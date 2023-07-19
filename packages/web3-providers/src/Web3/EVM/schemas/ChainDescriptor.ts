@@ -1,7 +1,13 @@
 import { z } from 'zod'
 import type { JsonRpcResponse } from 'web3-core-helpers'
 import { isSameURL, type ChainDescriptor } from '@masknet/web3-shared-base'
-import { ChainId, EthereumMethodType, NetworkType, SchemaType, createJsonRpcPayload } from '@masknet/web3-shared-evm'
+import {
+    type ChainId,
+    type NetworkType,
+    type SchemaType,
+    EthereumMethodType,
+    createJsonRpcPayload,
+} from '@masknet/web3-shared-evm'
 import { Duration, fetchJSON } from '../../../entry-helpers.js'
 
 interface ChainConfig {
