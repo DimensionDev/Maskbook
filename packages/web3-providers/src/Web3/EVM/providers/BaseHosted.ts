@@ -45,18 +45,21 @@ export class BaseHostedProvider
 
     override async setup(context?: Plugin.SNSAdaptor.SNSAdaptorContext) {
         await super.setup(context)
+
         this.walletStorage = context?.createKVStorage('memory', {}).createSubScope(`${this.providerType}_hosted`, {
             account: this.options.getDefaultAccount(),
             chainId: this.options.getDefaultChainId(),
             wallets: [] as Wallet[],
         }).storage
 
-        await this.walletStorage?.account.initializedPromise
-        await this.walletStorage?.chainId.initializedPromise
-        await this.walletStorage?.wallets.initializedPromise
+        await Promise.all([
+            this.walletStorage?.account.initializedPromise,
+            this.walletStorage?.chainId.initializedPromise,
+            this.walletStorage?.wallets.initializedPromise,
+        ])
 
-        await this.onAccountChanged()
-        await this.onChainChanged()
+        this.onAccountChanged()
+        this.onChainChanged()
 
         this.walletStorage?.account.subscription.subscribe(this.onAccountChanged.bind(this))
         this.walletStorage?.chainId.subscription.subscribe(this.onChainChanged.bind(this))

@@ -6,7 +6,6 @@ export let lensTokenStorage: StorageObject<LensTokenStorageType>
 
 export async function setupStorage(x: Plugin.SNSAdaptor.SNSAdaptorContext) {
     const result = x.createKVStorage('persistent', {}).createSubScope<LensTokenStorageType>('LensToken', {})
-    await result.storage.accessToken?.initializedPromise
-    await result.storage.refreshToken?.initializedPromise
+    await Promise.all([result.storage.accessToken?.initializedPromise, result.storage.refreshToken?.initializedPromise])
     lensTokenStorage = result.storage
 }
