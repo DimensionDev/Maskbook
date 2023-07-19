@@ -36,7 +36,7 @@ export interface BuildFlags {
     /** @default true */
     sourceMapHideFrameworks?: boolean | undefined
 }
-export type NormalizedFlags = Required<Omit<BuildFlags, 'noEval'>>
+export type NormalizedFlags = Required<BuildFlags>
 export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
     const {
         mode,
