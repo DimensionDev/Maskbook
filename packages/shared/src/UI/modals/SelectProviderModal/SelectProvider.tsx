@@ -1,5 +1,5 @@
 import { memo, useCallback, useMemo } from 'react'
-import { delay } from '@masknet/kit'
+import { delay, getEnumAsArray } from '@masknet/kit'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
 import { ConnectWalletModal, InjectedDialog, useSharedI18N } from '@masknet/shared'
@@ -20,14 +20,6 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-function getProviders() {
-    const providers = getRegisteredWeb3Providers()
-
-    return Sniffings.is_dashboard_page
-        ? providers.filter((x) => x.providerAdaptorPluginID === NetworkPluginID.PLUGIN_EVM)
-        : providers
-}
-
 export interface SelectProviderProps {
     open: boolean
     requiredSupportPluginID?: NetworkPluginID
@@ -36,9 +28,9 @@ export interface SelectProviderProps {
     onClose: () => void
 }
 export const SelectProvider = memo(function SelectProvider(props: SelectProviderProps) {
+    const { open, requiredSupportPluginID, requiredSupportChainIds, onConnect, onClose } = props
     const t = useSharedI18N()
     const { classes } = useStyles()
-    const { open, requiredSupportPluginID, requiredSupportChainIds, onConnect, onClose } = props
 
     const onProviderIconClicked = useCallback(
         async (
@@ -67,7 +59,11 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
         },
         [onConnect, onClose],
     )
-    const providers = useMemo(getProviders, [])
+    const providers = useMemo(() => {
+        if (Sniffings.is_dashboard_page) return getRegisteredWeb3Providers(NetworkPluginID.PLUGIN_EVM)
+        if (requiredSupportPluginID) return getRegisteredWeb3Providers(requiredSupportPluginID)
+        return getEnumAsArray(NetworkPluginID).flatMap((x) => getRegisteredWeb3Providers(x.value))
+    }, [requiredSupportPluginID])
 
     return (
         <InjectedDialog title={t.plugin_wallet_select_provider_dialog_title()} open={open} onClose={onClose}>

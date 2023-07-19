@@ -14,6 +14,7 @@ export const base: Plugin.Shared.Definition = {
                 [CurrentSNSNetwork.Twitter]: true,
                 [CurrentSNSNetwork.Facebook]: false,
                 [CurrentSNSNetwork.Instagram]: false,
+                [CurrentSNSNetwork.__SPA__]: true,
             },
         },
         target: 'stable',

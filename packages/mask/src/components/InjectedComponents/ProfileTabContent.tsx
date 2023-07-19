@@ -21,6 +21,8 @@ import {
     TokenWithSocialGroupMenu,
     SocialAccountList,
     useCollectionByTwitterHandler,
+    addressSorter,
+    WalletSettingEntry,
 } from '@masknet/shared'
 import {
     CrossIsolationMessages,
@@ -38,14 +40,13 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { ScopedDomainsContainer, useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
-import { addressSorter, useI18N } from '../../utils/index.js'
+import { useI18N } from '../../utils/index.js'
 import {
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
     useSocialIdentity,
     useSocialIdentityByUserId,
 } from '../DataSource/useActivatedUI.js'
-import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry.js'
 import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
 import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
 import { SearchResultInspector } from './SearchResultInspector.js'
@@ -156,7 +157,6 @@ function Content(props: ProfileTabContentProps) {
 
     const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
     const { value: currentSocialIdentity } = useSocialIdentity(currentVisitingSocialIdentity)
-
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
     const isOwnerIdentity = currentVisitingSocialIdentity?.isOwner
 

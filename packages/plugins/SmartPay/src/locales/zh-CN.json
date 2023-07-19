@@ -16,7 +16,6 @@
     "created_smart_pay_wallet_description": "在 Ploygon 网络上创建了一个 SmartPay 钱包。",
     "create_successfully_tips": "恭喜您! 您已成功创建了 SmartPay 钱包 {{address}}。",
     "create_successfully_tips_owner": "SmartPay 钱包的管理账户是 {{owner}}。",
-    "copy_wallet_address_success": "复制成功",
     "can_only_receive_polygon_assets": "只能接收 Polygon 网络的资产。",
     "current_manage_account": "当前的管理账户",
     "change_owner": "更改管理账户",

@@ -1,7 +1,7 @@
 import { first } from 'lodash-es'
 import type Web3 from 'web3'
 import { numberToHex, toHex, toNumber } from 'web3-utils'
-import { type Account, type ECKeyIdentifier, type Proof, type Wallet } from '@masknet/shared-base'
+import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet } from '@masknet/shared-base'
 import {
     AddressType,
     SchemaType,
@@ -43,6 +43,7 @@ import {
     createNonFungibleTokenContract,
     createNonFungibleTokenCollection,
 } from '@masknet/web3-shared-base'
+import { queryClient } from '@masknet/shared-base-ui'
 import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import { ContractReadonlyAPI } from './ContractReadonlyAPI.js'
 import { ConnectionOptionsReadonlyAPI } from './ConnectionOptionsReadonlyAPI.js'
@@ -50,7 +51,6 @@ import type { ConnectionAPI_Base } from '../../Base/apis/ConnectionAPI.js'
 import type { ConnectionOptions } from '../types/index.js'
 import { fetchJSON } from '../../../entry-helpers.js'
 import type { ConnectionOptions_Base } from '../../../entry-types.js'
-import { queryClient } from '@masknet/shared-base-ui'
 
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)
@@ -118,15 +118,11 @@ export class ConnectionReadonlyAPI
         )
     }
 
-    async addWallet(wallet: Wallet, initial?: ConnectionOptions): Promise<void> {
+    async addWallet(wallet: UpdatableWallet, initial?: ConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 
-    async updateWallet(address: string, wallet: Wallet, initial?: ConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    async updateOrAddWallet(wallet: Wallet, initial?: ConnectionOptions): Promise<void> {
+    async updateWallet(address: string, wallet: Partial<UpdatableWallet>, initial?: ConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 

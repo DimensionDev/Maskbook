@@ -1,6 +1,6 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import { NavLink, type LinkProps } from 'react-router-dom'
 import { BottomNavigation, BottomNavigationAction, Box, type BoxProps } from '@mui/material'
 import { Icons } from '@masknet/icons'
@@ -55,6 +55,14 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
     const { hasPassword, loading: getHasPasswordLoading } = useHasPassword()
 
     const walletPageLoading = getLockStatusLoading || getHasPasswordLoading
+
+    const walletLink = useMemo(() => {
+        if (walletPageLoading) return '#'
+        if (!wallet) return PopupRoutes.Wallet
+        if (isLocked) return PopupRoutes.Unlock
+        if (!hasPassword) return PopupRoutes.SetPaymentPassword
+        return PopupRoutes.Wallet
+    }, [walletPageLoading, isLocked, hasPassword])
     return (
         <Box className={cx(classes.container, className)} {...rest}>
             <BottomNavigation classes={{ root: classes.navigation }}>
@@ -65,30 +73,13 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
                         className={classes.iconOnly}
                     />
                 </BottomNavLink>
-                {walletPageLoading ? (
+                <BottomNavLink to={walletLink}>
                     <BottomNavigationAction
                         showLabel={false}
                         icon={<Icons.WalletNav size={24} />}
                         className={classes.iconOnly}
                     />
-                ) : (
-                    <BottomNavLink
-                        to={
-                            !wallet
-                                ? PopupRoutes.Wallet
-                                : isLocked
-                                ? PopupRoutes.Unlock
-                                : !hasPassword
-                                ? PopupRoutes.SetPaymentPassword
-                                : PopupRoutes.Wallet
-                        }>
-                        <BottomNavigationAction
-                            showLabel={false}
-                            icon={<Icons.WalletNav size={24} />}
-                            className={classes.iconOnly}
-                        />
-                    </BottomNavLink>
-                )}
+                </BottomNavLink>
                 <BottomNavLink to={PopupRoutes.Friends}>
                     <BottomNavigationAction
                         showLabel={false}

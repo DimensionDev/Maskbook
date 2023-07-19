@@ -64,9 +64,6 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
     updateWallet(address: string, wallet: Wallet): Promise<void> {
         throw new Error('Method not implemented.')
     }
-    updateOrAddWallet(wallet: Wallet): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
     renameWallet(address: string, name: string): Promise<void> {
         throw new Error('Method not implemented.')
     }
@@ -118,7 +115,7 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
                             chainName: chainResolver.chainFullName(chainId) ?? chainResolver.chainName(chainId),
                             nativeCurrency: chainResolver.nativeCurrency(chainId),
                             rpcUrls: [ProviderURL.fromOfficial(chainId)],
-                            blockExplorerUrls: [chainResolver.explorerURL(chainId)?.url],
+                            blockExplorerUrls: [chainResolver.explorerUrl(chainId)?.url],
                         },
                     ],
                 })

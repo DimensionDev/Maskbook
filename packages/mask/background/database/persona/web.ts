@@ -174,8 +174,8 @@ export async function consistentPersonaDBWriteAccess(
     t.addEventListener('error', finish)
 
     // Pause those events when patching write access
-    const resumePersona = MaskMessages.events.ownPersonaChanged.pause()
-    const resumeRelation = MaskMessages.events.relationsChanged.pause()
+    const resumePersona = MaskMessages.events.ownPersonaChanged.pause!()
+    const resumeRelation = MaskMessages.events.relationsChanged.pause!()
     try {
         await action(t)
     } finally {

@@ -45,6 +45,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     title: {
         fontSize: 16,
+        color: theme.palette.maskColor.publicMain,
         lineHeight: '20px',
         margin: theme.spacing(2.5, 0),
         fontWeight: 700,
@@ -53,7 +54,7 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(4.5),
         fontSize: 14,
         lineHeight: '18px',
-        fontWeight: 700,
+        fontWeight: 400,
         color: theme.palette.maskColor.publicMain,
         display: 'flex',
         alignItems: 'center',
@@ -69,6 +70,15 @@ const useStyles = makeStyles()((theme) => ({
     },
     text: {
         color: theme.palette.maskColor.publicMain,
+    },
+    qrWrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        overflow: 'hidden',
+        width: 148,
+        height: 148,
+        borderRadius: 6,
     },
 }))
 
@@ -95,18 +105,20 @@ export const ComponentToPrint = forwardRef(function ComponentToPrint(
                         </Typography>
                     </Typography>
                 </Box>
-                <QRCode
-                    value={qrValue}
-                    ecLevel="L"
-                    size={136}
-                    quietZone={6}
-                    logoImage={networkResolver.networkIcon(NetworkType.Ethereum)?.toString()}
-                />
+                <div className={classes.qrWrapper}>
+                    <QRCode
+                        value={qrValue}
+                        ecLevel="L"
+                        size={136}
+                        quietZone={6}
+                        logoImage={networkResolver.networkIcon(NetworkType.Ethereum)?.toString()}
+                    />
+                </div>
             </Box>
             <Typography className={classes.title}>{t.wallets_mnemonic_word()}</Typography>
             <MnemonicReveal words={words} indexed classes={{ wordCard: classes.wordCard, text: classes.text }} />
             <Typography className={classes.tips}>
-                <Icons.Info variant="light" size={20} />
+                <Icons.Info variant="light" size={24} />
                 {t.wallets_print_tips()}
             </Typography>
         </Box>

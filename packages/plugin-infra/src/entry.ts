@@ -11,6 +11,7 @@ export { createPluginRPC, createPluginRPCGenerator, __workaround__replaceIsBackg
 export { getAvailablePlugins } from './utils/getAvailablePlugins.js'
 export {
     getPluginDefine,
+    getRegisteredWeb3Chains,
     getRegisteredWeb3Networks,
     getRegisteredWeb3Providers,
     registerPlugin,

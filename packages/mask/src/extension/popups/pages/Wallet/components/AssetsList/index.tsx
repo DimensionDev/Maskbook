@@ -141,9 +141,9 @@ export const AssetsListUI = memo<AssetsListUIProps>(function AssetsListUI({ isEx
                             <Box position="relative">
                                 <TokenIcon
                                     className={classes.tokenIcon}
+                                    chainId={asset.chainId}
                                     address={asset.address}
                                     name={asset.name}
-                                    chainId={asset.chainId}
                                     logoURL={asset.logoURL}
                                     size={36}
                                 />

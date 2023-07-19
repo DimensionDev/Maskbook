@@ -19,7 +19,7 @@ export async function internal_wallet_restore(backup: NormalizedBackup.WalletBac
                 // fix a backup bug of pre-v2.2.2 versions
                 const accounts = await WalletServiceRef.value.getDerivableAccounts(wallet.mnemonic.val.words, 1, 5)
                 const index = accounts.findIndex(currySameAddress(wallet.address))
-                await WalletServiceRef.value.recoverWalletFromMnemonic(
+                await WalletServiceRef.value.recoverWalletFromMnemonicWords(
                     name,
                     wallet.mnemonic.val.words,
                     index > -1 ? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${index}` : wallet.mnemonic.val.path,

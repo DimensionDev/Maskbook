@@ -1,7 +1,7 @@
 import type Web3 from 'web3'
 import { toHex } from 'web3-utils'
 import { delay } from '@masknet/kit'
-import type { Account, ECKeyIdentifier, Proof, Wallet } from '@masknet/shared-base'
+import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet } from '@masknet/shared-base'
 import {
     type AddressType,
     type ChainId,
@@ -62,7 +62,7 @@ export class ConnectionAPI
     protected override Contract = new ContractAPI(this.options)
     protected override ConnectionOptions = new ConnectionOptionsAPI(this.options)
 
-    override async addWallet(wallet: Wallet, initial?: ConnectionOptions): Promise<void> {
+    override async addWallet(wallet: UpdatableWallet, initial?: ConnectionOptions): Promise<void> {
         await this.Request.request<void>(
             {
                 method: EthereumMethodType.MASK_ADD_WALLET,
@@ -72,21 +72,15 @@ export class ConnectionAPI
         )
     }
 
-    override async updateWallet(address: string, wallet: Wallet, initial?: ConnectionOptions): Promise<void> {
+    override async updateWallet(
+        address: string,
+        wallet: Partial<UpdatableWallet>,
+        initial?: ConnectionOptions,
+    ): Promise<void> {
         await this.Request.request<void>(
             {
                 method: EthereumMethodType.MASK_UPDATE_WALLET,
                 params: [address, wallet],
-            },
-            this.ConnectionOptions.fill(initial),
-        )
-    }
-
-    override async updateOrAddWallet(wallet: Wallet, initial?: ConnectionOptions): Promise<void> {
-        await this.Request.request<void>(
-            {
-                method: EthereumMethodType.MASK_ADD_OR_UPDATE_WALLET,
-                params: [wallet],
             },
             this.ConnectionOptions.fill(initial),
         )

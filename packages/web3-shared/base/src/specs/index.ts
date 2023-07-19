@@ -165,7 +165,13 @@ export type Price = {
     [key in CurrencyType]?: string
 }
 
+export interface Contact {
+    name: string
+    address: string
+}
+
 export interface ChainDescriptor<ChainId, SchemaType, NetworkType> {
+    ID: string
     type: NetworkType
     chainId: ChainId
     coinMarketCapChainId: string
@@ -177,13 +183,29 @@ export interface ChainDescriptor<ChainId, SchemaType, NetworkType> {
     shortName?: string
     network: 'mainnet' | 'testnet' | Omit<string, 'mainnet' | 'testnet'>
     nativeCurrency: FungibleToken<ChainId, SchemaType>
+    rpcUrl: string
+    iconUrl?: string
     // EIP3091
-    explorerURL: {
+    explorerUrl: {
         url: string
         parameters?: Record<string, string | number | boolean>
     }
     features?: string[]
+    // Indicate a built-in chain or customized one.
+    isCustomized: boolean
 }
+
+export type Network<ChainId, SchemaType, NetworkType> = ChainDescriptor<ChainId, SchemaType, NetworkType>
+
+export type ReasonableNetwork<ChainId, SchemaType, NetworkType> = ChainDescriptor<ChainId, SchemaType, NetworkType> & {
+    createdAt: Date
+    updatedAt: Date
+}
+
+export type TransferableNetwork<ChainId, SchemaType, NetworkType> = Omit<
+    Network<ChainId, SchemaType, NetworkType>,
+    'ID'
+>
 
 export interface NetworkDescriptor<ChainId, NetworkType> {
     /** An unique ID for each network */
@@ -851,14 +873,28 @@ export interface SettingsState extends Startable {
 
 export interface AddressBookState extends Startable {
     /** The tracked addresses of currently chosen sub-network */
-    addressBook?: Subscription<Array<{ name: string; address: string }>>
+    contacts?: Subscription<Contact[]>
 
     /** Add a contact into address book. */
-    addContact: (name: string, address: string) => Promise<void>
+    addContact: (contact: Contact) => Promise<void>
     /** Remove a contact from address book. */
     removeContact: (address: string) => Promise<void>
     /** Rename an name of contact from address book. */
-    renameContact: (name: string, address: string) => Promise<void>
+    renameContact: (contact: Contact) => Promise<void>
+}
+
+export interface NetworkState<ChainId, SchemaType, NetworkType> extends Startable {
+    networks?: Subscription<Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>>
+
+    /** Add a new network. */
+    addNetwork: (descriptor: TransferableNetwork<ChainId, SchemaType, NetworkType>) => Promise<void>
+    /** Update a network. */
+    updateNetwork: (
+        id: string,
+        updates: Partial<TransferableNetwork<ChainId, SchemaType, NetworkType>>,
+    ) => Promise<void>
+    /** Remove a network */
+    removeNetwork: (id: string) => Promise<void>
 }
 
 export interface RiskWarningState extends Startable {
@@ -1041,6 +1077,7 @@ export interface BlockNumberNotifierState<ChainId> {
 
 export interface Web3State<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter> {
     AddressBook?: AddressBookState
+    Network?: NetworkState<ChainId, SchemaType, NetworkType>
     BalanceNotifier?: BalanceNotifierState<ChainId>
     BlockNumberNotifier?: BlockNumberNotifierState<ChainId>
     IdentityService?: IdentityServiceState<ChainId>

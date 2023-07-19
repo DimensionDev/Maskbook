@@ -9,6 +9,7 @@ import {
     getSiteType,
     PopupRoutes,
     ValueRef,
+    ImportSource,
 } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
@@ -62,6 +63,7 @@ export class MaskWalletProvider
             .map((x) => ({
                 id: x.address,
                 name: super.wallets.find((item) => isSameAddress(item.address, x.address))?.name ?? 'Smart Pay',
+                source: ImportSource.WalletRPC,
                 address: x.address,
                 hasDerivationPath: false,
                 hasStoredKeyInfo: false,
@@ -117,7 +119,7 @@ export class MaskWalletProvider
 
     override async addWallet(wallet: Wallet): Promise<void> {
         if (!this.hostedAccount && !this.wallets.length) await this.walletStorage?.account.setValue(wallet.address)
-        await this.context?.addWallet(wallet.address, wallet)
+        await this.context?.addWallet(ImportSource.WalletRPC, wallet.address, wallet)
     }
 
     override async removeWallet(address: string, password?: string | undefined): Promise<void> {

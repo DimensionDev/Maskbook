@@ -4,12 +4,13 @@ import { type AbiItem, hexToNumber, hexToNumberString, toHex } from 'web3-utils'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Wallet, ECKeyIdentifier, Proof, ProofPayload } from '@masknet/shared-base'
 import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.json'
-import { type Transaction, type TransactionOptions, type UserOperation, EthereumMethodType } from '../types/index.js'
+import { type EIP3085Descriptor } from './EIP3085Editor.js'
 import { isValidChainId } from '../helpers/isValidChainId.js'
 import { formatEthereumAddress } from '../helpers/formatter.js'
 import { createJsonRpcPayload } from '../helpers/provider.js'
 import { parseChainId } from '../helpers/parseChainId.js'
 import { ZERO_ADDRESS, getSmartPayConstant } from '../constants/index.js'
+import { type Transaction, type TransactionOptions, type UserOperation, EthereumMethodType } from '../types/index.js'
 
 type Options = Pick<TransactionOptions, 'account' | 'chainId'>
 
@@ -67,6 +68,17 @@ export class PayloadEditor {
 
     get chainId() {
         return this.config.chainId ?? this.options?.chainId
+    }
+
+    get chainDescriptor() {
+        const { method, params } = this.payload
+        switch (method) {
+            case EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN:
+                const [descriptor] = params as [EIP3085Descriptor]
+                return descriptor
+            default:
+                return null
+        }
     }
 
     private getRawConfig() {
@@ -137,7 +149,6 @@ export class PayloadEditor {
         const { method, params } = this.payload
         switch (method) {
             case EthereumMethodType.MASK_ADD_WALLET:
-            case EthereumMethodType.MASK_ADD_OR_UPDATE_WALLET:
                 const [wallet] = params as [Wallet]
                 return wallet
             default:

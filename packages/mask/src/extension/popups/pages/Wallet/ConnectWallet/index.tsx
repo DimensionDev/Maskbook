@@ -61,15 +61,10 @@ const ConnectWalletPage = memo(() => {
     const { setSigned } = PopupContext.useContainer()
     const wallets = useWallets()
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
-    // connect to ethereum mainnet
-    const network = getRegisteredWeb3Networks().find(
-        (x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM && x.chainId === ChainId.Mainnet,
-    ) as Web3Helper.Web3NetworkDescriptor<NetworkPluginID.PLUGIN_EVM> | undefined
-    const providers = getRegisteredWeb3Providers().filter(
-        (x) => x.providerAdaptorPluginID === NetworkPluginID.PLUGIN_EVM,
-    ) as Array<Web3Helper.Web3ProviderDescriptor<NetworkPluginID.PLUGIN_EVM>>
-
     const { ProviderIconClickBait } = useWeb3UI(NetworkPluginID.PLUGIN_EVM).SelectProviderDialog ?? {}
+
+    const mainnet = getRegisteredWeb3Networks(NetworkPluginID.PLUGIN_EVM).find((x) => x.chainId === ChainId.Mainnet)
+    const providers = getRegisteredWeb3Providers(NetworkPluginID.PLUGIN_EVM)
 
     const onClick = useCallback(
         async (
@@ -117,7 +112,7 @@ const ConnectWalletPage = memo(() => {
     useMount(() => {
         setSigned(false)
     })
-    if (!network) return null
+    if (!mainnet) return null
 
     const createProvider = (
         provider: Web3Helper.Web3ProviderDescriptor<NetworkPluginID.PLUGIN_EVM>,
@@ -146,7 +141,7 @@ const ConnectWalletPage = memo(() => {
                         ) : (
                             <React.Fragment key={provider.ID}>
                                 {createProvider(provider, {
-                                    onClick: () => onClick(network, provider),
+                                    onClick: () => onClick(mainnet, provider),
                                 })}
                             </React.Fragment>
                         )

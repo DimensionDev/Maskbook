@@ -1,4 +1,3 @@
-export * from './addressSorter.js'
 export * from './collectNodeText.js'
 export * from './components/index.js'
 export * from './createNormalReactRoot.js'

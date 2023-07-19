@@ -36,7 +36,6 @@ import { useOpenApplicationBoardDialog } from '../shared/openApplicationBoardDia
 
 const useStyles = makeStyles()((theme) => ({
     title: {
-        color: theme.palette.mode === 'dark' ? theme.palette.text.primary : 'rgb(15, 20, 25)',
         display: 'flex',
         alignItems: 'center',
     },

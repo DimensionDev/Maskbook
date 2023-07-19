@@ -7,9 +7,9 @@ import {
 import { BigNumber } from 'bignumber.js'
 import { keccak256 } from '@ethersproject/keccak256'
 import { toUtf8Bytes } from '@ethersproject/strings'
+import { isENSContractAddress, isENSNameWrapperContractAddress } from './address.js'
 import { CHAIN_DESCRIPTORS, NETWORK_DESCRIPTORS, PROVIDER_DESCRIPTORS } from '../constants/index.js'
 import type { ChainId } from '../types/index.js'
-import { isENSContractAddress, isENSNameWrapperContractAddress } from './address.js'
 
 export const chainResolver = createChainResolver(CHAIN_DESCRIPTORS)
 export const explorerResolver = createExplorerResolver(CHAIN_DESCRIPTORS)
@@ -25,12 +25,12 @@ export function resolveNonFungibleTokenIdFromEnsDomain(domain: string): string {
     return new BigNumber(keccak256(toUtf8Bytes(domain.replace(/\.\w+$/, '')))).toFixed()
 }
 
-const LENS_FOLLOWER_IMAGE = new URL('./lens-follower.svg', import.meta.url).href
-const LENS_COMMENT_IMAGE = new URL('./lens-comment.svg', import.meta.url).href
-const LENS_POST_IMAGE = new URL('./lens-post.svg', import.meta.url).href
-const LENS_COLLECT_IMAGE = new URL('./lens-collect.svg', import.meta.url).href
-const LENS_IMAGE = new URL('./lens.svg', import.meta.url).href
-const ENS_IMAGE = new URL('./ens.svg', import.meta.url).href
+const LENS_FOLLOWER_IMAGE = new URL('../assets/lens-follower.svg', import.meta.url).href
+const LENS_COMMENT_IMAGE = new URL('../assets/lens-comment.svg', import.meta.url).href
+const LENS_POST_IMAGE = new URL('../assets/lens-post.svg', import.meta.url).href
+const LENS_COLLECT_IMAGE = new URL('../assets/lens-collect.svg', import.meta.url).href
+const LENS_IMAGE = new URL('../assets/lens.svg', import.meta.url).href
+const ENS_IMAGE = new URL('../assets/ens.svg', import.meta.url).href
 
 export function resolveImageURL(image?: string, name?: string, collectionName?: string, address?: string) {
     if (image) return image

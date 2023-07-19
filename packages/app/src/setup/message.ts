@@ -5,7 +5,12 @@ import {
     type PluginMessageEmitter,
     type PluginMessageEmitterItem,
 } from '@masknet/plugin-infra'
-import type { InternalMessage_PluginMessage } from '../plugin-worker/message-port.js'
+import type { InternalMessage_PluginMessage } from '../background-worker/message-port.js'
+import {
+    __workaround__replaceImplementationOfCrossIsolationMessage__,
+    __workaround__replaceImplementationOfMaskMessage__,
+    serializer,
+} from '@masknet/shared-base'
 export type MessageHandler = (message: any) => void
 export let postMessage: (type: string, data: unknown) => void
 const messageHandlers = new Map<string, Set<MessageHandler>>()
@@ -16,29 +21,19 @@ function MessageEventReceiver(event: MessageEvent): void {
     if (!handler?.size) return
     for (const h of handler) h(data)
 }
-
-// Ensure plugin host is ready by blocking this file
-const [workerReadyPromise, workerReady] = defer<void>()
-{
-    const removeListener = addListener('ready', () => {
-        removeListener()
-        workerReady()
-    })
-}
 if (typeof SharedWorker === 'function') {
-    const worker = new SharedWorker(new URL('../plugin-worker/init.ts', import.meta.url), {
+    const worker = new SharedWorker(new URL('../background-worker/init.ts', import.meta.url), {
         name: 'mask',
     })
     worker.port.addEventListener('message', MessageEventReceiver)
     worker.port.start()
     postMessage = (type: string, data: unknown) => worker.port.postMessage([type, data])
 } else {
-    const worker = new Worker(new URL('../plugin-worker/init.ts', import.meta.url), {
+    const worker = new Worker(new URL('../background-worker/init.ts', import.meta.url), {
         name: 'mask',
     })
     worker.addEventListener('message', MessageEventReceiver)
     postMessage = (type: string, data: unknown) => worker.postMessage([type, data])
-    worker.postMessage(['ready-request', undefined])
 }
 
 {
@@ -71,14 +66,11 @@ if (typeof SharedWorker === 'function') {
     }
 
     const cache = new Map<string, PluginMessageEmitter<unknown>>()
-    __workaround__replaceImplementationOfCreatePluginMessage__(function (
-        pluginID: string,
-        serializer: Serialization | undefined,
-    ): PluginMessageEmitter<unknown> {
-        if (cache.has(pluginID)) return cache.get(pluginID)! as PluginMessageEmitter<unknown>
+    function createEmitter(domain: string, serializer: Serialization | undefined): PluginMessageEmitter<unknown> {
+        if (cache.has(domain)) return cache.get(domain)! as PluginMessageEmitter<unknown>
 
         const listeners = new Map<string, Set<(data: unknown) => void>>()
-        addListener(pluginID, async (message) => {
+        addListener(domain, async (message) => {
             const [type, data] = message as InternalMessage_PluginMessage
             dispatchData(type, await de_ser(data))
         })
@@ -116,30 +108,52 @@ if (typeof SharedWorker === 'function') {
                     getEventName(eventName).delete(callback)
                 },
                 async sendByBroadcast(data) {
-                    postMessage(pluginID, [eventName, await ser(data)] satisfies InternalMessage_PluginMessage)
+                    postMessage(domain, [eventName, await ser(data)] satisfies InternalMessage_PluginMessage)
                 },
                 async sendToAll(data) {
-                    postMessage(pluginID, [eventName, await ser(data)] satisfies InternalMessage_PluginMessage)
+                    postMessage(domain, [eventName, await ser(data)] satisfies InternalMessage_PluginMessage)
                     dispatchData(eventName, data)
+                },
+                async sendToBackgroundPage(data) {
+                    postMessage(domain, [eventName, await ser(data)] satisfies InternalMessage_PluginMessage)
                 },
                 sendToLocal(data) {
                     dispatchData(eventName, data)
                 },
                 async sendToVisiblePages(data) {
                     if (document.visibilityState === 'visible') dispatchData(eventName, data)
-                    postMessage(pluginID, [eventName, await ser(data), true] satisfies InternalMessage_PluginMessage)
+                    postMessage(domain, [eventName, await ser(data), true] satisfies InternalMessage_PluginMessage)
                 },
             }
             return value
         })
-        cache.set(pluginID, emitter)
+        cache.set(domain, emitter)
         return emitter
+    }
+    __workaround__replaceImplementationOfCreatePluginMessage__(function (
+        pluginID: string,
+        serializer: Serialization | undefined,
+    ): PluginMessageEmitter<unknown> {
+        return createEmitter('plugin:' + pluginID, serializer)
     })
+    __workaround__replaceImplementationOfCrossIsolationMessage__(createEmitter('cross-isolation', undefined))
+    __workaround__replaceImplementationOfMaskMessage__(createEmitter('mask', serializer))
 }
+
+// Ensure plugin host is ready by blocking this file
+{
+    const [promise, resolve] = defer<void>()
+    const removeListener = addListener('ready', () => {
+        removeListener()
+        resolve()
+    })
+    postMessage('request-ready', null)
+    await promise
+}
+
 export function addListener(type: string, callback: MessageHandler) {
     if (!messageHandlers.has(type)) messageHandlers.set(type, new Set())
     const store = messageHandlers.get(type)!
     store.add(callback)
     return () => store.delete(callback)
 }
-await workerReadyPromise

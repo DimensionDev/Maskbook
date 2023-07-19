@@ -12,5 +12,7 @@
     "game_share_btn": "Share",
     "game_share_title": "Share",
     "game_dialog_info": "Share this game to twitter",
+    "plugin_game_name": "GAME",
+    "plugin_game_description": "Play game with your NFT.",
     "game_share_text": "I'm playing {{name}} by @NonFFriend x {{snsId}} on Twitter.\nInstall the Mask Network Extension mask.io and JOIN ME!\n $t(mask:hash_tag) #NFF #NFTgame\n{{share_Twitter}}"
 }

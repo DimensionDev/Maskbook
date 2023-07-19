@@ -1,15 +1,15 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
+import { PluginTransakMessages } from '@masknet/plugin-transak'
 import { useChainContext, useNetworkDescriptor, useNetworkContext, useWallets } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { DashboardRoutes, relativeRouteOf, CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ChainId, createNativeToken, type SchemaType } from '@masknet/web3-shared-evm'
 import type { FungibleToken, NonFungibleToken } from '@masknet/web3-shared-base'
-import { PluginMessages } from '../../API.js'
-import { PageFrame } from '../../components/PageFrame/index.js'
 import { useDashboardI18N } from '../../locales/index.js'
+import { PageFrame } from '../../components/PageFrame/index.js'
 import { Assets } from './components/Assets/index.js'
 import { Balance } from './components/Balance/index.js'
 import { History } from './components/History/index.js'
@@ -42,8 +42,11 @@ function Wallets() {
 
     const [receiveOpen, setReceiveOpen] = useState(false)
 
-    const networks = getRegisteredWeb3Networks()
     const { pluginID } = useNetworkContext()
+    const networks = getRegisteredWeb3Networks(pluginID).filter((x) => x.isMainnet)
+
+    // If show one network only, set it as default network
+    const defaultNetwork = networks.length !== 1 ? null : networks[0]
 
     const networkDescriptor = useNetworkDescriptor(
         NetworkPluginID.PLUGIN_EVM,
@@ -54,23 +57,13 @@ function Wallets() {
         networkDescriptor ?? null,
     )
 
-    const { openDialog: openBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak?.buyTokenDialogUpdated)
+    const { openDialog: openBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
     const openSwapDialog = useCallback(() => {
         CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
             open: true,
         })
     }, [])
-
-    const renderNetworks = useMemo(() => {
-        return networks.filter((x) => pluginID === x.networkSupporterPluginID && x.isMainnet)
-    }, [networks, pluginID])
-
-    // If show one network only, set it as default network
-    const defaultNetwork = useMemo(() => {
-        if (renderNetworks.length !== 1) return null
-        return renderNetworks[0]
-    }, [renderNetworks])
 
     useEffect(() => {
         if (isWalletPath) return
@@ -118,7 +111,7 @@ function Wallets() {
                         onBuy={openBuyDialog}
                         onSwap={openSwapDialog}
                         onReceive={() => setReceiveOpen(true)}
-                        networks={renderNetworks}
+                        networks={networks}
                         selectedNetwork={selectedNetwork}
                         onSelectNetwork={setSelectedNetwork}
                         showOperations={pluginID === NetworkPluginID.PLUGIN_EVM}

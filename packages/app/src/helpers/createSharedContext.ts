@@ -1,5 +1,5 @@
 import { WalletConnectQRCodeModal } from '@masknet/shared'
-import { ValueRefWithReady, createConstantSubscription } from '@masknet/shared-base'
+import { EMPTY_ARRAY, UNDEFINED, ValueRefWithReady } from '@masknet/shared-base'
 import { ThemeMode, FontSize } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 import { getPostURL } from '../helpers/getPostURL.js'
@@ -13,8 +13,8 @@ const emptyValueRef = new ValueRefWithReady<any>()
 
 export function createSharedContext(): Omit<Plugin.SNSAdaptor.SNSAdaptorContext, 'createKVStorage'> {
     return {
-        currentPersona: createConstantSubscription(undefined),
-        wallets: createConstantSubscription([]),
+        currentPersona: UNDEFINED,
+        wallets: EMPTY_ARRAY,
         share(text) {
             throw new Error('To be implemented.')
         },
@@ -24,7 +24,7 @@ export function createSharedContext(): Omit<Plugin.SNSAdaptor.SNSAdaptorContext,
         connectPersona: reject,
         createPersona: reject,
         currentPersonaIdentifier: emptyValueRef,
-        currentVisitingProfile: createConstantSubscription(undefined),
+        currentVisitingProfile: UNDEFINED,
         getPostURL,
         getPostPayload,
         getNextIDPlatform: () => undefined,
@@ -33,7 +33,7 @@ export function createSharedContext(): Omit<Plugin.SNSAdaptor.SNSAdaptorContext,
         getThemeSettings: () => ({ color: '', mode: ThemeMode.Light, size: FontSize.Normal, isDim: false }),
         getWallets: reject,
         hasPaymentPassword: reject,
-        lastRecognizedProfile: createConstantSubscription(undefined),
+        lastRecognizedProfile: UNDEFINED,
         openDashboard: reject,
         openPopupConnectWindow: reject,
         openPopupWindow: reject,
@@ -57,6 +57,7 @@ export function createSharedContext(): Omit<Plugin.SNSAdaptor.SNSAdaptorContext,
         signWithWallet: reject,
         updateWallet: reject,
         send: reject,
-        themeSettings: createConstantSubscription(undefined),
+        themeSettings: UNDEFINED,
+        allPersonas: EMPTY_ARRAY,
     }
 }
