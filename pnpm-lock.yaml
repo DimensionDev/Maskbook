@@ -3686,6 +3686,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.1.1
         version: 3.1.1(react-hook-form@7.45.2)
+      '@masknet/encryption':
+        specifier: workspace:^
+        version: link:../encryption
       '@masknet/icons':
         specifier: workspace:^
         version: link:../icons
@@ -3704,6 +3707,12 @@ importers:
       '@masknet/theme':
         specifier: workspace:^
         version: link:../theme
+      '@masknet/typed-message':
+        specifier: workspace:^
+        version: link:../typed-message/base
+      '@masknet/typed-message-react':
+        specifier: workspace:^
+        version: link:../typed-message/react
       '@masknet/web3-contracts':
         specifier: workspace:^
         version: link:../web3-contracts

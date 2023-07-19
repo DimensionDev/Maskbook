@@ -7,6 +7,7 @@ import { DashboardForMobile } from './components/DashboardMobile.js'
 import { DashboardContext } from './contexts/DashboardContext.js'
 import { ApplicationRoutes } from './constants/ApplicationRoutes.js'
 import { createSharedContext } from './helpers/createSharedContext.js'
+import ComposePage from './pages/ComposePage.js'
 
 const OverviewPage = lazy(() => import(/* webpackPrefetch: true */ './pages/OverviewPage.js'))
 const ExplorePage = lazy(() => import(/* webpackPrefetch: true */ './pages/ExplorePage.js'))
@@ -41,6 +42,7 @@ export function MainUI() {
                             <Route path={`${ApplicationRoutes.DSearch}/*`} element={<DSearchPage />} />
                             <Route path={`${ApplicationRoutes.Applications}/*`} element={<ApplicationsPage />} />
                             <Route path={`${ApplicationRoutes.Web3Profile}/*`} element={<Web3ProfilePage />} />
+                            <Route path={`${ApplicationRoutes.Compose}/*`} element={<ComposePage />} />
                             <Route path="*" element={<Navigate to={ApplicationRoutes.Explorer} />} />
                         </Routes>
                     </div>

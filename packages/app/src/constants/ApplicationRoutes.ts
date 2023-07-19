@@ -8,4 +8,5 @@ export enum ApplicationRoutes {
     DSearch = '/dsearch',
     Web3Profile = '/web3-profile',
     Applications = '/applications',
+    Compose = '/compose',
 }
