@@ -53,6 +53,7 @@ function prepareAllManifest(flags: NormalizedFlags, computedFlags: ComputedFlags
     )
 
     const manifestFlags: Record<NormalizedFlags['mainManifestFile'], ManifestPresets> = {
+        'chromium-beta-mv2': [{ ...flags, channel: 'beta' }, mv2Base],
         'chromium-mv2': [flags, mv2Base],
         'chromium-mv3': [flags, mv3Base],
         'firefox-mv2': [flags, mv2Base, (manifest: ManifestV2) => manifest.permissions!.push('tabs')],
