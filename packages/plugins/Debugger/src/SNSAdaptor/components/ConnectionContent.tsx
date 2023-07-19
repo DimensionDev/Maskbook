@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useChainContext, useNetworkContext, useTelemetry } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useNetworks, useTelemetry, useWeb3State } from '@masknet/web3-hooks-base'
 import { EventType, EventID, ExceptionType, ExceptionID } from '@masknet/web3-telemetry/types'
 import { NetworkPluginID, ProofType } from '@masknet/shared-base'
-import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, NetworkType, ProviderType, createNativeToken } from '@masknet/web3-shared-evm'
 import { Web3, Contract } from '@masknet/web3-providers'
 
 export interface ConnectionContentProps {
@@ -21,7 +21,30 @@ export function ConnectionContent(props: ConnectionContentProps) {
     const { classes } = useStyles()
     const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { Network } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const telemetry = useTelemetry()
+    const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
+
+    console.log('DEBUG: networks')
+    console.log(networks)
+
+    const onAddNetwork = useCallback(async () => {
+        await Network?.addNetwork({
+            type: NetworkType.CustomNetwork,
+            chainId: ChainId.Mainnet,
+            coinMarketCapChainId: '',
+            coinGeckoChainId: '',
+            coinGeckoPlatformId: '',
+            name: 'Mainnet',
+            network: 'mainnet',
+            nativeCurrency: createNativeToken(ChainId.Mainnet),
+            rpcUrl: 'https://mainnet.infura.io/v3/659123dd11294baf8a294d7a11cec92c',
+            explorerUrl: {
+                url: 'https://etherscan.io/',
+            },
+            isCustomized: true,
+        })
+    }, [Network])
 
     const onCaptureEvent = useCallback(async () => {
         telemetry.captureEvent(EventType.Debug, EventID.Debug)
@@ -216,6 +239,18 @@ export function ConnectionContent(props: ConnectionContentProps) {
         <section className={classes.container}>
             <Table size="small">
                 <TableBody>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Add Network
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button size="small" onClick={() => onAddNetwork()}>
+                                Add Network
+                            </Button>
+                        </TableCell>
+                    </TableRow>
                     <TableRow>
                         <TableCell>
                             <Typography variant="body2" whiteSpace="nowrap">
