@@ -6,7 +6,8 @@ import { buildPolyfill } from '../projects/polyfill.js'
 import { buildGun } from '../projects/gun.js'
 import { parallel, series, type TaskFunction } from 'gulp'
 import { buildSentry } from '../projects/sentry.js'
-import { type BuildFlagsExtended, getPreset, Preset } from './flags.js'
+import type { BuildFlagsExtended } from './flags.js'
+import { ManifestFile } from '../../../mask/.webpack/flags.js'
 
 export function buildWebpackFlag(name: string, args: BuildFlagsExtended) {
     const f = () => awaitChildProcess(webpack(args))
@@ -24,7 +25,7 @@ export function buildExtensionFlag(name: string, args: BuildFlagsExtended): Task
     return f
 }
 export const buildBaseExtension: TaskFunction = buildExtensionFlag('default', {
-    ...getPreset(Preset.Chromium),
+    manifestFile: ManifestFile.ChromiumMV2,
     channel: 'stable',
     mode: 'production',
 })
@@ -39,7 +40,7 @@ export async function extensionWatch(f: Function | BuildFlagsExtended) {
     if (typeof f === 'function')
         return awaitChildProcess(
             webpack({
-                ...getPreset(Preset.Chromium),
+                manifestFile: ManifestFile.ChromiumMV2,
                 channel: 'stable',
                 mode: 'development',
             }),

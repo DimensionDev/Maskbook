@@ -27,13 +27,13 @@ export function emitManifestFile(flags: NormalizedFlags, computedFlags: Computed
         // which is annoying when debugging in this case.
         writeFileSync(
             join(flags.outputPath, 'manifest.json'),
-            JSON.stringify(manifest.get(flags.mainManifestFile)!, undefined, 4),
+            JSON.stringify(manifest.get(flags.manifestFile)!, undefined, 4),
         )
     } else {
         plugins.push(
             emitFile.emitJSONFile({
                 name: `manifest.json`,
-                content: manifest.get(flags.mainManifestFile)!,
+                content: manifest.get(flags.manifestFile)!,
             }),
         )
     }
@@ -52,7 +52,7 @@ function prepareAllManifest(flags: NormalizedFlags, computedFlags: ComputedFlags
         readFileSync(new URL('./manifest/manifest-mv3.json', import.meta.url), 'utf-8'),
     )
 
-    const manifestFlags: Record<NormalizedFlags['mainManifestFile'], ManifestPresets> = {
+    const manifestFlags: Record<NormalizedFlags['manifestFile'], ManifestPresets> = {
         'chromium-beta-mv2': [{ ...flags, channel: 'beta' }, mv2Base],
         'chromium-mv2': [flags, mv2Base],
         'chromium-mv3': [flags, mv3Base],
@@ -67,7 +67,7 @@ function prepareAllManifest(flags: NormalizedFlags, computedFlags: ComputedFlags
         ],
         'safari-mv3': [flags, mv3Base],
     }
-    const manifest = new Map<NormalizedFlags['mainManifestFile'], ManifestV2 | ManifestV3>()
+    const manifest = new Map<NormalizedFlags['manifestFile'], ManifestV2 | ManifestV3>()
     for (const fileName in manifestFlags) {
         if (!Object.hasOwn(manifestFlags, fileName)) continue
         const [flags, base, modify]: ManifestPresets = (manifestFlags as any)[fileName]

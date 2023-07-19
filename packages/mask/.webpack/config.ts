@@ -51,7 +51,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         },
         cache: {
             type: 'filesystem',
-            readonly: flags.readonlyCache,
             buildDependencies: {
                 config: [fileURLToPath(import.meta.url)],
                 patches: await pnpmPatches,

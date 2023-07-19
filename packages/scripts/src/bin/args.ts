@@ -1,25 +1,23 @@
 import yargs from 'yargs'
 import type { BuildFlagsExtended } from '../extension/flags.js'
 import { hideBin } from 'yargs/helpers'
-import { applyPresetEnforce, getPreset, Preset } from '../extension/flags.js'
+import { applyPresetEnforce } from '../extension/flags.js'
 import { applyDotEnv } from '../extension/dotenv.js'
+import { ManifestFile } from '../../../mask/.webpack/flags.js'
 
-const presets = Object.values(Preset)
+const manifestFiles = Object.values(ManifestFile)
 export function extensionArgsParser(mode: 'development' | 'production') {
     const opts = yargs(hideBin(process.argv))
-        .options('preset', {
-            type: 'string',
-            choices: presets,
-            description: 'Select which preset to build',
-        })
         .options('output', { type: 'string', normalize: true, description: 'Output folder' })
         .conflicts('beta', 'insider')
         .options('beta', { type: 'boolean', description: 'Build beta version' })
         .options('insider', { type: 'boolean', description: 'Build insider version' })
 
-        .conflicts('mv2', 'mv3')
-        .options('mv2', { type: 'boolean', description: 'Build as a Manifest V2 extension' })
-        .options('mv3', { type: 'boolean', description: 'Build as a Manifest V3 extension' })
+        .options('manifest', {
+            type: 'string',
+            choices: [2, 3, ...manifestFiles] as const,
+            description: 'Select which manifest file/version to use',
+        })
 
         .options('profile', { type: 'boolean', description: 'Build a profile build' })
         .options('reproducible', { type: 'boolean', description: 'Build a reproducible build' })
@@ -52,14 +50,17 @@ export function extensionArgsParser(mode: 'development' | 'production') {
 
     if (opts instanceof Promise) throw new TypeError()
     const extensionOpts: BuildFlagsExtended = {
-        ...getPreset(opts.preset),
+        manifestFile:
+            opts.manifest === 2
+                ? ManifestFile.ChromiumMV2
+                : opts.manifest === 3
+                ? ManifestFile.ChromiumMV3
+                : opts.manifest || ManifestFile.ChromiumMV2,
         mode,
         outputPath: opts.output,
         channel: opts.beta ? 'beta' : opts.insider ? 'insider' : 'stable',
-        manifest: opts.mv3 ? 3 : opts.mv2 ? 2 : undefined,
         profiling: opts.profile,
         reproducibleBuild: opts.reproducible,
-        readonlyCache: opts.readonlyCache,
         progress: opts.progress,
         hmr: opts.hmr,
         reactRefresh: opts.reactRefresh,
@@ -69,6 +70,6 @@ export function extensionArgsParser(mode: 'development' | 'production') {
         sourceMapHideFrameworks: opts.sourceMapHideFrameworks,
     }
     applyDotEnv(extensionOpts)
-    applyPresetEnforce(opts.preset, extensionOpts)
+    applyPresetEnforce(extensionOpts)
     return extensionOpts
 }
