@@ -1,6 +1,6 @@
-import { getEnumAsArray } from '@masknet/kit'
-import { ChainId } from '../types/index.js'
+import { type ChainId } from '../types/index.js'
+import { ChainIdList } from '../constants/constants.js'
 
 export function isValidChainId(chainId?: ChainId): chainId is ChainId {
-    return getEnumAsArray(ChainId).some((x) => x.value === chainId)
+    return ChainIdList.some((x) => x === chainId)
 }

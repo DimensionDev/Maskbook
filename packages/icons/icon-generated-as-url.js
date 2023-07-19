@@ -148,7 +148,8 @@ export function chevron_up_url() { return new URL("./general/ChevronUp.svg", imp
 export function circle_close_url() { return new URL("./general/CircleClose.svg", import.meta.url) }
 export function circle_loading_url() { return new URL("./general/CircleLoading.svg", import.meta.url) }
 export function circle_warning_url() { return new URL("./general/CircleWarning.svg", import.meta.url) }
-export function clear_url() { return new URL("./general/Clear.svg", import.meta.url) }
+export function clear_dark_url() { return new URL("./general/Clear.dark.svg", import.meta.url) }
+export function clear_light_url() { return new URL("./general/Clear.light.svg", import.meta.url) }
 export function close_url() { return new URL("./general/Close.svg", import.meta.url) }
 export function cloud_backup_url() { return new URL("./general/CloudBackup.png", import.meta.url) }
 export function cloud_link_url() { return new URL("./general/CloudLink.png", import.meta.url) }

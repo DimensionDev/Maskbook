@@ -25,6 +25,7 @@
     "@masknet/plugin-infra": "workspace:^",
     "@masknet/plugin-solana": "workspace:^",
     "@masknet/plugin-wallet": "workspace:^",
+    "@masknet/plugin-transak": "workspace:^",
     "@masknet/public-api": "workspace:^",
     "@masknet/shared": "workspace:^",
     "@masknet/shared-base": "workspace:^",

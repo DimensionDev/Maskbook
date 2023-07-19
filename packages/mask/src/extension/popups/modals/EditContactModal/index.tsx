@@ -2,15 +2,15 @@ import { forwardRef, useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { ActionButton, MaskTextField, makeStyles } from '@masknet/theme'
 import { buttonClasses } from '@mui/material/Button'
+import { alpha } from '@mui/system'
+import { Box, Typography } from '@mui/material'
 import { type SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { EmojiAvatar } from '@masknet/shared'
-import { alpha } from '@mui/system'
-import { Box, Typography } from '@mui/material'
 import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Web3, Web3State } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { useAddressBook } from '@masknet/web3-hooks-base'
+import { useContacts } from '@masknet/web3-hooks-base'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { ContactType } from '../../pages/Wallet/type.js'
@@ -96,7 +96,7 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
     const { classes, cx } = useStyles()
     const { t } = useI18N()
 
-    const contacts = useAddressBook()
+    const contacts = useContacts()
 
     const nameAlreadyExist = Boolean(
         contacts?.find((contact) => contact.name === name && !isSameAddress(contact.address, address)),
@@ -109,7 +109,7 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
 
     const [{ loading }, edit] = useAsyncFn(async () => {
         if (type === ContactType.Recipient) {
-            await Web3State.state.AddressBook?.renameContact?.(name, address)
+            await Web3State.state.AddressBook?.renameContact({ name, address })
         } else if (type === ContactType.Owned) {
             await Web3.renameWallet?.(address, name, { providerType: ProviderType.MaskWallet })
         }

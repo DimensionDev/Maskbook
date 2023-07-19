@@ -165,7 +165,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         return ''
     }, [inputAmount, tokenAmount, nativeTokenBalance, balanceGasMinus, isDeposit])
 
-    const { value: tokenPrice = 0 } = useFungibleTokenPrice(
+    const { data: tokenPrice = 0 } = useFungibleTokenPrice(
         NetworkPluginID.PLUGIN_EVM,
         !isNativeTokenAddress(protocol.bareToken.address) ? protocol.bareToken.address : nativeToken?.address,
         { chainId },

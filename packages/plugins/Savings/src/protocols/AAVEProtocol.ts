@@ -9,9 +9,9 @@ import { ZERO, pow10, type FungibleToken } from '@masknet/web3-shared-base'
 import {
     TransactionEventType,
     createContract,
-    getAaveConstant,
     type ChainId,
     type SchemaType,
+    getAaveConstant,
 } from '@masknet/web3-shared-evm'
 import { BigNumber } from 'bignumber.js'
 import type Web3 from 'web3'
@@ -44,7 +44,6 @@ export class AAVEProtocol implements SavingsProtocol {
     public async getApr(chainId: ChainId, web3: Web3) {
         try {
             const subgraphUrl = getAaveConstant(chainId, 'AAVE_SUBGRAPHS')
-
             if (!subgraphUrl) {
                 return '0.00'
             }

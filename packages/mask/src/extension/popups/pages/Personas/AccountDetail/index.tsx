@@ -182,7 +182,7 @@ const AccountDetail = memo(() => {
                     onClick={async () => {
                         if (!currentPersona) return
                         const confirmed = await DisconnectModal.openAndWaitForClose({
-                            title: t('popups_new_persona_disconnect_confirmation'),
+                            title: t('popups_disconnect_persona'),
                             tips: (
                                 <Trans
                                     i18nKey="popups_persona_disconnect_tips"

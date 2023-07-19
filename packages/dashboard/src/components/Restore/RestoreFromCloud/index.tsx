@@ -1,9 +1,11 @@
-import { DashboardRoutes } from '@masknet/shared-base'
-import { useCustomSnackbar } from '@masknet/theme'
-import { Box } from '@mui/material'
+import urlcat from 'urlcat'
 import { memo, useCallback, useContext, useLayoutEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { PluginServices, Services } from '../../../API.js'
+import { Box } from '@mui/material'
+import { DashboardRoutes } from '@masknet/shared-base'
+import { useCustomSnackbar } from '@masknet/theme'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
+import { Services } from '../../../API.js'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { PersonaContext } from '../../../pages/Personas/hooks/usePersonaContext.js'
 import { BackupPreview } from '../../../pages/Settings/components/BackupPreview.js'
@@ -16,7 +18,6 @@ import { RestoreContext } from './RestoreProvider.js'
 import { RestoreStep } from './restoreReducer.js'
 import { InputForm } from './InputForm.js'
 import { ConfirmBackupInfo } from './ConfirmBackupInfo.js'
-import urlcat from 'urlcat'
 
 interface RestoreProps {
     onRestore: () => Promise<void>
@@ -72,8 +73,8 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
         dispatch({ type: 'SET_LOADING', loading: true })
         try {
             if (backupSummary?.wallets.length) {
-                const hasPassword = await PluginServices.Wallet.hasPassword()
-                if (!hasPassword) await PluginServices.Wallet.setDefaultPassword()
+                const hasPassword = await WalletServiceRef.value.hasPassword()
+                if (!hasPassword) await WalletServiceRef.value.setDefaultPassword()
             }
 
             await Services.Backup.restoreBackup(backupDecrypted)

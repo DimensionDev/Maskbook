@@ -12,7 +12,7 @@ import { MaskMessages } from '@masknet/shared-base'
 
 function injectProfileTabContentForEmptyState(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileEmptySelector())
-    startWatch(watcher, signal)
+    startWatch(watcher, { signal, shadowRootDelegatesFocus: false })
     attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(
         <ProfileTabContentAtTwitter floating />,
     )
@@ -20,7 +20,7 @@ function injectProfileTabContentForEmptyState(signal: AbortSignal) {
 
 function injectProfileTabContentState(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileTabPageSelector())
-    startWatch(watcher, signal)
+    startWatch(watcher, { signal, shadowRootDelegatesFocus: false })
     attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabContentAtTwitter />)
 }
 
@@ -37,9 +37,9 @@ export function injectProfileTabContentAtTwitter(signal: AbortSignal) {
         MaskMessages.events.profileTabHidden.sendToLocal({ hidden: false }),
     )
 
-    startWatch(contentLoseConnectionWatcher, signal)
-    startWatch(contentContentWatcher, signal)
-    startWatch(ContentForEmptyWatcher, signal)
+    startWatch(contentLoseConnectionWatcher, { signal, shadowRootDelegatesFocus: false })
+    startWatch(contentContentWatcher, { signal, shadowRootDelegatesFocus: false })
+    startWatch(ContentForEmptyWatcher, { signal, shadowRootDelegatesFocus: false })
 
     injectProfileTabContentForEmptyState(signal)
     injectProfileTabContentState(signal)

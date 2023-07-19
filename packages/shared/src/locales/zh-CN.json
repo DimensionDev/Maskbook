@@ -280,5 +280,8 @@
     "lucky_drop": "红包",
     "share": "分享",
     "ok": "确定",
-    "plugin_wallet_on_connect": "连接钱包"
+    "plugin_wallet_on_connect": "连接钱包",
+    "show_wallet_setting_intro": "请选择钱包保存设置后激活功能。",
+    "show_wallet_setting_button": "前往设置",
+    "web3_profile_no_social_address_list": "找不到有效的用户地址数据源。"
 }

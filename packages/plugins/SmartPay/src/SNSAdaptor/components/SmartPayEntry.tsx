@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect } from 'react'
 import { Trans } from 'react-i18next'
-import { ApplicationEntry, LeavePageConfirmModal, useSharedI18N } from '@masknet/shared'
+import { ApplicationEntry, LeavePageConfirmModal, PersonaSelectPanelModal, useSharedI18N } from '@masknet/shared'
 import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Icons } from '@masknet/icons'
@@ -29,20 +29,21 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
         if (loading || !value) return
 
         // Contract account already exists
-        if (wallets.filter((x) => x.owner).length)
+        if (wallets.filter((x) => x.owner).length) {
             setSmartPayDialog({
                 open: true,
                 hasAccounts: true,
                 signWallet: value.signWallet,
                 signPersona: value.signPersona,
             })
-
+            return
+        }
         // If there is no persona and no signer
         if (!personas.length && !value.signPersona && !value.signWallet) {
             LeavePageConfirmModal.open({
                 info: {
                     target: 'dashboard',
-                    url: DashboardRoutes.Setup,
+                    url: DashboardRoutes.SignUpPersona,
                     text: t.create_persona_hint(),
                     title: t.create_persona_title(),
                     actionHint: t.create_persona_action(),
@@ -50,8 +51,21 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
                 },
                 openDashboard,
             })
+            return
         }
-        return
+
+        // if there is verified persona but current persona isn't verified
+        if ((value.hasVerifiedPersona || personas.length) && !value.signPersona && !value.signWallet) {
+            return PersonaSelectPanelModal.open({
+                enableVerify: true,
+                target: PluginID.SmartPay,
+            })
+        }
+        return setSmartPayDialog({
+            open: true,
+            signWallet: value.signWallet,
+            signPersona: value.signPersona,
+        })
     }, [loading, wallets, value, personas])
 
     useEffect(() => {

@@ -31,7 +31,7 @@ export function ShadowRootIsolation({ children, rootElement = 'div', ...props }:
         if (dom.shadowRoot) return
 
         // Note: ShadowRootIsolation is expected to use inside other closed ShadowRoot
-        const shadow = dom.attachShadow({ ...Flags.shadowRootInit, mode: 'open' })
+        const shadow = dom.attachShadow({ ...Flags.shadowRootInit, mode: 'open', delegatesFocus: false })
         shadow.appendChild(container.current!)
     }, [dom])
 

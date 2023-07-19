@@ -1,5 +1,6 @@
 import { type NetworkPluginID } from '@masknet/shared-base'
 import type {
+    ChainDescriptor,
     NetworkDescriptor,
     ProviderDescriptor,
     FungibleToken,
@@ -138,6 +139,12 @@ export declare namespace Web3Helper {
         Definition[NetworkPluginID]['SchemaType']
     >
 
+    export type ChainDescriptorAll = ChainDescriptor<
+        Definition[NetworkPluginID]['ChainId'],
+        Definition[NetworkPluginID]['SchemaType'],
+        Definition[NetworkPluginID]['NetworkType']
+    >
+
     export type NetworkDescriptorAll = NetworkDescriptor<
         Definition[NetworkPluginID]['ChainId'],
         Definition[NetworkPluginID]['NetworkType']
@@ -232,6 +239,13 @@ export declare namespace Web3Helper {
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
     > = NonFungibleAsset<ChainIdScope<S, T>, SchemaTypeScope<S, T>>
+
+    export type ChainDescriptorScope<
+        S extends 'all' | void = void,
+        T extends NetworkPluginID = NetworkPluginID,
+    > = S extends 'all'
+        ? ChainDescriptorAll
+        : ChainDescriptor<Definition[T]['ChainId'], Definition[T]['SchemaType'], Definition[T]['NetworkType']>
 
     export type NetworkDescriptorScope<
         S extends 'all' | void = void,

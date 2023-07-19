@@ -6,6 +6,7 @@ import { Icons } from '@masknet/icons'
 import { base } from '../base.js'
 import { PluginPetMessages } from '../messages.js'
 import { PetsGlobalInjection } from './PetsGlobalInjection.js'
+import { PluginID } from '@masknet/shared-base'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -14,7 +15,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.Pets size={36} />
-            const name = <Trans i18nKey="plugin_pets_name" />
+            const name = <Trans i18nKey="plugin_pets_name" ns={PluginID.Pets} />
             const iconFilterColor = 'rgba(226, 0, 233, 0.2)'
             return {
                 ApplicationEntryID: base.ID,
@@ -38,7 +39,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 appBoardSortingDefaultPriority: 13,
                 marketListSortingPriority: 13,
                 icon,
-                description: <Trans i18nKey="plugin_pets_description" />,
+                description: <Trans i18nKey="plugin_pets_description" ns={PluginID.Pets} />,
                 name,
                 tutorialLink: 'https://twitter.com/NonFFriend',
                 iconFilterColor,

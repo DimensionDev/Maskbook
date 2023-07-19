@@ -1,11 +1,11 @@
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
+import type { ImportSource } from '@masknet/shared-base'
 
 export interface WalletRecord {
     id: string
-    /** User define wallet name. Default address.prefix(6) */
     name: string
-    /** The address of wallet */
     address: string
+    source: ImportSource
     type: 'wallet'
     derivationPath?: string
     latestDerivationPath?: string

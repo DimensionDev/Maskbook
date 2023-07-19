@@ -19,7 +19,6 @@ const useStyles = makeStyles()((theme) => {
             position: 'absolute',
             left: '16px',
             top: '14px',
-            background: 'white',
             borderRadius: '50%',
         },
     }
@@ -45,7 +44,7 @@ export function SourceProviderSwitcher({ sources, onSelect, selected }: SourcePr
                         <SourceProviderIcon size={24} provider={x} />
                         {selected === x && (
                             <Stack className={classes.selected}>
-                                <Icons.Success size={12} />
+                                <Icons.BorderedSuccess size={12} />
                             </Stack>
                         )}
                     </Stack>

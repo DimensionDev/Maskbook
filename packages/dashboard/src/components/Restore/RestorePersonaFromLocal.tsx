@@ -1,13 +1,14 @@
+import { memo, useCallback, useLayoutEffect, useMemo, useState } from 'react'
+import { useAsync } from 'react-use'
+import { Box, Button, Typography } from '@mui/material'
 import { type BackupSummary, decryptBackup } from '@masknet/backup-format'
 import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
 import { FileFrame, UploadDropArea } from '@masknet/shared'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { decode, encode } from '@msgpack/msgpack'
-import { Box, Button, Typography } from '@mui/material'
-import { memo, useCallback, useLayoutEffect, useMemo, useState } from 'react'
-import { useAsync } from 'react-use'
-import { PluginServices, Services } from '../../API.js'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
+import { Services } from '../../API.js'
 import { usePersonaRecovery } from '../../contexts/RecoveryContext.js'
 import { useDashboardI18N } from '../../locales/index.js'
 import { BackupPreview } from '../../pages/Settings/components/BackupPreview.js'
@@ -117,8 +118,8 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
             setProcessing(true)
             // If json has wallets, restore in popup.
             if (summary?.wallets.length) {
-                const hasPassword = await PluginServices.Wallet.hasPassword()
-                if (!hasPassword) await PluginServices.Wallet.setDefaultPassword()
+                const hasPassword = await WalletServiceRef.value.hasPassword()
+                if (!hasPassword) await WalletServiceRef.value.setDefaultPassword()
             }
             await Services.Backup.restoreBackup(backupValue)
 

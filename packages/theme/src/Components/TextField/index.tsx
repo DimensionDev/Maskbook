@@ -10,10 +10,11 @@ import {
     Typography,
     InputBase,
     inputBaseClasses,
+    alpha,
 } from '@mui/material'
 import { Sniffings } from '@masknet/shared-base'
 import { makeStyles } from '../../UIHelper/makeStyles.js'
-import { getMaskColor, MaskColorVar } from '../../CSSVariables/vars.js'
+import { MaskColorVar, getMaskColor } from '../../CSSVariables/vars.js'
 
 const useStyles = makeStyles()((theme) => ({
     label: {
@@ -47,7 +48,7 @@ const useStyles = makeStyles()((theme) => ({
             WebkitAppearance: 'none',
         },
         '& input::-webkit-input-placeholder': {
-            color: !Sniffings.is_dashboard_page ? theme.palette.maskColor.second : undefined,
+            color: !Sniffings.is_dashboard_page ? theme.palette.maskColor.second : theme.palette.maskColor.third,
         },
         [`&.${inputBaseClasses.focused}`]: {
             background: theme.palette.maskColor.bottom,
@@ -55,11 +56,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     input: {
         padding: theme.spacing(1),
-        background: !Sniffings.is_dashboard_page
-            ? theme.palette.maskColor.input
-            : theme.palette.mode === 'dark'
-            ? '#2B2E4C'
-            : '#F6F6F8',
+        background: theme.palette.maskColor.input,
         fontSize: 13,
         lineHeight: '16px',
         borderRadius: 6,
@@ -73,8 +70,13 @@ const useStyles = makeStyles()((theme) => ({
         color: 'rgba(255, 255, 255, 0.4)',
     },
     inputFocused: {
-        backgroundColor: !Sniffings.is_dashboard_page ? theme.palette.maskColor.input : MaskColorVar.primaryBackground,
-        boxShadow: `0 0 0 2px ${theme.palette.mode === 'dark' ? '#4F5378' : 'rgba(28, 104, 243, 0.2)'}`,
+        backgroundColor: !Sniffings.is_dashboard_page ? theme.palette.maskColor.input : theme.palette.maskColor.bottom,
+        ...(Sniffings.is_dashboard_page
+            ? {
+                  outline: `2px solid ${alpha(theme.palette.maskColor.primary, 0.2)}`,
+                  border: `1px solid ${alpha(theme.palette.maskColor.primary, 0.5)}`,
+              }
+            : { boxShadow: `0 0 0 2px ${theme.palette.mode === 'dark' ? '#4F5378' : 'rgba(28, 104, 243, 0.2)'}` }),
     },
 }))
 

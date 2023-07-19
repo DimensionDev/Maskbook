@@ -4,13 +4,13 @@ import { Emitter } from '@servie/events'
 import { CurrentSNSNetwork, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { BooleanPreference, createI18NBundle, i18NextInstance } from '@masknet/shared-base'
 import { setupReactShadowRootEnvironment } from '@masknet/theme'
-import { inMemoryStorage, indexedDBStorage } from './storage.js'
+import { inMemoryStorage, indexedDBStorage } from '../setup/storage.js'
 import { createSharedContext } from '../helpers/createSharedContext.js'
 
 startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
     minimalMode: {
         events: new Emitter(),
-        isEnabled: () => BooleanPreference.True,
+        isEnabled: () => BooleanPreference.False,
     },
     addI18NResource(plugin, resource) {
         createI18NBundle(plugin, resource)(i18NextInstance)
