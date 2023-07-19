@@ -9,21 +9,12 @@ import {
     useIsMinimalMode,
     usePluginI18NField,
     getProfileTabContent,
+    useAllPersonas,
+    useSNSAdaptorContext,
+    useLastRecognizedIdentity,
+    useSocialIdentityByUserId,
 } from '@masknet/plugin-infra/content-script'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
-import {
-    AddressItem,
-    ConnectPersonaBoundary,
-    GrantPermissions,
-    PluginCardFrameMini,
-    useCurrentPersonaConnectStatus,
-    useSocialAccountsBySettings,
-    TokenWithSocialGroupMenu,
-    SocialAccountList,
-    useCollectionByTwitterHandler,
-    addressSorter,
-    WalletSettingEntry,
-} from '@masknet/shared'
 import {
     CrossIsolationMessages,
     EMPTY_LIST,
@@ -32,30 +23,34 @@ import {
     PluginID,
     ProfileTabs,
     currentPersonaIdentifier,
+    isFacebook,
+    isTwitter,
 } from '@masknet/shared-base'
 import { useValueRef, useLocationChange } from '@masknet/shared-base-ui'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ScopedDomainsContainer, useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
-import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
-import { activatedSocialNetworkUI } from '../../social-network/index.js'
-import { useI18N } from '../../utils/index.js'
+import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry.js'
 import {
-    useCurrentVisitingIdentity,
-    useLastRecognizedIdentity,
-    useSocialIdentity,
-    useSocialIdentityByUserId,
-} from '../DataSource/useActivatedUI.js'
-import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
-import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
-import { SearchResultInspector } from './SearchResultInspector.js'
-import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
-import Services from '../../extension/service.js'
+    AddressItem,
+    ConnectPersonaBoundary,
+    GrantPermissions,
+    PluginCardFrameMini,
+    ProfileTabContext,
+    SearchResultInspector,
+    SocialAccountList,
+    TokenWithSocialGroupMenu,
+    useCollectionByTwitterHandler,
+    useCurrentPersonaConnectStatus,
+    useGrantPermissions,
+    usePluginHostPermissionCheck,
+    useSharedI18N,
+} from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        width: isFacebook(activatedSocialNetworkUI) ? 876 : 'auto',
+        width: isFacebook() ? 876 : 'auto',
     },
     container: {
         background:
@@ -137,35 +132,34 @@ function openWeb3ProfileSettingDialog() {
 function Content(props: ProfileTabContentProps) {
     const { classes } = useStyles(undefined, { props })
 
-    const { t } = useI18N()
+    const t = useSharedI18N()
     const translate = usePluginI18NField()
 
-    const [hidden, setHidden] = useState(true)
     const [profileTabType, setProfileTabType] = useState(ProfileTabs.WEB3)
     const [menuOpen, setMenuOpen] = useState(false)
     const closeMenu = useCallback(() => setMenuOpen(false), [])
-    const allPersonas = usePersonasFromDB()
+    const allPersonas = useAllPersonas()
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
+
+    const { openDashboard } = useSNSAdaptorContext()
 
     const {
         value: personaStatus,
         loading: loadingPersonaStatus,
         error: loadPersonaStatusError,
         retry: retryLoadPersonaStatus,
-    } = useCurrentPersonaConnectStatus(allPersonas, currentIdentifier, Services.Helper.openDashboard, lastRecognized)
+    } = useCurrentPersonaConnectStatus(allPersonas, currentIdentifier, openDashboard, lastRecognized)
 
-    const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
-    const { value: currentSocialIdentity } = useSocialIdentity(currentVisitingSocialIdentity)
+    const {
+        currentVisitingSocialIdentity,
+        socialAccounts = [],
+        currentSocialIdentity,
+    } = ProfileTabContext.useContainer()
+
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
     const isOwnerIdentity = currentVisitingSocialIdentity?.isOwner
 
-    const {
-        value: socialAccounts = EMPTY_LIST,
-        loading: loadingSocialAccounts,
-        error: loadSocialAccounts,
-        retry: retrySocialAccounts,
-    } = useSocialAccountsBySettings(currentSocialIdentity, undefined, addressSorter)
     const [selectedAddress = first(socialAccounts)?.address, setSelectedAddress] = useState<string>()
     const selectedSocialAccount = socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))
     const { setPair } = ScopedDomainsContainer.useContainer()
@@ -174,12 +168,6 @@ function Content(props: ProfileTabContentProps) {
             setPair(selectedSocialAccount.address, selectedSocialAccount.label)
         }
     }, [selectedSocialAccount?.address, selectedSocialAccount?.label])
-
-    useEffect(() => {
-        return MaskMessages.events.ownProofChanged.on(() => {
-            retrySocialAccounts()
-        })
-    }, [retrySocialAccounts])
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
     const displayPlugins = getAvailablePlugins(activatedPlugins, (plugins) => {
@@ -197,18 +185,17 @@ function Content(props: ProfileTabContentProps) {
         id: x.ID,
         label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
     }))
-
     const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
     const isWeb3ProfileDisable = useIsMinimalMode(PluginID.Web3Profile)
 
-    const isOnTwitter = isTwitter(activatedSocialNetworkUI)
+    const isOnTwitter = isTwitter()
     const doesOwnerHaveNoAddress =
         isOwnerIdentity && personaStatus.proof?.findIndex((p) => p.platform === NextIDPlatform.Ethereum) === -1
 
     // the owner persona and sns not verify on next ID
     const myPersonaNotVerifiedYet = isOwnerIdentity && !personaStatus.verified
-    const showNextID =
+    const showNextID1 =
         isOnTwitter &&
         // enabled the plugin
         (isWeb3ProfileDisable ||
@@ -218,12 +205,12 @@ function Content(props: ProfileTabContentProps) {
             // the visiting persona not have social address list
             (!isOwnerIdentity && !socialAccounts.length))
 
+    const showNextID = false
     const componentTabId = showNextID ? `${PluginID.NextID}_tabContent` : currentTab
 
     const contentComponent = useMemo(() => {
         const Component = getProfileTabContent(componentTabId)
         if (!Component) return null
-
         return <Component identity={currentSocialIdentity} socialAccount={selectedSocialAccount} />
     }, [componentTabId, selectedSocialAccount, currentSocialIdentity])
 
@@ -242,12 +229,6 @@ function Content(props: ProfileTabContentProps) {
         setSelectedAddress(undefined)
     }, [currentVisitingUserId])
 
-    useEffect(() => {
-        return MaskMessages.events.profileTabHidden.on((data) => {
-            if (data.hidden) setHidden(data.hidden)
-        })
-    }, [currentVisitingUserId])
-
     const [isHideInspector, hideInspector] = useState(false)
 
     useEffect(() => {
@@ -258,7 +239,6 @@ function Content(props: ProfileTabContentProps) {
 
     useEffect(() => {
         return MaskMessages.events.profileTabUpdated.on((data) => {
-            setHidden(!data.show)
             data.type && setProfileTabType(data.type)
         })
     }, [currentVisitingUserId])
@@ -299,8 +279,6 @@ function Content(props: ProfileTabContentProps) {
         return NextIDProof.queryProfilesByTwitterId(currentVisitingUserId)
     }, [currentVisitingUserId])
 
-    if (hidden) return null
-
     const keyword =
         profileTabType === ProfileTabs.WEB3 ? trendingResult?.address || trendingResult?.name : currentVisitingUserId
 
@@ -335,7 +313,7 @@ function Content(props: ProfileTabContentProps) {
         )
     }
 
-    if (!currentVisitingUserId || loadingSocialAccounts || loadingPersonaStatus)
+    if (!currentVisitingUserId || loadingPersonaStatus)
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
@@ -344,11 +322,9 @@ function Content(props: ProfileTabContentProps) {
             </ThemeProvider>
         )
 
-    if (((isOwnerIdentity && loadPersonaStatusError) || loadSocialAccounts) && socialAccounts.length === 0) {
+    if (isOwnerIdentity && loadPersonaStatusError && socialAccounts.length === 0) {
         const handleClick = () => {
             if (loadPersonaStatusError) retryLoadPersonaStatus()
-
-            if (loadSocialAccounts) retrySocialAccounts()
         }
         return (
             <ThemeProvider theme={MaskLightTheme}>
@@ -360,10 +336,10 @@ function Content(props: ProfileTabContentProps) {
                                 fontWeight={400}
                                 lineHeight="18px"
                                 color={(t) => t.palette.maskColor.danger}>
-                                {t('load_failed')}
+                                {t.load_failed()}
                             </Typography>
                             <Button color="primary" className={classes.reload} onClick={handleClick}>
-                                {t('reload')}
+                                {t.reload()}
                             </Button>
                         </Stack>
                     </PluginCardFrameMini>
@@ -384,7 +360,7 @@ function Content(props: ProfileTabContentProps) {
                                 fontWeight={400}
                                 lineHeight="18px"
                                 color={(t) => t.palette.maskColor.publicMain}>
-                                {t('web3_profile_no_social_address_list')}
+                                {t.web3_profile_no_social_address_list()}
                             </Typography>
                         </Stack>
                     </PluginCardFrameMini>
@@ -461,21 +437,21 @@ function Content(props: ProfileTabContentProps) {
                                 fontWeight={700}
                                 marginRight="5px"
                                 color={(theme) => theme.palette.maskColor.secondaryDark}>
-                                {t('powered_by')}
+                                {t.powered_by()}
                             </Typography>
                             <Typography
                                 fontSize="14px"
                                 fontWeight={700}
                                 marginRight="4px"
                                 color={(theme) => theme.palette.maskColor.dark}>
-                                {t('mask_network')}
+                                {t.mask_network()}
                             </Typography>
                             {isOwnerIdentity && isOnTwitter ? (
                                 <ConnectPersonaBoundary
                                     personas={allPersonas}
                                     identity={lastRecognized}
                                     currentPersonaIdentifier={currentIdentifier}
-                                    openDashboard={Services.Helper.openDashboard}
+                                    openDashboard={openDashboard}
                                     customHint
                                     handlerPosition="top-right"
                                     directTo={PluginID.Web3Profile}>

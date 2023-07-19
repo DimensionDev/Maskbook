@@ -8,7 +8,6 @@ import { getPluginDefine } from './store.js'
 import type { CurrentSNSNetwork, Plugin } from '../types.js'
 
 const { events, activated, startDaemon, minimalMode } = createManager((def) => def.SNSAdaptor)
-
 const activatedSub = new ValueRefWithReady<Plugin.SNSAdaptor.Definition[]>([], isEqual)
 events.on('activateChanged', () => (activatedSub.value = [...activated.plugins]))
 

@@ -343,7 +343,6 @@ export namespace Plugin.SNSAdaptor {
     export interface SNSAdaptorContext extends Shared.SharedUIContext {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
-        allPersonas?: Subscription<PersonaInformation[]>
         themeSettings: Subscription<ThemeSettings | undefined>
         /** The default theme settings. */
         getThemeSettings: () => ThemeSettings | undefined
@@ -380,6 +379,9 @@ export namespace Plugin.SNSAdaptor {
         getPostIdFromNewPostToast?: () => string
         postMessage?: (text: string, options?: any) => Promise<void>
         setPluginMinimalModeEnabled?: (id: string, enabled: boolean) => Promise<void>
+        getSearchedKeyword?: () => string
+        hasHostPermission?: (origins: readonly string[]) => Promise<boolean>
+        requestHostPermission?: (origins: readonly string[]) => Promise<boolean>
     }
 
     export type SelectProviderDialogEvent =

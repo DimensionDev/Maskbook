@@ -6,9 +6,10 @@ import '@masknet/plugin-artblocks'
 import '@masknet/plugin-snapshot'
 import '@masknet/plugin-cyberconnect'
 import '@masknet/plugin-vcent'
-
 import '@masknet/plugin-ito'
 import '@masknet/plugin-redpacket'
+import '@masknet/plugin-file-service'
+
 import '@masknet/plugin-maskbox'
 
 import '@masknet/plugin-flow'
@@ -32,5 +33,4 @@ import '@masknet/plugin-savings'
 import '@masknet/plugin-pets'
 import '@masknet/plugin-game'
 
-import '@masknet/plugin-file-service'
 import '@masknet/plugin-smart-pay'
