@@ -140,7 +140,9 @@ export class BaseHostedProvider
                 isSameAddress(x.address, address)
                     ? {
                           ...x,
-                          ...updates,
+                          name: updates.name ?? x.name,
+                          owner: updates.owner ?? x.owner,
+                          identifier: updates.identifier ?? x.identifier,
                           createdAt: x.createdAt ?? now,
                           updatedAt: now,
                       }
