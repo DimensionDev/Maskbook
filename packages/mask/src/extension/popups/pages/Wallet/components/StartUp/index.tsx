@@ -5,6 +5,7 @@ import { memo, useCallback } from 'react'
 import { useI18N } from '../../../../../../utils/index.js'
 import Services from '../../../../../service.js'
 import { DashboardRoutes, Sniffings } from '@masknet/shared-base'
+import { useHasPassword } from '../../../../hook/useHasPassword.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -67,18 +68,24 @@ export const WalletStartUp = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const theme = useTheme()
+    const { hasPassword } = useHasPassword()
 
-    const onEnterCreateWallet = useCallback(async (route: DashboardRoutes) => {
-        await browser.tabs.create({
-            active: true,
-            url: browser.runtime.getURL(`/dashboard.html#${route}`),
-        })
-        if (Sniffings.is_firefox) {
-            window.close()
-        }
+    const onEnterCreateWallet = useCallback(
+        async (route: DashboardRoutes) => {
+            await browser.tabs.create({
+                active: true,
+                url: browser.runtime.getURL(
+                    `/dashboard.html#${hasPassword ? route : DashboardRoutes.CreateMaskWalletForm}`,
+                ),
+            })
+            if (Sniffings.is_firefox) {
+                window.close()
+            }
 
-        await Services.Helper.removePopupWindow()
-    }, [])
+            await Services.Helper.removePopupWindow()
+        },
+        [hasPassword],
+    )
 
     return (
         <Box className={classes.container}>

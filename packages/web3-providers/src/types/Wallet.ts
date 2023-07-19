@@ -37,8 +37,6 @@ export namespace WalletAPI {
         addWallet(wallet: Wallet): Promise<void>
         /** Update a wallet. */
         updateWallet(address: string, wallet: Wallet): Promise<void>
-        /** Add or update a new wallet on demand. */
-        updateOrAddWallet(wallet: Wallet): Promise<void>
         /** Rename a wallet */
         renameWallet(address: string, name: string): Promise<void>
         /** Remove a wallet */

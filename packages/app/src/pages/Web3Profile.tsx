@@ -1,0 +1,41 @@
+import { DisableShadowRootContext, ShadowRootIsolation } from '@masknet/theme'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { DashboardContainer } from '../components/DashboardContainer.js'
+import { StickySearchHeader } from '../components/StickySearchBar.js'
+import { DashboardHeader } from '../components/DashboardHeader.js'
+import { ProfileTabContent, ProfileTabContext } from '@masknet/shared'
+import { currentSocialIdentity, currentVisitingSocialIdentity, socialAccounts } from '../mock.js'
+
+export interface Web3ProfilePageProps {}
+
+export default function Web3ProfilePage(props: Web3ProfilePageProps) {
+    return (
+        <DashboardContainer>
+            <StickySearchHeader />
+
+            <main>
+                <DashboardHeader title="W3bProfile" />
+
+                <div className="bg-white p-5">
+                    <div className="border pt-3 rounded-lg">
+                        <DisableShadowRootContext.Provider value={false}>
+                            <ShadowRootIsolation>
+                                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+                                    <ProfileTabContext.Provider
+                                        initialState={{
+                                            currentVisitingSocialIdentity,
+                                            socialAccounts,
+                                            currentSocialIdentity,
+                                        }}>
+                                        <ProfileTabContent />
+                                    </ProfileTabContext.Provider>
+                                </Web3ContextProvider>
+                            </ShadowRootIsolation>
+                        </DisableShadowRootContext.Provider>
+                    </div>
+                </div>
+            </main>
+        </DashboardContainer>
+    )
+}

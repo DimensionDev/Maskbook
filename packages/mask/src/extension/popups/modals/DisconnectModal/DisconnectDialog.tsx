@@ -7,6 +7,7 @@ import { ActionButton, makeStyles } from '@masknet/theme'
 const useStyles = makeStyles()((theme) => ({
     title: {
         fontSize: 16,
+        fontWeight: 700,
         lineHeight: '20px',
         textAlign: 'center',
     },

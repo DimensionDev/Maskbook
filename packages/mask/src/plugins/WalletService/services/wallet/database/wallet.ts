@@ -1,6 +1,6 @@
 import { omit } from 'lodash-es'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
-import { CrossIsolationMessages, asyncIteratorToArray } from '@masknet/shared-base'
+import { CrossIsolationMessages, type ImportSource, asyncIteratorToArray } from '@masknet/shared-base'
 import { formatEthereumAddress, isValidAddress } from '@masknet/web3-shared-evm'
 import { PluginDB } from '../../../database/Plugin.db.js'
 import type { WalletRecord } from '../type.js'
@@ -68,14 +68,15 @@ export async function getWallets() {
 }
 
 export async function addWallet(
+    source: ImportSource,
     address: string,
-    name?: string,
-    derivationPath?: string,
-    storedKeyInfo?: api.IStoredKeyInfo,
+    updates?: {
+        name?: string
+        derivationPath?: string
+        storedKeyInfo?: api.IStoredKeyInfo
+    },
 ) {
     const wallet = await getWallet(address)
-
-    // overwrite mask wallet is not allowed
     if (wallet?.storedKeyInfo?.data) throw new Error('The wallet already exists.')
 
     const now = new Date()
@@ -83,10 +84,11 @@ export async function addWallet(
     await PluginDB.add({
         id: address_,
         type: 'wallet',
+        source,
         address: address_,
-        name: name?.trim() || `Account ${(await getWallets()).length + 1}`,
-        derivationPath,
-        storedKeyInfo,
+        name: updates?.name?.trim() ?? `Account ${(await getWallets()).length + 1}`,
+        derivationPath: updates?.derivationPath,
+        storedKeyInfo: updates?.storedKeyInfo,
         createdAt: now,
         updatedAt: now,
     })
@@ -96,21 +98,22 @@ export async function addWallet(
 
 export async function updateWallet(
     address: string,
-    updates: Partial<Omit<WalletRecord, 'id' | 'type' | 'address' | 'createdAt' | 'updatedAt' | 'storedKeyInfo'>>,
+    updates: Partial<{
+        name: string
+        derivationPath?: string
+        latestDerivationPath?: string
+    }>,
 ) {
     const wallet = await getWallet(address)
-    const now = new Date()
-    const address_ = formatEthereumAddress(address)
-    const total = (await getWalletRecords()).length
+    if (!wallet) throw new Error('The wallet does not exist')
+
     await PluginDB.add({
         type: 'wallet',
-        id: address_,
-        address: address_,
-        name: `Account ${total + 1}`,
         ...wallet,
-        ...updates,
-        createdAt: wallet?.createdAt ?? now,
-        updatedAt: now,
+        name: updates.name ?? wallet.name,
+        derivationPath: updates?.derivationPath ?? wallet.derivationPath,
+        latestDerivationPath: updates?.latestDerivationPath ?? wallet.latestDerivationPath,
+        updatedAt: new Date(),
     })
     CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)
 }

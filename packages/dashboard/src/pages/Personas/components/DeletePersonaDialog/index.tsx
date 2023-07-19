@@ -28,7 +28,7 @@ export const DeletePersonaDialog = memo<DeletePersonaDialogProps>(({ open, onClo
             await changeCurrentPersona(lastedPersona)
         } else {
             showSnackbar(t.personas_setup_tip(), { variant: 'warning' })
-            navigate(DashboardRoutes.Setup)
+            navigate(DashboardRoutes.SignUpPersona)
         }
     }, [nickname, identifier])
 

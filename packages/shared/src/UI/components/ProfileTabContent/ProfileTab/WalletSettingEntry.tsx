@@ -3,7 +3,7 @@ import { CrossIsolationMessages } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, Stack, Typography } from '@mui/material'
 import { memo } from 'react'
-import { useI18N } from '../../../utils/index.js'
+import { useSharedI18N } from '../../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -21,20 +21,20 @@ function openWeb3ProfileSettingDialog() {
     })
 }
 export const WalletSettingEntry = memo(function WalletSettingEntry() {
-    const { t } = useI18N()
+    const t = useSharedI18N()
     const { classes } = useStyles()
 
     return (
         <>
             <Stack flex={1}>
                 <Typography fontWeight={400} fontSize={14}>
-                    {t('show_wallet_setting_intro')}
+                    {t.show_wallet_setting_intro()}
                 </Typography>
             </Stack>
             <Stack direction="row" justifyContent="center">
                 <Button className={classes.button} onClick={openWeb3ProfileSettingDialog}>
                     <Icons.Settings size={18} />
-                    {t('show_wallet_setting_button')}
+                    {t.show_wallet_setting_button()}
                 </Button>
             </Stack>
         </>

@@ -1,12 +1,13 @@
+import { useContext, useEffect, useMemo, useState } from 'react'
+import { useAsync, useAsyncFn } from 'react-use'
+import formatDateTime from 'date-fns/format'
+import { Box } from '@mui/material'
 import { encryptBackup } from '@masknet/backup-format'
 import { MimeType } from '@masknet/shared-base'
 import { MaskDialog, useCustomSnackbar } from '@masknet/theme'
 import { encode } from '@msgpack/msgpack'
-import { Box } from '@mui/material'
-import formatDateTime from 'date-fns/format'
-import { useContext, useEffect, useMemo, useState } from 'react'
-import { useAsync, useAsyncFn } from 'react-use'
-import { PluginServices, Services } from '../../../../API.js'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
+import { Services } from '../../../../API.js'
 import { LoadingButton } from '../../../../components/LoadingButton/index.js'
 import { MaskAlert } from '../../../../components/MaskAlert/index.js'
 import PasswordFiled from '../../../../components/PasswordField/index.js'
@@ -48,7 +49,7 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
 
         try {
             if (showPassword.wallet) {
-                const verified = await PluginServices.Wallet.verifyPassword(paymentPassword)
+                const verified = await WalletServiceRef.value.verifyPassword(paymentPassword)
                 if (!verified) {
                     setIncorrectPaymentPassword(true)
                     return
