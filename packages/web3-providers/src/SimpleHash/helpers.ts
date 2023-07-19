@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash-es'
+import { isEmpty, memoize } from 'lodash-es'
 import { unreachable } from '@masknet/kit'
 import {
     SourceType,
@@ -133,7 +133,9 @@ export function createNonFungibleCollection(collection: Collection): NonFungible
     }
 }
 
-export function resolveChainId(chain: string): ChainId | undefined {
+export const resolveChainId: (chainId: string) => ChainId | undefined = memoize(function resolveChainId(
+    chain: string,
+): ChainId | undefined {
     // Some of the `chainResolver.chainId()` results do not match.
     switch (chain) {
         case 'ethereum':
@@ -153,7 +155,7 @@ export function resolveChainId(chain: string): ChainId | undefined {
         default:
             return undefined
     }
-}
+})
 
 const ChainNameMap: Record<NetworkPluginID, Record<number, string>> = {
     [NetworkPluginID.PLUGIN_EVM]: {
@@ -185,7 +187,8 @@ export function checkBlurToken(pluginId: NetworkPluginID, chainId: Web3Helper.Ch
     return `${resolveChain(pluginId, chainId)}.${address.toLowerCase()}` === `ethereum.${ETH_BLUR_TOKEN_ADDRESS}`
 }
 
-export function checkLensFollower(name: string) {
+export function isLensFollower(name: string) {
+    if (!name) return false
     return name.endsWith('.lens-Follower')
 }
 

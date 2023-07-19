@@ -7,4 +7,9 @@ registerPlugin({
         load: () => import('./Worker/index.js'),
         hotModuleReload: (hot) => import.meta.webpackHot?.accept('./Worker', () => hot(import('./Worker/index.js'))),
     },
+    Dashboard: {
+        load: () => import('./UI/Dashboard/index.js'),
+        hotModuleReload: (hot) =>
+            import.meta.webpackHot?.accept('./UI/Dashboard', () => import('./UI/Dashboard/index.js')),
+    },
 })

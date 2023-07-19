@@ -1,0 +1,43 @@
+import {
+    hasPassword,
+    changePassword,
+    setPassword,
+    verifyPassword,
+    resetPassword,
+    exportMnemonicWords,
+    exportPrivateKey,
+    getDerivableAccounts,
+    getLegacyWallets,
+    getWallets,
+    recoverWalletFromMnemonicWords,
+    generateAddressFromMnemonicWords,
+    setDefaultPassword,
+    recoverWalletFromPrivateKey,
+    recoverWalletFromKeyStoreJSON,
+    createWalletFromMnemonicWords,
+    createMnemonicWords,
+    resolveMaskAccount,
+} from '../services/index.js'
+
+export function createWalletService() {
+    return {
+        changePassword,
+        createMnemonicWords: async () => createMnemonicWords(),
+        createWalletFromMnemonicWords,
+        exportMnemonicWords,
+        exportPrivateKey,
+        generateAddressFromMnemonicWords,
+        getDerivableAccounts,
+        getLegacyWallets,
+        getWallets,
+        hasPassword,
+        recoverWalletFromKeyStoreJSON,
+        recoverWalletFromMnemonicWords,
+        recoverWalletFromPrivateKey,
+        resetPassword,
+        resolveMaskAccount,
+        setDefaultPassword,
+        setPassword,
+        verifyPassword,
+    }
+}

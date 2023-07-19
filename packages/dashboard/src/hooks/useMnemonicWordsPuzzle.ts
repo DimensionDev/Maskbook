@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { produce } from 'immer'
 import { range, shuffle, remove, clone } from 'lodash-es'
-import { PluginServices } from '../API.js'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 
 const PUZZLE_SIZE = 3
 
@@ -16,7 +16,7 @@ export interface PuzzleWord {
 
 export function useMnemonicWordsPuzzle() {
     const { value: words = [], retry: wordsRetry } = useAsyncRetry(
-        () => PluginServices.Wallet.createMnemonicWords(),
+        () => WalletServiceRef.value.createMnemonicWords(),
         [],
     )
 
@@ -58,9 +58,12 @@ export function useMnemonicWordsPuzzle() {
 
     const verifyAnswerCallback = useCallback(
         (callback?: () => void) => {
-            const matched = Object.entries(puzzleAnswer).every((entry) => {
-                return words[Number(entry[0])] === entry[1]
-            })
+            const puzzleAnswerEntries = Object.entries(puzzleAnswer)
+            const matched =
+                puzzleAnswerEntries.length === 3 &&
+                puzzleAnswerEntries.every((entry) => {
+                    return words[Number(entry[0])] === entry[1]
+                })
             setIsMatch(matched)
 
             if (matched) callback?.()

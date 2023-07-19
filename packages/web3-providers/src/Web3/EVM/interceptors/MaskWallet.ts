@@ -41,15 +41,6 @@ export class MaskWallet implements Middleware<ConnectionContext> {
                     context.abort(error)
                 }
                 break
-            case EthereumMethodType.MASK_ADD_OR_UPDATE_WALLET:
-                try {
-                    if (!context.wallet) throw new Error('No wallet to be added.')
-                    await this.walletProvider.updateOrAddWallet(context.wallet)
-                    context.write()
-                } catch (error) {
-                    context.abort(error)
-                }
-                break
             case EthereumMethodType.MASK_UPDATE_WALLET:
                 try {
                     const [address, updates] = context.requestArguments.params as [string, Wallet]

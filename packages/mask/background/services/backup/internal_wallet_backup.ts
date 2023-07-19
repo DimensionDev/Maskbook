@@ -25,7 +25,7 @@ async function backupAllWallets(): Promise<NormalizedBackup.WalletBackup[]> {
             return {
                 ...wallet,
                 mnemonic: wallet.derivationPath
-                    ? await WalletServiceRef.value.exportMnemonic(wallet.address)
+                    ? await WalletServiceRef.value.exportMnemonicWords(wallet.address)
                     : undefined,
                 privateKey: wallet.derivationPath
                     ? undefined

@@ -4,6 +4,7 @@ import type React from 'react'
 import type { Option, Result } from 'ts-results-es'
 import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import type { api } from '@dimensiondev/mask-wallet-core/proto'
 /* eslint @masknet/unicode-specific-set: ["error", { "only": "code" }] */
 import type {
     BindingProof,
@@ -26,6 +27,7 @@ import type {
     SocialAccount,
     SocialIdentity,
     BooleanPreference,
+    ImportSource,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -165,10 +167,25 @@ export namespace Plugin.Shared {
         getWallets(): Promise<Wallet[]>
 
         /** Add a new wallet */
-        addWallet(id: string, wallet: Wallet): Promise<void>
+        addWallet(
+            source: ImportSource,
+            id: string,
+            updates?: {
+                name?: string
+                derivationPath?: string
+                storedKeyInfo?: api.IStoredKeyInfo
+            },
+        ): Promise<string>
 
         /** Update a wallet */
-        updateWallet(id: string, wallet?: Partial<Wallet>): Promise<void>
+        updateWallet(
+            id: string,
+            updates?: {
+                name?: string
+                derivationPath?: string
+                storedKeyInfo?: api.IStoredKeyInfo
+            },
+        ): Promise<void>
 
         /** Remove a old wallet */
         removeWallet(id: string, password?: string): Promise<void>
@@ -326,7 +343,6 @@ export namespace Plugin.SNSAdaptor {
     export interface SNSAdaptorContext extends Shared.SharedUIContext {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
-        allPersonas?: Subscription<PersonaInformation[]>
         themeSettings: Subscription<ThemeSettings | undefined>
         /** The default theme settings. */
         getThemeSettings: () => ThemeSettings | undefined
@@ -363,6 +379,9 @@ export namespace Plugin.SNSAdaptor {
         getPostIdFromNewPostToast?: () => string
         postMessage?: (text: string, options?: any) => Promise<void>
         setPluginMinimalModeEnabled?: (id: string, enabled: boolean) => Promise<void>
+        getSearchedKeyword?: () => string
+        hasHostPermission?: (origins: readonly string[]) => Promise<boolean>
+        requestHostPermission?: (origins: readonly string[]) => Promise<boolean>
     }
 
     export type SelectProviderDialogEvent =

@@ -118,7 +118,7 @@ const WalletRecovery = memo(() => {
             legacyWallets.map(async (x) => {
                 const name = x.name ?? 'Mask Wallet'
                 if (x._private_key_) await WalletRPC.recoverWalletFromPrivateKey(name, x._private_key_)
-                else await WalletRPC.recoverWalletFromMnemonic(name, x.mnemonic.join(' '))
+                else await WalletRPC.recoverWalletFromMnemonicWords(name, x.mnemonic.join(' '))
             }),
         )
 

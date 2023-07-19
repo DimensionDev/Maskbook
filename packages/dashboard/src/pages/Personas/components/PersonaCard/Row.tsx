@@ -1,7 +1,11 @@
 import { memo, useContext, useState } from 'react'
+import { useAsync, useToggle } from 'react-use'
+import { useNavigate } from 'react-router-dom'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Box, IconButton, MenuItem, Stack, Typography } from '@mui/material'
+import { styled } from '@mui/material/styles'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine/index.js'
 import {
     type PersonaIdentifier,
@@ -11,23 +15,19 @@ import {
     NextIDAction,
 } from '@masknet/shared-base'
 import { useMenu, usePersonaProofs } from '@masknet/shared'
+import { useWallets } from '@masknet/web3-hooks-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import { RenameDialog } from '../RenameDialog/index.js'
 import type { SocialNetwork } from '../../api.js'
-import { useAsync, useToggle } from 'react-use'
 import { UploadAvatarDialog } from '../UploadAvatarDialog/index.js'
 import { MaskAvatar } from '../../../../components/MaskAvatar/index.js'
-import { useNavigate } from 'react-router-dom'
 import { LogoutPersonaDialog } from '../LogoutPersonaDialog/index.js'
 import { UserContext } from '../../../Settings/hooks/UserContext.js'
-import { styled } from '@mui/material/styles'
 import { PreviewDialog as ExportPersonaDialog } from '../../../SignUp/steps/PreviewDialog.js'
 import { useExportPrivateKey } from '../../hooks/useExportPrivateKey.js'
 import { useExportMnemonicWords } from '../../hooks/useExportMnemonicWords.js'
-import { PluginServices } from '../../../../API.js'
-import { useWallets } from '@masknet/web3-hooks-base'
-import { isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     setting: {
@@ -64,7 +64,7 @@ export const PersonaRowCard = memo(() => {
     const { currentPersona, connectPersona, disconnectPersona, renamePersona, deleteBound, definedSocialNetworks } =
         PersonaContext.useContainer()
 
-    const { value: hasPaymentPassword = false } = useAsync(PluginServices.Wallet.hasPassword, [])
+    const { value: hasPaymentPassword = false } = useAsync(WalletServiceRef.value.hasPassword, [])
     if (!currentPersona?.identifier.publicKeyAsHex) return null
 
     return (

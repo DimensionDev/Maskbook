@@ -178,6 +178,9 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         setMinimalMode: Services.Settings.setPluginMinimalModeEnabled,
         setCurrentPersonaIdentifier: Services.Settings.setCurrentPersonaIdentifier,
         setPluginMinimalModeEnabled: Services.Settings.setPluginMinimalModeEnabled,
+        getSearchedKeyword: ui.collecting.getSearchedKeyword,
+        hasHostPermission: Services.Helper.hasHostPermission,
+        requestHostPermission: Services.Helper.requestHostPermission,
     }
 
     startPluginSNSAdaptor(
