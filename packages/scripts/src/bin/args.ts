@@ -2,7 +2,7 @@ import yargs from 'yargs'
 import type { BuildFlagsExtended } from '../extension/flags.js'
 import { hideBin } from 'yargs/helpers'
 import { applyPresetEnforce } from '../extension/flags.js'
-import { applyDotEnv } from '../extension/dotenv.js'
+import { applyDotEnv, parseManifest } from '../extension/dotenv.js'
 import { ManifestFile } from '../../../mask/.webpack/flags.js'
 
 const manifestFiles = Object.values(ManifestFile)
@@ -46,12 +46,7 @@ export function extensionArgsParser(mode: 'development' | 'production') {
 
     if (opts instanceof Promise) throw new TypeError()
     const extensionOpts: BuildFlagsExtended = {
-        manifestFile:
-            opts.manifest === '2'
-                ? ManifestFile.ChromiumMV2
-                : opts.manifest === '3'
-                ? ManifestFile.ChromiumMV3
-                : opts.manifest,
+        manifestFile: opts.manifest ? parseManifest(opts.manifest) : undefined,
         mode,
         outputPath: opts.output,
         channel: opts.beta ? 'beta' : opts.insider ? 'insider' : 'stable',
