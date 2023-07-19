@@ -10,6 +10,7 @@ import Services from '../../../service.js'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useModalNavigate } from '../index.js'
 import { HomeTabType } from '../../pages/Wallet/type.js'
+import { useWallets } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -41,6 +42,7 @@ const useStyles = makeStyles()((theme) => ({
 export const SelectProvider = memo(function SelectProvider() {
     const { classes } = useStyles()
 
+    const wallets = useWallets()
     const navigate = useNavigate()
     const modalNavigate = useModalNavigate()
     const location = useLocation()
@@ -52,7 +54,11 @@ export const SelectProvider = memo(function SelectProvider() {
             const disableNewWindow = params.get('disableNewWindow')
 
             if (providerType === ProviderType.MaskWallet) {
-                navigate(urlcat(PopupRoutes.SelectWallet, { verifyWallet: true, chainId: ChainId.Mainnet }))
+                navigate(
+                    wallets.length
+                        ? urlcat(PopupRoutes.SelectWallet, { verifyWallet: true, chainId: ChainId.Mainnet })
+                        : PopupRoutes.Wallet,
+                )
                 return
             } else if (providerType === ProviderType.WalletConnect) {
                 const account = await Web3.connect({ providerType })
@@ -85,7 +91,7 @@ export const SelectProvider = memo(function SelectProvider() {
                 return
             }
         },
-        [location.search],
+        [location.search, wallets],
     )
 
     return (

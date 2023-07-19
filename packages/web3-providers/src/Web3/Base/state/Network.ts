@@ -57,7 +57,7 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
         if (!Object.hasOwn(this.storage.value, id)) throw new Error('Not a valid network ID.')
     }
 
-    private async validateNetwork(network: TransferableNetwork<ChainId, SchemaType, NetworkType>) {
+    protected async validateNetwork(network: TransferableNetwork<ChainId, SchemaType, NetworkType>) {
         return true
     }
 

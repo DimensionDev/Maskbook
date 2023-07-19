@@ -47,8 +47,8 @@ function WalletItem({ proof, toggleUnlisted, profileIdentity, checked }: WalletI
     const formattedAddress = Others.formatAddress(proof.identity, 4)
     const addressLink = Others.explorerResolver.addressLink(chainId, proof.identity)
 
-    const balance = useNativeTokenBalance(networkPluginId, { account: proof.identity })
-    const { data: nativeToken } = useNativeToken(networkPluginId)
+    const balance = useNativeTokenBalance(networkPluginId, { account: proof.identity, chainId })
+    const { data: nativeToken } = useNativeToken(networkPluginId, { chainId })
 
     const walletName = useMemo(() => {
         if (domain) return domain

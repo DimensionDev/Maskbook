@@ -1,12 +1,11 @@
-import { ECKeyIdentifier, EMPTY_LIST, NextIDPlatform, type ProfileInformation as Profile } from '@masknet/shared-base'
-import { isValidAddress } from '@masknet/web3-shared-evm'
 import { uniqBy } from 'lodash-es'
 import { useEffect, useMemo, useState } from 'react'
+import { EMPTY_LIST, NextIDPlatform, type ProfileInformation as Profile } from '@masknet/shared-base'
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI.js'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI.js'
 import { SelectRecipientsDialogUI } from './SelectRecipientsDialog.js'
 import { useTwitterIdByWalletSearch } from './useTwitterIdByWalletSearch.js'
-import { usePersonasFromNextID } from '@masknet/shared'
+import { resolveNextIDPlatform, resolveValueToSearch, usePersonasFromNextID } from '@masknet/shared'
 import { useContacts } from './useContacts.js'
 import { useI18N } from '../../../utils/index.js'
 
@@ -19,23 +18,6 @@ export interface SelectRecipientsUIProps {
     open: boolean
     onClose(): void
     onSetSelected(selected: Profile[]): void
-}
-export const resolveNextIDPlatform = (value: string) => {
-    const address = value
-    if (isValidAddress(address)) return NextIDPlatform.Ethereum
-
-    const pubKey = value
-    if (pubKey.length >= 44) return NextIDPlatform.NextID
-
-    const userId = value
-    if (/^\w{1,15}$/.test(userId)) return NextIDPlatform.Twitter
-
-    return
-}
-
-export const resolveValueToSearch = (value: string) => {
-    if (value.length === 44) return new ECKeyIdentifier('secp256k1', value).publicKeyAsHex ?? value
-    return value.toLowerCase()
 }
 
 export function SelectRecipientsUI(props: SelectRecipientsUIProps) {

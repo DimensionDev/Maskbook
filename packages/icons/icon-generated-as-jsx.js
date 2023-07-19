@@ -1970,6 +1970,16 @@ export const More = /*#__PURE__*/ __createIcon('More', [
         s: true,
     },
 ])
+export const NextIdAvatar = /*#__PURE__*/ __createIcon('NextIdAvatar', [
+    {
+        c: ['dark'],
+        u: () => new URL('./general/NextIdAvatar.dark.svg', import.meta.url),
+    },
+    {
+        c: ['light'],
+        u: () => new URL('./general/NextIdAvatar.light.svg', import.meta.url),
+    },
+])
 export const NextIdPersonaWarning = /*#__PURE__*/ __createIcon('NextIdPersonaWarning', [
     {
         u: () => new URL('./general/NextIdPersonaWarning.svg', import.meta.url),

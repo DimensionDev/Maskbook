@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 84 84">
+    <g filter="url('#NextIdAvatar_light_svg__next-id-avatar')">
+        <rect width="60" height="60" x="12.37" y="8" fill="#07101B" rx="30" shape-rendering="crispEdges"/>
+        <path fill="#1C68F3" d="M27.37 27.166h-5L28.62 38l-6.25 10.833h5L33.62 38l-6.25-10.834Z"/>
+        <path fill="#fff" d="M39.453 27.166h4.167v21.667h-4.167V27.167Z"/>
+        <path fill="#fff" fill-rule="evenodd" d="M45.703 27.166v21.667h5.834c5.983 0 10.833-4.85 10.833-10.833 0-5.983-4.85-10.834-10.833-10.834h-5.834Zm4.167 17.5h1.667a6.667 6.667 0 0 0 0-13.333H49.87v13.334Z" clip-rule="evenodd"/>
+        <path fill="#1C68F3" d="M33.203 44.666h4.167v4.167h-4.167z"/>
+    </g>
+    <defs>
+        <filter id="NextIdAvatar_light_svg__next-id-avatar" width="84" height="84" x=".37" y="0" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+            <feColorMatrix in="SourceAlpha" result="hardAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+            <feOffset dy="4"/>
+            <feGaussianBlur stdDeviation="6"/>
+            <feComposite in2="hardAlpha" operator="out"/>
+            <feColorMatrix values="0 0 0 0 0.027451 0 0 0 0 0.0627451 0 0 0 0 0.105882 0 0 0 0.2 0"/>
+            <feBlend in2="BackgroundImageFix" result="effect1_dropShadow_4665_11632"/>
+            <feBlend in="SourceGraphic" in2="effect1_dropShadow_4665_11632" result="shape"/>
+        </filter>
+    </defs>
+</svg>

@@ -95,7 +95,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
             openDashboard,
             info: {
                 target: 'dashboard',
-                url: DashboardRoutes.Setup,
+                url: DashboardRoutes.SignUpPersona,
                 text: t.applications_create_persona_hint(),
                 title: t.applications_create_persona_title(),
                 actionHint: t.applications_create_persona_action(),

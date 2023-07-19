@@ -18,7 +18,7 @@ export default function Web3ProfilePage(props: Web3ProfilePageProps) {
                 <DashboardHeader title="W3bProfile" />
 
                 <div className="bg-white p-5">
-                    <div className="border pt-3 rounded-lg">
+                    <div className="border pt-3 rounded-lg" style={{ maxHeight: 700, overflowY: 'auto' }}>
                         <DisableShadowRootContext.Provider value={false}>
                             <ShadowRootIsolation>
                                 <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>

@@ -13,12 +13,9 @@ import { emitManifestFile } from './manifest.js'
 import { getGitInfo } from './git-info.js'
 
 import { dirname, join } from 'node:path'
-import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { readFile, readdir } from 'node:fs/promises'
 import { createRequire } from 'node:module'
-
-import { encodeArrayBuffer } from '@masknet/kit'
 
 import { type EntryDescription, normalizeEntryDescription, joinEntryItem } from './utils.js'
 import { type BuildFlags, normalizeBuildFlags, computedBuildFlags, computeCacheKey } from './flags.js'
@@ -28,6 +25,7 @@ import './clean-hmr.js'
 const __dirname = fileURLToPath(dirname(import.meta.url))
 const require = createRequire(import.meta.url)
 const patchesDir = join(__dirname, '../../../patches')
+const templateContent = readFile(join(__dirname, './template.html'), 'utf8')
 export async function createConfiguration(_inputFlags: BuildFlags): Promise<webpack.Configuration> {
     const VERSION = JSON.parse(await readFile(new URL('../../../package.json', import.meta.url), 'utf-8')).version
     const flags = normalizeBuildFlags(_inputFlags)
@@ -36,13 +34,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
 
     const polyfillFolder = join(flags.outputPath, './polyfill')
 
-    const pnpmPatchHash = readdir(patchesDir).then((files) =>
-        Promise.all(
-            files.map(async (file) => {
-                return encodeArrayBuffer(await crypto.subtle.digest('SHA-256', await readFile(join(patchesDir, file))))
-            }),
-        ),
-    )
+    const pnpmPatches = readdir(patchesDir).then((files) => files.map((x) => join(patchesDir, x)))
     const baseConfig: webpack.Configuration = {
         name: 'mask',
         // to set a correct base path for source map
@@ -62,7 +54,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             readonly: flags.readonlyCache,
             buildDependencies: {
                 config: [fileURLToPath(import.meta.url)],
-                patches: await pnpmPatchHash,
+                patches: await pnpmPatches,
             },
             version: cacheKey,
         },
@@ -308,15 +300,15 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         backgroundWorker: normalizeEntryDescription(join(__dirname, '../background/mv3-entry.ts')),
     })
     baseConfig.plugins!.push(
-        addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html' }),
-        addHTMLEntry({ chunks: ['popups'], filename: 'popups.html' }),
-        addHTMLEntry({ chunks: ['contentScript'], filename: 'generated__content__script.html' }),
-        addHTMLEntry({ chunks: ['debug'], filename: 'debug.html' }),
-        addHTMLEntry({ chunks: ['background'], filename: 'background.html', gun: true }),
+        await addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html' }),
+        await addHTMLEntry({ chunks: ['popups'], filename: 'popups.html' }),
+        await addHTMLEntry({ chunks: ['contentScript'], filename: 'generated__content__script.html' }),
+        await addHTMLEntry({ chunks: ['debug'], filename: 'debug.html' }),
+        await addHTMLEntry({ chunks: ['background'], filename: 'background.html', gun: true }),
     )
     if (flags.devtools) {
         entries.devtools = normalizeEntryDescription(join(__dirname, '../devtools/panels/index.tsx'))
-        baseConfig.plugins!.push(addHTMLEntry({ chunks: ['devtools'], filename: 'devtools-background.html' }))
+        baseConfig.plugins!.push(await addHTMLEntry({ chunks: ['devtools'], filename: 'devtools-background.html' }))
     }
     return baseConfig
 
@@ -327,14 +319,14 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         return entry
     }
 }
-function addHTMLEntry(
+async function addHTMLEntry(
     options: HTMLPlugin.Options & {
         gun?: boolean
     },
 ) {
-    let templateContent = readFileSync(join(__dirname, './template.html'), 'utf8')
+    let template = await templateContent
     if (options.gun) {
-        templateContent = templateContent.replace(`<!-- Gun -->`, '<script src="/gun.js"></script>')
+        template = template.replace(`<!-- Gun -->`, '<script src="/gun.js"></script>')
     }
     return new HTMLPlugin({
         templateContent,

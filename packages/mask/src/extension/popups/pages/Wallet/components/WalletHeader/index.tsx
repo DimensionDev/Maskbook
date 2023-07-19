@@ -25,7 +25,6 @@ export const WalletHeader = memo(function WalletHeader() {
     const matchUnlock = useMatch(PopupRoutes.Unlock)
     const matchWallet = useMatch(PopupRoutes.Wallet)
     const matchContractInteraction = useMatch(PopupRoutes.ContractInteraction)
-    const matchCreatePassword = useMatch(PopupRoutes.CreatePassword)
 
     const chooseNetwork = useCallback(() => {
         modalNavigate(PopupModalRoutes.ChooseNetwork)
@@ -38,8 +37,6 @@ export const WalletHeader = memo(function WalletHeader() {
     useEffect(() => {
         retry()
     }, [location.pathname])
-
-    if (matchCreatePassword) return null
 
     if (!wallet || !hasPassword || matchUnlock) return <WalletSetupHeaderUI />
 
