@@ -124,7 +124,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
             await Services.Backup.restoreBackup(backupValue)
 
             await onRestore(summary?.countOfWallets)
-        } catch (error) {
+        } catch {
             showSnackbar(t.sign_in_account_cloud_backup_failed(), { variant: 'error' })
         } finally {
             setProcessing(false)
