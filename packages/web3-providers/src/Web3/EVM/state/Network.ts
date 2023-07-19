@@ -19,6 +19,7 @@ export class Network extends NetworkState<ChainId, SchemaType, NetworkType> {
         const schema = createSchema(this.networks?.getCurrentValue() ?? [])
         const result = await schema.safeParseAsync(network)
         if (result.success) return true
+        // distinguish warnings
         return result.error.errors.some((x) => !(x.code === z.ZodIssueCode.custom && x.path[1] === 'symbol'))
     }
 }
