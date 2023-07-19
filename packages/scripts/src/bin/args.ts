@@ -15,16 +15,12 @@ export function extensionArgsParser(mode: 'development' | 'production') {
 
         .options('manifest', {
             type: 'string',
-            choices: [2, 3, ...manifestFiles] as const,
+            choices: ['2', '3', ...manifestFiles] as const,
             description: 'Select which manifest file/version to use',
         })
 
         .options('profile', { type: 'boolean', description: 'Build a profile build' })
         .options('reproducible', { type: 'boolean', description: 'Build a reproducible build' })
-        .options('readonlyCache', {
-            type: 'boolean',
-            description: 'Do not write Webpack filesystem cache during the build',
-        })
 
         .options('progress', { type: 'boolean', description: 'Show build progress' })
         .options('hmr', { type: 'boolean', description: 'Enable Hot Module Reload' })
@@ -51,9 +47,9 @@ export function extensionArgsParser(mode: 'development' | 'production') {
     if (opts instanceof Promise) throw new TypeError()
     const extensionOpts: BuildFlagsExtended = {
         manifestFile:
-            opts.manifest === 2
+            opts.manifest === '2'
                 ? ManifestFile.ChromiumMV2
-                : opts.manifest === 3
+                : opts.manifest === '3'
                 ? ManifestFile.ChromiumMV3
                 : opts.manifest || ManifestFile.ChromiumMV2,
         mode,
