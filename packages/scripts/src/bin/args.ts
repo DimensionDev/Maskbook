@@ -20,7 +20,6 @@ export function extensionArgsParser(mode: 'development' | 'production') {
         })
 
         .options('profile', { type: 'boolean', description: 'Build a profile build' })
-        .options('reproducible', { type: 'boolean', description: 'Build a reproducible build' })
 
         .options('progress', { type: 'boolean', description: 'Show build progress' })
         .options('hmr', { type: 'boolean', description: 'Enable Hot Module Reload' })
@@ -51,7 +50,6 @@ export function extensionArgsParser(mode: 'development' | 'production') {
         outputPath: opts.output,
         channel: opts.beta ? 'beta' : opts.insider ? 'insider' : 'stable',
         profiling: opts.profile,
-        reproducibleBuild: opts.reproducible,
         progress: opts.progress,
         hmr: opts.hmr,
         reactRefresh: opts.reactRefresh,

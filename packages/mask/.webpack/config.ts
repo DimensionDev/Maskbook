@@ -220,7 +220,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 ],
             }),
             (() => {
-                const { BRANCH_NAME, BUILD_DATE, COMMIT_DATE, COMMIT_HASH, DIRTY } = getGitInfo(flags.reproducibleBuild)
+                const { BRANCH_NAME, BUILD_DATE, COMMIT_DATE, COMMIT_HASH, DIRTY } = getGitInfo()
                 const json = {
                     BRANCH_NAME,
                     BUILD_DATE,

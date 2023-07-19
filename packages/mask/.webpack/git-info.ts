@@ -9,10 +9,10 @@ interface GitInfoReport {
 }
 
 /** Get git info */
-export function getGitInfo(reproducible: boolean): GitInfoReport {
+export function getGitInfo(): GitInfoReport {
     const report: GitInfoReport = {}
     try {
-        if (reproducible && !git.default.isRepository()) return report
+        if (!git.default.isRepository()) return report
         const DIRTY = git.default.isDirty()
         report.BUILD_DATE = new Date().toISOString()
         report.COMMIT_HASH = git.default.commitHash()

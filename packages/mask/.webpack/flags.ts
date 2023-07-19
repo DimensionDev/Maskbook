@@ -24,8 +24,6 @@ export interface BuildFlags {
     hmr?: boolean
     /** @default true in development and hmr is true */
     reactRefresh?: boolean
-    /** @default false */
-    reproducibleBuild?: boolean
     outputPath?: string
     /** @default true */
     devtools?: boolean
@@ -49,7 +47,6 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
     let {
         hmr = mode === 'development',
         reactRefresh = hmr,
-        reproducibleBuild = false,
         devtools = mode === 'development' || channel !== 'stable',
         sourceMapPreference = mode === 'development',
         outputPath = join(__dirname, '../../../', mode === 'development' ? 'dist' : 'build'),
@@ -74,7 +71,6 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         devtoolsEditorURI,
         // CI / profiling
         profiling,
-        reproducibleBuild,
     }
 }
 
