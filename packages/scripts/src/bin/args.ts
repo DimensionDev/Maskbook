@@ -51,7 +51,7 @@ export function extensionArgsParser(mode: 'development' | 'production') {
                 ? ManifestFile.ChromiumMV2
                 : opts.manifest === '3'
                 ? ManifestFile.ChromiumMV3
-                : opts.manifest || ManifestFile.ChromiumMV2,
+                : opts.manifest,
         mode,
         outputPath: opts.output,
         channel: opts.beta ? 'beta' : opts.insider ? 'insider' : 'stable',

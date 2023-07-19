@@ -14,7 +14,7 @@ export enum ManifestFile {
 }
 export interface BuildFlags {
     /** If this field is set, manifest.json will copy the content of manifest-*.json */
-    manifestFile: ManifestFile
+    manifestFile?: ManifestFile
     mode: 'development' | 'production'
     /** @default 'stable' */
     channel?: 'stable' | 'beta' | 'insider'
@@ -44,7 +44,7 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         channel = 'stable',
         devtoolsEditorURI = 'vscode://file/{path}:{line}',
         sourceMapHideFrameworks = true,
-        manifestFile,
+        manifestFile = ManifestFile.ChromiumMV2,
     } = flags
     let {
         hmr = mode === 'development',

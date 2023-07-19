@@ -14,8 +14,9 @@ export function applyDotEnv(flags: BuildFlags) {
     flags.sourceMapPreference ??= parseBooleanOrString(parsed.sourceMap)
     if (parsed.manifest) {
         if (parsed.manifest !== '2' && parsed.manifest !== '3') {
-            if (!Object.values(ManifestFile).includes(parsed.manifest as ManifestFile))
+            if (!Object.values(ManifestFile).includes(parsed.manifest as ManifestFile)) {
                 throw new TypeError(`Invalid manifest version "${parsed.manifest}" specified in the env file`)
+            }
         }
         flags.manifestFile ??= parseManifest(parsed.manifest as ManifestFile | '2' | '3')
     }
