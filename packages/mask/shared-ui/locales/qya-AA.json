@@ -945,6 +945,7 @@
     "popups_persona_disconnect": "crwdns8975:0crwdne8975:0",
     "popups_persona_disconnect_confirmation": "crwdns14718:0crwdne14718:0",
     "popups_new_persona_disconnect_confirmation": "crwdns18662:0crwdne18662:0",
+    "popups_disconnect_persona": "crwdns21719:0crwdne21719:0",
     "popups_new_persona_disconnect_confirmation_description": "crwdns18664:0crwdne18664:0",
     "popups_persona_disconnect_confirmation_description": "crwdns14720:0crwdne14720:0",
     "popups_persona_disconnect_tips": "crwdns20623:0{{identity}}crwdnd20623:0{{personaName}}crwdne20623:0",
