@@ -12,7 +12,6 @@ import {
     pluginIDsSettings,
 } from '@masknet/shared-base'
 import { initialPersonaInformation } from '@masknet/shared'
-import { delay } from '@masknet/kit'
 
 if (location.hash === '#/personas') {
     console.time('[SSR] Fill data')
@@ -26,14 +25,8 @@ if (location.hash === '#/personas') {
     ])
     console.timeEnd('[SSR] Fill data')
 
-    startPluginHost()
-    /**
-     * Waiting for one second is because the maximum waiting time set for initializing the plugin in `activatePlugin` is one second.
-     * The initialization of web3 state depends on the initialization of the plugin.
-     * And there are a large number of UI states that depend on web3 state, so not waiting may cause a crash.
-     */
-    await delay(1000)
     hydrateNormalReactRoot(<Popups />)
+    setTimeout(startPluginHost, 200)
 
     /**
      * Firefox will not help popup fixed width when user click browser action
@@ -57,9 +50,8 @@ if (location.hash === '#/personas') {
     console.timeEnd('[SSR] Hydrate')
 } else {
     await activateSocialNetworkUI()
-    startPluginHost()
-    await delay(1000)
     createNormalReactRoot(<Popups />)
+    startPluginHost()
 }
 
 function startPluginHost() {
