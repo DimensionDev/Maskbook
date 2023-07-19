@@ -1,4 +1,4 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
 
 settings:
   autoInstallPeers: true
@@ -275,7 +275,7 @@ importers:
         version: 3.0.2
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.1(@swc/core@1.3.67)(@types/node@18.15.11)(typescript@5.2.0-dev.20230630)
+        version: 10.9.1(@swc/core@1.3.67)(@types/node@18.15.11)(typescript@4.9.5)
       typescript:
         specifier: 5.2.0-dev.20230630
         version: 5.2.0-dev.20230630
@@ -4440,6 +4440,9 @@ importers:
       web3-utils:
         specifier: 1.8.0
         version: 1.8.0
+      zod:
+        specifier: ^3.21.4
+        version: 3.21.4
     devDependencies:
       '@types/bn.js':
         specifier: ^4.11.6
@@ -10289,7 +10292,7 @@ packages:
     resolution: {integrity: sha512-8KG5RD0GVP4ydEzRn/I4BNDuxDtqVbOdm8675T49OIG/NGhaK0pjPX7ZcDlvKYbA+ulvVK3ztfcF4uBdOxuJbQ==}
     dependencies:
       '@gar/promisify': 1.1.3
-      semver: 7.5.4
+      semver: 7.3.8
     dev: true
 
   /@npmcli/move-file@1.1.2:
@@ -20717,7 +20720,7 @@ packages:
       memfs: 3.4.10
       minimatch: 3.1.2
       schema-utils: 2.7.0
-      semver: 7.5.4
+      semver: 7.3.8
       tapable: 1.1.3
       typescript: 5.2.0-dev.20230630
       webpack: 4.46.0
@@ -23831,7 +23834,7 @@ packages:
       jest-util: 28.1.3
       natural-compare: 1.4.0
       pretty-format: 28.1.3
-      semver: 7.5.4
+      semver: 7.3.8
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -24180,7 +24183,7 @@ packages:
       jws: 3.2.2
       lodash: 4.17.21
       ms: 2.1.3
-      semver: 7.5.4
+      semver: 7.3.8
     dev: true
 
   /jsprim@1.4.2:
@@ -26300,7 +26303,7 @@ packages:
     dependencies:
       hosted-git-info: 4.1.0
       is-core-module: 2.11.0
-      semver: 7.5.4
+      semver: 7.3.8
       validate-npm-package-license: 3.0.4
 
   /normalize-path@2.1.1:
@@ -26890,7 +26893,7 @@ packages:
       got: 12.5.3
       registry-auth-token: 5.0.1
       registry-url: 6.0.1
-      semver: 7.5.4
+      semver: 7.3.8
     dev: true
 
   /pako@1.0.11:
@@ -27504,7 +27507,7 @@ packages:
       loader-utils: 2.0.4
       postcss: 7.0.39
       schema-utils: 3.2.0
-      semver: 7.5.4
+      semver: 7.3.8
       webpack: 4.46.0
     dev: true
 
@@ -29795,7 +29798,7 @@ packages:
     resolution: {integrity: sha512-0Ju4+6A8iOnpL/Thra7dZsSlOHYAHIeMxfhWQRI1/VLcT3WDBZKKtQt/QkBOsiIN9ZpuvHE6cGZ0x4glCMmfiA==}
     engines: {node: '>=12'}
     dependencies:
-      semver: 7.5.4
+      semver: 7.3.8
     dev: true
 
   /semver-greatest-satisfied-range@1.1.0:
@@ -29819,7 +29822,6 @@ packages:
     hasBin: true
     dependencies:
       lru-cache: 6.0.0
-    dev: true
 
   /semver@7.5.4:
     resolution: {integrity: sha512-1bCSESV6Pv+i21Hvpxp3Dx+pSD8lIPt8uVjRrxAUt/nbswYc+tK6Y2btiULjd4+fnq15PX+nqQDC7Oft7WkwcA==}
