@@ -1,14 +1,11 @@
 /* cspell:disable */
-import type { ProfileIdentifier } from '@masknet/base'
+import { ProfileIdentifier } from '@masknet/base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { NetworkPluginID, SocialAddressType, type SocialAccount } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 export const currentVisitingSocialIdentity: IdentityResolved = {
-    identifier: {
-        network: 'twitter.com',
-        userId: 'suji_yan',
-    } as ProfileIdentifier,
+    identifier: ProfileIdentifier.of('twitter.com', 'suji_yan').unwrap(),
     nickname: 'Suji Yan - Mask is BUIDLing',
     avatar: 'https://pbs.twimg.com/profile_images/1571030729605144577/Nxsva4Vq_400x400.png',
     bio: 'founder of @realmasknetwork #Mask\u{1F426}\nMaintain some fediverse instances\nsujiyan.eth',
@@ -31,10 +28,7 @@ export const socialAccounts: Array<SocialAccount<Web3Helper.ChainIdAll>> = [
 ]
 
 export const currentSocialIdentity = {
-    identifier: {
-        network: 'twitter.com',
-        userId: 'suji_yan',
-    } as ProfileIdentifier,
+    identifier: ProfileIdentifier.of('twitter.com', 'suji_yan').unwrap(),
     nickname: 'Suji Yan - Mask is BUIDLing',
     avatar: 'https://pbs.twimg.com/profile_images/1571030729605144577/Nxsva4Vq_400x400.png',
     bio: 'founder of @realmasknetwork #Mask\u{1F426}\nMaintain some fediverse instances\nsujiyan.eth',
