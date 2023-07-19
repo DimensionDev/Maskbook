@@ -3,50 +3,67 @@
 
 ### SourceMap
 
-# sourceMap=true
+; sourceMap=true
 # (default) Uses suggested sourceMap in the current build set.
 
-# sourceMap=false
+; sourceMap=false
 # Disables the sourceMap.
 
+; sourceMap=eval
+; sourceMap=eval-cheap-source-map
+; sourceMap=eval-cheap-module-source-map
+; sourceMap=eval-source-map
+; sourceMap=cheap-source-map
+; sourceMap=cheap-module-source-map
+; sourceMap=source-map
+; sourceMap=inline-cheap-source-map
+; sourceMap=inline-cheap-module-source-map
+; sourceMap=inline-source-map
 # sourceMap=...
 # Any valid value listed in https://webpack.js.org/configuration/devtool/, but it might not work in our environment.
 
 ### SourceMap hide frameworks
 
-# sourceMapHideFrameworks=true
+; sourceMapHideFrameworks=true
 # (default) Hide frameworks in sourceMap.
 
-# sourceMapHideFrameworks=false
+; sourceMapHideFrameworks=false
 # Show frameworks in sourceMap.
 
 ### Preferred Manifest Version
 
-# manifest=2
-# (default) Use Manifest V2 as default development target.
+; manifest=2
+# (default) Use Chromium Manifest V2 as default development target.
 
-# manifest=3
-# Use Manifest V3 as default development target.
+; manifest=3
+# Use Chromium Manifest V3 as default development target.
+
+; manifest=chromium-mv2
+; manifest=chromium-beta-mv2
+; manifest=chromium-mv3
+; manifest=firefox-mv2
+; manifest=firefox-mv3
+; manifest=safari-mv3
 
 ### Hot Module Reload
 
-# hmr=true
+; hmr=true
 # (default) Enable Hot Module Reload in development mode.
 
-# hmr=false
+; hmr=false
 # Disable Hot Module Reload in development mode.
 
 ### Devtools integration
 
-# devtools=true
+; devtools=true
 # (default) Enable Devtools integration in development mode.
 
-# devtools=false
+; devtools=false
 # Disable Devtools integration in development mode.
 
 ### React devtools default editor
 
-# devtoolsEditorURI=vscode://file/{path}:{line}
+; devtoolsEditorURI=vscode://file/{path}:{line}
 # (default) VSCode
 
 # devtoolsEditorURI=...

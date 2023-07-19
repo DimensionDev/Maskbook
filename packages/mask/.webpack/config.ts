@@ -27,7 +27,7 @@ const require = createRequire(import.meta.url)
 const patchesDir = join(__dirname, '../../../patches')
 const templateContent = readFile(join(__dirname, './template.html'), 'utf8')
 export async function createConfiguration(_inputFlags: BuildFlags): Promise<webpack.Configuration> {
-    const VERSION = JSON.parse(await readFile(new URL('../src/manifest.json', import.meta.url), 'utf-8')).version
+    const VERSION = JSON.parse(await readFile(new URL('../../../package.json', import.meta.url), 'utf-8')).version
     const flags = normalizeBuildFlags(_inputFlags)
     const computedFlags = computedBuildFlags(flags)
     const cacheKey = computeCacheKey(flags, computedFlags)
@@ -51,7 +51,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         },
         cache: {
             type: 'filesystem',
-            readonly: flags.readonlyCache,
             buildDependencies: {
                 config: [fileURLToPath(import.meta.url)],
                 patches: await pnpmPatches,
@@ -167,6 +166,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             ],
         },
         plugins: [
+            new WebExtensionPlugin({ background: { pageEntry: 'background', serviceWorkerEntry: 'backgroundWorker' } }),
             flags.sourceMapHideFrameworks !== false &&
                 new DevtoolsIgnorePlugin({
                     shouldIgnorePath: (path) => {
@@ -193,6 +193,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 'process.stderr': '/* stdin */ null',
             }),
             flags.reactRefresh && new ReactRefreshWebpackPlugin({ overlay: false, esModule: true }),
+            ...emitManifestFile(flags, computedFlags),
             new CopyPlugin({
                 patterns: [
                     { from: join(__dirname, '../public/'), to: flags.outputPath },
@@ -218,9 +219,8 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                     },
                 ],
             }),
-            emitManifestFile(flags, computedFlags),
             (() => {
-                const { BRANCH_NAME, BUILD_DATE, COMMIT_DATE, COMMIT_HASH, DIRTY } = getGitInfo(flags.reproducibleBuild)
+                const { BRANCH_NAME, BUILD_DATE, COMMIT_DATE, COMMIT_HASH, DIRTY } = getGitInfo()
                 const json = {
                     BRANCH_NAME,
                     BUILD_DATE,
@@ -290,52 +290,32 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         stats: flags.mode === 'production' ? 'errors-only' : undefined,
     }
 
-    const plugins = baseConfig.plugins!
     const entries: Record<string, EntryDescription> = (baseConfig.entry = {
-        dashboard: normalizeEntryDescription(join(__dirname, '../src/extension/dashboard/index.ts')),
-        popups: normalizeEntryDescription(join(__dirname, '../src/extension/popups/SSR-client.ts')),
-        contentScript: normalizeEntryDescription(join(__dirname, '../src/content-script.ts')),
-        debug: normalizeEntryDescription(join(__dirname, '../src/extension/debug-page/index.tsx')),
+        dashboard: withReactDevTools(join(__dirname, '../src/extension/dashboard/index.ts')),
+        popups: withReactDevTools(join(__dirname, '../src/extension/popups/SSR-client.ts')),
+        contentScript: withReactDevTools(join(__dirname, '../src/content-script.ts')),
+        debug: withReactDevTools(join(__dirname, '../src/extension/debug-page/index.tsx')),
+        background: normalizeEntryDescription(join(__dirname, '../background/mv2-entry.ts')),
+        backgroundWorker: normalizeEntryDescription(join(__dirname, '../background/mv3-entry.ts')),
     })
     baseConfig.plugins!.push(
         await addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html' }),
         await addHTMLEntry({ chunks: ['popups'], filename: 'popups.html' }),
         await addHTMLEntry({ chunks: ['contentScript'], filename: 'generated__content__script.html' }),
         await addHTMLEntry({ chunks: ['debug'], filename: 'debug.html' }),
+        await addHTMLEntry({ chunks: ['background'], filename: 'background.html', gun: true }),
     )
     if (flags.devtools) {
         entries.devtools = normalizeEntryDescription(join(__dirname, '../devtools/panels/index.tsx'))
         baseConfig.plugins!.push(await addHTMLEntry({ chunks: ['devtools'], filename: 'devtools-background.html' }))
     }
-    // background
-    if (flags.manifest === 3) {
-        entries.background = {
-            import: join(__dirname, '../background/mv3-entry.ts'),
-            filename: 'js/background.js',
-        }
-        plugins.push(new WebExtensionPlugin({ background: { entry: 'background', manifest: 3 } }))
-    } else {
-        entries.background = normalizeEntryDescription(join(__dirname, '../background/mv2-entry.ts'))
-        plugins.push(new WebExtensionPlugin({ background: { entry: 'background', manifest: 2 } }))
-        plugins.push(
-            await addHTMLEntry({
-                chunks: ['background'],
-                filename: 'background.html',
-                gun: true,
-            }),
-        )
-    }
-    for (const entry in entries) {
-        if (entry !== 'background' && entry !== 'devtools') {
-            withReactDevTools(entries[entry])
-        }
-    }
-
     return baseConfig
 
-    function withReactDevTools(entry: EntryDescription) {
-        if (!flags.devtools) return
+    function withReactDevTools(entry: string | string[] | EntryDescription): EntryDescription {
+        if (!flags.devtools) return normalizeEntryDescription(entry)
+        entry = normalizeEntryDescription(entry)
         entry.import = joinEntryItem(join(__dirname, '../devtools/content-script/index.ts'), entry.import)
+        return entry
     }
 }
 async function addHTMLEntry(

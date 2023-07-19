@@ -91,6 +91,12 @@ jobs:
           name: MaskNetwork.firefox.zip
           path: masknetwork.firefox.zip
           if-no-files-found: error
+      - name: Upload `MaskNetwork.firefox-mv3.zip`
+        uses: actions/upload-artifact@v3
+        with:
+          name: MaskNetwork.firefox-mv3.zip
+          path: masknetwork.firefox-mv3.zip
+          if-no-files-found: error
       - uses: "marvinpinto/action-automatic-releases@latest"
         if: startsWith(github.ref, 'refs/tags/v')
         with:

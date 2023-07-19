@@ -11,8 +11,8 @@ const base: SocialNetwork.Base = {
     encryptionNetwork: SocialNetworkEnum.Unknown,
     networkIdentifier: EnhanceableSite.Localhost,
     declarativePermissions: { origins: [] },
-    shouldActivate() {
-        return isEnvironment(Environment.ManifestAction)
+    shouldActivate(location) {
+        return location.protocol.includes('-extension') && !isEnvironment(Environment.ManifestBackground)
     },
 }
 const define: SocialNetworkUI.Definition = {
