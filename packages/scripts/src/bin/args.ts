@@ -1,7 +1,6 @@
 import yargs from 'yargs'
 import type { BuildFlagsExtended } from '../extension/flags.js'
 import { hideBin } from 'yargs/helpers'
-import { applyPresetEnforce } from '../extension/flags.js'
 import { applyDotEnv, parseManifest } from '../extension/dotenv.js'
 import { ManifestFile } from '../../../mask/.webpack/flags.js'
 
@@ -59,6 +58,5 @@ export function extensionArgsParser(mode: 'development' | 'production') {
         sourceMapHideFrameworks: opts.sourceMapHideFrameworks,
     }
     applyDotEnv(extensionOpts)
-    applyPresetEnforce(extensionOpts)
     return extensionOpts
 }
