@@ -70,7 +70,9 @@ const useStyles = makeStyles()((theme) => ({
         color: 'rgba(255, 255, 255, 0.4)',
     },
     inputFocused: {
-        backgroundColor: !Sniffings.is_dashboard_page ? theme.palette.maskColor.input : theme.palette.maskColor.bottom,
+        background: `${
+            !Sniffings.is_dashboard_page ? theme.palette.maskColor.input : theme.palette.maskColor.bottom
+        } !important`,
         ...(Sniffings.is_dashboard_page
             ? {
                   outline: `2px solid ${alpha(theme.palette.maskColor.primary, 0.2)}`,

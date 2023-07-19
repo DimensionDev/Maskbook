@@ -116,6 +116,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
     const restoreDB = useCallback(async () => {
         try {
             setProcessing(true)
+            console.log(WalletServiceRef)
             // If json has wallets, restore in popup.
             if (summary?.wallets.length) {
                 const hasPassword = await WalletServiceRef.value.hasPassword()
@@ -124,7 +125,8 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
             await Services.Backup.restoreBackup(backupValue)
 
             await onRestore(summary?.countOfWallets)
-        } catch {
+        } catch (error) {
+            console.log(error)
             showSnackbar(t.sign_in_account_cloud_backup_failed(), { variant: 'error' })
         } finally {
             setProcessing(false)

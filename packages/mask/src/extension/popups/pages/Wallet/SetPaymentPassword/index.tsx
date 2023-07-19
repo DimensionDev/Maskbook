@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Trans } from 'react-i18next'
 import { Controller } from 'react-hook-form'
 import type { z as zod } from 'zod'
@@ -101,12 +101,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     form: {
         width: '100%',
-        height: 204,
-        marginBottom: 128,
+        flex: 1,
     },
     textField: {
         width: '100%',
-        height: 54,
     },
     strong: {
         color: theme.palette.maskColor.main,
@@ -125,7 +123,8 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
     const { classes } = useStyles()
     const navigate = useNavigate()
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
-    const [isCreating, setIsCreating] = useState(false)
+    const [params] = useSearchParams()
+    const [isCreating, setIsCreating] = useState(!!params.get('isCreating'))
 
     const theme = useTheme()
 
@@ -176,7 +175,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                 {isCreating ? (
                     <>
                         <form className={classes.form} onSubmit={onSubmit}>
-                            <div className={classes.textField}>
+                            <div className={classes.textField} style={{ marginBottom: 12 }}>
                                 <Controller
                                     control={control}
                                     render={({ field }) => (
@@ -186,7 +185,6 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                                             variant="filled"
                                             placeholder={t('popups_wallet_payment_password')}
                                             error={!isValid && !!errors.password?.message}
-                                            helperText={!isValid ? errors.password?.message : ''}
                                         />
                                     )}
                                     name="password"
@@ -198,7 +196,6 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                                         <PasswordField
                                             {...field}
                                             error={!isValid && !!errors.confirm?.message}
-                                            helperText={!isValid ? errors.confirm?.message : ''}
                                             type="password"
                                             variant="filled"
                                             placeholder={t('popups_wallet_re_payment_password')}
@@ -224,7 +221,6 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
 
                         <Typography
                             color={theme.palette.maskColor.third}
-                            marginBottom="24px"
                             fontSize={14}
                             textAlign="center"
                             fontWeight={700}>
@@ -263,7 +259,9 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                 </div>
             ) : null}
 
-            {isCreating ? <Icons.Comeback className={classes.back} onClick={() => setIsCreating(false)} /> : null}
+            {isCreating && !params.get('isCreating') ? (
+                <Icons.Comeback className={classes.back} onClick={() => setIsCreating(false)} />
+            ) : null}
         </Box>
     )
 })

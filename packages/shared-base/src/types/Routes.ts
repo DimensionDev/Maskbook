@@ -36,7 +36,6 @@ export enum PopupRoutes {
     Root = '/',
     Wallet = '/wallet',
     WalletStartUp = '/wallet/startup',
-    CreatePassword = '/wallet/create-password',
     ImportWallet = '/wallet/import',
     AddDeriveWallet = '/wallet/addDerive',
     WalletSettings = '/wallet/settings',

@@ -77,6 +77,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.maskColor.danger,
+        marginTop: theme.spacing(1.5),
     },
     congratulation: {
         fontSize: 14,
@@ -90,7 +91,7 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         width: 160,
-        columnGap: 4,
+        rowGap: 4,
     },
     name: {
         fontSize: 14,
@@ -265,7 +266,9 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
                         </Button>
                     </Box>
                     {isBound ? (
-                        <Typography className={classes.bounded}>{t('popups_verify_wallet_bounded_tips')}</Typography>
+                        <Typography className={classes.bounded}>
+                            {t('popups_verify_wallet_bounded_tips', { persona: currentPersona?.nickname })}
+                        </Typography>
                     ) : null}
                     <Typography className={classes.description}>{t('popups_verify_wallet_description')}</Typography>
                     {loading ? <LoadingMask text={t('signing')} /> : null}
@@ -306,7 +309,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
                     {t('cancel')}
                 </Button>
                 {!signResult ? (
-                    <ActionButton fullWidth onClick={handleSign} disabled={loading}>
+                    <ActionButton fullWidth onClick={handleSign} disabled={loading || isBound}>
                         {t('sign')}
                     </ActionButton>
                 ) : (

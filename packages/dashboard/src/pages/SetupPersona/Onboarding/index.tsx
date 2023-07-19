@@ -90,7 +90,7 @@ export const Onboarding = memo(function Onboarding() {
     }, [])
 
     const onSetupPaymentPassword = useCallback(async () => {
-        await Services.Helper.openPopupWindow(PopupRoutes.SetPaymentPassword)
+        await Services.Helper.openPopupWindow(PopupRoutes.SetPaymentPassword, { isCreating: true })
     }, [])
 
     const words = useMemo(() => {

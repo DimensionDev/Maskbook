@@ -82,8 +82,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: '8px',
-        border: `1px solid ${theme.palette.maskColor.line}`,
     },
 }))
 
@@ -169,13 +167,14 @@ export const SignUpMnemonic = memo(function SignUpMnemonic() {
                 <IconButton className={classes.iconButton} onClick={handleDownload}>
                     <Icons.Download2 size={18} />
                 </IconButton>
-                <CopyButton
-                    classes={{ root: classes.iconBox }}
-                    size={18}
-                    className={classes.iconButton}
-                    text={words.join(' ')}
-                    successText={t.persona_phrase_copy_description()}
-                />
+                <IconButton className={classes.iconButton}>
+                    <CopyButton
+                        classes={{ root: classes.iconBox }}
+                        size={18}
+                        text={words.join(' ')}
+                        successText={t.persona_phrase_copy_description()}
+                    />
+                </IconButton>
             </Box>
             <Box className={classes.warning}>
                 <Icons.WarningTriangle size={20} />

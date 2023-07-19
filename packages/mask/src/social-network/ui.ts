@@ -166,7 +166,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         getPostURL: ui.utils.getPostURL,
         share: ui.utils.share,
         getUserIdentity: ui.utils.getUserIdentity,
-        createPersona: () => Services.Helper.openDashboard(DashboardRoutes.Setup),
+        createPersona: () => Services.Helper.openDashboard(DashboardRoutes.SignUpPersona),
         connectPersona,
         fetchManifest: Services.ThirdPartyPlugin.fetchManifest,
         getPersonaAvatar: Services.Identity.getPersonaAvatar,

@@ -172,13 +172,12 @@ export const ConnectedWallet = memo<ConnectedWalletProps>(function ConnectedWall
                                 title: t('popups_release_bind_wallet_title'),
                                 tips: (
                                     <Trans
-                                        i18nKey="popups_persona_disconnect_tips"
+                                        i18nKey="popups_wallet_disconnect_tips"
                                         components={{
                                             strong: <strong style={{ color: theme.palette.maskColor.main }} />,
                                         }}
                                         values={{
-                                            identity: formatEthereumAddress(wallet.identity, 4),
-                                            personaName: currentPersona?.nickname,
+                                            wallet: formatEthereumAddress(wallet.identity, 4),
                                         }}
                                     />
                                 ),
