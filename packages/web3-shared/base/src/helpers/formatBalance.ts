@@ -1,11 +1,13 @@
 import { BigNumber } from 'bignumber.js'
-import { pow10 } from './number.js'
+import { isLessThan, leftShift, pow10, scale10, trimZero } from './number.js'
 
 export function formatBalance(
     rawValue: BigNumber.Value = '0',
     decimals = 0,
     significant = decimals,
     isPrecise = false,
+    isFixed = false,
+    fixedDecimals = 4,
 ) {
     let balance = new BigNumber(rawValue)
     if (!balance.isInteger()) {
@@ -17,7 +19,13 @@ export function formatBalance(
         }
     }
     balance = balance.integerValue()
-    if (balance.isNaN()) return '0'
+
+    if (isFixed) {
+        const value = leftShift(balance, decimals)
+        const minimum = scale10(1, -fixedDecimals)
+        if (isLessThan(value, minimum)) return '<' + minimum.toFixed()
+        return trimZero(value.toFixed(4))
+    }
 
     const base = pow10(decimals) // 10n ** decimals
     if (balance.div(base).lt(pow10(-8)) && balance.isGreaterThan(0) && !isPrecise) return '<0.000001'
@@ -28,7 +36,7 @@ export function formatBalance(
     let fraction = balance.modulo(base).toString(10) // (balance % base).toString(10)
 
     // add leading zeros
-    while (fraction.length < decimals) fraction = `0${fraction}`
+    fraction = fraction.padStart(decimals, '0')
     // keep up to 6 decimal places
     fraction = fraction.slice(0, balance.div(base).gt(pow10(-6)) ? 6 : 8)
 

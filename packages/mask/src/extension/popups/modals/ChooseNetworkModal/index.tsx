@@ -7,12 +7,11 @@ import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useBalance, useChainContext, useNativeToken } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
-import { type NetworkDescriptor } from '@masknet/web3-shared-base'
+import { formatBalance, type NetworkDescriptor } from '@masknet/web3-shared-base'
 import { ProviderType, type ChainId, type NetworkType } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
 import { getEvmNetworks } from '../../../../utils/networks.js'
 import { ActionModal, useActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { formatBalance } from '../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     networkList: {
@@ -83,7 +82,7 @@ const NetworkItem = memo(function NetworkItem({ network, currentChainId }: Netwo
             <Box className={classes.text}>
                 <Typography className={classes.name}>{network.name}</Typography>
                 <Typography className={classes.balance}>
-                    {loading ? '--' : `${formatBalance(balance, token?.decimals)} ${token?.symbol}`}
+                    {loading ? '--' : `${formatBalance(balance, token?.decimals, 0, false, true)} ${token?.symbol}`}
                 </Typography>
             </Box>
             {selected ? (
