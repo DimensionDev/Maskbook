@@ -1,8 +1,19 @@
 import { SOCIAL_MEDIA_ROUND_ICON_MAPPING } from '@masknet/shared'
-import { SOCIAL_MEDIA_NAME, type EnhanceableSite } from '@masknet/shared-base'
+import { SOCIAL_MEDIA_NAME, EnhanceableSite } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { memo } from 'react'
+
+const SOCIAL_MEDIA_ICON_FILTER_COLOR: Record<EnhanceableSite | string, string> = {
+    [EnhanceableSite.Twitter]: 'drop-shadow(0px 6px 12px rgba(29, 161, 242, 0.20))',
+    [EnhanceableSite.Facebook]: 'drop-shadow(0px 6px 12px rgba(60, 89, 155, 0.20))',
+    [EnhanceableSite.Minds]: 'drop-shadow(0px 6px 12px rgba(33, 37, 42, 0.20))',
+    [EnhanceableSite.Instagram]: 'drop-shadow(0px 6px 12px rgba(246, 100, 16, 0.20))',
+    [EnhanceableSite.OpenSea]: '',
+    [EnhanceableSite.Mirror]: '',
+    [EnhanceableSite.Mask]: '',
+    [EnhanceableSite.Localhost]: '',
+}
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -21,9 +32,6 @@ const useStyles = makeStyles()((theme) => ({
     networkIcon: {
         width: 24,
         height: 24,
-        '& > svg': {
-            borderRadius: 99,
-        },
     },
     network: {
         marginLeft: 8,
@@ -52,7 +60,18 @@ export const ConnectSocialAccounts = memo<ConnectSocialAccountsProps>(function C
 
                 return (
                     <Box className={classes.item} key={networkIdentifier} onClick={() => onConnect(networkIdentifier)}>
-                        <div className={classes.networkIcon}>{Icon ? <Icon size={24} /> : null}</div>
+                        <div className={classes.networkIcon}>
+                            {Icon ? (
+                                <Icon
+                                    size={24}
+                                    style={{
+                                        filter: SOCIAL_MEDIA_ICON_FILTER_COLOR[networkIdentifier],
+                                        backdropFilter: 'blur(8px)',
+                                        borderRadius: 99,
+                                    }}
+                                />
+                            ) : null}
+                        </div>
                         <Typography className={classes.network}>{SOCIAL_MEDIA_NAME[networkIdentifier]}</Typography>
                     </Box>
                 )

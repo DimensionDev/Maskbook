@@ -33,7 +33,7 @@ export function useCurrentPersonaConnectStatus(
 
     const create = useCallback((target?: string, position?: 'center' | 'top-right', _?: boolean, direct = false) => {
         if (direct) {
-            openDashboard?.(DashboardRoutes.Setup)
+            openDashboard?.(DashboardRoutes.SignUpPersona)
         } else {
             LeavePageConfirmModal.open({
                 openDashboard,

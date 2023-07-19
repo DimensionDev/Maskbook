@@ -134,7 +134,7 @@ export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose
                         variant="roundedContained"
                         size="small"
                         sx={{ height: 32 }}
-                        onClick={() => openDashboard(DashboardRoutes.Setup)}>
+                        onClick={() => openDashboard(DashboardRoutes.SignUpPersona)}>
                         {t.create()}
                     </Button>
                 </Box>

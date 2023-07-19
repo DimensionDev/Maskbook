@@ -76,7 +76,7 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(
                 onClose()
             } else {
                 onClose()
-                navigate(DashboardRoutes.Setup)
+                navigate(DashboardRoutes.SignUpPersona)
             }
         }, [identifier, onClose, address, manageWallets.length])
 
