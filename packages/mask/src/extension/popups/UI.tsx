@@ -25,7 +25,7 @@ const SwapPage = lazy(() => import('./pages/Swap/index.js'))
 const RequestPermissionPage = lazy(() => import('./RequestPermission/index.js'))
 const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect/index.js'))
 const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermission/index.js'))
-const Contacts = lazy(() => import('./pages/Contacts/index.js'))
+const Contacts = lazy(() => import('./pages/Friends/index.js'))
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
