@@ -1,9 +1,9 @@
-import { omit, uniqWith } from 'lodash-es'
+import { uniqWith } from 'lodash-es'
 import type { RequestArguments } from 'web3-core'
 import { toHex } from 'web3-utils'
 import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
-import { EMPTY_LIST, type StorageObject, type Wallet } from '@masknet/shared-base'
+import { EMPTY_LIST, type StorageObject, type UpdatableWallet, type Wallet } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     getDefaultChainId,
@@ -130,10 +130,7 @@ export class BaseHostedProvider
         ])
     }
 
-    override async updateWallet(
-        address: string,
-        updates: Partial<Omit<Wallet, 'id' | 'address' | 'createdAt' | 'updatedAt' | 'storedKeyInfo'>>,
-    ) {
+    override async updateWallet(address: string, updates: Partial<UpdatableWallet>) {
         const wallet = this.walletStorage?.wallets.value.find((x) => isSameAddress(x.address, address))
         if (!wallet) throw new Error('Failed to find wallet.')
 
@@ -143,24 +140,15 @@ export class BaseHostedProvider
                 isSameAddress(x.address, address)
                     ? {
                           ...x,
-                          ...omit(updates, ['id', 'address', 'createdAt', 'updatedAt', 'storedKeyInfo']),
+                          name: updates.name ?? x.name,
+                          owner: updates.owner ?? x.owner,
+                          identifier: updates.identifier ?? x.identifier,
                           createdAt: x.createdAt ?? now,
                           updatedAt: now,
                       }
                     : x,
             ),
         )
-    }
-
-    override async updateOrAddWallet(wallet: Wallet) {
-        const target = this.walletStorage?.wallets.value.find((x) => isSameAddress(x.address, wallet.address))
-        if (target) {
-            return this.updateWallet(
-                target.address,
-                omit(wallet, ['id', 'address', 'createdAt', 'updatedAt', 'storedKeyInfo']),
-            )
-        }
-        await this.addWallet(wallet)
     }
 
     override async renameWallet(address: string, name: string) {

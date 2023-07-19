@@ -194,7 +194,7 @@ const CreateMnemonic = memo(function CreateMnemonic() {
     const [{ loading }, onSubmit] = useAsyncFn(async () => {
         handlePasswordAndWallets(location.state?.password, location.state?.isReset)
 
-        const address = await WalletServiceRef.value.recoverWalletFromMnemonicWords(walletName, words.join(' '))
+        const address = await WalletServiceRef.value.createWalletFromMnemonicWords(walletName, words.join(' '))
         await WalletServiceRef.value.resolveMaskAccount([
             {
                 address,

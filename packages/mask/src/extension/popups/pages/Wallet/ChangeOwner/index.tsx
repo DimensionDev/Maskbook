@@ -177,9 +177,20 @@ export default function ChangeOwner() {
 
         if (!hash) return
 
-        await Web3.confirmTransaction(hash, {
+        const receipt = await Web3.confirmTransaction(hash, {
             signal: AbortSignal.timeout(5 * 60 * 1000),
         })
+
+        if (!receipt.status) return
+
+        await Web3.updateWallet?.(
+            contractAccount.address,
+            {
+                owner: manageAccount.address,
+                identifier: manageAccount.identifier?.toText(),
+            },
+            { providerType: ProviderType.MaskWallet },
+        )
     }, [manageAccount?.address, smartPayChainId, contractAccount, wallet])
 
     useTitle(t('popups_wallet_change_owner'))

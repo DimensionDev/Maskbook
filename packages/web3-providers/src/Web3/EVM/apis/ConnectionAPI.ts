@@ -72,21 +72,15 @@ export class ConnectionAPI
         )
     }
 
-    override async updateWallet(address: string, wallet: UpdatableWallet, initial?: ConnectionOptions): Promise<void> {
+    override async updateWallet(
+        address: string,
+        wallet: Partial<UpdatableWallet>,
+        initial?: ConnectionOptions,
+    ): Promise<void> {
         await this.Request.request<void>(
             {
                 method: EthereumMethodType.MASK_UPDATE_WALLET,
                 params: [address, wallet],
-            },
-            this.ConnectionOptions.fill(initial),
-        )
-    }
-
-    override async updateOrAddWallet(wallet: Wallet, initial?: ConnectionOptions): Promise<void> {
-        await this.Request.request<void>(
-            {
-                method: EthereumMethodType.MASK_ADD_OR_UPDATE_WALLET,
-                params: [wallet],
             },
             this.ConnectionOptions.fill(initial),
         )

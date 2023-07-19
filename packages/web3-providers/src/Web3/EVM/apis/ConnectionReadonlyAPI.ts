@@ -122,11 +122,7 @@ export class ConnectionReadonlyAPI
         throw new Error('Method not implemented.')
     }
 
-    async updateWallet(address: string, wallet: UpdatableWallet, initial?: ConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    async updateOrAddWallet(wallet: Wallet, initial?: ConnectionOptions): Promise<void> {
+    async updateWallet(address: string, wallet: Partial<UpdatableWallet>, initial?: ConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 
