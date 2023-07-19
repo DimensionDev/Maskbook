@@ -1,11 +1,11 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useChainContext, useNetworkContext, useNetworks, useTelemetry, useWeb3State } from '@masknet/web3-hooks-base'
-import { EventType, EventID, ExceptionType, ExceptionID } from '@masknet/web3-telemetry/types'
+import { Web3, Contract } from '@masknet/web3-providers'
 import { NetworkPluginID, ProofType } from '@masknet/shared-base'
 import { ChainId, NetworkType, ProviderType, createNativeToken } from '@masknet/web3-shared-evm'
-import { Web3, Contract } from '@masknet/web3-providers'
+import { useChainContext, useNetworkContext, useNetworks, useTelemetry, useWeb3State } from '@masknet/web3-hooks-base'
+import { EventType, EventID, ExceptionType, ExceptionID } from '@masknet/web3-telemetry/types'
 
 export interface ConnectionContentProps {
     onClose?: () => void
@@ -25,8 +25,9 @@ export function ConnectionContent(props: ConnectionContentProps) {
     const telemetry = useTelemetry()
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
 
-    console.log('DEBUG: networks')
-    console.log(networks)
+    const customNetwork = useMemo(() => {
+        return networks.find((x) => x.type === NetworkType.CustomNetwork)
+    }, [networks])
 
     const onAddNetwork = useCallback(async () => {
         await Network?.addNetwork({
@@ -45,6 +46,18 @@ export function ConnectionContent(props: ConnectionContentProps) {
             isCustomized: true,
         })
     }, [Network])
+
+    const onRemoveNetwork = useCallback(async () => {
+        if (!customNetwork) return
+        await Network?.removeNetwork(customNetwork.ID)
+    }, [customNetwork, Network])
+
+    const onRenameNetwork = useCallback(async () => {
+        if (!customNetwork) return
+        await Network?.updateNetwork(customNetwork.ID, {
+            name: 'Ethereum Mainnet',
+        })
+    }, [customNetwork, Network])
 
     const onCaptureEvent = useCallback(async () => {
         telemetry.captureEvent(EventType.Debug, EventID.Debug)
@@ -242,7 +255,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
                     <TableRow>
                         <TableCell>
                             <Typography variant="body2" whiteSpace="nowrap">
-                                Add Network
+                                Add Custom Network
                             </Typography>
                         </TableCell>
                         <TableCell>
@@ -251,6 +264,34 @@ export function ConnectionContent(props: ConnectionContentProps) {
                             </Button>
                         </TableCell>
                     </TableRow>
+                    {customNetwork ? (
+                        <>
+                            <TableRow>
+                                <TableCell>
+                                    <Typography variant="body2" whiteSpace="nowrap">
+                                        Remove Custom Network
+                                    </Typography>
+                                </TableCell>
+                                <TableCell>
+                                    <Button size="small" onClick={() => onRemoveNetwork()}>
+                                        Remove {customNetwork.name}
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>
+                                    <Typography variant="body2" whiteSpace="nowrap">
+                                        Rename Custom Network
+                                    </Typography>
+                                </TableCell>
+                                <TableCell>
+                                    <Button size="small" onClick={() => onRenameNetwork()}>
+                                        Rename {customNetwork.name}
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        </>
+                    ) : null}
                     <TableRow>
                         <TableCell>
                             <Typography variant="body2" whiteSpace="nowrap">
