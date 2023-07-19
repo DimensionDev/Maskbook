@@ -1,3 +1,4 @@
+/* cspell:disable */
 import type { ProfileIdentifier } from '@masknet/base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { NetworkPluginID, SocialAddressType, type SocialAccount } from '@masknet/shared-base'
