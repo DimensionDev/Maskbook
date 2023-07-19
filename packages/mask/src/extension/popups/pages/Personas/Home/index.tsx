@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext } from 'react'
+import { memo, useCallback, useContext, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PersonaContext } from '@masknet/shared'
 import {
@@ -13,8 +13,10 @@ import Services from '../../../../service.js'
 import { HydrateFinished } from '../../../../../utils/createNormalReactRoot.js'
 import { useSupportSocialNetworks } from '../../../hook/useSupportSocialNetworks.js'
 import { useVerifiedWallets } from '../../../hook/useVerifiedWallets.js'
+import { useTheme } from '@mui/material'
 
 const PersonaHome = memo(() => {
+    const theme = useTheme()
     const navigate = useNavigate()
     const { avatar, currentPersona, setSelectedAccount, personas, accounts, proofs } = PersonaContext.useContainer()
 
@@ -66,13 +68,24 @@ const PersonaHome = memo(() => {
         navigate(PopupRoutes.AccountDetail)
     }, [])
 
+    const personaAvatar = useMemo(() => {
+        if (avatar) return avatar
+        if (proofs?.length) {
+            return theme.palette.mode === 'dark'
+                ? new URL('../../../assets/NextId.dark.png', import.meta.url).toString()
+                : new URL('../../../assets/NextId.light.png', import.meta.url).toString()
+        }
+
+        return
+    }, [theme.palette.mode, avatar, proofs])
+
     return (
         <PersonaHomeUI
             bindingWallets={bindingWallets}
             accounts={accounts}
             networks={definedSocialNetworks}
             isEmpty={!personas?.length}
-            avatar={avatar}
+            avatar={personaAvatar}
             fingerprint={currentPersona?.identifier.rawPublicKey}
             publicKey={currentPersona?.identifier.publicKeyAsHex}
             nickname={currentPersona?.nickname}

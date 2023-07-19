@@ -84,7 +84,7 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
                 openDashboard,
                 info: {
                     target: 'dashboard',
-                    url: DashboardRoutes.Setup,
+                    url: DashboardRoutes.SignUpPersona,
                     text: sharedI18N.create_persona_hint(),
                     title: sharedI18N.create_persona_title(),
                     actionHint: sharedI18N.create_persona_action(),
