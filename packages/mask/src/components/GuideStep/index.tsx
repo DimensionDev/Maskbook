@@ -141,7 +141,7 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     useLayoutEffect(() => {
         let stopped = false
         requestAnimationFrame(function fn() {
-            if (stopped || !stepVisible) return
+            if (stopped) return
             requestAnimationFrame(fn)
             if (!childrenRef.current) return
             const cr = childrenRef.current.getBoundingClientRect()
@@ -171,7 +171,7 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
             }
         })
         return () => void (stopped = true)
-    }, [stepVisible])
+    }, [])
 
     return (
         <>
