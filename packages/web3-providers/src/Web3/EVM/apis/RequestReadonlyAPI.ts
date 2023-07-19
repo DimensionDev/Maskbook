@@ -24,12 +24,7 @@ export class RequestReadonlyAPI {
     get customNetworkProviderURL() {
         const networkID = this.Network.networkID?.getCurrentValue()
         const networks = this.Network.networks?.getCurrentValue()
-
-        if (networkID && networks?.length) {
-            const network = networks.find((x) => x.ID === networkID && x.isCustomized)
-            return network?.rpcUrl
-        }
-        return
+        return networkID && networks?.find((x) => x.ID === networkID && x.isCustomized)?.rpcUrl
     }
 
     get request() {
