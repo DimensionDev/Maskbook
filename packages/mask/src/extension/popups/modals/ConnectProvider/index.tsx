@@ -104,9 +104,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
             const connect = async () => {
                 // wait for web3 state init
                 await delay(1500)
-                const account = await Web3.getAccount({ providerType })
                 const chainId = await Web3.getChainId({ providerType })
-                console.log(account)
                 return Web3.connect({
                     chainId,
                     providerType: providerType as ProviderType,
