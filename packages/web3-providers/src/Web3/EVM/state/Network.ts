@@ -22,4 +22,10 @@ export class Network extends NetworkState<ChainId, SchemaType, NetworkType> {
         // distinguish warnings
         return result.error.errors.some((x) => !(x.code === z.ZodIssueCode.custom && x.path[1] === 'symbol'))
     }
+
+    protected override async pingNetwork(
+        network: TransferableNetwork<ChainId, SchemaType, NetworkType>,
+    ): Promise<boolean> {
+        throw new Error('Ping RPC URL.')
+    }
 }

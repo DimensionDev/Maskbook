@@ -202,10 +202,8 @@ export class BaseHostedProvider
 
     override async switchAccount(account?: string) {
         if (!isValidAddress(account)) throw new Error(`Invalid address: ${account}`)
-
         const supported = await this.options.isSupportedAccount(account)
         if (!supported) throw new Error(`Not supported account: ${account}`)
-
         await this.walletStorage?.account.setValue(account)
     }
 
