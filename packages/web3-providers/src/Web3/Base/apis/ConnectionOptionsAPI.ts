@@ -14,6 +14,8 @@ export interface ConnectionOptions_Base<ChainId, ProviderType, Transaction> {
     identifier?: ECKeyIdentifier
     /** Designate the provider to handle the transaction. */
     providerType?: ProviderType
+    /** Custom network rpc url. */
+    providerURL?: string
     /** Gas payment token. */
     paymentToken?: string
     /** Only Support Mask Wallet, silent switch wallet */
