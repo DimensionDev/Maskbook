@@ -1,25 +1,32 @@
 import { Icons } from '@masknet/icons'
-import { CopyButton, ReversedAddress, ProgressiveText } from '@masknet/shared'
+import { CopyButton, ProgressiveText, ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { trimZero, type Transaction, multipliedBy, formatBalance } from '@masknet/web3-shared-base'
+import { makeStyles } from '@masknet/theme'
+import { useAccount, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
+import { ChainbaseHistory } from '@masknet/web3-providers'
+import {
+    formatBalance,
+    multipliedBy,
+    trimZero,
+    type Transaction,
+    TransactionStateType,
+} from '@masknet/web3-shared-base'
 import {
     explorerResolver,
+    formatHash,
+    formatWeiToEther,
+    formatWeiToGwei,
     type ChainId,
     type SchemaType,
-    formatHash,
-    formatWeiToGwei,
-    formatWeiToEther,
 } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography, alpha } from '@mui/material'
+import { useQuery } from '@tanstack/react-query'
+import { capitalize } from 'lodash-es'
 import { memo } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
+import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { WalletAssetTabs } from '../type.js'
-import { makeStyles } from '@masknet/theme'
-import { capitalize } from 'lodash-es'
-import { useQuery } from '@tanstack/react-query'
-import { ChainbaseHistory } from '@masknet/web3-providers'
-import { useAccount, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     statusTitle: {
@@ -97,26 +104,28 @@ export const TransactionDetail = memo(function TransactionDetail() {
             return ChainbaseHistory.getTransaction(transaction.chainId, transaction.id, transaction.blockNumber)
         },
     })
+    const { t } = useI18N()
     if (!transaction) {
         return <Navigate to={`${PopupRoutes.Wallet}?tab=${WalletAssetTabs.Activity}`} replace />
     }
 
+    const { FAILED, SUCCEED, NOT_DEPEND } = TransactionStateType
     const StatusIconMap = {
-        0: <Icons.BaseClose size={20} />,
-        1: <Icons.FillSuccess size={20} />,
-        2: <Icons.WarningTriangle size={20} />,
+        [FAILED]: <Icons.BaseClose size={20} />,
+        [SUCCEED]: <Icons.FillSuccess size={20} />,
+        [NOT_DEPEND]: <Icons.WarningTriangle size={20} />,
     }
     const StatusClassesMap = {
-        0: classes.statusFail,
-        1: classes.statusSuccess,
-        2: classes.statusPending,
+        [FAILED]: classes.statusFail,
+        [SUCCEED]: classes.statusSuccess,
+        [NOT_DEPEND]: classes.statusPending,
     }
     const StatusLabelMap = {
-        0: 'Failed',
-        1: 'Success',
-        2: 'Pending',
+        [FAILED]: t('transaction_failed'),
+        [SUCCEED]: t('transaction_success'),
+        [NOT_DEPEND]: t('transaction_pending'),
     }
-    const { status = 2 } = transaction
+    const { status = NOT_DEPEND } = transaction
     const isOut = transaction.from === account
     const link = explorerResolver.transactionLink(transaction.chainId, transaction.id)
 
@@ -128,7 +137,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
         <Box p={2}>
             <Box display="flex" alignItems="center">
                 <Typography variant="h2" className={classes.statusTitle}>
-                    Status
+                    {t('transaction_status')}
                 </Typography>
                 <Typography component="div" className={cx(classes.status, StatusClassesMap[status])}>
                     {StatusIconMap[status]}
@@ -136,32 +145,32 @@ export const TransactionDetail = memo(function TransactionDetail() {
                 </Typography>
             </Box>
             <Box className={classes.field}>
-                <Typography className={classes.fieldName}>Transaction Hash</Typography>
+                <Typography className={classes.fieldName}>{t('transaction_hash')}</Typography>
                 <Typography className={classes.fieldValue}>
                     {formatHash(transaction.id, 4)}
                     {transaction.id ? <CopyButton size={16} text={transaction.id} sx={{ ml: 0.5 }} /> : null}
                 </Typography>
             </Box>
             <Box className={classes.field}>
-                <Typography className={classes.fieldName}>Link</Typography>
+                <Typography className={classes.fieldName}>{t('transaction_link')}</Typography>
                 <Typography className={classes.fieldValue}>
-                    View on block explorer
+                    {t('view_on_explorer')}
                     <Link href={link} target="_blank" ml={0.5} fontSize={0}>
                         <Icons.LinkOut size={16} color={theme.palette.maskColor.second} />
                     </Link>
                 </Typography>
             </Box>
             <Typography variant="h2" className={classes.sectionName}>
-                Base
+                {t('transaction_base')}
             </Typography>
             <Box className={classes.field}>
-                <Typography className={classes.fieldName}>From</Typography>
+                <Typography className={classes.fieldName}>{t('transaction_from')}</Typography>
                 <Typography className={classes.fieldValue} component="div">
                     <ReversedAddress address={transaction.from} />
                 </Typography>
             </Box>
             <Box className={classes.field}>
-                <Typography className={classes.fieldName}>To</Typography>
+                <Typography className={classes.fieldName}>{t('transaction_to')}</Typography>
                 <Typography className={classes.fieldValue} component="div">
                     <ReversedAddress address={transaction.to} />
                 </Typography>
@@ -170,13 +179,13 @@ export const TransactionDetail = memo(function TransactionDetail() {
                 Transaction
             </Typography>
             <Box className={classes.field}>
-                <Typography className={classes.fieldName}>Nonce</Typography>
+                <Typography className={classes.fieldName}>{t('nonce')}</Typography>
                 <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
                     {tx?.nonce}
                 </ProgressiveText>
             </Box>
             <Box className={classes.field}>
-                <Typography className={classes.fieldName}>Amount</Typography>
+                <Typography className={classes.fieldName}>{t('amount')}</Typography>
                 <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
                     {tx && nativeToken
                         ? `${isOut ? '-' : '+'}${formatBalance(tx.value, nativeToken.decimals, 6)} ${
@@ -186,27 +195,27 @@ export const TransactionDetail = memo(function TransactionDetail() {
                 </ProgressiveText>
             </Box>
             <Box className={classes.field}>
-                <Typography className={classes.fieldName}>Gas Limit (Units)</Typography>
+                <Typography className={classes.fieldName}>{t('transaction_gas_limit')}</Typography>
                 <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
                     {tx?.gas}
                 </ProgressiveText>
             </Box>
             <Box className={classes.field}>
-                <Typography className={classes.fieldName}>Gas Used (Units)</Typography>
+                <Typography className={classes.fieldName}>{t('transaction_gas_used')}</Typography>
                 <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
                     {tx?.gas_used}
                     {gasUsedPercent ? ` (${trimZero(gasUsedPercent.toFixed(1))}%)` : ''}
                 </ProgressiveText>
             </Box>
             <Box className={classes.field}>
-                <Typography className={classes.fieldName}>Gas Price (GWEI)</Typography>
+                <Typography className={classes.fieldName}>{t('transaction_gas_price')}</Typography>
                 <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
                     {tx ? formatWeiToGwei(tx.gas_price).toFixed(6) : ''}
                 </ProgressiveText>
             </Box>
             {tx?.max_priority_fee_per_gas ? (
                 <Box className={classes.field}>
-                    <Typography className={classes.fieldName}>Priority Fee (GWEI)</Typography>
+                    <Typography className={classes.fieldName}>{t('transaction_priority_fee')}</Typography>
                     <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
                         {tx ? formatWeiToGwei(tx.max_priority_fee_per_gas).toFixed(6) : ''}
                     </ProgressiveText>
@@ -214,14 +223,14 @@ export const TransactionDetail = memo(function TransactionDetail() {
             ) : null}
             {tx?.max_fee_per_gas ? (
                 <Box className={classes.field}>
-                    <Typography className={classes.fieldName}>Max Fee (GWEI)</Typography>
+                    <Typography className={classes.fieldName}>{t('transaction_max_fee')}</Typography>
                     <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
                         {tx ? formatWeiToGwei(tx.max_fee_per_gas).toFixed(6) : ''}
                     </ProgressiveText>
                 </Box>
             ) : null}
             <Box className={classes.field}>
-                <Typography className={classes.fieldName}>Transaction Fee</Typography>
+                <Typography className={classes.fieldName}>{t('transaction_fee')}</Typography>
                 <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
                     {gasFee ? `${gasFee.toFixed(6)} ${nativeToken?.symbol}` : ''}
                     {gasCost ? ` ≈ $${gasCost.toFixed(2)}` : ''}
