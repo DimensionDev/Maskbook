@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { useI18N } from '../../../utils/index.js'
 import { AdditionalContent } from '../AdditionalPostContent.js'
 import type { ProfileIdentifier } from '@masknet/shared-base'
-import { wrapAuthorDifferentMessage } from './authorDifferentMessage.js'
+import { useAuthorDifferentMessage } from './authorDifferentMessage.js'
 
 export interface DecryptPostFailedProps {
     error: Error
@@ -20,7 +20,7 @@ export const DecryptPostFailed = memo(function DecryptPostFailed(props: DecryptP
             title={t('service_decryption_failed')}
             titleIcon="error"
             message={error?.message}
-            headerActions={wrapAuthorDifferentMessage(author, postedBy, void 0)}
+            headerActions={useAuthorDifferentMessage(author, postedBy, void 0)}
         />
     )
 })

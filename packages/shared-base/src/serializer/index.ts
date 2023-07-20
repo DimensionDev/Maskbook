@@ -5,7 +5,6 @@ import { Err, None, Ok, Some } from 'ts-results-es'
 import * as BN from 'bignumber.js'
 import { EncryptError, DecryptError } from '@masknet/encryption'
 
-// @ts-expect-error untyped library
 import { blob, builtin, cryptokey, file, filelist, imagebitmap, specialNumbers } from 'typeson-registry'
 import { Identifier } from '@masknet/base'
 import { responseRegedit } from './response.js'
