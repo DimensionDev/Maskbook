@@ -1,10 +1,10 @@
 import { memo, useCallback, useMemo } from 'react'
-import { Link, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
+import { Box, Link, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import { formatBalance, type FungibleToken } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { TokenIcon } from '../TokenIcon/index.js'
 import { Icons } from '@masknet/icons'
-import { useWeb3Others } from '@masknet/web3-hooks-base'
+import { useNetworkDescriptor, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, MaskLoadingButton, LoadingBase } from '@masknet/theme'
 import { useSharedI18N } from '../../../locales/index.js'
@@ -12,6 +12,7 @@ import { TokenListMode } from './type.js'
 import { SettingSwitch } from '../SettingSwitch/index.js'
 import { useTokenBlocked, useTokenTrusted } from './useTokenBlocked.js'
 import { FormattedBalance } from '../../wallet/index.js'
+import { ImageIcon } from '../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -94,6 +95,13 @@ const useStyles = makeStyles()((theme) => ({
     link: {
         color: theme.palette.maskColor.second,
     },
+    badgeIcon: {
+        position: 'absolute',
+        right: -6,
+        bottom: -4,
+        border: `1px solid ${theme.palette.common.white}`,
+        borderRadius: '50%',
+    },
 }))
 
 export const getFungibleTokenItem = <T extends NetworkPluginID>(
@@ -108,6 +116,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
         token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
         strategy: 'trust' | 'block',
     ) => Promise<void>,
+    isHiddenChainIcon?: boolean,
 ) => {
     return memo(({ data, index, style }: any) => {
         const t = useSharedI18N()
@@ -121,6 +130,8 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
 
         const isBlocked = useTokenBlocked(address)
         const isTrust = useTokenTrusted(address, token.chainId)
+
+        const networkDescriptor = useNetworkDescriptor(undefined, chainId)
 
         const { source, selected } = useMemo(() => {
             return {
@@ -204,13 +215,18 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                     onClick={mode === TokenListMode.List ? () => onSelect(token) : undefined}
                     disabled={!!(selected && mode === TokenListMode.List)}>
                     <ListItemIcon>
-                        <TokenIcon
-                            className={classes.icon}
-                            chainId={chainId}
-                            address={address}
-                            name={name}
-                            logoURL={logoURL}
-                        />
+                        <Box position="relative">
+                            <TokenIcon
+                                className={classes.icon}
+                                chainId={chainId}
+                                address={address}
+                                name={name}
+                                logoURL={logoURL}
+                            />
+                            {isHiddenChainIcon ? null : (
+                                <ImageIcon className={classes.badgeIcon} size={16} icon={networkDescriptor?.icon} />
+                            )}
+                        </Box>
                     </ListItemIcon>
                     <ListItemText classes={{ primary: classes.text }}>
                         <Typography className={classes.primary} color="textPrimary" component="span">

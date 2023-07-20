@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { ElementAnchor, EmptyStatus, Image, NetworkIcon, RetryHint, isSameNFT } from '@masknet/shared'
+import { ElementAnchor, EmptyStatus, Image, RetryHint, isSameNFT } from '@masknet/shared'
 import { EMPTY_OBJECT, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -7,7 +7,7 @@ import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
 import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
-import { Box, Button, Typography, styled } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import type { BoxProps } from '@mui/system'
 import { range, sortBy } from 'lodash-es'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -18,18 +18,7 @@ import { LoadingSkeleton } from './LoadingSkeleton.js'
 import { useUserAssets } from './UserAssetsContext.js'
 import type { CollectibleGridProps } from './types.js'
 import { useCollections } from './useCollections.js'
-
-const AllButton = styled(Button)(({ theme }) => ({
-    display: 'inline-block',
-    padding: 0,
-    borderRadius: '50%',
-    fontSize: 10,
-    backgroundColor: theme.palette.maskColor.highlight,
-    '&:hover': {
-        backgroundColor: theme.palette.maskColor.highlight,
-        boxShadow: 'none',
-    },
-}))
+import { SelectNetworkSidebar } from '../SelectNetworkSidebar/index.js'
 
 const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap = 1.5 }) => {
     const gapIsNumber = typeof gap === 'number'
@@ -97,34 +86,6 @@ const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap 
             color: theme.palette.maskColor.main,
             backgroundColor: theme.palette.maskColor.thirdMain,
         },
-        sidebar: {
-            width: 36,
-            flexShrink: 0,
-            paddingRight: theme.spacing(1.5),
-            paddingTop: gapIsNumber ? theme.spacing(gap) : gap,
-            boxSizing: 'border-box',
-            height: '100%',
-            overflow: 'auto',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-        networkButton: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: '12px',
-            width: 24,
-            minWidth: 24,
-            height: 24,
-            maxWidth: 24,
-            padding: 0,
-        },
-        indicator: {
-            position: 'absolute',
-            right: -3,
-            bottom: -1,
-        },
     }
 })
 
@@ -173,7 +134,7 @@ export const CollectionList = memo(function CollectionList({
     disableWindowScroll,
     onActionClick,
     onItemClick,
-    onChainChange,
+    onChainChange: _onChainChange,
     ...rest
 }: CollectionListProps) {
     const t = useSharedI18N()
@@ -190,6 +151,12 @@ export const CollectionList = memo(function CollectionList({
         )
     }, [allNetworks, pluginID])
 
+    const onChainChange = useCallback((chainId: Web3Helper.ChainIdAll | undefined) => {
+        setChainId(chainId)
+        _onChainChange?.(chainId)
+        setCurrentCollectionId(undefined)
+    }, [])
+
     const currentChainId = chainId ?? defaultChainId ?? (networks.length === 1 ? networks[0].chainId : chainId)
     const { collections, currentCollection, currentCollectionId, setCurrentCollectionId, loading, error, retry } =
         useCollections(pluginID, currentChainId, account)
@@ -205,40 +172,6 @@ export const CollectionList = memo(function CollectionList({
             loadVerifiedBy(id)
         },
         [loadAssets, loadVerifiedBy],
-    )
-
-    const sidebar = disableSidebar ? null : (
-        <div className={classes.sidebar}>
-            {networks.length > 1 ? (
-                <AllButton
-                    className={classes.networkButton}
-                    onClick={() => {
-                        setChainId(undefined)
-                        onChainChange?.(undefined)
-                        setCurrentCollectionId(undefined)
-                    }}>
-                    All
-                    {!currentChainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
-                </AllButton>
-            ) : null}
-            {networks.map((x) => (
-                <Button
-                    variant="text"
-                    key={x.chainId}
-                    className={classes.networkButton}
-                    disableRipple
-                    onClick={() => {
-                        setChainId(x.chainId)
-                        onChainChange?.(x.chainId)
-                        setCurrentCollectionId(undefined)
-                    }}>
-                    <NetworkIcon pluginID={pluginID} chainId={x.chainId} ImageIconProps={{ size: 24 }} />
-                    {currentChainId === x.chainId ? (
-                        <Icons.BorderedSuccess className={classes.indicator} size={12} />
-                    ) : null}
-                </Button>
-            ))}
-        </div>
     )
 
     const containerRef = useRef<HTMLDivElement>(null)
@@ -258,6 +191,17 @@ export const CollectionList = memo(function CollectionList({
             window.scroll({ top, behavior: 'smooth' })
         }
     }, [!currentCollectionId, disableWindowScroll])
+
+    const sidebar = disableSidebar ? null : (
+        <SelectNetworkSidebar
+            chainId={chainId}
+            defaultChainId={defaultChainId}
+            gridProps={gridProps}
+            onChainChange={onChainChange}
+            pluginID={pluginID}
+            supportedChains={SimpleHashSupportedChains[pluginID]}
+        />
+    )
 
     if (!collections.length && loading && !error && account)
         return (

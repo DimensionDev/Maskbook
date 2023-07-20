@@ -6,9 +6,11 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     useAccount,
     useBlockedFungibleTokens,
+    useFungibleAssets,
     useFungibleToken,
     useFungibleTokenBalance,
     useFungibleTokensBalance,
+    useFungibleTokensFromTokenList,
     useNetworkContext,
     useTrustedFungibleTokens,
     useWeb3Others,
@@ -29,6 +31,8 @@ import { getFungibleTokenItem } from './FungibleTokenItem.js'
 import { ManageTokenListBar } from './ManageTokenListBar.js'
 import { TokenListMode } from './type.js'
 
+export * from './type.js'
+
 const SEARCH_KEYS = ['address', 'symbol', 'name']
 
 export interface FungibleTokenListProps<T extends NetworkPluginID> extends withClasses<'channel' | 'bar' | 'listBox'> {
@@ -43,10 +47,9 @@ export interface FungibleTokenListProps<T extends NetworkPluginID> extends withC
     FixedSizeListProps?: Partial<MaskFixedSizeListProps>
     SearchTextFieldProps?: MaskTextFieldProps
     enableManage?: boolean
-    fungibleTokens: Web3Helper.FungibleTokenScope[]
+    isHiddenChainIcon?: boolean
     setMode?(mode: TokenListMode): void
     mode?: TokenListMode
-    fungibleAssets: Web3Helper.FungibleAssetScope[]
 }
 
 const useStyles = makeStyles()({
@@ -71,8 +74,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         FixedSizeListProps,
         selectedTokens = EMPTY_LIST,
         enableManage = false,
-        fungibleTokens,
-        fungibleAssets,
+        isHiddenChainIcon = true,
         setMode,
         mode = TokenListMode.List,
     } = props
@@ -85,6 +87,14 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     const chainId = props.chainId
     const { Token } = useWeb3State<'all'>(pluginID)
     const Others = useWeb3Others(pluginID)
+
+    const { value: fungibleTokens = EMPTY_LIST } = useFungibleTokensFromTokenList(pluginID, {
+        chainId,
+    })
+
+    const { data: fungibleAssets = EMPTY_LIST } = useFungibleAssets(pluginID, undefined, {
+        chainId,
+    })
 
     const trustedFungibleTokens = useTrustedFungibleTokens(pluginID, undefined, chainId)
     const blockedFungibleTokens = useBlockedFungibleTokens(pluginID)
@@ -126,7 +136,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         if (mode === TokenListMode.List) return EMPTY_LIST
         const isTrustedToken = currySameAddress(trustedFungibleTokens.map((x) => x.address))
 
-        return [...filteredFungibleTokens].sort((a, z) => {
+        return [...fungibleTokens].sort((a, z) => {
             // trusted token
             if (isTrustedToken(a.address)) return -1
             if (isTrustedToken(z.address)) return 1
@@ -150,7 +160,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
             return 0
         })
-    }, [chainId, trustedFungibleTokens, Others, mode])
+    }, [chainId, trustedFungibleTokens, fungibleTokens, Others, mode])
 
     const sortedFungibleTokensForList = useMemo(() => {
         if (mode === TokenListMode.Manage) return EMPTY_LIST
@@ -282,6 +292,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 if (strategy === 'trust') Token?.trustToken?.(account, token)
                 if (strategy === 'block') Token?.blockToken?.(account, token)
             },
+            isHiddenChainIcon,
         )
     }, [nativeToken?.address, selectedTokens, mode, trustedFungibleTokens, fungibleTokens])
 

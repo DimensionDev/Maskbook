@@ -1,6 +1,6 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
-import { memo, useCallback, useContext } from 'react'
+import { memo, useCallback, useContext, type ReactNode } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
@@ -10,6 +10,8 @@ import { PageTitleContext } from '../../context.js'
 const useStyles = makeStyles()((theme) => ({
     container: {
         background: theme.palette.maskColor.modalTitleBg,
+    },
+    header: {
         padding: theme.spacing(2),
         lineHeight: 0,
         display: 'grid',
@@ -38,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface NormalHeaderProps {
     onlyTitle?: boolean
-    onClose(): void
+    tabList?: ReactNode
 }
 
 function canNavBack() {
@@ -47,8 +49,9 @@ function canNavBack() {
     } catch {}
     return false
 }
-export const NormalHeader = memo<NormalHeaderProps>(function NormalHeader({ onlyTitle, onClose }) {
-    const { classes } = useStyles()
+export const NormalHeader = memo<NormalHeaderProps>(function NormalHeader(props) {
+    const { onlyTitle } = props
+    const { cx, classes } = useStyles()
     const navigate = useNavigate()
     const { title, extension, customBackHandler } = useContext(PageTitleContext)
 
@@ -57,22 +60,25 @@ export const NormalHeader = memo<NormalHeaderProps>(function NormalHeader({ only
     const handleBack = useCallback(() => navigate(-1), [])
     if (onlyTitle)
         return (
-            <Box className={classes.container} style={{ justifyContent: 'center' }}>
+            <Box className={cx(classes.container, classes.header)} style={{ justifyContent: 'center' }}>
                 <Typography className={classes.title}>{title}</Typography>
             </Box>
         )
 
     return (
         <Box className={classes.container}>
-            {showTitle ? (
-                <>
-                    <Icons.Comeback className={classes.back} onClick={customBackHandler ?? handleBack} />
-                    <Typography className={classes.title}>{title}</Typography>
-                    {extension}
-                </>
-            ) : (
-                <Icons.Mask className={classes.logo} />
-            )}
+            <Box className={classes.header}>
+                {showTitle ? (
+                    <>
+                        <Icons.Comeback className={classes.back} onClick={customBackHandler ?? handleBack} />
+                        <Typography className={classes.title}>{title}</Typography>
+                        {extension}
+                    </>
+                ) : (
+                    <Icons.Mask className={classes.logo} />
+                )}
+            </Box>
+            {props.tabList}
         </Box>
     )
 })
