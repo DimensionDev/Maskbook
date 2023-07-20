@@ -9,24 +9,24 @@
   },
   "dependencies": {
     "@masknet/static-module-record-swc": "^0.4.1",
-    "chalk": "^5.2.0",
-    "dotenv": "^16.0.3",
+    "chalk": "^5.3.0",
+    "dotenv": "^16.3.1",
     "enquirer": "^2.3.6",
     "fs-extra": "^11.1.1",
-    "glob": "^10.2.0",
+    "glob": "^10.3.3",
     "proper-lockfile": "^4.1.2",
-    "rimraf": "^5.0.0",
+    "rimraf": "^5.0.1",
     "source-map": "^0.7.4",
-    "yargs": "^17.7.1"
+    "yargs": "^17.7.2"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.1",
-    "@types/gulp": "^4.0.10",
-    "@types/node": "18.15.11",
+    "@types/gulp": "^4.0.13",
+    "@types/node": "20.4.2",
     "@types/proper-lockfile": "^4.1.2",
     "@types/yargs": "^17.0.24",
     "gulp-cli": "^2.3.0",
     "ts-node": "^10.9.1",
-    "web-ext": "^7.6.1"
+    "web-ext": "^7.6.2"
   }
 }

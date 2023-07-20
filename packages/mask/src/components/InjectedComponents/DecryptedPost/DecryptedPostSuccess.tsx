@@ -12,7 +12,7 @@ import {
     type ProfileInformation,
     type ProfileInformationFromNextID,
 } from '@masknet/shared-base'
-import { wrapAuthorDifferentMessage } from './authorDifferentMessage.js'
+import { useAuthorDifferentMessage } from './authorDifferentMessage.js'
 import { DecryptedUI_PluginRendererWithSuggestion } from '../DecryptedPostMetadataRender.js'
 import { PostInfoContext, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { useRecipientsList } from '../../CompositionDialog/useRecipientsList.js'
@@ -63,7 +63,7 @@ const DecryptPostSuccessBase = memo(function DecryptPostSuccessNoShare(
         <>
             <AdditionalContent
                 title={t('decrypted_postbox_title')}
-                headerActions={wrapAuthorDifferentMessage(author, postedBy, props.children)}
+                headerActions={useAuthorDifferentMessage(author, postedBy, props.children)}
                 message={message}
             />
             <DecryptedUI_PluginRendererWithSuggestion message={message} metadata={message.meta} />

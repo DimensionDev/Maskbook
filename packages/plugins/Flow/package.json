@@ -23,7 +23,7 @@
     "@masknet/web3-shared-flow": "workspace:^",
     "@servie/events": "^3.0.0",
     "bignumber.js": "9.1.1",
-    "date-fns": "^2.29.3",
+    "date-fns": "^2.30.0",
     "react-use": "^17.4.0"
   },
   "devDependencies": {
