@@ -1,4 +1,3 @@
-/// <reference path="./typeson.d.ts" />
 import { Typeson, TypesonPromise } from 'typeson'
 import type { Serialization } from 'async-call-rpc'
 import { Err, None, Ok, Some } from 'ts-results-es'
