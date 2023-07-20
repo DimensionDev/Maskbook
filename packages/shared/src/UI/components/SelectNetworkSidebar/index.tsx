@@ -63,6 +63,7 @@ interface SelectNetworkSidebarProps {
     gridProps?: StyleProps
     supportedChains: Web3Helper.ChainIdAll[]
     pluginID: NetworkPluginID
+    hiddenAllButton?: boolean
     chainId?: Web3Helper.ChainIdAll
     defaultChainId?: Web3Helper.ChainIdAll
     onChainChange: (chainId: Web3Helper.ChainIdAll | undefined) => void
@@ -75,6 +76,7 @@ export function SelectNetworkSidebar({
     defaultChainId,
     pluginID,
     onChainChange,
+    hiddenAllButton,
 }: SelectNetworkSidebarProps) {
     const t = useSharedI18N()
 
@@ -93,7 +95,7 @@ export function SelectNetworkSidebar({
 
     return (
         <div className={classes.sidebar}>
-            {networks.length > 1 ? (
+            {networks.length > 1 && !hiddenAllButton ? (
                 <AllButton className={classes.networkButton} onClick={() => onChainChange(undefined)}>
                     {t.all()}
                     {!currentChainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
