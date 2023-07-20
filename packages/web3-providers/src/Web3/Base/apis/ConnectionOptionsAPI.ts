@@ -39,7 +39,7 @@ export class ConnectionOptionsAPI_Base<
     constructor(private options?: ConnectionOptions_Base<ChainId, ProviderType, Transaction>) {}
 
     get Web3StateRef(): ValueRefWithReady<
-        Web3State<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter> | undefined
+        Web3State<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter>
     > {
         throw new Error('To be implemented.')
     }
@@ -59,8 +59,8 @@ export class ConnectionOptionsAPI_Base<
         }
     }
 
-    protected get refs(): ConnectionOptions_Base<ChainId, ProviderType, Transaction> | undefined {
-        if (!this.Web3StateRef.value) return
+    protected get refs(): ConnectionOptions_Base<ChainId, ProviderType, Transaction> {
+        if (!this.Web3StateRef.value) return {}
         return {
             account: this.Web3StateRef.value.Provider?.account?.getCurrentValue(),
             chainId: this.Web3StateRef.value.Provider?.chainId?.getCurrentValue(),

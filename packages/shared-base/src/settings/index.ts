@@ -37,10 +37,10 @@ const APPLICATION_ENTRY_UNLISTED = 'APPLICATION_ENTRY_UNLISTED'
 
 export const PersistentStorages = {
     Plugin: createPersistentKVStorage('plugin', {}),
+    Web3: createPersistentKVStorage('web3', {}),
     Settings: createPersistentKVStorage('settings', {
         debugging: false,
     }),
-    Web3: createPersistentKVStorage('web3', {}),
     /**
      * @deprecated Will be removed in 2.23
      */

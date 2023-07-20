@@ -11,7 +11,7 @@ import { ConnectionOptionsAPI_Base } from '../../Base/apis/ConnectionOptionsAPI.
 import { ValueRefWithReady } from '@masknet/shared-base'
 import { OthersAPI } from './OthersAPI.js'
 
-const EmptyRef = new ValueRefWithReady<Web3State | undefined>()
+const EmptyRef = new ValueRefWithReady<Web3State>({})
 
 export class ConnectionOptionsReadonlyAPI extends ConnectionOptionsAPI_Base<
     ChainId,
