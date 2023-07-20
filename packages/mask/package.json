@@ -177,7 +177,7 @@
     "webpack": "Jack-Works/webpack#lazy-import",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.13.3",
-    "webpack-target-webextension": "^1.0.4"
+    "webpack-target-webextension": "^1.1.0"
   },
   "peerDependencies": {
     "tss-react": "^4.8.2"

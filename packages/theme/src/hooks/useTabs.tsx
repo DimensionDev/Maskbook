@@ -18,7 +18,7 @@ import { useCallback, useEffect, useState, useTransition } from 'react'
  */
 export function useTabs<T extends string>(defaultTab: T, ...possibleTabs: T[]) {
     const [currentTab, setTab] = useState(defaultTab)
-    const [isPending, startTransition] = useTransition()
+    const [, startTransition] = useTransition()
     const tabRecords = { [defaultTab]: defaultTab } as Record<T, T>
     possibleTabs.forEach((t) => (tabRecords[t] = t))
 

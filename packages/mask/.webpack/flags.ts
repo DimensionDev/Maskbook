@@ -4,10 +4,17 @@ import { fileURLToPath } from 'node:url'
 
 const __dirname = fileURLToPath(dirname(import.meta.url))
 
+export enum ManifestFile {
+    ChromiumMV2 = 'chromium-mv2',
+    ChromiumBetaMV2 = 'chromium-beta-mv2',
+    ChromiumMV3 = 'chromium-mv3',
+    FirefoxMV2 = 'firefox-mv2',
+    FirefoxMV3 = 'firefox-mv3',
+    SafariMV3 = 'safari-mv3',
+}
 export interface BuildFlags {
-    engine: 'chromium' | 'firefox' | 'safari'
-    /** @default 2 */
-    manifest?: 2 | 3
+    /** If this field is set, manifest.json will copy the content of manifest-*.json */
+    manifestFile?: ManifestFile
     mode: 'development' | 'production'
     /** @default 'stable' */
     channel?: 'stable' | 'beta' | 'insider'
@@ -17,10 +24,6 @@ export interface BuildFlags {
     hmr?: boolean
     /** @default true in development and hmr is true */
     reactRefresh?: boolean
-    /** @default false */
-    readonlyCache?: boolean
-    /** @default false */
-    reproducibleBuild?: boolean
     outputPath?: string
     /** @default true */
     devtools?: boolean
@@ -36,28 +39,19 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
     const {
         mode,
         profiling = false,
-        engine,
-        manifest = 2,
-        readonlyCache = false,
         channel = 'stable',
         devtoolsEditorURI = 'vscode://file/{path}:{line}',
         sourceMapHideFrameworks = true,
+        manifestFile = ManifestFile.ChromiumMV2,
     } = flags
     let {
         hmr = mode === 'development',
         reactRefresh = hmr,
-        reproducibleBuild = false,
         devtools = mode === 'development' || channel !== 'stable',
         sourceMapPreference = mode === 'development',
         outputPath = join(__dirname, '../../../', mode === 'development' ? 'dist' : 'build'),
     } = flags
     if (!isAbsolute(outputPath)) outputPath = join(__dirname, '../../../', outputPath)
-
-    // Firefox requires reproducible build when reviewing the uploaded source code.
-    if (engine === 'firefox' && mode === 'production') reproducibleBuild = true
-
-    // CSP of Twitter bans connection to the HMR server and blocks the app to start.
-    if (engine === 'firefox') hmr = false
 
     if (mode === 'production') hmr = false
     if (!hmr) reactRefresh = false
@@ -67,8 +61,7 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         channel,
         outputPath,
         // Runtime
-        manifest,
-        engine,
+        manifestFile,
         // DX
         hmr,
         reactRefresh,
@@ -78,8 +71,6 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         devtoolsEditorURI,
         // CI / profiling
         profiling,
-        readonlyCache,
-        reproducibleBuild,
     }
 }
 
@@ -88,12 +79,14 @@ export interface ComputedFlags {
     reactProductionProfiling: boolean
 }
 
-export function computedBuildFlags(flags: Required<BuildFlags>): ComputedFlags {
+export function computedBuildFlags(
+    flags: Pick<Required<BuildFlags>, 'mode' | 'sourceMapPreference' | 'profiling' | 'manifestFile'>,
+): ComputedFlags {
     let sourceMapKind: Configuration['devtool'] = false
     if (flags.mode === 'production') sourceMapKind = 'source-map'
 
     if (flags.sourceMapPreference) {
-        if (flags.manifest === 3) sourceMapKind = 'inline-cheap-source-map'
+        if (flags.manifestFile.includes('3')) sourceMapKind = 'inline-cheap-source-map'
         else sourceMapKind = 'eval-cheap-source-map'
 
         if (flags.mode === 'production') sourceMapKind = 'source-map'

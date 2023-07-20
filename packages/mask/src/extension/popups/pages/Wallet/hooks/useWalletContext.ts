@@ -36,13 +36,25 @@ function useWalletContext() {
         refreshAssets: refetch,
         transactions,
         assetsLoading: isLoading,
+        /**
+         * @deprecated
+         * Pass tx id as a router parameter instead
+         */
         transaction,
+        /**
+         * @deprecated
+         * Pass tx id as a router parameter instead
+         */
         setTransaction,
         /**
          * @deprecated
          * Avoid using this, pass wallet as a router parameter instead
          */
         selectedWallet,
+        /**
+         * @deprecated
+         * pass wallet as a router parameter instead
+         */
         setSelectedWallet,
         assetsIsExpand,
         setAssetsIsExpand,

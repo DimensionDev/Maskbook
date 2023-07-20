@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icons } from '@masknet/icons'
-import { delay } from '@masknet/kit'
 import { queryClient } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { chainResolver, explorerResolver, getRPCConstant } from '@masknet/web3-shared-evm'
@@ -155,13 +154,7 @@ export const EditNetwork = memo(function EditNetwork() {
             setIsSubmitting(true)
             try {
                 if (isEditing) {
-                    if (data.chainId !== chainId) {
-                        await WalletRPC.deleteNetwork(id)
-                        await delay(100)
-                        await WalletRPC.addNetwork(data)
-                    } else {
-                        await WalletRPC.updateNetwork(id, { ...data, id })
-                    }
+                    await WalletRPC.updateNetwork(id, { ...data, id })
                     showSnackbar(t('saved_network_successfully'))
                 } else {
                     await WalletRPC.addNetwork(data)

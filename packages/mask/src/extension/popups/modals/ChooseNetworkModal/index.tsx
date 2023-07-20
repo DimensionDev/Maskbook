@@ -82,7 +82,7 @@ const NetworkItem = memo(function NetworkItem({ network, currentChainId }: Netwo
             <Box className={classes.text}>
                 <Typography className={classes.name}>{network.name}</Typography>
                 <Typography className={classes.balance}>
-                    {loading ? '--' : `${formatBalance(balance, token?.decimals)} ${token?.symbol}`}
+                    {loading ? '--' : `${formatBalance(balance, token?.decimals, 0, false, true)} ${token?.symbol}`}
                 </Typography>
             </Box>
             {selected ? (

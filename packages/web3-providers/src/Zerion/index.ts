@@ -1,5 +1,4 @@
 import { first, unionWith } from 'lodash-es'
-import { getEnumAsArray } from '@masknet/kit'
 import { createPageable, createIndicator, createNextIndicator, type Pageable, EMPTY_LIST } from '@masknet/shared-base'
 import {
     type Transaction,
@@ -17,6 +16,7 @@ import {
     SchemaType,
     isValidChainId,
     resolveImageURL,
+    ChainIdList,
 } from '@masknet/web3-shared-evm'
 import type { ZerionNonFungibleTokenItem, ZerionNonFungibleCollection, ZerionCoin } from './types.js'
 import { formatAsset, formatTransactions, isValidAsset } from './helpers.js'
@@ -79,9 +79,7 @@ export class ZerionAPI
         address: string,
         { indicator, chainId }: HubOptions_Base<ChainId> = {},
     ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
-        const pairs = getEnumAsArray(ChainId)
-            .filter((x) => x.value === chainId)
-            .map((x) => [x.value, 'transactions'] as const)
+        const pairs = ChainIdList.filter((x) => x === chainId).map((x) => [x, 'transactions'] as const)
         const allSettled = await Promise.allSettled(
             pairs.map(async ([chainId, scope]) => {
                 if (!scope) return EMPTY_LIST

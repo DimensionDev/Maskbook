@@ -30,7 +30,6 @@ const useStyles = makeStyles()((theme) => ({
             display: 'none',
         },
     },
-    table: {},
     cell: {
         whiteSpace: 'nowrap',
         border: 'none',
@@ -48,7 +47,7 @@ const useStyles = makeStyles()((theme) => ({
         textAlign: 'left',
     },
     link: {
-        display: 'inline-flex',
+        display: 'block',
         alignItems: 'center',
         gap: theme.spacing(0.25),
         whiteSpace: 'nowrap',
@@ -142,7 +141,7 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
                 </Typography>
             </Stack>
             <TableContainer className={classes.container} component={Paper} elevation={0}>
-                <Table className={classes.table} size="small">
+                <Table size="small">
                     <TableBody>
                         {contracts.length ? (
                             <TableRow>
@@ -187,7 +186,7 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
                                         </Typography>
                                     </TableCell>
                                     <TableCell className={classes.cellValue} align="right">
-                                        <Stack display="inline-flex" direction="row" gap={1}>
+                                        <div>
                                             {links.map((x, i) => (
                                                 <Linking
                                                     key={i}
@@ -196,7 +195,7 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
                                                     TypographyProps={{ fontWeight: 700, fontSize: 14 }}
                                                 />
                                             ))}
-                                        </Stack>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             )
@@ -252,7 +251,7 @@ export const CoinMetadataTableSkeleton = memo(function CoinMetadataTableSkeleton
                 </Typography>
             </Stack>
             <TableContainer className={classes.container} component={Paper} elevation={0}>
-                <Table className={classes.table} size="small">
+                <Table size="small">
                     <TableBody>
                         <TableRow>
                             <TableCell className={classes.cell}>
