@@ -17,6 +17,9 @@ export class RequestReadonlyAPI {
 
     get request() {
         return async <T>(requestArguments: RequestArguments, initial?: ConnectionOptions) => {
+            console.log('DEBUG: Requset Readonly API')
+            console.log(initial)
+
             return (await this.getWeb3Provider(initial).request(
                 PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
             )) as T

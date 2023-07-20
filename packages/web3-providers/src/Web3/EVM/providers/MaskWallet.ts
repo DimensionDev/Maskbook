@@ -199,10 +199,7 @@ export class MaskWalletProvider
         }
 
         // switch chain
-        if (chainId !== this.hostedChainId) {
-            await this.switchChain(chainId)
-        }
-
+        if (chainId !== this.hostedChainId) await this.switchChain(chainId)
         if (siteType) await this.context?.recordConnectedSites(siteType, true)
 
         return {
