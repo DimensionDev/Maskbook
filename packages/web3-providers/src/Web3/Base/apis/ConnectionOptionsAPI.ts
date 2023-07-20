@@ -59,8 +59,8 @@ export class ConnectionOptionsAPI_Base<
         }
     }
 
-    protected get refs(): ConnectionOptions_Base<ChainId, ProviderType, Transaction> {
-        if (!this.Web3StateRef.value) return {}
+    protected get refs(): ConnectionOptions_Base<ChainId, ProviderType, Transaction> | undefined {
+        if (!this.Web3StateRef.value) return
         return {
             account: this.Web3StateRef.value.Provider?.account?.getCurrentValue(),
             chainId: this.Web3StateRef.value.Provider?.chainId?.getCurrentValue(),
@@ -78,12 +78,12 @@ export class ConnectionOptionsAPI_Base<
         return {
             ...this.defaults,
             ...this.refs,
-            ...this.options,
+            ...pickBy(this.options, identity),
             ...pickBy(initials, identity),
             overrides: {
                 ...this.defaults.overrides,
-                ...this.refs.overrides,
-                ...this.options?.overrides,
+                ...pickBy(this.refs?.overrides, identity),
+                ...pickBy(this.options?.overrides, identity),
                 ...pickBy(overrides, identity),
             },
         }
