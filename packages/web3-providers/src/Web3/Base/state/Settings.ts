@@ -1,5 +1,5 @@
 import type { Subscription } from 'use-subscription'
-import { createConstantSubscription, InMemoryStorages, type StorageObject } from '@masknet/shared-base'
+import { createConstantSubscription, InMemoryStorages, NetworkPluginID, type StorageObject } from '@masknet/shared-base'
 import {
     CurrencyType,
     GasOptionType,
@@ -23,8 +23,13 @@ export class SettingsState implements Web3SettingsState {
     public fungibleAssetSourceType?: Subscription<SourceType>
     public nonFungibleAssetSourceType?: Subscription<SourceType>
 
-    constructor(context: Plugin.Shared.SharedUIContext) {
-        const { storage } = InMemoryStorages.Web3.createSubScope('Settings', {
+    constructor(
+        context: Plugin.Shared.SharedUIContext,
+        protected options: {
+            pluginID: NetworkPluginID
+        },
+    ) {
+        const { storage } = InMemoryStorages.Web3.createSubScope(`${this.options.pluginID}_Settings`, {
             currencyType: CurrencyType.USD,
             gasOptionType: GasOptionType.NORMAL,
             fungibleAssetSourceType: SourceType.DeBank,

@@ -8,6 +8,7 @@ import {
     ChainIdList,
 } from '@masknet/web3-shared-solana'
 import { TransactionState } from '../../Base/state/Transaction.js'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 export class Transaction extends TransactionState<ChainId, SolanaTransaction> {
     constructor(
@@ -18,6 +19,7 @@ export class Transaction extends TransactionState<ChainId, SolanaTransaction> {
         },
     ) {
         super(context, ChainIdList, subscriptions, {
+            pluginID: NetworkPluginID.PLUGIN_SOLANA,
             formatAddress,
             isValidChainId,
         })

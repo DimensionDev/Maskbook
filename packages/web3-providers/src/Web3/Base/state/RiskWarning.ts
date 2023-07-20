@@ -1,6 +1,12 @@
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
-import { InMemoryStorages, mapSubscription, mergeSubscription, type StorageItem } from '@masknet/shared-base'
+import {
+    InMemoryStorages,
+    mapSubscription,
+    mergeSubscription,
+    NetworkPluginID,
+    type StorageItem,
+} from '@masknet/shared-base'
 import type { RiskWarningState as Web3RiskWarningState } from '@masknet/web3-shared-base'
 
 export class RiskWarningState implements Web3RiskWarningState {
@@ -15,10 +21,11 @@ export class RiskWarningState implements Web3RiskWarningState {
             account?: Subscription<string>
         },
         protected options: {
+            pluginID: NetworkPluginID
             formatAddress(a: string): string
         },
     ) {
-        const { storage } = InMemoryStorages.Web3.createSubScope('RiskWarning', {
+        const { storage } = InMemoryStorages.Web3.createSubScope(`${this.options.pluginID}_RiskWarning`, {
             value: {},
         })
 

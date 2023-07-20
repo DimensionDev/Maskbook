@@ -23,10 +23,10 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
     constructor(
         protected context: Plugin.Shared.SharedUIContext,
         protected options: {
-            getNetworkPluginID: () => NetworkPluginID
+            pluginID: NetworkPluginID
         },
     ) {
-        const { storage } = PersistentStorages.Web3.createSubScope('Network', {
+        const { storage } = PersistentStorages.Web3.createSubScope(`${this.options.pluginID}_Network`, {
             networkID: '',
             networks: {},
         })
@@ -37,9 +37,8 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
             const customizedNetworks = Object.values(storage).sort(
                 (a, z) => a.createdAt.getTime() - z.createdAt.getTime(),
             )
-            const pluginID = this.options.getNetworkPluginID()
-            const registeredChains = getRegisteredWeb3Chains(pluginID)
-            const registeredNetworks = getRegisteredWeb3Networks(pluginID)
+            const registeredChains = getRegisteredWeb3Chains(this.options.pluginID)
+            const registeredNetworks = getRegisteredWeb3Networks(this.options.pluginID)
 
             return [
                 ...registeredNetworks.map((x) => registeredChains.find((y) => y.chainId === x.chainId)!),

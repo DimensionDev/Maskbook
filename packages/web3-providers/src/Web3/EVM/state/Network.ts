@@ -9,7 +9,7 @@ import { createSchema } from '../schemas/ChainDescriptor.js'
 export class Network extends NetworkState<ChainId, SchemaType, NetworkType> {
     constructor(context: Plugin.Shared.SharedUIContext) {
         super(context, {
-            getNetworkPluginID: () => NetworkPluginID.PLUGIN_EVM,
+            pluginID: NetworkPluginID.PLUGIN_EVM,
         })
     }
 

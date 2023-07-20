@@ -6,6 +6,7 @@ import type { Plugin } from '@masknet/plugin-infra/content-script'
 import {
     EMPTY_LIST,
     InMemoryStorages,
+    NetworkPluginID,
     type StorageObject,
     type UpdatableWallet,
     type Wallet,
@@ -52,11 +53,14 @@ export class BaseHostedProvider
     override async setup(context?: Plugin.SNSAdaptor.SNSAdaptorContext) {
         await super.setup(context)
 
-        this.walletStorage = InMemoryStorages.Web3.createSubScope(`EVM_${this.providerType}_hosted`, {
-            account: this.options.getDefaultAccount(),
-            chainId: this.options.getDefaultChainId(),
-            wallets: [] as Wallet[],
-        }).storage
+        this.walletStorage = InMemoryStorages.Web3.createSubScope(
+            `${NetworkPluginID.PLUGIN_EVM}_${this.providerType}_hosted`,
+            {
+                account: this.options.getDefaultAccount(),
+                chainId: this.options.getDefaultChainId(),
+                wallets: [] as Wallet[],
+            },
+        ).storage
 
         await Promise.all([
             this.walletStorage?.account.initializedPromise,

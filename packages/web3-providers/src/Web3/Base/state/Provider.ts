@@ -10,6 +10,7 @@ import {
     mergeSubscription,
     type StorageObject,
     InMemoryStorages,
+    NetworkPluginID,
 } from '@masknet/shared-base'
 import type { ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
 import type { WalletAPI } from '@masknet/web3-providers/types'
@@ -39,6 +40,7 @@ export class ProviderState<
         protected context: Plugin.Shared.SharedUIContext,
         protected providers: Record<ProviderType, WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>>,
         protected options: {
+            pluginID: NetworkPluginID
             isValidAddress(a?: string): boolean
             isValidChainId(a?: number): boolean
             isSameAddress(a?: string, b?: string): boolean
@@ -49,13 +51,16 @@ export class ProviderState<
             getNetworkTypeFromChainId(chainId: ChainId): NetworkType
         },
     ) {
-        const { storage } = InMemoryStorages.Web3.createSubScope(this.site ?? 'Provider', {
-            account: {
-                account: '',
-                chainId: options.getDefaultChainId(),
+        const { storage } = InMemoryStorages.Web3.createSubScope(
+            `${this.options.pluginID}_${this.site ?? 'Provider'}`,
+            {
+                account: {
+                    account: '',
+                    chainId: options.getDefaultChainId(),
+                },
+                providerType: options.getDefaultProviderType(),
             },
-            providerType: options.getDefaultProviderType(),
-        })
+        )
         this.storage = storage
     }
 
