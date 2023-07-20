@@ -1,5 +1,4 @@
 import { uniqWith } from 'lodash-es'
-import type { RequestArguments } from 'web3-core'
 import { toHex } from 'web3-utils'
 import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
@@ -16,7 +15,6 @@ import {
     getDefaultChainId,
     isValidAddress,
     formatEthereumAddress,
-    PayloadEditor,
     type ChainId,
     type ProviderType,
     type Web3Provider,
@@ -221,15 +219,5 @@ export class BaseHostedProvider
         const supported = await this.options.isSupportedChainId(chainId)
         if (!supported) throw new Error(`Not supported chain id: ${chainId}`)
         await this.walletStorage?.chainId.setValue(chainId)
-    }
-
-    override async request<T>(
-        requestArguments: RequestArguments,
-        initial?: WalletAPI.ProviderOptions<ChainId>,
-    ): Promise<T> {
-        return this.Request.request<T>(
-            PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
-            initial,
-        )
     }
 }

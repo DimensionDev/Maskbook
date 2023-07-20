@@ -16,6 +16,7 @@ import {
     ChainId,
     chainResolver,
     isValidAddress,
+    PayloadEditor,
     ProviderType,
     type Web3,
     type Web3Provider,
@@ -24,6 +25,8 @@ import type { Plugin } from '@masknet/plugin-infra/content-script'
 import { BaseContractWalletProvider } from './BaseContractWallet.js'
 import { SmartPayOwnerAPI } from '../../../SmartPay/apis/OwnerAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
+import type { RequestArguments } from 'web3-core'
+import { Web3StateRef } from '../apis/Web3StateAPI.js'
 
 export class MaskWalletProvider
     extends BaseContractWalletProvider
@@ -33,6 +36,12 @@ export class MaskWalletProvider
 
     constructor() {
         super(ProviderType.MaskWallet)
+    }
+
+    private getCustomNetworkProviderURL() {
+        const networkID = Web3StateRef.value.Network?.networkID?.getCurrentValue()
+        const networks = Web3StateRef.value.Network?.networks?.getCurrentValue()
+        return networkID && networks?.find((x) => x.ID === networkID && x.isCustomized)?.rpcUrl
     }
 
     async updateImmediately() {
@@ -211,5 +220,18 @@ export class MaskWalletProvider
     override async disconnect() {
         const siteType = getSiteType()
         if (siteType) await this.context?.recordConnectedSites(siteType, false)
+    }
+
+    override async request<T>(
+        requestArguments: RequestArguments,
+        initial?: WalletAPI.ProviderOptions<ChainId>,
+    ): Promise<T> {
+        return this.Request.request<T>(
+            PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
+            {
+                providerURL: this.getCustomNetworkProviderURL(),
+                ...initial,
+            },
+        )
     }
 }

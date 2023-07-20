@@ -18,6 +18,7 @@ export namespace WalletAPI {
     export interface ProviderOptions<ChainId> {
         chainId: ChainId
         account?: string
+        providerURL?: string
     }
 
     export interface Provider<ChainId, ProviderType, Web3Provider, Web3> extends Startable {
