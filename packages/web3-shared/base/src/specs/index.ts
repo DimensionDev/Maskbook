@@ -117,6 +117,12 @@ export enum TransactionStatusType {
     FAILED = 3,
 }
 
+export enum TransactionStateType {
+    FAILED = 0,
+    SUCCEED = 1,
+    NOT_DEPEND = 2,
+}
+
 export enum TransactionDescriptorType {
     /** Transfer on chain value. */
     TRANSFER = 'transfer',
