@@ -1,5 +1,12 @@
 import { type BigNumber } from 'bignumber.js'
 
+interface FloorPrice {
+    marketplace_id: LiteralUnion<'blur' | 'looksrare' | 'opensea' | 'x2y2'>
+    marketplace_name: LiteralUnion<'Blur' | 'LooksRare' | 'OpenSea' | 'X2Y2'>
+    value: number
+    payment_token: PaymentToken
+}
+
 // TODO: Contract address will be added in SimpleHash v1 release.
 // TODO: Asking SimpleHash to add schema in SimpleHash v1 release.
 export interface Collection {
@@ -13,8 +20,8 @@ export interface Collection {
     spam_score?: number
     discord_url: string
     floor_prices: Array<{
-        marketplace_id: string // opensea
-        marketplace_name: string // Opensea
+        marketplace_id: LiteralUnion<'blur' | 'looksrare' | 'opensea' | 'x2y2'>
+        marketplace_name: LiteralUnion<'Blur' | 'LooksRare' | 'OpenSea' | 'X2Y2'>
         value: number
         payment_token: PaymentToken
     }>
@@ -71,6 +78,7 @@ export interface Asset {
         payment_token?: PaymentToken
         timestamp: string // "2022-04-04T20:15:02"
     }
+    floor_prices: FloorPrice[]
     owners: Array<{
         owner_address: string
     }>
@@ -81,6 +89,13 @@ export interface Asset {
         image_opengraph_url: string
         image_small_url: string
         predominant_color: string
+    }
+    extra_metadata?: {
+        attributes: Array<{
+            trait_type: string
+            value: string
+            display_type: string | null
+        }>
     }
 }
 

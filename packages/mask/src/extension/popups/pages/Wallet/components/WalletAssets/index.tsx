@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { EmptyStatus, RestorableScroll } from '@masknet/shared'
+import { RestorableScroll } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, useTabs } from '@masknet/theme'
 import { useWallet } from '@masknet/web3-hooks-base'
@@ -14,6 +14,7 @@ import { WalletContext } from '../../hooks/useWalletContext.js'
 import { ActivityList } from '../ActivityList/index.js'
 import { AssetsList } from '../AssetsList/index.js'
 import { WalletAssetTabs } from '../../type.js'
+import { Collectibles } from '../Collectibles/index.js'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -162,9 +163,11 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI(
                             <AssetsList />
                         </TabPanel>
                     </RestorableScroll>
-                    <TabPanel value={WalletAssetTabs.Collectibles} className={classes.tabPanel}>
-                        <EmptyStatus height="100%">{t('empty')}</EmptyStatus>
-                    </TabPanel>
+                    <RestorableScroll scrollKey="collectibles" enabled={currentTab === WalletAssetTabs.Collectibles}>
+                        <TabPanel value={WalletAssetTabs.Collectibles} className={classes.tabPanel}>
+                            <Collectibles />
+                        </TabPanel>
+                    </RestorableScroll>
                     <RestorableScroll scrollKey="activities" enabled={currentTab === WalletAssetTabs.Activity}>
                         <TabPanel value={WalletAssetTabs.Activity} className={classes.tabPanel}>
                             <ActivityList />

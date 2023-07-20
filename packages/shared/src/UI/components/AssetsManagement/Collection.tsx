@@ -83,6 +83,7 @@ export interface CollectionProps
     /** set collection expanded */
     expanded?: boolean
     onExpand?(id: string): void
+    /** Invoke when component first renders */
     onInitialRender?(collection: Web3Helper.NonFungibleCollectionAll): void
     selectedAsset?: Web3Helper.NonFungibleAssetScope
 }

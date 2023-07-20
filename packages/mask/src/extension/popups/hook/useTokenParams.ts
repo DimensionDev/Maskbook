@@ -11,5 +11,5 @@ export function useTokenParams() {
     const rawAddress = params.get('address')
     const address = rawAddress || getNativeTokenAddress(chainId)
 
-    return { chainId, address, rawChainId, rawAddress }
+    return { chainId, address, rawChainId, rawAddress, params }
 }

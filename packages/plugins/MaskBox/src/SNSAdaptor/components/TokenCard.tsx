@@ -27,7 +27,7 @@ export interface TokenCardProps {
 
 export const TokenCard = memo<TokenCardProps>(({ contractDetailed, tokenId }: TokenCardProps) => {
     const { classes } = useStyles()
-    const { value: tokenDetailed } = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, contractDetailed.address, tokenId)
+    const { data: tokenDetailed } = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, contractDetailed.address, tokenId)
 
     return tokenDetailed ? (
         <>

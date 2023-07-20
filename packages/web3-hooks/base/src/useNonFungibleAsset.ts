@@ -1,9 +1,8 @@
-import { useAsyncRetry } from 'react-use'
 import { NetworkPluginID } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import type { HubOptions } from '@masknet/web3-providers/types'
 import { useChainContext } from './useContext.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
+import { useQuery } from '@tanstack/react-query'
 
 export function useNonFungibleAsset<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
@@ -17,8 +16,11 @@ export function useNonFungibleAsset<S extends 'all' | void = void, T extends Net
         ...options,
     })
 
-    return useAsyncRetry<Web3Helper.NonFungibleAssetScope<S, T> | undefined>(async () => {
-        if (!address || (!id && pluginID !== NetworkPluginID.PLUGIN_SOLANA)) return
-        return Hub.getNonFungibleAsset(address ?? '', id ?? '')
-    }, [address, id, Hub])
+    return useQuery({
+        queryKey: ['non-fungible-asset', pluginID, address, id, account, options],
+        queryFn: async () => {
+            if (!address || (!id && pluginID !== NetworkPluginID.PLUGIN_SOLANA)) return null
+            return Hub.getNonFungibleAsset(address ?? '', id ?? '')
+        },
+    })
 }
