@@ -3,7 +3,13 @@ import type { RequestArguments } from 'web3-core'
 import { toHex } from 'web3-utils'
 import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
-import { EMPTY_LIST, type StorageObject, type UpdatableWallet, type Wallet } from '@masknet/shared-base'
+import {
+    EMPTY_LIST,
+    InMemoryStorages,
+    type StorageObject,
+    type UpdatableWallet,
+    type Wallet,
+} from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     getDefaultChainId,
@@ -46,7 +52,7 @@ export class BaseHostedProvider
     override async setup(context?: Plugin.SNSAdaptor.SNSAdaptorContext) {
         await super.setup(context)
 
-        this.walletStorage = context?.createKVStorage('memory', {}).createSubScope(`${this.providerType}_hosted`, {
+        this.walletStorage = InMemoryStorages.Web3.createSubScope(`EVM_${this.providerType}_hosted`, {
             account: this.options.getDefaultAccount(),
             chainId: this.options.getDefaultChainId(),
             wallets: [] as Wallet[],

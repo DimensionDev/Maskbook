@@ -1,6 +1,6 @@
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
-import { mapSubscription, mergeSubscription, type StorageItem } from '@masknet/shared-base'
+import { InMemoryStorages, mapSubscription, mergeSubscription, type StorageItem } from '@masknet/shared-base'
 import type { RiskWarningState as Web3RiskWarningState } from '@masknet/web3-shared-base'
 
 export class RiskWarningState implements Web3RiskWarningState {
@@ -18,7 +18,7 @@ export class RiskWarningState implements Web3RiskWarningState {
             formatAddress(a: string): string
         },
     ) {
-        const { storage } = this.context.createKVStorage('memory', {}).createSubScope('RiskWarning', {
+        const { storage } = InMemoryStorages.Web3.createSubScope('RiskWarning', {
             value: {},
         })
 

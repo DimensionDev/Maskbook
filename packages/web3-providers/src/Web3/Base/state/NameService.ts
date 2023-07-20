@@ -1,7 +1,7 @@
 import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
-import { type StorageItem, NameServiceID } from '@masknet/shared-base'
+import { type StorageItem, NameServiceID, InMemoryStorages } from '@masknet/shared-base'
 import type { NameServiceAPI } from '@masknet/web3-providers/types'
 import { attemptUntil, type NameServiceState as Web3NameServiceState } from '@masknet/web3-shared-base'
 
@@ -21,7 +21,7 @@ export class NameServiceState<
             formatAddress(a: string): string
         },
     ) {
-        const { storage } = context.createKVStorage('memory', {}).createSubScope('NameServiceV2', {
+        const { storage } = InMemoryStorages.Web3.createSubScope('NameServiceV2', {
             value: Object.fromEntries(getEnumAsArray(NameServiceID).map((x) => [x.value, {}])) as DomainBooks,
         })
         this.storage = storage.value

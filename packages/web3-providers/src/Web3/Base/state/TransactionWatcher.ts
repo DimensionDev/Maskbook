@@ -3,7 +3,7 @@ import type { Subscription } from 'use-subscription'
 import { Emitter } from '@servie/events'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Plugin } from '@masknet/plugin-infra'
-import { getSubscriptionCurrentValue, type StorageItem } from '@masknet/shared-base'
+import { getSubscriptionCurrentValue, InMemoryStorages, type StorageItem } from '@masknet/shared-base'
 import {
     type TransactionChecker,
     TransactionStatusType,
@@ -185,7 +185,7 @@ export class TransactionWatcherState<ChainId extends PropertyKey, Transaction>
             getTransactionCreator: (transaction: Transaction) => string
         },
     ) {
-        const { storage } = this.context.createKVStorage('memory', {}).createSubScope('TransactionWatcher', {
+        const { storage } = InMemoryStorages.Web3.createSubScope('TransactionWatcher', {
             value: Object.fromEntries(chainIds.map((x) => [x, {}])) as TransactionWatcher<ChainId, Transaction>,
         })
         this.storage = storage.value

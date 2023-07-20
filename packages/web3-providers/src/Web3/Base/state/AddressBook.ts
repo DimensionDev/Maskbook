@@ -1,6 +1,6 @@
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
-import { EMPTY_LIST, type StorageItem } from '@masknet/shared-base'
+import { EMPTY_LIST, PersistentStorages, type StorageItem } from '@masknet/shared-base'
 import type { Contact, AddressBookState as Web3AddressBookState } from '@masknet/web3-shared-base'
 
 export class AddressBookState implements Web3AddressBookState {
@@ -15,7 +15,7 @@ export class AddressBookState implements Web3AddressBookState {
             formatAddress(a: string): string
         },
     ) {
-        const { storage } = this.context.createKVStorage('persistent', {}).createSubScope('AddressBookV2', {
+        const { storage } = PersistentStorages.Web3.createSubScope('AddressBookV2', {
             value: EMPTY_LIST,
         })
         this.storage = storage.value

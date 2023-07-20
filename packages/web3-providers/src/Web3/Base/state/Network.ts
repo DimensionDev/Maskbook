@@ -2,7 +2,7 @@ import { v4 as uuid } from 'uuid'
 import { omit } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import { getRegisteredWeb3Chains, getRegisteredWeb3Networks, type Plugin } from '@masknet/plugin-infra'
-import { mapSubscription, type NetworkPluginID, type StorageObject } from '@masknet/shared-base'
+import { mapSubscription, PersistentStorages, type NetworkPluginID, type StorageObject } from '@masknet/shared-base'
 import type {
     ReasonableNetwork,
     TransferableNetwork,
@@ -26,7 +26,7 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
             getNetworkPluginID: () => NetworkPluginID
         },
     ) {
-        const { storage } = this.context.createKVStorage('persistent', {}).createSubScope('Network', {
+        const { storage } = PersistentStorages.Web3.createSubScope('Network', {
             networkID: '',
             networks: {},
         })

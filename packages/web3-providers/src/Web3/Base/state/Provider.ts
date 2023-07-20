@@ -9,6 +9,7 @@ import {
     mapSubscription,
     mergeSubscription,
     type StorageObject,
+    InMemoryStorages,
 } from '@masknet/shared-base'
 import type { ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
 import type { WalletAPI } from '@masknet/web3-providers/types'
@@ -48,7 +49,7 @@ export class ProviderState<
             getNetworkTypeFromChainId(chainId: ChainId): NetworkType
         },
     ) {
-        const { storage } = this.context.createKVStorage('memory', {}).createSubScope(this.site ?? 'Provider', {
+        const { storage } = InMemoryStorages.Web3.createSubScope(this.site ?? 'Provider', {
             account: {
                 account: '',
                 chainId: options.getDefaultChainId(),

@@ -1,6 +1,6 @@
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
-import { mapSubscription, mergeSubscription, type StorageItem } from '@masknet/shared-base'
+import { mapSubscription, mergeSubscription, PersistentStorages, type StorageItem } from '@masknet/shared-base'
 import {
     type RecentTransaction,
     TransactionStatusType,
@@ -37,7 +37,7 @@ export class TransactionState<ChainId extends PropertyKey, Transaction>
             isValidChainId(chainId?: ChainId): boolean
         },
     ) {
-        const { storage } = this.context.createKVStorage('persistent', {}).createSubScope('Transaction', {
+        const { storage } = PersistentStorages.Web3.createSubScope('Transaction', {
             value: Object.fromEntries(chainIds.map((x) => [x, {}])) as TransactionStorage<ChainId, Transaction>,
         })
         this.storage = storage.value
