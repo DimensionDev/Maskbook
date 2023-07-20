@@ -58,12 +58,12 @@ export function formatTransactions(
                 id: transaction.hash,
                 chainId: ChainId.Mainnet,
                 type: transaction.type,
-                filterType: transaction.type,
+                cateType: transaction.type,
                 from: transaction.address_from ?? '',
                 to: transaction.address_to ?? '',
                 timestamp: transaction.mined_at,
                 status: transaction.status === ZerionTransactionStatus.FAILED ? 0 : 1,
-                tokens:
+                assets:
                     transaction.changes?.map(({ asset, direction, value }) => {
                         return {
                             id: asset.asset_code,

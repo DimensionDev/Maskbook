@@ -16,6 +16,11 @@ export function formatEthereumAddress(address: string, size = 0) {
     return `${address_.slice(0, Math.max(0, 2 + size))}...${address_.slice(-size)}`
 }
 
+export function formatHash(hash: string, size = 0) {
+    if (size === 0) return hash
+    return `${hash.slice(0, Math.max(0, 2 + size))}...${hash.slice(-size)}`
+}
+
 export const formatSchemaType = createLookupTableResolver<SchemaType, string>(
     {
         [SchemaType.Native]: 'Native',

@@ -108,7 +108,7 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
                     </Box>
                 </TableCell>
                 <TableCell className={classes.cell} align="center">
-                    {transaction.tokens.map((pair, index) => {
+                    {transaction.assets.map((pair, index) => {
                         const direction =
                             pair.direction === DebankTransactionDirection.SEND ||
                             pair.direction === ZerionTransactionDirection.OUT
@@ -129,7 +129,7 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
                                 </Box>
                                 <Box width="50%" flexGrow={0} flexShrink={0} textAlign="left">
                                     {pair.type === TokenType.NonFungible && (
-                                        <Tooltip title={pair.name} arrow disableInteractive>
+                                        <Tooltip title={pair.address} arrow disableInteractive>
                                             <Typography
                                                 className={classes.nftName}
                                                 variant="body2"

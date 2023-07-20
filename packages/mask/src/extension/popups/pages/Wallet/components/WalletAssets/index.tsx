@@ -6,13 +6,14 @@ import { useWallet } from '@masknet/web3-hooks-base'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab, styled, tabClasses, tabsClasses } from '@mui/material'
 import { memo, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useMount } from 'react-use'
 import { useContainer } from 'unstated-next'
 import { useI18N } from '../../../../../../utils/index.js'
 import { WalletContext } from '../../hooks/useWalletContext.js'
 import { ActivityList } from '../ActivityList/index.js'
 import { AssetsList } from '../AssetsList/index.js'
+import { WalletAssetTabs } from '../../type.js'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -106,43 +107,63 @@ export interface WalletAssetsUIProps {
     onAddToken: () => void
 }
 
-enum AssetTabs {
-    Tokens = 'Tokens',
-    Collectibles = 'Collectibles',
-    Activity = 'Activity',
-}
-
 export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI({ onAddToken }) {
     const { t } = useI18N()
+    const [params, setParams] = useSearchParams()
+    const paramTab = params.get('tab') as WalletAssetTabs
 
     const { classes } = useStyles()
-    const [currentTab, onChange, tabs] = useTabs(AssetTabs.Tokens, AssetTabs.Collectibles, AssetTabs.Activity)
+    const [currentTab, onChange] = useTabs(
+        paramTab || WalletAssetTabs.Tokens,
+        WalletAssetTabs.Tokens,
+        WalletAssetTabs.Collectibles,
+        WalletAssetTabs.Activity,
+    )
 
     return (
         <div className={classes.content}>
             <TabContext value={currentTab}>
                 <Box className={classes.header}>
-                    <StyledTabList value={currentTab} onChange={onChange}>
-                        <Tab className={classes.tab} label={t('popups_wallet_tab_assets')} value={tabs.Tokens} />
+                    <StyledTabList
+                        value={currentTab}
+                        onChange={(_, tab) => {
+                            setParams(
+                                (params) => {
+                                    params.set('tab', tab)
+                                    return params.toString()
+                                },
+                                { replace: true },
+                            )
+                            onChange(_, tab)
+                        }}>
+                        <Tab
+                            className={classes.tab}
+                            label={t('popups_wallet_tab_assets')}
+                            value={WalletAssetTabs.Tokens}
+                        />
                         <Tab
                             className={classes.tab}
                             label={t('popups_wallet_tab_collectibles')}
-                            value={tabs.Collectibles}
+                            value={WalletAssetTabs.Collectibles}
                         />
-                        <Tab className={classes.tab} label={t('popups_wallet_tab_activity')} value={tabs.Activity} />
+                        <Tab
+                            className={classes.tab}
+                            label={t('popups_wallet_tab_activity')}
+                            value={WalletAssetTabs.Activity}
+                        />
                     </StyledTabList>
                     <Button variant="text" className={classes.addButton} onClick={onAddToken}>
                         <Icons.AddNoBorder size={16} />
                     </Button>
                 </Box>
                 <Box className={classes.panels}>
-                    <TabPanel value={tabs.Tokens} className={classes.tabPanel}>
+                    <TabPanel value={WalletAssetTabs.Tokens} className={classes.tabPanel}>
                         <AssetsList />
                     </TabPanel>
-                    <TabPanel value={tabs.Collectibles} className={classes.tabPanel}>
+                    <TabPanel value={WalletAssetTabs.Collectibles} className={classes.tabPanel}>
                         <EmptyStatus height="100%">{t('empty')}</EmptyStatus>
                     </TabPanel>
-                    <TabPanel value={tabs.Activity} className={classes.tabPanel}>
+                    <TabPanel value={WalletAssetTabs.Activity} className={classes.tabPanel}>
                         <ActivityList />
                     </TabPanel>
                 </Box>

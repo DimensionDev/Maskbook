@@ -23,6 +23,7 @@ export function formatBalance(
     if (isFixed) {
         const value = leftShift(balance, decimals)
         const minimum = scale10(1, -fixedDecimals)
+        if (value.eq(0)) return '0'
         if (isLessThan(value, minimum)) return '<' + minimum.toFixed()
         return trimZero(value.toFixed(4))
     }

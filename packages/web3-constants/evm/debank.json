@@ -22,6 +22,9 @@
         "Aurora": "aurora",
         "Aurora_Testnet": "",
         "Conflux": "Conflux",
-        "Astar": "astar"
+        "Astar": "astar",
+        "Pulse": "pls",
+        "Klaytn": "klay",
+        "Arbitrum_Nova": "nova"
     }
 }

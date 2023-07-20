@@ -23,3 +23,9 @@ export enum ContactType {
     Owned = 'Owned',
     Recipient = 'Recipient',
 }
+
+export enum WalletAssetTabs {
+    Tokens = 'Tokens',
+    Collectibles = 'Collectibles',
+    Activity = 'Activity',
+}

@@ -39,6 +39,7 @@ describe('formatBalance util test', () => {
     describe('fixed mode', () => {
         test.each([
             { give: 1000, decimals: 18, isFixed: true, fixedDecimals: 4, expected: '<0.0001' },
+            { give: 0, decimals: 18, isFixed: true, fixedDecimals: 4, expected: '0' },
             { give: scale10(123, 14), decimals: 18, isFixed: true, fixedDecimals: 4, expected: '0.0123' },
             { give: scale10(123, 16), decimals: 18, isFixed: true, fixedDecimals: 4, expected: '1.23' },
             { give: scale10(123.456, 16), decimals: 18, isFixed: true, fixedDecimals: 4, expected: '1.2346' },
