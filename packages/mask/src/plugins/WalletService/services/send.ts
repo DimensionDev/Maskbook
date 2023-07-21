@@ -26,12 +26,6 @@ async function internalSend(
     callback: (error: Error | null, response?: JsonRpcResponse) => void,
     options?: TransactionOptions,
 ): Promise<void> {
-    console.log('DEBUG: internal send')
-    console.log({
-        payload,
-        options,
-    })
-
     const {
         pid = 0,
         from,
@@ -40,7 +34,6 @@ async function internalSend(
         signableConfig,
     } = PayloadEditor.fromPayload(payload, options)
     const owner = options?.owner
-    const providerURL = options?.providerURL
     const identifier = ECKeyIdentifier.from(options?.identifier).unwrapOr(undefined)
     const paymentToken = options?.paymentToken
     const signer = identifier
@@ -71,7 +64,6 @@ async function internalSend(
                             pid,
                             await Web3Readonly.sendSignedTransaction(await signer.signTransaction(signableConfig), {
                                 chainId,
-                                providerURL,
                             }),
                         ),
                     )
@@ -121,7 +113,7 @@ async function internalSend(
             callback(new Error('Method not implemented.'))
             break
         default:
-            await Web3Readonly.getWeb3Provider({ chainId, providerURL }).send(payload, callback)
+            await Web3Readonly.getWeb3Provider({ chainId }).send(payload, callback)
             break
     }
 }

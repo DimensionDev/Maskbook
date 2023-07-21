@@ -222,10 +222,7 @@ export class MaskWalletProvider
     ): Promise<T> {
         return this.Request.request<T>(
             PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
-            {
-                providerURL: Web3StateRef.value.Network?.network?.getCurrentValue().rpcUrl,
-                ...initial,
-            },
+            initial,
         )
     }
 }
