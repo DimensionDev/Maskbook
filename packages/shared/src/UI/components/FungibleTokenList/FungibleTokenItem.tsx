@@ -117,6 +117,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
         strategy: 'trust' | 'block',
     ) => Promise<void>,
     isHiddenChainIcon?: boolean,
+    isCustomToken?: boolean,
 ) => {
     return memo(({ data, index, style }: any) => {
         const t = useSharedI18N()
@@ -165,17 +166,21 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                 if (source === 'personal')
                     return <Icons.TrashLine onClick={(e) => onAddOrRemoveTokenToLocal(e, 'remove')} size={24} />
                 return (
-                    <SettingSwitch
-                        disabled={source === 'official-native' && mode === TokenListMode.Manage}
-                        classes={{ root: classes.switch }}
-                        onChange={async (event) => {
-                            event.stopPropagation()
-                            event.preventDefault()
-                            onTrustOrBlockTokenToLocal(event)
-                        }}
-                        size="small"
-                        checked={!isBlocked}
-                    />
+                    <>
+                        {isCustomToken ? null : (
+                            <SettingSwitch
+                                disabled={source === 'official-native' && mode === TokenListMode.Manage}
+                                classes={{ root: classes.switch }}
+                                onChange={async (event) => {
+                                    event.stopPropagation()
+                                    event.preventDefault()
+                                    onTrustOrBlockTokenToLocal(event)
+                                }}
+                                size="small"
+                                checked={!isBlocked}
+                            />
+                        )}
+                    </>
                 )
             }
             return source !== 'external' || isTrust ? (

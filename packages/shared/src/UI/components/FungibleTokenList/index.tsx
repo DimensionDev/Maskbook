@@ -246,17 +246,24 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
             return
         }
 
-        if (mode === TokenListMode.Manage) return ''
-
         return Others.isValidAddress(keyword) &&
             !sortedFungibleTokensForList.some((x) => isSameAddress(x.address, keyword))
             ? keyword
             : ''
-    }, [keyword, sortedFungibleTokensForList, Others, mode])
+    }, [keyword, sortedFungibleTokensForList, Others])
 
     const { data: searchedToken } = useFungibleToken(pluginID, searchedTokenAddress, undefined, {
         chainId,
     })
+
+    const isCustomToken = useMemo(
+        () =>
+            !sortedFungibleTokensForManage.find(
+                (x) => isSameAddress(x.address, searchedToken?.address) && searchedToken?.chainId === x.chainId,
+            ) && Boolean(searchedToken),
+        [sortedFungibleTokensForManage, searchedToken],
+    )
+
     const { data: tokenBalance = '' } = useFungibleTokenBalance(pluginID, searchedToken?.address, {
         chainId,
         account,
@@ -293,8 +300,17 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 if (strategy === 'block') Token?.blockToken?.(account, token)
             },
             isHiddenChainIcon,
+            isCustomToken,
         )
-    }, [nativeToken?.address, selectedTokens, mode, trustedFungibleTokens, fungibleTokens])
+    }, [
+        nativeToken?.address,
+        selectedTokens,
+        mode,
+        trustedFungibleTokens,
+        fungibleTokens,
+        isCustomToken,
+        isHiddenChainIcon,
+    ])
 
     const SearchFieldProps = useMemo(
         () => ({
@@ -319,6 +335,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
             <SearchableList<
                 FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> & {
                     balance?: string
+                    isCustomToken?: boolean
                 }
             >
                 onSelect={handleSelect}
@@ -326,7 +343,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 data={
                     searchedToken && isSameAddress(searchedToken.address, searchedTokenAddress)
                         ? // balance field work for case: user search someone token by contract and whitelist is empty.
-                          [{ ...searchedToken, balance: tokenBalance }]
+                          [{ ...searchedToken, balance: tokenBalance, isCustomToken }]
                         : mode === TokenListMode.List
                         ? sortedFungibleTokensForList
                         : sortedFungibleTokensForManage

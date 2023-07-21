@@ -12,6 +12,7 @@ import { NormalHeader } from '../../../components/index.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useIntersectionObserver } from '@react-hookz/web'
+import { useParams } from 'react-router-dom'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -80,10 +81,11 @@ const AddToken = memo(function AddToken() {
     const { classes } = useStyles()
     const blackList = useBlockedFungibleTokens()
     const rowSize = useRowSize()
+    const { chainId: chainId_ } = useParams()
 
     const [currentTab, onChange] = useTabs(TabType.Token, TabType.Token, TabType.NFT)
 
-    const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
+    const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>(chainId_ ? Number(chainId_) : ChainId.Mainnet)
 
     useTitle(t('add_assets'))
 
@@ -100,15 +102,15 @@ const AddToken = memo(function AddToken() {
             <div className={classes.content}>
                 <SelectNetworkSidebar
                     hiddenAllButton
-                    chainId={chainId ?? ChainId.Mainnet}
-                    onChainChange={setChainId}
+                    chainId={chainId}
+                    onChainChange={(chainId) => setChainId(chainId ?? ChainId.Mainnet)}
                     supportedChains={SupportedChains}
                     pluginID={NetworkPluginID.PLUGIN_EVM}
                 />
                 <div className={classes.main}>
                     <TabPanel className={classes.panel} value={TabType.Token}>
                         <FungibleTokenListItem
-                            chainId={chainId ?? ChainId.Mainnet}
+                            chainId={chainId}
                             isHiddenChainIcon={false}
                             mode={TokenListMode.Manage}
                             classes={{ channel: classes.channel, listBox: classes.listBox }}

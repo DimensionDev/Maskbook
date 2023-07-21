@@ -117,7 +117,7 @@ export default function Wallet() {
                     <Route path={r(PopupRoutes.CreateWallet)} element={<CreateWallet />} />
                     <Route path={r(PopupRoutes.BackupWallet)} element={<BackupWallet />} />
                     <Route path={r(`${PopupRoutes.Contacts}/:address?` as PopupRoutes)} element={<ContactList />} />
-                    <Route path={r(PopupRoutes.AddToken)} element={<AddToken />} />
+                    <Route path={r(`${PopupRoutes.AddToken}/:chainId` as PopupRoutes)} element={<AddToken />} />
                     <Route path={r(PopupRoutes.WalletSignRequest)} element={<SignRequest />} />
                     <Route path={r(PopupRoutes.GasSetting)} element={<GasSetting />} />
                     <Route path={r(PopupRoutes.TokenDetail)} element={<TokenDetail />} />
