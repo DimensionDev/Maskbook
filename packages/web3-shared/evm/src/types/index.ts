@@ -254,6 +254,7 @@ export interface Block {
     hash: string
     nonce: string
     timestamp: string
+    baseFeePerGas?: number
 }
 export interface Transaction {
     from?: string

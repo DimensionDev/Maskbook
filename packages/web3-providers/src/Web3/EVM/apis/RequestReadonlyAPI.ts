@@ -21,10 +21,12 @@ export class RequestReadonlyAPI {
             const options = this.ConnectionOptions.fill(initial)
             const providerURL = options.providerURL ?? ProviderURL.from(options.chainId)
 
-            return (await fetchJsonRpcResponse(
-                providerURL,
-                PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
-            )) as T
+            return (
+                await fetchJsonRpcResponse(
+                    providerURL,
+                    PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
+                )
+            ).result as T
         }
     }
 

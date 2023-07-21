@@ -148,7 +148,7 @@ export const Web3Storage = new Web3StorageAPI()
 export const Web3 = Web3All.use(NetworkPluginID.PLUGIN_EVM)!
 export const Web3Readonly = new ConnectionReadonlyAPI()
 export const Request = new RequestAPI()
-export const RequsetReadonly = new RequestReadonlyAPI()
+export const RequestReadonly = new RequestReadonlyAPI()
 export const Hub = HubAll.use(NetworkPluginID.PLUGIN_EVM)!
 export const Others = OthersAll.use(NetworkPluginID.PLUGIN_EVM)!
 

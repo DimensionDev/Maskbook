@@ -197,14 +197,18 @@ export class ConnectionReadonlyAPI
     }
 
     async getGasPrice(initial?: ConnectionOptions): Promise<string> {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.getWeb3(options).eth.getGasPrice()
+        return this.Request.request<string>(
+            {
+                method: EthereumMethodType.ETH_GAS_PRICE,
+                params: [],
+            },
+            initial,
+        )
     }
 
     async getAddressType(address: string, initial?: ConnectionOptions): Promise<AddressType | undefined> {
-        const options = this.ConnectionOptions.fill(initial)
         if (!isValidAddress(address)) return
-        const code = await this.getWeb3(options).eth.getCode(address)
+        const code = await this.getCode(address, initial)
         return code === '0x' ? AddressType.ExternalOwned : AddressType.Contract
     }
 
@@ -605,13 +609,23 @@ export class ConnectionReadonlyAPI
     }
 
     getBlock(noOrId: number | string, initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.getWeb3(options).eth.getBlock(noOrId) as Promise<Block>
+        return this.Request.request<Block>(
+            {
+                method: EthereumMethodType.ETH_GET_BLOCK_BY_NUMBER,
+                params: [toHex(noOrId), false],
+            },
+            initial,
+        )
     }
 
     getBlockNumber(initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.getWeb3(options).eth.getBlockNumber()
+        return this.Request.request<number>(
+            {
+                method: EthereumMethodType.ETH_BLOCK_NUMBER,
+                params: [],
+            },
+            initial,
+        )
     }
 
     async getBlockTimestamp(initial?: ConnectionOptions): Promise<number> {
@@ -622,18 +636,33 @@ export class ConnectionReadonlyAPI
     }
 
     getBalance(address: string, initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.getWeb3(options).eth.getBalance(address)
+        return this.Request.request<string>(
+            {
+                method: EthereumMethodType.ETH_GET_BALANCE,
+                params: [address, 'latest'],
+            },
+            initial,
+        )
     }
 
     getCode(address: string, initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.getWeb3(options).eth.getCode(address)
+        return this.Request.request<string>(
+            {
+                method: EthereumMethodType.ETH_GET_CODE,
+                params: [address, 'latest'],
+            },
+            initial,
+        )
     }
 
     async getTransaction(hash: string, initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.getWeb3(options).eth.getTransaction(hash) as unknown as Promise<TransactionDetailed>
+        return this.Request.request<TransactionDetailed>(
+            {
+                method: EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH,
+                params: [hash],
+            },
+            initial,
+        )
     }
 
     async estimateTransaction(transaction: Transaction, fallback = 21000, initial?: ConnectionOptions) {
@@ -654,8 +683,13 @@ export class ConnectionReadonlyAPI
     }
 
     getTransactionReceipt(hash: string, initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.getWeb3(options).eth.getTransactionReceipt(hash)
+        return this.Request.request<TransactionReceipt>(
+            {
+                method: EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
+                params: [hash],
+            },
+            initial,
+        )
     }
 
     async getTransactionStatus(hash: string, initial?: ConnectionOptions): Promise<TransactionStatusType> {
@@ -665,8 +699,13 @@ export class ConnectionReadonlyAPI
     }
 
     async getTransactionNonce(address: string, initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.getWeb3(options).eth.getTransactionCount(address)
+        return this.Request.request<number>(
+            {
+                method: EthereumMethodType.ETH_GET_TRANSACTION_COUNT,
+                params: [address, 'latest'],
+            },
+            initial,
+        )
     }
 
     signMessage(

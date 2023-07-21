@@ -2,11 +2,11 @@ import { nth } from 'lodash-es'
 import type { FeeHistoryResult } from 'web3-eth'
 import { GasOptionType, toFixed } from '@masknet/web3-shared-base'
 import { type ChainId, chainResolver, type GasOption } from '@masknet/web3-shared-evm'
-import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
+import { ConnectionReadonlyAPI } from './ConnectionReadonlyAPI.js'
 import type { GasOptionAPI_Base } from '../../../entry-types.js'
 
 export class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
-    private Request = new RequestReadonlyAPI()
+    private Web3 = new ConnectionReadonlyAPI()
 
     static HISTORICAL_BLOCKS = 4
 
@@ -35,15 +35,20 @@ export class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOpti
     }
 
     private async getGasOptionsForEIP1559(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
-        const web3 = this.Request.getWeb3({ chainId })
-        const history = await web3.eth.getFeeHistory(GasOptionAPI.HISTORICAL_BLOCKS, 'pending', [25, 50, 75])
+        const history = await this.Web3.getWeb3({ chainId }).eth.getFeeHistory(
+            GasOptionAPI.HISTORICAL_BLOCKS,
+            'pending',
+            [25, 50, 75],
+        )
         const blocks = this.formatFeeHistory(history)
         const slow = this.avg(blocks.map((b) => b.priorityFeePerGas[0]))
         const normal = this.avg(blocks.map((b) => b.priorityFeePerGas[1]))
         const fast = this.avg(blocks.map((b) => b.priorityFeePerGas[2]))
 
         // get the base fee per gas from the latest block
-        const block = await web3.eth.getBlock('latest')
+        const block = await this.Web3.getBlock('latest', {
+            chainId,
+        })
         const baseFeePerGas = block?.baseFeePerGas ?? 0
 
         return {
@@ -72,10 +77,9 @@ export class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOpti
     }
 
     private async getGasOptionsForPriorEIP1559(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
-        const web3 = this.Request.getWeb3({
+        const gasPrice = await this.Web3.getGasPrice({
             chainId,
         })
-        const gasPrice = await web3.eth.getGasPrice()
         return {
             [GasOptionType.FAST]: {
                 estimatedBaseFee: '0',

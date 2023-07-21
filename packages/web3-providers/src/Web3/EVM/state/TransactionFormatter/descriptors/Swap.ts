@@ -1,4 +1,5 @@
 import { first, last } from 'lodash-es'
+import { AbiCoder } from 'web3-eth-abi'
 import { i18NextInstance } from '@masknet/shared-base'
 import UniswapV3MulticallFunctionExactInputABI from '@masknet/web3-contracts/abis/UniswapV3MulticallFunctionExactInput.json'
 import UniswapV3MulticallFunctionExactInputSingleABI from '@masknet/web3-contracts/abis/UniswapV3MulticallFunctionExactInputSingle.json'
@@ -277,7 +278,7 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
             // Uniswap V3
             if (method.name === 'multicall' && method.parameters?.[0]?.[0]) {
                 try {
-                    const results = this.Web3.getWeb3().eth.abi.decodeParameters(
+                    const results = new AbiCoder().decodeParameters(
                         context.chainId === ChainId.Arbitrum
                             ? UniswapV3MulticallFunctionExactInputSingleABI
                             : UniswapV3MulticallFunctionExactInputABI,

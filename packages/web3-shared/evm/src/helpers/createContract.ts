@@ -11,6 +11,5 @@ export function createContract<T extends BaseContract>(
     options?: ContractOptions,
 ) {
     if (!address || !isValidAddress(address) || !web3) return null
-    const contract = new web3.eth.Contract(ABI, address, options) as unknown as T
-    return contract
+    return new web3.eth.Contract(ABI, address, options) as unknown as T
 }

@@ -2,7 +2,7 @@ import { isNil } from 'lodash-es'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { defer } from '@masknet/kit'
 import { ECKeyIdentifier, type SignType } from '@masknet/shared-base'
-import { RequsetReadonly, SmartPayAccount, Web3Readonly } from '@masknet/web3-providers'
+import { RequestReadonly, SmartPayAccount, Web3Readonly } from '@masknet/web3-providers'
 import {
     ChainId,
     createJsonRpcResponse,
@@ -114,7 +114,7 @@ async function internalSend(
             break
         default:
             try {
-                const result = await RequsetReadonly.request(
+                const result = await RequestReadonly.request(
                     {
                         method: payload.method,
                         params: payload.params,
