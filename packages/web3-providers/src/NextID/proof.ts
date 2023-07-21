@@ -442,7 +442,11 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             { enableSquash: true },
         )
 
-        const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal, data.identity.nft)
+        const nft = data.identity.neighborWithTraversal
+            .filter((x) => x.to.platform === NextIDPlatform.LENS)
+            .map((x) => x.from.nft)
+            .flat()
+        const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal, nft)
 
         return uniqWith(bindings, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
             (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
