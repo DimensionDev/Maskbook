@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useMemo } from 'react'
 import { Box, Link, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import { formatBalance, type FungibleToken } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
@@ -6,13 +6,14 @@ import { TokenIcon } from '../TokenIcon/index.js'
 import { Icons } from '@masknet/icons'
 import { useNetworkDescriptor, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { makeStyles, MaskLoadingButton, LoadingBase } from '@masknet/theme'
+import { makeStyles, LoadingBase, ActionButton } from '@masknet/theme'
 import { useSharedI18N } from '../../../locales/index.js'
 import { TokenListMode } from './type.js'
 import { SettingSwitch } from '../SettingSwitch/index.js'
 import { useTokenBlocked, useTokenTrusted } from './useTokenBlocked.js'
 import { FormattedBalance } from '../../wallet/index.js'
 import { ImageIcon } from '../index.js'
+import { useAsyncFn } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -67,11 +68,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
     },
     importButton: {
-        padding: '3px 0',
-        borderRadius: 15,
-        fontSize: 14,
-        fontWeight: 500,
-        lineHeight: '20px',
+        borderRadius: 99,
     },
     action: {
         display: 'inline-flex',
@@ -81,16 +78,6 @@ const useStyles = makeStyles()((theme) => ({
     switch: {
         position: 'relative',
         left: theme.spacing(1),
-    },
-    byUser: {
-        position: 'relative',
-        left: theme.spacing(-0.5),
-    },
-    bull: {
-        display: 'inline-block',
-        width: 21,
-        lineHeight: '18px',
-        textAlign: 'center',
     },
     link: {
         color: theme.palette.maskColor.second,
@@ -141,18 +128,18 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
             }
         }, [address, getSource, isSelected])
 
-        const onAddOrRemoveTokenToLocal = useCallback(
+        const [{ loading: onAddOrRemoveTokenToLocalLoading }, onAddOrRemoveTokenToLocal] = useAsyncFn(
             async (event: React.MouseEvent<HTMLButtonElement | HTMLElement>, strategy: 'add' | 'remove') => {
                 event.stopPropagation()
-                if (token) addOrRemoveTokenToLocal(token, strategy)
+                if (token) await addOrRemoveTokenToLocal(token, strategy)
             },
             [token, addOrRemoveTokenToLocal],
         )
 
-        const onTrustOrBlockTokenToLocal = useCallback(
+        const [{ loading: onTrustOrBlockTokenToLocalLoading }, onTrustOrBlockTokenToLocal] = useAsyncFn(
             async (event: React.ChangeEvent<HTMLInputElement>) => {
                 event.stopPropagation()
-                if (token) trustOrBlockTokenToLocal(token, event.target.checked ? 'trust' : 'block')
+                if (token) await trustOrBlockTokenToLocal(token, event.target.checked ? 'trust' : 'block')
             },
             [token, trustOrBlockTokenToLocal],
         )
@@ -167,14 +154,26 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                     return <Icons.TrashLine onClick={(e) => onAddOrRemoveTokenToLocal(e, 'remove')} size={24} />
                 return (
                     <>
-                        {isCustomToken ? null : (
+                        {isCustomToken ? (
+                            <ActionButton
+                                color="primary"
+                                disabled={onAddOrRemoveTokenToLocalLoading}
+                                loading={onAddOrRemoveTokenToLocalLoading}
+                                className={classes.importButton}
+                                onClick={(e) => onAddOrRemoveTokenToLocal(e, 'add')}>
+                                {t.import()}
+                            </ActionButton>
+                        ) : (
                             <SettingSwitch
-                                disabled={source === 'official-native' && mode === TokenListMode.Manage}
+                                disabled={
+                                    (source === 'official-native' && mode === TokenListMode.Manage) ||
+                                    onTrustOrBlockTokenToLocalLoading
+                                }
                                 classes={{ root: classes.switch }}
                                 onChange={async (event) => {
                                     event.stopPropagation()
                                     event.preventDefault()
-                                    onTrustOrBlockTokenToLocal(event)
+                                    await onTrustOrBlockTokenToLocal(event)
                                 }}
                                 size="small"
                                 checked={!isBlocked}
@@ -183,7 +182,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                     </>
                 )
             }
-            return source !== 'external' || isTrust ? (
+            return (
                 <Typography className={classes.balance}>
                     {balance === undefined ? (
                         <LoadingBase size={24} />
@@ -196,19 +195,14 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                         />
                     )}
                 </Typography>
-            ) : (
-                <MaskLoadingButton
-                    variant="contained"
-                    color="primary"
-                    onClick={(e) => onAddOrRemoveTokenToLocal(e, 'add')}
-                    size="small"
-                    className={classes.importButton}
-                    soloLoading
-                    loadingIndicator={<Icons.CircleLoading size={14} />}>
-                    {t.import()}
-                </MaskLoadingButton>
             )
         }, [balance, decimals, isBlocked, source, mode, isTrust])
+
+        const tokenIcon = useMemo(() => {
+            return (
+                <TokenIcon className={classes.icon} chainId={chainId} address={address} name={name} logoURL={logoURL} />
+            )
+        }, [classes.icon, chainId, address, name, logoURL])
 
         return (
             <div style={style}>
@@ -221,13 +215,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                     disabled={!!(selected && mode === TokenListMode.List)}>
                     <ListItemIcon>
                         <Box position="relative">
-                            <TokenIcon
-                                className={classes.icon}
-                                chainId={chainId}
-                                address={address}
-                                name={name}
-                                logoURL={logoURL}
-                            />
+                            {tokenIcon}
                             {isHiddenChainIcon ? null : (
                                 <ImageIcon className={classes.badgeIcon} size={16} icon={networkDescriptor?.icon} />
                             )}
@@ -246,12 +234,6 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                                     rel="noopener noreferrer">
                                     <Icons.PopupLink size={18} className={classes.link} />
                                 </Link>
-                                {isTrust ? (
-                                    <span className={classes.byUser}>
-                                        <span className={classes.bull}>&bull;</span>
-                                        {t.erc20_token_add_by_user()}
-                                    </span>
-                                ) : null}
                             </span>
                         </Typography>
                         <Typography

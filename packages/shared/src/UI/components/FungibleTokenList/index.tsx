@@ -35,7 +35,8 @@ export * from './type.js'
 
 const SEARCH_KEYS = ['address', 'symbol', 'name']
 
-export interface FungibleTokenListProps<T extends NetworkPluginID> extends withClasses<'channel' | 'bar' | 'listBox'> {
+export interface FungibleTokenListProps<T extends NetworkPluginID>
+    extends withClasses<'channel' | 'bar' | 'listBox' | 'searchInput'> {
     pluginID?: T
     chainId?: Web3Helper.ChainIdAll
     whitelist?: string[]
@@ -52,9 +53,9 @@ export interface FungibleTokenListProps<T extends NetworkPluginID> extends withC
     mode?: TokenListMode
 }
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles<{ enableMange: boolean }>()((theme, { enableMange }) => ({
     channel: {
-        position: 'relative',
+        position: enableMange ? 'relative' : 'unset',
     },
     bar: {
         position: 'absolute',
@@ -62,8 +63,7 @@ const useStyles = makeStyles()({
         left: 0,
         right: 0,
     },
-    listBox: {},
-})
+}))
 
 export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleTokenListProps<T>) {
     const {
@@ -80,7 +80,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     } = props
 
     const t = useSharedI18N()
-    const { classes } = useStyles(undefined, { props: { classes: props.classes } })
+    const { classes } = useStyles({ enableMange: mode === TokenListMode.List && enableManage }, { props })
 
     const { pluginID } = useNetworkContext<T>(props.pluginID)
     const account = useAccount(pluginID)
@@ -136,7 +136,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         if (mode === TokenListMode.List) return EMPTY_LIST
         const isTrustedToken = currySameAddress(trustedFungibleTokens.map((x) => x.address))
 
-        return [...fungibleTokens].sort((a, z) => {
+        return uniqBy([...fungibleTokens, ...trustedFungibleTokens], (x) => x.address.toLowerCase()).sort((a, z) => {
             // trusted token
             if (isTrustedToken(a.address)) return -1
             if (isTrustedToken(z.address)) return 1
@@ -160,7 +160,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
             return 0
         })
-    }, [chainId, trustedFungibleTokens, fungibleTokens, Others, mode])
+    }, [chainId, trustedFungibleTokens, fungibleTokens, mode])
 
     const sortedFungibleTokensForList = useMemo(() => {
         if (mode === TokenListMode.Manage) return EMPTY_LIST
@@ -225,7 +225,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
                 return 0
             })
-    }, [mode, chainId, fungibleAssets, trustedFungibleTokens, filteredFungibleTokens, fungibleTokensBalance, Others])
+    }, [mode, chainId, fungibleAssets, trustedFungibleTokens, filteredFungibleTokens, fungibleTokensBalance])
 
     // #region add token by address
     const [keyword, setKeyword] = useState('')
@@ -250,7 +250,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
             !sortedFungibleTokensForList.some((x) => isSameAddress(x.address, keyword))
             ? keyword
             : ''
-    }, [keyword, sortedFungibleTokensForList, Others])
+    }, [keyword, sortedFungibleTokensForList])
 
     const { data: searchedToken } = useFungibleToken(pluginID, searchedTokenAddress, undefined, {
         chainId,
@@ -289,15 +289,15 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
                 strategy: 'add' | 'remove',
             ) => {
-                if (strategy === 'add') Token?.addToken?.(account, token)
-                if (strategy === 'remove') Token?.removeToken?.(account, token)
+                if (strategy === 'add') await Token?.addToken?.(account, token)
+                if (strategy === 'remove') await Token?.removeToken?.(account, token)
             },
             async (
                 token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
                 strategy: 'trust' | 'block',
             ) => {
-                if (strategy === 'trust') Token?.trustToken?.(account, token)
-                if (strategy === 'block') Token?.blockToken?.(account, token)
+                if (strategy === 'trust') await Token?.trustToken?.(account, token)
+                if (strategy === 'block') await Token?.blockToken?.(account, token)
             },
             isHiddenChainIcon,
             isCustomToken,
@@ -351,7 +351,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 searchKey={SEARCH_KEYS}
                 disableSearch={!!props.disableSearch}
                 itemKey="address"
-                classes={{ listBox: classes.listBox }}
+                classes={{ listBox: classes.listBox, searchInput: classes.searchInput }}
                 itemRender={itemRender}
                 FixedSizeListProps={FixedSizeListProps}
                 SearchFieldProps={SearchFieldProps}

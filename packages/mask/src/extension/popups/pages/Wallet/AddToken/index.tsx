@@ -14,7 +14,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useIntersectionObserver } from '@react-hookz/web'
 import { useParams } from 'react-router-dom'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ currentTab: TabType }>()((theme, { currentTab }) => ({
     content: {
         flex: 1,
         padding: '16px 16px 0 16px',
@@ -30,6 +30,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     listBox: {
         flex: 1,
+        marginTop: 36,
     },
     wrapper: {
         paddingTop: theme.spacing(2),
@@ -59,6 +60,15 @@ const useStyles = makeStyles()((theme) => ({
             display: 'none',
         },
     },
+    searchInput: {
+        position: 'absolute',
+        left: 16,
+        width: 368,
+        zIndex: 50,
+    },
+    sidebar: {
+        marginTop: currentTab === TabType.Token ? 42 : 0,
+    },
 }))
 
 enum TabType {
@@ -78,12 +88,13 @@ const SupportedChains = [
 
 const AddToken = memo(function AddToken() {
     const { t } = useI18N()
-    const { classes } = useStyles()
+
     const blackList = useBlockedFungibleTokens()
     const rowSize = useRowSize()
     const { chainId: chainId_ } = useParams()
 
     const [currentTab, onChange] = useTabs(TabType.Token, TabType.Token, TabType.NFT)
+    const { classes } = useStyles({ currentTab })
 
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>(chainId_ ? Number(chainId_) : ChainId.Mainnet)
 
@@ -100,20 +111,26 @@ const AddToken = memo(function AddToken() {
                 }
             />
             <div className={classes.content}>
-                <SelectNetworkSidebar
-                    hiddenAllButton
-                    chainId={chainId}
-                    onChainChange={(chainId) => setChainId(chainId ?? ChainId.Mainnet)}
-                    supportedChains={SupportedChains}
-                    pluginID={NetworkPluginID.PLUGIN_EVM}
-                />
+                <div className={classes.sidebar}>
+                    <SelectNetworkSidebar
+                        hiddenAllButton
+                        chainId={chainId}
+                        onChainChange={(chainId) => setChainId(chainId ?? ChainId.Mainnet)}
+                        supportedChains={SupportedChains}
+                        pluginID={NetworkPluginID.PLUGIN_EVM}
+                    />
+                </div>
                 <div className={classes.main}>
                     <TabPanel className={classes.panel} value={TabType.Token}>
                         <FungibleTokenListItem
                             chainId={chainId}
                             isHiddenChainIcon={false}
                             mode={TokenListMode.Manage}
-                            classes={{ channel: classes.channel, listBox: classes.listBox }}
+                            classes={{
+                                channel: classes.channel,
+                                listBox: classes.listBox,
+                                searchInput: classes.searchInput,
+                            }}
                             blacklist={blackList.map((x) => x.address)}
                             FixedSizeListProps={{ height: 474, itemSize: rowSize + 16, className: classes.wrapper }}
                             SearchTextFieldProps={{ className: classes.input }}

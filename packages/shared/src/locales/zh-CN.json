@@ -31,7 +31,6 @@
     "erc20_token_list_placeholder": "代币代号名称或合约地址",
     "erc20_token_list_loading": "正在加载代币列表...",
     "erc20_search_token_loading": "正在加载代币...",
-    "erc20_token_add_by_user": "由用户添加",
     "erc20_search_wrong_address": "请输入有效的代币合约地址",
     "erc20_manage_token_list": "编辑代币列表",
     "address_viewer_binding_rules_title": "NFT 相册按如下规则展示 NFT：",
