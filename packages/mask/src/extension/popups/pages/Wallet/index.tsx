@@ -52,16 +52,14 @@ export default function Wallet() {
 
     const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
+    const skip = [
+        PopupRoutes.ContractInteraction,
+        PopupRoutes.WalletSignRequest,
+        PopupRoutes.GasSetting,
+        PopupRoutes.Unlock,
+    ].some((item) => item === location.pathname)
     const { loading, retry } = useAsyncRetry(async () => {
-        if (
-            [
-                PopupRoutes.ContractInteraction,
-                PopupRoutes.WalletSignRequest,
-                PopupRoutes.GasSetting,
-                PopupRoutes.Unlock,
-            ].some((item) => item === location.pathname)
-        )
-            return
+        if (skip) return
 
         const payload = await WalletRPC.topUnconfirmedRequest()
         if (!payload) return
@@ -93,7 +91,7 @@ export default function Wallet() {
         ) {
             navigate(PopupRoutes.ContractInteraction, { replace: true })
         }
-    }, [location.search, location.pathname, chainId, TransactionFormatter])
+    }, [skip, chainId, TransactionFormatter])
 
     useEffect(() => {
         return CrossIsolationMessages.events.requestsUpdated.on(({ hasRequest }) => {
@@ -104,7 +102,7 @@ export default function Wallet() {
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
             <WalletHeader />
-            {loading ? (
+            {loading && !skip ? (
                 <LoadingPlaceholder />
             ) : (
                 <Routes>

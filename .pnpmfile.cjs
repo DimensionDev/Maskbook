@@ -14,6 +14,9 @@ approvedList.set('ethereumjs-abi', [
 ])
 
 approvedList.set('webpack', 'Jack-Works/webpack#lazy-import')
+approvedList.set('string-width-cjs', 'npm:string-width@^4.2.0')
+approvedList.set('strip-ansi-cjs', 'npm:strip-ansi@^6.0.1')
+approvedList.set('wrap-ansi-cjs', ['npm:wrap-ansi@^6.0.1', 'npm:wrap-ansi@^7.0.0'])
 
 approvedList.set('wyvern-js', [
     // wyvern-schemas

@@ -1,4 +1,6 @@
-import { swc } from 'rollup-plugin-swc3'
+import { createRequire } from 'node:module'
+const require = createRequire(import.meta.url)
+const { swc } = require('rollup-plugin-swc3')
 
 export default {
     input: 'main/index.ts',

@@ -1,4 +1,4 @@
-/// <reference types="react/next" />
+/// <reference types="react/canary" />
 import { use, cache } from 'react'
 import { noop } from 'lodash-es'
 import { ValueRef } from '@masknet/shared-base'

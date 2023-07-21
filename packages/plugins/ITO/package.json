@@ -27,7 +27,7 @@
     "@masknet/web3-shared-evm": "workspace:^",
     "@types/json-stable-stringify": "^1.0.34",
     "@types/use-subscription": "^1.0.0",
-    "@types/uuid": "^9.0.1",
+    "@types/uuid": "^9.0.2",
     "bignumber.js": "9.1.1",
     "date-fns": "^2.30.0",
     "json-stable-stringify": "^1.0.2",
