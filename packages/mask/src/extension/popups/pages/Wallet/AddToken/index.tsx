@@ -1,6 +1,12 @@
 import { memo, useEffect, useRef, useState } from 'react'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
-import { FungibleTokenList, type FungibleTokenListProps, SelectNetworkSidebar, TokenListMode } from '@masknet/shared'
+import {
+    FungibleTokenList,
+    type FungibleTokenListProps,
+    SelectNetworkSidebar,
+    TokenListMode,
+    AddCollectibles,
+} from '@masknet/shared'
 import { useRowSize } from '@masknet/shared-base-ui'
 import { useBlockedFungibleTokens } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../../../utils/index.js'
@@ -67,7 +73,13 @@ const useStyles = makeStyles<{ currentTab: TabType }>()((theme, { currentTab }) 
         zIndex: 50,
     },
     sidebar: {
-        marginTop: currentTab === TabType.Token ? 42 : 0,
+        marginTop: currentTab === TabType.Token ? 52 : 0,
+    },
+    grid: {
+        gridTemplateColumns: 'repeat(auto-fill, minmax(40%, 1fr))',
+    },
+    form: {
+        padding: 0,
     },
 }))
 
@@ -118,6 +130,7 @@ const AddToken = memo(function AddToken() {
                         onChainChange={(chainId) => setChainId(chainId ?? ChainId.Mainnet)}
                         supportedChains={SupportedChains}
                         pluginID={NetworkPluginID.PLUGIN_EVM}
+                        gridProps={{ gap: 0 }}
                     />
                 </div>
                 <div className={classes.main}>
@@ -137,7 +150,12 @@ const AddToken = memo(function AddToken() {
                         />
                     </TabPanel>
                     <TabPanel className={classes.panel} value={TabType.NFT}>
-                        123
+                        <AddCollectibles
+                            pluginID={NetworkPluginID.PLUGIN_EVM}
+                            chainId={chainId}
+                            onClose={() => {}}
+                            classes={{ grid: classes.grid, form: classes.form }}
+                        />
                     </TabPanel>
                 </div>
             </div>
