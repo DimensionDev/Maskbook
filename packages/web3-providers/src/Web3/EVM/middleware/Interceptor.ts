@@ -6,6 +6,7 @@ import { WalletConnect } from '../interceptors/WalletConnect.js'
 import { MetaMaskLike } from '../interceptors/MetaMaskLike.js'
 import { Fortmatic } from '../interceptors/Fortmatic.js'
 import { ContractWallet } from '../interceptors/ContractWallet.js'
+import { CustomNetwork } from '../interceptors/CustomNetwork.js'
 import { Popups } from '../interceptors/Popups.js'
 import { SmartPayAccountAPI, SmartPayBundlerAPI, SmartPayFunderAPI } from '../../../SmartPay/index.js'
 
@@ -17,6 +18,7 @@ export class Interceptor implements Middleware<ConnectionContext> {
     private composers: Partial<Record<ProviderType, Composer<ConnectionContext>>> = {
         [ProviderType.None]: Composer.from(new NoneWallet()),
         [ProviderType.MaskWallet]: Composer.from(
+            new CustomNetwork(),
             new Popups(),
             new ContractWallet(ProviderType.MaskWallet, this.Account, this.Bundler, this.Funder),
             new MaskWallet(),

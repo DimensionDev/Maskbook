@@ -894,10 +894,17 @@ export interface AddressBookState extends Startable {
 }
 
 export interface NetworkState<ChainId, SchemaType, NetworkType> extends Startable {
+    /** The id of the used network. */
+    networkID?: Subscription<string>
+    /** The used network. */
+    network?: Subscription<ReasonableNetwork<ChainId, SchemaType, NetworkType>>
+    /** All available networks. */
     networks?: Subscription<Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>>
 
     /** Add a new network. */
     addNetwork: (descriptor: TransferableNetwork<ChainId, SchemaType, NetworkType>) => Promise<void>
+    /** Use the network RPC to build a connection. */
+    switchNetwork: (id: string) => Promise<void>
     /** Update a network. */
     updateNetwork: (
         id: string,

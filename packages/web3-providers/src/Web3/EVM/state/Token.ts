@@ -1,5 +1,6 @@
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress, type FungibleToken, type NonFungibleToken } from '@masknet/web3-shared-base'
 import {
     type ChainId,
@@ -31,6 +32,7 @@ export class Token extends TokenState<ChainId, SchemaType> {
             nonFungibleCollectionMap: {},
         }
         super(context, defaultValue, subscriptions, {
+            pluginID: NetworkPluginID.PLUGIN_EVM,
             isValidAddress,
             isSameAddress,
             formatAddress: formatEthereumAddress,

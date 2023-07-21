@@ -1,7 +1,14 @@
 import { uniqBy } from 'lodash-es'
 import { produce, type Draft } from 'immer'
 import type { Subscription } from 'use-subscription'
-import { mapSubscription, mergeSubscription, safeEmptyList, type StorageObject } from '@masknet/shared-base'
+import {
+    mapSubscription,
+    mergeSubscription,
+    PersistentStorages,
+    safeEmptyList,
+    type NetworkPluginID,
+    type StorageObject,
+} from '@masknet/shared-base'
 import {
     type FungibleToken,
     type NonFungibleToken,
@@ -82,12 +89,13 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
             chainId?: Subscription<ChainId>
         },
         protected options: {
+            pluginID: NetworkPluginID
             isValidAddress(a: string): boolean
             isSameAddress(a: string, b: string): boolean
             formatAddress(a: string): string
         },
     ) {
-        const { storage } = context.createKVStorage('persistent', {}).createSubScope('Token', defaultValue)
+        const { storage } = PersistentStorages.Web3.createSubScope(`${this.options.pluginID}_Token`, defaultValue)
         this.storage = storage
 
         if (this.subscriptions.account) {
