@@ -25,10 +25,6 @@ export class RequestReadonlyAPI {
 
     getWeb3(initial?: ConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
-
-        console.log('DEBUG: Requset Readonly API')
-        console.log(options)
-
         return createWeb3SDK(options.providerURL ?? ProviderURL.from(options.chainId))
     }
 

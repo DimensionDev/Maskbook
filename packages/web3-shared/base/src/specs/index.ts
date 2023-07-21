@@ -896,6 +896,8 @@ export interface AddressBookState extends Startable {
 export interface NetworkState<ChainId, SchemaType, NetworkType> extends Startable {
     /** The id of the used network. */
     networkID?: Subscription<string>
+    /** The used network. */
+    network?: Subscription<ReasonableNetwork<ChainId, SchemaType, NetworkType>>
     /** All available networks. */
     networks?: Subscription<Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>>
 

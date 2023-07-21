@@ -1,10 +1,11 @@
 import { z } from 'zod'
 import type { Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/shared-base'
-import type { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
+import { type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
 import type { TransferableNetwork } from '@masknet/web3-shared-base'
 import { NetworkState } from '../../Base/state/Network.js'
 import { createSchema } from '../schemas/ChainDescriptor.js'
+import { fetchChainId } from '../../../helpers/fetchChainId.js'
 
 export class Network extends NetworkState<ChainId, SchemaType, NetworkType> {
     constructor(context: Plugin.Shared.SharedUIContext) {
@@ -26,6 +27,7 @@ export class Network extends NetworkState<ChainId, SchemaType, NetworkType> {
     protected override async pingNetwork(
         network: TransferableNetwork<ChainId, SchemaType, NetworkType>,
     ): Promise<boolean> {
-        throw new Error('Ping RPC URL.')
+        const chainId = await fetchChainId(network.rpcUrl)
+        return network.chainId === chainId
     }
 }

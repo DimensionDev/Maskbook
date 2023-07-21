@@ -2,7 +2,13 @@ import { v4 as uuid } from 'uuid'
 import { omit } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import { getRegisteredWeb3Chains, getRegisteredWeb3Networks, type Plugin } from '@masknet/plugin-infra'
-import { mapSubscription, PersistentStorages, type NetworkPluginID, type StorageObject } from '@masknet/shared-base'
+import {
+    mapSubscription,
+    PersistentStorages,
+    type NetworkPluginID,
+    type StorageObject,
+    mergeSubscription,
+} from '@masknet/shared-base'
 import type {
     ReasonableNetwork,
     TransferableNetwork,
@@ -18,6 +24,7 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
     }> = null!
 
     public networkID?: Subscription<string>
+    public network?: Subscription<ReasonableNetwork<ChainId, SchemaType, NetworkType>>
     public networks?: Subscription<Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>>
 
     constructor(
@@ -32,6 +39,8 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
         })
 
         this.storage = storage
+
+        this.networkID = this.storage.networkID.subscription
 
         this.networks = mapSubscription(this.storage.networks.subscription, (storage) => {
             const customizedNetworks = Object.values(storage).sort(
@@ -49,7 +58,10 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
             ] as Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>
         })
 
-        this.networkID = this.storage.networkID.subscription
+        this.network = mapSubscription(
+            mergeSubscription(this.storage.networkID.subscription, this.storage.networks.subscription),
+            ([networkID, networks]) => networks[networkID],
+        )
     }
 
     get ready() {
@@ -118,6 +130,9 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
     async removeNetwork(id: string) {
         this.assertNetwork(id)
 
-        await this.storage.networks.setValue(omit(this.storage.networks.value, id))
+        await Promise.all([
+            this.storage.networks.setValue(omit(this.storage.networks.value, id)),
+            this.networkID?.getCurrentValue() === id ? await this.storage.networkID.setValue('') : Promise.resolve(),
+        ])
     }
 }

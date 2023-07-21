@@ -39,13 +39,18 @@ export function ConnectionContent(props: ConnectionContentProps) {
             name: 'Mainnet',
             network: 'mainnet',
             nativeCurrency: createNativeToken(ChainId.Mainnet),
-            rpcUrl: 'https://mainnet.infura.io/v3/659123dd11294baf8a294d7a11cec92c',
+            rpcUrl: 'https://cloudflare-eth.com',
             explorerUrl: {
                 url: 'https://etherscan.io/',
             },
             isCustomized: true,
         })
     }, [Network])
+
+    const onUseNetwork = useCallback(async () => {
+        if (!customNetwork) return
+        await Network?.useNetwork(customNetwork.ID)
+    }, [customNetwork, Network])
 
     const onRemoveNetwork = useCallback(async () => {
         if (!customNetwork) return
@@ -266,6 +271,18 @@ export function ConnectionContent(props: ConnectionContentProps) {
                     </TableRow>
                     {customNetwork ? (
                         <>
+                            <TableRow>
+                                <TableCell>
+                                    <Typography variant="body2" whiteSpace="nowrap">
+                                        Use Custom Network
+                                    </Typography>
+                                </TableCell>
+                                <TableCell>
+                                    <Button size="small" onClick={() => onUseNetwork()}>
+                                        Use Network
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
                             <TableRow>
                                 <TableCell>
                                     <Typography variant="body2" whiteSpace="nowrap">

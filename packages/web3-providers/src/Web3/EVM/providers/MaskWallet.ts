@@ -1,4 +1,5 @@
 import { compact, debounce, first, isEqual, sortBy, uniqWith } from 'lodash-es'
+import type { RequestArguments } from 'web3-core'
 import {
     createSubscriptionFromValueRef,
     CrossIsolationMessages,
@@ -23,10 +24,9 @@ import {
 } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
 import { BaseContractWalletProvider } from './BaseContractWallet.js'
+import { Web3StateRef } from '../apis/Web3StateAPI.js'
 import { SmartPayOwnerAPI } from '../../../SmartPay/apis/OwnerAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
-import type { RequestArguments } from 'web3-core'
-import { Web3StateRef } from '../apis/Web3StateAPI.js'
 
 export class MaskWalletProvider
     extends BaseContractWalletProvider
@@ -36,12 +36,6 @@ export class MaskWalletProvider
 
     constructor() {
         super(ProviderType.MaskWallet)
-    }
-
-    private getCustomNetworkProviderURL() {
-        const networkID = Web3StateRef.value.Network?.networkID?.getCurrentValue()
-        const networks = Web3StateRef.value.Network?.networks?.getCurrentValue()
-        return networkID && networks?.find((x) => x.ID === networkID && x.isCustomized)?.rpcUrl
     }
 
     async updateImmediately() {
@@ -229,7 +223,7 @@ export class MaskWalletProvider
         return this.Request.request<T>(
             PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
             {
-                providerURL: this.getCustomNetworkProviderURL(),
+                providerURL: Web3StateRef.value.Network?.network?.getCurrentValue().rpcUrl,
                 ...initial,
             },
         )

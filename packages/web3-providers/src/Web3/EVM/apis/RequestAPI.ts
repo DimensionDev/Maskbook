@@ -48,14 +48,7 @@ export class RequestAPI extends RequestReadonlyAPI {
                                     context.write(await this.Provider?.disconnect(options.providerType))
                                     break
                                 default: {
-                                    if (PayloadEditor.fromPayload(context.request).readonly) {
-                                        context.write(
-                                            await this.Request.request(context.requestArguments, {
-                                                account: options.account,
-                                                chainId: options.chainId,
-                                            }),
-                                        )
-                                    } else {
+                                    if (!PayloadEditor.fromPayload(context.request).readonly) {
                                         const web3Provider = Providers[options.providerType].createWeb3Provider({
                                             account: options.account,
                                             chainId: options.chainId,
@@ -63,6 +56,13 @@ export class RequestAPI extends RequestReadonlyAPI {
 
                                         // send request and set result in the context
                                         context.write((await web3Provider.request(context.requestArguments)) as T)
+                                    } else {
+                                        context.write(
+                                            await this.Request.request(context.requestArguments, {
+                                                account: options.account,
+                                                chainId: options.chainId,
+                                            }),
+                                        )
                                     }
 
                                     break
