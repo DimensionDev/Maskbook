@@ -29,11 +29,6 @@ export class DescriptorWithTransactionDecodedReceipt extends BaseDescriptor {
         const contract = this.Contract.getWeb3Contract(contractAddress, abi)
         if (!contract) return
 
-        const web3 = this.Web3.getWeb3({
-            chainId,
-        })
-        if (!web3) return
-
-        return decodeEvents(web3, contract.options.jsonInterface, receipt)
+        return decodeEvents(contract.options.jsonInterface, receipt)
     }
 }

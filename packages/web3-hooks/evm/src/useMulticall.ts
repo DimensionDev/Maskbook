@@ -164,7 +164,7 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
 
                             if (!outputType) return
 
-                            const decodeResult = decodeOutputString(Web3.getWeb3({ chainId }), outputType, hex) as
+                            const decodeResult = decodeOutputString(outputType, hex) as
                                 | UnboxTransactionObject<ReturnType<Multicall['methods']['multicall']>>
                                 | undefined
 
@@ -223,7 +223,7 @@ export function useMulticallStateDecoded<
                     ({ type, name }) => type === 'function' && name === names[index],
                 )?.outputs ?? []
             try {
-                const value = decodeOutputString(Web3.getWeb3({ chainId }), outputs, result) as R
+                const value = decodeOutputString(outputs, result) as R
                 return { succeed, gasUsed, value, error: null }
             } catch (error) {
                 return { succeed: false, gasUsed, value: null, error }

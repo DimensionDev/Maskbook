@@ -13,6 +13,7 @@ export function useERC20TokenAllowance(
         account: options?.account,
         chainId: options?.chainId,
     })
+
     return useBeatRetry(
         async () => {
             if (!account || !address || !spender) return '0'

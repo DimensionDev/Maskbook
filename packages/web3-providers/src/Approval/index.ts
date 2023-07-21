@@ -1,5 +1,5 @@
 import { BigNumber } from 'bignumber.js'
-import type Web3 from 'web3'
+import { AbiCoder } from 'web3-eth-abi'
 import type { Log } from 'web3-core'
 import { maxBy, mapKeys } from 'lodash-es'
 import { EMPTY_LIST } from '@masknet/shared-base'
@@ -156,25 +156,24 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
         topic: string,
         state: TokenApprovalInfoAccountMap | NFTApprovalInfoAccountMap,
     ) {
-        const web3 = this.Web3.getWeb3({ chainId })
         const fromBlock = state[account]?.get(chainId)?.fromBlock ?? 0
-        const toBlock = await web3.eth.getBlockNumber()
-        const logs = await web3.eth.getPastLogs({
-            topics: [topic, web3.eth.abi.encodeParameter('address', account)],
+        const toBlock = await this.Web3.getBlockNumber({ chainId })
+        const logs = await this.Web3.getWeb3({ chainId }).eth.getPastLogs({
+            topics: [topic, new AbiCoder().encodeParameter('address', account)],
             fromBlock,
             toBlock,
         })
 
-        return { records: parseLogs(web3, logs), toBlock }
+        return { records: parseLogs(logs), toBlock }
     }
 }
 
-function parseLogs(web3: Web3, logs: Log[]) {
+function parseLogs(logs: Log[]) {
     return logs
         .filter((x) => x.topics.length === 3 && x.data !== '0x')
         .reduce<Record<string, Record<string, Array<{ blockNumber: number; data: string; transactionIndex: number }>>>>(
             (acc, cur) => {
-                const spender = web3.eth.abi.decodeParameter('address', cur.topics[2]) as unknown as string
+                const spender = new AbiCoder().decodeParameter('address', cur.topics[2]) as unknown as string
                 if (isZeroAddress(spender)) return acc
                 if (!acc[spender]) acc[spender] = {}
 

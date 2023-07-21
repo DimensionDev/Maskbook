@@ -279,8 +279,7 @@ export class ConnectionAPI
 
     override async verifyMessage(type: string, message: string, signature: string, initial?: ConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
-        const web3 = this.getWeb3(options)
-        const dataToSign = await web3.eth.personal.ecRecover(message, signature)
+        const dataToSign = await this.getWeb3(options).eth.personal.ecRecover(message, signature)
         return dataToSign === message
     }
 
