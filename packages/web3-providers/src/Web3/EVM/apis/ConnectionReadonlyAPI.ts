@@ -639,8 +639,7 @@ export class ConnectionReadonlyAPI
     async estimateTransaction(transaction: Transaction, fallback = 21000, initial?: ConnectionOptions) {
         try {
             const options = this.ConnectionOptions.fill(initial)
-            const provider = this.Request.getWeb3Provider(options)
-            return provider.request<string>({
+            return this.Request.request<string>({
                 method: EthereumMethodType.ETH_ESTIMATE_GAS,
                 params: [
                     new AccountTransaction({
@@ -729,11 +728,13 @@ export class ConnectionReadonlyAPI
 
     callTransaction(transaction: Transaction, initial?: ConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
-        const provider = this.Request.getWeb3Provider(options)
-        return provider.request<string>({
-            method: EthereumMethodType.ETH_CALL,
-            params: [new AccountTransaction(transaction).fill(options.overrides), 'latest'],
-        })
+        return this.Request.request<string>(
+            {
+                method: EthereumMethodType.ETH_CALL,
+                params: [new AccountTransaction(transaction).fill(options.overrides), 'latest'],
+            },
+            options,
+        )
     }
 
     async sendTransaction(transaction: Transaction, initial?: ConnectionOptions): Promise<string> {
@@ -741,12 +742,13 @@ export class ConnectionReadonlyAPI
     }
 
     sendSignedTransaction(signature: string, initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        const provider = this.getWeb3Provider(options)
-        return provider.request<string>({
-            method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
-            params: [signature],
-        })
+        return this.Request.request<string>(
+            {
+                method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
+                params: [signature],
+            },
+            initial,
+        )
     }
 
     async confirmTransaction(hash: string, initial?: ConnectionOptions): Promise<TransactionReceipt> {

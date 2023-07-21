@@ -85,14 +85,12 @@ export class RequestAPI extends RequestReadonlyAPI {
     override getWeb3(initial?: ConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
         if (options.readonly) return this.Request.getWeb3(options)
-        return createWeb3(
-            createWeb3Provider((requestArguments: RequestArguments) => this.request(requestArguments, options)),
-        )
+        return createWeb3(createWeb3Provider((requestArguments) => this.request(requestArguments, options)))
     }
 
     override getWeb3Provider(initial?: ConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
         if (options.readonly) return this.Request.getWeb3Provider(options)
-        return createWeb3Provider((requestArguments: RequestArguments) => this.request(requestArguments, options))
+        return createWeb3Provider((requestArguments) => this.request(requestArguments, options))
     }
 }

@@ -37,5 +37,3 @@ export class RequestReadonlyAPI {
         return createWeb3Provider((requestArguments) => this.request(requestArguments, initial))
     }
 }
-
-const TT = new RequestReadonlyAPI()

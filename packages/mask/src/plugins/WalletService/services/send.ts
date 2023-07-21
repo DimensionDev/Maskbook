@@ -2,7 +2,7 @@ import { isNil } from 'lodash-es'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { defer } from '@masknet/kit'
 import { ECKeyIdentifier, type SignType } from '@masknet/shared-base'
-import { SmartPayAccount, Web3Readonly } from '@masknet/web3-providers'
+import { RequsetReadonly, SmartPayAccount, Web3Readonly } from '@masknet/web3-providers'
 import {
     ChainId,
     createJsonRpcResponse,
@@ -113,7 +113,21 @@ async function internalSend(
             callback(new Error('Method not implemented.'))
             break
         default:
-            await Web3Readonly.getWeb3Provider({ chainId }).send(payload, callback)
+            try {
+                const result = await RequsetReadonly.request(
+                    {
+                        method: payload.method,
+                        params: payload.params,
+                    },
+                    {
+                        chainId,
+                    },
+                )
+                callback(null, createJsonRpcResponse(pid, result))
+            } catch (error) {
+                if (error instanceof Error) callback(error)
+                else callback(new Error('Failed to send request.'))
+            }
             break
     }
 }
