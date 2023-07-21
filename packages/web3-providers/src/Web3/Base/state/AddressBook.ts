@@ -1,6 +1,6 @@
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
-import { EMPTY_LIST, NetworkPluginID, PersistentStorages, type StorageItem } from '@masknet/shared-base'
+import { EMPTY_LIST, type NetworkPluginID, PersistentStorages, type StorageItem } from '@masknet/shared-base'
 import type { Contact, AddressBookState as Web3AddressBookState } from '@masknet/web3-shared-base'
 
 export class AddressBookState implements Web3AddressBookState {

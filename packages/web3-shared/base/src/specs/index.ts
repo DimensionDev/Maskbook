@@ -904,7 +904,7 @@ export interface NetworkState<ChainId, SchemaType, NetworkType> extends Startabl
     /** Add a new network. */
     addNetwork: (descriptor: TransferableNetwork<ChainId, SchemaType, NetworkType>) => Promise<void>
     /** Use the network RPC to build a connection. */
-    useNetwork: (id: string) => Promise<void>
+    switchNetwork: (id: string) => Promise<void>
     /** Update a network. */
     updateNetwork: (
         id: string,

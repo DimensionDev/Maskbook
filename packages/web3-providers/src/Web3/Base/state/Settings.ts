@@ -1,5 +1,10 @@
 import type { Subscription } from 'use-subscription'
-import { createConstantSubscription, InMemoryStorages, NetworkPluginID, type StorageObject } from '@masknet/shared-base'
+import {
+    createConstantSubscription,
+    InMemoryStorages,
+    type NetworkPluginID,
+    type StorageObject,
+} from '@masknet/shared-base'
 import {
     CurrencyType,
     GasOptionType,

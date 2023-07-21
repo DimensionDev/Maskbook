@@ -49,7 +49,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
 
     const onUseNetwork = useCallback(async () => {
         if (!customNetwork) return
-        await Network?.useNetwork(customNetwork.ID)
+        await Network?.switchNetwork(customNetwork.ID)
     }, [customNetwork, Network])
 
     const onRemoveNetwork = useCallback(async () => {

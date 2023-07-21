@@ -3,8 +3,8 @@ import type { Plugin } from '@masknet/plugin-infra'
 import {
     mapSubscription,
     mergeSubscription,
-    NetworkPluginID,
     PersistentStorages,
+    type NetworkPluginID,
     type StorageItem,
 } from '@masknet/shared-base'
 import {

@@ -24,7 +24,6 @@ import {
 } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
 import { BaseContractWalletProvider } from './BaseContractWallet.js'
-import { Web3StateRef } from '../apis/Web3StateAPI.js'
 import { SmartPayOwnerAPI } from '../../../SmartPay/apis/OwnerAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 

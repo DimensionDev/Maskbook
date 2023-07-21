@@ -10,7 +10,7 @@ import {
     mergeSubscription,
     type StorageObject,
     InMemoryStorages,
-    NetworkPluginID,
+    type NetworkPluginID,
 } from '@masknet/shared-base'
 import type { ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
 import type { WalletAPI } from '@masknet/web3-providers/types'

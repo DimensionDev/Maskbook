@@ -105,7 +105,7 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
         })
     }
 
-    async useNetwork(id: string) {
+    async switchNetwork(id: string) {
         const network = this.assertNetwork(id)
 
         const valid = await this.pingNetwork(network)

@@ -4,9 +4,9 @@ import type { Subscription } from 'use-subscription'
 import {
     mapSubscription,
     mergeSubscription,
-    NetworkPluginID,
     PersistentStorages,
     safeEmptyList,
+    type NetworkPluginID,
     type StorageObject,
 } from '@masknet/shared-base'
 import {

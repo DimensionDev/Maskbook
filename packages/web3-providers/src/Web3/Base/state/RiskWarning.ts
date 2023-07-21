@@ -4,7 +4,7 @@ import {
     InMemoryStorages,
     mapSubscription,
     mergeSubscription,
-    NetworkPluginID,
+    type NetworkPluginID,
     type StorageItem,
 } from '@masknet/shared-base'
 import type { RiskWarningState as Web3RiskWarningState } from '@masknet/web3-shared-base'
