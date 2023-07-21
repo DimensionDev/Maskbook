@@ -3,7 +3,7 @@ import { useI18N } from '../../../utils/index.js'
 import { AdditionalContent } from '../AdditionalPostContent.js'
 import type { DecryptionProgress } from './types.js'
 import type { ProfileIdentifier } from '@masknet/shared-base'
-import { wrapAuthorDifferentMessage } from './authorDifferentMessage.js'
+import { useAuthorDifferentMessage } from './authorDifferentMessage.js'
 export interface DecryptPostAwaitingProps {
     type?: DecryptionProgress
     /** The author in the payload */
@@ -28,7 +28,7 @@ export const DecryptPostAwaiting = memo(function DecryptPostAwaiting(props: Decr
         <AdditionalContent
             title={key[type?.progress || 'undefined']}
             progress
-            headerActions={wrapAuthorDifferentMessage(author, postedBy, void 0)}
+            headerActions={useAuthorDifferentMessage(author, postedBy, void 0)}
         />
     )
 })

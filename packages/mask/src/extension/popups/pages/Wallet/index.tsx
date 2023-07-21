@@ -16,6 +16,7 @@ import { NetworkManagement } from './NetworkManagement/index.js'
 import SelectWallet from './SelectWallet/index.js'
 
 import TokenDetail from './TokenDetail/index.js'
+import { TransactionDetail } from './TransactionDetail/index.js'
 
 const ImportWallet = lazy(() => import('./ImportWallet/index.js'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet/index.js'))
@@ -51,16 +52,14 @@ export default function Wallet() {
 
     const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
+    const skip = [
+        PopupRoutes.ContractInteraction,
+        PopupRoutes.WalletSignRequest,
+        PopupRoutes.GasSetting,
+        PopupRoutes.Unlock,
+    ].some((item) => item === location.pathname)
     const { loading, retry } = useAsyncRetry(async () => {
-        if (
-            [
-                PopupRoutes.ContractInteraction,
-                PopupRoutes.WalletSignRequest,
-                PopupRoutes.GasSetting,
-                PopupRoutes.Unlock,
-            ].some((item) => item === location.pathname)
-        )
-            return
+        if (skip) return
 
         const payload = await WalletRPC.topUnconfirmedRequest()
         if (!payload) return
@@ -92,7 +91,7 @@ export default function Wallet() {
         ) {
             navigate(PopupRoutes.ContractInteraction, { replace: true })
         }
-    }, [location.search, location.pathname, chainId, TransactionFormatter])
+    }, [skip, chainId, TransactionFormatter])
 
     useEffect(() => {
         return CrossIsolationMessages.events.requestsUpdated.on(({ hasRequest }) => {
@@ -103,7 +102,7 @@ export default function Wallet() {
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
             <WalletHeader />
-            {loading ? (
+            {loading && !skip ? (
                 <LoadingPlaceholder />
             ) : (
                 <Routes>
@@ -121,6 +120,7 @@ export default function Wallet() {
                     <Route path={r(PopupRoutes.WalletSignRequest)} element={<SignRequest />} />
                     <Route path={r(PopupRoutes.GasSetting)} element={<GasSetting />} />
                     <Route path={r(PopupRoutes.TokenDetail)} element={<TokenDetail />} />
+                    <Route path={r(PopupRoutes.TransactionDetail)} element={<TransactionDetail />} />
                     <Route path={r(`${PopupRoutes.Transfer}/:address?` as PopupRoutes)} element={<Transfer />} />
                     <Route path={r(PopupRoutes.ContractInteraction)} element={<ContractInteraction />} />
                     <Route path={r(PopupRoutes.SelectWallet)} element={<SelectWallet />} />

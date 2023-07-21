@@ -1,5 +1,5 @@
 import { delay } from '@masknet/kit'
-import { ECKeyIdentifier, type StorageItem } from '@masknet/shared-base'
+import { ECKeyIdentifier, InMemoryStorages, NetworkPluginID, type StorageItem } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { type ProviderType, isValidAddress, type ChainId, type Web3Provider, type Web3 } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
@@ -30,13 +30,16 @@ export class BaseContractWalletProvider
     override async setup(context?: Plugin.SNSAdaptor.SNSAdaptorContext) {
         await super.setup(context)
 
-        this.ownerStorage = context?.createKVStorage('memory', {}).createSubScope(`${this.providerType}_owner`, {
-            value: {
-                account: this.options.getDefaultAccount(),
-                // empty string means EOA signer
-                identifier: '',
+        this.ownerStorage = InMemoryStorages.Web3.createSubScope(
+            `${NetworkPluginID.PLUGIN_EVM}_${this.providerType}_owner`,
+            {
+                value: {
+                    account: this.options.getDefaultAccount(),
+                    // empty string means EOA signer
+                    identifier: '',
+                },
             },
-        })?.storage.value
+        )?.storage.value
 
         await this.ownerStorage?.initializedPromise
 

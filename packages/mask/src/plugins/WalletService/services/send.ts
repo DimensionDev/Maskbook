@@ -166,7 +166,7 @@ export async function confirmRequest(payload: JsonRpcPayload, options?: Transact
 
     internalSend(
         payload,
-        (error, response) => {
+        async (error, response) => {
             UNCONFIRMED_CALLBACK_MAP.get(pid)?.(error, response)
             if (!response) {
                 reject(new Error('No response.'))
@@ -177,7 +177,7 @@ export async function confirmRequest(payload: JsonRpcPayload, options?: Transact
                 reject(editor.error)
                 return
             }
-            WalletRPC.deleteUnconfirmedRequest(payload)
+            await WalletRPC.deleteUnconfirmedRequest(payload)
                 .then(() => {
                     if (!options?.disableClose) removePopupWindow()
                 })

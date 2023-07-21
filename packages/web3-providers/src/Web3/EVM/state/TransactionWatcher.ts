@@ -1,5 +1,6 @@
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, ChainIdList, type Transaction } from '@masknet/web3-shared-evm'
 import { type RecentTransaction, TransactionStatusType } from '@masknet/web3-shared-base'
 import { TransactionCheckers } from './TransactionWatcher/checker.js'
@@ -15,6 +16,7 @@ export class TransactionWatcher extends TransactionWatcherState<ChainId, Transac
         },
     ) {
         super(context, ChainIdList, TransactionCheckers, subscriptions, {
+            pluginID: NetworkPluginID.PLUGIN_EVM,
             defaultBlockDelay: 15,
             getTransactionCreator: (tx) => tx.from ?? '',
         })

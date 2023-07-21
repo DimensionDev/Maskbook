@@ -1,4 +1,4 @@
-/// <reference types="react/next" />
+/// <reference types="react/canary" />
 import { unstable_useCacheRefresh, useContext } from 'react'
 import { formatCount, formatPercentage, isSameAddress } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, explorerResolver } from '@masknet/web3-shared-evm'

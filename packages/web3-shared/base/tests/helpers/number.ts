@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { leftShift, toFixed } from '../../src/helpers/number.js'
+import { leftShift, toFixed, trimZero } from '../../src/helpers/number.js'
 
 describe('leftShift util test', () => {
     test.each([
@@ -15,5 +15,32 @@ describe('leftShift util test', () => {
 describe('toFixed', () => {
     test.each([{ give: '10428.8', expected: '10429' }])('.format($give)', ({ give, expected }) => {
         expect(toFixed(give, 0)).toBe(expected)
+    })
+})
+
+describe('trimZero', () => {
+    test.each([
+        {
+            give: '100',
+            expected: '100',
+        },
+        {
+            give: '100.00',
+            expected: '100',
+        },
+        {
+            give: '0.11',
+            expected: '0.11',
+        },
+        {
+            give: '0.1100',
+            expected: '0.11',
+        },
+        {
+            give: '1.00',
+            expected: '1',
+        },
+    ])('trimZero($give)', ({ give, expected }) => {
+        expect(trimZero(give)).toBe(expected)
     })
 })

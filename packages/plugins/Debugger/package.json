@@ -27,7 +27,7 @@
     "@masknet/web3-shared-flow": "workspace:^",
     "@masknet/web3-shared-solana": "workspace:^",
     "bignumber.js": "9.1.1",
-    "date-fns": "^2.29.3",
+    "date-fns": "^2.30.0",
     "react-use": "^17.4.0",
     "urlcat": "^3.1.0",
     "web3-core-helpers": "1.8.0",

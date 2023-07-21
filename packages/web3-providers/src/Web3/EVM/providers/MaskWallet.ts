@@ -1,4 +1,5 @@
 import { compact, debounce, first, isEqual, sortBy, uniqWith } from 'lodash-es'
+import type { RequestArguments } from 'web3-core'
 import {
     createSubscriptionFromValueRef,
     CrossIsolationMessages,
@@ -16,6 +17,7 @@ import {
     ChainId,
     chainResolver,
     isValidAddress,
+    PayloadEditor,
     ProviderType,
     type Web3,
     type Web3Provider,
@@ -199,10 +201,7 @@ export class MaskWalletProvider
         }
 
         // switch chain
-        if (chainId !== this.hostedChainId) {
-            await this.switchChain(chainId)
-        }
-
+        if (chainId !== this.hostedChainId) await this.switchChain(chainId)
         if (siteType) await this.context?.recordConnectedSites(siteType, true)
 
         return {
@@ -214,5 +213,15 @@ export class MaskWalletProvider
     override async disconnect() {
         const siteType = getSiteType()
         if (siteType) await this.context?.recordConnectedSites(siteType, false)
+    }
+
+    override async request<T>(
+        requestArguments: RequestArguments,
+        initial?: WalletAPI.ProviderOptions<ChainId>,
+    ): Promise<T> {
+        return this.Request.request<T>(
+            PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
+            initial,
+        )
     }
 }

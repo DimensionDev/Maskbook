@@ -51,7 +51,7 @@ const SwitchWallet = memo(function SwitchWallet() {
     const { smartPayChainId } = PopupContext.useContainer()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
-    const { setChainId, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const handleClickCreate = useCallback(async () => {
         if (!wallets.filter((x) => x.hasDerivationPath).length) {
             await browser.tabs.create({
@@ -80,7 +80,11 @@ const SwitchWallet = memo(function SwitchWallet() {
                 identifier: ECKeyIdentifier.from(wallet.identifier).unwrapOr(undefined),
             })
             closeModal()
-            if (wallet.owner && smartPayChainId) setChainId(smartPayChainId)
+            if (wallet.owner && smartPayChainId) {
+                await Web3.switchChain?.(smartPayChainId, {
+                    providerType: ProviderType.MaskWallet,
+                })
+            }
         },
         [history, smartPayChainId, chainId, closeModal],
     )

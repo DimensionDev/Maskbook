@@ -44,11 +44,11 @@ const formatCurrencySymbol = (symbol: string, isLead: boolean) => {
 
 // https://mask.atlassian.net/wiki/spaces/MASK/pages/122916438/Token
 export function formatCurrency(
-    value: BigNumber.Value,
+    inputValue: BigNumber.Value,
     currency: LiteralUnion<Keys | 'USD'> = 'USD',
     options?: FormatterCurrencyOptions,
 ): string {
-    const bn = new BigNumber(value)
+    const bn = new BigNumber(inputValue)
     const { onlyRemainTwoDecimal = false } = options ?? {}
     const integerValue = bn.integerValue(1)
     const decimalValue = bn.plus(integerValue.negated())
@@ -146,12 +146,12 @@ export function formatCurrency(
                 case 'currency':
                     return formatCurrencySymbol(symbol ?? value, i === 0)
                 case 'fraction':
-                    return decimalValue
+                    const dec = decimalValue
                         .toFormat(onlyRemainTwoDecimal ? twoDecimalExp : sixDecimalExp)
-                        .replace('0.', '')
-                        .replace(/(0+)$/, '')
+                        .replace(/\d\./, '')
+                    return onlyRemainTwoDecimal ? dec.replace(/(\d\d)(0+)$/, '$1') : dec.replace(/(0+)$/, '')
                 case 'integer':
-                    return '0'
+                    return value
                 case 'literal':
                     return ''
                 default:

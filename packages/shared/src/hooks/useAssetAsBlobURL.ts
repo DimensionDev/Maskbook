@@ -1,3 +1,4 @@
+/// <reference types="react/canary" />
 import { cache, use } from 'react'
 import { fetchBlob } from '@masknet/web3-providers/helpers'
 

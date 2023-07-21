@@ -19,6 +19,7 @@ import type {
 export enum CurrencyType {
     NATIVE = 'native',
     BTC = 'btc',
+    ETH = 'eth',
     USD = 'usd',
 }
 
@@ -117,6 +118,12 @@ export enum TransactionStatusType {
     FAILED = 3,
 }
 
+export enum TransactionStateType {
+    FAILED = 0,
+    SUCCEED = 1,
+    NOT_DEPEND = 2,
+}
+
 export enum TransactionDescriptorType {
     /** Transfer on chain value. */
     TRANSFER = 'transfer',
@@ -161,9 +168,7 @@ export interface Identity {
     link?: string
 }
 
-export type Price = {
-    [key in CurrencyType]?: string
-}
+export type Price = Partial<Record<CurrencyType, string>>
 
 export interface Contact {
     name: string
@@ -776,32 +781,37 @@ export interface AddressName {
     resolvedAddress?: string
 }
 
+type TransactionAsset<ChainId, SchemaType> = Token<ChainId, SchemaType> & {
+    name: string
+    symbol: string
+    amount: string
+    direction: string
+}
+
 export interface Transaction<ChainId, SchemaType> {
     id: string
     chainId: ChainId
-    type?: string
-    filterType?: string
+    type?: LiteralUnion<'burn' | 'contract interaction'>
+    cateType?: LiteralUnion<'approve' | 'receive' | 'send'>
+    cateName?: string
+    /** address */
     from: string
+    /** address */
     to: string
     /** unix timestamp */
     timestamp: number
     /** 0: failed 1: succeed */
     status?: 0 | 1
-    /** transferred tokens */
-    tokens: Array<
-        Token<ChainId, SchemaType> & {
-            name: string
-            symbol: string
-            amount: string
-            direction: string
-        }
-    >
+    /** transferred assets */
+    assets: Array<TransactionAsset<ChainId, SchemaType>>
     /** estimated tx fee */
     fee?: Price
     input?: string
     hash?: string
     methodId?: string
     blockNumber?: number
+    isScam?: boolean
+    nonce?: number
 }
 
 export interface RecentTransaction<ChainId, Transaction> {
@@ -884,10 +894,17 @@ export interface AddressBookState extends Startable {
 }
 
 export interface NetworkState<ChainId, SchemaType, NetworkType> extends Startable {
+    /** The id of the used network. */
+    networkID?: Subscription<string>
+    /** The used network. */
+    network?: Subscription<ReasonableNetwork<ChainId, SchemaType, NetworkType>>
+    /** All available networks. */
     networks?: Subscription<Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>>
 
     /** Add a new network. */
     addNetwork: (descriptor: TransferableNetwork<ChainId, SchemaType, NetworkType>) => Promise<void>
+    /** Use the network RPC to build a connection. */
+    switchNetwork: (id: string) => Promise<void>
     /** Update a network. */
     updateNetwork: (
         id: string,

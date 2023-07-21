@@ -30,9 +30,9 @@
   "dependencies": {
     "@masknet/flags": "workspace:^",
     "@masknet/shared-base": "workspace:^",
-    "@sentry/browser": "^7.50.0",
-    "@sentry/tracing": "^7.50.0",
-    "@sentry/types": "^7.50.0",
+    "@sentry/browser": "^7.59.3",
+    "@sentry/tracing": "^7.59.3",
+    "@sentry/types": "^7.59.3",
     "react-use": "^17.4.0"
   }
 }

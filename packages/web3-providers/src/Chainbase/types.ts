@@ -90,6 +90,8 @@ export interface Tx {
     cumulative_gas_used: number
     max_fee_per_gas: number
     max_priority_fee_per_gas: number
+    saving_fee: number
+    burnt_fee: number
 }
 
 export interface ENSRecord {
@@ -102,4 +104,12 @@ export interface ENSRecord {
     expiration_time: string
     token_id: string
     text_records: Record<string, string>
+}
+
+export interface Event {
+    block_number: number
+    function: string
+    method_id: string
+    transaction_hash: string
+    transaction_index: number
 }

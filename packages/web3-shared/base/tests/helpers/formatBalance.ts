@@ -1,5 +1,6 @@
 import { describe, test, it, expect } from 'vitest'
 import { formatBalance } from '../../src/helpers/formatBalance.js'
+import { scale10 } from '../../src/helpers/number.js'
 
 describe('formatBalance util test', () => {
     test.each([
@@ -33,6 +34,23 @@ describe('formatBalance util test', () => {
         { give: 11, decimals: 10, significant: 20, expected: '<0.000001' },
     ])('.format($give $decimals $significant)', ({ give, decimals, significant, expected }) => {
         expect(formatBalance(give, decimals, significant)).toBe(expected)
+    })
+
+    describe('fixed mode', () => {
+        test.each([
+            { give: 1000, decimals: 18, isFixed: true, fixedDecimals: 4, expected: '<0.0001' },
+            { give: 0, decimals: 18, isFixed: true, fixedDecimals: 4, expected: '0' },
+            { give: scale10(123, 14), decimals: 18, isFixed: true, fixedDecimals: 4, expected: '0.0123' },
+            { give: scale10(123, 16), decimals: 18, isFixed: true, fixedDecimals: 4, expected: '1.23' },
+            { give: scale10(123.456, 16), decimals: 18, isFixed: true, fixedDecimals: 4, expected: '1.2346' },
+            { give: scale10(12.345678, 16), decimals: 18, isFixed: true, fixedDecimals: 4, expected: '0.1235' },
+            { give: scale10(123, 18), decimals: 18, isFixed: true, fixedDecimals: 4, expected: '123' },
+        ])(
+            '.format($give $decimals $isFixed, $fixedDecimals)',
+            ({ give, decimals, expected, isFixed, fixedDecimals }) => {
+                expect(formatBalance(give, decimals, 0, false, isFixed, fixedDecimals)).toBe(expected)
+            },
+        )
     })
 
     it('should raise an error if pass decimal number', () => {

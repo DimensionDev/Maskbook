@@ -17,6 +17,7 @@ const createInMemoryKVStorage = createKVStorageHost(inMemoryBackend, MaskMessage
 
 export const InMemoryStorages = {
     Plugin: createInMemoryKVStorage('plugin', {}),
+    Web3: createInMemoryKVStorage('web3', {}),
     FacebookNFTEventOnMobile: createInMemoryKVStorage('FacebookNFTEventMobile', {
         userId: '',
         avatarId: '',
@@ -33,8 +34,10 @@ export const InMemoryStorages = {
  */
 const ApplicationEntryUnlistedListKey = 'application_entry_unlisted_list'
 const APPLICATION_ENTRY_UNLISTED = 'APPLICATION_ENTRY_UNLISTED'
+
 export const PersistentStorages = {
     Plugin: createPersistentKVStorage('plugin', {}),
+    Web3: createPersistentKVStorage('web3', {}),
     Settings: createPersistentKVStorage('settings', {
         debugging: false,
     }),
