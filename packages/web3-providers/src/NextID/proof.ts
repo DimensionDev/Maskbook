@@ -444,8 +444,8 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
         const nft = data.identity.neighborWithTraversal
             .filter((x) => x.to.platform === NextIDPlatform.LENS)
-            .map((x) => x.from.nft)
-            .flat()
+            .flatMap((x) => x.from.nft)
+
         const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal, nft)
 
         return uniqWith(bindings, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
