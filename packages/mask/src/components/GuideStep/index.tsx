@@ -138,22 +138,20 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
 
     useLayoutEffect(() => {
         let stopped = false
-        requestAnimationFrame(function self() {
+        requestAnimationFrame(function fn() {
             if (stopped) return
-            requestAnimationFrame(self)
+            requestAnimationFrame(fn)
             if (!childrenRef.current) return
             const cr = childrenRef.current.getBoundingClientRect()
             if (!cr.height) return
             const bottomAvailable = window.innerHeight - cr.height - cr.top > 200
             setBottomAvailable(bottomAvailable)
-            let update = false
             setClientRect((old) => {
                 if (
                     old &&
                     (old.height === cr.height || old.left === cr.left || old.top === cr.top || old.width === cr.width)
                 )
                     return old
-                update = true
                 return cr
             })
             if (box1Ref.current) {

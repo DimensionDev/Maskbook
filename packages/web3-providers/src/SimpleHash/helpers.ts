@@ -1,3 +1,5 @@
+import { isEmpty, memoize } from 'lodash-es'
+import { unreachable } from '@masknet/kit'
 import {
     SourceType,
     TokenType,
@@ -8,15 +10,13 @@ import {
 import { ChainId, SchemaType, WNATIVE, chainResolver, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
 import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
-import { isEmpty } from 'lodash-es'
 import { createPermalink } from '../NFTScan/helpers/EVM.js'
-import { fetchJSON, getAssetFullName } from '../entry-helpers.js'
-import { ETH_BLUR_TOKEN_ADDRESS, SIMPLE_HASH_URL } from './constants.js'
-import { ActivityType as ActivityTypeSimpleHash, type Asset, type Collection } from './type.js'
 import { NetworkPluginID, createLookupTableResolver, queryClient } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { TrendingAPI } from '../entry-types.js'
-import { unreachable } from '@masknet/kit'
+import { fetchJSON, getAssetFullName } from '../entry-helpers.js'
+import { ETH_BLUR_TOKEN_ADDRESS, SIMPLE_HASH_URL } from './constants.js'
+import { ActivityType as ActivityTypeSimpleHash, type Asset, type Collection } from './type.js'
 
 export async function fetchFromSimpleHash<T>(path: string, init?: RequestInit) {
     return queryClient.fetchQuery<T>({
@@ -132,7 +132,9 @@ export function createNonFungibleCollection(collection: Collection): NonFungible
     }
 }
 
-export function resolveChainId(chain: string): ChainId | undefined {
+export const resolveChainId: (chainId: string) => ChainId | undefined = memoize(function resolveChainId(
+    chain: string,
+): ChainId | undefined {
     // Some of the `chainResolver.chainId()` results do not match.
     switch (chain) {
         case 'ethereum':
@@ -152,7 +154,7 @@ export function resolveChainId(chain: string): ChainId | undefined {
         default:
             return undefined
     }
-}
+})
 
 const ChainNameMap: Record<NetworkPluginID, Record<number, string>> = {
     [NetworkPluginID.PLUGIN_EVM]: {
@@ -184,7 +186,8 @@ export function checkBlurToken(pluginId: NetworkPluginID, chainId: Web3Helper.Ch
     return `${resolveChain(pluginId, chainId)}.${address.toLowerCase()}` === `ethereum.${ETH_BLUR_TOKEN_ADDRESS}`
 }
 
-export function checkLensFollower(name: string) {
+export function isLensFollower(name: string) {
+    if (!name) return false
     return name.endsWith('.lens-Follower')
 }
 

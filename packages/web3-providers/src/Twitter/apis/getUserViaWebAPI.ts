@@ -17,6 +17,7 @@ const features = {
     creator_subscriptions_tweet_preview_api_enabled: false,
     highlights_tweets_tab_ui_enabled: false,
     hidden_profile_likes_enabled: false,
+    hidden_profile_subscriptions_enabled: false,
 }
 
 async function createRequest(screenName: string) {
