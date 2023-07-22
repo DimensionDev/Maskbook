@@ -1,5 +1,4 @@
 import { compact, debounce, first, isEqual, sortBy, uniqWith } from 'lodash-es'
-import type { RequestArguments } from 'web3-core'
 import {
     createSubscriptionFromValueRef,
     CrossIsolationMessages,
@@ -21,6 +20,7 @@ import {
     ProviderType,
     type Web3,
     type Web3Provider,
+    type RequestArguments,
 } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
 import { BaseContractWalletProvider } from './BaseContractWallet.js'
@@ -220,7 +220,7 @@ export class MaskWalletProvider
         initial?: WalletAPI.ProviderOptions<ChainId>,
     ): Promise<T> {
         return this.Request.request<T>(
-            PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
+            PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill() as RequestArguments,
             initial,
         )
     }

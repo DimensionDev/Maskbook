@@ -116,8 +116,8 @@ async function internalSend(
             try {
                 const result = await RequestReadonly.request(
                     {
-                        method: payload.method,
-                        params: payload.params,
+                        method: payload.method as EthereumMethodType,
+                        params: payload.params ?? [],
                     },
                     {
                         chainId,

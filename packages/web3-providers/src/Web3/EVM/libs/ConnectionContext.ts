@@ -1,5 +1,4 @@
 import { omit, omitBy, isUndefined } from 'lodash-es'
-import type { RequestArguments } from 'web3-core'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
 import {
     ChainId,
@@ -11,6 +10,7 @@ import {
     createJsonRpcResponse,
     parseChainId,
     type Transaction,
+    type RequestArguments,
 } from '@masknet/web3-shared-evm'
 import type { ConnectionOptions } from '../types/index.js'
 
@@ -182,10 +182,7 @@ export class ConnectionContext {
      * JSON RPC request payload
      */
     get request() {
-        return createJsonRpcPayload(this.id, {
-            params: [],
-            ...this.requestArguments,
-        })
+        return createJsonRpcPayload(this.id, this.requestArguments)
     }
 
     /**

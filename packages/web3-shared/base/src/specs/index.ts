@@ -112,6 +112,12 @@ export enum ActivityType {
     CancelOffer = 'CancelOffer',
 }
 
+export enum RequestStateType {
+    NOT_DEPEND = 1,
+    APPROVED = 2,
+    DENIED = 3,
+}
+
 export enum TransactionStatusType {
     NOT_DEPEND = 1,
     SUCCEED = 2,
@@ -211,6 +217,21 @@ export type TransferableNetwork<ChainId, SchemaType, NetworkType> = Omit<
     Network<ChainId, SchemaType, NetworkType>,
     'ID'
 >
+
+export interface RequestDescriptor<Arguments> {
+    ID: string
+    arguments: Arguments
+}
+
+export type Request<Arguments> = RequestDescriptor<Arguments>
+
+export type ReasonableRequest<Arguments> = Request<Arguments> & {
+    state: RequestStateType
+    createdAt: Date
+    updatedAt: Date
+}
+
+export type TransferableRequest<Arguments> = Omit<Request<Arguments>, 'ID'>
 
 export interface NetworkDescriptor<ChainId, NetworkType> {
     /** An unique ID for each network */
@@ -989,6 +1010,22 @@ export interface TokenState<ChainId, SchemaType> extends Startable {
         tokenIds: string[],
     ): Promise<void>
 }
+
+export interface RequestState<Arguments> extends Startable {
+    /** The tracked requests. */
+    requests?: Subscription<Array<ReasonableRequest<Arguments>>>
+    /** Applies a request and waits for confirmation from the user. */
+    applyRequest<T>(request: TransferableRequest<Arguments>): Promise<T>
+    /** Updates request with new arguments. */
+    updateRequest(id: string, updates: Partial<TransferableRequest<Arguments>>): Promise<void>
+    /** Approves a request. */
+    approveRequest(id: string): Promise<void>
+    /** Rejects a request. */
+    denyRequest(id: string): Promise<void>
+    /** Rejects all requests. */
+    denyAllRequests(): Promise<void>
+}
+
 export interface TransactionState<ChainId, Transaction> extends Startable {
     /** The tracked transactions of currently chosen sub-network */
     transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
@@ -1092,7 +1129,15 @@ export interface BlockNumberNotifierState<ChainId> {
     emitter: Emitter<BlockNumberEvent<ChainId>>
 }
 
-export interface Web3State<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter> {
+export interface Web3State<
+    ChainId,
+    SchemaType,
+    ProviderType,
+    NetworkType,
+    RequestArguments,
+    Transaction,
+    TransactionParameter,
+> {
     AddressBook?: AddressBookState
     Network?: NetworkState<ChainId, SchemaType, NetworkType>
     BalanceNotifier?: BalanceNotifierState<ChainId>
@@ -1100,6 +1145,7 @@ export interface Web3State<ChainId, SchemaType, ProviderType, NetworkType, Trans
     IdentityService?: IdentityServiceState<ChainId>
     NameService?: NameServiceState
     RiskWarning?: RiskWarningState
+    Request?: RequestState<RequestArguments>
     Settings?: SettingsState
     Token?: TokenState<ChainId, SchemaType>
     Transaction?: TransactionState<ChainId, Transaction>

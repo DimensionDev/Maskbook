@@ -1,15 +1,16 @@
 import { registerPlugin } from '@masknet/plugin-infra'
-import type {
-    ChainId,
-    NetworkType,
-    ProviderType,
-    SchemaType,
-    Transaction,
-    TransactionParameter,
+import {
+    type ChainId,
+    type NetworkType,
+    type ProviderType,
+    type SchemaType,
+    type RequestArguments,
+    type Transaction,
+    type TransactionParameter,
 } from '@masknet/web3-shared-evm'
 import { base } from './base.js'
 
-registerPlugin<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter>({
+registerPlugin<ChainId, SchemaType, ProviderType, NetworkType, RequestArguments, Transaction, TransactionParameter>({
     ...base,
     SNSAdaptor: {
         load: () => import('./UI/SNSAdaptor/index.js'),

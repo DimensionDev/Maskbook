@@ -591,6 +591,7 @@ export class ConnectionReadonlyAPI
         const accounts = await this.Request.request<string[]>(
             {
                 method: EthereumMethodType.ETH_ACCOUNTS,
+                params: [],
             },
             options,
         )
@@ -602,6 +603,7 @@ export class ConnectionReadonlyAPI
         const chainId = await this.Request.request<string>(
             {
                 method: EthereumMethodType.ETH_CHAIN_ID,
+                params: [],
             },
             options,
         )

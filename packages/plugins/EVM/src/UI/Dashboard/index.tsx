@@ -4,6 +4,7 @@ import type {
     NetworkType,
     ProviderType,
     SchemaType,
+    RequestArguments,
     Transaction,
     TransactionParameter,
 } from '@masknet/web3-shared-evm'
@@ -15,6 +16,7 @@ const dashboard: Plugin.Dashboard.Definition<
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
     Transaction,
     TransactionParameter
 > = {

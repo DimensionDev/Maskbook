@@ -1,5 +1,4 @@
 import { first } from 'lodash-es'
-import type { RequestArguments } from 'web3-core'
 import { isInPageEthereumInjected } from '@masknet/shared-base'
 import type { InjectedProvider } from '@masknet/injected-script'
 import {
@@ -8,6 +7,7 @@ import {
     type ProviderType,
     type Web3Provider,
     type Web3,
+    type RequestArguments,
 } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
 import { BaseProvider } from './Base.js'
