@@ -1,4 +1,5 @@
 import { Icons } from '@masknet/icons'
+import { delay } from '@masknet/kit'
 import { ElementAnchor, EmptyStatus, Image, NetworkIcon, RetryHint, isSameNFT } from '@masknet/shared'
 import { EMPTY_OBJECT, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, ShadowRootTooltip, makeStyles } from '@masknet/theme'
@@ -13,7 +14,7 @@ import { range, sortBy } from 'lodash-es'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useSharedI18N } from '../../../locales/i18n_generated.js'
 import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
-import { Collection, LazyCollection, type CollectionProps, CollectionSkeleton } from './Collection.js'
+import { Collection, CollectionSkeleton, LazyCollection, type CollectionProps } from './Collection.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
 import { useUserAssets } from './UserAssetsContext.js'
 import type { CollectibleGridProps } from './types.js'
@@ -212,9 +213,21 @@ export const CollectionList = memo(function CollectionList({
         (collection: Web3Helper.NonFungibleCollectionAll) => {
             const id = collection.id!
             // To reduce requests, check if has been initialized
-            if (assetsMapRef.current[id]) return
-            loadAssets(collection)
+            if (assetsMapRef.current[id]?.assets.length) return
             loadVerifiedBy(id)
+            const stateKey = `${id}.${collection.chainId}`
+            const load = async () => {
+                if (assetsMapRef.current[stateKey]?.finished || assetsMapRef.current[stateKey]?.assets.length) return
+                await loadAssets(collection)
+                await delay(30)
+                // The first collectables might have been blocked, if assets of
+                // current collection is empty, try loading another page to fill
+                // the blank.
+                if (!assetsMapRef.current[stateKey].assets.length) {
+                    await load()
+                }
+            }
+            load()
         },
         [loadAssets, loadVerifiedBy],
     )
@@ -339,7 +352,6 @@ export const CollectionList = memo(function CollectionList({
                             assets={getAssets(currentCollection).assets}
                             verifiedBy={getVerifiedBy(currentCollection.id!)}
                             loading={getAssets(currentCollection).loading}
-                            expanded
                             onInitialRender={handleInitialRender}
                             disableAction={disableAction}
                             onActionClick={onActionClick}
@@ -412,7 +424,7 @@ const ExpandedCollection = memo(({ gridProps = EMPTY_OBJECT, ...collectionProps 
         <>
             <Box width="100%">
                 <Box className={classes.grid}>
-                    <Collection {...collectionProps} ref={undefined} />
+                    <Collection {...collectionProps} expanded ref={undefined} />
                     {loading ? range(20).map((i) => <CollectibleItemSkeleton omitName key={i} />) : null}
                 </Box>
             </Box>

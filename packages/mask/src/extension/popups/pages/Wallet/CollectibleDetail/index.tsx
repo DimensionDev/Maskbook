@@ -29,7 +29,6 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 12,
         overflow: 'hidden',
     },
-    fallbackImage: {},
     name: {
         fontSize: 16,
         fontWeight: 700,
@@ -81,6 +80,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         color: theme.palette.maskColor.second,
         fontWeight: 400,
+        wordWrap: 'break-word',
     },
     traits: {
         flexWrap: 'wrap',
@@ -98,6 +98,9 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         color: theme.palette.maskColor.primaryMain,
         textTransform: 'capitalize',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
     },
     traitValue: {
         fontSize: 13,
@@ -197,10 +200,7 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
         <article className={classes.page}>
             {availableAsset ? (
                 <AssetPreviewer
-                    classes={{
-                        root: classes.image,
-                        fallbackImage: classes.fallbackImage,
-                    }}
+                    classes={{ root: classes.image }}
                     url={availableAsset?.metadata?.imageURL}
                     fallbackImage={NFTFallbackImage}
                 />
@@ -249,38 +249,44 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
             <Typography variant="body1" className={classes.text}>
                 {assetDesc}
             </Typography>
-            <Typography variant="h2" className={classes.sectionTitle}>
-                {t('collectible_properties')}
-            </Typography>
-            <div className={classes.traits}>
-                {asset?.traits?.map((trait) => {
-                    const isAddress = isValidAddress(trait.value)
-                    const uiValue = isAddress
-                        ? formatEthereumAddress(trait.value, 4)
-                        : trait.displayType === 'date'
-                        ? formatTimestamp(trait.value)
-                        : trait.value
+            {isLoading || asset?.traits?.length ? (
+                <>
+                    <Typography variant="h2" className={classes.sectionTitle}>
+                        {t('collectible_properties')}
+                    </Typography>
+                    <div className={classes.traits}>
+                        {asset?.traits?.map((trait) => {
+                            const isAddress = isValidAddress(trait.value)
+                            const uiValue = isAddress
+                                ? formatEthereumAddress(trait.value, 4)
+                                : trait.displayType === 'date'
+                                ? formatTimestamp(trait.value)
+                                : trait.value
 
-                    return (
-                        <div key={trait.type} className={classes.trait}>
-                            <Typography className={classes.traitType}>{trait.type}</Typography>
-                            <TextOverflowTooltip title={trait.value}>
-                                <Typography className={classes.traitValue}>{uiValue}</Typography>
-                            </TextOverflowTooltip>
-                        </div>
-                    )
-                })}
-            </div>
-            <Typography variant="h2" className={classes.sectionTitle}>
-                {t('about_collection', { name: collectionName })}
-            </Typography>
-            <ProgressiveText
-                variant="body1"
-                loading={isLoading || !collectionDesc}
-                className={classes.text}
-                skeletonWidth={100}>
-                {collectionDesc}
-            </ProgressiveText>
+                            return (
+                                <div key={trait.type} className={classes.trait}>
+                                    <TextOverflowTooltip title={trait.type}>
+                                        <Typography className={classes.traitType}>{trait.type}</Typography>
+                                    </TextOverflowTooltip>
+                                    <TextOverflowTooltip title={trait.value}>
+                                        <Typography className={classes.traitValue}>{uiValue}</Typography>
+                                    </TextOverflowTooltip>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </>
+            ) : null}
+            {isLoading || collectionDesc ? (
+                <>
+                    <Typography variant="h2" className={classes.sectionTitle}>
+                        {t('about_collection', { name: collectionName })}
+                    </Typography>
+                    <ProgressiveText variant="body1" loading={isLoading} className={classes.text} skeletonWidth={100}>
+                        {collectionDesc}
+                    </ProgressiveText>
+                </>
+            ) : null}
             <Button
                 className={classes.sendButton}
                 onClick={() => navigate(address ? `${PopupRoutes.Contacts}/${address}` : PopupRoutes.Contacts)}>

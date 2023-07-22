@@ -55,12 +55,6 @@ const getAssetsTotal = (map: Record<string, AssetsState>) => sum(Object.values(m
 export const UserAssetsProvider = memo(({ pluginID, address, children }: Props) => {
     const [{ assetsMap, verifiedMap }, dispatch] = useReducer(assetsReducer, initialAssetsState)
     const indicatorMapRef = useRef<Map<string, PageIndicator | undefined>>(new Map())
-    const assetsMapRef = useRef<AssetsReducerState['assetsMap']>({})
-    const verifiedMapRef = useRef<AssetsReducerState['verifiedMap']>({})
-    useEffect(() => {
-        assetsMapRef.current = assetsMap
-        verifiedMapRef.current = verifiedMap
-    })
 
     const blockedTokens = useBlockedNonFungibleTokens(pluginID)
     const blockedTokenIds = useMemo(() => blockedTokens.map((x) => x.id), [blockedTokens])
@@ -83,6 +77,15 @@ export const UserAssetsProvider = memo(({ pluginID, address, children }: Props) 
         // Update accordingly
         return updated ? listingMap : assetsMap
     }, [assetsMap, blockedTokenIds])
+
+    const assetsMapRef = useRef<AssetsReducerState['assetsMap']>({})
+    const listingAssetsMapRef = useRef<AssetsReducerState['assetsMap']>({})
+    const verifiedMapRef = useRef<AssetsReducerState['verifiedMap']>({})
+    useEffect(() => {
+        assetsMapRef.current = assetsMap
+        verifiedMapRef.current = verifiedMap
+        listingAssetsMapRef.current = listingAssetsMap
+    })
 
     const isAllHidden = useMemo(() => {
         if (!blockedTokenIds.length || getAssetsTotal(assetsMap) === 0) return false
@@ -184,7 +187,7 @@ export const UserAssetsProvider = memo(({ pluginID, address, children }: Props) 
             getVerifiedBy,
             loadAssets,
             loadVerifiedBy,
-            assetsMapRef,
+            assetsMapRef: listingAssetsMapRef,
         }
     }, [getAssets, getVerifiedBy, loadAssets, loadVerifiedBy, isAllHidden])
     return <AssetsContext.Provider value={contextValue}>{children}</AssetsContext.Provider>
