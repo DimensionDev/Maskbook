@@ -1,6 +1,5 @@
 import { first } from 'lodash-es'
 import { toHex } from 'web3-utils'
-import type { RequestArguments } from 'web3-core'
 import { Emitter } from '@servie/events'
 import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
@@ -13,6 +12,7 @@ import {
     ProviderURL,
     EthereumMethodType,
     type Web3Provider,
+    type RequestArguments,
     type Web3,
     isValidChainId,
 } from '@masknet/web3-shared-evm'

@@ -1,5 +1,4 @@
-import type { RequestArguments } from 'web3-core'
-import { ProviderType, ChainId } from '@masknet/web3-shared-evm'
+import { ProviderType, ChainId, type RequestArguments } from '@masknet/web3-shared-evm'
 import { type BaseContractWalletProvider, Providers } from '@masknet/web3-providers'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
 import { ConnectionContext } from '../libs/ConnectionContext.js'

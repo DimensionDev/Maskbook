@@ -6,6 +6,7 @@ import type {
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
     Transaction as Web3Transaction,
     TransactionParameter,
     Web3State,
@@ -23,6 +24,7 @@ import { TransactionWatcher } from '../state/TransactionWatcher.js'
 import { IdentityService } from '../state/IdentityService.js'
 import { BalanceNotifier } from '../state/BalanceNotifier.js'
 import { BlockNumberNotifier } from '../state/BlockNumberNotifier.js'
+import { Request } from '../state/Request.js'
 import { Network } from '../state/Network.js'
 
 export const Web3StateRef = new ValueRefWithReady<Web3Helper.Definition[NetworkPluginID.PLUGIN_EVM]['Web3State']>()
@@ -32,6 +34,7 @@ export class Web3StateAPI extends Web3StateAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
     Web3Transaction,
     TransactionParameter
 > {
@@ -62,6 +65,7 @@ export class Web3StateAPI extends Web3StateAPI_Base<
             RiskWarning: new RiskWarning(context, {
                 account: Provider_.account,
             }),
+            Request: new Request(),
             Token: new Token(context, {
                 account: Provider_.account,
                 chainId: Provider_.chainId,

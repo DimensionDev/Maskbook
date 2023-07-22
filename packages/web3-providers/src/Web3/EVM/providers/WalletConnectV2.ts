@@ -1,6 +1,5 @@
 import { first } from 'lodash-es'
 import { toHex } from 'web3-utils'
-import type { RequestArguments } from 'web3-core'
 import type { Emitter } from '@servie/events'
 import { getSdkError } from '@walletconnect/utils'
 import { SignClient } from '@walletconnect/sign-client'
@@ -9,12 +8,13 @@ import type { UnboxPromise } from '@masknet/shared-base'
 import {
     ProviderType,
     ChainId,
-    type Web3,
-    type Web3Provider,
     chainResolver,
     EIP155Editor,
     isValidAddress,
     isValidChainId,
+    type RequestArguments,
+    type Web3,
+    type Web3Provider,
 } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base.js'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'

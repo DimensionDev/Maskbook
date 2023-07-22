@@ -22,9 +22,18 @@ export class HubFungibleAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
     Transaction,
     TransactionParameter,
-> extends HubProviderAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter> {
+> extends HubProviderAPI_Base<
+    ChainId,
+    SchemaType,
+    ProviderType,
+    NetworkType,
+    RequestArguments,
+    Transaction,
+    TransactionParameter
+> {
     protected getProviders(
         initial?: HubOptions_Base<ChainId>,
     ): Array<

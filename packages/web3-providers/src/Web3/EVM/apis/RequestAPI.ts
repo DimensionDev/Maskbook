@@ -1,5 +1,10 @@
-import type { RequestArguments } from 'web3-core'
-import { EthereumMethodType, PayloadEditor, createWeb3, createWeb3Provider } from '@masknet/web3-shared-evm'
+import {
+    EthereumMethodType,
+    PayloadEditor,
+    createWeb3,
+    createWeb3Provider,
+    type RequestArguments,
+} from '@masknet/web3-shared-evm'
 import { ComposerAPI } from './ComposerAPI.js'
 import { Web3StateRef } from './Web3StateAPI.js'
 import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'

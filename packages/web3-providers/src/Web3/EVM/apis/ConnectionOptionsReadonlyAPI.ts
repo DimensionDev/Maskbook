@@ -6,6 +6,7 @@ import type {
     Transaction,
     TransactionParameter,
     Web3State,
+    RequestArguments,
 } from '@masknet/web3-shared-evm'
 import { ConnectionOptionsAPI_Base } from '../../Base/apis/ConnectionOptionsAPI.js'
 import { ValueRefWithReady } from '@masknet/shared-base'
@@ -18,6 +19,7 @@ export class ConnectionOptionsReadonlyAPI extends ConnectionOptionsAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
     Transaction,
     TransactionParameter
 > {

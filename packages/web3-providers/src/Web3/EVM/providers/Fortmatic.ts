@@ -1,7 +1,6 @@
 import { first } from 'lodash-es'
 import Fortmatic from 'fortmatic'
 import { toHex } from 'web3-utils'
-import type { RequestArguments } from 'web3-core'
 import { timeout } from '@masknet/kit'
 import type { FmProvider } from 'fortmatic/dist/cjs/src/core/fm-provider.js'
 import {
@@ -9,6 +8,7 @@ import {
     chainResolver,
     ProviderURL,
     ProviderType,
+    type RequestArguments,
     type Web3Provider,
     type Web3,
 } from '@masknet/web3-shared-evm'

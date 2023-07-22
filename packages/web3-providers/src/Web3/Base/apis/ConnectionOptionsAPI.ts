@@ -33,13 +33,14 @@ export class ConnectionOptionsAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
     Transaction,
     TransactionParameter,
 > {
     constructor(private options?: ConnectionOptions_Base<ChainId, ProviderType, Transaction>) {}
 
     get Web3StateRef(): ValueRefWithReady<
-        Web3State<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter>
+        Web3State<ChainId, SchemaType, ProviderType, NetworkType, RequestArguments, Transaction, TransactionParameter>
     > {
         throw new Error('To be implemented.')
     }

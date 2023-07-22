@@ -4,6 +4,7 @@ import type {
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
     Transaction,
     TransactionParameter,
 } from '@masknet/web3-shared-solana'
@@ -15,6 +16,7 @@ export class SolanaHubBaseAPI extends HubBaseAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
     Transaction,
     TransactionParameter,
     GasOption

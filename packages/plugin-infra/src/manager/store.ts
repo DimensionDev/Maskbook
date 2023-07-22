@@ -37,9 +37,20 @@ export function registerPlugin<
     SchemaType = unknown,
     ProviderType = unknown,
     NetworkType = unknown,
+    RequestArguments = unknown,
     Transaction = unknown,
     TransactionParameter = unknown,
->(def: Plugin.DeferredDefinition<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter>) {
+>(
+    def: Plugin.DeferredDefinition<
+        ChainId,
+        SchemaType,
+        ProviderType,
+        NetworkType,
+        RequestArguments,
+        Transaction,
+        TransactionParameter
+    >,
+) {
     if (__registered.has(def.ID)) return
     if (!__meetRegisterRequirement(def, env.channel)) return
     __registered.set(def.ID, def as any)

@@ -250,7 +250,7 @@ export class PayloadEditor {
         return this.payload
     }
 
-    static from<T>(id: number, method: string, params: T[] = [], options?: Options) {
+    static from<T>(id: number, method: EthereumMethodType, params: T[] = [], options?: Options) {
         return new PayloadEditor(
             createJsonRpcPayload(id, {
                 method,
@@ -260,7 +260,7 @@ export class PayloadEditor {
         )
     }
 
-    static fromMethod<T>(method: string, params: T[] = [], options?: Options) {
+    static fromMethod<T>(method: EthereumMethodType, params: T[] = [], options?: Options) {
         return PayloadEditor.from(0, method, params, options)
     }
 

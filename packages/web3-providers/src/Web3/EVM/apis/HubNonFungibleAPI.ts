@@ -24,6 +24,7 @@ import {
     type NetworkType,
     type Transaction,
     type TransactionParameter,
+    type RequestArguments,
 } from '@masknet/web3-shared-evm'
 import { HubNonFungibleAPI_Base } from '../../Base/apis/HubNonFungibleAPI.js'
 import { HubOptionsAPI } from './HubOptionsAPI.js'
@@ -34,6 +35,7 @@ export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
     Transaction,
     TransactionParameter
 > {

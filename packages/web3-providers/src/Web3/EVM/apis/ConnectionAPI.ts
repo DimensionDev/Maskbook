@@ -114,6 +114,7 @@ export class ConnectionAPI
         await this.Request.request<void>(
             {
                 method: EthereumMethodType.MASK_RESET_ALL_WALLETS,
+                params: [],
             },
             this.ConnectionOptions.fill(initial),
         )
