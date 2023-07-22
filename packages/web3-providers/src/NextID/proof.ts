@@ -27,54 +27,83 @@ const BASE_URL =
     env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
 
 const relationServiceDomainQuery = `domain(domainSystem: $domainSystem, name: $domain) {
+    source
+    system
+    name
+    fetcher
+    resolved {
+      identity
+      platform
+      displayName
+    }
+    owner {
+      identity
+      platform
+      displayName
+      uuid
+      nft(category: ["ENS"], limit: 100, offset: 0) {
+        uuid
+        category
+        chain
+        id
+      }
+      neighborWithTraversal(depth: 5) {
+        ... on ProofRecord {
           source
-          system
-          name
-          fetcher
-          resolved {
-            identity
+          from {
+            nft(category: ["ENS"], limit: 100, offset: 0) {
+              uuid
+              category
+              chain
+              id
+            }
+            uuid
             platform
+            identity
             displayName
           }
-          owner {
-            identity
-            platform
-            displayName
-            neighborWithTraversal(depth: 5) {
-              ... on ProofRecord {
-                __typename
-                source
-                from {
-                  uuid
-                  platform
-                  identity
-                  displayName
-                }
-                to {
-                  uuid
-                  platform
-                  identity
-                  displayName
-                }
-              }
-              ... on HoldRecord {
-                __typename
-                source
-                from {
-                  uuid
-                  platform
-                  identity
-                  displayName
-                }
-                to {
-                  uuid
-                  platform
-                  identity
-                  displayName
-                }
-              }
+          to {
+            nft(category: ["ENS"], limit: 100, offset: 0) {
+              uuid
+              category
+              chain
+              id
             }
+            uuid
+            platform
+            identity
+            displayName
+          }
         }
+        ... on HoldRecord {
+          source
+          from {
+            nft(category: ["ENS"], limit: 100, offset: 0) {
+              uuid
+              category
+              chain
+              id
+            }
+            uuid
+            platform
+            identity
+            displayName
+          }
+          to {
+            nft(category: ["ENS"], limit: 100, offset: 0) {
+              uuid
+              category
+              chain
+              id
+            }
+            uuid
+            platform
+            identity
+            displayName
+          }
+        }
+      }
+    }
     }`
 
 const relationServiceIdentityQuery = `
@@ -327,6 +356,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 domain: {
                     owner: {
                         neighborWithTraversal: NeighborList
+                        nft: NextIDEnsRecord[]
                     }
                 } | null
             }
@@ -349,7 +379,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         )
 
         if (!data.domain) return EMPTY_LIST
-        const bindings = createBindProofsFromNeighbor(data.domain.owner.neighborWithTraversal, [])
+        const bindings = createBindProofsFromNeighbor(data.domain.owner.neighborWithTraversal, data.domain.owner.nft)
         return uniqWith(bindings, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
             (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
         )
@@ -413,7 +443,14 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             { enableSquash: true },
         )
 
-        const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal, data.identity.nft)
+        const nft = uniqBy(
+            data.identity.neighborWithTraversal
+                .flatMap((x) => x.from.nft)
+                .concat(data.identity.neighborWithTraversal.flatMap((x) => x.from.nft)),
+            (x) => x.uuid,
+        )
+
+        const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal, nft)
 
         return uniqWith(bindings, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
             (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
