@@ -27,7 +27,7 @@ import '@masknet/plugin-scam-warning/register'
 import '@masknet/plugin-transak/register'
 import '@masknet/plugin-external/register'
 import '@masknet/plugin-nextid/register'
-import '@masknet/plugin-trader/register/register'
+import '@masknet/plugin-trader/register'
 import '@masknet/plugin-profilecard/register'
 
 import '@masknet/plugin-claim/register'
