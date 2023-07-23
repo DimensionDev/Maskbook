@@ -23,5 +23,3 @@ ins.$mount({ target: document.body })
 ins.$data.payload = {
     id: 1,
 }
-
-export {}
