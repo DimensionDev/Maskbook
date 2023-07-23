@@ -220,13 +220,13 @@ export type TransferableNetwork<ChainId, SchemaType, NetworkType> = Omit<
 
 export interface RequestDescriptor<Arguments> {
     ID: string
+    state: RequestStateType
     arguments: Arguments
 }
 
 export type Request<Arguments> = RequestDescriptor<Arguments>
 
 export type ReasonableRequest<Arguments> = Request<Arguments> & {
-    state: RequestStateType
     createdAt: Date
     updatedAt: Date
 }
@@ -1014,8 +1014,10 @@ export interface TokenState<ChainId, SchemaType> extends Startable {
 export interface RequestState<Arguments> extends Startable {
     /** The tracked requests. */
     requests?: Subscription<Array<ReasonableRequest<Arguments>>>
+    /** Applies a request. */
+    applyRequest(request: TransferableRequest<Arguments>): Promise<string>
     /** Applies a request and waits for confirmation from the user. */
-    applyRequest<T>(request: TransferableRequest<Arguments>): Promise<T>
+    applyAndWaitRequest(request: TransferableRequest<Arguments>): Promise<void>
     /** Updates request with new arguments. */
     updateRequest(id: string, updates: Partial<TransferableRequest<Arguments>>): Promise<void>
     /** Approves a request. */
