@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { type BoxInfo, type BoxMetadata, MediaType } from '../../type.js'
+import { type BoxMetadata, MediaType } from '../../type.js'
 import { Box } from '@mui/material'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { Video } from '@masknet/shared'
@@ -19,17 +19,16 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ArticlesTabProps {
-    boxInfo: BoxInfo
     boxMetadata?: BoxMetadata
 }
 
 export function ArticlesTab(props: ArticlesTabProps) {
-    const { boxInfo, boxMetadata } = props
+    const { boxMetadata } = props
     const { classes } = useStyles()
 
     return (
         <Box className={classes.main}>
-            <Box className={classes.body}>
+            <Box>
                 {(() => {
                     if (!boxMetadata?.mediaType)
                         return (

@@ -4,7 +4,7 @@ import { useSingletonModal } from '@masknet/shared-base-ui'
 import { LeavePageConfirm, type OpenPageConfirm } from './LeavePageConfirm.js'
 
 export interface LeavePageConfirmModalOpenProps {
-    openDashboard?: (route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>
+    openDashboard?: (route?: DashboardRoutes, search?: string) => void
     info?: OpenPageConfirm
 }
 
@@ -14,8 +14,7 @@ export const LeavePageConfirmModal = forwardRef<
     SingletonModalRefCreator<LeavePageConfirmModalOpenProps>,
     LeavePageConfirmModalProps
 >((props, ref) => {
-    const [openDashboard, setOpenDashboard] =
-        useState<(route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>>()
+    const [openDashboard, setOpenDashboard] = useState<(route?: DashboardRoutes, search?: string) => void>()
     const [info, setInfo] = useState<OpenPageConfirm>()
 
     const [open, dispatch] = useSingletonModal(ref, {

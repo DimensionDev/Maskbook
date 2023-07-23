@@ -1,6 +1,6 @@
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Report as ReportIcon, HourglassBottom as HourglassBottomIcon } from '@mui/icons-material'
-import IconButton from '@mui/material/IconButton'
+import { IconButton } from '@mui/material'
 import { PluginScamRPC } from '../messages.js'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
@@ -36,7 +36,7 @@ function ReportButton() {
         id: id ? id.postID : undefined,
         nickname,
         userId: author?.userId,
-        links,
+        links: [...links],
         content: message.some ? message.val : null,
     }
     const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {

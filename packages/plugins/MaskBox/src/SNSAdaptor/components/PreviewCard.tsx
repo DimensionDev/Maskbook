@@ -345,7 +345,7 @@ export function PreviewCard(props: PreviewCardProps) {
                 </Box>
                 <Paper className={classes.content}>
                     <TabPanel value={tabs.Articles} key={tabs.Articles} sx={{ padding: 0 }}>
-                        {boxInfo ? <ArticlesTab boxInfo={boxInfo} boxMetadata={boxMetadata} /> : null}
+                        {boxInfo ? <ArticlesTab boxMetadata={boxMetadata} /> : null}
                     </TabPanel>
                     <TabPanel value={tabs.Details} key={tabs.Details} sx={{ padding: 0 }}>
                         {boxInfo ? <DetailsTab boxInfo={boxInfo} boxMetadata={boxMetadata} /> : null}

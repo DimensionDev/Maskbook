@@ -1,3 +1,4 @@
+import type { Socket } from 'socket.io-client'
 export enum SocketRequestNameSpace {
     Address = 'address',
     Assets = 'assets',
@@ -6,7 +7,7 @@ export enum SocketRequestNameSpace {
 
 export type SocketNameSpace = {
     namespace: SocketRequestNameSpace
-    socket: SocketIOClient.Socket
+    socket: typeof Socket
 }
 
 export enum SocketRequestType {

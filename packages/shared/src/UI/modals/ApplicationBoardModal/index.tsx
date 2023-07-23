@@ -6,7 +6,7 @@ import { ApplicationBoard, ApplicationSettingTabs } from './ApplicationBoardDial
 import type { PersonaAgainstSNSConnectStatus } from '../../../types.js'
 
 export type ApplicationBoardModalOpenProps = {
-    openDashboard: (route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>
+    openDashboard: (route?: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
     currentSNSNetwork: CurrentSNSNetwork
     allPersonas: PersonaInformation[]
@@ -28,8 +28,7 @@ export const ApplicationBoardModal = forwardRef<
     SingletonModalRefCreator<ApplicationBoardModalOpenProps>,
     ApplicationBoardModalProps
 >((props, ref) => {
-    const [openDashboard, setOpenDashboard] =
-        useState<(route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>>()
+    const [openDashboard, setOpenDashboard] = useState<(route?: DashboardRoutes, search?: string) => void>()
     const [queryOwnedPersonaInformation, setQueryOwnedPersonaInformation] =
         useState<(initializedOnly: boolean) => Promise<PersonaInformation[]>>()
     const [currentSNSNetwork, setCurrentSNSNetwork] = useState<CurrentSNSNetwork>()
