@@ -115,8 +115,8 @@ function GameWindow(props: Props) {
     const gameUrl = useMemo(() => {
         return urlcat(gameInfo?.url ?? '', {
             dom: 'nff',
-            sns: profile?.identifier.network ?? '',
-            id: profile?.identifier.userId ?? '',
+            sns: profile?.identifier?.network ?? '',
+            id: profile?.identifier?.userId ?? '',
             contract: tokenProps?.contract ?? '',
             tokenId: tokenProps?.tokenId ?? '',
             chainId,
@@ -124,8 +124,8 @@ function GameWindow(props: Props) {
         })
     }, [
         gameInfo,
-        profile?.identifier.network,
-        profile?.identifier.userId,
+        profile?.identifier?.network,
+        profile?.identifier?.userId,
         tokenProps?.contract,
         tokenProps?.tokenId,
         account,
@@ -141,7 +141,7 @@ function GameWindow(props: Props) {
                 <div className={cx(classes.control, { [classes.fullControl]: isFullScreen })}>
                     <img src={IconClose} onClick={handleClose} alt="close" />
                     <img src={IconFull} onClick={toggleFullscreen} alt="fullscreen" />
-                    {profile?.identifier.network === EnhanceableSite.Twitter ? (
+                    {profile?.identifier?.network === EnhanceableSite.Twitter ? (
                         <img src={IconShare} onClick={props.onShare} alt="fullscreen" />
                     ) : null}
                 </div>

@@ -44,7 +44,7 @@ interface ApplicationBoardProps {
     open: boolean
     onClose: () => void
 
-    openDashboard?: (route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>
+    openDashboard?: (route?: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
     currentSNSNetwork?: CurrentSNSNetwork
     allPersonas: PersonaInformation[]

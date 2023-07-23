@@ -203,7 +203,7 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
         chainId,
     )
 
-    const { value: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, spender.tokenInfo.address, undefined, {
+    const { data: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, spender.tokenInfo.address, undefined, {
         chainId,
     })
     const amount = spender.amount ? spender.amount : formatBalance(spender.rawAmount, token?.decimals)

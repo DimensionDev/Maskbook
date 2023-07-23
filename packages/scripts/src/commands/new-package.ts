@@ -123,14 +123,16 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
             })
         })
         await changeFile.JSON(new URL('packages/plugins/tsconfig.json', ROOT_PATH), (content) => {
-            content.references.push({ path: `./${NormativeName}/` })
+            Array.from(content.references)
+                .sort((a: any, b: any) => String(a.path).localeCompare(b.path, 'en'))
+                .push({ path: `./${NormativeName}/` })
         })
         await changeFile.typescript(new URL('packages/plugin-infra/src/types.ts', ROOT_PATH), (content) =>
             content.replace(INSERT_HERE, `${NormativeName} = '${pluginID}'\n${INSERT_HERE}`),
         )
         await changeFile.typescript(
             new URL(`packages/mask/shared/plugin-infra/register.js`, ROOT_PATH),
-            (content) => `${content}import '${npmName}'`,
+            (content) => `${content}import '${npmName}/register'`,
         )
         await awaitChildProcess(shell.cwd(ROOT_PATH)`pnpm install --prefer-offline -C packages/mask ${npmName}`)
         await changeFile(new URL('packages/mask/package.json', ROOT_PATH), (content) =>

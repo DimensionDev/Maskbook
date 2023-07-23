@@ -4,14 +4,12 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
       "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
     },
-    "./components": {
-      "types": "./dist/components.d.ts",
-      "mask-src": "./src/components.ts",
-      "default": "./dist/components.js"
+    "./register": {
+      "mask-src": "./src/register.ts",
+      "default": "./dist/register.js"
     }
   },
   "types": "./dist/index.d.ts",

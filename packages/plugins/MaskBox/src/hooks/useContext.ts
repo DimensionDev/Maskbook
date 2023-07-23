@@ -140,11 +140,8 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const notInWhiteList = value?.message === 'leaf not found'
 
     // at least hold token amount
-    const { value: holderToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, boxInfo?.holderTokenAddress)
-    const { value: holderTokenBalance = '0' } = useFungibleTokenBalance(
-        NetworkPluginID.PLUGIN_EVM,
-        holderToken?.address,
-    )
+    const { data: holderToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, boxInfo?.holderTokenAddress)
+    const { data: holderTokenBalance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, holderToken?.address)
     const holderMinTokenAmountBN = new BigNumber(boxInfo?.holderMinTokenAmount ?? 0)
     const insufficientHolderToken =
         isGreaterThan(holderMinTokenAmountBN, 0) && !holderMinTokenAmountBN.lte(holderTokenBalance)
@@ -261,8 +258,8 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     // #endregion
 
     // #region the payment token
-    const { value: paymentNativeTokenBalance = '0' } = useBalance()
-    const { value: paymentERC20TokenBalance = '0' } = useFungibleTokenBalance(
+    const { data: paymentNativeTokenBalance = '0' } = useBalance()
+    const { data: paymentERC20TokenBalance = '0' } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         isNativeTokenAddress(paymentTokenAddress) ? '' : paymentTokenAddress,
     )
