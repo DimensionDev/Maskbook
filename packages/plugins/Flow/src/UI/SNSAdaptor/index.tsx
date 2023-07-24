@@ -5,6 +5,7 @@ import type {
     ProviderType,
     SchemaType,
     RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter,
 } from '@masknet/web3-shared-flow'
@@ -17,6 +18,7 @@ const sns: Plugin.SNSAdaptor.Definition<
     ProviderType,
     NetworkType,
     RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter
 > = {

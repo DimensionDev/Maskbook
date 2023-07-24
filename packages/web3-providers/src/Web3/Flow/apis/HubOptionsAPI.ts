@@ -3,9 +3,10 @@ import type {
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter,
-    RequestArguments,
 } from '@masknet/web3-shared-flow'
 import { HubOptionsAPI_Base } from '../../Base/apis/HubOptionsAPI.js'
 import { FlowWeb3StateRef } from './Web3StateAPI.js'
@@ -17,6 +18,7 @@ export class FlowHubOptionsAPI extends HubOptionsAPI_Base<
     ProviderType,
     NetworkType,
     RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter
 > {

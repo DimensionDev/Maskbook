@@ -7,6 +7,7 @@ export class HubProviderAPI_Base<
     ProviderType,
     NetworkType,
     RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter,
 > {
@@ -18,6 +19,7 @@ export class HubProviderAPI_Base<
         ProviderType,
         NetworkType,
         RequestArguments,
+        RequestOptions,
         Transaction,
         TransactionParameter
     >(this.options)

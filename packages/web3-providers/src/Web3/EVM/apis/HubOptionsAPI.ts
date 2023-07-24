@@ -3,9 +3,10 @@ import type {
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter,
-    RequestArguments,
 } from '@masknet/web3-shared-evm'
 import { Web3StateRef } from './Web3StateAPI.js'
 import { OthersAPI } from './OthersAPI.js'
@@ -17,6 +18,7 @@ export class HubOptionsAPI extends HubOptionsAPI_Base<
     ProviderType,
     NetworkType,
     RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter
 > {
