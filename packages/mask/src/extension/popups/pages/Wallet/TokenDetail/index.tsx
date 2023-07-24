@@ -202,7 +202,7 @@ const TokenDetail = memo(function TokenDetail() {
             </Button>,
         )
         return () => setExtension(undefined)
-    }, [chainId, asset, isNativeToken, classes.deleteButton, showSnackbar, t])
+    }, [chainId, asset, isNativeToken, classes.deleteButton, showSnackbar, t, account])
 
     return (
         <div className={classes.halo}>

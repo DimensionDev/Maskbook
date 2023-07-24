@@ -394,6 +394,18 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
     source?: SourceType
     assets?: Array<NonFungibleAsset<ChainId, SchemaType>>
     socialLinks?: SocialLinks
+    floorPrices?: Array<{
+        marketplace_id: LiteralUnion<'blur' | 'looksrare' | 'opensea' | 'x2y2'>
+        marketplace_name: LiteralUnion<'Blur' | 'LooksRare' | 'OpenSea' | 'X2Y2'>
+        value: number
+        payment_token: {
+            payment_token_id: LiteralUnion<'ethereum.native'>
+            name: string
+            symbol: string
+            address: string | null
+            decimals: number
+        }
+    }>
 }
 
 export interface NonFungibleCollectionOverview {
@@ -454,6 +466,7 @@ export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, Sc
     metadata?: NonFungibleTokenMetadata<ChainId>
     /** the collection info */
     collection?: NonFungibleCollection<ChainId, SchemaType>
+    traits?: NonFungibleTokenTrait[]
 }
 
 export interface NonFungibleTokenTrait {
@@ -463,6 +476,7 @@ export interface NonFungibleTokenTrait {
     value: string
     /** The rarity of trait in percentage. */
     rarity?: string
+    displayType?: LiteralUnion<'date' | 'string' | 'number'> | null
 }
 
 export interface NonFungibleTokenAuction<ChainId, SchemaType> {

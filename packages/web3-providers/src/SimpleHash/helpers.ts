@@ -108,8 +108,15 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
             iconURL: asset.collection.image_url,
             verified: Boolean(asset.collection.marketplace_pages?.some((x) => x.verified)),
             createdAt: new Date(asset.created_date).getTime(),
+            floorPrices: asset.collection.floor_prices,
         },
         source: SourceType.SimpleHash,
+        traits:
+            asset.extra_metadata?.attributes.map((x) => ({
+                type: x.trait_type,
+                value: x.value,
+                displayType: x.display_type,
+            })) || [],
     }
 }
 

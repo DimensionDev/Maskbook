@@ -98,11 +98,7 @@ export function TokenTransactionConfirmModal({
     const t = useSharedI18N()
     confirmText = confirmText || 'Confirm'
     const isToken = tokenType === TokenType.Fungible
-    const { value: nonFungibleToken } = useNonFungibleAsset(
-        undefined,
-        nonFungibleTokenAddress,
-        nonFungibleTokenId ?? '',
-    )
+    const { data: nonFungibleToken } = useNonFungibleAsset(undefined, nonFungibleTokenAddress, nonFungibleTokenId ?? '')
     return (
         <InjectedDialog
             classes={{

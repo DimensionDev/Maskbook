@@ -45,14 +45,9 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect })
         [selectedTokenId, token.tokenId],
     )
 
-    const { value: NFTDetailed } = useNonFungibleAsset<'all'>(
-        NetworkPluginID.PLUGIN_EVM,
-        token.address,
-        token.tokenId,
-        {
-            chainId: token.chainId,
-        },
-    )
+    const { data: NFTDetailed } = useNonFungibleAsset<'all'>(NetworkPluginID.PLUGIN_EVM, token.address, token.tokenId, {
+        chainId: token.chainId,
+    })
 
     const NFTNameBar = useMemo(() => {
         return (

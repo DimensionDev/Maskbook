@@ -1,4 +1,5 @@
 import { Icons } from '@masknet/icons'
+import { delay } from '@masknet/kit'
 import { ElementAnchor, EmptyStatus, Image, NetworkIcon, RetryHint, isSameNFT } from '@masknet/shared'
 import { EMPTY_OBJECT, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, ShadowRootTooltip, makeStyles } from '@masknet/theme'
@@ -13,7 +14,7 @@ import { range, sortBy } from 'lodash-es'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useSharedI18N } from '../../../locales/i18n_generated.js'
 import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
-import { Collection, LazyCollection, type CollectionProps, CollectionSkeleton } from './Collection.js'
+import { Collection, CollectionSkeleton, LazyCollection, type CollectionProps } from './Collection.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
 import { useUserAssets } from './UserAssetsContext.js'
 import type { CollectibleGridProps } from './types.js'
@@ -148,6 +149,7 @@ export interface CollectionListProps
     account: string
     pluginID: NetworkPluginID
     defaultChainId?: Web3Helper.ChainIdAll
+    defaultCollectionId?: string
     gridProps?: CollectibleGridProps
     disableSidebar?: boolean
     disableWindowScroll?: boolean
@@ -157,6 +159,7 @@ export interface CollectionListProps
     /** Pending user customized assets, used to render loading skeletons */
     pendingAdditionalAssetCount?: number
     onChainChange?: (chainId?: Web3Helper.ChainIdAll) => void
+    onCollectionChange?: (collectionId: string | undefined) => void
 }
 
 export const CollectionList = memo(function CollectionList({
@@ -164,6 +167,7 @@ export const CollectionList = memo(function CollectionList({
     account,
     pluginID,
     defaultChainId,
+    defaultCollectionId,
     gridProps = EMPTY_OBJECT,
     disableSidebar,
     disableAction,
@@ -174,6 +178,7 @@ export const CollectionList = memo(function CollectionList({
     onActionClick,
     onItemClick,
     onChainChange,
+    onCollectionChange,
     ...rest
 }: CollectionListProps) {
     const t = useSharedI18N()
@@ -192,17 +197,37 @@ export const CollectionList = memo(function CollectionList({
 
     const currentChainId = chainId ?? defaultChainId ?? (networks.length === 1 ? networks[0].chainId : chainId)
     const { collections, currentCollection, currentCollectionId, setCurrentCollectionId, loading, error, retry } =
-        useCollections(pluginID, currentChainId, account)
+        useCollections({ pluginID, chainId: currentChainId, account, defaultCollectionId })
 
-    const { assetsMapRef, getAssets, getVerifiedBy, loadAssets, loadVerifiedBy } = useUserAssets()
+    const handleCollectionChange = useCallback(
+        (id: string | undefined) => {
+            setCurrentCollectionId(id)
+            onCollectionChange?.(id)
+        },
+        [onCollectionChange],
+    )
+
+    const { assetsMapRef, getAssets, getVerifiedBy, loadAssets, loadVerifiedBy, isAllHidden } = useUserAssets()
 
     const handleInitialRender = useCallback(
         (collection: Web3Helper.NonFungibleCollectionAll) => {
             const id = collection.id!
             // To reduce requests, check if has been initialized
-            if (assetsMapRef.current[id]) return
-            loadAssets(collection)
+            if (assetsMapRef.current[id]?.assets.length) return
             loadVerifiedBy(id)
+            const stateKey = `${id}.${collection.chainId}`
+            const load = async () => {
+                if (assetsMapRef.current[stateKey]?.finished || assetsMapRef.current[stateKey]?.assets.length) return
+                await loadAssets(collection)
+                await delay(30)
+                // The first collectables might have been blocked, if assets of
+                // current collection is empty, try loading another page to fill
+                // the blank.
+                if (!assetsMapRef.current[stateKey].assets.length) {
+                    await load()
+                }
+            }
+            load()
         },
         [loadAssets, loadVerifiedBy],
     )
@@ -215,7 +240,7 @@ export const CollectionList = memo(function CollectionList({
                     onClick={() => {
                         setChainId(undefined)
                         onChainChange?.(undefined)
-                        setCurrentCollectionId(undefined)
+                        handleCollectionChange(undefined)
                     }}>
                     All
                     {!currentChainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
@@ -230,7 +255,7 @@ export const CollectionList = memo(function CollectionList({
                     onClick={() => {
                         setChainId(x.chainId)
                         onChainChange?.(x.chainId)
-                        setCurrentCollectionId(undefined)
+                        handleCollectionChange(undefined)
                     }}>
                     <NetworkIcon pluginID={pluginID} chainId={x.chainId} ImageIconProps={{ size: 24 }} />
                     {currentChainId === x.chainId ? (
@@ -280,7 +305,7 @@ export const CollectionList = memo(function CollectionList({
             </Box>
         )
 
-    if ((!loading && !collections.length) || !account)
+    if ((!loading && !collections.length) || !account || isAllHidden)
         return (
             <Box className={cx(classes.container, className)} {...rest}>
                 <div className={classes.columns}>
@@ -313,7 +338,7 @@ export const CollectionList = memo(function CollectionList({
                             <Button
                                 variant="text"
                                 className={classes.backButton}
-                                onClick={() => setCurrentCollectionId(undefined)}>
+                                onClick={() => handleCollectionChange(undefined)}>
                                 <Icons.Undo size={16} />
                             </Button>
                         </div>
@@ -327,7 +352,6 @@ export const CollectionList = memo(function CollectionList({
                             assets={getAssets(currentCollection).assets}
                             verifiedBy={getVerifiedBy(currentCollection.id!)}
                             loading={getAssets(currentCollection).loading}
-                            expanded
                             onInitialRender={handleInitialRender}
                             disableAction={disableAction}
                             onActionClick={onActionClick}
@@ -367,7 +391,7 @@ export const CollectionList = memo(function CollectionList({
                                         assets={assetsState.assets}
                                         verifiedBy={getVerifiedBy(collection.id!)}
                                         loading={assetsState.loading}
-                                        onExpand={setCurrentCollectionId}
+                                        onExpand={handleCollectionChange}
                                         onInitialRender={handleInitialRender}
                                         disableAction={disableAction}
                                         onActionClick={onActionClick}
@@ -400,7 +424,7 @@ const ExpandedCollection = memo(({ gridProps = EMPTY_OBJECT, ...collectionProps 
         <>
             <Box width="100%">
                 <Box className={classes.grid}>
-                    <Collection {...collectionProps} ref={undefined} />
+                    <Collection {...collectionProps} expanded ref={undefined} />
                     {loading ? range(20).map((i) => <CollectibleItemSkeleton omitName key={i} />) : null}
                 </Box>
             </Box>

@@ -99,29 +99,29 @@ export function CardDialogContent(props: CardDialogContentProps) {
     }, [])
 
     const onMoreButtonClick = useCallback(() => {
-        const link = asset.value?.link
+        const link = asset.data?.link
 
         if (link) {
             openWindow(link)
             props.setOpen(false)
         }
-    }, [asset.value?.link])
+    }, [asset.data?.link])
 
-    if (asset.loading) return <LoadingStatus height="100%" />
-    if (!asset.value) return <ReloadStatus height="100%" message={t.load_failed()} onRetry={asset.retry} />
+    if (asset.isLoading) return <LoadingStatus height="100%" />
+    if (!asset.data) return <ReloadStatus height="100%" message={t.load_failed()} onRetry={asset.refetch} />
 
     // Links of Solana NFTs might be incorrect, we discard them temporarily.
-    const externalLink = pluginID !== NetworkPluginID.PLUGIN_SOLANA && asset.value.source ? asset.value.link : null
+    const externalLink = pluginID !== NetworkPluginID.PLUGIN_SOLANA && asset.data.source ? asset.data.link : null
     return (
         <div className={classes.contentWrapper}>
             <div className={classes.contentLayout}>
                 <div className={classes.mediaBox}>
-                    <FigureCard timeline asset={asset.value} />
+                    <FigureCard timeline asset={asset.data} />
                 </div>
 
                 <div className={classes.tabWrapper}>
                     {currentTab === TabType.About ? (
-                        <AboutTab orders={orders.value} asset={asset.value} />
+                        <AboutTab orders={orders.value} asset={asset.data} />
                     ) : currentTab === TabType.Offers ? (
                         <OffersTab offers={orders} />
                     ) : (
@@ -162,8 +162,8 @@ export function CardDialogContent(props: CardDialogContentProps) {
                             <span className={classes.buttonText}>
                                 {t.plugin_collectibles_more_on_button({
                                     provider:
-                                        asset.value.source === SourceType.NFTScan
-                                            ? resolveSourceTypeName(asset.value.source)
+                                        asset.data.source === SourceType.NFTScan
+                                            ? resolveSourceTypeName(asset.data.source)
                                             : 'platform',
                                 })}
                             </span>
