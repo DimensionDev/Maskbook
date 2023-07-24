@@ -13,10 +13,8 @@ import Services from '../../../../service.js'
 import { HydrateFinished } from '../../../../../utils/createNormalReactRoot.js'
 import { useSupportSocialNetworks } from '../../../hook/useSupportSocialNetworks.js'
 import { useVerifiedWallets } from '../../../hook/useVerifiedWallets.js'
-import { useTheme } from '@mui/material'
 
 const PersonaHome = memo(() => {
-    const theme = useTheme()
     const navigate = useNavigate()
     const { avatar, currentPersona, setSelectedAccount, personas, accounts, proofs } = PersonaContext.useContainer()
 

@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { UserContext } from '../../hook/useUserContext.js'
-import { passwordRegexp } from '../../regexp.js'
+import { passwordRegexp } from '../../constants.js'
 import { useAsyncFn } from 'react-use'
 import { PopupRoutes } from '@masknet/shared-base'
 

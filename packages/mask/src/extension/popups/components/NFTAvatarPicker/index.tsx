@@ -1,4 +1,4 @@
-import { ElementAnchor, NetworkTab, PersonaContext, PluginVerifiedWalletStatusBar, RetryHint } from '@masknet/shared'
+import { ElementAnchor, NetworkTab, PluginVerifiedWalletStatusBar, RetryHint } from '@masknet/shared'
 import { Box, Button, Stack } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
@@ -7,9 +7,8 @@ import { uniqBy } from 'lodash-es'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { CollectionList } from './CollectionList.js'
-import { useVerifiedWallets } from '../../hook/useVerifiedWallets.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
-import { EMPTY_LIST, type NetworkPluginID, PopupModalRoutes } from '@masknet/shared-base'
+import { EMPTY_LIST, type NetworkPluginID, PopupModalRoutes, type BindingProof } from '@masknet/shared-base'
 import { useModalNavigate } from '../index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -30,9 +29,10 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface NFTAvatarPickerProps {
     onChange: (image: string) => void
+    bindingWallets?: BindingProof[]
 }
 
-export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPicker({ onChange }) {
+export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPicker({ onChange, bindingWallets }) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { pluginID } = useNetworkContext()
@@ -51,10 +51,6 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
     const tokens = useMemo(() => {
         return uniqBy(assets, (x) => x.contract?.address.toLowerCase() + x.tokenId).filter((x) => x.chainId === chainId)
     }, [assets, chainId])
-
-    const { proofs } = PersonaContext.useContainer()
-
-    const { data: bindingWallets } = useVerifiedWallets(proofs)
 
     const handleChangeWallet = useCallback(() => modalNavigate(PopupModalRoutes.SelectProvider, { onlyMask: true }), [])
 

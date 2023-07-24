@@ -17,7 +17,7 @@ export interface PersonaAvatarProps extends withClasses<'root'> {
 
 export const PersonaAvatar = memo<PersonaAvatarProps>(function PersonaAvatar({ size, hasProofs, avatar, ...rest }) {
     const { classes } = useStyles(undefined, { props: rest })
-    if (hasProofs) return <Icons.NextIdAvatar size={size} className={classes.root} />
+    if (hasProofs && !avatar) return <Icons.NextIdAvatar size={size} className={classes.root} />
 
     if (avatar) return <Avatar src={avatar} style={{ width: size, height: size }} className={classes.root} />
 
