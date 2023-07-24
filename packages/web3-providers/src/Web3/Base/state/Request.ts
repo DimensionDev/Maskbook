@@ -69,11 +69,12 @@ export class RequestState<Arguments> implements Web3RequestState<Arguments> {
         const ID = await this.applyRequest(request)
 
         return new Promise((resolve, reject) => {
-            this.requests?.subscribe(() => {
+            const unsubscribe = this.requests?.subscribe(() => {
                 this.requests?.getCurrentValue().forEach((request) => {
-                    if (ID !== request.ID) return
+                    if (ID !== request.ID || request.state === RequestStateType.NOT_DEPEND) return
                     if (request.state === RequestStateType.APPROVED) resolve()
-                    else if (request.state === RequestStateType.DENIED) reject(new Error('User rejected the request.'))
+                    else reject(new Error('User rejected the request.'))
+                    unsubscribe?.()
                 })
             })
         })
