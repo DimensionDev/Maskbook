@@ -62,10 +62,14 @@ export class RequestState<Arguments, Options = unknown> implements Web3RequestSt
             updatedAt: now,
         }
 
-        await this.storage.requests.setValue({
-            ...this.storage.requests.value,
-            [ID]: request_,
-        })
+        await this.storage.requests.setValue(
+            Object.fromEntries([
+                ...Object.entries(this.storage.requests.value).filter(
+                    ([_, request]) => request.state === RequestStateType.NOT_DEPEND,
+                ),
+                [ID, request_],
+            ]),
+        )
 
         return request_
     }
