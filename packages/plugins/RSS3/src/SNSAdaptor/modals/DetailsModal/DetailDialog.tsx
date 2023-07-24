@@ -69,20 +69,19 @@ export function FeedDetailsDialog({ type, feed, onClose, actionIndex, ...rest }:
     const { classes } = useStyles()
     const links = feed.actions[0].related_urls
 
-    const { data: reversedName, isLoading: loadingENS } = useReverseAddress(undefined, feed.owner)
+    const address = feed.owner || feed.address_from || feed.actions[0].address_from || ''
+    const { data: reversedName, isLoading: loadingENS } = useReverseAddress(undefined, address)
     const { getDomain } = ScopedDomainsContainer.useContainer()
 
-    const name = feed.owner ? getDomain(feed.owner) || reversedName : reversedName
-    const feedOwner = useMemo((): FeedOwnerOptions | undefined => {
-        if (!feed.owner) return
+    const name = address ? getDomain(address) || reversedName : reversedName
+    const feedOwner = useMemo((): FeedOwnerOptions => {
         return {
-            address: feed.owner,
+            address,
             name,
-            ownerDisplay: name ? Others.formatDomainName(name) : Others.formatAddress(feed.owner, 4) ?? feed.owner,
+            ownerDisplay: name ? Others.formatDomainName(name) : Others.formatAddress(feed.owner, 4) ?? address,
         }
-    }, [feed.owner, name, Others.formatDomainName, Others.formatAddress])
+    }, [address, name, Others.formatDomainName, Others.formatAddress])
 
-    if (!feedOwner) return null
     return (
         <FeedOwnerContext.Provider value={feedOwner}>
             <InjectedDialog
