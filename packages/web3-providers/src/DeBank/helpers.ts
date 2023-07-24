@@ -43,7 +43,7 @@ export function formatAssets(data: WalletTokenRecord[]): Array<FungibleAsset<Cha
                 type: TokenType.Fungible,
                 schema: isNativeTokenAddress(address) ? SchemaType.Native : SchemaType.ERC20,
                 decimals: x.decimals,
-                name: x.name,
+                name: x.name.replace('(PoS)', ''),
                 symbol: x.symbol,
                 balance: rightShift(x.amount, x.decimals).toFixed(),
                 price: {
