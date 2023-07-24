@@ -188,7 +188,6 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
     )
 
     const handleAdd = useCallback(() => {
-        console.log({ contract })
         if (!contract) return
         onClose([contract, selectedTokenIds])
     }, [contract, selectedTokenIds, onClose])
