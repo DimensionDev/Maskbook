@@ -5,12 +5,22 @@ import {
     type ProviderType,
     type SchemaType,
     type RequestArguments,
+    type RequestOptions,
     type Transaction,
     type TransactionParameter,
 } from '@masknet/web3-shared-flow'
 import { base } from './base.js'
 
-registerPlugin<ChainId, SchemaType, ProviderType, NetworkType, RequestArguments, Transaction, TransactionParameter>({
+registerPlugin<
+    ChainId,
+    SchemaType,
+    ProviderType,
+    NetworkType,
+    RequestArguments,
+    RequestOptions,
+    Transaction,
+    TransactionParameter
+>({
     ...base,
     SNSAdaptor: {
         load: () => import('./UI/SNSAdaptor/index.js'),

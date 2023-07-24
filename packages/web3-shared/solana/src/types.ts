@@ -69,6 +69,7 @@ export type Signature = string
 export type GasOption = never
 export type Block = BlockResponse
 export type RequestArguments = never
+export type RequestOptions = never
 export type Operation = never
 export type Transaction = SolanaTransaction
 export type TransactionReceipt = never
@@ -84,6 +85,7 @@ export type Web3State = Web3StateShared<
     ProviderType,
     NetworkType,
     RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter
 >
@@ -98,6 +100,7 @@ export type Web3Definition = {
     GasOption: GasOption
     Block: Block
     RequestArguments: RequestArguments
+    RequestOptions: RequestOptions
     Operation: Operation
     Transaction: Transaction
     TransactionReceipt: TransactionReceipt

@@ -99,6 +99,7 @@ export declare namespace Plugin {
         ProviderType = unknown,
         NetworkType = unknown,
         RequestArguments = unknown,
+        RequestOptions = unknown,
         Transaction = unknown,
         TransactionParameter = unknown,
     > extends Shared.Definition<ChainId, SchemaType, ProviderType, NetworkType> {
@@ -110,6 +111,7 @@ export declare namespace Plugin {
                 ProviderType,
                 NetworkType,
                 RequestArguments,
+                RequestOptions,
                 Transaction,
                 TransactionParameter
             >
@@ -122,6 +124,7 @@ export declare namespace Plugin {
                 ProviderType,
                 NetworkType,
                 RequestArguments,
+                RequestOptions,
                 Transaction,
                 TransactionParameter
             >
@@ -423,6 +426,7 @@ export namespace Plugin.SNSAdaptor {
         ProviderType = unknown,
         NetworkType = unknown,
         RequestArguments = unknown,
+        RequestOptions = unknown,
         Transaction = unknown,
         TransactionParameter = unknown,
     > extends Shared.DefinitionDeferred<SNSAdaptorContext> {
@@ -453,6 +457,7 @@ export namespace Plugin.SNSAdaptor {
             ProviderType,
             NetworkType,
             RequestArguments,
+            RequestOptions,
             Transaction,
             TransactionParameter
         >
@@ -922,6 +927,7 @@ export namespace Plugin.Dashboard {
         ProviderType = unknown,
         NetworkType = unknown,
         RequestArguments = unknown,
+        RequestOptions = unknown,
         Transaction = unknown,
         TransactionParameter = unknown,
     > extends Shared.DefinitionDeferred<DashboardContext> {
@@ -936,6 +942,7 @@ export namespace Plugin.Dashboard {
             ProviderType,
             NetworkType,
             RequestArguments,
+            RequestOptions,
             Transaction,
             TransactionParameter
         >

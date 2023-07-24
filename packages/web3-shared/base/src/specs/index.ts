@@ -218,21 +218,21 @@ export type TransferableNetwork<ChainId, SchemaType, NetworkType> = Omit<
     'ID'
 >
 
-export interface RequestDescriptor<Arguments, TransactionOptions = unknown> {
+export interface RequestDescriptor<Arguments, Options> {
     ID: string
     state?: RequestStateType
     arguments: Arguments
-    options?: TransactionOptions
+    options?: Options
 }
 
-export type Request<Arguments, Options = unknown> = RequestDescriptor<Arguments, Options>
+export type Request<Arguments, Options> = RequestDescriptor<Arguments, Options>
 
-export type ReasonableRequest<Arguments, Options = unknown> = Request<Arguments, Options> & {
+export type ReasonableRequest<Arguments, Options> = Request<Arguments, Options> & {
     createdAt: Date
     updatedAt: Date
 }
 
-export type TransferableRequest<Arguments, Options = unknown> = Omit<Request<Arguments, Options>, 'ID'>
+export type TransferableRequest<Arguments, Options> = Omit<Request<Arguments, Options>, 'ID'>
 
 export interface NetworkDescriptor<ChainId, NetworkType> {
     /** An unique ID for each network */
@@ -1012,13 +1012,15 @@ export interface TokenState<ChainId, SchemaType> extends Startable {
     ): Promise<void>
 }
 
-export interface RequestState<Arguments, Options = unknown> extends Startable {
+export interface RequestState<Arguments, Options> extends Startable {
     /** The tracked requests. */
     requests?: Subscription<Array<ReasonableRequest<Arguments, Options>>>
     /** Applies a request. */
-    applyRequest(request: TransferableRequest<Arguments>): Promise<ReasonableRequest<Arguments, Options>>
+    applyRequest(request: TransferableRequest<Arguments, Options>): Promise<ReasonableRequest<Arguments, Options>>
     /** Applies a request and waits for confirmation from the user. */
-    applyAndWaitRequest(request: TransferableRequest<Arguments>): Promise<ReasonableRequest<Arguments, Options>>
+    applyAndWaitRequest(
+        request: TransferableRequest<Arguments, Options>,
+    ): Promise<ReasonableRequest<Arguments, Options>>
     /** Updates request with new arguments. */
     updateRequest(id: string, updates: Partial<TransferableRequest<Arguments, Options>>): Promise<void>
     /** Approves a request. */
@@ -1138,6 +1140,7 @@ export interface Web3State<
     ProviderType,
     NetworkType,
     RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter,
 > {
@@ -1148,7 +1151,7 @@ export interface Web3State<
     IdentityService?: IdentityServiceState<ChainId>
     NameService?: NameServiceState
     RiskWarning?: RiskWarningState
-    Request?: RequestState<RequestArguments>
+    Request?: RequestState<RequestArguments, RequestOptions>
     Settings?: SettingsState
     Token?: TokenState<ChainId, SchemaType>
     Transaction?: TransactionState<ChainId, Transaction>

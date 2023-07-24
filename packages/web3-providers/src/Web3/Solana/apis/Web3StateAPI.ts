@@ -7,6 +7,7 @@ import type {
     ProviderType,
     NetworkType,
     RequestArguments,
+    RequestOptions,
     Transaction as Web3Transaction,
     TransactionParameter,
     Web3State,
@@ -29,6 +30,7 @@ export class SolanaWeb3StateAPI extends Web3StateAPI_Base<
     ProviderType,
     NetworkType,
     RequestArguments,
+    RequestOptions,
     Web3Transaction,
     TransactionParameter
 > {

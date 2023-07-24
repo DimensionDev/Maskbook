@@ -56,6 +56,7 @@ export type GasOption = never
 export type Block = BlockObject
 export type BlockHeader = BlockHeaderObject
 export type RequestArguments = never
+export type RequestOptions = never
 export type Operation = never
 export type Transaction = MutateOptions
 export type TransactionQuery = QueryOptions
@@ -72,6 +73,7 @@ export type Web3State = Web3StateShared<
     ProviderType,
     NetworkType,
     RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter
 >
@@ -86,6 +88,7 @@ export type Web3Definition = {
     GasOption: GasOption
     Block: Block
     RequestArguments: RequestArguments
+    RequestOptions: RequestOptions
     Operation: Operation
     Transaction: Transaction
     TransactionReceipt: TransactionReceipt
