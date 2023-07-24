@@ -6,6 +6,7 @@ import { formatPersonaFingerprint } from '@masknet/shared-base'
 import { CopyButton } from '@masknet/shared'
 import urlcat from 'urlcat'
 import type { FriendsInformation } from '../../../hook/useFriends.js'
+import { AccountAvatar } from '../../Personas/components/AccountAvatar/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -54,7 +55,7 @@ export const ContactCard = memo<ContactCardProps>(({ friend }) => {
     return (
         <Box className={classes.card}>
             <Box className={classes.title}>
-                <div className={classes.avatar} />
+                <AccountAvatar avatar={avatar} />
                 <Box>
                     <Typography fontSize={14} fontWeight={700} lineHeight="18px">
                         {linkedPersona ? formatPersonaFingerprint(linkedPersona.rawPublicKey, 4) : null}
@@ -79,7 +80,9 @@ export const ContactCard = memo<ContactCardProps>(({ friend }) => {
                     </Typography>
                 </Box>
             </Box>
-            <Box display="flex" alignItems="center" height="58px" className={classes.connectedAccounts} />
+            <Box display="flex" alignItems="center" height="58px" className={classes.connectedAccounts}>
+                {' '}
+            </Box>
         </Box>
     )
 })
