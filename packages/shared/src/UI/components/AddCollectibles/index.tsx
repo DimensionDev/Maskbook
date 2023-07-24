@@ -1,12 +1,10 @@
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
-import { MaskColorVar, MaskTextField, makeStyles } from '@masknet/theme'
+import { ActionButton, MaskColorVar, MaskTextField, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useWeb3Connection, useWeb3Hub, useWeb3Others } from '@masknet/web3-hooks-base'
-import { Web3 } from '@masknet/web3-providers'
 import { isSameAddress, type NonFungibleTokenContract } from '@masknet/web3-shared-base'
-import { AddressType, type ChainId } from '@masknet/web3-shared-evm'
-import { Button, Stack, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { compact, isNaN, uniq } from 'lodash-es'
@@ -78,23 +76,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-function isValidTokenIds(rawIds: string) {
-    const containsInvalidId = rawIds.split(',').some((v) => {
-        const trimmed = v.trim()
-        if (!trimmed) return false
-        const id = Number.parseInt(trimmed, 10)
-        return isNaN(id) || id <= 0
-    })
-    return !containsInvalidId
-}
-
-async function isContract(address: string, chainId: ChainId) {
-    const addressType = await Web3.getAddressType(address, { chainId })
-    return addressType === AddressType.Contract
-}
-
 export interface AddCollectiblesProps<T extends NetworkPluginID = NetworkPluginID>
-    extends withClasses<'grid' | 'form'> {
+    extends withClasses<'grid' | 'form' | 'main'> {
     pluginID?: T
     chainId?: Web3Helper.Definition[T]['ChainId']
     /**
@@ -111,10 +94,21 @@ export interface AddCollectiblesProps<T extends NetworkPluginID = NetworkPluginI
             tokenIds: string[],
         ],
     ): void
+    onConfirmLoading?: boolean
+}
+
+function isValidTokenIds(rawIds: string) {
+    const containsInvalidId = rawIds.split(',').some((v) => {
+        const trimmed = v.trim()
+        if (!trimmed) return false
+        const id = Number.parseInt(trimmed, 10)
+        return isNaN(id) || id <= 0
+    })
+    return !containsInvalidId
 }
 
 export const AddCollectibles = memo(function AddCollectibles(props: AddCollectiblesProps) {
-    const { pluginID, chainId, account: defaultAccount, onClose } = props
+    const { pluginID, chainId, account: defaultAccount, onClose, onConfirmLoading } = props
     const t = useSharedI18N()
     const walletAccount = useAccount()
     const account = defaultAccount || walletAccount
@@ -151,9 +145,16 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
         queryKey: ['nft-contract', pluginID, chainId, address],
         queryFn: () => connection.getNonFungibleTokenContract(address, undefined, { chainId }),
     })
+
+    const isValid = useMemo(() => {
+        return Boolean(
+            contract?.address && Others.isValidAddress?.(contract?.address) && isValidTokenIds(watchedTokenIds),
+        )
+    }, [contract?.address, watchedTokenIds])
+
     const assetsQueries = useQueries({
         queries: tokenIds.map((tokenId) => ({
-            enabled: Boolean(contract?.address && !Others.isValidAddress?.(contract?.address)),
+            enabled: isValid,
             queryKey: ['nft-asset', pluginID, chainId, address, tokenId],
             queryFn: () => hub.getNonFungibleAsset(address, tokenId, { chainId }),
         })),
@@ -187,11 +188,12 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
     )
 
     const handleAdd = useCallback(() => {
+        console.log({ contract })
         if (!contract) return
         onClose([contract, selectedTokenIds])
     }, [contract, selectedTokenIds, onClose])
 
-    const disabled = !selectedTokenIds.length || isLoadingContract || isValidating
+    const disabled = !selectedTokenIds.length || isLoadingContract || isValidating || onConfirmLoading
 
     return (
         <form className={classes.form} onSubmit={handleFormSubmit}>
@@ -285,9 +287,14 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                 )}
             </div>
             <Stack className={classes.toolbar} direction="row" justifyContent="center">
-                <Button fullWidth startIcon={<Icons.Wallet size={18} />} disabled={disabled} onClick={handleAdd}>
+                <ActionButton
+                    fullWidth
+                    startIcon={<Icons.Wallet size={18} />}
+                    disabled={disabled}
+                    onClick={handleAdd}
+                    loading={onConfirmLoading}>
                     {t.add_collectibles()}
-                </Button>
+                </ActionButton>
             </Stack>
         </form>
     )

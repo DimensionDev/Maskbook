@@ -1,24 +1,19 @@
-import { memo, useEffect, useRef, useState } from 'react'
+import { memo, useState } from 'react'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
-import {
-    FungibleTokenList,
-    type FungibleTokenListProps,
-    SelectNetworkSidebar,
-    TokenListMode,
-    AddCollectibles,
-} from '@masknet/shared'
+import { FungibleTokenList, SelectNetworkSidebar, TokenListMode, AddCollectibles } from '@masknet/shared'
 import { useRowSize } from '@masknet/shared-base-ui'
-import { useBlockedFungibleTokens } from '@masknet/web3-hooks-base'
-import { useI18N } from '../../../../../utils/index.js'
-import { useTitle } from '../../../hook/useTitle.js'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { useBlockedFungibleTokens, useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { Tab } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { NormalHeader } from '../../../components/index.js'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useIntersectionObserver } from '@react-hookz/web'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useAsyncFn } from 'react-use'
+import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { useI18N } from '../../../../../utils/index.js'
+import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles<{ currentTab: TabType }>()((theme, { currentTab }) => ({
     content: {
@@ -80,6 +75,13 @@ const useStyles = makeStyles<{ currentTab: TabType }>()((theme, { currentTab }) 
     },
     form: {
         padding: 0,
+        height: 490,
+    },
+    nftContent: {
+        overflow: 'auto',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 
@@ -103,14 +105,25 @@ const AddToken = memo(function AddToken() {
 
     const blackList = useBlockedFungibleTokens()
     const rowSize = useRowSize()
+    const navigate = useNavigate()
     const { chainId: chainId_ } = useParams()
-
+    const { account } = useChainContext()
     const [currentTab, onChange] = useTabs(TabType.Token, TabType.Token, TabType.NFT)
     const { classes } = useStyles({ currentTab })
 
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>(chainId_ ? Number(chainId_) : ChainId.Mainnet)
 
     useTitle(t('add_assets'))
+
+    const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+
+    const [{ loading: loadingAddCustomNFTs }, addCustomNFTs] = useAsyncFn(
+        async (result: [contract: NonFungibleTokenContract<ChainId, SchemaType>, tokenIds: string[]]) => {
+            await Token?.addNonFungibleCollection?.(account, result[0], result[1])
+            navigate(PopupRoutes.Wallet)
+        },
+        [account],
+    )
 
     return (
         <TabContext value={currentTab}>
@@ -135,7 +148,7 @@ const AddToken = memo(function AddToken() {
                 </div>
                 <div className={classes.main}>
                     <TabPanel className={classes.panel} value={TabType.Token}>
-                        <FungibleTokenListItem
+                        <FungibleTokenList
                             chainId={chainId}
                             isHiddenChainIcon={false}
                             mode={TokenListMode.Manage}
@@ -153,8 +166,9 @@ const AddToken = memo(function AddToken() {
                         <AddCollectibles
                             pluginID={NetworkPluginID.PLUGIN_EVM}
                             chainId={chainId}
-                            onClose={() => {}}
-                            classes={{ grid: classes.grid, form: classes.form }}
+                            onClose={addCustomNFTs}
+                            onConfirmLoading={loadingAddCustomNFTs}
+                            classes={{ grid: classes.grid, form: classes.form, main: classes.nftContent }}
                         />
                     </TabPanel>
                 </div>
@@ -162,17 +176,5 @@ const AddToken = memo(function AddToken() {
         </TabContext>
     )
 })
-
-function FungibleTokenListItem<T extends NetworkPluginID>(props: FungibleTokenListProps<T>) {
-    const ref = useRef<HTMLDivElement | null>(null)
-    const entry = useIntersectionObserver(ref, {})
-    const [isViewed, setIsViewed] = useState(false)
-
-    useEffect(() => {
-        if (entry?.isIntersecting && entry?.intersectionRatio > 0) setIsViewed(true)
-    }, [entry?.isIntersecting])
-
-    return <div ref={ref}>{isViewed ? <FungibleTokenList {...props} /> : null}</div>
-}
 
 export default AddToken
