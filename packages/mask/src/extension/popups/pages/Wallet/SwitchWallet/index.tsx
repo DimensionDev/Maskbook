@@ -17,12 +17,11 @@ import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 const useStyles = makeStyles()((theme) => ({
     content: {
         overflow: 'auto',
-        backgroundColor: '#F7F9FA',
+        backgroundColor: theme.palette.maskColor.bottom,
         display: 'flex',
         flexDirection: 'column',
     },
     list: {
-        backgroundColor: '#ffffff',
         padding: 0,
         overflow: 'auto',
     },

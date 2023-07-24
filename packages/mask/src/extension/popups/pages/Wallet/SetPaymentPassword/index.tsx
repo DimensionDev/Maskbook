@@ -6,7 +6,7 @@ import { Controller } from 'react-hook-form'
 import type { z as zod } from 'zod'
 import { Box, Link, Typography, useTheme } from '@mui/material'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { NetworkPluginID, PopupRoutes, getDefaultWalletPassword } from '@masknet/shared-base'
+import { CrossIsolationMessages, NetworkPluginID, PopupRoutes, getDefaultWalletPassword } from '@masknet/shared-base'
 import { useBalance, useReverseAddress, useWallets } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -141,7 +141,9 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
             try {
                 await WalletRPC.changePassword(getDefaultWalletPassword(), data.password)
                 const hasPassword = await WalletRPC.hasPassword()
+
                 if (hasPassword) {
+                    CrossIsolationMessages.events.walletLockStatusUpdated.sendToAll(true)
                     navigate(PopupRoutes.Wallet, { replace: true })
                 }
             } catch (error) {

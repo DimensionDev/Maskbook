@@ -47,7 +47,6 @@ const BottomNavLink = memo<LinkProps>(function BottomNavLink({ children, to }) {
 
 export const Navigator = memo(function Navigator({ className, ...rest }: BoxProps) {
     const { classes, cx } = useStyle()
-
     const wallet = useWallet()
 
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()

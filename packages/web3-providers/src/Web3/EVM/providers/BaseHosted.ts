@@ -65,7 +65,6 @@ export class BaseHostedProvider
             this.walletStorage?.chainId.initializedPromise,
             this.walletStorage?.wallets.initializedPromise,
         ])
-
         this.onAccountChanged()
         this.onChainChanged()
 
@@ -197,6 +196,8 @@ export class BaseHostedProvider
     }
 
     private async onAccountChanged() {
+        await this.walletStorage?.account.initializedPromise
+
         if (!this.hostedAccount) return
 
         this.emitter.emit('accounts', [this.hostedAccount])
@@ -205,6 +206,7 @@ export class BaseHostedProvider
     }
 
     private async onChainChanged() {
+        await this.walletStorage?.chainId.initializedPromise
         if (this.hostedChainId) this.emitter.emit('chainId', toHex(this.hostedChainId))
     }
 

@@ -4,14 +4,23 @@ import { NetworkPluginID, PopupModalRoutes, PopupRoutes as PopupPaths } from '@m
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { TelemetryProvider, Web3ContextProvider, useMountReport } from '@masknet/web3-hooks-base'
 import { EventID } from '@masknet/web3-telemetry/types'
-import { lazy, memo, useEffect, useState, type ReactNode, useMemo } from 'react'
+import { lazy, memo, useEffect, useState, type ReactNode, useMemo, Suspense } from 'react'
 import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { usePopupTheme } from '../../utils/theme/usePopupTheme.js'
 import Services from '../service.js'
 import { PopupLayout } from './components/PopupLayout/index.js'
 import { PageTitleContext } from './context.js'
 import { PopupContext } from './hook/usePopupContext.js'
-import { ChooseNetworkModal, ConnectSocialAccountModal, Modals } from './modals/index.js'
+import {
+    ChooseNetworkModal,
+    ConnectSocialAccountModal,
+    Modals,
+    PersonaRenameModal,
+    PersonaSettingModal,
+    SetBackupPasswordModal,
+    SwitchPersonaModal,
+    VerifyBackupPasswordModal,
+} from './modals/index.js'
 import SwitchWallet from './pages/Wallet/SwitchWallet/index.js'
 import { WalletContext } from './pages/Wallet/hooks/useWalletContext.js'
 import { wrapModal } from './components/index.js'
@@ -20,6 +29,8 @@ import { ProviderType } from '@masknet/web3-shared-evm'
 import { ConnectProviderModal } from './modals/ConnectProvider/index.js'
 import { useIdleTimer } from 'react-idle-timer'
 import { WalletRPC } from '../../plugins/WalletService/messages.js'
+import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
+import { UserContext } from './hook/useUserContext.js'
 
 const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet/index.js'))
 const Personas = lazy(() => import(/* webpackPreload: true */ './pages/Personas/index.js'))
@@ -43,34 +54,70 @@ const PopupRoutes = memo(function PopupRoutes() {
     const location = useLocation()
     const mainLocation = location.state?.mainLocation as Location | undefined
     return (
-        <WalletContext.Provider>
-            <PersonaContext.Provider
-                initialState={{ queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation }}>
-                <Routes location={mainLocation || location}>
-                    <Route path="/" element={<PopupLayout />}>
-                        <Route path={PopupPaths.Personas + '/*'} element={<Personas />} />
-                        <Route path={PopupPaths.Wallet + '/*'} element={<Wallet />} />
-                    </Route>
-                    <Route path={PopupPaths.Swap} element={<SwapPage />} />
-                    <Route path={PopupPaths.RequestPermission} element={<RequestPermissionPage />} />
-                    <Route path={PopupPaths.PermissionAwareRedirect} element={<PermissionAwareRedirect />} />
-                    <Route path={PopupPaths.ThirdPartyRequestPermission} element={<ThirdPartyRequestPermission />} />
-                    <Route path="*" element={<Navigate replace to={PopupPaths.Personas} />} />
-                </Routes>
-                {mainLocation ? (
-                    <Routes>
-                        <Route path={PopupModalRoutes.ChooseNetwork} element={wrapModal(<ChooseNetworkModal />)} />
-                        <Route path={PopupModalRoutes.SwitchWallet} element={wrapModal(<SwitchWallet />)} />
-                        <Route
-                            path={PopupModalRoutes.ConnectSocialAccount}
-                            element={wrapModal(<ConnectSocialAccountModal />)}
-                        />
-                        <Route path={PopupModalRoutes.SelectProvider} element={wrapModal(<SelectProviderModal />)} />
-                        <Route path={PopupModalRoutes.ConnectProvider} element={wrapModal(<ConnectProviderModal />)} />
-                    </Routes>
-                ) : null}
-            </PersonaContext.Provider>
-        </WalletContext.Provider>
+        <Suspense fallback={<LoadingPlaceholder />}>
+            <WalletContext.Provider>
+                <PersonaContext.Provider
+                    initialState={{ queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation }}>
+                    <UserContext.Provider>
+                        <Routes location={mainLocation || location}>
+                            <Route path="/" element={<PopupLayout />}>
+                                <Route path={PopupPaths.Personas + '/*'} element={<Personas />} />
+                                <Route path={PopupPaths.Wallet + '/*'} element={<Wallet />} />
+                            </Route>
+                            <Route path={PopupPaths.Swap} element={<SwapPage />} />
+                            <Route path={PopupPaths.RequestPermission} element={<RequestPermissionPage />} />
+                            <Route path={PopupPaths.PermissionAwareRedirect} element={<PermissionAwareRedirect />} />
+                            <Route
+                                path={PopupPaths.ThirdPartyRequestPermission}
+                                element={<ThirdPartyRequestPermission />}
+                            />
+                            <Route path="*" element={<Navigate replace to={PopupPaths.Personas} />} />
+                        </Routes>
+                        {mainLocation ? (
+                            <Routes>
+                                <Route
+                                    path={PopupModalRoutes.verifyBackupPassword}
+                                    element={wrapModal(<VerifyBackupPasswordModal />)}
+                                />
+                                <Route
+                                    path={PopupModalRoutes.SetBackupPassword}
+                                    element={wrapModal(<SetBackupPasswordModal />)}
+                                />
+                                <Route
+                                    path={PopupModalRoutes.PersonaRename}
+                                    element={wrapModal(<PersonaRenameModal />)}
+                                />
+                                <Route
+                                    path={PopupModalRoutes.PersonaSettings}
+                                    element={wrapModal(<PersonaSettingModal />)}
+                                />
+                                <Route
+                                    path={PopupModalRoutes.SwitchPersona}
+                                    element={wrapModal(<SwitchPersonaModal />)}
+                                />
+                                <Route
+                                    path={PopupModalRoutes.ChooseNetwork}
+                                    element={wrapModal(<ChooseNetworkModal />)}
+                                />
+                                <Route path={PopupModalRoutes.SwitchWallet} element={wrapModal(<SwitchWallet />)} />
+                                <Route
+                                    path={PopupModalRoutes.ConnectSocialAccount}
+                                    element={wrapModal(<ConnectSocialAccountModal />)}
+                                />
+                                <Route
+                                    path={PopupModalRoutes.SelectProvider}
+                                    element={wrapModal(<SelectProviderModal />)}
+                                />
+                                <Route
+                                    path={PopupModalRoutes.ConnectProvider}
+                                    element={wrapModal(<ConnectProviderModal />)}
+                                />
+                            </Routes>
+                        ) : null}
+                    </UserContext.Provider>
+                </PersonaContext.Provider>
+            </WalletContext.Provider>
+        </Suspense>
     )
 })
 

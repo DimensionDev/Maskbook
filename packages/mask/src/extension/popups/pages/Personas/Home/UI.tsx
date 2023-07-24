@@ -1,19 +1,20 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
 import { Icons } from '@masknet/icons'
-import { CopyButton } from '@masknet/shared'
-import { formatPersonaFingerprint, type EnhanceableSite, type ProfileAccount } from '@masknet/shared-base'
+import { type EnhanceableSite, type ProfileAccount, PopupModalRoutes } from '@masknet/shared-base'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
-import { Avatar, Box, Button, Link, Tab, Typography, useTheme } from '@mui/material'
+import { Box, Button, Tab, Typography, useTheme } from '@mui/material'
 import { memo } from 'react'
-import urlcat from 'urlcat'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { SocialAccounts } from '../../../components/SocialAccounts/index.js'
 import { ConnectedWallet } from '../../../components/ConnectedWallet/index.js'
 import type { ConnectedWalletInfo } from '../type.js'
 import { useSearchParams } from 'react-router-dom'
 import { HomeTabType } from '../../Wallet/type.js'
+import { useModalNavigate } from '../../../components/index.js'
+import { PersonaPublicKey } from '../../../components/PersonaPublicKey/index.js'
+import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -74,10 +75,11 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    icon: {
-        width: 12,
-        height: 12,
+    publicKey: {
         fontSize: 12,
+        color: theme.palette.maskColor.second,
+    },
+    icon: {
         color: theme.palette.maskColor.second,
     },
     settings: {
@@ -114,6 +116,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface PersonaHomeUIProps {
+    hasProofs?: boolean
     avatar?: string | null
     fingerprint?: string
     publicKey?: string
@@ -142,9 +145,11 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
         publicKey,
         onAccountClick,
         bindingWallets,
+        hasProofs,
     }) => {
         const theme = useTheme()
         const { t } = useI18N()
+        const modalNavigate = useModalNavigate()
         const { classes } = useStyles()
 
         const [params] = useSearchParams()
@@ -162,15 +167,14 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                         <Box style={{ background: theme.palette.maskColor.modalTitleBg }}>
                             <Box className={classes.header}>
                                 <Icons.MaskSquare className={classes.logo} />
-                                <Icons.HamburgerMenu className={classes.menu} />
+                                <Icons.HamburgerMenu
+                                    className={classes.menu}
+                                    onClick={() => modalNavigate(PopupModalRoutes.SwitchPersona)}
+                                />
                             </Box>
                             <Box className={classes.info}>
                                 <Box position="relative">
-                                    {avatar ? (
-                                        <Avatar src={avatar} style={{ width: 60, height: 60 }} />
-                                    ) : (
-                                        <Icons.MenuPersonasActive size={60} style={{ borderRadius: 99 }} />
-                                    )}
+                                    <PersonaAvatar size={60} avatar={avatar} hasProofs={hasProofs} />
                                     <Box className={classes.edit}>
                                         <Icons.Edit size={12} />
                                     </Box>
@@ -178,27 +182,19 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                 <Typography fontSize={18} fontWeight="700" lineHeight="22px" marginTop="8px">
                                     {nickname}
                                 </Typography>
-                                {fingerprint ? (
-                                    <Typography
-                                        fontSize={12}
-                                        color={theme.palette.maskColor.second}
-                                        lineHeight="16px"
-                                        display="flex"
-                                        alignItems="center"
-                                        columnGap="2px">
-                                        {formatPersonaFingerprint(fingerprint, 4)}
-                                        <CopyButton text={fingerprint} size={12} className={classes.icon} />
-                                        <Link
-                                            underline="none"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            href={urlcat('https://web3.bio/', { s: publicKey })}
-                                            className={classes.icon}>
-                                            <Icons.LinkOut size={12} />
-                                        </Link>
-                                    </Typography>
+                                {fingerprint && publicKey ? (
+                                    <PersonaPublicKey
+                                        classes={{ text: classes.publicKey, icon: classes.icon }}
+                                        rawPublicKey={fingerprint}
+                                        publicHexString={publicKey}
+                                        iconSize={12}
+                                    />
                                 ) : null}
-                                <Icons.Settings2 size={20} className={classes.settings} />
+                                <Icons.Settings2
+                                    size={20}
+                                    className={classes.settings}
+                                    onClick={() => modalNavigate(PopupModalRoutes.PersonaSettings)}
+                                />
                             </Box>
 
                             <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
