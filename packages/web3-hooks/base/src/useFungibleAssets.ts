@@ -69,6 +69,12 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
         return filteredAssets
             .filter((x) => !isBlockedToken(x))
             .sort((a, z) => {
+                // mask token with position value
+                const aUSD = toZero(a.value?.[CurrencyType.USD])
+                const zUSD = toZero(z.value?.[CurrencyType.USD])
+                // token value
+                if (!aUSD.eq(zUSD)) return zUSD.gt(aUSD) ? 1 : -1
+
                 // the currently selected chain id
                 if (a.chainId !== z.chainId) {
                     if (a.chainId === chainId) return -1
@@ -83,16 +89,10 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
                     if (isNativeTokenZ) return 1
                 }
 
-                // mask token with position value
-                const aUSD = toZero(a.value?.[CurrencyType.USD])
-                const zUSD = toZero(z.value?.[CurrencyType.USD])
                 const isMaskTokenA = isSameAddress(a.address, Others.getMaskTokenAddress(a.chainId))
                 const isMaskTokenZ = isSameAddress(z.address, Others.getMaskTokenAddress(z.chainId))
                 if (aUSD.isPositive() && isMaskTokenA) return -1
                 if (zUSD.isPositive() && isMaskTokenZ) return 1
-
-                // token value
-                if (!aUSD.eq(zUSD)) return zUSD.gt(aUSD) ? 1 : -1
 
                 // token balance
                 const aBalance = leftShift(a.balance, a.decimals)
