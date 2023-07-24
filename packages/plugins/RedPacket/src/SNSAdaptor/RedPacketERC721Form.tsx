@@ -242,7 +242,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const [message, setMessage] = useState('Best Wishes!')
     const wallet = useWallet()
     const { data: nativeTokenDetailed } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
-    const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
+    const { data: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
     const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     const currentIdentity = useCurrentVisitingIdentity()

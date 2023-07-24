@@ -26,6 +26,7 @@ export interface NextIDEnsRecord {
     category: 'ENS'
     chain: string
     id: string
+    uuid: string
 }
 
 export interface NextIDIdentity {

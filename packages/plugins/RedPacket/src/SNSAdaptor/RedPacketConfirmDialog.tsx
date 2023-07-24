@@ -191,7 +191,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     }, [chainId, networkType, contract_version])
 
     const nativeTokenDetailed = useMemo(() => createNativeToken(chainId), [chainId])
-    const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const wallet = useWallet()
     const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
     const { value: params } = useCreateParams(settings!, contract_version, publicKey)

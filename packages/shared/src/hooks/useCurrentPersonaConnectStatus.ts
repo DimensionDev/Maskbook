@@ -26,7 +26,7 @@ const DEFAULT_PERSONA_CONNECT_STATUS: PersonaConnectStatus = {
 export function useCurrentPersonaConnectStatus(
     personas: PersonaInformation[],
     currentPersonaIdentifier?: string,
-    openDashboard?: (route?: DashboardRoutes, search?: string) => Promise<any>,
+    openDashboard?: (route?: DashboardRoutes, search?: string) => void,
     identity?: IdentityResolved,
 ) {
     const t = useSharedI18N()

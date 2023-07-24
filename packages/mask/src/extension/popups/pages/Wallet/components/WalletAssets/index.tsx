@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { EmptyStatus } from '@masknet/shared'
+import { EmptyStatus, RestorableScroll } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, useTabs } from '@masknet/theme'
 import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
@@ -159,15 +159,19 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI(
                     </Button>
                 </Box>
                 <Box className={classes.panels}>
-                    <TabPanel value={WalletAssetTabs.Tokens} className={classes.tabPanel}>
-                        <AssetsList />
-                    </TabPanel>
+                    <RestorableScroll scrollKey="assets" enabled={currentTab === WalletAssetTabs.Tokens}>
+                        <TabPanel value={WalletAssetTabs.Tokens} className={classes.tabPanel}>
+                            <AssetsList />
+                        </TabPanel>
+                    </RestorableScroll>
                     <TabPanel value={WalletAssetTabs.Collectibles} className={classes.tabPanel}>
                         <EmptyStatus height="100%">{t('empty')}</EmptyStatus>
                     </TabPanel>
-                    <TabPanel value={WalletAssetTabs.Activity} className={classes.tabPanel}>
-                        <ActivityList />
-                    </TabPanel>
+                    <RestorableScroll scrollKey="activities" enabled={currentTab === WalletAssetTabs.Activity}>
+                        <TabPanel value={WalletAssetTabs.Activity} className={classes.tabPanel}>
+                            <ActivityList />
+                        </TabPanel>
+                    </RestorableScroll>
                 </Box>
             </TabContext>
         </div>

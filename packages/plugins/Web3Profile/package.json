@@ -4,8 +4,12 @@
     "type": "module",
     "exports": {
         ".": {
-            "mask-src": "./src/index.ts",
-            "default": "./dist/index.js"
+          "mask-src": "./src/index.ts",
+          "default": "./dist/index.js"
+        },
+        "./register": {
+          "mask-src": "./src/register.ts",
+          "default": "./dist/register.js"
         }
     },
     "dependencies": {

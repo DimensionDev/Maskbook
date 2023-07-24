@@ -83,7 +83,7 @@ const useStyles = makeStyles<{
 })
 
 interface ApplicationBoardContentProps {
-    openDashboard?: (route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>
+    openDashboard?: (route?: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
     currentSNSNetwork?: CurrentSNSNetwork
     lastRecognized?: IdentityResolved
@@ -286,7 +286,7 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
 ApplicationEntryStatusContext.displayName = 'ApplicationEntryStatusContext'
 
 interface ApplicationEntryStatusProviderProps extends PropsWithChildren<{}> {
-    openDashboard?: (route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>
+    openDashboard?: (route?: DashboardRoutes, search?: string) => void
     lastRecognized?: IdentityResolved
     applicationCurrentStatus?: PersonaAgainstSNSConnectStatus
     personaAgainstSNSConnectStatusLoading: boolean

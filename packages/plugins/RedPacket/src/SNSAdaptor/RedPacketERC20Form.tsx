@@ -125,7 +125,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
 
     // #region select token
     const nativeTokenDetailed = useMemo(() => createNativeToken(chainId), [chainId])
-    const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const [token = nativeTokenDetailed, setToken] = useState<FungibleToken<ChainId, SchemaType> | undefined>(
         origin?.token,
     )

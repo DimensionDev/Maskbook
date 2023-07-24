@@ -4,6 +4,7 @@ import type {
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
     Transaction,
     TransactionParameter,
 } from '@masknet/web3-shared-flow'
@@ -15,6 +16,7 @@ export class FlowHubBaseAPI extends HubBaseAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
     Transaction,
     TransactionParameter,
     GasOption

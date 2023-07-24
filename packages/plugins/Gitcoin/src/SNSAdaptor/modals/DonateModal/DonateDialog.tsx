@@ -155,7 +155,7 @@ export const DonateDialog = memo(({ grant, ...rest }: DonateDialogProps) => {
         setRawAmount('')
     }, [amount, tipAmount, token, donateCallback, t, title])
 
-    const balance = new BigNumber(tokenBalance.value ?? '0')
+    const balance = new BigNumber(tokenBalance.data ?? '0')
     const availableBalance = useMemo(() => {
         if (!isNativeTokenAddress(token?.address)) return balance
         // Add gas padding.
@@ -200,7 +200,7 @@ export const DonateDialog = memo(({ grant, ...rest }: DonateDialogProps) => {
                         token={token}
                         onAmountChange={setRawAmount}
                         onSelectToken={onSelectTokenChipClick}
-                        loadingBalance={tokenBalance.loading}
+                        loadingBalance={tokenBalance.isLoading}
                         className={classes.input}
                     />
                     <div className={classes.row}>

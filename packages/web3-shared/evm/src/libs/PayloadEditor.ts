@@ -1,5 +1,5 @@
 import { first, isUndefined, omitBy } from 'lodash-es'
-import Web3 from 'web3'
+import { AbiCoder } from 'web3-eth-abi'
 import { type AbiItem, hexToNumber, hexToNumberString, toHex } from 'web3-utils'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Wallet, ECKeyIdentifier, Proof, ProofPayload } from '@masknet/shared-base'
@@ -102,7 +102,7 @@ export class PayloadEditor {
                     from: owner,
                     to: getSmartPayConstant(chainId, 'CREATE2_FACTORY_CONTRACT_ADDRESS'),
                     chainId,
-                    data: new Web3().eth.abi.encodeFunctionCall(
+                    data: new AbiCoder().encodeFunctionCall(
                         CREATE2_FACTORY_ABI.find((x) => x.name === 'deploy')! as AbiItem,
                         ['0x', toHex(0)],
                     ),
@@ -121,7 +121,7 @@ export class PayloadEditor {
                     // it's a not-exist address, use the zero address as a placeholder
                     to: ZERO_ADDRESS,
                     chainId,
-                    data: new Web3().eth.abi.encodeFunctionCall(
+                    data: new AbiCoder().encodeFunctionCall(
                         CREATE2_FACTORY_ABI.find((x) => x.name === 'fund')! as AbiItem,
                         [ownerAddress, toHex(nonce)],
                     ),
@@ -250,7 +250,7 @@ export class PayloadEditor {
         return this.payload
     }
 
-    static from<T>(id: number, method: string, params: T[] = [], options?: Options) {
+    static from<T>(id: number, method: EthereumMethodType, params: T[] = [], options?: Options) {
         return new PayloadEditor(
             createJsonRpcPayload(id, {
                 method,
@@ -260,7 +260,7 @@ export class PayloadEditor {
         )
     }
 
-    static fromMethod<T>(method: string, params: T[] = [], options?: Options) {
+    static fromMethod<T>(method: EthereumMethodType, params: T[] = [], options?: Options) {
         return PayloadEditor.from(0, method, params, options)
     }
 

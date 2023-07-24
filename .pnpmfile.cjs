@@ -56,12 +56,6 @@ function assertInstallationSourceValid(parentPackage, dependedPackage, installat
 
     if (dependedPackage === '@typescript/lib-dom' && installationSource.startsWith('npm:@types/web@^')) return
 
-    // !!! There is some relative path installation source in the dependency tree,
-    // !!! but if we do not allow those packages to run install scripts anyway, it might be safe.
-    // !!! If we can resolve 'link:../empty' to something like 'workspaceRoot:/projects/empty', it will be safe to install.
-    if (installationSource === 'link:../empty' || installationSource === 'link:..\\empty') return
-    if (installationSource === '../empty' || installationSource === '..\\empty') return
-
     throw new Error(
         `Unapproved dependency source:
     Package: ${dependedPackage}

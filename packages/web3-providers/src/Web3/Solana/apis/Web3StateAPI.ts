@@ -6,6 +6,7 @@ import type {
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
     Transaction as Web3Transaction,
     TransactionParameter,
     Web3State,
@@ -27,6 +28,7 @@ export class SolanaWeb3StateAPI extends Web3StateAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
     Web3Transaction,
     TransactionParameter
 > {

@@ -1,10 +1,11 @@
+import { AbiCoder } from 'web3-eth-abi'
+import secondsToMilliseconds from 'date-fns/secondsToMilliseconds'
 import { type ChainId, type SchemaType, chainResolver } from '@masknet/web3-shared-evm'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
-import secondsToMilliseconds from 'date-fns/secondsToMilliseconds'
-import type { RedPacketBaseAPI } from '../entry-types.js'
-import type { RedPacketJSONPayloadFromChain } from './types.js'
 import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
+import type { RedPacketJSONPayloadFromChain } from './types.js'
 import { CREATE_LUCKY_DROP_TOPIC } from './constants.js'
+import type { RedPacketBaseAPI } from '../entry-types.js'
 
 const creationSuccessTopicInputs = REDPACKET_ABI.find((x) => x.name === 'CreationSuccess')?.inputs!
 
@@ -21,9 +22,7 @@ export class ContractRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, 
     ): Promise<RedPacketJSONPayloadFromChain[] | undefined> {
         if (!senderAddress || !contractAddress || !fromBlock || !toBlock || !methodId) return
 
-        const web3 = this.Web3.getWeb3({ chainId })
-
-        const logs = await web3.eth.getPastLogs({
+        const logs = await this.Web3.getWeb3({ chainId }).eth.getPastLogs({
             topics: [CREATE_LUCKY_DROP_TOPIC],
             address: contractAddress,
             fromBlock,
@@ -31,7 +30,7 @@ export class ContractRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, 
         })
 
         return logs.map((log) => {
-            const result = web3.eth.abi.decodeLog(creationSuccessTopicInputs, log.data, [
+            const result = new AbiCoder().decodeLog(creationSuccessTopicInputs, log.data, [
                 CREATE_LUCKY_DROP_TOPIC,
             ]) as unknown as {
                 creation_time: string // 10

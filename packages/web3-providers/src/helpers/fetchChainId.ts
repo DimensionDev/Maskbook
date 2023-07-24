@@ -1,19 +1,14 @@
-import type { JsonRpcResponse } from 'web3-core-helpers'
 import { EthereumMethodType, createJsonRpcPayload } from '@masknet/web3-shared-evm'
-import { fetchJSON } from './fetchJSON.js'
+import { fetchJsonRpcResponse } from './fetchJsonRpcResponse.js'
 
-export async function fetchChainId(rpc: string) {
-    const { result } = await fetchJSON<JsonRpcResponse>(rpc, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(
-            createJsonRpcPayload(0, {
-                method: EthereumMethodType.ETH_CHAIN_ID,
-                params: [],
-            }),
-        ),
-    })
+export async function fetchChainId(url: string, init?: RequestInit) {
+    const { result } = await fetchJsonRpcResponse(
+        url,
+        createJsonRpcPayload(0, {
+            method: EthereumMethodType.ETH_CHAIN_ID,
+            params: [],
+        }),
+        init,
+    )
     return Number.parseInt(result, 16)
 }

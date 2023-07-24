@@ -1,6 +1,5 @@
 import { first } from 'lodash-es'
 import { toHex } from 'web3-utils'
-import type { RequestArguments } from 'web3-core'
 import { defer } from '@masknet/kit'
 import { Flags } from '@masknet/flags'
 import WalletConnect from '@walletconnect/client'
@@ -11,6 +10,7 @@ import {
     EthereumMethodType,
     isValidAddress,
     ProviderType,
+    type RequestArguments,
     type Web3Provider,
     type Web3,
     isValidChainId,

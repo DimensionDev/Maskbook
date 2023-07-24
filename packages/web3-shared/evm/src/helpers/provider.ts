@@ -1,7 +1,7 @@
 import Web3 from 'web3'
-import type { provider as Provider, RequestArguments as Web3RequestArguments } from 'web3-core'
+import type { provider as Provider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import type { EthereumMethodType, Web3Provider } from '../types/index.js'
+import type { EthereumMethodType, RequestArguments, Web3Provider } from '../types/index.js'
 
 export function createWeb3(provider: Provider) {
     const web3 = new Web3(provider)
@@ -11,10 +11,6 @@ export function createWeb3(provider: Provider) {
     // disable the default polling strategy
     web3.eth.transactionPollingInterval = Number.MAX_SAFE_INTEGER
     return web3
-}
-
-interface RequestArguments extends Web3RequestArguments {
-    method: LiteralUnion<EthereumMethodType, string>
 }
 
 export function createJsonRpcPayload(id: number, requestArguments: RequestArguments): JsonRpcPayload {
@@ -71,8 +67,8 @@ export function createWeb3Provider(request: <T>(requestArguments: RequestArgumen
         ) => {
             try {
                 const result = await request({
-                    method: payload.method,
-                    params: payload.params,
+                    method: payload.method as EthereumMethodType,
+                    params: payload.params ?? [],
                 })
                 callback(null, createJsonRpcResponse(payload.id as number, result))
                 return createJsonRpcResponse(payload.id as number, result)

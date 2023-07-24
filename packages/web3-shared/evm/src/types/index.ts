@@ -1,9 +1,5 @@
 import type EVM_Web3 from 'web3'
-import type {
-    RequestArguments,
-    Transaction as Web3Transaction,
-    TransactionReceipt as Web3TransactionReceipt,
-} from 'web3-core'
+import type { Transaction as Web3Transaction, TransactionReceipt as Web3TransactionReceipt } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types.js'
 import type { Web3UI as Web3UIShared, Web3State as Web3StateShared } from '@masknet/web3-shared-base'
@@ -254,7 +250,14 @@ export interface Block {
     hash: string
     nonce: string
     timestamp: string
+    baseFeePerGas?: number
 }
+
+export interface RequestArguments {
+    method: EthereumMethodType
+    params: any[]
+}
+
 export interface Transaction {
     from?: string
     to?: string
@@ -312,6 +315,7 @@ export type Web3State = Web3StateShared<
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
     Transaction,
     TransactionParameter
 >
@@ -325,6 +329,7 @@ export type Web3Definition = {
     Signature: Signature
     GasOption: GasOption
     Block: Block
+    RequestArguments: RequestArguments
     Operation: UserOperation
     Transaction: Transaction
     TransactionReceipt: TransactionReceipt

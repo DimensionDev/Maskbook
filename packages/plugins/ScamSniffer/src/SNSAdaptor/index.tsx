@@ -36,7 +36,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             id: id ? id.postID : undefined,
             nickname,
             userId: author?.userId,
-            links,
+            links: [...links],
             content: message.some ? message.val : null,
         }
         const [scamProject, setScamProject] = useState<ScamResult | null>(null)

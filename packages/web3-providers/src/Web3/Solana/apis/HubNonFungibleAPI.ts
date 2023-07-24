@@ -7,6 +7,7 @@ import type {
     NetworkType,
     Transaction,
     TransactionParameter,
+    RequestArguments,
 } from '@masknet/web3-shared-solana'
 import { SourceType } from '@masknet/web3-shared-base'
 import { HubNonFungibleAPI_Base } from '../../Base/apis/HubNonFungibleAPI.js'
@@ -18,6 +19,7 @@ export class SolanaHubNonFungibleAPI extends HubNonFungibleAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
     Transaction,
     TransactionParameter
 > {

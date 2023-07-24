@@ -14,6 +14,11 @@ export const resolveNextIDPlatformIcon = createLookupTableResolver<NextIDPlatfor
         [NextIDPlatform.REDDIT]: Icons.RedditRound,
         [NextIDPlatform.SYBIL]: null,
         [NextIDPlatform.EthLeaderboard]: null,
+        [NextIDPlatform.SpaceId]: null,
+        [NextIDPlatform.Farcaster]: null,
+        [NextIDPlatform.Bit]: null,
+        [NextIDPlatform.Unstoppable]: null,
+        [NextIDPlatform.CyberConnect]: null,
     },
     null,
 )
