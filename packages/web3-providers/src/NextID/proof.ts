@@ -387,6 +387,38 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         )
     }
 
+    async queryProfilesByPublicKey(publicKey: string) {
+        const { data } = await fetchJSON<{
+            data: {
+                identity: {
+                    nft: NextIDEnsRecord[]
+                    neighborWithTraversal: NeighborList
+                }
+            }
+        }>(
+            RELATION_SERVICE_URL,
+            {
+                method: 'POST',
+                mode: 'cors',
+                body: JSON.stringify({
+                    operationName: 'GET_PROFILES_QUERY',
+                    variables: { platform: 'nextid', identity: publicKey.toLowerCase() },
+                    query: `
+                    query GET_PROFILES_QUERY($platform: String, $identity: String) {
+                       ${relationServiceIdentityQuery}
+                      }
+                `,
+                }),
+            },
+            { enableSquash: true },
+        )
+
+        const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal, data.identity.nft)
+        return uniqWith(bindings, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
+            (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
+        )
+    }
+
     async queryProfilesByTwitterId(twitterId: string) {
         const { data } = await fetchJSON<{
             data: {

@@ -5,6 +5,7 @@ import { Box, Typography, Link, useTheme } from '@mui/material'
 import { formatPersonaFingerprint } from '@masknet/shared-base'
 import { CopyButton } from '@masknet/shared'
 import urlcat from 'urlcat'
+import type { FriendsInformation } from '../../../hook/useFriends.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -42,16 +43,21 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const ContactCard = memo(() => {
+interface ContactCardProps {
+    friend: FriendsInformation
+}
+
+export const ContactCard = memo<ContactCardProps>(({ friend }) => {
     const theme = useTheme()
     const { classes } = useStyles()
+    const { id, avatar, profiles, linkedPersona } = friend
     return (
         <Box className={classes.card}>
             <Box className={classes.title}>
                 <div className={classes.avatar} />
                 <Box>
                     <Typography fontSize={14} fontWeight={700} lineHeight="18px">
-                        AlYBpHJilaR6...ZMHam6IZE
+                        {linkedPersona ? formatPersonaFingerprint(linkedPersona.rawPublicKey, 4) : null}
                     </Typography>
                     <Typography
                         fontSize={12}
@@ -60,13 +66,13 @@ export const ContactCard = memo(() => {
                         display="flex"
                         alignItems="center"
                         columnGap="2px">
-                        {formatPersonaFingerprint('0xd8d8d8d8d8d8d8d8d88888888', 4)}
-                        <CopyButton text={'0xd8d8d8d8d8d8d8d8d88888888'} size={12} className={classes.icon} />
+                        {formatPersonaFingerprint(id, 4)}
+                        <CopyButton text={id} size={12} className={classes.icon} />
                         <Link
                             underline="none"
                             target="_blank"
                             rel="noopener noreferrer"
-                            href={urlcat('https://web3.bio/', { s: '0xd8d8d8d8d8d8d8d8d88888888' })}
+                            href={urlcat('https://web3.bio/', { s: id })}
                             className={classes.icon}>
                             <Icons.LinkOut size={12} />
                         </Link>
