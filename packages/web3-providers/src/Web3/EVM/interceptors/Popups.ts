@@ -10,6 +10,7 @@ import {
     PayloadEditor,
     EthereumMethodType,
     ProviderType,
+    createJsonRpcPayload,
 } from '@masknet/web3-shared-evm'
 import { ExtensionSite, getSiteType, isEnhanceableSiteType } from '@masknet/shared-base'
 import { isGreaterThan, isZero, toFixed } from '@masknet/web3-shared-base'
@@ -19,6 +20,7 @@ import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
 import { ContractReadonlyAPI } from '../apis/ContractReadonlyAPI.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { Providers } from '../providers/index.js'
+import { Web3StateRef } from '../apis/Web3StateAPI.js'
 
 const DEFAULT_PAYMENT_TOKEN_STATE = {
     allowMaskAsGas: false,
@@ -100,6 +102,7 @@ export class Popups implements Middleware<ConnectionContext> {
         // Draw the Popups up and wait for user confirmation before publishing risky requests on the network
         if (context.risky && context.writeable) {
             const currentChainId = await this.Web3.getChainId()
+
             if (context.method === EthereumMethodType.ETH_SEND_TRANSACTION && currentChainId !== context.chainId) {
                 await Providers[ProviderType.MaskWallet].switchChain(context.chainId)
             }
@@ -116,7 +119,15 @@ export class Popups implements Middleware<ConnectionContext> {
                 isUndefined,
             )
 
-            const response = await SharedContextRef.value.send(context.request, options)
+            const request = await Web3StateRef.value.Request?.applyAndWaitRequest({
+                arguments: context.requestArguments,
+            })
+            if (!request) {
+                context.abort('Failed to approve request.')
+                return
+            }
+
+            const response = await SharedContextRef.value.send(createJsonRpcPayload(0, request.arguments), options)
             const editor = ErrorEditor.from(null, response)
 
             if (editor.presence) {

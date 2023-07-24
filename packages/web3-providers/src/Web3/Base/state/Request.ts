@@ -45,34 +45,35 @@ export class RequestState<Arguments> implements Web3RequestState<Arguments> {
         return true
     }
 
-    async applyRequest<T>(request: TransferableRequest<Arguments>): Promise<string> {
+    async applyRequest<T>(request: TransferableRequest<Arguments>): Promise<ReasonableRequest<Arguments>> {
         await this.validateRequest(request)
 
         const ID = uuid()
         const now = new Date()
+        const request_ = {
+            ...request,
+            ID,
+            state: RequestStateType.NOT_DEPEND,
+            createdAt: now,
+            updatedAt: now,
+        }
 
         await this.storage.requests.setValue({
             ...this.storage.requests.value,
-            [ID]: {
-                ...request,
-                ID,
-                state: RequestStateType.NOT_DEPEND,
-                createdAt: now,
-                updatedAt: now,
-            },
+            [ID]: request_,
         })
 
-        return ID
+        return request_
     }
 
-    async applyAndWaitRequest(request: TransferableRequest<Arguments>): Promise<void> {
-        const ID = await this.applyRequest(request)
+    async applyAndWaitRequest(request: TransferableRequest<Arguments>): Promise<ReasonableRequest<Arguments>> {
+        const { ID } = await this.applyRequest(request)
 
         return new Promise((resolve, reject) => {
             const unsubscribe = this.requests?.subscribe(() => {
                 this.requests?.getCurrentValue().forEach((request) => {
                     if (ID !== request.ID || request.state === RequestStateType.NOT_DEPEND) return
-                    if (request.state === RequestStateType.APPROVED) resolve()
+                    if (request.state === RequestStateType.APPROVED) resolve(request)
                     else reject(new Error('User rejected the request.'))
                     unsubscribe?.()
                 })
