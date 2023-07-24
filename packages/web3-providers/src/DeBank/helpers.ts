@@ -31,7 +31,7 @@ export function formatAssets(data: WalletTokenRecord[]): Array<FungibleAsset<Cha
     const supportedChains = Object.values({ ...DeBank.CHAIN_ID, BSC: 'bnb' }).filter(Boolean)
 
     return data
-        .filter((x) => chainResolver.chainId(x.chain))
+        .filter((x) => chainResolver.chainId(x.chain) && supportedChains.includes(x.chain))
         .map((x) => {
             const chainId = chainResolver.chainId(x.chain)!
             const address = supportedChains.includes(x.id) ? createNativeToken(chainId).address : x.id
