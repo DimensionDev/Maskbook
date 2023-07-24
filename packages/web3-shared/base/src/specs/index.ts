@@ -220,7 +220,7 @@ export type TransferableNetwork<ChainId, SchemaType, NetworkType> = Omit<
 
 export interface RequestDescriptor<Arguments, Options> {
     ID: string
-    state?: RequestStateType
+    state: RequestStateType
     arguments: Arguments
     options?: Options
 }

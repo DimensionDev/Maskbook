@@ -13,7 +13,7 @@ import {
     createJsonRpcPayload,
 } from '@masknet/web3-shared-evm'
 import { ExtensionSite, getSiteType, isEnhanceableSiteType } from '@masknet/shared-base'
-import { isGreaterThan, isZero, toFixed } from '@masknet/web3-shared-base'
+import { RequestStateType, isGreaterThan, isZero, toFixed } from '@masknet/web3-shared-base'
 import { SharedContextRef } from '../../../PluginContext/index.js'
 import { SmartPayBundlerAPI } from '../../../SmartPay/index.js'
 import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
@@ -109,6 +109,7 @@ export class Popups implements Middleware<ConnectionContext> {
 
             const paymentToken = await this.getPaymentToken(context)
             const request = await Web3StateRef.value.Request?.applyAndWaitRequest({
+                state: RequestStateType.NOT_DEPEND,
                 arguments: context.requestArguments,
                 options: {
                     ...paymentToken,
