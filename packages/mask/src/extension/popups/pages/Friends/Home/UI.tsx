@@ -21,12 +21,15 @@ export interface FriendsHomeUIProps {
 
 export const FriendsHomeUI = memo<FriendsHomeUIProps>(({ friends }) => {
     const { classes } = useStyles()
+    {
+        console.log(friends)
+    }
     return (
         <div className={classes.container}>
             <Box display="flex" flexDirection="column" gap="12px" padding="16px">
-                {friends.map((friend) => (
-                    <ContactCard key={friend.id} friend={friend} />
-                ))}
+                {friends.map((friend) => {
+                    return <ContactCard key={friend.id} friend={friend} />
+                })}
             </Box>
         </div>
     )

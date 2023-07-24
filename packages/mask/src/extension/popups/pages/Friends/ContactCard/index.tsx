@@ -25,22 +25,29 @@ const useStyles = makeStyles()((theme) => ({
         borderTopLeftRadius: '6px',
         borderTopRightRadius: '6px',
     },
-    avatar: {
-        width: '36px',
-        height: '36px',
-        borderRadius: '50%',
-        background: theme.palette.maskColor.main,
-    },
     icon: {
         width: 12,
         height: 12,
         fontSize: 12,
         color: theme.palette.maskColor.second,
     },
+    iconBlack: {
+        color: theme.palette.maskColor.main,
+        display: 'flex',
+        alignItems: 'center',
+    },
     connectedAccounts: {
         borderBottomLeftRadius: '6px',
         borderBottomRightRadius: '6px',
         background: theme.palette.maskColor.white,
+        padding: '8px',
+    },
+    userId: {
+        display: 'flex',
+        fontSize: '14px',
+        fontStyle: 'normal',
+        fontWeight: 700,
+        lineHeight: '18px',
     },
 }))
 
@@ -51,7 +58,7 @@ interface ContactCardProps {
 export const ContactCard = memo<ContactCardProps>(({ friend }) => {
     const theme = useTheme()
     const { classes } = useStyles()
-    const { id, avatar, profiles, linkedPersona } = friend
+    const { id, avatar, profiles, linkedPersona, identifier } = friend
     return (
         <Box className={classes.card}>
             <Box className={classes.title}>
@@ -81,7 +88,20 @@ export const ContactCard = memo<ContactCardProps>(({ friend }) => {
                 </Box>
             </Box>
             <Box display="flex" alignItems="center" height="58px" className={classes.connectedAccounts}>
-                {' '}
+                <Box width="156px" padding="4px" display="flex" gap="10px" alignItems="center">
+                    <AccountAvatar avatar={avatar} network={identifier.network} isValid />
+                    <Box className={classes.userId}>
+                        {`@${identifier.userId}`}
+                        <Link
+                            underline="none"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href={`https://twitter.com/${identifier.userId}`}
+                            className={classes.iconBlack}>
+                            <Icons.LinkOut size={16} />
+                        </Link>
+                    </Box>
+                </Box>
             </Box>
         </Box>
     )

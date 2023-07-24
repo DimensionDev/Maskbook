@@ -1,16 +1,15 @@
 import { lazy, memo, Suspense, useEffect } from 'react'
 import { Route, Routes, useSearchParams } from 'react-router-dom'
 import { NetworkPluginID, PopupModalRoutes } from '@masknet/shared-base'
-
+import Services from '../../../service.js'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { useModalNavigate } from '../../components/index.js'
+import { useModalNavigate, NormalHeader } from '../../components/index.js'
 
 const Home = lazy(() => import(/* webpackPreload: true */ './Home/index.js'))
 
 const Contacts = memo(() => {
     const modalNavigate = useModalNavigate()
-
     const [params] = useSearchParams()
     useEffect(() => {
         const from = params.get('from')
@@ -22,6 +21,7 @@ const Contacts = memo(() => {
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
+            <NormalHeader onClose={() => Services.Helper.removePopupWindow()} />
             <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
                 <Routes>
                     <Route path="*" element={<Home />} />

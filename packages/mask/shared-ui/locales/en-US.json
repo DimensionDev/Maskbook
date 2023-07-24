@@ -976,6 +976,7 @@
     "popups_verify_wallet_bind_fail_tips": "Failed to add the wallet, please try again.",
     "popups_verify_wallet_congratulation_tips": "Connecting {{persona}} with {{wallet}} successfully.",
     "popups_switch_Wallet": "Switch Wallet",
+    "popups_encrypted_friends": "Encrypted Friends",
     "nft_wallet_label": "Wallet",
     "plugin_profile_no_wallets": "Connect your wallet here.<br/>This section will be shown to your encrypted friends.<br/>The display content includes digital art, donations, badges<br/>and other public information on chain.",
     "nft_input_address_label": "Please input contract address",

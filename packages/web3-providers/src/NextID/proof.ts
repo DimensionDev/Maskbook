@@ -402,7 +402,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 mode: 'cors',
                 body: JSON.stringify({
                     operationName: 'GET_PROFILES_QUERY',
-                    variables: { platform: 'nextid', identity: publicKey.toLowerCase() },
+                    variables: { platform: 'nextid', identity: publicKey },
                     query: `
                     query GET_PROFILES_QUERY($platform: String, $identity: String) {
                        ${relationServiceIdentityQuery}

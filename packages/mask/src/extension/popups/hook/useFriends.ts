@@ -22,15 +22,23 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
             1000,
         )
         if (values.length === 0) return EMPTY_LIST
-
         const identifiers = values.map((x) => x.profile)
         const res = await Services.Identity.queryProfilesInformation(identifiers)
         const friends = res.filter((item) => item.linkedPersona !== undefined)
         const profiles: FriendsInformation[] = []
+        const promiseArray: Array<Promise<BindingProof[]>> = []
         friends.forEach(async (item) => {
             const id = (item.linkedPersona as ECKeyIdentifier).publicKeyAsHex
-            const res = await NextIDProof.queryProfilesByPublicKey(id)
-            profiles.push({ ...item, profiles: res, id })
+            promiseArray.push(NextIDProof.queryProfilesByPublicKey(id))
+        })
+        const results = await Promise.allSettled(promiseArray)
+        results.forEach((item, index) => {
+            if (item.status !== 'rejected')
+                profiles.push({
+                    profiles: item.value,
+                    ...friends[index],
+                    id: (friends[index].linkedPersona as ECKeyIdentifier).publicKeyAsHex,
+                })
         })
         return new Promise((resolve) => {
             resolve(profiles)
