@@ -1,10 +1,10 @@
+import urlcat from 'urlcat'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { Transaction } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import urlcat from 'urlcat'
-import { fetchCachedJSON } from '../entry-helpers.js'
 import { CHAINBASE_API_URL } from './constants.js'
 import type { Tx } from './types.js'
+import { fetchCachedJSON } from '../entry-helpers.js'
 
 export async function fetchFromChainbase<T>(pathname: string) {
     const data = await fetchCachedJSON<

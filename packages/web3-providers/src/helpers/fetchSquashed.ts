@@ -15,18 +15,25 @@ function __fetch__(key: string, expiration: number, request: Request, init?: Req
     const responsePromise = next(request, init)
 
     // setup cache for merging subsequent requests
-    CACHE.set(key, {
-        timestamp: Date.now(),
-        response: responsePromise,
-    })
+    if (key) {
+        CACHE.set(key, {
+            timestamp: Date.now(),
+            response: responsePromise,
+        })
+    }
 
     return responsePromise.then((x) => x.clone())
+}
+
+async function defaultResolver(request: Request) {
+    return `${request.method} ${request.url} ${request.method === 'POST' ? await request.text() : 'NULL'}`
 }
 
 export async function fetchSquashed(
     input: RequestInfo | URL,
     init?: RequestInit,
     next = originalFetch,
+    resolver = defaultResolver,
     expiration = 600,
 ): Promise<Response> {
     // why: the caches doesn't define in test env
@@ -41,6 +48,6 @@ export async function fetchSquashed(
     const url = request.url
     if (!url.startsWith('http')) return next(request, init)
 
-    const key = `${request.method} ${request.url} ${request.method === 'POST' ? await request.text() : 'NULL'}`
+    const key = await resolver(request)
     return __fetch__(key, expiration, request, init, next)
 }
