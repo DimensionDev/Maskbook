@@ -18,7 +18,7 @@ import { useVerifiedWallets } from '../../../hook/useVerifiedWallets.js'
 import Services from '../../../../service.js'
 import { Web3, Web3Storage } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { PERSONA_AVATAR_DB_NAMESPACE } from '../../../constants.js'
+import { MAX_FILE_SIZE, PERSONA_AVATAR_DB_NAMESPACE } from '../../../constants.js'
 import type { PersonaAvatarData } from '../type.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -112,12 +112,20 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
 
     const inputRef = useRef<HTMLInputElement>(null)
     const [file, setFile] = useState<File | string | null>()
-    // const [editor, setEditor] = useState<AvatarEditor | null>(null)
+
     const [scale, setScale] = useState(1)
+
+    const handleSetFile = useCallback((file: File) => {
+        if (file.size > MAX_FILE_SIZE) {
+            showSnackbar(t('popups_set_avatar_failed'), { variant: 'error' })
+            return
+        }
+        setFile(file)
+    }, [])
 
     const [bound] = useDropArea({
         onFiles(files) {
-            setFile(files[0])
+            handleSetFile(files[0])
         },
     })
 
@@ -253,7 +261,8 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
                                         accept="image/png, image/jpeg"
                                         ref={inputRef}
                                         onChange={({ currentTarget }: React.ChangeEvent<HTMLInputElement>) => {
-                                            if (currentTarget.files) setFile(currentTarget.files.item(0))
+                                            if (!currentTarget.files) return
+                                            handleSetFile(currentTarget.files[0])
                                         }}
                                     />
                                     <Box className={classes.uploadIcon}>

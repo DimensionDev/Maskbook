@@ -65,8 +65,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     edit: {
         position: 'absolute',
-        bottom: 6,
-        right: 6,
+        bottom: 0,
+        right: 0,
         background: theme.palette.maskColor.bottom,
         borderRadius: 99,
         width: 18,
