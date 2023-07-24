@@ -1,24 +1,21 @@
 import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
 import { ElementAnchor, EmptyStatus, Image, NetworkIcon, RetryHint, isSameNFT } from '@masknet/shared'
-import { EMPTY_OBJECT, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_OBJECT } from '@masknet/shared-base'
 import { LoadingBase, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
-import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import { Box, Button, Typography, styled } from '@mui/material'
 import type { BoxProps } from '@mui/system'
-import { range, sortBy } from 'lodash-es'
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { range } from 'lodash-es'
+import { memo, useCallback, useEffect, useRef } from 'react'
 import { useSharedI18N } from '../../../locales/i18n_generated.js'
 import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
 import { Collection, CollectionSkeleton, LazyCollection, type CollectionProps } from './Collection.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
-import { useUserAssets } from './UserAssetsContext.js'
+import { useUserAssets } from './AssetsProvider.js'
 import type { CollectibleGridProps } from './types.js'
-import { useCollections } from './useCollections.js'
+import { CollectionsContext } from './CollectionsProvider.js'
+import { useChainRuntime } from './ChainRuntimeProvider.js'
 
 const AllButton = styled(Button)(({ theme }) => ({
     display: 'inline-block',
@@ -129,27 +126,9 @@ const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap 
     }
 })
 
-const SimpleHashSupportedChains: Record<NetworkPluginID, number[]> = {
-    [NetworkPluginID.PLUGIN_EVM]: [
-        ChainId.Mainnet,
-        ChainId.BSC,
-        ChainId.Matic,
-        ChainId.Arbitrum,
-        ChainId.Optimism,
-        ChainId.Avalanche,
-        ChainId.xDai,
-    ],
-    [NetworkPluginID.PLUGIN_SOLANA]: [SolanaChainId.Mainnet],
-    [NetworkPluginID.PLUGIN_FLOW]: [FlowChainId.Mainnet],
-}
-
 export interface CollectionListProps
     extends BoxProps,
         Pick<CollectionProps, 'disableAction' | 'onActionClick' | 'onItemClick'> {
-    account: string
-    pluginID: NetworkPluginID
-    defaultChainId?: Web3Helper.ChainIdAll
-    defaultCollectionId?: string
     gridProps?: CollectibleGridProps
     disableSidebar?: boolean
     disableWindowScroll?: boolean
@@ -164,10 +143,6 @@ export interface CollectionListProps
 
 export const CollectionList = memo(function CollectionList({
     className,
-    account,
-    pluginID,
-    defaultChainId,
-    defaultCollectionId,
     gridProps = EMPTY_OBJECT,
     disableSidebar,
     disableAction,
@@ -184,20 +159,9 @@ export const CollectionList = memo(function CollectionList({
     const t = useSharedI18N()
     const { classes, cx } = useStyles(gridProps)
 
-    const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
-
-    const allNetworks = useNetworkDescriptors(pluginID)
-    const networks = useMemo(() => {
-        const supported = SimpleHashSupportedChains[pluginID]
-        return sortBy(
-            allNetworks.filter((x) => x.isMainnet && supported.includes(x.chainId)),
-            (x) => supported.indexOf(x.chainId),
-        )
-    }, [allNetworks, pluginID])
-
-    const currentChainId = chainId ?? defaultChainId ?? (networks.length === 1 ? networks[0].chainId : chainId)
+    const { pluginID, account, chainId, setChainId, networks } = useChainRuntime()
     const { collections, currentCollection, currentCollectionId, setCurrentCollectionId, loading, error, retry } =
-        useCollections({ pluginID, chainId: currentChainId, account, defaultCollectionId })
+        CollectionsContext.useContainer()
 
     const handleCollectionChange = useCallback(
         (id: string | undefined) => {
@@ -243,7 +207,7 @@ export const CollectionList = memo(function CollectionList({
                         handleCollectionChange(undefined)
                     }}>
                     All
-                    {!currentChainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
+                    {!chainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
                 </AllButton>
             ) : null}
             {networks.map((x) => (
@@ -258,9 +222,7 @@ export const CollectionList = memo(function CollectionList({
                         handleCollectionChange(undefined)
                     }}>
                     <NetworkIcon pluginID={pluginID} chainId={x.chainId} ImageIconProps={{ size: 24 }} />
-                    {currentChainId === x.chainId ? (
-                        <Icons.BorderedSuccess className={classes.indicator} size={12} />
-                    ) : null}
+                    {chainId === x.chainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
                 </Button>
             ))}
         </div>
