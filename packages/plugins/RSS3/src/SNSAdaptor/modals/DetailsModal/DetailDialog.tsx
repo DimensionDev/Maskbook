@@ -10,6 +10,7 @@ import { FeedCard } from '../../components/index.js'
 import { ScopedDomainsContainer, useReverseAddress } from '@masknet/web3-hooks-base'
 import { FeedOwnerContext, type FeedOwnerOptions } from '../../contexts/index.js'
 import { Others } from '@masknet/web3-providers'
+import { parseURL } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     detailsDialog: {
@@ -99,14 +100,10 @@ export function FeedDetailsDialog({ type, feed, onClose, actionIndex, ...rest }:
                         {links?.length ? (
                             <div className={classes.links}>
                                 {links.map((link, index) => {
-                                    let host = ''
-                                    try {
-                                        const url = new URL(link)
-                                        if (!['http:', 'https:'].includes(url.protocol)) return null
-                                        host = url.host
-                                    } catch {}
-                                    const Icon = hostIconMap[host] ?? Icons.SettingsLanguage
-                                    const name = hostNameMap[host] ?? host
+                                    const url = parseURL(link)
+                                    if (!url || !['http:', 'https:'].includes(url.protocol)) return null
+                                    const Icon = hostIconMap[url.host] ?? Icons.SettingsLanguage
+                                    const name = hostNameMap[url.host] ?? url.host
                                     return (
                                         <Linking key={index} LinkProps={{ className: classes.link }} href={link}>
                                             <Icon size={24} />
