@@ -217,7 +217,7 @@ export namespace Plugin.Shared {
         send(payload: JsonRpcPayload, options?: TransactionOptions): Promise<JsonRpcResponse>
 
         /**
-         * @deprecated Use `Network` state stead
+         * @deprecated Use `Request` state stead
          * Confirm a request
          */
         confirmRequest(
@@ -226,7 +226,7 @@ export namespace Plugin.Shared {
         ): Promise<JsonRpcResponse | void>
 
         /**
-         * @deprecated Use `Network` state stead
+         * @deprecated Use `Request` state stead
          * Reject a request
          */
         rejectRequest(payload: JsonRpcPayload): Promise<void>
