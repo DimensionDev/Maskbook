@@ -5,7 +5,7 @@ import { makeStyles, useTabs } from '@masknet/theme'
 import { useAccount, useWallet } from '@masknet/web3-hooks-base'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab, styled, tabClasses, tabsClasses } from '@mui/material'
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useMount } from 'react-use'
 import { useContainer } from 'unstated-next'
@@ -152,6 +152,9 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI(
             { replace: true },
         )
     }, [])
+
+    const scrollTargetRef = useRef<HTMLDivElement>(null)
+
     return (
         <div className={classes.content}>
             <TabContext value={currentTab}>
@@ -194,24 +197,23 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI(
                     account={account}
                     defaultCollectionId={params.get(SEARCH_KEY) || undefined}>
                     <Box className={classes.panels}>
-                        <RestorableScroll scrollKey="assets" enabled={currentTab === WalletAssetTabs.Tokens}>
+                        <RestorableScroll scrollKey="assets">
                             <TabPanel value={WalletAssetTabs.Tokens} className={classes.tabPanel}>
                                 <AssetsList />
                             </TabPanel>
                         </RestorableScroll>
-                        <RestorableScroll
-                            scrollKey="collectibles"
-                            enabled={currentTab === WalletAssetTabs.Collectibles}>
-                            <TabPanel value={WalletAssetTabs.Collectibles} className={classes.tabPanel}>
+                        <TabPanel value={WalletAssetTabs.Collectibles} className={classes.tabPanel}>
+                            <RestorableScroll scrollKey="collectibles" targetRef={scrollTargetRef}>
                                 <CollectionList
                                     gridProps={gridProps}
                                     disableSidebar
+                                    scrollElementRef={scrollTargetRef}
                                     onItemClick={handleItemClick}
                                     onCollectionChange={handleCollectionChange}
                                 />
-                            </TabPanel>
-                        </RestorableScroll>
-                        <RestorableScroll scrollKey="activities" enabled={currentTab === WalletAssetTabs.Activity}>
+                            </RestorableScroll>
+                        </TabPanel>
+                        <RestorableScroll scrollKey="activities">
                             <TabPanel value={WalletAssetTabs.Activity} className={classes.tabPanel}>
                                 <ActivityList />
                             </TabPanel>

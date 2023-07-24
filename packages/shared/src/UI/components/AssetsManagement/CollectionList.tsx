@@ -4,10 +4,10 @@ import { ElementAnchor, EmptyStatus, Image, NetworkIcon, RetryHint, isSameNFT } 
 import { EMPTY_OBJECT } from '@masknet/shared-base'
 import { LoadingBase, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { Box, Button, Typography, styled } from '@mui/material'
+import { Box, Button, Typography, styled, useForkRef } from '@mui/material'
 import type { BoxProps } from '@mui/system'
 import { range } from 'lodash-es'
-import { memo, useCallback, useEffect, useRef } from 'react'
+import { memo, useCallback, useEffect, useRef, type RefObject } from 'react'
 import { useSharedI18N } from '../../../locales/i18n_generated.js'
 import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
 import { Collection, CollectionSkeleton, LazyCollection, type CollectionProps } from './Collection.js'
@@ -137,6 +137,7 @@ export interface CollectionListProps
     additionalAssets?: Web3Helper.NonFungibleAssetAll[]
     /** Pending user customized assets, used to render loading skeletons */
     pendingAdditionalAssetCount?: number
+    scrollElementRef?: RefObject<HTMLElement>
     onChainChange?: (chainId?: Web3Helper.ChainIdAll) => void
     onCollectionChange?: (collectionId: string | undefined) => void
 }
@@ -150,6 +151,7 @@ export const CollectionList = memo(function CollectionList({
     additionalAssets,
     pendingAdditionalAssetCount = 0,
     disableWindowScroll,
+    scrollElementRef,
     onActionClick,
     onItemClick,
     onChainChange,
@@ -230,6 +232,7 @@ export const CollectionList = memo(function CollectionList({
 
     const containerRef = useRef<HTMLDivElement>(null)
     const mainColumnRef = useRef<HTMLDivElement>(null)
+    const forkedMainColumnRef = useForkRef(mainColumnRef, scrollElementRef)
     useEffect(() => {
         if (!currentCollectionId) return
         if (disableWindowScroll) {
@@ -282,7 +285,7 @@ export const CollectionList = memo(function CollectionList({
     return (
         <Box className={cx(classes.container, className)} ref={containerRef} {...rest}>
             <div className={classes.columns}>
-                <div className={classes.main} ref={mainColumnRef}>
+                <div className={classes.main} ref={forkedMainColumnRef}>
                     {currentCollection ? (
                         <div className={classes.currentCollection}>
                             <Box className={classes.info}>
