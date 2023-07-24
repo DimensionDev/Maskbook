@@ -995,7 +995,7 @@
     "popups_backup_password_set_successfully": "Backup password set successfully",
     "popups_export_private_key_tips": "This export is only for exporting private key. We do not export any other data. If you need more data, please go to Settings: <a> Global Backup </a>",
     "popups_log_out_tips": "After logging out, your associated social accounts can no longer decrypt past encrypted messages. If you need to reuse your account, you can recover your account with your identity, private key, local or cloud backup.",
-    "popups_log_out_with_smartpay_tips": "Please note: This Persona {{persona}} is the management account of SmartPay wallet {{addresses}}. You cannot use SmartPay wallet to interact with blockchain after logging out persona.",
+    "popups_log_out_with_smart_pay_tips": "Please note: This Persona {{persona}} is the management account of SmartPay wallet {{addresses}}. You cannot use SmartPay wallet to interact with blockchain after logging out persona.",
     "popups_log_out_successfully": "Logout successfully",
     "popups_log_out_failed": "Logout failed",
     "popups_profile_photo_image": "Image",

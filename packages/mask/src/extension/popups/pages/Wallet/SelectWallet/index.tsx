@@ -44,7 +44,7 @@ const SelectWallet = memo(function SelectWallet() {
     const [params] = useSearchParams()
     const chainIdSearched = params.get('chainId')
     const isVerifyWalletFlow = params.get('verifyWallet')
-    const isSettingNFTAvatrFlow = params.get('setNFTAvatar')
+    const isSettingNFTAvatarFlow = params.get('setNFTAvatar')
 
     const { proofs } = PersonaContext.useContainer()
 
@@ -76,7 +76,7 @@ const SelectWallet = memo(function SelectWallet() {
     }, [isVerifyWalletFlow])
 
     const handleConfirm = useCallback(async () => {
-        if (isVerifyWalletFlow || isSettingNFTAvatrFlow) {
+        if (isVerifyWalletFlow || isSettingNFTAvatarFlow) {
             await Web3.connect({
                 account: selected,
                 chainId,
@@ -84,7 +84,7 @@ const SelectWallet = memo(function SelectWallet() {
             })
 
             navigate(
-                isSettingNFTAvatrFlow
+                isSettingNFTAvatarFlow
                     ? urlcat(PopupRoutes.PersonaAvatarSetting, { tab: ProfilePhotoType.NFT })
                     : PopupRoutes.ConnectWallet,
                 { replace: true },
@@ -106,7 +106,7 @@ const SelectWallet = memo(function SelectWallet() {
                   },
         ])
         return Services.Helper.removePopupWindow()
-    }, [isVerifyWalletFlow, selected, chainId, wallets, smartPayChainId, isSettingNFTAvatrFlow])
+    }, [isVerifyWalletFlow, selected, chainId, wallets, smartPayChainId, isSettingNFTAvatarFlow])
 
     useEffect(() => {
         if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
@@ -119,7 +119,7 @@ const SelectWallet = memo(function SelectWallet() {
             <Box pt="10px" pb={2} px={2} display="flex" flexDirection="column" columnGap={6}>
                 {wallets
                     .filter((x) => {
-                        if (chainId === smartPayChainId && !isVerifyWalletFlow && !isSettingNFTAvatrFlow) return true
+                        if (chainId === smartPayChainId && !isVerifyWalletFlow && !isSettingNFTAvatarFlow) return true
                         return !x.owner
                     })
                     .map((item) => {

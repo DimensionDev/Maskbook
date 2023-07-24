@@ -221,7 +221,7 @@ export const LogoutUI = memo<LogoutUIProps>(
                         {currentPersona && manageWallets.length ? (
                             <Typography mt={2}>
                                 <Trans
-                                    i18nKey="popups_log_out_with_smartpay_tips"
+                                    i18nKey="popups_log_out_with_smart_pay_tips"
                                     values={{
                                         persona: currentPersona.nickname,
                                         addresses: manageWallets
