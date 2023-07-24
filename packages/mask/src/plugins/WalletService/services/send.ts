@@ -1,6 +1,4 @@
-import { isNil } from 'lodash-es'
-import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import { defer } from '@masknet/kit'
+import type { JsonRpcPayload } from 'web3-core-helpers'
 import { ECKeyIdentifier, type SignType } from '@masknet/shared-base'
 import { RequestReadonly, SmartPayAccount, Web3Readonly } from '@masknet/web3-providers'
 import {
@@ -13,19 +11,13 @@ import {
     type TransactionOptions,
     Signer,
 } from '@masknet/web3-shared-evm'
-import { WalletRPC } from '../messages.js'
 import { signWithWallet } from './wallet/index.js'
 import { signWithPersona } from '../../../../background/services/identity/index.js'
-import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper/index.js'
 
 /**
- * Send to built-in RPC endpoints.
+ * The entrance of all RPC requests to MaskWallet.
  */
-async function internalSend(
-    payload: JsonRpcPayload,
-    callback: (error: Error | null, response?: JsonRpcResponse) => void,
-    options?: TransactionOptions,
-): Promise<void> {
+export async function send(payload: JsonRpcPayload, options?: TransactionOptions) {
     const {
         pid = 0,
         from,
@@ -45,73 +37,61 @@ async function internalSend(
     switch (payload.method) {
         case EthereumMethodType.ETH_SEND_TRANSACTION:
         case EthereumMethodType.MASK_REPLACE_TRANSACTION:
+            if (!signableConfig) throw new Error('No transaction to be sent.')
+
             try {
-                if (!signableConfig) throw new Error('No transaction to be sent.')
                 if (owner && paymentToken) {
-                    callback(
-                        null,
-                        createJsonRpcResponse(
-                            pid,
-                            await SmartPayAccount.sendTransaction(chainId, owner, signableConfig, signer, {
-                                paymentToken,
-                            }),
-                        ),
+                    return createJsonRpcResponse(
+                        pid,
+                        await SmartPayAccount.sendTransaction(chainId, owner, signableConfig, signer, {
+                            paymentToken,
+                        }),
                     )
                 } else {
-                    callback(
-                        null,
-                        createJsonRpcResponse(
-                            pid,
-                            await Web3Readonly.sendSignedTransaction(await signer.signTransaction(signableConfig), {
-                                chainId,
-                            }),
-                        ),
+                    return createJsonRpcResponse(
+                        pid,
+                        await Web3Readonly.sendSignedTransaction(await signer.signTransaction(signableConfig), {
+                            chainId,
+                        }),
                     )
                 }
             } catch (error) {
-                callback(ErrorEditor.from(error, null, 'Failed to send transaction.').error)
+                throw ErrorEditor.from(error, null, 'Failed to send transaction.').error
             }
-            break
         case EthereumMethodType.ETH_SIGN:
         case EthereumMethodType.PERSONAL_SIGN:
             try {
                 if (!signableMessage) throw new Error('No message to be signed.')
-                callback(null, createJsonRpcResponse(pid, await signer.signMessage(signableMessage)))
+                return createJsonRpcResponse(pid, await signer.signMessage(signableMessage))
             } catch (error) {
-                callback(ErrorEditor.from(error, null, 'Failed to sign message.').error)
+                throw ErrorEditor.from(error, null, 'Failed to sign message.').error
             }
-            break
         case EthereumMethodType.ETH_SIGN_TYPED_DATA:
             try {
                 if (!signableMessage) throw new Error('No typed data to be signed.')
-                callback(null, createJsonRpcResponse(pid, await signer.signTypedData(signableMessage)))
+                return createJsonRpcResponse(pid, await signer.signTypedData(signableMessage))
             } catch (error) {
-                callback(ErrorEditor.from(error, null, 'Failed to sign typed data.').error)
+                throw ErrorEditor.from(error, null, 'Failed to sign typed data.').error
             }
-            break
         case EthereumMethodType.ETH_SIGN_TRANSACTION:
             try {
                 if (!signableConfig) throw new Error('No transaction to be signed.')
-                callback(null, createJsonRpcResponse(pid, await signer.signTransaction(signableConfig)))
+                return createJsonRpcResponse(pid, await signer.signTransaction(signableConfig))
             } catch (error) {
-                callback(ErrorEditor.from(error, null, 'Failed to sign transaction.').error)
+                throw ErrorEditor.from(error, null, 'Failed to sign transaction.').error
             }
-            break
         case EthereumMethodType.MASK_DEPLOY:
             try {
                 const [owner] = payload.params as [string]
                 if (!isValidAddress(owner)) throw new Error('Invalid sender address.')
-                callback(null, createJsonRpcResponse(pid, await SmartPayAccount.deploy(chainId, owner, signer)))
+                return createJsonRpcResponse(pid, await SmartPayAccount.deploy(chainId, owner, signer))
             } catch (error) {
-                callback(ErrorEditor.from(error, null, 'Failed to deploy.').error)
+                throw ErrorEditor.from(error, null, 'Failed to deploy.').error
             }
-            break
         case EthereumMethodType.ETH_DECRYPT:
-            callback(new Error('Method not implemented.'))
-            break
+            throw new Error('Method not implemented.')
         case EthereumMethodType.ETH_GET_ENCRYPTION_PUBLIC_KEY:
-            callback(new Error('Method not implemented.'))
-            break
+            throw new Error('Method not implemented.')
         default:
             try {
                 const result = await RequestReadonly.request(
@@ -123,93 +103,28 @@ async function internalSend(
                         chainId,
                     },
                 )
-                callback(null, createJsonRpcResponse(pid, result))
+                return createJsonRpcResponse(pid, result)
             } catch (error) {
-                if (error instanceof Error) callback(error)
-                else callback(new Error('Failed to send request.'))
+                throw error instanceof Error ? error : new Error('Failed to send request.')
             }
-            break
     }
 }
 
-const UNCONFIRMED_CALLBACK_MAP = new Map<number, (error: Error | null, response?: JsonRpcResponse) => void>()
-
-let id = 0
+/**
+ * @deprecated Use `Request state` stead
+ * @param payload
+ * @param options
+ * @returns
+ */
+export async function confirmRequest(payload: JsonRpcPayload, options?: TransactionOptions) {
+    throw new Error('Use Request State stead.')
+}
 
 /**
- * The entrance of all RPC requests to MaskWallet.
+ * @deprecated Use `Request state` stead
+ * @param payload
+ * @returns
  */
-export async function send(payload: JsonRpcPayload, options?: TransactionOptions) {
-    return new Promise<JsonRpcResponse>(async (resolve, reject) => {
-        const callback = (error: Error | null, response?: JsonRpcResponse) => {
-            if (!isNil(error) || !isNil(response?.error)) {
-                reject(ErrorEditor.from(error, response).error)
-            } else if (response) resolve(response)
-        }
-
-        id += 1
-
-        const editor = PayloadEditor.fromPayload(
-            {
-                ...payload,
-                id,
-            },
-            options,
-        )
-        if (editor.risky && !options?.silent) {
-            await WalletRPC.pushUnconfirmedRequest({
-                ...editor.fill(),
-                owner: options?.owner,
-                identifier: options?.identifier,
-                paymentToken: options?.paymentToken,
-                allowMaskAsGas: options?.allowMaskAsGas,
-            })
-            UNCONFIRMED_CALLBACK_MAP.set(editor.pid!, callback)
-            if (options?.popupsWindow) openPopupWindow()
-        } else {
-            await internalSend(payload, callback, options)
-        }
-    })
-}
-
-export async function confirmRequest(payload: JsonRpcPayload, options?: TransactionOptions) {
-    const { pid } = PayloadEditor.fromPayload(payload, options)
-    if (!pid) return
-
-    const [deferred, resolve, reject] = defer<JsonRpcResponse, Error>()
-
-    internalSend(
-        payload,
-        async (error, response) => {
-            UNCONFIRMED_CALLBACK_MAP.get(pid)?.(error, response)
-            if (!response) {
-                reject(new Error('No response.'))
-                return
-            }
-            const editor = ErrorEditor.from(error, response)
-            if (editor.presence) {
-                reject(editor.error)
-                return
-            }
-            await WalletRPC.deleteUnconfirmedRequest(payload)
-                .then(() => {
-                    if (!options?.disableClose) removePopupWindow()
-                })
-                .finally(() => {
-                    UNCONFIRMED_CALLBACK_MAP.delete(pid)
-                })
-            resolve(response)
-        },
-        options,
-    )
-    return deferred
-}
-
 export async function rejectRequest(payload: JsonRpcPayload) {
-    const { pid } = PayloadEditor.fromPayload(payload)
-    if (!pid) return
-    UNCONFIRMED_CALLBACK_MAP.get(pid)?.(new Error('User rejected transaction.'))
-    await WalletRPC.deleteUnconfirmedRequest(payload)
-    await removePopupWindow()
-    UNCONFIRMED_CALLBACK_MAP.delete(pid)
+    throw new Error('Use Request State stead.')
 }

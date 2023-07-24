@@ -65,7 +65,7 @@ export class Web3StateAPI extends Web3StateAPI_Base<
             RiskWarning: new RiskWarning(context, {
                 account: Provider_.account,
             }),
-            Request: new Request(),
+            Request: new Request(context),
             Token: new Token(context, {
                 account: Provider_.account,
                 chainId: Provider_.chainId,

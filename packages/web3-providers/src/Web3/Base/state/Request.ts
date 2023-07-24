@@ -9,12 +9,12 @@ import {
 } from '@masknet/web3-shared-base'
 import { type NetworkPluginID, PersistentStorages, type StorageObject, mapSubscription } from '@masknet/shared-base'
 
-export class RequestState<Arguments> implements Web3RequestState<Arguments> {
+export class RequestState<Arguments, Options = unknown> implements Web3RequestState<Arguments, Options> {
     public storage: StorageObject<{
-        requests: Record<string, ReasonableRequest<Arguments>>
+        requests: Record<string, ReasonableRequest<Arguments, Options>>
     }> = null!
 
-    public requests?: Subscription<Array<ReasonableRequest<Arguments>>>
+    public requests?: Subscription<Array<ReasonableRequest<Arguments, Options>>>
 
     ready: boolean = true
     readyPromise: Promise<void> = Promise.resolve()
@@ -41,11 +41,13 @@ export class RequestState<Arguments> implements Web3RequestState<Arguments> {
         return this.storage.requests.value[id]
     }
 
-    protected async validateRequest(request: TransferableRequest<Arguments>) {
+    protected async validateRequest(request: TransferableRequest<Arguments, Options>) {
         return true
     }
 
-    async applyRequest<T>(request: TransferableRequest<Arguments>): Promise<ReasonableRequest<Arguments>> {
+    async applyRequest<T>(
+        request: TransferableRequest<Arguments, Options>,
+    ): Promise<ReasonableRequest<Arguments, Options>> {
         await this.validateRequest(request)
 
         const ID = uuid()
@@ -66,7 +68,9 @@ export class RequestState<Arguments> implements Web3RequestState<Arguments> {
         return request_
     }
 
-    async applyAndWaitRequest(request: TransferableRequest<Arguments>): Promise<ReasonableRequest<Arguments>> {
+    async applyAndWaitRequest(
+        request: TransferableRequest<Arguments, Options>,
+    ): Promise<ReasonableRequest<Arguments, Options>> {
         const { ID } = await this.applyRequest(request)
 
         return new Promise((resolve, reject) => {
@@ -81,7 +85,7 @@ export class RequestState<Arguments> implements Web3RequestState<Arguments> {
         })
     }
 
-    async updateRequest(id: string, updates: Partial<TransferableRequest<Arguments>>): Promise<void> {
+    async updateRequest(id: string, updates: Partial<TransferableRequest<Arguments, Options>>): Promise<void> {
         const request = this.assertNetwork(id)
 
         await this.storage.requests.setValue({

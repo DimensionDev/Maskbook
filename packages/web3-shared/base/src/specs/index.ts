@@ -218,20 +218,21 @@ export type TransferableNetwork<ChainId, SchemaType, NetworkType> = Omit<
     'ID'
 >
 
-export interface RequestDescriptor<Arguments> {
+export interface RequestDescriptor<Arguments, TransactionOptions = unknown> {
     ID: string
-    state: RequestStateType
+    state?: RequestStateType
     arguments: Arguments
+    options?: TransactionOptions
 }
 
-export type Request<Arguments> = RequestDescriptor<Arguments>
+export type Request<Arguments, Options = unknown> = RequestDescriptor<Arguments, Options>
 
-export type ReasonableRequest<Arguments> = Request<Arguments> & {
+export type ReasonableRequest<Arguments, Options = unknown> = Request<Arguments, Options> & {
     createdAt: Date
     updatedAt: Date
 }
 
-export type TransferableRequest<Arguments> = Omit<Request<Arguments>, 'ID'>
+export type TransferableRequest<Arguments, Options = unknown> = Omit<Request<Arguments, Options>, 'ID'>
 
 export interface NetworkDescriptor<ChainId, NetworkType> {
     /** An unique ID for each network */
@@ -1011,15 +1012,15 @@ export interface TokenState<ChainId, SchemaType> extends Startable {
     ): Promise<void>
 }
 
-export interface RequestState<Arguments> extends Startable {
+export interface RequestState<Arguments, Options = unknown> extends Startable {
     /** The tracked requests. */
-    requests?: Subscription<Array<ReasonableRequest<Arguments>>>
+    requests?: Subscription<Array<ReasonableRequest<Arguments, Options>>>
     /** Applies a request. */
-    applyRequest(request: TransferableRequest<Arguments>): Promise<string>
+    applyRequest(request: TransferableRequest<Arguments>): Promise<ReasonableRequest<Arguments, Options>>
     /** Applies a request and waits for confirmation from the user. */
-    applyAndWaitRequest(request: TransferableRequest<Arguments>): Promise<void>
+    applyAndWaitRequest(request: TransferableRequest<Arguments>): Promise<ReasonableRequest<Arguments, Options>>
     /** Updates request with new arguments. */
-    updateRequest(id: string, updates: Partial<TransferableRequest<Arguments>>): Promise<void>
+    updateRequest(id: string, updates: Partial<TransferableRequest<Arguments, Options>>): Promise<void>
     /** Approves a request. */
     approveRequest(id: string): Promise<void>
     /** Rejects a request. */
