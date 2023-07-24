@@ -2,7 +2,7 @@ import { memoize, uniqBy } from 'lodash-es'
 import { memoizePromise } from '@masknet/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { env } from '@masknet/flags'
-import { type FungibleToken, type NonFungibleToken, TokenType, isSameAddress } from '@masknet/web3-shared-base'
+import { type FungibleToken, type NonFungibleToken, TokenType } from '@masknet/web3-shared-base'
 import {
     ChainId,
     SchemaType,
@@ -85,17 +85,12 @@ export class R2D2TokenListAPI implements TokenListAPI.Provider<ChainId, SchemaTy
                     .sort((a, b) => b.weight - a.weight)
                     .flatMap((x) => x.tokens)
 
-                return (
-                    uniqBy(tokens, (x) => x.address.toLowerCase())
-                        .map((token) => {
-                            return {
-                                ...token,
-                                address: formatEthereumAddress(token.address),
-                            }
-                        })
-                        // Todo: remove it, just for testing.
-                        .filter((x) => !isSameAddress(x.address, '0x086373fad3447f7f86252fb59d56107e9e0faafa'))
-                )
+                return uniqBy(tokens, (x) => x.address.toLowerCase()).map((token) => {
+                    return {
+                        ...token,
+                        address: formatEthereumAddress(token.address),
+                    }
+                })
             },
             (urls, chainId) => `${chainId}-${urls.join(',')}`,
         )

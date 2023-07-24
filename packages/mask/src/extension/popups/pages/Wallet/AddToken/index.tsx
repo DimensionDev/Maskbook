@@ -111,7 +111,9 @@ const AddToken = memo(function AddToken() {
     const [currentTab, onChange] = useTabs(TabType.Token, TabType.Token, TabType.NFT)
     const { classes } = useStyles({ currentTab })
 
-    const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>(chainId_ ? Number(chainId_) : ChainId.Mainnet)
+    const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>(
+        chainId_ ? Number.parseInt(chainId_, 10) : ChainId.Mainnet,
+    )
 
     useTitle(t('add_assets'))
 
@@ -167,7 +169,7 @@ const AddToken = memo(function AddToken() {
                             pluginID={NetworkPluginID.PLUGIN_EVM}
                             chainId={chainId}
                             onClose={addCustomNFTs}
-                            onConfirmLoading={loadingAddCustomNFTs}
+                            disabled={loadingAddCustomNFTs}
                             classes={{ grid: classes.grid, form: classes.form, main: classes.nftContent }}
                         />
                     </TabPanel>

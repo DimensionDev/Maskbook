@@ -7,12 +7,13 @@ import { isSameAddress, type NonFungibleTokenContract } from '@masknet/web3-shar
 import { Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { useQueries, useQuery } from '@tanstack/react-query'
-import { compact, isNaN, uniq } from 'lodash-es'
+import { compact, uniq } from 'lodash-es'
 import { memo, useCallback, useMemo, useState, type FormEvent } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { CollectibleItem, CollectibleItemSkeleton } from '../../components/AssetsManagement/CollectibleItem.js'
 import { useSharedI18N } from '../../../locales/index.js'
 import { EmptyStatus, LoadingStatus, ReloadStatus } from '../../components/index.js'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     form: {
@@ -94,7 +95,7 @@ export interface AddCollectiblesProps<T extends NetworkPluginID = NetworkPluginI
             tokenIds: string[],
         ],
     ): void
-    onConfirmLoading?: boolean
+    disabled?: boolean
 }
 
 function isValidTokenIds(rawIds: string) {
@@ -102,13 +103,13 @@ function isValidTokenIds(rawIds: string) {
         const trimmed = v.trim()
         if (!trimmed) return false
         const id = Number.parseInt(trimmed, 10)
-        return isNaN(id) || id <= 0
+        return Number.isNaN(id) || id <= 0
     })
     return !containsInvalidId
 }
 
 export const AddCollectibles = memo(function AddCollectibles(props: AddCollectiblesProps) {
-    const { pluginID, chainId, account: defaultAccount, onClose, onConfirmLoading } = props
+    const { pluginID, chainId, account: defaultAccount, onClose } = props
     const t = useSharedI18N()
     const walletAccount = useAccount()
     const account = defaultAccount || walletAccount
@@ -132,7 +133,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
     const connection = useWeb3Connection(pluginID, { chainId })
 
     const validationMsgForAddress = useMemo(() => {
-        if (address && !Others.isValidAddress?.(address)) return t.collectible_contract_invalid()
+        if (!Others.isValidAddress?.(address ?? '')) return t.collectible_contract_invalid()
         return ''
     }, [address])
 
@@ -147,9 +148,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
     })
 
     const isValid = useMemo(() => {
-        return Boolean(
-            contract?.address && Others.isValidAddress?.(contract?.address) && isValidTokenIds(watchedTokenIds),
-        )
+        return Boolean(Others.isValidAddress?.(contract?.address ?? '') && isValidTokenIds(watchedTokenIds))
     }, [contract?.address, watchedTokenIds])
 
     const assetsQueries = useQueries({
@@ -180,19 +179,19 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                     : [...ids, asset.tokenId]
                 return {
                     ...idsMap,
-                    [address]: newIds,
+                    [formatEthereumAddress(address)]: newIds,
                 }
             })
         },
         [address],
     )
 
-    const handleAdd = useCallback(() => {
+    const handleClose = useCallback(() => {
         if (!contract) return
         onClose([contract, selectedTokenIds])
     }, [contract, selectedTokenIds, onClose])
 
-    const disabled = !selectedTokenIds.length || isLoadingContract || isValidating || onConfirmLoading
+    const disabled = !selectedTokenIds.length || isLoadingContract || isValidating || props.disabled
 
     return (
         <form className={classes.form} onSubmit={handleFormSubmit}>
@@ -263,25 +262,27 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                     <EmptyStatus height="100%">{t.no_results()}</EmptyStatus>
                 ) : (
                     <Box className={classes.grid}>
-                        {assetsQueries.map(({ data: asset, isLoading }, i) => {
-                            if (isLoading) return <CollectibleItemSkeleton key={i} />
-                            if (!asset) return null
-                            const isMine = isSameAddress(account, asset.owner?.address)
-                            return (
-                                <CollectibleItem
-                                    key={`${asset.chainId}.${asset.address}.${asset.tokenId}`}
-                                    className={isMine ? undefined : classes.notMine}
-                                    asset={asset}
-                                    pluginID={pluginID}
-                                    disableName
-                                    actionLabel={t.send()}
-                                    disableAction
-                                    onItemClick={isMine ? toggleSelect : undefined}
-                                    indicatorIcon={Icons.Checkbox}
-                                    isSelected={selectedTokenIds.includes(asset.tokenId)}
-                                />
-                            )
-                        })}
+                        {assetsQueries
+                            .filter((x) => x.data)
+                            .map(({ data: asset, isLoading }, i) => {
+                                if (isLoading) return <CollectibleItemSkeleton key={i} />
+                                if (!asset) return null
+                                const isMine = isSameAddress(account, asset.owner?.address)
+                                return (
+                                    <CollectibleItem
+                                        key={`${asset.chainId}.${asset.address}.${asset.tokenId}`}
+                                        className={isMine ? undefined : classes.notMine}
+                                        asset={asset}
+                                        pluginID={pluginID}
+                                        disableName
+                                        actionLabel={t.send()}
+                                        disableAction
+                                        onItemClick={isMine ? toggleSelect : undefined}
+                                        indicatorIcon={Icons.Checkbox}
+                                        isSelected={selectedTokenIds.includes(asset.tokenId)}
+                                    />
+                                )
+                            })}
                     </Box>
                 )}
             </div>
@@ -290,8 +291,8 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                     fullWidth
                     startIcon={<Icons.Wallet size={18} />}
                     disabled={disabled}
-                    onClick={handleAdd}
-                    loading={onConfirmLoading}>
+                    onClick={handleClose}
+                    loading={disabled}>
                     {t.add_collectibles()}
                 </ActionButton>
             </Stack>

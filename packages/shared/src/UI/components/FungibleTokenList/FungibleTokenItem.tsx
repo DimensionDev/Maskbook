@@ -198,12 +198,6 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
             )
         }, [balance, decimals, isBlocked, source, mode, isTrust])
 
-        const tokenIcon = useMemo(() => {
-            return (
-                <TokenIcon className={classes.icon} chainId={chainId} address={address} name={name} logoURL={logoURL} />
-            )
-        }, [classes.icon, chainId, address, name, logoURL])
-
         return (
             <div style={style}>
                 <ListItem
@@ -215,7 +209,13 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                     disabled={!!(selected && mode === TokenListMode.List)}>
                     <ListItemIcon>
                         <Box position="relative">
-                            {tokenIcon}
+                            <TokenIcon
+                                className={classes.icon}
+                                chainId={chainId}
+                                address={address}
+                                name={name}
+                                logoURL={logoURL}
+                            />
                             {isHiddenChainIcon ? null : (
                                 <ImageIcon className={classes.badgeIcon} size={16} icon={networkDescriptor?.icon} />
                             )}

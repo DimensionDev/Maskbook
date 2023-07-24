@@ -151,11 +151,14 @@ export const CollectionList = memo(function CollectionList({
         )
     }, [allNetworks, pluginID])
 
-    const onChainChange = useCallback((chainId: Web3Helper.ChainIdAll | undefined) => {
-        setChainId(chainId)
-        _onChainChange?.(chainId)
-        setCurrentCollectionId(undefined)
-    }, [])
+    const onChainChange = useCallback(
+        (chainId: Web3Helper.ChainIdAll | undefined) => {
+            setChainId(chainId)
+            _onChainChange?.(chainId)
+            setCurrentCollectionId(undefined)
+        },
+        [_onChainChange],
+    )
 
     const currentChainId = chainId ?? defaultChainId ?? (networks.length === 1 ? networks[0].chainId : chainId)
     const { collections, currentCollection, currentCollectionId, setCurrentCollectionId, loading, error, retry } =
