@@ -18,7 +18,7 @@ export type I18NFunction = typeof _f<keyof typeof en, any, any>
  * Enhanced version of useTranslation
  * @param opt Options
  */
-export function useI18N(opt?: UseTranslationOptions | undefined): {
+export function useI18N(opt?: UseTranslationOptions<undefined> | undefined): {
     t: I18NFunction
     i18n: typeof i18NextInstance
     ready: boolean
