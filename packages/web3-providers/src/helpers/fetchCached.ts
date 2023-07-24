@@ -3,6 +3,7 @@ import type { Fetcher } from './fetch.js'
 const { fetch: originalFetch } = globalThis
 
 export enum Duration {
+    NULL = 0,
     MINIMAL = 10000, // 10 seconds
     SHORT = 60000, // 1 min
     MEDIUM = 1800000, // 30 mins

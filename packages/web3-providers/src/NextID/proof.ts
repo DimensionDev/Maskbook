@@ -20,7 +20,7 @@ import { env } from '@masknet/flags'
 import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
 import { staleNextIDCached } from './helpers.js'
 import PRESET_LENS from './preset-lens.json'
-import { fetchJSON } from '../entry-helpers.js'
+import { fetchCachedJSON, fetchJSON, fetchSquashedJSON } from '../entry-helpers.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
 
 const BASE_URL =
@@ -222,7 +222,7 @@ const getExistedBindingQueryURL = (platform: string, identity: string, personaPu
 
 export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     fetchFromProofService<T>(request: Request | RequestInfo, init?: RequestInit) {
-        return fetchJSON<T>(request, init, { enableSquash: true, enableCache: true })
+        return fetchCachedJSON<T>(request, init)
     }
 
     async bindProof(
@@ -351,7 +351,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     async queryProfilesByDomain(domain?: string) {
         const domainSystem = getDomainSystem(domain)
         if (domainSystem === 'unknown') return EMPTY_LIST
-        const { data } = await fetchJSON<{
+        const { data } = await fetchSquashedJSON<{
             data: {
                 domain: {
                     owner: {
@@ -360,23 +360,19 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                     }
                 } | null
             }
-        }>(
-            RELATION_SERVICE_URL,
-            {
-                method: 'POST',
-                mode: 'cors',
-                body: JSON.stringify({
-                    operationName: 'GET_PROFILES_QUERY',
-                    variables: { domainSystem, domain: domain?.toLowerCase() },
-                    query: `
+        }>(RELATION_SERVICE_URL, {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify({
+                operationName: 'GET_PROFILES_QUERY',
+                variables: { domainSystem, domain: domain?.toLowerCase() },
+                query: `
                     query GET_PROFILES_QUERY($domainSystem:String, $domain: String) {
                       ${relationServiceDomainQuery}
                     }
                 `,
-                }),
-            },
-            { enableSquash: true },
-        )
+            }),
+        })
 
         if (!data.domain) return EMPTY_LIST
         const bindings = createBindProofsFromNeighbor(data.domain.owner.neighborWithTraversal, data.domain.owner.nft)
@@ -386,30 +382,26 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     }
 
     async queryProfilesByAddress(address: string) {
-        const { data } = await fetchJSON<{
+        const { data } = await fetchSquashedJSON<{
             data: {
                 identity: {
                     nft: NextIDEnsRecord[]
                     neighborWithTraversal: NeighborList
                 }
             }
-        }>(
-            RELATION_SERVICE_URL,
-            {
-                method: 'POST',
-                mode: 'cors',
-                body: JSON.stringify({
-                    operationName: 'GET_PROFILES_QUERY',
-                    variables: { platform: 'ethereum', identity: address.toLowerCase() },
-                    query: `
+        }>(RELATION_SERVICE_URL, {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify({
+                operationName: 'GET_PROFILES_QUERY',
+                variables: { platform: 'ethereum', identity: address.toLowerCase() },
+                query: `
                     query GET_PROFILES_QUERY($platform: String, $identity: String) {
                        ${relationServiceIdentityQuery}
                       }
                 `,
-                }),
-            },
-            { enableSquash: true },
-        )
+            }),
+        })
 
         const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal, data.identity.nft)
         return uniqWith(bindings, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
@@ -418,30 +410,26 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     }
 
     async queryProfilesByTwitterId(twitterId: string) {
-        const { data } = await fetchJSON<{
+        const { data } = await fetchSquashedJSON<{
             data: {
                 identity: {
                     nft: NextIDEnsRecord[]
                     neighborWithTraversal: NeighborList
                 }
             }
-        }>(
-            RELATION_SERVICE_URL,
-            {
-                method: 'POST',
-                mode: 'cors',
-                body: JSON.stringify({
-                    operationName: 'GET_PROFILES_BY_TWITTER_ID',
-                    variables: { platform: 'twitter', identity: twitterId.toLowerCase() },
-                    query: `
+        }>(RELATION_SERVICE_URL, {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify({
+                operationName: 'GET_PROFILES_BY_TWITTER_ID',
+                variables: { platform: 'twitter', identity: twitterId.toLowerCase() },
+                query: `
                         query GET_PROFILES_BY_TWITTER_ID($platform: String, $identity: String) {
                             ${relationServiceIdentityQuery}
                         }
                 `,
-                }),
-            },
-            { enableSquash: true },
-        )
+            }),
+        })
 
         const nft = uniqBy(
             data.identity.neighborWithTraversal
@@ -459,7 +447,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
     async queryAllLens(twitterId: string): Promise<NextIDBaseAPI.LensAccount[]> {
         const lowerCaseId = twitterId.toLowerCase()
-        const { data } = await fetchJSON<{
+        const { data } = await fetchSquashedJSON<{
             data: {
                 domain: {
                     owner: {
@@ -467,23 +455,19 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                     }
                 } | null
             }
-        }>(
-            RELATION_SERVICE_URL,
-            {
-                method: 'POST',
-                mode: 'cors',
-                body: JSON.stringify({
-                    operationName: 'GET_LENS_PROFILES',
-                    variables: { domainSystem: 'lens', domain: lowerCaseId },
-                    query: `
+        }>(RELATION_SERVICE_URL, {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify({
+                operationName: 'GET_LENS_PROFILES',
+                variables: { domainSystem: 'lens', domain: lowerCaseId },
+                query: `
                         query GET_LENS_PROFILES($domainSystem: String, $domain: String) {
                             ${relationServiceDomainQuery}
                         }
                 `,
-                }),
-            },
-            { enableSquash: true },
-        )
+            }),
+        })
 
         const connectionsTo =
             data.domain?.owner.neighborWithTraversal.filter((x) => x.to.platform === NextIDPlatform.LENS) || []

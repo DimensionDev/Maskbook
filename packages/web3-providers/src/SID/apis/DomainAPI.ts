@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 import { ChainId, isValidAddress, isValidDomain } from '@masknet/web3-shared-evm'
 import type { DomainAPI } from '../../entry-types.js'
-import { fetchJSON } from '../../entry-helpers.js'
+import { fetchCachedJSON } from '../../entry-helpers.js'
 
 const ROOT_HOST = 'https://api.prd.space.id'
 
@@ -21,16 +21,11 @@ export class SID_DomainAPI implements DomainAPI.Provider<ChainId> {
         const tld = this.resolveTLD(chainId)
         if (!tld) return
 
-        const result = await fetchJSON<{ code: number; address: string }>(
+        const result = await fetchCachedJSON<{ code: number; address: string }>(
             urlcat(ROOT_HOST, '/v1/getAddress', {
                 tld,
                 domain: name,
             }),
-            undefined,
-            {
-                enableCache: true,
-                enableSquash: true,
-            },
         )
 
         if (result.code === 0 && isValidAddress(result.address)) return result.address
@@ -41,16 +36,11 @@ export class SID_DomainAPI implements DomainAPI.Provider<ChainId> {
         const tld = this.resolveTLD(chainId)
         if (!tld) return
 
-        const result = await fetchJSON<{ code: number; name: string }>(
+        const result = await fetchCachedJSON<{ code: number; name: string }>(
             urlcat(ROOT_HOST, '/v1/getName', {
                 tld,
                 address,
             }),
-            undefined,
-            {
-                enableCache: true,
-                enableSquash: true,
-            },
         )
 
         if (result.code === 0 && isValidDomain(result.name)) return result.name

@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import type { ScalableBloomFilter } from 'bloom-filters'
-import { fetchJSON } from '../entry-helpers.js'
+import { fetchSquashedJSON } from '../entry-helpers.js'
 import type { ScamWarningAPI } from '../entry-types.js'
 
 const BASE_URL = 'https://scam.mask.r2d2.to/cryptoscam-db'
@@ -10,9 +10,7 @@ export class CryptoScamDB_API implements ScamWarningAPI.Provider {
 
     async getBloomFilter() {
         if (this.bloomFilter) return this.bloomFilter
-        const filter = await fetchJSON<JSON>(urlcat(BASE_URL, 'filter/config.json'), undefined, {
-            enableSquash: true,
-        })
+        const filter = await fetchSquashedJSON<JSON>(urlcat(BASE_URL, 'filter/config.json'))
 
         const { ScalableBloomFilter } = await import('bloom-filters')
         this.bloomFilter = ScalableBloomFilter.fromJSON(filter)
@@ -27,9 +25,7 @@ export class CryptoScamDB_API implements ScamWarningAPI.Provider {
             const url = new URL(link)
             if (!filter.has(url.host)) return
 
-            const result = await fetchJSON<ScamWarningAPI.Info>(urlcat(BASE_URL, `${url.host}.json`), undefined, {
-                enableSquash: true,
-            })
+            const result = await fetchSquashedJSON<ScamWarningAPI.Info>(urlcat(BASE_URL, `${url.host}.json`))
             if (!result) return
 
             const scamURL = new URL(result.url)

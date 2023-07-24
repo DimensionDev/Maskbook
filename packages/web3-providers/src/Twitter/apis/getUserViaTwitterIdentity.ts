@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { fetchJSON, staleCached } from '../../entry-helpers.js'
+import { fetchCachedJSON, staleCached } from '../../entry-helpers.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'
 
 const TWITTER_IDENTITY_URL = 'https://mr8asf7i4h.execute-api.us-east-1.amazonaws.com/prod/twitter-identity'
@@ -40,15 +40,10 @@ function identityToLegacyUser(response: TwitterBaseAPI.IdentifyResponse): Twitte
     }
 }
 export async function getUserViaTwitterIdentity(screenName: string): Promise<TwitterBaseAPI.User | null> {
-    const identity = await fetchJSON<TwitterBaseAPI.IdentifyResponse>(
+    const identity = await fetchCachedJSON<TwitterBaseAPI.IdentifyResponse>(
         urlcat(TWITTER_IDENTITY_URL, {
             screenName,
         }),
-        undefined,
-        {
-            enableCache: true,
-            enableSquash: true,
-        },
     )
     return identityToLegacyUser(identity)
 }

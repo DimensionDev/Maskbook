@@ -27,26 +27,26 @@ import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants.js'
 import type { EVM } from '../types/EVM.js'
 import { resolveNFTScanHostName } from './utils.js'
 import type { NonFungibleTokenAPI } from '../../entry-types.js'
-import { fetchJSON, parseJSON, getAssetFullName, resolveActivityType, getPaymentToken } from '../../entry-helpers.js'
+import {
+    fetchSquashedJSON,
+    parseJSON,
+    getAssetFullName,
+    resolveActivityType,
+    getPaymentToken,
+} from '../../entry-helpers.js'
 
 const Contract = new ContractReadonlyAPI()
 
 export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, init?: RequestInit) {
-    return fetchJSON<T>(
-        urlcat(NFTSCAN_URL, pathname),
-        {
-            ...init,
-            headers: {
-                'content-type': 'application/json',
-                ...init?.headers,
-                ...(chainId ? { 'x-app-chainid': chainId.toString() } : {}),
-            },
-            cache: 'no-cache',
+    return fetchSquashedJSON<T>(urlcat(NFTSCAN_URL, pathname), {
+        ...init,
+        headers: {
+            'content-type': 'application/json',
+            ...init?.headers,
+            ...(chainId ? { 'x-app-chainid': chainId.toString() } : {}),
         },
-        {
-            enableSquash: true,
-        },
-    )
+        cache: 'no-cache',
+    })
 }
 
 export async function getContractSymbol(chainId: ChainId, address: string) {

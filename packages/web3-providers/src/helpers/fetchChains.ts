@@ -1,5 +1,5 @@
 import { Duration } from './fetchCached.js'
-import { fetchJSON } from './fetchJSON.js'
+import { fetchCachedJSON } from './fetchJSON.js'
 
 export interface ChainConfig {
     name: string
@@ -29,8 +29,8 @@ export interface ChainConfig {
 }
 
 export async function fetchChains() {
-    return fetchJSON<ChainConfig[]>('https://chainid.network/chains.json', undefined, {
-        enableCache: true,
+    return fetchCachedJSON<ChainConfig[]>('https://chainid.network/chains.json', undefined, {
+        squashExpiration: 0,
         cacheDuration: Duration.LONG,
     })
 }

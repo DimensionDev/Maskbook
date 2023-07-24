@@ -3,7 +3,7 @@ import { GasOptionType, toFixed } from '@masknet/web3-shared-base'
 import { ChainId, formatGweiToWei, getDeBankConstants, type GasOption } from '@masknet/web3-shared-evm'
 import type { GasPriceDictResponse } from '../types.js'
 import { DEBANK_OPEN_API } from '../constants.js'
-import { fetchJSON } from '../../entry-helpers.js'
+import { fetchSquashedJSON } from '../../entry-helpers.js'
 import type { GasOptionAPI_Base } from '../../entry-types.js'
 
 /**
@@ -26,12 +26,8 @@ export class DeBankGasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, G
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
         if (!CHAIN_ID) throw new Error('Failed to get gas price.')
 
-        const result = await fetchJSON<GasPriceDictResponse>(
+        const result = await fetchSquashedJSON<GasPriceDictResponse>(
             urlcat(DEBANK_OPEN_API, '/v1/wallet/gas_market', { chain_id: CHAIN_ID }),
-            undefined,
-            {
-                enableSquash: true,
-            },
         )
         if (result.error_code !== 0) throw new Error('Failed to get gas price.')
 
