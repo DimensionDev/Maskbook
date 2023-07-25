@@ -1,3 +1,4 @@
+/* cspell:disable */
 import { MutationObserverWatcher, type LiveSelector } from '@dimensiondev/holoflows-kit'
 import { querySelector } from '../utils/selector.js'
 import { startWatch } from '../../../utils/watcher.js'
