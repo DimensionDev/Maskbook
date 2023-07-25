@@ -26,6 +26,9 @@ function zipTo(
 ): TaskFunction {
     const f: TaskFunction = async () => {
         await copyFile(new URL(`manifest-${withManifestFile}.json`, BUILD_PATH), new URL('manifest.json', BUILD_PATH))
+        if (!reproducible && withManifestFile === ManifestFile.ChromiumBetaMV2) {
+            await copyFile(new URL('build-info-beta.json', BUILD_PATH), new URL('build-info.json', BUILD_PATH))
+        }
         const { cmd } = await import('web-ext')
         await cmd.build({
             sourceDir: fileURLToPath(BUILD_PATH),
