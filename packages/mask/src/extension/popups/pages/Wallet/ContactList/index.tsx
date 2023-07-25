@@ -26,7 +26,7 @@ const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivid
     contactsPanel: {
         display: 'flex',
         flexDirection: 'column',
-        padding: '0 16px',
+        padding: '0',
         maxHeight: 380,
         overflow: 'scroll',
     },
@@ -48,8 +48,8 @@ const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivid
     contactsListItem: {
         display: 'flex',
         justifyContent: 'space-between',
-        paddingLeft: '0px !important',
-        paddingRight: '0px !important',
+        paddingLeft: '16px !important',
+        paddingRight: '16px !important',
         cursor: 'pointer',
         '&:hover': {
             backgroundColor: theme.palette.background.default,
@@ -63,6 +63,7 @@ const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivid
         color: theme.palette.maskColor.main,
         fontSize: 14,
         fontWeight: 700,
+        paddingLeft: 16,
     },
     icon: {
         fontSize: 18,

@@ -39,7 +39,7 @@ const BottomNavLink = memo<LinkProps>(function BottomNavLink({ children, to }) {
     const { classes } = useStyle()
 
     return (
-        <NavLink to={to} className={({ isActive }) => (isActive ? classes.selected : undefined)}>
+        <NavLink to={to} className={({ isActive }) => (isActive && to !== '#' ? classes.selected : undefined)}>
             {children}
         </NavLink>
     )

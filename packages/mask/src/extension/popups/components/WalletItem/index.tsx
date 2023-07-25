@@ -78,6 +78,9 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         marginLeft: theme.spacing(2),
     },
+    tooltip: {
+        width: 240,
+    },
 }))
 
 export interface WalletItemProps extends Omit<ListItemProps, 'onSelect'> {
@@ -121,7 +124,7 @@ export const WalletItem = memo<WalletItemProps>(function WalletItem({
                         )}
                     </Typography>
                     <Typography className={classes.address}>
-                        <Tooltip title={wallet.address} placement="right">
+                        <Tooltip title={wallet.address} placement="right" classes={{ tooltip: classes.tooltip }}>
                             <span>
                                 <FormattedAddress address={wallet.address} size={4} formatter={formatEthereumAddress} />
                             </span>
