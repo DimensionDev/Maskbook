@@ -42,7 +42,7 @@ export const PersonaPublicKey = memo<PersonaPublicKeyProps>(function PersonaPubl
     return (
         <Typography className={classes.text}>
             {formatPersonaFingerprint(rawPublicKey, 4)}
-            <CopyButton text={rawPublicKey} classes={{ root: classes.icon }} size={iconSize} />
+            <CopyButton text={rawPublicKey} className={classes.icon} size={iconSize} />
             <Link
                 underline="none"
                 target="_blank"

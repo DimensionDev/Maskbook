@@ -31,10 +31,11 @@ export const CopyButton = memo<CopyButtonProps>(function CopyButton({
     size,
     color,
     scoped = true,
+    className,
     ...props
 }) {
     const t = useSharedI18N()
-    const { classes, theme } = useStyles(undefined, { props })
+    const { classes, cx, theme } = useStyles(undefined, { props })
 
     const [, copyToClipboard] = useCopyToClipboard()
     const [copied, setCopied] = useState(false)
@@ -68,7 +69,7 @@ export const CopyButton = memo<CopyButtonProps>(function CopyButton({
                 color="inherit"
                 {...props}
                 fontSize={0}
-                className={classes.root}>
+                className={cx(classes.root, className)}>
                 {active ? (
                     <Icons.Check {...iconProps} color={theme.palette.maskColor.success} />
                 ) : (
