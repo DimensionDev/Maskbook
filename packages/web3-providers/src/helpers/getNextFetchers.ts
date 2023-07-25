@@ -3,7 +3,7 @@ import { fetchSquashed } from './fetchSquashed.js'
 import { fetchCached } from './fetchCached.js'
 
 export interface NextFetchersOptions {
-    /** Assgins 0 to disable squash. */
+    /** Assigns 0 to disable squash. */
     squashExpiration?: number
     /** Assigns 0 to disable cache */
     cacheDuration?: number
