@@ -3,9 +3,10 @@ import type {
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter,
-    RequestArguments,
 } from '@masknet/web3-shared-solana'
 import { HubOptionsAPI_Base } from '../../Base/apis/HubOptionsAPI.js'
 import { SolanaOthersAPI } from './OthersAPI.js'
@@ -17,6 +18,7 @@ export class SolanaHubOptionsAPI extends HubOptionsAPI_Base<
     ProviderType,
     NetworkType,
     RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter
 > {

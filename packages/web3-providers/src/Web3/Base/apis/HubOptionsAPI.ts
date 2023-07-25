@@ -30,13 +30,23 @@ export class HubOptionsAPI_Base<
     ProviderType,
     NetworkType,
     RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter,
 > {
     constructor(private options?: HubOptions_Base<ChainId>) {}
 
     get Web3StateRef(): ValueRefWithReady<
-        Web3State<ChainId, SchemaType, ProviderType, NetworkType, RequestArguments, Transaction, TransactionParameter>
+        Web3State<
+            ChainId,
+            SchemaType,
+            ProviderType,
+            NetworkType,
+            RequestArguments,
+            RequestOptions,
+            Transaction,
+            TransactionParameter
+        >
     > {
         throw new Error('To be implemented.')
     }

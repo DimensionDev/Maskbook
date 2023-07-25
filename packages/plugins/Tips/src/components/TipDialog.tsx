@@ -104,11 +104,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
 
     const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
 
-    const { value: nonFungibleToken } = useNonFungibleAsset(
-        undefined,
-        nonFungibleTokenAddress,
-        nonFungibleTokenId ?? '',
-    )
+    const { data: nonFungibleToken } = useNonFungibleAsset(undefined, nonFungibleTokenAddress, nonFungibleTokenId ?? '')
     const { share } = useSNSAdaptorContext()
 
     const send = useCallback(async () => {

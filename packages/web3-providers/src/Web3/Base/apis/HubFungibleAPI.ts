@@ -23,6 +23,7 @@ export class HubFungibleAPI_Base<
     ProviderType,
     NetworkType,
     RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter,
 > extends HubProviderAPI_Base<
@@ -31,6 +32,7 @@ export class HubFungibleAPI_Base<
     ProviderType,
     NetworkType,
     RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter
 > {

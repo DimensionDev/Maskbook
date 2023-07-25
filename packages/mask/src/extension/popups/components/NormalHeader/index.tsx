@@ -31,6 +31,11 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         minHeight: 22,
         textAlign: 'center',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        paddingLeft: theme.spacing(1),
+        paddingRight: theme.spacing(1),
     },
     logo: {
         width: 96,
@@ -55,7 +60,7 @@ export const NormalHeader = memo<NormalHeaderProps>(function NormalHeader(props)
     const navigate = useNavigate()
     const { title, extension, customBackHandler } = useContext(PageTitleContext)
 
-    const showTitle = canNavBack() && title
+    const showTitle = canNavBack() && title !== undefined
 
     const handleBack = useCallback(() => navigate(-1), [])
     if (onlyTitle)

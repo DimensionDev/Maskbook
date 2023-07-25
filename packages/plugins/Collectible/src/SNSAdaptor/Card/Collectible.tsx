@@ -133,29 +133,29 @@ export function Collectible(props: CollectibleProps) {
         }
     }, [])
 
-    if (asset.loading) return <LoadingStatus height={148} p={1} />
+    if (asset.isLoading) return <LoadingStatus height={148} p={1} />
 
-    if (!asset.value && !asset.error) {
+    if (!asset.data && !asset.error) {
         return <EmptyStatus className={classes.empty}>{t.nft_minted()}</EmptyStatus>
     }
 
-    if (!asset.value) {
+    if (!asset.data) {
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" pb={2} pt={4}>
                 <RetryHint
                     ButtonProps={{ startIcon: <Icons.Restore color="white" size={18} />, sx: { width: 256 } }}
-                    retry={() => asset.retry()}
+                    retry={() => asset.refetch()}
                 />
             </Box>
         )
     }
 
-    const _asset = asset.value
+    const _asset = asset.data
     const endDate = _asset.auction?.endAt
     const renderTab = () => {
         const tabMap = {
-            [tabs.about]: <AboutTab asset={asset} />,
-            [tabs.details]: <DetailsTab asset={asset} />,
+            [tabs.about]: <AboutTab asset={asset.data} isLoading={asset.isLoading} />,
+            [tabs.details]: <DetailsTab asset={asset.data} isLoading={asset.isLoading} />,
             [tabs.offers]: <OffersTab offers={orders} />,
             [tabs.activities]: <ActivitiesTab events={events} />,
         }

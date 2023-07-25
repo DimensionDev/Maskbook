@@ -258,6 +258,13 @@ export interface RequestArguments {
     params: any[]
 }
 
+export interface RequestOptions {
+    owner?: string
+    identifier?: string
+    paymentToken?: string
+    allowMaskAsGas?: boolean
+}
+
 export interface Transaction {
     from?: string
     to?: string
@@ -316,6 +323,7 @@ export type Web3State = Web3StateShared<
     ProviderType,
     NetworkType,
     RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter
 >
@@ -330,6 +338,7 @@ export type Web3Definition = {
     GasOption: GasOption
     Block: Block
     RequestArguments: RequestArguments
+    RequestOptions: RequestOptions
     Operation: UserOperation
     Transaction: Transaction
     TransactionReceipt: TransactionReceipt

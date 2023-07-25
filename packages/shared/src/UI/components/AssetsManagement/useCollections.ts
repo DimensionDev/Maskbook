@@ -7,8 +7,15 @@ import { produce, type Draft } from 'immer'
 import { sum } from 'lodash-es'
 import { useMemo, useState } from 'react'
 
-export function useCollections(pluginID: NetworkPluginID, chainId: Web3Helper.ChainIdAll | undefined, account: string) {
-    const [currentCollectionId, setCurrentCollectionId] = useState<string>()
+interface Options {
+    pluginID: NetworkPluginID
+    chainId: Web3Helper.ChainIdAll | undefined
+    account: string
+    defaultCollectionId?: string
+}
+
+export function useCollections({ pluginID, chainId, account, defaultCollectionId }: Options) {
+    const [currentCollectionId = defaultCollectionId, setCurrentCollectionId] = useState<string>()
     const {
         data: rawCollections = EMPTY_LIST,
         isLoading: loading,
@@ -20,7 +27,7 @@ export function useCollections(pluginID: NetworkPluginID, chainId: Web3Helper.Ch
         sourceType: SourceType.SimpleHash,
     })
 
-    const mergedCollections = useMemo(() => {
+    const merged = useMemo(() => {
         return produce(rawCollections, (draft) => {
             const mergeBy = (name: string, filterFn: (c: Draft<Web3Helper.NonFungibleCollectionAll>) => boolean) => {
                 const matchedCollections = draft.filter(filterFn)
@@ -42,11 +49,11 @@ export function useCollections(pluginID: NetworkPluginID, chainId: Web3Helper.Ch
     }, [rawCollections])
 
     const collections = useMemo(
-        () => (chainId ? mergedCollections.filter((x) => x.chainId === chainId) : mergedCollections),
-        [mergedCollections, chainId],
+        () => (chainId ? merged.filter((x) => x.chainId === chainId) : merged),
+        [merged, chainId],
     )
 
-    const currentCollection = mergedCollections.find((x) => x.id === currentCollectionId)
+    const currentCollection = currentCollectionId ? merged.find((x) => x.id === currentCollectionId) : undefined
 
     return {
         collections,
