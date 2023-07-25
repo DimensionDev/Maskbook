@@ -1,6 +1,11 @@
 import { memoize } from 'lodash-es'
 import Web3 from 'web3'
-import { createWeb3Provider, ProviderURL, PayloadEditor, type RequestArguments } from '@masknet/web3-shared-evm'
+import {
+    createWeb3ProviderFromRequest,
+    ProviderURL,
+    PayloadEditor,
+    type RequestArguments,
+} from '@masknet/web3-shared-evm'
 import { ConnectionOptionsReadonlyAPI } from './ConnectionOptionsReadonlyAPI.js'
 import { fetchJsonRpcResponse } from '../../../helpers/fetchJsonRpcResponse.js'
 import type { ConnectionOptions } from '../types/index.js'
@@ -35,6 +40,6 @@ export class RequestReadonlyAPI {
     }
 
     getWeb3Provider(initial?: ConnectionOptions) {
-        return createWeb3Provider((requestArguments) => this.request(requestArguments, initial))
+        return createWeb3ProviderFromRequest((requestArguments) => this.request(requestArguments, initial))
     }
 }

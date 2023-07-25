@@ -3,16 +3,6 @@ import type { provider as Provider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { EthereumMethodType, RequestArguments, Web3Provider } from '../types/index.js'
 
-export function createWeb3(provider: Provider) {
-    const web3 = new Web3(provider)
-    web3.eth.transactionBlockTimeout = 10 * 1000
-    web3.eth.transactionPollingTimeout = 10 * 1000
-    // @ts-expect-error private or untyped API?
-    // disable the default polling strategy
-    web3.eth.transactionPollingInterval = Number.MAX_SAFE_INTEGER
-    return web3
-}
-
 export function createJsonRpcPayload(id: number, requestArguments: RequestArguments): JsonRpcPayload {
     return {
         jsonrpc: '2.0',
@@ -31,22 +21,33 @@ export function createJsonRpcResponse<T>(id: number, result?: T, error?: Error):
     }
 }
 
-export function createWeb3Request(
-    send: (payload: JsonRpcPayload, callback: (error: Error | null, response?: JsonRpcResponse) => void) => void,
-): <T>(requestArguments: RequestArguments) => Promise<T> {
-    return <T>(requestArguments: RequestArguments) =>
-        new Promise<T>((resolve, reject) => {
-            send(createJsonRpcPayload(0, requestArguments), (error, response) => {
-                if (error || response?.error) {
-                    reject(error ?? new Error(response?.error?.message ?? 'Failed to send RPC request.'))
-                } else {
-                    resolve(response?.result)
-                }
-            })
-        })
+export function createWeb3FromProvider(provider: Provider) {
+    const web3 = new Web3(provider)
+    web3.eth.transactionBlockTimeout = 10 * 1000
+    web3.eth.transactionPollingTimeout = 10 * 1000
+    // @ts-expect-error private or untyped API?
+    // disable the default polling strategy
+    web3.eth.transactionPollingInterval = Number.MAX_SAFE_INTEGER
+    return web3
 }
 
-export function createWeb3Provider(request: <T>(requestArguments: RequestArguments) => Promise<T>): Web3Provider {
+export function createWeb3FromURL(url: string) {
+    return createWeb3FromProvider(createWeb3ProviderFromURL(url))
+}
+
+export function createWeb3ProviderFromURL(url: string): Web3Provider {
+    return createWeb3ProviderFromRequest((requestArguments) =>
+        fetchJsonRpcResponse(url, {
+            id: 0,
+            jsonrpc: '2.0',
+            ...requestArguments,
+        }),
+    )
+}
+
+export function createWeb3ProviderFromRequest(
+    request: <T>(requestArguments: RequestArguments) => Promise<T>,
+): Web3Provider {
     const provider: Web3Provider = {
         on() {
             return provider
