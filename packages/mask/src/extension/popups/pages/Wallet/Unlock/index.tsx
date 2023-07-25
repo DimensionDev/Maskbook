@@ -1,7 +1,6 @@
-import { memo, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router-dom'
-import { Trans } from 'react-i18next'
 import { LoadingButton } from '@mui/lab'
 import { Box, Typography, useTheme } from '@mui/material'
 import { PopupRoutes } from '@masknet/shared-base'
@@ -9,7 +8,6 @@ import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../../utils/index.js'
 import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
-import { ResetWalletModal } from '../../../modals/modals.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -44,9 +42,6 @@ const useStyles = makeStyles()((theme) => ({
         height: 192,
         width: '100%',
     },
-    strong: {
-        color: theme.palette.maskColor.main,
-    },
     pointer: {
         cursor: 'pointer',
     },
@@ -65,6 +60,10 @@ const Unlock = memo(() => {
         if (verified) navigate({ pathname: PopupRoutes.Wallet }, { replace: true })
         return verified
     }, [password])
+
+    const navigateToResetWallet = useCallback(() => {
+        navigate({ pathname: PopupRoutes.ResetWallet }, { replace: true })
+    }, [])
 
     return (
         <Box className={classes.container}>
@@ -96,17 +95,14 @@ const Unlock = memo(() => {
                 </LoadingButton>
 
                 <Typography
-                    color={theme.palette.maskColor.third}
+                    color={theme.palette.maskColor.main}
                     marginTop="16px"
-                    onClick={() => ResetWalletModal.open({})}
+                    onClick={navigateToResetWallet}
                     className={classes.pointer}
                     fontSize={14}
                     textAlign="center"
-                    fontWeight={400}>
-                    <Trans
-                        i18nKey="popups_wallet_reset_tips"
-                        components={{ strong: <strong className={classes.strong} /> }}
-                    />
+                    fontWeight={700}>
+                    {t('popups_wallet_reset_tips')}
                 </Typography>
             </Box>
         </Box>
