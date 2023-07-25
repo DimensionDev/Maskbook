@@ -1,22 +1,19 @@
 import type { Fetcher } from './fetch.js'
 import { fetchSquashed } from './fetchSquashed.js'
-import { Duration, fetchCached } from './fetchCached.js'
+import { fetchCached } from './fetchCached.js'
 
 export interface NextFetchersOptions {
-    enableSquash?: boolean
-    enableCache?: boolean
+    /** Assigns 0 to disable squash. */
     squashExpiration?: number
+    /** Assigns 0 to disable cache */
     cacheDuration?: number
+    /** Generates an unequal request key. Requests that share the same key will be squashed into a single one. */
+    resolver?: (request: Request) => Promise<string>
 }
 
-export function getNextFetchers({
-    enableSquash = false,
-    enableCache = false,
-    squashExpiration = 600,
-    cacheDuration = Duration.SHORT,
-}: NextFetchersOptions = {}) {
+export function getNextFetchers({ squashExpiration = 0, cacheDuration = 0, resolver }: NextFetchersOptions = {}) {
     const fetchers: Fetcher[] = []
-    if (enableSquash) fetchers.push((...args) => fetchSquashed(...args, squashExpiration))
-    if (enableCache) fetchers.push((...args) => fetchCached(...args, cacheDuration))
+    if (squashExpiration > 0) fetchers.push((...args) => fetchSquashed(...args, resolver, squashExpiration))
+    if (cacheDuration > 0) fetchers.push((...args) => fetchCached(...args, cacheDuration))
     return fetchers
 }

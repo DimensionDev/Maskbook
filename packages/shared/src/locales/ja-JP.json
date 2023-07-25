@@ -30,7 +30,6 @@
     "erc20_token_list_placeholder": "名前またはコントラクトアドレス (USDC または 0x234...",
     "erc20_token_list_loading": "トークンリストを読み込み中...",
     "erc20_search_token_loading": "トークンを読み込み中...",
-    "erc20_token_add_by_user": "ユーザーが追加しました",
     "erc20_search_wrong_address": "有効なトークンアドレスを入力してください",
     "erc20_manage_token_list": "トークンリストを管理",
     "address_viewer_binding_rules_title": "NFTギャラリーには、以下のルールに従ったNFTが表示されます。",

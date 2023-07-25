@@ -13,7 +13,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { NFTSCAN_BASE_SOLANA, NFTSCAN_URL } from '../constants.js'
 import type { Solana } from '../types/Solana.js'
-import { resolveActivityType, parseJSON, getAssetFullName, fetchJSON } from '../../entry-helpers.js'
+import { resolveActivityType, parseJSON, getAssetFullName, fetchSquashedJSON } from '../../entry-helpers.js'
 
 export function createPermalink(chainId: ChainId, address?: string) {
     if (!address) return
@@ -25,21 +25,15 @@ export function createPermalink(chainId: ChainId, address?: string) {
 export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, init?: RequestInit) {
     if (chainId !== ChainId.Mainnet) return
 
-    return fetchJSON<T>(
-        urlcat(NFTSCAN_URL, pathname),
-        {
-            ...init,
-            headers: {
-                'content-type': 'application/json',
-                ...init?.headers,
-                'x-app-chainid': 'solana',
-            },
-            cache: 'no-cache',
+    return fetchSquashedJSON<T>(urlcat(NFTSCAN_URL, pathname), {
+        ...init,
+        headers: {
+            'content-type': 'application/json',
+            ...init?.headers,
+            'x-app-chainid': 'solana',
         },
-        {
-            enableSquash: true,
-        },
-    )
+        cache: 'no-cache',
+    })
 }
 
 export function createNonFungibleAsset(chainId: ChainId, asset: Solana.Asset): NonFungibleAsset<ChainId, SchemaType> {

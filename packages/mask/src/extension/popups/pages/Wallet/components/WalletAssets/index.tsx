@@ -1,11 +1,11 @@
 import { Icons } from '@masknet/icons'
-import { EmptyStatus, RestorableScroll } from '@masknet/shared'
+import { CollectionList, RestorableScroll, UserAssetsProvider } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, useTabs } from '@masknet/theme'
-import { useWallet } from '@masknet/web3-hooks-base'
+import { useAccount, useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab, styled, tabClasses, tabsClasses } from '@mui/material'
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useMount } from 'react-use'
 import { useContainer } from 'unstated-next'
@@ -14,6 +14,13 @@ import { WalletContext } from '../../hooks/useWalletContext.js'
 import { ActivityList } from '../ActivityList/index.js'
 import { AssetsList } from '../AssetsList/index.js'
 import { WalletAssetTabs } from '../../type.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import urlcat from 'urlcat'
+
+const gridProps = {
+    columns: 'repeat(auto-fill, minmax(20%, 1fr))',
+    gap: '8px',
+}
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -92,13 +99,15 @@ const StyledTabList = styled(TabList)`
 
 export const WalletAssets = memo(function WalletAssets() {
     const navigate = useNavigate()
+    const { chainId } = useChainContext()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { refreshAssets } = useContainer(WalletContext)
 
     useMount(() => {
         refreshAssets()
     })
-    const handleAdd = useCallback(() => navigate(PopupRoutes.AddToken), [navigate])
+
+    const handleAdd = useCallback(() => navigate(`${PopupRoutes.AddToken}/${chainId}`), [chainId, navigate])
 
     return wallet ? <WalletAssetsUI onAddToken={handleAdd} /> : null
 })
@@ -109,6 +118,7 @@ export interface WalletAssetsUIProps {
 
 export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI({ onAddToken }) {
     const { t } = useI18N()
+    const navigate = useNavigate()
     const [params, setParams] = useSearchParams()
     const paramTab = params.get('tab') as WalletAssetTabs
 
@@ -119,6 +129,33 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI(
         WalletAssetTabs.Collectibles,
         WalletAssetTabs.Activity,
     )
+
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const SEARCH_KEY = 'collectionId'
+
+    const handleItemClick = useCallback(
+        (asset: Web3Helper.NonFungibleTokenAll) => {
+            const path = urlcat(PopupRoutes.CollectibleDetail, {
+                chainId: asset.chainId,
+                address: asset.address,
+                id: asset.tokenId,
+            })
+            navigate(path, { state: { asset } })
+        },
+        [navigate],
+    )
+    const handleCollectionChange = useCallback((id: string | undefined) => {
+        setParams(
+            (params) => {
+                if (!id) params.delete(SEARCH_KEY)
+                else params.set(SEARCH_KEY, id)
+                return params.toString()
+            },
+            { replace: true },
+        )
+    }, [])
+
+    const scrollTargetRef = useRef<HTMLDivElement>(null)
 
     return (
         <div className={classes.content}>
@@ -156,21 +193,36 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI(
                         <Icons.AddNoBorder size={16} />
                     </Button>
                 </Box>
-                <Box className={classes.panels}>
-                    <RestorableScroll scrollKey="assets" enabled={currentTab === WalletAssetTabs.Tokens}>
-                        <TabPanel value={WalletAssetTabs.Tokens} className={classes.tabPanel}>
-                            <AssetsList />
+
+                <UserAssetsProvider
+                    pluginID={NetworkPluginID.PLUGIN_EVM}
+                    account={account}
+                    defaultCollectionId={params.get(SEARCH_KEY) || undefined}>
+                    <Box className={classes.panels}>
+                        <RestorableScroll scrollKey="assets">
+                            <TabPanel value={WalletAssetTabs.Tokens} className={classes.tabPanel}>
+                                <AssetsList />
+                            </TabPanel>
+                        </RestorableScroll>
+                        <TabPanel value={WalletAssetTabs.Collectibles} className={classes.tabPanel}>
+                            <RestorableScroll scrollKey="collectibles" targetRef={scrollTargetRef}>
+                                <CollectionList
+                                    gridProps={gridProps}
+                                    disableSidebar
+                                    disableWindowScroll
+                                    scrollElementRef={scrollTargetRef}
+                                    onItemClick={handleItemClick}
+                                    onCollectionChange={handleCollectionChange}
+                                />
+                            </RestorableScroll>
                         </TabPanel>
-                    </RestorableScroll>
-                    <TabPanel value={WalletAssetTabs.Collectibles} className={classes.tabPanel}>
-                        <EmptyStatus height="100%">{t('empty')}</EmptyStatus>
-                    </TabPanel>
-                    <RestorableScroll scrollKey="activities" enabled={currentTab === WalletAssetTabs.Activity}>
-                        <TabPanel value={WalletAssetTabs.Activity} className={classes.tabPanel}>
-                            <ActivityList />
-                        </TabPanel>
-                    </RestorableScroll>
-                </Box>
+                        <RestorableScroll scrollKey="activities">
+                            <TabPanel value={WalletAssetTabs.Activity} className={classes.tabPanel}>
+                                <ActivityList />
+                            </TabPanel>
+                        </RestorableScroll>
+                    </Box>
+                </UserAssetsProvider>
             </TabContext>
         </div>
     )

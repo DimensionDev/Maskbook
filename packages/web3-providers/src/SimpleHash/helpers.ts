@@ -14,7 +14,7 @@ import { queryClient } from '@masknet/shared-base-ui'
 import { NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { createPermalink } from '../NFTScan/helpers/EVM.js'
-import { fetchJSON, getAssetFullName } from '../entry-helpers.js'
+import { fetchSquashedJSON, getAssetFullName } from '../entry-helpers.js'
 import { ETH_BLUR_TOKEN_ADDRESS, SIMPLE_HASH_URL } from './constants.js'
 import { ActivityType as ActivityTypeSimpleHash, type Asset, type Collection } from './type.js'
 import { TrendingAPI } from '../entry-types.js'
@@ -24,17 +24,11 @@ export async function fetchFromSimpleHash<T>(path: string, init?: RequestInit) {
         queryKey: [path],
         staleTime: 10_000,
         queryFn: async () => {
-            return fetchJSON<T>(
-                `${SIMPLE_HASH_URL}${path}`,
-                {
-                    method: 'GET',
-                    mode: 'cors',
-                    headers: { 'content-type': 'application/json' },
-                },
-                {
-                    enableSquash: true,
-                },
-            )
+            return fetchSquashedJSON<T>(`${SIMPLE_HASH_URL}${path}`, {
+                method: 'GET',
+                mode: 'cors',
+                headers: { 'content-type': 'application/json' },
+            })
         },
     })
 }
@@ -108,8 +102,15 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
             iconURL: asset.collection.image_url,
             verified: Boolean(asset.collection.marketplace_pages?.some((x) => x.verified)),
             createdAt: new Date(asset.created_date).getTime(),
+            floorPrices: asset.collection.floor_prices,
         },
         source: SourceType.SimpleHash,
+        traits:
+            asset.extra_metadata?.attributes.map((x) => ({
+                type: x.trait_type,
+                value: x.value,
+                displayType: x.display_type,
+            })) || [],
     }
 }
 

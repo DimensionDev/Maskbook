@@ -99,6 +99,7 @@ export declare namespace Plugin {
         ProviderType = unknown,
         NetworkType = unknown,
         RequestArguments = unknown,
+        RequestOptions = unknown,
         Transaction = unknown,
         TransactionParameter = unknown,
     > extends Shared.Definition<ChainId, SchemaType, ProviderType, NetworkType> {
@@ -110,6 +111,7 @@ export declare namespace Plugin {
                 ProviderType,
                 NetworkType,
                 RequestArguments,
+                RequestOptions,
                 Transaction,
                 TransactionParameter
             >
@@ -122,6 +124,7 @@ export declare namespace Plugin {
                 ProviderType,
                 NetworkType,
                 RequestArguments,
+                RequestOptions,
                 Transaction,
                 TransactionParameter
             >
@@ -213,13 +216,19 @@ export namespace Plugin.Shared {
         /** Send request to native API, for a risky request will be added into the waiting queue. */
         send(payload: JsonRpcPayload, options?: TransactionOptions): Promise<JsonRpcResponse>
 
-        /** Confirm a request */
+        /**
+         * @deprecated Use `Request` state stead
+         * Confirm a request
+         */
         confirmRequest(
             payload: JsonRpcPayload,
             options?: { disableClose?: boolean; popupsWindow?: boolean },
         ): Promise<JsonRpcResponse | void>
 
-        /** Reject a request */
+        /**
+         * @deprecated Use `Request` state stead
+         * Reject a request
+         */
         rejectRequest(payload: JsonRpcPayload): Promise<void>
 
         hasPaymentPassword(): Promise<boolean>
@@ -417,6 +426,7 @@ export namespace Plugin.SNSAdaptor {
         ProviderType = unknown,
         NetworkType = unknown,
         RequestArguments = unknown,
+        RequestOptions = unknown,
         Transaction = unknown,
         TransactionParameter = unknown,
     > extends Shared.DefinitionDeferred<SNSAdaptorContext> {
@@ -447,6 +457,7 @@ export namespace Plugin.SNSAdaptor {
             ProviderType,
             NetworkType,
             RequestArguments,
+            RequestOptions,
             Transaction,
             TransactionParameter
         >
@@ -916,6 +927,7 @@ export namespace Plugin.Dashboard {
         ProviderType = unknown,
         NetworkType = unknown,
         RequestArguments = unknown,
+        RequestOptions = unknown,
         Transaction = unknown,
         TransactionParameter = unknown,
     > extends Shared.DefinitionDeferred<DashboardContext> {
@@ -930,6 +942,7 @@ export namespace Plugin.Dashboard {
             ProviderType,
             NetworkType,
             RequestArguments,
+            RequestOptions,
             Transaction,
             TransactionParameter
         >

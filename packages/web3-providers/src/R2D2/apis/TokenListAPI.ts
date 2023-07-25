@@ -11,17 +11,15 @@ import {
     getTokenListConstants,
 } from '@masknet/web3-shared-evm'
 import type { TokenListAPI } from '../../entry-types.js'
-import { Duration, fetchJSON } from '../../entry-helpers.js'
+import { Duration, fetchCachedJSON } from '../../entry-helpers.js'
 
 const fetchTokenList = memoizePromise(
     memoize,
     async (url: string) => {
-        return fetchJSON<TokenListAPI.TokenList<ChainId> | TokenListAPI.TokenObject<ChainId>>(
+        return fetchCachedJSON<TokenListAPI.TokenList<ChainId> | TokenListAPI.TokenObject<ChainId>>(
             url,
             { cache: 'default' },
             {
-                enableCache: true,
-                enableSquash: true,
                 cacheDuration: Duration.LONG,
             },
         )

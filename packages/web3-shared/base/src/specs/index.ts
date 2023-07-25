@@ -218,20 +218,21 @@ export type TransferableNetwork<ChainId, SchemaType, NetworkType> = Omit<
     'ID'
 >
 
-export interface RequestDescriptor<Arguments> {
+export interface RequestDescriptor<Arguments, Options> {
     ID: string
+    state: RequestStateType
     arguments: Arguments
+    options?: Options
 }
 
-export type Request<Arguments> = RequestDescriptor<Arguments>
+export type Request<Arguments, Options> = RequestDescriptor<Arguments, Options>
 
-export type ReasonableRequest<Arguments> = Request<Arguments> & {
-    state: RequestStateType
+export type ReasonableRequest<Arguments, Options> = Request<Arguments, Options> & {
     createdAt: Date
     updatedAt: Date
 }
 
-export type TransferableRequest<Arguments> = Omit<Request<Arguments>, 'ID'>
+export type TransferableRequest<Arguments, Options> = Omit<Request<Arguments, Options>, 'ID'>
 
 export interface NetworkDescriptor<ChainId, NetworkType> {
     /** An unique ID for each network */
@@ -394,6 +395,18 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
     source?: SourceType
     assets?: Array<NonFungibleAsset<ChainId, SchemaType>>
     socialLinks?: SocialLinks
+    floorPrices?: Array<{
+        marketplace_id: LiteralUnion<'blur' | 'looksrare' | 'opensea' | 'x2y2'>
+        marketplace_name: LiteralUnion<'Blur' | 'LooksRare' | 'OpenSea' | 'X2Y2'>
+        value: number
+        payment_token: {
+            payment_token_id: LiteralUnion<'ethereum.native'>
+            name: string
+            symbol: string
+            address: string | null
+            decimals: number
+        }
+    }>
 }
 
 export interface NonFungibleCollectionOverview {
@@ -454,6 +467,7 @@ export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, Sc
     metadata?: NonFungibleTokenMetadata<ChainId>
     /** the collection info */
     collection?: NonFungibleCollection<ChainId, SchemaType>
+    traits?: NonFungibleTokenTrait[]
 }
 
 export interface NonFungibleTokenTrait {
@@ -463,6 +477,7 @@ export interface NonFungibleTokenTrait {
     value: string
     /** The rarity of trait in percentage. */
     rarity?: string
+    displayType?: LiteralUnion<'date' | 'string' | 'number'> | null
 }
 
 export interface NonFungibleTokenAuction<ChainId, SchemaType> {
@@ -982,7 +997,10 @@ export interface TokenState<ChainId, SchemaType> extends Startable {
     /** Unblock a token */
     trustToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
     /** Block a token */
-    blockToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
+    blockToken?: (
+        address: string,
+        token: Token<ChainId, SchemaType> | NonFungibleToken<ChainId, SchemaType>,
+    ) => Promise<void>
     /** Create a credible fungible token */
     createFungibleToken?: (
         chainId: ChainId,
@@ -1011,13 +1029,17 @@ export interface TokenState<ChainId, SchemaType> extends Startable {
     ): Promise<void>
 }
 
-export interface RequestState<Arguments> extends Startable {
+export interface RequestState<Arguments, Options> extends Startable {
     /** The tracked requests. */
-    requests?: Subscription<Array<ReasonableRequest<Arguments>>>
+    requests?: Subscription<Array<ReasonableRequest<Arguments, Options>>>
+    /** Applies a request. */
+    applyRequest(request: TransferableRequest<Arguments, Options>): Promise<ReasonableRequest<Arguments, Options>>
     /** Applies a request and waits for confirmation from the user. */
-    applyRequest<T>(request: TransferableRequest<Arguments>): Promise<T>
+    applyAndWaitRequest(
+        request: TransferableRequest<Arguments, Options>,
+    ): Promise<ReasonableRequest<Arguments, Options>>
     /** Updates request with new arguments. */
-    updateRequest(id: string, updates: Partial<TransferableRequest<Arguments>>): Promise<void>
+    updateRequest(id: string, updates: Partial<TransferableRequest<Arguments, Options>>): Promise<void>
     /** Approves a request. */
     approveRequest(id: string): Promise<void>
     /** Rejects a request. */
@@ -1135,6 +1157,7 @@ export interface Web3State<
     ProviderType,
     NetworkType,
     RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter,
 > {
@@ -1145,7 +1168,7 @@ export interface Web3State<
     IdentityService?: IdentityServiceState<ChainId>
     NameService?: NameServiceState
     RiskWarning?: RiskWarningState
-    Request?: RequestState<RequestArguments>
+    Request?: RequestState<RequestArguments, RequestOptions>
     Settings?: SettingsState
     Token?: TokenState<ChainId, SchemaType>
     Transaction?: TransactionState<ChainId, Transaction>

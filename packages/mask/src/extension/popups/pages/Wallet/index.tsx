@@ -18,6 +18,7 @@ import { WalletHeader } from './components/WalletHeader/index.js'
 
 import TokenDetail from './TokenDetail/index.js'
 import { TransactionDetail } from './TransactionDetail/index.js'
+import { CollectibleDetail } from './CollectibleDetail/index.js'
 
 const ImportWallet = lazy(() => import('./ImportWallet/index.js'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet/index.js'))
@@ -118,11 +119,12 @@ export default function Wallet() {
                         <Route path={r(PopupRoutes.CreateWallet)} element={<CreateWallet />} />
                         <Route path={r(PopupRoutes.BackupWallet)} element={<BackupWallet />} />
                         <Route path={r(`${PopupRoutes.Contacts}/:address?` as PopupRoutes)} element={<ContactList />} />
-                        <Route path={r(PopupRoutes.AddToken)} element={<AddToken />} />
+                        <Route path={r(`${PopupRoutes.AddToken}/:chainId` as PopupRoutes)} element={<AddToken />} />
                         <Route path={r(PopupRoutes.WalletSignRequest)} element={<SignRequest />} />
                         <Route path={r(PopupRoutes.GasSetting)} element={<GasSetting />} />
                         <Route path={r(PopupRoutes.TokenDetail)} element={<TokenDetail />} />
                         <Route path={r(PopupRoutes.TransactionDetail)} element={<TransactionDetail />} />
+                        <Route path={r(PopupRoutes.CollectibleDetail)} element={<CollectibleDetail />} />
                         <Route path={r(`${PopupRoutes.Transfer}/:address?` as PopupRoutes)} element={<Transfer />} />
                         <Route path={r(PopupRoutes.ContractInteraction)} element={<ContractInteraction />} />
                         <Route path={r(PopupRoutes.SelectWallet)} element={<SelectWallet />} />

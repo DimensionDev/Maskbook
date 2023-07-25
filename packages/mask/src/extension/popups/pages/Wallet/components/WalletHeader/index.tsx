@@ -23,6 +23,7 @@ export const WalletHeader = memo(function WalletHeader() {
     const { connected, url } = useConnected()
     const matchUnlock = useMatch(PopupRoutes.Unlock)
     const matchWallet = useMatch(PopupRoutes.Wallet)
+    const matchAddAssets = useMatch(`${PopupRoutes.AddToken}/:chainId`)
     const matchContractInteraction = useMatch(PopupRoutes.ContractInteraction)
 
     const chooseNetwork = useCallback(() => {
@@ -36,6 +37,8 @@ export const WalletHeader = memo(function WalletHeader() {
     useEffect(() => {
         retry()
     }, [location.pathname])
+
+    if (matchAddAssets) return null
 
     if (!wallet || !hasPassword || matchUnlock) return <WalletSetupHeaderUI />
 

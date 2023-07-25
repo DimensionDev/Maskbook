@@ -17,6 +17,7 @@ import { useTrustedFungibleTokens } from './useTrustedFungibleTokens.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
 import { useWeb3Others } from './useWeb3Others.js'
 import { useWeb3State } from './useWeb3State.js'
+import { SchemaType } from '@masknet/web3-shared-evm'
 
 export function useFungibleAssets<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
@@ -30,8 +31,8 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
         ...options,
     })
     const Others = useWeb3Others(pluginID)
-    const trustedTokens = useTrustedFungibleTokens(pluginID)
-    const blockedTokens = useBlockedFungibleTokens(pluginID)
+    const trustedTokens = useTrustedFungibleTokens(pluginID, SchemaType.ERC721)
+    const blockedTokens = useBlockedFungibleTokens(pluginID, SchemaType.ERC20)
     const { BalanceNotifier } = useWeb3State(pluginID)
 
     const { data: mergedAssets = EMPTY_LIST, ...rest } = useQuery<Array<Web3Helper.FungibleAssetScope<S, T>>>({
@@ -68,6 +69,12 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
         return filteredAssets
             .filter((x) => !isBlockedToken(x))
             .sort((a, z) => {
+                // mask token with position value
+                const aUSD = toZero(a.value?.[CurrencyType.USD])
+                const zUSD = toZero(z.value?.[CurrencyType.USD])
+                // token value
+                if (!aUSD.eq(zUSD)) return zUSD.gt(aUSD) ? 1 : -1
+
                 // the currently selected chain id
                 if (a.chainId !== z.chainId) {
                     if (a.chainId === chainId) return -1
@@ -82,16 +89,10 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
                     if (isNativeTokenZ) return 1
                 }
 
-                // mask token with position value
-                const aUSD = toZero(a.value?.[CurrencyType.USD])
-                const zUSD = toZero(z.value?.[CurrencyType.USD])
                 const isMaskTokenA = isSameAddress(a.address, Others.getMaskTokenAddress(a.chainId))
                 const isMaskTokenZ = isSameAddress(z.address, Others.getMaskTokenAddress(z.chainId))
                 if (aUSD.isPositive() && isMaskTokenA) return -1
                 if (zUSD.isPositive() && isMaskTokenZ) return 1
-
-                // token value
-                if (!aUSD.eq(zUSD)) return zUSD.gt(aUSD) ? 1 : -1
 
                 // token balance
                 const aBalance = leftShift(a.balance, a.decimals)

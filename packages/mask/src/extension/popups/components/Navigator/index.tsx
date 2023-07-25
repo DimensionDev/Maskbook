@@ -61,7 +61,7 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
         if (isLocked) return PopupRoutes.Unlock
         if (!hasPassword) return PopupRoutes.SetPaymentPassword
         return PopupRoutes.Wallet
-    }, [walletPageLoading, isLocked, hasPassword])
+    }, [wallet, walletPageLoading, isLocked, hasPassword])
     return (
         <Box className={cx(classes.container, className)} {...rest}>
             <BottomNavigation classes={{ root: classes.navigation }}>

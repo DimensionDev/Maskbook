@@ -9,6 +9,7 @@ export class HubBaseAPI_Base<
     ProviderType,
     NetworkType,
     RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter,
     GasOption,
@@ -18,6 +19,7 @@ export class HubBaseAPI_Base<
     ProviderType,
     NetworkType,
     RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter
 > {

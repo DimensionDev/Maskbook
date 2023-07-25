@@ -34,19 +34,20 @@ export const SwitchPersonaModal = memo<ActionModalBaseProps>(function SwitchPers
     const { classes } = useStyles()
     const { personas, currentPersona } = PersonaContext.useContainer()
 
-    const handleOpenDashboard = useCallback((route: DashboardRoutes) => {
-        browser.tabs.create({
+    const handleOpenDashboard = useCallback(async (route: DashboardRoutes) => {
+        await browser.tabs.create({
             active: true,
             url: browser.runtime.getURL(`/dashboard.html#${route}`),
         })
         if (navigator.userAgent.includes('Firefox')) {
             window.close()
         }
-        Services.Helper.removePopupWindow()
+        await Services.Helper.removePopupWindow()
     }, [])
 
-    const handleSelect = useCallback((persona: PersonaInformation) => {
-        Services.Settings.setCurrentPersonaIdentifier(persona.identifier).then(() => navigate(-1))
+    const handleSelect = useCallback(async (persona: PersonaInformation) => {
+        await Services.Settings.setCurrentPersonaIdentifier(persona.identifier)
+        navigate(-1)
     }, [])
 
     const action = (

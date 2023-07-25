@@ -238,7 +238,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     }, [shareText, share])
     // #endregion
 
-    const { value: nonFungibleToken } = useNonFungibleAsset(
+    const { data: nonFungibleToken } = useNonFungibleAsset(
         undefined,
         availability?.token_address,
         availability?.claimed_id,
@@ -274,7 +274,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         })
     }, [pluginID, payload.chainId, availability?.claimed_id, availability?.token_address])
 
-    const { value: NFTDetailed, loading: loadingNFTDetailed } = useNonFungibleAsset<'all'>(
+    const { data: NFTDetailed, isLoading: loadingNFTDetailed } = useNonFungibleAsset<'all'>(
         NetworkPluginID.PLUGIN_EVM,
         payload.contractAddress,
         availability?.claimed_id,

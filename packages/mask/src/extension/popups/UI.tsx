@@ -131,7 +131,7 @@ export default function Popups() {
     )
 
     useMountReport(EventID.AccessPopups)
-    useIdleTimer({ onAction: WalletRPC.setAutoLockTimer, throttle: 2000 })
+    useIdleTimer({ onAction: WalletRPC.setAutoLockTimer })
 
     return PageUIProvider(
         usePopupTheme,
