@@ -63,6 +63,9 @@ patchedDependencies:
   '@walletconnect/client@1.7.8':
     hash: 2krbsxzv524dzcdemy7vploqza
     path: patches/@walletconnect__client@1.7.8.patch
+  '@walletconnect/socket-transport@1.7.8':
+    hash: sme2rghvxvgvnqeexxxwrxv5xm
+    path: patches/@walletconnect__socket-transport@1.7.8.patch
   bloom-filters@3.0.0:
     hash: 2etetjrjxbcye2oktxqpij75ey
     path: patches/bloom-filters@3.0.0.patch
@@ -4343,6 +4346,9 @@ importers:
       '@walletconnect/sign-client':
         specifier: ^2.7.3
         version: 2.7.3
+      '@walletconnect/socket-transport':
+        specifier: 1.7.8
+        version: 1.7.8(patch_hash=sme2rghvxvgvnqeexxxwrxv5xm)
       '@walletconnect/types':
         specifier: ^2.7.3
         version: 2.7.3
@@ -14241,7 +14247,7 @@ packages:
   /@walletconnect/core@1.7.8:
     resolution: {integrity: sha512-9xcQ0YNf9JUFb0YOX1Mpy4Yojt+6w2yQz/0aIEyj2X/s9D71NW0fTYsMcdhkLOI7mn2cqVbx2t1lRvdgqsbrSQ==}
     dependencies:
-      '@walletconnect/socket-transport': 1.7.8
+      '@walletconnect/socket-transport': 1.7.8(patch_hash=sme2rghvxvgvnqeexxxwrxv5xm)
       '@walletconnect/types': 1.7.8
       '@walletconnect/utils': 1.7.8
     transitivePeerDependencies:
@@ -14433,7 +14439,7 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@walletconnect/socket-transport@1.7.8:
+  /@walletconnect/socket-transport@1.7.8(patch_hash=sme2rghvxvgvnqeexxxwrxv5xm):
     resolution: {integrity: sha512-bqEjLxfSzG79v2OT7XVOZoyUkg6g3yng0fURrdLusWs42fYHWnrSrIZDejFn8N5PiZk5R2edrggkQ7w0VUUAfw==}
     dependencies:
       '@walletconnect/types': 1.7.8
@@ -14443,6 +14449,7 @@ packages:
       - bufferutil
       - utf-8-validate
     dev: false
+    patched: true
 
   /@walletconnect/time@1.0.2:
     resolution: {integrity: sha512-uzdd9woDcJ1AaBZRhqy5rNC9laqWGErfc4dxA9a87mPdKOgWMD85mcFo9dIYIts/Jwocfwn07EC6EzclKubk/g==}
@@ -34479,7 +34486,7 @@ packages:
     dev: false
 
   github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.70)(webpack-cli@5.1.4):
-    resolution: {tarball: https://codeload.github.com/Jack-Works/webpack/tar.gz/528c91e564d5756e21c9c462b607d913452af770}
+    resolution: {commit: 528c91e564d5756e21c9c462b607d913452af770, repo: git+ssh://git@github.com/Jack-Works/webpack.git, type: git}
     id: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770
     name: webpack
     version: 5.88.0
@@ -34523,7 +34530,7 @@ packages:
     dev: true
 
   github.com/locize/html-parse-stringify2/d463109433b2c49c74a081044f54b2a6a1ccad7c:
-    resolution: {tarball: https://codeload.github.com/locize/html-parse-stringify2/tar.gz/d463109433b2c49c74a081044f54b2a6a1ccad7c}
+    resolution: {commit: d463109433b2c49c74a081044f54b2a6a1ccad7c, repo: git+ssh://git@github.com/locize/html-parse-stringify2.git, type: git}
     name: html-parse-stringify2
     version: 2.0.1
     dependencies:

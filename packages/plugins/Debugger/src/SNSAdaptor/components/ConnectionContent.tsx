@@ -237,20 +237,35 @@ export function ConnectionContent(props: ConnectionContentProps) {
     )
 
     const onSwitchChain = useCallback(async (chainId: ChainId) => {
-        return Web3.switchChain?.(chainId)
+        try {
+            await Web3.switchChain?.(chainId)
+        } catch (error: unknown) {
+            // eslint-disable-next-line no-alert
+            if (error instanceof Error) alert(error.message)
+        }
     }, [])
 
     const onConnect = useCallback(async (chainId: ChainId, providerType: ProviderType) => {
-        await Web3.connect({
-            chainId,
-            providerType,
-        })
+        try {
+            await Web3.connect({
+                chainId,
+                providerType,
+            })
+        } catch (error: unknown) {
+            // eslint-disable-next-line no-alert
+            if (error instanceof Error) alert(error.message)
+        }
     }, [])
 
     const onDisconnect = useCallback(async (providerType: ProviderType) => {
-        await Web3.disconnect({
-            providerType,
-        })
+        try {
+            await Web3.disconnect({
+                providerType,
+            })
+        } catch (error: unknown) {
+            // eslint-disable-next-line no-alert
+            if (error instanceof Error) alert(error.message)
+        }
     }, [])
 
     return (

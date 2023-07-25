@@ -69,6 +69,7 @@
     "@uniswap/v3-sdk": "3.9.0",
     "@walletconnect/client": "1.7.8",
     "@walletconnect/sign-client": "^2.7.3",
+    "@walletconnect/socket-transport": "1.7.8",
     "@walletconnect/types": "^2.7.3",
     "@walletconnect/utils": "^2.7.3",
     "bignumber.js": "9.1.1",
