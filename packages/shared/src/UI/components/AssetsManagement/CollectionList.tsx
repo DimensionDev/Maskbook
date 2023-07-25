@@ -1,36 +1,21 @@
 import { Icons } from '@masknet/icons'
-import { delay } from '@masknet/kit'
-import { ElementAnchor, EmptyStatus, Image, NetworkIcon, RetryHint, isSameNFT } from '@masknet/shared'
-import { EMPTY_OBJECT, NetworkPluginID } from '@masknet/shared-base'
+import { ElementAnchor, EmptyStatus, Image, RetryHint, isSameNFT } from '@masknet/shared'
+import { EMPTY_OBJECT } from '@masknet/shared-base'
 import { LoadingBase, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
-import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
-import { Box, Button, Typography, styled } from '@mui/material'
+import { Box, Button, Typography, useForkRef } from '@mui/material'
 import type { BoxProps } from '@mui/system'
-import { range, sortBy } from 'lodash-es'
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { range } from 'lodash-es'
+import { memo, useCallback, useEffect, useRef, type RefObject } from 'react'
 import { useSharedI18N } from '../../../locales/i18n_generated.js'
 import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
 import { Collection, CollectionSkeleton, LazyCollection, type CollectionProps } from './Collection.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
-import { useUserAssets } from './UserAssetsContext.js'
+import { useUserAssets } from './AssetsProvider.js'
 import type { CollectibleGridProps } from './types.js'
-import { useCollections } from './useCollections.js'
-
-const AllButton = styled(Button)(({ theme }) => ({
-    display: 'inline-block',
-    padding: 0,
-    borderRadius: '50%',
-    fontSize: 10,
-    backgroundColor: theme.palette.maskColor.highlight,
-    '&:hover': {
-        backgroundColor: theme.palette.maskColor.highlight,
-        boxShadow: 'none',
-    },
-}))
+import { SelectNetworkSidebar } from '../SelectNetworkSidebar/index.js'
+import { CollectionsContext } from './CollectionsProvider.js'
+import { useChainRuntime } from './ChainRuntimeProvider.js'
 
 const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap = 1.5 }) => {
     const gapIsNumber = typeof gap === 'number'
@@ -98,58 +83,12 @@ const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap 
             color: theme.palette.maskColor.main,
             backgroundColor: theme.palette.maskColor.thirdMain,
         },
-        sidebar: {
-            width: 36,
-            flexShrink: 0,
-            paddingRight: theme.spacing(1.5),
-            paddingTop: gapIsNumber ? theme.spacing(gap) : gap,
-            boxSizing: 'border-box',
-            height: '100%',
-            overflow: 'auto',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-        networkButton: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: '12px',
-            width: 24,
-            minWidth: 24,
-            height: 24,
-            maxWidth: 24,
-            padding: 0,
-        },
-        indicator: {
-            position: 'absolute',
-            right: -3,
-            bottom: -1,
-        },
     }
 })
-
-const SimpleHashSupportedChains: Record<NetworkPluginID, number[]> = {
-    [NetworkPluginID.PLUGIN_EVM]: [
-        ChainId.Mainnet,
-        ChainId.BSC,
-        ChainId.Matic,
-        ChainId.Arbitrum,
-        ChainId.Optimism,
-        ChainId.Avalanche,
-        ChainId.xDai,
-    ],
-    [NetworkPluginID.PLUGIN_SOLANA]: [SolanaChainId.Mainnet],
-    [NetworkPluginID.PLUGIN_FLOW]: [FlowChainId.Mainnet],
-}
 
 export interface CollectionListProps
     extends BoxProps,
         Pick<CollectionProps, 'disableAction' | 'onActionClick' | 'onItemClick'> {
-    account: string
-    pluginID: NetworkPluginID
-    defaultChainId?: Web3Helper.ChainIdAll
-    defaultCollectionId?: string
     gridProps?: CollectibleGridProps
     disableSidebar?: boolean
     disableWindowScroll?: boolean
@@ -158,16 +97,13 @@ export interface CollectionListProps
     additionalAssets?: Web3Helper.NonFungibleAssetAll[]
     /** Pending user customized assets, used to render loading skeletons */
     pendingAdditionalAssetCount?: number
+    scrollElementRef?: RefObject<HTMLElement>
     onChainChange?: (chainId?: Web3Helper.ChainIdAll) => void
     onCollectionChange?: (collectionId: string | undefined) => void
 }
 
 export const CollectionList = memo(function CollectionList({
     className,
-    account,
-    pluginID,
-    defaultChainId,
-    defaultCollectionId,
     gridProps = EMPTY_OBJECT,
     disableSidebar,
     disableAction,
@@ -175,29 +111,29 @@ export const CollectionList = memo(function CollectionList({
     additionalAssets,
     pendingAdditionalAssetCount = 0,
     disableWindowScroll,
+    scrollElementRef,
     onActionClick,
     onItemClick,
-    onChainChange,
+    onChainChange: _onChainChange,
     onCollectionChange,
     ...rest
 }: CollectionListProps) {
     const t = useSharedI18N()
     const { classes, cx } = useStyles(gridProps)
 
-    const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
-
-    const allNetworks = useNetworkDescriptors(pluginID)
-    const networks = useMemo(() => {
-        const supported = SimpleHashSupportedChains[pluginID]
-        return sortBy(
-            allNetworks.filter((x) => x.isMainnet && supported.includes(x.chainId)),
-            (x) => supported.indexOf(x.chainId),
-        )
-    }, [allNetworks, pluginID])
-
-    const currentChainId = chainId ?? defaultChainId ?? (networks.length === 1 ? networks[0].chainId : chainId)
+    const { pluginID, account, chainId, setChainId, networks } = useChainRuntime()
     const { collections, currentCollection, currentCollectionId, setCurrentCollectionId, loading, error, retry } =
-        useCollections({ pluginID, chainId: currentChainId, account, defaultCollectionId })
+        CollectionsContext.useContainer()
+
+    const onChainChange = useCallback(
+        (chainId: Web3Helper.ChainIdAll | undefined) => {
+            setChainId(chainId)
+            _onChainChange?.(chainId)
+            setCurrentCollectionId(undefined)
+            onCollectionChange?.(undefined)
+        },
+        [_onChainChange],
+    )
 
     const handleCollectionChange = useCallback(
         (id: string | undefined) => {
@@ -207,7 +143,8 @@ export const CollectionList = memo(function CollectionList({
         [onCollectionChange],
     )
 
-    const { assetsMapRef, getAssets, getVerifiedBy, loadAssets, loadVerifiedBy, isAllHidden } = useUserAssets()
+    const { assetsMapRef, getAssets, getBLockedTokenIds, getVerifiedBy, loadAssets, loadVerifiedBy, isAllHidden } =
+        useUserAssets()
 
     const handleInitialRender = useCallback(
         (collection: Web3Helper.NonFungibleCollectionAll) => {
@@ -215,59 +152,14 @@ export const CollectionList = memo(function CollectionList({
             // To reduce requests, check if has been initialized
             if (assetsMapRef.current[id]?.assets.length) return
             loadVerifiedBy(id)
-            const stateKey = `${id}.${collection.chainId}`
-            const load = async () => {
-                if (assetsMapRef.current[stateKey]?.finished || assetsMapRef.current[stateKey]?.assets.length) return
-                await loadAssets(collection)
-                await delay(30)
-                // The first collectables might have been blocked, if assets of
-                // current collection is empty, try loading another page to fill
-                // the blank.
-                if (!assetsMapRef.current[stateKey].assets.length) {
-                    await load()
-                }
-            }
-            load()
+            loadAssets(collection)
         },
         [loadAssets, loadVerifiedBy],
     )
 
-    const sidebar = disableSidebar ? null : (
-        <div className={classes.sidebar}>
-            {networks.length > 1 ? (
-                <AllButton
-                    className={classes.networkButton}
-                    onClick={() => {
-                        setChainId(undefined)
-                        onChainChange?.(undefined)
-                        handleCollectionChange(undefined)
-                    }}>
-                    All
-                    {!currentChainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
-                </AllButton>
-            ) : null}
-            {networks.map((x) => (
-                <Button
-                    variant="text"
-                    key={x.chainId}
-                    className={classes.networkButton}
-                    disableRipple
-                    onClick={() => {
-                        setChainId(x.chainId)
-                        onChainChange?.(x.chainId)
-                        handleCollectionChange(undefined)
-                    }}>
-                    <NetworkIcon pluginID={pluginID} chainId={x.chainId} ImageIconProps={{ size: 24 }} />
-                    {currentChainId === x.chainId ? (
-                        <Icons.BorderedSuccess className={classes.indicator} size={12} />
-                    ) : null}
-                </Button>
-            ))}
-        </div>
-    )
-
     const containerRef = useRef<HTMLDivElement>(null)
     const mainColumnRef = useRef<HTMLDivElement>(null)
+    const forkedMainColumnRef = useForkRef(mainColumnRef, scrollElementRef)
     useEffect(() => {
         if (!currentCollectionId) return
         if (disableWindowScroll) {
@@ -283,6 +175,16 @@ export const CollectionList = memo(function CollectionList({
             window.scroll({ top, behavior: 'smooth' })
         }
     }, [!currentCollectionId, disableWindowScroll])
+
+    const sidebar = disableSidebar ? null : (
+        <SelectNetworkSidebar
+            chainId={chainId}
+            gridProps={gridProps}
+            onChainChange={onChainChange}
+            pluginID={pluginID}
+            networks={networks}
+        />
+    )
 
     if (!collections.length && loading && !error && account)
         return (
@@ -320,7 +222,7 @@ export const CollectionList = memo(function CollectionList({
     return (
         <Box className={cx(classes.container, className)} ref={containerRef} {...rest}>
             <div className={classes.columns}>
-                <div className={classes.main} ref={mainColumnRef}>
+                <div className={classes.main} ref={forkedMainColumnRef}>
                     {currentCollection ? (
                         <div className={classes.currentCollection}>
                             <Box className={classes.info}>
@@ -352,6 +254,7 @@ export const CollectionList = memo(function CollectionList({
                             assets={getAssets(currentCollection).assets}
                             verifiedBy={getVerifiedBy(currentCollection.id!)}
                             loading={getAssets(currentCollection).loading}
+                            finished={getAssets(currentCollection).finished}
                             onInitialRender={handleInitialRender}
                             disableAction={disableAction}
                             onActionClick={onActionClick}
@@ -376,9 +279,9 @@ export const CollectionList = memo(function CollectionList({
                                     disableName
                                     actionLabel={t.send()}
                                     disableAction={disableAction}
+                                    isSelected={isSameNFT(pluginID, asset, selectedAsset)}
                                     onActionClick={onActionClick}
                                     onItemClick={onItemClick}
-                                    isSelected={isSameNFT(pluginID, asset, selectedAsset)}
                                 />
                             ))}
                             {collections.map((collection) => {
@@ -391,12 +294,14 @@ export const CollectionList = memo(function CollectionList({
                                         assets={assetsState.assets}
                                         verifiedBy={getVerifiedBy(collection.id!)}
                                         loading={assetsState.loading}
+                                        finished={assetsState.finished}
+                                        blockedTokenIds={getBLockedTokenIds(collection)}
+                                        selectedAsset={selectedAsset}
                                         onExpand={handleCollectionChange}
                                         onInitialRender={handleInitialRender}
                                         disableAction={disableAction}
                                         onActionClick={onActionClick}
                                         onItemClick={onItemClick}
-                                        selectedAsset={selectedAsset}
                                     />
                                 )
                             })}

@@ -46,13 +46,8 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
             if (!socialAccount) return null
             return (
                 <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
-                    <UserAssetsProvider pluginID={socialAccount.pluginID} address={socialAccount.address}>
-                        <CollectionList
-                            account={socialAccount.address}
-                            pluginID={socialAccount.pluginID}
-                            gridProps={gridProps}
-                            onItemClick={inspectCollectible}
-                        />
+                    <UserAssetsProvider pluginID={socialAccount.pluginID} account={socialAccount.address}>
+                        <CollectionList gridProps={gridProps} onItemClick={inspectCollectible} />
                     </UserAssetsProvider>
                 </Web3ContextProvider>
             )
@@ -106,11 +101,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
 
                     return (
                         <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
-                            <UserAssetsProvider pluginID={socialAccount.pluginID} address={socialAccount.address}>
+                            <UserAssetsProvider pluginID={socialAccount.pluginID} account={socialAccount.address}>
                                 <CollectionList
                                     height={392}
-                                    account={socialAccount.address}
-                                    pluginID={socialAccount.pluginID}
                                     gridProps={gridProps}
                                     disableWindowScroll
                                     onItemClick={inspectCollectible}
@@ -150,11 +143,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     return (
                         <Box style={{ minHeight: 300 }}>
                             <Web3ContextProvider value={{ pluginID: result.pluginID }}>
-                                <UserAssetsProvider pluginID={result.pluginID} address={socialAccount.address}>
+                                <UserAssetsProvider pluginID={result.pluginID} account={socialAccount.address}>
                                     <CollectionList
                                         height={479}
-                                        account={socialAccount.address}
-                                        pluginID={socialAccount.pluginID}
                                         gridProps={gridProps}
                                         disableWindowScroll
                                         onItemClick={inspectCollectible}

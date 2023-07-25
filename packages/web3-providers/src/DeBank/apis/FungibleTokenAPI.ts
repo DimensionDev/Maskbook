@@ -30,7 +30,6 @@ export class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId
                 formatAssets(
                     (result ?? []).map((x) => ({
                         ...x,
-
                         // rename bsc to bnb
                         id: resolveDeBankAssetId(x.id),
                         chain: resolveDeBankAssetId(x.chain),

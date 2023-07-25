@@ -184,6 +184,7 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
                         type: TokenType.NonFungible,
                         schema: SchemaType.ERC721,
                         address: availableAsset.address,
+                        tokenId: availableAsset.tokenId,
                     })
                     showSnackbar(t('hided_token_successfully'))
                     navigate(-1)
