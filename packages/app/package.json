@@ -8,6 +8,7 @@
     "scripts": {
         "start": "npx webpack serve",
         "build": "pnpm run build:css && npx webpack",
+        "build:ci": "pnpm run build:css && npx webpack -o ../../dist/cloudflare/app",
         "build:css": "cross-env TAILWIND_MODE=build NODE_ENV=production postcss src/styles/tailwind.css -o src/styles/index.css",
         "watch:css": "cross-env TAILWIND_MODE=watch NODE_ENV=development postcss src/styles/tailwind.css -o src/styles/index.css --watch"
     },
