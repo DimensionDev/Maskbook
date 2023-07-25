@@ -145,6 +145,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
     })
 
     const validationMsgForAddress = useMemo(() => {
+        if (!address) return ''
         if (!Others.isValidAddress?.(address ?? '') || addressType !== AddressType.Contract)
             return t.collectible_contract_invalid()
         return ''
