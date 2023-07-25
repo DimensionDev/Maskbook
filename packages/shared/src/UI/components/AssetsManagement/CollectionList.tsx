@@ -1,5 +1,4 @@
 import { Icons } from '@masknet/icons'
-import { delay } from '@masknet/kit'
 import { ElementAnchor, EmptyStatus, Image, NetworkIcon, RetryHint, isSameNFT } from '@masknet/shared'
 import { EMPTY_OBJECT } from '@masknet/shared-base'
 import { LoadingBase, ShadowRootTooltip, makeStyles } from '@masknet/theme'
@@ -173,7 +172,8 @@ export const CollectionList = memo(function CollectionList({
         [onCollectionChange],
     )
 
-    const { assetsMapRef, getAssets, getVerifiedBy, loadAssets, loadVerifiedBy, isAllHidden } = useUserAssets()
+    const { assetsMapRef, getAssets, getBLockedTokenIds, getVerifiedBy, loadAssets, loadVerifiedBy, isAllHidden } =
+        useUserAssets()
 
     const handleInitialRender = useCallback(
         (collection: Web3Helper.NonFungibleCollectionAll) => {
@@ -181,19 +181,7 @@ export const CollectionList = memo(function CollectionList({
             // To reduce requests, check if has been initialized
             if (assetsMapRef.current[id]?.assets.length) return
             loadVerifiedBy(id)
-            const stateKey = `${id}.${collection.chainId}`
-            const load = async () => {
-                if (assetsMapRef.current[stateKey]?.finished || assetsMapRef.current[stateKey]?.assets.length) return
-                await loadAssets(collection)
-                await delay(30)
-                // The first collectables might have been blocked, if assets of
-                // current collection is empty, try loading another page to fill
-                // the blank.
-                if (!assetsMapRef.current[stateKey].assets.length) {
-                    await load()
-                }
-            }
-            load()
+            loadAssets(collection)
         },
         [loadAssets, loadVerifiedBy],
     )
@@ -317,6 +305,7 @@ export const CollectionList = memo(function CollectionList({
                             assets={getAssets(currentCollection).assets}
                             verifiedBy={getVerifiedBy(currentCollection.id!)}
                             loading={getAssets(currentCollection).loading}
+                            finished={getAssets(currentCollection).finished}
                             onInitialRender={handleInitialRender}
                             disableAction={disableAction}
                             onActionClick={onActionClick}
@@ -341,9 +330,9 @@ export const CollectionList = memo(function CollectionList({
                                     disableName
                                     actionLabel={t.send()}
                                     disableAction={disableAction}
+                                    isSelected={isSameNFT(pluginID, asset, selectedAsset)}
                                     onActionClick={onActionClick}
                                     onItemClick={onItemClick}
-                                    isSelected={isSameNFT(pluginID, asset, selectedAsset)}
                                 />
                             ))}
                             {collections.map((collection) => {
@@ -356,12 +345,14 @@ export const CollectionList = memo(function CollectionList({
                                         assets={assetsState.assets}
                                         verifiedBy={getVerifiedBy(collection.id!)}
                                         loading={assetsState.loading}
+                                        finished={assetsState.finished}
+                                        blockedTokenIds={getBLockedTokenIds(collection)}
+                                        selectedAsset={selectedAsset}
                                         onExpand={handleCollectionChange}
                                         onInitialRender={handleInitialRender}
                                         disableAction={disableAction}
                                         onActionClick={onActionClick}
                                         onItemClick={onItemClick}
-                                        selectedAsset={selectedAsset}
                                     />
                                 )
                             })}

@@ -29,5 +29,5 @@ export const RestorableScroll = memo(function RestorableScroll({ scrollKey, targ
         }
     }, [scrollKey])
 
-    return cloneElement(children, { ...children.props, ref: containerRef })
+    return cloneElement(children, { ...children.props, ref: targetRef ? undefined : containerRef })
 })
