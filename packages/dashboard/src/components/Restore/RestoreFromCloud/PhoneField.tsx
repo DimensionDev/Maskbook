@@ -52,7 +52,8 @@ export const PhoneField = memo(function PhoneField() {
     }, [account, language])
 
     const { fillSubmitOutlet } = usePersonaRecovery()
-    const disabled = !account || invalidPhone || !phoneRegexp.test(account) || code.length !== 6 || !!error || loading
+    const phoneNotReady = !account || invalidPhone || !phoneRegexp.test(account)
+    const disabled = phoneNotReady || code.length !== 6 || !!error || loading
     useLayoutEffect(() => {
         return fillSubmitOutlet(
             <PrimaryButton
@@ -96,6 +97,7 @@ export const PhoneField = memo(function PhoneField() {
                     errorMessage={sendCodeError?.message || codeError}
                     onSend={handleSendCode}
                     placeholder={t.data_recovery_mobile_code()}
+                    disabled={phoneNotReady}
                     inputProps={{
                         maxLength: 6,
                     }}
