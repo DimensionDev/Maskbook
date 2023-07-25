@@ -427,9 +427,8 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                             ${relationServiceIdentityQuery}
                         }
                 `,
-                }),
-            },
-        )
+            }),
+        })
         const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal)
         return bindings.filter((x) => ![NextIDPlatform.NextID].includes(x.platform) && x.identity)
     }
