@@ -187,11 +187,9 @@ export function NFTListDialog() {
         <>
             <DialogContent className={classes.content}>
                 {account || proofs.length ? (
-                    <UserAssetsProvider pluginID={selectedPluginId} address={targetAccount}>
+                    <UserAssetsProvider pluginID={selectedPluginId} account={targetAccount}>
                         <CollectionList
                             height={479}
-                            account={targetAccount}
-                            pluginID={selectedPluginId}
                             gridProps={gridProps}
                             disableWindowScroll
                             selectedAsset={selectedToken}
