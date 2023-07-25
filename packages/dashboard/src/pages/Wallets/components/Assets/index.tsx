@@ -128,11 +128,8 @@ export const Assets = memo<AssetsProps>(({ network }) => {
                         value={AssetTab.Collectibles}
                         key={AssetTab.Collectibles}
                         sx={{ minHeight: 'calc(100% - 48px)' }}>
-                        <UserAssetsProvider pluginID={pluginID} address={account}>
+                        <UserAssetsProvider pluginID={pluginID} account={account} defaultChainId={network?.chainId}>
                             <CollectionList
-                                pluginID={pluginID}
-                                defaultChainId={network?.chainId}
-                                account={account}
                                 gridProps={gridProps}
                                 disableSidebar
                                 disableAction={false}

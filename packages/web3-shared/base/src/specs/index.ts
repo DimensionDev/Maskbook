@@ -997,7 +997,10 @@ export interface TokenState<ChainId, SchemaType> extends Startable {
     /** Unblock a token */
     trustToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
     /** Block a token */
-    blockToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
+    blockToken?: (
+        address: string,
+        token: Token<ChainId, SchemaType> | NonFungibleToken<ChainId, SchemaType>,
+    ) => Promise<void>
     /** Create a credible fungible token */
     createFungibleToken?: (
         chainId: ChainId,

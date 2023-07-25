@@ -1,20 +1,16 @@
-import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNonFungibleCollections } from '@masknet/web3-hooks-base'
 import { SourceType } from '@masknet/web3-shared-base'
 import { isLensCollect, isLensFollower } from '@masknet/web3-shared-evm'
 import { produce, type Draft } from 'immer'
 import { sum } from 'lodash-es'
-import { useMemo, useState } from 'react'
+import { memo, useMemo, useState, type PropsWithChildren } from 'react'
+import { createContainer } from 'unstated-next'
+import { useChainRuntime } from './ChainRuntimeProvider.js'
 
-interface Options {
-    pluginID: NetworkPluginID
-    chainId: Web3Helper.ChainIdAll | undefined
-    account: string
-    defaultCollectionId?: string
-}
-
-export function useCollections({ pluginID, chainId, account, defaultCollectionId }: Options) {
+function useCollections(defaultCollectionId?: string) {
+    const { pluginID, chainId, account } = useChainRuntime()
     const [currentCollectionId = defaultCollectionId, setCurrentCollectionId] = useState<string>()
     const {
         data: rawCollections = EMPTY_LIST,
@@ -65,3 +61,15 @@ export function useCollections({ pluginID, chainId, account, defaultCollectionId
         retry,
     }
 }
+
+export const CollectionsContext = createContainer(useCollections)
+
+export interface CollectionsProviderProps {
+    defaultCollectionId?: string
+}
+export const CollectionsProvider = memo<PropsWithChildren<CollectionsProviderProps>>(function CollectionsProvider({
+    defaultCollectionId,
+    children,
+}) {
+    return <CollectionsContext.Provider initialState={defaultCollectionId}>{children}</CollectionsContext.Provider>
+})
