@@ -1,10 +1,10 @@
 import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
-import { useValueRef } from '@masknet/shared-base-ui'
-import { querySelector, sideBarProfileSelector } from '../utils/selector.js'
-import { startWatch } from '../../../utils/watcher.js'
-import { ProfileLinkAtTwitter, ToolboxHintAtTwitter } from './ToolboxHint_UI.js'
 import { ValueRef } from '@masknet/shared-base'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { startWatch } from '../../../utils/watcher.js'
+import { querySelector, sideBarProfileSelector } from '../utils/selector.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { ProfileLinkAtTwitter, ToolboxHintAtTwitter } from './ToolboxHint_UI.js'
 
 const SideBarNativeItemTextMarginLeftRef = new ValueRef('20px')
 const SideBarNativeItemIconSize = new ValueRef('24px')

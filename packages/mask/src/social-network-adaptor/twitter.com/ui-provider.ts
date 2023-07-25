@@ -171,6 +171,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         return { profiles }
     },
     injection: {
+        logo: injectLogoAtTwitter,
         toolbox: injectToolboxHintAtTwitter,
         searchResult: injectSearchResultInspectorAtTwitter,
         profileTab: injectProfileTabAtTwitter,

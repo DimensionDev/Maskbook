@@ -92,6 +92,8 @@ export namespace SocialNetworkUI {
             postInspector?(signal: AbortSignal, current: PostInfo): void
             /** Add custom actions buttons to the post */
             postActions?(signal: AbortSignal, author: PostInfo): void
+            /** Inject a logo */
+            logo?(signal: AbortSignal): void
             /** Inject a tool box that displayed in the navigation bar of the SNS */
             toolbox?(signal: AbortSignal, category: 'wallet' | 'application'): void
             banner?(signal: AbortSignal): void

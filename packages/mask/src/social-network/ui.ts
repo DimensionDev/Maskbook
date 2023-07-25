@@ -102,6 +102,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     startPostListener()
     ui.collecting.currentVisitingIdentityProvider?.start(signal)
 
+    ui.injection.logo?.(signal)
     ui.injection.pageInspector?.(signal)
     ui.injection.toolbox?.(signal, 'wallet')
     ui.injection.toolbox?.(signal, 'application')
