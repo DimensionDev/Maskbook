@@ -48,7 +48,7 @@ export default class WalletConnectProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
     private connectorId = 0
-    private connector: WalletConnect = this.createConnector()
+    private connector: WalletConnect = null!
 
     /**
      * The ongoing walletconnect connection which the listeners use to resolve later.
