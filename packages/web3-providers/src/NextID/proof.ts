@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { first, sortBy, uniqBy, uniqWith } from 'lodash-es'
+import { first, sortBy, uniqBy } from 'lodash-es'
 import {
     NextIDPlatform,
     fromHex,
@@ -201,11 +201,12 @@ interface CreatePayloadResponse {
     created_at: string
 }
 
-type NeighborList = Array<{
+type NeighborNode = {
     source: NextIDPlatform
     to: NextIDIdentity
     from: NextIDIdentity
-}>
+}
+type NeighborList = NeighborNode[]
 
 const getPersonaQueryURL = (platform: string, identity: string) =>
     urlcat(BASE_URL, '/v1/proof', {
@@ -380,9 +381,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
         if (!data.domain) return EMPTY_LIST
         const bindings = createBindProofsFromNeighbor(data.domain.owner.neighborWithTraversal, data.domain.owner.nft)
-        return uniqWith(bindings, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
-            (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
-        )
+        return bindings.filter((x) => ![NextIDPlatform.NextID].includes(x.platform) && x.identity)
     }
 
     async queryProfilesByAddress(address: string) {
@@ -412,7 +411,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         )
 
         const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal, data.identity.nft)
-        return uniqWith(bindings, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
+        return bindings.filter(
             (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
         )
     }
@@ -451,10 +450,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         )
 
         const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal, nft)
-
-        return uniqWith(bindings, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
-            (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
-        )
+        return bindings.filter((x) => ![NextIDPlatform.NextID].includes(x.platform) && x.identity)
     }
 
     async queryAllLens(twitterId: string): Promise<NextIDBaseAPI.LensAccount[]> {
@@ -564,26 +560,44 @@ function groupEnsBinding(ensList: NextIDEnsRecord[]) {
     )
 }
 
+function createBindingProofNodeFromNeighbor(nextIDIdentity: NextIDIdentity, source: NextIDPlatform) {
+    if (nextIDIdentity.nft.length === 0)
+        return createBindingProofFromProfileQuery(
+            nextIDIdentity.platform,
+            nextIDIdentity.identity,
+            nextIDIdentity.displayName,
+            undefined,
+            source,
+        )
+    const nft = nextIDIdentity.nft.map((x) =>
+        createBindingProofFromProfileQuery(NextIDPlatform.NextID, x.id, x.id, undefined, NextIDPlatform.ENS),
+    )
+    return createBindingProofFromProfileQuery(
+        NextIDPlatform.ENS,
+        nextIDIdentity.identity,
+        nextIDIdentity.displayName,
+        undefined,
+        source,
+        nft,
+    )
+}
+
 function createBindProofsFromNeighbor(neighborList: NeighborList, ensList: NextIDEnsRecord[]): BindingProof[] {
     const bindings = neighborList
-        .map((x) =>
-            createBindingProofFromProfileQuery(x.to.platform, x.to.identity, x.to.displayName, undefined, x.source),
-        )
+        .map((x) => {
+            return {
+                uuid: x.from.uuid,
+                data: createBindingProofNodeFromNeighbor(x.from, x.source),
+            }
+        })
         .concat(
-            neighborList.map((x) =>
-                createBindingProofFromProfileQuery(
-                    x.from.platform,
-                    x.from.identity,
-                    x.from.displayName,
-                    undefined,
-                    x.source,
-                ),
-            ),
+            neighborList.map((x) => {
+                return {
+                    uuid: x.to.uuid,
+                    data: createBindingProofNodeFromNeighbor(x.to, x.source),
+                }
+            }),
         )
 
-    if (ensList.length) {
-        bindings.unshift(groupEnsBinding(uniqBy(ensList, (x) => x.id)))
-    }
-
-    return bindings
+    return uniqBy(bindings, (x) => x.uuid).map((x) => x.data)
 }
