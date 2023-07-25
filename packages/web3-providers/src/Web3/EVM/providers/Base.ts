@@ -5,8 +5,6 @@ import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
 import {
     chainResolver,
-    createWeb3FromProvider,
-    createWeb3ProviderFromRequest,
     ChainId,
     type ProviderType,
     ProviderURL,
@@ -19,6 +17,7 @@ import {
 import { type Account, type Wallet, EMPTY_LIST, createConstantSubscription } from '@masknet/shared-base'
 import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
+import { createWeb3FromProvider, createWeb3ProviderFromRequest } from '../../../entry-helpers.js'
 
 export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3> {
     protected context: Plugin.SNSAdaptor.SNSAdaptorContext | undefined

@@ -1,7 +1,8 @@
-import { CoinGeckoTrending, getCurrency } from '@masknet/web3-providers'
+import { useQuery } from '@tanstack/react-query'
+import { CoinGeckoTrending } from '@masknet/web3-providers'
+import { trending } from '@masknet/web3-providers/helpers'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { SourceType } from '@masknet/web3-shared-base'
-import { useQuery } from '@tanstack/react-query'
 import { useCoinGeckoCoinId } from './useCoinGeckoCoinId.js'
 
 export function useCoinTrendingStats(chainId: number, address?: string, days?: number) {
@@ -11,7 +12,8 @@ export function useCoinTrendingStats(chainId: number, address?: string, days?: n
         queryKey: ['coin-stats', chainId, address, coinId, days],
         queryFn: async (): Promise<TrendingAPI.Stat[] | undefined> => {
             if (!coinId || days === undefined) return
-            const currency = getCurrency(chainId, SourceType.CoinGecko)
+
+            const currency = trending.getCurrency(chainId, SourceType.CoinGecko)
             if (!currency) return
 
             return CoinGeckoTrending.getCoinPriceStats(chainId, coinId, currency, days)

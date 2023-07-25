@@ -1,17 +1,11 @@
 import { memoize } from 'lodash-es'
-import Web3 from 'web3'
-import {
-    createWeb3ProviderFromRequest,
-    ProviderURL,
-    PayloadEditor,
-    type RequestArguments,
-} from '@masknet/web3-shared-evm'
+import { ProviderURL, type RequestArguments } from '@masknet/web3-shared-evm'
 import { ConnectionOptionsReadonlyAPI } from './ConnectionOptionsReadonlyAPI.js'
-import { fetchJsonRpcResponse } from '../../../helpers/fetchJsonRpcResponse.js'
 import type { ConnectionOptions } from '../types/index.js'
+import { createWeb3FromProvider, createWeb3ProviderFromURL } from '../../../entry-helpers.js'
 
 const createWeb3SDK = memoize(
-    (url: string) => new Web3(url),
+    (url: string) => createWeb3FromProvider(createWeb3ProviderFromURL(url)),
     (url) => url.toLowerCase(),
 )
 
@@ -22,15 +16,7 @@ export class RequestReadonlyAPI {
 
     get request() {
         return async <T>(requestArguments: RequestArguments, initial?: ConnectionOptions) => {
-            const options = this.ConnectionOptions.fill(initial)
-            const providerURL = options.providerURL ?? ProviderURL.from(options.chainId)
-
-            return (
-                await fetchJsonRpcResponse(
-                    providerURL,
-                    PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
-                )
-            ).result as T
+            return (await this.getWeb3Provider(initial).request(requestArguments)) as T
         }
     }
 
@@ -40,6 +26,7 @@ export class RequestReadonlyAPI {
     }
 
     getWeb3Provider(initial?: ConnectionOptions) {
-        return createWeb3ProviderFromRequest((requestArguments) => this.request(requestArguments, initial))
+        const options = this.ConnectionOptions.fill(initial)
+        return createWeb3ProviderFromURL(options.providerURL ?? ProviderURL.from(options.chainId))
     }
 }

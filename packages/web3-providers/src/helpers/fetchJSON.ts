@@ -18,7 +18,7 @@ export async function fetchSquashedJSON<T = unknown>(
     options?: NextFetchersOptions,
 ): Promise<T> {
     return fetchJSON<T>(input, init, {
-        squashExpiration: 1600,
+        squashExpiration: 600,
         ...options,
     })
 }
@@ -29,7 +29,7 @@ export async function fetchCachedJSON<T = unknown>(
     options?: NextFetchersOptions,
 ): Promise<T> {
     return fetchJSON<T>(input, init, {
-        squashExpiration: 1600,
+        squashExpiration: 600,
         cacheDuration: Duration.SHORT,
         ...options,
     })

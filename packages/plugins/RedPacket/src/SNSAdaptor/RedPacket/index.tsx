@@ -1,20 +1,20 @@
 import { useCallback, useMemo } from 'react'
 import { Card, Typography, Box } from '@mui/material'
 import { Stack } from '@mui/system'
+import { LoadingBase, makeStyles, parseColor } from '@masknet/theme'
 import { ChainId, chainResolver, networkResolver } from '@masknet/web3-shared-evm'
 import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { formatBalance, isZero, TokenType } from '@masknet/web3-shared-base'
 import { NetworkPluginID, isFacebook, isTwitter } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { TransactionConfirmModal } from '@masknet/shared'
+import { usePostLink, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useI18N } from '../../locales/index.js'
-import { LoadingBase, makeStyles, parseColor } from '@masknet/theme'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
 import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
-import { TransactionConfirmModal } from '@masknet/shared'
-import { usePostLink, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 export const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {

@@ -9,19 +9,21 @@ import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import EntryPointABI from '@masknet/web3-contracts/abis/EntryPoint.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import type { EntryPoint } from '@masknet/web3-contracts/types/EntryPoint.js'
-import type { ChainId, Transaction, UserOperation } from '../types/index.js'
 import {
+    createContract,
+    formatEthereumAddress,
+    getSmartPayConstants,
     getZeroAddress,
-    isZeroString,
     isEmptyHex,
-    isZeroAddress,
-    isValidAddress,
     isNativeTokenAddress,
-} from '../helpers/address.js'
-import { createContract } from '../helpers/createContract.js'
-import { formatEthereumAddress } from '../helpers/formatter.js'
-import { getSmartPayConstants } from '../constants/index.js'
-import type { Signer } from './Signer.js'
+    isValidAddress,
+    isZeroAddress,
+    isZeroString,
+    type ChainId,
+    type Signer,
+    type Transaction,
+    type UserOperation,
+} from '@masknet/web3-shared-evm'
 
 const USER_OP_TYPE = {
     userOp: {

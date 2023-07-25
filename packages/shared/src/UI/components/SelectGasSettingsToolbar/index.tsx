@@ -21,7 +21,6 @@ import {
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
     type ChainId,
-    DepositPaymaster,
     formatWeiToEther,
     type GasConfig,
     GasEditor,
@@ -38,7 +37,7 @@ import {
     useWeb3Others,
 } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
-import { SmartPayBundler } from '@masknet/web3-providers'
+import { DepositPaymaster, SmartPayBundler } from '@masknet/web3-providers'
 import { SettingsContext } from '../SettingsBoard/Context.js'
 import { useGasCurrencyMenu } from '../../../hooks/useGasCurrencyMenu.js'
 

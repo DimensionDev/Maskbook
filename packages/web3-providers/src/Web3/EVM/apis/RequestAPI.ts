@@ -1,16 +1,11 @@
-import {
-    EthereumMethodType,
-    PayloadEditor,
-    createWeb3FromProvider,
-    createWeb3ProviderFromRequest,
-    type RequestArguments,
-} from '@masknet/web3-shared-evm'
+import { EthereumMethodType, PayloadEditor, type RequestArguments } from '@masknet/web3-shared-evm'
 import { ComposerAPI } from './ComposerAPI.js'
 import { Web3StateRef } from './Web3StateAPI.js'
 import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import { createContext } from '../helpers/createContext.js'
 import { Providers } from '../providers/index.js'
 import type { ConnectionOptions } from '../types/index.js'
+import { createWeb3FromProvider, createWeb3ProviderFromRequest } from '../../../entry-helpers.js'
 
 export class RequestAPI extends RequestReadonlyAPI {
     private Composer = new ComposerAPI()

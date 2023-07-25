@@ -12,7 +12,6 @@ import { BigNumber } from 'bignumber.js'
 import {
     addGasMargin,
     ChainId,
-    DepositPaymaster,
     explorerResolver,
     formatEthereumAddress,
     formatGweiToEther,
@@ -58,7 +57,7 @@ import {
     useMaskTokenAddress,
 } from '@masknet/web3-hooks-base'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/web3-hooks-evm'
-import { Web3 } from '@masknet/web3-providers'
+import { DepositPaymaster, Web3 } from '@masknet/web3-providers'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { AccountItem } from './AccountItem.js'
 import { TransferAddressError } from '../type.js'
