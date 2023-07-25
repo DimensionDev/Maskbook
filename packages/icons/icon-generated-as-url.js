@@ -94,6 +94,7 @@ export function solana_url() { return new URL("./brands/Solana.svg", import.meta
 export function sushi_swap_url() { return new URL("./brands/SushiSwap.png", import.meta.url) }
 export function sybil_url() { return new URL("./brands/Sybil.png", import.meta.url) }
 export function telegram_round_url() { return new URL("./brands/TelegramRound.svg", import.meta.url) }
+export function twitter_3_url() { return new URL("./brands/twitter3.svg", import.meta.url) }
 export function twitter_colored_url() { return new URL("./brands/TwitterColored.svg", import.meta.url) }
 export function twitter_other_colored_url() { return new URL("./brands/TwitterOtherColored.svg", import.meta.url) }
 export function twitter_round_url() { return new URL("./brands/TwitterRound.svg", import.meta.url) }

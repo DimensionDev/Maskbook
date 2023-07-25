@@ -487,6 +487,11 @@ export const TelegramRound = /*#__PURE__*/ __createIcon('TelegramRound', [
         u: () => new URL('./brands/TelegramRound.svg', import.meta.url),
     },
 ])
+export const Twitter3 = /*#__PURE__*/ __createIcon('twitter3', [
+    {
+        u: () => new URL('./brands/twitter3.svg', import.meta.url),
+    },
+])
 export const TwitterColored = /*#__PURE__*/ __createIcon('TwitterColored', [
     {
         u: () => new URL('./brands/TwitterColored.svg', import.meta.url),
