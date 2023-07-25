@@ -19,7 +19,7 @@ export const UserAssetsProvider = memo<PropsWithChildren<UserAssetsProviderProps
 
     const blockedTokens = useBlockedNonFungibleTokens(pluginID)
     const blockedIds = useMemo(() => {
-        if (isSameAddress(systemAccount, account)) return EMPTY_LIST
+        if (!isSameAddress(systemAccount, account)) return EMPTY_LIST
         return blockedTokens.map((x) => x.id)
     }, [blockedTokens, systemAccount, account])
 
