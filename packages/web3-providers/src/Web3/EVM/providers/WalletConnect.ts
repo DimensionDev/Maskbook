@@ -109,7 +109,7 @@ export default class WalletConnectProvider
 
     private async destroyConnector() {
         try {
-            await this.connector?.killSession()
+            this.connector?.transportClose()
         } catch {
             this.onDisconnect(new Error('disconnect'), {
                 event: 'disconnect',
@@ -160,18 +160,17 @@ export default class WalletConnectProvider
         this.emitter.emit('accounts', payload.params[0].accounts)
     }
 
-    private onModalClose(error: Error | null, payload: ModalClosePayload) {
-        if (!this.connection) return
-        this.connection.reject(error || new Error('User rejected'))
+    private async onModalClose(error: Error | null, payload: ModalClosePayload) {
+        if (!this.connector?.connected) await this.destroyConnector()
+        this.connection?.reject(error || new Error('User rejected'))
     }
 
     private async login(expectedChainId?: ChainId) {
-        if (this.connector?.connected) await this.logout()
+        await this.destroyConnector()
+        this.connector = this.createConnector()
 
         // delay to return the result until session is updated or connected
         const [deferred, resolve, reject] = defer<Account<ChainId>>()
-
-        this.connector = this.createConnector()
 
         this.connection = {
             resolve,
