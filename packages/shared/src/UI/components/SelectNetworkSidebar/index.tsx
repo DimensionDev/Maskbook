@@ -3,9 +3,6 @@ import { useSharedI18N } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { EMPTY_OBJECT, type NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
-import { useMemo } from 'react'
-import { sortBy } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { NetworkIcon } from '../index.js'
 
@@ -61,19 +58,17 @@ const useStyles = makeStyles<StyleProps>()((theme, { gap = 1.5 }) => {
 
 interface SelectNetworkSidebarProps {
     gridProps?: StyleProps
-    supportedChains: Web3Helper.ChainIdAll[]
+    networks: Web3Helper.NetworkDescriptorAll[]
     pluginID: NetworkPluginID
     hiddenAllButton?: boolean
     chainId?: Web3Helper.ChainIdAll
-    defaultChainId?: Web3Helper.ChainIdAll
     onChainChange: (chainId: Web3Helper.ChainIdAll | undefined) => void
 }
 
 export function SelectNetworkSidebar({
     gridProps = EMPTY_OBJECT,
-    supportedChains,
+    networks,
     chainId,
-    defaultChainId,
     pluginID,
     onChainChange,
     hiddenAllButton,
@@ -82,23 +77,12 @@ export function SelectNetworkSidebar({
 
     const { classes } = useStyles(gridProps)
 
-    const allNetworks = useNetworkDescriptors(pluginID)
-
-    const networks = useMemo(() => {
-        return sortBy(
-            allNetworks.filter((x) => x.isMainnet && supportedChains.includes(x.chainId)),
-            (x) => supportedChains.indexOf(x.chainId),
-        )
-    }, [allNetworks, supportedChains])
-
-    const currentChainId = chainId ?? defaultChainId ?? (networks.length === 1 ? networks[0].chainId : chainId)
-
     return (
         <div className={classes.sidebar}>
             {networks.length > 1 && !hiddenAllButton ? (
                 <AllButton className={classes.networkButton} onClick={() => onChainChange(undefined)}>
                     {t.all()}
-                    {!currentChainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
+                    {!chainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
                 </AllButton>
             ) : null}
             {networks.map((x) => (
@@ -109,9 +93,7 @@ export function SelectNetworkSidebar({
                     disableRipple
                     onClick={() => onChainChange(x.chainId)}>
                     <NetworkIcon pluginID={pluginID} chainId={x.chainId} ImageIconProps={{ size: 24 }} />
-                    {currentChainId === x.chainId ? (
-                        <Icons.BorderedSuccess className={classes.indicator} size={12} />
-                    ) : null}
+                    {chainId === x.chainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
                 </Button>
             ))}
         </div>

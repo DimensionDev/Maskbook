@@ -1,8 +1,13 @@
-import { memo, useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { FungibleTokenList, SelectNetworkSidebar, TokenListMode, AddCollectibles } from '@masknet/shared'
 import { useRowSize } from '@masknet/shared-base-ui'
-import { useBlockedFungibleTokens, useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
+import {
+    useBlockedFungibleTokens,
+    useChainContext,
+    useNetworkDescriptors,
+    useWeb3State,
+} from '@masknet/web3-hooks-base'
 import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { Tab } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
@@ -14,6 +19,7 @@ import { useAsyncFn } from 'react-use'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
+import { sortBy } from 'lodash-es'
 
 const useStyles = makeStyles<{ currentTab: TabType }>()((theme, { currentTab }) => ({
     content: {
@@ -115,6 +121,15 @@ const AddToken = memo(function AddToken() {
         chainId_ ? Number.parseInt(chainId_, 10) : ChainId.Mainnet,
     )
 
+    const allNetworks = useNetworkDescriptors(NetworkPluginID.PLUGIN_EVM)
+
+    const networks = useMemo(() => {
+        return sortBy(
+            allNetworks.filter((x) => x.isMainnet && SupportedChains.includes(x.chainId)),
+            (x) => SupportedChains.indexOf(x.chainId),
+        )
+    }, [allNetworks])
+
     useTitle(t('add_assets'))
 
     const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
@@ -143,7 +158,7 @@ const AddToken = memo(function AddToken() {
                         hiddenAllButton
                         chainId={chainId}
                         onChainChange={(chainId) => setChainId(chainId ?? ChainId.Mainnet)}
-                        supportedChains={SupportedChains}
+                        networks={networks}
                         pluginID={NetworkPluginID.PLUGIN_EVM}
                         gridProps={{ gap: 0 }}
                     />

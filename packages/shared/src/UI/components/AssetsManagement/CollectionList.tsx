@@ -179,11 +179,10 @@ export const CollectionList = memo(function CollectionList({
     const sidebar = disableSidebar ? null : (
         <SelectNetworkSidebar
             chainId={chainId}
-            defaultChainId={defaultChainId}
             gridProps={gridProps}
             onChainChange={onChainChange}
             pluginID={pluginID}
-            supportedChains={SimpleHashSupportedChains[pluginID]}
+            networks={networks}
         />
     )
 

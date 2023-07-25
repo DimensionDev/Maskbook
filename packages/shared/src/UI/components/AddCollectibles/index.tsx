@@ -291,8 +291,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                     fullWidth
                     startIcon={<Icons.Wallet size={18} />}
                     disabled={disabled}
-                    onClick={handleClose}
-                    loading={disabled}>
+                    onClick={handleClose}>
                     {t.add_collectibles()}
                 </ActionButton>
             </Stack>
