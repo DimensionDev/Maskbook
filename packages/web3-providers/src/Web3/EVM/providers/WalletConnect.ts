@@ -16,6 +16,7 @@ import {
     isValidChainId,
 } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base.js'
+import { Web3StateRef } from '../apis/Web3StateAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 interface SessionPayload {
@@ -59,10 +60,22 @@ export default class WalletConnectProvider
 
     constructor() {
         super(ProviderType.WalletConnect)
+
+        this.resumeConnector()
     }
 
     override get connected() {
         return this.connector.connected
+    }
+
+    private async resumeConnector() {
+        const Provider = Web3StateRef.value.Provider
+
+        await Provider?.readyPromise
+
+        if (Provider?.providerType?.getCurrentValue() === ProviderType.WalletConnect) {
+            this.createConnector()
+        }
     }
 
     private createConnector() {
