@@ -43,6 +43,7 @@ import { injectProfileCardHolder } from './injection/ProfileCard/index.js'
 import { injectAvatar } from './injection/Avatar/index.js'
 import { injectLens } from './injection/Lens/index.js'
 import { injectNFTAvatarInTwitter } from './injection/NFT/index.js'
+import { injectLogoAtTwitter } from './injection/Logo.js'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
