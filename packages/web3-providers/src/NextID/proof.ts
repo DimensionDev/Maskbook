@@ -550,19 +550,17 @@ function createBindingProofNodeFromNeighbor(nextIDIdentity: NextIDIdentity, sour
 }
 
 function createBindProofsFromNeighbor(neighborList: NeighborList): BindingProof[] {
-    const bindings = neighborList
-        .map((x) => {
-            return [
-                {
-                    uuid: x.from.uuid,
-                    data: createBindingProofNodeFromNeighbor(x.from, x.source),
-                },
-                {
-                    uuid: x.to.uuid,
-                    data: createBindingProofNodeFromNeighbor(x.to, x.source),
-                },
-            ]
-        })
-        .flat()
+    const bindings = neighborList.flatMap((x) => {
+        return [
+            {
+                uuid: x.from.uuid,
+                data: createBindingProofNodeFromNeighbor(x.from, x.source),
+            },
+            {
+                uuid: x.to.uuid,
+                data: createBindingProofNodeFromNeighbor(x.to, x.source),
+            },
+        ]
+    })
     return uniqBy(bindings, (x) => x.uuid).map((x) => x.data)
 }
