@@ -5,6 +5,7 @@ import { SearchableList, makeStyles, type MaskFixedSizeListProps, type MaskTextF
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     useAccount,
+    useAddressType,
     useBlockedFungibleTokens,
     useFungibleAssets,
     useFungibleToken,
@@ -30,6 +31,7 @@ import { useSharedI18N } from '../../../locales/index.js'
 import { getFungibleTokenItem } from './FungibleTokenItem.js'
 import { ManageTokenListBar } from './ManageTokenListBar.js'
 import { TokenListMode } from './type.js'
+import { AddressType } from '@masknet/web3-shared-evm'
 
 export * from './type.js'
 
@@ -231,6 +233,12 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     const [keyword, setKeyword] = useState('')
     const [searchError, setSearchError] = useState<string>()
 
+    const { value: addressType } = useAddressType(pluginID, !Others.isValidAddress?.(keyword ?? '') ? '' : keyword, {
+        chainId,
+    })
+
+    const isAddressNotContract = addressType !== AddressType.Contract && Others.isValidAddress(keyword)
+
     const searchedTokenAddress = useMemo(() => {
         if (!keyword) {
             setSearchError(undefined)
@@ -341,7 +349,9 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 onSelect={handleSelect}
                 onSearch={setKeyword}
                 data={
-                    searchedToken && isSameAddress(searchedToken.address, searchedTokenAddress)
+                    isAddressNotContract
+                        ? EMPTY_LIST
+                        : searchedToken && isSameAddress(searchedToken.address, searchedTokenAddress)
                         ? // balance field work for case: user search someone token by contract and whitelist is empty.
                           [{ ...searchedToken, balance: tokenBalance, isCustomToken }]
                         : mode === TokenListMode.List

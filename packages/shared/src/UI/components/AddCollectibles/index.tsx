@@ -1,8 +1,14 @@
 import { Icons } from '@masknet/icons'
-import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, MaskColorVar, MaskTextField, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useAccount, useWeb3Connection, useWeb3Hub, useWeb3Others } from '@masknet/web3-hooks-base'
+import {
+    useAccount,
+    useChainContext,
+    useWeb3Connection,
+    useWeb3Hub,
+    useWeb3Others,
+    useAddressType,
+} from '@masknet/web3-hooks-base'
 import { isSameAddress, type NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
@@ -13,7 +19,8 @@ import { Controller, useForm } from 'react-hook-form'
 import { CollectibleItem, CollectibleItemSkeleton } from '../../components/AssetsManagement/CollectibleItem.js'
 import { useSharedI18N } from '../../../locales/index.js'
 import { EmptyStatus, LoadingStatus, ReloadStatus } from '../../components/index.js'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { AddressType, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { type NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     form: {
@@ -109,7 +116,8 @@ function isValidTokenIds(rawIds: string) {
 }
 
 export const AddCollectibles = memo(function AddCollectibles(props: AddCollectiblesProps) {
-    const { pluginID, chainId, account: defaultAccount, onClose } = props
+    const { pluginID, chainId: chainId_, account: defaultAccount, onClose } = props
+    const { chainId } = useChainContext({ chainId: chainId_ })
     const t = useSharedI18N()
     const walletAccount = useAccount()
     const account = defaultAccount || walletAccount
@@ -132,10 +140,15 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
     const hub = useWeb3Hub(pluginID, { chainId })
     const connection = useWeb3Connection(pluginID, { chainId })
 
+    const { value: addressType } = useAddressType(pluginID, !Others.isValidAddress?.(address ?? '') ? '' : address, {
+        chainId,
+    })
+
     const validationMsgForAddress = useMemo(() => {
-        if (!Others.isValidAddress?.(address ?? '')) return t.collectible_contract_invalid()
+        if (!Others.isValidAddress?.(address ?? '') || addressType !== AddressType.Contract)
+            return t.collectible_contract_invalid()
         return ''
-    }, [address])
+    }, [address, addressType])
 
     const {
         data: contract,
@@ -148,8 +161,8 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
     })
 
     const isValid = useMemo(() => {
-        return Boolean(Others.isValidAddress?.(contract?.address ?? '') && isValidTokenIds(watchedTokenIds))
-    }, [contract?.address, watchedTokenIds])
+        return Boolean(isValidTokenIds(watchedTokenIds) && !validationMsgForAddress)
+    }, [watchedTokenIds, validationMsgForAddress])
 
     const assetsQueries = useQueries({
         queries: tokenIds.map((tokenId) => ({
