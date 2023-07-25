@@ -36,11 +36,19 @@ function createRequestID(chainId: ChainId, requestArguments: RequestArguments) {
     }
 }
 
-function getChainIdFromRequest(request: Request) {
+async function getChainIdFromRequest(request: Request) {
     const url = request.url
+    const body: JsonRpcPayload = await request.json()
 
     console.log('DEBUG: getChainIdFromRequest')
-    console.log({ url })
+    console.log({
+        url,
+        body,
+        id: createRequestID(ChainId.Mainnet, {
+            method: body.method as EthereumMethodType,
+            params: body.params as [],
+        }),
+    })
 
     // TODO: chainId should be computed from the request url
     return ChainId.Mainnet
@@ -51,7 +59,7 @@ async function resolveRequestKey(request: Request) {
         const body: JsonRpcPayload = await request.json()
 
         return (
-            createRequestID(getChainIdFromRequest(request), {
+            createRequestID(await getChainIdFromRequest(request), {
                 method: body.method as EthereumMethodType,
                 params: body.params ?? [],
             }) ?? ''
