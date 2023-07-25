@@ -380,7 +380,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         )
 
         if (!data.domain) return EMPTY_LIST
-        const bindings = createBindProofsFromNeighbor(data.domain.owner.neighborWithTraversal, data.domain.owner.nft)
+        const bindings = createBindProofsFromNeighbor(data.domain.owner.neighborWithTraversal)
         return bindings.filter((x) => ![NextIDPlatform.NextID].includes(x.platform) && x.identity)
     }
 
@@ -410,7 +410,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             { enableSquash: true },
         )
 
-        const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal, data.identity.nft)
+        const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal)
         return bindings.filter(
             (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
         )
@@ -441,15 +441,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             },
             { enableSquash: true },
         )
-
-        const nft = uniqBy(
-            data.identity.neighborWithTraversal
-                .flatMap((x) => x.from.nft)
-                .concat(data.identity.neighborWithTraversal.flatMap((x) => x.from.nft)),
-            (x) => x.uuid,
-        )
-
-        const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal, nft)
+        const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal)
         return bindings.filter((x) => ![NextIDPlatform.NextID].includes(x.platform) && x.identity)
     }
 
@@ -543,37 +535,12 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     }
 }
 
-// Group all ens
-function groupEnsBinding(ensList: NextIDEnsRecord[]) {
-    const first = ensList[0]
-    return createBindingProofFromProfileQuery(
-        NextIDPlatform.ENS,
-        first.id,
-        first.id,
-        undefined,
-        NextIDPlatform.ENS,
-        ensList
-            .slice(1)
-            .map((x) =>
-                createBindingProofFromProfileQuery(NextIDPlatform.NextID, x.id, x.id, undefined, NextIDPlatform.ENS),
-            ),
-    )
-}
-
 function createBindingProofNodeFromNeighbor(nextIDIdentity: NextIDIdentity, source: NextIDPlatform) {
-    if (nextIDIdentity.nft.length === 0)
-        return createBindingProofFromProfileQuery(
-            nextIDIdentity.platform,
-            nextIDIdentity.identity,
-            nextIDIdentity.displayName,
-            undefined,
-            source,
-        )
     const nft = nextIDIdentity.nft.map((x) =>
         createBindingProofFromProfileQuery(NextIDPlatform.NextID, x.id, x.id, undefined, NextIDPlatform.ENS),
     )
     return createBindingProofFromProfileQuery(
-        NextIDPlatform.ENS,
+        nft.length === 0 ? nextIDIdentity.platform : NextIDPlatform.ENS,
         nextIDIdentity.identity,
         nextIDIdentity.displayName,
         undefined,
@@ -582,22 +549,20 @@ function createBindingProofNodeFromNeighbor(nextIDIdentity: NextIDIdentity, sour
     )
 }
 
-function createBindProofsFromNeighbor(neighborList: NeighborList, ensList: NextIDEnsRecord[]): BindingProof[] {
+function createBindProofsFromNeighbor(neighborList: NeighborList): BindingProof[] {
     const bindings = neighborList
         .map((x) => {
-            return {
-                uuid: x.from.uuid,
-                data: createBindingProofNodeFromNeighbor(x.from, x.source),
-            }
-        })
-        .concat(
-            neighborList.map((x) => {
-                return {
+            return [
+                {
+                    uuid: x.from.uuid,
+                    data: createBindingProofNodeFromNeighbor(x.from, x.source),
+                },
+                {
                     uuid: x.to.uuid,
                     data: createBindingProofNodeFromNeighbor(x.to, x.source),
-                }
-            }),
-        )
-
+                },
+            ]
+        })
+        .flat()
     return uniqBy(bindings, (x) => x.uuid).map((x) => x.data)
 }
