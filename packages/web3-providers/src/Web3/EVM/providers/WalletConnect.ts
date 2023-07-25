@@ -16,8 +16,8 @@ import {
     isValidChainId,
 } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base.js'
-import { Web3StateRef } from '../apis/Web3StateAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
+import { parseJSON } from '../../../entry-helpers.js'
 
 interface SessionPayload {
     event: 'connect' | 'session_update'
@@ -48,7 +48,7 @@ export default class WalletConnectProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
     private connectorId = 0
-    private connector: WalletConnect = null!
+    private connector: WalletConnect | undefined
 
     /**
      * The ongoing walletconnect connection which the listeners use to resolve later.
@@ -60,22 +60,11 @@ export default class WalletConnectProvider
 
     constructor() {
         super(ProviderType.WalletConnect)
-
         this.resumeConnector()
     }
 
     override get connected() {
-        return this.connector.connected
-    }
-
-    private async resumeConnector() {
-        const Provider = Web3StateRef.value.Provider
-
-        await Provider?.readyPromise
-
-        if (Provider?.providerType?.getCurrentValue() === ProviderType.WalletConnect) {
-            this.createConnector()
-        }
+        return this.connector?.connected ?? false
     }
 
     private createConnector() {
@@ -110,6 +99,29 @@ export default class WalletConnectProvider
         connector.on('modal_closed', createListener(this.onModalClose.bind(this)))
 
         return connector
+    }
+
+    private resumeConnector() {
+        const json = localStorage.getItem('walletconnect')
+        const connection = parseJSON<{ connected: boolean }>(json)
+        if (connection?.connected) this.connector = this.createConnector()
+    }
+
+    private async destroyConnector() {
+        try {
+            await this.connector?.killSession()
+        } catch {
+            this.onDisconnect(new Error('disconnect'), {
+                event: 'disconnect',
+                params: [
+                    {
+                        message: 'disconnect',
+                    },
+                ],
+            })
+        } finally {
+            window.localStorage.removeItem('walletconnect')
+        }
     }
 
     private onConnect(error: Error | null, payload: SessionPayload) {
@@ -154,6 +166,8 @@ export default class WalletConnectProvider
     }
 
     private async login(expectedChainId?: ChainId) {
+        if (this.connector?.connected) await this.logout()
+
         // delay to return the result until session is updated or connected
         const [deferred, resolve, reject] = defer<Account<ChainId>>()
 
@@ -173,7 +187,6 @@ export default class WalletConnectProvider
                     account,
                 })
             } else {
-                await this.logoutClientSide()
                 await this.connector.createSession()
             }
         } else {
@@ -186,27 +199,7 @@ export default class WalletConnectProvider
     }
 
     private async logout() {
-        await this.logoutClientSide(true)
-    }
-
-    private async logoutClientSide(force = false) {
-        try {
-            await this.connector.killSession()
-        } catch {
-            window.localStorage.removeItem('walletconnect')
-
-            // force to clean client state
-            if (force) {
-                this.onDisconnect(new Error('disconnect'), {
-                    event: 'disconnect',
-                    params: [
-                        {
-                            message: 'disconnect',
-                        },
-                    ],
-                })
-            }
-        }
+        await this.destroyConnector()
     }
 
     override async switchChain(chainId: ChainId): Promise<void> {
@@ -235,7 +228,9 @@ export default class WalletConnectProvider
         await this.logout()
     }
 
-    override request<T>(requestArguments: RequestArguments): Promise<T> {
+    override async request<T>(requestArguments: RequestArguments): Promise<T> {
+        if (!this.connector) throw new Error('No connector found.')
+
         switch (requestArguments.method) {
             case EthereumMethodType.ETH_CHAIN_ID:
                 return Promise.resolve(this.connector.chainId) as Promise<T>
