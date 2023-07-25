@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { CollectionList, RestorableScroll, UserAssetsProvider } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, useTabs } from '@masknet/theme'
-import { useAccount, useWallet } from '@masknet/web3-hooks-base'
+import { useAccount, useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab, styled, tabClasses, tabsClasses } from '@mui/material'
 import { memo, useCallback, useRef } from 'react'
@@ -99,13 +99,15 @@ const StyledTabList = styled(TabList)`
 
 export const WalletAssets = memo(function WalletAssets() {
     const navigate = useNavigate()
+    const { chainId } = useChainContext()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { refreshAssets } = useContainer(WalletContext)
 
     useMount(() => {
         refreshAssets()
     })
-    const handleAdd = useCallback(() => navigate(PopupRoutes.AddToken), [navigate])
+
+    const handleAdd = useCallback(() => navigate(`${PopupRoutes.AddToken}/${chainId}`), [chainId, navigate])
 
     return wallet ? <WalletAssetsUI onAddToken={handleAdd} /> : null
 })

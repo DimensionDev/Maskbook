@@ -1,11 +1,6 @@
 import { useState, useMemo } from 'react'
 import { DialogContent, type Theme, useMediaQuery, inputClasses } from '@mui/material'
-import {
-    useNetworkContext,
-    useNativeTokenAddress,
-    useFungibleTokensFromTokenList,
-    useFungibleAssets,
-} from '@masknet/web3-hooks-base'
+import { useNetworkContext, useNativeTokenAddress } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { EMPTY_LIST, EnhanceableSite, type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { useRowSize } from '@masknet/shared-base-ui'
@@ -14,7 +9,7 @@ import type { FungibleToken } from '@masknet/web3-shared-base'
 import { TokenListMode } from '../../components/FungibleTokenList/type.js'
 import { useSharedI18N } from '../../../locales/index.js'
 import { InjectedDialog, useBaseUIRuntime } from '../../contexts/index.js'
-import { FungibleTokenList, LoadingStatus } from '../../components/index.js'
+import { FungibleTokenList } from '../../components/index.js'
 
 interface StyleProps {
     compact: boolean
@@ -88,14 +83,6 @@ export function SelectFungibleTokenDialog({
 
     const nativeTokenAddress = useNativeTokenAddress(currentPluginID)
 
-    const { value: fungibleTokens = EMPTY_LIST, loading: loadingTokens } = useFungibleTokensFromTokenList(pluginID, {
-        chainId,
-    })
-
-    const { data: fungibleAssets = EMPTY_LIST } = useFungibleAssets(pluginID, undefined, {
-        chainId,
-    })
-
     const FixedSizeListProps = useMemo(
         () => ({ itemSize: rowSize + 22, height: isMdScreen ? 300 : 428, className: classes.wrapper }),
         [rowSize, isMdScreen],
@@ -109,31 +96,25 @@ export function SelectFungibleTokenDialog({
             }}
             title={title ? title : mode === TokenListMode.Manage ? t.manage_token_list() : t.select_token()}>
             <DialogContent classes={{ root: classes.content }}>
-                {loadingTokens && mode !== TokenListMode.Manage ? (
-                    <LoadingStatus height={500} />
-                ) : (
-                    <FungibleTokenList
-                        mode={mode}
-                        setMode={setMode}
-                        pluginID={currentPluginID}
-                        fungibleTokens={fungibleTokens}
-                        fungibleAssets={fungibleAssets}
-                        chainId={chainId}
-                        tokens={tokens ?? EMPTY_LIST}
-                        whitelist={whitelist}
-                        enableManage={enableManage}
-                        blacklist={
-                            disableNativeToken && nativeTokenAddress ? [nativeTokenAddress, ...blacklist] : blacklist
-                        }
-                        disableSearch={disableSearchBar}
-                        selectedTokens={selectedTokens}
-                        onSelect={onClose}
-                        FixedSizeListProps={FixedSizeListProps}
-                        SearchTextFieldProps={{
-                            InputProps: { classes: { root: classes.search } },
-                        }}
-                    />
-                )}
+                <FungibleTokenList
+                    mode={mode}
+                    setMode={setMode}
+                    pluginID={currentPluginID}
+                    chainId={chainId}
+                    tokens={tokens ?? EMPTY_LIST}
+                    whitelist={whitelist}
+                    enableManage={enableManage}
+                    blacklist={
+                        disableNativeToken && nativeTokenAddress ? [nativeTokenAddress, ...blacklist] : blacklist
+                    }
+                    disableSearch={disableSearchBar}
+                    selectedTokens={selectedTokens}
+                    onSelect={onClose}
+                    FixedSizeListProps={FixedSizeListProps}
+                    SearchTextFieldProps={{
+                        InputProps: { classes: { root: classes.search } },
+                    }}
+                />
             </DialogContent>
         </InjectedDialog>
     )
