@@ -47,14 +47,18 @@ function getChainIdFromRequest(request: Request) {
 }
 
 async function resolveRequestKey(request: Request) {
-    const body: JsonRpcPayload = await request.json()
+    try {
+        const body: JsonRpcPayload = await request.json()
 
-    return (
-        createRequestID(getChainIdFromRequest(request), {
-            method: body.method as EthereumMethodType,
-            params: body.params ?? [],
-        }) ?? ''
-    )
+        return (
+            createRequestID(getChainIdFromRequest(request), {
+                method: body.method as EthereumMethodType,
+                params: body.params ?? [],
+            }) ?? ''
+        )
+    } catch {
+        return ''
+    }
 }
 
 export async function fetchJsonRpcResponse(url: string, payload: JsonRpcPayload, init?: RequestInit) {
