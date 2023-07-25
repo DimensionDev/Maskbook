@@ -5,6 +5,7 @@ import { memo } from 'react'
 import { ContactCard } from '../ContactCard/index.js'
 import { type FriendsInformation } from '../../../hook/useFriends.js'
 import { Box } from '@mui/material'
+import { Search } from '../Search/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -21,11 +22,11 @@ export interface FriendsHomeUIProps {
 
 export const FriendsHomeUI = memo<FriendsHomeUIProps>(({ friends }) => {
     const { classes } = useStyles()
-    {
-        console.log(friends)
-    }
     return (
         <div className={classes.container}>
+            <Box padding="16px 16px 0 16px">
+                <Search />
+            </Box>
             <Box display="flex" flexDirection="column" gap="12px" padding="16px">
                 {friends.map((friend) => {
                     return <ContactCard key={friend.id} friend={friend} />
