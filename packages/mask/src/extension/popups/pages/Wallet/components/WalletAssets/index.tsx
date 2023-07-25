@@ -107,13 +107,16 @@ export const WalletAssets = memo(function WalletAssets() {
         refreshAssets()
     })
 
-    const handleAdd = useCallback(() => navigate(`${PopupRoutes.AddToken}/${chainId}`), [chainId, navigate])
+    const handleAdd = useCallback(
+        (assetTab: WalletAssetTabs) => navigate(`${PopupRoutes.AddToken}/${chainId}/${assetTab}`),
+        [chainId, navigate],
+    )
 
     return wallet ? <WalletAssetsUI onAddToken={handleAdd} /> : null
 })
 
 export interface WalletAssetsUIProps {
-    onAddToken: () => void
+    onAddToken: (assetTab: WalletAssetTabs) => void
 }
 
 export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI({ onAddToken }) {
@@ -189,7 +192,7 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI(
                             value={WalletAssetTabs.Activity}
                         />
                     </StyledTabList>
-                    <Button variant="text" className={classes.addButton} onClick={onAddToken}>
+                    <Button variant="text" className={classes.addButton} onClick={() => onAddToken(currentTab)}>
                         <Icons.AddNoBorder size={16} />
                     </Button>
                 </Box>
