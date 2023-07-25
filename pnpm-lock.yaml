@@ -60,6 +60,9 @@ patchedDependencies:
   '@walletconnect/client@1.7.8':
     hash: 2krbsxzv524dzcdemy7vploqza
     path: patches/@walletconnect__client@1.7.8.patch
+  '@walletconnect/socket-transport@1.7.8':
+    hash: yqrbucohgzysigjw7364fbx7xa
+    path: patches/@walletconnect__socket-transport@1.7.8.patch
   bloom-filters@3.0.0:
     hash: 2etetjrjxbcye2oktxqpij75ey
     path: patches/bloom-filters@3.0.0.patch
@@ -3540,6 +3543,9 @@ importers:
       '@walletconnect/sign-client':
         specifier: ^2.7.3
         version: 2.7.3
+      '@walletconnect/socket-transport':
+        specifier: 1.7.8
+        version: 1.7.8(patch_hash=yqrbucohgzysigjw7364fbx7xa)
       '@walletconnect/types':
         specifier: ^2.7.3
         version: 2.7.3
@@ -13155,7 +13161,7 @@ packages:
   /@walletconnect/core@1.7.8:
     resolution: {integrity: sha512-9xcQ0YNf9JUFb0YOX1Mpy4Yojt+6w2yQz/0aIEyj2X/s9D71NW0fTYsMcdhkLOI7mn2cqVbx2t1lRvdgqsbrSQ==}
     dependencies:
-      '@walletconnect/socket-transport': 1.7.8
+      '@walletconnect/socket-transport': 1.7.8(patch_hash=yqrbucohgzysigjw7364fbx7xa)
       '@walletconnect/types': 1.7.8
       '@walletconnect/utils': 1.7.8
     transitivePeerDependencies:
@@ -13347,7 +13353,7 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@walletconnect/socket-transport@1.7.8:
+  /@walletconnect/socket-transport@1.7.8(patch_hash=yqrbucohgzysigjw7364fbx7xa):
     resolution: {integrity: sha512-bqEjLxfSzG79v2OT7XVOZoyUkg6g3yng0fURrdLusWs42fYHWnrSrIZDejFn8N5PiZk5R2edrggkQ7w0VUUAfw==}
     dependencies:
       '@walletconnect/types': 1.7.8
@@ -13357,6 +13363,7 @@ packages:
       - bufferutil
       - utf-8-validate
     dev: false
+    patched: true
 
   /@walletconnect/time@1.0.2:
     resolution: {integrity: sha512-uzdd9woDcJ1AaBZRhqy5rNC9laqWGErfc4dxA9a87mPdKOgWMD85mcFo9dIYIts/Jwocfwn07EC6EzclKubk/g==}
@@ -33454,6 +33461,7 @@ time:
   /@uniswap/v2-sdk@3.0.0-alpha.2: '2021-05-21T14:24:53.975Z'
   /@vitest/ui@0.30.1: '2023-04-11T11:27:59.267Z'
   /@walletconnect/sign-client@2.7.3: '2023-05-08T06:42:19.413Z'
+  /@walletconnect/socket-transport@1.7.8: '2022-04-26T10:08:30.425Z'
   /@walletconnect/types@2.7.3: '2023-05-08T06:42:07.362Z'
   /@walletconnect/utils@2.7.3: '2023-05-08T06:42:09.851Z'
   /anchorme@2.1.2: '2020-05-08T13:17:56.752Z'

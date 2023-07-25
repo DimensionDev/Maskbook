@@ -1,0 +1,26 @@
+diff --git a/dist/cjs/index.js b/dist/cjs/index.js
+index 8a0e63b67854fac1a23cdea274319d1ea14b34f7..d078de24361778aa726443d236aa72766df7e92c 100644
+--- a/dist/cjs/index.js
++++ b/dist/cjs/index.js
+@@ -93,7 +93,7 @@ class SocketTransport {
+             setTimeout(() => {
+                 this._nextSocket = null;
+                 this._socketCreate();
+-            }, 1000);
++            }, 2000);
+         };
+     }
+     _socketOpen() {
+diff --git a/dist/esm/index.js b/dist/esm/index.js
+index 9a6cc3275e94dd38cbb549fbdb22dfb726fcec32..da38160aa8541dc1d99c15870e543baf47033ffa 100644
+--- a/dist/esm/index.js
++++ b/dist/esm/index.js
+@@ -90,7 +90,7 @@ class SocketTransport {
+             setTimeout(() => {
+                 this._nextSocket = null;
+                 this._socketCreate();
+-            }, 1000);
++            }, 2000);
+         };
+     }
+     _socketOpen() {
