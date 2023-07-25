@@ -66,6 +66,9 @@ const useStyles = makeStyles()((theme) => {
                 display: 'flex',
                 flexDirection: 'column',
                 overflow: 'auto',
+                '&::-webkit-scrollbar': {
+                    display: 'none',
+                },
             },
         },
         addButton: {
