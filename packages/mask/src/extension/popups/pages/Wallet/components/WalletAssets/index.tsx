@@ -209,6 +209,7 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI(
                                 <CollectionList
                                     gridProps={gridProps}
                                     disableSidebar
+                                    disableWindowScroll
                                     scrollElementRef={scrollTargetRef}
                                     onItemClick={handleItemClick}
                                     onCollectionChange={handleCollectionChange}
