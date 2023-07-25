@@ -33,15 +33,18 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
         })
         const results = await Promise.allSettled(promiseArray)
         results.forEach((item, index) => {
-            if (item.status !== 'rejected')
+            if (item.status !== 'rejected') {
+                const filtered = item.value.filter(
+                    (x) => x.platform === 'twitter' || x.platform === 'lens' || x.platform === 'ens',
+                )
                 profiles.push({
-                    profiles: item.value,
+                    profiles: filtered,
                     ...friends[index],
                     id: (friends[index].linkedPersona as ECKeyIdentifier).publicKeyAsHex,
                 })
+            }
+            return
         })
-        return new Promise((resolve) => {
-            resolve(profiles)
-        })
+        return profiles
     }, [network, currentPersona])
 }
