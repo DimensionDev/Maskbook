@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { FungibleTokenList, SelectNetworkSidebar, TokenListMode, AddCollectibles } from '@masknet/shared'
 import { useRowSize } from '@masknet/shared-base-ui'
@@ -38,6 +38,9 @@ const useStyles = makeStyles<{ currentTab: TabType }>()((theme, { currentTab }) 
     listBox: {
         flex: 1,
         marginTop: 36,
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     wrapper: {
         paddingTop: theme.spacing(2),
@@ -96,7 +99,7 @@ enum TabType {
     NFT = 'NFT',
 }
 
-const SupportedChains = [
+const CollectibleSupportedChains: Web3Helper.ChainIdAll[] = [
     ChainId.Mainnet,
     ChainId.BSC,
     ChainId.Matic,
@@ -104,6 +107,20 @@ const SupportedChains = [
     ChainId.Optimism,
     ChainId.Avalanche,
     ChainId.xDai,
+]
+
+const TokenSupportedChains: Web3Helper.ChainIdAll[] = [
+    ChainId.Mainnet,
+    ChainId.BSC,
+    ChainId.Matic,
+    ChainId.Arbitrum,
+    ChainId.xDai,
+    ChainId.Fantom,
+    ChainId.Optimism,
+    ChainId.Avalanche,
+    ChainId.Aurora,
+    ChainId.Conflux,
+    ChainId.Astar,
 ]
 
 const AddToken = memo(function AddToken() {
@@ -123,12 +140,24 @@ const AddToken = memo(function AddToken() {
 
     const allNetworks = useNetworkDescriptors(NetworkPluginID.PLUGIN_EVM)
 
+    const supportedChains = currentTab === TabType.Token ? TokenSupportedChains : CollectibleSupportedChains
+
     const networks = useMemo(() => {
         return sortBy(
-            allNetworks.filter((x) => x.isMainnet && SupportedChains.includes(x.chainId)),
-            (x) => SupportedChains.indexOf(x.chainId),
+            allNetworks.filter((x) => x.isMainnet && supportedChains.includes(x.chainId)),
+            (x) => supportedChains.indexOf(x.chainId),
         )
-    }, [allNetworks])
+    }, [allNetworks, supportedChains])
+
+    const changeTab = useCallback(
+        (event: object, value: string) => {
+            onChange(event, value)
+            if (currentTab === TabType.Token && !CollectibleSupportedChains.includes(chainId)) {
+                setChainId(ChainId.Mainnet)
+            }
+        },
+        [onChange, chainId, currentTab],
+    )
 
     useTitle(t('add_assets'))
 
@@ -146,7 +175,7 @@ const AddToken = memo(function AddToken() {
         <TabContext value={currentTab}>
             <NormalHeader
                 tabList={
-                    <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
+                    <MaskTabList onChange={changeTab} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
                         <Tab label={t('popups_wallet_token')} value={TabType.Token} />
                         <Tab label={t('popups_wallet_collectible')} value={TabType.NFT} />
                     </MaskTabList>
