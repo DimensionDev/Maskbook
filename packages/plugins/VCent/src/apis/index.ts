@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { fetchJSON } from '@masknet/web3-providers/helpers'
+import { fetchCachedJSON } from '@masknet/web3-providers/helpers'
 import { TWEET_BASE_URL } from '../constants.js'
 
 export interface TweetData {
@@ -22,13 +22,6 @@ export interface TweetDataResponse {
 }
 
 export async function getTweetData(tweetAddress: string) {
-    const { results } = await fetchJSON<TweetDataResponse>(
-        urlcat(TWEET_BASE_URL, { tweetID: tweetAddress }),
-        undefined,
-        {
-            enableCache: true,
-            enableSquash: true,
-        },
-    )
+    const { results } = await fetchCachedJSON<TweetDataResponse>(urlcat(TWEET_BASE_URL, { tweetID: tweetAddress }))
     return results
 }

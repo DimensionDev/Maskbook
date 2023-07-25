@@ -1,13 +1,13 @@
 import urlcat from 'urlcat'
 import { KV_ROOT_URL } from '../constants/index.js'
-import { fetchJSON } from '../../entry-helpers.js'
+import { fetchSquashedJSON } from '../../entry-helpers.js'
 
 export class R2D2GetterSetter<T> {
     constructor(private prefix: string) {}
 
     async get(key: string) {
         try {
-            return fetchJSON<T>(
+            return fetchSquashedJSON<T>(
                 urlcat(KV_ROOT_URL, 'api/:name', {
                     name: `${this.prefix}_${key}`,
                 }),
@@ -16,9 +16,6 @@ export class R2D2GetterSetter<T> {
                     headers: {
                         'Content-Type': 'text/plain',
                     },
-                },
-                {
-                    enableSquash: true,
                 },
             )
         } catch {

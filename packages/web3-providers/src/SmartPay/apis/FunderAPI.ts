@@ -5,7 +5,7 @@ import { EMPTY_LIST, type Proof } from '@masknet/shared-base'
 import { ConnectionReadonlyAPI } from '../../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { FUNDER_PROD } from '../constants.js'
 import { FunderAPI } from '../../entry-types.js'
-import { fetchJSON } from '../../entry-helpers.js'
+import { fetchJSON, fetchCachedJSON } from '../../entry-helpers.js'
 
 export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
     private Web3 = new ConnectionReadonlyAPI()
@@ -15,14 +15,7 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
     }
 
     private async getWhiteList(handler: string) {
-        return fetchJSON<FunderAPI.WhiteList>(
-            urlcat(FUNDER_PROD, '/whitelist', { twitterHandle: handler }),
-            undefined,
-            {
-                enableSquash: true,
-                enableCache: true,
-            },
-        )
+        return fetchCachedJSON<FunderAPI.WhiteList>(urlcat(FUNDER_PROD, '/whitelist', { twitterHandle: handler }))
     }
 
     async getRemainFrequency(handler: string) {
@@ -39,13 +32,8 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
         await this.assetChainId(chainId)
 
         try {
-            const operations = await fetchJSON<FunderAPI.Operation[]>(
+            const operations = await fetchCachedJSON<FunderAPI.Operation[]>(
                 urlcat(FUNDER_PROD, '/operation', { scanKey: FunderAPI.ScanKey.OwnerAddress, scanValue: owner }),
-                undefined,
-                {
-                    enableSquash: true,
-                    enableCache: true,
-                },
             )
             const allSettled = await Promise.allSettled(
                 operations.map<Promise<TransactionReceipt | null>>((x) =>
