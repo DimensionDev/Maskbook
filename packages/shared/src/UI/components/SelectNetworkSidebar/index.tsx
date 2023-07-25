@@ -107,9 +107,7 @@ export function SelectNetworkSidebar({
                     key={x.chainId}
                     className={classes.networkButton}
                     disableRipple
-                    onClick={() => {
-                        onChainChange(x.chainId)
-                    }}>
+                    onClick={() => onChainChange(x.chainId)}>
                     <NetworkIcon pluginID={pluginID} chainId={x.chainId} ImageIconProps={{ size: 24 }} />
                     {currentChainId === x.chainId ? (
                         <Icons.BorderedSuccess className={classes.indicator} size={12} />
