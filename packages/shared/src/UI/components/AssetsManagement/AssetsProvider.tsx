@@ -188,7 +188,7 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
             // If assets just fetched are all blocked, load another page.
             const blockedMapKey = [collection.chainId, collection.address].join('.').toLowerCase()
             const blockedList = blockedTokenIdsMapRef.current[blockedMapKey]
-            if (!blockedList.length || !assets?.length) return
+            if (!blockedList?.length || !assets?.length) return
             const listings = assets.filter((x) => !blockedList.includes(x.tokenId))
             if (!listings.length) await loadAssetsViaHub(collection)
         },

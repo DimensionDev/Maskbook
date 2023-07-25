@@ -198,7 +198,10 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                     (gasLimit) => isGreaterThanOrEqualTo(gasLimit, minGasLimitContext),
                     t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimitContext }),
                 ),
-            gasPrice: zod.string().min(1, t('wallet_transfer_error_gas_price_absence')),
+            gasPrice: zod
+                .string()
+                .min(1, t('wallet_transfer_error_gas_price_absence'))
+                .transform((x) => x || '0'),
         })
     }, [selectedAsset, minGasLimitContext])
 
@@ -209,7 +212,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
         defaultValues: {
             address: '',
             amount: '',
-            gasPrice: '',
+            gasPrice: '0',
             gasLimit: '0',
         },
         context: {
@@ -264,7 +267,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     // #endregion
 
     // #region Get min gas limit with amount and recipient address
-    const { value: minGasLimit, error } = useGasLimit(
+    const { value: minGasLimit } = useGasLimit(
         selectedAsset?.schema,
         selectedAsset?.address,
         rightShift(amount ? amount : 0, selectedAsset?.decimals).toFixed(),
@@ -278,7 +281,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     )
 
     const maxAmount = useMemo(() => {
-        let amount_ = new BigNumber(tokenBalance || '0')
+        let amount_ = new BigNumber(tokenBalance)
         amount_ = selectedAsset?.schema === SchemaType.Native ? amount_.minus(multipliedBy(30000, gasPrice)) : amount_
 
         return BigNumber.max(0, amount_).toFixed()

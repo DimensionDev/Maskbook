@@ -14,7 +14,6 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 const useStyles = makeStyles()((theme) => ({
     input: {
         flex: 1,
-        marginBottom: 8,
     },
     to: {
         display: 'flex',
@@ -30,7 +29,6 @@ const useStyles = makeStyles()((theme) => ({
     receiverPanel: {
         display: 'flex',
         alignItems: 'flex-start',
-        height: 88,
         width: '100%',
     },
     inputText: {

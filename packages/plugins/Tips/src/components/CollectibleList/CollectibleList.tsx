@@ -6,7 +6,6 @@ import { SourceType } from '@masknet/web3-shared-base'
 import { Box, Typography } from '@mui/material'
 import { ActionButton, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { type ChangeEventOptions, CollectibleItem, type SelectableProps } from './CollectibleItem.js'
-import { CollectibleListContext } from './CollectibleListContext.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
 import type { CollectibleGridProps } from './type.js'
 import { useI18N } from '../../locales/index.js'
@@ -51,7 +50,6 @@ export interface CollectibleListProps
     error?: string
     loading: boolean
     retry(): void
-    readonly?: boolean
     hasRetry?: boolean
     disableLink?: boolean
     showNetworkIcon?: boolean
@@ -73,7 +71,6 @@ export function CollectibleList(props: CollectibleListProps) {
         loading,
         retry,
         error,
-        readonly,
         hasRetry = true,
         selectable,
         multiple,
@@ -103,71 +100,68 @@ export function CollectibleList(props: CollectibleListProps) {
 
     const listRef = useRef<typeof Box>(null)
 
-    const context = useMemo(() => ({ collectiblesRetry: retry }), [retry])
     return (
-        <CollectibleListContext.Provider value={context}>
-            <Box className={classes.list} ref={listRef}>
-                {loading && collectibles.length === 0 ? <LoadingSkeleton className={classes.root} /> : null}
-                {error || (collectibles.length === 0 && !loading) ? (
-                    <Box className={classes.text}>
-                        <Typography color="textSecondary">{t.tips_no_collectible_found()}</Typography>
-                        {hasRetry ? (
-                            <ActionButton className={classes.button} onClick={retry}>
-                                {t.retry()}
-                            </ActionButton>
-                        ) : null}
-                    </Box>
-                ) : (
-                    <Box className={classes.root}>
-                        {collectibles.map((token, index) => {
-                            const name = token.metadata?.name
-                            const uiTokenId = Others.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
-                            const title = `${name || token.collection?.name || token.contract?.name} ${uiTokenId}`
-                            const collectibleKey = getCollectibleKey(token)
-                            const checked = selectable ? value?.includes(collectibleKey) : false
-                            const inactive = value ? !!value?.length && !checked : false
-                            return (
-                                <ShadowRootTooltip
-                                    key={index}
-                                    title={title}
-                                    placement="top"
-                                    disableInteractive
-                                    PopperProps={{
-                                        placement: 'top',
-                                        popperOptions: {
-                                            strategy: 'absolute',
-                                        },
-                                        modifiers: [
-                                            {
-                                                name: 'preventOverflow',
-                                                options: {
-                                                    rootBoundary: listRef.current,
-                                                    boundary: listRef.current,
-                                                },
+        <Box className={classes.list} ref={listRef}>
+            {loading && collectibles.length === 0 ? <LoadingSkeleton className={classes.root} /> : null}
+            {error || (collectibles.length === 0 && !loading) ? (
+                <Box className={classes.text}>
+                    <Typography color="textSecondary">{t.tips_no_collectible_found()}</Typography>
+                    {hasRetry ? (
+                        <ActionButton className={classes.button} onClick={retry}>
+                            {t.retry()}
+                        </ActionButton>
+                    ) : null}
+                </Box>
+            ) : (
+                <Box className={classes.root}>
+                    {collectibles.map((token, index) => {
+                        const name = token.metadata?.name
+                        const uiTokenId = Others.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
+                        const title = `${name || token.collection?.name || token.contract?.name} ${uiTokenId}`
+                        const collectibleKey = getCollectibleKey(token)
+                        const checked = selectable ? value?.includes(collectibleKey) : false
+                        const inactive = value ? !!value?.length && !checked : false
+                        return (
+                            <ShadowRootTooltip
+                                key={index}
+                                title={title}
+                                placement="top"
+                                disableInteractive
+                                PopperProps={{
+                                    placement: 'top',
+                                    popperOptions: {
+                                        strategy: 'absolute',
+                                    },
+                                    modifiers: [
+                                        {
+                                            name: 'preventOverflow',
+                                            options: {
+                                                rootBoundary: listRef.current,
+                                                boundary: listRef.current,
                                             },
-                                        ],
-                                    }}
-                                    arrow>
-                                    <CollectibleItem
-                                        className={classes.collectibleItem}
-                                        asset={token}
-                                        provider={SourceType.OpenSea}
-                                        pluginID={pluginID}
-                                        selectable={selectable}
-                                        multiple={multiple}
-                                        disableLink={disableLink}
-                                        showNetworkIcon={showNetworkIcon}
-                                        checked={checked}
-                                        inactive={inactive}
-                                        value={collectibleKey}
-                                        onChange={handleItemChange}
-                                    />
-                                </ShadowRootTooltip>
-                            )
-                        })}
-                    </Box>
-                )}
-            </Box>
-        </CollectibleListContext.Provider>
+                                        },
+                                    ],
+                                }}
+                                arrow>
+                                <CollectibleItem
+                                    className={classes.collectibleItem}
+                                    asset={token}
+                                    provider={SourceType.OpenSea}
+                                    pluginID={pluginID}
+                                    selectable={selectable}
+                                    multiple={multiple}
+                                    disableLink={disableLink}
+                                    showNetworkIcon={showNetworkIcon}
+                                    checked={checked}
+                                    inactive={inactive}
+                                    value={collectibleKey}
+                                    onChange={handleItemChange}
+                                />
+                            </ShadowRootTooltip>
+                        )
+                    })}
+                </Box>
+            )}
+        </Box>
     )
 }
