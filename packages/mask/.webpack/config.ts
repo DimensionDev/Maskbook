@@ -219,7 +219,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                     },
                 ],
             }),
-            (() => {
+            ...(() => {
                 const { BRANCH_NAME, BUILD_DATE, COMMIT_DATE, COMMIT_HASH, DIRTY } = getGitInfo()
                 const json = {
                     BRANCH_NAME,
@@ -231,7 +231,10 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                     VERSION,
                     REACT_DEVTOOLS_EDITOR_URL: flags.mode === 'development' ? flags.devtoolsEditorURI : undefined,
                 }
-                return emitJSONFile({ content: json, name: 'build-info.json' })
+                return [
+                    emitJSONFile({ content: json, name: 'build-info.json' }),
+                    emitJSONFile({ content: { ...json, channel: 'beta' }, name: 'build-info-beta.json' }),
+                ]
             })(),
         ],
         optimization: {
