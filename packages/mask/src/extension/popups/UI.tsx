@@ -57,7 +57,10 @@ const PopupRoutes = memo(function PopupRoutes() {
         <Suspense fallback={<LoadingPlaceholder />}>
             <WalletContext.Provider>
                 <PersonaContext.Provider
-                    initialState={{ queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation }}>
+                    initialState={{
+                        queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
+                        queryPersonaAvatarLastUpdateTime: Services.Identity.getPersonaAvatarLastUpdateTime,
+                    }}>
                     <UserContext.Provider>
                         <Routes location={mainLocation || location}>
                             <Route path="/" element={<PopupLayout />}>

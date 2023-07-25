@@ -62,6 +62,13 @@ export async function queryAvatarDB(
     if (result) scheduleAvatarMetaUpdate(id, { lastAccessTime: new Date() })
     return result || null
 }
+
+export async function queryAvatarMetaDataDB(
+    t: IDBPSafeTransaction<AvatarDBSchema, ['metadata']>,
+    id: IdentifierWithAvatar,
+) {
+    return t.objectStore('metadata').get(id.toText())
+}
 function scheduleAvatarMetaUpdate(id: IdentifierWithAvatar, meta: Partial<AvatarMetadataRecord>) {
     pendingUpdate.set(id, meta)
 

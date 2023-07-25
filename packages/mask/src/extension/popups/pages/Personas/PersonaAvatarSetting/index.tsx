@@ -13,13 +13,12 @@ import { useModalNavigate } from '../../../components/index.js'
 import { NetworkPluginID, PopupModalRoutes, PopupRoutes, SignType } from '@masknet/shared-base'
 import { ProfilePhotoType } from '../../Wallet/type.js'
 import { NFTAvatarPicker } from '../../../components/NFTAvatarPicker/index.js'
-import { PersonaContext } from '@masknet/shared'
+import { PERSONA_AVATAR_DB_NAMESPACE, PersonaContext, type PersonaAvatarData } from '@masknet/shared'
 import { useVerifiedWallets } from '../../../hook/useVerifiedWallets.js'
 import Services from '../../../../service.js'
 import { Web3, Web3Storage } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { MAX_FILE_SIZE, PERSONA_AVATAR_DB_NAMESPACE } from '../../../constants.js'
-import type { PersonaAvatarData } from '../type.js'
+import { MAX_FILE_SIZE } from '../../../constants.js'
 
 const useStyles = makeStyles()((theme) => ({
     tabs: {

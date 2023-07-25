@@ -35,3 +35,5 @@ export const SNS_RSS3_FIELD_KEY_MAP: Partial<Record<EnhanceableSite, RSS3_KEY_SN
     [EnhanceableSite.Twitter]: RSS3_KEY_SNS.TWITTER,
     [EnhanceableSite.Instagram]: RSS3_KEY_SNS.INSTAGRAM,
 }
+
+export const PERSONA_AVATAR_DB_NAMESPACE = 'com.maskbook.persona.avatar.storage'
