@@ -49,7 +49,6 @@
     "redirect_alert": "ブラウザがリダイレクトされない場合は、 <terms>こちら</terms>をクリックしてください。",
     "typed_message_text_alert": "現在、TypedMessageTextのみ対応しています。",
     "badge_renderer_provided_by_plugin": "プラグインにより提供",
-    "add_token": "トークンを追加",
     "add_nft_contract_search_hint": "NFT コレクション名、シンボルまたはコントラクトのアドレスを検索",
     "applications": "アプリケーション",
     "application_settings": "アプリ設定",
