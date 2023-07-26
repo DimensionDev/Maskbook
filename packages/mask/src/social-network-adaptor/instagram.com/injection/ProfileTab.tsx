@@ -2,11 +2,11 @@ import { useLayoutEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-use'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, startWatch } from '@masknet/theme'
 import { MaskMessages } from '@masknet/shared-base'
 import { useMatchXS } from '@masknet/shared-base-ui'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js'
-import { attachReactTreeWithContainer, startWatch } from '../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../utils/index.js'
 import {
     searchProfileActiveTabSelector,
     searchProfileTabListLastChildSelector,

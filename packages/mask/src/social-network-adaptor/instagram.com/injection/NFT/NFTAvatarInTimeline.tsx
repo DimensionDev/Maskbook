@@ -1,10 +1,10 @@
 import { DOMProxy, type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../../utils/index.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { NFTBadgeTimeline, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
 import { searchInstagramPostAvatarSelector } from '../../utils/selector.js'
 import { memo } from 'react'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, startWatch } from '@masknet/theme'
 import { noop } from 'lodash-es'
 import { Flags } from '@masknet/flags'
 

@@ -1,11 +1,11 @@
 import { useCallback, useLayoutEffect, useState } from 'react'
 import { useLocation } from 'react-use'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, startWatch } from '@masknet/theme'
 import { MaskMessages } from '@masknet/shared-base'
 import { useLocationChange } from '@masknet/shared-base-ui'
 import { searchInstagramAvatarEditPageSettingDialog, searchInstagramAvatarListSelector } from '../../utils/selector.js'
-import { attachReactTreeWithContainer, startWatch, useI18N } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer, useI18N } from '../../../../utils/index.js'
 import { NFTAvatarSettingDialog } from './NFTAvatarSettingDialog.js'
 
 export async function injectProfileNFTAvatarInInstagram(signal: AbortSignal) {

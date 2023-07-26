@@ -11,13 +11,13 @@ import { ProfileIdentifier } from '@masknet/shared-base'
 import { creator } from '../../../social-network/utils.js'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context.js'
 import { untilElementAvailable } from '../../../utils/dom.js'
-import { startWatch } from '../../../utils/watcher.js'
 import { mindsBase } from '../base.js'
 import { mindsShared } from '../shared.js'
 import { postParser } from '../utils/fetch.js'
 import { postContentSelector } from '../utils/selector.js'
 import { getCurrentIdentifier } from '../../utils.js'
 import Services from '../../../extension/service.js'
+import { startWatch } from '@masknet/theme'
 
 export const PostProviderMinds: Next.CollectingCapabilities.PostsProvider = {
     posts: creator.EmptyPostProviderState(),

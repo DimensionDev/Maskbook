@@ -3,7 +3,7 @@ import { postEditorInTimelineSelector, postEditorInPopupSelector } from '../util
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { hasEditor, isCompose } from '../utils/postBox.js'
 import { Banner } from '../../../components/Welcomes/Banner.js'
-import { startWatch, type WatchOptions } from '../../../utils/watcher.js'
+import { startWatch, type WatchOptions } from '@masknet/theme'
 
 export function injectBannerAtTwitter(signal: AbortSignal) {
     const emptyNode = document.createElement('div')

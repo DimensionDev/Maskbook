@@ -5,12 +5,12 @@ import { isMobileFacebook } from '../utils/isMobile.js'
 import { getProfileIdentifierAtFacebook } from '../utils/getProfileIdentifier.js'
 import { type TypedMessage, makeTypedMessageText, makeTypedMessageTuple } from '@masknet/typed-message'
 import { clickSeeMore } from '../injection/PostInspector.js'
-import { startWatch } from '../../../utils/watcher.js'
 import { facebookShared } from '../shared.js'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context.js'
 import { collectNodeText } from '../../../utils/index.js'
 import { None, Some, type Option } from 'ts-results-es'
 import { Flags } from '@masknet/flags'
+import { startWatch } from '@masknet/theme'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobileFacebook ? '.story_body_container > div' : '[role=article]  [id]  span[dir="auto"]',

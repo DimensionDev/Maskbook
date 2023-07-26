@@ -1,6 +1,6 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { NFTAvatarInTwitter } from './NFTAvatarInTwitter.js'
-import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../../utils/index.js'
 import {
     searchTwitterAvatarNFTLinkSelector,
     searchTwitterAvatarNFTSelector,
@@ -10,6 +10,7 @@ import {
 import { NFTAvatarClipInTwitter } from './NFTAvatarClip.js'
 import { getAvatarType } from '../../utils/AvatarType.js'
 import { AvatarType } from '@masknet/plugin-avatar'
+import { startWatch } from '@masknet/theme'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const avatarType = getAvatarType()

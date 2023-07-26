@@ -5,10 +5,10 @@ import { postsContentSelector } from '../utils/selectors.js'
 
 import { mirrorShared } from '../shared.js'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context.js'
-import { startWatch } from '../../../utils/index.js'
 import { formatWriter, getMirrorPageType, MirrorPageType, MIRROR_ENTRY_ID } from './utils.js'
 import { Mirror } from '@masknet/web3-providers'
 import type { PostContextCoAuthor } from '@masknet/plugin-infra/content-script'
+import { startWatch } from '@masknet/theme'
 
 const MIRROR_LINK_PREFIX = /https(.*)mirror.xyz(.*)\//i
 

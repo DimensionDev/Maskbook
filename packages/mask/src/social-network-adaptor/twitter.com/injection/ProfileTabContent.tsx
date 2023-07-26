@@ -1,7 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { getMaskColor, makeStyles } from '@masknet/theme'
+import { getMaskColor, makeStyles, startWatch } from '@masknet/theme'
 import { ProfileTabContent } from '../../../components/InjectedComponents/ProfileTabContent.js'
-import { attachReactTreeWithContainer, startWatch } from '../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../utils/index.js'
 import {
     searchNewTweetButtonSelector,
     searchProfileEmptySelector,

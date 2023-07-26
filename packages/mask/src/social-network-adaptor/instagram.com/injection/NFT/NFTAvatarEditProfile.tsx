@@ -4,9 +4,9 @@ import {
     searchInstagramProfileAvatarButtonSelector,
     searchInstagramProfileEditButton,
 } from '../../utils/selector.js'
-import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../../utils/index.js'
 import { useMemo } from 'react'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, startWatch } from '@masknet/theme'
 import { NFTAvatarButton } from '@masknet/plugin-avatar'
 import { NFTAvatarSettingDialog } from './NFTAvatarSettingDialog.js'
 import { useLocation } from 'react-use'

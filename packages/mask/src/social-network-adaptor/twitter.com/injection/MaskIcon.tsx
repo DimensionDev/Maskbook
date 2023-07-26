@@ -6,7 +6,6 @@ import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { memoize, noop } from 'lodash-es'
 import Services from '../../../extension/service.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
-import { startWatch, type WatchOptions } from '../../../utils/watcher.js'
 import {
     bioPageUserIDSelector,
     bioPageUserNickNameSelector,
@@ -14,6 +13,7 @@ import {
     isProfilePageLike,
 } from '../utils/selector.js'
 import { Flags } from '@masknet/flags'
+import { startWatch, type WatchOptions } from '@masknet/theme'
 
 function Icon(props: { size: number }) {
     return (

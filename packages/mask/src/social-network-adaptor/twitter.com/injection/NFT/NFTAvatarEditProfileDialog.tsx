@@ -4,7 +4,7 @@ import { NFTAvatarButton } from '@masknet/plugin-avatar'
 import { ConnectPersonaBoundary } from '@masknet/shared'
 import { CrossIsolationMessages, PluginID, currentPersonaIdentifier } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, startWatch } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
 
 import {
@@ -14,7 +14,7 @@ import {
 } from '../../../../components/DataSource/useActivatedUI.js'
 import { usePersonasFromDB } from '../../../../components/DataSource/usePersonasFromDB.js'
 import { Services } from '../../../../extension/service.js'
-import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../../utils/index.js'
 import { ButtonStyle } from '../../constant.js'
 import { searchProfileAvatarSelector, searchProfileSaveSelector } from '../../utils/selector.js'
 

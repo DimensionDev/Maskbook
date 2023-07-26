@@ -3,9 +3,8 @@ import { type PostInfo, PostInfoProvider } from '@masknet/plugin-infra/content-s
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { PostComment, type PostCommentProps } from '../../../components/InjectedComponents/PostComments.js'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, startWatch } from '@masknet/theme'
 import { collectNodeText } from '../../../utils/index.js'
-import { startWatch } from '../../../utils/watcher.js'
 import { ValueRef } from '@masknet/shared-base'
 
 interface injectPostCommentsDefaultConfig {

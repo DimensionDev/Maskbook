@@ -31,6 +31,7 @@ export function useInjectedCSS(showAvatar: boolean, updatedAvatar: boolean) {
                 }
             
             `
+
                 rainbowElement.current = linkDom.firstElementChild.nextElementSibling
                 linkDom.firstElementChild.nextElementSibling?.classList.add('rainbowBorder')
                 linkDom.appendChild(style)

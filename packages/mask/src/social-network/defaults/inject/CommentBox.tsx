@@ -1,11 +1,10 @@
 import { memo, useCallback, useContext } from 'react'
 import { type PostInfo, usePostInfoDetails, PostInfoContext } from '@masknet/plugin-infra/content-script'
 import { type DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, startWatch } from '@masknet/theme'
 import { MaskMessages } from '@masknet/shared-base'
 import { CommentBox, type CommentBoxProps } from '../../../components/InjectedComponents/CommentBox.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
-import { startWatch } from '../../../utils/watcher.js'
 
 const defaultOnPasteToCommentBox = async (
     encryptedComment: string,

@@ -1,8 +1,8 @@
 import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Composition } from '../../../components/CompositionDialog/Composition.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
-import { startWatch } from '../../../utils/watcher.js'
 import { composerModalSelector, rootSelector } from '../utils/selector.js'
+import { startWatch } from '@masknet/theme'
 
 export function injectPostDialogAtMinds(signal: AbortSignal) {
     renderPostDialogTo('popup', composerModalSelector(), signal)

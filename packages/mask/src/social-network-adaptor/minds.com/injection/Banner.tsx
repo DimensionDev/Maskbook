@@ -1,8 +1,7 @@
 import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, startWatch } from '@masknet/theme'
 import { Banner } from '../../../components/Welcomes/Banner.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
-import { startWatch } from '../../../utils/watcher.js'
 import { postEditorInTimelineSelector, postEditorInDialogSelector } from '../utils/selector.js'
 
 export function injectBannerAtMinds(signal: AbortSignal) {

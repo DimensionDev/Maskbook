@@ -1,6 +1,6 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { makeStyles } from '@masknet/theme'
-import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
+import { makeStyles, startWatch } from '@masknet/theme'
+import { attachReactTreeWithContainer } from '../../../../utils/index.js'
 import { NFTAvatar, toPNG } from '@masknet/plugin-avatar'
 import { hookInputUploadOnce } from '@masknet/injected-script'
 import {

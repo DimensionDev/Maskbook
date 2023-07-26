@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { debounce } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, startWatch } from '@masknet/theme'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { attachReactTreeWithContainer, startWatch } from '../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../utils/index.js'
 import {
     profileTabSelectedSelector,
     profileTabUnselectedSelector,

@@ -1,10 +1,9 @@
 import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, startWatch } from '@masknet/theme'
 import { useMemo, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { attachReactTreeWithContainer } from '../../../../utils/index.js'
-import { startWatch } from '../../../../utils/watcher.js'
 import { querySelector } from '../../utils/selector.js'
 
 const selector: () => LiveSelector<HTMLElement, true> = () =>

@@ -2,9 +2,10 @@ import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Plugin } from '@masknet/plugin-infra'
 import { noop } from 'lodash-es'
 import { Avatar } from '../../../../components/InjectedComponents/Avatar.js'
-import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../../utils/index.js'
 import { querySelectorAll } from '../../utils/selector.js'
 import { Flags } from '@masknet/flags'
+import { startWatch } from '@masknet/theme'
 
 function getTwitterId(ele: HTMLElement) {
     const profileLink = ele.querySelector('a[role="link"]') as HTMLAnchorElement

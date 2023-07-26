@@ -4,8 +4,8 @@ import { PLUGIN_ID } from '../constants.js'
 import { PluginID } from '@masknet/shared-base'
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
-import { SwitchLogoDialog } from './SwitchLogoDialog.js'
 import { LogoSwitcher } from './LogoSwitcher.js'
+import { Modals } from './modals.js'
 
 const recommendFeature = {
     description: <Trans i18nKey="title" ns={PluginID.SwitchLogo} />,
@@ -18,7 +18,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     GlobalInjection() {
         return (
             <>
-                <SwitchLogoDialog />
+                <Modals />
                 <LogoSwitcher />
             </>
         )
