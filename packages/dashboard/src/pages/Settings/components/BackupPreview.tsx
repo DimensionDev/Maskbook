@@ -79,7 +79,7 @@ const useStyles = makeStyles()((theme) => ({
     list: {
         padding: 0,
     },
-    walletIcon: {
+    walletHeaderIcon: {
         backgroundColor: '#1C68F3',
         boxShadow: '0px 6px 12px rgba(28, 104, 243, 0.2)',
     },
@@ -98,6 +98,11 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.second,
         minWidth: 'unset',
     },
+    walletIcon: {
+        marginRight: theme.spacing(1),
+        color: theme.palette.maskColor.second,
+        minWidth: 'unset',
+    },
     listText: {
         fontSize: 14,
     },
@@ -105,7 +110,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
     },
 }))
 
@@ -174,7 +179,7 @@ export function BackupPreview({ info, ...rest }: BackupPreviewProps) {
                     <CardHeader
                         className={classes.cardHeader}
                         avatar={
-                            <div className={cx(classes.cardIcon, classes.walletIcon)}>
+                            <div className={cx(classes.cardIcon, classes.walletHeaderIcon)}>
                                 <Icons.Wallet size={20} color="#fff" />
                             </div>
                         }
@@ -188,7 +193,7 @@ export function BackupPreview({ info, ...rest }: BackupPreviewProps) {
                         <List className={cx(classes.wallets, classes.list)}>
                             {info.wallets.map((wallet) => (
                                 <ListItem key={wallet} className={classes.wallet}>
-                                    <ListItemIcon className={classes.listItemIcon}>
+                                    <ListItemIcon className={classes.walletIcon}>
                                         <Icons.Wallet size={20} />
                                     </ListItemIcon>
                                     <ListItemText className={classes.listText}>
