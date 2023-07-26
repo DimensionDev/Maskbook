@@ -24,7 +24,6 @@ import type {
     GameDialogEvent,
     PopupWalletConnectEvent,
     SwitchTwitterLogoEvent,
-    CheckSwtichLogoEvent,
 } from './Events.js'
 
 /**
@@ -73,7 +72,6 @@ export interface CrossIsolationEvents {
     gameDialogUpdated: GameDialogEvent
 
     switchLogoUpdated: SwitchTwitterLogoEvent
-    checkSwtichLogoEvent: CheckSwtichLogoEvent
 }
 
 export type PluginMessageEmitter<T> = { readonly [key in keyof T]: PluginMessageEmitterItem<T[key]> }

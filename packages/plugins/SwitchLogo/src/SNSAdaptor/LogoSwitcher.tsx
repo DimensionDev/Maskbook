@@ -1,10 +1,11 @@
 /* cspell: disable */
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 import { CrossIsolationMessages, PluginID, SwitchLogoType, switchLogoSettings } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
+import { Stack } from '@mui/material'
 
 const BlueBirdHTML = `
      <svg
@@ -61,7 +62,7 @@ export function LogoSwitcher() {
     const ref = useRef<HTMLDivElement>(null)
     const disable = useIsMinimalModeDashBoard(PluginID.SwitchLogo)
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (logoType === SwitchLogoType.Classics && !disable) {
             if (logo) {
                 // eslint-disable-next-line @masknet/browser-no-set-html
@@ -78,16 +79,20 @@ export function LogoSwitcher() {
     useEffect(() => {
         if (!ref.current) return
         logo?.parentElement?.style.setProperty('position', 'relative')
-        logo?.parentElement?.appendChild(ref.current)
+        logo?.parentElement?.parentElement?.parentElement?.appendChild(ref.current)
     }, [logo])
 
+    useEffect(() => {
+        ref.current?.addEventListener('click', onClick)
+        return ref.current?.removeEventListener('click', onClick)
+    }, [ref.current])
     const onClick = useCallback(() => {
         CrossIsolationMessages.events.switchLogoUpdated.sendToLocal({ open: true })
     }, [])
 
     return (
-        <div ref={ref} className={cx(classes.switchIcon, classes.hover)} onClick={onClick} style={{}}>
+        <Stack ref={ref} className={cx(classes.switchIcon, classes.hover)} onClick={onClick} style={{}}>
             {SwitchLogoIcon()}
-        </div>
+        </Stack>
     )
 }
