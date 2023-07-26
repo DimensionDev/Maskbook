@@ -1,28 +1,30 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { ActionButton, MaskTextField } from '@masknet/theme'
-import {
-    Body,
-    ColumnContentLayout,
-    Footer,
-    PersonaLogoBox,
-    SignUpAccountLogo,
-} from '../../../components/RegisterFrame/ColumnContentLayout.js'
-import { DashboardRoutes } from '@masknet/shared-base'
-import { Header } from '../../../components/RegisterFrame/ColumnContentHeader.js'
+import { MaskTextField, makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
+import { useState } from 'react'
+import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
+import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useDashboardI18N } from '../../../locales/index.js'
-import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer.js'
 
-function Label({ value }: { value: string }) {
-    return (
-        <Typography
-            variant="body2"
-            sx={{ marginBottom: '8px', fontWeight: 'bolder', color: (theme) => theme.palette.primary.main }}>
-            {value}
-        </Typography>
-    )
-}
+const useStyles = makeStyles()((theme) => ({
+    header: {
+        display: 'flex',
+        justifyContent: 'space-between',
+    },
+    second: {
+        fontSize: 14,
+        lineHeight: '18px',
+        color: theme.palette.maskColor.second,
+    },
+    title: {
+        fontSize: 36,
+        lineHeight: 1.2,
+        fontWeight: 700,
+    },
+    buttonGroup: {
+        display: 'flex',
+        columnGap: 12,
+    },
+}))
 
 export interface PersonaNameUIProps {
     error?: string
@@ -31,55 +33,49 @@ export interface PersonaNameUIProps {
 }
 
 export function PersonaNameUI({ onNext, error, loading }: PersonaNameUIProps) {
+    const { classes } = useStyles()
     const t = useDashboardI18N()
-    const navigate = useNavigate()
 
     const [personaName, setPersonaName] = useState('')
-    const [helper, setHelper] = useState('')
-
-    useEffect(() => {
-        setHelper('')
-    }, [personaName])
-
-    useEffect(() => {
-        if (error) setHelper(error)
-    }, [error])
 
     return (
-        <ColumnContentLayout>
-            <Header
-                title={t.create_account_persona_title()}
-                subtitle={t.create_account_persona_subtitle()}
-                action={{ name: t.create_account_sign_in_button(), callback: () => navigate(DashboardRoutes.SignIn) }}
+        <>
+            <Box className={classes.header}>
+                <Typography variant="h1" className={classes.title}>
+                    {t.data_recovery_set_name()}
+                </Typography>
+            </Box>
+            <Typography className={classes.second} mt={2}>
+                {t.persona_create_tips()}
+            </Typography>
+
+            <Typography className={classes.second} mt={3} mb={2}>
+                {t.persona()}
+            </Typography>
+            <MaskTextField
+                onChange={(e) => {
+                    setPersonaName(e.target.value)
+                }}
+                required
+                InputProps={{ disableUnderline: true }}
+                inputProps={{ maxLength: 24 }}
+                error={!!error}
+                helperText={error}
             />
-            <Body>
-                <PersonaLogoBox>
-                    <SignUpAccountLogo />
-                </PersonaLogoBox>
-                <Box>
-                    <MaskTextField
-                        required
-                        label={<Label value={t.persona()} />}
-                        InputProps={{ disableUnderline: true }}
-                        onChange={(e) => setPersonaName(e.currentTarget.value)}
-                        inputProps={{ maxLength: 24 }}
-                        error={!!helper}
-                        helperText={helper}
-                    />
-                    <ButtonContainer>
-                        <ActionButton
-                            loading={loading}
-                            size="large"
-                            variant="rounded"
-                            color="primary"
-                            onClick={() => onNext(personaName)}
-                            disabled={!personaName || loading}>
-                            {t.next()}
-                        </ActionButton>
-                    </ButtonContainer>
-                </Box>
-            </Body>
-            <Footer />
-        </ColumnContentLayout>
+
+            <SetupFrameController>
+                <div className={classes.buttonGroup}>
+                    <PrimaryButton
+                        loading={loading}
+                        width="125px"
+                        size="large"
+                        color="primary"
+                        onClick={() => onNext(personaName)}
+                        disabled={!personaName || loading}>
+                        {t.continue()}
+                    </PrimaryButton>
+                </div>
+            </SetupFrameController>
+        </>
     )
 }
