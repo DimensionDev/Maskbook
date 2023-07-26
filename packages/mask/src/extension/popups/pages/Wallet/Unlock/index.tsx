@@ -1,7 +1,6 @@
-import urlcat from 'urlcat'
 import { memo, useCallback, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
 import { Box, Typography, useTheme } from '@mui/material'
 import { PopupRoutes } from '@masknet/shared-base'
@@ -9,7 +8,6 @@ import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../../utils/index.js'
 import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
-import { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -55,23 +53,13 @@ const Unlock = memo(() => {
     const [password, setPassword] = useState('')
     const theme = useTheme()
     const navigate = useNavigate()
-    const location = useLocation()
-    const search = new URLSearchParams(location.search)
-    const route = search.get('route')
 
     const [{ value: verified, loading }, handleUnlock] = useAsyncFn(async () => {
         const verified = await WalletRPC.unlockWallet(password)
 
-        if (verified) {
-            if (route === PopupRoutes.SelectWallet) {
-                navigate(urlcat(PopupRoutes.SelectWallet, { verifyWallet: true, chainId: ChainId.Mainnet }))
-                return
-            }
-
-            navigate({ pathname: PopupRoutes.Wallet }, { replace: true })
-        }
+        if (verified) navigate({ pathname: PopupRoutes.Wallet }, { replace: true })
         return verified
-    }, [password, route])
+    }, [password])
 
     const navigateToResetWallet = useCallback(() => {
         navigate({ pathname: PopupRoutes.ResetWallet }, { replace: true })
