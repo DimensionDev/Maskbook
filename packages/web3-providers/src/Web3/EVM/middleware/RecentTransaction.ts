@@ -40,14 +40,10 @@ export class RecentTransaction implements Middleware<ConnectionContext> {
                     await TransactionWatcher?.watchTransaction(context.chainId, context.result, transaction)
                     break
                 case EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT:
-                    const isSquashed = typeof context.result !== 'undefined'
-                    if (isSquashed) return
-
                     const receipt = context.result as TransactionReceipt | null
                     const status = getTransactionStatusType(receipt)
                     if (!receipt?.transactionHash || status === TransactionStatusType.NOT_DEPEND) return
 
-                    // update built-in notifier
                     BalanceNotifier?.emitter.emit('update', {
                         chainId: context.chainId,
                         account: receipt.from,
