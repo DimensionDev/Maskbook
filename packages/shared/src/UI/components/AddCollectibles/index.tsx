@@ -140,16 +140,20 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
     const hub = useWeb3Hub(pluginID, { chainId })
     const connection = useWeb3Connection(pluginID, { chainId })
 
-    const { value: addressType } = useAddressType(pluginID, !Others.isValidAddress?.(address ?? '') ? '' : address, {
-        chainId,
-    })
+    const { value: addressType, loading: loadingAddressType } = useAddressType(
+        pluginID,
+        !Others.isValidAddress?.(address ?? '') ? '' : address,
+        {
+            chainId,
+        },
+    )
 
     const validationMsgForAddress = useMemo(() => {
         if (!address) return ''
-        if (!Others.isValidAddress?.(address ?? '') || addressType !== AddressType.Contract)
+        if (!Others.isValidAddress?.(address ?? '') || (addressType !== AddressType.Contract && !loadingAddressType))
             return t.collectible_contract_invalid()
         return ''
-    }, [address, addressType])
+    }, [address, addressType, loadingAddressType])
 
     const {
         data: contract,
@@ -162,7 +166,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
     })
 
     const isValid = useMemo(() => {
-        return Boolean(isValidTokenIds(watchedTokenIds) && !validationMsgForAddress)
+        return Boolean(isValidTokenIds(watchedTokenIds) && !validationMsgForAddress && address && tokenIds.length > 0)
     }, [watchedTokenIds, validationMsgForAddress])
 
     const assetsQueries = useQueries({
@@ -172,7 +176,9 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
             queryFn: () => hub.getNonFungibleAsset(address, tokenId, { chainId }),
         })),
     })
-    const noResults = assetsQueries.every((x) => !x.isLoading && !x.data)
+    const loadingAssets = assetsQueries.every((x) => x.isLoading)
+    const allFailed = assetsQueries.every((x) => x.failureReason)
+    const noResults = assetsQueries.every((x) => !x.isLoading && !x.data) || !isValid || allFailed
     const someNotMine = assetsQueries.some((x) => (x.data ? !isSameAddress(x.data.owner?.address, account) : false))
 
     const handleFormSubmit = useCallback(
@@ -268,7 +274,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                 </Typography>
             ) : null}
             <div className={classes.main}>
-                {isLoadingContract ? (
+                {(isLoadingContract || loadingAssets) && isValid && !allFailed ? (
                     <LoadingStatus flexGrow={1} />
                 ) : isError ? (
                     <ReloadStatus flexGrow={1} onRetry={refetch} />
