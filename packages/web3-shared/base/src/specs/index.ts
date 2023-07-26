@@ -861,6 +861,8 @@ export interface RecentTransaction<ChainId, Transaction> {
     status: TransactionStatusType
     /** all available tx candidates */
     candidates: Record<string, Transaction>
+    /** record drafted at */
+    draftedAt: Date
     /** record created at */
     createdAt: Date
     /** record updated at */
@@ -1094,13 +1096,9 @@ export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
         txHash?: string,
     ) => Promise<TransactionDescriptor<ChainId, Transaction, Parameters>>
 }
-export interface TransactionWatcherState<ChainId, Transaction> extends Startable {
+export interface TransactionWatcherState<ChainId, Transaction> {
     emitter: Emitter<WatchEvents<ChainId, Transaction>>
 
-    /** Add a transaction into the watch list. */
-    watchTransaction: (chainId: ChainId, id: string, transaction: Transaction) => Promise<void>
-    /** Remove a transaction from the watch list. */
-    unwatchTransaction: (chainId: ChainId, id: string) => Promise<void>
     /** Notify error */
     notifyError: (error: Error, request: JsonRpcPayload) => Promise<void>
     /** Notify transaction status */

@@ -95,6 +95,7 @@ export class TransactionState<ChainId extends PropertyKey, Transaction>
                 id,
                 indexId: id,
                 chainId,
+                draftedAt: now,
                 createdAt: now,
                 updatedAt: now,
                 status: TransactionStatusType.NOT_DEPEND,
