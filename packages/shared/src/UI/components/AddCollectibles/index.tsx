@@ -145,7 +145,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
 
     const { value: addressType, loading: loadingAddressType } = useAddressType(
         pluginID,
-        Others.isValidAddress?.(address ?? '') ? address : '',
+        Others.isValidAddress?.(address) ? address : '',
         {
             chainId,
         },
