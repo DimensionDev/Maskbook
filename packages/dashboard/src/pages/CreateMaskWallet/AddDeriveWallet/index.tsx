@@ -146,7 +146,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         <>
             <div className={classes.between}>
                 <Typography className={cx(classes.second, classes.bold)}>
-                    {t.create_step({ step: '2', total: '2' })}
+                    {t.create_step({ step: '2', totalStep: '2' })}
                 </Typography>
                 <Typography className={cx(classes.create, classes.bold)} onClick={handleRecovery}>
                     {t.create()}
