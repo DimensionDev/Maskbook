@@ -1,10 +1,10 @@
 import { memo, useMemo } from 'react'
 import { Box, Link, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import { formatBalance, type FungibleToken } from '@masknet/web3-shared-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { TokenIcon } from '../TokenIcon/index.js'
 import { Icons } from '@masknet/icons'
-import { useNetworkDescriptor, useWeb3Others } from '@masknet/web3-hooks-base'
+import { useFungibleTokenBalance, useNetworkDescriptor, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, LoadingBase, ActionButton } from '@masknet/theme'
 import { useSharedI18N } from '../../../locales/index.js'
@@ -12,7 +12,7 @@ import { TokenListMode } from './type.js'
 import { SettingSwitch } from '../SettingSwitch/index.js'
 import { useTokenBlocked, useTokenTrusted } from './useTokenBlocked.js'
 import { FormattedBalance } from '../../wallet/index.js'
-import { ImageIcon } from '../index.js'
+import { DotLoading, ImageIcon } from '../index.js'
 import { useAsyncFn } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
@@ -88,6 +88,11 @@ const useStyles = makeStyles()((theme) => ({
         bottom: -4,
         border: `1px solid ${theme.palette.common.white}`,
         borderRadius: '50%',
+    },
+    dotLoadingWrapper: {
+        display: 'flex',
+        flexDirection: 'column-reverse',
+        height: 15,
     },
 }))
 
@@ -198,6 +203,14 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
             )
         }, [balance, decimals, isBlocked, source, mode, isTrust])
 
+        const { data: tokenBalance, isLoading: isLoadingTokenBalance } = useFungibleTokenBalance(
+            NetworkPluginID.PLUGIN_EVM,
+            isCustomToken ? address : '',
+            {
+                chainId,
+            },
+        )
+
         return (
             <div style={style}>
                 <ListItem
@@ -225,15 +238,32 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                         <Typography className={classes.primary} color="textPrimary" component="span">
                             <span className={classes.symbol}>{symbol}</span>
                             <span className={`${classes.name} dashboard token-list-symbol`}>
-                                <span className={classes.nameText}>{name}</span>
-                                <Link
-                                    onClick={(event) => event.stopPropagation()}
-                                    href={explorerLink}
-                                    style={{ width: 18, height: 18 }}
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    <Icons.PopupLink size={18} className={classes.link} />
-                                </Link>
+                                {isCustomToken ? (
+                                    isLoadingTokenBalance ? (
+                                        <div className={classes.dotLoadingWrapper}>
+                                            <DotLoading />
+                                        </div>
+                                    ) : (
+                                        <FormattedBalance
+                                            value={tokenBalance}
+                                            decimals={decimals}
+                                            significant={6}
+                                            formatter={formatBalance}
+                                        />
+                                    )
+                                ) : (
+                                    <>
+                                        <span className={classes.nameText}>{name}</span>
+                                        <Link
+                                            onClick={(event) => event.stopPropagation()}
+                                            href={explorerLink}
+                                            style={{ width: 18, height: 18 }}
+                                            target="_blank"
+                                            rel="noopener noreferrer">
+                                            <Icons.PopupLink size={18} className={classes.link} />
+                                        </Link>
+                                    </>
+                                )}
                             </span>
                         </Typography>
                         <Typography

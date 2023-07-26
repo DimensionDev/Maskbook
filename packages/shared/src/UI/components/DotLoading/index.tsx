@@ -20,8 +20,8 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     dot: {
-        width: 4,
-        height: 4,
+        width: 3,
+        height: 3,
         backgroundColor: theme.palette.maskColor.main,
     },
 }))
