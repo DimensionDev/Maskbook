@@ -46,11 +46,11 @@ export function PersonaNameUI({ onNext, error, loading }: PersonaNameUIProps) {
                 </Typography>
             </Box>
             <Typography className={classes.second} mt={2}>
-                {t.persona_create_tips()}
+                {t.data_recovery_name_tip()}
             </Typography>
 
             <Typography className={classes.second} mt={3} mb={2}>
-                {t.persona()}
+                {t.persona_name()}
             </Typography>
             <MaskTextField
                 onChange={(e) => {
