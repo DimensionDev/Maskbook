@@ -54,6 +54,9 @@ const useStyles = makeStyles()((theme) => ({
         paddingRight: theme.spacing(1),
         boxSizing: 'border-box',
         marginBottom: 'auto',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     notMine: {
         opacity: 0.5,

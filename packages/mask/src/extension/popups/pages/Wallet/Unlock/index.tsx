@@ -75,6 +75,9 @@ const Unlock = memo(() => {
                     <PasswordField
                         placeholder="Password"
                         value={password}
+                        onKeyDown={(event) => {
+                            if (event.key === 'Enter') handleUnlock()
+                        }}
                         type="password"
                         onChange={(e) => setPassword(e.target.value)}
                     />
@@ -89,7 +92,7 @@ const Unlock = memo(() => {
                     loading={loading}
                     fullWidth
                     variant="contained"
-                    disabled={!password}
+                    disabled={!password || loading}
                     onClick={handleUnlock}>
                     {t('unlock')}
                 </LoadingButton>
