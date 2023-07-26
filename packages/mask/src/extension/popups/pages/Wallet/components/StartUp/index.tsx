@@ -1,11 +1,12 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography, useTheme } from '@mui/material'
-import { memo, useCallback } from 'react'
+import { memo } from 'react'
 import { useI18N } from '../../../../../../utils/index.js'
 import Services from '../../../../../service.js'
 import { DashboardRoutes, Sniffings } from '@masknet/shared-base'
-import { useHasPassword } from '../../../../hook/useHasPassword.js'
+import { useAsyncFn } from 'react-use'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -83,26 +84,23 @@ export const WalletStartUp = memo(() => {
     const { t } = useI18N()
     const { cx, classes } = useStyles()
     const theme = useTheme()
-    const { hasPassword } = useHasPassword()
 
-    const onEnterCreateWallet = useCallback(
-        async (route: DashboardRoutes) => {
-            await browser.tabs.create({
-                active: true,
-                url: browser.runtime.getURL(
-                    `/dashboard.html#${hasPassword ? route : DashboardRoutes.CreateMaskWalletForm}${
-                        route === DashboardRoutes.RecoveryMaskWallet && !hasPassword ? '?recover=true' : ''
-                    }`,
-                ),
-            })
-            if (Sniffings.is_firefox) {
-                window.close()
-            }
+    const [, onEnterCreateWallet] = useAsyncFn(async (route: DashboardRoutes) => {
+        const hasPassword = await WalletServiceRef.value.hasPassword()
+        await browser.tabs.create({
+            active: true,
+            url: browser.runtime.getURL(
+                `/dashboard.html#${hasPassword ? route : DashboardRoutes.CreateMaskWalletForm}${
+                    route === DashboardRoutes.RecoveryMaskWallet && !hasPassword ? '?recover=true' : ''
+                }`,
+            ),
+        })
+        if (Sniffings.is_firefox) {
+            window.close()
+        }
 
-            await Services.Helper.removePopupWindow()
-        },
-        [hasPassword],
-    )
+        await Services.Helper.removePopupWindow()
+    }, [])
 
     return (
         <Box className={classes.container}>

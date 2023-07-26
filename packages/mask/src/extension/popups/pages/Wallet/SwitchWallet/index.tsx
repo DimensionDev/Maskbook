@@ -13,6 +13,8 @@ import { PopupContext } from '../../../hook/usePopupContext.js'
 import { ActionModal, useActionModal } from '../../../components/index.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
 import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
+import { useAsyncFn } from 'react-use'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -52,17 +54,21 @@ const SwitchWallet = memo(function SwitchWallet() {
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const handleClickCreate = useCallback(async () => {
+    const [, handleClickCreate] = useAsyncFn(async () => {
         if (!wallets.filter((x) => x.hasDerivationPath).length) {
+            const hasPaymentPassword = await WalletServiceRef.value.hasPassword()
             await browser.tabs.create({
                 active: true,
-                url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet/form'),
+                url: browser.runtime.getURL(
+                    `/dashboard.html#/create-mask-wallet/${hasPaymentPassword ? 'mnemonic' : 'form'}`,
+                ),
             })
         } else {
             navigate(PopupRoutes.CreateWallet)
         }
     }, [wallets, history])
-    const handleImport = useCallback(async () => {
+
+    const [, handleImport] = useAsyncFn(async () => {
         await browser.tabs.create({
             active: true,
             url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet/recovery'),
