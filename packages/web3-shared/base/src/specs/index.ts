@@ -1057,7 +1057,12 @@ export interface TransactionState<ChainId, Transaction> extends Startable {
     /** Get a transaction record. */
     getTransaction?: (chainId: ChainId, address: string, id: string) => Promise<Transaction | undefined>
     /** Add a transaction record. */
-    addTransaction?: (chainId: ChainId, address: string, id: string, transaction: Transaction) => Promise<void>
+    addTransaction?: (
+        chainId: ChainId,
+        address: string,
+        id: string,
+        transaction: Transaction & { draftedAt: Date },
+    ) => Promise<void>
     /** Replace a transaction with new record. */
     replaceTransaction?: (
         chainId: ChainId,
