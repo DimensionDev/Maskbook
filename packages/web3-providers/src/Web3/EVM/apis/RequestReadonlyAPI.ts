@@ -1,13 +1,7 @@
-import { memoize } from 'lodash-es'
 import { ProviderURL, type RequestArguments } from '@masknet/web3-shared-evm'
 import { ConnectionOptionsReadonlyAPI } from './ConnectionOptionsReadonlyAPI.js'
 import type { ConnectionOptions } from '../types/index.js'
-import { createWeb3FromProvider, createWeb3ProviderFromURL } from '../../../entry-helpers.js'
-
-const createWeb3SDK = memoize(
-    (url: string) => createWeb3FromProvider(createWeb3ProviderFromURL(url)),
-    (url) => url.toLowerCase(),
-)
+import { createWeb3FromURL, createWeb3ProviderFromURL } from '../../../entry-helpers.js'
 
 export class RequestReadonlyAPI {
     constructor(protected options?: ConnectionOptions) {}
@@ -22,7 +16,7 @@ export class RequestReadonlyAPI {
 
     getWeb3(initial?: ConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
-        return createWeb3SDK(options.providerURL ?? ProviderURL.from(options.chainId))
+        return createWeb3FromURL(options.providerURL ?? ProviderURL.from(options.chainId))
     }
 
     getWeb3Provider(initial?: ConnectionOptions) {

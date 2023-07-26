@@ -143,7 +143,11 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
 
     // Create a web3 instance from the external provider by default.
     createWeb3(options?: WalletAPI.ProviderOptions<ChainId>) {
-        return createWeb3FromProvider(this.createWeb3Provider(options))
+        return createWeb3FromProvider(
+            createWeb3ProviderFromRequest((requestArguments: RequestArguments) =>
+                this.request(requestArguments, options),
+            ),
+        )
     }
 
     // Create an external provider from the basic request method.
