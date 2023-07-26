@@ -23,7 +23,8 @@ const useStyles = makeStyles()((theme) => ({
         padding: 16,
         display: 'flex',
         marginBottom: 12,
-        justifyContent: 'center',
+        flexDirection: 'column',
+        alignItems: 'center',
     },
     title: {
         fontSize: 24,
@@ -53,20 +54,34 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         fontWeight: 400,
     },
+    placeholderDescription: {
+        fontSize: 14,
+        lineHeight: '18px',
+        fontWeight: 700,
+        color: theme.palette.maskColor.third,
+        width: 270,
+        marginTop: theme.spacing(1.5),
+        textAlign: 'center',
+    },
     mnemonicIcon: {
+        background: theme.palette.maskColor.success,
+    },
+    walletIcon: {
+        background: theme.palette.maskColor.primary,
+    },
+    iconWrapper: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         width: 30,
         height: 30,
-        background: theme.palette.maskColor.success,
         borderRadius: '100%',
     },
 }))
 
 export const WalletStartUp = memo(() => {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const { cx, classes } = useStyles()
     const theme = useTheme()
     const { hasPassword } = useHasPassword()
 
@@ -92,11 +107,16 @@ export const WalletStartUp = memo(() => {
             <Box className={classes.content}>
                 <Box className={classes.titleWrapper}>
                     <Typography className={classes.title}>{t('popups_add_wallet')}</Typography>
+                    <Typography className={classes.placeholderDescription}>
+                        {t('popups_add_wallet_description')}
+                    </Typography>
                 </Box>
                 <Box
                     className={classes.addWalletWrapper}
                     onClick={() => onEnterCreateWallet(DashboardRoutes.CreateMaskWalletMnemonic)}>
-                    <Icons.MaskBlue size={30} />
+                    <div className={cx(classes.iconWrapper, classes.walletIcon)}>
+                        <Icons.Wallet size={20} color={theme.palette.maskColor.white} />
+                    </div>
                     <div>
                         <Typography className={classes.subTitle}>{t('popups_create_a_new_wallet_title')}</Typography>
                         <Typography className={classes.description}>
@@ -108,7 +128,7 @@ export const WalletStartUp = memo(() => {
                 <Box
                     className={classes.addWalletWrapper}
                     onClick={() => onEnterCreateWallet(DashboardRoutes.RecoveryMaskWallet)}>
-                    <div className={classes.mnemonicIcon}>
+                    <div className={cx(classes.iconWrapper, classes.mnemonicIcon)}>
                         <Icons.Mnemonic size={20} color={theme.palette.maskColor.white} />
                     </div>
                     <div>
