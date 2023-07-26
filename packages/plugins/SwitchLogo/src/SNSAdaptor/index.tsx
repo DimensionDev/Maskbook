@@ -1,10 +1,11 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base.js'
-import { SwitchLogo } from './SwitchLogo.js'
 import { PLUGIN_ID } from '../constants.js'
 import { PluginID } from '@masknet/shared-base'
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
+import { SwitchLogoDialog } from './SwitchLogoDialog.js'
+import { LogoSwitcher } from './LogoSwitcher.js'
 
 const recommendFeature = {
     description: <Trans i18nKey="title" ns={PluginID.SwitchLogo} />,
@@ -15,7 +16,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {},
     GlobalInjection() {
-        return <SwitchLogo />
+        return (
+            <>
+                <SwitchLogoDialog />
+                <LogoSwitcher />
+            </>
+        )
     },
     ApplicationEntries: [
         {

@@ -51,9 +51,9 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface SwitchLogoProps {}
+interface SwitchLogoDialogProps {}
 
-export const SwitchLogo = memo<SwitchLogoProps>(() => {
+export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
     const t = useI18N()
     const { classes, cx } = useStyles()
     const [open, setOpen] = useState(false)

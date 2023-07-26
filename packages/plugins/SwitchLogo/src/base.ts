@@ -14,7 +14,7 @@ export const base: Plugin.Shared.Definition = {
                 [CurrentSNSNetwork.Twitter]: true,
             },
         },
-        target: 'beta',
+        target: 'stable',
     },
     experimentalMark: true,
     i18n: languages,
