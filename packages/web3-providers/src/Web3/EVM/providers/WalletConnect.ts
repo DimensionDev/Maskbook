@@ -54,6 +54,7 @@ export default class WalletConnectProvider
      * The ongoing walletconnect connection which the listeners use to resolve later.
      */
     private connection: {
+        deferred: Promise<Account<ChainId>>
         resolve: (account: Account<ChainId>) => void
         reject: (error: unknown) => void
     } | null = null
@@ -67,7 +68,20 @@ export default class WalletConnectProvider
         return this.connector?.connected ?? false
     }
 
+    private createConnection() {
+        // delay to return the result until session is updated or connected
+        const [deferred, resolve, reject] = defer<Account<ChainId>>()
+
+        return {
+            deferred,
+            resolve,
+            reject,
+        }
+    }
+
     private createConnector() {
+        console.log('DEBUG: createConnector')
+
         // disable legacy listeners
         this.connectorId += 1
 
@@ -75,6 +89,12 @@ export default class WalletConnectProvider
 
         const createListener = <T>(listener: (error: Error | null, payload: T) => void) => {
             return (error: Error | null, payload: T) => {
+                console.log('DEBUG: listener')
+                console.log({
+                    error,
+                    payload,
+                })
+
                 if (connectorId !== this.connectorId) return
                 return listener(error, payload)
             }
@@ -109,7 +129,12 @@ export default class WalletConnectProvider
 
     private async destroyConnector() {
         try {
+            if (this.connector?.session.connected) await this.connector.killSession(new Error('Destroy Connection'))
             this.connector?.transportClose()
+            this.connector?.off('connect')
+            this.connector?.off('disconnect')
+            this.connector?.off('session_update')
+            this.connector?.off('modal_closed')
         } catch {
             this.onDisconnect(new Error('disconnect'), {
                 event: 'disconnect',
@@ -166,33 +191,30 @@ export default class WalletConnectProvider
     }
 
     private async login(expectedChainId?: ChainId) {
-        await this.destroyConnector()
+        // await this.destroyConnector()
         this.connector = this.createConnector()
-
-        // delay to return the result until session is updated or connected
-        const [deferred, resolve, reject] = defer<Account<ChainId>>()
-
-        this.connection = {
-            resolve,
-            reject,
-        }
+        this.connection = this.createConnection()
 
         if (this.connector.connected) {
             const { chainId: actualChainId, accounts } = this.connector
             const account = first(accounts)
-            if (actualChainId !== 0 && actualChainId === expectedChainId && account && isValidAddress(account)) {
+            if (actualChainId !== 0 && actualChainId === expectedChainId && isValidAddress(account)) {
                 this.connection.resolve({
                     chainId: actualChainId,
                     account,
                 })
             } else {
-                await this.connector.createSession()
+                await this.connector.connect({
+                    chainId: expectedChainId,
+                })
             }
         } else {
-            await this.connector.createSession()
+            await this.connector.connect({
+                chainId: expectedChainId,
+            })
         }
 
-        return deferred.finally(() => {
+        return this.connection.deferred.finally(() => {
             this.connection = null
         })
     }
