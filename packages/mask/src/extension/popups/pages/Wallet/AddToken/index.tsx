@@ -137,7 +137,7 @@ const AddToken = memo(function AddToken() {
         TabType.Collectibles,
     )
     const { classes } = useStyles({ currentTab })
-    console.log({ assetType })
+
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>(
         chainId_ ? Number.parseInt(chainId_, 10) : ChainId.Mainnet,
     )
