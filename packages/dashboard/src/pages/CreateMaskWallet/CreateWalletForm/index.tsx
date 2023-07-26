@@ -74,6 +74,7 @@ const CreateWalletForm = memo(function CreateWalletForm() {
     const location = useLocation()
     const params = new URLSearchParams(location.search)
     const isReset = params.get('reset')
+    const isRecover = params.get('recover')
 
     const schema = useMemo(() => {
         const passwordRule = zod
@@ -107,7 +108,7 @@ const CreateWalletForm = memo(function CreateWalletForm() {
 
     const onSubmit = handleSubmit((data) => {
         navigate(
-            DashboardRoutes.CreateMaskWalletMnemonic,
+            isRecover ? DashboardRoutes.RecoveryMaskWallet : DashboardRoutes.CreateMaskWalletMnemonic,
             data.password
                 ? {
                       state: { password: data.password, isReset },

@@ -90,7 +90,9 @@ export const WalletStartUp = memo(() => {
             await browser.tabs.create({
                 active: true,
                 url: browser.runtime.getURL(
-                    `/dashboard.html#${hasPassword ? route : DashboardRoutes.CreateMaskWalletForm}`,
+                    `/dashboard.html#${hasPassword ? route : DashboardRoutes.CreateMaskWalletForm}${
+                        route === DashboardRoutes.RecoveryMaskWallet && !hasPassword ? '?recover=true' : ''
+                    }`,
                 ),
             })
             if (Sniffings.is_firefox) {
