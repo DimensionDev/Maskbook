@@ -16,3 +16,8 @@ export const DeleteContactModal = new SingletonModal<DeleteContactModalOpenProps
 export * from './ChooseNetworkModal/index.js'
 export * from './ConnectSocialAccountModal/index.js'
 export * from './SelectProviderModal/index.js'
+export * from './SwitchPersonaModal/index.js'
+export * from './PersonaSettingModal/index.js'
+export * from './PersonaRenameModal/index.js'
+export * from './SetBackupPasswordModal/index.js'
+export * from './VerifyBackupPasswordModal/index.js'

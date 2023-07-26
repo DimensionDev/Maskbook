@@ -1,6 +1,7 @@
 import { memo, type PropsWithChildren, useLayoutEffect, useRef, useState } from 'react'
 import { Box, Button } from '@mui/material'
 import { useSharedI18N } from '../../../locales/index.js'
+import { Sniffings } from '@masknet/shared-base'
 
 interface ActionProps extends PropsWithChildren<{}> {
     openSelectWalletDialog: () => void
@@ -20,7 +21,7 @@ export const Action = memo<ActionProps>(function Action({ children, openSelectWa
     }, [children])
 
     return (
-        <Box display="flex" columnGap={16} minWidth={276} ref={ref}>
+        <Box display="flex" columnGap={16} minWidth={!Sniffings.is_popup_page ? 276 : 176} ref={ref}>
             <Button fullWidth onClick={openSelectWalletDialog} style={{ display: !emptyChildren ? 'none' : undefined }}>
                 {t.wallet_status_button_change()}
             </Button>

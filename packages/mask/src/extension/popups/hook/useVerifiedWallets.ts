@@ -10,7 +10,7 @@ export function useVerifiedWallets(proofs?: BindingProof[]) {
 
     return useQuery({
         enabled: !!NameService && !!proofs?.length,
-        queryKey: ['popups', 'verified', 'wallets', JSON.stringify(proofs)],
+        queryKey: ['popups', 'verified', 'wallets', proofs ? JSON.stringify(proofs) : undefined],
         queryFn: async () => {
             if (!NameService || !proofs) return
 

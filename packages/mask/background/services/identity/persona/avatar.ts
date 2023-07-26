@@ -1,5 +1,5 @@
 import { MaskMessages, type PersonaIdentifier, type ProfileIdentifier } from '@masknet/shared-base'
-import { queryAvatarsDataURL, storeAvatar } from '../../../database/avatar-cache/avatar.js'
+import { queryAvatarLastUpdateTime, queryAvatarsDataURL, storeAvatar } from '../../../database/avatar-cache/avatar.js'
 
 export async function getPersonaAvatar(identifier: PersonaIdentifier | null | undefined): Promise<string | undefined> {
     if (!identifier) return undefined
@@ -11,6 +11,11 @@ export async function getPersonaAvatars(
 ): Promise<Map<ProfileIdentifier | PersonaIdentifier, string>> {
     if (!identifiers) return new Map<ProfileIdentifier | PersonaIdentifier, string>()
     return queryAvatarsDataURL(identifiers)
+}
+
+export async function getPersonaAvatarLastUpdateTime(identifier?: PersonaIdentifier | null) {
+    if (!identifier) return undefined
+    return queryAvatarLastUpdateTime(identifier)
 }
 
 export async function updatePersonaAvatar(identifier: PersonaIdentifier | null | undefined, avatar: Blob) {

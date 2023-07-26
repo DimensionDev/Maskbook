@@ -4,10 +4,12 @@ import {
     storeAvatarDB,
     type IdentifierWithAvatar,
     createAvatarDBAccess,
+    queryAvatarMetaDataDB,
 } from './db.js'
 import { blobToDataURL, memoizePromise } from '@masknet/kit'
 import { createTransaction } from '../utils/openDB.js'
 import { memoize } from 'lodash-es'
+import type { PersonaIdentifier } from '@masknet/shared-base'
 
 const impl = memoizePromise(
     memoize,
@@ -30,8 +32,22 @@ const impl = memoizePromise(
     },
     (id: IdentifierWithAvatar[]) => id.flatMap((x) => x.toText()).join(';'),
 )
+
+const queryAvatarLastUpdateTimeImpl = memoizePromise(
+    memoize,
+    async (identifier: IdentifierWithAvatar) => {
+        const t = createTransaction(await createAvatarDBAccess(), 'readonly')('metadata')
+        const metadata = await queryAvatarMetaDataDB(t, identifier)
+        return metadata?.lastUpdateTime
+    },
+    (x) => x,
+)
+
 export const queryAvatarsDataURL: (identifiers: IdentifierWithAvatar[]) => Promise<Map<IdentifierWithAvatar, string>> =
     impl
+
+export const queryAvatarLastUpdateTime: (identifier: PersonaIdentifier) => Promise<Date | undefined> =
+    queryAvatarLastUpdateTimeImpl
 
 /**
  * Store an avatar with a url for an identifier.
@@ -64,6 +80,7 @@ export async function storeAvatar(identifier: IdentifierWithAvatar, avatar: Arra
     } catch (error) {
         console.error('[AvatarDB] Store avatar failed', error)
     } finally {
+        queryAvatarLastUpdateTimeImpl.cache.clear()
         impl.cache.clear()
     }
 }

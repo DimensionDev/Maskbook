@@ -10,12 +10,12 @@ export const PersonaHeader = memo(function PersonaHeader() {
     const { setExtension } = useContext(PageTitleContext)
     const matchHome = useMatch(PopupRoutes.Personas)
     const matchWalletConnect = useMatch(PopupRoutes.WalletConnect)
-
+    const matchProfilePhoto = useMatch(PopupRoutes.PersonaAvatarSetting)
     useUpdateEffect(() => {
         setExtension(undefined)
     }, [location.pathname, setExtension])
 
-    if (matchHome || matchWalletConnect) return null
+    if (matchHome || matchWalletConnect || matchProfilePhoto) return null
 
     return <NormalHeader />
 })

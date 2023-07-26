@@ -1,21 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 84 84">
-    <g filter="url('#NextIdAvatar_dark_svg__next-id-avatar')">
-        <rect width="60" height="60" x="12" y="8" fill="#F5F5F5" rx="30" shape-rendering="crispEdges"/>
-        <path fill="#1C68F3" d="M27 27.166h-5L28.25 38 22 48.833h5L33.25 38 27 27.166Z"/>
-        <path fill="#141414" d="M39.083 27.166h4.167v21.667h-4.167V27.167Z"/>
-        <path fill="#141414" fill-rule="evenodd" d="M45.333 27.166v21.667h5.834C57.15 48.833 62 43.983 62 38c0-5.983-4.85-10.834-10.833-10.834h-5.834Zm4.167 17.5h1.667a6.667 6.667 0 0 0 0-13.333H49.5v13.334Z" clip-rule="evenodd"/>
-        <path fill="#1C68F3" d="M32.833 44.666H37v4.167h-4.167z"/>
-    </g>
-    <defs>
-        <filter id="NextIdAvatar_dark_svg__next-id-avatar" width="84" height="84" x="0" y="0" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
-            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-            <feColorMatrix in="SourceAlpha" result="hardAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
-            <feOffset dy="4"/>
-            <feGaussianBlur stdDeviation="6"/>
-            <feComposite in2="hardAlpha" operator="out"/>
-            <feColorMatrix values="0 0 0 0 0.027451 0 0 0 0 0.0627451 0 0 0 0 0.105882 0 0 0 0.2 0"/>
-            <feBlend in2="BackgroundImageFix" result="effect1_dropShadow_4665_11740"/>
-            <feBlend in="SourceGraphic" in2="effect1_dropShadow_4665_11740" result="shape"/>
-        </filter>
-    </defs>
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 60 60">
+    <rect width="60" height="60" fill="#F5F5F5" rx="30"/>
+    <path fill="#1C68F3" d="M15 19.166h-5L16.25 30 10 40.833h5L21.25 30 15 19.166Z"/>
+    <path fill="#141414" d="M27.084 19.166h4.167v21.667h-4.167V19.167Z"/>
+    <path fill="#141414" fill-rule="evenodd" d="M33.334 19.166v21.667h5.833c5.983 0 10.834-4.85 10.834-10.833 0-5.983-4.85-10.834-10.834-10.834h-5.833Zm4.167 17.5h1.666a6.667 6.667 0 0 0 0-13.333h-1.666v13.334Z" clip-rule="evenodd"/>
+    <path fill="#1C68F3" d="M20.834 36.666h4.167v4.167h-4.167z"/>
 </svg>

@@ -18,6 +18,10 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import { usePersonaProofs } from './usePersonaProofs.js'
 import compareDesc from 'date-fns/compareDesc'
 import isBefore from 'date-fns/isBefore'
+import { useAsync } from 'react-use'
+import { Web3Storage } from '@masknet/web3-providers'
+import { PERSONA_AVATAR_DB_NAMESPACE } from '../constants.js'
+import type { PersonaAvatarData } from '../types.js'
 
 export const initialPersonaInformation = new ValueRef<PersonaInformation[]>([])
 
@@ -45,6 +49,7 @@ function useSSRPersonaInformation(
 
 function usePersonaContext(initialState?: {
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
+    queryPersonaAvatarLastUpdateTime?: (identifier?: ECKeyIdentifier) => Promise<Date | undefined>
 }) {
     const [selectedAccount, setSelectedAccount] = useState<ProfileAccount>()
     const [selectedPersona, setSelectedPersona] = useState<PersonaInformation>()
@@ -55,7 +60,20 @@ function usePersonaContext(initialState?: {
     const currentPersona = personas?.find(
         (x) => x.identifier === ECKeyIdentifier.from(currentIdentifier).unwrapOr(head(personas)?.identifier),
     )
-    const avatar = currentPersona?.avatar
+    const { value: avatar } = useAsync(async () => {
+        if (!currentPersona) return
+        if (!initialState?.queryPersonaAvatarLastUpdateTime) return currentPersona.avatar
+
+        const lastUpdateTime = await initialState.queryPersonaAvatarLastUpdateTime(currentPersona.identifier)
+        const storage = Web3Storage.createKVStorage(PERSONA_AVATAR_DB_NAMESPACE)
+        const remote: PersonaAvatarData = await storage.get<PersonaAvatarData>(currentPersona.identifier.rawPublicKey)
+
+        if (lastUpdateTime && isBefore(lastUpdateTime, remote.updateAt)) {
+            return remote.imageUrl
+        }
+
+        return currentPersona.avatar
+    }, [currentPersona, initialState?.queryPersonaAvatarLastUpdateTime])
 
     const { data: proofs, isLoading: fetchProofsLoading } = usePersonaProofs(currentPersona?.identifier.publicKeyAsHex)
 

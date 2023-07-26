@@ -19,6 +19,11 @@ export enum HomeTabType {
     ConnectedWallets = 'Connected Wallets',
 }
 
+export enum ProfilePhotoType {
+    Image = 'Image',
+    NFT = 'NFT',
+}
+
 export enum ContactType {
     Owned = 'Owned',
     Recipient = 'Recipient',

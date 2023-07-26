@@ -23,7 +23,6 @@ const useStyles = makeStyles()((theme) => ({
         paddingTop: '12.5vh',
         paddingBottom: '12.5vh',
         paddingRight: theme.spacing(8),
-        minHeight: 1024,
         display: 'flex',
         flexDirection: 'column',
         [theme.breakpoints.up('lg')]: {
@@ -86,5 +85,9 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, 
 
 interface SetupFrameControllerProps extends PropsWithChildren {}
 export const SetupFrameController = memo<SetupFrameControllerProps>(function SetupFrameController({ children }) {
-    return <Box marginTop="auto">{children}</Box>
+    return (
+        <Box marginTop="auto" py={3}>
+            {children}
+        </Box>
+    )
 })
