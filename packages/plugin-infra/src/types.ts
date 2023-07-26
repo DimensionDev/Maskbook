@@ -408,6 +408,8 @@ export namespace Plugin.SNSAdaptor {
         getSearchedKeyword?: () => string
         hasHostPermission?: (origins: readonly string[]) => Promise<boolean>
         requestHostPermission?: (origins: readonly string[]) => Promise<boolean>
+        getDecentralizedSearchSettings?: () => Promise<boolean>
+        setDecentralizedSearchSettings?: (checked: boolean) => Promise<void>
     }
 
     export type SelectProviderDialogEvent =

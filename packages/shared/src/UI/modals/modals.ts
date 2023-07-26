@@ -4,7 +4,10 @@ import type { WalletConnectQRCodeOpenProps } from './WalletConnectQRCodeModal/in
 import type { WalletRiskWarningModalOpenProps } from './WalletRiskWarningModal/index.js'
 import type { ConnectWalletModalOpenProps, ConnectWalletModalCloseProps } from './ConnectWalletModal/index.js'
 import type { LeavePageConfirmModalOpenProps } from './LeavePageConfirmModal/index.js'
-import type { ApplicationBoardModalOpenProps } from './ApplicationBoardModal/index.js'
+import type {
+    ApplicationBoardModalOpenProps,
+    ApplicationBoardSettingsModalOpenProps,
+} from './ApplicationBoardModal/index.js'
 import type { GasSettingModalOpenOrCloseProps } from './GasSettingModal/index.js'
 import type { ConfirmModalCloseProps, ConfirmModalOpenProps } from './ConfirmModal/index.js'
 import type { TransactionConfirmModalOpenProps } from './TokenTransactionConfirmModal/index.js'
@@ -27,6 +30,7 @@ export const WalletRiskWarningModal = new SingletonModal<WalletRiskWarningModalO
 export const ConnectWalletModal = new SingletonModal<ConnectWalletModalOpenProps, ConnectWalletModalCloseProps>()
 export const LeavePageConfirmModal = new SingletonModal<LeavePageConfirmModalOpenProps>()
 export const ApplicationBoardModal = new SingletonModal<ApplicationBoardModalOpenProps>()
+export const ApplicationBoardSettingsModal = new SingletonModal<ApplicationBoardSettingsModalOpenProps>()
 export const GasSettingModal = new SingletonModal<GasSettingModalOpenOrCloseProps, GasSettingModalOpenOrCloseProps>()
 export const TransactionConfirmModal = new SingletonModal<TransactionConfirmModalOpenProps>()
 export const TransactionSnackbar = new SingletonModal()

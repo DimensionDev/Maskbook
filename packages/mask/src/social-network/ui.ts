@@ -179,6 +179,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         setMinimalMode: Services.Settings.setPluginMinimalModeEnabled,
         setCurrentPersonaIdentifier: Services.Settings.setCurrentPersonaIdentifier,
         setPluginMinimalModeEnabled: Services.Settings.setPluginMinimalModeEnabled,
+        setDecentralizedSearchSettings: Services.Settings.setDecentralizedSearchSettings,
+        getDecentralizedSearchSettings: Services.Settings.getDecentralizedSearchSettings,
         getSearchedKeyword: ui.collecting.getSearchedKeyword,
         hasHostPermission: Services.Helper.hasHostPermission,
         requestHostPermission: Services.Helper.requestHostPermission,
