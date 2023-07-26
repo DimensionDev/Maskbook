@@ -11,20 +11,18 @@ import { createPageable, createIndicator, createNextIndicator, EMPTY_LIST } from
 import { ChainId, createERC20Token, createNativeToken, isZeroAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { X2Y2_API_URL, X2Y2_PAGE_SIZE } from './constants.js'
 import type { Contract, Event, Order } from './types.js'
-import { fetchJSON, resolveActivityType } from '../entry-helpers.js'
+import { fetchSquashedJSON, resolveActivityType } from '../entry-helpers.js'
 import type { HubOptions_Base, NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromX2Y2<T>(pathname: string) {
-    const response = await fetchJSON<
+    const response = await fetchSquashedJSON<
         | {
               success: boolean
               next?: string
               data?: T | null
           }
         | undefined
-    >(urlcat(X2Y2_API_URL, pathname), undefined, {
-        enableSquash: true,
-    })
+    >(urlcat(X2Y2_API_URL, pathname))
     // The `undefined` can be given a default value when deconstructed, but `null` can't.
     return response?.success ? ([response.data ?? undefined, response.next] as const) : EMPTY_LIST
 }

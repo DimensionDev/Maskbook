@@ -2,14 +2,11 @@ import urlcat from 'urlcat'
 import { compact } from 'lodash-es'
 import { MASK_X_DEFAULT_PAGINATION, MASK_X_ROOT_URL } from './constants.js'
 import { MaskX_BaseAPI } from '../entry-types.js'
-import { fetchJSON } from '../entry-helpers.js'
+import { fetchCachedJSON } from '../entry-helpers.js'
 
 export class MaskX_API implements MaskX_BaseAPI.Provider {
     private async fetchFromMaskX(pathname: string) {
-        return fetchJSON<MaskX_BaseAPI.Response>(urlcat(MASK_X_ROOT_URL, pathname), undefined, {
-            enableCache: true,
-            enableSquash: true,
-        })
+        return fetchCachedJSON<MaskX_BaseAPI.Response>(urlcat(MASK_X_ROOT_URL, pathname))
     }
 
     private getOptions({ size = 20, page = 1 }: MaskX_BaseAPI.Options = MASK_X_DEFAULT_PAGINATION) {

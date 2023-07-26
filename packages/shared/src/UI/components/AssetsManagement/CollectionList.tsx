@@ -1,12 +1,12 @@
 import { Icons } from '@masknet/icons'
 import { ElementAnchor, EmptyStatus, Image, RetryHint, isSameNFT } from '@masknet/shared'
-import { EMPTY_OBJECT } from '@masknet/shared-base'
+import { EMPTY_OBJECT, Sniffings } from '@masknet/shared-base'
 import { LoadingBase, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Box, Button, Typography, useForkRef } from '@mui/material'
 import type { BoxProps } from '@mui/system'
 import { range } from 'lodash-es'
-import { memo, useCallback, useEffect, useRef, type RefObject } from 'react'
+import { memo, useCallback, useRef, type RefObject } from 'react'
 import { useSharedI18N } from '../../../locales/i18n_generated.js'
 import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
 import { Collection, CollectionSkeleton, LazyCollection, type CollectionProps } from './Collection.js'
@@ -86,6 +86,16 @@ const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap 
     }
 })
 
+function getTopOffset() {
+    if (Sniffings.is_twitter_page) {
+        // 53, height of the sticky bar of Twitter,
+        // 96, height of the header of web3 tab
+        return 53 + 96
+    }
+    // TODO Other SNS pages
+    return 0
+}
+
 export interface CollectionListProps
     extends BoxProps,
         Pick<CollectionProps, 'disableAction' | 'onActionClick' | 'onItemClick'> {
@@ -114,7 +124,7 @@ export const CollectionList = memo(function CollectionList({
     scrollElementRef,
     onActionClick,
     onItemClick,
-    onChainChange: _onChainChange,
+    onChainChange,
     onCollectionChange,
     ...rest
 }: CollectionListProps) {
@@ -125,22 +135,40 @@ export const CollectionList = memo(function CollectionList({
     const { collections, currentCollection, currentCollectionId, setCurrentCollectionId, loading, error, retry } =
         CollectionsContext.useContainer()
 
-    const onChainChange = useCallback(
+    const handleChainChange = useCallback(
         (chainId: Web3Helper.ChainIdAll | undefined) => {
             setChainId(chainId)
-            _onChainChange?.(chainId)
+            onChainChange?.(chainId)
             setCurrentCollectionId(undefined)
             onCollectionChange?.(undefined)
         },
-        [_onChainChange],
+        [onChainChange],
     )
+    const containerRef = useRef<HTMLDivElement>(null)
+    const mainColumnRef = useRef<HTMLDivElement>(null)
+    const forkedMainColumnRef = useForkRef(mainColumnRef, scrollElementRef)
+    const scrollToTop = useCallback(() => {
+        if (disableWindowScroll) {
+            mainColumnRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+        } else {
+            const rect = containerRef.current?.getBoundingClientRect()
+            if (!rect) return
+            const offset = getTopOffset()
+            if (Math.abs(rect.top - offset) < 50) return
+            const top = rect.top + window.scrollY - offset
+            window.scroll({ top, behavior: 'smooth' })
+        }
+    }, [disableWindowScroll])
 
     const handleCollectionChange = useCallback(
         (id: string | undefined) => {
             setCurrentCollectionId(id)
             onCollectionChange?.(id)
+
+            if (!id) return
+            scrollToTop()
         },
-        [onCollectionChange],
+        [onCollectionChange, scrollToTop],
     )
 
     const { assetsMapRef, getAssets, getBLockedTokenIds, getVerifiedBy, loadAssets, loadVerifiedBy, isAllHidden } =
@@ -157,30 +185,11 @@ export const CollectionList = memo(function CollectionList({
         [loadAssets, loadVerifiedBy],
     )
 
-    const containerRef = useRef<HTMLDivElement>(null)
-    const mainColumnRef = useRef<HTMLDivElement>(null)
-    const forkedMainColumnRef = useForkRef(mainColumnRef, scrollElementRef)
-    useEffect(() => {
-        if (!currentCollectionId) return
-        if (disableWindowScroll) {
-            mainColumnRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
-        } else {
-            const rect = containerRef.current?.getBoundingClientRect()
-            if (!rect) return
-            // 53, height of the sticky bar of Twitter,
-            // 96, height of the header of web3 tab
-            const offset = 53 + 96
-            if (Math.abs(rect.top - offset) < 50) return
-            const top = rect.top + window.scrollY - offset
-            window.scroll({ top, behavior: 'smooth' })
-        }
-    }, [!currentCollectionId, disableWindowScroll])
-
     const sidebar = disableSidebar ? null : (
         <SelectNetworkSidebar
             chainId={chainId}
             gridProps={gridProps}
-            onChainChange={onChainChange}
+            onChainChange={handleChainChange}
             pluginID={pluginID}
             networks={networks}
         />

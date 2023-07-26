@@ -11,7 +11,7 @@ const GlobalCss = (
     <GlobalStyles
         styles={{
             body: {
-                minWidth: 400,
+                width: 400,
                 overflowX: 'hidden',
                 margin: '0 auto !important',
                 maxWidth: '100%',

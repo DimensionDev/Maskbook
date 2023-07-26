@@ -5,8 +5,6 @@ import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
 import {
     chainResolver,
-    createWeb3,
-    createWeb3Provider,
     ChainId,
     type ProviderType,
     ProviderURL,
@@ -19,6 +17,7 @@ import {
 import { type Account, type Wallet, EMPTY_LIST, createConstantSubscription } from '@masknet/shared-base'
 import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
+import { createWeb3FromProvider, createWeb3ProviderFromRequest } from '../../../entry-helpers.js'
 
 export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3> {
     protected context: Plugin.SNSAdaptor.SNSAdaptorContext | undefined
@@ -144,12 +143,18 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
 
     // Create a web3 instance from the external provider by default.
     createWeb3(options?: WalletAPI.ProviderOptions<ChainId>) {
-        return createWeb3(this.createWeb3Provider(options))
+        return createWeb3FromProvider(
+            createWeb3ProviderFromRequest((requestArguments: RequestArguments) =>
+                this.request(requestArguments, options),
+            ),
+        )
     }
 
     // Create an external provider from the basic request method.
     createWeb3Provider(options?: WalletAPI.ProviderOptions<ChainId>) {
-        return createWeb3Provider((requestArguments: RequestArguments) => this.request(requestArguments, options))
+        return createWeb3ProviderFromRequest((requestArguments: RequestArguments) =>
+            this.request(requestArguments, options),
+        )
     }
 
     async connect(expectedChainId: ChainId, address?: string): Promise<Account<ChainId>> {

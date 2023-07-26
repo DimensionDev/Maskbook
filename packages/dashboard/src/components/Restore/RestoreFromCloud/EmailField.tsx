@@ -28,13 +28,13 @@ export const EmailField = memo(function EmailField() {
 
     const [{ error: sendCodeError }, handleSendCodeFn] = useAsyncFn(async () => {
         const type = AccountType.Email
-        showSnackbar(t.sign_in_account_cloud_backup_send_email_success({ type }), { variant: 'success' })
         await sendCode({
             account,
             type,
             scenario: Scenario.backup,
             locale: language.includes('zh') ? Locale.zh : Locale.en,
         })
+        showSnackbar(t.sign_in_account_cloud_backup_send_email_success({ type }), { variant: 'success' })
     }, [account, language])
 
     const validCheck = () => {
@@ -45,7 +45,8 @@ export const EmailField = memo(function EmailField() {
     }
 
     const { fillSubmitOutlet } = usePersonaRecovery()
-    const disabled = !account || invalidEmail || code.length !== 6
+    const emailNotReady = !account || invalidEmail
+    const disabled = emailNotReady || code.length !== 6
     useLayoutEffect(() => {
         return fillSubmitOutlet(
             <PrimaryButton
@@ -102,6 +103,7 @@ export const EmailField = memo(function EmailField() {
                     errorMessage={sendCodeError?.message || codeError}
                     onSend={handleSendCodeFn}
                     placeholder={t.data_recovery_email_code()}
+                    disabled={emailNotReady}
                     inputProps={{
                         maxLength: 6,
                     }}

@@ -66,6 +66,9 @@ const useStyles = makeStyles()((theme) => {
                 display: 'flex',
                 flexDirection: 'column',
                 overflow: 'auto',
+                '&::-webkit-scrollbar': {
+                    display: 'none',
+                },
             },
         },
         addButton: {
@@ -212,6 +215,7 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI(
                                 <CollectionList
                                     gridProps={gridProps}
                                     disableSidebar
+                                    disableWindowScroll
                                     scrollElementRef={scrollTargetRef}
                                     onItemClick={handleItemClick}
                                     onCollectionChange={handleCollectionChange}

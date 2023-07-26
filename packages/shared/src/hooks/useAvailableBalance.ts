@@ -8,12 +8,11 @@ import {
     useMaskTokenAddress,
     useNativeTokenBalance,
 } from '@masknet/web3-hooks-base'
-import { SmartPayBundler } from '@masknet/web3-providers'
+import { DepositPaymaster, SmartPayBundler } from '@masknet/web3-providers'
 import type { ConnectionOptions } from '@masknet/web3-providers/types'
 import { isGreaterThan, isSameAddress, toFixed, ZERO } from '@masknet/web3-shared-base'
 import {
     type ChainId,
-    DepositPaymaster,
     type GasConfig,
     GasEditor,
     isNativeTokenAddress,

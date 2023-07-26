@@ -1,16 +1,11 @@
-import {
-    EthereumMethodType,
-    PayloadEditor,
-    createWeb3,
-    createWeb3Provider,
-    type RequestArguments,
-} from '@masknet/web3-shared-evm'
+import { EthereumMethodType, PayloadEditor, type RequestArguments } from '@masknet/web3-shared-evm'
 import { ComposerAPI } from './ComposerAPI.js'
 import { Web3StateRef } from './Web3StateAPI.js'
 import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import { createContext } from '../helpers/createContext.js'
 import { Providers } from '../providers/index.js'
 import type { ConnectionOptions } from '../types/index.js'
+import { createWeb3FromProvider, createWeb3ProviderFromRequest } from '../../../entry-helpers.js'
 
 export class RequestAPI extends RequestReadonlyAPI {
     private Composer = new ComposerAPI()
@@ -90,12 +85,14 @@ export class RequestAPI extends RequestReadonlyAPI {
     override getWeb3(initial?: ConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
         if (options.readonly) return this.Request.getWeb3(options)
-        return createWeb3(createWeb3Provider((requestArguments) => this.request(requestArguments, options)))
+        return createWeb3FromProvider(
+            createWeb3ProviderFromRequest((requestArguments) => this.request(requestArguments, options)),
+        )
     }
 
     override getWeb3Provider(initial?: ConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
         if (options.readonly) return this.Request.getWeb3Provider(options)
-        return createWeb3Provider((requestArguments) => this.request(requestArguments, options))
+        return createWeb3ProviderFromRequest((requestArguments) => this.request(requestArguments, options))
     }
 }

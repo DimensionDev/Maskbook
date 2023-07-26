@@ -1,12 +1,9 @@
-import Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
+import { type ChainId, createContract, getSmartPayConstants, ProviderURL } from '@masknet/web3-shared-evm'
 import DepositPaymasterABI from '@masknet/web3-contracts/abis/DepositPaymaster.json'
 import type { DepositPaymaster as DepositPaymasterType } from '@masknet/web3-contracts/types/DepositPaymaster.js'
-import type { ChainId } from '../types/index.js'
-import { getSmartPayConstants } from '../constants/constants.js'
-import { createContract } from '../helpers/createContract.js'
-import { ProviderURL } from './ProviderURL.js'
+import { createWeb3FromURL } from '../../entry-helpers.js'
 
 export class DepositPaymaster {
     /**
@@ -18,9 +15,8 @@ export class DepositPaymaster {
     private get contract() {
         const { PAYMASTER_MASK_CONTRACT_ADDRESS } = getSmartPayConstants(this.chainId)
         if (!PAYMASTER_MASK_CONTRACT_ADDRESS) return
-        const web3 = new Web3(ProviderURL.from(this.chainId))
         return createContract<DepositPaymasterType>(
-            web3,
+            createWeb3FromURL(ProviderURL.from(this.chainId)),
             PAYMASTER_MASK_CONTRACT_ADDRESS,
             DepositPaymasterABI as AbiItem[],
         )

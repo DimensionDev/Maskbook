@@ -10,6 +10,7 @@ export {
 } from './codegen/index.js'
 export { ciBuild, extensionWatch } from './extension/index.js'
 export { buildNetlify } from './netlify/index.js'
+export { buildCloudflare } from './cloudflare/index.js'
 
 // Tools
 export { clean, help, createPackageInteractive, syncDevelop, changesetRelease } from './commands/index.js'

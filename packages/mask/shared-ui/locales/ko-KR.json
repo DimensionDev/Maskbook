@@ -49,7 +49,6 @@
     "redirect_alert": "브라우저가 리다이렉트하지 않으면 <terms>여기 클릭</terms>",
     "typed_message_text_alert": "현재 TypedMessageText만 지원합니다.",
     "badge_renderer_provided_by_plugin": "플러그인으로 제공",
-    "add_token": "토큰 추가",
     "add_nft_contract_search_hint": "NFT 컨트렉트 이름이나 주소를 검색하기",
     "applications": "어플리케이션",
     "application_settings": "앱 설정",

@@ -6,13 +6,7 @@ import { delay } from '@masknet/kit'
 import { Box, Typography, useTheme } from '@mui/material'
 import { ImageIcon, ConfirmModal, SelectProviderModal, SelectFungibleTokenModal } from '@masknet/shared'
 import { formatBalance, isSameAddress, isZero, minus, toFixed } from '@masknet/web3-shared-base'
-import {
-    addGasMargin,
-    ChainId,
-    DepositPaymaster,
-    type EIP1559GasConfig,
-    type GasConfig,
-} from '@masknet/web3-shared-evm'
+import { addGasMargin, ChainId, type EIP1559GasConfig, type GasConfig } from '@masknet/web3-shared-evm'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
 import {
     useChainContext,
@@ -30,7 +24,7 @@ import { useActivatedPlugin, useSNSAdaptorContext } from '@masknet/plugin-infra/
 import { NetworkPluginID, PluginID, isFacebook, isTwitter } from '@masknet/shared-base'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { type TraderAPI } from '@masknet/web3-providers/types'
-import { SmartPayBundler } from '@masknet/web3-providers'
+import { DepositPaymaster, SmartPayBundler } from '@masknet/web3-providers'
 import { useI18N } from '../../locales/index.js'
 import { isNativeTokenWrapper } from '../../helpers/index.js'
 import { PluginTraderMessages } from '../../messages.js'

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
-import { ChainId } from '../../src/index.js'
-import { ContractWallet } from '../../src/libs/ContractWallet.js'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { ContractWallet } from '../../../src/SmartPay/libs/ContractWallet.js'
 
 describe('ContractWallet', () => {
     const wallet = new ContractWallet(

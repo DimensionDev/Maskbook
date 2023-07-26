@@ -1,10 +1,10 @@
 import { toHex } from 'web3-utils'
 import { type ECKeyIdentifier, SignType } from '@masknet/shared-base'
 import {
-    type ChainId,
     Signer,
     EthereumMethodType,
     isValidAddress,
+    type ChainId,
     type Middleware,
     type ProviderType,
     type Transaction,

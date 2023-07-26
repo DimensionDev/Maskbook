@@ -7,7 +7,8 @@ import {
 } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { HubOptions } from '@masknet/web3-providers/types'
-import { CurrencyType, currySameAddress, isSameAddress, leftShift, minus, toZero } from '@masknet/web3-shared-base'
+import { CurrencyType, currySameAddress, isSameAddress, leftShift, minus } from '@masknet/web3-shared-base'
+import { BigNumber } from 'bignumber.js'
 import { useQuery } from '@tanstack/react-query'
 import { noop, unionWith } from 'lodash-es'
 import { useEffect, useMemo } from 'react'
@@ -70,8 +71,8 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
             .filter((x) => !isBlockedToken(x))
             .sort((a, z) => {
                 // mask token with position value
-                const aUSD = toZero(a.value?.[CurrencyType.USD])
-                const zUSD = toZero(z.value?.[CurrencyType.USD])
+                const aUSD = new BigNumber(a.value?.[CurrencyType.USD] || 0)
+                const zUSD = new BigNumber(z.value?.[CurrencyType.USD] || 0)
                 // token value
                 if (!aUSD.eq(zUSD)) return zUSD.gt(aUSD) ? 1 : -1
 

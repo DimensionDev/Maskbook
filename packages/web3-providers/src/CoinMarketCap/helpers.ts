@@ -1,5 +1,5 @@
 import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { fetchJSON } from '../entry-helpers.js'
+import { fetchSquashedJSON } from '../entry-helpers.js'
 import { isSameAddress } from '@masknet/web3-shared-base'
 
 const NETWORK_NAME_MAP: {
@@ -24,7 +24,5 @@ export function resolveCoinMarketCapAddress(address: string) {
 }
 
 export function fetchFromCoinMarketCap<T>(request: RequestInfo | URL, init?: RequestInit) {
-    return fetchJSON<T>(request, init, {
-        enableSquash: true,
-    })
+    return fetchSquashedJSON<T>(request, init)
 }

@@ -439,6 +439,8 @@
     "data_recovery_mobile": "Mobile",
     "data_recovery_mobile_code": "Mobile verification code",
     "data_recovery_invalid_mobile": "Invalid phone number, please check and try again.",
+    "data_recovery_set_name": "Set Your Persona Name",
+    "data_recovery_name_tip": "Set your persona name with maximum length of 24 characters",
     "file_unpacking": "Uppacking",
     "file_unpacking_completed": "Completed",
     "data_decrypting": "Decrypting",

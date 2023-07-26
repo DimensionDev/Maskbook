@@ -1,14 +1,14 @@
-import type { NetworkPluginID } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
-import { getCurrency } from '@masknet/web3-providers'
-import type { TrendingAPI } from '@masknet/web3-providers/types'
-import { TokenType, type NonFungibleTokenActivity } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
-import { flatten } from 'lodash-es'
 import { useEffect, useRef, useState } from 'react'
 import { useAsync, useAsyncFn, useAsyncRetry } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
+import { flatten } from 'lodash-es'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
+import { trending } from '@masknet/web3-providers/helpers'
+import type { TrendingAPI } from '@masknet/web3-providers/types'
+import { TokenType, type NonFungibleTokenActivity } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../messages.js'
 
 export function useNFT_TrendingOverview(
@@ -68,10 +68,10 @@ export function useTrendingById(
     trending?: TrendingAPI.Trending | null
 }> {
     const { chainId } = useChainContext({ chainId: result.chainId })
-    const currency = getCurrency(result.chainId, result.source)
+    const currency = trending.getCurrency(result.chainId, result.source)
 
     const {
-        value: trending,
+        value: coinTrending,
         loading,
         error,
     } = useAsync(async () => {
@@ -79,8 +79,8 @@ export function useTrendingById(
         return PluginTraderRPC.getCoinTrending(result, currency)
     }, [chainId, JSON.stringify(result), currency?.id])
 
-    const { data: detailedToken } = useFungibleToken(result.pluginID, trending?.coin.contract_address, undefined, {
-        chainId: trending?.coin.chainId as ChainId,
+    const { data: detailedToken } = useFungibleToken(result.pluginID, coinTrending?.coin.contract_address, undefined, {
+        chainId: coinTrending?.coin.chainId as ChainId,
     })
 
     if (loading) {
@@ -99,19 +99,19 @@ export function useTrendingById(
     return {
         value: {
             currency,
-            trending: trending
+            trending: coinTrending
                 ? {
-                      ...trending,
+                      ...coinTrending,
                       coin: {
-                          ...trending.coin,
-                          id: trending.coin.id ?? '',
-                          name: trending.coin.name ?? '',
-                          symbol: trending.coin.symbol ?? '',
-                          type: trending.coin.type ?? TokenType.Fungible,
-                          decimals: trending.coin.decimals || detailedToken?.decimals || 0,
+                          ...coinTrending.coin,
+                          id: coinTrending.coin.id ?? '',
+                          name: coinTrending.coin.name ?? '',
+                          symbol: coinTrending.coin.symbol ?? '',
+                          type: coinTrending.coin.type ?? TokenType.Fungible,
+                          decimals: coinTrending.coin.decimals || detailedToken?.decimals || 0,
                           contract_address:
-                              trending.coin.contract_address ?? trending.contracts?.[0]?.address ?? address,
-                          chainId: trending.coin.chainId ?? trending.contracts?.[0]?.chainId ?? chainId,
+                              coinTrending.coin.contract_address ?? coinTrending.contracts?.[0]?.address ?? address,
+                          chainId: coinTrending.coin.chainId ?? coinTrending.contracts?.[0]?.chainId ?? chainId,
                       },
                   }
                 : null,

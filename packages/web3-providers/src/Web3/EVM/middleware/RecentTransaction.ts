@@ -2,13 +2,13 @@ import type { TransactionReceipt } from 'web3-core'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import {
     EthereumMethodType,
-    UserTransaction,
     type Transaction,
     type Middleware,
     getTransactionStatusType,
 } from '@masknet/web3-shared-evm'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
+import { UserTransaction } from '../../../SmartPay/libs/UserTransaction.js'
 
 export class RecentTransaction implements Middleware<ConnectionContext> {
     async fn(context: ConnectionContext, next: () => Promise<void>) {

@@ -155,7 +155,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
     return (
         <Box width="100%">
             {restoreStatus !== RestoreStatus.Verified ? (
-                <UploadDropArea onSelectFile={handleSetFile} omitSizeLimit accept=".bin" />
+                <UploadDropArea onSelectFile={handleSetFile} omitSizeLimit accept=".bin,.json" />
             ) : null}
             {file && restoreStatus !== RestoreStatus.Verified ? (
                 <FileFrame
