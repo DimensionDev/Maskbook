@@ -70,18 +70,6 @@ class Watcher<ChainId extends PropertyKey, Transaction> {
         })
     }
 
-    private async setTransaction(
-        chainId: ChainId,
-        id: string,
-        transaction: TransactionWatcherItem<ChainId, Transaction>,
-    ) {
-        await this.setStorage(chainId, id, transaction)
-    }
-
-    private async removeTransaction(chainId: ChainId, id: string) {
-        await this.deleteStorage(chainId, id)
-    }
-
     private getAllTransactions(chainId: ChainId) {
         const storage = this.getStorage(chainId)
         return storage ? [...Object.entries(storage)].sort(([, a], [, z]) => z.at - a.at) : []
@@ -111,7 +99,11 @@ class Watcher<ChainId extends PropertyKey, Transaction> {
 
         // unwatch legacy transactions
         for (const [id] of this.getUnwatched(chainId)) {
-            await this.unwatchTransaction(chainId, id)
+            try {
+                await this.unwatchTransaction(chainId, id)
+            } catch {
+                console.warn('Failed to unwatch transaction.')
+            }
         }
 
         // check if all transactions were sealed
@@ -141,9 +133,7 @@ class Watcher<ChainId extends PropertyKey, Transaction> {
 
     public startCheck(chainId: ChainId) {
         this.stopCheck()
-        if (this.timer === null) {
-            this.timer = setTimeout(this.check.bind(this, chainId), this.options.delay)
-        }
+        this.timer = setTimeout(this.check.bind(this, chainId), this.options.delay)
     }
 
     public stopCheck() {
@@ -152,7 +142,7 @@ class Watcher<ChainId extends PropertyKey, Transaction> {
     }
 
     public async watchTransaction(chainId: ChainId, id: string, transaction: Transaction) {
-        await this.setTransaction(chainId, id, {
+        await this.setStorage(chainId, id, {
             at: Date.now(),
             id,
             chainId,
@@ -163,7 +153,7 @@ class Watcher<ChainId extends PropertyKey, Transaction> {
     }
 
     public async unwatchTransaction(chainId: ChainId, id: string) {
-        await this.removeTransaction(chainId, id)
+        await this.deleteStorage(chainId, id)
     }
 }
 

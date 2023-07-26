@@ -37,15 +37,17 @@ export class TransactionWatcher extends TransactionWatcherState<ChainId, Transac
 
         // a wallet connected
         if (Transaction) {
+            if (!transaction.from) return
+
+            const stored = await Transaction.getTransaction?.(chainId, transaction.from, id)
+            if (!stored) return
+
             // update record status in transaction state
-            if (status !== TransactionStatusType.NOT_DEPEND && transaction.from)
+            if (status !== TransactionStatusType.NOT_DEPEND)
                 await Transaction.updateTransaction?.(chainId, transaction.from, id, status)
 
             // only tracked records will get notified
-            if (transaction.from) {
-                const stored = await Transaction.getTransaction?.(chainId, transaction.from, id)
-                if (stored) this.emitter.emit('progress', chainId, id, status, transaction)
-            }
+            this.emitter.emit('progress', chainId, id, status, transaction)
         } else {
             this.emitter.emit('progress', chainId, id, status, transaction)
         }

@@ -14,7 +14,7 @@ export class CustomNetwork implements Middleware<ConnectionContext> {
     async fn(context: ConnectionContext, next: () => Promise<void>) {
         const network = this.Network.network?.getCurrentValue()
 
-        if (context.providerType === ProviderType.MaskWallet && network?.isCustomized) {
+        if (network?.isCustomized) {
             try {
                 const result = await this.Request.request(context.requestArguments, {
                     providerURL: network.rpcUrl,
