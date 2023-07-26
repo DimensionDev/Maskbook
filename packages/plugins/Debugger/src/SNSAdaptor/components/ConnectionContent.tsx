@@ -199,6 +199,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
         try {
             await Web3.switchChain?.(chainId)
         } catch (error: unknown) {
+            // eslint-disable-next-line no-alert
             if (error instanceof Error) alert(error.message)
         }
     }, [])
@@ -210,6 +211,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
                 providerType,
             })
         } catch (error: unknown) {
+            // eslint-disable-next-line no-alert
             if (error instanceof Error) alert(error.message)
         }
     }, [])
@@ -220,6 +222,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
                 providerType,
             })
         } catch (error: unknown) {
+            // eslint-disable-next-line no-alert
             if (error instanceof Error) alert(error.message)
         }
     }, [])

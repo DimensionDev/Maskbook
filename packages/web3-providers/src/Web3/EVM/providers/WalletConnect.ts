@@ -6,11 +6,11 @@ import { Flags } from '@masknet/flags'
 import WalletConnect from '@walletconnect/client'
 import type { Account } from '@masknet/shared-base'
 import {
-    type ChainId,
     chainResolver,
     EthereumMethodType,
     isValidAddress,
     ProviderType,
+    type ChainId,
     type Web3Provider,
     type Web3,
     isValidChainId,
@@ -79,18 +79,6 @@ export default class WalletConnectProvider
     }
 
     private createConnector() {
-        const createListener = <T>(listener: (error: Error | null, payload: T) => void) => {
-            return (error: Error | null, payload: T) => {
-                console.log('DEBUG: listener')
-                console.log({
-                    error,
-                    payload,
-                })
-
-                return listener(error, payload)
-            }
-        }
-
         const connector = new WalletConnect({
             bridge: Flags.wc_v1_bridge_url,
             qrcodeModal: {
@@ -104,10 +92,10 @@ export default class WalletConnectProvider
             },
         })
 
-        connector.on('connect', createListener(this.onConnect.bind(this)))
-        connector.on('disconnect', createListener(this.onDisconnect.bind(this)))
-        connector.on('session_update', createListener(this.onSessionUpdate.bind(this)))
-        connector.on('modal_closed', createListener(this.onModalCloseByUser.bind(this)))
+        connector.on('connect', this.onConnect.bind(this))
+        connector.on('disconnect', this.onDisconnect.bind(this))
+        connector.on('session_update', this.onSessionUpdate.bind(this))
+        connector.on('modal_closed', this.onModalCloseByUser.bind(this))
 
         return connector
     }
