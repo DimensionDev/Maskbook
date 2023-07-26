@@ -47,7 +47,6 @@ export default class WalletConnectProvider
     extends BaseProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
-    private connectorId = 0
     private connector: WalletConnect | undefined
 
     /**
@@ -80,13 +79,6 @@ export default class WalletConnectProvider
     }
 
     private createConnector() {
-        console.log('DEBUG: createConnector')
-
-        // disable legacy listeners
-        this.connectorId += 1
-
-        const connectorId = this.connectorId
-
         const createListener = <T>(listener: (error: Error | null, payload: T) => void) => {
             return (error: Error | null, payload: T) => {
                 console.log('DEBUG: listener')
@@ -95,7 +87,6 @@ export default class WalletConnectProvider
                     payload,
                 })
 
-                if (connectorId !== this.connectorId) return
                 return listener(error, payload)
             }
         }
@@ -150,16 +141,14 @@ export default class WalletConnectProvider
     }
 
     private onConnect(error: Error | null, payload: SessionPayload) {
-        if (!this.connection) return
-
         if (error) {
-            this.connection.reject(error)
-            return
+            this.connection?.reject(error)
+        } else {
+            this.connection?.resolve({
+                chainId: payload.params[0].chainId,
+                account: first(payload.params[0].accounts) ?? '',
+            })
         }
-        this.connection.resolve({
-            chainId: payload.params[0].chainId,
-            account: first(payload.params[0].accounts) ?? '',
-        })
     }
 
     private onDisconnect(error: Error | null, payload: DisconnectPayload) {
