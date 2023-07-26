@@ -11,6 +11,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useModalNavigate } from '../index.js'
 import { HomeTabType } from '../../pages/Wallet/type.js'
 import { useWallets } from '@masknet/web3-hooks-base'
+import { WalletRPC } from '../../../../plugins/WalletService/messages.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -53,10 +54,14 @@ export const SelectProvider = memo(function SelectProvider() {
             const params = new URLSearchParams(location.search)
             const disableNewWindow = params.get('disableNewWindow')
 
+            const isWalletLocked = await WalletRPC.isLocked()
+
             if (providerType === ProviderType.MaskWallet) {
                 navigate(
                     wallets.length
-                        ? urlcat(PopupRoutes.SelectWallet, { verifyWallet: true, chainId: ChainId.Mainnet })
+                        ? isWalletLocked
+                            ? urlcat(PopupRoutes.Unlock, { route: PopupRoutes.SelectWallet })
+                            : urlcat(PopupRoutes.SelectWallet, { verifyWallet: true, chainId: ChainId.Mainnet })
                         : PopupRoutes.Wallet,
                 )
                 return
