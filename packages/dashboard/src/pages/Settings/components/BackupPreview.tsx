@@ -160,7 +160,7 @@ export function BackupPreview({ info, ...rest }: BackupPreviewProps) {
                                 {t.settings_backup_preview_contacts()}
                             </ListItemText>
                         </ListItem>
-                        <ListItem secondaryAction={<Typography>{info.contacts}</Typography>}>
+                        <ListItem secondaryAction={<Typography>{info.files}</Typography>}>
                             <ListItemIcon className={classes.listItemIcon}>
                                 <Icons.Folder size={20} />
                             </ListItemIcon>
