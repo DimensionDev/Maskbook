@@ -412,11 +412,8 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             },
             { enableSquash: true },
         )
-
         const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal, data.identity.nft)
-        return uniqWith(bindings, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
-            (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
-        )
+        return uniqWith(bindings, (a, b) => a.identity === b.identity && a.platform === b.platform)
     }
 
     async queryProfilesByTwitterId(twitterId: string) {
@@ -447,9 +444,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
         const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal, data.identity.nft)
 
-        return uniqWith(bindings, (a, b) => a.identity === b.identity && a.platform === b.platform).filter(
-            (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
-        )
+        return uniqWith(bindings, (a, b) => a.identity === b.identity && a.platform === b.platform)
     }
 
     async queryAllLens(twitterId: string): Promise<NextIDBaseAPI.LensAccount[]> {

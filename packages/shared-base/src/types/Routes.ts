@@ -78,6 +78,7 @@ export enum PopupRoutes {
     VerifyWallet = '/personas/verify',
     ChangeOwner = '/wallet/change-owner',
     Friends = '/friends',
+    FriendsDetail = '/friends/detail',
     Settings = '/settings',
     WalletConnect = '/personas/wallet-connect',
 }

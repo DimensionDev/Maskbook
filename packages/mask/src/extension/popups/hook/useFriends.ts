@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { type ECKeyIdentifier, EMPTY_LIST, type BindingProof, type ProfileInformation } from '@masknet/shared-base'
+import { ECKeyIdentifier, EMPTY_LIST, type BindingProof, type ProfileInformation } from '@masknet/shared-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { useCurrentPersona } from '../../../components/DataSource/usePersonaConnectStatus.js'
 import Services from '../../../extension/service.js'
@@ -35,7 +35,11 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
         results.forEach((item, index) => {
             if (item.status !== 'rejected') {
                 const filtered = item.value.filter(
-                    (x) => x.platform === 'twitter' || x.platform === 'lens' || x.platform === 'ens',
+                    (x) =>
+                        x.platform === 'twitter' ||
+                        x.platform === 'lens' ||
+                        x.platform === 'ens' ||
+                        x.platform === 'ethereum',
                 )
                 profiles.push({
                     profiles: filtered,
@@ -45,6 +49,16 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
             }
             return
         })
+        console.log(profiles)
         return profiles
     }, [network, currentPersona])
+}
+
+export function useFriend(network: string, id: string): AsyncStateRetry<FriendsInformation> {
+    return useAsyncRetry(async () => {
+        ECKeyIdentifier.fromHexPublicKeyK256(id)
+        const res = {} as FriendsInformation
+        res.profiles = await NextIDProof.queryProfilesByPublicKey(id)
+        return res
+    }, [network, id])
 }

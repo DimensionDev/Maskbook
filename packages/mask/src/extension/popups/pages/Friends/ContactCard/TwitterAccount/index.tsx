@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Box, Link } from '@mui/material'
-import { AccountAvatar } from '../../Personas/components/AccountAvatar/index.js'
+import { AccountAvatar } from '../../../Personas/components/AccountAvatar/index.js'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 

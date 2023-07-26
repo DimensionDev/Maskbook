@@ -8,8 +8,8 @@ import urlcat from 'urlcat'
 import type { FriendsInformation } from '../../../hook/useFriends.js'
 import { AccountAvatar } from '../../Personas/components/AccountAvatar/index.js'
 import { useNavigate } from 'react-router-dom'
-import { TwitterAccount } from '../TwitterAccount/index.js'
-import { LensAccount } from '../LensAccount/index.js'
+import { TwitterAccount } from './TwitterAccount/index.js'
+import { LensAccount } from './LensAccount/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -68,7 +68,7 @@ interface ContactCardProps {
 export const ContactCard = memo<ContactCardProps>(({ friend }) => {
     const theme = useTheme()
     const { classes } = useStyles()
-    const { id, avatar, profiles, linkedPersona, identifier } = friend
+    const { id, avatar, profiles, linkedPersona } = friend
     const navigate = useNavigate()
     return (
         <Box className={classes.card}>
@@ -99,7 +99,16 @@ export const ContactCard = memo<ContactCardProps>(({ friend }) => {
                         </Typography>
                     </Box>
                 </Box>
-                <Button onClick={() => navigate('/friends/detail')} color="inherit" style={{ borderRadius: '50%' }}>
+                <Button
+                    onClick={() =>
+                        navigate(`/friends/detail/${id}`, {
+                            state: {
+                                friend,
+                            },
+                        })
+                    }
+                    color="inherit"
+                    style={{ borderRadius: '50%' }}>
                     <Icons.ArrowRight />
                 </Button>
             </Box>
