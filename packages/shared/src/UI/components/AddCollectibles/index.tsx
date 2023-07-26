@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { ActionButton, MaskColorVar, MaskTextField, makeStyles } from '@masknet/theme'
+import { ActionButton, MaskTextField, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     useAccount,
@@ -10,7 +10,7 @@ import {
     useAddressType,
 } from '@masknet/web3-hooks-base'
 import { isSameAddress, type NonFungibleTokenContract } from '@masknet/web3-shared-base'
-import { Stack, Typography } from '@mui/material'
+import { Stack, Typography, useTheme } from '@mui/material'
 import { Box } from '@mui/system'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { compact, uniq } from 'lodash-es'
@@ -68,7 +68,7 @@ const useStyles = makeStyles()((theme) => ({
     error: {
         backgroundColor: theme.palette.maskColor.bottom,
         fontSize: 14,
-        color: MaskColorVar.redMain,
+        color: theme.palette.maskColor.danger,
     },
     toolbar: {
         position: 'absolute',
@@ -122,6 +122,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
     const { pluginID, chainId: chainId_, account: defaultAccount, onClose } = props
     const { chainId } = useChainContext({ chainId: chainId_ })
     const t = useSharedI18N()
+    const theme = useTheme()
     const walletAccount = useAccount()
     const account = defaultAccount || walletAccount
     const { classes } = useStyles(undefined, { props })
@@ -227,11 +228,15 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                             <MaskTextField
                                 {...field}
                                 placeholder={t.add_collectibles_address_placeholder()}
-                                error={!!errors.address}
+                                error={!!(errors.address || validationMsgForAddress)}
                                 InputProps={{
                                     spellCheck: false,
                                     endAdornment: field.value ? (
-                                        <Icons.Close size={18} onClick={() => resetField('address')} />
+                                        <Icons.Close
+                                            size={18}
+                                            onClick={() => resetField('address')}
+                                            color={validationMsgForAddress ? theme.palette.maskColor.danger : undefined}
+                                        />
                                     ) : null,
                                 }}
                             />
@@ -257,7 +262,11 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                                 InputProps={{
                                     spellCheck: false,
                                     endAdornment: field.value ? (
-                                        <Icons.Close size={18} onClick={() => resetField('tokenIds')} />
+                                        <Icons.Close
+                                            size={18}
+                                            onClick={() => resetField('tokenIds')}
+                                            color={errors.tokenIds ? theme.palette.maskColor.danger : undefined}
+                                        />
                                     ) : null,
                                 }}
                             />

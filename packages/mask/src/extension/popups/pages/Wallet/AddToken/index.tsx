@@ -21,7 +21,7 @@ import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { sortBy } from 'lodash-es'
 
-const useStyles = makeStyles<{ currentTab: TabType }>()((theme, { currentTab }) => ({
+const useStyles = makeStyles<{ currentTab: TabType; searchError: boolean }>()((theme, { currentTab, searchError }) => ({
     content: {
         flex: 1,
         padding: '16px 16px 0 16px',
@@ -37,7 +37,7 @@ const useStyles = makeStyles<{ currentTab: TabType }>()((theme, { currentTab }) 
     },
     listBox: {
         flex: 1,
-        marginTop: 36,
+        marginTop: searchError ? 54 : 36,
         '&::-webkit-scrollbar': {
             display: 'none',
         },
@@ -77,7 +77,7 @@ const useStyles = makeStyles<{ currentTab: TabType }>()((theme, { currentTab }) 
         zIndex: 50,
     },
     sidebar: {
-        marginTop: currentTab === TabType.Tokens ? 52 : 0,
+        marginTop: currentTab === TabType.Tokens ? (searchError ? 70 : 52) : 0,
     },
     grid: {
         gridTemplateColumns: 'repeat(auto-fill, minmax(40%, 1fr))',
@@ -136,7 +136,8 @@ const AddToken = memo(function AddToken() {
         TabType.Tokens,
         TabType.Collectibles,
     )
-    const { classes } = useStyles({ currentTab })
+    const [searchError, setSearchError] = useState(false)
+    const { classes } = useStyles({ currentTab, searchError })
 
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>(
         chainId_ ? Number.parseInt(chainId_, 10) : ChainId.Mainnet,
@@ -207,6 +208,7 @@ const AddToken = memo(function AddToken() {
                                 listBox: classes.listBox,
                                 searchInput: classes.searchInput,
                             }}
+                            onSearchError={setSearchError}
                             blacklist={blackList.map((x) => x.address)}
                             FixedSizeListProps={{ height: 474, itemSize: rowSize + 16, className: classes.wrapper }}
                             SearchTextFieldProps={{ className: classes.input }}

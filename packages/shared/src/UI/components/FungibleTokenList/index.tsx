@@ -47,6 +47,7 @@ export interface FungibleTokenListProps<T extends NetworkPluginID>
     selectedTokens?: string[]
     disableSearch?: boolean
     onSelect?(token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null): void
+    onSearchError?(error: boolean): void
     FixedSizeListProps?: Partial<MaskFixedSizeListProps>
     SearchTextFieldProps?: MaskTextFieldProps
     enableManage?: boolean
@@ -73,6 +74,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         whitelist: includeTokens,
         blacklist: excludeTokens = EMPTY_LIST,
         onSelect,
+        onSearchError,
         FixedSizeListProps,
         selectedTokens = EMPTY_LIST,
         enableManage = false,
@@ -242,6 +244,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     const searchedTokenAddress = useMemo(() => {
         if (!keyword) {
             setSearchError(undefined)
+            onSearchError?.(false)
             return
         }
 
@@ -250,6 +253,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
             keyword.length > 3 &&
             !Others.isValidAddress(keyword)
         ) {
+            onSearchError?.(true)
             setSearchError(t.erc20_search_wrong_address())
             return
         }
@@ -319,7 +323,6 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         isCustomToken,
         isHiddenChainIcon,
     ])
-
     const SearchFieldProps = useMemo(
         () => ({
             placeholder: t.erc20_token_list_placeholder(),
