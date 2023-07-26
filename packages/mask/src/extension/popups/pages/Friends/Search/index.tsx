@@ -25,10 +25,18 @@ const useStyles = makeStyles()((theme) => ({
 export const Search = memo(() => {
     const { classes } = useStyles()
     const { t } = useI18N()
+    const handleKeyPress = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+        }
+    }
     return (
         <Box className={classes.container}>
             <Icons.Search />
-            <input placeholder={t('popupp_encrypted_friends_search_placeholder')} className={classes.input} />
+            <input
+                placeholder={t('popupp_encrypted_friends_search_placeholder')}
+                className={classes.input}
+                onKeyPress={(e) => handleKeyPress(e)}
+            />
         </Box>
     )
 })
