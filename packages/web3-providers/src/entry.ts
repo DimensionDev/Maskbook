@@ -89,7 +89,11 @@ export { Balancer } from './Trader/Balancer.js'
 export { Zrx } from './Trader/Zrx.js'
 export { Bancor } from './Trader/Bancor.js'
 export { OpenOcean } from './Trader/OpenOcean.js'
-export * from './Trending/helpers.js'
+
+export { DepositPaymaster } from './SmartPay/libs/DepositPaymaster.js'
+export { ContractWallet } from './SmartPay/libs/ContractWallet.js'
+export { Create2Factory } from './SmartPay/libs/Create2Factory.js'
+export { UserTransaction } from './SmartPay/libs/UserTransaction.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const Lido = new LidoAPI()

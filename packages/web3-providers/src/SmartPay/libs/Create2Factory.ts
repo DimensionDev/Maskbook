@@ -1,5 +1,5 @@
 import { bytesToHex, hexToBytes, keccak256, padLeft, toHex } from 'web3-utils'
-import { formatEthereumAddress } from '../helpers/formatter.js'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 
 export class Create2Factory {
     static MAX_DERIVATION_NUM = 99
