@@ -61,7 +61,7 @@ patchedDependencies:
     hash: 2krbsxzv524dzcdemy7vploqza
     path: patches/@walletconnect__client@1.7.8.patch
   '@walletconnect/socket-transport@1.7.8':
-    hash: 3swz4snnmqnv2ijkke5k2bgbea
+    hash: sme2rghvxvgvnqeexxxwrxv5xm
     path: patches/@walletconnect__socket-transport@1.7.8.patch
   bloom-filters@3.0.0:
     hash: 2etetjrjxbcye2oktxqpij75ey
@@ -3545,7 +3545,7 @@ importers:
         version: 2.7.3
       '@walletconnect/socket-transport':
         specifier: 1.7.8
-        version: 1.7.8(patch_hash=3swz4snnmqnv2ijkke5k2bgbea)
+        version: 1.7.8(patch_hash=sme2rghvxvgvnqeexxxwrxv5xm)
       '@walletconnect/types':
         specifier: ^2.7.3
         version: 2.7.3
@@ -13122,7 +13122,7 @@ packages:
   /@walletconnect/core@1.7.8:
     resolution: {integrity: sha512-9xcQ0YNf9JUFb0YOX1Mpy4Yojt+6w2yQz/0aIEyj2X/s9D71NW0fTYsMcdhkLOI7mn2cqVbx2t1lRvdgqsbrSQ==}
     dependencies:
-      '@walletconnect/socket-transport': 1.7.8(patch_hash=3swz4snnmqnv2ijkke5k2bgbea)
+      '@walletconnect/socket-transport': 1.7.8(patch_hash=sme2rghvxvgvnqeexxxwrxv5xm)
       '@walletconnect/types': 1.7.8
       '@walletconnect/utils': 1.7.8
     transitivePeerDependencies:
@@ -13314,7 +13314,7 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@walletconnect/socket-transport@1.7.8(patch_hash=3swz4snnmqnv2ijkke5k2bgbea):
+  /@walletconnect/socket-transport@1.7.8(patch_hash=sme2rghvxvgvnqeexxxwrxv5xm):
     resolution: {integrity: sha512-bqEjLxfSzG79v2OT7XVOZoyUkg6g3yng0fURrdLusWs42fYHWnrSrIZDejFn8N5PiZk5R2edrggkQ7w0VUUAfw==}
     dependencies:
       '@walletconnect/types': 1.7.8
