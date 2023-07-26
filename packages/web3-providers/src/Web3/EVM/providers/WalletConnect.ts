@@ -107,7 +107,7 @@ export default class WalletConnectProvider
         connector.on('connect', createListener(this.onConnect.bind(this)))
         connector.on('disconnect', createListener(this.onDisconnect.bind(this)))
         connector.on('session_update', createListener(this.onSessionUpdate.bind(this)))
-        connector.on('modal_closed', createListener(this.onModalClose.bind(this)))
+        connector.on('modal_closed', createListener(this.onModalCloseByUser.bind(this)))
 
         return connector
     }
@@ -151,36 +151,37 @@ export default class WalletConnectProvider
         }
     }
 
-    private onDisconnect(error: Error | null, payload: DisconnectPayload) {
+    private async onDisconnect(error: Error | null, payload: DisconnectPayload) {
+        await this.destroyConnector()
+
         if (this.connection) {
             this.connection.reject(error || new Error('User rejected connection.'))
             return
         }
 
-        if (error) return
-
-        this.emitter.emit('disconnect', ProviderType.WalletConnect)
+        if (!error) {
+            this.emitter.emit('disconnect', ProviderType.WalletConnect)
+        }
     }
 
-    private onSessionUpdate(error: Error | null, payload: SessionPayload) {
+    private async onSessionUpdate(error: Error | null, payload: SessionPayload) {
         if (this.connection) {
             this.onConnect(error, payload)
             return
         }
 
-        if (error) return
-
-        this.emitter.emit('chainId', toHex(payload.params[0].chainId))
-        this.emitter.emit('accounts', payload.params[0].accounts)
+        if (!error) {
+            this.emitter.emit('chainId', toHex(payload.params[0].chainId))
+            this.emitter.emit('accounts', payload.params[0].accounts)
+        }
     }
 
-    private async onModalClose(error: Error | null, payload: ModalClosePayload) {
+    private async onModalCloseByUser(error: Error | null, payload: ModalClosePayload) {
         if (!this.connector?.connected) await this.destroyConnector()
         this.connection?.reject(error || new Error('User rejected'))
     }
 
     private async login(expectedChainId?: ChainId) {
-        // await this.destroyConnector()
         this.connector = this.createConnector()
         this.connection = this.createConnection()
 
@@ -230,7 +231,8 @@ export default class WalletConnectProvider
 
     override async connect(chainId: ChainId) {
         const account = await this.login(chainId)
-        if (!account.account) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)
+        if (!isValidAddress(account.account))
+            throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)
         return account
     }
 
@@ -244,14 +246,12 @@ export default class WalletConnectProvider
         switch (requestArguments.method) {
             case EthereumMethodType.ETH_CHAIN_ID:
                 return Promise.resolve(this.connector.chainId) as Promise<T>
-            case EthereumMethodType.ETH_SEND_TRANSACTION: {
-                const [config] = requestArguments.params
-                return this.connector.sendTransaction(config) as Promise<T>
-            }
-            case EthereumMethodType.ETH_SIGN_TRANSACTION: {
-                const [config] = requestArguments.params
-                return this.connector.signTransaction(config) as Promise<T>
-            }
+            case EthereumMethodType.ETH_ACCOUNTS:
+                return Promise.resolve(this.connector.accounts) as Promise<T>
+            case EthereumMethodType.ETH_SEND_TRANSACTION:
+                return this.connector.sendTransaction(requestArguments.params[0]) as Promise<T>
+            case EthereumMethodType.ETH_SIGN_TRANSACTION:
+                return this.connector.signTransaction(requestArguments.params[0]) as Promise<T>
             case EthereumMethodType.PERSONAL_SIGN:
                 return this.connector.signPersonalMessage(requestArguments.params) as Promise<T>
             case EthereumMethodType.ETH_SIGN:
