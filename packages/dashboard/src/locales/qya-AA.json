@@ -439,6 +439,8 @@
     "data_recovery_mobile": "crwdns20571:0crwdne20571:0",
     "data_recovery_mobile_code": "crwdns20573:0crwdne20573:0",
     "data_recovery_invalid_mobile": "crwdns21657:0crwdne21657:0",
+    "data_recovery_set_name": "crwdns21789:0crwdne21789:0",
+    "data_recovery_name_tip": "crwdns21791:0crwdne21791:0",
     "file_unpacking": "crwdns20575:0crwdne20575:0",
     "file_unpacking_completed": "crwdns20577:0crwdne20577:0",
     "data_decrypting": "crwdns20579:0crwdne20579:0",
