@@ -2,9 +2,8 @@
 import { useCallback, useEffect, useLayoutEffect } from 'react'
 import { PluginID, SwitchLogoType, switchLogoSettings } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useIsMinimalMode, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { attachReactTreeToMountedRoot_noHost, makeStyles, startWatch } from '@masknet/theme'
-import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
 import { SwitchLogoDialog } from './modals.js'
@@ -57,6 +56,9 @@ const useStyles = makeStyles()(() => ({
             opacity: 1,
         },
     },
+    hidden: {
+        opacity: 0,
+    },
 }))
 
 const attachReactTreeWithContainer = attachReactTreeToMountedRoot_noHost()
@@ -81,15 +83,13 @@ function SwitchLogoIconButton() {
     const { classes, cx } = useStyles()
     const current = useLastRecognizedIdentity()
     const logoType = useValueRef(switchLogoSettings[current?.identifier?.userId || ''])
+    const disable = useIsMinimalMode(PluginID.SwitchLogo)
 
-    const disable = useIsMinimalModeDashBoard(PluginID.SwitchLogo)
-
-    console.log('disable', disable)
     useLayoutEffect(() => {
         const node = LogoSelector.evaluate()
         if (!node) return
         node?.parentElement?.style.setProperty('position', 'relative')
-        if (logoType === SwitchLogoType.Classics) {
+        if (logoType === SwitchLogoType.Classics && !disable) {
             // eslint-disable-next-line @masknet/browser-no-set-html
             node.innerHTML = BlueBirdHTML
         } else {
@@ -103,8 +103,8 @@ function SwitchLogoIconButton() {
     }, [])
 
     return (
-        <div className={cx(classes.switchIcon, classes.hover)}>
-            <div className={cx(classes.iconBox, classes.hover)}>
+        <div className={classes.switchIcon}>
+            <div className={cx(classes.iconBox, disable ? classes.hidden : classes.hover)}>
                 <Icons.SwitchLogo className={classes.icon} onClickCapture={onClick} />
             </div>
         </div>
