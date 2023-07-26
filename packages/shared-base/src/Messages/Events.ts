@@ -78,6 +78,10 @@ export interface CheckSecurityConfirmationDialogEvent {
     open: boolean
 }
 
+export interface CheckSwtichLogoEvent {
+    disabled: boolean
+}
+
 export type CheckSecurityDialogEvent =
     | {
           open: true

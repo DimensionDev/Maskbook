@@ -111,6 +111,8 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
         async (id: string, checked: boolean) => {
             if (id === PluginID.GoPlusSecurity && checked === false)
                 return CrossIsolationMessages.events.checkSecurityConfirmationDialogEvent.sendToAll({ open: true })
+            if (id === PluginID.SwitchLogo)
+                CrossIsolationMessages.events.checkSwtichLogoEvent.sendToAll({ disabled: !checked })
             await setPluginMinimalModeEnabled?.(id, !checked)
         },
         [setPluginMinimalModeEnabled],

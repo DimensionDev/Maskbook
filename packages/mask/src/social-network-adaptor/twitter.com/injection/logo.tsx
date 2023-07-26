@@ -1,11 +1,20 @@
+/* cspell: disable */
 import { MutationObserverWatcher, type LiveSelector } from '@dimensiondev/holoflows-kit'
 import { querySelector } from '../utils/selector.js'
 import { startWatch } from '../../../utils/watcher.js'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { attachReactTreeWithContainer } from '../../../utils/index.js'
-import { CrossIsolationMessages, SwitchLogoType, switchLogoSettings } from '@masknet/shared-base'
+import {
+    BooleanPreference,
+    CrossIsolationMessages,
+    PluginID,
+    SwitchLogoType,
+    switchLogoSettings,
+} from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
+import Services from '../../../extension/service.js'
+import { useAsync } from 'react-use'
 
 const BlueBirdHTML = `
      <svg
@@ -41,7 +50,20 @@ function Logo() {
     const logoType = useValueRef(switchLogoSettings[current.identifier?.userId || ''])
     const logo = logoSelector().evaluate()
 
-    if (logoType === SwitchLogoType.Classics) {
+    const { value: switchLogoDisabled } = useAsync(async () => {
+        const disabled = await Services.Settings.getPluginMinimalModeEnabled(PluginID.SwitchLogo)
+        return disabled === BooleanPreference.True
+    }, [])
+
+    const [disabled, setDisabled] = useState(switchLogoDisabled)
+
+    useEffect(() => {
+        return CrossIsolationMessages.events.checkSwtichLogoEvent.on((data) => {
+            setDisabled(data.disabled)
+        })
+    }, [logo])
+
+    if (logoType === SwitchLogoType.Classics && !disabled) {
         if (logo) {
             // eslint-disable-next-line @masknet/browser-no-set-html
             logo.innerHTML = BlueBirdHTML
@@ -54,10 +76,13 @@ function Logo() {
     }
 
     useEffect(() => {
-        if (!logo) return
-        logo.addEventListener('click', onOpenDialog)
+        if (disabled) {
+            logo?.removeEventListener('click', onOpenDialog)
+            return
+        }
+        logo?.addEventListener('click', onOpenDialog)
         return () => logo?.removeEventListener('click', onOpenDialog)
-    }, [logo, onOpenDialog])
+    }, [disabled, logo])
 
     return null
 }

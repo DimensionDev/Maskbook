@@ -69,7 +69,7 @@ export const SwitchLogo = memo<SwitchLogoProps>(() => {
         })
     }, [])
 
-    const openApplicationBoardDialog = () => {}
+    const openApplicationBoardDialog = useCallback(() => {}, [])
 
     const shareText = [t.share_text(), t.share_mask()].join('\n')
     const onSave = useCallback(async () => {
