@@ -81,7 +81,7 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
         switchLogoSettings[identity.identifier.userId].value = logoType ?? defaultLogoType
         setOpen(false)
         if (needShare) {
-            share?.([t.share_text(), t.share_mask()].join('\n'))
+            share?.([t.share_text(), '#TwitterLogo #TwitterX #SaveTheBird', t.share_mask()].join('\n'))
         }
     }, [logoType, identity?.identifier?.userId, defaultLogoType, share, needShare])
 
