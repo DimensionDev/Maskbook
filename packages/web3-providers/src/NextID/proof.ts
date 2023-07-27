@@ -429,7 +429,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 `,
             }),
         })
-        const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal, data.identity.nft)
+        const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal)
         return bindings
     }
 
