@@ -38,6 +38,7 @@
     { "path": "../../mask-sdk/server" },
     { "path": "../../plugins/Trader" },
     { "path": "../../plugins/External" },
+    { "path": "../../plugins/SwitchLogo" },
     { "path": "../../sandboxed-plugin-runtime/src/site-adaptor" },
     { "path": "../web-workers" },
     { "path": "../utils-pure" },

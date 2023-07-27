@@ -1,16 +1,17 @@
+import { useMemo } from 'react'
+import { useLocation } from 'react-use'
+import { makeStyles } from '@masknet/theme'
+import { MaskMessages } from '@masknet/shared-base'
+import { NFTAvatarButton } from '@masknet/plugin-avatar'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import {
     searchInstagramAvatarSettingDialog,
     searchInstagramProfileAvatarButtonSelector,
     searchInstagramProfileEditButton,
 } from '../../utils/selector.js'
-import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
-import { useMemo } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { NFTAvatarButton } from '@masknet/plugin-avatar'
+import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
+import { startWatch } from '../../../../utils/startWatch.js'
 import { NFTAvatarSettingDialog } from './NFTAvatarSettingDialog.js'
-import { useLocation } from 'react-use'
-import { MaskMessages } from '@masknet/shared-base'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchInstagramProfileAvatarButtonSelector())

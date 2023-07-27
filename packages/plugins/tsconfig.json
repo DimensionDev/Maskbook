@@ -37,6 +37,7 @@
     { "path": "./Transak/" },
     { "path": "./VCent/" },
     { "path": "./Wallet/" },
-    { "path": "./Web3Profile/" }
+    { "path": "./Web3Profile/" },
+    { "path": "./SwitchLogo/" }
   ]
 }

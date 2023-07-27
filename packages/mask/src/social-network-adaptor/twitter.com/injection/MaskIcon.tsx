@@ -1,19 +1,19 @@
+import { memoize, noop } from 'lodash-es'
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
 import { memoizePromise } from '@masknet/kit'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
-import { memoize, noop } from 'lodash-es'
+import { Flags } from '@masknet/flags'
 import Services from '../../../extension/service.js'
+import { startWatch, type WatchOptions } from '../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
-import { startWatch, type WatchOptions } from '../../../utils/watcher.js'
 import {
     bioPageUserIDSelector,
     bioPageUserNickNameSelector,
     floatingBioCardSelector,
     isProfilePageLike,
 } from '../utils/selector.js'
-import { Flags } from '@masknet/flags'
 
 function Icon(props: { size: number }) {
     return (

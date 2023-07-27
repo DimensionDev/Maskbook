@@ -6,7 +6,7 @@ import { WalletConnectQRCodeModal } from './WalletConnectQRCodeModal/index.js'
 import { WalletRiskWarningModal } from './WalletRiskWarningModal/index.js'
 import { ConnectWalletModal } from './ConnectWalletModal/index.js'
 import { LeavePageConfirmModal } from './LeavePageConfirmModal/index.js'
-import { ApplicationBoardModal } from './ApplicationBoardModal/index.js'
+import { ApplicationBoardModal, ApplicationBoardSettingsModal } from './ApplicationBoardModal/index.js'
 import { GasSettingModal } from './GasSettingModal/index.js'
 import { TransactionSnackbarModal } from './TransactionSnackbar/index.js'
 import { ConfirmModal } from './ConfirmModal/index.js'
@@ -39,6 +39,7 @@ export const Modals = memo(function Modals() {
             <SelectGasSettingsModal ref={modals.SelectGasSettingsModal.register} />
             <AddCollectiblesModal ref={modals.AddCollectiblesModal.register} />
             <PersonaSelectPanelModal ref={modals.PersonaSelectPanelModal.register} />
+            <ApplicationBoardSettingsModal ref={modals.ApplicationBoardSettingsModal.register} />
         </>
     )
 })

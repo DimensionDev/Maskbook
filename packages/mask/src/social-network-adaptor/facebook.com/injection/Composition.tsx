@@ -6,8 +6,8 @@ import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderI
 import { Composition } from '../../../components/CompositionDialog/Composition.js'
 import { isMobileFacebook } from '../utils/isMobile.js'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint.js'
-import { startWatch } from '../../../utils/watcher.js'
 import { taskOpenComposeBoxFacebook, taskCloseNativeComposeBoxFacebook } from '../automation/openComposeBox.js'
+import { startWatch } from '../../../utils/startWatch.js'
 
 let composeBox: LiveSelector<Element>
 

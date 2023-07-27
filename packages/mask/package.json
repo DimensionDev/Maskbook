@@ -55,6 +55,7 @@
     "@masknet/plugin-smart-pay": "workspace:^",
     "@masknet/plugin-snapshot": "workspace:^",
     "@masknet/plugin-solana": "workspace:^",
+    "@masknet/plugin-switch-logo": "workspace:^",
     "@masknet/plugin-tips": "workspace:^",
     "@masknet/plugin-trader": "workspace:^",
     "@masknet/plugin-transak": "workspace:^",

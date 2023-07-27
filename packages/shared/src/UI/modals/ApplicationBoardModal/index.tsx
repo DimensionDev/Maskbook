@@ -4,6 +4,7 @@ import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { CurrentSNSNetwork, IdentityResolved } from '@masknet/plugin-infra'
 import { ApplicationBoard, ApplicationSettingTabs } from './ApplicationBoardDialog.js'
 import type { PersonaAgainstSNSConnectStatus } from '../../../types.js'
+import { ApplicationBoardSettingsDialog } from './ApplicationSettingsDialog.js'
 
 export type ApplicationBoardModalOpenProps = {
     openDashboard: (route?: DashboardRoutes, search?: string) => void
@@ -79,6 +80,51 @@ export const ApplicationBoardModal = forwardRef<
             setDecentralizedSearchSettings={setDecentralizedSearchSettings}
             onClose={() => dispatch?.close()}
             quickMode={quickMode}
+            focusPluginID={focusPluginID}
+            tab={tab}
+        />
+    )
+})
+
+export interface ApplicationBoardSettingsModalOpenProps {
+    focusPluginID?: PluginID
+    setPluginMinimalModeEnabled?: (id: string, checked: boolean) => Promise<void>
+    getDecentralizedSearchSettings?: () => Promise<boolean>
+    setDecentralizedSearchSettings?: (checked: boolean) => Promise<void>
+    tab?: ApplicationSettingTabs
+}
+
+export type ApplicationBoardSettingsModalProps = {}
+
+export const ApplicationBoardSettingsModal = forwardRef<
+    SingletonModalRefCreator<ApplicationBoardSettingsModalOpenProps>,
+    ApplicationBoardSettingsModalProps
+>((props, ref) => {
+    const [setPluginMinimalModeEnabled, setSetPluginMinimalModeEnabled] =
+        useState<(id: string, checked: boolean) => Promise<void>>()
+    const [getDecentralizedSearchSettings, setGetDecentralizedSearchSettings] = useState<() => Promise<boolean>>()
+    const [setDecentralizedSearchSettings, setSetDecentralizedSearchSettings] =
+        useState<(checked: boolean) => Promise<void>>()
+    const [focusPluginID, setFocusPluginID] = useState<PluginID>()
+    const [tab, setTab] = useState<ApplicationSettingTabs | undefined>(ApplicationSettingTabs.pluginSwitch)
+    const [open, dispatch] = useSingletonModal(ref, {
+        onOpen(props) {
+            setSetPluginMinimalModeEnabled(() => props.setPluginMinimalModeEnabled)
+            setGetDecentralizedSearchSettings(() => props.getDecentralizedSearchSettings)
+            setSetDecentralizedSearchSettings(() => props.setDecentralizedSearchSettings)
+            setFocusPluginID(props.focusPluginID)
+            setTab(props.tab)
+        },
+    })
+
+    if (!open) return null
+    return (
+        <ApplicationBoardSettingsDialog
+            open
+            setPluginMinimalModeEnabled={setPluginMinimalModeEnabled}
+            getDecentralizedSearchSettings={getDecentralizedSearchSettings}
+            setDecentralizedSearchSettings={setDecentralizedSearchSettings}
+            onClose={() => dispatch?.close()}
             focusPluginID={focusPluginID}
             tab={tab}
         />

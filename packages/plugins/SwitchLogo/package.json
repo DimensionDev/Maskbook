@@ -1,0 +1,25 @@
+{
+    "name": "@masknet/plugin-switch-logo",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": {
+            "mask-src": "./src/index.ts",
+            "default": "./dist/index.js"
+        },
+        "./register": {
+            "mask-src": "./src/register.ts",
+            "default": "./dist/register.js"
+        }
+    },
+    "dependencies": {
+        "@masknet/icons": "workspace:^",
+        "@masknet/plugin-infra": "workspace:^",
+        "@masknet/shared": "workspace:^",
+        "@masknet/shared-base": "workspace:^",
+        "@masknet/shared-base-ui": "workspace:^",
+        "@masknet/theme": "workspace:^",
+        "react-use": "^17.4.0",
+        "use-subscription": "^1.8.0"
+    }
+}

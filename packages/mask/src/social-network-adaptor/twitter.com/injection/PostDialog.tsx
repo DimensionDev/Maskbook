@@ -1,8 +1,8 @@
 import { MutationObserverWatcher, type LiveSelector } from '@dimensiondev/holoflows-kit'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { Composition } from '../../../components/CompositionDialog/Composition.js'
-import { startWatch, type WatchOptions } from '../../../utils/watcher.js'
 import { postEditorContentInPopupSelector, rootSelector } from '../utils/selector.js'
+import { startWatch, type WatchOptions } from '../../../utils/startWatch.js'
 
 function renderPostDialogTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T, true>, options: WatchOptions) {
     const watcher = new MutationObserverWatcher(ls)

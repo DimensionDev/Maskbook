@@ -1,7 +1,7 @@
 import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Composition } from '../../../components/CompositionDialog/Composition.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
-import { startWatch } from '../../../utils/watcher.js'
+import { startWatch } from '../../../utils/startWatch.js'
 import { composerModalSelector, rootSelector } from '../utils/selector.js'
 
 export function injectPostDialogAtMinds(signal: AbortSignal) {

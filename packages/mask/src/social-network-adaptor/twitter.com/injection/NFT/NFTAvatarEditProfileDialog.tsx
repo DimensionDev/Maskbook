@@ -6,7 +6,6 @@ import { CrossIsolationMessages, PluginID, currentPersonaIdentifier } from '@mas
 import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
-
 import {
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
@@ -14,9 +13,10 @@ import {
 } from '../../../../components/DataSource/useActivatedUI.js'
 import { usePersonasFromDB } from '../../../../components/DataSource/usePersonasFromDB.js'
 import { Services } from '../../../../extension/service.js'
-import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { ButtonStyle } from '../../constant.js'
 import { searchProfileAvatarSelector, searchProfileSaveSelector } from '../../utils/selector.js'
+import { startWatch } from '../../../../utils/startWatch.js'
 
 export function injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())

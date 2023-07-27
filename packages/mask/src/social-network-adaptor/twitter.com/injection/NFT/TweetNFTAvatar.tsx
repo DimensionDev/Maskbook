@@ -1,12 +1,13 @@
+import { noop } from 'lodash-es'
+import { Flags } from '@masknet/flags'
 import { DOMProxy, type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { searchRetweetAvatarSelector, searchTweetAvatarSelector } from '../../utils/selector.js'
-import { noop } from 'lodash-es'
 import { MiniAvatarBorder } from './MiniAvatarBorder.js'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
 import { getUserId } from '../../utils/user.js'
-import { Flags } from '@masknet/flags'
+import { startWatch } from '../../../../utils/startWatch.js'
 
 function _(main: () => LiveSelector<HTMLElement>, signal: AbortSignal) {
     startWatch(

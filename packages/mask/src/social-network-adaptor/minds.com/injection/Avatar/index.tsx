@@ -1,10 +1,11 @@
+import { noop } from 'lodash-es'
+import { Flags } from '@masknet/flags'
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Plugin } from '@masknet/plugin-infra'
 import { Avatar } from '../../../../components/InjectedComponents/Avatar.js'
-import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
+import { startWatch } from '../../../../utils/startWatch.js'
 import { inpageAvatarSelector } from '../../utils/selector.js'
-import { noop } from 'lodash-es'
-import { Flags } from '@masknet/flags'
 
 export async function injectAvatar(signal: AbortSignal) {
     startWatch(

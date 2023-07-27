@@ -1,8 +1,10 @@
 import Color from 'color'
 import { useEffect, useState } from 'react'
+import { useAsync } from 'react-use'
+import { useCollectionByTwitterHandler } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { attachReactTreeWithContainer, startWatch, untilElementAvailable } from '../../../utils/index.js'
+import { attachReactTreeWithContainer, untilElementAvailable } from '../../../utils/index.js'
 import type { NonFungibleCollectionResult, FungibleTokenResult } from '@masknet/web3-shared-base'
 import { useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
 import { ProfileTabs, PluginID, MaskMessages, BooleanPreference } from '@masknet/shared-base'
@@ -22,8 +24,7 @@ import {
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI.js'
 import Services from '../../../extension/service.js'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js'
-import { useAsync } from 'react-use'
-import { useCollectionByTwitterHandler } from '@masknet/shared'
+import { startWatch } from '../../../utils/startWatch.js'
 
 function getStyleProps() {
     const EMPTY_STYLE = {} as CSSStyleDeclaration

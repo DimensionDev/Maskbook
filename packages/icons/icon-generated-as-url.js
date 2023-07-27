@@ -94,6 +94,8 @@ export function solana_url() { return new URL("./brands/Solana.svg", import.meta
 export function sushi_swap_url() { return new URL("./brands/SushiSwap.png", import.meta.url) }
 export function sybil_url() { return new URL("./brands/Sybil.png", import.meta.url) }
 export function telegram_round_url() { return new URL("./brands/TelegramRound.svg", import.meta.url) }
+export function twitter_3_dark_url() { return new URL("./brands/twitter3.dark.svg", import.meta.url) }
+export function twitter_3_light_url() { return new URL("./brands/twitter3.light.svg", import.meta.url) }
 export function twitter_colored_url() { return new URL("./brands/TwitterColored.svg", import.meta.url) }
 export function twitter_other_colored_url() { return new URL("./brands/TwitterOtherColored.svg", import.meta.url) }
 export function twitter_round_url() { return new URL("./brands/TwitterRound.svg", import.meta.url) }
@@ -286,6 +288,8 @@ export function success_url() { return new URL("./general/Success.svg", import.m
 export function success_for_snack_bar_url() { return new URL("./general/SuccessForSnackBar.svg", import.meta.url) }
 export function swap_url() { return new URL("./general/Swap.svg", import.meta.url) }
 export function swap_colorful_url() { return new URL("./general/SwapColorful.svg", import.meta.url) }
+export function switch_logo_dark_url() { return new URL("./general/SwitchLogo.dark.svg", import.meta.url) }
+export function switch_logo_light_url() { return new URL("./general/SwitchLogo.light.svg", import.meta.url) }
 export function telegram_round_gray_url() { return new URL("./general/TelegramRoundGray.svg", import.meta.url) }
 export function tick_url() { return new URL("./general/Tick.svg", import.meta.url) }
 export function tip_url() { return new URL("./general/Tip.svg", import.meta.url) }
