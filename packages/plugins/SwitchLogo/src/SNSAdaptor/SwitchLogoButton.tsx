@@ -1,7 +1,7 @@
 /* cspell: disable */
 import { useCallback, useLayoutEffect } from 'react'
 import { CrossIsolationMessages, PluginID, SwitchLogoType } from '@masknet/shared-base'
-import { useIsMinimalMode, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useIsMinimalMode, type IdentityResolved } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
@@ -60,13 +60,15 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-export function SwitchLogoButton() {
+interface SwitchLogoButtonProps {
+    identity?: IdentityResolved
+}
+export function SwitchLogoButton({ identity }: SwitchLogoButtonProps) {
     const { classes, cx } = useStyles()
-    const current = useLastRecognizedIdentity()
     const disable = useIsMinimalMode(PluginID.SwitchLogo)
 
     const [storage, _] = useSwitchLogoStorage()
-    const logoType = storage[current?.identifier?.userId || '']
+    const logoType = storage[identity?.identifier?.userId || 'default']
 
     useLayoutEffect(() => {
         const node = LogoSelector.evaluate()

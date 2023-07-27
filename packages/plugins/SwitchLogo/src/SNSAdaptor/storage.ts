@@ -14,7 +14,7 @@ export function useSwitchLogoStorage(): [
     value: Record<string, SwitchLogoType>,
     callback: (userId: string, newValue: SwitchLogoType) => void,
 ] {
-    const value = useSubscription(switchLogoStorage.storage.value.subscription)
+    const value = useSubscription(switchLogoStorage?.storage?.value?.subscription)
     return [
         value,
         function setSwitchLogoType(userId: string, newValue: SwitchLogoType) {

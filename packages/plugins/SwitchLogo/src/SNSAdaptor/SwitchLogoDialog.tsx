@@ -59,7 +59,7 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
     const { classes, cx } = useStyles()
     const identity = useLastRecognizedIdentity()
     const [storage, setupStorage] = useSwitchLogoStorage()
-    const defaultLogoType = storage[identity?.identifier?.userId || '']
+    const defaultLogoType = storage[identity?.identifier?.userId || 'default']
     const [logoType, setLogoType] = useState<SwitchLogoType>()
     const { share } = useSNSAdaptorContext()
     const [needShare, setNeedShare] = useState(true)
