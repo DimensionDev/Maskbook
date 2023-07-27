@@ -275,7 +275,7 @@ importers:
         version: 3.0.2
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@5.2.0-dev.20230630)
+        version: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@4.9.5)
       typescript:
         specifier: 5.2.0-dev.20230630
         version: 5.2.0-dev.20230630
@@ -21915,7 +21915,7 @@ packages:
       solc: 0.7.3(debug@4.3.4)
       source-map-support: 0.5.21
       stacktrace-parser: 0.1.10
-      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@5.2.0-dev.20230630)
+      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@4.9.5)
       tsort: 0.0.1
       typescript: 5.2.0-dev.20230630
       undici: 5.20.0
@@ -23823,7 +23823,7 @@ packages:
       pretty-format: 28.1.3
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@5.2.0-dev.20230630)
+      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@4.9.5)
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -27751,7 +27751,7 @@ packages:
     dependencies:
       lilconfig: 2.1.0
       postcss: 8.4.26
-      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@5.2.0-dev.20230630)
+      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@4.9.5)
       yaml: 2.1.3
     dev: false
 
@@ -32008,7 +32008,6 @@ packages:
       typescript: 4.9.5
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: true
 
   /ts-node@10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@5.2.0-dev.20230630):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
@@ -32308,7 +32307,6 @@ packages:
     resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
     engines: {node: '>=4.2.0'}
     hasBin: true
-    dev: true
 
   /typescript@5.2.0-dev.20230630:
     resolution: {integrity: sha512-PpI4tXtyv86eAhapMWrJF5roAxswu022vmSjDRU7NzPqT5+DlBktIlDePOrBo7OUBWNVEiUfsWuoDNbq5Sjj6Q==}
