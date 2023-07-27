@@ -10,13 +10,12 @@ export function setupStorage(_: ScopedStorage<SwitchLogoStorageOptions>) {
     switchLogoStorage = _
 }
 
-export function useSwitchLogoStorage(): [
-    value: Record<string, SwitchLogoType>,
-    callback: (userId: string, newValue: SwitchLogoType) => void,
-] {
+export function useSwitchLogoStorage(
+    userId?: string,
+): [value: SwitchLogoType, callback: (userId: string, newValue: SwitchLogoType) => void] {
     const value = useSubscription(switchLogoStorage?.storage?.value?.subscription)
     return [
-        value,
+        value[userId || 'default'],
         function setSwitchLogoType(userId: string, newValue: SwitchLogoType) {
             value[userId] = newValue
             switchLogoStorage.storage.value.setValue(value)

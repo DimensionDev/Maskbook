@@ -66,10 +66,7 @@ interface SwitchLogoButtonProps {
 export function SwitchLogoButton({ identity }: SwitchLogoButtonProps) {
     const { classes, cx } = useStyles()
     const disable = useIsMinimalMode(PluginID.SwitchLogo)
-
-    const [storage, _] = useSwitchLogoStorage()
-    const logoType = storage[identity?.identifier?.userId || 'default']
-
+    const [logoType, _] = useSwitchLogoStorage(identity?.identifier?.userId)
     useLayoutEffect(() => {
         const node = LogoSelector.evaluate()
         if (!node) return
