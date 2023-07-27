@@ -26,6 +26,7 @@ export const RestPartOfPluginUIContextShared: Omit<
     | 'currentPersonaIdentifier'
     | 'ownPersonaChanged'
     | 'switchLogoSettings'
+    | 'switchLogoOpenedState'
 > = {
     currentPersona: createSubscriptionFromAsync(
         Services.Settings.getCurrentPersonaIdentifier,

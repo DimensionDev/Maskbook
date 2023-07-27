@@ -23,6 +23,7 @@ import { type SetupGuideContext, SetupGuideStep } from '../../shared/legacy-sett
 import {
     currentPersonaIdentifier,
     currentSetupGuideStatus,
+    switchLogoOpenedState,
     switchLogoSettings,
 } from '../../shared/legacy-settings/settings.js'
 import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host.js'
@@ -214,6 +215,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     ownPersonaChanged: MaskMessages.events.ownPersonaChanged,
                     currentPersonaIdentifier,
                     switchLogoSettings,
+                    switchLogoOpenedState,
                 }
             },
             Services.Settings.getPluginMinimalModeEnabled,

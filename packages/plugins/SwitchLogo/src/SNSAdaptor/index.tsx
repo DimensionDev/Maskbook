@@ -7,6 +7,7 @@ import { PluginID } from '@masknet/shared-base'
 import { SwitchLogoDialog } from './SwitchLogoDialog.js'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
+import { SwitchLogoOpenedState, setupStorage } from './storage.js'
 
 const recommendFeature = {
     description: <Trans i18nKey="description" ns={PluginID.SwitchLogo} />,
@@ -17,6 +18,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     async init(signal, context) {
         SNSAdaptorPluginContext.setup(context)
+        const storage = context.createKVStorage('persistent', { value: SwitchLogoOpenedState.Unopened })
+        setupStorage(storage)
     },
     GlobalInjection() {
         return (

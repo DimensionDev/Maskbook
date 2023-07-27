@@ -8,6 +8,7 @@ import { CrossIsolationMessages, SwitchLogoType } from '@masknet/shared-base'
 import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
+import { SwitchLogoOpenedState } from './storage.js'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -59,7 +60,7 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
     const t = useI18N()
     const { classes, cx } = useStyles()
     const identity = useLastRecognizedIdentity()
-    const { switchLogoSettings } = useSNSAdaptorContext()
+    const { switchLogoSettings, switchLogoOpenedState } = useSNSAdaptorContext()
     const defaultLogoType = useValueRef(switchLogoSettings[identity?.identifier?.userId || ''])
     const [logoType, setLogoType] = useState<SwitchLogoType>()
     const { share } = useSNSAdaptorContext()
@@ -67,8 +68,9 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
     const [open, setOpen] = useState(false)
 
     useEffect(() => {
-        return CrossIsolationMessages.events.switchLogoUpdated.on((data) => {
+        return CrossIsolationMessages.events.switchLogoUpdated.on(async (data) => {
             setOpen(data.open)
+            switchLogoOpenedState.value = SwitchLogoOpenedState.Opened
         })
     }, [])
 

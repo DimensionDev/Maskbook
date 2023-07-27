@@ -2,9 +2,16 @@ import { cloneElement, type ReactElement, useRef, useState, useLayoutEffect } fr
 import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Modal, styled, Typography } from '@mui/material'
-import { sayHelloShowed, userGuideFinished, userGuideStatus } from '../../../shared/legacy-settings/settings.js'
+import {
+    sayHelloShowed,
+    switchLogoOpenedState,
+    userGuideFinished,
+    userGuideStatus,
+} from '../../../shared/legacy-settings/settings.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { useI18N } from '../../utils/index.js'
+import { CrossIsolationMessages } from '@masknet/shared-base'
+import { SwitchLogoOpenedState } from '@masknet/plugin-switch-logo'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -116,11 +123,18 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     const box3Ref = useRef<HTMLDivElement>(null)
 
     const stepVisible = isCurrentStep && !finished && !!clientRect?.top && !!clientRect.left
+    const state = useValueRef(switchLogoOpenedState)
 
     const onSkip = () => {
         sayHelloShowed[networkIdentifier].value = true
         userGuideFinished[networkIdentifier].value = true
+        CrossIsolationMessages.events.switchLogoUpdated.sendToAll({ open: true })
     }
+
+    useLayoutEffect(() => {
+        if (!finished || state === SwitchLogoOpenedState.Opened) return
+        CrossIsolationMessages.events.switchLogoUpdated.sendToAll({ open: true })
+    }, [finished, state])
 
     const onNext = () => {
         if (step !== total) {
@@ -134,6 +148,7 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     const onTry = () => {
         userGuideFinished[networkIdentifier].value = true
         onComplete?.()
+        CrossIsolationMessages.events.switchLogoUpdated.sendToAll({ open: true })
     }
 
     useLayoutEffect(() => {
