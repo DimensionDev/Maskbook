@@ -11,7 +11,6 @@ import {
     ProviderType,
     createJsonRpcPayload,
 } from '@masknet/web3-shared-evm'
-import { ExtensionSite, getSiteType, isEnhanceableSiteType } from '@masknet/shared-base'
 import { RequestStateType, isGreaterThan, isZero, toFixed } from '@masknet/web3-shared-base'
 import { DepositPaymaster } from '../../../SmartPay/libs/DepositPaymaster.js'
 import { SharedContextRef } from '../../../PluginContext/index.js'
