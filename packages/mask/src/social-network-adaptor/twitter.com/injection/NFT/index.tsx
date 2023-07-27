@@ -1,16 +1,16 @@
+import { AvatarType } from '@masknet/plugin-avatar'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { NFTAvatarInTwitter } from './NFTAvatarInTwitter.js'
-import { attachReactTreeWithContainer } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import {
     searchTwitterAvatarNFTLinkSelector,
     searchTwitterAvatarNFTSelector,
     searchTwitterAvatarSelector,
     searchTwitterSquareAvatarSelector,
 } from '../../utils/selector.js'
+import { startWatch } from '../../../../utils/startWatch.js'
 import { NFTAvatarClipInTwitter } from './NFTAvatarClip.js'
 import { getAvatarType } from '../../utils/AvatarType.js'
-import { AvatarType } from '@masknet/plugin-avatar'
-import { startWatch } from '@masknet/theme'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const avatarType = getAvatarType()

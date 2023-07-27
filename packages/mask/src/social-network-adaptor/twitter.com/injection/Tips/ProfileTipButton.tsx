@@ -1,9 +1,10 @@
+import { useMemo, useState } from 'react'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { makeStyles, startWatch } from '@masknet/theme'
-import { useMemo, useState } from 'react'
+import { makeStyles } from '@masknet/theme'
 import { useCurrentVisitingIdentity, useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
-import { attachReactTreeWithContainer } from '../../../../utils/index.js'
+import { startWatch } from '../../../../utils/startWatch.js'
+import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { ButtonStyle } from '../../constant.js'
 import { profileFollowButtonSelector as selector } from '../../utils/selector.js'
 

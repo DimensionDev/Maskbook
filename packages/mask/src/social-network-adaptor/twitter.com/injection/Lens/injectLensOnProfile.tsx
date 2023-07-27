@@ -1,9 +1,10 @@
+import { useMemo, useState } from 'react'
 import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { makeStyles, startWatch } from '@masknet/theme'
-import { useMemo, useState } from 'react'
+import { makeStyles } from '@masknet/theme'
+import { startWatch } from '../../../../utils/startWatch.js'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
-import { attachReactTreeWithContainer } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { querySelector } from '../../utils/selector.js'
 
 const selector: () => LiveSelector<HTMLElement, true> = () =>

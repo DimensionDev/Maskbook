@@ -1,14 +1,15 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { getMaskColor, makeStyles, startWatch } from '@masknet/theme'
+import { MaskMessages } from '@masknet/shared-base'
+import { getMaskColor, makeStyles } from '@masknet/theme'
 import { ProfileTabContent } from '../../../components/InjectedComponents/ProfileTabContent.js'
-import { attachReactTreeWithContainer } from '../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import {
     searchNewTweetButtonSelector,
     searchProfileEmptySelector,
     searchProfileTabPageSelector,
     searchProfileTabLoseConnectionPageSelector,
 } from '../utils/selector.js'
-import { MaskMessages } from '@masknet/shared-base'
+import { startWatch } from '../../../utils/startWatch.js'
 
 function injectProfileTabContentForEmptyState(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileEmptySelector())

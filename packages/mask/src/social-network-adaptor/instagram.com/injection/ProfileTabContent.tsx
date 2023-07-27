@@ -1,7 +1,8 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { getMaskColor, makeStyles, startWatch } from '@masknet/theme'
+import { getMaskColor, makeStyles } from '@masknet/theme'
 import { ProfileTabContent } from '../../../components/InjectedComponents/ProfileTabContent.js'
-import { attachReactTreeWithContainer } from '../../../utils/index.js'
+import { startWatch } from '../../../utils/startWatch.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { searchProfileActiveTabSelector, searchProfileTabArticlePageSelector } from '../utils/selector.js'
 
 export function injectProfileTabContentAtInstagram(signal: AbortSignal) {

@@ -7,12 +7,13 @@ import {
     useIsMinimalMode,
 } from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST, PluginID, NetworkPluginID, type SocialAccount } from '@masknet/shared-base'
-import { makeStyles, startWatch } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Web3ContextProvider, useWeb3Others, useNetworkContext } from '@masknet/web3-hooks-base'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
-import { attachReactTreeWithContainer } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { menuAuthorSelector as selector } from '../../utils/selectors.js'
+import { startWatch } from '../../../../utils/startWatch.js'
 
 export function injectTipsButtonOnMenu(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())

@@ -1,13 +1,14 @@
-import { DOMProxy, type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { attachReactTreeWithContainer } from '../../../../utils/index.js'
-import { getInjectNodeInfo } from '../../utils/avatar.js'
-import { searchFaceBookPostAvatarOnMobileSelector, searchFaceBookPostAvatarSelector } from '../../utils/selector.js'
-import { NFTBadgeTimeline, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
-import { isMobileFacebook } from '../../utils/isMobile.js'
 import { memo } from 'react'
-import { makeStyles, startWatch } from '@masknet/theme'
 import { noop } from 'lodash-es'
 import { Flags } from '@masknet/flags'
+import { makeStyles } from '@masknet/theme'
+import { NFTBadgeTimeline, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
+import { DOMProxy, type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { startWatch } from '../../../../utils/startWatch.js'
+import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
+import { getInjectNodeInfo } from '../../utils/avatar.js'
+import { searchFaceBookPostAvatarOnMobileSelector, searchFaceBookPostAvatarSelector } from '../../utils/selector.js'
+import { isMobileFacebook } from '../../utils/isMobile.js'
 
 const useStyles = makeStyles()(() => ({
     root: {

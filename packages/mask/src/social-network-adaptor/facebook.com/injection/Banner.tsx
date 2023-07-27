@@ -1,8 +1,8 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { startWatch } from '../../../utils/startWatch.js'
 import { isMobileFacebook } from '../utils/isMobile.js'
 import { Banner } from '../../../components/Welcomes/Banner.js'
-import { startWatch } from '@masknet/theme'
 
 let composeBox: LiveSelector<Element>
 if (isMobileFacebook) {

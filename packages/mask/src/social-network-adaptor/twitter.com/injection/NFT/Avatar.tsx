@@ -1,11 +1,11 @@
+import { Flags } from '@masknet/flags'
 import { DOMProxy, type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { attachReactTreeWithContainer } from '../../../../utils/index.js'
+import { startWatch } from '../../../../utils/startWatch.js'
+import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { followUserAvatarSelector, postAvatarSelector } from '../../utils/selector.js'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
 import { MiniAvatarBorder } from './MiniAvatarBorder.js'
-import { Flags } from '@masknet/flags'
-import { startWatch } from '@masknet/theme'
 
 function getUserId(ele: HTMLElement) {
     const attribute = ele.dataset.testid || ''

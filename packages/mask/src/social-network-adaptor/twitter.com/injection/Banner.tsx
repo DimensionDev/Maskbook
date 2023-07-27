@@ -1,9 +1,9 @@
 import { MutationObserverWatcher, type LiveSelector } from '@dimensiondev/holoflows-kit'
 import { postEditorInTimelineSelector, postEditorInPopupSelector } from '../utils/selector.js'
+import { startWatch, type WatchOptions } from '../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { hasEditor, isCompose } from '../utils/postBox.js'
 import { Banner } from '../../../components/Welcomes/Banner.js'
-import { startWatch, type WatchOptions } from '@masknet/theme'
 
 export function injectBannerAtTwitter(signal: AbortSignal) {
     const emptyNode = document.createElement('div')

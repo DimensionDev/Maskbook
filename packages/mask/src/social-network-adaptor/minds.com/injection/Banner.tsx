@@ -1,6 +1,7 @@
 import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { makeStyles, startWatch } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Banner } from '../../../components/Welcomes/Banner.js'
+import { startWatch } from '../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { postEditorInTimelineSelector, postEditorInDialogSelector } from '../utils/selector.js'
 

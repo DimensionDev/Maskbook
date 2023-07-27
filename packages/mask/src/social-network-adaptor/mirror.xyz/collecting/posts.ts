@@ -1,14 +1,13 @@
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { Mirror } from '@masknet/web3-providers'
+import type { PostContextCoAuthor } from '@masknet/plugin-infra/content-script'
 import type { SocialNetworkUI as Next } from '@masknet/types'
 import { creator } from '../../../social-network/index.js'
 import { postsContentSelector } from '../utils/selectors.js'
-
 import { mirrorShared } from '../shared.js'
+import { startWatch } from '../../../utils/startWatch.js'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context.js'
 import { formatWriter, getMirrorPageType, MirrorPageType, MIRROR_ENTRY_ID } from './utils.js'
-import { Mirror } from '@masknet/web3-providers'
-import type { PostContextCoAuthor } from '@masknet/plugin-infra/content-script'
-import { startWatch } from '@masknet/theme'
 
 const MIRROR_LINK_PREFIX = /https(.*)mirror.xyz(.*)\//i
 

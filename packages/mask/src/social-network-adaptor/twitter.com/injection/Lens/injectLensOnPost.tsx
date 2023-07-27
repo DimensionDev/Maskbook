@@ -1,9 +1,10 @@
+import { useMemo, useState } from 'react'
+import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
-import { makeStyles, startWatch } from '@masknet/theme'
-import { useMemo, useState } from 'react'
-import { attachReactTreeWithContainer } from '../../../../utils/index.js'
+import { startWatch } from '../../../../utils/startWatch.js'
+import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { querySelectorAll } from '../../utils/selector.js'
 
 const selector = () => {

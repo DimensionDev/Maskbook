@@ -1,8 +1,11 @@
+import { useCallback, useEffect } from 'react'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { makeStyles, startWatch } from '@masknet/theme'
-import { attachReactTreeWithContainer } from '../../../../utils/index.js'
+import { makeStyles } from '@masknet/theme'
 import { NFTAvatar, toPNG } from '@masknet/plugin-avatar'
 import { hookInputUploadOnce } from '@masknet/injected-script'
+import type { SelectTokenInfo } from '@masknet/plugin-avatar'
+import { MaskMessages, NetworkPluginID } from '@masknet/shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import {
     searchFacebookAvatarListSelector,
     searchFacebookAvatarMobileListSelector,
@@ -11,14 +14,12 @@ import {
     searchFacebookConfirmAvatarImageSelector,
     searchFacebookSaveAvatarButtonSelector,
 } from '../../utils/selector.js'
-import { useCallback, useEffect } from 'react'
+import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
+import { startWatch } from '../../../../utils/startWatch.js'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { getAvatarId } from '../../utils/user.js'
 import { isMobileFacebook } from '../../utils/isMobile.js'
 import { InMemoryStorages } from '../../../../../shared/index.js'
-import type { SelectTokenInfo } from '@masknet/plugin-avatar'
-import { MaskMessages, NetworkPluginID } from '@masknet/shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export async function injectProfileNFTAvatarInFaceBook(signal: AbortSignal) {
     if (!isMobileFacebook) {
