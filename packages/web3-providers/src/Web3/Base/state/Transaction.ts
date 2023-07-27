@@ -80,7 +80,12 @@ export class TransactionState<ChainId extends PropertyKey, Transaction>
         return
     }
 
-    async addTransaction(chainId: ChainId, address: string, id: string, transaction: Transaction) {
+    async addTransaction(
+        chainId: ChainId,
+        address: string,
+        id: string,
+        transaction: Transaction & { draftedAt: Date },
+    ) {
         const now = new Date()
         const all = this.storage.value
         const address_ = this.options.formatAddress(address)
@@ -95,6 +100,7 @@ export class TransactionState<ChainId extends PropertyKey, Transaction>
                 id,
                 indexId: id,
                 chainId,
+                draftedAt: transaction.draftedAt,
                 createdAt: now,
                 updatedAt: now,
                 status: TransactionStatusType.NOT_DEPEND,

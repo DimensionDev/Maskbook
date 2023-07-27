@@ -75,8 +75,8 @@ export class Web3StateAPI extends Web3StateAPI_Base<
             Transaction: Transaction_,
             TransactionFormatter: new TransactionFormatter(context),
             TransactionWatcher: new TransactionWatcher(context, {
-                chainId: Provider_.chainId,
-                transactions: Transaction_.transactions,
+                chainId: Provider_.chainId!,
+                transactions: Transaction_.transactions!,
             }),
         }
     }
