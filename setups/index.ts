@@ -48,6 +48,9 @@ globalThis.localStorage = (() => {
     }
 })()
 
+// @ts-ignore
+globalThis.document = {}
+
 // Add `navigator` polyfill.
 Reflect.set(globalThis, 'navigator', {
     userAgent: 'vitest',

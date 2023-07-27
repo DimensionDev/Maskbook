@@ -7,6 +7,7 @@ import {
     unstable_HistoryRouter as HistoryRouter,
     type HistoryRouterProps,
 } from 'react-router-dom'
+import { useIdleTimer } from 'react-idle-timer'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { PageUIProvider, PersonaContext } from '@masknet/shared'
 import { NetworkPluginID, PopupModalRoutes, PopupRoutes as PopupPaths, PopupsHistory } from '@masknet/shared-base'
@@ -34,7 +35,6 @@ import { wrapModal } from './components/index.js'
 import { SelectProviderModal } from './modals/SelectProviderModal/index.js'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { ConnectProviderModal } from './modals/ConnectProvider/index.js'
-import { useIdleTimer } from 'react-idle-timer'
 import { WalletRPC } from '../../plugins/WalletService/messages.js'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import { UserContext } from './hook/useUserContext.js'
