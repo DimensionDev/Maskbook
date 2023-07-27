@@ -1,13 +1,10 @@
-import {
-    PluginID,
-    createProxyKVStorageBackend,
-    type KVStorageBackend,
-    createKVStorageHost,
-    MaskMessages,
-} from '../index.js'
+import { MaskMessages } from '../Messages/index.js'
+import { PluginID } from '../types/PluginID.js'
+import { createProxyKVStorageBackend, type KVStorageBackend, createKVStorageHost } from './kv-storage/index.js'
 
 const indexedDBProxy = createProxyKVStorageBackend()
 const inMemoryBackend = createProxyKVStorageBackend()
+
 export function setupMaskKVStorageBackend(indexedDB: KVStorageBackend, inMemory: KVStorageBackend) {
     indexedDBProxy.replaceBackend(indexedDB)
     inMemoryBackend.replaceBackend(inMemory)
