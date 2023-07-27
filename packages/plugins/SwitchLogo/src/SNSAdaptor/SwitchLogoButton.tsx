@@ -1,10 +1,10 @@
 /* cspell: disable */
 import { useCallback, useLayoutEffect } from 'react'
+import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages, PluginID, SwitchLogoType } from '@masknet/shared-base'
 import { useIsMinimalMode, type IdentityResolved } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
-import { Icons } from '@masknet/icons'
 import { useSwitchLogoStorage } from './storage.js'
 
 const BlueBirdHTML = `

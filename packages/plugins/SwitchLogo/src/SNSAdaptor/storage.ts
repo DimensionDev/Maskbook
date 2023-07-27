@@ -1,24 +1,24 @@
-import type { ScopedStorage, SwitchLogoType } from '@masknet/shared-base'
 import { useSubscription } from 'use-subscription'
+import type { ScopedStorage, SwitchLogoType } from '@masknet/shared-base'
 
-export type SwitchLogoStorageOptions = {
+export interface SwitchLogoStorageOptions {
     value: Record<string, SwitchLogoType>
 }
 
-let switchLogoStorage: ScopedStorage<SwitchLogoStorageOptions>
+let storage: ScopedStorage<SwitchLogoStorageOptions> = null!
+
 export function setupStorage(_: ScopedStorage<SwitchLogoStorageOptions>) {
-    switchLogoStorage = _
+    storage = _
 }
 
-export function useSwitchLogoStorage(
-    userId?: string,
-): [value: SwitchLogoType, callback: (userId: string, newValue: SwitchLogoType) => void] {
-    const value = useSubscription(switchLogoStorage?.storage?.value?.subscription)
+export function useSwitchLogoStorage(currentUserId = 'default') {
+    const value = useSubscription(storage?.storage.value.subscription)
+
     return [
-        value[userId || 'default'],
-        function setSwitchLogoType(userId: string, newValue: SwitchLogoType) {
+        value[currentUserId],
+        async (userId: string, newValue: SwitchLogoType) => {
             value[userId] = newValue
-            switchLogoStorage.storage.value.setValue(value)
+            await storage.storage.value.setValue(value)
         },
-    ]
+    ] as const
 }

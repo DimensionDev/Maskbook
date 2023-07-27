@@ -79,7 +79,7 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
 
     const onSave = useCallback(async () => {
         if (!identity?.identifier?.userId) return
-        setupStorage(identity.identifier.userId, logoType ?? defaultLogoType)
+        await setupStorage(identity.identifier.userId, logoType ?? defaultLogoType)
         setOpen(false)
         if (needShare) {
             share?.([t.share_text(), t.share_mask()].join('\n'))

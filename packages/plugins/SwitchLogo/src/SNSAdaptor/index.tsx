@@ -1,13 +1,13 @@
-import type { Plugin } from '@masknet/plugin-infra'
-import { base } from '../base.js'
-import { PLUGIN_ID } from '../constants.js'
-import { PluginID, SwitchLogoType } from '@masknet/shared-base'
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
+import type { Plugin } from '@masknet/plugin-infra'
+import { SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { SNSAdaptorPluginContext } from '@masknet/web3-providers'
+import { PluginID, SwitchLogoType } from '@masknet/shared-base'
 import { SwitchLogoDialog } from './SwitchLogoDialog.js'
 import { setupStorage } from './storage.js'
-import { SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { SharedContext } from '../settings.js'
+import { base } from '../base.js'
+import { PLUGIN_ID } from '../constants.js'
 
 const recommendFeature = {
     description: <Trans i18nKey="description" ns={PluginID.SwitchLogo} />,
@@ -17,16 +17,14 @@ const recommendFeature = {
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {
-        setupStorage(
-            context
-                .createKVStorage('persistent', {})
-                .createSubScope('SwitchLogo', { value: { default: SwitchLogoType.New } }),
-        )
-        SharedContext.value = context
+        SNSAdaptorPluginContext.setup(context)
+
+        const storage = context.createKVStorage('persistent', { value: { default: SwitchLogoType.New } })
+        setupStorage(storage)
     },
     GlobalInjection() {
         return (
-            <SNSAdaptorContext.Provider value={SharedContext.value!}>
+            <SNSAdaptorContext.Provider value={SNSAdaptorPluginContext.context}>
                 <SwitchLogoDialog />
             </SNSAdaptorContext.Provider>
         )
