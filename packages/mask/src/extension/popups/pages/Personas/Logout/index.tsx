@@ -93,7 +93,7 @@ const Logout = memo(() => {
         } catch {
             showSnackbar(t('popups_log_out_failed'))
         }
-    }, [currentPersona, history, Provider, wallet, wallets, smartPayChainId, manageWallets.length])
+    }, [currentPersona, Provider, wallet, wallets, smartPayChainId, manageWallets.length])
 
     return (
         <LogoutUI

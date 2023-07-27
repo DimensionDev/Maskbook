@@ -331,7 +331,7 @@ const ContractInteraction = memo(() => {
         } catch (error_) {
             setTransferError(true)
         }
-    }, [request, location.search, history, chainId, smartPayChainId])
+    }, [request, location.search, chainId, smartPayChainId])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
         if (!request) return

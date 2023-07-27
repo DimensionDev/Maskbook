@@ -175,7 +175,7 @@ const ImportWallet = memo(() => {
                 }
             }
         },
-        [mnemonic, currentTab, keyStoreContent, keyStorePassword, privateKey, disabled, history, tabs],
+        [mnemonic, currentTab, keyStoreContent, keyStorePassword, privateKey, disabled, tabs],
     )
 
     const onSubmit = handleSubmit(onDerivedWallet)

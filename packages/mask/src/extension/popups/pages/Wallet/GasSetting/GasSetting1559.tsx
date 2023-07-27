@@ -278,7 +278,7 @@ export const GasSetting1559 = memo(() => {
             })
             navigate(-1)
         },
-        [value, history],
+        [value],
     )
 
     const onSubmit = handleSubmit((data) => handleConfirm(data))

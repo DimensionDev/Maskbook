@@ -152,7 +152,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                 }
             }
         },
-        [history, setError],
+        [setError],
     )
 
     const onSubmit = handleSubmit(onConfirm)
