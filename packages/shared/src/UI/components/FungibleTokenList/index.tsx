@@ -106,7 +106,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
     const filteredFungibleTokens = useMemo(() => {
         const allFungibleTokens = uniqBy(
-            [...(nativeToken ? [nativeToken] : EMPTY_LIST), ...tokens, ...fungibleTokens, ...trustedFungibleTokens],
+            [...(nativeToken ? [nativeToken] : []), ...tokens, ...fungibleTokens, ...trustedFungibleTokens],
             (x) => x.address.toLowerCase(),
         )
 
@@ -140,9 +140,8 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         if (mode === TokenListMode.List) return EMPTY_LIST
         const isTrustedToken = currySameAddress(trustedFungibleTokens.map((x) => x.address))
 
-        return uniqBy(
-            [...(nativeToken ? [nativeToken] : EMPTY_LIST), ...fungibleTokens, ...trustedFungibleTokens],
-            (x) => x.address.toLowerCase(),
+        return uniqBy([...(nativeToken ? [nativeToken] : []), ...fungibleTokens, ...trustedFungibleTokens], (x) =>
+            x.address.toLowerCase(),
         ).sort((a, z) => {
             // trusted token
             if (isTrustedToken(a.address)) return -1

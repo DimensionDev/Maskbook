@@ -13,7 +13,6 @@ import { PopupContext } from '../../../hook/usePopupContext.js'
 import { ActionModal, useActionModal } from '../../../components/index.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
 import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
-import { useAsyncFn } from 'react-use'
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => ({
@@ -53,7 +52,7 @@ const SwitchWallet = memo(function SwitchWallet() {
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const [, handleClickCreate] = useAsyncFn(async () => {
+    const handleClickCreate = useCallback(async () => {
         if (!wallets.filter((x) => x.hasDerivationPath).length) {
             const hasPaymentPassword = await WalletServiceRef.value.hasPassword()
             await browser.tabs.create({
@@ -67,7 +66,7 @@ const SwitchWallet = memo(function SwitchWallet() {
         }
     }, [wallets, history])
 
-    const [, handleImport] = useAsyncFn(async () => {
+    const handleImport = useCallback(async () => {
         await browser.tabs.create({
             active: true,
             url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet/recovery'),
