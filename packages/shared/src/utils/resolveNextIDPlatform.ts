@@ -1,4 +1,4 @@
-import { ECKeyIdentifier, NextIDPlatform } from '@masknet/shared-base'
+import { NextIDPlatform } from '@masknet/shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 
 export const resolveNextIDPlatform = (value: string) => {
@@ -12,9 +12,4 @@ export const resolveNextIDPlatform = (value: string) => {
     if (/^\w{1,15}$/.test(userId)) return NextIDPlatform.Twitter
 
     return
-}
-
-export const resolveValueToSearch = (value: string) => {
-    if (value.length === 44) return new ECKeyIdentifier('secp256k1', value).publicKeyAsHex ?? value
-    return value.toLowerCase()
 }
