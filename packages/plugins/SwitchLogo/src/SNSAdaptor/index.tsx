@@ -3,9 +3,8 @@ import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
 import { SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { SNSAdaptorPluginContext } from '@masknet/web3-providers'
-import { PluginID, SwitchLogoType } from '@masknet/shared-base'
+import { PluginID } from '@masknet/shared-base'
 import { SwitchLogoDialog } from './SwitchLogoDialog.js'
-import { setupStorage } from './storage.js'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
 
@@ -16,11 +15,8 @@ const recommendFeature = {
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal, context) {
+    async init(signal, context) {
         SNSAdaptorPluginContext.setup(context)
-
-        const storage = context.createKVStorage('persistent', { value: { default: SwitchLogoType.New } })
-        setupStorage(storage)
     },
     GlobalInjection() {
         return (

@@ -4,6 +4,7 @@ import { querySelector } from '../utils/selector.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { startWatch } from '../../../utils/watcher.js'
 import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
+import { switchLogoSettings } from '../../../../shared/legacy-settings/settings.js'
 
 const logoSelector: () => LiveSelector<HTMLElement, true> = () => {
     return querySelector<HTMLElement>('h1[role="heading"] a > div > svg').closest(1)
@@ -19,5 +20,5 @@ export function injectSwitchLogoButton(signal: AbortSignal) {
 
 function InjectSwitchLogoButton() {
     const identity = useLastRecognizedIdentity()
-    return <SwitchLogoButton identity={identity} />
+    return <SwitchLogoButton identity={identity} switchLogoSettings={switchLogoSettings} />
 }

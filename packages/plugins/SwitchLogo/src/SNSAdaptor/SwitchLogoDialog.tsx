@@ -6,8 +6,7 @@ import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages, SwitchLogoType } from '@masknet/shared-base'
 import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { useSwitchLogoStorage } from './storage.js'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
 
 const useStyles = makeStyles()((theme) => ({
@@ -60,7 +59,8 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
     const t = useI18N()
     const { classes, cx } = useStyles()
     const identity = useLastRecognizedIdentity()
-    const [defaultLogoType, setupStorage] = useSwitchLogoStorage(identity?.identifier?.userId)
+    const { switchLogoSettings } = useSNSAdaptorContext()
+    const defaultLogoType = useValueRef(switchLogoSettings[identity?.identifier?.userId || ''])
     const [logoType, setLogoType] = useState<SwitchLogoType>()
     const { share } = useSNSAdaptorContext()
     const [needShare, setNeedShare] = useState(true)
@@ -77,13 +77,13 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
     )
 
     const onSave = useCallback(async () => {
-        if (!identity?.identifier?.userId) return
-        await setupStorage(identity.identifier.userId, logoType ?? defaultLogoType)
+        if (!identity?.identifier?.userId || !switchLogoSettings) return
+        switchLogoSettings[identity.identifier.userId].value = logoType ?? defaultLogoType
         setOpen(false)
         if (needShare) {
             share?.([t.share_text(), t.share_mask()].join('\n'))
         }
-    }, [logoType, identity?.identifier?.userId, defaultLogoType, share, needShare, setupStorage])
+    }, [logoType, identity?.identifier?.userId, defaultLogoType, share, needShare])
 
     const onChange = useCallback((logoType: SwitchLogoType) => {
         setLogoType(logoType)

@@ -1,11 +1,11 @@
 /* cspell: disable */
 import { useCallback, useLayoutEffect } from 'react'
 import { Icons } from '@masknet/icons'
-import { CrossIsolationMessages, PluginID, SwitchLogoType } from '@masknet/shared-base'
+import { CrossIsolationMessages, PluginID, SwitchLogoType, type ValueRefWithReady } from '@masknet/shared-base'
 import { useIsMinimalMode, type IdentityResolved } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
-import { useSwitchLogoStorage } from './storage.js'
+import { useValueRef } from '@masknet/shared-base-ui'
 
 const BlueBirdHTML = `
      <svg
@@ -62,11 +62,12 @@ const useStyles = makeStyles()(() => ({
 
 interface SwitchLogoButtonProps {
     identity?: IdentityResolved
+    switchLogoSettings: Record<string, ValueRefWithReady<SwitchLogoType>>
 }
-export function SwitchLogoButton({ identity }: SwitchLogoButtonProps) {
+export function SwitchLogoButton({ identity, switchLogoSettings }: SwitchLogoButtonProps) {
     const { classes, cx } = useStyles()
     const disable = useIsMinimalMode(PluginID.SwitchLogo)
-    const [logoType, _] = useSwitchLogoStorage(identity?.identifier?.userId)
+    const logoType = useValueRef(switchLogoSettings[identity?.identifier?.userId || ''])
     useLayoutEffect(() => {
         const node = LogoSelector.evaluate()
         if (!node) return
