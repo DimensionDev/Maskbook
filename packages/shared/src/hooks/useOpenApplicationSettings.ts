@@ -3,7 +3,7 @@ import { ApplicationBoardSettingsModal } from '../index.js'
 import { useCallback } from 'react'
 import type { ApplicationSettingTabs } from '../UI/modals/ApplicationBoardModal/ApplicationBoardDialog.js'
 
-export function useOpenAppliactionSettings() {
+export function useOpenApplicationSettings() {
     const { setPluginMinimalModeEnabled, getDecentralizedSearchSettings, setDecentralizedSearchSettings } =
         useSNSAdaptorContext()
 

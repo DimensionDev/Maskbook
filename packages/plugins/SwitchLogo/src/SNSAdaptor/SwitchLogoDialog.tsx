@@ -1,5 +1,5 @@
 import { memo, useCallback, useState } from 'react'
-import { InjectedDialog, useOpenAppliactionSettings } from '@masknet/shared'
+import { InjectedDialog, useOpenApplicationSettings } from '@masknet/shared'
 import { Button, Checkbox, DialogContent, FormControlLabel, IconButton, Stack, Typography } from '@mui/material'
 import { useI18N } from '../locales/index.js'
 import { makeStyles } from '@masknet/theme'
@@ -65,7 +65,7 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(({ open, onClose }) 
     const [logoType, setLogoType] = useState<SwitchLogoType>()
     const { share } = useSNSAdaptorContext()
     const [needShare, setNeedShare] = useState(true)
-    const openApplicationBoardDialog = useOpenAppliactionSettings()
+    const openApplicationBoardDialog = useOpenApplicationSettings()
 
     const shareText = [t.share_text(), t.share_mask()].join('\n')
     const onSave = useCallback(async () => {
