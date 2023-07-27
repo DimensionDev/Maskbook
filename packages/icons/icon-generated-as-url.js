@@ -288,7 +288,8 @@ export function success_url() { return new URL("./general/Success.svg", import.m
 export function success_for_snack_bar_url() { return new URL("./general/SuccessForSnackBar.svg", import.meta.url) }
 export function swap_url() { return new URL("./general/Swap.svg", import.meta.url) }
 export function swap_colorful_url() { return new URL("./general/SwapColorful.svg", import.meta.url) }
-export function switch_logo_url() { return new URL("./general/SwitchLogo.svg", import.meta.url) }
+export function switch_logo_dark_url() { return new URL("./general/SwitchLogo.dark.svg", import.meta.url) }
+export function switch_logo_light_url() { return new URL("./general/SwitchLogo.light.svg", import.meta.url) }
 export function telegram_round_gray_url() { return new URL("./general/TelegramRoundGray.svg", import.meta.url) }
 export function tick_url() { return new URL("./general/Tick.svg", import.meta.url) }
 export function tip_url() { return new URL("./general/Tip.svg", import.meta.url) }

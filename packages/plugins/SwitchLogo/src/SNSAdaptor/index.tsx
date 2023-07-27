@@ -8,7 +8,7 @@ import { LogoSwitcher } from './LogoSwitcher.js'
 import { Modals } from './modals.js'
 
 const recommendFeature = {
-    description: <Trans i18nKey="title" ns={PluginID.SwitchLogo} />,
+    description: <Trans i18nKey="description" ns={PluginID.SwitchLogo} />,
     backgroundGradient: 'linear-gradient(360deg, #FFECD2 -0.43%, #FCB69F 99.57%)',
 }
 
@@ -27,10 +27,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
         {
             ApplicationEntryID: PLUGIN_ID,
             appBoardSortingDefaultPriority: 10,
-            icon: <Icons.Twitter3 size={36} />,
+            icon: <Icons.TwitterColored size={36} />,
             name: <Trans ns={PluginID.SwitchLogo} i18nKey="title" />,
             category: 'dapp',
             recommendFeature,
+            description: recommendFeature.description,
         },
     ],
 }

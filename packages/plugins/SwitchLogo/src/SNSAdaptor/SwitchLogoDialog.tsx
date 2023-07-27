@@ -5,7 +5,7 @@ import { useI18N } from '../locales/index.js'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { SwitchLogoType, switchLogoSettings } from '@masknet/shared-base'
-import { useLastRecognizedSocialIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useValueRef } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
@@ -27,6 +27,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         borderRadius: 8,
         cursor: 'pointer',
+        gap: 8,
     },
     selected: {
         border: `1px solid ${theme.palette.maskColor.highlight}`,
@@ -59,35 +60,26 @@ interface SwitchLogoDialogProps {
 export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(({ open, onClose }) => {
     const t = useI18N()
     const { classes, cx } = useStyles()
-    const { loading, value: socialIdentity } = useLastRecognizedSocialIdentity()
-    const defaultLogoType = useValueRef(switchLogoSettings[socialIdentity?.identifier?.userId || ''])
+    const identity = useLastRecognizedIdentity()
+    const defaultLogoType = useValueRef(switchLogoSettings[identity?.identifier?.userId || ''])
     const [logoType, setLogoType] = useState<SwitchLogoType>()
     const { share } = useSNSAdaptorContext()
-    const [needShare, setNeedShare] = useState(false)
-
+    const [needShare, setNeedShare] = useState(true)
     const openApplicationBoardDialog = useOpenAppliactionSettings()
 
     const shareText = [t.share_text(), t.share_mask()].join('\n')
     const onSave = useCallback(async () => {
-        if (!socialIdentity?.identifier?.userId) return
-        switchLogoSettings[socialIdentity.identifier.userId].value = logoType ?? defaultLogoType
+        if (!identity?.identifier?.userId) return
+        switchLogoSettings[identity.identifier.userId].value = logoType ?? defaultLogoType
         onClose()
         if (needShare) {
             share?.(shareText)
         }
-    }, [logoType, socialIdentity, defaultLogoType, share, needShare, shareText])
-
-    const onReset = useCallback(() => {
-        if (!socialIdentity?.identifier?.userId) return
-        switchLogoSettings[socialIdentity.identifier.userId].value = SwitchLogoType.New
-        onClose()
-    }, [socialIdentity])
+    }, [logoType, identity?.identifier?.userId, defaultLogoType, share, needShare, shareText])
 
     const onChange = useCallback((logoType: SwitchLogoType) => {
         setLogoType(logoType)
     }, [])
-
-    if (loading) return null
 
     return (
         <InjectedDialog open={open} onClose={onClose} title={t.title()} classes={{ paper: classes.dialog }}>
@@ -100,7 +92,9 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(({ open, onClose }) 
                         )}
                         onClick={() => onChange(SwitchLogoType.Classics)}>
                         <Icons.TwitterColored />
-                        <Typography>{t.classics_logo()}</Typography>
+                        <Typography fontSize={14} fontWeight={700}>
+                            {t.classics_logo()}
+                        </Typography>
                     </Stack>
                     <Stack
                         className={cx(
@@ -109,7 +103,9 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(({ open, onClose }) 
                         )}
                         onClick={() => onChange(SwitchLogoType.New)}>
                         <Icons.Twitter3 />
-                        <Typography>{t.new_logo()}</Typography>
+                        <Typography fontSize={14} fontWeight={700}>
+                            {t.new_logo()}
+                        </Typography>
                     </Stack>
                 </Stack>
                 <Stack>
@@ -122,16 +118,17 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(({ open, onClose }) 
                             />
                         }
                         label={
-                            <Typography fontSize={14} fontWeight={400} lineHeight="18px">
+                            <Typography
+                                fontSize={14}
+                                fontWeight={400}
+                                lineHeight="18px"
+                                color={(theme) => theme.palette.maskColor.secondaryDark}>
                                 {t.save_tip()}
                             </Typography>
                         }
                     />
                 </Stack>
                 <Stack className={classes.buttons}>
-                    <Button variant="roundedContained" fullWidth onClick={onReset}>
-                        {t.reset()}
-                    </Button>
                     <Button variant="roundedContained" fullWidth onClick={onSave}>
                         {t.save()}
                     </Button>

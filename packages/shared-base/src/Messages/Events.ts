@@ -261,7 +261,3 @@ export interface PopupWalletConnectEvent {
     open: boolean
     uri?: string
 }
-
-export interface SwitchTwitterLogoEvent {
-    open: boolean
-}

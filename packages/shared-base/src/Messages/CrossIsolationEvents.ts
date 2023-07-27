@@ -23,7 +23,6 @@ import type {
     WalletLockStatusUpdatedEvent,
     GameDialogEvent,
     PopupWalletConnectEvent,
-    SwitchTwitterLogoEvent,
 } from './Events.js'
 
 /**
@@ -70,8 +69,6 @@ export interface CrossIsolationEvents {
     walletLockStatusUpdated: WalletLockStatusUpdatedEvent
 
     gameDialogUpdated: GameDialogEvent
-
-    switchLogoUpdated: SwitchTwitterLogoEvent
 }
 
 export type PluginMessageEmitter<T> = { readonly [key in keyof T]: PluginMessageEmitterItem<T[key]> }

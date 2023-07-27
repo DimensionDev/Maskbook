@@ -2660,7 +2660,12 @@ export const SwapColorful = /*#__PURE__*/ __createIcon('SwapColorful', [
 ])
 export const SwitchLogo = /*#__PURE__*/ __createIcon('SwitchLogo', [
     {
-        u: () => new URL('./general/SwitchLogo.svg', import.meta.url),
+        c: ['dark'],
+        u: () => new URL('./general/SwitchLogo.dark.svg', import.meta.url),
+    },
+    {
+        c: ['light'],
+        u: () => new URL('./general/SwitchLogo.light.svg', import.meta.url),
     },
 ])
 export const TelegramRoundGray = /*#__PURE__*/ __createIcon('TelegramRoundGray', [
