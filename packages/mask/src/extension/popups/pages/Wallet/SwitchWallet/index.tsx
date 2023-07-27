@@ -143,6 +143,7 @@ const SwitchWallet = memo(function SwitchWallet() {
         </Box>
     )
 
+    console.log(wallets)
     return (
         <ActionModal header={t('wallet_account')} action={action}>
             <div className={classes.content}>

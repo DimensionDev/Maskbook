@@ -13,7 +13,7 @@ import { useWalletLockStatus } from '../../pages/Wallet/hooks/useWalletLockStatu
 const useStyle = makeStyles()((theme) => ({
     navigation: {
         height: 72,
-        padding: '0 18px',
+        padding: 0,
         background: theme.palette.maskColor.secondaryBottom,
         boxShadow: theme.palette.maskColor.bottomBg,
         backdropFilter: 'blur(8px)',
@@ -21,6 +21,7 @@ const useStyle = makeStyles()((theme) => ({
     iconOnly: {
         color: theme.palette.maskColor.third,
         height: '100%',
+        minWidth: 94,
     },
     selected: {
         '& > button': {
@@ -68,28 +69,28 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
                 <BottomNavLink to={PopupRoutes.Personas}>
                     <BottomNavigationAction
                         showLabel={false}
-                        icon={<Icons.Me size={24} />}
+                        icon={<Icons.Me size={28} />}
                         className={classes.iconOnly}
                     />
                 </BottomNavLink>
                 <BottomNavLink to={walletLink}>
                     <BottomNavigationAction
                         showLabel={false}
-                        icon={<Icons.WalletNav size={24} />}
+                        icon={<Icons.WalletNav size={28} />}
                         className={classes.iconOnly}
                     />
                 </BottomNavLink>
                 <BottomNavLink to={PopupRoutes.Contracts}>
                     <BottomNavigationAction
                         showLabel={false}
-                        icon={<Icons.Contacts size={24} />}
+                        icon={<Icons.Contacts size={28} />}
                         className={classes.iconOnly}
                     />
                 </BottomNavLink>
                 <BottomNavLink to={PopupRoutes.Settings}>
                     <BottomNavigationAction
                         showLabel={false}
-                        icon={<Icons.Settings2 size={24} />}
+                        icon={<Icons.Settings2 size={28} />}
                         className={classes.iconOnly}
                     />
                 </BottomNavLink>
