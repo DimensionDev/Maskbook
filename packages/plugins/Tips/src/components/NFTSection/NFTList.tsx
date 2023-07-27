@@ -91,6 +91,10 @@ export function NFTItem({ token }: NFTItemProps) {
     )
 }
 
+/**
+ * @deprecated Unused
+ *
+ */
 export function NFTList({
     selectedPairs,
     tokens,

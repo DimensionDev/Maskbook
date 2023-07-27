@@ -1,14 +1,15 @@
-import { useCallback, useMemo, useRef } from 'react'
+import { useCallback, useMemo, useRef, memo } from 'react'
 import { useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { SourceType } from '@masknet/web3-shared-base'
-import { Box, Typography } from '@mui/material'
-import { ActionButton, ShadowRootTooltip, makeStyles } from '@masknet/theme'
+import { Box } from '@mui/material'
+import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { type ChangeEventOptions, CollectibleItem, type SelectableProps } from './CollectibleItem.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
 import type { CollectibleGridProps } from './type.js'
-import { useI18N } from '../../locales/index.js'
+import { ReloadStatus } from '../index.js'
+import { useSharedI18N } from '../../../index.js'
 
 const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 3, gap = 2 }) => {
     const gapIsNumber = typeof gap === 'number'
@@ -31,9 +32,6 @@ const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 3, gap 
             justifyContent: 'center',
             height: 260,
         },
-        button: {
-            marginTop: 8,
-        },
         list: {
             overflow: 'auto',
             position: 'relative',
@@ -49,37 +47,37 @@ export interface CollectibleListProps
     collectibles: Web3Helper.NonFungibleAssetAll[]
     error?: string
     loading: boolean
-    retry(): void
-    hasRetry?: boolean
     disableLink?: boolean
     showNetworkIcon?: boolean
     /** Collectible key, in format of `${contractAddress}_${tokenId}` */
     value?: string | string[]
+    getCollectibleKey?(collectible: Web3Helper.NonFungibleAssetAll): string
+    retry(): void
     onChange?(value: string | string[] | null): void
 }
 
-const getCollectibleKey = (collectible: Web3Helper.NonFungibleAssetAll) => {
+const getKey = (collectible: Web3Helper.NonFungibleAssetAll) => {
     return `${collectible.address}_${collectible.tokenId}`
 }
 
-export function CollectibleList(props: CollectibleListProps) {
+export const CollectibleList = memo(function CollectibleList(props: CollectibleListProps) {
     const {
         pluginID,
         collectibles,
         columns,
         gap,
         loading,
-        retry,
         error,
-        hasRetry = true,
         selectable,
         multiple,
         disableLink,
         showNetworkIcon,
         value,
+        retry,
+        getCollectibleKey = getKey,
         onChange,
     } = props
-    const t = useI18N()
+    const t = useSharedI18N()
     const { classes } = useStyles({ columns, gap }, { props: { classes: props.classes } })
     const Others = useWeb3Others()
 
@@ -104,14 +102,7 @@ export function CollectibleList(props: CollectibleListProps) {
         <Box className={classes.list} ref={listRef}>
             {loading && collectibles.length === 0 ? <LoadingSkeleton className={classes.root} /> : null}
             {error || (collectibles.length === 0 && !loading) ? (
-                <Box className={classes.text}>
-                    <Typography color="textSecondary">{t.tips_no_collectible_found()}</Typography>
-                    {hasRetry ? (
-                        <ActionButton className={classes.button} onClick={retry}>
-                            {t.retry()}
-                        </ActionButton>
-                    ) : null}
-                </Box>
+                <ReloadStatus className={classes.text} message={t.no_collectible_found()} onRetry={retry} />
             ) : (
                 <Box className={classes.root}>
                     {collectibles.map((token, index) => {
@@ -164,4 +155,4 @@ export function CollectibleList(props: CollectibleListProps) {
             )}
         </Box>
     )
-}
+})

@@ -83,6 +83,10 @@ export interface CollectionListProps {
     gridProps?: CollectibleGridProps
 }
 
+/**
+ * @deprecated
+ * Unused, will double check and remove later.
+ */
 export function CollectionList({ socialAccount, persona, profile, gridProps = EMPTY_OBJECT }: CollectionListProps) {
     const { t } = useI18N()
     const { classes } = useStyles(gridProps)

@@ -13,3 +13,17 @@ export function useTokenParams() {
 
     return { chainId, address, rawChainId, rawAddress, params, setParams }
 }
+
+/**
+ * No fallback for non-fungible token
+ */
+export function useNonFungibleTokenParams() {
+    const [params, setParams] = useSearchParams()
+    const defaultChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const rawChainId = params.get('nft:chainId')
+    const chainId: ChainId = rawChainId ? Number.parseInt(rawChainId, 10) : defaultChainId
+    const address = params.get('nft:address')
+    const tokenId = params.get('nft:tokenId')
+
+    return { chainId, address, tokenId, params, setParams }
+}

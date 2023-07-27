@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Typography, type BoxProps } from '@mui/material'
 import { memo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { matchPath, useLocation, useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { useI18N } from '../../../../../../utils/index.js'
 
@@ -59,13 +59,21 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
     const { classes, cx, theme } = useStyles()
     const { t } = useI18N()
     const navigate = useNavigate()
+    const location = useLocation()
 
     return (
         <Box className={cx(classes.container, className)} {...rest}>
             <button
                 type="button"
                 className={classes.button}
-                onClick={() => navigate(address ? `${PopupRoutes.Contacts}/${address}` : PopupRoutes.Contacts)}>
+                onClick={() => {
+                    const path = urlcat(PopupRoutes.Contacts, {
+                        address,
+                        chainId,
+                        token: matchPath(PopupRoutes.TokenDetail, location.pathname) ? true : undefined,
+                    })
+                    return navigate(path)
+                }}>
                 <Icons.Send size={20} color={theme.palette.maskColor.main} />
                 <Typography className={classes.label}>{t('wallet_send')}</Typography>
             </button>

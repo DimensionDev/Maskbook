@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useCallback } from 'react'
+import { useEffect, useState, useMemo, useCallback, memo } from 'react'
 import { useAsync } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import {
@@ -41,7 +41,8 @@ import { DepositPaymaster, SmartPayBundler } from '@masknet/web3-providers'
 import { SettingsContext } from '../SettingsBoard/Context.js'
 import { useGasCurrencyMenu } from '../../../hooks/useGasCurrencyMenu.js'
 
-interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPluginID> {
+export interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPluginID>
+    extends withClasses<'label'> {
     pluginID?: T
     chainId?: Web3Helper.ChainIdAll
     nativeToken: Web3Helper.FungibleTokenAll
@@ -52,6 +53,8 @@ interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPlugi
     supportMultiCurrency?: boolean
     estimateGasFee?: string
     editMode?: boolean
+    /** No effects on editMode */
+    className?: string
 }
 
 const useStyles = makeStyles()((theme) => {
@@ -126,7 +129,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export function SelectGasSettingsToolbar(props: SelectGasSettingsToolbarProps) {
+export const SelectGasSettingsToolbar = memo(function SelectGasSettingsToolbar(props: SelectGasSettingsToolbarProps) {
     const { pluginID } = useNetworkContext(props.pluginID)
     const { chainId } = useChainContext({ chainId: props.chainId })
 
@@ -135,7 +138,7 @@ export function SelectGasSettingsToolbar(props: SelectGasSettingsToolbarProps) {
             <SelectGasSettingsToolbarUI {...props} />
         </SettingsContext.Provider>
     )
-}
+})
 
 export function SelectGasSettingsToolbarUI({
     onChange,
@@ -146,9 +149,11 @@ export function SelectGasSettingsToolbarUI({
     estimateGasFee,
     supportMultiCurrency,
     editMode,
+    className,
+    classes: externalClasses,
 }: SelectGasSettingsToolbarProps) {
     const t = useSharedI18N()
-    const { classes, cx, theme } = useStyles()
+    const { classes, cx, theme } = useStyles(undefined, { props: { classes: externalClasses } })
     const { gasOptions, GAS_OPTION_NAMES } = SettingsContext.useContainer()
 
     const [approveDialogOpen, setApproveDialogOpen] = useState(false)
@@ -299,8 +304,10 @@ export function SelectGasSettingsToolbarUI({
         currencyToken?.decimals,
     ])
 
-    return gasOptions && !isZero(gasFee) ? (
-        editMode ? (
+    if (!gasOptions || isZero(gasFee)) return null
+
+    if (editMode)
+        return (
             <>
                 <Grid item xs={6}>
                     <Typography variant="body1" color="textSecondary">
@@ -323,30 +330,31 @@ export function SelectGasSettingsToolbarUI({
                     </Typography>
                 </Grid>
             </>
-        ) : (
-            <Box className={classes.section}>
-                <Typography className={classes.title}>{t.gas_settings_label_gas_fee()}</Typography>
-                <Typography className={classes.gasSection} component="div">
-                    <FormattedBalance
-                        value={gasFee}
-                        decimals={currencyToken?.decimals ?? 0}
-                        significant={4}
-                        symbol={currencyToken?.symbol}
-                        formatter={formatBalance}
-                    />
-                    <Typography className={classes.gasUSDPrice}>{t.gas_usd_price({ usd: gasFeeUSD })}</Typography>
-                    <div className={classes.root} onClick={gasOptions ? openMenu : undefined}>
-                        <Typography className={classes.text}>
-                            {isCustomGas ? t.gas_settings_custom() : GAS_OPTION_NAMES[currentGasOptionType]}
-                        </Typography>
-                        <Icons.Candle width={12} height={12} />
-                    </div>
-                    {supportMultiCurrency ? <Icons.ArrowDrop onClick={openCurrencyMenu} /> : null}
-                    {menu}
-                    {supportMultiCurrency ? currencyMenu : null}
-                </Typography>
-                <ApproveMaskDialog open={approveDialogOpen} handleClose={() => setApproveDialogOpen(false)} />
-            </Box>
         )
-    ) : null
+
+    return (
+        <Box className={cx(classes.section, className)}>
+            <Typography className={cx(classes.label, classes.label)}>{t.gas_settings_label_gas_fee()}</Typography>
+            <Typography className={classes.gasSection} component="div">
+                <FormattedBalance
+                    value={gasFee}
+                    decimals={currencyToken?.decimals ?? 0}
+                    significant={4}
+                    symbol={currencyToken?.symbol}
+                    formatter={formatBalance}
+                />
+                <Typography className={classes.gasUSDPrice}>{t.gas_usd_price({ usd: gasFeeUSD })}</Typography>
+                <div className={classes.root} onClick={gasOptions ? openMenu : undefined}>
+                    <Typography className={classes.text}>
+                        {isCustomGas ? t.gas_settings_custom() : GAS_OPTION_NAMES[currentGasOptionType]}
+                    </Typography>
+                    <Icons.Candle width={12} height={12} />
+                </div>
+                {supportMultiCurrency ? <Icons.ArrowDrop onClick={openCurrencyMenu} /> : null}
+                {menu}
+                {supportMultiCurrency ? currencyMenu : null}
+            </Typography>
+            <ApproveMaskDialog open={approveDialogOpen} handleClose={() => setApproveDialogOpen(false)} />
+        </Box>
+    )
 }

@@ -136,7 +136,7 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI(
     const [params, setParams] = useSearchParams()
 
     const { classes } = useStyles()
-    const [currentTab, handleTabChange] = useParamTab(WalletAssetTabs.Tokens)
+    const [currentTab, handleTabChange] = useParamTab<WalletAssetTabs>(WalletAssetTabs.Tokens)
 
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const SEARCH_KEY = 'collectionId'

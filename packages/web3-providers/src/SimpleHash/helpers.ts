@@ -21,7 +21,7 @@ import { TrendingAPI } from '../entry-types.js'
 
 export async function fetchFromSimpleHash<T>(path: string, init?: RequestInit) {
     return queryClient.fetchQuery<T>({
-        queryKey: [path],
+        queryKey: ['simple-hash', path],
         staleTime: 10_000,
         queryFn: async () => {
             return fetchSquashedJSON<T>(`${SIMPLE_HASH_URL}${path}`, {

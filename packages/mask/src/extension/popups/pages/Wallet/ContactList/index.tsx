@@ -12,7 +12,7 @@ import { ContactsContext } from '../../../hook/useContactsContext.js'
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
 import { DeleteContactModal, EditContactModal } from '../../../modals/modals.js'
 import { ContactType } from '../type.js'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import urlcat from 'urlcat'
 
 const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivideLine }) => ({
@@ -125,23 +125,26 @@ const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivid
     },
 }))
 
-const ContactListUI = memo(function TransferUI() {
+const ContactListUI = memo(function ContactListUI() {
     const { t } = useI18N()
     const { classes } = useStyles({})
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const { receiver, contacts, receiverValidationMessage } = ContactsContext.useContainer()
+    const [params] = useSearchParams()
 
     useTitle(t('popups_send'))
 
     const navigate = useNavigate()
+
     const handleSelectContact = useCallback(
-        (address: string) => {
+        (addr: string) => {
             const path = urlcat(PopupRoutes.Transfer, {
-                recipient: address,
+                ...Object.fromEntries(params.entries()),
+                recipient: addr,
             })
             navigate(path)
         },
-        [navigate],
+        [navigate, params],
     )
 
     return (
