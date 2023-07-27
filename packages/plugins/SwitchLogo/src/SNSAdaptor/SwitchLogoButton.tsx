@@ -66,8 +66,9 @@ export function SwitchLogoButton({ identity, switchLogoSettings }: SwitchLogoBut
     const { classes, cx } = useStyles()
     const disable = useIsMinimalMode(PluginID.SwitchLogo)
     const logoType = useValueRef(switchLogoSettings[identity?.identifier?.userId || ''])
+    const node = LogoSelector.evaluate()
+
     useLayoutEffect(() => {
-        const node = LogoSelector.evaluate()
         if (!node) return
         node?.parentElement?.style.setProperty('position', 'relative')
         if (logoType === SwitchLogoType.Classics && !disable) {
@@ -77,7 +78,7 @@ export function SwitchLogoButton({ identity, switchLogoSettings }: SwitchLogoBut
             // eslint-disable-next-line @masknet/browser-no-set-html
             node.innerHTML = LetterHTML || ''
         }
-    }, [logoType, disable])
+    }, [logoType, disable, node])
 
     const onClick = useCallback(() => {
         if (disable) return
