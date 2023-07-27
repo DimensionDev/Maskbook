@@ -256,7 +256,7 @@ async function addWalletFromMnemonicWords(
             StoredKeyData: imported.StoredKey.data,
         })
         if (!exported?.privateKey) throw new Error(`Failed to export private key at path: ${derivationPath}`)
-        return createWalletFromPrivateKey(name, exported.privateKey)
+        return addWalletFromPrivateKey(source, name, exported.privateKey)
     } else {
         const created = await Mask.createAccountOfCoinAtPath({
             coin: api.Coin.Ethereum,

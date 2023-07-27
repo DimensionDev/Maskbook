@@ -72,7 +72,7 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
     const handleRestore = useCallback(async () => {
         dispatch({ type: 'SET_LOADING', loading: true })
         try {
-            if (backupSummary?.wallets.length) {
+            if (backupSummary?.countOfWallets) {
                 const hasPassword = await WalletServiceRef.value.hasPassword()
                 if (!hasPassword) await WalletServiceRef.value.setDefaultPassword()
             }

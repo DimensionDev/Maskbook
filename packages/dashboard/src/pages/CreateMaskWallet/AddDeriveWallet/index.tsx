@@ -112,7 +112,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         await handlePasswordAndWallets(password, isReset)
 
         const firstPath = first(unDeriveWallets)
-        const firstWallet = await WalletServiceRef.value.createWalletFromMnemonicWords(
+        const firstWallet = await WalletServiceRef.value.recoverWalletFromMnemonicWords(
             `${walletName}${firstPath!}`,
             mnemonic,
             `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${firstPath}`,
@@ -122,7 +122,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
             unDeriveWallets
                 .slice(1)
                 .map(async (pathIndex) =>
-                    WalletServiceRef.value.createWalletFromMnemonicWords(
+                    WalletServiceRef.value.recoverWalletFromMnemonicWords(
                         `${walletName}${pathIndex}`,
                         mnemonic,
                         `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${pathIndex}`,

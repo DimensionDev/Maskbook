@@ -117,7 +117,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
         try {
             setProcessing(true)
             // If json has wallets, restore in popup.
-            if (summary?.wallets.length) {
+            if (summary?.countOfWallets) {
                 const hasPassword = await WalletServiceRef.value.hasPassword()
                 if (!hasPassword) await WalletServiceRef.value.setDefaultPassword()
             }
