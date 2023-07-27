@@ -190,7 +190,7 @@ const CreateMnemonic = memo(function CreateMnemonic() {
 
         const address = await WalletServiceRef.value.generateAddressFromMnemonicWords(walletName, words.join(' '))
         return address
-    }, [words.join(' '), walletName, hasPassword])
+    }, [words, walletName, hasPassword])
 
     const [{ loading }, onSubmit] = useAsyncFn(async () => {
         handlePasswordAndWallets(location.state?.password, location.state?.isReset)
@@ -203,7 +203,7 @@ const CreateMnemonic = memo(function CreateMnemonic() {
         ])
 
         navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
-    }, [walletName, words.join(' '), location.state?.isReset, location.state?.password])
+    }, [walletName, words, location.state?.isReset, location.state?.password])
 
     const step = useMemo(() => String((isVerify ? 3 : 2) - (hasPassword ? 1 : 0)), [isVerify, hasPassword])
     const totalSteps = hasPassword ? '2' : '3'
