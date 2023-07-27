@@ -3,9 +3,9 @@ import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import { useEverSeen } from '@masknet/shared-base-ui'
 import { ShadowRootTooltip, makeStyles, useDetectOverflow } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { Skeleton, Typography } from '@mui/material'
+import { Skeleton, Typography, useForkRef } from '@mui/material'
 import { range } from 'lodash-es'
-import { memo, useLayoutEffect, type HTMLProps, useMemo } from 'react'
+import { memo, useLayoutEffect, type HTMLProps, useMemo, forwardRef } from 'react'
 import { useSharedI18N } from '../../../index.js'
 import { isSameNFT } from '../../../utils/index.js'
 import { CollectibleCard } from './CollectibleCard.js'
@@ -216,45 +216,50 @@ export interface CollectionSkeletonProps extends HTMLProps<HTMLDivElement> {
     count: number
     expanded?: boolean
 }
-export function CollectionSkeleton({ className, count, id, expanded, ...rest }: CollectionSkeletonProps) {
-    const { compact, containerRef } = useCompactDetection()
-    const { classes, cx } = useStyles({ compact })
+export const CollectionSkeleton = memo(
+    forwardRef<HTMLDivElement, CollectionSkeletonProps>(function CollectionSkeleton(
+        { className, count, id, expanded, ...rest },
+        ref,
+    ) {
+        const { compact, containerRef } = useCompactDetection()
+        const { classes, cx } = useStyles({ compact })
 
-    // We render up to 4 skeletons unless it's expanded.
-    const renderCount = expanded ? count : Math.min(4, count)
-    const asFolder = renderCount > 2 && !expanded
+        // We render up to 4 skeletons unless it's expanded.
+        const renderCount = expanded ? count : Math.min(4, count)
+        const asFolder = renderCount > 2 && !expanded
 
-    const skeletons = range(renderCount).map((i) => <CollectibleItemSkeleton omitInfo={asFolder} key={`${id}.${i}`} />)
+        const skeletons = range(renderCount).map((i) => (
+            <CollectibleItemSkeleton omitInfo={asFolder} key={`${id}.${i}`} ref={i === 0 ? ref : undefined} />
+        ))
 
-    if (asFolder)
-        return (
-            <div className={cx(className, classes.folder)} ref={containerRef} {...rest}>
-                <div className={classes.grid}>{skeletons}</div>
-                <div className={classes.info}>
-                    {expanded ? null : (
-                        <Typography className={classes.name} color="textPrimary" variant="body2">
-                            <Skeleton animation="wave" variant="text" width="80%" />
+        const forkedContainerRef = useForkRef(containerRef, ref)
+
+        if (asFolder)
+            return (
+                <div className={cx(className, classes.folder)} ref={forkedContainerRef} {...rest}>
+                    <div className={classes.grid}>{skeletons}</div>
+                    <div className={classes.info}>
+                        {expanded ? null : (
+                            <Typography className={classes.name} color="textPrimary" variant="body2">
+                                <Skeleton animation="wave" variant="text" width="80%" />
+                            </Typography>
+                        )}
+                        <Typography className={classes.tokenId} variant="body2" component="div">
+                            <Skeleton animation="wave" variant="text" width="40%" />
                         </Typography>
-                    )}
-                    <Typography className={classes.tokenId} variant="body2" component="div">
-                        <Skeleton animation="wave" variant="text" width="40%" />
-                    </Typography>
+                    </div>
                 </div>
-            </div>
-        )
-    return <>{skeletons}</>
-}
+            )
+        return <>{skeletons}</>
+    }),
+)
 
 export const LazyCollection = memo((props: CollectionProps) => {
     const { className, collection } = props
-    const [seen, placeholderRef] = useEverSeen()
+    const [seen, ref] = useEverSeen()
 
     if (seen) return <Collection {...props} ref={undefined} />
-    return (
-        <div className={className} ref={placeholderRef}>
-            <CollectionSkeleton className={className} id={collection.id!} count={collection.balance!} />
-        </div>
-    )
+    return <CollectionSkeleton className={className} id={collection.id!} count={collection.balance!} ref={ref} />
 })
 
 LazyCollection.displayName = 'LazyCollection'
