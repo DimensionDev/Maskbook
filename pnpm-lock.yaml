@@ -34486,7 +34486,7 @@ packages:
     dev: false
 
   github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.70)(webpack-cli@5.1.4):
-    resolution: {commit: 528c91e564d5756e21c9c462b607d913452af770, repo: git+ssh://git@github.com/Jack-Works/webpack.git, type: git}
+    resolution: {tarball: https://codeload.github.com/Jack-Works/webpack/tar.gz/528c91e564d5756e21c9c462b607d913452af770}
     id: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770
     name: webpack
     version: 5.88.0
@@ -34530,7 +34530,7 @@ packages:
     dev: true
 
   github.com/locize/html-parse-stringify2/d463109433b2c49c74a081044f54b2a6a1ccad7c:
-    resolution: {commit: d463109433b2c49c74a081044f54b2a6a1ccad7c, repo: git+ssh://git@github.com/locize/html-parse-stringify2.git, type: git}
+    resolution: {tarball: https://codeload.github.com/locize/html-parse-stringify2/tar.gz/d463109433b2c49c74a081044f54b2a6a1ccad7c}
     name: html-parse-stringify2
     version: 2.0.1
     dependencies:
