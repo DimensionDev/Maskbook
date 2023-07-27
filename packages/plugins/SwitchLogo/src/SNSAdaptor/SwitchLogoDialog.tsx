@@ -7,6 +7,8 @@ import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages, SwitchLogoType } from '@masknet/shared-base'
 import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useSwitchLogoStorage } from './storage.js'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { WalletMessages } from '@masknet/plugin-wallet'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -57,8 +59,8 @@ interface SwitchLogoDialogProps {}
 export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
     const t = useI18N()
     const { classes, cx } = useStyles()
-    const identity = useLastRecognizedIdentity(dentity?.identifier?.userId)
-    const [defaultLogoType, setupStorage] = useSwitchLogoStorage()
+    const identity = useLastRecognizedIdentity()
+    const [defaultLogoType, setupStorage] = useSwitchLogoStorage(identity?.identifier?.userId)
     const [logoType, setLogoType] = useState<SwitchLogoType>()
     const { share } = useSNSAdaptorContext()
     const [needShare, setNeedShare] = useState(true)
@@ -70,12 +72,9 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
         })
     }, [])
 
-    const openApplicationBoardDialog = useCallback(() => {
-        CrossIsolationMessages.events.applicationDialogEvent.sendToAll({
-            open: true,
-            pluginID: '',
-        })
-    }, [])
+    const { openDialog: openApplicationBoardDialog } = useRemoteControlledDialog(
+        WalletMessages.events.applicationSettingsDialogUpdated,
+    )
 
     const onSave = useCallback(async () => {
         if (!identity?.identifier?.userId) return
