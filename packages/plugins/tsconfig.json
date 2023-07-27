@@ -17,6 +17,7 @@
     { "path": "./SmartPay/" },
     { "path": "./Transak/" },
     { "path": "./Avatar" },
-    { "path": "./Claim/" }
+    { "path": "./Claim/" },
+    { "path": "./SwitchLogo/" }
   ]
 }

@@ -343,6 +343,8 @@ export namespace Plugin.SNSAdaptor {
         queryPersonaByProfile: (id: ProfileIdentifier) => Promise<PersonaInformation | undefined>
         connectPersona: () => Promise<void>
         createPersona: () => void
+        getDecentralizedSearchSettings?: () => Promise<boolean>
+        setDecentralizedSearchSettings?: (checked: boolean) => Promise<void>
     }
 
     export type SelectProviderDialogEvent =

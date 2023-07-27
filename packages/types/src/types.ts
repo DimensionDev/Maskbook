@@ -134,6 +134,7 @@ export namespace SocialNetworkUI {
             tips?(signal: AbortSignal): void
             lens?(signal: AbortSignal): void
             profileCard?(signal: AbortSignal): void
+            switchLogo?(signal: AbortSignal): void
         }
         export interface NewPostComposition {
             start(signal: AbortSignal): void
