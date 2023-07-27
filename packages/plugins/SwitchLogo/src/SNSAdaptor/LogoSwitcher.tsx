@@ -1,10 +1,10 @@
 /* cspell: disable */
-import { useCallback, useEffect, useLayoutEffect } from 'react'
+import { useCallback, useLayoutEffect } from 'react'
 import { PluginID, SwitchLogoType, switchLogoSettings } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { useIsMinimalMode, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
-import { attachReactTreeToMountedRoot_noHost, makeStyles, startWatch } from '@masknet/theme'
-import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { makeStyles } from '@masknet/theme'
+import { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
 import { SwitchLogoDialog } from './modals.js'
 
@@ -61,25 +61,7 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-const attachReactTreeWithContainer = attachReactTreeToMountedRoot_noHost()
-export function LogoSwitcher() {
-    useEffect(() => {
-        const parentDom = LogoSelector.evaluate()?.parentElement
-        if (!parentDom) return
-        const dom = document.createElement('main')
-        parentDom.appendChild(dom)
-        const shadow = dom.attachShadow({ mode: 'closed', delegatesFocus: true })
-        const ab = new AbortController()
-        const watcher = new MutationObserverWatcher(LogoSelector)
-        startWatch(watcher, ab)
-        attachReactTreeWithContainer(shadow, { signal: ab.signal }).render(<SwitchLogoIconButton />)
-        return () => ab.abort()
-    }, [LogoSelector, attachReactTreeWithContainer])
-
-    return null
-}
-
-function SwitchLogoIconButton() {
+export function SwitchLogoIconButton() {
     const { classes, cx } = useStyles()
     const current = useLastRecognizedIdentity()
     const logoType = useValueRef(switchLogoSettings[current?.identifier?.userId || ''])
@@ -99,8 +81,9 @@ function SwitchLogoIconButton() {
     }, [logoType, disable])
 
     const onClick = useCallback(() => {
+        if (disable) return
         SwitchLogoDialog.open()
-    }, [])
+    }, [disable])
 
     return (
         <div className={classes.switchIcon}>

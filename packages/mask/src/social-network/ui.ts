@@ -110,6 +110,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.injection.avatar?.(signal)
     ui.injection.profileCard?.(signal)
 
+    ui.injection.switchLogo?.(signal)
     ui.injection.PluginSettingsDialog?.(signal)
 
     // Update user avatar

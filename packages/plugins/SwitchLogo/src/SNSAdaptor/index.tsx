@@ -4,7 +4,6 @@ import { PLUGIN_ID } from '../constants.js'
 import { PluginID } from '@masknet/shared-base'
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
-import { LogoSwitcher } from './LogoSwitcher.js'
 import { Modals } from './modals.js'
 
 const recommendFeature = {
@@ -16,12 +15,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {},
     GlobalInjection() {
-        return (
-            <>
-                <Modals />
-                <LogoSwitcher />
-            </>
-        )
+        return <Modals />
     },
     ApplicationEntries: [
         {
