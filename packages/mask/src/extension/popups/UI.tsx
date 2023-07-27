@@ -1,11 +1,19 @@
+import { lazy, memo, useEffect, useState, type ReactNode, useMemo, Suspense } from 'react'
+import {
+    Navigate,
+    Route,
+    Routes,
+    useLocation,
+    unstable_HistoryRouter as HistoryRouter,
+    type HistoryRouterProps,
+} from 'react-router-dom'
+import { useIdleTimer } from 'react-idle-timer'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { PageUIProvider, PersonaContext } from '@masknet/shared'
-import { NetworkPluginID, PopupModalRoutes, PopupRoutes as PopupPaths } from '@masknet/shared-base'
+import { NetworkPluginID, PopupModalRoutes, PopupRoutes as PopupPaths, PopupsHistory } from '@masknet/shared-base'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { TelemetryProvider, Web3ContextProvider, useMountReport } from '@masknet/web3-hooks-base'
 import { EventID } from '@masknet/web3-telemetry/types'
-import { lazy, memo, useEffect, useState, type ReactNode, useMemo, Suspense } from 'react'
-import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { usePopupTheme } from '../../utils/theme/usePopupTheme.js'
 import Services from '../service.js'
 import { PopupLayout } from './components/PopupLayout/index.js'
@@ -27,7 +35,6 @@ import { wrapModal } from './components/index.js'
 import { SelectProviderModal } from './modals/SelectProviderModal/index.js'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { ConnectProviderModal } from './modals/ConnectProvider/index.js'
-import { useIdleTimer } from 'react-idle-timer'
 import { WalletRPC } from '../../plugins/WalletService/messages.js'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import { UserContext } from './hook/useUserContext.js'
@@ -143,12 +150,12 @@ export default function Popups() {
                 <TelemetryProvider>
                     <PopupContext.Provider>
                         <PageTitleContext.Provider value={titleContext}>
-                            <HashRouter>
+                            <HistoryRouter history={PopupsHistory as unknown as HistoryRouterProps['history']}>
                                 <PopupRoutes />
                                 <Modals />
                                 {/* TODO: Should only load plugins when the page is plugin-aware. */}
                                 <PluginRenderDelayed />
-                            </HashRouter>
+                            </HistoryRouter>
                         </PageTitleContext.Provider>
                     </PopupContext.Provider>
                 </TelemetryProvider>

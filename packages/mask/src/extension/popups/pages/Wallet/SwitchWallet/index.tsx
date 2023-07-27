@@ -64,7 +64,7 @@ const SwitchWallet = memo(function SwitchWallet() {
         } else {
             navigate(PopupRoutes.CreateWallet)
         }
-    }, [wallets, history])
+    }, [wallets])
 
     const handleImport = useCallback(async () => {
         await browser.tabs.create({
@@ -90,7 +90,7 @@ const SwitchWallet = memo(function SwitchWallet() {
                 })
             }
         },
-        [history, smartPayChainId, chainId, closeModal],
+        [smartPayChainId, chainId, closeModal],
     )
 
     const handleLock = useCallback(async () => {

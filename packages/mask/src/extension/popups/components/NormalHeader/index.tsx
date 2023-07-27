@@ -1,10 +1,10 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
 import { memo, useCallback, useContext, type ReactNode } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { Box, Typography } from '@mui/material'
-import { Icons } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
+import { Box, Typography } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
+import { Icons } from '@masknet/icons'
 import { PageTitleContext } from '../../context.js'
 
 const useStyles = makeStyles()((theme) => ({
