@@ -25,9 +25,9 @@ import Services from '../extension/service.js'
 import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-adaptor/utils.js'
 import { setupReactShadowRootEnvironment } from '../utils/index.js'
 import '../utils/debug/general.js'
+import { configureSelectorMissReporter } from '../utils/startWatch.js'
 import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
 import { definedSocialNetworkUIs } from './define.js'
-import { configureSelectorMissReporter } from '@masknet/theme'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 

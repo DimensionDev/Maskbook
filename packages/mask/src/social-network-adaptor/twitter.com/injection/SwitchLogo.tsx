@@ -1,4 +1,4 @@
-import { SwitchLogoIconButton } from '@masknet/plugin-switch-logo'
+import { SwitchLogoButton } from '@masknet/plugin-switch-logo'
 import { MutationObserverWatcher, type LiveSelector } from '@dimensiondev/holoflows-kit'
 import { querySelector } from '../utils/selector.js'
 import { startWatch } from '../../../utils/startWatch.js'
@@ -12,6 +12,6 @@ export function injectSwitchLogoButton(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(logoSelector())
     startWatch(watcher, signal)
     attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
-        <SwitchLogoIconButton />,
+        <SwitchLogoButton />,
     )
 }

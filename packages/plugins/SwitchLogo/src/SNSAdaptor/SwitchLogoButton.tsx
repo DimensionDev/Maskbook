@@ -61,7 +61,7 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-export function SwitchLogoIconButton() {
+export function SwitchLogoButton() {
     const { classes, cx } = useStyles()
     const current = useLastRecognizedIdentity()
     const logoType = useValueRef(switchLogoSettings[current?.identifier?.userId || ''])

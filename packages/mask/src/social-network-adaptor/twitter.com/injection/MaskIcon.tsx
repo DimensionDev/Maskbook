@@ -1,10 +1,12 @@
+import { memoize, noop } from 'lodash-es'
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
 import { memoizePromise } from '@masknet/kit'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
-import { memoize, noop } from 'lodash-es'
+import { Flags } from '@masknet/flags'
 import Services from '../../../extension/service.js'
+import { startWatch, type WatchOptions } from '../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import {
     bioPageUserIDSelector,
@@ -12,8 +14,6 @@ import {
     floatingBioCardSelector,
     isProfilePageLike,
 } from '../utils/selector.js'
-import { Flags } from '@masknet/flags'
-import { startWatch, type WatchOptions } from '@masknet/theme'
 
 function Icon(props: { size: number }) {
     return (

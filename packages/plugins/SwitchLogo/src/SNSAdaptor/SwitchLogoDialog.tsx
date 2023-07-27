@@ -67,15 +67,14 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(({ open, onClose }) 
     const [needShare, setNeedShare] = useState(true)
     const openApplicationBoardDialog = useOpenApplicationSettings()
 
-    const shareText = [t.share_text(), t.share_mask()].join('\n')
     const onSave = useCallback(async () => {
         if (!identity?.identifier?.userId) return
         switchLogoSettings[identity.identifier.userId].value = logoType ?? defaultLogoType
         onClose()
         if (needShare) {
-            share?.(shareText)
+            share?.([t.share_text(), t.share_mask()].join('\n'))
         }
-    }, [logoType, identity?.identifier?.userId, defaultLogoType, share, needShare, shareText])
+    }, [logoType, identity?.identifier?.userId, defaultLogoType, share, needShare])
 
     const onChange = useCallback((logoType: SwitchLogoType) => {
         setLogoType(logoType)
