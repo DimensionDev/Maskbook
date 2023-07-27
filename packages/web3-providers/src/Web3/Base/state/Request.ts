@@ -50,7 +50,9 @@ export class RequestState<Arguments, Options = unknown> implements Web3RequestSt
     protected async waitRequest(id: string): Promise<ReasonableRequest<Arguments, Options>> {
         return new Promise((resolve, reject) => {
             const unsubscribe = this.requests?.subscribe(() => {
-                const request = this.requests?.getCurrentValue().find((x) => x.ID === id)
+                const request = this.requests
+                    ?.getCurrentValue()
+                    .find((x) => x.ID === id && x.state !== RequestStateType.NOT_DEPEND)
                 if (!request) return
 
                 if (request.state === RequestStateType.APPROVED) resolve(request)
