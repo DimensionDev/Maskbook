@@ -47,6 +47,19 @@ export class RequestState<Arguments, Options = unknown> implements Web3RequestSt
         return true
     }
 
+    protected async waitRequest(id: string): Promise<ReasonableRequest<Arguments, Options>> {
+        return new Promise((resolve, reject) => {
+            const unsubscribe = this.requests?.subscribe(() => {
+                const request = this.requests?.getCurrentValue().find((x) => x.ID === id)
+                if (!request) return
+
+                if (request.state === RequestStateType.APPROVED) resolve(request)
+                else reject(new Error('User rejected the request.'))
+                unsubscribe?.()
+            })
+        })
+    }
+
     async applyRequest<T>(
         request: TransferableRequest<Arguments, Options>,
     ): Promise<ReasonableRequest<Arguments, Options>> {
@@ -78,17 +91,7 @@ export class RequestState<Arguments, Options = unknown> implements Web3RequestSt
         request: TransferableRequest<Arguments, Options>,
     ): Promise<ReasonableRequest<Arguments, Options>> {
         const { ID } = await this.applyRequest(request)
-
-        return new Promise((resolve, reject) => {
-            const unsubscribe = this.requests?.subscribe(() => {
-                const request = this.requests?.getCurrentValue().find((x) => x.ID === ID)
-                if (!request) return
-
-                if (request.state === RequestStateType.APPROVED) resolve(request)
-                else reject(new Error('User rejected the request.'))
-                unsubscribe?.()
-            })
-        })
+        return this.waitRequest(ID)
     }
 
     async updateRequest(id: string, updates: Partial<TransferableRequest<Arguments, Options>>): Promise<void> {
