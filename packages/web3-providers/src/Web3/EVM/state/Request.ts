@@ -14,6 +14,7 @@ export class Request extends RequestState<RequestArguments, RequestOptions> {
     ): Promise<ReasonableRequest<RequestArguments, RequestOptions>> {
         const { ID } = await super.applyRequest(request)
 
+        // TODO: make this for Mask Wallet only
         // open the popups window and wait for approvement from the user.
         SNSAdaptorContextRef.value.openPopupWindow()
 
