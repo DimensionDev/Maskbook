@@ -1,12 +1,11 @@
 /* cspell: disable */
 import { useCallback, useLayoutEffect } from 'react'
-import { PluginID, SwitchLogoType, switchLogoSettings } from '@masknet/shared-base'
-import { useValueRef } from '@masknet/shared-base-ui'
+import { CrossIsolationMessages, PluginID, SwitchLogoType } from '@masknet/shared-base'
 import { useIsMinimalMode, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
-import { SwitchLogoDialog } from './modals.js'
+import { useSwitchLogoStorage } from './storage.js'
 
 const BlueBirdHTML = `
      <svg
@@ -64,8 +63,10 @@ const useStyles = makeStyles()(() => ({
 export function SwitchLogoButton() {
     const { classes, cx } = useStyles()
     const current = useLastRecognizedIdentity()
-    const logoType = useValueRef(switchLogoSettings[current?.identifier?.userId || ''])
     const disable = useIsMinimalMode(PluginID.SwitchLogo)
+
+    const [storage, _] = useSwitchLogoStorage()
+    const logoType = storage[current?.identifier?.userId || '']
 
     useLayoutEffect(() => {
         const node = LogoSelector.evaluate()
@@ -82,7 +83,7 @@ export function SwitchLogoButton() {
 
     const onClick = useCallback(() => {
         if (disable) return
-        SwitchLogoDialog.open()
+        CrossIsolationMessages.events.switchLogoUpdated.sendToAll({ open: true })
     }, [disable])
 
     return (

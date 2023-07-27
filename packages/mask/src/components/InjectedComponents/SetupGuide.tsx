@@ -3,7 +3,13 @@ import stringify from 'json-stable-stringify'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { NextIDProof } from '@masknet/web3-providers'
-import { type PersonaIdentifier, ProfileIdentifier, EnhanceableSite, EncryptionTargetType } from '@masknet/shared-base'
+import {
+    type PersonaIdentifier,
+    ProfileIdentifier,
+    EnhanceableSite,
+    EncryptionTargetType,
+    CrossIsolationMessages,
+} from '@masknet/shared-base'
 import { useI18N } from '../../utils/index.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import {
@@ -19,7 +25,6 @@ import { VerifyNextID } from './SetupGuide/VerifyNextID.js'
 import { PinExtension } from './SetupGuide/PinExtension.js'
 import { useSetupGuideStepInfo } from './SetupGuide/useSetupGuideStepInfo.js'
 import { useNextIDVerify } from '../DataSource/useNextIDVerify.js'
-import { SwitchLogoDialog } from '@masknet/plugin-switch-logo'
 
 // #region setup guide ui
 interface SetupGuideUIProps {
@@ -96,7 +101,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
         const afterVerify = () => {
             setOperation(true)
-            SwitchLogoDialog.open()
+            CrossIsolationMessages.events.switchLogoUpdated.sendToAll({ open: true })
         }
         await handleVerifyNextID(destinedPersonaInfo, userId, afterVerify)
     }, [userId, destinedPersonaInfo])

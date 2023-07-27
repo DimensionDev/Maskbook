@@ -4,7 +4,8 @@ import { PLUGIN_ID } from '../constants.js'
 import { PluginID } from '@masknet/shared-base'
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
-import { Modals } from './modals.js'
+import { SwitchLogoDialog } from './SwitchLogoDialog.js'
+import { setupStorage } from './storage.js'
 
 const recommendFeature = {
     description: <Trans i18nKey="description" ns={PluginID.SwitchLogo} />,
@@ -13,9 +14,11 @@ const recommendFeature = {
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal, context) {},
+    init(signal, context) {
+        setupStorage(context.createKVStorage('persistent', {}).createSubScope('SwitchLogo', { value: {} }))
+    },
     GlobalInjection() {
-        return <Modals />
+        return <SwitchLogoDialog />
     },
     ApplicationEntries: [
         {

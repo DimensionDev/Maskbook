@@ -1,12 +1,12 @@
-import { memo, useCallback, useState } from 'react'
-import { InjectedDialog, useOpenApplicationSettings } from '@masknet/shared'
+import { memo, useCallback, useEffect, useState } from 'react'
+import { InjectedDialog } from '@masknet/shared'
 import { Button, Checkbox, DialogContent, FormControlLabel, IconButton, Stack, Typography } from '@mui/material'
 import { useI18N } from '../locales/index.js'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { SwitchLogoType, switchLogoSettings } from '@masknet/shared-base'
+import { CrossIsolationMessages, SwitchLogoType } from '@masknet/shared-base'
 import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { useValueRef } from '@masknet/shared-base-ui'
+import { useSwitchLogoStorage } from './storage.js'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -52,36 +52,51 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface SwitchLogoDialogProps {
-    open: boolean
-    onClose: () => void
-}
+interface SwitchLogoDialogProps {}
 
-export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(({ open, onClose }) => {
+export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
     const t = useI18N()
     const { classes, cx } = useStyles()
     const identity = useLastRecognizedIdentity()
-    const defaultLogoType = useValueRef(switchLogoSettings[identity?.identifier?.userId || ''])
+    const [storage, setupStorage] = useSwitchLogoStorage()
+    const defaultLogoType = storage[identity?.identifier?.userId || '']
     const [logoType, setLogoType] = useState<SwitchLogoType>()
     const { share } = useSNSAdaptorContext()
     const [needShare, setNeedShare] = useState(true)
-    const openApplicationBoardDialog = useOpenApplicationSettings()
+    const [open, setOpen] = useState(false)
+
+    useEffect(() => {
+        return CrossIsolationMessages.events.switchLogoUpdated.on((data) => {
+            setOpen(data.open)
+        })
+    }, [])
+
+    const openApplicationBoardDialog = useCallback(() => {
+        CrossIsolationMessages.events.applicationDialogEvent.sendToAll({
+            open: true,
+            pluginID: '',
+        })
+    }, [])
 
     const onSave = useCallback(async () => {
         if (!identity?.identifier?.userId) return
-        switchLogoSettings[identity.identifier.userId].value = logoType ?? defaultLogoType
-        onClose()
+        setupStorage(identity.identifier.userId, logoType ?? defaultLogoType)
+        setOpen(false)
         if (needShare) {
             share?.([t.share_text(), t.share_mask()].join('\n'))
         }
-    }, [logoType, identity?.identifier?.userId, defaultLogoType, share, needShare])
+    }, [logoType, identity?.identifier?.userId, defaultLogoType, share, needShare, setupStorage])
 
     const onChange = useCallback((logoType: SwitchLogoType) => {
         setLogoType(logoType)
     }, [])
 
     return (
-        <InjectedDialog open={open} onClose={onClose} title={t.title()} classes={{ paper: classes.dialog }}>
+        <InjectedDialog
+            open={open}
+            onClose={() => setOpen(false)}
+            title={t.title()}
+            classes={{ paper: classes.dialog }}>
             <DialogContent className={classes.content}>
                 <Stack className={classes.icons}>
                     <Stack
