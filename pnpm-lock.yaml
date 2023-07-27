@@ -844,18 +844,9 @@ importers:
       '@masknet/plugin-solana':
         specifier: workspace:^
         version: link:../plugins/Solana
-<<<<<<< HEAD
-=======
       '@masknet/plugin-switch-logo':
         specifier: workspace:^
         version: link:../plugins/SwitchLogo
-      '@masknet/plugin-tips':
-        specifier: workspace:^
-        version: link:../plugins/Tips
-      '@masknet/plugin-trader':
-        specifier: workspace:^
-        version: link:../plugins/Trader
->>>>>>> e7041a92e (feat: logo switcher plugin)
       '@masknet/plugin-transak':
         specifier: workspace:^
         version: link:../plugins/Transak
@@ -2359,38 +2350,7 @@ importers:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-9a72e6227-20230525)
 
-<<<<<<< HEAD
   packages/plugins/SmartPay:
-=======
-  packages/plugins/SwitchLogo:
-    dependencies:
-      '@masknet/icons':
-        specifier: workspace:^
-        version: link:../../icons
-      '@masknet/plugin-infra':
-        specifier: workspace:^
-        version: link:../../plugin-infra
-      '@masknet/shared':
-        specifier: workspace:^
-        version: link:../../shared
-      '@masknet/shared-base':
-        specifier: workspace:^
-        version: link:../../shared-base
-      '@masknet/shared-base-ui':
-        specifier: workspace:^
-        version: link:../../shared-base-ui
-      '@masknet/theme':
-        specifier: workspace:^
-        version: link:../../theme
-      react-use:
-        specifier: ^17.4.0
-        version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      use-subscription:
-        specifier: ^1.8.0
-        version: 1.8.0(react@0.0.0-experimental-0a360642d-20230711)
-
-  packages/plugins/Tips:
->>>>>>> e7041a92e (feat: logo switcher plugin)
     dependencies:
       '@masknet/icons':
         specifier: workspace:^
@@ -2491,6 +2451,33 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
+
+  packages/plugins/SwitchLogo:
+    dependencies:
+      '@masknet/icons':
+        specifier: workspace:^
+        version: link:../../icons
+      '@masknet/plugin-infra':
+        specifier: workspace:^
+        version: link:../../plugin-infra
+      '@masknet/shared':
+        specifier: workspace:^
+        version: link:../../shared
+      '@masknet/shared-base':
+        specifier: workspace:^
+        version: link:../../shared-base
+      '@masknet/shared-base-ui':
+        specifier: workspace:^
+        version: link:../../shared-base-ui
+      '@masknet/theme':
+        specifier: workspace:^
+        version: link:../../theme
+      react-use:
+        specifier: ^17.4.0
+        version: 17.4.0(react-dom@0.0.0-experimental-9a72e6227-20230525)(react@0.0.0-experimental-9a72e6227-20230525)
+      use-subscription:
+        specifier: ^1.8.0
+        version: 1.8.0(react@0.0.0-experimental-9a72e6227-20230525)
 
   packages/plugins/Transak:
     dependencies:
@@ -5670,15 +5657,6 @@ packages:
     dependencies:
       regenerator-runtime: 0.13.11
 
-<<<<<<< HEAD
-=======
-  /@babel/runtime@7.22.6:
-    resolution: {integrity: sha512-wDb5pWm4WDdF6LFUde3Jl8WzPA+3ZbxYqkC6xAXuD3irdEHN1k0NfTRrJD8ZD378SJ61miMLCqIOXYhd8x+AJQ==}
-    engines: {node: '>=6.9.0'}
-    dependencies:
-      regenerator-runtime: 0.13.11
-
->>>>>>> e7041a92e (feat: logo switcher plugin)
   /@babel/template@7.20.7:
     resolution: {integrity: sha512-8SegXApWe6VoNw0r9JHpSteLKTpTiLZ4rMlGIm9JQ18KiCtyQiAMEazujAHrUS5flrcqYZa75ukev3P6QmUwUw==}
     engines: {node: '>=6.9.0'}
@@ -6869,13 +6847,8 @@ packages:
     dependencies:
       '@babel/core': 7.21.4
       '@babel/helper-module-imports': 7.18.6
-<<<<<<< HEAD
       '@babel/plugin-syntax-jsx': 7.18.6(@babel/core@7.21.4)
       '@babel/runtime': 7.21.0
-=======
-      '@babel/plugin-syntax-jsx': 7.18.6(@babel/core@7.22.9)
-      '@babel/runtime': 7.22.6
->>>>>>> e7041a92e (feat: logo switcher plugin)
       '@emotion/hash': 0.9.0
       '@emotion/memoize': 0.8.0
       '@emotion/serialize': 1.1.0
@@ -8439,13 +8412,8 @@ packages:
   /@manypkg/find-root@1.1.0:
     resolution: {integrity: sha512-mki5uBvhHzO8kYYix/WRy2WX8S3B5wdVSc9D6KcU5lQNglP2yt58/VfLuAK49glRXChosY8ap2oJ1qgma3GUVA==}
     dependencies:
-<<<<<<< HEAD
       '@babel/runtime': 7.21.0
       '@types/node': 18.15.11
-=======
-      '@babel/runtime': 7.22.6
-      '@types/node': 20.4.2
->>>>>>> e7041a92e (feat: logo switcher plugin)
       find-up: 4.1.0
       fs-extra: 8.1.0
     dev: true
@@ -10133,11 +10101,7 @@ packages:
     resolution: {integrity: sha512-LZmYCKcPQDtJgecvWOgT/cnoIQPWjdH+QVyzPcFvyDUiT0DiRjZaam4aqNUyvchLFhzgunv3d9xOoyE34ofdoQ==}
     engines: {node: '>= 10'}
     dependencies:
-<<<<<<< HEAD
-      '@babel/runtime': 7.20.13
-=======
-      '@babel/runtime': 7.22.6
->>>>>>> e7041a92e (feat: logo switcher plugin)
+      '@babel/runtime': 7.21.0
       '@solana/web3.js': 1.75.0
       bn.js: 5.2.1
       buffer: 6.0.3
@@ -14772,7 +14736,7 @@ packages:
     resolution: {integrity: sha512-Cg7TFGpIr01vOQNODXOOaGz2NpCU5gl8x1qJFbb6hbZxR7XrcE2vtbAsTAbJ7/xwJtUuJEw8K8Zr/AE0LHlesg==}
     engines: {node: '>=10', npm: '>=6'}
     dependencies:
-      '@babel/runtime': 7.22.6
+      '@babel/runtime': 7.21.0
       cosmiconfig: 7.1.0
       resolve: 1.22.1
 
@@ -23481,7 +23445,7 @@ packages:
     resolution: {integrity: sha512-prXSYk799h3GY3iOWnC6ZigYzMPjxN2svgjJ9shk7oMadSNX3wXy0B6F32PMJv7qtMnrIbUxoEHzbutvxR2LBQ==}
     engines: {node: '>=6.0.0', npm: '>=6.0.0', yarn: '>=1.0.0'}
     dependencies:
-      '@babel/runtime': 7.22.6
+      '@babel/runtime': 7.21.0
       app-root-dir: 1.0.2
       core-js: 3.30.1
       dotenv: 8.6.0
@@ -27574,7 +27538,7 @@ packages:
     dependencies:
       '@babel/core': 7.21.4
       '@babel/generator': 7.21.4
-      '@babel/runtime': 7.22.6
+      '@babel/runtime': 7.21.0
       ast-types: 0.14.2
       commander: 2.20.3
       doctrine: 3.0.0
@@ -28158,7 +28122,7 @@ packages:
   /regenerator-transform@0.15.0:
     resolution: {integrity: sha512-LsrGtPmbYg19bcPHwdtmXwbW+TqNvtY4riE3P83foeHRroMbH6/2ddFBfab3t7kbzc7v7p4wbkIecHImqt0QNg==}
     dependencies:
-      '@babel/runtime': 7.22.6
+      '@babel/runtime': 7.21.0
     dev: true
 
   /regex-not@1.0.2:
@@ -28715,7 +28679,7 @@ packages:
   /rtl-css-js@1.15.0:
     resolution: {integrity: sha512-99Cu4wNNIhrI10xxUaABHsdDqzalrSRTie4GeCmbGVuehm4oj+fIy8fTzB+16pmKe8Bv9rl+hxIBez6KxExTew==}
     dependencies:
-      '@babel/runtime': 7.22.6
+      '@babel/runtime': 7.21.0
     dev: false
 
   /run-async@2.4.1:
@@ -31583,7 +31547,7 @@ packages:
   /use-subscription@1.8.0(react@0.0.0-experimental-9a72e6227-20230525):
     resolution: {integrity: sha512-LISuG0/TmmoDoCRmV5XAqYkd3UCBNM0ML3gGBndze65WITcsExCD3DTvXXTLyNcOC0heFQZzluW88bN/oC1DQQ==}
     peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-9a72e6227-20230525
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-d1e35c703-20221110 || 0.0.0-experimental-9a72e6227-20230525
     peerDependenciesMeta:
       react:
         optional: true
@@ -33486,7 +33450,6 @@ time:
   /@uniswap/v2-sdk@3.0.0-alpha.2: '2021-05-21T14:24:53.975Z'
   /@vitest/ui@0.30.1: '2023-04-11T11:27:59.267Z'
   /@walletconnect/sign-client@2.7.3: '2023-05-08T06:42:19.413Z'
-  /@walletconnect/socket-transport@1.7.8: '2022-04-26T10:08:30.425Z'
   /@walletconnect/types@2.7.3: '2023-05-08T06:42:07.362Z'
   /@walletconnect/utils@2.7.3: '2023-05-08T06:42:09.851Z'
   /anchorme@2.1.2: '2020-05-08T13:17:56.752Z'
