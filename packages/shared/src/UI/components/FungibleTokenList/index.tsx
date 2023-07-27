@@ -5,6 +5,7 @@ import { SearchableList, makeStyles, type MaskFixedSizeListProps, type MaskTextF
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     useAccount,
+    useAddressType,
     useBlockedFungibleTokens,
     useFungibleAssets,
     useFungibleToken,
@@ -30,6 +31,7 @@ import { useSharedI18N } from '../../../locales/index.js'
 import { getFungibleTokenItem } from './FungibleTokenItem.js'
 import { ManageTokenListBar } from './ManageTokenListBar.js'
 import { TokenListMode } from './type.js'
+import { AddressType } from '@masknet/web3-shared-evm'
 
 export * from './type.js'
 
@@ -45,6 +47,7 @@ export interface FungibleTokenListProps<T extends NetworkPluginID>
     selectedTokens?: string[]
     disableSearch?: boolean
     onSelect?(token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null): void
+    onSearchError?(error: boolean): void
     FixedSizeListProps?: Partial<MaskFixedSizeListProps>
     SearchTextFieldProps?: MaskTextFieldProps
     enableManage?: boolean
@@ -71,6 +74,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         whitelist: includeTokens,
         blacklist: excludeTokens = EMPTY_LIST,
         onSelect,
+        onSearchError,
         FixedSizeListProps,
         selectedTokens = EMPTY_LIST,
         enableManage = false,
@@ -136,7 +140,9 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         if (mode === TokenListMode.List) return EMPTY_LIST
         const isTrustedToken = currySameAddress(trustedFungibleTokens.map((x) => x.address))
 
-        return uniqBy([...fungibleTokens, ...trustedFungibleTokens], (x) => x.address.toLowerCase()).sort((a, z) => {
+        return uniqBy([...(nativeToken ? [nativeToken] : []), ...fungibleTokens, ...trustedFungibleTokens], (x) =>
+            x.address.toLowerCase(),
+        ).sort((a, z) => {
             // trusted token
             if (isTrustedToken(a.address)) return -1
             if (isTrustedToken(z.address)) return 1
@@ -160,7 +166,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
             return 0
         })
-    }, [chainId, trustedFungibleTokens, fungibleTokens, mode])
+    }, [chainId, trustedFungibleTokens, fungibleTokens, nativeToken, mode])
 
     const sortedFungibleTokensForList = useMemo(() => {
         if (mode === TokenListMode.Manage) return EMPTY_LIST
@@ -231,9 +237,16 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     const [keyword, setKeyword] = useState('')
     const [searchError, setSearchError] = useState<string>()
 
+    const { value: addressType } = useAddressType(pluginID, !Others.isValidAddress?.(keyword ?? '') ? '' : keyword, {
+        chainId,
+    })
+
+    const isAddressNotContract = addressType !== AddressType.Contract && Others.isValidAddress(keyword)
+
     const searchedTokenAddress = useMemo(() => {
         if (!keyword) {
             setSearchError(undefined)
+            onSearchError?.(false)
             return
         }
 
@@ -242,6 +255,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
             keyword.length > 3 &&
             !Others.isValidAddress(keyword)
         ) {
+            onSearchError?.(true)
             setSearchError(t.erc20_search_wrong_address())
             return
         }
@@ -311,7 +325,6 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         isCustomToken,
         isHiddenChainIcon,
     ])
-
     const SearchFieldProps = useMemo(
         () => ({
             placeholder: t.erc20_token_list_placeholder(),
@@ -341,7 +354,9 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 onSelect={handleSelect}
                 onSearch={setKeyword}
                 data={
-                    searchedToken && isSameAddress(searchedToken.address, searchedTokenAddress)
+                    isAddressNotContract
+                        ? EMPTY_LIST
+                        : searchedToken && isSameAddress(searchedToken.address, searchedTokenAddress)
                         ? // balance field work for case: user search someone token by contract and whitelist is empty.
                           [{ ...searchedToken, balance: tokenBalance, isCustomToken }]
                         : mode === TokenListMode.List

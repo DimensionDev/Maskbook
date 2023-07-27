@@ -4,7 +4,7 @@ import { ActionButton, makeStyles } from '@masknet/theme'
 import { Providers, Web3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import { memo, useState } from 'react'
 import { Controller } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -23,10 +23,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         overflow: 'auto',
-    },
-    error: {
-        color: theme.palette.maskColor.danger,
-        marginTop: theme.spacing(0.5),
     },
 }))
 
@@ -88,7 +84,6 @@ const CreateWallet = memo(function CreateWallet() {
                         />
                     )}
                 />
-                {errors.name ? <Typography className={classes.error}>{errors.name.message}</Typography> : null}
             </Box>
             <ActionButton loading={loading} fullWidth disabled={disabled} onClick={onSubmit}>
                 {t('add')}

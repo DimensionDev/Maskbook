@@ -5,8 +5,7 @@ import { Sniffings } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { formatBalance, isZero } from '@masknet/web3-shared-base'
 import { Box, TextField, Typography } from '@mui/material'
-import { FormattedBalance } from '@masknet/shared'
-import { DotLoading } from './DotLoading.js'
+import { FormattedBalance, DotLoading } from '@masknet/shared'
 import { useI18N } from '../../../locales/index.js'
 
 // TODO: remove isDashboard after remove Dashboard page

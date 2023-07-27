@@ -22,8 +22,9 @@ export const WalletHeader = memo(function WalletHeader() {
     const currentNetwork = useMemo(() => networks.find((x) => x.chainId === chainId) ?? networks[0], [chainId])
     const { connected, url } = useConnected()
     const matchUnlock = useMatch(PopupRoutes.Unlock)
+    const matchResetWallet = useMatch(PopupRoutes.ResetWallet)
     const matchWallet = useMatch(PopupRoutes.Wallet)
-    const matchAddAssets = useMatch(`${PopupRoutes.AddToken}/:chainId`)
+    const matchAddAssets = useMatch(`${PopupRoutes.AddToken}/:chainId/:assetType`)
     const matchContractInteraction = useMatch(PopupRoutes.ContractInteraction)
 
     const chooseNetwork = useCallback(() => {
@@ -40,7 +41,7 @@ export const WalletHeader = memo(function WalletHeader() {
 
     if (matchAddAssets) return null
 
-    if (!wallet || !hasPassword || matchUnlock) return <WalletSetupHeaderUI />
+    if (!wallet || !hasPassword || matchUnlock || matchResetWallet) return <WalletSetupHeaderUI />
 
     if (matchContractInteraction) {
         return (

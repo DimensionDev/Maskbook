@@ -85,6 +85,11 @@ const Recovery = memo(function Recovery() {
 
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'privateKey', 'local')
 
+    const onTabChange = useCallback((event: object, value: string) => {
+        onChange(event, value)
+        setError('')
+    }, [])
+
     const handleRestoreFromMnemonic = useCallback(
         async (values: string[]) => {
             try {
@@ -99,8 +104,12 @@ const Recovery = memo(function Recovery() {
                         isReset: location.state?.isReset,
                     },
                 })
-            } catch {
-                setError(t.wallet_recovery_mnemonic_confirm_failed())
+            } catch (error) {
+                const errorMsg = (error as Error).message
+                // SDK's error message is not as same as design.
+                setError(
+                    errorMsg === 'Invalid mnemonic words.' ? t.wallet_recovery_mnemonic_confirm_failed() : errorMsg,
+                )
             }
         },
         [t, navigate, location.state?.isReset, location.state?.password],
@@ -112,8 +121,12 @@ const Recovery = memo(function Recovery() {
                 await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
                 await WalletServiceRef.value.recoverWalletFromPrivateKey(getDefaultWalletName(), data.privateKey)
                 navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
-            } catch {
-                onError('privateKey', { type: 'value', message: t.sign_in_account_private_key_error() })
+            } catch (error) {
+                const errorMsg = (error as Error).message
+                onError('privateKey', {
+                    type: 'value',
+                    message: errorMsg === 'Invalid private key.' ? t.sign_in_account_private_key_error() : errorMsg,
+                })
             }
         },
         [t, navigate, location.state?.isReset, location.state?.password],
@@ -131,8 +144,14 @@ const Recovery = memo(function Recovery() {
                 )
                 await WalletServiceRef.value.resolveMaskAccount([{ address }])
                 navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
-            } catch {
-                setError(t.create_wallet_key_store_incorrect_password())
+            } catch (error) {
+                const errorMsg = (error as Error).message
+                // Todo: SDK should return 'Incorrect Keystore Password.' when keystore pwd is wrong.
+                setError(
+                    errorMsg === 'Incorrect payment password.'
+                        ? t.create_wallet_key_store_incorrect_password()
+                        : errorMsg,
+                )
             }
         },
         [t, navigate, location.state?.isReset, location.state?.password],
@@ -152,7 +171,7 @@ const Recovery = memo(function Recovery() {
         <>
             <div className={classes.between}>
                 <Typography className={cx(classes.second, classes.bold)}>
-                    {t.create_step({ step: '2', total: '2' })}
+                    {t.create_step({ step: '2', totalSteps: '2' })}
                 </Typography>
                 <Typography className={cx(classes.create, classes.bold)} onClick={handleRecovery}>
                     {t.create()}
@@ -171,7 +190,7 @@ const Recovery = memo(function Recovery() {
                 <div className={classes.tabContainer}>
                     <TabContext value={currentTab}>
                         <div className={classes.tabList}>
-                            <MaskTabList variant="base" onChange={onChange} aria-label="Recovery Methods">
+                            <MaskTabList variant="base" onChange={onTabChange} aria-label="Recovery Methods">
                                 <Tab className={classes.tab} label="Mnemonic" value={tabs.mnemonic} />
                                 <Tab className={classes.tab} label="Private Key" value={tabs.privateKey} />
                                 <Tab className={classes.tab} label="KeyStore" value={tabs.local} />

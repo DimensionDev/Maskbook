@@ -430,7 +430,7 @@
     "recovery_smart_pay_wallet_description_other": "crwdns19439:0{{count}}crwdne19439:0",
     "welcome_request_to_collect": "crwdns19511:0crwdne19511:0",
     "welcome_to_use_mask_network": "crwdns20473:0crwdne20473:0",
-    "create_step": "crwdns21539:0{{step}}crwdnd21539:0{{total}}crwdne21539:0",
+    "create_step": "crwdns21539:0{{step}}crwdnd21539:0{{totalSteps}}crwdne21539:0",
     "persona_create_title": "crwdns20477:0crwdne20477:0",
     "persona_create_tips": "crwdns20479:0crwdne20479:0",
     "data_recovery_title": "crwdns20563:0crwdne20563:0",

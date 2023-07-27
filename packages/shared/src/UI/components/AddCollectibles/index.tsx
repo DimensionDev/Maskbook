@@ -1,10 +1,16 @@
 import { Icons } from '@masknet/icons'
-import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
-import { ActionButton, MaskColorVar, MaskTextField, makeStyles } from '@masknet/theme'
+import { ActionButton, MaskTextField, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useAccount, useWeb3Connection, useWeb3Hub, useWeb3Others } from '@masknet/web3-hooks-base'
+import {
+    useAccount,
+    useChainContext,
+    useWeb3Connection,
+    useWeb3Hub,
+    useWeb3Others,
+    useAddressType,
+} from '@masknet/web3-hooks-base'
 import { isSameAddress, type NonFungibleTokenContract } from '@masknet/web3-shared-base'
-import { Stack, Typography } from '@mui/material'
+import { Stack, Typography, useTheme } from '@mui/material'
 import { Box } from '@mui/system'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { compact, uniq } from 'lodash-es'
@@ -13,7 +19,8 @@ import { Controller, useForm } from 'react-hook-form'
 import { CollectibleItem, CollectibleItemSkeleton } from '../../components/AssetsManagement/CollectibleItem.js'
 import { useSharedI18N } from '../../../locales/index.js'
 import { EmptyStatus, LoadingStatus, ReloadStatus } from '../../components/index.js'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { AddressType, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { type NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     form: {
@@ -47,6 +54,9 @@ const useStyles = makeStyles()((theme) => ({
         paddingRight: theme.spacing(1),
         boxSizing: 'border-box',
         marginBottom: 'auto',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     notMine: {
         opacity: 0.5,
@@ -58,7 +68,7 @@ const useStyles = makeStyles()((theme) => ({
     error: {
         backgroundColor: theme.palette.maskColor.bottom,
         fontSize: 14,
-        color: MaskColorVar.redMain,
+        color: theme.palette.maskColor.danger,
     },
     toolbar: {
         position: 'absolute',
@@ -109,8 +119,10 @@ function isValidTokenIds(rawIds: string) {
 }
 
 export const AddCollectibles = memo(function AddCollectibles(props: AddCollectiblesProps) {
-    const { pluginID, chainId, account: defaultAccount, onClose } = props
+    const { pluginID, chainId: chainId_, account: defaultAccount, onClose } = props
+    const { chainId } = useChainContext({ chainId: chainId_ })
     const t = useSharedI18N()
+    const theme = useTheme()
     const walletAccount = useAccount()
     const account = defaultAccount || walletAccount
     const { classes } = useStyles(undefined, { props })
@@ -132,10 +144,20 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
     const hub = useWeb3Hub(pluginID, { chainId })
     const connection = useWeb3Connection(pluginID, { chainId })
 
+    const { value: addressType, loading: loadingAddressType } = useAddressType(
+        pluginID,
+        Others.isValidAddress?.(address) ? address : '',
+        {
+            chainId,
+        },
+    )
+
     const validationMsgForAddress = useMemo(() => {
-        if (!Others.isValidAddress?.(address ?? '')) return t.collectible_contract_invalid()
+        if (!address) return ''
+        if (!Others.isValidAddress?.(address ?? '') || (addressType !== AddressType.Contract && !loadingAddressType))
+            return t.collectible_contract_invalid()
         return ''
-    }, [address])
+    }, [address, addressType, loadingAddressType])
 
     const {
         data: contract,
@@ -148,8 +170,8 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
     })
 
     const isValid = useMemo(() => {
-        return Boolean(Others.isValidAddress?.(contract?.address ?? '') && isValidTokenIds(watchedTokenIds))
-    }, [contract?.address, watchedTokenIds])
+        return Boolean(isValidTokenIds(watchedTokenIds) && !validationMsgForAddress && address && tokenIds.length > 0)
+    }, [watchedTokenIds, validationMsgForAddress])
 
     const assetsQueries = useQueries({
         queries: tokenIds.map((tokenId) => ({
@@ -158,7 +180,9 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
             queryFn: () => hub.getNonFungibleAsset(address, tokenId, { chainId }),
         })),
     })
-    const noResults = assetsQueries.every((x) => !x.isLoading && !x.data)
+    const loadingAssets = assetsQueries.every((x) => x.isLoading)
+    const allFailed = assetsQueries.every((x) => x.failureReason)
+    const noResults = assetsQueries.every((x) => !x.isLoading && !x.data) || !isValid || allFailed
     const someNotMine = assetsQueries.some((x) => (x.data ? !isSameAddress(x.data.owner?.address, account) : false))
 
     const handleFormSubmit = useCallback(
@@ -204,11 +228,15 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                             <MaskTextField
                                 {...field}
                                 placeholder={t.add_collectibles_address_placeholder()}
-                                error={!!errors.address}
+                                error={!!(errors.address || validationMsgForAddress)}
                                 InputProps={{
                                     spellCheck: false,
                                     endAdornment: field.value ? (
-                                        <Icons.Close size={18} onClick={() => resetField('address')} />
+                                        <Icons.Close
+                                            size={18}
+                                            onClick={() => resetField('address')}
+                                            color={validationMsgForAddress ? theme.palette.maskColor.danger : undefined}
+                                        />
                                     ) : null,
                                 }}
                             />
@@ -234,7 +262,11 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                                 InputProps={{
                                     spellCheck: false,
                                     endAdornment: field.value ? (
-                                        <Icons.Close size={18} onClick={() => resetField('tokenIds')} />
+                                        <Icons.Close
+                                            size={18}
+                                            onClick={() => resetField('tokenIds')}
+                                            color={errors.tokenIds ? theme.palette.maskColor.danger : undefined}
+                                        />
                                     ) : null,
                                 }}
                             />
@@ -254,7 +286,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                 </Typography>
             ) : null}
             <div className={classes.main}>
-                {isLoadingContract ? (
+                {(isLoadingContract || loadingAssets) && isValid && !allFailed ? (
                     <LoadingStatus flexGrow={1} />
                 ) : isError ? (
                     <ReloadStatus flexGrow={1} onRetry={refetch} />

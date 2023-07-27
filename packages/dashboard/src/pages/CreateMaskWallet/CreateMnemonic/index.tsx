@@ -1,5 +1,5 @@
 import { toBlob } from 'html-to-image'
-import { memo, useCallback, useRef, useState } from 'react'
+import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Alert, alpha, Box, Button, Stack, Typography, useTheme } from '@mui/material'
@@ -181,15 +181,16 @@ const CreateMnemonic = memo(function CreateMnemonic() {
         })
     }, [location.state?.password, location.state?.isReset])
 
+    const { value: hasPassword, loading: loadingHasPassword } = useAsync(WalletServiceRef.value.hasPassword, [])
+
     const { value: address } = useAsync(async () => {
         if (!words.length) return
 
-        const hasPassword = await WalletServiceRef.value.hasPassword()
         if (!hasPassword) await WalletServiceRef.value.setDefaultPassword()
 
         const address = await WalletServiceRef.value.generateAddressFromMnemonicWords(walletName, words.join(' '))
         return address
-    }, [words.join(' '), walletName])
+    }, [words, walletName, hasPassword])
 
     const [{ loading }, onSubmit] = useAsyncFn(async () => {
         handlePasswordAndWallets(location.state?.password, location.state?.isReset)
@@ -202,14 +203,18 @@ const CreateMnemonic = memo(function CreateMnemonic() {
         ])
 
         navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
-    }, [walletName, words.join(' '), location.state?.isReset, location.state?.password])
+    }, [walletName, words, location.state?.isReset, location.state?.password])
+
+    const step = useMemo(() => String((isVerify ? 3 : 2) - (hasPassword ? 1 : 0)), [isVerify, hasPassword])
+    const totalSteps = hasPassword ? '2' : '3'
 
     return (
         <>
             <div className={classes.between}>
                 <Typography className={cx(classes.second, classes.bold)}>
-                    {t.create_step({ step: isVerify ? '3' : '2', total: '3' })}
+                    {loadingHasPassword ? '' : t.create_step({ step, totalSteps })}
                 </Typography>
+
                 <Typography className={cx(classes.import, classes.bold)} onClick={handleRecovery}>
                     {t.wallets_import_wallet_import()}
                 </Typography>
