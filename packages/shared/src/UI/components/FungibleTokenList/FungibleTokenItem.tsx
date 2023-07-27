@@ -240,9 +240,9 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                             <span className={`${classes.name} dashboard token-list-symbol`}>
                                 {isCustomToken ? (
                                     isLoadingTokenBalance ? (
-                                        <div className={classes.dotLoadingWrapper}>
+                                        <span className={classes.dotLoadingWrapper}>
                                             <DotLoading />
-                                        </div>
+                                        </span>
                                     ) : (
                                         <FormattedBalance
                                             value={tokenBalance}

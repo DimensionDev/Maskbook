@@ -206,13 +206,13 @@ const CreateMnemonic = memo(function CreateMnemonic() {
     }, [walletName, words.join(' '), location.state?.isReset, location.state?.password])
 
     const step = useMemo(() => String((isVerify ? 3 : 2) - (hasPassword ? 1 : 0)), [isVerify, hasPassword])
-    const totalStep = hasPassword ? '2' : '3'
+    const totalSteps = hasPassword ? '2' : '3'
 
     return (
         <>
             <div className={classes.between}>
                 <Typography className={cx(classes.second, classes.bold)}>
-                    {loadingHasPassword ? '' : t.create_step({ step, totalStep })}
+                    {loadingHasPassword ? '' : t.create_step({ step, totalSteps })}
                 </Typography>
 
                 <Typography className={cx(classes.import, classes.bold)} onClick={handleRecovery}>

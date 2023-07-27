@@ -120,7 +120,7 @@ const CreateWalletForm = memo(function CreateWalletForm() {
     return (
         <div className={classes.container}>
             <Typography className={cx(classes.second, classes.bold)}>
-                {t.create_step({ step: '1', totalStep: '3' })}
+                {t.create_step({ step: '1', totalSteps: '3' })}
             </Typography>
             <Typography className={cx(classes.title, classes.bold)}>{t.set_payment_password()}</Typography>
             <Typography className={classes.tips}>{t.create_wallet_payment_password_tip_1()}</Typography>
