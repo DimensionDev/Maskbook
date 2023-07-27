@@ -412,6 +412,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             },
             { enableSquash: true },
         )
+        console.log(data, 'aaa')
         const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal, data.identity.nft)
         return uniqWith(bindings, (a, b) => a.identity === b.identity && a.platform === b.platform)
     }

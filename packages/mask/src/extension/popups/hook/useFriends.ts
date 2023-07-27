@@ -49,7 +49,6 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
             }
             return
         })
-        console.log(profiles)
         return profiles
     }, [network, currentPersona])
 }
