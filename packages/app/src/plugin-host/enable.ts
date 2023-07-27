@@ -119,6 +119,7 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
             send: reject,
             NFTAvatarTimelineUpdated: emptyEventRegistry,
             themeSettings: createConstantSubscription(undefined),
+            switchLogoSettings: {},
         }
     },
     permission: {
