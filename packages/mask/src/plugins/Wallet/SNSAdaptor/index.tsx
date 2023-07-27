@@ -11,6 +11,7 @@ import { GasSettingDialog } from './GasSettingDialog/index.js'
 import { TransactionSnackbar } from './TransactionSnackbar/index.js'
 import { ApplicationBoardDialog } from '../../../components/shared/ApplicationBoardDialog.js'
 import { LeavePageConfirmDialog } from '../../../components/shared/LeavePageConfirmDialog.js'
+import { ApplicationBoardSettingsDialog } from '../../../components/shared/ApplicationSettingsDialog.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -21,6 +22,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 <SelectProviderDialog />
                 <WalletStatusDialog />
                 <ApplicationBoardDialog />
+                <ApplicationBoardSettingsDialog />
                 <ConnectWalletDialog />
                 <WalletRiskWarningDialog />
                 <GasSettingDialog />

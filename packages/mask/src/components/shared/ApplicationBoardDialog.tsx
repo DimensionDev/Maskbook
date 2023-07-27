@@ -1,4 +1,3 @@
-import { useState, useCallback } from 'react'
 import { DialogContent, IconButton, Tab } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
@@ -11,6 +10,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationBoard } from './ApplicationBoard.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useI18N } from '../../utils/index.js'
+import { useCallback, useState } from 'react'
 
 const useStyles = makeStyles<{
     openSettings: boolean
