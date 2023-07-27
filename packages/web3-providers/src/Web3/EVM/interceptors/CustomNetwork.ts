@@ -1,4 +1,4 @@
-import { ProviderType, type Middleware } from '@masknet/web3-shared-evm'
+import type { Middleware } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
 import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
