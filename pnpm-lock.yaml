@@ -2472,6 +2472,9 @@ importers:
       '@masknet/theme':
         specifier: workspace:^
         version: link:../../theme
+      '@masknet/web3-providers':
+        specifier: workspace:^
+        version: link:../../web3-providers
       '@types/use-subscription':
         specifier: ^1.0.0
         version: 1.0.0
