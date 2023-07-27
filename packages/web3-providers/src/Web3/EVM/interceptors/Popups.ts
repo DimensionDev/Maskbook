@@ -100,7 +100,7 @@ export class Popups implements Middleware<ConnectionContext> {
     }
     async fn(context: ConnectionContext, next: () => Promise<void>) {
         // Draw the Popups up and wait for user confirmation before publishing risky requests on the network
-        if (context.risky && context.writeable && !context.silent) {
+        if (context.risky && context.writeable) {
             const currentChainId = await this.Web3.getChainId()
 
             if (context.method === EthereumMethodType.ETH_SEND_TRANSACTION && currentChainId !== context.chainId) {
@@ -108,7 +108,7 @@ export class Popups implements Middleware<ConnectionContext> {
             }
 
             const paymentToken = await this.getPaymentToken(context)
-            const request = await Web3StateRef.value.Request?.applyAndWaitRequest({
+            const requestToBeApproved = {
                 state: RequestStateType.NOT_DEPEND,
                 arguments: context.requestArguments,
                 options: {
@@ -116,7 +116,12 @@ export class Popups implements Middleware<ConnectionContext> {
                     owner: context.owner,
                     identifier: context.identifier?.toText(),
                 },
-            })
+            }
+
+            const request = context.silent
+                ? requestToBeApproved
+                : await Web3StateRef.value.Request?.applyAndWaitRequest(requestToBeApproved)
+
             if (!request) {
                 context.abort('Failed to approve request.')
                 await next()
@@ -125,13 +130,7 @@ export class Popups implements Middleware<ConnectionContext> {
 
             const response = await SharedContextRef.value.send(
                 createJsonRpcPayload(0, request.arguments),
-                omitBy<TransactionOptions>(
-                    {
-                        ...request.options,
-                        popupsWindow: getSiteType() === ExtensionSite.Dashboard || isEnhanceableSiteType(),
-                    },
-                    isUndefined,
-                ),
+                omitBy<TransactionOptions>(request.options, isUndefined),
             )
             const editor = ErrorEditor.from(null, response)
 
