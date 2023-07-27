@@ -65,12 +65,13 @@ interface PluginVerifiedWalletStatusBarProps extends PropsWithChildren<{}> {
     verifiedWallets: BindingProof[]
     className?: string
     expectedAddress: string
-    openPopupWindow: () => void
+    openPopupWindow?: () => void
     onChange?: (address: string, pluginID: NetworkPluginID, chainId: Web3Helper.ChainIdAll) => void
+    onChangeWallet?: () => void
 }
 
 export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarProps>(
-    ({ className, children, verifiedWallets, onChange, expectedAddress, openPopupWindow }) => {
+    ({ className, children, verifiedWallets, onChange, expectedAddress, openPopupWindow, onChangeWallet }) => {
         const t = useSharedI18N()
         const { classes, cx } = useStyles()
 
@@ -164,7 +165,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                     <WalletMenuItem
                         address={account}
                         verified={isVerifiedAccount}
-                        onChangeWallet={() => SelectProviderModal.open()}
+                        onChangeWallet={onChangeWallet ? onChangeWallet : () => SelectProviderModal.open()}
                         selected={isSameAddress(descriptionProps.address, account)}
                         onSelect={onSelect}
                         expectedChainId={isSmartPay ? smartPaySupportChainId : globalChainId}
@@ -191,14 +192,16 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                         onSelect={onSelect}
                     />
                 )),
-                <MenuItem key="Wallet Setting" onClick={openPopupWindow}>
-                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <Icons.WalletSetting size={30} sx={{ marginRight: 1, transform: 'translate(0px, 2px)' }} />
-                        <Typography fontSize={14} fontWeight={700}>
-                            {t.connected_wallet_settings()}
-                        </Typography>
-                    </Box>
-                </MenuItem>,
+                openPopupWindow ? (
+                    <MenuItem key="Wallet Setting" onClick={openPopupWindow}>
+                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <Icons.WalletSetting size={30} sx={{ marginRight: 1, transform: 'translate(0px, 2px)' }} />
+                            <Typography fontSize={14} fontWeight={700}>
+                                {t.connected_wallet_settings()}
+                            </Typography>
+                        </Box>
+                    </MenuItem>
+                ) : null,
             ],
             {
                 classes: { paper: classes.menu },

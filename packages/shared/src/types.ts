@@ -19,3 +19,9 @@ export interface PersonaAgainstSNSConnectStatus {
     currentPersonaPublicKey: string
     currentSNSConnectedPersonaPublicKey: string
 }
+
+export interface PersonaAvatarData {
+    sign: string
+    imageUrl: string
+    updateAt: number
+}

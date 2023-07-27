@@ -1,5 +1,5 @@
 import { memo, type HTMLProps } from 'react'
-import { Card } from '@mui/material'
+import { Card, Radio } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { type NetworkPluginID } from '@masknet/shared-base'
@@ -49,6 +49,13 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.primary,
         zIndex: 1,
     },
+    radio: {
+        padding: 0,
+        position: 'absolute',
+        top: 5,
+        right: 5,
+        zIndex: 1,
+    },
 }))
 
 export interface CollectibleCardProps extends HTMLProps<HTMLDivElement> {
@@ -62,6 +69,7 @@ export interface CollectibleCardProps extends HTMLProps<HTMLDivElement> {
      */
     indicatorIcon?: GeneratedIcon
     isSelected?: boolean
+    useRadio?: boolean
 }
 
 export const CollectibleCard = memo(
@@ -73,6 +81,7 @@ export const CollectibleCard = memo(
         disableInspect,
         indicatorIcon,
         isSelected,
+        useRadio,
         ...rest
     }: CollectibleCardProps) => {
         const { classes, cx } = useStyles()
@@ -103,7 +112,11 @@ export const CollectibleCard = memo(
                         fallbackImage={fallbackImage}
                     />
                 </Card>
-                {isSelected ? <IndicatorIcon className={classes.indicator} size={20} /> : null}
+                {useRadio ? (
+                    <Radio className={classes.radio} checked={isSelected} />
+                ) : isSelected ? (
+                    <IndicatorIcon className={classes.indicator} size={20} />
+                ) : null}
             </div>
         )
     },

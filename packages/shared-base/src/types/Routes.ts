@@ -30,6 +30,11 @@ export enum PopupModalRoutes {
     ConnectSocialAccount = '/modal/connect-social-account',
     SelectProvider = '/modal/select-provider',
     ConnectProvider = '/modal/connect-provider',
+    SwitchPersona = '/modal/switch-persona',
+    PersonaSettings = '/modal/persona-setting',
+    PersonaRename = '/modal/persona-rename',
+    SetBackupPassword = '/modal/set-backup-password',
+    verifyBackupPassword = '/modal/verify-backup-password',
 }
 
 export enum PopupRoutes {
@@ -65,8 +70,6 @@ export enum PopupRoutes {
     Receive = '/wallet/receive',
     Personas = '/personas',
     Logout = '/personas/logout',
-    PersonaRename = '/personas/rename',
-    SelectPersona = '/personas/select',
     SocialAccounts = '/personas/accounts',
     AccountDetail = '/personas/accounts/detail',
     ConnectedWallets = '/personas/connected-wallets',
@@ -82,4 +85,6 @@ export enum PopupRoutes {
     Contracts = '/contracts',
     Settings = '/settings',
     WalletConnect = '/personas/wallet-connect',
+    ExportPrivateKey = '/personas/export-private-key',
+    PersonaAvatarSetting = '/personas/avatar-setting',
 }

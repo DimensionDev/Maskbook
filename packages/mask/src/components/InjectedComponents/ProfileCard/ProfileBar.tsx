@@ -99,7 +99,7 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
         lineHeight: '14px',
         height: 14,
         overflow: 'hidden',
-        color: theme.palette.text.secondary,
+        color: theme.palette.maskColor.second,
         cursor: 'pointer',
         flexShrink: 0,
     },
