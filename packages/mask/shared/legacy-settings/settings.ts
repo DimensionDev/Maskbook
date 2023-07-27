@@ -70,4 +70,4 @@ try {
     else languageSettings.value = LanguageOptions.__auto__
 } catch {}
 
-export const switchLogoSettings = createBulkSettings('SwitchLogo', SwitchLogoType.New)
+export const switchLogoSettings = createBulkSettings('SwitchLogo', SwitchLogoType.None)
