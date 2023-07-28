@@ -13,7 +13,6 @@
     "Coin98.ts",
     "Coinbase.ts",
     "MetaMask.ts",
-    "MathWallet.ts",
     "Opera.ts",
     "Clover.ts",
     "utils.ts"

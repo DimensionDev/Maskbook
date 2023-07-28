@@ -64,7 +64,14 @@ export class BaseContractWalletProvider
     }
 
     override get readyPromise() {
-        return Promise.all([super.readyPromise, this.ownerStorage?.initializedPromise]).then(() => {})
+        return new Promise<void>(async (resolve, reject) => {
+            try {
+                await Promise.all([super.readyPromise, this.ownerStorage?.initializedPromise])
+                resolve()
+            } catch (error) {
+                reject(error)
+            }
+        })
     }
 
     get ownerAccount() {

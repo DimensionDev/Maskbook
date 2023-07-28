@@ -6,6 +6,8 @@ export class OperaProvider extends InjectedProvider {
     }
 
     override async untilAvailable(): Promise<void> {
-        await super.untilAvailable(() => super.getProperty('isOpera') as Promise<boolean>)
+        await super.untilAvailable(() => {
+            return super.getProperty<boolean>('isOpera')
+        })
     }
 }

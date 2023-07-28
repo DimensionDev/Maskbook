@@ -20,8 +20,14 @@ export class BaseInjectedProvider
     }
 
     override get readyPromise() {
-        if (isExtensionSiteType()) return Promise.reject(new Error('Not available on extension site.'))
-        return this.bridge.untilAvailable().then(() => undefined)
+        return new Promise<void>(async (resolve, reject) => {
+            if (!isExtensionSiteType()) {
+                await this.bridge.untilAvailable()
+                resolve()
+            } else {
+                reject(new Error('Not available on extension site.'))
+            }
+        })
     }
 
     override async setup(): Promise<void> {

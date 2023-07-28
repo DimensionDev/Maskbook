@@ -80,12 +80,12 @@ export function __unsafe__onEvent(path: string, bridgeEvent: keyof InternalEvent
 function __unsafe__untilInner(name: string) {
     if ($.hasOwn(__unsafe__window, name)) return $.PromiseResolve(true)
 
-    let restCheckTimes = 150 // 30s
+    let restCheckTimes = 15 // 3s
 
-    return new $.Promise<true>((resolve) => {
+    return new $.Promise<true>((resolve, reject) => {
         function check() {
             restCheckTimes -= 1
-            if (restCheckTimes < 0) return
+            if (restCheckTimes < 0) return reject(new Error('timeout'))
             if ($.hasOwn(__unsafe__window, name)) return resolve(true)
             $.setTimeout(check, 200)
         }

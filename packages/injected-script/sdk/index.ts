@@ -5,7 +5,6 @@ import { PhantomProvider } from './Phantom.js'
 import { SolflareProvider } from './Solflare.js'
 import { MetaMaskProvider } from './MetaMask.js'
 import { sendEvent, rejectPromise, resolvePromise } from './utils.js'
-import { MathWalletProvider } from './MathWallet.js'
 import { OperaProvider } from './Opera.js'
 import { CloverProvider } from './Clover.js'
 
@@ -17,7 +16,6 @@ export const injectedCoin98SolanaProvider = new Coin98Provider(Coin98ProviderTyp
 export const injectedPhantomProvider = new PhantomProvider()
 export const injectedSolflareProvider = new SolflareProvider()
 export const injectedMetaMaskProvider = new MetaMaskProvider()
-export const injectedMathWalletProvider = new MathWalletProvider()
 export const injectedCoinbaseProvider = new CoinbaseProvider()
 export const injectedOperaProvider = new OperaProvider()
 export const injectedCloverProvider = new CloverProvider()
@@ -65,7 +63,6 @@ globalThis.document?.addEventListener?.(CustomEventId, (e) => {
                 injectedCoin98SolanaProvider,
                 injectedPhantomProvider,
                 injectedMetaMaskProvider,
-                injectedMathWalletProvider,
                 injectedOperaProvider,
                 injectedCloverProvider,
             ].find((x) => x.pathname === pathname)

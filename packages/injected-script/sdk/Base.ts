@@ -12,6 +12,9 @@ export class InjectedProvider {
     private async startup() {
         await this.untilAvailable()
 
+        // if a provider is not ready, it will not be able to connect
+        if (!this.isReady) return
+
         this.on('connected', () => {
             this.isConnectedInternal = true
         })

@@ -394,20 +394,6 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         downloadLink: 'https://www.coinbase.com/wallet/downloads',
     },
     {
-        ID: `${PLUGIN_ID}_mathwallet`,
-        providerAdaptorPluginID: PLUGIN_ID,
-        type: ProviderType.MathWallet,
-        name: 'MathWallet',
-        icon: new URL('../assets/mathwallet.png', import.meta.url).href,
-        enableRequirements: {
-            supportedChainIds: [ChainId.Mainnet, ChainId.BSC],
-            supportedEnhanceableSites: [],
-        },
-        homeLink: 'https://mathwallet.org',
-        shortenLink: 'mathwallet.org',
-        downloadLink: 'https://mathwallet.org/en-us/#extension',
-    },
-    {
         ID: `${PLUGIN_ID}_opera`,
         providerAdaptorPluginID: PLUGIN_ID,
         type: ProviderType.Opera,

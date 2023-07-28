@@ -100,13 +100,20 @@ export class ProviderState<
     }
 
     private async setupProviders() {
-        await Promise.all(
-            Object.entries(this.providers).map(async (entry) => {
-                const [providerType, provider] = entry as [
-                    ProviderType,
-                    WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>,
-                ]
+        const providers = Object.entries(this.providers) as Array<
+            [ProviderType, WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>]
+        >
 
+        setTimeout(() => {
+            console.log('DEBUG: providers')
+            console.log(providers)
+        }, 10000)
+
+        await Promise.allSettled(providers.map(([_, provider]) => provider.readyPromise))
+
+        providers
+            .filter(([, provider]) => provider.ready)
+            .forEach(async ([providerType, provider]) => {
                 provider.emitter.on('chainId', async (chainId) => {
                     await this.setAccount(providerType, {
                         chainId: Number.parseInt(chainId, 16) as ChainId,
@@ -144,8 +151,7 @@ export class ProviderState<
                 } catch {
                     // ignore setup errors
                 }
-            }),
-        )
+            })
     }
 
     private async setAccount(providerType: ProviderType, account: Partial<Account<ChainId>>) {

@@ -211,9 +211,8 @@ export enum ProviderType {
     WalletConnectV2 = 'WalletConnectV2',
     Fortmatic = 'Fortmatic',
     Coin98 = 'Coin98',
-    MathWallet = 'MathWallet',
-    Opera = 'Opera',
     Coinbase = 'Coinbase',
+    Opera = 'Opera',
     Clover = 'Clover',
     CustomNetwork = 'CustomNetwork',
 }

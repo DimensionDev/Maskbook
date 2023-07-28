@@ -6,6 +6,13 @@ export class CloverProvider extends InjectedProvider {
     }
 
     override async untilAvailable(): Promise<void> {
-        await super.untilAvailable(() => super.getProperty('isClover') as Promise<boolean>)
+        try {
+            await super.untilAvailable(() => {
+                return super.getProperty<boolean>('isClover')
+            })
+        } catch (error) {
+            console.log('DEBUG: clover error')
+            console.log(error)
+        }
     }
 }
