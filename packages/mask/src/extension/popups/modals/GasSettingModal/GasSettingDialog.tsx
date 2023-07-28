@@ -190,7 +190,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                     </Box>
                 )}
                 {error ? <Alert severity="error">{error}</Alert> : null}
-                <Button>{t('confirm')}</Button>
+                <Button onClick={handleConfirm}>{t('confirm')}</Button>
             </Box>
         </BottomDrawer>
     )
