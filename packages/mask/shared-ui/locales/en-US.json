@@ -169,6 +169,8 @@
     "no_enough_gas_fees": "No Enough Gas Fees",
     "open": "Open",
     "settings": "Settings",
+    "do_not_see_your_nft": "Don't see your NFT?",
+    "import_nft": "Import NFT",
     "setup_guide_login": "Please sign up or log in to connect Mask Network.",
     "setup_guide_find_username_text": "Link your profile to your persona.",
     "setup_guide_connect_auto": "Connect",
