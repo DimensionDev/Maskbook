@@ -213,7 +213,6 @@ export enum ProviderType {
     Coin98 = 'Coin98',
     MathWallet = 'MathWallet',
     Opera = 'Opera',
-    WalletLink = 'WalletLink',
     Coinbase = 'Coinbase',
     Clover = 'Clover',
     CustomNetwork = 'CustomNetwork',

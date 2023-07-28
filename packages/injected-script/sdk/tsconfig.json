@@ -15,7 +15,6 @@
     "MetaMask.ts",
     "MathWallet.ts",
     "Opera.ts",
-    "WalletLink.ts",
     "Clover.ts",
     "utils.ts"
   ],

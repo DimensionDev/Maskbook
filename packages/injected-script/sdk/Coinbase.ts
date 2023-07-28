@@ -6,6 +6,13 @@ export class CoinbaseProvider extends InjectedProvider {
         super('coinbaseWalletExtension')
     }
 
+    override async untilAvailable(): Promise<void> {
+        await super.untilAvailable(async () => {
+            const isCoinbaseWallet = await super.getProperty<boolean>('isCoinbaseWallet')
+            return isCoinbaseWallet
+        })
+    }
+
     override connect(options: unknown): Promise<void> {
         return createPromise((id) => sendEvent('web3BridgeExecute', [this.pathname, 'enable'].join('.'), id, options))
     }

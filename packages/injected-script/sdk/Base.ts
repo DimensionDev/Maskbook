@@ -95,7 +95,7 @@ export class InjectedProvider {
     /**
      * Access primitive property on the sdk object.
      */
-    getProperty(key: string): Promise<unknown> {
+    getProperty<T = unknown>(key: string): Promise<T> {
         return createPromise((id) => sendEvent('web3BridgePrimitiveAccess', this.pathname, id, key))
     }
 }

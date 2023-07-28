@@ -24,7 +24,6 @@ export class Interceptor implements Middleware<ConnectionContext> {
         [ProviderType.MetaMask]: Composer.from(new MetaMaskLike(ProviderType.MetaMask)),
         [ProviderType.WalletConnect]: Composer.from(new WalletConnect()),
         [ProviderType.Coin98]: Composer.from(new MetaMaskLike(ProviderType.Coin98)),
-        [ProviderType.WalletLink]: Composer.from(new MetaMaskLike(ProviderType.WalletLink)),
         [ProviderType.MathWallet]: Composer.from(new MetaMaskLike(ProviderType.MathWallet)),
         [ProviderType.Fortmatic]: Composer.from(new Fortmatic()),
         [ProviderType.Opera]: Composer.from(new MetaMaskLike(ProviderType.Opera)),
