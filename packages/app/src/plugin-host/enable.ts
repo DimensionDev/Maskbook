@@ -8,6 +8,7 @@ import {
     createI18NBundle,
     createKVStorageHost,
     i18NextInstance,
+    SwitchLogoOpenedState,
     ValueRefWithReady,
 } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -119,6 +120,8 @@ startPluginSNSAdaptor(CurrentSNSNetwork.__SPA__, {
             send: reject,
             NFTAvatarTimelineUpdated: emptyEventRegistry,
             themeSettings: createConstantSubscription(undefined),
+            switchLogoSettings: {},
+            switchLogoOpenedState: new ValueRefWithReady<SwitchLogoOpenedState>(SwitchLogoOpenedState.Unopened),
         }
     },
     permission: {

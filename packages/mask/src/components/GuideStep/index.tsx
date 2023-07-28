@@ -1,10 +1,16 @@
-import { cloneElement, type ReactElement, useRef, useState, useLayoutEffect } from 'react'
+import { cloneElement, type ReactElement, useRef, useState, useLayoutEffect, useEffect } from 'react'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Modal, styled, Typography } from '@mui/material'
-import { sayHelloShowed, userGuideFinished, userGuideStatus } from '../../../shared/legacy-settings/settings.js'
+import {
+    sayHelloShowed,
+    switchLogoOpenedState,
+    userGuideFinished,
+    userGuideStatus,
+} from '../../../shared/legacy-settings/settings.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { useI18N } from '../../utils/index.js'
+import { CrossIsolationMessages, EnhanceableSite, SwitchLogoOpenedState } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -116,11 +122,21 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     const box3Ref = useRef<HTMLDivElement>(null)
 
     const stepVisible = isCurrentStep && !finished && !!clientRect?.top && !!clientRect.left
+    const state = useValueRef(switchLogoOpenedState)
 
     const onSkip = () => {
         sayHelloShowed[networkIdentifier].value = true
         userGuideFinished[networkIdentifier].value = true
+        CrossIsolationMessages.events.switchLogoUpdated.sendToAll({ open: true })
     }
+
+    useEffect(() => {
+        return CrossIsolationMessages.events.switchLogoLoadedUpdated.on(() => {
+            if (!finished || state === SwitchLogoOpenedState.Opened || networkIdentifier !== EnhanceableSite.Twitter)
+                return
+            CrossIsolationMessages.events.switchLogoUpdated.sendToAll({ open: true })
+        })
+    }, [finished, state, networkIdentifier])
 
     const onNext = () => {
         if (step !== total) {
@@ -134,6 +150,7 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     const onTry = () => {
         userGuideFinished[networkIdentifier].value = true
         onComplete?.()
+        CrossIsolationMessages.events.switchLogoUpdated.sendToAll({ open: true })
     }
 
     useLayoutEffect(() => {

@@ -467,6 +467,16 @@ export const TelegramRound = /*#__PURE__*/ __createIcon('TelegramRound', [
         u: () => new URL('./brands/TelegramRound.svg', import.meta.url),
     },
 ])
+export const Twitter3 = /*#__PURE__*/ __createIcon('twitter3', [
+    {
+        c: ['dark'],
+        u: () => new URL('./brands/twitter3.dark.svg', import.meta.url),
+    },
+    {
+        c: ['light'],
+        u: () => new URL('./brands/twitter3.light.svg', import.meta.url),
+    },
+])
 export const TwitterColored = /*#__PURE__*/ __createIcon('TwitterColored', [
     {
         u: () => new URL('./brands/TwitterColored.svg', import.meta.url),
@@ -2199,6 +2209,16 @@ export const Swap = /*#__PURE__*/ __createIcon('Swap', [
 export const SwapColorful = /*#__PURE__*/ __createIcon('SwapColorful', [
     {
         u: () => new URL('./general/SwapColorful.svg', import.meta.url),
+    },
+])
+export const SwitchLogo = /*#__PURE__*/ __createIcon('SwitchLogo', [
+    {
+        c: ['dark'],
+        u: () => new URL('./general/SwitchLogo.dark.svg', import.meta.url),
+    },
+    {
+        c: ['light'],
+        u: () => new URL('./general/SwitchLogo.light.svg', import.meta.url),
     },
 ])
 export const TelegramRoundGray = /*#__PURE__*/ __createIcon('TelegramRoundGray', [

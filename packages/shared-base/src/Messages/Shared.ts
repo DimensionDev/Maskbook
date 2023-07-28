@@ -20,6 +20,7 @@ import type {
     SmartPayDialogEvent,
     RenameWalletEvent,
     FollowLensDialogEvent,
+    SwitchLogoEvent,
 } from './Mask.js'
 
 /**
@@ -61,4 +62,6 @@ export interface CrossIsolationEvents {
      * Application Persona List dialog
      */
     PersonaSelectPanelDialogUpdated: PersonaSelectPanelDialogEvent
+    switchLogoUpdated: SwitchLogoEvent
+    switchLogoLoadedUpdated: void
 }

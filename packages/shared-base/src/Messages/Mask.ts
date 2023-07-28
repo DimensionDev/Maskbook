@@ -266,3 +266,7 @@ export interface PersonaSignRequestEvent {
     requestID: string
     selectedPersona?: PersonaIdentifier
 }
+
+export interface SwitchLogoEvent {
+    open: boolean
+}

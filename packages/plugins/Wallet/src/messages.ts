@@ -18,6 +18,10 @@ export type ApplicationDialogEvent = {
     }
 }
 
+export type applicationSettingsDialogEvent = {
+    open: boolean
+}
+
 export type SelectProviderDialogEvent =
     | {
           open: true
@@ -97,6 +101,8 @@ export interface WalletMessage {
      * Application dialog
      */
     applicationDialogUpdated: ApplicationDialogEvent
+
+    applicationSettingsDialogUpdated: applicationSettingsDialogEvent
 
     /**
      * Gas setting dialog

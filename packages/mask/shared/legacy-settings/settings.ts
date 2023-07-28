@@ -1,7 +1,14 @@
 import { isEqual } from 'lodash-es'
 import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
-import { EnhanceableSite, ExtensionSite, updateLanguage, NetworkPluginID } from '@masknet/shared-base'
+import {
+    EnhanceableSite,
+    ExtensionSite,
+    updateLanguage,
+    NetworkPluginID,
+    SwitchLogoType,
+    SwitchLogoOpenedState,
+} from '@masknet/shared-base'
 import { BooleanPreference } from '@masknet/plugin-infra'
 import { Sentry } from '@masknet/web3-telemetry'
 import { createGlobalSettings, createBulkSettings } from './createSettings.js'
@@ -69,3 +76,9 @@ try {
     else if (lng === 'ko') languageSettings.value = LanguageOptions.koKR
     else languageSettings.value = LanguageOptions.__auto__
 } catch {}
+
+export const switchLogoSettings = createBulkSettings('SwitchLogo', SwitchLogoType.New)
+export const switchLogoOpenedState = createGlobalSettings<SwitchLogoOpenedState>(
+    'SwitchLogoOpenedState',
+    SwitchLogoOpenedState.Unopened,
+)

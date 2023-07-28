@@ -20,7 +20,12 @@ import { Flags } from '@masknet/flags'
 import { Sentry } from '@masknet/web3-telemetry'
 import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
 import { type SetupGuideContext, SetupGuideStep } from '../../shared/legacy-settings/types.js'
-import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../shared/legacy-settings/settings.js'
+import {
+    currentPersonaIdentifier,
+    currentSetupGuideStatus,
+    switchLogoOpenedState,
+    switchLogoSettings,
+} from '../../shared/legacy-settings/settings.js'
 import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host.js'
 import Services from '../extension/service.js'
 import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-adaptor/utils.js'
@@ -125,6 +130,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.injection.avatar?.(signal)
     ui.injection.profileCard?.(signal)
 
+    ui.injection.switchLogo?.(signal)
     ui.injection.PluginSettingsDialog?.(signal)
 
     // Update user avatar
@@ -208,6 +214,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     connectPersona,
                     ownPersonaChanged: MaskMessages.events.ownPersonaChanged,
                     currentPersonaIdentifier,
+                    switchLogoSettings,
+                    switchLogoOpenedState,
                 }
             },
             Services.Settings.getPluginMinimalModeEnabled,

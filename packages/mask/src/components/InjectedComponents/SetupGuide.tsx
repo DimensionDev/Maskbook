@@ -94,13 +94,13 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         if (isBound) return
 
         const afterVerify = () => setOperation(true)
+
         await handleVerifyNextID(destinedPersonaInfo, userId, afterVerify)
     }, [userId, destinedPersonaInfo])
 
     const onVerifyDone = useCallback(() => {
-        if (step === SetupGuideStep.VerifyOnNextID) {
-            currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier].value = ''
-        }
+        if (!(step === SetupGuideStep.VerifyOnNextID)) return
+        currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier].value = ''
     }, [step])
 
     const onClose = useCallback(() => {
