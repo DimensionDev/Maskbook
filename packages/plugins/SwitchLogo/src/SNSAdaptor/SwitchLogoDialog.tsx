@@ -8,6 +8,8 @@ import { CrossIsolationMessages, SwitchLogoOpenedState, SwitchLogoType } from '@
 import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
+import { useMountReport, useTelemetry } from '@masknet/web3-hooks-base'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -65,6 +67,7 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
     const { share } = useSNSAdaptorContext()
     const [needShare, setNeedShare] = useState(true)
     const [open, setOpen] = useState(false)
+    const telemetry = useTelemetry()
 
     useEffect(() => {
         return CrossIsolationMessages.events.switchLogoUpdated.on(async (data) => {
@@ -81,6 +84,7 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
         if (!identity?.identifier?.userId || !switchLogoSettings) return
         switchLogoSettings[identity.identifier.userId].value = logoType ?? defaultLogoType
         setOpen(false)
+        telemetry.captureEvent(EventType.Access, EventID.SwitchTwitterLogoSuccessfully)
         if (needShare && logoType === SwitchLogoType.Classics) {
             share?.([t.share_text(), '#TwitterLogo #TwitterX #SaveTheBird\n', t.share_mask()].join('\n'))
         }
@@ -95,6 +99,8 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
         if (defaultLogoType === logoType) return true
         return false
     }, [defaultLogoType, logoType])
+
+    useMountReport(EventID.AccessSwitchLogo)
 
     return (
         <InjectedDialog

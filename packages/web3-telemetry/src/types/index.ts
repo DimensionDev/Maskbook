@@ -49,6 +49,9 @@ export enum EventID {
     AccessDashboard = 'AccessDashboard',
     // Open the popups page
     AccessPopups = 'AccessPopups',
+    // open Switch logo dialog
+    AccessSwitchLogo = 'AccessSwitchLogoPlugin',
+    SwitchTwitterLogoSuccessfully = 'SwitchTwitterLogoSuccessfully',
     // For debug only
     Debug = 'Debug',
 }
