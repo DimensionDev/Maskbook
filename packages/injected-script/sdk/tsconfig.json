@@ -11,6 +11,7 @@
     "Phantom.ts",
     "Solflare.ts",
     "Coin98.ts",
+    "Coinbase.ts",
     "MetaMask.ts",
     "MathWallet.ts",
     "Opera.ts",

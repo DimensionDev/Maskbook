@@ -214,6 +214,7 @@ export enum ProviderType {
     MathWallet = 'MathWallet',
     Opera = 'Opera',
     WalletLink = 'WalletLink',
+    Coinbase = 'Coinbase',
     Clover = 'Clover',
     CustomNetwork = 'CustomNetwork',
 }

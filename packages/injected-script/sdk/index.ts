@@ -1,5 +1,6 @@
 import { CustomEventId, decodeEvent } from '../shared/index.js'
 import { Coin98Provider, Coin98ProviderType } from './Coin98.js'
+import { CoinbaseProvider } from './Coinbase.js'
 import { PhantomProvider } from './Phantom.js'
 import { SolflareProvider } from './Solflare.js'
 import { MetaMaskProvider } from './MetaMask.js'
@@ -19,6 +20,7 @@ export const injectedSolflareProvider = new SolflareProvider()
 export const injectedMetaMaskProvider = new MetaMaskProvider()
 export const injectedMathWalletProvider = new MathWalletProvider()
 export const injectedWalletLinkProvider = new WalletLinkProvider()
+export const injectedCoinbaseProvider = new CoinbaseProvider()
 export const injectedOperaProvider = new OperaProvider()
 export const injectedCloverProvider = new CloverProvider()
 
