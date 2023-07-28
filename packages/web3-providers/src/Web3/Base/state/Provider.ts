@@ -76,8 +76,7 @@ export class ProviderState<
     }
 
     async setup() {
-        await Promise.all([this.storage.account.initializedPromise, this.storage.providerType.initializedPromise])
-
+        await this.readyPromise
         await this.setupSubscriptions()
         await this.setupProviders()
     }
@@ -104,54 +103,49 @@ export class ProviderState<
             [ProviderType, WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>]
         >
 
-        setTimeout(() => {
-            console.log('DEBUG: providers')
-            console.log(providers)
-        }, 10000)
+        providers.map(async ([providerType, provider]) => {
+            try {
+                await provider.setup(this.context)
+            } catch {
+                // ignore setup errors
+            }
 
-        await Promise.allSettled(providers.map(([_, provider]) => provider.readyPromise))
+            await provider.readyPromise
+            if (!provider.ready) return
 
-        providers
-            .filter(([, provider]) => provider.ready)
-            .forEach(async ([providerType, provider]) => {
-                provider.emitter.on('chainId', async (chainId) => {
-                    await this.setAccount(providerType, {
-                        chainId: Number.parseInt(chainId, 16) as ChainId,
-                    })
+            console.log(`DEBUG: start listening to ${providerType} events`)
+
+            provider.emitter.on('chainId', async (chainId) => {
+                await this.setAccount(providerType, {
+                    chainId: Number.parseInt(chainId, 16) as ChainId,
                 })
-                provider.emitter.on('connect', async ({ account }) => {
-                    if (!this.options.isValidAddress(account)) return
-                    // provider should update before account, otherwise account failed to update
-                    await this.setProvider(providerType)
+            })
+            provider.emitter.on('connect', async ({ account }) => {
+                if (!this.options.isValidAddress(account)) return
+                // provider should update before account, otherwise account failed to update
+                await this.setProvider(providerType)
+                await this.setAccount(providerType, {
+                    account,
+                })
+            })
+            provider.emitter.on('accounts', async (accounts) => {
+                const account = first(accounts)
+
+                if (account && this.options.isValidAddress(account))
                     await this.setAccount(providerType, {
                         account,
                     })
-                })
-                provider.emitter.on('accounts', async (accounts) => {
-                    const account = first(accounts)
-
-                    if (account && this.options.isValidAddress(account))
-                        await this.setAccount(providerType, {
-                            account,
-                        })
-                })
-                provider.emitter.on('disconnect', async () => {
-                    await this.setAccount(providerType, {
-                        account: '',
-                        chainId: this.options.getDefaultChainId(),
-                    })
-
-                    if (!this.site) return
-
-                    await this.storage.providerType.setValue(this.options.getDefaultProviderType())
-                })
-
-                try {
-                    await provider.setup(this.context)
-                } catch {
-                    // ignore setup errors
-                }
             })
+            provider.emitter.on('disconnect', async () => {
+                await this.setAccount(providerType, {
+                    account: '',
+                    chainId: this.options.getDefaultChainId(),
+                })
+
+                if (!this.site) return
+                await this.storage.providerType.setValue(this.options.getDefaultProviderType())
+            })
+        })
     }
 
     private async setAccount(providerType: ProviderType, account: Partial<Account<ChainId>>) {

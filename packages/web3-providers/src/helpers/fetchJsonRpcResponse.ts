@@ -5,14 +5,6 @@ import { fetchSquashedJSON } from './fetchJSON.js'
 async function resolveRequestKey(request: Request) {
     try {
         const body: JsonRpcPayload = await request.json()
-
-        console.log('DEBUG: resolveRequestKey')
-        console.log({
-            ID: RequestID.fromPayload(request.url, body).ID,
-            url: request.url,
-            body,
-        })
-
         return RequestID.fromPayload(request.url, body).ID ?? ''
     } catch {
         return ''

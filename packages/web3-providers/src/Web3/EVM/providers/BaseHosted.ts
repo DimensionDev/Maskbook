@@ -92,18 +92,11 @@ export class BaseHostedProvider
     }
 
     override get readyPromise() {
-        return new Promise<void>(async (resolve, reject) => {
-            try {
-                await Promise.all([
-                    this.walletStorage?.wallets.initializedPromise,
-                    this.walletStorage?.account.initializedPromise,
-                    this.walletStorage?.chainId.initializedPromise,
-                ])
-                resolve()
-            } catch (error) {
-                reject(error)
-            }
-        })
+        return Promise.all([
+            this.walletStorage?.wallets.initializedPromise,
+            this.walletStorage?.account.initializedPromise,
+            this.walletStorage?.chainId.initializedPromise,
+        ]).then(() => {})
     }
 
     override get subscription() {
