@@ -10,8 +10,7 @@ import {
 } from '../../../shared/legacy-settings/settings.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { useI18N } from '../../utils/index.js'
-import { CrossIsolationMessages, EnhanceableSite } from '@masknet/shared-base'
-import { SwitchLogoOpenedState } from '@masknet/plugin-switch-logo'
+import { CrossIsolationMessages, EnhanceableSite, SwitchLogoOpenedState } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

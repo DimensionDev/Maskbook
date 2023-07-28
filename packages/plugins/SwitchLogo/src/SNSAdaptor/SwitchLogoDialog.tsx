@@ -4,11 +4,10 @@ import { Button, Checkbox, DialogContent, FormControlLabel, IconButton, Stack, T
 import { useI18N } from '../locales/index.js'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { CrossIsolationMessages, SwitchLogoType } from '@masknet/shared-base'
+import { CrossIsolationMessages, SwitchLogoOpenedState, SwitchLogoType } from '@masknet/shared-base'
 import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { SwitchLogoOpenedState } from './storage.js'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
