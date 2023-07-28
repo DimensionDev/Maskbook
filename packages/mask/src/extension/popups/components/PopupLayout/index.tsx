@@ -12,10 +12,16 @@ const GlobalCss = (
         styles={{
             body: {
                 width: 400,
+                minWidth: 400,
                 overflowX: 'hidden',
                 margin: '0 auto !important',
                 maxWidth: '100%',
                 WebkitFontSmoothing: 'subpixel-antialiased',
+                '&::-webkit-scrollbar': {
+                    display: 'none',
+                },
+            },
+            '[data-hide-scrollbar]': {
                 '&::-webkit-scrollbar': {
                     display: 'none',
                 },
@@ -63,7 +69,9 @@ export const PopupLayout = memo(function PopupLayout({ children }: PropsWithChil
             {GlobalCss}
             <Paper elevation={0} style={{ height: '100vh', overflowY: 'auto', minHeight: 600, borderRadius: 0 }}>
                 <div className={classes.container}>
-                    <div className={classes.body}>{children ?? <Outlet />}</div>
+                    <div className={classes.body} data-hide-scrollbar>
+                        {children ?? <Outlet />}
+                    </div>
                     {matched ? <Navigator className={classes.navigator} /> : null}
                 </div>
             </Paper>
