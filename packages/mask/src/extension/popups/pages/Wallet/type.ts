@@ -34,3 +34,10 @@ export enum WalletAssetTabs {
     Collectibles = 'Collectibles',
     Activity = 'Activity',
 }
+
+export type GasSetting = {
+    gas: string
+    gasPrice?: string
+    maxPriorityFeePerGas?: string
+    maxFeePerGas?: string
+}

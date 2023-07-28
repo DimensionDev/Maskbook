@@ -932,6 +932,8 @@
     "popups_wallet_gas_fee_settings_max_priority_fee": "Max priority fee",
     "popups_wallet_gas_fee_settings_max_fee": "Max fee",
     "popups_wallet_gas_fee_settings_min_gas_limit_tips": "Gas limit must be at least {{limit}}",
+    "popups_wallet_spped_up_transaction_tips": "Spend more transaction fees to cancel the previous transaction.",
+    "popups_wallet_cancel_transaction_tips": "Spend more transaction fees to cancel the previous transaction.",
     "popups_wallet_signature_request_title": "Signature Request",
     "popups_wallet_signature_request": "Signature request",
     "popups_wallet_signature_request_message": "Message",

@@ -55,7 +55,7 @@ export function useGasOptionsMenu(gas: string, callback: (config: GasConfig, typ
     const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
 
     const handleClickCustom = useCallback(async () => {
-        const result = await GasSettingModal.openAndWaitForClose({ chainId, gas })
+        const result = await GasSettingModal.openAndWaitForClose({ chainId, config: { gas } })
         if (!result) return
 
         callback(result)

@@ -3,25 +3,47 @@ import { GasSettingDialog } from './GasSettingDialog.js'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { SingletonModalRefCreator } from '@masknet/shared-base'
 import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
+import type { GasSetting, ReplaceType } from '../../pages/Wallet/type.js'
 
 export interface GasSettingModalOpenProps {
     chainId: ChainId
-    gas: string
+
+    replaceType?: ReplaceType
+    config: GasSetting
 }
 
 export type GasSettingModalCloseProps = GasConfig | undefined
+
+const initGasSetting = {
+    gas: '',
+}
 
 export const GasSettingModal = forwardRef<
     SingletonModalRefCreator<GasSettingModalOpenProps, GasSettingModalCloseProps>
 >((_, ref) => {
     const [chainId, setChainId] = useState<ChainId | undefined>()
-    const [gas, setGas] = useState('0')
+    const [replaceType, setReplaceType] = useState<ReplaceType>()
+    const [gasConfig, setGasConfig] = useState<GasSetting>(initGasSetting)
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
             setChainId(props.chainId)
-            setGas(props.gas)
+            setReplaceType(props.replaceType)
+            setGasConfig(props.config)
+        },
+        onClose() {
+            setChainId(undefined)
+            setReplaceType(undefined)
+            setGasConfig(initGasSetting)
         },
     })
 
-    return <GasSettingDialog onClose={(config) => dispatch?.close(config)} open={open} chainId={chainId} gas={gas} />
+    return (
+        <GasSettingDialog
+            onClose={(config) => dispatch?.close(config)}
+            open={open}
+            chainId={chainId}
+            replaceType={replaceType}
+            config={gasConfig}
+        />
+    )
 })
