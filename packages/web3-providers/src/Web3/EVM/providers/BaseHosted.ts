@@ -75,7 +75,7 @@ export class BaseHostedProvider
     protected get options() {
         return {
             isSupportedAccount: () => true,
-            isSupportedChainId: (chainId: number) => chainId > 0 && Math.floor(chainId) === chainId,
+            isSupportedChainId: (chainId: number) => chainId > 0 && Number.isInteger(chainId),
             getDefaultAccount: () => '',
             getDefaultChainId,
             formatAddress: formatEthereumAddress,
