@@ -36,9 +36,10 @@ export class Popups implements Middleware<ConnectionContext> {
     private Bundler = new SmartPayBundlerAPI()
     private Request = new RequestReadonlyAPI()
 
-    private get Network() {
+    private get customNetwork() {
         if (!Web3StateRef.value.Network) throw new Error('The web3 state does not load yet.')
-        return Web3StateRef.value.Network.network?.getCurrentValue()
+        const network = Web3StateRef.value.Network.network?.getCurrentValue()
+        return network?.isCustomized ? network : undefined
     }
 
     private async getPaymentToken(context: ConnectionContext) {
@@ -138,11 +139,11 @@ export class Popups implements Middleware<ConnectionContext> {
             }
 
             try {
-                const response = this.Network?.isCustomized
+                const response = this.customNetwork
                     ? createJsonRpcResponse(
                           0,
                           await this.Request.request(context.requestArguments, {
-                              providerURL: this.Network.rpcUrl,
+                              providerURL: this.customNetwork.rpcUrl,
                           }),
                       )
                     : await SharedContextRef.value.send(
