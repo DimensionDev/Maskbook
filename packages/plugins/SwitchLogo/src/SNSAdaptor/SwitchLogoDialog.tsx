@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { Button, Checkbox, DialogContent, FormControlLabel, IconButton, Stack, Typography } from '@mui/material'
 import { useI18N } from '../locales/index.js'
@@ -62,7 +62,7 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
     const identity = useLastRecognizedIdentity()
     const { switchLogoSettings, switchLogoOpenedState } = useSNSAdaptorContext()
     const defaultLogoType = useValueRef(switchLogoSettings[identity?.identifier?.userId || ''])
-    const [logoType, setLogoType] = useState<SwitchLogoType>()
+    const [logoType, setLogoType] = useState<SwitchLogoType>(SwitchLogoType.Classics)
     const { share } = useSNSAdaptorContext()
     const [needShare, setNeedShare] = useState(true)
     const [open, setOpen] = useState(false)
@@ -82,14 +82,20 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
         if (!identity?.identifier?.userId || !switchLogoSettings) return
         switchLogoSettings[identity.identifier.userId].value = logoType ?? defaultLogoType
         setOpen(false)
-        if (needShare) {
-            share?.([t.share_text(), t.share_mask()].join('\n'))
+        if (needShare && logoType === SwitchLogoType.Classics) {
+            share?.([t.share_text(), '#TwitterLogo #TwitterX #SaveTheBird', t.share_mask()].join('\n'))
         }
     }, [logoType, identity?.identifier?.userId, defaultLogoType, share, needShare])
 
     const onChange = useCallback((logoType: SwitchLogoType) => {
         setLogoType(logoType)
     }, [])
+
+    const disabled = useMemo(() => {
+        if (defaultLogoType === SwitchLogoType.None) return false
+        if (defaultLogoType === logoType) return true
+        return false
+    }, [defaultLogoType, logoType])
 
     return (
         <InjectedDialog
@@ -123,27 +129,31 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
                     </Stack>
                 </Stack>
                 <Stack>
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                color="primary"
-                                checked={needShare}
-                                onChange={(event) => setNeedShare(event.target.checked)}
-                            />
-                        }
-                        label={
-                            <Typography
-                                fontSize={14}
-                                fontWeight={400}
-                                lineHeight="18px"
-                                color={(theme) => theme.palette.maskColor.secondaryDark}>
-                                {t.save_tip()}
-                            </Typography>
-                        }
-                    />
+                    {logoType === SwitchLogoType.Classics ? (
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    color="primary"
+                                    checked={needShare}
+                                    onChange={(event) => setNeedShare(event.target.checked)}
+                                />
+                            }
+                            label={
+                                <Typography
+                                    fontSize={14}
+                                    fontWeight={400}
+                                    lineHeight="18px"
+                                    color={(theme) => theme.palette.maskColor.secondaryDark}>
+                                    {t.save_tip()}
+                                </Typography>
+                            }
+                        />
+                    ) : (
+                        <br />
+                    )}
                 </Stack>
                 <Stack className={classes.buttons}>
-                    <Button variant="roundedContained" fullWidth onClick={onSave}>
+                    <Button variant="roundedContained" fullWidth onClick={onSave} disabled={disabled}>
                         {t.save()}
                     </Button>
                 </Stack>
