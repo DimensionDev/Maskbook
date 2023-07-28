@@ -48,7 +48,7 @@ const useStyles = makeStyles()((theme) => ({
 interface GasSettingDialogProps {
     open: boolean
     chainId?: ChainId
-    nonce?: string
+    nonce: string
     onClose: (config?: GasConfig) => void
     replaceType?: ReplaceType
     config: GasSetting
@@ -121,11 +121,11 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
             case ReplaceType.CANCEL:
                 return t('popups_wallet_cancel_transaction_tips')
             case ReplaceType.SPEED_UP:
-                return t('popups_wallet_spped_up_transaction_tips')
+                return t('popups_wallet_speed_up_transaction_tips')
             default:
                 return
         }
-    }, [])
+    }, [replaceType])
 
     const handleConfirm = useCallback(() => {
         onClose(
@@ -164,7 +164,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
 
     return (
         <BottomDrawer open={open} title={title} onClose={onClose}>
-            <Box display="flex" flexDirection="column" rowGap={1.5}>
+            <Box display="flex" flexDirection="column" rowGap={1.5} mt={1.5}>
                 <Typography className={classes.preview}>
                     {formatWeiToEther(totalGas).toString()}
                     {nativeToken?.symbol}≈
