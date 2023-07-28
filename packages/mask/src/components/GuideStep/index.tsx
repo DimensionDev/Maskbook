@@ -127,12 +127,16 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     const onSkip = () => {
         sayHelloShowed[networkIdentifier].value = true
         userGuideFinished[networkIdentifier].value = true
-        CrossIsolationMessages.events.switchLogoUpdated.sendToAll({ open: true })
+        CrossIsolationMessages.events.switchLogoUpdated.sendToLocal({ open: true })
     }
 
     useLayoutEffect(() => {
         if (!finished || state === SwitchLogoOpenedState.Opened || networkIdentifier !== EnhanceableSite.Twitter) return
-        CrossIsolationMessages.events.switchLogoUpdated.sendToAll({ open: true })
+        const timer = setTimeout(
+            () => CrossIsolationMessages.events.switchLogoUpdated.sendToLocal({ open: true }),
+            10_1000,
+        )
+        return () => clearTimeout(timer)
     }, [finished, state, networkIdentifier])
 
     const onNext = () => {
@@ -147,7 +151,7 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     const onTry = () => {
         userGuideFinished[networkIdentifier].value = true
         onComplete?.()
-        CrossIsolationMessages.events.switchLogoUpdated.sendToAll({ open: true })
+        CrossIsolationMessages.events.switchLogoUpdated.sendToLocal({ open: true })
     }
 
     useLayoutEffect(() => {
