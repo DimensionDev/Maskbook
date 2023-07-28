@@ -9,7 +9,7 @@ export class MetaMaskProvider extends InjectedProvider {
         await super.untilAvailable(async () => {
             const isMetaMask = await super.getProperty<boolean>('isMetaMask')
             const isCoinbaseWallet = await super.getProperty<boolean>('isCoinbaseWallet')
-            return !!(isMetaMask && !isCoinbaseWallet)
+            return !!isMetaMask && !isCoinbaseWallet
         })
     }
 }
