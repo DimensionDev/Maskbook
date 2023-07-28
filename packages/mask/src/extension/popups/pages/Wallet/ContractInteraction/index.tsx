@@ -46,7 +46,6 @@ import { useTitle } from '../../../hook/useTitle.js'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
-import { StyledRadio } from '../../../components/StyledRadio/index.js'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
 import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 
@@ -309,7 +308,6 @@ const ContractInteraction = memo(() => {
         NetworkPluginID.PLUGIN_EVM,
         handleChangeGasCurrency,
         request?.paymentToken,
-        StyledRadio,
     )
     useUpdateEffect(() => {
         if (!request && !requestLoading && !error) {

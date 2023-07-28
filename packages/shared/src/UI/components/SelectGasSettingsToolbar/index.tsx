@@ -257,7 +257,6 @@ export function SelectGasSettingsToolbarUI({
         NetworkPluginID.PLUGIN_EVM,
         (address) => setCurrentGasCurrency(address),
         currentGasCurrency,
-        undefined,
         () => setApproveDialogOpen(true),
     )
 

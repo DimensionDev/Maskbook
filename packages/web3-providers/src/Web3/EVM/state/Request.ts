@@ -16,7 +16,7 @@ export class Request extends RequestState<RequestArguments, RequestOptions> {
 
         // TODO: make this for Mask Wallet only
         // open the popups window and wait for approvement from the user.
-        SNSAdaptorContextRef.value.openPopupWindow()
+        await SNSAdaptorContextRef.value.openPopupWindow()
 
         return super.waitRequest(ID)
     }
