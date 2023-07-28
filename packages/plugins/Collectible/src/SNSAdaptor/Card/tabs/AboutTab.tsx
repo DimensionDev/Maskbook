@@ -1,4 +1,3 @@
-import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { BigNumber } from 'bignumber.js'
 import { first } from 'lodash-es'
 import { LoadingBase, makeStyles } from '@masknet/theme'
@@ -34,17 +33,18 @@ const resolveTopListing = (orders?: Array<NonFungibleTokenOrder<Web3Helper.Chain
 }
 
 export interface AboutTabProps {
-    asset: AsyncState<Web3Helper.NonFungibleAssetAll>
+    asset: Web3Helper.NonFungibleAssetAll | null | undefined
+    isLoading: boolean
 }
 
 export function AboutTab(props: AboutTabProps) {
-    const { asset } = props
+    const { asset, isLoading } = props
     const { orders, sourceType } = Context.useContainer()
     const topListing = resolveTopListing(orders?.value)
     const hidePriceCard = !topListing && Boolean(orders.error) && !sourceType
     const { classes } = useStyles({ hidePriceCard })
 
-    if (asset.loading || !asset.value)
+    if (isLoading || !asset)
         return (
             <CollectibleCard>
                 <div className={classes.body}>
@@ -56,7 +56,7 @@ export function AboutTab(props: AboutTabProps) {
         <CollectibleCard>
             <div className={classes.body}>
                 <div className={classes.basic}>
-                    <FigureCard hideSubTitle asset={asset.value} />
+                    <FigureCard hideSubTitle asset={asset} />
                 </div>
                 <PriceCard topListing={topListing} />
             </div>

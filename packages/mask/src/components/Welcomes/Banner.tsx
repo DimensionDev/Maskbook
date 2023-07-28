@@ -76,7 +76,7 @@ export function Banner(props: BannerProps) {
         }
 
         Services.Helper.openDashboard(
-            personaConnectStatus.hasPersona ? DashboardRoutes.Personas : DashboardRoutes.Setup,
+            personaConnectStatus.hasPersona ? DashboardRoutes.Personas : DashboardRoutes.SignUpPersona,
         )
     }, [networkIdentifier, nextStep])
     const defaultUserName = networkIdentifier

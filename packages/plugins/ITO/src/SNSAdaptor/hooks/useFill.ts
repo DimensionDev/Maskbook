@@ -115,13 +115,8 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         )
 
         const hash = await Web3.sendTransaction(tx, { chainId })
-
         const receipt = await Web3.getTransactionReceipt(hash, { chainId })
-
-        const events = receipt
-            ? decodeEvents(Web3.getWeb3({ chainId }), ITO_Contract.options.jsonInterface, receipt)
-            : undefined
-
+        const events = receipt ? decodeEvents(ITO_Contract.options.jsonInterface, receipt) : undefined
         return { hash, receipt, settings, events }
     }, [account, ITO_Contract, poolSettings, paramResult])
 

@@ -1,6 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { isProfilePageLike, searchProfileCoverSelector } from '../utils/selector.js'
-import { attachReactTreeWithContainer, startWatch } from '../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { startWatch } from '../../../utils/startWatch.js'
 import { ProfileCover } from '../../../components/InjectedComponents/ProfileCover.js'
 
 export function injectProfileCover(signal: AbortSignal) {

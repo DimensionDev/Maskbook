@@ -13,16 +13,16 @@ import { PopupContext } from '../../../hook/usePopupContext.js'
 import { ActionModal, useActionModal } from '../../../components/index.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
 import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
         overflow: 'auto',
-        backgroundColor: '#F7F9FA',
+        backgroundColor: theme.palette.maskColor.bottom,
         display: 'flex',
         flexDirection: 'column',
     },
     list: {
-        backgroundColor: '#ffffff',
         padding: 0,
         overflow: 'auto',
     },
@@ -51,17 +51,21 @@ const SwitchWallet = memo(function SwitchWallet() {
     const { smartPayChainId } = PopupContext.useContainer()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
-    const { setChainId, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const handleClickCreate = useCallback(async () => {
         if (!wallets.filter((x) => x.hasDerivationPath).length) {
+            const hasPaymentPassword = await WalletServiceRef.value.hasPassword()
             await browser.tabs.create({
                 active: true,
-                url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet/form'),
+                url: browser.runtime.getURL(
+                    `/dashboard.html#/create-mask-wallet/${hasPaymentPassword ? 'mnemonic' : 'form'}`,
+                ),
             })
         } else {
             navigate(PopupRoutes.CreateWallet)
         }
-    }, [wallets, history])
+    }, [wallets])
+
     const handleImport = useCallback(async () => {
         await browser.tabs.create({
             active: true,
@@ -80,9 +84,13 @@ const SwitchWallet = memo(function SwitchWallet() {
                 identifier: ECKeyIdentifier.from(wallet.identifier).unwrapOr(undefined),
             })
             closeModal()
-            if (wallet.owner && smartPayChainId) setChainId(smartPayChainId)
+            if (wallet.owner && smartPayChainId) {
+                await Web3.switchChain?.(smartPayChainId, {
+                    providerType: ProviderType.MaskWallet,
+                })
+            }
         },
-        [history, smartPayChainId, chainId, closeModal],
+        [smartPayChainId, chainId, closeModal],
     )
 
     const handleLock = useCallback(async () => {
@@ -135,6 +143,7 @@ const SwitchWallet = memo(function SwitchWallet() {
         </Box>
     )
 
+    console.log(wallets)
     return (
         <ActionModal header={t('wallet_account')} action={action}>
             <div className={classes.content}>

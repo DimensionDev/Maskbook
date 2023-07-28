@@ -24,8 +24,8 @@ export function useContract<T extends BaseContract>(chainId?: ChainId, address =
  */
 export function useContracts<T extends BaseContract>(
     chainId?: ChainId,
-    listOfAddress: string[] = [],
-    ABI: AbiItem[] = [],
+    listOfAddress: string[] = EMPTY_LIST,
+    ABI: AbiItem[] = EMPTY_LIST,
 ) {
     return useMemo(
         () =>

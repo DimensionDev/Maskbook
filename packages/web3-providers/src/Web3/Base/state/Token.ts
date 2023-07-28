@@ -1,7 +1,14 @@
 import { uniqBy } from 'lodash-es'
 import { produce, type Draft } from 'immer'
 import type { Subscription } from 'use-subscription'
-import { mapSubscription, mergeSubscription, safeEmptyList, type StorageObject } from '@masknet/shared-base'
+import {
+    mapSubscription,
+    mergeSubscription,
+    PersistentStorages,
+    safeEmptyList,
+    type NetworkPluginID,
+    type StorageObject,
+} from '@masknet/shared-base'
 import {
     type FungibleToken,
     type NonFungibleToken,
@@ -17,6 +24,7 @@ export interface TokenStorage<ChainId extends number, SchemaType> {
     fungibleTokenList: Record<string, Array<FungibleToken<ChainId, SchemaType>>>
     nonFungibleTokenList: Record<string, Array<NonFungibleToken<ChainId, SchemaType>>>
     fungibleTokenBlockedBy: Record<string, string[]>
+    /** For non-fungible token, we store `${chainId}.${address}.${tokenId}` as token id */
     nonFungibleTokenBlockedBy: Record<string, string[]>
     credibleFungibleTokenList: Partial<Record<ChainId, Array<FungibleToken<ChainId, SchemaType>>>>
     credibleNonFungibleTokenList: Partial<Record<ChainId, Array<NonFungibleToken<ChainId, SchemaType>>>>
@@ -82,12 +90,13 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
             chainId?: Subscription<ChainId>
         },
         protected options: {
+            pluginID: NetworkPluginID
             isValidAddress(a: string): boolean
             isSameAddress(a: string, b: string): boolean
             formatAddress(a: string): string
         },
     ) {
-        const { storage } = context.createKVStorage('persistent', {}).createSubScope('Token', defaultValue)
+        const { storage } = PersistentStorages.Web3.createSubScope(`${this.options.pluginID}_Token`, defaultValue)
         this.storage = storage
 
         if (this.subscriptions.account) {
@@ -123,12 +132,10 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
                     storage.fungibleTokenList.subscription,
                     storage.fungibleTokenBlockedBy.subscription,
                 ),
-                ([account, tokens, blockedBy]) =>
-                    safeEmptyList(
-                        tokens[account.toLowerCase()]?.filter(
-                            (x) => blockedBy[account.toLowerCase()]?.includes(x.address),
-                        ),
-                    ),
+                ([account, tokens, blockedBy]) => {
+                    const key = account.toLowerCase()
+                    return safeEmptyList(tokens[key]?.filter((x) => blockedBy[key]?.includes(x.id)))
+                },
             )
             this.blockedNonFungibleTokens = mapSubscription(
                 mergeSubscription(
@@ -136,12 +143,10 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
                     storage.nonFungibleTokenList.subscription,
                     storage.nonFungibleTokenBlockedBy.subscription,
                 ),
-                ([account, tokens, blockedBy]) =>
-                    safeEmptyList(
-                        tokens[account.toLowerCase()]?.filter(
-                            (x) => blockedBy[account.toLowerCase()]?.includes(x.address),
-                        ),
-                    ),
+                ([account, tokens, blockedBy]) => {
+                    const key = account.toLowerCase()
+                    return safeEmptyList(tokens[key]?.filter((x) => blockedBy[key]?.includes(x.id)))
+                },
             )
             if (this.subscriptions.chainId) {
                 this.credibleFungibleTokens = mapSubscription(
@@ -159,32 +164,22 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
     }
 
     // add or remove by contract address from user
-    private async addOrRemoveToken(address: string, token: Token<ChainId, SchemaType>, strategy: 'add' | 'remove') {
-        if (!this.options.isValidAddress(token.address)) throw new Error('Not a valid token.')
+    private async addOrRemoveToken(account: string, token: Token<ChainId, SchemaType>, strategy: 'add' | 'remove') {
+        if (!token.id) throw new Error('Token id is required')
 
-        const account = this.options.formatAddress(address).toLowerCase()
-        const tokenAddress = this.options.formatAddress(token.address)
+        const key = account.toLowerCase()
         const tokens: Record<string, Array<Token<ChainId, SchemaType>>> = token.type === TokenType.Fungible
             ? this.storage.fungibleTokenList.value
             : this.storage.nonFungibleTokenList.value
+        const id = token.id.toLowerCase()
 
-        const addedTokens: Array<Token<ChainId, SchemaType>> = tokens[account] ?? []
-        const tokensUpdated =
+        const oldList: Array<Token<ChainId, SchemaType>> = tokens[key] ?? []
+        const newList =
             strategy === 'add'
-                ? uniqBy(
-                      [
-                          {
-                              ...token,
-                              id: tokenAddress,
-                              address: tokenAddress,
-                          },
-                          ...addedTokens,
-                      ],
-                      (x) => x.id,
-                  )
-                : addedTokens.filter((x) => !this.options.isSameAddress(x.address, tokenAddress))
+                ? uniqBy([{ ...token, id }, ...oldList], (x) => x.id)
+                : oldList.filter((x) => x.id !== id)
 
-        const updatedValue = { ...tokens, [account]: tokensUpdated }
+        const updatedValue = { ...tokens, [key]: newList }
 
         if (token.type === TokenType.Fungible) {
             await this.storage.fungibleTokenList.setValue(
@@ -198,22 +193,22 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
     }
 
     // trust or block exist token in token list
-    private async blockOrUnblockToken(address: string, token: Token<ChainId, SchemaType>, strategy: 'trust' | 'block') {
-        if (!this.options.isValidAddress(token.address)) throw new Error('Not a valid token.')
+    private async blockOrUnblockToken(account: string, token: Token<ChainId, SchemaType>, strategy: 'trust' | 'block') {
+        if (!token.id) throw new Error('Token id is required')
 
-        const address_ = this.options.formatAddress(address).toLowerCase()
+        const key = account.toLowerCase()
         const blocked =
             token.type === TokenType.Fungible
                 ? this.storage.fungibleTokenBlockedBy.value
                 : this.storage.nonFungibleTokenBlockedBy.value
+        const oldList = blocked[key] ?? []
+        const id = token.id.toLowerCase()
         const blockedUpdated = {
             ...blocked,
-            [address_]:
+            [key]:
                 strategy === 'trust'
-                    ? blocked[address_]?.filter((x) => !this.options.isSameAddress(x, token.address))
-                    : uniqBy([this.options.formatAddress(token.address), ...(blocked[address_] ?? [])], (x) =>
-                          x.toLowerCase(),
-                      ),
+                    ? oldList.filter((x) => x.toLowerCase() !== id)
+                    : uniqBy([id, ...oldList], (x) => x.toLowerCase()),
         }
 
         if (token.type === TokenType.Fungible) {

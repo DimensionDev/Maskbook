@@ -48,4 +48,5 @@ export enum PluginID {
     SmartPay = 'com.mask.smart-pay',
     Claim = 'com.mask.claim',
     WalletService = 'com.mask.WalletService',
+    SwitchLogo = 'io.mask.switch-logo',
 }

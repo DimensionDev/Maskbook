@@ -62,7 +62,7 @@ export interface OpenPageConfirm {
 export interface LeavePageConfirmProps {
     open: boolean
     onClose: () => void
-    openDashboard?: (route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>
+    openDashboard?: (route?: DashboardRoutes, search?: string) => void
     info?: OpenPageConfirm
 }
 

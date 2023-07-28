@@ -6,6 +6,7 @@ import { BooleanPreference } from '../types.js'
 import { NetworkPluginID, PluginID } from '../types/PluginID.js'
 import { LockStatus } from '../types/Wallet.js'
 import { EnhanceableSite, ExtensionSite } from '../Site/types.js'
+import { SwitchLogoType } from '../types/SwitchLogo.js'
 
 export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__)
 languageSettings.addListener(updateLanguage)
@@ -73,3 +74,5 @@ try {
     else if (lng === 'ko') languageSettings.value = LanguageOptions.koKR
     else languageSettings.value = LanguageOptions.__auto__
 } catch {}
+
+export const switchLogoSettings = createBulkSettings('SwitchLogo', SwitchLogoType.New)

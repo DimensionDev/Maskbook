@@ -4,8 +4,12 @@
     "type": "module",
     "exports": {
         ".": {
-            "mask-src": "./src/index.ts",
-            "default": "./dist/index.js"
+          "mask-src": "./src/index.ts",
+          "default": "./dist/index.js"
+        },
+        "./register": {
+          "mask-src": "./src/register.ts",
+          "default": "./dist/register.js"
         }
     },
     "dependencies": {
@@ -24,7 +28,7 @@
         "web3-utils": "1.8.0",
         "bignumber.js": "9.1.1",
         "urlcat": "^3.1.0",
-        "date-fns": "2.29.3",
+        "date-fns": "^2.30.0",
         "@ethersproject/abi": "^5.4.0",
         "react-use": "^17.4.0",
         "use-subscription": "^1.8.0",

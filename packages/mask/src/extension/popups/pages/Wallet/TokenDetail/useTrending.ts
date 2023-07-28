@@ -1,4 +1,5 @@
-import { CoinGeckoTrending, getCurrency } from '@masknet/web3-providers'
+import { CoinGeckoTrending } from '@masknet/web3-providers'
+import { trending } from '@masknet/web3-providers/helpers'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { SourceType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
@@ -11,8 +12,9 @@ export function useTrending(chainId: ChainId, address?: string) {
         enabled: !isLoading,
         queryKey: ['coin-trending', 'coin-gecko', chainId, coinId, address],
         queryFn: async (): Promise<TrendingAPI.Trending | undefined> => {
-            const currency = getCurrency(chainId, SourceType.CoinGecko)
+            const currency = trending.getCurrency(chainId, SourceType.CoinGecko)
             if (!currency || !coinId) return
+
             return CoinGeckoTrending.getCoinTrending(chainId, coinId, currency)
         },
     })

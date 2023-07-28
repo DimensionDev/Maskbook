@@ -1,5 +1,5 @@
 import { SignType } from '@masknet/shared-base'
-import type { Transaction } from '../types/index.js'
+import type { Transaction } from '@masknet/web3-shared-evm'
 
 export class Signer<T> {
     constructor(

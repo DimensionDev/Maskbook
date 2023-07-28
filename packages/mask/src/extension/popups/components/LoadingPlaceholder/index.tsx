@@ -1,8 +1,7 @@
 import { memo } from 'react'
-import { Icons } from '@masknet/icons'
-import { Typography } from '@mui/material'
+import { Typography, useTheme } from '@mui/material'
 import { useI18N } from '../../../../utils/index.js'
-import { makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -12,6 +11,8 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         flex: 1,
         gap: 12,
+        minHeight: 600,
+        minWidth: 400,
     },
 }))
 
@@ -23,12 +24,13 @@ export interface LoadingPlaceholderProps {
 
 export const LoadingPlaceholder = memo((props: LoadingPlaceholderProps) => {
     const { t } = useI18N()
+    const theme = useTheme()
     const { classes } = useStyles()
 
     return (
         <main className={classes.container}>
-            <Icons.CircleLoading style={{ color: props.iconColor ?? '#1C68F3' }} />
-            <Typography variant="caption" color={props.titleColor ?? '#A6A9B6'}>
+            <LoadingBase style={{ color: props.iconColor ?? theme.palette.maskColor.main }} />
+            <Typography variant="caption" color={props.titleColor ?? theme.palette.maskColor.second}>
                 {props.title ?? t('loading')}
             </Typography>
         </main>

@@ -1,5 +1,6 @@
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
+import { NetworkPluginID } from '@masknet/shared-base'
 import {
     type ChainId,
     type Transaction as EVM_Transaction,
@@ -18,6 +19,7 @@ export class Transaction extends TransactionState<ChainId, EVM_Transaction> {
         },
     ) {
         super(context, ChainIdList, subscriptions, {
+            pluginID: NetworkPluginID.PLUGIN_EVM,
             formatAddress: formatEthereumAddress,
             isValidChainId,
         })

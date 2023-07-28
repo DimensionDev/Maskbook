@@ -1,1 +1,5 @@
-{}
+{
+    "plugin_snapshot_download_report": "下载报告",
+    "enable_plugin_boundary": "开启插件",
+    "loading": "加载中"
+}

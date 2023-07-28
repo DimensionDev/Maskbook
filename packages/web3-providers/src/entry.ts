@@ -68,6 +68,8 @@ import { ApprovalAPI } from './Approval/index.js'
 import { ContractAPI } from './Web3/EVM/apis/ContractAPI.js'
 import { ContractReadonlyAPI } from './Web3/EVM/apis/ContractReadonlyAPI.js'
 import { ConnectionReadonlyAPI } from './Web3/EVM/apis/ConnectionReadonlyAPI.js'
+import { RequestAPI } from './Web3/EVM/apis/RequestAPI.js'
+import { RequestReadonlyAPI } from './Web3/EVM/apis/RequestReadonlyAPI.js'
 import { SignerAPI } from './Web3/EVM/apis/SignerAPI.js'
 import { Web3StateAPI } from './Web3/EVM/apis/Web3StateAPI.js'
 import { FlowFungibleAPI } from './Web3/Flow/apis/FungibleTokenAPI.js'
@@ -87,7 +89,11 @@ export { Balancer } from './Trader/Balancer.js'
 export { Zrx } from './Trader/Zrx.js'
 export { Bancor } from './Trader/Bancor.js'
 export { OpenOcean } from './Trader/OpenOcean.js'
-export * from './Trending/helpers.js'
+
+export { DepositPaymaster } from './SmartPay/libs/DepositPaymaster.js'
+export { ContractWallet } from './SmartPay/libs/ContractWallet.js'
+export { Create2Factory } from './SmartPay/libs/Create2Factory.js'
+export { UserTransaction } from './SmartPay/libs/UserTransaction.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const Lido = new LidoAPI()
@@ -145,6 +151,8 @@ export const Web3State = new Web3StateAPI()
 export const Web3Storage = new Web3StorageAPI()
 export const Web3 = Web3All.use(NetworkPluginID.PLUGIN_EVM)!
 export const Web3Readonly = new ConnectionReadonlyAPI()
+export const Request = new RequestAPI()
+export const RequestReadonly = new RequestReadonlyAPI()
 export const Hub = HubAll.use(NetworkPluginID.PLUGIN_EVM)!
 export const Others = OthersAll.use(NetworkPluginID.PLUGIN_EVM)!
 

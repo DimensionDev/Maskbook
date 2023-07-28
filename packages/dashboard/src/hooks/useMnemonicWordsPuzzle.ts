@@ -3,6 +3,7 @@ import { useAsyncRetry } from 'react-use'
 import { produce } from 'immer'
 import { range, shuffle, remove, clone } from 'lodash-es'
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const PUZZLE_SIZE = 3
 
@@ -15,7 +16,7 @@ export interface PuzzleWord {
 }
 
 export function useMnemonicWordsPuzzle() {
-    const { value: words = [], retry: wordsRetry } = useAsyncRetry(
+    const { value: words = EMPTY_LIST, retry: wordsRetry } = useAsyncRetry(
         () => WalletServiceRef.value.createMnemonicWords(),
         [],
     )

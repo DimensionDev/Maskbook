@@ -2,20 +2,23 @@ import { CrossIsolationMessages, NetworkPluginID, PopupRoutes, relativeRouteOf }
 import { useChainContext, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
 import { TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { EthereumMethodType, PayloadEditor } from '@masknet/web3-shared-evm'
-import { lazy, Suspense, useEffect } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { useAsyncRetry } from 'react-use'
+import { RestorableScrollContext } from '@masknet/shared'
 import { WalletRPC } from '../../../../plugins/WalletService/messages.js'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
 import { PopupContext } from '../../hook/usePopupContext.js'
 import { EditNetwork } from './EditNetwork/index.js'
+import { NetworkManagement } from './NetworkManagement/index.js'
+import SelectWallet from './SelectWallet/index.js'
 import { WalletStartUp } from './components/StartUp/index.js'
 import { WalletAssets } from './components/WalletAssets/index.js'
 import { WalletHeader } from './components/WalletHeader/index.js'
-import { NetworkManagement } from './NetworkManagement/index.js'
-import SelectWallet from './SelectWallet/index.js'
 
 import TokenDetail from './TokenDetail/index.js'
+import { TransactionDetail } from './TransactionDetail/index.js'
+import { CollectibleDetail } from './CollectibleDetail/index.js'
 
 const ImportWallet = lazy(() => import('./ImportWallet/index.js'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet/index.js'))
@@ -31,10 +34,10 @@ const Transfer = lazy(() => import('./Transfer/index.js'))
 const ContactList = lazy(() => import('./ContactList/index.js'))
 const ContractInteraction = lazy(() => import('./ContractInteraction/index.js'))
 const Unlock = lazy(() => import('./Unlock/index.js'))
+const ResetWallet = lazy(() => import('./ResetWallet/index.js'))
 const SetPaymentPassword = lazy(() => import('./SetPaymentPassword/index.js'))
 const LegacyWalletRecovery = lazy(() => import('./LegacyWalletRecovery/index.js'))
 const ReplaceTransaction = lazy(() => import('./ReplaceTransaction/index.js'))
-const CreatePassword = lazy(() => import('./CreatePassword/index.js'))
 const ChangeOwner = lazy(() => import('./ChangeOwner/index.js'))
 const Receive = lazy(() => import('./Receive/index.js'))
 
@@ -52,16 +55,14 @@ export default function Wallet() {
 
     const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
+    const skip = [
+        PopupRoutes.ContractInteraction,
+        PopupRoutes.WalletSignRequest,
+        PopupRoutes.GasSetting,
+        PopupRoutes.Unlock,
+    ].some((item) => item === location.pathname)
     const { loading, retry } = useAsyncRetry(async () => {
-        if (
-            [
-                PopupRoutes.ContractInteraction,
-                PopupRoutes.WalletSignRequest,
-                PopupRoutes.GasSetting,
-                PopupRoutes.Unlock,
-            ].some((item) => item === location.pathname)
-        )
-            return
+        if (skip) return
 
         const payload = await WalletRPC.topUnconfirmedRequest()
         if (!payload) return
@@ -93,7 +94,7 @@ export default function Wallet() {
         ) {
             navigate(PopupRoutes.ContractInteraction, { replace: true })
         }
-    }, [location.search, location.pathname, chainId, TransactionFormatter])
+    }, [skip, chainId, TransactionFormatter])
 
     useEffect(() => {
         return CrossIsolationMessages.events.requestsUpdated.on(({ hasRequest }) => {
@@ -104,38 +105,45 @@ export default function Wallet() {
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
             <WalletHeader />
-            {loading ? (
-                <LoadingPlaceholder />
-            ) : (
-                <Routes>
-                    <Route path="*" element={!wallet ? <WalletStartUp /> : <WalletAssets />} />
-                    <Route path={r(PopupRoutes.LegacyWalletRecovered)} element={<LegacyWalletRecovery />} />
-                    <Route path={r(PopupRoutes.ImportWallet)} element={<ImportWallet />} />
-                    <Route path={r(PopupRoutes.AddDeriveWallet)} element={<AddDeriveWallet />} />
-                    <Route path={r(PopupRoutes.WalletSettings)} element={<WalletSettings />} />
-                    <Route path={r(PopupRoutes.WalletRename)} element={<WalletRename />} />
-                    <Route path={r(PopupRoutes.DeleteWallet)} element={<DeleteWallet />} />
-                    <Route path={r(PopupRoutes.CreateWallet)} element={<CreateWallet />} />
-                    <Route path={r(PopupRoutes.BackupWallet)} element={<BackupWallet />} />
-                    <Route path={r(`${PopupRoutes.Contacts}/:address?` as PopupRoutes)} element={<ContactList />} />
-                    <Route path={r(PopupRoutes.AddToken)} element={<AddToken />} />
-                    <Route path={r(PopupRoutes.WalletSignRequest)} element={<SignRequest />} />
-                    <Route path={r(PopupRoutes.GasSetting)} element={<GasSetting />} />
-                    <Route path={r(PopupRoutes.TokenDetail)} element={<TokenDetail />} />
-                    <Route path={r(`${PopupRoutes.Transfer}/:address?` as PopupRoutes)} element={<Transfer />} />
-                    <Route path={r(PopupRoutes.ContractInteraction)} element={<ContractInteraction />} />
-                    <Route path={r(PopupRoutes.SelectWallet)} element={<SelectWallet />} />
-                    <Route path={r(PopupRoutes.Unlock)} element={<Unlock />} />
-                    <Route path={r(PopupRoutes.SetPaymentPassword)} element={<SetPaymentPassword />} />
-                    <Route path={r(PopupRoutes.ReplaceTransaction)} element={<ReplaceTransaction />} />
-                    <Route path={r(PopupRoutes.CreatePassword)} element={<CreatePassword />} />
-                    <Route path={r(PopupRoutes.ChangeOwner)} element={<ChangeOwner />} />
-                    <Route path={r(PopupRoutes.NetworkManagement)} element={<NetworkManagement />} />
-                    <Route path={r(PopupRoutes.AddNetwork)} element={<EditNetwork />} />
-                    <Route path={r(`${PopupRoutes.EditNetwork}/:id?` as PopupRoutes)} element={<EditNetwork />} />
-                    <Route path={r(PopupRoutes.Receive)} element={<Receive />} />
-                </Routes>
-            )}
+            <RestorableScrollContext.Provider>
+                {loading && !skip ? (
+                    <LoadingPlaceholder />
+                ) : (
+                    <Routes>
+                        <Route path="*" element={!wallet ? <WalletStartUp /> : <WalletAssets />} />
+                        <Route path={r(PopupRoutes.LegacyWalletRecovered)} element={<LegacyWalletRecovery />} />
+                        <Route path={r(PopupRoutes.ImportWallet)} element={<ImportWallet />} />
+                        <Route path={r(PopupRoutes.AddDeriveWallet)} element={<AddDeriveWallet />} />
+                        <Route path={r(PopupRoutes.WalletSettings)} element={<WalletSettings />} />
+                        <Route path={r(PopupRoutes.WalletRename)} element={<WalletRename />} />
+                        <Route path={r(PopupRoutes.DeleteWallet)} element={<DeleteWallet />} />
+                        <Route path={r(PopupRoutes.CreateWallet)} element={<CreateWallet />} />
+                        <Route path={r(PopupRoutes.BackupWallet)} element={<BackupWallet />} />
+                        <Route path={r(`${PopupRoutes.Contacts}/:address?` as PopupRoutes)} element={<ContactList />} />
+                        <Route
+                            path={r(`${PopupRoutes.AddToken}/:chainId/:assetType` as PopupRoutes)}
+                            element={<AddToken />}
+                        />
+                        <Route path={r(PopupRoutes.WalletSignRequest)} element={<SignRequest />} />
+                        <Route path={r(PopupRoutes.GasSetting)} element={<GasSetting />} />
+                        <Route path={r(PopupRoutes.TokenDetail)} element={<TokenDetail />} />
+                        <Route path={r(PopupRoutes.TransactionDetail)} element={<TransactionDetail />} />
+                        <Route path={r(PopupRoutes.CollectibleDetail)} element={<CollectibleDetail />} />
+                        <Route path={r(`${PopupRoutes.Transfer}/:address?` as PopupRoutes)} element={<Transfer />} />
+                        <Route path={r(PopupRoutes.ContractInteraction)} element={<ContractInteraction />} />
+                        <Route path={r(PopupRoutes.SelectWallet)} element={<SelectWallet />} />
+                        <Route path={r(PopupRoutes.Unlock)} element={<Unlock />} />
+                        <Route path={r(PopupRoutes.ResetWallet)} element={<ResetWallet />} />
+                        <Route path={r(PopupRoutes.SetPaymentPassword)} element={<SetPaymentPassword />} />
+                        <Route path={r(PopupRoutes.ReplaceTransaction)} element={<ReplaceTransaction />} />
+                        <Route path={r(PopupRoutes.ChangeOwner)} element={<ChangeOwner />} />
+                        <Route path={r(PopupRoutes.NetworkManagement)} element={<NetworkManagement />} />
+                        <Route path={r(PopupRoutes.AddNetwork)} element={<EditNetwork />} />
+                        <Route path={r(`${PopupRoutes.EditNetwork}/:id?` as PopupRoutes)} element={<EditNetwork />} />
+                        <Route path={r(PopupRoutes.Receive)} element={<Receive />} />
+                    </Routes>
+                )}
+            </RestorableScrollContext.Provider>
         </Suspense>
     )
 }

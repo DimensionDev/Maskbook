@@ -6,6 +6,10 @@
     ".": {
       "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
+    },
+    "./register": {
+      "mask-src": "./src/register.ts",
+      "default": "./dist/register.js"
     }
   },
   "dependencies": {
@@ -24,10 +28,10 @@
     "@msgpack/msgpack": "^3.0.0-beta2",
     "@servie/events": "^3.0.0",
     "arweave": "^1.13.6",
-    "date-fns": "^2.29.3",
-    "ipfs-http-client": "^60.0.0",
+    "date-fns": "^2.30.0",
+    "ipfs-http-client": "^60.0.1",
     "react-feather": "^2.0.10",
-    "react-router-dom": "^6.10.0",
+    "react-router-dom": "^6.14.2",
     "react-use": "^17.4.0",
     "urlcat": "^3.1.0",
     "use-subscription": "^1.8.0"

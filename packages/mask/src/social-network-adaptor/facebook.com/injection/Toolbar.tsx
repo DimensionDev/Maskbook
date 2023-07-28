@@ -1,6 +1,6 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
-import { startWatch } from '../../../utils/watcher.js'
+import { startWatch } from '../../../utils/startWatch.js'
 import { toolboxInSidebarSelector, toolboxInSidebarSelectorWithNoLeftRailStart } from '../utils/selector.js'
 import { ToolboxAtFacebook } from './ToolbarUI.js'
 

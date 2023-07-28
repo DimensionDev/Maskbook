@@ -23,8 +23,9 @@ import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
 import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host.js'
 import Services from '../extension/service.js'
 import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-adaptor/utils.js'
-import { configureSelectorMissReporter, setupReactShadowRootEnvironment } from '../utils/index.js'
+import { setupReactShadowRootEnvironment } from '../utils/index.js'
 import '../utils/debug/general.js'
+import { configureSelectorMissReporter } from '../utils/startWatch.js'
 import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
 import { definedSocialNetworkUIs } from './define.js'
 
@@ -109,6 +110,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.injection.avatar?.(signal)
     ui.injection.profileCard?.(signal)
 
+    ui.injection.switchLogo?.(signal)
     ui.injection.PluginSettingsDialog?.(signal)
 
     // Update user avatar
@@ -166,7 +168,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         getPostURL: ui.utils.getPostURL,
         share: ui.utils.share,
         getUserIdentity: ui.utils.getUserIdentity,
-        createPersona: () => Services.Helper.openDashboard(DashboardRoutes.Setup),
+        createPersona: () => Services.Helper.openDashboard(DashboardRoutes.SignUpPersona),
         connectPersona,
         fetchManifest: Services.ThirdPartyPlugin.fetchManifest,
         getPersonaAvatar: Services.Identity.getPersonaAvatar,
@@ -178,6 +180,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         setMinimalMode: Services.Settings.setPluginMinimalModeEnabled,
         setCurrentPersonaIdentifier: Services.Settings.setCurrentPersonaIdentifier,
         setPluginMinimalModeEnabled: Services.Settings.setPluginMinimalModeEnabled,
+        setDecentralizedSearchSettings: Services.Settings.setDecentralizedSearchSettings,
+        getDecentralizedSearchSettings: Services.Settings.getDecentralizedSearchSettings,
         getSearchedKeyword: ui.collecting.getSearchedKeyword,
         hasHostPermission: Services.Helper.hasHostPermission,
         requestHostPermission: Services.Helper.requestHostPermission,

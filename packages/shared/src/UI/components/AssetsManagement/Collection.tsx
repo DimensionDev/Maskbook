@@ -1,15 +1,16 @@
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
+import { useEverSeen } from '@masknet/shared-base-ui'
 import { ShadowRootTooltip, makeStyles, useDetectOverflow } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Skeleton, Typography } from '@mui/material'
 import { range } from 'lodash-es'
-import { memo, useEffect, useLayoutEffect, useRef, useState, type HTMLProps } from 'react'
+import { memo, useLayoutEffect, type HTMLProps, useMemo } from 'react'
 import { useSharedI18N } from '../../../index.js'
+import { isSameNFT } from '../../../utils/index.js'
 import { CollectibleCard } from './CollectibleCard.js'
 import { CollectibleItem, CollectibleItemSkeleton, type CollectibleItemProps } from './CollectibleItem.js'
 import { useCompactDetection } from './useCompactDetection.js'
-import { isSameNFT } from '../../../utils/index.js'
 
 const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
     folder: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
     grid: {
         display: 'grid',
         overflow: 'auto',
-        gridTemplateColumns: 'repeat(2, 1fr)',
+        gridTemplate: 'repeat(2, 1fr) / repeat(2, 1fr)',
         // TODO Unfortunately, we can't use @container query in shadow DOM yet.
         gridGap: theme.spacing(compact ? 0.5 : 1),
         padding: theme.spacing(compact ? 0.5 : 1),
@@ -79,10 +80,13 @@ export interface CollectionProps
     pluginID: NetworkPluginID
     collection: Web3Helper.NonFungibleCollectionAll
     assets: Web3Helper.NonFungibleAssetScope[]
+    blockedTokenIds?: string[]
     loading: boolean
+    finished?: boolean
     /** set collection expanded */
     expanded?: boolean
     onExpand?(id: string): void
+    /** Invoke when component first renders */
     onInitialRender?(collection: Web3Helper.NonFungibleCollectionAll): void
     selectedAsset?: Web3Helper.NonFungibleAssetScope
 }
@@ -95,8 +99,10 @@ export const Collection = memo(
         className,
         collection,
         pluginID,
-        loading,
         assets = EMPTY_LIST,
+        blockedTokenIds = EMPTY_LIST,
+        loading,
+        finished,
         verifiedBy,
         expanded,
         onExpand,
@@ -116,15 +122,21 @@ export const Collection = memo(
         }, [])
 
         const [nameOverflow, nameRef] = useDetectOverflow()
+        // blockedTokenIds are offline data, we can only presume they all
+        // belongs to user until finish loading
+        const count = useMemo(() => {
+            if (!blockedTokenIds.length) return collection.balance!
+            return finished ? assets.length : collection.balance! - blockedTokenIds.length
+        }, [collection.balance, assets.length, blockedTokenIds.length, finished])
 
         if (loading && !assets.length) {
-            return <CollectionSkeleton id={collection.id!} count={collection.balance!} expanded={expanded} />
+            return <CollectionSkeleton id={collection.id!} count={count} expanded={expanded} />
         }
 
-        const hasExtra = collection.balance! > 4 && !expanded
+        const hasExtra = count > 4 && !expanded
         const assetsSlice = hasExtra ? assets.slice(0, 3) : assets
 
-        if (collection.balance! <= 2 || expanded) {
+        if (collection.balance! <= 2 || (!loading && assets.length < 2) || expanded) {
             const renderAssets = assetsSlice.map((asset) => (
                 <CollectibleItem
                     key={`${asset.chainId}.${asset.address}.${asset.tokenId}`}
@@ -169,7 +181,7 @@ export const Collection = memo(
                         {renderAssets}
                         {hasExtra ? (
                             <Typography component="div" className={classes.extraCount}>
-                                {collection.balance! > 1002 ? '>999' : `+${collection.balance! - 3}`}
+                                {count > 1002 ? '>999' : `+${count - 3}`}
                             </Typography>
                         ) : null}
                     </div>
@@ -235,29 +247,9 @@ export function CollectionSkeleton({ className, count, id, expanded, ...rest }: 
 
 export const LazyCollection = memo((props: CollectionProps) => {
     const { className, collection } = props
-    const placeholderRef = useRef<HTMLDivElement>(null)
-    const [seen, setSeen] = useState(false)
+    const [seen, placeholderRef] = useEverSeen()
 
-    useEffect(() => {
-        if (!placeholderRef.current || seen) return
-        const observer = new IntersectionObserver(
-            (evt) => {
-                if (!evt[0].isIntersecting) return
-                setSeen(true)
-                observer.disconnect()
-            },
-            { root: null },
-        )
-        observer.observe(placeholderRef.current)
-
-        return () => {
-            observer.disconnect()
-        }
-    }, [placeholderRef.current, seen])
-
-    if (seen) {
-        return <Collection {...props} ref={undefined} />
-    }
+    if (seen) return <Collection {...props} ref={undefined} />
     return (
         <div className={className} ref={placeholderRef}>
             <CollectionSkeleton className={className} id={collection.id!} count={collection.balance!} />

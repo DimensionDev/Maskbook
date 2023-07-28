@@ -1,4 +1,3 @@
-import { FormattedBalance } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useBalance, useNativeToken } from '@masknet/web3-hooks-base'
 import { formatBalance } from '@masknet/web3-shared-base'
@@ -36,12 +35,7 @@ export const WalletBalance = memo(function WalletBalance({
 
     return (
         <Typography {...props}>
-            <FormattedBalance
-                value={balance}
-                decimals={nativeToken.decimals}
-                symbol={nativeToken.symbol}
-                formatter={formatBalance}
-            />
+            {`${formatBalance(balance, nativeToken.decimals, 0, false, true)} ${nativeToken.symbol}`}
         </Typography>
     )
 })

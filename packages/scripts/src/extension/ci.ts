@@ -1,62 +1,41 @@
 #!/usr/bin/env ts-node
 import { fileURLToPath } from 'url'
-import { join } from 'path'
-import { series, parallel, type TaskFunction, src, dest } from 'gulp'
-import { buildBaseExtension, buildWebpackFlag } from './normal.js'
+import { series, type TaskFunction } from 'gulp'
+import { buildBaseExtension } from './normal.js'
 import { ROOT_PATH, task } from '../utils/index.js'
 import { codegen } from '../codegen/index.js'
-import { type BuildFlagsExtended, getPreset, Preset } from './flags.js'
+import { type BuildFlagsExtended } from './flags.js'
+import { copyFile } from 'fs/promises'
+import { ManifestFile } from '../../../mask/.webpack/flags.js'
 
 const BUILD_PATH = new URL('build/', ROOT_PATH)
 export const ciBuild: TaskFunction = series(
     codegen,
     buildBaseExtension,
-    parallel(
-        zipTo(BUILD_PATH, 'MaskNetwork.chromium.zip'),
-        buildTarget(
-            'Firefox',
-            { ...getPreset(Preset.Firefox), outputPath: 'build-firefox' },
-            'MaskNetwork.firefox.zip',
-        ),
-        buildTarget(
-            'Chromium-beta',
-            { ...getPreset(Preset.Chromium), channel: 'beta', outputPath: 'build-chromium-beta' },
-            'MaskNetwork.chromium-beta.zip',
-        ),
-        buildTarget(
-            'Chromium-MV3',
-            { ...getPreset(Preset.Chromium), manifest: 3, outputPath: 'build-mv3' },
-            'MaskNetwork.chromium-mv3.zip',
-        ),
-    ),
+    zipTo('MaskNetwork.chromium.zip', ManifestFile.ChromiumMV2),
+    zipTo('MaskNetwork.firefox.zip', ManifestFile.FirefoxMV2, true),
+    zipTo('MaskNetwork.firefox-mv3.zip', ManifestFile.FirefoxMV3, true),
+    zipTo('MaskNetwork.chromium-beta.zip', ManifestFile.ChromiumBetaMV2),
+    zipTo('MaskNetwork.chromium-mv3.zip', ManifestFile.ChromiumMV3),
 )
 task(ciBuild, 'build-ci', 'Build the extension on CI')
-function buildTarget(name: string, options: Omit<BuildFlagsExtended, 'mode'>, outFile: string) {
-    options.readonlyCache = true
-    const output = new URL(options.outputPath!, ROOT_PATH)
-    const outputFolder = (options.outputPath = fileURLToPath(output))
-
-    const copySandboxModules: TaskFunction = () =>
-        src('sandboxed-modules/**/*', {
-            cwd: fileURLToPath(BUILD_PATH),
-        }).pipe(dest(join(outputFolder, 'sandboxed-modules/')))
-    copySandboxModules.displayName = `Copy sandboxed modules to ${outputFolder}`
-
-    return series(
-        buildWebpackFlag(name, { ...options, mode: 'production' }),
-        copySandboxModules,
-        zipTo(output, outFile),
-    )
-}
-function zipTo(absBuildDir: URL, fileName: string): TaskFunction {
+function zipTo(
+    fileName: string,
+    withManifestFile: BuildFlagsExtended['manifestFile'],
+    reproducible?: boolean,
+): TaskFunction {
     const f: TaskFunction = async () => {
+        await copyFile(new URL(`manifest-${withManifestFile}.json`, BUILD_PATH), new URL('manifest.json', BUILD_PATH))
+        if (!reproducible && withManifestFile === ManifestFile.ChromiumBetaMV2) {
+            await copyFile(new URL('build-info-beta.json', BUILD_PATH), new URL('build-info.json', BUILD_PATH))
+        }
         const { cmd } = await import('web-ext')
         await cmd.build({
-            sourceDir: fileURLToPath(absBuildDir),
+            sourceDir: fileURLToPath(BUILD_PATH),
             artifactsDir: fileURLToPath(ROOT_PATH),
             filename: fileName,
             overwriteDest: true,
-            ignoreFiles: ['*/*.map'],
+            ignoreFiles: ['*/*.map', reproducible ? 'build-info.json' : undefined!].filter(Boolean),
         })
     }
     f.displayName = `Build extension zip at ${fileName}`

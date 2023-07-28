@@ -1,7 +1,16 @@
 import { type SourceType, createPredicate } from '@masknet/web3-shared-base'
 import { HubOptionsAPI_Base, type HubOptions_Base } from './HubOptionsAPI.js'
 
-export class HubProviderAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter> {
+export class HubProviderAPI_Base<
+    ChainId,
+    SchemaType,
+    ProviderType,
+    NetworkType,
+    RequestArguments,
+    RequestOptions,
+    Transaction,
+    TransactionParameter,
+> {
     constructor(protected options?: HubOptions_Base<ChainId>) {}
 
     protected HubOptions = new HubOptionsAPI_Base<
@@ -9,6 +18,8 @@ export class HubProviderAPI_Base<ChainId, SchemaType, ProviderType, NetworkType,
         SchemaType,
         ProviderType,
         NetworkType,
+        RequestArguments,
+        RequestOptions,
         Transaction,
         TransactionParameter
     >(this.options)

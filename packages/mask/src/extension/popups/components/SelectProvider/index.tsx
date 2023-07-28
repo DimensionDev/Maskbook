@@ -1,15 +1,13 @@
 import { memo, useCallback } from 'react'
 import urlcat from 'urlcat'
 import { getRegisteredWeb3Providers } from '@masknet/plugin-infra'
-import { ExtensionSite, NetworkPluginID, PopupModalRoutes, PopupRoutes } from '@masknet/shared-base'
+import { ExtensionSite, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
-import { Web3 } from '@masknet/web3-providers'
 import { Box, Typography } from '@mui/material'
-import Services from '../../../service.js'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useModalNavigate } from '../index.js'
-import { HomeTabType } from '../../pages/Wallet/type.js'
+import { useWallets } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -41,57 +39,44 @@ const useStyles = makeStyles()((theme) => ({
 export const SelectProvider = memo(function SelectProvider() {
     const { classes } = useStyles()
 
+    const wallets = useWallets()
     const navigate = useNavigate()
     const modalNavigate = useModalNavigate()
-    const location = useLocation()
+    const [params] = useSearchParams()
+    const disableNewWindow = params.get('disableNewWindow')
+    const onlyMask = params.get('onlyMask')
     const providers = getRegisteredWeb3Providers(NetworkPluginID.PLUGIN_EVM)
 
     const onClick = useCallback(
         async (providerType: ProviderType) => {
-            const params = new URLSearchParams(location.search)
-            const disableNewWindow = params.get('disableNewWindow')
-
             if (providerType === ProviderType.MaskWallet) {
-                navigate(urlcat(PopupRoutes.SelectWallet, { verifyWallet: true, chainId: ChainId.Mainnet }))
-                return
-            } else if (providerType === ProviderType.WalletConnect) {
-                const account = await Web3.connect({ providerType })
-
-                // wallet connect has been connected
-                if (account) {
-                    navigate(PopupRoutes.ConnectWallet)
-                    return
-                }
-            } else {
-                if (disableNewWindow) {
-                    modalNavigate(
-                        PopupModalRoutes.ConnectProvider,
-                        {
-                            providerType,
-                        },
-                        {
-                            replace: true,
-                        },
-                    )
-                    return
-                }
-
-                await Services.Helper.openPopupWindow(
-                    PopupRoutes.Personas,
-                    { providerType, from: PopupModalRoutes.SelectProvider, tab: HomeTabType.ConnectedWallets },
-                    true,
+                // TODO: improve web3 state in middleware, like wallet connect
+                navigate(
+                    wallets.length
+                        ? urlcat(PopupRoutes.SelectWallet, {
+                              setNFTAvatar: onlyMask ? true : undefined,
+                              verifyWallet: !onlyMask ? true : undefined,
+                              chainId: ChainId.Mainnet,
+                          })
+                        : PopupRoutes.Wallet,
                 )
-
                 return
+            } else {
             }
         },
-        [location.search],
+        [wallets, disableNewWindow, onlyMask],
     )
 
     return (
         <Box className={classes.container}>
             {providers
-                .filter((x) => (x.enableRequirements?.supportedExtensionSites ?? []).includes(ExtensionSite.Popup))
+                .filter((x) => {
+                    if (onlyMask) {
+                        return x.type === ProviderType.MaskWallet || x.type === ProviderType.WalletConnect
+                    }
+
+                    return (x.enableRequirements?.supportedExtensionSites ?? []).includes(ExtensionSite.Popup)
+                })
                 .map((provider) => {
                     return (
                         <div className={classes.providerItem} key={provider.ID} onClick={() => onClick(provider.type)}>

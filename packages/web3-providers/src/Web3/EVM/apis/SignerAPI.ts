@@ -26,10 +26,9 @@ export class SignerAPI implements SignerAPI_Base.Provider {
                 const chainId = transaction.chainId
                 if (!chainId) throw new Error('Invalid chain id.')
 
-                const web3 = this.Web3.getWeb3({
+                const { rawTransaction } = await this.Web3.getWeb3({
                     chainId,
-                })
-                const { rawTransaction } = await web3.eth.accounts.signTransaction(transaction, toHex(key))
+                }).eth.accounts.signTransaction(transaction, toHex(key))
                 if (!rawTransaction) throw new Error('Failed to sign transaction.')
 
                 return rawTransaction

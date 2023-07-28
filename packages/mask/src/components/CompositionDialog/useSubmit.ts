@@ -14,10 +14,10 @@ import { SteganographyPayload } from './SteganographyPayload.js'
 export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'reply') {
     const { t: originalTran } = useI18N()
     const t: typeof originalTran = useCallback(
-        (key, options = {}) => {
+        ((key: string, options = {}) => {
             if (typeof options === 'string') return t(key, options)
             return originalTran(key, { interpolation: { escapeValue: false }, ...options })
-        },
+        }) as any,
         [originalTran],
     )
 

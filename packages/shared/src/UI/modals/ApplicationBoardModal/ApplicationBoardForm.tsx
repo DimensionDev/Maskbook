@@ -12,7 +12,7 @@ import { ApplicationBoardContent } from './ApplicationBoard.js'
 import { useSharedI18N, type PersonaAgainstSNSConnectStatus } from '../../../index.js'
 
 interface ApplicationBoardFormProps {
-    openDashboard?: (route?: DashboardRoutes, search?: string) => ReturnType<typeof browser.tabs.create>
+    openDashboard?: (route?: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
     currentSNSNetwork?: CurrentSNSNetwork
     allPersonas: PersonaInformation[]

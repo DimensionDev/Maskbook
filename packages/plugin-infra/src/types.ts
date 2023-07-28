@@ -98,16 +98,36 @@ export declare namespace Plugin {
         SchemaType = unknown,
         ProviderType = unknown,
         NetworkType = unknown,
+        RequestArguments = unknown,
+        RequestOptions = unknown,
         Transaction = unknown,
         TransactionParameter = unknown,
     > extends Shared.Definition<ChainId, SchemaType, ProviderType, NetworkType> {
         /** Load the SNSAdaptor part of the plugin. */
         SNSAdaptor?: Loader<
-            SNSAdaptor.Definition<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter>
+            SNSAdaptor.Definition<
+                ChainId,
+                SchemaType,
+                ProviderType,
+                NetworkType,
+                RequestArguments,
+                RequestOptions,
+                Transaction,
+                TransactionParameter
+            >
         >
         /** Load the Dashboard part of the plugin. */
         Dashboard?: Loader<
-            Dashboard.Definition<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter>
+            Dashboard.Definition<
+                ChainId,
+                SchemaType,
+                ProviderType,
+                NetworkType,
+                RequestArguments,
+                RequestOptions,
+                Transaction,
+                TransactionParameter
+            >
         >
         /** Load the Worker part of the plugin. */
         Worker?: Loader<Worker.Definition>
@@ -196,13 +216,19 @@ export namespace Plugin.Shared {
         /** Send request to native API, for a risky request will be added into the waiting queue. */
         send(payload: JsonRpcPayload, options?: TransactionOptions): Promise<JsonRpcResponse>
 
-        /** Confirm a request */
+        /**
+         * @deprecated Use `Request` state stead
+         * Confirm a request
+         */
         confirmRequest(
             payload: JsonRpcPayload,
             options?: { disableClose?: boolean; popupsWindow?: boolean },
         ): Promise<JsonRpcResponse | void>
 
-        /** Reject a request */
+        /**
+         * @deprecated Use `Request` state stead
+         * Reject a request
+         */
         rejectRequest(payload: JsonRpcPayload): Promise<void>
 
         hasPaymentPassword(): Promise<boolean>
@@ -382,6 +408,8 @@ export namespace Plugin.SNSAdaptor {
         getSearchedKeyword?: () => string
         hasHostPermission?: (origins: readonly string[]) => Promise<boolean>
         requestHostPermission?: (origins: readonly string[]) => Promise<boolean>
+        getDecentralizedSearchSettings?: () => Promise<boolean>
+        setDecentralizedSearchSettings?: (checked: boolean) => Promise<void>
     }
 
     export type SelectProviderDialogEvent =
@@ -399,6 +427,8 @@ export namespace Plugin.SNSAdaptor {
         SchemaType = unknown,
         ProviderType = unknown,
         NetworkType = unknown,
+        RequestArguments = unknown,
+        RequestOptions = unknown,
         Transaction = unknown,
         TransactionParameter = unknown,
     > extends Shared.DefinitionDeferred<SNSAdaptorContext> {
@@ -423,7 +453,16 @@ export namespace Plugin.SNSAdaptor {
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
         Web3UI?: Web3UI<ChainId, ProviderType, NetworkType>
         /** This is the context of the currently chosen network. */
-        Web3State?: Web3State<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter>
+        Web3State?: Web3State<
+            ChainId,
+            SchemaType,
+            ProviderType,
+            NetworkType,
+            RequestArguments,
+            RequestOptions,
+            Transaction,
+            TransactionParameter
+        >
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         readonly CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
@@ -889,6 +928,8 @@ export namespace Plugin.Dashboard {
         SchemaType = unknown,
         ProviderType = unknown,
         NetworkType = unknown,
+        RequestArguments = unknown,
+        RequestOptions = unknown,
         Transaction = unknown,
         TransactionParameter = unknown,
     > extends Shared.DefinitionDeferred<DashboardContext> {
@@ -897,7 +938,16 @@ export namespace Plugin.Dashboard {
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
         Web3UI?: Web3UI<ChainId, ProviderType, NetworkType>
         /** This is the context of the currently chosen network. */
-        Web3State?: Web3State<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter>
+        Web3State?: Web3State<
+            ChainId,
+            SchemaType,
+            ProviderType,
+            NetworkType,
+            RequestArguments,
+            RequestOptions,
+            Transaction,
+            TransactionParameter
+        >
         /** Plugin DO NOT need to define this. This will be auto set by the plugin host. */
         __general_ui__?: GeneralUI.DefinitionDeferred
     }

@@ -31,23 +31,29 @@ export interface TokenItem {
     symbol: string
     time_at: number
     contract_id: string
+    /** Only NFT */
+    is_erc721: boolean
+    /** Only NFT */
+    is_erc1155: boolean
 }
 
 export interface HistoryItem {
     cate_id: keyof HistoryResponse['data']['cate_dict']
     debt_liquidated: null
     id: string
+    chain: LiteralUnion<'eth' | 'aurora' | 'matic' | 'pls' | 'ftm' | 'op' | 'klay' | 'nova'>
     other_addr: string
     project_id?: string
-    receives: AmountTokenPair[]
-    sends: AmountTokenPair[]
+    receives: TransferringAsset[]
+    sends: TransferringAsset[]
     spot_trade?: SpotTrade
     time_at: number
     token_approve?: TokenApprove
     tx?: Record
+    is_scam: boolean
 }
 
-export interface AmountTokenPair {
+export interface TransferringAsset {
     amount: number
     to_addr: string
     token_id: string
@@ -68,7 +74,7 @@ export interface TokenApprove {
 }
 
 export interface Record {
-    eth_gas_fee: number
+    eth_gas_fee?: number
     from_addr: string
     name: string
     // Note: this is JSON string
@@ -76,7 +82,7 @@ export interface Record {
     // Note: 0 - failed, 1 - succeed
     status: 0 | 1
     to_addr: string
-    usd_gas_fee: number
+    usd_gas_fee?: number
     value: number
 }
 

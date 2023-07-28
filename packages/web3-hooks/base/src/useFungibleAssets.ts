@@ -1,22 +1,24 @@
-import { useEffect, useMemo } from 'react'
-import { noop, unionWith } from 'lodash-es'
 import {
-    asyncIteratorToArray,
     EMPTY_LIST,
+    asyncIteratorToArray,
     pageableToIterator,
-    type PageIndicator,
     type NetworkPluginID,
+    type PageIndicator,
 } from '@masknet/shared-base'
-import type { HubOptions } from '@masknet/web3-providers/types'
-import { CurrencyType, currySameAddress, isSameAddress, leftShift, minus, toZero } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { HubOptions } from '@masknet/web3-providers/types'
+import { CurrencyType, currySameAddress, isSameAddress, leftShift, minus } from '@masknet/web3-shared-base'
+import { BigNumber } from 'bignumber.js'
+import { useQuery } from '@tanstack/react-query'
+import { noop, unionWith } from 'lodash-es'
+import { useEffect, useMemo } from 'react'
+import { useBlockedFungibleTokens } from './useBlockedFungibleTokens.js'
 import { useChainContext } from './useContext.js'
-import { useWeb3State } from './useWeb3State.js'
+import { useTrustedFungibleTokens } from './useTrustedFungibleTokens.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
 import { useWeb3Others } from './useWeb3Others.js'
-import { useTrustedFungibleTokens } from './useTrustedFungibleTokens.js'
-import { useBlockedFungibleTokens } from './useBlockedFungibleTokens.js'
-import { useQuery } from '@tanstack/react-query'
+import { useWeb3State } from './useWeb3State.js'
+import { SchemaType } from '@masknet/web3-shared-evm'
 
 export function useFungibleAssets<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
@@ -30,8 +32,8 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
         ...options,
     })
     const Others = useWeb3Others(pluginID)
-    const trustedTokens = useTrustedFungibleTokens(pluginID)
-    const blockedTokens = useBlockedFungibleTokens(pluginID)
+    const trustedTokens = useTrustedFungibleTokens(pluginID, SchemaType.ERC721)
+    const blockedTokens = useBlockedFungibleTokens(pluginID, SchemaType.ERC20)
     const { BalanceNotifier } = useWeb3State(pluginID)
 
     const { data: mergedAssets = EMPTY_LIST, ...rest } = useQuery<Array<Web3Helper.FungibleAssetScope<S, T>>>({
@@ -68,6 +70,12 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
         return filteredAssets
             .filter((x) => !isBlockedToken(x))
             .sort((a, z) => {
+                // mask token with position value
+                const aUSD = new BigNumber(a.value?.[CurrencyType.USD] || 0)
+                const zUSD = new BigNumber(z.value?.[CurrencyType.USD] || 0)
+                // token value
+                if (!aUSD.eq(zUSD)) return zUSD.gt(aUSD) ? 1 : -1
+
                 // the currently selected chain id
                 if (a.chainId !== z.chainId) {
                     if (a.chainId === chainId) return -1
@@ -77,19 +85,15 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
                 // native token
                 const isNativeTokenA = isSameAddress(a.address, Others.getNativeTokenAddress(a.chainId))
                 const isNativeTokenZ = isSameAddress(z.address, Others.getNativeTokenAddress(z.chainId))
-                if (isNativeTokenA) return -1
-                if (isNativeTokenZ) return 1
+                if (isNativeTokenA !== isNativeTokenZ) {
+                    if (isNativeTokenA) return -1
+                    if (isNativeTokenZ) return 1
+                }
 
-                // mask token with position value
-                const aUSD = toZero(a.value?.[CurrencyType.USD])
-                const zUSD = toZero(z.value?.[CurrencyType.USD])
                 const isMaskTokenA = isSameAddress(a.address, Others.getMaskTokenAddress(a.chainId))
                 const isMaskTokenZ = isSameAddress(z.address, Others.getMaskTokenAddress(z.chainId))
                 if (aUSD.isPositive() && isMaskTokenA) return -1
                 if (zUSD.isPositive() && isMaskTokenZ) return 1
-
-                // token value
-                if (!aUSD.isEqualTo(zUSD)) return minus(zUSD, aUSD).isPositive() ? 1 : -1
 
                 // token balance
                 const aBalance = leftShift(a.balance, a.decimals)

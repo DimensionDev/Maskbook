@@ -40,7 +40,7 @@ export function ConnectSocialMedia() {
                 </PersonaLogoBox>
                 <div>
                     <Stack direction="row" justifyContent="flex-end" sx={{ marginBottom: (theme) => theme.spacing(4) }}>
-                        <Button variant="text" onClick={() => navigate(DashboardRoutes.Setup)}>
+                        <Button variant="text" onClick={() => navigate(DashboardRoutes.SignUpPersona)}>
                             {t.go_back()}
                         </Button>
                     </Stack>

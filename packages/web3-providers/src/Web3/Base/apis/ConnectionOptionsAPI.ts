@@ -14,6 +14,8 @@ export interface ConnectionOptions_Base<ChainId, ProviderType, Transaction> {
     identifier?: ECKeyIdentifier
     /** Designate the provider to handle the transaction. */
     providerType?: ProviderType
+    /** Custom network rpc url. */
+    providerURL?: string
     /** Gas payment token. */
     paymentToken?: string
     /** Only Support Mask Wallet, silent switch wallet */
@@ -31,13 +33,24 @@ export class ConnectionOptionsAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter,
 > {
     constructor(private options?: ConnectionOptions_Base<ChainId, ProviderType, Transaction>) {}
 
     get Web3StateRef(): ValueRefWithReady<
-        Web3State<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter>
+        Web3State<
+            ChainId,
+            SchemaType,
+            ProviderType,
+            NetworkType,
+            RequestArguments,
+            RequestOptions,
+            Transaction,
+            TransactionParameter
+        >
     > {
         throw new Error('To be implemented.')
     }
@@ -76,12 +89,12 @@ export class ConnectionOptionsAPI_Base<
         return {
             ...this.defaults,
             ...this.refs,
-            ...this.options,
+            ...pickBy(this.options, identity),
             ...pickBy(initials, identity),
             overrides: {
                 ...this.defaults.overrides,
-                ...this.refs.overrides,
-                ...this.options?.overrides,
+                ...pickBy(this.refs?.overrides, identity),
+                ...pickBy(this.options?.overrides, identity),
                 ...pickBy(overrides, identity),
             },
         }

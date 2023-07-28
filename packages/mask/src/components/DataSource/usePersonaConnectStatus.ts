@@ -14,7 +14,7 @@ import { useLastRecognizedIdentity } from './useActivatedUI.js'
 import { usePersonasFromDB } from './usePersonasFromDB.js'
 
 const createPersona = () => {
-    Services.Helper.openDashboard(DashboardRoutes.Setup)
+    Services.Helper.openDashboard(DashboardRoutes.SignUpPersona)
 }
 
 const connectPersona = async () => {

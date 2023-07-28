@@ -1,4 +1,3 @@
-/* eslint-disable @masknet/unicode-specific-set */
 import { MenuItem, type SelectChangeEvent } from '@mui/material'
 import { useLanguage } from '../../Personas/api.js'
 import { Services } from '../../../API.js'

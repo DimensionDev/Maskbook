@@ -136,7 +136,6 @@ export function useCreateCallback(
         if (!token || !redPacketContract || !createParams) return
 
         const { gas, params, paramsObj, gasError } = createParams
-
         if (gasError) return
 
         try {
@@ -160,7 +159,7 @@ export function useCreateCallback(
         const hash = await Web3.sendTransaction(tx, { paymentToken: gasOption?.gasCurrency, chainId })
         const receipt = await Web3.getTransactionReceipt(hash, { chainId })
         if (receipt) {
-            const events = decodeEvents(Web3.getWeb3({ chainId }), redPacketContract.options.jsonInterface, receipt)
+            const events = decodeEvents(redPacketContract.options.jsonInterface, receipt)
 
             return {
                 hash,

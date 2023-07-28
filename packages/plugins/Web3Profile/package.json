@@ -4,8 +4,12 @@
     "type": "module",
     "exports": {
         ".": {
-            "mask-src": "./src/index.ts",
-            "default": "./dist/index.js"
+          "mask-src": "./src/index.ts",
+          "default": "./dist/index.js"
+        },
+        "./register": {
+          "mask-src": "./src/register.ts",
+          "default": "./dist/register.js"
         }
     },
     "dependencies": {
@@ -25,7 +29,7 @@
         "@masknet/web3-shared-evm": "workspace:^",
         "@servie/events": "^3.0.0",
         "@types/use-subscription": "^1.0.0",
-        "date-fns": "2.29.3",
+        "date-fns": "^2.30.0",
         "react-feather": "^2.0.10",
         "react-use": "^17.4.0",
         "urlcat": "^3.1.0",

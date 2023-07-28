@@ -1,11 +1,12 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography, useTheme } from '@mui/material'
-import { memo, useCallback } from 'react'
+import { memo } from 'react'
 import { useI18N } from '../../../../../../utils/index.js'
 import Services from '../../../../../service.js'
 import { DashboardRoutes, Sniffings } from '@masknet/shared-base'
-import { useHasPassword } from '../../../../hook/useHasPassword.js'
+import { useAsyncFn } from 'react-use'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -23,7 +24,8 @@ const useStyles = makeStyles()((theme) => ({
         padding: 16,
         display: 'flex',
         marginBottom: 12,
-        justifyContent: 'center',
+        flexDirection: 'column',
+        alignItems: 'center',
     },
     title: {
         fontSize: 24,
@@ -53,50 +55,68 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         fontWeight: 400,
     },
+    placeholderDescription: {
+        fontSize: 14,
+        lineHeight: '18px',
+        fontWeight: 700,
+        color: theme.palette.maskColor.third,
+        width: 270,
+        marginTop: theme.spacing(1.5),
+        textAlign: 'center',
+    },
     mnemonicIcon: {
+        background: theme.palette.maskColor.success,
+    },
+    walletIcon: {
+        background: theme.palette.maskColor.primary,
+    },
+    iconWrapper: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         width: 30,
         height: 30,
-        background: theme.palette.maskColor.success,
         borderRadius: '100%',
     },
 }))
 
 export const WalletStartUp = memo(() => {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const { cx, classes } = useStyles()
     const theme = useTheme()
-    const { hasPassword } = useHasPassword()
 
-    const onEnterCreateWallet = useCallback(
-        async (route: DashboardRoutes) => {
-            await browser.tabs.create({
-                active: true,
-                url: browser.runtime.getURL(
-                    `/dashboard.html#${hasPassword ? route : DashboardRoutes.CreateMaskWalletForm}`,
-                ),
-            })
-            if (Sniffings.is_firefox) {
-                window.close()
-            }
+    const [, onEnterCreateWallet] = useAsyncFn(async (route: DashboardRoutes) => {
+        const hasPassword = await WalletServiceRef.value.hasPassword()
+        await browser.tabs.create({
+            active: true,
+            url: browser.runtime.getURL(
+                `/dashboard.html#${hasPassword ? route : DashboardRoutes.CreateMaskWalletForm}${
+                    route === DashboardRoutes.RecoveryMaskWallet && !hasPassword ? '?recover=true' : ''
+                }`,
+            ),
+        })
+        if (Sniffings.is_firefox) {
+            window.close()
+        }
 
-            await Services.Helper.removePopupWindow()
-        },
-        [hasPassword],
-    )
+        await Services.Helper.removePopupWindow()
+    }, [])
 
     return (
         <Box className={classes.container}>
             <Box className={classes.content}>
                 <Box className={classes.titleWrapper}>
                     <Typography className={classes.title}>{t('popups_add_wallet')}</Typography>
+                    <Typography className={classes.placeholderDescription}>
+                        {t('popups_add_wallet_description')}
+                    </Typography>
                 </Box>
                 <Box
                     className={classes.addWalletWrapper}
                     onClick={() => onEnterCreateWallet(DashboardRoutes.CreateMaskWalletMnemonic)}>
-                    <Icons.MaskBlue size={30} />
+                    <div className={cx(classes.iconWrapper, classes.walletIcon)}>
+                        <Icons.Wallet size={20} color={theme.palette.maskColor.white} />
+                    </div>
                     <div>
                         <Typography className={classes.subTitle}>{t('popups_create_a_new_wallet_title')}</Typography>
                         <Typography className={classes.description}>
@@ -108,7 +128,7 @@ export const WalletStartUp = memo(() => {
                 <Box
                     className={classes.addWalletWrapper}
                     onClick={() => onEnterCreateWallet(DashboardRoutes.RecoveryMaskWallet)}>
-                    <div className={classes.mnemonicIcon}>
+                    <div className={cx(classes.iconWrapper, classes.mnemonicIcon)}>
                         <Icons.Mnemonic size={20} color={theme.palette.maskColor.white} />
                     </div>
                     <div>

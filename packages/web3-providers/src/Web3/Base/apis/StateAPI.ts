@@ -7,6 +7,8 @@ export class Web3StateAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter,
     State extends Web3State<
@@ -14,9 +16,20 @@ export class Web3StateAPI_Base<
         SchemaType,
         ProviderType,
         NetworkType,
+        RequestArguments,
+        RequestOptions,
         Transaction,
         TransactionParameter
-    > = Web3State<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter>,
+    > = Web3State<
+        ChainId,
+        SchemaType,
+        ProviderType,
+        NetworkType,
+        RequestArguments,
+        RequestOptions,
+        Transaction,
+        TransactionParameter
+    >,
 > {
     constructor(private _ref: ValueRefWithReady<State>) {}
 

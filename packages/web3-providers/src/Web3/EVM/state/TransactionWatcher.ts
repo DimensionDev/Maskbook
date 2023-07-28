@@ -1,6 +1,7 @@
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
-import { type ChainId, ChainIdList, type Transaction } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { type ChainId, type Transaction } from '@masknet/web3-shared-evm'
 import { type RecentTransaction, TransactionStatusType } from '@masknet/web3-shared-base'
 import { TransactionCheckers } from './TransactionWatcher/checker.js'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
@@ -10,19 +11,15 @@ export class TransactionWatcher extends TransactionWatcherState<ChainId, Transac
     constructor(
         context: Plugin.Shared.SharedUIContext,
         subscriptions: {
-            chainId?: Subscription<ChainId>
-            transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
+            chainId: Subscription<ChainId>
+            transactions: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
         },
     ) {
-        super(context, ChainIdList, TransactionCheckers, subscriptions, {
+        super(context, subscriptions, {
+            pluginID: NetworkPluginID.PLUGIN_EVM,
             defaultBlockDelay: 15,
-            getTransactionCreator: (tx) => tx.from ?? '',
+            getTransactionCheckers: () => TransactionCheckers,
         })
-    }
-
-    override async watchTransaction(chainId: ChainId, id: string, transaction: Transaction) {
-        await super.watchTransaction(chainId, id, transaction)
-        this.emitter.emit('progress', chainId, id, TransactionStatusType.NOT_DEPEND, transaction)
     }
 
     override async notifyTransaction(
@@ -33,19 +30,10 @@ export class TransactionWatcher extends TransactionWatcherState<ChainId, Transac
     ) {
         const { Transaction } = Web3StateRef.value
 
-        // a wallet connected
-        if (Transaction) {
-            // update record status in transaction state
-            if (status !== TransactionStatusType.NOT_DEPEND && transaction.from)
-                await Transaction.updateTransaction?.(chainId, transaction.from, id, status)
-
-            // only tracked records will get notified
-            if (transaction.from) {
-                const stored = await Transaction.getTransaction?.(chainId, transaction.from, id)
-                if (stored) this.emitter.emit('progress', chainId, id, status, transaction)
-            }
-        } else {
-            this.emitter.emit('progress', chainId, id, status, transaction)
+        if (Transaction && transaction.from && status !== TransactionStatusType.NOT_DEPEND) {
+            await Transaction.updateTransaction?.(chainId, transaction.from, id, status)
         }
+
+        this.emitter.emit('progress', chainId, id, status, transaction)
     }
 }

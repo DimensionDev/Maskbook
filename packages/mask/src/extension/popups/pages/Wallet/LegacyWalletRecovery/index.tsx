@@ -131,7 +131,7 @@ const WalletRecovery = memo(() => {
 
         await Services.Helper.removePopupWindow()
         navigate(PopupRoutes.Wallet, { replace: true })
-    }, [onSubmit, hasPassword, legacyWallets.map((x) => x.address).join(','), history])
+    }, [onSubmit, hasPassword, legacyWallets.map((x) => x.address).join(',')])
 
     useTitle(t('popups_recovery_wallet'))
 

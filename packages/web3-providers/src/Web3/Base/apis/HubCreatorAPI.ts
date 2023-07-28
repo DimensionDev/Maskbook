@@ -18,6 +18,8 @@ export class HubCreatorAPI_Base<T extends NetworkPluginID> {
             Web3Helper.Definition[T]['SchemaType'],
             Web3Helper.Definition[T]['ProviderType'],
             Web3Helper.Definition[T]['NetworkType'],
+            Web3Helper.Definition[T]['RequestArguments'],
+            Web3Helper.Definition[T]['RequestOptions'],
             Web3Helper.Definition[T]['Transaction'],
             Web3Helper.Definition[T]['TransactionParameter'],
             Web3Helper.Definition[T]['GasOption']
@@ -34,6 +36,8 @@ export class HubCreatorAPI_Base<T extends NetworkPluginID> {
             Web3Helper.Definition[T]['SchemaType'],
             Web3Helper.Definition[T]['ProviderType'],
             Web3Helper.Definition[T]['NetworkType'],
+            Web3Helper.Definition[T]['RequestArguments'],
+            Web3Helper.Definition[T]['RequestOptions'],
             Web3Helper.Definition[T]['Transaction'],
             Web3Helper.Definition[T]['TransactionParameter']
         >,

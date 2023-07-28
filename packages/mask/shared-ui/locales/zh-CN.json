@@ -49,7 +49,6 @@
     "redirect_alert": "如果您的浏览器没有重新跳转，请 <terms>点击这里</terms>。",
     "typed_message_text_alert": "当前只支持输入消息文本。",
     "badge_renderer_provided_by_plugin": "插件提供：",
-    "add_token": "添加代币",
     "add_nft_contract_search_hint": "搜索 NFT 合约名称或地址",
     "applications": "应用程序",
     "application_settings": "应用设置",
@@ -832,7 +831,6 @@
     "popups_wallet_set_up_payment_password": "设置支付密码",
     "popups_wallet_create_payment_password_tip": "至少8个字符",
     "popups_wallet_payment_password_tip": "支付密码必须是数字、大小写字母和特殊字符中的2个类别的组合，长度为 8-20 个字符。",
-    "popups_wallet_go_back": "返回",
     "popups_wallet_start_up_tip": "请连接到您的钱包，可选择创建一个新钱包或使用助记词恢复一个旧钱包。",
     "popups_wallet_name_placeholder": "输入1-12 个字符",
     "popups_wallet_name_mnemonic": "助记词",
@@ -921,6 +919,13 @@
     "popups_password_do_not_match": "备份密码不正确",
     "popups_backup_password": "备份密码",
     "popups_rename_error_tip": "最大长度为 {{length}} 个字符。",
+    "popups_wait_for_provider_connect_timeout": "钱包请求超时",
+    "popups_choose_another_wallet": "切换钱包",
+    "popups_switch_Wallet": "切换钱包",
+    "popups_recovery": "恢复",
+    "popups_profile_photo_nfts": "NFTs",
+    "popups_set_avatar_successfully": "新头像设置成功",
+    "popups_set_avatar_failed": "加载头像失败。",
     "nft_wallet_label": "钱包",
     "plugin_profile_no_wallets": "在此连接您的钱包。<br/>此部分将显示给您的加密朋友。<br/>显示内容包括数字艺术、捐赠、徽章<br/>和其他链上的公开信息。",
     "nft_input_address_label": "请输入合约地址",
@@ -1025,5 +1030,6 @@
     "plugin_wallet_support_chains_tips": "仅支持 EVM 链、ETH、BNB 、Polygon、Arb、Op等。",
     "plugin_wallet_connect_fortmatic": "连接 Fortmatic",
     "plugin_wallet_choose_network": "选择网络",
-    "plugin_disabled_tip": "您需要打开 DAPP 才能查看特定内容。"
+    "plugin_disabled_tip": "您需要打开 DAPP 才能查看特定内容。",
+    "network_management_add_network": "添加网络"
 }

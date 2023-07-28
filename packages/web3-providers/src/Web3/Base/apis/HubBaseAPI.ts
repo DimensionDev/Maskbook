@@ -8,10 +8,21 @@ export class HubBaseAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter,
     GasOption,
-> extends HubProviderAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter> {
+> extends HubProviderAPI_Base<
+    ChainId,
+    SchemaType,
+    ProviderType,
+    NetworkType,
+    RequestArguments,
+    RequestOptions,
+    Transaction,
+    TransactionParameter
+> {
     getGasOptions(
         chainId: ChainId,
         initial?: HubOptions_Base<ChainId>,

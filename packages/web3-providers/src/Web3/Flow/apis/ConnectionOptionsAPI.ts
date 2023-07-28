@@ -5,6 +5,8 @@ import type {
     NetworkType,
     Transaction,
     TransactionParameter,
+    RequestArguments,
+    RequestOptions,
 } from '@masknet/web3-shared-flow'
 import { ConnectionOptionsAPI_Base } from '../../Base/apis/ConnectionOptionsAPI.js'
 import { FlowWeb3StateRef } from './Web3StateAPI.js'
@@ -15,6 +17,8 @@ export class FlowConnectionOptionsAPI extends ConnectionOptionsAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter
 > {

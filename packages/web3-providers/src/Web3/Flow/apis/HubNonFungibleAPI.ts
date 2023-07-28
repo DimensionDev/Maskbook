@@ -6,6 +6,8 @@ import type {
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter,
 } from '@masknet/web3-shared-flow'
@@ -18,6 +20,8 @@ export class FlowHubNonFungibleAPI extends HubNonFungibleAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter
 > {

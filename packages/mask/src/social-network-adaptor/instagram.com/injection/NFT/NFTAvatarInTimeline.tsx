@@ -1,12 +1,13 @@
+import { memo } from 'react'
+import { noop } from 'lodash-es'
+import { makeStyles } from '@masknet/theme'
+import { Flags } from '@masknet/flags'
 import { DOMProxy, type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { attachReactTreeWithContainer, startWatch } from '../../../../utils/index.js'
+import { startWatch } from '../../../../utils/startWatch.js'
+import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { NFTBadgeTimeline, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
 import { searchInstagramPostAvatarSelector } from '../../utils/selector.js'
-import { memo } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { noop } from 'lodash-es'
-import { Flags } from '@masknet/flags'
 
 const useStyles = makeStyles()(() => ({
     root: {

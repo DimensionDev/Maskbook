@@ -6,10 +6,14 @@
     ".": {
       "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
+    },
+    "./register": {
+      "mask-src": "./src/register.ts",
+      "default": "./dist/register.js"
     }
   },
   "dependencies": {
-    "@json2csv/plainjs": "^6.1.3",
+    "@json2csv/plainjs": "^7.0.1",
     "@masknet/icons": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",
     "@masknet/shared": "workspace:^",
@@ -21,7 +25,7 @@
     "@masknet/web3-providers": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
-    "@react-hookz/web": "^23.0.0",
+    "@react-hookz/web": "^23.1.0",
     "@types/color": "^3.0.3",
     "color": "^4.2.3",
     "date-fns": "^2.30.0",

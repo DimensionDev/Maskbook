@@ -19,6 +19,7 @@ import type {
 export enum CurrencyType {
     NATIVE = 'native',
     BTC = 'btc',
+    ETH = 'eth',
     USD = 'usd',
 }
 
@@ -111,10 +112,22 @@ export enum ActivityType {
     CancelOffer = 'CancelOffer',
 }
 
+export enum RequestStateType {
+    NOT_DEPEND = 1,
+    APPROVED = 2,
+    DENIED = 3,
+}
+
 export enum TransactionStatusType {
     NOT_DEPEND = 1,
     SUCCEED = 2,
     FAILED = 3,
+}
+
+export enum TransactionStateType {
+    FAILED = 0,
+    SUCCEED = 1,
+    NOT_DEPEND = 2,
 }
 
 export enum TransactionDescriptorType {
@@ -161,9 +174,7 @@ export interface Identity {
     link?: string
 }
 
-export type Price = {
-    [key in CurrencyType]?: string
-}
+export type Price = Partial<Record<CurrencyType, string>>
 
 export interface Contact {
     name: string
@@ -206,6 +217,22 @@ export type TransferableNetwork<ChainId, SchemaType, NetworkType> = Omit<
     Network<ChainId, SchemaType, NetworkType>,
     'ID'
 >
+
+export interface RequestDescriptor<Arguments, Options> {
+    ID: string
+    state: RequestStateType
+    arguments: Arguments
+    options?: Options
+}
+
+export type Request<Arguments, Options> = RequestDescriptor<Arguments, Options>
+
+export type ReasonableRequest<Arguments, Options> = Request<Arguments, Options> & {
+    createdAt: Date
+    updatedAt: Date
+}
+
+export type TransferableRequest<Arguments, Options> = Omit<Request<Arguments, Options>, 'ID'>
 
 export interface NetworkDescriptor<ChainId, NetworkType> {
     /** An unique ID for each network */
@@ -368,6 +395,18 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
     source?: SourceType
     assets?: Array<NonFungibleAsset<ChainId, SchemaType>>
     socialLinks?: SocialLinks
+    floorPrices?: Array<{
+        marketplace_id: LiteralUnion<'blur' | 'looksrare' | 'opensea' | 'x2y2'>
+        marketplace_name: LiteralUnion<'Blur' | 'LooksRare' | 'OpenSea' | 'X2Y2'>
+        value: number
+        payment_token: {
+            payment_token_id: LiteralUnion<'ethereum.native'>
+            name: string
+            symbol: string
+            address: string | null
+            decimals: number
+        }
+    }>
 }
 
 export interface NonFungibleCollectionOverview {
@@ -428,6 +467,7 @@ export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, Sc
     metadata?: NonFungibleTokenMetadata<ChainId>
     /** the collection info */
     collection?: NonFungibleCollection<ChainId, SchemaType>
+    traits?: NonFungibleTokenTrait[]
 }
 
 export interface NonFungibleTokenTrait {
@@ -437,6 +477,7 @@ export interface NonFungibleTokenTrait {
     value: string
     /** The rarity of trait in percentage. */
     rarity?: string
+    displayType?: LiteralUnion<'date' | 'string' | 'number'> | null
 }
 
 export interface NonFungibleTokenAuction<ChainId, SchemaType> {
@@ -776,32 +817,37 @@ export interface AddressName {
     resolvedAddress?: string
 }
 
+type TransactionAsset<ChainId, SchemaType> = Token<ChainId, SchemaType> & {
+    name: string
+    symbol: string
+    amount: string
+    direction: string
+}
+
 export interface Transaction<ChainId, SchemaType> {
     id: string
     chainId: ChainId
-    type?: string
-    filterType?: string
+    type?: LiteralUnion<'burn' | 'contract interaction'>
+    cateType?: LiteralUnion<'approve' | 'receive' | 'send'>
+    cateName?: string
+    /** address */
     from: string
+    /** address */
     to: string
     /** unix timestamp */
     timestamp: number
     /** 0: failed 1: succeed */
     status?: 0 | 1
-    /** transferred tokens */
-    tokens: Array<
-        Token<ChainId, SchemaType> & {
-            name: string
-            symbol: string
-            amount: string
-            direction: string
-        }
-    >
+    /** transferred assets */
+    assets: Array<TransactionAsset<ChainId, SchemaType>>
     /** estimated tx fee */
     fee?: Price
     input?: string
     hash?: string
     methodId?: string
     blockNumber?: number
+    isScam?: boolean
+    nonce?: number
 }
 
 export interface RecentTransaction<ChainId, Transaction> {
@@ -815,6 +861,8 @@ export interface RecentTransaction<ChainId, Transaction> {
     status: TransactionStatusType
     /** all available tx candidates */
     candidates: Record<string, Transaction>
+    /** record drafted at */
+    draftedAt: Date
     /** record created at */
     createdAt: Date
     /** record updated at */
@@ -884,10 +932,17 @@ export interface AddressBookState extends Startable {
 }
 
 export interface NetworkState<ChainId, SchemaType, NetworkType> extends Startable {
+    /** The id of the used network. */
+    networkID?: Subscription<string>
+    /** The used network. */
+    network?: Subscription<ReasonableNetwork<ChainId, SchemaType, NetworkType>>
+    /** All available networks. */
     networks?: Subscription<Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>>
 
     /** Add a new network. */
     addNetwork: (descriptor: TransferableNetwork<ChainId, SchemaType, NetworkType>) => Promise<void>
+    /** Use the network RPC to build a connection. */
+    switchNetwork: (id: string) => Promise<void>
     /** Update a network. */
     updateNetwork: (
         id: string,
@@ -944,7 +999,10 @@ export interface TokenState<ChainId, SchemaType> extends Startable {
     /** Unblock a token */
     trustToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
     /** Block a token */
-    blockToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
+    blockToken?: (
+        address: string,
+        token: Token<ChainId, SchemaType> | NonFungibleToken<ChainId, SchemaType>,
+    ) => Promise<void>
     /** Create a credible fungible token */
     createFungibleToken?: (
         chainId: ChainId,
@@ -972,6 +1030,26 @@ export interface TokenState<ChainId, SchemaType> extends Startable {
         tokenIds: string[],
     ): Promise<void>
 }
+
+export interface RequestState<Arguments, Options> extends Startable {
+    /** The tracked requests. */
+    requests?: Subscription<Array<ReasonableRequest<Arguments, Options>>>
+    /** Applies a request. */
+    applyRequest(request: TransferableRequest<Arguments, Options>): Promise<ReasonableRequest<Arguments, Options>>
+    /** Applies a request and waits for confirmation from the user. */
+    applyAndWaitRequest(
+        request: TransferableRequest<Arguments, Options>,
+    ): Promise<ReasonableRequest<Arguments, Options>>
+    /** Updates request with new arguments. */
+    updateRequest(id: string, updates: Partial<TransferableRequest<Arguments, Options>>): Promise<void>
+    /** Approves a request. */
+    approveRequest(id: string): Promise<void>
+    /** Rejects a request. */
+    denyRequest(id: string): Promise<void>
+    /** Rejects all requests. */
+    denyAllRequests(): Promise<void>
+}
+
 export interface TransactionState<ChainId, Transaction> extends Startable {
     /** The tracked transactions of currently chosen sub-network */
     transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
@@ -979,7 +1057,12 @@ export interface TransactionState<ChainId, Transaction> extends Startable {
     /** Get a transaction record. */
     getTransaction?: (chainId: ChainId, address: string, id: string) => Promise<Transaction | undefined>
     /** Add a transaction record. */
-    addTransaction?: (chainId: ChainId, address: string, id: string, transaction: Transaction) => Promise<void>
+    addTransaction?: (
+        chainId: ChainId,
+        address: string,
+        id: string,
+        transaction: Transaction & { draftedAt: Date },
+    ) => Promise<void>
     /** Replace a transaction with new record. */
     replaceTransaction?: (
         chainId: ChainId,
@@ -1018,13 +1101,9 @@ export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
         txHash?: string,
     ) => Promise<TransactionDescriptor<ChainId, Transaction, Parameters>>
 }
-export interface TransactionWatcherState<ChainId, Transaction> extends Startable {
+export interface TransactionWatcherState<ChainId, Transaction> {
     emitter: Emitter<WatchEvents<ChainId, Transaction>>
 
-    /** Add a transaction into the watch list. */
-    watchTransaction: (chainId: ChainId, id: string, transaction: Transaction) => Promise<void>
-    /** Remove a transaction from the watch list. */
-    unwatchTransaction: (chainId: ChainId, id: string) => Promise<void>
     /** Notify error */
     notifyError: (error: Error, request: JsonRpcPayload) => Promise<void>
     /** Notify transaction status */
@@ -1075,7 +1154,16 @@ export interface BlockNumberNotifierState<ChainId> {
     emitter: Emitter<BlockNumberEvent<ChainId>>
 }
 
-export interface Web3State<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter> {
+export interface Web3State<
+    ChainId,
+    SchemaType,
+    ProviderType,
+    NetworkType,
+    RequestArguments,
+    RequestOptions,
+    Transaction,
+    TransactionParameter,
+> {
     AddressBook?: AddressBookState
     Network?: NetworkState<ChainId, SchemaType, NetworkType>
     BalanceNotifier?: BalanceNotifierState<ChainId>
@@ -1083,6 +1171,7 @@ export interface Web3State<ChainId, SchemaType, ProviderType, NetworkType, Trans
     IdentityService?: IdentityServiceState<ChainId>
     NameService?: NameServiceState
     RiskWarning?: RiskWarningState
+    Request?: RequestState<RequestArguments, RequestOptions>
     Settings?: SettingsState
     Token?: TokenState<ChainId, SchemaType>
     Transaction?: TransactionState<ChainId, Transaction>

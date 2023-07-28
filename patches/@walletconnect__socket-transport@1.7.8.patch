@@ -1,0 +1,32 @@
+diff --git a/dist/cjs/index.js b/dist/cjs/index.js
+index 8a0e63b67854fac1a23cdea274319d1ea14b34f7..71ee14802f200c3e4ccb16343389fc93ad74a7f2 100644
+--- a/dist/cjs/index.js
++++ b/dist/cjs/index.js
+@@ -90,10 +90,7 @@ class SocketTransport {
+         this._nextSocket.onopen = () => this._socketOpen();
+         this._nextSocket.onerror = (event) => this._socketError(event);
+         this._nextSocket.onclose = () => {
+-            setTimeout(() => {
+-                this._nextSocket = null;
+-                this._socketCreate();
+-            }, 1000);
++            this._nextSocket = null;
+         };
+     }
+     _socketOpen() {
+diff --git a/dist/esm/index.js b/dist/esm/index.js
+index 9a6cc3275e94dd38cbb549fbdb22dfb726fcec32..96341379984dc9bfea9527e3320f2acc63635667 100644
+--- a/dist/esm/index.js
++++ b/dist/esm/index.js
+@@ -87,10 +87,7 @@ class SocketTransport {
+         this._nextSocket.onopen = () => this._socketOpen();
+         this._nextSocket.onerror = (event) => this._socketError(event);
+         this._nextSocket.onclose = () => {
+-            setTimeout(() => {
+-                this._nextSocket = null;
+-                this._socketCreate();
+-            }, 1000);
++            this._nextSocket = null;
+         };
+     }
+     _socketOpen() {

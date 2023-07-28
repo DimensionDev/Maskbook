@@ -3,6 +3,8 @@ import type {
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter,
     Web3State,
@@ -11,18 +13,20 @@ import { ConnectionOptionsAPI_Base } from '../../Base/apis/ConnectionOptionsAPI.
 import { ValueRefWithReady } from '@masknet/shared-base'
 import { OthersAPI } from './OthersAPI.js'
 
-const Ref = new ValueRefWithReady({} as Web3State)
+const EmptyRef = new ValueRefWithReady<Web3State>({})
 
 export class ConnectionOptionsReadonlyAPI extends ConnectionOptionsAPI_Base<
     ChainId,
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter
 > {
     override get Web3StateRef() {
-        return Ref
+        return EmptyRef
     }
 
     override get Web3Others() {

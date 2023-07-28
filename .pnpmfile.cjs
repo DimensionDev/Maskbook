@@ -14,6 +14,9 @@ approvedList.set('ethereumjs-abi', [
 ])
 
 approvedList.set('webpack', 'Jack-Works/webpack#lazy-import')
+approvedList.set('string-width-cjs', 'npm:string-width@^4.2.0')
+approvedList.set('strip-ansi-cjs', 'npm:strip-ansi@^6.0.1')
+approvedList.set('wrap-ansi-cjs', ['npm:wrap-ansi@^6.0.1', 'npm:wrap-ansi@^7.0.0'])
 
 approvedList.set('wyvern-js', [
     // wyvern-schemas
@@ -52,12 +55,6 @@ function assertInstallationSourceValid(parentPackage, dependedPackage, installat
     }
 
     if (dependedPackage === '@typescript/lib-dom' && installationSource.startsWith('npm:@types/web@^')) return
-
-    // !!! There is some relative path installation source in the dependency tree,
-    // !!! but if we do not allow those packages to run install scripts anyway, it might be safe.
-    // !!! If we can resolve 'link:../empty' to something like 'workspaceRoot:/projects/empty', it will be safe to install.
-    if (installationSource === 'link:../empty' || installationSource === 'link:..\\empty') return
-    if (installationSource === '../empty' || installationSource === '..\\empty') return
 
     throw new Error(
         `Unapproved dependency source:

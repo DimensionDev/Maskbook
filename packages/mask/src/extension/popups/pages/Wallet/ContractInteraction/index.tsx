@@ -5,9 +5,10 @@ import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, Typography } from '@mui/material'
+import { LoadingButton } from '@mui/lab'
 import { makeStyles } from '@masknet/theme'
 import {
-    DepositPaymaster,
     formatDomainName,
     formatGweiToWei,
     formatWeiToEther,
@@ -15,9 +16,7 @@ import {
     PayloadEditor,
 } from '@masknet/web3-shared-evm'
 import { CopyButton, FormattedBalance, FormattedCurrency, TokenIcon, useGasCurrencyMenu } from '@masknet/shared'
-import { Link, Typography } from '@mui/material'
 import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
-import { LoadingButton } from '@mui/lab'
 import { unreachable } from '@masknet/kit'
 import {
     useChainContext,
@@ -42,7 +41,7 @@ import {
     ZERO,
 } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
-import { Web3 } from '@masknet/web3-providers'
+import { DepositPaymaster, Web3 } from '@masknet/web3-providers'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { useI18N } from '../../../../../utils/index.js'
@@ -332,7 +331,7 @@ const ContractInteraction = memo(() => {
         } catch (error_) {
             setTransferError(true)
         }
-    }, [request, location.search, history, chainId, smartPayChainId])
+    }, [request, location.search, chainId, smartPayChainId])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
         if (!request) return

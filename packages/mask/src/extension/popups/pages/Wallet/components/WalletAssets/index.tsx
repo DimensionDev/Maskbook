@@ -1,18 +1,26 @@
 import { Icons } from '@masknet/icons'
-import { EmptyStatus } from '@masknet/shared'
+import { CollectionList, RestorableScroll, UserAssetsProvider } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, useTabs } from '@masknet/theme'
-import { useWallet } from '@masknet/web3-hooks-base'
+import { useAccount, useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab, styled, tabClasses, tabsClasses } from '@mui/material'
-import { memo, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { memo, useCallback, useRef } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useMount } from 'react-use'
 import { useContainer } from 'unstated-next'
 import { useI18N } from '../../../../../../utils/index.js'
 import { WalletContext } from '../../hooks/useWalletContext.js'
 import { ActivityList } from '../ActivityList/index.js'
 import { AssetsList } from '../AssetsList/index.js'
+import { WalletAssetTabs } from '../../type.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import urlcat from 'urlcat'
+
+const gridProps = {
+    columns: 'repeat(auto-fill, minmax(20%, 1fr))',
+    gap: '8px',
+}
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -58,6 +66,9 @@ const useStyles = makeStyles()((theme) => {
                 display: 'flex',
                 flexDirection: 'column',
                 overflow: 'auto',
+                '&::-webkit-scrollbar': {
+                    display: 'none',
+                },
             },
         },
         addButton: {
@@ -91,61 +102,133 @@ const StyledTabList = styled(TabList)`
 
 export const WalletAssets = memo(function WalletAssets() {
     const navigate = useNavigate()
+    const { chainId } = useChainContext()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { refreshAssets } = useContainer(WalletContext)
 
     useMount(() => {
         refreshAssets()
     })
-    const handleAdd = useCallback(() => navigate(PopupRoutes.AddToken), [navigate])
+
+    const handleAdd = useCallback(
+        (assetTab: WalletAssetTabs) => navigate(`${PopupRoutes.AddToken}/${chainId}/${assetTab}`),
+        [chainId, navigate],
+    )
 
     return wallet ? <WalletAssetsUI onAddToken={handleAdd} /> : null
 })
 
 export interface WalletAssetsUIProps {
-    onAddToken: () => void
-}
-
-enum AssetTabs {
-    Tokens = 'Tokens',
-    Collectibles = 'Collectibles',
-    Activity = 'Activity',
+    onAddToken: (assetTab: WalletAssetTabs) => void
 }
 
 export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI({ onAddToken }) {
     const { t } = useI18N()
+    const navigate = useNavigate()
+    const [params, setParams] = useSearchParams()
+    const paramTab = params.get('tab') as WalletAssetTabs
 
     const { classes } = useStyles()
-    const [currentTab, onChange, tabs] = useTabs(AssetTabs.Tokens, AssetTabs.Collectibles, AssetTabs.Activity)
+    const [currentTab, onChange] = useTabs(
+        paramTab || WalletAssetTabs.Tokens,
+        WalletAssetTabs.Tokens,
+        WalletAssetTabs.Collectibles,
+        WalletAssetTabs.Activity,
+    )
+
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const SEARCH_KEY = 'collectionId'
+
+    const handleItemClick = useCallback(
+        (asset: Web3Helper.NonFungibleTokenAll) => {
+            const path = urlcat(PopupRoutes.CollectibleDetail, {
+                chainId: asset.chainId,
+                address: asset.address,
+                id: asset.tokenId,
+            })
+            navigate(path, { state: { asset } })
+        },
+        [navigate],
+    )
+    const handleCollectionChange = useCallback((id: string | undefined) => {
+        setParams(
+            (params) => {
+                if (!id) params.delete(SEARCH_KEY)
+                else params.set(SEARCH_KEY, id)
+                return params.toString()
+            },
+            { replace: true },
+        )
+    }, [])
+
+    const scrollTargetRef = useRef<HTMLDivElement>(null)
 
     return (
         <div className={classes.content}>
             <TabContext value={currentTab}>
                 <Box className={classes.header}>
-                    <StyledTabList value={currentTab} onChange={onChange}>
-                        <Tab className={classes.tab} label={t('popups_wallet_tab_assets')} value={tabs.Tokens} />
+                    <StyledTabList
+                        value={currentTab}
+                        onChange={(_, tab) => {
+                            setParams(
+                                (params) => {
+                                    params.set('tab', tab)
+                                    return params.toString()
+                                },
+                                { replace: true },
+                            )
+                            onChange(_, tab)
+                        }}>
+                        <Tab
+                            className={classes.tab}
+                            label={t('popups_wallet_tab_assets')}
+                            value={WalletAssetTabs.Tokens}
+                        />
                         <Tab
                             className={classes.tab}
                             label={t('popups_wallet_tab_collectibles')}
-                            value={tabs.Collectibles}
+                            value={WalletAssetTabs.Collectibles}
                         />
-                        <Tab className={classes.tab} label={t('popups_wallet_tab_activity')} value={tabs.Activity} />
+                        <Tab
+                            className={classes.tab}
+                            label={t('popups_wallet_tab_activity')}
+                            value={WalletAssetTabs.Activity}
+                        />
                     </StyledTabList>
-                    <Button variant="text" className={classes.addButton} onClick={onAddToken}>
+                    <Button variant="text" className={classes.addButton} onClick={() => onAddToken(currentTab)}>
                         <Icons.AddNoBorder size={16} />
                     </Button>
                 </Box>
-                <Box className={classes.panels}>
-                    <TabPanel value={tabs.Tokens} className={classes.tabPanel}>
-                        <AssetsList />
-                    </TabPanel>
-                    <TabPanel value={tabs.Collectibles} className={classes.tabPanel}>
-                        <EmptyStatus height="100%">{t('empty')}</EmptyStatus>
-                    </TabPanel>
-                    <TabPanel value={tabs.Activity} className={classes.tabPanel}>
-                        <ActivityList />
-                    </TabPanel>
-                </Box>
+
+                <UserAssetsProvider
+                    pluginID={NetworkPluginID.PLUGIN_EVM}
+                    account={account}
+                    defaultCollectionId={params.get(SEARCH_KEY) || undefined}>
+                    <Box className={classes.panels}>
+                        <RestorableScroll scrollKey="assets">
+                            <TabPanel value={WalletAssetTabs.Tokens} className={classes.tabPanel}>
+                                <AssetsList />
+                            </TabPanel>
+                        </RestorableScroll>
+                        <TabPanel value={WalletAssetTabs.Collectibles} className={classes.tabPanel}>
+                            <RestorableScroll scrollKey="collectibles" targetRef={scrollTargetRef}>
+                                <CollectionList
+                                    gridProps={gridProps}
+                                    disableSidebar
+                                    disableWindowScroll
+                                    scrollElementRef={scrollTargetRef}
+                                    onItemClick={handleItemClick}
+                                    onCollectionChange={handleCollectionChange}
+                                />
+                            </RestorableScroll>
+                        </TabPanel>
+                        <RestorableScroll scrollKey="activities">
+                            <TabPanel value={WalletAssetTabs.Activity} className={classes.tabPanel}>
+                                <ActivityList />
+                            </TabPanel>
+                        </RestorableScroll>
+                    </Box>
+                </UserAssetsProvider>
             </TabContext>
         </div>
     )

@@ -42,13 +42,7 @@ export function useClaimCallback(pids: string[], contractAddress: string | undef
             return {
                 hash,
                 receipt,
-                events: decodeEvents(
-                    Web3.getWeb3({
-                        chainId,
-                    }),
-                    ITO_Contract.options.jsonInterface,
-                    receipt,
-                ),
+                events: decodeEvents(ITO_Contract.options.jsonInterface, receipt),
             }
         }
         return { hash, receipt }

@@ -2,13 +2,13 @@ import { useCallback, useMemo, useState } from 'react'
 import { FixedSizeList, type FixedSizeListProps, type ListChildComponentProps } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-es'
-import { Box, Stack } from '@mui/material'
+import { Box, Stack, Typography, useTheme } from '@mui/material'
 import { makeStyles } from '../../UIHelper/index.js'
 import { MaskTextField, type MaskTextFieldProps } from '../TextField/index.js'
 import { Icons } from '@masknet/icons'
 import { EmptyResult } from './EmptyResult.js'
 
-export interface MaskSearchableListProps<T> extends withClasses<'listBox'> {
+export interface MaskSearchableListProps<T> extends withClasses<'listBox' | 'searchInput'> {
     /** The list data should be render */
     data: T[]
     /** The identity of list data item for remove duplicates item */
@@ -59,7 +59,8 @@ export function SearchableList<T extends {}>({
     ...props
 }: MaskSearchableListProps<T>) {
     const [keyword, setKeyword] = useState('')
-    const { classes } = useStyles(undefined, { props: { classes: props.classes } })
+    const theme = useTheme()
+    const { classes } = useStyles(undefined, { props })
     const { height = 300, itemSize, ...rest } = FixedSizeListProps
     const { InputProps, ...textFieldPropsRest } = SearchFieldProps ?? {}
 
@@ -109,7 +110,7 @@ export function SearchableList<T extends {}>({
     return (
         <div className={classes.container}>
             {!disableSearch && (
-                <Box>
+                <Box className={classes.searchInput}>
                     <MaskTextField
                         value={keyword}
                         placeholder="Search"
@@ -119,12 +120,23 @@ export function SearchableList<T extends {}>({
                             style: { height: 40 },
                             inputProps: { style: { paddingLeft: 4 } },
                             startAdornment: <Icons.Search size={18} />,
-                            endAdornment: keyword ? <Icons.Close size={18} onClick={handleClear} /> : null,
+                            endAdornment: keyword ? (
+                                <Icons.Close
+                                    size={18}
+                                    onClick={handleClear}
+                                    color={textFieldPropsRest.error ? theme.palette.maskColor.danger : undefined}
+                                />
+                            ) : null,
                             ...InputProps,
                         }}
                         onChange={handleChange}
                         {...textFieldPropsRest}
                     />
+                    {textFieldPropsRest.error ? (
+                        <Typography className={classes.error} mt={0.5}>
+                            {textFieldPropsRest.helperText}
+                        </Typography>
+                    ) : null}
                 </Box>
             )}
             {readyToRenderData.length === 0 && (
@@ -183,6 +195,11 @@ const useStyles = makeStyles()((theme) => ({
     },
     list: {
         scrollbarWidth: 'thin',
+    },
+    error: {
+        backgroundColor: theme.palette.maskColor.bottom,
+        fontSize: 14,
+        color: theme.palette.maskColor.danger,
     },
 }))
 

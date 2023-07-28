@@ -17,6 +17,7 @@ export interface SendingCodeFieldProps extends Omit<MaskTextFieldProps, 'onChang
     sendButtonText?: string
     errorMessage?: string
     autoSend?: boolean
+    resendDisabled?: boolean
     onBlur?(code: string): void
     onChange?(code: string): void
     onSend?(): void
@@ -27,6 +28,7 @@ export function SendingCodeField({
     errorMessage,
     onBlur,
     disabled = false,
+    resendDisabled,
     autoSend = false,
     onChange,
     ...rest
@@ -59,7 +61,7 @@ export function SendingCodeField({
                         size="small"
                         variant="text"
                         onClick={onSend}
-                        disabled={disabled}>
+                        disabled={resendDisabled || disabled}>
                         {sendButtonText}
                     </CountdownButton>
                 ),

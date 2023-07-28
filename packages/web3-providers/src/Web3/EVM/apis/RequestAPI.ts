@@ -1,18 +1,18 @@
-import type { RequestArguments } from 'web3-core'
-import { EthereumMethodType, PayloadEditor, createWeb3, createWeb3Provider } from '@masknet/web3-shared-evm'
+import { EthereumMethodType, PayloadEditor, type RequestArguments } from '@masknet/web3-shared-evm'
 import { ComposerAPI } from './ComposerAPI.js'
 import { Web3StateRef } from './Web3StateAPI.js'
 import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import { createContext } from '../helpers/createContext.js'
 import { Providers } from '../providers/index.js'
 import type { ConnectionOptions } from '../types/index.js'
+import { createWeb3FromProvider, createWeb3ProviderFromRequest } from '../../../entry-helpers.js'
 
 export class RequestAPI extends RequestReadonlyAPI {
     private Composer = new ComposerAPI()
     private Request = new RequestReadonlyAPI(this.options)
 
     private get Provider() {
-        if (!Web3StateRef.value.Provider) throw new Error('The provider does not load yet.')
+        if (!Web3StateRef.value.Provider) throw new Error('The web3 state does not load yet.')
         return Web3StateRef.value.Provider
     }
 
@@ -48,14 +48,7 @@ export class RequestAPI extends RequestReadonlyAPI {
                                     context.write(await this.Provider?.disconnect(options.providerType))
                                     break
                                 default: {
-                                    if (PayloadEditor.fromPayload(context.request).readonly) {
-                                        context.write(
-                                            await this.Request.request(context.requestArguments, {
-                                                account: options.account,
-                                                chainId: options.chainId,
-                                            }),
-                                        )
-                                    } else {
+                                    if (!PayloadEditor.fromPayload(context.request).readonly) {
                                         const web3Provider = Providers[options.providerType].createWeb3Provider({
                                             account: options.account,
                                             chainId: options.chainId,
@@ -63,6 +56,13 @@ export class RequestAPI extends RequestReadonlyAPI {
 
                                         // send request and set result in the context
                                         context.write((await web3Provider.request(context.requestArguments)) as T)
+                                    } else {
+                                        context.write(
+                                            await this.Request.request(context.requestArguments, {
+                                                account: options.account,
+                                                chainId: options.chainId,
+                                            }),
+                                        )
                                     }
 
                                     break
@@ -84,17 +84,15 @@ export class RequestAPI extends RequestReadonlyAPI {
 
     override getWeb3(initial?: ConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
-
         if (options.readonly) return this.Request.getWeb3(options)
-        return createWeb3(
-            createWeb3Provider((requestArguments: RequestArguments) => this.request(requestArguments, options)),
+        return createWeb3FromProvider(
+            createWeb3ProviderFromRequest((requestArguments) => this.request(requestArguments, options)),
         )
     }
 
     override getWeb3Provider(initial?: ConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
-
         if (options.readonly) return this.Request.getWeb3Provider(options)
-        return createWeb3Provider((requestArguments: RequestArguments) => this.request(requestArguments, options))
+        return createWeb3ProviderFromRequest((requestArguments) => this.request(requestArguments, options))
     }
 }

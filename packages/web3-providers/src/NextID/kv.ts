@@ -9,7 +9,7 @@ import { env } from '@masknet/flags'
 import { KV_BASE_URL_DEV, KV_BASE_URL_PROD } from './constants.js'
 import { staleNextIDCached } from './helpers.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
-import { fetchJSON } from '../entry-helpers.js'
+import { fetchCachedJSON, fetchJSON, fetchSquashedJSON } from '../entry-helpers.js'
 
 interface CreatePayloadResponse {
     uuid: string
@@ -46,12 +46,8 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             persona: string
             proofs: Proof[]
         }
-        const response = await fetchJSON<Response | undefined>(
+        const response = await fetchSquashedJSON<Response | undefined>(
             urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }),
-            undefined,
-            {
-                enableSquash: true,
-            },
         )
         if (!response) return Err('User not found')
 
@@ -75,24 +71,14 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
         interface Response {
             values: Proof[]
         }
-        const response = await fetchJSON<Response>(
-            urlcat(BASE_URL, '/v1/kv/by_identity', { platform, identity }),
-            undefined,
-            {
-                enableCache: true,
-                enableSquash: true,
-            },
-        )
+        const response = await fetchCachedJSON<Response>(urlcat(BASE_URL, '/v1/kv/by_identity', { platform, identity }))
         if (!response) return Err('User not found')
 
         const result = compact(response.values.map((x) => x.content[pluginID]))
         return Ok(result)
     }
     async get<T>(personaPublicKey: string): Promise<T> {
-        return fetchJSON<T>(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }), undefined, {
-            enableCache: true,
-            enableSquash: true,
-        })
+        return fetchCachedJSON<T>(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
     }
     /**
      * Get signature payload for updating

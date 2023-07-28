@@ -4,6 +4,8 @@ import type {
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
+    RequestOptions,
     Transaction as Web3Transaction,
     TransactionParameter,
     Web3State,
@@ -25,6 +27,8 @@ export class FlowWeb3StateAPI extends Web3StateAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
+    RequestOptions,
     Web3Transaction,
     TransactionParameter
 > {

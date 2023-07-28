@@ -1,16 +1,17 @@
+import { useMaskI18N } from '../../../../shared-ui/index.js'
 import type { ProfileIdentifier } from '@masknet/shared-base'
-import { i18n } from '../../../../shared-ui/locales_legacy/index.js'
 
-export function wrapAuthorDifferentMessage(
+export function useAuthorDifferentMessage(
     author: ProfileIdentifier | null,
     postBy: ProfileIdentifier | null,
     jsx: React.ReactNode,
 ) {
+    const t = useMaskI18N()
     if (!author || !postBy) return jsx
     if (author === postBy) return jsx
     return (
         <>
-            {i18n.t('decrypted_postbox_author_mismatch', { name: author?.userId })}
+            {t.decrypted_postbox_author_mismatch({ name: author?.userId })}
             {jsx}
         </>
     )

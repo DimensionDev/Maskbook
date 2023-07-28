@@ -1,7 +1,8 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { ProfileTabContent } from '../../../components/InjectedComponents/ProfileTabContent.js'
-import { attachReactTreeWithContainer, startWatch } from '../../../utils/index.js'
+import { startWatch } from '../../../utils/startWatch.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { profileSectionSelector, searchProfileTabPageSelector } from '../utils/selector.js'
 
 function injectProfileTabContentState(signal: AbortSignal) {

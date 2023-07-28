@@ -1,9 +1,12 @@
-import { swc } from 'rollup-plugin-swc3'
+import { createRequire } from 'node:module'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import { terser } from 'rollup-plugin-terser'
 import json from '@rollup/plugin-json'
 import { fileURLToPath } from 'node:url'
+
+const require = createRequire(import.meta.url)
+const { swc } = require('rollup-plugin-swc3')
 
 export default [
     {

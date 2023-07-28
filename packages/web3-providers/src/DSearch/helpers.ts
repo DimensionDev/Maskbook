@@ -1,8 +1,8 @@
-import { Duration, fetchJSON } from '../entry-helpers.js'
+import { Duration, fetchCachedJSON } from '../entry-helpers.js'
 
 export function fetchFromDSearch<T>(request: RequestInfo | URL, init?: RequestInit) {
-    return fetchJSON<T>(request, init, {
-        enableCache: true,
+    return fetchCachedJSON<T>(request, init, {
+        squashExpiration: 0,
         cacheDuration: Duration.MEDIUM,
     })
 }

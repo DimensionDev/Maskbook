@@ -3,6 +3,8 @@ import type {
     ChainId,
     NetworkType,
     ProviderType,
+    RequestArguments,
+    RequestOptions,
     SchemaType,
     Transaction,
     TransactionParameter,
@@ -15,6 +17,8 @@ const sns: Plugin.SNSAdaptor.Definition<
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter
 > = {

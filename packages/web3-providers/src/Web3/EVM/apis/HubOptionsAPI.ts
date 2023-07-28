@@ -3,6 +3,8 @@ import type {
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter,
 } from '@masknet/web3-shared-evm'
@@ -15,6 +17,8 @@ export class HubOptionsAPI extends HubOptionsAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter
 > {

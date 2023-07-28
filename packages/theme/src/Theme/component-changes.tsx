@@ -15,6 +15,7 @@ import {
     alertClasses,
     linearProgressClasses,
     selectClasses,
+    filledInputClasses,
 } from '@mui/material'
 import type { MaskColor } from './colors.js'
 
@@ -863,6 +864,7 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                     [`&.${inputBaseClasses.focused}`]: {
                         outline: `2px solid ${alpha(colors.maskColor.primary, 0.2)}`,
                         border: `1px solid ${alpha(colors.maskColor.primary, 0.5)}`,
+                        boxShadow: `0px 0px 3px ${colors.maskColor.primary}`,
                         backgroundColor: colors.maskColor.bottom,
                     },
                     // For Select Menu
@@ -888,6 +890,27 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                         color: colors.maskColor.third,
                     },
                     '&:focus': {
+                        borderRadius: 8,
+                    },
+                },
+            },
+        },
+    },
+})
+
+export const TextField = (mode: PaletteMode, colors: MaskColor) => ({
+    components: {
+        MuiTextField: {
+            defaultProps: {
+                variant: 'filled',
+                InputProps: {
+                    disableUnderline: true,
+                },
+            },
+            styleOverrides: {
+                root: {
+                    borderRadius: 8,
+                    [`& .${filledInputClasses.root}`]: {
                         borderRadius: 8,
                     },
                 },

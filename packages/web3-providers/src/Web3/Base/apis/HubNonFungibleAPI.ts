@@ -23,9 +23,20 @@ export class HubNonFungibleAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
+    RequestArguments,
+    RequestOptions,
     Transaction,
     TransactionParameter,
-> extends HubProviderAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter> {
+> extends HubProviderAPI_Base<
+    ChainId,
+    SchemaType,
+    ProviderType,
+    NetworkType,
+    RequestArguments,
+    RequestOptions,
+    Transaction,
+    TransactionParameter
+> {
     protected getProviders(
         initial?: HubOptions_Base<ChainId>,
     ): Array<

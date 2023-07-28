@@ -1,11 +1,11 @@
+import { useMemo, useState } from 'react'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useMemo, useState } from 'react'
-import { startWatch } from '../../../../utils/watcher.js'
 import { querySelectorAll } from '../../utils/selector.js'
-import { attachReactTreeWithContainer } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
+import { startWatch } from '../../../../utils/startWatch.js'
 
 const selector = () => {
     // [href^="/search"] is a hash tag

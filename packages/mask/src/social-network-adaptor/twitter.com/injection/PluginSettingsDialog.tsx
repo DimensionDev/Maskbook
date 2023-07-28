@@ -1,6 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { PluginSettingsDialog } from '../../../components/InjectedComponents/PluginSettingsDialog.js'
-import { attachReactTreeWithContainer, startWatch } from '../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { startWatch } from '../../../utils/startWatch.js'
 import { rootSelector } from '../utils/selector.js'
 
 /**

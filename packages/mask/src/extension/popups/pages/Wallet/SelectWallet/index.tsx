@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { first } from 'lodash-es'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ECKeyIdentifier, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { useChainContext, useChainIdValid, useWallets } from '@masknet/web3-hooks-base'
 import { ProviderType, type ChainId } from '@masknet/web3-shared-evm'
@@ -18,6 +18,8 @@ import { WalletItem } from '../../../components/WalletItem/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { useVerifiedWallets } from '../../../hook/useVerifiedWallets.js'
 import Services from '../../../../service.js'
+import { ProfilePhotoType } from '../type.js'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
@@ -39,10 +41,10 @@ const SelectWallet = memo(function SelectWallet() {
     const { t } = useI18N()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
-    const location = useLocation()
-    const search = new URLSearchParams(location.search)
-    const chainIdSearched = search.get('chainId')
-    const isVerifyWalletFlow = search.get('verifyWallet')
+    const [params] = useSearchParams()
+    const chainIdSearched = params.get('chainId')
+    const isVerifyWalletFlow = params.get('verifyWallet')
+    const isSettingNFTAvatarFlow = params.get('setNFTAvatar')
 
     const { proofs } = PersonaContext.useContainer()
 
@@ -74,14 +76,19 @@ const SelectWallet = memo(function SelectWallet() {
     }, [isVerifyWalletFlow])
 
     const handleConfirm = useCallback(async () => {
-        if (isVerifyWalletFlow) {
+        if (isVerifyWalletFlow || isSettingNFTAvatarFlow) {
             await Web3.connect({
                 account: selected,
                 chainId,
                 providerType: ProviderType.MaskWallet,
             })
 
-            navigate(PopupRoutes.ConnectWallet, { replace: true })
+            navigate(
+                isSettingNFTAvatarFlow
+                    ? urlcat(PopupRoutes.PersonaAvatarSetting, { tab: ProfilePhotoType.NFT })
+                    : PopupRoutes.ConnectWallet,
+                { replace: true },
+            )
             return
         }
 
@@ -99,7 +106,7 @@ const SelectWallet = memo(function SelectWallet() {
                   },
         ])
         return Services.Helper.removePopupWindow()
-    }, [isVerifyWalletFlow, selected, chainId, wallets, smartPayChainId])
+    }, [isVerifyWalletFlow, selected, chainId, wallets, smartPayChainId, isSettingNFTAvatarFlow])
 
     useEffect(() => {
         if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
@@ -112,7 +119,7 @@ const SelectWallet = memo(function SelectWallet() {
             <Box pt="10px" pb={2} px={2} display="flex" flexDirection="column" columnGap={6}>
                 {wallets
                     .filter((x) => {
-                        if (chainId === smartPayChainId && !isVerifyWalletFlow) return true
+                        if (chainId === smartPayChainId && !isVerifyWalletFlow && !isSettingNFTAvatarFlow) return true
                         return !x.owner
                     })
                     .map((item) => {

@@ -7,7 +7,6 @@
   "files": [
     "./clean-hmr.ts",
     "./config.ts",
-    "./EnvironmentPlugin.ts",
     "./fix-regenerator-runtime.ts",
     "./flags.ts",
     "./git-info.ts",

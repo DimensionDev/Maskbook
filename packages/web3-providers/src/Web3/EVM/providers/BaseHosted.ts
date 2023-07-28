@@ -1,15 +1,20 @@
 import { uniqWith } from 'lodash-es'
-import type { RequestArguments } from 'web3-core'
 import { toHex } from 'web3-utils'
 import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
-import { EMPTY_LIST, type StorageObject, type UpdatableWallet, type Wallet } from '@masknet/shared-base'
+import {
+    EMPTY_LIST,
+    InMemoryStorages,
+    NetworkPluginID,
+    type StorageObject,
+    type UpdatableWallet,
+    type Wallet,
+} from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     getDefaultChainId,
     isValidAddress,
     formatEthereumAddress,
-    PayloadEditor,
     type ChainId,
     type ProviderType,
     type Web3Provider,
@@ -46,18 +51,20 @@ export class BaseHostedProvider
     override async setup(context?: Plugin.SNSAdaptor.SNSAdaptorContext) {
         await super.setup(context)
 
-        this.walletStorage = context?.createKVStorage('memory', {}).createSubScope(`${this.providerType}_hosted`, {
-            account: this.options.getDefaultAccount(),
-            chainId: this.options.getDefaultChainId(),
-            wallets: [] as Wallet[],
-        }).storage
+        this.walletStorage = InMemoryStorages.Web3.createSubScope(
+            `${NetworkPluginID.PLUGIN_EVM}_${this.providerType}_hosted`,
+            {
+                account: this.options.getDefaultAccount(),
+                chainId: this.options.getDefaultChainId(),
+                wallets: [] as Wallet[],
+            },
+        ).storage
 
         await Promise.all([
             this.walletStorage?.account.initializedPromise,
             this.walletStorage?.chainId.initializedPromise,
             this.walletStorage?.wallets.initializedPromise,
         ])
-
         this.onAccountChanged()
         this.onChainChanged()
 
@@ -189,6 +196,8 @@ export class BaseHostedProvider
     }
 
     private async onAccountChanged() {
+        await this.walletStorage?.account.initializedPromise
+
         if (!this.hostedAccount) return
 
         this.emitter.emit('accounts', [this.hostedAccount])
@@ -197,15 +206,14 @@ export class BaseHostedProvider
     }
 
     private async onChainChanged() {
+        await this.walletStorage?.chainId.initializedPromise
         if (this.hostedChainId) this.emitter.emit('chainId', toHex(this.hostedChainId))
     }
 
     override async switchAccount(account?: string) {
         if (!isValidAddress(account)) throw new Error(`Invalid address: ${account}`)
-
         const supported = await this.options.isSupportedAccount(account)
         if (!supported) throw new Error(`Not supported account: ${account}`)
-
         await this.walletStorage?.account.setValue(account)
     }
 
@@ -213,15 +221,5 @@ export class BaseHostedProvider
         const supported = await this.options.isSupportedChainId(chainId)
         if (!supported) throw new Error(`Not supported chain id: ${chainId}`)
         await this.walletStorage?.chainId.setValue(chainId)
-    }
-
-    override async request<T>(
-        requestArguments: RequestArguments,
-        initial?: WalletAPI.ProviderOptions<ChainId>,
-    ): Promise<T> {
-        return this.Request.request<T>(
-            PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill(),
-            initial,
-        )
     }
 }

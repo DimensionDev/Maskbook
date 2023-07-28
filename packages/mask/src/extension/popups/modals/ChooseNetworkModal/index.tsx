@@ -12,6 +12,7 @@ import { ProviderType, type ChainId, type NetworkType } from '@masknet/web3-shar
 import { Box, Typography } from '@mui/material'
 import { getEvmNetworks } from '../../../../utils/networks.js'
 import { ActionModal, useActionModal, type ActionModalBaseProps } from '../../components/index.js'
+import { useI18N } from '../../../../utils/i18n-next-ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     networkList: {
@@ -82,7 +83,7 @@ const NetworkItem = memo(function NetworkItem({ network, currentChainId }: Netwo
             <Box className={classes.text}>
                 <Typography className={classes.name}>{network.name}</Typography>
                 <Typography className={classes.balance}>
-                    {loading ? '--' : `${formatBalance(balance, token?.decimals)} ${token?.symbol}`}
+                    {loading ? '--' : `${formatBalance(balance, token?.decimals, 0, false, true)} ${token?.symbol}`}
                 </Typography>
             </Box>
             {selected ? (
@@ -95,6 +96,7 @@ const NetworkItem = memo(function NetworkItem({ network, currentChainId }: Netwo
 })
 
 export const ChooseNetworkModal = memo(function ChooseNetworkModal({ ...rest }: ActionModalBaseProps) {
+    const { t } = useI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
     const { chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -107,7 +109,7 @@ export const ChooseNetworkModal = memo(function ChooseNetworkModal({ ...rest }: 
     )
 
     return (
-        <ActionModal header="Network" action={action} keepMounted {...rest}>
+        <ActionModal header={t('network')} action={action} keepMounted {...rest}>
             <ul className={classes.networkList}>
                 {networks.map((network) => (
                     <NetworkItem key={network.chainId} currentChainId={currentChainId} network={network} />

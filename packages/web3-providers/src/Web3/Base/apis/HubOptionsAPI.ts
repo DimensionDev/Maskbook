@@ -24,11 +24,29 @@ export interface HubOptions_Base<ChainId, Indicator = PageIndicator> {
     allChains?: boolean
 }
 
-export class HubOptionsAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter> {
+export class HubOptionsAPI_Base<
+    ChainId,
+    SchemaType,
+    ProviderType,
+    NetworkType,
+    RequestArguments,
+    RequestOptions,
+    Transaction,
+    TransactionParameter,
+> {
     constructor(private options?: HubOptions_Base<ChainId>) {}
 
     get Web3StateRef(): ValueRefWithReady<
-        Web3State<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter>
+        Web3State<
+            ChainId,
+            SchemaType,
+            ProviderType,
+            NetworkType,
+            RequestArguments,
+            RequestOptions,
+            Transaction,
+            TransactionParameter
+        >
     > {
         throw new Error('To be implemented.')
     }

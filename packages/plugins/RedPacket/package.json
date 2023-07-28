@@ -6,6 +6,10 @@
     ".": {
       "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
+    },
+    "./register": {
+      "mask-src": "./src/register.ts",
+      "default": "./dist/register.js"
     }
   },
   "dependencies": {
@@ -22,7 +26,7 @@
     "@masknet/web3-providers": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
-    "@react-hookz/web": "^23.0.0",
+    "@react-hookz/web": "^23.1.0",
     "bignumber.js": "9.1.1",
     "date-fns": "^2.30.0",
     "react-use": "^17.4.0",

@@ -115,7 +115,7 @@ const avoidMistakeRules = {
     // '@masknet/string-no-data-url': 'error', // data:...
     '@masknet/unicode-no-bidi': 'error',
     '@masknet/unicode-no-invisible': 'error',
-    '@masknet/unicode-specific-set': 'warn',
+    '@masknet/unicode-specific-set': 'off',
 
     // Confusing code
     'no-bitwise': 'error', // need mark out
@@ -184,7 +184,6 @@ const avoidMistakeRules = {
     // 'react/no-array-index-key': 'warn', // no key={index}
     // 'react/no-object-type-as-default-prop': 'warn', // function Component({ items = [] })
     'unicorn/consistent-function-scoping': 'warn', // hoist unnecessary higher order functions
-    // 'unicorn/no-unsafe-regex': 'warn', // prevent RegExDoS
 }
 const codeStyleRules = {
     // Deprecated

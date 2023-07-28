@@ -9,6 +9,7 @@ import {
     FungibleCoinMarketTableSkeleton,
     PriceChange,
     PriceChartRange,
+    ProgressiveText,
     ReloadStatus,
     TokenIcon,
 } from '@masknet/shared'
@@ -57,6 +58,8 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 24,
             fontWeight: 700,
             textAlign: 'center',
+            display: 'flex',
+            justifyContent: 'center',
         },
         tokenIcon: {
             marginRight: 4,
@@ -135,7 +138,7 @@ const TokenDetail = memo(function TokenDetail() {
     const isNativeToken = isNativeTokenAddress(address)
     const { data: balance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address, { chainId })
     const asset = useAsset(chainId, address, account)
-    const { data: tokenPrice } = useTokenPrice(chainId, address)
+    const { data: tokenPrice, isLoading: isLoadingPrice } = useTokenPrice(chainId, address)
     const tokenValue = useMemo(() => {
         if (asset?.value?.usd) return asset.value.usd
         if (!asset?.decimals || !tokenPrice || !balance) return 0
@@ -202,15 +205,15 @@ const TokenDetail = memo(function TokenDetail() {
             </Button>,
         )
         return () => setExtension(undefined)
-    }, [chainId, asset, isNativeToken, classes.deleteButton, showSnackbar, t])
+    }, [chainId, asset, isNativeToken, classes.deleteButton, showSnackbar, t, account])
 
     return (
         <div className={classes.halo}>
             <Box className={classes.page}>
                 <Box padding={2}>
-                    <Typography className={classes.assetValue}>
+                    <ProgressiveText className={classes.assetValue} loading={isLoadingPrice} skeletonWidth={80}>
                         <FormattedCurrency value={tokenPrice} formatter={formatCurrency} />
-                    </Typography>
+                    </ProgressiveText>
                     <PriceChange change={priceChange} loading={isLoadingTrending} />
                     <PriceChartRange days={chartRange} onDaysChange={setChartRange} gap="10px" mt={2} />
                     {!isLoadingStats && isError ? (

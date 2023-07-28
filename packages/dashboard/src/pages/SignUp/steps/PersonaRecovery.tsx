@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useCustomSnackbar } from '@masknet/theme'
 import { DashboardRoutes, EMPTY_LIST, type ECKeyIdentifier, type EC_Public_JsonWebKey } from '@masknet/shared-base'
@@ -8,7 +8,7 @@ import { PersonaNameUI } from './PersonaNameUI.js'
 import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext.js'
 import { delay } from '@masknet/kit'
-import { useAsync } from 'react-use'
+import { useAsync, useAsyncFn } from 'react-use'
 import { SmartPayBundler, SmartPayOwner } from '@masknet/web3-providers'
 import urlcat from 'urlcat'
 
@@ -33,7 +33,7 @@ export function PersonaRecovery() {
         navigate(DashboardRoutes.SignUp, { replace: true })
     }, [state.mnemonic, state.privateKey])
 
-    const onNext = useCallback(
+    const [{ loading }, onNext] = useAsyncFn(
         async (personaName: string) => {
             setError('')
 
@@ -82,5 +82,5 @@ export function PersonaRecovery() {
         [state?.mnemonic, state?.privateKey],
     )
 
-    return <PersonaNameUI onNext={onNext} error={error} />
+    return <PersonaNameUI onNext={onNext} error={error} loading={loading} />
 }

@@ -16,9 +16,11 @@ import {
     ChainId,
     chainResolver,
     isValidAddress,
+    PayloadEditor,
     ProviderType,
     type Web3,
     type Web3Provider,
+    type RequestArguments,
 } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
 import { BaseContractWalletProvider } from './BaseContractWallet.js'
@@ -199,10 +201,7 @@ export class MaskWalletProvider
         }
 
         // switch chain
-        if (chainId !== this.hostedChainId) {
-            await this.switchChain(chainId)
-        }
-
+        if (chainId !== this.hostedChainId) await this.switchChain(chainId)
         if (siteType) await this.context?.recordConnectedSites(siteType, true)
 
         return {
@@ -214,5 +213,15 @@ export class MaskWalletProvider
     override async disconnect() {
         const siteType = getSiteType()
         if (siteType) await this.context?.recordConnectedSites(siteType, false)
+    }
+
+    override async request<T>(
+        requestArguments: RequestArguments,
+        initial?: WalletAPI.ProviderOptions<ChainId>,
+    ): Promise<T> {
+        return this.Request.request<T>(
+            PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill() as RequestArguments,
+            initial,
+        )
     }
 }

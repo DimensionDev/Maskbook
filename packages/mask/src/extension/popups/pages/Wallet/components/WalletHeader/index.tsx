@@ -3,7 +3,6 @@ import { useAsyncRetry } from 'react-use'
 import { useMatch, useLocation } from 'react-router-dom'
 import { NetworkPluginID, PopupModalRoutes, PopupRoutes } from '@masknet/shared-base'
 import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
-import Services from '../../../../../service.js'
 import { useConnected } from '../../hooks/useConnected.js'
 import { WalletHeaderUI } from './UI.js'
 import { getEvmNetworks } from '../../../../../../utils/networks.js'
@@ -23,9 +22,10 @@ export const WalletHeader = memo(function WalletHeader() {
     const currentNetwork = useMemo(() => networks.find((x) => x.chainId === chainId) ?? networks[0], [chainId])
     const { connected, url } = useConnected()
     const matchUnlock = useMatch(PopupRoutes.Unlock)
+    const matchResetWallet = useMatch(PopupRoutes.ResetWallet)
     const matchWallet = useMatch(PopupRoutes.Wallet)
+    const matchAddAssets = useMatch(`${PopupRoutes.AddToken}/:chainId/:assetType`)
     const matchContractInteraction = useMatch(PopupRoutes.ContractInteraction)
-    const matchCreatePassword = useMatch(PopupRoutes.CreatePassword)
 
     const chooseNetwork = useCallback(() => {
         modalNavigate(PopupModalRoutes.ChooseNetwork)
@@ -39,9 +39,9 @@ export const WalletHeader = memo(function WalletHeader() {
         retry()
     }, [location.pathname])
 
-    if (matchCreatePassword) return null
+    if (matchAddAssets) return null
 
-    if (!wallet || !hasPassword || matchUnlock) return <WalletSetupHeaderUI />
+    if (!wallet || !hasPassword || matchUnlock || matchResetWallet) return <WalletSetupHeaderUI />
 
     if (matchContractInteraction) {
         return (
@@ -69,6 +69,6 @@ export const WalletHeader = memo(function WalletHeader() {
             wallet={wallet}
         />
     ) : (
-        <NormalHeader onClose={() => Services.Helper.removePopupWindow()} />
+        <NormalHeader />
     )
 })

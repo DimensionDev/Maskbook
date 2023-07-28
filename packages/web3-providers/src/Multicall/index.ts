@@ -10,13 +10,13 @@ import {
     type UnboxTransactionObject,
 } from '@masknet/web3-shared-evm'
 import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
-import { RequestReadonlyAPI } from '../Web3/EVM/apis/RequestReadonlyAPI.js'
+import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { CONSERVATIVE_BLOCK_GAS_LIMIT, DEFAULT_GAS_LIMIT, DEFAULT_GAS_REQUIRED } from './constants.js'
 import type { MulticallBaseAPI } from '../entry-types.js'
 
 export class MulticallAPI implements MulticallBaseAPI.Provider {
-    private Request = new RequestReadonlyAPI()
     private Contract = new ContractReadonlyAPI()
+    private Web3 = new ConnectionReadonlyAPI()
 
     private results: {
         [chainId: number]: {
@@ -109,8 +109,7 @@ export class MulticallAPI implements MulticallBaseAPI.Provider {
         const contract = this.createContract(chainId)
         if (!contract) return EMPTY_LIST
 
-        const web3 = this.Request.getWeb3({ chainId })
-        const blockNumber_ = blockNumber ?? (await web3.eth.getBlockNumber())
+        const blockNumber_ = blockNumber ?? (await this.Web3.getBlockNumber({ chainId }))
 
         // filter out cached calls
         const unresolvedCalls = calls.filter((call_) => !this.getCallResult(call_, chainId, blockNumber_))
@@ -121,12 +120,12 @@ export class MulticallAPI implements MulticallBaseAPI.Provider {
                 this.chunkArray(unresolvedCalls).map(async (chunk) => {
                     // we don't mind the actual block number of the current call
                     const tx = new ContractTransaction(contract).fill(contract.methods.multicall(chunk), overrides)
-                    const hex = await web3.eth.call(tx)
+                    const hex = await this.Web3.callTransaction(tx, { chainId })
 
                     const outputType = contract.options.jsonInterface.find(({ name }) => name === 'multicall')?.outputs
                     if (!outputType) return
 
-                    const decodeResult = decodeOutputString(web3, outputType, hex) as
+                    const decodeResult = decodeOutputString(outputType, hex) as
                         | UnboxTransactionObject<ReturnType<Multicall['methods']['multicall']>>
                         | undefined
 
@@ -150,7 +149,7 @@ export class MulticallAPI implements MulticallBaseAPI.Provider {
                     ({ type, name }) => type === 'function' && name === names[index],
                 )?.outputs ?? []
             try {
-                const value = decodeOutputString(web3, outputs, result) as R
+                const value = decodeOutputString(outputs, result) as R
                 return { succeed, gasUsed, value, error: null }
             } catch (error) {
                 return { succeed: false, gasUsed, value: null, error }

@@ -6,13 +6,14 @@ import { makeStyles } from '@masknet/theme'
 import { MaskMessages } from '@masknet/shared-base'
 import { useMatchXS } from '@masknet/shared-base-ui'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js'
-import { attachReactTreeWithContainer, startWatch } from '../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import {
     searchProfileActiveTabSelector,
     searchProfileTabListLastChildSelector,
     searchProfileTabPageSelector,
     searchProfileTabSelector,
 } from '../utils/selector.js'
+import { startWatch } from '../../../utils/startWatch.js'
 
 export function injectProfileTabAtInstagram(signal: AbortSignal) {
     let tabInjected = false

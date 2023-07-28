@@ -117,7 +117,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
         try {
             setProcessing(true)
             // If json has wallets, restore in popup.
-            if (summary?.wallets.length) {
+            if (summary?.countOfWallets) {
                 const hasPassword = await WalletServiceRef.value.hasPassword()
                 if (!hasPassword) await WalletServiceRef.value.setDefaultPassword()
             }
@@ -155,7 +155,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
     return (
         <Box width="100%">
             {restoreStatus !== RestoreStatus.Verified ? (
-                <UploadDropArea onSelectFile={handleSetFile} omitSizeLimit accept=".bin" />
+                <UploadDropArea onSelectFile={handleSetFile} omitSizeLimit accept=".bin,.json" />
             ) : null}
             {file && restoreStatus !== RestoreStatus.Verified ? (
                 <FileFrame

@@ -7,14 +7,20 @@ export class TransactionWatcher implements Middleware<ConnectionContext> {
     async fn(context: ConnectionContext, next: () => Promise<void>) {
         await next()
 
-        const { TransactionWatcher } = Web3StateRef.value
-        const recognizedError = context.error as RecognizableError | null
+        const failedToSendTransaction =
+            context.error &&
+            [
+                EthereumMethodType.MASK_DEPLOY,
+                EthereumMethodType.MASK_FUND,
+                EthereumMethodType.ETH_SEND_TRANSACTION,
+                EthereumMethodType.ETH_SEND_USER_OPERATION,
+            ].includes(context.method)
+        const failedToEstimateTransaction =
+            (context.error as RecognizableError | null)?.isRecognized &&
+            context.method === EthereumMethodType.ETH_ESTIMATE_GAS
 
-        if (
-            (context.method === EthereumMethodType.ETH_SEND_TRANSACTION && recognizedError) ||
-            (context.method === EthereumMethodType.ETH_ESTIMATE_GAS && recognizedError?.isRecognized)
-        ) {
-            await TransactionWatcher?.notifyError(recognizedError, context.request)
+        if (failedToSendTransaction || failedToEstimateTransaction) {
+            await Web3StateRef.value.TransactionWatcher?.notifyError(context.error!, context.request)
         }
     }
 }

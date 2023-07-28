@@ -1,11 +1,11 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useChainContext, useNetworkContext, useTelemetry } from '@masknet/web3-hooks-base'
-import { EventType, EventID, ExceptionType, ExceptionID } from '@masknet/web3-telemetry/types'
-import { NetworkPluginID, ProofType } from '@masknet/shared-base'
-import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Web3, Contract } from '@masknet/web3-providers'
+import { NetworkPluginID, ProofType } from '@masknet/shared-base'
+import { ChainId, NetworkType, ProviderType, createNativeToken } from '@masknet/web3-shared-evm'
+import { useChainContext, useNetworkContext, useNetworks, useTelemetry, useWeb3State } from '@masknet/web3-hooks-base'
+import { EventType, EventID, ExceptionType, ExceptionID } from '@masknet/web3-telemetry/types'
 
 export interface ConnectionContentProps {
     onClose?: () => void
@@ -21,7 +21,48 @@ export function ConnectionContent(props: ConnectionContentProps) {
     const { classes } = useStyles()
     const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { Network } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const telemetry = useTelemetry()
+    const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
+
+    const customNetwork = useMemo(() => {
+        return networks.find((x) => x.type === NetworkType.CustomNetwork)
+    }, [networks])
+
+    const onAddNetwork = useCallback(async () => {
+        await Network?.addNetwork({
+            type: NetworkType.CustomNetwork,
+            chainId: ChainId.Mainnet,
+            coinMarketCapChainId: '',
+            coinGeckoChainId: '',
+            coinGeckoPlatformId: '',
+            name: 'Mainnet',
+            network: 'mainnet',
+            nativeCurrency: createNativeToken(ChainId.Mainnet),
+            rpcUrl: 'https://cloudflare-eth.com',
+            explorerUrl: {
+                url: 'https://etherscan.io/',
+            },
+            isCustomized: true,
+        })
+    }, [Network])
+
+    const onUseNetwork = useCallback(async () => {
+        if (!customNetwork) return
+        await Network?.switchNetwork(customNetwork.ID)
+    }, [customNetwork, Network])
+
+    const onRemoveNetwork = useCallback(async () => {
+        if (!customNetwork) return
+        await Network?.removeNetwork(customNetwork.ID)
+    }, [customNetwork, Network])
+
+    const onRenameNetwork = useCallback(async () => {
+        if (!customNetwork) return
+        await Network?.updateNetwork(customNetwork.ID, {
+            name: 'Ethereum Mainnet',
+        })
+    }, [customNetwork, Network])
 
     const onCaptureEvent = useCallback(async () => {
         telemetry.captureEvent(EventType.Debug, EventID.Debug)
@@ -196,26 +237,93 @@ export function ConnectionContent(props: ConnectionContentProps) {
     )
 
     const onSwitchChain = useCallback(async (chainId: ChainId) => {
-        return Web3.switchChain?.(chainId)
+        try {
+            await Web3.switchChain?.(chainId)
+        } catch (error: unknown) {
+            // eslint-disable-next-line no-alert
+            if (error instanceof Error) alert(error.message)
+        }
     }, [])
 
     const onConnect = useCallback(async (chainId: ChainId, providerType: ProviderType) => {
-        await Web3.connect({
-            chainId,
-            providerType,
-        })
+        try {
+            await Web3.connect({
+                chainId,
+                providerType,
+            })
+        } catch (error: unknown) {
+            // eslint-disable-next-line no-alert
+            if (error instanceof Error) alert(error.message)
+        }
     }, [])
 
     const onDisconnect = useCallback(async (providerType: ProviderType) => {
-        await Web3.disconnect({
-            providerType,
-        })
+        try {
+            await Web3.disconnect({
+                providerType,
+            })
+        } catch (error: unknown) {
+            // eslint-disable-next-line no-alert
+            if (error instanceof Error) alert(error.message)
+        }
     }, [])
 
     return (
         <section className={classes.container}>
             <Table size="small">
                 <TableBody>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Add Custom Network
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button size="small" onClick={() => onAddNetwork()}>
+                                Add Network
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    {customNetwork ? (
+                        <>
+                            <TableRow>
+                                <TableCell>
+                                    <Typography variant="body2" whiteSpace="nowrap">
+                                        Use Custom Network
+                                    </Typography>
+                                </TableCell>
+                                <TableCell>
+                                    <Button size="small" onClick={() => onUseNetwork()}>
+                                        Use Network
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>
+                                    <Typography variant="body2" whiteSpace="nowrap">
+                                        Remove Custom Network
+                                    </Typography>
+                                </TableCell>
+                                <TableCell>
+                                    <Button size="small" onClick={() => onRemoveNetwork()}>
+                                        Remove {customNetwork.name}
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>
+                                    <Typography variant="body2" whiteSpace="nowrap">
+                                        Rename Custom Network
+                                    </Typography>
+                                </TableCell>
+                                <TableCell>
+                                    <Button size="small" onClick={() => onRenameNetwork()}>
+                                        Rename {customNetwork.name}
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        </>
+                    ) : null}
                     <TableRow>
                         <TableCell>
                             <Typography variant="body2" whiteSpace="nowrap">

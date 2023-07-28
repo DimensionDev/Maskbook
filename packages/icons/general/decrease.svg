@@ -1,6 +1,6 @@
-<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="base/decrease">
-<path id="Vector (Stroke)" fill-rule="evenodd" clip-rule="evenodd" d="M10.0001 3.99935C6.68637 3.99935 4.00008 6.68564 4.00008 9.99935C4.00008 13.3131 6.68637 15.9993 10.0001 15.9993C13.3138 15.9993 16.0001 13.3131 16.0001 9.99935C16.0001 6.68564 13.3138 3.99935 10.0001 3.99935ZM2.66675 9.99935C2.66675 5.94926 5.94999 2.66602 10.0001 2.66602C14.0502 2.66602 17.3334 5.94926 17.3334 9.99935C17.3334 14.0494 14.0502 17.3327 10.0001 17.3327C5.94999 17.3327 2.66675 14.0494 2.66675 9.99935Z" fill="currentColor" />
-<path id="Vector (Stroke)_2" fill-rule="evenodd" clip-rule="evenodd" d="M6.66663 9.99937C6.66663 9.63118 6.9651 9.3327 7.33329 9.3327H12.6666C13.0348 9.3327 13.3333 9.63118 13.3333 9.99937C13.3333 10.3676 13.0348 10.666 12.6666 10.666H7.33329C6.9651 10.666 6.66663 10.3676 6.66663 9.99937Z" fill="currentColor"/>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+    <g id="decrease_svg__base/decrease" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd">
+        <path id="decrease_svg__Vector (Stroke)" d="M10 4a6 6 0 1 0 0 12 6 6 0 0 0 0-12Zm-7.333 6a7.333 7.333 0 1 1 14.666 0 7.333 7.333 0 0 1-14.666 0Z"/>
+        <path id="decrease_svg__Vector (Stroke)_2" d="M6.667 10c0-.369.298-.667.666-.667h5.334a.667.667 0 1 1 0 1.333H7.333a.667.667 0 0 1-.666-.667Z"/>
+    </g>
 </svg>
