@@ -919,6 +919,13 @@
     "popups_password_do_not_match": "备份密码不正确",
     "popups_backup_password": "备份密码",
     "popups_rename_error_tip": "最大长度为 {{length}} 个字符。",
+    "popups_wait_for_provider_connect_timeout": "钱包请求超时",
+    "popups_choose_another_wallet": "切换钱包",
+    "popups_switch_Wallet": "切换钱包",
+    "popups_recovery": "恢复",
+    "popups_profile_photo_nfts": "NFTs",
+    "popups_set_avatar_successfully": "新头像设置成功",
+    "popups_set_avatar_failed": "加载头像失败。",
     "nft_wallet_label": "钱包",
     "plugin_profile_no_wallets": "在此连接您的钱包。<br/>此部分将显示给您的加密朋友。<br/>显示内容包括数字艺术、捐赠、徽章<br/>和其他链上的公开信息。",
     "nft_input_address_label": "请输入合约地址",
@@ -1023,5 +1030,6 @@
     "plugin_wallet_support_chains_tips": "仅支持 EVM 链、ETH、BNB 、Polygon、Arb、Op等。",
     "plugin_wallet_connect_fortmatic": "连接 Fortmatic",
     "plugin_wallet_choose_network": "选择网络",
-    "plugin_disabled_tip": "您需要打开 DAPP 才能查看特定内容。"
+    "plugin_disabled_tip": "您需要打开 DAPP 才能查看特定内容。",
+    "network_management_add_network": "添加网络"
 }
