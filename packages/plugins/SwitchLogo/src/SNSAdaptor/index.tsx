@@ -3,10 +3,11 @@ import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
 import { SNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { SNSAdaptorPluginContext } from '@masknet/web3-providers'
-import { PluginID } from '@masknet/shared-base'
+import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import { SwitchLogoDialog } from './SwitchLogoDialog.js'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
+import { useEffect } from 'react'
 
 const recommendFeature = {
     description: <Trans i18nKey="description" ns={PluginID.SwitchLogo} />,
@@ -19,6 +20,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
         SNSAdaptorPluginContext.setup(context)
     },
     GlobalInjection() {
+        useEffect(() => {
+            CrossIsolationMessages.events.switchLogoLoadedUpdated.sendToLocal()
+        }, [])
         return (
             <SNSAdaptorContext.Provider value={SNSAdaptorPluginContext.context}>
                 <SwitchLogoDialog />

@@ -63,4 +63,5 @@ export interface CrossIsolationEvents {
      */
     PersonaSelectPanelDialogUpdated: PersonaSelectPanelDialogEvent
     switchLogoUpdated: SwitchLogoEvent
+    switchLogoLoadedUpdated: void
 }

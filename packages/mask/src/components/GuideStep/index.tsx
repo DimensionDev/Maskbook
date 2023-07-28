@@ -1,4 +1,4 @@
-import { cloneElement, type ReactElement, useRef, useState, useLayoutEffect } from 'react'
+import { cloneElement, type ReactElement, useRef, useState, useLayoutEffect, useEffect } from 'react'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Modal, styled, Typography } from '@mui/material'
@@ -130,9 +130,12 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
         CrossIsolationMessages.events.switchLogoUpdated.sendToAll({ open: true })
     }
 
-    useLayoutEffect(() => {
-        if (!finished || state === SwitchLogoOpenedState.Opened || networkIdentifier !== EnhanceableSite.Twitter) return
-        CrossIsolationMessages.events.switchLogoUpdated.sendToAll({ open: true })
+    useEffect(() => {
+        return CrossIsolationMessages.events.switchLogoLoadedUpdated.on(() => {
+            if (!finished || state === SwitchLogoOpenedState.Opened || networkIdentifier !== EnhanceableSite.Twitter)
+                return
+            CrossIsolationMessages.events.switchLogoUpdated.sendToAll({ open: true })
+        })
     }, [finished, state, networkIdentifier])
 
     const onNext = () => {
