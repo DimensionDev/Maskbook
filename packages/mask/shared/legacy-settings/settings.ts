@@ -79,6 +79,6 @@ try {
 
 export const switchLogoSettings = createBulkSettings('SwitchLogo', SwitchLogoType.New)
 export const switchLogoOpenedState = createGlobalSettings<SwitchLogoOpenedState>(
-    'SwichtLogoOpenedState',
+    'SwitchLogoOpenedState',
     SwitchLogoOpenedState.Unopened,
 )
