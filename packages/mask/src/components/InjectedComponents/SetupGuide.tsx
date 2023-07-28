@@ -3,13 +3,7 @@ import stringify from 'json-stable-stringify'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { NextIDProof } from '@masknet/web3-providers'
-import {
-    type PersonaIdentifier,
-    ProfileIdentifier,
-    EnhanceableSite,
-    EncryptionTargetType,
-    CrossIsolationMessages,
-} from '@masknet/shared-base'
+import { type PersonaIdentifier, ProfileIdentifier, EnhanceableSite, EncryptionTargetType } from '@masknet/shared-base'
 import { useI18N } from '../../utils/index.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import {
@@ -99,10 +93,8 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         const isBound = await NextIDProof.queryIsBound(destinedPersonaInfo.identifier.publicKeyAsHex, platform, userId)
         if (isBound) return
 
-        const afterVerify = () => {
-            setOperation(true)
-            CrossIsolationMessages.events.switchLogoUpdated.sendToAll({ open: true })
-        }
+        const afterVerify = () => setOperation(true)
+
         await handleVerifyNextID(destinedPersonaInfo, userId, afterVerify)
     }, [userId, destinedPersonaInfo])
 

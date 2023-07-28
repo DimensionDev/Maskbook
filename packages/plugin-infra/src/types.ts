@@ -26,6 +26,7 @@ import type {
     SocialAccount,
     SocialIdentity,
     SwitchLogoType,
+    SwitchLogoOpenedState,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -347,6 +348,7 @@ export namespace Plugin.SNSAdaptor {
         getDecentralizedSearchSettings?: () => Promise<boolean>
         setDecentralizedSearchSettings?: (checked: boolean) => Promise<void>
         switchLogoSettings: Record<string, ValueRefWithReady<SwitchLogoType>>
+        switchLogoOpenedState: ValueRefWithReady<SwitchLogoOpenedState>
     }
 
     export type SelectProviderDialogEvent =
