@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useCallback, useContext, useEffect, useMemo } from 'react'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useWallets } from '@masknet/web3-hooks-base'
@@ -10,8 +10,10 @@ import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { ContactsContext } from '../../../hook/useContactsContext.js'
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
-import { DeleteContactModal, EditContactModal } from '../../../modals/modals.js'
+import { DeleteContactModal, EditContactModal, AddContactModal } from '../../../modals/modals.js'
 import { ContactType } from '../type.js'
+import { useLocation } from 'react-router-dom'
+import { PageTitleContext } from '../../../context.js'
 
 const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivideLine }) => ({
     root: {
@@ -125,10 +127,31 @@ const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivid
 const ContactListUI = memo(function TransferUI() {
     const { t } = useI18N()
     const { classes } = useStyles({})
+    const theme = useTheme()
+    const { setExtension } = useContext(PageTitleContext)
+    const state = useLocation().state as
+        | {
+              type: 'send' | 'manage'
+          }
+        | undefined
+    const isManage = state?.type === 'manage'
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const { receiver, contacts, receiverValidationMessage } = ContactsContext.useContainer()
 
-    useTitle(t('popups_send'))
+    const addContact = useCallback(() => {
+        return AddContactModal.openAndWaitForClose({
+            title: t('wallet_add_contact'),
+            address: '',
+            name: '',
+        })
+    }, [t])
+
+    useEffect(() => {
+        if (!isManage) return
+        setExtension(<Icons.Add color={theme.palette.maskColor.main} sx={{ cursor: 'pointer' }} onClick={addContact} />)
+    }, [isManage])
+
+    useTitle(isManage ? t('contacts') : t('popups_send'))
 
     return (
         <div className={classes.root}>
@@ -168,16 +191,18 @@ const ContactListUI = memo(function TransferUI() {
                         })}
                     </List>
                 </Box>
-                <Box className={classes.bottomAction}>
-                    <ActionButton
-                        fullWidth
-                        onClick={() => {}}
-                        width={368}
-                        className={classes.confirmButton}
-                        disabled={!!receiverValidationMessage || !receiver}>
-                        {t('next')}
-                    </ActionButton>
-                </Box>
+                {isManage ? null : (
+                    <Box className={classes.bottomAction}>
+                        <ActionButton
+                            fullWidth
+                            onClick={() => {}}
+                            width={368}
+                            className={classes.confirmButton}
+                            disabled={!!receiverValidationMessage || !receiver}>
+                            {t('next')}
+                        </ActionButton>
+                    </Box>
+                )}
             </Box>
         </div>
     )

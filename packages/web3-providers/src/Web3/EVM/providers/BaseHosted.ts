@@ -162,6 +162,12 @@ export class BaseHostedProvider
     }
 
     override async renameWallet(address: string, name: string) {
+        const isNameExists = this.walletStorage?.wallets.value
+            .filter((x) => !isSameAddress(x.address, address))
+            .some((x) => x.name === name)
+
+        if (isNameExists) throw new Error('The wallet name already exists.')
+
         await this.updateWallet(address, {
             name,
         })
