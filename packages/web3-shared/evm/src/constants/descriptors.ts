@@ -385,7 +385,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         name: 'Coinbase',
         icon: new URL('../assets/coinbase.png', import.meta.url).href,
         enableRequirements: {
-            supportedChainIds: ChainIdList,
+            supportedChainIds: [ChainId.Mainnet, ChainId.Arbitrum, ChainId.Avalanche, ChainId.Optimism, ChainId.Matic],
             supportedEnhanceableSites: EnhanceableSiteList,
             supportedExtensionSites: ExtensionSiteList,
         },

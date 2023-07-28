@@ -111,8 +111,6 @@ export class ProviderState<
                 return
             }
 
-            console.log(`DEBUG: start listening to ${providerType} events`)
-
             provider.emitter.on('chainId', async (chainId) => {
                 await this.setAccount(providerType, {
                     chainId: Number.parseInt(chainId, 16) as ChainId,

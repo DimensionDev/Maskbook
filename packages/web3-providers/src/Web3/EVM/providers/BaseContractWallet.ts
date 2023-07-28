@@ -59,14 +59,6 @@ export class BaseContractWalletProvider
         })
     }
 
-    override get ready() {
-        return [this.ownerStorage?.initialized].every((x) => !!x)
-    }
-
-    override get readyPromise() {
-        return Promise.all([super.readyPromise, this.ownerStorage?.initializedPromise]).then(() => {})
-    }
-
     get ownerAccount() {
         return this.ownerStorage?.value.account ?? this.options.getDefaultAccount()
     }

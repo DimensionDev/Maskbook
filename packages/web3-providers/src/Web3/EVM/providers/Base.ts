@@ -39,12 +39,20 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
         return false
     }
 
-    // No need to wait by default
+    /**
+     * This field indicates the provider is ready to be set up.
+     * Please make sure that the provider SDK or global environment is ready.
+     * No need to wait by default
+     */
     get ready() {
         return true
     }
 
-    // No need to wait by default
+    /**
+     * This field indicates the provider is ready to be set up.
+     * Please make sure that the provider SDK or global environment is ready.
+     * No need to wait by default
+     */
     get readyPromise() {
         return Promise.resolve()
     }

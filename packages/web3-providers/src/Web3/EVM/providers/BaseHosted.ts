@@ -83,22 +83,6 @@ export class BaseHostedProvider
         }
     }
 
-    override get ready() {
-        return [
-            this.walletStorage?.wallets.initialized,
-            this.walletStorage?.account.initialized,
-            this.walletStorage?.chainId.initialized,
-        ].every((x) => !!x)
-    }
-
-    override get readyPromise() {
-        return Promise.all([
-            this.walletStorage?.wallets.initializedPromise,
-            this.walletStorage?.account.initializedPromise,
-            this.walletStorage?.chainId.initializedPromise,
-        ]).then(() => {})
-    }
-
     override get subscription() {
         if (!this.walletStorage) return super.subscription
         return {
