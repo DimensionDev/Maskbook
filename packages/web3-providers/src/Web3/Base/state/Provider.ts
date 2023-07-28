@@ -105,13 +105,11 @@ export class ProviderState<
 
         providers.map(async ([providerType, provider]) => {
             try {
-                await provider.setup(this.context)
+                await provider.readyPromise
+                if (!provider.ready) return
             } catch {
-                // ignore setup errors
+                return
             }
-
-            await provider.readyPromise
-            if (!provider.ready) return
 
             console.log(`DEBUG: start listening to ${providerType} events`)
 
@@ -145,6 +143,12 @@ export class ProviderState<
                 if (!this.site) return
                 await this.storage.providerType.setValue(this.options.getDefaultProviderType())
             })
+
+            try {
+                await provider.setup(this.context)
+            } catch {
+                // ignore setup errors
+            }
         })
     }
 

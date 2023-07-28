@@ -20,6 +20,17 @@ export const injectedCoinbaseProvider = new CoinbaseProvider()
 export const injectedOperaProvider = new OperaProvider()
 export const injectedCloverProvider = new CloverProvider()
 
+// Please keep this list update to date
+const Providers = [
+    injectedCoinbaseProvider,
+    injectedOperaProvider,
+    injectedCloverProvider,
+    injectedMetaMaskProvider,
+    injectedCoin98EVMProvider,
+    injectedCoin98SolanaProvider,
+    injectedPhantomProvider,
+]
+
 export function pasteText(text: string) {
     sendEvent('paste', text)
 }
@@ -58,16 +69,7 @@ globalThis.document?.addEventListener?.(CustomEventId, (e) => {
 
         case 'web3BridgeEmitEvent':
             const [pathname, eventName, data] = r[1]
-            const provider = [
-                injectedCoin98EVMProvider,
-                injectedCoin98SolanaProvider,
-                injectedPhantomProvider,
-                injectedMetaMaskProvider,
-                injectedOperaProvider,
-                injectedCloverProvider,
-            ].find((x) => x.pathname === pathname)
-
-            provider?.emit(eventName, data)
+            Providers.filter((x) => x.pathname === pathname).forEach((x) => x?.emit(eventName, data))
             return
 
         case 'web3BridgeBindEvent':
