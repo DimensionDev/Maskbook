@@ -21,12 +21,12 @@ export class OperaProvider
     }
 
     override get ready() {
-        if (!Sniffings.is_opera) return true
+        if (Sniffings.is_opera) return true
         return super.ready
     }
 
     override get readyPromise() {
-        if (!Sniffings.is_opera) return Promise.resolve(undefined)
+        if (Sniffings.is_opera) return Promise.resolve()
         return super.readyPromise
     }
 

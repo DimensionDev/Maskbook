@@ -6,6 +6,9 @@ export class CloverProvider extends InjectedProvider {
     }
 
     override async untilAvailable(): Promise<void> {
-        await super.untilAvailable(() => super.getProperty('isClover') as Promise<boolean>)
+        await super.untilAvailable(async () => {
+            const isClover = await super.getProperty<boolean>('isClover')
+            return !!isClover
+        })
     }
 }

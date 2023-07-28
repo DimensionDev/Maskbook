@@ -20,9 +20,7 @@ export class Coin98Provider extends InjectedProvider {
 
     override async request<T>(data: RequestArguments): Promise<T> {
         // coin98 cannot handle it correctly (test with coin98 v6.0.3)
-        if (data.method === 'eth_chainId') {
-            return this.getProperty('chainId') as T
-        }
+        if (data.method === 'eth_chainId') return (await this.getProperty<T>('chainId'))!
         return super.request<T>(data)
     }
 }
