@@ -10,7 +10,7 @@ import {
 } from '../../../shared/legacy-settings/settings.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { useI18N } from '../../utils/index.js'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages, EnhanceableSite } from '@masknet/shared-base'
 import { SwitchLogoOpenedState } from '@masknet/plugin-switch-logo'
 
 const useStyles = makeStyles()((theme) => ({
@@ -132,9 +132,9 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     }
 
     useLayoutEffect(() => {
-        if (!finished || state === SwitchLogoOpenedState.Opened) return
+        if (!finished || state === SwitchLogoOpenedState.Opened || networkIdentifier !== EnhanceableSite.Twitter) return
         CrossIsolationMessages.events.switchLogoUpdated.sendToAll({ open: true })
-    }, [finished, state])
+    }, [finished, state, networkIdentifier])
 
     const onNext = () => {
         if (step !== total) {
