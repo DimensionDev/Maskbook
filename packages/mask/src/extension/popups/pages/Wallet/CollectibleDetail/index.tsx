@@ -198,7 +198,7 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
     const lastSale = asset?.priceInToken
 
     return (
-        <article className={classes.page}>
+        <article className={classes.page} data-hide-scrollbar>
             {availableAsset ? (
                 <AssetPreviewer
                     classes={{ root: classes.image }}

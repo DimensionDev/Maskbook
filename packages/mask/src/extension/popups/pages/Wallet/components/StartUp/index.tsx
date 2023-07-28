@@ -103,7 +103,7 @@ export const WalletStartUp = memo(() => {
     }, [])
 
     return (
-        <Box className={classes.container}>
+        <Box className={classes.container} data-hide-scrollbar>
             <Box className={classes.content}>
                 <Box className={classes.titleWrapper}>
                     <Typography className={classes.title}>{t('popups_add_wallet')}</Typography>

@@ -176,7 +176,7 @@ const AssetsListSkeleton = memo(function AssetsListSkeleton() {
     const { classes } = useStyles()
     return (
         <List dense className={classes.list}>
-            {range(4).map((i) => (
+            {range(10).map((i) => (
                 <ListItem
                     key={i}
                     className={classes.item}

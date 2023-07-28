@@ -1,14 +1,15 @@
 import { memo, type MouseEvent } from 'react'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, TextOverflowTooltip } from '@masknet/theme'
 import { Box, Link, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import type { Wallet } from '@masknet/shared-base'
-import { CopyButton, FormattedAddress, ImageIcon } from '@masknet/shared'
+import { CopyButton, FormattedAddress, ImageIcon, ProgressiveText } from '@masknet/shared'
 import { type ChainId, formatEthereumAddress, explorerResolver, type NetworkType } from '@masknet/web3-shared-evm'
 import type { NetworkDescriptor } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../../utils/index.js'
 import { ActionGroup } from '../ActionGroup/index.js'
 import { WalletAssetsValue } from './WalletAssetsValue.js'
+import { useConnected } from '../../hooks/useConnected.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -23,6 +24,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+        height: 42,
     },
     action: {
         background: 'rgba(255, 255, 255, 0.8)',
@@ -31,11 +33,15 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         cursor: 'pointer',
+        maxWidth: '50%',
     },
     nickname: {
         color: '#07101B',
         lineHeight: '18px',
         fontWeight: 700,
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
     },
     identifier: {
         fontSize: 10,
@@ -77,6 +83,7 @@ const useStyles = makeStyles()((theme) => ({
         columnGap: 4,
     },
     dot: {
+        display: 'inline-block',
         width: 7,
         height: 7,
         borderRadius: 99,
@@ -106,8 +113,6 @@ interface WalletHeaderUIProps {
     onActionClick: () => void
     wallet: Wallet
     disabled?: boolean
-    connected?: boolean
-    hiddenConnected?: boolean
 }
 
 export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI({
@@ -117,11 +122,11 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
     onActionClick,
     wallet,
     disabled,
-    connected,
-    hiddenConnected,
 }) {
     const { t } = useI18N()
     const { classes, cx } = useStyles()
+    const { data, isLoading } = useConnected()
+    const connected = data?.connected
 
     return (
         <Box className={classes.container}>
@@ -134,7 +139,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                     <ImageIcon size={30} icon={currentNetwork.icon} name={currentNetwork.name} />
 
                     <div style={{ marginLeft: 4 }}>
-                        <Typography className={classes.chainName}>
+                        <Typography className={classes.chainName} component="div">
                             {currentNetwork.name}
                             {!disabled && !wallet.owner ? (
                                 <Icons.ArrowDrop
@@ -143,9 +148,9 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                                 />
                             ) : null}
                         </Typography>
-                        {!hiddenConnected ? (
-                            <Typography className={classes.connected} component="div">
-                                <div
+                        {data?.url || isLoading ? (
+                            <ProgressiveText className={classes.connected} loading={isLoading}>
+                                <span
                                     className={cx(
                                         classes.dot,
                                         connected ? classes.connectedDot : classes.unconnectedDot,
@@ -156,7 +161,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                                         context: connected ? 'connected' : 'unconnected',
                                     })}
                                 </span>
-                            </Typography>
+                            </ProgressiveText>
                         ) : null}
                     </div>
                 </div>
@@ -166,18 +171,20 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                         if (!disabled) onActionClick()
                     }}>
                     {wallet.owner ? <Icons.SmartPay size={30} /> : <Icons.MaskBlue size={30} />}
-                    <Box ml={0.5}>
-                        <Typography className={classes.nickname}>{wallet.name}</Typography>
+                    <Box ml={0.5} overflow="hidden">
+                        <TextOverflowTooltip title={wallet.name}>
+                            <Typography className={classes.nickname}>{wallet.name}</Typography>
+                        </TextOverflowTooltip>
                         <Typography className={classes.identifier}>
                             <FormattedAddress address={wallet.address} formatter={formatEthereumAddress} size={4} />
                             <CopyButton text={wallet.address} className={classes.icon} size={12} />
                             <Link
+                                className={classes.icon}
                                 onClick={(event) => event.stopPropagation()}
-                                style={{ width: 12, height: 12 }}
                                 href={explorerResolver.addressLink(chainId, wallet.address ?? '')}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                <Icons.PopupLink className={classes.icon} />
+                                <Icons.PopupLink size={12} />
                             </Link>
                         </Typography>
                     </Box>
