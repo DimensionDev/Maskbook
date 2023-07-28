@@ -1,13 +1,12 @@
-import { Icons } from '@masknet/icons'
-import { ElementAnchor, EmptyStatus, Image, RetryHint, isSameNFT } from '@masknet/shared'
+import { ElementAnchor, EmptyStatus, RetryHint, isSameNFT } from '@masknet/shared'
 import { EMPTY_OBJECT, Sniffings } from '@masknet/shared-base'
-import { LoadingBase, ShadowRootTooltip, makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { Box, Button, Typography, useForkRef } from '@mui/material'
+import { Box, useForkRef } from '@mui/material'
 import type { BoxProps } from '@mui/system'
 import { range } from 'lodash-es'
-import { memo, useCallback, useRef, type RefObject } from 'react'
-import { useSharedI18N } from '../../../locales/i18n_generated.js'
+import { memo, useCallback, useRef, type RefObject, type ReactNode } from 'react'
+import { useSharedI18N } from '../../../locales/index.js'
 import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
 import { Collection, CollectionSkeleton, LazyCollection, type CollectionProps } from './Collection.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
@@ -16,6 +15,7 @@ import type { CollectibleGridProps } from './types.js'
 import { SelectNetworkSidebar } from '../SelectNetworkSidebar/index.js'
 import { CollectionsContext } from './CollectionsProvider.js'
 import { useChainRuntime } from './ChainRuntimeProvider.js'
+import { CollectionHeader } from './CollectionHeader.js'
 
 const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap = 1.5 }) => {
     const gapIsNumber = typeof gap === 'number'
@@ -36,6 +36,8 @@ const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap 
             },
         },
         main: {
+            display: 'flex',
+            flexDirection: 'column',
             flexGrow: 1,
             height: '100%',
             boxSizing: 'border-box',
@@ -47,6 +49,10 @@ const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap 
             },
             paddingTop: gapIsNumber ? theme.spacing(gap) : gap,
         },
+        emptyMain: {
+            display: 'flex',
+            flexDirection: 'column',
+        },
         grid: {
             width: '100%',
             display: 'grid',
@@ -56,32 +62,8 @@ const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap 
             paddingRight: theme.spacing(1),
             boxSizing: 'border-box',
         },
-        currentCollection: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            color: theme.palette.maskColor.main,
+        collectionHeader: {
             margin: theme.spacing(0, gap, 1.5),
-        },
-        info: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-        icon: {
-            width: 24,
-            height: 24,
-            borderRadius: '100%',
-            objectFit: 'cover',
-        },
-        backButton: {
-            padding: theme.spacing(1, 0),
-            width: 40,
-            minWidth: 40,
-            textAlign: 'center',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: 32,
-            color: theme.palette.maskColor.main,
-            backgroundColor: theme.palette.maskColor.thirdMain,
         },
     }
 })
@@ -107,6 +89,7 @@ export interface CollectionListProps
     additionalAssets?: Web3Helper.NonFungibleAssetAll[]
     /** Pending user customized assets, used to render loading skeletons */
     pendingAdditionalAssetCount?: number
+    emptyText?: ReactNode
     scrollElementRef?: RefObject<HTMLElement>
     onChainChange?: (chainId?: Web3Helper.ChainIdAll) => void
     onCollectionChange?: (collectionId: string | undefined) => void
@@ -122,6 +105,7 @@ export const CollectionList = memo(function CollectionList({
     pendingAdditionalAssetCount = 0,
     disableWindowScroll,
     scrollElementRef,
+    emptyText,
     onActionClick,
     onItemClick,
     onChainChange,
@@ -132,7 +116,7 @@ export const CollectionList = memo(function CollectionList({
     const { classes, cx } = useStyles(gridProps)
 
     const { pluginID, account, chainId, setChainId, networks } = useChainRuntime()
-    const { collections, currentCollection, currentCollectionId, setCurrentCollectionId, loading, error, retry } =
+    const { collections, currentCollection, setCurrentCollectionId, loading, error, retry } =
         CollectionsContext.useContainer()
 
     const handleChainChange = useCallback(
@@ -177,8 +161,9 @@ export const CollectionList = memo(function CollectionList({
     const handleInitialRender = useCallback(
         (collection: Web3Helper.NonFungibleCollectionAll) => {
             const id = collection.id!
+            const assetsState = assetsMapRef.current[id]
             // To reduce requests, check if has been initialized
-            if (assetsMapRef.current[id]?.assets.length) return
+            if (assetsState?.assets.length || assetsState?.loading) return
             loadVerifiedBy(id)
             loadAssets(collection)
         },
@@ -216,44 +201,24 @@ export const CollectionList = memo(function CollectionList({
             </Box>
         )
 
-    if ((!loading && !collections.length) || !account || isAllHidden)
+    if ((!loading && !collections.length) || !account || isAllHidden) {
         return (
             <Box className={cx(classes.container, className)} {...rest}>
                 <div className={classes.columns}>
-                    <EmptyStatus flexGrow={1}>{t.no_NFTs_found()}</EmptyStatus>
+                    <Box className={cx(classes.main, classes.emptyMain)} display="flex">
+                        <EmptyStatus flexGrow={1}>{emptyText ?? t.no_NFTs_found()}</EmptyStatus>
+                    </Box>
                     {sidebar}
                 </div>
             </Box>
         )
-
-    const currentVerifiedBy = currentCollectionId ? getVerifiedBy(currentCollectionId) : []
+    }
 
     return (
         <Box className={cx(classes.container, className)} ref={containerRef} {...rest}>
             <div className={classes.columns}>
                 <div className={classes.main} ref={forkedMainColumnRef}>
-                    {currentCollection ? (
-                        <div className={classes.currentCollection}>
-                            <Box className={classes.info}>
-                                {currentCollection.iconURL ? (
-                                    <Image className={classes.icon} size={24} src={currentCollection.iconURL} />
-                                ) : null}
-                                <Typography mx={1}>{currentCollection.name}</Typography>
-                                {currentVerifiedBy.length ? (
-                                    <ShadowRootTooltip
-                                        title={t.verified_by({ marketplace: currentVerifiedBy.join(', ') })}>
-                                        <Icons.Verification size={16} />
-                                    </ShadowRootTooltip>
-                                ) : null}
-                            </Box>
-                            <Button
-                                variant="text"
-                                className={classes.backButton}
-                                onClick={() => handleCollectionChange(undefined)}>
-                                <Icons.Undo size={16} />
-                            </Button>
-                        </div>
-                    ) : null}
+                    <CollectionHeader className={classes.collectionHeader} onResetCollection={handleCollectionChange} />
                     {currentCollection ? (
                         <ExpandedCollection
                             gridProps={gridProps}
@@ -264,6 +229,7 @@ export const CollectionList = memo(function CollectionList({
                             verifiedBy={getVerifiedBy(currentCollection.id!)}
                             loading={getAssets(currentCollection).loading}
                             finished={getAssets(currentCollection).finished}
+                            emptyText={emptyText}
                             onInitialRender={handleInitialRender}
                             disableAction={disableAction}
                             onActionClick={onActionClick}
@@ -326,14 +292,23 @@ export const CollectionList = memo(function CollectionList({
 
 interface ExpandedCollectionProps extends CollectionProps {
     gridProps?: CollectibleGridProps
+    emptyText?: ReactNode
 }
 
 /** An ExpandedCollection tiles collectable cards */
-const ExpandedCollection = memo(({ gridProps = EMPTY_OBJECT, ...collectionProps }: ExpandedCollectionProps) => {
+const ExpandedCollection = memo(function ExpandedCollection({
+    gridProps = EMPTY_OBJECT,
+    emptyText,
+    ...collectionProps
+}: ExpandedCollectionProps) {
+    const t = useSharedI18N()
     const { loadAssets, getAssets } = useUserAssets()
     const { classes, theme } = useStyles(gridProps)
     const { collection, assets } = collectionProps
     const { finished, loading } = getAssets(collection)
+
+    if (finished && !assets.length) return <EmptyStatus flexGrow={1}>{emptyText ?? t.no_NFTs_found()}</EmptyStatus>
+
     return (
         <>
             <Box width="100%">
@@ -352,5 +327,3 @@ const ExpandedCollection = memo(({ gridProps = EMPTY_OBJECT, ...collectionProps 
         </>
     )
 })
-
-ExpandedCollection.displayName = 'ExpandedCollection'
