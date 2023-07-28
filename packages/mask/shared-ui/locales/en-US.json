@@ -926,7 +926,7 @@
     "popups_wallet_gas_price_too_low": "Gas Price too low will cause the transaction to fail.",
     "popups_wallet_gas_price_estimate_second": "Likely in < {{seconds}} seconds",
     "popups_wallet_gas_price_current_base_fee": "Current base fee is {{baseFee}} Gwei",
-    "poppus_wallet_gas_max_priority_fee_too_low": "Max priority fee is too low for network conditions.",
+    "popups_wallet_gas_max_priority_fee_too_low": "Max priority fee is too low for network conditions.",
     "popups_wallet_gas_fee_settings_usd": " ≈ <span>{{usd}}</span>",
     "popups_wallet_gas_fee_settings_gas_limit": "Gas Limit",
     "popups_wallet_gas_fee_settings_max_priority_fee": "Max priority fee",

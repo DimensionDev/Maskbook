@@ -9,10 +9,11 @@ import {
     type GasConfig,
 } from '@masknet/web3-shared-evm'
 import { useChainIdSupport, useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NUMERIC_INPUT_REGEXP_PATTERN, NetworkPluginID } from '@masknet/shared-base'
 import { Alert, Box, Button, TextField, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { formatCurrency, isGreaterThan, isLessThan } from '@masknet/web3-shared-base'
+import { BigNumber } from 'bignumber.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -58,7 +59,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     const [maxPriorityFeePerGas, setMaxPriorityFeePerGas] = useState('')
     const [maxFeePerGas, setMaxFeePerGas] = useState('')
 
-    const estiamteSecond = useMemo(() => {
+    const estimateSecond = useMemo(() => {
         if (!gasOptions) return
         const target = isSupport1559 ? maxFeePerGas : gasPrice
         if (isLessThan(target, formatWeiToGwei(gasOptions.normal.suggestedMaxFeePerGas))) {
@@ -81,7 +82,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                 ? t('popups_wallet_gas_price_too_low')
                 : null
         } else if (isLessThan(maxFeePerGas, maxPriorityFeePerGas)) {
-            return t('poppus_wallet_gas_max_priority_fee_too_low')
+            return t('popups_wallet_gas_max_priority_fee_too_low')
         }
         return null
     }, [isSupport1559, gasOptions, gasPrice, maxPriorityFeePerGas, maxFeePerGas])
@@ -99,7 +100,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
 
     useEffect(() => {
         if (!open || !gasOptions) return
-        // Set default vaue
+        // Set default value
         if (!isSupport1559) {
             setGasPrice(formatWeiToGwei(gasOptions.normal.suggestedMaxFeePerGas).toFixed(2))
         }
@@ -117,9 +118,9 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                         onlyRemainTwoDecimal: true,
                     })}
                 </Typography>
-                {estiamteSecond ? (
+                {estimateSecond ? (
                     <Typography className={classes.seconds}>
-                        {t('popups_wallet_gas_price_estimate_second', { seconds: estiamteSecond })}
+                        {t('popups_wallet_gas_price_estimate_second', { seconds: estimateSecond })}
                     </Typography>
                 ) : null}
                 {gasOptions?.normal.baseFeePerGas && isSupport1559 && !error ? (
@@ -145,10 +146,23 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                 <TextField
                                     error={!!error}
                                     value={maxPriorityFeePerGas}
-                                    onChange={(e) => setMaxPriorityFeePerGas(e.target.value)}
+                                    onChange={(e) => {
+                                        if (
+                                            isLessThan(
+                                                e.target.value,
+                                                formatWeiToGwei(gasOptions?.slow.suggestedMaxPriorityFeePerGas ?? 0),
+                                            )
+                                        )
+                                            return
+                                        setMaxPriorityFeePerGas(e.target.value)
+                                        setMaxFeePerGas((prev) => new BigNumber(e.target.value).plus(prev).toString())
+                                    }}
                                     InputProps={{
                                         endAdornment: <Typography className={classes.unit}>{t('gwei')}</Typography>,
                                         disableUnderline: true,
+                                        inputProps: {
+                                            pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                        },
                                     }}
                                 />
                             </Box>
@@ -157,11 +171,24 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                     {t('popups_wallet_gas_fee_settings_max_fee')}
                                 </Typography>
                                 <TextField
-                                    onChange={(e) => setMaxFeePerGas(e.target.value)}
+                                    onChange={(e) => {
+                                        if (
+                                            isLessThan(
+                                                e.target.value,
+                                                formatWeiToGwei(gasOptions?.slow.baseFeePerGas ?? 0),
+                                            )
+                                        )
+                                            return
+
+                                        setMaxFeePerGas(e.target.value)
+                                    }}
                                     value={maxFeePerGas}
                                     InputProps={{
                                         endAdornment: <Typography className={classes.unit}>{t('gwei')}</Typography>,
                                         disableUnderline: true,
+                                        inputProps: {
+                                            pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                        },
                                     }}
                                 />
                             </Box>
@@ -178,6 +205,9 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                 InputProps={{
                                     endAdornment: <Typography className={classes.unit}>{t('gwei')}</Typography>,
                                     disableUnderline: true,
+                                    inputProps: {
+                                        pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                    },
                                 }}
                             />
                         </Box>
