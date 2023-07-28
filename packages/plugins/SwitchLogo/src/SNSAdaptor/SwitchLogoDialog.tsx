@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: 24,
     },
     iconButton: {
-        border: '1px solid Transparent',
+        border: `1px solid ${theme.palette.maskColor.secondaryLine}`,
         width: 170,
         height: 74,
         display: 'flex',
