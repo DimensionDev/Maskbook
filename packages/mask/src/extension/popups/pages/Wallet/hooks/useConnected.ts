@@ -5,7 +5,9 @@ import { useQuery } from '@tanstack/react-query'
 
 export function useConnected() {
     return useQuery(['connected-status'], async () => {
-        const { url } = await Services.Helper.queryCurrentActiveTab()
+        const result = await Services.Helper.queryCurrentActiveTab()
+        if (!result) return { connected: false, url: '' }
+        const { url } = result
         const siteType = getSiteType(url)
 
         if (!siteType) return { connected: false, url }

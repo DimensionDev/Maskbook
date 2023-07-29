@@ -8,6 +8,7 @@ import { getEvmNetworks } from '../../../../../../utils/networks.js'
 import { NormalHeader, useModalNavigate } from '../../../../components/index.js'
 import { WalletHeaderUI } from './UI.js'
 import { WalletSetupHeaderUI } from './WalletSetupHeaderUI.js'
+import Services from '../../../../../service.js'
 
 export const WalletHeader = memo(function WalletHeader() {
     const modalNavigate = useModalNavigate()
@@ -27,6 +28,7 @@ export const WalletHeader = memo(function WalletHeader() {
     const matchWallet = useMatch(PopupRoutes.Wallet)
     const matchAddAssets = useMatch(`${PopupRoutes.AddToken}/:chainId/:assetType`)
     const matchContractInteraction = useMatch(PopupRoutes.ContractInteraction)
+    const matchWalletSign = useMatch(PopupRoutes.WalletSignRequest)
 
     const chooseNetwork = useCallback(() => {
         modalNavigate(PopupModalRoutes.ChooseNetwork)
@@ -40,7 +42,7 @@ export const WalletHeader = memo(function WalletHeader() {
 
     if (!wallet || !hasPassword || matchUnlock || matchResetWallet) return <WalletSetupHeaderUI />
 
-    if (matchContractInteraction) {
+    if (matchContractInteraction || matchWalletSign) {
         return (
             <WalletHeaderUI
                 chainId={chainId}
@@ -62,6 +64,6 @@ export const WalletHeader = memo(function WalletHeader() {
             wallet={wallet}
         />
     ) : (
-        <NormalHeader />
+        <NormalHeader onClose={() => Services.Helper.removePopupWindow()} />
     )
 })

@@ -1,14 +1,9 @@
-import { CrossIsolationMessages, NetworkPluginID, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
-import { useChainContext, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
-import { TransactionDescriptorType } from '@masknet/web3-shared-base'
-import { EthereumMethodType, PayloadEditor } from '@masknet/web3-shared-evm'
-import { Suspense, lazy, useEffect } from 'react'
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
-import { useAsyncRetry } from 'react-use'
+import { PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
+import { useWallet } from '@masknet/web3-hooks-base'
+import { Suspense, lazy } from 'react'
+import { Route, Routes } from 'react-router-dom'
 import { RestorableScrollContext } from '@masknet/shared'
-import { WalletRPC } from '../../../../plugins/WalletService/messages.js'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
-import { PopupContext } from '../../hook/usePopupContext.js'
 import { EditNetwork } from './EditNetwork/index.js'
 import { NetworkManagement } from './NetworkManagement/index.js'
 import SelectWallet from './SelectWallet/index.js'
@@ -45,104 +40,44 @@ const r = relativeRouteOf(PopupRoutes.Wallet)
 
 export default function Wallet() {
     const wallet = useWallet()
-    const location = useLocation()
-    const navigate = useNavigate()
-
-    const { smartPayChainId } = PopupContext.useContainer()
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
-        chainId: wallet?.owner && smartPayChainId ? smartPayChainId : undefined,
-    })
-
-    const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-
-    const skip = [
-        PopupRoutes.ContractInteraction,
-        PopupRoutes.WalletSignRequest,
-        PopupRoutes.GasSetting,
-        PopupRoutes.Unlock,
-    ].some((item) => item === location.pathname)
-    const { loading, retry } = useAsyncRetry(async () => {
-        if (skip) return
-
-        const payload = await WalletRPC.topUnconfirmedRequest()
-        if (!payload) return
-
-        if (payload) {
-            switch (payload.method) {
-                case EthereumMethodType.ETH_SIGN:
-                case EthereumMethodType.ETH_SIGN_TYPED_DATA:
-                case EthereumMethodType.PERSONAL_SIGN:
-                    navigate(PopupRoutes.WalletSignRequest, { replace: true })
-                    break
-                case EthereumMethodType.MASK_DEPLOY:
-                    navigate(PopupRoutes.ContractInteraction, { replace: true })
-                    break
-                default:
-                    break
-            }
-        }
-
-        const computedPayload = PayloadEditor.fromPayload(payload)
-        if (!computedPayload.config) return
-
-        const formatterTransaction = await TransactionFormatter?.formatTransaction(chainId, computedPayload.config)
-        if (
-            formatterTransaction &&
-            [TransactionDescriptorType.INTERACTION, TransactionDescriptorType.TRANSFER].includes(
-                formatterTransaction.type,
-            )
-        ) {
-            navigate(PopupRoutes.ContractInteraction, { replace: true })
-        }
-    }, [skip, chainId, TransactionFormatter])
-
-    useEffect(() => {
-        return CrossIsolationMessages.events.requestsUpdated.on(({ hasRequest }) => {
-            if (hasRequest) retry()
-        })
-    }, [])
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
             <WalletHeader />
             <RestorableScrollContext.Provider>
-                {loading && !skip ? (
-                    <LoadingPlaceholder />
-                ) : (
-                    <Routes>
-                        <Route path="*" element={wallet ? <WalletAssets /> : <WalletStartUp />} />
-                        <Route path={r(PopupRoutes.LegacyWalletRecovered)} element={<LegacyWalletRecovery />} />
-                        <Route path={r(PopupRoutes.ImportWallet)} element={<ImportWallet />} />
-                        <Route path={r(PopupRoutes.AddDeriveWallet)} element={<AddDeriveWallet />} />
-                        <Route path={r(PopupRoutes.WalletSettings)} element={<WalletSettings />} />
-                        <Route path={r(PopupRoutes.WalletRename)} element={<WalletRename />} />
-                        <Route path={r(PopupRoutes.DeleteWallet)} element={<DeleteWallet />} />
-                        <Route path={r(PopupRoutes.CreateWallet)} element={<CreateWallet />} />
-                        <Route path={r(PopupRoutes.BackupWallet)} element={<BackupWallet />} />
-                        <Route path={r(`${PopupRoutes.Contacts}/:address?` as PopupRoutes)} element={<ContactList />} />
-                        <Route
-                            path={r(`${PopupRoutes.AddToken}/:chainId/:assetType` as PopupRoutes)}
-                            element={<AddToken />}
-                        />
-                        <Route path={r(PopupRoutes.WalletSignRequest)} element={<SignRequest />} />
-                        <Route path={r(PopupRoutes.GasSetting)} element={<GasSetting />} />
-                        <Route path={r(PopupRoutes.TokenDetail)} element={<TokenDetail />} />
-                        <Route path={r(PopupRoutes.TransactionDetail)} element={<TransactionDetail />} />
-                        <Route path={r(PopupRoutes.CollectibleDetail)} element={<CollectibleDetail />} />
-                        <Route path={r(`${PopupRoutes.Transfer}/:address?` as PopupRoutes)} element={<Transfer />} />
-                        <Route path={r(PopupRoutes.ContractInteraction)} element={<ContractInteraction />} />
-                        <Route path={r(PopupRoutes.SelectWallet)} element={<SelectWallet />} />
-                        <Route path={r(PopupRoutes.Unlock)} element={<Unlock />} />
-                        <Route path={r(PopupRoutes.ResetWallet)} element={<ResetWallet />} />
-                        <Route path={r(PopupRoutes.SetPaymentPassword)} element={<SetPaymentPassword />} />
-                        <Route path={r(PopupRoutes.ReplaceTransaction)} element={<ReplaceTransaction />} />
-                        <Route path={r(PopupRoutes.ChangeOwner)} element={<ChangeOwner />} />
-                        <Route path={r(PopupRoutes.NetworkManagement)} element={<NetworkManagement />} />
-                        <Route path={r(PopupRoutes.AddNetwork)} element={<EditNetwork />} />
-                        <Route path={r(`${PopupRoutes.EditNetwork}/:id?` as PopupRoutes)} element={<EditNetwork />} />
-                        <Route path={r(PopupRoutes.Receive)} element={<Receive />} />
-                    </Routes>
-                )}
+                <Routes>
+                    <Route path="*" element={wallet ? <WalletAssets /> : <WalletStartUp />} />
+                    <Route path={r(PopupRoutes.LegacyWalletRecovered)} element={<LegacyWalletRecovery />} />
+                    <Route path={r(PopupRoutes.ImportWallet)} element={<ImportWallet />} />
+                    <Route path={r(PopupRoutes.AddDeriveWallet)} element={<AddDeriveWallet />} />
+                    <Route path={r(PopupRoutes.WalletSettings)} element={<WalletSettings />} />
+                    <Route path={r(PopupRoutes.WalletRename)} element={<WalletRename />} />
+                    <Route path={r(PopupRoutes.DeleteWallet)} element={<DeleteWallet />} />
+                    <Route path={r(PopupRoutes.CreateWallet)} element={<CreateWallet />} />
+                    <Route path={r(PopupRoutes.BackupWallet)} element={<BackupWallet />} />
+                    <Route path={r(`${PopupRoutes.Contacts}/:address?` as PopupRoutes)} element={<ContactList />} />
+                    <Route
+                        path={r(`${PopupRoutes.AddToken}/:chainId/:assetType` as PopupRoutes)}
+                        element={<AddToken />}
+                    />
+                    <Route path={r(PopupRoutes.WalletSignRequest)} element={<SignRequest />} />
+                    <Route path={r(PopupRoutes.GasSetting)} element={<GasSetting />} />
+                    <Route path={r(PopupRoutes.TokenDetail)} element={<TokenDetail />} />
+                    <Route path={r(PopupRoutes.TransactionDetail)} element={<TransactionDetail />} />
+                    <Route path={r(PopupRoutes.CollectibleDetail)} element={<CollectibleDetail />} />
+                    <Route path={r(`${PopupRoutes.Transfer}/:address?` as PopupRoutes)} element={<Transfer />} />
+                    <Route path={r(PopupRoutes.ContractInteraction)} element={<ContractInteraction />} />
+                    <Route path={r(PopupRoutes.SelectWallet)} element={<SelectWallet />} />
+                    <Route path={r(PopupRoutes.Unlock)} element={<Unlock />} />
+                    <Route path={r(PopupRoutes.ResetWallet)} element={<ResetWallet />} />
+                    <Route path={r(PopupRoutes.SetPaymentPassword)} element={<SetPaymentPassword />} />
+                    <Route path={r(PopupRoutes.ReplaceTransaction)} element={<ReplaceTransaction />} />
+                    <Route path={r(PopupRoutes.ChangeOwner)} element={<ChangeOwner />} />
+                    <Route path={r(PopupRoutes.NetworkManagement)} element={<NetworkManagement />} />
+                    <Route path={r(PopupRoutes.AddNetwork)} element={<EditNetwork />} />
+                    <Route path={r(`${PopupRoutes.EditNetwork}/:id?` as PopupRoutes)} element={<EditNetwork />} />
+                    <Route path={r(PopupRoutes.Receive)} element={<Receive />} />
+                </Routes>
             </RestorableScrollContext.Provider>
         </Suspense>
     )

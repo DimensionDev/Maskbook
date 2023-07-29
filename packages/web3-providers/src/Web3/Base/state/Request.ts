@@ -33,7 +33,7 @@ export class RequestState<Arguments, Options = unknown> implements Web3RequestSt
 
         this.requests = mapSubscription(this.storage.requests.subscription, (storage) => {
             return Object.values(storage)
-                .filter((x) => x.state === RequestStateType.APPROVED)
+                .filter((x) => x.state === RequestStateType.NOT_DEPEND)
                 .sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime())
         })
     }

@@ -1,54 +1,50 @@
-import { memo, useMemo, useState } from 'react'
-import { useAsyncFn } from 'react-use'
-import { useLocation as useRouteLocation, useNavigate } from 'react-router-dom'
-import { toUtf8 } from 'web3-utils'
-import { LoadingButton } from '@mui/lab'
-import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
-import { makeStyles } from '@masknet/theme'
-import { Typography } from '@mui/material'
-import { useWallets } from '@masknet/web3-hooks-base'
-import { PopupRoutes } from '@masknet/shared-base'
-import { EthereumMethodType } from '@masknet/web3-shared-evm'
-import { isSameAddress } from '@masknet/web3-shared-base'
-import { useTitle } from '../../../hook/useTitle.js'
+import { memo, useMemo } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { ActionButton, makeStyles } from '@masknet/theme'
+import { Box, Typography } from '@mui/material'
+import { useLatestRequest, useWeb3State } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../../../utils/index.js'
-import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
+import { EthereumMethodType } from '@masknet/web3-shared-evm'
+import { toUtf8 } from 'web3-utils'
+import { BottomController } from '../../../components/BottomController/index.js'
+import { useAsyncFn } from 'react-use'
+import Services from '../../../../service.js'
+import { PopupRoutes } from '@masknet/shared-base'
 
-const useStyles = makeStyles()(() => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         padding: 16,
         display: 'flex',
         flexDirection: 'column',
         flex: 1,
     },
-    info: {
-        backgroundColor: '#F7F9FA',
-        padding: 10,
-        borderRadius: 8,
-    },
     title: {
-        color: '#15181B',
-        fontSize: 18,
-        lineHeight: '24px',
-        fontWeight: 500,
+        fontSize: 24,
+        fontWeight: 700,
+        textAlign: 'center',
     },
-    walletName: {
-        color: '#15181B',
-        fontSize: 16,
-        lineHeight: '22px',
-        margin: '10px 0',
+    source: {
+        padding: theme.spacing(1.25),
+        border: `1px solid ${theme.palette.maskColor.line}`,
+        marginTop: theme.spacing(4),
+        display: 'flex',
+        flexDirection: 'column',
+        rowGap: theme.spacing(1.25),
     },
-    secondary: {
-        color: '#7B8192',
+    sourceText: {
         fontSize: 12,
-        lineHeight: '16px',
-        marginBottom: 10,
+        fontWeight: 700,
+        color: theme.palette.maskColor.second,
+    },
+    messageTitle: {
+        fontSize: 14,
+        fontWeight: 700,
+        marginTop: theme.spacing(3),
     },
     message: {
-        color: '#15181B',
         fontSize: 12,
-        lineHeight: '16px',
-        flex: 1,
+        marginTop: theme.spacing(1.5),
+        color: theme.palette.maskColor.second,
         wordBreak: 'break-all',
         maxHeight: 260,
         overflow: 'auto',
@@ -56,132 +52,70 @@ const useStyles = makeStyles()(() => ({
             display: 'none',
         },
     },
-    controller: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
-        gap: 20,
-        padding: 16,
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        width: '100%',
-        backgroundColor: '#ffffff',
-    },
-    button: {
-        fontWeight: 600,
-        padding: '9px 0',
-        borderRadius: 20,
-        fontSize: 14,
-        lineHeight: '20px',
-    },
-    error: {
-        color: '#FF5F5F',
-        fontSize: 12,
-        lineHeight: '16px',
-        padding: '0 16px 20px 16px',
-        wordBreak: 'break-all',
-    },
 }))
 
 const SignRequest = memo(() => {
     const { t } = useI18N()
-    const routeLocation = useRouteLocation()
-    const navigate = useNavigate()
     const { classes } = useStyles()
-    const { value } = useUnconfirmedRequest()
+    const [params] = useSearchParams()
+    const navigate = useNavigate()
+    const latestRequest = useLatestRequest()
+    const { Request } = useWeb3State()
 
-    const wallets = useWallets()
-    const [transferError, setTransferError] = useState(false)
+    const source = params.get('source')
 
-    const { data, address } = useMemo(() => {
-        if (!value)
-            return {
-                data: '',
-                address: '',
-            }
-        if (
-            value?.payload.method === EthereumMethodType.ETH_SIGN ||
-            value?.payload.method === EthereumMethodType.ETH_SIGN_TYPED_DATA
-        ) {
+    const message = useMemo(() => {
+        if (!latestRequest) return
+        const { method, params } = latestRequest.arguments
+        if (method === EthereumMethodType.ETH_SIGN || method === EthereumMethodType.ETH_SIGN_TYPED_DATA) {
             try {
-                return {
-                    address: value.payload.params?.[0],
-                    data: toUtf8(value.payload.params?.[1] ?? ''),
-                }
+                return toUtf8(params[1])
             } catch {
-                return {
-                    address: value.payload.params?.[0],
-                    data: value.payload.params?.[1],
-                }
+                return params[1]
             }
-        } else if (value?.payload.method === EthereumMethodType.PERSONAL_SIGN)
-            return {
-                address: value.payload.params?.[1],
-                data: value.payload.params?.[0],
-            }
-
-        return {
-            data: '',
-            address: '',
+        } else if (method === EthereumMethodType.PERSONAL_SIGN) {
+            return params[0]
         }
-    }, [value])
+    }, [latestRequest])
 
-    const wallet = wallets.find((x) => isSameAddress(x.address, address))
-    const [{ loading }, handleConfirm] = useAsyncFn(async () => {
-        const goBack = new URLSearchParams(routeLocation.search).get('goBack')
+    const [{ loading: confirmLoading }, handleConfirm] = useAsyncFn(async () => {
+        if (!latestRequest) return
+        await Request?.approveRequest(latestRequest.ID)
+        if (source) await Services.Helper.removePopupWindow()
+        navigate(-1)
+    }, [latestRequest, Request, source])
 
-        if (value) {
-            try {
-                await WalletRPC.confirmRequest(value.payload, {
-                    disableClose: !!goBack,
-                    owner: wallet?.owner,
-                    identifier: wallet?.identifier,
-                })
-                navigate(-1)
-            } catch (error_) {
-                setTransferError(true)
-            }
-        }
-    }, [value, routeLocation.search, wallet])
-
-    const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
-        if (!value) return
-        await WalletRPC.rejectRequest(value.payload)
+    const [{ loading: cancelLoading }, handleCancel] = useAsyncFn(async () => {
+        if (!latestRequest) return
+        await Request?.denyRequest(latestRequest.ID)
+        if (source) await Services.Helper.removePopupWindow()
         navigate(PopupRoutes.Wallet, { replace: true })
-    }, [value])
-
-    useTitle(t('popups_wallet_signature_request_title'))
+    }, [latestRequest, Request, source])
 
     return (
-        <main className={classes.container}>
-            <div className={classes.info}>
-                <Typography className={classes.title}>{t('popups_wallet_signature_request')}</Typography>
-                <Typography className={classes.walletName}>{wallet?.name ?? ''}</Typography>
-                <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
-                    {typeof address === 'string' ? address : undefined}
-                </Typography>
-            </div>
-            <Typography className={classes.secondary} style={{ marginTop: 20 }}>
-                {t('popups_wallet_signature_request_message')}:
-            </Typography>
-            <Typography className={classes.message}>{data}</Typography>
-            {transferError ? (
-                <Typography className={classes.error}>{t('popups_wallet_transfer_error_tip')}</Typography>
-            ) : null}
-            <div className={classes.controller}>
-                <LoadingButton
-                    loading={rejectLoading}
-                    variant="contained"
-                    className={classes.button}
-                    style={!rejectLoading ? { backgroundColor: '#F7F9FA', color: '#1C68F3' } : undefined}
-                    onClick={handleReject}>
+        <Box>
+            <main className={classes.container}>
+                <Typography className={classes.title}>{t('popups_wallet_signature_request_title')}</Typography>
+                {source ? (
+                    <Box className={classes.source}>
+                        <Typography fontSize={16} fontWeight={700}>
+                            {t('popups_wallet_request_source')}
+                        </Typography>
+                        <Typography className={classes.sourceText}>{source}</Typography>
+                    </Box>
+                ) : null}
+                <Typography className={classes.messageTitle}>{t('popups_wallet_sign_message')}</Typography>
+                <Typography className={classes.message}>{message}</Typography>
+            </main>
+            <BottomController>
+                <ActionButton loading={cancelLoading} onClick={handleCancel} fullWidth variant="outlined">
                     {t('cancel')}
-                </LoadingButton>
-                <LoadingButton loading={loading} variant="contained" className={classes.button} onClick={handleConfirm}>
+                </ActionButton>
+                <ActionButton loading={confirmLoading} onClick={handleConfirm} fullWidth>
                     {t('confirm')}
-                </LoadingButton>
-            </div>
-        </main>
+                </ActionButton>
+            </BottomController>
+        </Box>
     )
 })
 
