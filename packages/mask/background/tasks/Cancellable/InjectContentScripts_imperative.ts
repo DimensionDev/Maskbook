@@ -4,8 +4,8 @@ import { hmr } from '../../../utils-pure/hmr.js'
 import type { ExtensionTypes, WebNavigation } from 'webextension-polyfill'
 
 const { signal } = hmr(import.meta.webpackHot)
-export const injectedScriptURL = '/injected-script.js'
-export const maskSDK_URL = '/mask-sdk.js'
+export const injectedScriptURL = '/js/injected-script.js'
+export const maskSDK_URL = '/js/mask-sdk.js'
 export const contentScriptURL = '/generated__content__script.html'
 
 if (typeof browser.scripting?.registerContentScripts === 'undefined') InjectContentScript(signal)
