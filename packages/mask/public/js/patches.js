@@ -28,7 +28,7 @@ if (!globalThis[Symbol.for('mask_init_patch')]) {
             patch[api] = desc
             PatchThisOfDescriptorToGlobal(desc, window)
         }
-        console.log('[Mask] applying primorial patches', patch)
+        console.log('[Mask] applying intrinsic patches', patch)
         Object.defineProperties(window, patch)
         /**
          * Many methods on `window` requires `this` points to a Window object
