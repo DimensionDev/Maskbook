@@ -9,6 +9,7 @@ import { useTitle } from '../../../hook/useTitle.js'
 import { Rename } from './Rename.js'
 import { Contacts } from './Contacts.js'
 import { useStyles } from './useStyles.js'
+import { AutoLock } from './AutoLock.js'
 
 const WalletSettings = memo(() => {
     const { t } = useI18N()
@@ -48,15 +49,7 @@ const WalletSettings = memo(() => {
                 </ListItem>
                 <Rename />
                 <Contacts />
-                <ListItem className={classes.item}>
-                    <Box className={classes.itemBox}>
-                        <Icons.Time size={20} color={theme.palette.maskColor.second} />
-                        <Typography className={classes.itemText}>
-                            {t('popups_wallet_settings_auto_unlock_time')}
-                        </Typography>
-                    </Box>
-                    <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />
-                </ListItem>
+                <AutoLock />
                 <ListItem className={classes.item}>
                     <Box className={classes.itemBox}>
                         <Icons.Currency size={20} color={theme.palette.maskColor.second} />

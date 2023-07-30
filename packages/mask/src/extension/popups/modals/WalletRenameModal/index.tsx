@@ -78,6 +78,7 @@ function WalletRenameDrawer({ wallet, ...rest }: WalletRenameDrawerProps) {
                 </Typography>
             ) : null}
             <ActionButton
+                loading={loading}
                 disabled={loading || !name.length || !!error}
                 onClick={handleClick}
                 sx={{ marginTop: '16px' }}>

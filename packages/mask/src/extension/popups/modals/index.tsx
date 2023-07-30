@@ -5,6 +5,7 @@ import { AddContactModal } from './AddContactModal/index.js'
 import { EditContactModal } from './EditContactModal/index.js'
 import { DeleteContactModal } from './DeleteContactModal/index.js'
 import { WalletRenameModal } from './WalletRenameModal/index.js'
+import { WalletAutoLockSettingModal } from './WalletAutoLockSettingModal/index.js'
 
 import * as modals from './modals.js'
 export * from './modals.js'
@@ -18,6 +19,7 @@ export const Modals = memo(function Modals() {
             <EditContactModal ref={modals.EditContactModal.register} />
             <DeleteContactModal ref={modals.DeleteContactModal.register} />
             <WalletRenameModal ref={modals.WalletRenameModal.register} />
+            <WalletAutoLockSettingModal ref={modals.WalletAutoLockSettingModal.register} />
         </>
     )
 })
