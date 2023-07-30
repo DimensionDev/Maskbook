@@ -15,12 +15,12 @@ import {
 } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
-import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { MaskDarkTheme, MaskLightTheme, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useAccount, useFungibleTokenBalance, useNativeToken, useWeb3State } from '@masknet/web3-hooks-base'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, formatCurrency, isSameAddress, leftShift } from '@masknet/web3-shared-base'
 import { SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { Box, Button, Skeleton, Typography } from '@mui/material'
+import { Box, Button, Skeleton, ThemeProvider, Typography } from '@mui/material'
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
@@ -129,7 +129,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 const TokenDetail = memo(function TokenDetail() {
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
     const { t } = useI18N()
     const { chainId, address } = useTokenParams()
     const navigate = useNavigate()
@@ -277,7 +277,14 @@ const TokenDetail = memo(function TokenDetail() {
                         <CoinMetadataTable trending={trending} />
                     </Box>
                 )}
-                <ActionGroup className={classes.actions} chainId={chainId} address={address} onSwap={openSwapDialog} />
+                <ThemeProvider theme={theme.palette.mode === 'light' ? MaskDarkTheme : MaskLightTheme}>
+                    <ActionGroup
+                        className={classes.actions}
+                        chainId={chainId}
+                        address={address}
+                        onSwap={openSwapDialog}
+                    />
+                </ThemeProvider>
             </Box>
         </div>
     )
