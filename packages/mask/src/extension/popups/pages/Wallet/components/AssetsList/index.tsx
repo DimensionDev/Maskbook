@@ -158,7 +158,7 @@ export const AssetsListUI = memo<AssetsListUIProps>(function AssetsListUI({ isEx
                                         value={isNaN(asset.balance) ? 0 : asset.balance}
                                         decimals={isNaN(asset.decimals) ? 0 : asset.decimals}
                                         symbol={asset.symbol}
-                                        significant={6}
+                                        significant={4}
                                         formatter={formatBalance}
                                     />
                                 </Typography>
