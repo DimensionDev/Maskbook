@@ -46,6 +46,7 @@ export class MaskWalletProvider
             (x) => !!x.owner,
         )
     }
+
     async update() {
         // Fetching info of SmartPay wallets is slow, update provider wallets eagerly here.
         await this.updateImmediately()

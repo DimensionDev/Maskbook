@@ -1,1 +1,5 @@
-{}
+{
+    "plugin_ito_status_no_start": "尚未开始",
+    "plugin_ito_status_ongoing": "进行中",
+    "plugin_ito_continue": "继续"
+}

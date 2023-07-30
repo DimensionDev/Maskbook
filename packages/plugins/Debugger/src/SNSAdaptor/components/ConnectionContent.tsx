@@ -242,6 +242,14 @@ export function ConnectionContent(props: ConnectionContentProps) {
         } catch (error: unknown) {
             // eslint-disable-next-line no-alert
             if (error instanceof Error) alert(error.message)
+        } finally {
+            if ((await Web3.getChainId()) === chainId) {
+                // eslint-disable-next-line no-alert
+                alert(`Switched to chain ${chainId}`)
+            } else {
+                // eslint-disable-next-line no-alert
+                alert(`Failed to switch to chain ${chainId}`)
+            }
         }
     }, [])
 

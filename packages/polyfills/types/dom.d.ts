@@ -48,6 +48,7 @@ interface DOMParser {
 declare namespace React {
     interface HTMLAttributes<T> {
         dangerouslySetInnerHTML?: { __html: string | TrustedHTML } | undefined
+        'data-hide-scrollbar'?: boolean
     }
 }
 

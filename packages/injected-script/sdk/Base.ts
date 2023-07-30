@@ -1,9 +1,9 @@
 import { createPromise, sendEvent } from './utils.js'
 
 export class InjectedProvider {
-    private events = new Map<string, Set<(data: unknown) => void>>()
-    private isReadyInternal = false
-    private isConnectedInternal = false
+    protected events = new Map<string, Set<(data: unknown) => void>>()
+    protected isReadyInternal = false
+    protected isConnectedInternal = false
 
     constructor(public pathname: string) {
         this.startup()
@@ -12,6 +12,9 @@ export class InjectedProvider {
     private async startup() {
         await this.untilAvailable()
 
+        // if a provider is not ready, it will not be able to connect
+        if (!this.isReady) return
+
         this.on('connected', () => {
             this.isConnectedInternal = true
         })
@@ -19,7 +22,7 @@ export class InjectedProvider {
             this.isConnectedInternal = false
         })
 
-        this.isConnectedInternal = (await this.getProperty('isConnected')) as boolean
+        this.isConnectedInternal = (await this.getProperty<boolean | null>('isConnected')) ?? false
     }
 
     get isReady() {
@@ -95,7 +98,7 @@ export class InjectedProvider {
     /**
      * Access primitive property on the sdk object.
      */
-    getProperty(key: string): Promise<unknown> {
+    getProperty<T = unknown>(key: string): Promise<T | null> {
         return createPromise((id) => sendEvent('web3BridgePrimitiveAccess', this.pathname, id, key))
     }
 }

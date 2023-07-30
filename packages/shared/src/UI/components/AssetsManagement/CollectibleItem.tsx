@@ -207,25 +207,30 @@ export interface CollectibleItemSkeletonProps extends HTMLProps<HTMLDivElement> 
     omitName?: boolean
 }
 
-export function CollectibleItemSkeleton({ className, omitInfo, omitName, ...rest }: CollectibleItemSkeletonProps) {
-    const { classes, cx } = useStyles()
-    return (
-        <div className={cx(classes.card, className)} {...rest}>
-            <div className={classes.collectibleCard}>
-                <Skeleton animation="wave" variant="rectangular" sx={{ borderRadius: '8px' }} height="100%" />
-            </div>
-            {omitInfo ? null : (
-                <div className={classes.info}>
-                    {omitName ? null : (
-                        <Typography className={classes.name} variant="body2">
-                            <Skeleton animation="wave" variant="text" width="80%" />
-                        </Typography>
-                    )}
-                    <Typography className={classes.identity} variant="body2" component="div">
-                        <Skeleton animation="wave" variant="text" width={'40%'} />
-                    </Typography>
+export const CollectibleItemSkeleton = memo(
+    forwardRef<HTMLDivElement, CollectibleItemSkeletonProps>(function CollectibleItemSkeleton(
+        { className, omitInfo, omitName, ...rest },
+        ref,
+    ) {
+        const { classes, cx } = useStyles()
+        return (
+            <div className={cx(classes.card, className)} {...rest} ref={ref}>
+                <div className={classes.collectibleCard}>
+                    <Skeleton animation="wave" variant="rectangular" sx={{ borderRadius: '8px' }} height="100%" />
                 </div>
-            )}
-        </div>
-    )
-}
+                {omitInfo ? null : (
+                    <div className={classes.info}>
+                        {omitName ? null : (
+                            <Typography className={classes.name} variant="body2">
+                                <Skeleton animation="wave" variant="text" width="80%" />
+                            </Typography>
+                        )}
+                        <Typography className={classes.identity} variant="body2" component="div">
+                            <Skeleton animation="wave" variant="text" width={'40%'} />
+                        </Typography>
+                    </div>
+                )}
+            </div>
+        )
+    }),
+)

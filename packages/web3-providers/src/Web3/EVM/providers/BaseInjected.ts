@@ -29,7 +29,7 @@ export class BaseInjectedProvider
     }
 
     override get readyPromise() {
-        if (isInPageEthereumInjected()) return this.bridge.untilAvailable().then(() => undefined)
+        if (isInPageEthereumInjected()) return this.bridge.untilAvailable()
         return Promise.reject(new Error('Not available on extension site.'))
     }
 

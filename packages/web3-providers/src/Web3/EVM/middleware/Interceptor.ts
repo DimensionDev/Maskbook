@@ -6,7 +6,6 @@ import { WalletConnect } from '../interceptors/WalletConnect.js'
 import { MetaMaskLike } from '../interceptors/MetaMaskLike.js'
 import { Fortmatic } from '../interceptors/Fortmatic.js'
 import { ContractWallet } from '../interceptors/ContractWallet.js'
-import { CustomNetwork } from '../interceptors/CustomNetwork.js'
 import { Popups } from '../interceptors/Popups.js'
 import { SmartPayAccountAPI, SmartPayBundlerAPI, SmartPayFunderAPI } from '../../../SmartPay/index.js'
 
@@ -18,7 +17,6 @@ export class Interceptor implements Middleware<ConnectionContext> {
     private composers: Partial<Record<ProviderType, Composer<ConnectionContext>>> = {
         [ProviderType.None]: Composer.from(new NoneWallet()),
         [ProviderType.MaskWallet]: Composer.from(
-            new CustomNetwork(),
             new Popups(),
             new ContractWallet(ProviderType.MaskWallet, this.Account, this.Bundler, this.Funder),
             new MaskWallet(),
@@ -26,8 +24,6 @@ export class Interceptor implements Middleware<ConnectionContext> {
         [ProviderType.MetaMask]: Composer.from(new MetaMaskLike(ProviderType.MetaMask)),
         [ProviderType.WalletConnect]: Composer.from(new WalletConnect()),
         [ProviderType.Coin98]: Composer.from(new MetaMaskLike(ProviderType.Coin98)),
-        [ProviderType.WalletLink]: Composer.from(new MetaMaskLike(ProviderType.WalletLink)),
-        [ProviderType.MathWallet]: Composer.from(new MetaMaskLike(ProviderType.MathWallet)),
         [ProviderType.Fortmatic]: Composer.from(new Fortmatic()),
         [ProviderType.Opera]: Composer.from(new MetaMaskLike(ProviderType.Opera)),
         [ProviderType.Clover]: Composer.from(new MetaMaskLike(ProviderType.Clover)),

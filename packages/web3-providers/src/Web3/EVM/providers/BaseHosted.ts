@@ -75,28 +75,12 @@ export class BaseHostedProvider
     protected get options() {
         return {
             isSupportedAccount: () => true,
-            isSupportedChainId: () => true,
+            isSupportedChainId: (chainId: number) => chainId > 0 && Number.isInteger(chainId),
             getDefaultAccount: () => '',
             getDefaultChainId,
             formatAddress: formatEthereumAddress,
             ...this.initial,
         }
-    }
-
-    override get ready() {
-        return [
-            this.walletStorage?.wallets.initialized,
-            this.walletStorage?.account.initialized,
-            this.walletStorage?.chainId.initialized,
-        ].every((x) => !!x)
-    }
-
-    override get readyPromise() {
-        return Promise.all([
-            this.walletStorage?.wallets.initializedPromise,
-            this.walletStorage?.account.initializedPromise,
-            this.walletStorage?.chainId.initializedPromise,
-        ]).then(() => {})
     }
 
     override get subscription() {

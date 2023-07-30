@@ -6,6 +6,7 @@ import type { EditContactModalOpenProps } from './EditContactModal/index.js'
 import type { WalletRenameModalOpenProps } from './WalletRenameModal/index.js'
 import type { DeleteContactModalOpenProps } from './DeleteContactModal/index.js'
 import type { WalletAutoLockSettingModalOpenProps } from './WalletAutoLockSettingModal/index.js'
+import type { GasSettingModalCloseProps, GasSettingModalOpenProps } from './GasSettingModal/index.js'
 
 export const DisconnectModal = new SingletonModal<DisconnectModalOpenProps, DisconnectModalCloseProps>()
 export const ConfirmModal = new SingletonModal<ConfirmModalOpenProps, boolean>()
@@ -14,6 +15,7 @@ export const EditContactModal = new SingletonModal<EditContactModalOpenProps, bo
 export const WalletRenameModal = new SingletonModal<WalletRenameModalOpenProps, boolean>()
 export const DeleteContactModal = new SingletonModal<DeleteContactModalOpenProps, boolean>()
 export const WalletAutoLockSettingModal = new SingletonModal<WalletAutoLockSettingModalOpenProps, boolean>()
+export const GasSettingModal = new SingletonModal<GasSettingModalOpenProps, GasSettingModalCloseProps>()
 
 export * from './ChooseNetworkModal/index.js'
 export * from './ConnectSocialAccountModal/index.js'

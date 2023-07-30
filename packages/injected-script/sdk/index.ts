@@ -1,11 +1,10 @@
 import { CustomEventId, decodeEvent } from '../shared/index.js'
 import { Coin98Provider, Coin98ProviderType } from './Coin98.js'
+import { CoinbaseProvider } from './Coinbase.js'
 import { PhantomProvider } from './Phantom.js'
 import { SolflareProvider } from './Solflare.js'
 import { MetaMaskProvider } from './MetaMask.js'
 import { sendEvent, rejectPromise, resolvePromise } from './utils.js'
-import { MathWalletProvider } from './MathWallet.js'
-import { WalletLinkProvider } from './WalletLink.js'
 import { OperaProvider } from './Opera.js'
 import { CloverProvider } from './Clover.js'
 
@@ -17,10 +16,20 @@ export const injectedCoin98SolanaProvider = new Coin98Provider(Coin98ProviderTyp
 export const injectedPhantomProvider = new PhantomProvider()
 export const injectedSolflareProvider = new SolflareProvider()
 export const injectedMetaMaskProvider = new MetaMaskProvider()
-export const injectedMathWalletProvider = new MathWalletProvider()
-export const injectedWalletLinkProvider = new WalletLinkProvider()
+export const injectedCoinbaseProvider = new CoinbaseProvider()
 export const injectedOperaProvider = new OperaProvider()
 export const injectedCloverProvider = new CloverProvider()
+
+// Please keep this list update to date
+const Providers = [
+    injectedCoinbaseProvider,
+    injectedOperaProvider,
+    injectedCloverProvider,
+    injectedMetaMaskProvider,
+    injectedCoin98EVMProvider,
+    injectedCoin98SolanaProvider,
+    injectedPhantomProvider,
+]
 
 export function pasteText(text: string) {
     sendEvent('paste', text)
@@ -60,18 +69,7 @@ globalThis.document?.addEventListener?.(CustomEventId, (e) => {
 
         case 'web3BridgeEmitEvent':
             const [pathname, eventName, data] = r[1]
-            const provider = [
-                injectedCoin98EVMProvider,
-                injectedCoin98SolanaProvider,
-                injectedPhantomProvider,
-                injectedMetaMaskProvider,
-                injectedMathWalletProvider,
-                injectedWalletLinkProvider,
-                injectedOperaProvider,
-                injectedCloverProvider,
-            ].find((x) => x.pathname === pathname)
-
-            provider?.emit(eventName, data)
+            Providers.filter((x) => x.pathname === pathname).forEach((x) => x?.emit(eventName, data))
             return
 
         case 'web3BridgeBindEvent':
