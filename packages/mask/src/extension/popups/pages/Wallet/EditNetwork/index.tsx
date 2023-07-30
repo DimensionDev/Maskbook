@@ -1,18 +1,20 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Icons } from '@masknet/icons'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { queryClient } from '@masknet/shared-base-ui'
+import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
+import { ChainResolver, ExplorerResolver } from '@masknet/web3-providers'
+import { TokenType, type TransferableNetwork } from '@masknet/web3-shared-base'
+import { NetworkType, SchemaType, ZERO_ADDRESS, type ChainId } from '@masknet/web3-shared-evm'
+import { Button, Input, Typography, alpha } from '@mui/material'
+import { useMutation } from '@tanstack/react-query'
+import { omit } from 'lodash-es'
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { type ZodCustomIssue, type z } from 'zod'
-import { omit } from 'lodash-es'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Icons } from '@masknet/icons'
-import { queryClient } from '@masknet/shared-base-ui'
-import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
-import { getRPCConstant } from '@masknet/web3-shared-evm'
-import { Button, Input, Typography, alpha } from '@mui/material'
-import { ChainResolver, ExplorerResolver } from '@masknet/web3-providers'
-import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
-import { createSchema, getEvmNetworks, useI18N, type AvailableLocaleKeys } from '../../../../../utils/index.js'
+import { createSchema, useI18N, type AvailableLocaleKeys } from '../../../../../utils/index.js'
 import { PageTitleContext } from '../../../context.js'
 import { useTitle } from '../../../hook/index.js'
 
@@ -68,41 +70,35 @@ export const EditNetwork = memo(function EditNetwork() {
     const isEditing = !!id && !chainId
 
     // #region Get network
-    const networks = useMemo(() => getEvmNetworks(true), [])
-    const builtInNetwork = useMemo(() => {
-        if (!chainId) return null
-        const network = networks.find((x) => x.chainId === chainId)
+    const { Network } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
+    const network = useMemo(() => {
+        const network = networks.find((x) => x.ID === id)
         if (!network) return null
         return {
             name: network.name,
-            chainId,
-            rpc: getRPCConstant(network.chainId, 'RPC_URLS')?.[0],
+            chainId: network.chainId,
+            rpc: network.rpcUrl,
             currencySymbol: ChainResolver.nativeCurrency(network.chainId)?.symbol,
             explorer: ExplorerResolver.explorerUrl(network.chainId).url,
+            isCustomized: network.isCustomized,
         }
     }, [chainId, networks])
-    const { data: storedNetworks = [] } = useQuery({
-        enabled: !builtInNetwork && !!chainId,
-        queryKey: ['system', 'wallet', 'networks'],
-        queryFn: () => WalletRPC.getNetworks(),
-    })
-    const storedNetwork = storedNetworks.find((x) => x.id === id)
-    const network = builtInNetwork || storedNetwork
     // #endregion
 
     const { showSnackbar } = usePopupCustomSnackbar()
     useTitle(network ? network.name : t('network_management_add_network'))
     const { setExtension } = useContext(PageTitleContext)
 
-    const isBuiltIn = !!builtInNetwork
+    const isBuiltIn = network ? !network.isCustomized : false
     useEffect(() => {
-        if (isBuiltIn || !id) return
+        if (isBuiltIn || !id || !Network) return
         setExtension(
             <Button
                 variant="text"
                 className={classes.iconButton}
                 onClick={async () => {
-                    await WalletRPC.deleteNetwork(id)
+                    await Network?.removeNetwork(id)
                     showSnackbar(t('deleted_network_successfully'))
                     // Trigger UI update.
                     queryClient.invalidateQueries(QUERY_KEY)
@@ -112,25 +108,24 @@ export const EditNetwork = memo(function EditNetwork() {
             </Button>,
         )
         return () => setExtension(undefined)
-    }, [isBuiltIn, id, classes.iconButton, showSnackbar, t])
+    }, [isBuiltIn, id, classes.iconButton, showSnackbar, t, Network])
 
     const schema = useMemo(() => {
         return createSchema(t, async (name) => {
-            const networks = await WalletRPC.getNetworks()
-            return !networks.find((network) => network.name === name && network.id !== id)
+            return !networks.find((network) => network.name === name && network.ID !== id)
         })
-    }, [t, id])
+    }, [t, id, networks])
 
     type FormInputs = z.infer<typeof schema>
     const {
         getValues,
         register,
         setError,
-        formState: { errors, isValidating, isDirty },
+        formState: { errors, isValidating, isDirty, isValid: isFormValid },
     } = useForm<FormInputs>({
         mode: 'all',
         resolver: zodResolver(schema),
-        defaultValues: network,
+        defaultValues: network || {},
     })
     const checkZodError = useCallback(
         (message: string) => {
@@ -152,13 +147,39 @@ export const EditNetwork = memo(function EditNetwork() {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const { isLoading: isMutating, mutate } = useMutation<void, unknown, FormInputs>({
         mutationFn: async (data) => {
+            if (!Network) return
             setIsSubmitting(true)
+            const chainId = +data.chainId
             try {
+                const network: TransferableNetwork<ChainId, SchemaType, NetworkType> = {
+                    isCustomized: true,
+                    type: NetworkType.CustomNetwork,
+                    chainId,
+                    coinMarketCapChainId: '',
+                    coinGeckoChainId: '',
+                    name: data.name,
+                    fullName: data.name,
+                    network: 'mainnet',
+                    rpcUrl: data.rpc,
+                    nativeCurrency: {
+                        id: ZERO_ADDRESS,
+                        chainId,
+                        type: TokenType.Fungible,
+                        schema: SchemaType.Native,
+                        name: data.currencySymbol || '',
+                        symbol: data.currencySymbol || '',
+                        decimals: 18,
+                        address: ZERO_ADDRESS,
+                    },
+                    explorerUrl: {
+                        url: '',
+                    },
+                }
                 if (isEditing) {
-                    await WalletRPC.updateNetwork(id, { ...data, id })
+                    await Network.updateNetwork(id, network)
                     showSnackbar(t('saved_network_successfully'))
                 } else {
-                    await WalletRPC.addNetwork(data)
+                    await Network.addNetwork(network)
                     showSnackbar(t('adding_network_successfully'))
                 }
                 navigate(-1)
@@ -173,7 +194,7 @@ export const EditNetwork = memo(function EditNetwork() {
 
     const [isChecking, setIsChecking] = useState(false)
     // Discard currencySymbol warning
-    const isValid = Object.keys(omit(errors, 'currencySymbol')).length === 0
+    const isValid = isFormValid || (!!errors.currencySymbol && Object.keys(omit(errors, 'currencySymbol')).length === 0)
     const isNotReady = isValidating || (!isValidating && !isValid) || !isDirty || isChecking
     const disabled = isNotReady || isMutating || isSubmitting
 
@@ -203,6 +224,10 @@ export const EditNetwork = memo(function EditNetwork() {
                     {...register('name')}
                     placeholder="Cel"
                     disabled={isBuiltIn}
+                    inputProps={{
+                        placeholder: '',
+                        maxLength: 20,
+                    }}
                 />
                 {errors.name ? <Typography className={classes.error}>{errors.name.message}</Typography> : null}
 

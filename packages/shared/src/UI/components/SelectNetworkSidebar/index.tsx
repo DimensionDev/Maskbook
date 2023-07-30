@@ -3,6 +3,7 @@ import { useSharedI18N } from '@masknet/shared'
 import { type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { ReasonableNetwork } from '@masknet/web3-shared-base'
 import { Button, styled } from '@mui/material'
 import { memo, type HTMLProps } from 'react'
 import { NetworkIcon } from '../NetworkIcon/index.js'
@@ -48,7 +49,7 @@ const useStyles = makeStyles()({
 })
 
 interface SelectNetworkSidebarProps extends HTMLProps<HTMLDivElement> {
-    networks: Web3Helper.NetworkDescriptorAll[]
+    networks: Array<ReasonableNetwork<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll, Web3Helper.NetworkTypeAll>>
     pluginID: NetworkPluginID
     hideAllButton?: boolean
     chainId?: Web3Helper.ChainIdAll
@@ -83,7 +84,7 @@ export const SelectNetworkSidebar = memo(function SelectNetworkSidebar({
                     className={classes.networkButton}
                     disableRipple
                     onClick={() => onChainChange?.(x.chainId)}>
-                    <NetworkIcon pluginID={pluginID} chainId={x.chainId} ImageIconProps={{ size: 24 }} />
+                    <NetworkIcon pluginID={pluginID} chainId={x.chainId} name={x.name} size={24} />
                     {chainId === x.chainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
                 </Button>
             ))}

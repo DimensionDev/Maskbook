@@ -49,7 +49,7 @@ export const Icon = memo<IconProps>(function Icon(props) {
                 backgroundImage: showImage ? undefined : `url("${defaultBackgroundImage}")`,
                 backgroundColor: showImage ? color ?? theme.palette.common.white : undefined,
             }}>
-            {label ?? name?.slice(0, 1).toUpperCase()}
+            {label ?? name?.slice(0, 1).toUpperCase() ?? '?'}
         </Avatar>
     )
 })

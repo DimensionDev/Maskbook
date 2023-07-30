@@ -25,7 +25,7 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
 
     public networkID?: Subscription<string>
     public network?: Subscription<ReasonableNetwork<ChainId, SchemaType, NetworkType>>
-    public networks?: Subscription<Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>>
+    public networks: Subscription<Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>>
 
     constructor(
         protected context: Plugin.Shared.SharedUIContext,
@@ -34,7 +34,7 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
         },
     ) {
         const { storage } = PersistentStorages.Web3.createSubScope(`${this.options.pluginID}_Network`, {
-            networkID: '',
+            networkID: '1_ETH',
             networks: {},
         })
 
@@ -43,8 +43,9 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
         this.networkID = this.storage.networkID.subscription
 
         this.networks = mapSubscription(this.storage.networks.subscription, (storage) => {
+            // Newest to oldest
             const customizedNetworks = Object.values(storage).sort(
-                (a, z) => a.createdAt.getTime() - z.createdAt.getTime(),
+                (a, z) => z.createdAt.getTime() - a.createdAt.getTime(),
             )
             const registeredChains = getRegisteredWeb3Chains(this.options.pluginID)
             const registeredNetworks = getRegisteredWeb3Networks(this.options.pluginID)
@@ -75,8 +76,9 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
     }
 
     private assertNetwork(id: string) {
-        if (!Object.hasOwn(this.storage.networks.value, id)) throw new Error('Not a valid network ID.')
-        return this.storage.networks.value[id]
+        const network = this.networks.getCurrentValue().find((x) => x.ID === id)
+        if (!network) throw new Error('Not a valid network ID.')
+        return network
     }
 
     protected async validateNetwork(network: TransferableNetwork<ChainId, SchemaType, NetworkType>) {

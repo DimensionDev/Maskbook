@@ -1,6 +1,3 @@
-import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import urlcat from 'urlcat'
 import { Icons } from '@masknet/icons'
 import {
     CoinMetadataTable,
@@ -16,13 +13,14 @@ import {
     ReloadStatus,
     TokenIcon,
 } from '@masknet/shared'
-import { Days, EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { openWindow } from '@masknet/shared-base-ui'
+import { Days, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { MaskDarkTheme, MaskLightTheme, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
-import { useAccount, useFungibleTokenBalance, useNativeToken, useWeb3State } from '@masknet/web3-hooks-base'
-import { TokenType, formatBalance, formatCurrency, isSameAddress, leftShift, trimZero } from '@masknet/web3-shared-base'
+import { useAccount, useFungibleTokenBalance, useWeb3State } from '@masknet/web3-hooks-base'
+import { TokenType, formatBalance, formatCurrency, leftShift, trimZero } from '@masknet/web3-shared-base'
 import { SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, ThemeProvider, Typography } from '@mui/material'
+import { memo, useContext, useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { PageTitleContext } from '../../../context.js'
 import { useTitle, useTokenParams } from '../../../hook/index.js'
@@ -136,7 +134,6 @@ const TokenDetail = memo(function TokenDetail() {
     const { t } = useI18N()
     const { chainId, address } = useTokenParams()
     const navigate = useNavigate()
-    const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const isNativeToken = isNativeTokenAddress(address)
     const { data: balance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address, { chainId })
@@ -151,23 +148,6 @@ const TokenDetail = memo(function TokenDetail() {
     const { data: trending, isLoading: isLoadingTrending, isError } = useTrending(chainId, address)
     const priceChange =
         trending?.market?.price_change_percentage_24h_in_currency || trending?.market?.price_change_24h || 0
-
-    const openSwapDialog = useCallback(async () => {
-        const url = urlcat(
-            'popups.html#/',
-            PopupRoutes.Swap,
-            !isSameAddress(nativeToken?.address, asset?.address)
-                ? {
-                      id: asset?.address,
-                      name: asset?.name,
-                      symbol: asset?.symbol,
-                      contract_address: asset?.address,
-                      decimals: asset?.decimals,
-                  }
-                : {},
-        )
-        openWindow(browser.runtime.getURL(url), 'SWAP_DIALOG')
-    }, [asset, nativeToken])
 
     const [chartRange, setChartRange] = useState(Days.ONE_DAY)
     const {
@@ -281,12 +261,7 @@ const TokenDetail = memo(function TokenDetail() {
                     </Box>
                 )}
                 <ThemeProvider theme={theme.palette.mode === 'light' ? MaskDarkTheme : MaskLightTheme}>
-                    <ActionGroup
-                        className={classes.actions}
-                        chainId={chainId}
-                        address={address}
-                        onSwap={openSwapDialog}
-                    />
+                    <ActionGroup className={classes.actions} chainId={chainId} address={address} />
                 </ThemeProvider>
             </Box>
         </div>
