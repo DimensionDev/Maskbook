@@ -1,3 +1,4 @@
+import { getAutoLockerTime } from './database/locker.js'
 import * as password from './password.js'
 import { CrossIsolationMessages, LockStatus, currentMaskWalletLockStatusSettings } from '@masknet/shared-base'
 
@@ -25,15 +26,14 @@ export async function unlockWallet(unverifiedPassword: string) {
     }
 }
 
-const DEFAULT_LOCK_TIME = 1000 * 60 * 15 // 15 mins
-
 let autoLockTimer: NodeJS.Timeout | undefined
 
-export function setAutoLockTimer() {
+export async function setAutoLockTimer() {
+    const autoLockTime = await getAutoLockerTime()
     clearTimeout(autoLockTimer)
     autoLockTimer = setTimeout(async () => {
         await lockWallet()
-    }, DEFAULT_LOCK_TIME)
+    }, autoLockTime)
 }
 
-setAutoLockTimer()
+export * from './database/locker.js'

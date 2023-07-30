@@ -1,10 +1,14 @@
-import { forwardRef, useState } from 'react'
-import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { forwardRef, useEffect, useState } from 'react'
+import { useAsyncFn, useAsyncRetry } from 'react-use'
+import millisecondsToMinutes from 'date-fns/millisecondsToMinutes'
+import minutesToMilliseconds from 'date-fns/minutesToMilliseconds'
 import { Box, TextField, Typography, useTheme } from '@mui/material'
 import { type SingletonModalRefCreator } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useSingletonModal } from '@masknet/shared-base-ui'
+import { WalletRPC } from '../../../../plugins/WalletService/messages.js'
+import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
+import { useI18N } from '../../../../utils/i18n-next-ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -53,10 +57,21 @@ function WalletAutoLockSettingDrawer({ ...rest }: WalletAutoLockSettingDrawerPro
     const { t } = useI18N()
     const theme = useTheme()
     const { classes, cx } = useStyles()
-    const [time, setTime] = useState('15')
-    const [noAutoLock, setNoAutoLock] = useState(false)
+    const { value: autoLockerTime = 900000, retry } = useAsyncRetry(WalletRPC.getAutoLockerTime, [])
+
+    const [time, setTime] = useState(millisecondsToMinutes(autoLockerTime).toString())
     const error = Number.isNaN(Number(time))
 
+    useEffect(() => {
+        setTime(millisecondsToMinutes(autoLockerTime).toString())
+    }, [autoLockerTime])
+
+    const [{ loading }, setAutoLockerTime] = useAsyncFn(async (time: number) => {
+        await WalletRPC.setAutoLockerTime(time)
+        retry()
+    }, [])
+
+    console.log({ autoLockerTime })
     const options = [
         {
             value: '15',
@@ -131,7 +146,11 @@ function WalletAutoLockSettingDrawer({ ...rest }: WalletAutoLockSettingDrawerPro
                 ))}
             </Box>
 
-            <ActionButton disabled={error} sx={{ marginTop: '16px' }}>
+            <ActionButton
+                disabled={error || loading}
+                loading={loading}
+                sx={{ marginTop: '16px' }}
+                onClick={() => setAutoLockerTime(minutesToMilliseconds(Number(time)))}>
                 {t('confirm')}
             </ActionButton>
         </BottomDrawer>
