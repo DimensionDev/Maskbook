@@ -32,7 +32,8 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     const computedFlags = computedBuildFlags(flags)
     const cacheKey = computeCacheKey(flags, computedFlags)
 
-    const polyfillFolder = join(flags.outputPath, './polyfill')
+    const nonWebpackJSFiles = join(flags.outputPath, './js')
+    const polyfillFolder = join(nonWebpackJSFiles, './polyfill')
 
     const pnpmPatches = readdir(patchesDir).then((files) => files.map((x) => join(patchesDir, x)))
     const baseConfig: webpack.Configuration = {
@@ -197,9 +198,12 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             new CopyPlugin({
                 patterns: [
                     { from: join(__dirname, '../public/'), to: flags.outputPath },
-                    { from: join(__dirname, '../../injected-script/dist/injected-script.js'), to: flags.outputPath },
-                    { from: join(__dirname, '../../gun-utils/gun.js'), to: flags.outputPath },
-                    { from: join(__dirname, '../../mask-sdk/dist/mask-sdk.js'), to: flags.outputPath },
+                    {
+                        from: join(__dirname, '../../injected-script/dist/injected-script.js'),
+                        to: nonWebpackJSFiles,
+                    },
+                    { from: join(__dirname, '../../gun-utils/gun.js'), to: nonWebpackJSFiles },
+                    { from: join(__dirname, '../../mask-sdk/dist/mask-sdk.js'), to: nonWebpackJSFiles },
                     {
                         context: join(__dirname, '../../polyfills/dist/'),
                         from: '*.js',
@@ -215,7 +219,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                     },
                     {
                         from: join(__dirname, '../../sentry/dist/sentry.js'),
-                        to: join(flags.outputPath, 'sentry.js'),
+                        to: nonWebpackJSFiles,
                     },
                 ],
             }),
@@ -268,13 +272,13 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 dynamicImport: true,
             },
             path: flags.outputPath,
-            filename: 'js/[name].js',
-            // In some cases webpack will emit files starts with "_" which is reserved in web extension.
-            chunkFilename: 'js/chunk.[name].js',
+            filename: 'bundled/[name].js',
+            chunkFilename: 'bundled/chunk.[name].js',
             assetModuleFilename: 'assets/[hash][ext][query]',
-            devtoolModuleFilenameTemplate: 'webpack://[namespace]/[resource-path]',
-            hotUpdateChunkFilename: 'hot/[id].[fullhash].js',
+            webassemblyModuleFilename: 'assets/[hash].wasm',
             hotUpdateMainFilename: 'hot/[runtime].[fullhash].json',
+            hotUpdateChunkFilename: 'hot/[id].[fullhash].js',
+            devtoolModuleFilenameTemplate: 'webpack://[namespace]/[resource-path]',
             globalObject: 'globalThis',
             publicPath: '/',
             clean: flags.mode === 'production',
@@ -284,7 +288,10 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                   }
                 : undefined,
         },
-        ignoreWarnings: [/Failed to parse source map/],
+        ignoreWarnings: [
+            /Failed to parse source map/,
+            /Critical dependency: the request of a dependency is an expression/,
+        ],
         devServer: {
             hot: flags.hmr ? 'only' : false,
             liveReload: false,
@@ -328,7 +335,7 @@ async function addHTMLEntry(
 ) {
     let template = await templateContent
     if (options.gun) {
-        template = template.replace(`<!-- Gun -->`, '<script src="/gun.js"></script>')
+        template = template.replace(`<!-- Gun -->`, '<script src="/js/gun.js"></script>')
     }
     return new HTMLPlugin({
         templateContent,
