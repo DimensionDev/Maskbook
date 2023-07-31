@@ -2,20 +2,20 @@ import { Icons } from '@masknet/icons'
 import { CollectionList, RestorableScroll, UserAssetsProvider } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, useTabs } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
-import { Box, Button, Tab, styled, tabClasses, tabsClasses } from '@mui/material'
+import { Box, Button, Tab, Typography, styled, tabClasses, tabsClasses } from '@mui/material'
 import { memo, useCallback, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useMount } from 'react-use'
 import { useContainer } from 'unstated-next'
+import urlcat from 'urlcat'
 import { useI18N } from '../../../../../../utils/index.js'
 import { WalletContext } from '../../hooks/useWalletContext.js'
+import { WalletAssetTabs } from '../../type.js'
 import { ActivityList } from '../ActivityList/index.js'
 import { AssetsList } from '../AssetsList/index.js'
-import { WalletAssetTabs } from '../../type.js'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import urlcat from 'urlcat'
 
 const gridProps = {
     columns: 'repeat(auto-fill, minmax(20%, 1fr))',
@@ -84,6 +84,13 @@ const useStyles = makeStyles()((theme) => {
             backgroundColor: theme.palette.maskColor.bottom,
             boxShadow: `0px 4px 6px 0px ${isDark ? 'rgba(0, 0, 0, 0.10)' : 'rgba(102, 108, 135, 0.10)'}`,
             marginLeft: 'auto',
+        },
+        importNft: {
+            cursor: 'pointer',
+            color: isDark ? theme.palette.maskColor.main : theme.palette.maskColor.highlight,
+            fontSize: 14,
+            fontWeight: 400,
+            textAlign: 'center',
         },
     }
 })
@@ -163,6 +170,15 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI(
 
     const scrollTargetRef = useRef<HTMLDivElement>(null)
 
+    const collectiblesEmptyText = (
+        <>
+            <Typography component="div">{t('do_not_see_your_nft')}</Typography>
+            <Typography className={classes.importNft} role="button" onClick={() => onAddToken(currentTab)}>
+                {t('import_nft')}
+            </Typography>
+        </>
+    )
+
     return (
         <div className={classes.content}>
             <TabContext value={currentTab}>
@@ -217,6 +233,7 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI(
                                     disableSidebar
                                     disableWindowScroll
                                     scrollElementRef={scrollTargetRef}
+                                    emptyText={collectiblesEmptyText}
                                     onItemClick={handleItemClick}
                                     onCollectionChange={handleCollectionChange}
                                 />

@@ -57,6 +57,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     body: {
         marginTop: theme.spacing(1.5),
+        flexGrow: 1,
     },
     icon: {
         marginLeft: theme.spacing(1.5),

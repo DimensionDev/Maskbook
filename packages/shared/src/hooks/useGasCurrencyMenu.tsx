@@ -1,6 +1,6 @@
 import { compact, noop } from 'lodash-es'
 import { useCallback, useState } from 'react'
-import { Button, MenuItem, Radio as MuiRadio, type RadioProps, Typography } from '@mui/material'
+import { Button, MenuItem, Typography, Radio } from '@mui/material'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { formatBalance, isLessThan, isSameAddress } from '@masknet/web3-shared-base'
@@ -34,8 +34,6 @@ export function useGasCurrencyMenu(
     pluginId?: NetworkPluginID,
     onCurrencyChange?: (address: string) => void,
     selectedAddress?: string,
-    // TODO: remove this after override popups theme
-    Radio: React.ComponentType<RadioProps> = MuiRadio,
     handleUnlock?: () => void,
 ) {
     const sharedI18N = useSharedI18N()

@@ -10,8 +10,11 @@ import {
     EthereumMethodType,
     ProviderType,
     createJsonRpcPayload,
+    type RequestArguments,
+    type RequestOptions,
+    createJsonRpcResponse,
 } from '@masknet/web3-shared-evm'
-import { RequestStateType, isGreaterThan, isZero, toFixed } from '@masknet/web3-shared-base'
+import { RequestStateType, isGreaterThan, isZero, toFixed, type TransferableRequest } from '@masknet/web3-shared-base'
 import { DepositPaymaster } from '../../../SmartPay/libs/DepositPaymaster.js'
 import { SharedContextRef } from '../../../PluginContext/index.js'
 import { SmartPayBundlerAPI } from '../../../SmartPay/index.js'
@@ -20,6 +23,7 @@ import { ContractReadonlyAPI } from '../apis/ContractReadonlyAPI.js'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { Providers } from '../providers/index.js'
+import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
 
 const DEFAULT_PAYMENT_TOKEN_STATE = {
     allowMaskAsGas: false,
@@ -30,6 +34,13 @@ export class Popups implements Middleware<ConnectionContext> {
     private Web3 = new ConnectionReadonlyAPI()
     private Contract = new ContractReadonlyAPI()
     private Bundler = new SmartPayBundlerAPI()
+    private Request = new RequestReadonlyAPI()
+
+    private get customNetwork() {
+        if (!Web3StateRef.value.Network) throw new Error('The web3 state does not load yet.')
+        const network = Web3StateRef.value.Network.network?.getCurrentValue()
+        return network?.isCustomized ? network : undefined
+    }
 
     private async getPaymentToken(context: ConnectionContext) {
         const maskAddress = getMaskTokenAddress(context.chainId)
@@ -97,6 +108,7 @@ export class Popups implements Middleware<ConnectionContext> {
             }
         }
     }
+
     async fn(context: ConnectionContext, next: () => Promise<void>) {
         // Draw the Popups up and wait for user confirmation before publishing risky requests on the network
         if (context.risky && context.writeable) {
@@ -106,12 +118,11 @@ export class Popups implements Middleware<ConnectionContext> {
                 await Providers[ProviderType.MaskWallet].switchChain(context.chainId)
             }
 
-            const paymentToken = await this.getPaymentToken(context)
-            const requestToBeApproved = {
+            const requestToBeApproved: TransferableRequest<RequestArguments, RequestOptions> = {
                 state: RequestStateType.NOT_DEPEND,
                 arguments: context.requestArguments,
                 options: {
-                    ...paymentToken,
+                    ...(await this.getPaymentToken(context)),
                     owner: context.owner,
                     identifier: context.identifier?.toText(),
                 },
@@ -127,16 +138,28 @@ export class Popups implements Middleware<ConnectionContext> {
                 return
             }
 
-            const response = await SharedContextRef.value.send(
-                createJsonRpcPayload(0, request.arguments),
-                omitBy<TransactionOptions>(request.options, isUndefined),
-            )
-            const editor = ErrorEditor.from(null, response)
+            try {
+                const response = this.customNetwork
+                    ? createJsonRpcResponse(
+                          0,
+                          await this.Request.request(context.requestArguments, {
+                              providerURL: this.customNetwork.rpcUrl,
+                          }),
+                      )
+                    : await SharedContextRef.value.send(
+                          createJsonRpcPayload(0, request.arguments),
+                          omitBy<TransactionOptions>(request.options, isUndefined),
+                      )
 
-            if (editor.presence) {
-                context.abort(editor.error)
-            } else {
-                context.write(response?.result)
+                const editor = ErrorEditor.from(null, response)
+
+                if (editor.presence) {
+                    context.abort(editor.error)
+                } else {
+                    context.write(response?.result)
+                }
+            } catch (error) {
+                context.abort(error)
             }
         }
 

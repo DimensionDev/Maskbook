@@ -22,6 +22,7 @@ import {
     type AssetsState,
 } from './assetsReducer.js'
 import { useChainRuntime } from './ChainRuntimeProvider.js'
+import { CollectionsContext } from './CollectionsProvider.js'
 
 interface AssetsContextOptions {
     assetsMapRef: MutableRefObject<Record<string, AssetsState>>
@@ -102,10 +103,13 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
         blockedTokenIdsMapRef.current = blockedTokenIdsMap
     })
 
+    const { collections } = CollectionsContext.useContainer()
     const isAllHidden = useMemo(() => {
+        // Collections assets are lazy loading, can't judge if not all collections been load
+        if (Object.keys(assetsMap).length < collections.length) return false
         if (!blockedIds.length || getAssetsTotal(assetsMap) === 0) return false
         return getAssetsTotal(listingAssetsMap) === 0
-    }, [assetsMap, listingAssetsMap, !blockedIds.length])
+    }, [assetsMap, listingAssetsMap, !blockedIds.length, collections.length])
 
     const Hub = useWeb3Hub(pluginID)
 

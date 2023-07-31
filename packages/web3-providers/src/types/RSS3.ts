@@ -202,6 +202,7 @@ export namespace RSS3BaseAPI {
     export interface PostMetadata {
         title?: string
         body?: string
+        /** Not all platforms provide summary */
         summary?: string
         author: string[]
         created_at?: string
@@ -212,6 +213,8 @@ export namespace RSS3BaseAPI {
             mime_type: LiteralUnion<'image/png'>
         }>
         type_on_platform: Type[]
+        profile_id?: number
+        publication_id?: number
     }
     interface CommentMetadata extends PostMetadata {
         target: PostMetadata

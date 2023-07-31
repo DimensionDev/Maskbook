@@ -40,7 +40,7 @@ interface MarkdownProps extends Options {
     defaultStyle?: boolean
 }
 
-export const Markdown = memo<MarkdownProps>(({ children, className, defaultStyle = true, ...props }) => {
+export const Markdown = memo<MarkdownProps>(function Markdown({ children, className, defaultStyle = true, ...props }) {
     const { classes, cx } = useStyles()
 
     const markdown = markdownTransformIpfsURL(children)

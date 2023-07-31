@@ -3,9 +3,16 @@ import { FormattedBalance, ImageIcon, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles, type ActionButtonProps } from '@masknet/theme'
 import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
-import { formatBalance, formatCurrency, isGte, isLessThan, type FungibleAsset } from '@masknet/web3-shared-base'
+import {
+    formatBalance,
+    formatCurrency,
+    isGte,
+    isLessThan,
+    type FungibleAsset,
+    trimZero,
+} from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
-import { Box, List, ListItem, ListItemIcon, ListItemText, Skeleton, Typography } from '@mui/material'
+import { Box, List, ListItem, ListItemText, Skeleton, Typography } from '@mui/material'
 import { isNaN, range } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -43,9 +50,16 @@ const useStyles = makeStyles()((theme) => ({
     },
     text: {
         marginLeft: 14,
+    },
+    name: {
         fontSize: 16,
         fontWeight: 700,
         color: theme.palette.maskColor.main,
+    },
+    balance: {
+        fontSize: 14,
+        color: theme.palette.maskColor.second,
+        fontWeight: 400,
     },
     value: {
         fontSize: 16,
@@ -134,36 +148,34 @@ export const AssetsListUI = memo<AssetsListUIProps>(function AssetsListUI({ isEx
                         onClick={() => onItemClick(asset)}
                         secondaryAction={
                             <Typography className={classes.value}>
-                                {formatCurrency(asset.value?.usd || 0, 'USD', { onlyRemainTwoDecimal: true })}
+                                {trimZero(formatCurrency(asset.value?.usd || 0, 'USD', { onlyRemainTwoDecimal: true }))}
                             </Typography>
                         }>
-                        <ListItemIcon>
-                            <Box position="relative">
-                                <TokenIcon
-                                    className={classes.tokenIcon}
-                                    chainId={asset.chainId}
-                                    address={asset.address}
-                                    name={asset.name}
-                                    logoURL={asset.logoURL}
-                                    size={36}
-                                />
-                                <ImageIcon className={classes.badgeIcon} size={16} icon={networkDescriptor?.icon} />
-                            </Box>
-                        </ListItemIcon>
+                        <Box position="relative">
+                            <TokenIcon
+                                className={classes.tokenIcon}
+                                chainId={asset.chainId}
+                                address={asset.address}
+                                name={asset.name}
+                                logoURL={asset.logoURL}
+                                size={36}
+                            />
+                            <ImageIcon className={classes.badgeIcon} size={16} icon={networkDescriptor?.icon} />
+                        </Box>
                         <ListItemText
                             className={classes.text}
                             secondary={
-                                <Typography>
+                                <Typography className={classes.balance}>
                                     <FormattedBalance
                                         value={isNaN(asset.balance) ? 0 : asset.balance}
                                         decimals={isNaN(asset.decimals) ? 0 : asset.decimals}
                                         symbol={asset.symbol}
-                                        significant={6}
+                                        significant={4}
                                         formatter={formatBalance}
                                     />
                                 </Typography>
                             }>
-                            {asset.name}
+                            <Typography className={classes.name}>{asset.name}</Typography>
                         </ListItemText>
                     </ListItem>
                 )
@@ -176,7 +188,7 @@ const AssetsListSkeleton = memo(function AssetsListSkeleton() {
     const { classes } = useStyles()
     return (
         <List dense className={classes.list}>
-            {range(4).map((i) => (
+            {range(10).map((i) => (
                 <ListItem
                     key={i}
                     className={classes.item}
@@ -185,20 +197,18 @@ const AssetsListSkeleton = memo(function AssetsListSkeleton() {
                             <Skeleton width={60} />
                         </Typography>
                     }>
-                    <ListItemIcon>
-                        <Box position="relative">
-                            <Skeleton variant="circular" className={classes.tokenIcon} />
-                            <Skeleton variant="circular" width={16} height={16} className={classes.badgeIcon} />
-                        </Box>
-                    </ListItemIcon>
+                    <Box position="relative">
+                        <Skeleton variant="circular" className={classes.tokenIcon} />
+                        <Skeleton variant="circular" width={16} height={16} className={classes.badgeIcon} />
+                    </Box>
                     <ListItemText
                         className={classes.text}
                         secondary={
-                            <Typography>
+                            <Typography className={classes.balance}>
                                 <Skeleton width={100} />
                             </Typography>
                         }>
-                        <Skeleton width={90} />
+                        <Skeleton className={classes.name} width={90} />
                     </ListItemText>
                 </ListItem>
             ))}

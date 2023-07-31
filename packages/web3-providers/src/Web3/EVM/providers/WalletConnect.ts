@@ -101,7 +101,7 @@ export default class WalletConnectProvider
     }
 
     private resumeConnector() {
-        const json = localStorage.getItem('walletconnect')
+        const json = globalThis.localStorage?.getItem('walletconnect')
         const connection = parseJSON<{ connected: boolean }>(json)
         if (connection?.connected) this.connector = this.createConnector()
     }

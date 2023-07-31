@@ -1,11 +1,11 @@
 import { Image, Markdown } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { resolveIPFS_URL, resolveResourceURL } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
 import { useCallback } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
-import { useAddressLabel } from '../../hooks/index.js'
+import { useAddressLabel, usePublicationId } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
 import { Label, LinkifyOptions, htmlToPlain } from './common.js'
@@ -124,6 +124,10 @@ const cardTypeMap = {
     [Type.Share]: CardType.NoteLink,
 } as const
 
+function resolveLenstubeWatchLink(publicationId: string) {
+    return `https://lenstube.xyz/watch/${publicationId}`
+}
+
 /**
  * NoteCard
  * Including:
@@ -154,7 +158,11 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
         [action.platform, action.related_urls?.[0]],
     )
 
+    const { data: publicationId, isLoading } = usePublicationId(feed.hash)
+
     const media = metadata?.media?.[0]
+    // Image post on Forcaster
+    const isImagePost = metadata?.body ? /https?:\/\/.*?\.(jpg|png)$/.test(metadata.body) : false
 
     return (
         <CardFrame
@@ -175,25 +183,27 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
                 />
             </Typography>
             <div className={classes.body}>
-                {media?.mime_type.startsWith('image/') ? (
+                {media?.mime_type.startsWith('image/') || isImagePost ? (
                     <Image
                         classes={{ container: classes.image }}
-                        src={resolveResourceURL(media.address)}
+                        src={isImagePost ? metadata!.body : resolveResourceURL(media!.address)}
                         height={imageSize}
                         width={imageSize}
                     />
                 ) : media?.mime_type.startsWith('video/') ? (
                     <Link
                         className={classes.playButton}
-                        href={resolveResourceURL(media.address)}
+                        href={
+                            publicationId ? resolveLenstubeWatchLink(publicationId) : resolveResourceURL(media.address)
+                        }
                         target="_blank"
                         onClick={(evt) => evt.stopPropagation()}>
-                        <Icons.Play size={64} />
+                        {isLoading ? <LoadingBase size={36} /> : <Icons.Play size={64} />}
                     </Link>
                 ) : null}
                 <div className={cx(classes.info, metadata?.title || rest.verbose ? null : classes.center)}>
                     {metadata?.title ? <Typography className={classes.title}>{metadata.title}</Typography> : null}
-                    {rest.verbose && metadata?.body ? (
+                    {isImagePost ? null : rest.verbose && metadata?.body ? (
                         <Markdown
                             className={mdClasses.markdown}
                             defaultStyle={false}

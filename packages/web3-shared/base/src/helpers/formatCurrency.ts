@@ -151,7 +151,9 @@ export function formatCurrency(
                         .replace(/\d\./, '')
                     return onlyRemainTwoDecimal ? dec.replace(/(\d\d)(0+)$/, '$1') : dec.replace(/(0+)$/, '')
                 case 'integer':
-                    return value
+                    // When there is a carry
+                    if (bn.gt('0.99') && onlyRemainTwoDecimal) return '1'
+                    return '0'
                 case 'literal':
                     return ''
                 default:
