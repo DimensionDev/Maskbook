@@ -7,8 +7,8 @@ export class Web3StateAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter,
     State extends Web3State<
@@ -16,8 +16,8 @@ export class Web3StateAPI_Base<
         SchemaType,
         ProviderType,
         NetworkType,
-        RequestArguments,
-        RequestOptions,
+        MessageRequest,
+        MessageResponse,
         Transaction,
         TransactionParameter
     > = Web3State<
@@ -25,8 +25,8 @@ export class Web3StateAPI_Base<
         SchemaType,
         ProviderType,
         NetworkType,
-        RequestArguments,
-        RequestOptions,
+        MessageRequest,
+        MessageResponse,
         Transaction,
         TransactionParameter
     >,

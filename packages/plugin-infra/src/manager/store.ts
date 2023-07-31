@@ -37,8 +37,8 @@ export function registerPlugin<
     SchemaType = unknown,
     ProviderType = unknown,
     NetworkType = unknown,
-    RequestArguments = unknown,
-    RequestOptions = unknown,
+    MessageRequest = unknown,
+    MessageResponse = unknown,
     Transaction = unknown,
     TransactionParameter = unknown,
 >(
@@ -47,8 +47,8 @@ export function registerPlugin<
         SchemaType,
         ProviderType,
         NetworkType,
-        RequestArguments,
-        RequestOptions,
+        MessageRequest,
+        MessageResponse,
         Transaction,
         TransactionParameter
     >,

@@ -9,8 +9,8 @@ import {
     type SchemaType,
     type ProviderType,
     type NetworkType,
-    type RequestArguments,
-    type RequestOptions,
+    type MessageRequest,
+    type MessageResponse,
     type Transaction,
     type TransactionParameter,
 } from '@masknet/web3-shared-evm'
@@ -24,8 +24,8 @@ export class HubBaseAPI extends HubBaseAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter,
     GasOption

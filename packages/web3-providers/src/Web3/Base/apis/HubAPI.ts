@@ -7,8 +7,8 @@ export type HubAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter,
     GasOption,
@@ -17,8 +17,8 @@ export type HubAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter,
     GasOption
@@ -28,8 +28,8 @@ export type HubAPI_Base<
         SchemaType,
         ProviderType,
         NetworkType,
-        RequestArguments,
-        RequestOptions,
+        MessageRequest,
+        MessageResponse,
         Transaction,
         TransactionParameter
     > &
@@ -38,8 +38,8 @@ export type HubAPI_Base<
         SchemaType,
         ProviderType,
         NetworkType,
-        RequestArguments,
-        RequestOptions,
+        MessageRequest,
+        MessageResponse,
         Transaction,
         TransactionParameter
     >
