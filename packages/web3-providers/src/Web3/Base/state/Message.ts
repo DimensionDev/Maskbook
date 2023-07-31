@@ -22,7 +22,7 @@ export class MessageState<Requset, Response> implements Web3MessageState<Requset
             pluginID: NetworkPluginID
         },
     ) {
-        const { storage } = PersistentStorages.Web3.createSubScope(`${this.options.pluginID}_Request`, {
+        const { storage } = PersistentStorages.Web3.createSubScope(`${this.options.pluginID}_Message`, {
             messages: {},
         })
 
@@ -30,8 +30,8 @@ export class MessageState<Requset, Response> implements Web3MessageState<Requset
 
         this.messages = mapSubscription(this.storage.messages.subscription, (storage) => {
             return Object.values(storage)
-                .filter((x) => x.state === MessageStateType.APPROVED)
-                .sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime())
+                .filter((x) => x.state === MessageStateType.NOT_DEPEND)
+                .sort((a, z) => z.createdAt.getTime() - a.createdAt.getTime())
         })
     }
 
@@ -44,48 +44,47 @@ export class MessageState<Requset, Response> implements Web3MessageState<Requset
     }
 
     protected assertMessage(id: string) {
-        if (!Object.hasOwn(this.storage.messages.value, id)) throw new Error('Invalid request ID')
-        return this.storage.messages.value[id]
+        const message = this.storage.messages.value[id]
+        if (!message) throw new Error('Invalid message ID')
+        return message
     }
 
-    protected async validateRequest(request: TransferableMessage<Requset, Response>) {
+    protected async validateMessage(message: TransferableMessage<Requset, Response>) {
         return true
     }
 
     protected async waitForApprovingRequest(id: string): Promise<ReasonableMessage<Requset, Response>> {
         return new Promise((resolve, reject) => {
-            const unsubscribe = this.messages?.subscribe(() => {
-                const request = this.messages?.getCurrentValue().find((x) => x.ID === id)
-                if (request?.state !== MessageStateType.APPROVED && request?.state !== MessageStateType.DENIED) return
+            const observe = () => {
+                const message = this.storage.messages.value[id]
 
-                if (request.state === MessageStateType.APPROVED) resolve(request)
-                else reject(new Error('User rejected the request.'))
-                unsubscribe?.()
-            })
-        })
-    }
+                if (message) {
+                    // not a state to be resolved
+                    if (message.state === MessageStateType.NOT_DEPEND) return
 
-    protected async waitForBroadcastingRequest(id: string): Promise<ReasonableMessage<Requset, Response>> {
-        return new Promise((resolve) => {
-            const unsubscribe = this.messages?.subscribe(() => {
-                const request = this.messages?.getCurrentValue().find((x) => x.ID === id)
-                if (request?.state !== MessageStateType.BROADCASTED) return
+                    if (message.state === MessageStateType.APPROVED) resolve(message)
+                    else reject(new Error('User rejected the message.'))
+                } else {
+                    reject(new Error('Invalid request ID'))
+                }
 
-                resolve(request)
-                unsubscribe?.()
-            })
+                unsubscribe()
+            }
+
+            const unsubscribe = this.storage.messages.subscription.subscribe(observe)
+            observe()
         })
     }
 
     async applyRequest<T>(
-        request: TransferableMessage<Requset, Response>,
+        message: TransferableMessage<Requset, Response>,
     ): Promise<ReasonableMessage<Requset, Response>> {
-        await this.validateRequest(request)
+        await this.validateMessage(message)
 
         const ID = uuid()
         const now = new Date()
-        const request_ = {
-            ...request,
+        const message_ = {
+            ...message,
             ID,
             state: MessageStateType.NOT_DEPEND,
             createdAt: now,
@@ -95,51 +94,44 @@ export class MessageState<Requset, Response> implements Web3MessageState<Requset
         await this.storage.messages.setValue(
             Object.fromEntries([
                 ...Object.entries(this.storage.messages.value).filter(
-                    ([_, request]) => request.state === MessageStateType.NOT_DEPEND,
+                    // remove those resolved messages
+                    ([_, message]) => message.state === MessageStateType.NOT_DEPEND,
                 ),
-                [ID, request_],
+                [ID, message_],
             ]),
         )
 
-        return request_
+        return message_
     }
 
-    async applyAndWaitResponse<T>(request: TransferableMessage<Requset, Response>): Promise<Response> {
-        const { ID } = await this.applyRequest(request)
-        await this.waitForApprovingRequest(ID)
-        const broadcastedRequest = await this.waitForBroadcastingRequest(ID)
-        if (!broadcastedRequest.response) throw new Error('Invalid response')
-        return broadcastedRequest.response
+    async applyAndWaitResponse(message: TransferableMessage<Requset, Response>): Promise<Response> {
+        const { ID } = await this.applyRequest(message)
+        const { response } = await this.waitForApprovingRequest(ID)
+        if (!response) throw new Error('Invalid response')
+        return response
     }
 
-    async updateRequest(id: string, updates: Partial<TransferableMessage<Requset, Response>>): Promise<void> {
-        const request = this.assertMessage(id)
+    async updateMessage(id: string, updates: Partial<TransferableMessage<Requset, Response>>): Promise<void> {
+        const message = this.assertMessage(id)
 
         await this.storage.messages.setValue({
             ...this.storage.messages.value,
             [id]: {
-                ...request,
+                ...message,
                 ...updates,
                 updatedAt: new Date(),
             },
         })
     }
 
-    async broadcastRequest(id: string): Promise<void> {
-        await this.updateRequest(id, {
-            state: MessageStateType.BROADCASTED,
-            response: undefined,
-        })
-    }
-
     async approveRequest(id: string): Promise<void> {
-        await this.updateRequest(id, {
+        await this.updateMessage(id, {
             state: MessageStateType.APPROVED,
         })
     }
 
     async denyRequest(id: string): Promise<void> {
-        await this.updateRequest(id, {
+        await this.updateMessage(id, {
             state: MessageStateType.DENIED,
         })
     }
@@ -147,10 +139,10 @@ export class MessageState<Requset, Response> implements Web3MessageState<Requset
     async denyAllRequests(): Promise<void> {
         await this.storage.messages.setValue(
             Object.fromEntries(
-                Object.entries(this.storage.messages.value).map(([id, request]) => [
+                Object.entries(this.storage.messages.value).map(([id, message]) => [
                     id,
                     {
-                        ...request,
+                        ...message,
                         state: MessageStateType.DENIED,
                     },
                 ]),

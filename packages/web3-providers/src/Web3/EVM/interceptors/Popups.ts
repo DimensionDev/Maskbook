@@ -117,6 +117,7 @@ export class Popups implements Middleware<ConnectionContext> {
                     arguments: context.requestArguments,
                     options: {
                         ...(await this.getPaymentToken(context)),
+                        silent: context.silent,
                         owner: context.owner,
                         identifier: context.identifier?.toText(),
                         providerURL: this.customNetwork ? this.customNetwork.rpcUrl : undefined,

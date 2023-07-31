@@ -258,6 +258,7 @@ export interface RequestArguments {
 }
 
 export interface RequestOptions {
+    silent?: boolean
     owner?: string
     identifier?: string
     paymentToken?: string

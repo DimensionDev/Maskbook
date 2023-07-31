@@ -116,7 +116,6 @@ export enum MessageStateType {
     NOT_DEPEND = 1,
     APPROVED = 2,
     DENIED = 3,
-    BROADCASTED = 4,
 }
 
 export enum TransactionStatusType {
@@ -1033,14 +1032,14 @@ export interface TokenState<ChainId, SchemaType> extends Startable {
 }
 
 export interface MessageState<Requset, Response> extends Startable {
-    /** The tracked requests. */
+    /** All unresolved requests. */
     messages?: Subscription<Array<ReasonableMessage<Requset, Response>>>
+    /** Updates a request. */
+    updateMessage(id: string, updates: Partial<TransferableMessage<Requset, Response>>): Promise<void>
     /** Applies a request. */
-    applyRequest(request: TransferableMessage<Requset, Response>): Promise<ReasonableMessage<Requset, Response>>
+    applyRequest(message: TransferableMessage<Requset, Response>): Promise<ReasonableMessage<Requset, Response>>
     /** Applies a request and waits for confirmation from the user. */
-    applyAndWaitResponse<T>(request: TransferableMessage<Requset, Response>): Promise<Response>
-    /** Updates request with new arguments. */
-    updateRequest(id: string, updates: Partial<TransferableMessage<Requset, Response>>): Promise<void>
+    applyAndWaitResponse<T>(message: TransferableMessage<Requset, Response>): Promise<Response>
     /** Approves a request. */
     approveRequest(id: string): Promise<void>
     /** Rejects a request. */

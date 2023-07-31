@@ -25,29 +25,35 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
     protected override async waitForApprovingRequest(
         id: string,
     ): Promise<ReasonableMessage<MessageRequest, MessageResponse>> {
-        // TODO: make this for Mask Wallet only
-        // open the popups window and wait for approvement from the user.
-        await SNSAdaptorContextRef.value.openPopupWindow()
+        const { request } = this.assertMessage(id)
+
+        if (request.options.silent) {
+            await this.approveRequest(id)
+        } else {
+            // TODO: make this for Mask Wallet only
+            // open the popups window and wait for approvement from the user.
+            await SNSAdaptorContextRef.value.openPopupWindow()
+        }
 
         return super.waitForApprovingRequest(id)
     }
 
-    override async broadcastRequest(id: string): Promise<void> {
-        const message = this.assertMessage(id)
-        const response = message.request.options?.providerURL
+    override async approveRequest(id: string): Promise<void> {
+        const { request } = this.assertMessage(id)
+        const response = request.options?.providerURL
             ? createJsonRpcResponse(
                   0,
-                  await this.Request.request(message.request.arguments, {
-                      providerURL: message.request.options.providerURL,
+                  await this.Request.request(request.arguments, {
+                      providerURL: request.options.providerURL,
                   }),
               )
             : await SharedContextRef.value.send(
-                  createJsonRpcPayload(0, message.request.arguments),
-                  omitBy<TransactionOptions>(message.request.options, isUndefined),
+                  createJsonRpcPayload(0, request.arguments),
+                  omitBy<TransactionOptions>(request.options, isUndefined),
               )
 
-        await this.updateRequest(id, {
-            state: MessageStateType.BROADCASTED,
+        await this.updateMessage(id, {
+            state: MessageStateType.APPROVED,
             response,
         })
     }
