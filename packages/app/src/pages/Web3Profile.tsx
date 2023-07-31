@@ -15,10 +15,10 @@ export default function Web3ProfilePage(props: Web3ProfilePageProps) {
             <StickySearchHeader />
 
             <main>
-                <DashboardHeader title="W3bProfile" />
+                <DashboardHeader title="W3b Profile" />
 
                 <div className="bg-white p-5">
-                    <div className="border pt-3 rounded-lg" style={{ maxHeight: 700, overflowY: 'auto' }}>
+                    <div className="border rounded-lg" style={{ maxHeight: 700, overflowY: 'auto' }}>
                         <DisableShadowRootContext.Provider value={false}>
                             <ShadowRootIsolation>
                                 <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
