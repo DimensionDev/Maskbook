@@ -137,6 +137,7 @@ export const SNSAdaptorPluginContext = new SNSAdaptorContextAPI()
 export { Providers } from './Web3/EVM/providers/index.js'
 export { FlowProviders } from './Web3/Flow/providers/index.js'
 export { SolanaProviders } from './Web3/Solana/providers/index.js'
+export { BitcoinProviders } from './Web3/Bitcoin/providers/index.js'
 export { BaseContractWalletProvider } from './Web3/EVM/providers/BaseContractWallet.js'
 
 // Web3

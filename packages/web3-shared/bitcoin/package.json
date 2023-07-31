@@ -1,0 +1,29 @@
+{
+  "name": "@masknet/web3-shared-bitcoin",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.js",
+      "mask-src": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.js",
+  "include": [
+    "src",
+    "src/**/*.json"
+  ],
+  "dependencies": {
+    "@masknet/shared-base": "workspace:^",
+    "@masknet/web3-constants": "workspace:^",
+    "@masknet/web3-shared-base": "workspace:^",
+    "bignumber.js": "9.1.1",
+    "bitcore-lib": "^10.0.5",
+    "buffer": "^6.0.3",
+    "bs58": "^5.0.0",
+    "react-use": "^17.4.0",
+    "web3-utils": "1.8.0",
+    "urlcat": "^3.1.0"
+  }
+}

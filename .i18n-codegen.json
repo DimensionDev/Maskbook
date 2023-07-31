@@ -198,6 +198,19 @@
             }
         },
         {
+            "input": "./packages/plugins/Bitcoin/src/locales/en-US.json",
+            "output": "./packages/plugins/Bitcoin/src/locales/i18n_generated",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "com.maskbook.bitcoin",
+                "trans": "Translate",
+                "emitTS": true,
+                "shouldUnescape": true
+            }
+        },
+        {
             "input": "./packages/plugins/NextID/src/locales/en-US.json",
             "output": "./packages/plugins/NextID/src/locales/i18n_generated",
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },

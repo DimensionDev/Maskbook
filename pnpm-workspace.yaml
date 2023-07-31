@@ -11,3 +11,4 @@ packages:
   - 'packages/web3-shared/evm'
   - 'packages/web3-shared/flow'
   - 'packages/web3-shared/solana'
+  - 'packages/web3-shared/bitcoin'

@@ -4,6 +4,7 @@
     { "path": "./Approval/" },
     { "path": "./ArtBlocks/" },
     { "path": "./Avatar/" },
+    { "path": "./Bitcoin/" },
     { "path": "./Claim/" },
     { "path": "./Collectible/" },
     { "path": "./CrossChainBridge/" },

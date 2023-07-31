@@ -275,7 +275,7 @@ importers:
         version: 3.0.2
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@5.2.0-dev.20230630)
+        version: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@4.9.5)
       typescript:
         specifier: 5.2.0-dev.20230630
         version: 5.2.0-dev.20230630
@@ -1681,6 +1681,64 @@ importers:
       uuid:
         specifier: ^9.0.0
         version: 9.0.0
+
+  packages/plugins/Bitcoin:
+    dependencies:
+      '@masknet/flags':
+        specifier: workspace:^
+        version: link:../../flags
+      '@masknet/icons':
+        specifier: workspace:^
+        version: link:../../icons
+      '@masknet/injected-script':
+        specifier: workspace:^
+        version: link:../../injected-script
+      '@masknet/plugin-infra':
+        specifier: workspace:^
+        version: link:../../plugin-infra
+      '@masknet/shared':
+        specifier: workspace:^
+        version: link:../../shared
+      '@masknet/shared-base':
+        specifier: workspace:^
+        version: link:../../shared-base
+      '@masknet/theme':
+        specifier: workspace:^
+        version: link:../../theme
+      '@masknet/web3-constants':
+        specifier: workspace:^
+        version: link:../../web3-constants
+      '@masknet/web3-contracts':
+        specifier: workspace:^
+        version: link:../../web3-contracts
+      '@masknet/web3-helpers':
+        specifier: workspace:^
+        version: link:../../web3-helpers
+      '@masknet/web3-providers':
+        specifier: workspace:^
+        version: link:../../web3-providers
+      '@masknet/web3-shared-base':
+        specifier: workspace:^
+        version: link:../../web3-shared/base
+      '@masknet/web3-shared-bitcoin':
+        specifier: workspace:^
+        version: link:../../web3-shared/bitcoin
+      '@servie/events':
+        specifier: ^3.0.0
+        version: 3.0.0
+      bignumber.js:
+        specifier: 9.1.1
+        version: 9.1.1
+      react-use:
+        specifier: ^17.4.0
+        version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
+      urlcat:
+        specifier: ^3.1.0
+        version: 3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e)
+    devDependencies:
+      '@types/use-subscription':
+        specifier: ^1.0.0
+        version: 1.0.0
 
   packages/plugins/Claim:
     dependencies:
@@ -4322,6 +4380,9 @@ importers:
       '@masknet/web3-shared-base':
         specifier: workspace:^
         version: link:../web3-shared/base
+      '@masknet/web3-shared-bitcoin':
+        specifier: workspace:^
+        version: link:../web3-shared/bitcoin
       '@masknet/web3-shared-evm':
         specifier: workspace:^
         version: link:../web3-shared/evm
@@ -4519,6 +4580,39 @@ importers:
       mock-socket:
         specifier: ^9.2.1
         version: 9.2.1
+
+  packages/web3-shared/bitcoin:
+    dependencies:
+      '@masknet/shared-base':
+        specifier: workspace:^
+        version: link:../../shared-base
+      '@masknet/web3-constants':
+        specifier: workspace:^
+        version: link:../../web3-constants
+      '@masknet/web3-shared-base':
+        specifier: workspace:^
+        version: link:../base
+      bignumber.js:
+        specifier: 9.1.1
+        version: 9.1.1
+      bitcore-lib:
+        specifier: ^10.0.5
+        version: 10.0.5
+      bs58:
+        specifier: ^5.0.0
+        version: 5.0.0
+      buffer:
+        specifier: ^6.0.3
+        version: 6.0.3
+      react-use:
+        specifier: ^17.4.0
+        version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
+      urlcat:
+        specifier: ^3.1.0
+        version: 3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e)
+      web3-utils:
+        specifier: 1.8.0
+        version: 1.8.0
 
   packages/web3-shared/evm:
     dependencies:
@@ -21954,7 +22048,7 @@ packages:
       solc: 0.7.3(debug@4.3.4)
       source-map-support: 0.5.21
       stacktrace-parser: 0.1.10
-      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@5.2.0-dev.20230630)
+      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@4.9.5)
       tsort: 0.0.1
       typescript: 5.2.0-dev.20230630
       undici: 5.20.0
@@ -23862,7 +23956,7 @@ packages:
       pretty-format: 28.1.3
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@5.2.0-dev.20230630)
+      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@4.9.5)
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -27790,7 +27884,7 @@ packages:
     dependencies:
       lilconfig: 2.1.0
       postcss: 8.4.26
-      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@5.2.0-dev.20230630)
+      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@4.9.5)
       yaml: 2.1.3
     dev: false
 
@@ -32047,7 +32141,6 @@ packages:
       typescript: 4.9.5
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: true
 
   /ts-node@10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@5.2.0-dev.20230630):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
@@ -32347,7 +32440,6 @@ packages:
     resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
     engines: {node: '>=4.2.0'}
     hasBin: true
-    dev: true
 
   /typescript@5.2.0-dev.20230630:
     resolution: {integrity: sha512-PpI4tXtyv86eAhapMWrJF5roAxswu022vmSjDRU7NzPqT5+DlBktIlDePOrBo7OUBWNVEiUfsWuoDNbq5Sjj6Q==}

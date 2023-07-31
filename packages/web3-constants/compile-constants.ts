@@ -68,3 +68,5 @@ compileConstants(join(__dirname, 'evm'), [
 compileConstants(join(__dirname, 'solana'), ['Mainnet', 'Testnet', 'Devnet'])
 
 compileConstants(join(__dirname, 'flow'), ['Mainnet', 'Testnet'])
+
+compileConstants(join(__dirname, 'bitcoin'), ['Mainnet', 'Testnet', 'Stagenet', 'DogoCoin', 'BitcoinCash'])

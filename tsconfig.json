@@ -97,6 +97,7 @@
       "@masknet/web3-shared-evm": ["./packages/web3-shared/evm/src"],
       "@masknet/web3-shared-flow": ["./packages/web3-shared/flow/src"],
       "@masknet/web3-shared-solana": ["./packages/web3-shared/solana/src"],
+      "@masknet/web3-shared-bitcoin": ["./packages/web3-shared/bitcoin/src"],
       "@masknet/typed-message": ["./packages/typed-message/base"],
       "@masknet/typed-message-react": ["./packages/typed-message/react"],
       "@masknet/types": ["./packages/types/src"],

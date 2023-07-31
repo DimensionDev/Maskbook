@@ -5,6 +5,7 @@ export enum NetworkPluginID {
     PLUGIN_EVM = 'com.mask.evm',
     PLUGIN_FLOW = 'com.mask.flow',
     PLUGIN_SOLANA = 'com.mask.solana',
+    PLUGIN_BITCOIN = 'com.mask.bitcoin',
 }
 
 /**
@@ -14,6 +15,7 @@ export enum PluginID {
     EVM = 'com.mask.evm',
     Flow = 'com.mask.flow',
     Solana = 'com.mask.solana',
+    Bitcoin = 'com.mask.bitcoin',
     Approval = 'com.maskbook.approval',
     Avatar = 'com.maskbook.avatar',
     ArtBlocks = 'io.artblocks',

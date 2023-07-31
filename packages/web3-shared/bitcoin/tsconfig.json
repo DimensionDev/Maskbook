@@ -1,0 +1,10 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
+  },
+  "include": ["./src", "./src/**/*.json"],
+  "references": [{ "path": "../../base" }, { "path": "../../theme" }, { "path": "../../web3-shared/base" }]
+}
