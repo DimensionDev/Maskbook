@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { MaskTextField, makeStyles } from '@masknet/theme'
 import { openWindow } from '@masknet/shared-base-ui'
-import { Box, Typography, useTheme } from '@mui/material'
+import { Box, Typography, useTheme, type BoxProps } from '@mui/material'
 import { memo, useCallback } from 'react'
 
 import { useI18N } from '../../../../utils/index.js'
@@ -14,7 +14,6 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 const useStyles = makeStyles()((theme) => ({
     input: {
         flex: 1,
-        marginBottom: 8,
     },
     to: {
         display: 'flex',
@@ -30,8 +29,6 @@ const useStyles = makeStyles()((theme) => ({
     receiverPanel: {
         display: 'flex',
         alignItems: 'flex-start',
-        height: 88,
-        width: '100%',
     },
     inputText: {
         fontSize: 10,
@@ -66,9 +63,9 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const AddContactInputPanel = memo(function AddContactInputPanel() {
+const AddContactInputPanel = memo(function AddContactInputPanel(props: BoxProps) {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { address, receiver, setReceiver, ensName, receiverValidationMessage, registeredAddress } =
         ContactsContext.useContainer()
@@ -84,7 +81,7 @@ const AddContactInputPanel = memo(function AddContactInputPanel() {
     }, [address, ensName])
 
     return (
-        <Box padding={2} className={classes.receiverPanel}>
+        <Box padding={2} {...props} className={cx(classes.receiverPanel, props.className)}>
             <div className={classes.to}>
                 <Typography className={classes.toText}>{t('popups_wallet_transfer_to')}</Typography>
             </div>
@@ -107,7 +104,7 @@ const AddContactInputPanel = memo(function AddContactInputPanel() {
                     }}
                 />
                 {receiverValidationMessage || registeredAddress ? (
-                    <Typography className={receiverValidationMessage ? classes.validation : classes.receiver}>
+                    <Typography className={receiverValidationMessage ? classes.validation : classes.receiver} mt={1}>
                         {receiverValidationMessage || registeredAddress}
                         {receiverValidationMessage ? null : (
                             <Icons.LinkOut

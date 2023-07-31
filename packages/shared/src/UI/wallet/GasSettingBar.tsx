@@ -14,7 +14,7 @@ export interface GasSettingBarProps {
     gasPrice?: BigNumber.Value
     maxFee?: BigNumber.Value
     priorityFee?: BigNumber.Value
-    onChange: (tx: NonPayableTx) => void
+    onChange?: (tx: NonPayableTx) => void
 }
 
 export function GasSettingBar(props: GasSettingBarProps) {
@@ -47,7 +47,7 @@ export function GasSettingBar(props: GasSettingBarProps) {
     useEffect(() => {
         const off = GasSettingModal.emitter.on('close', (evt) => {
             if (evt?.gasOption) setGasOptionType(evt.gasOption)
-            onChange(
+            onChange?.(
                 (chainResolver.isSupport(chainId, 'EIP1559')
                     ? {
                           gas: evt?.gasLimit,

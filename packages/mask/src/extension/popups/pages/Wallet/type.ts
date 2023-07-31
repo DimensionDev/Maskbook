@@ -41,3 +41,8 @@ export type GasSetting = {
     maxPriorityFeePerGas?: string
     maxFeePerGas?: string
 }
+
+export enum TransferTabType {
+    Token = 'Token',
+    NFT = 'NFT',
+}

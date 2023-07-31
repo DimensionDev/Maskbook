@@ -1,10 +1,11 @@
-import { Button, styled } from '@mui/material'
-import { useSharedI18N } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
-import { EMPTY_OBJECT, type NetworkPluginID } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
-import { NetworkIcon } from '../index.js'
+import { useSharedI18N } from '@masknet/shared'
+import { EMPTY_OBJECT, type NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { Button, styled } from '@mui/material'
+import { memo } from 'react'
+import { NetworkIcon } from '../NetworkIcon/index.js'
 
 const AllButton = styled(Button)(({ theme }) => ({
     display: 'inline-block',
@@ -62,10 +63,10 @@ interface SelectNetworkSidebarProps {
     pluginID: NetworkPluginID
     hiddenAllButton?: boolean
     chainId?: Web3Helper.ChainIdAll
-    onChainChange: (chainId: Web3Helper.ChainIdAll | undefined) => void
+    onChainChange?: (chainId: Web3Helper.ChainIdAll | undefined) => void
 }
 
-export function SelectNetworkSidebar({
+export const SelectNetworkSidebar = memo(function SelectNetworkSidebar({
     gridProps = EMPTY_OBJECT,
     networks,
     chainId,
@@ -80,7 +81,7 @@ export function SelectNetworkSidebar({
     return (
         <div className={classes.sidebar}>
             {networks.length > 1 && !hiddenAllButton ? (
-                <AllButton className={classes.networkButton} onClick={() => onChainChange(undefined)}>
+                <AllButton className={classes.networkButton} onClick={() => onChainChange?.(undefined)}>
                     {t.all()}
                     {!chainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
                 </AllButton>
@@ -91,11 +92,11 @@ export function SelectNetworkSidebar({
                     key={x.chainId}
                     className={classes.networkButton}
                     disableRipple
-                    onClick={() => onChainChange(x.chainId)}>
+                    onClick={() => onChainChange?.(x.chainId)}>
                     <NetworkIcon pluginID={pluginID} chainId={x.chainId} ImageIconProps={{ size: 24 }} />
                     {chainId === x.chainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
                 </Button>
             ))}
         </div>
     )
-}
+})
