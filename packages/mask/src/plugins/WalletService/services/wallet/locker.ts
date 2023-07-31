@@ -30,7 +30,11 @@ let autoLockTimer: NodeJS.Timeout | undefined
 
 export async function setAutoLockTimer() {
     const autoLockTime = await getAutoLockerTime()
+
     clearTimeout(autoLockTimer)
+
+    if (autoLockTime === 0) return
+
     autoLockTimer = setTimeout(async () => {
         await lockWallet()
     }, autoLockTime)

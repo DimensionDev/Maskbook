@@ -44,8 +44,6 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface WalletAutoLockSettingDrawerProps extends BottomDrawerProps {}
-
 enum OptionName {
     ONE_QUARTE = '15',
     TWO_QUARTE = '30',
@@ -54,9 +52,9 @@ enum OptionName {
     NEVER = 'Never',
 }
 
-const DEFAULT_MIN_AUTO_LOCKER_TIME = 900000
+const DEFAULT_MIN_AUTO_LOCKER_TIME = 1000 * 60 * 15 // 15 mins
 
-function WalletAutoLockSettingDrawer(props: WalletAutoLockSettingDrawerProps) {
+function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
     const { t } = useI18N()
     const theme = useTheme()
     const { classes, cx } = useStyles()
@@ -69,8 +67,9 @@ function WalletAutoLockSettingDrawer(props: WalletAutoLockSettingDrawerProps) {
     const error = Number.isNaN(Number(time ?? initialTime))
 
     const [{ loading }, setAutoLockerTime] = useAsyncFn(async (time: number) => {
-        await WalletRPC.setAutoLockerTime(time < DEFAULT_MIN_AUTO_LOCKER_TIME ? DEFAULT_MIN_AUTO_LOCKER_TIME : time)
-        CrossIsolationMessages.events.walletLockTimeUpdated.sendToAll()
+        await WalletRPC.setAutoLockerTime(
+            time === 0 ? time : time < DEFAULT_MIN_AUTO_LOCKER_TIME ? DEFAULT_MIN_AUTO_LOCKER_TIME : time,
+        )
         props.onClose?.()
     }, [])
 
@@ -159,7 +158,7 @@ function WalletAutoLockSettingDrawer(props: WalletAutoLockSettingDrawerProps) {
     )
 }
 
-export type WalletAutoLockSettingModalOpenProps = Omit<WalletAutoLockSettingDrawerProps, 'open'>
+export type WalletAutoLockSettingModalOpenProps = Omit<BottomDrawerProps, 'open'>
 
 export const WalletAutoLockSettingModal = forwardRef<
     SingletonModalRefCreator<WalletAutoLockSettingModalOpenProps, boolean>
@@ -173,5 +172,14 @@ export const WalletAutoLockSettingModal = forwardRef<
             setProps(p)
         },
     })
-    return <WalletAutoLockSettingDrawer open={open} {...props} onClose={() => dispatch?.close(false)} />
+    return (
+        <WalletAutoLockSettingDrawer
+            open={open}
+            {...props}
+            onClose={() => {
+                CrossIsolationMessages.events.walletLockTimeUpdated.sendToAll()
+                dispatch?.close(false)
+            }}
+        />
+    )
 })

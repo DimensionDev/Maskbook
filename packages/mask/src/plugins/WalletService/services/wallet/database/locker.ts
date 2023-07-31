@@ -17,7 +17,7 @@ async function getAutoLockerRecord() {
 
 export async function getAutoLockerTime() {
     const record = await getAutoLockerRecord()
-    return record?.time ?? DEFAULT_LOCK_TIME
+    return record?.time ?? (record?.time === 0 ? 0 : DEFAULT_LOCK_TIME)
 }
 
 export async function setAutoLockerTime(time: number) {
