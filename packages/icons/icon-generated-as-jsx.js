@@ -3075,7 +3075,7 @@ export const UserOutline = /*#__PURE__*/ __createIcon('UserOutline', [
                 fill: 'none',
                 viewBox: '0 0 18 18',
                 children: /*#__PURE__*/ _jsx('g', {
-                    id: 'UserOutline_svg__vuesax/linear/user-square',
+                    id: 'UserOutline_svg__UserOutline_svg/linear/user-square',
                     children: /*#__PURE__*/ _jsxs('g', {
                         id: 'UserOutline_svg__user-square',
                         fill: 'currentColor',
