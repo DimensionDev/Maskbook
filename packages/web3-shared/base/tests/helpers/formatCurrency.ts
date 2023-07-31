@@ -25,12 +25,15 @@ describe('USD Currency price format util test', () => {
         { give: 0.000002, expected: '$0.000002' },
         { give: 1e-9, expected: '$0.000000001' },
         { give: 1e-13, expected: '< $0.000001' },
+        { give: 0.9993631112, expected: '$0.999363' },
         { give: 0.000000002636, expected: '$0.000000002636' },
         { give: 0.000000002636, expected: '< $0.01', options: { onlyRemainTwoDecimal: true } },
         { give: 0.032112, expected: '$0.03', options: { onlyRemainTwoDecimal: true } },
         { give: 1.999363, expected: '$2.00' },
         { give: '0.998994883856411', expected: '$1.00', options: { onlyRemainTwoDecimal: true } },
         { give: '1.998994883856411', expected: '$2.00', options: { onlyRemainTwoDecimal: true } },
+        { give: '11.998994883856411', expected: '$12.00', options: { onlyRemainTwoDecimal: true } },
+        { give: '11.998994883856411', expected: '$12.00' },
     ])('.formatCurrency($give)', ({ give, expected, options }) => {
         expect(formatCurrency(give, undefined, options)).toBe(expected)
     })
