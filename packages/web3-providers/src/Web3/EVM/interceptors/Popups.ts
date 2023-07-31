@@ -126,7 +126,6 @@ export class Popups implements Middleware<ConnectionContext> {
             }
 
             try {
-                // TODO: handle if context.silent is true
                 const response = await Web3StateRef.value.Message?.applyAndWaitResponse(request)
 
                 if (!response) {

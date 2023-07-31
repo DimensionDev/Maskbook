@@ -9,12 +9,12 @@ import {
 } from '@masknet/web3-shared-base'
 import { type NetworkPluginID, PersistentStorages, type StorageObject, mapSubscription } from '@masknet/shared-base'
 
-export class MessageState<Requset, Response> implements Web3MessageState<Requset, Response> {
+export class MessageState<Request, Response> implements Web3MessageState<Request, Response> {
     public storage: StorageObject<{
-        messages: Record<string, ReasonableMessage<Requset, Response>>
+        messages: Record<string, ReasonableMessage<Request, Response>>
     }> = null!
 
-    public messages?: Subscription<Array<ReasonableMessage<Requset, Response>>>
+    public messages?: Subscription<Array<ReasonableMessage<Request, Response>>>
 
     constructor(
         protected context: Plugin.Shared.SharedUIContext,
@@ -49,11 +49,11 @@ export class MessageState<Requset, Response> implements Web3MessageState<Requset
         return message
     }
 
-    protected async validateMessage(message: TransferableMessage<Requset, Response>) {
+    protected async validateMessage(message: TransferableMessage<Request, Response>) {
         return true
     }
 
-    protected async waitForApprovingRequest(id: string): Promise<ReasonableMessage<Requset, Response>> {
+    protected async waitForApprovingRequest(id: string): Promise<ReasonableMessage<Request, Response>> {
         return new Promise((resolve, reject) => {
             const observe = () => {
                 const message = this.storage.messages.value[id]
@@ -77,8 +77,8 @@ export class MessageState<Requset, Response> implements Web3MessageState<Requset
     }
 
     async applyRequest<T>(
-        message: TransferableMessage<Requset, Response>,
-    ): Promise<ReasonableMessage<Requset, Response>> {
+        message: TransferableMessage<Request, Response>,
+    ): Promise<ReasonableMessage<Request, Response>> {
         await this.validateMessage(message)
 
         const ID = uuid()
@@ -104,14 +104,14 @@ export class MessageState<Requset, Response> implements Web3MessageState<Requset
         return message_
     }
 
-    async applyAndWaitResponse(message: TransferableMessage<Requset, Response>): Promise<Response> {
+    async applyAndWaitResponse(message: TransferableMessage<Request, Response>): Promise<Response> {
         const { ID } = await this.applyRequest(message)
         const { response } = await this.waitForApprovingRequest(ID)
         if (!response) throw new Error('Invalid response')
         return response
     }
 
-    async updateMessage(id: string, updates: Partial<TransferableMessage<Requset, Response>>): Promise<void> {
+    async updateMessage(id: string, updates: Partial<TransferableMessage<Request, Response>>): Promise<void> {
         const message = this.assertMessage(id)
 
         await this.storage.messages.setValue({

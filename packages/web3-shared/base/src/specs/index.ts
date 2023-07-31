@@ -232,7 +232,7 @@ export type ReasonableMessage<Request, Response> = Message<Request, Response> & 
     updatedAt: Date
 }
 
-export type TransferableMessage<Requset, Response> = Omit<Message<Requset, Response>, 'ID'>
+export type TransferableMessage<Request, Response> = Omit<Message<Request, Response>, 'ID'>
 
 export interface NetworkDescriptor<ChainId, NetworkType> {
     /** An unique ID for each network */
@@ -1031,15 +1031,15 @@ export interface TokenState<ChainId, SchemaType> extends Startable {
     ): Promise<void>
 }
 
-export interface MessageState<Requset, Response> extends Startable {
+export interface MessageState<Request, Response> extends Startable {
     /** All unresolved requests. */
-    messages?: Subscription<Array<ReasonableMessage<Requset, Response>>>
+    messages?: Subscription<Array<ReasonableMessage<Request, Response>>>
     /** Updates a request. */
-    updateMessage(id: string, updates: Partial<TransferableMessage<Requset, Response>>): Promise<void>
+    updateMessage(id: string, updates: Partial<TransferableMessage<Request, Response>>): Promise<void>
     /** Applies a request. */
-    applyRequest(message: TransferableMessage<Requset, Response>): Promise<ReasonableMessage<Requset, Response>>
+    applyRequest(message: TransferableMessage<Request, Response>): Promise<ReasonableMessage<Request, Response>>
     /** Applies a request and waits for confirmation from the user. */
-    applyAndWaitResponse<T>(message: TransferableMessage<Requset, Response>): Promise<Response>
+    applyAndWaitResponse<T>(message: TransferableMessage<Request, Response>): Promise<Response>
     /** Approves a request. */
     approveRequest(id: string): Promise<void>
     /** Rejects a request. */
