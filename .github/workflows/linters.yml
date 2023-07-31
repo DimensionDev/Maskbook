@@ -19,6 +19,8 @@ concurrency:
 jobs:
   codegen:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
         with:
@@ -48,6 +50,8 @@ jobs:
           message: 'fix: packages/plugins/tsconfig.json'
   prettier:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
         with:
@@ -59,6 +63,8 @@ jobs:
           message: 'fix: prettier'
   markdownlint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
         with:
@@ -111,6 +117,8 @@ jobs:
       - run: pnpm run test
   eslint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
         with:
