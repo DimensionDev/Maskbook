@@ -1,4 +1,7 @@
 {
+    "plugin_snapshot_proposal": "提案",
+    "plugin_snapshot_progress": "进度",
+    "plugin_snapshot_current_result_title": "当前结果",
     "plugin_snapshot_download_report": "下载报告",
     "enable_plugin_boundary": "开启插件",
     "loading": "加载中"

@@ -1,0 +1,633 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		04BF55B12A7570BB00826B9F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BF55B02A7570BB00826B9F /* AppDelegate.swift */; };
+		04BF55B52A7570BB00826B9F /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = 04BF55B32A7570BB00826B9F /* Main.html */; };
+		04BF55B92A7570BB00826B9F /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = 04BF55B82A7570BB00826B9F /* Style.css */; };
+		04BF55BB2A7570BB00826B9F /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = 04BF55BA2A7570BB00826B9F /* Script.js */; };
+		04BF55BD2A7570BB00826B9F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BF55BC2A7570BB00826B9F /* ViewController.swift */; };
+		04BF55C02A7570BB00826B9F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 04BF55BE2A7570BB00826B9F /* Main.storyboard */; };
+		04BF55C22A7570BB00826B9F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04BF55C12A7570BB00826B9F /* Assets.xcassets */; };
+		04BF55CA2A7570BC00826B9F /* Mask Network Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 04BF55C92A7570BC00826B9F /* Mask Network Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		04BF55CF2A7570BC00826B9F /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BF55CE2A7570BC00826B9F /* SafariWebExtensionHandler.swift */; };
+		04EE66B02A761BB100DF6966 /* background.html in Resources */ = {isa = PBXBuildFile; fileRef = 04EE669A2A761BB100DF6966 /* background.html */; };
+		04EE66B12A761BB100DF6966 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 04EE669B2A761BB100DF6966 /* manifest.json */; };
+		04EE66B22A761BB100DF6966 /* empty.html in Resources */ = {isa = PBXBuildFile; fileRef = 04EE669C2A761BB100DF6966 /* empty.html */; };
+		04EE66B32A761BB100DF6966 /* js in Resources */ = {isa = PBXBuildFile; fileRef = 04EE669D2A761BB100DF6966 /* js */; };
+		04EE66B42A761BB100DF6966 /* debug.html in Resources */ = {isa = PBXBuildFile; fileRef = 04EE669E2A761BB100DF6966 /* debug.html */; };
+		04EE66B52A761BB100DF6966 /* build-info-beta.json in Resources */ = {isa = PBXBuildFile; fileRef = 04EE669F2A761BB100DF6966 /* build-info-beta.json */; };
+		04EE66B62A761BB100DF6966 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 04EE66A02A761BB100DF6966 /* assets */; };
+		04EE66B72A761BB100DF6966 /* manifest-v3.entry.js in Resources */ = {isa = PBXBuildFile; fileRef = 04EE66A12A761BB100DF6966 /* manifest-v3.entry.js */; };
+		04EE66B82A761BB100DF6966 /* worker.js in Resources */ = {isa = PBXBuildFile; fileRef = 04EE66A22A761BB100DF6966 /* worker.js */; };
+		04EE66BC2A761BB100DF6966 /* sandboxed-modules in Resources */ = {isa = PBXBuildFile; fileRef = 04EE66A62A761BB100DF6966 /* sandboxed-modules */; };
+		04EE66BD2A761BB100DF6966 /* popups.html in Resources */ = {isa = PBXBuildFile; fileRef = 04EE66A72A761BB100DF6966 /* popups.html */; };
+		04EE66BE2A761BB100DF6966 /* generated__content__script.html in Resources */ = {isa = PBXBuildFile; fileRef = 04EE66A82A761BB100DF6966 /* generated__content__script.html */; };
+		04EE66BF2A761BB100DF6966 /* bundled in Resources */ = {isa = PBXBuildFile; fileRef = 04EE66A92A761BB100DF6966 /* bundled */; };
+		04EE66C02A761BB100DF6966 /* devtools-background.html in Resources */ = {isa = PBXBuildFile; fileRef = 04EE66AA2A761BB100DF6966 /* devtools-background.html */; };
+		04EE66C32A761BB100DF6966 /* dashboard.html in Resources */ = {isa = PBXBuildFile; fileRef = 04EE66AD2A761BB100DF6966 /* dashboard.html */; };
+		04EE66C42A761BB100DF6966 /* build-info.json in Resources */ = {isa = PBXBuildFile; fileRef = 04EE66AE2A761BB100DF6966 /* build-info.json */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		04BF55CB2A7570BC00826B9F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 04BF55A52A7570BA00826B9F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 04BF55C82A7570BC00826B9F;
+			remoteInfo = "Mask Network Extension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		04BF55E82A7570BC00826B9F /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				04BF55CA2A7570BC00826B9F /* Mask Network Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		04BF55AD2A7570BB00826B9F /* Mask Network.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mask Network.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		04BF55B02A7570BB00826B9F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		04BF55B42A7570BB00826B9F /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = ../Base.lproj/Main.html; sourceTree = "<group>"; };
+		04BF55B82A7570BB00826B9F /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
+		04BF55BA2A7570BB00826B9F /* Script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Script.js; sourceTree = "<group>"; };
+		04BF55BC2A7570BB00826B9F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		04BF55BF2A7570BB00826B9F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		04BF55C12A7570BB00826B9F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		04BF55C32A7570BB00826B9F /* Mask_Network.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mask_Network.entitlements; sourceTree = "<group>"; };
+		04BF55C42A7570BB00826B9F /* Mask Network.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Mask Network.entitlements"; sourceTree = "<group>"; };
+		04BF55C92A7570BC00826B9F /* Mask Network Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Mask Network Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		04BF55CE2A7570BC00826B9F /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
+		04BF55E12A7570BC00826B9F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		04BF55E22A7570BC00826B9F /* Mask_Network_Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mask_Network_Extension.entitlements; sourceTree = "<group>"; };
+		04EE669A2A761BB100DF6966 /* background.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = background.html; sourceTree = "<group>"; };
+		04EE669B2A761BB100DF6966 /* manifest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = manifest.json; sourceTree = "<group>"; };
+		04EE669C2A761BB100DF6966 /* empty.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = empty.html; sourceTree = "<group>"; };
+		04EE669D2A761BB100DF6966 /* js */ = {isa = PBXFileReference; lastKnownFileType = folder; path = js; sourceTree = "<group>"; };
+		04EE669E2A761BB100DF6966 /* debug.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = debug.html; sourceTree = "<group>"; };
+		04EE669F2A761BB100DF6966 /* build-info-beta.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "build-info-beta.json"; sourceTree = "<group>"; };
+		04EE66A02A761BB100DF6966 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
+		04EE66A12A761BB100DF6966 /* manifest-v3.entry.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "manifest-v3.entry.js"; sourceTree = "<group>"; };
+		04EE66A22A761BB100DF6966 /* worker.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = worker.js; sourceTree = "<group>"; };
+		04EE66A62A761BB100DF6966 /* sandboxed-modules */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "sandboxed-modules"; sourceTree = "<group>"; };
+		04EE66A72A761BB100DF6966 /* popups.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = popups.html; sourceTree = "<group>"; };
+		04EE66A82A761BB100DF6966 /* generated__content__script.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = generated__content__script.html; sourceTree = "<group>"; };
+		04EE66A92A761BB100DF6966 /* bundled */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bundled; sourceTree = "<group>"; };
+		04EE66AA2A761BB100DF6966 /* devtools-background.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "devtools-background.html"; sourceTree = "<group>"; };
+		04EE66AD2A761BB100DF6966 /* dashboard.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = dashboard.html; sourceTree = "<group>"; };
+		04EE66AE2A761BB100DF6966 /* build-info.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "build-info.json"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		04BF55AA2A7570BB00826B9F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		04BF55C62A7570BC00826B9F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		04BF55A42A7570BA00826B9F = {
+			isa = PBXGroup;
+			children = (
+				04BF55AF2A7570BB00826B9F /* Mask Network */,
+				04BF55CD2A7570BC00826B9F /* Mask Network Extension */,
+				04BF55AE2A7570BB00826B9F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		04BF55AE2A7570BB00826B9F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				04BF55AD2A7570BB00826B9F /* Mask Network.app */,
+				04BF55C92A7570BC00826B9F /* Mask Network Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		04BF55AF2A7570BB00826B9F /* Mask Network */ = {
+			isa = PBXGroup;
+			children = (
+				04BF55B02A7570BB00826B9F /* AppDelegate.swift */,
+				04BF55BC2A7570BB00826B9F /* ViewController.swift */,
+				04BF55BE2A7570BB00826B9F /* Main.storyboard */,
+				04BF55C12A7570BB00826B9F /* Assets.xcassets */,
+				04BF55C32A7570BB00826B9F /* Mask_Network.entitlements */,
+				04BF55C42A7570BB00826B9F /* Mask Network.entitlements */,
+				04BF55B22A7570BB00826B9F /* Resources */,
+			);
+			path = "Mask Network";
+			sourceTree = "<group>";
+		};
+		04BF55B22A7570BB00826B9F /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				04BF55B32A7570BB00826B9F /* Main.html */,
+				04BF55B82A7570BB00826B9F /* Style.css */,
+				04BF55BA2A7570BB00826B9F /* Script.js */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		04BF55CD2A7570BC00826B9F /* Mask Network Extension */ = {
+			isa = PBXGroup;
+			children = (
+				04BF55CE2A7570BC00826B9F /* SafariWebExtensionHandler.swift */,
+				04BF55E12A7570BC00826B9F /* Info.plist */,
+				04BF55E22A7570BC00826B9F /* Mask_Network_Extension.entitlements */,
+				04BF55D02A7570BC00826B9F /* Resources */,
+			);
+			path = "Mask Network Extension";
+			sourceTree = "<group>";
+		};
+		04BF55D02A7570BC00826B9F /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				04EE66A02A761BB100DF6966 /* assets */,
+				04EE669A2A761BB100DF6966 /* background.html */,
+				04EE669F2A761BB100DF6966 /* build-info-beta.json */,
+				04EE66AE2A761BB100DF6966 /* build-info.json */,
+				04EE66A92A761BB100DF6966 /* bundled */,
+				04EE66AD2A761BB100DF6966 /* dashboard.html */,
+				04EE669E2A761BB100DF6966 /* debug.html */,
+				04EE66AA2A761BB100DF6966 /* devtools-background.html */,
+				04EE669C2A761BB100DF6966 /* empty.html */,
+				04EE66A82A761BB100DF6966 /* generated__content__script.html */,
+				04EE669D2A761BB100DF6966 /* js */,
+				04EE66A12A761BB100DF6966 /* manifest-v3.entry.js */,
+				04EE669B2A761BB100DF6966 /* manifest.json */,
+				04EE66A72A761BB100DF6966 /* popups.html */,
+				04EE66A62A761BB100DF6966 /* sandboxed-modules */,
+				04EE66A22A761BB100DF6966 /* worker.js */,
+			);
+			name = Resources;
+			path = ../../../../dist;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		04BF55AC2A7570BB00826B9F /* Mask Network */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 04BF55E92A7570BC00826B9F /* Build configuration list for PBXNativeTarget "Mask Network" */;
+			buildPhases = (
+				04BF55A92A7570BB00826B9F /* Sources */,
+				04BF55AA2A7570BB00826B9F /* Frameworks */,
+				04BF55AB2A7570BB00826B9F /* Resources */,
+				04BF55E82A7570BC00826B9F /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				04BF55CC2A7570BC00826B9F /* PBXTargetDependency */,
+			);
+			name = "Mask Network";
+			productName = "Mask Network";
+			productReference = 04BF55AD2A7570BB00826B9F /* Mask Network.app */;
+			productType = "com.apple.product-type.application";
+		};
+		04BF55C82A7570BC00826B9F /* Mask Network Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 04BF55E52A7570BC00826B9F /* Build configuration list for PBXNativeTarget "Mask Network Extension" */;
+			buildPhases = (
+				04BF55C52A7570BC00826B9F /* Sources */,
+				04BF55C62A7570BC00826B9F /* Frameworks */,
+				04BF55C72A7570BC00826B9F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Mask Network Extension";
+			productName = "Mask Network Extension";
+			productReference = 04BF55C92A7570BC00826B9F /* Mask Network Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		04BF55A52A7570BA00826B9F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1430;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					04BF55AC2A7570BB00826B9F = {
+						CreatedOnToolsVersion = 14.3.1;
+					};
+					04BF55C82A7570BC00826B9F = {
+						CreatedOnToolsVersion = 14.3.1;
+					};
+				};
+			};
+			buildConfigurationList = 04BF55A82A7570BA00826B9F /* Build configuration list for PBXProject "Mask Network" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 04BF55A42A7570BA00826B9F;
+			productRefGroup = 04BF55AE2A7570BB00826B9F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				04BF55AC2A7570BB00826B9F /* Mask Network */,
+				04BF55C82A7570BC00826B9F /* Mask Network Extension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		04BF55AB2A7570BB00826B9F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				04BF55C02A7570BB00826B9F /* Main.storyboard in Resources */,
+				04BF55BB2A7570BB00826B9F /* Script.js in Resources */,
+				04BF55B52A7570BB00826B9F /* Main.html in Resources */,
+				04BF55C22A7570BB00826B9F /* Assets.xcassets in Resources */,
+				04BF55B92A7570BB00826B9F /* Style.css in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		04BF55C72A7570BC00826B9F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				04EE66B12A761BB100DF6966 /* manifest.json in Resources */,
+				04EE66BC2A761BB100DF6966 /* sandboxed-modules in Resources */,
+				04EE66C02A761BB100DF6966 /* devtools-background.html in Resources */,
+				04EE66C42A761BB100DF6966 /* build-info.json in Resources */,
+				04EE66BD2A761BB100DF6966 /* popups.html in Resources */,
+				04EE66B22A761BB100DF6966 /* empty.html in Resources */,
+				04EE66BF2A761BB100DF6966 /* bundled in Resources */,
+				04EE66B62A761BB100DF6966 /* assets in Resources */,
+				04EE66B02A761BB100DF6966 /* background.html in Resources */,
+				04EE66B82A761BB100DF6966 /* worker.js in Resources */,
+				04EE66B72A761BB100DF6966 /* manifest-v3.entry.js in Resources */,
+				04EE66B32A761BB100DF6966 /* js in Resources */,
+				04EE66B52A761BB100DF6966 /* build-info-beta.json in Resources */,
+				04EE66B42A761BB100DF6966 /* debug.html in Resources */,
+				04EE66C32A761BB100DF6966 /* dashboard.html in Resources */,
+				04EE66BE2A761BB100DF6966 /* generated__content__script.html in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		04BF55A92A7570BB00826B9F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				04BF55BD2A7570BB00826B9F /* ViewController.swift in Sources */,
+				04BF55B12A7570BB00826B9F /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		04BF55C52A7570BC00826B9F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				04BF55CF2A7570BC00826B9F /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		04BF55CC2A7570BC00826B9F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 04BF55C82A7570BC00826B9F /* Mask Network Extension */;
+			targetProxy = 04BF55CB2A7570BC00826B9F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		04BF55B32A7570BB00826B9F /* Main.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				04BF55B42A7570BB00826B9F /* Base */,
+			);
+			name = Main.html;
+			sourceTree = "<group>";
+		};
+		04BF55BE2A7570BB00826B9F /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				04BF55BF2A7570BB00826B9F /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		04BF55E32A7570BC00826B9F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		04BF55E42A7570BC00826B9F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		04BF55E62A7570BC00826B9F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = "Mask Network Extension/Mask_Network_Extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Mask Network Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Mask Network Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = mask.io.extension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		04BF55E72A7570BC00826B9F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = "Mask Network Extension/Mask_Network_Extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Mask Network Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Mask Network Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = mask.io.extension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		04BF55EA2A7570BC00826B9F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Mask Network/Mask Network.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Mask Network";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = mask.io.extension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		04BF55EB2A7570BC00826B9F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Mask Network/Mask Network.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Mask Network";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = mask.io.extension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		04BF55A82A7570BA00826B9F /* Build configuration list for PBXProject "Mask Network" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				04BF55E32A7570BC00826B9F /* Debug */,
+				04BF55E42A7570BC00826B9F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		04BF55E52A7570BC00826B9F /* Build configuration list for PBXNativeTarget "Mask Network Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				04BF55E62A7570BC00826B9F /* Debug */,
+				04BF55E72A7570BC00826B9F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		04BF55E92A7570BC00826B9F /* Build configuration list for PBXNativeTarget "Mask Network" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				04BF55EA2A7570BC00826B9F /* Debug */,
+				04BF55EB2A7570BC00826B9F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 04BF55A52A7570BA00826B9F /* Project object */;
+}
