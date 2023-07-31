@@ -55,8 +55,8 @@ export type Signature = string
 export type GasOption = never
 export type Block = BlockObject
 export type BlockHeader = BlockHeaderObject
-export type RequestArguments = never
-export type RequestOptions = never
+export type MessageRequest = never
+export type MessageResponse = never
 export type Operation = never
 export type Transaction = MutateOptions
 export type TransactionQuery = QueryOptions
@@ -72,8 +72,8 @@ export type Web3State = Web3StateShared<
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter
 >
@@ -87,8 +87,8 @@ export type Web3Definition = {
     Signature: Signature
     GasOption: GasOption
     Block: Block
-    RequestArguments: RequestArguments
-    RequestOptions: RequestOptions
+    MessageRequest: MessageRequest
+    MessageResponse: MessageResponse
     Operation: Operation
     Transaction: Transaction
     TransactionReceipt: TransactionReceipt

@@ -112,7 +112,7 @@ export enum ActivityType {
     CancelOffer = 'CancelOffer',
 }
 
-export enum RequestStateType {
+export enum MessageStateType {
     NOT_DEPEND = 1,
     APPROVED = 2,
     DENIED = 3,
@@ -219,22 +219,21 @@ export type TransferableNetwork<ChainId, SchemaType, NetworkType> = Omit<
     'ID'
 >
 
-export interface RequestDescriptor<Arguments, Options> {
+export interface MessageDescriptor<Request, Response> {
     ID: string
-    state: RequestStateType
-    arguments: Arguments
-    result?: unknown
-    options?: Options
+    state: MessageStateType
+    request: Request
+    response?: Response
 }
 
-export type Request<Arguments, Options> = RequestDescriptor<Arguments, Options>
+export type Message<Request, Response> = MessageDescriptor<Request, Response>
 
-export type ReasonableRequest<Arguments, Options> = Request<Arguments, Options> & {
+export type ReasonableMessage<Request, Response> = Message<Request, Response> & {
     createdAt: Date
     updatedAt: Date
 }
 
-export type TransferableRequest<Arguments, Options> = Omit<Request<Arguments, Options>, 'ID'>
+export type TransferableMessage<Requset, Response> = Omit<Message<Requset, Response>, 'ID'>
 
 export interface NetworkDescriptor<ChainId, NetworkType> {
     /** An unique ID for each network */
@@ -1033,15 +1032,15 @@ export interface TokenState<ChainId, SchemaType> extends Startable {
     ): Promise<void>
 }
 
-export interface RequestState<Arguments, Options> extends Startable {
+export interface MessageState<Requset, Response> extends Startable {
     /** The tracked requests. */
-    requests?: Subscription<Array<ReasonableRequest<Arguments, Options>>>
+    messages?: Subscription<Array<ReasonableMessage<Requset, Response>>>
     /** Applies a request. */
-    applyRequest(request: TransferableRequest<Arguments, Options>): Promise<ReasonableRequest<Arguments, Options>>
+    applyRequest(request: TransferableMessage<Requset, Response>): Promise<ReasonableMessage<Requset, Response>>
     /** Applies a request and waits for confirmation from the user. */
-    applyAndWaitRequest<T>(request: TransferableRequest<Arguments, Options>): Promise<T>
+    applyAndWaitResponse<T>(request: TransferableMessage<Requset, Response>): Promise<Response>
     /** Updates request with new arguments. */
-    updateRequest(id: string, updates: Partial<TransferableRequest<Arguments, Options>>): Promise<void>
+    updateRequest(id: string, updates: Partial<TransferableMessage<Requset, Response>>): Promise<void>
     /** Approves a request. */
     approveRequest(id: string): Promise<void>
     /** Rejects a request. */
@@ -1116,6 +1115,7 @@ export interface TransactionWatcherState<ChainId, Transaction> {
         status: TransactionStatusType,
     ) => Promise<void>
 }
+
 export interface ProviderState<ChainId, ProviderType, NetworkType> extends Startable {
     /** The account of the currently visiting site. */
     account?: Subscription<string>
@@ -1161,8 +1161,8 @@ export interface Web3State<
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter,
 > {
@@ -1173,7 +1173,7 @@ export interface Web3State<
     IdentityService?: IdentityServiceState<ChainId>
     NameService?: NameServiceState
     RiskWarning?: RiskWarningState
-    Request?: RequestState<RequestArguments, RequestOptions>
+    Message?: MessageState<MessageRequest, MessageResponse>
     Settings?: SettingsState
     Token?: TokenState<ChainId, SchemaType>
     Transaction?: TransactionState<ChainId, Transaction>

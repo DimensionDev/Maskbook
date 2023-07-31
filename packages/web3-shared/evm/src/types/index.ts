@@ -266,6 +266,13 @@ export interface RequestOptions {
     providerURL?: string
 }
 
+export interface MessageRequest {
+    arguments: RequestArguments
+    options: RequestOptions
+}
+
+export type MessageResponse = JsonRpcResponse
+
 export interface Transaction {
     from?: string
     to?: string
@@ -323,8 +330,8 @@ export type Web3State = Web3StateShared<
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter
 >
@@ -338,8 +345,8 @@ export type Web3Definition = {
     Signature: Signature
     GasOption: GasOption
     Block: Block
-    RequestArguments: RequestArguments
-    RequestOptions: RequestOptions
+    MessageRequest: MessageRequest
+    MessageResponse: MessageResponse
     Operation: UserOperation
     Transaction: Transaction
     TransactionReceipt: TransactionReceipt

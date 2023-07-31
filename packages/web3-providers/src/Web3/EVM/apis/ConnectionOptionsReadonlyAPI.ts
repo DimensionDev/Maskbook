@@ -3,8 +3,8 @@ import type {
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter,
     Web3State,
@@ -20,8 +20,8 @@ export class ConnectionOptionsReadonlyAPI extends ConnectionOptionsAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter
 > {

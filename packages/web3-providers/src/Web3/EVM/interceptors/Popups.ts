@@ -7,10 +7,10 @@ import {
     PayloadEditor,
     EthereumMethodType,
     ProviderType,
-    type RequestArguments,
-    type RequestOptions,
+    type MessageRequest,
+    type MessageResponse,
 } from '@masknet/web3-shared-evm'
-import { RequestStateType, isGreaterThan, isZero, toFixed, type TransferableRequest } from '@masknet/web3-shared-base'
+import { MessageStateType, isGreaterThan, isZero, toFixed, type TransferableMessage } from '@masknet/web3-shared-base'
 import { DepositPaymaster } from '../../../SmartPay/libs/DepositPaymaster.js'
 import { SmartPayBundlerAPI } from '../../../SmartPay/index.js'
 import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
@@ -111,20 +111,22 @@ export class Popups implements Middleware<ConnectionContext> {
                 await Providers[ProviderType.MaskWallet].switchChain(context.chainId)
             }
 
-            const requestToBeApproved: TransferableRequest<RequestArguments, RequestOptions> = {
-                state: RequestStateType.NOT_DEPEND,
-                arguments: context.requestArguments,
-                options: {
-                    ...(await this.getPaymentToken(context)),
-                    owner: context.owner,
-                    silent: context.silent,
-                    identifier: context.identifier?.toText(),
-                    providerURL: this.customNetwork ? this.customNetwork.rpcUrl : undefined,
+            const requestToBeApproved: TransferableMessage<MessageRequest, MessageResponse> = {
+                state: MessageStateType.NOT_DEPEND,
+                request: {
+                    arguments: context.requestArguments,
+                    options: {
+                        ...(await this.getPaymentToken(context)),
+                        owner: context.owner,
+                        silent: context.silent,
+                        identifier: context.identifier?.toText(),
+                        providerURL: this.customNetwork ? this.customNetwork.rpcUrl : undefined,
+                    },
                 },
             }
 
             try {
-                const response = await Web3StateRef.value.Request?.applyAndWaitRequest(requestToBeApproved)
+                const response = await Web3StateRef.value.Message?.applyAndWaitResponse(requestToBeApproved)
 
                 if (!response) {
                     context.abort('Failed to approve request.')
