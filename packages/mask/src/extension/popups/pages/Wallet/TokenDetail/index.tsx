@@ -61,6 +61,9 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             justifyContent: 'center',
         },
+        priceChange: {
+            fontSize: 16,
+        },
         tokenIcon: {
             marginRight: 4,
         },
@@ -214,7 +217,7 @@ const TokenDetail = memo(function TokenDetail() {
                     <ProgressiveText className={classes.assetValue} loading={isLoadingPrice} skeletonWidth={80}>
                         <FormattedCurrency value={tokenPrice} formatter={formatCurrency} />
                     </ProgressiveText>
-                    <PriceChange change={priceChange} loading={isLoadingTrending} />
+                    <PriceChange className={classes.priceChange} change={priceChange} loading={isLoadingTrending} />
                     <PriceChartRange days={chartRange} onDaysChange={setChartRange} gap="10px" mt={2} />
                     {!isLoadingStats && isError ? (
                         <ReloadStatus

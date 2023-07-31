@@ -117,3 +117,7 @@ export function trimZero(digit: string) {
         return p1 ? `.${p1}` : ''
     })
 }
+
+export function addThousandSeparators(num: string | number) {
+    return num.toString().replaceAll(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
+}
