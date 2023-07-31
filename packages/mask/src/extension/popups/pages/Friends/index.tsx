@@ -1,7 +1,6 @@
 import { lazy, memo, Suspense, useEffect } from 'react'
 import { Route, Routes, useSearchParams, useMatch } from 'react-router-dom'
 import { NetworkPluginID, PopupModalRoutes, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
-import Services from '../../../service.js'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { useModalNavigate, NormalHeader } from '../../components/index.js'
@@ -24,7 +23,7 @@ const Contacts = memo(() => {
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
-            {matchDetail ? null : <NormalHeader onClose={() => Services.Helper.removePopupWindow()} />}
+            {matchDetail ? null : <NormalHeader />}
             <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
                 <Routes>
                     <Route path="*" element={<Home />} />

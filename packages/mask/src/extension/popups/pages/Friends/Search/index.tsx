@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
@@ -22,20 +22,34 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
     },
 }))
-export const Search = memo(() => {
+
+interface SearchProps {
+    setSearchValue: (v: string) => void
+}
+
+export const Search = memo<SearchProps>(({ setSearchValue }) => {
     const { classes } = useStyles()
     const { t } = useI18N()
+    const [value, setValue] = useState<string>('')
     const handleKeyPress = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter') {
-        }
+        if (e.key !== 'Enter') return
+        setSearchValue(value)
     }
     return (
         <Box className={classes.container}>
             <Icons.Search />
             <input
-                placeholder={t('popupp_encrypted_friends_search_placeholder')}
+                placeholder={t('popups_encrypted_friends_search_placeholder')}
                 className={classes.input}
-                onKeyPress={(e) => handleKeyPress(e)}
+                onKeyUp={(e) => handleKeyPress(e)}
+                onBlur={() => {
+                    setTimeout(() => {
+                        setSearchValue(value)
+                    }, 500)
+                }}
+                onChange={(e) => {
+                    setValue(e.target.value)
+                }}
             />
         </Box>
     )
