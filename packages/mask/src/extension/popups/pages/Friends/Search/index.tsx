@@ -21,6 +21,12 @@ const useStyles = makeStyles()((theme) => ({
         outline: 'none',
         color: theme.palette.maskColor.main,
     },
+    button: {
+        background: 'transparent',
+        border: 'none',
+        outline: 'none',
+        cursor: 'pointer',
+    },
 }))
 
 interface SearchProps {
@@ -39,18 +45,30 @@ export const Search = memo<SearchProps>(({ setSearchValue }) => {
         <Box className={classes.container}>
             <Icons.Search />
             <input
+                value={value}
                 placeholder={t('popups_encrypted_friends_search_placeholder')}
                 className={classes.input}
                 onKeyUp={(e) => handleKeyPress(e)}
-                onBlur={() => {
+                onBlur={(e) => {
                     setTimeout(() => {
-                        setSearchValue(value)
+                        setSearchValue(e.target.value)
                     }, 500)
                 }}
                 onChange={(e) => {
                     setValue(e.target.value)
                 }}
             />
+            {value ? (
+                <button
+                    type="reset"
+                    onClick={() => {
+                        setValue('')
+                        setSearchValue('')
+                    }}
+                    className={classes.button}>
+                    <Icons.Close />
+                </button>
+            ) : null}
         </Box>
     )
 })

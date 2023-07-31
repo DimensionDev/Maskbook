@@ -2,10 +2,9 @@ import { memo } from 'react'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography, Link, useTheme, ButtonBase as Button, ButtonBase } from '@mui/material'
-import { formatPersonaFingerprint } from '@masknet/shared-base'
+import { formatPersonaFingerprint, type BindingProof } from '@masknet/shared-base'
 import { CopyButton } from '@masknet/shared'
 import urlcat from 'urlcat'
-import type { FriendsInformation } from '../../../hook/useFriends.js'
 import { AccountAvatar } from '../../Personas/components/AccountAvatar/index.js'
 import { useNavigate } from 'react-router-dom'
 import { TwitterAccount } from './TwitterAccount/index.js'
@@ -62,13 +61,15 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface ContactCardProps {
-    friend: FriendsInformation
+    avatar?: string
+    profiles: BindingProof[]
+    nextId: string
+    publicKey?: string
 }
 
-export const ContactCard = memo<ContactCardProps>(({ friend }) => {
+export const ContactCard = memo<ContactCardProps>(({ avatar, nextId, profiles, publicKey }) => {
     const theme = useTheme()
     const { classes } = useStyles()
-    const { id, avatar, profiles, linkedPersona } = friend
     const navigate = useNavigate()
     return (
         <Box className={classes.card}>
@@ -77,7 +78,7 @@ export const ContactCard = memo<ContactCardProps>(({ friend }) => {
                     <AccountAvatar avatar={avatar} />
                     <Box>
                         <Typography fontSize={14} fontWeight={700} lineHeight="18px">
-                            {linkedPersona ? formatPersonaFingerprint(linkedPersona.rawPublicKey, 4) : null}
+                            {publicKey ? formatPersonaFingerprint(publicKey, 4) : null}
                         </Typography>
                         <Typography
                             fontSize={12}
@@ -86,13 +87,13 @@ export const ContactCard = memo<ContactCardProps>(({ friend }) => {
                             display="flex"
                             alignItems="center"
                             columnGap="2px">
-                            {formatPersonaFingerprint(id, 4)}
-                            <CopyButton text={id} size={12} className={classes.icon} />
+                            {nextId ? formatPersonaFingerprint(nextId, 4) : null}
+                            <CopyButton text={nextId} size={12} className={classes.icon} />
                             <Link
                                 underline="none"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                href={urlcat('https://web3.bio/', { s: id })}
+                                href={urlcat('https://web3.bio/', { s: nextId })}
                                 className={classes.icon}>
                                 <Icons.LinkOut size={12} />
                             </Link>
@@ -101,9 +102,12 @@ export const ContactCard = memo<ContactCardProps>(({ friend }) => {
                 </Box>
                 <Button
                     onClick={() =>
-                        navigate(`/friends/detail/${id}`, {
+                        navigate(`/friends/detail/${nextId}`, {
                             state: {
-                                friend,
+                                avatar,
+                                publicKey,
+                                nextId,
+                                profiles,
                             },
                         })
                     }
@@ -125,12 +129,25 @@ export const ContactCard = memo<ContactCardProps>(({ friend }) => {
                             return <TwitterAccount avatar={''} userId={profile.name} />
                         case 'lens':
                             return <LensAccount userId={profile.identity} />
+                        case 'ens':
+                            return <LensAccount userId={profile.identity} />
                         default:
                             return null
                     }
                 })}
                 {profiles.length > 2 ? (
-                    <ButtonBase className={classes.more}>
+                    <ButtonBase
+                        className={classes.more}
+                        onClick={() => {
+                            navigate(`/friends/detail/${nextId}`, {
+                                state: {
+                                    avatar,
+                                    publicKey,
+                                    nextId,
+                                    profiles,
+                                },
+                            })
+                        }}>
                         <Typography
                             fontSize={12}
                             fontWeight={400}

@@ -29,6 +29,9 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.secondary,
         whiteSpace: 'nowrap',
     },
+    mainText: {
+        color: theme.palette.text.primary,
+    },
 }))
 
 export interface FriendsHomeUIProps {
@@ -41,7 +44,7 @@ export interface FriendsHomeUIProps {
 
 export const FriendsHomeUI = memo<FriendsHomeUIProps>(
     ({ loading, friends, setSearchValue, searchResult, searchValue }) => {
-        const { classes } = useStyles()
+        const { classes, cx } = useStyles()
         const { t } = useI18N()
         return (
             <div className={classes.container}>
@@ -49,7 +52,7 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(
                     <Search setSearchValue={setSearchValue} />
                 </Box>
                 {loading ? (
-                    <div className={classes.empty}>
+                    <div className={cx(classes.empty, classes.mainText)}>
                         <LoadingBase />
                         <Typography>{t('loading')}</Typography>
                     </div>
@@ -61,15 +64,27 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(
                     ) : (
                         <Box display="flex" flexDirection="column" gap="12px" padding="16px">
                             {searchResult.map((friend) => {
-                                console.log(friend)
-                                return ''
+                                return (
+                                    <ContactCard
+                                        key={friend.persona}
+                                        nextId={friend.persona}
+                                        profiles={friend.proofs}
+                                    />
+                                )
                             })}
                         </Box>
                     )
                 ) : (
                     <Box display="flex" flexDirection="column" gap="12px" padding="16px">
                         {friends.map((friend) => {
-                            return <ContactCard key={friend.id} friend={friend} />
+                            return (
+                                <ContactCard
+                                    key={friend.id}
+                                    avatar={friend.avatar}
+                                    nextId={friend.linkedPersona?.publicKeyAsHex as string}
+                                    profiles={friend.profiles}
+                                />
+                            )
                         })}
                     </Box>
                 )}

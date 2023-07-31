@@ -15,7 +15,6 @@ const FriendsHome = memo(() => {
     const type = resolveNextIDPlatform(searchValue)
     const _value = resolveValueToSearch(searchValue)
     const { loading, value: searchResult } = usePersonasFromNextID(_value, type ?? NextIDPlatform.NextID, false)
-    console.log(searchResult, _value, 'aaa')
     useTitle(t('popups_encrypted_friends'))
     return (
         <FriendsHomeUI

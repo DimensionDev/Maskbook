@@ -430,7 +430,6 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             }),
         })
         const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal)
-        console.log(bindings, 'bindings')
         return bindings
     }
 

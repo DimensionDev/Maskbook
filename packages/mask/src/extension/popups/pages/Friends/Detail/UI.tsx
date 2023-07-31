@@ -5,10 +5,9 @@ import { memo, useCallback } from 'react'
 import { Box, Avatar, Typography, Link } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
-import { formatPersonaFingerprint } from '@masknet/shared-base'
+import { formatPersonaFingerprint, type BindingProof } from '@masknet/shared-base'
 import { useTheme } from '@mui/system'
 import { CopyButton } from '@masknet/shared'
-import { type FriendsInformation } from '../../../hook/useFriends.js'
 import { TwitterAccount } from './TwitterAccount/index.js'
 import { LensAccount } from './LensAccount/index.js'
 import urlcat from 'urlcat'
@@ -54,15 +53,17 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface FriendsDetailUIProps {
-    friend: FriendsInformation
+    avatar?: string
+    profiles: BindingProof[]
+    nextId: string
+    publicKey?: string
 }
 
-export const FriendsDetailUI = memo<FriendsDetailUIProps>(({ friend }) => {
+export const FriendsDetailUI = memo<FriendsDetailUIProps>(({ avatar, nextId, publicKey, profiles }) => {
     const { classes } = useStyles()
     const navigate = useNavigate()
     const handleBack = useCallback(() => navigate(-1), [])
     const theme = useTheme()
-    const { avatar, id, linkedPersona, profiles } = friend
     return (
         <Box display="flex" flexDirection="column" alignItems="center" width="100%">
             <Box className={classes.container}>
@@ -81,7 +82,7 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(({ friend }) => {
                         )}
                     </Box>
                     <Typography fontSize={18} fontWeight="700" lineHeight="22px" marginTop="8px">
-                        {linkedPersona ? formatPersonaFingerprint(linkedPersona.rawPublicKey, 4) : null}
+                        {publicKey ? formatPersonaFingerprint(publicKey, 4) : null}
                     </Typography>
                     <Typography
                         fontSize={12}
@@ -90,13 +91,13 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(({ friend }) => {
                         display="flex"
                         alignItems="center"
                         columnGap="2px">
-                        {formatPersonaFingerprint(id, 4)}
-                        <CopyButton text={id} size={12} className={classes.icon} />
+                        {formatPersonaFingerprint(nextId, 4)}
+                        <CopyButton text={nextId} size={12} className={classes.icon} />
                         <Link
                             underline="none"
                             target="_blank"
                             rel="noopener noreferrer"
-                            href={urlcat('https://web3.bio/', { s: id })}
+                            href={urlcat('https://web3.bio/', { s: nextId })}
                             className={classes.icon}>
                             <Icons.LinkOut size={12} />
                         </Link>

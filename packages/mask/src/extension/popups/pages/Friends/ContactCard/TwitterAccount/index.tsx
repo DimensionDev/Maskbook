@@ -3,6 +3,7 @@ import { Box, Link } from '@mui/material'
 import { AccountAvatar } from '../../../Personas/components/AccountAvatar/index.js'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
+import { formatPersonaName } from '@masknet/shared-base'
 
 interface TwitterAccountProps {
     avatar: string
@@ -30,7 +31,7 @@ export const TwitterAccount = memo<TwitterAccountProps>(({ avatar, userId }) => 
         <Box width="156px" padding="4px" display="flex" gap="10px" alignItems="center">
             <AccountAvatar avatar={avatar} network="twitter.com" isValid />
             <Box className={classes.userId}>
-                {`@${userId}`}
+                {`@${formatPersonaName(userId)}`}
                 <Link
                     underline="none"
                     target="_blank"

@@ -4,7 +4,8 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { formatPersonaName } from '@masknet/shared-base'
 
-interface LensAccountProps {
+interface AccountProps {
+    icon: string
     userId: string
 }
 
@@ -23,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const LensAccount = memo<LensAccountProps>(({ userId }) => {
+export const Account = memo<AccountProps>(({ userId, icon }) => {
     const { classes } = useStyles()
     return (
         <Box width="156px" padding="4px" display="flex" gap="10px" alignItems="center">

@@ -5,6 +5,6 @@ import { useParams, useLocation } from 'react-router-dom'
 export const FriendsDetail = memo(() => {
     const { id } = useParams<{ id: string }>()
     const location = useLocation()
-    const { friend } = location.state
-    return friend ? <FriendsDetailUI friend={friend} /> : null
+    const { avatar, profiles, nextId, publicKey } = location.state
+    return <FriendsDetailUI avatar={avatar} profiles={profiles} nextId={nextId} publicKey={publicKey} />
 })
