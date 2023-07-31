@@ -49,7 +49,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
     const list = useMemo(() => data?.pages.flatMap((x) => x.data) || EMPTY_LIST, [data?.pages])
     const nextPage = useCallback(() => fetchNextPage(), [fetchNextPage])
 
-    // TODO rename these fields with style of react-query
+    // TODO rename these fields in style of react-query
     return {
         value: list,
         next: nextPage,

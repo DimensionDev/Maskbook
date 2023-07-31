@@ -1,6 +1,6 @@
 import { MaskTabList, makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
-import { Box, Button, Tab } from '@mui/material'
+import { Box, Tab } from '@mui/material'
 import { memo, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
@@ -12,8 +12,6 @@ import { useTitle } from '../../../hook/useTitle.js'
 import { FungibleTokenSection } from './FungibleTokenSection.js'
 import { NonFungibleTokenSection } from './NonFungibleTokenSection.js'
 import { TransferTabType } from '../type.js'
-import { useChainContext, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     page: {
@@ -24,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     body: {
         flexGrow: 1,
-        padding: theme.spacing(2, 2, 0),
+        // padding: theme.spacing(2, 2, 0),
         overflow: 'auto',
         display: 'flex',
         flexDirection: 'column',
@@ -44,19 +42,6 @@ const useStyles = makeStyles()((theme) => ({
         paddingTop: '0px!important',
         paddingLeft: 16,
         paddingRight: 16,
-    },
-    actionGroup: {
-        display: 'flex',
-        justifyContent: 'center',
-        background: theme.palette.maskColor.secondaryBottom,
-        boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
-        backdropFilter: 'blur(8px)',
-        gap: theme.spacing(2),
-        padding: theme.spacing(2),
-        width: '100%',
-        bottom: 0,
-        zIndex: 100,
-        marginTop: 'auto',
     },
 }))
 
@@ -94,7 +79,7 @@ const Transfer = memo(function Transfer() {
                     }
                 />
                 <div className={classes.body}>
-                    <AddContactInputPanel p={0} />
+                    <AddContactInputPanel p={0} m="16px 16px 0" />
                     <TabPanel value={TransferTabType.Token} className={classes.panel} data-hide-scrollbar>
                         <FungibleTokenSection />
                     </TabPanel>
@@ -103,11 +88,6 @@ const Transfer = memo(function Transfer() {
                     </TabPanel>
                 </div>
             </TabContext>
-            {currentTab === TransferTabType.Token ? null : (
-                <Box className={classes.actionGroup}>
-                    <Button fullWidth>{t('confirm')}</Button>
-                </Box>
-            )}
         </Box>
     )
 })

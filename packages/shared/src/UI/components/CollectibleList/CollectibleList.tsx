@@ -1,15 +1,15 @@
-import { useCallback, useMemo, useRef, memo } from 'react'
-import { useWeb3Others } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { SourceType } from '@masknet/web3-shared-base'
-import { Box } from '@mui/material'
 import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
-import { type ChangeEventOptions, CollectibleItem, type SelectableProps } from './CollectibleItem.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useWeb3Others } from '@masknet/web3-hooks-base'
+import { SourceType } from '@masknet/web3-shared-base'
+import { Box, type BoxProps } from '@mui/material'
+import { memo, useCallback, useMemo, useRef } from 'react'
+import { useSharedI18N } from '../../../index.js'
+import { ReloadStatus } from '../index.js'
+import { CollectibleItem, type ChangeEventOptions, type SelectableProps } from './CollectibleItem.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
 import type { CollectibleGridProps } from './type.js'
-import { ReloadStatus } from '../index.js'
-import { useSharedI18N } from '../../../index.js'
 
 const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 3, gap = 2 }) => {
     const gapIsNumber = typeof gap === 'number'
@@ -40,16 +40,19 @@ const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 3, gap 
 })
 
 export interface CollectibleListProps
-    extends withClasses<'empty' | 'button' | 'root'>,
-        CollectibleGridProps,
-        Omit<SelectableProps, 'value' | 'checked' | 'onChange'> {
+    extends CollectibleGridProps,
+        Omit<SelectableProps, 'value' | 'checked' | 'onChange'>,
+        Omit<BoxProps, 'gap' | 'onChange'> {
     pluginID?: NetworkPluginID
     collectibles: Web3Helper.NonFungibleAssetAll[]
     error?: string
     loading: boolean
     disableLink?: boolean
     showNetworkIcon?: boolean
-    /** Collectible key, in format of `${contractAddress}_${tokenId}` */
+    /**
+     * Collectible key, in format of `${contractAddress}_${tokenId}`.
+     * You can also customize, but don't forget pass a customized getCollectibleKey as well.
+     * */
     value?: string | string[]
     getCollectibleKey?(collectible: Web3Helper.NonFungibleAssetAll): string
     retry(): void
@@ -76,9 +79,11 @@ export const CollectibleList = memo(function CollectibleList(props: CollectibleL
         retry,
         getCollectibleKey = getKey,
         onChange,
+        className,
+        ...rest
     } = props
     const t = useSharedI18N()
-    const { classes } = useStyles({ columns, gap }, { props: { classes: props.classes } })
+    const { classes, cx } = useStyles({ columns, gap })
     const Others = useWeb3Others()
 
     const availableKeys = useMemo(() => collectibles.map(getCollectibleKey), [collectibles])
@@ -95,11 +100,10 @@ export const CollectibleList = memo(function CollectibleList(props: CollectibleL
         },
         [multiple, availableKeys, value],
     )
-
     const listRef = useRef<typeof Box>(null)
 
     return (
-        <Box className={classes.list} ref={listRef}>
+        <Box className={cx(classes.list, className)} {...rest} ref={listRef}>
             {loading && collectibles.length === 0 ? <LoadingSkeleton className={classes.root} /> : null}
             {error || (collectibles.length === 0 && !loading) ? (
                 <ReloadStatus className={classes.text} message={t.no_collectible_found()} onRetry={retry} />

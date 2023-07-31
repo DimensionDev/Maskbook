@@ -49,12 +49,14 @@ export interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = Netwo
     nativeTokenPrice: number
     gasLimit: number
     gasConfig?: GasConfig
-    onChange?(gasConfig?: GasConfig): void
     supportMultiCurrency?: boolean
     estimateGasFee?: string
     editMode?: boolean
     /** No effects on editMode */
     className?: string
+    onChange?(gasConfig: GasConfig): void
+    /** Will open internal setting dialog instead if not provided */
+    onOpenCustomSetting?(): void
 }
 
 const useStyles = makeStyles()((theme) => {
@@ -141,7 +143,6 @@ export const SelectGasSettingsToolbar = memo(function SelectGasSettingsToolbar(p
 })
 
 export function SelectGasSettingsToolbarUI({
-    onChange,
     gasConfig: gasOption,
     gasLimit,
     nativeToken,
@@ -151,6 +152,8 @@ export function SelectGasSettingsToolbarUI({
     editMode,
     className,
     classes: externalClasses,
+    onChange,
+    onOpenCustomSetting,
 }: SelectGasSettingsToolbarProps) {
     const t = useSharedI18N()
     const { classes, cx, theme } = useStyles(undefined, { props: { classes: externalClasses } })
@@ -185,6 +188,11 @@ export function SelectGasSettingsToolbarUI({
 
     const openCustomGasSettingsDialog = useCallback(async () => {
         setIsCustomGas(true)
+        if (typeof onOpenCustomSetting === 'function') {
+            onOpenCustomSetting()
+            return
+        }
+
         const { settings } = await SelectGasSettingsModal.openAndWaitForClose({
             chainId,
             disableGasLimit: true,
@@ -198,7 +206,7 @@ export function SelectGasSettingsToolbarUI({
             (settings?.transaction as Transaction).maxPriorityFeePerGas!,
             (settings?.transaction as Transaction).gasPrice!,
         )
-    }, [chainId, gasOption, setGasConfigCallback])
+    }, [chainId, gasOption, setGasConfigCallback, onOpenCustomSetting])
 
     const currentGasOption = gasOptions?.[currentGasOptionType]
     useEffect(() => {

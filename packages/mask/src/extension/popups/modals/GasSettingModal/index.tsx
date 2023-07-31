@@ -32,12 +32,6 @@ export const GasSettingModal = forwardRef<
             setGasConfig(props.config)
             setNonce(props.nonce ?? '')
         },
-        onClose() {
-            setChainId(undefined)
-            setReplaceType(undefined)
-            setGasConfig(initGasSetting)
-            setNonce('')
-        },
     })
 
     return (

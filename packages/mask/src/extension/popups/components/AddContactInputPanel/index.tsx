@@ -29,7 +29,6 @@ const useStyles = makeStyles()((theme) => ({
     receiverPanel: {
         display: 'flex',
         alignItems: 'flex-start',
-        width: '100%',
     },
     inputText: {
         fontSize: 10,

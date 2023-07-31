@@ -73,7 +73,7 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
                         className={classes.iconOnly}
                     />
                 </BottomNavLink>
-                <BottomNavLink to={PopupRoutes.Wallet}>
+                <BottomNavLink to={walletLink}>
                     <BottomNavigationAction
                         showLabel={false}
                         icon={<Icons.WalletNav size={28} />}

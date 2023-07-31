@@ -9,7 +9,7 @@ import { Icons } from '@masknet/icons'
 
 interface GasSettingMenuProps {
     gas: string
-    onChange: (config: GasConfig) => void
+    onChange?: (config: GasConfig) => void
 }
 
 export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu({ gas, onChange }) {
@@ -20,7 +20,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
     const handleChange = useCallback(
         (config: GasConfig, type?: GasOptionType) => {
             if (type) setGasOptionType(type)
-            onChange(config)
+            onChange?.(config)
         },
         [onChange],
     )

@@ -46,6 +46,7 @@ export function isLessThan(a: BigNumber.Value, b: BigNumber.Value) {
 export function isLessThanOrEqualTo(a: BigNumber.Value, b: BigNumber.Value) {
     return new BigNumber(a).isLessThanOrEqualTo(b)
 }
+export { isLessThanOrEqualTo as isLte }
 
 /** a > 0 */
 export function isPositive(n: BigNumber.Value) {

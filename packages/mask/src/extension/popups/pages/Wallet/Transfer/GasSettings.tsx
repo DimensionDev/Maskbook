@@ -5,8 +5,8 @@ import { useNativeTokenPrice, useWallet } from '@masknet/web3-hooks-base'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { createNativeToken, isNativeTokenAddress, type ChainId } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
-import { memo, useMemo } from 'react'
-import { useI18N } from '../../../../../utils/index.js'
+import { memo, useCallback, useMemo } from 'react'
+import { GasSettingModal } from '../../../modals/modals.js'
 
 const useStyles = makeStyles()((theme) => ({
     label: {
@@ -28,7 +28,6 @@ interface Props extends Pick<SelectGasSettingsToolbarProps, 'gasConfig' | 'onCha
 }
 export const GasSettings = memo<Props>(function GasSettings({ tokenAddress: address, chainId, gasConfig, onChange }) {
     const { classes } = useStyles()
-    const { t } = useI18N()
 
     const wallet = useWallet()
     const { data: smartPayChainId } = useQuery(['smart-pay', 'supported-chainId'], () =>
@@ -40,33 +39,26 @@ export const GasSettings = memo<Props>(function GasSettings({ tokenAddress: addr
     const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
         chainId,
     })
-    // const { value: defaultGasPrice = '1' } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
-    // const [gasOption, setGasOption] = useState<GasConfig>()
-    //
-    // const handleGasSettingChange = useCallback(
-    //     (gasConfig: GasConfig) => {
-    //         const editor = GasEditor.fromConfig(chainId, gasConfig)
-    //         setGasOption((config) => {
-    //             return editor.getGasConfig({
-    //                 gasPrice: defaultGasPrice,
-    //                 maxFeePerGas: defaultGasPrice,
-    //                 maxPriorityFeePerGas: defaultGasPrice,
-    //                 ...config,
-    //             })
-    //         })
-    //     },
-    //     [chainId, defaultGasPrice],
-    // )
+
+    const handleOpenCustom = useCallback(async () => {
+        const settings = await GasSettingModal.openAndWaitForClose({
+            chainId,
+            config: { gas: gasLimit.toString() },
+        })
+        if (settings) onChange?.(settings)
+    }, [gasLimit])
     return (
         <SelectGasSettingsToolbar
+            chainId={chainId}
             className={classes.settingBar}
             supportMultiCurrency={!!wallet?.owner && chainId === smartPayChainId}
             nativeToken={nativeToken}
             nativeTokenPrice={nativeTokenPrice}
             gasConfig={gasConfig}
             gasLimit={gasLimit}
-            onChange={onChange}
             classes={{ label: classes.label }}
+            onOpenCustomSetting={handleOpenCustom}
+            onChange={onChange}
         />
     )
 })

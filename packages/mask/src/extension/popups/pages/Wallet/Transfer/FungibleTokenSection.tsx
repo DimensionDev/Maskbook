@@ -1,18 +1,17 @@
 import { Icons } from '@masknet/icons'
-import { ImageIcon, ProgressiveText, TokenIcon } from '@masknet/shared'
+import { ImageIcon, ProgressiveText, TokenIcon, useAvailableBalance } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     useChainContext,
-    useFungibleAsset,
+    useFungibleToken,
     useFungibleTokenBalance,
-    useGasPrice,
     useNetworkDescriptor,
     useWeb3Connection,
 } from '@masknet/web3-hooks-base'
-import { formatBalance, isLessThan, isZero, leftShift, rightShift } from '@masknet/web3-shared-base'
-import { GasEditor, type GasConfig } from '@masknet/web3-shared-evm'
+import { formatBalance, isLessThan, isLte, isZero, leftShift, rightShift } from '@masknet/web3-shared-base'
+import { type GasConfig } from '@masknet/web3-shared-evm'
 import { Box, Input, Typography } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -32,6 +31,10 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.white,
         backgroundColor: MaskColors.light.maskColor.primary,
         cursor: 'pointer',
+        margin: theme.spacing(0, 2),
+    },
+    tokenPicker: {
+        margin: theme.spacing(0, 2),
     },
     tokenIcon: {
         width: 36,
@@ -81,49 +84,45 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         )
     }, [])
     const network = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
-    const { data: asset, isLoading } = useFungibleAsset(NetworkPluginID.PLUGIN_EVM, address, { chainId })
+    const { data: token, isLoading } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, address, undefined, { chainId })
 
-    const { value: defaultGasPrice = '1' } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const [gasOption, setGasOption] = useState<GasConfig>()
-
-    const handleGasSettingChange = useCallback(
-        (gasConfig: GasConfig) => {
-            const editor = GasEditor.fromConfig(chainId, gasConfig)
-            setGasOption((config) => {
-                return editor.getGasConfig({
-                    gasPrice: defaultGasPrice,
-                    maxFeePerGas: defaultGasPrice,
-                    maxPriorityFeePerGas: defaultGasPrice,
-                    ...config,
-                })
-            })
-        },
-        [chainId, defaultGasPrice],
-    )
-
-    const { data: balance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address, { chainId })
+    const { data: balance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address, { chainId })
+    const [gasConfig, setGasConfig] = useState<GasConfig>()
     const [amount, setAmount] = useState('')
     const totalAmount = useMemo(
-        () => (amount && asset?.decimals ? rightShift(amount, asset.decimals).toFixed() : '0'),
+        () => (amount && token?.decimals ? rightShift(amount, token.decimals).toFixed() : '0'),
         [],
     )
+    const { balance: availableBalance } = useAvailableBalance(NetworkPluginID.PLUGIN_EVM, address, gasConfig, {
+        chainId,
+    })
 
     const { account } = useChainContext()
     const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, {
         account,
     })
     const recipient = params.get('recipient')
-    const [state, transferToken] = useAsyncFn(async () => {
-        if (!recipient || !isZero(totalAmount) || !asset?.decimals) return
-        return Web3.transferFungibleToken(address, recipient, totalAmount, '')
-    }, [address, recipient, totalAmount, asset?.decimals])
+    const [state, transfer] = useAsyncFn(async () => {
+        if (!recipient || !isZero(totalAmount) || !token?.decimals) return
+        return Web3.transferFungibleToken(address, recipient, totalAmount, '', {
+            overrides: gasConfig,
+        })
+    }, [address, recipient, totalAmount, token?.decimals, gasConfig])
 
     if (undecided)
-        return <TokenPicker defaultChainId={chainId} chainId={chainId} address={address} onSelect={handleSelectToken} />
+        return (
+            <TokenPicker
+                className={classes.tokenPicker}
+                defaultChainId={chainId}
+                chainId={chainId}
+                address={address}
+                onSelect={handleSelectToken}
+            />
+        )
 
-    const inputNotReady = !recipient || !amount
-    const tokenNotReady = !asset?.decimals || !balance || isLessThan(balance, totalAmount)
-    const transferDisabled = inputNotReady || tokenNotReady
+    const inputNotReady = !recipient || !amount || isLessThan(availableBalance, totalAmount)
+    const tokenNotReady = !token?.decimals || !balance || isLessThan(balance, totalAmount)
+    const transferDisabled = inputNotReady || tokenNotReady || isLte(totalAmount, 0)
 
     return (
         <>
@@ -131,11 +130,11 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                 className={classes.asset}
                 data-hide-scrollbar
                 onClick={async () => {
-                    const asset = await ChooseTokenModal.openAndWaitForClose({
+                    const picked = await ChooseTokenModal.openAndWaitForClose({
                         chainId,
                         address,
                     })
-                    if (asset) handleSelectToken(asset)
+                    if (picked) handleSelectToken(picked)
                 }}>
                 <Box position="relative" height={36} width={36}>
                     <TokenIcon className={classes.tokenIcon} chainId={chainId} address={address} />
@@ -143,17 +142,17 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                 </Box>
                 <Box mr="auto" ml={2}>
                     <ProgressiveText loading={isLoading} skeletonWidth={36}>
-                        {asset?.symbol}
+                        {token?.symbol}
                     </ProgressiveText>
                     <ProgressiveText loading={isLoading} skeletonWidth={60}>
                         {t('available_amount', {
-                            amount: formatBalance(asset?.balance, asset?.decimals, 0, false, true, 5),
+                            amount: formatBalance(availableBalance, token?.decimals, 0, false, true, 5),
                         })}
                     </ProgressiveText>
                 </Box>
                 <Icons.ArrowDrop size={24} />
             </Box>
-            <Box mt={2}>
+            <Box mt={2} mx={2}>
                 <Input
                     fullWidth
                     disableUnderline
@@ -162,8 +161,8 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                         <Typography
                             className={classes.maxButton}
                             onClick={() => {
-                                if (!balance || !asset?.decimals) return
-                                setAmount(leftShift(balance, asset.decimals).toFixed())
+                                if (!balance || !token?.decimals) return
+                                setAmount(leftShift(availableBalance, token.decimals).toFixed())
                             }}>
                             {t('max')}
                         </Typography>
@@ -172,19 +171,14 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                     onChange={(e) => setAmount(e.target.value)}
                 />
             </Box>
-            <Box display="flex" justifyContent="space-between" width="100%" mt={2}>
-                <GasSettings
-                    chainId={chainId}
-                    tokenAddress={address}
-                    gasConfig={gasOption}
-                    onChange={handleGasSettingChange}
-                />
+            <Box display="flex" justifyContent="space-between" mt={2} mx={2}>
+                <GasSettings chainId={chainId} tokenAddress={address} gasConfig={gasConfig} onChange={setGasConfig} />
             </Box>
             <Box className={classes.actionGroup}>
                 <ActionButton variant="outlined" fullWidth onClick={() => navigate(-2)}>
                     {t('cancel')}
                 </ActionButton>
-                <ActionButton fullWidth onClick={transferToken} disabled={transferDisabled} loading={state.loading}>
+                <ActionButton fullWidth onClick={transfer} disabled={transferDisabled} loading={state.loading}>
                     {t('next')}
                 </ActionButton>
             </Box>

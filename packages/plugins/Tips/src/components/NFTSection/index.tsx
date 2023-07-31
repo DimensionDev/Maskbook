@@ -12,8 +12,6 @@ import { isLensProfileAddress, isLensFollower, isLensCollect, SchemaType, type C
 import { useI18N } from '../../locales/index.js'
 import { useTip } from '../../contexts/index.js'
 
-export * from './NFTList.js'
-
 const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
