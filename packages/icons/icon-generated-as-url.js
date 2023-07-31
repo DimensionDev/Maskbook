@@ -70,6 +70,7 @@ export function minds_round_url() { return new URL("./brands/MindsRound.svg", im
 export function mini_mask_dark_url() { return new URL("./brands/MiniMask.dark.svg", import.meta.url) }
 export function mini_mask_light_url() { return new URL("./brands/MiniMask.light.svg", import.meta.url) }
 export function mirror_url() { return new URL("./brands/Mirror.svg", import.meta.url) }
+export function momoka_url() { return new URL("./brands/Momoka.svg", import.meta.url) }
 export function next_id_mini_dark_url() { return new URL("./brands/NextIDMini.dark.svg", import.meta.url) }
 export function next_id_mini_light_url() { return new URL("./brands/NextIDMini.light.svg", import.meta.url) }
 export function nft_scan_url() { return new URL("./brands/NFTScan.svg", import.meta.url) }
@@ -375,6 +376,7 @@ export function collectible_mint_url() { return new URL("./rss3/CollectibleMint.
 export function collectible_out_url() { return new URL("./rss3/CollectibleOut.svg", import.meta.url) }
 export function donation_donate_url() { return new URL("./rss3/DonationDonate.svg", import.meta.url) }
 export function donation_launch_url() { return new URL("./rss3/DonationLaunch.svg", import.meta.url) }
+export function follow_url() { return new URL("./rss3/Follow.svg", import.meta.url) }
 export function governance_propose_url() { return new URL("./rss3/GovernancePropose.svg", import.meta.url) }
 export function governance_vote_url() { return new URL("./rss3/GovernanceVote.svg", import.meta.url) }
 export function note_burn_url() { return new URL("./rss3/NoteBurn.svg", import.meta.url) }
@@ -388,7 +390,6 @@ export function profile_link_url() { return new URL("./rss3/ProfileLink.svg", im
 export function profile_proxy_url() { return new URL("./rss3/ProfileProxy.svg", import.meta.url) }
 export function profile_update_url() { return new URL("./rss3/ProfileUpdate.svg", import.meta.url) }
 export function rss_3_link_url() { return new URL("./rss3/RSS3Link.svg", import.meta.url) }
-export function rss_3_profile_link_url() { return new URL("./rss3/RSS3ProfileLink.svg", import.meta.url) }
 export function token_bridge_url() { return new URL("./rss3/TokenBridge.svg", import.meta.url) }
 export function token_burn_url() { return new URL("./rss3/TokenBurn.svg", import.meta.url) }
 export function token_in_url() { return new URL("./rss3/TokenIn.svg", import.meta.url) }
@@ -398,6 +399,7 @@ export function token_out_url() { return new URL("./rss3/TokenOut.svg", import.m
 export function token_stake_url() { return new URL("./rss3/TokenStake.svg", import.meta.url) }
 export function token_swap_url() { return new URL("./rss3/TokenSwap.svg", import.meta.url) }
 export function token_unstake_url() { return new URL("./rss3/TokenUnstake.svg", import.meta.url) }
+export function unfollow_url() { return new URL("./rss3/Unfollow.svg", import.meta.url) }
 export function unknown_burn_url() { return new URL("./rss3/UnknownBurn.svg", import.meta.url) }
 export function unknown_cancel_url() { return new URL("./rss3/UnknownCancel.svg", import.meta.url) }
 export function unknown_in_url() { return new URL("./rss3/UnknownIn.svg", import.meta.url) }

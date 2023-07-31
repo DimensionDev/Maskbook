@@ -141,7 +141,7 @@ export const hostIconMap: Record<string, IconComponent> = {
     'mirror.xyz': Icons.Mirror,
     'ipfs.io': Icons.IPFS,
     'snapshot.org': Icons.Snapshot,
-    'momoka.lens.xyz': Icons.Lens,
+    'momoka.lens.xyz': Icons.Momoka,
 }
 
 export const hostNameMap: Record<string, string> = {
