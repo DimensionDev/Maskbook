@@ -1,18 +1,18 @@
+import { Icons } from '@masknet/icons'
+import { Plugin } from '@masknet/plugin-infra'
+import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { ApplicationEntry } from '@masknet/shared'
+import { CrossIsolationMessages, EMPTY_LIST, PluginID } from '@masknet/shared-base'
+import { useFireflyLensAccounts } from '@masknet/web3-hooks-base'
+import { NextIDProof } from '@masknet/web3-providers'
+import { useQuery } from '@tanstack/react-query'
 import { uniqBy } from 'lodash-es'
 import { useEffect, useMemo } from 'react'
 import { Trans } from 'react-i18next'
-import { useQuery } from '@tanstack/react-query'
-import { Plugin } from '@masknet/plugin-infra'
-import { Icons } from '@masknet/icons'
-import { ApplicationEntry } from '@masknet/shared'
-import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
-import { NextIdLensToFireflyLens } from './components/LensPopup.js'
-import { useFireflyLensAccounts } from '@masknet/web3-hooks-base'
-import { NextIDProof } from '@masknet/web3-providers'
-import { CrossIsolationMessages, EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { base } from '../base.js'
-import { LensBadge } from './components/LensBadge.js'
 import { Web3ProfileGlobalInjection } from './Web3ProfileGlobalInjection.js'
+import { LensBadge } from './components/LensBadge.js'
+import { NextIdLensToFireflyLens } from './components/LensPopup.js'
 import { setupStorage } from './context.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -73,13 +73,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
         ID: `${base.ID}_lens`,
         UI: {
             Content({ identity, slot, onStatusUpdate }) {
-                const { data: accounts = EMPTY_LIST } = useFireflyLensAccounts(identity?.userId)
+                const userId = identity?.userId
+                const { data: accounts = EMPTY_LIST } = useFireflyLensAccounts(userId, true)
                 const isProfile = slot === Plugin.SNSAdaptor.LensSlot.ProfileName
 
                 const handle = accounts[0]?.handle
                 const { data: nextIdLens = EMPTY_LIST } = useQuery({
-                    queryKey: ['next-id', 'all-lens', identity?.userId],
-                    enabled: isProfile && !!handle,
+                    queryKey: ['next-id', 'all-lens', userId],
+                    enabled: isProfile && !!handle && !!accounts?.length,
                     queryFn: async () => {
                         const lensAccounts = await NextIDProof.queryAllLens(handle)
                         return lensAccounts.map(NextIdLensToFireflyLens)
@@ -96,9 +97,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     onStatusUpdate?.(hasLens)
                 }, [onStatusUpdate, hasLens])
 
-                if (!lensAccounts.length || !identity?.userId) return null
+                if (!accounts.length || !userId) return null
 
-                return <LensBadge slot={slot} accounts={lensAccounts} userId={identity.userId} />
+                return <LensBadge slot={slot} accounts={lensAccounts} userId={userId} />
             },
         },
     },
