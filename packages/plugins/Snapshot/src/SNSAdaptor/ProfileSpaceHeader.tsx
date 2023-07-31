@@ -1,13 +1,13 @@
-import { formatCount, type DAOResult } from '@masknet/web3-shared-base'
-import { type ChainId } from '@masknet/web3-shared-evm'
 import { useState, useRef } from 'react'
 import { Icons } from '@masknet/icons'
 import { Box, Typography, Avatar, IconButton, Button, ThemeProvider, type Theme } from '@mui/material'
+import { formatCount, type DAOResult } from '@masknet/web3-shared-base'
+import { type ChainId } from '@masknet/web3-shared-evm'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
 import { SpaceMenu } from './SpaceMenu.js'
 import { resolveSnapshotSpacePageUrl } from './helpers.js'
 import { useCurrentAccountFollowSpaceList } from './hooks/useCurrentAccountFollowSpaceList.js'
-import { useChainContext } from '@masknet/web3-hooks-base'
 import { useI18N } from '../locales/index.js'
 
 interface ProfileSpaceHeaderProps {

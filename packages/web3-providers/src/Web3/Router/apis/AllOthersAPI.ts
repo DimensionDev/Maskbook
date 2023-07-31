@@ -10,6 +10,7 @@ export class AllOthersAPI {
         [NetworkPluginID.PLUGIN_EVM]: new OthersAPI(),
         [NetworkPluginID.PLUGIN_FLOW]: new FlowOthersAPI(),
         [NetworkPluginID.PLUGIN_SOLANA]: new SolanaOthersAPI(),
+        [NetworkPluginID.PLUGIN_BITCOIN]: new SolanaOthersAPI(),
     }
 
     use<T extends NetworkPluginID>(pluginID: T) {

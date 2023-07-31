@@ -32,6 +32,12 @@ const createCreator = <T extends NetworkPluginID>(networkPluginID: T) => {
                 new SolanaOthersAPI(),
                 new SolanaConnectionOptionsAPI(),
             )
+        case NetworkPluginID.PLUGIN_BITCOIN:
+            return new ConnectionCreatorAPI_Base<NetworkPluginID.PLUGIN_BITCOIN>(
+                (initial) => new SolanaConnectionAPI(initial),
+                new SolanaOthersAPI(),
+                new SolanaConnectionOptionsAPI(),
+            )
         default:
             throw new Error('Not supported.')
     }
@@ -42,6 +48,7 @@ export class AllConnectionAPI {
         [NetworkPluginID.PLUGIN_EVM]: createCreator(NetworkPluginID.PLUGIN_EVM),
         [NetworkPluginID.PLUGIN_FLOW]: createCreator(NetworkPluginID.PLUGIN_FLOW),
         [NetworkPluginID.PLUGIN_SOLANA]: createCreator(NetworkPluginID.PLUGIN_SOLANA),
+        [NetworkPluginID.PLUGIN_BITCOIN]: createCreator(NetworkPluginID.PLUGIN_BITCOIN),
     }
 
     use<T extends NetworkPluginID>(

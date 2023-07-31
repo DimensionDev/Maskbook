@@ -10,6 +10,7 @@ import {
 import { ChainId, SchemaType, WNATIVE, chainResolver, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
 import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
+import { ChainId as BitcoinChainId } from '@masknet/web3-shared-bitcoin'
 import { queryClient } from '@masknet/shared-base-ui'
 import { NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -173,6 +174,11 @@ const ChainNameMap: Record<NetworkPluginID, Record<number, string>> = {
     },
     [NetworkPluginID.PLUGIN_FLOW]: {
         [FlowChainId.Mainnet]: 'flow',
+    },
+    [NetworkPluginID.PLUGIN_BITCOIN]: {
+        [BitcoinChainId.Mainnet]: 'bitcoin',
+        [BitcoinChainId.BitcoinCash]: 'bitcoincash',
+        [BitcoinChainId.DogoCoin]: 'dogocoin',
     },
 }
 

@@ -49,6 +49,17 @@ export class AllHubAPI {
             new SolanaOthersAPI(),
             new SolanaHubOptionsAPI(),
         ),
+        [NetworkPluginID.PLUGIN_BITCOIN]: new HubCreatorAPI_Base<NetworkPluginID.PLUGIN_SOLANA>(
+            (initial) => {
+                return mixin(
+                    new SolanaHubBaseAPI(initial),
+                    new SolanaHubFungibleAPI(initial),
+                    new SolanaHubNonFungibleAPI(initial),
+                )
+            },
+            new SolanaOthersAPI(),
+            new SolanaHubOptionsAPI(),
+        ),
     }
 
     use<T extends NetworkPluginID>(pluginID: T, initial?: HubOptions_Base<Web3Helper.Definition[T]['ChainId']>) {
