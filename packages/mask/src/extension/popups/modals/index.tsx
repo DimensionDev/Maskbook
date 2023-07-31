@@ -7,6 +7,7 @@ import { DeleteContactModal } from './DeleteContactModal/index.js'
 import { WalletRenameModal } from './WalletRenameModal/index.js'
 import { WalletAutoLockSettingModal } from './WalletAutoLockSettingModal/index.js'
 import { ChangePaymentPasswordModal } from './ChangePaymentPasswordModal/index.js'
+import { ShowPrivateKeyModal } from './ShowPrivateKeyModal/index.js'
 
 import { GasSettingModal } from './GasSettingModal/index.js'
 import * as modals from './modals.js'
@@ -24,6 +25,7 @@ export const Modals = memo(function Modals() {
             <WalletAutoLockSettingModal ref={modals.WalletAutoLockSettingModal.register} />
             <GasSettingModal ref={modals.GasSettingModal.register} />
             <ChangePaymentPasswordModal ref={modals.ChangePaymentPasswordModal.register} />
+            <ShowPrivateKeyModal ref={modals.ShowPrivateKeyModal.register} />
         </>
     )
 })

@@ -8,6 +8,7 @@ import type { DeleteContactModalOpenProps } from './DeleteContactModal/index.js'
 import type { WalletAutoLockSettingModalOpenProps } from './WalletAutoLockSettingModal/index.js'
 import type { GasSettingModalCloseProps, GasSettingModalOpenProps } from './GasSettingModal/index.js'
 import type { ChangePaymentPasswordOpenProps } from './ChangePaymentPasswordModal/index.js'
+import type { ShowPrivateKeyModalOpenProps } from './ShowPrivateKeyModal/index.js'
 
 export const DisconnectModal = new SingletonModal<DisconnectModalOpenProps, DisconnectModalCloseProps>()
 export const ConfirmModal = new SingletonModal<ConfirmModalOpenProps, boolean>()
@@ -18,6 +19,7 @@ export const DeleteContactModal = new SingletonModal<DeleteContactModalOpenProps
 export const WalletAutoLockSettingModal = new SingletonModal<WalletAutoLockSettingModalOpenProps, boolean>()
 export const GasSettingModal = new SingletonModal<GasSettingModalOpenProps, GasSettingModalCloseProps>()
 export const ChangePaymentPasswordModal = new SingletonModal<ChangePaymentPasswordOpenProps, boolean>()
+export const ShowPrivateKeyModal = new SingletonModal<ShowPrivateKeyModalOpenProps, boolean>()
 
 export * from './ChooseNetworkModal/index.js'
 export * from './ConnectSocialAccountModal/index.js'

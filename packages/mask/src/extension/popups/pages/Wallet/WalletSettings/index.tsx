@@ -11,6 +11,7 @@ import { Contacts } from './Contacts.js'
 import { useStyles } from './useStyles.js'
 import { AutoLock } from './AutoLock.js'
 import { ChangePaymentPassword } from './ChangePaymentPassword.js'
+import { ShowPrivateKey } from './ShowPrivateKey.js'
 
 const WalletSettings = memo(() => {
     const { t } = useI18N()
@@ -59,15 +60,7 @@ const WalletSettings = memo(() => {
                     <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />
                 </ListItem>
                 <ChangePaymentPassword />
-                <ListItem className={classes.item}>
-                    <Box className={classes.itemBox}>
-                        <Icons.PublicKey2 size={20} color={theme.palette.maskColor.second} />
-                        <Typography className={classes.itemText}>
-                            {t('popups_wallet_settings_show_private_key')}
-                        </Typography>
-                    </Box>
-                    <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />
-                </ListItem>
+                <ShowPrivateKey />
             </List>
         </div>
     )
