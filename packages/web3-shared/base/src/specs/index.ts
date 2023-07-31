@@ -1047,8 +1047,6 @@ export interface MessageState<Requset, Response> extends Startable {
     denyRequest(id: string): Promise<void>
     /** Rejects all requests. */
     denyAllRequests(): Promise<void>
-    /** Broadcast a request. */
-    broadcastRequest(id: string): Promise<void>
 }
 
 export interface TransactionState<ChainId, Transaction> extends Startable {

@@ -111,14 +111,13 @@ export class Popups implements Middleware<ConnectionContext> {
                 await Providers[ProviderType.MaskWallet].switchChain(context.chainId)
             }
 
-            const requestToBeApproved: TransferableMessage<MessageRequest, MessageResponse> = {
+            const request: TransferableMessage<MessageRequest, MessageResponse> = {
                 state: MessageStateType.NOT_DEPEND,
                 request: {
                     arguments: context.requestArguments,
                     options: {
                         ...(await this.getPaymentToken(context)),
                         owner: context.owner,
-                        silent: context.silent,
                         identifier: context.identifier?.toText(),
                         providerURL: this.customNetwork ? this.customNetwork.rpcUrl : undefined,
                     },
@@ -126,7 +125,8 @@ export class Popups implements Middleware<ConnectionContext> {
             }
 
             try {
-                const response = await Web3StateRef.value.Message?.applyAndWaitResponse(requestToBeApproved)
+                // TODO: handle if context.silent is true
+                const response = await Web3StateRef.value.Message?.applyAndWaitResponse(request)
 
                 if (!response) {
                     context.abort('Failed to approve request.')

@@ -25,13 +25,9 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
     protected override async waitForApprovingRequest(
         id: string,
     ): Promise<ReasonableMessage<MessageRequest, MessageResponse>> {
-        const message = this.assertMessage(id)
-
-        if (message.request.options?.silent) {
-            // TODO: make this for Mask Wallet only
-            // open the popups window and wait for approvement from the user.
-            await SNSAdaptorContextRef.value.openPopupWindow()
-        }
+        // TODO: make this for Mask Wallet only
+        // open the popups window and wait for approvement from the user.
+        await SNSAdaptorContextRef.value.openPopupWindow()
 
         return super.waitForApprovingRequest(id)
     }
