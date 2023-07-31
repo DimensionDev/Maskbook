@@ -93,6 +93,7 @@ export function ProfileLinkCard({ feed, className, ...rest }: ProfileLinkCardPro
     const otherEns = useAddressLabel(metadata?.address ?? '')
     const other = metadata ? resolveHandle(metadata) : otherEns
     const formattedOther = formatDomainName(other, 16, true)
+    const Icon = feed.type === 'follow' ? Icons.Follow : Icons.Unfollow
 
     return (
         <CardFrame
@@ -131,7 +132,7 @@ export function ProfileLinkCard({ feed, className, ...rest }: ProfileLinkCardPro
                             {formattedUser}
                         </Typography>
                     </div>
-                    <Icons.RSS3ProfileLink height={18} width="auto" />
+                    <Icon height={18} width={48} />
                     <div className={classes.user}>
                         <Image
                             className={classes.avatar}

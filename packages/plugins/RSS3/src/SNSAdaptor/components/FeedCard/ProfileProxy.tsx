@@ -104,7 +104,7 @@ export function ProfileProxyCard({ feed, className, ...rest }: ProfileProxyCardP
                         />
                         <Typography className={classes.name}>{user}</Typography>
                     </div>
-                    <Icons.RSS3ProfileLink height={18} width="auto" />
+                    <Icons.Follow height={18} width={48} />
                 </div>
             ) : null}
         </CardFrame>

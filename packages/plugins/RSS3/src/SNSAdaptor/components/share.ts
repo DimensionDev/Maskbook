@@ -141,6 +141,7 @@ export const hostIconMap: Record<string, IconComponent> = {
     'mirror.xyz': Icons.Mirror,
     'ipfs.io': Icons.IPFS,
     'snapshot.org': Icons.Snapshot,
+    'momoka.lens.xyz': Icons.Momoka,
 }
 
 export const hostNameMap: Record<string, string> = {
@@ -157,6 +158,7 @@ export const hostNameMap: Record<string, string> = {
     'ipfs.io': 'IPFS',
     'snapshot.org': 'Snapshot',
     'mirror.xyz': 'Mirror',
+    'momoka.lens.xyz': 'Momoka',
 }
 
 export function getLastAction<
