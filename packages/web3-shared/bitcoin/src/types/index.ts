@@ -10,6 +10,10 @@ export enum ChainId {
     Mainnet = 87, // 'W'.charCodeAt(0),
     Testnet = 84, // 'T'.charCodeAt(0),
     Stagenet = 83, // 'S'.charCodeAt(0),
+
+    BitcoinCash = 66, // 'B'.charCodeAt(0),
+
+    DogoCoin = 68, // 'D'.charCodeAt(0),
 }
 
 export enum AddressType {

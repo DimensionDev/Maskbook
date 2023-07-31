@@ -266,6 +266,7 @@ export const resolveNetworkWalletName = createLookupTableResolver<NetworkPluginI
         [NetworkPluginID.PLUGIN_EVM]: 'Ethereum Wallet',
         [NetworkPluginID.PLUGIN_SOLANA]: 'Solana Wallet',
         [NetworkPluginID.PLUGIN_FLOW]: 'Flow Wallet',
+        [NetworkPluginID.PLUGIN_BITCOIN]: 'Bitcoin Wallet',
     },
     (network) => {
         throw new Error(`Unknown network plugin-id: ${network}`)

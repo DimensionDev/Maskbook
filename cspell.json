@@ -92,6 +92,7 @@
         "dklen",
         "dompurify",
         "dotbit",
+        "dogocoin",
         "ecsign",
         "endregion",
         "enhanceable",
@@ -260,6 +261,7 @@
         "solsea",
         "spaceid",
         "startable",
+        "stagenet",
         "steganographic",
         "steganography",
         "stego",
@@ -450,6 +452,10 @@
         {
             "filename": "packages/web3-shared/evm/assets/**/*.json",
             "ignoreWords": ["görli"]
+        },
+        {
+            "filename": "packages/web3-constants/bitcoin/**/*.json",
+            "ignoreWords": ["1BitcoinEaterAddressDontSendf59kuE"]
         },
         {
             "filename": "packages/mask/src/plugins/ITO/assets/regions.json",

@@ -444,6 +444,9 @@ importers:
       '@masknet/web3-shared-base':
         specifier: workspace:^
         version: link:../web3-shared/base
+      '@masknet/web3-shared-bitcoin':
+        specifier: workspace:^
+        version: link:../web3-shared/bitcoin
       '@masknet/web3-shared-evm':
         specifier: workspace:^
         version: link:../web3-shared/evm
