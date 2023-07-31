@@ -1,94 +1,34 @@
 import { memo, useEffect, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { makeStyles } from '@masknet/theme'
-import { Button, Typography } from '@mui/material'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { ActionButton } from '@masknet/theme'
+import { Box } from '@mui/material'
 import { PersonaContext } from '@masknet/shared'
 import { type PersonaInformation, PopupRoutes, SignType, MaskMessages } from '@masknet/shared-base'
 import { usePersonasFromDB } from '../../../../../components/DataSource/usePersonasFromDB.js'
 import { MethodAfterPersonaSign } from '../../Wallet/type.js'
 import Services from '../../../../service.js'
-import { useTitle } from '../../../hook/useTitle.js'
 import { useI18N } from '../../../../../utils/index.js'
-
-const useStyles = makeStyles()(() => ({
-    container: {
-        padding: 16,
-        display: 'flex',
-        flexDirection: 'column',
-        flex: 1,
-    },
-    info: {
-        backgroundColor: '#F7F9FA',
-        padding: 10,
-        borderRadius: 8,
-    },
-    title: {
-        color: '#15181B',
-        fontSize: 18,
-        lineHeight: '24px',
-        fontWeight: 500,
-    },
-    personaName: {
-        color: '#15181B',
-        fontSize: 16,
-        lineHeight: '22px',
-        margin: '10px 0',
-    },
-    secondary: {
-        color: '#7B8192',
-        fontSize: 12,
-        lineHeight: '16px',
-        marginBottom: 10,
-    },
-    message: {
-        color: '#15181B',
-        fontSize: 12,
-        lineHeight: '16px',
-        flex: 1,
-        wordBreak: 'break-all',
-        maxHeight: 260,
-        overflow: 'auto',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
-    controller: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
-        gap: 20,
-        padding: 16,
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        width: '100%',
-        backgroundColor: '#ffffff',
-    },
-    button: {
-        fontWeight: 600,
-        padding: '9px 0',
-        borderRadius: 20,
-        fontSize: 14,
-        lineHeight: '20px',
-    },
-}))
+import { SignRequestInfo } from '../../../components/SignRequestInfo/index.js'
+import { BottomController } from '../../../components/BottomController/index.js'
 
 const PersonaSignRequest = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
-    const location = useLocation()
-    const { classes } = useStyles()
+    const [params] = useSearchParams()
     const [requestID, setRequestID] = useState<string>()
-    const [message, setMessage] = useState<string>()
+    const [message, setMessage] = useState<string>('')
     const [selected, setSelected] = useState<PersonaInformation>()
     const personas = usePersonasFromDB()
     const { currentPersona } = PersonaContext.useContainer()
+
+    const source = params.get('source')
+
     useEffect(() => {
         if (!personas.length) return
-        const url = new URLSearchParams(location.search)
-        const messageInURL = url.get('message')
-        const requestIDInURL = url.get('requestID')
-        const identifierInURL = url.get('identifier')
+        const messageInURL = params.get('message')
+        const requestIDInURL = params.get('requestID')
+        const identifierInURL = params.get('identifier')
         const selectedPersona = personas.find((x) => x.identifier.toText() === identifierInURL) ?? personas[0]
 
         if (!messageInURL || !requestIDInURL || !selectedPersona) {
@@ -98,10 +38,9 @@ const PersonaSignRequest = memo(() => {
             setMessage(messageInURL)
             setRequestID(requestIDInURL)
         }
-    }, [personas, location.search])
+    }, [personas, params])
 
-    const [, onSign] = useAsyncFn(async () => {
-        const url = new URLSearchParams(location.search)
+    const [{ loading: confirmLoading }, handleConfirm] = useAsyncFn(async () => {
         if (!requestID || !selected) return
         const selectedPersona = selected.identifier
         MaskMessages.events.personaSignRequest.sendToBackgroundPage({
@@ -109,7 +48,7 @@ const PersonaSignRequest = memo(() => {
             selectedPersona,
         })
 
-        const method = url.get('method') as MethodAfterPersonaSign | undefined
+        const method = params.get('method') as MethodAfterPersonaSign | undefined
 
         if (!method) {
             window.close()
@@ -127,11 +66,11 @@ const PersonaSignRequest = memo(() => {
                     true,
                 )
 
-                const profileIdentifier = url.get('profileIdentifier')
-                const platform = url.get('platform')
-                const identity = url.get('identity')
-                const createdAt = url.get('createdAt')
-                const uuid = url.get('uuid')
+                const profileIdentifier = params.get('profileIdentifier')
+                const platform = params.get('platform')
+                const identity = params.get('identity')
+                const createdAt = params.get('createdAt')
+                const uuid = params.get('uuid')
 
                 if (
                     !signature ||
@@ -159,46 +98,28 @@ const PersonaSignRequest = memo(() => {
                 break
         }
         navigate(-1)
-    }, [location, selected, requestID, message, currentPersona])
+    }, [params, selected, requestID, message, currentPersona])
 
-    const onCancel = async () => {
+    const [{ loading: cancelLoading }, handleCancel] = useAsyncFn(async () => {
         if (!requestID) return
-        const url = new URLSearchParams(location.search)
         MaskMessages.events.personaSignRequest.sendToBackgroundPage({ requestID })
-        const method = url.get('method')
+        const method = params.get('method')
         if (!method) window.close()
         navigate(-1)
-    }
-
-    useTitle('')
+    }, [requestID, params])
 
     return (
-        <>
-            <main className={classes.container}>
-                <div className={classes.info}>
-                    <Typography className={classes.title}>{t('popups_persona_sign_request_title')}</Typography>
-                    <Typography className={classes.personaName}>{selected?.nickname}</Typography>
-                    <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
-                        {selected?.identifier.rawPublicKey}
-                    </Typography>
-                </div>
-                <Typography className={classes.secondary} style={{ marginTop: 20 }}>
-                    {t('popups_persona_sign_request_message')}:
-                </Typography>
-                <Typography className={classes.message}>{message}</Typography>
-                <div className={classes.controller}>
-                    <Button
-                        className={classes.button}
-                        style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
-                        onClick={onCancel}>
-                        {t('cancel')}
-                    </Button>
-                    <Button className={classes.button} onClick={onSign} variant="contained">
-                        {t('sign')}
-                    </Button>
-                </div>
-            </main>
-        </>
+        <Box>
+            <SignRequestInfo message={message} source={source} />
+            <BottomController>
+                <ActionButton loading={cancelLoading} onClick={handleCancel} fullWidth variant="outlined">
+                    {t('cancel')}
+                </ActionButton>
+                <ActionButton loading={confirmLoading} onClick={handleConfirm} fullWidth>
+                    {t('confirm')}
+                </ActionButton>
+            </BottomController>
+        </Box>
     )
 })
 
