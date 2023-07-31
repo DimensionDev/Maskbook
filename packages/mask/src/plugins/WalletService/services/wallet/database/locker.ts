@@ -1,3 +1,4 @@
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { PluginDB } from '../../../database/Plugin.db.js'
 
 const DEFAULT_LOCK_TIME = 1000 * 60 * 15 // 15 mins
@@ -21,4 +22,5 @@ export async function getAutoLockerTime() {
 
 export async function setAutoLockerTime(time: number) {
     await PluginDB.add({ type: 'unlock-time', id: ID, time })
+    CrossIsolationMessages.events.walletLockTimeUpdated.sendToAll()
 }

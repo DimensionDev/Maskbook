@@ -21,6 +21,7 @@ import type {
     WalletsUpdatedEvent,
     RequestsUpdatedEvent,
     WalletLockStatusUpdatedEvent,
+    walletLockTimeUpdatedEvent,
     GameDialogEvent,
     PopupWalletConnectEvent,
 } from './Events.js'
@@ -67,6 +68,7 @@ export interface CrossIsolationEvents {
     walletsUpdated: WalletsUpdatedEvent
     requestsUpdated: RequestsUpdatedEvent
     walletLockStatusUpdated: WalletLockStatusUpdatedEvent
+    walletLockTimeUpdated: walletLockTimeUpdatedEvent
 
     gameDialogUpdated: GameDialogEvent
 }

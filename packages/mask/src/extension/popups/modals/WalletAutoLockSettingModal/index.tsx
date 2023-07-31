@@ -1,14 +1,15 @@
-import { forwardRef, useEffect, useState } from 'react'
-import { useAsyncFn, useAsyncRetry } from 'react-use'
+import { forwardRef, useState } from 'react'
+import { useAsyncFn } from 'react-use'
 import millisecondsToMinutes from 'date-fns/millisecondsToMinutes'
 import minutesToMilliseconds from 'date-fns/minutesToMilliseconds'
 import { Box, TextField, Typography, useTheme } from '@mui/material'
-import { type SingletonModalRefCreator } from '@masknet/shared-base'
+import { CrossIsolationMessages, type SingletonModalRefCreator } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { WalletRPC } from '../../../../plugins/WalletService/messages.js'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useWalletAutoLockTime } from '../../pages/Wallet/hooks/useWalletAutoLockTime.js'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -53,25 +54,26 @@ enum OptionName {
     NEVER = 'Never',
 }
 
-function WalletAutoLockSettingDrawer({ ...rest }: WalletAutoLockSettingDrawerProps) {
+const DEFAULT_MIN_AUTO_LOCKER_TIME = 900000
+
+function WalletAutoLockSettingDrawer(props: WalletAutoLockSettingDrawerProps) {
     const { t } = useI18N()
     const theme = useTheme()
     const { classes, cx } = useStyles()
-    const { value: autoLockerTime = 900000, retry } = useAsyncRetry(WalletRPC.getAutoLockerTime, [])
+    const { value: autoLockerTime = DEFAULT_MIN_AUTO_LOCKER_TIME } = useWalletAutoLockTime()
 
-    const [time, setTime] = useState(millisecondsToMinutes(autoLockerTime).toString())
-    const error = Number.isNaN(Number(time))
+    const [time, setTime] = useState<string>()
 
-    useEffect(() => {
-        setTime(millisecondsToMinutes(autoLockerTime).toString())
-    }, [autoLockerTime])
+    const initialTime = millisecondsToMinutes(autoLockerTime).toString()
+
+    const error = Number.isNaN(Number(time ?? initialTime))
 
     const [{ loading }, setAutoLockerTime] = useAsyncFn(async (time: number) => {
-        await WalletRPC.setAutoLockerTime(time)
-        retry()
+        await WalletRPC.setAutoLockerTime(time < DEFAULT_MIN_AUTO_LOCKER_TIME ? DEFAULT_MIN_AUTO_LOCKER_TIME : time)
+        CrossIsolationMessages.events.walletLockTimeUpdated.sendToAll()
+        props.onClose?.()
     }, [])
 
-    console.log({ autoLockerTime })
     const options = [
         {
             value: '15',
@@ -96,7 +98,7 @@ function WalletAutoLockSettingDrawer({ ...rest }: WalletAutoLockSettingDrawerPro
     ]
 
     return (
-        <BottomDrawer {...rest}>
+        <BottomDrawer {...props}>
             <Typography
                 fontWeight={700}
                 textAlign="center"
@@ -110,7 +112,7 @@ function WalletAutoLockSettingDrawer({ ...rest }: WalletAutoLockSettingDrawerPro
                     error={error}
                     fullWidth
                     placeholder={'15'}
-                    value={time}
+                    value={time ?? initialTime}
                     onChange={(e) => setTime(e.target.value)}
                     InputProps={{
                         endAdornment: (
@@ -135,7 +137,7 @@ function WalletAutoLockSettingDrawer({ ...rest }: WalletAutoLockSettingDrawerPro
                         className={cx(
                             classes.listItem,
                             option.name === OptionName.ONE_DAY ? classes.listItemOneDay : '',
-                            option.value === time ? classes.selected : '',
+                            option.value === (time ?? initialTime) ? classes.selected : '',
                         )}
                         onClick={() => {
                             setTime(option.value)
