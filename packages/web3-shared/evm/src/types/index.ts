@@ -262,6 +262,8 @@ export interface RequestOptions {
     identifier?: string
     paymentToken?: string
     allowMaskAsGas?: boolean
+    silent?: boolean
+    providerURL?: string
 }
 
 export interface Transaction {

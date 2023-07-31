@@ -16,9 +16,6 @@ export class RequestState<Arguments, Options = unknown> implements Web3RequestSt
 
     public requests?: Subscription<Array<ReasonableRequest<Arguments, Options>>>
 
-    ready: boolean = true
-    readyPromise: Promise<void> = Promise.resolve()
-
     constructor(
         protected context: Plugin.Shared.SharedUIContext,
         protected options: {
@@ -38,7 +35,15 @@ export class RequestState<Arguments, Options = unknown> implements Web3RequestSt
         })
     }
 
-    private assertNetwork(id: string) {
+    get ready() {
+        return this.storage.requests.initialized
+    }
+
+    get readyPromise() {
+        return this.storage.requests.initializedPromise
+    }
+
+    protected assertNetwork(id: string) {
         if (!Object.hasOwn(this.storage.requests.value, id)) throw new Error('Invalid request ID')
         return this.storage.requests.value[id]
     }
@@ -47,16 +52,26 @@ export class RequestState<Arguments, Options = unknown> implements Web3RequestSt
         return true
     }
 
-    protected async waitRequest(id: string): Promise<ReasonableRequest<Arguments, Options>> {
+    protected async waitForApprovingRequest(id: string): Promise<ReasonableRequest<Arguments, Options>> {
         return new Promise((resolve, reject) => {
             const unsubscribe = this.requests?.subscribe(() => {
-                const request = this.requests
-                    ?.getCurrentValue()
-                    .find((x) => x.ID === id && x.state !== RequestStateType.NOT_DEPEND)
-                if (!request) return
+                const request = this.requests?.getCurrentValue().find((x) => x.ID === id)
+                if (request?.state !== RequestStateType.APPROVED && request?.state !== RequestStateType.DENIED) return
 
                 if (request.state === RequestStateType.APPROVED) resolve(request)
                 else reject(new Error('User rejected the request.'))
+                unsubscribe?.()
+            })
+        })
+    }
+
+    protected async waitForBroadcastingRequest(id: string): Promise<ReasonableRequest<Arguments, Options>> {
+        return new Promise((resolve) => {
+            const unsubscribe = this.requests?.subscribe(() => {
+                const request = this.requests?.getCurrentValue().find((x) => x.ID === id)
+                if (request?.state !== RequestStateType.BROADCASTED) return
+
+                resolve(request)
                 unsubscribe?.()
             })
         })
@@ -89,11 +104,11 @@ export class RequestState<Arguments, Options = unknown> implements Web3RequestSt
         return request_
     }
 
-    async applyAndWaitRequest(
-        request: TransferableRequest<Arguments, Options>,
-    ): Promise<ReasonableRequest<Arguments, Options>> {
+    async applyAndWaitRequest<T>(request: TransferableRequest<Arguments, Options>): Promise<T> {
         const { ID } = await this.applyRequest(request)
-        return this.waitRequest(ID)
+        await this.waitForApprovingRequest(ID)
+        const broadcastedRequest = await this.waitForBroadcastingRequest(ID)
+        return broadcastedRequest.result as T
     }
 
     async updateRequest(id: string, updates: Partial<TransferableRequest<Arguments, Options>>): Promise<void> {
@@ -106,6 +121,13 @@ export class RequestState<Arguments, Options = unknown> implements Web3RequestSt
                 ...updates,
                 updatedAt: new Date(),
             },
+        })
+    }
+
+    async broadcastRequest(id: string): Promise<void> {
+        await this.updateRequest(id, {
+            state: RequestStateType.BROADCASTED,
+            result: undefined,
         })
     }
 

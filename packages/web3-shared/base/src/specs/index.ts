@@ -116,6 +116,7 @@ export enum RequestStateType {
     NOT_DEPEND = 1,
     APPROVED = 2,
     DENIED = 3,
+    BROADCASTED = 4,
 }
 
 export enum TransactionStatusType {
@@ -222,6 +223,7 @@ export interface RequestDescriptor<Arguments, Options> {
     ID: string
     state: RequestStateType
     arguments: Arguments
+    result?: unknown
     options?: Options
 }
 
@@ -1037,9 +1039,7 @@ export interface RequestState<Arguments, Options> extends Startable {
     /** Applies a request. */
     applyRequest(request: TransferableRequest<Arguments, Options>): Promise<ReasonableRequest<Arguments, Options>>
     /** Applies a request and waits for confirmation from the user. */
-    applyAndWaitRequest(
-        request: TransferableRequest<Arguments, Options>,
-    ): Promise<ReasonableRequest<Arguments, Options>>
+    applyAndWaitRequest<T>(request: TransferableRequest<Arguments, Options>): Promise<T>
     /** Updates request with new arguments. */
     updateRequest(id: string, updates: Partial<TransferableRequest<Arguments, Options>>): Promise<void>
     /** Approves a request. */
@@ -1048,6 +1048,8 @@ export interface RequestState<Arguments, Options> extends Startable {
     denyRequest(id: string): Promise<void>
     /** Rejects all requests. */
     denyAllRequests(): Promise<void>
+    /** Broadcast a request. */
+    broadcastRequest(id: string): Promise<void>
 }
 
 export interface TransactionState<ChainId, Transaction> extends Startable {
