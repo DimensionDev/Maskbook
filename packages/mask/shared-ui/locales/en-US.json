@@ -965,6 +965,7 @@
     "popups_wallet_password_not_match": "The passwords don't match.",
     "popups_wallet_password_satisfied_requirement": "The password is not satisfied the requirement.",
     "popups_wallet_password_length_error": "The password length is incorrect.",
+    "popups_wallet_password_change_successful": "Change payment password successfully.",
     "popups_wallet_unlock_wallet": "Unlock Wallet",
     "popups_wallet_unlock_error_password": "Incorrect password",
     "popups_wallet_activity_to_address": "To: {{address}}",

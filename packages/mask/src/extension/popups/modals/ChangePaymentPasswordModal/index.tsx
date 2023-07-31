@@ -4,7 +4,7 @@ import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { Box, Typography, useTheme } from '@mui/material'
 import { useAsyncFn } from 'react-use'
 import { type SingletonModalRefCreator } from '@masknet/shared-base'
-import { ActionButton } from '@masknet/theme'
+import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
@@ -42,6 +42,8 @@ function ChangePaymentPasswordDrawer({
     const { t } = useI18N()
     const theme = useTheme()
 
+    const { showSnackbar } = usePopupCustomSnackbar()
+
     const [{ loading }, handleClick] = useAsyncFn(async () => {
         if (newPassword !== confirmNewPassword) {
             setPasswordNotMatch(t('popups_wallet_new_password_not_match'))
@@ -53,6 +55,7 @@ function ChangePaymentPasswordDrawer({
         }
         try {
             await WalletServiceRef.value.changePassword(oldPassword, newPassword)
+            showSnackbar(t('popups_wallet_password_change_successful'))
             rest.onClose?.()
         } catch (error) {
             setOriginalPasswordWrong((error as Error).message)
