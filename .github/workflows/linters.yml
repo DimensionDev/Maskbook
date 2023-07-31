@@ -17,18 +17,63 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  codegen:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+          cache: "pnpm"
+      - name: Authenticate NPM
+        uses: DimensionDev/github-token-action@latest
+        with:
+            registry: true
+      - run: git config --global url."https://github.com/".insteadOf git@github.com
+      - run: pnpm install
+      - run: npx gulp codegen
+      - uses: EndBug/add-and-commit@v9
+        with:
+          message: 'fix: run codegen'
+      - run: npx gulp sync-languages
+      - uses: EndBug/add-and-commit@v9
+        with:
+          message: 'fix: run sync-languages'
+      - run: npx gulp fix-plugins-tsconfig
+      - uses: EndBug/add-and-commit@v9
+        with:
+          message: 'fix: packages/plugins/tsconfig.json'
   prettier:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
       - uses: actions/setup-node@v3
-      - run: npx prettier@3.0.0 --check .
+      - run: npx prettier@3.0.0 --write .
+      - uses: EndBug/add-and-commit@v9
+        with:
+          message: 'fix: prettier'
   markdownlint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
       - uses: actions/setup-node@v3
-      - run: npx markdownlint-cli .
+      - run: npx markdownlint-cli --fix .
+      - uses: EndBug/add-and-commit@v9
+        with:
+          message: 'fix: markdownlint'
   anti-trojan-source:
     runs-on: ubuntu-latest
     steps:
@@ -72,8 +117,12 @@ jobs:
       - run: pnpm run test
   eslint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
       - uses: pnpm/action-setup@v2.2.1
       - uses: actions/setup-node@v3
         with:
@@ -96,13 +145,14 @@ jobs:
       - run: git config --global url."https://github.com/".insteadOf git@github.com
       - run: pnpm install
       - run: npx gulp codegen
-      - run: echo "If you error at next line, please run npx gulp codegen and commit it!"
-      - run: git diff --exit-code
       - name: Run Eslint
         run: |
           # report to stdio and to file, it's cached, the second run should be fast
           pnpm run lint:ci
           pnpm run lint:ci-report
+      - uses: EndBug/add-and-commit@v9
+        with:
+          message: 'fix: markdownlint'
       - name: Upload eslint report
         uses: actions/upload-artifact@v2
         with:
