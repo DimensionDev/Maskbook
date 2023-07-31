@@ -10,6 +10,7 @@ import { Rename } from './Rename.js'
 import { Contacts } from './Contacts.js'
 import { useStyles } from './useStyles.js'
 import { AutoLock } from './AutoLock.js'
+import { ChangePaymentPassword } from './ChangePaymentPassword.js'
 
 const WalletSettings = memo(() => {
     const { t } = useI18N()
@@ -57,15 +58,7 @@ const WalletSettings = memo(() => {
                     </Box>
                     <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />
                 </ListItem>
-                <ListItem className={classes.item}>
-                    <Box className={classes.itemBox}>
-                        <Icons.Lock size={20} color={theme.palette.maskColor.second} />
-                        <Typography className={classes.itemText}>
-                            {t('popups_wallet_settings_change_payment_password')}
-                        </Typography>
-                    </Box>
-                    <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />
-                </ListItem>
+                <ChangePaymentPassword />
                 <ListItem className={classes.item}>
                     <Box className={classes.itemBox}>
                         <Icons.PublicKey2 size={20} color={theme.palette.maskColor.second} />

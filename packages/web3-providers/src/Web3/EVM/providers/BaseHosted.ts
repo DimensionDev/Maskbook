@@ -4,7 +4,7 @@ import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
 import {
     EMPTY_LIST,
-    InMemoryStorages,
+    PersistentStorages,
     NetworkPluginID,
     type StorageObject,
     type UpdatableWallet,
@@ -51,7 +51,7 @@ export class BaseHostedProvider
     override async setup(context?: Plugin.SNSAdaptor.SNSAdaptorContext) {
         await super.setup(context)
 
-        this.walletStorage = InMemoryStorages.Web3.createSubScope(
+        this.walletStorage = PersistentStorages.Web3.createSubScope(
             `${NetworkPluginID.PLUGIN_EVM}_${this.providerType}_hosted`,
             {
                 account: this.options.getDefaultAccount(),

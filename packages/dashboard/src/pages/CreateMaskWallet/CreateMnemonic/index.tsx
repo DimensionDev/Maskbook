@@ -190,7 +190,7 @@ const CreateMnemonic = memo(function CreateMnemonic() {
 
         const address = await WalletServiceRef.value.generateAddressFromMnemonicWords(walletName, words.join(' '))
         return address
-    }, [words, walletName, hasPassword])
+    }, [words.join(' '), walletName, hasPassword])
 
     const [{ loading }, onSubmit] = useAsyncFn(async () => {
         handlePasswordAndWallets(location.state?.password, location.state?.isReset)
