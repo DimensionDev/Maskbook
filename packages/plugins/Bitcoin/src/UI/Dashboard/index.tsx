@@ -9,7 +9,7 @@ import type {
     Transaction,
     TransactionParameter,
 } from '@masknet/web3-shared-bitcoin'
-import { SharedPluginContext, BitcoinWeb3State } from '@masknet/web3-providers'
+import { SharedPluginContext } from '@masknet/web3-providers'
 import { base } from '../../base.js'
 
 const dashboard: Plugin.Dashboard.Definition<
@@ -26,10 +26,10 @@ const dashboard: Plugin.Dashboard.Definition<
     async init(signal, context) {
         SharedPluginContext.setup(context)
 
-        const state = await BitcoinWeb3State.create(context)
+        // const state = await BitcoinWeb3State.create(context)
 
-        BitcoinWeb3State.setup(state)
-        dashboard.BitcoinWeb3State = state
+        // BitcoinWeb3State.setup(state)
+        // dashboard.BitcoinWeb3State = state
     },
 }
 

@@ -10,7 +10,8 @@
     { "path": "../shared-base" },
     { "path": "../web3-shared/base" },
     { "path": "../web3-shared/evm" },
+    { "path": "../web3-shared/flow" },
     { "path": "../web3-shared/solana" },
-    { "path": "../web3-shared/flow" }
+    { "path": "../web3-shared/bitcoin" }
   ]
 }

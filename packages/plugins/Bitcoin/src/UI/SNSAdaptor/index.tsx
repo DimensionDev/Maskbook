@@ -29,7 +29,7 @@ const sns: Plugin.SNSAdaptor.Definition<
         const state = await Web3State.create(context)
 
         Web3State.setup(state)
-        sns.Web3State = Web3State.state
+        // sns.Web3State = Web3State.state
     },
 }
 

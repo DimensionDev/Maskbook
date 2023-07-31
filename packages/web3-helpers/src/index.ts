@@ -22,12 +22,14 @@ import type {
 import type * as EVM from '@masknet/web3-shared-evm'
 import type * as Flow from '@masknet/web3-shared-flow'
 import type * as Solana from '@masknet/web3-shared-solana'
+import type * as Bitcoin from '@masknet/web3-shared-bitcoin'
 
 export declare namespace Web3Helper {
     export interface Definition {
         [NetworkPluginID.PLUGIN_EVM]: EVM.Web3Definition
         [NetworkPluginID.PLUGIN_FLOW]: Flow.Web3Definition
         [NetworkPluginID.PLUGIN_SOLANA]: Solana.Web3Definition
+        [NetworkPluginID.PLUGIN_BITCOIN]: Bitcoin.Web3Definition
     }
 
     export type Web3ProviderDescriptor<T extends NetworkPluginID = never> = T extends never
