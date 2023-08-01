@@ -124,6 +124,7 @@ export const ShareSelectNetwork = memo<ShareSelectNetworkProps>(({ open, onClose
                         onClick={() => {
                             if (!encodedText) return
                             openWindow(SharedUrl[network]?.(encodedText))
+                            onClose()
                         }}>
                         {t.share()}
                     </Button>

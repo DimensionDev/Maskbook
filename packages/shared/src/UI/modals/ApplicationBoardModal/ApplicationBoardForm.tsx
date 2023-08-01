@@ -1,4 +1,4 @@
-import { MaskTabList, useTabs } from '@masknet/theme'
+import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { useState } from 'react'
 import { ApplicationSettingTabs } from './ApplicationBoardDialog.js'
 import { TabContext, TabPanel } from '@mui/lab'
@@ -11,6 +11,19 @@ import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch
 import { ApplicationBoardContent } from './ApplicationBoard.js'
 import { useSharedI18N, type PersonaAgainstSNSConnectStatus } from '../../../index.js'
 
+const useStyles = makeStyles()(() => ({
+    applicationWrapper: {
+        maxHeight: 'initial',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        maxWidth: 583,
+    },
+    recommendFeatureAppListWrapper: {
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        maxWidth: 583,
+    },
+}))
 interface ApplicationBoardFormProps {
     openDashboard?: (route?: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
@@ -34,6 +47,7 @@ export function ApplicationBoardForm(props: ApplicationBoardFormProps) {
         ApplicationSettingTabs.pluginList,
         ApplicationSettingTabs.pluginSwitch,
     )
+    const { classes } = useStyles()
 
     return (
         <>
@@ -62,10 +76,10 @@ export function ApplicationBoardForm(props: ApplicationBoardFormProps) {
                         </MaskTabList>
                     </Stack>
 
-                    <TabPanel value={tabs.pluginList} style={{ padding: 8 }}>
+                    <TabPanel value={tabs.pluginList} style={{ padding: 8, maxHeight: 600, overflowY: 'auto' }}>
                         <ApplicationSettingPluginList />
                     </TabPanel>
-                    <TabPanel value={tabs.pluginSwitch} style={{ padding: 8 }}>
+                    <TabPanel value={tabs.pluginSwitch} style={{ padding: 8, maxHeight: 600, overflowY: 'auto' }}>
                         <ApplicationSettingPluginSwitch
                             focusPluginID={props.focusPluginID}
                             setPluginMinimalModeEnabled={props.setPluginMinimalModeEnabled}
@@ -76,15 +90,31 @@ export function ApplicationBoardForm(props: ApplicationBoardFormProps) {
                 </TabContext>
             ) : (
                 <>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 8 }}>
-                        <IconButton
-                            size="small"
-                            sx={{ margin: '-5px' }}
-                            onClick={() => setOpenSettings((openSettings) => !openSettings)}>
-                            <Icons.Gear size={24} />
-                        </IconButton>
-                    </div>
+                    <Stack
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'end',
+                            padding: 1,
+                            marginLeft: 'auto',
+                            marginRight: 'auto',
+                            maxWidth: 583,
+                            background:
+                                'linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%);',
+                        }}>
+                        <div style={{ display: 'flex', flex: 1, justifyContent: 'flex-end' }}>
+                            <IconButton
+                                size="small"
+                                sx={{ margin: '-5px' }}
+                                onClick={() => setOpenSettings((openSettings) => !openSettings)}>
+                                <Icons.Gear size={24} />
+                            </IconButton>
+                        </div>
+                    </Stack>
                     <ApplicationBoardContent
+                        classes={{
+                            applicationWrapper: classes.applicationWrapper,
+                            recommendFeatureAppListWrapper: classes.recommendFeatureAppListWrapper,
+                        }}
                         openDashboard={props.openDashboard}
                         queryOwnedPersonaInformation={props.queryOwnedPersonaInformation}
                         currentSNSNetwork={props.currentSNSNetwork}

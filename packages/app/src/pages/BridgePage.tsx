@@ -12,11 +12,13 @@ export default function BridgePage(props: BridgePageProps) {
                 <DashboardHeader title="Bridges" />
 
                 <div className="bg-white p-5">
-                    <DisableShadowRootContext.Provider value={false}>
-                        <ShadowRootIsolation>
-                            <BridgeStack />
-                        </ShadowRootIsolation>
-                    </DisableShadowRootContext.Provider>
+                    <div className="border pt-3 rounded-lg">
+                        <DisableShadowRootContext.Provider value={false}>
+                            <ShadowRootIsolation>
+                                <BridgeStack />
+                            </ShadowRootIsolation>
+                        </DisableShadowRootContext.Provider>
+                    </div>
                 </div>
             </main>
         </DashboardContainer>
