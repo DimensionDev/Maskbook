@@ -29,6 +29,7 @@
     "select_token": "crwdns8025:0crwdne8025:0",
     "select_a_token": "crwdns18774:0crwdne18774:0",
     "select_collectibles": "crwdns20221:0crwdne20221:0",
+    "no_collectible_found": "crwdns21913:0crwdne21913:0",
     "manage_token_list": "crwdns18556:0crwdne18556:0",
     "token_list_loading": "crwdns18776:0crwdne18776:0",
     "erc20_token_list_placeholder": "crwdns9007:0crwdne9007:0",
