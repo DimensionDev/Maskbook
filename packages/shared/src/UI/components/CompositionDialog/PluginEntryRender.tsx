@@ -10,11 +10,16 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { DialogContent, alpha } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { GrantPermissions, InjectedDialog, useSharedI18N } from '@masknet/shared'
+import {
+    ClickableChip,
+    GrantPermissions,
+    InjectedDialog,
+    useGrantPermissions,
+    usePluginHostPermissionCheck,
+    useSharedI18N,
+} from '@masknet/shared'
 import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
-import { ClickableChip } from '../shared/SelectRecipients/ClickableChip.js'
-import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
 
 const useStyles = makeStyles()((theme) => ({
     sup: {

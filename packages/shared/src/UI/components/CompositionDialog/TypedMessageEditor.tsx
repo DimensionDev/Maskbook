@@ -9,8 +9,8 @@ import { editTypedMessageMeta } from '@masknet/typed-message-react'
 import { makeStyles } from '@masknet/theme'
 import { InputBase, Alert, Button, inputBaseClasses, alpha } from '@mui/material'
 import { useCallback, useImperativeHandle, useState, useRef, forwardRef, memo, useMemo, useEffect } from 'react'
-import { useI18N } from '../../utils/index.js'
 import { BadgeRenderer } from './BadgeRenderer.js'
+import { useSharedI18N } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -83,7 +83,7 @@ export const TypedMessageEditor = memo(
     forwardRef<TypedMessageEditorRef, TypedMessageEditorProps>(function TypedMessageEditor(props, ref) {
         const { onChange, readonly } = props
         const { classes, cx } = useStyles()
-        const { t } = useI18N()
+        const t = useSharedI18N()
 
         const [value, setValue] = useState(props.defaultValue ?? emptyMessage)
         const currentValue = useRef(value)
@@ -148,10 +148,10 @@ export const TypedMessageEditor = memo(
                     severity="error"
                     action={
                         <Button onClick={reset}>
-                            {t('reset')} {t('editor')}
+                            {t.reset()} {t.editor()}
                         </Button>
                     }>
-                    {t('typed_message_text_alert')}
+                    {t.typed_message_text_alert()}
                 </Alert>
             )
         }
@@ -176,7 +176,7 @@ export const TypedMessageEditor = memo(
                     onChange={setAsText}
                     fullWidth
                     multiline
-                    placeholder={t('post_dialog__placeholder')}
+                    placeholder={t.post_dialog__placeholder()}
                     rows={value.meta ? 11 : 13}
                 />
             </>
