@@ -10,5 +10,7 @@
     "plugin_trader_gas_setting_fast": "快速",
     "plugin_trader_gas_setting_custom": "自定义",
     "plugin_trader_tx_cost_usd": "(${{usd}})",
-    "plugin_trader_tx_cost_usd_new": "({{usd}})"
+    "plugin_trader_tx_cost_usd_new": "({{usd}})",
+    "settings": "设置",
+    "powered_by": "技术支持来自"
 }
