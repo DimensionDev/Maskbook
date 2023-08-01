@@ -43,7 +43,7 @@ export function DashboardContainer(props: DashboardContainerProps) {
             </div>
             {keyword ? (
                 <div className="bg-white p-5">
-                    <div className="border p-4 rounded-lg">
+                    <div className="border rounded-lg">
                         <DisableShadowRootContext.Provider value={false}>
                             <ShadowRootIsolation>
                                 <SearchResultInspector keyword={keyword} />
