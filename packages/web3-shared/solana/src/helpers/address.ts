@@ -1,4 +1,5 @@
 import bs58 from 'bs58'
+import { memoize } from 'lodash-es'
 import * as Web3 from '@solana/web3.js'
 import { getEnumAsArray } from '@masknet/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -6,11 +7,6 @@ import { ChainId, NetworkType, ProviderType, SchemaType } from '../types.js'
 import { getTokenConstant, ZERO_ADDRESS } from '../constants/index.js'
 import { NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
 import { isTronAddress } from './isTronAddress.js'
-import { memoize } from 'lodash-es'
-
-export function encodePublicKey(key: Web3.PublicKey) {
-    return key.toBase58()
-}
 
 export function decodeAddress(initData: string | Buffer | Uint8Array) {
     const data = typeof initData === 'string' ? bs58.decode(initData) : initData

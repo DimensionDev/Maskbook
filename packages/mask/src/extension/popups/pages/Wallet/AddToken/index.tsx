@@ -1,4 +1,9 @@
 import { memo, useCallback, useMemo, useState } from 'react'
+import { useAsyncFn } from 'react-use'
+import { useNavigate, useParams } from 'react-router-dom'
+import { sortBy } from 'lodash-es'
+import { Tab } from '@mui/material'
+import { TabContext, TabPanel } from '@mui/lab'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { FungibleTokenList, SelectNetworkSidebar, TokenListMode, AddCollectibles } from '@masknet/shared'
 import { useRowSize } from '@masknet/shared-base-ui'
@@ -9,17 +14,12 @@ import {
     useWeb3State,
 } from '@masknet/web3-hooks-base'
 import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
-import { Tab } from '@mui/material'
-import { TabContext, TabPanel } from '@mui/lab'
-import { NormalHeader } from '../../../components/index.js'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useAsyncFn } from 'react-use'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { NormalHeader } from '../../../components/index.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
-import { sortBy } from 'lodash-es'
 
 const useStyles = makeStyles<{ currentTab: TabType; searchError: boolean }>()((theme, { currentTab, searchError }) => ({
     content: {

@@ -1,4 +1,5 @@
 import urlcat from 'urlcat'
+import { memoize } from 'lodash-es'
 import { NetworkPluginID, createLookupTableResolver, NextIDPlatform, SocialAddressType } from '@masknet/shared-base'
 import {
     type ChainDescriptor,
@@ -7,7 +8,6 @@ import {
     type ProviderDescriptor,
     SourceType,
 } from '../specs/index.js'
-import { memoize } from 'lodash-es'
 
 export interface ExplorerRoutes {
     addressPathname?: string
@@ -20,15 +20,15 @@ export interface ExplorerRoutes {
 
 // A workaround for extracting un-exported internal types.
 // Learn more https://stackoverflow.com/questions/50321419/typescript-returntype-of-generic-function
-export class Wrapper<ChainId, SchemaType, ProviderType, NetworkType> {
+class Wrapper<ChainId, SchemaType, ProviderType, NetworkType> {
     createChainResolver(descriptors: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>) {
-        return createChainResolver(descriptors)
+        return createChainResolver(() => descriptors)
     }
     createExplorerResolver(
         descriptors: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>,
         routes?: ExplorerRoutes,
     ) {
-        return createExplorerResolver(descriptors, routes)
+        return createExplorerResolver(() => descriptors, routes)
     }
     createNetworkResolver(descriptors: Array<NetworkDescriptor<ChainId, NetworkType>>) {
         return createNetworkResolver(descriptors)
@@ -52,14 +52,14 @@ export type ReturnProviderResolver<ChainId, ProviderType> = ReturnType<
 >
 
 export function createChainResolver<ChainId, SchemaType, NetworkType>(
-    descriptors: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>,
+    getChainDescriptors: () => Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>,
 ) {
-    const getChainDescriptor = (chainId?: ChainId) => descriptors.find((x) => x.chainId === chainId)
+    const getChainDescriptor = (chainId?: ChainId) => getChainDescriptors().find((x) => x.chainId === chainId)
 
     return {
         chainId: (name?: string) =>
             name
-                ? descriptors.find((x) =>
+                ? getChainDescriptors().find((x) =>
                       [x.name, x.type as string, x.fullName, x.shortName]
                           .map((x) => x?.toLowerCase())
                           .filter(Boolean)
@@ -89,7 +89,7 @@ export function createChainResolver<ChainId, SchemaType, NetworkType>(
 }
 
 export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
-    descriptors: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>,
+    getChainDescriptors: () => Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>,
     {
         addressPathname = '/address/:address',
         blockPathname = '/block/:blockNumber',
@@ -100,7 +100,7 @@ export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
     }: ExplorerRoutes = {},
 ) {
     const getExplorerUrl = (chainId: ChainId) => {
-        const chainDescriptor = descriptors.find((x) => x.chainId === chainId)
+        const chainDescriptor = getChainDescriptors().find((x) => x.chainId === chainId)
         return chainDescriptor?.explorerUrl ?? { url: '' }
     }
 
