@@ -11,9 +11,6 @@ import { memo } from 'react'
 import { useAsync } from 'react-use'
 import { SocialTooltip } from './SocialTooltip.js'
 import { resolveNextIDPlatformIcon } from './utils.js'
-import { isValidAddress as isValidAddressEVM } from '@masknet/web3-shared-evm'
-import { isValidAddress as isValidAddressFlow } from '@masknet/web3-shared-flow'
-import { isValidAddress as isValidAddressSolana } from '@masknet/web3-shared-solana'
 
 const useStyles = makeStyles()((theme) => ({
     listItem: {
@@ -142,10 +139,6 @@ interface SocialAccountListItemProps {
     profileUrl?: string
 }
 
-const isValidAddress = (address?: string): boolean => {
-    return isValidAddressEVM(address) || isValidAddressFlow(address) || isValidAddressSolana(address)
-}
-
 export function SocialAccountListItem({
     platform,
     link,
@@ -197,7 +190,7 @@ export function SocialAccountListItem({
                     {icon}
 
                     <Typography className={cx(classes.socialName, classes.accountName)} component="div">
-                        {isValidAddress(name || identity) ? (
+                        {Others.isValidAddress(name || identity) ? (
                             <>
                                 {Others.formatAddress(name || identity, 4)}
                                 <CopyButton size={14} text={name || identity} />
