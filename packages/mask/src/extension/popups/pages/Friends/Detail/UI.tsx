@@ -111,7 +111,9 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(({ avatar, nextId, pub
                 {profiles.map((profile) => {
                     switch (profile.platform) {
                         case 'twitter':
-                            return <TwitterAccount avatar={''} userId={profile.name} />
+                            return (
+                                <TwitterAccount avatar={''} userId={profile.name ? profile.name : profile.identity} />
+                            )
                         case 'ens':
                         case 'ethereum':
                         case 'github':
