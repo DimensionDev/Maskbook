@@ -2,15 +2,23 @@ import { memo } from 'react'
 import { Box, Link } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { type NextIDPlatform, formatPersonaName } from '@masknet/shared-base'
+import { formatPersonaName } from '@masknet/shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 
 interface AccountProps {
-    icon: NextIDPlatform
     userId: string
+    icon: string
 }
 
 const useStyles = makeStyles()((theme) => ({
+    container: {
+        width: '119px',
+        height: '86px',
+        borderRadius: '8px',
+        ':hover': {
+            boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
+        },
+    },
     iconBlack: {
         color: theme.palette.maskColor.main,
         display: 'flex',
@@ -18,12 +26,13 @@ const useStyles = makeStyles()((theme) => ({
     },
     userId: {
         display: 'flex',
-        fontSize: '14px',
+        fontSize: '12px',
         fontStyle: 'normal',
         fontWeight: 700,
-        lineHeight: '18px',
+        lineHeight: '16px',
     },
 }))
+
 const url = {
     twitter: 'https://twitter.com/',
     ens: 'https://app.ens.domains/name/',
@@ -38,23 +47,29 @@ const url = {
 export const Account = memo<AccountProps>(({ userId, icon }) => {
     const { classes } = useStyles()
     return (
-        <Box width="156px" padding="4px" display="flex" gap="10px" alignItems="center">
+        <Box
+            padding="12px"
+            display="flex"
+            flexDirection="column"
+            gap="10px"
+            alignItems="center"
+            className={classes.container}>
             {(() => {
                 switch (icon) {
                     case 'lens':
-                        return <Icons.Lens width={30} height={30} />
+                        return <Icons.Lens width={40} height={40} />
                     case 'ethereum':
-                        return <Icons.ETH width={30} height={30} />
+                        return <Icons.ETH width={40} height={40} />
                     case 'ens':
-                        return <Icons.ENS width={30} height={30} />
+                        return <Icons.ENS width={40} height={40} />
                     case 'github':
-                        return <Icons.GitHub width={30} height={30} />
+                        return <Icons.GitHub width={40} height={40} />
                     case 'farcaster':
-                        return <Icons.Farcaster width={30} height={30} />
+                        return <Icons.Farcaster width={40} height={40} />
                     case 'space_id':
-                        return <Icons.SpaceId width={30} height={30} />
+                        return <Icons.SpaceId width={40} height={40} />
                     case 'unstoppabledomains':
-                        return <Icons.Unstoppable width={30} height={30} />
+                        return <Icons.Unstoppable width={40} height={40} />
                     default:
                         return null
                 }

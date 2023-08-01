@@ -9,8 +9,9 @@ import { formatPersonaFingerprint, type BindingProof } from '@masknet/shared-bas
 import { useTheme } from '@mui/system'
 import { CopyButton } from '@masknet/shared'
 import { TwitterAccount } from './TwitterAccount/index.js'
-import { LensAccount } from './LensAccount/index.js'
+import { Account } from './Account/index.js'
 import urlcat from 'urlcat'
+
 const useStyles = makeStyles()((theme) => ({
     container: {
         width: '100%',
@@ -46,8 +47,8 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         display: 'grid',
         justifyContent: 'center',
-        padding: '12px',
-        gap: '8px',
+        padding: '16px',
+        gap: '12px',
         gridTemplateColumns: 'repeat(3, 119px)',
     },
 }))
@@ -109,8 +110,19 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(({ avatar, nextId, pub
                     switch (profile.platform) {
                         case 'twitter':
                             return <TwitterAccount avatar={''} userId={profile.name} />
+                        case 'ens':
+                        case 'ethereum':
+                        case 'github':
+                        case 'space_id':
                         case 'lens':
-                            return <LensAccount userId={profile.identity} />
+                        case 'unstoppabledomains':
+                        case 'farcaster':
+                            return (
+                                <Account
+                                    userId={profile.platform === 'ens' ? profile.name : profile.identity}
+                                    icon={profile.platform}
+                                />
+                            )
                         default:
                             return null
                     }

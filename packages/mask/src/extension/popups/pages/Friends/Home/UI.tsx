@@ -82,6 +82,7 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(
                                     key={friend.id}
                                     avatar={friend.avatar}
                                     nextId={friend.linkedPersona?.publicKeyAsHex as string}
+                                    publicKey={friend.linkedPersona?.rawPublicKey}
                                     profiles={friend.profiles}
                                 />
                             )

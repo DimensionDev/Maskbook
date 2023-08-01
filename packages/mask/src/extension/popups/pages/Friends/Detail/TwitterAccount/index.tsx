@@ -24,10 +24,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     userId: {
         display: 'flex',
-        fontSize: '14px',
+        fontSize: '12px',
         fontStyle: 'normal',
         fontWeight: 700,
-        lineHeight: '18px',
+        lineHeight: '16px',
     },
 }))
 

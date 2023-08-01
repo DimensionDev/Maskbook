@@ -8,7 +8,7 @@ import urlcat from 'urlcat'
 import { AccountAvatar } from '../../Personas/components/AccountAvatar/index.js'
 import { useNavigate } from 'react-router-dom'
 import { TwitterAccount } from './TwitterAccount/index.js'
-import { LensAccount } from './LensAccount/index.js'
+import { Account } from './Account/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -127,10 +127,19 @@ export const ContactCard = memo<ContactCardProps>(({ avatar, nextId, profiles, p
                     switch (profile.platform) {
                         case 'twitter':
                             return <TwitterAccount avatar={''} userId={profile.name} />
-                        case 'lens':
-                            return <LensAccount userId={profile.identity} />
                         case 'ens':
-                            return <LensAccount userId={profile.identity} />
+                        case 'ethereum':
+                        case 'github':
+                        case 'space_id':
+                        case 'lens':
+                        case 'unstoppabledomains':
+                        case 'farcaster':
+                            return (
+                                <Account
+                                    userId={profile.platform === 'ens' ? profile.name : profile.identity}
+                                    icon={profile.platform}
+                                />
+                            )
                         default:
                             return null
                     }

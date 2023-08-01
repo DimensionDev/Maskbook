@@ -39,7 +39,11 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
                         x.platform === 'twitter' ||
                         x.platform === 'lens' ||
                         x.platform === 'ens' ||
-                        x.platform === 'ethereum',
+                        x.platform === 'ethereum' ||
+                        x.platform === 'github' ||
+                        x.platform === 'space_id' ||
+                        x.platform === 'farcaster' ||
+                        x.platform === 'unstoppabledomains',
                 )
                 profiles.push({
                     profiles: filtered,
