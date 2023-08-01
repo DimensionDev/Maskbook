@@ -7,7 +7,6 @@ import { Web3ContextProvider, useChainContext, useFungibleToken } from '@masknet
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { createERC20Token, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { DashboardContainer } from '../components/DashboardContainer.js'
-import { StickySearchHeader } from '../components/StickySearchBar.js'
 import { DashboardHeader } from '../components/DashboardHeader.js'
 
 export interface SwapPageProps {}
@@ -34,8 +33,6 @@ export default function SwapPage(props: SwapPageProps) {
 
     return (
         <DashboardContainer>
-            <StickySearchHeader />
-
             <main>
                 <DashboardHeader title="Swap" />
 

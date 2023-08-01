@@ -8,7 +8,6 @@ import {
     TruckIcon,
     WindowIcon,
     UserCircleIcon,
-    MagnifyingGlassIcon,
     PencilSquareIcon,
 } from '@heroicons/react/24/outline'
 import { SelectProviderModal, WalletStatusModal } from '@masknet/shared'
@@ -21,7 +20,6 @@ const navigation = [
     { name: 'Compose', icon: PencilSquareIcon, to: ApplicationRoutes.Compose },
     { name: 'Explore', icon: RocketLaunchIcon, to: ApplicationRoutes.Explorer },
     { name: 'Favorites', icon: HeartIcon, to: ApplicationRoutes.Favorites },
-    { name: 'DSearch', icon: MagnifyingGlassIcon, to: ApplicationRoutes.DSearch },
     { name: 'Mask Network', icon: WindowIcon, to: ApplicationRoutes.Applications },
     { name: 'Web3 Profile', icon: UserCircleIcon, to: ApplicationRoutes.Web3Profile },
     { name: 'Swap', icon: ArrowPathRoundedSquareIcon, to: ApplicationRoutes.Swap },

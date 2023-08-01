@@ -1,7 +1,6 @@
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { DashboardContainer } from '../components/DashboardContainer.js'
 import { DashboardHeader } from '../components/DashboardHeader.js'
-import { StickySearchHeader } from '../components/StickySearchBar.js'
 
 export interface OverviewPageProps {}
 
@@ -10,8 +9,6 @@ export default function OverviewPage(props: OverviewPageProps) {
 
     return (
         <DashboardContainer>
-            <StickySearchHeader />
-
             <main>
                 <DashboardHeader title="Overview" />
 

@@ -7,5 +7,10 @@
     "lib": ["WebWorker", "ES2022"]
   },
   "include": ["src/background-worker"],
-  "references": [{ "path": "../base" }, { "path": "../shared-base" }, { "path": "../plugin-infra" }]
+  "references": [
+    { "path": "../base" },
+    { "path": "../shared-base" },
+    { "path": "../plugin-infra" },
+    { "path": "../plugins/Trader" }
+  ]
 }
