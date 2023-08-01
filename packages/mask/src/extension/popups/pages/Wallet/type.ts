@@ -41,3 +41,5 @@ export type GasSetting = {
     maxPriorityFeePerGas?: string
     maxFeePerGas?: string
 }
+
+export type GasParams = Omit<GasSetting, 'gas'>

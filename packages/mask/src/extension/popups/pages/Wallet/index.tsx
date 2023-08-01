@@ -23,11 +23,10 @@ const DeleteWallet = lazy(() => import('./DeleteWallet/index.js'))
 const CreateWallet = lazy(() => import('./CreateWallet/index.js'))
 const BackupWallet = lazy(() => import('./BackupWallet/index.js'))
 const AddToken = lazy(() => import('./AddToken/index.js'))
-const SignRequest = lazy(() => import('./SignRequest/index.js'))
 const GasSetting = lazy(() => import('./GasSetting/index.js'))
 const Transfer = lazy(() => import('./Transfer/index.js'))
 const ContactList = lazy(() => import('./ContactList/index.js'))
-const ContractInteraction = lazy(() => import('./ContractInteraction/index.js'))
+const ContractInteraction = lazy(() => import('./Interaction/index.js'))
 const Unlock = lazy(() => import('./Unlock/index.js'))
 const ResetWallet = lazy(() => import('./ResetWallet/index.js'))
 const SetPaymentPassword = lazy(() => import('./SetPaymentPassword/index.js'))
@@ -60,7 +59,6 @@ export default function Wallet() {
                         path={r(`${PopupRoutes.AddToken}/:chainId/:assetType` as PopupRoutes)}
                         element={<AddToken />}
                     />
-                    <Route path={r(PopupRoutes.WalletSignRequest)} element={<SignRequest />} />
                     <Route path={r(PopupRoutes.GasSetting)} element={<GasSetting />} />
                     <Route path={r(PopupRoutes.TokenDetail)} element={<TokenDetail />} />
                     <Route path={r(PopupRoutes.TransactionDetail)} element={<TransactionDetail />} />

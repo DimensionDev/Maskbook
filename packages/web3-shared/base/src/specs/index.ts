@@ -1043,7 +1043,7 @@ export interface RequestState<Arguments, Options> extends Startable {
     /** Updates request with new arguments. */
     updateRequest(id: string, updates: Partial<TransferableRequest<Arguments, Options>>): Promise<void>
     /** Approves a request. */
-    approveRequest(id: string): Promise<void>
+    approveRequest(id: string, updates?: Partial<TransferableMessage<Request, Response>>): Promise<void>
     /** Rejects a request. */
     denyRequest(id: string): Promise<void>
     /** Rejects all requests. */

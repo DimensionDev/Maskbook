@@ -2,7 +2,6 @@ import { memo, useEffect, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ActionButton } from '@masknet/theme'
-import { Box } from '@mui/material'
 import { PersonaContext } from '@masknet/shared'
 import { type PersonaInformation, PopupRoutes, SignType, MaskMessages } from '@masknet/shared-base'
 import { usePersonasFromDB } from '../../../../../components/DataSource/usePersonasFromDB.js'
@@ -11,6 +10,7 @@ import Services from '../../../../service.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { SignRequestInfo } from '../../../components/SignRequestInfo/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
+import { Box } from '@mui/material'
 
 const PersonaSignRequest = memo(() => {
     const { t } = useI18N()
@@ -116,7 +116,7 @@ const PersonaSignRequest = memo(() => {
                     {t('cancel')}
                 </ActionButton>
                 <ActionButton loading={confirmLoading} onClick={handleConfirm} fullWidth>
-                    {t('confirm')}
+                    {t('sign')}
                 </ActionButton>
             </BottomController>
         </Box>

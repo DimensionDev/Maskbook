@@ -12,9 +12,10 @@ import { useChainIdSupport, useGasOptions, useNativeToken, useNativeTokenPrice }
 import { NUMERIC_INPUT_REGEXP_PATTERN, NetworkPluginID } from '@masknet/shared-base'
 import { Alert, Box, Button, TextField, Typography, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { formatCurrency, isGreaterThan, isLessThan } from '@masknet/web3-shared-base'
+import { formatBalance, formatCurrency, isGreaterThan, isLessThan } from '@masknet/web3-shared-base'
 import { BigNumber } from 'bignumber.js'
 import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
+import { FormattedBalance } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -91,7 +92,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
         return formatGweiToWei(isSupport1559 ? maxFeePerGas : gasPrice)
             .times(config.gas)
             .toFixed()
-    }, [gasPrice, config.gas, maxFeePerGas])
+    }, [gasPrice, config.gas, maxFeePerGas, isSupport1559])
 
     const error = useMemo(() => {
         if (!replaceType) return null
@@ -166,8 +167,14 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
         <BottomDrawer open={open} title={title} onClose={onClose}>
             <Box display="flex" flexDirection="column" rowGap={1.5} mt={1.5}>
                 <Typography className={classes.preview}>
-                    {formatWeiToEther(totalGas).toString()}
-                    {nativeToken?.symbol}≈
+                    <FormattedBalance
+                        value={totalGas}
+                        decimals={nativeToken?.decimals}
+                        significant={4}
+                        symbol={nativeToken?.symbol}
+                        formatter={formatBalance}
+                    />
+                    ≈
                     {formatCurrency(formatWeiToEther(totalGas).times(nativeTokenPrice ?? 0), 'USD', {
                         onlyRemainTwoDecimal: true,
                     })}

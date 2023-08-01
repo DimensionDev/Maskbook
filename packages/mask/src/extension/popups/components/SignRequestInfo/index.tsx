@@ -6,7 +6,6 @@ import { Box } from 'react-feather'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
-        padding: 16,
         display: 'flex',
         flexDirection: 'column',
         flex: 1,
