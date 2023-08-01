@@ -9,6 +9,9 @@ import { memo, useCallback, useMemo } from 'react'
 import { GasSettingModal } from '../../../modals/modals.js'
 
 const useStyles = makeStyles()((theme) => ({
+    paper: {
+        borderRadius: 16,
+    },
     label: {
         fontSize: 14,
         color: theme.palette.maskColor.second,
@@ -59,6 +62,11 @@ export const GasSettings = memo<Props>(function GasSettings({ tokenAddress: addr
             classes={{ label: classes.label }}
             onOpenCustomSetting={handleOpenCustom}
             onChange={onChange}
+            MenuProps={{
+                PaperProps: {
+                    className: classes.paper,
+                },
+            }}
         />
     )
 })

@@ -3,13 +3,7 @@ import { ImageIcon, ProgressiveText, TokenIcon, useAvailableBalance } from '@mas
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import {
-    useChainContext,
-    useFungibleToken,
-    useFungibleTokenBalance,
-    useNetworkDescriptor,
-    useWeb3Connection,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken, useNetworkDescriptor, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { formatBalance, isLessThan, isLte, isZero, leftShift, rightShift } from '@masknet/web3-shared-base'
 import { type GasConfig } from '@masknet/web3-shared-evm'
 import { Box, Input, Typography } from '@mui/material'
@@ -86,28 +80,33 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const network = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const { data: token, isLoading } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, address, undefined, { chainId })
 
-    const { data: balance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address, { chainId })
     const [gasConfig, setGasConfig] = useState<GasConfig>()
     const [amount, setAmount] = useState('')
     const totalAmount = useMemo(
         () => (amount && token?.decimals ? rightShift(amount, token.decimals).toFixed() : '0'),
-        [],
+        [amount, token?.decimals],
     )
-    const { balance: availableBalance } = useAvailableBalance(NetworkPluginID.PLUGIN_EVM, address, gasConfig, {
-        chainId,
-    })
+    const { balance, isLoading: isLoadingBalance } = useAvailableBalance(
+        NetworkPluginID.PLUGIN_EVM,
+        address,
+        gasConfig,
+        {
+            chainId,
+        },
+    )
 
     const { account } = useChainContext()
     const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, {
         account,
+        chainId,
     })
     const recipient = params.get('recipient')
     const [state, transfer] = useAsyncFn(async () => {
-        if (!recipient || !isZero(totalAmount) || !token?.decimals) return
+        if (!recipient || isZero(totalAmount) || !token?.decimals) return
         return Web3.transferFungibleToken(address, recipient, totalAmount, '', {
             overrides: gasConfig,
         })
-    }, [address, recipient, totalAmount, token?.decimals, gasConfig])
+    }, [address, chainId, recipient, totalAmount, token?.decimals, gasConfig])
 
     if (undecided)
         return (
@@ -120,7 +119,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
             />
         )
 
-    const inputNotReady = !recipient || !amount || isLessThan(availableBalance, totalAmount)
+    const inputNotReady = !recipient || !amount || isLessThan(balance, totalAmount)
     const tokenNotReady = !token?.decimals || !balance || isLessThan(balance, totalAmount)
     const transferDisabled = inputNotReady || tokenNotReady || isLte(totalAmount, 0)
 
@@ -144,9 +143,9 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                     <ProgressiveText loading={isLoading} skeletonWidth={36}>
                         {token?.symbol}
                     </ProgressiveText>
-                    <ProgressiveText loading={isLoading} skeletonWidth={60}>
+                    <ProgressiveText loading={isLoading || isLoadingBalance} skeletonWidth={60}>
                         {t('available_amount', {
-                            amount: formatBalance(availableBalance, token?.decimals, 0, false, true, 5),
+                            amount: formatBalance(balance, token?.decimals, 0, false, true, 5),
                         })}
                     </ProgressiveText>
                 </Box>
@@ -162,7 +161,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                             className={classes.maxButton}
                             onClick={() => {
                                 if (!balance || !token?.decimals) return
-                                setAmount(leftShift(availableBalance, token.decimals).toFixed())
+                                setAmount(leftShift(balance, token.decimals).toFixed())
                             }}>
                             {t('max')}
                         </Typography>
