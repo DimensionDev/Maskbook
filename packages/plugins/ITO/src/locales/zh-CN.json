@@ -1,5 +1,13 @@
 {
+    "plugin_ito_claim_all_dialog_title": "认领您的代币",
+    "plugin_ito_sell_price": "价格",
+    "plugin_ito_claim_all": "认领全部",
+    "plugin_ito_error_allocation_absence": "请输入兑换限制",
+    "plugin_ito_error_allocation_invalid": "无效的金额",
+    "plugin_ito_list_start_date": "开始时间 {{date}}",
     "plugin_ito_status_no_start": "尚未开始",
     "plugin_ito_status_ongoing": "进行中",
-    "plugin_ito_continue": "继续"
+    "plugin_ito_continue": "继续",
+    "no_data": "暂无数据",
+    "amount": "金额"
 }

@@ -1,4 +1,7 @@
 {
+    "plugin_savings": "储蓄",
+    "plugin_savings_asset": "资产",
+    "plugin_savings_apr": "年利率",
     "plugin_savings_withdraw": "提取",
     "failed": "失败"
 }
