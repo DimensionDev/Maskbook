@@ -1,11 +1,11 @@
+import urlcat from 'urlcat'
+import { memo, useMemo, useState } from 'react'
 import { SocialNetworkEnum, SocialNetworkEnumToProfileDomain, socialNetworkEncoder } from '@masknet/encryption'
 import { Icons } from '@masknet/icons'
 import { InjectedDialog, useSharedI18N } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogContent, FormControlLabel, Radio, RadioGroup, Typography, useTheme } from '@mui/material'
-import { memo, useMemo, useState } from 'react'
-import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
