@@ -44,6 +44,7 @@ export interface FriendsHomeUIProps {
 
 export const FriendsHomeUI = memo<FriendsHomeUIProps>(
     ({ loading, friends, setSearchValue, searchResult, searchValue }) => {
+        console.log(searchResult, 'searchResult')
         const { classes, cx } = useStyles()
         const { t } = useI18N()
         return (
@@ -74,6 +75,10 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(
                             })}
                         </Box>
                     )
+                ) : friends.length === 0 ? (
+                    <EmptyStatus className={classes.empty}>
+                        {t('popups_encrypted_friends_search_no_result')}
+                    </EmptyStatus>
                 ) : (
                     <Box display="flex" flexDirection="column" gap="12px" padding="16px">
                         {friends.map((friend) => {

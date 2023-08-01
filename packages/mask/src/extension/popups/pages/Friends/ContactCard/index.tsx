@@ -1,11 +1,10 @@
 import { memo } from 'react'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { Box, Typography, Link, useTheme, ButtonBase as Button, ButtonBase } from '@mui/material'
+import { Box, Typography, Link, useTheme, ButtonBase as Button, ButtonBase, Avatar } from '@mui/material'
 import { formatPersonaFingerprint, type BindingProof } from '@masknet/shared-base'
 import { CopyButton } from '@masknet/shared'
 import urlcat from 'urlcat'
-import { AccountAvatar } from '../../Personas/components/AccountAvatar/index.js'
 import { useNavigate } from 'react-router-dom'
 import { TwitterAccount } from './TwitterAccount/index.js'
 import { Account } from './Account/index.js'
@@ -33,6 +32,10 @@ const useStyles = makeStyles()((theme) => ({
         borderTopLeftRadius: '6px',
         borderTopRightRadius: '6px',
         background: theme.palette.maskColor.modalTitleBg,
+    },
+    avatar: {
+        width: 40,
+        height: 40,
     },
     icon: {
         width: 12,
@@ -75,7 +78,11 @@ export const ContactCard = memo<ContactCardProps>(({ avatar, nextId, profiles, p
         <Box className={classes.card}>
             <Box className={classes.titleWrap}>
                 <Box className={classes.title}>
-                    <AccountAvatar avatar={avatar} />
+                    {avatar ? (
+                        <Avatar className={classes.avatar} src={avatar} />
+                    ) : (
+                        <Icons.NextIdAvatar className={classes.avatar} />
+                    )}
                     <Box>
                         <Typography fontSize={14} fontWeight={700} lineHeight="18px">
                             {publicKey ? formatPersonaFingerprint(publicKey, 4) : null}
@@ -126,7 +133,9 @@ export const ContactCard = memo<ContactCardProps>(({ avatar, nextId, profiles, p
                 {profiles.slice(0, 2).map((profile) => {
                     switch (profile.platform) {
                         case 'twitter':
-                            return <TwitterAccount avatar={''} userId={profile.name} />
+                            return (
+                                <TwitterAccount avatar={''} userId={profile.name ? profile.name : profile.identity} />
+                            )
                         case 'ens':
                         case 'ethereum':
                         case 'github':

@@ -16,6 +16,11 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
+    avatar: {
+        width: 30,
+        height: 30,
+        alignItems: 'center',
+    },
     userId: {
         display: 'flex',
         fontSize: '14px',
@@ -29,7 +34,12 @@ export const TwitterAccount = memo<TwitterAccountProps>(({ avatar, userId }) => 
     const { classes } = useStyles()
     return (
         <Box width="156px" padding="4px" display="flex" gap="10px" alignItems="center">
-            <AccountAvatar avatar={avatar} network="twitter.com" isValid />
+            <AccountAvatar
+                avatar={avatar}
+                network="twitter.com"
+                isValid
+                classes={{ avatar: classes.avatar, container: classes.avatar }}
+            />
             <Box className={classes.userId}>
                 {`@${formatPersonaName(userId)}`}
                 <Link

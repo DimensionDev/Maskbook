@@ -1005,6 +1005,7 @@
     "popups_encrypted_friends": "Encrypted Friends",
     "popups_encrypted_friends_search_placeholder": "Search Next.ID, Twitter, lens, ENS or Address",
     "popups_encrypted_friends_search_no_result": "No search results",
+    "popups_encrypted_friends_no_friends": "No encrypted friends, you can try searching.",
     "popups_switch_persona": "Switch Persona",
     "popups_recovery": "Recovery",
     "popups_next_id": "Next.ID",
