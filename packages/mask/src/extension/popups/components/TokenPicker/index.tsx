@@ -13,6 +13,7 @@ const useStyles = makeStyles()((theme) => {
     return {
         picker: {
             display: 'flex',
+            gap: theme.spacing(2),
             flexDirection: 'row',
             overflow: 'auto',
         },
@@ -56,7 +57,7 @@ export const TokenPicker = memo(function TokenPicker({
                 networks={networks}
                 pluginID={NetworkPluginID.PLUGIN_EVM}
                 chainId={sidebarChainId}
-                hiddenAllButton
+                hideAllButton
                 onChainChange={setSidebarChainId}
             />
             <List className={classes.list} data-hide-scrollbar>
