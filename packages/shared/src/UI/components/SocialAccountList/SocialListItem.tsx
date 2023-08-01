@@ -3,7 +3,7 @@ import { CopyButton, Image, useSharedI18N } from '@masknet/shared'
 import { CrossIsolationMessages, NextIDPlatform, type BindingProof } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { ENS, Lens } from '@masknet/web3-providers'
 import { isSameAddress, resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
 import { MenuItem, Typography } from '@mui/material'
@@ -11,7 +11,9 @@ import { memo } from 'react'
 import { useAsync } from 'react-use'
 import { SocialTooltip } from './SocialTooltip.js'
 import { resolveNextIDPlatformIcon } from './utils.js'
-import { formatEthereumAddress, isValidAddress } from '@masknet/web3-shared-evm'
+import { isValidAddress as isValidAddressEVM } from '@masknet/web3-shared-evm'
+import { isValidAddress as isValidAddressFlow } from '@masknet/web3-shared-flow'
+import { isValidAddress as isValidAddressSolana } from '@masknet/web3-shared-solana'
 
 const useStyles = makeStyles()((theme) => ({
     listItem: {
@@ -140,6 +142,10 @@ interface SocialAccountListItemProps {
     profileUrl?: string
 }
 
+const isValidAddress = (address?: string): boolean => {
+    return isValidAddressEVM(address) || isValidAddressFlow(address) || isValidAddressSolana(address)
+}
+
 export function SocialAccountListItem({
     platform,
     link,
@@ -152,6 +158,7 @@ export function SocialAccountListItem({
     const t = useSharedI18N()
     const { account } = useChainContext()
     const { classes, cx } = useStyles()
+    const Others = useWeb3Others()
 
     const { loading, value } = useAsync(async () => {
         if (platform !== NextIDPlatform.LENS || !identity) return
@@ -188,10 +195,11 @@ export function SocialAccountListItem({
                 }}>
                 <div className={classes.content}>
                     {icon}
+
                     <Typography className={cx(classes.socialName, classes.accountName)} component="div">
                         {isValidAddress(name || identity) ? (
                             <>
-                                {formatEthereumAddress(name || identity, 4)}
+                                {Others.formatAddress(name || identity, 4)}
                                 <CopyButton size={14} text={name || identity} />
                             </>
                         ) : (
