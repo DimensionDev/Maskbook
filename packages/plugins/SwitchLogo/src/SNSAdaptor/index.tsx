@@ -1,10 +1,10 @@
+import React from 'react'
+import { Trans } from 'react-i18next'
 import type { Plugin } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/shared-base'
+import { Icons } from '@masknet/icons'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
-import { PluginID } from '@masknet/shared-base'
-import { Trans } from 'react-i18next'
-import { Icons } from '@masknet/icons'
-import React from 'react'
 
 const recommendFeature = {
     description: <Trans i18nKey="description" ns={PluginID.SwitchLogo} />,

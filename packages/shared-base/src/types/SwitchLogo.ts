@@ -4,7 +4,7 @@ export enum SwitchLogoType {
     None = 'None',
 }
 
-export enum SwitchLogoOpenedState {
-    'Opened' = 1,
-    'Unopened' = 0,
+export enum SwitchLogoDialogStatus {
+    NeverOpened = 0,
+    PreviouslyOpened = 1,
 }

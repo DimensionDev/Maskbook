@@ -4,7 +4,7 @@ import { Box, Modal, styled, Typography } from '@mui/material'
 import {
     CrossIsolationMessages,
     EnhanceableSite,
-    SwitchLogoOpenedState,
+    SwitchLogoDialogStatus,
     sayHelloShowed,
     switchLogoOpenedState,
     userGuideFinished,
@@ -150,7 +150,12 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     }
 
     useLayoutEffect(() => {
-        if (!finished || state === SwitchLogoOpenedState.Opened || networkIdentifier !== EnhanceableSite.Twitter) return
+        if (
+            !finished ||
+            state === SwitchLogoDialogStatus.PreviouslyOpened ||
+            networkIdentifier !== EnhanceableSite.Twitter
+        )
+            return
         CrossIsolationMessages.events.switchLogoDialogUpdated.sendToLocal({ open: true })
     }, [finished, state, networkIdentifier])
 

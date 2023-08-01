@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import {
     CrossIsolationMessages,
-    SwitchLogoOpenedState,
+    SwitchLogoDialogStatus,
     SwitchLogoType,
     switchLogoOpenedState,
     switchLogoSettings,
@@ -73,7 +73,7 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
     useEffect(() => {
         return CrossIsolationMessages.events.switchLogoDialogUpdated.on(async (data) => {
             setOpen(data.open)
-            switchLogoOpenedState.value = SwitchLogoOpenedState.Opened
+            switchLogoOpenedState.value = SwitchLogoDialogStatus.PreviouslyOpened
         })
     }, [])
 
