@@ -3,11 +3,12 @@ import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { Box, Typography, useTheme } from '@mui/material'
 import { useAsyncFn } from 'react-use'
-import { type SingletonModalRefCreator } from '@masknet/shared-base'
+import { PopupRoutes, type SingletonModalRefCreator } from '@masknet/shared-base'
 import { ActionButton } from '@masknet/theme'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { WalletRPC } from '../../../../plugins/WalletService/messages.js'
+import { useNavigate } from 'react-router-dom'
 
 interface ShowPrivateKeyDrawerProps extends BottomDrawerProps {
     error: string
@@ -19,10 +20,22 @@ interface ShowPrivateKeyDrawerProps extends BottomDrawerProps {
 function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest }: ShowPrivateKeyDrawerProps) {
     const { t } = useI18N()
     const theme = useTheme()
+    const navigate = useNavigate()
 
     const [{ loading }, handleClick] = useAsyncFn(async () => {
         const isVerify = await WalletRPC.verifyPassword(password)
-        isVerify ? rest.onClose?.() : setError(t('create_wallet_incorrect_payment_password'))
+
+        if (!isVerify) {
+            setError(t('create_wallet_incorrect_payment_password'))
+            return
+        }
+        await WalletRPC.unlockWallet(password)
+        navigate(PopupRoutes.ExportWalletPrivateKey, {
+            state: {
+                password,
+            },
+        })
+        rest.onClose?.()
     }, [password])
 
     return (

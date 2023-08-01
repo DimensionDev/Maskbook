@@ -182,6 +182,7 @@ export function edit_2_url() { return new URL("./general/Edit2.svg", import.meta
 export function empty_url() { return new URL("./general/Empty.png", import.meta.url) }
 export function empty_simple_dark_url() { return new URL("./general/EmptySimple.dark.svg", import.meta.url) }
 export function empty_simple_light_url() { return new URL("./general/EmptySimple.light.svg", import.meta.url) }
+export function encrypted_files_url() { return new URL("./general/EncryptedFiles.svg", import.meta.url) }
 export function eye_dark_url() { return new URL("./general/Eye.dark.svg", import.meta.url) }
 export function eye_light_url() { return new URL("./general/Eye.light.svg", import.meta.url) }
 export function eye_off_dark_url() { return new URL("./general/EyeOff.dark.svg", import.meta.url) }

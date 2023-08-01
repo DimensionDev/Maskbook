@@ -26,6 +26,7 @@ export const WalletHeader = memo(function WalletHeader() {
     const matchResetWallet = useMatch(PopupRoutes.ResetWallet)
     const matchWallet = useMatch(PopupRoutes.Wallet)
     const matchAddAssets = useMatch(`${PopupRoutes.AddToken}/:chainId/:assetType`)
+    const matchExportPrivateKey = useMatch(PopupRoutes.ExportWalletPrivateKey)
     const matchContractInteraction = useMatch(PopupRoutes.ContractInteraction)
 
     const chooseNetwork = useCallback(() => {
@@ -36,7 +37,7 @@ export const WalletHeader = memo(function WalletHeader() {
         modalNavigate(PopupModalRoutes.SwitchWallet)
     }, [modalNavigate])
 
-    if (matchAddAssets) return null
+    if (matchAddAssets || matchExportPrivateKey) return null
 
     if (!wallet || !hasPassword || matchUnlock || matchResetWallet) return <WalletSetupHeaderUI />
 

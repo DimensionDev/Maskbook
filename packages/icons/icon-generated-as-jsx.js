@@ -1631,6 +1631,11 @@ export const EmptySimple = /*#__PURE__*/ __createIcon('EmptySimple', [
         u: () => new URL('./general/EmptySimple.light.svg', import.meta.url),
     },
 ])
+export const EncryptedFiles = /*#__PURE__*/ __createIcon('EncryptedFiles', [
+    {
+        u: () => new URL('./general/EncryptedFiles.svg', import.meta.url),
+    },
+])
 export const Eye = /*#__PURE__*/ __createIcon('Eye', [
     {
         c: ['dark'],
