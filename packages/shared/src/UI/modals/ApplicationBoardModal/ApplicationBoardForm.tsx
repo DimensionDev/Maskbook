@@ -14,15 +14,9 @@ import { useSharedI18N, type PersonaAgainstSNSConnectStatus } from '../../../ind
 const useStyles = makeStyles()(() => ({
     applicationWrapper: {
         maxHeight: 'initial',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        maxWidth: 583,
+        width: 'auto',
     },
-    recommendFeatureAppListWrapper: {
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        maxWidth: 583,
-    },
+    recommendFeatureAppListWrapper: {},
 }))
 interface ApplicationBoardFormProps {
     openDashboard?: (route?: DashboardRoutes, search?: string) => void
@@ -62,12 +56,12 @@ export function ApplicationBoardForm(props: ApplicationBoardFormProps) {
                             background:
                                 'linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%);',
                         }}>
-                        <div style={{ display: 'flex', flex: 1, justifyContent: 'flex-end' }}>
+                        <div style={{ display: 'flex', flex: 1, justifyContent: 'start', padding: 8 }}>
                             <IconButton
                                 size="small"
                                 sx={{ margin: '-5px' }}
                                 onClick={() => setOpenSettings((openSettings) => !openSettings)}>
-                                <Icons.Gear size={24} />
+                                <Icons.ArrowBack size={24} />
                             </IconButton>
                         </div>
                         <MaskTabList variant="base" onChange={onChange} aria-label="ApplicationBoard">
@@ -97,11 +91,10 @@ export function ApplicationBoardForm(props: ApplicationBoardFormProps) {
                             padding: 1,
                             marginLeft: 'auto',
                             marginRight: 'auto',
-                            maxWidth: 583,
                             background:
                                 'linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%);',
                         }}>
-                        <div style={{ display: 'flex', flex: 1, justifyContent: 'flex-end' }}>
+                        <div style={{ display: 'flex', flex: 1, justifyContent: 'flex-end', padding: 8 }}>
                             <IconButton
                                 size="small"
                                 sx={{ margin: '-5px' }}
