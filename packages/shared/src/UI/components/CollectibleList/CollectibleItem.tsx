@@ -1,7 +1,7 @@
 import { forwardRef, type HTMLProps, memo } from 'react'
 import { useWeb3Others } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
-import { Checkbox, Radio, Skeleton, Typography } from '@mui/material'
+import { Checkbox, Radio, Skeleton, Typography, useForkRef } from '@mui/material'
 import { CollectibleCard, type CollectibleCardProps } from './CollectibleCard.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -90,6 +90,11 @@ export const CollectibleItem = memo(
         const uiTokenId = Others.formatTokenId(asset.tokenId, 4)
 
         const SelectableButton = selectable && multiple ? Checkbox : Radio
+        const scrollIntoViewRef = (node: HTMLDivElement) => {
+            if (!checked || multiple || !node) return
+            node.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+        }
+        const forkedRef = useForkRef(ref, scrollIntoViewRef)
 
         return (
             <div
@@ -106,7 +111,7 @@ export const CollectibleItem = memo(
                     }
                 }}
                 {...rest}
-                ref={ref}>
+                ref={forkedRef}>
                 <CollectibleCard
                     className={classes.collectibleCard}
                     asset={asset}

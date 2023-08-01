@@ -27,7 +27,7 @@ import {
     formatGas,
     type Transaction,
 } from '@masknet/web3-shared-evm'
-import { Typography, MenuItem, Box, Grid } from '@mui/material'
+import { Typography, MenuItem, Box, Grid, type MenuProps } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     useChainContext,
@@ -57,6 +57,7 @@ export interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = Netwo
     onChange?(gasConfig: GasConfig): void
     /** Will open internal setting dialog instead if not provided */
     onOpenCustomSetting?(): void
+    MenuProps?: Partial<MenuProps>
 }
 
 const useStyles = makeStyles()((theme) => {
@@ -154,6 +155,7 @@ export function SelectGasSettingsToolbarUI({
     classes: externalClasses,
     onChange,
     onOpenCustomSetting,
+    MenuProps = {},
 }: SelectGasSettingsToolbarProps) {
     const t = useSharedI18N()
     const { classes, cx, theme } = useStyles(undefined, { props: { classes: externalClasses } })
@@ -251,17 +253,25 @@ export function SelectGasSettingsToolbarUI({
                 </MenuItem>,
             ),
         {
+            ...MenuProps,
             anchorSibling: false,
             anchorOrigin: {
                 vertical: 'bottom',
                 horizontal: 'right',
+                ...MenuProps.anchorOrigin,
             },
             transformOrigin: {
                 vertical: 'top',
                 horizontal: 'right',
+                ...MenuProps.transformOrigin,
             },
             PaperProps: {
-                style: { background: theme.palette.maskColor.bottom, transform: 'translateY(8px)' },
+                ...MenuProps.PaperProps,
+                style: {
+                    background: theme.palette.maskColor.bottom,
+                    transform: 'translateY(8px)',
+                    ...MenuProps.PaperProps?.style,
+                },
             },
         },
     )
