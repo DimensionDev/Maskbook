@@ -22,7 +22,6 @@ import { VerifyNextID } from './SetupGuide/VerifyNextID.js'
 import { PinExtension } from './SetupGuide/PinExtension.js'
 import { useSetupGuideStepInfo } from './SetupGuide/useSetupGuideStepInfo.js'
 import { useNextIDVerify } from '../DataSource/useNextIDVerify.js'
-import { SwitchLogoDialog } from '@masknet/plugin-switch-logo'
 
 // #region setup guide ui
 interface SetupGuideUIProps {
@@ -99,7 +98,6 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
         const afterVerify = () => {
             setOperation(true)
-            SwitchLogoDialog.open()
         }
         await handleVerifyNextID(destinedPersonaInfo, userId, afterVerify)
     }, [userId, destinedPersonaInfo])

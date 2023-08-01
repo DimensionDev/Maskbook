@@ -219,6 +219,9 @@ export interface SwapDialogEvent {
     }
 }
 
+export interface switchLogoDialogEvent {
+    open: boolean
+}
 export interface WalletSettingsDialogEvent {
     pluginID?: string
 }
