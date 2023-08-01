@@ -15,9 +15,9 @@ import { queryClient } from '@masknet/shared-base-ui'
 import { NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { createPermalink } from '../NFTScan/helpers/EVM.js'
-import { fetchSquashedJSON, getAssetFullName } from '../entry-helpers.js'
 import { ETH_BLUR_TOKEN_ADDRESS, SIMPLE_HASH_URL } from './constants.js'
 import { ActivityType as ActivityTypeSimpleHash, type Asset, type Collection } from './type.js'
+import { fetchSquashedJSON, getAssetFullName } from '../entry-helpers.js'
 import { TrendingAPI } from '../entry-types.js'
 
 export async function fetchFromSimpleHash<T>(path: string, init?: RequestInit) {
@@ -177,7 +177,7 @@ const ChainNameMap: Record<NetworkPluginID, Record<number, string>> = {
     },
     [NetworkPluginID.PLUGIN_BITCOIN]: {
         [BitcoinChainId.Mainnet]: 'bitcoin',
-        [BitcoinChainId.BitcoinCash]: 'bitcoincash',
+        [BitcoinChainId.BitcoinCash]: 'bitcoin_cash',
         [BitcoinChainId.DogoCoin]: 'dogocoin',
     },
 }

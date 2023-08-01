@@ -48,27 +48,85 @@ export enum ProviderType {
     None = 'None',
 }
 
-export type Web3 = never
-
-export type Web3Provider = never
-
-export type Signature = string
+export interface UTXO {
+    /** The transaction hash behind the UTXO */
+    hash: string
+    /** To identity the UTXO */
+    index: number
+    /** Script contains basic instructions for the transaction */
+    script: string
+    /** Address of the sender wallet */
+    address: string
+    /** Amount in satoshi */
+    amount: string
+}
 
 export interface Block {
-    hash: string
-    nonce: string
-    timestamp: string
-    baseFeePerGas?: number
+    miner: string
+    difficulty: string
+    timestamp: number
+    block_height: number
 }
+
+export interface Transaction {
+    /** Address of the sender wallet */
+    from: string
+    /** Address of the recipient wallet */
+    to: string
+    /** Address of the change recipient wallet, default to the sender wallet. */
+    change?: string
+    /** A previously calculated fee in satoshi */
+    fee?: string
+    /** The total amount to be sent in satoshi  */
+    amount: string
+}
+
+export interface TransactionDetailed {
+    hash: string
+    from: string
+    to: string
+    confirmations: number
+    block_hash: string
+    block_height: number
+    timestamp: number
+    script_signature: string
+    script: string
+}
+
+export interface Web3 {
+    /** Get the balance of a specified address, which represents the sum of coins in its unspent outputs. */
+    getBalance(address: string): Promise<string>
+    /** Get a list of unspent outputs (UTXOs) associated with the specified address. */
+    getUTXOs(address: string): Promise<UTXO[]>
+    /** Get the unique chain id of the blockchain network. */
+    getChainId(): Promise<number>
+    /** Get the latest block number on the blockchain network. */
+    getBlockNumber(): Promise<number>
+    /** Get the block information corresponding to the specified block hash. */
+    getBlockByHash(hash: string): Promise<Block>
+    /** Get the block information corresponding to the specified block height/number. */
+    getBlockByNumber(height: number): Promise<Block>
+    /** Get transaction information corresponding to the specified transaction hash. */
+    getTransactionByHash(hash: string): Promise<TransactionDetailed>
+    /** Send a transaction to the blockchain network. */
+    sendTransaction(transaction: Transaction): Promise<void>
+    /** Sign a transaction and return the signature. */
+    signTransaction(transaction: Transaction): Promise<string>
+    /** Send a raw transaction (pre-signed) to the blockchain network. */
+    sendRawTransaction(signed: string): Promise<string>
+}
+
+export interface Web3Provider {
+    getWeb3(): Web3
+}
+
+export type Signature = string
 
 export type MessageRequest = never
 export type MessageResponse = never
 
-export interface Transaction {}
-
 export type UserOperation = never
 export type TransactionReceipt = never
-export type TransactionDetailed = never
 export type TransactionSignature = string
 export type TransactionParameter = string | boolean | undefined
 export type TransactionOptions = never

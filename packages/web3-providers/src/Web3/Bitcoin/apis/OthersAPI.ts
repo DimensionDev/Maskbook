@@ -45,7 +45,7 @@ export class BitcoinOthersAPI extends OthersAPI_Base<ChainId, SchemaType, Provid
 
     override isNativeTokenSchemaType = isNativeTokenSchemaType
     override isFungibleTokenSchemaType = isNativeTokenSchemaType
-    override isNonFungibleTokenSchemaType = (scheamType: SchemaType) => !isNativeTokenSchemaType(scheamType)
+    override isNonFungibleTokenSchemaType = (schemaType: SchemaType) => !isNativeTokenSchemaType(schemaType)
 
     override getNetworkPluginID = getNetworkPluginID
     override getDefaultChainId = getDefaultChainId
