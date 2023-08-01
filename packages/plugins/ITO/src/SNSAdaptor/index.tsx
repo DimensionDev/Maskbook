@@ -50,7 +50,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         label: (
             <>
                 <Icons.Markets size={16} />
-                <Trans i18nKey="plugin_ito_name" />
+                <Trans i18nKey="plugin_ito_name" ns={PluginID.ITO} />
             </>
         ),
     },
