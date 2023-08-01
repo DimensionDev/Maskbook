@@ -19,7 +19,7 @@ export function DashboardContainer(props: DashboardContainerProps) {
         [],
     )
     return (
-        <div className="xl:pl-72">
+        <div className="xl:pl-72 container">
             <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-6 border-b border-white/5 bg-zinc-900 px-4 shadow-sm sm:px-6 lg:px-8">
                 <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
                     <label htmlFor="search-field" className="sr-only">
@@ -43,7 +43,7 @@ export function DashboardContainer(props: DashboardContainerProps) {
             </div>
             {keyword ? (
                 <div className="bg-white p-5">
-                    <div className="border rounded-lg">
+                    <div className="border p-4 rounded-lg">
                         <DisableShadowRootContext.Provider value={false}>
                             <ShadowRootIsolation>
                                 <SearchResultInspector keyword={keyword} />
