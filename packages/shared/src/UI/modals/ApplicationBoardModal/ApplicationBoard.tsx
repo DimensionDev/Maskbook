@@ -82,7 +82,7 @@ const useStyles = makeStyles<{
     }
 })
 
-interface ApplicationBoardContentProps {
+interface ApplicationBoardContentProps extends withClasses<'applicationWrapper' | 'recommendFeatureAppListWrapper'> {
     openDashboard?: (route?: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
     currentSNSNetwork?: CurrentSNSNetwork
@@ -100,6 +100,7 @@ export function ApplicationBoardContent({
     allPersonas,
     applicationCurrentStatus,
     personaAgainstSNSConnectStatusLoading,
+    classes,
 }: ApplicationBoardContentProps) {
     return (
         <PersonaContext.Provider initialState={{ queryOwnedPersonaInformation }}>
@@ -109,19 +110,25 @@ export function ApplicationBoardContent({
                 allPersonas={allPersonas}
                 applicationCurrentStatus={applicationCurrentStatus}
                 personaAgainstSNSConnectStatusLoading={personaAgainstSNSConnectStatusLoading}>
-                <ApplicationBoardPluginsList currentSNSNetwork={currentSNSNetwork} />
+                <ApplicationBoardPluginsList
+                    currentSNSNetwork={currentSNSNetwork}
+                    classes={{
+                        applicationWrapper: classes?.applicationWrapper,
+                        recommendFeatureAppListWrapper: classes?.recommendFeatureAppListWrapper,
+                    }}
+                />
             </ApplicationEntryStatusProvider>
         </PersonaContext.Provider>
     )
 }
 
-interface ApplicationBoardPluginsListProps {
+interface ApplicationBoardPluginsListProps
+    extends withClasses<'applicationWrapper' | 'recommendFeatureAppListWrapper'> {
     currentSNSNetwork?: CurrentSNSNetwork
 }
 
-function ApplicationBoardPluginsList({
-    currentSNSNetwork = CurrentSNSNetwork.Twitter,
-}: ApplicationBoardPluginsListProps) {
+function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
+    const { currentSNSNetwork = CurrentSNSNetwork.Twitter } = props
     const t = useSharedI18N()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const { pluginID: currentWeb3Network } = useNetworkContext()
@@ -161,16 +168,22 @@ function ApplicationBoardPluginsList({
     const [isCarouselReady] = useTimeout(300)
     const [isHoveringCarousel, setIsHoveringCarousel] = useState(false)
     // #endregion
-    const { classes, cx } = useStyles({
-        shouldScroll: listedAppList.length > 12,
-        isCarouselReady: !!isCarouselReady(),
-    })
+    const { classes, cx } = useStyles(
+        {
+            shouldScroll: listedAppList.length > 12,
+            isCarouselReady: !!isCarouselReady(),
+        },
+        { props },
+    )
 
     useMountReport(EventID.AccessApplicationBoard)
 
     return (
         <>
             <ApplicationRecommendArea
+                classes={{
+                    recommendFeatureAppListWrapper: classes?.recommendFeatureAppListWrapper,
+                }}
                 recommendFeatureAppList={recommendFeatureAppList}
                 isCarouselReady={isCarouselReady}
                 RenderEntryComponent={RenderEntryComponent}
