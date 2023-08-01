@@ -66,8 +66,9 @@ interface CollectibleItemProps
         CollectibleCardProps,
         SelectableProps {}
 
+// TODO lazy render in big list.
 export const CollectibleItem = memo(
-    forwardRef<HTMLDivElement, CollectibleItemProps>((props: CollectibleItemProps, ref) => {
+    forwardRef<HTMLDivElement, CollectibleItemProps>(function CollectibleItem(props: CollectibleItemProps, ref) {
         const {
             provider,
             asset,

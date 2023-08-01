@@ -4,8 +4,8 @@ import type {
     NetworkType,
     ProviderType,
     SchemaType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter,
 } from '@masknet/web3-shared-solana'
@@ -17,8 +17,8 @@ const dashboard: Plugin.Dashboard.Definition<
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter
 > = {

@@ -3,8 +3,8 @@ import type {
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter,
 } from '@masknet/web3-shared-solana'
@@ -17,8 +17,8 @@ export class SolanaHubOptionsAPI extends HubOptionsAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter
 > {

@@ -14,6 +14,8 @@ import { useTokenParams, useTitle } from '../../../hook/index.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { PageTitleContext } from '../../../context.js'
 import { ConfirmModal } from '../../../modals/modals.js'
+import urlcat from 'urlcat'
+import { TransferTabType } from '../type.js'
 
 const useStyles = makeStyles()((theme) => ({
     page: {
@@ -256,7 +258,7 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
                         {t('collectible_properties')}
                     </Typography>
                     <div className={classes.traits}>
-                        {asset?.traits?.map((trait) => {
+                        {asset?.traits?.map((trait, index) => {
                             const isAddress = isValidAddress(trait.value)
                             const uiValue = isAddress
                                 ? formatEthereumAddress(trait.value, 4)
@@ -265,7 +267,7 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
                                 : trait.value
 
                             return (
-                                <div key={trait.type} className={classes.trait}>
+                                <div key={index} className={classes.trait}>
                                     <TextOverflowTooltip title={trait.type}>
                                         <Typography className={classes.traitType}>{trait.type}</Typography>
                                     </TextOverflowTooltip>
@@ -290,7 +292,15 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
             ) : null}
             <Button
                 className={classes.sendButton}
-                onClick={() => navigate(address ? `${PopupRoutes.Contacts}/${address}` : PopupRoutes.Contacts)}>
+                onClick={() => {
+                    const path = urlcat(PopupRoutes.Contacts, {
+                        tab: TransferTabType.NFT,
+                        'nft:chainId': chainId,
+                        'nft:address': address,
+                        'nft:tokenId': availableAsset?.tokenId,
+                    })
+                    navigate(path)
+                }}>
                 <Icons.Send size={16} style={{ marginRight: 4 }} />
                 {t('send')}
             </Button>

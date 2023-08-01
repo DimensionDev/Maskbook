@@ -25,7 +25,7 @@ export function formatBalance(
         const minimum = scale10(1, -fixedDecimals)
         if (value.eq(0)) return '0'
         if (isLessThan(value, minimum)) return '<' + minimum.toFixed()
-        return addThousandSeparators(trimZero(value.toFixed(4)))
+        return addThousandSeparators(trimZero(value.toFixed(fixedDecimals)))
     }
 
     const base = pow10(decimals) // 10n ** decimals

@@ -57,7 +57,7 @@ export function isLens(name?: string) {
 
 export function isLensFollower(name: string) {
     // vitalik.lens-Follower, lensprotocol-Follower V2
-    return name.includes('.lens-Follower') || name.includes('lensprotocol-Follower')
+    return name.includes('.lens-Follower') || name.includes('lensprotocol-Follower') || name.endsWith("'s follower NFT")
 }
 
 const NORMAL_COLLECT_RE = /\.lens-Collect-\d+$/

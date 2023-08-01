@@ -129,7 +129,7 @@ export default function Wallet() {
                         <Route path={r(PopupRoutes.TokenDetail)} element={<TokenDetail />} />
                         <Route path={r(PopupRoutes.TransactionDetail)} element={<TransactionDetail />} />
                         <Route path={r(PopupRoutes.CollectibleDetail)} element={<CollectibleDetail />} />
-                        <Route path={r(`${PopupRoutes.Transfer}/:address?` as PopupRoutes)} element={<Transfer />} />
+                        <Route path={r(PopupRoutes.Transfer)} element={<Transfer />} />
                         <Route path={r(PopupRoutes.ContractInteraction)} element={<ContractInteraction />} />
                         <Route path={r(PopupRoutes.SelectWallet)} element={<SelectWallet />} />
                         <Route path={r(PopupRoutes.Unlock)} element={<Unlock />} />

@@ -7,7 +7,7 @@ interface Props extends Pick<HTMLProps<HTMLDivElement>, 'className'> {}
 export function LoadingSkeleton({ className }: Props) {
     return (
         <div className={className}>
-            {range(3).map((i) => (
+            {range(7).map((i) => (
                 <CollectibleItemSkeleton key={i} />
             ))}
         </div>

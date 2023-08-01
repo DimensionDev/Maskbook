@@ -98,8 +98,8 @@ export declare namespace Plugin {
         SchemaType = unknown,
         ProviderType = unknown,
         NetworkType = unknown,
-        RequestArguments = unknown,
-        RequestOptions = unknown,
+        MessageRequest = unknown,
+        MessageResponse = unknown,
         Transaction = unknown,
         TransactionParameter = unknown,
     > extends Shared.Definition<ChainId, SchemaType, ProviderType, NetworkType> {
@@ -110,8 +110,8 @@ export declare namespace Plugin {
                 SchemaType,
                 ProviderType,
                 NetworkType,
-                RequestArguments,
-                RequestOptions,
+                MessageRequest,
+                MessageResponse,
                 Transaction,
                 TransactionParameter
             >
@@ -123,8 +123,8 @@ export declare namespace Plugin {
                 SchemaType,
                 ProviderType,
                 NetworkType,
-                RequestArguments,
-                RequestOptions,
+                MessageRequest,
+                MessageResponse,
                 Transaction,
                 TransactionParameter
             >
@@ -427,8 +427,8 @@ export namespace Plugin.SNSAdaptor {
         SchemaType = unknown,
         ProviderType = unknown,
         NetworkType = unknown,
-        RequestArguments = unknown,
-        RequestOptions = unknown,
+        MessageRequest = unknown,
+        MessageResponse = unknown,
         Transaction = unknown,
         TransactionParameter = unknown,
     > extends Shared.DefinitionDeferred<SNSAdaptorContext> {
@@ -458,8 +458,8 @@ export namespace Plugin.SNSAdaptor {
             SchemaType,
             ProviderType,
             NetworkType,
-            RequestArguments,
-            RequestOptions,
+            MessageRequest,
+            MessageResponse,
             Transaction,
             TransactionParameter
         >
@@ -928,8 +928,8 @@ export namespace Plugin.Dashboard {
         SchemaType = unknown,
         ProviderType = unknown,
         NetworkType = unknown,
-        RequestArguments = unknown,
-        RequestOptions = unknown,
+        MessageRequest = unknown,
+        MessageResponse = unknown,
         Transaction = unknown,
         TransactionParameter = unknown,
     > extends Shared.DefinitionDeferred<DashboardContext> {
@@ -943,8 +943,8 @@ export namespace Plugin.Dashboard {
             SchemaType,
             ProviderType,
             NetworkType,
-            RequestArguments,
-            RequestOptions,
+            MessageRequest,
+            MessageResponse,
             Transaction,
             TransactionParameter
         >

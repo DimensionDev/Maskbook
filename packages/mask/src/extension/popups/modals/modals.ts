@@ -5,6 +5,7 @@ import type { AddContactModalOpenProps } from './AddContactModal/index.js'
 import type { EditContactModalOpenProps } from './EditContactModal/index.js'
 import type { DeleteContactModalOpenProps } from './DeleteContactModal/index.js'
 import type { GasSettingModalCloseProps, GasSettingModalOpenProps } from './GasSettingModal/index.js'
+import type { ChooseTokenModalCloseProps, ChooseTokenModalOpenProps } from './ChooseToken/index.js'
 
 export const DisconnectModal = new SingletonModal<DisconnectModalOpenProps, DisconnectModalCloseProps>()
 export const ConfirmModal = new SingletonModal<ConfirmModalOpenProps, boolean>()
@@ -12,6 +13,7 @@ export const AddContactModal = new SingletonModal<AddContactModalOpenProps, bool
 export const EditContactModal = new SingletonModal<EditContactModalOpenProps, boolean>()
 export const DeleteContactModal = new SingletonModal<DeleteContactModalOpenProps, boolean>()
 export const GasSettingModal = new SingletonModal<GasSettingModalOpenProps, GasSettingModalCloseProps>()
+export const ChooseTokenModal = new SingletonModal<ChooseTokenModalOpenProps, ChooseTokenModalCloseProps>()
 
 export * from './ChooseNetworkModal/index.js'
 export * from './ConnectSocialAccountModal/index.js'
