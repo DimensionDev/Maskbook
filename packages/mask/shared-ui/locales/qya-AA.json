@@ -1194,5 +1194,12 @@
     "collectible_last_sale_price": "crwdns21775:0crwdne21775:0",
     "about_collection": "crwdns21777:0{{- name}}crwdne21777:0",
     "hide_collectible": "crwdns21779:0{{-name}}crwdne21779:0",
-    "hide_collectible_description": "crwdns21781:0{{- name}}crwdne21781:0"
+    "hide_collectible_description": "crwdns21781:0{{- name}}crwdne21781:0",
+    "switch_logo_title": "crwdns21915:0crwdne21915:0",
+    "switch_logo_save_tip": "crwdns21917:0crwdne21917:0",
+    "switch_logo_classics_logo": "crwdns21919:0crwdne21919:0",
+    "switch_logo_new_logo": "crwdns21921:0crwdne21921:0",
+    "switch_logo_share_text": "crwdns21923:0crwdne21923:0",
+    "switch_logo_share_mask": "crwdns21925:0crwdne21925:0",
+    "switch_logo_description": "crwdns21927:0crwdne21927:0"
 }
