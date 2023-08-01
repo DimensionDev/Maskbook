@@ -33,6 +33,7 @@ import { EventID } from '@masknet/web3-telemetry/types'
 import { useI18N } from '../../utils/index.js'
 import GuideStep from '../GuideStep/index.js'
 import { useOpenApplicationBoardDialog } from '../shared/openApplicationBoardDialog.js'
+import { SwitchLogoDialog } from './SwitchLogo/SwitchLogoDialog.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -77,29 +78,32 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
 
     useMountReport(EventID.AccessToolbox)
     return (
-        <GuideStep step={1} total={4} tip={t('user_guide_tip_1')}>
-            <Container>
-                <ListItemButton onClick={openApplicationBoardDialog}>
-                    <ListItemIcon>
-                        <Icons.MaskBlue size={iconSize} />
-                    </ListItemIcon>
-                    {mini ? null : (
-                        <ListItemText
-                            primary={
-                                <Box
-                                    sx={{
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                    }}>
-                                    <Typography className={classes.title}>{t('mask_network')}</Typography>
-                                </Box>
-                            }
-                        />
-                    )}
-                </ListItemButton>
-            </Container>
-        </GuideStep>
+        <>
+            <GuideStep step={1} total={4} tip={t('user_guide_tip_1')}>
+                <Container>
+                    <ListItemButton onClick={openApplicationBoardDialog}>
+                        <ListItemIcon>
+                            <Icons.MaskBlue size={iconSize} />
+                        </ListItemIcon>
+                        {mini ? null : (
+                            <ListItemText
+                                primary={
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
+                                        }}>
+                                        <Typography className={classes.title}>{t('mask_network')}</Typography>
+                                    </Box>
+                                }
+                            />
+                        )}
+                    </ListItemButton>
+                </Container>
+            </GuideStep>
+            <SwitchLogoDialog />
+        </>
     )
 }
 
