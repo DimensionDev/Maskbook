@@ -7,8 +7,8 @@ import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.jso
 import { type EIP3085Descriptor } from './EIP3085Editor.js'
 import { isValidChainId } from '../helpers/isValidChainId.js'
 import { formatEthereumAddress } from '../helpers/formatter.js'
-import { createJsonRpcPayload } from '../helpers/rpc.js'
 import { parseChainId } from '../helpers/parseChainId.js'
+import { createJsonRpcPayload } from '../helpers/createJsonRpcPayload.js'
 import { ZERO_ADDRESS, getSmartPayConstant } from '../constants/index.js'
 import { type Transaction, type TransactionOptions, type UserOperation, EthereumMethodType } from '../types/index.js'
 
