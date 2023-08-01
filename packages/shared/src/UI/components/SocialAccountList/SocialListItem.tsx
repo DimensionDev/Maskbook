@@ -11,6 +11,7 @@ import { memo } from 'react'
 import { useAsync } from 'react-use'
 import { SocialTooltip } from './SocialTooltip.js'
 import { resolveNextIDPlatformIcon } from './utils.js'
+import { formatEthereumAddress, isValidAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     listItem: {
@@ -188,7 +189,14 @@ export function SocialAccountListItem({
                 <div className={classes.content}>
                     {icon}
                     <Typography className={cx(classes.socialName, classes.accountName)} component="div">
-                        {name || identity}
+                        {isValidAddress(name || identity) ? (
+                            <>
+                                {formatEthereumAddress(name || identity, 4)}
+                                <CopyButton size={14} text={name || identity} />
+                            </>
+                        ) : (
+                            name || identity
+                        )}
                         {platform === NextIDPlatform.ENS ? <ENSAddress domain={identity} /> : null}
                     </Typography>
                     {platform === NextIDPlatform.LENS ? (
