@@ -51,9 +51,6 @@ const useStyles = makeStyles()((theme) => ({
         gap: '12px',
         gridTemplateColumns: 'repeat(3, 119px)',
     },
-    relative: {
-        position: 'relative',
-    },
 }))
 
 export interface FriendsDetailUIProps {
@@ -61,9 +58,10 @@ export interface FriendsDetailUIProps {
     profiles: BindingProof[]
     nextId: string
     publicKey?: string
+    isLocal?: boolean
 }
 
-export const FriendsDetailUI = memo<FriendsDetailUIProps>(({ avatar, nextId, publicKey, profiles }) => {
+export const FriendsDetailUI = memo<FriendsDetailUIProps>(({ avatar, nextId, publicKey, profiles, isLocal }) => {
     const { classes } = useStyles()
     const navigate = useNavigate()
     const handleBack = useCallback(() => navigate(-1), [])
@@ -74,7 +72,7 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(({ avatar, nextId, pub
                 <Box className={classes.header}>
                     <Icons.Comeback className={classes.back} onClick={handleBack} />
                     <Box />
-                    <Icons.Delete className={classes.back} />
+                    {isLocal ? <Icons.Delete className={classes.back} /> : null}
                 </Box>
                 <Box className={classes.info}>
                     <Box>

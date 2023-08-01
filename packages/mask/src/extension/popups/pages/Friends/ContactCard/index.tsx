@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography, Link, useTheme, ButtonBase as Button, ButtonBase, Avatar } from '@mui/material'
-import { formatPersonaFingerprint, type BindingProof } from '@masknet/shared-base'
+import { formatPersonaFingerprint, type BindingProof, PopupRoutes } from '@masknet/shared-base'
 import { CopyButton } from '@masknet/shared'
 import urlcat from 'urlcat'
 import { useNavigate } from 'react-router-dom'
@@ -68,9 +68,10 @@ interface ContactCardProps {
     profiles: BindingProof[]
     nextId: string
     publicKey?: string
+    isLocal?: boolean
 }
 
-export const ContactCard = memo<ContactCardProps>(({ avatar, nextId, profiles, publicKey }) => {
+export const ContactCard = memo<ContactCardProps>(({ avatar, nextId, profiles, publicKey, isLocal }) => {
     const theme = useTheme()
     const { classes } = useStyles()
     const navigate = useNavigate()
@@ -109,12 +110,13 @@ export const ContactCard = memo<ContactCardProps>(({ avatar, nextId, profiles, p
                 </Box>
                 <Button
                     onClick={() =>
-                        navigate(`/friends/detail/${nextId}`, {
+                        navigate(`${PopupRoutes.FriendsDetail}${nextId}`, {
                             state: {
                                 avatar,
                                 publicKey,
                                 nextId,
                                 profiles,
+                                isLocal,
                             },
                         })
                     }
@@ -157,12 +159,13 @@ export const ContactCard = memo<ContactCardProps>(({ avatar, nextId, profiles, p
                     <ButtonBase
                         className={classes.more}
                         onClick={() => {
-                            navigate(`/friends/detail/${nextId}`, {
+                            navigate(`${PopupRoutes.FriendsDetail}${nextId}`, {
                                 state: {
                                     avatar,
                                     publicKey,
                                     nextId,
                                     profiles,
+                                    isLocal,
                                 },
                             })
                         }}>
