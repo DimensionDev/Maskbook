@@ -6,30 +6,30 @@ import {
     type SchemaType,
     type ProviderType,
     type NetworkType,
-    type RequestArguments,
-    type RequestOptions,
+    type MessageRequest,
+    type MessageResponse,
     type Transaction,
     type TransactionParameter,
-} from '@masknet/web3-shared-solana'
+} from '@masknet/web3-shared-bitcoin'
 import { HubFungibleAPI_Base } from '../../Base/apis/HubFungibleAPI.js'
-import { SolanaHubOptionsAPI } from './HubOptionsAPI.js'
-import { SolanaConnectionAPI } from './ConnectionAPI.js'
-import { SolanaWeb3StateRef } from './Web3StateAPI.js'
+import { BitcoinHubOptionsAPI } from './HubOptionsAPI.js'
+import { BitcoinConnectionAPI } from './ConnectionAPI.js'
+import { BitcoinWeb3StateRef } from './Web3StateAPI.js'
 import type { HubOptions } from '../types/index.js'
 
-export class SolanaHubFungibleAPI extends HubFungibleAPI_Base<
+export class BitcoinHubFungibleAPI extends HubFungibleAPI_Base<
     ChainId,
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter
 > {
-    private Web3 = new SolanaConnectionAPI()
+    private Web3 = new BitcoinConnectionAPI()
 
-    protected override HubOptions = new SolanaHubOptionsAPI(this.options)
+    protected override HubOptions = new BitcoinHubOptionsAPI(this.options)
 
     protected override getProviders(initial?: HubOptions) {
         const options = this.HubOptions.fill(initial)

@@ -17,7 +17,7 @@ import {
     getTokenListConstants,
     getNativeTokenAddress,
     getTokenConstant,
-} from '@masknet/web3-shared-solana'
+} from '@masknet/web3-shared-bitcoin'
 import { CoinGeckoPriceAPI_Solana } from '../../../CoinGecko/index.js'
 import { RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants/index.js'
 import { createFungibleAsset, createFungibleToken, requestRPC } from '../helpers/index.js'
@@ -82,7 +82,7 @@ const fetchMaskTokenList = memoizePromise(
     (url) => url,
 )
 
-export class SolanaFungibleTokenAPI
+export class BitcoinFungibleTokenAPI
     implements TokenListAPI.Provider<ChainId, SchemaType>, FungibleTokenAPI.Provider<ChainId, SchemaType>
 {
     private coingecko = new CoinGeckoPriceAPI_Solana()

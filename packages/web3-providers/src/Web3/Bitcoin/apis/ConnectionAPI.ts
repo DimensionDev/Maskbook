@@ -15,7 +15,7 @@ import {
     decodeAddress,
     type TransactionSignature,
     type ProviderType,
-    type Operation,
+    type UserOperation,
 } from '@masknet/web3-shared-bitcoin'
 import {
     TransactionStatusType,
@@ -31,14 +31,13 @@ import { EMPTY_OBJECT, type Account } from '@masknet/shared-base'
 import { PublicKey, sendAndConfirmRawTransaction, type BlockResponse } from '@solana/web3.js'
 import type { ConnectionAPI_Base } from '../../Base/apis/ConnectionAPI.js'
 import { MagicEdenAPI } from '../../../MagicEden/index.js'
-import { SolanaWeb3API } from './Web3API.js'
-import { SolanaTransferAPI } from './TransferAPI.js'
-import { SolanaConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
-import { SolanaWeb3StateRef } from './Web3StateAPI.js'
-import { SolanaFungibleTokenAPI } from './FungibleTokenAPI.js'
+import { BitcoinWeb3API } from './Web3API.js'
+import { BitcoinConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
+import { BitcoinWeb3StateRef } from './Web3StateAPI.js'
+import { BitcoinFungibleTokenAPI } from './FungibleTokenAPI.js'
 import type { ConnectionOptions } from '../types/index.js'
 
-export class SolanaConnectionAPI
+export class BitcoinConnectionAPI
     implements
         ConnectionAPI_Base<
             ChainId,
@@ -46,7 +45,7 @@ export class SolanaConnectionAPI
             SchemaType,
             ProviderType,
             Signature,
-            Operation,
+            UserOperation,
             Transaction,
             TransactionReceipt,
             TransactionDetailed,
@@ -59,10 +58,10 @@ export class SolanaConnectionAPI
     constructor(private options?: ConnectionOptions) {}
 
     private MagicEden = new MagicEdenAPI()
-    private FungibleToken = new SolanaFungibleTokenAPI()
-    private Web3 = new SolanaWeb3API(this.options)
-    private Transfer = new SolanaTransferAPI(this.options)
-    private ConnectionOptions = new SolanaConnectionOptionsAPI(this.options)
+    private FungibleToken = new BitcoinFungibleTokenAPI()
+    private Web3 = new BitcoinWeb3API(this.options)
+    private Transfer = new BitcoinTransferAPI(this.options)
+    private ConnectionOptions = new BitcoinConnectionOptionsAPI(this.options)
 
     getAccount(initial?: ConnectionOptions | undefined): Promise<string> {
         const options = this.ConnectionOptions.fill(initial)

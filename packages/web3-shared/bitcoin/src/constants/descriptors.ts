@@ -21,7 +21,7 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
         name: 'Bitcoin',
         color: '#f7931a',
         fullName: 'Bitcoin',
-        shortName: 'Bitcoin',
+        shortName: 'BTC',
         network: 'mainnet',
         nativeCurrency: createFungibleToken(
             ChainId.Mainnet,

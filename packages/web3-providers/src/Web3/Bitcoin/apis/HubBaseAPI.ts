@@ -4,8 +4,8 @@ import type {
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter,
 } from '@masknet/web3-shared-bitcoin'
@@ -17,8 +17,8 @@ export class BitcoinHubBaseAPI extends HubBaseAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter,
     GasOption

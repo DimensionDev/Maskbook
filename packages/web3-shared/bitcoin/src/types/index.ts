@@ -61,9 +61,8 @@ export interface Block {
     baseFeePerGas?: number
 }
 
-export type RequestArguments = never
-
-export type RequestOptions = never
+export type MessageRequest = never
+export type MessageResponse = never
 
 export interface Transaction {}
 
@@ -81,8 +80,8 @@ export type Web3State = Web3StateShared<
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter
 >
@@ -96,8 +95,8 @@ export type Web3Definition = {
     Signature: Signature
     GasOption: GasOption
     Block: Block
-    RequestArguments: RequestArguments
-    RequestOptions: RequestOptions
+    MessageRequest: MessageRequest
+    MessageResponse: MessageResponse
     Operation: UserOperation
     Transaction: Transaction
     TransactionReceipt: TransactionReceipt

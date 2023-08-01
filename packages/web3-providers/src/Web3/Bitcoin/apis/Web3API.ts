@@ -1,6 +1,6 @@
 import { memoize } from 'lodash-es'
 import type { Connection } from '@solana/web3.js'
-import { type ChainId, createClient } from '@masknet/web3-shared-bitcoin'
+import { type ChainId } from '@masknet/web3-shared-bitcoin'
 import { BitcoinConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
 import { BitcoinProviders } from '../providers/index.js'
 import type { ConnectionOptions } from '../types/index.js'
