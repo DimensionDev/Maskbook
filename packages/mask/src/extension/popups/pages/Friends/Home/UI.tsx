@@ -7,8 +7,8 @@ import { type FriendsInformation } from '../../../hook/useFriends.js'
 import { Box, Typography } from '@mui/material'
 import { Search } from '../Search/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
-import { type NextIDPersonaBindings } from '@masknet/shared-base'
 import { EmptyStatus } from '@masknet/shared'
+import type { NextIDPersonaBindingsWithIdentifier } from '../../../hook/useFriendsFromSearch.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -36,7 +36,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface FriendsHomeUIProps {
     searchValue: string
-    searchResult: NextIDPersonaBindings[]
+    searchResult: NextIDPersonaBindingsWithIdentifier[]
     loading: boolean
     friends: FriendsInformation[]
     setSearchValue: (v: string) => void
@@ -44,7 +44,6 @@ export interface FriendsHomeUIProps {
 
 export const FriendsHomeUI = memo<FriendsHomeUIProps>(
     ({ loading, friends, setSearchValue, searchResult, searchValue }) => {
-        console.log(searchResult, 'searchResult')
         const { classes, cx } = useStyles()
         const { t } = useI18N()
         return (
@@ -70,15 +69,14 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(
                                         key={friend.persona}
                                         nextId={friend.persona}
                                         profiles={friend.proofs}
+                                        publicKey={friend.linkedPersona?.rawPublicKey}
                                     />
                                 )
                             })}
                         </Box>
                     )
                 ) : friends.length === 0 ? (
-                    <EmptyStatus className={classes.empty}>
-                        {t('popups_encrypted_friends_search_no_result')}
-                    </EmptyStatus>
+                    <EmptyStatus className={classes.empty}>{t('popups_encrypted_friends_no_friends')}</EmptyStatus>
                 ) : (
                     <Box display="flex" flexDirection="column" gap="12px" padding="16px">
                         {friends.map((friend) => {

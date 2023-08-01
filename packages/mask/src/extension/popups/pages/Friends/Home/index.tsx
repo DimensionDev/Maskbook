@@ -2,10 +2,11 @@ import { memo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FriendsHomeUI } from './UI.js'
 import { useFriends } from '../../../hook/useFriends.js'
-import { EMPTY_LIST, NextIDPlatform, type NextIDPersonaBindings } from '@masknet/shared-base'
+import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { resolveNextIDPlatform, resolveValueToSearch, usePersonasFromNextID } from '@masknet/shared'
+import { useFriendsFromSearch } from '../../../hook/useFriendsFromSearch.js'
 
 const FriendsHome = memo(() => {
     const navigate = useNavigate()
@@ -15,6 +16,9 @@ const FriendsHome = memo(() => {
     const type = resolveNextIDPlatform(searchValue)
     const _value = resolveValueToSearch(searchValue)
     const { loading, value: searchResult } = usePersonasFromNextID(_value, type ?? NextIDPlatform.NextID, false)
+    const { value: searchedList = EMPTY_LIST } = useFriendsFromSearch(searchResult)
+    console.log('searchedList', searchedList)
+
     useTitle(t('popups_encrypted_friends'))
     return (
         <FriendsHomeUI
@@ -22,7 +26,7 @@ const FriendsHome = memo(() => {
             loading={loading}
             setSearchValue={setSearchValue}
             searchValue={searchValue}
-            searchResult={searchResult as NextIDPersonaBindings[]}
+            searchResult={searchedList}
         />
     )
 })

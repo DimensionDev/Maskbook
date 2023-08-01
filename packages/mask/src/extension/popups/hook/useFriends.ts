@@ -21,6 +21,7 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
             },
             1000,
         )
+        console.log(currentPersona?.identifier)
         if (values.length === 0) return EMPTY_LIST
         const identifiers = values.map((x) => x.profile)
         const res = await Services.Identity.queryProfilesInformation(identifiers)

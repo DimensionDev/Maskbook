@@ -51,6 +51,9 @@ const useStyles = makeStyles()((theme) => ({
         gap: '12px',
         gridTemplateColumns: 'repeat(3, 119px)',
     },
+    relative: {
+        position: 'relative',
+    },
 }))
 
 export interface FriendsDetailUIProps {
@@ -74,12 +77,11 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(({ avatar, nextId, pub
                     <Icons.Delete className={classes.back} />
                 </Box>
                 <Box className={classes.info}>
-                    <Box position="relative">
-                        {' '}
+                    <Box>
                         {avatar ? (
                             <Avatar src={avatar} style={{ width: 60, height: 60 }} />
                         ) : (
-                            <Icons.MenuPersonasActive size={60} style={{ borderRadius: 99 }} />
+                            <Icons.NextIdAvatar size={60} style={{ borderRadius: 99 }} />
                         )}
                     </Box>
                     <Typography fontSize={18} fontWeight="700" lineHeight="22px" marginTop="8px">
