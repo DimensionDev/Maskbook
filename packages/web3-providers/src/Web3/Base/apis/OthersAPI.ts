@@ -40,8 +40,8 @@ export class OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Tran
         throw new Error('Method not implemented.')
     }
 
-    chainResolver = createChainResolver<ChainId, SchemaType, NetworkType>(this.options.chainDescriptors)
-    explorerResolver = createExplorerResolver<ChainId, SchemaType, NetworkType>(this.options.chainDescriptors)
+    chainResolver = createChainResolver<ChainId, SchemaType, NetworkType>(() => this.options.chainDescriptors)
+    explorerResolver = createExplorerResolver<ChainId, SchemaType, NetworkType>(() => this.options.chainDescriptors)
     providerResolver = createProviderResolver<ChainId, ProviderType>(this.options.providerDescriptors)
     networkResolver = createNetworkResolver<ChainId, NetworkType>(this.options.networkDescriptors)
 

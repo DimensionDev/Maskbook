@@ -41,7 +41,7 @@ export class FlowOthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderT
         })
     }
 
-    override explorerResolver = createExplorerResolver(this.options.chainDescriptors, {
+    override explorerResolver = createExplorerResolver(() => this.options.chainDescriptors, {
         addressPathname: '/account/:address',
         transactionPathname: '/transaction/:id',
         fungibleTokenPathname: '/contract/:address',
