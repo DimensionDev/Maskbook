@@ -37,7 +37,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     editorWrapper: {
         flex: 1,
-        width: 568,
         background: theme.palette.maskColor.bottom,
         padding: 0,
         boxSizing: 'border-box',
@@ -57,7 +56,7 @@ const useStyles = makeStyles()((theme) => ({
                 ? ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
                 : '0px 0px 20px rgba(255, 255, 255, 0.12);',
         background: alpha(theme.palette.maskColor.bottom, 0.8),
-        justifyContent: 'space-between',
+        justifyContent: 'end',
         display: 'flex',
     },
 }))
