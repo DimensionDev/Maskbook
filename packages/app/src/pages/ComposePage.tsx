@@ -1,6 +1,5 @@
 import { DisableShadowRootContext, ShadowRootIsolation } from '@masknet/theme'
 import { DashboardContainer } from '../components/DashboardContainer.js'
-import { StickySearchHeader } from '../components/StickySearchBar.js'
 import { DashboardHeader } from '../components/DashboardHeader.js'
 import { CompositionDialogUI, ShareSelectNetworkModal } from '@masknet/shared'
 import { useCallback } from 'react'
@@ -32,10 +31,8 @@ export default function ComposePage(props: ComposePageProps) {
 
     return (
         <DashboardContainer>
-            <StickySearchHeader />
-
             <main>
-                <DashboardHeader title="Swap" />
+                <DashboardHeader title="Message" />
 
                 <div className="bg-white p-5">
                     <div className="border pt-3 rounded-lg">
