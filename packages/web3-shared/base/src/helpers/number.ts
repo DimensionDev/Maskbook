@@ -46,6 +46,7 @@ export function isLessThan(a: BigNumber.Value, b: BigNumber.Value) {
 export function isLessThanOrEqualTo(a: BigNumber.Value, b: BigNumber.Value) {
     return new BigNumber(a).isLessThanOrEqualTo(b)
 }
+export { isLessThanOrEqualTo as isLte }
 
 /** a > 0 */
 export function isPositive(n: BigNumber.Value) {
@@ -116,4 +117,8 @@ export function trimZero(digit: string) {
     return digit.replaceAll(/\.([1-9]*)?0+$/g, (_, p1) => {
         return p1 ? `.${p1}` : ''
     })
+}
+
+export function addThousandSeparators(num: string | number) {
+    return num.toString().replaceAll(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
 }

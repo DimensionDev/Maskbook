@@ -1,5 +1,4 @@
 export * from './constants.js'
 export * from './descriptors.js'
-export * from './getContractOwnerDomain.js'
 export * from './primitives.js'
 export * from './tokens.js'

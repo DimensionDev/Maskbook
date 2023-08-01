@@ -23,21 +23,21 @@
     { "path": "./NextID/" },
     { "path": "./Pets/" },
     { "path": "./ProfileCard/" },
-    { "path": "./RedPacket/" },
     { "path": "./RSS3/" },
+    { "path": "./RedPacket/" },
     { "path": "./Savings/" },
     { "path": "./ScamSniffer/" },
     { "path": "./ScamWarning/" },
     { "path": "./SmartPay/" },
     { "path": "./Snapshot/" },
     { "path": "./Solana/" },
-    { "path": "./template/" },
+    { "path": "./SwitchLogo/" },
     { "path": "./Tips/" },
     { "path": "./Trader/" },
     { "path": "./Transak/" },
     { "path": "./VCent/" },
     { "path": "./Wallet/" },
     { "path": "./Web3Profile/" },
-    { "path": "./SwitchLogo/" }
+    { "path": "./template/" }
   ]
 }

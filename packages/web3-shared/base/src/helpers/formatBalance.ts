@@ -1,5 +1,5 @@
 import { BigNumber } from 'bignumber.js'
-import { isLessThan, leftShift, pow10, scale10, trimZero } from './number.js'
+import { addThousandSeparators, isLessThan, leftShift, pow10, scale10, trimZero } from './number.js'
 
 export function formatBalance(
     rawValue: BigNumber.Value = '0',
@@ -25,7 +25,7 @@ export function formatBalance(
         const minimum = scale10(1, -fixedDecimals)
         if (value.eq(0)) return '0'
         if (isLessThan(value, minimum)) return '<' + minimum.toFixed()
-        return trimZero(value.toFixed(4))
+        return addThousandSeparators(trimZero(value.toFixed(fixedDecimals)))
     }
 
     const base = pow10(decimals) // 10n ** decimals
@@ -51,5 +51,6 @@ export function formatBalance(
     const value = `${whole}${fraction === '' ? '' : `.${fraction}`}`
 
     const raw = negative ? `-${value}` : value
-    return raw.includes('.') ? raw.replace(/0+$/, '').replace(/\.$/, '') : raw
+    const result = raw.includes('.') ? raw.replace(/0+$/, '').replace(/\.$/, '') : raw
+    return addThousandSeparators(result)
 }

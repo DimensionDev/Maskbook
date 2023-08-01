@@ -1,1 +1,16 @@
-{}
+{
+    "plugin_trader_table_updated": "已更新",
+    "plugin_trader_table_from": "从",
+    "plugin_trader_table_to": "至",
+    "plugin_trader_swap_amount_symbol": "兑换",
+    "plugin_trader_update": "更新",
+    "plugin_trader_gas_setting_high": "高速",
+    "plugin_trader_gas_setting_medium": "中等",
+    "plugin_trader_gas_setting_standard": "标准",
+    "plugin_trader_gas_setting_fast": "快速",
+    "plugin_trader_gas_setting_custom": "自定义",
+    "plugin_trader_tx_cost_usd": "(${{usd}})",
+    "plugin_trader_tx_cost_usd_new": "({{usd}})",
+    "settings": "设置",
+    "powered_by": "技术支持来自"
+}

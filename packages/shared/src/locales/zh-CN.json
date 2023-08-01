@@ -86,7 +86,7 @@
     "hour_one": "小时",
     "hour_other": "小时",
     "ago": "前",
-    "properties": "特性",
+    "properties": "属性",
     "security_detection": "安全检测",
     "risky_items": "{{quantity}} 个有风险的因素",
     "attention_items": "{{quantity}} 个需要关注的因素",
@@ -284,5 +284,8 @@
     "lucky_drop": "红包",
     "share": "分享",
     "ok": "确定",
-    "plugin_wallet_on_connect": "连接钱包"
+    "plugin_wallet_on_connect": "连接钱包",
+    "upload_error$single": "不是单个文件。",
+    "upload_or": "或者",
+    "upload_browse_files": "浏览文件"
 }

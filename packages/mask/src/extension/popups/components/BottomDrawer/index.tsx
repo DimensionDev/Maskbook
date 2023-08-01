@@ -31,11 +31,12 @@ export interface BottomDrawerProps extends PropsWithChildren {
 
 export const BottomDrawer = memo<BottomDrawerProps>(function BottomDrawer({ open, onClose, children, title }) {
     const { classes } = useStyles()
+    const handleClose = () => onClose?.()
     return (
-        <Drawer anchor="bottom" onClose={onClose} open={open} classes={{ paper: classes.root }}>
+        <Drawer anchor="bottom" onClose={handleClose} open={open} classes={{ paper: classes.root }}>
             <Box className={classes.header}>
                 <Typography className={classes.title}>{title}</Typography>
-                <Icons.Close size={24} onClick={onClose} />
+                <Icons.Close size={24} onClick={handleClose} />
             </Box>
             {children}
         </Drawer>

@@ -4,8 +4,8 @@ import {
     type NetworkType,
     type ProviderType,
     type SchemaType,
-    type RequestArguments,
-    type RequestOptions,
+    type MessageRequest,
+    type MessageResponse,
     type Transaction,
     type TransactionParameter,
 } from '@masknet/web3-shared-evm'
@@ -16,8 +16,8 @@ registerPlugin<
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter
 >({

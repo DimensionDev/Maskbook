@@ -7,7 +7,12 @@
     "optional_host_permissions": ["<all_urls>"],
     "background": { "service_worker": "/manifest-v3.entry.js" },
     "options_ui": { "page": "dashboard.html", "open_in_tab": true },
-    "icons": { "16": "16x16.png", "48": "48x48.png", "128": "128x128.png", "256": "256x256.png" },
+    "icons": {
+        "16": "assets/16x16.png",
+        "48": "assets/48x48.png",
+        "128": "assets/128x128.png",
+        "256": "assets/256x256.png"
+    },
     "action": { "default_popup": "popups.html" },
     "homepage_url": "https://mask.io",
     "description": "The portal to the new & open Internet. Send encrypted message and decentralized Apps right on top of social networks.",

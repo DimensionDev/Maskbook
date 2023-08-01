@@ -1,8 +1,8 @@
-import { MaskTabList, useTabs } from '@masknet/theme'
+import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { useState } from 'react'
 import { ApplicationSettingTabs } from './ApplicationBoardDialog.js'
 import { TabContext, TabPanel } from '@mui/lab'
-import { IconButton, Tab } from '@mui/material'
+import { IconButton, Stack, Tab } from '@mui/material'
 import type { DashboardRoutes, PersonaInformation, PluginID } from '@masknet/shared-base'
 import type { CurrentSNSNetwork, IdentityResolved } from '@masknet/plugin-infra'
 import { Icons } from '@masknet/icons'
@@ -11,6 +11,13 @@ import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch
 import { ApplicationBoardContent } from './ApplicationBoard.js'
 import { useSharedI18N, type PersonaAgainstSNSConnectStatus } from '../../../index.js'
 
+const useStyles = makeStyles()(() => ({
+    applicationWrapper: {
+        maxHeight: 'initial',
+        width: 'auto',
+    },
+    recommendFeatureAppListWrapper: {},
+}))
 interface ApplicationBoardFormProps {
     openDashboard?: (route?: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
@@ -34,28 +41,39 @@ export function ApplicationBoardForm(props: ApplicationBoardFormProps) {
         ApplicationSettingTabs.pluginList,
         ApplicationSettingTabs.pluginSwitch,
     )
+    const { classes } = useStyles()
 
     return (
         <>
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <IconButton
-                    size="small"
-                    sx={{ margin: '-5px' }}
-                    onClick={() => setOpenSettings((openSettings) => !openSettings)}>
-                    <Icons.Gear size={24} />
-                </IconButton>
-            </div>
             {openSettings ? (
                 <TabContext value={currentTab}>
-                    <MaskTabList variant="base" onChange={onChange} aria-label="ApplicationBoard">
-                        <Tab label={t.application_settings_tab_app_list()} value={tabs.pluginList} />
-                        <Tab label={t.application_settings_tab_plug_in_switch()} value={tabs.pluginSwitch} />
-                    </MaskTabList>
+                    <Stack
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            padding: 1,
+                            flexDirection: 'column',
+                            background:
+                                'linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%);',
+                        }}>
+                        <div style={{ display: 'flex', flex: 1, justifyContent: 'start', padding: 8 }}>
+                            <IconButton
+                                size="small"
+                                sx={{ margin: '-5px' }}
+                                onClick={() => setOpenSettings((openSettings) => !openSettings)}>
+                                <Icons.ArrowBack size={24} />
+                            </IconButton>
+                        </div>
+                        <MaskTabList variant="base" onChange={onChange} aria-label="ApplicationBoard">
+                            <Tab label={t.application_settings_tab_app_list()} value={tabs.pluginList} />
+                            <Tab label={t.application_settings_tab_plug_in_switch()} value={tabs.pluginSwitch} />
+                        </MaskTabList>
+                    </Stack>
 
-                    <TabPanel value={tabs.pluginList} style={{ padding: 0 }}>
+                    <TabPanel value={tabs.pluginList} style={{ padding: 8, maxHeight: 600, overflowY: 'auto' }}>
                         <ApplicationSettingPluginList />
                     </TabPanel>
-                    <TabPanel value={tabs.pluginSwitch} style={{ padding: 0 }}>
+                    <TabPanel value={tabs.pluginSwitch} style={{ padding: 8, maxHeight: 600, overflowY: 'auto' }}>
                         <ApplicationSettingPluginSwitch
                             focusPluginID={props.focusPluginID}
                             setPluginMinimalModeEnabled={props.setPluginMinimalModeEnabled}
@@ -65,15 +83,40 @@ export function ApplicationBoardForm(props: ApplicationBoardFormProps) {
                     </TabPanel>
                 </TabContext>
             ) : (
-                <ApplicationBoardContent
-                    openDashboard={props.openDashboard}
-                    queryOwnedPersonaInformation={props.queryOwnedPersonaInformation}
-                    currentSNSNetwork={props.currentSNSNetwork}
-                    lastRecognized={props.lastRecognized}
-                    allPersonas={props.allPersonas}
-                    applicationCurrentStatus={props.applicationCurrentStatus}
-                    personaAgainstSNSConnectStatusLoading={props.personaAgainstSNSConnectStatusLoading}
-                />
+                <>
+                    <Stack
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'end',
+                            padding: 1,
+                            marginLeft: 'auto',
+                            marginRight: 'auto',
+                            background:
+                                'linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%);',
+                        }}>
+                        <div style={{ display: 'flex', flex: 1, justifyContent: 'flex-end', padding: 8 }}>
+                            <IconButton
+                                size="small"
+                                sx={{ margin: '-5px' }}
+                                onClick={() => setOpenSettings((openSettings) => !openSettings)}>
+                                <Icons.Gear size={24} />
+                            </IconButton>
+                        </div>
+                    </Stack>
+                    <ApplicationBoardContent
+                        classes={{
+                            applicationWrapper: classes.applicationWrapper,
+                            recommendFeatureAppListWrapper: classes.recommendFeatureAppListWrapper,
+                        }}
+                        openDashboard={props.openDashboard}
+                        queryOwnedPersonaInformation={props.queryOwnedPersonaInformation}
+                        currentSNSNetwork={props.currentSNSNetwork}
+                        lastRecognized={props.lastRecognized}
+                        allPersonas={props.allPersonas}
+                        applicationCurrentStatus={props.applicationCurrentStatus}
+                        personaAgainstSNSConnectStatusLoading={props.personaAgainstSNSConnectStatusLoading}
+                    />
+                </>
             )}
         </>
     )

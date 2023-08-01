@@ -18,7 +18,6 @@ import { useTrustedFungibleTokens } from './useTrustedFungibleTokens.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
 import { useWeb3Others } from './useWeb3Others.js'
 import { useWeb3State } from './useWeb3State.js'
-import { SchemaType } from '@masknet/web3-shared-evm'
 
 export function useFungibleAssets<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
@@ -32,8 +31,8 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
         ...options,
     })
     const Others = useWeb3Others(pluginID)
-    const trustedTokens = useTrustedFungibleTokens(pluginID, SchemaType.ERC721)
-    const blockedTokens = useBlockedFungibleTokens(pluginID, SchemaType.ERC20)
+    const trustedTokens = useTrustedFungibleTokens(pluginID)
+    const blockedTokens = useBlockedFungibleTokens(pluginID)
     const { BalanceNotifier } = useWeb3State(pluginID)
 
     const { data: mergedAssets = EMPTY_LIST, ...rest } = useQuery<Array<Web3Helper.FungibleAssetScope<S, T>>>({

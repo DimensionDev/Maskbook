@@ -159,6 +159,9 @@ export namespace LensBaseAPI {
         currency: string
         module: string
     }
+    export interface TransactionPublication {
+        publicationId: string
+    }
 
     export interface Provider {
         getProfileByHandle: (handle: string) => Promise<Profile>
@@ -190,5 +193,6 @@ export namespace LensBaseAPI {
             currency: string,
             options?: { token: string },
         ) => Promise<ApprovedModuleAllowanceAmount | undefined>
+        queryTransactionPublicationId: (txId: string) => Promise<string | undefined>
     }
 }

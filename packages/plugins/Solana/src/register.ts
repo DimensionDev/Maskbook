@@ -1,13 +1,13 @@
 import { registerPlugin } from '@masknet/plugin-infra'
-import {
-    type RequestArguments,
-    type RequestOptions,
-    type ChainId,
-    type NetworkType,
-    type ProviderType,
-    type SchemaType,
-    type Transaction,
-    type TransactionParameter,
+import type {
+    MessageRequest,
+    MessageResponse,
+    ChainId,
+    NetworkType,
+    ProviderType,
+    SchemaType,
+    Transaction,
+    TransactionParameter,
 } from '@masknet/web3-shared-solana'
 import { base } from './base.js'
 
@@ -16,8 +16,8 @@ registerPlugin<
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter
 >({

@@ -2,7 +2,7 @@ import type { Options } from 'prettier'
 import { ROOT_PATH } from './paths.js'
 import { fileURLToPath } from 'url'
 
-export async function prettier(code: string, parser: Options['parser'] = 'typescript') {
+export async function prettier(code: string, parser: Options['parser'] = 'typescript', tabWidth = 4) {
     const {
         default: { format, resolveConfig, resolveConfigFile },
     } = await (import('prettier') as Promise<{ default: typeof import('prettier') }>)
@@ -11,6 +11,6 @@ export async function prettier(code: string, parser: Options['parser'] = 'typesc
     return format(code, {
         ...config,
         parser,
-        tabWidth: 4,
+        tabWidth,
     })
 }

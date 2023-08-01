@@ -1,9 +1,9 @@
 import { memo, useCallback, useMemo } from 'react'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useWallets } from '@masknet/web3-hooks-base'
 import { explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { Box, Link, List, ListItem, MenuItem, Stack, Typography, useTheme } from '@mui/material'
+import { Box, Link, List, ListItem, MenuItem, Typography, useTheme, type ListItemProps } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { EmojiAvatar, FormattedAddress, useMenuConfig } from '@masknet/shared'
 import { useI18N } from '../../../../../utils/index.js'
@@ -12,6 +12,8 @@ import { ContactsContext } from '../../../hook/useContactsContext.js'
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
 import { DeleteContactModal, EditContactModal } from '../../../modals/modals.js'
 import { ContactType } from '../type.js'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivideLine }) => ({
     root: {
@@ -20,8 +22,10 @@ const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivid
     },
     page: {
         position: 'relative',
-        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
         overflow: 'auto',
+        height: '100%',
     },
     contactsPanel: {
         display: 'flex',
@@ -81,7 +85,7 @@ const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivid
         padding: '8px 12px',
         width: 140,
         minHeight: 'unset',
-        '&:first-child': showDivideLine
+        '&:first-of-type': showDivideLine
             ? {
                   '&:after': {
                       content: '""',
@@ -111,7 +115,6 @@ const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivid
         justifyContent: 'center',
         background: theme.palette.maskColor.secondaryBottom,
         boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
-        position: 'absolute',
         backdropFilter: 'blur(8px)',
         width: '100%',
         bottom: 0,
@@ -122,13 +125,27 @@ const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivid
     },
 }))
 
-const ContactListUI = memo(function TransferUI() {
+const ContactListUI = memo(function ContactListUI() {
     const { t } = useI18N()
     const { classes } = useStyles({})
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const { receiver, contacts, receiverValidationMessage } = ContactsContext.useContainer()
+    const [params] = useSearchParams()
 
     useTitle(t('popups_send'))
+
+    const navigate = useNavigate()
+
+    const handleSelectContact = useCallback(
+        (addr: string) => {
+            const path = urlcat(PopupRoutes.Transfer, {
+                ...Object.fromEntries(params.entries()),
+                recipient: addr,
+            })
+            navigate(path)
+        },
+        [navigate, params],
+    )
 
     return (
         <div className={classes.root}>
@@ -143,13 +160,13 @@ const ContactListUI = memo(function TransferUI() {
                     <List className={classes.contactsList}>
                         {contacts.map((contact, index) => {
                             return (
-                                <Stack key={index}>
-                                    <ContactListItem
-                                        address={contact.address}
-                                        name={contact.name}
-                                        type={ContactType.Recipient}
-                                    />
-                                </Stack>
+                                <ContactListItem
+                                    key={index}
+                                    address={contact.address}
+                                    name={contact.name}
+                                    contactType={ContactType.Recipient}
+                                    onSelectContact={handleSelectContact}
+                                />
                             )
                         })}
                     </List>
@@ -157,13 +174,13 @@ const ContactListUI = memo(function TransferUI() {
                     <List className={classes.contactsList}>
                         {wallets.map((wallet, index) => {
                             return (
-                                <Stack key={index}>
-                                    <ContactListItem
-                                        address={wallet.address}
-                                        name={wallet.name}
-                                        type={ContactType.Owned}
-                                    />
-                                </Stack>
+                                <ContactListItem
+                                    key={index}
+                                    address={wallet.address}
+                                    name={wallet.name}
+                                    contactType={ContactType.Owned}
+                                    onSelectContact={handleSelectContact}
+                                />
                             )
                         })}
                     </List>
@@ -183,15 +200,16 @@ const ContactListUI = memo(function TransferUI() {
     )
 })
 
-interface ContactListItemProps {
+interface ContactListItemProps extends ListItemProps {
     address: string
     name: string
-    type: ContactType
+    contactType: ContactType
+    onSelectContact?: (address: string) => void
 }
 
-function ContactListItem({ address, name, type }: ContactListItemProps) {
+function ContactListItem({ address, name, contactType, onSelectContact, ...rest }: ContactListItemProps) {
     const { t } = useI18N()
-    const { classes } = useStyles({ showDivideLine: type === ContactType.Recipient })
+    const { classes } = useStyles({ showDivideLine: contactType === ContactType.Recipient })
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const theme = useTheme()
 
@@ -200,9 +218,9 @@ function ContactListItem({ address, name, type }: ContactListItemProps) {
             title: t('wallet_edit_contact'),
             address,
             name,
-            type,
+            type: contactType,
         })
-    }, [address, name, type, t])
+    }, [address, name, contactType, t])
 
     const deleteContact = useCallback(() => {
         return DeleteContactModal.openAndWaitForClose({
@@ -212,25 +230,22 @@ function ContactListItem({ address, name, type }: ContactListItemProps) {
         })
     }, [address, name, t])
 
-    const menuOptions = useMemo(
-        () => [
+    const menuOptions = useMemo(() => {
+        const options = [
             {
                 name: t('edit'),
                 icon: <Icons.Edit2 size={20} color={theme.palette.maskColor.second} />,
                 handler: editContact,
             },
-            ...(type === ContactType.Recipient
-                ? [
-                      {
-                          name: t('delete'),
-                          icon: <Icons.Decrease size={20} color={theme.palette.maskColor.second} />,
-                          handler: deleteContact,
-                      },
-                  ]
-                : []),
-        ],
-        [t, type],
-    )
+        ]
+        if (contactType === ContactType.Recipient)
+            options.push({
+                name: t('delete'),
+                icon: <Icons.Decrease size={20} color={theme.palette.maskColor.second} />,
+                handler: deleteContact,
+            })
+        return options
+    }, [t, contactType])
 
     const [menu, openMenu] = useMenuConfig(
         menuOptions.map((option, index) => (
@@ -254,7 +269,7 @@ function ContactListItem({ address, name, type }: ContactListItemProps) {
     )
 
     return (
-        <ListItem classes={{ root: classes.contactsListItem }}>
+        <ListItem classes={{ root: classes.contactsListItem }} onClick={() => onSelectContact?.(address)} {...rest}>
             <div className={classes.contactsListItemInfo}>
                 <EmojiAvatar address={address} className={classes.emojiAvatar} sx={{ width: 24, height: 24 }} />
                 <div>
