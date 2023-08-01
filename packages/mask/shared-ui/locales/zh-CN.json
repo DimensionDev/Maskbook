@@ -1036,5 +1036,8 @@
     "plugin_wallet_connect_fortmatic": "连接 Fortmatic",
     "plugin_wallet_choose_network": "选择网络",
     "plugin_disabled_tip": "您需要打开 DAPP 才能查看特定内容。",
-    "network_management_add_network": "添加网络"
+    "network_management_add_network": "添加网络",
+    "collectible_title": "收藏品",
+    "collectible_properties": "属性",
+    "collectible_last_sale_price": "属性"
 }
