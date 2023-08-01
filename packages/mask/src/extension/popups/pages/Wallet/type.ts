@@ -43,3 +43,8 @@ export type GasSetting = {
 }
 
 export type GasParams = Omit<GasSetting, 'gas'>
+
+export enum TransferTabType {
+    Token = 'Token',
+    NFT = 'NFT',
+}
