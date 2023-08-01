@@ -70,6 +70,8 @@ export function SelectGasSettingsDialog({
         [pluginID_, chainId_, slippageTolerance, transaction],
     )
 
+    console.log('settings', settings)
+
     if (!open) return null
 
     return (

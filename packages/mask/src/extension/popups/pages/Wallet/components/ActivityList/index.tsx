@@ -1,17 +1,17 @@
 import { ElementAnchor } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useAccount } from '@masknet/web3-hooks-base'
-import { DeBankHistory } from '@masknet/web3-providers'
-import type { Transaction } from '@masknet/web3-shared-evm'
+import type { RecentTransaction } from '@masknet/web3-shared-base'
+import { ProviderType, type ChainId, type Transaction } from '@masknet/web3-shared-evm'
 import { List } from '@mui/material'
-import { useInfiniteQuery } from '@tanstack/react-query'
 import { range } from 'lodash-es'
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import urlcat from 'urlcat'
 import { ReplaceType } from '../../type.js'
-import { ActivityListItem, ActivityListItemSkeleton } from './ActivityListItem.js'
+import { ActivityItem, ActivityItemSkeleton, RecentActivityItem } from './ActivityItem.js'
+import { useTransactions } from './useTransactions.js'
+import { GasSettingModal } from '../../../../modals/modals.js'
+import { Web3 } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -30,46 +30,58 @@ export interface ActivityListProps {}
 export const ActivityList = memo<ActivityListProps>(function ActivityList() {
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const { data, isFetching, fetchNextPage } = useInfiniteQuery({
-        queryKey: ['debank', 'all-history', account],
-        queryFn: async ({ pageParam }) => {
-            return DeBankHistory.getAllTransactions(account, { indicator: pageParam })
-        },
-        getNextPageParam: (lastPage) => lastPage.nextIndicator,
-    })
-    const transactions = useMemo(() => data?.pages.flatMap((p) => p.data) || EMPTY_LIST, [data?.pages])
+    const { data: transactions, localeTxes, isFetching, fetchNextPage } = useTransactions()
 
-    const handleSpeedup = useCallback(
-        (transaction: Transaction) => {
-            navigate(
-                urlcat(PopupRoutes.ReplaceTransaction, {
-                    type: ReplaceType.SPEED_UP,
-                }),
-                {
-                    state: { transaction },
-                },
-            )
+    const modifyTransaction = useCallback(
+        async (transaction: RecentTransaction<ChainId, Transaction>, replaceType: ReplaceType) => {
+            const candidate = transaction.candidates[transaction.id]
+            if (!candidate) return
+            const oldConfig = {
+                gas: candidate.gas!,
+                gasPrice: candidate.gasPrice,
+                maxFeePerGas: candidate.maxFeePerGas,
+                maxPriorityFeePerGas: candidate.maxPriorityFeePerGas,
+            }
+            const settings = await GasSettingModal.openAndWaitForClose({
+                chainId: transaction.chainId,
+                config: oldConfig,
+                nonce: candidate.nonce!,
+                replaceType,
+            })
+            if (!settings) return
+            const newConfig = {
+                ...oldConfig,
+                ...settings,
+            }
+            if (replaceType === ReplaceType.CANCEL) {
+                await Web3.cancelTransaction(transaction?.id, newConfig, {
+                    providerType: ProviderType.MaskWallet,
+                })
+            } else {
+                await Web3.replaceTransaction(transaction?.id, newConfig, {
+                    providerType: ProviderType.MaskWallet,
+                })
+            }
         },
         [navigate],
+    )
+
+    const handleSpeedup = useCallback(
+        async (transaction: RecentTransaction<ChainId, Transaction>) => {
+            modifyTransaction(transaction, ReplaceType.SPEED_UP)
+        },
+        [navigate, modifyTransaction],
     )
 
     const handleCancel = useCallback(
-        (transaction: Transaction) => {
-            navigate(
-                urlcat(PopupRoutes.ReplaceTransaction, {
-                    type: ReplaceType.CANCEL,
-                }),
-                {
-                    state: { transaction },
-                },
-            )
+        (transaction: RecentTransaction<ChainId, Transaction>) => {
+            modifyTransaction(transaction, ReplaceType.CANCEL)
         },
-        [navigate],
+        [navigate, modifyTransaction],
     )
 
     const handleView = useCallback(
-        (transaction: Transaction) => {
+        (transaction: Transaction | RecentTransaction<ChainId, Transaction>) => {
             navigate(PopupRoutes.TransactionDetail, {
                 // No available API to fetch a transaction info yet.
                 // Just pass target transaction to the detail page.
@@ -82,17 +94,24 @@ export const ActivityList = memo<ActivityListProps>(function ActivityList() {
     return (
         <>
             <List dense className={classes.list}>
-                {transactions.map((transaction) => (
-                    <ActivityListItem
+                {localeTxes.map((transaction) => (
+                    <RecentActivityItem
                         key={transaction.id}
-                        className={classes.item}
                         transaction={transaction}
                         onSpeedup={handleSpeedup}
                         onCancel={handleCancel}
                         onView={handleView}
                     />
                 ))}
-                {isFetching ? range(4).map((i) => <ActivityListItemSkeleton key={i} className={classes.item} />) : null}
+                {transactions.map((transaction) => (
+                    <ActivityItem
+                        key={transaction.id}
+                        className={classes.item}
+                        transaction={transaction}
+                        onView={handleView}
+                    />
+                ))}
+                {isFetching ? range(4).map((i) => <ActivityItemSkeleton key={i} className={classes.item} />) : null}
             </List>
             <ElementAnchor callback={() => fetchNextPage()} key={transactions.length} height={10} />
         </>

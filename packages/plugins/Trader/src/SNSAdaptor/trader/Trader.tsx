@@ -459,3 +459,5 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
         </>
     )
 })
+
+Trader.displayName = 'Trader'
