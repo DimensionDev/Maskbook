@@ -1424,6 +1424,32 @@ export const Document = /*#__PURE__*/ __createIcon('Document', [
         u: () => new URL('./general/Document.svg', import.meta.url),
     },
 ])
+export const Documents = /*#__PURE__*/ __createIcon('Documents', [
+    {
+        u: () => new URL('./general/Documents.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsxs('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 16 16',
+                children: [
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: 'currentColor',
+                        fillRule: 'evenodd',
+                        d: 'M3.98 2.61c-.42.45-.65 1.14-.65 2.06v6.66c0 .92.23 1.6.65 2.06.42.44 1.09.74 2.15.74h5.34c1.06 0 1.74-.3 2.15-.74.42-.46.65-1.14.65-2.06V4.67c0-.92-.23-1.6-.65-2.06-.41-.44-1.09-.74-2.15-.74H6.13c-1.06 0-1.73.3-2.15.74ZM3.2 1.9C3.87 1.17 4.87.8 6.13.8h5.34c1.27 0 2.26.37 2.93 1.1.66.71.93 1.7.93 2.78v6.66c0 1.08-.27 2.07-.93 2.78-.67.72-1.66 1.09-2.93 1.09H6.13c-1.26 0-2.26-.37-2.93-1.09a3.98 3.98 0 0 1-.93-2.78V4.67c0-1.09.27-2.07.93-2.78Z',
+                        clipRule: 'evenodd',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: 'currentColor',
+                        fillRule: 'evenodd',
+                        d: 'M11.46 1.33c.29 0 .53.24.53.54V3.2c0 .44.36.8.8.8h1.33a.53.53 0 0 1 0 1.07H12.8a1.87 1.87 0 0 1-1.87-1.87V1.87c0-.3.24-.54.54-.54ZM5.6 8c0-.3.24-.53.53-.53h4a.53.53 0 1 1 0 1.06h-4A.53.53 0 0 1 5.6 8Zm0 2.14c0-.3.24-.54.53-.54h5.33a.53.53 0 0 1 0 1.07H6.13a.53.53 0 0 1-.53-.53Z',
+                        clipRule: 'evenodd',
+                    }),
+                ],
+            }),
+        s: true,
+    },
+])
 export const DoubleArrowUp = /*#__PURE__*/ __createIcon(
     'DoubleArrowUp',
     [

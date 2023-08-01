@@ -106,6 +106,9 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                         }),
                         failedDescription: i18NextInstance.t('plugin_red_packet_create_with_token_fail'),
                     },
+                    popup: {
+                        method: method.name,
+                    },
                 }
             } else if (method?.name === 'claim') {
                 const tokenAmountDescription = await this.getClaimTokenInfo(context.chainId, context.to, context.hash)
@@ -122,6 +125,9 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                             : i18NextInstance.t('plugin_red_packet_claim_success_without_details'),
                         failedDescription: i18NextInstance.t('plugin_red_packet_claim_fail'),
                     },
+                    popup: {
+                        method: method.name,
+                    },
                 }
             } else {
                 const tokenAmountDescription = await this.getRefundTokenInfo(context.chainId, context.to, context.hash)
@@ -136,6 +142,9 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                               })
                             : i18NextInstance.t('plugin_red_packet_refund_with_token_success_without_detail'),
                         failedDescription: i18NextInstance.t('plugin_red_packet_refund_with_token_fail'),
+                    },
+                    popup: {
+                        method: method?.name,
                     },
                 }
             }
@@ -157,6 +166,9 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                             : i18NextInstance.t('plugin_nft_red_packet_create_success_without_detail'),
                         failedDescription: i18NextInstance.t('plugin_red_packet_create_with_token_fail'),
                     },
+                    popup: {
+                        method: method.name,
+                    },
                 }
             } else if (method?.name === 'claim') {
                 const symbol = await this.getClaimedNFTSymbol(context.chainId, RED_PACKET_NFT_ADDRESS, context.hash)
@@ -171,6 +183,9 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                               })
                             : i18NextInstance.t('plugin_nft_red_packet_claim_success_without_detail'),
                         failedDescription: i18NextInstance.t('plugin_red_packet_claim_fail'),
+                    },
+                    popup: {
+                        method: method.name,
                     },
                 }
             }

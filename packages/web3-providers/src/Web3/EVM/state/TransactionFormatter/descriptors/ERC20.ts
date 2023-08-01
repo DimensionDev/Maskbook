@@ -85,6 +85,9 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                                     ? revokeFailedDescription
                                     : approveFailedDescription,
                             },
+                            popup: {
+                                method: name,
+                            },
                         }
                     }
 
@@ -96,6 +99,7 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                             description: revokeDescription,
                             popup: {
                                 tokenDescription: token?.symbol ?? 'token',
+                                method: name,
                             },
                             snackbar: {
                                 successfulDescription: revokeSuccessDescription,
@@ -114,6 +118,7 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                             tokenDescription: leftShift(parameters?.value, token?.decimals).gt(pow10(9))
                                 ? i18NextInstance.t('popups_wallet_token_infinite_unlock')
                                 : undefined,
+                            method: name,
                         },
                         snackbar: {
                             successfulDescription: approveSuccessDescription,
@@ -144,6 +149,9 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                             tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
                         }),
                         failedDescription: i18NextInstance.t('plugin_infra_descriptor_token_transfer_fail'),
+                    },
+                    popup: {
+                        method: name,
                     },
                 }
             }

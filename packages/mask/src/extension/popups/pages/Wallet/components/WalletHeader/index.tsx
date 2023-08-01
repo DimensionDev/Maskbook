@@ -30,7 +30,6 @@ export const WalletHeader = memo(function WalletHeader() {
     const matchWallet = useMatch(PopupRoutes.Wallet)
     const customHeader = CUSTOM_HEADER_PATTERNS.some((pattern) => matchPath(pattern, location.pathname))
     const matchContractInteraction = useMatch(PopupRoutes.ContractInteraction)
-    const matchWalletSign = useMatch(PopupRoutes.WalletSignRequest)
 
     const chooseNetwork = useCallback(() => {
         modalNavigate(PopupModalRoutes.ChooseNetwork)
@@ -42,9 +41,8 @@ export const WalletHeader = memo(function WalletHeader() {
 
     if (customHeader) return null
 
-    if (!wallet || !hasPassword || matchUnlock || matchResetWallet) return <WalletSetupHeaderUI />
-
-    if (matchContractInteraction || matchWalletSign) {
+    if (matchContractInteraction) {
+        if (!wallet) return null
         return (
             <WalletHeaderUI
                 chainId={chainId}
@@ -56,6 +54,8 @@ export const WalletHeader = memo(function WalletHeader() {
             />
         )
     }
+
+    if (!wallet || !hasPassword || matchUnlock || matchResetWallet) return <WalletSetupHeaderUI />
 
     return matchWallet ? (
         <WalletHeaderUI

@@ -40,6 +40,9 @@ export class ERC721Descriptor extends BaseDescriptor implements TransactionDescr
                                 action: 'unlock',
                             }),
                         },
+                        popup: {
+                            method: name,
+                        },
                     }
                 }
                 case 'setApprovalForAll': {
@@ -72,6 +75,9 @@ export class ERC721Descriptor extends BaseDescriptor implements TransactionDescr
                                 action: action.toLowerCase(),
                             }),
                         },
+                        popup: {
+                            method: name,
+                        },
                     }
                 }
                 case 'transferFrom':
@@ -87,6 +93,10 @@ export class ERC721Descriptor extends BaseDescriptor implements TransactionDescr
                                 symbol,
                             }),
                             failedDescription: i18NextInstance.t('plugin_infra_descriptor_nft_transfer_fail'),
+                        },
+                        popup: {
+                            method: name,
+                            tokenId: parameters.tokenId as string,
                         },
                     }
                 }

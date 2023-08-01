@@ -19,12 +19,13 @@ import {
     useFungibleToken,
     useFungibleTokenPrice,
     useNativeToken,
+    useNonFungibleAsset,
     useReverseAddress,
 } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { unreachable } from '@masknet/kit'
 import { isString } from 'lodash-es'
-import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
+import { FormattedBalance, FormattedCurrency, ImageIcon, TokenIcon } from '@masknet/shared'
 import { GasSettingMenu } from '../GasSettingMenu/index.js'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 
@@ -47,6 +48,7 @@ const useStyles = makeStyles()((theme) => ({
     tokenIcon: {
         width: 24,
         height: 24,
+        borderRadius: '50%',
     },
     amount: {
         display: 'flex',
@@ -121,6 +123,10 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
         }
     }, [transaction])
 
+    const tokenId = transaction?.formattedTransaction?.popup?.tokenId
+
+    const { data: metadata } = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, tokenId ? to : undefined, tokenId)
+
     const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
 
     const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, to)
@@ -173,20 +179,30 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
 
             <Box display="flex" justifyContent="space-between" alignItems="center" mt={3}>
                 <Typography className={classes.amount}>
-                    <TokenIcon
-                        address={(tokenAddress || nativeToken?.address) ?? ''}
-                        chainId={chainId}
-                        name={token?.name}
-                        className={classes.tokenIcon}
-                    />
-                    <FormattedBalance
-                        value={amount}
-                        decimals={token?.decimals}
-                        significant={4}
-                        formatter={formatBalance}
-                    />
+                    {tokenId && metadata?.collection?.iconURL ? (
+                        <>
+                            <ImageIcon icon={metadata.collection.iconURL} className={classes.tokenIcon} />
+                            {metadata.collection.name}#{tokenId}
+                        </>
+                    ) : null}
+                    {!tokenId ? (
+                        <>
+                            <TokenIcon
+                                address={(tokenAddress || nativeToken?.address) ?? ''}
+                                chainId={chainId}
+                                name={token?.name}
+                                className={classes.tokenIcon}
+                            />
+                            <FormattedBalance
+                                value={amount}
+                                decimals={token?.decimals}
+                                significant={4}
+                                formatter={formatBalance}
+                            />
+                        </>
+                    ) : null}
                 </Typography>
-                {!isGreaterThan(tokenValueUSD, pow10(9)) ? (
+                {!isGreaterThan(tokenValueUSD, pow10(9)) && !tokenId ? (
                     <Typography className={classes.value}>
                         <FormattedCurrency value={tokenValueUSD} formatter={formatCurrency} />
                     </Typography>

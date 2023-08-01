@@ -774,6 +774,10 @@ export interface TransactionDescriptor<ChainId, Transaction, Parameter = string 
         failedTitle?: string
     }
     popup?: {
+        /** The method name of contract function */
+        method?: string
+        /** The Non-fugible token description */
+        tokenId?: string
         /** The custom token description */
         tokenDescription?: string
     }
