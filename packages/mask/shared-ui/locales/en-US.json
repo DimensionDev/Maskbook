@@ -1194,5 +1194,12 @@
     "collectible_last_sale_price": "Properties",
     "about_collection": "Abount {{- name}}",
     "hide_collectible": "Hide {{-name}}",
-    "hide_collectible_description": "Confirm to hide {{- name}}? You can redisplay it by re-adding this NFT at any time."
+    "hide_collectible_description": "Confirm to hide {{- name}}? You can redisplay it by re-adding this NFT at any time.",
+    "switch_logo_title": "Switch Twitter Logo",
+    "switch_logo_save_tip": "Share and recommend this feature after saving.",
+    "switch_logo_classics_logo": "Classics Logo",
+    "switch_logo_new_logo": "New Logo",
+    "switch_logo_share_text": "I just replaced Twitter X logo with the original blue bird one with Mask Network extension.",
+    "switch_logo_share_mask": "Download https://mask.io to try more powerful tools on Twitter.",
+    "switch_logo_description": "Switch between the classic Twitter logo and the new one."
 }

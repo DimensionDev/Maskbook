@@ -24,6 +24,7 @@ const useStyles = makeStyles()((theme) => {
         scroll: {
             flexGrow: 1,
             overflow: 'auto',
+            paddingBottom: theme.spacing(9),
             marginLeft: theme.spacing(1),
             marginRight: theme.spacing(1),
         },
@@ -32,6 +33,9 @@ const useStyles = makeStyles()((theme) => {
             flexGrow: 1,
         },
         actionGroup: {
+            position: 'absolute',
+            left: 0,
+            right: 0,
             display: 'flex',
             justifyContent: 'center',
             background: theme.palette.maskColor.secondaryBottom,
@@ -92,6 +96,7 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
     const { account } = useChainContext()
     const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, {
         account,
+        chainId,
     })
     const recipient = params.get('recipient')
     const [state, transfer] = useAsyncFn(async () => {

@@ -7,4 +7,5 @@ export enum ApplicationRoutes {
     Settings = '/settings',
     Web3Profile = '/web3-profile',
     Applications = '/applications',
+    Compose = '/compose',
 }

@@ -8,6 +8,8 @@ import {
     TruckIcon,
     WindowIcon,
     UserCircleIcon,
+    MagnifyingGlassIcon,
+    PencilSquareIcon,
 } from '@heroicons/react/24/outline'
 import { SelectProviderModal, WalletStatusModal } from '@masknet/shared'
 import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
@@ -16,6 +18,7 @@ import { ApplicationRoutes } from '../constants/ApplicationRoutes.js'
 
 const navigation = [
     { name: 'Overview', icon: EyeIcon, to: ApplicationRoutes.Overview },
+    { name: 'Compose', icon: PencilSquareIcon, to: ApplicationRoutes.Compose },
     { name: 'Explore', icon: RocketLaunchIcon, to: ApplicationRoutes.Explorer },
     { name: 'Favorites', icon: HeartIcon, to: ApplicationRoutes.Favorites },
     { name: 'Mask Network', icon: WindowIcon, to: ApplicationRoutes.Applications },

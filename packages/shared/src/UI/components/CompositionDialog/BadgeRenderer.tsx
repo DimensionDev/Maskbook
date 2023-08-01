@@ -2,7 +2,7 @@ import { useActivatedPluginsSNSAdaptor, type Plugin, usePluginI18NField } from '
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import type { TypedMessage } from '@masknet/typed-message'
 import { Box, Chip } from '@mui/material'
-import { useI18N } from '../../utils/index.js'
+import { useSharedI18N } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     chip: {
@@ -21,7 +21,7 @@ export interface BadgeRendererProps {
 export function BadgeRenderer({ meta, onDeleteMeta, readonly }: BadgeRendererProps) {
     const plugins = useActivatedPluginsSNSAdaptor('any')
     const i18n = usePluginI18NField()
-    const { t } = useI18N()
+    const t = useSharedI18N()
     if (!meta) return null
 
     const result = [...meta.entries()].flatMap(([metaKey, metaValue]) => {
@@ -47,7 +47,7 @@ export function BadgeRenderer({ meta, onDeleteMeta, readonly }: BadgeRendererPro
                 if (typeof desc === 'string')
                     desc = {
                         text: desc,
-                        tooltip: `${t('badge_renderer_provided_by_plugin')} "${i18n(plugin.ID, plugin.name)}"`,
+                        tooltip: `${t.badge_renderer_provided_by_plugin()} "${i18n(plugin.ID, plugin.name)}"`,
                     }
                 return (
                     <MetaBadge
