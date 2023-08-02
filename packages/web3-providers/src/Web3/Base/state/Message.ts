@@ -124,9 +124,14 @@ export class MessageState<Request, Response> implements Web3MessageState<Request
         })
     }
 
-    async approveRequest(id: string, updates?: Partial<TransferableMessage<Request, Response>>): Promise<void> {
+    async approveRequest(id: string, updates?: Request): Promise<void> {
+        const message = this.assertMessage(id)
+
         await this.updateMessage(id, {
-            ...updates,
+            request: {
+                ...message.request,
+                ...updates,
+            },
             state: MessageStateType.APPROVED,
         })
     }

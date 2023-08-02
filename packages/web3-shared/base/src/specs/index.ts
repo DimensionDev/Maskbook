@@ -1047,7 +1047,7 @@ export interface MessageState<Request, Response> extends Startable {
     /** Applies a request and waits for confirmation from the user. */
     applyAndWaitResponse<T>(message: TransferableMessage<Request, Response>): Promise<Response>
     /** Approves a request. */
-    approveRequest(id: string, updates?: Partial<TransferableMessage<Request, Response>>): Promise<void>
+    approveRequest(id: string, updates?: Request): Promise<void>
     /** Rejects a request. */
     denyRequest(id: string): Promise<void>
     /** Rejects all requests. */

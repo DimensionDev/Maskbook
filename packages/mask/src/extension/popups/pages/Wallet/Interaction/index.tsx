@@ -193,12 +193,10 @@ const Interaction = memo(function Interaction() {
         }
 
         await Message?.approveRequest(currentRequest.ID, {
-            request: {
-                ...currentRequest.request,
-                arguments: {
-                    ...currentRequest.request.arguments,
-                    params,
-                },
+            ...currentRequest.request,
+            arguments: {
+                ...currentRequest.request.arguments,
+                params,
             },
         })
         if (source) await Services.Helper.removePopupWindow()

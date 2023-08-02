@@ -10,7 +10,7 @@ import {
     type MessageResponse,
     type TransactionOptions,
 } from '@masknet/web3-shared-evm'
-import { MessageStateType, type ReasonableMessage, type TransferableMessage } from '@masknet/web3-shared-base'
+import { MessageStateType, type ReasonableMessage } from '@masknet/web3-shared-base'
 import { MessageState } from '../../Base/state/Message.js'
 import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
 import { SharedContextRef } from '../../../PluginContext/index.js'
@@ -44,15 +44,12 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
         return super.waitForApprovingRequest(id)
     }
 
-    override async approveRequest(
-        id: string,
-        updates?: Partial<TransferableMessage<MessageRequest, MessageResponse>>,
-    ): Promise<void> {
+    override async approveRequest(id: string, updates?: MessageRequest): Promise<void> {
         const { request } = this.assertMessage(id)
-        const payload = updates?.request?.arguments
+        const payload = updates?.arguments
             ? {
                   ...request.arguments,
-                  ...updates.request.arguments,
+                  ...updates.arguments,
               }
             : request.arguments
         const response = request.options?.providerURL
@@ -68,7 +65,10 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
               )
 
         await this.updateMessage(id, {
-            ...updates,
+            request: {
+                ...request,
+                ...updates,
+            },
             state: MessageStateType.APPROVED,
             response,
         })
