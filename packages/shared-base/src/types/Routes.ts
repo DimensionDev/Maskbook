@@ -51,7 +51,6 @@ export enum PopupRoutes {
     LegacyWalletRecovered = '/wallet/legacy-recovered',
     BackupWallet = '/wallet/backup',
     AddToken = '/wallet/addToken',
-    WalletSignRequest = '/wallet/sign',
     GasSetting = '/wallet/gas',
     TokenDetail = '/wallet/token-detail',
     TransactionDetail = '/wallet/transaction-detail',

@@ -774,6 +774,12 @@ export interface TransactionDescriptor<ChainId, Transaction, Parameter = string 
         failedTitle?: string
     }
     popup?: {
+        /** The spender address of erc20 approve */
+        spender?: string
+        /** The method name of contract function */
+        method?: string
+        /** The Non-Fungible token description */
+        tokenId?: string
         /** The custom token description */
         tokenDescription?: string
     }
@@ -1041,7 +1047,7 @@ export interface MessageState<Request, Response> extends Startable {
     /** Applies a request and waits for confirmation from the user. */
     applyAndWaitResponse<T>(message: TransferableMessage<Request, Response>): Promise<Response>
     /** Approves a request. */
-    approveRequest(id: string): Promise<void>
+    approveRequest(id: string, updates?: Request): Promise<void>
     /** Rejects a request. */
     denyRequest(id: string): Promise<void>
     /** Rejects all requests. */

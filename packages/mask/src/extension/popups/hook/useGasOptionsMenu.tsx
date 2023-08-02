@@ -4,7 +4,7 @@ import { useI18N } from '../../../utils/i18n-next-ui.js'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext, useChainIdSupport, useGasOptions } from '@masknet/web3-hooks-base'
 import { formatWeiToGwei, type GasConfig, type GasOption } from '@masknet/web3-shared-evm'
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { GasSettingModal } from '../modals/modals.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { GasOptionType } from '@masknet/web3-shared-base'
@@ -80,12 +80,6 @@ export function useGasOptionsMenu(gas: string, callback: (config: GasConfig, typ
         },
         [callback, isSupport1559],
     )
-
-    // Set init gas option
-    useEffect(() => {
-        if (!gasOptions?.slow) return
-        handleClick(GasOptionType.SLOW, gasOptions.slow)
-    }, [gasOptions, handleClick])
 
     return useMenuConfig(
         [
