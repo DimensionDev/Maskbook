@@ -158,7 +158,7 @@ const mindsUI: SocialNetworkUI.Definition = {
         profileCover: injectMindsProfileCover,
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtMinds,
-        enhancedPostRenderer: injectPostReplacerAtMinds,
+        postReplacer: injectPostReplacerAtMinds,
         banner: injectBannerAtMinds,
         searchResult: injectSearchResultInspectorAtMinds,
         newPostComposition: {
