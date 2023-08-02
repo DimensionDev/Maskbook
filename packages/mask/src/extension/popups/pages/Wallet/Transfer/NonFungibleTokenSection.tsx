@@ -2,7 +2,7 @@ import { CollectibleList, ElementAnchor } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useNonFungibleAssets, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useNonFungibleAsset, useNonFungibleAssets, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
 import { uniqWith } from 'lodash-es'
@@ -78,7 +78,8 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
         })
     }, [fetchedTokens])
 
-    const selectedKey = address && tokenId ? `${chainId}.${address}.${tokenId}` : undefined
+    const hasSelected = address && tokenId
+    const selectedKey = hasSelected ? `${chainId}.${address}.${tokenId}` : undefined
 
     const handleChange = useCallback((value: string | null) => {
         setParams(
@@ -98,6 +99,20 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
             { replace: true },
         )
     }, [])
+
+    // Collectibles are lazy loading, we can't let the target token scroll into view before it's loaded
+    // So we fetch and prepend it to the list.
+    const { data: targetToken } = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, address || '', tokenId || '', {
+        chainId,
+    })
+    const prependTokens = useMemo(() => {
+        if (!hasSelected || !targetToken) return tokens
+        const loadedTargetToken = tokens.find(
+            (x) => x.chainId === chainId && isSameAddress(x.address, address) && x.tokenId === tokenId,
+        )
+        if (loadedTargetToken) return tokens
+        return [targetToken, ...tokens]
+    }, [hasSelected, targetToken, tokens, chainId, address, tokenId])
 
     const { account } = useChainContext()
     const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, {
@@ -119,7 +134,7 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
                 <CollectibleList
                     className={classes.collectibleList}
                     retry={next}
-                    collectibles={tokens}
+                    collectibles={prependTokens}
                     pluginID={NetworkPluginID.PLUGIN_EVM}
                     loading={loading}
                     columns={4}
