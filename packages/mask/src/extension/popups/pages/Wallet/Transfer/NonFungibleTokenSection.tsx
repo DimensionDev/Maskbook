@@ -59,7 +59,13 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
     const { classes } = useStyles()
     const { chainId, address, tokenId, params, setParams } = useNonFungibleTokenParams()
 
-    const { value: fetchedTokens = EMPTY_LIST, done, next, loading } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
+    const {
+        value: fetchedTokens = EMPTY_LIST,
+        done,
+        next,
+        loading,
+        dataUpdatedAt,
+    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
     const tokens = useMemo(() => {
         const filtered = fetchedTokens.filter((x) => {
             if (isLensProfileAddress(x.address)) return false
@@ -124,9 +130,12 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
                     getCollectibleKey={getCollectibleKey}
                     onChange={handleChange}
                 />
-                <ElementAnchor key={fetchedTokens.length} callback={() => next?.()}>
-                    {!done && <LoadingBase size={36} />}
-                </ElementAnchor>
+                {done ? null : (
+                    // There might be chains that has no assets, setting key to token size might stuck the loading
+                    <ElementAnchor key={dataUpdatedAt} callback={() => next?.()}>
+                        <LoadingBase size={36} />
+                    </ElementAnchor>
+                )}
             </div>
             <div className={classes.actionGroup}>
                 <ActionButton fullWidth onClick={transfer} disabled={disabled} loading={state.loading}>
