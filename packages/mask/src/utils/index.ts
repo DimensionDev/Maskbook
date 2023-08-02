@@ -1,4 +1,5 @@
 export * from './collectNodeText.js'
+export * from './formatBalance2.js'
 export * from './components/index.js'
 export * from './createNormalReactRoot.js'
 export * from './debug/index.js'

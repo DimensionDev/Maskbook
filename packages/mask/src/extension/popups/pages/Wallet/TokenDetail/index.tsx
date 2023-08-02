@@ -18,7 +18,7 @@ import { openWindow } from '@masknet/shared-base-ui'
 import { MaskDarkTheme, MaskLightTheme, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useAccount, useFungibleTokenBalance, useNativeToken, useWeb3State } from '@masknet/web3-hooks-base'
 import { TrendingAPI } from '@masknet/web3-providers/types'
-import { TokenType, formatBalance, formatCurrency, isSameAddress, leftShift } from '@masknet/web3-shared-base'
+import { TokenType, formatBalance, formatCurrency, isSameAddress, leftShift, trimZero } from '@masknet/web3-shared-base'
 import { SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, ThemeProvider, Typography } from '@mui/material'
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
@@ -79,6 +79,7 @@ const useStyles = makeStyles()((theme) => {
             marginTop: 2,
             display: 'flex',
             alignItems: 'center',
+            justifyContent: 'flex-end',
         },
         actions: {
             position: 'fixed',
@@ -236,7 +237,7 @@ const TokenDetail = memo(function TokenDetail() {
 
                     <Box display="flex" flexDirection="row" justifyContent="space-between">
                         <Box>
-                            <Typography className={classes.label}>Balance</Typography>
+                            <Typography className={classes.label}>{t('balance')}</Typography>
                             {asset ? (
                                 <Typography component="div" className={classes.value}>
                                     <TokenIcon
@@ -262,9 +263,9 @@ const TokenDetail = memo(function TokenDetail() {
                             )}
                         </Box>
                         <Box textAlign="right">
-                            <Typography className={classes.label}>value</Typography>
+                            <Typography className={classes.label}>{t('value')}</Typography>
                             <Typography component="div" className={classes.value}>
-                                {formatCurrency(tokenValue, 'USD', { onlyRemainTwoDecimal: true })}
+                                {trimZero(formatCurrency(tokenValue, 'USD', { onlyRemainTwoDecimal: true }))}
                             </Typography>
                         </Box>
                     </Box>

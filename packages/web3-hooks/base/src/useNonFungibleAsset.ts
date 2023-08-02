@@ -17,6 +17,7 @@ export function useNonFungibleAsset<S extends 'all' | void = void, T extends Net
     })
 
     return useQuery({
+        enabled: !!address,
         queryKey: ['non-fungible-asset', pluginID, address, id, account, options],
         queryFn: async () => {
             if (!address || (!id && pluginID !== NetworkPluginID.PLUGIN_SOLANA)) return null
