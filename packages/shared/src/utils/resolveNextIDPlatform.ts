@@ -8,6 +8,11 @@ export const resolveNextIDPlatform = (value: string) => {
     const pubKey = value
     if (pubKey.length >= 44) return NextIDPlatform.NextID
 
+    const domain = value
+    if (domain.endsWith('.eth')) return NextIDPlatform.ENS
+
+    if (domain.endsWith('.lens')) return NextIDPlatform.LENS
+
     const userId = value
     if (/^\w{1,15}$/.test(userId)) return NextIDPlatform.Twitter
 

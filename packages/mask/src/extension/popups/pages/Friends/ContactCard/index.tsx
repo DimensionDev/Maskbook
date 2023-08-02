@@ -110,7 +110,7 @@ export const ContactCard = memo<ContactCardProps>(({ avatar, nextId, profiles, p
                 </Box>
                 <Button
                     onClick={() =>
-                        navigate(`${PopupRoutes.FriendsDetail}${nextId}`, {
+                        navigate(`${PopupRoutes.FriendsDetail}/${nextId}`, {
                             state: {
                                 avatar,
                                 publicKey,
@@ -127,7 +127,7 @@ export const ContactCard = memo<ContactCardProps>(({ avatar, nextId, profiles, p
             </Box>
             <Box
                 display="flex"
-                gap="12px"
+                gap="8px"
                 alignItems="center"
                 height="58px"
                 className={classes.connectedAccounts}
@@ -159,7 +159,7 @@ export const ContactCard = memo<ContactCardProps>(({ avatar, nextId, profiles, p
                     <ButtonBase
                         className={classes.more}
                         onClick={() => {
-                            navigate(`${PopupRoutes.FriendsDetail}${nextId}`, {
+                            navigate(`${PopupRoutes.FriendsDetail}/${nextId}`, {
                                 state: {
                                     avatar,
                                     publicKey,
@@ -174,7 +174,6 @@ export const ContactCard = memo<ContactCardProps>(({ avatar, nextId, profiles, p
                             fontWeight={400}
                             lineHeight="16px"
                             color={theme.palette.maskColor.main}>
-                            {' '}
                             {`+${profiles.length - 2}`}
                         </Typography>
                     </ButtonBase>

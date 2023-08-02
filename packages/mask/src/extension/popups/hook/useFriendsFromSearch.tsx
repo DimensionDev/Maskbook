@@ -1,6 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { ECKeyIdentifier, EMPTY_LIST, type NextIDPersonaBindings } from '@masknet/shared-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
+import { uniqBy } from 'lodash-es'
 
 export type NextIDPersonaBindingsWithIdentifier = NextIDPersonaBindings & { linkedPersona: ECKeyIdentifier }
 
@@ -32,6 +33,6 @@ export function useFriendsFromSearch(
                 persona: item.persona,
             })
         })
-        return profiles
+        return uniqBy(profiles, ({ linkedPersona }) => linkedPersona.publicKeyAsHex)
     }, [searchResult])
 }

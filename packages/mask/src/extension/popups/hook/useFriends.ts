@@ -11,7 +11,6 @@ export type FriendsInformation = ProfileInformation & {
 
 export function useFriends(network: string): AsyncStateRetry<FriendsInformation[]> {
     const currentPersona = useCurrentPersona()
-
     return useAsyncRetry(async () => {
         const values = await Services.Identity.queryRelationPaged(
             currentPersona?.identifier,
@@ -33,25 +32,23 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
         })
         const results = await Promise.allSettled(promiseArray)
         results.forEach((item, index) => {
-            if (item.status !== 'rejected') {
-                const filtered = item.value.filter(
-                    (x) =>
-                        x.platform === 'twitter' ||
-                        x.platform === 'lens' ||
-                        x.platform === 'ens' ||
-                        x.platform === 'ethereum' ||
-                        x.platform === 'github' ||
-                        x.platform === 'space_id' ||
-                        x.platform === 'farcaster' ||
-                        x.platform === 'unstoppabledomains',
-                )
-                profiles.push({
-                    profiles: filtered,
-                    ...friends[index],
-                    id: (friends[index].linkedPersona as ECKeyIdentifier).publicKeyAsHex,
-                })
-            }
-            return
+            if (!(item.status !== 'rejected')) return
+            const filtered = item.value.filter(
+                (x) =>
+                    x.platform === 'twitter' ||
+                    x.platform === 'lens' ||
+                    x.platform === 'ens' ||
+                    x.platform === 'ethereum' ||
+                    x.platform === 'github' ||
+                    x.platform === 'space_id' ||
+                    x.platform === 'farcaster' ||
+                    x.platform === 'unstoppabledomains',
+            )
+            profiles.push({
+                profiles: filtered,
+                ...friends[index],
+                id: (friends[index].linkedPersona as ECKeyIdentifier).publicKeyAsHex,
+            })
         })
         return profiles
     }, [network, currentPersona])
