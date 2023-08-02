@@ -61,8 +61,12 @@ function getTweetNode(node: HTMLElement) {
 }
 const shouldSkipDecrypt = (node: HTMLElement, tweetNode: HTMLElement) => {
     const isAdsNode = !!tweetNode.querySelector(
-        // promotion icon
-        'svg path[d$="996V8h7v7z"]',
+        [
+            // show more icon
+            '[data-testid="tweet-text-show-more-link"]',
+            // promotion icon
+            'svg path[d$="996V8h7v7z"]',
+        ].join(','),
     )
     if (isAdsNode) return true
 

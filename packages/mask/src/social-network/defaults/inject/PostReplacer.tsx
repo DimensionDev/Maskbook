@@ -9,15 +9,13 @@ interface InjectPostReplacerConfig {
     unzipPost(node: DOMProxy): void
 }
 
-export function injectPostReplacer(config: InjectPostReplacerConfig) {
+export function injectPostReplacer({ zipPost, unzipPost }: InjectPostReplacerConfig) {
     const PostReplacerDefault = memo(function PostReplacerDefault(props: {
         zipPost: PostReplacerProps['zip']
         unZipPost: PostReplacerProps['unzip']
     }) {
         return <PostReplacer zip={props.zipPost} unzip={props.unZipPost} />
     })
-
-    const { zipPost, unzipPost } = config
 
     return function injectPostReplacer(current: PostInfo, signal: AbortSignal) {
         signal.addEventListener('abort', unzipPost as () => void)
