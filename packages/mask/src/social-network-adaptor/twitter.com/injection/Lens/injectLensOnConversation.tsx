@@ -1,39 +1,14 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { Plugin, createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useMemo, useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { attachReactTreeWithContainer } from '../../../../utils/index.js'
 import { startWatch } from '../../../../utils/watcher.js'
 import { querySelectorAll } from '../../utils/selector.js'
 
 const selector = () => {
     return querySelectorAll<HTMLElement>('[data-testid=conversation] div:not([tabindex]) div[dir] + div[dir]')
-}
-
-/**
- * Inject on conversation, including both DM drawer and message page (/messages/xxx)
- */
-export function injectLensOnConversation(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(selector())
-    startWatch(watcher, signal)
-    watcher.useForeach((node, _, proxy) => {
-        const spans = node
-            .closest('[data-testid=conversation]')
-            ?.querySelectorAll<HTMLElement>('[tabindex] [dir] span:not([data-testid=tweetText])')
-        if (!spans) return
-        const userId = [...spans].reduce((id, node) => {
-            if (id) return id
-            if (node.textContent?.match(/@\w/)) {
-                return node.textContent.trim().slice(1)
-            }
-            return ''
-        }, '')
-        if (!userId) return
-        attachReactTreeWithContainer(proxy.afterShadow, { signal, untilVisible: true }).render(
-            <ConversationLensSlot userId={userId} />,
-        )
-    })
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -67,7 +42,7 @@ const createRootElement = () => {
     return span
 }
 
-function ConversationLensSlot({ userId }: Props) {
+const ConversationLensSlot = memo(function ConversationLensSlot({ userId }: Props) {
     const [disabled, setDisabled] = useState(true)
     const { classes, cx } = useStyles()
 
@@ -78,7 +53,7 @@ function ConversationLensSlot({ userId }: Props) {
             undefined,
             createRootElement,
         )
-        const identifier = ProfileIdentifier.of(EnhanceableSite.Twitter, userId).unwrap()
+        const identifier = ProfileIdentifier.of(EnhanceableSite.Twitter, userId).unwrapOr(null)
         if (!identifier) return null
 
         return (
@@ -89,4 +64,29 @@ function ConversationLensSlot({ userId }: Props) {
     if (!component) return null
 
     return <span className={cx(classes.slot, disabled ? classes.hide : null)}>{component}</span>
+})
+
+/**
+ * Inject on conversation, including both DM drawer and message page (/messages/xxx)
+ */
+export function injectLensOnConversation(signal: AbortSignal) {
+    const watcher = new MutationObserverWatcher(selector())
+    startWatch(watcher, signal)
+    watcher.useForeach((node, _, proxy) => {
+        const spans = node
+            .closest('[data-testid=conversation]')
+            ?.querySelectorAll<HTMLElement>('[tabindex] [dir] span:not([data-testid=tweetText])')
+        if (!spans) return
+        const userId = [...spans].reduce((id, node) => {
+            if (id) return id
+            if (node.textContent?.match(/@\w/)) {
+                return node.textContent.trim().slice(1)
+            }
+            return ''
+        }, '')
+        if (!userId) return
+        attachReactTreeWithContainer(proxy.afterShadow, { signal, untilVisible: true }).render(
+            <ConversationLensSlot userId={userId} />,
+        )
+    })
 }
