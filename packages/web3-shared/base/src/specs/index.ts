@@ -778,7 +778,7 @@ export interface TransactionDescriptor<ChainId, Transaction, Parameter = string 
         spender?: string
         /** The method name of contract function */
         method?: string
-        /** The Non-fugible token description */
+        /** The Non-Fungible token description */
         tokenId?: string
         /** The custom token description */
         tokenDescription?: string
