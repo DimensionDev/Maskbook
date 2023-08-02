@@ -40,6 +40,7 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
+        paddingLeft: theme.spacing(0.5),
     },
     receiver: {
         display: 'flex',
