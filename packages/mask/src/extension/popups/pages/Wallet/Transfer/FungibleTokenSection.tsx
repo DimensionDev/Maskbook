@@ -65,7 +65,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const { chainId, address, params, setParams } = useTokenParams()
     const navigate = useNavigate()
     // Enter from wallet home page, sending token is not decided yet
-    const undecided = !!params.get('undecided')
+    const undecided = params.get('undecided') === 'true'
     const handleSelectToken = useCallback((asset: Web3Helper.FungibleAssetAll): void => {
         setParams(
             (p) => {
