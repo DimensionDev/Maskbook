@@ -1,10 +1,9 @@
 import { Icons } from '@masknet/icons'
-import { FormattedBalance, ImageIcon, TokenIcon } from '@masknet/shared'
+import { ImageIcon, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles, type ActionButtonProps } from '@masknet/theme'
 import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
 import {
-    formatBalance,
     formatCurrency,
     isGte,
     isLessThan,
@@ -20,6 +19,7 @@ import { useContainer } from 'unstated-next'
 import urlcat from 'urlcat'
 import { useI18N } from '../../../../../../utils/index.js'
 import { WalletContext } from '../../hooks/useWalletContext.js'
+import { formatBalance2 } from '../../../../../../utils/formatBalance2.js'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -166,13 +166,11 @@ export const AssetsListUI = memo<AssetsListUIProps>(function AssetsListUI({ isEx
                             className={classes.text}
                             secondary={
                                 <Typography className={classes.balance}>
-                                    <FormattedBalance
-                                        value={isNaN(asset.balance) ? 0 : asset.balance}
-                                        decimals={isNaN(asset.decimals) ? 0 : asset.decimals}
-                                        symbol={asset.symbol}
-                                        significant={4}
-                                        formatter={formatBalance}
-                                    />
+                                    {formatBalance2(
+                                        isNaN(asset.balance) ? 0 : asset.balance,
+                                        isNaN(asset.decimals) ? 0 : asset.decimals,
+                                    )}
+                                    {asset.symbol}
                                 </Typography>
                             }>
                             <Typography className={classes.name}>{asset.name}</Typography>
