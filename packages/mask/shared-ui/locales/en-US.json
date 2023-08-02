@@ -30,6 +30,8 @@
     "operation": "Operation",
     "gas_limit": "Gas Limit",
     "gas_price": "Gas Price",
+    "value": "value",
+    "balance": "Balance",
     "gwei": "Gwei",
     "redirect_to": "Redirect to",
     "welcome_back": "Welcome Back",
