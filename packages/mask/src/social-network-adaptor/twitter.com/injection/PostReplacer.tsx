@@ -12,6 +12,9 @@ export function injectPostReplacerAtTwitter(signal: AbortSignal, current: PostIn
     const isCollapsedPost = !!current.rootNode?.querySelector('[data-testid="tweet-text-show-more-link"]')
     if (isPromotionPost || isCollapsedPost) return
 
+    const hasVideo = !!current.rootNode?.closest('[data-testid="tweet"]')?.querySelector('video')
+    if (hasVideo) return
+
     const hasCashOrHashTag = !!current.rootNode?.querySelector(
         ['a[role="link"][href*="cashtag_click"]', 'a[role="link"][href*="hashtag_click"]'].join(','),
     )
