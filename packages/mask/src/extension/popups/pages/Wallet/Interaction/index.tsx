@@ -87,7 +87,7 @@ const signRequest = [
     EthereumMethodType.PERSONAL_SIGN,
 ]
 
-const approveParamatersType = [
+const approveParametersType = [
     {
         name: 'spender',
         type: 'address',
@@ -161,11 +161,11 @@ const Interaction = memo(function Interaction() {
 
             const coder = ABICoder as unknown as ABICoder.AbiCoder
             const parameters = coder.decodeParameters(
-                approveParamatersType,
+                approveParametersType,
                 transaction?.formattedTransaction._tx.data.slice(10),
             )
 
-            const result = coder.encodeParameters(approveParamatersType, [parameters.spender, approveAmount])
+            const result = coder.encodeParameters(approveParametersType, [parameters.spender, approveAmount])
 
             params = currentRequest.request.arguments.params.map((x) =>
                 x === 'latest'
@@ -283,7 +283,7 @@ const Interaction = memo(function Interaction() {
                             </Box>
                             <Box display="flex" alignItems="center" columnGap={1.25}>
                                 <Typography className={classes.itemTitle}>
-                                    {t('popups_wallet_unlock_erc20_cranted_to')}
+                                    {t('popups_wallet_unlock_erc20_granted_to')}
                                 </Typography>
                                 <Typography className={classes.itemValue}>
                                     {formatEthereumAddress(transaction.formattedTransaction.popup.spender, 4)}
