@@ -167,8 +167,6 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
         setMaxFeePerGas(maxFeePerGas.toFixed(2))
     }, [open, isSupport1559, gasOptions, replaceType, config])
 
-    console.log('formatBalance', totalGas, nativeToken?.decimals)
-
     return (
         <BottomDrawer open={open} title={title} onClose={onClose}>
             <Box display="flex" flexDirection="column" rowGap={1.5} mt={1.5}>

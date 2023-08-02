@@ -14,15 +14,16 @@ import {
 import { isLessThan, isLte, isZero, leftShift, rightShift } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, type GasConfig } from '@masknet/web3-shared-evm'
 import { Box, Input, Typography } from '@mui/material'
+import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
+import { formatBalance2 } from '../../../../../utils/formatBalance2.js'
 import { useI18N } from '../../../../../utils/index.js'
+import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
 import { TokenPicker } from '../../../components/index.js'
 import { useTokenParams } from '../../../hook/index.js'
 import { ChooseTokenModal } from '../../../modals/modals.js'
-import { formatBalance2 } from '../../../../../utils/formatBalance2.js'
-import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
 import { useDefaultGasConfig } from './useDefaultGasConfig.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -198,7 +199,14 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                         </Typography>
                     }
                     value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
+                    onChange={(e) => {
+                        if (!balance || !token?.decimals || !e.target.value) {
+                            setAmount(e.target.value)
+                            return
+                        }
+                        const value = BigNumber.min(e.target.value, leftShift(balance, token.decimals)).toFixed()
+                        return setAmount(value)
+                    }}
                 />
             </Box>
             <Box display="flex" justifyContent="space-between" mt={2} mx={2}>
