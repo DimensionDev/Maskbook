@@ -1,3 +1,6 @@
+import { useEffect, useMemo, useState } from 'react'
+import { produce } from 'immer'
+import { makeStyles } from '@masknet/theme'
 import {
     type TransformationContext,
     type TypedMessage,
@@ -9,15 +12,12 @@ import {
     makeTypedMessageText,
     isTypedMessageText,
 } from '@masknet/typed-message'
+import { MaskMessages } from '@masknet/shared-base'
 import { TypedMessageRender, useTransformedValue } from '@masknet/typed-message-react'
-import { makeStyles } from '@masknet/theme'
-import { useEffect, useMemo, useState } from 'react'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context.js'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
 import { activatedSocialNetworkUI } from '../../social-network/ui.js'
-import { produce } from 'immer'
-import { MaskMessages } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
     root: {
@@ -26,8 +26,8 @@ const useStyles = makeStyles()({
 })
 
 export interface PostReplacerProps {
-    zip?: () => void
-    unzip?: () => void
+    zip: () => void
+    unzip: () => void
 }
 
 export function PostReplacer(props: PostReplacerProps) {
@@ -72,8 +72,8 @@ export function PostReplacer(props: PostReplacerProps) {
 
 function Transformer({
     message,
-    unzip,
     zip,
+    unzip,
 }: {
     message: TypedMessage
 } & PostReplacerProps) {
