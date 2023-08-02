@@ -1,7 +1,7 @@
 import { MaskTabList, makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Box, Tab } from '@mui/material'
-import { memo, useEffect } from 'react'
+import { memo, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
@@ -51,16 +51,9 @@ const Transfer = memo(function Transfer() {
 
     useTitle(t('popups_send'))
     const [params] = useSearchParams()
-    const paramRecipient = params.get('recipient')
     const undecided = params.get('undecided') === 'true'
 
     const [currentTab, handleTabChange] = useParamTab<TransferTabType>(TransferTabType.Token)
-
-    const { setReceiver } = ContactsContext.useContainer()
-
-    useEffect(() => {
-        setReceiver(paramRecipient || '')
-    }, [paramRecipient])
 
     return (
         <Box className={classes.page}>
@@ -93,8 +86,12 @@ const Transfer = memo(function Transfer() {
 })
 
 const TransferPage = memo(function TransferPage() {
+    const [params] = useSearchParams()
+    const defaultAddress = params.get('recipient') || ''
+    const defaultName = params.get('recipientName') || ''
+    const initialState = useMemo(() => ({ defaultAddress, defaultName }), [defaultAddress, defaultName])
     return (
-        <ContactsContext.Provider>
+        <ContactsContext.Provider initialState={initialState}>
             <Transfer />
         </ContactsContext.Provider>
     )
