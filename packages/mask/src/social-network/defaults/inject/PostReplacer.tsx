@@ -19,6 +19,7 @@ export function injectPostReplacer({ zipPost, unzipPost }: InjectPostReplacerCon
 
     return function injectPostReplacer(current: PostInfo, signal: AbortSignal) {
         signal.addEventListener('abort', unzipPost as () => void)
+
         attachReactTreeWithContainer(current.rootElement.afterShadow, {
             key: 'post-replacer',
             untilVisible: true,

@@ -8,6 +8,10 @@ function resolveLangNode(node: HTMLElement) {
 }
 
 export function injectPostReplacerAtTwitter(signal: AbortSignal, current: PostInfo) {
+    const isPromotionPost = !!current.rootNode?.querySelector('svg path[d$="996V8h7v7z"]')
+    const isCollapsedPost = !!current.rootNode?.querySelector('[data-testid="tweet-text-show-more-link"]')
+    if (isPromotionPost || isCollapsedPost) return
+
     return injectPostReplacer({
         zipPost(node) {
             if (node.destroyed) return
