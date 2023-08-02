@@ -151,7 +151,7 @@ const Interaction = memo(function Interaction() {
         }
     }, [currentRequest, chainId, TransactionFormatter])
 
-    const [{ loading: confirmLoading, error }, handleConfirm] = useAsyncFn(async () => {
+    const [{ loading: confirmLoading }, handleConfirm] = useAsyncFn(async () => {
         if (!currentRequest) return
 
         let params = currentRequest.request.arguments.params
@@ -205,7 +205,6 @@ const Interaction = memo(function Interaction() {
         navigate(-1)
     }, [currentRequest, Message, source, gasConfig, approveAmount, transaction?.formattedTransaction?._tx.data])
 
-    console.log(error)
     const [{ loading: cancelLoading }, handleCancel] = useAsyncFn(async () => {
         if (!currentRequest) return
         await Message?.denyRequest(currentRequest.ID)
