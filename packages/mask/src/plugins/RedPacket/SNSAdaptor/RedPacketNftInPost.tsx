@@ -1,9 +1,10 @@
 import { useEffect } from 'react'
-import { RedPacketRPC } from '../messages.js'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import type { RedPacketNftJSONPayload } from '../types.js'
+import { RedPacketRPC } from '../messages.js'
 import { RedPacketNft } from './RedPacketNft.js'
 import { TransactionConfirmDialogProvider } from './context/TokenTransactionConfirmDialogContext.js'
-import { ChainContextProvider } from '@masknet/web3-hooks-base'
 
 export interface RedPacketNftInPostProps {
     payload: RedPacketNftJSONPayload
@@ -20,9 +21,9 @@ export function RedPacketNftInPost({ payload }: RedPacketNftInPostProps) {
     }, [payload])
     return (
         <TransactionConfirmDialogProvider>
-            <ChainContextProvider value={{ chainId: payload.chainId }}>
+            <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: payload.chainId }}>
                 <RedPacketNft payload={payload} />
-            </ChainContextProvider>
+            </Web3ContextProvider>
         </TransactionConfirmDialogProvider>
     )
 }
