@@ -1,7 +1,8 @@
 import { Icons } from '@masknet/icons'
 import { CollectionList, RestorableScroll, UserAssetsProvider } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { makeStyles, useTabs } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab, Typography, styled, tabClasses, tabsClasses } from '@mui/material'
@@ -9,13 +10,13 @@ import { memo, useCallback, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useMount } from 'react-use'
 import { useContainer } from 'unstated-next'
+import urlcat from 'urlcat'
 import { useI18N } from '../../../../../../utils/index.js'
+import { useParamTab } from '../../../../hook/index.js'
 import { WalletContext } from '../../hooks/useWalletContext.js'
+import { WalletAssetTabs } from '../../type.js'
 import { ActivityList } from '../ActivityList/index.js'
 import { AssetsList } from '../AssetsList/index.js'
-import { WalletAssetTabs } from '../../type.js'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import urlcat from 'urlcat'
 
 const gridProps = {
     columns: 'repeat(auto-fill, minmax(20%, 1fr))',
@@ -133,15 +134,9 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI(
     const { t } = useI18N()
     const navigate = useNavigate()
     const [params, setParams] = useSearchParams()
-    const paramTab = params.get('tab') as WalletAssetTabs
 
     const { classes } = useStyles()
-    const [currentTab, onChange] = useTabs(
-        paramTab || WalletAssetTabs.Tokens,
-        WalletAssetTabs.Tokens,
-        WalletAssetTabs.Collectibles,
-        WalletAssetTabs.Activity,
-    )
+    const [currentTab, handleTabChange] = useParamTab<WalletAssetTabs>(WalletAssetTabs.Tokens)
 
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const SEARCH_KEY = 'collectionId'
@@ -183,18 +178,7 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI(
         <div className={classes.content}>
             <TabContext value={currentTab}>
                 <Box className={classes.header}>
-                    <StyledTabList
-                        value={currentTab}
-                        onChange={(_, tab) => {
-                            setParams(
-                                (params) => {
-                                    params.set('tab', tab)
-                                    return params.toString()
-                                },
-                                { replace: true },
-                            )
-                            onChange(_, tab)
-                        }}>
+                    <StyledTabList value={currentTab} onChange={handleTabChange}>
                         <Tab
                             className={classes.tab}
                             label={t('popups_wallet_tab_assets')}

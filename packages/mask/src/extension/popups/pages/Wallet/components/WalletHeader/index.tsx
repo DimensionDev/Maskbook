@@ -2,12 +2,18 @@ import { NetworkPluginID, PopupModalRoutes, PopupRoutes } from '@masknet/shared-
 import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import { useQuery } from '@tanstack/react-query'
 import { memo, useCallback, useEffect, useMemo } from 'react'
-import { useLocation, useMatch } from 'react-router-dom'
+import { matchPath, useLocation, useMatch } from 'react-router-dom'
 import { WalletRPC } from '../../../../../../plugins/WalletService/messages.js'
 import { getEvmNetworks } from '../../../../../../utils/networks.js'
 import { NormalHeader, useModalNavigate } from '../../../../components/index.js'
 import { WalletHeaderUI } from './UI.js'
 import { WalletSetupHeaderUI } from './WalletSetupHeaderUI.js'
+
+const CUSTOM_HEADER_PATTERNS = [
+    `${PopupRoutes.AddToken}/:chainId/:assetType`,
+    PopupRoutes.Transfer,
+    PopupRoutes.ExportWalletPrivateKey,
+]
 
 export const WalletHeader = memo(function WalletHeader() {
     const modalNavigate = useModalNavigate()
@@ -25,8 +31,7 @@ export const WalletHeader = memo(function WalletHeader() {
     const matchUnlock = useMatch(PopupRoutes.Unlock)
     const matchResetWallet = useMatch(PopupRoutes.ResetWallet)
     const matchWallet = useMatch(PopupRoutes.Wallet)
-    const matchAddAssets = useMatch(`${PopupRoutes.AddToken}/:chainId/:assetType`)
-    const matchExportPrivateKey = useMatch(PopupRoutes.ExportWalletPrivateKey)
+    const customHeader = CUSTOM_HEADER_PATTERNS.some((pattern) => matchPath(pattern, location.pathname))
     const matchContractInteraction = useMatch(PopupRoutes.ContractInteraction)
 
     const chooseNetwork = useCallback(() => {
@@ -37,7 +42,7 @@ export const WalletHeader = memo(function WalletHeader() {
         modalNavigate(PopupModalRoutes.SwitchWallet)
     }, [modalNavigate])
 
-    if (matchAddAssets || matchExportPrivateKey) return null
+    if (customHeader) return null
 
     if (!wallet || !hasPassword || matchUnlock || matchResetWallet) return <WalletSetupHeaderUI />
 

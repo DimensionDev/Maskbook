@@ -1,1 +1,7 @@
-{}
+{
+    "plugin_artblocks_paused": "已暂停",
+    "plugin_artblocks_website": "网站",
+    "plugin_artblocks_chain": "链",
+    "plugin_artblocks_blockchain_row": "区块链：",
+    "plugin_artblocks_contract_row": "合约："
+}

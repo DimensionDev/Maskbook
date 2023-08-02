@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Button, TextField } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isValidAddress, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
@@ -6,7 +6,6 @@ import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import { useTokenTransferCallback } from '@masknet/web3-hooks-evm'
 import { Image } from '@masknet/shared'
 import { useI18N } from '../../../../utils/index.js'
-import { CollectibleListContext } from '../../DashboardComponents/CollectibleList/index.js'
 import { DashboardDialogCore, DashboardDialogWrapper, type WrappedDialogProps } from '../Base.js'
 import { Icons } from '@masknet/icons'
 
@@ -34,18 +33,17 @@ export function DashboardWalletTransferDialogNFT(
     const { classes } = useTransferDialogStylesNFT()
 
     const [address, setAddress] = useState('')
-    const { collectiblesRetry } = useContext(CollectibleListContext)
 
     // #region transfer tokens
     const [{ loading }, transferCallback] = useTokenTransferCallback(token.schema, token.address)
 
+    // TODO Trigger refetching by invaliding related queries via react-query
     const onTransfer = useCallback(async () => {
         const hash = await transferCallback(token.tokenId, address)
         if (typeof hash === 'string') {
             onClose()
         }
-        collectiblesRetry()
-    }, [transferCallback, token.tokenId, address, collectiblesRetry])
+    }, [transferCallback, token.tokenId, address])
     // #endregion
 
     // #region validation

@@ -10,6 +10,8 @@ import { ChangePaymentPasswordModal } from './ChangePaymentPasswordModal/index.j
 import { ShowPrivateKeyModal } from './ShowPrivateKeyModal/index.js'
 
 import { GasSettingModal } from './GasSettingModal/index.js'
+import { ChooseTokenModal } from './ChooseToken/index.js'
+
 import * as modals from './modals.js'
 export * from './modals.js'
 
@@ -26,6 +28,7 @@ export const Modals = memo(function Modals() {
             <GasSettingModal ref={modals.GasSettingModal.register} />
             <ChangePaymentPasswordModal ref={modals.ChangePaymentPasswordModal.register} />
             <ShowPrivateKeyModal ref={modals.ShowPrivateKeyModal.register} />
+            <ChooseTokenModal ref={modals.ChooseTokenModal.register} />
         </>
     )
 })

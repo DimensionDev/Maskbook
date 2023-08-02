@@ -517,4 +517,34 @@ export class LensAPI implements LensBaseAPI.Provider {
 
         return first(data.approvedModuleAllowanceAmount)
     }
+
+    async queryTransactionPublicationId(txId: string) {
+        const result = await fetchJSON<{
+            data: { dataAvailabilityTransaction: LensBaseAPI.TransactionPublication }
+        }>(LENS_ROOT_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query: /* GraphQL */ `
+                    query TransactionPublicationId($txId: String!) {
+                        dataAvailabilityTransaction(request: { id: $txId }) {
+                            ... on DataAvailabilityPost {
+                                ...DAPostFields
+                                __typename
+                            }
+                        }
+                    }
+                    fragment DAPostFields on DataAvailabilityPost {
+                        publicationId
+                        __typename
+                    }
+                `,
+                variables: { txId },
+            }),
+        })
+
+        return result?.data?.dataAvailabilityTransaction.publicationId
+    }
 }

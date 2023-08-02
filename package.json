@@ -20,7 +20,7 @@
     "build": "build",
     "build:mv3": "build --manifest 3",
     "lint": "eslint packages --cache --fix",
-    "lint:ci": "eslint packages --cache --cache-strategy content",
+    "lint:ci": "eslint packages --cache --cache-strategy content --fix",
     "lint:ci-report": "pnpm run lint:ci --format=junit --output-file=reports/junit/eslint-results.xml --max-warnings=0",
     "prepare": "husky install",
     "svgo": "svgo packages/icons/*/*.svg",

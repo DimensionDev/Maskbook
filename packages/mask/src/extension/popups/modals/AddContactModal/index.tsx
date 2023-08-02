@@ -94,6 +94,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
                 value={name}
                 onChange={(ev) => setName(ev.target.value)}
                 error={nameExistError}
+                autoFocus
             />
             <MaskTextField
                 spellCheck={false}

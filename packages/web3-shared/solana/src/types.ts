@@ -68,8 +68,8 @@ export type Web3Provider = {
 export type Signature = string
 export type GasOption = never
 export type Block = BlockResponse
-export type RequestArguments = never
-export type RequestOptions = never
+export type MessageRequest = never
+export type MessageResponse = never
 export type Operation = never
 export type Transaction = SolanaTransaction
 export type TransactionReceipt = never
@@ -84,8 +84,8 @@ export type Web3State = Web3StateShared<
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter
 >
@@ -99,8 +99,8 @@ export type Web3Definition = {
     Signature: Signature
     GasOption: GasOption
     Block: Block
-    RequestArguments: RequestArguments
-    RequestOptions: RequestOptions
+    MessageRequest: MessageRequest
+    MessageResponse: MessageResponse
     Operation: Operation
     Transaction: Transaction
     TransactionReceipt: TransactionReceipt

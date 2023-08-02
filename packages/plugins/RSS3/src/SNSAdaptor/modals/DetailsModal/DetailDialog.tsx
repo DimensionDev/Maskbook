@@ -1,16 +1,16 @@
 import { Icons } from '@masknet/icons'
-import { InjectedDialog, type InjectedDialogProps, Linking } from '@masknet/shared'
+import { InjectedDialog, Linking, type InjectedDialogProps } from '@masknet/shared'
+import { parseURL } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
+import { ScopedDomainsContainer, useReverseAddress } from '@masknet/web3-hooks-base'
+import { Others } from '@masknet/web3-providers'
 import { DialogContent, Typography } from '@mui/material'
 import { useMemo, type PropsWithChildren } from 'react'
-import type { FeedCardProps } from '../../components/base.js'
-import { hostIconMap, type CardType, hostNameMap } from '../../components/share.js'
 import { useI18N } from '../../../locales/index.js'
+import type { FeedCardProps } from '../../components/base.js'
 import { FeedCard } from '../../components/index.js'
-import { ScopedDomainsContainer, useReverseAddress } from '@masknet/web3-hooks-base'
+import { hostIconMap, hostNameMap, type CardType } from '../../components/share.js'
 import { FeedOwnerContext, type FeedOwnerOptions } from '../../contexts/index.js'
-import { Others } from '@masknet/web3-providers'
-import { parseURL } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     detailsDialog: {
@@ -28,6 +28,7 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'auto',
         display: 'flex',
         flexDirection: 'column',
+        flexGrow: 1,
         '::-webkit-scrollbar': {
             display: 'none',
         },
@@ -71,7 +72,7 @@ export function FeedDetailsDialog({ type, feed, onClose, actionIndex, ...rest }:
     const links = feed.actions[0].related_urls
 
     const address = feed.owner || feed.address_from || feed.actions[0].address_from || ''
-    const { data: reversedName, isLoading: loadingENS } = useReverseAddress(undefined, address)
+    const { data: reversedName } = useReverseAddress(undefined, address)
     const { getDomain } = ScopedDomainsContainer.useContainer()
 
     const name = address ? getDomain(address) || reversedName : reversedName

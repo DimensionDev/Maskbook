@@ -367,6 +367,11 @@ export const Mirror = /*#__PURE__*/ __createIcon('Mirror', [
         u: () => new URL('./brands/Mirror.svg', import.meta.url),
     },
 ])
+export const Momoka = /*#__PURE__*/ __createIcon('Momoka', [
+    {
+        u: () => new URL('./brands/Momoka.svg', import.meta.url),
+    },
+])
 export const NextIDMini = /*#__PURE__*/ __createIcon('NextIDMini', [
     {
         c: ['dark'],
@@ -3513,6 +3518,11 @@ export const DonationLaunch = /*#__PURE__*/ __createIcon('DonationLaunch', [
         u: () => new URL('./rss3/DonationLaunch.svg', import.meta.url),
     },
 ])
+export const Follow = /*#__PURE__*/ __createIcon('Follow', [
+    {
+        u: () => new URL('./rss3/Follow.svg', import.meta.url),
+    },
+])
 export const GovernancePropose = /*#__PURE__*/ __createIcon('GovernancePropose', [
     {
         u: () => new URL('./rss3/GovernancePropose.svg', import.meta.url),
@@ -3593,11 +3603,6 @@ export const RSS3Link = /*#__PURE__*/ __createIcon(
     ],
     [9, 2],
 )
-export const RSS3ProfileLink = /*#__PURE__*/ __createIcon('RSS3ProfileLink', [
-    {
-        u: () => new URL('./rss3/RSS3ProfileLink.svg', import.meta.url),
-    },
-])
 export const TokenBridge = /*#__PURE__*/ __createIcon('TokenBridge', [
     {
         u: () => new URL('./rss3/TokenBridge.svg', import.meta.url),
@@ -3641,6 +3646,11 @@ export const TokenSwap = /*#__PURE__*/ __createIcon('TokenSwap', [
 export const TokenUnstake = /*#__PURE__*/ __createIcon('TokenUnstake', [
     {
         u: () => new URL('./rss3/TokenUnstake.svg', import.meta.url),
+    },
+])
+export const Unfollow = /*#__PURE__*/ __createIcon('Unfollow', [
+    {
+        u: () => new URL('./rss3/Unfollow.svg', import.meta.url),
     },
 ])
 export const UnknownBurn = /*#__PURE__*/ __createIcon('UnknownBurn', [

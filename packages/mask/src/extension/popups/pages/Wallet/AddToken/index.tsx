@@ -78,6 +78,7 @@ const useStyles = makeStyles<{ currentTab: TabType; searchError: boolean }>()((t
     },
     sidebar: {
         marginTop: currentTab === TabType.Tokens ? (searchError ? 70 : 52) : 0,
+        marginRight: theme.spacing(1.5),
     },
     grid: {
         gridTemplateColumns: 'repeat(auto-fill, minmax(40%, 1fr))',
@@ -129,7 +130,7 @@ const AddToken = memo(function AddToken() {
     const blackList = useBlockedFungibleTokens()
     const rowSize = useRowSize()
     const navigate = useNavigate()
-    const { chainId: chainId_, assetType } = useParams()
+    const { chainId: defaultChainId, assetType } = useParams()
     const { account } = useChainContext()
     const [currentTab, onChange] = useTabs(
         assetType === TabType.Collectibles ? TabType.Collectibles : TabType.Tokens,
@@ -140,7 +141,7 @@ const AddToken = memo(function AddToken() {
     const { classes } = useStyles({ currentTab, searchError })
 
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>(
-        chainId_ ? Number.parseInt(chainId_, 10) : ChainId.Mainnet,
+        defaultChainId ? Number.parseInt(defaultChainId, 10) : ChainId.Mainnet,
     )
 
     const allNetworks = useNetworkDescriptors(NetworkPluginID.PLUGIN_EVM)
@@ -187,16 +188,14 @@ const AddToken = memo(function AddToken() {
                 }
             />
             <div className={classes.content}>
-                <div className={classes.sidebar}>
-                    <SelectNetworkSidebar
-                        hiddenAllButton
-                        chainId={chainId}
-                        onChainChange={(chainId) => setChainId(chainId ?? ChainId.Mainnet)}
-                        networks={networks}
-                        pluginID={NetworkPluginID.PLUGIN_EVM}
-                        gridProps={{ gap: 0 }}
-                    />
-                </div>
+                <SelectNetworkSidebar
+                    className={classes.sidebar}
+                    hideAllButton
+                    chainId={chainId}
+                    onChainChange={(chainId) => setChainId(chainId ?? ChainId.Mainnet)}
+                    networks={networks}
+                    pluginID={NetworkPluginID.PLUGIN_EVM}
+                />
                 <div className={classes.main}>
                     <TabPanel className={classes.panel} value={TabType.Tokens}>
                         <FungibleTokenList

@@ -1,13 +1,13 @@
 import { registerPlugin } from '@masknet/plugin-infra'
-import {
-    type ChainId,
-    type NetworkType,
-    type ProviderType,
-    type SchemaType,
-    type RequestArguments,
-    type RequestOptions,
-    type Transaction,
-    type TransactionParameter,
+import type {
+    ChainId,
+    NetworkType,
+    ProviderType,
+    SchemaType,
+    MessageRequest,
+    MessageResponse,
+    Transaction,
+    TransactionParameter,
 } from '@masknet/web3-shared-flow'
 import { base } from './base.js'
 
@@ -16,8 +16,8 @@ registerPlugin<
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter
 >({

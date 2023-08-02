@@ -111,5 +111,8 @@
     "share": "分享",
     "ok": "确定",
     "got_nft": "你得到了 {{name}}",
-    "history": "历史"
+    "history": "历史",
+    "plugin_wallet_invalid_network": "网络无效",
+    "select_all": "全选",
+    "retry": "重试"
 }

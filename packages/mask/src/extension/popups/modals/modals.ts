@@ -9,6 +9,7 @@ import type { WalletAutoLockSettingModalOpenProps } from './WalletAutoLockSettin
 import type { GasSettingModalCloseProps, GasSettingModalOpenProps } from './GasSettingModal/index.js'
 import type { ChangePaymentPasswordOpenProps } from './ChangePaymentPasswordModal/index.js'
 import type { ShowPrivateKeyModalOpenProps } from './ShowPrivateKeyModal/index.js'
+import type { ChooseTokenModalCloseProps, ChooseTokenModalOpenProps } from './ChooseToken/index.js'
 
 export const DisconnectModal = new SingletonModal<DisconnectModalOpenProps, DisconnectModalCloseProps>()
 export const ConfirmModal = new SingletonModal<ConfirmModalOpenProps, boolean>()
@@ -20,6 +21,7 @@ export const WalletAutoLockSettingModal = new SingletonModal<WalletAutoLockSetti
 export const GasSettingModal = new SingletonModal<GasSettingModalOpenProps, GasSettingModalCloseProps>()
 export const ChangePaymentPasswordModal = new SingletonModal<ChangePaymentPasswordOpenProps, boolean>()
 export const ShowPrivateKeyModal = new SingletonModal<ShowPrivateKeyModalOpenProps, boolean>()
+export const ChooseTokenModal = new SingletonModal<ChooseTokenModalOpenProps, ChooseTokenModalCloseProps>()
 
 export * from './ChooseCurrencyModal/index.js'
 export * from './ChooseNetworkModal/index.js'
