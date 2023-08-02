@@ -16,9 +16,6 @@ import {
     type NetworkType,
     type Transaction,
     type SchemaType,
-    CHAIN_DESCRIPTORS,
-    NETWORK_DESCRIPTORS,
-    PROVIDER_DESCRIPTORS,
     getNetworkPluginID,
     getDefaultChainId,
     getInvalidChainId,
@@ -33,15 +30,16 @@ import {
     isValidChainId,
 } from '@masknet/web3-shared-evm'
 import { OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
+import { ChainResolverAPI } from './ChainResolverAPI.js'
+import { ExplorerResolverAPI } from './ExplorerResolverAPI.js'
+import { ProviderResolverAPI } from './ProviderResolverAPI.js'
+import { NetworkResolverAPI } from './NetworkExplorerAPI.js'
 
 export class OthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
-    constructor() {
-        super({
-            chainDescriptors: CHAIN_DESCRIPTORS,
-            networkDescriptors: NETWORK_DESCRIPTORS,
-            providerDescriptors: PROVIDER_DESCRIPTORS,
-        })
-    }
+    chainResolver = new ChainResolverAPI()
+    explorerResolver = new ExplorerResolverAPI()
+    providerResolver = new ProviderResolverAPI()
+    networkResolver = new NetworkResolverAPI()
 
     override isValidDomain = isValidDomain
     override isValidChainId = isValidChainId

@@ -1,4 +1,4 @@
-import { createExplorerResolver, createFungibleToken, createNonFungibleToken } from '@masknet/web3-shared-base'
+import { createFungibleToken, createNonFungibleToken } from '@masknet/web3-shared-base'
 import {
     isValidDomain,
     isValidAddress,
@@ -14,9 +14,6 @@ import {
     type NetworkType,
     type Transaction,
     type SchemaType,
-    CHAIN_DESCRIPTORS,
-    NETWORK_DESCRIPTORS,
-    PROVIDER_DESCRIPTORS,
     getDefaultChainId,
     getInvalidChainId,
     getDefaultNetworkType,
@@ -31,26 +28,16 @@ import {
     getNetworkPluginID,
 } from '@masknet/web3-shared-flow'
 import { OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
+import { FlowChainResolverAPI } from './ChainResolverAPI.js'
+import { FlowExplorerResolverAPI } from './ExplorerResolverAPI.js'
+import { FlowProviderResolverAPI } from './ProviderResolverAPI.js'
+import { FlowNetworkResolverAPI } from './NetworkExplorerAPI.js'
 
 export class FlowOthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
-    constructor() {
-        super({
-            chainDescriptors: CHAIN_DESCRIPTORS,
-            networkDescriptors: NETWORK_DESCRIPTORS,
-            providerDescriptors: PROVIDER_DESCRIPTORS,
-        })
-    }
-
-    override explorerResolver = createExplorerResolver(() => this.options.chainDescriptors, {
-        addressPathname: '/account/:address',
-        transactionPathname: '/transaction/:id',
-        fungibleTokenPathname: '/contract/:address',
-        nonFungibleTokenPathname: '/contract/:address',
-    })
-
-    resolveFungibleTokenLink(chainId: ChainId, address: string): string {
-        throw new Error('Method not implemented.')
-    }
+    chainResolver = new FlowChainResolverAPI()
+    explorerResolver = new FlowExplorerResolverAPI()
+    providerResolver = new FlowProviderResolverAPI()
+    networkResolver = new FlowNetworkResolverAPI()
 
     override isValidDomain = isValidDomain
     override isValidChainId = isValidChainId

@@ -8,14 +8,11 @@ import {
     isFungibleTokenSchemaType,
     isNonFungibleTokenSchemaType,
     type ChainId,
-    formatAddress,
     type ProviderType,
     type NetworkType,
     type Transaction,
     type SchemaType,
-    CHAIN_DESCRIPTORS,
-    NETWORK_DESCRIPTORS,
-    PROVIDER_DESCRIPTORS,
+    formatAddress,
     formatTokenId,
     getNetworkPluginID,
     getDefaultChainId,
@@ -25,24 +22,22 @@ import {
     getZeroAddress,
     getMaskTokenAddress,
     getNativeTokenAddress,
-    explorerResolver,
     formatSchemaType,
     createNativeToken,
     isValidChainId,
 } from '@masknet/web3-shared-solana'
 import { createFungibleToken, createNonFungibleToken } from '@masknet/web3-shared-base'
 import { OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
+import { SolanaExplorerResolverAPI } from './ExplorerResolverAPI.js'
+import { SolanaChainResolverAPI } from './ChainResolverAPI.js'
+import { SolanaProviderResolverAPI } from './ProviderResolverAPI.js'
+import { SolanaNetworkResolverAPI } from './NetworkExplorerAPI.js'
 
 export class SolanaOthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
-    constructor() {
-        super({
-            chainDescriptors: CHAIN_DESCRIPTORS,
-            networkDescriptors: NETWORK_DESCRIPTORS,
-            providerDescriptors: PROVIDER_DESCRIPTORS,
-        })
-    }
-
-    override explorerResolver = explorerResolver
+    chainResolver = new SolanaChainResolverAPI()
+    explorerResolver = new SolanaExplorerResolverAPI()
+    providerResolver = new SolanaProviderResolverAPI()
+    networkResolver = new SolanaNetworkResolverAPI()
 
     override isValidDomain = isValidDomain
     override isValidChainId = isValidChainId
