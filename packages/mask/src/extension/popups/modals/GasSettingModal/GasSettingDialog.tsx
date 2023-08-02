@@ -12,10 +12,9 @@ import { useChainIdSupport, useGasOptions, useNativeToken, useNativeTokenPrice }
 import { NUMERIC_INPUT_REGEXP_PATTERN, NetworkPluginID } from '@masknet/shared-base'
 import { Alert, Box, Button, TextField, Typography, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { formatBalance, formatCurrency, isGreaterThan, isLessThan } from '@masknet/web3-shared-base'
+import { ZERO, formatBalance, formatCurrency, isGreaterThan, isLessThan } from '@masknet/web3-shared-base'
 import { BigNumber } from 'bignumber.js'
 import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
-import { FormattedBalance } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -89,18 +88,22 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     }, [gasOptions, gasPrice, isSupport1559, maxFeePerGas, replaceType])
 
     const totalGas = useMemo(() => {
-        return formatGweiToWei(isSupport1559 ? maxFeePerGas : gasPrice)
+        return formatGweiToWei((isSupport1559 ? maxFeePerGas : gasPrice) || ZERO)
             .times(config.gas)
             .toFixed()
     }, [gasPrice, config.gas, maxFeePerGas, isSupport1559])
 
     const error = useMemo(() => {
-        if (!replaceType) return null
+        if (replaceType) return null
         if (!isSupport1559) {
             return gasOptions && isGreaterThan(formatWeiToGwei(gasOptions.slow.suggestedMaxFeePerGas), gasPrice)
                 ? t('popups_wallet_gas_price_too_low')
                 : null
-        } else if (isLessThan(maxFeePerGas, maxPriorityFeePerGas)) {
+        } else if (
+            isLessThan(maxFeePerGas, maxPriorityFeePerGas) ||
+            (gasOptions &&
+                isGreaterThan(formatWeiToGwei(gasOptions.slow.suggestedMaxPriorityFeePerGas), maxPriorityFeePerGas))
+        ) {
             return t('popups_wallet_gas_max_priority_fee_too_low')
         }
         return null
@@ -167,14 +170,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
         <BottomDrawer open={open} title={title} onClose={onClose}>
             <Box display="flex" flexDirection="column" rowGap={1.5} mt={1.5}>
                 <Typography className={classes.preview}>
-                    <FormattedBalance
-                        value={totalGas}
-                        decimals={nativeToken?.decimals}
-                        significant={4}
-                        symbol={nativeToken?.symbol}
-                        formatter={formatBalance}
-                    />
-                    ≈
+                    {formatBalance(totalGas, nativeToken?.decimals, 4, false, true)} ≈{' '}
                     {formatCurrency(formatWeiToEther(totalGas).times(nativeTokenPrice ?? 0), 'USD', {
                         onlyRemainTwoDecimal: true,
                     })}
@@ -221,11 +217,12 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                     value={maxPriorityFeePerGas}
                                     onChange={(e) => {
                                         if (
-                                            isLessThan(
+                                            (isLessThan(
                                                 e.target.value,
                                                 formatWeiToGwei(gasOptions?.slow.suggestedMaxPriorityFeePerGas ?? 0),
                                             ) &&
-                                            !!replaceType
+                                                !!replaceType) ||
+                                            !e.target.value
                                         )
                                             return
                                         setMaxPriorityFeePerGas(e.target.value)
@@ -247,13 +244,14 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                 <TextField
                                     onChange={(e) => {
                                         if (
-                                            isLessThan(
+                                            (isLessThan(
                                                 e.target.value,
                                                 formatWeiToGwei(gasOptions?.slow.baseFeePerGas ?? 0).plus(
                                                     maxPriorityFeePerGas,
                                                 ),
                                             ) &&
-                                            !!replaceType
+                                                !!replaceType) ||
+                                            !e.target.value
                                         )
                                             return
 
@@ -280,11 +278,12 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                 value={gasPrice}
                                 onChange={(e) => {
                                     if (
-                                        isLessThan(
+                                        (isLessThan(
                                             e.target.value,
                                             formatWeiToGwei(gasOptions?.slow.suggestedMaxFeePerGas ?? 0),
                                         ) &&
-                                        !!replaceType
+                                            !!replaceType) ||
+                                        !e.target.value
                                     ) {
                                         return
                                     }
