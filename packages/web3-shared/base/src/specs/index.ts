@@ -23,6 +23,13 @@ export enum CurrencyType {
     USD = 'usd',
 }
 
+export enum FiatCurrencyType {
+    USD = 'usd',
+    CNY = 'cny',
+    HKD = 'hkd',
+    JPY = 'jpy',
+}
+
 export enum OrderSide {
     Buy = 0,
     Sell = 1,
@@ -911,12 +918,16 @@ export interface SettingsState extends Startable {
     allowTestnet?: Subscription<boolean>
     /** The currency of estimated values and prices. */
     currencyType?: Subscription<CurrencyType>
+    /** The fiat currency of estimated values and prices. */
+    fiatCurrencyType?: Subscription<FiatCurrencyType>
     /** The gas options type */
     gasOptionType?: Subscription<GasOptionType>
     /** The source type of fungible assets */
     fungibleAssetSourceType?: Subscription<SourceType>
     /** The source type of non-fungible assets */
     nonFungibleAssetSourceType?: Subscription<SourceType>
+    /** Set the default fiat currency. */
+    setFiatCurrencyType: (type: FiatCurrencyType) => Promise<void>
 }
 
 export interface AddressBookState extends Startable {

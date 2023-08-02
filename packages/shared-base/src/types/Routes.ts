@@ -25,6 +25,7 @@ export enum DashboardRoutes {
 }
 
 export enum PopupModalRoutes {
+    ChooseCurrency = '/modal/choose-currency',
     ChooseNetwork = '/modal/choose-network',
     SwitchWallet = '/modal/switch-wallet',
     ConnectSocialAccount = '/modal/connect-social-account',

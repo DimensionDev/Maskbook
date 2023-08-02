@@ -6,7 +6,13 @@ import type { OthersAPI_Base } from './OthersAPI.js'
 import type { HubAPI_Base } from './HubAPI.js'
 
 const resolver = <ChainId>(initial?: HubOptions_Base<ChainId>) => {
-    return [initial?.chainId, initial?.account, initial?.currencyType, initial?.sourceType].join(',')
+    return [
+        initial?.chainId,
+        initial?.account,
+        initial?.currencyType,
+        initial?.fiatCurrencyType,
+        initial?.sourceType,
+    ].join(',')
 }
 
 export class HubCreatorAPI_Base<T extends NetworkPluginID> {

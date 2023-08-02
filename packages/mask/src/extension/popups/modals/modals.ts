@@ -21,6 +21,7 @@ export const GasSettingModal = new SingletonModal<GasSettingModalOpenProps, GasS
 export const ChangePaymentPasswordModal = new SingletonModal<ChangePaymentPasswordOpenProps, boolean>()
 export const ShowPrivateKeyModal = new SingletonModal<ShowPrivateKeyModalOpenProps, boolean>()
 
+export * from './ChooseCurrencyModal/index.js'
 export * from './ChooseNetworkModal/index.js'
 export * from './ConnectSocialAccountModal/index.js'
 export * from './SelectProviderModal/index.js'

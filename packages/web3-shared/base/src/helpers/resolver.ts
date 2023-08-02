@@ -6,6 +6,7 @@ import {
     type NetworkDescriptor,
     type ProviderDescriptor,
     SourceType,
+    FiatCurrencyType,
 } from '../specs/index.js'
 import { memoize } from 'lodash-es'
 
@@ -258,6 +259,18 @@ export const resolveCurrencyName = createLookupTableResolver<CurrencyType, strin
     },
     (CurrencyType) => {
         throw new Error(`Unknown currency type: ${CurrencyType}.`)
+    },
+)
+
+export const resolveFiatCurrencyName = createLookupTableResolver<FiatCurrencyType, string>(
+    {
+        [FiatCurrencyType.USD]: 'USD',
+        [FiatCurrencyType.CNY]: 'CNY',
+        [FiatCurrencyType.JPY]: 'JPY',
+        [FiatCurrencyType.HKD]: 'HKD',
+    },
+    (FiatCurrencyType) => {
+        throw new Error(`Unknown currency type: ${FiatCurrencyType}.`)
     },
 )
 

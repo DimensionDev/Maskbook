@@ -12,6 +12,8 @@ import { useStyles } from './useStyles.js'
 import { AutoLock } from './AutoLock.js'
 import { ChangePaymentPassword } from './ChangePaymentPassword.js'
 import { ShowPrivateKey } from './ShowPrivateKey.js'
+import { ChangeNetwork } from './ChangeNetwork.js'
+import { ChangeCurrency } from './ChangeCurrency.js'
 
 const WalletSettings = memo(() => {
     const { t } = useI18N()
@@ -52,15 +54,10 @@ const WalletSettings = memo(() => {
                 <Rename />
                 <Contacts />
                 <AutoLock />
-                <ListItem className={classes.item}>
-                    <Box className={classes.itemBox}>
-                        <Icons.Currency size={20} color={theme.palette.maskColor.second} />
-                        <Typography className={classes.itemText}>{t('currency')}</Typography>
-                    </Box>
-                    <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />
-                </ListItem>
+                <ChangeCurrency />
                 <ChangePaymentPassword />
                 <ShowPrivateKey />
+                <ChangeNetwork />
             </List>
         </div>
     )

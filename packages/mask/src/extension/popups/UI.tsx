@@ -20,6 +20,7 @@ import { PopupLayout } from './components/PopupLayout/index.js'
 import { PageTitleContext } from './context.js'
 import { PopupContext } from './hook/usePopupContext.js'
 import {
+    ChooseCurrencyModal,
     ChooseNetworkModal,
     ConnectSocialAccountModal,
     Modals,
@@ -104,6 +105,10 @@ const PopupRoutes = memo(function PopupRoutes() {
                                 <Route
                                     path={PopupModalRoutes.SwitchPersona}
                                     element={wrapModal(<SwitchPersonaModal />)}
+                                />
+                                <Route
+                                    path={PopupModalRoutes.ChooseCurrency}
+                                    element={wrapModal(<ChooseCurrencyModal />)}
                                 />
                                 <Route
                                     path={PopupModalRoutes.ChooseNetwork}

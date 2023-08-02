@@ -5,7 +5,6 @@ import { useStyles } from './useStyles.js'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useContacts, useWallet, useWallets } from '@masknet/web3-hooks-base'
-import { useMemo } from 'react'
 
 export function Contacts() {
     const { t } = useI18N()
@@ -15,14 +14,14 @@ export function Contacts() {
     const contacts = useContacts()
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const totalContacts = useMemo(() => wallets.length + contacts.length, [wallets.length + contacts.length])
+    const totalContacts = wallets.length + contacts.length
 
     return (
         <ListItem
             className={classes.item}
             onClick={() => navigate(`${PopupRoutes.Contacts}/${wallet?.address}`, { state: { type: 'manage' } })}>
             <Box className={classes.itemBox}>
-                <Icons.UserOutline size={20} color={theme.palette.maskColor.second} />
+                <Icons.BaseUser size={20} color={theme.palette.maskColor.second} />
                 <Typography className={classes.itemText}>{t('contacts')}</Typography>
             </Box>
             <Box className={classes.itemBox}>

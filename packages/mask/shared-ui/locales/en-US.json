@@ -853,6 +853,7 @@
     "popups_back_up_the_wallet": "Back up the wallet",
     "popups_recovery_wallet": "Wallet Recovered",
     "popups_wallet_setting": "Wallet settings",
+    "popups_wallet_settings_change_network": "Change network",
     "popups_wallet_settings_auto_unlock_time": "Auto-lock Time",
     "popups_wallet_settings_auto_unlock_time_mins": "{{time}} Mins",
     "popups_wallet_settings_auto_unlock_time_title": "Auto-lock",
