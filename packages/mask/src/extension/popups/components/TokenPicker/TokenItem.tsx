@@ -93,7 +93,7 @@ export const TokenItem = memo(function TokenItem({
         <ListItem
             secondaryAction={
                 <Typography className={classes.balance}>
-                    {formatBalance(asset.balance, asset.decimals, 0, false, true, 5)}
+                    {formatBalance(asset.balance, asset.decimals, 0, false, true, 4)}
                 </Typography>
             }
             className={cx(classes.item, className, selected ? classes.selected : null)}
