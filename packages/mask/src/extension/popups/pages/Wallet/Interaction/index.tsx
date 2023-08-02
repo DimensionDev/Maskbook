@@ -1,7 +1,7 @@
-import { memo, useCallback, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { Box, Typography } from '@mui/material'
-import { useChainContext, useFungibleToken, useMessages, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useMessages, useWeb3State } from '@masknet/web3-hooks-base'
 import {
     EthereumMethodType,
     createJsonRpcPayload,
@@ -107,6 +107,8 @@ const Interaction = memo(function Interaction() {
     const [approveAmount, setApproveAmount] = useState('')
     const [expand, setExpand] = useState(false)
     const [gasConfig, setGasConfig] = useState<GasParams | undefined>()
+    const [paymentToken, setPaymentToken] = useState('')
+
     const messages = useMessages()
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -198,10 +200,22 @@ const Interaction = memo(function Interaction() {
                 ...currentRequest.request.arguments,
                 params,
             },
+            options: {
+                ...currentRequest.request.options,
+                paymentToken,
+            },
         })
         if (source) await Services.Helper.removePopupWindow()
         navigate(-1)
-    }, [currentRequest, Message, source, gasConfig, approveAmount, transaction?.formattedTransaction?._tx.data])
+    }, [
+        currentRequest,
+        Message,
+        source,
+        gasConfig,
+        approveAmount,
+        transaction?.formattedTransaction?._tx.data,
+        paymentToken,
+    ])
 
     const [{ loading: cancelLoading }, handleCancel] = useAsyncFn(async () => {
         if (!currentRequest) return
@@ -229,20 +243,33 @@ const Interaction = memo(function Interaction() {
             return <UnlockERC20Token transaction={transaction} handleChange={(value) => setApproveAmount(value)} />
         }
 
-        return <TransactionPreview transaction={transaction} onConfigChange={handleChangeGasConfig} />
-    }, [message, source, transaction, handleChangeGasConfig, currentRequest])
-
-    const { data: token } = useFungibleToken(
-        NetworkPluginID.PLUGIN_EVM,
-        transaction?.formattedTransaction?.tokenInAddress,
-    )
+        return (
+            <TransactionPreview
+                transaction={transaction}
+                onConfigChange={handleChangeGasConfig}
+                paymentToken={paymentToken}
+                onPaymentTokenChange={(paymentToken) => setPaymentToken(paymentToken)}
+            />
+        )
+    }, [message, source, transaction, handleChangeGasConfig, currentRequest, paymentToken])
 
     // clear gas config when index has been changed
     useUpdateEffect(() => {
         setGasConfig(undefined)
         setExpand(false)
         setApproveAmount('')
+        setPaymentToken('')
     }, [index])
+
+    // update default payment token from transaction
+    useEffect(() => {
+        if (!transaction?.paymentToken) return
+
+        setPaymentToken((prev) => {
+            if (prev) return prev
+            return transaction.paymentToken ?? ''
+        })
+    }, [transaction?.paymentToken])
 
     if (!currentRequest) return
 

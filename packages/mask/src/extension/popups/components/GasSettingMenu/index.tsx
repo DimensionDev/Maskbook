@@ -20,14 +20,16 @@ import { useAsync } from 'react-use'
 import { useContainer } from 'unstated-next'
 import { PopupContext } from '../../hook/usePopupContext.js'
 import { BigNumber } from 'bignumber.js'
-import { FormattedBalance } from '@masknet/shared'
+import { FormattedBalance, useGasCurrencyMenu } from '@masknet/shared'
 import { noop } from 'lodash-es'
 interface GasSettingMenuProps {
     gas: string
     initConfig?: GasConfig
     disable?: boolean
     onChange?: (config: GasConfig) => void
+    onPaymentTokenChange?: (paymentToken: string) => void
     paymentToken?: string
+    owner?: string
     allowMaskAsGas?: boolean
 }
 
@@ -38,6 +40,8 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
     paymentToken,
     disable,
     allowMaskAsGas,
+    owner,
+    onPaymentTokenChange,
 }) {
     const { t } = useI18N()
     const theme = useTheme()
@@ -56,6 +60,12 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
 
     const [menu, openMenu] = useGasOptionsMenu(gas, !disable ? handleChange : noop)
 
+    const [paymentTokenMenu, openPaymentTokenMenu] = useGasCurrencyMenu(
+        NetworkPluginID.PLUGIN_EVM,
+        onPaymentTokenChange ?? noop,
+        paymentToken,
+    )
+
     const { value: gasOptions } = useGasOptions()
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -63,8 +73,14 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
 
     const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM, { chainId })
 
-    const { data: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, paymentToken ?? nativeTokenAddress)
-    const { data: tokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, paymentToken ?? nativeTokenAddress)
+    const { data: token } = useFungibleToken(
+        NetworkPluginID.PLUGIN_EVM,
+        paymentToken ? paymentToken : nativeTokenAddress,
+    )
+    const { data: tokenPrice } = useFungibleTokenPrice(
+        NetworkPluginID.PLUGIN_EVM,
+        paymentToken ? paymentToken : nativeTokenAddress,
+    )
 
     const gasOptionName = useMemo(() => {
         switch (gasOptionType) {
@@ -147,6 +163,12 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
                     </Typography>
                     <Icons.Candle size={12} />
                 </Box>
+            ) : null}
+            {owner && allowMaskAsGas ? (
+                <>
+                    <Icons.ArrowDrop size={20} sx={{ ml: 0.5, cursor: 'pointer' }} onClick={openPaymentTokenMenu} />
+                    {paymentTokenMenu}
+                </>
             ) : null}
             {menu}
         </Box>
