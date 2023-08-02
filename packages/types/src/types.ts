@@ -87,6 +87,7 @@ export namespace SocialNetworkUI {
             /** Inject the UI that used to open the composition UI */
             newPostComposition?: NewPostComposition
             commentComposition?: CommentComposition
+            /** @deprecated The replacer makes tricky UI */
             enhancedPostRenderer?(signal: AbortSignal, current: PostInfo): void
             /** Display the additional content (decrypted, plugin, ...) below the post */
             postInspector?(signal: AbortSignal, current: PostInfo): void

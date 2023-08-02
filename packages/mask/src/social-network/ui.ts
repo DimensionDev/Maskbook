@@ -272,7 +272,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             signal.addEventListener('abort', () => abort.abort())
             abortSignals.set(key, abort)
             const { signal: postSignal } = abort
-            ui.injection.enhancedPostRenderer?.(postSignal, value)
             ui.injection.postInspector?.(postSignal, value)
             ui.injection.postActions?.(postSignal, value)
             ui.injection.commentComposition?.compositionBox(postSignal, value)
