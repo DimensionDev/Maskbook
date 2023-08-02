@@ -9,7 +9,6 @@ import { NextIDProof } from '@masknet/web3-providers'
 export function usePersonasFromNextID(userId: string, platform: NextIDPlatform, exact?: boolean) {
     const asyncRetry = useAsyncRetry(async () => {
         if (!platform || !userId) return EMPTY_LIST
-        console.log(platform)
         return NextIDProof.queryAllExistedBindingsByPlatform(platform, userId, exact)
     }, [platform, userId, exact])
     useEffect(() => MaskMessages.events.ownProofChanged.on(asyncRetry.retry), [asyncRetry.retry])

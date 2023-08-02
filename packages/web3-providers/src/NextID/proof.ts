@@ -314,7 +314,6 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         const nextIDPersonaBindings: NextIDPersonaBindings[] = []
         let page = 1
         do {
-            console.log('000000000')
             const result = await this.fetchFromProofService<NextIDBindings>(
                 urlcat(BASE_URL, '/v1/proof', {
                     platform,
@@ -324,7 +323,6 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                     order: 'desc',
                 }),
             )
-            console.log(result, '000000000')
             const personaBindings = result.ids
             if (personaBindings.length === 0) return nextIDPersonaBindings
             nextIDPersonaBindings.push(...personaBindings)

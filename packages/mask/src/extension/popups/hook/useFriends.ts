@@ -4,6 +4,7 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { useCurrentPersona } from '../../../components/DataSource/usePersonaConnectStatus.js'
 import Services from '../../../extension/service.js'
 import { NextIDProof } from '@masknet/web3-providers'
+import { uniqBy } from 'lodash-es'
 
 export type FriendsInformation = ProfileInformation & {
     profiles: BindingProof[]
@@ -50,6 +51,6 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
                 id: (friends[index].linkedPersona as ECKeyIdentifier).publicKeyAsHex,
             })
         })
-        return profiles
+        return uniqBy(profiles, ({ id }) => id)
     }, [network, currentPersona])
 }
