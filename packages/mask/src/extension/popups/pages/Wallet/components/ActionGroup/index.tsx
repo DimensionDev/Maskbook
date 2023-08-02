@@ -71,7 +71,7 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
                         address,
                         chainId,
                         token: matchPath(PopupRoutes.TokenDetail, location.pathname) ? true : undefined,
-                        undecided: !address,
+                        undecided: address ? undefined : true,
                     })
                     navigate(path)
                 }}>

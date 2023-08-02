@@ -52,7 +52,7 @@ const Transfer = memo(function Transfer() {
     useTitle(t('popups_send'))
     const [params] = useSearchParams()
     const paramRecipient = params.get('recipient')
-    const isToken = !!params.get('token')
+    const undecided = params.get('undecided') === 'true'
 
     const [currentTab, handleTabChange] = useParamTab<TransferTabType>(TransferTabType.Token)
 
@@ -67,7 +67,7 @@ const Transfer = memo(function Transfer() {
             <TabContext value={currentTab}>
                 <NormalHeader
                     tabList={
-                        isToken ? null : (
+                        undecided ? (
                             <MaskTabList
                                 onChange={handleTabChange}
                                 aria-label="persona-tabs"
@@ -75,7 +75,7 @@ const Transfer = memo(function Transfer() {
                                 <Tab label={t('popups_wallet_token')} value={TransferTabType.Token} />
                                 <Tab label={t('popups_wallet_collectible')} value={TransferTabType.NFT} />
                             </MaskTabList>
-                        )
+                        ) : null
                     }
                 />
                 <div className={classes.body}>

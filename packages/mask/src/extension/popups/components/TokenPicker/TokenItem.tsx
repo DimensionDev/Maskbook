@@ -11,7 +11,9 @@ import { memo, useEffect, useMemo, useRef } from 'react'
 const useStyles = makeStyles()((theme) => {
     return {
         item: {
+            height: 60,
             padding: theme.spacing(1, 1.5),
+            boxSizing: 'border-box',
             borderRadius: 8,
             border: `1px solid ${theme.palette.maskColor.line}`,
             marginBottom: theme.spacing(1),
@@ -30,6 +32,9 @@ const useStyles = makeStyles()((theme) => {
             border: `1px solid ${theme.palette.common.white}`,
             borderRadius: '50%',
         },
+        listText: {
+            margin: 0,
+        },
         text: {
             fontSize: 16,
             fontWeight: 700,
@@ -44,7 +49,7 @@ const useStyles = makeStyles()((theme) => {
         balance: {
             fontSize: 16,
             fontWeight: 700,
-            color: theme.palette.maskColor.second,
+            color: theme.palette.maskColor.main,
         },
         link: {
             color: theme.palette.maskColor.second,
@@ -88,7 +93,7 @@ export const TokenItem = memo(function TokenItem({
         <ListItem
             secondaryAction={
                 <Typography className={classes.balance}>
-                    {formatBalance(asset.balance, asset.decimals, 0, false, true, 5)}
+                    {formatBalance(asset.balance, asset.decimals, 0, false, true, 4)}
                 </Typography>
             }
             className={cx(classes.item, className, selected ? classes.selected : null)}
@@ -108,6 +113,7 @@ export const TokenItem = memo(function TokenItem({
                 </Box>
             </ListItemIcon>
             <ListItemText
+                className={classes.listText}
                 secondary={
                     <Typography className={classes.name}>
                         {asset.name}

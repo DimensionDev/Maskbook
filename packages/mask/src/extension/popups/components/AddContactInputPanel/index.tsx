@@ -15,16 +15,14 @@ const useStyles = makeStyles()((theme) => ({
     input: {
         flex: 1,
     },
-    to: {
-        display: 'flex',
-        alignItems: 'center',
-        marginRight: 16,
-        height: 40,
-    },
     toText: {
         color: theme.palette.maskColor.second,
         fontSize: 14,
         fontWeight: 700,
+        height: 40,
+        width: 33,
+        display: 'flex',
+        alignItems: 'center',
     },
     receiverPanel: {
         display: 'flex',
@@ -42,6 +40,7 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
+        paddingLeft: theme.spacing(0.5),
     },
     receiver: {
         display: 'flex',
@@ -82,9 +81,7 @@ const AddContactInputPanel = memo(function AddContactInputPanel(props: BoxProps)
 
     return (
         <Box padding={2} {...props} className={cx(classes.receiverPanel, props.className)}>
-            <div className={classes.to}>
-                <Typography className={classes.toText}>{t('popups_wallet_transfer_to')}</Typography>
-            </div>
+            <Typography className={classes.toText}>{t('popups_wallet_transfer_to')}</Typography>
             <div className={classes.fieldWrapper}>
                 <MaskTextField
                     placeholder={t('wallet_transfer_placeholder')}
