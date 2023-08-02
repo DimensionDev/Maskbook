@@ -39,5 +39,3 @@ export async function setAutoLockTimer() {
         await lockWallet()
     }, autoLockTime)
 }
-
-export * from './database/locker.js'
