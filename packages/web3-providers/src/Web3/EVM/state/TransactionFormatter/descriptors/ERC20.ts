@@ -115,6 +115,7 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                         tokenInAmount: parameters?.value,
                         description: approveDescription,
                         popup: {
+                            spender: parameters.spender,
                             tokenDescription: leftShift(parameters?.value, token?.decimals).gt(pow10(9))
                                 ? i18NextInstance.t('popups_wallet_token_infinite_unlock')
                                 : undefined,

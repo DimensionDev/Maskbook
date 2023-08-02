@@ -8,10 +8,8 @@ import {
     formatCurrency,
     isGreaterThan,
     pow10,
-    type TransactionDescriptor,
-    type TransactionContext,
 } from '@masknet/web3-shared-base'
-import { type GasConfig, type Transaction, type ChainId, type TransactionParameter } from '@masknet/web3-shared-evm'
+import { type GasConfig } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
 import {
     useChainContext,
@@ -21,13 +19,14 @@ import {
     useNativeToken,
     useNonFungibleAsset,
     useReverseAddress,
+    useWeb3Others,
 } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { unreachable } from '@masknet/kit'
 import { isString } from 'lodash-es'
 import { FormattedBalance, FormattedCurrency, ImageIcon, TokenIcon } from '@masknet/shared'
 import { GasSettingMenu } from '../GasSettingMenu/index.js'
-import type { JsonRpcPayload } from 'web3-core-helpers'
+import type { TransactionDetail } from '../../pages/Wallet/type.js'
 
 const useStyles = makeStyles()((theme) => ({
     info: {
@@ -69,15 +68,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface TransactionPreviewProps {
-    transaction?: {
-        owner?: string
-        paymentToken?: string
-        allowMaskAsGas?: boolean
-        payload: JsonRpcPayload
-        computedPayload: Partial<Transaction>
-        formattedTransaction?: TransactionDescriptor<ChainId, Transaction, TransactionParameter>
-        transactionContext?: TransactionContext<ChainId, TransactionParameter>
-    }
+    transaction?: TransactionDetail
     onConfigChange: (config: GasConfig) => void
 }
 
@@ -88,7 +79,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
     const { t } = useI18N()
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-
+    const Others = useWeb3Others()
     const { title, to, tokenAddress, amount } = useMemo(() => {
         const type = transaction?.formattedTransaction?.type
 
@@ -167,7 +158,9 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
             <Box className={classes.info}>
                 <Box display="flex" justifyContent="space-between">
                     <Typography className={classes.title}>{title}</Typography>
-                    {domain ? <Typography className={classes.title}>{domain}</Typography> : null}
+                    {domain ? (
+                        <Typography className={classes.title}>{Others.formatDomainName(domain)}</Typography>
+                    ) : null}
                 </Box>
                 <Box mt={2} display="flex" columnGap={0.5}>
                     <Typography className={classes.addressTitle}>{t('address')}:</Typography>

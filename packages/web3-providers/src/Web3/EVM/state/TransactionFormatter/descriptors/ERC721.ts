@@ -18,7 +18,8 @@ export class ERC721Descriptor extends BaseDescriptor implements TransactionDescr
         for (const { name, parameters } of context.methods) {
             switch (name) {
                 case 'approve': {
-                    if (parameters?.to === undefined || parameters?.tokenId === undefined) break
+                    const schemaType = await this.Web3.getSchemaType(context.to)
+                    if (parameters?.to === undefined || parameters?.tokenId === undefined || !schemaType) break
 
                     const symbol = await this.getContractSymbol(context.chainId, context.to)
 
@@ -46,7 +47,8 @@ export class ERC721Descriptor extends BaseDescriptor implements TransactionDescr
                     }
                 }
                 case 'setApprovalForAll': {
-                    if (parameters?.operator === undefined || parameters?.approved === undefined) break
+                    const schemaType = await this.Web3.getSchemaType(context.to)
+                    if (parameters?.operator === undefined || parameters?.approved === undefined || !schemaType) break
 
                     const action = parameters?.approved === false ? 'Revoke' : 'Unlock'
                     const symbol = await this.getContractSymbol(context.chainId, context.to)

@@ -21,9 +21,11 @@ import { useContainer } from 'unstated-next'
 import { PopupContext } from '../../hook/usePopupContext.js'
 import { BigNumber } from 'bignumber.js'
 import { FormattedBalance } from '@masknet/shared'
+import { noop } from 'lodash-es'
 interface GasSettingMenuProps {
     gas: string
     initConfig?: GasConfig
+    disable?: boolean
     onChange?: (config: GasConfig) => void
     paymentToken?: string
     allowMaskAsGas?: boolean
@@ -34,6 +36,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
     onChange,
     initConfig,
     paymentToken,
+    disable,
     allowMaskAsGas,
 }) {
     const { t } = useI18N()
@@ -51,7 +54,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
         [onChange],
     )
 
-    const [menu, openMenu] = useGasOptionsMenu(gas, handleChange)
+    const [menu, openMenu] = useGasOptionsMenu(gas, !disable ? handleChange : noop)
 
     const { value: gasOptions } = useGasOptions()
 
@@ -129,20 +132,22 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
                     onlyRemainTwoDecimal: true,
                 })}
             </Typography>
-            <Box
-                py={0.5}
-                px={1.5}
-                border={`1px solid ${theme.palette.maskColor.line}`}
-                onClick={openMenu}
-                borderRadius={99}
-                display="inline-flex"
-                alignItems="center"
-                columnGap={0.5}>
-                <Typography fontWeight={700} lineHeight="18px" fontSize={14}>
-                    {gasOptionName}
-                </Typography>
-                <Icons.Candle size={12} />
-            </Box>
+            {!disable ? (
+                <Box
+                    py={0.5}
+                    px={1.5}
+                    border={`1px solid ${theme.palette.maskColor.line}`}
+                    onClick={openMenu}
+                    borderRadius={99}
+                    display="inline-flex"
+                    alignItems="center"
+                    columnGap={0.5}>
+                    <Typography fontWeight={700} lineHeight="18px" fontSize={14}>
+                        {gasOptionName}
+                    </Typography>
+                    <Icons.Candle size={12} />
+                </Box>
+            ) : null}
             {menu}
         </Box>
     )

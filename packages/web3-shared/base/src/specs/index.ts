@@ -774,6 +774,8 @@ export interface TransactionDescriptor<ChainId, Transaction, Parameter = string 
         failedTitle?: string
     }
     popup?: {
+        /** The spender address of erc20 approve */
+        spender?: string
         /** The method name of contract function */
         method?: string
         /** The Non-fugible token description */

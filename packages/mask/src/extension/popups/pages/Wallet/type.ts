@@ -1,3 +1,7 @@
+import type { TransactionDescriptor, TransactionContext } from '@masknet/web3-shared-base'
+import type { ChainId, TransactionParameter, Transaction } from '@masknet/web3-shared-evm'
+import type { JsonRpcPayload } from 'web3-core-helpers'
+
 export enum ReplaceType {
     CANCEL = 'CANCEL',
     SPEED_UP = 'SPEED_UP',
@@ -40,6 +44,16 @@ export type GasSetting = {
     gasPrice?: string
     maxPriorityFeePerGas?: string
     maxFeePerGas?: string
+}
+
+export type TransactionDetail = {
+    owner?: string
+    paymentToken?: string
+    allowMaskAsGas?: boolean
+    payload: JsonRpcPayload
+    computedPayload: Partial<Transaction>
+    formattedTransaction?: TransactionDescriptor<ChainId, Transaction, TransactionParameter>
+    transactionContext?: TransactionContext<ChainId, TransactionParameter>
 }
 
 export type GasParams = Omit<GasSetting, 'gas'>
