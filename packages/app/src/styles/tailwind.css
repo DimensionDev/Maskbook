@@ -11,5 +11,10 @@ body {
     box-sizing: border-box;
 }
 
+.containerPage {
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+}
 @tailwind components;
 @tailwind utilities;

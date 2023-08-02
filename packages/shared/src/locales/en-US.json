@@ -359,5 +359,6 @@
     "connect": "Connect",
     "reset": "Reset",
     "editor": "Editor",
-    "typed_message_text_alert": "Only TypedMessageText is supported currently."
+    "typed_message_text_alert": "Only TypedMessageText is supported currently.",
+    "plugin_wallet_connect_desc": "Supports Mask Wallet, MetaMask and WalletConnect."
 }
