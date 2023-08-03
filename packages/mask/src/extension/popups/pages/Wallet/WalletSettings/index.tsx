@@ -14,6 +14,8 @@ import { ChangePaymentPassword } from './ChangePaymentPassword.js'
 import { ShowPrivateKey } from './ShowPrivateKey.js'
 import { ChangeNetwork } from './ChangeNetwork.js'
 import { ChangeCurrency } from './ChangeCurrency.js'
+import { ActionButton } from '@masknet/theme'
+import { WalletRemoveModal } from '../../../modals/modals.js'
 
 const WalletSettings = memo(() => {
     const { t } = useI18N()
@@ -59,6 +61,21 @@ const WalletSettings = memo(() => {
                 <ShowPrivateKey />
                 <ChangeNetwork />
             </List>
+            <Box className={classes.bottomAction}>
+                <ActionButton
+                    fullWidth
+                    onClick={async () =>
+                        await WalletRemoveModal.openAndWaitForClose({
+                            title: t('remove'),
+                            wallet,
+                        })
+                    }
+                    width={368}
+                    color="error"
+                    className={classes.removeWalletButton}>
+                    {t('popups_wallet_settings_remove_wallet')}
+                </ActionButton>
+            </Box>
         </div>
     )
 })

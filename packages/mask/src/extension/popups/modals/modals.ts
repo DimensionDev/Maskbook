@@ -4,6 +4,7 @@ import type { ConfirmModalOpenProps } from './ConfirmModal/index.js'
 import type { AddContactModalOpenProps } from './AddContactModal/index.js'
 import type { EditContactModalOpenProps } from './EditContactModal/index.js'
 import type { WalletRenameModalOpenProps } from './WalletRenameModal/index.js'
+import type { WalletRemoveModalOpenProps } from './WalletRemoveModal/index.js'
 import type { DeleteContactModalOpenProps } from './DeleteContactModal/index.js'
 import type { WalletAutoLockSettingModalOpenProps } from './WalletAutoLockSettingModal/index.js'
 import type { GasSettingModalCloseProps, GasSettingModalOpenProps } from './GasSettingModal/index.js'
@@ -16,6 +17,7 @@ export const ConfirmModal = new SingletonModal<ConfirmModalOpenProps, boolean>()
 export const AddContactModal = new SingletonModal<AddContactModalOpenProps, boolean>()
 export const EditContactModal = new SingletonModal<EditContactModalOpenProps, boolean>()
 export const WalletRenameModal = new SingletonModal<WalletRenameModalOpenProps, boolean>()
+export const WalletRemoveModal = new SingletonModal<WalletRemoveModalOpenProps, boolean>()
 export const DeleteContactModal = new SingletonModal<DeleteContactModalOpenProps, boolean>()
 export const WalletAutoLockSettingModal = new SingletonModal<WalletAutoLockSettingModalOpenProps, boolean>()
 export const GasSettingModal = new SingletonModal<GasSettingModalOpenProps, GasSettingModalCloseProps>()

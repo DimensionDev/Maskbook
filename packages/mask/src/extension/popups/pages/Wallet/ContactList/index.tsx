@@ -112,6 +112,7 @@ const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivid
         cursor: 'pointer',
     },
     bottomAction: {
+        position: 'absolute',
         display: 'flex',
         justifyContent: 'center',
         background: theme.palette.maskColor.secondaryBottom,

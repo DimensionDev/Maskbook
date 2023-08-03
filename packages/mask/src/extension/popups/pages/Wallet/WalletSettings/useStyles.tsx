@@ -64,4 +64,19 @@ export const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         height: 24,
     },
+    bottomAction: {
+        position: 'absolute',
+        paddingTop: 16,
+        display: 'flex',
+        justifyContent: 'center',
+        background: theme.palette.maskColor.secondaryBottom,
+        boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
+        backdropFilter: 'blur(8px)',
+        width: '100%',
+        bottom: 0,
+        zIndex: 100,
+    },
+    removeWalletButton: {
+        marginBottom: 16,
+    },
 }))
