@@ -20,7 +20,7 @@ const FriendsHome = memo(() => {
         type ?? NextIDPlatform.NextID,
         true,
     )
-    const { value: searchedList = EMPTY_LIST } = useFriendsFromSearch(searchResult)
+    const { value: searchedList = EMPTY_LIST } = useFriendsFromSearch(searchResult, value)
     useTitle(t('popups_encrypted_friends'))
     return (
         <FriendsHomeUI

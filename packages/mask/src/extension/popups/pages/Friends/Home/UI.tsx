@@ -70,6 +70,7 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(
                                         nextId={friend.persona}
                                         profiles={friend.proofs}
                                         publicKey={friend.linkedPersona?.rawPublicKey}
+                                        isLocal={friend.isLocal}
                                     />
                                 )
                             })}

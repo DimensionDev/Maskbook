@@ -2,11 +2,15 @@ import { useAsyncRetry } from 'react-use'
 import { ECKeyIdentifier, EMPTY_LIST, type NextIDPersonaBindings } from '@masknet/shared-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { uniqBy } from 'lodash-es'
+import type { FriendsInformation } from './useFriends.js'
 
-export type NextIDPersonaBindingsWithIdentifier = NextIDPersonaBindings & { linkedPersona: ECKeyIdentifier }
+export type NextIDPersonaBindingsWithIdentifier = NextIDPersonaBindings & { linkedPersona: ECKeyIdentifier } & {
+    isLocal?: boolean
+}
 
 export function useFriendsFromSearch(
     searchResult?: NextIDPersonaBindings[],
+    localList?: FriendsInformation[],
 ): AsyncStateRetry<NextIDPersonaBindingsWithIdentifier[]> {
     return useAsyncRetry(async () => {
         if (!searchResult?.length) return EMPTY_LIST
@@ -31,8 +35,11 @@ export function useFriendsFromSearch(
                 linkedPersona: identifier,
                 activated_at: item.activated_at,
                 persona: item.persona,
+                isLocal: localList
+                    ? localList.some((x) => x.linkedPersona?.publicKeyAsHex === identifier.publicKeyAsHex)
+                    : false,
             })
         })
         return uniqBy(profiles, ({ linkedPersona }) => linkedPersona.publicKeyAsHex)
-    }, [searchResult])
+    }, [searchResult, localList])
 }

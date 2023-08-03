@@ -1,13 +1,22 @@
-import { memo } from 'react'
+import { memo, useState, useCallback } from 'react'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography, Link, useTheme, ButtonBase as Button, ButtonBase, Avatar } from '@mui/material'
-import { formatPersonaFingerprint, type BindingProof, PopupRoutes } from '@masknet/shared-base'
-import { CopyButton } from '@masknet/shared'
+import {
+    formatPersonaFingerprint,
+    type BindingProof,
+    PopupRoutes,
+    ProfileIdentifier,
+    ECKeyIdentifier,
+} from '@masknet/shared-base'
+import { CopyButton, PersonaContext } from '@masknet/shared'
 import urlcat from 'urlcat'
 import { useNavigate } from 'react-router-dom'
 import { TwitterAccount } from './TwitterAccount/index.js'
 import { Account } from './Account/index.js'
+import { NextIDPlatform } from '@masknet/shared-base'
+import { attachNextIDToProfile } from '../../../../../utils/utils.js'
+import Services from '../../../../service.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -61,6 +70,18 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         right: '10px',
     },
+    addButton: {
+        display: 'flex',
+        padding: '8px 12px',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: '99px',
+        background: theme.palette.maskColor.main,
+        color: theme.palette.maskColor.white,
+        fontSize: '12px',
+        lineHeight: '16px',
+        fontWeight: 700,
+    },
 }))
 
 interface ContactCardProps {
@@ -75,6 +96,28 @@ export const ContactCard = memo<ContactCardProps>(({ avatar, nextId, profiles, p
     const theme = useTheme()
     const { classes } = useStyles()
     const navigate = useNavigate()
+    const [local, setLocal] = useState(false)
+    const { currentPersona } = PersonaContext.useContainer()
+    const handleAddFriend = useCallback(() => {
+        setLocal(true)
+        const twitter = profiles.find((p) => p.platform === NextIDPlatform.Twitter)
+        if (!twitter || !currentPersona) return
+        const profileIdentifier = ProfileIdentifier.of('twitter.com', twitter.identity).unwrap()
+        const personaIdentifier = ECKeyIdentifier.fromHexPublicKeyK256(nextId).expect(
+            `${nextId} should be a valid hex public key in k256`,
+        )
+        console.log(profileIdentifier)
+        attachNextIDToProfile({
+            identifier: profileIdentifier,
+            linkedPersona: personaIdentifier,
+            fromNextID: true,
+            linkedTwitterNames: [twitter.identity],
+        })
+        Services.Identity.queryProfilesInformation([profileIdentifier]).then((res) => {
+            console.log(res)
+        })
+    }, [profiles, nextId, currentPersona])
+
     return (
         <Box className={classes.card}>
             <Box className={classes.titleWrap}>
@@ -108,22 +151,28 @@ export const ContactCard = memo<ContactCardProps>(({ avatar, nextId, profiles, p
                         </Typography>
                     </Box>
                 </Box>
-                <Button
-                    onClick={() =>
-                        navigate(`${PopupRoutes.FriendsDetail}/${nextId}`, {
-                            state: {
-                                avatar,
-                                publicKey,
-                                nextId,
-                                profiles,
-                                isLocal,
-                            },
-                        })
-                    }
-                    color="inherit"
-                    style={{ borderRadius: '50%' }}>
-                    <Icons.ArrowRight />
-                </Button>
+                {isLocal || local ? (
+                    <Button
+                        onClick={() =>
+                            navigate(`${PopupRoutes.FriendsDetail}/${nextId}`, {
+                                state: {
+                                    avatar,
+                                    publicKey,
+                                    nextId,
+                                    profiles,
+                                    isLocal,
+                                },
+                            })
+                        }
+                        color="inherit"
+                        style={{ borderRadius: '50%' }}>
+                        <Icons.ArrowRight />
+                    </Button>
+                ) : (
+                    <Button className={classes.addButton} onClick={handleAddFriend}>
+                        Add
+                    </Button>
+                )}
             </Box>
             <Box
                 display="flex"
