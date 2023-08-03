@@ -1,7 +1,7 @@
 import {
+    type ChainId,
     APE,
     BUSD,
-    type ChainId,
     DAI,
     HUSD,
     RARI,

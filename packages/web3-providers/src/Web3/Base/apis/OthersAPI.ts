@@ -113,10 +113,10 @@ export class OthersAPI_Base<
     formatSchemaType(schema: SchemaType): string {
         throw new Error('Method not implemented.')
     }
+
     createNativeToken(chainId: ChainId): FungibleToken<ChainId, SchemaType> {
         throw new Error('Method not implemented.')
     }
-
     createFungibleToken(
         chainId: ChainId,
         schemaType: SchemaType,
