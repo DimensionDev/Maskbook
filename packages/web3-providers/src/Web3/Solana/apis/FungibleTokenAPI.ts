@@ -87,7 +87,6 @@ export class SolanaFungibleTokenAPI
     implements TokenListAPI.Provider<ChainId, SchemaType>, FungibleTokenAPI.Provider<ChainId, SchemaType>
 {
     private CoinGecko = new CoinGeckoPriceAPI_Solana()
-    private ChainResolver = new SolanaChainResolverAPI()
 
     private async getSplTokenList(chainId: ChainId, account: string) {
         if (!isValidChainId(chainId)) return []
@@ -140,7 +139,7 @@ export class SolanaFungibleTokenAPI
             params: [account],
         })
         const balance = data.result?.value.toString() ?? '0'
-        return createFungibleAsset(this.ChainResolver.nativeCurrency(chainId), balance, {
+        return createFungibleAsset(new SolanaChainResolverAPI().nativeCurrency(chainId), balance, {
             [CurrencyType.USD]: price.toString(),
         })
     }

@@ -24,7 +24,6 @@ const redPacketInterFace = new Interface(REDPACKET_ABI)
 const nftRedPacketInterFace = new Interface(NFT_REDPACKET_ABI)
 
 export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
-    private ChainResolver = new ChainResolverAPI()
     private ChainbaseRedPacket = new ChainbaseRedPacketAPI()
     private EtherscanRedPacket = new EtherscanRedPacketAPI()
     private ContractRedPacket = new ContractRedPacketAPI()
@@ -142,7 +141,7 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
                     txid: tx.hash ?? '',
                     contract_version: 1,
                     shares: decodedInputParam._erc721_token_ids.length,
-                    network: this.ChainResolver.networkType(tx.chainId),
+                    network: new ChainResolverAPI().networkType(tx.chainId),
                     token_address: decodedInputParam._token_addr,
                     chainId: tx.chainId,
                     sender: {
@@ -191,7 +190,7 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
                     duration: decodedInputParam._duration.toNumber() * 1000,
                     block_number: Number(tx.blockNumber),
                     contract_version: 4,
-                    network: this.ChainResolver.networkType(tx.chainId),
+                    network: new ChainResolverAPI().networkType(tx.chainId),
                     token_address: decodedInputParam._token_addr,
                     sender: {
                         address: senderAddress,

@@ -1,9 +1,8 @@
-import { memo } from 'react'
-import { Typography, useTheme } from '@mui/material'
-import { useI18N } from '../../../../utils/index.js'
-import { LoadingBase, makeStyles } from '@masknet/theme'
+import { memo, type HTMLProps } from 'react'
+import { makeStyles } from '@masknet/theme'
+import { LoadingStatus } from '@masknet/shared'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()({
     container: {
         display: 'flex',
         justifyContent: 'center',
@@ -11,28 +10,19 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         flex: 1,
         gap: 12,
-        minHeight: 600,
-        minWidth: 400,
     },
-}))
+})
 
-export interface LoadingPlaceholderProps {
+export interface LoadingPlaceholderProps extends HTMLProps<HTMLDivElement> {
     title?: string
-    titleColor?: string
-    iconColor?: string
 }
 
-export const LoadingPlaceholder = memo((props: LoadingPlaceholderProps) => {
-    const { t } = useI18N()
-    const theme = useTheme()
-    const { classes } = useStyles()
+export const LoadingPlaceholder = memo(function LoadingPlaceholder({ title, ...rest }: LoadingPlaceholderProps) {
+    const { classes, cx } = useStyles()
 
     return (
-        <main className={classes.container}>
-            <LoadingBase style={{ color: props.iconColor ?? theme.palette.maskColor.main }} />
-            <Typography variant="caption" color={props.titleColor ?? theme.palette.maskColor.second}>
-                {props.title ?? t('loading')}
-            </Typography>
+        <main {...rest} className={cx(classes.container, rest.className)}>
+            <LoadingStatus iconSize={24}>{title}</LoadingStatus>
         </main>
     )
 })

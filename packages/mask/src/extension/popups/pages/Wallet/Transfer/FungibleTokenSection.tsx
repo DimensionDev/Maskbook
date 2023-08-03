@@ -4,6 +4,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
+    ChainContextProvider,
     useChainContext,
     useFungibleToken,
     useNativeTokenAddress,
@@ -18,8 +19,7 @@ import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
-import { formatBalance2 } from '../../../../../utils/formatBalance2.js'
-import { useI18N } from '../../../../../utils/index.js'
+import { formatTokenBalance, useI18N } from '../../../../../utils/index.js'
 import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
 import { TokenPicker } from '../../../components/index.js'
 import { useTokenParams } from '../../../hook/index.js'
@@ -80,6 +80,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { chainId, address, params, setParams } = useTokenParams()
+    const chainContextValue = useMemo(() => ({ chainId }), [chainId])
     const navigate = useNavigate()
     // Enter from wallet home page, sending token is not decided yet
     const undecided = params.get('undecided') === 'true'
@@ -177,7 +178,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                     </ProgressiveText>
                     <ProgressiveText loading={isLoadingBalance} skeletonWidth={60}>
                         {t('available_amount', {
-                            amount: formatBalance2(tokenBalance, token?.decimals),
+                            amount: formatTokenBalance(tokenBalance, token?.decimals),
                         })}
                     </ProgressiveText>
                 </Box>
@@ -211,16 +212,18 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
             </Box>
             <Box display="flex" justifyContent="space-between" mt={2} mx={2}>
                 <Typography className={classes.label}>{t('gas_fee')}</Typography>
-                <GasSettingMenu
-                    gas={gasLimit}
-                    defaultChainId={chainId}
-                    initConfig={defaultGasConfig}
-                    allowMaskAsGas
-                    paymentToken={paymentAddress}
-                    onPaymentTokenChange={setPaymentAddress}
-                    owner={wallet?.owner}
-                    onChange={setGasConfig}
-                />
+                <ChainContextProvider value={chainContextValue}>
+                    <GasSettingMenu
+                        gas={gasLimit}
+                        defaultChainId={chainId}
+                        initConfig={defaultGasConfig}
+                        allowMaskAsGas
+                        paymentToken={paymentAddress}
+                        onPaymentTokenChange={setPaymentAddress}
+                        owner={wallet?.owner}
+                        onChange={setGasConfig}
+                    />
+                </ChainContextProvider>
             </Box>
             <Box className={classes.actionGroup}>
                 <ActionButton variant="outlined" fullWidth onClick={() => navigate(-2)}>

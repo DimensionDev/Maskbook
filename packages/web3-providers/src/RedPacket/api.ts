@@ -12,7 +12,6 @@ const creationSuccessTopicInputs = REDPACKET_ABI.find((x) => x.name === 'Creatio
 
 export class ContractRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
     private Web3 = new ConnectionReadonlyAPI()
-    private ChainResolver = new ChainResolverAPI()
 
     async getHistories(
         chainId: ChainId,
@@ -57,7 +56,7 @@ export class ContractRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, 
                 duration: secondsToMilliseconds(Number(result.duration)),
                 block_number: log.blockNumber,
                 contract_version: 4,
-                network: this.ChainResolver.networkType(chainId),
+                network: new ChainResolverAPI().networkType(chainId),
                 token_address: result.token_address,
                 sender: {
                     address: senderAddress,

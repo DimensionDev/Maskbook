@@ -58,7 +58,6 @@ export class SolanaConnectionAPI
 {
     private MagicEden = new MagicEdenAPI()
     private FungibleToken = new SolanaFungibleTokenAPI()
-    private ChainResolver = new SolanaChainResolverAPI()
 
     constructor(private options?: ConnectionOptions) {}
 
@@ -279,7 +278,7 @@ export class SolanaConnectionAPI
 
     async getNativeToken(initial?: ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
-        return this.ChainResolver.nativeCurrency(options.chainId)
+        return new SolanaChainResolverAPI().nativeCurrency(options.chainId)
     }
 
     async getFungibleToken(address: string, initial?: ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {

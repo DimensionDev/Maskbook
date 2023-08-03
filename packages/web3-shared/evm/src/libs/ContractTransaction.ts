@@ -28,7 +28,7 @@ export class ContractTransaction<T extends BaseContract | null> {
 
         return pickBy(
             {
-                from: overrides?.from ?? this.contract?.defaultAccount ?? '',
+                from: overrides?.from ?? this.contract?.defaultAccount ?? this.contract?.options.from ?? '',
                 to: this.contract?.options.address,
                 data: transaction?.encodeABI(),
                 value: overrides?.value ? toHex(overrides.value) : undefined,

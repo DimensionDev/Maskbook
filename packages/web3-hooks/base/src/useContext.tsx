@@ -1,4 +1,4 @@
-import React, { createContext, type ReactNode, useContext, useState, useMemo, type ProviderProps } from 'react'
+import React, { createContext, type ReactNode, useContext, useState, useMemo, type ProviderProps, memo } from 'react'
 import { isUndefined, omitBy } from 'lodash-es'
 import { useSubscription } from 'use-subscription'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
@@ -60,7 +60,10 @@ export function NetworkContextProvider({ value, children }: ProviderProps<Networ
     return <NetworkContext.Provider value={context}>{children}</NetworkContext.Provider>
 }
 
-export function ChainContextProvider({ value, children }: ProviderProps<ChainContextGetter>) {
+export const ChainContextProvider = memo(function ChainContextProvider({
+    value,
+    children,
+}: ProviderProps<ChainContextGetter>) {
     const { pluginID } = useNetworkContext()
     const { controlled } = value
 
@@ -102,7 +105,7 @@ export function ChainContextProvider({ value, children }: ProviderProps<ChainCon
         [account, chainId, providerType],
     )
     return <ChainContext.Provider value={context}>{children}</ChainContext.Provider>
-}
+})
 
 export function Web3ContextProvider({
     value,

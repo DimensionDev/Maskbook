@@ -17,9 +17,6 @@ import { fetchFromChainbase } from '../helpers.js'
 import type { HubOptions_Base, NonFungibleTokenAPI } from '../../entry-types.js'
 
 export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    private ChainResolver = new ChainResolverAPI()
-    private ExplorerResolver = new ExplorerResolverAPI()
-
     createNonFungibleTokenPermalink(chainId: ChainId, address: string, tokenId: string) {
         if (chainId === ChainId.Mainnet || chainId === ChainId.Matic) {
             return urlcat('https://opensea.com/:protocol/:contract/:tokenId', {
@@ -28,7 +25,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
                 protocol: chainId === ChainId.Mainnet ? 'ethereum' : 'matic',
             })
         }
-        return this.ExplorerResolver.addressLink(chainId, address)
+        return new ExplorerResolverAPI().addressLink(chainId, address)
     }
 
     createNonFungibleTokenAssetFromNFT(chainId: ChainId, nft: NFT): NonFungibleAsset<ChainId, SchemaType> {
@@ -141,7 +138,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
             }),
         )
         if (!floorPrice) return
-        const nativeToken = this.ChainResolver.nativeCurrency(chainId)
+        const nativeToken = new ChainResolverAPI().nativeCurrency(chainId)
         return {
             amount: scale10(floorPrice.floor_price, nativeToken.decimals).toFixed(0),
             token: nativeToken,

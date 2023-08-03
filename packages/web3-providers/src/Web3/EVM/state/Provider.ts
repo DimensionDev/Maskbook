@@ -25,8 +25,6 @@ import { Providers } from '../providers/index.js'
 import { ProviderState } from '../../Base/state/Provider.js'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
-    private ChainResolver = new ChainResolverAPI()
-
     constructor(context: Plugin.Shared.SharedUIContext) {
         super(context, Providers, {
             pluginID: NetworkPluginID.PLUGIN_EVM,
@@ -38,7 +36,7 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             getDefaultNetworkType,
             getDefaultProviderType,
             getNetworkTypeFromChainId: (chainId: ChainId) =>
-                this.ChainResolver.networkType(chainId) ?? NetworkType.Ethereum,
+                new ChainResolverAPI().networkType(chainId) ?? NetworkType.Ethereum,
         })
     }
 

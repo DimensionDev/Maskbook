@@ -61,7 +61,6 @@ export function getNativeTokenLabel(networkType: NetworkType) {
 export class Zrx implements TraderAPI.Provider {
     private Web3 = new ConnectionReadonlyAPI()
     private Contract = new ContractReadonlyAPI()
-    private ChainResolver = new ChainResolverAPI()
 
     public provider = TradeProvider.ZRX
 
@@ -101,7 +100,7 @@ export class Zrx implements TraderAPI.Provider {
     ) {
         if (isZero(inputAmount) || !inputToken || !outputToken) return null
 
-        const networkType = this.ChainResolver.networkType(chainId as ChainId)
+        const networkType = new ChainResolverAPI().networkType(chainId as ChainId)
 
         if (!networkType) return
         const sellToken = isNativeTokenAddress(inputToken.address)

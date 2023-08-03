@@ -8,12 +8,14 @@ import {
     formatCurrency,
     isGreaterThan,
     pow10,
+    isSameAddress,
 } from '@masknet/web3-shared-base'
 import { type GasConfig } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
 import {
     useChainContext,
     useChainIdSupport,
+    useContacts,
     useFungibleToken,
     useFungibleTokenPrice,
     useNativeToken,
@@ -83,6 +85,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
     const { t } = useI18N()
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const contacts = useContacts()
     const Others = useWeb3Others()
     const { title, to, tokenAddress, amount } = useMemo(() => {
         const type = transaction?.formattedTransaction?.type
@@ -91,10 +94,10 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
 
         switch (type) {
             case TransactionDescriptorType.INTERACTION:
-                const to = transaction.owner
-                    ? transaction.formattedTransaction?.context?.methods?.find((x) => x.name === 'transfer')?.parameters
-                          ?.to
-                    : undefined
+                const to = transaction.formattedTransaction?.context?.methods?.find((x) =>
+                    ['transfer', 'transferFrom', 'safeTransferFrom'].includes(x.name ?? ''),
+                )?.parameters?.to
+
                 return {
                     title: transaction.formattedTransaction?.title ?? t('popups_wallet_contract_interaction'),
                     to: to && isString(to) ? to : transaction.computedPayload?.to,
@@ -155,6 +158,12 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
         }
     }, [transaction?.computedPayload, isSupport1559])
 
+    const receiver = useMemo(() => {
+        if (domain) return Others.formatDomainName(domain)
+        const target = contacts.find((x) => isSameAddress(x.address, to))
+        return target?.name
+    }, [domain, to, contacts])
+
     if (!transaction) return
 
     return (
@@ -162,13 +171,11 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
             <Box className={classes.info}>
                 <Box display="flex" justifyContent="space-between">
                     <Typography className={classes.title}>{title}</Typography>
-                    {domain ? (
-                        <Typography className={classes.title}>{Others.formatDomainName(domain)}</Typography>
-                    ) : null}
+                    {receiver ? <Typography className={classes.title}>{receiver}</Typography> : null}
                 </Box>
-                <Box mt={2} display="flex" columnGap={0.5}>
+                <Box mt={2} display="flex" columnGap={0.5} alignItems="center">
                     <Typography className={classes.addressTitle}>{t('address')}:</Typography>
-                    <Typography fontSize={12} fontWeight={700}>
+                    <Typography fontSize={11} fontWeight={700} lineHeight="16px">
                         {to}
                     </Typography>
                 </Box>

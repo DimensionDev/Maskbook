@@ -30,8 +30,6 @@ async function fetchFromX2Y2<T>(pathname: string) {
 }
 
 export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    private ChainResolver = new ChainResolverAPI()
-
     createPermalink(address: string, tokenId: string) {
         return urlcat('https://x2y2.io/eth/:contract/:tokenId', {
             contract: address,
@@ -61,7 +59,7 @@ export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             priceInToken: {
                 amount: order.price,
                 token: isZeroAddress(order.currency)
-                    ? this.ChainResolver.nativeCurrency(ChainId.Mainnet)
+                    ? new ChainResolverAPI().nativeCurrency(ChainId.Mainnet)
                     : createERC20Token(ChainId.Mainnet, order.currency),
             },
             source: SourceType.X2Y2,
@@ -84,7 +82,7 @@ export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             },
             timestamp: Number.parseInt(event.created_at, 10) * 1000,
             paymentToken: isZeroAddress(event.order.currency)
-                ? this.ChainResolver.nativeCurrency(ChainId.Mainnet)
+                ? new ChainResolverAPI().nativeCurrency(ChainId.Mainnet)
                 : createERC20Token(ChainId.Mainnet, event.order.currency),
             source: SourceType.X2Y2,
         }

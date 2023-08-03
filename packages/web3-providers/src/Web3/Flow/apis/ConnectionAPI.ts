@@ -58,7 +58,6 @@ export class FlowConnectionAPI
 
     private Web3 = new FlowWeb3API(this.options)
     private ConnectionOptions = new FlowConnectionOptionsAPI(this.options)
-    private ChainResolver = new FlowChainResolverAPI()
 
     getWeb3(initial?: ConnectionOptions) {
         return this.Web3.getWeb3(initial)
@@ -183,7 +182,7 @@ export class FlowConnectionAPI
 
     getNativeToken(initial?: ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
-        const token = this.ChainResolver.nativeCurrency(options.chainId)
+        const token = new FlowChainResolverAPI().nativeCurrency(options.chainId)
         return Promise.resolve(token)
     }
 

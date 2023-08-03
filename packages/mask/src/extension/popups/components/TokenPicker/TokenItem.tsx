@@ -7,7 +7,7 @@ import { type NetworkDescriptor } from '@masknet/web3-shared-base'
 import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { Box, ListItem, ListItemIcon, ListItemText, Typography, type ListItemProps, Link } from '@mui/material'
 import { memo, useEffect, useMemo, useRef } from 'react'
-import { formatBalance2 } from '../../../../utils/index.js'
+import { formatTokenBalance } from '../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -93,7 +93,7 @@ export const TokenItem = memo(function TokenItem({
     return (
         <ListItem
             secondaryAction={
-                <Typography className={classes.balance}>{formatBalance2(asset.balance, asset.decimals)}</Typography>
+                <Typography className={classes.balance}>{formatTokenBalance(asset.balance, asset.decimals)}</Typography>
             }
             className={cx(classes.item, className, selected ? classes.selected : null)}
             onClick={() => onSelect?.(asset)}

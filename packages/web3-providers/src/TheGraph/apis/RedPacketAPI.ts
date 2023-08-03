@@ -39,8 +39,6 @@ type NFTRedpacketRecord = {
 }
 
 export class TheGraphRedPacketAPI {
-    private ChainResolver = new ChainResolverAPI()
-
     async getHistories(chainId: ChainId, senderAddress: string, contractAddress: string) {
         if (!senderAddress || !contractAddress) return
 
@@ -87,7 +85,7 @@ export class TheGraphRedPacketAPI {
                     duration: Number(x.duration) * 1000,
                     block_number: Number(x.block_number),
                     contract_version: 4,
-                    network: this.ChainResolver.networkType(chainId),
+                    network: new ChainResolverAPI().networkType(chainId),
                     token_address: x.token.address,
                     sender: {
                         address: senderAddress,
@@ -145,7 +143,7 @@ export class TheGraphRedPacketAPI {
                     txid: x.txid,
                     contract_version: 1,
                     shares: x.shares,
-                    network: this.ChainResolver.networkType(chainId),
+                    network: new ChainResolverAPI().networkType(chainId),
                     token_address: x.token_contract.address,
                     sender: {
                         address: x.creator.address,

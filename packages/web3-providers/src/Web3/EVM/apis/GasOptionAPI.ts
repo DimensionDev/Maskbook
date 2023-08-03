@@ -10,7 +10,6 @@ export class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOpti
     static HISTORICAL_BLOCKS = 4
 
     private Web3 = new ConnectionReadonlyAPI()
-    private ChainResolver = new ChainResolverAPI()
 
     private avg(arr: number[]) {
         const sum = arr.reduce((a, v) => a + v)
@@ -105,7 +104,7 @@ export class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOpti
     }
 
     async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
-        if (this.ChainResolver.isFeatureSupported(chainId, 'EIP1559')) return this.getGasOptionsForEIP1559(chainId)
+        if (new ChainResolverAPI().isFeatureSupported(chainId, 'EIP1559')) return this.getGasOptionsForEIP1559(chainId)
         else return this.getGasOptionsForPriorEIP1559(chainId)
     }
 }

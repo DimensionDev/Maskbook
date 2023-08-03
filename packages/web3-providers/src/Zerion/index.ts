@@ -96,8 +96,6 @@ export class ZerionAPI
 }
 
 export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    private ChainResolver = new ChainResolverAPI()
-
     createNonFungibleCollectionFromCollectionData(chainId: ChainId, collection: ZerionNonFungibleCollection) {
         return {
             chainId,
@@ -209,7 +207,7 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
 
         if (!response.payload['nft-info'].asset.floor_price) return
 
-        const nativeToken = this.ChainResolver.nativeCurrency(chainId)
+        const nativeToken = new ChainResolverAPI().nativeCurrency(chainId)
         return {
             amount: scale10(response.payload['nft-info'].asset.floor_price, nativeToken.decimals).toFixed(0),
             token: nativeToken,
