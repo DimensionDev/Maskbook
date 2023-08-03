@@ -12,8 +12,6 @@ import { ConnectionOptionsAPI_Base } from '../../Base/apis/ConnectionOptionsAPI.
 import { Web3StateRef } from './Web3StateAPI.js'
 import { OthersAPI } from './OthersAPI.js'
 
-const Web3Others = new OthersAPI()
-
 export class ConnectionOptionsAPI extends ConnectionOptionsAPI_Base<
     ChainId,
     SchemaType,
@@ -29,6 +27,6 @@ export class ConnectionOptionsAPI extends ConnectionOptionsAPI_Base<
     }
 
     override get Web3Others() {
-        return Web3Others
+        return new OthersAPI()
     }
 }

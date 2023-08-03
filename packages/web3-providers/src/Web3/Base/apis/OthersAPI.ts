@@ -6,18 +6,10 @@ import type { ChainResolverAPI_Base } from './ChainResolverAPI.js'
 import type { ExplorerResolverAPI_Base } from './ExplorerResolverAPI.js'
 
 export class OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
-    get chainResolver(): ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
-        return null!
-    }
-    get explorerResolver(): ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
-        return null!
-    }
-    get providerResolver(): ProviderResolverAPI_Base<ChainId, ProviderType> {
-        return null!
-    }
-    get networkResolver(): NetworkResolverAPI_Base<ChainId, NetworkType> {
-        return null!
-    }
+    readonly chainResolver: ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> = null!
+    readonly explorerResolver: ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> = null!
+    readonly providerResolver: ProviderResolverAPI_Base<ChainId, ProviderType> = null!
+    readonly networkResolver: NetworkResolverAPI_Base<ChainId, NetworkType> = null!
 
     getNetworkPluginID(): NetworkPluginID {
         throw new Error('Method not implemented.')

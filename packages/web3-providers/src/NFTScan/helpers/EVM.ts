@@ -21,7 +21,7 @@ import {
     isValidDomain,
     resolveImageURL,
 } from '@masknet/web3-shared-evm'
-import { ChainResolver } from '../../Web3/EVM/apis/ResolverAPI.js'
+import { ChainResolverAPI } from '../../Web3/EVM/apis/ResolverAPI.js'
 import { ContractReadonlyAPI } from '../../Web3/EVM/apis/ContractReadonlyAPI.js'
 import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants.js'
 import type { EVM } from '../types/EVM.js'
@@ -32,8 +32,6 @@ import { getAssetFullName } from '../../helpers/getAssetFullName.js'
 import { getPaymentToken } from '../../helpers/getPaymentToken.js'
 import { resolveActivityType } from '../../helpers/resolveActivityType.js'
 import type { NonFungibleTokenAPI } from '../../entry-types.js'
-
-const Contract = new ContractReadonlyAPI()
 
 export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, init?: RequestInit) {
     return fetchSquashedJSON<T>(urlcat(NFTSCAN_URL, pathname), {
@@ -49,7 +47,7 @@ export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, 
 
 export async function getContractSymbol(chainId: ChainId, address: string) {
     try {
-        const contract = Contract.getERC721Contract(address, { chainId })
+        const contract = new ContractReadonlyAPI().getERC721Contract(address, { chainId })
         const symbol = await contract?.methods.symbol().call({})
         return symbol ?? ''
     } catch {
@@ -134,7 +132,7 @@ export function createNonFungibleAsset(
                   // FIXME: cannot get payment token
                   token:
                       asset.latest_trade_symbol === 'ETH'
-                          ? ChainResolver.nativeCurrency(chainId) ?? WNATIVE[chainId]
+                          ? new ChainResolverAPI().nativeCurrency(chainId) ?? WNATIVE[chainId]
                           : WNATIVE[chainId],
               }
             : undefined,

@@ -5,15 +5,33 @@ import {
     type ChainId,
     type SchemaType,
     type NetworkType,
+    ProviderType,
 } from '@masknet/web3-shared-flow'
 import { ChainResolverAPI_Base } from '../../Base/apis/ChainResolverAPI.js'
 import { ExplorerResolverAPI_Base } from '../../Base/apis/ExplorerResolverAPI.js'
 import { ProviderResolverAPI_Base } from '../../Base/apis/ProviderResolverAPI.js'
 import { NetworkResolverAPI_Base } from '../../Base/apis/NetworkExplorerAPI.js'
 
-export const FlowChainResolver = new ChainResolverAPI_Base<ChainId, SchemaType, NetworkType>(() => CHAIN_DESCRIPTORS)
-export const FlowExplorerResolver = new ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType>(
-    () => CHAIN_DESCRIPTORS,
-)
-export const FlowProviderResolver = new ProviderResolverAPI_Base(() => PROVIDER_DESCRIPTORS)
-export const FlowNetworkResolver = new NetworkResolverAPI_Base(() => NETWORK_DESCRIPTORS)
+export class FlowChainResolverAPI extends ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
+    constructor() {
+        super(() => CHAIN_DESCRIPTORS)
+    }
+}
+
+export class FlowExplorerResolverAPI extends ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
+    constructor() {
+        super(() => CHAIN_DESCRIPTORS)
+    }
+}
+
+export class FlowProviderResolverAPI extends ProviderResolverAPI_Base<ChainId, ProviderType> {
+    constructor() {
+        super(() => PROVIDER_DESCRIPTORS)
+    }
+}
+
+export class FlowNetworkResolverAPI extends NetworkResolverAPI_Base<ChainId, NetworkType> {
+    constructor() {
+        super(() => NETWORK_DESCRIPTORS)
+    }
+}

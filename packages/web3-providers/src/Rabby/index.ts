@@ -2,7 +2,7 @@ import urlcat from 'urlcat'
 import { omit } from 'lodash-es'
 import { type ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import { isSameAddress, type NonFungibleContractSpender, type FungibleTokenSpender } from '@masknet/web3-shared-base'
-import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
+import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
 import { resolveNetworkOnRabby } from './helpers.js'
 import { getAllMaskDappContractInfo } from '../helpers/getAllMaskDappContractInfo.js'
 import { NON_FUNGIBLE_TOKEN_API_URL, FUNGIBLE_TOKEN_API_URL } from './constants.js'
@@ -11,9 +11,11 @@ import type { AuthorizationAPI } from '../entry-types.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 
 export class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
+    private ChainResolver = new ChainResolverAPI()
+
     async getNonFungibleTokenSpenders(chainId: ChainId, account: string) {
         const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'nft')
-        const networkType = ChainResolver.networkType(chainId)
+        const networkType = this.ChainResolver.networkType(chainId)
 
         if (!networkType || !account || !isValidChainId(chainId)) return []
         const rawData = await fetchJSON<{ contracts: NFTInfo[] }>(
@@ -61,7 +63,7 @@ export class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
 
     async getFungibleTokenSpenders(chainId: ChainId, account: string) {
         const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'token')
-        const networkType = ChainResolver.networkType(chainId)
+        const networkType = this.ChainResolver.networkType(chainId)
 
         if (!networkType || !account || !isValidChainId(chainId)) return []
 

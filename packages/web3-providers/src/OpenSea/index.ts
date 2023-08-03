@@ -21,7 +21,7 @@ import {
     SourceType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, createERC20Token, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
-import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
+import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
 import {
     type OpenSeaAssetContract,
     type OpenSeaAssetEvent,
@@ -54,7 +54,7 @@ function createTokenDetailed(
         image_url?: string
     },
 ) {
-    if (token.symbol === 'ETH') return ChainResolver.nativeCurrency(chainId)
+    if (token.symbol === 'ETH') return new ChainResolverAPI().nativeCurrency(chainId)
     return createERC20Token(chainId, token.address, token.name, token.symbol, token.decimals, token.image_url)
 }
 

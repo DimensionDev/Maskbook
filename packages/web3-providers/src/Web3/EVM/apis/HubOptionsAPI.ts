@@ -22,13 +22,11 @@ export class HubOptionsAPI extends HubOptionsAPI_Base<
     Transaction,
     TransactionParameter
 > {
-    private Others = new OthersAPI()
-
     override get Web3StateRef() {
         return Web3StateRef
     }
 
     override get Web3Others() {
-        return this.Others
+        return new OthersAPI()
     }
 }

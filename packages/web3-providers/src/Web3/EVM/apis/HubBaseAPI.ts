@@ -12,7 +12,7 @@ import {
     type Transaction,
     type TransactionParameter,
 } from '@masknet/web3-shared-evm'
-import { ChainResolver } from './ResolverAPI.js'
+import { ChainResolverAPI } from './ResolverAPI.js'
 import { HubBaseAPI_Base } from '../../Base/apis/HubBaseAPI.js'
 import { GasOptionAPI } from './GasOptionAPI.js'
 import { HubOptionsAPI } from './HubOptionsAPI.js'
@@ -39,6 +39,7 @@ export class HubBaseAPI extends HubBaseAPI_Base<
     private DeBankGasOption = new DeBankGasOptionAPI()
     private DeBankHistory = new DeBankHistoryAPI()
     private Zerion = new ZerionAPI()
+    private ChainResolver = new ChainResolverAPI()
 
     protected override HubOptions = new HubOptionsAPI(this.options)
 
@@ -48,7 +49,7 @@ export class HubBaseAPI extends HubBaseAPI_Base<
             chainId,
         })
         try {
-            const isEIP1559 = ChainResolver.isFeatureSupported(options.chainId, 'EIP1559')
+            const isEIP1559 = this.ChainResolver.isFeatureSupported(options.chainId, 'EIP1559')
             if (isEIP1559 && chainId !== ChainId.Astar) return await this.MetaSwap.getGasOptions(options.chainId)
             if (chainId === ChainId.Astar) return await this.AstarGas.getGasOptions(options.chainId)
             return await this.DeBankGasOption.getGasOptions(options.chainId)

@@ -14,7 +14,7 @@ import {
     isValidChainId,
 } from '@masknet/web3-shared-evm'
 import { type Account, type Wallet, EMPTY_LIST, createConstantSubscription } from '@masknet/shared-base'
-import { ChainResolver } from '../apis/ResolverAPI.js'
+import { ChainResolverAPI } from '../apis/ResolverAPI.js'
 import { createWeb3FromProvider } from '../../../helpers/createWeb3FromProvider.js'
 import { createWeb3ProviderFromRequest } from '../../../helpers/createWeb3ProviderFromRequest.js'
 import type { WalletAPI } from '../../../entry-types.js'
@@ -93,6 +93,8 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
     // Switch chain with RPC calls by default
     async switchChain(chainId: ChainId): Promise<void> {
         if (!isValidChainId(chainId)) throw new Error('Invalid chain id.')
+
+        const ChainResolver = new ChainResolverAPI()
 
         try {
             await this.request({

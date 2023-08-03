@@ -43,7 +43,7 @@ import {
     createNonFungibleTokenCollection,
 } from '@masknet/web3-shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
-import { ChainResolver } from './ResolverAPI.js'
+import { ChainResolverAPI } from './ResolverAPI.js'
 import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import { ContractReadonlyAPI } from './ContractReadonlyAPI.js'
 import { ConnectionOptionsReadonlyAPI } from './ConnectionOptionsReadonlyAPI.js'
@@ -86,6 +86,8 @@ export class ConnectionReadonlyAPI
             Web3Provider
         >
 {
+    private ChainResolver = new ChainResolverAPI()
+
     constructor(protected options?: ConnectionOptions) {}
 
     protected Request = new RequestReadonlyAPI(this.options)
@@ -547,7 +549,7 @@ export class ConnectionReadonlyAPI
 
     getNativeToken(initial?: ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
-        const token = ChainResolver.nativeCurrency(options.chainId)
+        const token = this.ChainResolver.nativeCurrency(options.chainId)
         if (!token) throw new Error('Failed to create native token.')
         return Promise.resolve(token)
     }

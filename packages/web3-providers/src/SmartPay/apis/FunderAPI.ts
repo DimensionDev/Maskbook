@@ -7,9 +7,9 @@ import { FUNDER_PROD } from '../constants.js'
 import { fetchJSON, fetchCachedJSON } from '../../helpers/fetchJSON.js'
 import { FunderAPI } from '../../entry-types.js'
 
-const Web3 = new ConnectionReadonlyAPI()
-
 export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
+    private Web3 = new ConnectionReadonlyAPI()
+
     private async assetChainId(chainId: ChainId) {
         if (![ChainId.Matic, ChainId.Mumbai].includes(chainId)) throw new Error(`Not supported ${chainId}.`)
     }
@@ -37,7 +37,7 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
             )
             const allSettled = await Promise.allSettled(
                 operations.map<Promise<TransactionReceipt | null>>((x) =>
-                    Web3.getTransactionReceipt(x.tokenTransferTx, {
+                    this.Web3.getTransactionReceipt(x.tokenTransferTx, {
                         chainId,
                     }),
                 ),

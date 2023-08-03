@@ -22,13 +22,11 @@ export class SolanaHubOptionsAPI extends HubOptionsAPI_Base<
     Transaction,
     TransactionParameter
 > {
-    private Others = new SolanaOthersAPI()
-
     override get Web3StateRef() {
         return SolanaWeb3StateRef
     }
 
     override get Web3Others() {
-        return this.Others
+        return new SolanaOthersAPI()
     }
 }

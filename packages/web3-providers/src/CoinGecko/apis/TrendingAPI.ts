@@ -4,7 +4,7 @@ import { attemptUntil, TokenType, SourceType } from '@masknet/web3-shared-base'
 import { ChainId, getCoinGeckoConstants, getTokenConstant, isNativeTokenSymbol } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { COINGECKO_CHAIN_ID_LIST, COINGECKO_URL_BASE } from '../constants.js'
-import { ChainResolver } from '../../Web3/EVM/apis/ResolverAPI.js'
+import { ChainResolverAPI } from '../../Web3/EVM/apis/ResolverAPI.js'
 import { getCommunityLink, isMirroredKeyword } from '../../Trending/helpers.js'
 import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../../Trending/constants.js'
 import { getAllCoins, getCoinInfo, getPriceStats as getStats, getThumbCoins } from './base.js'
@@ -17,6 +17,8 @@ import type { TrendingAPI } from '../../entry-types.js'
 const Fuse = new FuseCoinAPI()
 
 export class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.ChainIdAll> {
+    private ChainResolver = new ChainResolverAPI()
+
     private coins: Map<string, TrendingAPI.Coin> = new Map()
 
     private async createCoins() {
@@ -117,7 +119,7 @@ export class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.Cha
             currency,
             coin: {
                 id,
-                chainId: isNativeTokenSymbol(info.symbol) ? ChainResolver.chainId(info.name) : undefined,
+                chainId: isNativeTokenSymbol(info.symbol) ? this.ChainResolver.chainId(info.name) : undefined,
                 name: info.name,
                 symbol: info.symbol.toUpperCase(),
                 type: TokenType.Fungible,
@@ -152,8 +154,8 @@ export class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.Cha
                 twitter_url,
                 telegram_url,
                 contract_address:
-                    ChainResolver.chainId(info.name) && isNativeTokenSymbol(info.symbol)
-                        ? getTokenConstant(ChainResolver.chainId(info.name)!, 'NATIVE_TOKEN_ADDRESS')
+                    this.ChainResolver.chainId(info.name) && isNativeTokenSymbol(info.symbol)
+                        ? getTokenConstant(this.ChainResolver.chainId(info.name)!, 'NATIVE_TOKEN_ADDRESS')
                         : info.contract_address,
             },
             market: (() => {

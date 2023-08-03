@@ -27,21 +27,18 @@ import {
     getNetworkPluginID,
 } from '@masknet/web3-shared-flow'
 import { OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
-import { FlowChainResolver, FlowExplorerResolver, FlowProviderResolver, FlowNetworkResolver } from './ResolverAPI.js'
+import {
+    FlowChainResolverAPI,
+    FlowExplorerResolverAPI,
+    FlowProviderResolverAPI,
+    FlowNetworkResolverAPI,
+} from './ResolverAPI.js'
 
 export class FlowOthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
-    override get chainResolver() {
-        return FlowChainResolver
-    }
-    override get explorerResolver() {
-        return FlowExplorerResolver
-    }
-    override get providerResolver() {
-        return FlowProviderResolver
-    }
-    override get networkResolver() {
-        return FlowNetworkResolver
-    }
+    override chainResolver = new FlowChainResolverAPI()
+    override explorerResolver = new FlowExplorerResolverAPI()
+    override providerResolver = new FlowProviderResolverAPI()
+    override networkResolver = new FlowNetworkResolverAPI()
 
     override isValidDomain = isValidDomain
     override isValidChainId = isValidChainId

@@ -25,13 +25,11 @@ export class ConnectionOptionsReadonlyAPI extends ConnectionOptionsAPI_Base<
     Transaction,
     TransactionParameter
 > {
-    private Others = new OthersAPI()
-
     override get Web3StateRef() {
         return EmptyRef
     }
 
     override get Web3Others() {
-        return this.Others
+        return new OthersAPI()
     }
 }

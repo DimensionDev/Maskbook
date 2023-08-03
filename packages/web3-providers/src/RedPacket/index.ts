@@ -14,7 +14,7 @@ import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import NFT_REDPACKET_ABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
 import { DSEARCH_BASE_URL } from '../DSearch/constants.js'
 import { fetchFromDSearch } from '../DSearch/helpers.js'
-import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
+import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
 import { ContractRedPacketAPI } from './api.js'
 import { ChainbaseRedPacketAPI } from '../Chainbase/index.js'
 import { EtherscanRedPacketAPI } from '../Etherscan/index.js'
@@ -24,6 +24,7 @@ const redPacketInterFace = new Interface(REDPACKET_ABI)
 const nftRedPacketInterFace = new Interface(NFT_REDPACKET_ABI)
 
 export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
+    private ChainResolver = new ChainResolverAPI()
     private ChainbaseRedPacket = new ChainbaseRedPacketAPI()
     private EtherscanRedPacket = new EtherscanRedPacketAPI()
     private ContractRedPacket = new ContractRedPacketAPI()
@@ -141,7 +142,7 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
                     txid: tx.hash ?? '',
                     contract_version: 1,
                     shares: decodedInputParam._erc721_token_ids.length,
-                    network: ChainResolver.networkType(tx.chainId),
+                    network: this.ChainResolver.networkType(tx.chainId),
                     token_address: decodedInputParam._token_addr,
                     chainId: tx.chainId,
                     sender: {
@@ -190,7 +191,7 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
                     duration: decodedInputParam._duration.toNumber() * 1000,
                     block_number: Number(tx.blockNumber),
                     contract_version: 4,
-                    network: ChainResolver.networkType(tx.chainId),
+                    network: this.ChainResolver.networkType(tx.chainId),
                     token_address: decodedInputParam._token_addr,
                     sender: {
                         address: senderAddress,

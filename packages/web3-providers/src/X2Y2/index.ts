@@ -9,7 +9,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { createPageable, createIndicator, createNextIndicator, EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, createERC20Token, isZeroAddress, SchemaType } from '@masknet/web3-shared-evm'
-import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
+import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
 import { X2Y2_API_URL, X2Y2_PAGE_SIZE } from './constants.js'
 import type { Contract, Event, Order } from './types.js'
 import { resolveActivityType } from '../helpers/resolveActivityType.js'
@@ -30,6 +30,8 @@ async function fetchFromX2Y2<T>(pathname: string) {
 }
 
 export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+    private ChainResolver = new ChainResolverAPI()
+
     createPermalink(address: string, tokenId: string) {
         return urlcat('https://x2y2.io/eth/:contract/:tokenId', {
             contract: address,
@@ -59,7 +61,7 @@ export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             priceInToken: {
                 amount: order.price,
                 token: isZeroAddress(order.currency)
-                    ? ChainResolver.nativeCurrency(ChainId.Mainnet)
+                    ? this.ChainResolver.nativeCurrency(ChainId.Mainnet)
                     : createERC20Token(ChainId.Mainnet, order.currency),
             },
             source: SourceType.X2Y2,
@@ -82,7 +84,7 @@ export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             },
             timestamp: Number.parseInt(event.created_at, 10) * 1000,
             paymentToken: isZeroAddress(event.order.currency)
-                ? ChainResolver.nativeCurrency(ChainId.Mainnet)
+                ? this.ChainResolver.nativeCurrency(ChainId.Mainnet)
                 : createERC20Token(ChainId.Mainnet, event.order.currency),
             source: SourceType.X2Y2,
         }

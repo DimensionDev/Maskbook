@@ -47,7 +47,6 @@ const NextIDStorageProvider = new NextIDStorageAPI()
 const RSS3 = new RSS3API()
 const SpaceID = new SpaceID_API()
 const Twitter = new TwitterAPI()
-const Web3 = new ConnectionReadonlyAPI()
 
 function getENSNames(userId: string, nickname: string, bio: string) {
     return [userId.match(ENS_RE), nickname.match(ENS_RE), bio.match(ENS_RE)].flatMap((result) => result ?? [])
@@ -121,6 +120,8 @@ const resolveMaskXAddressType = createLookupTableResolver<MaskX_BaseAPI.SourceTy
 )
 
 export class IdentityService extends IdentityServiceState<ChainId> {
+    private Web3 = new ConnectionReadonlyAPI()
+
     constructor(protected context: Plugin.Shared.SharedUIContext) {
         super()
     }
@@ -272,7 +273,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
 
         const response = await Twitter.getUserNftContainer(userId)
         if (!response) return
-        const ownerAddress = await Web3.getNonFungibleTokenOwner(response.address, response.token_id, undefined, {
+        const ownerAddress = await this.Web3.getNonFungibleTokenOwner(response.address, response.token_id, undefined, {
             chainId: ChainId.Mainnet,
         })
         if (!ownerAddress || !isValidAddress(ownerAddress)) return

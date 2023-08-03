@@ -33,7 +33,7 @@ import { MagicEdenAPI } from '../../../MagicEden/index.js'
 import { SolanaWeb3API } from './Web3API.js'
 import { SolanaTransferAPI } from './TransferAPI.js'
 import { SolanaConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
-import { SolanaChainResolver } from './ResolverAPI.js'
+import { SolanaChainResolverAPI } from './ResolverAPI.js'
 import { SolanaWeb3StateRef } from './Web3StateAPI.js'
 import { SolanaFungibleTokenAPI } from './FungibleTokenAPI.js'
 import type { ConnectionOptions } from '../types/index.js'
@@ -58,6 +58,7 @@ export class SolanaConnectionAPI
 {
     private MagicEden = new MagicEdenAPI()
     private FungibleToken = new SolanaFungibleTokenAPI()
+    private ChainResolver = new SolanaChainResolverAPI()
 
     constructor(private options?: ConnectionOptions) {}
 
@@ -278,7 +279,7 @@ export class SolanaConnectionAPI
 
     async getNativeToken(initial?: ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
-        return SolanaChainResolver.nativeCurrency(options.chainId)
+        return this.ChainResolver.nativeCurrency(options.chainId)
     }
 
     async getFungibleToken(address: string, initial?: ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {

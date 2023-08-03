@@ -17,7 +17,7 @@ import {
     resolveImageURL,
     ChainIdList,
 } from '@masknet/web3-shared-evm'
-import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
+import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
 import type { ZerionNonFungibleTokenItem, ZerionNonFungibleCollection, ZerionCoin } from './types.js'
 import { formatAsset, formatTransactions, isValidAsset } from './helpers.js'
 import {
@@ -96,6 +96,8 @@ export class ZerionAPI
 }
 
 export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+    private ChainResolver = new ChainResolverAPI()
+
     createNonFungibleCollectionFromCollectionData(chainId: ChainId, collection: ZerionNonFungibleCollection) {
         return {
             chainId,
@@ -207,7 +209,7 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
 
         if (!response.payload['nft-info'].asset.floor_price) return
 
-        const nativeToken = ChainResolver.nativeCurrency(chainId)
+        const nativeToken = this.ChainResolver.nativeCurrency(chainId)
         return {
             amount: scale10(response.payload['nft-info'].asset.floor_price, nativeToken.decimals).toFixed(0),
             token: nativeToken,

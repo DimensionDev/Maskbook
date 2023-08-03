@@ -31,7 +31,7 @@ import {
 import { toHex, type Account } from '@masknet/shared-base'
 import type { ConnectionAPI_Base } from '../../Base/apis/ConnectionAPI.js'
 import { FlowConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
-import { FlowChainResolver } from './ResolverAPI.js'
+import { FlowChainResolverAPI } from './ResolverAPI.js'
 import { FlowWeb3API } from './Web3API.js'
 import { FlowWeb3StateRef } from './Web3StateAPI.js'
 import type { ConnectionOptions } from '../types/index.js'
@@ -58,6 +58,7 @@ export class FlowConnectionAPI
 
     private Web3 = new FlowWeb3API(this.options)
     private ConnectionOptions = new FlowConnectionOptionsAPI(this.options)
+    private ChainResolver = new FlowChainResolverAPI()
 
     getWeb3(initial?: ConnectionOptions) {
         return this.Web3.getWeb3(initial)
@@ -182,7 +183,7 @@ export class FlowConnectionAPI
 
     getNativeToken(initial?: ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
-        const token = FlowChainResolver.nativeCurrency(options.chainId)
+        const token = this.ChainResolver.nativeCurrency(options.chainId)
         return Promise.resolve(token)
     }
 

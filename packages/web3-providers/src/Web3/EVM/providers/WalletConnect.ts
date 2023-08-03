@@ -14,7 +14,7 @@ import {
     type Web3,
     isValidChainId,
 } from '@masknet/web3-shared-evm'
-import { ChainResolver } from '../apis/ResolverAPI.js'
+import { ChainResolverAPI } from '../apis/ResolverAPI.js'
 import { BaseProvider } from './Base.js'
 import { parseJSON } from '../../../helpers/parseJSON.js'
 import type { WalletAPI } from '../../../entry-types.js'
@@ -220,7 +220,7 @@ export default class WalletConnectProvider
     override async connect(chainId: ChainId) {
         const account = await this.login(chainId)
         if (!isValidAddress(account.account))
-            throw new Error(`Failed to connect to ${ChainResolver.chainFullName(chainId)}.`)
+            throw new Error(`Failed to connect to ${new ChainResolverAPI().chainFullName(chainId)}.`)
         return account
     }
 

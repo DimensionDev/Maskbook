@@ -15,7 +15,7 @@ import {
     getDefaultNetworkType,
 } from '@masknet/web3-shared-flow'
 import { FlowProviders } from '../providers/index.js'
-import { FlowChainResolver } from '../apis/ResolverAPI.js'
+import { FlowChainResolverAPI } from '../apis/ResolverAPI.js'
 import { ProviderState } from '../../Base/state/Provider.js'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
@@ -29,7 +29,8 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             getDefaultChainId,
             getDefaultProviderType,
             getDefaultNetworkType,
-            getNetworkTypeFromChainId: (chainId: ChainId) => FlowChainResolver.networkType(chainId) ?? NetworkType.Flow,
+            getNetworkTypeFromChainId: (chainId: ChainId) =>
+                new FlowChainResolverAPI().networkType(chainId) ?? NetworkType.Flow,
         })
     }
 }

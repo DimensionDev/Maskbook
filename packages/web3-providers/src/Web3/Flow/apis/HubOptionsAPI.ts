@@ -12,8 +12,6 @@ import { HubOptionsAPI_Base } from '../../Base/apis/HubOptionsAPI.js'
 import { FlowWeb3StateRef } from './Web3StateAPI.js'
 import { FlowOthersAPI } from './OthersAPI.js'
 
-const Web3Others = new FlowOthersAPI()
-
 export class FlowHubOptionsAPI extends HubOptionsAPI_Base<
     ChainId,
     SchemaType,
@@ -29,6 +27,6 @@ export class FlowHubOptionsAPI extends HubOptionsAPI_Base<
     }
 
     override get Web3Others() {
-        return Web3Others
+        return new FlowOthersAPI()
     }
 }

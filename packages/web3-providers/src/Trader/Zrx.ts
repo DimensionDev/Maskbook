@@ -26,7 +26,7 @@ import { ZRX_AFFILIATE_ADDRESS, ZRX_BASE_URL } from './constants/0x.js'
 import { TradeStrategy, type TradeComputed, type TraderAPI } from '../types/Trader.js'
 import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
-import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
+import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
@@ -59,10 +59,11 @@ export function getNativeTokenLabel(networkType: NetworkType) {
 }
 
 export class Zrx implements TraderAPI.Provider {
-    public provider = TradeProvider.ZRX
-
     private Web3 = new ConnectionReadonlyAPI()
     private Contract = new ContractReadonlyAPI()
+    private ChainResolver = new ChainResolverAPI()
+
+    public provider = TradeProvider.ZRX
 
     private async swapQuote(request: SwapQuoteRequest, networkType: NetworkType) {
         const params: Record<string, string | number> = {}
@@ -100,7 +101,7 @@ export class Zrx implements TraderAPI.Provider {
     ) {
         if (isZero(inputAmount) || !inputToken || !outputToken) return null
 
-        const networkType = ChainResolver.networkType(chainId as ChainId)
+        const networkType = this.ChainResolver.networkType(chainId as ChainId)
 
         if (!networkType) return
         const sellToken = isNativeTokenAddress(inputToken.address)

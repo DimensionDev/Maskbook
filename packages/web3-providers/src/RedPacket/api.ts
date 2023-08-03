@@ -2,7 +2,7 @@ import { AbiCoder } from 'web3-eth-abi'
 import secondsToMilliseconds from 'date-fns/secondsToMilliseconds'
 import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
-import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
+import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
 import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import type { RedPacketJSONPayloadFromChain } from './types.js'
 import { CREATE_LUCKY_DROP_TOPIC } from './constants.js'
@@ -10,9 +10,10 @@ import type { RedPacketBaseAPI } from '../entry-types.js'
 
 const creationSuccessTopicInputs = REDPACKET_ABI.find((x) => x.name === 'CreationSuccess')?.inputs!
 
-const Web3 = new ConnectionReadonlyAPI()
-
 export class ContractRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
+    private Web3 = new ConnectionReadonlyAPI()
+    private ChainResolver = new ChainResolverAPI()
+
     async getHistories(
         chainId: ChainId,
         senderAddress: string,
@@ -23,7 +24,7 @@ export class ContractRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, 
     ): Promise<RedPacketJSONPayloadFromChain[] | undefined> {
         if (!senderAddress || !contractAddress || !fromBlock || !toBlock || !methodId) return
 
-        const logs = await Web3.getWeb3({ chainId }).eth.getPastLogs({
+        const logs = await this.Web3.getWeb3({ chainId }).eth.getPastLogs({
             topics: [CREATE_LUCKY_DROP_TOPIC],
             address: contractAddress,
             fromBlock,
@@ -56,7 +57,7 @@ export class ContractRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, 
                 duration: secondsToMilliseconds(Number(result.duration)),
                 block_number: log.blockNumber,
                 contract_version: 4,
-                network: ChainResolver.networkType(chainId),
+                network: this.ChainResolver.networkType(chainId),
                 token_address: result.token_address,
                 sender: {
                     address: senderAddress,

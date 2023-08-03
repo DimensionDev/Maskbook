@@ -29,21 +29,13 @@ import {
     isValidChainId,
 } from '@masknet/web3-shared-evm'
 import { OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
-import { ChainResolver, ExplorerResolver, ProviderResolver, NetworkResolver } from './ResolverAPI.js'
+import { ChainResolverAPI, ExplorerResolverAPI, ProviderResolverAPI, NetworkResolverAPI } from './ResolverAPI.js'
 
 export class OthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
-    override get chainResolver() {
-        return ChainResolver
-    }
-    override get explorerResolver() {
-        return ExplorerResolver
-    }
-    override get providerResolver() {
-        return ProviderResolver
-    }
-    override get networkResolver() {
-        return NetworkResolver
-    }
+    override chainResolver = new ChainResolverAPI()
+    override explorerResolver = new ExplorerResolverAPI()
+    override providerResolver = new ProviderResolverAPI()
+    override networkResolver = new NetworkResolverAPI()
 
     override isValidDomain = isValidDomain
     override isValidChainId = isValidChainId
@@ -69,7 +61,7 @@ export class OthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderType,
     override formatTokenId = formatTokenId
     override formatDomainName = formatDomainName
     override formatSchemaType = formatSchemaType
-    override createNativeToken = (chainId: ChainId) => ChainResolver.nativeCurrency(chainId)
+    override createNativeToken = (chainId: ChainId) => new ChainResolverAPI().nativeCurrency(chainId)
     override createFungibleToken = createFungibleToken
     override createNonFungibleToken = createNonFungibleToken
 }

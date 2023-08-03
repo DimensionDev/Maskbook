@@ -22,13 +22,11 @@ export class FlowConnectionOptionsAPI extends ConnectionOptionsAPI_Base<
     Transaction,
     TransactionParameter
 > {
-    private Others = new FlowOthersAPI()
-
     override get Web3StateRef() {
         return FlowWeb3StateRef
     }
 
     override get Web3Others() {
-        return this.Others
+        return new FlowOthersAPI()
     }
 }

@@ -19,7 +19,7 @@ import {
     SourceType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
-import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
+import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
 import { RaribleEventType, type RaribleOrder, type RaribleHistory, type RaribleNFTItemMapResponse } from './types.js'
 import { RaribleURL } from './constants.js'
 import { fetchGlobal } from '../helpers/fetchGlobal.js'
@@ -122,7 +122,7 @@ function createOrder(chainId: ChainId, order: RaribleOrder): NonFungibleTokenOrd
             name: order.make.type['@type'],
             symbol: order.make.type['@type'],
             address: createAddress(order.make.type.contract),
-        }) ?? ChainResolver.nativeCurrency(chainId)
+        }) ?? new ChainResolverAPI().nativeCurrency(chainId)
     return {
         id: order.id,
         chainId,
