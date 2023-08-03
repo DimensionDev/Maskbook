@@ -19,8 +19,7 @@ import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
-import { formatBalance2 } from '../../../../../utils/formatBalance2.js'
-import { useI18N } from '../../../../../utils/index.js'
+import { formatTokenBalance, useI18N } from '../../../../../utils/index.js'
 import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
 import { TokenPicker } from '../../../components/index.js'
 import { useTokenParams } from '../../../hook/index.js'
@@ -179,7 +178,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                     </ProgressiveText>
                     <ProgressiveText loading={isLoadingBalance} skeletonWidth={60}>
                         {t('available_amount', {
-                            amount: formatBalance2(tokenBalance, token?.decimals),
+                            amount: formatTokenBalance(tokenBalance, token?.decimals),
                         })}
                     </ProgressiveText>
                 </Box>
