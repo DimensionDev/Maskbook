@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { createContainer } from 'unstated-next'
-import { useChainContext, useRecentTransactions, useFungibleAssets, useWallets } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useRecentTransactions,
+    useFungibleAssets,
+    useWallets,
+    useFiatCurrencyType,
+    useFiatCurrencyRate,
+} from '@masknet/web3-hooks-base'
 import { EMPTY_LIST, NetworkPluginID, type Wallet } from '@masknet/shared-base'
 import { type FungibleAsset, isSameAddress, type RecentTransactionComputed } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType, Transaction } from '@masknet/web3-shared-evm'
@@ -19,6 +26,8 @@ function useWalletContext() {
     const [currentToken, setCurrentToken] = useState<FungibleAsset<ChainId, SchemaType>>()
     const [transaction, setTransaction] = useState<RecentTransactionComputed<ChainId, Transaction>>()
     const [selectedWallet, setSelectedWallet] = useState<Wallet | null>()
+    const fiatCurrencyType = useFiatCurrencyType()
+    const { value: fiatCurrencyRate } = useFiatCurrencyRate(fiatCurrencyType)
 
     const [assetsIsExpand, setAssetsIsExpand] = useState(false)
 
@@ -33,6 +42,7 @@ function useWalletContext() {
         currentToken,
         setCurrentToken,
         assets,
+        fiatCurrencyType,
         refreshAssets: refetch,
         transactions,
         assetsLoading: isLoading,
