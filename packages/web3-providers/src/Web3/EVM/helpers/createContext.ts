@@ -1,5 +1,6 @@
 import { ProviderType, ChainId, type RequestArguments } from '@masknet/web3-shared-evm'
-import { type BaseContractWalletProvider, Providers } from '@masknet/web3-providers'
+import { Providers } from '../providers/index.js'
+import type { BaseContractWalletProvider } from '../providers/BaseContractWallet.js'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
 import { ConnectionContext } from '../libs/ConnectionContext.js'
 import type { ConnectionOptions } from '../types/index.js'

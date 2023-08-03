@@ -5,7 +5,7 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 
 export function useDefaultGasConfig(chainId: ChainId, gasLimit: string) {
     const Others = useWeb3Others()
-    const isSupportEIP1559 = Others.chainResolver.isSupport(chainId, 'EIP1559')
+    const isSupportEIP1559 = Others.chainResolver.isFeatureSupported(chainId, 'EIP1559')
     const { value: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM, {
         chainId,
     })

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import { makeStyles, ActionButton, LoadingBase, parseColor, ShadowRootTooltip, useDetectOverflow } from '@masknet/theme'
-import { networkResolver, type ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { type RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { Card, Typography, Button, Box } from '@mui/material'
 import {
@@ -11,7 +11,7 @@ import {
     TransactionConfirmModal,
 } from '@masknet/shared'
 import { useChainContext, useNetworkContext, useNonFungibleAsset } from '@masknet/web3-hooks-base'
-import { Web3 } from '@masknet/web3-providers'
+import { NetworkResolver, Web3 } from '@masknet/web3-providers'
 import { TokenType } from '@masknet/web3-shared-base'
 import { usePostLink, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { NetworkPluginID, CrossIsolationMessages, isTwitter, isFacebook } from '@masknet/shared-base'
@@ -221,7 +221,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         const options = {
             sender: payload.senderName,
             payload: postLink.toString(),
-            network: networkResolver.networkName(networkType) || '',
+            network: NetworkResolver.networkName(networkType) || '',
             account_promote: t.account_promote({
                 context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
             }),

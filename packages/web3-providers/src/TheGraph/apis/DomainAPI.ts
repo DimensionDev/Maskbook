@@ -2,7 +2,7 @@ import { first } from 'lodash-es'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { API_URL } from '../constants.js'
 import type { DomainAPI } from '../../entry-types.js'
-import { fetchJSON } from '../../entry-helpers.js'
+import { fetchJSON } from '../../helpers/fetchJSON.js'
 
 export class TheGraphDomainAPI implements DomainAPI.Provider<ChainId> {
     async lookup(chainId: ChainId, name: string): Promise<string | undefined> {

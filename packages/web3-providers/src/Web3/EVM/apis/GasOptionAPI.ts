@@ -1,14 +1,15 @@
 import { nth } from 'lodash-es'
 import type { FeeHistoryResult } from 'web3-eth'
 import { GasOptionType, toFixed } from '@masknet/web3-shared-base'
-import { type ChainId, chainResolver, type GasOption } from '@masknet/web3-shared-evm'
+import { type ChainId, type GasOption } from '@masknet/web3-shared-evm'
+import { ChainResolverAPI } from './ResolverAPI.js'
 import { ConnectionReadonlyAPI } from './ConnectionReadonlyAPI.js'
 import type { GasOptionAPI_Base } from '../../../entry-types.js'
 
 export class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
-    private Web3 = new ConnectionReadonlyAPI()
-
     static HISTORICAL_BLOCKS = 4
+
+    private Web3 = new ConnectionReadonlyAPI()
 
     private avg(arr: number[]) {
         const sum = arr.reduce((a, v) => a + v)
@@ -103,7 +104,7 @@ export class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOpti
     }
 
     async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
-        if (chainResolver.isSupport(chainId, 'EIP1559')) return this.getGasOptionsForEIP1559(chainId)
+        if (new ChainResolverAPI().isFeatureSupported(chainId, 'EIP1559')) return this.getGasOptionsForEIP1559(chainId)
         else return this.getGasOptionsForPriorEIP1559(chainId)
     }
 }

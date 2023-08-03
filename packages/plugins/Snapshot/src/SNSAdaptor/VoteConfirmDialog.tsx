@@ -1,10 +1,11 @@
+import { OpenInNew } from '@mui/icons-material'
 import { Link, DialogContent, DialogActions, Typography } from '@mui/material'
 import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { OpenInNew } from '@mui/icons-material'
-import { type ChainId, explorerResolver } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { PluginWalletStatusBar, InjectedDialog, WalletConnectedBoundary } from '@masknet/shared'
-import { InfoField } from './InformationCard.js'
 import { formatCount } from '@masknet/web3-shared-base'
+import { ExplorerResolver } from '@masknet/web3-providers'
+import { InfoField } from './InformationCard.js'
 import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -79,7 +80,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                         className={classes.link}
                         target="_blank"
                         rel="noopener"
-                        href={explorerResolver.blockLink(chainId, Number.parseInt(snapshot, 10))}>
+                        href={ExplorerResolver.blockLink(chainId, Number.parseInt(snapshot, 10))}>
                         {snapshot}
                         <OpenInNew fontSize="small" sx={{ paddingLeft: 1 }} />
                     </Link>

@@ -1,6 +1,6 @@
 import { Link, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { TrendingAPI } from '@masknet/web3-providers/types'
+import { Days } from '@masknet/shared-base'
 import { resolveDaysName } from '../../pipes.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -25,13 +25,11 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const Days = TrendingAPI.Days
-
 export const DEFAULT_RANGE_OPTIONS = [Days.ONE_DAY, Days.ONE_WEEK, Days.ONE_MONTH, Days.ONE_YEAR, Days.MAX]
 
 export interface PriceChartDaysControlProps {
     days: number
-    rangeOptions?: TrendingAPI.Days[]
+    rangeOptions?: Days[]
     onDaysChange?: (days: number) => void
 }
 

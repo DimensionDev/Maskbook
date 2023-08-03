@@ -13,7 +13,7 @@ import {
     type NetworkPluginID,
 } from '@masknet/shared-base'
 import type { ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
-import type { WalletAPI } from '@masknet/web3-providers/types'
+import type { WalletAPI } from '../../../entry-types.js'
 
 export interface ProviderStorage<Account, ProviderType extends string> {
     account: Account

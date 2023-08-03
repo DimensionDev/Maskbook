@@ -2,11 +2,11 @@ import { useCallback, useMemo } from 'react'
 import { Card, Typography, Box } from '@mui/material'
 import { Stack } from '@mui/system'
 import { LoadingBase, makeStyles, parseColor } from '@masknet/theme'
-import { ChainId, chainResolver, networkResolver } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { formatBalance, isZero, TokenType } from '@masknet/web3-shared-base'
 import { NetworkPluginID, isFacebook, isTwitter } from '@masknet/shared-base'
-import { Web3 } from '@masknet/web3-providers'
+import { ChainResolver, NetworkResolver, Web3 } from '@masknet/web3-providers'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { TransactionConfirmModal } from '@masknet/shared'
 import { usePostLink, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
@@ -134,7 +134,7 @@ export function RedPacket(props: RedPacketProps) {
     const { share } = useSNSAdaptorContext()
     const token = payload.token
     const { pluginID } = useNetworkContext()
-    const payloadChainId = token?.chainId ?? chainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
+    const payloadChainId = token?.chainId ?? ChainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
     const { account, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         chainId: payloadChainId,
         account: pluginID === NetworkPluginID.PLUGIN_EVM ? undefined : '',
@@ -170,7 +170,7 @@ export function RedPacket(props: RedPacketProps) {
         const shareTextOption = {
             sender: payload.sender.name,
             payload: postLink.toString(),
-            network: networkResolver.networkName(networkType) ?? 'Mainnet',
+            network: NetworkResolver.networkName(networkType) ?? 'Mainnet',
             account: isTwitter() ? t.twitter_account() : t.facebook_account(),
             interpolation: { escapeValue: false },
         }

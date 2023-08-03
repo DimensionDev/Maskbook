@@ -2,8 +2,8 @@ import urlcat from 'urlcat'
 import { isNull } from 'lodash-es'
 import { attemptTimes } from '@masknet/web3-shared-base'
 import { getTokens, getHeaders } from './getTokens.js'
+import { fetchCached, staleCached } from '../../helpers/fetchCached.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'
-import { fetchCached, staleCached } from '../../entry-helpers.js'
 
 const features = {
     responsive_web_twitter_blue_verified_badge_is_enabled: true,

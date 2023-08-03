@@ -1,15 +1,14 @@
 import React, { createContext, type ReactNode, useContext, useState, useMemo, type ProviderProps, memo } from 'react'
 import { isUndefined, omitBy } from 'lodash-es'
+import { useSubscription } from 'use-subscription'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { compose, Sniffings, type MaskEvents, type NetworkPluginID } from '@masknet/shared-base'
+import { Providers, type BaseContractWalletProvider } from '@masknet/web3-providers'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'
-import { useNetworkType } from './useNetworkType.js'
 import { useProviderType } from './useProviderType.js'
-import { useSubscription } from 'use-subscription'
-import { Providers, type BaseContractWalletProvider } from '@masknet/web3-providers'
-import { ProviderType, chainResolver } from '@masknet/web3-shared-evm'
 
 interface EnvironmentContext<T extends NetworkPluginID = NetworkPluginID> {
     pluginID: T
@@ -70,14 +69,12 @@ export const ChainContextProvider = memo(function ChainContextProvider({
 
     const globalAccount = useAccount(pluginID)
     const globalChainId = useChainId(pluginID)
-    const globalNetworkType = useNetworkType(pluginID)
     const globalProviderType = useProviderType(pluginID)
 
     const maskProvider = Providers[ProviderType.MaskWallet] as BaseContractWalletProvider
 
     const maskAccount = useSubscription(maskProvider.subscription.account)
     const maskChainId = useSubscription(maskProvider.subscription.chainId)
-    const maskNetworkType = useMemo(() => chainResolver.networkType(maskChainId), [maskChainId])
 
     const [_account, setAccount] = useState<string>()
     const [_chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
@@ -90,9 +87,6 @@ export const ChainContextProvider = memo(function ChainContextProvider({
     const chainId = controlled
         ? value.chainId
         : _chainId ?? value.chainId ?? (Sniffings.is_popup_wallet_page ? maskChainId : globalChainId)
-    const networkType = controlled
-        ? value.networkType
-        : _networkType ?? value.networkType ?? (Sniffings.is_popup_wallet_page ? maskNetworkType : globalNetworkType)
     const providerType = controlled
         ? value.providerType
         : _providerType ??
@@ -103,14 +97,12 @@ export const ChainContextProvider = memo(function ChainContextProvider({
         () => ({
             account,
             chainId,
-            networkType,
             providerType,
             setAccount,
             setChainId,
-            setNetworkType,
             setProviderType,
         }),
-        [account, chainId, networkType, providerType],
+        [account, chainId, providerType],
     )
     return <ChainContext.Provider value={context}>{children}</ChainContext.Provider>
 })
@@ -149,16 +141,14 @@ export function ActualNetworkContextProvider({ children }: { children: ReactNode
 export function ActualChainContextProvider({ children }: { children: ReactNode | undefined }) {
     const account = useAccount()
     const chainId = useChainId()
-    const networkType = useNetworkType()
     const providerType = useProviderType()
     const value = useMemo(
         () => ({
             account,
             chainId,
-            networkType,
             providerType,
         }),
-        [account, chainId, networkType, providerType],
+        [account, chainId, providerType],
     )
     return <ChainContext.Provider value={value} children={children} />
 }

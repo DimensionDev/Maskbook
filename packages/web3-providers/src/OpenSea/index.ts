@@ -20,14 +20,8 @@ import {
     resolveIPFS_URL,
     SourceType,
 } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    SchemaType,
-    createNativeToken,
-    createERC20Token,
-    isValidChainId,
-    resolveImageURL,
-} from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, createERC20Token, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
+import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
 import {
     type OpenSeaAssetContract,
     type OpenSeaAssetEvent,
@@ -39,7 +33,10 @@ import {
 } from './types.js'
 import { getOrderUSDPrice } from './utils.js'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants.js'
-import { fetchSquashedJSON, getAssetFullName, getPaymentToken, resolveActivityType } from '../entry-helpers.js'
+import { getAssetFullName } from '../helpers/getAssetFullName.js'
+import { getPaymentToken } from '../helpers/getPaymentToken.js'
+import { fetchSquashedJSON } from '../helpers/fetchJSON.js'
+import { resolveActivityType } from '../helpers/resolveActivityType.js'
 import type { HubOptions_Base, NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId, init?: RequestInit) {
@@ -57,7 +54,7 @@ function createTokenDetailed(
         image_url?: string
     },
 ) {
-    if (token.symbol === 'ETH') return createNativeToken(chainId)
+    if (token.symbol === 'ETH') return new ChainResolverAPI().nativeCurrency(chainId)
     return createERC20Token(chainId, token.address, token.name, token.symbol, token.decimals, token.image_url)
 }
 

@@ -2,7 +2,7 @@ import { SourceType, TokenType, type NonFungibleAsset, type NonFungibleCollectio
 import { isValidDomain, ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-solana'
 import { isEmpty } from 'lodash-es'
 import { createPermalink as SolanaCreatePermalink } from '../NFTScan/helpers/Solana.js'
-import { getAssetFullName } from '../entry-helpers.js'
+import { getAssetFullName } from '../helpers/getAssetFullName.js'
 import type { Asset, Collection } from './type.js'
 
 export function createSolanaNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, SchemaType> | undefined {

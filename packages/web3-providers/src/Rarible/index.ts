@@ -18,10 +18,14 @@ import {
     scale10,
     SourceType,
 } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, createNativeToken, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
+import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
 import { RaribleEventType, type RaribleOrder, type RaribleHistory, type RaribleNFTItemMapResponse } from './types.js'
 import { RaribleURL } from './constants.js'
-import { getPaymentToken, getAssetFullName, resolveActivityType, fetchGlobal } from '../entry-helpers.js'
+import { fetchGlobal } from '../helpers/fetchGlobal.js'
+import { getPaymentToken } from '../helpers/getPaymentToken.js'
+import { getAssetFullName } from '../helpers/getAssetFullName.js'
+import { resolveActivityType } from '../helpers/resolveActivityType.js'
 import type { HubOptions_Base, NonFungibleTokenAPI } from '../entry-types.js'
 
 const resolveRaribleBlockchain = createLookupTableResolver<number, string>(
@@ -118,7 +122,7 @@ function createOrder(chainId: ChainId, order: RaribleOrder): NonFungibleTokenOrd
             name: order.make.type['@type'],
             symbol: order.make.type['@type'],
             address: createAddress(order.make.type.contract),
-        }) ?? createNativeToken(chainId)
+        }) ?? new ChainResolverAPI().nativeCurrency(chainId)
     return {
         id: order.id,
         chainId,

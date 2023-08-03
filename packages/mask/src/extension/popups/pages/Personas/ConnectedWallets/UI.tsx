@@ -1,14 +1,15 @@
 import { memo, useCallback, useState } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
-import { CopyButton, FormattedAddress, ImageIcon } from '@masknet/shared'
 import { Button, Link, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
+import { makeStyles } from '@masknet/theme'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
+import { CopyButton, FormattedAddress, ImageIcon } from '@masknet/shared'
+import { ExplorerResolver } from '@masknet/web3-providers'
 import type { ConnectedWalletInfo } from '../type.js'
 import { DisconnectWalletDialog } from '../components/DisconnectWalletDialog/index.js'
 import { useI18N } from '../../../../../utils/index.js'
-import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -148,7 +149,7 @@ export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
                                     <CopyButton text={wallet.identity} className={classes.icon} size={16} />
                                     <Link
                                         style={{ width: 16, height: 16 }}
-                                        href={explorerResolver.addressLink(chainId, wallet.identity ?? '')}
+                                        href={ExplorerResolver.addressLink(chainId, wallet.identity ?? '')}
                                         target="_blank"
                                         rel="noopener noreferrer">
                                         <Icons.PopupLink className={classes.icon} />

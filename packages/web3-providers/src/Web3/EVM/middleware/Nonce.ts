@@ -13,6 +13,7 @@ export class Nonce implements Middleware<ConnectionContext> {
     static INITIAL_NONCE = -1
 
     private Web3 = new ConnectionReadonlyAPI()
+
     private nonces = new Map<string, Map<ChainId, number>>()
 
     private async syncRemoteNonce(chainId: ChainId, address: string, commitment = 0) {
