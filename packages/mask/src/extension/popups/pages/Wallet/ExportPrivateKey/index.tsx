@@ -68,7 +68,7 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
 
     const handleCopy = useCallback(() => {
         if (!value?.privateKey) return
-        copyToClipboard(value?.privateKey)
+        copyToClipboard(value.privateKey)
         showSnackbar(t('copied'))
     }, [value?.privateKey])
 
@@ -104,7 +104,7 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
                                 borderRadius: 8,
                                 height: 240,
                             }}>
-                            {value?.privateKey}
+                            {value.privateKey}
                         </Typography>
                     ) : null}
                 </TabPanel>

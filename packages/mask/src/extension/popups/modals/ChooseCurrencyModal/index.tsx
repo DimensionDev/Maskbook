@@ -40,10 +40,10 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface NetworkItemProps {
+interface CurrencyItemProps {
     fiatCurrencyType: FiatCurrencyType
 }
-const CurrencyItem = memo(function NetworkItem({ fiatCurrencyType }: NetworkItemProps) {
+const CurrencyItem = memo(function CurrencyItem({ fiatCurrencyType }: CurrencyItemProps) {
     const { cx, classes, theme } = useStyles()
     const { closeModal } = useActionModal()
     const currentFiatCurrencyType = useFiatCurrencyType()
