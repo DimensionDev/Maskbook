@@ -26,8 +26,8 @@ describe('Market Cap format util test', () => {
         { give: 1016000000, expected: '$1.02B' },
         { give: 9906374170, expected: '$9.91B' },
         { give: 17729505549, expected: '$17.73B' },
-        { give: 1000000000000, expected: '$1e+12' },
-        { give: 9900000000000, expected: '$9.9e+12' },
+        { give: 1000000000000, expected: '$1T' },
+        { give: 9900000000000, expected: '$9.90T' },
     ])('.format($give)', ({ give, expected }) => {
         expect(formatMarketCap(give)).toBe(expected)
     })
