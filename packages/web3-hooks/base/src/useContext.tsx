@@ -1,4 +1,4 @@
-import React, { createContext, type ReactNode, useContext, useState, useMemo, type ProviderProps } from 'react'
+import React, { createContext, type ReactNode, useContext, useState, useMemo, type ProviderProps, memo } from 'react'
 import { isUndefined, omitBy } from 'lodash-es'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { compose, Sniffings, type MaskEvents, type NetworkPluginID } from '@masknet/shared-base'
@@ -61,7 +61,10 @@ export function NetworkContextProvider({ value, children }: ProviderProps<Networ
     return <NetworkContext.Provider value={context}>{children}</NetworkContext.Provider>
 }
 
-export function ChainContextProvider({ value, children }: ProviderProps<ChainContextGetter>) {
+export const ChainContextProvider = memo(function ChainContextProvider({
+    value,
+    children,
+}: ProviderProps<ChainContextGetter>) {
     const { pluginID } = useNetworkContext()
     const { controlled } = value
 
@@ -110,7 +113,7 @@ export function ChainContextProvider({ value, children }: ProviderProps<ChainCon
         [account, chainId, networkType, providerType],
     )
     return <ChainContext.Provider value={context}>{children}</ChainContext.Provider>
-}
+})
 
 export function Web3ContextProvider({
     value,

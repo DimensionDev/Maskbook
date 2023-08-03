@@ -4,6 +4,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
+    ChainContextProvider,
     useChainContext,
     useFungibleToken,
     useNativeTokenAddress,
@@ -80,6 +81,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { chainId, address, params, setParams } = useTokenParams()
+    const chainContextValue = useMemo(() => ({ chainId }), [chainId])
     const navigate = useNavigate()
     // Enter from wallet home page, sending token is not decided yet
     const undecided = params.get('undecided') === 'true'
@@ -211,16 +213,18 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
             </Box>
             <Box display="flex" justifyContent="space-between" mt={2} mx={2}>
                 <Typography className={classes.label}>{t('gas_fee')}</Typography>
-                <GasSettingMenu
-                    gas={gasLimit}
-                    defaultChainId={chainId}
-                    initConfig={defaultGasConfig}
-                    allowMaskAsGas
-                    paymentToken={paymentAddress}
-                    onPaymentTokenChange={setPaymentAddress}
-                    owner={wallet?.owner}
-                    onChange={setGasConfig}
-                />
+                <ChainContextProvider value={chainContextValue}>
+                    <GasSettingMenu
+                        gas={gasLimit}
+                        defaultChainId={chainId}
+                        initConfig={defaultGasConfig}
+                        allowMaskAsGas
+                        paymentToken={paymentAddress}
+                        onPaymentTokenChange={setPaymentAddress}
+                        owner={wallet?.owner}
+                        onChange={setGasConfig}
+                    />
+                </ChainContextProvider>
             </Box>
             <Box className={classes.actionGroup}>
                 <ActionButton variant="outlined" fullWidth onClick={() => navigate(-2)}>
