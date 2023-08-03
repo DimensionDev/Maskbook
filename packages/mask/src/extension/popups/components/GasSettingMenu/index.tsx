@@ -1,31 +1,96 @@
-import { GasOptionType } from '@masknet/web3-shared-base'
-import type { GasConfig } from '@masknet/web3-shared-evm'
+import { Icons } from '@masknet/icons'
+import { FormattedBalance, useGasCurrencyMenu } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
+import {
+    useChainContext,
+    useChainIdSupport,
+    useFungibleToken,
+    useFungibleTokenPrice,
+    useGasOptions,
+    useNativeTokenAddress,
+} from '@masknet/web3-hooks-base'
+import { DepositPaymaster } from '@masknet/web3-providers'
+import { GasOptionType, ZERO, formatBalance, formatCurrency, toFixed } from '@masknet/web3-shared-base'
+import {
+    formatWeiToEther,
+    type EIP1559GasConfig,
+    type GasConfig,
+    type ChainId,
+    isNativeTokenAddress,
+} from '@masknet/web3-shared-evm'
 import { Typography, useTheme } from '@mui/material'
 import { Box } from '@mui/system'
-import { memo, useCallback, useMemo, useState } from 'react'
-import { useGasOptionsMenu } from '../../hook/useGasOptionsMenu.js'
+import { BigNumber } from 'bignumber.js'
+import { noop } from 'lodash-es'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { useAsync } from 'react-use'
+import { useContainer } from 'unstated-next'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
-import { Icons } from '@masknet/icons'
+import { useGasOptionsMenu } from '../../hook/useGasOptionsMenu.js'
+import { PopupContext } from '../../hook/usePopupContext.js'
 
 interface GasSettingMenuProps {
     gas: string
+    initConfig?: GasConfig
+    defaultChainId?: ChainId
+    disable?: boolean
     onChange?: (config: GasConfig) => void
+    onPaymentTokenChange?: (paymentToken: string) => void
+    /** Payment token address */
+    paymentToken?: string
+    owner?: string
+    allowMaskAsGas?: boolean
 }
 
-export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu({ gas, onChange }) {
+export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu({
+    gas,
+    defaultChainId,
+    initConfig,
+    paymentToken,
+    disable,
+    allowMaskAsGas,
+    owner,
+    onChange,
+    onPaymentTokenChange,
+}) {
     const { t } = useI18N()
     const theme = useTheme()
-    const [gasOptionType, setGasOptionType] = useState<GasOptionType | undefined>()
+    const { smartPayChainId } = useContainer(PopupContext)
+    const [gasConfig = initConfig, setGasConfig] = useState<GasConfig | undefined>()
+    const [gasOptionType, setGasOptionType] = useState<GasOptionType | undefined>(GasOptionType.SLOW)
 
     const handleChange = useCallback(
         (config: GasConfig, type?: GasOptionType) => {
             if (type) setGasOptionType(type)
+            setGasConfig(config)
             onChange?.(config)
         },
         [onChange],
     )
 
-    const [menu, openMenu] = useGasOptionsMenu(gas, handleChange)
+    const [menu, openMenu] = useGasOptionsMenu(gas, !disable ? handleChange : noop)
+
+    const [paymentTokenMenu, openPaymentTokenMenu] = useGasCurrencyMenu(
+        NetworkPluginID.PLUGIN_EVM,
+        onPaymentTokenChange ?? noop,
+        paymentToken,
+    )
+
+    const { value: gasOptions } = useGasOptions()
+
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: defaultChainId })
+    const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
+
+    const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM, { chainId })
+
+    const { data: token } = useFungibleToken(
+        NetworkPluginID.PLUGIN_EVM,
+        paymentToken ? paymentToken : nativeTokenAddress,
+    )
+    const { data: tokenPrice } = useFungibleTokenPrice(
+        NetworkPluginID.PLUGIN_EVM,
+        paymentToken ? paymentToken : nativeTokenAddress,
+    )
 
     const gasOptionName = useMemo(() => {
         switch (gasOptionType) {
@@ -39,23 +104,84 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
         }
     }, [gasOptionType])
 
+    const { value: smartPayRatio } = useAsync(async () => {
+        if (!smartPayChainId) return
+        const depositPaymaster = new DepositPaymaster(smartPayChainId)
+        const ratio = await depositPaymaster.getRatio()
+
+        return ratio
+    }, [smartPayChainId])
+    const gasRatio = !paymentToken || isNativeTokenAddress(paymentToken) ? 1 : smartPayRatio
+
+    const totalGas = useMemo(() => {
+        if (!gasConfig) return ZERO
+        const result = new BigNumber(
+            (isSupport1559 ? (gasConfig as EIP1559GasConfig).maxFeePerGas : gasConfig.gasPrice) || ZERO,
+        ).times(gas)
+
+        if (gasRatio === 1 || !gasRatio) return toFixed(result, 0)
+        return toFixed(result.multipliedBy(gasRatio), 0)
+    }, [gasConfig, gas, gasRatio])
+
+    // If there is no init configuration, set a default config
+    useEffect(() => {
+        if (initConfig || !gasOptions || !onChange) return
+        const target = gasOptions[GasOptionType.SLOW]
+        const result = isSupport1559
+            ? {
+                  maxPriorityFeePerGas: target.suggestedMaxPriorityFeePerGas,
+                  maxFeePerGas: target.suggestedMaxFeePerGas,
+              }
+            : {
+                  gasPrice: target.suggestedMaxFeePerGas,
+              }
+
+        setGasConfig((prev) => {
+            if (prev) return
+            return result
+        })
+
+        onChange(result)
+    }, [onChange, initConfig, gasOptions, isSupport1559])
+
     return (
-        <>
-            <Box
-                py={0.5}
-                px={1.5}
-                border={`1px solid ${theme.palette.maskColor.line}`}
-                onClick={openMenu}
-                borderRadius={99}
-                display="inline-flex"
-                alignItems="center"
-                columnGap={0.5}>
-                <Typography fontWeight={700} lineHeight="18px" fontSize={14}>
-                    {gasOptionName}
-                </Typography>
-                <Icons.Candle size={12} />
-            </Box>
+        <Box display="flex" alignItems="center">
+            <Typography fontWeight={700} fontSize={14} mr={0.5}>
+                <FormattedBalance
+                    value={totalGas}
+                    decimals={token?.decimals}
+                    significant={4}
+                    symbol={token?.symbol}
+                    formatter={formatBalance}
+                />
+                {' ≈ '}
+                {formatCurrency(formatWeiToEther(totalGas).times(tokenPrice ?? 0), 'USD', {
+                    onlyRemainTwoDecimal: true,
+                })}
+            </Typography>
+            {!disable ? (
+                <Box
+                    py={0.5}
+                    px={1.5}
+                    border={`1px solid ${theme.palette.maskColor.line}`}
+                    onClick={openMenu}
+                    borderRadius={99}
+                    display="inline-flex"
+                    alignItems="center"
+                    columnGap={0.5}>
+                    <Typography fontWeight={700} lineHeight="18px" fontSize={14}>
+                        {gasOptionName}
+                    </Typography>
+                    <Icons.Candle size={12} />
+                </Box>
+            ) : null}
+            {owner && allowMaskAsGas ? (
+                <>
+                    <Icons.ArrowDrop size={20} sx={{ ml: 0.5, cursor: 'pointer' }} onClick={openPaymentTokenMenu} />
+                    {paymentTokenMenu}
+                </>
+            ) : null}
             {menu}
-        </>
+        </Box>
     )
 })

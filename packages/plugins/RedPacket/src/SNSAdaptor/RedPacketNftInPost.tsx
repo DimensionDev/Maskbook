@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
 import { RedPacketRPC } from '../messages.js'
 import type { RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { RedPacketNft } from './RedPacketNft.js'
-import { ChainContextProvider } from '@masknet/web3-hooks-base'
 
 export interface RedPacketNftInPostProps {
     payload: RedPacketNftJSONPayload
@@ -18,8 +19,8 @@ export function RedPacketNftInPost({ payload }: RedPacketNftInPostProps) {
         })
     }, [payload])
     return (
-        <ChainContextProvider value={{ chainId: payload.chainId }}>
+        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: payload.chainId }}>
             <RedPacketNft payload={payload} />
-        </ChainContextProvider>
+        </Web3ContextProvider>
     )
 }

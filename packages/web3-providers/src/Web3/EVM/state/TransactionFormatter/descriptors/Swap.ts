@@ -47,6 +47,9 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                         )} for ${getTokenAmountDescription(parameters.amountOutMin, outputToken)} successfully.`,
                         failedDescription: `Failed to swap ${outputToken?.symbol ?? ''}.`,
                     },
+                    popup: {
+                        method: method.name,
+                    },
                 }
             }
 
@@ -73,6 +76,9 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                             outputToken,
                         )} for ${getTokenAmountDescription(parameters.amountOutMin, nativeToken)} successfully.`,
                         failedDescription: `Failed to swap ${nativeToken?.symbol ?? ''}.`,
+                    },
+                    popup: {
+                        method: method.name,
                     },
                 }
             }
@@ -106,6 +112,9 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                         )} for ${getTokenAmountDescription(parameters.amountOutMin, tokenOut)} successfully.`,
                         failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
                     },
+                    popup: {
+                        method: method.name,
+                    },
                 }
             }
 
@@ -138,6 +147,9 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                         )} for ${getTokenAmountDescription(parameters.minReturnAmount, tokenOut)} successfully.`,
                         failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
                     },
+                    popup: {
+                        method: method.name,
+                    },
                 }
             }
 
@@ -166,6 +178,9 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                             tokenIn,
                         )} for ${getTokenAmountDescription(parameters.minReturnAmount, tokenOut)} successfully.`,
                         failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                    },
+                    popup: {
+                        method: method.name,
                     },
                 }
             }
@@ -208,6 +223,9 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                             tokenIn,
                         )} for ${getTokenAmountDescription(_parameters?.[1]?.minReturnAmount, tokenOut)} successfully.`,
                         failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                    },
+                    popup: {
+                        method: method.name,
                     },
                 }
             }
@@ -273,6 +291,9 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                         )} for ${getTokenAmountDescription(parameters._minReturn, tokenOut)} successfully.`,
                         failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
                     },
+                    popup: {
+                        method: method.name,
+                    },
                 }
             }
             // Uniswap V3
@@ -329,12 +350,18 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                             )} for ${getTokenAmountDescription(amountOutMinimum, tokenOut)} successfully.`,
                             failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
                         },
+                        popup: {
+                            method: method.name,
+                        },
                     }
                 } catch {
                     return {
                         chainId: context.chainId,
                         title: 'Swap Token',
                         description: 'Swap with Uniswap V3',
+                        popup: {
+                            method: method.name,
+                        },
                     }
                 }
             }
@@ -368,6 +395,9 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                         )} for ${getTokenAmountDescription(parameters.minBuyAmount, tokenOut)} successfully.`,
                         failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
                     },
+                    popup: {
+                        method: method.name,
+                    },
                 }
             }
 
@@ -395,6 +425,9 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                             tokenIn,
                         )} for ${getTokenAmountDescription(amount, tokenOut)} successfully.`,
                         failedDescription: `Failed to ${actionName} ${tokenOut?.symbol ?? ''}.`,
+                    },
+                    popup: {
+                        method: method.name,
                     },
                 }
             }
@@ -424,6 +457,9 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                             tokenIn,
                         )} for ${getTokenAmountDescription(parameters.amountOutMin, tokenOut)} successfully.`,
                         failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                    },
+                    popup: {
+                        method: method.name,
                     },
                 }
             }

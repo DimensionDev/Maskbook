@@ -19,7 +19,7 @@ function isLocked() {
 async function openWindow(url: string): Promise<void> {
     const windows = await browser.windows.getAll()
     const popup = windows.find((win) => win && win.type === 'popup' && win.id === currentPopupWindowId)
-    if (popup) {
+    if (popup || currentPopupWindowId) {
         await browser.windows.update(currentPopupWindowId, { focused: true })
     } else {
         let left: number

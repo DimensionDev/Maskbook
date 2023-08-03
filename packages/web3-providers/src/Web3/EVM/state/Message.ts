@@ -1,6 +1,6 @@
 import { omitBy } from 'lodash-es'
 import { isUndefined } from '@walletconnect/utils'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, PopupRoutes, PopupsHistory, Sniffings } from '@masknet/shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 import { SNSAdaptorContextRef } from '@masknet/plugin-infra/dom'
 import {
@@ -31,28 +31,44 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
             await this.approveRequest(id)
         } else {
             // TODO: make this for Mask Wallet only
-            // open the popups window and wait for approvement from the user.
-            await SNSAdaptorContextRef.value.openPopupWindow()
+            if (Sniffings.is_popup_page) {
+                PopupsHistory.push(PopupRoutes.ContractInteraction)
+            } else {
+                // open the popups window and wait for approvement from the user.
+                await SNSAdaptorContextRef.value.openPopupWindow(PopupRoutes.ContractInteraction, {
+                    source: location.origin,
+                })
+            }
         }
 
         return super.waitForApprovingRequest(id)
     }
 
-    override async approveRequest(id: string): Promise<void> {
+    override async approveRequest(id: string, updates?: MessageRequest): Promise<void> {
         const { request } = this.assertMessage(id)
+        const payload = updates?.arguments
+            ? {
+                  ...request.arguments,
+                  ...updates.arguments,
+              }
+            : request.arguments
         const response = request.options?.providerURL
             ? createJsonRpcResponse(
                   0,
-                  await this.Request.request(request.arguments, {
+                  await this.Request.request(payload, {
                       providerURL: request.options.providerURL,
                   }),
               )
             : await SharedContextRef.value.send(
-                  createJsonRpcPayload(0, request.arguments),
+                  createJsonRpcPayload(0, payload),
                   omitBy<TransactionOptions>(request.options, isUndefined),
               )
 
         await this.updateMessage(id, {
+            request: {
+                ...request,
+                ...updates,
+            },
             state: MessageStateType.APPROVED,
             response,
         })

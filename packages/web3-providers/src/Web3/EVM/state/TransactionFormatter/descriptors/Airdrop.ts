@@ -28,6 +28,9 @@ export class AirdropDescriptor extends BaseDescriptor implements TransactionDesc
                         )} were successfully claimed`,
                         failedDescription: 'Transaction was Rejected!',
                     },
+                    popup: {
+                        method: name,
+                    },
                 }
             }
         }

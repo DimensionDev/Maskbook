@@ -48,6 +48,9 @@ export class GitcoinDescriptor extends BaseDescriptor implements TransactionDesc
                         }),
                         failedDescription: i18NextInstance.t('plugin_infra_descriptor_gitcoin_donate_fail'),
                     },
+                    popup: {
+                        method: name,
+                    },
                 }
             }
         }

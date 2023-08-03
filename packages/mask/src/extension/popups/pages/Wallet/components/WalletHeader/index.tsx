@@ -8,6 +8,7 @@ import { getEvmNetworks } from '../../../../../../utils/networks.js'
 import { NormalHeader, useModalNavigate } from '../../../../components/index.js'
 import { WalletHeaderUI } from './UI.js'
 import { WalletSetupHeaderUI } from './WalletSetupHeaderUI.js'
+import Services from '../../../../../service.js'
 
 const CUSTOM_HEADER_PATTERNS = [
     `${PopupRoutes.AddToken}/:chainId/:assetType`,
@@ -44,9 +45,8 @@ export const WalletHeader = memo(function WalletHeader() {
 
     if (customHeader) return null
 
-    if (!wallet || !hasPassword || matchUnlock || matchResetWallet) return <WalletSetupHeaderUI />
-
     if (matchContractInteraction) {
+        if (!wallet) return null
         return (
             <WalletHeaderUI
                 chainId={chainId}
@@ -59,6 +59,8 @@ export const WalletHeader = memo(function WalletHeader() {
         )
     }
 
+    if (!wallet || !hasPassword || matchUnlock || matchResetWallet) return <WalletSetupHeaderUI />
+
     return matchWallet ? (
         <WalletHeaderUI
             chainId={chainId}
@@ -68,6 +70,6 @@ export const WalletHeader = memo(function WalletHeader() {
             wallet={wallet}
         />
     ) : (
-        <NormalHeader />
+        <NormalHeader onClose={() => Services.Helper.removePopupWindow()} />
     )
 })

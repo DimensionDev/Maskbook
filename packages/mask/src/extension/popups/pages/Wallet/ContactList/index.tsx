@@ -139,7 +139,7 @@ const ContactListUI = memo(function ContactListUI() {
         | undefined
     const isManage = state?.type === 'manage'
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
-    const { receiver, contacts, receiverValidationMessage } = ContactsContext.useContainer()
+    const { userInput, contacts, inputValidationMessage } = ContactsContext.useContainer()
     const [params] = useSearchParams()
 
     const addContact = useCallback(() => {
@@ -160,10 +160,11 @@ const ContactListUI = memo(function ContactListUI() {
     const navigate = useNavigate()
 
     const handleSelectContact = useCallback(
-        (addr: string) => {
+        (addr: string, recipientName: string) => {
             const path = urlcat(PopupRoutes.Transfer, {
                 ...Object.fromEntries(params.entries()),
                 recipient: addr,
+                recipientName,
             })
             navigate(path)
         },
@@ -215,7 +216,7 @@ const ContactListUI = memo(function ContactListUI() {
                             onClick={() => {}}
                             width={368}
                             className={classes.confirmButton}
-                            disabled={!!receiverValidationMessage || !receiver}>
+                            disabled={!!inputValidationMessage || !userInput}>
                             {t('next')}
                         </ActionButton>
                     </Box>
@@ -229,7 +230,7 @@ interface ContactListItemProps extends ListItemProps {
     address: string
     name: string
     contactType: ContactType
-    onSelectContact?: (address: string) => void
+    onSelectContact?: (address: string, name: string) => void
 }
 
 function ContactListItem({ address, name, contactType, onSelectContact, ...rest }: ContactListItemProps) {
@@ -294,7 +295,10 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
     )
 
     return (
-        <ListItem classes={{ root: classes.contactsListItem }} onClick={() => onSelectContact?.(address)} {...rest}>
+        <ListItem
+            classes={{ root: classes.contactsListItem }}
+            onClick={() => onSelectContact?.(address, name)}
+            {...rest}>
             <div className={classes.contactsListItemInfo}>
                 <EmojiAvatar address={address} className={classes.emojiAvatar} sx={{ width: 24, height: 24 }} />
                 <div>

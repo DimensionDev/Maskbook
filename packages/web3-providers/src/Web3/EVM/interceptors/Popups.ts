@@ -95,10 +95,7 @@ export class Popups implements Middleware<ConnectionContext> {
             if (isZero(nativeBalance))
                 return { allowMaskAsGas: true, paymentToken: context.paymentToken ?? maskAddress }
 
-            return {
-                allowMaskAsGas: false,
-                paymentToken: undefined,
-            }
+            return DEFAULT_PAYMENT_TOKEN_STATE
         }
     }
 

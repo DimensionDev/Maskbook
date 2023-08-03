@@ -177,7 +177,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         profileTab: injectProfileTabAtTwitter,
         profileCover: injectProfileCover,
         profileTabContent: injectProfileTabContentAtTwitter,
-        enhancedPostRenderer: injectPostReplacerAtTwitter,
+        postReplacer: injectPostReplacerAtTwitter,
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtTwitter,
         postActions: injectPostActionsAtTwitter,

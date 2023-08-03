@@ -11,13 +11,13 @@ import { ActionGroup } from '../ActionGroup/index.js'
 import { WalletAssetsValue } from './WalletAssetsValue.js'
 import { useConnected } from '../../hooks/useConnected.js'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => ({
     container: {
         background:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
         padding: '16px',
         // padding bottom space for assets tabs
-        paddingBottom: 34,
+        paddingBottom: !disabled ? 34 : 16,
         lineHeight: 0,
     },
     topbar: {
@@ -121,10 +121,10 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
     onOpenNetworkSelector,
     onActionClick,
     wallet,
-    disabled,
+    disabled = false,
 }) {
     const { t } = useI18N()
-    const { classes, cx } = useStyles()
+    const { classes, cx } = useStyles({ disabled })
     const { data, isLoading } = useConnected()
     const connected = data?.connected
 
@@ -191,8 +191,12 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                     {!disabled ? <Icons.ArrowDrop className={classes.arrow} /> : null}
                 </div>
             </div>
-            <WalletAssetsValue className={classes.balance} skeletonWidth={100} skeletonHeight="2em" />
-            <ActionGroup mt={2} />
+            {!disabled ? (
+                <>
+                    <WalletAssetsValue className={classes.balance} skeletonWidth={100} skeletonHeight="2em" />
+                    <ActionGroup mt={2} />
+                </>
+            ) : null}
         </Box>
     )
 })
