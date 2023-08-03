@@ -30,6 +30,8 @@
     "operation": "crwdns10075:0crwdne10075:0",
     "gas_limit": "crwdns10077:0crwdne10077:0",
     "gas_price": "crwdns10079:0crwdne10079:0",
+    "value": "crwdns22019:0crwdne22019:0",
+    "balance": "crwdns22021:0crwdne22021:0",
     "gwei": "crwdns21885:0crwdne21885:0",
     "redirect_to": "crwdns10081:0crwdne10081:0",
     "welcome_back": "crwdns21629:0crwdne21629:0",
