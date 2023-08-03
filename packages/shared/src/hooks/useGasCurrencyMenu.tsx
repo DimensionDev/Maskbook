@@ -1,8 +1,8 @@
 import { compact, noop } from 'lodash-es'
 import { useCallback, useState } from 'react'
-import { Button, MenuItem, Typography, Radio } from '@mui/material'
+import { Button, MenuItem, Typography } from '@mui/material'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, RadioButton } from '@masknet/theme'
 import { formatBalance, isLessThan, isSameAddress } from '@masknet/web3-shared-base'
 import { useChainContext, useFungibleToken, useMaskTokenAddress, useNativeToken } from '@masknet/web3-hooks-base'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
@@ -14,9 +14,14 @@ const useStyles = makeStyles()((theme) => ({
     paper: {
         minWidth: 240,
         background: theme.palette.maskColor.bottom,
+        borderRadius: 16,
+        boxShadow: theme.palette.maskColor.bottomBg,
+        padding: theme.spacing(1.5),
     },
     item: {
         display: 'flex',
+        height: 30,
+        padding: 0,
         justifyContent: 'space-between',
         alignItems: 'center',
     },
@@ -66,7 +71,7 @@ export function useGasCurrencyMenu(
                         <TokenIcon {...nativeToken} size={30} />
                         {nativeToken.symbol}
                     </Typography>
-                    <Radio checked={isSameAddress(selected, nativeToken.address)} />
+                    <RadioButton size={20} checked={isSameAddress(selected, nativeToken.address)} />
                 </MenuItem>
             ) : null,
             maskToken ? (
@@ -82,7 +87,7 @@ export function useGasCurrencyMenu(
                             {sharedI18N.unlock()}
                         </Button>
                     ) : (
-                        <Radio checked={isSameAddress(selected, maskAddress)} />
+                        <RadioButton size={20} checked={isSameAddress(selected, maskAddress)} />
                     )}
                 </MenuItem>
             ) : null,
@@ -93,7 +98,7 @@ export function useGasCurrencyMenu(
             },
             anchorOrigin: {
                 vertical: 'bottom',
-                horizontal: 'center',
+                horizontal: 'right',
             },
             transformOrigin: {
                 vertical: 'top',

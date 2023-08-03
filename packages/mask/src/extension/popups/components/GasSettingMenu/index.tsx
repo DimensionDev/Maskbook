@@ -1,11 +1,6 @@
-import { GasOptionType, ZERO, formatBalance, formatCurrency, toFixed } from '@masknet/web3-shared-base'
-import { type EIP1559GasConfig, type GasConfig, formatWeiToEther } from '@masknet/web3-shared-evm'
-import { Typography, useTheme } from '@mui/material'
-import { Box } from '@mui/system'
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { useGasOptionsMenu } from '../../hook/useGasOptionsMenu.js'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { Icons } from '@masknet/icons'
+import { FormattedBalance, useGasCurrencyMenu } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import {
     useChainContext,
     useChainIdSupport,
@@ -14,20 +9,34 @@ import {
     useGasOptions,
     useNativeTokenAddress,
 } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { DepositPaymaster } from '@masknet/web3-providers'
+import { GasOptionType, ZERO, formatBalance, formatCurrency, toFixed } from '@masknet/web3-shared-base'
+import {
+    formatWeiToEther,
+    type EIP1559GasConfig,
+    type GasConfig,
+    type ChainId,
+    isNativeTokenAddress,
+} from '@masknet/web3-shared-evm'
+import { Typography, useTheme } from '@mui/material'
+import { Box } from '@mui/system'
+import { BigNumber } from 'bignumber.js'
+import { noop } from 'lodash-es'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { useContainer } from 'unstated-next'
+import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useGasOptionsMenu } from '../../hook/useGasOptionsMenu.js'
 import { PopupContext } from '../../hook/usePopupContext.js'
-import { BigNumber } from 'bignumber.js'
-import { FormattedBalance, useGasCurrencyMenu } from '@masknet/shared'
-import { noop } from 'lodash-es'
+
 interface GasSettingMenuProps {
     gas: string
     initConfig?: GasConfig
+    defaultChainId?: ChainId
     disable?: boolean
     onChange?: (config: GasConfig) => void
     onPaymentTokenChange?: (paymentToken: string) => void
+    /** Payment token address */
     paymentToken?: string
     owner?: string
     allowMaskAsGas?: boolean
@@ -35,18 +44,19 @@ interface GasSettingMenuProps {
 
 export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu({
     gas,
-    onChange,
+    defaultChainId,
     initConfig,
     paymentToken,
     disable,
     allowMaskAsGas,
     owner,
+    onChange,
     onPaymentTokenChange,
 }) {
     const { t } = useI18N()
     const theme = useTheme()
     const { smartPayChainId } = useContainer(PopupContext)
-    const [gasConfig, setGasConfig] = useState<GasConfig | undefined>(initConfig)
+    const [gasConfig = initConfig, setGasConfig] = useState<GasConfig | undefined>()
     const [gasOptionType, setGasOptionType] = useState<GasOptionType | undefined>(GasOptionType.SLOW)
 
     const handleChange = useCallback(
@@ -68,7 +78,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
 
     const { value: gasOptions } = useGasOptions()
 
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: defaultChainId })
     const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
 
     const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM, { chainId })
@@ -94,23 +104,24 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
         }
     }, [gasOptionType])
 
-    const { value: currencyRatio } = useAsync(async () => {
+    const { value: smartPayRatio } = useAsync(async () => {
         if (!smartPayChainId) return
         const depositPaymaster = new DepositPaymaster(smartPayChainId)
         const ratio = await depositPaymaster.getRatio()
 
         return ratio
     }, [smartPayChainId])
+    const gasRatio = !paymentToken || isNativeTokenAddress(paymentToken) ? 1 : smartPayRatio
 
     const totalGas = useMemo(() => {
         if (!gasConfig) return ZERO
         const result = new BigNumber(
-            (isSupport1559 ? (gasConfig as EIP1559GasConfig).maxFeePerGas : gasConfig.gasPrice) ?? ZERO,
+            (isSupport1559 ? (gasConfig as EIP1559GasConfig).maxFeePerGas : gasConfig.gasPrice) || ZERO,
         ).times(gas)
 
-        if (!currencyRatio) return toFixed(result, 0)
-        return toFixed(result.multipliedBy(currencyRatio), 0)
-    }, [gasConfig, gas, currencyRatio])
+        if (gasRatio === 1 || !gasRatio) return toFixed(result, 0)
+        return toFixed(result.multipliedBy(gasRatio), 0)
+    }, [gasConfig, gas, gasRatio])
 
     // If there is no init configuration, set a default config
     useEffect(() => {
@@ -135,15 +146,15 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
 
     return (
         <Box display="flex" alignItems="center">
-            <Typography fontWeight={700} fontSize={14}>
+            <Typography fontWeight={700} fontSize={14} mr={0.5}>
                 <FormattedBalance
                     value={totalGas}
                     decimals={token?.decimals}
                     significant={4}
                     symbol={token?.symbol}
                     formatter={formatBalance}
-                />{' '}
-                ≈{' '}
+                />
+                {' ≈ '}
                 {formatCurrency(formatWeiToEther(totalGas).times(tokenPrice ?? 0), 'USD', {
                     onlyRemainTwoDecimal: true,
                 })}

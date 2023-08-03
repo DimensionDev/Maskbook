@@ -3,19 +3,28 @@ import { ImageIcon, ProgressiveText, TokenIcon, useAvailableBalance } from '@mas
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useFungibleToken, useNetworkDescriptor, useWeb3Connection } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useFungibleToken,
+    useNativeTokenAddress,
+    useNetworkDescriptor,
+    useWallet,
+    useWeb3Connection,
+} from '@masknet/web3-hooks-base'
 import { isLessThan, isLte, isZero, leftShift, rightShift } from '@masknet/web3-shared-base'
-import { type GasConfig } from '@masknet/web3-shared-evm'
+import { isNativeTokenAddress, type GasConfig } from '@masknet/web3-shared-evm'
 import { Box, Input, Typography } from '@mui/material'
+import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
+import { formatBalance2 } from '../../../../../utils/formatBalance2.js'
 import { useI18N } from '../../../../../utils/index.js'
+import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
 import { TokenPicker } from '../../../components/index.js'
 import { useTokenParams } from '../../../hook/index.js'
 import { ChooseTokenModal } from '../../../modals/modals.js'
-import { GasSettings } from './GasSettings.js'
-import { formatBalance2 } from '../../../../../utils/formatBalance2.js'
+import { useDefaultGasConfig } from './useDefaultGasConfig.js'
 
 const useStyles = makeStyles()((theme) => ({
     asset: {
@@ -45,6 +54,11 @@ const useStyles = makeStyles()((theme) => ({
     maxButton: {
         cursor: 'pointer',
     },
+    label: {
+        fontSize: 14,
+        color: theme.palette.maskColor.second,
+        fontWeight: 700,
+    },
     actionGroup: {
         display: 'flex',
         justifyContent: 'center',
@@ -60,6 +74,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+const ETH_GAS_LIMIT = '21000'
+const ERC20_GAS_LIMIT = '50000'
 export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const { t } = useI18N()
     const { classes } = useStyles()
@@ -86,7 +102,11 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const network = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const { data: token, isLoading } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, address, undefined, { chainId })
 
-    const [gasConfig, setGasConfig] = useState<GasConfig>()
+    const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const isNativeToken = isNativeTokenAddress(address)
+    const gasLimit = isNativeToken ? ETH_GAS_LIMIT : ERC20_GAS_LIMIT
+    const defaultGasConfig = useDefaultGasConfig(chainId, gasLimit)
+    const [gasConfig = defaultGasConfig, setGasConfig] = useState<GasConfig>()
     const [amount, setAmount] = useState('')
     const totalAmount = useMemo(
         () => (amount && token?.decimals ? rightShift(amount, token.decimals).toFixed() : '0'),
@@ -101,6 +121,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         },
     )
 
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { account } = useChainContext()
     const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, {
         account,
@@ -113,6 +134,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
             overrides: gasConfig,
         })
     }, [address, chainId, recipient, totalAmount, token?.decimals, gasConfig])
+    const [paymentAddress, setPaymentAddress] = useState(nativeTokenAddress)
 
     if (undecided)
         return (
@@ -177,11 +199,28 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                         </Typography>
                     }
                     value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
+                    onChange={(e) => {
+                        if (!balance || !token?.decimals || !e.target.value) {
+                            setAmount(e.target.value)
+                            return
+                        }
+                        const value = BigNumber.min(e.target.value, leftShift(balance, token.decimals)).toFixed()
+                        return setAmount(value)
+                    }}
                 />
             </Box>
             <Box display="flex" justifyContent="space-between" mt={2} mx={2}>
-                <GasSettings chainId={chainId} tokenAddress={address} gasConfig={gasConfig} onChange={setGasConfig} />
+                <Typography className={classes.label}>{t('gas_fee')}</Typography>
+                <GasSettingMenu
+                    gas={gasLimit}
+                    defaultChainId={chainId}
+                    initConfig={defaultGasConfig}
+                    allowMaskAsGas
+                    paymentToken={paymentAddress}
+                    onPaymentTokenChange={setPaymentAddress}
+                    owner={wallet?.owner}
+                    onChange={setGasConfig}
+                />
             </Box>
             <Box className={classes.actionGroup}>
                 <ActionButton variant="outlined" fullWidth onClick={() => navigate(-2)}>

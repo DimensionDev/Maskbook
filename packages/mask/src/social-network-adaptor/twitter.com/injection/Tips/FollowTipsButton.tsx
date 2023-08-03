@@ -1,5 +1,4 @@
 import { memo, useMemo, useState } from 'react'
-import { useAsync } from 'react-use'
 import { noop } from 'lodash-es'
 import { Flags } from '@masknet/flags'
 import { makeStyles } from '@masknet/theme'
@@ -10,7 +9,10 @@ import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/rend
 import { startWatch } from '../../../../utils/startWatch.js'
 import { TipButtonStyle } from '../../constant.js'
 import { normalFollowButtonSelector as selector } from '../../utils/selector.js'
+import type { SocialIdentity } from '@masknet/shared-base'
 import { getUserIdentity } from '../../utils/user.js'
+import { getAvatarType } from '../../utils/AvatarType.js'
+import { AvatarType } from '@masknet/plugin-avatar'
 
 function getTwitterId(ele: HTMLElement) {
     const profileLink = ele.closest('[data-testid="UserCell"]')?.querySelector('a[role="link"]')
@@ -32,11 +34,13 @@ export function injectTipsButtonOnFollowButton(signal: AbortSignal) {
                     afterShadowRootInit: Flags.shadowRootInit,
                 })
                 proxy.realCurrent = ele
+
+                const type = getAvatarType()
                 const identity = await getUserIdentity(twitterId)
                 if (!identity) return
 
                 const root = attachReactTreeWithContainer(proxy.beforeShadow, { signal })
-                root.render(<FollowButtonTipsSlot userId={twitterId} />)
+                root.render(type === AvatarType.Clip ? <FollowButtonTipsSlot identity={identity} /> : <div />)
                 remover = root.destroy
             }
 
@@ -66,15 +70,14 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface Props {
-    userId: string
+    identity: SocialIdentity
 }
 
-const FollowButtonTipsSlot = memo(({ userId }: Props) => {
+const FollowButtonTipsSlot = memo(({ identity }: Props) => {
     const themeSetting = useThemeSettings()
     const tipStyle = TipButtonStyle[themeSetting.size]
     const { classes, cx } = useStyles()
 
-    const { value: identity } = useAsync(async () => getUserIdentity(userId), [userId])
     const [disabled, setDisabled] = useState(true)
 
     const component = useMemo(() => {

@@ -88,6 +88,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     }, [gasOptions, gasPrice, isSupport1559, maxFeePerGas, replaceType])
 
     const totalGas = useMemo(() => {
+        if (!config.gas) return '0'
         return formatGweiToWei((isSupport1559 ? maxFeePerGas : gasPrice) || ZERO)
             .times(config.gas)
             .toFixed()

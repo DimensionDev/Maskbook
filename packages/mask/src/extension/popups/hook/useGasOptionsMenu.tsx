@@ -26,10 +26,10 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: 'unset',
         minWidth: 134,
         cursor: 'pointer',
-        '&:first-child': {
+        '&:first-of-type': {
             paddingTop: 0,
         },
-        '&:last-child': {
+        '&:last-of-type': {
             paddingBottom: 4,
             border: 'unset',
         },
@@ -121,6 +121,10 @@ export function useGasOptionsMenu(gas: string, callback: (config: GasConfig, typ
             classes: {
                 paper: classes.paper,
                 list: classes.list,
+            },
+            anchorOrigin: {
+                vertical: 'bottom',
+                horizontal: 'right',
             },
         },
     )
