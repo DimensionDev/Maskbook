@@ -139,7 +139,7 @@ const ContactListUI = memo(function ContactListUI() {
         | undefined
     const isManage = state?.type === 'manage'
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
-    const { userInput, contacts, inputValidationMessage } = ContactsContext.useContainer()
+    const { userInput, address, contacts, inputValidationMessage } = ContactsContext.useContainer()
     const [params] = useSearchParams()
 
     const addContact = useCallback(() => {
@@ -213,7 +213,13 @@ const ContactListUI = memo(function ContactListUI() {
                     <Box className={classes.bottomAction}>
                         <ActionButton
                             fullWidth
-                            onClick={() => {}}
+                            onClick={() => {
+                                const path = urlcat(PopupRoutes.Transfer, {
+                                    ...Object.fromEntries(params.entries()),
+                                    recipient: address,
+                                })
+                                navigate(path)
+                            }}
                             width={368}
                             className={classes.confirmButton}
                             disabled={!!inputValidationMessage || !userInput}>
