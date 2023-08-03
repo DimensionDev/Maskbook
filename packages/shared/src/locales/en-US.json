@@ -360,5 +360,21 @@
     "reset": "Reset",
     "editor": "Editor",
     "typed_message_text_alert": "Only TypedMessageText is supported currently.",
-    "plugin_wallet_connect_desc": "Supports Mask Wallet, MetaMask and WalletConnect."
+    "plugin_wallet_connect_desc": "Supports Mask Wallet, MetaMask and WalletConnect.",
+    "wallets_assets_token_sent_not_connect_tip": "Not connected to {{chainName}}.",
+    "wallets_assets_token_sent_switch_network_tip": "Click to switch.",
+    "wallets_empty_tokens_tip": "No assets were found. Please add tokens.",
+    "wallets_assets_asset": "Asset",
+    "wallets_assets_balance": "Balance",
+    "wallets_assets_price": "Price",
+    "wallets_assets_value": "Value",
+    "wallets_assets_operation": "Operation",
+    "wallets_assets_more$collapsed": "Tokens with small value are not displayed ({{- symbol }} $1). Show all",
+    "wallets_assets_more$expanded": "Tokens with small value are displayed ({{- symbol }} $1). Hide all",
+    "wallets_assets_more_show_all": "Show all",
+    "wallets_history_types": "Types",
+    "wallets_history_value": "Value",
+    "wallets_history_time": "Time",
+    "wallets_history_receiver": "Interacted with (to)",
+    "wallet_history_no_data": "No history records."
 }

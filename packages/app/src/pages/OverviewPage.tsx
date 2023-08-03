@@ -10,14 +10,11 @@ export interface OverviewPageProps {}
 
 export default function OverviewPage(props: OverviewPageProps) {
     const { account } = useChainContext()
-
-    console.log('--------')
-    console.log('account', account)
     return (
         <DashboardContainer>
             <main>
                 <DashboardHeader title="Overview" />
-                <div className="bg-black p-5">
+                <div className="bg-white p-5">
                     <div className="border rounded-lg">
                         <DisableShadowRootContext.Provider value={false}>
                             <ShadowRootIsolation>

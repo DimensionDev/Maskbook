@@ -1,0 +1,168 @@
+import { memo } from 'react'
+import { BigNumber } from 'bignumber.js'
+import formatDateTime from 'date-fns/format'
+import fromUnixTime from 'date-fns/fromUnixTime'
+import { Icons } from '@masknet/icons'
+import { useReverseAddress, useWeb3Others } from '@masknet/web3-hooks-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { TokenType, type Transaction } from '@masknet/web3-shared-base'
+import { Box, Link, Stack, TableCell, TableRow, Tooltip, Typography } from '@mui/material'
+import { DebankTransactionDirection, ZerionTransactionDirection } from '@masknet/web3-providers/types'
+import { TransactionIcon } from '../TransactionIcon/index.js'
+
+const useStyles = makeStyles()((theme) => ({
+    type: {
+        maxWidth: '240px',
+        textOverflow: 'ellipsis',
+        textTransform: 'capitalize',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+    },
+    cell: {
+        padding: `${theme.spacing(1.25)} ${theme.spacing(2.5)}`,
+        border: 'none',
+        fontSize: theme.typography.pxToRem(14),
+    },
+    link: {
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 21,
+        color: MaskColorVar.textPrimary,
+    },
+    linkIcon: {
+        // TODO: replace with theme color
+        color: theme.palette.mode === 'dark' ? '#F5F5F5' : '#07101B',
+        marginLeft: 10,
+    },
+    pair: {
+        color: MaskColorVar.greenMain,
+    },
+    send: {
+        color: MaskColorVar.redMain,
+    },
+    hover: {
+        '&:hover': {
+            backgroundColor: theme.palette.background.default,
+        },
+    },
+    nftName: {
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        cursor: 'default',
+    },
+}))
+
+export interface HistoryTableRowProps {
+    transaction: Transaction<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    selectedChainId: Web3Helper.ChainIdAll
+}
+
+export const HistoryTableRow = memo<HistoryTableRowProps>(({ transaction, selectedChainId }) => {
+    const { data: domain } = useReverseAddress(undefined, transaction.to)
+    const transactionType = (transaction.type ?? '').replaceAll('_', ' ')
+
+    return (
+        <HistoryTableRowUI
+            transaction={transaction}
+            formattedType={transactionType}
+            selectedChainId={selectedChainId}
+            domain={domain}
+        />
+    )
+})
+
+HistoryTableRow.displayName = 'HistoryTableRow'
+
+export interface HistoryTableRowUIProps extends HistoryTableRowProps {
+    selectedChainId: Web3Helper.ChainIdAll
+    formattedType: string
+    domain?: string
+}
+
+export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
+    ({ transaction, selectedChainId, formattedType, domain }) => {
+        const { classes, cx } = useStyles()
+        const Others = useWeb3Others()
+
+        return (
+            <TableRow className={classes.hover}>
+                <TableCell className={classes.cell} align="center" variant="body">
+                    <Box style={{ display: 'flex', alignItems: 'center' }}>
+                        <TransactionIcon
+                            transactionType={transaction.type}
+                            type={transaction.type}
+                            address={transaction.to}
+                            failed={transaction.status === 0}
+                        />
+                        <Stack pl={2}>
+                            <Typography textAlign="left" className={classes.type} variant="body2">
+                                {formattedType}
+                            </Typography>
+                            <Typography fontSize={12} textAlign="left" color={MaskColorVar.textSecondary}>
+                                {formatDateTime(fromUnixTime(transaction.timestamp), 'yyyy-MM-dd HH:mm')}
+                            </Typography>
+                        </Stack>
+                    </Box>
+                </TableCell>
+                <TableCell className={classes.cell} align="center">
+                    {transaction.assets.map((pair, index) => {
+                        const direction =
+                            pair.direction === DebankTransactionDirection.SEND ||
+                            pair.direction === ZerionTransactionDirection.OUT
+                        return (
+                            <Stack
+                                key={index}
+                                className={cx(classes.pair, { [classes.send]: direction })}
+                                justifyContent="center"
+                                gap={2}
+                                direction="row">
+                                <Box width="50%" flexGrow={0} flexShrink={0} textAlign="right">
+                                    <span>{direction ? '-' : '+'}</span>
+                                    <span>
+                                        {new BigNumber(pair.amount).toFixed(
+                                            new BigNumber(pair.amount).toNumber() < 1 ? 6 : 2,
+                                        )}
+                                    </span>
+                                </Box>
+                                <Box width="50%" flexGrow={0} flexShrink={0} textAlign="left">
+                                    {pair.type === TokenType.NonFungible && (
+                                        <Tooltip title={pair.address} arrow disableInteractive>
+                                            <Typography
+                                                className={classes.nftName}
+                                                variant="body2"
+                                                color={MaskColorVar.textPrimary}>
+                                                {pair.name}
+                                            </Typography>
+                                        </Tooltip>
+                                    )}
+                                    {pair.type === TokenType.Fungible && (
+                                        <Typography variant="body2" color={MaskColorVar.textPrimary}>
+                                            {pair.symbol}
+                                        </Typography>
+                                    )}
+                                </Box>
+                            </Stack>
+                        )
+                    })}
+                </TableCell>
+                <TableCell className={classes.cell} align="center">
+                    <Box className={classes.link}>
+                        <Typography variant="body2" title={domain || transaction.to}>
+                            {domain ? Others.formatDomainName?.(domain) : Others.formatAddress(transaction.to, 4)}
+                        </Typography>
+                        <Link
+                            sx={{ height: 21 }}
+                            href={Others.explorerResolver.transactionLink(selectedChainId, transaction.id)}
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            <Icons.LinkOut size={16} className={classes.linkIcon} />
+                        </Link>
+                    </Box>
+                </TableCell>
+            </TableRow>
+        )
+    },
+)

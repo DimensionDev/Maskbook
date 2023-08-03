@@ -1,7 +1,15 @@
 import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
-import { useChainIdValid, useNetworkDescriptor, useProviderDescriptor } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useChainIdValid,
+    useNetworkContext,
+    useNetworkDescriptor,
+    useProviderDescriptor,
+} from '@masknet/web3-hooks-base'
 import { WalletStatusBox } from '../WalletStatusBox/index.js'
+import { PageContent } from './PageContent.js'
+import { ChainRuntimeProvider } from '../AssetsManagement/ChainRuntimeProvider.js'
 
 interface PageHeaderProps {}
 
@@ -14,11 +22,14 @@ export const PageHeader = memo<PageHeaderProps>((props) => {
     const providerDescriptor = useProviderDescriptor<'all'>()
     const chainIdValid = useChainIdValid()
     const networkDescriptor = useNetworkDescriptor()
+    const account = '0x790116d0685eB197B886DAcAD9C247f785987A4a'
+    const { pluginID } = useNetworkContext()
+    const { chainId } = useChainContext()
 
-    console.log(providerDescriptor)
     return (
-        <div>
+        <ChainRuntimeProvider pluginID={pluginID} defaultChainId={chainId} account={account}>
             <WalletStatusBox />
-        </div>
+            <PageContent account={account} />
+        </ChainRuntimeProvider>
     )
 })
