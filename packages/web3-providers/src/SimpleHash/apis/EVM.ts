@@ -9,7 +9,7 @@ import {
     createIndicator,
     createNextIndicator,
     NetworkPluginID,
-    Days,
+    type Days,
 } from '@masknet/shared-base'
 import {
     SourceType,
