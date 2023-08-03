@@ -14,10 +14,7 @@ import {
     type ChainId,
     type ProviderType,
     type NetworkType,
-    type MessageRequest,
-    type MessageResponse,
     type Transaction,
-    type TransactionParameter,
     type SchemaType,
     getNetworkPluginID,
     getDefaultChainId,
@@ -34,16 +31,7 @@ import {
 import { OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
 import { ChainResolver, ExplorerResolver, ProviderResolver, NetworkResolver } from './ResolverAPI.js'
 
-export class OthersAPI extends OthersAPI_Base<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter
-> {
+export class OthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
     override get chainResolver() {
         return ChainResolver
     }

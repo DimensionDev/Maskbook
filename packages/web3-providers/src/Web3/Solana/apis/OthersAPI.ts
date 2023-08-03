@@ -10,10 +10,7 @@ import {
     type ChainId,
     type ProviderType,
     type NetworkType,
-    type MessageRequest,
-    type MessageResponse,
     type Transaction,
-    type TransactionParameter,
     type SchemaType,
     formatAddress,
     formatTokenId,
@@ -37,16 +34,7 @@ import {
     SolanaNetworkResolver,
 } from './ResolverAPI.js'
 
-export class SolanaOthersAPI extends OthersAPI_Base<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter
-> {
+export class SolanaOthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
     override get chainResolver() {
         return SolanaChainResolver
     }

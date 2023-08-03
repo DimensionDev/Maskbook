@@ -1,42 +1,14 @@
-import type { ValueRefWithReady } from '@masknet/shared-base'
-import type { ChainDescriptor, Web3State } from '@masknet/web3-shared-base'
+import type { ChainDescriptor } from '@masknet/web3-shared-base'
 
-export class ChainResolverAPI_Base<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter,
-> {
-    constructor(
-        private descriptors: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>,
-        private ref?: ValueRefWithReady<
-            Web3State<
-                ChainId,
-                SchemaType,
-                ProviderType,
-                NetworkType,
-                MessageRequest,
-                MessageResponse,
-                Transaction,
-                TransactionParameter
-            >
-        >,
-    ) {}
-
-    private getDescriptors() {
-        return [...this.descriptors, ...(this.ref?.value.Network?.networks?.getCurrentValue() ?? [])]
-    }
+export class ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
+    constructor(private getDescriptors: () => Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>) {}
 
     private getDescriptor(chainId: ChainId) {
         return this.getDescriptors().find((x) => x.chainId === chainId)!
     }
 
     chainId = (name: string) =>
-        this.descriptors.find((x) =>
+        this.getDescriptors().find((x) =>
             [x.name, x.type as string, x.fullName, x.shortName]
                 .map((x) => x?.toLowerCase())
                 .filter(Boolean)

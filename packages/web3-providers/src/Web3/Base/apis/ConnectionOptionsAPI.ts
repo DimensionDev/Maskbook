@@ -55,16 +55,7 @@ export class ConnectionOptionsAPI_Base<
         throw new Error('To be implemented.')
     }
 
-    get Web3Others(): OthersAPI_Base<
-        ChainId,
-        SchemaType,
-        ProviderType,
-        NetworkType,
-        MessageRequest,
-        MessageResponse,
-        Transaction,
-        TransactionParameter
-    > {
+    get Web3Others(): OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
         throw new Error('To be implemented.')
     }
 

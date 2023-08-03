@@ -5,38 +5,11 @@ import type { NetworkResolverAPI_Base } from './NetworkExplorerAPI.js'
 import type { ChainResolverAPI_Base } from './ChainResolverAPI.js'
 import type { ExplorerResolverAPI_Base } from './ExplorerResolverAPI.js'
 
-export class OthersAPI_Base<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter,
-> {
-    get chainResolver(): ChainResolverAPI_Base<
-        ChainId,
-        SchemaType,
-        ProviderType,
-        NetworkType,
-        MessageRequest,
-        MessageResponse,
-        Transaction,
-        TransactionParameter
-    > {
+export class OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
+    get chainResolver(): ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
         return null!
     }
-    get explorerResolver(): ExplorerResolverAPI_Base<
-        ChainId,
-        SchemaType,
-        ProviderType,
-        NetworkType,
-        MessageRequest,
-        MessageResponse,
-        Transaction,
-        TransactionParameter
-    > {
+    get explorerResolver(): ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
         return null!
     }
     get providerResolver(): ProviderResolverAPI_Base<ChainId, ProviderType> {

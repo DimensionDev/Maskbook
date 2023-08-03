@@ -12,10 +12,7 @@ import {
     formatDomainName,
     type ProviderType,
     type NetworkType,
-    type MessageRequest,
-    type MessageResponse,
     type Transaction,
-    type TransactionParameter,
     type SchemaType,
     getDefaultChainId,
     getInvalidChainId,
@@ -32,16 +29,7 @@ import {
 import { OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
 import { FlowChainResolver, FlowExplorerResolver, FlowProviderResolver, FlowNetworkResolver } from './ResolverAPI.js'
 
-export class FlowOthersAPI extends OthersAPI_Base<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter
-> {
+export class FlowOthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
     override get chainResolver() {
         return FlowChainResolver
     }

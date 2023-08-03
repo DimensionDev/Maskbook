@@ -1,6 +1,5 @@
 import urlcat from 'urlcat'
-import type { ChainDescriptor, Web3State } from '@masknet/web3-shared-base'
-import type { ValueRefWithReady } from '@masknet/shared-base'
+import type { ChainDescriptor } from '@masknet/web3-shared-base'
 
 export interface ExplorerOptions {
     addressPathname?: string
@@ -11,30 +10,9 @@ export interface ExplorerOptions {
     nonFungibleTokenPathname?: string
 }
 
-export class ExplorerResolverAPI_Base<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter,
-> {
+export class ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
     constructor(
-        private descriptors: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>,
-        private ref?: ValueRefWithReady<
-            Web3State<
-                ChainId,
-                SchemaType,
-                ProviderType,
-                NetworkType,
-                MessageRequest,
-                MessageResponse,
-                Transaction,
-                TransactionParameter
-            >
-        >,
+        private getDescriptors: () => Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>,
         private initial?: ExplorerOptions,
     ) {}
 
@@ -51,10 +29,6 @@ export class ExplorerResolverAPI_Base<
             ...defaults,
             ...this.initial,
         }
-    }
-
-    private getDescriptors() {
-        return [...this.descriptors, ...(this.ref?.value.Network?.networks?.getCurrentValue() ?? [])]
     }
 
     private getExplorerURL(chainId: ChainId) {
