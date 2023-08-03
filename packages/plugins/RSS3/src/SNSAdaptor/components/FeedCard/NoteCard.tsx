@@ -43,6 +43,7 @@ const useStyles = makeStyles<void, 'title' | 'image' | 'content' | 'info' | 'bod
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            flexShrink: 0,
             backgroundColor: theme.palette.maskColor.bg,
             [`& + .${refs.info}`]: {
                 marginLeft: theme.spacing(1.5),
@@ -124,8 +125,20 @@ const cardTypeMap = {
     [Type.Share]: CardType.NoteLink,
 } as const
 
-function resolveLenstubeWatchLink(publicationId: string) {
-    return `https://lenstube.xyz/watch/${publicationId}`
+const toHex = (num: number) => {
+    const str = num.toString(16)
+    return str.length % 2 === 0 ? str : str.padStart(str.length + 1, '0')
+}
+
+function resolveDetailLink(publicationId?: string, metadata?: RSS3BaseAPI.PostMetadata, related_urls?: string[]) {
+    if (publicationId) return `https://lenstube.xyz/watch/${publicationId}`
+    if (!metadata) return null
+
+    const { profile_id, publication_id } = metadata
+    if (!profile_id || !publication_id || !related_urls?.length) return null
+
+    const pubId = `0x${toHex(profile_id)}-0x${toHex(publication_id)}`
+    return related_urls.find((x) => x.toLowerCase().endsWith(pubId))
 }
 
 /**
@@ -194,7 +207,8 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
                     <Link
                         className={classes.playButton}
                         href={
-                            publicationId ? resolveLenstubeWatchLink(publicationId) : resolveResourceURL(media.address)
+                            resolveDetailLink(publicationId, metadata, action.related_urls) ||
+                            resolveResourceURL(media.address)
                         }
                         target="_blank"
                         onClick={(evt) => evt.stopPropagation()}>
