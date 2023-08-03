@@ -36,7 +36,6 @@ const boundaryValues = [
  */
 export function formatMarketCap(value: BigNumber.Value, currency = 'USD', currencyRate = 1) {
     const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency, currencyDisplay: 'narrowSymbol' })
-    console.log({ currencyRate })
     const bgValue = new BigNumber(value).multipliedBy(currencyRate)
 
     const boundary = boundaryValues.find(
