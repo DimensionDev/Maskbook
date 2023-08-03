@@ -11,7 +11,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { NetworkPluginID, NUMERIC_INPUT_REGEXP_PATTERN, PopupRoutes } from '@masknet/shared-base'
 import { Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import { useChainContext, useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useFiatCurrencyRate,
+    useFiatCurrencyType,
+    useGasOptions,
+    useNativeToken,
+    useNativeTokenPrice,
+} from '@masknet/web3-hooks-base'
 import {
     ChainId,
     formatGweiToWei,
@@ -102,6 +109,8 @@ export const Prior1559GasSetting = memo(() => {
     const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
         chainId: nativeToken?.chainId,
     })
+    const fiatCurrencyType = useFiatCurrencyType()
+    const { value: fiatCurrencyRate } = useFiatCurrencyRate()
 
     // #region Get gas options from debank
     const gasOptions = useMemo(() => {
@@ -266,8 +275,8 @@ export const Prior1559GasSetting = memo(() => {
                                             formatWeiToEther(gasPrice)
                                                 .times(nativeTokenPrice)
                                                 .times(minGasLimit || 21000),
-                                            'USD',
-                                            { onlyRemainTwoDecimal: true },
+                                            fiatCurrencyType,
+                                            { onlyRemainTwoDecimal: true, fiatCurrencyRate },
                                         ),
                                     }}
                                     components={{ span: <span /> }}

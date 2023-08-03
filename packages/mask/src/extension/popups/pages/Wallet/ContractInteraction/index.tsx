@@ -15,7 +15,7 @@ import {
     isNativeTokenAddress,
     PayloadEditor,
 } from '@masknet/web3-shared-evm'
-import { CopyButton, FormattedBalance, FormattedCurrency, TokenIcon, useGasCurrencyMenu } from '@masknet/shared'
+import { CopyButton, FormattedBalance, TokenIcon, useGasCurrencyMenu } from '@masknet/shared'
 import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { unreachable } from '@masknet/kit'
 import {
@@ -48,6 +48,7 @@ import { useI18N } from '../../../../../utils/index.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
 import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
+import { WalletContext } from '../hooks/useWalletContext.js'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -155,6 +156,7 @@ const ContractInteraction = memo(() => {
     const navigate = useNavigate()
 
     const { smartPayChainId } = useContainer(PopupContext)
+    const { fiatCurrencyType, fiatCurrencyRate } = useContainer(WalletContext)
     const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [transferError, setTransferError] = useState(false)
@@ -422,9 +424,12 @@ const ContractInteraction = memo(() => {
                                         />
                                     </Typography>
                                     <Typography>
-                                        {!isGreaterThan(tokenValueUSD, pow10(9)) ? (
-                                            <FormattedCurrency value={tokenValueUSD} formatter={formatCurrency} />
-                                        ) : null}
+                                        {!isGreaterThan(tokenValueUSD, pow10(9))
+                                            ? formatCurrency(tokenValueUSD, fiatCurrencyType, {
+                                                  onlyRemainTwoDecimal: true,
+                                                  fiatCurrencyRate,
+                                              })
+                                            : null}
                                     </Typography>
                                 </>
                             ) : null}
@@ -469,9 +474,11 @@ const ContractInteraction = memo(() => {
                             <Typography className={classes.label}>
                                 {t('popups_wallet_contract_interaction_total')}
                             </Typography>
-
                             <Typography className={classes.gasPrice}>
-                                <FormattedCurrency value={totalUSD} formatter={formatCurrency} />
+                                {formatCurrency(totalUSD, fiatCurrencyType, {
+                                    onlyRemainTwoDecimal: true,
+                                    fiatCurrencyRate,
+                                })}
                             </Typography>
                         </div>
                     ) : null}

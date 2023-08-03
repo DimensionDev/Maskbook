@@ -27,7 +27,7 @@ function useWalletContext() {
     const [transaction, setTransaction] = useState<RecentTransactionComputed<ChainId, Transaction>>()
     const [selectedWallet, setSelectedWallet] = useState<Wallet | null>()
     const fiatCurrencyType = useFiatCurrencyType()
-    const { value: fiatCurrencyRate = 1 } = useFiatCurrencyRate(fiatCurrencyType)
+    const { value: fiatCurrencyRate = 1 } = useFiatCurrencyRate()
 
     const [assetsIsExpand, setAssetsIsExpand] = useState(false)
 
@@ -43,6 +43,7 @@ function useWalletContext() {
         setCurrentToken,
         assets,
         fiatCurrencyType,
+        fiatCurrencyRate,
         refreshAssets: refetch,
         transactions,
         assetsLoading: isLoading,

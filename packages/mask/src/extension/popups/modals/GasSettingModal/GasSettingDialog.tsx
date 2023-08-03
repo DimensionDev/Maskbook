@@ -8,7 +8,14 @@ import {
     formatWeiToEther,
     type GasConfig,
 } from '@masknet/web3-shared-evm'
-import { useChainIdSupport, useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
+import {
+    useChainIdSupport,
+    useFiatCurrencyRate,
+    useFiatCurrencyType,
+    useGasOptions,
+    useNativeToken,
+    useNativeTokenPrice,
+} from '@masknet/web3-hooks-base'
 import { NUMERIC_INPUT_REGEXP_PATTERN, NetworkPluginID } from '@masknet/shared-base'
 import { Alert, Box, Button, TextField, Typography, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -69,6 +76,8 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     const { value: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { data: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const fiatCurrencyType = useFiatCurrencyType()
+    const { value: fiatCurrencyRate } = useFiatCurrencyRate()
 
     const [gasPrice, setGasPrice] = useState(config.gasPrice ? config.gasPrice : '')
     const [maxPriorityFeePerGas, setMaxPriorityFeePerGas] = useState(
@@ -168,8 +177,9 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                 <Typography className={classes.preview}>
                     {formatWeiToEther(totalGas).toString()}
                     {nativeToken?.symbol}≈
-                    {formatCurrency(formatWeiToEther(totalGas).times(nativeTokenPrice ?? 0), 'USD', {
+                    {formatCurrency(formatWeiToEther(totalGas).times(nativeTokenPrice ?? 0), fiatCurrencyType, {
                         onlyRemainTwoDecimal: true,
+                        fiatCurrencyRate,
                     })}
                 </Typography>
                 {tips ? (

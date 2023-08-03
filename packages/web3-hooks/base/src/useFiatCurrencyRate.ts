@@ -1,9 +1,9 @@
 import { FiatCurrencyRate } from '@masknet/web3-providers'
-import type { FiatCurrencyType } from '@masknet/web3-shared-base'
-import { useAsyncRetry } from 'react-use'
 
-export function useFiatCurrencyRate(type?: FiatCurrencyType) {
-    return useAsyncRetry(() => {
-        return FiatCurrencyRate.getRate(type)
-    }, [type])
+import { useAsyncRetry } from 'react-use'
+import { useFiatCurrencyType } from './useFiatCurrencyType.js'
+
+export function useFiatCurrencyRate() {
+    const fiatCurrencyType = useFiatCurrencyType()
+    return useAsyncRetry(async () => FiatCurrencyRate.getRate(fiatCurrencyType), [fiatCurrencyType])
 }

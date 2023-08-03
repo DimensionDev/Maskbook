@@ -24,10 +24,10 @@ export enum CurrencyType {
 }
 
 export enum FiatCurrencyType {
-    USD = 'usd',
-    CNY = 'cny',
-    HKD = 'hkd',
-    JPY = 'jpy',
+    USD = 'USD',
+    CNY = 'CNY',
+    HKD = 'HKD',
+    JPY = 'JPY',
 }
 
 export enum OrderSide {

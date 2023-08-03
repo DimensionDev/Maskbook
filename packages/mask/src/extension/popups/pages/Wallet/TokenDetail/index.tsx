@@ -4,7 +4,6 @@ import {
     CoinMetadataTableSkeleton,
     EmptyStatus,
     FormattedBalance,
-    FormattedCurrency,
     FungibleCoinMarketTable,
     FungibleCoinMarketTableSkeleton,
     PriceChange,
@@ -29,11 +28,12 @@ import { PageTitleContext } from '../../../context.js'
 import { useTitle, useTokenParams } from '../../../hook/index.js'
 import { ConfirmModal } from '../../../modals/modals.js'
 import { ActionGroup } from '../components/index.js'
-import { useAsset } from '../hooks/index.js'
+import { WalletContext, useAsset } from '../hooks/index.js'
 import { DIMENSION, TrendingChart } from './TrendingChart.js'
 import { useCoinTrendingStats } from './useCoinTrendingStats.js'
 import { useTokenPrice } from './useTokenPrice.js'
 import { useTrending } from './useTrending.js'
+import { useContainer } from 'unstated-next'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -147,6 +147,7 @@ const TokenDetail = memo(function TokenDetail() {
         if (!asset?.decimals || !tokenPrice || !balance) return 0
         return leftShift(balance, asset.decimals).times(tokenPrice)
     }, [balance, asset, tokenPrice])
+    const { fiatCurrencyType, fiatCurrencyRate } = useContainer(WalletContext)
 
     const { data: trending, isLoading: isLoadingTrending, isError } = useTrending(chainId, address)
     const priceChange =
@@ -215,7 +216,12 @@ const TokenDetail = memo(function TokenDetail() {
             <Box className={classes.page}>
                 <Box padding={2}>
                     <ProgressiveText className={classes.assetValue} loading={isLoadingPrice} skeletonWidth={80}>
-                        <FormattedCurrency value={tokenPrice} formatter={formatCurrency} />
+                        {tokenPrice
+                            ? formatCurrency(tokenPrice, fiatCurrencyType, {
+                                  fiatCurrencyRate,
+                                  onlyRemainTwoDecimal: true,
+                              })
+                            : null}
                     </ProgressiveText>
                     <PriceChange className={classes.priceChange} change={priceChange} loading={isLoadingTrending} />
                     <PriceChartRange days={chartRange} onDaysChange={setChartRange} gap="10px" mt={2} />
@@ -264,7 +270,10 @@ const TokenDetail = memo(function TokenDetail() {
                         <Box textAlign="right">
                             <Typography className={classes.label}>value</Typography>
                             <Typography component="div" className={classes.value}>
-                                {formatCurrency(tokenValue, 'USD', { onlyRemainTwoDecimal: true })}
+                                {formatCurrency(tokenValue, fiatCurrencyType, {
+                                    onlyRemainTwoDecimal: true,
+                                    fiatCurrencyRate,
+                                })}
                             </Typography>
                         </Box>
                     </Box>

@@ -10,7 +10,7 @@ interface WalletAssetsValueProps extends Omit<ProgressiveTextProps, 'loading'> {
 }
 
 export const WalletAssetsValue = memo(function WalletAssetsValue({ account, ...props }: WalletAssetsValueProps) {
-    const { assets, assetsLoading, fiatCurrencyType } = useContainer(WalletContext)
+    const { assets, assetsLoading, fiatCurrencyType, fiatCurrencyRate } = useContainer(WalletContext)
 
     const value = useMemo(() => {
         return sum(assets.map((x) => (x.value?.usd ? Number.parseFloat(x.value.usd) : 0)))
@@ -18,7 +18,7 @@ export const WalletAssetsValue = memo(function WalletAssetsValue({ account, ...p
 
     return (
         <ProgressiveText {...props} loading={assetsLoading}>
-            {formatCurrency(value, fiatCurrencyType, { onlyRemainTwoDecimal: true })}
+            {formatCurrency(value, fiatCurrencyType, { onlyRemainTwoDecimal: true, fiatCurrencyRate })}
         </ProgressiveText>
     )
 })

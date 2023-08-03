@@ -14,6 +14,7 @@ import {
 } from '@mui/material'
 import { memo } from 'react'
 import { useSharedI18N } from '../../../locales/index.js'
+import { useFiatCurrencyType, useFiatCurrencyRate } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()({
     container: {
@@ -46,7 +47,9 @@ interface CoinMarketTableProps {
 export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ trending }: CoinMarketTableProps) {
     const t = useSharedI18N()
     const { classes } = useStyles()
-
+    const fiatCurrencyType = useFiatCurrencyType()
+    const { value: fiatCurrencyRate = 1, loading } = useFiatCurrencyRate()
+    console.log({ fiatCurrencyRate })
     const market = trending?.market
 
     return (
@@ -66,7 +69,9 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.cell}>
-                                {market?.market_cap ? formatMarketCap(market.market_cap) : '--'}
+                                {market?.market_cap && !loading
+                                    ? formatMarketCap(market.market_cap, fiatCurrencyType, fiatCurrencyRate)
+                                    : '--'}
                             </TableCell>
                         </TableRow>
 
@@ -88,7 +93,9 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.cell}>
-                                {market?.total_volume ? `$${formatSupply(market.total_volume)}` : '--'}
+                                {market?.total_volume && !loading
+                                    ? formatMarketCap(market.total_volume, fiatCurrencyType, fiatCurrencyRate)
+                                    : '--'}
                             </TableCell>
                         </TableRow>
                         <TableRow>

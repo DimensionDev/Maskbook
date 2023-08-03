@@ -3,6 +3,7 @@ import { scale10 } from './number.js'
 
 export interface FormatterCurrencyOptions {
     onlyRemainTwoDecimal?: boolean
+    fiatCurrencyRate?: number
 }
 
 const BOUNDARIES = {
@@ -48,8 +49,8 @@ export function formatCurrency(
     currency: LiteralUnion<Keys | 'USD'> = 'USD',
     options?: FormatterCurrencyOptions,
 ): string {
-    const bn = new BigNumber(inputValue)
-    const { onlyRemainTwoDecimal = false } = options ?? {}
+    const { onlyRemainTwoDecimal = false, fiatCurrencyRate = 1 } = options ?? {}
+    const bn = new BigNumber(inputValue).multipliedBy(fiatCurrencyRate)
     const integerValue = bn.integerValue(1)
     const decimalValue = bn.plus(integerValue.negated())
     const isMoreThanOrEqualToOne = bn.isGreaterThanOrEqualTo(1)
