@@ -4,7 +4,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useFungibleToken, useNetworkDescriptor, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { formatBalance, isLessThan, isLte, isZero, leftShift, rightShift } from '@masknet/web3-shared-base'
+import { isLessThan, isLte, isZero, leftShift, rightShift } from '@masknet/web3-shared-base'
 import { type GasConfig } from '@masknet/web3-shared-evm'
 import { Box, Input, Typography } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
@@ -15,6 +15,7 @@ import { TokenPicker } from '../../../components/index.js'
 import { useTokenParams } from '../../../hook/index.js'
 import { ChooseTokenModal } from '../../../modals/modals.js'
 import { GasSettings } from './GasSettings.js'
+import { formatBalance2 } from '../../../../../utils/formatBalance2.js'
 
 const useStyles = makeStyles()((theme) => ({
     asset: {
@@ -65,18 +66,23 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const { chainId, address, params, setParams } = useTokenParams()
     const navigate = useNavigate()
     // Enter from wallet home page, sending token is not decided yet
-    const undecided = !!params.get('undecided')
-    const handleSelectToken = useCallback((asset: Web3Helper.FungibleAssetAll): void => {
-        setParams(
-            (p) => {
-                p.set('chainId', asset.chainId.toString())
-                p.set('address', asset.address)
-                p.delete('undecided')
-                return p.toString()
-            },
-            { replace: true },
-        )
-    }, [])
+    const undecided = params.get('undecided') === 'true'
+    const [selectedAsset, setSelectedAsset] = useState<Web3Helper.FungibleAssetAll>()
+    const handleSelectAsset = useCallback(
+        (asset: Web3Helper.FungibleAssetAll): void => {
+            setSelectedAsset(asset)
+            setParams(
+                (p) => {
+                    p.set('chainId', asset.chainId.toString())
+                    p.set('address', asset.address)
+                    p.delete('undecided')
+                    return p.toString()
+                },
+                { replace: true },
+            )
+        },
+        [setParams],
+    )
     const network = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const { data: token, isLoading } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, address, undefined, { chainId })
 
@@ -86,7 +92,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         () => (amount && token?.decimals ? rightShift(amount, token.decimals).toFixed() : '0'),
         [amount, token?.decimals],
     )
-    const { balance, isLoading: isLoadingBalance } = useAvailableBalance(
+    const { balance, isLoading: isLoadingAvailableBalance } = useAvailableBalance(
         NetworkPluginID.PLUGIN_EVM,
         address,
         gasConfig,
@@ -115,13 +121,17 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                 defaultChainId={chainId}
                 chainId={chainId}
                 address={address}
-                onSelect={handleSelectToken}
+                onSelect={handleSelectAsset}
             />
         )
 
     const inputNotReady = !recipient || !amount || isLessThan(balance, totalAmount)
     const tokenNotReady = !token?.decimals || !balance || isLessThan(balance, totalAmount)
     const transferDisabled = inputNotReady || tokenNotReady || isLte(totalAmount, 0)
+
+    // Use selectedAsset balance eagerly
+    const isLoadingBalance = selectedAsset?.balance ? false : isLoadingAvailableBalance || isLoading
+    const tokenBalance = isLoadingAvailableBalance || isLoading ? selectedAsset?.balance : balance
 
     return (
         <>
@@ -133,7 +143,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                         chainId,
                         address,
                     })
-                    if (picked) handleSelectToken(picked)
+                    if (picked) handleSelectAsset(picked)
                 }}>
                 <Box position="relative" height={36} width={36}>
                     <TokenIcon className={classes.tokenIcon} chainId={chainId} address={address} />
@@ -143,9 +153,9 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                     <ProgressiveText loading={isLoading} skeletonWidth={36}>
                         {token?.symbol}
                     </ProgressiveText>
-                    <ProgressiveText loading={isLoading || isLoadingBalance} skeletonWidth={60}>
+                    <ProgressiveText loading={isLoadingBalance} skeletonWidth={60}>
                         {t('available_amount', {
-                            amount: formatBalance(balance, token?.decimals, 0, false, true, 5),
+                            amount: formatBalance2(tokenBalance, token?.decimals),
                         })}
                     </ProgressiveText>
                 </Box>

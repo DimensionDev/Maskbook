@@ -287,5 +287,8 @@
     "plugin_wallet_on_connect": "连接钱包",
     "upload_error$single": "不是单个文件。",
     "upload_or": "或者",
-    "upload_browse_files": "浏览文件"
+    "upload_browse_files": "浏览文件",
+    "persona_load_failed": "加载失败",
+    "applications_persona_title": "身份",
+    "applications_persona_copy": "复制成功"
 }

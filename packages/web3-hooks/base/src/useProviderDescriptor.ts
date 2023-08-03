@@ -10,7 +10,6 @@ export function useProviderDescriptor<S extends 'all' | void = void, T extends N
 ): Web3Helper.ProviderDescriptorScope<S, T> {
     const { pluginID } = useNetworkContext(expectedPluginID)
     const { providerType } = useChainContext()
-
     const typeOrId = expectedProviderTypeOrID ?? providerType ?? ''
     return useMemo(() => {
         return getPluginDefine(pluginID)?.declareWeb3Providers?.find((x) =>
