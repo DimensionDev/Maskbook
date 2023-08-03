@@ -12,9 +12,9 @@ import {
 import { SolanaHubAPI } from '../apis/HubAPI.js'
 import { TokenState, type TokenStorage } from '../../Base/state/Token.js'
 
-const Hub = new SolanaHubAPI().create()
-
 export class Token extends TokenState<ChainId, SchemaType> {
+    private Hub = new SolanaHubAPI().create()
+
     constructor(
         protected override context: Plugin.Shared.SharedUIContext,
         protected override subscriptions: {
@@ -49,7 +49,7 @@ export class Token extends TokenState<ChainId, SchemaType> {
         const fungibleTokenListByChainFromStorage = fungibleTokenListFromStorage?.[chainId]
 
         if (!fungibleTokenListByChainFromStorage) {
-            const fungibleTokenList = await Hub.getFungibleTokensFromTokenList(chainId, { chainId })
+            const fungibleTokenList = await this.Hub.getFungibleTokensFromTokenList(chainId, { chainId })
             await this.storage.credibleFungibleTokenList.setValue({
                 ...fungibleTokenListFromStorage,
                 [chainId]: fungibleTokenList,
@@ -74,7 +74,7 @@ export class Token extends TokenState<ChainId, SchemaType> {
         const nonFungibleTokenListByChainFromStorage = nonFungibleTokenListFromStorage?.[chainId]
 
         if (!nonFungibleTokenListByChainFromStorage) {
-            const nonFungibleTokenList = await Hub.getNonFungibleTokensFromTokenList?.(chainId, { chainId })
+            const nonFungibleTokenList = await this.Hub.getNonFungibleTokensFromTokenList?.(chainId, { chainId })
             await this.storage.credibleNonFungibleTokenList.setValue({
                 ...nonFungibleTokenListFromStorage,
                 [chainId]: nonFungibleTokenList,

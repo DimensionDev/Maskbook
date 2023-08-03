@@ -85,9 +85,9 @@ export async function getLatestMarketPairs(id: string, currency: string) {
 
 // #endregion
 
-const Fuse = new FuseCoinAPI()
-
 export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
+    private Fuse = new FuseCoinAPI()
+
     private async getHistorical(
         id: string,
         currency: string,
@@ -130,7 +130,7 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
-        return Fuse.create(await this.getAllCoins())
+        return this.Fuse.create(await this.getAllCoins())
             .search(keyword)
             .map((x) => x.item)
             .filter((y) => y.market_cap_rank && y.market_cap_rank < VALID_TOP_RANK)

@@ -29,14 +29,14 @@ import { SmartPayBundlerAPI } from '../../../SmartPay/index.js'
 import { SmartPayOwnerAPI } from '../../../SmartPay/apis/OwnerAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
-const Request = new RequestReadonlyAPI()
-const Bundler = new SmartPayBundlerAPI()
-
 export class MaskWalletProvider
     extends BaseContractWalletProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
     private ref = new ValueRef<Wallet[]>(EMPTY_LIST)
+
+    private Request = new RequestReadonlyAPI()
+    private Bundler = new SmartPayBundlerAPI()
 
     constructor() {
         super(ProviderType.MaskWallet)
@@ -59,7 +59,7 @@ export class MaskWalletProvider
         const allPersonas = this.context?.allPersonas?.getCurrentValue() ?? []
         const wallets = this.context?.wallets.getCurrentValue() ?? EMPTY_LIST
 
-        const chainId = await Bundler.getSupportedChainId()
+        const chainId = await this.Bundler.getSupportedChainId()
         const accounts = await new SmartPayOwnerAPI().getAccountsByOwners(chainId, [
             ...wallets.map((x) => x.address),
             ...compact(allPersonas.map((x) => x.address)),
@@ -109,7 +109,7 @@ export class MaskWalletProvider
 
         this.subscription?.wallets?.subscribe(async () => {
             const primaryWallet = first(this.wallets)
-            const smartPayChainId = await Bundler.getSupportedChainId()
+            const smartPayChainId = await this.Bundler.getSupportedChainId()
             if (!this.hostedAccount && primaryWallet) {
                 await this.switchAccount(primaryWallet.address)
                 await this.switchChain(primaryWallet.owner ? smartPayChainId : ChainId.Mainnet)
@@ -225,7 +225,7 @@ export class MaskWalletProvider
         requestArguments: RequestArguments,
         initial?: WalletAPI.ProviderOptions<ChainId>,
     ): Promise<T> {
-        return Request.request<T>(
+        return this.Request.request<T>(
             PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill() as RequestArguments,
             initial,
         )

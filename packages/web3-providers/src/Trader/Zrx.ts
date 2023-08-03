@@ -31,9 +31,6 @@ import { fetchJSON } from '../helpers/fetchJSON.js'
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 
-const Web3 = new ConnectionReadonlyAPI()
-const Contract = new ContractReadonlyAPI()
-
 export function getNativeTokenLabel(networkType: NetworkType) {
     switch (networkType) {
         case NetworkType.Ethereum:
@@ -63,6 +60,9 @@ export function getNativeTokenLabel(networkType: NetworkType) {
 
 export class Zrx implements TraderAPI.Provider {
     public provider = TradeProvider.ZRX
+
+    private Web3 = new ConnectionReadonlyAPI()
+    private Contract = new ContractReadonlyAPI()
 
     private async swapQuote(request: SwapQuoteRequest, networkType: NetworkType) {
         const params: Record<string, string | number> = {}
@@ -195,7 +195,7 @@ export class Zrx implements TraderAPI.Provider {
         const tradeAmount = new BigNumber(inputAmount || '0')
         if (tradeAmount.isZero() || !inputToken || !outputToken || !WNATIVE_ADDRESS) return null
 
-        const wrapperContract = Contract.getWETHContract(WNATIVE_ADDRESS, { chainId })
+        const wrapperContract = this.Contract.getWETHContract(WNATIVE_ADDRESS, { chainId })
 
         const computed = {
             strategy: TradeStrategy.ExactIn,
@@ -243,6 +243,6 @@ export class Zrx implements TraderAPI.Provider {
             ...pick(trade.trade_, 'to', 'data', 'value'),
         }
 
-        return Web3.estimateTransaction(config, 0, { chainId })
+        return this.Web3.estimateTransaction(config, 0, { chainId })
     }
 }

@@ -19,16 +19,16 @@ import { Web3StateRef } from '../apis/Web3StateAPI.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { Providers } from '../providers/index.js'
 
-const Web3 = new ConnectionReadonlyAPI()
-const Contract = new ContractReadonlyAPI()
-const Bundler = new SmartPayBundlerAPI()
-
 const DEFAULT_PAYMENT_TOKEN_STATE = {
     allowMaskAsGas: false,
     paymentToken: undefined,
 }
 
 export class Popups implements Middleware<ConnectionContext> {
+    private Web3 = new ConnectionReadonlyAPI()
+    private Contract = new ContractReadonlyAPI()
+    private Bundler = new SmartPayBundlerAPI()
+
     private get customNetwork() {
         if (!Web3StateRef.value.Network) throw new Error('The web3 state does not load yet.')
         const network = Web3StateRef.value.Network.network?.getCurrentValue()
@@ -38,7 +38,7 @@ export class Popups implements Middleware<ConnectionContext> {
     private async getPaymentToken(context: ConnectionContext) {
         const maskAddress = getMaskTokenAddress(context.chainId)
         try {
-            const smartPayChainId = await Bundler.getSupportedChainId()
+            const smartPayChainId = await this.Bundler.getSupportedChainId()
             if (context.chainId !== smartPayChainId || !context.owner) return DEFAULT_PAYMENT_TOKEN_STATE
 
             const { PAYMASTER_MASK_CONTRACT_ADDRESS } = getSmartPayConstants(context.chainId)
@@ -50,7 +50,7 @@ export class Popups implements Middleware<ConnectionContext> {
 
             if (!signableConfig?.maxFeePerGas) return DEFAULT_PAYMENT_TOKEN_STATE
 
-            const gas = await Web3.estimateTransaction?.(signableConfig, undefined, {
+            const gas = await this.Web3.estimateTransaction?.(signableConfig, undefined, {
                 chainId: context.chainId,
                 account: context.account,
                 paymentToken: maskAddress,
@@ -67,12 +67,12 @@ export class Popups implements Middleware<ConnectionContext> {
                 0,
             )
 
-            const maskBalance = await Web3.getFungibleTokenBalance(maskAddress, undefined, {
+            const maskBalance = await this.Web3.getFungibleTokenBalance(maskAddress, undefined, {
                 account: context.account,
                 chainId: context.chainId,
             })
 
-            const contract = Contract.getERC20Contract(maskAddress, { chainId: context.chainId })
+            const contract = this.Contract.getERC20Contract(maskAddress, { chainId: context.chainId })
             if (!contract) return DEFAULT_PAYMENT_TOKEN_STATE
 
             const maskAllowance = await contract.methods
@@ -87,7 +87,7 @@ export class Popups implements Middleware<ConnectionContext> {
                 paymentToken: context.paymentToken ?? !availableBalanceTooLow ? maskAddress : undefined,
             }
         } catch (error) {
-            const nativeBalance = await Web3.getNativeTokenBalance({
+            const nativeBalance = await this.Web3.getNativeTokenBalance({
                 account: context.account,
                 chainId: context.chainId,
             })
@@ -102,7 +102,7 @@ export class Popups implements Middleware<ConnectionContext> {
     async fn(context: ConnectionContext, next: () => Promise<void>) {
         // Draw the Popups up and wait for user confirmation before publishing risky requests on the network
         if (context.risky && context.writeable) {
-            const currentChainId = await Web3.getChainId()
+            const currentChainId = await this.Web3.getChainId()
 
             if (context.method === EthereumMethodType.ETH_SEND_TRANSACTION && currentChainId !== context.chainId) {
                 await Providers[ProviderType.MaskWallet].switchChain(context.chainId)

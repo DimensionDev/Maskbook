@@ -23,11 +23,11 @@ import type { HubOptions_Base, RedPacketBaseAPI } from '../entry-types.js'
 const redPacketInterFace = new Interface(REDPACKET_ABI)
 const nftRedPacketInterFace = new Interface(NFT_REDPACKET_ABI)
 
-const ChainbaseRedPacket = new ChainbaseRedPacketAPI()
-const EtherscanRedPacket = new EtherscanRedPacketAPI()
-const ContractRedPacket = new ContractRedPacketAPI()
-
 export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
+    private ChainbaseRedPacket = new ChainbaseRedPacketAPI()
+    private EtherscanRedPacket = new EtherscanRedPacketAPI()
+    private ContractRedPacket = new ContractRedPacketAPI()
+
     getHistories(
         chainId: ChainId,
         senderAddress: string,
@@ -39,7 +39,7 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
         return attemptUntil(
             [
                 async () =>
-                    ContractRedPacket.getHistories(
+                    this.ContractRedPacket.getHistories(
                         chainId,
                         senderAddress,
                         contractAddress,
@@ -89,7 +89,7 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
         return attemptUntil(
             [
                 async () =>
-                    await EtherscanRedPacket.getHistoryTransactions(
+                    await this.EtherscanRedPacket.getHistoryTransactions(
                         chainId,
                         senderAddress,
                         contractAddress,
@@ -99,7 +99,12 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
                     ),
 
                 async () =>
-                    await ChainbaseRedPacket.getHistoryTransactions(chainId, senderAddress, contractAddress, methodId),
+                    await this.ChainbaseRedPacket.getHistoryTransactions(
+                        chainId,
+                        senderAddress,
+                        contractAddress,
+                        methodId,
+                    ),
             ],
             [],
         )

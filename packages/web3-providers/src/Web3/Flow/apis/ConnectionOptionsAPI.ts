@@ -12,8 +12,6 @@ import { ConnectionOptionsAPI_Base } from '../../Base/apis/ConnectionOptionsAPI.
 import { FlowWeb3StateRef } from './Web3StateAPI.js'
 import { FlowOthersAPI } from './OthersAPI.js'
 
-const Web3Others = new FlowOthersAPI()
-
 export class FlowConnectionOptionsAPI extends ConnectionOptionsAPI_Base<
     ChainId,
     SchemaType,
@@ -24,11 +22,13 @@ export class FlowConnectionOptionsAPI extends ConnectionOptionsAPI_Base<
     Transaction,
     TransactionParameter
 > {
+    private Others = new FlowOthersAPI()
+
     override get Web3StateRef() {
         return FlowWeb3StateRef
     }
 
     override get Web3Others() {
-        return Web3Others
+        return this.Others
     }
 }

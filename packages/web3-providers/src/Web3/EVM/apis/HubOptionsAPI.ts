@@ -12,8 +12,6 @@ import { HubOptionsAPI_Base } from '../../Base/apis/HubOptionsAPI.js'
 import { Web3StateRef } from './Web3StateAPI.js'
 import { OthersAPI } from './OthersAPI.js'
 
-const Web3Others = new OthersAPI()
-
 export class HubOptionsAPI extends HubOptionsAPI_Base<
     ChainId,
     SchemaType,
@@ -24,11 +22,13 @@ export class HubOptionsAPI extends HubOptionsAPI_Base<
     Transaction,
     TransactionParameter
 > {
+    private Others = new OthersAPI()
+
     override get Web3StateRef() {
         return Web3StateRef
     }
 
     override get Web3Others() {
-        return Web3Others
+        return this.Others
     }
 }

@@ -5,9 +5,9 @@ import { getTokenAmountDescription } from '../utils.js'
 import type { TransactionDescriptor } from '../types.js'
 import { AirdropAPI } from '../../../../../Airdrop/index.js'
 
-const Airdrop = new AirdropAPI()
-
 export class AirdropDescriptor extends BaseDescriptor implements TransactionDescriptor {
+    private Airdrop = new AirdropAPI()
+
     override async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
         const context = context_ as TransactionContext<ChainId>
         const { ITO2_CONTRACT_ADDRESS } = getITOConstants(context.chainId)
@@ -15,7 +15,7 @@ export class AirdropDescriptor extends BaseDescriptor implements TransactionDesc
 
         for (const { name, parameters } of context.methods) {
             if (name === 'claim' && parameters?._eventIndex !== undefined) {
-                const result = await Airdrop.getPoolInfo(context.chainId, parameters._eventIndex)
+                const result = await this.Airdrop.getPoolInfo(context.chainId, parameters._eventIndex)
                 const token = result?.token
                     ? await this.Hub.getFungibleToken(result.token, { chainId: context.chainId })
                     : undefined

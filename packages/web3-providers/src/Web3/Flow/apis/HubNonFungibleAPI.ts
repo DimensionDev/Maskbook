@@ -15,8 +15,6 @@ import type { HubOptions_Base } from '../../Base/apis/HubOptionsAPI.js'
 import { AlchemyFlowAPI } from '../../../Alchemy/index.js'
 import type { NonFungibleTokenAPI } from '../../../entry-types.js'
 
-const AlchemyFlow = new AlchemyFlowAPI()
-
 export class FlowHubNonFungibleAPI extends HubNonFungibleAPI_Base<
     ChainId,
     SchemaType,
@@ -27,14 +25,16 @@ export class FlowHubNonFungibleAPI extends HubNonFungibleAPI_Base<
     Transaction,
     TransactionParameter
 > {
+    private AlchemyFlow = new AlchemyFlowAPI()
+
     protected override HubOptions = new FlowHubOptionsAPI(this.options)
 
     protected override getProviders(initial?: HubOptions_Base<ChainId>) {
         return this.getPredicateProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
             {
-                [SourceType.Alchemy_FLOW]: AlchemyFlow,
+                [SourceType.Alchemy_FLOW]: this.AlchemyFlow,
             },
-            [AlchemyFlow],
+            [this.AlchemyFlow],
             initial,
         )
     }

@@ -6,9 +6,9 @@ import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { HubAPI } from '../apis/HubAPI.js'
 import { ChainResolver } from '../apis/ResolverAPI.js'
 
-const Hub = new HubAPI().create()
-
 export class Base implements Translator<ConnectionContext> {
+    private Hub = new HubAPI().create()
+
     async encode(context: ConnectionContext) {
         const config = context.config
         if (!config || PayloadEditor.fromPayload(context.request).readonly) return
@@ -26,7 +26,7 @@ export class Base implements Translator<ConnectionContext> {
             }
 
             // add gas price
-            const options = await Hub.getGasOptions(context.chainId, {
+            const options = await this.Hub.getGasOptions(context.chainId, {
                 chainId: context.chainId,
             })
             const { [GasOptionType.SLOW]: slowOption, [GasOptionType.NORMAL]: normalOption } = options ?? {}

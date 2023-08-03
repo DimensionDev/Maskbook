@@ -29,22 +29,6 @@ import { X2Y2API } from '../../../X2Y2/index.js'
 import { ZerionNonFungibleTokenAPI } from '../../../Zerion/index.js'
 import { ZoraAPI } from '../../../Zora/index.js'
 
-const AlchemyEVM = new AlchemyEVM_API()
-const Approval = new ApprovalAPI()
-const ChainbaseNonFungibleToken = new ChainbaseNonFungibleTokenAPI()
-const Gem = new GemAPI()
-const GoPlusAuthorization = new GoPlusAuthorizationAPI()
-const LooksRare = new LooksRareAPI()
-const NFTScanNonFungibleTokenEVM = new NFTScanNonFungibleTokenAPI_EVM()
-const OpenSea = new OpenSeaAPI()
-const R2D2TokenList = new R2D2TokenListAPI()
-const Rabby = new RabbyAPI()
-const Rarible = new RaribleAPI()
-const SimpleHashEVM = new SimpleHashAPI_EVM()
-const X2Y2 = new X2Y2API()
-const ZerionNonFungibleToken = new ZerionNonFungibleTokenAPI()
-const Zora = new ZoraAPI()
-
 export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<
     ChainId,
     SchemaType,
@@ -55,6 +39,22 @@ export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<
     Transaction,
     TransactionParameter
 > {
+    private AlchemyEVM = new AlchemyEVM_API()
+    private Approval = new ApprovalAPI()
+    private ChainbaseNonFungibleToken = new ChainbaseNonFungibleTokenAPI()
+    private Gem = new GemAPI()
+    private GoPlusAuthorization = new GoPlusAuthorizationAPI()
+    private LooksRare = new LooksRareAPI()
+    private NFTScanNonFungibleTokenEVM = new NFTScanNonFungibleTokenAPI_EVM()
+    private OpenSea = new OpenSeaAPI()
+    private R2D2TokenList = new R2D2TokenListAPI()
+    private Rabby = new RabbyAPI()
+    private Rarible = new RaribleAPI()
+    private SimpleHashEVM = new SimpleHashAPI_EVM()
+    private X2Y2 = new X2Y2API()
+    private ZerionNonFungibleToken = new ZerionNonFungibleTokenAPI()
+    private Zora = new ZoraAPI()
+
     protected override HubOptions = new HubOptionsAPI(this.options)
 
     protected override getProviders(initial?: HubOptions) {
@@ -65,53 +65,53 @@ export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<
             | TokenListAPI.Provider<ChainId, SchemaType>
         >(
             {
-                [SourceType.X2Y2]: X2Y2,
-                [SourceType.Chainbase]: ChainbaseNonFungibleToken,
-                [SourceType.Zerion]: ZerionNonFungibleToken,
-                [SourceType.NFTScan]: NFTScanNonFungibleTokenEVM,
-                [SourceType.Rarible]: Rarible,
-                [SourceType.OpenSea]: OpenSea,
-                [SourceType.Approval]: Approval,
-                [SourceType.Alchemy_EVM]: AlchemyEVM,
-                [SourceType.LooksRare]: LooksRare,
-                [SourceType.Zora]: Zora,
-                [SourceType.Gem]: Gem,
-                [SourceType.GoPlus]: GoPlusAuthorization,
-                [SourceType.Rabby]: Rabby,
-                [SourceType.R2D2]: R2D2TokenList,
-                [SourceType.SimpleHash]: SimpleHashEVM,
+                [SourceType.X2Y2]: this.X2Y2,
+                [SourceType.Chainbase]: this.ChainbaseNonFungibleToken,
+                [SourceType.Zerion]: this.ZerionNonFungibleToken,
+                [SourceType.NFTScan]: this.NFTScanNonFungibleTokenEVM,
+                [SourceType.Rarible]: this.Rarible,
+                [SourceType.OpenSea]: this.OpenSea,
+                [SourceType.Approval]: this.Approval,
+                [SourceType.Alchemy_EVM]: this.AlchemyEVM,
+                [SourceType.LooksRare]: this.LooksRare,
+                [SourceType.Zora]: this.Zora,
+                [SourceType.Gem]: this.Gem,
+                [SourceType.GoPlus]: this.GoPlusAuthorization,
+                [SourceType.Rabby]: this.Rabby,
+                [SourceType.R2D2]: this.R2D2TokenList,
+                [SourceType.SimpleHash]: this.SimpleHashEVM,
             },
             options.chainId === ChainId.Mainnet
                 ? [
-                      X2Y2,
-                      SimpleHashEVM,
-                      NFTScanNonFungibleTokenEVM,
-                      ZerionNonFungibleToken,
-                      Rarible,
-                      OpenSea,
-                      AlchemyEVM,
-                      LooksRare,
-                      Zora,
-                      Gem,
-                      Approval,
-                      GoPlusAuthorization,
-                      Rabby,
-                      R2D2TokenList,
+                      this.X2Y2,
+                      this.SimpleHashEVM,
+                      this.NFTScanNonFungibleTokenEVM,
+                      this.ZerionNonFungibleToken,
+                      this.Rarible,
+                      this.OpenSea,
+                      this.AlchemyEVM,
+                      this.LooksRare,
+                      this.Zora,
+                      this.Gem,
+                      this.Approval,
+                      this.GoPlusAuthorization,
+                      this.Rabby,
+                      this.R2D2TokenList,
                   ]
                 : [
-                      SimpleHashEVM,
-                      NFTScanNonFungibleTokenEVM,
-                      ZerionNonFungibleToken,
-                      Rarible,
-                      AlchemyEVM,
-                      OpenSea,
-                      LooksRare,
-                      Zora,
-                      Approval,
-                      Gem,
-                      GoPlusAuthorization,
-                      Rabby,
-                      R2D2TokenList,
+                      this.SimpleHashEVM,
+                      this.NFTScanNonFungibleTokenEVM,
+                      this.ZerionNonFungibleToken,
+                      this.Rarible,
+                      this.AlchemyEVM,
+                      this.OpenSea,
+                      this.LooksRare,
+                      this.Zora,
+                      this.Approval,
+                      this.Gem,
+                      this.GoPlusAuthorization,
+                      this.Rabby,
+                      this.R2D2TokenList,
                   ],
             initial,
         )

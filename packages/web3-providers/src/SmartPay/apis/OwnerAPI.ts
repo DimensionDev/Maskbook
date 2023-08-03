@@ -22,21 +22,21 @@ interface OwnerShip {
     creator: string
 }
 
-const Contract = new ContractReadonlyAPI()
-const Multicall = new MulticallAPI()
-const Bundler = new SmartPayBundlerAPI()
-const Funder = new SmartPayFunderAPI()
-
 export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGIN_EVM> {
+    private Contract = new ContractReadonlyAPI()
+    private Multicall = new MulticallAPI()
+    private Bundler = new SmartPayBundlerAPI()
+    private Funder = new SmartPayFunderAPI()
+
     private async getEntryPoint(chainId: ChainId) {
-        const entryPoints = await Bundler.getSupportedEntryPoints(chainId)
+        const entryPoints = await this.Bundler.getSupportedEntryPoints(chainId)
         const entryPoint = first(entryPoints)
         if (!entryPoint || !isValidAddress(entryPoint)) throw new Error(`Not supported ${chainId}`)
         return entryPoint
     }
 
     private createWalletContract(chainId: ChainId, address: string) {
-        return Contract.getWalletContract(address, {
+        return this.Contract.getWalletContract(address, {
             chainId,
         })
     }
@@ -99,8 +99,8 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
     private async getAccountsFromMulticall(chainId: ChainId, owner: string, options: string[]) {
         const contracts = options.map((x) => this.createWalletContract(chainId, x)!)
         const names = Array.from<'owner'>({ length: options.length }).fill('owner')
-        const calls = Multicall.createMultipleContractSingleData(contracts, names, [])
-        const results = await Multicall.call(chainId, contracts, names, calls)
+        const calls = this.Multicall.createMultipleContractSingleData(contracts, names, [])
+        const results = await this.Multicall.call(chainId, contracts, names, calls)
         const accounts = results.flatMap((x) => (x.succeed && x.value ? x.value : ''))
 
         if (!accounts.length) {
@@ -174,7 +174,7 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
         const contractWallet = await this.createContractWallet(chainId, owner)
         const address = create2Factory.derive(contractWallet.initCode, nonce)
 
-        const operations = await Funder.getOperationsByOwner(chainId, owner)
+        const operations = await this.Funder.getOperationsByOwner(chainId, owner)
 
         // TODO: ensure account is deployed
         return this.createContractAccount(
@@ -198,7 +198,7 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
             queryFn: async () => {
                 const create2Factory = await this.createCreate2Factory(chainId, owner)
                 const contractWallet = await this.createContractWallet(chainId, owner)
-                const operations = await Funder.getOperationsByOwner(chainId, owner)
+                const operations = await this.Funder.getOperationsByOwner(chainId, owner)
 
                 const allSettled = await Promise.allSettled([
                     this.getAccountsFromMulticall(

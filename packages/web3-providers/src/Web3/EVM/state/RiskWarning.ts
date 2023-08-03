@@ -5,9 +5,9 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { RiskWarningState } from '../../Base/state/RiskWarning.js'
 import { RiskWarningAPI } from '../../../RiskWarning/index.js'
 
-const Warning = new RiskWarningAPI()
-
 export class RiskWarning extends RiskWarningState {
+    private Warning = new RiskWarningAPI()
+
     constructor(
         context: Plugin.Shared.SharedUIContext,
         subscription: {
@@ -21,7 +21,7 @@ export class RiskWarning extends RiskWarningState {
     }
 
     override async approve(address: string, pluginID?: string | undefined) {
-        await Warning.approve(address, pluginID)
+        await this.Warning.approve(address, pluginID)
         await super.approve(address)
     }
 }

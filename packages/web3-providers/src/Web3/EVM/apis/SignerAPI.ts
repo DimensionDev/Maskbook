@@ -4,9 +4,9 @@ import { SignType, toHex } from '@masknet/shared-base'
 import { ConnectionAPI } from './ConnectionAPI.js'
 import type { SignerAPI_Base } from '../../../entry-types.js'
 
-const Web3 = new ConnectionAPI()
-
 export class SignerAPI implements SignerAPI_Base.Provider {
+    private Web3 = new ConnectionAPI()
+
     async sign<T>(type: SignType, key: Buffer, message: T): Promise<string> {
         switch (type) {
             case SignType.Message:
@@ -26,7 +26,7 @@ export class SignerAPI implements SignerAPI_Base.Provider {
                 const chainId = transaction.chainId
                 if (!chainId) throw new Error('Invalid chain id.')
 
-                const { rawTransaction } = await Web3.getWeb3({
+                const { rawTransaction } = await this.Web3.getWeb3({
                     chainId,
                 }).eth.accounts.signTransaction(transaction, toHex(key))
                 if (!rawTransaction) throw new Error('Failed to sign transaction.')
