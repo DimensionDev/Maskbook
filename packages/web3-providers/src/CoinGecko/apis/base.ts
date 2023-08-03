@@ -1,9 +1,10 @@
 import urlcat from 'urlcat'
+import { Days } from '@masknet/shared-base'
 import { CurrencyType, type Price } from '@masknet/web3-shared-base'
 import { COINGECKO_URL_BASE } from '../constants.js'
 import type { Category, CoinInfo, Exchange, ThumbCoin, ThumbCollection } from '../types.js'
 import { fetchCachedJSON } from '../../helpers/fetchJSON.js'
-import { TrendingAPI } from '../../entry-types.js'
+import type { TrendingAPI } from '../../entry-types.js'
 
 function fetchFromCoinGecko<T>(request: RequestInfo | URL, init?: RequestInit) {
     return fetchCachedJSON<T>(request, init)
@@ -66,7 +67,7 @@ export async function getPriceStats(coinId: string, currencyId: string, days: nu
     }>(
         urlcat(COINGECKO_URL_BASE, `/coins/${coinId}/market_chart`, {
             vs_currency: currencyId,
-            days: days === TrendingAPI.Days.MAX ? 11430 : days,
+            days: days === Days.MAX ? 11430 : days,
         }),
         {
             cache: 'default',

@@ -15,7 +15,7 @@ export class OthersAPI_Base<
     Transaction,
     TransactionParameter,
 > {
-    chainResolver: ChainResolverAPI_Base<
+    get chainResolver(): ChainResolverAPI_Base<
         ChainId,
         SchemaType,
         ProviderType,
@@ -24,8 +24,10 @@ export class OthersAPI_Base<
         MessageResponse,
         Transaction,
         TransactionParameter
-    > = null!
-    explorerResolver: ExplorerResolverAPI_Base<
+    > {
+        return null!
+    }
+    get explorerResolver(): ExplorerResolverAPI_Base<
         ChainId,
         SchemaType,
         ProviderType,
@@ -34,9 +36,15 @@ export class OthersAPI_Base<
         MessageResponse,
         Transaction,
         TransactionParameter
-    > = null!
-    providerResolver: ProviderResolverAPI_Base<ChainId, ProviderType> = null!
-    networkResolver: NetworkResolverAPI_Base<ChainId, NetworkType> = null!
+    > {
+        return null!
+    }
+    get providerResolver(): ProviderResolverAPI_Base<ChainId, ProviderType> {
+        return null!
+    }
+    get networkResolver(): NetworkResolverAPI_Base<ChainId, NetworkType> {
+        return null!
+    }
 
     getNetworkPluginID(): NetworkPluginID {
         throw new Error('Method not implemented.')

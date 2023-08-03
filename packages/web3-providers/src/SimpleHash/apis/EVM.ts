@@ -9,6 +9,7 @@ import {
     createIndicator,
     createNextIndicator,
     NetworkPluginID,
+    Days,
 } from '@masknet/shared-base'
 import {
     SourceType,
@@ -166,7 +167,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         chainId: ChainId,
         collectionId: string,
         currency: TrendingAPI.Currency,
-        days: TrendingAPI.Days,
+        days: Days,
     ): Promise<TrendingAPI.Stat[]> {
         const range = resolveSimpleHashRange(days)
         const to_timeStamp = millisecondsToSeconds(Date.now())

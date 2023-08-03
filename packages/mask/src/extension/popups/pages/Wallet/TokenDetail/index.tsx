@@ -1,3 +1,6 @@
+import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import urlcat from 'urlcat'
 import { Icons } from '@masknet/icons'
 import {
     CoinMetadataTable,
@@ -13,17 +16,13 @@ import {
     ReloadStatus,
     TokenIcon,
 } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { Days, EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { MaskDarkTheme, MaskLightTheme, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useAccount, useFungibleTokenBalance, useNativeToken, useWeb3State } from '@masknet/web3-hooks-base'
-import { TrendingAPI } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, formatCurrency, isSameAddress, leftShift, trimZero } from '@masknet/web3-shared-base'
 import { SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, ThemeProvider, Typography } from '@mui/material'
-import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import urlcat from 'urlcat'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { PageTitleContext } from '../../../context.js'
 import { useTitle, useTokenParams } from '../../../hook/index.js'
@@ -170,7 +169,7 @@ const TokenDetail = memo(function TokenDetail() {
         openWindow(browser.runtime.getURL(url), 'SWAP_DIALOG')
     }, [asset, nativeToken])
 
-    const [chartRange, setChartRange] = useState(TrendingAPI.Days.ONE_DAY)
+    const [chartRange, setChartRange] = useState(Days.ONE_DAY)
     const {
         data: stats = EMPTY_LIST,
         refetch,

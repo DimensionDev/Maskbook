@@ -42,10 +42,18 @@ export class FlowOthersAPI extends OthersAPI_Base<
     Transaction,
     TransactionParameter
 > {
-    override chainResolver = FlowChainResolver
-    override explorerResolver = FlowExplorerResolver
-    override providerResolver = FlowProviderResolver
-    override networkResolver = FlowNetworkResolver
+    override get chainResolver() {
+        return FlowChainResolver
+    }
+    override get explorerResolver() {
+        return FlowExplorerResolver
+    }
+    override get providerResolver() {
+        return FlowProviderResolver
+    }
+    override get networkResolver() {
+        return FlowNetworkResolver
+    }
 
     override isValidDomain = isValidDomain
     override isValidChainId = isValidChainId

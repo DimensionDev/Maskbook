@@ -11,7 +11,7 @@ import { ChainId, SchemaType, WNATIVE, isValidChainId, resolveImageURL } from '@
 import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
 import { queryClient } from '@masknet/shared-base-ui'
-import { NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
+import { Days, NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { createPermalink } from '../NFTScan/helpers/EVM.js'
 import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
@@ -19,7 +19,6 @@ import { ETH_BLUR_TOKEN_ADDRESS, SIMPLE_HASH_URL } from './constants.js'
 import { ActivityType as ActivityTypeSimpleHash, type Asset, type Collection } from './type.js'
 import { fetchSquashedJSON } from '../helpers/fetchJSON.js'
 import { getAssetFullName } from '../helpers/getAssetFullName.js'
-import { TrendingAPI } from '../entry-types.js'
 
 export async function fetchFromSimpleHash<T>(path: string, init?: RequestInit) {
     return queryClient.fetchQuery<T>({
@@ -195,14 +194,14 @@ export function isLensFollower(name: string) {
     return name.endsWith('.lens-Follower')
 }
 
-export const resolveSimpleHashRange = createLookupTableResolver<TrendingAPI.Days, number>(
+export const resolveSimpleHashRange = createLookupTableResolver<Days, number>(
     {
-        [TrendingAPI.Days.ONE_DAY]: 60 * 60 * 24,
-        [TrendingAPI.Days.ONE_WEEK]: 60 * 60 * 24 * 7,
-        [TrendingAPI.Days.ONE_MONTH]: 60 * 60 * 24 * 30,
-        [TrendingAPI.Days.THREE_MONTHS]: 60 * 60 * 24 * 90,
-        [TrendingAPI.Days.ONE_YEAR]: 0,
-        [TrendingAPI.Days.MAX]: 0,
+        [Days.ONE_DAY]: 60 * 60 * 24,
+        [Days.ONE_WEEK]: 60 * 60 * 24 * 7,
+        [Days.ONE_MONTH]: 60 * 60 * 24 * 30,
+        [Days.THREE_MONTHS]: 60 * 60 * 24 * 90,
+        [Days.ONE_YEAR]: 0,
+        [Days.MAX]: 0,
     },
     () => 0,
 )

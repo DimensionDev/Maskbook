@@ -44,10 +44,18 @@ export class OthersAPI extends OthersAPI_Base<
     Transaction,
     TransactionParameter
 > {
-    override chainResolver = ChainResolver
-    override explorerResolver = ExplorerResolver
-    override providerResolver = ProviderResolver
-    override networkResolver = NetworkResolver
+    override get chainResolver() {
+        return ChainResolver
+    }
+    override get explorerResolver() {
+        return ExplorerResolver
+    }
+    override get providerResolver() {
+        return ProviderResolver
+    }
+    override get networkResolver() {
+        return NetworkResolver
+    }
 
     override isValidDomain = isValidDomain
     override isValidChainId = isValidChainId

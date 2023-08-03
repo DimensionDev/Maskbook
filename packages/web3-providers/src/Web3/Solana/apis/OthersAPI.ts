@@ -47,10 +47,18 @@ export class SolanaOthersAPI extends OthersAPI_Base<
     Transaction,
     TransactionParameter
 > {
-    override chainResolver = SolanaChainResolver
-    override explorerResolver = SolanaExplorerResolver
-    override providerResolver = SolanaProviderResolver
-    override networkResolver = SolanaNetworkResolver
+    override get chainResolver() {
+        return SolanaChainResolver
+    }
+    override get explorerResolver() {
+        return SolanaExplorerResolver
+    }
+    override get providerResolver() {
+        return SolanaProviderResolver
+    }
+    override get networkResolver() {
+        return SolanaNetworkResolver
+    }
 
     override isValidDomain = isValidDomain
     override isValidChainId = isValidChainId
