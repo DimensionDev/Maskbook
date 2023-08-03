@@ -286,6 +286,7 @@
     "ok": "确定",
     "plugin_wallet_on_connect": "连接钱包",
     "upload_error$single": "不是单个文件。",
+    "upload_file_title$failed": "上传文件失败",
     "upload_size_limit": "大小限制：10 MB",
     "upload_or": "或者",
     "upload_browse_files": "浏览文件",
@@ -294,5 +295,7 @@
     "applications_persona_title": "身份",
     "applications_persona_copy": "复制成功",
     "applications_persona_connect": "连接到 {{-nickname}}",
-    "applications_persona_verify": "验证 {{-nickname}}"
+    "applications_persona_verify": "验证 {{-nickname}}",
+    "enable_plugin_boundary": "开启插件",
+    "usdc_price_statistic": "价值数据统计"
 }
