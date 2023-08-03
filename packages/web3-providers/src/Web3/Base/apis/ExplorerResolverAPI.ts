@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import type { Web3State } from '@masknet/web3-shared-base'
+import type { ChainDescriptor, Web3State } from '@masknet/web3-shared-base'
 import type { ValueRefWithReady } from '@masknet/shared-base'
 
 export interface ExplorerOptions {
@@ -22,7 +22,8 @@ export class ExplorerResolverAPI_Base<
     TransactionParameter,
 > {
     constructor(
-        private ref: ValueRefWithReady<
+        private descriptors: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>,
+        private ref?: ValueRefWithReady<
             Web3State<
                 ChainId,
                 SchemaType,
@@ -52,12 +53,12 @@ export class ExplorerResolverAPI_Base<
         }
     }
 
-    private get descriptors() {
-        return this.ref.value.Network?.networks?.getCurrentValue() ?? []
+    private getDescriptors() {
+        return [...this.descriptors, ...(this.ref?.value.Network?.networks?.getCurrentValue() ?? [])]
     }
 
     private getExplorerURL(chainId: ChainId) {
-        const chainDescriptor = this.descriptors.find((x) => x.chainId === chainId)
+        const chainDescriptor = this.getDescriptors().find((x) => x.chainId === chainId)
         return chainDescriptor?.explorerUrl ?? { url: '' }
     }
 
