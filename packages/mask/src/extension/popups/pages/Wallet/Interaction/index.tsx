@@ -13,17 +13,18 @@ import { toHex, toUtf8 } from 'web3-utils'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { SignRequestInfo } from '../../../components/SignRequestInfo/index.js'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { ActionButton, makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useAsync, useAsyncFn } from 'react-use'
 import Services from '../../../../service.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { TransactionPreview } from '../../../components/TransactionPreview/index.js'
-import type { GasParams } from '../type.js'
+import { WalletAssetTabs, type GasParams } from '../type.js'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
 import { Icons } from '@masknet/icons'
 import { useUpdateEffect } from '@react-hookz/web'
 import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
 import * as ABICoder from 'web3-eth-abi'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     left: {
@@ -67,9 +68,6 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.second,
         wordBreak: 'break-all',
     },
-    hidden: {
-        visibility: 'hidden',
-    },
     itemTitle: {
         fontSize: 12,
         fontWeight: 700,
@@ -111,6 +109,7 @@ const Interaction = memo(function Interaction() {
 
     const messages = useMessages()
 
+    const { showSnackbar } = usePopupCustomSnackbar()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { Message, TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
@@ -154,59 +153,72 @@ const Interaction = memo(function Interaction() {
     }, [currentRequest, chainId, TransactionFormatter])
 
     const [{ loading: confirmLoading }, handleConfirm] = useAsyncFn(async () => {
-        if (!currentRequest) return
+        try {
+            if (!currentRequest) return
 
-        let params = currentRequest.request.arguments.params
+            let params = currentRequest.request.arguments.params
 
-        if (approveAmount) {
-            if (!transaction?.formattedTransaction?._tx.data) return
+            if (approveAmount) {
+                if (!transaction?.formattedTransaction?._tx.data) return
 
-            const coder = ABICoder as unknown as ABICoder.AbiCoder
-            const parameters = coder.decodeParameters(
-                approveParametersType,
-                transaction?.formattedTransaction._tx.data.slice(10),
+                const coder = ABICoder as unknown as ABICoder.AbiCoder
+                const parameters = coder.decodeParameters(
+                    approveParametersType,
+                    transaction?.formattedTransaction._tx.data.slice(10),
+                )
+
+                const result = coder.encodeParameters(approveParametersType, [parameters.spender, approveAmount])
+
+                params = currentRequest.request.arguments.params.map((x) =>
+                    x === 'latest'
+                        ? x
+                        : {
+                              ...x,
+                              data: result,
+                          },
+                )
+            } else {
+                params = !gasConfig
+                    ? currentRequest.request.arguments.params
+                    : currentRequest.request.arguments.params.map((x) =>
+                          x === 'latest'
+                              ? x
+                              : {
+                                    ...x,
+                                    gasPrice: gasConfig.gasPrice ? toHex(gasConfig.gasPrice) : x.gasPrice,
+                                    maxPriorityFeePerGas: gasConfig.maxPriorityFeePerGas
+                                        ? toHex(gasConfig.maxPriorityFeePerGas)
+                                        : x.maxPriorityFeePerGas,
+                                    maxFeePerGas: gasConfig.maxFeePerGas
+                                        ? toHex(gasConfig.maxFeePerGas)
+                                        : x.maxFeePerGas,
+                                },
+                      )
+            }
+
+            await Message?.approveRequest(currentRequest.ID, {
+                ...currentRequest.request,
+                arguments: {
+                    ...currentRequest.request.arguments,
+                    params,
+                },
+                options: {
+                    ...currentRequest.request.options,
+                    paymentToken,
+                },
+            })
+            if (source) await Services.Helper.removePopupWindow()
+            navigate(urlcat(PopupRoutes.Wallet, { tab: WalletAssetTabs.Activity }), { replace: true })
+        } catch (error) {
+            showSnackbar(
+                <Typography textAlign="center" width="275px">
+                    {t('popups_wallet_rpc_error')}
+                </Typography>,
+                {
+                    variant: 'error',
+                },
             )
-
-            const result = coder.encodeParameters(approveParametersType, [parameters.spender, approveAmount])
-
-            params = currentRequest.request.arguments.params.map((x) =>
-                x === 'latest'
-                    ? x
-                    : {
-                          ...x,
-                          data: result,
-                      },
-            )
-        } else {
-            params = !gasConfig
-                ? currentRequest.request.arguments.params
-                : currentRequest.request.arguments.params.map((x) =>
-                      x === 'latest'
-                          ? x
-                          : {
-                                ...x,
-                                gasPrice: gasConfig.gasPrice ? toHex(gasConfig.gasPrice) : x.gasPrice,
-                                maxPriorityFeePerGas: gasConfig.maxPriorityFeePerGas
-                                    ? toHex(gasConfig.maxPriorityFeePerGas)
-                                    : x.maxPriorityFeePerGas,
-                                maxFeePerGas: gasConfig.maxFeePerGas ? toHex(gasConfig.maxFeePerGas) : x.maxFeePerGas,
-                            },
-                  )
         }
-
-        await Message?.approveRequest(currentRequest.ID, {
-            ...currentRequest.request,
-            arguments: {
-                ...currentRequest.request.arguments,
-                params,
-            },
-            options: {
-                ...currentRequest.request.options,
-                paymentToken,
-            },
-        })
-        if (source) await Services.Helper.removePopupWindow()
-        navigate(-1)
     }, [
         currentRequest,
         Message,
@@ -261,6 +273,11 @@ const Interaction = memo(function Interaction() {
         setPaymentToken('')
     }, [index])
 
+    useEffect(() => {
+        if (!messages.length) return
+        setIndex(messages.length - 1)
+    }, [messages.length])
+
     // update default payment token from transaction
     useEffect(() => {
         if (!transaction?.paymentToken) return
@@ -279,7 +296,7 @@ const Interaction = memo(function Interaction() {
 
     return (
         <Box flex={1} display="flex" flexDirection="column">
-            <Box p={2} display="flex" flexDirection="column">
+            <Box p={2} display="flex" flexDirection="column" flex={1}>
                 {content}
                 <Box
                     display="flex"
@@ -296,40 +313,44 @@ const Interaction = memo(function Interaction() {
                     />
                 </Box>
 
-                <Box className={cx(classes.transactionDetail, !expand ? classes.hidden : undefined)}>
-                    {transaction?.formattedTransaction?.popup?.spender && approveAmount ? (
-                        <>
-                            <Box display="flex" alignItems="center" columnGap={1.25}>
-                                <Typography className={classes.itemTitle}>
-                                    {t('popups_wallet_unlock_erc20_approve_amount')}
-                                </Typography>
-                                <Typography className={classes.itemValue}>{approveAmount}</Typography>
-                            </Box>
-                            <Box display="flex" alignItems="center" columnGap={1.25}>
-                                <Typography className={classes.itemTitle}>
-                                    {t('popups_wallet_unlock_erc20_granted_to')}
-                                </Typography>
-                                <Typography className={classes.itemValue}>
-                                    {formatEthereumAddress(transaction.formattedTransaction.popup.spender, 4)}
-                                </Typography>
-                            </Box>
-                        </>
-                    ) : null}
-                    <Box display="flex" columnGap={0.5} alignItems="center">
-                        <Icons.Documents className={classes.document} size={16} />
-                        <Typography className={classes.text}>{t('data')}</Typography>
+                {expand ? (
+                    <Box className={classes.transactionDetail}>
+                        {transaction?.formattedTransaction?.popup?.spender && approveAmount ? (
+                            <>
+                                <Box display="flex" alignItems="center" columnGap={1.25}>
+                                    <Typography className={classes.itemTitle}>
+                                        {t('popups_wallet_unlock_erc20_approve_amount')}
+                                    </Typography>
+                                    <Typography className={classes.itemValue}>{approveAmount}</Typography>
+                                </Box>
+                                <Box display="flex" alignItems="center" columnGap={1.25}>
+                                    <Typography className={classes.itemTitle}>
+                                        {t('popups_wallet_unlock_erc20_granted_to')}
+                                    </Typography>
+                                    <Typography className={classes.itemValue}>
+                                        {formatEthereumAddress(transaction.formattedTransaction.popup.spender, 4)}
+                                    </Typography>
+                                </Box>
+                            </>
+                        ) : null}
+                        <Box display="flex" columnGap={0.5} alignItems="center">
+                            <Icons.Documents className={classes.document} size={16} />
+                            <Typography className={classes.text}>{t('data')}</Typography>
+                        </Box>
+                        {transaction?.formattedTransaction?.popup?.method ? (
+                            <Typography className={classes.text}>
+                                {t('popups_wallet_transaction_function_name', {
+                                    name: transaction?.formattedTransaction.popup.method,
+                                })}
+                            </Typography>
+                        ) : null}
+                        {transaction?.formattedTransaction?._tx.data ? (
+                            <Typography className={classes.data}>
+                                {transaction.formattedTransaction._tx.data}
+                            </Typography>
+                        ) : null}
                     </Box>
-                    {transaction?.formattedTransaction?.popup?.method ? (
-                        <Typography className={classes.text}>
-                            {t('popups_wallet_transaction_function_name', {
-                                name: transaction?.formattedTransaction.popup.method,
-                            })}
-                        </Typography>
-                    ) : null}
-                    {transaction?.formattedTransaction?._tx.data ? (
-                        <Typography className={classes.data}>{transaction.formattedTransaction._tx.data}</Typography>
-                    ) : null}
-                </Box>
+                ) : null}
 
                 {messages.length > 1 ? (
                     <Box display="flex" flexDirection="column" alignItems="center" marginTop="auto" marginBottom={9}>
@@ -347,7 +368,10 @@ const Interaction = memo(function Interaction() {
                             </Typography>
                             <Icons.ArrowDrop
                                 size={16}
-                                className={classes.right}
+                                className={cx(
+                                    classes.right,
+                                    index === messages.length - 1 ? classes.disabled : undefined,
+                                )}
                                 onClick={() => {
                                     if (index === messages.length - 1) return
                                     setIndex(index + 1)
@@ -370,7 +394,7 @@ const Interaction = memo(function Interaction() {
                     {t('cancel')}
                 </ActionButton>
                 <ActionButton loading={confirmLoading} onClick={handleConfirm} fullWidth>
-                    {t('sign')}
+                    {signRequest.includes(currentRequest?.request.arguments.method) ? t('sign') : t('confirm')}
                 </ActionButton>
             </BottomController>
         </Box>
