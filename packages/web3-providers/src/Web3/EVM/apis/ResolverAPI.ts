@@ -5,7 +5,7 @@ import {
     type ChainId,
     type SchemaType,
     type NetworkType,
-    ProviderType,
+    type ProviderType,
 } from '@masknet/web3-shared-evm'
 import { Web3StateRef } from './Web3StateAPI.js'
 import { ChainResolverAPI_Base } from '../../Base/apis/ChainResolverAPI.js'

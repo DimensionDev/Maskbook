@@ -5,7 +5,7 @@ import {
     type ChainId,
     type SchemaType,
     type NetworkType,
-    ProviderType,
+    type ProviderType,
 } from '@masknet/web3-shared-solana'
 import { ChainResolverAPI_Base } from '../../Base/apis/ChainResolverAPI.js'
 import { ExplorerResolverAPI_Base } from '../../Base/apis/ExplorerResolverAPI.js'
