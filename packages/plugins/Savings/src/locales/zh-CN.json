@@ -15,6 +15,7 @@
     "popups_loading": "加载中",
     "plugin_trader_error_amount_absence": "输入金额",
     "plugin_trader_error_insufficient_balance": "{{symbol}} 余额不足",
+    "plugin_trade_error_input_amount_less_minimum_amount": "输入金额低于最低金额",
     "twitter_account": "realMaskNetwork",
     "facebook_account": "masknetwork",
     "done": "完成",
