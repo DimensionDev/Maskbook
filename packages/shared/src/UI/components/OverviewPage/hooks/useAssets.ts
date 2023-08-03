@@ -5,10 +5,12 @@ import {
     useChainContext,
     useFungibleTokensFromTokenList,
     useWeb3Others,
+    useTransactions,
+    useIterator,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { isSameAddress, type Transaction } from '@masknet/web3-shared-base'
 import { useMemo } from 'react'
 
 function useContext(initialState?: { account?: string; chainId?: Web3Helper.ChainIdAll; pluginID?: NetworkPluginID }) {
@@ -32,10 +34,26 @@ function useContext(initialState?: { account?: string; chainId?: Web3Helper.Chai
             return { ...x, logoURL: token.logoURL }
         })
     }, [fungibleAssets.data, fungibleTokens, Others.chainResolver.nativeCurrency])
+
+    const iterator = useTransactions(initialState?.pluginID, { chainId })
+    const {
+        value = EMPTY_LIST,
+        next,
+        done,
+        loading: loadingHistory,
+    } = useIterator<Transaction<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>(iterator)
+
+    const dataSource = useMemo(() => {
+        return value.filter((x) => x.chainId === chainId)
+    }, [value, chainId])
+
     return {
         account,
         chainId,
         fungibleAssets: { ...fungibleAssets, value: assets, loading: loading || fungibleAssets.isLoading },
+        next,
+        done,
+        history: { value: dataSource, loading: loadingHistory },
     }
 }
 

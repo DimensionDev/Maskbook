@@ -7,7 +7,6 @@ export function useProviderType<S extends 'all' | void = void, T extends Network
     pluginID?: T,
 ) {
     const { Provider } = useWeb3State(pluginID)
-    console.log('provider', Provider)
     const defaultProviderType = useSubscription(Provider?.providerType ?? UNDEFINED)
 
     return defaultProviderType as Web3Helper.ProviderTypeScope<S, T>

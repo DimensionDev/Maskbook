@@ -1,13 +1,13 @@
-import { type Dispatch, memo, type SetStateAction, useMemo, useState } from 'react'
+import { type Dispatch, memo, type SetStateAction, useState } from 'react'
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { LoadingBase, makeStyles, MaskColorVar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useTransactions, useNetworkContext, useIterator } from '@masknet/web3-hooks-base'
 import { ElementAnchor, useSharedI18N } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import type { Transaction } from '@masknet/web3-shared-base'
 import { HistoryTableRow } from '../HistoryTableRow/index.js'
+import { useContainer } from 'unstated-next'
+import { Context } from '../../hooks/useAssets.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -47,18 +47,8 @@ interface HistoryTableProps {
 
 export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
     const [page, setPage] = useState(0)
-    const { pluginID } = useNetworkContext()
-    const iterator = useTransactions(pluginID, { chainId: selectedChainId })
-    const {
-        value = EMPTY_LIST,
-        next,
-        done,
-        loading,
-    } = useIterator<Transaction<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>(iterator)
-
-    const dataSource = useMemo(() => {
-        return value.filter((x) => x.chainId === selectedChainId)
-    }, [value, selectedChainId])
+    const { done, history, next } = useContainer(Context)
+    const { value: dataSource, loading } = history
 
     return (
         <HistoryTableUI

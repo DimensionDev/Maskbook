@@ -89,7 +89,8 @@ export class ZerionAPI
             }),
         )
         const transactions = allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
-
+        console.log('--------')
+        console.log(transactions)
         return createPageable(transactions, createIndicator(indicator))
     }
 }

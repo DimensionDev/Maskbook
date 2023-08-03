@@ -19,7 +19,11 @@ export default function OverviewPage(props: OverviewPageProps) {
                         <DisableShadowRootContext.Provider value={false}>
                             <ShadowRootIsolation>
                                 <Web3ContextProvider
-                                    value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
+                                    value={{
+                                        pluginID: NetworkPluginID.PLUGIN_EVM,
+                                        chainId: ChainId.Mainnet,
+                                        account: '0x790116d0685eB197B886DAcAD9C247f785987A4a',
+                                    }}>
                                     <OverviewPager />
                                 </Web3ContextProvider>
                             </ShadowRootIsolation>

@@ -28,7 +28,6 @@ export const Network = memo<NetworkProps>(() => {
     const onClick = useCallback((chain?: Web3Helper.NetworkDescriptorAll) => {
         setChainId(chain?.chainId)
         setSelectedChain(chain)
-        console.log('chain', chain)
     }, [])
 
     const [menu, openMenu] = useMenuConfig(

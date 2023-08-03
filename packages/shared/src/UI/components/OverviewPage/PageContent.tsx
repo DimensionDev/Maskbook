@@ -5,11 +5,11 @@ import { memo } from 'react'
 import { CollectionList, UserAssetsProvider } from '../../../index.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Network } from './Network.js'
-import { FungibleTokenTable } from './Asset/TokensPage.js'
 import { useChainRuntime } from '../AssetsManagement/ChainRuntimeProvider.js'
 import { Context } from './hooks/useAssets.js'
 import { HistoryTable } from './History/HistoryTable/index.js'
 import { ChainId } from '@masknet/web3-shared-evm'
+import { TokenPage } from './TokenPage.js'
 
 const useStyles = makeStyles()((theme) => ({
     tabs: {
@@ -46,13 +46,12 @@ export const PageContent = memo<PageContentProps>(({ account }) => {
                         <Tab label="Nfts" value={tabs.Nfts} />
                         <Tab label="History" value={tabs.History} />
                     </MaskTabList>
-
                     <div className={classes.menuBar}>
                         <Network />
                     </div>
                 </div>
                 <TabPanel value={tabs.Token} style={{ padding: 8, maxHeight: 600, overflowY: 'auto' }}>
-                    <FungibleTokenTable selectedChainId={chainId} />
+                    <TokenPage seeMore={() => setTab('History')} />
                 </TabPanel>
                 <TabPanel value={tabs.Nfts} style={{ padding: 8, maxHeight: 600, overflowY: 'auto' }}>
                     <UserAssetsProvider pluginID={NetworkPluginID.PLUGIN_EVM} account={account}>

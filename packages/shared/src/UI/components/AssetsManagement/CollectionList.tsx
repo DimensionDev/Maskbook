@@ -123,8 +123,6 @@ export const CollectionList = memo(function CollectionList({
     const { collections, currentCollection, setCurrentCollectionId, loading, error, retry } =
         CollectionsContext.useContainer()
 
-    console.log('-------')
-    console.log('chain', chainId)
     const handleChainChange = useCallback(
         (chainId: Web3Helper.ChainIdAll | undefined) => {
             setChainId(chainId)

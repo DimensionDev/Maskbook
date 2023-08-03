@@ -136,9 +136,6 @@ export function WalletStatusBox(props: WalletStatusBox) {
 
     const { summary: pendingSummary, transactionList } = usePendingTransactions()
 
-    console.log('----111')
-    console.log(Sniffings)
-    console.log(theme)
     if (!Others.isValidAddress(account)) {
         return (
             <section className={classes.connectButtonWrapper}>

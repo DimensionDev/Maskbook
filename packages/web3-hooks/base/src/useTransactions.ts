@@ -16,6 +16,7 @@ export function useTransactions<T extends NetworkPluginID = NetworkPluginID>(
             async (indicator) => {
                 return Hub.getTransactions(options?.chainId ?? chainId, options?.account ?? account, {
                     indicator,
+                    sourceType: options?.sourceType,
                 })
             },
             { maxSize: 999 },
