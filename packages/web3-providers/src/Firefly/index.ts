@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { BASE_URL, TWITTER_HANDLER_VERIFY_URL } from './constants.js'
-import { fetchJSON } from '../entry-helpers.js'
+import { fetchJSON } from '../helpers/fetchJSON.js'
 import type { FireflyBaseAPI } from '../entry-types.js'
 
 export class FireflyAPI implements FireflyBaseAPI.Provider {

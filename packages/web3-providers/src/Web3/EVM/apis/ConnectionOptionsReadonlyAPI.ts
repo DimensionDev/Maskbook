@@ -9,9 +9,11 @@ import type {
     TransactionParameter,
     Web3State,
 } from '@masknet/web3-shared-evm'
-import { ConnectionOptionsAPI_Base } from '../../Base/apis/ConnectionOptionsAPI.js'
 import { ValueRefWithReady } from '@masknet/shared-base'
+import { ConnectionOptionsAPI_Base } from '../../Base/apis/ConnectionOptionsAPI.js'
 import { OthersAPI } from './OthersAPI.js'
+
+const Web3Others = new OthersAPI()
 
 const EmptyRef = new ValueRefWithReady<Web3State>({})
 
@@ -30,6 +32,6 @@ export class ConnectionOptionsReadonlyAPI extends ConnectionOptionsAPI_Base<
     }
 
     override get Web3Others() {
-        return new OthersAPI()
+        return Web3Others
     }
 }

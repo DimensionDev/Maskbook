@@ -4,20 +4,20 @@ import { Emitter } from '@servie/events'
 import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
 import {
-    chainResolver,
     ChainId,
-    type ProviderType,
     ProviderURL,
     EthereumMethodType,
+    type ProviderType,
     type Web3Provider,
     type RequestArguments,
     type Web3,
     isValidChainId,
 } from '@masknet/web3-shared-evm'
 import { type Account, type Wallet, EMPTY_LIST, createConstantSubscription } from '@masknet/shared-base'
-import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
+import { ChainResolver } from '../apis/ResolverAPI.js'
+import { createWeb3FromProvider } from '../../../helpers/createWeb3FromProvider.js'
+import { createWeb3ProviderFromRequest } from '../../../helpers/createWeb3ProviderFromRequest.js'
 import type { WalletAPI } from '../../../entry-types.js'
-import { createWeb3FromProvider, createWeb3ProviderFromRequest } from '../../../entry-helpers.js'
 
 export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3> {
     protected context: Plugin.SNSAdaptor.SNSAdaptorContext | undefined
@@ -25,7 +25,6 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
     constructor(protected providerType: ProviderType) {}
 
     public emitter = new Emitter<WalletAPI.ProviderEvents<ChainId, ProviderType>>()
-    public Request = new RequestReadonlyAPI()
 
     get subscription() {
         return {
@@ -119,10 +118,10 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
                     params: [
                         {
                             chainId: toHex(chainId),
-                            chainName: chainResolver.chainFullName(chainId) ?? chainResolver.chainName(chainId),
-                            nativeCurrency: chainResolver.nativeCurrency(chainId),
+                            chainName: ChainResolver.chainFullName(chainId) ?? ChainResolver.chainName(chainId),
+                            nativeCurrency: ChainResolver.nativeCurrency(chainId),
                             rpcUrls: [ProviderURL.fromOfficial(chainId)],
-                            blockExplorerUrls: [chainResolver.explorerUrl(chainId)?.url],
+                            blockExplorerUrls: [ChainResolver.explorerUrl(chainId)?.url],
                         },
                     ],
                 })
@@ -140,7 +139,7 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
         })
 
         if (Number.parseInt(actualChainId, 16) !== chainId)
-            throw new Error(`Failed to switch to ${chainResolver.chainFullName(chainId)}.`)
+            throw new Error(`Failed to switch to ${ChainResolver.chainFullName(chainId)}.`)
     }
 
     // A provider should at least implement a RPC request method.

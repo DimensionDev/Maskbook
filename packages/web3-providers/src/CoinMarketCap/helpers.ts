@@ -1,5 +1,5 @@
 import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { fetchSquashedJSON } from '../entry-helpers.js'
+import { fetchSquashedJSON } from '../helpers/fetchJSON.js'
 import { isSameAddress } from '@masknet/web3-shared-base'
 
 const NETWORK_NAME_MAP: {

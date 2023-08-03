@@ -1,9 +1,11 @@
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { RiskWarning as RiskWarningAPI } from '@masknet/web3-providers'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { RiskWarningState } from '../../Base/state/RiskWarning.js'
+import { RiskWarningAPI } from '../../../RiskWarning/index.js'
+
+const Warning = new RiskWarningAPI()
 
 export class RiskWarning extends RiskWarningState {
     constructor(
@@ -19,7 +21,7 @@ export class RiskWarning extends RiskWarningState {
     }
 
     override async approve(address: string, pluginID?: string | undefined) {
-        await RiskWarningAPI.approve(address, pluginID)
+        await Warning.approve(address, pluginID)
         await super.approve(address)
     }
 }

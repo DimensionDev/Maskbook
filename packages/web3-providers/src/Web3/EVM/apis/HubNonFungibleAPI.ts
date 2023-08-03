@@ -1,21 +1,3 @@
-import {
-    AlchemyEVM,
-    Approval,
-    ChainbaseNonFungibleToken,
-    Gem,
-    GoPlusAuthorization,
-    LooksRare,
-    NFTScanNonFungibleTokenEVM,
-    OpenSea,
-    R2D2TokenList,
-    Rabby,
-    Rarible,
-    SimpleHashEVM,
-    X2Y2,
-    ZerionNonFungibleToken,
-    Zora,
-} from '@masknet/web3-providers'
-import type { AuthorizationAPI, NonFungibleTokenAPI, TokenListAPI } from '@masknet/web3-providers/types'
 import { SourceType } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -30,6 +12,38 @@ import {
 import { HubNonFungibleAPI_Base } from '../../Base/apis/HubNonFungibleAPI.js'
 import { HubOptionsAPI } from './HubOptionsAPI.js'
 import type { HubOptions } from '../types/index.js'
+import type { AuthorizationAPI, NonFungibleTokenAPI, TokenListAPI } from '../../../entry-types.js'
+import { AlchemyEVM_API } from '../../../Alchemy/index.js'
+import { ApprovalAPI } from '../../../Approval/index.js'
+import { ChainbaseNonFungibleTokenAPI } from '../../../Chainbase/index.js'
+import { GemAPI } from '../../../Gem/index.js'
+import { GoPlusAuthorizationAPI } from '../../../GoPlusLabs/index.js'
+import { LooksRareAPI } from '../../../LooksRare/index.js'
+import { NFTScanNonFungibleTokenAPI_EVM } from '../../../NFTScan/index.js'
+import { OpenSeaAPI } from '../../../OpenSea/index.js'
+import { R2D2TokenListAPI } from '../../../R2D2/index.js'
+import { RabbyAPI } from '../../../Rabby/index.js'
+import { RaribleAPI } from '../../../Rarible/index.js'
+import { SimpleHashAPI_EVM } from '../../../SimpleHash/index.js'
+import { X2Y2API } from '../../../X2Y2/index.js'
+import { ZerionNonFungibleTokenAPI } from '../../../Zerion/index.js'
+import { ZoraAPI } from '../../../Zora/index.js'
+
+const AlchemyEVM = new AlchemyEVM_API()
+const Approval = new ApprovalAPI()
+const ChainbaseNonFungibleToken = new ChainbaseNonFungibleTokenAPI()
+const Gem = new GemAPI()
+const GoPlusAuthorization = new GoPlusAuthorizationAPI()
+const LooksRare = new LooksRareAPI()
+const NFTScanNonFungibleTokenEVM = new NFTScanNonFungibleTokenAPI_EVM()
+const OpenSea = new OpenSeaAPI()
+const R2D2TokenList = new R2D2TokenListAPI()
+const Rabby = new RabbyAPI()
+const Rarible = new RaribleAPI()
+const SimpleHashEVM = new SimpleHashAPI_EVM()
+const X2Y2 = new X2Y2API()
+const ZerionNonFungibleToken = new ZerionNonFungibleTokenAPI()
+const Zora = new ZoraAPI()
 
 export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<
     ChainId,

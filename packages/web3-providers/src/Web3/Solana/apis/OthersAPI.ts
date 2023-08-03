@@ -10,7 +10,10 @@ import {
     type ChainId,
     type ProviderType,
     type NetworkType,
+    type MessageRequest,
+    type MessageResponse,
     type Transaction,
+    type TransactionParameter,
     type SchemaType,
     formatAddress,
     formatTokenId,
@@ -23,21 +26,31 @@ import {
     getMaskTokenAddress,
     getNativeTokenAddress,
     formatSchemaType,
-    createNativeToken,
     isValidChainId,
 } from '@masknet/web3-shared-solana'
 import { createFungibleToken, createNonFungibleToken } from '@masknet/web3-shared-base'
 import { OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
-import { SolanaExplorerResolverAPI } from './ExplorerResolverAPI.js'
-import { SolanaChainResolverAPI } from './ChainResolverAPI.js'
-import { SolanaProviderResolverAPI } from './ProviderResolverAPI.js'
-import { SolanaNetworkResolverAPI } from './NetworkExplorerAPI.js'
+import {
+    SolanaChainResolver,
+    SolanaExplorerResolver,
+    SolanaProviderResolver,
+    SolanaNetworkResolver,
+} from './ResolverAPI.js'
 
-export class SolanaOthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
-    chainResolver = new SolanaChainResolverAPI()
-    explorerResolver = new SolanaExplorerResolverAPI()
-    providerResolver = new SolanaProviderResolverAPI()
-    networkResolver = new SolanaNetworkResolverAPI()
+export class SolanaOthersAPI extends OthersAPI_Base<
+    ChainId,
+    SchemaType,
+    ProviderType,
+    NetworkType,
+    MessageRequest,
+    MessageResponse,
+    Transaction,
+    TransactionParameter
+> {
+    override chainResolver = SolanaChainResolver
+    override explorerResolver = SolanaExplorerResolver
+    override providerResolver = SolanaProviderResolver
+    override networkResolver = SolanaNetworkResolver
 
     override isValidDomain = isValidDomain
     override isValidChainId = isValidChainId
@@ -62,7 +75,7 @@ export class SolanaOthersAPI extends OthersAPI_Base<ChainId, SchemaType, Provide
     override formatDomainName = formatDomainName
     override formatTokenId = formatTokenId
     override formatSchemaType = formatSchemaType
-    override createNativeToken = createNativeToken
+    override createNativeToken = (chainId: ChainId) => this.chainResolver.nativeCurrency(chainId)
     override createFungibleToken = createFungibleToken
     override createNonFungibleToken = createNonFungibleToken
 }

@@ -1,8 +1,10 @@
 import { sha3, toHex } from 'web3-utils'
-import { EtherscanExplorer } from '@masknet/web3-providers'
-import type { ExplorerAPI } from '@masknet/web3-providers/types'
 import { type TransactionChecker, TransactionStatusType } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
+import { EtherscanExplorerAPI } from '../../../../../Etherscan/index.js'
+import type { ExplorerAPI } from '../../../../../entry-types.js'
+
+const EtherscanExplorer = new EtherscanExplorerAPI()
 
 class TTL<T> {
     private cache: Record<string, { value: T; ttl: number; at: number }> = {}

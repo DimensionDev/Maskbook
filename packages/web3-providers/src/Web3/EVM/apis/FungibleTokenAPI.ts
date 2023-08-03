@@ -14,15 +14,15 @@ import { CoinGeckoPriceAPI_EVM } from '../../../CoinGecko/index.js'
 import type { HubOptions } from '../types/index.js'
 import type { FungibleTokenAPI as FungibleTokenBaseAPI } from '../../../entry-types.js'
 
-export class FungibleTokenAPI implements FungibleTokenBaseAPI.Provider<ChainId, SchemaType> {
-    private Contract = new ContractReadonlyAPI()
-    private CoinGecko = new CoinGeckoPriceAPI_EVM()
+const Contract = new ContractReadonlyAPI()
+const CoinGecko = new CoinGeckoPriceAPI_EVM()
 
+export class FungibleTokenAPI implements FungibleTokenBaseAPI.Provider<ChainId, SchemaType> {
     private createContract(chainId: ChainId) {
         const address = getEthereumConstant(chainId, 'BALANCE_CHECKER_ADDRESS')
         if (!address) throw new Error('Failed to create balance checker contract.')
 
-        const contract = this.Contract.getBalanceCheckerContract(address, {
+        const contract = Contract.getBalanceCheckerContract(address, {
             chainId,
         })
         if (!contract) throw new Error('Failed to create balance checker contract.')
@@ -31,7 +31,7 @@ export class FungibleTokenAPI implements FungibleTokenBaseAPI.Provider<ChainId, 
     }
 
     async createAssets(fungibleToken: FungibleToken<ChainId, SchemaType>, chainId: ChainId, balance: number) {
-        const price = await this.CoinGecko.getFungibleTokenPrice(chainId, fungibleToken.address)
+        const price = await CoinGecko.getFungibleTokenPrice(chainId, fungibleToken.address)
 
         return {
             ...fungibleToken,

@@ -35,9 +35,9 @@ import { AirdropDescriptor } from './TransactionFormatter/descriptors/Airdrop.js
 import { TransactionFormatterState } from '../../Base/state/TransactionFormatter.js'
 import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
 
-export class TransactionFormatter extends TransactionFormatterState<ChainId, TransactionParameter, Transaction> {
-    private Web3 = new ConnectionReadonlyAPI()
+const Web3 = new ConnectionReadonlyAPI()
 
+export class TransactionFormatter extends TransactionFormatterState<ChainId, TransactionParameter, Transaction> {
     private coder = ABICoder as unknown as ABICoder.AbiCoder
     private descriptors: Record<TransactionDescriptorType, TransactionDescriptor[]> = {
         [TransactionDescriptorType.TRANSFER]: [new TransferTokenDescriptor()],
@@ -111,7 +111,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
         if (to) {
             let code = ''
             try {
-                code = await this.Web3.getCode(to, { chainId })
+                code = await Web3.getCode(to, { chainId })
             } catch {
                 code = ''
             }

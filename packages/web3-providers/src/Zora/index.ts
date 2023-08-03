@@ -18,7 +18,8 @@ import {
     SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { ChainId, createNativeToken, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
+import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
 import {
     type Collection,
     type Event,
@@ -31,8 +32,9 @@ import {
 } from './types.js'
 import { GetEventsQuery, GetTokenQuery } from './queries.js'
 import { ZORA_MAINNET_GRAPHQL_URL } from './constants.js'
+import { getAssetFullName } from '../helpers/getAssetFullName.js'
+import { resolveActivityType } from '../helpers/resolveActivityType.js'
 import type { HubOptions_Base, NonFungibleTokenAPI } from '../entry-types.js'
-import { getAssetFullName, resolveActivityType } from '../entry-helpers.js'
 
 export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     private client = new GraphQLClient(ZORA_MAINNET_GRAPHQL_URL)
@@ -94,7 +96,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             priceInToken: token.mintInfo?.price.nativePrice.raw
                 ? {
                       amount: token.mintInfo?.price.nativePrice.raw,
-                      token: createNativeToken(chainId),
+                      token: ChainResolver.nativeCurrency(chainId),
                   }
                 : undefined,
             owner: token.owner
@@ -166,7 +168,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
                     priceInToken: price.nativePrice.raw
                         ? {
                               amount: price.nativePrice.raw,
-                              token: createNativeToken(chainId),
+                              token: ChainResolver.nativeCurrency(chainId),
                           }
                         : undefined,
                 }

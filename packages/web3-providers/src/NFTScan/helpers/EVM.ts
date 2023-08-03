@@ -15,25 +15,23 @@ import {
 } from '@masknet/web3-shared-base'
 import {
     type ChainId,
-    chainResolver,
     isENSContractAddress,
     SchemaType,
     WNATIVE,
     isValidDomain,
     resolveImageURL,
 } from '@masknet/web3-shared-evm'
+import { ChainResolver } from '../../Web3/EVM/apis/ResolverAPI.js'
 import { ContractReadonlyAPI } from '../../Web3/EVM/apis/ContractReadonlyAPI.js'
 import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants.js'
 import type { EVM } from '../types/EVM.js'
 import { resolveNFTScanHostName } from './utils.js'
+import { fetchSquashedJSON } from '../../helpers/fetchJSON.js'
+import { parseJSON } from '../../helpers/parseJSON.js'
+import { getAssetFullName } from '../../helpers/getAssetFullName.js'
+import { getPaymentToken } from '../../helpers/getPaymentToken.js'
+import { resolveActivityType } from '../../helpers/resolveActivityType.js'
 import type { NonFungibleTokenAPI } from '../../entry-types.js'
-import {
-    fetchSquashedJSON,
-    parseJSON,
-    getAssetFullName,
-    resolveActivityType,
-    getPaymentToken,
-} from '../../entry-helpers.js'
 
 const Contract = new ContractReadonlyAPI()
 
@@ -136,7 +134,7 @@ export function createNonFungibleAsset(
                   // FIXME: cannot get payment token
                   token:
                       asset.latest_trade_symbol === 'ETH'
-                          ? chainResolver.nativeCurrency(chainId) ?? WNATIVE[chainId]
+                          ? ChainResolver.nativeCurrency(chainId) ?? WNATIVE[chainId]
                           : WNATIVE[chainId],
               }
             : undefined,

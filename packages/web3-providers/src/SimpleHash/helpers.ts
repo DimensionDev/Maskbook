@@ -7,16 +7,18 @@ import {
     type NonFungibleCollection,
     ActivityType,
 } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, WNATIVE, chainResolver, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, WNATIVE, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
 import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
 import { queryClient } from '@masknet/shared-base-ui'
 import { NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { createPermalink } from '../NFTScan/helpers/EVM.js'
-import { fetchSquashedJSON, getAssetFullName } from '../entry-helpers.js'
+import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
 import { ETH_BLUR_TOKEN_ADDRESS, SIMPLE_HASH_URL } from './constants.js'
 import { ActivityType as ActivityTypeSimpleHash, type Asset, type Collection } from './type.js'
+import { fetchSquashedJSON } from '../helpers/fetchJSON.js'
+import { getAssetFullName } from '../helpers/getAssetFullName.js'
 import { TrendingAPI } from '../entry-types.js'
 
 export async function fetchFromSimpleHash<T>(path: string, init?: RequestInit) {
@@ -61,7 +63,7 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
                   // FIXME: cannot get payment token
                   token:
                       asset.last_sale.payment_token?.symbol === 'ETH'
-                          ? chainResolver.nativeCurrency(chainId) ?? WNATIVE[chainId]
+                          ? ChainResolver.nativeCurrency(chainId) ?? WNATIVE[chainId]
                           : WNATIVE[chainId],
               }
             : undefined,

@@ -1,9 +1,11 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { formatAddress, isValidAddress, isValidDomain, isZeroAddress } from '@masknet/web3-shared-solana'
-import { Bonfida } from '@masknet/web3-providers'
-import type { NameServiceAPI } from '@masknet/web3-providers/types'
 import { NameServiceState } from '../../Base/state/NameService.js'
+import { BonfidaAPI } from '../../../Bonfida/index.js'
+import type { NameServiceAPI } from '../../../entry-types.js'
+
+const Bonfida = new BonfidaAPI()
 
 export class NameService extends NameServiceState {
     constructor(context: Plugin.Shared.SharedUIContext) {

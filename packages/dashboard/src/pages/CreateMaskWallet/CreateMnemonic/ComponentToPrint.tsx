@@ -1,12 +1,13 @@
 import { forwardRef, type ForwardedRef, useMemo } from 'react'
-import { useDashboardI18N } from '../../../locales/i18n_generated.js'
+import { QRCode } from 'react-qrcode-logo'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { QRCode } from 'react-qrcode-logo'
+import { Icons } from '@masknet/icons'
+import { NetworkType } from '@masknet/web3-shared-evm'
+import { NetworkResolver } from '@masknet/web3-providers'
 import { PrintBackground } from '../../../assets/index.js'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
-import { Icons } from '@masknet/icons'
-import { NetworkType, networkResolver } from '@masknet/web3-shared-evm'
+import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 
 interface ComponentToPrintProps {
     words: string[]
@@ -111,7 +112,7 @@ export const ComponentToPrint = forwardRef(function ComponentToPrint(
                         ecLevel="L"
                         size={136}
                         quietZone={6}
-                        logoImage={networkResolver.networkIcon(NetworkType.Ethereum)?.toString()}
+                        logoImage={NetworkResolver.networkIcon(NetworkType.Ethereum)?.toString()}
                     />
                 </div>
             </Box>

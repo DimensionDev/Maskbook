@@ -15,9 +15,9 @@ import { MessageState } from '../../Base/state/Message.js'
 import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
 import { SharedContextRef } from '../../../PluginContext/index.js'
 
-export class Message extends MessageState<MessageRequest, MessageResponse> {
-    private Request = new RequestReadonlyAPI()
+const Request = new RequestReadonlyAPI()
 
+export class Message extends MessageState<MessageRequest, MessageResponse> {
     constructor(context: Plugin.Shared.SharedUIContext) {
         super(context, { pluginID: NetworkPluginID.PLUGIN_EVM })
     }
@@ -55,7 +55,7 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
         const response = request.options?.providerURL
             ? createJsonRpcResponse(
                   0,
-                  await this.Request.request(payload, {
+                  await Request.request(payload, {
                       providerURL: request.options.providerURL,
                   }),
               )

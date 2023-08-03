@@ -11,6 +11,11 @@ import { getTradeContext } from './helpers/trade.js'
 import { computeAllRoutes } from './helpers/uniswap.js'
 import { PoolState, type TradeContext, type Trade as TradeResult } from '../types/Trader.js'
 import { UniSwapV2Like } from './UniSwapV2.js'
+import { MulticallAPI } from '../Multicall/index.js'
+import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
+
+const Contract = new ContractReadonlyAPI()
+const Multicall = new MulticallAPI()
 
 export class UniSwapV3Like extends UniSwapV2Like {
     constructor() {
@@ -68,26 +73,26 @@ export class UniSwapV3Like extends UniSwapV2Like {
         )
 
         const poolAddresses = this.getPoolAddresses(transformed, context)
-        const poolContracts = compact(poolAddresses.map((x) => this.Contract.getPoolStateV3(x, { chainId })))
+        const poolContracts = compact(poolAddresses.map((x) => Contract.getPoolStateV3(x, { chainId })))
 
-        const slot0sCalls = this.Multicall.createMultipleContractSingleData(
+        const slot0sCalls = Multicall.createMultipleContractSingleData(
             poolContracts,
             Array.from<'slot0'>({ length: poolContracts.length }).fill('slot0'),
             [],
         )
-        const liquiditiesCalls = this.Multicall.createMultipleContractSingleData(
+        const liquiditiesCalls = Multicall.createMultipleContractSingleData(
             poolContracts,
             Array.from<'liquidity'>({ length: poolContracts.length }).fill('liquidity'),
             [],
         )
 
-        const slot0s = await this.Multicall.call(
+        const slot0s = await Multicall.call(
             chainId,
             poolContracts,
             Array.from<'slot0'>({ length: poolContracts.length }).fill('slot0'),
             slot0sCalls,
         )
-        const liquidities = await this.Multicall.call(
+        const liquidities = await Multicall.call(
             chainId,
             poolContracts,
             Array.from<'liquidity'>({ length: poolContracts.length }).fill('liquidity'),
@@ -127,7 +132,7 @@ export class UniSwapV3Like extends UniSwapV2Like {
         const { UNISWAP_V3_QUOTER_ADDRESS } = getTraderConstants(chainId)
         if (!UNISWAP_V3_QUOTER_ADDRESS) return null
 
-        const quoterContract = this.Contract.getQuoterContract(UNISWAP_V3_QUOTER_ADDRESS, { chainId })
+        const quoterContract = Contract.getQuoterContract(UNISWAP_V3_QUOTER_ADDRESS, { chainId })
 
         const allCurrencyCombinations = this.getAllCommonPairs(chainId, currencyAmountIn?.currency, currencyOut)
 
@@ -161,13 +166,13 @@ export class UniSwapV3Like extends UniSwapV2Like {
 
         if (!quoterContract) return null
 
-        const quotesCalls = this.Multicall.createSingleContractMultipleData(
+        const quotesCalls = Multicall.createSingleContractMultipleData(
             quoterContract,
             Array.from<'quoteExactInput'>({ length: quoteExactInInputs.length }).fill('quoteExactInput'),
             quoteExactInInputs,
         )
 
-        const quotesResults = await this.Multicall.call(
+        const quotesResults = await Multicall.call(
             chainId,
             Array.from({ length: quoteExactInInputs.length }).map(() => quoterContract),
             Array.from<'quoteExactInput'>({ length: quoteExactInInputs.length }).fill('quoteExactInput'),

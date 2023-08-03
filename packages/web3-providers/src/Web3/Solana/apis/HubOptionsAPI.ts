@@ -12,6 +12,8 @@ import { HubOptionsAPI_Base } from '../../Base/apis/HubOptionsAPI.js'
 import { SolanaOthersAPI } from './OthersAPI.js'
 import { SolanaWeb3StateRef } from './Web3StateAPI.js'
 
+const Web3Others = new SolanaOthersAPI()
+
 export class SolanaHubOptionsAPI extends HubOptionsAPI_Base<
     ChainId,
     SchemaType,
@@ -27,6 +29,6 @@ export class SolanaHubOptionsAPI extends HubOptionsAPI_Base<
     }
 
     override get Web3Others() {
-        return new SolanaOthersAPI()
+        return Web3Others
     }
 }

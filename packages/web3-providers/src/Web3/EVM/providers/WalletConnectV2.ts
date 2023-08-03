@@ -8,7 +8,6 @@ import type { UnboxPromise } from '@masknet/shared-base'
 import {
     ProviderType,
     ChainId,
-    chainResolver,
     EIP155Editor,
     isValidAddress,
     isValidChainId,
@@ -16,6 +15,7 @@ import {
     type Web3,
     type Web3Provider,
 } from '@masknet/web3-shared-evm'
+import { ChainResolver } from '../apis/ResolverAPI.js'
 import { BaseProvider } from './Base.js'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
@@ -143,7 +143,7 @@ export default class WalletConnectV2Provider
         await this.signClient.setup()
 
         const account = await this.login(chainId)
-        if (!account) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)
+        if (!account) throw new Error(`Failed to connect to ${ChainResolver.chainFullName(chainId)}.`)
 
         return account
     }

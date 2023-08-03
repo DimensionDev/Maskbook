@@ -9,16 +9,16 @@ import { ContractWallet } from '../interceptors/ContractWallet.js'
 import { Popups } from '../interceptors/Popups.js'
 import { SmartPayAccountAPI, SmartPayBundlerAPI, SmartPayFunderAPI } from '../../../SmartPay/index.js'
 
-export class Interceptor implements Middleware<ConnectionContext> {
-    private Account = new SmartPayAccountAPI()
-    private Bundler = new SmartPayBundlerAPI()
-    private Funder = new SmartPayFunderAPI()
+const Account = new SmartPayAccountAPI()
+const Bundler = new SmartPayBundlerAPI()
+const Funder = new SmartPayFunderAPI()
 
+export class Interceptor implements Middleware<ConnectionContext> {
     private composers: Partial<Record<ProviderType, Composer<ConnectionContext>>> = {
         [ProviderType.None]: Composer.from(new NoneWallet()),
         [ProviderType.MaskWallet]: Composer.from(
             new Popups(),
-            new ContractWallet(ProviderType.MaskWallet, this.Account, this.Bundler, this.Funder),
+            new ContractWallet(ProviderType.MaskWallet, Account, Bundler, Funder),
             new MaskWallet(),
         ),
         [ProviderType.MetaMask]: Composer.from(new MetaMaskLike(ProviderType.MetaMask)),

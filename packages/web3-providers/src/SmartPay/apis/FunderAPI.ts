@@ -4,12 +4,12 @@ import { ChainId, type TransactionReceipt } from '@masknet/web3-shared-evm'
 import { EMPTY_LIST, type Proof } from '@masknet/shared-base'
 import { ConnectionReadonlyAPI } from '../../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { FUNDER_PROD } from '../constants.js'
+import { fetchJSON, fetchCachedJSON } from '../../helpers/fetchJSON.js'
 import { FunderAPI } from '../../entry-types.js'
-import { fetchJSON, fetchCachedJSON } from '../../entry-helpers.js'
+
+const Web3 = new ConnectionReadonlyAPI()
 
 export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
-    private Web3 = new ConnectionReadonlyAPI()
-
     private async assetChainId(chainId: ChainId) {
         if (![ChainId.Matic, ChainId.Mumbai].includes(chainId)) throw new Error(`Not supported ${chainId}.`)
     }
@@ -37,7 +37,7 @@ export class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
             )
             const allSettled = await Promise.allSettled(
                 operations.map<Promise<TransactionReceipt | null>>((x) =>
-                    this.Web3.getTransactionReceipt(x.tokenTransferTx, {
+                    Web3.getTransactionReceipt(x.tokenTransferTx, {
                         chainId,
                     }),
                 ),

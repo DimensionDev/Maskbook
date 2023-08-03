@@ -12,6 +12,8 @@ import { ConnectionOptionsAPI_Base } from '../../Base/apis/ConnectionOptionsAPI.
 import { SolanaOthersAPI } from './OthersAPI.js'
 import { SolanaWeb3StateRef } from './Web3StateAPI.js'
 
+const Web3Others = new SolanaOthersAPI()
+
 export class SolanaConnectionOptionsAPI extends ConnectionOptionsAPI_Base<
     ChainId,
     SchemaType,
@@ -27,6 +29,6 @@ export class SolanaConnectionOptionsAPI extends ConnectionOptionsAPI_Base<
     }
 
     override get Web3Others() {
-        return new SolanaOthersAPI()
+        return Web3Others
     }
 }

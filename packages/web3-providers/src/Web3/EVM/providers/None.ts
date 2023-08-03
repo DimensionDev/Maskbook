@@ -6,7 +6,10 @@ import {
     type Web3,
 } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base.js'
+import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
+
+const Request = new RequestReadonlyAPI()
 
 export class NoneProvider
     extends BaseProvider
@@ -20,6 +23,6 @@ export class NoneProvider
         requestArguments: RequestArguments,
         initial?: WalletAPI.ProviderOptions<ChainId>,
     ): Promise<T> {
-        return this.Request.request(requestArguments, initial)
+        return Request.request(requestArguments, initial)
     }
 }

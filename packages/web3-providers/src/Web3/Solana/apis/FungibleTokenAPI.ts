@@ -12,12 +12,12 @@ import {
 import {
     ChainId,
     SchemaType,
-    createNativeToken,
     isValidChainId,
     getTokenListConstants,
     getNativeTokenAddress,
     getTokenConstant,
 } from '@masknet/web3-shared-solana'
+import { SolanaChainResolver } from './ResolverAPI.js'
 import { CoinGeckoPriceAPI_Solana } from '../../../CoinGecko/index.js'
 import { RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants/index.js'
 import { createFungibleAsset, createFungibleToken, requestRPC } from '../helpers/index.js'
@@ -28,8 +28,8 @@ import type {
     MaskToken,
     HubOptions,
 } from '../types/index.js'
+import { fetchJSON } from '../../../helpers/fetchJSON.js'
 import type { FungibleTokenAPI, TokenListAPI } from '../../../entry-types.js'
-import { fetchJSON } from '../../../entry-helpers.js'
 
 const fetchRayDiumTokenList = memoizePromise(
     memoize,
@@ -38,7 +38,7 @@ const fetchRayDiumTokenList = memoizePromise(
         const tokens: Array<FungibleToken<ChainId, SchemaType>> = [...tokenList.official, ...tokenList.unOfficial].map(
             (token) => {
                 if (isSameAddress(token.mint, '11111111111111111111111111111111'))
-                    return createNativeToken(ChainId.Mainnet)
+                    return SolanaChainResolver.nativeCurrency(ChainId.Mainnet)
                 return {
                     id: token.mint,
                     chainId: ChainId.Mainnet,
@@ -63,7 +63,7 @@ const fetchMaskTokenList = memoizePromise(
         const res = await fetchJSON<{ tokens: MaskToken[] }>(url, { cache: 'force-cache' })
         const nativeAddress = getTokenConstant(ChainId.Mainnet, 'SOL_ADDRESS', '')
         const tokens: Array<FungibleToken<ChainId, SchemaType>> = res.tokens.map((token) => {
-            if (isSameAddress(token.address, nativeAddress)) return createNativeToken(ChainId.Mainnet)
+            if (isSameAddress(token.address, nativeAddress)) return SolanaChainResolver.nativeCurrency(ChainId.Mainnet)
 
             return {
                 id: token.address,
@@ -138,7 +138,7 @@ export class SolanaFungibleTokenAPI
             params: [account],
         })
         const balance = data.result?.value.toString() ?? '0'
-        return createFungibleAsset(createNativeToken(chainId), balance, {
+        return createFungibleAsset(SolanaChainResolver.nativeCurrency(chainId), balance, {
             [CurrencyType.USD]: price.toString(),
         })
     }

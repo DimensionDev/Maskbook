@@ -12,7 +12,10 @@ import {
     formatDomainName,
     type ProviderType,
     type NetworkType,
+    type MessageRequest,
+    type MessageResponse,
     type Transaction,
+    type TransactionParameter,
     type SchemaType,
     getDefaultChainId,
     getInvalidChainId,
@@ -23,21 +26,26 @@ import {
     getNativeTokenAddress,
     formatSchemaType,
     formatTokenId,
-    createNativeToken,
     isValidChainId,
     getNetworkPluginID,
 } from '@masknet/web3-shared-flow'
 import { OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
-import { FlowChainResolverAPI } from './ChainResolverAPI.js'
-import { FlowExplorerResolverAPI } from './ExplorerResolverAPI.js'
-import { FlowProviderResolverAPI } from './ProviderResolverAPI.js'
-import { FlowNetworkResolverAPI } from './NetworkExplorerAPI.js'
+import { FlowChainResolver, FlowExplorerResolver, FlowProviderResolver, FlowNetworkResolver } from './ResolverAPI.js'
 
-export class FlowOthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
-    chainResolver = new FlowChainResolverAPI()
-    explorerResolver = new FlowExplorerResolverAPI()
-    providerResolver = new FlowProviderResolverAPI()
-    networkResolver = new FlowNetworkResolverAPI()
+export class FlowOthersAPI extends OthersAPI_Base<
+    ChainId,
+    SchemaType,
+    ProviderType,
+    NetworkType,
+    MessageRequest,
+    MessageResponse,
+    Transaction,
+    TransactionParameter
+> {
+    override chainResolver = FlowChainResolver
+    override explorerResolver = FlowExplorerResolver
+    override providerResolver = FlowProviderResolver
+    override networkResolver = FlowNetworkResolver
 
     override isValidDomain = isValidDomain
     override isValidChainId = isValidChainId
@@ -61,7 +69,7 @@ export class FlowOthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderT
     override formatDomainName = formatDomainName
     override formatTokenId = formatTokenId
     override formatSchemaType = formatSchemaType
-    override createNativeToken = createNativeToken
+    override createNativeToken = (chainId: ChainId) => this.chainResolver.nativeCurrency(chainId)
     override createFungibleToken = createFungibleToken
     override createNonFungibleToken = createNonFungibleToken
 }

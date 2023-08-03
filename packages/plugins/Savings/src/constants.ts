@@ -1,13 +1,14 @@
 import { PluginID } from '@masknet/shared-base'
+import { ChainResolver } from '@masknet/web3-providers'
 import type { FungibleToken } from '@masknet/web3-shared-base'
-import { ChainId, createERC20Tokens, createNativeToken, type SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, createERC20Tokens, type SchemaType } from '@masknet/web3-shared-evm'
 
 export const SAVINGS_PLUGIN_NAME = 'Savings'
 export const SAVINGS_PLUGIN_ID = PluginID.Savings
 
 export const LDO_PAIRS: Array<[FungibleToken<ChainId, SchemaType>, FungibleToken<ChainId, SchemaType>]> = [
     [
-        createNativeToken(ChainId.Mainnet),
+        ChainResolver.nativeCurrency(ChainId.Mainnet),
         createERC20Tokens('LDO_stETH_ADDRESS', 'Liquid staked Ether 2.0', 'stETH', 18)[ChainId.Mainnet],
     ],
 ]

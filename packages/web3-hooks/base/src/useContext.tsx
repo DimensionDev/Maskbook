@@ -1,15 +1,15 @@
 import React, { createContext, type ReactNode, useContext, useState, useMemo, type ProviderProps } from 'react'
 import { isUndefined, omitBy } from 'lodash-es'
+import { useSubscription } from 'use-subscription'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { compose, Sniffings, type MaskEvents, type NetworkPluginID } from '@masknet/shared-base'
+import { Providers, type BaseContractWalletProvider, ChainResolver } from '@masknet/web3-providers'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'
 import { useNetworkType } from './useNetworkType.js'
 import { useProviderType } from './useProviderType.js'
-import { useSubscription } from 'use-subscription'
-import { Providers, type BaseContractWalletProvider } from '@masknet/web3-providers'
-import { ProviderType, chainResolver } from '@masknet/web3-shared-evm'
 
 interface EnvironmentContext<T extends NetworkPluginID = NetworkPluginID> {
     pluginID: T
@@ -74,7 +74,7 @@ export function ChainContextProvider({ value, children }: ProviderProps<ChainCon
 
     const maskAccount = useSubscription(maskProvider.subscription.account)
     const maskChainId = useSubscription(maskProvider.subscription.chainId)
-    const maskNetworkType = useMemo(() => chainResolver.networkType(maskChainId), [maskChainId])
+    const maskNetworkType = useMemo(() => ChainResolver.networkType(maskChainId), [maskChainId])
 
     const [_account, setAccount] = useState<string>()
     const [_chainId, setChainId] = useState<Web3Helper.ChainIdAll>()

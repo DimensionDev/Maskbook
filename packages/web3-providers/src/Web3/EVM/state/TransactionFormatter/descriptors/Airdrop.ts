@@ -1,9 +1,11 @@
-import { Airdrop } from '@masknet/web3-providers'
 import { isSameAddress, type TransactionContext } from '@masknet/web3-shared-base'
 import { getITOConstants, type ChainId, type TransactionParameter } from '@masknet/web3-shared-evm'
 import { BaseDescriptor } from './Base.js'
 import { getTokenAmountDescription } from '../utils.js'
 import type { TransactionDescriptor } from '../types.js'
+import { AirdropAPI } from '../../../../../Airdrop/index.js'
+
+const Airdrop = new AirdropAPI()
 
 export class AirdropDescriptor extends BaseDescriptor implements TransactionDescriptor {
     override async compute(context_: TransactionContext<ChainId, TransactionParameter>) {

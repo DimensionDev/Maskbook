@@ -4,8 +4,9 @@ import { Box, Link, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import type { Wallet } from '@masknet/shared-base'
 import { CopyButton, FormattedAddress, ImageIcon, ProgressiveText } from '@masknet/shared'
-import { type ChainId, formatEthereumAddress, explorerResolver, type NetworkType } from '@masknet/web3-shared-evm'
+import { type ChainId, formatEthereumAddress, type NetworkType } from '@masknet/web3-shared-evm'
 import type { NetworkDescriptor } from '@masknet/web3-shared-base'
+import { ExplorerResolver } from '@masknet/web3-providers'
 import { useI18N } from '../../../../../../utils/index.js'
 import { ActionGroup } from '../ActionGroup/index.js'
 import { WalletAssetsValue } from './WalletAssetsValue.js'
@@ -181,7 +182,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                             <Link
                                 className={classes.icon}
                                 onClick={(event) => event.stopPropagation()}
-                                href={explorerResolver.addressLink(chainId, wallet.address ?? '')}
+                                href={ExplorerResolver.addressLink(chainId, wallet.address ?? '')}
                                 target="_blank"
                                 rel="noopener noreferrer">
                                 <Icons.PopupLink size={12} />

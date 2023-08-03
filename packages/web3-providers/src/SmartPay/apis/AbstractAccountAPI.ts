@@ -17,13 +17,13 @@ import { ContractWallet } from '../libs/ContractWallet.js'
 import { UserTransaction } from '../libs/UserTransaction.js'
 import type { AbstractAccountAPI } from '../../entry-types.js'
 
-export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<ChainId, UserOperation, Transaction> {
-    private Request = new RequestReadonlyAPI()
-    private Owner = new SmartPayOwnerAPI()
-    private Bundler = new SmartPayBundlerAPI()
+const Request = new RequestReadonlyAPI()
+const Owner = new SmartPayOwnerAPI()
+const Bundler = new SmartPayBundlerAPI()
 
+export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<ChainId, UserOperation, Transaction> {
     private async getEntryPoint(chainId: ChainId) {
-        const entryPoints = await this.Bundler.getSupportedEntryPoints(chainId)
+        const entryPoints = await Bundler.getSupportedEntryPoints(chainId)
         const entryPoint = first(entryPoints)
         if (!entryPoint || !isValidAddress(entryPoint)) throw new Error(`Not supported ${chainId}`)
         return entryPoint
@@ -56,7 +56,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<ChainId, 
     ) {
         const getOverrides = async () => {
             if (isEmptyHex(userTransaction.initCode) && userTransaction.nonce === 0) {
-                const accounts = await this.Owner.getAccountsByOwner(chainId, owner, false)
+                const accounts = await Owner.getAccountsByOwner(chainId, owner, false)
                 const target = accounts.find((x) => isSameAddress(x.address, userTransaction.operation.sender))
                 const accountsDeployed = accounts.filter((x) => isSameAddress(x.creator, owner) && x.deployed)
 
@@ -75,12 +75,12 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<ChainId, 
             return
         }
 
-        await userTransaction.fillUserOperation(this.Request.getWeb3({ chainId }), await getOverrides())
-        return this.Bundler.sendUserOperation(chainId, await userTransaction.signUserOperation(signer))
+        await userTransaction.fillUserOperation(Request.getWeb3({ chainId }), await getOverrides())
+        return Bundler.sendUserOperation(chainId, await userTransaction.signUserOperation(signer))
     }
 
     private async estimateUserTransaction(chainId: ChainId, userTransaction: UserTransaction) {
-        await userTransaction.fillUserOperation(this.Request.getWeb3({ chainId }))
+        await userTransaction.fillUserOperation(Request.getWeb3({ chainId }))
         return userTransaction.estimateUserOperation()
     }
 
@@ -132,7 +132,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<ChainId, 
         if (!isValidAddress(owner)) throw new Error('Invalid owner address.')
 
         const initCode = await this.getInitCode(chainId, owner)
-        const accounts = await this.Owner.getAccountsByOwner(chainId, owner, false)
+        const accounts = await Owner.getAccountsByOwner(chainId, owner, false)
         const accountsDeployed = accounts.filter((x) => isSameAddress(x.creator, owner) && x.deployed)
 
         return this.sendUserOperation(

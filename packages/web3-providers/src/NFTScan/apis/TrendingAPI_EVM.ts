@@ -1,5 +1,6 @@
 import urlcat from 'urlcat'
 import { compact } from 'lodash-es'
+import { MaskIconURLs } from '@masknet/icons'
 import {
     TokenType,
     SourceType,
@@ -15,14 +16,13 @@ import { getContractSymbol } from '../../helpers/getContractSymbol.js'
 import { resolveNFTScanHostName, resolveNFTScanRange, NonFungibleMarketplace } from '../helpers/utils.js'
 import { LooksRareAPI } from '../../LooksRare/index.js'
 import { OpenSeaAPI } from '../../OpenSea/index.js'
+import { getPaymentToken } from '../../helpers/getPaymentToken.js'
 import type { TrendingAPI, NonFungibleTokenAPI } from '../../entry-types.js'
-import { getPaymentToken } from '../../entry-helpers.js'
-import { MaskIconURLs } from '@masknet/icons'
+
+const Looksrare = new LooksRareAPI()
+const Opensea = new OpenSeaAPI()
 
 export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
-    private looksrare = new LooksRareAPI()
-    private opensea = new OpenSeaAPI()
-
     private async getCollection(chainId: ChainId, id: string): Promise<NonFungibleTokenAPI.Collection | undefined> {
         const path = urlcat('/api/v2/collections/:address', {
             address: id,
@@ -169,8 +169,8 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
         const address = collection.contract_address
         const [symbol, openseaStats, looksrareStats] = await Promise.all([
             getContractSymbol(chainId, id),
-            this.opensea.getStats(address).catch(() => null),
-            this.looksrare.getStats(address).catch(() => null),
+            Opensea.getStats(address).catch(() => null),
+            Looksrare.getStats(address).catch(() => null),
         ])
         const tickers: TrendingAPI.Ticker[] = compact([
             openseaStats

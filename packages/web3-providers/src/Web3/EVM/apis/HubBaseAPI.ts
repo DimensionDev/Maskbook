@@ -1,10 +1,8 @@
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { MetaSwap, AstarGas, Zerion, DeBankGasOption, DeBankHistory } from '@masknet/web3-providers'
 import { attemptUntil, type Transaction as Web3Transaction } from '@masknet/web3-shared-base'
 import { type Pageable, createPageable, createIndicator } from '@masknet/shared-base'
 import {
     ChainId,
-    chainResolver,
     type GasOption,
     type SchemaType,
     type ProviderType,
@@ -14,10 +12,22 @@ import {
     type Transaction,
     type TransactionParameter,
 } from '@masknet/web3-shared-evm'
+import { ChainResolver } from './ResolverAPI.js'
 import { HubBaseAPI_Base } from '../../Base/apis/HubBaseAPI.js'
 import { GasOptionAPI } from './GasOptionAPI.js'
 import { HubOptionsAPI } from './HubOptionsAPI.js'
 import type { HubOptions } from '../types/index.js'
+import { MetaSwapAPI } from '../../../MetaSwap/index.js'
+import { AstarAPI } from '../../../Astar/index.js'
+import { DeBankGasOptionAPI, DeBankHistoryAPI } from '../../../DeBank/index.js'
+import { ZerionAPI } from '../../../Zerion/index.js'
+
+const GasOptions = new GasOptionAPI()
+const MetaSwap = new MetaSwapAPI()
+const AstarGas = new AstarAPI()
+const DeBankGasOption = new DeBankGasOptionAPI()
+const DeBankHistory = new DeBankHistoryAPI()
+const Zerion = new ZerionAPI()
 
 export class HubBaseAPI extends HubBaseAPI_Base<
     ChainId,
@@ -31,7 +41,6 @@ export class HubBaseAPI extends HubBaseAPI_Base<
     GasOption
 > {
     protected override HubOptions = new HubOptionsAPI(this.options)
-    private GasOptions = new GasOptionAPI()
 
     override async getGasOptions(chainId: ChainId, initial?: HubOptions) {
         const options = this.HubOptions.fill({
@@ -39,12 +48,12 @@ export class HubBaseAPI extends HubBaseAPI_Base<
             chainId,
         })
         try {
-            const isEIP1559 = chainResolver.isSupport(options.chainId, 'EIP1559')
+            const isEIP1559 = ChainResolver.isFeatureSupported(options.chainId, 'EIP1559')
             if (isEIP1559 && chainId !== ChainId.Astar) return await MetaSwap.getGasOptions(options.chainId)
             if (chainId === ChainId.Astar) return await AstarGas.getGasOptions(options.chainId)
             return await DeBankGasOption.getGasOptions(options.chainId)
         } catch (error) {
-            return this.GasOptions.getGasOptions(options.chainId)
+            return GasOptions.getGasOptions(options.chainId)
         }
     }
 

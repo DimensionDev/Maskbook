@@ -14,7 +14,6 @@ import {
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     ChainId,
-    chainResolver,
     isValidAddress,
     PayloadEditor,
     ProviderType,
@@ -23,9 +22,15 @@ import {
     type RequestArguments,
 } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
+import { ChainResolver } from '../apis/ResolverAPI.js'
 import { BaseContractWalletProvider } from './BaseContractWallet.js'
+import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
+import { SmartPayBundlerAPI } from '../../../SmartPay/index.js'
 import { SmartPayOwnerAPI } from '../../../SmartPay/apis/OwnerAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
+
+const Request = new RequestReadonlyAPI()
+const Bundler = new SmartPayBundlerAPI()
 
 export class MaskWalletProvider
     extends BaseContractWalletProvider
@@ -54,7 +59,7 @@ export class MaskWalletProvider
         const allPersonas = this.context?.allPersonas?.getCurrentValue() ?? []
         const wallets = this.context?.wallets.getCurrentValue() ?? EMPTY_LIST
 
-        const chainId = await this.Bundler.getSupportedChainId()
+        const chainId = await Bundler.getSupportedChainId()
         const accounts = await new SmartPayOwnerAPI().getAccountsByOwners(chainId, [
             ...wallets.map((x) => x.address),
             ...compact(allPersonas.map((x) => x.address)),
@@ -104,7 +109,7 @@ export class MaskWalletProvider
 
         this.subscription?.wallets?.subscribe(async () => {
             const primaryWallet = first(this.wallets)
-            const smartPayChainId = await this.Bundler.getSupportedChainId()
+            const smartPayChainId = await Bundler.getSupportedChainId()
             if (!this.hostedAccount && primaryWallet) {
                 await this.switchAccount(primaryWallet.address)
                 await this.switchChain(primaryWallet.owner ? smartPayChainId : ChainId.Mainnet)
@@ -186,7 +191,7 @@ export class MaskWalletProvider
         })
 
         const account = first(await this.context?.selectAccount())
-        if (!account) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}`)
+        if (!account) throw new Error(`Failed to connect to ${ChainResolver.chainFullName(chainId)}`)
 
         // switch account
         if (!isSameAddress(this.hostedAccount, account?.address)) {
@@ -220,7 +225,7 @@ export class MaskWalletProvider
         requestArguments: RequestArguments,
         initial?: WalletAPI.ProviderOptions<ChainId>,
     ): Promise<T> {
-        return this.Request.request<T>(
+        return Request.request<T>(
             PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill() as RequestArguments,
             initial,
         )

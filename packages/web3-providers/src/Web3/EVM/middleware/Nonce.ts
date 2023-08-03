@@ -9,10 +9,11 @@ import {
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
 
+const Web3 = new ConnectionReadonlyAPI()
+
 export class Nonce implements Middleware<ConnectionContext> {
     static INITIAL_NONCE = -1
 
-    private Web3 = new ConnectionReadonlyAPI()
     private nonces = new Map<string, Map<ChainId, number>>()
 
     private async syncRemoteNonce(chainId: ChainId, address: string, commitment = 0) {
@@ -22,7 +23,7 @@ export class Nonce implements Middleware<ConnectionContext> {
             chainId,
             commitment +
                 Math.max(
-                    await this.Web3.getTransactionNonce(address, {
+                    await Web3.getTransactionNonce(address, {
                         chainId,
                     }),
                     addressNonces.get(chainId) ?? Nonce.INITIAL_NONCE,

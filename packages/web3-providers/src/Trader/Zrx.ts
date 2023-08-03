@@ -4,7 +4,6 @@ import { first, pick } from 'lodash-es'
 import { TradeProvider } from '@masknet/public-api'
 import {
     NetworkType,
-    chainResolver,
     isNativeTokenAddress,
     type ChainId,
     ContractTransaction,
@@ -27,9 +26,13 @@ import { ZRX_AFFILIATE_ADDRESS, ZRX_BASE_URL } from './constants/0x.js'
 import { TradeStrategy, type TradeComputed, type TraderAPI } from '../types/Trader.js'
 import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
-import { fetchJSON } from '../entry-helpers.js'
+import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
+import { fetchJSON } from '../helpers/fetchJSON.js'
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+
+const Web3 = new ConnectionReadonlyAPI()
+const Contract = new ContractReadonlyAPI()
 
 export function getNativeTokenLabel(networkType: NetworkType) {
     switch (networkType) {
@@ -59,8 +62,6 @@ export function getNativeTokenLabel(networkType: NetworkType) {
 }
 
 export class Zrx implements TraderAPI.Provider {
-    public Web3 = new ConnectionReadonlyAPI()
-    public Contract = new ContractReadonlyAPI()
     public provider = TradeProvider.ZRX
 
     private async swapQuote(request: SwapQuoteRequest, networkType: NetworkType) {
@@ -99,7 +100,7 @@ export class Zrx implements TraderAPI.Provider {
     ) {
         if (isZero(inputAmount) || !inputToken || !outputToken) return null
 
-        const networkType = chainResolver.networkType(chainId as ChainId)
+        const networkType = ChainResolver.networkType(chainId as ChainId)
 
         if (!networkType) return
         const sellToken = isNativeTokenAddress(inputToken.address)
@@ -194,7 +195,7 @@ export class Zrx implements TraderAPI.Provider {
         const tradeAmount = new BigNumber(inputAmount || '0')
         if (tradeAmount.isZero() || !inputToken || !outputToken || !WNATIVE_ADDRESS) return null
 
-        const wrapperContract = this.Contract.getWETHContract(WNATIVE_ADDRESS, { chainId })
+        const wrapperContract = Contract.getWETHContract(WNATIVE_ADDRESS, { chainId })
 
         const computed = {
             strategy: TradeStrategy.ExactIn,
@@ -242,6 +243,6 @@ export class Zrx implements TraderAPI.Provider {
             ...pick(trade.trade_, 'to', 'data', 'value'),
         }
 
-        return this.Web3.estimateTransaction(config, 0, { chainId })
+        return Web3.estimateTransaction(config, 0, { chainId })
     }
 }

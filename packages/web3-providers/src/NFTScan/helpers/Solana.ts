@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { ChainId, createNativeToken, SchemaType } from '@masknet/web3-shared-solana'
+import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
 import {
     type NonFungibleAsset,
     type NonFungibleCollection,
@@ -11,9 +11,13 @@ import {
     SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
+import { SolanaChainResolver } from '../../Web3/Solana/apis/ResolverAPI.js'
 import { NFTSCAN_BASE_SOLANA, NFTSCAN_URL } from '../constants.js'
 import type { Solana } from '../types/Solana.js'
-import { resolveActivityType, parseJSON, getAssetFullName, fetchSquashedJSON } from '../../entry-helpers.js'
+import { fetchSquashedJSON } from '../../helpers/fetchJSON.js'
+import { resolveActivityType } from '../../helpers/resolveActivityType.js'
+import { parseJSON } from '../../helpers/parseJSON.js'
+import { getAssetFullName } from '../../helpers/getAssetFullName.js'
 
 export function createPermalink(chainId: ChainId, address?: string) {
     if (!address) return
@@ -46,7 +50,7 @@ export function createNonFungibleAsset(chainId: ChainId, asset: Solana.Asset): N
     const owner = asset.owner
     const schema = SchemaType.NonFungible
     const symbol = payload?.symbol
-    const nativeToken = createNativeToken(chainId)
+    const nativeToken = SolanaChainResolver.nativeCurrency(chainId)
 
     return {
         id: asset.token_address,
@@ -147,7 +151,7 @@ export function createNonFungibleTokenEvent(
     chainId: ChainId,
     transaction: Solana.Transaction,
 ): NonFungibleTokenEvent<ChainId, SchemaType> {
-    const paymentToken = createNativeToken(chainId)
+    const paymentToken = SolanaChainResolver.nativeCurrency(chainId)
     return {
         chainId,
         id: transaction.hash,

@@ -9,7 +9,6 @@ import {
     type Block,
     type Web3Provider,
     type Web3,
-    createNativeToken,
     isNativeTokenAddress,
     getNativeTokenAddress,
     decodeAddress,
@@ -34,9 +33,13 @@ import { MagicEdenAPI } from '../../../MagicEden/index.js'
 import { SolanaWeb3API } from './Web3API.js'
 import { SolanaTransferAPI } from './TransferAPI.js'
 import { SolanaConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
+import { SolanaChainResolver } from './ResolverAPI.js'
 import { SolanaWeb3StateRef } from './Web3StateAPI.js'
 import { SolanaFungibleTokenAPI } from './FungibleTokenAPI.js'
 import type { ConnectionOptions } from '../types/index.js'
+
+const MagicEden = new MagicEdenAPI()
+const FungibleToken = new SolanaFungibleTokenAPI()
 
 export class SolanaConnectionAPI
     implements
@@ -58,8 +61,6 @@ export class SolanaConnectionAPI
 {
     constructor(private options?: ConnectionOptions) {}
 
-    private MagicEden = new MagicEdenAPI()
-    private FungibleToken = new SolanaFungibleTokenAPI()
     private Web3 = new SolanaWeb3API(this.options)
     private Transfer = new SolanaTransferAPI(this.options)
     private ConnectionOptions = new SolanaConnectionOptionsAPI(this.options)
@@ -176,7 +177,7 @@ export class SolanaConnectionAPI
         const options = this.ConnectionOptions.fill(initial)
         if (!options.account) return '0'
         if (isNativeTokenAddress(address)) return this.getNativeTokenBalance(options)
-        const { data: assets } = await this.FungibleToken.getAssets(options.account, options)
+        const { data: assets } = await FungibleToken.getAssets(options.account, options)
         const asset = assets.find((x) => isSameAddress(x.address, address))
         return asset?.balance ?? '0'
     }
@@ -196,7 +197,7 @@ export class SolanaConnectionAPI
     ): Promise<Record<string, string>> {
         const options = this.ConnectionOptions.fill(initial)
         if (!options.account) return EMPTY_OBJECT
-        const { data: assets } = await this.FungibleToken.getAssets(options.account, {
+        const { data: assets } = await FungibleToken.getAssets(options.account, {
             chainId: options.chainId,
         })
         const records = assets.reduce<Record<string, string>>(
@@ -277,13 +278,13 @@ export class SolanaConnectionAPI
 
     async getNativeToken(initial?: ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
-        return createNativeToken(options.chainId)
+        return SolanaChainResolver.nativeCurrency(options.chainId)
     }
 
     async getFungibleToken(address: string, initial?: ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
         if (!address || isNativeTokenAddress(address)) return this.getNativeToken(options)
-        const tokens = await this.FungibleToken.getFungibleTokenList(options.chainId, [])
+        const tokens = await FungibleToken.getFungibleTokenList(options.chainId, [])
         const token = tokens.find((x) => isSameAddress(x.address, address))
         return (
             token ??
@@ -301,7 +302,7 @@ export class SolanaConnectionAPI
         initial?: ConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
-        const asset = await this.MagicEden.getAsset(address, tokenId, {
+        const asset = await MagicEden.getAsset(address, tokenId, {
             chainId: options.chainId,
         })
         return createNonFungibleToken(

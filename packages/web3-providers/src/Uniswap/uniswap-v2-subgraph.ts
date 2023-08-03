@@ -2,7 +2,7 @@ import { chunk, first, flatten } from 'lodash-es'
 import stringify from 'json-stable-stringify'
 import { type ChainId, getTrendingConstants, isValidChainId } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { fetchJSON } from '../entry-helpers.js'
+import { fetchJSON } from '../helpers/fetchJSON.js'
 
 const TokenFields = `
   fragment TokenFields on Token {

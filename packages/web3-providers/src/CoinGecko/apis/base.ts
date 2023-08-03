@@ -2,7 +2,7 @@ import urlcat from 'urlcat'
 import { CurrencyType, type Price } from '@masknet/web3-shared-base'
 import { COINGECKO_URL_BASE } from '../constants.js'
 import type { Category, CoinInfo, Exchange, ThumbCoin, ThumbCollection } from '../types.js'
-import { fetchCachedJSON } from '../../entry-helpers.js'
+import { fetchCachedJSON } from '../../helpers/fetchJSON.js'
 import { TrendingAPI } from '../../entry-types.js'
 
 function fetchFromCoinGecko<T>(request: RequestInfo | URL, init?: RequestInit) {

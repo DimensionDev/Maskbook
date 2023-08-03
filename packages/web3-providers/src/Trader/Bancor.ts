@@ -25,7 +25,10 @@ import { BANCOR_API_BASE_URL } from './constants/bancor.js'
 import { BIPS_BASE } from './constants/index.js'
 import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
-import { fetchJSON } from '../entry-helpers.js'
+import { fetchJSON } from '../helpers/fetchJSON.js'
+
+const Web3 = new ConnectionReadonlyAPI()
+const Contract = new ContractReadonlyAPI()
 
 const roundDecimal = (value: number | string | undefined, decimals: number) => {
     return Math.round(Number(value || 0) * Math.pow(10, decimals)) / Math.pow(10, decimals)
@@ -47,8 +50,6 @@ const calculateMinimumReturn = ({
 }
 
 export class Bancor implements TraderAPI.Provider {
-    public Web3 = new ConnectionReadonlyAPI()
-    public Contract = new ContractReadonlyAPI()
     public provider = TradeProvider.BANCOR
 
     private async swapTransactionBancor(request: SwapBancorRequest) {
@@ -192,7 +193,7 @@ export class Bancor implements TraderAPI.Provider {
         const tradeAmount = new BigNumber(inputAmount || '0')
         if (tradeAmount.isZero() || !inputToken || !outputToken || !WNATIVE_ADDRESS) return null
 
-        const wrapperContract = this.Contract.getWETHContract(WNATIVE_ADDRESS, { chainId })
+        const wrapperContract = Contract.getWETHContract(WNATIVE_ADDRESS, { chainId })
 
         const computed = {
             strategy: TradeStrategy.ExactIn,
@@ -241,6 +242,6 @@ export class Bancor implements TraderAPI.Provider {
         const transaction = data.length === 1 ? data[0] : data[1]
 
         const config = pick(transaction.transaction, ['to', 'data', 'value', 'from'])
-        return this.Web3.estimateTransaction(config, 0, { chainId })
+        return Web3.estimateTransaction(config, 0, { chainId })
     }
 }

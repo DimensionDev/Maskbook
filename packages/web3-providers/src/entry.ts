@@ -82,18 +82,6 @@ import { AllHubAPI } from './Web3/Router/apis/AllHubAPI.js'
 import { AllConnectionAPI } from './Web3/Router/apis/AllConnectionAPI.js'
 import { AllOthersAPI } from './Web3/Router/apis/AllOthersAPI.js'
 import { Web3StorageAPI } from './Storage/apis/Storage.js'
-import { ChainResolverAPI } from './Web3/EVM/apis/ChainResolverAPI.js'
-import { ExplorerResolverAPI } from './Web3/EVM/apis/ExplorerResolverAPI.js'
-import { NetworkResolverAPI } from './Web3/EVM/apis/NetworkExplorerAPI.js'
-import { ProviderResolverAPI } from './Web3/EVM/apis/ProviderResolverAPI.js'
-import { FlowChainResolverAPI } from './Web3/Flow/apis/ChainResolverAPI.js'
-import { FlowExplorerResolverAPI } from './Web3/Flow/apis/ExplorerResolverAPI.js'
-import { FlowNetworkResolverAPI } from './Web3/Flow/apis/NetworkExplorerAPI.js'
-import { FlowProviderResolverAPI } from './Web3/Flow/apis/ProviderResolverAPI.js'
-import { SolanaChainResolverAPI } from './Web3/Solana/apis/ChainResolverAPI.js'
-import { SolanaExplorerResolverAPI } from './Web3/Solana/apis/ExplorerResolverAPI.js'
-import { SolanaNetworkResolverAPI } from './Web3/Solana/apis/NetworkExplorerAPI.js'
-import { SolanaProviderResolverAPI } from './Web3/Solana/apis/ProviderResolverAPI.js'
 
 export { UniSwapV2Like } from './Trader/UniSwapV2.js'
 export { UniSwapV3Like } from './Trader/UniSwapV3.js'
@@ -151,15 +139,25 @@ export { FlowProviders } from './Web3/Flow/providers/index.js'
 export { SolanaProviders } from './Web3/Solana/providers/index.js'
 export { BaseContractWalletProvider } from './Web3/EVM/providers/BaseContractWallet.js'
 
+export { ChainResolver, ExplorerResolver, ProviderResolver, NetworkResolver } from './Web3/EVM/apis/ResolverAPI.js'
+export {
+    FlowChainResolver,
+    FlowExplorerResolver,
+    FlowProviderResolver,
+    FlowNetworkResolver,
+} from './Web3/Flow/apis/ResolverAPI.js'
+export {
+    SolanaChainResolver,
+    SolanaExplorerResolver,
+    SolanaProviderResolver,
+    SolanaNetworkResolver,
+} from './Web3/Solana/apis/ResolverAPI.js'
+
 // Web3
 export const HubAll = new AllHubAPI()
 export const Web3All = new AllConnectionAPI()
 export const OthersAll = new AllOthersAPI()
 
-export const ChainResolver = new ChainResolverAPI()
-export const ExplorerResolver = new ExplorerResolverAPI()
-export const NetworkResolver = new NetworkResolverAPI()
-export const ProviderResolver = new ProviderResolverAPI()
 export const Contract = new ContractAPI()
 export const ContractReadonly = new ContractReadonlyAPI()
 export const Signer = new SignerAPI()
@@ -172,20 +170,12 @@ export const RequestReadonly = new RequestReadonlyAPI()
 export const Hub = HubAll.use(NetworkPluginID.PLUGIN_EVM)!
 export const Others = OthersAll.use(NetworkPluginID.PLUGIN_EVM)!
 
-export const FlowChainResolver = new FlowChainResolverAPI()
-export const FlowExplorerResolver = new FlowExplorerResolverAPI()
-export const FlowNetworkResolver = new FlowNetworkResolverAPI()
-export const FlowProviderResolver = new FlowProviderResolverAPI()
 export const FlowFungible = new FlowFungibleAPI()
 export const FlowWeb3State = new FlowWeb3StateAPI()
 export const FlowWeb3 = Web3All.use(NetworkPluginID.PLUGIN_FLOW)!
 export const FlowHub = HubAll.use(NetworkPluginID.PLUGIN_FLOW)!
 export const FlowOthers = OthersAll.use(NetworkPluginID.PLUGIN_FLOW)!
 
-export const SolanaChainResolver = new SolanaChainResolverAPI()
-export const SolanaExplorerResolver = new SolanaExplorerResolverAPI()
-export const SolanaNetworkResolver = new SolanaNetworkResolverAPI()
-export const SolanaProviderResolver = new SolanaProviderResolverAPI()
 export const SolanaDomain = new SolanaDomainAPI()
 export const SolanaFungible = new SolanaFungibleTokenAPI()
 export const SolanaNonFungible = new SolanaNonFungibleTokenAPI()

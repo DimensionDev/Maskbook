@@ -15,12 +15,13 @@ import {
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { CopyButton, FormattedAddress, FormattedBalance } from '@masknet/shared'
-import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { ExplorerResolver } from '@masknet/web3-providers'
+import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { formatBalance } from '@masknet/web3-shared-base'
-import { useSharedI18N } from '../../locales/index.js'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useBalance } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { useSharedI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -193,7 +194,7 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(function Der
                     <Icons.LinkOut
                         size={16}
                         className={classes.link}
-                        onClick={() => openWindow(explorerResolver.addressLink(ChainId.Mainnet, address))}
+                        onClick={() => openWindow(ExplorerResolver.addressLink(ChainId.Mainnet, address))}
                     />
                 </div>
             </TableCell>

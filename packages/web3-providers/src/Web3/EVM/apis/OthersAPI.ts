@@ -14,7 +14,10 @@ import {
     type ChainId,
     type ProviderType,
     type NetworkType,
+    type MessageRequest,
+    type MessageResponse,
     type Transaction,
+    type TransactionParameter,
     type SchemaType,
     getNetworkPluginID,
     getDefaultChainId,
@@ -26,20 +29,25 @@ import {
     getNativeTokenAddress,
     getAverageBlockDelay,
     formatSchemaType,
-    createNativeToken,
     isValidChainId,
 } from '@masknet/web3-shared-evm'
 import { OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
-import { ChainResolverAPI } from './ChainResolverAPI.js'
-import { ExplorerResolverAPI } from './ExplorerResolverAPI.js'
-import { ProviderResolverAPI } from './ProviderResolverAPI.js'
-import { NetworkResolverAPI } from './NetworkExplorerAPI.js'
+import { ChainResolver, ExplorerResolver, ProviderResolver, NetworkResolver } from './ResolverAPI.js'
 
-export class OthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
-    chainResolver = new ChainResolverAPI()
-    explorerResolver = new ExplorerResolverAPI()
-    providerResolver = new ProviderResolverAPI()
-    networkResolver = new NetworkResolverAPI()
+export class OthersAPI extends OthersAPI_Base<
+    ChainId,
+    SchemaType,
+    ProviderType,
+    NetworkType,
+    MessageRequest,
+    MessageResponse,
+    Transaction,
+    TransactionParameter
+> {
+    override chainResolver = ChainResolver
+    override explorerResolver = ExplorerResolver
+    override providerResolver = ProviderResolver
+    override networkResolver = NetworkResolver
 
     override isValidDomain = isValidDomain
     override isValidChainId = isValidChainId
@@ -65,7 +73,7 @@ export class OthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderType,
     override formatTokenId = formatTokenId
     override formatDomainName = formatDomainName
     override formatSchemaType = formatSchemaType
-    override createNativeToken = createNativeToken
+    override createNativeToken = (chainId: ChainId) => ChainResolver.nativeCurrency(chainId)
     override createFungibleToken = createFungibleToken
     override createNonFungibleToken = createNonFungibleToken
 }

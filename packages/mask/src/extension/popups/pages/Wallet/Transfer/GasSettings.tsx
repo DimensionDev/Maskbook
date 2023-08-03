@@ -1,11 +1,11 @@
+import { memo, useCallback, useMemo } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { SelectGasSettingsToolbar, type SelectGasSettingsToolbarProps } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useNativeTokenPrice, useWallet } from '@masknet/web3-hooks-base'
-import { SmartPayBundler } from '@masknet/web3-providers'
-import { createNativeToken, isNativeTokenAddress, type ChainId } from '@masknet/web3-shared-evm'
-import { useQuery } from '@tanstack/react-query'
-import { memo, useCallback, useMemo } from 'react'
+import { ChainResolver, SmartPayBundler } from '@masknet/web3-providers'
+import { isNativeTokenAddress, type ChainId } from '@masknet/web3-shared-evm'
 import { GasSettingModal } from '../../../modals/modals.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -38,7 +38,7 @@ export const GasSettings = memo<Props>(function GasSettings({ tokenAddress: addr
     )
     const isNativeToken = isNativeTokenAddress(address)
     const gasLimit = isNativeToken ? ETH_GAS_LIMIT : ERC20_GAS_LIMIT
-    const nativeToken = useMemo(() => createNativeToken(chainId), [chainId])
+    const nativeToken = useMemo(() => ChainResolver.nativeCurrency(chainId), [chainId])
     const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
         chainId,
     })

@@ -20,9 +20,9 @@ import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js
 import { getAllMaskDappContractInfo } from '../helpers/getAllMaskDappContractInfo.js'
 import type { AuthorizationAPI } from '../entry-types.js'
 
-export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
-    private Web3 = new ConnectionReadonlyAPI()
+const Web3 = new ConnectionReadonlyAPI()
 
+export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
     async getFungibleTokenSpenders(chainId: ChainId, account: string) {
         try {
             const { toBlock, records: tokenSpenderRecords } = await this.parseSpenderRecords(
@@ -157,8 +157,8 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
         state: TokenApprovalInfoAccountMap | NFTApprovalInfoAccountMap,
     ) {
         const fromBlock = state[account]?.get(chainId)?.fromBlock ?? 0
-        const toBlock = await this.Web3.getBlockNumber({ chainId })
-        const logs = await this.Web3.getWeb3({ chainId }).eth.getPastLogs({
+        const toBlock = await Web3.getBlockNumber({ chainId })
+        const logs = await Web3.getWeb3({ chainId }).eth.getPastLogs({
             topics: [topic, new AbiCoder().encodeParameter('address', account)],
             fromBlock,
             toBlock,

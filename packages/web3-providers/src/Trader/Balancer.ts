@@ -20,7 +20,6 @@ import { BALANCER_SOR_GAS_PRICE, BALANCER_MAX_NO_POOLS } from './constants/balan
 import { TradeStrategy, type TradeComputed, type TraderAPI } from '../types/Trader.js'
 import { BALANCER_SWAP_TYPE, type SwapResponse, type Route } from './types/balancer.js'
 import { ONE_BIPS, SLIPPAGE_DEFAULT } from './constants/index.js'
-import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
 
 const MIN_VALUE = new BigNumber('1e-5')
@@ -35,9 +34,9 @@ const createSOR_ = memoize((chainId: ChainId) => {
     )
 })
 
+const Contract = new ContractReadonlyAPI()
+
 export class Balancer implements TraderAPI.Provider {
-    public Web3 = new ConnectionReadonlyAPI()
-    public Contract = new ContractReadonlyAPI()
     public provider = TradeProvider.BALANCER
 
     private createSOR(chainId: ChainId) {
@@ -221,7 +220,7 @@ export class Balancer implements TraderAPI.Provider {
         const tradeAmount = new BigNumber(inputAmount || '0')
         if (tradeAmount.isZero() || !inputToken || !outputToken || !WNATIVE_ADDRESS) return null
 
-        const wrapperContract = this.Contract.getWETHContract(WNATIVE_ADDRESS, { chainId })
+        const wrapperContract = Contract.getWETHContract(WNATIVE_ADDRESS, { chainId })
 
         const computed = {
             strategy: TradeStrategy.ExactIn,
@@ -263,7 +262,7 @@ export class Balancer implements TraderAPI.Provider {
 
     public async getTradeGasLimit(account: string, chainId: ChainId, trade: TradeComputed<SwapResponse>) {
         const { BALANCER_ETH_ADDRESS, BALANCER_EXCHANGE_PROXY_ADDRESS } = getTraderConstants(chainId)
-        const exchangeProxyContract = this.Contract.getExchangeProxyContract(BALANCER_EXCHANGE_PROXY_ADDRESS, {
+        const exchangeProxyContract = Contract.getExchangeProxyContract(BALANCER_EXCHANGE_PROXY_ADDRESS, {
             chainId,
         })
 

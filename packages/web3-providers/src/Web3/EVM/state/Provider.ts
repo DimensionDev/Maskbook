@@ -14,13 +14,13 @@ import {
     ProviderType,
     type Web3,
     type Web3Provider,
-    chainResolver,
     isValidChainId,
     getInvalidChainId,
     getDefaultChainId,
     getDefaultNetworkType,
     getDefaultProviderType,
 } from '@masknet/web3-shared-evm'
+import { ChainResolver } from '../apis/ResolverAPI.js'
 import { Providers } from '../providers/index.js'
 import { ProviderState } from '../../Base/state/Provider.js'
 
@@ -35,7 +35,7 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             getInvalidChainId,
             getDefaultNetworkType,
             getDefaultProviderType,
-            getNetworkTypeFromChainId: (chainId: ChainId) => chainResolver.networkType(chainId) ?? NetworkType.Ethereum,
+            getNetworkTypeFromChainId: (chainId: ChainId) => ChainResolver.networkType(chainId) ?? NetworkType.Ethereum,
         })
     }
 

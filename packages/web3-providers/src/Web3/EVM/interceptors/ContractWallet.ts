@@ -18,6 +18,9 @@ import type { BaseContractWalletProvider } from '../providers/BaseContractWallet
 import { SharedContextRef } from '../../../PluginContext/index.js'
 import type { BundlerAPI, AbstractAccountAPI, FunderAPI } from '../../../entry-types.js'
 
+const Web3 = new ConnectionAPI()
+const Contract = new ContractReadonlyAPI()
+
 export class ContractWallet implements Middleware<ConnectionContext> {
     constructor(
         protected providerType: ProviderType,
@@ -26,11 +29,8 @@ export class ContractWallet implements Middleware<ConnectionContext> {
         protected funder: FunderAPI.Provider<ChainId>,
     ) {}
 
-    private Web3 = new ConnectionAPI()
-    private Contract = new ContractReadonlyAPI()
-
     private async getNonce(context: ConnectionContext) {
-        const contract = this.Contract.getWalletContract(context.account)
+        const contract = Contract.getWalletContract(context.account)
         if (!contract) throw new Error('Failed to create wallet contract.')
         return contract.methods.nonce().call()
     }
@@ -47,17 +47,17 @@ export class ContractWallet implements Middleware<ConnectionContext> {
             return new Signer(context.owner, (type: SignType, message: string | Transaction, account: string) => {
                 switch (type) {
                     case SignType.Message:
-                        return this.Web3.signMessage('message', message as string, {
+                        return Web3.signMessage('message', message as string, {
                             account,
                             providerType: this.providerType,
                         })
                     case SignType.TypedData:
-                        return this.Web3.signMessage('typedData', message as string, {
+                        return Web3.signMessage('typedData', message as string, {
                             account,
                             providerType: this.providerType,
                         })
                     case SignType.Transaction:
-                        return this.Web3.signTransaction(message as Transaction, {
+                        return Web3.signTransaction(message as Transaction, {
                             account,
                             providerType: this.providerType,
                         })

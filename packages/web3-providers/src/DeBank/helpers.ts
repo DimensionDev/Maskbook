@@ -1,8 +1,6 @@
 import { compact, isNil } from 'lodash-es'
 import {
     type ChainId,
-    chainResolver,
-    createNativeToken,
     formatEthereumAddress,
     isNativeTokenAddress,
     SchemaType,
@@ -20,6 +18,7 @@ import {
     isSameAddress,
 } from '@masknet/web3-shared-base'
 import DeBank from '@masknet/web3-constants/evm/debank.json'
+import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
 import {
     DebankTransactionDirection,
     type HistoryResponse,
@@ -31,10 +30,10 @@ export function formatAssets(data: WalletTokenRecord[]): Array<FungibleAsset<Cha
     const supportedChains = Object.values({ ...DeBank.CHAIN_ID, BSC: 'bnb' }).filter(Boolean)
 
     return data
-        .filter((x) => chainResolver.chainId(x.chain) && supportedChains.includes(x.chain))
+        .filter((x) => ChainResolver.chainId(x.chain) && supportedChains.includes(x.chain))
         .map((x) => {
-            const chainId = chainResolver.chainId(x.chain)!
-            const address = supportedChains.includes(x.id) ? createNativeToken(chainId).address : x.id
+            const chainId = ChainResolver.chainId(x.chain)!
+            const address = supportedChains.includes(x.id) ? ChainResolver.nativeCurrency(chainId).address : x.id
 
             return {
                 id: address,
@@ -102,7 +101,7 @@ export function formatTransactions({
             txType = 'contract interaction'
         }
 
-        const chainId = chainResolver.chainId(transaction.chain)
+        const chainId = ChainResolver.chainId(transaction.chain)
         if (!chainId) return
 
         if (isSameAddress(transaction.sends[0]?.to_addr, ZERO_ADDRESS)) {

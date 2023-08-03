@@ -1,5 +1,3 @@
-import { FlowFungible } from '@masknet/web3-providers'
-import type { FungibleTokenAPI } from '@masknet/web3-providers/types'
 import { SourceType } from '@masknet/web3-shared-base'
 import type {
     ChainId,
@@ -11,9 +9,13 @@ import type {
     Transaction,
     TransactionParameter,
 } from '@masknet/web3-shared-flow'
+import { FlowFungibleAPI } from './FungibleTokenAPI.js'
 import { FlowHubOptionsAPI } from './HubOptionsAPI.js'
 import { HubFungibleAPI_Base } from '../../Base/apis/HubFungibleAPI.js'
 import type { HubOptions_Base } from '../../Base/apis/HubOptionsAPI.js'
+import type { FungibleTokenAPI } from '../../../entry-types.js'
+
+const FlowFungible = new FlowFungibleAPI()
 
 export class FlowHubFungibleAPI extends HubFungibleAPI_Base<
     ChainId,

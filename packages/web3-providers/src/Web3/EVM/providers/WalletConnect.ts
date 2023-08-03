@@ -5,7 +5,6 @@ import { Flags } from '@masknet/flags'
 import WalletConnect from '@walletconnect/client'
 import type { Account } from '@masknet/shared-base'
 import {
-    chainResolver,
     EthereumMethodType,
     isValidAddress,
     ProviderType,
@@ -15,9 +14,10 @@ import {
     type Web3,
     isValidChainId,
 } from '@masknet/web3-shared-evm'
+import { ChainResolver } from '../apis/ResolverAPI.js'
 import { BaseProvider } from './Base.js'
+import { parseJSON } from '../../../helpers/parseJSON.js'
 import type { WalletAPI } from '../../../entry-types.js'
-import { parseJSON } from '../../../entry-helpers.js'
 
 interface SessionPayload {
     event: 'connect' | 'session_update'
@@ -220,7 +220,7 @@ export default class WalletConnectProvider
     override async connect(chainId: ChainId) {
         const account = await this.login(chainId)
         if (!isValidAddress(account.account))
-            throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)
+            throw new Error(`Failed to connect to ${ChainResolver.chainFullName(chainId)}.`)
         return account
     }
 

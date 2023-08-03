@@ -1,16 +1,16 @@
 import { memo, useCallback } from 'react'
+import { Trans } from 'react-i18next'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { Box, Link, Typography, useTheme } from '@mui/material'
 import type { ConnectedWalletInfo } from '../../pages/Personas/type.js'
 import { MaskMessages, NetworkPluginID, NextIDAction, PopupModalRoutes, SignType } from '@masknet/shared-base'
 import { useChainContext, useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { FormattedAddress, ImageIcon, PersonaContext } from '@masknet/shared'
-import { ChainId, explorerResolver, formatDomainName, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { ChainId, formatDomainName, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
+import { ExplorerResolver, NextIDProof } from '@masknet/web3-providers'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
-import { Trans } from 'react-i18next'
 import { DisconnectModal } from '../../modals/modals.js'
-import { NextIDProof } from '@masknet/web3-providers'
 import Services from '../../../service.js'
 import { useModalNavigate } from '../index.js'
 import { SelectProvider } from '../SelectProvider/index.js'
@@ -149,7 +149,7 @@ export const ConnectedWallet = memo<ConnectedWalletProps>(function ConnectedWall
                                 </Typography>
                                 <Link
                                     style={{ width: 16, height: 16, color: 'inherit' }}
-                                    href={explorerResolver.addressLink(chainId, wallet.identity ?? '')}
+                                    href={ExplorerResolver.addressLink(chainId, wallet.identity ?? '')}
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     <Icons.LinkOut size={16} sx={{ ml: 0.25 }} />

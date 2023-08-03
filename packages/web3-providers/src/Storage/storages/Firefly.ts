@@ -6,11 +6,11 @@ import type { StorageAPI } from '../../entry-types.js'
 
 const caches = new Map<string, LRUCache<string, any>>()
 
+const Firefly = new FireflyGetterSetter()
+const Web3 = new ConnectionAPI()
+
 export class FireflyStorage implements StorageAPI.Storage {
     private cache: LRUCache<string, any> | undefined
-
-    private Firefly = new FireflyGetterSetter()
-    private Web3 = new ConnectionAPI()
 
     constructor(
         private namespace: string,
@@ -39,7 +39,7 @@ export class FireflyStorage implements StorageAPI.Storage {
         const cacheKey = `${this.getKey()}-${key}`
         let value = this.cache?.get(cacheKey)
         if (value) return value as T
-        value = await this.Firefly.get(this.namespace, key, this.address)
+        value = await Firefly.get(this.namespace, key, this.address)
         this.cache?.set(cacheKey, value)
         return value as T
     }
@@ -49,9 +49,9 @@ export class FireflyStorage implements StorageAPI.Storage {
     }
 
     async set<T>(key: string, value: T) {
-        const signature = await this.Web3.signMessage(SignType.Message, JSON.stringify(value))
+        const signature = await Web3.signMessage(SignType.Message, JSON.stringify(value))
         if (!signature) throw new Error('Failed to sign payload')
-        await this.Firefly.set(this.namespace, key, this.address, value as string, signature)
+        await Firefly.set(this.namespace, key, this.address, value as string, signature)
         const cacheKey = `${this.getKey()}-${key}`
         this.cache?.delete(cacheKey)
         return

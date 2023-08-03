@@ -1,7 +1,43 @@
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { type FungibleToken, type NonFungibleToken, isSameAddress } from '@masknet/web3-shared-base'
+import type { ProviderResolverAPI_Base } from './ProviderResolverAPI.js'
+import type { NetworkResolverAPI_Base } from './NetworkExplorerAPI.js'
+import type { ChainResolverAPI_Base } from './ChainResolverAPI.js'
+import type { ExplorerResolverAPI_Base } from './ExplorerResolverAPI.js'
 
-export class OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
+export class OthersAPI_Base<
+    ChainId,
+    SchemaType,
+    ProviderType,
+    NetworkType,
+    MessageRequest,
+    MessageResponse,
+    Transaction,
+    TransactionParameter,
+> {
+    chainResolver: ChainResolverAPI_Base<
+        ChainId,
+        SchemaType,
+        ProviderType,
+        NetworkType,
+        MessageRequest,
+        MessageResponse,
+        Transaction,
+        TransactionParameter
+    > = null!
+    explorerResolver: ExplorerResolverAPI_Base<
+        ChainId,
+        SchemaType,
+        ProviderType,
+        NetworkType,
+        MessageRequest,
+        MessageResponse,
+        Transaction,
+        TransactionParameter
+    > = null!
+    providerResolver: ProviderResolverAPI_Base<ChainId, ProviderType> = null!
+    networkResolver: NetworkResolverAPI_Base<ChainId, NetworkType> = null!
+
     getNetworkPluginID(): NetworkPluginID {
         throw new Error('Method not implemented.')
     }
