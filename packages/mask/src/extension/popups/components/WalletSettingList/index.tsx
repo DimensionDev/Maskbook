@@ -78,9 +78,9 @@ function WalletItem({ proof, toggleUnlisted, profileIdentity, checked }: WalletI
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 href={addressLink}
-                                width={16}
-                                height={16}>
-                                <Icons.LinkOut size={16} color={theme.palette.maskColor.main} />
+                                width={14}
+                                height={14}>
+                                <Icons.LinkOut size={14} color={theme.palette.maskColor.main} />
                             </Link>
                         </Typography>
                     }
