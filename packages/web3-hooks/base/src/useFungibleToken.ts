@@ -3,8 +3,8 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import type { HubOptions } from '@masknet/web3-providers/types'
 import { attemptUntil } from '@masknet/web3-shared-base'
 import { useQuery } from '@tanstack/react-query'
-import { useChainId } from './useChainId.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
+import { useChainContext } from './useContext.js'
 
 export function useFungibleToken<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
@@ -12,7 +12,7 @@ export function useFungibleToken<S extends 'all' | void = void, T extends Networ
     fallbackToken?: Web3Helper.FungibleTokenScope<S, T>,
     options?: HubOptions<T>,
 ) {
-    const chainId = useChainId(pluginID, options?.chainId)
+    const { chainId } = useChainContext({ chainId: options?.chainId })
     const Hub = useWeb3Hub(pluginID, {
         chainId,
         ...options,
