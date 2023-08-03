@@ -1046,6 +1046,7 @@
     "popups_wallet_unlock_erc20_balance_too_high_tips": "crwdns22013:0crwdne22013:0",
     "popups_wallet_unlock_erc20_approve_amount": "crwdns22015:0crwdne22015:0",
     "popups_wallet_unlock_erc20_granted_to": "crwdns22017:0crwdne22017:0",
+    "popups_wallet_rpc_error": "crwdns22023:0crwdne22023:0",
     "nft_wallet_label": "crwdns9205:0crwdne9205:0",
     "plugin_profile_no_wallets": "crwdns9327:0crwdne9327:0",
     "nft_input_address_label": "crwdns9193:0crwdne9193:0",

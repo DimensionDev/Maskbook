@@ -1,5 +1,6 @@
 {
     "plugin_external_loader_search_button": "查找插件",
+    "plugin_external_plugin_url": "插件 URL：",
     "plugin_external_name": "外部插件",
     "load": "加载",
     "load_all": "加载全部",
