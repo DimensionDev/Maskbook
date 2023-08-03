@@ -3,7 +3,7 @@ import { isNull } from 'lodash-es'
 import { attemptTimes } from '@masknet/web3-shared-base'
 import { getTokens, getHeaders } from './getTokens.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'
-import { fetchCached, staleCached } from '../../entry-helpers.js'
+import { fetchSquashed, staleCached } from '../../entry-helpers.js'
 
 const features = {
     responsive_web_twitter_blue_verified_badge_is_enabled: true,
@@ -45,7 +45,7 @@ export async function getUserViaWebAPI(screenName: string): Promise<TwitterBaseA
     const request = await createRequest(screenName)
     if (!request) return null
 
-    const response = await fetchCached(request)
+    const response = await fetchSquashed(request)
     if (response.ok) {
         const json: TwitterBaseAPI.UserByScreenNameResponse = await response.json()
         return json.data.user.result
