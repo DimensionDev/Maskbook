@@ -4,5 +4,6 @@
     "plugin_external_name": "外部插件",
     "load": "加载",
     "load_all": "加载全部",
-    "reload": "重新加载"
+    "reload": "重新加载",
+    "plugin_external_get_started": "让我们开始吧！"
 }
