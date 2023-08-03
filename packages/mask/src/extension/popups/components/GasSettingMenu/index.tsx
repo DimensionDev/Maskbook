@@ -1,5 +1,5 @@
 import { GasOptionType, ZERO, formatBalance, formatCurrency, toFixed } from '@masknet/web3-shared-base'
-import { type EIP1559GasConfig, type GasConfig, formatWeiToEther } from '@masknet/web3-shared-evm'
+import { type EIP1559GasConfig, type GasConfig, formatWeiToEther, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { Typography, useTheme } from '@mui/material'
 import { Box } from '@mui/system'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
@@ -108,9 +108,9 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
             (isSupport1559 ? (gasConfig as EIP1559GasConfig).maxFeePerGas : gasConfig.gasPrice) ?? ZERO,
         ).times(gas)
 
-        if (!currencyRatio) return toFixed(result, 0)
+        if (!currencyRatio || !paymentToken || isNativeTokenAddress(paymentToken) || !owner) return toFixed(result, 0)
         return toFixed(result.multipliedBy(currencyRatio), 0)
-    }, [gasConfig, gas, currencyRatio])
+    }, [gasConfig, gas, currencyRatio, paymentToken, owner])
 
     // If there is no init configuration, set a default config
     useEffect(() => {
@@ -150,6 +150,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
             </Typography>
             {!disable ? (
                 <Box
+                    ml={0.5}
                     py={0.5}
                     px={1.5}
                     border={`1px solid ${theme.palette.maskColor.line}`}
