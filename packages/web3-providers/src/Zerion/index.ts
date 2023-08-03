@@ -203,8 +203,8 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
         { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return
-        const response = await getNonFungibleInfo(address, tokenId)
 
+        const response = await getNonFungibleInfo(address, tokenId)
         if (!response.payload['nft-info'].asset.floor_price) return
 
         const nativeToken = new ChainResolverAPI().nativeCurrency(chainId)

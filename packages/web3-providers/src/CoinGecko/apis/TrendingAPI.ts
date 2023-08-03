@@ -16,7 +16,6 @@ import type { TrendingAPI } from '../../entry-types.js'
 
 export class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.ChainIdAll> {
     private Fuse = new FuseCoinAPI()
-    private ChainResolver = new ChainResolverAPI()
 
     private coins: Map<string, TrendingAPI.Coin> = new Map()
 
@@ -118,7 +117,7 @@ export class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.Cha
             currency,
             coin: {
                 id,
-                chainId: isNativeTokenSymbol(info.symbol) ? this.ChainResolver.chainId(info.name) : undefined,
+                chainId: isNativeTokenSymbol(info.symbol) ? new ChainResolverAPI().chainId(info.name) : undefined,
                 name: info.name,
                 symbol: info.symbol.toUpperCase(),
                 type: TokenType.Fungible,
@@ -153,8 +152,8 @@ export class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.Cha
                 twitter_url,
                 telegram_url,
                 contract_address:
-                    this.ChainResolver.chainId(info.name) && isNativeTokenSymbol(info.symbol)
-                        ? getTokenConstant(this.ChainResolver.chainId(info.name)!, 'NATIVE_TOKEN_ADDRESS')
+                    new ChainResolverAPI().chainId(info.name) && isNativeTokenSymbol(info.symbol)
+                        ? getTokenConstant(new ChainResolverAPI().chainId(info.name)!, 'NATIVE_TOKEN_ADDRESS')
                         : info.contract_address,
             },
             market: (() => {
