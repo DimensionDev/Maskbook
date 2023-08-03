@@ -88,6 +88,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     }, [gasOptions, gasPrice, isSupport1559, maxFeePerGas, replaceType])
 
     const totalGas = useMemo(() => {
+        if (!config.gas) return '0'
         return formatGweiToWei((isSupport1559 ? maxFeePerGas : gasPrice) || ZERO)
             .times(config.gas)
             .toFixed()
@@ -165,6 +166,8 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
         setMaxPriorityFeePerGas(maxPriorityFeePerGas.toFixed(2))
         setMaxFeePerGas(maxFeePerGas.toFixed(2))
     }, [open, isSupport1559, gasOptions, replaceType, config])
+
+    console.log('formatBalance', totalGas, nativeToken?.decimals)
 
     return (
         <BottomDrawer open={open} title={title} onClose={onClose}>
