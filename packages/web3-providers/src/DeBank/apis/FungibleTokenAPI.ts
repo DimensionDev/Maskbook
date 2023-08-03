@@ -12,9 +12,9 @@ import { fetchCachedJSON } from '../../helpers/fetchJSON.js'
 import { getNativeAssets } from '../../helpers/getNativeAssets.js'
 import type { FungibleTokenAPI, HubOptions_Base } from '../../entry-types.js'
 
-const FungibleToken = new EVM_FungibleTokenAPI()
-
 export class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, SchemaType> {
+    private FungibleToken = new EVM_FungibleTokenAPI()
+
     async getAssets(address: string, options?: HubOptions_Base<ChainId>) {
         const result = await fetchCachedJSON<WalletTokenRecord[] | undefined>(
             urlcat(DEBANK_OPEN_API, '/v1/user/all_token_list', {
@@ -55,7 +55,7 @@ export class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId
         trustedFungibleTokens?: Array<FungibleToken<ChainId, SchemaType>>,
         options?: HubOptions_Base<ChainId>,
     ) {
-        const trustTokenAssets = await FungibleToken.getTrustedAssets(address, trustedFungibleTokens, options)
+        const trustTokenAssets = await this.FungibleToken.getTrustedAssets(address, trustedFungibleTokens, options)
         return createPageable(
             unionWith(
                 trustTokenAssets.data,

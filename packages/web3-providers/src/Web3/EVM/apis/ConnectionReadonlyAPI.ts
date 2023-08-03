@@ -86,8 +86,6 @@ export class ConnectionReadonlyAPI
             Web3Provider
         >
 {
-    private ChainResolver = new ChainResolverAPI()
-
     constructor(protected options?: ConnectionOptions) {}
 
     protected Request = new RequestReadonlyAPI(this.options)
@@ -549,7 +547,7 @@ export class ConnectionReadonlyAPI
 
     getNativeToken(initial?: ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
-        const token = this.ChainResolver.nativeCurrency(options.chainId)
+        const token = new ChainResolverAPI().nativeCurrency(options.chainId)
         if (!token) throw new Error('Failed to create native token.')
         return Promise.resolve(token)
     }

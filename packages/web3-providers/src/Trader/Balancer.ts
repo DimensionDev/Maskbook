@@ -34,9 +34,9 @@ const createSOR_ = memoize((chainId: ChainId) => {
     )
 })
 
-const Contract = new ContractReadonlyAPI()
-
 export class Balancer implements TraderAPI.Provider {
+    private Contract = new ContractReadonlyAPI()
+
     public provider = TradeProvider.BALANCER
 
     private createSOR(chainId: ChainId) {
@@ -220,7 +220,7 @@ export class Balancer implements TraderAPI.Provider {
         const tradeAmount = new BigNumber(inputAmount || '0')
         if (tradeAmount.isZero() || !inputToken || !outputToken || !WNATIVE_ADDRESS) return null
 
-        const wrapperContract = Contract.getWETHContract(WNATIVE_ADDRESS, { chainId })
+        const wrapperContract = this.Contract.getWETHContract(WNATIVE_ADDRESS, { chainId })
 
         const computed = {
             strategy: TradeStrategy.ExactIn,
@@ -262,7 +262,7 @@ export class Balancer implements TraderAPI.Provider {
 
     public async getTradeGasLimit(account: string, chainId: ChainId, trade: TradeComputed<SwapResponse>) {
         const { BALANCER_ETH_ADDRESS, BALANCER_EXCHANGE_PROXY_ADDRESS } = getTraderConstants(chainId)
-        const exchangeProxyContract = Contract.getExchangeProxyContract(BALANCER_EXCHANGE_PROXY_ADDRESS, {
+        const exchangeProxyContract = this.Contract.getExchangeProxyContract(BALANCER_EXCHANGE_PROXY_ADDRESS, {
             chainId,
         })
 

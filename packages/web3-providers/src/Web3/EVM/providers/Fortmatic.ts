@@ -52,8 +52,6 @@ export default class FortmaticProvider
     extends BaseProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
-    private ChainResolver = new ChainResolverAPI()
-
     /**
      * If the internal chain id exists, it means the connection was created.
      * Otherwise, no connection was created before.
@@ -126,7 +124,7 @@ export default class FortmaticProvider
             this.chainId = chainId
             const accounts = await this.login()
             if (!accounts.length)
-                throw new Error(`Failed to connect to ${this.ChainResolver.chainFullName(this.chainId)}.`)
+                throw new Error(`Failed to connect to ${new ChainResolverAPI().chainFullName(this.chainId)}.`)
 
             const connected = {
                 account: first(accounts)!,

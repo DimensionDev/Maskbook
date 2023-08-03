@@ -14,9 +14,8 @@ import { FuseCoinAPI } from '../../Fuse/index.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 import type { TrendingAPI } from '../../entry-types.js'
 
-const Fuse = new FuseCoinAPI()
-
 export class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.ChainIdAll> {
+    private Fuse = new FuseCoinAPI()
     private ChainResolver = new ChainResolverAPI()
 
     private coins: Map<string, TrendingAPI.Coin> = new Map()
@@ -48,7 +47,7 @@ export class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.Cha
                     .map((y) => this.coins.get(y.id)),
             ).slice(0, COIN_RECOMMENDATION_SIZE)
         } catch {
-            return Fuse.create(await this.getAllCoins())
+            return this.Fuse.create(await this.getAllCoins())
                 .search(keyword)
                 .map((x) => x.item)
                 .slice(0, COIN_RECOMMENDATION_SIZE)

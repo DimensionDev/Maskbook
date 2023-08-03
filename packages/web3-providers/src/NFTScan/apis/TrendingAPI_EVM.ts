@@ -19,10 +19,10 @@ import { OpenSeaAPI } from '../../OpenSea/index.js'
 import { getPaymentToken } from '../../helpers/getPaymentToken.js'
 import type { TrendingAPI, NonFungibleTokenAPI } from '../../entry-types.js'
 
-const Looksrare = new LooksRareAPI()
-const Opensea = new OpenSeaAPI()
-
 export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
+    private Looksrare = new LooksRareAPI()
+    private Opensea = new OpenSeaAPI()
+
     private async getCollection(chainId: ChainId, id: string): Promise<NonFungibleTokenAPI.Collection | undefined> {
         const path = urlcat('/api/v2/collections/:address', {
             address: id,
@@ -169,8 +169,8 @@ export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
         const address = collection.contract_address
         const [symbol, openseaStats, looksrareStats] = await Promise.all([
             getContractSymbol(chainId, id),
-            Opensea.getStats(address).catch(() => null),
-            Looksrare.getStats(address).catch(() => null),
+            this.Opensea.getStats(address).catch(() => null),
+            this.Looksrare.getStats(address).catch(() => null),
         ])
         const tickers: TrendingAPI.Ticker[] = compact([
             openseaStats

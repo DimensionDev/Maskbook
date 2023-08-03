@@ -72,7 +72,6 @@ export default class WalletConnectV2Provider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
     private SignClient = new Client(this.emitter)
-    private ChainResolver = new ChainResolverAPI()
 
     constructor() {
         super(ProviderType.WalletConnectV2)
@@ -144,7 +143,7 @@ export default class WalletConnectV2Provider
         await this.SignClient.setup()
 
         const account = await this.login(chainId)
-        if (!account) throw new Error(`Failed to connect to ${this.ChainResolver.chainFullName(chainId)}.`)
+        if (!account) throw new Error(`Failed to connect to ${new ChainResolverAPI().chainFullName(chainId)}.`)
 
         return account
     }

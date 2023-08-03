@@ -6,10 +6,10 @@ import { ENS_API } from '../../../ENS/index.js'
 import { SpaceID_API } from '../../../SpaceID/index.js'
 import type { NameServiceAPI } from '../../../entry-types.js'
 
-const ENS = new ENS_API()
-const SpaceID = new SpaceID_API()
-
 export class NameService extends NameServiceState {
+    private ENS = new ENS_API()
+    private SpaceID = new SpaceID_API()
+
     constructor(context: Plugin.Shared.SharedUIContext) {
         super(context, {
             pluginID: NetworkPluginID.PLUGIN_EVM,
@@ -20,6 +20,6 @@ export class NameService extends NameServiceState {
     }
 
     override createResolvers() {
-        return [ENS, SpaceID] as NameServiceAPI.Provider[]
+        return [this.ENS, this.SpaceID] as NameServiceAPI.Provider[]
     }
 }

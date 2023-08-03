@@ -6,13 +6,15 @@ import { getTokenAmountDescription } from '../utils.js'
 import type { TransactionDescriptor } from '../types.js'
 
 export class UniswapDescriptor extends BaseDescriptor implements TransactionDescriptor {
+    private ChainResolver = new ChainResolverAPI()
+
     override compute(context: TransactionContext<ChainId, TransactionParameter>) {
         return Promise.resolve({
             chainId: context.chainId,
             title: 'Contract Deployment',
             description: `Contract Deployment ${getTokenAmountDescription(
                 context.value,
-                new ChainResolverAPI().nativeCurrency(context.chainId),
+                this.ChainResolver.nativeCurrency(context.chainId),
             )}`,
         })
     }

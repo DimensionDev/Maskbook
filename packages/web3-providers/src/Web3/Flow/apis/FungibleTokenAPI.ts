@@ -14,8 +14,6 @@ import { CoinGeckoPriceAPI_EVM } from '../../../CoinGecko/index.js'
 import type { HubOptions_Base } from '../../Base/apis/HubOptionsAPI.js'
 import type { FungibleTokenAPI, TokenListAPI } from '../../../entry-types.js'
 
-const CoinGeckoPriceEVM = new CoinGeckoPriceAPI_EVM()
-
 async function getTokenBalance(
     chainId: ChainId,
     account: string,
@@ -59,7 +57,7 @@ async function getTokenBalance(
 
 async function getAssetFUSD(chainId: ChainId, account: string) {
     const { FUSD_ADDRESS = '', FUNGIBLE_TOKEN_ADDRESS = '' } = getTokenConstants(chainId)
-    const price = await CoinGeckoPriceEVM.getFungibleTokenPrice(ChainId_EVM.Mainnet, 'usd-coin', {
+    const price = await new CoinGeckoPriceAPI_EVM().getFungibleTokenPrice(ChainId_EVM.Mainnet, 'usd-coin', {
         currencyType: CurrencyType.USD,
     })
     const balance = await getTokenBalance(chainId, account, 8, {
@@ -86,7 +84,7 @@ async function getAssetFUSD(chainId: ChainId, account: string) {
 
 async function getAssetFLOW(chainId: ChainId, account: string) {
     const { FLOW_ADDRESS = '', FUNGIBLE_TOKEN_ADDRESS = '' } = getTokenConstants(chainId)
-    const price = await CoinGeckoPriceEVM.getFungibleTokenPrice(ChainId_EVM.Mainnet, 'flow', {
+    const price = await new CoinGeckoPriceAPI_EVM().getFungibleTokenPrice(ChainId_EVM.Mainnet, 'flow', {
         currencyType: CurrencyType.USD,
     })
     const balance = await getTokenBalance(chainId, account, 8, {
@@ -114,7 +112,7 @@ async function getAssetFLOW(chainId: ChainId, account: string) {
 
 async function getAssetTether(chainId: ChainId, account: string) {
     const { TETHER_ADDRESS = '', FUNGIBLE_TOKEN_ADDRESS = '' } = getTokenConstants(chainId)
-    const price = await CoinGeckoPriceEVM.getFungibleTokenPrice(ChainId_EVM.Mainnet, 'tether', {
+    const price = await new CoinGeckoPriceAPI_EVM().getFungibleTokenPrice(ChainId_EVM.Mainnet, 'tether', {
         currencyType: CurrencyType.USD,
     })
     const balance = await getTokenBalance(chainId, account, 8, {

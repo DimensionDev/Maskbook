@@ -7,8 +7,6 @@ import { BaseHostedProvider } from './BaseHosted.js'
 import { SmartPayBundlerAPI } from '../../../SmartPay/index.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
-const Bundler = new SmartPayBundlerAPI()
-
 /**
  * EIP-4337 compatible smart contract based wallet.
  */
@@ -16,6 +14,8 @@ export class BaseContractWalletProvider
     extends BaseHostedProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
+    protected Bundler = new SmartPayBundlerAPI()
+
     private ownerStorage:
         | StorageItem<{
               account: string
@@ -46,7 +46,7 @@ export class BaseContractWalletProvider
         this.subscription.wallets?.subscribe(async () => {
             if (!this.hostedAccount) return
             const target = this.wallets?.find((x) => isSameAddress(x.address, this.hostedAccount))
-            const smartPayChainId = await Bundler.getSupportedChainId()
+            const smartPayChainId = await this.Bundler.getSupportedChainId()
             if (target?.owner) {
                 await this.ownerStorage?.setValue({
                     account: target.owner,

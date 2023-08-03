@@ -25,7 +25,6 @@ import type { Plugin } from '@masknet/plugin-infra/content-script'
 import { ChainResolverAPI } from '../apis/ResolverAPI.js'
 import { BaseContractWalletProvider } from './BaseContractWallet.js'
 import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
-import { SmartPayBundlerAPI } from '../../../SmartPay/index.js'
 import { SmartPayOwnerAPI } from '../../../SmartPay/apis/OwnerAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
@@ -34,8 +33,6 @@ export class MaskWalletProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
     private Request = new RequestReadonlyAPI()
-    private Bundler = new SmartPayBundlerAPI()
-    private ChainResolver = new ChainResolverAPI()
 
     private ref = new ValueRef<Wallet[]>(EMPTY_LIST)
 
@@ -192,7 +189,7 @@ export class MaskWalletProvider
         })
 
         const account = first(await this.context?.selectAccount())
-        if (!account) throw new Error(`Failed to connect to ${this.ChainResolver.chainFullName(chainId)}`)
+        if (!account) throw new Error(`Failed to connect to ${new ChainResolverAPI().chainFullName(chainId)}`)
 
         // switch account
         if (!isSameAddress(this.hostedAccount, account?.address)) {

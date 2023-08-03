@@ -15,8 +15,6 @@ import { HubFungibleAPI_Base } from '../../Base/apis/HubFungibleAPI.js'
 import type { HubOptions_Base } from '../../Base/apis/HubOptionsAPI.js'
 import type { FungibleTokenAPI } from '../../../entry-types.js'
 
-const FlowFungible = new FlowFungibleAPI()
-
 export class FlowHubFungibleAPI extends HubFungibleAPI_Base<
     ChainId,
     SchemaType,
@@ -27,14 +25,16 @@ export class FlowHubFungibleAPI extends HubFungibleAPI_Base<
     Transaction,
     TransactionParameter
 > {
+    private FlowFungible = new FlowFungibleAPI()
+
     protected override HubOptions = new FlowHubOptionsAPI(this.options)
 
     protected override getProviders(initial?: HubOptions_Base<ChainId>) {
         return this.getPredicateProviders<FungibleTokenAPI.Provider<ChainId, SchemaType>>(
             {
-                [SourceType.Flow]: FlowFungible,
+                [SourceType.Flow]: this.FlowFungible,
             },
-            [FlowFungible],
+            [this.FlowFungible],
             initial,
         )
     }

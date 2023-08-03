@@ -40,15 +40,15 @@ export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<
     TransactionParameter
 > {
     private AlchemyEVM = new AlchemyEVM_API()
-    private Approval = new ApprovalAPI()
+    private Approval_ = new ApprovalAPI()
     private ChainbaseNonFungibleToken = new ChainbaseNonFungibleTokenAPI()
     private Gem = new GemAPI()
-    private GoPlusAuthorization = new GoPlusAuthorizationAPI()
+    private GoPlusAuthorization_ = new GoPlusAuthorizationAPI()
     private LooksRare = new LooksRareAPI()
     private NFTScanNonFungibleTokenEVM = new NFTScanNonFungibleTokenAPI_EVM()
     private OpenSea = new OpenSeaAPI()
-    private R2D2TokenList = new R2D2TokenListAPI()
-    private Rabby = new RabbyAPI()
+    private R2D2TokenList_ = new R2D2TokenListAPI()
+    private Rabby_ = new RabbyAPI()
     private Rarible = new RaribleAPI()
     private SimpleHashEVM = new SimpleHashAPI_EVM()
     private X2Y2 = new X2Y2API()
@@ -71,14 +71,14 @@ export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<
                 [SourceType.NFTScan]: this.NFTScanNonFungibleTokenEVM,
                 [SourceType.Rarible]: this.Rarible,
                 [SourceType.OpenSea]: this.OpenSea,
-                [SourceType.Approval]: this.Approval,
+                [SourceType.Approval]: this.Approval_,
                 [SourceType.Alchemy_EVM]: this.AlchemyEVM,
                 [SourceType.LooksRare]: this.LooksRare,
                 [SourceType.Zora]: this.Zora,
                 [SourceType.Gem]: this.Gem,
-                [SourceType.GoPlus]: this.GoPlusAuthorization,
-                [SourceType.Rabby]: this.Rabby,
-                [SourceType.R2D2]: this.R2D2TokenList,
+                [SourceType.GoPlus]: this.GoPlusAuthorization_,
+                [SourceType.Rabby]: this.Rabby_,
+                [SourceType.R2D2]: this.R2D2TokenList_,
                 [SourceType.SimpleHash]: this.SimpleHashEVM,
             },
             options.chainId === ChainId.Mainnet
@@ -93,10 +93,10 @@ export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<
                       this.LooksRare,
                       this.Zora,
                       this.Gem,
-                      this.Approval,
-                      this.GoPlusAuthorization,
-                      this.Rabby,
-                      this.R2D2TokenList,
+                      this.Approval_,
+                      this.GoPlusAuthorization_,
+                      this.Rabby_,
+                      this.R2D2TokenList_,
                   ]
                 : [
                       this.SimpleHashEVM,
@@ -107,11 +107,11 @@ export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<
                       this.OpenSea,
                       this.LooksRare,
                       this.Zora,
-                      this.Approval,
+                      this.Approval_,
                       this.Gem,
-                      this.GoPlusAuthorization,
-                      this.Rabby,
-                      this.R2D2TokenList,
+                      this.GoPlusAuthorization_,
+                      this.Rabby_,
+                      this.R2D2TokenList_,
                   ],
             initial,
         )
