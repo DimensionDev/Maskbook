@@ -233,7 +233,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                 <Tab label={t('popups_connected_wallets')} value={HomeTabType.ConnectedWallets} />
                             </MaskTabList>
                         </Box>
-                        <TabPanel className={classes.panel} value={HomeTabType.SocialAccounts}>
+                        <TabPanel className={classes.panel} value={HomeTabType.SocialAccounts} data-hide-scrollbar>
                             <SocialAccounts
                                 accounts={accounts}
                                 networks={networks}
@@ -241,7 +241,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                 onAccountClick={onAccountClick}
                             />
                         </TabPanel>
-                        <TabPanel className={classes.panel} value={HomeTabType.ConnectedWallets}>
+                        <TabPanel className={classes.panel} value={HomeTabType.ConnectedWallets} data-hide-scrollbar>
                             <ConnectedWallet wallets={bindingWallets} />
                         </TabPanel>
                     </TabContext>
