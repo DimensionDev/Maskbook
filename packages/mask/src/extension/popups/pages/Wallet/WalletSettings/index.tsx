@@ -47,7 +47,7 @@ const WalletSettings = memo(() => {
                 <Icons.ArrowDownRound color={theme.palette.maskColor.white} size={24} />
             </Box>
             <List dense className={classes.list}>
-                <ChangeOwner />
+                {wallet.owner ? <ChangeOwner /> : null}
                 <Rename />
                 <Contacts />
                 <AutoLock />
