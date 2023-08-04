@@ -78,7 +78,7 @@ export const NormalHeader = memo<NormalHeaderProps>(function NormalHeader(props)
             <Box className={classes.header}>
                 {showTitle ? (
                     <>
-                        {canBack && onClose ? (
+                        {canBack ? (
                             <Icons.Comeback className={classes.icon} onClick={customBackHandler ?? handleBack} />
                         ) : (
                             <Icons.Close className={classes.icon} onClick={onClose} />
