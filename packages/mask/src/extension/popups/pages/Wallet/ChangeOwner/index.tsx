@@ -1,14 +1,14 @@
 import urlcat from 'urlcat'
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useContainer } from 'unstated-next'
 import { Box, Link, Popover, Typography, Button, alpha } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { CopyButton } from '@masknet/shared'
-import { DashboardRoutes, ECKeyIdentifier, type NetworkPluginID, PopupModalRoutes } from '@masknet/shared-base'
+import { ECKeyIdentifier, type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useChainContext, useWallet, useWallets } from '@masknet/web3-hooks-base'
+import { ChainContextProvider, useChainContext, useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { ExplorerResolver, Web3 } from '@masknet/web3-providers'
@@ -18,9 +18,8 @@ import { StyledInput } from '../../../components/StyledInput/index.js'
 import { StyledRadio } from '../../../components/StyledRadio/index.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 import { useTitle } from '../../../hook/useTitle.js'
-import { WalletContext } from '../hooks/useWalletContext.js'
-import { useModalNavigate } from '../../../components/index.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
+import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -158,6 +157,13 @@ const useStyles = makeStyles()((theme) => ({
     input: {
         fontSize: 13,
     },
+    label: {
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: 14,
+        color: theme.palette.maskColor.second,
+        fontWeight: 700,
+    },
 }))
 
 enum ManagerAccountType {
@@ -172,6 +178,8 @@ interface ManagerAccount {
     identifier?: ECKeyIdentifier
 }
 
+const ETH_GAS_LIMIT = '21000'
+
 export default function ChangeOwner() {
     const { t } = useI18N()
     const { classes, cx } = useStyles()
@@ -181,10 +189,10 @@ export default function ChangeOwner() {
     const [manageAccount, setManageAccount] = useState<ManagerAccount>()
 
     const { smartPayChainId } = useContainer(PopupContext)
+
+    const chainContextValue = useMemo(() => ({ chainId: smartPayChainId }), [smartPayChainId])
     const wallet = useWallet()
     const wallets = useWallets()
-
-    const { selectedWallet: contractAccount } = useContainer(WalletContext)
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value: personaManagers } = useAsync(async () => {
@@ -205,19 +213,14 @@ export default function ChangeOwner() {
     const managerAddress = walletManager?.address ?? personaManager?.address
 
     const [, handleConfirm] = useAsyncFn(async () => {
-        if (!manageAccount?.address || !contractAccount) return
-        if (!isSameAddress(wallet?.address, contractAccount.address))
-            await Web3.connect({
-                account: contractAccount?.address,
-                chainId: smartPayChainId,
-                providerType: ProviderType.MaskWallet,
-            })
+        if (!manageAccount?.address || !wallet) return
+
         const hash = await Web3.changeOwner?.(manageAccount.address, {
             chainId: smartPayChainId,
-            account: contractAccount?.address,
+            account: wallet?.address,
             providerType: ProviderType.MaskWallet,
-            owner: contractAccount?.owner,
-            identifier: ECKeyIdentifier.from(contractAccount?.identifier).unwrapOr(undefined),
+            owner: wallet?.owner,
+            identifier: ECKeyIdentifier.from(wallet?.identifier).unwrapOr(undefined),
         })
 
         if (!hash) return
@@ -229,32 +232,16 @@ export default function ChangeOwner() {
         if (!receipt.status) return
 
         await Web3.updateWallet?.(
-            contractAccount.address,
+            wallet.address,
             {
                 owner: manageAccount.address,
                 identifier: manageAccount.identifier?.toText(),
             },
             { providerType: ProviderType.MaskWallet },
         )
-    }, [manageAccount?.address, smartPayChainId, contractAccount, wallet])
+    }, [manageAccount?.address, smartPayChainId, wallet])
 
     useTitle(t('popups_wallet_change_owner'))
-
-    const onCreatePersona = useCallback(async () => {
-        browser.tabs.create({
-            active: true,
-            url: browser.runtime.getURL(`/dashboard.html#${DashboardRoutes.SignUp}`),
-        })
-        if (navigator.userAgent.includes('Firefox')) {
-            window.close()
-        }
-        await Services.Helper.removePopupWindow()
-    }, [])
-
-    const modalNavigate = useModalNavigate()
-    const onCreateWallet = useCallback(() => {
-        modalNavigate(PopupModalRoutes.SwitchWallet)
-    }, [modalNavigate])
 
     return (
         <>
@@ -343,6 +330,20 @@ export default function ChangeOwner() {
                     }}
                     inputProps={{ style: { cursor: 'pointer' } }}
                 />
+                {manageAccount ? (
+                    <Box display="flex" justifyContent="space-between" mt={2}>
+                        <Typography className={classes.label}>{t('gas_fee')}</Typography>
+                        <ChainContextProvider value={chainContextValue}>
+                            <GasSettingMenu
+                                gas={ETH_GAS_LIMIT}
+                                defaultChainId={chainId}
+                                owner={wallet?.owner}
+                                onChange={() => {}}
+                                allowMaskAsGas
+                            />
+                        </ChainContextProvider>
+                    </Box>
+                ) : null}
                 <Popover
                     open={!!anchorEl}
                     anchorEl={anchorEl}
@@ -361,12 +362,10 @@ export default function ChangeOwner() {
                                 key={persona.address}
                                 className={cx(
                                     classes.item,
-                                    isSameAddress(persona.address, contractAccount?.owner)
-                                        ? classes.disabledItem
-                                        : undefined,
+                                    isSameAddress(persona.address, wallet?.owner) ? classes.disabledItem : undefined,
                                 )}
                                 onClick={() => {
-                                    if (isSameAddress(persona.address, contractAccount?.owner)) return
+                                    if (isSameAddress(persona.address, wallet?.owner)) return
                                     setManageAccount({
                                         type: ManagerAccountType.Persona,
                                         name: persona.nickname,
@@ -395,12 +394,10 @@ export default function ChangeOwner() {
                                 key={wallet.address}
                                 className={cx(
                                     classes.item,
-                                    isSameAddress(wallet.address, contractAccount?.owner)
-                                        ? classes.disabledItem
-                                        : undefined,
+                                    isSameAddress(wallet.address, wallet?.owner) ? classes.disabledItem : undefined,
                                 )}
                                 onClick={() => {
-                                    if (isSameAddress(wallet.address, contractAccount?.owner)) return
+                                    if (isSameAddress(wallet.address, wallet?.owner)) return
                                     setManageAccount({
                                         type: ManagerAccountType.Wallet,
                                         name: wallet.name,
@@ -427,14 +424,7 @@ export default function ChangeOwner() {
                 <Button
                     variant="contained"
                     className={cx(classes.button, classes.secondaryButton)}
-                    onClick={() => {
-                        const toBeClose = new URLSearchParams(location.search).get('toBeClose')
-                        if (toBeClose) {
-                            Services.Helper.removePopupWindow()
-                        } else {
-                            navigate(-1)
-                        }
-                    }}>
+                    onClick={() => navigate(-1)}>
                     {t('cancel')}
                 </Button>
                 <Button variant="contained" className={classes.button} onClick={handleConfirm}>
