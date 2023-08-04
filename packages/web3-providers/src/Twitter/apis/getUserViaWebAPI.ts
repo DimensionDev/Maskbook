@@ -2,8 +2,10 @@ import urlcat from 'urlcat'
 import { isNull } from 'lodash-es'
 import { attemptTimes } from '@masknet/web3-shared-base'
 import { getTokens, getHeaders } from './getTokens.js'
+import { fetchGlobal } from '../../helpers/fetchGlobal.js'
+import { Expiration } from '../../helpers/fetchSquashed.js'
+import { Duration, staleCached } from '../../helpers/fetchCached.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'
-import { fetchSquashed, staleCached } from '../../entry-helpers.js'
 
 const features = {
     responsive_web_twitter_blue_verified_badge_is_enabled: true,
@@ -45,7 +47,10 @@ export async function getUserViaWebAPI(screenName: string): Promise<TwitterBaseA
     const request = await createRequest(screenName)
     if (!request) return null
 
-    const response = await fetchSquashed(request)
+    const response = await fetchGlobal(request, undefined, {
+        cacheDuration: Duration.SHORT,
+        squashExpiration: Expiration.SHORT,
+    })
     if (response.ok) {
         const json: TwitterBaseAPI.UserByScreenNameResponse = await response.json()
         return json.data.user.result
