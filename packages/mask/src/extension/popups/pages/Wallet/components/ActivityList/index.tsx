@@ -34,7 +34,7 @@ export const ActivityList = memo<ActivityListProps>(function ActivityList() {
 
     const modifyTransaction = useCallback(
         async (transaction: RecentTransaction<ChainId, Transaction>, replaceType: ReplaceType) => {
-            const candidate = transaction.candidates[transaction.id]
+            const candidate = transaction.candidates[transaction.indexId]
             if (!candidate) return
             const oldConfig = {
                 gas: candidate.gas!,

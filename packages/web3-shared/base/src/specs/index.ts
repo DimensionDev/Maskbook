@@ -431,7 +431,7 @@ export interface NonFungibleCollectionOverview {
 export interface NonFungibleTokenActivity<ChainId, SchemaType> {
     hash: string
     event_type: ActivityType
-    transaction_link: string
+    transaction_link?: string
     timestamp: number
     imageURL: string
     trade_price?: number

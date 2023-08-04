@@ -208,7 +208,7 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
     const { t } = useI18N()
     const { classes, cx } = useStyles({})
     // candidate is current transaction
-    const candidate = transaction.candidates[transaction.id]
+    const candidate = transaction.candidates[transaction.indexId]
     const toAddress = candidate.to
     const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, toAddress)
     const descriptors = useNetworkDescriptors(NetworkPluginID.PLUGIN_EVM)
