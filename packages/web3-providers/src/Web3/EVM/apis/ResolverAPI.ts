@@ -15,13 +15,19 @@ import { NetworkResolverAPI_Base } from '../../Base/apis/NetworkExplorerAPI.js'
 
 export class ChainResolverAPI extends ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
     constructor() {
-        super(() => [...CHAIN_DESCRIPTORS, ...(Web3StateRef.value.Network?.networks?.getCurrentValue() ?? [])])
+        super(() => {
+            if (!Web3StateRef.value?.Network?.networks) return CHAIN_DESCRIPTORS
+            return [...CHAIN_DESCRIPTORS, ...(Web3StateRef.value.Network.networks.getCurrentValue() ?? [])]
+        })
     }
 }
 
 export class ExplorerResolverAPI extends ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
     constructor() {
-        super(() => [...CHAIN_DESCRIPTORS, ...(Web3StateRef.value.Network?.networks?.getCurrentValue() ?? [])])
+        super(() => {
+            if (!Web3StateRef.value?.Network?.networks) return CHAIN_DESCRIPTORS
+            return [...CHAIN_DESCRIPTORS, ...(Web3StateRef.value.Network.networks.getCurrentValue() ?? [])]
+        })
     }
 }
 

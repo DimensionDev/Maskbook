@@ -3,12 +3,7 @@ import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { useRowSize } from '@masknet/shared-base-ui'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import {
-    useBlockedFungibleTokens,
-    useChainContext,
-    useNetworkDescriptors,
-    useWeb3State,
-} from '@masknet/web3-hooks-base'
+import { useBlockedFungibleTokens, useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
@@ -144,13 +139,13 @@ const AddToken = memo(function AddToken() {
         defaultChainId ? Number.parseInt(defaultChainId, 10) : ChainId.Mainnet,
     )
 
-    const allNetworks = useNetworkDescriptors(NetworkPluginID.PLUGIN_EVM)
-
+    const allNetworks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
     const supportedChains = currentTab === TabType.Tokens ? TokenSupportedChains : CollectibleSupportedChains
-
     const networks = useMemo(() => {
         return sortBy(
-            allNetworks.filter((x) => x.isMainnet && supportedChains.includes(x.chainId)),
+            allNetworks.filter(
+                (x) => (x.network === 'mainnet' || x.isCustomized) && supportedChains.includes(x.chainId),
+            ),
             (x) => supportedChains.indexOf(x.chainId),
         )
     }, [allNetworks, supportedChains])

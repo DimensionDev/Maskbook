@@ -3,6 +3,10 @@ import { getPluginDefine } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext } from './useContext.js'
 
+/**
+ * @deprecated
+ * Get all networks with useNetworks() instead
+ */
 export function useNetworkDescriptors<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     expectedPluginID?: T,
 ) {

@@ -3,9 +3,8 @@ import { ImageIcon, TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3Others } from '@masknet/web3-hooks-base'
-import { type NetworkDescriptor } from '@masknet/web3-shared-base'
-import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
-import { Box, ListItem, ListItemIcon, ListItemText, Typography, type ListItemProps, Link } from '@mui/material'
+import { type ReasonableNetwork } from '@masknet/web3-shared-base'
+import { Box, Link, ListItem, ListItemIcon, ListItemText, Typography, type ListItemProps } from '@mui/material'
 import { memo, useEffect, useMemo, useRef } from 'react'
 import { formatTokenBalance } from '../../../../utils/index.js'
 
@@ -64,7 +63,7 @@ const useStyles = makeStyles()((theme) => {
 
 export interface TokenItemProps extends Omit<ListItemProps, 'onSelect'> {
     asset: Web3Helper.FungibleAssetAll
-    network: NetworkDescriptor<ChainId, NetworkType> | undefined
+    network: ReasonableNetwork<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll, Web3Helper.NetworkTypeAll>
     selected?: boolean
     onSelect?(asset: Web3Helper.FungibleAssetAll): void
 }
@@ -108,7 +107,7 @@ export const TokenItem = memo(function TokenItem({
                         address={asset.address}
                         size={36}
                     />
-                    <ImageIcon className={classes.badgeIcon} size={16} icon={network?.icon} />
+                    <ImageIcon className={classes.badgeIcon} size={16} icon={network?.iconUrl} name={network.name} />
                 </Box>
             </ListItemIcon>
             <ListItemText

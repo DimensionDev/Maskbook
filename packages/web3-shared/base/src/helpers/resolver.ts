@@ -108,53 +108,53 @@ export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
         explorerUrl: getExplorerUrl,
         addressLink: (chainId: ChainId, address: string, tokenId?: string) => {
             const explorerUrl = getExplorerUrl(chainId)
-            if (!explorerUrl.url) return ''
+            if (!explorerUrl.url) return
             return urlcat(explorerUrl.url, addressPathname, {
                 address,
-                ...explorerUrl?.parameters,
+                ...explorerUrl.parameters,
             })
         },
         blockLink: (chainId: ChainId, blockNumber: number) => {
             const explorerUrl = getExplorerUrl(chainId)
-            if (!explorerUrl.url) return ''
+            if (!explorerUrl.url) return
 
             return urlcat(explorerUrl.url, blockPathname, {
                 blockNumber,
-                ...explorerUrl?.parameters,
+                ...explorerUrl.parameters,
             })
         },
         transactionLink: (chainId: ChainId, id: string) => {
             const explorerUrl = getExplorerUrl(chainId)
-            if (!explorerUrl.url) return ''
+            if (!explorerUrl.url) return
 
             return urlcat(explorerUrl.url, transactionPathname, {
                 id,
-                ...explorerUrl?.parameters,
+                ...explorerUrl.parameters,
             })
         },
         domainLink: (chainId: ChainId, domain: string) => {
             const explorerUrl = getExplorerUrl(chainId)
-            if (!explorerUrl.url) return ''
+            if (!explorerUrl.url) return
             return urlcat(explorerUrl.url, domainPathname, {
                 domain,
-                ...explorerUrl?.parameters,
+                ...explorerUrl.parameters,
             })
         },
         fungibleTokenLink: (chainId: ChainId, address: string) => {
             const explorerUrl = getExplorerUrl(chainId)
-            if (!address || !explorerUrl.url) return ''
+            if (!address || !explorerUrl.url) return
             return urlcat(explorerUrl.url, fungibleTokenPathname, {
                 address,
-                ...explorerUrl?.parameters,
+                ...explorerUrl.parameters,
             })
         },
         nonFungibleTokenLink: (chainId: ChainId, address: string, tokenId: string) => {
             const explorerUrl = getExplorerUrl(chainId)
-            if (!explorerUrl.url) return ''
+            if (!explorerUrl.url) return
             return urlcat(explorerUrl.url, nonFungibleTokenPathname, {
                 address,
                 tokenId,
-                ...explorerUrl?.parameters,
+                ...explorerUrl.parameters,
             })
         },
     }
