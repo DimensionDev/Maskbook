@@ -5,10 +5,10 @@ import type { SingletonModalRefCreator } from '@masknet/shared-base'
 import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
 import type { GasSetting, ReplaceType } from '../../pages/Wallet/type.js'
 
-export interface GasSettingModalOpenProps {
+export type GasSettingModalOpenProps = {
     chainId: ChainId
     config: GasSetting
-    nonce?: string
+    nonce?: string | number
     replaceType?: ReplaceType
 }
 
@@ -24,7 +24,7 @@ export const GasSettingModal = forwardRef<
     const [chainId, setChainId] = useState<ChainId | undefined>()
     const [replaceType, setReplaceType] = useState<ReplaceType>()
     const [gasConfig, setGasConfig] = useState<GasSetting>(initGasSetting)
-    const [nonce, setNonce] = useState('')
+    const [nonce, setNonce] = useState<string | number>('')
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
             setChainId(props.chainId)

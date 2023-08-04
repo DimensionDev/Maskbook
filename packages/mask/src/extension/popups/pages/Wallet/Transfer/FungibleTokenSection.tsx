@@ -15,7 +15,6 @@ import {
 import { isLessThan, isLte, isZero, leftShift, rightShift } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, type GasConfig } from '@masknet/web3-shared-evm'
 import { Box, Input, Typography } from '@mui/material'
-import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
@@ -154,6 +153,9 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const isLoadingBalance = selectedAsset?.balance ? false : isLoadingAvailableBalance || isLoading
     const tokenBalance = isLoadingAvailableBalance || isLoading ? selectedAsset?.balance : balance
 
+    const decimals = token?.decimals || selectedAsset?.decimals
+    const uiTokenBalance = tokenBalance && decimals ? leftShift(tokenBalance, decimals).toString() : '0'
+
     return (
         <>
             <Box
@@ -192,18 +194,19 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                             className={classes.maxButton}
                             onClick={() => {
                                 if (!balance || !token?.decimals) return
-                                setAmount(leftShift(balance, token.decimals).toFixed())
+                                setAmount(uiTokenBalance)
                             }}>
                             {t('max')}
                         </Typography>
                     }
                     value={amount}
                     onChange={(e) => {
-                        if (!balance || !token?.decimals || !e.target.value) {
-                            setAmount(e.target.value)
+                        let value = e.target.value
+                        if (!balance || !token?.decimals || !value) {
+                            setAmount(value)
                             return
                         }
-                        const value = BigNumber.min(e.target.value, leftShift(balance, token.decimals)).toFixed()
+                        value = isLessThan(value, uiTokenBalance) ? value : uiTokenBalance
                         return setAmount(value)
                     }}
                 />
