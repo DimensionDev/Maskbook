@@ -41,7 +41,7 @@ const WalletSettings = memo(() => {
                     )}
                     <div className={classes.walletInfo}>
                         <Typography className={classes.primaryItemText}>{wallet.name}</Typography>
-                        <Typography className={classes.primaryItemSecondeText}>{wallet.address}</Typography>
+                        <Typography className={classes.primaryItemSecondText}>{wallet.address}</Typography>
                     </div>
                 </Box>
                 <Icons.ArrowDownRound color={theme.palette.maskColor.white} size={24} />

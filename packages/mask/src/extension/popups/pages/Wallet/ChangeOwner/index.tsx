@@ -1,17 +1,12 @@
+import urlcat from 'urlcat'
 import { useCallback, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useContainer } from 'unstated-next'
-import { Box, Link, Popover, Typography, Button } from '@mui/material'
+import { Box, Link, Popover, Typography, Button, alpha } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { CopyButton, FormattedAddress } from '@masknet/shared'
-import {
-    DashboardRoutes,
-    ECKeyIdentifier,
-    formatPersonaFingerprint,
-    type NetworkPluginID,
-    PopupModalRoutes,
-} from '@masknet/shared-base'
+import { CopyButton } from '@masknet/shared'
+import { DashboardRoutes, ECKeyIdentifier, type NetworkPluginID, PopupModalRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext, useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -25,40 +20,86 @@ import { PopupContext } from '../../../hook/usePopupContext.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { WalletContext } from '../hooks/useWalletContext.js'
 import { useModalNavigate } from '../../../components/index.js'
+import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
         padding: theme.spacing(2),
     },
     title: {
-        fontSize: 12,
+        fontSize: 14,
+        fontWeight: 700,
         lineHeight: '16px',
-        color: '#1C68F3',
+        color: theme.palette.maskColor.main,
     },
-    wallet: {
-        padding: theme.spacing(1.25),
+    list: {
+        padding: 0,
+        height: 212,
+        overflow: 'auto',
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
+    },
+    primaryItem: {
+        margin: 0,
+        cursor: 'default',
+        background:
+            theme.palette.mode === 'light'
+                ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(255, 255, 255, 0.90) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.20) 1.03%, rgba(98, 152, 234, 0.20) 1.04%, rgba(98, 126, 234, 0.20) 100%)'
+                : 'linear-gradient(180deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.00) 100%)',
+    },
+    secondItem: {
+        margin: 0,
+        cursor: 'default',
+        background: theme.palette.maskColor.bottom,
+        border: `1px solid ${theme.palette.maskColor.line}`,
+    },
+    primaryItemText: {
+        fontSize: 14,
+        fontWeight: 700,
+        color: theme.palette.maskColor.main,
+    },
+    primaryItemSecondText: {
+        display: 'flex',
+        fontSize: 10,
+        fontWeight: 400,
+        color: theme.palette.maskColor.secondaryMain,
+    },
+    walletAddress: {
+        transform: 'translateY(3px)',
+        marginRight: 4,
+    },
+    walletInfo: {
+        marginLeft: 12,
+        height: 38,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+    },
+    item: {
+        display: 'flex',
+        padding: theme.spacing(1.5),
+        alignItems: 'center',
+        cursor: 'pointer',
+        justifyContent: 'space-between',
+        background: theme.palette.maskColor.bottom,
+        borderRadius: 16,
+        '&:hover': {
+            background: theme.palette.maskColor.bg,
+        },
+    },
+    primaryItemBox: {
         display: 'flex',
         alignItems: 'center',
-        columnGap: 4,
+        height: 36,
     },
-    text: {
-        fontSize: 12,
-        lineHeight: '16px',
-        color: '#1C68F3',
-        fontWeight: 600,
-        display: 'flex',
-    },
-    icon: {
-        fontSize: 12,
-        height: 12,
-        width: 12,
-        color: '#1C68F3',
-        cursor: 'pointer',
-        marginLeft: 4,
-    },
+
     paper: {
         padding: theme.spacing(1.5),
         borderRadius: 16,
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     popoverTitle: {
         fontSize: 16,
@@ -67,35 +108,12 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
     },
-    add: {
-        fontSize: 16,
-        lineHeight: '20px',
-        fontWeight: 700,
-        cursor: 'pointer',
-    },
-    placeholder: {
-        padding: theme.spacing(3.5, 1),
-        color: theme.palette.maskColor.second,
-    },
-    list: {
-        padding: theme.spacing(2, 0),
-    },
-    item: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        cursor: 'pointer',
-    },
     identity: {
         fontSIze: 14,
         lineHeight: '18px',
         color: '#767F8D',
         display: 'flex',
         alignItems: 'center',
-    },
-    copy: {
-        fontSize: 14,
-        width: 14,
-        height: 14,
     },
     button: {
         fontWeight: 600,
@@ -123,6 +141,22 @@ const useStyles = makeStyles()((theme) => ({
     },
     disabledItem: {
         opacity: 0.5,
+    },
+    linkIcon: {
+        color: theme.palette.maskColor.main,
+        cursor: 'pointer',
+        width: 16,
+        height: 16,
+        marginRight: 4,
+    },
+    avatar: {
+        borderRadius: '50%',
+        height: 24,
+        width: 24,
+        background: alpha(theme.palette.maskColor.primary, 0.2),
+    },
+    input: {
+        fontSize: 13,
     },
 }))
 
@@ -158,6 +192,17 @@ export default function ChangeOwner() {
     }, [])
 
     const walletManagers = useMemo(() => wallets.filter((x) => !x.owner), [wallets])
+
+    const walletManager = useMemo(
+        () => wallets.find((x) => !x.owner && isSameAddress(wallet?.owner, x.address)),
+        [walletManagers, wallet],
+    )
+    const personaManager = useMemo(
+        () => personaManagers?.find((x) => isSameAddress(wallet?.owner, x.address)),
+        [personaManagers, wallet],
+    )
+
+    const managerAddress = walletManager?.address ?? personaManager?.address
 
     const [, handleConfirm] = useAsyncFn(async () => {
         if (!manageAccount?.address || !contractAccount) return
@@ -214,39 +259,85 @@ export default function ChangeOwner() {
     return (
         <>
             <div className={classes.content}>
-                <Typography className={classes.title}>{t('popups_wallet_current_managed_accounts')}</Typography>
-                <Box className={classes.wallet}>
-                    <Icons.MaskWallet />
-                    <Box>
-                        <Typography className={classes.text}>{contractAccount?.name}</Typography>
-                        <Typography className={classes.text}>
-                            <FormattedAddress
-                                address={contractAccount?.address}
-                                size={4}
-                                formatter={formatEthereumAddress}
-                            />
-                            <Link
-                                display="flex"
-                                alignItems="center"
-                                href={
-                                    contractAccount?.address
-                                        ? ExplorerResolver.addressLink(chainId, contractAccount.address)
-                                        : undefined
-                                }
-                                target="_blank"
-                                rel="noopener noreferrer">
-                                <Icons.PopupLink className={classes.icon} />
-                            </Link>
-                        </Typography>
+                <Box className={cx(classes.item, classes.primaryItem)}>
+                    <Box className={classes.primaryItemBox}>
+                        <Icons.SmartPay size={24} />
+                        <div className={classes.walletInfo}>
+                            <Typography className={classes.primaryItemText}>{wallet?.name}</Typography>
+                            <Typography className={classes.primaryItemSecondText}>
+                                <span className={classes.walletAddress}>{wallet?.address}</span>
+                                {wallet?.address ? (
+                                    <>
+                                        <CopyButton size={16} className={classes.linkIcon} text={wallet.address} />
+                                        <Link
+                                            href={ExplorerResolver.addressLink(chainId, wallet.address)}
+                                            target="_blank"
+                                            title="View on Explorer"
+                                            rel="noopener noreferrer"
+                                            onClick={(event) => {
+                                                event.stopPropagation()
+                                            }}
+                                            className={classes.linkIcon}>
+                                            <Icons.LinkOut size={16} className={classes.linkIcon} />
+                                        </Link>
+                                    </>
+                                ) : null}
+                            </Typography>
+                        </div>
                     </Box>
                 </Box>
-                <Typography className={classes.title} sx={{ mb: 1.25 }}>
+                <Typography className={classes.title} sx={{ mb: 2, mt: 2 }}>
+                    {t('popups_wallet_settings_current_management_account')}
+                </Typography>
+                <Box className={cx(classes.item, classes.secondItem)}>
+                    <Box className={classes.primaryItemBox}>
+                        {walletManager ? (
+                            <Icons.ETH size={24} />
+                        ) : personaManager ? (
+                            <div className={classes.avatar}>
+                                <PersonaAvatar avatar={personaManager.avatar} size={24} />
+                            </div>
+                        ) : null}
+                        <div className={classes.walletInfo}>
+                            <Typography className={classes.primaryItemText}>
+                                {walletManager?.name ?? personaManager?.nickname}
+                            </Typography>
+                            <Typography className={classes.primaryItemSecondText}>
+                                <span className={classes.walletAddress}>{managerAddress}</span>
+                                {managerAddress ? (
+                                    <>
+                                        <CopyButton size={16} className={classes.linkIcon} text={managerAddress} />
+                                        <Link
+                                            href={
+                                                walletManager
+                                                    ? ExplorerResolver.addressLink(chainId, managerAddress)
+                                                    : urlcat('https://web3.bio/', { s: managerAddress })
+                                            }
+                                            target="_blank"
+                                            title="View on Explorer"
+                                            rel="noopener noreferrer"
+                                            onClick={(event) => {
+                                                event.stopPropagation()
+                                            }}
+                                            className={classes.linkIcon}>
+                                            <Icons.LinkOut size={16} className={classes.linkIcon} />
+                                        </Link>
+                                    </>
+                                ) : null}
+                            </Typography>
+                        </div>
+                    </Box>
+                </Box>
+                <Typography className={classes.title} sx={{ mb: 2, mt: 2 }}>
                     {t('popups_wallet_set_a_new_manage_account')}
                 </Typography>
                 <StyledInput
-                    placeholder="Select"
-                    InputProps={{ endAdornment: <Icons.ArrowDrop size={20} /> }}
-                    value={manageAccount?.name}
+                    placeholder={t('popups_wallet_settings_local_persona_or_wallet_only')}
+                    InputProps={{
+                        endAdornment: <Icons.ArrowDownRound size={18} sx={{ cursor: 'pointer' }} />,
+                        classes: { input: classes.input },
+                    }}
+                    value={manageAccount?.address}
                     onMouseDown={(event) => {
                         setAnchorEl(event.currentTarget)
                     }}
@@ -259,117 +350,77 @@ export default function ChangeOwner() {
                         setAnchorEl(null)
                     }}
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-                    PaperProps={{ style: { minWidth: `${anchorEl?.clientWidth ?? 568}px` }, className: classes.paper }}
+                    PaperProps={{
+                        style: { minWidth: `${anchorEl?.clientWidth ?? 568}px`, height: 212 },
+                        className: classes.paper,
+                    }}
                     disableRestoreFocus>
-                    <Typography className={classes.popoverTitle}>
-                        {t('persona')}{' '}
-                        <Typography className={classes.add} onClick={onCreatePersona}>
-                            {t('add')}
-                        </Typography>
-                    </Typography>
-                    {personaManagers?.length ? (
-                        <Box className={classes.list}>
-                            {personaManagers.map((persona, index) => (
-                                <Box
-                                    key={index}
-                                    className={cx(
-                                        classes.item,
-                                        isSameAddress(persona.address, contractAccount?.owner)
-                                            ? classes.disabledItem
-                                            : undefined,
-                                    )}
-                                    onClick={() => {
-                                        if (isSameAddress(persona.address, contractAccount?.owner)) return
-                                        setManageAccount({
-                                            type: ManagerAccountType.Persona,
-                                            name: persona.nickname,
-                                            address: persona.address,
-                                            identifier: persona.identifier,
-                                        })
-                                    }}>
-                                    <Box display="flex" alignItems="center" columnGap={0.5}>
-                                        <Icons.MaskBlue size={30} />
-                                        <Box>
-                                            <Typography className={classes.popoverTitle}>{persona.nickname}</Typography>
-                                            <Typography className={classes.identity}>
-                                                {formatPersonaFingerprint(persona.identifier.rawPublicKey, 4)}
-                                                <CopyButton
-                                                    text={persona.identifier.rawPublicKey}
-                                                    className={classes.copy}
-                                                    size={14}
-                                                />
-                                                {persona.address ? (
-                                                    <Link
-                                                        sx={{ display: 'flex', alignItems: 'center', color: 'inherit' }}
-                                                        href={ExplorerResolver.addressLink(chainId, persona.address)}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer">
-                                                        <Icons.PopupLink className={classes.copy} />
-                                                    </Link>
-                                                ) : null}
-                                            </Typography>
-                                        </Box>
+                    <Box className={classes.list}>
+                        {personaManagers?.map((persona) => (
+                            <Box
+                                key={persona.address}
+                                className={cx(
+                                    classes.item,
+                                    isSameAddress(persona.address, contractAccount?.owner)
+                                        ? classes.disabledItem
+                                        : undefined,
+                                )}
+                                onClick={() => {
+                                    if (isSameAddress(persona.address, contractAccount?.owner)) return
+                                    setManageAccount({
+                                        type: ManagerAccountType.Persona,
+                                        name: persona.nickname,
+                                        address: persona.address,
+                                        identifier: persona.identifier,
+                                    })
+                                    setAnchorEl(null)
+                                }}>
+                                <Box display="flex" alignItems="center" columnGap={0.5}>
+                                    <div className={classes.avatar}>
+                                        <PersonaAvatar avatar={persona.avatar} size={24} />
+                                    </div>
+
+                                    <Box ml="6px">
+                                        <Typography className={classes.popoverTitle}>{persona.nickname}</Typography>
+                                        <Typography className={classes.identity}>
+                                            {persona.address ? formatEthereumAddress(persona.address, 4) : null}
+                                        </Typography>
                                     </Box>
-                                    <StyledRadio checked={isSameAddress(persona.address, manageAccount?.address)} />
                                 </Box>
-                            ))}
-                        </Box>
-                    ) : (
-                        <Box className={classes.placeholder}>
-                            <Typography>{t('popups_no_persona_found')}</Typography>
-                        </Box>
-                    )}
-                    <Typography className={classes.popoverTitle}>
-                        {t('popups_wallet_wallets')}
-                        <Typography className={classes.add} onClick={onCreateWallet}>
-                            {t('add')}
-                        </Typography>
-                    </Typography>
-                    {walletManagers?.length ? (
-                        <Box className={classes.list}>
-                            {walletManagers?.map((wallet, index) => (
-                                <Box
-                                    key={index}
-                                    className={cx(
-                                        classes.item,
-                                        isSameAddress(wallet.address, contractAccount?.owner)
-                                            ? classes.disabledItem
-                                            : undefined,
-                                    )}
-                                    onClick={() => {
-                                        if (isSameAddress(wallet.address, contractAccount?.owner)) return
-                                        setManageAccount({
-                                            type: ManagerAccountType.Wallet,
-                                            name: wallet.name,
-                                            address: wallet.address,
-                                        })
-                                    }}>
-                                    <Box display="flex" alignItems="center" columnGap={0.5}>
-                                        <Icons.MaskBlue size={30} />
-                                        <Box>
-                                            <Typography className={classes.popoverTitle}>{wallet.name}</Typography>
-                                            <Typography className={classes.identity}>
-                                                {formatEthereumAddress(wallet.address, 4)}
-                                                <CopyButton text={wallet.address} className={classes.copy} size={14} />
-                                                <Link
-                                                    sx={{ display: 'flex', alignItems: 'center', color: 'inherit' }}
-                                                    href={ExplorerResolver.addressLink(chainId, wallet.address)}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer">
-                                                    <Icons.PopupLink className={classes.copy} />
-                                                </Link>
-                                            </Typography>
-                                        </Box>
+                                <StyledRadio checked={isSameAddress(persona.address, manageAccount?.address)} />
+                            </Box>
+                        ))}
+                        {walletManagers?.map((wallet) => (
+                            <Box
+                                key={wallet.address}
+                                className={cx(
+                                    classes.item,
+                                    isSameAddress(wallet.address, contractAccount?.owner)
+                                        ? classes.disabledItem
+                                        : undefined,
+                                )}
+                                onClick={() => {
+                                    if (isSameAddress(wallet.address, contractAccount?.owner)) return
+                                    setManageAccount({
+                                        type: ManagerAccountType.Wallet,
+                                        name: wallet.name,
+                                        address: wallet.address,
+                                    })
+                                    setAnchorEl(null)
+                                }}>
+                                <Box display="flex" alignItems="center" columnGap={0.5}>
+                                    <Icons.MaskBlue size={24} />
+                                    <Box ml="6px">
+                                        <Typography className={classes.popoverTitle}>{wallet.name}</Typography>
+                                        <Typography className={classes.identity}>
+                                            {formatEthereumAddress(wallet.address, 4)}
+                                        </Typography>
                                     </Box>
-                                    <StyledRadio checked={isSameAddress(manageAccount?.address, wallet.address)} />
                                 </Box>
-                            ))}
-                        </Box>
-                    ) : (
-                        <Box className={classes.placeholder}>
-                            <Typography>{t('popups_no_wallets_found')}</Typography>
-                        </Box>
-                    )}
+                                <StyledRadio checked={isSameAddress(manageAccount?.address, wallet.address)} />
+                            </Box>
+                        ))}
+                    </Box>
                 </Popover>
             </div>
             <div className={classes.controller}>
@@ -387,7 +438,7 @@ export default function ChangeOwner() {
                     {t('cancel')}
                 </Button>
                 <Button variant="contained" className={classes.button} onClick={handleConfirm}>
-                    {t('confirm')}
+                    {t('wallet_status_button_change')}
                 </Button>
             </div>
         </>

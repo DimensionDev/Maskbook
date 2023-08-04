@@ -26,7 +26,7 @@ export const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         color: theme.palette.maskColor.white,
     },
-    primaryItemSecondeText: {
+    primaryItemSecondText: {
         fontSize: 10,
         fontWeight: 700,
         color: alpha(theme.palette.maskColor.white, 0.8),
