@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { Icon, WalletIcon } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { ActionButton, makeStyles } from '@masknet/theme'
+import { ActionButton, TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { Box, List, ListItem, Typography, alpha } from '@mui/material'
 import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -36,15 +36,20 @@ const useStyles = makeStyles()((theme) => ({
     text: {
         marginLeft: theme.spacing(1),
         marginRight: 'auto',
+        flexGrow: 1,
         display: 'flex',
         alignItems: 'center',
     },
     name: {
         marginRight: theme.spacing(0.5),
         fontSize: 12,
+        maxWidth: '50%',
         color: theme.palette.maskColor.main,
         fontWeight: 700,
         lineHeight: '16px',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
     },
     footer: {
         padding: theme.spacing(2),
@@ -81,7 +86,9 @@ export const NetworkManagement = memo(function NetworkManagement() {
                                 <Icon size={24} name={network.name} AvatarProps={{ sx: { fontSize: 12 } }} />
                             )}
                             <Box className={classes.text}>
-                                <Typography className={classes.name}>{network.name}</Typography>
+                                <TextOverflowTooltip title={network.name}>
+                                    <Typography className={classes.name}>{network.name}</Typography>
+                                </TextOverflowTooltip>
                                 {network.isCustomized ? null : <Icons.Lock size={16} />}
                             </Box>
                             <Icons.RightArrow color={theme.palette.maskColor.second} size={20} />

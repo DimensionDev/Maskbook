@@ -25,7 +25,8 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => (
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        height: 42,
+        height: 38,
+        gap: theme.spacing(1),
     },
     action: {
         background: 'rgba(255, 255, 255, 0.8)',
@@ -61,19 +62,23 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => (
     arrow: {
         fontSize: 20,
         transition: 'all 300ms',
+        flexShrink: 0,
         color: theme.palette.maskColor.secondaryDark,
     },
     networkSelector: {
         display: 'flex',
+        flexGrow: 1,
         alignItems: 'center',
         cursor: 'pointer',
     },
     chainName: {
+        flexGrow: 1,
         lineHeight: '18px',
         color: '#15181B',
         fontWeight: 700,
-        display: 'flex',
-        alignItems: 'center',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
     },
     connected: {
         display: 'flex',
@@ -130,6 +135,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
     const connected = data?.connected
     const addressLink = ExplorerResolver.addressLink(chainId, wallet.address)
 
+    const networkName = currentNetwork?.name || currentNetwork?.fullName
     return (
         <Box className={classes.container}>
             <div className={classes.topbar}>
@@ -144,16 +150,21 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                         <ChainIcon size={30} color={currentNetwork?.color} name={currentNetwork?.name} />
                     )}
 
-                    <div style={{ marginLeft: 4 }}>
-                        <Typography className={classes.chainName} component="div">
-                            {currentNetwork?.name || currentNetwork?.fullName}
+                    <Box ml={0.5} overflow="auto">
+                        <Box overflow="auto" display="flex">
+                            <TextOverflowTooltip title={networkName}>
+                                <Typography className={classes.chainName} component="div">
+                                    {networkName}
+                                </Typography>
+                            </TextOverflowTooltip>
                             {!disabled && !wallet.owner ? (
                                 <Icons.ArrowDrop
+                                    size={20}
                                     className={classes.arrow}
                                     style={{ transform: status ? 'rotate(-180deg)' : undefined }}
                                 />
                             ) : null}
-                        </Typography>
+                        </Box>
                         {data?.url || isLoading ? (
                             <ProgressiveText className={classes.connected} loading={isLoading}>
                                 <span
@@ -169,7 +180,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                                 </span>
                             </ProgressiveText>
                         ) : null}
-                    </div>
+                    </Box>
                 </div>
                 <div
                     className={classes.action}
