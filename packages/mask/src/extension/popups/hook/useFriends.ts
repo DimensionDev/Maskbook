@@ -14,7 +14,8 @@ import { uniqBy } from 'lodash-es'
 
 export type FriendsInformation = ProfileInformation & {
     profiles: BindingProof[]
-} & { id: string }
+    id: string
+}
 
 export function useFriends(network: string): AsyncStateRetry<FriendsInformation[]> {
     const currentPersona = useCurrentPersona()
