@@ -1,11 +1,11 @@
+import { memo } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Link, List, ListItem, ListItemText } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
-import { explorerResolver } from '@masknet/web3-shared-evm'
-import { Link, List, ListItem, ListItemText } from '@mui/material'
-import { memo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { ExplorerResolver } from '@masknet/web3-providers'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { WalletContext } from '../hooks/useWalletContext.js'
@@ -37,14 +37,13 @@ const useStyles = makeStyles()((theme) => ({
 
 const WalletSettings = memo(() => {
     const { t } = useI18N()
+    const { classes } = useStyles()
     const navigate = useNavigate()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const currentWallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { selectedWallet } = WalletContext.useContainer()
 
     const wallet = selectedWallet ?? currentWallet
-
-    const { classes } = useStyles()
 
     useTitle(t('popups_wallet_setting'))
 
@@ -76,7 +75,7 @@ const WalletSettings = memo(() => {
                     </ListItem>
                 ) : null}
                 <Link
-                    href={explorerResolver.addressLink(chainId, wallet?.address ?? '')}
+                    href={ExplorerResolver.addressLink(chainId, wallet?.address ?? '')}
                     target="_blank"
                     rel="noopener noreferrer">
                     <ListItem className={classes.item}>

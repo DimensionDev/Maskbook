@@ -1,15 +1,13 @@
-import { Flags } from '@masknet/flags'
 import { Icons } from '@masknet/icons'
 import { Icon, WalletIcon } from '@masknet/shared'
-import { PopupRoutes } from '@masknet/shared-base'
+import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Box, List, ListItem, Typography, alpha } from '@mui/material'
-import { useQuery } from '@tanstack/react-query'
-import { memo, useMemo } from 'react'
+import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
-import { getEvmNetworks, useI18N } from '../../../../../utils/index.js'
+import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/index.js'
+import { useNetworks } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -63,32 +61,28 @@ export const NetworkManagement = memo(function NetworkManagement() {
     const navigate = useNavigate()
     useTitle(t('management_network'))
 
-    const networks = useMemo(() => getEvmNetworks(Flags.support_testnet_switch), [])
-    const { data: customizedNetworks = [] } = useQuery(['system', 'wallet', 'networks'], () => WalletRPC.getNetworks())
+    const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
 
     return (
         <main className={classes.main}>
             <List className={classes.list}>
-                {[...networks, ...customizedNetworks].map((network) => {
-                    // Only NetworkDescriptor has `icon`
-                    const isBuiltIn = 'icon' in network
-                    const id = 'id' in network ? network.id : network.chainId
+                {networks.map((network) => {
                     return (
                         <ListItem
-                            key={id}
+                            key={network.ID}
                             className={classes.network}
                             role="link"
                             onClick={() => {
-                                navigate(`${PopupRoutes.EditNetwork}/${id}`)
+                                navigate(`${PopupRoutes.EditNetwork}/${network.ID}`)
                             }}>
-                            {isBuiltIn ? (
-                                <WalletIcon size={24} mainIcon={network.icon} />
+                            {network.iconUrl ? (
+                                <WalletIcon size={24} mainIcon={network.iconUrl} />
                             ) : (
                                 <Icon size={24} name={network.name} AvatarProps={{ sx: { fontSize: 12 } }} />
                             )}
                             <Box className={classes.text}>
                                 <Typography className={classes.name}>{network.name}</Typography>
-                                {isBuiltIn ? <Icons.Lock size={16} /> : null}
+                                {network.isCustomized ? null : <Icons.Lock size={16} />}
                             </Box>
                             <Icons.RightArrow color={theme.palette.maskColor.second} size={20} />
                         </ListItem>

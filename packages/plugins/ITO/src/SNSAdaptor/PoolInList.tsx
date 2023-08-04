@@ -5,7 +5,7 @@ import { useSubscription } from 'use-subscription'
 import formatDateTime from 'date-fns/format'
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID, PersistentStorages } from '@masknet/shared-base'
-import { SchemaType, chainResolver, type ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { SchemaType, type ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { isZero, formatBalance, type FungibleToken, TokenType } from '@masknet/web3-shared-base'
 import {
     Box,
@@ -21,12 +21,13 @@ import {
     Typography,
 } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
+import { useChainContext, useFungibleToken, useFungibleTokens } from '@masknet/web3-hooks-base'
+import { ChainResolver } from '@masknet/web3-providers'
 import { MSG_DELIMITER } from '../constants.js'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
 import { usePoolTradeInfo } from './hooks/usePoolTradeInfo.js'
 import { ITO_Status, type JSON_PayloadFromChain, type JSON_PayloadInMask, type PoolFromNetwork } from '../types.js'
 import { useDestructCallback } from './hooks/useDestructCallback.js'
-import { useChainContext, useFungibleToken, useFungibleTokens } from '@masknet/web3-hooks-base'
 import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -319,7 +320,7 @@ export function PoolInList(props: PoolInListProps) {
                                                 size="small"
                                                 style={{ whiteSpace: 'nowrap' }}>
                                                 {isNativeTokenAddress(token.address)
-                                                    ? chainResolver.nativeCurrency(token.chainId)?.symbol
+                                                    ? ChainResolver.nativeCurrency(token.chainId)?.symbol
                                                     : token.symbol}
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
@@ -333,7 +334,7 @@ export function PoolInList(props: PoolInListProps) {
                                                     6,
                                                 )}{' '}
                                                 {isNativeTokenAddress(token.address)
-                                                    ? chainResolver.nativeCurrency(token.chainId)?.symbol
+                                                    ? ChainResolver.nativeCurrency(token.chainId)?.symbol
                                                     : token.symbol}{' '}
                                                 / {poolToken.symbol}
                                             </TableCell>

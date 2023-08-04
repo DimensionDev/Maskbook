@@ -1,10 +1,10 @@
+import { useMemo } from 'react'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useSocialAccountsAll } from '@masknet/web3-hooks-base'
 import type { Plugin } from '@masknet/plugin-infra'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useSocialIdentityByUserId } from '../DataSource/useActivatedUI.js'
-import { useMemo } from 'react'
 
 const useStyles = makeStyles()(() => ({
     root: {},

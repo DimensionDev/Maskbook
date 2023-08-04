@@ -1,16 +1,17 @@
-import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { PluginCyberConnectRPC } from '../messages.js'
-import { Link, Stack, Tab, Typography } from '@mui/material'
-import ConnectButton from './ConnectButton.js'
 import Avatar from 'boring-avatars'
-import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { useQuery } from '@tanstack/react-query'
+import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { Link, Stack, Tab, Typography } from '@mui/material'
+import { TabContext, TabPanel } from '@mui/lab'
+import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { FormattedAddress, CopyButton, ReloadStatus, LoadingStatus, EmptyStatus } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { TabContext, TabPanel } from '@mui/lab'
+import { ExplorerResolver } from '@masknet/web3-providers'
+import ConnectButton from './ConnectButton.js'
+import { FollowersPage } from './FollowersPage.js'
 import { useI18N } from '../locales/index.js'
 import { ProfileTab } from '../constants.js'
-import { FollowersPage } from './FollowersPage.js'
-import { useQuery } from '@tanstack/react-query'
+import { PluginCyberConnectRPC } from '../messages.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -160,7 +161,7 @@ function Profile({ url }: { url: string }) {
                             <Link
                                 onClick={(event) => event.stopPropagation()}
                                 style={{ width: 16, height: 16 }}
-                                href={explorerResolver.addressLink(ChainId.Mainnet, identity?.address ?? '')}
+                                href={ExplorerResolver.addressLink(ChainId.Mainnet, identity?.address ?? '')}
                                 target="_blank"
                                 rel="noopener noreferrer">
                                 <Icons.PopupLink className={classes.PopupLink} size={16} />

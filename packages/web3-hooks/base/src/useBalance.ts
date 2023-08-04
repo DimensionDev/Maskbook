@@ -18,7 +18,7 @@ export function useBalance<T extends NetworkPluginID = NetworkPluginID>(pluginID
     const { BalanceNotifier } = useWeb3State(pluginID)
 
     const result = useQuery({
-        enabled: !!account,
+        enabled: !!account && !!Web3,
         queryKey: ['balance', pluginID, chainId, account, options],
         queryFn: async () => {
             if (!account) return 0

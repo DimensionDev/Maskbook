@@ -111,7 +111,7 @@ export function TokenBridgeCard({ feed, ...rest }: TokenBridgeCardProps) {
                         <NetworkIcon
                             pluginID={NetworkPluginID.PLUGIN_EVM}
                             chainId={metadata.target_network.chain_id}
-                            ImageIconProps={{ size: 32 }}
+                            size={32}
                         />
                     </div>
                 </div>

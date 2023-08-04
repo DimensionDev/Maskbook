@@ -1,5 +1,7 @@
-import { BigNumber } from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useAsync } from 'react-use'
+import { BigNumber } from 'bignumber.js'
+import { Icons } from '@masknet/icons'
 import {
     useChainContext,
     useBalance,
@@ -8,13 +10,7 @@ import {
     useNativeTokenPrice,
     useWallet,
 } from '@masknet/web3-hooks-base'
-import {
-    chainResolver,
-    explorerResolver,
-    type GasConfig,
-    useRedPacketConstants,
-    createNativeToken,
-} from '@masknet/web3-shared-evm'
+import { type GasConfig, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { type RedPacketRecord, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
@@ -22,13 +18,11 @@ import { PluginWalletStatusBar, ChainBoundary, SelectGasSettingsToolbar } from '
 import { useTransactionValue } from '@masknet/web3-hooks-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Launch as LaunchIcon } from '@mui/icons-material'
-import { SmartPayBundler, Web3 } from '@masknet/web3-providers'
+import { ChainResolver, ExplorerResolver, SmartPayBundler, Web3 } from '@masknet/web3-providers'
 import { formatBalance, isSameAddress, isZero } from '@masknet/web3-shared-base'
 import { type RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback.js'
 import { useI18N } from '../locales/index.js'
 import { RedPacketRPC } from '../messages.js'
-import { Icons } from '@masknet/icons'
-import { useAsync } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -174,7 +168,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
 
     // assemble JSON payload
     const payload = useRef<RedPacketJSONPayload>({
-        network: chainResolver.chainName(chainId),
+        network: ChainResolver.chainName(chainId),
     } as RedPacketJSONPayload)
 
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
@@ -187,10 +181,10 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         }
         payload.current.contract_address = contractAddress
         payload.current.contract_version = contract_version
-        payload.current.network = chainResolver.networkType(chainId)
+        payload.current.network = ChainResolver.networkType(chainId)
     }, [chainId, networkType, contract_version])
 
-    const nativeTokenDetailed = useMemo(() => createNativeToken(chainId), [chainId])
+    const nativeTokenDetailed = useMemo(() => ChainResolver.nativeCurrency(chainId), [chainId])
     const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const wallet = useWallet()
     const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
@@ -244,7 +238,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                                 <Link
                                     color="textPrimary"
                                     className={classes.link}
-                                    href={explorerResolver.fungibleTokenLink(chainId, settings?.token?.address ?? '')}
+                                    href={ExplorerResolver.fungibleTokenLink(chainId, settings?.token?.address ?? '')}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     onClick={stop}>
@@ -272,7 +266,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                         <Link
                             color="textPrimary"
                             className={classes.link}
-                            href={explorerResolver.fungibleTokenLink(chainId, settings?.token?.address ?? '')}
+                            href={ExplorerResolver.fungibleTokenLink(chainId, settings?.token?.address ?? '')}
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={stop}>

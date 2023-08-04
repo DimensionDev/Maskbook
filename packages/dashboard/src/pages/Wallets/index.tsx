@@ -2,11 +2,12 @@ import { useEffect, useMemo, useState, useCallback } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
 import { PluginTransakMessages } from '@masknet/plugin-transak'
-import { useChainContext, useNetworkDescriptor, useNetworkContext, useWallets } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { useChainContext, useNetworkDescriptor, useNetworkContext, useWallets } from '@masknet/web3-hooks-base'
 import { DashboardRoutes, relativeRouteOf, CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { ChainId, createNativeToken, type SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { ChainResolver } from '@masknet/web3-providers'
 import type { FungibleToken, NonFungibleToken } from '@masknet/web3-shared-base'
 import { useDashboardI18N } from '../../locales/index.js'
 import { PageFrame } from '../../components/PageFrame/index.js'
@@ -104,7 +105,9 @@ function Wallets() {
                             navigate(DashboardRoutes.WalletsTransfer, {
                                 state: {
                                     type: TransferTab.Token,
-                                    token: createNativeToken((selectedNetwork?.chainId ?? chainId) as ChainId),
+                                    token: ChainResolver.nativeCurrency(
+                                        (selectedNetwork?.chainId ?? chainId) as ChainId,
+                                    ),
                                 },
                             })
                         }

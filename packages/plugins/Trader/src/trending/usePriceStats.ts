@@ -1,9 +1,9 @@
 import { useAsyncRetry } from 'react-use'
 import { isUndefined } from 'lodash-es'
+import { Days } from '@masknet/shared-base'
 import type { SourceType } from '@masknet/web3-shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { TrendingAPI } from '@masknet/web3-providers/types'
 import { PluginTraderRPC } from '../messages.js'
 import type { Currency } from '../types/index.js'
 
@@ -11,13 +11,13 @@ export function usePriceStats({
     chainId: expectedChainId,
     coinId,
     currency,
-    days = TrendingAPI.Days.MAX,
+    days = Days.MAX,
     sourceType,
 }: {
     chainId: Web3Helper.ChainIdAll
     coinId?: string
     currency?: Currency
-    days?: TrendingAPI.Days
+    days?: Days
     sourceType?: SourceType
 }) {
     const { chainId } = useChainContext({

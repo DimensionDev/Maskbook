@@ -1049,6 +1049,7 @@
     "popups_wallet_unlock_erc20_balance_too_high_tips": "This allows the third party to spend all your token balance until it reaches the cap or you revoke the spending cap. If this is not intended, consider setting a lower spending cap.",
     "popups_wallet_unlock_erc20_approve_amount": "Approve amount",
     "popups_wallet_unlock_erc20_granted_to": "Granted to",
+    "popups_wallet_rpc_error": "There was a network or RPC provider error, please try again later!",
     "nft_wallet_label": "Wallet",
     "plugin_profile_no_wallets": "Connect your wallet here.<br/>This section will be shown to your encrypted friends.<br/>The display content includes digital art, donations, badges<br/>and other public information on chain.",
     "nft_input_address_label": "Please input contract address",

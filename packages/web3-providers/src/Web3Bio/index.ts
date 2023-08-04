@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 import { EMPTY_LIST, createBindingProofFromProfileQuery, NextIDPlatform, type BindingProof } from '@masknet/shared-base'
 import type { Web3BioBaseAPI } from '../types/Web3Bio.js'
-import { fetchCachedJSON } from '../entry-helpers.js'
+import { fetchCachedJSON } from '../helpers/fetchJSON.js'
 import { WEB3_BIO_ROOT_URL } from './constants.js'
 import type { Web3BioProfile } from './types.js'
 

@@ -55,9 +55,9 @@ import {
 } from '../types/Trader.js'
 
 export class UniSwapV2Like implements TraderAPI.Provider {
-    public Web3 = new ConnectionReadonlyAPI()
-    public Contract = new ContractReadonlyAPI()
-    public Multicall = new MulticallAPI()
+    protected Web3 = new ConnectionReadonlyAPI()
+    protected Contract = new ContractReadonlyAPI()
+    protected Multicall = new MulticallAPI()
 
     constructor(public provider: TradeProvider) {}
 

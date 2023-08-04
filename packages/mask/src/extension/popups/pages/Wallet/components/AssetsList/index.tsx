@@ -11,9 +11,8 @@ import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useContainer } from 'unstated-next'
 import urlcat from 'urlcat'
-import { useI18N } from '../../../../../../utils/index.js'
+import { useI18N, formatTokenBalance } from '../../../../../../utils/index.js'
 import { WalletContext } from '../../hooks/useWalletContext.js'
-import { formatBalance2 } from '../../../../../../utils/formatBalance2.js'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -160,7 +159,7 @@ export const AssetsListUI = memo<AssetsListUIProps>(function AssetsListUI({ isEx
                             className={classes.text}
                             secondary={
                                 <Typography className={classes.balance}>
-                                    {formatBalance2(
+                                    {formatTokenBalance(
                                         isNaN(asset.balance) ? 0 : asset.balance,
                                         isNaN(asset.decimals) ? 0 : asset.decimals,
                                     )}

@@ -1,22 +1,17 @@
+import { useCallback, useState } from 'react'
+import { Trans } from 'react-i18next'
+import { Link, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { formatBalance, type FungibleToken, isGreaterThan, rightShift } from '@masknet/web3-shared-base'
-import { useCallback, useState } from 'react'
-import {
-    type SchemaType,
-    formatEthereumAddress,
-    explorerResolver,
-    useITOConstants,
-    type ChainId,
-} from '@masknet/web3-shared-evm'
-import { Link, Typography } from '@mui/material'
-import { Trans } from 'react-i18next'
+import { type SchemaType, formatEthereumAddress, useITOConstants, type ChainId } from '@masknet/web3-shared-evm'
 import {
     FungibleTokenInput,
     WalletConnectedBoundary,
     EthereumERC20TokenApprovedBoundary,
     SelectFungibleTokenModal,
 } from '@masknet/shared'
+import { ExplorerResolver } from '@masknet/web3-providers'
 import { useChainContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { useI18N } from '../locales/index.js'
 
@@ -85,7 +80,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
                                 <Link
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    href={explorerResolver.addressLink(chainId, ITO2_CONTRACT_ADDRESS)}
+                                    href={ExplorerResolver.addressLink(chainId, ITO2_CONTRACT_ADDRESS)}
                                 />
                             ),
                         }}

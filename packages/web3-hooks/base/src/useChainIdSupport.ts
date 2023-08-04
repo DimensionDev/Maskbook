@@ -11,5 +11,5 @@ export function useChainIdSupport<T extends NetworkPluginID>(
     const { chainId } = useChainContext({ chainId: expectedChainId })
     const Others = useWeb3Others(pluginID)
 
-    return Others.chainResolver.isSupport?.(chainId, feature) ?? false
+    return Others.chainResolver.isFeatureSupported?.(chainId, feature ?? '') ?? false
 }

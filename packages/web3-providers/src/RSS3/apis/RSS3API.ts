@@ -7,7 +7,7 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { RSS3_FEED_ENDPOINT, RSS3_ENDPOINT, NameServiceToChainMap, RSS3_LEGACY_ENDPOINT } from '../constants.js'
 import { type RSS3NameServiceResponse, type RSS3ProfilesResponse, TAG, TYPE } from '../types.js'
 import { normalizedFeed } from '../helpers.js'
-import { fetchJSON } from '../../entry-helpers.js'
+import { fetchJSON } from '../../helpers/fetchJSON.js'
 import { RSS3BaseAPI, type HubOptions_Base } from '../../entry-types.js'
 import { queryClient } from '@masknet/shared-base-ui'
 

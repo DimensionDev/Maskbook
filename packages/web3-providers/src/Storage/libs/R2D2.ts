@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { KV_ROOT_URL } from '../constants/index.js'
-import { fetchSquashedJSON } from '../../entry-helpers.js'
+import { fetchSquashedJSON } from '../../helpers/fetchJSON.js'
 
 export class R2D2GetterSetter<T> {
     constructor(private prefix: string) {}

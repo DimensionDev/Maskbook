@@ -14,21 +14,19 @@ import {
     type SocialIdentity,
 } from '@masknet/shared-base'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
-import {
-    ARBID,
-    ENS,
-    Firefly,
-    Lens,
-    MaskX,
-    NextIDProof,
-    NextIDStorageProvider,
-    RSS3,
-    SpaceID,
-    Twitter,
-} from '@masknet/web3-providers'
-import { MaskX_BaseAPI } from '@masknet/web3-providers/types'
 import { IdentityServiceState } from '../../Base/state/Identity.js'
 import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
+import { MaskX_BaseAPI } from '../../../entry-types.js'
+import { ARBID_API } from '../../../ARBID/index.js'
+import { ENS_API } from '../../../ENS/index.js'
+import { FireflyAPI } from '../../../Firefly/index.js'
+import { LensAPI } from '../../../Lens/index.js'
+import { MaskX_API } from '../../../MaskX/index.js'
+import { NextIDProofAPI } from '../../../NextID/proof.js'
+import { RSS3API } from '../../../RSS3/index.js'
+import { SpaceID_API } from '../../../SpaceID/index.js'
+import { TwitterAPI } from '../../../Twitter/index.js'
+import { NextIDStorageAPI } from '../../../NextID/kv.js'
 
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
 const SID_RE = /[^\s()[\]]{1,256}\.bnb\b/gi
@@ -38,6 +36,17 @@ const CROSSBELL_HANDLE_RE = /[\w.]+\.csb/gi
 const LENS_RE = /[^\s()[\]]{1,256}\.lens\b/i
 const LENS_URL_RE = /https?:\/\/.+\/(\w+\.lens)/
 const LENS_DOMAIN_RE = /[a-z][\d_a-z]{4,25}\.lens/
+
+const ARBID = new ARBID_API()
+const ENS = new ENS_API()
+const Firefly = new FireflyAPI()
+const Lens = new LensAPI()
+const MaskX = new MaskX_API()
+const NextIDProof = new NextIDProofAPI()
+const NextIDStorageProvider = new NextIDStorageAPI()
+const RSS3 = new RSS3API()
+const SpaceID = new SpaceID_API()
+const Twitter = new TwitterAPI()
 
 function getENSNames(userId: string, nickname: string, bio: string) {
     return [userId.match(ENS_RE), nickname.match(ENS_RE), bio.match(ENS_RE)].flatMap((result) => result ?? [])

@@ -168,7 +168,7 @@ export function SelectGasSettingsToolbarUI({
     const { chainId } = useChainContext()
     const Others = useWeb3Others()
 
-    const isSupportEIP1559 = Others.chainResolver.isSupport(chainId, 'EIP1559')
+    const isSupportEIP1559 = Others.chainResolver.isFeatureSupported(chainId, 'EIP1559')
     const setGasConfigCallback = useCallback(
         (maxFeePerGas: string, maxPriorityFeePerGas: string, gasPrice: string) =>
             onChange?.(

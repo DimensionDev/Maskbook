@@ -1,19 +1,20 @@
 import { memo, useCallback, useMemo } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import urlcat from 'urlcat'
+import { Box, Link, List, ListItem, MenuItem, Typography, useTheme, type ListItemProps } from '@mui/material'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useWallets } from '@masknet/web3-hooks-base'
-import { explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { Box, Link, List, ListItem, MenuItem, Typography, useTheme, type ListItemProps } from '@mui/material'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import { EmojiAvatar, FormattedAddress, useMenuConfig } from '@masknet/shared'
+import { ExplorerResolver } from '@masknet/web3-providers'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { ContactsContext } from '../../../hook/useContactsContext.js'
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
 import { DeleteContactModal, EditContactModal } from '../../../modals/modals.js'
 import { ContactType } from '../type.js'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import urlcat from 'urlcat'
 
 const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivideLine }) => ({
     root: {
@@ -288,7 +289,7 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
                         <FormattedAddress address={address} formatter={formatEthereumAddress} size={4} />
                         <Link
                             onClick={(event) => event.stopPropagation()}
-                            href={explorerResolver.addressLink(chainId, address ?? '')}
+                            href={ExplorerResolver.addressLink(chainId, address ?? '')}
                             target="_blank"
                             rel="noopener noreferrer">
                             <Icons.PopupLink className={classes.icon} />

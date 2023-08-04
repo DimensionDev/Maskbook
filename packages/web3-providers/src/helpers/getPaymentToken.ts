@@ -1,8 +1,7 @@
 import {
+    type ChainId,
     APE,
     BUSD,
-    type ChainId,
-    createNativeToken,
     DAI,
     HUSD,
     RARI,
@@ -11,6 +10,7 @@ import {
     USDT,
     WBTC,
     WNATIVE,
+    CHAIN_DESCRIPTORS,
 } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -23,10 +23,13 @@ export function getPaymentToken(
     token?: { name?: string; symbol?: string; address?: string },
 ) {
     if (!token) return
-    return [createNativeToken(chainId as ChainId), ...tokens.map((x) => x[chainId])].find(
+    return [
+        CHAIN_DESCRIPTORS.find((x) => x.chainId === (chainId as ChainId))?.nativeCurrency,
+        ...tokens.map((x) => x[chainId]),
+    ].find(
         (x) =>
-            x.name.toLowerCase() === token.name?.toLowerCase() ||
-            x.symbol.toLowerCase() === token.symbol?.toLowerCase() ||
-            isSameAddress(x.address, token.address),
+            x?.name.toLowerCase() === token.name?.toLowerCase() ||
+            x?.symbol.toLowerCase() === token.symbol?.toLowerCase() ||
+            isSameAddress(x?.address, token.address),
     )
 }

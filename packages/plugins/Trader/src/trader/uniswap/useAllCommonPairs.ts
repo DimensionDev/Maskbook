@@ -14,7 +14,7 @@ export function useAllCurrencyCombinations(tradeProvider: TradeProvider, currenc
     const { chainId } = useChainContext()
     const Others = useWeb3Others()
     const { pluginID } = useNetworkContext()
-    const chainIdValid = Others.chainResolver.isValid(chainId)
+    const chainIdValid = Others.chainResolver.isValidChainId(chainId)
     const context = useGetTradeContext(tradeProvider)
 
     const [tokenA, tokenB] = chainIdValid ? [currencyA?.wrapped, currencyB?.wrapped] : [undefined, undefined]

@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import type { MindBaseAPI } from '../entry-types.js'
-import { fetchJSON } from '../entry-helpers.js'
+import { fetchJSON } from '../helpers/fetchJSON.js'
 
 export class MindsAPI implements MindBaseAPI.Provider {
     async getUserByScreenName(screenName?: string) {
