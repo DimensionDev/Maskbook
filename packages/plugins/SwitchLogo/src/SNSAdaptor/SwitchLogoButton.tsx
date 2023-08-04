@@ -1,12 +1,11 @@
 /* cspell: disable */
 import { useCallback, useLayoutEffect } from 'react'
-import { PluginID, SwitchLogoType, switchLogoSettings } from '@masknet/shared-base'
+import { CrossIsolationMessages, PluginID, SwitchLogoType, switchLogoSettings } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { useIsMinimalMode, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
-import { SwitchLogoDialog } from './modals.js'
 
 const BlueBirdHTML = `
      <svg
@@ -82,7 +81,7 @@ export function SwitchLogoButton() {
 
     const onClick = useCallback(() => {
         if (disable) return
-        SwitchLogoDialog.open()
+        CrossIsolationMessages.events.switchLogoDialogUpdated.sendToLocal({ open: true })
     }, [disable])
 
     return (

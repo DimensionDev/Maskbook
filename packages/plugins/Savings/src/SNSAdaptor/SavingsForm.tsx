@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
+import { useQueryClient } from '@tanstack/react-query'
 import { BigNumber } from 'bignumber.js'
 import type { AbiItem } from 'web3-utils'
 import {
@@ -33,14 +34,13 @@ import {
     isZero,
     rightShift,
 } from '@masknet/web3-shared-base'
-import { Contract, Others, Web3 } from '@masknet/web3-providers'
-import { SchemaType, chainResolver, getAaveConstant, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { useSNSAdaptorContext } from '@masknet/plugin-infra/dom'
+import { Contract, Others, Web3, ChainResolver } from '@masknet/web3-providers'
+import { SchemaType, getAaveConstant, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
-import { useQueryClient } from '@tanstack/react-query'
 import { ProtocolType, TabType, type SavingsProtocol } from '../types.js'
 import { useApr, useBalance } from './hooks/index.js'
 import { useI18N } from '../locales/index.js'
-import { useSNSAdaptorContext } from '@masknet/plugin-infra/dom'
 
 export const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
@@ -199,7 +199,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     const promote = {
         amount: inputAmount,
         symbol: protocol.bareToken.symbol,
-        chain: chainResolver.chainName(chainId) ?? '',
+        chain: ChainResolver.chainName(chainId) ?? '',
         account: isTwitter() ? t.twitter_account() : t.facebook_account(),
     }
     const shareText = isDeposit ? t.promote_savings(promote) : t.promote_withdraw(promote)

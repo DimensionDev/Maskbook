@@ -1,7 +1,7 @@
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, type ChainIdOptionalRecord, type SchemaType } from '../types/index.js'
-import { chainResolver } from '../helpers/resolver.js'
 import { createERC20Tokens } from '../helpers/token.js'
+import { CHAIN_DESCRIPTORS } from './descriptors.js'
 
 export type ERC20AgainstToken = Readonly<ChainIdOptionalRecord<Array<FungibleToken<ChainId, SchemaType.ERC20>>>>
 
@@ -57,10 +57,14 @@ export const xYUMI = createERC20Tokens('xYUMI_ADDRESS', 'Yumi Staking Token', 'x
 export const OP = createERC20Tokens('OP_ADDRESS', 'Optimism', 'OP', 18)
 export const RARI = createERC20Tokens('RARI_ADDRESS', 'Rarible', 'RARI', 18)
 
+const getNativeCurrency = (chainId: ChainId) => {
+    return CHAIN_DESCRIPTORS.find((x) => x.chainId === chainId)?.nativeCurrency
+}
+
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',
-    (chainId) => `Wrapped ${chainResolver?.nativeCurrency(chainId)?.name ?? 'Ether'}`,
-    (chainId) => `W${chainResolver?.nativeCurrency(chainId)?.symbol ?? 'ETH'}`,
+    (chainId) => `Wrapped ${getNativeCurrency(chainId)?.name ?? 'Ether'}`,
+    (chainId) => `W${getNativeCurrency(chainId)?.symbol ?? 'ETH'}`,
     18,
 )
 

@@ -1,23 +1,24 @@
-import { memo, type MouseEvent } from 'react'
-import { makeStyles, TextOverflowTooltip } from '@masknet/theme'
-import { Box, Link, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
+import { ChainIcon, CopyButton, FormattedAddress, ImageIcon, ProgressiveText } from '@masknet/shared'
 import type { Wallet } from '@masknet/shared-base'
-import { CopyButton, FormattedAddress, ImageIcon, ProgressiveText } from '@masknet/shared'
-import { type ChainId, formatEthereumAddress, explorerResolver, type NetworkType } from '@masknet/web3-shared-evm'
-import type { NetworkDescriptor } from '@masknet/web3-shared-base'
+import { makeStyles, TextOverflowTooltip } from '@masknet/theme'
+import { ExplorerResolver } from '@masknet/web3-providers'
+import type { ReasonableNetwork } from '@masknet/web3-shared-base'
+import { formatEthereumAddress, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
+import { Box, Link, Typography } from '@mui/material'
+import { memo, type MouseEvent } from 'react'
 import { useI18N } from '../../../../../../utils/index.js'
+import { useConnected } from '../../hooks/useConnected.js'
 import { ActionGroup } from '../ActionGroup/index.js'
 import { WalletAssetsValue } from './WalletAssetsValue.js'
-import { useConnected } from '../../hooks/useConnected.js'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => ({
     container: {
         background:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
         padding: '16px',
         // padding bottom space for assets tabs
-        paddingBottom: 34,
+        paddingBottom: !disabled ? 34 : 16,
         lineHeight: 0,
     },
     topbar: {
@@ -107,7 +108,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 interface WalletHeaderUIProps {
-    currentNetwork: NetworkDescriptor<ChainId, NetworkType>
+    currentNetwork?: ReasonableNetwork<ChainId, SchemaType, NetworkType>
     chainId: ChainId
     onOpenNetworkSelector: (event: MouseEvent<HTMLDivElement>) => void
     onActionClick: () => void
@@ -121,12 +122,13 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
     onOpenNetworkSelector,
     onActionClick,
     wallet,
-    disabled,
+    disabled = false,
 }) {
     const { t } = useI18N()
-    const { classes, cx } = useStyles()
+    const { classes, cx } = useStyles({ disabled })
     const { data, isLoading } = useConnected()
     const connected = data?.connected
+    const addressLink = ExplorerResolver.addressLink(chainId, wallet.address)
 
     return (
         <Box className={classes.container}>
@@ -136,11 +138,15 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                     onClick={(event) => {
                         if (!disabled && !wallet.owner) onOpenNetworkSelector(event)
                     }}>
-                    <ImageIcon size={30} icon={currentNetwork.icon} name={currentNetwork.name} />
+                    {currentNetwork?.iconUrl ? (
+                        <ImageIcon size={30} icon={currentNetwork?.iconUrl} name={currentNetwork?.name || '?'} />
+                    ) : (
+                        <ChainIcon size={30} color={currentNetwork?.color} name={currentNetwork?.name} />
+                    )}
 
                     <div style={{ marginLeft: 4 }}>
                         <Typography className={classes.chainName} component="div">
-                            {currentNetwork.name}
+                            {currentNetwork?.name || currentNetwork?.fullName}
                             {!disabled && !wallet.owner ? (
                                 <Icons.ArrowDrop
                                     className={classes.arrow}
@@ -178,21 +184,27 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                         <Typography className={classes.identifier}>
                             <FormattedAddress address={wallet.address} formatter={formatEthereumAddress} size={4} />
                             <CopyButton text={wallet.address} className={classes.icon} size={12} />
-                            <Link
-                                className={classes.icon}
-                                onClick={(event) => event.stopPropagation()}
-                                href={explorerResolver.addressLink(chainId, wallet.address ?? '')}
-                                target="_blank"
-                                rel="noopener noreferrer">
-                                <Icons.PopupLink size={12} />
-                            </Link>
+                            {addressLink ? (
+                                <Link
+                                    className={classes.icon}
+                                    onClick={(event) => event.stopPropagation()}
+                                    href={addressLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    <Icons.PopupLink size={12} />
+                                </Link>
+                            ) : null}
                         </Typography>
                     </Box>
                     {!disabled ? <Icons.ArrowDrop className={classes.arrow} /> : null}
                 </div>
             </div>
-            <WalletAssetsValue className={classes.balance} skeletonWidth={100} skeletonHeight="2em" />
-            <ActionGroup mt={2} />
+            {!disabled ? (
+                <>
+                    <WalletAssetsValue className={classes.balance} skeletonWidth={100} skeletonHeight="2em" />
+                    <ActionGroup mt={2} />
+                </>
+            ) : null}
         </Box>
     )
 })

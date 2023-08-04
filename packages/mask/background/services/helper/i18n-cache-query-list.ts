@@ -43,4 +43,5 @@ export default {
     'plugins/Savings/src/locales/%locale%.json': 'com.savings',
     'plugins/Snapshot/src/locales/%locale%.json': 'org.snapshot',
     'plugins/ProfileCard/src/locales/%locale%.json': 'io.mask.web3-profile-card',
+    'plugins/SwitchLogo/src/locales/%locale%.json': 'io.mask.switch-logo',
 }

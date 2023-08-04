@@ -43,7 +43,7 @@ export function GasOptionSelector(props: GasOptionSelectorProps) {
     const { classes } = useStyles()
     const { gasOptionType, setGasOptionType } = SettingsContext.useContainer()
 
-    const isEIP1559 = Others.chainResolver.isSupport(chainId, 'EIP1559')
+    const isEIP1559 = Others.chainResolver.isFeatureSupported(chainId, 'EIP1559')
 
     const onClick = useCallback(
         (type: GasOptionType, option: GasOption) => {

@@ -1,5 +1,6 @@
 export * from './Account.js'
 export * from './Color.js'
+export * from './Days.js'
 export * from './MIME.js'
 export * from './NameService.js'
 export * from './Observable.js'

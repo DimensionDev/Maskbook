@@ -1,29 +1,11 @@
-import {
-    Approval,
-    ChainbaseFungibleToken,
-    Cloudflare,
-    CoinGeckoPriceEVM,
-    DeBankFungibleToken,
-    GoPlusAuthorization,
-    R2D2TokenList,
-    Rabby,
-    Zerion,
-} from '@masknet/web3-providers'
-import type {
-    AuthorizationAPI,
-    FungibleTokenAPI,
-    TokenListAPI,
-    TokenIconAPI,
-    PriceAPI,
-} from '@masknet/web3-providers/types'
 import { SourceType, attemptUntil } from '@masknet/web3-shared-base'
 import {
     ChainId,
     type SchemaType,
     type ProviderType,
     type NetworkType,
-    type RequestArguments,
-    type RequestOptions,
+    type MessageRequest,
+    type MessageResponse,
     type Transaction,
     type TransactionParameter,
 } from '@masknet/web3-shared-evm'
@@ -32,17 +14,37 @@ import type { HubOptions_Base } from '../../Base/apis/HubOptionsAPI.js'
 import { HubFungibleAPI_Base } from '../../Base/apis/HubFungibleAPI.js'
 import { Web3StateRef } from './Web3StateAPI.js'
 import { HubOptionsAPI } from './HubOptionsAPI.js'
+import type { AuthorizationAPI, FungibleTokenAPI, TokenListAPI, TokenIconAPI, PriceAPI } from '../../../entry-types.js'
+import { ApprovalAPI } from '../../../Approval/index.js'
+import { ChainbaseFungibleTokenAPI } from '../../../Chainbase/index.js'
+import { CloudflareAPI } from '../../../Cloudflare/index.js'
+import { CoinGeckoPriceAPI_EVM } from '../../../CoinGecko/index.js'
+import { DeBankFungibleTokenAPI } from '../../../DeBank/index.js'
+import { GoPlusAuthorizationAPI } from '../../../GoPlusLabs/index.js'
+import { R2D2TokenListAPI } from '../../../R2D2/index.js'
+import { RabbyAPI } from '../../../Rabby/index.js'
+import { ZerionAPI } from '../../../Zerion/index.js'
 
 export class HubFungibleAPI extends HubFungibleAPI_Base<
     ChainId,
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter
 > {
+    private Approval = new ApprovalAPI()
+    private ChainbaseFungibleToken = new ChainbaseFungibleTokenAPI()
+    private Cloudflare = new CloudflareAPI()
+    private CoinGeckoPriceEVM = new CoinGeckoPriceAPI_EVM()
+    private DeBankFungibleToken = new DeBankFungibleTokenAPI()
+    private GoPlusAuthorization = new GoPlusAuthorizationAPI()
+    private R2D2TokenList = new R2D2TokenListAPI()
+    private Rabby = new RabbyAPI()
+    private Zerion_ = new ZerionAPI()
+
     protected override HubOptions = new HubOptionsAPI(this.options)
 
     private Web3 = new ConnectionReadonlyAPI()
@@ -61,26 +63,26 @@ export class HubFungibleAPI extends HubFungibleAPI_Base<
                 PriceAPI.Provider<ChainId>
         >(
             {
-                [SourceType.Chainbase]: ChainbaseFungibleToken,
-                [SourceType.DeBank]: DeBankFungibleToken,
-                [SourceType.Zerion]: Zerion,
-                [SourceType.GoPlus]: GoPlusAuthorization,
-                [SourceType.Rabby]: Rabby,
-                [SourceType.Approval]: Approval,
-                [SourceType.R2D2]: R2D2TokenList,
-                [SourceType.CF]: Cloudflare,
-                [SourceType.CoinGecko]: CoinGeckoPriceEVM,
+                [SourceType.Chainbase]: this.ChainbaseFungibleToken,
+                [SourceType.DeBank]: this.DeBankFungibleToken,
+                [SourceType.Zerion]: this.Zerion_,
+                [SourceType.GoPlus]: this.GoPlusAuthorization,
+                [SourceType.Rabby]: this.Rabby,
+                [SourceType.Approval]: this.Approval,
+                [SourceType.R2D2]: this.R2D2TokenList,
+                [SourceType.CF]: this.Cloudflare,
+                [SourceType.CoinGecko]: this.CoinGeckoPriceEVM,
             },
             [
-                DeBankFungibleToken,
-                Approval,
-                Zerion,
-                ChainbaseFungibleToken,
-                Rabby,
-                GoPlusAuthorization,
-                R2D2TokenList,
-                Cloudflare,
-                CoinGeckoPriceEVM,
+                this.DeBankFungibleToken,
+                this.Approval,
+                this.Zerion_,
+                this.ChainbaseFungibleToken,
+                this.Rabby,
+                this.GoPlusAuthorization,
+                this.R2D2TokenList,
+                this.Cloudflare,
+                this.CoinGeckoPriceEVM,
             ],
             initial,
         )

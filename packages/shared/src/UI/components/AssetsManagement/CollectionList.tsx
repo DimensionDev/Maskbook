@@ -35,6 +35,10 @@ const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap 
                 display: 'none',
             },
         },
+        sidebar: {
+            paddingTop: gapIsNumber ? theme.spacing(gap) : gap,
+            paddingRight: theme.spacing(1.5),
+        },
         main: {
             display: 'flex',
             flexDirection: 'column',
@@ -173,7 +177,7 @@ export const CollectionList = memo(function CollectionList({
     const sidebar = disableSidebar ? null : (
         <SelectNetworkSidebar
             chainId={chainId}
-            gridProps={gridProps}
+            className={classes.sidebar}
             onChainChange={handleChainChange}
             pluginID={pluginID}
             networks={networks}

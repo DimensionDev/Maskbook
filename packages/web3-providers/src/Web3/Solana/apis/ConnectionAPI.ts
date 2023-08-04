@@ -9,7 +9,6 @@ import {
     type Block,
     type Web3Provider,
     type Web3,
-    createNativeToken,
     isNativeTokenAddress,
     getNativeTokenAddress,
     decodeAddress,
@@ -34,6 +33,7 @@ import { MagicEdenAPI } from '../../../MagicEden/index.js'
 import { SolanaWeb3API } from './Web3API.js'
 import { SolanaTransferAPI } from './TransferAPI.js'
 import { SolanaConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
+import { SolanaChainResolverAPI } from './ResolverAPI.js'
 import { SolanaWeb3StateRef } from './Web3StateAPI.js'
 import { SolanaFungibleTokenAPI } from './FungibleTokenAPI.js'
 import type { ConnectionOptions } from '../types/index.js'
@@ -56,10 +56,11 @@ export class SolanaConnectionAPI
             Web3Provider
         >
 {
-    constructor(private options?: ConnectionOptions) {}
-
     private MagicEden = new MagicEdenAPI()
     private FungibleToken = new SolanaFungibleTokenAPI()
+
+    constructor(private options?: ConnectionOptions) {}
+
     private Web3 = new SolanaWeb3API(this.options)
     private Transfer = new SolanaTransferAPI(this.options)
     private ConnectionOptions = new SolanaConnectionOptionsAPI(this.options)
@@ -277,7 +278,7 @@ export class SolanaConnectionAPI
 
     async getNativeToken(initial?: ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
-        return createNativeToken(options.chainId)
+        return new SolanaChainResolverAPI().nativeCurrency(options.chainId)
     }
 
     async getFungibleToken(address: string, initial?: ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {

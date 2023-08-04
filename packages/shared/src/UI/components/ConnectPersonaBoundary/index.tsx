@@ -44,7 +44,7 @@ interface ConnectPersonaBoundaryProps {
     beforeAction?: (status: PersonaConnectStatus) => Promise<void> | void
     afterAction?: (status: PersonaConnectStatus) => Promise<void> | void
     currentPersonaIdentifier: string
-    openDashboard: (route?: DashboardRoutes, search?: string) => void
+    openDashboard?: (route?: DashboardRoutes, search?: string) => void
     identity?: IdentityResolved
 }
 

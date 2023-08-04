@@ -18,8 +18,8 @@ export class HubCreatorAPI_Base<T extends NetworkPluginID> {
             Web3Helper.Definition[T]['SchemaType'],
             Web3Helper.Definition[T]['ProviderType'],
             Web3Helper.Definition[T]['NetworkType'],
-            Web3Helper.Definition[T]['RequestArguments'],
-            Web3Helper.Definition[T]['RequestOptions'],
+            Web3Helper.Definition[T]['MessageRequest'],
+            Web3Helper.Definition[T]['MessageResponse'],
             Web3Helper.Definition[T]['Transaction'],
             Web3Helper.Definition[T]['TransactionParameter'],
             Web3Helper.Definition[T]['GasOption']
@@ -36,8 +36,8 @@ export class HubCreatorAPI_Base<T extends NetworkPluginID> {
             Web3Helper.Definition[T]['SchemaType'],
             Web3Helper.Definition[T]['ProviderType'],
             Web3Helper.Definition[T]['NetworkType'],
-            Web3Helper.Definition[T]['RequestArguments'],
-            Web3Helper.Definition[T]['RequestOptions'],
+            Web3Helper.Definition[T]['MessageRequest'],
+            Web3Helper.Definition[T]['MessageResponse'],
             Web3Helper.Definition[T]['Transaction'],
             Web3Helper.Definition[T]['TransactionParameter']
         >,
@@ -46,8 +46,6 @@ export class HubCreatorAPI_Base<T extends NetworkPluginID> {
     private createCached = memoize(this.creator, resolver<Web3Helper.Definition[T]['ChainId']>)
 
     create(initial?: HubOptions_Base<Web3Helper.Definition[T]['ChainId']>) {
-        const options = this.Web3HubOptions.fill(initial)
-        if (!this.Web3Others.isValidChainId(options.chainId!)) return
         return this.createCached(initial)
     }
 }

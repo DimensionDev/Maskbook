@@ -20,6 +20,9 @@ export class SmartPayDescriptor extends BaseDescriptor implements TransactionDes
                             successfulDescription: 'Created a SmartPay wallet on Polygon network.',
                             failedDescription: '',
                         },
+                        popup: {
+                            method: name,
+                        },
                     }
                 case 'deploy':
                     return {
@@ -30,6 +33,9 @@ export class SmartPayDescriptor extends BaseDescriptor implements TransactionDes
                             successfulDescription: 'Deploy a SmartPay wallet on Polygon network.',
                             failedDescription: '',
                         },
+                        popup: {
+                            method: name,
+                        },
                     }
                 case 'changeOwner':
                     return {
@@ -39,6 +45,9 @@ export class SmartPayDescriptor extends BaseDescriptor implements TransactionDes
                         snackbar: {
                             successfulDescription: 'Change owner Successfully.',
                             failedDescription: '',
+                        },
+                        popup: {
+                            method: name,
                         },
                     }
                 default:

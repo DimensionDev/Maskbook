@@ -28,14 +28,16 @@ export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>
     const { chainId } = useChainContext(options)
     const { value: nativeTokenBalance = '0' } = useNativeTokenBalance(pluginID, options)
     const maskTokenAddress = useMaskTokenAddress(pluginID, options)
-    const { data: maskBalance = '0' } = useFungibleTokenBalance(undefined, maskTokenAddress)
-
-    const { data: tokenBalance = '0' } = useFungibleTokenBalance(pluginID, address, {
+    const { data: maskBalance = '0', isLoading: isLoadingMaskBalance } = useFungibleTokenBalance(
+        undefined,
+        maskTokenAddress,
+    )
+    const { data: tokenBalance = '0', isLoading: isLoadingTokenBalance } = useFungibleTokenBalance(pluginID, address, {
         chainId,
     })
 
     // #region paymaster ratio
-    const { value: currencyRatio } = useAsync(async () => {
+    const { value: currencyRatio, loading } = useAsync(async () => {
         const chainId = await SmartPayBundler.getSupportedChainId()
         const depositPaymaster = new DepositPaymaster(chainId)
         const ratio = await depositPaymaster.getRatio()
@@ -83,5 +85,6 @@ export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>
             isAvailableBalance && pluginID === NetworkPluginID.PLUGIN_EVM
                 ? BigNumber.max(new BigNumber(tokenBalance).minus(gasFee), 0).toString()
                 : tokenBalance,
+        isLoading: isLoadingMaskBalance || isLoadingTokenBalance || loading,
     }
 }

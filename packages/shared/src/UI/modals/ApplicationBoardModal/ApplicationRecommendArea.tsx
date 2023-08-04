@@ -50,7 +50,7 @@ const useStyles = makeStyles()(() => {
     }
 })
 
-interface Props {
+interface Props extends withClasses<'recommendFeatureAppListWrapper'> {
     recommendFeatureAppList: Application[]
     RenderEntryComponent: (props: { application: Application }) => JSX.Element
     isCarouselReady?: () => boolean | null
@@ -66,7 +66,7 @@ export function ApplicationRecommendArea(props: Props) {
         isHoveringCarousel,
         setIsHoveringCarousel,
     } = props
-    const { classes, cx } = useStyles()
+    const { classes, cx } = useStyles(undefined, { props })
     const [isPlaying, setIsPlaying] = useState(true)
 
     return (

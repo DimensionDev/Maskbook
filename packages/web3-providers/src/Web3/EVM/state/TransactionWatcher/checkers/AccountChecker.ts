@@ -1,8 +1,8 @@
 import { sha3, toHex } from 'web3-utils'
-import { EtherscanExplorer } from '@masknet/web3-providers'
-import type { ExplorerAPI } from '@masknet/web3-providers/types'
 import { type TransactionChecker, TransactionStatusType } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
+import { EtherscanExplorerAPI } from '../../../../../Etherscan/index.js'
+import type { ExplorerAPI } from '../../../../../entry-types.js'
 
 class TTL<T> {
     private cache: Record<string, { value: T; ttl: number; at: number }> = {}
@@ -30,6 +30,8 @@ export class AccountChecker implements TransactionChecker<ChainId, Transaction> 
 
     private ttl = new TTL<ExplorerAPI.Transaction[]>()
 
+    private EtherscanExplorer = new EtherscanExplorerAPI()
+
     private getExplorerTransactionId(transaction: ExplorerAPI.Transaction | null) {
         if (!transaction) return ''
         const { from, to, input, value } = transaction
@@ -47,7 +49,7 @@ export class AccountChecker implements TransactionChecker<ChainId, Transaction> 
         const hit = this.ttl.get(key)
         if (hit) return hit
 
-        const transactions = await EtherscanExplorer.getLatestTransactions(chainId, account, {
+        const transactions = await this.EtherscanExplorer.getLatestTransactions(chainId, account, {
             offset: AccountChecker.CHECK_LATEST_TRANSACTION_SIZE,
         })
         this.ttl.set(key, transactions, 15 * 1000)

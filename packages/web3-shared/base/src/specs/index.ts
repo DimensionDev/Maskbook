@@ -112,7 +112,7 @@ export enum ActivityType {
     CancelOffer = 'CancelOffer',
 }
 
-export enum RequestStateType {
+export enum MessageStateType {
     NOT_DEPEND = 1,
     APPROVED = 2,
     DENIED = 3,
@@ -185,14 +185,14 @@ export interface ChainDescriptor<ChainId, SchemaType, NetworkType> {
     ID: string
     type: NetworkType
     chainId: ChainId
-    coinMarketCapChainId: string
-    coinGeckoChainId: string
-    coinGeckoPlatformId: string
+    coinMarketCapChainId?: string
+    coinGeckoChainId?: string
+    coinGeckoPlatformId?: string
     name: string
     color?: string
     fullName?: string
     shortName?: string
-    network: 'mainnet' | 'testnet' | Omit<string, 'mainnet' | 'testnet'>
+    network: LiteralUnion<'mainnet' | 'testnet'>
     nativeCurrency: FungibleToken<ChainId, SchemaType>
     rpcUrl: string
     iconUrl?: string
@@ -218,21 +218,21 @@ export type TransferableNetwork<ChainId, SchemaType, NetworkType> = Omit<
     'ID'
 >
 
-export interface RequestDescriptor<Arguments, Options> {
+export interface MessageDescriptor<Request, Response> {
     ID: string
-    state: RequestStateType
-    arguments: Arguments
-    options?: Options
+    state: MessageStateType
+    request: Request
+    response?: Response
 }
 
-export type Request<Arguments, Options> = RequestDescriptor<Arguments, Options>
+export type Message<Request, Response> = MessageDescriptor<Request, Response>
 
-export type ReasonableRequest<Arguments, Options> = Request<Arguments, Options> & {
+export type ReasonableMessage<Request, Response> = Message<Request, Response> & {
     createdAt: Date
     updatedAt: Date
 }
 
-export type TransferableRequest<Arguments, Options> = Omit<Request<Arguments, Options>, 'ID'>
+export type TransferableMessage<Request, Response> = Omit<Message<Request, Response>, 'ID'>
 
 export interface NetworkDescriptor<ChainId, NetworkType> {
     /** An unique ID for each network */
@@ -774,6 +774,12 @@ export interface TransactionDescriptor<ChainId, Transaction, Parameter = string 
         failedTitle?: string
     }
     popup?: {
+        /** The spender address of erc20 approve */
+        spender?: string
+        /** The method name of contract function */
+        method?: string
+        /** The Non-Fungible token description */
+        tokenId?: string
         /** The custom token description */
         tokenDescription?: string
     }
@@ -1031,19 +1037,17 @@ export interface TokenState<ChainId, SchemaType> extends Startable {
     ): Promise<void>
 }
 
-export interface RequestState<Arguments, Options> extends Startable {
-    /** The tracked requests. */
-    requests?: Subscription<Array<ReasonableRequest<Arguments, Options>>>
+export interface MessageState<Request, Response> extends Startable {
+    /** All unresolved requests. */
+    messages?: Subscription<Array<ReasonableMessage<Request, Response>>>
+    /** Updates a request. */
+    updateMessage(id: string, updates: Partial<TransferableMessage<Request, Response>>): Promise<void>
     /** Applies a request. */
-    applyRequest(request: TransferableRequest<Arguments, Options>): Promise<ReasonableRequest<Arguments, Options>>
+    applyRequest(message: TransferableMessage<Request, Response>): Promise<ReasonableMessage<Request, Response>>
     /** Applies a request and waits for confirmation from the user. */
-    applyAndWaitRequest(
-        request: TransferableRequest<Arguments, Options>,
-    ): Promise<ReasonableRequest<Arguments, Options>>
-    /** Updates request with new arguments. */
-    updateRequest(id: string, updates: Partial<TransferableRequest<Arguments, Options>>): Promise<void>
+    applyAndWaitResponse<T>(message: TransferableMessage<Request, Response>): Promise<Response>
     /** Approves a request. */
-    approveRequest(id: string): Promise<void>
+    approveRequest(id: string, updates?: Request): Promise<void>
     /** Rejects a request. */
     denyRequest(id: string): Promise<void>
     /** Rejects all requests. */
@@ -1114,6 +1118,7 @@ export interface TransactionWatcherState<ChainId, Transaction> {
         status: TransactionStatusType,
     ) => Promise<void>
 }
+
 export interface ProviderState<ChainId, ProviderType, NetworkType> extends Startable {
     /** The account of the currently visiting site. */
     account?: Subscription<string>
@@ -1159,8 +1164,8 @@ export interface Web3State<
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter,
 > {
@@ -1171,7 +1176,7 @@ export interface Web3State<
     IdentityService?: IdentityServiceState<ChainId>
     NameService?: NameServiceState
     RiskWarning?: RiskWarningState
-    Request?: RequestState<RequestArguments, RequestOptions>
+    Message?: MessageState<MessageRequest, MessageResponse>
     Settings?: SettingsState
     Token?: TokenState<ChainId, SchemaType>
     Transaction?: TransactionState<ChainId, Transaction>

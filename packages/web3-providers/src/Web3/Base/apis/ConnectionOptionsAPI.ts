@@ -33,8 +33,8 @@ export class ConnectionOptionsAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter,
 > {
@@ -46,8 +46,8 @@ export class ConnectionOptionsAPI_Base<
             SchemaType,
             ProviderType,
             NetworkType,
-            RequestArguments,
-            RequestOptions,
+            MessageRequest,
+            MessageResponse,
             Transaction,
             TransactionParameter
         >

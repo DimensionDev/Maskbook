@@ -2,19 +2,21 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3Others } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { ImageIcon, type ImageIconProps } from '../ImageIcon/index.js'
+import { ChainIcon } from '../index.js'
 
-export interface NetworkIconProps {
+export interface NetworkIconProps extends ImageIconProps {
     pluginID: NetworkPluginID
     chainId: Web3Helper.ChainIdAll
-    ImageIconProps?: Partial<ImageIconProps>
+    name?: string
 }
 
 export function NetworkIcon(props: NetworkIconProps) {
-    const { pluginID, chainId, ImageIconProps } = props
+    const { pluginID, chainId, name, icon, ...rest } = props
     const Others = useWeb3Others(pluginID)
     const networkType = Others.chainResolver.networkType(chainId)
     const networkIcon = networkType ? Others.networkResolver.networkIcon(networkType) : undefined
+    const iconUrl = networkIcon || icon
 
-    if (networkIcon) return <ImageIcon icon={networkIcon} size={20} {...ImageIconProps} />
-    return null
+    if (iconUrl) return <ImageIcon size={20} {...rest} icon={iconUrl} />
+    return <ChainIcon size={rest?.size || 20} name={name} color={rest.color} />
 }

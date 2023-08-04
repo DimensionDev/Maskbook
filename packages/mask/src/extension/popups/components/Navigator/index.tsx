@@ -6,9 +6,10 @@ import { BottomNavigation, BottomNavigationAction, Box, type BoxProps } from '@m
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { PopupRoutes } from '@masknet/shared-base'
-import { useWallet } from '@masknet/web3-hooks-base'
+import { useMessages, useWallet } from '@masknet/web3-hooks-base'
 import { useHasPassword } from '../../hook/useHasPassword.js'
 import { useWalletLockStatus } from '../../pages/Wallet/hooks/useWalletLockStatus.js'
+import urlcat from 'urlcat'
 
 const useStyle = makeStyles()((theme) => ({
     navigation: {
@@ -50,6 +51,8 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
     const { classes, cx } = useStyle()
     const wallet = useWallet()
 
+    const messages = useMessages()
+
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
 
     const { hasPassword, loading: getHasPasswordLoading } = useHasPassword()
@@ -59,10 +62,13 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
     const walletLink = useMemo(() => {
         if (walletPageLoading) return '#'
         if (!wallet) return PopupRoutes.Wallet
-        if (isLocked) return PopupRoutes.Unlock
+        if (isLocked)
+            return urlcat(PopupRoutes.Unlock, { from: messages.length ? PopupRoutes.ContractInteraction : undefined })
         if (!hasPassword) return PopupRoutes.SetPaymentPassword
+        if (messages.length) return PopupRoutes.ContractInteraction
         return PopupRoutes.Wallet
-    }, [wallet, walletPageLoading, isLocked, hasPassword])
+    }, [wallet, walletPageLoading, isLocked, hasPassword, messages])
+
     return (
         <Box className={cx(classes.container, className)} {...rest}>
             <BottomNavigation classes={{ root: classes.navigation }}>

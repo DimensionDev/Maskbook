@@ -6,7 +6,7 @@ import { ChainId, getDeBankConstants, type SchemaType } from '@masknet/web3-shar
 import { formatTransactions, resolveDeBankAssetIdReversed } from '../helpers.js'
 import type { HistoryRecord } from '../types.js'
 import { DEBANK_OPEN_API } from '../constants.js'
-import { fetchSquashedJSON } from '../../entry-helpers.js'
+import { fetchSquashedJSON } from '../../helpers/fetchJSON.js'
 import type { HistoryAPI, HubOptions_Base } from '../../entry-types.js'
 
 export class DeBankHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaType> {

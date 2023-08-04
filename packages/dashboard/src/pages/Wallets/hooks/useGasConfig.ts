@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { toHex } from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
-import { chainResolver, type GasConfig } from '@masknet/web3-shared-evm'
+import { ChainResolver } from '@masknet/web3-providers'
+import { type GasConfig } from '@masknet/web3-shared-evm'
 import { useChainContext, useGasOptions, useGasPrice } from '@masknet/web3-hooks-base'
 import { GasOptionType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -23,7 +24,7 @@ export function useGasConfig(gasLimit: number, minGasLimit: number): GasConfigPr
     const [maxFee, setMaxFee] = useState<BigNumber.Value>(0)
     const [priorityFee, setPriorityFee] = useState<BigNumber.Value>(0)
 
-    const is1559Supported = useMemo(() => chainResolver.isSupport(chainId, 'EIP1559'), [chainId])
+    const is1559Supported = useMemo(() => ChainResolver.isFeatureSupported(chainId, 'EIP1559'), [chainId])
     const { value: defaultGasPrice = '0' } = useGasPrice(NetworkPluginID.PLUGIN_EVM)
     const gasPrice = customGasPrice || defaultGasPrice
     const { value: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM)

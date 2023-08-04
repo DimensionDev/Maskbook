@@ -3,7 +3,7 @@ import { CopyButton, Image, useSharedI18N } from '@masknet/shared'
 import { CrossIsolationMessages, NextIDPlatform, type BindingProof } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { ENS, Lens } from '@masknet/web3-providers'
 import { isSameAddress, resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
 import { MenuItem, Typography } from '@mui/material'
@@ -151,6 +151,7 @@ export function SocialAccountListItem({
     const t = useSharedI18N()
     const { account } = useChainContext()
     const { classes, cx } = useStyles()
+    const Others = useWeb3Others()
 
     const { loading, value } = useAsync(async () => {
         if (platform !== NextIDPlatform.LENS || !identity) return
@@ -187,8 +188,16 @@ export function SocialAccountListItem({
                 }}>
                 <div className={classes.content}>
                     {icon}
+
                     <Typography className={cx(classes.socialName, classes.accountName)} component="div">
-                        {name || identity}
+                        {Others.isValidAddress(name || identity) ? (
+                            <>
+                                {Others.formatAddress(name || identity, 4)}
+                                <CopyButton size={14} text={name || identity} />
+                            </>
+                        ) : (
+                            name || identity
+                        )}
                         {platform === NextIDPlatform.ENS ? <ENSAddress domain={identity} /> : null}
                     </Typography>
                     {platform === NextIDPlatform.LENS ? (

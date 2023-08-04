@@ -20,7 +20,7 @@ import { env } from '@masknet/flags'
 import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
 import { staleNextIDCached } from './helpers.js'
 import PRESET_LENS from './preset-lens.json'
-import { fetchCachedJSON, fetchJSON, fetchSquashedJSON } from '../entry-helpers.js'
+import { fetchCachedJSON, fetchJSON, fetchSquashedJSON } from '../helpers/fetchJSON.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
 
 const BASE_URL =

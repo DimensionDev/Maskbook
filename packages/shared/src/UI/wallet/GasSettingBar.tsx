@@ -1,20 +1,21 @@
 import { useMemo, useState, useEffect, useCallback } from 'react'
 import { BigNumber } from 'bignumber.js'
-import { chainResolver, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { Tune } from '@mui/icons-material'
-import type { NonPayableTx } from '@masknet/web3-contracts/types/types.js'
 import { Box, IconButton, Typography } from '@mui/material'
+import { formatWeiToEther } from '@masknet/web3-shared-evm'
+import { GasSettingModal, TokenPrice } from '@masknet/shared'
+import type { NonPayableTx } from '@masknet/web3-contracts/types/types.js'
 import { GasOptionType, multipliedBy } from '@masknet/web3-shared-base'
+import { ChainResolver } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useFungibleToken, useGasPrice } from '@masknet/web3-hooks-base'
-import { GasSettingModal, TokenPrice } from '@masknet/shared'
 
 export interface GasSettingBarProps {
     gasLimit: number
     gasPrice?: BigNumber.Value
     maxFee?: BigNumber.Value
     priorityFee?: BigNumber.Value
-    onChange: (tx: NonPayableTx) => void
+    onChange?: (tx: NonPayableTx) => void
 }
 
 export function GasSettingBar(props: GasSettingBarProps) {
@@ -28,7 +29,7 @@ export function GasSettingBar(props: GasSettingBarProps) {
 
     const onOpenGasSettingDialog = useCallback(() => {
         GasSettingModal.open(
-            chainResolver.isSupport(chainId, 'EIP1559')
+            ChainResolver.isFeatureSupported(chainId, 'EIP1559')
                 ? {
                       gasLimit,
                       maxFee,
@@ -47,8 +48,8 @@ export function GasSettingBar(props: GasSettingBarProps) {
     useEffect(() => {
         const off = GasSettingModal.emitter.on('close', (evt) => {
             if (evt?.gasOption) setGasOptionType(evt.gasOption)
-            onChange(
-                (chainResolver.isSupport(chainId, 'EIP1559')
+            onChange?.(
+                (ChainResolver.isFeatureSupported(chainId, 'EIP1559')
                     ? {
                           gas: evt?.gasLimit,
                           maxFeePerGas: evt?.maxFee,
@@ -68,7 +69,9 @@ export function GasSettingBar(props: GasSettingBarProps) {
     const gasFee = useMemo(() => {
         return multipliedBy(
             gasLimit,
-            chainResolver.isSupport(chainId, 'EIP1559') && maxFee ? new BigNumber(maxFee) : gasPrice ?? gasPriceDefault,
+            ChainResolver.isFeatureSupported(chainId, 'EIP1559') && maxFee
+                ? new BigNumber(maxFee)
+                : gasPrice ?? gasPriceDefault,
         )
     }, [chainId, gasLimit, gasPrice, maxFee, gasPriceDefault])
 

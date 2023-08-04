@@ -33,6 +33,9 @@ export class SavingsDescriptor extends BaseDescriptor implements TransactionDesc
                             symbol: token?.symbol ?? 'token',
                         }),
                     },
+                    popup: {
+                        method: name,
+                    },
                 }
             }
 
@@ -56,6 +59,9 @@ export class SavingsDescriptor extends BaseDescriptor implements TransactionDesc
                             symbol: token?.symbol ?? 'token',
                         }),
                     },
+                    popup: {
+                        method: name,
+                    },
                 }
             }
 
@@ -77,6 +83,9 @@ export class SavingsDescriptor extends BaseDescriptor implements TransactionDesc
                         failedDescription: i18NextInstance.t('plugin_infra_descriptor_token_withdraw_fail', {
                             symbol: token?.symbol ?? 'token',
                         }),
+                    },
+                    popup: {
+                        method: name,
                     },
                 }
             }

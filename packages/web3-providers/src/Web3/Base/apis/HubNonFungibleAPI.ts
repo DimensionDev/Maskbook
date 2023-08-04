@@ -14,17 +14,17 @@ import {
     type PriceInToken,
 } from '@masknet/web3-shared-base'
 import { type Pageable, createPageable, createIndicator, EMPTY_LIST } from '@masknet/shared-base'
-import type { AuthorizationAPI, NonFungibleTokenAPI, TokenListAPI } from '@masknet/web3-providers/types'
 import { HubProviderAPI_Base } from './HubProviderAPI.js'
 import type { HubOptions_Base } from './HubOptionsAPI.js'
+import type { AuthorizationAPI, NonFungibleTokenAPI, TokenListAPI } from '../../../entry-types.js'
 
 export class HubNonFungibleAPI_Base<
     ChainId,
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter,
 > extends HubProviderAPI_Base<
@@ -32,8 +32,8 @@ export class HubNonFungibleAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter
 > {

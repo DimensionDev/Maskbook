@@ -18,11 +18,15 @@ import { LoadingButton } from '@mui/lab'
 import { Button, DialogActions, Typography, alpha } from '@mui/material'
 import { useI18N } from '../../utils/index.js'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients.js'
-import { CharLimitIndicator } from './CharLimitIndicator.js'
 import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMethodSelector.js'
 import { EncryptionTargetSelector } from './EncryptionTargetSelector.js'
-import { PluginEntryRender, type PluginEntryRenderRef } from './PluginEntryRender.js'
-import { TypedMessageEditor, type TypedMessageEditorRef } from './TypedMessageEditor.js'
+import {
+    TypedMessageEditor,
+    type TypedMessageEditorRef,
+    CharLimitIndicator,
+    PluginEntryRender,
+    type PluginEntryRenderRef,
+} from '@masknet/shared'
 import type { EncryptTargetE2EFromProfileIdentifier } from '../../../background/services/crypto/encryption.js'
 
 const useStyles = makeStyles()((theme) => ({

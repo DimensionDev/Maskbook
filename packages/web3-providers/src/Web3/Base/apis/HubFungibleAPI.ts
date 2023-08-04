@@ -7,23 +7,17 @@ import {
     type FungibleTokenSpender,
 } from '@masknet/web3-shared-base'
 import { type Pageable, createPageable, createIndicator, EMPTY_LIST } from '@masknet/shared-base'
-import type {
-    AuthorizationAPI,
-    FungibleTokenAPI,
-    TokenListAPI,
-    TokenIconAPI,
-    PriceAPI,
-} from '@masknet/web3-providers/types'
 import { HubProviderAPI_Base } from './HubProviderAPI.js'
 import type { HubOptions_Base } from './HubOptionsAPI.js'
+import type { AuthorizationAPI, FungibleTokenAPI, TokenListAPI, TokenIconAPI, PriceAPI } from '../../../entry-types.js'
 
 export class HubFungibleAPI_Base<
     ChainId,
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter,
 > extends HubProviderAPI_Base<
@@ -31,8 +25,8 @@ export class HubFungibleAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter
 > {

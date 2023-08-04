@@ -65,7 +65,7 @@ export function GasSection(props: GasSectionProps) {
     // EVM only
     if (pluginID !== NetworkPluginID.PLUGIN_EVM) return null
 
-    const isEIP1559 = Others.chainResolver.isSupport(chainId as ChainId, 'EIP1559')
+    const isEIP1559 = Others.chainResolver.isFeatureSupported(chainId as ChainId, 'EIP1559')
     const suggestedMaxFeePerGas = gasOptions?.[gasOptionType ?? GasOptionType.NORMAL].suggestedMaxFeePerGas
     const suggestedMaxPriorityFeePerGas =
         gasOptions?.[gasOptionType ?? GasOptionType.NORMAL].suggestedMaxPriorityFeePerGas

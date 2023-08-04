@@ -29,8 +29,8 @@ export class HubOptionsAPI_Base<
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter,
 > {
@@ -42,8 +42,8 @@ export class HubOptionsAPI_Base<
             SchemaType,
             ProviderType,
             NetworkType,
-            RequestArguments,
-            RequestOptions,
+            MessageRequest,
+            MessageResponse,
             Transaction,
             TransactionParameter
         >

@@ -1,37 +1,32 @@
+import { memo, useCallback } from 'react'
+import { Box, Typography, useTheme, type BoxProps } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { MaskTextField, makeStyles } from '@masknet/theme'
 import { openWindow } from '@masknet/shared-base-ui'
-import { Box, Typography, useTheme } from '@mui/material'
-import { memo, useCallback } from 'react'
-
+import { ExplorerResolver } from '@masknet/web3-providers'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../../../utils/index.js'
 import { ContactsContext } from '../../hook/useContactsContext.js'
 import { AddContactModal } from '../../modals/modals.js'
-import { explorerResolver } from '@masknet/web3-shared-evm'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     input: {
         flex: 1,
-        marginBottom: 8,
-    },
-    to: {
-        display: 'flex',
-        alignItems: 'center',
-        marginRight: 16,
-        height: 40,
     },
     toText: {
         color: theme.palette.maskColor.second,
         fontSize: 14,
         fontWeight: 700,
+        height: 40,
+        minWidth: 32,
+        marginRight: theme.spacing(0.5),
+        display: 'flex',
+        alignItems: 'center',
     },
     receiverPanel: {
         display: 'flex',
         alignItems: 'flex-start',
-        height: 88,
-        width: '100%',
     },
     inputText: {
         fontSize: 10,
@@ -45,6 +40,7 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
+        paddingLeft: theme.spacing(0.5),
     },
     receiver: {
         display: 'flex',
@@ -66,58 +62,63 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const AddContactInputPanel = memo(function AddContactInputPanel() {
+const AddContactInputPanel = memo(function AddContactInputPanel(props: BoxProps) {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { address, receiver, setReceiver, ensName, receiverValidationMessage, registeredAddress } =
-        ContactsContext.useContainer()
+    const {
+        address,
+        userInput,
+        setUserInput,
+        inputValidationMessage: addressValidationMessage,
+    } = ContactsContext.useContainer()
 
     const theme = useTheme()
 
     const openAddContactModal = useCallback(() => {
+        if (!address) return
         return AddContactModal.openAndWaitForClose({
             title: t('wallet_add_contact'),
             address,
-            name: ensName,
+            name: userInput,
         })
-    }, [address, ensName])
+    }, [address, userInput])
+
+    const addable = !addressValidationMessage && (address || userInput)
+    const shouldShowAddress = !!address && address !== userInput
 
     return (
-        <Box padding={2} className={classes.receiverPanel}>
-            <div className={classes.to}>
-                <Typography className={classes.toText}>{t('popups_wallet_transfer_to')}</Typography>
-            </div>
+        <Box padding={2} {...props} className={cx(classes.receiverPanel, props.className)}>
+            <Typography className={classes.toText}>{t('popups_wallet_transfer_to')}</Typography>
             <div className={classes.fieldWrapper}>
                 <MaskTextField
                     placeholder={t('wallet_transfer_placeholder')}
-                    value={receiver}
-                    onChange={(ev) => setReceiver(ev.target.value)}
+                    value={userInput}
+                    onChange={(ev) => setUserInput(ev.target.value)}
                     wrapperProps={{ className: classes.input }}
                     InputProps={{
                         spellCheck: false,
-                        endAdornment:
-                            !receiverValidationMessage && (registeredAddress || receiver) ? (
-                                <div className={classes.endAdornment} onClick={openAddContactModal}>
-                                    <Typography className={classes.save}>{t('save')}</Typography>
-                                    <Icons.AddUser size={18} color={theme.palette.maskColor.main} />
-                                </div>
-                            ) : undefined,
+                        endAdornment: addable ? (
+                            <div className={classes.endAdornment} onClick={openAddContactModal}>
+                                <Typography className={classes.save}>{t('save')}</Typography>
+                                <Icons.AddUser size={18} color={theme.palette.maskColor.main} />
+                            </div>
+                        ) : undefined,
                         classes: { input: classes.inputText },
                     }}
                 />
-                {receiverValidationMessage || registeredAddress ? (
-                    <Typography className={receiverValidationMessage ? classes.validation : classes.receiver}>
-                        {receiverValidationMessage || registeredAddress}
-                        {receiverValidationMessage ? null : (
-                            <Icons.LinkOut
-                                size={18}
-                                className={classes.linkOut}
-                                onClick={() =>
-                                    openWindow(explorerResolver.addressLink(chainId, registeredAddress ?? ''))
-                                }
-                            />
-                        )}
+                {addressValidationMessage ? (
+                    <Typography className={classes.validation} mt={1}>
+                        {addressValidationMessage}
+                    </Typography>
+                ) : shouldShowAddress ? (
+                    <Typography className={classes.receiver} mt={1}>
+                        {address}
+                        <Icons.LinkOut
+                            size={18}
+                            className={classes.linkOut}
+                            onClick={() => openWindow(ExplorerResolver.addressLink(chainId, address))}
+                        />
                     </Typography>
                 ) : null}
             </div>

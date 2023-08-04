@@ -1,5 +1,9 @@
 const { fetch: originalFetch } = globalThis
 
+export enum Expiration {
+    SHORT = 1000,
+}
+
 const CACHE = new Map<
     string,
     {
@@ -34,7 +38,7 @@ export async function fetchSquashed(
     init?: RequestInit,
     next = originalFetch,
     resolver = defaultResolver,
-    expiration = 600,
+    expiration = Expiration.SHORT,
 ): Promise<Response> {
     // why: the caches doesn't define in test env
     if (process.env.NODE_ENV === 'test') return next(input, init)

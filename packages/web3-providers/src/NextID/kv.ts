@@ -9,7 +9,7 @@ import { env } from '@masknet/flags'
 import { KV_BASE_URL_DEV, KV_BASE_URL_PROD } from './constants.js'
 import { staleNextIDCached } from './helpers.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
-import { fetchCachedJSON, fetchJSON, fetchSquashedJSON } from '../entry-helpers.js'
+import { fetchCachedJSON, fetchJSON, fetchSquashedJSON } from '../helpers/fetchJSON.js'
 
 interface CreatePayloadResponse {
     uuid: string

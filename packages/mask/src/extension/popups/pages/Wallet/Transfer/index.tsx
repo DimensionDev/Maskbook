@@ -1,113 +1,100 @@
-import { FormattedBalance, TokenIcon, useMenu } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
-import {
-    useAccount,
-    useBalance,
-    useChainContext,
-    useFungibleTokenBalance,
-    useNativeTokenAddress,
-    useWallets,
-} from '@masknet/web3-hooks-base'
-import { formatBalance, isSameAddress } from '@masknet/web3-shared-base'
-import { chainResolver, isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { MenuItem, Typography } from '@mui/material'
-import { first } from 'lodash-es'
-import { memo, useEffect, useMemo, useState } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
-import { useContainer } from 'unstated-next'
+import { MaskTabList, makeStyles } from '@masknet/theme'
+import { TabContext, TabPanel } from '@mui/lab'
+import { Box, Tab } from '@mui/material'
+import { memo, useMemo } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
+import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
+import { NormalHeader } from '../../../components/index.js'
+import { ContactsContext } from '../../../hook/useContactsContext.js'
+import { useParamTab } from '../../../hook/useParamTab.js'
 import { useTitle } from '../../../hook/useTitle.js'
-import { WalletContext, useAsset } from '../hooks/index.js'
-import { Prior1559Transfer } from './Prior1559Transfer.js'
-import { Transfer1559 } from './Transfer1559.js'
+import { FungibleTokenSection } from './FungibleTokenSection.js'
+import { NonFungibleTokenSection } from './NonFungibleTokenSection.js'
+import { TransferTabType } from '../type.js'
 
-const useStyles = makeStyles()({
-    assetItem: {
+const useStyles = makeStyles()((theme) => ({
+    page: {
         display: 'flex',
-        justifyContent: 'space-between',
-        minWidth: 278,
+        flexDirection: 'column',
+        overflow: 'auto',
+        height: '100%',
     },
-    assetSymbol: {
+    body: {
+        flexGrow: 1,
+        // padding: theme.spacing(2, 2, 0),
+        overflow: 'auto',
         display: 'flex',
-        alignItems: 'center',
-        '& > p': {
-            marginLeft: 10,
+        flexDirection: 'column',
+    },
+    panel: {
+        '&:not([hidden])': {
+            marginTop: theme.spacing(2),
+            padding: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 1,
+            overflow: 'auto',
         },
     },
-})
+    tabs: {
+        flex: 'none!important',
+        paddingTop: '0px!important',
+        paddingLeft: 16,
+        paddingRight: 16,
+    },
+}))
 
 const Transfer = memo(function Transfer() {
-    const location = useLocation()
     const { t } = useI18N()
     const { classes } = useStyles()
-    const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM)
-    const address = useParams().address || nativeTokenAddress
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const isNativeToken = !address || isNativeTokenAddress(address)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
-    const { assets } = useContainer(WalletContext)
-    const { data: nativeTokenBalance = '0' } = useBalance(NetworkPluginID.PLUGIN_EVM)
-    const { data: erc20Balance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address)
-    const balance = isNativeToken ? nativeTokenBalance : erc20Balance
-    const currentAsset = useAsset(chainId, address, account)
-    const [selectedAsset, setSelectedAsset] = useState(currentAsset ?? first(assets))
-
-    const otherWallets = useMemo(
-        () => wallets.map((wallet) => ({ name: wallet.name ?? '', address: wallet.address })),
-        [wallets],
-    )
-
-    const [assetsMenu, openAssetMenu] = useMenu(
-        ...assets.map((asset, index) => {
-            return (
-                <MenuItem key={index} className={classes.assetItem} onClick={() => setSelectedAsset(asset)}>
-                    <div className={classes.assetSymbol}>
-                        <TokenIcon
-                            chainId={asset.chainId}
-                            address={asset.address}
-                            name={asset.name}
-                            symbol={asset.symbol}
-                        />
-                        <Typography>{asset.symbol}</Typography>
-                    </div>
-                    <Typography>
-                        <FormattedBalance
-                            value={balance}
-                            decimals={asset.decimals}
-                            significant={4}
-                            formatter={formatBalance}
-                        />
-                    </Typography>
-                </MenuItem>
-            )
-        }),
-    )
 
     useTitle(t('popups_send'))
+    const [params] = useSearchParams()
+    const undecided = params.get('undecided') === 'true'
 
-    useEffect(() => {
-        const address = new URLSearchParams(location.search).get('selectedToken')
-        if (!address) return
-        const target = assets.find((x) => isSameAddress(x.address, address))
-        setSelectedAsset(target)
-    }, [assets, location])
+    const [currentTab, handleTabChange] = useParamTab<TransferTabType>(TransferTabType.Token)
 
     return (
-        <>
-            {chainResolver.isSupport(chainId, 'EIP1559') ? (
-                <Transfer1559 selectedAsset={selectedAsset} otherWallets={otherWallets} openAssetMenu={openAssetMenu} />
-            ) : (
-                <Prior1559Transfer
-                    selectedAsset={selectedAsset}
-                    otherWallets={otherWallets}
-                    openAssetMenu={openAssetMenu}
+        <Box className={classes.page}>
+            <TabContext value={currentTab}>
+                <NormalHeader
+                    tabList={
+                        undecided ? (
+                            <MaskTabList
+                                onChange={handleTabChange}
+                                aria-label="persona-tabs"
+                                classes={{ root: classes.tabs }}>
+                                <Tab label={t('popups_wallet_token')} value={TransferTabType.Token} />
+                                <Tab label={t('popups_wallet_collectible')} value={TransferTabType.NFT} />
+                            </MaskTabList>
+                        ) : null
+                    }
                 />
-            )}
-            {assetsMenu}
-        </>
+                <div className={classes.body}>
+                    <AddContactInputPanel p={0} m="16px 16px 0" />
+                    <TabPanel value={TransferTabType.Token} className={classes.panel} data-hide-scrollbar>
+                        <FungibleTokenSection />
+                    </TabPanel>
+                    <TabPanel value={TransferTabType.NFT} className={classes.panel} data-hide-scrollbar>
+                        <NonFungibleTokenSection />
+                    </TabPanel>
+                </div>
+            </TabContext>
+        </Box>
     )
 })
 
-export default Transfer
+const TransferPage = memo(function TransferPage() {
+    const [params] = useSearchParams()
+    const defaultAddress = params.get('recipient') || ''
+    const defaultName = params.get('recipientName') || ''
+    const initialState = useMemo(() => ({ defaultAddress, defaultName }), [defaultAddress, defaultName])
+    return (
+        <ContactsContext.Provider initialState={initialState}>
+            <Transfer />
+        </ContactsContext.Provider>
+    )
+})
+
+export default TransferPage

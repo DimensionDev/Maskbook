@@ -8,7 +8,9 @@ import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 export async function internal_wallet_restore(backup: NormalizedBackup.WalletBackup[]) {
     for (const wallet of backup) {
         try {
-            const name = wallet.name
+            const wallets = await WalletServiceRef.value.getWallets()
+            const nameExists = wallets.some((x) => x.name === wallet.name)
+            const name = nameExists ? `Wallet ${wallets.length + 1}` : wallet.name
 
             if (wallet.privateKey.some)
                 await WalletServiceRef.value.recoverWalletFromPrivateKey(

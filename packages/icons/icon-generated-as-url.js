@@ -172,6 +172,7 @@ export function default_token_light_url() { return new URL("./general/DefaultTok
 export function delete_url() { return new URL("./general/Delete.svg", import.meta.url) }
 export function disconnect_url() { return new URL("./general/Disconnect.svg", import.meta.url) }
 export function document_url() { return new URL("./general/Document.svg", import.meta.url) }
+export function documents_url() { return new URL("./general/Documents.svg", import.meta.url) }
 export function double_arrow_up_url() { return new URL("./general/DoubleArrowUp.svg", import.meta.url) }
 export function download_url() { return new URL("./general/Download.svg", import.meta.url) }
 export function download_2_url() { return new URL("./general/Download2.svg", import.meta.url) }

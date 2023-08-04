@@ -6,6 +6,20 @@ import type { Web3UI as Web3UIShared, Web3State as Web3StateShared } from '@mask
 
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
 
+// Learn more at: https://eips.ethereum.org/EIPS/eip-3085
+export interface EIP3085Descriptor {
+    chainId: string
+    blockExplorerUrls?: string[]
+    chainName?: string
+    iconUrls?: string[]
+    nativeCurrency?: {
+        name: string
+        symbol: string
+        decimals: number
+    }
+    rpcUrls?: string[]
+}
+
 // Learn more about ethereum ChainId https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
 export enum ChainId {
     // Mainnet
@@ -258,11 +272,20 @@ export interface RequestArguments {
 }
 
 export interface RequestOptions {
+    silent?: boolean
     owner?: string
     identifier?: string
     paymentToken?: string
     allowMaskAsGas?: boolean
+    providerURL?: string
 }
+
+export interface MessageRequest {
+    arguments: RequestArguments
+    options: RequestOptions
+}
+
+export type MessageResponse = JsonRpcResponse
 
 export interface Transaction {
     from?: string
@@ -321,8 +344,8 @@ export type Web3State = Web3StateShared<
     SchemaType,
     ProviderType,
     NetworkType,
-    RequestArguments,
-    RequestOptions,
+    MessageRequest,
+    MessageResponse,
     Transaction,
     TransactionParameter
 >
@@ -336,8 +359,8 @@ export type Web3Definition = {
     Signature: Signature
     GasOption: GasOption
     Block: Block
-    RequestArguments: RequestArguments
-    RequestOptions: RequestOptions
+    MessageRequest: MessageRequest
+    MessageResponse: MessageResponse
     Operation: UserOperation
     Transaction: Transaction
     TransactionReceipt: TransactionReceipt

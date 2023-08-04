@@ -1,24 +1,24 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
+import { Trans } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { first } from 'lodash-es'
 import { useContainer } from 'unstated-next'
+import { Icons } from '@masknet/icons'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { PersonaContext } from '@masknet/shared'
 import { Box, Button, Link, Typography, useTheme } from '@mui/material'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { PopupRoutes, type PersonaInformation, NetworkPluginID, type Wallet } from '@masknet/shared-base'
 import { useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
-import { Providers, Web3 } from '@masknet/web3-providers'
-import { type ChainId, ProviderType, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { ExplorerResolver, Providers, Web3 } from '@masknet/web3-providers'
+import { type ChainId, ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../utils/index.js'
 import Services from '../../../../service.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
-import { Icons } from '@masknet/icons'
-import { Trans } from 'react-i18next'
 import { useHasPassword } from '../../../hook/useHasPassword.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
@@ -204,7 +204,7 @@ export const LogoutUI = memo<LogoutUIProps>(
                                                         height: 16,
                                                         color: theme.palette.maskColor.main,
                                                     }}
-                                                    href={explorerResolver.addressLink(chainId, x.address)}
+                                                    href={ExplorerResolver.addressLink(chainId, x.address)}
                                                     target="_blank"
                                                     rel="noopener noreferrer">
                                                     <Icons.LinkOut size={16} />

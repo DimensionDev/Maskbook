@@ -1,8 +1,8 @@
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { SourceType } from '@masknet/web3-shared-base'
-import type { TrendingAPI } from '../entry-types.js'
 import { CURRENCIES_MAP } from './constants.js'
 import MIRRORED_TOKENS from './mirrored_tokens.json'
+import type { TrendingAPI } from '../entry-types.js'
 
 export function isMirroredKeyword(symbol: string) {
     return MIRRORED_TOKENS.map((x) => x.symbol).some((x) => x.toUpperCase() === symbol.toUpperCase())

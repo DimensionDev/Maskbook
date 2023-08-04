@@ -23,6 +23,7 @@
     { "path": "../web3-helpers" },
     { "path": "../web3-hooks/base" },
     { "path": "../web3-providers" },
-    { "path": "../web3-shared/base" }
+    { "path": "../web3-shared/base" },
+    { "path": "../plugins/Trader" }
   ]
 }
