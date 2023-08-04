@@ -8,7 +8,7 @@ import { CloudBackupVerifyDialog, type VerifyNextData } from './dialogs/CloudBac
 import { UserContext } from '../hooks/UserContext.js'
 import type { VerifyCodeRequest } from '../api.js'
 import type { BackupFileInfo } from '../type.js'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useSearchParams } from 'react-router-dom'
 
 export default function BackupSetting() {
     const t = useDashboardI18N()
@@ -17,14 +17,16 @@ export default function BackupSetting() {
             open: 'setting' | null
         }
     }
+    const [pageParams] = useSearchParams()
     const { ensurePasswordSet } = useContext(UserContext)
     const [merged, setMerged] = useState(false)
     const [showDialog, setShowDialog] = useState({
         backup: false,
-        mode: false,
+        mode: !!pageParams.get('mode'),
         verify: false,
         merge: false,
     })
+
     const [localMode, setLocalMode] = useState(true)
     const [params, setParams] = useState<VerifyCodeRequest | undefined>(undefined)
     const [cloudFileInfo, setCloudFileInfo] = useState<BackupFileInfo | undefined>(undefined)
