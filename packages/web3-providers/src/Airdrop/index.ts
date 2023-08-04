@@ -1,6 +1,6 @@
 import { type ChainId, getAirdropClaimersConstants } from '@masknet/web3-shared-evm'
 import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
-import { fetchJSON } from '../entry-helpers.js'
+import { fetchJSON } from '../helpers/fetchJSON.js'
 
 export class AirdropAPI {
     private Contract = new ContractReadonlyAPI()

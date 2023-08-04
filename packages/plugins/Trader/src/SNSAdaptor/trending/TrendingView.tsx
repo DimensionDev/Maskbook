@@ -21,10 +21,11 @@ import {
     getSiteType,
     type SocialIdentity,
     pluginIDsSettings,
+    Days,
 } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
-import { TrendingAPI } from '@masknet/web3-providers/types'
+import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { TrendingViewContext } from './context.js'
 import { usePriceStats } from '../../trending/usePriceStats.js'
 import { useTrendingById } from '../../trending/useTrending.js'
@@ -164,28 +165,27 @@ export function TrendingView(props: TrendingViewProps) {
     }, [currentResult])
 
     // #region stats
-    const [days, setDays] = useState(TrendingAPI.Days.ONE_DAY)
+    const [days, setDays] = useState(Days.ONE_DAY)
     const [currentPriceChange, setCurrentPriceChange] = useState(
         trending?.market?.price_change_percentage_24h_in_currency,
     )
     const onPriceDaysControlChange = useCallback(
         (days: number) => {
             setDays(days)
-            const Days = TrendingAPI.Days
-            const map: Partial<Record<TrendingAPI.Days, number | undefined>> = {
+            const map: Partial<Record<Days, number | undefined>> = {
                 [Days.ONE_DAY]: trending?.market?.price_change_percentage_24h_in_currency,
                 [Days.ONE_WEEK]: trending?.market?.price_change_percentage_7d_in_currency,
                 [Days.ONE_MONTH]: trending?.market?.price_change_percentage_30d_in_currency,
                 [Days.ONE_YEAR]: trending?.market?.price_change_percentage_1y_in_currency,
                 [Days.MAX]: trending?.market?.atl_change_percentage,
             }
-            setCurrentPriceChange(map[days as TrendingAPI.Days])
+            setCurrentPriceChange(map[days as Days])
         },
         [JSON.stringify(trending?.market)],
     )
 
     useEffect(() => {
-        onPriceDaysControlChange(TrendingAPI.Days.ONE_DAY)
+        onPriceDaysControlChange(Days.ONE_DAY)
     }, [JSON.stringify(trending?.market)])
 
     const isNFT = trending?.coin.type === TokenType.NonFungible

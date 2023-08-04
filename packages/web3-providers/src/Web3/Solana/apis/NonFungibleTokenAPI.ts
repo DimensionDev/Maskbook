@@ -5,8 +5,9 @@ import { type NonFungibleAsset, TokenType } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
 import type { GetProgramAccountsResponse, HubOptions } from '../types/index.js'
 import { requestRPC } from '../helpers/index.js'
+import { fetchJSON } from '../../../helpers/fetchJSON.js'
+import { getAssetFullName } from '../../../helpers/getAssetFullName.js'
 import type { NonFungibleTokenAPI } from '../../../entry-types.js'
-import { fetchJSON, getAssetFullName } from '../../../entry-helpers.js'
 
 interface ExternalMetadata {
     name: string

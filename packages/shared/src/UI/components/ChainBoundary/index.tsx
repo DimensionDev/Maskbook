@@ -14,11 +14,11 @@ import {
     useWeb3Others,
     useWeb3Connection,
 } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { WalletIcon } from '../WalletIcon/index.js'
 import { type ActionButtonPromiseProps } from '../ActionButton/index.js'
-import type { NetworkPluginID } from '@masknet/shared-base'
 import { useSharedI18N } from '../../../locales/index.js'
 import { SelectProviderModal } from '../../../index.js'
 
@@ -93,7 +93,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
 
     const expectedChainName = expectedOthers.chainResolver.chainName(expectedChainId)
     const expectedNetworkDescriptor = useNetworkDescriptor(expectedPluginID, expectedChainId)
-    const expectedChainAllowed = expectedOthers.chainResolver.isValid(expectedChainId, expectedAllowTestnet)
+    const expectedChainAllowed = expectedOthers.chainResolver.isValidChainId(expectedChainId, expectedAllowTestnet)
 
     const isPluginIDMatched = actualPluginID === expectedPluginID
     const isMatched = predicate(actualPluginID, actualChainId)

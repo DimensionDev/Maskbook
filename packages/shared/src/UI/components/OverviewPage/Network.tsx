@@ -60,8 +60,7 @@ export const Network = memo<NetworkProps>(() => {
 
     return (
         <>
-            <Button onClick={openMenu}>
-                {' '}
+            <Button onClick={openMenu} variant="text">
                 <NetworkItem chain={selectedChain} />
             </Button>
             {menu}

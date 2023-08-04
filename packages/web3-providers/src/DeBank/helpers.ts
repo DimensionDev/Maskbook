@@ -1,8 +1,6 @@
 import { compact, isNil } from 'lodash-es'
 import {
     type ChainId,
-    chainResolver,
-    createNativeToken,
     formatEthereumAddress,
     isNativeTokenAddress,
     SchemaType,
@@ -20,6 +18,7 @@ import {
     isSameAddress,
 } from '@masknet/web3-shared-base'
 import DeBank from '@masknet/web3-constants/evm/debank.json'
+import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
 import {
     DebankTransactionDirection,
     type HistoryResponse,
@@ -28,13 +27,14 @@ import {
 } from './types.js'
 
 export function formatAssets(data: WalletTokenRecord[]): Array<FungibleAsset<ChainId, SchemaType>> {
+    const resolver = new ChainResolverAPI()
     const supportedChains = Object.values({ ...DeBank.CHAIN_ID, BSC: 'bnb' }).filter(Boolean)
 
     return data
-        .filter((x) => chainResolver.chainId(x.chain) && supportedChains.includes(x.chain))
+        .filter((x) => resolver.chainId(x.chain) && supportedChains.includes(x.chain))
         .map((x) => {
-            const chainId = chainResolver.chainId(x.chain)!
-            const address = supportedChains.includes(x.id) ? createNativeToken(chainId).address : x.id
+            const chainId = resolver.chainId(x.chain)!
+            const address = supportedChains.includes(x.id) ? resolver.nativeCurrency(chainId).address : x.id
 
             return {
                 id: address,
@@ -94,6 +94,7 @@ export function formatTransactions({
     history_list,
     token_dict,
 }: HistoryResponse['data']): Array<Transaction<ChainId, SchemaType>> {
+    const resolver = new ChainResolverAPI()
     const transactions = history_list.map((transaction): Transaction<ChainId, SchemaType> | undefined => {
         let txType = transaction.tx?.name
         if (!txType && !isNil(transaction.cate_id)) {
@@ -102,7 +103,7 @@ export function formatTransactions({
             txType = 'contract interaction'
         }
 
-        const chainId = chainResolver.chainId(transaction.chain)
+        const chainId = resolver.chainId(transaction.chain)
         if (!chainId) return
 
         if (isSameAddress(transaction.sends[0]?.to_addr, ZERO_ADDRESS)) {

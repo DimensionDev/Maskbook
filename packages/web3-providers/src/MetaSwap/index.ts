@@ -3,7 +3,7 @@ import { GasOptionType } from '@masknet/web3-shared-base'
 import { type ChainId, formatGweiToWei, type GasOption, isValidChainId } from '@masknet/web3-shared-evm'
 import type { EstimateSuggestResponse } from './types.js'
 import type { GasOptionAPI_Base } from '../entry-types.js'
-import { fetchJSON } from '../entry-helpers.js'
+import { fetchJSON } from '../helpers/fetchJSON.js'
 
 const METASWAP_API = 'https://gas-api.metaswap.codefi.network/'
 

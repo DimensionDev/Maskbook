@@ -12,10 +12,10 @@ import { SmartPayFunderAPI } from './FunderAPI.js'
 import { ContractWallet } from '../libs/ContractWallet.js'
 import { Create2Factory } from '../libs/Create2Factory.js'
 import { LOG_ROOT, MAX_ACCOUNT_LENGTH, THE_GRAPH_PROD } from '../constants.js'
+import { fetchJSON } from '../../helpers/fetchJSON.js'
 import type { OwnerAPI } from '../../entry-types.js'
-import { fetchJSON } from '../../entry-helpers.js'
 
-type OwnerShip = {
+interface OwnerShip {
     address: string
     owner: string
     id: string

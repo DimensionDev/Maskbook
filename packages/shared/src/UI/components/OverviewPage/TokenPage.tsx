@@ -1,7 +1,6 @@
 import { memo } from 'react'
 import { useChainRuntime } from '../AssetsManagement/ChainRuntimeProvider.js'
 import { FungibleTokenTable } from './Asset/TokensPage.js'
-import type { ChartStat } from './types.js'
 import { Chart } from './Chart.js'
 import { Button, Typography } from '@mui/material'
 import { useContainer } from 'unstated-next'
@@ -20,6 +19,9 @@ import { WalletIcon } from '../WalletIcon/index.js'
 import formatDateTime from 'date-fns/format'
 import { DebankTransactionDirection, ZerionTransactionDirection } from '@masknet/web3-providers/types'
 import { BigNumber } from 'bignumber.js'
+import { useChartStat } from './index.js'
+import { ChartDaysControl, DEFAULT_RANGE_OPTIONS } from './ChartDaysControl.js'
+import { Days } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     chartBar: {
@@ -51,7 +53,12 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
     },
-
+    performance: {
+        border: `1px solid ${theme.palette.maskColor.line}`,
+        padding: 8,
+        flex: 1,
+        borderRadius: 12,
+    },
     loading: {
         display: 'flex',
         flex: 1,
@@ -67,6 +74,11 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'end',
     },
+    gap: {
+        gap: 12,
+        display: 'flex',
+        flexDirection: 'column',
+    },
 }))
 interface TokenPageProps {
     seeMore: () => void
@@ -75,28 +87,33 @@ interface TokenPageProps {
 export const TokenPage = memo<TokenPageProps>(({ seeMore }) => {
     const { classes } = useStyles()
     const { chainId } = useChainRuntime()
-    const stat: ChartStat[] = [
-        [1691071891847, 10],
-        [1691071991847, 100],
-        [1691072891847, 1000],
-    ]
+    const { chartStat } = useChartStat()
+    const { total } = useContainer(Context)
 
     return (
         <div>
             <div className={classes.chartBar}>
-                <div>
-                    <Typography>Performance</Typography>
-                    <div style={{ border: '1px solid gray' }}>
-                        <Chart stats={stat} />
+                <div className={classes.gap}>
+                    <Typography fontSize={24} lineHeight="28px" fontWeight={500}>
+                        Performance
+                    </Typography>
+                    <div className={classes.performance}>
+                        <Typography fontSize={40} lineHeight="48px" fontWeight={500}>
+                            ${total}
+                        </Typography>
+                        <Chart stats={chartStat} />
+                        <ChartDaysControl rangeOptions={DEFAULT_RANGE_OPTIONS} days={Days.ONE_DAY} />
                     </div>
                 </div>
-                <div>
-                    <Typography>History</Typography>
+                <div className={classes.gap}>
+                    <Typography fontSize={24} lineHeight="28px" fontWeight={500}>
+                        History
+                    </Typography>
                     <History seeMore={seeMore} />
                 </div>
             </div>
-            <div>
-                <Typography fontWeight={700} component="h1">
+            <div style={{ marginTop: 24 }}>
+                <Typography fontSize={24} lineHeight="28px" fontWeight={500}>
                     Assets
                 </Typography>
                 <FungibleTokenTable selectedChainId={chainId} />
@@ -134,7 +151,7 @@ const History = memo<HistoryProps>(({ seeMore }) => {
                         </div>
                     ))}
                     <div className={classes.seeMore}>
-                        <Button onClick={seeMore} disabled={loading}>
+                        <Button onClick={seeMore} disabled={loading} variant="outlined">
                             See more
                         </Button>
                     </div>
@@ -153,9 +170,6 @@ const HistoryNonFungibleRow = memo<HistoryNonFungibleRowProps>(({ transaction })
     const { data: asset } = useNonFungibleAsset(pluginID, transaction.assets[0].address, transaction.assets[0].id, {
         chainId,
     })
-    console.log('---nonfungbile----')
-    console.log('tranaction', transaction)
-    console.log('asset', asset)
     return <HistoryRow asset={asset} transaction={transaction} />
 })
 
@@ -169,9 +183,6 @@ const HistoryFungibleRow = memo<HistoryFungibleRowProps>(({ transaction }) => {
         chainId,
         account,
     })
-    console.log('----fungible---')
-    console.log('tranaction', transaction)
-    console.log('asset', asset)
     return <HistoryRow asset={asset} transaction={transaction} />
 })
 

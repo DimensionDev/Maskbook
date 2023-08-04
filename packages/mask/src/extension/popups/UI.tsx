@@ -1,24 +1,32 @@
-import { lazy, memo, useEffect, useState, type ReactNode, useMemo, Suspense } from 'react'
-import {
-    Navigate,
-    Route,
-    Routes,
-    useLocation,
-    unstable_HistoryRouter as HistoryRouter,
-    type HistoryRouterProps,
-} from 'react-router-dom'
-import { useIdleTimer } from 'react-idle-timer'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { PageUIProvider, PersonaContext } from '@masknet/shared'
 import { NetworkPluginID, PopupModalRoutes, PopupRoutes as PopupPaths, PopupsHistory } from '@masknet/shared-base'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { TelemetryProvider, Web3ContextProvider, useMountReport } from '@masknet/web3-hooks-base'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { EventID } from '@masknet/web3-telemetry/types'
+import { Box } from '@mui/material'
+import { Suspense, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useIdleTimer } from 'react-idle-timer'
+import {
+    unstable_HistoryRouter as HistoryRouter,
+    Navigate,
+    Route,
+    Routes,
+    useLocation,
+    type HistoryRouterProps,
+} from 'react-router-dom'
+import { WalletRPC } from '../../plugins/WalletService/messages.js'
 import { usePopupTheme } from '../../utils/theme/usePopupTheme.js'
 import Services from '../service.js'
+import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import { PopupLayout } from './components/PopupLayout/index.js'
+import { wrapModal } from './components/index.js'
 import { PageTitleContext } from './context.js'
 import { PopupContext } from './hook/usePopupContext.js'
+import { UserContext } from './hook/useUserContext.js'
+import { ConnectProviderModal } from './modals/ConnectProvider/index.js'
+import { SelectProviderModal } from './modals/SelectProviderModal/index.js'
 import {
     ChooseNetworkModal,
     ConnectSocialAccountModal,
@@ -31,13 +39,6 @@ import {
 } from './modals/index.js'
 import SwitchWallet from './pages/Wallet/SwitchWallet/index.js'
 import { WalletContext } from './pages/Wallet/hooks/useWalletContext.js'
-import { wrapModal } from './components/index.js'
-import { SelectProviderModal } from './modals/SelectProviderModal/index.js'
-import { ProviderType } from '@masknet/web3-shared-evm'
-import { ConnectProviderModal } from './modals/ConnectProvider/index.js'
-import { WalletRPC } from '../../plugins/WalletService/messages.js'
-import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
-import { UserContext } from './hook/useUserContext.js'
 
 const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet/index.js'))
 const Personas = lazy(() => import(/* webpackPreload: true */ './pages/Personas/index.js'))
@@ -57,17 +58,22 @@ function PluginRenderDelayed() {
 
 const Web3ContextType = { pluginID: NetworkPluginID.PLUGIN_EVM, providerType: ProviderType.MaskWallet }
 
+const personaInitialState = {
+    queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
+    queryPersonaAvatarLastUpdateTime: Services.Identity.getPersonaAvatarLastUpdateTime,
+}
 const PopupRoutes = memo(function PopupRoutes() {
     const location = useLocation()
     const mainLocation = location.state?.mainLocation as Location | undefined
     return (
-        <Suspense fallback={<LoadingPlaceholder />}>
+        <Suspense
+            fallback={
+                <Box height="100vh" display="flex">
+                    <LoadingPlaceholder />
+                </Box>
+            }>
             <WalletContext.Provider>
-                <PersonaContext.Provider
-                    initialState={{
-                        queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
-                        queryPersonaAvatarLastUpdateTime: Services.Identity.getPersonaAvatarLastUpdateTime,
-                    }}>
+                <PersonaContext.Provider initialState={personaInitialState}>
                     <UserContext.Provider>
                         <Routes location={mainLocation || location}>
                             <Route path="/" element={<PopupLayout />}>

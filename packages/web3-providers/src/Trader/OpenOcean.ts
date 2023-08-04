@@ -21,11 +21,11 @@ import type { SwapOOData, SwapOORequest } from './types/openocean.js'
 import { TradeStrategy, type TradeComputed, type TraderAPI } from '../types/Trader.js'
 import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
-import { fetchJSON } from '../entry-helpers.js'
+import { fetchJSON } from '../helpers/fetchJSON.js'
 
 export class OpenOcean implements TraderAPI.Provider {
-    public Web3 = new ConnectionReadonlyAPI()
-    public Contract = new ContractReadonlyAPI()
+    private Web3 = new ConnectionReadonlyAPI()
+    private Contract = new ContractReadonlyAPI()
 
     public provider = TradeProvider.OPENOCEAN
 

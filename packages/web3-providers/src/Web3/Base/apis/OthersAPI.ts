@@ -1,28 +1,15 @@
 import type { NetworkPluginID } from '@masknet/shared-base'
-import {
-    type ChainDescriptor,
-    type NetworkDescriptor,
-    type ProviderDescriptor,
-    type FungibleToken,
-    type NonFungibleToken,
-    createChainResolver,
-    createExplorerResolver,
-    createNetworkResolver,
-    createProviderResolver,
-    isSameAddress,
-} from '@masknet/web3-shared-base'
+import { type FungibleToken, type NonFungibleToken, isSameAddress } from '@masknet/web3-shared-base'
+import type { ProviderResolverAPI_Base } from './ProviderResolverAPI.js'
+import type { NetworkResolverAPI_Base } from './NetworkExplorerAPI.js'
+import type { ChainResolverAPI_Base } from './ChainResolverAPI.js'
+import type { ExplorerResolverAPI_Base } from './ExplorerResolverAPI.js'
 
 export class OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
-    constructor(
-        protected options: {
-            /** Built-in chain descriptors */
-            chainDescriptors: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>
-            /** Built-in network descriptors */
-            networkDescriptors: Array<NetworkDescriptor<ChainId, NetworkType>>
-            /** Built-in provider descriptors */
-            providerDescriptors: Array<ProviderDescriptor<ChainId, ProviderType>>
-        },
-    ) {}
+    readonly chainResolver: ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> = null!
+    readonly explorerResolver: ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> = null!
+    readonly providerResolver: ProviderResolverAPI_Base<ChainId, ProviderType> = null!
+    readonly networkResolver: NetworkResolverAPI_Base<ChainId, NetworkType> = null!
 
     getNetworkPluginID(): NetworkPluginID {
         throw new Error('Method not implemented.')
@@ -40,11 +27,6 @@ export class OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Tran
         throw new Error('Method not implemented.')
     }
 
-    chainResolver = createChainResolver<ChainId, SchemaType, NetworkType>(this.options.chainDescriptors)
-    explorerResolver = createExplorerResolver<ChainId, SchemaType, NetworkType>(this.options.chainDescriptors)
-    providerResolver = createProviderResolver<ChainId, ProviderType>(this.options.providerDescriptors)
-    networkResolver = createNetworkResolver<ChainId, NetworkType>(this.options.networkDescriptors)
-
     getZeroAddress(): string | undefined {
         throw new Error('Method not implemented.')
     }
@@ -52,14 +34,13 @@ export class OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Tran
         throw new Error('Method not implemented.')
     }
     getMaskTokenAddress(chainId?: ChainId): string | undefined {
-        return undefined
+        throw new Error('Method not implemented.')
     }
     getAverageBlockDelay(chainId: ChainId, scale = 1): number {
-        const delay = this.options.networkDescriptors.find((x) => x.chainId === chainId)?.averageBlockDelay ?? 10
-        return delay * scale * 1000
+        throw new Error('Method not implemented.')
     }
     getTransactionSignature(chainId?: ChainId, transaction?: Transaction | undefined): string | undefined {
-        return
+        throw new Error('Method not implemented.')
     }
 
     isSameAddress = isSameAddress
@@ -71,8 +52,7 @@ export class OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Tran
         throw new Error('Method not implemented.')
     }
     isValidChain(chainId: ChainId, testnet = false): boolean {
-        const descriptor = this.options.chainDescriptors.find((x) => x.chainId === chainId)
-        return descriptor?.network === 'mainnet' || testnet
+        throw new Error('Method not implemented.')
     }
     isValidChainId(chainId: ChainId): boolean {
         throw new Error('Method not implemented.')
@@ -106,6 +86,7 @@ export class OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Tran
     formatSchemaType(schema: SchemaType): string {
         throw new Error('Method not implemented.')
     }
+
     createNativeToken(chainId: ChainId): FungibleToken<ChainId, SchemaType> {
         throw new Error('Method not implemented.')
     }

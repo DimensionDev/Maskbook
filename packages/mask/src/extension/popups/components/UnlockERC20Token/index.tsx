@@ -1,16 +1,16 @@
 import { memo, useMemo, useState } from 'react'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { Trans } from 'react-i18next'
 import { Box, Button, Link, TextField, Typography, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { TransactionDetail } from '../../pages/Wallet/type.js'
 import { NUMERIC_INPUT_REGEXP_PATTERN, NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useChainIdSupport, useFungibleToken, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
-import { Trans } from 'react-i18next'
+import { ExplorerResolver } from '@masknet/web3-providers'
 import { CopyButton, TokenIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { explorerResolver } from '@masknet/web3-shared-evm'
-import { GasSettingMenu } from '../GasSettingMenu/index.js'
 import { isGreaterThan, leftShift } from '@masknet/web3-shared-base'
+import { GasSettingMenu } from '../GasSettingMenu/index.js'
+import type { TransactionDetail } from '../../pages/Wallet/type.js'
+import { useI18N } from '../../../../utils/i18n-next-ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -157,7 +157,7 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                 {token?.address ? (
                     <Box display="flex" columnGap={1} alignItems="center">
                         <CopyButton text={token.address} size={16} />
-                        <Link href={explorerResolver.addressLink(chainId, token.address)} className={classes.link}>
+                        <Link href={ExplorerResolver.addressLink(chainId, token.address)} className={classes.link}>
                             <Icons.LinkOut size={16} />
                         </Link>
                     </Box>
@@ -211,7 +211,7 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                     <Typography className={classes.spender}>
                         {t('contract')}:{transaction.formattedTransaction.popup?.spender}
                         <Link
-                            href={explorerResolver.addressLink(chainId, transaction.formattedTransaction.popup.spender)}
+                            href={ExplorerResolver.addressLink(chainId, transaction.formattedTransaction.popup.spender)}
                             className={classes.link}
                             style={{ color: theme.palette.maskColor.second }}>
                             <Icons.LinkOut size={16} />

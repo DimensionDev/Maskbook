@@ -25,7 +25,7 @@ import { BANCOR_API_BASE_URL } from './constants/bancor.js'
 import { BIPS_BASE } from './constants/index.js'
 import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
-import { fetchJSON } from '../entry-helpers.js'
+import { fetchJSON } from '../helpers/fetchJSON.js'
 
 const roundDecimal = (value: number | string | undefined, decimals: number) => {
     return Math.round(Number(value || 0) * Math.pow(10, decimals)) / Math.pow(10, decimals)
@@ -47,9 +47,10 @@ const calculateMinimumReturn = ({
 }
 
 export class Bancor implements TraderAPI.Provider {
-    public Web3 = new ConnectionReadonlyAPI()
-    public Contract = new ContractReadonlyAPI()
     public provider = TradeProvider.BANCOR
+
+    private Web3 = new ConnectionReadonlyAPI()
+    private Contract = new ContractReadonlyAPI()
 
     private async swapTransactionBancor(request: SwapBancorRequest) {
         const baseUrl = BANCOR_API_BASE_URL[request.chainId]

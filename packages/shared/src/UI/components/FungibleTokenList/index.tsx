@@ -3,10 +3,12 @@ import { uniqBy } from 'lodash-es'
 import { EMPTY_LIST, EMPTY_OBJECT, type NetworkPluginID } from '@masknet/shared-base'
 import { SearchableList, makeStyles, type MaskFixedSizeListProps, type MaskTextFieldProps } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { AddressType } from '@masknet/web3-shared-evm'
 import {
     useAccount,
     useAddressType,
     useBlockedFungibleTokens,
+    useChainId,
     useFungibleAssets,
     useFungibleToken,
     useFungibleTokenBalance,
@@ -31,7 +33,6 @@ import { useSharedI18N } from '../../../locales/index.js'
 import { getFungibleTokenItem } from './FungibleTokenItem.js'
 import { ManageTokenListBar } from './ManageTokenListBar.js'
 import { TokenListMode } from './type.js'
-import { AddressType } from '@masknet/web3-shared-evm'
 
 export * from './type.js'
 
@@ -88,7 +89,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
     const { pluginID } = useNetworkContext<T>(props.pluginID)
     const account = useAccount(pluginID)
-    const chainId = props.chainId
+    const chainId = useChainId(pluginID, props.chainId)
     const { Token } = useWeb3State<'all'>(pluginID)
     const Others = useWeb3Others(pluginID)
 

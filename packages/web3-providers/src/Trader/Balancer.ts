@@ -20,7 +20,6 @@ import { BALANCER_SOR_GAS_PRICE, BALANCER_MAX_NO_POOLS } from './constants/balan
 import { TradeStrategy, type TradeComputed, type TraderAPI } from '../types/Trader.js'
 import { BALANCER_SWAP_TYPE, type SwapResponse, type Route } from './types/balancer.js'
 import { ONE_BIPS, SLIPPAGE_DEFAULT } from './constants/index.js'
-import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
 
 const MIN_VALUE = new BigNumber('1e-5')
@@ -36,8 +35,8 @@ const createSOR_ = memoize((chainId: ChainId) => {
 })
 
 export class Balancer implements TraderAPI.Provider {
-    public Web3 = new ConnectionReadonlyAPI()
-    public Contract = new ContractReadonlyAPI()
+    private Contract = new ContractReadonlyAPI()
+
     public provider = TradeProvider.BALANCER
 
     private createSOR(chainId: ChainId) {

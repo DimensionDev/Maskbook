@@ -3,8 +3,8 @@ import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { SourceType, type NonFungibleTokenRarity } from '@masknet/web3-shared-base'
 import { createLookupTableResolver } from '@masknet/shared-base'
 import { GEM_API_URL, RARITY_SOURCE_TYPE } from './constants.js'
+import { fetchCachedJSON } from '../helpers/fetchJSON.js'
 import type { HubOptions_Base, NonFungibleTokenAPI } from '../entry-types.js'
-import { fetchCachedJSON } from '../entry-helpers.js'
 
 const resolveRarityId = createLookupTableResolver<
     SourceType.Gem | SourceType.RaritySniper | SourceType.TraitSniper,

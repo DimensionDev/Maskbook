@@ -3,7 +3,7 @@ import { BigNumber } from 'bignumber.js'
 import { type ChainId, createContract, getSmartPayConstants, ProviderURL } from '@masknet/web3-shared-evm'
 import DepositPaymasterABI from '@masknet/web3-contracts/abis/DepositPaymaster.json'
 import type { DepositPaymaster as DepositPaymasterType } from '@masknet/web3-contracts/types/DepositPaymaster.js'
-import { createWeb3FromURL } from '../../entry-helpers.js'
+import { createWeb3FromURL } from '../../helpers/createWeb3FromURL.js'
 
 export class DepositPaymaster {
     /**

@@ -1,7 +1,9 @@
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { type ChainId } from '@masknet/web3-shared-evm'
+import { ChainResolver } from '@masknet/web3-providers'
 import type { JSON_PayloadInMask, PoolRecord, PoolFromNetwork } from '../types.js'
 import * as subgraph from './apis/subgraph.js'
 import * as database from './database.js'
-import { type ChainId, chainResolver } from '@masknet/web3-shared-evm'
 
 export async function getTradeInfo(pid: string, trader: string, chainId: ChainId) {
     const tradeInfo = await subgraph.getTradeInfo(chainId, pid, trader)
@@ -20,7 +22,7 @@ export async function getAllPoolsAsSellerFromDatabase(poolsFromChain: PoolFromNe
 }
 
 export async function getAllPoolsAsBuyer(address: string, chainId: ChainId) {
-    if (!chainResolver.isValid(chainId)) return []
+    if (!ChainResolver.isValidChainId(chainId)) return EMPTY_LIST
     const pools = await subgraph.getAllPoolsAsBuyer(chainId, address)
     return pools.filter((x) => x.pool.chain_id === chainId)
 }

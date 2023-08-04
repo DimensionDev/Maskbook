@@ -1,21 +1,24 @@
 import { SelectNetworkSidebar } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useFungibleAssets, useNetworkDescriptors } from '@masknet/web3-hooks-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { useFungibleAssets, useNetworks } from '@masknet/web3-hooks-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { type ChainId } from '@masknet/web3-shared-evm'
 import { Box, List, type BoxProps } from '@mui/material'
 import { memo, useMemo, useState } from 'react'
 import { TokenItem, type TokenItemProps } from './TokenItem.js'
-import { makeStyles } from '@masknet/theme'
-import { isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
         picker: {
             display: 'flex',
-            gap: theme.spacing(2),
+            gap: theme.spacing(0.5),
             flexDirection: 'row',
             overflow: 'auto',
+        },
+        sidebar: {
+            paddingRight: theme.spacing(1),
         },
         list: {
             overflow: 'auto',
@@ -48,12 +51,12 @@ export const TokenPicker = memo(function TokenPicker({
         return assets.filter((x) => x.chainId === sidebarChainId)
     }, [assets, sidebarChainId])
 
-    const allNetworks = useNetworkDescriptors(NetworkPluginID.PLUGIN_EVM)
-    const networks = useMemo(() => allNetworks.filter((x) => x.isMainnet), [allNetworks])
+    const networks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
 
     return (
         <Box className={cx(classes.picker, className)} {...rest}>
             <SelectNetworkSidebar
+                className={classes.sidebar}
                 networks={networks}
                 pluginID={NetworkPluginID.PLUGIN_EVM}
                 chainId={sidebarChainId}
@@ -62,9 +65,8 @@ export const TokenPicker = memo(function TokenPicker({
             />
             <List className={classes.list} data-hide-scrollbar>
                 {availableAssets.map((asset) => {
-                    const network = allNetworks.find((x) => x.chainId === asset.chainId)
+                    const network = networks.find((x) => x.chainId === asset.chainId)!
                     const selected = asset.chainId === chainId && isSameAddress(asset.address, address)
-
                     return (
                         <TokenItem
                             key={`${asset.chainId}.${asset.address}`}

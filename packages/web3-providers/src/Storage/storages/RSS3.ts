@@ -6,10 +6,10 @@ import type { StorageAPI } from '../../entry-types.js'
 const caches = new Map<string, LRUCache<string, any>>()
 
 export class RSS3Storage implements StorageAPI.Storage {
-    private cache: LRUCache<string, any> | undefined
-
     private RSS3 = new RSS3API()
     private Web3 = new ConnectionAPI()
+
+    private cache: LRUCache<string, any> | undefined
 
     constructor(private address: string) {
         const cache = caches.get(address)

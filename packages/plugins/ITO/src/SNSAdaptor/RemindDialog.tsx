@@ -2,17 +2,12 @@ import { useState } from 'react'
 import { Checkbox, FormControlLabel, Link, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { FormattedAddress, TokenIcon } from '@masknet/shared'
-import {
-    type ChainId,
-    formatEthereumAddress,
-    explorerResolver,
-    networkResolver,
-    type SchemaType,
-} from '@masknet/web3-shared-evm'
-import { SwapStatus } from './SwapGuide.js'
+import { type ChainId, formatEthereumAddress, type SchemaType } from '@masknet/web3-shared-evm'
+import { ExplorerResolver, NetworkResolver } from '@masknet/web3-providers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
+import { SwapStatus } from './SwapGuide.js'
 import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -90,7 +85,7 @@ export function RemindDialog(props: RemindDialogProps) {
             <section className={classes.wrapper}>
                 <Typography variant="body1" className={cx(classes.reminderText, classes.reminderTextFirst)}>
                     {t.plugin_ito_dialog_claim_reminder_text1({
-                        networkType: networkResolver.networkName(networkType) || '',
+                        networkType: NetworkResolver.networkName(networkType) || '',
                     })}
                 </Typography>
                 <Typography variant="body1" className={classes.reminderText}>
@@ -120,7 +115,7 @@ export function RemindDialog(props: RemindDialogProps) {
                         target="_blank"
                         className={classes.tokenLink}
                         rel="noopener noreferrer"
-                        href={explorerResolver.fungibleTokenLink(chainId, token.address)}>
+                        href={ExplorerResolver.fungibleTokenLink(chainId, token.address)}>
                         <Typography variant="body2">
                             <FormattedAddress address={token.address} size={4} formatter={formatEthereumAddress} /> (
                             {t.plugin_ito_view_on_explorer()})

@@ -1,15 +1,14 @@
+import { memo, useCallback } from 'react'
+import { Box, Typography, useTheme, type BoxProps } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { MaskTextField, makeStyles } from '@masknet/theme'
 import { openWindow } from '@masknet/shared-base-ui'
-import { Box, Typography, useTheme, type BoxProps } from '@mui/material'
-import { memo, useCallback } from 'react'
-
+import { ExplorerResolver } from '@masknet/web3-providers'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../../../utils/index.js'
 import { ContactsContext } from '../../hook/useContactsContext.js'
 import { AddContactModal } from '../../modals/modals.js'
-import { explorerResolver } from '@masknet/web3-shared-evm'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     input: {
@@ -20,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         fontWeight: 700,
         height: 40,
-        width: 32,
+        minWidth: 32,
         marginRight: theme.spacing(0.5),
         display: 'flex',
         alignItems: 'center',
@@ -118,7 +117,7 @@ const AddContactInputPanel = memo(function AddContactInputPanel(props: BoxProps)
                         <Icons.LinkOut
                             size={18}
                             className={classes.linkOut}
-                            onClick={() => openWindow(explorerResolver.addressLink(chainId, address))}
+                            onClick={() => openWindow(ExplorerResolver.addressLink(chainId, address))}
                         />
                     </Typography>
                 ) : null}

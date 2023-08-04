@@ -12,6 +12,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { isSameAddress, type Transaction } from '@masknet/web3-shared-base'
 import { useMemo } from 'react'
+import { BigNumber } from 'bignumber.js'
 
 function useContext(initialState?: { account?: string; chainId?: Web3Helper.ChainIdAll; pluginID?: NetworkPluginID }) {
     const { account, chainId } = useChainContext({ account: initialState?.account, chainId: initialState?.chainId })
@@ -35,6 +36,14 @@ function useContext(initialState?: { account?: string; chainId?: Web3Helper.Chai
         })
     }, [fungibleAssets.data, fungibleTokens, Others.chainResolver.nativeCurrency])
 
+    const total = useMemo(() => {
+        let v = new BigNumber(0)
+        assets.map((asset) => {
+            v = new BigNumber(asset.value?.usd ?? 0).plus(v)
+        })
+        return v.toFixed(2)
+    }, [assets])
+
     const iterator = useTransactions(initialState?.pluginID, { chainId })
     const {
         value = EMPTY_LIST,
@@ -54,6 +63,7 @@ function useContext(initialState?: { account?: string; chainId?: Web3Helper.Chai
         next,
         done,
         history: { value: dataSource, loading: loadingHistory },
+        total,
     }
 }
 

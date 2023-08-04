@@ -1,10 +1,11 @@
+import { useCallback } from 'react'
+import { ExternalLink } from 'react-feather'
+import { Button, DialogActions, DialogContent, Link, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { CopyButton, InjectedDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { ChainId, explorerResolver, formatEthereumAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { Button, DialogActions, DialogContent, Link, Stack, Typography } from '@mui/material'
-import { useCallback } from 'react'
-import { ExternalLink } from 'react-feather'
+import { ExplorerResolver } from '@masknet/web3-providers'
+import { ChainId, formatEthereumAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../locales/index.js'
 import { type TokenRiskWarningDialogEvent } from '../../messages.js'
 
@@ -112,7 +113,7 @@ export function RiskWarningDialog({ open, token, onSetDialog }: Props) {
                         <Link
                             className={classes.link}
                             href={
-                                explorerResolver.fungibleTokenLink?.(
+                                ExplorerResolver.fungibleTokenLink?.(
                                     token?.chainId ?? ChainId.Mainnet,
                                     token?.contract ?? ZERO_ADDRESS,
                                 ) ?? ''

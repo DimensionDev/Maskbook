@@ -46,8 +46,6 @@ export class HubCreatorAPI_Base<T extends NetworkPluginID> {
     private createCached = memoize(this.creator, resolver<Web3Helper.Definition[T]['ChainId']>)
 
     create(initial?: HubOptions_Base<Web3Helper.Definition[T]['ChainId']>) {
-        const options = this.Web3HubOptions.fill(initial)
-        if (!this.Web3Others.isValidChainId(options.chainId!)) return
         return this.createCached(initial)
     }
 }
