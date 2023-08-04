@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { type NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
-import { Box, List, ListItem, Typography, useTheme } from '@mui/material'
+import { Box, List, Typography, useTheme } from '@mui/material'
 import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
@@ -14,6 +14,7 @@ import { ChangePaymentPassword } from './ChangePaymentPassword.js'
 import { ShowPrivateKey } from './ShowPrivateKey.js'
 import { ChangeNetwork } from './ChangeNetwork.js'
 import { ChangeCurrency } from './ChangeCurrency.js'
+import { ChangeOwner } from './ChangeOwner.js'
 import { ActionButton } from '@masknet/theme'
 import { WalletRemoveModal } from '../../../modals/modals.js'
 
@@ -46,13 +47,7 @@ const WalletSettings = memo(() => {
                 <Icons.ArrowDownRound color={theme.palette.maskColor.white} size={24} />
             </Box>
             <List dense className={classes.list}>
-                <ListItem className={classes.item}>
-                    <Box className={classes.itemBox}>
-                        <Icons.PersonasOutline size={20} color={theme.palette.maskColor.second} />
-                        <Typography className={classes.itemText}>{t('popups_change_owner')}</Typography>
-                    </Box>
-                    <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />
-                </ListItem>
+                <ChangeOwner />
                 <Rename />
                 <Contacts />
                 <AutoLock />
