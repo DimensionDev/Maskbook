@@ -1020,7 +1020,7 @@
     "popups_switch_persona": "crwdns21805:0crwdne21805:0",
     "popups_recovery": "crwdns21807:0crwdne21807:0",
     "popups_next_id": "crwdns21809:0crwdne21809:0",
-    "popups_export_private_key": "crwdns21811:0crwdne21811:0",
+    "popups_backup_persona": "crwdns22031:0crwdne22031:0",
     "popups_persona_rename_tips": "crwdns21813:0crwdne21813:0",
     "popups_backup_password_rules": "crwdns21815:0crwdne21815:0",
     "popups_backup_password_tips": "crwdns21817:0crwdne21817:0",
