@@ -1,5 +1,6 @@
 import { fetch } from './fetch.js'
 import { Duration } from './fetchCached.js'
+import { Expiration } from './fetchSquashed.js'
 import { getNextFetchers, type NextFetchersOptions } from './getNextFetchers.js'
 
 export async function fetchJSON<T = unknown>(
@@ -18,7 +19,7 @@ export async function fetchSquashedJSON<T = unknown>(
     options?: NextFetchersOptions,
 ): Promise<T> {
     return fetchJSON<T>(input, init, {
-        squashExpiration: 600,
+        squashExpiration: Expiration.SHORT,
         ...options,
     })
 }
@@ -29,7 +30,7 @@ export async function fetchCachedJSON<T = unknown>(
     options?: NextFetchersOptions,
 ): Promise<T> {
     return fetchJSON<T>(input, init, {
-        squashExpiration: 600,
+        squashExpiration: Expiration.SHORT,
         cacheDuration: Duration.SHORT,
         ...options,
     })
