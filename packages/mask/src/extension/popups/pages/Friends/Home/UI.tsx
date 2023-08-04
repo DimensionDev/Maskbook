@@ -13,7 +13,7 @@ import type { NextIDPersonaBindingsWithIdentifier } from '../../../hook/useFrien
 const useStyles = makeStyles()((theme) => ({
     container: {
         flex: 1,
-        backgroundColor: '#F7F9FA',
+        backgroundColor: theme.palette.maskColor.white,
         display: 'flex',
         flexDirection: 'column',
     },

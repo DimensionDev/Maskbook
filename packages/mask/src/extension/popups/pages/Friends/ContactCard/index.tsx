@@ -1,7 +1,7 @@
 import { memo, useState, useCallback } from 'react'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { Box, Typography, Link, useTheme, ButtonBase as Button, ButtonBase, Avatar } from '@mui/material'
+import { Box, Typography, Link, useTheme, ButtonBase as Button, Avatar } from '@mui/material'
 import {
     formatPersonaFingerprint,
     type BindingProof,
@@ -12,11 +12,11 @@ import {
 import { CopyButton, PersonaContext } from '@masknet/shared'
 import urlcat from 'urlcat'
 import { useNavigate } from 'react-router-dom'
-import { TwitterAccount } from './TwitterAccount/index.js'
-import { Account } from './Account/index.js'
 import { NextIDPlatform } from '@masknet/shared-base'
 import { attachNextIDToProfile } from '../../../../../utils/utils.js'
 import Services from '../../../../service.js'
+import { ConnectedAccounts } from './ConnectedAccounts/index.js'
+import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -52,24 +52,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         color: theme.palette.maskColor.second,
     },
-    connectedAccounts: {
-        borderBottomLeftRadius: '6px',
-        borderBottomRightRadius: '6px',
-        background: theme.palette.maskColor.white,
-        padding: '8px',
-        position: 'relative',
-    },
-    more: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '24px',
-        height: '24px',
-        background: 'rgba(28, 104, 243, 0.1)',
-        borderRadius: '50%',
-        position: 'absolute',
-        right: '10px',
-    },
     addButton: {
         display: 'flex',
         padding: '8px 12px',
@@ -98,6 +80,7 @@ export const ContactCard = memo<ContactCardProps>(({ avatar, nextId, profiles, p
     const navigate = useNavigate()
     const [local, setLocal] = useState(false)
     const { currentPersona } = PersonaContext.useContainer()
+    const { t } = useI18N()
     const handleAddFriend = useCallback(() => {
         setLocal(true)
         const twitter = profiles.find((p) => p.platform === NextIDPlatform.Twitter)
@@ -106,7 +89,6 @@ export const ContactCard = memo<ContactCardProps>(({ avatar, nextId, profiles, p
         const personaIdentifier = ECKeyIdentifier.fromHexPublicKeyK256(nextId).expect(
             `${nextId} should be a valid hex public key in k256`,
         )
-        console.log(profileIdentifier)
         attachNextIDToProfile({
             identifier: profileIdentifier,
             linkedPersona: personaIdentifier,
@@ -170,64 +152,17 @@ export const ContactCard = memo<ContactCardProps>(({ avatar, nextId, profiles, p
                     </Button>
                 ) : (
                     <Button className={classes.addButton} onClick={handleAddFriend}>
-                        Add
+                        {t('popups_encrypted_friends_add_friends')}
                     </Button>
                 )}
             </Box>
-            <Box
-                display="flex"
-                gap="8px"
-                alignItems="center"
-                height="58px"
-                className={classes.connectedAccounts}
-                width="100%">
-                {profiles.slice(0, 2).map((profile) => {
-                    switch (profile.platform) {
-                        case 'twitter':
-                            return (
-                                <TwitterAccount avatar={''} userId={profile.name ? profile.name : profile.identity} />
-                            )
-                        case 'ens':
-                        case 'ethereum':
-                        case 'github':
-                        case 'space_id':
-                        case 'lens':
-                        case 'unstoppabledomains':
-                        case 'farcaster':
-                            return (
-                                <Account
-                                    userId={profile.platform === 'ens' ? profile.name : profile.identity}
-                                    icon={profile.platform}
-                                />
-                            )
-                        default:
-                            return null
-                    }
-                })}
-                {profiles.length > 2 ? (
-                    <ButtonBase
-                        className={classes.more}
-                        onClick={() => {
-                            navigate(`${PopupRoutes.FriendsDetail}/${nextId}`, {
-                                state: {
-                                    avatar,
-                                    publicKey,
-                                    nextId,
-                                    profiles,
-                                    isLocal,
-                                },
-                            })
-                        }}>
-                        <Typography
-                            fontSize={12}
-                            fontWeight={400}
-                            lineHeight="16px"
-                            color={theme.palette.maskColor.main}>
-                            {`+${profiles.length - 2}`}
-                        </Typography>
-                    </ButtonBase>
-                ) : null}
-            </Box>
+            <ConnectedAccounts
+                avatar={avatar}
+                nextId={nextId}
+                publicKey={publicKey}
+                isLocal={isLocal}
+                profiles={profiles}
+            />
         </Box>
     )
 })

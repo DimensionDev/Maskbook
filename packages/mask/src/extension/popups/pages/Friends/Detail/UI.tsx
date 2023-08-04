@@ -8,9 +8,8 @@ import { useNavigate } from 'react-router-dom'
 import { formatPersonaFingerprint, type BindingProof } from '@masknet/shared-base'
 import { useTheme } from '@mui/system'
 import { CopyButton } from '@masknet/shared'
-import { TwitterAccount } from './TwitterAccount/index.js'
-import { Account } from './Account/index.js'
 import urlcat from 'urlcat'
+import { ConnectedAccounts } from './ConnectAccounts/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -47,14 +46,6 @@ const useStyles = makeStyles()((theme) => ({
         height: 12,
         fontSize: 12,
         color: theme.palette.maskColor.second,
-    },
-    accounts: {
-        width: '100%',
-        display: 'grid',
-        justifyContent: 'center',
-        padding: '16px',
-        gap: '12px',
-        gridTemplateColumns: 'repeat(3, 119px)',
     },
 }))
 
@@ -118,34 +109,7 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(
                         </Typography>
                     </Box>
                 </Box>
-                <Box className={classes.accounts}>
-                    {profiles.map((profile) => {
-                        switch (profile.platform) {
-                            case 'twitter':
-                                return (
-                                    <TwitterAccount
-                                        avatar={''}
-                                        userId={profile.name ? profile.name : profile.identity}
-                                    />
-                                )
-                            case 'ens':
-                            case 'ethereum':
-                            case 'github':
-                            case 'space_id':
-                            case 'lens':
-                            case 'unstoppabledomains':
-                            case 'farcaster':
-                                return (
-                                    <Account
-                                        userId={profile.platform === 'ens' ? profile.name : profile.identity}
-                                        icon={profile.platform}
-                                    />
-                                )
-                            default:
-                                return null
-                        }
-                    })}
-                </Box>
+                <ConnectedAccounts profiles={profiles} />
             </Box>
         )
     },

@@ -15,7 +15,7 @@ export function useFriendsFromSearch(
     return useAsyncRetry(async () => {
         if (!searchResult?.length) return EMPTY_LIST
         const profiles: NextIDPersonaBindingsWithIdentifier[] = []
-        searchResult.forEach((item, index) => {
+        searchResult.map((item, index) => {
             const filtered = item.proofs.filter(
                 (x) =>
                     x.platform === 'twitter' ||

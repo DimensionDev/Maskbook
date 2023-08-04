@@ -33,7 +33,7 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
         const friends = res.filter((item) => item.linkedPersona !== undefined)
         const profiles: FriendsInformation[] = []
         const promiseArray: Array<Promise<BindingProof[]>> = []
-        friends.forEach(async (item) => {
+        friends.map(async (item) => {
             const id = (item.linkedPersona as ECKeyIdentifier).publicKeyAsHex
             promiseArray.push(NextIDProof.queryProfilesByPublicKey(id))
         })
