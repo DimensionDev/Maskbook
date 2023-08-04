@@ -4,8 +4,10 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext } from './useContext.js'
 
 /**
- * @deprecated
- * Get all networks with useNetworks() instead
+ * Get all built in declared network descriptor
+ * @param expectedPluginID
+ * @param expectedChainIdOrNetworkTypeOrID
+ * @returns
  */
 export function useNetworkDescriptors<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     expectedPluginID?: T,
