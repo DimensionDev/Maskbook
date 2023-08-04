@@ -24,7 +24,6 @@ import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
 import { TokenPicker } from '../../../components/index.js'
 import { useTokenParams } from '../../../hook/index.js'
 import { ChooseTokenModal } from '../../../modals/modals.js'
-import { useDefaultGasConfig } from './useDefaultGasConfig.js'
 
 const useStyles = makeStyles()((theme) => ({
     asset: {
@@ -106,8 +105,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM, { chainId })
     const isNativeToken = isNativeTokenAddress(address)
     const gasLimit = isNativeToken ? ETH_GAS_LIMIT : ERC20_GAS_LIMIT
-    const defaultGasConfig = useDefaultGasConfig(chainId, gasLimit)
-    const [gasConfig = defaultGasConfig, setGasConfig] = useState<GasConfig>()
+    const [gasConfig, setGasConfig] = useState<GasConfig>()
     const [amount, setAmount] = useState('')
     const totalAmount = useMemo(
         () => (amount && token?.decimals ? rightShift(amount, token.decimals).toFixed() : '0'),
@@ -216,8 +214,6 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                     <GasSettingMenu
                         gas={gasLimit}
                         defaultChainId={chainId}
-                        initConfig={defaultGasConfig}
-                        allowMaskAsGas
                         paymentToken={paymentAddress}
                         onPaymentTokenChange={setPaymentAddress}
                         owner={wallet?.owner}

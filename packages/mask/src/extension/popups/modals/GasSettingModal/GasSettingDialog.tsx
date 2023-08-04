@@ -171,7 +171,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
         <BottomDrawer open={open} title={title} onClose={onClose}>
             <Box display="flex" flexDirection="column" rowGap={1.5} mt={1.5}>
                 <Typography className={classes.preview}>
-                    {formatBalance(totalGas, nativeToken?.decimals, 4, false, true)} ≈{' '}
+                    {formatBalance(totalGas, nativeToken?.decimals, 4, false, true)} {nativeToken?.symbol} ≈{' '}
                     {formatCurrency(formatWeiToEther(totalGas).times(nativeTokenPrice ?? 0), 'USD', {
                         onlyRemainTwoDecimal: true,
                     })}
@@ -218,16 +218,17 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                     value={maxPriorityFeePerGas}
                                     onChange={(e) => {
                                         if (
-                                            (isLessThan(
+                                            isLessThan(
                                                 e.target.value,
                                                 formatWeiToGwei(gasOptions?.slow.suggestedMaxPriorityFeePerGas ?? 0),
                                             ) &&
-                                                !!replaceType) ||
-                                            !e.target.value
+                                            !!replaceType
                                         )
                                             return
                                         setMaxPriorityFeePerGas(e.target.value)
-                                        setMaxFeePerGas((prev) => new BigNumber(e.target.value).plus(prev).toString())
+                                        setMaxFeePerGas((prev) =>
+                                            new BigNumber(e.target.value || ZERO).plus(prev).toString(),
+                                        )
                                     }}
                                     InputProps={{
                                         endAdornment: <Typography className={classes.unit}>{t('gwei')}</Typography>,
@@ -245,14 +246,13 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                 <TextField
                                     onChange={(e) => {
                                         if (
-                                            (isLessThan(
+                                            isLessThan(
                                                 e.target.value,
                                                 formatWeiToGwei(gasOptions?.slow.baseFeePerGas ?? 0).plus(
                                                     maxPriorityFeePerGas,
                                                 ),
                                             ) &&
-                                                !!replaceType) ||
-                                            !e.target.value
+                                            !!replaceType
                                         )
                                             return
 
@@ -279,12 +279,11 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                 value={gasPrice}
                                 onChange={(e) => {
                                     if (
-                                        (isLessThan(
+                                        isLessThan(
                                             e.target.value,
                                             formatWeiToGwei(gasOptions?.slow.suggestedMaxFeePerGas ?? 0),
                                         ) &&
-                                            !!replaceType) ||
-                                        !e.target.value
+                                        !!replaceType
                                     ) {
                                         return
                                     }
