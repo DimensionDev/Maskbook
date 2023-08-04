@@ -29,6 +29,11 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 24,
         cursor: 'pointer',
         color: theme.palette.maskColor.main,
+        border: 'none',
+        background: 'none',
+        padding: 0,
+        margin: 0,
+        outline: 'none',
     },
     info: {
         padding: theme.spacing(2),
@@ -59,77 +64,89 @@ export interface FriendsDetailUIProps {
     nextId: string
     publicKey?: string
     isLocal?: boolean
+    handleDelete: () => void
 }
 
-export const FriendsDetailUI = memo<FriendsDetailUIProps>(({ avatar, nextId, publicKey, profiles, isLocal }) => {
-    const { classes } = useStyles()
-    const navigate = useNavigate()
-    const handleBack = useCallback(() => navigate(-1), [])
-    const theme = useTheme()
-    return (
-        <Box display="flex" flexDirection="column" alignItems="center" width="100%">
-            <Box className={classes.container}>
-                <Box className={classes.header}>
-                    <Icons.Comeback className={classes.back} onClick={handleBack} />
-                    <Box />
-                    {isLocal ? <Icons.Delete className={classes.back} /> : null}
-                </Box>
-                <Box className={classes.info}>
-                    <Box>
-                        {avatar ? (
-                            <Avatar src={avatar} style={{ width: 60, height: 60 }} />
-                        ) : (
-                            <Icons.NextIdAvatar size={60} style={{ borderRadius: 99 }} />
-                        )}
+export const FriendsDetailUI = memo<FriendsDetailUIProps>(
+    ({ avatar, nextId, publicKey, profiles, isLocal, handleDelete }) => {
+        const { classes } = useStyles()
+        const navigate = useNavigate()
+        const handleBack = useCallback(() => navigate(-1), [])
+        const theme = useTheme()
+        return (
+            <Box display="flex" flexDirection="column" alignItems="center" width="100%">
+                <Box className={classes.container}>
+                    <Box className={classes.header}>
+                        <button onClick={handleBack} type="submit" className={classes.back}>
+                            <Icons.Comeback />
+                        </button>
+                        <Box />
+                        {isLocal ? (
+                            <button onClick={handleDelete} type="submit" className={classes.back}>
+                                <Icons.Delete />
+                            </button>
+                        ) : null}
                     </Box>
-                    <Typography fontSize={18} fontWeight="700" lineHeight="22px" marginTop="8px">
-                        {publicKey ? formatPersonaFingerprint(publicKey, 4) : null}
-                    </Typography>
-                    <Typography
-                        fontSize={12}
-                        color={theme.palette.maskColor.second}
-                        lineHeight="16px"
-                        display="flex"
-                        alignItems="center"
-                        columnGap="2px">
-                        {formatPersonaFingerprint(nextId, 4)}
-                        <CopyButton text={nextId} size={12} className={classes.icon} />
-                        <Link
-                            underline="none"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            href={urlcat('https://web3.bio/', { s: nextId })}
-                            className={classes.icon}>
-                            <Icons.LinkOut size={12} />
-                        </Link>
-                    </Typography>
+                    <Box className={classes.info}>
+                        <Box>
+                            {avatar ? (
+                                <Avatar src={avatar} style={{ width: 60, height: 60 }} />
+                            ) : (
+                                <Icons.NextIdAvatar size={60} style={{ borderRadius: 99 }} />
+                            )}
+                        </Box>
+                        <Typography fontSize={18} fontWeight="700" lineHeight="22px" marginTop="8px">
+                            {publicKey ? formatPersonaFingerprint(publicKey, 4) : null}
+                        </Typography>
+                        <Typography
+                            fontSize={12}
+                            color={theme.palette.maskColor.second}
+                            lineHeight="16px"
+                            display="flex"
+                            alignItems="center"
+                            columnGap="2px">
+                            {formatPersonaFingerprint(nextId, 4)}
+                            <CopyButton text={nextId} size={12} className={classes.icon} />
+                            <Link
+                                underline="none"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                href={urlcat('https://web3.bio/', { s: nextId })}
+                                className={classes.icon}>
+                                <Icons.LinkOut size={12} />
+                            </Link>
+                        </Typography>
+                    </Box>
+                </Box>
+                <Box className={classes.accounts}>
+                    {profiles.map((profile) => {
+                        switch (profile.platform) {
+                            case 'twitter':
+                                return (
+                                    <TwitterAccount
+                                        avatar={''}
+                                        userId={profile.name ? profile.name : profile.identity}
+                                    />
+                                )
+                            case 'ens':
+                            case 'ethereum':
+                            case 'github':
+                            case 'space_id':
+                            case 'lens':
+                            case 'unstoppabledomains':
+                            case 'farcaster':
+                                return (
+                                    <Account
+                                        userId={profile.platform === 'ens' ? profile.name : profile.identity}
+                                        icon={profile.platform}
+                                    />
+                                )
+                            default:
+                                return null
+                        }
+                    })}
                 </Box>
             </Box>
-            <Box className={classes.accounts}>
-                {profiles.map((profile) => {
-                    switch (profile.platform) {
-                        case 'twitter':
-                            return (
-                                <TwitterAccount avatar={''} userId={profile.name ? profile.name : profile.identity} />
-                            )
-                        case 'ens':
-                        case 'ethereum':
-                        case 'github':
-                        case 'space_id':
-                        case 'lens':
-                        case 'unstoppabledomains':
-                        case 'farcaster':
-                            return (
-                                <Account
-                                    userId={profile.platform === 'ens' ? profile.name : profile.identity}
-                                    icon={profile.platform}
-                                />
-                            )
-                        default:
-                            return null
-                    }
-                })}
-            </Box>
-        </Box>
-    )
-})
+        )
+    },
+)
