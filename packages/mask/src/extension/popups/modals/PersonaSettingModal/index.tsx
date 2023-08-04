@@ -99,7 +99,7 @@ export const PersonaSettingModal = memo<ActionModalBaseProps>(function PersonaSe
                 </Box>
             </Box>
             <Box className={classes.item}>
-                <Typography className={classes.text}>{t('popups_export_private_key')}</Typography>
+                <Typography className={classes.text}>{t('popups_backup_persona')}</Typography>
                 <Icons.ArrowRight
                     size={24}
                     className={classes.arrow}

@@ -1020,7 +1020,7 @@
     "popups_switch_persona": "Switch Persona",
     "popups_recovery": "Recovery",
     "popups_next_id": "Next.ID",
-    "popups_export_private_key": "Export Private Key",
+    "popups_backup_persona": "Backup Persona",
     "popups_persona_rename_tips": "Persona name must between 3 to 20 characters.",
     "popups_backup_password_rules": "Backup password must be between 8 and 20 characters and contain at least a number, a uppercase letter, a lowercase letter and a special character. ",
     "popups_backup_password_tips": "Please set up backup password to export private key.",
