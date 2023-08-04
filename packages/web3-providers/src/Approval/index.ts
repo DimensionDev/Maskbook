@@ -1,5 +1,5 @@
 import { BigNumber } from 'bignumber.js'
-import { AbiCoder } from 'web3-eth-abi'
+import * as ABICoder from 'web3-eth-abi'
 import type { Log } from 'web3-core'
 import { maxBy, mapKeys } from 'lodash-es'
 import { EMPTY_LIST } from '@masknet/shared-base'
@@ -158,8 +158,9 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
     ) {
         const fromBlock = state[account]?.get(chainId)?.fromBlock ?? 0
         const toBlock = await this.Web3.getBlockNumber({ chainId })
+        const coder = ABICoder as unknown as ABICoder.AbiCoder
         const logs = await this.Web3.getWeb3({ chainId }).eth.getPastLogs({
-            topics: [topic, new AbiCoder().encodeParameter('address', account)],
+            topics: [topic, coder.encodeParameter('address', account)],
             fromBlock,
             toBlock,
         })
@@ -173,7 +174,8 @@ function parseLogs(logs: Log[]) {
         .filter((x) => x.topics.length === 3 && x.data !== '0x')
         .reduce<Record<string, Record<string, Array<{ blockNumber: number; data: string; transactionIndex: number }>>>>(
             (acc, cur) => {
-                const spender = new AbiCoder().decodeParameter('address', cur.topics[2]) as unknown as string
+                const coder = ABICoder as unknown as ABICoder.AbiCoder
+                const spender = coder.decodeParameter('address', cur.topics[2]) as unknown as string
                 if (isZeroAddress(spender)) return acc
                 if (!acc[spender]) acc[spender] = {}
 

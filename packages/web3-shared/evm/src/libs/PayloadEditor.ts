@@ -1,5 +1,5 @@
 import { first, isUndefined, omitBy } from 'lodash-es'
-import { AbiCoder } from 'web3-eth-abi'
+import * as ABICoder from 'web3-eth-abi'
 import { type AbiItem, hexToNumber, hexToNumberString, toHex } from 'web3-utils'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Wallet, ECKeyIdentifier, Proof, ProofPayload } from '@masknet/shared-base'
@@ -83,6 +83,7 @@ export class PayloadEditor {
 
     private getRawConfig() {
         const { method, params } = this.payload
+        const coder = ABICoder as unknown as ABICoder.AbiCoder
         switch (method) {
             case EthereumMethodType.ETH_CALL:
             case EthereumMethodType.ETH_ESTIMATE_GAS:
@@ -98,14 +99,15 @@ export class PayloadEditor {
                 const [owner] = params as [string]
 
                 // compose a fake transaction to be accepted by Transaction Watcher
+
                 return {
                     from: owner,
                     to: getSmartPayConstant(chainId, 'CREATE2_FACTORY_CONTRACT_ADDRESS'),
                     chainId,
-                    data: new AbiCoder().encodeFunctionCall(
-                        CREATE2_FACTORY_ABI.find((x) => x.name === 'deploy')! as AbiItem,
-                        ['0x', toHex(0)],
-                    ),
+                    data: coder.encodeFunctionCall(CREATE2_FACTORY_ABI.find((x) => x.name === 'deploy')! as AbiItem, [
+                        '0x',
+                        toHex(0),
+                    ]),
                 }
             }
             case EthereumMethodType.MASK_FUND: {
@@ -121,10 +123,10 @@ export class PayloadEditor {
                     // it's a not-exist address, use the zero address as a placeholder
                     to: ZERO_ADDRESS,
                     chainId,
-                    data: new AbiCoder().encodeFunctionCall(
-                        CREATE2_FACTORY_ABI.find((x) => x.name === 'fund')! as AbiItem,
-                        [ownerAddress, toHex(nonce)],
-                    ),
+                    data: coder.encodeFunctionCall(CREATE2_FACTORY_ABI.find((x) => x.name === 'fund')! as AbiItem, [
+                        ownerAddress,
+                        toHex(nonce),
+                    ]),
                 }
             }
             default:

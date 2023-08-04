@@ -1,4 +1,4 @@
-import { AbiCoder } from 'web3-eth-abi'
+import * as ABICoder from 'web3-eth-abi'
 import secondsToMilliseconds from 'date-fns/secondsToMilliseconds'
 import { type ChainId, type SchemaType, chainResolver } from '@masknet/web3-shared-evm'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
@@ -29,8 +29,10 @@ export class ContractRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, 
             toBlock,
         })
 
+        const coder = ABICoder as unknown as ABICoder.AbiCoder
+
         return logs.map((log) => {
-            const result = new AbiCoder().decodeLog(creationSuccessTopicInputs, log.data, [
+            const result = coder.decodeLog(creationSuccessTopicInputs, log.data, [
                 CREATE_LUCKY_DROP_TOPIC,
             ]) as unknown as {
                 creation_time: string // 10
