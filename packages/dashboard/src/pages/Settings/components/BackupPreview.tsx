@@ -3,7 +3,8 @@ import { Icons } from '@masknet/icons'
 import { ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
-import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { ExplorerResolver } from '@masknet/web3-providers'
 import {
     Card,
     CardContent,
@@ -200,7 +201,7 @@ export function BackupPreview({ info, ...rest }: BackupPreviewProps) {
                                         <Link
                                             className={classes.link}
                                             fontSize={0}
-                                            href={explorerResolver.addressLink(ChainId.Mainnet, wallet)}
+                                            href={ExplorerResolver.addressLink(ChainId.Mainnet, wallet)}
                                             target="_blank">
                                             <ReversedAddress
                                                 component="span"

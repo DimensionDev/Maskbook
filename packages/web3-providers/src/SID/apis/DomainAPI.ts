@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 import { ChainId, isValidAddress, isValidDomain } from '@masknet/web3-shared-evm'
 import type { DomainAPI } from '../../entry-types.js'
-import { fetchCachedJSON } from '../../entry-helpers.js'
+import { fetchCachedJSON } from '../../helpers/fetchJSON.js'
 
 const ROOT_HOST = 'https://api.prd.space.id'
 

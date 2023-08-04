@@ -1,11 +1,13 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { formatAddress, isValidAddress, isValidDomain, isZeroAddress } from '@masknet/web3-shared-solana'
-import { Bonfida } from '@masknet/web3-providers'
-import type { NameServiceAPI } from '@masknet/web3-providers/types'
 import { NameServiceState } from '../../Base/state/NameService.js'
+import { BonfidaAPI } from '../../../Bonfida/index.js'
+import type { NameServiceAPI } from '../../../entry-types.js'
 
 export class NameService extends NameServiceState {
+    private Bonfida = new BonfidaAPI()
+
     constructor(context: Plugin.Shared.SharedUIContext) {
         super(context, {
             pluginID: NetworkPluginID.PLUGIN_SOLANA,
@@ -16,6 +18,6 @@ export class NameService extends NameServiceState {
     }
 
     override createResolvers() {
-        return [Bonfida] as NameServiceAPI.Provider[]
+        return [this.Bonfida] as NameServiceAPI.Provider[]
     }
 }

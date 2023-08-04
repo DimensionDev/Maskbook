@@ -1,7 +1,8 @@
 import { ProviderURL, type RequestArguments } from '@masknet/web3-shared-evm'
 import { ConnectionOptionsReadonlyAPI } from './ConnectionOptionsReadonlyAPI.js'
 import type { ConnectionOptions } from '../types/index.js'
-import { createWeb3FromURL, createWeb3ProviderFromURL } from '../../../entry-helpers.js'
+import { createWeb3FromURL } from '../../../helpers/createWeb3FromURL.js'
+import { createWeb3ProviderFromURL } from '../../../helpers/createWeb3ProviderFromURL.js'
 
 export class RequestReadonlyAPI {
     constructor(protected options?: ConnectionOptions) {}

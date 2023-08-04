@@ -1,7 +1,6 @@
 import { createContext, useContext, useMemo, type ProviderProps } from 'react'
 import type { CommonOptions } from '@masknet/web3-telemetry/types'
 import { useChainContext, useNetworkContext } from '../useContext.js'
-import { useNetworkType } from '../useNetworkType.js'
 import { useProviderType } from '../useProviderType.js'
 
 const Telemetry = createContext<CommonOptions>(null!)
@@ -11,7 +10,6 @@ export function TelemetryProvider({ value, children }: Partial<ProviderProps<Com
     const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext()
 
-    const networkType = useNetworkType()
     const providerType = useProviderType()
 
     const options = useMemo<CommonOptions>(() => {
@@ -22,7 +20,6 @@ export function TelemetryProvider({ value, children }: Partial<ProviderProps<Com
             network: {
                 chainId,
                 networkID: pluginID,
-                networkType,
                 providerType,
                 ...value?.network,
             },
@@ -31,7 +28,7 @@ export function TelemetryProvider({ value, children }: Partial<ProviderProps<Com
                 ...value?.user,
             },
         }
-    }, [pluginID, account, chainId, networkType, providerType, JSON.stringify(value)])
+    }, [pluginID, account, chainId, providerType, JSON.stringify(value)])
 
     return <Telemetry.Provider value={options}>{children}</Telemetry.Provider>
 }

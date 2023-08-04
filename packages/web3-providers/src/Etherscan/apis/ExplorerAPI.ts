@@ -2,8 +2,8 @@ import urlcat from 'urlcat'
 import { type ChainId, EtherscanURL } from '@masknet/web3-shared-evm'
 import type { Transaction } from '../types.js'
 import { toTransaction } from '../helpers.js'
+import { fetchJSON } from '../../helpers/fetchJSON.js'
 import type { ExplorerAPI } from '../../entry-types.js'
-import { fetchJSON } from '../../entry-helpers.js'
 
 export class EtherscanExplorerAPI implements ExplorerAPI.Provider {
     async getLatestTransactions(

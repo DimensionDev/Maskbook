@@ -3,7 +3,6 @@ import { compact } from 'lodash-es'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import { type NftRedPacketJSONPayload, RedPacketStatus } from '@masknet/web3-providers/types'
 import { useAvailabilityNftRedPacket } from './useAvailabilityNftRedPacket.js'
 
@@ -34,7 +33,6 @@ export function useNftAvailabilityComputed(account: string, payload: NftRedPacke
         const isExpired = availability.expired
         const isClaimed = availability.isClaimed
         const isCreator = isSameAddress(payload?.sender.address ?? '', account)
-        const parsedChainId = chainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
 
         const isPasswordValid = !!payload.password && payload.password !== 'PASSWORD INVALID'
         const isClaimable = !isExpired && !isEmpty && !isClaimed

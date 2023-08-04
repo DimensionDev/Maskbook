@@ -3,8 +3,9 @@ import { Box, Button, InputAdornment, MenuItem, Stack, Typography } from '@mui/m
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material'
 import { makeStyles, MaskTextField } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
+import { ChainResolver } from '@masknet/web3-providers'
 import type { SecurityAPI } from '@masknet/web3-providers/types'
-import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { WalletIcon, useMenuConfig } from '@masknet/shared'
 import { useI18N } from '../../locales/index.js'
 import { useSupportedChains } from '../hooks/useSupportedChains.js'
@@ -48,8 +49,8 @@ interface SearchBoxProps {
 const DEFAULT_SEARCH_CHAIN = ChainId.Mainnet
 
 function getChainName(chain?: SecurityAPI.SupportedChain<ChainId>) {
-    if (!chain) return chainResolver.chainName(ChainId.Mainnet)
-    return chainResolver.chainName(chain.chainId) ?? chain.name
+    if (!chain) return ChainResolver.chainName(ChainId.Mainnet)
+    return ChainResolver.chainName(chain.chainId) ?? chain.name
 }
 
 export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {

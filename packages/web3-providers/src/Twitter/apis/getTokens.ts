@@ -1,6 +1,6 @@
 import { escapeRegExp } from 'lodash-es'
 import { squashPromise } from '@masknet/web3-shared-base'
-import { fetchText } from '../../entry-helpers.js'
+import { fetchText } from '../../helpers/fetchText.js'
 
 function getScriptURL(content: string, name: string) {
     const matchURL = new RegExp(

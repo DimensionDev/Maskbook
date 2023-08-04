@@ -11,8 +11,7 @@ import { TipButtonStyle } from '../../constant.js'
 import { normalFollowButtonSelector as selector } from '../../utils/selector.js'
 import type { SocialIdentity } from '@masknet/shared-base'
 import { getUserIdentity } from '../../utils/user.js'
-import { getAvatarType } from '../../utils/AvatarType.js'
-import { AvatarType } from '@masknet/plugin-avatar'
+import { isVerifiedUser } from '../../utils/AvatarType.js'
 
 function getTwitterId(ele: HTMLElement) {
     const profileLink = ele.closest('[data-testid="UserCell"]')?.querySelector('a[role="link"]')
@@ -35,12 +34,12 @@ export function injectTipsButtonOnFollowButton(signal: AbortSignal) {
                 })
                 proxy.realCurrent = ele
 
-                const type = getAvatarType()
+                const isVerified = isVerifiedUser(ele)
                 const identity = await getUserIdentity(twitterId)
                 if (!identity) return
 
                 const root = attachReactTreeWithContainer(proxy.beforeShadow, { signal })
-                root.render(type === AvatarType.Clip ? <FollowButtonTipsSlot identity={identity} /> : <div />)
+                root.render(isVerified ? <FollowButtonTipsSlot identity={identity} /> : <div />)
                 remover = root.destroy
             }
 

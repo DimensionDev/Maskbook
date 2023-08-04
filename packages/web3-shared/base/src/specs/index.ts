@@ -192,14 +192,14 @@ export interface ChainDescriptor<ChainId, SchemaType, NetworkType> {
     ID: string
     type: NetworkType
     chainId: ChainId
-    coinMarketCapChainId: string
-    coinGeckoChainId: string
-    coinGeckoPlatformId: string
+    coinMarketCapChainId?: string
+    coinGeckoChainId?: string
+    coinGeckoPlatformId?: string
     name: string
     color?: string
     fullName?: string
     shortName?: string
-    network: 'mainnet' | 'testnet' | Omit<string, 'mainnet' | 'testnet'>
+    network: LiteralUnion<'mainnet' | 'testnet'>
     nativeCurrency: FungibleToken<ChainId, SchemaType>
     rpcUrl: string
     iconUrl?: string

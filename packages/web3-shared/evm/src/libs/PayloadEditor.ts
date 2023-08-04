@@ -4,13 +4,18 @@ import { type AbiItem, hexToNumber, hexToNumberString, toHex } from 'web3-utils'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Wallet, ECKeyIdentifier, Proof, ProofPayload } from '@masknet/shared-base'
 import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.json'
-import { type EIP3085Descriptor } from './EIP3085Editor.js'
 import { isValidChainId } from '../helpers/isValidChainId.js'
 import { formatEthereumAddress } from '../helpers/formatter.js'
 import { parseChainId } from '../helpers/parseChainId.js'
 import { createJsonRpcPayload } from '../helpers/createJsonRpcPayload.js'
 import { ZERO_ADDRESS, getSmartPayConstant } from '../constants/index.js'
-import { type Transaction, type TransactionOptions, type UserOperation, EthereumMethodType } from '../types/index.js'
+import {
+    type Transaction,
+    type TransactionOptions,
+    type UserOperation,
+    type EIP3085Descriptor,
+    EthereumMethodType,
+} from '../types/index.js'
 
 type Options = Pick<TransactionOptions, 'account' | 'chainId'>
 

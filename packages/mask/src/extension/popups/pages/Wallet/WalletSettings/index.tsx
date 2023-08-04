@@ -1,9 +1,9 @@
-import { Icons } from '@masknet/icons'
-import { type NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
-import { Box, List, Typography, useTheme } from '@mui/material'
 import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Icons } from '@masknet/icons'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
+import { Box, List, Typography, useTheme } from '@mui/material'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { Rename } from './Rename.js'
@@ -20,11 +20,11 @@ import { WalletRemoveModal } from '../../../modals/modals.js'
 
 const WalletSettings = memo(() => {
     const { t } = useI18N()
+    const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const wallet = useWallet()
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const theme = useTheme()
-    const { classes, cx } = useStyles()
 
     useTitle(t('popups_wallet_setting'))
 

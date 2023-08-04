@@ -2,7 +2,7 @@ import { chunk, first, flatten } from 'lodash-es'
 import stringify from 'json-stable-stringify'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { type ChainId, getTrendingConstants } from '@masknet/web3-shared-evm'
-import { fetchJSON } from '../../entry-helpers.js'
+import { fetchJSON } from '../../helpers/fetchJSON.js'
 
 interface Block {
     number: string

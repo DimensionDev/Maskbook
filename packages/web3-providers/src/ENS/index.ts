@@ -7,8 +7,8 @@ import { TheGraphDomainAPI } from '../TheGraph/index.js'
 import type { NameServiceAPI } from '../entry-types.js'
 
 export class ENS_API implements NameServiceAPI.Provider {
-    private ChainbaseDomain = new ChainbaseDomainAPI()
     private R2D2Domain = new R2D2DomainAPI()
+    private ChainbaseDomain = new ChainbaseDomainAPI()
     private TheGraphDomain = new TheGraphDomainAPI()
 
     get id() {

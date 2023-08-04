@@ -85,7 +85,7 @@ export function GasForm(props: GasFormProps) {
     const t = useSharedI18N()
     const { classes } = useStyles()
 
-    const isEIP1559 = Others.chainResolver.isSupport(chainId, 'EIP1559')
+    const isEIP1559 = Others.chainResolver.isFeatureSupported(chainId, 'EIP1559')
     const baseFeePerGas = gasOptions[GasOptionType.FAST].baseFeePerGas ?? '0'
 
     const schema = useGasSchema(chainId, transaction, gasOptions)

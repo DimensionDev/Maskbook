@@ -2,7 +2,7 @@ import urlcat from 'urlcat'
 import { compact } from 'lodash-es'
 import { MASK_X_DEFAULT_PAGINATION, MASK_X_ROOT_URL } from './constants.js'
 import { MaskX_BaseAPI } from '../entry-types.js'
-import { fetchCachedJSON } from '../entry-helpers.js'
+import { fetchCachedJSON } from '../helpers/fetchJSON.js'
 
 export class MaskX_API implements MaskX_BaseAPI.Provider {
     private async fetchFromMaskX(pathname: string) {

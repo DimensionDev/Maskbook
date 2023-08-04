@@ -1,7 +1,8 @@
 import * as ABICoder from 'web3-eth-abi'
 import secondsToMilliseconds from 'date-fns/secondsToMilliseconds'
-import { type ChainId, type SchemaType, chainResolver } from '@masknet/web3-shared-evm'
+import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
+import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
 import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import type { RedPacketJSONPayloadFromChain } from './types.js'
 import { CREATE_LUCKY_DROP_TOPIC } from './constants.js'
@@ -57,7 +58,7 @@ export class ContractRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, 
                 duration: secondsToMilliseconds(Number(result.duration)),
                 block_number: log.blockNumber,
                 contract_version: 4,
-                network: chainResolver.networkType(chainId),
+                network: new ChainResolverAPI().networkType(chainId),
                 token_address: result.token_address,
                 sender: {
                     address: senderAddress,

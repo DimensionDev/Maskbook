@@ -6,6 +6,20 @@ import type { Web3UI as Web3UIShared, Web3State as Web3StateShared } from '@mask
 
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
 
+// Learn more at: https://eips.ethereum.org/EIPS/eip-3085
+export interface EIP3085Descriptor {
+    chainId: string
+    blockExplorerUrls?: string[]
+    chainName?: string
+    iconUrls?: string[]
+    nativeCurrency?: {
+        name: string
+        symbol: string
+        decimals: number
+    }
+    rpcUrls?: string[]
+}
+
 // Learn more about ethereum ChainId https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
 export enum ChainId {
     // Mainnet

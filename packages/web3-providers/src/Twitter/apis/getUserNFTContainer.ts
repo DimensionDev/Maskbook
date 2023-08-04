@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { getTokens, getHeaders } from './getTokens.js'
-import { fetchJSON } from '../../entry-helpers.js'
+import { fetchJSON } from '../../helpers/fetchJSON.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'
 
 export async function getUserNFTContainer(screenName: string) {

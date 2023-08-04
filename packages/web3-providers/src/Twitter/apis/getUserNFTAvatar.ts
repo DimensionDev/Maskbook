@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { fetchCachedJSON } from '../../entry-helpers.js'
+import { fetchCachedJSON } from '../../helpers/fetchJSON.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'
 
 export async function getUserNFTAvatar(screenName: string) {

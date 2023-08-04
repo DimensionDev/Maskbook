@@ -152,16 +152,19 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI(
         },
         [navigate],
     )
-    const handleCollectionChange = useCallback((id: string | undefined) => {
-        setParams(
-            (params) => {
-                if (!id) params.delete(SEARCH_KEY)
-                else params.set(SEARCH_KEY, id)
-                return params.toString()
-            },
-            { replace: true },
-        )
-    }, [])
+    const handleCollectionChange = useCallback(
+        (id: string | undefined) => {
+            setParams(
+                (params) => {
+                    if (!id) params.delete(SEARCH_KEY)
+                    else params.set(SEARCH_KEY, id)
+                    return params.toString()
+                },
+                { replace: true },
+            )
+        },
+        [setParams],
+    )
 
     const scrollTargetRef = useRef<HTMLDivElement>(null)
 

@@ -14,9 +14,11 @@ import { createIndicator, createNextIndicator, createPageable, type Pageable, EM
 import { ChainId, createERC20Token, formatWeiToEther, SchemaType } from '@masknet/web3-shared-evm'
 import type { Collection, Event, Order, Stats, Token } from './types.js'
 import { LOOKSRARE_API_URL, LOOKSRARE_PAGE_SIZE } from './constants.js'
-import { fetchJSON, getPaymentToken, resolveActivityType } from '../entry-helpers.js'
-import type { HubOptions_Base, NonFungibleTokenAPI } from '../entry-types.js'
+import { fetchJSON } from '../helpers/fetchJSON.js'
+import { getPaymentToken } from '../helpers/getPaymentToken.js'
+import { resolveActivityType } from '../helpers/resolveActivityType.js'
 import { isSupportedChainId } from './utils.js'
+import type { HubOptions_Base, NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromLooksRare<T>(chainId: ChainId, url: string) {
     if (![ChainId.Mainnet, ChainId.Rinkeby].includes(chainId)) return

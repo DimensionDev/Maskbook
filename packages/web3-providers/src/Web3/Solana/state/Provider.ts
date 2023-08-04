@@ -5,7 +5,6 @@ import {
     isValidChainId,
     getInvalidChainId,
     isValidAddress,
-    chainResolver,
     type ChainId,
     NetworkType,
     type ProviderType,
@@ -15,7 +14,8 @@ import {
     getDefaultNetworkType,
     getDefaultProviderType,
 } from '@masknet/web3-shared-solana'
-import { SolanaProviders } from '@masknet/web3-providers'
+import { SolanaProviders } from '../providers/index.js'
+import { SolanaChainResolverAPI } from '../apis/ResolverAPI.js'
 import { ProviderState } from '../../Base/state/Provider.js'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
@@ -29,7 +29,8 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             getDefaultChainId,
             getDefaultNetworkType,
             getDefaultProviderType,
-            getNetworkTypeFromChainId: (chainId: ChainId) => chainResolver.networkType(chainId) ?? NetworkType.Solana,
+            getNetworkTypeFromChainId: (chainId: ChainId) =>
+                new SolanaChainResolverAPI().networkType(chainId) ?? NetworkType.Solana,
         })
     }
 }

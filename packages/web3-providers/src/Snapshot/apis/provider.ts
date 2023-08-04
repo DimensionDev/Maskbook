@@ -1,4 +1,4 @@
-import { fetchCachedJSON } from '../../entry-helpers.js'
+import { fetchCachedJSON } from '../../helpers/fetchJSON.js'
 import type { SnapshotBaseAPI } from '../../entry-types.js'
 
 async function fetchFromGraphql<T>(query: string) {

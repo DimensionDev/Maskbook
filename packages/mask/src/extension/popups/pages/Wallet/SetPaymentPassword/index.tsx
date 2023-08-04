@@ -9,8 +9,9 @@ import { ActionButton, makeStyles } from '@masknet/theme'
 import { CrossIsolationMessages, NetworkPluginID, PopupRoutes, getDefaultWalletPassword } from '@masknet/shared-base'
 import { useBalance, useReverseAddress, useWallets } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
-import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { FormattedBalance } from '@masknet/shared'
+import { ExplorerResolver } from '@masknet/web3-providers'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { usePasswordForm } from '../hooks/usePasswordForm.js'
@@ -292,7 +293,7 @@ function WalletItem({ address }: WalletItemProps) {
                         underline="none"
                         target="_blank"
                         rel="noopener noreferrer"
-                        href={explorerResolver.addressLink(ChainId.Mainnet, address)}
+                        href={ExplorerResolver.addressLink(ChainId.Mainnet, address)}
                         marginLeft="4px"
                         width={16}
                         height={16}>
