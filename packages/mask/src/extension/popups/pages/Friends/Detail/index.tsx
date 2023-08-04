@@ -7,11 +7,11 @@ export const FriendsDetail = memo(() => {
     const location = useLocation()
     const { avatar, profiles, nextId, publicKey, isLocal } = location.state
     const [deleted, setDeleted] = useState(false)
-    const handleDelete = useCallback(() => {
+    const handleDelete = useCallback(async () => {
         const personaIdentifier = ECKeyIdentifier.fromHexPublicKeyK256(nextId).expect(
             `${nextId} should be a valid hex public key in k256`,
         )
-        Services.Identity.deletePersona(personaIdentifier, 'safe delete')
+        await Services.Identity.deletePersona(personaIdentifier, 'safe delete')
         setDeleted(true)
     }, [nextId])
     const local = useMemo(() => isLocal && !deleted, [isLocal, deleted])

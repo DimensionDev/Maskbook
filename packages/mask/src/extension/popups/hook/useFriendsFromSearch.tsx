@@ -14,8 +14,7 @@ export function useFriendsFromSearch(
 ): AsyncStateRetry<NextIDPersonaBindingsWithIdentifier[]> {
     return useAsyncRetry(async () => {
         if (!searchResult?.length) return EMPTY_LIST
-        const profiles: NextIDPersonaBindingsWithIdentifier[] = []
-        searchResult.map((item, index) => {
+        const profiles: NextIDPersonaBindingsWithIdentifier[] = searchResult.map((item, index) => {
             const filtered = item.proofs.filter(
                 (x) =>
                     x.platform === 'twitter' ||
@@ -30,7 +29,7 @@ export function useFriendsFromSearch(
             const identifier = ECKeyIdentifier.fromHexPublicKeyK256(item.persona).expect(
                 `${item.persona} should be a valid hex public key in k256`,
             )
-            profiles.push({
+            return {
                 proofs: filtered,
                 linkedPersona: identifier,
                 activated_at: item.activated_at,
@@ -38,7 +37,7 @@ export function useFriendsFromSearch(
                 isLocal: localList
                     ? localList.some((x) => x.linkedPersona?.publicKeyAsHex === identifier.publicKeyAsHex)
                     : false,
-            })
+            }
         })
         return uniqBy(profiles, ({ linkedPersona }) => linkedPersona.publicKeyAsHex)
     }, [searchResult, localList])

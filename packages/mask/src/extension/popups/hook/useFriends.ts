@@ -14,7 +14,8 @@ import { uniqBy } from 'lodash-es'
 
 export type FriendsInformation = ProfileInformation & {
     profiles: BindingProof[]
-} & { id: string }
+    id: string
+}
 
 export function useFriends(network: string): AsyncStateRetry<FriendsInformation[]> {
     const currentPersona = useCurrentPersona()
@@ -31,16 +32,14 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
         const identifiers = values.map((x) => x.profile)
         const res = await Services.Identity.queryProfilesInformation(identifiers)
         const friends = res.filter((item) => item.linkedPersona !== undefined)
-        const profiles: FriendsInformation[] = []
-        const promiseArray: Array<Promise<BindingProof[]>> = []
-        friends.map(async (item) => {
+        const promiseArray: Array<Promise<BindingProof[]>> = friends.map((item) => {
             const id = (item.linkedPersona as ECKeyIdentifier).publicKeyAsHex
-            promiseArray.push(NextIDProof.queryProfilesByPublicKey(id))
+            return NextIDProof.queryProfilesByPublicKey(id)
         })
         const results = await Promise.allSettled(promiseArray)
-        results.forEach((item, index) => {
+        const profiles: FriendsInformation[] = results.map((item, index) => {
             if (!(item.status !== 'rejected')) {
-                profiles.push({
+                return {
                     profiles: [
                         {
                             platform: NextIDPlatform.Twitter,
@@ -53,8 +52,7 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
                     ],
                     ...friends[index],
                     id: (friends[index].linkedPersona as ECKeyIdentifier).publicKeyAsHex,
-                })
-                return
+                }
             }
             const filtered = item.value.filter(
                 (x) =>
@@ -67,11 +65,11 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
                     x.platform === 'farcaster' ||
                     x.platform === 'unstoppabledomains',
             )
-            profiles.push({
+            return {
                 profiles: filtered,
                 ...friends[index],
                 id: (friends[index].linkedPersona as ECKeyIdentifier).publicKeyAsHex,
-            })
+            }
         })
         return uniqBy(profiles, ({ id }) => id)
     }, [network, currentPersona])

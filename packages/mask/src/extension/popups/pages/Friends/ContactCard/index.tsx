@@ -14,7 +14,6 @@ import urlcat from 'urlcat'
 import { useNavigate } from 'react-router-dom'
 import { NextIDPlatform } from '@masknet/shared-base'
 import { attachNextIDToProfile } from '../../../../../utils/utils.js'
-import Services from '../../../../service.js'
 import { ConnectedAccounts } from './ConnectedAccounts/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 
@@ -81,23 +80,20 @@ export const ContactCard = memo<ContactCardProps>(({ avatar, nextId, profiles, p
     const [local, setLocal] = useState(false)
     const { currentPersona } = PersonaContext.useContainer()
     const { t } = useI18N()
-    const handleAddFriend = useCallback(() => {
-        setLocal(true)
+    const handleAddFriend = useCallback(async () => {
         const twitter = profiles.find((p) => p.platform === NextIDPlatform.Twitter)
         if (!twitter || !currentPersona) return
         const profileIdentifier = ProfileIdentifier.of('twitter.com', twitter.identity).unwrap()
         const personaIdentifier = ECKeyIdentifier.fromHexPublicKeyK256(nextId).expect(
             `${nextId} should be a valid hex public key in k256`,
         )
-        attachNextIDToProfile({
+        await attachNextIDToProfile({
             identifier: profileIdentifier,
             linkedPersona: personaIdentifier,
             fromNextID: true,
             linkedTwitterNames: [twitter.identity],
         })
-        Services.Identity.queryProfilesInformation([profileIdentifier]).then((res) => {
-            console.log(res)
-        })
+        setLocal(true)
     }, [profiles, nextId, currentPersona])
 
     return (
