@@ -20,14 +20,21 @@ const useStyles = makeStyles()((theme) => ({
 
 interface Props extends BoxProps {
     omitText?: boolean
+    iconSize?: number
 }
 
-export const LoadingStatus = memo(function LoadingStatus({ omitText, className, children, ...rest }: Props) {
+export const LoadingStatus = memo(function LoadingStatus({
+    omitText,
+    className,
+    iconSize = 32,
+    children,
+    ...rest
+}: Props) {
     const { classes, cx } = useStyles()
     const t = useSharedI18N()
     return (
         <Box className={cx(classes.statusBox, className)} p={2} {...rest}>
-            <LoadingBase size={32} />
+            <LoadingBase size={iconSize} />
             {omitText ? null : <Typography className={classes.text}>{children ?? t.loading()}</Typography>}
         </Box>
     )

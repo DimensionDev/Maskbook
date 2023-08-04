@@ -3,7 +3,7 @@ import { CopyButton, ProgressiveText, ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useAccount, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
-import { ChainbaseHistory } from '@masknet/web3-providers'
+import { ChainbaseHistory, ExplorerResolver } from '@masknet/web3-providers'
 import {
     formatBalance,
     multipliedBy,
@@ -11,14 +11,7 @@ import {
     type Transaction,
     TransactionStateType,
 } from '@masknet/web3-shared-base'
-import {
-    explorerResolver,
-    formatHash,
-    formatWeiToEther,
-    formatWeiToGwei,
-    type ChainId,
-    type SchemaType,
-} from '@masknet/web3-shared-evm'
+import { formatHash, formatWeiToEther, formatWeiToGwei, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography, alpha } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { capitalize } from 'lodash-es'
@@ -127,7 +120,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
     }
     const { status = NOT_DEPEND } = transaction
     const isOut = transaction.from === account
-    const link = explorerResolver.transactionLink(transaction.chainId, transaction.id)
+    const link = ExplorerResolver.transactionLink(transaction.chainId, transaction.id)
 
     const gasUsedPercent = tx ? (tx.gas_used * 100) / tx.gas : 0
     const gasFee = tx ? formatWeiToEther(multipliedBy(tx.gas_price, tx.gas)) : undefined

@@ -16,9 +16,6 @@ import {
     type NetworkType,
     type Transaction,
     type SchemaType,
-    CHAIN_DESCRIPTORS,
-    NETWORK_DESCRIPTORS,
-    PROVIDER_DESCRIPTORS,
     getNetworkPluginID,
     getDefaultChainId,
     getInvalidChainId,
@@ -29,19 +26,16 @@ import {
     getNativeTokenAddress,
     getAverageBlockDelay,
     formatSchemaType,
-    createNativeToken,
     isValidChainId,
 } from '@masknet/web3-shared-evm'
 import { OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
+import { ChainResolverAPI, ExplorerResolverAPI, ProviderResolverAPI, NetworkResolverAPI } from './ResolverAPI.js'
 
 export class OthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
-    constructor() {
-        super({
-            chainDescriptors: CHAIN_DESCRIPTORS,
-            networkDescriptors: NETWORK_DESCRIPTORS,
-            providerDescriptors: PROVIDER_DESCRIPTORS,
-        })
-    }
+    override chainResolver = new ChainResolverAPI()
+    override explorerResolver = new ExplorerResolverAPI()
+    override providerResolver = new ProviderResolverAPI()
+    override networkResolver = new NetworkResolverAPI()
 
     override isValidDomain = isValidDomain
     override isValidChainId = isValidChainId
@@ -67,7 +61,7 @@ export class OthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderType,
     override formatTokenId = formatTokenId
     override formatDomainName = formatDomainName
     override formatSchemaType = formatSchemaType
-    override createNativeToken = createNativeToken
+    override createNativeToken = (chainId: ChainId) => new ChainResolverAPI().nativeCurrency(chainId)
     override createFungibleToken = createFungibleToken
     override createNonFungibleToken = createNonFungibleToken
 }

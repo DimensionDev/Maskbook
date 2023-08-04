@@ -2,8 +2,8 @@ import urlcat from 'urlcat'
 import { first } from 'lodash-es'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, formatEthereumAddress, isValidAddress, isValidChainId, isValidDomain } from '@masknet/web3-shared-evm'
-import type { ENSRecord } from '../types.js'
 import { fetchFromChainbase } from '../helpers.js'
+import type { ENSRecord } from '../types.js'
 import type { DomainAPI } from '../../entry-types.js'
 
 export class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {

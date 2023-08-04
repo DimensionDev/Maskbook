@@ -14,13 +14,7 @@ import {
     formatBalance,
     ZERO,
 } from '@masknet/web3-shared-base'
-import {
-    type ChainId,
-    type GasConfig,
-    SchemaType,
-    useRedPacketConstants,
-    createNativeToken,
-} from '@masknet/web3-shared-evm'
+import { type ChainId, type GasConfig, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { useTransactionValue } from '@masknet/web3-hooks-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
@@ -35,14 +29,14 @@ import {
     SelectFungibleTokenModal,
     useCurrentLinkedPersona,
 } from '@masknet/shared'
+import { Icons } from '@masknet/icons'
+import { useCurrentVisitingIdentity } from '@masknet/plugin-infra/content-script'
 import { useChainContext, useWallet, useNativeTokenPrice, useNetworkContext } from '@masknet/web3-hooks-base'
-import { SmartPayBundler, Web3 } from '@masknet/web3-providers'
+import { ChainResolver, SmartPayBundler, Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../locales/index.js'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants.js'
 import { type RedPacketSettings, useCreateParams } from './hooks/useCreateCallback.js'
 import { useDefaultCreateGas } from './hooks/useDefaultCreateGas.js'
-import { Icons } from '@masknet/icons'
-import { useCurrentVisitingIdentity } from '@masknet/plugin-infra/content-script'
 
 // seconds of 1 day
 const duration = 60 * 60 * 24
@@ -124,7 +118,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     // #region select token
-    const nativeTokenDetailed = useMemo(() => createNativeToken(chainId), [chainId])
+    const nativeTokenDetailed = useMemo(() => ChainResolver.nativeCurrency(chainId), [chainId])
     const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const [token = nativeTokenDetailed, setToken] = useState<FungibleToken<ChainId, SchemaType> | undefined>(
         origin?.token,

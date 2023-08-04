@@ -5,8 +5,9 @@ import { ChainId, getContractAddress, SchemaType, isValidChainId } from '@maskne
 import { Alchemy_FLOW_NetworkMap, FILTER_WORDS } from '../constants.js'
 import type { AlchemyNFT_Flow, AlchemyResponse_Flow, AlchemyResponse_Flow_Metadata } from '../types.js'
 import { formatAlchemyTokenId, formatAlchemyTokenAddress } from '../helpers.js'
+import { fetchJSON } from '../../helpers/fetchJSON.js'
+import { getAssetFullName } from '../../helpers/getAssetFullName.js'
 import type { HubOptions_Base, NonFungibleTokenAPI } from '../../entry-types.js'
-import { getAssetFullName, fetchJSON } from '../../entry-helpers.js'
 
 function createNonFungibleTokenImageURL(asset: AlchemyNFT_Flow | AlchemyResponse_Flow_Metadata) {
     return (

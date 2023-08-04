@@ -1,15 +1,16 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Icons } from '@masknet/icons'
-import { queryClient } from '@masknet/shared-base-ui'
-import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
-import { chainResolver, explorerResolver, getRPCConstant } from '@masknet/web3-shared-evm'
-import { Button, Input, Typography, alpha } from '@mui/material'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { omit } from 'lodash-es'
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { type ZodCustomIssue, type z } from 'zod'
+import { omit } from 'lodash-es'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Icons } from '@masknet/icons'
+import { queryClient } from '@masknet/shared-base-ui'
+import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { getRPCConstant } from '@masknet/web3-shared-evm'
+import { Button, Input, Typography, alpha } from '@mui/material'
+import { ChainResolver, ExplorerResolver } from '@masknet/web3-providers'
 import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 import { createSchema, getEvmNetworks, useI18N, type AvailableLocaleKeys } from '../../../../../utils/index.js'
 import { PageTitleContext } from '../../../context.js'
@@ -76,8 +77,8 @@ export const EditNetwork = memo(function EditNetwork() {
             name: network.name,
             chainId,
             rpc: getRPCConstant(network.chainId, 'RPC_URLS')?.[0],
-            currencySymbol: chainResolver.nativeCurrency(network.chainId)?.symbol,
-            explorer: explorerResolver.explorerUrl(network.chainId).url,
+            currencySymbol: ChainResolver.nativeCurrency(network.chainId)?.symbol,
+            explorer: ExplorerResolver.explorerUrl(network.chainId).url,
         }
     }, [chainId, networks])
     const { data: storedNetworks = [] } = useQuery({

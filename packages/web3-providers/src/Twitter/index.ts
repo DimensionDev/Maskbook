@@ -15,7 +15,7 @@ import {
     getComputedUserSettings,
 } from './apis/index.js'
 import type { TwitterBaseAPI } from '../entry-types.js'
-import { fetchJSON } from '../entry-helpers.js'
+import { fetchJSON } from '../helpers/fetchJSON.js'
 
 const UPLOAD_AVATAR_URL = 'https://upload.twitter.com/i/media/upload.json'
 const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/

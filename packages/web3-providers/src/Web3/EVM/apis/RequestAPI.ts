@@ -5,7 +5,8 @@ import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import { createContext } from '../helpers/createContext.js'
 import { Providers } from '../providers/index.js'
 import type { ConnectionOptions } from '../types/index.js'
-import { createWeb3FromProvider, createWeb3ProviderFromRequest } from '../../../entry-helpers.js'
+import { createWeb3FromProvider } from '../../../helpers/createWeb3FromProvider.js'
+import { createWeb3ProviderFromRequest } from '../../../helpers/createWeb3ProviderFromRequest.js'
 
 export class RequestAPI extends RequestReadonlyAPI {
     private Composer = new ComposerAPI()

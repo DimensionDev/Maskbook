@@ -3,15 +3,11 @@ import { memoizePromise } from '@masknet/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { env } from '@masknet/flags'
 import { type FungibleToken, type NonFungibleToken, TokenType } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    SchemaType,
-    formatEthereumAddress,
-    chainResolver,
-    getTokenListConstants,
-} from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, formatEthereumAddress, getTokenListConstants } from '@masknet/web3-shared-evm'
+import { ChainResolverAPI } from '../../Web3/EVM/apis/ResolverAPI.js'
+import { Duration } from '../../helpers/fetchCached.js'
+import { fetchCachedJSON } from '../../helpers/fetchJSON.js'
 import type { TokenListAPI } from '../../entry-types.js'
-import { Duration, fetchCachedJSON } from '../../entry-helpers.js'
 
 const fetchTokenList = memoizePromise(
     memoize,
@@ -41,7 +37,7 @@ async function fetchCommonERC20TokensFromTokenList(
             (x) =>
                 x.chainId === chainId &&
                 (process.env.NODE_ENV === 'production' && env.channel === 'stable'
-                    ? chainResolver.isMainnet(chainId)
+                    ? new ChainResolverAPI().isMainnet(chainId)
                     : true),
         )
         .map((x) => ({

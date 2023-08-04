@@ -22,11 +22,11 @@ import {
     ContractTransaction,
 } from '@masknet/web3-shared-evm'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
+import { Web3StateRef } from './Web3StateAPI.js'
 import { RequestAPI } from './RequestAPI.js'
 import { ContractAPI } from './ContractAPI.js'
 import { ConnectionReadonlyAPI } from './ConnectionReadonlyAPI.js'
 import { ConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
-import { Web3StateRef } from './Web3StateAPI.js'
 import type { ConnectionAPI_Base } from '../../Base/apis/ConnectionAPI.js'
 import { Providers } from '../providers/index.js'
 import type { ConnectionOptions } from '../types/index.js'

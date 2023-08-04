@@ -8,9 +8,9 @@ import type {
     Transaction,
     TransactionParameter,
 } from '@masknet/web3-shared-evm'
+import { HubOptionsAPI_Base } from '../../Base/apis/HubOptionsAPI.js'
 import { Web3StateRef } from './Web3StateAPI.js'
 import { OthersAPI } from './OthersAPI.js'
-import { HubOptionsAPI_Base } from '../../Base/apis/HubOptionsAPI.js'
 
 export class HubOptionsAPI extends HubOptionsAPI_Base<
     ChainId,

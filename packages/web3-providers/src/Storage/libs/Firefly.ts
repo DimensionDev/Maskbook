@@ -1,6 +1,7 @@
 import urlcat from 'urlcat'
 import { FIREFLY_API_URL } from '../constants/index.js'
-import { fetchJSON, parseJSON } from '../../entry-helpers.js'
+import { fetchJSON } from '../../helpers/fetchJSON.js'
+import { parseJSON } from '../../helpers/parseJSON.js'
 
 interface ResponseData {
     code: number

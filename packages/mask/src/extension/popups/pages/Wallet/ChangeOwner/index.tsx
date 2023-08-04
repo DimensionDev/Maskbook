@@ -15,8 +15,8 @@ import {
 import { makeStyles } from '@masknet/theme'
 import { useChainContext, useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { explorerResolver, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
-import { Web3 } from '@masknet/web3-providers'
+import { formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
+import { ExplorerResolver, Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../../../../../utils/index.js'
 import Services from '../../../../service.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
@@ -230,7 +230,7 @@ export default function ChangeOwner() {
                                 alignItems="center"
                                 href={
                                     contractAccount?.address
-                                        ? explorerResolver.addressLink(chainId, contractAccount.address)
+                                        ? ExplorerResolver.addressLink(chainId, contractAccount.address)
                                         : undefined
                                 }
                                 target="_blank"
@@ -301,7 +301,7 @@ export default function ChangeOwner() {
                                                 {persona.address ? (
                                                     <Link
                                                         sx={{ display: 'flex', alignItems: 'center', color: 'inherit' }}
-                                                        href={explorerResolver.addressLink(chainId, persona.address)}
+                                                        href={ExplorerResolver.addressLink(chainId, persona.address)}
                                                         target="_blank"
                                                         rel="noopener noreferrer">
                                                         <Icons.PopupLink className={classes.copy} />
@@ -353,7 +353,7 @@ export default function ChangeOwner() {
                                                 <CopyButton text={wallet.address} className={classes.copy} size={14} />
                                                 <Link
                                                     sx={{ display: 'flex', alignItems: 'center', color: 'inherit' }}
-                                                    href={explorerResolver.addressLink(chainId, wallet.address)}
+                                                    href={ExplorerResolver.addressLink(chainId, wallet.address)}
                                                     target="_blank"
                                                     rel="noopener noreferrer">
                                                     <Icons.PopupLink className={classes.copy} />

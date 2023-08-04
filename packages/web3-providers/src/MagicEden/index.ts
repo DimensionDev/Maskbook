@@ -19,7 +19,8 @@ import type {
     TokenActivity,
     WalletOffer,
 } from './types.js'
-import { fetchJSON, getAssetFullName } from '../entry-helpers.js'
+import { fetchJSON } from '../helpers/fetchJSON.js'
+import { getAssetFullName } from '../helpers/getAssetFullName.js'
 import type { HubOptions_Base, NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromMagicEden<T>(chainId: ChainId, path: string) {

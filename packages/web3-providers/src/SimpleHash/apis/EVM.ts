@@ -9,6 +9,7 @@ import {
     createIndicator,
     createNextIndicator,
     NetworkPluginID,
+    type Days,
 } from '@masknet/shared-base'
 import {
     SourceType,
@@ -24,14 +25,7 @@ import subSeconds from 'date-fns/subSeconds'
 import isAfter from 'date-fns/isAfter'
 import secondsToMilliseconds from 'date-fns/secondsToMilliseconds'
 import millisecondsToSeconds from 'date-fns/millisecondsToSeconds'
-import {
-    ChainId,
-    SchemaType,
-    isValidChainId,
-    explorerResolver,
-    ZERO_ADDRESS,
-    createNativeToken,
-} from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, isValidChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import {
     fetchFromSimpleHash,
     createNonFungibleAsset,
@@ -57,13 +51,14 @@ import { LooksRareAPI } from '../../LooksRare/index.js'
 import { OpenSeaAPI } from '../../OpenSea/index.js'
 import { getContractSymbol } from '../../helpers/getContractSymbol.js'
 import { NonFungibleMarketplace } from '../../NFTScan/helpers/utils.js'
+import { ChainResolverAPI, ExplorerResolverAPI } from '../../Web3/EVM/apis/ResolverAPI.js'
 import type { HubOptions_Base, NonFungibleTokenAPI, TrendingAPI } from '../../entry-types.js'
 import { historicalPriceState } from '../historicalPriceState.js'
 import { SIMPLE_HASH_HISTORICAL_PRICE_START_TIME } from '../constants.js'
 
 export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    private looksrare = new LooksRareAPI()
-    private opensea = new OpenSeaAPI()
+    private Looksrare = new LooksRareAPI()
+    private Opensea = new OpenSeaAPI()
 
     private async getCollectionByContractAddress(
         address: string,
@@ -172,7 +167,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         chainId: ChainId,
         collectionId: string,
         currency: TrendingAPI.Currency,
-        days: TrendingAPI.Days,
+        days: Days,
     ): Promise<TrendingAPI.Stat[]> {
         const range = resolveSimpleHashRange(days)
         const to_timeStamp = millisecondsToSeconds(Date.now())
@@ -403,7 +398,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
                 const trade_token =
                     !x.sale_details?.payment_token ||
                     checkBlurToken(NetworkPluginID.PLUGIN_EVM, chainId, x.sale_details.payment_token?.address || '')
-                        ? createNativeToken(chainId)
+                        ? new ChainResolverAPI().nativeCurrency(chainId)
                         : {
                               ...x.sale_details?.payment_token,
                               type: TokenType.Fungible,
@@ -421,7 +416,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
                     hash: x.transaction,
                     from: x.from_address,
                     token_id: x.token_id,
-                    transaction_link: explorerResolver.transactionLink(chainId, x.transaction),
+                    transaction_link: new ExplorerResolverAPI().transactionLink(chainId, x.transaction),
                     event_type: resolveEventType(x.event_type),
                     send: x.from_address,
                     receive: x.event_type === ActivityType.Burn ? ZERO_ADDRESS : x.to_address,
@@ -452,8 +447,8 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
 
         const [symbol, openseaStats, looksrareStats] = await Promise.all([
             getContractSymbol(chainId, address),
-            this.opensea.getStats(address).catch(() => null),
-            this.looksrare.getStats(address).catch(() => null),
+            this.Opensea.getStats(address).catch(() => null),
+            this.Looksrare.getStats(address).catch(() => null),
         ])
 
         const paymentToken = collection.floor_prices[0]?.payment_token
