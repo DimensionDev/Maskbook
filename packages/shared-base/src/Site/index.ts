@@ -75,11 +75,19 @@ export function isExtensionSiteType() {
     return !!getExtensionSiteType()
 }
 
-export function isEthereumInjected() {
+/**
+ * The metamask browser provider is available in the page.
+ * @returns
+ */
+export function isEthereumInjected(name = 'ethereum') {
     if (typeof window === 'undefined') return false
-    return typeof Reflect.get(window, 'ethereum') !== 'undefined'
+    return typeof Reflect.get(window, name) !== 'undefined'
 }
 
+/**
+ * The metamask browser provider (for extension's content page) is available in the page.
+ * @returns
+ */
 export function isInPageEthereumInjected() {
     return !isExtensionSiteType() && !Sniffings.is_firefox
 }
