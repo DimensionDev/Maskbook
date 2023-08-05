@@ -5,7 +5,6 @@ import {
     RocketLaunchIcon,
     HeartIcon,
     EyeIcon,
-    TruckIcon,
     WindowIcon,
     UserCircleIcon,
     PencilSquareIcon,
@@ -23,7 +22,6 @@ const navigation = [
     { name: 'Mask Network', icon: WindowIcon, to: ApplicationRoutes.Applications },
     { name: 'Web3 Profile', icon: UserCircleIcon, to: ApplicationRoutes.Web3Profile },
     { name: 'Swap', icon: ArrowPathRoundedSquareIcon, to: ApplicationRoutes.Swap },
-    { name: 'Bridges', icon: TruckIcon, to: ApplicationRoutes.Bridges },
     { name: 'Settings', icon: Cog6ToothIcon, to: ApplicationRoutes.Settings },
 ]
 
