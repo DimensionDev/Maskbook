@@ -1,34 +1,34 @@
 import { Icons } from '@masknet/icons'
 import { CopyButton, ProgressiveText, ReversedAddress } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { MaskColors, makeStyles } from '@masknet/theme'
 import { useAccount, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { ChainbaseHistory, ExplorerResolver } from '@masknet/web3-providers'
 import {
+    TransactionStateType,
     formatBalance,
     multipliedBy,
     trimZero,
-    type Transaction,
-    TransactionStateType,
     type RecentTransaction,
+    type Transaction,
 } from '@masknet/web3-shared-base'
 import {
     formatHash,
     formatWeiToEther,
     formatWeiToGwei,
     type ChainId,
-    type SchemaType,
     type Transaction as EvmTransaction,
+    type SchemaType,
 } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography, alpha } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { capitalize } from 'lodash-es'
-import { memo, useMemo } from 'react'
+import { memo } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { WalletAssetTabs } from '../type.js'
-import format from 'date-fns/format'
+import { useTransactionLogs } from './useTransactionLogs.js'
 
 const useStyles = makeStyles()((theme) => ({
     statusTitle: {
@@ -146,19 +146,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
         },
     })
 
-    const logs = useMemo(() => {
-        if (transactionState && 'candidates' in transactionState) {
-            return [
-                t('transaction_confirmed_at', {
-                    datetime: format(transactionState.createdAt, "HH:mm 'on' M/dd/yyyy"),
-                }),
-                t('transaction_completed_at', {
-                    datetime: format(transactionState.updatedAt, "HH:mm 'on' M/dd/yyyy"),
-                }),
-            ].filter(Boolean)
-        }
-        return EMPTY_LIST
-    }, [transactionState, t])
+    const logs = useTransactionLogs(transactionState)
     if (!transaction) {
         return <Navigate to={`${PopupRoutes.Wallet}?tab=${WalletAssetTabs.Activity}`} replace />
     }

@@ -1,17 +1,22 @@
 import { ElementAnchor } from '@masknet/shared'
 import { PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import type { RecentTransaction } from '@masknet/web3-shared-base'
-import { ProviderType, type ChainId, type Transaction } from '@masknet/web3-shared-evm'
+import { Web3 } from '@masknet/web3-providers'
+import type { RecentTransaction, Transaction } from '@masknet/web3-shared-base'
+import {
+    ProviderType,
+    type ChainId,
+    type Transaction as EvmTransaction,
+    type SchemaType,
+} from '@masknet/web3-shared-evm'
 import { List } from '@mui/material'
 import { range } from 'lodash-es'
 import { memo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { GasSettingModal } from '../../../../modals/modals.js'
 import { ReplaceType } from '../../type.js'
 import { ActivityItem, ActivityItemSkeleton, RecentActivityItem } from './ActivityItem.js'
 import { useTransactions } from './useTransactions.js'
-import { GasSettingModal } from '../../../../modals/modals.js'
-import { Web3 } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -33,7 +38,7 @@ export const ActivityList = memo<ActivityListProps>(function ActivityList() {
     const { data: transactions, localeTxes, isFetching, fetchNextPage } = useTransactions()
 
     const modifyTransaction = useCallback(
-        async (transaction: RecentTransaction<ChainId, Transaction>, replaceType: ReplaceType) => {
+        async (transaction: RecentTransaction<ChainId, EvmTransaction>, replaceType: ReplaceType) => {
             const candidate = transaction.candidates[transaction.indexId]
             if (!candidate) return
             const oldConfig = {
@@ -67,21 +72,21 @@ export const ActivityList = memo<ActivityListProps>(function ActivityList() {
     )
 
     const handleSpeedup = useCallback(
-        async (transaction: RecentTransaction<ChainId, Transaction>) => {
+        async (transaction: RecentTransaction<ChainId, EvmTransaction>) => {
             modifyTransaction(transaction, ReplaceType.SPEED_UP)
         },
         [navigate, modifyTransaction],
     )
 
     const handleCancel = useCallback(
-        (transaction: RecentTransaction<ChainId, Transaction>) => {
+        (transaction: RecentTransaction<ChainId, EvmTransaction>) => {
             modifyTransaction(transaction, ReplaceType.CANCEL)
         },
         [navigate, modifyTransaction],
     )
 
     const handleView = useCallback(
-        (transaction: Transaction | RecentTransaction<ChainId, Transaction>) => {
+        (transaction: Transaction<ChainId, SchemaType> | RecentTransaction<ChainId, EvmTransaction>) => {
             navigate(PopupRoutes.TransactionDetail, {
                 // No available API to fetch a transaction info yet.
                 // Just pass target transaction to the detail page.
