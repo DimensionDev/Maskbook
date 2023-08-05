@@ -17,7 +17,7 @@ export const VerifyBackupPasswordModal = memo<ActionModalBaseProps>(function Ver
 
     const verifyPassword = useCallback(() => {
         setPasswordMatched(user.backupPassword === password)
-    }, [user])
+    }, [user, password])
 
     const handleExport = useCallback(() => {
         navigate(PopupRoutes.ExportPrivateKey, { replace: true })
@@ -25,7 +25,7 @@ export const VerifyBackupPasswordModal = memo<ActionModalBaseProps>(function Ver
 
     return (
         <ActionModal
-            header={t('popups_export_private_key')}
+            header={t('popups_backup_persona')}
             action={
                 <ActionButton onClick={handleExport} disabled={!passwordMatched || !password.length}>
                     {t('export')}
@@ -36,7 +36,7 @@ export const VerifyBackupPasswordModal = memo<ActionModalBaseProps>(function Ver
                     placeholder={t('password')}
                     onChange={(e) => setPassword(e.target.value)}
                     onBlur={verifyPassword}
-                    error={passwordMatched}
+                    error={!passwordMatched}
                     helperText={!passwordMatched ? t('popups_backup_password_inconsistency') : null}
                 />
             </Box>

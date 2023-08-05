@@ -123,7 +123,11 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
 
     const tokenId = transaction?.formattedTransaction?.popup?.tokenId
 
-    const { data: metadata } = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, tokenId ? to : undefined, tokenId)
+    const { data: metadata } = useNonFungibleAsset(
+        NetworkPluginID.PLUGIN_EVM,
+        tokenId ? transaction.computedPayload.to : undefined,
+        tokenId,
+    )
 
     const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
 

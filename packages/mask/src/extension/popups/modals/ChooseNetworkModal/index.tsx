@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Icons } from '@masknet/icons'
 import { ChainIcon, ImageIcon } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { ActionButton, makeStyles } from '@masknet/theme'
+import { ActionButton, TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { useBalance, useNativeToken, useNetwork, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
 import { formatBalance, type ReasonableNetwork } from '@masknet/web3-shared-base'
@@ -27,16 +27,21 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 8,
         padding: theme.spacing(1.5),
         border: `1px solid ${theme.palette.maskColor.line}`,
+        overflow: 'auto',
     },
     text: {
         marginLeft: theme.spacing(1),
         marginRight: 'auto',
+        overflow: 'auto',
     },
     name: {
         fontSize: 12,
         color: theme.palette.maskColor.main,
         fontWeight: 700,
         lineHeight: '16px',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
     },
     balance: {
         fontSize: 12,
@@ -85,7 +90,9 @@ const NetworkItem = memo(function NetworkItem({ network, currentNetworkId }: Net
                 <ChainIcon size={24} color={network.color} name={network.name} />
             )}
             <Box className={classes.text}>
-                <Typography className={classes.name}>{network.name}</Typography>
+                <TextOverflowTooltip title={network.name}>
+                    <Typography className={classes.name}>{network.name}</Typography>
+                </TextOverflowTooltip>
                 <Typography className={classes.balance}>
                     {loading ? '--' : `${formatBalance(balance, token?.decimals, 0, false, true)} ${token?.symbol}`}
                 </Typography>

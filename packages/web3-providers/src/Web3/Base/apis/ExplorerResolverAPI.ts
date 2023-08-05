@@ -40,7 +40,7 @@ export class ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
 
     addressLink = (chainId: ChainId, address: string, tokenId?: string) => {
         const explorerUrl = this.getExplorerURL(chainId)
-        if (!explorerUrl.url) return ''
+        if (!explorerUrl.url) return
         return urlcat(explorerUrl.url, this.options.addressPathname, {
             address,
             ...explorerUrl?.parameters,
@@ -49,7 +49,7 @@ export class ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
 
     blockLink = (chainId: ChainId, blockNumber: number) => {
         const explorerUrl = this.getExplorerURL(chainId)
-        if (!explorerUrl.url) return ''
+        if (!explorerUrl.url) return
 
         return urlcat(explorerUrl.url, this.options.blockPathname, {
             blockNumber,
@@ -59,7 +59,7 @@ export class ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
 
     transactionLink = (chainId: ChainId, id: string) => {
         const explorerUrl = this.getExplorerURL(chainId)
-        if (!explorerUrl.url) return ''
+        if (!explorerUrl.url) return
 
         return urlcat(explorerUrl.url, this.options.transactionPathname, {
             id,
@@ -69,7 +69,7 @@ export class ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
 
     domainLink = (chainId: ChainId, domain: string) => {
         const explorerUrl = this.getExplorerURL(chainId)
-        if (!explorerUrl.url) return ''
+        if (!explorerUrl.url) return
         return urlcat(explorerUrl.url, this.options.domainPathname, {
             domain,
             ...explorerUrl?.parameters,
@@ -78,7 +78,7 @@ export class ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
 
     fungibleTokenLink = (chainId: ChainId, address: string) => {
         const explorerUrl = this.getExplorerURL(chainId)
-        if (!address || !explorerUrl.url) return ''
+        if (!address || !explorerUrl.url) return
         return urlcat(explorerUrl.url, this.options.fungibleTokenPathname, {
             address,
             ...explorerUrl?.parameters,
@@ -87,7 +87,7 @@ export class ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
 
     nonFungibleTokenLink = (chainId: ChainId, address: string, tokenId: string) => {
         const explorerUrl = this.getExplorerURL(chainId)
-        if (!explorerUrl.url) return ''
+        if (!explorerUrl.url) return
         return urlcat(explorerUrl.url, this.options.nonFungibleTokenPathname, {
             address,
             tokenId,

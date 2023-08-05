@@ -47,15 +47,18 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         fontWeight: 700,
         lineHeight: '16px',
-        display: 'flex',
-        alignItems: 'center',
-        columnGap: theme.spacing(0.25),
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        maxWidth: 100,
+        overflow: 'hidden',
     },
     address: {
         fontSize: 12,
         fontWeight: 400,
         lineHeight: '16px',
         color: theme.palette.maskColor.second,
+        display: 'flex',
+        alignItems: 'center',
     },
     connect: {
         cursor: 'pointer',
@@ -65,6 +68,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         background: theme.palette.maskColor.bg,
         columnGap: 4,
+        padding: '21px 0',
     },
 }))
 
@@ -138,29 +142,23 @@ export const ConnectedWallet = memo<ConnectedWalletProps>(function ConnectedWall
                     <Box display="flex" alignItems="center">
                         <ImageIcon size={24} icon={networkDescriptor?.icon} className={classes.walletIcon} />
                         <Typography className={classes.walletInfo} component="div">
-                            <Typography className={classes.walletName}>
-                                <Typography
-                                    component="span"
-                                    textOverflow="ellipsis"
-                                    whiteSpace="nowrap"
-                                    maxWidth="100px"
-                                    overflow="hidden">
-                                    {formatDomainName(wallet.name, 10)}
-                                </Typography>
-                                <Link
-                                    style={{ width: 16, height: 16, color: 'inherit' }}
-                                    href={ExplorerResolver.addressLink(chainId, wallet.identity ?? '')}
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    <Icons.LinkOut size={16} sx={{ ml: 0.25 }} />
-                                </Link>
+                            <Typography className={classes.walletName} component="span">
+                                {formatDomainName(wallet.name, 10)}
                             </Typography>
+
                             <Typography component="span" className={classes.address}>
                                 <FormattedAddress
                                     address={wallet.identity}
                                     size={4}
                                     formatter={formatEthereumAddress}
                                 />
+                                <Link
+                                    style={{ width: 14, height: 14, color: theme.palette.maskColor.main }}
+                                    href={ExplorerResolver.addressLink(chainId, wallet.identity ?? '')}
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    <Icons.LinkOut size={14} sx={{ ml: 0.25 }} />
+                                </Link>
                             </Typography>
                         </Typography>
                     </Box>

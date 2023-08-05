@@ -91,6 +91,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     }, [])
     // #endregion
 
+    console.log('gasConfig', gasConfig)
     const [, openSettingDialog] = useAsyncFn(async () => {
         const { settings } = await SelectGasSettingsModal.openAndWaitForClose({
             chainId,
@@ -102,9 +103,10 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 ...gasConfig,
             },
         })
+        console.log('settings', settings)
         if (settings?.slippageTolerance) currentSlippageSettings.value = settings.slippageTolerance
 
-        PluginTraderMessages.swapSettingsUpdated.sendToAll({
+        PluginTraderMessages.swapSettingsUpdated.sendToLocal({
             open: false,
             gasConfig: GasEditor.fromTransaction(
                 chainId as ChainId,

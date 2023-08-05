@@ -16,6 +16,7 @@ import { ZERO, formatBalance, formatCurrency, isGreaterThan, isLessThan, isZero 
 import { BigNumber } from 'bignumber.js'
 import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
 import { MAX_GAS_LIMIT } from '../../constants.js'
+import { hexToNumber } from 'web3-utils'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -49,7 +50,7 @@ const useStyles = makeStyles()((theme) => ({
 interface GasSettingDialogProps {
     open: boolean
     chainId?: ChainId
-    nonce: string
+    nonce: string | number
     onClose: (config?: GasConfig) => void
     replaceType?: ReplaceType
     config: GasSetting
@@ -264,7 +265,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                             </Typography>
                             <TextField
                                 error={!!gasLimitError}
-                                value={replaceType ? nonce : gas}
+                                value={replaceType ? hexToNumber(nonce) : config.gas}
                                 disabled={!!replaceType}
                                 fullWidth
                                 onChange={(e) => {
@@ -390,7 +391,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                 {t('popups_wallet_gas_fee_settings_gas_limit')}
                             </Typography>
                             <TextField
-                                value={replaceType ? nonce : gas}
+                                value={replaceType ? hexToNumber(nonce) : config.gas}
                                 disabled={!!replaceType}
                                 fullWidth
                                 onChange={(e) => {

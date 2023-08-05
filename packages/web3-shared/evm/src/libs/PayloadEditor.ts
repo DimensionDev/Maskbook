@@ -143,6 +143,7 @@ export class PayloadEditor {
         return omitBy<Transaction>(
             {
                 ...raw,
+                nonce: parseHexNumber(raw?.nonce),
                 from: raw?.from ?? this.options?.account,
                 chainId: parseChainId(raw?.chainId) ?? this.options?.chainId,
             },

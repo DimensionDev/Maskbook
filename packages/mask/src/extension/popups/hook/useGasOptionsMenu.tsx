@@ -1,13 +1,13 @@
 import { useMenuConfig } from '@masknet/shared'
-import { MenuItem, Typography } from '@mui/material'
-import { useI18N } from '../../../utils/i18n-next-ui.js'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext, useChainIdSupport, useGasOptions } from '@masknet/web3-hooks-base'
-import { formatWeiToGwei, type GasConfig, type GasOption } from '@masknet/web3-shared-evm'
-import { useCallback } from 'react'
-import { GasSettingModal } from '../modals/modals.js'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { GasOptionType } from '@masknet/web3-shared-base'
+import { formatWeiToGwei, type GasConfig, type GasOption } from '@masknet/web3-shared-evm'
+import { MenuItem, Typography } from '@mui/material'
+import { useCallback } from 'react'
+import { useI18N } from '../../../utils/i18n-next-ui.js'
+import { GasSettingModal } from '../modals/modals.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
