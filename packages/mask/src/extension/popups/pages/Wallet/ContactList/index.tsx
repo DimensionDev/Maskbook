@@ -1,5 +1,5 @@
 import { memo, useCallback, useMemo } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { Box, Link, List, ListItem, MenuItem, Typography, useTheme, type ListItemProps } from '@mui/material'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
@@ -136,6 +136,7 @@ const ContactListUI = memo(function ContactListUI() {
     useTitle(t('popups_send'))
 
     const navigate = useNavigate()
+    const location = useLocation()
 
     const handleSelectContact = useCallback(
         (addr: string, recipientName: string) => {
@@ -144,9 +145,11 @@ const ContactListUI = memo(function ContactListUI() {
                 recipient: addr,
                 recipientName,
             })
-            navigate(path)
+            navigate(path, {
+                state: location.state,
+            })
         },
-        [navigate, params],
+        [navigate, params, location.state],
     )
 
     return (
@@ -195,7 +198,9 @@ const ContactListUI = memo(function ContactListUI() {
                                 ...Object.fromEntries(params.entries()),
                                 recipient: address,
                             })
-                            navigate(path)
+                            navigate(path, {
+                                state: location.state,
+                            })
                         }}
                         width={368}
                         className={classes.confirmButton}

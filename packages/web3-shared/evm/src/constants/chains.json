@@ -235,7 +235,7 @@
             "name": "Ether",
             "symbol": "ETH",
             "decimals": 18,
-            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/arbitrum/info/logo.png/quality=85"
         },
         "infoURL": "https://arbitrum.io",
         "explorers": [
@@ -260,7 +260,7 @@
             "name": "Arbitrum Rinkeby Ether",
             "symbol": "ETH",
             "decimals": 18,
-            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/arbitrum/info/logo.png/quality=85"
         },
         "infoURL": "https://arbitrum.io",
         "explorers": [
@@ -282,7 +282,7 @@
             "name": "Ether",
             "symbol": "ETH",
             "decimals": 18,
-            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/optimism/info/logo.png/quality=85"
         },
         "infoURL": "https://optimistic.etherscan.io/",
         "fullName": "Optimism",
@@ -466,7 +466,7 @@
             "name": "Ether",
             "symbol": "AETH",
             "decimals": 18,
-            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/aurora/info/logo.png/quality=85"
         },
         "infoURL": "https://aurora.dev",
         "explorers": [

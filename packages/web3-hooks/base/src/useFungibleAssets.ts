@@ -18,6 +18,7 @@ import { useTrustedFungibleTokens } from './useTrustedFungibleTokens.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
 import { useWeb3Others } from './useWeb3Others.js'
 import { useWeb3State } from './useWeb3State.js'
+import { useNetworks } from './useNetworks.js'
 
 export function useFungibleAssets<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
@@ -34,6 +35,7 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
     const trustedTokens = useTrustedFungibleTokens(pluginID)
     const blockedTokens = useBlockedFungibleTokens(pluginID)
     const { BalanceNotifier } = useWeb3State(pluginID)
+    const networks = useNetworks()
 
     const { data: mergedAssets = EMPTY_LIST, ...rest } = useQuery<Array<Web3Helper.FungibleAssetScope<S, T>>>({
         queryKey: ['fungible-assets', pluginID, account],
@@ -51,12 +53,14 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
             })
             const assets = await asyncIteratorToArray(iterator)
             const trustedAssets = await asyncIteratorToArray(trustedAssetsIterator)
+            const networkIds = networks.map((x) => x.chainId)
 
-            return unionWith(
+            const list = unionWith(
                 assets,
                 trustedAssets,
                 (a, z) => isSameAddress(a.address, z.address) && a.chainId === z.chainId,
             )
+            return list.filter((x) => networkIds.includes(x.chainId))
         },
     })
 

@@ -16,7 +16,7 @@ import { isLessThan, isLte, isZero, leftShift, rightShift } from '@masknet/web3-
 import { isNativeTokenAddress, type GasConfig } from '@masknet/web3-shared-evm'
 import { Box, Input, Typography } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { formatTokenBalance, useI18N } from '../../../../../utils/index.js'
 import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
@@ -82,7 +82,8 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const navigate = useNavigate()
     // Enter from wallet home page, sending token is not decided yet
     const undecided = params.get('undecided') === 'true'
-    const [selectedAsset, setSelectedAsset] = useState<Web3Helper.FungibleAssetAll>()
+    const locationAsset = useLocation().state?.asset as Web3Helper.FungibleAssetAll | undefined
+    const [selectedAsset = locationAsset, setSelectedAsset] = useState<Web3Helper.FungibleAssetAll>()
     const handleSelectAsset = useCallback(
         (asset: Web3Helper.FungibleAssetAll): void => {
             setSelectedAsset(asset)
