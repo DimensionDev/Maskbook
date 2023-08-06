@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useAsync } from 'react-use'
 import { useLocation } from 'react-router-dom'
 import { createContainer } from 'unstated-next'
 import {
@@ -12,6 +13,7 @@ import {
 import { EMPTY_LIST, NetworkPluginID, type Wallet } from '@masknet/shared-base'
 import { type FungibleAsset, isSameAddress, type RecentTransactionComputed } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType, Transaction } from '@masknet/web3-shared-evm'
+import Services from '../../../../service.js'
 
 function useWalletContext() {
     const location = useLocation()
@@ -22,6 +24,9 @@ function useWalletContext() {
         isLoading,
         refetch,
     } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, { chainId })
+    const { value: personaManagers } = useAsync(async () => {
+        return Services.Identity.queryOwnedPersonaInformation(true)
+    }, [])
     const transactions = useRecentTransactions(NetworkPluginID.PLUGIN_EVM)
     const [currentToken, setCurrentToken] = useState<FungibleAsset<ChainId, SchemaType>>()
     const [transaction, setTransaction] = useState<RecentTransactionComputed<ChainId, Transaction>>()
@@ -69,6 +74,7 @@ function useWalletContext() {
         setSelectedWallet,
         assetsIsExpand,
         setAssetsIsExpand,
+        personaManagers,
     }
 }
 

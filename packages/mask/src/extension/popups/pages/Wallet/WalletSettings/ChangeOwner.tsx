@@ -1,4 +1,5 @@
 import { Icons } from '@masknet/icons'
+import { useContainer } from 'unstated-next'
 import { Box, ListItem, Typography, useTheme } from '@mui/material'
 import { useI18N } from '../../../../../utils/index.js'
 import { useStyles } from './useStyles.js'
@@ -7,8 +8,7 @@ import { PopupRoutes } from '@masknet/shared-base'
 import { useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { useMemo } from 'react'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { useAsync } from 'react-use'
-import Services from '../../../../service.js'
+import { WalletContext } from '../hooks/useWalletContext.js'
 
 export function ChangeOwner() {
     const { t } = useI18N()
@@ -17,9 +17,9 @@ export function ChangeOwner() {
     const navigate = useNavigate()
     const wallet = useWallet()
     const wallets = useWallets()
-    const { value: personaManagers } = useAsync(async () => {
-        return Services.Identity.queryOwnedPersonaInformation(true)
-    }, [])
+
+    const { personaManagers } = useContainer(WalletContext)
+
     const walletManager = useMemo(
         () => wallets.find((x) => !x.owner && isSameAddress(wallet?.owner, x.address)),
         [wallets, wallet],
@@ -36,7 +36,7 @@ export function ChangeOwner() {
                 <Typography className={classes.itemText}>{t('popups_change_owner')}</Typography>
             </Box>
             <Box className={classes.itemBox}>
-                <Typography className={classes.itemText}>{walletManager?.name ?? personaManager?.address}</Typography>
+                <Typography className={classes.itemText}>{walletManager?.name ?? personaManager?.nickname}</Typography>
                 <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />
             </Box>
         </ListItem>

@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 import { useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useAsync, useAsyncFn } from 'react-use'
+import { useAsyncFn } from 'react-use'
 import { useContainer } from 'unstated-next'
 import { Box, Link, Popover, Typography, Button, alpha } from '@mui/material'
 import { Icons } from '@masknet/icons'
@@ -13,13 +13,13 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { ExplorerResolver, Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../../../../../utils/index.js'
-import Services from '../../../../service.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { StyledRadio } from '../../../components/StyledRadio/index.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
 import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
+import { WalletContext } from '../hooks/useWalletContext.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -189,15 +189,12 @@ export default function ChangeOwner() {
     const [manageAccount, setManageAccount] = useState<ManagerAccount>()
 
     const { smartPayChainId } = useContainer(PopupContext)
-
+    const { personaManagers } = useContainer(WalletContext)
     const chainContextValue = useMemo(() => ({ chainId: smartPayChainId }), [smartPayChainId])
     const wallet = useWallet()
     const wallets = useWallets()
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { value: personaManagers } = useAsync(async () => {
-        return Services.Identity.queryOwnedPersonaInformation(true)
-    }, [])
 
     const walletManagers = useMemo(() => wallets.filter((x) => !x.owner), [wallets])
 
