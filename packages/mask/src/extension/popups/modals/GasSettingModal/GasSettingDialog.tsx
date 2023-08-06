@@ -22,6 +22,7 @@ import { makeStyles } from '@masknet/theme'
 import { ZERO, formatBalance, formatCurrency, isGreaterThan, isLessThan } from '@masknet/web3-shared-base'
 import { BigNumber } from 'bignumber.js'
 import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
+import { hexToNumber } from 'web3-utils'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -55,7 +56,7 @@ const useStyles = makeStyles()((theme) => ({
 interface GasSettingDialogProps {
     open: boolean
     chainId?: ChainId
-    nonce: string
+    nonce: string | number
     onClose: (config?: GasConfig) => void
     replaceType?: ReplaceType
     config: GasSetting
@@ -216,7 +217,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                             <Typography className={classes.title}>
                                 {replaceType ? t('nonce') : t('popups_wallet_gas_fee_settings_gas_limit')}
                             </Typography>
-                            <TextField value={replaceType ? nonce : config.gas} disabled fullWidth />
+                            <TextField value={replaceType ? hexToNumber(nonce) : config.gas} disabled fullWidth />
                         </Box>
                         <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" columnGap={2}>
                             <Box>

@@ -272,7 +272,7 @@ const TokenDetail = memo(function TokenDetail() {
                     </Box>
                 )}
                 <ThemeProvider theme={theme.palette.mode === 'light' ? MaskDarkTheme : MaskLightTheme}>
-                    <ActionGroup className={classes.actions} chainId={chainId} address={address} />
+                    <ActionGroup className={classes.actions} chainId={chainId} address={address} asset={asset} />
                 </ThemeProvider>
             </Box>
         </div>

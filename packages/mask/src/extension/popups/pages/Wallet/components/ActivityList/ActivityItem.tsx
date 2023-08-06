@@ -2,13 +2,19 @@ import { Icons } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useNetworkDescriptors, useReverseAddress } from '@masknet/web3-hooks-base'
+import { useNativeToken, useNetworkDescriptors, useReverseAddress } from '@masknet/web3-hooks-base'
 import { DebankTransactionDirection } from '@masknet/web3-providers/types'
-import { isLessThan, type Transaction } from '@masknet/web3-shared-base'
-import { SchemaType, formatDomainName, formatEthereumAddress, type ChainId } from '@masknet/web3-shared-evm'
+import { isLessThan, type RecentTransaction, type Transaction } from '@masknet/web3-shared-base'
+import {
+    SchemaType,
+    formatDomainName,
+    formatEthereumAddress,
+    type ChainId,
+    type Transaction as EvmTransaction,
+} from '@masknet/web3-shared-evm'
 import { Box, ListItem, ListItemText, Typography, type ListItemProps, alpha, Skeleton } from '@mui/material'
-import { memo } from 'react'
-import { useI18N } from '../../../../../../utils/index.js'
+import { memo, useMemo } from 'react'
+import { formatTokenBalance, useI18N } from '../../../../../../utils/index.js'
 
 const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' }, __) => {
     const colorMap: Record<string, string> = {
@@ -68,6 +74,27 @@ const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' },
         txName: {
             textTransform: 'capitalize',
         },
+        operations: {
+            display: 'flex',
+            gap: 6,
+            marginTop: theme.spacing(0.5),
+        },
+        button: {
+            borderRadius: 4,
+            padding: '4px 6px',
+            border: 'none',
+            fontSize: 12,
+            fontWeight: 700,
+            cursor: 'pointer',
+        },
+        speedupButton: {
+            backgroundColor: alpha(theme.palette.maskColor.primary, 0.1),
+            color: theme.palette.maskColor.primary,
+        },
+        cancelButton: {
+            backgroundColor: alpha(theme.palette.maskColor.danger, 0.1),
+            color: theme.palette.maskColor.danger,
+        },
         failedLabel: {
             fontSize: 14,
             color: theme.palette.maskColor.danger,
@@ -103,21 +130,12 @@ const TransactionIcon = memo(function TransactionIcon({ cateType }: TransactionI
     return <div className={classes.txIcon}>{IconMap[mapType] || IconMap.default}</div>
 })
 
-export interface ActivityListItemProps extends ListItemProps {
+export interface ActivityItemProps extends ListItemProps {
     transaction: Transaction<ChainId, SchemaType>
-    onSpeedup: (tx: Transaction<ChainId, SchemaType>) => void
-    onCancel: (tx: Transaction<ChainId, SchemaType>) => void
     onView: (tx: Transaction<ChainId, SchemaType>) => void
 }
 
-export const ActivityListItem = memo<ActivityListItemProps>(function ActivityListItem({
-    transaction,
-    className,
-    onSpeedup,
-    onCancel,
-    onView,
-    ...rest
-}) {
+export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ transaction, className, onView, ...rest }) {
     const { t } = useI18N()
     const { classes, cx } = useStyles({})
     const toAddress = transaction.to
@@ -172,7 +190,97 @@ export const ActivityListItem = memo<ActivityListItemProps>(function ActivityLis
     )
 })
 
-export const ActivityListItemSkeleton = memo<ListItemProps>(function ActivityListItem({ className, ...rest }) {
+interface RecentActivityItemProps extends Omit<ActivityItemProps, 'transaction' | 'onView'> {
+    transaction: RecentTransaction<ChainId, EvmTransaction>
+    onView: (tx: RecentTransaction<ChainId, EvmTransaction>) => void
+    onSpeedup?: (tx: RecentTransaction<ChainId, EvmTransaction>) => void
+    onCancel?: (tx: RecentTransaction<ChainId, EvmTransaction>) => void
+}
+
+export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentActivityItem({
+    transaction,
+    className,
+    onSpeedup,
+    onCancel,
+    onView,
+    ...rest
+}) {
+    const { t } = useI18N()
+    const { classes, cx } = useStyles({})
+    // candidate is current transaction
+    const candidate = transaction.candidates[transaction.indexId]
+    const toAddress = candidate.to
+    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, toAddress)
+    const descriptors = useNetworkDescriptors(NetworkPluginID.PLUGIN_EVM)
+    const networkDescriptor = descriptors.find((x) => x.chainId === transaction.chainId)
+    const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId: transaction.chainId })
+
+    const recipient = useMemo(() => {
+        if (domain) return t('to_address', { address: formatDomainName(domain) })
+        if (toAddress) return t('to_address', { address: formatEthereumAddress(toAddress, 4) })
+    }, [domain, t])
+
+    return (
+        <ListItem className={cx(classes.item, className)} onClick={() => onView(transaction)} {...rest}>
+            <Box className={classes.txIconContainer}>
+                {/* TODO specify cateType */}
+                <TransactionIcon cateType={'send'} />
+                <ImageIcon className={classes.badgeIcon} size={16} icon={networkDescriptor?.icon} />
+            </Box>
+            <ListItemText
+                secondaryTypographyProps={{ component: 'div' }}
+                style={{ marginLeft: 15 }}
+                secondary={
+                    <Box>
+                        <Typography>
+                            {!transaction.status ? (
+                                <Typography className={classes.failedLabel} component="span">
+                                    {t('failed')}
+                                </Typography>
+                            ) : null}
+                            {recipient}
+                        </Typography>
+                        {/* TODO actions for pending transitions */}
+                        <Box className={classes.operations}>
+                            <button
+                                type="button"
+                                className={cx(classes.button, classes.speedupButton)}
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    onSpeedup?.(transaction)
+                                }}>
+                                {t('speed_up')}
+                            </button>
+                            <button
+                                type="button"
+                                className={cx(classes.button, classes.cancelButton)}
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    onCancel?.(transaction)
+                                }}>
+                                {t('cancel')}
+                            </button>
+                        </Box>
+                    </Box>
+                }>
+                {/* TODO specify cateType */}
+                <Typography className={classes.txName}>Send</Typography>
+            </ListItemText>
+            <Box ml="auto">
+                {candidate.value && nativeToken ? (
+                    <Typography className={classes.asset}>
+                        <strong className={classes.amount}>
+                            {`- ${formatTokenBalance(candidate.value, nativeToken.decimals)} `}
+                        </strong>
+                        <span className={classes.symbol}>{nativeToken.symbol}</span>
+                    </Typography>
+                ) : null}
+            </Box>
+        </ListItem>
+    )
+})
+
+export const ActivityItemSkeleton = memo<ListItemProps>(function ActivityItemSkeleton({ className, ...rest }) {
     const { classes, cx } = useStyles({})
 
     return (

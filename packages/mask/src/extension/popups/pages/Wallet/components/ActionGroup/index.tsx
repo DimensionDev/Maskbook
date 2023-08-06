@@ -91,7 +91,9 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
                         token: matchPath(PopupRoutes.TokenDetail, location.pathname) ? true : undefined,
                         undecided: address ? undefined : true,
                     })
-                    navigate(path)
+                    navigate(path, {
+                        state: { asset },
+                    })
                 }}>
                 <Icons.Send size={20} color={theme.palette.maskColor.main} />
                 <Typography className={classes.label}>{t('wallet_send')}</Typography>

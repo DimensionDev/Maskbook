@@ -159,6 +159,7 @@ const ContactListUI = memo(function ContactListUI() {
     useTitle(isManage ? t('contacts') : t('popups_send'))
 
     const navigate = useNavigate()
+    const location = useLocation()
 
     const handleSelectContact = useCallback(
         (addr: string, recipientName: string) => {
@@ -167,9 +168,11 @@ const ContactListUI = memo(function ContactListUI() {
                 recipient: addr,
                 recipientName,
             })
-            navigate(path)
+            navigate(path, {
+                state: location.state,
+            })
         },
-        [navigate, params],
+        [navigate, params, location.state],
     )
 
     return (
@@ -219,7 +222,9 @@ const ContactListUI = memo(function ContactListUI() {
                                     ...Object.fromEntries(params.entries()),
                                     recipient: address,
                                 })
-                                navigate(path)
+                                navigate(path, {
+                                    state: location.state,
+                                })
                             }}
                             width={368}
                             className={classes.confirmButton}
