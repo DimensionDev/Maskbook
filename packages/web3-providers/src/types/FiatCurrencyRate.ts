@@ -1,4 +1,4 @@
-import type { FiatCurrencyType } from '@masknet/web3-shared-base'
+import type { CurrencyType } from '@masknet/web3-shared-base'
 
 export namespace FiatCurrencyRateBaseAPI {
     export type Result = {
@@ -6,6 +6,6 @@ export namespace FiatCurrencyRateBaseAPI {
     }
 
     export interface Provider {
-        getRate(type?: FiatCurrencyType): Promise<number>
+        getRate(type?: CurrencyType): Promise<number>
     }
 }

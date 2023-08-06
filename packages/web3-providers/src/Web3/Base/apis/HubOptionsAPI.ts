@@ -1,6 +1,6 @@
 import { identity, pickBy } from 'lodash-es'
 import type { NetworkPluginID, PageIndicator, PartialRequired, ValueRefWithReady } from '@masknet/shared-base'
-import { CurrencyType, FiatCurrencyType, type SourceType, type Web3State } from '@masknet/web3-shared-base'
+import { CurrencyType, type SourceType, type Web3State } from '@masknet/web3-shared-base'
 import { type SchemaType } from '@masknet/web3-shared-evm'
 import type { OthersAPI_Base } from './OthersAPI.js'
 
@@ -17,8 +17,6 @@ export interface HubOptions_Base<ChainId, Indicator = PageIndicator> {
     schemaType?: SchemaType
     /** The currency type of data */
     currencyType?: CurrencyType
-    /** The fiat currency type of data */
-    fiatCurrencyType?: FiatCurrencyType
     /** The item size of each page. */
     size?: number
     /** The page index. */
@@ -63,7 +61,6 @@ export class HubOptionsAPI_Base<
             chainId: this.Web3Others.getDefaultChainId(),
             networkPluginId: this.Web3Others.getNetworkPluginID(),
             currencyType: CurrencyType.USD,
-            fiatCurrencyType: FiatCurrencyType.USD,
             size: 50,
         }
     }
@@ -74,7 +71,6 @@ export class HubOptionsAPI_Base<
             account: this.Web3StateRef.value.Provider?.account?.getCurrentValue(),
             chainId: this.Web3StateRef.value.Provider?.chainId?.getCurrentValue(),
             currencyType: this.Web3StateRef.value.Settings?.currencyType?.getCurrentValue(),
-            fiatCurrencyType: this.Web3StateRef.value.Settings?.fiatCurrencyType?.getCurrentValue(),
         }
     }
 

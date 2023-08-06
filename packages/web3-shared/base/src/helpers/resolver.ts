@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { NetworkPluginID, createLookupTableResolver, NextIDPlatform, SocialAddressType } from '@masknet/shared-base'
-import { CurrencyType, SourceType, FiatCurrencyType } from '../specs/index.js'
+import { CurrencyType, SourceType } from '../specs/index.js'
 import { memoize } from 'lodash-es'
 
 export const resolveSocialAddressLink = createLookupTableResolver<SocialAddressType, string>(
@@ -74,21 +74,12 @@ export const resolveCurrencyName = createLookupTableResolver<CurrencyType, strin
         [CurrencyType.ETH]: 'ETH',
         [CurrencyType.NATIVE]: 'ETH',
         [CurrencyType.USD]: 'USD',
+        [CurrencyType.CNY]: 'CNY',
+        [CurrencyType.JPY]: 'JPY',
+        [CurrencyType.HKD]: 'HKD',
     },
     (CurrencyType) => {
         throw new Error(`Unknown currency type: ${CurrencyType}.`)
-    },
-)
-
-export const resolveFiatCurrencyName = createLookupTableResolver<FiatCurrencyType, string>(
-    {
-        [FiatCurrencyType.USD]: 'USD',
-        [FiatCurrencyType.CNY]: 'CNY',
-        [FiatCurrencyType.JPY]: 'JPY',
-        [FiatCurrencyType.HKD]: 'HKD',
-    },
-    (FiatCurrencyType) => {
-        throw new Error(`Unknown currency type: ${FiatCurrencyType}.`)
     },
 )
 

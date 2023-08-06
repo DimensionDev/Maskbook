@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { FiatCurrencyIcon } from '@masknet/shared'
-import { FiatCurrencyType, resolveFiatCurrencyName } from '@masknet/web3-shared-base'
+import { CurrencyType, resolveCurrencyName } from '@masknet/web3-shared-base'
 import { ActionModal, useActionModal, type ActionModalBaseProps } from '../../components/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { Box, Typography } from '@mui/material'
@@ -41,7 +41,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface CurrencyItemProps {
-    fiatCurrencyType: FiatCurrencyType
+    fiatCurrencyType: CurrencyType
 }
 const CurrencyItem = memo(function CurrencyItem({ fiatCurrencyType }: CurrencyItemProps) {
     const { cx, classes, theme } = useStyles()
@@ -50,7 +50,7 @@ const CurrencyItem = memo(function CurrencyItem({ fiatCurrencyType }: CurrencyIt
     const selected = fiatCurrencyType === currentFiatCurrencyType
 
     const setFiatCurrencyType = useCallback(async () => {
-        await Web3State.state.Settings?.setFiatCurrencyType(fiatCurrencyType)
+        await Web3State.state.Settings?.setDefaultCurrencyType(fiatCurrencyType)
         closeModal()
     }, [fiatCurrencyType])
 
@@ -61,7 +61,7 @@ const CurrencyItem = memo(function CurrencyItem({ fiatCurrencyType }: CurrencyIt
             onClick={setFiatCurrencyType}>
             <Box className={classes.itemBox}>
                 <FiatCurrencyIcon type={fiatCurrencyType} size={24} />
-                <Typography className={classes.text}>{resolveFiatCurrencyName(fiatCurrencyType)}</Typography>
+                <Typography className={classes.text}>{resolveCurrencyName(fiatCurrencyType)}</Typography>
             </Box>
             {selected ? (
                 <Icons.RadioButtonChecked size={20} />
@@ -79,9 +79,11 @@ export const ChooseCurrencyModal = memo(function ChooseCurrencyModal({ ...rest }
     return (
         <ActionModal header={t('currency')} keepMounted {...rest}>
             <ul className={classes.networkList}>
-                {Object.values(FiatCurrencyType).map((fiatCurrencyType, index) => (
-                    <CurrencyItem key={index} fiatCurrencyType={fiatCurrencyType} />
-                ))}
+                {[CurrencyType.USD, CurrencyType.CNY, CurrencyType.HKD, CurrencyType.JPY].map(
+                    (fiatCurrencyType, index) => (
+                        <CurrencyItem key={index} fiatCurrencyType={fiatCurrencyType} />
+                    ),
+                )}
             </ul>
         </ActionModal>
     )
