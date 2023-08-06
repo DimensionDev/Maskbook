@@ -1,7 +1,10 @@
 import urlcat from 'urlcat'
+import { Contract, ExplorerResolver, Web3 } from '@masknet/web3-providers'
 import { useMemo, useState } from 'react'
+import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
+import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useAsyncFn } from 'react-use'
+import { useAsync, useAsyncFn } from 'react-use'
 import { useContainer } from 'unstated-next'
 import { Box, Link, Popover, Typography, Button, alpha } from '@mui/material'
 import { Icons } from '@masknet/icons'
@@ -10,8 +13,7 @@ import { ECKeyIdentifier, type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { ChainContextProvider, useChainContext, useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
-import { ExplorerResolver, Web3 } from '@masknet/web3-providers'
+import { formatEthereumAddress, ProviderType, type GasConfig } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../utils/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { StyledRadio } from '../../../components/StyledRadio/index.js'
@@ -20,6 +22,7 @@ import { useTitle } from '../../../hook/useTitle.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
 import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
 import { WalletContext } from '../hooks/useWalletContext.js'
+import type { AbiItem } from 'web3-utils'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -178,7 +181,7 @@ interface ManagerAccount {
     identifier?: ECKeyIdentifier
 }
 
-const ETH_GAS_LIMIT = '21000'
+const FALLBACK_GAS = 50000
 
 export default function ChangeOwner() {
     const { t } = useI18N()
@@ -191,6 +194,8 @@ export default function ChangeOwner() {
     const { smartPayChainId } = useContainer(PopupContext)
     const { personaManagers } = useContainer(WalletContext)
     const chainContextValue = useMemo(() => ({ chainId: smartPayChainId }), [smartPayChainId])
+    const [paymentToken, setPaymentToken] = useState('')
+    const [gasConfig, setGasConfig] = useState<GasConfig>()
     const wallet = useWallet()
     const wallets = useWallets()
 
@@ -209,6 +214,18 @@ export default function ChangeOwner() {
 
     const managerAddress = walletManager?.address ?? personaManager?.address
 
+    const { value: gas } = useAsync(async () => {
+        const contract = Contract.getWeb3Contract<Wallet>(wallet?.address, WalletABI as AbiItem[])
+        if (!manageAccount?.address) return
+        const tx = {
+            from: wallet?.address,
+            to: wallet?.address,
+            data: contract?.methods.changeOwner(manageAccount.address).encodeABI(),
+        }
+        const gas = await Web3.estimateTransaction?.(tx, FALLBACK_GAS)
+        return gas ? Number.parseInt(gas, 16).toString() : FALLBACK_GAS.toString()
+    }, [manageAccount?.address, wallet?.address])
+
     const [, handleConfirm] = useAsyncFn(async () => {
         if (!manageAccount?.address || !wallet) return
 
@@ -218,6 +235,7 @@ export default function ChangeOwner() {
             providerType: ProviderType.MaskWallet,
             owner: wallet?.owner,
             identifier: ECKeyIdentifier.from(wallet?.identifier).unwrapOr(undefined),
+            overrides: gasConfig,
         })
 
         if (!hash) return
@@ -236,7 +254,7 @@ export default function ChangeOwner() {
             },
             { providerType: ProviderType.MaskWallet },
         )
-    }, [manageAccount, smartPayChainId, wallet])
+    }, [manageAccount, smartPayChainId, wallet, gasConfig])
 
     useTitle(t('popups_wallet_change_owner'))
 
@@ -332,10 +350,13 @@ export default function ChangeOwner() {
                         <Typography className={classes.label}>{t('gas_fee')}</Typography>
                         <ChainContextProvider value={chainContextValue}>
                             <GasSettingMenu
-                                gas={ETH_GAS_LIMIT}
+                                gas={gas ?? FALLBACK_GAS.toString()}
+                                initConfig={gasConfig}
+                                paymentToken={paymentToken}
                                 defaultChainId={chainId}
                                 owner={wallet?.owner}
-                                onChange={() => {}}
+                                onChange={setGasConfig}
+                                onPaymentTokenChange={(paymentToken) => setPaymentToken(paymentToken)}
                                 allowMaskAsGas
                             />
                         </ChainContextProvider>
