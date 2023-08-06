@@ -239,7 +239,7 @@ export default function ChangeOwner() {
             },
             { providerType: ProviderType.MaskWallet },
         )
-    }, [manageAccount?.address, smartPayChainId, wallet])
+    }, [manageAccount, smartPayChainId, wallet])
 
     useTitle(t('popups_wallet_change_owner'))
 
