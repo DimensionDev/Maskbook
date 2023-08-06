@@ -1,9 +1,8 @@
 import type { AbiOutput } from 'web3-utils'
-import * as ABICoder from 'web3-eth-abi'
+import { abiCoder } from './abiCoder.js'
 
 export function decodeOutputString(abis: AbiOutput[], output: string) {
-    const coder = ABICoder as unknown as ABICoder.AbiCoder
-    if (abis.length === 1) return coder.decodeParameter(abis[0], output)
-    if (abis.length > 1) return coder.decodeParameters(abis, output)
+    if (abis.length === 1) return abiCoder.decodeParameter(abis[0], output)
+    if (abis.length > 1) return abiCoder.decodeParameters(abis, output)
     return
 }

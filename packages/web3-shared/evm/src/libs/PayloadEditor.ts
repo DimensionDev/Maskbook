@@ -1,5 +1,4 @@
 import { first, isUndefined, omitBy } from 'lodash-es'
-import * as ABICoder from 'web3-eth-abi'
 import { type AbiItem, hexToNumber, hexToNumberString, toHex } from 'web3-utils'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Wallet, ECKeyIdentifier, Proof, ProofPayload } from '@masknet/shared-base'
@@ -16,6 +15,7 @@ import {
     type EIP3085Descriptor,
     EthereumMethodType,
 } from '../types/index.js'
+import { abiCoder } from '../index.js'
 
 type Options = Pick<TransactionOptions, 'account' | 'chainId'>
 
@@ -88,7 +88,6 @@ export class PayloadEditor {
 
     private getRawConfig() {
         const { method, params } = this.payload
-        const coder = ABICoder as unknown as ABICoder.AbiCoder
         switch (method) {
             case EthereumMethodType.ETH_CALL:
             case EthereumMethodType.ETH_ESTIMATE_GAS:
@@ -109,10 +108,10 @@ export class PayloadEditor {
                     from: owner,
                     to: getSmartPayConstant(chainId, 'CREATE2_FACTORY_CONTRACT_ADDRESS'),
                     chainId,
-                    data: coder.encodeFunctionCall(CREATE2_FACTORY_ABI.find((x) => x.name === 'deploy')! as AbiItem, [
-                        '0x',
-                        toHex(0),
-                    ]),
+                    data: abiCoder.encodeFunctionCall(
+                        CREATE2_FACTORY_ABI.find((x) => x.name === 'deploy')! as AbiItem,
+                        ['0x', toHex(0)],
+                    ),
                 }
             }
             case EthereumMethodType.MASK_FUND: {
@@ -128,7 +127,7 @@ export class PayloadEditor {
                     // it's a not-exist address, use the zero address as a placeholder
                     to: ZERO_ADDRESS,
                     chainId,
-                    data: coder.encodeFunctionCall(CREATE2_FACTORY_ABI.find((x) => x.name === 'fund')! as AbiItem, [
+                    data: abiCoder.encodeFunctionCall(CREATE2_FACTORY_ABI.find((x) => x.name === 'fund')! as AbiItem, [
                         ownerAddress,
                         toHex(nonce),
                     ]),
