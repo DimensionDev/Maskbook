@@ -7,7 +7,7 @@ export const DIMENSION: Dimension = {
     right: 16,
     bottom: 32,
     left: 16,
-    width: 500,
+    width: 780,
     height: 200,
 }
 

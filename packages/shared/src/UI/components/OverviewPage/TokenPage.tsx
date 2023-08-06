@@ -216,8 +216,8 @@ const HistoryRow = memo<HistoryRowProps>(({ asset, transaction }) => {
                 <Typography color="textSecondary">{formatDateTime(transaction.timestamp, 'MM-dd')}</Typography>
             </div>
             <div className={classes.amount}>
-                <span>{direction ? '-' : '+'}</span>
-                <span>{new BigNumber(amount).toFixed(new BigNumber(amount).toNumber() < 1 ? 6 : 2)}</span>
+                <Typography>{direction ? '-' : '+'}</Typography>
+                <Typography>{new BigNumber(amount).toFixed(new BigNumber(amount).toNumber() < 1 ? 6 : 2)}</Typography>
             </div>
         </div>
     )

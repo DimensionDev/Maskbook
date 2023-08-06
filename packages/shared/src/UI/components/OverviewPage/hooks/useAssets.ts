@@ -37,10 +37,7 @@ function useContext(initialState?: { account?: string; chainId?: Web3Helper.Chai
     }, [fungibleAssets.data, fungibleTokens, Others.chainResolver.nativeCurrency])
 
     const total = useMemo(() => {
-        let v = new BigNumber(0)
-        assets.map((asset) => {
-            v = new BigNumber(asset.value?.usd ?? 0).plus(v)
-        })
+        const v = BigNumber.sum(...assets.map((x) => x.value?.usd ?? '0'))
         return v.toFixed(2)
     }, [assets])
 
