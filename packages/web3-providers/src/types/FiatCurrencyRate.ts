@@ -2,7 +2,7 @@ import type { FiatCurrencyType } from '@masknet/web3-shared-base'
 
 export namespace FiatCurrencyRateBaseAPI {
     export type Result = {
-        rates: Record<FiatCurrencyType, number>
+        rates: Record<string, number>
     }
 
     export interface Provider {

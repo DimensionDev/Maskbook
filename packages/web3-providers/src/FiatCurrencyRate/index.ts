@@ -7,6 +7,6 @@ export class FiatCurrencyRateAPI implements FiatCurrencyRateBaseAPI.Provider {
     async getRate(type?: FiatCurrencyType): Promise<number> {
         if (!type || type === FiatCurrencyType.USD) return 1
         const result = await fetchJSON<FiatCurrencyRateBaseAPI.Result>(BASE_URL)
-        return result.rates[type]
+        return result.rates[type.toUpperCase()]
     }
 }

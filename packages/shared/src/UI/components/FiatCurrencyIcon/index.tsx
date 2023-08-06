@@ -7,7 +7,7 @@ interface FiatCurrencyIcon extends GeneratedIconProps {
     type: FiatCurrencyType
 }
 
-const ICON_FILTER_COLOR: Record<FiatCurrencyType | string, string> = {
+const ICON_FILTER_COLOR: Record<FiatCurrencyType, string> = {
     [FiatCurrencyType.USD]: 'drop-shadow(0px 6px 12px rgba(0, 204, 94, 0.20))',
     [FiatCurrencyType.CNY]: 'drop-shadow(0px 6px 12px rgba(243, 0, 0, 0.20))',
     [FiatCurrencyType.HKD]: 'drop-shadow(0px 6px 12px rgba(243, 0, 0, 0.20))',
