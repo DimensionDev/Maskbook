@@ -31,7 +31,6 @@ const Unlock = lazy(() => import('./Unlock/index.js'))
 const ResetWallet = lazy(() => import('./ResetWallet/index.js'))
 const SetPaymentPassword = lazy(() => import('./SetPaymentPassword/index.js'))
 const LegacyWalletRecovery = lazy(() => import('./LegacyWalletRecovery/index.js'))
-const ReplaceTransaction = lazy(() => import('./ReplaceTransaction/index.js'))
 const ChangeOwner = lazy(() => import('./ChangeOwner/index.js'))
 const Receive = lazy(() => import('./Receive/index.js'))
 
@@ -69,7 +68,6 @@ export default function Wallet() {
                     <Route path={r(PopupRoutes.Unlock)} element={<Unlock />} />
                     <Route path={r(PopupRoutes.ResetWallet)} element={<ResetWallet />} />
                     <Route path={r(PopupRoutes.SetPaymentPassword)} element={<SetPaymentPassword />} />
-                    <Route path={r(PopupRoutes.ReplaceTransaction)} element={<ReplaceTransaction />} />
                     <Route path={r(PopupRoutes.ChangeOwner)} element={<ChangeOwner />} />
                     <Route path={r(PopupRoutes.NetworkManagement)} element={<NetworkManagement />} />
                     <Route path={r(PopupRoutes.AddNetwork)} element={<EditNetwork />} />
