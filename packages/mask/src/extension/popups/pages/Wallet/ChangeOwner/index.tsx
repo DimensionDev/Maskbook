@@ -6,11 +6,11 @@ import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useContainer } from 'unstated-next'
-import { Box, Link, Popover, Typography, Button, alpha } from '@mui/material'
+import { Box, Link, Popover, Typography, alpha } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { CopyButton } from '@masknet/shared'
 import { ECKeyIdentifier, type NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import { ChainContextProvider, useChainContext, useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, ProviderType, type GasConfig } from '@masknet/web3-shared-evm'
@@ -226,7 +226,7 @@ export default function ChangeOwner() {
         return gas ? Number.parseInt(gas, 16).toString() : FALLBACK_GAS.toString()
     }, [manageAccount?.address, wallet?.address])
 
-    const [, handleConfirm] = useAsyncFn(async () => {
+    const [{ loading: loadingHandleConfirm }, handleConfirm] = useAsyncFn(async () => {
         if (!manageAccount?.address || !wallet) return
 
         const hash = await Web3.changeOwner?.(manageAccount.address, {
@@ -439,15 +439,20 @@ export default function ChangeOwner() {
                 </Popover>
             </div>
             <div className={classes.controller}>
-                <Button
+                <ActionButton
                     variant="contained"
                     className={cx(classes.button, classes.secondaryButton)}
                     onClick={() => navigate(-1)}>
                     {t('cancel')}
-                </Button>
-                <Button variant="contained" className={classes.button} onClick={handleConfirm}>
+                </ActionButton>
+                <ActionButton
+                    variant="contained"
+                    className={classes.button}
+                    onClick={handleConfirm}
+                    loading={loadingHandleConfirm}
+                    disabled={loadingHandleConfirm}>
                     {t('wallet_status_button_change')}
-                </Button>
+                </ActionButton>
             </div>
         </>
     )
