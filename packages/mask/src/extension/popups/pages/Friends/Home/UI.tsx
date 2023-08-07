@@ -90,7 +90,7 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
                             <ContactCard
                                 key={friend.id}
                                 avatar={friend.avatar}
-                                nextId={friend.linkedPersona?.publicKeyAsHex as string}
+                                nextId={friend.linkedPersona?.publicKeyAsHex}
                                 publicKey={friend.linkedPersona?.rawPublicKey}
                                 profiles={friend.profiles}
                                 isLocal

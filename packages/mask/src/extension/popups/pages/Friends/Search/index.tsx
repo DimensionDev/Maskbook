@@ -37,8 +37,10 @@ export const Search = memo<SearchProps>(function Search({ setSearchValue }) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const [value, setValue] = useState<string>('')
+    const [timer, setTimer] = useState<NodeJS.Timeout | null>(null)
     const handleKeyPress = (e: React.KeyboardEvent) => {
         if (e.key !== 'Enter') return
+        if (timer) clearTimeout(timer)
         setSearchValue(value)
     }
     return (
@@ -50,9 +52,11 @@ export const Search = memo<SearchProps>(function Search({ setSearchValue }) {
                 className={classes.input}
                 onKeyUp={(e) => handleKeyPress(e)}
                 onBlur={(e) => {
-                    setTimeout(() => {
-                        setSearchValue(e.target.value)
-                    }, 500)
+                    setTimer(
+                        setTimeout(() => {
+                            setSearchValue(e.target.value)
+                        }, 500),
+                    )
                 }}
                 onChange={(e) => {
                     setValue(e.target.value)
