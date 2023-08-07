@@ -75,8 +75,8 @@ export async function verifyPasswordRequired(unverifiedPassword: string) {
 
 export async function changePassword(oldPassword: string, newPassword: string) {
     validatePasswordRequired(newPassword)
-    const isVerify = await verifyPassword(oldPassword)
-    if (!isVerify) throw new Error('Incorrect payment password.')
+    const verified = await verifyPassword(oldPassword)
+    if (!verified) throw new Error('Incorrect payment password.')
     if (oldPassword === newPassword) throw new Error('Failed to set the same password as the old one.')
     await database.updateSecret(oldPassword, newPassword)
     INTERNAL_setPassword(newPassword)

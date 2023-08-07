@@ -23,9 +23,9 @@ function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest 
     const navigate = useNavigate()
 
     const [{ loading }, handleClick] = useAsyncFn(async () => {
-        const isVerify = await WalletRPC.verifyPassword(password)
+        const verified = await WalletRPC.verifyPassword(password)
 
-        if (!isVerify) {
+        if (!verified) {
             setError(t('create_wallet_incorrect_payment_password'))
             return
         }

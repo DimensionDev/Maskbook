@@ -29,9 +29,9 @@ function WalletRenameDrawer({ wallet, error, password, setPassword, setError, ..
         if (!password || !wallet) return
 
         try {
-            const isVerify = await WalletRPC.verifyPassword(password)
+            const verified = await WalletRPC.verifyPassword(password)
 
-            if (!isVerify) {
+            if (!verified) {
                 setError(t('create_wallet_incorrect_payment_password'))
                 return
             }
