@@ -14,7 +14,7 @@ import {
 } from './types.js'
 import { SecurityMessages } from './rules.js'
 import { getAllMaskDappContractInfo } from '../helpers/getAllMaskDappContractInfo.js'
-import { fetchJSON } from '../entry-helpers.js'
+import { fetchJSON } from '../helpers/fetchJSON.js'
 import type { AuthorizationAPI, SecurityAPI } from '../entry-types.js'
 
 function checkInWhitelist(chainId = ChainId.Mainnet, address: string) {

@@ -18,7 +18,8 @@ export class ERC721Descriptor extends BaseDescriptor implements TransactionDescr
         for (const { name, parameters } of context.methods) {
             switch (name) {
                 case 'approve': {
-                    if (parameters?.to === undefined || parameters?.tokenId === undefined) break
+                    const schemaType = await this.Web3.getSchemaType(context.to)
+                    if (parameters?.to === undefined || parameters?.tokenId === undefined || !schemaType) break
 
                     const symbol = await this.getContractSymbol(context.chainId, context.to)
 
@@ -40,10 +41,14 @@ export class ERC721Descriptor extends BaseDescriptor implements TransactionDescr
                                 action: 'unlock',
                             }),
                         },
+                        popup: {
+                            method: name,
+                        },
                     }
                 }
                 case 'setApprovalForAll': {
-                    if (parameters?.operator === undefined || parameters?.approved === undefined) break
+                    const schemaType = await this.Web3.getSchemaType(context.to)
+                    if (parameters?.operator === undefined || parameters?.approved === undefined || !schemaType) break
 
                     const action = parameters?.approved === false ? 'Revoke' : 'Unlock'
                     const symbol = await this.getContractSymbol(context.chainId, context.to)
@@ -72,6 +77,9 @@ export class ERC721Descriptor extends BaseDescriptor implements TransactionDescr
                                 action: action.toLowerCase(),
                             }),
                         },
+                        popup: {
+                            method: name,
+                        },
                     }
                 }
                 case 'transferFrom':
@@ -87,6 +95,10 @@ export class ERC721Descriptor extends BaseDescriptor implements TransactionDescr
                                 symbol,
                             }),
                             failedDescription: i18NextInstance.t('plugin_infra_descriptor_nft_transfer_fail'),
+                        },
+                        popup: {
+                            method: name,
+                            tokenId: parameters.tokenId as string,
                         },
                     }
                 }

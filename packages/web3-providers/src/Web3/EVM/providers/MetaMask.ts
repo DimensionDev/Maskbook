@@ -26,14 +26,16 @@ export class MetaMaskProvider
     }
 
     override get ready() {
-        if (isEthereumInjected() || isInPageEthereumInjected()) return super.ready
+        if (isEthereumInjected()) return true
+        if (isInPageEthereumInjected()) return super.ready
         const isConnected = (this.bridge as unknown as MetaMaskInpageProvider).isConnected()
         return isConnected
     }
 
     override get readyPromise() {
-        if (isEthereumInjected() || isInPageEthereumInjected()) return super.readyPromise
-        return Promise.resolve(undefined)
+        if (isEthereumInjected()) return Promise.resolve()
+        if (isInPageEthereumInjected()) return super.readyPromise
+        return Promise.resolve()
     }
 
     override async disconnect(): Promise<void> {

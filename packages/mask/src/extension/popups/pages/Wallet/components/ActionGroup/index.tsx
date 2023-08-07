@@ -1,9 +1,11 @@
 import { Icons } from '@masknet/icons'
-import { PopupRoutes } from '@masknet/shared-base'
+import { PopupRoutes, type NetworkPluginID } from '@masknet/shared-base'
+import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { isNativeTokenAddress, type ChainId } from '@masknet/web3-shared-evm'
 import { Box, Typography, type BoxProps } from '@mui/material'
-import { memo } from 'react'
+import { memo, useCallback } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { useI18N } from '../../../../../../utils/index.js'
@@ -52,14 +54,30 @@ const useStyles = makeStyles()((theme) => {
 interface Props extends BoxProps {
     chainId?: ChainId
     address?: string
-    onSwap?(): void
+    asset?: Web3Helper.FungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
 }
 
-export const ActionGroup = memo(function ActionGroup({ className, chainId, address, onSwap, ...rest }: Props) {
+export const ActionGroup = memo(function ActionGroup({ className, chainId, address, asset, ...rest }: Props) {
     const { classes, cx, theme } = useStyles()
     const { t } = useI18N()
     const navigate = useNavigate()
     const location = useLocation()
+    const handleSwap = useCallback(() => {
+        const url = urlcat(
+            'popups.html#/',
+            PopupRoutes.Swap,
+            isNativeTokenAddress(asset?.address)
+                ? {}
+                : {
+                      id: asset?.address,
+                      name: asset?.name,
+                      symbol: asset?.symbol,
+                      contract_address: asset?.address,
+                      decimals: asset?.decimals,
+                  },
+        )
+        openWindow(browser.runtime.getURL(url), 'SWAP_DIALOG')
+    }, [asset])
 
     return (
         <Box className={cx(classes.container, className)} {...rest}>
@@ -71,9 +89,11 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
                         address,
                         chainId,
                         token: matchPath(PopupRoutes.TokenDetail, location.pathname) ? true : undefined,
-                        undecided: !address,
+                        undecided: address ? undefined : true,
                     })
-                    navigate(path)
+                    navigate(path, {
+                        state: { asset },
+                    })
                 }}>
                 <Icons.Send size={20} color={theme.palette.maskColor.main} />
                 <Typography className={classes.label}>{t('wallet_send')}</Typography>
@@ -92,7 +112,7 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
                 <Icons.ArrowDownward size={20} color={theme.palette.maskColor.main} />
                 <Typography className={classes.label}>{t('wallet_receive')}</Typography>
             </button>
-            <button type="button" className={classes.button} onClick={onSwap}>
+            <button type="button" className={classes.button} onClick={handleSwap}>
                 <Icons.Cached size={20} color={theme.palette.maskColor.main} />
                 <Typography className={classes.label}>{t('wallet_swap')}</Typography>
             </button>

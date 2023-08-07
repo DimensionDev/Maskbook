@@ -11,13 +11,13 @@ import {
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
-    createNativeToken,
     type GasOption,
     SchemaType,
     isValidChainId,
     resolveImageURL,
     ChainIdList,
 } from '@masknet/web3-shared-evm'
+import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
 import type { ZerionNonFungibleTokenItem, ZerionNonFungibleCollection, ZerionCoin } from './types.js'
 import { formatAsset, formatTransactions, isValidAsset } from './helpers.js'
 import {
@@ -30,7 +30,8 @@ import {
     getTransactionList,
     zerionChainIdResolver,
 } from './base-api.js'
-import { getAssetFullName, getNativeAssets } from '../entry-helpers.js'
+import { getAssetFullName } from '../helpers/getAssetFullName.js'
+import { getNativeAssets } from '../helpers/getNativeAssets.js'
 import type {
     FungibleTokenAPI,
     GasOptionAPI_Base,
@@ -202,11 +203,11 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
         { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return
-        const response = await getNonFungibleInfo(address, tokenId)
 
+        const response = await getNonFungibleInfo(address, tokenId)
         if (!response.payload['nft-info'].asset.floor_price) return
 
-        const nativeToken = createNativeToken(chainId)
+        const nativeToken = new ChainResolverAPI().nativeCurrency(chainId)
         return {
             amount: scale10(response.payload['nft-info'].asset.floor_price, nativeToken.decimals).toFixed(0),
             token: nativeToken,

@@ -19,15 +19,15 @@ import { SharedContextRef } from '../../../PluginContext/index.js'
 import type { BundlerAPI, AbstractAccountAPI, FunderAPI } from '../../../entry-types.js'
 
 export class ContractWallet implements Middleware<ConnectionContext> {
+    private Web3 = new ConnectionAPI()
+    private Contract = new ContractReadonlyAPI()
+
     constructor(
         protected providerType: ProviderType,
         protected account: AbstractAccountAPI.Provider<ChainId, UserOperation, Transaction>,
         protected bundler: BundlerAPI.Provider,
         protected funder: FunderAPI.Provider<ChainId>,
     ) {}
-
-    private Web3 = new ConnectionAPI()
-    private Contract = new ContractReadonlyAPI()
 
     private async getNonce(context: ConnectionContext) {
         const contract = this.Contract.getWalletContract(context.account)

@@ -3,9 +3,9 @@ import { useCopyToClipboard } from 'react-use'
 import { MaskColorVar, MaskDialog, makeStyles } from '@masknet/theme'
 import { QRCode, useSnackbarCallback } from '@masknet/shared'
 import { DialogContent, Typography, DialogActions, Button } from '@mui/material'
-import { useChainContext, useReverseAddress, useWeb3Others } from '@masknet/web3-hooks-base'
+import { ChainResolver } from '@masknet/web3-providers'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { chainResolver } from '@masknet/web3-shared-evm'
+import { useChainContext, useReverseAddress, useWeb3Others } from '@masknet/web3-hooks-base'
 import { WalletQRCodeContainer } from '../../../../components/WalletQRCodeContainer/index.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
 
@@ -76,11 +76,11 @@ export const ReceiveDialogUI = memo<ReceiveDialogUIProps>(({ open, chainId, addr
             }}>
             <DialogContent className={classes.container}>
                 <Typography sx={{ marginBottom: 3.5 }}>
-                    {t.wallets_receive_tips({ chainName: chainResolver.chainName(chainId as number) ?? '' })}
+                    {t.wallets_receive_tips({ chainName: ChainResolver.chainName(chainId as number) ?? '' })}
                 </Typography>
                 <WalletQRCodeContainer width={286} height={286} border={{ borderWidth: 15, borderHeight: 2 }}>
                     <QRCode
-                        text={`${chainResolver.chainPrefix(chainId as number)}:${address}`}
+                        text={`${ChainResolver.chainPrefix(chainId as number)}:${address}`}
                         options={{ width: 282 }}
                         canvasProps={{
                             style: { display: 'block', margin: 'auto' },

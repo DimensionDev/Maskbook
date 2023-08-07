@@ -57,5 +57,6 @@
     "create_persona_intro": "请创建您的身份以使用 Web3 个人资料。",
     "add_wallet_intro": "在 Web3 中，您可以给已安装Mask Network的好友展示接收小费的地址，NFT 收藏品，捐赠记录和其他链上信息。",
     "others_lack_wallet": "用户尚未设置此项。",
+    "applications_persona_title": "身份",
     "enable_plugin": "开启插件"
 }

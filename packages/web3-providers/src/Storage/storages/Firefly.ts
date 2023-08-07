@@ -7,10 +7,10 @@ import type { StorageAPI } from '../../entry-types.js'
 const caches = new Map<string, LRUCache<string, any>>()
 
 export class FireflyStorage implements StorageAPI.Storage {
-    private cache: LRUCache<string, any> | undefined
-
     private Firefly = new FireflyGetterSetter()
     private Web3 = new ConnectionAPI()
+
+    private cache: LRUCache<string, any> | undefined
 
     constructor(
         private namespace: string,

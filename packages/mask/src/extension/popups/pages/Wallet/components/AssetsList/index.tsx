@@ -1,25 +1,17 @@
 import { Icons } from '@masknet/icons'
-import { FormattedBalance, ImageIcon, TokenIcon } from '@masknet/shared'
+import { ImageIcon, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles, type ActionButtonProps } from '@masknet/theme'
 import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
-import {
-    formatBalance,
-    formatCurrency,
-    isGte,
-    isLessThan,
-    type FungibleAsset,
-    trimZero,
-} from '@masknet/web3-shared-base'
+import { formatCurrency, isGte, isLessThan, type FungibleAsset, trimZero } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { Box, List, ListItem, ListItemText, Skeleton, Typography } from '@mui/material'
 import { isNaN, range } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useContainer } from 'unstated-next'
 import urlcat from 'urlcat'
-import { useI18N } from '../../../../../../utils/index.js'
-import { WalletContext } from '../../hooks/useWalletContext.js'
+import { useI18N, formatTokenBalance } from '../../../../../../utils/index.js'
+import { useAssetExpand, useWalletAssets } from '../../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -77,9 +69,9 @@ type Asset = FungibleAsset<ChainId, SchemaType>
 export const AssetsList = memo(function AssetsList() {
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const { assets, assetsLoading, setCurrentToken, assetsIsExpand, setAssetsIsExpand } = useContainer(WalletContext)
+    const { data: assets, isLoading } = useWalletAssets()
+    const [assetsIsExpand, setAssetsIsExpand] = useAssetExpand()
     const onItemClick = useCallback((asset: Asset) => {
-        setCurrentToken(asset)
         navigate(urlcat(PopupRoutes.TokenDetail, { chainId: asset.chainId, address: asset.address }))
     }, [])
     const onSwitch = useCallback(() => setAssetsIsExpand((x) => !x), [])
@@ -92,7 +84,7 @@ export const AssetsList = memo(function AssetsList() {
     }, [assets])
     return (
         <>
-            {assetsLoading ? (
+            {isLoading ? (
                 <AssetsListSkeleton />
             ) : (
                 <AssetsListUI isExpand={assetsIsExpand} assets={assets} onItemClick={onItemClick} />
@@ -166,13 +158,11 @@ export const AssetsListUI = memo<AssetsListUIProps>(function AssetsListUI({ isEx
                             className={classes.text}
                             secondary={
                                 <Typography className={classes.balance}>
-                                    <FormattedBalance
-                                        value={isNaN(asset.balance) ? 0 : asset.balance}
-                                        decimals={isNaN(asset.decimals) ? 0 : asset.decimals}
-                                        symbol={asset.symbol}
-                                        significant={4}
-                                        formatter={formatBalance}
-                                    />
+                                    {formatTokenBalance(
+                                        isNaN(asset.balance) ? 0 : asset.balance,
+                                        isNaN(asset.decimals) ? 0 : asset.decimals,
+                                    )}
+                                    {asset.symbol}
                                 </Typography>
                             }>
                             <Typography className={classes.name}>{asset.name}</Typography>

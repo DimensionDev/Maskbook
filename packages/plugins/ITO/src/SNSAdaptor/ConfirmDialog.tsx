@@ -1,8 +1,9 @@
+import { Fragment, useCallback, useState, useEffect } from 'react'
+import formatDateTime from 'date-fns/format'
 import { FormattedAddress, FormattedBalance, PluginWalletStatusBar } from '@masknet/shared'
 import {
     formatEthereumAddress,
     isNativeTokenAddress,
-    explorerResolver,
     useITOConstants,
     type SchemaType,
     type ChainId,
@@ -11,12 +12,11 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import { formatBalance, type FungibleToken, leftShift, ONE } from '@masknet/web3-shared-base'
 import { Grid, IconButton, Link, Paper, Typography, Box } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { ExplorerResolver } from '@masknet/web3-providers'
 import { Launch as LaunchIcon, Repeat as RepeatIcon } from '@mui/icons-material'
-import formatDateTime from 'date-fns/format'
-import { Fragment, useCallback, useState, useEffect } from 'react'
 import type { PoolSettings } from './hooks/useFill.js'
 import { decodeRegionCode, regionCodes } from './hooks/useRegion.js'
-import { useChainContext } from '@masknet/web3-hooks-base'
 import { useI18N } from '../locales/index.js'
 
 const useSwapItemStyles = makeStyles()({
@@ -136,7 +136,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                             {isNativeTokenAddress(poolSettings?.token?.address) ? null : (
                                 <Link
                                     className={classes.link}
-                                    href={explorerResolver.fungibleTokenLink(chainId, poolSettings?.token?.address!)}
+                                    href={ExplorerResolver.fungibleTokenLink(chainId, poolSettings?.token?.address!)}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     onClick={stop}>
@@ -237,7 +237,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                             <Grid item xs={6}>
                                 <Paper className={classes.data}>
                                     <Link
-                                        href={explorerResolver.addressLink(chainId, poolSettings?.qualificationAddress)}
+                                        href={ExplorerResolver.addressLink(chainId, poolSettings?.qualificationAddress)}
                                         target="_blank"
                                         rel="noopener noreferrer">
                                         <Typography>

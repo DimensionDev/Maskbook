@@ -2,14 +2,7 @@ import { BigNumber } from 'bignumber.js'
 import formatDateTime from 'date-fns/format'
 import { startCase } from 'lodash-es'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import {
-    formatEthereumAddress,
-    isNativeTokenAddress,
-    explorerResolver,
-    chainResolver,
-    type ChainId,
-    type SchemaType,
-} from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, isNativeTokenAddress, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import {
     isZero,
     ZERO,
@@ -23,6 +16,10 @@ import { TokenIcon, ChainBoundary, WalletConnectedBoundary, useAssetAsBlobURL } 
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
 import { EnhanceableSite, NetworkPluginID, getSiteType, isFacebook, isTwitter } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { Icons } from '@masknet/icons'
+import { ChainResolver, ExplorerResolver } from '@masknet/web3-providers'
+import { usePostLink, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { ITO_EXCHANGE_RATION_MAX, MSG_DELIMITER, TIME_WAIT_BLOCKCHAIN } from '../constants.js'
 import { sortTokens } from './helpers.js'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
@@ -34,9 +31,6 @@ import { checkRegionRestrict, decodeRegionCode, useIPRegion } from './hooks/useR
 import { ITO_Status, type JSON_PayloadInMask } from '../types.js'
 import { StyledLinearProgress } from './StyledLinearProgress.js'
 import { SwapGuide, SwapStatus } from './SwapGuide.js'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import { Icons } from '@masknet/icons'
-import { usePostLink, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useI18N } from '../locales/index.js'
 import { getTextUILength } from './utils/sliceTextByUILength.js'
 
@@ -197,7 +191,7 @@ function TokenItem({ price, token, exchangeToken }: TokenItemProps) {
             <Typography component="span">
                 <strong>{price}</strong>{' '}
                 {isNativeTokenAddress(exchangeToken.address)
-                    ? chainResolver.nativeCurrency(exchangeToken.chainId)?.symbol
+                    ? ChainResolver.nativeCurrency(exchangeToken.chainId)?.symbol
                     : exchangeToken.symbol}{' '}
                 / {token.symbol}
             </Typography>
@@ -560,7 +554,7 @@ export function ITO(props: ITO_Props) {
                     })}
                     <Link
                         className={classes.tokenLink}
-                        href={explorerResolver.fungibleTokenLink(token.chainId, token.address)}
+                        href={ExplorerResolver.fungibleTokenLink(token.chainId, token.address)}
                         target="_blank"
                         rel="noopener noreferrer">
                         <OpenInNewIcon fontSize="small" className={classes.totalIcon} />

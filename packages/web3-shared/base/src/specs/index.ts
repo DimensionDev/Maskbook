@@ -185,14 +185,14 @@ export interface ChainDescriptor<ChainId, SchemaType, NetworkType> {
     ID: string
     type: NetworkType
     chainId: ChainId
-    coinMarketCapChainId: string
-    coinGeckoChainId: string
-    coinGeckoPlatformId: string
+    coinMarketCapChainId?: string
+    coinGeckoChainId?: string
+    coinGeckoPlatformId?: string
     name: string
     color?: string
     fullName?: string
     shortName?: string
-    network: 'mainnet' | 'testnet' | Omit<string, 'mainnet' | 'testnet'>
+    network: LiteralUnion<'mainnet' | 'testnet'>
     nativeCurrency: FungibleToken<ChainId, SchemaType>
     rpcUrl: string
     iconUrl?: string
@@ -431,7 +431,7 @@ export interface NonFungibleCollectionOverview {
 export interface NonFungibleTokenActivity<ChainId, SchemaType> {
     hash: string
     event_type: ActivityType
-    transaction_link: string
+    transaction_link?: string
     timestamp: number
     imageURL: string
     trade_price?: number
@@ -774,6 +774,12 @@ export interface TransactionDescriptor<ChainId, Transaction, Parameter = string 
         failedTitle?: string
     }
     popup?: {
+        /** The spender address of erc20 approve */
+        spender?: string
+        /** The method name of contract function */
+        method?: string
+        /** The Non-Fungible token description */
+        tokenId?: string
         /** The custom token description */
         tokenDescription?: string
     }
@@ -1041,7 +1047,7 @@ export interface MessageState<Request, Response> extends Startable {
     /** Applies a request and waits for confirmation from the user. */
     applyAndWaitResponse<T>(message: TransferableMessage<Request, Response>): Promise<Response>
     /** Approves a request. */
-    approveRequest(id: string): Promise<void>
+    approveRequest(id: string, updates?: Request): Promise<void>
     /** Rejects a request. */
     denyRequest(id: string): Promise<void>
     /** Rejects all requests. */

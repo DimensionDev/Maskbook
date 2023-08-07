@@ -11,5 +11,6 @@
     "details": "详情",
     "failed": "加载失败",
     "retry": "重新加载",
-    "action_title": "{{title}} ({{price}} {{symbol}}/时间)"
+    "action_title": "{{title}} ({{price}} {{symbol}}/时间)",
+    "plugin_mask_box_name": "Mask盲盒"
 }

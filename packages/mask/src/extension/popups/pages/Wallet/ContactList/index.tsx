@@ -1,19 +1,20 @@
 import { memo, useCallback, useMemo } from 'react'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import urlcat from 'urlcat'
+import { Box, Link, List, ListItem, MenuItem, Typography, useTheme, type ListItemProps } from '@mui/material'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useWallets } from '@masknet/web3-hooks-base'
-import { explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { Box, Link, List, ListItem, MenuItem, Typography, useTheme, type ListItemProps } from '@mui/material'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import { EmojiAvatar, FormattedAddress, useMenuConfig } from '@masknet/shared'
+import { ExplorerResolver } from '@masknet/web3-providers'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { ContactsContext } from '../../../hook/useContactsContext.js'
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
 import { DeleteContactModal, EditContactModal } from '../../../modals/modals.js'
 import { ContactType } from '../type.js'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import urlcat from 'urlcat'
 
 const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivideLine }) => ({
     root: {
@@ -129,22 +130,26 @@ const ContactListUI = memo(function ContactListUI() {
     const { t } = useI18N()
     const { classes } = useStyles({})
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
-    const { receiver, contacts, receiverValidationMessage } = ContactsContext.useContainer()
+    const { userInput, address, contacts, inputValidationMessage } = ContactsContext.useContainer()
     const [params] = useSearchParams()
 
     useTitle(t('popups_send'))
 
     const navigate = useNavigate()
+    const location = useLocation()
 
     const handleSelectContact = useCallback(
-        (addr: string) => {
+        (addr: string, recipientName: string) => {
             const path = urlcat(PopupRoutes.Transfer, {
                 ...Object.fromEntries(params.entries()),
                 recipient: addr,
+                recipientName,
             })
-            navigate(path)
+            navigate(path, {
+                state: location.state,
+            })
         },
-        [navigate, params],
+        [navigate, params, location.state],
     )
 
     return (
@@ -188,10 +193,18 @@ const ContactListUI = memo(function ContactListUI() {
                 <Box className={classes.bottomAction}>
                     <ActionButton
                         fullWidth
-                        onClick={() => {}}
+                        onClick={() => {
+                            const path = urlcat(PopupRoutes.Transfer, {
+                                ...Object.fromEntries(params.entries()),
+                                recipient: address,
+                            })
+                            navigate(path, {
+                                state: location.state,
+                            })
+                        }}
                         width={368}
                         className={classes.confirmButton}
-                        disabled={!!receiverValidationMessage || !receiver}>
+                        disabled={!!inputValidationMessage || !userInput}>
                         {t('next')}
                     </ActionButton>
                 </Box>
@@ -204,7 +217,7 @@ interface ContactListItemProps extends ListItemProps {
     address: string
     name: string
     contactType: ContactType
-    onSelectContact?: (address: string) => void
+    onSelectContact?: (address: string, name: string) => void
 }
 
 function ContactListItem({ address, name, contactType, onSelectContact, ...rest }: ContactListItemProps) {
@@ -269,7 +282,10 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
     )
 
     return (
-        <ListItem classes={{ root: classes.contactsListItem }} onClick={() => onSelectContact?.(address)} {...rest}>
+        <ListItem
+            classes={{ root: classes.contactsListItem }}
+            onClick={() => onSelectContact?.(address, name)}
+            {...rest}>
             <div className={classes.contactsListItemInfo}>
                 <EmojiAvatar address={address} className={classes.emojiAvatar} sx={{ width: 24, height: 24 }} />
                 <div>
@@ -278,7 +294,7 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
                         <FormattedAddress address={address} formatter={formatEthereumAddress} size={4} />
                         <Link
                             onClick={(event) => event.stopPropagation()}
-                            href={explorerResolver.addressLink(chainId, address ?? '')}
+                            href={ExplorerResolver.addressLink(chainId, address ?? '')}
                             target="_blank"
                             rel="noopener noreferrer">
                             <Icons.PopupLink className={classes.icon} />

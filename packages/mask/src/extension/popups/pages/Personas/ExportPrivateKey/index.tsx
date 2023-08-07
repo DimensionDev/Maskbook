@@ -9,7 +9,7 @@ import { useAsync, useCopyToClipboard } from 'react-use'
 import { Trans } from 'react-i18next'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { useNavigate } from 'react-router-dom'
-import { PopupRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
 
 const ExportPrivateKey = memo(function ExportPrivateKey() {
@@ -36,7 +36,7 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
         showSnackbar(t('copied'))
     }, [value])
 
-    useTitle(t('popups_wallet_backup_private_key'))
+    useTitle(currentPersona?.nickname ?? '')
 
     return (
         <Box>
@@ -53,7 +53,18 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
                     <Trans
                         i18nKey="popups_export_private_key_tips"
                         components={{
-                            a: <Link />,
+                            a: (
+                                <Link
+                                    onClick={() => {
+                                        browser.tabs.create({
+                                            active: true,
+                                            url: browser.runtime.getURL(
+                                                `/dashboard.html#${DashboardRoutes.Settings}?mode=true`,
+                                            ),
+                                        })
+                                    }}
+                                />
+                            ),
                         }}
                     />
                 </Typography>

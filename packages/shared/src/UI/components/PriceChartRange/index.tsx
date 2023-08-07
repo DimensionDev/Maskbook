@@ -1,6 +1,6 @@
 import { Link, Typography, type StackProps, Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { TrendingAPI } from '@masknet/web3-providers/types'
+import { Days } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ columns: number }>()((theme, { columns }) => ({
     container: {
@@ -27,8 +27,6 @@ const useStyles = makeStyles<{ columns: number }>()((theme, { columns }) => ({
     },
 }))
 
-const Days = TrendingAPI.Days
-
 export const DEFAULT_RANGE_OPTIONS = [Days.ONE_DAY, Days.ONE_WEEK, Days.ONE_MONTH, Days.ONE_YEAR, Days.MAX]
 
 function resolveDaysName(days: number) {
@@ -41,7 +39,7 @@ function resolveDaysName(days: number) {
 }
 export interface PriceChartDaysControlProps extends StackProps {
     days: number
-    rangeOptions?: TrendingAPI.Days[]
+    rangeOptions?: Days[]
     onDaysChange?: (days: number) => void
 }
 

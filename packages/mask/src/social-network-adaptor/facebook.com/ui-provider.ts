@@ -201,7 +201,7 @@ const facebookUI: SocialNetworkUI.Definition = {
         profileCover: injectFacebookProfileCover,
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
         openNFTAvatarSettingDialog,
-        enhancedPostRenderer: injectPostReplacerAtFacebook,
+        postReplacer: injectPostReplacerAtFacebook,
         postInspector: injectPostInspectorFacebook,
         pageInspector: injectPageInspectorDefault(),
         setupWizard: createTaskStartSetupGuideDefault(),

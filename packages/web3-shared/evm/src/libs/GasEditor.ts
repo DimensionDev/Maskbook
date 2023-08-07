@@ -1,7 +1,6 @@
 import { toHex } from 'web3-utils'
 import { GasOptionType, isZero, multipliedBy, toFixed } from '@masknet/web3-shared-base'
 import { formatWeiToEther } from '../helpers/formatter.js'
-import { chainResolver } from '../helpers/resolver.js'
 import type {
     ChainId,
     EIP1559GasConfig,
@@ -10,6 +9,7 @@ import type {
     PriorEIP1559GasConfig,
     Transaction,
 } from '../types/index.js'
+import { CHAIN_DESCRIPTORS } from '../constants/descriptors.js'
 
 export class GasEditor {
     constructor(
@@ -18,7 +18,7 @@ export class GasEditor {
     ) {}
 
     private get isEIP1559() {
-        return chainResolver.isSupport(this.chainId, 'EIP1559')
+        return !!CHAIN_DESCRIPTORS.find((x) => x.chainId === this.chainId)?.features?.includes('EIP1559')
     }
 
     private get EIP1559GasOptionConfig() {

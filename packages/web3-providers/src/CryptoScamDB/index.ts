@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import type { ScalableBloomFilter } from 'bloom-filters'
-import { fetchSquashedJSON } from '../entry-helpers.js'
+import { fetchSquashedJSON } from '../helpers/fetchJSON.js'
 import type { ScamWarningAPI } from '../entry-types.js'
 
 const BASE_URL = 'https://scam.mask.r2d2.to/cryptoscam-db'

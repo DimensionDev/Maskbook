@@ -1,13 +1,13 @@
 import { NetworkPluginID, PopupModalRoutes, PopupRoutes } from '@masknet/shared-base'
-import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetwork, useWallet } from '@masknet/web3-hooks-base'
 import { useQuery } from '@tanstack/react-query'
-import { memo, useCallback, useEffect, useMemo } from 'react'
+import { memo, useCallback, useEffect } from 'react'
 import { matchPath, useLocation, useMatch } from 'react-router-dom'
 import { WalletRPC } from '../../../../../../plugins/WalletService/messages.js'
-import { getEvmNetworks } from '../../../../../../utils/networks.js'
 import { NormalHeader, useModalNavigate } from '../../../../components/index.js'
 import { WalletHeaderUI } from './UI.js'
 import { WalletSetupHeaderUI } from './WalletSetupHeaderUI.js'
+import Services from '../../../../../service.js'
 
 const CUSTOM_HEADER_PATTERNS = [`${PopupRoutes.AddToken}/:chainId/:assetType`, PopupRoutes.Transfer]
 
@@ -21,9 +21,7 @@ export const WalletHeader = memo(function WalletHeader() {
         refetch()
     }, [location.pathname])
 
-    const networks = useMemo(() => getEvmNetworks(true), [])
-
-    const currentNetwork = useMemo(() => networks.find((x) => x.chainId === chainId) ?? networks[0], [chainId])
+    const currentNetwork = useNetwork(NetworkPluginID.PLUGIN_EVM)
     const matchUnlock = useMatch(PopupRoutes.Unlock)
     const matchResetWallet = useMatch(PopupRoutes.ResetWallet)
     const matchWallet = useMatch(PopupRoutes.Wallet)
@@ -40,9 +38,8 @@ export const WalletHeader = memo(function WalletHeader() {
 
     if (customHeader) return null
 
-    if (!wallet || !hasPassword || matchUnlock || matchResetWallet) return <WalletSetupHeaderUI />
-
     if (matchContractInteraction) {
+        if (!wallet) return null
         return (
             <WalletHeaderUI
                 chainId={chainId}
@@ -55,6 +52,8 @@ export const WalletHeader = memo(function WalletHeader() {
         )
     }
 
+    if (!wallet || !hasPassword || matchUnlock || matchResetWallet) return <WalletSetupHeaderUI />
+
     return matchWallet ? (
         <WalletHeaderUI
             chainId={chainId}
@@ -64,6 +63,6 @@ export const WalletHeader = memo(function WalletHeader() {
             wallet={wallet}
         />
     ) : (
-        <NormalHeader />
+        <NormalHeader onClose={() => Services.Helper.removePopupWindow()} />
     )
 })

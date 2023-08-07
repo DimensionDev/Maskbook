@@ -5,16 +5,23 @@ import { TextOverflowTooltip, makeStyles, usePopupCustomSnackbar } from '@maskne
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useNonFungibleAsset, useWeb3State } from '@masknet/web3-hooks-base'
 import { TokenType, formatBalance } from '@masknet/web3-shared-base'
-import { SchemaType, formatEthereumAddress, isValidAddress } from '@masknet/web3-shared-evm'
+import {
+    SchemaType,
+    formatEthereumAddress,
+    isLensCollect,
+    isLensFollower,
+    isLensProfileAddress,
+    isValidAddress,
+} from '@masknet/web3-shared-evm'
 import { Button, Skeleton, Typography } from '@mui/material'
 import formatDateTime from 'date-fns/format'
 import { memo, useContext, useEffect, useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useTokenParams, useTitle } from '../../../hook/index.js'
+import urlcat from 'urlcat'
 import { useI18N } from '../../../../../utils/index.js'
 import { PageTitleContext } from '../../../context.js'
+import { useTitle, useTokenParams } from '../../../hook/index.js'
 import { ConfirmModal } from '../../../modals/modals.js'
-import urlcat from 'urlcat'
 import { TransferTabType } from '../type.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -198,6 +205,13 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
     }, [classes.iconButton, t, name, account, navigate, showSnackbar])
 
     const lastSale = asset?.priceInToken
+    const transferable = useMemo(() => {
+        if (!availableAsset) return false
+        if (isLensProfileAddress(availableAsset.address)) return false
+        if (availableAsset.metadata?.name && isLensFollower(availableAsset.metadata.name)) return false
+        if (availableAsset.collection?.name && isLensCollect(availableAsset.collection.name)) return false
+        return true
+    }, [availableAsset])
 
     return (
         <article className={classes.page} data-hide-scrollbar>
@@ -290,20 +304,22 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
                     </ProgressiveText>
                 </>
             ) : null}
-            <Button
-                className={classes.sendButton}
-                onClick={() => {
-                    const path = urlcat(PopupRoutes.Contacts, {
-                        tab: TransferTabType.NFT,
-                        'nft:chainId': chainId,
-                        'nft:address': address,
-                        'nft:tokenId': availableAsset?.tokenId,
-                    })
-                    navigate(path)
-                }}>
-                <Icons.Send size={16} style={{ marginRight: 4 }} />
-                {t('send')}
-            </Button>
+            {transferable ? (
+                <Button
+                    className={classes.sendButton}
+                    onClick={() => {
+                        const path = urlcat(PopupRoutes.Contacts, {
+                            tab: TransferTabType.NFT,
+                            'nft:chainId': chainId,
+                            'nft:address': address,
+                            'nft:tokenId': availableAsset?.tokenId,
+                        })
+                        navigate(path)
+                    }}>
+                    <Icons.Send size={16} style={{ marginRight: 4 }} />
+                    {t('send')}
+                </Button>
+            ) : null}
         </article>
     )
 })

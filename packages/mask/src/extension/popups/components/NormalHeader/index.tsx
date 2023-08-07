@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         flexShrink: 0,
     },
-    back: {
+    icon: {
         fontSize: 24,
         cursor: 'pointer',
         color: theme.palette.maskColor.main,
@@ -46,6 +46,7 @@ const useStyles = makeStyles()((theme) => ({
 interface NormalHeaderProps {
     onlyTitle?: boolean
     tabList?: ReactNode
+    onClose?: () => void
 }
 
 function canNavBack() {
@@ -55,14 +56,16 @@ function canNavBack() {
     return false
 }
 export const NormalHeader = memo<NormalHeaderProps>(function NormalHeader(props) {
-    const { onlyTitle } = props
+    const { onlyTitle, onClose, tabList } = props
     const { cx, classes } = useStyles()
     const navigate = useNavigate()
     const { title, extension, customBackHandler } = useContext(PageTitleContext)
 
-    const showTitle = canNavBack() && title !== undefined
+    const canBack = canNavBack()
+    const showTitle = title !== undefined
 
     const handleBack = useCallback(() => navigate(-1), [])
+
     if (onlyTitle)
         return (
             <Box className={cx(classes.container, classes.header)} style={{ justifyContent: 'center' }}>
@@ -75,7 +78,11 @@ export const NormalHeader = memo<NormalHeaderProps>(function NormalHeader(props)
             <Box className={classes.header}>
                 {showTitle ? (
                     <>
-                        <Icons.Comeback className={classes.back} onClick={customBackHandler ?? handleBack} />
+                        {canBack ? (
+                            <Icons.Comeback className={classes.icon} onClick={customBackHandler ?? handleBack} />
+                        ) : (
+                            <Icons.Close className={classes.icon} onClick={onClose} />
+                        )}
                         <Typography className={classes.title}>{title}</Typography>
                         {extension}
                     </>
@@ -83,7 +90,7 @@ export const NormalHeader = memo<NormalHeaderProps>(function NormalHeader(props)
                     <Icons.Mask className={classes.logo} />
                 )}
             </Box>
-            {props.tabList}
+            {tabList}
         </Box>
     )
 })

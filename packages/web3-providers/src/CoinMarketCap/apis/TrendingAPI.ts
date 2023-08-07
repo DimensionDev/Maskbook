@@ -1,5 +1,5 @@
 import getUnixTime from 'date-fns/getUnixTime'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { Days, NetworkPluginID } from '@masknet/shared-base'
 import { TokenType, SourceType } from '@masknet/web3-shared-base'
 import { type ChainId, isValidChainId } from '@masknet/web3-shared-evm'
 import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_BASE_URL, THIRD_PARTY_V1_BASE_URL } from '../constants.js'
@@ -8,7 +8,7 @@ import type { Coin, Pair, ResultData, Status, QuotesInfo, CoinInfo } from '../ty
 import { FuseCoinAPI } from '../../Fuse/index.js'
 import { getCommunityLink, isMirroredKeyword } from '../../Trending/helpers.js'
 import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../../Trending/constants.js'
-import { TrendingAPI } from '../../entry-types.js'
+import type { TrendingAPI } from '../../entry-types.js'
 
 // #regin get quote info
 export async function getQuotesInfo(id: string, currency: string) {
@@ -86,7 +86,7 @@ export async function getLatestMarketPairs(id: string, currency: string) {
 // #endregion
 
 export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
-    private fuse = new FuseCoinAPI()
+    private Fuse = new FuseCoinAPI()
 
     private async getHistorical(
         id: string,
@@ -130,8 +130,7 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
-        return this.fuse
-            .create(await this.getAllCoins())
+        return this.Fuse.create(await this.getAllCoins())
             .search(keyword)
             .map((x) => x.item)
             .filter((y) => y.market_cap_rank && y.market_cap_rank < VALID_TOP_RANK)
@@ -268,7 +267,7 @@ export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
         const stats = await this.getHistorical(
             coinId,
             currency.name.toUpperCase(),
-            days === TrendingAPI.Days.MAX ? BTC_FIRST_LEGER_DATE : startDate,
+            days === Days.MAX ? BTC_FIRST_LEGER_DATE : startDate,
             endDate,
             interval,
         )

@@ -29,7 +29,7 @@ export function useSetWalletNameForm(defaultName?: string) {
         mode: 'onChange',
         resolver: zodResolver(schema),
         defaultValues: {
-            name: defaultName ?? `account ${wallets.length + 1}`,
+            name: defaultName ?? `Wallet ${wallets.length + 1}`,
         },
     })
 

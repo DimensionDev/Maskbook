@@ -1,12 +1,12 @@
 import { memo, useEffect, useState } from 'react'
-import { CrossIsolationMessages } from '@masknet/shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { ChainContextProvider } from '@masknet/web3-hooks-base'
 import { Sentry } from '@masknet/web3-telemetry'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
-import { FollowLensDialog } from './components/FollowLensDialog.js'
 import { LensPopup } from './components/LensPopup.js'
+import { FollowLensDialog } from './components/FollowLensDialog.js'
 import { Web3ProfileDialog } from './components/Web3ProfileDialog.js'
 
 export const Web3ProfileGlobalInjection = memo(function Web3ProfileGlobalInjection() {
@@ -38,9 +38,9 @@ export const Web3ProfileGlobalInjection = memo(function Web3ProfileGlobalInjecti
             {profileOpen ? <Web3ProfileDialog open onClose={() => setProfileOpen(false)} /> : null}
 
             {lensOpen && handle ? (
-                <ChainContextProvider value={{ chainId: ChainId.Matic }}>
+                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Matic }}>
                     <FollowLensDialog handle={handle} onClose={closeLensDialog} />
-                </ChainContextProvider>
+                </Web3ContextProvider>
             ) : null}
 
             <LensPopup />

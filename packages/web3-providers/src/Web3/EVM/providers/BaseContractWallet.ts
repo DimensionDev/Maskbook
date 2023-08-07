@@ -1,6 +1,6 @@
 import { delay } from '@masknet/kit'
-import { ECKeyIdentifier, InMemoryStorages, NetworkPluginID, type StorageItem } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
+import { ECKeyIdentifier, InMemoryStorages, NetworkPluginID, type StorageItem } from '@masknet/shared-base'
 import { type ProviderType, isValidAddress, type ChainId, type Web3Provider, type Web3 } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
 import { BaseHostedProvider } from './BaseHosted.js'

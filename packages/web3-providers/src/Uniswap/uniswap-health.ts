@@ -1,7 +1,7 @@
 import { first } from 'lodash-es'
 import stringify from 'json-stable-stringify'
 import { type ChainId, getTrendingConstants } from '@masknet/web3-shared-evm'
-import { fetchJSON } from '../entry-helpers.js'
+import { fetchJSON } from '../helpers/fetchJSON.js'
 
 async function fetchFromUniswapV2Health<T>(chainId: ChainId, query: string) {
     const subgraphURL = getTrendingConstants(chainId).UNISWAP_V2_HEALTH_URL
