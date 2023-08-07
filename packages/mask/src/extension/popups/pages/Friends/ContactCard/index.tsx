@@ -87,8 +87,9 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
     const { currentPersona } = PersonaContext.useContainer()
     const { t } = useI18N()
     const handleAddFriend = useCallback(async () => {
+        if (!currentPersona) return
         const twitter = profiles.find((p) => p.platform === NextIDPlatform.Twitter)
-        if (!twitter || !currentPersona) return
+        if (!twitter) return
         const profileIdentifier = ProfileIdentifier.of('twitter.com', twitter.identity).unwrap()
         const personaIdentifier = ECKeyIdentifier.fromHexPublicKeyK256(nextId).expect(
             `${nextId} should be a valid hex public key in k256`,
