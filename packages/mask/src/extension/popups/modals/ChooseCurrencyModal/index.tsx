@@ -1,12 +1,11 @@
 import { memo, useCallback } from 'react'
-import { makeStyles } from '@masknet/theme'
+import { RadioButton, makeStyles } from '@masknet/theme'
 import { FiatCurrencyIcon } from '@masknet/shared'
 import { CurrencyType, resolveCurrencyName } from '@masknet/web3-shared-base'
 import { ActionModal, useActionModal, type ActionModalBaseProps } from '../../components/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { Box, Typography } from '@mui/material'
 import { useCurrencyType } from '@masknet/web3-hooks-base'
-import { Icons } from '@masknet/icons'
 import { Web3State } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
@@ -44,10 +43,10 @@ interface CurrencyItemProps {
     fiatCurrencyType: CurrencyType
 }
 const CurrencyItem = memo(function CurrencyItem({ fiatCurrencyType }: CurrencyItemProps) {
-    const { cx, classes, theme } = useStyles()
+    const { cx, classes } = useStyles()
     const { closeModal } = useActionModal()
     const currentCurrencyType = useCurrencyType()
-    const selected = fiatCurrencyType === currentCurrencyType
+    const checked = fiatCurrencyType === currentCurrencyType
 
     const setFiatCurrencyType = useCallback(async () => {
         await Web3State.state.Settings?.setDefaultCurrencyType(fiatCurrencyType)
@@ -56,18 +55,14 @@ const CurrencyItem = memo(function CurrencyItem({ fiatCurrencyType }: CurrencyIt
 
     return (
         <li
-            className={cx(classes.item, selected ? classes.selectedItem : '')}
+            className={cx(classes.item, checked ? classes.selectedItem : '')}
             role="option"
             onClick={setFiatCurrencyType}>
             <Box className={classes.itemBox}>
                 <FiatCurrencyIcon type={fiatCurrencyType} size={24} />
                 <Typography className={classes.text}>{resolveCurrencyName(fiatCurrencyType)}</Typography>
             </Box>
-            {selected ? (
-                <Icons.RadioButtonChecked size={20} />
-            ) : (
-                <Icons.RadioButtonUnChecked size={20} color={theme.palette.maskColor.line} />
-            )}
+            <RadioButton size={20} checked={checked} />
         </li>
     )
 })
