@@ -20,6 +20,20 @@ export async function INTERNAL_getPasswordRequired() {
     return password_
 }
 
+export async function INTERNAL_getUnverifiedPassword(unverifiedPassword?: string) {
+    if (unverifiedPassword) await verifyPasswordRequired(unverifiedPassword)
+    let password_: string = ''
+
+    try {
+        password_ = await INTERNAL_getPasswordRequired()
+    } catch {
+        if (!unverifiedPassword) throw new Error('No password set yet or expired.')
+        password_ = await database.decryptSecret(unverifiedPassword)
+    }
+
+    return password_
+}
+
 export function INTERNAL_setPassword(newPassword: string) {
     validatePasswordRequired(newPassword)
     inMemoryPassword = newPassword

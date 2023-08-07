@@ -192,8 +192,8 @@ export async function exportMnemonicWords(address: string, unverifiedPassword?: 
 }
 
 export async function exportPrivateKey(address: string, unverifiedPassword?: string) {
-    if (unverifiedPassword) await password.verifyPasswordRequired(unverifiedPassword)
-    const password_ = (await password.INTERNAL_getPasswordRequired()) ?? unverifiedPassword
+    const password_ = await password.INTERNAL_getUnverifiedPassword(unverifiedPassword)
+
     const wallet = await database.getWalletRequired(address)
     if (!wallet.storedKeyInfo) throw new Error(`Cannot export private key of ${address}.`)
     const exported = wallet.derivationPath
@@ -214,14 +214,7 @@ export async function exportPrivateKey(address: string, unverifiedPassword?: str
 }
 
 export async function exportKeyStoreJSON(address: string, unverifiedPassword?: string) {
-    if (unverifiedPassword) await password.verifyPasswordRequired(unverifiedPassword)
-    let password_: string = ''
-    try {
-        password_ = await password.INTERNAL_getPasswordRequired()
-    } catch {
-        if (!unverifiedPassword) throw new Error('No password set yet or expired.')
-        password_ = await database.decryptSecret(unverifiedPassword)
-    }
+    const password_ = await password.INTERNAL_getUnverifiedPassword(unverifiedPassword)
 
     const wallet = await database.getWalletRequired(address)
     if (!wallet.storedKeyInfo) throw new Error(`Cannot export private key of ${address}.`)
