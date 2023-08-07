@@ -216,7 +216,7 @@ export default function ChangeOwner() {
 
     const { value: gas } = useAsync(async () => {
         const contract = Contract.getWeb3Contract<Wallet>(wallet?.address, WalletABI as AbiItem[])
-        if (!manageAccount?.address) return
+        if (!manageAccount?.address || !wallet?.address) return
         const tx = {
             from: wallet?.address,
             to: wallet?.address,
@@ -274,7 +274,7 @@ export default function ChangeOwner() {
                                         <Link
                                             href={ExplorerResolver.addressLink(chainId, wallet.address)}
                                             target="_blank"
-                                            title="View on Explorer"
+                                            title={t('view_on_explorer')}
                                             rel="noopener noreferrer"
                                             onClick={(event) => {
                                                 event.stopPropagation()
@@ -316,7 +316,7 @@ export default function ChangeOwner() {
                                                     : urlcat('https://web3.bio/', { s: managerAddress })
                                             }
                                             target="_blank"
-                                            title="View on Explorer"
+                                            title={t('view_on_explorer')}
                                             rel="noopener noreferrer"
                                             onClick={(event) => {
                                                 event.stopPropagation()
