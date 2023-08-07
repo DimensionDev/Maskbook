@@ -29,8 +29,7 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
             1000,
         )
         if (values.length === 0) return EMPTY_LIST
-        const identifiers = values.map((x) => x.profile)
-        const res = await Services.Identity.queryProfilesInformation(identifiers)
+        const res = await Services.Identity.queryProfilesInformation(values.map((x) => x.profile))
         const friends = res.filter((item) => item.linkedPersona !== undefined)
         const promiseArray: Array<Promise<BindingProof[]>> = friends.map((item) => {
             const id = (item.linkedPersona as ECKeyIdentifier).publicKeyAsHex
@@ -56,14 +55,14 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
             }
             const filtered = item.value.filter(
                 (x) =>
-                    x.platform === 'twitter' ||
-                    x.platform === 'lens' ||
-                    x.platform === 'ens' ||
-                    x.platform === 'ethereum' ||
-                    x.platform === 'github' ||
-                    x.platform === 'space_id' ||
-                    x.platform === 'farcaster' ||
-                    x.platform === 'unstoppabledomains',
+                    x.platform === NextIDPlatform.Twitter ||
+                    x.platform === NextIDPlatform.LENS ||
+                    x.platform === NextIDPlatform.ENS ||
+                    x.platform === NextIDPlatform.Ethereum ||
+                    x.platform === NextIDPlatform.GitHub ||
+                    x.platform === NextIDPlatform.SpaceId ||
+                    x.platform === NextIDPlatform.Farcaster ||
+                    x.platform === NextIDPlatform.Unstoppable,
             )
             return {
                 profiles: filtered,

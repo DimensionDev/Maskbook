@@ -1,9 +1,9 @@
-import { memo, useCallback, useMemo, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { FriendsDetailUI } from './UI.js'
 import { useLocation } from 'react-router-dom'
 import Services from '../../../../service.js'
 import { ECKeyIdentifier } from '@masknet/shared-base'
-export const FriendsDetail = memo(() => {
+export const FriendsDetail = memo(function FriendsDetail() {
     const location = useLocation()
     const { avatar, profiles, nextId, publicKey, isLocal } = location.state
     const [deleted, setDeleted] = useState(false)
@@ -14,7 +14,6 @@ export const FriendsDetail = memo(() => {
         await Services.Identity.deletePersona(personaIdentifier, 'safe delete')
         setDeleted(true)
     }, [nextId])
-    const local = useMemo(() => isLocal && !deleted, [isLocal, deleted])
 
     return (
         <FriendsDetailUI
@@ -22,7 +21,7 @@ export const FriendsDetail = memo(() => {
             profiles={profiles}
             nextId={nextId}
             publicKey={publicKey}
-            isLocal={local}
+            isLocal={isLocal ? !deleted : false}
             handleDelete={handleDelete}
         />
     )

@@ -73,7 +73,13 @@ interface ContactCardProps {
     isLocal?: boolean
 }
 
-export const ContactCard = memo<ContactCardProps>(({ avatar, nextId, profiles, publicKey, isLocal }) => {
+export const ContactCard = memo<ContactCardProps>(function ContactCard({
+    avatar,
+    nextId,
+    profiles,
+    publicKey,
+    isLocal,
+}) {
     const theme = useTheme()
     const { classes } = useStyles()
     const navigate = useNavigate()

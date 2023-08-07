@@ -392,7 +392,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             mode: 'cors',
             body: JSON.stringify({
                 operationName: 'GET_PROFILES_QUERY',
-                variables: { platform: 'ethereum', identity: address.toLowerCase() },
+                variables: { platform: NextIDPlatform.Ethereum, identity: address.toLowerCase() },
                 query: `
                     query GET_PROFILES_QUERY($platform: String, $identity: String) {
                        ${relationServiceIdentityQuery}
@@ -420,7 +420,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             mode: 'cors',
             body: JSON.stringify({
                 operationName: 'GET_PROFILES_QUERY',
-                variables: { platform: 'nextid', identity: publicKey },
+                variables: { platform: NextIDPlatform.NextID, identity: publicKey },
                 query: `
                     query GET_PROFILES_QUERY($platform: String, $identity: String) {
                        ${relationServiceIdentityQuery}
@@ -445,7 +445,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             mode: 'cors',
             body: JSON.stringify({
                 operationName: 'GET_PROFILES_BY_TWITTER_ID',
-                variables: { platform: 'twitter', identity: twitterId.toLowerCase() },
+                variables: { platform: NextIDPlatform.Twitter, identity: twitterId.toLowerCase() },
                 query: `
                         query GET_PROFILES_BY_TWITTER_ID($platform: String, $identity: String) {
                             ${relationServiceIdentityQuery}

@@ -2,11 +2,20 @@ import { memo } from 'react'
 import { Box, Link } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { type NextIDPlatform, formatPersonaName } from '@masknet/shared-base'
+import { NextIDPlatform, formatPersonaName } from '@masknet/shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { safeUnreachable } from '@masknet/kit'
 
+export type SupportedPlatforms =
+    | NextIDPlatform.Ethereum
+    | NextIDPlatform.GitHub
+    | NextIDPlatform.ENS
+    | NextIDPlatform.LENS
+    | NextIDPlatform.SpaceId
+    | NextIDPlatform.Farcaster
+    | NextIDPlatform.Unstoppable
 interface AccountProps {
-    icon: NextIDPlatform
+    icon: SupportedPlatforms
     userId: string
 }
 
@@ -24,38 +33,39 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
     },
 }))
-const url = {
-    twitter: 'https://twitter.com/',
-    ens: 'https://app.ens.domains/name/',
-    unstoppabledomains: 'https://ud.me/',
-    github: 'https://github.com/',
-    space_id: 'https://space.storage/',
-    farcaster: 'https://www.farcaster.xyz/',
-    lens: 'https://lenster.xyz/',
-    ethereum: 'https://etherscan.io/address/',
+export const url: Partial<Record<NextIDPlatform, string>> = {
+    [NextIDPlatform.Twitter]: 'https://twitter.com/',
+    [NextIDPlatform.ENS]: 'https://app.ens.domains/name/',
+    [NextIDPlatform.Unstoppable]: 'https://ud.me/',
+    [NextIDPlatform.GitHub]: 'https://github.com/',
+    [NextIDPlatform.SpaceId]: 'https://space.storage/',
+    [NextIDPlatform.Farcaster]: 'https://www.farcaster.xyz/',
+    [NextIDPlatform.LENS]: 'https://lenster.xyz/',
+    [NextIDPlatform.Ethereum]: 'https://etherscan.io/address/',
 }
 
-export const Account = memo<AccountProps>(({ userId, icon }) => {
+export const Account = memo<AccountProps>(function Account({ userId, icon }) {
     const { classes } = useStyles()
     return (
         <Box width="156px" padding="4px" display="flex" gap="10px" alignItems="center">
             {(() => {
                 switch (icon) {
-                    case 'lens':
+                    case NextIDPlatform.LENS:
                         return <Icons.Lens width={30} height={30} />
-                    case 'ethereum':
+                    case NextIDPlatform.Ethereum:
                         return <Icons.ETH width={30} height={30} />
-                    case 'ens':
+                    case NextIDPlatform.ENS:
                         return <Icons.ENS width={30} height={30} />
-                    case 'github':
+                    case NextIDPlatform.GitHub:
                         return <Icons.GitHub width={30} height={30} />
-                    case 'farcaster':
+                    case NextIDPlatform.Farcaster:
                         return <Icons.Farcaster width={30} height={30} />
-                    case 'space_id':
+                    case NextIDPlatform.SpaceId:
                         return <Icons.SpaceId width={30} height={30} />
-                    case 'unstoppabledomains':
+                    case NextIDPlatform.Unstoppable:
                         return <Icons.Unstoppable width={30} height={30} />
                     default:
+                        safeUnreachable(icon)
                         return null
                 }
             })()}
@@ -65,7 +75,7 @@ export const Account = memo<AccountProps>(({ userId, icon }) => {
                     underline="none"
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={url[icon as keyof typeof url] + userId}
+                    href={url[icon] + userId}
                     className={classes.iconBlack}>
                     <Icons.LinkOut size={16} />
                 </Link>

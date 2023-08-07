@@ -1,8 +1,7 @@
-import { memo, useState } from 'react'
+import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography, useTheme, ButtonBase } from '@mui/material'
 import { type BindingProof, PopupRoutes, NextIDPlatform } from '@masknet/shared-base'
-import { PersonaContext } from '@masknet/shared'
 import { useNavigate } from 'react-router-dom'
 import { TwitterAccount } from '../TwitterAccount/index.js'
 import { Account } from '../Account/index.js'
@@ -37,12 +36,16 @@ interface ConnectedAccountsProps {
     isLocal?: boolean
 }
 
-export const ConnectedAccounts = memo<ConnectedAccountsProps>(({ avatar, nextId, profiles, publicKey, isLocal }) => {
+export const ConnectedAccounts = memo<ConnectedAccountsProps>(function ({
+    avatar,
+    nextId,
+    profiles,
+    publicKey,
+    isLocal,
+}) {
     const theme = useTheme()
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const [local, setLocal] = useState(false)
-    const { currentPersona } = PersonaContext.useContainer()
 
     return (
         <Box

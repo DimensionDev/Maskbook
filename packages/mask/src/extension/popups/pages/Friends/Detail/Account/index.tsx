@@ -2,12 +2,15 @@ import { memo } from 'react'
 import { Box, Link } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { formatPersonaName } from '@masknet/shared-base'
+import { NextIDPlatform, formatPersonaName } from '@masknet/shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { safeUnreachable } from '@masknet/kit'
+import { url } from '../../ContactCard/Account/index.js'
+import type { SupportedPlatforms } from '../../ContactCard/Account/index.js'
 
 interface AccountProps {
     userId: string
-    icon: string
+    icon: SupportedPlatforms
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -33,18 +36,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const url = {
-    twitter: 'https://twitter.com/',
-    ens: 'https://app.ens.domains/name/',
-    unstoppabledomains: 'https://ud.me/',
-    github: 'https://github.com/',
-    space_id: 'https://space.storage/',
-    farcaster: 'https://www.farcaster.xyz/',
-    lens: 'https://lenster.xyz/',
-    ethereum: 'https://etherscan.io/address/',
-}
-
-export const Account = memo<AccountProps>(({ userId, icon }) => {
+export const Account = memo<AccountProps>(function Account({ userId, icon }) {
     const { classes } = useStyles()
     return (
         <Box
@@ -56,21 +48,22 @@ export const Account = memo<AccountProps>(({ userId, icon }) => {
             className={classes.container}>
             {(() => {
                 switch (icon) {
-                    case 'lens':
+                    case NextIDPlatform.LENS:
                         return <Icons.Lens width={40} height={40} />
-                    case 'ethereum':
+                    case NextIDPlatform.Ethereum:
                         return <Icons.ETH width={40} height={40} />
-                    case 'ens':
+                    case NextIDPlatform.ENS:
                         return <Icons.ENS width={40} height={40} />
-                    case 'github':
+                    case NextIDPlatform.GitHub:
                         return <Icons.GitHub width={40} height={40} />
-                    case 'farcaster':
+                    case NextIDPlatform.Farcaster:
                         return <Icons.Farcaster width={40} height={40} />
-                    case 'space_id':
+                    case NextIDPlatform.SpaceId:
                         return <Icons.SpaceId width={40} height={40} />
-                    case 'unstoppabledomains':
+                    case NextIDPlatform.Unstoppable:
                         return <Icons.Unstoppable width={40} height={40} />
                     default:
+                        safeUnreachable(icon)
                         return null
                 }
             })()}
@@ -80,7 +73,7 @@ export const Account = memo<AccountProps>(({ userId, icon }) => {
                     underline="none"
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={url[icon as keyof typeof url] + userId}
+                    href={url[icon] + userId}
                     className={classes.iconBlack}>
                     <Icons.LinkOut size={16} />
                 </Link>

@@ -42,59 +42,63 @@ export interface FriendsHomeUIProps {
     setSearchValue: (v: string) => void
 }
 
-export const FriendsHomeUI = memo<FriendsHomeUIProps>(
-    ({ loading, friends, setSearchValue, searchResult, searchValue }) => {
-        const { classes, cx } = useStyles()
-        const { t } = useI18N()
-        return (
-            <div className={classes.container}>
-                <Box padding="16px 16px 0 16px">
-                    <Search setSearchValue={setSearchValue} />
-                </Box>
-                {loading ? (
-                    <div className={cx(classes.empty, classes.mainText)}>
-                        <LoadingBase />
-                        <Typography>{t('loading')}</Typography>
-                    </div>
-                ) : searchValue ? (
-                    searchResult.length === 0 ? (
-                        <EmptyStatus className={classes.empty}>
-                            {t('popups_encrypted_friends_search_no_result')}
-                        </EmptyStatus>
-                    ) : (
-                        <Box display="flex" flexDirection="column" gap="12px" padding="16px">
-                            {searchResult.map((friend) => {
-                                return (
-                                    <ContactCard
-                                        key={friend.persona}
-                                        nextId={friend.persona}
-                                        profiles={friend.proofs}
-                                        publicKey={friend.linkedPersona?.rawPublicKey}
-                                        isLocal={friend.isLocal}
-                                    />
-                                )
-                            })}
-                        </Box>
-                    )
-                ) : friends.length === 0 ? (
-                    <EmptyStatus className={classes.empty}>{t('popups_encrypted_friends_no_friends')}</EmptyStatus>
+export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
+    loading,
+    friends,
+    setSearchValue,
+    searchResult,
+    searchValue,
+}) {
+    const { classes, cx } = useStyles()
+    const { t } = useI18N()
+    return (
+        <div className={classes.container}>
+            <Box padding="16px 16px 0 16px">
+                <Search setSearchValue={setSearchValue} />
+            </Box>
+            {loading ? (
+                <div className={cx(classes.empty, classes.mainText)}>
+                    <LoadingBase />
+                    <Typography>{t('loading')}</Typography>
+                </div>
+            ) : searchValue ? (
+                searchResult.length === 0 ? (
+                    <EmptyStatus className={classes.empty}>
+                        {t('popups_encrypted_friends_search_no_result')}
+                    </EmptyStatus>
                 ) : (
                     <Box display="flex" flexDirection="column" gap="12px" padding="16px">
-                        {friends.map((friend) => {
+                        {searchResult.map((friend) => {
                             return (
                                 <ContactCard
-                                    key={friend.id}
-                                    avatar={friend.avatar}
-                                    nextId={friend.linkedPersona?.publicKeyAsHex as string}
+                                    key={friend.persona}
+                                    nextId={friend.persona}
+                                    profiles={friend.proofs}
                                     publicKey={friend.linkedPersona?.rawPublicKey}
-                                    profiles={friend.profiles}
-                                    isLocal
+                                    isLocal={friend.isLocal}
                                 />
                             )
                         })}
                     </Box>
-                )}
-            </div>
-        )
-    },
-)
+                )
+            ) : friends.length === 0 ? (
+                <EmptyStatus className={classes.empty}>{t('popups_encrypted_friends_no_friends')}</EmptyStatus>
+            ) : (
+                <Box display="flex" flexDirection="column" gap="12px" padding="16px">
+                    {friends.map((friend) => {
+                        return (
+                            <ContactCard
+                                key={friend.id}
+                                avatar={friend.avatar}
+                                nextId={friend.linkedPersona?.publicKeyAsHex as string}
+                                publicKey={friend.linkedPersona?.rawPublicKey}
+                                profiles={friend.profiles}
+                                isLocal
+                            />
+                        )
+                    })}
+                </Box>
+            )}
+        </div>
+    )
+})

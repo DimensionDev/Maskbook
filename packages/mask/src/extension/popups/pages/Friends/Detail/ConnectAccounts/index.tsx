@@ -21,7 +21,7 @@ interface ConnectedAccountsProps {
     profiles: BindingProof[]
 }
 
-export const ConnectedAccounts = memo<ConnectedAccountsProps>(({ profiles }) => {
+export const ConnectedAccounts = memo<ConnectedAccountsProps>(function ConnectedAccounts({ profiles }) {
     const { classes } = useStyles()
 
     return (

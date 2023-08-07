@@ -9,7 +9,7 @@ import { FriendsDetail } from './Detail/index.js'
 const Home = lazy(() => import(/* webpackPreload: true */ './Home/index.js'))
 const r = relativeRouteOf(PopupRoutes.Friends)
 
-const Contacts = memo(() => {
+const Contacts = memo(function Contacts() {
     const modalNavigate = useModalNavigate()
     const [params] = useSearchParams()
     const matchDetail = useMatch(`${PopupRoutes.FriendsDetail}/:id`)

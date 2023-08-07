@@ -8,7 +8,7 @@ import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { resolveNextIDPlatform, resolveValueToSearch, usePersonasFromNextID } from '@masknet/shared'
 import { useFriendsFromSearch } from '../../../hook/useFriendsFromSearch.js'
 
-const FriendsHome = memo(() => {
+const FriendsHome = memo(function FriendsHome() {
     const navigate = useNavigate()
     const { t } = useI18N()
     const { loading, value = EMPTY_LIST } = useFriends('twitter.com')

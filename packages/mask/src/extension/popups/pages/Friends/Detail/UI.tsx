@@ -58,59 +58,64 @@ export interface FriendsDetailUIProps {
     handleDelete: () => void
 }
 
-export const FriendsDetailUI = memo<FriendsDetailUIProps>(
-    ({ avatar, nextId, publicKey, profiles, isLocal, handleDelete }) => {
-        const { classes } = useStyles()
-        const navigate = useNavigate()
-        const handleBack = useCallback(() => navigate(-1), [])
-        const theme = useTheme()
-        return (
-            <Box display="flex" flexDirection="column" alignItems="center" width="100%">
-                <Box className={classes.container}>
-                    <Box className={classes.header}>
-                        <button onClick={handleBack} type="submit" className={classes.back}>
-                            <Icons.Comeback />
+export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetailUI({
+    avatar,
+    nextId,
+    publicKey,
+    profiles,
+    isLocal,
+    handleDelete,
+}) {
+    const { classes } = useStyles()
+    const navigate = useNavigate()
+    const handleBack = useCallback(() => navigate(-1), [])
+    const theme = useTheme()
+    return (
+        <Box display="flex" flexDirection="column" alignItems="center" width="100%">
+            <Box className={classes.container}>
+                <Box className={classes.header}>
+                    <button onClick={handleBack} type="submit" className={classes.back}>
+                        <Icons.Comeback />
+                    </button>
+                    <Box />
+                    {isLocal ? (
+                        <button onClick={handleDelete} type="submit" className={classes.back}>
+                            <Icons.Delete />
                         </button>
-                        <Box />
-                        {isLocal ? (
-                            <button onClick={handleDelete} type="submit" className={classes.back}>
-                                <Icons.Delete />
-                            </button>
-                        ) : null}
-                    </Box>
-                    <Box className={classes.info}>
-                        <Box>
-                            {avatar ? (
-                                <Avatar src={avatar} style={{ width: 60, height: 60 }} />
-                            ) : (
-                                <Icons.NextIdAvatar size={60} style={{ borderRadius: 99 }} />
-                            )}
-                        </Box>
-                        <Typography fontSize={18} fontWeight="700" lineHeight="22px" marginTop="8px">
-                            {publicKey ? formatPersonaFingerprint(publicKey, 4) : null}
-                        </Typography>
-                        <Typography
-                            fontSize={12}
-                            color={theme.palette.maskColor.second}
-                            lineHeight="16px"
-                            display="flex"
-                            alignItems="center"
-                            columnGap="2px">
-                            {formatPersonaFingerprint(nextId, 4)}
-                            <CopyButton text={nextId} size={12} className={classes.icon} />
-                            <Link
-                                underline="none"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                href={urlcat('https://web3.bio/', { s: nextId })}
-                                className={classes.icon}>
-                                <Icons.LinkOut size={12} />
-                            </Link>
-                        </Typography>
-                    </Box>
+                    ) : null}
                 </Box>
-                <ConnectedAccounts profiles={profiles} />
+                <Box className={classes.info}>
+                    <Box>
+                        {avatar ? (
+                            <Avatar src={avatar} style={{ width: 60, height: 60 }} />
+                        ) : (
+                            <Icons.NextIdAvatar size={60} style={{ borderRadius: 99 }} />
+                        )}
+                    </Box>
+                    <Typography fontSize={18} fontWeight="700" lineHeight="22px" marginTop="8px">
+                        {publicKey ? formatPersonaFingerprint(publicKey, 4) : null}
+                    </Typography>
+                    <Typography
+                        fontSize={12}
+                        color={theme.palette.maskColor.second}
+                        lineHeight="16px"
+                        display="flex"
+                        alignItems="center"
+                        columnGap="2px">
+                        {formatPersonaFingerprint(nextId, 4)}
+                        <CopyButton text={nextId} size={12} className={classes.icon} />
+                        <Link
+                            underline="none"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href={urlcat('https://web3.bio/', { s: nextId })}
+                            className={classes.icon}>
+                            <Icons.LinkOut size={12} />
+                        </Link>
+                    </Typography>
+                </Box>
             </Box>
-        )
-    },
-)
+            <ConnectedAccounts profiles={profiles} />
+        </Box>
+    )
+})

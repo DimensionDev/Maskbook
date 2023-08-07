@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const TwitterAccount = memo<TwitterAccountProps>(({ avatar, userId }) => {
+export const TwitterAccount = memo<TwitterAccountProps>(function TwitterAccount({ avatar, userId }) {
     const { classes } = useStyles()
     return (
         <Box width="156px" padding="4px" display="flex" gap="10px" alignItems="center">

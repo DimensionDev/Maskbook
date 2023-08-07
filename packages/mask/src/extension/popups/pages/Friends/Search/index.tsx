@@ -33,7 +33,7 @@ interface SearchProps {
     setSearchValue: (v: string) => void
 }
 
-export const Search = memo<SearchProps>(({ setSearchValue }) => {
+export const Search = memo<SearchProps>(function Search({ setSearchValue }) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const [value, setValue] = useState<string>('')

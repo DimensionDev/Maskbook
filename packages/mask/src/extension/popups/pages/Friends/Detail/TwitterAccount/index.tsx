@@ -2,6 +2,7 @@ import { memo } from 'react'
 import { Box, Link } from '@mui/material'
 import { AccountAvatar } from '../../../Personas/components/AccountAvatar/index.js'
 import { makeStyles } from '@masknet/theme'
+import { EnhanceableSite } from '@masknet/shared-base'
 
 interface TwitterAccountProps {
     avatar: string
@@ -31,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const TwitterAccount = memo<TwitterAccountProps>(({ avatar, userId }) => {
+export const TwitterAccount = memo<TwitterAccountProps>(function TwitterAccount({ avatar, userId }) {
     const { classes } = useStyles()
     return (
         <Link
@@ -47,7 +48,7 @@ export const TwitterAccount = memo<TwitterAccountProps>(({ avatar, userId }) => 
                 gap="10px"
                 alignItems="center"
                 className={classes.container}>
-                <AccountAvatar avatar={avatar} network="twitter.com" isValid />
+                <AccountAvatar avatar={avatar} network={EnhanceableSite.Twitter} isValid />
                 <Box className={classes.userId}>{`@${userId}`}</Box>
             </Box>
         </Link>
