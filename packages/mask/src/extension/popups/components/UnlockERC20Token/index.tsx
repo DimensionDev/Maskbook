@@ -48,7 +48,7 @@ const useStyles = makeStyles()((theme) => ({
     address: {
         fontSize: 10,
         color: theme.palette.maskColor.second,
-        fontWeight: 700,
+        fontWeight: 400,
     },
     link: {
         width: 16,
@@ -66,6 +66,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     input: {
         paddingRight: '0px !important',
+        background: theme.palette.maskColor.input,
     },
     max: {
         fontWeight: 400,
@@ -73,7 +74,16 @@ const useStyles = makeStyles()((theme) => ({
     },
     spender: {
         color: theme.palette.maskColor.second,
-        fontSize: 11,
+        fontSize: 12,
+        fontWeight: 700,
+        lineHeight: '16px',
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    spenderAddress: {
+        marginTop: 4,
+        color: theme.palette.maskColor.main,
+        fontSize: 12,
         fontWeight: 700,
         lineHeight: '16px',
         display: 'flex',
@@ -187,8 +197,10 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                         ),
                         disableUnderline: true,
                         className: classes.input,
+                        type: 'number',
                         inputProps: {
                             pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                            min: 0,
                         },
                     }}
                 />
@@ -209,13 +221,19 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                 <Typography className={classes.name}>{t('popups_wallet_unlock_erc20_requested_by')}</Typography>
                 {transaction.formattedTransaction.popup?.spender ? (
                     <Typography className={classes.spender}>
-                        {t('contract')}:{transaction.formattedTransaction.popup?.spender}
-                        <Link
-                            href={ExplorerResolver.addressLink(chainId, transaction.formattedTransaction.popup.spender)}
-                            className={classes.link}
-                            style={{ color: theme.palette.maskColor.second }}>
-                            <Icons.LinkOut size={16} />
-                        </Link>
+                        {t('contract')}:
+                        <Typography className={classes.spenderAddress}>
+                            {transaction.formattedTransaction.popup?.spender}{' '}
+                            <Link
+                                href={ExplorerResolver.addressLink(
+                                    chainId,
+                                    transaction.formattedTransaction.popup.spender,
+                                )}
+                                className={classes.link}
+                                style={{ color: theme.palette.maskColor.second }}>
+                                <Icons.LinkOut size={16} />
+                            </Link>
+                        </Typography>
                     </Typography>
                 ) : null}
             </Box>

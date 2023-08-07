@@ -19,7 +19,7 @@ import { useParamTab } from '../../../hook/useParamTab.js'
 const useStyles = makeStyles()((theme) => ({
     container: {
         flex: 1,
-        backgroundColor: '#F7F9FA',
+        background: theme.palette.maskColor.bottom,
         display: 'flex',
         flexDirection: 'column',
     },
@@ -77,6 +77,7 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         color: theme.palette.maskColor.third,
         marginTop: theme.spacing(1.5),
+        textAlign: 'center',
     },
     edit: {
         position: 'absolute',

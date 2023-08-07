@@ -75,11 +75,12 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => (
     chainName: {
         flexGrow: 1,
         lineHeight: '18px',
-        color: '#15181B',
+        color: theme.palette.maskColor.main,
         fontWeight: 700,
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         whiteSpace: 'nowrap',
+        maxWidth: 154,
     },
     connected: {
         display: 'flex',

@@ -116,7 +116,7 @@ const SelectWallet = memo(function SelectWallet() {
 
     return chainIdValid ? (
         <Box>
-            <Box pt="10px" pb={2} px={2} display="flex" flexDirection="column" columnGap={6}>
+            <Box pt={1} pb={9} px={2} display="flex" flexDirection="column" rowGap="6px">
                 {wallets
                     .filter((x) => {
                         if (chainId === smartPayChainId && !isVerifyWalletFlow && !isSettingNFTAvatarFlow) return true

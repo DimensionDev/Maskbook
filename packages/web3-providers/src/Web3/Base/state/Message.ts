@@ -31,7 +31,7 @@ export class MessageState<Request, Response> implements Web3MessageState<Request
         this.messages = mapSubscription(this.storage.messages.subscription, (storage) => {
             return Object.values(storage)
                 .filter((x) => x.state === MessageStateType.NOT_DEPEND)
-                .sort((a, z) => z.createdAt.getTime() - a.createdAt.getTime())
+                .sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime())
         })
     }
 

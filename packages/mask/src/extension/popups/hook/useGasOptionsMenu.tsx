@@ -5,7 +5,7 @@ import { useChainContext, useChainIdSupport, useGasOptions } from '@masknet/web3
 import { GasOptionType } from '@masknet/web3-shared-base'
 import { formatWeiToGwei, type GasConfig, type GasOption } from '@masknet/web3-shared-evm'
 import { MenuItem, Typography } from '@mui/material'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui.js'
 import { GasSettingModal } from '../modals/modals.js'
 
@@ -54,15 +54,18 @@ export function useGasOptionsMenu(minimumGas: string, callback: (config: GasConf
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
 
+    const [customGasConfig, setCustomGasConfig] = useState<GasConfig>()
+
     const handleClickCustom = useCallback(async () => {
         const result = await GasSettingModal.openAndWaitForClose({
             chainId,
-            config: { gas: minimumGas },
+            config: { gas: minimumGas, ...customGasConfig },
         })
         if (!result) return
 
+        setCustomGasConfig(result)
         callback(result)
-    }, [chainId, minimumGas, callback])
+    }, [chainId, minimumGas, callback, customGasConfig])
 
     const handleClick = useCallback(
         (type?: GasOptionType, option?: GasOption) => {
