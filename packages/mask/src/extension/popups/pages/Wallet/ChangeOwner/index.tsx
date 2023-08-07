@@ -350,7 +350,7 @@ export default function ChangeOwner() {
                         <Typography className={classes.label}>{t('gas_fee')}</Typography>
                         <ChainContextProvider value={chainContextValue}>
                             <GasSettingMenu
-                                gas={gas ?? FALLBACK_GAS.toString()}
+                                minimumGas={gas ?? FALLBACK_GAS.toString()}
                                 initConfig={gasConfig}
                                 paymentToken={paymentToken}
                                 defaultChainId={chainId}
