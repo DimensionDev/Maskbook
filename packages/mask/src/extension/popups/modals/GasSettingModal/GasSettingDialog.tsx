@@ -11,7 +11,7 @@ import {
 import {
     useChainIdSupport,
     useFiatCurrencyRate,
-    useFiatCurrencyType,
+    useCurrencyType,
     useGasOptions,
     useNativeToken,
     useNativeTokenPrice,
@@ -77,7 +77,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     const { value: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { data: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const fiatCurrencyType = useFiatCurrencyType()
+    const currencyType = useCurrencyType()
     const { value: fiatCurrencyRate } = useFiatCurrencyRate()
 
     const [gasPrice, setGasPrice] = useState(config.gasPrice ? config.gasPrice : '')
@@ -182,7 +182,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
             <Box display="flex" flexDirection="column" rowGap={1.5} mt={1.5}>
                 <Typography className={classes.preview}>
                     {formatBalance(totalGas, nativeToken?.decimals, 4, false, true)} {nativeToken?.symbol} ≈{' '}
-                    {formatCurrency(formatWeiToEther(totalGas).times(nativeTokenPrice ?? 0), fiatCurrencyType, {
+                    {formatCurrency(formatWeiToEther(totalGas).times(nativeTokenPrice ?? 0), currencyType, {
                         onlyRemainTwoDecimal: true,
                         fiatCurrencyRate,
                     })}

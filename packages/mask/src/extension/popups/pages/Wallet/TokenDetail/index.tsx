@@ -144,7 +144,7 @@ const TokenDetail = memo(function TokenDetail() {
         if (!asset?.decimals || !tokenPrice || !balance) return 0
         return leftShift(balance, asset.decimals).times(tokenPrice)
     }, [balance, asset, tokenPrice])
-    const { fiatCurrencyType, fiatCurrencyRate } = useContainer(WalletContext)
+    const { currencyType, fiatCurrencyRate } = useContainer(WalletContext)
 
     const { data: trending, isLoading: isLoadingTrending, isError } = useTrending(chainId, address)
     const priceChange =
@@ -197,7 +197,7 @@ const TokenDetail = memo(function TokenDetail() {
                 <Box padding={2}>
                     <ProgressiveText className={classes.assetValue} loading={isLoadingPrice} skeletonWidth={80}>
                         {tokenPrice
-                            ? formatCurrency(tokenPrice, fiatCurrencyType, {
+                            ? formatCurrency(tokenPrice, currencyType, {
                                   fiatCurrencyRate,
                                   onlyRemainTwoDecimal: true,
                               })
@@ -251,7 +251,7 @@ const TokenDetail = memo(function TokenDetail() {
                             <Typography className={classes.label}>{t('value')}</Typography>
                             <Typography component="div" className={classes.value}>
                                 {trimZero(
-                                    formatCurrency(tokenValue, fiatCurrencyType, {
+                                    formatCurrency(tokenValue, currencyType, {
                                         onlyRemainTwoDecimal: true,
                                         fiatCurrencyRate,
                                     }),

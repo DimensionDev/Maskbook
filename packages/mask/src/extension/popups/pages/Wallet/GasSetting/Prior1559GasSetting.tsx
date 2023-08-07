@@ -14,7 +14,7 @@ import { LoadingButton } from '@mui/lab'
 import {
     useChainContext,
     useFiatCurrencyRate,
-    useFiatCurrencyType,
+    useCurrencyType,
     useGasOptions,
     useNativeToken,
     useNativeTokenPrice,
@@ -109,7 +109,7 @@ export const Prior1559GasSetting = memo(() => {
     const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
         chainId: nativeToken?.chainId,
     })
-    const fiatCurrencyType = useFiatCurrencyType()
+    const currencyType = useCurrencyType()
     const { value: fiatCurrencyRate } = useFiatCurrencyRate()
 
     // #region Get gas options from debank
@@ -275,7 +275,7 @@ export const Prior1559GasSetting = memo(() => {
                                             formatWeiToEther(gasPrice)
                                                 .times(nativeTokenPrice)
                                                 .times(minGasLimit || 21000),
-                                            fiatCurrencyType,
+                                            currencyType,
                                             { onlyRemainTwoDecimal: true, fiatCurrencyRate },
                                         ),
                                     }}

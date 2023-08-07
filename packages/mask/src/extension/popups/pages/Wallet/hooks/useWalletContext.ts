@@ -7,7 +7,7 @@ import {
     useRecentTransactions,
     useFungibleAssets,
     useWallets,
-    useFiatCurrencyType,
+    useCurrencyType,
     useFiatCurrencyRate,
 } from '@masknet/web3-hooks-base'
 import { EMPTY_LIST, NetworkPluginID, type Wallet } from '@masknet/shared-base'
@@ -31,7 +31,7 @@ function useWalletContext() {
     const [currentToken, setCurrentToken] = useState<FungibleAsset<ChainId, SchemaType>>()
     const [transaction, setTransaction] = useState<RecentTransactionComputed<ChainId, Transaction>>()
     const [selectedWallet, setSelectedWallet] = useState<Wallet | null>()
-    const fiatCurrencyType = useFiatCurrencyType()
+    const currencyType = useCurrencyType()
     const { value: fiatCurrencyRate = 1 } = useFiatCurrencyRate()
 
     const [assetsIsExpand, setAssetsIsExpand] = useState(false)
@@ -47,7 +47,7 @@ function useWalletContext() {
         currentToken,
         setCurrentToken,
         assets,
-        fiatCurrencyType,
+        currencyType,
         fiatCurrencyRate,
         refreshAssets: refetch,
         transactions,

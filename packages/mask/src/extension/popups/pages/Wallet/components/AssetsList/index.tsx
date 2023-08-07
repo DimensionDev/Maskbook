@@ -126,7 +126,7 @@ export interface AssetsListUIProps {
 
 export const AssetsListUI = memo<AssetsListUIProps>(function AssetsListUI({ isExpand, assets, onItemClick }) {
     const { classes } = useStyles()
-    const { fiatCurrencyType, fiatCurrencyRate } = useContainer(WalletContext)
+    const { currencyType, fiatCurrencyRate } = useContainer(WalletContext)
     const list = assets.filter(
         (asset) => isExpand || isNativeTokenAddress(asset.address) || isGte(asset.value?.usd ?? 0, 1),
     )
@@ -143,7 +143,7 @@ export const AssetsListUI = memo<AssetsListUIProps>(function AssetsListUI({ isEx
                         secondaryAction={
                             <Typography className={classes.value}>
                                 {trimZero(
-                                    formatCurrency(asset.value?.usd || 0, fiatCurrencyType, {
+                                    formatCurrency(asset.value?.usd || 0, currencyType, {
                                         onlyRemainTwoDecimal: true,
                                         fiatCurrencyRate,
                                     }),

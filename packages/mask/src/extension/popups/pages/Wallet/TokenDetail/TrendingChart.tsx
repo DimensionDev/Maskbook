@@ -19,14 +19,14 @@ interface TrendingChartProps extends HTMLProps<SVGSVGElement> {
 
 export function TrendingChart({ stats, ...props }: TrendingChartProps) {
     const svgRef = useRef<SVGSVGElement>(null)
-    const { fiatCurrencyType, fiatCurrencyRate } = useContainer(WalletContext)
+    const { currencyType, fiatCurrencyRate } = useContainer(WalletContext)
     const chartData = useMemo(
         () => stats.map(([date, price]) => ({ date: new Date(date), value: price * fiatCurrencyRate })),
         [stats],
     )
 
     useDimension(svgRef, DIMENSION)
-    usePriceLineChart(svgRef, chartData, DIMENSION, 'token-price-line-chart', { sign: fiatCurrencyType })
+    usePriceLineChart(svgRef, chartData, DIMENSION, 'token-price-line-chart', { sign: currencyType })
 
     return (
         <svg

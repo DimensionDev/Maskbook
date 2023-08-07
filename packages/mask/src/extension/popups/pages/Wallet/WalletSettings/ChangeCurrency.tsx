@@ -5,8 +5,8 @@ import { useStyles } from './useStyles.js'
 import { useCallback } from 'react'
 import { PopupModalRoutes } from '@masknet/shared-base'
 import { useModalNavigate } from '../../../components/index.js'
-import { useFiatCurrencyType } from '@masknet/web3-hooks-base'
-import { resolveFiatCurrencyName } from '@masknet/web3-shared-base'
+import { useCurrencyType } from '@masknet/web3-hooks-base'
+import { resolveCurrencyName } from '@masknet/web3-shared-base'
 
 export function ChangeCurrency() {
     const { t } = useI18N()
@@ -19,7 +19,7 @@ export function ChangeCurrency() {
         modalNavigate(PopupModalRoutes.ChooseCurrency)
     }, [modalNavigate])
 
-    const fiatCurrencyType = useFiatCurrencyType()
+    const currencyType = useCurrencyType()
 
     return (
         <ListItem className={classes.item} onClick={chooseCurrency}>
@@ -28,8 +28,8 @@ export function ChangeCurrency() {
                 <Typography className={classes.itemText}>{t('currency')}</Typography>
             </Box>
             <Box className={classes.itemBox}>
-                {fiatCurrencyType ? (
-                    <Typography className={classes.itemText}>{resolveFiatCurrencyName(fiatCurrencyType)}</Typography>
+                {currencyType ? (
+                    <Typography className={classes.itemText}>{resolveCurrencyName(currencyType)}</Typography>
                 ) : null}
                 <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />
             </Box>

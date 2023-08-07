@@ -28,7 +28,7 @@ import {
 import { Web3 } from '@masknet/web3-providers'
 import {
     useFiatCurrencyRate,
-    useFiatCurrencyType,
+    useCurrencyType,
     useGasOptions,
     useNativeToken,
     useNativeTokenPrice,
@@ -125,7 +125,7 @@ export const GasSetting1559 = memo(() => {
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
     const { value: gasOptions, loading: getGasOptionsLoading } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
 
-    const fiatCurrencyType = useFiatCurrencyType()
+    const currencyType = useCurrencyType()
     const { value: fiatCurrencyRate } = useFiatCurrencyRate()
 
     // #region Gas options
@@ -368,7 +368,7 @@ export const GasSetting1559 = memo(() => {
                                         formatWeiToEther(content?.suggestedMaxFeePerGas ?? 0)
                                             .times(nativeTokenPrice)
                                             .times(gasLimit ?? 21000),
-                                        fiatCurrencyType,
+                                        currencyType,
                                         { onlyRemainTwoDecimal: true, fiatCurrencyRate },
                                     ),
                                 }}
@@ -416,7 +416,7 @@ export const GasSetting1559 = memo(() => {
                                     formatGweiToEther(Number(maxPriorityFeePerGas))
                                         .times(nativeTokenPrice)
                                         .times(gasLimit),
-                                    fiatCurrencyType,
+                                    currencyType,
                                     { onlyRemainTwoDecimal: true, fiatCurrencyRate },
                                 ),
                             }}
@@ -456,7 +456,7 @@ export const GasSetting1559 = memo(() => {
                             values={{
                                 usd: formatCurrency(
                                     formatGweiToEther(Number(maxFeePerGas)).times(nativeTokenPrice).times(gasLimit),
-                                    fiatCurrencyType,
+                                    currencyType,
                                     { onlyRemainTwoDecimal: true, fiatCurrencyRate },
                                 ),
                             }}

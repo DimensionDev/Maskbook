@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import { memo } from 'react'
 import { useSharedI18N } from '../../../locales/index.js'
-import { useFiatCurrencyType, useFiatCurrencyRate } from '@masknet/web3-hooks-base'
+import { useCurrencyType, useFiatCurrencyRate } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()({
     container: {
@@ -47,7 +47,7 @@ interface CoinMarketTableProps {
 export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ trending }: CoinMarketTableProps) {
     const t = useSharedI18N()
     const { classes } = useStyles()
-    const fiatCurrencyType = useFiatCurrencyType()
+    const currencyType = useCurrencyType()
     const { value: fiatCurrencyRate = 1, loading } = useFiatCurrencyRate()
     console.log({ fiatCurrencyRate })
     const market = trending?.market
@@ -70,7 +70,7 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                             </TableCell>
                             <TableCell className={classes.cell}>
                                 {market?.market_cap && !loading
-                                    ? formatMarketCap(market.market_cap, fiatCurrencyType, fiatCurrencyRate)
+                                    ? formatMarketCap(market.market_cap, currencyType, fiatCurrencyRate)
                                     : '--'}
                             </TableCell>
                         </TableRow>
@@ -94,7 +94,7 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                             </TableCell>
                             <TableCell className={classes.cell}>
                                 {market?.total_volume && !loading
-                                    ? formatMarketCap(market.total_volume, fiatCurrencyType, fiatCurrencyRate)
+                                    ? formatMarketCap(market.total_volume, currencyType, fiatCurrencyRate)
                                     : '--'}
                             </TableCell>
                         </TableRow>

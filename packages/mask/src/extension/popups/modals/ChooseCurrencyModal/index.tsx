@@ -5,7 +5,7 @@ import { CurrencyType, resolveCurrencyName } from '@masknet/web3-shared-base'
 import { ActionModal, useActionModal, type ActionModalBaseProps } from '../../components/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { Box, Typography } from '@mui/material'
-import { useFiatCurrencyType } from '@masknet/web3-hooks-base'
+import { useCurrencyType } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { Web3State } from '@masknet/web3-providers'
 
@@ -46,8 +46,8 @@ interface CurrencyItemProps {
 const CurrencyItem = memo(function CurrencyItem({ fiatCurrencyType }: CurrencyItemProps) {
     const { cx, classes, theme } = useStyles()
     const { closeModal } = useActionModal()
-    const currentFiatCurrencyType = useFiatCurrencyType()
-    const selected = fiatCurrencyType === currentFiatCurrencyType
+    const currentCurrencyType = useCurrencyType()
+    const selected = fiatCurrencyType === currentCurrencyType
 
     const setFiatCurrencyType = useCallback(async () => {
         await Web3State.state.Settings?.setDefaultCurrencyType(fiatCurrencyType)
