@@ -2,7 +2,7 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { type NonFungibleTokenOrder, formatBalance, formatCurrency, isValidTimestamp } from '@masknet/web3-shared-base'
-import { TokenIcon } from '@masknet/shared'
+import { FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
@@ -96,7 +96,9 @@ export function OfferCard(props: OfferCardProps) {
                         </Typography>
                         {offer.price?.usd ? (
                             <Typography className={classes.textBase} fontSize={12}>
-                                <strong>{formatCurrency(offer.price.usd)}</strong>
+                                <strong>
+                                    <FormattedCurrency value={offer.price.usd} formatter={formatCurrency} />
+                                </strong>
                             </Typography>
                         ) : null}
                     </div>

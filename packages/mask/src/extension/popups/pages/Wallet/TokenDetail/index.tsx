@@ -16,7 +16,7 @@ import {
 import { Days, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { MaskDarkTheme, MaskLightTheme, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useAccount, useFungibleTokenBalance, useWeb3State } from '@masknet/web3-hooks-base'
-import { TokenType, formatBalance, formatCurrency, leftShift, trimZero } from '@masknet/web3-shared-base'
+import { TokenType, formatBalance, formatCurrency, leftShift } from '@masknet/web3-shared-base'
 import { SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, ThemeProvider, Typography } from '@mui/material'
 import { memo, useContext, useEffect, useMemo, useState } from 'react'
@@ -195,7 +195,7 @@ const TokenDetail = memo(function TokenDetail() {
             <Box className={classes.page}>
                 <Box padding={2}>
                     <ProgressiveText className={classes.assetValue} loading={isLoadingPrice} skeletonWidth={80}>
-                        <FormattedCurrency value={tokenPrice} formatter={formatCurrency} />
+                        {tokenPrice ? <FormattedCurrency value={tokenPrice} formatter={formatCurrency} /> : null}
                     </ProgressiveText>
                     <PriceChange className={classes.priceChange} change={priceChange} loading={isLoadingTrending} />
                     <PriceChartRange days={chartRange} onDaysChange={setChartRange} gap="10px" mt={2} />
@@ -244,7 +244,7 @@ const TokenDetail = memo(function TokenDetail() {
                         <Box textAlign="right">
                             <Typography className={classes.label}>{t('value')}</Typography>
                             <Typography component="div" className={classes.value}>
-                                {trimZero(formatCurrency(tokenValue, 'USD', { onlyRemainTwoDecimal: true }))}
+                                <FormattedCurrency value={tokenValue} formatter={formatCurrency} />
                             </Typography>
                         </Box>
                     </Box>

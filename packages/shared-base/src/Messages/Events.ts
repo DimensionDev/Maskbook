@@ -248,8 +248,6 @@ export interface PersonaSignRequestEvent {
     selectedPersona?: PersonaIdentifier
 }
 
-export type WalletsUpdatedEvent = void
-
 export interface RequestsUpdatedEvent {
     hasRequest: boolean
 }

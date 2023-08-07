@@ -28,6 +28,7 @@ import { UserContext } from './hook/useUserContext.js'
 import { ConnectProviderModal } from './modals/ConnectProvider/index.js'
 import { SelectProviderModal } from './modals/SelectProviderModal/index.js'
 import {
+    ChooseCurrencyModal,
     ChooseNetworkModal,
     ConnectSocialAccountModal,
     Modals,
@@ -103,6 +104,10 @@ const PopupRoutes = memo(function PopupRoutes() {
                                 element={wrapModal(<PersonaSettingModal />)}
                             />
                             <Route path={PopupModalRoutes.SwitchPersona} element={wrapModal(<SwitchPersonaModal />)} />
+                            <Route
+                                path={PopupModalRoutes.ChooseCurrency}
+                                element={wrapModal(<ChooseCurrencyModal />)}
+                            />
                             <Route path={PopupModalRoutes.ChooseNetwork} element={wrapModal(<ChooseNetworkModal />)} />
                             <Route path={PopupModalRoutes.SwitchWallet} element={wrapModal(<SwitchWallet />)} />
                             <Route

@@ -1,7 +1,6 @@
 import { BigNumber } from 'bignumber.js'
 import { isUndefined, omitBy } from 'lodash-es'
 import type Web3 from 'web3'
-import * as ABICoder from 'web3-eth-abi'
 import { type AbiItem, hexToBytes, keccak256, padLeft, toHex, toNumber } from 'web3-utils'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
 import { isGreaterThan, multipliedBy, toFixed } from '@masknet/web3-shared-base'
@@ -23,6 +22,7 @@ import {
     type Signer,
     type Transaction,
     type UserOperation,
+    abiCoder,
 } from '@masknet/web3-shared-evm'
 
 const USER_OP_TYPE = {
@@ -83,8 +83,6 @@ const CALL_WALLET_TYPE: AbiItem = {
     ],
 }
 
-const coder = ABICoder as unknown as ABICoder.AbiCoder
-
 export interface Options {
     paymentToken?: string
 }
@@ -130,7 +128,7 @@ export class UserTransaction {
      * Pack everything without signature
      */
     get pack() {
-        const encoded = coder.encodeParameter(USER_OP_TYPE, {
+        const encoded = abiCoder.encodeParameter(USER_OP_TYPE, {
             ...this.userOperation,
             signature: '0x',
         })
@@ -141,7 +139,7 @@ export class UserTransaction {
      * Pack everything include signature
      */
     get packAll() {
-        const encoded = coder.encodeParameter(USER_OP_TYPE, this.userOperation)
+        const encoded = abiCoder.encodeParameter(USER_OP_TYPE, this.userOperation)
         return `0x${encoded.slice(66, encoded.length - 64)}`
     }
 
@@ -151,7 +149,7 @@ export class UserTransaction {
 
     get requestId() {
         return keccak256(
-            coder.encodeParameters(['bytes32', 'address', 'uint256'], [this.hash, this.entryPoint, this.chainId]),
+            abiCoder.encodeParameters(['bytes32', 'address', 'uint256'], [this.hash, this.entryPoint, this.chainId]),
         )
     }
 
@@ -358,7 +356,7 @@ export class UserTransaction {
             sender: formatEthereumAddress(from),
             nonce: toNumber(nonce),
             callGas: transaction.gas ?? DEFAULT_USER_OPERATION.callGas,
-            callData: coder.encodeFunctionCall(CALL_WALLET_TYPE, [to, value, data]),
+            callData: abiCoder.encodeFunctionCall(CALL_WALLET_TYPE, [to, value, data]),
             maxFeePerGas: transaction.maxFeePerGas ?? transaction.gasPrice ?? DEFAULT_USER_OPERATION.maxFeePerGas,
             maxPriorityFeePerGas:
                 transaction.maxPriorityFeePerGas ?? transaction.gasPrice ?? DEFAULT_USER_OPERATION.maxPriorityFeePerGas,
@@ -368,7 +366,7 @@ export class UserTransaction {
 
     static toTransaction(chainId: ChainId, userOperation: UserOperation): Transaction {
         const parameters = !isEmptyHex(userOperation.callData)
-            ? (coder.decodeParameters(CALL_WALLET_TYPE.inputs ?? [], userOperation.callData.slice(10)) as {
+            ? (abiCoder.decodeParameters(CALL_WALLET_TYPE.inputs ?? [], userOperation.callData.slice(10)) as {
                   dest: string
                   value: string
                   func: string

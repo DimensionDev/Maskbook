@@ -87,7 +87,6 @@ export function TickersTable({ tickers }: TickersTableProps) {
     const tickerRows = tickers.map((ticker, index) => {
         const price = ticker.price ?? ticker.floor_price
         const volume = ticker.volume
-        const currency = 'USD'
         const marketplaceOrExchange = (
             <Stack direction="row" alignItems="center">
                 {ticker.logo_url ? <img className={classes.logo} src={ticker.logo_url} /> : null}
@@ -95,7 +94,7 @@ export function TickersTable({ tickers }: TickersTableProps) {
             </Stack>
         )
         const cellMap: Record<Cells, ReactNode> = {
-            volume: volume ? <FormattedCurrency value={volume} sign={currency} formatter={formatCurrency} /> : null,
+            volume: volume ? <FormattedCurrency value={volume} formatter={formatCurrency} /> : null,
             updated: ticker.updated ? formatElapsed(ticker.updated.getTime()) : null,
             exchange: marketplaceOrExchange,
             pair: (() => {
@@ -132,7 +131,7 @@ export function TickersTable({ tickers }: TickersTableProps) {
                     </ShadowRootTooltip>
                 )
             })(),
-            price: price ? <FormattedCurrency value={price} sign={currency} formatter={formatCurrency} /> : null,
+            price: price ? <FormattedCurrency value={price} formatter={formatCurrency} /> : null,
         }
 
         const cells = Object.entries(pick(cellMap, columns)).map(([name, cell]) => (
