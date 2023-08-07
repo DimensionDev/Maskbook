@@ -3,7 +3,7 @@ import { useAsyncFn } from 'react-use'
 import millisecondsToMinutes from 'date-fns/millisecondsToMinutes'
 import minutesToMilliseconds from 'date-fns/minutesToMilliseconds'
 import { Box, TextField, Typography, useTheme } from '@mui/material'
-import { CrossIsolationMessages, type SingletonModalRefCreator } from '@masknet/shared-base'
+import { type SingletonModalRefCreator } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { WalletRPC } from '../../../../plugins/WalletService/messages.js'
@@ -170,14 +170,5 @@ export const WalletAutoLockSettingModal = forwardRef<
             setProps(p)
         },
     })
-    return (
-        <WalletAutoLockSettingDrawer
-            open={open}
-            {...props}
-            onClose={() => {
-                CrossIsolationMessages.events.walletLockTimeUpdated.sendToAll()
-                dispatch?.close(false)
-            }}
-        />
-    )
+    return <WalletAutoLockSettingDrawer open={open} {...props} onClose={() => dispatch?.close(false)} />
 })
