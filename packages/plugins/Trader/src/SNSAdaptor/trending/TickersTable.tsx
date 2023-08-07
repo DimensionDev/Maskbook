@@ -17,7 +17,7 @@ import { useSNSThemeMode } from '@masknet/plugin-infra/content-script'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { FormattedCurrency } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { formatCurrency, formatElapsed } from '@masknet/web3-shared-base'
+import { CurrencyType, formatCurrency, formatElapsed } from '@masknet/web3-shared-base'
 import type { Ticker } from '../../types/index.js'
 import { TrendingViewContext } from './context.js'
 import { useI18N } from '../../locales/index.js'
@@ -87,7 +87,7 @@ export function TickersTable({ tickers }: TickersTableProps) {
     const tickerRows = tickers.map((ticker, index) => {
         const price = ticker.price ?? ticker.floor_price
         const volume = ticker.volume
-        const currency = 'USD'
+        const currency = CurrencyType.USD
         const marketplaceOrExchange = (
             <Stack direction="row" alignItems="center">
                 {ticker.logo_url ? <img className={classes.logo} src={ticker.logo_url} /> : null}

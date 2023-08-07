@@ -67,9 +67,7 @@ function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
     const error = Number.isNaN(Number(time ?? initialTime))
 
     const [{ loading }, setAutoLockerTime] = useAsyncFn(async (time: number) => {
-        await WalletRPC.setAutoLockerTime(
-            time === 0 ? time : time < DEFAULT_MIN_AUTO_LOCKER_TIME ? DEFAULT_MIN_AUTO_LOCKER_TIME : time,
-        )
+        await WalletRPC.setAutoLockerTime(time === 0 ? time : Math.max(time, DEFAULT_MIN_AUTO_LOCKER_TIME))
         props.onClose?.()
     }, [])
 

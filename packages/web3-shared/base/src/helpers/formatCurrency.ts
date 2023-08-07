@@ -1,5 +1,6 @@
 import { BigNumber } from 'bignumber.js'
 import { scale10 } from './number.js'
+import { CurrencyType } from '../index.js'
 
 export interface FormatterCurrencyOptions {
     onlyRemainTwoDecimal?: boolean
@@ -46,7 +47,7 @@ const formatCurrencySymbol = (symbol: string, isLead: boolean) => {
 // https://mask.atlassian.net/wiki/spaces/MASK/pages/122916438/Token
 export function formatCurrency(
     inputValue: BigNumber.Value,
-    currency: LiteralUnion<Keys | 'USD'> = 'USD',
+    currency: LiteralUnion<Keys | 'USD'> = CurrencyType.USD,
     options?: FormatterCurrencyOptions,
 ): string {
     const { onlyRemainTwoDecimal = false, fiatCurrencyRate = 1 } = options ?? {}
