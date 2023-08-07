@@ -13,7 +13,7 @@ export function ShowPrivateKey() {
         <ListItem
             className={classes.item}
             onClick={() =>
-                ShowPrivateKeyModal.openAndWaitForClose({
+                ShowPrivateKeyModal.open({
                     title: t('popups_wallet_settings_show_private_key'),
                 })
             }>

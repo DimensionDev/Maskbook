@@ -17,7 +17,7 @@ export function AutoLock() {
         <ListItem
             className={classes.item}
             onClick={() =>
-                WalletAutoLockSettingModal.openAndWaitForClose({
+                WalletAutoLockSettingModal.open({
                     title: t('popups_wallet_settings_auto_unlock_time_title'),
                 })
             }>

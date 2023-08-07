@@ -17,7 +17,7 @@ export function Rename() {
         <ListItem
             className={classes.item}
             onClick={() =>
-                WalletRenameModal.openAndWaitForClose({
+                WalletRenameModal.open({
                     wallet,
                     title: t('rename'),
                 })

@@ -13,7 +13,7 @@ export function ChangePaymentPassword() {
         <ListItem
             className={classes.item}
             onClick={() =>
-                ChangePaymentPasswordModal.openAndWaitForClose({
+                ChangePaymentPasswordModal.open({
                     title: t('popups_wallet_settings_change_payment_password'),
                 })
             }>
