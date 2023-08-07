@@ -1,9 +1,12 @@
 import { FiatCurrencyRate } from '@masknet/web3-providers'
-
-import { useAsyncRetry } from 'react-use'
+import { useQuery } from '@tanstack/react-query'
 import { useCurrencyType } from './useCurrencyType.js'
 
 export function useFiatCurrencyRate() {
     const fiatCurrencyType = useCurrencyType()
-    return useAsyncRetry(async () => FiatCurrencyRate.getRate(fiatCurrencyType), [fiatCurrencyType])
+
+    return useQuery({
+        queryKey: [fiatCurrencyType],
+        queryFn: async () => FiatCurrencyRate.getRate(fiatCurrencyType),
+    })
 }

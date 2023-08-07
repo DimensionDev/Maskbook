@@ -17,7 +17,7 @@ function useWalletContext() {
 
     const [selectedWallet, setSelectedWallet] = useState<Wallet | null>()
     const currencyType = useCurrencyType()
-    const { value: fiatCurrencyRate = 1 } = useFiatCurrencyRate()
+    const { data: fiatCurrencyRate = 1 } = useFiatCurrencyRate()
 
     useEffect(() => {
         const contractAccount = new URLSearchParams(location.search).get('contractAccount')

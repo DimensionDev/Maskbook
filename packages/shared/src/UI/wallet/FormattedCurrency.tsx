@@ -19,7 +19,7 @@ export function FormattedCurrency({
     formatter = (value, sign) => `${sign} ${value}`.trim(),
 }: FormattedCurrencyProps) {
     const currentSign = useCurrencyType()
-    const { value: currentFiatCurrencyRate } = useFiatCurrencyRate()
+    const { data: currentFiatCurrencyRate } = useFiatCurrencyRate()
     return (
         <Fragment>
             {formatter(value, sign ?? currentSign, {

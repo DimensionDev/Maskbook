@@ -48,8 +48,8 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
     const t = useSharedI18N()
     const { classes } = useStyles()
     const currencyType = useCurrencyType()
-    const { value: fiatCurrencyRate = 1, loading } = useFiatCurrencyRate()
-    console.log({ fiatCurrencyRate })
+    const { data: fiatCurrencyRate = 1, isLoading } = useFiatCurrencyRate()
+
     const market = trending?.market
 
     return (
@@ -69,7 +69,7 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.cell}>
-                                {market?.market_cap && !loading
+                                {market?.market_cap && !isLoading
                                     ? formatMarketCap(market.market_cap, currencyType, fiatCurrencyRate)
                                     : '--'}
                             </TableCell>
@@ -93,7 +93,7 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.cell}>
-                                {market?.total_volume && !loading
+                                {market?.total_volume && !isLoading
                                     ? formatMarketCap(market.total_volume, currencyType, fiatCurrencyRate)
                                     : '--'}
                             </TableCell>
