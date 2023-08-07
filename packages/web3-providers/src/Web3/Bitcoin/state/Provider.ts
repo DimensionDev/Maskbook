@@ -2,7 +2,6 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
-    chainResolver,
     isValidBitcoinAddress,
     isValidChainId,
     getInvalidChainId,
@@ -16,6 +15,7 @@ import {
     getDefaultNetworkType,
 } from '@masknet/web3-shared-bitcoin'
 import { BitcoinProviders } from '@masknet/web3-providers'
+import { ChainResolverAPI } from '../apis/ResolverAPI.js'
 import { ProviderState } from '../../Base/state/Provider.js'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
@@ -29,7 +29,8 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             getDefaultChainId,
             getDefaultProviderType,
             getDefaultNetworkType,
-            getNetworkTypeFromChainId: (chainId: ChainId) => chainResolver.networkType(chainId) ?? NetworkType.Mainnet,
+            getNetworkTypeFromChainId: (chainId: ChainId) =>
+                new ChainResolverAPI().networkType(chainId) ?? NetworkType.Mainnet,
         })
     }
 }

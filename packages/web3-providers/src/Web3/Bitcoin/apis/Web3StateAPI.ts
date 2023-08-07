@@ -18,6 +18,8 @@ import { Settings } from '../state/Settings.js'
 import { Transaction } from '../state/Transaction.js'
 import { IdentityService } from '../state/IdentityService.js'
 import { Network } from '../state/Network.js'
+import { BalanceNotifier } from '../state/BalanceNotifier.js'
+import { BlockNumberNotifier } from '../state/BlockNumberNotifier.js'
 import { Web3StateAPI_Base } from '../../Base/apis/StateAPI.js'
 
 export const BitcoinWeb3StateRef = new ValueRefWithReady<
@@ -43,6 +45,9 @@ export class BitcoinWeb3StateAPI extends Web3StateAPI_Base<
         await Provider_.setup()
 
         return {
+            Provider: Provider_,
+            BalanceNotifier: new BalanceNotifier(),
+            BlockNumberNotifier: new BlockNumberNotifier(),
             AddressBook: new AddressBook(context),
             IdentityService: new IdentityService(context),
             Settings: new Settings(context),
@@ -51,7 +56,6 @@ export class BitcoinWeb3StateAPI extends Web3StateAPI_Base<
                 chainId: Provider_.chainId,
                 account: Provider_.account,
             }),
-            Provider: Provider_,
         }
     }
 }

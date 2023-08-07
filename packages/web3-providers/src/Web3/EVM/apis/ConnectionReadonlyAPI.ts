@@ -545,11 +545,11 @@ export class ConnectionReadonlyAPI
         return Object.fromEntries(listOfAddress.map<[string, string]>((x, i) => [x, result[i]]))
     }
 
-    getNativeToken(initial?: ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
+    async getNativeToken(initial?: ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
         const token = new ChainResolverAPI().nativeCurrency(options.chainId)
         if (!token) throw new Error('Failed to create native token.')
-        return Promise.resolve(token)
+        return token
     }
 
     async getFungibleToken(address: string, initial?: ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {

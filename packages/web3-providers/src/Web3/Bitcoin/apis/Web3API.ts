@@ -1,14 +1,7 @@
-import { memoize } from 'lodash-es'
 import type { Connection } from '@solana/web3.js'
-import { type ChainId } from '@masknet/web3-shared-bitcoin'
 import { BitcoinConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
 import { BitcoinProviders } from '../providers/index.js'
 import type { ConnectionOptions } from '../types/index.js'
-
-const createWeb3SDK = memoize(
-    (chainId: ChainId) => createClient(chainId),
-    (chainId) => chainId,
-)
 
 export class BitcoinWeb3API {
     constructor(private options?: ConnectionOptions) {}
@@ -31,7 +24,8 @@ export class BitcoinWeb3API {
     }
 
     getWeb3Connection(initial?: ConnectionOptions): Connection {
-        const options = this.ConnectionOptions.fill(initial)
-        return createWeb3SDK(options.chainId)
+        // const options = this.ConnectionOptions.fill(initial)
+        // return createWeb3SDK(options.chainId)
+        throw new Error('To be implemented.')
     }
 }

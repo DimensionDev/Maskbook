@@ -1,7 +1,7 @@
 import {
     AddressType,
     ChainId,
-    SchemaType,
+    type SchemaType,
     type Signature,
     type Transaction,
     type TransactionDetailed,
@@ -9,10 +9,8 @@ import {
     type Block,
     type Web3Provider,
     type Web3,
-    createNativeToken,
     isNativeTokenAddress,
     getNativeTokenAddress,
-    decodeAddress,
     type TransactionSignature,
     type ProviderType,
     type UserOperation,
@@ -25,16 +23,17 @@ import {
     type NonFungibleTokenContract,
     type NonFungibleCollection,
     isSameAddress,
-    createNonFungibleToken,
 } from '@masknet/web3-shared-base'
 import { EMPTY_OBJECT, type Account } from '@masknet/shared-base'
 import { PublicKey, sendAndConfirmRawTransaction, type BlockResponse } from '@solana/web3.js'
 import type { ConnectionAPI_Base } from '../../Base/apis/ConnectionAPI.js'
 import { MagicEdenAPI } from '../../../MagicEden/index.js'
 import { BitcoinWeb3API } from './Web3API.js'
+import { BitcoinWeb3StateRef } from './Web3StateAPI.js'
 import { BitcoinConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
-import { BitcoinFungibleTokenAPI } from './FungibleTokenAPI.js'
+import { BitcoinFungibleTokenListAPI } from './FungibleTokenListAPI.js'
 import type { ConnectionOptions } from '../types/index.js'
+import { ChainResolverAPI } from './ResolverAPI.js'
 
 export class BitcoinConnectionAPI
     implements
@@ -57,9 +56,8 @@ export class BitcoinConnectionAPI
     constructor(private options?: ConnectionOptions) {}
 
     private MagicEden = new MagicEdenAPI()
-    private FungibleToken = new BitcoinFungibleTokenAPI()
+    private FungibleTokenList = new BitcoinFungibleTokenListAPI()
     private Web3 = new BitcoinWeb3API(this.options)
-    private Transfer = new BitcoinTransferAPI(this.options)
     private ConnectionOptions = new BitcoinConnectionOptionsAPI(this.options)
 
     getAccount(initial?: ConnectionOptions | undefined): Promise<string> {
@@ -140,13 +138,13 @@ export class BitcoinConnectionAPI
         return {
             account: '',
             chainId: ChainId.Mainnet,
-            ...(await SolanaWeb3StateRef.value.Provider?.connect(options.providerType, options.chainId)),
+            ...(await BitcoinWeb3StateRef.value.Provider?.connect(options.providerType, options.chainId)),
         }
     }
 
     async disconnect(initial?: ConnectionOptions): Promise<void> {
         const options = this.ConnectionOptions.fill(initial)
-        await SolanaWeb3StateRef.value.Provider?.disconnect(options.providerType)
+        await BitcoinWeb3StateRef.value.Provider?.disconnect(options.providerType)
     }
 
     getWeb3(initial?: ConnectionOptions) {
@@ -268,14 +266,14 @@ export class BitcoinConnectionAPI
     }
 
     async getTransactionNonce(account: string, initial?: ConnectionOptions): Promise<number> {
-        const options = this.ConnectionOptions.fill(initial)
-        const response = await this.Web3.getWeb3Connection(options).getNonce(decodeAddress(account))
-        return response?.nonce ? Number.parseInt(response.nonce, 10) : 0
+        throw new Error('Method not implemented.')
     }
 
     async getNativeToken(initial?: ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
-        return createNativeToken(options.chainId)
+        const token = new ChainResolverAPI().nativeCurrency(options.chainId)
+        if (!token) throw new Error('Failed to create native token.')
+        return token
     }
 
     async getFungibleToken(address: string, initial?: ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
@@ -298,20 +296,7 @@ export class BitcoinConnectionAPI
         schema?: SchemaType,
         initial?: ConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
-        const options = this.ConnectionOptions.fill(initial)
-        const asset = await this.MagicEden.getAsset(address, tokenId, {
-            chainId: options.chainId,
-        })
-        return createNonFungibleToken(
-            options.chainId,
-            address,
-            SchemaType.NonFungible,
-            tokenId,
-            asset?.ownerId,
-            asset?.metadata,
-            asset?.contract,
-            asset?.collection,
-        )
+        throw new Error('Method not implemented.')
     }
 
     getNonFungibleTokenOwner(

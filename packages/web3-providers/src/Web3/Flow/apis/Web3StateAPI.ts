@@ -41,6 +41,7 @@ export class FlowWeb3StateAPI extends Web3StateAPI_Base<
         await Provider_.setup()
 
         return {
+            Provider: Provider_,
             AddressBook: new AddressBook(context),
             IdentityService: new IdentityService(context),
             Settings: new Settings(context),
@@ -49,7 +50,6 @@ export class FlowWeb3StateAPI extends Web3StateAPI_Base<
                 chainId: Provider_.chainId,
                 account: Provider_.account,
             }),
-            Provider: Provider_,
         }
     }
 }
