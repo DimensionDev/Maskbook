@@ -12,7 +12,7 @@ export default function ApplicationsPage(props: ApplicationsPageProps) {
                 <DashboardHeader title="Applications" />
 
                 <div className="bg-white p-5">
-                    <div className="border rounded-lg">
+                    <div className="border rounded-lg overflow-hidden">
                         <DisableShadowRootContext.Provider value={false}>
                             <ShadowRootIsolation>
                                 <ApplicationBoardForm allPersonas={[]} personaAgainstSNSConnectStatusLoading={false} />

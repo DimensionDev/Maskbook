@@ -1,17 +1,11 @@
 import { Icons } from '@masknet/icons'
 import { CopyButton, ProgressiveText, ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { MaskColors, makeStyles } from '@masknet/theme'
 import { useAccount, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { ChainbaseHistory, ExplorerResolver } from '@masknet/web3-providers'
-import {
-    formatBalance,
-    multipliedBy,
-    trimZero,
-    type Transaction,
-    TransactionStateType,
-} from '@masknet/web3-shared-base'
-import { formatHash, formatWeiToEther, formatWeiToGwei, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { TransactionStateType, formatBalance, multipliedBy, trimZero } from '@masknet/web3-shared-base'
+import { formatHash, formatWeiToEther, formatWeiToGwei } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography, alpha } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { capitalize } from 'lodash-es'
@@ -20,6 +14,8 @@ import { Navigate, useLocation } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { WalletAssetTabs } from '../type.js'
+import type { TransactionState } from './types.js'
+import { useTransactionLogs } from './useTransactionLogs.js'
 
 const useStyles = makeStyles()((theme) => ({
     statusTitle: {
@@ -76,14 +72,52 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         borderRadius: 4,
     },
+    logs: {
+        padding: 0,
+        margin: 0,
+        listStyleType: 'none',
+    },
+    log: {
+        marginTop: theme.spacing(1.5),
+        display: 'flex',
+        alignItems: 'center',
+    },
+    index: {
+        height: 22,
+        width: 22,
+        flexShrink: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'linear-gradient(180deg, #1C68F3 0%, #8EB6FF 99.00%)',
+        borderRadius: '50%',
+        color: MaskColors.light.maskColor.white,
+        fontSize: 12,
+        fontWeight: 700,
+    },
+    logText: {
+        lineHeight: '16px',
+        color: theme.palette.maskColor.main,
+        marginLeft: theme.spacing(1.5),
+        fontWeight: 700,
+        fontSize: 12,
+    },
 }))
 
 export const TransactionDetail = memo(function TransactionDetail() {
+    const { t } = useI18N()
     const { classes, cx, theme } = useStyles()
     const location = useLocation()
-    const transaction = location.state.transaction as Transaction<ChainId, SchemaType> | undefined
+    const transactionState = location.state.transaction as TransactionState
+    const transaction =
+        transactionState && 'candidates' in transactionState
+            ? transactionState.candidates[transactionState.id]
+            : transactionState
     const account = useAccount()
-    useTitle(capitalize(transaction?.cateName || 'Transaction'))
+    const chainId = transactionState?.chainId
+    const transactionId = transactionState?.id
+    const blockNumber = transaction && 'blockNumber' in transaction ? transaction.blockNumber : undefined
+    useTitle(capitalize(transaction && 'cateName' in transaction ? transaction.cateName : 'Transaction'))
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId: transaction?.chainId })
     const { data: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
         chainId: transaction?.chainId,
@@ -91,13 +125,14 @@ export const TransactionDetail = memo(function TransactionDetail() {
 
     const { data: tx, isLoading: loadingTx } = useQuery({
         enabled: !!transaction,
-        queryKey: ['chainbase', 'transaction', transaction?.chainId, transaction?.id, transaction?.blockNumber],
+        queryKey: ['chainbase', 'transaction', transaction?.chainId, transactionId, blockNumber],
         queryFn: async () => {
-            if (!transaction) return
-            return ChainbaseHistory.getTransaction(transaction.chainId, transaction.id, transaction.blockNumber)
+            if (!transaction || !chainId || !transactionId) return
+            return ChainbaseHistory.getTransaction(chainId, transactionId, blockNumber)
         },
     })
-    const { t } = useI18N()
+
+    const logs = useTransactionLogs(transactionState)
     if (!transaction) {
         return <Navigate to={`${PopupRoutes.Wallet}?tab=${WalletAssetTabs.Activity}`} replace />
     }
@@ -118,16 +153,16 @@ export const TransactionDetail = memo(function TransactionDetail() {
         [SUCCEED]: t('transaction_success'),
         [NOT_DEPEND]: t('transaction_pending'),
     }
-    const { status = NOT_DEPEND } = transaction
+    const status = (transactionState?.status || NOT_DEPEND) as TransactionStateType
     const isOut = transaction.from === account
-    const link = ExplorerResolver.transactionLink(transaction.chainId, transaction.id)
+    const link = transactionId ? ExplorerResolver.transactionLink(chainId!, transactionId) : undefined
 
     const gasUsedPercent = tx ? (tx.gas_used * 100) / tx.gas : 0
     const gasFee = tx ? formatWeiToEther(multipliedBy(tx.gas_price, tx.gas)) : undefined
     const gasCost = gasFee && nativeTokenPrice ? gasFee.times(nativeTokenPrice) : undefined
 
     return (
-        <Box p={2}>
+        <Box p={2} overflow="auto" data-hide-scrollbar>
             <Box display="flex" alignItems="center">
                 <Typography variant="h2" className={classes.statusTitle}>
                     {t('transaction_status')}
@@ -137,13 +172,15 @@ export const TransactionDetail = memo(function TransactionDetail() {
                     {StatusLabelMap[status]}
                 </Typography>
             </Box>
-            <Box className={classes.field}>
-                <Typography className={classes.fieldName}>{t('transaction_hash')}</Typography>
-                <Typography className={classes.fieldValue}>
-                    {formatHash(transaction.id, 4)}
-                    {transaction.id ? <CopyButton size={16} text={transaction.id} sx={{ ml: 0.5 }} /> : null}
-                </Typography>
-            </Box>
+            {transactionId ? (
+                <Box className={classes.field}>
+                    <Typography className={classes.fieldName}>{t('transaction_hash')}</Typography>
+                    <Typography className={classes.fieldValue}>
+                        {formatHash(transactionId, 4)}
+                        <CopyButton size={16} text={transactionId} sx={{ ml: 0.5 }} />
+                    </Typography>
+                </Box>
+            ) : null}
             <Box className={classes.field}>
                 <Typography className={classes.fieldName}>{t('transaction_link')}</Typography>
                 <Typography className={classes.fieldValue}>
@@ -159,13 +196,13 @@ export const TransactionDetail = memo(function TransactionDetail() {
             <Box className={classes.field}>
                 <Typography className={classes.fieldName}>{t('transaction_from')}</Typography>
                 <Typography className={classes.fieldValue} component="div">
-                    <ReversedAddress address={transaction.from} />
+                    <ReversedAddress address={transaction.from!} />
                 </Typography>
             </Box>
             <Box className={classes.field}>
                 <Typography className={classes.fieldName}>{t('transaction_to')}</Typography>
                 <Typography className={classes.fieldValue} component="div">
-                    <ReversedAddress address={transaction.to} />
+                    <ReversedAddress address={transaction.to!} />
                 </Typography>
             </Box>
             <Typography variant="h2" className={classes.sectionName}>
@@ -229,9 +266,21 @@ export const TransactionDetail = memo(function TransactionDetail() {
                     {gasCost ? ` ≈ $${gasCost.toFixed(2)}` : ''}
                 </ProgressiveText>
             </Box>
-            <Typography variant="h2" className={classes.sectionName}>
-                Activity Log
-            </Typography>
+            {logs?.length ? (
+                <>
+                    <Typography variant="h2" className={classes.sectionName}>
+                        {t('activity_log')}
+                    </Typography>
+                    <ol className={classes.logs}>
+                        {logs.map((log, index) => (
+                            <li key={index} className={classes.log}>
+                                <div className={classes.index}>{index + 1}</div>
+                                <Typography className={classes.logText}>{log}</Typography>
+                            </li>
+                        ))}
+                    </ol>
+                </>
+            ) : null}
         </Box>
     )
 })

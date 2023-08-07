@@ -9,7 +9,7 @@ export interface ChainIconProps {
 }
 
 const avatarProps: AvatarProps = {
-    sx: { fontSize: 12 },
+    sx: { fontSize: 12, fontWeight: 'bold' },
 }
 export const ChainIcon = memo<ChainIconProps>(function ChainIcon({ color, size = 12.5, name }) {
     return <Icon color={color} size={size} name={name} AvatarProps={avatarProps} />
