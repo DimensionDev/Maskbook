@@ -68,7 +68,7 @@ const useStyles = makeStyles()((theme) => ({
 interface ContactCardProps {
     avatar?: string
     profiles: BindingProof[]
-    nextId: string
+    nextId?: string
     publicKey?: string
     isLocal?: boolean
 }
@@ -123,7 +123,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                             alignItems="center"
                             columnGap="2px">
                             {nextId ? formatPersonaFingerprint(nextId, 4) : null}
-                            <CopyButton text={nextId} size={12} className={classes.icon} />
+                            <CopyButton text={nextId ? nextId : ''} size={12} className={classes.icon} />
                             <Link
                                 underline="none"
                                 target="_blank"

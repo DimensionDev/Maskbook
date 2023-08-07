@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
 interface ConnectedAccountsProps {
     avatar?: string
     profiles: BindingProof[]
-    nextId: string
+    nextId?: string
     publicKey?: string
     isLocal?: boolean
 }

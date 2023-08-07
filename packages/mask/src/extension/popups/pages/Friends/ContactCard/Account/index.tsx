@@ -33,8 +33,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
     },
 }))
-export const url: Partial<Record<NextIDPlatform, string>> = {
-    [NextIDPlatform.Twitter]: 'https://twitter.com/',
+export const url: Record<SupportedPlatforms, string> = {
     [NextIDPlatform.ENS]: 'https://app.ens.domains/name/',
     [NextIDPlatform.Unstoppable]: 'https://ud.me/',
     [NextIDPlatform.GitHub]: 'https://github.com/',
@@ -70,7 +69,7 @@ export const Account = memo<AccountProps>(function Account({ userId, icon }) {
                 }
             })()}
             <Box className={classes.userId}>
-                {icon === 'ethereum' ? formatEthereumAddress(userId, 4) : formatPersonaName(userId)}
+                {icon === NextIDPlatform.Ethereum ? formatEthereumAddress(userId, 4) : formatPersonaName(userId)}
                 <Link
                     underline="none"
                     target="_blank"
