@@ -16,6 +16,7 @@ export default {
     'plugins/RSS3/src/locales/%locale%.json': 'bio.rss3',
     'plugins/EVM/src/locales/%locale%.json': 'com.mask.evm',
     'plugins/Solana/src/locales/%locale%.json': 'com.maskbook.solana',
+    'plugins/Bitcoin/src/locales/%locale%.json': 'com.maskbook.bitcoin',
     'plugins/NextID/src/locales/%locale%.json': 'com.mask.next_id',
     'plugins/template/src/locales/%locale%.json': '__template__',
     'plugins/GoPlusSecurity/src/locales/%locale%.json': 'io.gopluslabs.security',
