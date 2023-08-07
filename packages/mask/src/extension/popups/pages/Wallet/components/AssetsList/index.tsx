@@ -125,7 +125,6 @@ export interface AssetsListUIProps {
 
 export const AssetsListUI = memo<AssetsListUIProps>(function AssetsListUI({ isExpand, assets, onItemClick }) {
     const { classes } = useStyles()
-    const { currencyType, fiatCurrencyRate } = useContainer(WalletContext)
     const list = assets.filter(
         (asset) => isExpand || isNativeTokenAddress(asset.address) || isGte(asset.value?.usd ?? 0, 1),
     )
