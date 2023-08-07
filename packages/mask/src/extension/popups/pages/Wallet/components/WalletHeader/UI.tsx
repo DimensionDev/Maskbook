@@ -70,6 +70,7 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => (
         flexGrow: 1,
         alignItems: 'center',
         cursor: 'pointer',
+        overflow: 'auto',
     },
     chainName: {
         flexGrow: 1,
