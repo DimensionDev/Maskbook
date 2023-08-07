@@ -40,10 +40,11 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface AccountAvatar extends withClasses<'avatar'> {
+export interface AccountAvatar extends withClasses<'avatar' | 'container'> {
     avatar?: string | null
     network?: string
     isValid?: boolean
+    size?: number
 }
 
 export const AccountAvatar = memo<AccountAvatar>(({ avatar, network, isValid, ...props }) => {

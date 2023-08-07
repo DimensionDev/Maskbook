@@ -50,7 +50,14 @@ const useStyles = makeStyles()({
     },
 })
 
-const PATTERNS = [PopupRoutes.Personas, PopupRoutes.Wallet, PopupRoutes.Unlock, PopupRoutes.SetPaymentPassword]
+const PATTERNS = [
+    PopupRoutes.Personas,
+    PopupRoutes.Wallet,
+    PopupRoutes.Unlock,
+    PopupRoutes.WalletSettings,
+    PopupRoutes.SetPaymentPassword,
+    PopupRoutes.Friends,
+]
 
 export const PopupLayout = memo(function PopupLayout({ children }: PropsWithChildren<{}>) {
     const { classes } = useStyles()

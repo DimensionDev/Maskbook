@@ -46,6 +46,7 @@ const SwapPage = lazy(() => import('./pages/Swap/index.js'))
 const RequestPermissionPage = lazy(() => import('./RequestPermission/index.js'))
 const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect/index.js'))
 const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermission/index.js'))
+const Contacts = lazy(() => import('./pages/Friends/index.js'))
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
@@ -78,6 +79,7 @@ const PopupRoutes = memo(function PopupRoutes() {
                         <Route path="/" element={<PopupLayout />}>
                             <Route path={PopupPaths.Personas + '/*'} element={<Personas />} />
                             <Route path={PopupPaths.Wallet + '/*'} element={<Wallet />} />
+                            <Route path={PopupPaths.Friends + '/*'} element={<Contacts />} />
                         </Route>
                         <Route path={PopupPaths.Swap} element={<SwapPage />} />
                         <Route path={PopupPaths.RequestPermission} element={<RequestPermissionPage />} />
