@@ -33,7 +33,7 @@ export async function setAutoLockTimer() {
 
     clearTimeout(autoLockTimer)
 
-    if (autoLockTime === 0) return
+    if (autoLockTime <= 0) return
 
     autoLockTimer = setTimeout(async () => {
         await lockWallet()
