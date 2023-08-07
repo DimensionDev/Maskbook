@@ -13,7 +13,7 @@ import { omit } from 'lodash-es'
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
-import { type ZodCustomIssue, type z } from 'zod'
+import { z, type ZodCustomIssue } from 'zod'
 import { createSchema, useI18N, type AvailableLocaleKeys } from '../../../../../utils/index.js'
 import { PageTitleContext } from '../../../context.js'
 import { useTitle } from '../../../hook/index.js'
@@ -113,6 +113,17 @@ export const EditNetwork = memo(function EditNetwork() {
     const schema = useMemo(() => {
         return createSchema(t, async (name) => {
             return !networks.find((network) => network.name === name && network.ID !== id)
+        }).superRefine((schema, context) => {
+            const network = networks.find((network) => network.rpcUrl === schema.rpc && network.ID !== id)
+            if (network) {
+                context.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    path: ['rpc'],
+                    message: t('rpc_url_is_used_by', { name: network.name }),
+                })
+                return false
+            }
+            return true
         })
     }, [t, id, networks])
 
@@ -123,7 +134,7 @@ export const EditNetwork = memo(function EditNetwork() {
         setError,
         formState: { errors, isValidating, isDirty, isValid: isFormValid },
     } = useForm<FormInputs>({
-        mode: 'all',
+        mode: 'onChange',
         resolver: zodResolver(schema),
         defaultValues: network || {},
     })
@@ -149,7 +160,8 @@ export const EditNetwork = memo(function EditNetwork() {
         mutationFn: async (data) => {
             if (!Network) return
             setIsSubmitting(true)
-            const chainId = +data.chainId
+            const parsedData = await schema.parseAsync(data)
+            const chainId = parsedData.chainId
             try {
                 const network: TransferableNetwork<ChainId, SchemaType, NetworkType> = {
                     isCustomized: true,
@@ -157,17 +169,17 @@ export const EditNetwork = memo(function EditNetwork() {
                     chainId,
                     coinMarketCapChainId: '',
                     coinGeckoChainId: '',
-                    name: data.name,
-                    fullName: data.name,
+                    name: parsedData.name,
+                    fullName: parsedData.name,
                     network: 'mainnet',
-                    rpcUrl: data.rpc,
+                    rpcUrl: parsedData.rpc,
                     nativeCurrency: {
                         id: ZERO_ADDRESS,
                         chainId,
                         type: TokenType.Fungible,
                         schema: SchemaType.Native,
-                        name: data.currencySymbol || '',
-                        symbol: data.currencySymbol || '',
+                        name: parsedData.currencySymbol || '',
+                        symbol: parsedData.currencySymbol || '',
                         decimals: 18,
                         address: ZERO_ADDRESS,
                     },
@@ -196,6 +208,7 @@ export const EditNetwork = memo(function EditNetwork() {
     // Discard currencySymbol warning
     const isValid = isFormValid || (!!errors.currencySymbol && Object.keys(omit(errors, 'currencySymbol')).length === 0)
     const isNotReady = isValidating || (!isValidating && !isValid) || !isDirty || isChecking
+    console.log({ isValidating, isDirty, isChecking, isValid, errors, isFormValid })
     const disabled = isNotReady || isMutating || isSubmitting
 
     // currency symbol error is tolerable,

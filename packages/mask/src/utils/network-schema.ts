@@ -53,8 +53,8 @@ export function createBaseSchema(t: I18NFunction, duplicateNameValidator: NameVa
             z
                 .string()
                 .trim()
-                .regex(/^\d+$/, t('incorrect_chain_id'))
-                .transform((v) => Number.parseInt(v, 10)),
+                .regex(/^\d+|0x[\da-e]$/i, t('incorrect_chain_id'))
+                .transform((v) => Number.parseInt(v, v.startsWith('0x') ? 16 : 10)),
             z.number(),
         ]),
         currencySymbol: z.string().optional(),
