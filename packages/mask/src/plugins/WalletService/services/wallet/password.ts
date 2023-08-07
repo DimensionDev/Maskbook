@@ -68,15 +68,14 @@ export async function verifyPassword(unverifiedPassword: string) {
     return validate(await database.decryptSecret(unverifiedPassword))
 }
 
-export async function verifyPasswordRequired(unverifiedPassword: string) {
-    if (!(await verifyPassword(unverifiedPassword))) throw new Error('Wrong password')
+export async function verifyPasswordRequired(unverifiedPassword: string, errorMsg?: string) {
+    if (!(await verifyPassword(unverifiedPassword))) throw new Error(errorMsg ?? 'Wrong password')
     return true
 }
 
 export async function changePassword(oldPassword: string, newPassword: string) {
     validatePasswordRequired(newPassword)
-    const verified = await verifyPassword(oldPassword)
-    if (!verified) throw new Error('Incorrect payment password.')
+    await verifyPasswordRequired(oldPassword, 'Incorrect payment password.')
     if (oldPassword === newPassword) throw new Error('Failed to set the same password as the old one.')
     await database.updateSecret(oldPassword, newPassword)
     INTERNAL_setPassword(newPassword)
