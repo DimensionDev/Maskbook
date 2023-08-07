@@ -49,11 +49,11 @@ export function DashboardForDesktop(props: SidebarForDesktopProps) {
 
     return (
         <div className="hidden xl:fixed xl:inset-y-0 xl:z-50 xl:flex xl:w-72 xl:flex-col">
-            <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-black/10 px-6 ring-1 ring-white/5">
+            <div className="flex grow flex-col gap-y-5 overflow-y-auto dark:bg-black/10 bg-white/10 px-6 ring-1 ring-white/5">
                 <div className="flex h-16 shrink-0 items-center">
                     <a
                         href="#"
-                        className="flex items-center gap-x-4  py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800"
+                        className="flex items-center gap-x-4  py-3 text-sm font-semibold leading-6 text-white hover:text-white"
                         onClick={(ev) => {
                             ev.preventDefault()
                             ev.stopPropagation()
@@ -67,7 +67,9 @@ export function DashboardForDesktop(props: SidebarForDesktopProps) {
                             alt=""
                         />
                         <span className="sr-only">Your profile</span>
-                        <span aria-hidden="true">{account ? Others.formatAddress(account, 4) : 'Connect Wallet'}</span>
+                        <span className="dark:text-white  text-black" aria-hidden="true">
+                            {account ? Others.formatAddress(account, 4) : 'Connect Wallet'}
+                        </span>
                     </a>
                 </div>
                 <nav className="flex flex-1 flex-col">
@@ -80,7 +82,7 @@ export function DashboardForDesktop(props: SidebarForDesktopProps) {
                             </ul>
                         </li>
                         <li className="-mx-6 mt-auto">
-                            <span className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800">
+                            <span className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 dark:text-white text-black ">
                                 {`Version: ${env.VERSION}`}
                             </span>
                         </li>
