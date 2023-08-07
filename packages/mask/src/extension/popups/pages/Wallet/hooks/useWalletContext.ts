@@ -1,14 +1,23 @@
 import { type Wallet } from '@masknet/shared-base'
-import { useWallets } from '@masknet/web3-hooks-base'
+import { useWallets, useCurrencyType, useFiatCurrencyRate } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useEffect, useState } from 'react'
+import { useAsync } from 'react-use'
 import { useLocation } from 'react-router-dom'
 import { createContainer } from 'unstated-next'
+import Services from '../../../../service.js'
 
 function useWalletContext() {
     const location = useLocation()
     const wallets = useWallets()
+
+    const { value: personaManagers } = useAsync(async () => {
+        return Services.Identity.queryOwnedPersonaInformation(true)
+    }, [])
+
     const [selectedWallet, setSelectedWallet] = useState<Wallet | null>()
+    const currencyType = useCurrencyType()
+    const { data: fiatCurrencyRate = 1 } = useFiatCurrencyRate()
 
     useEffect(() => {
         const contractAccount = new URLSearchParams(location.search).get('contractAccount')
@@ -18,6 +27,9 @@ function useWalletContext() {
     }, [location.search, wallets, selectedWallet])
 
     return {
+        currencyType,
+        fiatCurrencyRate,
+        personaManagers,
         /**
          * @deprecated
          * Avoid using this, pass wallet as a router parameter instead

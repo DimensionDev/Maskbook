@@ -1,4 +1,5 @@
 export * from './constants/index.js'
+export * from './helpers/abiCoder.js'
 export * from './helpers/addGasMargin.js'
 export * from './helpers/address.js'
 export * from './helpers/createContract.js'

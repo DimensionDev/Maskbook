@@ -20,6 +20,20 @@ export async function INTERNAL_getPasswordRequired() {
     return password_
 }
 
+export async function INTERNAL_getUnverifiedPassword(unverifiedPassword?: string) {
+    if (unverifiedPassword) await verifyPasswordRequired(unverifiedPassword)
+    let password_: string = ''
+
+    try {
+        password_ = await INTERNAL_getPasswordRequired()
+    } catch {
+        if (!unverifiedPassword) throw new Error('No password set yet or expired.')
+        password_ = await database.decryptSecret(unverifiedPassword)
+    }
+
+    return password_
+}
+
 export function INTERNAL_setPassword(newPassword: string) {
     validatePasswordRequired(newPassword)
     inMemoryPassword = newPassword
@@ -54,14 +68,14 @@ export async function verifyPassword(unverifiedPassword: string) {
     return validate(await database.decryptSecret(unverifiedPassword))
 }
 
-export async function verifyPasswordRequired(unverifiedPassword: string) {
-    if (!(await verifyPassword(unverifiedPassword))) throw new Error('Wrong password')
+export async function verifyPasswordRequired(unverifiedPassword: string, errorMsg?: string) {
+    if (!(await verifyPassword(unverifiedPassword))) throw new Error(errorMsg ?? 'Wrong password')
     return true
 }
 
 export async function changePassword(oldPassword: string, newPassword: string) {
     validatePasswordRequired(newPassword)
-    validatePasswordRequired(oldPassword)
+    await verifyPasswordRequired(oldPassword, 'Incorrect payment password.')
     if (oldPassword === newPassword) throw new Error('Failed to set the same password as the old one.')
     await database.updateSecret(oldPassword, newPassword)
     INTERNAL_setPassword(newPassword)

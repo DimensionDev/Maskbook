@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useCallback, useMemo, useContext, useEffect } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { Box, Link, List, ListItem, MenuItem, Typography, useTheme, type ListItemProps } from '@mui/material'
@@ -13,133 +13,159 @@ import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { ContactsContext } from '../../../hook/useContactsContext.js'
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
-import { DeleteContactModal, EditContactModal } from '../../../modals/modals.js'
+import { DeleteContactModal, EditContactModal, AddContactModal } from '../../../modals/modals.js'
 import { ContactType } from '../type.js'
+import { PageTitleContext } from '../../../context.js'
 
-const useStyles = makeStyles<{ showDivideLine?: boolean }>()((theme, { showDivideLine }) => ({
-    root: {
-        overflowX: 'hidden',
-        height: '100%',
-    },
-    page: {
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'auto',
-        height: '100%',
-    },
-    contactsPanel: {
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '0',
-        maxHeight: 380,
-        overflow: 'scroll',
-    },
-    contactsList: {
-        padding: 0,
-    },
-    nickname: {
-        color: theme.palette.maskColor.main,
-        lineHeight: '18px',
-        fontWeight: 700,
-    },
-    identifier: {
-        fontSize: 14,
-        color: theme.palette.maskColor.second,
-        lineHeight: 1,
-        display: 'flex',
-        alignItems: 'center',
-    },
-    contactsListItem: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        paddingLeft: '16px !important',
-        paddingRight: '16px !important',
-        cursor: 'pointer',
-        '&:hover': {
-            backgroundColor: theme.palette.background.default,
+const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean }>()(
+    (theme, { showDivideLine, isManage }) => ({
+        root: {
+            overflowX: 'hidden',
+            height: '100%',
         },
-    },
-    contactsListItemInfo: {
-        display: 'flex',
-        alignItems: 'center',
-    },
-    contactTitle: {
-        color: theme.palette.maskColor.main,
-        fontSize: 14,
-        fontWeight: 700,
-        paddingLeft: 16,
-    },
-    icon: {
-        fontSize: 18,
-        height: 18,
-        width: 18,
-        color: theme.palette.maskColor.main,
-        cursor: 'pointer',
-        marginLeft: 4,
-    },
-    menu: {
-        padding: '4px 0px 8px 0px',
-        borderRadius: '16px',
-    },
-    menuItem: {
-        padding: '8px 12px',
-        width: 140,
-        minHeight: 'unset',
-        '&:first-of-type': showDivideLine
-            ? {
-                  '&:after': {
-                      content: '""',
-                      background: theme.palette.divider,
-                      bottom: 0,
-                      position: 'absolute',
-                      width: 120,
-                      height: 1,
-                  },
-              }
-            : {},
-    },
-    optionName: {
-        fontSize: 14,
-        fontWeight: 700,
-        marginLeft: 8,
-    },
-    emojiAvatar: {
-        marginRight: 10,
-        fontSize: 14,
-    },
-    iconMore: {
-        cursor: 'pointer',
-    },
-    bottomAction: {
-        display: 'flex',
-        justifyContent: 'center',
-        background: theme.palette.maskColor.secondaryBottom,
-        boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
-        backdropFilter: 'blur(8px)',
-        width: '100%',
-        bottom: 0,
-        zIndex: 100,
-    },
-    confirmButton: {
-        margin: '16px 0',
-    },
-}))
+        page: {
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'auto',
+            height: '100%',
+        },
+        contactsPanel: {
+            display: 'flex',
+            flexDirection: 'column',
+            padding: '0',
+            maxHeight: isManage ? 470 : 380,
+            overflow: 'scroll',
+        },
+        contactsList: {
+            padding: 0,
+        },
+        nickname: {
+            color: theme.palette.maskColor.main,
+            lineHeight: '18px',
+            fontWeight: 700,
+        },
+        identifier: {
+            fontSize: 14,
+            color: theme.palette.maskColor.second,
+            lineHeight: 1,
+            display: 'flex',
+            alignItems: 'center',
+        },
+        contactsListItem: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            paddingLeft: '16px !important',
+            paddingRight: '16px !important',
+            cursor: 'pointer',
+            '&:hover': {
+                backgroundColor: theme.palette.background.default,
+            },
+        },
+        contactsListItemInfo: {
+            display: 'flex',
+            alignItems: 'center',
+        },
+        contactTitle: {
+            color: theme.palette.maskColor.main,
+            fontSize: 14,
+            fontWeight: 700,
+            paddingLeft: 16,
+        },
+        icon: {
+            fontSize: 18,
+            height: 18,
+            width: 18,
+            color: theme.palette.maskColor.main,
+            cursor: 'pointer',
+            marginLeft: 4,
+        },
+        menu: {
+            padding: '4px 0px 8px 0px',
+            borderRadius: '16px',
+        },
+        menuItem: {
+            padding: '8px 12px',
+            width: 140,
+            minHeight: 'unset',
+            '&:first-of-type': showDivideLine
+                ? {
+                      '&:after': {
+                          content: '""',
+                          background: theme.palette.divider,
+                          bottom: 0,
+                          position: 'absolute',
+                          width: 120,
+                          height: 1,
+                      },
+                  }
+                : {},
+        },
+        optionName: {
+            fontSize: 14,
+            fontWeight: 700,
+            marginLeft: 8,
+        },
+        emojiAvatar: {
+            marginRight: 10,
+            fontSize: 14,
+        },
+        iconMore: {
+            cursor: 'pointer',
+        },
+        bottomAction: {
+            position: 'absolute',
+            display: 'flex',
+            justifyContent: 'center',
+            background: theme.palette.maskColor.secondaryBottom,
+            boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
+            backdropFilter: 'blur(8px)',
+            width: '100%',
+            bottom: 0,
+            zIndex: 100,
+        },
+        confirmButton: {
+            margin: '16px 0',
+        },
+    }),
+)
 
 const ContactListUI = memo(function ContactListUI() {
     const { t } = useI18N()
-    const { classes } = useStyles({})
+    const theme = useTheme()
+    const { setExtension } = useContext(PageTitleContext)
+    const state = useLocation().state as
+        | {
+              type: 'send' | 'manage'
+          }
+        | undefined
+    const isManage = state?.type === 'manage'
+    const { classes } = useStyles({ isManage })
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const { userInput, address, contacts, inputValidationMessage } = ContactsContext.useContainer()
     const [params] = useSearchParams()
 
-    useTitle(t('popups_send'))
+    const addContact = useCallback(() => {
+        return AddContactModal.openAndWaitForClose({
+            title: t('wallet_add_contact'),
+            address: '',
+            name: '',
+        })
+    }, [t])
+
+    useEffect(() => {
+        if (!isManage) return
+        setExtension(<Icons.Add color={theme.palette.maskColor.main} sx={{ cursor: 'pointer' }} onClick={addContact} />)
+    }, [isManage])
+
+    useTitle(isManage ? t('contacts') : t('popups_send'))
 
     const navigate = useNavigate()
     const location = useLocation()
 
     const handleSelectContact = useCallback(
         (addr: string, recipientName: string) => {
+            if (isManage) return
             const path = urlcat(PopupRoutes.Transfer, {
                 ...Object.fromEntries(params.entries()),
                 recipient: addr,
@@ -149,7 +175,7 @@ const ContactListUI = memo(function ContactListUI() {
                 state: location.state,
             })
         },
-        [navigate, params, location.state],
+        [navigate, params, location.state, isManage],
     )
 
     return (
@@ -190,24 +216,26 @@ const ContactListUI = memo(function ContactListUI() {
                         })}
                     </List>
                 </Box>
-                <Box className={classes.bottomAction}>
-                    <ActionButton
-                        fullWidth
-                        onClick={() => {
-                            const path = urlcat(PopupRoutes.Transfer, {
-                                ...Object.fromEntries(params.entries()),
-                                recipient: address,
-                            })
-                            navigate(path, {
-                                state: location.state,
-                            })
-                        }}
-                        width={368}
-                        className={classes.confirmButton}
-                        disabled={!!inputValidationMessage || !userInput}>
-                        {t('next')}
-                    </ActionButton>
-                </Box>
+                {isManage ? null : (
+                    <Box className={classes.bottomAction}>
+                        <ActionButton
+                            fullWidth
+                            onClick={() => {
+                                const path = urlcat(PopupRoutes.Transfer, {
+                                    ...Object.fromEntries(params.entries()),
+                                    recipient: address,
+                                })
+                                navigate(path, {
+                                    state: location.state,
+                                })
+                            }}
+                            width={368}
+                            className={classes.confirmButton}
+                            disabled={!!inputValidationMessage || !userInput}>
+                            {t('next')}
+                        </ActionButton>
+                    </Box>
+                )}
             </Box>
         </div>
     )

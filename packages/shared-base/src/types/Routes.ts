@@ -25,6 +25,7 @@ export enum DashboardRoutes {
 }
 
 export enum PopupModalRoutes {
+    ChooseCurrency = '/modal/choose-currency',
     ChooseNetwork = '/modal/choose-network',
     SwitchWallet = '/modal/switch-wallet',
     ConnectSocialAccount = '/modal/connect-social-account',
@@ -67,6 +68,7 @@ export enum PopupRoutes {
     EditNetwork = '/wallet/edit-network',
     AddNetwork = '/wallet/add-network',
     Receive = '/wallet/receive',
+    ExportWalletPrivateKey = '/wallet/export-private-key',
     Personas = '/personas',
     Logout = '/personas/logout',
     SocialAccounts = '/personas/accounts',

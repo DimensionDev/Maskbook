@@ -17,7 +17,7 @@ import { useDashboardI18N } from '../../../locales/index.js'
 import { ComponentToPrint } from './ComponentToPrint.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 
-const useStyles = makeStyles<{ isVerify: boolean }>()((theme, { isVerify }) => ({
+const useStyles = makeStyles()((theme) => ({
     title: {
         fontSize: 30,
         margin: '12px 0',
@@ -163,13 +163,13 @@ const CreateMnemonic = memo(function CreateMnemonic() {
     const walletName = 'Wallet 1'
     const t = useDashboardI18N()
     const { handlePasswordAndWallets } = ResetWalletContext.useContainer()
-    const [isVerify, setIsVerify] = useState(false)
-    const { classes, cx } = useStyles({ isVerify })
+    const [verified, setVerified] = useState(false)
+    const { classes, cx } = useStyles()
     const { words, refreshCallback, puzzleWordList, answerCallback, puzzleAnswer, verifyAnswerCallback, isMatched } =
         useMnemonicWordsPuzzle()
 
     const onVerifyClick = useCallback(() => {
-        setIsVerify(true)
+        setVerified(true)
     }, [])
 
     const handleRecovery = useCallback(() => {
@@ -190,7 +190,7 @@ const CreateMnemonic = memo(function CreateMnemonic() {
 
         const address = await WalletServiceRef.value.generateAddressFromMnemonicWords(walletName, words.join(' '))
         return address
-    }, [words, walletName, hasPassword])
+    }, [words.join(' '), walletName, hasPassword])
 
     const [{ loading }, onSubmit] = useAsyncFn(async () => {
         handlePasswordAndWallets(location.state?.password, location.state?.isReset)
@@ -205,7 +205,7 @@ const CreateMnemonic = memo(function CreateMnemonic() {
         navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
     }, [walletName, words, location.state?.isReset, location.state?.password])
 
-    const step = useMemo(() => String((isVerify ? 3 : 2) - (hasPassword ? 1 : 0)), [isVerify, hasPassword])
+    const step = useMemo(() => String((verified ? 3 : 2) - (hasPassword ? 1 : 0)), [verified, hasPassword])
     const totalSteps = hasPassword ? '2' : '3'
 
     return (
@@ -219,10 +219,10 @@ const CreateMnemonic = memo(function CreateMnemonic() {
                     {t.wallets_import_wallet_import()}
                 </Typography>
             </div>
-            {isVerify ? (
+            {verified ? (
                 <VerifyMnemonicUI
                     isReset={location.state?.isReset}
-                    setIsVerify={setIsVerify}
+                    setVerified={setVerified}
                     words={words}
                     loading={loading}
                     isMatched={isMatched}
@@ -262,7 +262,7 @@ interface VerifyMnemonicUIProps {
     isReset: boolean
     loading: boolean
     isMatched: boolean | undefined
-    setIsVerify: (isVerify: boolean) => void
+    setVerified: (verified: boolean) => void
     onSubmit: () => void
 }
 
@@ -276,7 +276,7 @@ interface PuzzleOption {
 
 const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
     answerCallback,
-    setIsVerify,
+    setVerified,
     onSubmit,
     loading,
     isReset,
@@ -286,7 +286,7 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
     isMatched,
 }) {
     const t = useDashboardI18N()
-    const { classes, cx } = useStyles({ isVerify: true })
+    const { classes, cx } = useStyles()
 
     return (
         <>
@@ -317,7 +317,7 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
                         className={classes.bold}
                         width="125px"
                         size="large"
-                        onClick={() => setIsVerify(false)}>
+                        onClick={() => setVerified(false)}>
                         {t.back()}
                     </SecondaryButton>
                     <PrimaryButton
@@ -337,7 +337,7 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
 })
 
 const PuzzleOption = memo<PuzzleOption>(function PuzzleOption({ puzzleWord, puzzleAnswer, answerCallback }) {
-    const { classes, cx } = useStyles({ isVerify: false })
+    const { classes, cx } = useStyles()
 
     return (
         <>
@@ -371,7 +371,7 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
 }) {
     const t = useDashboardI18N()
     const ref = useRef(null)
-    const { classes, cx } = useStyles({ isVerify: false })
+    const { classes, cx } = useStyles()
     const theme = useTheme()
 
     const [, handleDownload] = useAsyncFn(async () => {

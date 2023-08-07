@@ -12,6 +12,7 @@ import { Web3State } from '@masknet/web3-providers'
 import { useContacts } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
+import { isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -65,18 +66,23 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
     const contacts = useContacts()
 
     const addressError = Boolean(address) && !isValidAddress(address)
-    const nameAlreadyExist = Boolean(contacts?.find((contact) => contact.name === name))
-
-    const validationMessage = useMemo(() => {
-        if (addressError) return t('wallets_transfer_error_invalid_address')
-        if (nameAlreadyExist) return t('wallets_transfer_contact_wallet_name_already_exist')
-        return ''
-    }, [t, addressError, nameAlreadyExist])
+    const nameExistError = Boolean(contacts?.find((contact) => contact.name === name))
+    const addressExistError = useMemo(
+        () => contacts.some((contact) => isSameAddress(address, contact.address)),
+        [contacts, address],
+    )
 
     const [{ loading }, addContact] = useAsyncFn(async () => {
         await Web3State.state.AddressBook?.addContact({ name, address })
         onConfirm?.()
-    }, [name, address, onConfirm])
+    }, [name, address, onConfirm, t])
+
+    const validationMessage = useMemo(() => {
+        if (addressError) return t('wallets_transfer_error_invalid_address')
+        if (nameExistError) return t('wallets_transfer_contact_wallet_name_already_exist')
+        if (addressExistError) return t('popups_wallet_settings_address_exists')
+        return ''
+    }, [t, addressError, nameExistError, addressExistError])
 
     return (
         <BottomDrawer {...rest}>
@@ -87,7 +93,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
                 className={classes.input}
                 value={name}
                 onChange={(ev) => setName(ev.target.value)}
-                error={nameAlreadyExist}
+                error={nameExistError}
                 autoFocus
             />
             <MaskTextField
@@ -96,7 +102,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
                 wrapperProps={{ className: classes.input }}
                 value={address}
                 onChange={(ev) => setAddress(ev.target.value)}
-                error={addressError}
+                error={addressError || addressExistError}
             />
             {validationMessage ? <Typography className={classes.helperText}>{validationMessage}</Typography> : null}
             <div className={classes.buttonGroup}>
@@ -107,7 +113,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
                     loading={loading}
                     onClick={addContact}
                     className={classes.button}
-                    disabled={addressError || nameAlreadyExist || !name}>
+                    disabled={addressError || nameExistError || !name}>
                     {t('confirm')}
                 </ActionButton>
             </div>

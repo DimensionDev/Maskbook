@@ -21,6 +21,9 @@ export enum CurrencyType {
     BTC = 'btc',
     ETH = 'eth',
     USD = 'usd',
+    CNY = 'cny',
+    HKD = 'hkd',
+    JPY = 'jpy',
 }
 
 export enum OrderSide {
@@ -923,6 +926,8 @@ export interface SettingsState extends Startable {
     fungibleAssetSourceType?: Subscription<SourceType>
     /** The source type of non-fungible assets */
     nonFungibleAssetSourceType?: Subscription<SourceType>
+    /** Set the default fiat currency. */
+    setDefaultCurrencyType: (type: CurrencyType) => Promise<void>
 }
 
 export interface AddressBookState extends Startable {

@@ -66,4 +66,8 @@ export class SettingsState implements Web3SettingsState {
             this.storage.nonFungibleAssetSourceType.initializedPromise,
         ]).then(() => {})
     }
+
+    async setDefaultCurrencyType(currencyType: CurrencyType) {
+        await this.storage.currencyType.setValue(currencyType)
+    }
 }
