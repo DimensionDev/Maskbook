@@ -186,7 +186,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
             </Box>
 
             <Box display="flex" justifyContent="space-between" alignItems="center" mt={3}>
-                <Typography className={classes.amount}>
+                <Typography component="div" className={classes.amount}>
                     {tokenId && metadata?.collection?.iconURL ? (
                         <>
                             <ImageIcon icon={metadata.collection.iconURL} className={classes.tokenIcon} />
@@ -220,7 +220,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                 <Typography className={classes.gasFeeTitle}>{t('popups_wallet_gas_fee')}</Typography>
                 {transaction.computedPayload.gas && initConfig ? (
                     <GasSettingMenu
-                        gas={transaction.computedPayload.gas}
+                        minimumGas={transaction.computedPayload.gas}
                         initConfig={initConfig}
                         onChange={onConfigChange}
                         paymentToken={paymentToken}

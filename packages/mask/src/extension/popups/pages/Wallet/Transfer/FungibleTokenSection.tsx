@@ -216,7 +216,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                 <Typography className={classes.label}>{t('gas_fee')}</Typography>
                 <ChainContextProvider value={chainContextValue}>
                     <GasSettingMenu
-                        gas={gasLimit}
+                        minimumGas={gasLimit}
                         defaultChainId={chainId}
                         paymentToken={paymentAddress}
                         onPaymentTokenChange={setPaymentAddress}

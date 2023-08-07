@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function useGasOptionsMenu(gas: string, callback: (config: GasConfig, type?: GasOptionType) => void) {
+export function useGasOptionsMenu(minimumGas: string, callback: (config: GasConfig, type?: GasOptionType) => void) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { value: gasOptions } = useGasOptions()
@@ -57,12 +57,12 @@ export function useGasOptionsMenu(gas: string, callback: (config: GasConfig, typ
     const handleClickCustom = useCallback(async () => {
         const result = await GasSettingModal.openAndWaitForClose({
             chainId,
-            config: { gas },
+            config: { gas: minimumGas },
         })
         if (!result) return
 
         callback(result)
-    }, [chainId, gas, callback])
+    }, [chainId, minimumGas, callback])
 
     const handleClick = useCallback(
         (type?: GasOptionType, option?: GasOption) => {

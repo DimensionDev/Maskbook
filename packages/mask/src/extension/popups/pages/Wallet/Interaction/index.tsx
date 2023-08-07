@@ -18,13 +18,14 @@ import { useAsync, useAsyncFn } from 'react-use'
 import Services from '../../../../service.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { TransactionPreview } from '../../../components/TransactionPreview/index.js'
-import { WalletAssetTabs, type GasParams } from '../type.js'
+import { WalletAssetTabs } from '../type.js'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
 import { Icons } from '@masknet/icons'
 import { useUpdateEffect } from '@react-hookz/web'
 import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
 import * as ABICoder from 'web3-eth-abi'
 import urlcat from 'urlcat'
+import { mapKeys } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     left: {
@@ -104,7 +105,7 @@ const Interaction = memo(function Interaction() {
     const [index, setIndex] = useState(0)
     const [approveAmount, setApproveAmount] = useState('')
     const [expand, setExpand] = useState(false)
-    const [gasConfig, setGasConfig] = useState<GasParams | undefined>()
+    const [gasConfig, setGasConfig] = useState<GasConfig | undefined>()
     const [paymentToken, setPaymentToken] = useState('')
 
     const messages = useMessages()
@@ -185,13 +186,10 @@ const Interaction = memo(function Interaction() {
                               ? x
                               : {
                                     ...x,
-                                    gasPrice: gasConfig.gasPrice ? toHex(gasConfig.gasPrice) : x.gasPrice,
-                                    maxPriorityFeePerGas: gasConfig.maxPriorityFeePerGas
-                                        ? toHex(gasConfig.maxPriorityFeePerGas)
-                                        : x.maxPriorityFeePerGas,
-                                    maxFeePerGas: gasConfig.maxFeePerGas
-                                        ? toHex(gasConfig.maxFeePerGas)
-                                        : x.maxFeePerGas,
+                                    ...mapKeys(gasConfig, (value, key) => {
+                                        if (key === 'gasCurrency' || !value) return
+                                        return toHex(value)
+                                    }),
                                 },
                       )
             }
