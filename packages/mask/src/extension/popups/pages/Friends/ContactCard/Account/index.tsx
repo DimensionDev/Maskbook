@@ -14,6 +14,7 @@ export type SupportedPlatforms =
     | NextIDPlatform.SpaceId
     | NextIDPlatform.Farcaster
     | NextIDPlatform.Unstoppable
+
 interface AccountProps {
     icon: SupportedPlatforms
     userId: string
@@ -33,6 +34,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
     },
 }))
+
 export const url: Record<SupportedPlatforms, string> = {
     [NextIDPlatform.ENS]: 'https://app.ens.domains/name/',
     [NextIDPlatform.Unstoppable]: 'https://ud.me/',
