@@ -1,8 +1,10 @@
 import { BigNumber } from 'bignumber.js'
 import { scale10 } from './number.js'
+import { CurrencyType } from '../index.js'
 
 export interface FormatterCurrencyOptions {
     onlyRemainTwoDecimal?: boolean
+    fiatCurrencyRate?: number
 }
 
 const BOUNDARIES = {
@@ -45,11 +47,11 @@ const formatCurrencySymbol = (symbol: string, isLead: boolean) => {
 // https://mask.atlassian.net/wiki/spaces/MASK/pages/122916438/Token
 export function formatCurrency(
     inputValue: BigNumber.Value,
-    currency: LiteralUnion<Keys | 'USD'> = 'USD',
+    currency: LiteralUnion<Keys | 'USD'> = CurrencyType.USD,
     options?: FormatterCurrencyOptions,
 ): string {
-    const bn = new BigNumber(inputValue)
-    const { onlyRemainTwoDecimal = false } = options ?? {}
+    const { onlyRemainTwoDecimal = false, fiatCurrencyRate = 1 } = options ?? {}
+    const bn = new BigNumber(inputValue).multipliedBy(fiatCurrencyRate)
     const integerValue = bn.integerValue(1)
     const decimalValue = bn.plus(integerValue.negated())
     const isMoreThanOrEqualToOne = bn.isGreaterThanOrEqualTo(1)

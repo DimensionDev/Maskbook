@@ -1,4 +1,4 @@
-import { ProgressiveText, type ProgressiveTextProps } from '@masknet/shared'
+import { FormattedCurrency, ProgressiveText, type ProgressiveTextProps } from '@masknet/shared'
 import { formatCurrency } from '@masknet/web3-shared-base'
 import { sum } from 'lodash-es'
 import { memo, useMemo } from 'react'
@@ -17,7 +17,7 @@ export const WalletAssetsValue = memo(function WalletAssetsValue({ account, ...p
 
     return (
         <ProgressiveText {...props} loading={isLoading}>
-            {formatCurrency(value, 'USD', { onlyRemainTwoDecimal: true })}
+            <FormattedCurrency value={value} formatter={formatCurrency} />
         </ProgressiveText>
     )
 })

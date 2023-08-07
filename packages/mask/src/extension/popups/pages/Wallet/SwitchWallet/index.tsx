@@ -97,6 +97,10 @@ const SwitchWallet = memo(function SwitchWallet() {
         [smartPayChainId, chainId, closeModal, Network, networks],
     )
 
+    const handleClickSettings = useCallback(async () => {
+        navigate(PopupRoutes.WalletSettings)
+    }, [])
+
     const handleLock = useCallback(async () => {
         await WalletRPC.lockWallet()
         navigate(PopupRoutes.Unlock)
@@ -138,7 +142,12 @@ const SwitchWallet = memo(function SwitchWallet() {
                     {t('popups_lock_wallet')}
                 </Typography>
             </ActionButton>
-            <ActionButton className={classes.actionButton} fullWidth size="small" variant="outlined">
+            <ActionButton
+                className={classes.actionButton}
+                fullWidth
+                size="small"
+                variant="outlined"
+                onClick={handleClickSettings}>
                 <Icons.WalletSetting size={20} color={theme.palette.maskColor.second} />
                 <Typography className={classes.actionLabel} component="span">
                     {t('popups_wallet_settings')}

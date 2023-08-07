@@ -86,7 +86,7 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
                         className={classes.iconOnly}
                     />
                 </BottomNavLink>
-                <BottomNavLink to={PopupRoutes.Contracts}>
+                <BottomNavLink to={PopupRoutes.Friends}>
                     <BottomNavigationAction
                         showLabel={false}
                         icon={<Icons.Contacts size={28} />}

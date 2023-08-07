@@ -56,6 +56,7 @@ const PATTERNS = [
     PopupRoutes.Unlock,
     PopupRoutes.WalletSettings,
     PopupRoutes.SetPaymentPassword,
+    PopupRoutes.Friends,
 ]
 
 export const PopupLayout = memo(function PopupLayout({ children }: PropsWithChildren<{}>) {

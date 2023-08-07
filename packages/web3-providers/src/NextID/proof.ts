@@ -323,7 +323,6 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                     order: 'desc',
                 }),
             )
-
             const personaBindings = result.ids
             if (personaBindings.length === 0) return nextIDPersonaBindings
             nextIDPersonaBindings.push(...personaBindings)
@@ -393,7 +392,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             mode: 'cors',
             body: JSON.stringify({
                 operationName: 'GET_PROFILES_QUERY',
-                variables: { platform: 'ethereum', identity: address.toLowerCase() },
+                variables: { platform: NextIDPlatform.Ethereum, identity: address.toLowerCase() },
                 query: `
                     query GET_PROFILES_QUERY($platform: String, $identity: String) {
                        ${relationServiceIdentityQuery}
@@ -406,6 +405,31 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return bindings.filter(
             (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
         )
+    }
+
+    async queryProfilesByPublicKey(publicKey: string) {
+        const { data } = await fetchJSON<{
+            data: {
+                identity: {
+                    nft: NextIDEnsRecord[]
+                    neighborWithTraversal: NeighborList
+                }
+            }
+        }>(RELATION_SERVICE_URL, {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify({
+                operationName: 'GET_PROFILES_QUERY',
+                variables: { platform: NextIDPlatform.NextID, identity: publicKey },
+                query: `
+                    query GET_PROFILES_QUERY($platform: String, $identity: String) {
+                       ${relationServiceIdentityQuery}
+                      }
+                `,
+            }),
+        })
+        const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal)
+        return bindings
     }
 
     async queryProfilesByTwitterId(twitterId: string) {
@@ -421,7 +445,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             mode: 'cors',
             body: JSON.stringify({
                 operationName: 'GET_PROFILES_BY_TWITTER_ID',
-                variables: { platform: 'twitter', identity: twitterId.toLowerCase() },
+                variables: { platform: NextIDPlatform.Twitter, identity: twitterId.toLowerCase() },
                 query: `
                         query GET_PROFILES_BY_TWITTER_ID($platform: String, $identity: String) {
                             ${relationServiceIdentityQuery}

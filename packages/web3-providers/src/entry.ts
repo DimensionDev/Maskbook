@@ -62,6 +62,7 @@ import { Web3BioAPI } from './Web3Bio/index.js'
 import { SnapshotAPI, SnapshotSearchAPI } from './Snapshot/index.js'
 import { AirdropAPI } from './Airdrop/index.js'
 import { FireflyAPI } from './Firefly/index.js'
+import { FiatCurrencyRateAPI } from './FiatCurrencyRate/index.js'
 import { SID_DomainAPI } from './SID/index.js'
 import { SNSAdaptorContextAPI, SharedContextAPI } from './PluginContext/index.js'
 import { ApprovalAPI } from './Approval/index.js'
@@ -280,3 +281,6 @@ export const Airdrop = new AirdropAPI()
 
 // Firefly
 export const Firefly = new FireflyAPI()
+
+// FiatCurrencyRate
+export const FiatCurrencyRate = new FiatCurrencyRateAPI()

@@ -17,6 +17,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 24,
         lineHeight: '120%',
         fontWeight: 700,
+        whiteSpace: 'nowrap',
         flex: 1,
         paddingTop: theme.spacing(3),
         paddingLeft: theme.spacing(4),

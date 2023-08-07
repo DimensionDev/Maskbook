@@ -3,9 +3,6 @@ import {
     ArrowPathRoundedSquareIcon,
     Cog6ToothIcon,
     RocketLaunchIcon,
-    HeartIcon,
-    EyeIcon,
-    TruckIcon,
     WindowIcon,
     UserCircleIcon,
     PencilSquareIcon,
@@ -14,16 +11,14 @@ import { SelectProviderModal, WalletStatusModal } from '@masknet/shared'
 import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { classNames } from '../helpers/classNames.js'
 import { ApplicationRoutes } from '../constants/ApplicationRoutes.js'
+import { env } from '@masknet/flags'
 
 const navigation = [
-    { name: 'Overview', icon: EyeIcon, to: ApplicationRoutes.Overview },
+    { name: 'Mask Network', icon: WindowIcon, to: ApplicationRoutes.Applications },
     { name: 'Compose', icon: PencilSquareIcon, to: ApplicationRoutes.Compose },
     { name: 'Explore', icon: RocketLaunchIcon, to: ApplicationRoutes.Explorer },
-    { name: 'Favorites', icon: HeartIcon, to: ApplicationRoutes.Favorites },
-    { name: 'Mask Network', icon: WindowIcon, to: ApplicationRoutes.Applications },
     { name: 'Web3 Profile', icon: UserCircleIcon, to: ApplicationRoutes.Web3Profile },
     { name: 'Swap', icon: ArrowPathRoundedSquareIcon, to: ApplicationRoutes.Swap },
-    { name: 'Bridges', icon: TruckIcon, to: ApplicationRoutes.Bridges },
     { name: 'Settings', icon: Cog6ToothIcon, to: ApplicationRoutes.Settings },
 ]
 
@@ -56,11 +51,24 @@ export function DashboardForDesktop(props: SidebarForDesktopProps) {
         <div className="hidden xl:fixed xl:inset-y-0 xl:z-50 xl:flex xl:w-72 xl:flex-col">
             <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-black/10 px-6 ring-1 ring-white/5">
                 <div className="flex h-16 shrink-0 items-center">
-                    <img
-                        className="h-8 w-auto"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                        alt="Your Company"
-                    />
+                    <a
+                        href="#"
+                        className="flex items-center gap-x-4  py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800"
+                        onClick={(ev) => {
+                            ev.preventDefault()
+                            ev.stopPropagation()
+
+                            if (account) WalletStatusModal.open()
+                            else SelectProviderModal.open()
+                        }}>
+                        <img
+                            className="h-8 w-8 rounded-full bg-gray-800"
+                            src="https://github.com/DimensionDev/Mask-VI/raw/master/assets/Logo/MB--Logo--Geo--ForceCircle--Blue.svg"
+                            alt=""
+                        />
+                        <span className="sr-only">Your profile</span>
+                        <span aria-hidden="true">{account ? Others.formatAddress(account, 4) : 'Connect Wallet'}</span>
+                    </a>
                 </div>
                 <nav className="flex flex-1 flex-col">
                     <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -72,26 +80,9 @@ export function DashboardForDesktop(props: SidebarForDesktopProps) {
                             </ul>
                         </li>
                         <li className="-mx-6 mt-auto">
-                            <a
-                                href="#"
-                                className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800"
-                                onClick={(ev) => {
-                                    ev.preventDefault()
-                                    ev.stopPropagation()
-
-                                    if (account) WalletStatusModal.open()
-                                    else SelectProviderModal.open()
-                                }}>
-                                <img
-                                    className="h-8 w-8 rounded-full bg-gray-800"
-                                    src="https://github.com/DimensionDev/Mask-VI/raw/master/assets/Logo/MB--Logo--Geo--ForceCircle--Blue.svg"
-                                    alt=""
-                                />
-                                <span className="sr-only">Your profile</span>
-                                <span aria-hidden="true">
-                                    {account ? Others.formatAddress(account, 4) : 'Connect Wallet'}
-                                </span>
-                            </a>
+                            <span className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800">
+                                {`Version: ${env.VERSION}`}
+                            </span>
                         </li>
                     </ul>
                 </nav>
