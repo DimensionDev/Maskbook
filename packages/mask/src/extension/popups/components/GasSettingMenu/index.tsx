@@ -61,7 +61,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
 
     const handleChange = useCallback(
         (config: GasConfig, type?: GasOptionType) => {
-            if (type) setGasOptionType(type)
+            setGasOptionType(type)
             setGasConfig(config)
             onChange?.(config)
         },
@@ -99,8 +99,9 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
             case GasOptionType.NORMAL:
                 return t('popups_wallet_gas_fee_settings_high')
             case GasOptionType.SLOW:
-            default:
                 return t('popups_wallet_gas_fee_settings_medium')
+            default:
+                return t('popups_wallet_gas_fee_settings_custom')
         }
     }, [gasOptionType])
 

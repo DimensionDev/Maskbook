@@ -117,7 +117,7 @@ const Interaction = memo(function Interaction() {
     const source = params.get('source')
     const currentRequest = useMemo(() => {
         if (!messages?.length) return
-        return messages.reverse()[index]
+        return messages[index]
     }, [messages, index])
 
     const message = useMemo(() => {
@@ -312,7 +312,9 @@ const Interaction = memo(function Interaction() {
                 </Box>
 
                 {expand ? (
-                    <Box className={classes.transactionDetail}>
+                    <Box
+                        className={classes.transactionDetail}
+                        style={{ marginBottom: expand && messages.length <= 1 ? 72 : 16 }}>
                         {transaction?.formattedTransaction?.popup?.spender && approveAmount ? (
                             <>
                                 <Box display="flex" alignItems="center" columnGap={1.25}>
