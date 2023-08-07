@@ -14,6 +14,7 @@ import {
 } from '@mui/material'
 import { memo } from 'react'
 import { useSharedI18N } from '../../../locales/index.js'
+import { useCurrencyType, useFiatCurrencyRate } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()({
     container: {
@@ -46,6 +47,8 @@ interface CoinMarketTableProps {
 export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ trending }: CoinMarketTableProps) {
     const t = useSharedI18N()
     const { classes } = useStyles()
+    const currencyType = useCurrencyType()
+    const { data: fiatCurrencyRate = 1, isLoading } = useFiatCurrencyRate()
 
     const market = trending?.market
 
@@ -66,7 +69,9 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.cell}>
-                                {market?.market_cap ? formatMarketCap(market.market_cap) : '--'}
+                                {market?.market_cap && !isLoading
+                                    ? formatMarketCap(market.market_cap, currencyType, fiatCurrencyRate)
+                                    : '--'}
                             </TableCell>
                         </TableRow>
 
@@ -88,7 +93,9 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.cell}>
-                                {market?.total_volume ? `$${formatSupply(market.total_volume)}` : '--'}
+                                {market?.total_volume && !isLoading
+                                    ? formatMarketCap(market.total_volume, currencyType, fiatCurrencyRate)
+                                    : '--'}
                             </TableCell>
                         </TableRow>
                         <TableRow>

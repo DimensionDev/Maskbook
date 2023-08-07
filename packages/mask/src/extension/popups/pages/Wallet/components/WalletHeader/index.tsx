@@ -9,7 +9,11 @@ import { WalletHeaderUI } from './UI.js'
 import { WalletSetupHeaderUI } from './WalletSetupHeaderUI.js'
 import Services from '../../../../../service.js'
 
-const CUSTOM_HEADER_PATTERNS = [`${PopupRoutes.AddToken}/:chainId/:assetType`, PopupRoutes.Transfer]
+const CUSTOM_HEADER_PATTERNS = [
+    `${PopupRoutes.AddToken}/:chainId/:assetType`,
+    PopupRoutes.Transfer,
+    PopupRoutes.ExportWalletPrivateKey,
+]
 
 export const WalletHeader = memo(function WalletHeader() {
     const modalNavigate = useModalNavigate()

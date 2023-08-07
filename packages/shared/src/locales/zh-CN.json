@@ -310,5 +310,8 @@
     "website": "网站",
     "show_wallet_setting_button": "前往设置",
     "badge_renderer_provided_by_plugin": "插件提供：",
-    "post_dialog__button": "加密"
+    "post_dialog__button": "加密",
+    "post_dialog_visible_to": "可见范围",
+    "post_dialog_encryption_method": "加密方式",
+    "plugins": "插件"
 }

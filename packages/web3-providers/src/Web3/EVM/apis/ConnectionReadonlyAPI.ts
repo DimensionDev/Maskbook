@@ -675,6 +675,7 @@ export class ConnectionReadonlyAPI
                 params: [
                     new AccountTransaction({
                         from: options.account,
+                        chainId: options.chainId,
                         ...transaction,
                     }).fill(options.overrides),
                 ],

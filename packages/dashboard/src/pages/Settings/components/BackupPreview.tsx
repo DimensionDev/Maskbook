@@ -132,7 +132,7 @@ export function BackupPreview({ info, ...rest }: BackupPreviewProps) {
                     className={classes.cardHeader}
                     avatar={
                         <div className={cx(classes.cardIcon, classes.personaIcon)}>
-                            <Icons.BaseUser size={20} color="#fff" />
+                            <Icons.BaseUser size={20} />
                         </div>
                     }
                     classes={{ action: classes.action }}

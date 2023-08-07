@@ -3,6 +3,7 @@ import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { Box, Typography } from '@mui/material'
 import { useChainContext, useMessages, useWeb3State } from '@masknet/web3-hooks-base'
 import {
+    abiCoder,
     EthereumMethodType,
     createJsonRpcPayload,
     type GasConfig,
@@ -23,7 +24,6 @@ import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index
 import { Icons } from '@masknet/icons'
 import { useUpdateEffect } from '@react-hookz/web'
 import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
-import * as ABICoder from 'web3-eth-abi'
 import urlcat from 'urlcat'
 import { mapKeys } from 'lodash-es'
 
@@ -162,13 +162,12 @@ const Interaction = memo(function Interaction() {
             if (approveAmount) {
                 if (!transaction?.formattedTransaction?._tx.data) return
 
-                const coder = ABICoder as unknown as ABICoder.AbiCoder
-                const parameters = coder.decodeParameters(
+                const parameters = abiCoder.decodeParameters(
                     approveParametersType,
                     transaction?.formattedTransaction._tx.data.slice(10),
                 )
 
-                const result = coder.encodeParameters(approveParametersType, [parameters.spender, approveAmount])
+                const result = abiCoder.encodeParameters(approveParametersType, [parameters.spender, approveAmount])
 
                 params = currentRequest.request.arguments.params.map((x) =>
                     x === 'latest'

@@ -8,8 +8,8 @@ export function useERC165<T extends BaseContract>(contract: T | null, address?: 
         if (!contract || !address || !interfaceId) return false
         try {
             const isERC165 = await contract.methods.supportsInterface(ERC165_INTERFACE_ID).call()
-            const isVerify = await contract.methods.supportsInterface(interfaceId).call()
-            return isERC165 && isVerify
+            const verified = await contract.methods.supportsInterface(interfaceId).call()
+            return isERC165 && verified
         } catch {
             return false
         }

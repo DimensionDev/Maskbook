@@ -24,6 +24,7 @@ import {
 import { BigNumber } from 'bignumber.js'
 import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
 import { MAX_GAS_LIMIT } from '../../constants.js'
+import { FormattedCurrency } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -236,9 +237,10 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
             <Box display="flex" flexDirection="column" rowGap={1.5} mt={1.5}>
                 <Typography className={classes.preview}>
                     {formatBalance(totalGas, nativeToken?.decimals, 4, false, true)} {nativeToken?.symbol} ≈{' '}
-                    {formatCurrency(formatWeiToEther(totalGas).times(nativeTokenPrice ?? 0), 'USD', {
-                        onlyRemainTwoDecimal: true,
-                    })}
+                    <FormattedCurrency
+                        value={formatWeiToEther(totalGas).times(nativeTokenPrice ?? 0)}
+                        formatter={formatCurrency}
+                    />
                 </Typography>
                 {tips ? (
                     <Typography

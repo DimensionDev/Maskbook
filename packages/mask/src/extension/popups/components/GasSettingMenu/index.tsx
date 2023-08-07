@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { FormattedBalance, useGasCurrencyMenu } from '@masknet/shared'
+import { FormattedBalance, FormattedCurrency, useGasCurrencyMenu } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
     useChainContext,
@@ -10,7 +10,7 @@ import {
     useNativeTokenAddress,
 } from '@masknet/web3-hooks-base'
 import { DepositPaymaster } from '@masknet/web3-providers'
-import { GasOptionType, ZERO, formatBalance, formatCurrency, toFixed } from '@masknet/web3-shared-base'
+import { CurrencyType, GasOptionType, ZERO, formatBalance, toFixed } from '@masknet/web3-shared-base'
 import {
     formatWeiToEther,
     type EIP1559GasConfig,
@@ -156,9 +156,13 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
                     formatter={formatBalance}
                 />
                 {' ≈ '}
-                {formatCurrency(formatWeiToEther(totalGas).times(tokenPrice ?? 0), 'USD', {
-                    onlyRemainTwoDecimal: true,
-                })}
+                <FormattedCurrency
+                    sign={CurrencyType.USD}
+                    value={formatWeiToEther(totalGas).times(tokenPrice ?? 0)}
+                    options={{
+                        onlyRemainTwoDecimal: true,
+                    }}
+                />
             </Typography>
             {!disable ? (
                 <Box
