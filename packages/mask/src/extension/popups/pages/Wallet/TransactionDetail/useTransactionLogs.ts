@@ -15,11 +15,10 @@ import type { ChainId, Transaction as EvmTransaction } from '@masknet/web3-share
  */
 export function useTransactionLogs(transactionState: TransactionState) {
     const { t } = useI18N()
-    const isRecentTx = transactionState && 'candidates' in transactionState
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { Transaction } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { data: txes } = useQuery({
-        enabled: transactionState && !isRecentTx,
+        enabled: transactionState && !('candidates' in transactionState),
         // Could already be cached through ActivityList page.
         queryKey: ['transactions', transactionState?.chainId, account],
         queryFn: async () => {
@@ -29,14 +28,10 @@ export function useTransactionLogs(transactionState: TransactionState) {
     })
     const logs = useMemo(() => {
         if (!transactionState) return EMPTY_LIST
-        let localTransaction: RecentTransaction<ChainId, EvmTransaction> | undefined = undefined
         const isRecentTx = 'candidates' in transactionState
-        if (isRecentTx) {
-            localTransaction = transactionState
-        }
-        if (!isRecentTx) {
-            localTransaction = txes?.find((x) => x.id === transactionState.hash)
-        }
+        const localTransaction: RecentTransaction<ChainId, EvmTransaction> | undefined = isRecentTx
+            ? transactionState
+            : txes?.find((x) => x.id === transactionState.hash)
         if (localTransaction) {
             return [
                 t('transaction_confirmed_at', {

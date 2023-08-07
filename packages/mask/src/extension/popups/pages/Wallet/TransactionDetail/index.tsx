@@ -4,22 +4,8 @@ import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { MaskColors, makeStyles } from '@masknet/theme'
 import { useAccount, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { ChainbaseHistory, ExplorerResolver } from '@masknet/web3-providers'
-import {
-    TransactionStateType,
-    formatBalance,
-    multipliedBy,
-    trimZero,
-    type RecentTransaction,
-    type Transaction,
-} from '@masknet/web3-shared-base'
-import {
-    formatHash,
-    formatWeiToEther,
-    formatWeiToGwei,
-    type ChainId,
-    type Transaction as EvmTransaction,
-    type SchemaType,
-} from '@masknet/web3-shared-evm'
+import { TransactionStateType, formatBalance, multipliedBy, trimZero } from '@masknet/web3-shared-base'
+import { formatHash, formatWeiToEther, formatWeiToGwei } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography, alpha } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { capitalize } from 'lodash-es'
@@ -28,6 +14,7 @@ import { Navigate, useLocation } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { WalletAssetTabs } from '../type.js'
+import type { TransactionState } from './types.js'
 import { useTransactionLogs } from './useTransactionLogs.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -117,7 +104,6 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-type TransactionState = Transaction<ChainId, SchemaType> | RecentTransaction<ChainId, EvmTransaction> | undefined
 export const TransactionDetail = memo(function TransactionDetail() {
     const { t } = useI18N()
     const { classes, cx, theme } = useStyles()
