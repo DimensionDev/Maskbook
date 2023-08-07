@@ -15,7 +15,7 @@ import {
     type EIP3085Descriptor,
     EthereumMethodType,
 } from '../types/index.js'
-import { abiCoder } from '../index.js'
+import { abiCoder } from '../helpers/abiCoder.js'
 
 type Options = Pick<TransactionOptions, 'account' | 'chainId'>
 
