@@ -15,7 +15,7 @@ async function getAutoLockerRecord() {
     return PluginDB.get('unlock-time', ID)
 }
 
-export async function getAutoLockerTime() {
+export async function getAutoLockerDuration() {
     const record = await getAutoLockerRecord()
     return record?.time ?? (record?.time === 0 ? 0 : DEFAULT_LOCK_TIME)
 }

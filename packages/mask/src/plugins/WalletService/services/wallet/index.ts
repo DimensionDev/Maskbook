@@ -37,7 +37,7 @@ export {
     clearPassword,
 } from './password.js'
 
-export { getAutoLockerTime, setAutoLockerTime } from './database/locker.js'
+export { getAutoLockerDuration, setAutoLockerTime } from './database/locker.js'
 
 // locker
 export { isLocked, lockWallet, unlockWallet, setAutoLockTimer } from './locker.js'

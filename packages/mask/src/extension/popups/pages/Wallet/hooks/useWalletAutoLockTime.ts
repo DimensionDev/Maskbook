@@ -5,7 +5,7 @@ import { CrossIsolationMessages } from '@masknet/shared-base'
 
 export function useWalletAutoLockTime() {
     const result = useAsyncRetry(async () => {
-        return WalletRPC.getAutoLockerTime()
+        return WalletRPC.getAutoLockerDuration()
     }, [])
 
     useEffect(() => {
