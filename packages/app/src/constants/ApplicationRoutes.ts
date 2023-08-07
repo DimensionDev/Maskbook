@@ -8,4 +8,5 @@ export enum ApplicationRoutes {
     Web3Profile = '/web3-profile',
     Applications = '/applications',
     Compose = '/compose',
+    Transak = '/transak',
 }
