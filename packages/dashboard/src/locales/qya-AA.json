@@ -473,5 +473,7 @@
     "identity_words": "crwdns21661:0crwdne21661:0",
     "private_key": "crwdns21663:0crwdne21663:0",
     "local_backup": "crwdns21665:0crwdne21665:0",
-    "incorrect_verification_code": "crwdns21667:0crwdne21667:0"
+    "incorrect_verification_code": "crwdns21667:0crwdne21667:0",
+    "wallet_set_payment_password_successfully": "crwdns22115:0crwdne22115:0",
+    "wallet_open_mask_wallet": "crwdns22117:0crwdne22117:0"
 }
