@@ -1,9 +1,8 @@
 import { Box, Paper, Stack } from '@mui/material'
 import { memo } from 'react'
-import { SelectProviderModal } from '../../modals/index.js'
 import { Icons } from '@masknet/icons'
-import { useSharedI18N } from '../../../index.js'
 import { ActionCard } from './ActionCard.js'
+import { SelectProviderModal, useSharedI18N } from '../../../index.js'
 
 export const ConnectWallet = memo(() => {
     const t = useSharedI18N()
@@ -19,7 +18,7 @@ export const ConnectWallet = memo(() => {
                         action={{
                             type: 'primary',
                             text: t.connect(),
-                            handler: SelectProviderModal.open,
+                            handler: () => SelectProviderModal.open(),
                         }}
                     />
                 </Box>
