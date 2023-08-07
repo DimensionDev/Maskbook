@@ -4,6 +4,7 @@ import {
     CoinMetadataTableSkeleton,
     EmptyStatus,
     FormattedBalance,
+    FormattedCurrency,
     FungibleCoinMarketTable,
     FungibleCoinMarketTableSkeleton,
     PriceChange,
@@ -15,7 +16,7 @@ import {
 import { Days, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { MaskDarkTheme, MaskLightTheme, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useAccount, useFungibleTokenBalance, useWeb3State } from '@masknet/web3-hooks-base'
-import { TokenType, formatBalance, formatCurrency, leftShift, trimZero } from '@masknet/web3-shared-base'
+import { TokenType, formatBalance, formatCurrency, leftShift } from '@masknet/web3-shared-base'
 import { SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, ThemeProvider, Typography } from '@mui/material'
 import { memo, useContext, useEffect, useMemo, useState } from 'react'
@@ -25,12 +26,11 @@ import { PageTitleContext } from '../../../context.js'
 import { useTitle, useTokenParams } from '../../../hook/index.js'
 import { ConfirmModal } from '../../../modals/modals.js'
 import { ActionGroup } from '../components/index.js'
-import { WalletContext, useAsset } from '../hooks/index.js'
+import { useAsset } from '../hooks/index.js'
 import { DIMENSION, TrendingChart } from './TrendingChart.js'
 import { useCoinTrendingStats } from './useCoinTrendingStats.js'
 import { useTokenPrice } from './useTokenPrice.js'
 import { useTrending } from './useTrending.js'
-import { useContainer } from 'unstated-next'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -144,7 +144,6 @@ const TokenDetail = memo(function TokenDetail() {
         if (!asset?.decimals || !tokenPrice || !balance) return 0
         return leftShift(balance, asset.decimals).times(tokenPrice)
     }, [balance, asset, tokenPrice])
-    const { currencyType, fiatCurrencyRate } = useContainer(WalletContext)
 
     const { data: trending, isLoading: isLoadingTrending, isError } = useTrending(chainId, address)
     const priceChange =
@@ -196,12 +195,7 @@ const TokenDetail = memo(function TokenDetail() {
             <Box className={classes.page}>
                 <Box padding={2}>
                     <ProgressiveText className={classes.assetValue} loading={isLoadingPrice} skeletonWidth={80}>
-                        {tokenPrice
-                            ? formatCurrency(tokenPrice, currencyType, {
-                                  fiatCurrencyRate,
-                                  onlyRemainTwoDecimal: true,
-                              })
-                            : null}
+                        {tokenPrice ? <FormattedCurrency value={tokenPrice} formatter={formatCurrency} /> : null}
                     </ProgressiveText>
                     <PriceChange className={classes.priceChange} change={priceChange} loading={isLoadingTrending} />
                     <PriceChartRange days={chartRange} onDaysChange={setChartRange} gap="10px" mt={2} />
@@ -250,12 +244,7 @@ const TokenDetail = memo(function TokenDetail() {
                         <Box textAlign="right">
                             <Typography className={classes.label}>{t('value')}</Typography>
                             <Typography component="div" className={classes.value}>
-                                {trimZero(
-                                    formatCurrency(tokenValue, currencyType, {
-                                        onlyRemainTwoDecimal: true,
-                                        fiatCurrencyRate,
-                                    }),
-                                )}
+                                <FormattedCurrency value={tokenValue} formatter={formatCurrency} />
                             </Typography>
                         </Box>
                     </Box>

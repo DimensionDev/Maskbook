@@ -8,14 +8,7 @@ import {
     formatWeiToEther,
     type GasConfig,
 } from '@masknet/web3-shared-evm'
-import {
-    useChainIdSupport,
-    useFiatCurrencyRate,
-    useCurrencyType,
-    useGasOptions,
-    useNativeToken,
-    useNativeTokenPrice,
-} from '@masknet/web3-hooks-base'
+import { useChainIdSupport, useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { NUMERIC_INPUT_REGEXP_PATTERN, NetworkPluginID } from '@masknet/shared-base'
 import { Alert, Box, Button, TextField, Typography, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -23,6 +16,7 @@ import { ZERO, formatBalance, formatCurrency, isGreaterThan, isLessThan } from '
 import { BigNumber } from 'bignumber.js'
 import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
 import { hexToNumber } from 'web3-utils'
+import { FormattedCurrency } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -77,8 +71,6 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     const { value: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { data: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const currencyType = useCurrencyType()
-    const { value: fiatCurrencyRate } = useFiatCurrencyRate()
 
     const [gasPrice, setGasPrice] = useState(config.gasPrice ? config.gasPrice : '')
     const [maxPriorityFeePerGas, setMaxPriorityFeePerGas] = useState(
@@ -182,10 +174,10 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
             <Box display="flex" flexDirection="column" rowGap={1.5} mt={1.5}>
                 <Typography className={classes.preview}>
                     {formatBalance(totalGas, nativeToken?.decimals, 4, false, true)} {nativeToken?.symbol} ≈{' '}
-                    {formatCurrency(formatWeiToEther(totalGas).times(nativeTokenPrice ?? 0), currencyType, {
-                        onlyRemainTwoDecimal: true,
-                        fiatCurrencyRate,
-                    })}
+                    <FormattedCurrency
+                        value={formatWeiToEther(totalGas).times(nativeTokenPrice ?? 0)}
+                        formatter={formatCurrency}
+                    />
                 </Typography>
                 {tips ? (
                     <Typography

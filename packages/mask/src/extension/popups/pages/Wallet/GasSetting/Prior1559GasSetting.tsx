@@ -2,7 +2,6 @@ import { memo, useEffect, useMemo, useState } from 'react'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { Controller, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { Trans } from 'react-i18next'
 import { BigNumber } from 'bignumber.js'
 import { isEmpty } from 'lodash-es'
 import { toHex } from 'web3-utils'
@@ -11,14 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { NetworkPluginID, NUMERIC_INPUT_REGEXP_PATTERN, PopupRoutes } from '@masknet/shared-base'
 import { Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import {
-    useChainContext,
-    useFiatCurrencyRate,
-    useCurrencyType,
-    useGasOptions,
-    useNativeToken,
-    useNativeTokenPrice,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import {
     ChainId,
     formatGweiToWei,
@@ -33,6 +25,7 @@ import { useI18N } from '../../../../../utils/index.js'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
+import { FormattedCurrency } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -109,8 +102,6 @@ export const Prior1559GasSetting = memo(() => {
     const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
         chainId: nativeToken?.chainId,
     })
-    const currencyType = useCurrencyType()
-    const { value: fiatCurrencyRate } = useFiatCurrencyRate()
 
     // #region Get gas options from debank
     const gasOptions = useMemo(() => {
@@ -268,19 +259,12 @@ export const Prior1559GasSetting = memo(() => {
                                 {formatWeiToGwei(gasPrice ?? 0).toString()} Gwei
                             </Typography>
                             <Typography className={classes.gasUSD}>
-                                <Trans
-                                    i18nKey="popups_wallet_gas_fee_settings_usd"
-                                    values={{
-                                        usd: formatCurrency(
-                                            formatWeiToEther(gasPrice)
-                                                .times(nativeTokenPrice)
-                                                .times(minGasLimit || 21000),
-                                            currencyType,
-                                            { onlyRemainTwoDecimal: true, fiatCurrencyRate },
-                                        ),
-                                    }}
-                                    components={{ span: <span /> }}
-                                    shouldUnescape
+                                ≈{' '}
+                                <FormattedCurrency
+                                    value={formatWeiToEther(gasPrice)
+                                        .times(nativeTokenPrice)
+                                        .times(minGasLimit || 21000)}
+                                    formatter={formatCurrency}
                                 />
                             </Typography>
                         </div>

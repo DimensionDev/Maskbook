@@ -1,9 +1,9 @@
 import { Icons } from '@masknet/icons'
-import { ImageIcon, TokenIcon } from '@masknet/shared'
+import { FormattedCurrency, ImageIcon, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles, type ActionButtonProps } from '@masknet/theme'
 import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
-import { formatCurrency, isGte, isLessThan, type FungibleAsset, trimZero } from '@masknet/web3-shared-base'
+import { formatCurrency, isGte, isLessThan, type FungibleAsset } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { Box, List, ListItem, ListItemText, Skeleton, Typography } from '@mui/material'
 import { isNaN, range } from 'lodash-es'
@@ -142,12 +142,7 @@ export const AssetsListUI = memo<AssetsListUIProps>(function AssetsListUI({ isEx
                         onClick={() => onItemClick(asset)}
                         secondaryAction={
                             <Typography className={classes.value}>
-                                {trimZero(
-                                    formatCurrency(asset.value?.usd || 0, currencyType, {
-                                        onlyRemainTwoDecimal: true,
-                                        fiatCurrencyRate,
-                                    }),
-                                )}
+                                <FormattedCurrency value={asset.value?.usd || 0} formatter={formatCurrency} />
                             </Typography>
                         }>
                         <Box position="relative">
