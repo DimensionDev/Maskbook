@@ -1,8 +1,8 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box } from '@mui/material'
-import { type BindingProof, NextIDPlatform } from '@masknet/shared-base'
-import { TwitterAccount } from '../TwitterAccount/index.js'
+import { type BindingProof, NextIDPlatform, EnhanceableSite } from '@masknet/shared-base'
+import { SocialAccount } from '../SocialAccount/index.js'
 import { Account } from '../Account/index.js'
 import { safeUnreachable } from '@masknet/kit'
 
@@ -29,7 +29,13 @@ export const ConnectedAccounts = memo<ConnectedAccountsProps>(function Connected
             {profiles.map((profile) => {
                 switch (profile.platform) {
                     case NextIDPlatform.Twitter:
-                        return <TwitterAccount avatar={''} userId={profile.name ? profile.name : profile.identity} />
+                        return (
+                            <SocialAccount
+                                avatar={''}
+                                userId={profile.name ? profile.name : profile.identity}
+                                site={EnhanceableSite.Twitter}
+                            />
+                        )
                     case NextIDPlatform.ENS:
                     case NextIDPlatform.Ethereum:
                     case NextIDPlatform.GitHub:

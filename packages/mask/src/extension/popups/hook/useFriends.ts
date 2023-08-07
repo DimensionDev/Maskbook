@@ -23,7 +23,7 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
         const values = await Services.Identity.queryRelationPaged(
             currentPersona?.identifier,
             {
-                network,
+                network: 'all',
                 pageOffset: 0,
             },
             1000,
@@ -70,6 +70,6 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
                 id: (friends[index].linkedPersona as ECKeyIdentifier).publicKeyAsHex,
             }
         })
-        return uniqBy(profiles, ({ id }) => id)
+        return uniqBy(profiles, ({ id }) => id).reverse()
     }, [network, currentPersona])
 }

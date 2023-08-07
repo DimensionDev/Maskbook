@@ -593,7 +593,7 @@ export async function queryRelationsPagedDB(
 
     for await (const cursor of t.objectStore('relations').index('favor, profile, linked').iterate()) {
         if (cursor.value.linked !== linked.toText()) continue
-        if (cursor.value.network !== options.network) continue
+        if (options.network !== 'all' && cursor.value.network !== options.network) continue
 
         if (firstRecord && options.after && options.after.profile.toText() !== cursor?.value.profile) {
             cursor.continue([options.after.favor, options.after.profile.toText(), options.after.linked.toText()])

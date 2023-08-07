@@ -3,11 +3,12 @@ import { Box, Link } from '@mui/material'
 import { AccountAvatar } from '../../../Personas/components/AccountAvatar/index.js'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { formatPersonaName } from '@masknet/shared-base'
+import { type EnhanceableSite, formatPersonaName } from '@masknet/shared-base'
 
-interface TwitterAccountProps {
+interface SocialAccountProps {
     avatar: string
     userId: string
+    site: EnhanceableSite
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -30,13 +31,13 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const TwitterAccount = memo<TwitterAccountProps>(function TwitterAccount({ avatar, userId }) {
+export const SocialAccount = memo<SocialAccountProps>(function SocialAccount({ avatar, userId, site }) {
     const { classes } = useStyles()
     return (
         <Box width="156px" padding="4px" display="flex" gap="10px" alignItems="center">
             <AccountAvatar
                 avatar={avatar}
-                network="twitter.com"
+                network={site}
                 isValid
                 classes={{ avatar: classes.avatar, container: classes.avatar }}
             />
@@ -46,7 +47,7 @@ export const TwitterAccount = memo<TwitterAccountProps>(function TwitterAccount(
                     underline="none"
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`https://twitter.com/${userId}`}
+                    href={`https://${site}/${userId}`}
                     className={classes.iconBlack}>
                     <Icons.LinkOut size={16} />
                 </Link>
