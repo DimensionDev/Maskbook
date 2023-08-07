@@ -33,7 +33,6 @@ import type { ConnectionAPI_Base } from '../../Base/apis/ConnectionAPI.js'
 import { MagicEdenAPI } from '../../../MagicEden/index.js'
 import { BitcoinWeb3API } from './Web3API.js'
 import { BitcoinConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
-import { BitcoinWeb3StateRef } from './Web3StateAPI.js'
 import { BitcoinFungibleTokenAPI } from './FungibleTokenAPI.js'
 import type { ConnectionOptions } from '../types/index.js'
 

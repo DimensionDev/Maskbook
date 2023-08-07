@@ -121,10 +121,8 @@ export interface Web3Provider {
 }
 
 export type Signature = string
-
 export type MessageRequest = never
 export type MessageResponse = never
-
 export type UserOperation = never
 export type TransactionReceipt = never
 export type TransactionSignature = string

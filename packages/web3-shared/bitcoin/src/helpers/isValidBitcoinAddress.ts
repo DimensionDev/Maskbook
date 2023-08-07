@@ -1,5 +1,5 @@
-import { isArrayBufferEqual } from '@masknet/kit'
 import { sha3 } from 'web3-utils'
+import { isArrayBufferEqual } from '@masknet/kit'
 
 export function isValidBitcoinAddress(address?: string): address is string {
     try {
