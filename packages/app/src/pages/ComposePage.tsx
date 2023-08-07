@@ -35,7 +35,7 @@ export default function ComposePage(props: ComposePageProps) {
                 <DashboardHeader title="Message" />
 
                 <div className="bg-white p-5">
-                    <div className="border pt-3 rounded-lg">
+                    <div className="border overflow-hidden rounded-lg">
                         <DisableShadowRootContext.Provider value={false}>
                             <ShadowRootIsolation>
                                 <CompositionDialogUI maxLength={560} onSubmit={onSubmit} />

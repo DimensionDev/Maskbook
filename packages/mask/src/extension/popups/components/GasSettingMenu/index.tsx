@@ -30,7 +30,7 @@ import { useGasOptionsMenu } from '../../hook/useGasOptionsMenu.js'
 import { PopupContext } from '../../hook/usePopupContext.js'
 
 interface GasSettingMenuProps {
-    gas: string
+    minimumGas: string
     initConfig?: GasConfig
     defaultChainId?: ChainId
     disable?: boolean
@@ -43,7 +43,7 @@ interface GasSettingMenuProps {
 }
 
 export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu({
-    gas,
+    minimumGas,
     defaultChainId,
     initConfig,
     paymentToken,
@@ -68,7 +68,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
         [onChange],
     )
 
-    const [menu, openMenu] = useGasOptionsMenu(gas, !disable ? handleChange : noop)
+    const [menu, openMenu] = useGasOptionsMenu(minimumGas, !disable ? handleChange : noop)
 
     const [paymentTokenMenu, openPaymentTokenMenu] = useGasCurrencyMenu(
         NetworkPluginID.PLUGIN_EVM,
@@ -111,17 +111,17 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
 
         return ratio
     }, [smartPayChainId])
-    const gasRatio = !paymentToken || isNativeTokenAddress(paymentToken) ? 1 : smartPayRatio
+    const gasRatio = paymentToken && !isNativeTokenAddress(paymentToken) ? smartPayRatio : undefined
 
     const totalGas = useMemo(() => {
         if (!gasConfig) return ZERO
         const result = new BigNumber(
             (isSupport1559 ? (gasConfig as EIP1559GasConfig).maxFeePerGas : gasConfig.gasPrice) || ZERO,
-        ).times(gas)
+        ).times(minimumGas)
 
-        if (gasRatio === 1 || !gasRatio) return toFixed(result, 0)
+        if (!gasRatio) return toFixed(result, 0)
         return toFixed(result.multipliedBy(gasRatio), 0)
-    }, [gasConfig, gas, gasRatio])
+    }, [gasConfig, minimumGas, gasRatio])
 
     // If there is no init configuration, set a default config
     useEffect(() => {

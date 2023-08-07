@@ -1,7 +1,7 @@
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { useAccount, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
 import { DeBankHistory } from '@masknet/web3-providers'
-import { TransactionStatusType, type RecentTransaction } from '@masknet/web3-shared-base'
+import { type RecentTransaction } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction as EvmTransaction } from '@masknet/web3-shared-evm'
 import { useInfiniteQuery, useQueries } from '@tanstack/react-query'
 import { useMemo } from 'react'
@@ -19,6 +19,8 @@ export function useTransactions() {
         },
         getNextPageParam: (lastPage) => lastPage.nextIndicator,
     })
+    const data = result.data
+    const transactions = useMemo(() => data?.pages.flatMap((p) => p.data) || EMPTY_LIST, [data?.pages])
 
     const networks = useNetworks()
 
@@ -27,27 +29,21 @@ export function useTransactions() {
         queries: networks.map((network) => {
             return {
                 enabled: !!account,
-                queryKey: ['transitions', network, account],
+                queryKey: ['transitions', network.chainId, account],
                 queryFn: async () => {
                     return Transaction?.getTransactions?.(network.chainId, account) ?? []
                 },
             }
         }),
     })
-    const localeTxes = useMemo(() => {
+    const allLocaleTxes = useMemo(() => {
         return queries.flatMap((x) => x.data ?? []) as Array<RecentTransaction<ChainId, EvmTransaction>>
     }, [queries])
 
-    localeTxes.filter((x) => x.status !== TransactionStatusType.SUCCEED)
-    const localeTxMap = useMemo(() => {
-        return Object.fromEntries(
-            localeTxes.map((x) => {
-                return [x.id, x]
-            }),
-        )
-    }, [localeTxes])
-    const data = result.data
-    const transactions = useMemo(() => data?.pages.flatMap((p) => p.data) || EMPTY_LIST, [data?.pages])
-    const merged = transactions
-    return { ...result, data: merged, localeTxes, localeTxMap }
+    // Some are already in debank history
+    const localeTxes = useMemo(() => {
+        return allLocaleTxes.filter((tx) => !transactions.find((x) => x.hash === tx.id))
+    }, [allLocaleTxes, transactions])
+
+    return { ...result, data: transactions, localeTxes }
 }

@@ -56,8 +56,6 @@ export type TransactionDetail = {
     transactionContext?: TransactionContext<ChainId, TransactionParameter>
 }
 
-export type GasParams = Omit<GasSetting, 'gas'>
-
 export enum TransferTabType {
     Token = 'Token',
     NFT = 'NFT',
