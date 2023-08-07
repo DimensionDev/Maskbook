@@ -68,6 +68,6 @@ export class SettingsState implements Web3SettingsState {
     }
 
     async setDefaultCurrencyType(currencyType: CurrencyType) {
-        this.storage.currencyType.setValue(currencyType)
+        await this.storage.currencyType.setValue(currencyType)
     }
 }
