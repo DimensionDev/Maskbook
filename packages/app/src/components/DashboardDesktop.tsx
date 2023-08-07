@@ -3,9 +3,6 @@ import {
     ArrowPathRoundedSquareIcon,
     Cog6ToothIcon,
     RocketLaunchIcon,
-    HeartIcon,
-    EyeIcon,
-    TruckIcon,
     WindowIcon,
     UserCircleIcon,
     PencilSquareIcon,
@@ -16,14 +13,11 @@ import { classNames } from '../helpers/classNames.js'
 import { ApplicationRoutes } from '../constants/ApplicationRoutes.js'
 
 const navigation = [
-    { name: 'Overview', icon: EyeIcon, to: ApplicationRoutes.Overview },
+    { name: 'Mask Network', icon: WindowIcon, to: ApplicationRoutes.Applications },
     { name: 'Compose', icon: PencilSquareIcon, to: ApplicationRoutes.Compose },
     { name: 'Explore', icon: RocketLaunchIcon, to: ApplicationRoutes.Explorer },
-    { name: 'Favorites', icon: HeartIcon, to: ApplicationRoutes.Favorites },
-    { name: 'Mask Network', icon: WindowIcon, to: ApplicationRoutes.Applications },
     { name: 'Web3 Profile', icon: UserCircleIcon, to: ApplicationRoutes.Web3Profile },
     { name: 'Swap', icon: ArrowPathRoundedSquareIcon, to: ApplicationRoutes.Swap },
-    { name: 'Bridges', icon: TruckIcon, to: ApplicationRoutes.Bridges },
     { name: 'Settings', icon: Cog6ToothIcon, to: ApplicationRoutes.Settings },
 ]
 
