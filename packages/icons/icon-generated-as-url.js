@@ -8,7 +8,6 @@ export function avalanche_url() { return new URL("./brands/Avalanche.svg", impor
 export function blocto_url() { return new URL("./brands/Blocto.svg", import.meta.url) }
 export function bsc_url() { return new URL("./brands/BSC.svg", import.meta.url) }
 export function celo_url() { return new URL("./brands/Celo.svg", import.meta.url) }
-export function chrome_url() { return new URL("./brands/Chrome.png", import.meta.url) }
 export function coin_gecko_url() { return new URL("./brands/CoinGecko.svg", import.meta.url) }
 export function coin_market_cap_url() { return new URL("./brands/CoinMarketCap.svg", import.meta.url) }
 export function cosmos_url() { return new URL("./brands/Cosmos.svg", import.meta.url) }
@@ -32,7 +31,6 @@ export function fantom_url() { return new URL("./brands/Fantom.svg", import.meta
 export function farcaster_url() { return new URL("./brands/Farcaster.svg", import.meta.url) }
 export function firefly_dark_url() { return new URL("./brands/Firefly.dark.svg", import.meta.url) }
 export function firefly_light_url() { return new URL("./brands/Firefly.light.svg", import.meta.url) }
-export function firefox_url() { return new URL("./brands/Firefox.png", import.meta.url) }
 export function flow_url() { return new URL("./brands/Flow.svg", import.meta.url) }
 export function game_url() { return new URL("./brands/Game.svg", import.meta.url) }
 export function gem_url() { return new URL("./brands/Gem.svg", import.meta.url) }
@@ -80,7 +78,6 @@ export function non_fungible_friends_url() { return new URL("./brands/NonFungibl
 export function okx_url() { return new URL("./brands/OKX.svg", import.meta.url) }
 export function open_sea_url() { return new URL("./brands/OpenSea.svg", import.meta.url) }
 export function open_sea_colored_url() { return new URL("./brands/OpenSeaColored.svg", import.meta.url) }
-export function opera_url() { return new URL("./brands/Opera.png", import.meta.url) }
 export function optimism_url() { return new URL("./brands/Optimism.svg", import.meta.url) }
 export function pancake_swap_url() { return new URL("./brands/PancakeSwap.png", import.meta.url) }
 export function pets_url() { return new URL("./brands/Pets.svg", import.meta.url) }

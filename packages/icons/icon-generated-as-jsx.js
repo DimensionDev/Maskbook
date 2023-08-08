@@ -50,11 +50,6 @@ export const Celo = /*#__PURE__*/ __createIcon('Celo', [
         u: () => new URL('./brands/Celo.svg', import.meta.url),
     },
 ])
-export const Chrome = /*#__PURE__*/ __createIcon('Chrome', [
-    {
-        u: () => new URL('./brands/Chrome.png', import.meta.url),
-    },
-])
 export const CoinGecko = /*#__PURE__*/ __createIcon('CoinGecko', [
     {
         u: () => new URL('./brands/CoinGecko.svg', import.meta.url),
@@ -176,11 +171,6 @@ export const Firefly = /*#__PURE__*/ __createIcon('Firefly', [
     {
         c: ['light'],
         u: () => new URL('./brands/Firefly.light.svg', import.meta.url),
-    },
-])
-export const Firefox = /*#__PURE__*/ __createIcon('Firefox', [
-    {
-        u: () => new URL('./brands/Firefox.png', import.meta.url),
     },
 ])
 export const Flow = /*#__PURE__*/ __createIcon('Flow', [
@@ -415,11 +405,6 @@ export const OpenSea = /*#__PURE__*/ __createIcon('OpenSea', [
 export const OpenSeaColored = /*#__PURE__*/ __createIcon('OpenSeaColored', [
     {
         u: () => new URL('./brands/OpenSeaColored.svg', import.meta.url),
-    },
-])
-export const Opera = /*#__PURE__*/ __createIcon('Opera', [
-    {
-        u: () => new URL('./brands/Opera.png', import.meta.url),
     },
 ])
 export const Optimism = /*#__PURE__*/ __createIcon('Optimism', [
