@@ -11,7 +11,7 @@
   },
   "types": "./dist/index.d.js",
   "dependencies": {
-    "@blocto/fcl": "^0.0.78-alpha.10",
+    "@blocto/fcl": "^1.4.0",
     "@masknet/shared-base": "workspace:^",
     "@masknet/web3-constants": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",

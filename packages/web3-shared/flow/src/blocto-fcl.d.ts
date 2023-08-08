@@ -36,6 +36,12 @@ declare module '@blocto/fcl' {
          * [discovery]{@link https://docs.onflow.org/fcl/reference/api/#discovery}.
          */
         'discovery.authn.endpoint'?: string
+
+        'discovery.wallet.method'?: string
+        /**
+         * Your applications id, can be requested by wallets and other services.
+         */
+        'app.detail.id'?: string
         /**
          * Your applications title, can be requested by wallets and other services.
          */
@@ -45,6 +51,8 @@ declare module '@blocto/fcl' {
          * services.
          */
         'app.detail.icon'?: string
+
+        'challenge.handshake'?: string
     }
 
     export interface Configuration {
