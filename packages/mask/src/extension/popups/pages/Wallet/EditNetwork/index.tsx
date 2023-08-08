@@ -14,7 +14,8 @@ import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'rea
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { z, type ZodCustomIssue } from 'zod'
-import { createSchema, useI18N, type AvailableLocaleKeys } from '../../../../../utils/index.js'
+import { useI18N, type AvailableLocaleKeys } from '../../../../../utils/index.js'
+import { createSchema } from './network-schema.js'
 import { PageTitleContext } from '../../../context.js'
 import { useTitle } from '../../../hook/index.js'
 

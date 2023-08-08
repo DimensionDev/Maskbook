@@ -53,7 +53,7 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
             return [
                 ...registeredNetworks.map((x) => registeredChains.find((y) => y.chainId === x.chainId)!),
                 ...customizedNetworks.map((x) => ({
-                    ...omit(x, 'createdAt', 'updatedAt'),
+                    ...x,
                     isCustomized: true,
                 })),
             ] as Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>
@@ -117,7 +117,7 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
     }
 
     async updateNetwork(id: string, updates: Partial<TransferableNetwork<ChainId, SchemaType, NetworkType>>) {
-        const network = this.storage.networks.value[id]
+        const network = this.assertNetwork(id)
 
         await this.storage.networks.setValue({
             ...this.storage.networks.value,

@@ -1,7 +1,7 @@
 import { EthereumMethodType, createJsonRpcPayload } from '@masknet/web3-shared-evm'
 import { memoize } from 'lodash-es'
 import { z } from 'zod'
-import type { I18NFunction } from './i18n-next-ui.js'
+import type { I18NFunction } from '../../../../../utils/i18n-next-ui.js'
 
 interface ChainConfig {
     name: string
