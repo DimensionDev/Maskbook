@@ -5,12 +5,20 @@ import { i18n } from '../../../../../shared-ui/locales_legacy/index.js'
 
 let inMemoryPassword = ''
 
+/**
+ * Decrypt the master password and return it. If it fails to decrypt, then return an empty string.
+ * @returns
+ */
 export async function INTERNAL_getMasterPassword() {
     const hasSafeSecret = await database.hasSafeSecret()
     if (!hasSafeSecret) return database.decryptSecret(getDefaultWalletPassword())
     return inMemoryPassword ? database.decryptSecret(inMemoryPassword) : ''
 }
 
+/**
+ * Decrypt the master password and return it. If it fails to decrypt, then throw an error.
+ * @returns
+ */
 export async function INTERNAL_getMasterPasswordRequired() {
     const password_ = await INTERNAL_getMasterPassword()
     if (!password_) throw new Error('No password set yet or expired.')
