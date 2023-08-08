@@ -911,7 +911,7 @@
     "popups_wallet_new_password_not_match": "The new passwords don't match",
     "popups_wallet_create_payment_password_tip": "At least 6 characters",
     "popups_wallet_term_of_service_agree_part_1": "By proceeding you agree to the",
-    "popups_wallet_term_of_service_agree_part_2": "<strong>Service Agreement</strong> and <strong>Privacy Policy</strong>",
+    "popups_wallet_term_of_service_agree_part_2": "<agreement>Service Agreement</agreement> and <policy>Privacy Policy</policy>",
     "popups_wallet_reset_tips": "Forgot payment password?",
     "popups_wallet_payment_password_tip": "The Payment password must be a combination of 2 categories out of numbers, letters, and special characters with a length of 8-20 characters.",
     "create_wallet_incorrect_payment_password": "Incorrect Payment Password.",

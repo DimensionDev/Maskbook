@@ -234,7 +234,22 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                             fontWeight={700}>
                             <Trans
                                 i18nKey="popups_wallet_term_of_service_agree_part_2"
-                                components={{ strong: <strong className={classes.strong} /> }}
+                                components={{
+                                    agreement: (
+                                        <a
+                                            className={classes.strong}
+                                            target="_blank"
+                                            href="https://legal.mask.io/maskbook/service-agreement-beta-browser.html"
+                                        />
+                                    ),
+                                    policy: (
+                                        <a
+                                            className={classes.strong}
+                                            target="_blank"
+                                            href="https://legal.mask.io/maskbook/privacy-policy-browser.html"
+                                        />
+                                    ),
+                                }}
                             />
                         </Typography>
                     </>
