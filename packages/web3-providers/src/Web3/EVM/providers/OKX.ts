@@ -1,4 +1,4 @@
-import { injectedCoinbaseProvider } from '@masknet/injected-script'
+import { injectedOKXProvider } from '@masknet/injected-script'
 import { isEthereumInjected, isInPageEthereumInjected } from '@masknet/shared-base'
 import { type ChainId, ProviderType, type Web3, type Web3Provider } from '@masknet/web3-shared-evm'
 import { BaseInjectedProvider } from './BaseInjected.js'
@@ -6,9 +6,9 @@ import type { WalletAPI } from '../../../entry-types.js'
 
 function getInjectedProvider() {
     if (isEthereumInjected('okxwallet')) return Reflect.get(window, 'okxwallet')
-    if (isInPageEthereumInjected()) return injectedCoinbaseProvider
+    if (isInPageEthereumInjected()) return injectedOKXProvider
     // Not available on extension site.
-    return injectedCoinbaseProvider
+    return injectedOKXProvider
 }
 
 export class OKXProvider
