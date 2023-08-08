@@ -336,8 +336,8 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
                 size={24}
                 className={classes.iconMore}
                 onClick={(event) => {
-                    openMenu(event)
                     event.stopPropagation()
+                    openMenu(event)
                 }}
             />
             {menu}

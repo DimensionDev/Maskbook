@@ -54,7 +54,7 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
                 PopupsHistory.push(urlcat(route, fromState))
             } else {
                 // open the popups window and wait for approvement from the user.
-                await SNSAdaptorContextRef.value.openPopupWindow(route as PopupRoutes, {
+                await SNSAdaptorContextRef.value.openPopupWindow(route, {
                     source: location.origin,
                     ...fromState,
                 })
