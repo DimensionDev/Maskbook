@@ -1,5 +1,4 @@
 import { memo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { FriendsHomeUI } from './UI.js'
 import { useFriends } from '../../../hook/useFriends.js'
 import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
@@ -9,7 +8,6 @@ import { resolveNextIDPlatform, resolveValueToSearch, usePersonasFromNextID } fr
 import { useFriendsFromSearch } from '../../../hook/useFriendsFromSearch.js'
 
 const FriendsHome = memo(function FriendsHome() {
-    const navigate = useNavigate()
     const { t } = useI18N()
     const { loading, value = EMPTY_LIST } = useFriends('twitter.com')
     const [searchValue, setSearchValue] = useState('')

@@ -25,7 +25,7 @@ export const ConnectedAccounts = memo<ConnectedAccountsProps>(function Connected
     return (
         <Box display="flex" gap="8px" alignItems="center" height="58px" className={classes.accounts} width="100%">
             {profiles.map((profile) => {
-                return <AccountRender key={profile.platform} profile={profile} detail />
+                return <AccountRender key={profile.identity} profile={profile} detail />
             })}
         </Box>
     )

@@ -32,6 +32,14 @@ const useStyles = makeStyles()((theme) => ({
     mainText: {
         color: theme.palette.text.primary,
     },
+    cardContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px',
+        padding: '16px',
+        maxHeight: '100vh',
+        overflowY: 'auto',
+    },
 }))
 
 export interface FriendsHomeUIProps {
@@ -67,7 +75,7 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
                         {t('popups_encrypted_friends_search_no_result')}
                     </EmptyStatus>
                 ) : (
-                    <Box display="flex" flexDirection="column" gap="12px" padding="16px">
+                    <Box className={classes.cardContainer}>
                         {searchResult.map((friend) => {
                             return (
                                 <ContactCard
@@ -84,7 +92,7 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
             ) : friends.length === 0 ? (
                 <EmptyStatus className={classes.empty}>{t('popups_encrypted_friends_no_friends')}</EmptyStatus>
             ) : (
-                <Box display="flex" flexDirection="column" gap="12px" padding="16px">
+                <Box className={classes.cardContainer}>
                     {friends.map((friend) => {
                         return (
                             <ContactCard
