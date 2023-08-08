@@ -3,6 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { Box } from '@mui/material'
 import { type BindingProof } from '@masknet/shared-base'
 import { AccountRender } from '../../AccountRender/index.js'
+import { RestorableScroll } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     accounts: {
@@ -12,6 +13,10 @@ const useStyles = makeStyles()((theme) => ({
         padding: '16px',
         gap: '12px',
         gridTemplateColumns: 'repeat(3, 119px)',
+        overflowY: 'auto',
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 
@@ -23,10 +28,12 @@ export const ConnectedAccounts = memo<ConnectedAccountsProps>(function Connected
     const { classes } = useStyles()
 
     return (
-        <Box display="flex" gap="8px" alignItems="center" height="58px" className={classes.accounts} width="100%">
-            {profiles.map((profile) => {
-                return <AccountRender key={profile.identity} profile={profile} detail />
-            })}
-        </Box>
+        <RestorableScroll scrollKey="connected_accounts">
+            <Box className={classes.accounts}>
+                {profiles.map((profile) => {
+                    return <AccountRender key={profile.identity} profile={profile} detail />
+                })}
+            </Box>
+        </RestorableScroll>
     )
 })

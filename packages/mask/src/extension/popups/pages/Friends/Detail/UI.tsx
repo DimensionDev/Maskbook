@@ -15,6 +15,7 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         width: '100%',
         background: theme.palette.maskColor.modalTitleBg,
+        maxHeight: '100vh',
     },
     header: {
         padding: theme.spacing(2),
