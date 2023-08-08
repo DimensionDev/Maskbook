@@ -90,13 +90,14 @@ export async function openPopupWindow(
 
     if (currentPopupWindowId) {
         await browser.windows.update(currentPopupWindowId, { focused: true })
-        return CrossIsolationMessages.events.popupRouteUpdated.sendToAll(
+        CrossIsolationMessages.events.popupRouteUpdated.sendToAll(
             urlcat(shouldUnlockWallet ? PopupRoutes.Unlock : route ?? PopupRoutes.Wallet, {
                 toBeClose: 1,
                 from: locked && route ? route : null,
                 ...params,
             }),
         )
+        return
     }
 
     return openWindow(url)
