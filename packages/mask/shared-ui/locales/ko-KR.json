@@ -781,7 +781,7 @@
     "popups_wallet_create_payment_password": "비밀번호 생성",
     "popups_wallet_payment_password": "결제 비밀번호",
     "popups_wallet_set_up_payment_password": "결제 비밀번호 설정",
-    "popups_wallet_create_payment_password_tip": "최소 6 글자 이상 이용하세요",
+    "popups_wallet_create_payment_password_tip": "최소 8 글자 이상 이용하세요",
     "popups_wallet_payment_password_tip": "결제 암호는 8-20자 사이여야 하여 숫자, 문자 및 특수 문자 중 2 가지가 포함되어야 합니다.",
     "popups_wallet_start_up_tip": "월렛 연결. 새로운 월렛을 만들거나 시드 문구로 기존 월렛을 복구하세요.",
     "popups_wallet_name_placeholder": "1-12 자 입력하세요",
