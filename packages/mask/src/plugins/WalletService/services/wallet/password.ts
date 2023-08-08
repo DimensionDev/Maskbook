@@ -5,14 +5,14 @@ import { i18n } from '../../../../../shared-ui/locales_legacy/index.js'
 
 let inMemoryPassword = ''
 
-export async function INTERNAL_getPassword() {
+export async function INTERNAL_getMasterPassword() {
     const hasSafeSecret = await database.hasSafeSecret()
     if (!hasSafeSecret) return database.decryptSecret(getDefaultWalletPassword())
     return inMemoryPassword ? database.decryptSecret(inMemoryPassword) : ''
 }
 
-export async function INTERNAL_getPasswordRequired() {
-    const password_ = await INTERNAL_getPassword()
+export async function INTERNAL_getMasterPasswordRequired() {
+    const password_ = await INTERNAL_getMasterPassword()
     if (!password_) throw new Error('No password set yet or expired.')
     return password_
 }

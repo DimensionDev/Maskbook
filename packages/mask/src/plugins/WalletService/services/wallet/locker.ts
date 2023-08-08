@@ -3,7 +3,7 @@ import * as password from './password.js'
 import { CrossIsolationMessages, LockStatus, currentMaskWalletLockStatusSettings } from '@masknet/shared-base'
 
 export async function isLocked() {
-    return (await password.hasPassword()) && !(await password.INTERNAL_getPassword())
+    return (await password.hasPassword()) && !(await password.INTERNAL_getMasterPassword())
 }
 
 export async function lockWallet() {
