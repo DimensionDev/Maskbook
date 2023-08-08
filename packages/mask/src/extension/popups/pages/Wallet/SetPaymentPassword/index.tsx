@@ -156,7 +156,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
 
                 if (hasPassword) {
                     const from = params.get('from')
-                    CrossIsolationMessages.events.hasPaymentPasswordUpdated.sendToAll(true)
+                    CrossIsolationMessages.events.passwordStatusUpdated.sendToAll(true)
                     navigate({ pathname: from || PopupRoutes.Wallet }, { replace: true })
                 }
             } catch (error) {

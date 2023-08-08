@@ -1,12 +1,11 @@
 import { memo, useCallback } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { getRegisteredWeb3Providers } from '@masknet/plugin-infra'
 import { ExtensionSite, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useModalNavigate } from '../index.js'
 import { useWallets } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -41,7 +40,6 @@ export const SelectProvider = memo(function SelectProvider() {
 
     const wallets = useWallets()
     const navigate = useNavigate()
-    const modalNavigate = useModalNavigate()
     const [params] = useSearchParams()
     const disableNewWindow = params.get('disableNewWindow')
     const onlyMask = params.get('onlyMask')

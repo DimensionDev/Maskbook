@@ -76,7 +76,7 @@ const WalletRecovery = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const { hasPassword, loading: getHasPasswordLoading } = useHasPassword()
+    const { hasPassword, loading: hasPasswordLoading } = useHasPassword()
 
     const {
         control,
@@ -86,7 +86,7 @@ const WalletRecovery = memo(() => {
         schema,
     } = usePasswordForm(!hasPassword)
 
-    const { value: legacyWallets = [], loading: getLegacyWalletsLoading } = useAsyncRetry(async () => {
+    const { value: legacyWallets = [], loading: legacyWalletsLoading } = useAsyncRetry(async () => {
         const now = new Date()
         const wallets = await WalletRPC.getLegacyWallets()
         if (!wallets.length) return []
@@ -135,7 +135,7 @@ const WalletRecovery = memo(() => {
 
     useTitle(t('popups_recovery_wallet'))
 
-    return getHasPasswordLoading || getLegacyWalletsLoading ? (
+    return hasPasswordLoading || legacyWalletsLoading ? (
         <LoadingPlaceholder />
     ) : (
         <>

@@ -1,12 +1,12 @@
+import { memo } from 'react'
+import { useAsyncFn } from 'react-use'
+import { Box, Typography, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { Box, Typography, useTheme } from '@mui/material'
-import { memo } from 'react'
+import { DashboardRoutes, Sniffings } from '@masknet/shared-base'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../../../../../../utils/index.js'
 import Services from '../../../../../service.js'
-import { DashboardRoutes, Sniffings } from '@masknet/shared-base'
-import { useAsyncFn } from 'react-use'
-import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

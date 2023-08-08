@@ -1,8 +1,8 @@
+import { compact } from 'lodash-es'
+import { useQuery } from '@tanstack/react-query'
 import { NetworkPluginID, type BindingProof, NextIDPlatform } from '@masknet/shared-base'
 import { useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { isGreaterThan, isSameAddress, resolveNextIDPlatformWalletName } from '@masknet/web3-shared-base'
-import { useQuery } from '@tanstack/react-query'
-import { compact } from 'lodash-es'
 
 export function useVerifiedWallets(proofs?: BindingProof[]) {
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)

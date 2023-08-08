@@ -92,8 +92,7 @@ export async function resetSecret(password: string) {
  */
 export async function encryptSecret(password: string) {
     const secret = await getSecret()
-    if (!password) throw new Error('Invalid password.')
-    if (secret) throw new Error('Failed to encrypt secret.')
+    if (secret) throw new Error('A secret has already been set.')
 
     const iv = getIV()
     const key = await deriveKey(iv, password)
@@ -116,7 +115,7 @@ export async function encryptSecret(password: string) {
  */
 export async function updateSecret(oldPassword: string, newPassword: string) {
     const secret = await getSecret()
-    if (!secret) throw new Error('Failed to update secret.')
+    if (!secret) throw new Error('No secret has set before.')
 
     if (newPassword === getDefaultWalletPassword()) throw new Error('Invalid password.')
 
@@ -142,7 +141,7 @@ export async function updateSecret(oldPassword: string, newPassword: string) {
  */
 export async function decryptSecret(password: string) {
     const secret = await getSecret()
-    if (!secret) throw new Error('Failed to decrypt secret.')
+    if (!secret) throw new Error('No secret has set before.')
 
     try {
         const key = await deriveKey(secret.iv, password)

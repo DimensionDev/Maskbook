@@ -54,7 +54,7 @@ const Logout = memo(() => {
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const { Provider } = useWeb3State()
     const { smartPayChainId } = useContainer(PopupContext)
-    const { hasPassword, loading: getHasPasswordLoading } = useHasPassword()
+    const { hasPassword, loading: hasPasswordLoading } = useHasPassword()
 
     const { user } = useContainer(UserContext)
     const { showSnackbar } = usePopupCustomSnackbar()
@@ -102,7 +102,7 @@ const Logout = memo(() => {
             currentPersona={currentPersona}
             backupPassword={user.backupPassword ?? ''}
             verifyPaymentPassword={WalletRPC.verifyPassword}
-            loading={loading || getHasPasswordLoading}
+            loading={loading || hasPasswordLoading}
             hasPassword={hasPassword}
             onLogout={onLogout}
             onCancel={() => navigate(-1)}
