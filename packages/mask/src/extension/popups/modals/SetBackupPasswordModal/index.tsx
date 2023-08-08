@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { UserContext } from '../../hook/useUserContext.js'
-import { passwordRegexp } from '../../constants.js'
+import { MATCH_PASSWORD_RE } from '../../constants.js'
 import { useAsyncFn } from 'react-use'
 import { PopupRoutes } from '@masknet/shared-base'
 
@@ -23,7 +23,7 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
     const { showSnackbar } = usePopupCustomSnackbar()
 
     const validPassword = useCallback(() => {
-        const isValid = passwordRegexp.test(newPassword)
+        const isValid = MATCH_PASSWORD_RE.test(newPassword)
         setValidState(isValid)
     }, [newPassword])
 
