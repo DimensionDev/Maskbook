@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { type DashboardRoutes, PopupRoutes, MaskMessages } from '@masknet/shared-base'
+import { type DashboardRoutes, PopupRoutes, MaskMessages, CrossIsolationMessages } from '@masknet/shared-base'
 
 let currentPopupWindowId = 0
 
@@ -87,6 +87,18 @@ export async function openPopupWindow(
         from: locked && route ? route : null,
         ...params,
     })
+
+    if (currentPopupWindowId) {
+        await browser.windows.update(currentPopupWindowId, { focused: true })
+        CrossIsolationMessages.events.popupRouteUpdated.sendToAll(
+            urlcat(shouldUnlockWallet ? PopupRoutes.Unlock : route ?? PopupRoutes.Wallet, {
+                toBeClose: 1,
+                from: locked && route ? route : null,
+                ...params,
+            }),
+        )
+        return
+    }
 
     return openWindow(url)
 }

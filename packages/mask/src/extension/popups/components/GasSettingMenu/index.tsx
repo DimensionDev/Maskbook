@@ -10,7 +10,15 @@ import {
     useNativeTokenAddress,
 } from '@masknet/web3-hooks-base'
 import { DepositPaymaster } from '@masknet/web3-providers'
-import { CurrencyType, GasOptionType, ZERO, formatBalance, toFixed } from '@masknet/web3-shared-base'
+import {
+    CurrencyType,
+    GasOptionType,
+    ZERO,
+    formatBalance,
+    formatCurrency,
+    scale10,
+    toFixed,
+} from '@masknet/web3-shared-base'
 import {
     formatWeiToEther,
     type EIP1559GasConfig,
@@ -126,7 +134,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
 
     // If there is no init configuration, set a default config
     useEffect(() => {
-        if (initConfig || !gasOptions || !onChange) return
+        if (!!initConfig || !gasOptions || !onChange) return
         const target = gasOptions[GasOptionType.SLOW]
         const result = isSupport1559
             ? {
@@ -160,8 +168,13 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
                     sign={CurrencyType.USD}
                     value={formatWeiToEther(totalGas).times(tokenPrice ?? 0)}
                     options={{
-                        onlyRemainTwoDecimal: true,
+                        onlyRemainTwoDecimal: false,
+                        customDecimalConfig: {
+                            boundary: scale10(1, -4),
+                            decimalExp: 4,
+                        },
                     }}
+                    formatter={formatCurrency}
                 />
             </Typography>
             {!disable ? (

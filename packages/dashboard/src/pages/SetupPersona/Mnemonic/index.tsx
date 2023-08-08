@@ -199,7 +199,13 @@ export const SignUpMnemonic = memo(function SignUpMnemonic() {
             </Box>
 
             <SetupFrameController>
-                <PrimaryButton width="125px" size="large" color="primary" loading={loading} onClick={handleCreate}>
+                <PrimaryButton
+                    width="125px"
+                    size="large"
+                    color="primary"
+                    loading={loading}
+                    onClick={handleCreate}
+                    disabled={!checked}>
                     {t.continue()}
                 </PrimaryButton>
             </SetupFrameController>

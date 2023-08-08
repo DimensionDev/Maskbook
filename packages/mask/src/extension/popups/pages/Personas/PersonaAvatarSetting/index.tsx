@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useRef, useState } from 'react'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { ActionButton, MaskTabList, makeStyles, usePopupCustomSnackbar, useTabs } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
@@ -9,7 +9,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import AvatarEditor from 'react-avatar-editor'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { Web3ContextProvider, useChainContext } from '@masknet/web3-hooks-base'
-import { useModalNavigate } from '../../../components/index.js'
+import { NormalHeader, useModalNavigate } from '../../../components/index.js'
 import { NetworkPluginID, PopupModalRoutes, PopupRoutes, SignType } from '@masknet/shared-base'
 import { ProfilePhotoType } from '../../Wallet/type.js'
 import { NFTAvatarPicker } from '../../../components/NFTAvatarPicker/index.js'
@@ -19,6 +19,7 @@ import Services from '../../../../service.js'
 import { Web3, Web3Storage } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { MAX_FILE_SIZE } from '../../../constants.js'
+import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles()((theme) => ({
     tabs: {
@@ -27,7 +28,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     tabPanel: {
         padding: 0,
-        height: '100%',
+        height: 508,
     },
     uploadBox: {
         background: theme.palette.maskColor.whiteBlue,
@@ -62,31 +63,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     file: {
         display: 'none',
-    },
-    header: {
-        background: theme.palette.maskColor.modalTitleBg,
-    },
-    titleContainer: {
-        display: 'grid',
-        gridTemplateColumns: '24px auto 24px',
-        padding: theme.spacing(2),
-
-        lineHeight: 0,
-        alignItems: 'center',
-        flexShrink: 0,
-    },
-    back: {
-        fontSize: 24,
-        cursor: 'pointer',
-        color: theme.palette.maskColor.main,
-    },
-    title: {
-        fontSize: 14,
-        lineHeight: '22px',
-        color: theme.palette.maskColor.main,
-        fontWeight: 700,
-        minHeight: 22,
-        textAlign: 'center',
     },
 }))
 
@@ -127,16 +103,6 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
             handleSetFile(files[0])
         },
     })
-
-    const title = useMemo(() => {
-        return (
-            <Box className={classes.titleContainer}>
-                <Icons.Comeback className={classes.back} onClick={() => navigate(-1)} />
-                <Typography className={classes.title}>{t('popups_profile_photo')}</Typography>
-            </Box>
-        )
-    }, [classes, navigate])
-
     const { account } = useChainContext()
 
     const handleChangeTab = useCallback(
@@ -198,10 +164,12 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
         }
     }, [file, currentPersona, account, bindingWallets])
 
+    useTitle(t('popups_profile_photo'))
+
     if (file) {
         return (
             <Box>
-                <Box className={classes.header}>{title}</Box>
+                <NormalHeader />
                 <Box p={2}>
                     <AvatarEditor
                         ref={editor}
@@ -237,18 +205,19 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
     return (
         <Box flex={1}>
             <TabContext value={currentTab}>
-                <Box className={classes.header}>
-                    {title}
-                    {!file ? (
-                        <MaskTabList
-                            onChange={handleChangeTab}
-                            aria-label="profile-photo-tabs"
-                            classes={{ root: classes.tabs }}>
-                            <Tab label={t('popups_profile_photo_image')} value={ProfilePhotoType.Image} />
-                            <Tab label={t('popups_profile_photo_nfts')} value={ProfilePhotoType.NFT} />
-                        </MaskTabList>
-                    ) : null}
-                </Box>
+                <NormalHeader
+                    tabList={
+                        !file ? (
+                            <MaskTabList
+                                onChange={handleChangeTab}
+                                aria-label="profile-photo-tabs"
+                                classes={{ root: classes.tabs }}>
+                                <Tab label={t('popups_profile_photo_image')} value={ProfilePhotoType.Image} />
+                                <Tab label={t('popups_profile_photo_nfts')} value={ProfilePhotoType.NFT} />
+                            </MaskTabList>
+                        ) : null
+                    }
+                />
                 {!file ? (
                     <>
                         <TabPanel value={ProfilePhotoType.Image} className={classes.tabPanel}>

@@ -1,7 +1,7 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
 import { Icons } from '@masknet/icons'
-import { type EnhanceableSite, type ProfileAccount, PopupModalRoutes } from '@masknet/shared-base'
+import { type EnhanceableSite, type ProfileAccount, PopupModalRoutes, PopupRoutes } from '@masknet/shared-base'
 import { MaskTabList, makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Box, Tab, Typography, useTheme } from '@mui/material'
@@ -15,6 +15,7 @@ import { useModalNavigate } from '../../../components/index.js'
 import { PersonaPublicKey } from '../../../components/PersonaPublicKey/index.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
 import { useParamTab } from '../../../hook/useParamTab.js'
+import { useNavigate } from 'react-router-dom'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -90,6 +91,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        cursor: 'pointer',
     },
     publicKey: {
         fontSize: 12,
@@ -187,6 +189,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
     }) => {
         const theme = useTheme()
         const { t } = useI18N()
+        const navigate = useNavigate()
         const modalNavigate = useModalNavigate()
         const { classes, cx } = useStyles()
 
@@ -207,7 +210,9 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                             <Box className={classes.info}>
                                 <Box position="relative">
                                     <PersonaAvatar size={60} avatar={avatar} hasProofs={hasProofs} />
-                                    <Box className={classes.edit}>
+                                    <Box
+                                        className={classes.edit}
+                                        onClick={() => navigate(PopupRoutes.PersonaAvatarSetting)}>
                                         <Icons.Edit size={12} />
                                     </Box>
                                 </Box>

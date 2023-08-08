@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
     },
     icon: {
-        color: theme.palette.maskColor.main,
+        color: theme.palette.maskColor.second,
     },
 }))
 
