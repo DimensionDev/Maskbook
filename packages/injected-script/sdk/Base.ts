@@ -43,8 +43,15 @@ export class InjectedProvider {
     /**
      * Break the connections.
      */
-    disconnect(): Promise<void> {
-        return createPromise((id) => sendEvent('web3BridgeExecute', [this.pathname, 'disconnect'].join('.'), id))
+    async disconnect(): Promise<void> {
+        try {
+            // some providers do not support disconnect
+            return await createPromise((id) =>
+                sendEvent('web3BridgeExecute', [this.pathname, 'disconnect'].join('.'), id),
+            )
+        } catch {
+            return
+        }
     }
 
     /**

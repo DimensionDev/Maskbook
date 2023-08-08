@@ -83,7 +83,11 @@ export class BaseInjectedProvider
     }
 
     override async disconnect() {
-        await this.readyPromise
-        await this.bridge.disconnect()
+        try {
+            await this.readyPromise
+            await this.bridge.disconnect()
+        } catch {
+            return
+        }
     }
 }
