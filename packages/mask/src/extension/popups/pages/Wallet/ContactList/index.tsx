@@ -76,7 +76,6 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean }>()
             fontSize: 18,
             height: 18,
             width: 18,
-            color: theme.palette.maskColor.main,
             cursor: 'pointer',
             marginLeft: 4,
         },
@@ -325,7 +324,7 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
                             href={ExplorerResolver.addressLink(chainId, address ?? '')}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <Icons.PopupLink className={classes.icon} />
+                            <Icons.PopupLink className={classes.icon} color={theme.palette.maskColor.second} />
                         </Link>
                     </Typography>
                 </div>
