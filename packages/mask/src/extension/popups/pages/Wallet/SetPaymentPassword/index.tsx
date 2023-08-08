@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Trans } from 'react-i18next'
@@ -135,7 +135,12 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
         setError,
         formState: { errors, isValid },
         schema,
+        reset,
     } = usePasswordForm()
+
+    useEffect(() => {
+        reset({ password: '', confirm: '' })
+    }, [isCreating])
 
     const [{ loading }, onConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
