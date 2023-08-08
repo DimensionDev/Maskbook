@@ -34,8 +34,9 @@ export function formatAssets(data: WalletTokenRecord[]): Array<FungibleAsset<Cha
         try {
             // chainId is beyond builtin chainIds
             return resolver.nativeCurrency(chainId)?.address || ZERO_ADDRESS
-        } catch {}
-        return ZERO_ADDRESS
+        } catch {
+            return ZERO_ADDRESS
+        }
     })
 
     return data
