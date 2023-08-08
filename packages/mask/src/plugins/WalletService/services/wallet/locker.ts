@@ -16,7 +16,6 @@ export async function unlockWallet(unverifiedPassword: string) {
     if (!isLocked()) return true
     try {
         await password.verifyPasswordRequired(unverifiedPassword)
-        password.INTERNAL_setPassword(unverifiedPassword)
         currentMaskWalletLockStatusSettings.value = LockStatus.UNLOCK
         CrossIsolationMessages.events.walletLockStatusUpdated.sendToAll(false)
         return true

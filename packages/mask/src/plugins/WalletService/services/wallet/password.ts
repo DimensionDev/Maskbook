@@ -56,7 +56,10 @@ export async function hasPassword() {
 
 export async function verifyPassword(unverifiedPassword: string) {
     if (inMemoryPassword === unverifiedPassword) return true
-    return validate(await database.decryptSecret(unverifiedPassword))
+    const valid = validate(await database.decryptSecret(unverifiedPassword))
+    if (!valid) return false
+    INTERNAL_setPassword(unverifiedPassword)
+    return true
 }
 
 export async function verifyPasswordRequired(unverifiedPassword: string, errorMsg?: string) {

@@ -354,7 +354,6 @@ export async function generateAddressFromMnemonicWords(
         password: masterPassword,
     })
     if (!imported?.StoredKey) throw new Error('Failed to import the wallet.')
-
     const created = await Mask.createAccountOfCoinAtPath({
         coin: api.Coin.Ethereum,
         name,
