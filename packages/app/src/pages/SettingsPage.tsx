@@ -3,9 +3,8 @@ import { DashboardContainer } from '../components/DashboardContainer.js'
 import { DashboardHeader } from '../components/DashboardHeader.js'
 
 import { Button, MenuItem, Typography } from '@mui/material'
-import { spaThemeMode } from '@masknet/shared-base'
-import { useValueRef } from '@masknet/shared-base-ui'
 import { useMenuConfig } from '@masknet/shared'
+import { useSystemPreferencePalette } from '@masknet/theme'
 
 export interface SettingsPageProps {}
 
@@ -21,20 +20,30 @@ export default function SettingsPage(props: SettingsPageProps) {
 }
 
 const SetupThemeMode = memo(() => {
-    const themeMode = useValueRef(spaThemeMode)
+    const systemMode = useSystemPreferencePalette()
+
     const onClick = useCallback(
-        (mode: 'dark' | 'light') => {
-            spaThemeMode.value = mode
+        (mode: 'dark' | 'light' | 'system') => {
+            localStorage.themeMode = mode
         },
-        [spaThemeMode],
+        [localStorage.themeMode],
     )
+
     useEffect(() => {
-        if (themeMode === 'dark') document.documentElement.classList.add('dark')
+        if (!localStorage.themeMode || localStorage.themeMode === 'system') {
+            if (systemMode === 'dark') document.documentElement.classList.add('dark')
+            else document.documentElement.classList.add('light')
+            return
+        }
+        if (localStorage.themeMode === 'dark') document.documentElement.classList.add('dark')
         else document.documentElement.classList.remove('dark')
-    }, [themeMode])
+    }, [systemMode, localStorage.themeMode])
 
     const [menu, openMenu] = useMenuConfig(
         [
+            <MenuItem key="system" onClick={() => onClick('system')}>
+                <Typography component="span">System</Typography>
+            </MenuItem>,
             <MenuItem key="dark" onClick={() => onClick('dark')}>
                 <Typography component="span">Dark</Typography>
             </MenuItem>,
@@ -56,7 +65,7 @@ const SetupThemeMode = memo(() => {
             <Button
                 className="dark:text-white text-black bg-black/10 dark:bg-white/10 hover:text-white"
                 onClick={openMenu}>
-                {themeMode === 'dark' ? 'Dark' : 'Light'}
+                {localStorage.themeMode === 'dark' ? 'Dark' : localStorage.themeMode === 'light' ? 'Light' : 'System'}
             </Button>
             {menu}
         </div>

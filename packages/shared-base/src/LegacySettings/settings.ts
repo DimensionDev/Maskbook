@@ -80,5 +80,3 @@ export const switchLogoOpenedState = createGlobalSettings<SwitchLogoDialogStatus
     'SwitchLogoOpenedState',
     SwitchLogoDialogStatus.NeverOpened,
 )
-
-export const spaThemeMode = createGlobalSettings<'dark' | 'light'>('SPAThemeMode', 'light')
