@@ -1205,6 +1205,7 @@
     "network_already_exists": "crwdns21619:0crwdne21619:0",
     "incorrect_rpc_url": "crwdns21357:0crwdne21357:0",
     "incorrect_explorer_url": "crwdns21359:0crwdne21359:0",
+    "rpc_url_is_used_by": "crwdns22119:0{{- name}}crwdne22119:0",
     "failed_to_fetch_chain_id": "crwdns21361:0crwdne21361:0",
     "rpc_return_different_chain_id": "crwdns21363:0{{chain_id}}crwdne21363:0",
     "rpc_return_different_symbol": "crwdns21365:0{{chain_id}}crwdnd21365:0{{symbol}}crwdne21365:0",
