@@ -1,9 +1,9 @@
+import { CrossIsolationMessages, LockStatus, currentMaskWalletLockStatusSettings } from '@masknet/shared-base'
 import { getAutoLockerDuration } from './database/locker.js'
 import * as password from './password.js'
-import { CrossIsolationMessages, LockStatus, currentMaskWalletLockStatusSettings } from '@masknet/shared-base'
 
 export async function isLocked() {
-    return (await password.hasPassword()) && !(await password.INTERNAL_getMasterPassword())
+    return (await password.hasPassword()) && !(await password.hasVerifiedPassword())
 }
 
 export async function lockWallet() {

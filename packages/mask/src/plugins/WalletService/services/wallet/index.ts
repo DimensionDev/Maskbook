@@ -191,19 +191,19 @@ export async function exportMnemonicWords(address: string, unverifiedPassword?: 
 
 export async function exportPrivateKey(address: string, unverifiedPassword?: string) {
     if (unverifiedPassword) await password.verifyPasswordRequired(unverifiedPassword)
-    const password_ = await password.INTERNAL_getMasterPasswordRequired()
+    const masterPassword = await password.INTERNAL_getMasterPasswordRequired()
     const wallet = await database.getWalletRequired(address)
     if (!wallet.storedKeyInfo) throw new Error(`Cannot export private key of ${address}.`)
     const exported = wallet.derivationPath
         ? await Mask.exportPrivateKeyOfPath({
               coin: api.Coin.Ethereum,
               derivationPath: wallet.derivationPath ?? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-              password: password_,
+              password: masterPassword,
               StoredKeyData: wallet.storedKeyInfo.data,
           })
         : await Mask.exportPrivateKey({
               coin: api.Coin.Ethereum,
-              password: password_,
+              password: masterPassword,
               StoredKeyData: wallet.storedKeyInfo.data,
           })
 

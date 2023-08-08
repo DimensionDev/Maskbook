@@ -8,6 +8,7 @@ import { useWallets } from '@masknet/web3-hooks-base'
 import { useAllPersonas, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { PluginSmartPayMessages } from '../../message.js'
 import { useQueryQualifications } from '../../hooks/useQueryQualifications.js'
+
 export interface SmartPayEntryProps {
     disabled: boolean
     tooltipHint?: string

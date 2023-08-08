@@ -5,20 +5,14 @@ import { i18n } from '../../../../../shared-ui/locales_legacy/index.js'
 
 let inMemoryPassword = ''
 
-/**
- * Decrypt the master password and return it. If it fails to decrypt, then return an empty string.
- * @returns
- */
+/** Decrypt the master password and return it. If it fails to decrypt, then return an empty string. */
 export async function INTERNAL_getMasterPassword() {
     const hasSafeSecret = await database.hasSafeSecret()
     if (!hasSafeSecret) return database.decryptSecret(getDefaultWalletPassword())
     return inMemoryPassword ? database.decryptSecret(inMemoryPassword) : ''
 }
 
-/**
- * Decrypt the master password and return it. If it fails to decrypt, then throw an error.
- * @returns
- */
+/** Decrypt the master password and return it. If it fails to decrypt, then throw an error. */
 export async function INTERNAL_getMasterPasswordRequired() {
     const password_ = await INTERNAL_getMasterPassword()
     if (!password_) throw new Error('No password set yet or expired.')
@@ -30,18 +24,21 @@ export function INTERNAL_setPassword(newPassword: string) {
     inMemoryPassword = newPassword
 }
 
+/** Force erase the preexisting password and set a new one. */
 export async function resetPassword(newPassword: string) {
     validatePasswordRequired(newPassword)
     await database.resetSecret(newPassword)
     INTERNAL_setPassword(newPassword)
 }
 
+/** Set a password when no one has set it before. */
 export async function setPassword(newPassword: string) {
     validatePasswordRequired(newPassword)
     await database.encryptSecret(newPassword)
     INTERNAL_setPassword(newPassword)
 }
 
+/** Set the default password if no secret set before. */
 export async function setDefaultPassword() {
     const hasSecret = await database.hasSecret()
     if (hasSecret) return
@@ -50,10 +47,22 @@ export async function setDefaultPassword() {
     INTERNAL_setPassword(password)
 }
 
+/** Clear the verified password in memory forces the user to re-enter the password. */
+export function clearPassword() {
+    inMemoryPassword = ''
+}
+
+/** Has set a password. */
 export async function hasPassword() {
     return database.hasSafeSecret()
 }
 
+/** Has a verified password in memory. */
+export async function hasVerifiedPassword() {
+    return validatePassword(inMemoryPassword)
+}
+
+/** Verify the given password. if successful, keep it in memory. */
 export async function verifyPassword(unverifiedPassword: string) {
     if (inMemoryPassword === unverifiedPassword) return true
     const valid = validate(await database.decryptSecret(unverifiedPassword))
@@ -62,14 +71,15 @@ export async function verifyPassword(unverifiedPassword: string) {
     return true
 }
 
-export async function verifyPasswordRequired(unverifiedPassword: string, errorMsg?: string) {
-    if (!(await verifyPassword(unverifiedPassword))) throw new Error(errorMsg ?? 'Wrong password')
+/** Verify the given password. if successful, keep it in memory; otherwise, throw an error. */
+export async function verifyPasswordRequired(unverifiedPassword: string, message?: string) {
+    if (!(await verifyPassword(unverifiedPassword))) throw new Error(message ?? 'Wrong password')
     return true
 }
 
-export async function changePassword(oldPassword: string, newPassword: string) {
+export async function changePassword(oldPassword: string, newPassword: string, message?: string) {
     validatePasswordRequired(newPassword)
-    await verifyPasswordRequired(oldPassword, 'Incorrect payment password.')
+    await verifyPasswordRequired(oldPassword, message ?? 'Incorrect payment password.')
     if (oldPassword === newPassword) throw new Error('Failed to set the same password as the old one.')
     await database.updateSecret(oldPassword, newPassword)
     INTERNAL_setPassword(newPassword)
@@ -85,8 +95,4 @@ export function validatePassword(unverifiedPassword: string) {
 export function validatePasswordRequired(unverifiedPassword: string) {
     if (!validatePassword(unverifiedPassword)) throw new Error(i18n.t('popups_wallet_password_satisfied_requirement'))
     return true
-}
-
-export function clearPassword() {
-    inMemoryPassword = ''
 }

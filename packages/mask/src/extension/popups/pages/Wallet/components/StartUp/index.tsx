@@ -1,13 +1,12 @@
+import { memo } from 'react'
+import { useAsyncFn } from 'react-use'
+import { Box, Typography, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { Box, Typography, useTheme } from '@mui/material'
-import { memo } from 'react'
+import { DashboardRoutes, Sniffings } from '@masknet/shared-base'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../../../../../../utils/index.js'
 import Services from '../../../../../service.js'
-import { DashboardRoutes, Sniffings } from '@masknet/shared-base'
-import { useAsyncFn } from 'react-use'
-import { WalletServiceRef } from '@masknet/plugin-infra/dom'
-import { useWallets } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -85,7 +84,6 @@ export const WalletStartUp = memo(() => {
     const { t } = useI18N()
     const { cx, classes } = useStyles()
     const theme = useTheme()
-    const wallets = useWallets()
 
     const [, onEnterCreateWallet] = useAsyncFn(async (route: DashboardRoutes) => {
         const hasPassword = await WalletServiceRef.value.hasPassword()
