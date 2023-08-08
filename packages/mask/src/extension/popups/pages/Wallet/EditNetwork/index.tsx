@@ -115,7 +115,8 @@ export const EditNetwork = memo(function EditNetwork() {
         return createSchema(t, async (name) => {
             return !networks.find((network) => network.name === name && network.ID !== id)
         }).superRefine((schema, context) => {
-            const network = networks.find((network) => network.rpcUrl === schema.rpc && network.ID !== id)
+            const { rpc } = schema
+            const network = networks.find((network) => network.rpcUrl === rpc && network.ID !== id)
             if (network) {
                 context.addIssue({
                     code: z.ZodIssueCode.custom,
@@ -123,6 +124,18 @@ export const EditNetwork = memo(function EditNetwork() {
                     message: t('rpc_url_is_used_by', { name: network.name }),
                 })
                 return false
+            } else {
+                networks.some((network) => {
+                    if (getRPCConstant(network.chainId, 'RPC_URLS')?.includes(rpc)) {
+                        context.addIssue({
+                            code: z.ZodIssueCode.custom,
+                            path: ['rpc'],
+                            message: t('rpc_url_is_used_by', { name: network.name }),
+                        })
+                        return true
+                    }
+                    return false
+                })
             }
             return true
         })
