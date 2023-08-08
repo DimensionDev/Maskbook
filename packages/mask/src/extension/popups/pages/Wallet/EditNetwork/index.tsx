@@ -6,7 +6,7 @@ import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme
 import { useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
 import { ChainResolver, ExplorerResolver } from '@masknet/web3-providers'
 import { TokenType, type TransferableNetwork } from '@masknet/web3-shared-base'
-import { NetworkType, SchemaType, ZERO_ADDRESS, type ChainId } from '@masknet/web3-shared-evm'
+import { NetworkType, SchemaType, ZERO_ADDRESS, type ChainId, getRPCConstant } from '@masknet/web3-shared-evm'
 import { Button, Input, Typography, alpha } from '@mui/material'
 import { useMutation } from '@tanstack/react-query'
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
@@ -79,7 +79,7 @@ export const EditNetwork = memo(function EditNetwork() {
         return {
             name: network.name,
             chainId: network.chainId,
-            rpc: network.rpcUrl,
+            rpc: network.isCustomized ? network.rpcUrl : getRPCConstant(network.chainId, 'RPC_URLS')?.[0],
             currencySymbol: ChainResolver.nativeCurrency(network.chainId)?.symbol,
             explorer: ExplorerResolver.explorerUrl(network.chainId).url,
             isCustomized: network.isCustomized,
