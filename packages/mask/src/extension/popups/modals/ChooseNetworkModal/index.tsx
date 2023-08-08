@@ -34,6 +34,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 24,
         borderRadius: '50%',
         overflow: 'hidden',
+        flexShrink: 0,
     },
     text: {
         marginLeft: theme.spacing(1),
