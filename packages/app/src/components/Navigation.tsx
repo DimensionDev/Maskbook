@@ -13,7 +13,7 @@ import { classNames } from '../helpers/classNames.js'
 import { DashboardContext } from '../contexts/DashboardContext.js'
 
 const navigation = [
-    { name: 'Mask Network', icon: WindowIcon, to: ApplicationRoutes.Applications },
+    { name: 'Applications', icon: WindowIcon, to: ApplicationRoutes.Applications },
     { name: 'Compose', icon: PencilSquareIcon, to: ApplicationRoutes.Compose },
     { name: 'Explore', icon: RocketLaunchIcon, to: ApplicationRoutes.Explorer },
     { name: 'Web3 Profile', icon: UserCircleIcon, to: ApplicationRoutes.Web3Profile },
@@ -35,7 +35,7 @@ function NavigationLink(props: (typeof navigation)[0]) {
                 className={classNames(
                     matched
                         ? 'bg-gray-800 text-white'
-                        : 'text-black dark:text-white hover:text-white hover:bg-gray-800',
+                        : 'text-black dark:text-white hover:text-black hover:bg-black/10 dark:hover:bg-back/10',
                     'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
                 )}>
                 <props.icon className="h-6 w-6 shrink-0" aria-hidden="true" />

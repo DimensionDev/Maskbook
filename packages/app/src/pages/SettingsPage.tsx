@@ -1,10 +1,11 @@
-import { memo, useCallback, useEffect } from 'react'
+import { memo, useCallback } from 'react'
 import { DashboardContainer } from '../components/DashboardContainer.js'
 import { DashboardHeader } from '../components/DashboardHeader.js'
 
 import { Button, MenuItem, Typography } from '@mui/material'
 import { useMenuConfig } from '@masknet/shared'
 import { useSystemPreferencePalette } from '@masknet/theme'
+import { setThemeMode } from '../helpers/setThemeMode.js'
 
 export interface SettingsPageProps {}
 
@@ -29,19 +30,10 @@ const SetupThemeMode = memo(() => {
     const onClick = useCallback(
         (mode: 'dark' | 'light' | 'system') => {
             localStorage.themeMode = mode
+            setThemeMode(mode, systemMode)
         },
-        [localStorage.themeMode],
+        [localStorage.themeMode, systemMode],
     )
-
-    useEffect(() => {
-        if (!localStorage.themeMode || localStorage.themeMode === 'system') {
-            if (systemMode === 'dark') document.documentElement.classList.add('dark')
-            else document.documentElement.classList.add('light')
-            return
-        }
-        if (localStorage.themeMode === 'dark') document.documentElement.classList.add('dark')
-        else document.documentElement.classList.remove('dark')
-    }, [systemMode, localStorage.themeMode])
 
     const [menu, openMenu] = useMenuConfig(
         [

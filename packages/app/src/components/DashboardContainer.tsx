@@ -1,10 +1,11 @@
 import { Bars3Icon } from '@heroicons/react/20/solid'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { EmptyStatus, SearchResultInspector } from '@masknet/shared'
-import { DisableShadowRootContext, ShadowRootIsolation } from '@masknet/theme'
+import { DisableShadowRootContext, ShadowRootIsolation, useSystemPreferencePalette } from '@masknet/theme'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
-import { useCallback, useDeferredValue, useState } from 'react'
+import { useCallback, useDeferredValue, useEffect, useState } from 'react'
 import { DashboardContext } from '../contexts/DashboardContext.js'
+import { setThemeMode } from '../helpers/setThemeMode.js'
 
 export interface DashboardContainerProps {
     children: React.ReactNode
@@ -20,6 +21,11 @@ export function DashboardContainer(props: DashboardContainerProps) {
         (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setSearch(e.target.value),
         [],
     )
+    const systemMode = useSystemPreferencePalette()
+    useEffect(() => {
+        setThemeMode(localStorage.themeMode ?? 'system', systemMode)
+    }, [systemMode, localStorage.themeMode])
+
     return (
         <div className="xl:pl-72 container">
             <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-6 border-b border-white/5  dark:bg-zinc-900 px-4 shadow-sm sm:px-6 lg:px-8">
