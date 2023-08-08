@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
 import { useAsyncRetry } from 'react-use'
+import { useLocation } from 'react-router-dom'
+import { parseURL } from '@masknet/shared-base'
 import { MissingParameter } from '../MissingParameter/index.js'
 import { PermissionAwareRedirectUI } from './ui.js'
 import { getHostPermissionFieldFromURL, isValidURL } from './utils.js'
@@ -21,7 +22,8 @@ function Inner({ url, context }: { url: string; context: string }) {
     }, [url])
     useEffect(() => {
         if (!hasPermission) return
-        const parsed = new URL(url)
+        const parsed = parseURL(url)
+        if (!parsed) return
         parsed.searchParams.append('mask_context', context)
         location.assign(parsed.toString())
     }, [hasPermission, url])

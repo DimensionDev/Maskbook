@@ -1,14 +1,14 @@
 import { memo, useCallback, useState } from 'react'
+import { useAsyncFn } from 'react-use'
+import { useNavigate } from 'react-router-dom'
+import { Box, Typography, useTheme } from '@mui/material'
+import { PopupRoutes } from '@masknet/shared-base'
+import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
-import { Box, Typography, useTheme } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
-import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { UserContext } from '../../hook/useUserContext.js'
-import { passwordRegexp } from '../../constants.js'
-import { useAsyncFn } from 'react-use'
-import { PopupRoutes } from '@masknet/shared-base'
+import { MATCH_PASSWORD_RE } from '../../constants.js'
 
 export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBackupPasswordModal() {
     const { t } = useI18N()
@@ -23,8 +23,7 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
     const { showSnackbar } = usePopupCustomSnackbar()
 
     const validPassword = useCallback(() => {
-        const isValid = passwordRegexp.test(newPassword)
-        setValidState(isValid)
+        setValidState(MATCH_PASSWORD_RE.test(newPassword))
     }, [newPassword])
 
     const validRepeatPassword = useCallback(() => {
