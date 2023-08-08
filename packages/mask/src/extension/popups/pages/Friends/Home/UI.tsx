@@ -17,6 +17,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         maxHeight: '100vh',
+        overflowY: 'hidden',
     },
     empty: {
         position: 'absolute',

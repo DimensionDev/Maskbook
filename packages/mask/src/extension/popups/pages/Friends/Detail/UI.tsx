@@ -8,14 +8,12 @@ import { useNavigate } from 'react-router-dom'
 import { formatPersonaFingerprint, type BindingProof } from '@masknet/shared-base'
 import { useTheme } from '@mui/system'
 import { CopyButton } from '@masknet/shared'
-import urlcat from 'urlcat'
 import { ConnectedAccounts } from './ConnectAccounts/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
-        width: '100%',
-        background: theme.palette.maskColor.modalTitleBg,
         maxHeight: '100vh',
+        overflowY: 'hidden',
     },
     header: {
         padding: theme.spacing(2),
@@ -24,6 +22,10 @@ const useStyles = makeStyles()((theme) => ({
         gridTemplateColumns: '24px auto 24px',
         alignItems: 'center',
         flexShrink: 0,
+    },
+    profileInfo: {
+        width: '100%',
+        background: theme.palette.maskColor.modalTitleBg,
     },
     back: {
         fontSize: 24,
@@ -72,8 +74,8 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
     const handleBack = useCallback(() => navigate(-1), [])
     const theme = useTheme()
     return (
-        <Box display="flex" flexDirection="column" alignItems="center" width="100%">
-            <Box className={classes.container}>
+        <Box display="flex" flexDirection="column" alignItems="center" width="100%" className={classes.container}>
+            <Box className={classes.profileInfo}>
                 <Box className={classes.header}>
                     <button onClick={handleBack} type="submit" className={classes.back}>
                         <Icons.Comeback />
@@ -109,7 +111,7 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
                             underline="none"
                             target="_blank"
                             rel="noopener noreferrer"
-                            href={urlcat('https://web3.bio/', { s: nextId })}
+                            href={`https://web3.bio/${nextId}`}
                             className={classes.icon}>
                             <Icons.LinkOut size={12} />
                         </Link>
