@@ -1,4 +1,4 @@
-import { compact, isNil } from 'lodash-es'
+import { compact, isNil, memoize } from 'lodash-es'
 import {
     type ChainId,
     formatEthereumAddress,
@@ -17,24 +17,32 @@ import {
     type Transaction,
     isSameAddress,
 } from '@masknet/web3-shared-base'
-import DeBank from '@masknet/web3-constants/evm/debank.json'
 import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
 import {
     DebankTransactionDirection,
+    type DebankChains,
     type HistoryResponse,
     type TransferringAsset,
     type WalletTokenRecord,
 } from './types.js'
+import { DEBANK_CHAIN_TO_CHAIN_ID_MAP } from './constants.js'
 
 export function formatAssets(data: WalletTokenRecord[]): Array<FungibleAsset<ChainId, SchemaType>> {
     const resolver = new ChainResolverAPI()
-    const supportedChains = Object.values({ ...DeBank.CHAIN_ID, BSC: 'bnb' }).filter(Boolean)
+
+    const resolveNativeAddress = memoize((chainId: ChainId) => {
+        try {
+            // chainId is beyond builtin chainIds
+            return resolver.nativeCurrency(chainId)?.address || ZERO_ADDRESS
+        } catch {}
+        return ZERO_ADDRESS
+    })
 
     return data
-        .filter((x) => resolver.chainId(x.chain) && supportedChains.includes(x.chain))
+        .filter((x) => DEBANK_CHAIN_TO_CHAIN_ID_MAP[x.chain])
         .map((x) => {
-            const chainId = resolver.chainId(x.chain)!
-            const address = supportedChains.includes(x.id) ? resolver.nativeCurrency(chainId).address : x.id
+            const chainId = DEBANK_CHAIN_TO_CHAIN_ID_MAP[x.id as DebankChains]
+            const address = chainId ? resolveNativeAddress(chainId) : x.id
 
             return {
                 id: address,

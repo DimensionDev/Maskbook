@@ -40,6 +40,7 @@ export enum ChainId {
     // Arbitrum
     Arbitrum = 42161,
     Arbitrum_Rinkeby = 421611,
+    Arbitrum_Nova = 42170,
 
     // xDai
     xDai = 100,
@@ -83,6 +84,19 @@ export enum ChainId {
     Crossbell = 3737,
 
     Moonbeam = 1284,
+
+    Pulse = 369,
+
+    Klaytn = 8217,
+
+    Harmony = 1666600000,
+
+    Moonriver = 1285,
+
+    Cronos = 25,
+
+    /** BitTorrent Chain Mainnet */
+    BitTorrent = 199,
 
     // For any chains not supported yet.
     Invalid = 0,

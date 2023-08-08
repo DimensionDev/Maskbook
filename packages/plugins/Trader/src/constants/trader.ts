@@ -26,7 +26,7 @@ export const PRICE_IMPACT_NON_EXPERT_BLOCKED = 1500 // 15%
 
 export const MINIMUM_AMOUNT = new BigNumber('1e-6')
 
-export const BLOCK_TIME_SCALE: Record<ChainId, number> = {
+export const BLOCK_TIME_SCALE: Partial<Record<ChainId, number>> = {
     [ChainId.Mainnet]: 3,
     [ChainId.Ropsten]: 3,
     [ChainId.Rinkeby]: 3,

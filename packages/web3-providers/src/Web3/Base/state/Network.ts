@@ -117,7 +117,7 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
     }
 
     async updateNetwork(id: string, updates: Partial<TransferableNetwork<ChainId, SchemaType, NetworkType>>) {
-        const network = this.assertNetwork(id)
+        const network = this.storage.networks.value[id]
 
         await this.storage.networks.setValue({
             ...this.storage.networks.value,
