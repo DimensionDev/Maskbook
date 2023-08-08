@@ -818,7 +818,7 @@
     "popups_generate_a_new_persona": "Generate a new persona",
     "popups_import_wallet": "Import Wallet",
     "popups_import_wallets": "Import Wallets",
-    "popups_import_wallets_description": "Support for mnemonics, private keys, keystore import",
+    "popups_import_wallets_description": "Support mnemonic phrase, private key or keystone file.",
     "popups_import_persona_description": "Support Identity code, private key, local backups or cloud backups to access your personal data.",
     "popups_lock_wallet": "Lock Wallet",
     "popups_wallet_settings": "Wallet Settings",
