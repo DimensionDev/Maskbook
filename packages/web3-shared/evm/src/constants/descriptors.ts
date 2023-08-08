@@ -395,6 +395,21 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         downloadLink: 'https://www.coinbase.com/wallet/downloads',
     },
     {
+        ID: `${PLUGIN_ID}_okx`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.OKX,
+        name: 'OKX Wallet',
+        icon: new URL('../assets/okx.png', import.meta.url).href,
+        enableRequirements: {
+            supportedChainIds: [ChainId.Mainnet, ChainId.Arbitrum, ChainId.Avalanche, ChainId.Optimism, ChainId.Matic],
+            supportedEnhanceableSites: EnhanceableSiteList,
+            supportedExtensionSites: ExtensionSiteList,
+        },
+        homeLink: 'https://www.okx.com/web3',
+        shortenLink: 'okx.com',
+        downloadLink: 'https://www.okx.com/web3',
+    },
+    {
         ID: `${PLUGIN_ID}_opera`,
         providerAdaptorPluginID: PLUGIN_ID,
         type: ProviderType.Opera,
