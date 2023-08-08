@@ -323,6 +323,7 @@
     "wallet_transfer_my_contacts_title": "My Contacts",
     "wallets_transfer_error_address_absence": "Enter recipient address",
     "wallets_transfer_error_invalid_address": "Invalid wallet address.",
+    "wallets_transfer_error_invalid_domain": "This ENS does not exist or not be resolved.",
     "wallet_transfer_error_no_ens_support": "Network does not support ENS.",
     "wallet_transfer_error_amount_absence": "Enter an amount",
     "wallet_transfer_error_address_absence": "Enter recipient address",

@@ -35,11 +35,12 @@ function useContactsContext({ defaultName, defaultAddress }: ContextOptions = { 
 
     const inputValidationMessage = useMemo(() => {
         if (!userInput || address) return ''
-        if (
-            !(isValidAddress(userInput) || isValidDomain(userInput)) ||
-            (isValidDomain(userInput) && (resolveDomainError || !registeredAddress))
-        )
+        if (!(isValidAddress(userInput) || isValidDomain(userInput))) {
             return t('wallets_transfer_error_invalid_address')
+        }
+        if (isValidDomain(userInput) && (resolveDomainError || !registeredAddress)) {
+            return t('wallets_transfer_error_invalid_domain')
+        }
         return ''
     }, [userInput, resolveDomainError, registeredAddress])
 
