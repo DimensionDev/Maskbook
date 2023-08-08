@@ -13,7 +13,11 @@ export default function SettingsPage(props: SettingsPageProps) {
         <DashboardContainer>
             <main>
                 <DashboardHeader title="Settings" />
-                <SetupThemeMode />
+                <div className="bg-white p-5">
+                    <div className="border overflow-hidden rounded-lg">
+                        <SetupThemeMode />
+                    </div>
+                </div>
             </main>
         </DashboardContainer>
     )
@@ -61,10 +65,8 @@ const SetupThemeMode = memo(() => {
 
     return (
         <div className="flex w-full sm:p-6 justify-center sm:items-center">
-            <Typography className="w-full text-gray-400">theme</Typography>
-            <Button
-                className="dark:text-white text-black bg-black/10 dark:bg-white/10 hover:text-white"
-                onClick={openMenu}>
+            <Typography className="w-full text-black text-base">theme</Typography>
+            <Button className="text-black bg-black/10  hover:bg-black/10 hover:text-black" onClick={openMenu}>
                 {localStorage.themeMode === 'dark' ? 'Dark' : localStorage.themeMode === 'light' ? 'Light' : 'System'}
             </Button>
             {menu}

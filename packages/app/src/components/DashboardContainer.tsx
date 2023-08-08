@@ -1,8 +1,10 @@
+import { Bars3Icon } from '@heroicons/react/20/solid'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
-import { SearchResultInspector } from '@masknet/shared'
+import { EmptyStatus, SearchResultInspector } from '@masknet/shared'
 import { DisableShadowRootContext, ShadowRootIsolation } from '@masknet/theme'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
 import { useCallback, useDeferredValue, useState } from 'react'
+import { DashboardContext } from '../contexts/DashboardContext.js'
 
 export interface DashboardContainerProps {
     children: React.ReactNode
@@ -13,14 +15,21 @@ export function DashboardContainer(props: DashboardContainerProps) {
     const [search, setSearch] = useState('')
     const { value: registeredAddress = '' } = useLookupAddress(undefined, useDeferredValue(search))
     const keyword = registeredAddress || search
-
+    const { sidebarOpen, setSidebarOpen } = DashboardContext.useContainer()
     const onChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setSearch(e.target.value),
         [],
     )
     return (
-        <div className="xl:pl-72 container mx-auto">
+        <div className="xl:pl-72 container">
             <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-6 border-b border-white/5  dark:bg-zinc-900 px-4 shadow-sm sm:px-6 lg:px-8">
+                <button
+                    type="button"
+                    className="-m-2.5 p-2.5 dark:text-white text-black xl:hidden"
+                    onClick={() => setSidebarOpen(true)}>
+                    <span className="sr-only">Open sidebar</span>
+                    <Bars3Icon className="h-5 w-5" aria-hidden="true" />
+                </button>
                 <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
                     <label htmlFor="search-field" className="sr-only">
                         Search
@@ -32,7 +41,7 @@ export function DashboardContainer(props: DashboardContainerProps) {
                         />
                         <input
                             id="search-field"
-                            className="block h-full w-full border-0 bg-transparent py-0 pl-8 pr-0 text-white focus:ring-0 sm:text-sm"
+                            className="block h-full w-full border-0 bg-transparent py-0 pl-8 pr-0 dark:text-white text-black focus:ring-0 sm:text-sm"
                             placeholder="eg: Twitter accounts, Persona public keys, wallet addresses or ENS"
                             type="search"
                             name="search"
@@ -42,17 +51,22 @@ export function DashboardContainer(props: DashboardContainerProps) {
                 </div>
             </div>
             {keyword ? (
-                <div className="bg-white p-5">
-                    <div className="border rounded-lg overflow-hidden">
-                        <DisableShadowRootContext.Provider value={false}>
-                            <ShadowRootIsolation>
-                                <SearchResultInspector keyword={keyword} />
-                            </ShadowRootIsolation>
-                        </DisableShadowRootContext.Provider>
+                <div className=" lg:px-8">
+                    <div className="bg-white p-5">
+                        <div className="border rounded-lg overflow-hidden">
+                            <DisableShadowRootContext.Provider value={false}>
+                                <ShadowRootIsolation>
+                                    <SearchResultInspector
+                                        keyword={keyword}
+                                        empty={<EmptyStatus>No results</EmptyStatus>}
+                                    />
+                                </ShadowRootIsolation>
+                            </DisableShadowRootContext.Provider>
+                        </div>
                     </div>
                 </div>
             ) : (
-                children
+                <div className="lg:px-8">{children}</div>
             )}
         </div>
     )
