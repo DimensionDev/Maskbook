@@ -273,7 +273,7 @@ export const EditNetwork = memo(function EditNetwork() {
                     error={!!errors.currencySymbol}
                     {...register('currencySymbol', { required: false })}
                     placeholder="eg. ETH"
-                    disabled={isBuiltIn}
+                    disabled={isBuiltIn || !!errors.chainId}
                 />
                 {errors.currencySymbol ? (
                     <Typography className={classes.warn}>{errors.currencySymbol.message}</Typography>

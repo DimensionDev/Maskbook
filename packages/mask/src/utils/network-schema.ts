@@ -36,6 +36,24 @@ export async function fetchChains(): Promise<ChainConfig[]> {
 
 type NameValidator = (name: string) => boolean | Promise<boolean>
 
+const getRpcChainId = async (rpc: string) => {
+    const res = await fetch(rpc, {
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json',
+            Origin: location.origin,
+        },
+        body: JSON.stringify(
+            createJsonRpcPayload(0, {
+                method: EthereumMethodType.ETH_CHAIN_ID,
+                params: [],
+            }),
+        ),
+    })
+    const json = (await res.json()) as { result: string }
+    return Number.parseInt(json.result, 16)
+}
+
 /**
  * schema with basic validation
  * duplicated name validator is injected as dependency, both frontend and
@@ -58,7 +76,7 @@ export function createBaseSchema(t: I18NFunction, duplicateNameValidator: NameVa
             z.number(),
         ]),
         currencySymbol: z.string().optional(),
-        explorer: z.union([z.string().url(t('incorrect_explorer_url')), z.string().optional()]),
+        explorer: z.union([z.string().url(t('incorrect_explorer_url')), z.literal('')]),
     })
     return schema
 }
@@ -68,23 +86,9 @@ export function createSchema(t: I18NFunction, duplicateNameValidator: NameValida
     const schema = baseSchema
         .superRefine(async (schema, context) => {
             if (!schema.rpc || !schema.chainId) return true
-            let rpcId: number
+            let rpcChainId: number
             try {
-                const res = await fetch(schema.rpc, {
-                    method: 'post',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Origin: location.origin,
-                    },
-                    body: JSON.stringify(
-                        createJsonRpcPayload(0, {
-                            method: EthereumMethodType.ETH_CHAIN_ID,
-                            params: [],
-                        }),
-                    ),
-                })
-                const json = (await res.json()) as { result: string }
-                rpcId = Number.parseInt(json.result, 16)
+                rpcChainId = await getRpcChainId(schema.rpc)
             } catch {
                 context.addIssue({
                     code: z.ZodIssueCode.custom,
@@ -93,9 +97,9 @@ export function createSchema(t: I18NFunction, duplicateNameValidator: NameValida
                 })
                 return
             }
-            if (rpcId !== schema.chainId) {
+            if (rpcChainId !== schema.chainId) {
                 // Background can pass i18n params by params field to frontend
-                const params = { chain_id: rpcId }
+                const params = { chain_id: rpcChainId }
                 context.addIssue({
                     code: z.ZodIssueCode.custom,
                     path: ['chainId'],
