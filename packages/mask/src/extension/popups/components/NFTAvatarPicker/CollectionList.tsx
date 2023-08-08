@@ -12,7 +12,7 @@ export interface CollectionListProps {
     tokens: Web3Helper.NonFungibleAssetAll[]
     account?: string
     selected?: Web3Helper.NonFungibleAssetAll
-    onItemClick: (item: Web3Helper.NonFungibleAssetAll) => void
+    onItemClick: (item?: Web3Helper.NonFungibleAssetAll) => void
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -27,6 +27,9 @@ const useStyles = makeStyles()((theme) => ({
         height: 86,
         maxHeight: 86,
     },
+    disabled: {
+        opacity: 0.5,
+    },
 }))
 
 export const CollectionList = memo<CollectionListProps>(function CollectionList({
@@ -38,7 +41,7 @@ export const CollectionList = memo<CollectionListProps>(function CollectionList(
 }) {
     const { t } = useI18N()
     const { pluginID } = useNetworkContext()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
 
     if ((!loading && !tokens.length) || !account) {
         return (
@@ -63,17 +66,24 @@ export const CollectionList = memo<CollectionListProps>(function CollectionList(
     return (
         <Box className={classes.container}>
             {tokens.length
-                ? tokens.map((x, index) => (
-                      <CollectibleCard
-                          className={classes.item}
-                          asset={x}
-                          key={index}
-                          disableNetworkIcon
-                          onClick={() => onItemClick(x)}
-                          isSelected={isSameNFT(pluginID, x, selected)}
-                          useRadio
-                      />
-                  ))
+                ? tokens.map((x, index) => {
+                      const isSelected = isSameNFT(pluginID, x, selected)
+                      const disabled = selected && !isSelected
+                      return (
+                          <CollectibleCard
+                              className={cx(classes.item, disabled ? classes.disabled : undefined)}
+                              asset={x}
+                              key={index}
+                              disableNetworkIcon
+                              onClick={() => {
+                                  if (disabled) return
+                                  onItemClick(!selected ? x : undefined)
+                              }}
+                              isSelected={isSameNFT(pluginID, x, selected)}
+                              useRadio
+                          />
+                      )
+                  })
                 : null}
         </Box>
     )

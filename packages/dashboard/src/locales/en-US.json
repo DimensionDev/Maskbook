@@ -452,7 +452,7 @@
     "persona_phrase_title": "Your Recovery phrase",
     "persona_phrase_tips": "Please select the correct method to restore the backup.",
     "persona_phrase_copy_description": "The mnemonic has been copied, please keep it in a safe place.",
-    "persona_phrase_create_tips": "Never share recovery phrase with anyone, sotre it seurely!",
+    "persona_phrase_create_tips": "Never share 12-word secret recovery phrase with anyone!",
     "persona_phrase_create_check_tips": "I wrote down all the words in order",
     "persona_onboarding_to_twitter": "Experience in Twitter",
     "persona_onboarding_set_payment_password": "Set Payment Password",

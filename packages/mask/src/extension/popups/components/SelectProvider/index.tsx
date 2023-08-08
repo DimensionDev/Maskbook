@@ -2,11 +2,15 @@ import { memo, useCallback } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { getRegisteredWeb3Providers } from '@masknet/plugin-infra'
-import { ExtensionSite, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { ExtensionSite, NetworkPluginID, PopupModalRoutes, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
 import { useWallets } from '@masknet/web3-hooks-base'
+import { Web3 } from '@masknet/web3-providers'
+import Services from '../../../service.js'
+import { HomeTabType } from '../../pages/Wallet/type.js'
+import { useModalNavigate } from '../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -44,13 +48,14 @@ export const SelectProvider = memo(function SelectProvider() {
     const disableNewWindow = params.get('disableNewWindow')
     const onlyMask = params.get('onlyMask')
     const providers = getRegisteredWeb3Providers(NetworkPluginID.PLUGIN_EVM)
+    const modalNavigate = useModalNavigate()
 
     const onClick = useCallback(
         async (providerType: ProviderType) => {
             if (providerType === ProviderType.MaskWallet) {
-                // TODO: improve web3 state in middleware, like wallet connect
+                const hasWallets = wallets.filter((x) => !x.owner).length
                 navigate(
-                    wallets.length
+                    hasWallets
                         ? urlcat(PopupRoutes.SelectWallet, {
                               setNFTAvatar: onlyMask ? true : undefined,
                               verifyWallet: !onlyMask ? true : undefined,
@@ -59,7 +64,35 @@ export const SelectProvider = memo(function SelectProvider() {
                         : PopupRoutes.Wallet,
                 )
                 return
+            } else if (providerType === ProviderType.WalletConnect) {
+                const account = await Web3.connect({ providerType })
+
+                // wallet connect has been connected
+                if (account) {
+                    navigate(PopupRoutes.ConnectWallet)
+                    return
+                }
             } else {
+                if (disableNewWindow) {
+                    modalNavigate(
+                        PopupModalRoutes.ConnectProvider,
+                        {
+                            providerType,
+                        },
+                        {
+                            replace: true,
+                        },
+                    )
+                    return
+                }
+
+                await Services.Helper.openPopupWindow(
+                    PopupRoutes.Personas,
+                    { providerType, from: PopupModalRoutes.SelectProvider, tab: HomeTabType.ConnectedWallets },
+                    true,
+                )
+
+                return
             }
         },
         [wallets, disableNewWindow, onlyMask],
