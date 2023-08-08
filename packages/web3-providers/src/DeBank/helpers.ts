@@ -72,6 +72,8 @@ function toTxAsset(
     token_dict: HistoryResponse['data']['token_dict'],
 ) {
     const token = token_dict[token_id]
+    // token_dict might not contain value to current token_id
+    if (!token) return null
     const schema = token.decimals
         ? isValidAddress(token.id)
             ? SchemaType.Native
@@ -130,10 +132,10 @@ export function formatTransactions({
             from: transaction.tx?.from_addr ?? '',
             to: transaction.other_addr,
             status: transaction.tx?.status,
-            assets: [
+            assets: compact([
                 ...transaction.sends.map((asset) => toTxAsset(asset, chainId, token_dict)),
                 ...transaction.receives.map((asset) => toTxAsset(asset, chainId, token_dict)),
-            ],
+            ]),
             fee: transaction.tx
                 ? { eth: transaction.tx.eth_gas_fee?.toString(), usd: transaction.tx.usd_gas_fee?.toString() }
                 : undefined,
