@@ -836,7 +836,7 @@
     "popups_wallet_create_payment_password": "设置密码",
     "popups_wallet_payment_password": "支付密码",
     "popups_wallet_set_up_payment_password": "设置支付密码",
-    "popups_wallet_create_payment_password_tip": "至少6个字符",
+    "popups_wallet_create_payment_password_tip": "至少8个字符",
     "popups_wallet_payment_password_tip": "支付密码必须是数字、大小写字母和特殊字符中的2个类别的组合，长度为 8-20 个字符。",
     "popups_wallet_start_up_tip": "请连接到您的钱包，可选择创建一个新钱包或使用助记词恢复一个旧钱包。",
     "popups_wallet_name_placeholder": "输入1-12 个字符",
