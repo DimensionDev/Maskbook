@@ -12,7 +12,7 @@ import { useMutation } from '@tanstack/react-query'
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
-import { z, type ZodCustomIssue } from 'zod'
+import { type z, type ZodCustomIssue } from 'zod'
 import { useI18N, type AvailableLocaleKeys } from '../../../../../utils/index.js'
 import { createSchema } from './network-schema.js'
 import { PageTitleContext } from '../../../context.js'
@@ -112,33 +112,14 @@ export const EditNetwork = memo(function EditNetwork() {
     }, [isBuiltIn, id, classes.iconButton, showSnackbar, t, Network])
 
     const schema = useMemo(() => {
-        return createSchema(t, async (name) => {
-            return !networks.find((network) => network.name === name && network.ID !== id)
-        }).superRefine((schema, context) => {
-            const { rpc } = schema
-            const network = networks.find((network) => network.rpcUrl === rpc && network.ID !== id)
-            if (network) {
-                context.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    path: ['rpc'],
-                    message: t('rpc_url_is_used_by', { name: network.name }),
-                })
-                return false
-            } else {
-                networks.some((network) => {
-                    if (getRPCConstant(network.chainId, 'RPC_URLS')?.includes(rpc)) {
-                        context.addIssue({
-                            code: z.ZodIssueCode.custom,
-                            path: ['rpc'],
-                            message: t('rpc_url_is_used_by', { name: network.name }),
-                        })
-                        return true
-                    }
-                    return false
-                })
-            }
-            return true
-        })
+        return createSchema(
+            t,
+            async (name) => {
+                return !networks.find((network) => network.name === name && network.ID !== id)
+            },
+            networks,
+            id,
+        )
     }, [t, id, networks])
 
     type FormInputs = z.infer<typeof schema>
