@@ -1,6 +1,5 @@
-import { EthereumMethodType, createJsonRpcPayload } from '@masknet/web3-shared-evm'
-import { memoize } from 'lodash-es'
 import { z } from 'zod'
+import { fetchChainId } from '@masknet/web3-providers/helpers'
 import type { I18NFunction } from '../../../../../utils/i18n-next-ui.js'
 
 interface ChainConfig {
@@ -37,24 +36,6 @@ export async function fetchChains(): Promise<ChainConfig[]> {
 
 type NameValidator = (name: string) => boolean | Promise<boolean>
 
-const getRpcChainId = memoize(async (rpc: string) => {
-    const res = await fetch(rpc, {
-        method: 'post',
-        headers: {
-            'Content-Type': 'application/json',
-            Origin: location.origin,
-        },
-        body: JSON.stringify(
-            createJsonRpcPayload(0, {
-                method: EthereumMethodType.ETH_CHAIN_ID,
-                params: [],
-            }),
-        ),
-    })
-    const json = (await res.json()) as { result: string }
-    return Number.parseInt(json.result, 16)
-})
-
 /**
  * schema with basic validation
  * duplicated name validator is injected as dependency, both frontend and
@@ -89,7 +70,7 @@ export function createSchema(t: I18NFunction, duplicateNameValidator: NameValida
             if (!schema.rpc || !schema.chainId) return true
             let rpcChainId: number
             try {
-                rpcChainId = await getRpcChainId(schema.rpc)
+                rpcChainId = await fetchChainId(schema.rpc)
             } catch {
                 context.addIssue({
                     code: z.ZodIssueCode.custom,
