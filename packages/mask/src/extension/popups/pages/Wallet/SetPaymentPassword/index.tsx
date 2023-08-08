@@ -144,7 +144,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                 const hasPassword = await WalletRPC.hasPassword()
 
                 if (hasPassword) {
-                    CrossIsolationMessages.events.hasPaymentPasswordUpdated.sendToAll(true)
+                    CrossIsolationMessages.events.passwordStatusUpdated.sendToAll(true)
                     navigate(PopupRoutes.Wallet, { replace: true })
                 }
             } catch (error) {

@@ -130,7 +130,7 @@ export const Onboarding = memo(function Onboarding() {
     }, [t])
 
     useEffect(() => {
-        return CrossIsolationMessages.events.hasPaymentPasswordUpdated.on((hasPassword) => {
+        return CrossIsolationMessages.events.passwordStatusUpdated.on((hasPassword) => {
             if (!hasPassword) return
             retry()
             showSnackbar(t.persona_onboarding_set_payment_password(), {

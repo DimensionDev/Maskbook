@@ -1,14 +1,14 @@
+import { useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Icons } from '@masknet/icons'
 import { useContainer } from 'unstated-next'
 import { Box, ListItem, Typography, useTheme } from '@mui/material'
-import { useI18N } from '../../../../../utils/index.js'
-import { useStyles } from './useStyles.js'
-import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useWallet, useWallets } from '@masknet/web3-hooks-base'
-import { useMemo } from 'react'
 import { isSameAddress } from '@masknet/web3-shared-base'
+import { useI18N } from '../../../../../utils/index.js'
 import { WalletContext } from '../hooks/useWalletContext.js'
+import { useStyles } from './useStyles.js'
 
 export function ChangeOwner() {
     const { t } = useI18N()
