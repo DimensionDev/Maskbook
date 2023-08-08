@@ -1,10 +1,12 @@
 import { useMemo, useState } from 'react'
 import { createContainer } from 'unstated-next'
 import { NetworkPluginID, type Wallet } from '@masknet/shared-base'
-import { useContacts, useChainContext, useLookupAddress, useWallets } from '@masknet/web3-hooks-base'
-import { isValidAddress, isValidDomain } from '@masknet/web3-shared-evm'
+import { useContacts, useChainContext, useLookupAddress, useWallets, useAddressType } from '@masknet/web3-hooks-base'
+import { AddressType, isValidAddress, isValidDomain } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils/index.js'
 import { type Contact } from '@masknet/web3-shared-base'
+import { useAsync } from 'react-use'
+import { GoPlusLabs } from '@masknet/web3-providers'
 
 interface ContextOptions {
     defaultName: string
@@ -33,15 +35,33 @@ function useContactsContext({ defaultName, defaultAddress }: ContextOptions = { 
         return contact?.address
     }, [userInput, registeredAddress, contacts, wallets])
 
+    const { value: addressType } = useAddressType(NetworkPluginID.PLUGIN_EVM, address, {
+        chainId,
+    })
+
+    const { value: security } = useAsync(async () => {
+        if (!isValidAddress(address)) return
+        return GoPlusLabs.getAddressSecurity(chainId, address)
+    }, [chainId, address])
+
+    const isMaliciousAddress = security && Object.values(security).filter((x) => x === '1').length > 0
+
     const inputValidationMessage = useMemo(() => {
+        if (isMaliciousAddress) return t('wallets_transfer_error_address_scam')
         if (!userInput || address) return ''
-        if (
-            !(isValidAddress(userInput) || isValidDomain(userInput)) ||
-            (isValidDomain(userInput) && (resolveDomainError || !registeredAddress))
-        )
+        if (!(isValidAddress(userInput) || isValidDomain(userInput))) {
             return t('wallets_transfer_error_invalid_address')
+        }
+        if (isValidDomain(userInput) && (resolveDomainError || !registeredAddress)) {
+            return t('wallets_transfer_error_invalid_domain')
+        }
         return ''
-    }, [userInput, resolveDomainError, registeredAddress])
+    }, [userInput, resolveDomainError, registeredAddress, isMaliciousAddress])
+
+    const inputWarningMessage = useMemo(() => {
+        if (addressType === AddressType.Contract) return t('wallets_transfer_warning_contract_address')
+        return ''
+    }, [addressType])
 
     return {
         contacts,
@@ -50,6 +70,7 @@ function useContactsContext({ defaultName, defaultAddress }: ContextOptions = { 
         userInput,
         setUserInput,
         inputValidationMessage,
+        inputWarningMessage,
     }
 }
 

@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useState } from 'react'
+import { Fragment, useCallback, useEffect, type Dispatch } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { v4 as uuid } from 'uuid'
 import { ArrowDownward as ArrowDownwardIcon } from '@mui/icons-material'
@@ -6,7 +6,7 @@ import { ITO_EXCHANGE_RATION_MAX } from '../constants.js'
 import {
     type ExchangeTokenAndAmountState,
     ExchangeTokenAndAmountActionType,
-    useExchangeTokenAndAmount,
+    type ExchangeTokenAndAmountAction,
 } from './hooks/useExchangeTokenAmountstate.js'
 import { ExchangeTokenPanel } from './ExchangeTokenPanel.js'
 import type { FungibleToken } from '@masknet/web3-shared-base'
@@ -22,68 +22,71 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface ExchangeTokenPanelGroupProps {
     token: FungibleToken<ChainId, SchemaType> | undefined
-    origin: ExchangeTokenAndAmountState[]
-    onTokenAmountChange: (data: ExchangeTokenAndAmountState[]) => void
+    dispatchExchangeTokenList: Dispatch<ExchangeTokenAndAmountAction>
+    exchangeTokenList: ExchangeTokenAndAmountState[]
     chainId: ChainId
 }
 
 export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
     const { classes } = useStyles()
     const t = useI18N()
-    const { onTokenAmountChange, chainId } = props
-    const [selectedTokensAddress, setSelectedTokensAddress] = useState<string[]>([])
-    const [exchangeTokenArray, dispatchExchangeTokenArray] = useExchangeTokenAndAmount(props.origin)
+    const { dispatchExchangeTokenList, exchangeTokenList, chainId } = props
 
     const onAdd = useCallback(() => {
-        if (exchangeTokenArray.length > ITO_EXCHANGE_RATION_MAX) return
-        dispatchExchangeTokenArray({
+        if (exchangeTokenList.length > ITO_EXCHANGE_RATION_MAX) return
+        dispatchExchangeTokenList({
             type: ExchangeTokenAndAmountActionType.ADD,
             key: uuid(),
             token: undefined,
             amount: '0',
         })
-    }, [dispatchExchangeTokenArray, exchangeTokenArray.length])
+    }, [dispatchExchangeTokenList, exchangeTokenList])
 
     const onAmountChange = useCallback(
         (amount: string, key: string) => {
-            dispatchExchangeTokenArray({
+            dispatchExchangeTokenList({
                 type: ExchangeTokenAndAmountActionType.UPDATE_AMOUNT,
                 amount,
                 key,
             })
         },
-        [dispatchExchangeTokenArray],
+        [dispatchExchangeTokenList],
     )
 
     const onTokenChange = useCallback(
         (token: FungibleToken<ChainId, SchemaType>, key: string) => {
-            dispatchExchangeTokenArray({
+            dispatchExchangeTokenList({
                 type: ExchangeTokenAndAmountActionType.UPDATE_TOKEN,
                 token,
                 key,
             })
 
-            dispatchExchangeTokenArray({
+            dispatchExchangeTokenList({
                 type: ExchangeTokenAndAmountActionType.UPDATE_AMOUNT,
                 amount: '',
                 key,
             })
         },
-        [dispatchExchangeTokenArray],
+        [dispatchExchangeTokenList],
+    )
+
+    const onTokenRemove = useCallback(
+        (item: ExchangeTokenAndAmountState) => {
+            dispatchExchangeTokenList({
+                type: ExchangeTokenAndAmountActionType.REMOVE,
+                key: item.key,
+            })
+        },
+        [dispatchExchangeTokenList],
     )
 
     useEffect(() => {
-        onTokenAmountChange(exchangeTokenArray)
-        setSelectedTokensAddress(exchangeTokenArray.map((x) => x.token?.address ?? ''))
-    }, [exchangeTokenArray, onTokenAmountChange])
-
-    useEffect(() => {
-        dispatchExchangeTokenArray({ type: ExchangeTokenAndAmountActionType.CLEAR })
+        dispatchExchangeTokenList({ type: ExchangeTokenAndAmountActionType.CLEAR })
     }, [chainId])
 
     return (
         <>
-            {exchangeTokenArray.map((item, idx) => {
+            {exchangeTokenList.map((item, idx) => {
                 return (
                     <Fragment key={idx}>
                         <ExchangeTokenPanel
@@ -93,18 +96,13 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
                             disableBalance={idx !== 0}
                             isSell={idx === 0}
                             inputAmount={item.amount}
-                            selectedTokensAddress={selectedTokensAddress}
+                            selectedTokensAddress={exchangeTokenList.map((x) => x.token?.address ?? '')}
                             onAmountChange={onAmountChange}
                             exchangeToken={item.token}
                             onExchangeTokenChange={onTokenChange}
-                            showRemove={idx > 0 && idx < exchangeTokenArray.length && exchangeTokenArray.length !== 2}
-                            showAdd={idx === exchangeTokenArray.length - 1 && idx < ITO_EXCHANGE_RATION_MAX}
-                            onRemove={() =>
-                                dispatchExchangeTokenArray({
-                                    type: ExchangeTokenAndAmountActionType.REMOVE,
-                                    key: item.key,
-                                })
-                            }
+                            showRemove={idx > 0 && idx < exchangeTokenList.length && exchangeTokenList.length !== 2}
+                            showAdd={idx === exchangeTokenList.length - 1 && idx < ITO_EXCHANGE_RATION_MAX}
+                            onRemove={() => onTokenRemove(item)}
                             onAdd={onAdd}
                             placeholder={idx ? `1${props.token?.symbol}=` : undefined}
                         />

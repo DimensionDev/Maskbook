@@ -65,7 +65,7 @@ const Unlock = memo(() => {
     }, [password, params])
 
     const navigateToResetWallet = useCallback(() => {
-        navigate({ pathname: PopupRoutes.ResetWallet }, { replace: true })
+        navigate({ pathname: PopupRoutes.ResetWallet })
     }, [])
 
     return (

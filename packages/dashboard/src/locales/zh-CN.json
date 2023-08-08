@@ -449,7 +449,6 @@
     "persona_onboarding_wallets_one": "{{count}} 钱包 🚀",
     "persona_onboarding_wallets_other": "{{count}} 钱包 🚀",
     "wallet_history_no_data": "没有历史记录。",
-    "welcome_agreement_policy": "我已阅读并同意 <agreement>服务协议</agreement> 和 <policy>隐私政策</policy>。",
     "wallets_history_burn": "燃烧",
     "wallet_connect_tips": "您已连接到一个钱包。请在那个钱包中切换网络，或切换到另一个钱包。",
     "identity_words": "身份助记词",

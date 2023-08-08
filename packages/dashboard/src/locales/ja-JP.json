@@ -389,6 +389,5 @@
     "recovery_smart_pay_wallet_description_other": "{{count}} ローカル SmartPay ウォレットが検出され、正常に復元されました。",
     "welcome_request_to_collect": "お客様の利用情報を収集し、改善に役立てます。",
     "wallet_history_no_data": "履歴記録はありません。",
-    "welcome_agreement_policy": "私は <agreement>サービス規約</agreement> と <policy>プライバシーポリシー</policy>を読み、これに同意します。",
     "wallets_history_burn": "バーン"
 }

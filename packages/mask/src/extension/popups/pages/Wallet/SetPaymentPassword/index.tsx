@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Trans } from 'react-i18next'
@@ -6,7 +6,13 @@ import { Controller } from 'react-hook-form'
 import type { z as zod } from 'zod'
 import { Box, Link, Typography, useTheme } from '@mui/material'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { CrossIsolationMessages, NetworkPluginID, PopupRoutes, getDefaultWalletPassword } from '@masknet/shared-base'
+import {
+    CrossIsolationMessages,
+    NetworkPluginID,
+    PopupRoutes,
+    getDefaultWalletPassword,
+    type Wallet,
+} from '@masknet/shared-base'
 import { useBalance, useReverseAddress, useWallets } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -135,7 +141,12 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
         setError,
         formState: { errors, isValid },
         schema,
+        reset,
     } = usePasswordForm()
+
+    useEffect(() => {
+        reset({ password: '', confirm: '' })
+    }, [isCreating])
 
     const [{ loading }, onConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
@@ -144,8 +155,9 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                 const hasPassword = await WalletRPC.hasPassword()
 
                 if (hasPassword) {
+                    const from = params.get('from')
                     CrossIsolationMessages.events.passwordStatusUpdated.sendToAll(true)
-                    navigate(PopupRoutes.Wallet, { replace: true })
+                    navigate({ pathname: from || PopupRoutes.Wallet }, { replace: true })
                 }
             } catch (error) {
                 if (error instanceof Error) {
@@ -153,7 +165,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                 }
             }
         },
-        [setError],
+        [setError, params],
     )
 
     const onSubmit = handleSubmit(onConfirm)
@@ -201,7 +213,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                                             error={!isValid && !!errors.confirm?.message}
                                             type="password"
                                             variant="filled"
-                                            placeholder={t('popups_wallet_re_payment_password')}
+                                            placeholder={t('popups_wallet_confirm_password')}
                                         />
                                     )}
                                     name="confirm"
@@ -229,7 +241,22 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                             fontWeight={700}>
                             <Trans
                                 i18nKey="popups_wallet_term_of_service_agree_part_2"
-                                components={{ strong: <strong className={classes.strong} /> }}
+                                components={{
+                                    agreement: (
+                                        <a
+                                            className={classes.strong}
+                                            target="_blank"
+                                            href="https://legal.mask.io/maskbook/service-agreement-beta-browser.html"
+                                        />
+                                    ),
+                                    policy: (
+                                        <a
+                                            className={classes.strong}
+                                            target="_blank"
+                                            href="https://legal.mask.io/maskbook/privacy-policy-browser.html"
+                                        />
+                                    ),
+                                }}
                             />
                         </Typography>
                     </>
@@ -237,7 +264,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                     <>
                         <Box className={classes.walletItemList}>
                             {wallets.map((wallet, index) => (
-                                <WalletItem address={wallet.address} key={index} />
+                                <WalletItem wallet={wallet} key={index} />
                             ))}
                         </Box>
                         <div className={classes.setPasswordButtonWrapper}>
@@ -270,11 +297,12 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
 })
 
 interface WalletItemProps {
-    address: string
+    wallet: Wallet
 }
 
-function WalletItem({ address }: WalletItemProps) {
+function WalletItem({ wallet }: WalletItemProps) {
     const { classes } = useStyles()
+    const { address, owner } = wallet
     const { data: balance = '0' } = useBalance(NetworkPluginID.PLUGIN_EVM, {
         account: address,
         chainId: ChainId.Mainnet,
@@ -285,7 +313,7 @@ function WalletItem({ address }: WalletItemProps) {
 
     return (
         <Box className={classes.addWalletWrapper}>
-            <Icons.ETH size={30} />
+            {owner ? <Icons.SmartPay size={30} /> : <Icons.ETH size={30} />}
             <div>
                 <Typography className={classes.subTitle}>
                     {domain || formatEthereumAddress(address, 4)}{' '}
