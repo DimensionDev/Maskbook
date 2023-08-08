@@ -96,7 +96,7 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
                         )}
                     </Box>
                     <Typography fontSize={18} fontWeight="700" lineHeight="22px" marginTop="8px">
-                        {publicKey ? formatPersonaFingerprint(publicKey, 4) : null}
+                        {publicKey ? formatPersonaFingerprint(publicKey) : null}
                     </Typography>
                     <Typography
                         fontSize={12}

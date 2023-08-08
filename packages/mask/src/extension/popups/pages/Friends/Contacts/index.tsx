@@ -37,7 +37,7 @@ export interface ContactsProps {
 }
 
 export const Contacts = memo<ContactsProps>(function Contacts({ friends }) {
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
     return friends.length === 0 ? (
         <EmptyStatus className={classes.empty}>{t('popups_encrypted_friends_no_friends')}</EmptyStatus>

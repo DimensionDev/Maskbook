@@ -2,9 +2,10 @@ import { memo } from 'react'
 import { Box, Link } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { NextIDPlatform, formatPersonaName } from '@masknet/shared-base'
+import { NextIDPlatform } from '@masknet/shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { safeUnreachable } from '@masknet/kit'
+import { formatUserId } from '../SocialAccount/index.js'
 
 export type SupportedPlatforms =
     | NextIDPlatform.Ethereum
@@ -40,8 +41,8 @@ export const url: Record<SupportedPlatforms, string> = {
     [NextIDPlatform.Unstoppable]: 'https://ud.me/',
     [NextIDPlatform.GitHub]: 'https://github.com/',
     [NextIDPlatform.SpaceId]: 'https://space.storage/',
-    [NextIDPlatform.Farcaster]: 'https://www.farcaster.xyz/',
-    [NextIDPlatform.LENS]: 'https://lenster.xyz/',
+    [NextIDPlatform.Farcaster]: 'https://warpcast.com/',
+    [NextIDPlatform.LENS]: 'https://lenster.xyz/u/',
     [NextIDPlatform.Ethereum]: 'https://etherscan.io/address/',
 }
 
@@ -72,7 +73,7 @@ export const Account = memo<AccountProps>(function Account({ userId, icon }) {
                     }
                 })()}
                 <Box className={classes.userId}>
-                    {icon === NextIDPlatform.Ethereum ? formatEthereumAddress(userId, 4) : formatPersonaName(userId)}
+                    {icon === NextIDPlatform.Ethereum ? formatEthereumAddress(userId, 4) : formatUserId(userId)}
                     <Link
                         underline="none"
                         target="_blank"

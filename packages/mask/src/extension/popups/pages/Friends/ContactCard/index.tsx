@@ -113,7 +113,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                     )}
                     <Box>
                         <Typography fontSize={14} fontWeight={700} lineHeight="18px">
-                            {publicKey ? formatPersonaFingerprint(publicKey, 4) : null}
+                            {publicKey ? formatPersonaFingerprint(publicKey) : null}
                         </Typography>
                         <Typography
                             fontSize={12}
