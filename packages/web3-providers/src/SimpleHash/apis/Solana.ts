@@ -18,6 +18,7 @@ import {
     createSolanaNonFungibleCollection,
     resolveSolanaChainId,
 } from '../solana-helpers.js'
+import { SPAM_SCORE } from '../constants.js'
 
 export class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
@@ -100,7 +101,7 @@ export class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainI
 
         const collections = response.collections
             // Might got bad data responded including id field and other fields empty
-            .filter((x) => x?.id && isValidChainId(resolveSolanaChainId(x.chain)) && x.spam_score !== 100)
+            .filter((x) => x?.id && isValidChainId(resolveSolanaChainId(x.chain)) && x.spam_score !== SPAM_SCORE)
             .map((x) => createSolanaNonFungibleCollection(x))
 
         return createPageable(collections, createIndicator(indicator))
