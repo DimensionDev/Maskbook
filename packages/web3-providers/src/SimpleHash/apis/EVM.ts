@@ -54,7 +54,7 @@ import { NonFungibleMarketplace } from '../../NFTScan/helpers/utils.js'
 import { ChainResolverAPI, ExplorerResolverAPI } from '../../Web3/EVM/apis/ResolverAPI.js'
 import type { HubOptions_Base, NonFungibleTokenAPI, TrendingAPI } from '../../entry-types.js'
 import { historicalPriceState } from '../historicalPriceState.js'
-import { SIMPLE_HASH_HISTORICAL_PRICE_START_TIME } from '../constants.js'
+import { SIMPLE_HASH_HISTORICAL_PRICE_START_TIME, SPAM_SCORE } from '../constants.js'
 
 export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     private Looksrare = new LooksRareAPI()
@@ -285,7 +285,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         const filteredCollections = response.collections
             // Might got bad data responded including id field and other fields empty
             .filter((x) => {
-                if (!x?.id || x.spam_score === 100) return false
+                if (!x?.id || x.spam_score === SPAM_SCORE) return false
                 return (
                     isValidChainId(resolveChainId(x.chain)) &&
                     x.top_contracts.length > 0 &&
