@@ -37,7 +37,7 @@ export const Avalanche = /*#__PURE__*/ __createIcon('Avalanche', [
 ])
 export const Blocto = /*#__PURE__*/ __createIcon('Blocto', [
     {
-        u: () => new URL('./brands/Blocto.png', import.meta.url),
+        u: () => new URL('./brands/Blocto.svg', import.meta.url),
     },
 ])
 export const BSC = /*#__PURE__*/ __createIcon('BSC', [

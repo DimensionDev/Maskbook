@@ -5,7 +5,7 @@ export function arweave_url() { return new URL("./brands/Arweave.png", import.me
 export function astar_url() { return new URL("./brands/Astar.png", import.meta.url) }
 export function aurora_url() { return new URL("./brands/Aurora.svg", import.meta.url) }
 export function avalanche_url() { return new URL("./brands/Avalanche.svg", import.meta.url) }
-export function blocto_url() { return new URL("./brands/Blocto.png", import.meta.url) }
+export function blocto_url() { return new URL("./brands/Blocto.svg", import.meta.url) }
 export function bsc_url() { return new URL("./brands/BSC.svg", import.meta.url) }
 export function celo_url() { return new URL("./brands/Celo.svg", import.meta.url) }
 export function coin_gecko_url() { return new URL("./brands/CoinGecko.svg", import.meta.url) }
