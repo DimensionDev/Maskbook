@@ -904,7 +904,6 @@
     "popups_wallet_set_payment_password": "Set the payment password",
     "popups_wallet_create_payment_password": "Create Password",
     "popups_wallet_payment_password": "Payment Password",
-    "popups_wallet_re_payment_password": "Re-enter the payment password",
     "popups_wallet_set_up_payment_password": "Set up payment password",
     "popups_wallet_old_payment_password": "Old Payment Password",
     "popups_wallet_new_payment_password": "New Payment Password",

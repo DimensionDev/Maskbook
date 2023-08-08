@@ -206,7 +206,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                                             error={!isValid && !!errors.confirm?.message}
                                             type="password"
                                             variant="filled"
-                                            placeholder={t('popups_wallet_re_payment_password')}
+                                            placeholder={t('popups_wallet_confirm_password')}
                                         />
                                     )}
                                     name="confirm"
