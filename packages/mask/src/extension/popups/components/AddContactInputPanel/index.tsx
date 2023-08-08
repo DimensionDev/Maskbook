@@ -52,6 +52,10 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.danger,
         fontSize: 14,
     },
+    warning: {
+        color: theme.palette.maskColor.warn,
+        fontSize: 14,
+    },
     fieldWrapper: {
         flex: 1,
     },
@@ -71,6 +75,7 @@ const AddContactInputPanel = memo(function AddContactInputPanel(props: BoxProps)
         userInput,
         setUserInput,
         inputValidationMessage: addressValidationMessage,
+        inputWarningMessage,
     } = ContactsContext.useContainer()
 
     const theme = useTheme()
@@ -107,6 +112,11 @@ const AddContactInputPanel = memo(function AddContactInputPanel(props: BoxProps)
                         classes: { input: classes.inputText },
                     }}
                 />
+                {inputWarningMessage && !addressValidationMessage ? (
+                    <Typography className={classes.warning} mt={1}>
+                        {inputWarningMessage}
+                    </Typography>
+                ) : null}
                 {addressValidationMessage ? (
                     <Typography className={classes.validation} mt={1}>
                         {addressValidationMessage}
