@@ -238,7 +238,7 @@ export const EditNetwork = memo(function EditNetwork() {
                     disabled={isBuiltIn}
                     inputProps={{
                         placeholder: '',
-                        maxLength: 20,
+                        maxLength: 24,
                     }}
                 />
                 {errors.name ? <Typography className={classes.error}>{errors.name.message}</Typography> : null}
