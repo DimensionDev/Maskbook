@@ -208,7 +208,6 @@ export const EditNetwork = memo(function EditNetwork() {
     // Discard currencySymbol warning
     const isValid = isFormValid || (!!errors.currencySymbol && Object.keys(omit(errors, 'currencySymbol')).length === 0)
     const isNotReady = isValidating || (!isValidating && !isValid) || !isDirty || isChecking
-    console.log({ isValidating, isDirty, isChecking, isValid, errors, isFormValid })
     const disabled = isNotReady || isMutating || isSubmitting
 
     // currency symbol error is tolerable,
