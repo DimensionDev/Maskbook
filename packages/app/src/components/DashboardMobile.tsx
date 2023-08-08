@@ -4,6 +4,8 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import { DashboardContext } from '../contexts/DashboardContext.js'
 import { WalletItem } from './Wallet.js'
 import { Navigation } from './Navigation.js'
+import { InstallExtension } from './Install.js'
+import { env } from '@masknet/flags'
 
 export interface DashboardForMobileProps {}
 
@@ -58,9 +60,15 @@ export function DashboardForMobile(props: DashboardForMobileProps) {
                                     <WalletItem />
                                 </div>
                                 <nav className="flex flex-1 flex-col">
-                                    <ul role="list" className="flex flex-1 flex-col gap-y-7">
+                                    <ul role="list" className="flex flex-1 flex-col gap-y-7  justify-between">
                                         <li>
                                             <Navigation />
+                                        </li>
+                                        <li>
+                                            <InstallExtension />
+                                            <span className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 dark:text-white text-black ">
+                                                {`Version: ${env.VERSION}`}
+                                            </span>
                                         </li>
                                     </ul>
                                 </nav>

@@ -1,6 +1,7 @@
 import { env } from '@masknet/flags'
 import { WalletItem } from './Wallet.js'
 import { Navigation } from './Navigation.js'
+import { InstallExtension } from './Install.js'
 
 export interface SidebarForDesktopProps {}
 
@@ -17,6 +18,7 @@ export function DashboardForDesktop(props: SidebarForDesktopProps) {
                             <Navigation />
                         </li>
                         <li className="-mx-6 mt-auto">
+                            <InstallExtension />
                             <span className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 dark:text-white text-black ">
                                 {`Version: ${env.VERSION}`}
                             </span>
