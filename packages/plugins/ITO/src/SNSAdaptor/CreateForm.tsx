@@ -16,7 +16,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { Box, Stack, Typography, InputBase, inputBaseClasses } from '@mui/material'
 import { makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
 import { Check as CheckIcon, Close as UnCheckIcon } from '@mui/icons-material'
-import type { ExchangeTokenAndAmountState } from './hooks/useExchangeTokenAmountstate.js'
+import { useExchangeTokenAndAmount, type ExchangeTokenAndAmountState } from './hooks/useExchangeTokenAmountstate.js'
 import type { PoolSettings } from './hooks/useFill.js'
 import { useQualificationVerify } from './hooks/useQualificationVerify.js'
 import { decodeRegionCode, encodeRegionCode, regionCodes, useRegionSelect } from './hooks/useRegion.js'
@@ -169,8 +169,7 @@ export function CreateForm(props: CreateFormProps) {
         })
     }
 
-    const [tokenAndAmounts, setTokenAndAmounts] = useState<ExchangeTokenAndAmountState[]>(TAS)
-
+    const [exchangeTokenList, dispatchExchangeTokenList] = useExchangeTokenAndAmount(TAS)
     const [startTime, setStartTime] = useState(origin?.startTime || new Date())
     const [endTime, setEndTime] = useState(origin?.endTime || new Date())
     const [unlockTime, setUnlockTime] = useState(origin?.unlockTime || new Date())
@@ -225,7 +224,7 @@ export function CreateForm(props: CreateFormProps) {
     }, [advanceSettingData])
 
     useEffect(() => {
-        const [first, ...rest] = tokenAndAmounts
+        const [first, ...rest] = exchangeTokenList
         const qualificationAddress_ =
             qualification?.isQualification && advanceSettingData.contract
                 ? qualificationAddress
@@ -256,7 +255,7 @@ export function CreateForm(props: CreateFormProps) {
         message,
         totalOfPerWallet,
         tokenAndAmount,
-        tokenAndAmounts,
+        exchangeTokenList,
         setTokenAndAmount,
         startTime,
         endTime,
@@ -281,8 +280,8 @@ export function CreateForm(props: CreateFormProps) {
     }, [chainId])
 
     const validationMessage = useMemo(() => {
-        if (tokenAndAmounts.length === 0) return t.plugin_ito_error_enter_amount_and_token()
-        for (const { amount, token } of tokenAndAmounts) {
+        if (exchangeTokenList.length === 0) return t.plugin_ito_error_enter_amount_and_token()
+        for (const { amount, token } of exchangeTokenList) {
             if (!token) return t.plugin_ito_error_select_token()
             if (amount === '') return t.plugin_ito_error_enter_amount()
             if (isZero(amount)) return t.plugin_ito_error_enter_amount()
@@ -319,7 +318,7 @@ export function CreateForm(props: CreateFormProps) {
         startTime,
         tokenAndAmount?.amount,
         tokenAndAmount?.token?.symbol,
-        tokenAndAmounts,
+        exchangeTokenList,
         tokenBalance,
         totalOfPerWallet,
     ])
@@ -370,8 +369,8 @@ export function CreateForm(props: CreateFormProps) {
             <Box className={classes.line} style={{ display: 'block' }}>
                 <ExchangeTokenPanelGroup
                     token={tokenAndAmount?.token}
-                    origin={tokenAndAmounts}
-                    onTokenAmountChange={(arr) => setTokenAndAmounts(arr)}
+                    exchangeTokenList={exchangeTokenList}
+                    dispatchExchangeTokenList={dispatchExchangeTokenList}
                     chainId={chainId}
                 />
             </Box>
