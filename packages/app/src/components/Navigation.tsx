@@ -34,8 +34,8 @@ function NavigationLink(props: (typeof navigation)[0]) {
                 to={to}
                 className={classNames(
                     matched
-                        ? 'bg-gray-800 text-white'
-                        : 'text-black dark:text-white hover:text-black hover:bg-black/10 dark:hover:bg-back/10',
+                        ? 'dark:bg-gray-800 dark:text-white bg-gray-50 text-indigo-600'
+                        : ' text-gray-700 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-800 hover:text-indigo-600 hover:bg-gray-50',
                     'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
                 )}>
                 <props.icon className="h-6 w-6 shrink-0" aria-hidden="true" />

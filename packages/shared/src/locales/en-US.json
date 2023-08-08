@@ -359,5 +359,6 @@
     "connect": "Connect",
     "reset": "Reset",
     "editor": "Editor",
-    "typed_message_text_alert": "Only TypedMessageText is supported currently."
+    "typed_message_text_alert": "Only TypedMessageText is supported currently.",
+    "share_to_social_networks": "Share to Social Networks"
 }

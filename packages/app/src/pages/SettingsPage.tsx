@@ -6,6 +6,7 @@ import { Button, MenuItem, Typography } from '@mui/material'
 import { useMenuConfig } from '@masknet/shared'
 import { useSystemPreferencePalette } from '@masknet/theme'
 import { setThemeMode } from '../helpers/setThemeMode.js'
+import { Appearance } from '@masknet/public-api'
 
 export interface SettingsPageProps {}
 
@@ -28,7 +29,7 @@ const SetupThemeMode = memo(() => {
     const systemMode = useSystemPreferencePalette()
 
     const onClick = useCallback(
-        (mode: 'dark' | 'light' | 'system') => {
+        (mode: Appearance) => {
             localStorage.themeMode = mode
             setThemeMode(mode, systemMode)
         },
@@ -37,13 +38,13 @@ const SetupThemeMode = memo(() => {
 
     const [menu, openMenu] = useMenuConfig(
         [
-            <MenuItem key="system" onClick={() => onClick('system')}>
+            <MenuItem key={Appearance.default} onClick={() => onClick(Appearance.default)}>
                 <Typography component="span">System</Typography>
             </MenuItem>,
-            <MenuItem key="dark" onClick={() => onClick('dark')}>
+            <MenuItem key={Appearance.dark} onClick={() => onClick(Appearance.dark)}>
                 <Typography component="span">Dark</Typography>
             </MenuItem>,
-            <MenuItem key="light" onClick={() => onClick('light')}>
+            <MenuItem key={Appearance.light} onClick={() => onClick(Appearance.light)}>
                 <Typography component="span">Light</Typography>
             </MenuItem>,
         ],
@@ -59,7 +60,11 @@ const SetupThemeMode = memo(() => {
         <div className="flex w-full sm:p-6 justify-center sm:items-center">
             <Typography className="w-full text-black text-base">theme</Typography>
             <Button className="text-black bg-black/10  hover:bg-black/10 hover:text-black" onClick={openMenu}>
-                {localStorage.themeMode === 'dark' ? 'Dark' : localStorage.themeMode === 'light' ? 'Light' : 'System'}
+                {localStorage.themeMode === Appearance.dark
+                    ? 'Dark'
+                    : localStorage.themeMode === Appearance.light
+                    ? 'Light'
+                    : 'System'}
             </Button>
             {menu}
         </div>

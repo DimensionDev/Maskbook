@@ -6,6 +6,7 @@ import { useLookupAddress } from '@masknet/web3-hooks-base'
 import { useCallback, useDeferredValue, useEffect, useState } from 'react'
 import { DashboardContext } from '../contexts/DashboardContext.js'
 import { setThemeMode } from '../helpers/setThemeMode.js'
+import { Appearance } from '@masknet/public-api'
 
 export interface DashboardContainerProps {
     children: React.ReactNode
@@ -16,19 +17,19 @@ export function DashboardContainer(props: DashboardContainerProps) {
     const [search, setSearch] = useState('')
     const { value: registeredAddress = '' } = useLookupAddress(undefined, useDeferredValue(search))
     const keyword = registeredAddress || search
-    const { sidebarOpen, setSidebarOpen } = DashboardContext.useContainer()
+    const { setSidebarOpen } = DashboardContext.useContainer()
     const onChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setSearch(e.target.value),
         [],
     )
     const systemMode = useSystemPreferencePalette()
     useEffect(() => {
-        setThemeMode(localStorage.themeMode ?? 'system', systemMode)
+        setThemeMode(localStorage.themeMode ?? Appearance.default, systemMode)
     }, [systemMode, localStorage.themeMode])
 
     return (
         <div className="xl:pl-72 container">
-            <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-6 border-b border-white/5  dark:bg-zinc-900 px-4 shadow-sm sm:px-6 lg:px-8">
+            <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-6 border-b dark:border-white/5  border-black/5 dark:bg-zinc-900 px-4  sm:px-6 lg:px-8 border">
                 <button
                     type="button"
                     className="-m-2.5 p-2.5 dark:text-white text-black xl:hidden"
