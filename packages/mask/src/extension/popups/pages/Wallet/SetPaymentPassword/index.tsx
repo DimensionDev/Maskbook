@@ -6,7 +6,13 @@ import { Controller } from 'react-hook-form'
 import type { z as zod } from 'zod'
 import { Box, Link, Typography, useTheme } from '@mui/material'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { CrossIsolationMessages, NetworkPluginID, PopupRoutes, getDefaultWalletPassword } from '@masknet/shared-base'
+import {
+    CrossIsolationMessages,
+    NetworkPluginID,
+    PopupRoutes,
+    getDefaultWalletPassword,
+    type Wallet,
+} from '@masknet/shared-base'
 import { useBalance, useReverseAddress, useWallets } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -149,8 +155,9 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                 const hasPassword = await WalletRPC.hasPassword()
 
                 if (hasPassword) {
+                    const from = params.get('from')
                     CrossIsolationMessages.events.hasPaymentPasswordUpdated.sendToAll(true)
-                    navigate(PopupRoutes.Wallet, { replace: true })
+                    navigate({ pathname: from || PopupRoutes.Wallet }, { replace: true })
                 }
             } catch (error) {
                 if (error instanceof Error) {
@@ -158,7 +165,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                 }
             }
         },
-        [setError],
+        [setError, params],
     )
 
     const onSubmit = handleSubmit(onConfirm)
@@ -257,7 +264,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                     <>
                         <Box className={classes.walletItemList}>
                             {wallets.map((wallet, index) => (
-                                <WalletItem address={wallet.address} key={index} />
+                                <WalletItem wallet={wallet} key={index} />
                             ))}
                         </Box>
                         <div className={classes.setPasswordButtonWrapper}>
@@ -290,11 +297,12 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
 })
 
 interface WalletItemProps {
-    address: string
+    wallet: Wallet
 }
 
-function WalletItem({ address }: WalletItemProps) {
+function WalletItem({ wallet }: WalletItemProps) {
     const { classes } = useStyles()
+    const { address, owner } = wallet
     const { data: balance = '0' } = useBalance(NetworkPluginID.PLUGIN_EVM, {
         account: address,
         chainId: ChainId.Mainnet,
@@ -305,7 +313,7 @@ function WalletItem({ address }: WalletItemProps) {
 
     return (
         <Box className={classes.addWalletWrapper}>
-            <Icons.ETH size={30} />
+            {owner ? <Icons.SmartPay size={30} /> : <Icons.ETH size={30} />}
             <div>
                 <Typography className={classes.subTitle}>
                     {domain || formatEthereumAddress(address, 4)}{' '}
