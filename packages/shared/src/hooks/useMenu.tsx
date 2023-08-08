@@ -44,6 +44,7 @@ export function useMenuConfig(
     menu: React.ReactNode,
     openDialog: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void,
     closeDialog: () => void,
+    open: boolean,
 ] {
     const { classes } = useStyles()
     const { anchorSibling = false, useShadowRoot = true, ...menuProps } = config
@@ -96,5 +97,6 @@ export function useMenuConfig(
             setOpen(false)
             setAnchorEl(null)
         }, []),
+        open,
     ]
 }

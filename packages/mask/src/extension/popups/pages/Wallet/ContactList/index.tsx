@@ -287,7 +287,7 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
         return options
     }, [t, contactType])
 
-    const [menu, openMenu] = useMenuConfig(
+    const [menu, openMenu, _, isOpenMenu] = useMenuConfig(
         menuOptions.map((option, index) => (
             <MenuItem key={index} className={classes.menuItem} onClick={option.handler}>
                 {option.icon}
@@ -311,7 +311,7 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
     return (
         <ListItem
             classes={{ root: classes.contactsListItem }}
-            onClick={() => onSelectContact?.(address, name)}
+            onClick={() => !isOpenMenu && onSelectContact?.(address, name)}
             {...rest}>
             <div className={classes.contactsListItemInfo}>
                 <EmojiAvatar address={address} className={classes.emojiAvatar} sx={{ width: 24, height: 24 }} />
@@ -329,7 +329,14 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
                     </Typography>
                 </div>
             </div>
-            <Icons.More size={24} className={classes.iconMore} onClick={openMenu} />
+            <Icons.More
+                size={24}
+                className={classes.iconMore}
+                onClick={(event) => {
+                    openMenu(event)
+                    event.stopPropagation()
+                }}
+            />
             {menu}
         </ListItem>
     )
