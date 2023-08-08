@@ -1215,6 +1215,7 @@
     "rpc_requires_https": "URLs require the appropriate HTTPS prefix.",
     "failed_to_save_network": "Failed to save network",
     "incorrect_chain_id": "Incorrect Chain Id",
+    "invalid_number": "Invalid number",
     "adding_network_exists": "Network already exists",
     "saved_network_successfully": "Saved network successfully",
     "adding_network_successfully": "Adding network successfully",
