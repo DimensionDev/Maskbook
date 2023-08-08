@@ -320,7 +320,7 @@
     "wallet_transfer_placeholder": "Ens or Address(0x)",
     "wallet_transfer_title": "Transfer",
     "wallet_transfer_my_wallets_title": "My Wallets",
-    "wallet_transfer_my_contacts_title": "My Contacts",
+    "wallet_transfer_my_contacts_title": "Contacts",
     "wallets_transfer_error_address_absence": "Enter recipient address",
     "wallets_transfer_error_invalid_address": "Invalid wallet address.",
     "wallets_transfer_error_invalid_domain": "This ENS does not exist or not be resolved.",

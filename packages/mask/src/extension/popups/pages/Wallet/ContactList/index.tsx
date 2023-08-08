@@ -36,6 +36,9 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean }>()
             padding: '0',
             maxHeight: isManage ? 470 : 380,
             overflow: 'scroll',
+            '::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         contactsList: {
             padding: 0,
