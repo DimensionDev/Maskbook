@@ -14,7 +14,8 @@ import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'rea
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { z, type ZodCustomIssue } from 'zod'
-import { createSchema, useI18N, type AvailableLocaleKeys } from '../../../../../utils/index.js'
+import { useI18N, type AvailableLocaleKeys } from '../../../../../utils/index.js'
+import { createSchema } from './network-schema.js'
 import { PageTitleContext } from '../../../context.js'
 import { useTitle } from '../../../hook/index.js'
 
@@ -130,6 +131,7 @@ export const EditNetwork = memo(function EditNetwork() {
     type FormInputs = z.infer<typeof schema>
     const {
         getValues,
+        watch,
         register,
         setError,
         formState: { errors, isValidating, isDirty, isValid: isFormValid },
@@ -155,6 +157,15 @@ export const EditNetwork = memo(function EditNetwork() {
         },
         [setError, t],
     )
+
+    const formChainId = watch('chainId')
+    const chainIdWarning = useMemo(() => {
+        if (!formChainId) return
+        const duplicated = networks.find((x) => x.chainId === +formChainId)
+        if (!duplicated) return
+        return t('chain_id_is_used_by', { name: duplicated.name })
+    }, [formChainId, networks])
+
     const [isSubmitting, setIsSubmitting] = useState(false)
     const { isLoading: isMutating, mutate } = useMutation<void, unknown, FormInputs>({
         mutationFn: async (data) => {
@@ -238,7 +249,7 @@ export const EditNetwork = memo(function EditNetwork() {
                     disabled={isBuiltIn}
                     inputProps={{
                         placeholder: '',
-                        maxLength: 20,
+                        maxLength: 24,
                     }}
                 />
                 {errors.name ? <Typography className={classes.error}>{errors.name.message}</Typography> : null}
@@ -263,7 +274,11 @@ export const EditNetwork = memo(function EditNetwork() {
                     placeholder="eg. 2"
                     disabled={isBuiltIn}
                 />
-                {errors.chainId ? <Typography className={classes.error}>{errors.chainId.message}</Typography> : null}
+                {errors.chainId ? (
+                    <Typography className={classes.error}>{errors.chainId.message}</Typography>
+                ) : chainIdWarning ? (
+                    <Typography className={classes.warn}>{chainIdWarning}</Typography>
+                ) : null}
 
                 <Typography className={classes.label}>{t('optional_currency_symbol')}</Typography>
                 <Input

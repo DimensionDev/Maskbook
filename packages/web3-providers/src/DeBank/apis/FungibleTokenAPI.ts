@@ -34,7 +34,6 @@ export class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId
                         ...x,
                         // rename bsc to bnb
                         id: resolveDeBankAssetId(x.id),
-                        chain: resolveDeBankAssetId(x.chain),
                         // prefix ARETH
                         symbol: x.chain === 'arb' && x.symbol === 'ETH' ? 'ARETH' : x.symbol,
                         logo_url:

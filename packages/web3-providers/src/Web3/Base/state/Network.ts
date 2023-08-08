@@ -53,7 +53,7 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
             return [
                 ...registeredNetworks.map((x) => registeredChains.find((y) => y.chainId === x.chainId)!),
                 ...customizedNetworks.map((x) => ({
-                    ...omit(x, 'createdAt', 'updatedAt'),
+                    ...x,
                     isCustomized: true,
                 })),
             ] as Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>

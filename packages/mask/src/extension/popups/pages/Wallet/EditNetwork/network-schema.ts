@@ -1,6 +1,6 @@
-import { EthereumMethodType, createJsonRpcPayload } from '@masknet/web3-shared-evm'
 import { z } from 'zod'
-import type { I18NFunction } from './i18n-next-ui.js'
+import { fetchChainId } from '@masknet/web3-providers/helpers'
+import type { I18NFunction } from '../../../../../utils/i18n-next-ui.js'
 
 interface ChainConfig {
     name: string
@@ -43,7 +43,7 @@ type NameValidator = (name: string) => boolean | Promise<boolean>
  */
 export function createBaseSchema(t: I18NFunction, duplicateNameValidator: NameValidator) {
     const schema = z.object({
-        name: z.string().nonempty().refine(duplicateNameValidator, t('network_already_exists')),
+        name: z.string().trim().nonempty().refine(duplicateNameValidator, t('network_already_exists')),
         rpc: z
             .string()
             .trim()
@@ -68,23 +68,9 @@ export function createSchema(t: I18NFunction, duplicateNameValidator: NameValida
     const schema = baseSchema
         .superRefine(async (schema, context) => {
             if (!schema.rpc || !schema.chainId) return true
-            let rpcId: number
+            let rpcChainId: number
             try {
-                const res = await fetch(schema.rpc, {
-                    method: 'post',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Origin: location.origin,
-                    },
-                    body: JSON.stringify(
-                        createJsonRpcPayload(0, {
-                            method: EthereumMethodType.ETH_CHAIN_ID,
-                            params: [],
-                        }),
-                    ),
-                })
-                const json = (await res.json()) as { result: string }
-                rpcId = Number.parseInt(json.result, 16)
+                rpcChainId = await fetchChainId(schema.rpc)
             } catch {
                 context.addIssue({
                     code: z.ZodIssueCode.custom,
@@ -93,9 +79,9 @@ export function createSchema(t: I18NFunction, duplicateNameValidator: NameValida
                 })
                 return
             }
-            if (rpcId !== schema.chainId) {
+            if (rpcChainId !== schema.chainId) {
                 // Background can pass i18n params by params field to frontend
-                const params = { chain_id: rpcId }
+                const params = { chain_id: rpcChainId }
                 context.addIssue({
                     code: z.ZodIssueCode.custom,
                     path: ['chainId'],
