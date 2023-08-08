@@ -1,5 +1,5 @@
-import { useLocation } from 'react-router-dom'
 import { useAsync } from 'react-use'
+import { useLocation } from 'react-router-dom'
 import Services from '../../service.js'
 import { ThirdPartyRequestPermission } from './ThirdPartyRequestPermission.js'
 
@@ -16,8 +16,9 @@ export default function () {
             pluginURL={plugin}
             pluginName={value.name}
             permissions={permission.map((x) => Number.parseInt(x, 10))}
-            onGrant={(granted) => {
-                Services.ThirdPartyPlugin.grantPermission(plugin, granted).then(() => window.close())
+            onGrant={async (granted) => {
+                await Services.ThirdPartyPlugin.grantPermission(plugin, granted)
+                window.close()
             }}
         />
     )
