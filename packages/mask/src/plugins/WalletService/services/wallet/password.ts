@@ -7,30 +7,13 @@ let inMemoryPassword = ''
 
 export async function INTERNAL_getPassword() {
     const hasSafeSecret = await database.hasSafeSecret()
-    return hasSafeSecret
-        ? inMemoryPassword
-            ? database.decryptSecret(inMemoryPassword)
-            : ''
-        : database.decryptSecret(getDefaultWalletPassword())
+    if (!hasSafeSecret) return database.decryptSecret(getDefaultWalletPassword())
+    return inMemoryPassword ? database.decryptSecret(inMemoryPassword) : ''
 }
 
 export async function INTERNAL_getPasswordRequired() {
     const password_ = await INTERNAL_getPassword()
     if (!password_) throw new Error('No password set yet or expired.')
-    return password_
-}
-
-export async function INTERNAL_getUnverifiedPassword(unverifiedPassword?: string) {
-    if (unverifiedPassword) await verifyPasswordRequired(unverifiedPassword)
-    let password_: string = ''
-
-    try {
-        password_ = await INTERNAL_getPasswordRequired()
-    } catch {
-        if (!unverifiedPassword) throw new Error('No password set yet or expired.')
-        password_ = await database.decryptSecret(unverifiedPassword)
-    }
-
     return password_
 }
 
