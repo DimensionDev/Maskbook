@@ -130,6 +130,7 @@ export const EditNetwork = memo(function EditNetwork() {
     type FormInputs = z.infer<typeof schema>
     const {
         getValues,
+        watch,
         register,
         setError,
         formState: { errors, isValidating, isDirty, isValid: isFormValid },
@@ -155,6 +156,15 @@ export const EditNetwork = memo(function EditNetwork() {
         },
         [setError, t],
     )
+
+    const formChainId = watch('chainId')
+    const chainIdWarning = useMemo(() => {
+        if (!formChainId) return
+        const duplicated = networks.find((x) => x.chainId === +formChainId)
+        if (!duplicated) return
+        return t('chain_id_is_used_by', { name: duplicated.name })
+    }, [formChainId, networks])
+
     const [isSubmitting, setIsSubmitting] = useState(false)
     const { isLoading: isMutating, mutate } = useMutation<void, unknown, FormInputs>({
         mutationFn: async (data) => {
@@ -263,7 +273,11 @@ export const EditNetwork = memo(function EditNetwork() {
                     placeholder="eg. 2"
                     disabled={isBuiltIn}
                 />
-                {errors.chainId ? <Typography className={classes.error}>{errors.chainId.message}</Typography> : null}
+                {errors.chainId ? (
+                    <Typography className={classes.error}>{errors.chainId.message}</Typography>
+                ) : chainIdWarning ? (
+                    <Typography className={classes.warn}>{chainIdWarning}</Typography>
+                ) : null}
 
                 <Typography className={classes.label}>{t('optional_currency_symbol')}</Typography>
                 <Input
