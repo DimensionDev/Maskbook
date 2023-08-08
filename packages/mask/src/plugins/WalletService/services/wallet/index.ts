@@ -23,7 +23,6 @@ function sanitizeWallet(wallet: Wallet): Wallet {
 
 // db
 export { hasWallet, addWallet, updateWallet } from './database/wallet.js'
-export { getNetwork, getNetworks, addNetwork, updateNetwork, deleteNetwork } from './database/network.js'
 
 // password
 export {
