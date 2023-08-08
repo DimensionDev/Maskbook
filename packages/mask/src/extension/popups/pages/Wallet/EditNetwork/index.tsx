@@ -9,7 +9,6 @@ import { TokenType, type TransferableNetwork } from '@masknet/web3-shared-base'
 import { NetworkType, SchemaType, ZERO_ADDRESS, type ChainId } from '@masknet/web3-shared-evm'
 import { Button, Input, Typography, alpha } from '@mui/material'
 import { useMutation } from '@tanstack/react-query'
-import { omit } from 'lodash-es'
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -18,6 +17,7 @@ import { useI18N, type AvailableLocaleKeys } from '../../../../../utils/index.js
 import { createSchema } from './network-schema.js'
 import { PageTitleContext } from '../../../context.js'
 import { useTitle } from '../../../hook/index.js'
+import { useWarnings } from './useWarnings.js'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -144,8 +144,6 @@ export const EditNetwork = memo(function EditNetwork() {
         (message: string) => {
             try {
                 const issues = JSON.parse(message) as ZodCustomIssue[]
-                const isInvalid = issues.some((issue) => issue.path[0] !== 'currencySymbol')
-                if (!isInvalid) return true
                 issues.forEach((issue) => {
                     // We assume there is no multiple paths.
                     setError(issue.path[0] as keyof FormInputs, {
@@ -158,22 +156,18 @@ export const EditNetwork = memo(function EditNetwork() {
         [setError, t],
     )
 
-    const formChainId = watch('chainId')
-    const chainIdWarning = useMemo(() => {
-        if (!formChainId) return
-        const duplicated = networks.find((x) => x.chainId === +formChainId)
-        if (!duplicated) return
-        return t('chain_id_is_used_by', { name: duplicated.name })
-    }, [formChainId, networks])
+    const formChainId = +watch('chainId')
+    const formSymbol = watch('currencySymbol')
+    const { chainIdWarning, symbolWarning } = useWarnings(formChainId, formSymbol)
 
     const [isSubmitting, setIsSubmitting] = useState(false)
     const { isLoading: isMutating, mutate } = useMutation<void, unknown, FormInputs>({
         mutationFn: async (data) => {
             if (!Network) return
             setIsSubmitting(true)
-            const parsedData = await schema.parseAsync(data)
-            const chainId = parsedData.chainId
             try {
+                const parsedData = await schema.parseAsync(data)
+                const chainId = parsedData.chainId
                 const network: TransferableNetwork<ChainId, SchemaType, NetworkType> = {
                     isCustomized: true,
                     type: NetworkType.CustomNetwork,
@@ -216,13 +210,9 @@ export const EditNetwork = memo(function EditNetwork() {
     })
 
     const [isChecking, setIsChecking] = useState(false)
-    // Discard currencySymbol warning
-    const isValid = isFormValid || (!!errors.currencySymbol && Object.keys(omit(errors, 'currencySymbol')).length === 0)
-    const isNotReady = isValidating || (!isValidating && !isValid) || !isDirty || isChecking
+    const isNotReady = isValidating || !isFormValid || !isDirty || isChecking
     const disabled = isNotReady || isMutating || isSubmitting
 
-    // currency symbol error is tolerable,
-    // but react-hook-form's handleSubmit can't tolerate it
     const handleSubmit = useCallback(async () => {
         if (disabled) return
         setIsChecking(true)
@@ -289,9 +279,7 @@ export const EditNetwork = memo(function EditNetwork() {
                     placeholder="eg. ETH"
                     disabled={isBuiltIn || !!errors.chainId}
                 />
-                {errors.currencySymbol ? (
-                    <Typography className={classes.warn}>{errors.currencySymbol.message}</Typography>
-                ) : null}
+                {symbolWarning ? <Typography className={classes.warn}>{symbolWarning}</Typography> : null}
 
                 <Typography className={classes.label}>{t('optional_block_explorer_url')}</Typography>
                 <Input

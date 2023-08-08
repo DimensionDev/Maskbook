@@ -65,53 +65,31 @@ export function createBaseSchema(t: I18NFunction, duplicateNameValidator: NameVa
 
 export function createSchema(t: I18NFunction, duplicateNameValidator: NameValidator) {
     const baseSchema = createBaseSchema(t, duplicateNameValidator)
-    const schema = baseSchema
-        .superRefine(async (schema, context) => {
-            if (!schema.rpc || !schema.chainId) return true
-            let rpcChainId: number
-            try {
-                rpcChainId = await fetchChainId(schema.rpc)
-            } catch {
-                context.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    path: ['rpc'],
-                    message: t('failed_to_fetch_chain_id'),
-                })
-                return
-            }
-            if (rpcChainId !== schema.chainId) {
-                // Background can pass i18n params by params field to frontend
-                const params = { chain_id: rpcChainId }
-                context.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    path: ['chainId'],
-                    message: t('rpc_return_different_chain_id', params),
-                    params,
-                })
-                return
-            }
-            return true
-        })
-        .superRefine(async (schema, context) => {
-            if (!schema.chainId || !schema.currencySymbol) return true
-            try {
-                const chains = await fetchChains()
-                const match = chains.find((chain) => chain.chainId === schema.chainId)
-                if (!match) return true
-                if (match.nativeCurrency.symbol !== schema.currencySymbol) {
-                    // ditto
-                    const params = { chain_id: match.chainId, symbol: match.nativeCurrency.symbol }
-                    context.addIssue({
-                        code: z.ZodIssueCode.custom,
-                        path: ['currencySymbol'],
-                        message: t('rpc_return_different_symbol', params),
-                        params,
-                    })
-                }
-            } catch {
-                // Ignore
-            }
-            return true
-        })
+    const schema = baseSchema.superRefine(async (schema, context) => {
+        if (!schema.rpc || !schema.chainId) return true
+        let rpcChainId: number
+        try {
+            rpcChainId = await fetchChainId(schema.rpc)
+        } catch {
+            context.addIssue({
+                code: z.ZodIssueCode.custom,
+                path: ['rpc'],
+                message: t('failed_to_fetch_chain_id'),
+            })
+            return
+        }
+        if (rpcChainId !== schema.chainId) {
+            // Background can pass i18n params by params field to frontend
+            const params = { chain_id: rpcChainId }
+            context.addIssue({
+                code: z.ZodIssueCode.custom,
+                path: ['chainId'],
+                message: t('rpc_return_different_chain_id', params),
+                params,
+            })
+            return
+        }
+        return true
+    })
     return schema
 }
