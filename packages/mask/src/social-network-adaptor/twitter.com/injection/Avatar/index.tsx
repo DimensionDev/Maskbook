@@ -57,7 +57,7 @@ export async function injectAvatar(signal: AbortSignal) {
                             height: 16,
                             zIndex: 2,
                         }}>
-                        {<Avatar userId={twitterId} sourceType={sourceType} />}
+                        <Avatar userId={twitterId} sourceType={sourceType} />
                     </div>,
                 )
                 remover = root.destroy
