@@ -85,6 +85,9 @@ const useStyles = makeStyles()((theme) => ({
         backdropFilter: 'blur(16px)',
         borderRadius: theme.spacing(0, 0, 1.5, 1.5),
     },
+    input: {
+        fontSize: 12,
+    },
 }))
 
 export interface AddCollectiblesProps<T extends NetworkPluginID = NetworkPluginID>
@@ -238,6 +241,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                                             color={validationMsgForAddress ? theme.palette.maskColor.danger : undefined}
                                         />
                                     ) : null,
+                                    classes: { input: classes.input },
                                 }}
                             />
                             {validationMsgForAddress ? (
@@ -268,6 +272,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                                             color={errors.tokenIds ? theme.palette.maskColor.danger : undefined}
                                         />
                                     ) : null,
+                                    classes: { input: classes.input },
                                 }}
                             />
 
@@ -310,7 +315,6 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                                         actionLabel={t.send()}
                                         disableAction
                                         onItemClick={isMine ? toggleSelect : undefined}
-                                        indicatorIcon={Icons.Checkbox}
                                         isSelected={selectedTokenIds.includes(asset.tokenId)}
                                     />
                                 )
