@@ -8,7 +8,7 @@ import { PluginTransakMessages } from '../messages.js'
 import { BuyTokenGlobalInjection } from './BuyTokenGlobalInjection.js'
 import { PluginID } from '@masknet/shared-base'
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal) {},
     GlobalInjection: BuyTokenGlobalInjection,

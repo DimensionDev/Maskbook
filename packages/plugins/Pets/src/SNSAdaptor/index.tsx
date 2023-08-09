@@ -8,7 +8,7 @@ import { PluginPetMessages } from '../messages.js'
 import { PetsGlobalInjection } from './PetsGlobalInjection.js'
 import { PluginID } from '@masknet/shared-base'
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init() {},
     GlobalInjection: PetsGlobalInjection,

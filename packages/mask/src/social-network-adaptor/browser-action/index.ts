@@ -1,6 +1,6 @@
 import type { SocialNetwork, SocialNetworkUI } from '@masknet/types'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { SocialNetworkEnum } from '@masknet/encryption'
+import { EncryptPayloadNetwork } from '@masknet/encryption'
 import { EnhanceableSite, ValueRef, type ProfileInformation } from '@masknet/shared-base'
 import { useThemePopupVariant } from './customization/custom.js'
 import { defineSocialNetworkUI, definedSocialNetworkUIs } from '../../social-network/index.js'
@@ -8,7 +8,7 @@ import { CurrentVisitingIdentityProviderDefault, IdentityProviderDefault } from 
 import { ThemeSettingsProviderDefault } from './collecting/theme.js'
 
 const base: SocialNetwork.Base = {
-    encryptionNetwork: SocialNetworkEnum.Unknown,
+    encryptPayloadNetwork: EncryptPayloadNetwork.Unknown,
     networkIdentifier: EnhanceableSite.Localhost,
     declarativePermissions: { origins: [] },
     shouldActivate(location) {

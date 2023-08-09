@@ -1,16 +1,16 @@
-import { CurrentSNSNetwork } from '@masknet/plugin-infra'
+import { SiteAdaptor } from '@masknet/plugin-infra'
 import type { SocialNetwork } from '@masknet/types'
 import { EnhanceableSite, type PersonaIdentifier, type ProfileIdentifier } from '@masknet/shared-base'
 import { activatedSocialNetworkUI, globalUIState } from '../social-network/index.js'
 
-export function getCurrentSNSNetwork(current: SocialNetwork.Base['networkIdentifier']): CurrentSNSNetwork {
-    const table: Partial<Record<EnhanceableSite, CurrentSNSNetwork>> = {
-        [EnhanceableSite.Twitter]: CurrentSNSNetwork.Twitter,
-        [EnhanceableSite.Facebook]: CurrentSNSNetwork.Facebook,
-        [EnhanceableSite.Instagram]: CurrentSNSNetwork.Instagram,
-        [EnhanceableSite.Minds]: CurrentSNSNetwork.Minds,
+export function getCurrentSNSNetwork(current: SocialNetwork.Base['networkIdentifier']): SiteAdaptor {
+    const table: Partial<Record<EnhanceableSite, SiteAdaptor>> = {
+        [EnhanceableSite.Twitter]: SiteAdaptor.Twitter,
+        [EnhanceableSite.Facebook]: SiteAdaptor.Facebook,
+        [EnhanceableSite.Instagram]: SiteAdaptor.Instagram,
+        [EnhanceableSite.Minds]: SiteAdaptor.Minds,
     }
-    return table[current] ?? CurrentSNSNetwork.Unknown
+    return table[current] ?? SiteAdaptor.Unknown
 }
 
 export function getCurrentIdentifier():

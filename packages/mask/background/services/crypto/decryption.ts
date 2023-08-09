@@ -3,12 +3,12 @@ import {
     decrypt,
     parsePayload,
     DecryptProgressKind,
-    EC_KeyCurveEnum,
+    EC_KeyCurve,
     type DecryptProgress,
-    type SocialNetworkEnum,
-    SocialNetworkEnumToProfileDomain,
+    type EncryptPayloadNetwork,
+    encryptPayloadNetworkToDomain,
     type EC_Key,
-    socialNetworkDecoder,
+    decodeByNetwork,
     steganographyDecodeImage,
     DecryptError,
     DecryptErrorReasons,
@@ -41,7 +41,7 @@ import {
 } from '../../network/gun/encryption/queryPostKey.js'
 
 export interface DecryptionContext {
-    currentSocialNetwork: SocialNetworkEnum
+    currentSocialNetwork: EncryptPayloadNetwork
     currentProfile: ProfileIdentifier | null
     authorHint: ProfileIdentifier | null
     postURL: string | undefined
@@ -72,7 +72,7 @@ export async function* decryptionWithSocialNetworkDecoding(
 ): AsyncGenerator<DecryptProgress, void, undefined> {
     let decoded: string | Uint8Array
     if (encoded.type === 'text') {
-        decoded = socialNetworkDecoder(context.currentSocialNetwork, encoded.text)[0]
+        decoded = decodeByNetwork(context.currentSocialNetwork, encoded.text)[0]
     } else {
         if (!context.authorHint) {
             return yield new DecryptError(DecryptErrorReasons.UnrecognizedAuthor, undefined)
@@ -82,7 +82,7 @@ export async function* decryptionWithSocialNetworkDecoding(
             downloadImage,
         })
         if (typeof result === 'string') {
-            decoded = socialNetworkDecoder(context.currentSocialNetwork, result)[0]
+            decoded = decodeByNetwork(context.currentSocialNetwork, result)[0]
         } else if (result === null) {
             return yield new DecryptError(DecryptErrorReasons.NoPayloadFound, undefined)
         } else {
@@ -119,7 +119,7 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
         yield info
     }
     const id = new PostIVIdentifier(
-        SocialNetworkEnumToProfileDomain(currentSocialNetwork),
+        encryptPayloadNetworkToDomain(currentSocialNetwork),
         encodeArrayBuffer(new Uint8Array(iv)),
     )
     // #endregion
@@ -234,7 +234,7 @@ async function storeAuthorPublicKey(
         // ! Skip store the public key because it might be a security problem.
         return
     }
-    if (pub.algr !== EC_KeyCurveEnum.secp256k1) {
+    if (pub.algr !== EC_KeyCurve.secp256k1) {
         throw new Error('TODO: support other curves')
     }
 

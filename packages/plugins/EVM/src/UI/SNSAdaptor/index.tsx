@@ -12,7 +12,7 @@ import type {
 import { SharedPluginContext, Web3State } from '@masknet/web3-providers'
 import { base } from '../../base.js'
 
-const sns: Plugin.SNSAdaptor.Definition<
+const sns: Plugin.SiteAdaptor.Definition<
     ChainId,
     SchemaType,
     ProviderType,

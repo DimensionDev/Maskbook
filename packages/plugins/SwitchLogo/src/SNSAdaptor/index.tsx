@@ -11,7 +11,7 @@ const recommendFeature = {
     backgroundGradient: 'linear-gradient(360deg, #FFECD2 -0.43%, #FCB69F 99.57%)',
 }
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal, context) {},
     ApplicationEntries: [

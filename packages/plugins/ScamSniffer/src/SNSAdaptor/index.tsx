@@ -21,7 +21,7 @@ function Renderer(
     return <ScamAlert result={props.project} />
 }
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal) {},
     PostInspector: function Component() {

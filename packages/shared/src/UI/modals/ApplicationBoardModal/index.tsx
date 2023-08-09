@@ -1,7 +1,7 @@
 import { forwardRef, useState } from 'react'
 import type { DashboardRoutes, PersonaInformation, PluginID, SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
-import type { CurrentSNSNetwork, IdentityResolved } from '@masknet/plugin-infra'
+import type { SiteAdaptor, IdentityResolved } from '@masknet/plugin-infra'
 import { ApplicationBoard, ApplicationSettingTabs } from './ApplicationBoardDialog.js'
 import type { PersonaAgainstSNSConnectStatus } from '../../../types.js'
 import { ApplicationBoardSettingsDialog } from './ApplicationSettingsDialog.js'
@@ -9,7 +9,7 @@ import { ApplicationBoardSettingsDialog } from './ApplicationSettingsDialog.js'
 export type ApplicationBoardModalOpenProps = {
     openDashboard: (route?: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
-    currentSNSNetwork: CurrentSNSNetwork
+    currentSNSNetwork: SiteAdaptor
     allPersonas: PersonaInformation[]
     lastRecognized: IdentityResolved
     applicationCurrentStatus?: PersonaAgainstSNSConnectStatus
@@ -32,7 +32,7 @@ export const ApplicationBoardModal = forwardRef<
     const [openDashboard, setOpenDashboard] = useState<(route?: DashboardRoutes, search?: string) => void>()
     const [queryOwnedPersonaInformation, setQueryOwnedPersonaInformation] =
         useState<(initializedOnly: boolean) => Promise<PersonaInformation[]>>()
-    const [currentSNSNetwork, setCurrentSNSNetwork] = useState<CurrentSNSNetwork>()
+    const [currentSNSNetwork, setCurrentSNSNetwork] = useState<SiteAdaptor>()
     const [allPersonas, setAllPersonas] = useState<PersonaInformation[]>()
     const [lastRecognized, setLastRecognized] = useState<IdentityResolved>()
     const [applicationCurrentStatus, setApplicationCurrentStatus] = useState<PersonaAgainstSNSConnectStatus>()

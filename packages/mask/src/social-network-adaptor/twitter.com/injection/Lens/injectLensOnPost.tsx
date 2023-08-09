@@ -72,7 +72,7 @@ function PostLensSlot({ userId }: Props) {
         const identifier = ProfileIdentifier.of(EnhanceableSite.Twitter, userId).unwrap()
         if (!identifier) return null
 
-        return <Component identity={identifier} slot={Plugin.SNSAdaptor.LensSlot.Post} onStatusUpdate={setDisabled} />
+        return <Component identity={identifier} slot={Plugin.SiteAdaptor.LensSlot.Post} onStatusUpdate={setDisabled} />
     }, [userId])
 
     if (!component) return null

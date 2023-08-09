@@ -33,7 +33,7 @@ const PermissionBoundary = memo<PermissionBoundaryProps>(({ permissions, fallbac
     return <>{children}</>
 })
 
-export const MaskPostExtraPluginWrapperWithPermission: PluginWrapperComponent<Plugin.SNSAdaptor.Definition> =
+export const MaskPostExtraPluginWrapperWithPermission: PluginWrapperComponent<Plugin.SiteAdaptor.Definition> =
     forwardRef((props, ref) => {
         const wrapperMethodsRef = useRef<PluginWrapperMethods | null>(null)
         const theme = useTheme()

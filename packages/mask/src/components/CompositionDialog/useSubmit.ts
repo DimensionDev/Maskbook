@@ -1,4 +1,4 @@
-import { socialNetworkEncoder } from '@masknet/encryption'
+import { encodeByNetwork } from '@masknet/encryption'
 import { PluginID, type ProfileIdentifier, SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
 import type { Meta } from '@masknet/typed-message'
 import { useCallback } from 'react'
@@ -36,10 +36,10 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 content,
                 target,
                 lastRecognizedIdentity?.identifier ?? fallbackProfile,
-                activatedSocialNetworkUI.encryptionNetwork,
+                activatedSocialNetworkUI.encryptPayloadNetwork,
             )
             // Since we cannot directly send binary on the SNS, we need to encode it into a string.
-            const encrypted = socialNetworkEncoder(activatedSocialNetworkUI.encryptionNetwork, rawEncrypted)
+            const encrypted = encodeByNetwork(activatedSocialNetworkUI.encryptPayloadNetwork, rawEncrypted)
 
             if (encode === 'image') {
                 const decoratedText = decorateEncryptedText('', t, content.meta)
@@ -49,7 +49,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 await pasteImage(
                     decoratedText || defaultText,
                     // We can send raw binary through the image, but for the text we still use the old way.
-                    // For text, it must send the text _after_ socialNetworkEncoder, otherwise it will break backward compatibility.
+                    // For text, it must send the text _after_ encodeByNetwork, otherwise it will break backward compatibility.
                     typeof rawEncrypted === 'string' ? encrypted : rawEncrypted,
                     reason,
                 )

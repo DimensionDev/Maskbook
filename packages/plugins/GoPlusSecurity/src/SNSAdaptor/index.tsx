@@ -7,7 +7,7 @@ import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import { base } from '../base.js'
 import { GoPlusGlobalInjection } from './GoPlusGlobalInjection.js'
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal, context) {},
     GlobalInjection: GoPlusGlobalInjection,

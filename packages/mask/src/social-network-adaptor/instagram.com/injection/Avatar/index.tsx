@@ -35,7 +35,7 @@ export async function injectAvatar(signal: AbortSignal) {
                             zIndex: 2,
                         }}>
                         {userId ? (
-                            <Avatar userId={userId} sourceType={Plugin.SNSAdaptor.AvatarRealmSourceType.Post} />
+                            <Avatar userId={userId} sourceType={Plugin.SiteAdaptor.AvatarRealmSourceType.Post} />
                         ) : null}
                     </div>,
                 )

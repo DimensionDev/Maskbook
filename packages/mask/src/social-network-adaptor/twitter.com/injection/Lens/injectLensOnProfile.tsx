@@ -45,7 +45,7 @@ function ProfileLensSlot() {
         return (
             <Component
                 identity={visitingIdentity.identifier}
-                slot={Plugin.SNSAdaptor.LensSlot.ProfileName}
+                slot={Plugin.SiteAdaptor.LensSlot.ProfileName}
                 onStatusUpdate={setDisabled}
             />
         )

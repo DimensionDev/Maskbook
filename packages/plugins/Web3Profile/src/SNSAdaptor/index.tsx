@@ -15,7 +15,7 @@ import { LensBadge } from './components/LensBadge.js'
 import { NextIdLensToFireflyLens } from './components/LensPopup.js'
 import { setupStorage } from './context.js'
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     async init(signal, context) {
         await setupStorage(context)
@@ -75,7 +75,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             Content({ identity, slot, onStatusUpdate }) {
                 const userId = identity?.userId
                 const { data: accounts = EMPTY_LIST } = useFireflyLensAccounts(userId, true)
-                const isProfile = slot === Plugin.SNSAdaptor.LensSlot.ProfileName
+                const isProfile = slot === Plugin.SiteAdaptor.LensSlot.ProfileName
 
                 const handle = accounts[0]?.handle
                 const { data: nextIdLens = EMPTY_LIST } = useQuery({

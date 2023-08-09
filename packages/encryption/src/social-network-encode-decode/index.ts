@@ -1,9 +1,9 @@
-import { SocialNetworkEnum } from '../payload/types.js'
+import { EncryptPayloadNetwork } from '../payload/types.js'
 import { sharedDecoder, sharedEncoder } from './shared.js'
 import { TwitterDecoder, __TwitterEncoder } from './twitter.js'
 
-export function socialNetworkDecoder(network: SocialNetworkEnum, content: string): Array<string | Uint8Array> {
-    if (network === SocialNetworkEnum.Twitter) {
+export function decodeByNetwork(network: EncryptPayloadNetwork, content: string): Array<string | Uint8Array> {
+    if (network === EncryptPayloadNetwork.Twitter) {
         return TwitterDecoder(content)
             .map((x) => [x])
             .unwrapOr([])
@@ -18,15 +18,15 @@ export function socialNetworkDecoder(network: SocialNetworkEnum, content: string
     }
     return result
 }
-export function socialNetworkEncoder(network: SocialNetworkEnum, content: string | Uint8Array): string {
+export function encodeByNetwork(network: EncryptPayloadNetwork, content: string | Uint8Array): string {
     // v38
     if (typeof content === 'string') {
-        if (network === SocialNetworkEnum.Twitter) return __TwitterEncoder(content)
+        if (network === EncryptPayloadNetwork.Twitter) return __TwitterEncoder(content)
         return content
     }
 
     // v37
-    if (network === SocialNetworkEnum.Twitter) return __TwitterEncoder(content)
+    if (network === EncryptPayloadNetwork.Twitter) return __TwitterEncoder(content)
     return sharedEncoder(content)
 }
 

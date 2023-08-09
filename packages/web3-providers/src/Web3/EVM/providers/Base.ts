@@ -20,7 +20,7 @@ import { createWeb3ProviderFromRequest } from '../../../helpers/createWeb3Provid
 import type { WalletAPI } from '../../../entry-types.js'
 
 export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3> {
-    protected context: Plugin.SNSAdaptor.SNSAdaptorContext | undefined
+    protected context: Plugin.SiteAdaptor.SiteAdaptorContext | undefined
 
     constructor(protected providerType: ProviderType) {}
 
@@ -56,7 +56,7 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
         return Promise.resolve()
     }
 
-    async setup(context?: Plugin.SNSAdaptor.SNSAdaptorContext): Promise<void> {
+    async setup(context?: Plugin.SiteAdaptor.SiteAdaptorContext): Promise<void> {
         if (context) {
             this.context = context
             return

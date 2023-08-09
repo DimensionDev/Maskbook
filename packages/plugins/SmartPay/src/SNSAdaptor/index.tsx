@@ -13,7 +13,7 @@ import { SmartPayDialog } from './components/index.js'
 import { InjectReceiveDialog } from './components/ReceiveDialog.js'
 import { InjectSmartPayDescriptionDialog } from './components/SmartPayDescriptionDialog.js'
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal, context) {},
     GlobalInjection: function SmartPayGlobalInjection() {

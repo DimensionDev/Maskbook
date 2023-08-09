@@ -15,7 +15,7 @@ let hot:
           string,
           (
               hot: Promise<{
-                  default: Plugin.SNSAdaptor.Definition
+                  default: Plugin.SiteAdaptor.Definition
               }>,
           ) => void
       >
@@ -48,7 +48,7 @@ function __builtInPluginInfraBridgeCallback__(this: SiteAdaptorPluginHost, id: s
 
     const base: Plugin.Shared.Definition = {
         enableRequirement: {
-            networks: { type: 'opt-out', networks: {} },
+            supports: { type: 'opt-out', sites: {} },
             target: 'beta',
         },
         ID: id as PluginID,
@@ -59,7 +59,7 @@ function __builtInPluginInfraBridgeCallback__(this: SiteAdaptorPluginHost, id: s
     }
     const def: Plugin.DeferredDefinition = {
         ...base,
-        SNSAdaptor: {
+        SiteAdaptor: {
             hotModuleReload: (reload) => hot?.set(id, reload),
             async load() {
                 return { default: sns }
@@ -67,7 +67,7 @@ function __builtInPluginInfraBridgeCallback__(this: SiteAdaptorPluginHost, id: s
         },
     }
 
-    const sns: Plugin.SNSAdaptor.Definition = {
+    const sns: Plugin.SiteAdaptor.Definition = {
         ...base,
         init: async (signal, context) => {
             try {
@@ -81,7 +81,7 @@ function __builtInPluginInfraBridgeCallback__(this: SiteAdaptorPluginHost, id: s
             if (!instance?.CompositionEntry) return undefined
             return {
                 label: Children.only(instance.CompositionEntry.label),
-                dialog({ onClose, open }: Plugin.SNSAdaptor.CompositionDialogEntry_DialogProps) {
+                dialog({ onClose, open }: Plugin.SiteAdaptor.CompositionDialogEntry_DialogProps) {
                     if (open) return createElement(instance!.CompositionEntry!.dialog as any, { onClose, open })
                     return null
                 },
@@ -93,6 +93,6 @@ function __builtInPluginInfraBridgeCallback__(this: SiteAdaptorPluginHost, id: s
             return instance!.CompositionDialogMetadataBadgeRender(k, meta)
         },
     }
-    if (hot?.has(id)) hot.get(id)!(def.SNSAdaptor!.load())
+    if (hot?.has(id)) hot.get(id)!(def.SiteAdaptor!.load())
     else registerPlugin(def)
 }

@@ -52,7 +52,7 @@ function ProfileTipsSlot() {
         return (
             <Component
                 identity={visitingPersona.identifier}
-                slot={Plugin.SNSAdaptor.TipsSlot.Profile}
+                slot={Plugin.SiteAdaptor.TipsSlot.Profile}
                 iconSize={buttonStyle.iconSize}
                 buttonSize={buttonStyle.buttonSize}
                 onStatusUpdate={setDisabled}

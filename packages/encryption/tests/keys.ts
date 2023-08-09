@@ -1,7 +1,7 @@
 /* cspell:disable */
 import { test } from 'vitest'
 import type { AESCryptoKey, EC_Private_CryptoKey, EC_Public_CryptoKey, ProfileIdentifier } from '@masknet/base'
-import { type EC_Key, EC_KeyCurveEnum, importEC_Key } from '../src/index.js'
+import { type EC_Key, EC_KeyCurve, importEC_Key } from '../src/index.js'
 import { unreachable } from '@masknet/kit'
 import { None, type Option, Some } from 'ts-results-es'
 test('test keys', () => {})
@@ -158,10 +158,10 @@ async function toPublic({
 }: typeof alice_K256_publicKey & {
     d?: string
 }): Promise<EC_Key<EC_Public_CryptoKey>> {
-    const x = await importEC_Key(key, EC_KeyCurveEnum.secp256k1)
-    return { algr: EC_KeyCurveEnum.secp256k1, key: x.unwrap() as EC_Public_CryptoKey }
+    const x = await importEC_Key(key, EC_KeyCurve.secp256k1)
+    return { algr: EC_KeyCurve.secp256k1, key: x.unwrap() as EC_Public_CryptoKey }
 }
 async function toPrivate(key: typeof jack_k256_private) {
-    const x = await importEC_Key(key, EC_KeyCurveEnum.secp256k1)
-    return { algr: EC_KeyCurveEnum.secp256k1, key: x.unwrap() as EC_Private_CryptoKey }
+    const x = await importEC_Key(key, EC_KeyCurve.secp256k1)
+    return { algr: EC_KeyCurve.secp256k1, key: x.unwrap() as EC_Private_CryptoKey }
 }

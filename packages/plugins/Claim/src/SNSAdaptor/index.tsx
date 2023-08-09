@@ -12,7 +12,7 @@ import { ClaimDialog } from './components/ClaimDialog/index.js'
 import { ClaimEntry } from './components/ClaimEntry/index.js'
 import { ClaimSuccessDialog } from './components/ClaimSuccessDialog/index.js'
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal, context) {},
     GlobalInjection: function ClaimGlobalInjection() {

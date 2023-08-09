@@ -1,11 +1,7 @@
 import { createContext, useContext, useMemo, useState, type PropsWithChildren } from 'react'
 import { useTimeout } from 'react-use'
 import { Typography } from '@mui/material'
-import {
-    CurrentSNSNetwork,
-    useActivatedPluginsSNSAdaptor,
-    type IdentityResolved,
-} from '@masknet/plugin-infra/content-script'
+import { SiteAdaptor, useActivatedPluginsSNSAdaptor, type IdentityResolved } from '@masknet/plugin-infra/content-script'
 import {
     useCurrentPersonaConnectStatus,
     SelectProviderModal,
@@ -85,7 +81,7 @@ const useStyles = makeStyles<{
 interface ApplicationBoardContentProps extends withClasses<'applicationWrapper' | 'recommendFeatureAppListWrapper'> {
     openDashboard?: (route?: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
-    currentSNSNetwork?: CurrentSNSNetwork
+    currentSNSNetwork?: SiteAdaptor
     lastRecognized?: IdentityResolved
     allPersonas: PersonaInformation[]
     applicationCurrentStatus?: PersonaAgainstSNSConnectStatus
@@ -124,11 +120,11 @@ export function ApplicationBoardContent({
 
 interface ApplicationBoardPluginsListProps
     extends withClasses<'applicationWrapper' | 'recommendFeatureAppListWrapper'> {
-    currentSNSNetwork?: CurrentSNSNetwork
+    currentSNSNetwork?: SiteAdaptor
 }
 
 function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
-    const { currentSNSNetwork = CurrentSNSNetwork.Twitter } = props
+    const { currentSNSNetwork = SiteAdaptor.Twitter } = props
     const t = useSharedI18N()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const { pluginID: currentWeb3Network } = useNetworkContext()
@@ -140,7 +136,7 @@ function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
                     if (!ApplicationEntries) return []
                     const currentWeb3NetworkSupportedChainIds = enableRequirement.web3?.[currentWeb3Network]
                     const isWalletConnectedRequired = currentWeb3NetworkSupportedChainIds !== undefined
-                    const currentSNSIsSupportedNetwork = enableRequirement.networks.networks[currentSNSNetwork]
+                    const currentSNSIsSupportedNetwork = enableRequirement.supports.sites[currentSNSNetwork]
                     const isSNSEnabled = currentSNSIsSupportedNetwork === undefined || currentSNSIsSupportedNetwork
                     return ApplicationEntries.map((entry) => ({
                         entry,

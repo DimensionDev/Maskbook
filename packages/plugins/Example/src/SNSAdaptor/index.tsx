@@ -4,7 +4,7 @@ import { PluginID } from '@masknet/shared-base'
 import { Typography } from '@mui/material'
 import { base } from '../base.js'
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal) {
         console.debug('Example plugin has been loaded.')

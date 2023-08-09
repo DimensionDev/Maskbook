@@ -8,7 +8,7 @@ export const base: Plugin.Shared.Definition = {
     description: { fallback: PLUGIN_DESCRIPTION },
     publisher: { name: { fallback: 'CryptoScamDB' }, link: 'https://cryptoscamdb.org' },
     enableRequirement: {
-        networks: { type: 'opt-out', networks: {} },
+        supports: { type: 'opt-out', sites: {} },
         target: 'stable',
     },
     experimentalMark: true,

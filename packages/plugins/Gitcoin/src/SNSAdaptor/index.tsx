@@ -23,7 +23,7 @@ function Renderer(props: { id: string }) {
     )
 }
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(_, context) {},
     GlobalInjection() {

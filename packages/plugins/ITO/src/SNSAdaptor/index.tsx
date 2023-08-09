@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal) {},
     DecryptedInspector(props) {

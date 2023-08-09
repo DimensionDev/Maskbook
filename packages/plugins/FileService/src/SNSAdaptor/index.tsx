@@ -19,12 +19,12 @@ import { openBrowser, openPicker } from './emitter.js'
 import { FileServiceInjection } from './FileServiceInjection.js'
 import { Modals } from './modals/index.js'
 
-type BadgeRenderer<T> = (f: T) => Plugin.SNSAdaptor.BadgeDescriptor
+type BadgeRenderer<T> = (f: T) => Plugin.SiteAdaptor.BadgeDescriptor
 
 function clickHandler() {
     return openBrowser('popup')
 }
-const definition: Plugin.SNSAdaptor.Definition = {
+const definition: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal, context) {
         setupStorage(context.createKVStorage<StorageOptions>('persistent', { termsConfirmed: undefined }))
@@ -106,7 +106,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
 
 export default definition
 
-function onAttachedFile(file: FileInfo): Plugin.SNSAdaptor.BadgeDescriptor {
+function onAttachedFile(file: FileInfo): Plugin.SiteAdaptor.BadgeDescriptor {
     const name = truncate(file.name, { length: 10 })
     const size = formatFileSize(file.size, true)
 
@@ -124,7 +124,7 @@ function onAttachedFile(file: FileInfo): Plugin.SNSAdaptor.BadgeDescriptor {
     }
 }
 
-function onAttachedMultipleFile(files: FileInfo[]): Plugin.SNSAdaptor.BadgeDescriptor {
+function onAttachedMultipleFile(files: FileInfo[]): Plugin.SiteAdaptor.BadgeDescriptor {
     if (files.length === 1) return onAttachedFile(files[0])
     return {
         text: (

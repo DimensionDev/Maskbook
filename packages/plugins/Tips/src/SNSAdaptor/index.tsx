@@ -9,7 +9,7 @@ import { TipTaskManager } from '../contexts/index.js'
 import { guideStorageDefaultValue, setupStorage, storageDefaultValue } from '../storage/index.js'
 import { TipsRealmContent } from './components/TipsRealmContent/index.js'
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(_, context) {
         const storage = context.createKVStorage('memory', storageDefaultValue)

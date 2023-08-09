@@ -4,7 +4,7 @@ import { languages } from './locales/languages.js'
 
 registerPlugin({
     ...base,
-    SNSAdaptor: {
+    SiteAdaptor: {
         load: () => import('./SNSAdaptor/index.js'),
         hotModuleReload: (hot) =>
             import.meta.webpackHot?.accept('./SNSAdaptor', () => hot(import('./SNSAdaptor/index.js'))),

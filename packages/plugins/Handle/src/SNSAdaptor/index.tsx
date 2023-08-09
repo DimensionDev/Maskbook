@@ -7,7 +7,7 @@ import { base } from '../base.js'
 import { SearchResultInspector } from './SearchResultInspector.js'
 import { type EOAResult, SearchResultType } from '@masknet/web3-shared-base'
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal) {},
     SearchResultInspector: {

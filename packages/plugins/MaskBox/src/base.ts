@@ -8,7 +8,7 @@ export const base: Plugin.Shared.Definition = {
     description: { fallback: 'The mystery box with NFT inside which is provided by Mask Network.' },
     publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
     enableRequirement: {
-        networks: { type: 'opt-out', networks: {} },
+        supports: { type: 'opt-out', sites: {} },
         target: 'stable',
     },
     experimentalMark: true,

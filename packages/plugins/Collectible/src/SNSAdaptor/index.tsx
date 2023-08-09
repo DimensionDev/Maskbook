@@ -35,7 +35,7 @@ function useInspectCollectible(pluginID?: NetworkPluginID) {
 const gridProps = {
     columns: 'repeat(auto-fill, minmax(20%, 1fr))',
 }
-const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
+const TabConfig: Plugin.SiteAdaptor.ProfileTab = {
     ID: `${PLUGIN_ID}_nfts`,
     label: 'NFTs',
     priority: 4,
@@ -69,7 +69,7 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
     },
 }
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal, context) {},
     GlobalInjection() {

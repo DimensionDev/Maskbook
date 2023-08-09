@@ -84,7 +84,7 @@ export const Onboarding = memo(function Onboarding() {
     const { value: hasPaymentPassword, loading, retry } = useAsyncRetry(WalletServiceRef.value.hasPassword, [])
 
     const onSetupTwitter = useCallback(async () => {
-        const url = await Services.SocialNetwork.setupSite(EnhanceableSite.Twitter, false)
+        const url = await Services.SiteAdaptor.setupSite(EnhanceableSite.Twitter, false)
         if (!url) return
         await delay(300)
         await browser.tabs.create({

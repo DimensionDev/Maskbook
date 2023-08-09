@@ -10,7 +10,7 @@ export type SocialNetwork = {
 }
 
 export const useSupportedSocialNetworkSites = createHook(
-    () => Services.SocialNetwork.getSupportedSites({ isSocialNetwork: true }),
+    () => Services.SiteAdaptor.getSupportedSites({ isSocialNetwork: true }),
     noop,
 )
 

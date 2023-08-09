@@ -7,7 +7,7 @@ import { base } from '../base.js'
 import { SavingsDialog } from './SavingsDialog.js'
 import { PluginID } from '@masknet/shared-base'
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal) {},
     ApplicationEntries: [

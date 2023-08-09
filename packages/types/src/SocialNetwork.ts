@@ -1,4 +1,4 @@
-import type { SocialNetworkEnum } from '@masknet/encryption'
+import type { EncryptPayloadNetwork } from '@masknet/encryption'
 import type { EnhanceableSite, PostIdentifier } from '@masknet/shared-base'
 import type { IdentityResolved, PostContext, PostContextCreation } from '@masknet/plugin-infra/content-script'
 import type { SocialNetworkUI } from './SocialNetworkUI.js'
@@ -24,7 +24,7 @@ export declare namespace SocialNetwork {
          * !!! THIS SHOULD NOT BE USED TO CONSTRUCT A NEW ProfileIdentifier !!!
          */
         networkIdentifier: EnhanceableSite
-        encryptionNetwork: SocialNetworkEnum
+        encryptPayloadNetwork: EncryptPayloadNetwork
         /**
          * This field _will_ be overwritten by SocialNetworkUI.permissions
          */

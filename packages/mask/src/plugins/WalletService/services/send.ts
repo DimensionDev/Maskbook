@@ -109,22 +109,3 @@ export async function send(payload: JsonRpcPayload, options?: TransactionOptions
             }
     }
 }
-
-/**
- * @deprecated Use `Request state` stead
- * @param payload
- * @param options
- * @returns
- */
-export async function confirmRequest(payload: JsonRpcPayload, options?: TransactionOptions) {
-    throw new Error('Use Request State stead.')
-}
-
-/**
- * @deprecated Use `Request state` stead
- * @param payload
- * @returns
- */
-export async function rejectRequest(payload: JsonRpcPayload) {
-    throw new Error('Use Request State stead.')
-}

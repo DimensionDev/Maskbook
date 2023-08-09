@@ -12,7 +12,7 @@ import { Context } from '../hooks/useContext.js'
 
 const isMaskBox = (x: string) => x.startsWith('https://box-beta.mask.io') || x.startsWith('https://box.mask.io')
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal, context) {},
     DecryptedInspector(props) {
