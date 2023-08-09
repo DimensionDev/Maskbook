@@ -95,6 +95,7 @@ export class ConnectionOptionsAPI_Base<
                 ...this.defaults.overrides,
                 ...pickBy(this.refs?.overrides, identity),
                 ...pickBy(this.options?.overrides, identity),
+                ...pickBy(initials?.overrides, identity),
                 ...pickBy(overrides, identity),
             },
         }

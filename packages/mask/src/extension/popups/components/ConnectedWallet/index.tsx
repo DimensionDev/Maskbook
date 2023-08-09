@@ -143,7 +143,7 @@ export const ConnectedWallet = memo<ConnectedWalletProps>(function ConnectedWall
                         <ImageIcon size={24} icon={networkDescriptor?.icon} className={classes.walletIcon} />
                         <Typography className={classes.walletInfo} component="div">
                             <Typography className={classes.walletName} component="span">
-                                {formatDomainName(wallet.name, 10)}
+                                {formatDomainName(wallet.name, 13)}
                             </Typography>
 
                             <Typography component="span" className={classes.address}>

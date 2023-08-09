@@ -10,6 +10,7 @@ import { CollectionList } from './CollectionList.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { EMPTY_LIST, type NetworkPluginID, PopupModalRoutes, type BindingProof } from '@masknet/shared-base'
 import { useModalNavigate } from '../index.js'
+import { Flags } from '@masknet/flags'
 
 const useStyles = makeStyles()((theme) => ({
     bottomBar: {
@@ -25,6 +26,11 @@ const useStyles = makeStyles()((theme) => ({
         height: 72,
         maxHeight: 72,
     },
+    container: {
+        maxHeight: 446,
+        overflow: 'scroll',
+        paddingBottom: 80,
+    },
 }))
 
 export interface NFTAvatarPickerProps {
@@ -39,7 +45,7 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
     const modalNavigate = useModalNavigate()
     const chains = useMemo(() => {
         const networks = getRegisteredWeb3Networks(pluginID)
-        return networks.map((x) => x.chainId)
+        return networks.filter((x) => (Flags.support_testnet_switch ? true : x.isMainnet)).map((x) => x.chainId)
     }, [])
 
     const [selected, setSelected] = useState<Web3Helper.NonFungibleAssetAll | undefined>()
@@ -61,17 +67,25 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
     }, [])
 
     return (
-        <Box height="100%">
+        <Box maxHeight={508}>
             <Box height={62}>
                 <NetworkTab chains={chains} pluginID={pluginID} />
             </Box>
-            <CollectionList
-                tokens={tokens}
-                loading={loading}
-                account={account}
-                selected={selected}
-                onItemClick={setSelected}
-            />
+            <Box className={classes.container}>
+                <CollectionList
+                    tokens={tokens}
+                    loading={loading}
+                    account={account}
+                    selected={selected}
+                    onItemClick={setSelected}
+                />
+                {error && !done && tokens.length ? (
+                    <Stack py={1} style={{ gridColumnStart: 1, gridColumnEnd: 6 }}>
+                        <RetryHint hint={false} retry={next} />
+                    </Stack>
+                ) : null}
+                <ElementAnchor callback={next}>{!done && tokens.length !== 0 && <LoadingBase />}</ElementAnchor>
+            </Box>
             <Box>
                 <PluginVerifiedWalletStatusBar
                     onChange={handleChange}
@@ -90,12 +104,6 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
                     </Button>
                 </PluginVerifiedWalletStatusBar>
             </Box>
-            {error && !done && tokens.length ? (
-                <Stack py={1} style={{ gridColumnStart: 1, gridColumnEnd: 6 }}>
-                    <RetryHint hint={false} retry={next} />
-                </Stack>
-            ) : null}
-            <ElementAnchor callback={next}>{!done && tokens.length !== 0 && <LoadingBase />}</ElementAnchor>
         </Box>
     )
 })

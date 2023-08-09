@@ -12,7 +12,7 @@ import {
     useWallet,
     useWeb3Connection,
 } from '@masknet/web3-hooks-base'
-import { isLessThan, isLte, isZero, leftShift, rightShift } from '@masknet/web3-shared-base'
+import { isLessThan, isLte, isZero, leftShift, minus, rightShift } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, type GasConfig } from '@masknet/web3-shared-evm'
 import { Box, Input, Typography } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
@@ -23,6 +23,7 @@ import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
 import { TokenPicker } from '../../../components/index.js'
 import { useTokenParams } from '../../../hook/index.js'
 import { ChooseTokenModal } from '../../../modals/modals.js'
+import { useDefaultGasConfig } from './useDefaultGasConfig.js'
 
 const useStyles = makeStyles()((theme) => ({
     asset: {
@@ -56,6 +57,10 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         color: theme.palette.maskColor.second,
         fontWeight: 700,
+    },
+    error: {
+        color: theme.palette.maskColor.danger,
+        margin: theme.spacing(2, 2, 0),
     },
     actionGroup: {
         display: 'flex',
@@ -105,20 +110,21 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM, { chainId })
     const isNativeToken = isNativeTokenAddress(address)
     const gasLimit = isNativeToken ? ETH_GAS_LIMIT : ERC20_GAS_LIMIT
-    const [gasConfig, setGasConfig] = useState<GasConfig>()
+    const defaultGasConfig = useDefaultGasConfig(chainId, gasLimit)
+    const [gasConfig = defaultGasConfig, setGasConfig] = useState<GasConfig>()
     const [amount, setAmount] = useState('')
     const totalAmount = useMemo(
         () => (amount && token?.decimals ? rightShift(amount, token.decimals).toFixed() : '0'),
         [amount, token?.decimals],
     )
-    const { balance, isLoading: isLoadingAvailableBalance } = useAvailableBalance(
-        NetworkPluginID.PLUGIN_EVM,
-        address,
-        gasConfig,
-        {
-            chainId,
-        },
-    )
+    const {
+        balance,
+        isLoading: isLoadingAvailableBalance,
+        isGasSufficient,
+        gasFee,
+    } = useAvailableBalance(NetworkPluginID.PLUGIN_EVM, address, gasConfig, {
+        chainId,
+    })
 
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { account } = useChainContext()
@@ -147,12 +153,13 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         )
 
     const inputNotReady = !recipient || !amount || isLessThan(balance, totalAmount)
-    const tokenNotReady = !token?.decimals || !balance || isLessThan(balance, totalAmount)
+    const tokenNotReady = !token?.decimals || !balance || isLessThan(balance, totalAmount) || !isGasSufficient
     const transferDisabled = inputNotReady || tokenNotReady || isLte(totalAmount, 0)
 
     // Use selectedAsset balance eagerly
     const isLoadingBalance = selectedAsset?.balance ? false : isLoadingAvailableBalance || isLoading
-    const tokenBalance = isLoadingAvailableBalance || isLoading ? selectedAsset?.balance : balance
+    // Available token balance
+    const tokenBalance = isLoadingAvailableBalance || isLoading ? minus(selectedAsset?.balance || 0, gasFee) : balance
 
     const decimals = token?.decimals || selectedAsset?.decimals
     const uiTokenBalance = tokenBalance && decimals ? leftShift(tokenBalance, decimals).toString() : '0'
@@ -178,9 +185,11 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                         {token?.symbol}
                     </ProgressiveText>
                     <ProgressiveText loading={isLoadingBalance} skeletonWidth={60}>
-                        {t('available_amount', {
-                            amount: formatTokenBalance(tokenBalance, token?.decimals),
-                        })}
+                        {isNativeToken
+                            ? t('available_amount', {
+                                  amount: formatTokenBalance(tokenBalance, token?.decimals),
+                              })
+                            : formatTokenBalance(tokenBalance, token?.decimals)}
                     </ProgressiveText>
                 </Box>
                 <Icons.ArrowDrop size={24} />
@@ -216,15 +225,20 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                 <Typography className={classes.label}>{t('gas_fee')}</Typography>
                 <ChainContextProvider value={chainContextValue}>
                     <GasSettingMenu
+                        initConfig={gasConfig}
                         minimumGas={gasLimit}
                         defaultChainId={chainId}
                         paymentToken={paymentAddress}
+                        allowMaskAsGas
                         onPaymentTokenChange={setPaymentAddress}
                         owner={wallet?.owner}
                         onChange={setGasConfig}
                     />
                 </ChainContextProvider>
             </Box>
+            {isGasSufficient ? null : (
+                <Typography className={classes.error}>{t('insufficient_funds_for_gas')}</Typography>
+            )}
             <Box className={classes.actionGroup}>
                 <ActionButton variant="outlined" fullWidth onClick={() => navigate(-2)}>
                     {t('cancel')}

@@ -1,23 +1,33 @@
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { BottomDrawer } from '../../components/index.js'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { FormattedCurrency } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { useChainIdSupport, useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import {
-    formatWeiToGwei,
-    type ChainId,
+    ZERO,
+    formatBalance,
+    formatCurrency,
+    isGreaterThan,
+    isGreaterThanOrEqualTo,
+    isLessThan,
+    isLessThanOrEqualTo,
+    isPositive,
+    isZero,
+    scale10,
+    toFixed,
+} from '@masknet/web3-shared-base'
+import {
     formatGweiToWei,
     formatWeiToEther,
+    formatWeiToGwei,
+    type ChainId,
     type GasConfig,
 } from '@masknet/web3-shared-evm'
-import { useChainIdSupport, useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
-import { NUMERIC_INPUT_REGEXP_PATTERN, NetworkPluginID } from '@masknet/shared-base'
 import { Alert, Box, Button, TextField, Typography, useTheme } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { ZERO, formatBalance, formatCurrency, isGreaterThan, isLessThan, isZero } from '@masknet/web3-shared-base'
 import { BigNumber } from 'bignumber.js'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { BottomDrawer } from '../../components/index.js'
 import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
-import { MAX_GAS_LIMIT } from '../../constants.js'
-import { hexToNumber } from 'web3-utils'
-import { FormattedCurrency } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -73,12 +83,9 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { data: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
 
-    const [gas, setGas] = useState(config.gas)
-    const [gasPrice, setGasPrice] = useState(config.gasPrice ? config.gasPrice : '')
-    const [maxPriorityFeePerGas, setMaxPriorityFeePerGas] = useState(
-        config.maxPriorityFeePerGas ? config.maxPriorityFeePerGas : '',
-    )
-    const [maxFeePerGas, setMaxFeePerGas] = useState(config.maxFeePerGas ? config.maxFeePerGas : '')
+    const [gasPrice = config.gasPrice || '', setGasPrice] = useState<string>()
+    const [maxPriorityFeePerGas = config.maxPriorityFeePerGas || '', setMaxPriorityFeePerGas] = useState<string>()
+    const [maxFeePerGas = config.maxFeePerGas || '', setMaxFeePerGas] = useState<string>()
 
     const estimateSecond = useMemo(() => {
         if (!gasOptions || replaceType) return
@@ -98,18 +105,10 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
             .toFixed()
     }, [gasPrice, config.gas, maxFeePerGas, isSupport1559])
 
-    const gasLimitError = useMemo(() => {
-        if (isLessThan(gas, config.gas) || isGreaterThan(gas, MAX_GAS_LIMIT)) {
-            return t('popups_wallet_invalid_gas_limit')
-        }
-
-        return
-    }, [gas, config.gas])
-
     const gasPriceError = useMemo(() => {
         if (isSupport1559) return
         if (isZero(gasPrice)) return t('popups_wallet_gas_price_should_greater_than_zero')
-        if (gasOptions && isGreaterThan(gasOptions.slow.suggestedMaxFeePerGas, formatGweiToWei(gasPrice))) {
+        if (gasOptions && isGreaterThanOrEqualTo(gasOptions.slow.suggestedMaxFeePerGas, formatGweiToWei(gasPrice))) {
             return t('popups_wallet_gas_price_too_low')
         }
         return
@@ -142,7 +141,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
 
         if (formattedMaxPriorityFee.isZero()) return
 
-        if (isLessThan(formattedMaxFee, miniumMaxFeePerGas)) {
+        if (isLessThanOrEqualTo(formattedMaxFee, miniumMaxFeePerGas)) {
             return t('popups_wallet_max_fee_is_too_low', {
                 minimum: formatWeiToGwei(miniumMaxFeePerGas).toFixed(2),
             })
@@ -151,17 +150,14 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     }, [maxFeePerGas, maxPriorityFeePerGas, gasOptions?.fast, isSupport1559])
 
     const disabled = useMemo(() => {
-        if (isLessThan(gas, config.gas) || isGreaterThan(gas, MAX_GAS_LIMIT)) {
-            return true
-        }
         if (isSupport1559) {
             return isZero(maxPriorityFeePerGas) || !!maxFeePerGasError
         } else {
             return isZero(gasPrice)
         }
-    }, [gas, config.gas, maxPriorityFeePerGas, maxFeePerGas, gasOptions, isSupport1559, maxFeePerGasError])
+    }, [maxPriorityFeePerGas, maxFeePerGas, gasOptions, isSupport1559, maxFeePerGasError])
 
-    const error = gasLimitError || gasPriceError || maxPriorityFeePerGasError || maxFeePerGasError
+    const error = gasPriceError || maxPriorityFeePerGasError || maxFeePerGasError
 
     const title = useMemo(() => {
         switch (replaceType) {
@@ -189,37 +185,34 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
         onClose(
             isSupport1559
                 ? {
-                      gas,
                       maxFeePerGas: formatGweiToWei(maxFeePerGas).toFixed(),
                       maxPriorityFeePerGas: formatGweiToWei(maxPriorityFeePerGas).toFixed(),
                   }
-                : { gasPrice: formatGweiToWei(gasPrice).toFixed(), gas },
+                : { gasPrice: formatGweiToWei(gasPrice).toFixed() },
         )
-    }, [gasPrice, maxFeePerGas, maxPriorityFeePerGas, isSupport1559, onClose, gas])
+    }, [gasPrice, maxFeePerGas, maxPriorityFeePerGas, isSupport1559, onClose])
 
     useEffect(() => {
-        if (!open || !gasOptions) return
+        if (!open || !gasOptions || config.gasPrice || (config.maxFeePerGas && config.maxPriorityFeePerGas)) return
         // Set default value
         if (!isSupport1559) {
             const result =
                 replaceType && config.gasPrice
                     ? formatWeiToGwei(config.gasPrice).plus(5)
-                    : formatWeiToGwei(gasOptions.fast.suggestedMaxFeePerGas)
+                    : formatWeiToGwei(gasOptions.normal.suggestedMaxFeePerGas)
 
-            setGas(config.gas)
             setGasPrice(result.toFixed(2))
         } else {
             const maxPriorityFeePerGas =
                 replaceType && config.maxPriorityFeePerGas
                     ? formatWeiToGwei(config.maxPriorityFeePerGas).plus(5)
-                    : formatWeiToGwei(gasOptions.fast.suggestedMaxPriorityFeePerGas)
+                    : formatWeiToGwei(gasOptions.normal.suggestedMaxPriorityFeePerGas)
 
             const maxFeePerGas =
                 replaceType && config.maxFeePerGas
                     ? formatWeiToGwei(config.maxFeePerGas).plus(5)
-                    : formatWeiToGwei(gasOptions.fast.suggestedMaxFeePerGas)
+                    : formatWeiToGwei(gasOptions.normal.suggestedMaxFeePerGas)
 
-            setGas(config.gas)
             setMaxPriorityFeePerGas(maxPriorityFeePerGas.toFixed(2))
             setMaxFeePerGas(maxFeePerGas.toFixed(2))
         }
@@ -233,6 +226,13 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                     <FormattedCurrency
                         value={formatWeiToEther(totalGas).times(nativeTokenPrice ?? 0)}
                         formatter={formatCurrency}
+                        options={{
+                            onlyRemainTwoDecimal: false,
+                            customDecimalConfig: {
+                                boundary: scale10(1, -4),
+                                decimalExp: 4,
+                            },
+                        }}
                     />
                 </Typography>
                 {tips ? (
@@ -266,20 +266,12 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                 {replaceType ? t('nonce') : t('popups_wallet_gas_fee_settings_gas_limit')}
                             </Typography>
                             <TextField
-                                error={!!gasLimitError}
-                                value={replaceType ? hexToNumber(nonce) : config.gas}
-                                disabled={!!replaceType}
+                                value={toFixed(replaceType ? nonce : config.gas, 0)}
+                                disabled
                                 fullWidth
-                                onChange={(e) => {
-                                    if (replaceType) return
-                                    setGas(e.target.value || '0')
-                                }}
                                 InputProps={{
                                     disableUnderline: true,
                                     type: 'number',
-                                    inputProps: {
-                                        pattern: NUMERIC_INPUT_REGEXP_PATTERN,
-                                    },
                                 }}
                             />
                         </Box>
@@ -301,13 +293,15 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                         }
 
                                         if (
-                                            isLessThan(
+                                            (isLessThan(
                                                 e.target.value,
                                                 formatWeiToGwei(gasOptions?.slow.suggestedMaxPriorityFeePerGas ?? 0),
                                             ) &&
-                                            !!replaceType
-                                        )
+                                                !!replaceType) ||
+                                            !isPositive(e.target.value)
+                                        ) {
                                             return
+                                        }
 
                                         setMaxPriorityFeePerGas(e.target.value)
                                         setMaxFeePerGas(
@@ -319,9 +313,9 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                     InputProps={{
                                         endAdornment: <Typography className={classes.unit}>{t('gwei')}</Typography>,
                                         disableUnderline: true,
-                                        type: 'number',
                                         inputProps: {
-                                            pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                            min: 0,
+                                            type: 'number',
                                         },
                                     }}
                                 />
@@ -334,13 +328,14 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                     error={!!maxFeePerGasError}
                                     onChange={(e) => {
                                         if (
-                                            isLessThan(
+                                            (isLessThan(
                                                 e.target.value,
                                                 formatWeiToGwei(gasOptions?.slow.baseFeePerGas ?? 0).plus(
                                                     maxPriorityFeePerGas,
                                                 ),
                                             ) &&
-                                            !!replaceType
+                                                !!replaceType) ||
+                                            !isPositive(e.target.value)
                                         )
                                             return
 
@@ -352,7 +347,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                         disableUnderline: true,
                                         type: 'number',
                                         inputProps: {
-                                            pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                            min: 0,
                                         },
                                     }}
                                 />
@@ -368,11 +363,12 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                 value={gasPrice}
                                 onChange={(e) => {
                                     if (
-                                        isLessThan(
+                                        (isLessThan(
                                             e.target.value,
                                             formatWeiToGwei(gasOptions?.slow.suggestedMaxFeePerGas ?? 0),
                                         ) &&
-                                        !!replaceType
+                                            !!replaceType) ||
+                                        !isPositive(e.target.value)
                                     ) {
                                         return
                                     }
@@ -383,7 +379,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                     disableUnderline: true,
                                     type: 'number',
                                     inputProps: {
-                                        pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                                        min: 0,
                                     },
                                 }}
                             />
@@ -393,19 +389,12 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                 {t('popups_wallet_gas_fee_settings_gas_limit')}
                             </Typography>
                             <TextField
-                                value={replaceType ? hexToNumber(nonce) : config.gas}
-                                disabled={!!replaceType}
+                                value={toFixed(replaceType ? nonce : config.gas, 0)}
+                                disabled
                                 fullWidth
-                                onChange={(e) => {
-                                    if (replaceType) return
-                                    setGas(e.target.value || '0')
-                                }}
                                 InputProps={{
                                     disableUnderline: true,
                                     type: 'number',
-                                    inputProps: {
-                                        pattern: NUMERIC_INPUT_REGEXP_PATTERN,
-                                    },
                                 }}
                             />
                         </Box>

@@ -1,16 +1,16 @@
 import { forwardRef, useState } from 'react'
-import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
-import { Box, Typography, useTheme } from '@mui/material'
 import { useAsyncFn } from 'react-use'
-import { PopupRoutes, type SingletonModalRefCreator, type Wallet } from '@masknet/shared-base'
+import { useNavigate } from 'react-router-dom'
+import { Box, Typography, useTheme } from '@mui/material'
 import { ActionButton } from '@masknet/theme'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { Web3 } from '@masknet/web3-providers'
+import { ProviderType } from '@masknet/web3-shared-evm'
+import { PopupRoutes, type SingletonModalRefCreator, type Wallet } from '@masknet/shared-base'
+import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
+import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { WalletRPC } from '../../../../plugins/WalletService/messages.js'
-import { ProviderType } from '@masknet/web3-shared-evm'
-import { useNavigate } from 'react-router-dom'
 
 interface WalletRemoveDrawerProps extends BottomDrawerProps {
     error: string
@@ -35,7 +35,7 @@ function WalletRenameDrawer({ wallet, error, password, setPassword, setError, ..
                 setError(t('create_wallet_incorrect_payment_password'))
                 return
             }
-            await Web3?.removeWallet?.(wallet.address, password, { providerType: ProviderType.MaskWallet })
+            await Web3.removeWallet?.(wallet.address, password, { providerType: ProviderType.MaskWallet })
             rest.onClose?.()
 
             const wallets = await WalletRPC.getWallets()

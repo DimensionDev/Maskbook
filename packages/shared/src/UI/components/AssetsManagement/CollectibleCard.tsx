@@ -1,11 +1,10 @@
 import { memo, type HTMLProps } from 'react'
-import { Card, Radio } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Card, useTheme } from '@mui/material'
+import { CheckBoxButton, RadioButton, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { type NetworkPluginID } from '@masknet/shared-base'
 import { AssetPreviewer, NetworkIcon } from '@masknet/shared'
 import { resolveImageURL } from '@masknet/web3-shared-evm'
-import { Icons, type GeneratedIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -43,13 +42,6 @@ const useStyles = makeStyles()((theme) => ({
         height: '100%',
     },
     indicator: {
-        position: 'absolute',
-        top: 5,
-        right: 5,
-        color: theme.palette.maskColor.primary,
-        zIndex: 1,
-    },
-    radio: {
         padding: 0,
         position: 'absolute',
         top: 5,
@@ -64,10 +56,6 @@ export interface CollectibleCardProps extends HTMLProps<HTMLDivElement> {
     disableNetworkIcon?: boolean
     /** disable inspect NFT details */
     disableInspect?: boolean
-    /**
-     * Use Icons.Checkbox for multiple select
-     */
-    indicatorIcon?: GeneratedIcon
     isSelected?: boolean
     useRadio?: boolean
 }
@@ -79,12 +67,12 @@ export const CollectibleCard = memo(
         asset,
         disableNetworkIcon,
         disableInspect,
-        indicatorIcon,
         isSelected,
         useRadio,
         ...rest
     }: CollectibleCardProps) => {
         const { classes, cx } = useStyles()
+        const theme = useTheme()
 
         const icon =
             pluginID && !disableNetworkIcon ? <NetworkIcon pluginID={pluginID} chainId={asset.chainId} /> : null
@@ -97,7 +85,7 @@ export const CollectibleCard = memo(
             asset.contract?.address,
         )
 
-        const IndicatorIcon = indicatorIcon ?? Icons.CheckCircle
+        const IndicatorButton = useRadio ? RadioButton : CheckBoxButton
 
         return (
             <div className={cx(classes.root, className)} {...rest}>
@@ -112,11 +100,13 @@ export const CollectibleCard = memo(
                         fallbackImage={fallbackImage}
                     />
                 </Card>
-                {useRadio ? (
-                    <Radio className={classes.radio} checked={isSelected} />
-                ) : isSelected ? (
-                    <IndicatorIcon className={classes.indicator} size={20} />
-                ) : null}
+                <IndicatorButton
+                    size={20}
+                    checked={isSelected}
+                    className={classes.indicator}
+                    checkedButtonColor={theme.palette.maskColor.primary}
+                    unCheckedButtonColor={theme.palette.maskColor.secondaryLine}
+                />
             </div>
         )
     },

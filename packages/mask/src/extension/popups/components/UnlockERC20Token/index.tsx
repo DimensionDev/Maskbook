@@ -7,7 +7,7 @@ import { useChainContext, useChainIdSupport, useFungibleToken, useFungibleTokenB
 import { ExplorerResolver } from '@masknet/web3-providers'
 import { CopyButton, TokenIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { isGreaterThan, leftShift } from '@masknet/web3-shared-base'
+import { isGreaterThan, isZero, leftShift } from '@masknet/web3-shared-base'
 import { GasSettingMenu } from '../GasSettingMenu/index.js'
 import type { TransactionDetail } from '../../pages/Wallet/type.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
@@ -48,7 +48,7 @@ const useStyles = makeStyles()((theme) => ({
     address: {
         fontSize: 10,
         color: theme.palette.maskColor.second,
-        fontWeight: 700,
+        fontWeight: 400,
     },
     link: {
         width: 16,
@@ -66,6 +66,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     input: {
         paddingRight: '0px !important',
+        background: theme.palette.maskColor.input,
     },
     max: {
         fontWeight: 400,
@@ -73,7 +74,16 @@ const useStyles = makeStyles()((theme) => ({
     },
     spender: {
         color: theme.palette.maskColor.second,
-        fontSize: 11,
+        fontSize: 12,
+        fontWeight: 700,
+        lineHeight: '16px',
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    spenderAddress: {
+        marginTop: 4,
+        color: theme.palette.maskColor.main,
+        fontSize: 12,
         fontWeight: 700,
         lineHeight: '16px',
         display: 'flex',
@@ -128,6 +138,17 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
             gasPrice: transaction.computedPayload.gasPrice,
         }
     }, [transaction?.computedPayload, isSupport1559])
+
+    const tips = useMemo(() => {
+        if (isZero(value)) {
+            return t('popups_wallet_unlock_erc20_revoke_tips')
+        }
+        if (isGreaterThan(value, leftShift(balance, token?.decimals))) {
+            return t('popups_wallet_unlock_erc20_balance_too_high_tips')
+        }
+
+        return t('popups_wallet_unlock_erc20_balance_tips', { amount: value, symbol: token?.symbol })
+    }, [value, balance, token])
 
     if (!transaction.formattedTransaction) return null
 
@@ -187,8 +208,10 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                         ),
                         disableUnderline: true,
                         className: classes.input,
+                        type: 'number',
                         inputProps: {
                             pattern: NUMERIC_INPUT_REGEXP_PATTERN,
+                            min: 0,
                         },
                     }}
                 />
@@ -201,21 +224,25 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                                 ? theme.palette.maskColor.danger
                                 : theme.palette.maskColor.warn
                         }>
-                        {isGreaterThan(value, leftShift(balance, token?.decimals))
-                            ? t('popups_wallet_unlock_erc20_balance_too_high_tips')
-                            : t('popups_wallet_unlock_erc20_balance_tips', { amount: value, symbol: token?.symbol })}
+                        {tips}
                     </Typography>
                 ) : null}
                 <Typography className={classes.name}>{t('popups_wallet_unlock_erc20_requested_by')}</Typography>
                 {transaction.formattedTransaction.popup?.spender ? (
                     <Typography className={classes.spender}>
-                        {t('contract')}:{transaction.formattedTransaction.popup?.spender}
-                        <Link
-                            href={ExplorerResolver.addressLink(chainId, transaction.formattedTransaction.popup.spender)}
-                            className={classes.link}
-                            style={{ color: theme.palette.maskColor.second }}>
-                            <Icons.LinkOut size={16} />
-                        </Link>
+                        {t('contract')}:
+                        <Typography className={classes.spenderAddress}>
+                            {transaction.formattedTransaction.popup?.spender}{' '}
+                            <Link
+                                href={ExplorerResolver.addressLink(
+                                    chainId,
+                                    transaction.formattedTransaction.popup.spender,
+                                )}
+                                className={classes.link}
+                                style={{ color: theme.palette.maskColor.second }}>
+                                <Icons.LinkOut size={16} />
+                            </Link>
+                        </Typography>
                     </Typography>
                 ) : null}
             </Box>

@@ -112,7 +112,7 @@ export function useAllProviderTradeContext() {
     const { inputAmount, inputToken, outputToken } = tradeStore
     const allTradeComputed: Array<AsyncStateRetry<TraderAPI.TradeInfo>> = useAllTradeComputed(
         inputAmount,
-        openConfirmDialog ? 1 : BLOCK_TIME_SCALE[chainId],
+        openConfirmDialog ? 1 : BLOCK_TIME_SCALE[chainId] || 1,
         inputToken,
         outputToken,
         temporarySlippage,

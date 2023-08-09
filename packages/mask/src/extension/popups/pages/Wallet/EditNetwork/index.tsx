@@ -4,19 +4,19 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
-import { ChainResolver, ExplorerResolver } from '@masknet/web3-providers'
 import { TokenType, type TransferableNetwork } from '@masknet/web3-shared-base'
-import { NetworkType, SchemaType, ZERO_ADDRESS, type ChainId } from '@masknet/web3-shared-evm'
+import { NetworkType, SchemaType, ZERO_ADDRESS, type ChainId, getRPCConstant } from '@masknet/web3-shared-evm'
 import { Button, Input, Typography, alpha } from '@mui/material'
 import { useMutation } from '@tanstack/react-query'
-import { omit } from 'lodash-es'
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
-import { type ZodCustomIssue, type z } from 'zod'
-import { createSchema, useI18N, type AvailableLocaleKeys } from '../../../../../utils/index.js'
+import { type z, type ZodCustomIssue } from 'zod'
+import { useI18N, type AvailableLocaleKeys } from '../../../../../utils/index.js'
+import { createSchema } from './network-schema.js'
 import { PageTitleContext } from '../../../context.js'
 import { useTitle } from '../../../hook/index.js'
+import { useWarnings } from './useWarnings.js'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -78,9 +78,9 @@ export const EditNetwork = memo(function EditNetwork() {
         return {
             name: network.name,
             chainId: network.chainId,
-            rpc: network.rpcUrl,
-            currencySymbol: ChainResolver.nativeCurrency(network.chainId)?.symbol,
-            explorer: ExplorerResolver.explorerUrl(network.chainId).url,
+            rpc: network.isCustomized ? network.rpcUrl : getRPCConstant(network.chainId, 'RPC_URLS')?.[0],
+            currencySymbol: network.nativeCurrency.symbol,
+            explorer: network.explorerUrl.url,
             isCustomized: network.isCustomized,
         }
     }, [chainId, networks])
@@ -111,19 +111,25 @@ export const EditNetwork = memo(function EditNetwork() {
     }, [isBuiltIn, id, classes.iconButton, showSnackbar, t, Network])
 
     const schema = useMemo(() => {
-        return createSchema(t, async (name) => {
-            return !networks.find((network) => network.name === name && network.ID !== id)
-        })
+        return createSchema(
+            t,
+            async (name) => {
+                return !networks.find((network) => network.name === name && network.ID !== id)
+            },
+            networks,
+            id,
+        )
     }, [t, id, networks])
 
     type FormInputs = z.infer<typeof schema>
     const {
         getValues,
+        watch,
         register,
         setError,
         formState: { errors, isValidating, isDirty, isValid: isFormValid },
     } = useForm<FormInputs>({
-        mode: 'all',
+        mode: 'onChange',
         resolver: zodResolver(schema),
         defaultValues: network || {},
     })
@@ -131,8 +137,6 @@ export const EditNetwork = memo(function EditNetwork() {
         (message: string) => {
             try {
                 const issues = JSON.parse(message) as ZodCustomIssue[]
-                const isInvalid = issues.some((issue) => issue.path[0] !== 'currencySymbol')
-                if (!isInvalid) return true
                 issues.forEach((issue) => {
                     // We assume there is no multiple paths.
                     setError(issue.path[0] as keyof FormInputs, {
@@ -144,30 +148,34 @@ export const EditNetwork = memo(function EditNetwork() {
         },
         [setError, t],
     )
+
+    const formChainId = +watch('chainId')
+    const formSymbol = watch('currencySymbol')
+    const { chainIdWarning, symbolWarning } = useWarnings(formChainId, formSymbol)
+
     const [isSubmitting, setIsSubmitting] = useState(false)
     const { isLoading: isMutating, mutate } = useMutation<void, unknown, FormInputs>({
         mutationFn: async (data) => {
             if (!Network) return
             setIsSubmitting(true)
-            const chainId = +data.chainId
             try {
+                const parsedData = await schema.parseAsync(data)
+                const chainId = parsedData.chainId
                 const network: TransferableNetwork<ChainId, SchemaType, NetworkType> = {
                     isCustomized: true,
                     type: NetworkType.CustomNetwork,
                     chainId,
-                    coinMarketCapChainId: '',
-                    coinGeckoChainId: '',
-                    name: data.name,
-                    fullName: data.name,
+                    name: parsedData.name,
+                    fullName: parsedData.name,
                     network: 'mainnet',
-                    rpcUrl: data.rpc,
+                    rpcUrl: parsedData.rpc,
                     nativeCurrency: {
                         id: ZERO_ADDRESS,
                         chainId,
                         type: TokenType.Fungible,
                         schema: SchemaType.Native,
-                        name: data.currencySymbol || '',
-                        symbol: data.currencySymbol || '',
+                        name: parsedData.currencySymbol || '',
+                        symbol: parsedData.currencySymbol || '',
                         decimals: 18,
                         address: ZERO_ADDRESS,
                     },
@@ -193,13 +201,9 @@ export const EditNetwork = memo(function EditNetwork() {
     })
 
     const [isChecking, setIsChecking] = useState(false)
-    // Discard currencySymbol warning
-    const isValid = isFormValid || (!!errors.currencySymbol && Object.keys(omit(errors, 'currencySymbol')).length === 0)
-    const isNotReady = isValidating || (!isValidating && !isValid) || !isDirty || isChecking
+    const isNotReady = isValidating || !isFormValid || !isDirty || isChecking
     const disabled = isNotReady || isMutating || isSubmitting
 
-    // currency symbol error is tolerable,
-    // but react-hook-form's handleSubmit can't tolerate it
     const handleSubmit = useCallback(async () => {
         if (disabled) return
         setIsChecking(true)
@@ -226,7 +230,7 @@ export const EditNetwork = memo(function EditNetwork() {
                     disabled={isBuiltIn}
                     inputProps={{
                         placeholder: '',
-                        maxLength: 20,
+                        maxLength: 24,
                     }}
                 />
                 {errors.name ? <Typography className={classes.error}>{errors.name.message}</Typography> : null}
@@ -251,7 +255,11 @@ export const EditNetwork = memo(function EditNetwork() {
                     placeholder="eg. 2"
                     disabled={isBuiltIn}
                 />
-                {errors.chainId ? <Typography className={classes.error}>{errors.chainId.message}</Typography> : null}
+                {errors.chainId ? (
+                    <Typography className={classes.error}>{errors.chainId.message}</Typography>
+                ) : chainIdWarning ? (
+                    <Typography className={classes.warn}>{chainIdWarning}</Typography>
+                ) : null}
 
                 <Typography className={classes.label}>{t('optional_currency_symbol')}</Typography>
                 <Input
@@ -260,11 +268,9 @@ export const EditNetwork = memo(function EditNetwork() {
                     error={!!errors.currencySymbol}
                     {...register('currencySymbol', { required: false })}
                     placeholder="eg. ETH"
-                    disabled={isBuiltIn}
+                    disabled={isBuiltIn || !!errors.chainId}
                 />
-                {errors.currencySymbol ? (
-                    <Typography className={classes.warn}>{errors.currencySymbol.message}</Typography>
-                ) : null}
+                {symbolWarning ? <Typography className={classes.warn}>{symbolWarning}</Typography> : null}
 
                 <Typography className={classes.label}>{t('optional_block_explorer_url')}</Typography>
                 <Input

@@ -1,6 +1,12 @@
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { PageUIProvider, PersonaContext } from '@masknet/shared'
-import { NetworkPluginID, PopupModalRoutes, PopupRoutes as PopupPaths, PopupsHistory } from '@masknet/shared-base'
+import {
+    CrossIsolationMessages,
+    NetworkPluginID,
+    PopupModalRoutes,
+    PopupRoutes as PopupPaths,
+    PopupsHistory,
+} from '@masknet/shared-base'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { TelemetryProvider, Web3ContextProvider, useMountReport } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
@@ -46,6 +52,7 @@ const SwapPage = lazy(() => import('./pages/Swap/index.js'))
 const RequestPermissionPage = lazy(() => import('./RequestPermission/index.js'))
 const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect/index.js'))
 const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermission/index.js'))
+const Contacts = lazy(() => import('./pages/Friends/index.js'))
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
@@ -78,6 +85,7 @@ const PopupRoutes = memo(function PopupRoutes() {
                         <Route path="/" element={<PopupLayout />}>
                             <Route path={PopupPaths.Personas + '/*'} element={<Personas />} />
                             <Route path={PopupPaths.Wallet + '/*'} element={<Wallet />} />
+                            <Route path={PopupPaths.Friends + '/*'} element={<Contacts />} />
                         </Route>
                         <Route path={PopupPaths.Swap} element={<SwapPage />} />
                         <Route path={PopupPaths.RequestPermission} element={<RequestPermissionPage />} />
@@ -142,6 +150,7 @@ export default function Popups() {
     useMountReport(EventID.AccessPopups)
     useIdleTimer({ onAction: WalletRPC.setAutoLockTimer, throttle: 10000 })
 
+    useEffect(() => CrossIsolationMessages.events.popupRouteUpdated.on((url) => PopupsHistory.replace(url)), [])
     return PageUIProvider(
         usePopupTheme,
         <PopupSnackbarProvider>

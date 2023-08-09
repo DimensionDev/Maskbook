@@ -5,6 +5,7 @@ import WalletConnectProvider from './WalletConnect.js'
 import WalletConnectV2Provider from './WalletConnectV2.js'
 import { EVM_Coin98Provider } from './Coin98.js'
 import { CoinbaseProvider } from './Coinbase.js'
+import { OKXProvider } from './OKX.js'
 import { CloverProvider } from './Clover.js'
 import FortmaticProvider from './Fortmatic.js'
 import { OperaProvider } from './Opera.js'
@@ -22,6 +23,7 @@ export const Providers: Record<ProviderType, EVM_Provider> = {
     [ProviderType.WalletConnectV2]: new WalletConnectV2Provider(),
     [ProviderType.Coin98]: new EVM_Coin98Provider(),
     [ProviderType.Coinbase]: new CoinbaseProvider(),
+    [ProviderType.OKX]: new OKXProvider(),
     [ProviderType.Clover]: new CloverProvider(),
     [ProviderType.Fortmatic]: new FortmaticProvider(),
     [ProviderType.Opera]: new OperaProvider(),

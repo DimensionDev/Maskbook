@@ -12,6 +12,7 @@
     "Solflare.ts",
     "Coin98.ts",
     "Coinbase.ts",
+    "OKX.ts",
     "MetaMask.ts",
     "Opera.ts",
     "Clover.ts",

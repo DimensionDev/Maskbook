@@ -56,7 +56,8 @@ export const WalletHeader = memo(function WalletHeader() {
         )
     }
 
-    if (!wallet || !hasPassword || matchUnlock || matchResetWallet) return <WalletSetupHeaderUI />
+    if (!wallet || !hasPassword || matchUnlock || matchResetWallet)
+        return <WalletSetupHeaderUI showBack={!!matchResetWallet} />
 
     return matchWallet ? (
         <WalletHeaderUI

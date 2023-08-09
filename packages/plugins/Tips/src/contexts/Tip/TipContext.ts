@@ -34,7 +34,7 @@ export interface TipContextOptions {
     validatingRecipient: boolean
     recipientValidation: ValidationTuple
     isAvailableBalance: boolean
-    isAvailableGasBalance: boolean
+    isGasSufficient: boolean
     balance: string
 }
 
@@ -66,7 +66,7 @@ export const TipContext = createContext<TipContextOptions>({
     validatingRecipient: false,
     recipientValidation: [true],
     isAvailableBalance: false,
-    isAvailableGasBalance: false,
+    isGasSufficient: false,
     balance: '',
 })
 TipContext.displayName = 'TipContext'

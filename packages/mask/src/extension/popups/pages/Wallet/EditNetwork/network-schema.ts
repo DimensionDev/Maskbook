@@ -1,6 +1,8 @@
-import { EthereumMethodType, createJsonRpcPayload } from '@masknet/web3-shared-evm'
 import { z } from 'zod'
-import type { I18NFunction } from './i18n-next-ui.js'
+import { fetchChainId } from '@masknet/web3-providers/helpers'
+import type { I18NFunction } from '../../../../../utils/i18n-next-ui.js'
+import { isSameURL, type ReasonableNetwork } from '@masknet/web3-shared-base'
+import { getRPCConstant, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
 
 interface ChainConfig {
     name: string
@@ -43,7 +45,7 @@ type NameValidator = (name: string) => boolean | Promise<boolean>
  */
 export function createBaseSchema(t: I18NFunction, duplicateNameValidator: NameValidator) {
     const schema = z.object({
-        name: z.string().nonempty().refine(duplicateNameValidator, t('network_already_exists')),
+        name: z.string().trim().nonempty().refine(duplicateNameValidator, t('network_already_exists')),
         rpc: z
             .string()
             .trim()
@@ -53,38 +55,29 @@ export function createBaseSchema(t: I18NFunction, duplicateNameValidator: NameVa
             z
                 .string()
                 .trim()
-                .regex(/^\d+$/, t('incorrect_chain_id'))
-                .transform((v) => Number.parseInt(v, 10)),
+                .regex(/^\d+|0x[\da-f]$/i, t('invalid_number'))
+                .transform((v) => Number.parseInt(v, v.startsWith('0x') ? 16 : 10)),
             z.number(),
         ]),
         currencySymbol: z.string().optional(),
-        explorer: z.union([z.string().url(t('incorrect_explorer_url')), z.string().optional()]),
+        explorer: z.union([z.string().url(t('incorrect_explorer_url')), z.literal('')]),
     })
     return schema
 }
 
-export function createSchema(t: I18NFunction, duplicateNameValidator: NameValidator) {
+export function createSchema(
+    t: I18NFunction,
+    duplicateNameValidator: NameValidator,
+    networks: Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>,
+    editingId: string | undefined,
+) {
     const baseSchema = createBaseSchema(t, duplicateNameValidator)
     const schema = baseSchema
         .superRefine(async (schema, context) => {
             if (!schema.rpc || !schema.chainId) return true
-            let rpcId: number
+            let rpcChainId: number
             try {
-                const res = await fetch(schema.rpc, {
-                    method: 'post',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Origin: location.origin,
-                    },
-                    body: JSON.stringify(
-                        createJsonRpcPayload(0, {
-                            method: EthereumMethodType.ETH_CHAIN_ID,
-                            params: [],
-                        }),
-                    ),
-                })
-                const json = (await res.json()) as { result: string }
-                rpcId = Number.parseInt(json.result, 16)
+                rpcChainId = await fetchChainId(schema.rpc)
             } catch {
                 context.addIssue({
                     code: z.ZodIssueCode.custom,
@@ -93,9 +86,9 @@ export function createSchema(t: I18NFunction, duplicateNameValidator: NameValida
                 })
                 return
             }
-            if (rpcId !== schema.chainId) {
+            if (rpcChainId !== schema.chainId) {
                 // Background can pass i18n params by params field to frontend
-                const params = { chain_id: rpcId }
+                const params = { chain_id: rpcChainId }
                 context.addIssue({
                     code: z.ZodIssueCode.custom,
                     path: ['chainId'],
@@ -106,24 +99,28 @@ export function createSchema(t: I18NFunction, duplicateNameValidator: NameValida
             }
             return true
         })
-        .superRefine(async (schema, context) => {
-            if (!schema.chainId || !schema.currencySymbol) return true
-            try {
-                const chains = await fetchChains()
-                const match = chains.find((chain) => chain.chainId === schema.chainId)
-                if (!match) return true
-                if (match.nativeCurrency.symbol !== schema.currencySymbol) {
-                    // ditto
-                    const params = { chain_id: match.chainId, symbol: match.nativeCurrency.symbol }
-                    context.addIssue({
-                        code: z.ZodIssueCode.custom,
-                        path: ['currencySymbol'],
-                        message: t('rpc_return_different_symbol', params),
-                        params,
-                    })
-                }
-            } catch {
-                // Ignore
+        .superRefine((schema, context) => {
+            const { rpc } = schema
+            const network = networks.find((network) => isSameURL(network.rpcUrl, rpc) && network.ID !== editingId)
+            if (network) {
+                context.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    path: ['rpc'],
+                    message: t('rpc_url_is_used_by', { name: network.name }),
+                })
+                return false
+            } else {
+                networks.some((network) => {
+                    if (getRPCConstant(network.chainId, 'RPC_URLS')?.includes(rpc)) {
+                        context.addIssue({
+                            code: z.ZodIssueCode.custom,
+                            path: ['rpc'],
+                            message: t('rpc_url_is_used_by', { name: network.name }),
+                        })
+                        return true
+                    }
+                    return false
+                })
             }
             return true
         })

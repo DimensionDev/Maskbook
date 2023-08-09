@@ -4,7 +4,7 @@ import { isSameAddress, type FungibleToken } from '@masknet/web3-shared-base'
 import { createPageable, createIndicator } from '@masknet/shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { FungibleTokenAPI as EVM_FungibleTokenAPI } from '../../Web3/EVM/apis/FungibleTokenAPI.js'
-import { formatAssets, resolveDeBankAssetId } from '../helpers.js'
+import { formatAssets } from '../helpers.js'
 import type { WalletTokenRecord } from '../types.js'
 import { DEBANK_OPEN_API } from '../constants.js'
 import { Duration } from '../../helpers/fetchCached.js'
@@ -32,9 +32,6 @@ export class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId
                 formatAssets(
                     (result ?? []).map((x) => ({
                         ...x,
-                        // rename bsc to bnb
-                        id: resolveDeBankAssetId(x.id),
-                        chain: resolveDeBankAssetId(x.chain),
                         // prefix ARETH
                         symbol: x.chain === 'arb' && x.symbol === 'ETH' ? 'ARETH' : x.symbol,
                         logo_url:
