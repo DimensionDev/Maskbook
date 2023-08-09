@@ -1238,6 +1238,7 @@
     "empty": "crwdns21545:0crwdne21545:0",
     "hide_token_symbol": "crwdns21547:0{{- symbol}}crwdne21547:0",
     "hide_token_description": "crwdns21549:0{{- symbol}}crwdne21549:0",
+    "scam_tx": "crwdns22133:0crwdne22133:0",
     "to_address": "crwdns21731:0{{address}}crwdne21731:0",
     "transaction_status": "crwdns21733:0crwdne21733:0",
     "transaction_failed": "crwdns21735:0crwdne21735:0",
