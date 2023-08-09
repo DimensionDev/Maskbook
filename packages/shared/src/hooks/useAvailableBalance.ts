@@ -81,6 +81,7 @@ export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>
         isAvailableBalance,
         isGasSufficient,
         isGasFeeGreaterThanOneETH,
+        gasFee,
         balance:
             isAvailableBalance && pluginID === NetworkPluginID.PLUGIN_EVM
                 ? BigNumber.max(new BigNumber(tokenBalance).minus(gasFee), 0).toString()
