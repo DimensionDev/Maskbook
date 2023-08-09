@@ -52,7 +52,6 @@ export const AccountRender = memo<AccountRenderProps>(function AccountRender({ p
             case NextIDPlatform.REDDIT:
             case NextIDPlatform.RSS3:
             case NextIDPlatform.NextID:
-            case NextIDPlatform.Discord:
                 return null
             default:
                 safeUnreachable(profile.platform)

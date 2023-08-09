@@ -20,7 +20,6 @@ export enum NextIDPlatform {
     Bit = 'dotbit',
     Unstoppable = 'unstoppabledomains',
     CyberConnect = 'cyberconnect',
-    Discord = 'discord',
 }
 
 export interface NextIDEnsRecord {

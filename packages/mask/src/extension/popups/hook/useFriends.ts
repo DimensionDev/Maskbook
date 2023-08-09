@@ -63,8 +63,7 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
                         x.platform !== NextIDPlatform.REDDIT &&
                         x.platform !== NextIDPlatform.SYBIL &&
                         x.platform !== NextIDPlatform.EthLeaderboard &&
-                        x.platform !== NextIDPlatform.NextID &&
-                        x.platform !== NextIDPlatform.Discord),
+                        x.platform !== NextIDPlatform.NextID),
             )
             return {
                 profiles: filtered,
