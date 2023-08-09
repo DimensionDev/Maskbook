@@ -420,6 +420,7 @@
     "welcome_to_use_mask_network": "欢迎来到 Mask Network！",
     "create_step": "步骤 {{step}}/{{totalSteps}}",
     "persona_create_title": "创建新的 MASK 身份",
+    "persona_create_tips": "创建您的身份以开始",
     "data_recovery_title": "恢复数据",
     "data_recovery_email": "电子邮箱",
     "data_recovery_email_code": "邮箱验证码",
@@ -454,5 +455,6 @@
     "identity_words": "身份助记词",
     "private_key": "私钥",
     "local_backup": "本地备份",
-    "incorrect_verification_code": "验证码错误。"
+    "incorrect_verification_code": "验证码错误。",
+    "wallet_open_mask_wallet": "打开一个钱包"
 }
