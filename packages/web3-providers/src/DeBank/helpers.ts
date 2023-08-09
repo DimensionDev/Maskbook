@@ -20,7 +20,6 @@ import {
 import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
 import {
     DebankTransactionDirection,
-    type DebankChains,
     type HistoryResponse,
     type TransferringAsset,
     type WalletTokenRecord,
@@ -42,11 +41,11 @@ export function formatAssets(data: WalletTokenRecord[]): Array<FungibleAsset<Cha
     return data
         .filter((x) => DEBANK_CHAIN_TO_CHAIN_ID_MAP[x.chain])
         .map((x) => {
-            const chainId = DEBANK_CHAIN_TO_CHAIN_ID_MAP[x.id as DebankChains]
-            const address = chainId ? resolveNativeAddress(chainId) : x.id
+            const chainId = DEBANK_CHAIN_TO_CHAIN_ID_MAP[x.chain]
+            const address = x.id in DEBANK_CHAIN_TO_CHAIN_ID_MAP ? resolveNativeAddress(chainId) : x.id
 
             return {
-                id: address,
+                id: x.id,
                 address: formatEthereumAddress(address),
                 chainId,
                 type: TokenType.Fungible,
@@ -143,12 +142,6 @@ export function formatTransactions({
         }
     })
     return compact(transactions)
-}
-
-export function resolveDeBankAssetId(id: string) {
-    if (id === 'bsc') return 'bnb'
-    if (id === 'cfx') return 'Conflux'
-    return id
 }
 
 export function resolveDeBankAssetIdReversed(id: string) {
