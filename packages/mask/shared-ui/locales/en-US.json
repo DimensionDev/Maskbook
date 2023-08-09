@@ -1238,6 +1238,7 @@
     "empty": "Empty",
     "hide_token_symbol": "Hide {{- symbol}}",
     "hide_token_description": "Confirm to hide {{- symbol}}?  You can redisplay it by re-adding this token at any time.",
+    "scam_tx": "Scam tx",
     "to_address": "to {{address}}",
     "transaction_status": "status",
     "transaction_failed": "Failed",

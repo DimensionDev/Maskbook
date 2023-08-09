@@ -73,6 +73,21 @@ const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' },
         },
         txName: {
             textTransform: 'capitalize',
+            whiteSpace: 'nowrap',
+        },
+        scamLabel: {
+            display: 'inline-block',
+            padding: '4px 6px',
+            backgroundColor: theme.palette.maskColor.third,
+            color: theme.palette.maskColor.white,
+            fontSize: 12,
+            lineHeight: '16px',
+            fontWeight: 700,
+            marginLeft: 4,
+            borderRadius: 4,
+        },
+        toAddress: {
+            whiteSpace: 'nowrap',
         },
         operations: {
             display: 'flex',
@@ -157,20 +172,21 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                 secondaryTypographyProps={{ component: 'div' }}
                 style={{ marginLeft: 15 }}
                 secondary={
-                    <Box>
-                        <Typography>
-                            {!transaction.status ? (
-                                <Typography className={classes.failedLabel} component="span">
-                                    {t('failed')}
-                                </Typography>
-                            ) : null}
-                            {t('to_address', {
-                                address: domain ? formatDomainName(domain) : formatEthereumAddress(toAddress, 4),
-                            })}
-                        </Typography>
-                    </Box>
+                    <Typography className={classes.toAddress}>
+                        {!transaction.status ? (
+                            <Typography className={classes.failedLabel} component="span">
+                                {t('failed')}
+                            </Typography>
+                        ) : null}
+                        {t('to_address', {
+                            address: domain ? formatDomainName(domain) : formatEthereumAddress(toAddress, 4),
+                        })}
+                    </Typography>
                 }>
-                <Typography className={classes.txName}>{transaction.cateName}</Typography>
+                <Typography className={classes.txName}>
+                    {transaction.cateName}
+                    {transaction.isScam ? <span className={classes.scamLabel}>{t('scam_tx')}</span> : null}
+                </Typography>
             </ListItemText>
             <Box ml="auto">
                 {transaction.assets
