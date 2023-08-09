@@ -208,7 +208,7 @@
     "view": "View",
     "verified_by": "Verified by {{ marketplace }}",
     "no_NFTs_found": "No NFTs found.",
-    "add_collectibles": "Add Collectibles",
+    "add_collectibles": "Add NFTs",
     "collectible_contract_require": "The collectible address is required",
     "collectible_contract_invalid": "Incorrect contract address.",
     "collectible_token_id_require": "The collectible token id is required",

@@ -140,7 +140,11 @@ export const AssetsListUI = memo<AssetsListUIProps>(function AssetsListUI({ isEx
                         onClick={() => onItemClick(asset)}
                         secondaryAction={
                             <Typography className={classes.value}>
-                                <FormattedCurrency value={asset.value?.usd || 0} formatter={formatCurrency} />
+                                <FormattedCurrency
+                                    value={asset.value?.usd || 0}
+                                    formatter={formatCurrency}
+                                    options={{ onlyRemainTwoDecimal: true }}
+                                />
                             </Typography>
                         }>
                         <Box position="relative">
