@@ -9,7 +9,7 @@ const PluginRender = lazy(() => import('./plugin-render.js'))
 
 export function DecryptMessage() {
     const postData = getPostPayload()
-    if (!postData) return <Typography>No payload found.</Typography>
+    if (!postData) return <Typography className="text-black dark:text-white">No payload found.</Typography>
 
     const [text, version] = postData
     return <DecryptMessageWorker text={text} version={version} />

@@ -28,8 +28,8 @@ export function DashboardContainer(props: DashboardContainerProps) {
     }, [systemMode, localStorage.themeMode])
 
     return (
-        <div className="xl:pl-72 container">
-            <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-6 border-b dark:border-white/5  border-black/5 dark:bg-zinc-900 px-4  sm:px-6 lg:px-8 border">
+        <div className="xl:pl-72 ">
+            <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-6  border-b border-line-light dark:border-line-dark dark:bg-black bg-white px-4  sm:px-6 lg:px-8">
                 <button
                     type="button"
                     className="-m-2.5 p-2.5 dark:text-white text-black xl:hidden"
@@ -43,12 +43,12 @@ export function DashboardContainer(props: DashboardContainerProps) {
                     </label>
                     <div className="relative w-full">
                         <MagnifyingGlassIcon
-                            className="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-500"
+                            className="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-black dark:text-white"
                             aria-hidden="true"
                         />
                         <input
                             id="search-field"
-                            className="block h-full w-full border-0 bg-transparent py-0 pl-8 pr-0 dark:text-white text-black focus:ring-0 sm:text-sm"
+                            className="dark:bg-black bg-white block h-full w-full border-0 bg-transparent py-0 pl-8 pr-0 dark:text-white text-black focus:ring-0 sm:text-sm"
                             placeholder="eg: Twitter accounts, Persona public keys, wallet addresses or ENS"
                             type="search"
                             name="search"
@@ -59,8 +59,8 @@ export function DashboardContainer(props: DashboardContainerProps) {
             </div>
             {keyword ? (
                 <div className=" lg:px-8">
-                    <div className="bg-white p-5">
-                        <div className="border rounded-lg overflow-hidden">
+                    <div className="bg-white dark:bg-black p-5">
+                        <div className="border rounded-lg overflow-hidden dark:border-line-dark border-line-light">
                             <DisableShadowRootContext.Provider value={false}>
                                 <ShadowRootIsolation>
                                     <SearchResultInspector

@@ -8,7 +8,7 @@ export interface SidebarForDesktopProps {}
 export function DashboardForDesktop(props: SidebarForDesktopProps) {
     return (
         <div className="hidden xl:fixed xl:inset-y-0 xl:z-50 xl:flex xl:w-72 xl:flex-col">
-            <div className="flex grow flex-col gap-y-5 overflow-y-auto dark:bg-black/10 bg-white/10 px-6 ring-1 dark:ring-white/10 ring-gray-400/20">
+            <div className="flex grow flex-col gap-y-5 overflow-y-auto dark:bg-black/10 bg-white/10 px-6 ring-1 dark:ring-line-dark ring-line-light">
                 <div className="flex h-16 shrink-0 items-center">
                     <WalletItem />
                 </div>

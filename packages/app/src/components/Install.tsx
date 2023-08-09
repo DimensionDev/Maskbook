@@ -17,7 +17,7 @@ export const InstallExtension = memo(() => {
 
     return (
         <a role="button" className="flex flex-1 w-full" href="https://mask.io/download-links">
-            <div className="flex flex-1 items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 dark:text-white text-black border dark:border-white/5  border-black/5 dark:bg-gray-800 dark:text-white bg-gray-50">
+            <div className="flex flex-1 items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 dark:text-white text-black border-y dark:border-line-dark  border-line-light dark:bg-gray-800 dark:text-white bg-gray-50">
                 <div className="text-gray-700 dark:text-gray-400 flex justify-between flex-1">
                     <Typography className="flex flex-1">Install Extension</Typography>
                     <div className="flex">
