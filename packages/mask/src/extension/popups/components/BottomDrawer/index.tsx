@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
+import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { Box, Drawer, Typography } from '@mui/material'
 import { memo, type PropsWithChildren } from 'react'
 
@@ -21,6 +21,8 @@ const useStyles = makeStyles()((theme) => ({
         flex: 1,
         paddingTop: theme.spacing(3),
         paddingLeft: theme.spacing(4),
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
     },
 }))
 
@@ -36,7 +38,9 @@ export const BottomDrawer = memo<BottomDrawerProps>(function BottomDrawer({ open
     return (
         <Drawer anchor="bottom" onClose={handleClose} open={open} classes={{ paper: classes.root }}>
             <Box className={classes.header}>
-                <Typography className={classes.title}>{title}</Typography>
+                <TextOverflowTooltip title={title}>
+                    <Typography className={classes.title}>{title}</Typography>
+                </TextOverflowTooltip>
                 <Icons.Close size={24} onClick={handleClose} />
             </Box>
             {children}
