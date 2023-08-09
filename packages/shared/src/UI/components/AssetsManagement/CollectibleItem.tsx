@@ -119,6 +119,7 @@ export const CollectibleItem = memo(
             onActionClick,
             onItemClick,
             isSelected,
+            showUnCheckedIndicator,
             ...rest
         } = props
         const t = useSharedI18N()
@@ -161,6 +162,7 @@ export const CollectibleItem = memo(
                         disableNetworkIcon={disableNetworkIcon}
                         onClick={handleClick}
                         isSelected={isSelected}
+                        showUnCheckedIndicator={showUnCheckedIndicator}
                     />
                     <div className={cx(classes.info, classes.ease)}>
                         {disableName ? null : (

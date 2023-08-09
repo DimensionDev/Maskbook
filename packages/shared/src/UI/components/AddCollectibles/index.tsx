@@ -318,6 +318,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                                         disableAction
                                         onItemClick={isMine ? toggleSelect : undefined}
                                         isSelected={selectedTokenIds.includes(asset.tokenId)}
+                                        showUnCheckedIndicator
                                     />
                                 )
                             })}

@@ -7,7 +7,7 @@ interface Props extends GeneratedIconProps {
     checkedButtonColor?: string
 }
 
-export const CheckBoxButton = memo<Props>(function CheckBoxButton({
+export const CheckBoxIndicator = memo<Props>(function CheckBoxIndicator({
     checked,
     unCheckedButtonColor,
     checkedButtonColor,
