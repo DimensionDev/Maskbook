@@ -111,9 +111,7 @@ const useStyles = makeStyles<{ currentTab: string }>()((theme, { currentTab }) =
     }
 })
 
-export interface CollectibleProps {}
-
-export function Collectible(props: CollectibleProps) {
+export function Collectible() {
     const t = useI18N()
     const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activities')
     const { classes } = useStyles({ currentTab })
@@ -156,7 +154,16 @@ export function Collectible(props: CollectibleProps) {
         const tabMap = {
             [tabs.about]: <AboutTab asset={asset.data} isLoading={asset.isLoading} />,
             [tabs.details]: <DetailsTab asset={asset.data} isLoading={asset.isLoading} />,
-            [tabs.offers]: <OffersTab offers={orders} />,
+            [tabs.offers]: (
+                <OffersTab
+                    offers={orders.value}
+                    loading={orders.loading}
+                    error={orders.error}
+                    finished={orders.ended}
+                    onRetry={orders.retry}
+                    onNext={orders.next}
+                />
+            ),
             [tabs.activities]: <ActivitiesTab events={events} />,
         }
 

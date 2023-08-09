@@ -7,9 +7,10 @@ import { useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../../locales/i18n_generated.js'
+import { memo, type HTMLProps } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
-    wrapper: {
+    card: {
         width: '100%',
         display: 'flex',
         alignItems: 'center',
@@ -47,13 +48,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface OfferCardProps {
+export interface OfferCardProps extends HTMLProps<HTMLDivElement> {
     offer: NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
 }
 
-export function OfferCard(props: OfferCardProps) {
-    const { offer } = props
-    const { classes } = useStyles()
+export const OfferCard = memo(function OfferCard({ offer, ...rest }: OfferCardProps) {
+    const { classes, cx } = useStyles()
     const Others = useWeb3Others()
     const t = useI18N()
 
@@ -84,7 +84,7 @@ export function OfferCard(props: OfferCardProps) {
     }
 
     return (
-        <div className={classes.wrapper}>
+        <div {...rest} className={cx(classes.card, rest.className)}>
             <div className={classes.offerDetail}>
                 <div className={classes.flex}>
                     {renderTokenIcon()}
@@ -135,4 +135,4 @@ export function OfferCard(props: OfferCardProps) {
             </div>
         </div>
     )
-}
+})
