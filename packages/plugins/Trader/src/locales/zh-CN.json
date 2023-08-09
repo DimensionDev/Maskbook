@@ -1,6 +1,8 @@
 {
+    "promote": "在 Twitter 上即时交换代币。安装 Mask.io 以在多链Dex上探索“更好的服务器”。",
     "impact_warning": "价格影响提示",
     "risk_warning": "风险提示",
+    "risk_warning_description": "您想要交易的金额可能比当前市场价格下跌 <span>{{impact}}</span> 。因此，您可能会损失 <span>{{lostSymbol}}</span>  或 <span>{{- lostValue}}</span>。",
     "adjust_order": "调整顺序",
     "make_trade_anyway": "仍然交易",
     "swap_failed": "兑换失败",
@@ -87,6 +89,7 @@
     "plugin_trader_slippage_tolerance": "高级设置：",
     "plugin_trader_gas_fee": "Gas 费用",
     "plugin_trader_unlock_symbol": "解锁 {{symbol}}",
+    "plugin_trader_unlock_tips": "您必须授予 {{provider}} 智能合约使用您的 {{symbol}} 的权限。每个代币只需要授权一次。",
     "plugin_trader_swap_amount_symbol": "兑换",
     "plugin_trader_confirm_from": "从",
     "plugin_trader_confirm_to": "至",
