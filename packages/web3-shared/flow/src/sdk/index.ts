@@ -8,11 +8,9 @@ export function createClient(chainId: ChainId) {
     fcl.config({
         'flow.network': 'mainnet',
         'accessNode.api': authConstants.ACCESS_NODE_API!,
-        'app.detail.id': authConstants.MASK_APP_ID,
+        'discovery.wallet': authConstants.DISCOVERY_WALLET!,
         'app.detail.title': authConstants.MASK_APP_TITLE,
         'app.detail.icon': authConstants.MASK_APP_ICON,
-        'discovery.wallet': authConstants.DISCOVERY_WALLET!,
-        'discovery.wallet.method': 'HTTP/POST',
     })
     return fcl
 }
