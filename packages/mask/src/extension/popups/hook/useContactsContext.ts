@@ -44,7 +44,7 @@ function useContactsContext({ defaultName, defaultAddress }: ContextOptions = { 
         return GoPlusLabs.getAddressSecurity(chainId, address)
     }, [chainId, address])
 
-    const isMaliciousAddress = security && Object.values(security).filter((x) => x === '1').length > 0
+    const isMaliciousAddress = security && Object.values(security).filter((x) => x === '1').length > 1
 
     const inputValidationMessage = useMemo(() => {
         if (isMaliciousAddress) return t('wallets_transfer_error_address_scam')

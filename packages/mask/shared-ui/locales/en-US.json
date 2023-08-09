@@ -903,6 +903,7 @@
     "popups_welcome": "Welcome",
     "popups_wallet_token": "Tokens",
     "popups_wallet_collectible": "NFTs",
+    "popups_wallet_collectible_added_successfully": "Successfully added",
     "popups_wallet_dialog_legacy_wallet_tip": "Detected legacy wallets, please click confirm to restore them all.",
     "popups_wallet_set_payment_password": "Set the payment password",
     "popups_wallet_create_payment_password": "Create Password",

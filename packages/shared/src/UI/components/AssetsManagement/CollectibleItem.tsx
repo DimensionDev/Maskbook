@@ -118,7 +118,6 @@ export const CollectibleItem = memo(
             verifiedBy = EMPTY_LIST,
             onActionClick,
             onItemClick,
-            indicatorIcon,
             isSelected,
             ...rest
         } = props
@@ -161,7 +160,6 @@ export const CollectibleItem = memo(
                         asset={asset}
                         disableNetworkIcon={disableNetworkIcon}
                         onClick={handleClick}
-                        indicatorIcon={indicatorIcon}
                         isSelected={isSelected}
                     />
                     <div className={cx(classes.info, classes.ease)}>
