@@ -4,7 +4,6 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
-import { ChainResolver, ExplorerResolver } from '@masknet/web3-providers'
 import { TokenType, type TransferableNetwork } from '@masknet/web3-shared-base'
 import { NetworkType, SchemaType, ZERO_ADDRESS, type ChainId, getRPCConstant } from '@masknet/web3-shared-evm'
 import { Button, Input, Typography, alpha } from '@mui/material'
@@ -80,8 +79,8 @@ export const EditNetwork = memo(function EditNetwork() {
             name: network.name,
             chainId: network.chainId,
             rpc: network.isCustomized ? network.rpcUrl : getRPCConstant(network.chainId, 'RPC_URLS')?.[0],
-            currencySymbol: ChainResolver.nativeCurrency(network.chainId)?.symbol,
-            explorer: ExplorerResolver.explorerUrl(network.chainId).url,
+            currencySymbol: network.nativeCurrency.symbol,
+            explorer: network.explorerUrl.url,
             isCustomized: network.isCustomized,
         }
     }, [chainId, networks])

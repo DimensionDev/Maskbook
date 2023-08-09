@@ -12,7 +12,7 @@ import {
     useWallet,
     useWeb3Connection,
 } from '@masknet/web3-hooks-base'
-import { isLessThan, isLte, isZero, leftShift, rightShift } from '@masknet/web3-shared-base'
+import { isLessThan, isLte, isZero, leftShift, minus, rightShift } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, type GasConfig } from '@masknet/web3-shared-evm'
 import { Box, Input, Typography } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
@@ -60,7 +60,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     error: {
         color: theme.palette.maskColor.danger,
-        marginTop: theme.spacing(2),
+        margin: theme.spacing(2, 2, 0),
     },
     actionGroup: {
         display: 'flex',
@@ -121,6 +121,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         balance,
         isLoading: isLoadingAvailableBalance,
         isGasSufficient,
+        gasFee,
     } = useAvailableBalance(NetworkPluginID.PLUGIN_EVM, address, gasConfig, {
         chainId,
     })
@@ -157,7 +158,8 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
 
     // Use selectedAsset balance eagerly
     const isLoadingBalance = selectedAsset?.balance ? false : isLoadingAvailableBalance || isLoading
-    const tokenBalance = isLoadingAvailableBalance || isLoading ? selectedAsset?.balance : balance
+    // Available token balance
+    const tokenBalance = isLoadingAvailableBalance || isLoading ? minus(selectedAsset?.balance || 0, gasFee) : balance
 
     const decimals = token?.decimals || selectedAsset?.decimals
     const uiTokenBalance = tokenBalance && decimals ? leftShift(tokenBalance, decimals).toString() : '0'
