@@ -4,6 +4,7 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { uniqBy } from 'lodash-es'
 import type { FriendsInformation } from './useFriends.js'
 import { NextIDPlatform } from '@masknet/shared-base'
+import { PlatformSort } from './useFriends.js'
 
 export type NextIDPersonaBindingsWithIdentifier = NextIDPersonaBindings & { linkedPersona: ECKeyIdentifier } & {
     isLocal?: boolean
@@ -12,6 +13,7 @@ export type NextIDPersonaBindingsWithIdentifier = NextIDPersonaBindings & { link
 export function useFriendsFromSearch(
     searchResult?: NextIDPersonaBindings[],
     localList?: FriendsInformation[],
+    searchValue?: string,
 ): AsyncStateRetry<NextIDPersonaBindingsWithIdentifier[]> {
     return useAsyncRetry(async () => {
         if (!searchResult?.length) return EMPTY_LIST
@@ -28,6 +30,12 @@ export function useFriendsFromSearch(
             )
             const identifier = ECKeyIdentifier.fromHexPublicKeyK256(item.persona).expect(
                 `${item.persona} should be a valid hex public key in k256`,
+            )
+            filtered.sort((a, b) =>
+                a.identity === searchValue || a.name === searchValue
+                    ? -1
+                    : PlatformSort[a.platform as keyof typeof PlatformSort] -
+                      PlatformSort[b.platform as keyof typeof PlatformSort],
             )
             return {
                 proofs: filtered,

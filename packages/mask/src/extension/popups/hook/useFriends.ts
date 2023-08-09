@@ -16,8 +16,18 @@ export type FriendsInformation = ProfileInformation & {
     profiles: BindingProof[]
     id: string
 }
-
-export function useFriends(network: string): AsyncStateRetry<FriendsInformation[]> {
+export const PlatformSort = {
+    twitter: 0,
+    github: 1,
+    ethereum: 2,
+    ens: 3,
+    lens: 4,
+    keybase: 5,
+    farcaster: 6,
+    space_id: 7,
+    unstoppabledomains: 8,
+}
+export function useFriends(): AsyncStateRetry<FriendsInformation[]> {
     const currentPersona = useCurrentPersona()
     return useAsyncRetry(async () => {
         const values = await Services.Identity.queryRelationPaged(
@@ -65,6 +75,12 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
                         x.platform !== NextIDPlatform.EthLeaderboard &&
                         x.platform !== NextIDPlatform.NextID),
             )
+
+            filtered.sort(
+                (a, b) =>
+                    PlatformSort[a.platform as keyof typeof PlatformSort] -
+                    PlatformSort[b.platform as keyof typeof PlatformSort],
+            )
             return {
                 profiles: filtered,
                 ...friends[index],
@@ -72,5 +88,5 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
             }
         })
         return uniqBy(profiles, ({ id }) => id).reverse()
-    }, [network, currentPersona])
+    }, [currentPersona])
 }

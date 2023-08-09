@@ -10,7 +10,7 @@ import { useFriendsFromSearch } from '../../../hook/useFriendsFromSearch.js'
 
 const FriendsHome = memo(function FriendsHome() {
     const { t } = useI18N()
-    const { loading, value = EMPTY_LIST } = useFriends('twitter.com')
+    const { loading, value = EMPTY_LIST } = useFriends()
     const [searchValue, setSearchValue] = useState('')
     const type = resolveNextIDPlatform(searchValue)
     const { loading: resolveLoading, value: _value = '' } = useSearchValue(searchValue, type)
@@ -19,7 +19,7 @@ const FriendsHome = memo(function FriendsHome() {
         type ?? NextIDPlatform.NextID,
         false,
     )
-    const { value: searchedList = EMPTY_LIST } = useFriendsFromSearch(searchResult, value)
+    const { value: searchedList = EMPTY_LIST } = useFriendsFromSearch(searchResult, value, _value)
     useTitle(t('popups_encrypted_friends'))
     return (
         <FriendsHomeUI
