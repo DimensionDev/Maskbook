@@ -1,17 +1,7 @@
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { BottomDrawer } from '../../components/index.js'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
-import {
-    formatWeiToGwei,
-    type ChainId,
-    formatGweiToWei,
-    formatWeiToEther,
-    type GasConfig,
-} from '@masknet/web3-shared-evm'
-import { useChainIdSupport, useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
+import { FormattedCurrency } from '@masknet/shared'
 import { NUMERIC_INPUT_REGEXP_PATTERN, NetworkPluginID } from '@masknet/shared-base'
-import { Alert, Box, Button, TextField, Typography, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { useChainIdSupport, useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import {
     ZERO,
     formatBalance,
@@ -22,9 +12,19 @@ import {
     scale10,
     toFixed,
 } from '@masknet/web3-shared-base'
+import {
+    formatGweiToWei,
+    formatWeiToEther,
+    formatWeiToGwei,
+    type ChainId,
+    type GasConfig,
+} from '@masknet/web3-shared-evm'
+import { Alert, Box, Button, TextField, Typography, useTheme } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { BottomDrawer } from '../../components/index.js'
 import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
-import { FormattedCurrency } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -80,11 +80,9 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { data: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
 
-    const [gasPrice, setGasPrice] = useState(config.gasPrice ? config.gasPrice : '')
-    const [maxPriorityFeePerGas, setMaxPriorityFeePerGas] = useState(
-        config.maxPriorityFeePerGas ? config.maxPriorityFeePerGas : '',
-    )
-    const [maxFeePerGas, setMaxFeePerGas] = useState(config.maxFeePerGas ? config.maxFeePerGas : '')
+    const [gasPrice = config.gasPrice || '', setGasPrice] = useState<string>()
+    const [maxPriorityFeePerGas = config.maxPriorityFeePerGas || '', setMaxPriorityFeePerGas] = useState<string>()
+    const [maxFeePerGas = config.maxFeePerGas || '', setMaxFeePerGas] = useState<string>()
 
     const estimateSecond = useMemo(() => {
         if (!gasOptions || replaceType) return
@@ -318,9 +316,6 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                         inputProps: {
                                             min: 0,
                                             type: 'number',
-                                            inputProps: {
-                                                min: 0,
-                                            },
                                         },
                                     }}
                                 />
