@@ -26,7 +26,6 @@ interface ConnectedAccountsProps {
 
 export const ConnectedAccounts = memo<ConnectedAccountsProps>(function ConnectedAccounts({ profiles }) {
     const { classes } = useStyles()
-
     return (
         <RestorableScroll scrollKey="connected_accounts">
             <Box className={classes.accounts}>

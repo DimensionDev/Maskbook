@@ -106,7 +106,7 @@ const relationServiceDomainQuery = `domain(domainSystem: $domainSystem, name: $d
     }
     }`
 
-const relationServiceIdentityQuery = `
+const relationServiceIdentityQuery = (depth?: number) => `
     identity(platform: $platform, identity: $identity) {
         platform
         identity
@@ -125,7 +125,7 @@ const relationServiceIdentityQuery = `
           address
           id
         }
-        neighborWithTraversal(depth: 5) {
+        neighborWithTraversal(depth: ${depth ?? 5}) {
           ... on ProofRecord {
             source
             from {
@@ -395,7 +395,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 variables: { platform: NextIDPlatform.Ethereum, identity: address.toLowerCase() },
                 query: `
                     query GET_PROFILES_QUERY($platform: String, $identity: String) {
-                       ${relationServiceIdentityQuery}
+                       ${relationServiceIdentityQuery()}
                       }
                 `,
             }),
@@ -423,7 +423,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 variables: { platform: NextIDPlatform.NextID, identity: publicKey },
                 query: `
                     query GET_PROFILES_QUERY($platform: String, $identity: String) {
-                       ${relationServiceIdentityQuery}
+                       ${relationServiceIdentityQuery(2)}
                       }
                 `,
             }),
@@ -448,7 +448,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 variables: { platform: NextIDPlatform.Twitter, identity: twitterId.toLowerCase() },
                 query: `
                         query GET_PROFILES_BY_TWITTER_ID($platform: String, $identity: String) {
-                            ${relationServiceIdentityQuery}
+                            ${relationServiceIdentityQuery()}
                         }
                 `,
             }),

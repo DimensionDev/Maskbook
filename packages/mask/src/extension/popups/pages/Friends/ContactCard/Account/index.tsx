@@ -15,6 +15,7 @@ export type SupportedPlatforms =
     | NextIDPlatform.SpaceId
     | NextIDPlatform.Farcaster
     | NextIDPlatform.Unstoppable
+    | NextIDPlatform.Keybase
 
 interface AccountProps {
     icon: SupportedPlatforms
@@ -40,10 +41,11 @@ export const url: Record<SupportedPlatforms, string> = {
     [NextIDPlatform.ENS]: 'https://app.ens.domains/name/',
     [NextIDPlatform.Unstoppable]: 'https://ud.me/',
     [NextIDPlatform.GitHub]: 'https://github.com/',
-    [NextIDPlatform.SpaceId]: 'https://space.storage/',
+    [NextIDPlatform.SpaceId]: 'https://bscscan.com/address/',
     [NextIDPlatform.Farcaster]: 'https://warpcast.com/',
     [NextIDPlatform.LENS]: 'https://lenster.xyz/u/',
     [NextIDPlatform.Ethereum]: 'https://etherscan.io/address/',
+    [NextIDPlatform.Keybase]: 'https://keybase.io/',
 }
 
 export const Account = memo<AccountProps>(function Account({ userId, icon }) {
@@ -67,6 +69,8 @@ export const Account = memo<AccountProps>(function Account({ userId, icon }) {
                             return <Icons.SpaceId width={30} height={30} />
                         case NextIDPlatform.Unstoppable:
                             return <Icons.Unstoppable width={30} height={30} />
+                        case NextIDPlatform.Keybase:
+                            return <Icons.Keybase width={30} height={30} />
                         default:
                             safeUnreachable(icon)
                             return null

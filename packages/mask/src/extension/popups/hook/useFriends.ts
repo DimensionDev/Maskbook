@@ -57,14 +57,12 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
             }
             const filtered = item.value.filter(
                 (x) =>
-                    x.platform === NextIDPlatform.Twitter ||
-                    x.platform === NextIDPlatform.LENS ||
-                    x.platform === NextIDPlatform.ENS ||
-                    x.platform === NextIDPlatform.Ethereum ||
-                    x.platform === NextIDPlatform.GitHub ||
-                    x.platform === NextIDPlatform.SpaceId ||
-                    x.platform === NextIDPlatform.Farcaster ||
-                    x.platform === NextIDPlatform.Unstoppable,
+                    x.platform !== NextIDPlatform.Bit &&
+                    x.platform !== NextIDPlatform.CyberConnect &&
+                    x.platform !== NextIDPlatform.REDDIT &&
+                    x.platform !== NextIDPlatform.SYBIL &&
+                    x.platform !== NextIDPlatform.EthLeaderboard &&
+                    x.platform !== NextIDPlatform.NextID,
             )
             return {
                 profiles: filtered,

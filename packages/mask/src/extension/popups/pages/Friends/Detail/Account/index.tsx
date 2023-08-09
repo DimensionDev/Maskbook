@@ -63,6 +63,8 @@ export const Account = memo<AccountProps>(function Account({ userId, icon }) {
                             return <Icons.SpaceId width={40} height={40} />
                         case NextIDPlatform.Unstoppable:
                             return <Icons.Unstoppable width={40} height={40} />
+                        case NextIDPlatform.Keybase:
+                            return <Icons.Keybase width={40} height={40} />
                         default:
                             safeUnreachable(icon)
                             return null

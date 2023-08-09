@@ -18,14 +18,12 @@ export function useFriendsFromSearch(
         const profiles: NextIDPersonaBindingsWithIdentifier[] = searchResult.map((item, index) => {
             const filtered = item.proofs.filter(
                 (x) =>
-                    x.platform === NextIDPlatform.Twitter ||
-                    x.platform === NextIDPlatform.LENS ||
-                    x.platform === NextIDPlatform.ENS ||
-                    x.platform === NextIDPlatform.Ethereum ||
-                    x.platform === NextIDPlatform.GitHub ||
-                    x.platform === NextIDPlatform.SpaceId ||
-                    x.platform === NextIDPlatform.Farcaster ||
-                    x.platform === NextIDPlatform.Unstoppable,
+                    x.platform !== NextIDPlatform.Bit &&
+                    x.platform !== NextIDPlatform.CyberConnect &&
+                    x.platform !== NextIDPlatform.REDDIT &&
+                    x.platform !== NextIDPlatform.SYBIL &&
+                    x.platform !== NextIDPlatform.EthLeaderboard &&
+                    x.platform !== NextIDPlatform.NextID,
             )
             const identifier = ECKeyIdentifier.fromHexPublicKeyK256(item.persona).expect(
                 `${item.persona} should be a valid hex public key in k256`,
