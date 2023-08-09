@@ -34,10 +34,18 @@ export const VerifyBackupPasswordModal = memo<ActionModalBaseProps>(function Ver
             <Box display="flex" flexDirection="column" m={0.5}>
                 <PasswordField
                     placeholder={t('password')}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => {
+                        setPasswordMatched(true)
+                        setPassword(e.target.value)
+                    }}
+                    onClear={() => {
+                        setPasswordMatched(true)
+                        setPassword('')
+                    }}
+                    value={password}
                     onBlur={verifyPassword}
                     error={!passwordMatched}
-                    helperText={!passwordMatched ? t('popups_backup_password_inconsistency') : null}
+                    helperText={!passwordMatched ? t('popups_backup_password_incorrect') : null}
                 />
             </Box>
         </ActionModal>

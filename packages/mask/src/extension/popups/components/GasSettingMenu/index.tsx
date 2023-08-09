@@ -20,11 +20,11 @@ import {
     toFixed,
 } from '@masknet/web3-shared-base'
 import {
-    formatWeiToEther,
     type EIP1559GasConfig,
     type GasConfig,
     type ChainId,
     isNativeTokenAddress,
+    formatWeiToEther,
 } from '@masknet/web3-shared-evm'
 import { Typography, useTheme } from '@mui/material'
 import { Box } from '@mui/system'

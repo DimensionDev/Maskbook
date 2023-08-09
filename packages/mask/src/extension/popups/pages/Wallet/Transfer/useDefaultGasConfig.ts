@@ -10,7 +10,7 @@ export function useDefaultGasConfig(chainId: ChainId, gasLimit: string) {
         chainId,
     })
 
-    const gasOption = gasOptions?.[GasOptionType.NORMAL]
+    const gasOption = gasOptions?.[GasOptionType.SLOW]
     if (!gasOption) return
     return isSupportEIP1559
         ? {

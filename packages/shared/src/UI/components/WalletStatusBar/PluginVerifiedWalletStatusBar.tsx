@@ -58,6 +58,7 @@ const useStyles = makeStyles()((theme) => ({
             theme.palette.mode === 'dark'
                 ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
                 : '0px 4px 30px rgba(0, 0, 0, 0.1)',
+        borderRadius: Sniffings.is_popup_page ? 16 : undefined,
     },
 }))
 
@@ -181,7 +182,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                         </Button>
                     </MenuItem>
                 ),
-                <Divider key="divider" style={{ marginLeft: 8, marginRight: 8 }} />,
+                wallets.length ? <Divider key="divider" style={{ marginLeft: 8, marginRight: 8 }} /> : null,
                 ...wallets.map((x) => (
                     <WalletMenuItem
                         key={x.identity}
