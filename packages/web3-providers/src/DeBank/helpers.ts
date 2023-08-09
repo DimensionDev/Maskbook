@@ -75,7 +75,7 @@ function toTxAsset(
     // token_dict might not contain value to current token_id
     if (!token) return null
     const schema = token.decimals
-        ? isValidAddress(token.id) // token.id for native token is symbol. e.g `matic` for Matic
+        ? isValidAddress(token.id) // for native token, token.id is symbol. e.g `matic` for Matic
             ? SchemaType.ERC20
             : SchemaType.Native
         : token.is_erc721
