@@ -1,12 +1,12 @@
 import { Icons } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { useNativeToken, useNetworkDescriptors, useReverseAddress } from '@masknet/web3-hooks-base'
 import { DebankTransactionDirection } from '@masknet/web3-providers/types'
 import { isLessThan, TransactionStatusType, type RecentTransaction, type Transaction } from '@masknet/web3-shared-base'
 import {
-    SchemaType,
+    type SchemaType,
     formatDomainName,
     formatEthereumAddress,
     type ChainId,
@@ -121,12 +121,20 @@ const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' },
             fontWeight: 700,
             color: theme.palette.maskColor.main,
             textAlign: 'right',
+            display: 'inline-flex',
+            alignItems: 'center',
         },
         amount: {
             fontWeight: 700,
         },
         symbol: {
+            display: 'inline-block',
             fontWeight: 400,
+            maxWidth: '9ch',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            marginLeft: theme.spacing(0.5),
         },
     }
 })
@@ -190,14 +198,16 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
             </ListItemText>
             <Box ml="auto">
                 {transaction.assets
-                    .filter((asset) => asset.schema === SchemaType.ERC20 || asset.schema === SchemaType.Native)
+                    // .filter((asset) => asset.schema === SchemaType.ERC20 || asset.schema === SchemaType.Native)
                     .map((token, i) => {
                         const isRend = token.direction === DebankTransactionDirection.SEND
                         const amount = isLessThan(token.amount, '0.000001') ? '<0.000001' : token.amount
                         return (
                             <Typography key={i} className={classes.asset}>
                                 <strong className={classes.amount}>{`${isRend ? '-' : '+'} ${amount} `}</strong>
-                                <span className={classes.symbol}>{token.symbol}</span>
+                                <TextOverflowTooltip title={token.symbol}>
+                                    <span className={classes.symbol}>{token.symbol}</span>
+                                </TextOverflowTooltip>
                             </Typography>
                         )
                     })}
