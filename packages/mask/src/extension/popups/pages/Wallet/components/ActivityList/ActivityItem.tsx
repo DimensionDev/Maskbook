@@ -4,15 +4,22 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { useNativeToken, useNetworkDescriptors, useReverseAddress } from '@masknet/web3-hooks-base'
 import { DebankTransactionDirection } from '@masknet/web3-providers/types'
-import { isLessThan, TransactionStatusType, type RecentTransaction, type Transaction } from '@masknet/web3-shared-base'
 import {
-    type SchemaType,
+    TransactionStatusType,
+    isLessThan,
+    toFixed,
+    trimZero,
+    type RecentTransaction,
+    type Transaction,
+} from '@masknet/web3-shared-base'
+import {
     formatDomainName,
     formatEthereumAddress,
     type ChainId,
     type Transaction as EvmTransaction,
+    type SchemaType,
 } from '@masknet/web3-shared-evm'
-import { Box, ListItem, ListItemText, Typography, type ListItemProps, alpha, Skeleton } from '@mui/material'
+import { Box, ListItem, ListItemText, Skeleton, Typography, alpha, type ListItemProps } from '@mui/material'
 import { memo, useMemo } from 'react'
 import { formatTokenBalance, useI18N } from '../../../../../../utils/index.js'
 
@@ -201,7 +208,9 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                     // .filter((asset) => asset.schema === SchemaType.ERC20 || asset.schema === SchemaType.Native)
                     .map((token, i) => {
                         const isRend = token.direction === DebankTransactionDirection.SEND
-                        const amount = isLessThan(token.amount, '0.000001') ? '<0.000001' : token.amount
+                        const amount = isLessThan(token.amount, '0.0001')
+                            ? '<0.0001'
+                            : trimZero(toFixed(token.amount, 4))
                         return (
                             <Typography key={i} className={classes.asset}>
                                 <strong className={classes.amount}>{`${isRend ? '-' : '+'} ${amount} `}</strong>
