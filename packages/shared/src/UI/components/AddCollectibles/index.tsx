@@ -195,12 +195,12 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
         [handleSubmit],
     )
     const [selectedTokenIdsMap, setSelectedTokenIdsMap] = useState<Record<string, string[]>>({})
-    const selectedTokenIds = selectedTokenIdsMap[address] || EMPTY_LIST
+    const selectedTokenIds = selectedTokenIdsMap[formatEthereumAddress(address)] || EMPTY_LIST
 
     const toggleSelect = useCallback(
         (asset: Web3Helper.NonFungibleAssetAll) => {
             setSelectedTokenIdsMap((idsMap) => {
-                const ids = idsMap[address] ?? []
+                const ids = idsMap[formatEthereumAddress(address)] ?? []
                 const newIds = ids.includes(asset.tokenId)
                     ? ids.filter((x) => x !== asset.tokenId)
                     : [...ids, asset.tokenId]
