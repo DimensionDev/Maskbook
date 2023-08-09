@@ -166,8 +166,6 @@ export const EditNetwork = memo(function EditNetwork() {
                     isCustomized: true,
                     type: NetworkType.CustomNetwork,
                     chainId,
-                    coinMarketCapChainId: '',
-                    coinGeckoChainId: '',
                     name: parsedData.name,
                     fullName: parsedData.name,
                     network: 'mainnet',

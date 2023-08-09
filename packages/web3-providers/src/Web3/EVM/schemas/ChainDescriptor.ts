@@ -8,9 +8,9 @@ export function createSchema(descriptors: Array<ChainDescriptor<ChainId, SchemaT
             .object({
                 type: z.string(),
                 chainId: z.number().int().gt(0, { message: 'Incorrect chain Id.' }),
-                coinMarketCapChainId: z.string(),
-                coinGeckoChainId: z.string(),
-                coinGeckoPlatformId: z.string(),
+                coinMarketCapChainId: z.string().optional(),
+                coinGeckoChainId: z.string().optional(),
+                coinGeckoPlatformId: z.string().optional(),
                 name: z.string().trim().nonempty(),
                 color: z.string().optional(),
                 fullName: z.string().trim().optional(),
@@ -28,7 +28,7 @@ export function createSchema(descriptors: Array<ChainDescriptor<ChainId, SchemaT
                     .refine((rpc: string) => rpc.startsWith('https://'), 'Required HTTPs URL'),
                 iconUrl: z.string().trim().optional(),
                 explorerUrl: z.object({
-                    url: z.string().url(),
+                    url: z.union([z.string().url(), z.literal('')]),
                     parameters: z.record(z.union([z.string(), z.number(), z.boolean()])).optional(),
                 }),
                 features: z.array(z.string()).optional(),
