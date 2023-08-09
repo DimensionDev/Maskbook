@@ -4,7 +4,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useNativeToken, useNetworkDescriptors, useReverseAddress } from '@masknet/web3-hooks-base'
 import { DebankTransactionDirection } from '@masknet/web3-providers/types'
-import { isLessThan, type RecentTransaction, type Transaction } from '@masknet/web3-shared-base'
+import { isLessThan, TransactionStatusType, type RecentTransaction, type Transaction } from '@masknet/web3-shared-base'
 import {
     SchemaType,
     formatDomainName,
@@ -105,6 +105,7 @@ const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' },
             fontSize: 14,
             fontWeight: 700,
             color: theme.palette.maskColor.main,
+            textAlign: 'right',
         },
         amount: {
             fontWeight: 700,
@@ -167,14 +168,13 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                                 address: domain ? formatDomainName(domain) : formatEthereumAddress(toAddress, 4),
                             })}
                         </Typography>
-                        {/* TODO actions for pending transitions */}
                     </Box>
                 }>
                 <Typography className={classes.txName}>{transaction.cateName}</Typography>
             </ListItemText>
             <Box ml="auto">
                 {transaction.assets
-                    .filter((asset) => asset.schema === SchemaType.ERC20)
+                    .filter((asset) => asset.schema === SchemaType.ERC20 || asset.schema === SchemaType.Native)
                     .map((token, i) => {
                         const isRend = token.direction === DebankTransactionDirection.SEND
                         const amount = isLessThan(token.amount, '0.000001') ? '<0.000001' : token.amount
@@ -233,7 +233,7 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
                 secondary={
                     <Box>
                         <Typography>
-                            {!transaction.status ? (
+                            {transaction.status === TransactionStatusType.FAILED ? (
                                 <Typography className={classes.failedLabel} component="span">
                                     {t('failed')}
                                 </Typography>
@@ -264,7 +264,7 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
                     </Box>
                 }>
                 {/* TODO specify cateType */}
-                <Typography className={classes.txName}>Send</Typography>
+                <Typography className={classes.txName}>{t('send')}</Typography>
             </ListItemText>
             <Box ml="auto">
                 {candidate.value && nativeToken ? (

@@ -75,9 +75,9 @@ function toTxAsset(
     // token_dict might not contain value to current token_id
     if (!token) return null
     const schema = token.decimals
-        ? isValidAddress(token.id)
-            ? SchemaType.Native
-            : SchemaType.ERC20
+        ? isValidAddress(token.id) // token.id for native token is symbol. e.g `matic` for Matic
+            ? SchemaType.ERC20
+            : SchemaType.Native
         : token.is_erc721
         ? SchemaType.ERC721
         : SchemaType.ERC1155
@@ -88,15 +88,15 @@ function toTxAsset(
     return {
         id: token_id,
         chainId,
-        type: token?.decimals ? TokenType.Fungible : TokenType.NonFungible,
+        type: token.decimals ? TokenType.Fungible : TokenType.NonFungible,
         schema,
-        name: token?.name ?? 'Unknown Token',
-        symbol: token?.optimized_symbol,
+        name: token.name ?? 'Unknown Token',
+        symbol: token.optimized_symbol,
         address: token.decimals ? token_id : token.contract_id,
         decimals: token.decimals || 1,
         direction: DebankTransactionDirection.SEND,
         amount: amount?.toString(),
-        logoURI: token?.logo_url,
+        logoURI: token.logo_url,
     }
 }
 
