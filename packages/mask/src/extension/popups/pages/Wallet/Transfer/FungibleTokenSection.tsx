@@ -224,6 +224,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                         minimumGas={gasLimit}
                         defaultChainId={chainId}
                         paymentToken={paymentAddress}
+                        allowMaskAsGas
                         onPaymentTokenChange={setPaymentAddress}
                         owner={wallet?.owner}
                         onChange={setGasConfig}
