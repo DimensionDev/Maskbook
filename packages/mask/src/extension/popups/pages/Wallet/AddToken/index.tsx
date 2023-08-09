@@ -136,12 +136,14 @@ const AddToken = memo(function AddToken() {
     const [searchError, setSearchError] = useState(false)
     const { classes } = useStyles({ currentTab, searchError })
 
+    const supportedChains = currentTab === TabType.Tokens ? TokenSupportedChains : CollectibleSupportedChains
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>(
-        defaultChainId ? Number.parseInt(defaultChainId, 10) : ChainId.Mainnet,
+        defaultChainId && supportedChains.includes(Number.parseInt(defaultChainId, 10))
+            ? Number.parseInt(defaultChainId, 10)
+            : ChainId.Mainnet,
     )
 
     const allNetworks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
-    const supportedChains = currentTab === TabType.Tokens ? TokenSupportedChains : CollectibleSupportedChains
     const networks = useMemo(() => {
         return sortBy(
             allNetworks.filter(
@@ -157,8 +159,16 @@ const AddToken = memo(function AddToken() {
             if (currentTab === TabType.Tokens && !CollectibleSupportedChains.includes(chainId)) {
                 setChainId(ChainId.Mainnet)
             }
+
+            if (
+                currentTab === TabType.Collectibles &&
+                defaultChainId &&
+                TokenSupportedChains.includes(Number.parseInt(defaultChainId, 10))
+            ) {
+                setChainId(Number.parseInt(defaultChainId, 10))
+            }
         },
-        [onChange, chainId, currentTab],
+        [onChange, chainId, defaultChainId, currentTab],
     )
 
     useTitle(t('add_assets'))
