@@ -9,7 +9,7 @@ import { isLocalContext } from '../sns-context.js'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { MaskMessages } from '@masknet/shared-base'
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal) {
         const a = ExternalPluginMessages.ping.on((data) => {

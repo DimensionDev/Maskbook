@@ -5,10 +5,10 @@ import { type NetworkPluginID, ValueRefWithReady } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { createManager } from './manage.js'
 import { getPluginDefine } from './store.js'
-import type { CurrentSNSNetwork, Plugin } from '../types.js'
+import type { SiteAdaptor, Plugin } from '../types.js'
 
-const { events, activated, startDaemon, minimalMode } = createManager((def) => def.SNSAdaptor)
-const activatedSub = new ValueRefWithReady<Plugin.SNSAdaptor.Definition[]>([], isEqual)
+const { events, activated, startDaemon, minimalMode } = createManager((def) => def.SiteAdaptor)
+const activatedSub = new ValueRefWithReady<Plugin.SiteAdaptor.Definition[]>([], isEqual)
 events.on('activateChanged', () => (activatedSub.value = [...activated.plugins]))
 
 const minimalModeSub = new ValueRefWithReady<string[]>([], isEqual)
@@ -70,16 +70,16 @@ export function useActivatedPluginSNSAdaptor_Web3Supported(chainId: number, plug
 }
 
 export function startPluginSNSAdaptor(
-    currentNetwork: CurrentSNSNetwork,
-    host: Plugin.__Host.Host<Plugin.SNSAdaptor.SNSAdaptorContext>,
+    currentNetwork: SiteAdaptor,
+    host: Plugin.__Host.Host<Plugin.SiteAdaptor.SiteAdaptorContext>,
 ) {
     startDaemon(host, (id) => {
         const def = getPluginDefine(id)
         if (!def) return false
         // boolean | undefined
-        const status = def.enableRequirement.networks.networks[currentNetwork]
-        if (def.enableRequirement.networks.type === 'opt-in' && status !== true) return false
-        if (def.enableRequirement.networks.type === 'opt-out' && status === true) return false
+        const status = def.enableRequirement.supports.sites[currentNetwork]
+        if (def.enableRequirement.supports.type === 'opt-in' && status !== true) return false
+        if (def.enableRequirement.supports.type === 'opt-out' && status === true) return false
         return true
     })
 }

@@ -22,7 +22,7 @@ registerPlugin<
     TransactionParameter
 >({
     ...base,
-    SNSAdaptor: {
+    SiteAdaptor: {
         load: () => import('./UI/SNSAdaptor/index.js'),
         hotModuleReload: (hot) =>
             import.meta.webpackHot?.accept('./UI/SNSAdaptor', () => hot(import('./UI/SNSAdaptor/index.js'))),

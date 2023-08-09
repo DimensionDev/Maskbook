@@ -3,7 +3,7 @@ import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
 import { NextIdPage } from '../components/NextIdPage.js'
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal, context) {},
     ProfileTabs: [

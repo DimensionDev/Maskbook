@@ -7,7 +7,7 @@ import { base } from '../base.js'
 import WalletConnectDialog, { ConnectContext } from './WalletConnectDialog.js'
 import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init() {},
     GlobalInjection() {

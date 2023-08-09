@@ -13,7 +13,7 @@ function clickHandler() {
         open: true,
     })
 }
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal, context) {},
     GlobalInjection() {

@@ -59,7 +59,7 @@ const useStyles = makeStyles<{ buttonSize: number }, 'postTipsButton'>()((theme,
     },
 }))
 
-const { TipsSlot } = Plugin.SNSAdaptor
+const { TipsSlot } = Plugin.SiteAdaptor
 export function TipsRealmContent({
     identity,
     slot,
@@ -67,7 +67,7 @@ export function TipsRealmContent({
     iconSize = 24,
     buttonSize = 34,
     onStatusUpdate,
-}: Plugin.SNSAdaptor.TipsRealmOptions) {
+}: Plugin.SiteAdaptor.TipsRealmOptions) {
     const t = useI18N()
     const { classes, cx } = useStyles({ buttonSize })
     const myIdentity = useLastRecognizedIdentity()
@@ -75,7 +75,7 @@ export function TipsRealmContent({
 
     if (!identity || identity.userId === myIdentity?.identifier?.userId) return null
 
-    const buttonClassMap: Record<Plugin.SNSAdaptor.TipsSlot, string> = {
+    const buttonClassMap: Record<Plugin.SiteAdaptor.TipsSlot, string> = {
         [TipsSlot.FollowButton]: cx(classes.followTipsButton, classes.roundButton),
         [TipsSlot.Post]: classes.postTipsButton,
         [TipsSlot.Profile]: cx(classes.profileTipsButton, classes.roundButton),

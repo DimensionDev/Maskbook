@@ -12,7 +12,7 @@ const useStyles = makeStyles()(() => ({
 
 interface AvatarProps extends withClasses<'root'> {
     userId: string
-    sourceType?: Plugin.SNSAdaptor.AvatarRealmSourceType
+    sourceType?: Plugin.SiteAdaptor.AvatarRealmSourceType
 }
 
 export function Avatar(props: AvatarProps) {

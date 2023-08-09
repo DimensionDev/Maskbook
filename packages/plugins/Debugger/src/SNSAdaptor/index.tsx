@@ -15,7 +15,7 @@ import { AvatarDecorator } from './components/AvatarDecorator.js'
 import { WidgetDialog } from './components/WidgetDialog.js'
 import { SearchResultInspector } from './components/SearchResultInspector.js'
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal, context) {},
     ApplicationEntries: [

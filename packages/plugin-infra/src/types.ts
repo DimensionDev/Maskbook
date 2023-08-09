@@ -103,9 +103,9 @@ export declare namespace Plugin {
         Transaction = unknown,
         TransactionParameter = unknown,
     > extends Shared.Definition<ChainId, SchemaType, ProviderType, NetworkType> {
-        /** Load the SNSAdaptor part of the plugin. */
-        SNSAdaptor?: Loader<
-            SNSAdaptor.Definition<
+        /** Load the Site Adaptor part of the plugin. */
+        SiteAdaptor?: Loader<
+            SiteAdaptor.Definition<
                 ChainId,
                 SchemaType,
                 ProviderType,
@@ -215,22 +215,6 @@ export namespace Plugin.Shared {
 
         /** Send request to native API, for a risky request will be added into the waiting queue. */
         send(payload: JsonRpcPayload, options?: TransactionOptions): Promise<JsonRpcResponse>
-
-        /**
-         * @deprecated Use `Request` state stead
-         * Confirm a request
-         */
-        confirmRequest(
-            payload: JsonRpcPayload,
-            options?: { disableClose?: boolean; popupsWindow?: boolean },
-        ): Promise<JsonRpcResponse | void>
-
-        /**
-         * @deprecated Use `Request` state stead
-         * Reject a request
-         */
-        rejectRequest(payload: JsonRpcPayload): Promise<void>
-
         hasPaymentPassword(): Promise<boolean>
     }
 
@@ -278,10 +262,13 @@ export namespace Plugin.Shared {
         inMinimalModeByDefault?: boolean
         /** i18n resources of this plugin */
         i18n?: I18NResource
+        // TODO: move to .contribution.web3Chains
         /** Introduce sub-network information. */
         declareWeb3Chains?: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>
+        // TODO: move to .contribution.web3Networks
         /** Introduce networks information. */
         declareWeb3Networks?: Array<NetworkDescriptor<ChainId, NetworkType>>
+        // TODO: move to .contribution.web3Providers
         /** Introduce wallet providers information. */
         declareWeb3Providers?: Array<ProviderDescriptor<ChainId, ProviderType>>
         /**
@@ -295,7 +282,7 @@ export namespace Plugin.Shared {
     }
 
     /**
-     * This part is shared between Dashboard, SNSAdaptor and Worker part
+     * This part is shared between Dashboard, Site Adaptor and Worker part
      * which you should include the information above in those three parts.
      */
     export interface DefinitionDeferred<Context extends SharedContext = SharedContext> extends Definition, Utilities {
@@ -328,8 +315,8 @@ export namespace Plugin.Shared {
      */
     export interface EnableRequirement {
         target: ReleaseStages
-        /** The SNS Network this plugin supports. */
-        networks: SupportedNetworksDeclare
+        /** The website this plugin supports. */
+        supports: SupportedSitesDeclare
         /** The Web3 Network this plugin supports */
         web3?: Web3EnableRequirement
         /**
@@ -340,13 +327,13 @@ export namespace Plugin.Shared {
         host_permissions?: string[]
     }
 
-    export interface SupportedNetworksDeclare {
+    export interface SupportedSitesDeclare {
         /**
-         * opt-in means the listed networks is supported.
-         * out-out means the listed networks is not supported.
+         * opt-in means the listed site is supported.
+         * out-out means the listed site is not supported.
          */
         type: 'opt-in' | 'opt-out'
-        networks: Partial<Record<CurrentSNSNetwork, boolean>>
+        sites: Partial<Record<SiteAdaptor, boolean>>
     }
 
     export type I18NLanguage = string
@@ -364,9 +351,9 @@ export namespace Plugin.Shared {
     export interface Ability {}
 }
 
-/** This part runs in the SNSAdaptor */
-export namespace Plugin.SNSAdaptor {
-    export interface SNSAdaptorContext extends Shared.SharedUIContext {
+/** This part runs in the Site Adaptor */
+export namespace Plugin.SiteAdaptor {
+    export interface SiteAdaptorContext extends Shared.SharedUIContext {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
         themeSettings: Subscription<ThemeSettings | undefined>
@@ -412,16 +399,6 @@ export namespace Plugin.SNSAdaptor {
         setDecentralizedSearchSettings?: (checked: boolean) => Promise<void>
     }
 
-    export type SelectProviderDialogEvent =
-        | {
-              open: true
-              pluginID?: NetworkPluginID
-          }
-        | {
-              open: false
-              address?: string
-          }
-
     export interface Definition<
         ChainId = unknown,
         SchemaType = unknown,
@@ -431,7 +408,7 @@ export namespace Plugin.SNSAdaptor {
         MessageResponse = unknown,
         Transaction = unknown,
         TransactionParameter = unknown,
-    > extends Shared.DefinitionDeferred<SNSAdaptorContext> {
+    > extends Shared.DefinitionDeferred<SiteAdaptorContext> {
         /** This UI will be rendered for each post found. */
         PostInspector?: InjectUI<{}>
         /** This UI will be rendered for action of each post found. */
@@ -440,16 +417,12 @@ export namespace Plugin.SNSAdaptor {
         DecryptedInspector?: InjectUI<{
             message: TypedMessage
         }>
-        /** This UI will be rendered into the global scope of an SNS. */
+        /** This UI will be rendered into the global scope of the site. */
         GlobalInjection?: InjectUI<{}>
-        /** This UI will be rendered under the Search result of SNS */
+        /** This UI will be rendered under the Search result of the site */
         SearchResultInspector?: SearchResultInspector
-        /** This UI will be rendered under the Search result of SNS. */
+        /** This UI will be rendered under the Search result of the site. */
         SearchResultTabs?: SearchResultTab[]
-        /**
-         * @deprecated Use SearchResultInspector stead
-         * This is the detailed UI content that will be rendered under the Search of the SNS. */
-        SearchResultContent?: SearchResultContent
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
         Web3UI?: Web3UI<ChainId, ProviderType, NetworkType>
         /** This is the context of the currently chosen network. */
@@ -1092,18 +1065,18 @@ export namespace Plugin.GeneralUI {
          *
          * 1. Environment
          *
-         * The render component MUST NOT assume they are running in a specific environment (e.g. SNS Adaptor).
+         * The render component MUST NOT assume they are running in a specific environment (e.g. Site Adaptor).
          * Plugin messages and RPC MAY NOT working.
          *
          * It MUST NOT assume the environment using the `context` props.
          * ALL actions MUST BE DONE with the given props.
          *
          * Here is some example of *possible* environments.
-         * - inside SNS Adaptor, given "composition" context, running in the CompositionDialog.
-         * - inside SNS Adaptor, given "post" context,        running in the DecryptedPost.
-         * - inside Dashboard,   given "post" context,        running in the PostHistory as the previewer.
-         * - inside Popups,      given "post" context,        running in the PostInspector (Isolated mode).
-         * - on mask.io,         given "post" context,        allowing preview the message without extension installed.
+         * - inside site adaptor, given "composition" context, running in the CompositionDialog.
+         * - inside site adaptor, given "post" context,        running in the DecryptedPost.
+         * - inside Dashboard,    given "post" context,        running in the PostHistory as the previewer.
+         * - inside Popups,       given "post" context,        running in the PostInspector (Isolated mode).
+         * - on mask.io,          given "post" context,        allowing preview the message without extension installed.
          *
          * 2. Contexts
          *
@@ -1224,16 +1197,16 @@ export interface I18NStringField {
 export type I18NFieldOrReactNode = I18NStringField | React.ReactNode
 
 /**
- * The current running SocialNetwork.
+ * All supported site adaptors.
  */
-export enum CurrentSNSNetwork {
+export enum SiteAdaptor {
     Unknown = 0,
     Facebook = 1,
     Twitter = 2,
     Instagram = 3,
     Minds = 4,
 
-    __SPA__ = 99,
+    MaskIO = 99,
 }
 
 export interface IdentityResolved {

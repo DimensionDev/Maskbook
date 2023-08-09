@@ -9,7 +9,7 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import { PluginID } from '@masknet/shared-base'
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal) {},
     PostInspector() {

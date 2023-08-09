@@ -8,7 +8,7 @@ import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { VCentDialog } from './TweetDialog.js'
 import { base } from '../base.js'
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal) {},
     PostInspector: Component,

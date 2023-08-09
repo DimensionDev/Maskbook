@@ -73,7 +73,7 @@ function AuthorTipsButtonWrapper() {
         return (
             <Component
                 identity={visitingIdentity.identifier}
-                slot={Plugin.SNSAdaptor.TipsSlot.MirrorMenu}
+                slot={Plugin.SiteAdaptor.TipsSlot.MirrorMenu}
                 accounts={accounts}
             />
         )

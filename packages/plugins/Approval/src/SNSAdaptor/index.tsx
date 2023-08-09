@@ -9,7 +9,7 @@ import { ApprovalDialog } from './ApprovalDialog.js'
 import { Web3ContextProvider, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal) {},
     ApplicationEntries: [

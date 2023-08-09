@@ -21,7 +21,7 @@ function Renderer({ url }: { url: string }) {
     )
 }
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal) {},
     DecryptedInspector: function Component(props): JSX.Element | null {

@@ -44,8 +44,8 @@ export async function injectAvatar(signal: AbortSignal) {
                 proxy.realCurrent = ele.firstChild as HTMLElement
                 const isSuggestion = ele.closest('[data-testid=UserCell]')
                 const sourceType = isSuggestion
-                    ? Plugin.SNSAdaptor.AvatarRealmSourceType.Suggestion
-                    : Plugin.SNSAdaptor.AvatarRealmSourceType.Post
+                    ? Plugin.SiteAdaptor.AvatarRealmSourceType.Suggestion
+                    : Plugin.SiteAdaptor.AvatarRealmSourceType.Post
 
                 const isVerified = isVerifiedUser(ele)
                 const root = attachReactTreeWithContainer(proxy.afterShadow, { untilVisible: true, signal })

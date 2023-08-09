@@ -13,5 +13,5 @@ const ActionsRenderer = createInjectHooksRenderer(
 export function PostActions() {
     const identifier = usePostInfoDetails.author()
     if (!identifier) return null
-    return <ActionsRenderer identity={identifier} slot={Plugin.SNSAdaptor.TipsSlot.Post} />
+    return <ActionsRenderer identity={identifier} slot={Plugin.SiteAdaptor.TipsSlot.Post} />
 }

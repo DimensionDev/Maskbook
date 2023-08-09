@@ -7,7 +7,7 @@ import { useSubscription } from 'use-subscription'
 import { useSharedI18N } from '../../../index.js'
 
 export interface Application {
-    entry: Plugin.SNSAdaptor.ApplicationEntry
+    entry: Plugin.SiteAdaptor.ApplicationEntry
     pluginID: PluginID
     enabled?: boolean
     isWalletConnectedRequired?: boolean
@@ -151,7 +151,7 @@ function AppList({ appList, isListing }: AppListProps) {
 
 interface AppListItemProps {
     pluginID: string
-    entry: Plugin.SNSAdaptor.ApplicationEntry
+    entry: Plugin.SiteAdaptor.ApplicationEntry
     isListing: boolean
 }
 

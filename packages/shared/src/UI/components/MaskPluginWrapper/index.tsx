@@ -19,7 +19,7 @@ interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     content?: ReactNode
     action?: ReactNode
     publisher?: JSX.Element
-    wrapperProps?: Plugin.SNSAdaptor.PluginWrapperProps
+    wrapperProps?: Plugin.SiteAdaptor.PluginWrapperProps
     publisherLink?: string
     lackHostPermission?: boolean
     ID: string
@@ -158,7 +158,7 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
     return <Suspense fallback={<SnackbarContent message="Mask is loading this content..." />} children={inner} />
 }
 
-export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SNSAdaptor.Definition> = forwardRef(
+export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SiteAdaptor.Definition> = forwardRef(
     (props, ref) => {
         const { ID, name, publisher, wrapperProps } = props.definition
         const t = usePluginI18NField()

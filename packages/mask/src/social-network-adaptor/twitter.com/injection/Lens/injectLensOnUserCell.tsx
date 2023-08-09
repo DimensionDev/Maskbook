@@ -75,7 +75,7 @@ function UserCellLensSlot({ userId }: Props) {
         if (!identifier) return null
 
         return (
-            <Component identity={identifier} slot={Plugin.SNSAdaptor.LensSlot.Sidebar} onStatusUpdate={setDisabled} />
+            <Component identity={identifier} slot={Plugin.SiteAdaptor.LensSlot.Sidebar} onStatusUpdate={setDisabled} />
         )
     }, [userId])
 

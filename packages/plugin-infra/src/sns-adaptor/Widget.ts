@@ -4,14 +4,14 @@ import type { PluginID } from '@masknet/shared-base'
 import { useActivatedPluginsSNSAdaptor } from '../manager/sns-adaptor.js'
 import type { Plugin } from '../types.js'
 
-export interface WidgetProps<Name extends keyof Plugin.SNSAdaptor.WidgetRegistry> {
+export interface WidgetProps<Name extends keyof Plugin.SiteAdaptor.WidgetRegistry> {
     name: Name
     pluginID?: PluginID
     fallback?: React.ReactNode | null
 }
 
-export function Widget<Name extends keyof Plugin.SNSAdaptor.WidgetRegistry>(
-    props: WidgetProps<Name> & (Plugin.SNSAdaptor.WidgetRegistry[Name] extends infer U extends object ? U : never),
+export function Widget<Name extends keyof Plugin.SiteAdaptor.WidgetRegistry>(
+    props: WidgetProps<Name> & (Plugin.SiteAdaptor.WidgetRegistry[Name] extends infer U extends object ? U : never),
 ) {
     const { name, pluginID, fallback, ...rest } = props
     const plugins = useActivatedPluginsSNSAdaptor(false)

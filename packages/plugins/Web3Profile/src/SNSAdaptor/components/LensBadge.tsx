@@ -6,10 +6,10 @@ import { Plugin } from '@masknet/plugin-infra'
 import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
 import { openPopup } from '../emitter.js'
 
-const LensIconSizeMap: Record<Plugin.SNSAdaptor.LensSlot, number> = {
-    [Plugin.SNSAdaptor.LensSlot.Post]: 18,
-    [Plugin.SNSAdaptor.LensSlot.ProfileName]: 18,
-    [Plugin.SNSAdaptor.LensSlot.Sidebar]: 16,
+const LensIconSizeMap: Record<Plugin.SiteAdaptor.LensSlot, number> = {
+    [Plugin.SiteAdaptor.LensSlot.Post]: 18,
+    [Plugin.SiteAdaptor.LensSlot.ProfileName]: 18,
+    [Plugin.SiteAdaptor.LensSlot.Sidebar]: 16,
 }
 
 const useStyles = makeStyles()({
@@ -19,7 +19,7 @@ const useStyles = makeStyles()({
     },
 })
 interface Props {
-    slot: Plugin.SNSAdaptor.LensSlot
+    slot: Plugin.SiteAdaptor.LensSlot
     accounts: FireflyBaseAPI.LensAccount[]
     userId: string
 }

@@ -41,7 +41,7 @@ export function PostActions() {
                 })) ?? []),
             ]}
             identity={identifier}
-            slot={Plugin.SNSAdaptor.TipsSlot.MirrorEntry}
+            slot={Plugin.SiteAdaptor.TipsSlot.MirrorEntry}
         />
     )
 }

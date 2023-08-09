@@ -102,7 +102,7 @@ export class MaskWalletProvider
         return this.subscription.wallets.getCurrentValue()
     }
 
-    override async setup(context?: Plugin.SNSAdaptor.SNSAdaptorContext) {
+    override async setup(context?: Plugin.SiteAdaptor.SiteAdaptorContext) {
         await super.setup(context)
 
         this.subscription?.wallets?.subscribe(async () => {

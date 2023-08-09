@@ -7,7 +7,7 @@ import { SNS_RSS3_FIELD_KEY_MAP } from '@masknet/shared'
 import { PLUGIN_ID } from '../constants.js'
 import { AvatarBadge } from './AvatarBadge/AvatarBadge.js'
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal, context) {},
     ApplicationEntries: [

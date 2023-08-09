@@ -11,9 +11,9 @@ export const base: Plugin.Shared.Definition = {
     },
     publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
     enableRequirement: {
-        networks: {
+        supports: {
             type: 'opt-out',
-            networks: {},
+            sites: {},
         },
         target: 'stable',
         web3: {

@@ -8,7 +8,7 @@ import { PluginID } from '@masknet/shared-base'
 import { Trans } from 'react-i18next'
 import { CrossChainBridgeDialog } from './CrossChainBridgeDialog.js'
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal, context) {},
     ApplicationEntries: [

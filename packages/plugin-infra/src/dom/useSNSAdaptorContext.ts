@@ -3,7 +3,7 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import type { Plugin } from '../types.js'
 
 export const SNSAdaptorContextRef = new ValueRefWithReady<
-    Omit<Plugin.SNSAdaptor.SNSAdaptorContext, 'createKVStorage'>
+    Omit<Plugin.SiteAdaptor.SiteAdaptorContext, 'createKVStorage'>
 >()
 
 export function useSNSAdaptorContext() {

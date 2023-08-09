@@ -89,7 +89,7 @@ const FollowButtonTipsSlot = memo(({ identity }: Props) => {
                 identity={identity?.identifier}
                 buttonSize={tipStyle.buttonSize}
                 iconSize={tipStyle.iconSize}
-                slot={Plugin.SNSAdaptor.TipsSlot.FollowButton}
+                slot={Plugin.SiteAdaptor.TipsSlot.FollowButton}
                 onStatusUpdate={setDisabled}
             />
         )

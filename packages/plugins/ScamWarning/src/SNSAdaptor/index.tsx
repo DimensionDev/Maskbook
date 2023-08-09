@@ -9,7 +9,7 @@ import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { base } from '../base.js'
 import { PLUGIN_DESCRIPTION, PLUGIN_NAME } from '../constants.js'
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal, context) {},
     ApplicationEntries: [
