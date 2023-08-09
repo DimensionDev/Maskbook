@@ -79,7 +79,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     useEffect(() => {
         if (openOnInitAnswered) return
         openOnInitAnswered = true
-        Services.SocialNetwork.getDesignatedAutoStartPluginID().then((plugin) => {
+        Services.SiteAdaptor.getDesignatedAutoStartPluginID().then((plugin) => {
             if (!plugin) return
             setOpen(true)
             UI.current?.startPlugin(plugin)

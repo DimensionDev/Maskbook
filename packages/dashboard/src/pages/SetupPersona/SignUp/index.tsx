@@ -66,7 +66,7 @@ export const SignUp = memo(function SignUp() {
     }, [personaName])
 
     const onSkip = useCallback(async () => {
-        const url = await Services.SocialNetwork.setupSite(EnhanceableSite.Twitter, false)
+        const url = await Services.SiteAdaptor.setupSite(EnhanceableSite.Twitter, false)
         if (!url) return
         await delay(300)
         await browser.tabs.create({
