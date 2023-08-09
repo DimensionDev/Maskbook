@@ -3,8 +3,8 @@ import { useMount } from 'react-use'
 import { Typography } from '@mui/material'
 import { MaskMessages, ProfileTabs } from '@masknet/shared-base'
 import { useMatchXS, useLocationChange } from '@masknet/shared-base-ui'
-import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
-import { activatedSiteAdaptorUI } from '../../social-network/index.js'
+import { isTwitter } from '../../site-adaptors/twitter.com/base.js'
+import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 
 export interface ProfileTabProps extends withClasses<'tab' | 'button' | 'selected'>, PropsWithChildren<{}> {
     clear(): void

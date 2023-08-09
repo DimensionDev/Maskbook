@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Box, InputBase } from '@mui/material'
-import { activatedSiteAdaptorUI } from '../../social-network/index.js'
+import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { useI18N } from '../../utils/index.js'
 import { EnhanceableSite } from '@masknet/shared-base'
 

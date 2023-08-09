@@ -5,7 +5,7 @@ import { TypedMessageRender } from '@masknet/typed-message-react'
 import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context.js'
 import { Check as CheckIcon, Close as CloseIcon } from '@mui/icons-material'
 import { memo, useCallback, useMemo } from 'react'
-import { activatedSiteAdaptorUI } from '../../social-network/ui.js'
+import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/ui.js'
 import { Icons } from '@masknet/icons'
 
 export enum AdditionalIcon {

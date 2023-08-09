@@ -20,7 +20,7 @@ import { useSelectedRecipientsList } from '../../CompositionDialog/useSelectedRe
 import Services from '../../../extension/service.js'
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI.js'
 import { delay } from '@masknet/kit'
-import { activatedSiteAdaptorUI } from '../../../social-network/index.js'
+import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
 import { RecipientsToolTip } from './RecipientsToolTip.js'
 import { Icons } from '@masknet/icons'
 

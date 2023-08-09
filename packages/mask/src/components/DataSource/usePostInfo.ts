@@ -1,5 +1,5 @@
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
-import { activatedSiteAdaptorUI } from '../../social-network/index.js'
+import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 
 export function usePostLink() {
     const id = usePostInfoDetails.snsID()

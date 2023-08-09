@@ -9,7 +9,7 @@ import {
     currentSetupGuideStatus,
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { activatedSiteAdaptorUI } from '../../social-network/index.js'
+import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { usePersonaConnectStatus } from './usePersonaConnectStatus.js'
 import { useLastRecognizedIdentity } from './useActivatedUI.js'
 import Services from '../../extension/service.js'

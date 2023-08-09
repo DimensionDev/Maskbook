@@ -13,7 +13,7 @@ import {
 } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import Services from '../../../extension/service.js'
-import { activatedSiteAdaptorUI } from '../../../social-network/index.js'
+import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { useSetupGuideStatus } from '../../GuideStep/useSetupGuideStatus.js'
 

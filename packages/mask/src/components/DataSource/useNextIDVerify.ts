@@ -11,7 +11,7 @@ import {
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import Services from '../../extension/service.js'
-import { activatedSiteAdaptorUI } from '../../social-network/index.js'
+import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 
 export function useNextIDVerify() {
     const verifyPostCollectTimer = useRef<NodeJS.Timer | null>(null)

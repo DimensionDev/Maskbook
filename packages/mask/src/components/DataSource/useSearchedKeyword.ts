@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { activatedSiteAdaptorUI } from '../../social-network/index.js'
+import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 
 export function useSearchedKeyword() {
     const [keyword, setKeyword] = useState('')

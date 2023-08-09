@@ -10,7 +10,7 @@ import { startTransition, useCallback, useDeferredValue, useMemo, useState } fro
 import { useI18N } from '../../../utils/index.js'
 import { ProfileInList } from '../SelectRecipients/ProfileInList.js'
 import { useContacts } from '../SelectRecipients/useContacts.js'
-import { activatedSiteAdaptorUI } from '../../../social-network/ui.js'
+import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
 
 export interface SelectProfileUIProps extends withClasses<'root'> {
     items: Profile[]

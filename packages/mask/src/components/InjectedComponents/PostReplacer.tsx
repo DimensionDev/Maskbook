@@ -17,7 +17,7 @@ import { TypedMessageRender, useTransformedValue } from '@masknet/typed-message-
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context.js'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
-import { activatedSiteAdaptorUI } from '../../social-network/ui.js'
+import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/ui.js'
 
 const useStyles = makeStyles()({
     root: {

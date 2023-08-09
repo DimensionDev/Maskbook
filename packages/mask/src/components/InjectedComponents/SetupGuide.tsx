@@ -15,7 +15,7 @@ import {
     userGuideStatus,
 } from '@masknet/shared-base'
 import { useI18N } from '../../utils/index.js'
-import { activatedSiteAdaptorUI } from '../../social-network/index.js'
+import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import Services from '../../extension/service.js'
 import { FindUsername } from './SetupGuide/FindUsername.js'
 import { VerifyNextID } from './SetupGuide/VerifyNextID.js'

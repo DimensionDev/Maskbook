@@ -7,7 +7,7 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { NextIDProof } from '@masknet/web3-providers'
 import { FontSize, ThemeColor, ThemeMode, type ThemeSettings } from '@masknet/web3-shared-base'
-import { activatedSiteAdaptorUI, activatedSiteAdaptor_state } from '../../social-network/index.js'
+import { activatedSiteAdaptorUI, activatedSiteAdaptor_state } from '../../site-adaptor-infra/index.js'
 import Services from '../../extension/service.js'
 
 async function queryPersonaFromDB(identityResolved: IdentityResolved) {

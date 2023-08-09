@@ -7,7 +7,7 @@ import { DashboardRoutes, currentPersonaIdentifier } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { MaskColors, makeStyles } from '@masknet/theme'
 import Services from '../../extension/service.js'
-import { activatedSiteAdaptorUI, activatedSiteAdaptor_state } from '../../social-network/index.js'
+import { activatedSiteAdaptorUI, activatedSiteAdaptor_state } from '../../site-adaptor-infra/index.js'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 

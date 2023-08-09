@@ -4,8 +4,8 @@ import { SharedContextProvider } from '@masknet/shared'
 import { CSSVariableInjector, MaskThemeProvider } from '@masknet/theme'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { compose } from '@masknet/shared-base'
-import { activatedSiteAdaptorUI } from './social-network/index.js'
-import { isFacebook } from './social-network-adaptor/facebook.com/base.js'
+import { activatedSiteAdaptorUI } from './site-adaptor-infra/index.js'
+import { isFacebook } from './site-adaptors/facebook.com/base.js'
 import { useMaskSiteAdaptorMixedTheme } from './utils/theme/useMaskSiteAdaptorMixedTheme.js'
 
 export function ShadowRootAttachPointRoot(children: React.ReactNode) {

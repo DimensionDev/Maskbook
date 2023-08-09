@@ -13,7 +13,7 @@ import {
 import { useValueRef } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../utils/index.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
-import { activatedSiteAdaptorUI } from '../../../social-network/ui.js'
+import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
