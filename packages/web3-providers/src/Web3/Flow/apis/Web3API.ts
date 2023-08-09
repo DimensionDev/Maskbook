@@ -23,7 +23,7 @@ export class FlowWeb3API {
         throw new Error('Method not implemented.')
     }
 
-    getWeb3ProviderInstance(initial?: ConnectionOptions) {
+    getProviderInstance(initial?: ConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
         return FlowProviders[options.providerType]
     }

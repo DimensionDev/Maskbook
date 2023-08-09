@@ -51,8 +51,6 @@ declare module '@blocto/fcl' {
          * services.
          */
         'app.detail.icon'?: string
-
-        'challenge.handshake'?: string
     }
 
     export interface Configuration {
