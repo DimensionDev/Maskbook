@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { AddCollectibles, FungibleTokenList, SelectNetworkSidebar, TokenListMode } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { useRowSize } from '@masknet/shared-base-ui'
-import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
+import { MaskTabList, makeStyles, usePopupCustomSnackbar, useTabs } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useBlockedFungibleTokens, useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
@@ -15,6 +15,7 @@ import { Tab } from '@mui/material'
 import { useI18N } from '../../../../../utils/index.js'
 import { NormalHeader } from '../../../components/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
+import { WalletAssetTabs } from '../type.js'
 
 const useStyles = makeStyles<{ currentTab: TabType; searchError: boolean }>()((theme, { currentTab, searchError }) => ({
     content: {
@@ -164,10 +165,15 @@ const AddToken = memo(function AddToken() {
 
     const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
+    const { showSnackbar } = usePopupCustomSnackbar()
+
     const [{ loading: loadingAddCustomNFTs }, addCustomNFTs] = useAsyncFn(
         async (result: [contract: NonFungibleTokenContract<ChainId, SchemaType>, tokenIds: string[]]) => {
             await Token?.addNonFungibleCollection?.(account, result[0], result[1])
-            navigate(PopupRoutes.Wallet)
+            showSnackbar(t('popups_wallet_collectible_added_successfully'), {
+                variant: 'success',
+            })
+            navigate(`${PopupRoutes.Wallet}?tab=${WalletAssetTabs.Collectibles}`, { replace: true })
         },
         [account],
     )
