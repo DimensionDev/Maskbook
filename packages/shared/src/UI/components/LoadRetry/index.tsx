@@ -4,7 +4,7 @@ import { useSharedI18N } from '../../../locales/index.js'
 
 interface RetryHintProps {
     hint?: boolean
-    retry(): void
+    retry?(): void
     ButtonProps?: ButtonProps
 }
 
@@ -18,7 +18,7 @@ export const RetryHint = memo<RetryHintProps>(({ retry, hint = true, ButtonProps
                         {t.load_failed()}
                     </Typography>
                 ) : null}
-                <Button {...ButtonProps} size="small" style={{ borderRadius: 16 }} onClick={retry}>
+                <Button {...ButtonProps} size="small" style={{ borderRadius: 16 }} onClick={() => retry?.()}>
                     {t.load_retry()}
                 </Button>
             </Stack>

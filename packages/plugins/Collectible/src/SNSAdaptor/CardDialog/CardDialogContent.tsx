@@ -123,7 +123,13 @@ export function CardDialogContent(props: CardDialogContentProps) {
                     {currentTab === TabType.About ? (
                         <AboutTab orders={orders.value} asset={asset.data} />
                     ) : currentTab === TabType.Offers ? (
-                        <OffersTab offers={orders} />
+                        <OffersTab
+                            offers={orders.value}
+                            loading={orders.loading}
+                            finished={orders.ended}
+                            onNext={orders.next}
+                            onRetry={orders.retry}
+                        />
                     ) : (
                         <ActivitiesTab events={events} />
                     )}
