@@ -8,8 +8,8 @@ import { useRowSize } from '@masknet/shared-base-ui'
 import { MaskTabList, makeStyles, usePopupCustomSnackbar, useTabs } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useBlockedFungibleTokens, useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
-import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
-import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { TokenType, type NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab } from '@mui/material'
 import { useI18N } from '../../../../../utils/index.js'
@@ -169,7 +169,20 @@ const AddToken = memo(function AddToken() {
 
     const [{ loading: loadingAddCustomNFTs }, addCustomNFTs] = useAsyncFn(
         async (result: [contract: NonFungibleTokenContract<ChainId, SchemaType>, tokenIds: string[]]) => {
-            await Token?.addNonFungibleCollection?.(account, result[0], result[1])
+            const [contract, tokenIds] = result
+            await Token?.addNonFungibleCollection?.(account, contract, tokenIds)
+
+            for await (const tokenId of tokenIds) {
+                await Token?.trustToken?.(account, {
+                    id: `${contract.chainId}.${contract.address}.${tokenId}`,
+                    chainId: contract.chainId,
+                    type: TokenType.NonFungible,
+                    schema: SchemaType.ERC721,
+                    address: contract.address,
+                    tokenId,
+                })
+            }
+
             showSnackbar(t('popups_wallet_collectible_added_successfully'), {
                 variant: 'success',
             })
