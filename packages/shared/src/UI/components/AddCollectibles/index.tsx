@@ -291,7 +291,9 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                 </Typography>
             ) : null}
             <div className={classes.main}>
-                {(isLoadingContract || loadingAssets) && isValid && !allFailed ? (
+                {!address || tokenIds.length === 0 ? null : (isLoadingContract || loadingAssets) &&
+                  isValid &&
+                  !allFailed ? (
                     <LoadingStatus flexGrow={1} />
                 ) : isError ? (
                     <ReloadStatus flexGrow={1} onRetry={refetch} />
