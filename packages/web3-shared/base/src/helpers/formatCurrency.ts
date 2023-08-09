@@ -167,7 +167,9 @@ export function formatCurrency(
                     return formatCurrencySymbol(symbol ?? value, i === 0)
                 case 'fraction':
                     const dec = decimalValue
-                        .toFormat(onlyRemainTwoDecimal ? twoDecimalExp : sixDecimalExp)
+                        .toFormat(
+                            customDecimalConfig?.decimalExp ?? (onlyRemainTwoDecimal ? twoDecimalExp : sixDecimalExp),
+                        )
                         .replace(/\d\./, '')
                     return onlyRemainTwoDecimal ? dec.replace(/(\d\d)(0+)$/, '$1') : dec.replace(/(0+)$/, '')
                 case 'integer':
