@@ -4,7 +4,8 @@ import { useFriends } from '../../../hook/useFriends.js'
 import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
-import { resolveNextIDPlatform, resolveValueToSearch, usePersonasFromNextID } from '@masknet/shared'
+import { resolveNextIDPlatform, usePersonasFromNextID } from '@masknet/shared'
+import { useSearchValue } from '../../../hook/useSearchValue.js'
 import { useFriendsFromSearch } from '../../../hook/useFriendsFromSearch.js'
 
 const FriendsHome = memo(function FriendsHome() {
@@ -12,7 +13,7 @@ const FriendsHome = memo(function FriendsHome() {
     const { loading, value = EMPTY_LIST } = useFriends('twitter.com')
     const [searchValue, setSearchValue] = useState('')
     const type = resolveNextIDPlatform(searchValue)
-    const _value = resolveValueToSearch(searchValue, type)
+    const { loading: resolveLoading, value: _value = '' } = useSearchValue(searchValue, type)
     const { loading: searchLoading, value: searchResult } = usePersonasFromNextID(
         _value,
         type ?? NextIDPlatform.NextID,
@@ -23,7 +24,7 @@ const FriendsHome = memo(function FriendsHome() {
     return (
         <FriendsHomeUI
             friends={value}
-            loading={loading || searchLoading}
+            loading={loading || resolveLoading || searchLoading}
             setSearchValue={setSearchValue}
             searchValue={searchValue}
             searchResult={searchedList}

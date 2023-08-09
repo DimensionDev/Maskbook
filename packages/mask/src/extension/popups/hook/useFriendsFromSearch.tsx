@@ -24,8 +24,7 @@ export function useFriendsFromSearch(
                         x.platform !== NextIDPlatform.REDDIT &&
                         x.platform !== NextIDPlatform.SYBIL &&
                         x.platform !== NextIDPlatform.EthLeaderboard &&
-                        x.platform !== NextIDPlatform.NextID &&
-                        x.platform !== NextIDPlatform.Discord),
+                        x.platform !== NextIDPlatform.NextID),
             )
             const identifier = ECKeyIdentifier.fromHexPublicKeyK256(item.persona).expect(
                 `${item.persona} should be a valid hex public key in k256`,
