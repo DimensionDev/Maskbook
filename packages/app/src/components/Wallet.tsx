@@ -1,6 +1,5 @@
 import { Icons } from '@masknet/icons'
 import { CopyButton, FormattedAddress, SelectProviderModal, WalletIcon, WalletStatusModal } from '@masknet/shared'
-import { Sniffings } from '@masknet/shared-base'
 import { MaskLightTheme, makeStyles } from '@masknet/theme'
 import {
     useBalance,
@@ -15,28 +14,23 @@ import {
 } from '@masknet/web3-hooks-base'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { Link, ThemeProvider, Typography, useTheme } from '@mui/material'
+import { Link, ThemeProvider, Typography } from '@mui/material'
 import { memo } from 'react'
 
-const useStyles = makeStyles<{
-    contentBackground?: string
-    textColor?: string
-    disableChange?: boolean
-    withinRiskWarningDialog?: boolean
-}>()((theme, { contentBackground, disableChange, withinRiskWarningDialog, textColor }) => ({
+const useStyles = makeStyles()((theme) => ({
     accountInfo: {
         fontSize: 16,
         flexGrow: 1,
         marginLeft: theme.spacing(1.5),
     },
     accountName: {
-        color: !Sniffings.is_dashboard_page ? theme.palette.maskColor.dark : textColor,
+        color: theme.palette.maskColor.dark,
         fontWeight: 700,
         marginRight: 5,
         lineHeight: '18px',
     },
     balance: {
-        color: !Sniffings.is_dashboard_page ? theme.palette.maskColor.dark : textColor,
+        color: theme.palette.maskColor.dark,
         paddingTop: 2,
         lineHeight: '18px',
     },
@@ -55,10 +49,10 @@ const useStyles = makeStyles<{
         marginRight: theme.spacing(0.5),
     },
     copyIcon: {
-        color: Sniffings.is_dashboard_page ? textColor : theme.palette.maskColor.dark,
+        color: theme.palette.maskColor.dark,
     },
     linkIcon: {
-        color: Sniffings.is_dashboard_page ? textColor : theme.palette.maskColor?.dark,
+        color: theme.palette.maskColor?.dark,
     },
     walletItem: {
         display: 'flex',
@@ -78,16 +72,7 @@ interface WalletItemProps {
 }
 export const WalletItem = memo<WalletItemProps>((props) => {
     const providerDescriptor = useProviderDescriptor<'all'>()
-    const theme = useTheme()
-    const { classes, cx } = useStyles({
-        contentBackground: providerDescriptor?.backgroundGradient ?? theme.palette.maskColor.publicBg,
-        disableChange: props.disableChange,
-        withinRiskWarningDialog: props.withinRiskWarningDialog,
-        textColor:
-            providerDescriptor?.type === ProviderType.MaskWallet
-                ? theme.palette.maskColor.dark
-                : theme.palette.text.primary,
-    })
+    const { classes, cx } = useStyles()
 
     const Others = useWeb3Others()
     const { account, chainId } = useChainContext()
