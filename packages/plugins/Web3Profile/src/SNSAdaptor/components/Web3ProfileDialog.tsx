@@ -3,7 +3,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import { DialogActions, DialogContent } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { Alert, EmptyStatus, InjectedDialog, PersonaAction, usePersonaProofs } from '@masknet/shared'
+import { Alert, EmptyStatus, InjectedDialog, PersonaAction, PopupHomeTabType, usePersonaProofs } from '@masknet/shared'
 import { EMPTY_LIST, NextIDPlatform, PopupRoutes, PluginID, EMPTY_OBJECT } from '@masknet/shared-base'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useChainContext, useUnlistedAddressConfig } from '@masknet/web3-hooks-base'
@@ -132,10 +132,10 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
 
     const openPopupsWindow = useCallback(() => {
         openPopupWindow(PopupRoutes.Personas, {
-            chainId,
-            internal: true,
+            tab: PopupHomeTabType.ConnectedWallets,
+            disableNewWindow: true,
         })
-    }, [chainId])
+    }, [])
 
     const disabled = isClean || isInitialLoading
 

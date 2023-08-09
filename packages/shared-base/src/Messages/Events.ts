@@ -256,6 +256,8 @@ export type WalletLockStatusUpdatedEvent = boolean
 
 export type PasswordStatusUpdatedEvent = boolean
 
+export type PopupPageUpdatedEvent = string
+
 export interface GameDialogEvent {
     open: boolean
     tokenProps?: { tokenId?: string; contract?: string; chainId?: number }

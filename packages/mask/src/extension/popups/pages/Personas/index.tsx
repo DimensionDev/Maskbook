@@ -17,7 +17,6 @@ const Home = lazy(() => import(/* webpackPreload: true */ './Home/index.js'))
 const Logout = lazy(() => import('./Logout/index.js'))
 const PersonaSignRequest = lazy(() => import('./PersonaSignRequest/index.js'))
 const AccountDetail = lazy(() => import('./AccountDetail/index.js'))
-const ConnectedWallets = lazy(() => import('./ConnectedWallets/index.js'))
 const ConnectWallet = lazy(() => import('./ConnectWallet/index.js'))
 const WalletConnect = lazy(() => import('./WalletConnect/index.js'))
 const ExportPrivateKey = lazy(() => import('./ExportPrivateKey/index.js'))
@@ -57,7 +56,7 @@ const Persona = memo(() => {
                 <Route path={r(PopupRoutes.Logout)} element={<Logout />} />
                 <Route path={r(PopupRoutes.PersonaSignRequest)} element={<PersonaSignRequest />} />
                 <Route path={r(PopupRoutes.AccountDetail)} element={<AccountDetail />} />
-                <Route path={r(PopupRoutes.ConnectedWallets)} element={<ConnectedWallets />} />
+
                 <Route path={r(PopupRoutes.ConnectWallet)} element={<ConnectWallet />} />
                 <Route path={r(PopupRoutes.WalletConnect)} element={<WalletConnect />} />
                 <Route path={r(PopupRoutes.ExportPrivateKey)} element={<ExportPrivateKey />} />

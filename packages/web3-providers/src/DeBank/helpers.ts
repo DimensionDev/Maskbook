@@ -72,10 +72,12 @@ function toTxAsset(
     token_dict: HistoryResponse['data']['token_dict'],
 ) {
     const token = token_dict[token_id]
+    // token_dict might not contain value to current token_id
+    if (!token) return null
     const schema = token.decimals
-        ? isValidAddress(token.id)
-            ? SchemaType.Native
-            : SchemaType.ERC20
+        ? isValidAddress(token.id) // for native token, token.id is symbol. e.g `matic` for Matic
+            ? SchemaType.ERC20
+            : SchemaType.Native
         : token.is_erc721
         ? SchemaType.ERC721
         : SchemaType.ERC1155
@@ -86,15 +88,15 @@ function toTxAsset(
     return {
         id: token_id,
         chainId,
-        type: token?.decimals ? TokenType.Fungible : TokenType.NonFungible,
+        type: token.decimals ? TokenType.Fungible : TokenType.NonFungible,
         schema,
-        name: token?.name ?? 'Unknown Token',
-        symbol: token?.optimized_symbol,
+        name: token.name ?? 'Unknown Token',
+        symbol: token.optimized_symbol,
         address: token.decimals ? token_id : token.contract_id,
         decimals: token.decimals || 1,
         direction: DebankTransactionDirection.SEND,
         amount: amount?.toString(),
-        logoURI: token?.logo_url,
+        logoURI: token.logo_url,
     }
 }
 
@@ -130,10 +132,10 @@ export function formatTransactions({
             from: transaction.tx?.from_addr ?? '',
             to: transaction.other_addr,
             status: transaction.tx?.status,
-            assets: [
+            assets: compact([
                 ...transaction.sends.map((asset) => toTxAsset(asset, chainId, token_dict)),
                 ...transaction.receives.map((asset) => toTxAsset(asset, chainId, token_dict)),
-            ],
+            ]),
             fee: transaction.tx
                 ? { eth: transaction.tx.eth_gas_fee?.toString(), usd: transaction.tx.usd_gas_fee?.toString() }
                 : undefined,

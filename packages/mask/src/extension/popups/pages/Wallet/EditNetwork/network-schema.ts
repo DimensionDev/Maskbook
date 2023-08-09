@@ -1,6 +1,8 @@
 import { z } from 'zod'
 import { fetchChainId } from '@masknet/web3-providers/helpers'
 import type { I18NFunction } from '../../../../../utils/i18n-next-ui.js'
+import { isSameURL, type ReasonableNetwork } from '@masknet/web3-shared-base'
+import { getRPCConstant, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
 
 interface ChainConfig {
     name: string
@@ -53,7 +55,7 @@ export function createBaseSchema(t: I18NFunction, duplicateNameValidator: NameVa
             z
                 .string()
                 .trim()
-                .regex(/^\d+|0x[\da-e]$/i, t('incorrect_chain_id'))
+                .regex(/^\d+|0x[\da-f]$/i, t('invalid_number'))
                 .transform((v) => Number.parseInt(v, v.startsWith('0x') ? 16 : 10)),
             z.number(),
         ]),
@@ -63,7 +65,12 @@ export function createBaseSchema(t: I18NFunction, duplicateNameValidator: NameVa
     return schema
 }
 
-export function createSchema(t: I18NFunction, duplicateNameValidator: NameValidator) {
+export function createSchema(
+    t: I18NFunction,
+    duplicateNameValidator: NameValidator,
+    networks: Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>,
+    editingId: string | undefined,
+) {
     const baseSchema = createBaseSchema(t, duplicateNameValidator)
     const schema = baseSchema
         .superRefine(async (schema, context) => {
@@ -92,24 +99,28 @@ export function createSchema(t: I18NFunction, duplicateNameValidator: NameValida
             }
             return true
         })
-        .superRefine(async (schema, context) => {
-            if (!schema.chainId || !schema.currencySymbol) return true
-            try {
-                const chains = await fetchChains()
-                const match = chains.find((chain) => chain.chainId === schema.chainId)
-                if (!match) return true
-                if (match.nativeCurrency.symbol !== schema.currencySymbol) {
-                    // ditto
-                    const params = { chain_id: match.chainId, symbol: match.nativeCurrency.symbol }
-                    context.addIssue({
-                        code: z.ZodIssueCode.custom,
-                        path: ['currencySymbol'],
-                        message: t('rpc_return_different_symbol', params),
-                        params,
-                    })
-                }
-            } catch {
-                // Ignore
+        .superRefine((schema, context) => {
+            const { rpc } = schema
+            const network = networks.find((network) => isSameURL(network.rpcUrl, rpc) && network.ID !== editingId)
+            if (network) {
+                context.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    path: ['rpc'],
+                    message: t('rpc_url_is_used_by', { name: network.name }),
+                })
+                return false
+            } else {
+                networks.some((network) => {
+                    if (getRPCConstant(network.chainId, 'RPC_URLS')?.includes(rpc)) {
+                        context.addIssue({
+                            code: z.ZodIssueCode.custom,
+                            path: ['rpc'],
+                            message: t('rpc_url_is_used_by', { name: network.name }),
+                        })
+                        return true
+                    }
+                    return false
+                })
             }
             return true
         })

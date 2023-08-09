@@ -18,6 +18,8 @@ import type {
 export class NetworkState<ChainId, SchemaType, NetworkType>
     implements Web3NetworkState<ChainId, SchemaType, NetworkType>
 {
+    /** default network can't be removed */
+    private DEFAULT_NETWORK_ID = '1_ETH'
     public storage: StorageObject<{
         networkID: string
         networks: Record<string, ReasonableNetwork<ChainId, SchemaType, NetworkType>>
@@ -34,7 +36,7 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
         },
     ) {
         const { storage } = PersistentStorages.Web3.createSubScope(`${this.options.pluginID}_Network`, {
-            networkID: '1_ETH',
+            networkID: this.DEFAULT_NETWORK_ID,
             networks: {},
         })
 
@@ -51,7 +53,9 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
             const registeredNetworks = getRegisteredWeb3Networks(this.options.pluginID)
 
             return [
-                ...registeredNetworks.map((x) => registeredChains.find((y) => y.chainId === x.chainId)!),
+                ...registeredNetworks
+                    .filter((x) => x.isMainnet)
+                    .map((x) => registeredChains.find((y) => y.chainId === x.chainId)!),
                 ...customizedNetworks.map((x) => ({
                     ...x,
                     isCustomized: true,
@@ -131,6 +135,11 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
 
     async removeNetwork(id: string) {
         this.assertNetwork(id)
+
+        // If remove current network, reset to default network
+        if (id === this.networkID?.getCurrentValue()) {
+            await this.switchNetwork(this.DEFAULT_NETWORK_ID)
+        }
 
         await Promise.all([
             this.storage.networks.setValue(omit(this.storage.networks.value, id)),
