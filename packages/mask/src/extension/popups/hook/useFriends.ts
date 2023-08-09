@@ -35,7 +35,7 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
         const allSettled = await Promise.allSettled(
             friends.map((item) => {
                 const id = (item.linkedPersona as ECKeyIdentifier).publicKeyAsHex
-                return NextIDProof.queryProfilesByPublicKey(id)
+                return NextIDProof.queryProfilesByPublicKey(id, 2)
             }),
         )
         const profiles: FriendsInformation[] = allSettled.map((item, index) => {
@@ -57,12 +57,14 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
             }
             const filtered = item.value.filter(
                 (x) =>
-                    x.platform !== NextIDPlatform.Bit &&
-                    x.platform !== NextIDPlatform.CyberConnect &&
-                    x.platform !== NextIDPlatform.REDDIT &&
-                    x.platform !== NextIDPlatform.SYBIL &&
-                    x.platform !== NextIDPlatform.EthLeaderboard &&
-                    x.platform !== NextIDPlatform.NextID,
+                    (x.platform === NextIDPlatform.ENS && x.name.endsWith('.eth')) ||
+                    (x.platform !== NextIDPlatform.Bit &&
+                        x.platform !== NextIDPlatform.CyberConnect &&
+                        x.platform !== NextIDPlatform.REDDIT &&
+                        x.platform !== NextIDPlatform.SYBIL &&
+                        x.platform !== NextIDPlatform.EthLeaderboard &&
+                        x.platform !== NextIDPlatform.NextID &&
+                        x.platform !== NextIDPlatform.Discord),
             )
             return {
                 profiles: filtered,

@@ -12,11 +12,11 @@ const FriendsHome = memo(function FriendsHome() {
     const { loading, value = EMPTY_LIST } = useFriends('twitter.com')
     const [searchValue, setSearchValue] = useState('')
     const type = resolveNextIDPlatform(searchValue)
-    const _value = resolveValueToSearch(searchValue)
+    const _value = resolveValueToSearch(searchValue, type)
     const { loading: searchLoading, value: searchResult } = usePersonasFromNextID(
         _value,
         type ?? NextIDPlatform.NextID,
-        true,
+        false,
     )
     const { value: searchedList = EMPTY_LIST } = useFriendsFromSearch(searchResult, value)
     useTitle(t('popups_encrypted_friends'))
