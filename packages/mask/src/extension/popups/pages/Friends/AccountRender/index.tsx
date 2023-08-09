@@ -35,25 +35,24 @@ export const AccountRender = memo<AccountRenderProps>(function AccountRender({ p
             case NextIDPlatform.LENS:
             case NextIDPlatform.Unstoppable:
             case NextIDPlatform.Farcaster:
+            case NextIDPlatform.Keybase:
+                const _userID =
+                    profile.platform === NextIDPlatform.ENS || profile.platform === NextIDPlatform.Keybase
+                        ? profile.name
+                        : profile.identity
                 return detail ? (
-                    <DetailAccount
-                        userId={profile.platform === NextIDPlatform.ENS ? profile.name : profile.identity}
-                        icon={profile.platform}
-                    />
+                    <DetailAccount userId={_userID} icon={profile.platform} />
                 ) : (
-                    <Account
-                        userId={profile.platform === NextIDPlatform.ENS ? profile.name : profile.identity}
-                        icon={profile.platform}
-                    />
+                    <Account userId={_userID} icon={profile.platform} />
                 )
             case NextIDPlatform.CyberConnect:
             case NextIDPlatform.Bit:
             case NextIDPlatform.SYBIL:
-            case NextIDPlatform.Keybase:
             case NextIDPlatform.EthLeaderboard:
             case NextIDPlatform.REDDIT:
             case NextIDPlatform.RSS3:
             case NextIDPlatform.NextID:
+            case NextIDPlatform.Discord:
                 return null
             default:
                 safeUnreachable(profile.platform)
