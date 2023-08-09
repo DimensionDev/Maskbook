@@ -53,7 +53,9 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
             const registeredNetworks = getRegisteredWeb3Networks(this.options.pluginID)
 
             return [
-                ...registeredNetworks.map((x) => registeredChains.find((y) => y.chainId === x.chainId)!),
+                ...registeredNetworks
+                    .filter((x) => x.isMainnet)
+                    .map((x) => registeredChains.find((y) => y.chainId === x.chainId)!),
                 ...customizedNetworks.map((x) => ({
                     ...x,
                     isCustomized: true,
