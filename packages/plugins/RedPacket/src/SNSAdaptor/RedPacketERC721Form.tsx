@@ -261,7 +261,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         tokenDetailedList.map((value) => value.tokenId),
     )
 
-    const { isAvailableGasBalance, isGasFeeGreaterThanOneETH } = useAvailableBalance(
+    const { isGasSufficient, isGasFeeGreaterThanOneETH } = useAvailableBalance(
         NetworkPluginID.PLUGIN_EVM,
         '',
         gasOption,
@@ -338,15 +338,15 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         if (!balance) return t.erc721_insufficient_balance()
         if (tokenDetailedList.length === 0) return t.select_a_token()
         return ''
-    }, [tokenDetailedList.length, balance, t, isAvailableGasBalance])
+    }, [tokenDetailedList.length, balance, t, isGasSufficient])
 
     const gasValidationMessage = useMemo(() => {
-        if (!isAvailableGasBalance) {
+        if (!isGasSufficient) {
             return t.no_enough_gas_fees()
         }
         if (isGasFeeGreaterThanOneETH) return t.erc721_create_lucky_drop()
         return ''
-    }, [isAvailableGasBalance, isGasFeeGreaterThanOneETH])
+    }, [isGasSufficient, isGasFeeGreaterThanOneETH])
 
     useEffect(() => {
         setIsNFTRedPacketLoaded?.(balance > 0)

@@ -69,7 +69,7 @@ export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>
         [address, gasOption?.gasCurrency, pluginID],
     )
 
-    const isAvailableGasBalance = useMemo(() => {
+    const isGasSufficient = useMemo(() => {
         if (pluginID !== NetworkPluginID.PLUGIN_EVM) return true
         if (!gasOption?.gasCurrency || isNativeTokenAddress(gasOption.gasCurrency))
             return isGreaterThan(nativeTokenBalance, gasFee)
@@ -79,7 +79,7 @@ export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>
 
     return {
         isAvailableBalance,
-        isAvailableGasBalance,
+        isGasSufficient,
         isGasFeeGreaterThanOneETH,
         balance:
             isAvailableBalance && pluginID === NetworkPluginID.PLUGIN_EVM

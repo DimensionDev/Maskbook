@@ -179,6 +179,7 @@
     "buy_now": "Buy Now",
     "no_enough_gas_fees": "No Enough Gas Fees",
     "gas_fee": "Gas Fee",
+    "insufficient_funds_for_gas": "Insufficient funds for gas.",
     "open": "Open",
     "settings": "Settings",
     "do_not_see_your_nft": "Don't see your NFT?",
