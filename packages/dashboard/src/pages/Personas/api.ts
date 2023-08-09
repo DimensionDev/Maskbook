@@ -5,7 +5,7 @@ import { ValueRef } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { Services, Messages } from '../../API.js'
 
-export type SocialNetwork = {
+export interface SiteAdaptor {
     networkIdentifier: string
 }
 

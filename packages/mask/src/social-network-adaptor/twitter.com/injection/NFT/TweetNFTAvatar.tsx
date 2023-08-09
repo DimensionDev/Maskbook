@@ -5,7 +5,7 @@ import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/rend
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { searchRetweetAvatarSelector, searchTweetAvatarSelector } from '../../utils/selector.js'
 import { MiniAvatarBorder } from './MiniAvatarBorder.js'
-import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
+import { activatedSiteAdaptorUI } from '../../../../social-network/ui.js'
 import { getUserId } from '../../utils/user.js'
 import { startWatch } from '../../../../utils/startWatch.js'
 
@@ -32,7 +32,7 @@ function _(main: () => LiveSelector<HTMLElement>, signal: AbortSignal) {
                             size={info.width}
                             screenName={
                                 userId ||
-                                activatedSocialNetworkUI.collecting.identityProvider?.recognized.value.identifier
+                                activatedSiteAdaptorUI.collecting.identityProvider?.recognized.value.identifier
                                     ?.userId ||
                                 ''
                             }

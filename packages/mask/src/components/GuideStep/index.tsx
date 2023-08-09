@@ -11,7 +11,7 @@ import {
     userGuideStatus,
 } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { activatedSocialNetworkUI } from '../../social-network/index.js'
+import { activatedSiteAdaptorUI } from '../../social-network/index.js'
 import { useI18N } from '../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -116,7 +116,7 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     const childrenRef = useRef<HTMLElement>()
     const [clientRect, setClientRect] = useState<Pick<DOMRect, 'width' | 'height' | 'top' | 'left'>>()
     const [bottomAvailable, setBottomAvailable] = useState(true)
-    const { networkIdentifier } = activatedSocialNetworkUI
+    const { networkIdentifier } = activatedSiteAdaptorUI
     const currentStep = useValueRef(userGuideStatus[networkIdentifier])
     const finished = useValueRef(userGuideFinished[networkIdentifier])
     const isCurrentStep = +currentStep === step

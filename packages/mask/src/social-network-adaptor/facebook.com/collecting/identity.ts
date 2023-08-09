@@ -1,5 +1,5 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import type { SocialNetworkUI } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { creator } from '../../../social-network/index.js'
 import { getProfileIdentifierAtFacebook, getUserID } from '../utils/getProfileIdentifier.js'
 import { isMobileFacebook } from '../utils/isMobile.js'
@@ -9,7 +9,7 @@ import { getAvatar, getBioDescription, getFacebookId, getNickName, getPersonalHo
 import { delay } from '@masknet/kit'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 
-export const IdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
+export const IdentityProviderFacebook: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: true,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(signal) {
@@ -45,8 +45,8 @@ function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<IdentityResolv
 }
 
 function resolveCurrentVisitingIdentityInner(
-    ref: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
-    ownerRef: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
+    ref: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
+    ownerRef: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
     const selector = isMobileFacebook ? searchUserIdOnMobileSelector() : searchFacebookAvatarSelector()
@@ -91,7 +91,7 @@ function resolveCurrentVisitingIdentityInner(
     createWatcher(selector)
 }
 
-export const CurrentVisitingIdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
+export const CurrentVisitingIdentityProviderFacebook: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: false,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {

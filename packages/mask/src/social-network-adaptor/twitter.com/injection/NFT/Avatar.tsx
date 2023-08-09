@@ -4,7 +4,7 @@ import { startWatch } from '../../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
 import { followUserAvatarSelector, postAvatarSelector } from '../../utils/selector.js'
-import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
+import { activatedSiteAdaptorUI } from '../../../../social-network/ui.js'
 import { MiniAvatarBorder } from './MiniAvatarBorder.js'
 
 function getUserId(ele: HTMLElement) {
@@ -45,7 +45,7 @@ function inject(selector: () => LiveSelector<HTMLElement>, signal: AbortSignal) 
                             size={info.width}
                             screenName={
                                 userId ||
-                                activatedSocialNetworkUI.collecting.identityProvider?.recognized.value.identifier
+                                activatedSiteAdaptorUI.collecting.identityProvider?.recognized.value.identifier
                                     ?.userId ||
                                 ''
                             }

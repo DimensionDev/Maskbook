@@ -1,4 +1,4 @@
-import type { SocialNetworkUI } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { stateCreator } from '../../social-network/utils.js'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/index.js'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles.js'
@@ -8,7 +8,7 @@ import { ThemeSettingsProviderDefault } from '../browser-action/collecting/theme
 import { openseaBase } from './base.js'
 import { openseaShared } from './shared.js'
 
-const define: SocialNetworkUI.Definition = {
+const define: SiteAdaptorUI.Definition = {
     ...openseaShared,
     ...openseaBase,
     automation: {},

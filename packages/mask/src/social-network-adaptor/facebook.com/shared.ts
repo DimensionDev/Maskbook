@@ -1,4 +1,4 @@
-import type { SocialNetwork } from '@masknet/types'
+import type { SiteAdaptor } from '@masknet/types'
 import { facebookBase } from './base.js'
 import { getPostUrlAtFacebook, isValidFacebookUsername } from './utils/parse-username.js'
 import type { PostIdentifier } from '@masknet/shared-base'
@@ -10,7 +10,7 @@ import { FacebookAdaptor } from '../../../shared/site-adaptors/implementations/f
 const getPostURL = (post: PostIdentifier): URL | null => {
     return new URL(getPostUrlAtFacebook(post))
 }
-export const facebookShared: SocialNetwork.Shared & SocialNetwork.Base = {
+export const facebookShared: SiteAdaptor.Shared & SiteAdaptor.Base = {
     ...facebookBase,
     utils: {
         isValidUsername: (v) => !!isValidFacebookUsername(v),

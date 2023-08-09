@@ -1,7 +1,7 @@
-import type { SocialNetworkUI } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { languages } from '../locales/languages.js'
 
-export const i18NOverwriteTwitter: SocialNetworkUI.Customization.I18NOverwrite = {
+export const i18NOverwriteTwitter: SiteAdaptorUI.Customization.I18NOverwrite = {
     mask: {},
 }
 const resource = languages

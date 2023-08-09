@@ -7,7 +7,7 @@ import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderI
 import { startWatch } from '../../../utils/startWatch.js'
 import { postEditorInDialogSelector, postEditorInTimelineSelector } from '../utils/selector.js'
 import { isMinds } from '../base.js'
-import { activatedSocialNetworkUI } from '../../../social-network/ui.js'
+import { activatedSiteAdaptorUI } from '../../../social-network/ui.js'
 import type { CompositionType } from '@masknet/plugin-infra/content-script'
 
 export function injectPostDialogHintAtMinds(signal: AbortSignal) {
@@ -33,7 +33,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { reason }) => ({
         ...(reason === 'timeline'
             ? {
                   width: '40px',
-                  transform: !isMinds(activatedSocialNetworkUI) ? 'translateX(200px) translateY(-78px)' : '',
+                  transform: !isMinds(activatedSiteAdaptorUI) ? 'translateX(200px) translateY(-78px)' : '',
               }
             : {}),
     },

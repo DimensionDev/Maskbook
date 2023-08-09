@@ -1,5 +1,5 @@
 import { delay } from '@masknet/kit'
-import type { SocialNetworkUI } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { hasEditor, hasFocus, isCompose } from '../utils/postBox.js'
 import { newPostButtonSelector, postEditorDraftContentSelector } from '../utils/selector.js'
 import { untilElementAvailable } from '../../../utils/dom.js'
@@ -7,7 +7,7 @@ import { pasteImageToCompositionDefault } from '../../../social-network/defaults
 
 export async function pasteImageToCompositionTwitter(
     url: string | Blob,
-    options: SocialNetworkUI.AutomationCapabilities.NativeCompositionAttachImageOptions,
+    options: SiteAdaptorUI.AutomationCapabilities.NativeCompositionAttachImageOptions,
 ) {
     const interval = 500
 

@@ -11,12 +11,12 @@ import {
     makeTypedMessageTuple,
     makeTypedMessageTupleFromList,
 } from '@masknet/typed-message'
-import type { SocialNetworkUI as Next } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import type { EventListener } from '@servie/events'
 import { memoize, noop } from 'lodash-es'
 import utils from 'web3-utils'
 import Services from '../../../extension/service.js'
-import { creator, globalUIState } from '../../../social-network/index.js'
+import { creator, activatedSiteAdaptor_state } from '../../../social-network/index.js'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context.js'
 import { untilElementAvailable } from '../../../utils/dom.js'
 import { getCurrentIdentifier } from '../../utils.js'
@@ -72,7 +72,7 @@ const shouldSkipDecrypt = (node: HTMLElement, tweetNode: HTMLElement) => {
     return isCardNode && hasTextNode
 }
 function registerPostCollectorInner(
-    postStore: Next.CollectingCapabilities.PostsProvider['posts'],
+    postStore: SiteAdaptorUI.CollectingCapabilities.PostsProvider['posts'],
     cancel: AbortSignal,
 ) {
     const updateProfileInfo = memoize(
@@ -153,7 +153,7 @@ function registerPostCollectorInner(
         .startWatch(250, cancel)
 }
 
-export const PostProviderTwitter: Next.CollectingCapabilities.PostsProvider = {
+export const PostProviderTwitter: SiteAdaptorUI.CollectingCapabilities.PostsProvider = {
     posts: creator.EmptyPostProviderState(),
     start(cancel) {
         registerPostCollectorInner(this.posts, cancel)
@@ -166,7 +166,8 @@ export function getPostIdFromNewPostToast() {
 }
 
 export function collectVerificationPost(keyword: string) {
-    const userId = IdentityProviderTwitter.recognized.value.identifier || globalUIState.profiles.value[0].identifier
+    const userId =
+        IdentityProviderTwitter.recognized.value.identifier || activatedSiteAdaptor_state.profiles.value[0].identifier
     const postNodes = timelinePostContentSelector().evaluate()
 
     for (const postNode of postNodes) {

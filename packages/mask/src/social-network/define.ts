@@ -1,15 +1,14 @@
 import { env } from '@masknet/flags'
-import type { SocialNetworkUI } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 
-const definedSocialNetworkUIsLocal = new Map<string, SocialNetworkUI.DeferredDefinition>()
-export const definedSocialNetworkUIs: ReadonlyMap<string, SocialNetworkUI.DeferredDefinition> =
-    definedSocialNetworkUIsLocal
+const definedSiteAdaptorsUILocal = new Map<string, SiteAdaptorUI.DeferredDefinition>()
+export const definedSiteAdaptorsUI: ReadonlyMap<string, SiteAdaptorUI.DeferredDefinition> = definedSiteAdaptorsUILocal
 
-export function activateSocialNetworkUI() {
-    const ui_deferred = [...definedSocialNetworkUIs.values()].find((x) => x.shouldActivate(location))
+export function activateSiteAdaptorUI() {
+    const ui_deferred = [...definedSiteAdaptorsUI.values()].find((x) => x.shouldActivate(location))
     if (!ui_deferred) return Promise.resolve(false)
     return import('./ui.js')
-        .then((x) => x.activateSocialNetworkUIInner(ui_deferred))
+        .then((x) => x.activateSiteAdaptorUIInner(ui_deferred))
         .then(
             () => true,
             (error) => {
@@ -18,10 +17,10 @@ export function activateSocialNetworkUI() {
             },
         )
 }
-export function defineSocialNetworkUI(UI: SocialNetworkUI.DeferredDefinition) {
+export function defineSiteAdaptorUI(UI: SiteAdaptorUI.DeferredDefinition) {
     if (UI.notReadyForProduction) {
         if (env.channel === 'stable' && process.env.NODE_ENV === 'production') return UI
     }
-    definedSocialNetworkUIsLocal.set(UI.networkIdentifier, UI)
+    definedSiteAdaptorsUILocal.set(UI.networkIdentifier, UI)
     return UI
 }

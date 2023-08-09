@@ -1,11 +1,11 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import type { SocialNetworkUI as Next } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { ThemeMode } from '@masknet/web3-shared-base'
 import { creator } from '../../../social-network/utils.js'
 import { themeSelector } from '../utils/selectors.js'
 
 function resolveThemeSettingsInner(
-    ref: Next.CollectingCapabilities.ThemeSettingsProvider['recognized'],
+    ref: SiteAdaptorUI.CollectingCapabilities.ThemeSettingsProvider['recognized'],
     cancel: AbortSignal,
 ) {
     function updateThemeColor() {
@@ -23,7 +23,7 @@ function resolveThemeSettingsInner(
         .startWatch({ childList: true, subtree: true }, cancel)
 }
 
-export const ThemeSettingsProviderMirror: Next.CollectingCapabilities.ThemeSettingsProvider = {
+export const ThemeSettingsProviderMirror: SiteAdaptorUI.CollectingCapabilities.ThemeSettingsProvider = {
     recognized: creator.EmptyThemeSettingsProviderState(),
     async start(cancel) {
         resolveThemeSettingsInner(this.recognized, cancel)

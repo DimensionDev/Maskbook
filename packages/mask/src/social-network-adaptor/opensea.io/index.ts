@@ -1,7 +1,7 @@
-import { defineSocialNetworkUI } from '../../social-network/index.js'
+import { defineSiteAdaptorUI } from '../../social-network/index.js'
 import { openseaBase } from './base.js'
 
-defineSocialNetworkUI({
+defineSiteAdaptorUI({
     ...openseaBase,
     load: () => import('./ui-provider.js'),
     hotModuleReload(callback) {

@@ -1,9 +1,9 @@
 import { SiteAdaptor } from '@masknet/plugin-infra'
-import type { SocialNetwork } from '@masknet/types'
+import type { SiteAdaptor as SiteAdaptorType } from '@masknet/types'
 import { EnhanceableSite, type PersonaIdentifier, type ProfileIdentifier } from '@masknet/shared-base'
-import { activatedSocialNetworkUI, globalUIState } from '../social-network/index.js'
+import { activatedSiteAdaptorUI, activatedSiteAdaptor_state } from '../social-network/index.js'
 
-export function getCurrentSNSNetwork(current: SocialNetwork.Base['networkIdentifier']): SiteAdaptor {
+export function getCurrentSNSNetwork(current: SiteAdaptorType.Base['networkIdentifier']): SiteAdaptor {
     const table: Partial<Record<EnhanceableSite, SiteAdaptor>> = {
         [EnhanceableSite.Twitter]: SiteAdaptor.Twitter,
         [EnhanceableSite.Facebook]: SiteAdaptor.Facebook,
@@ -19,10 +19,10 @@ export function getCurrentIdentifier():
           linkedPersona?: PersonaIdentifier
       }
     | undefined {
-    const current = activatedSocialNetworkUI.collecting.identityProvider?.recognized.value
+    const current = activatedSiteAdaptorUI.collecting.identityProvider?.recognized.value
 
     return (
-        globalUIState.profiles.value.find((i) => i.identifier === current?.identifier) ||
-        globalUIState.profiles.value[0]
+        activatedSiteAdaptor_state.profiles.value.find((i) => i.identifier === current?.identifier) ||
+        activatedSiteAdaptor_state.profiles.value[0]
     )
 }

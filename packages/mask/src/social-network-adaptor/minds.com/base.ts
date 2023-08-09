@@ -1,9 +1,9 @@
 import { EncryptPayloadNetwork } from '@masknet/encryption'
-import type { SocialNetwork } from '@masknet/types'
+import type { SiteAdaptor } from '@masknet/types'
 import { EnhanceableSite } from '@masknet/shared-base'
 
 const origins = ['https://www.minds.com/*', 'https://minds.com/*', 'https://cdn.minds.com/*']
-export const mindsBase: SocialNetwork.Base = {
+export const mindsBase: SiteAdaptor.Base = {
     networkIdentifier: EnhanceableSite.Minds,
     encryptPayloadNetwork: EncryptPayloadNetwork.Minds,
     declarativePermissions: { origins },
@@ -12,6 +12,6 @@ export const mindsBase: SocialNetwork.Base = {
     },
 }
 
-export function isMinds(ui: SocialNetwork.Base) {
+export function isMinds(ui: SiteAdaptor.Base) {
     return ui.networkIdentifier === EnhanceableSite.Minds
 }

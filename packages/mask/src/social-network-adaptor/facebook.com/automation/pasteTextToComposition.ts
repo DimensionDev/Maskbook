@@ -1,6 +1,6 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { isMobileFacebook } from '../utils/isMobile.js'
-import type { SocialNetworkUI } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { inputText, pasteText } from '@masknet/injected-script'
 import { delay, waitDocumentReadyState } from '@masknet/kit'
 import { MaskMessages } from '@masknet/shared-base'
@@ -10,7 +10,7 @@ import { MaskMessages } from '@masknet/shared-base'
  */
 export async function pasteTextToCompositionFacebook(
     text: string,
-    options: SocialNetworkUI.AutomationCapabilities.NativeCompositionAttachTextOptions,
+    options: SiteAdaptorUI.AutomationCapabilities.NativeCompositionAttachTextOptions,
 ) {
     const { recover } = options
     await waitDocumentReadyState('interactive')

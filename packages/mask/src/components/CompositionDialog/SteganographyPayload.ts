@@ -1,11 +1,11 @@
 import { GrayscaleAlgorithm, SteganographyPreset } from '@masknet/encryption'
 import { SteganographyPresetImage } from '../../resources/image-payload/index.js'
-import { activatedSocialNetworkUI } from '../../social-network/index.js'
+import { activatedSiteAdaptorUI } from '../../social-network/index.js'
 import Services from '../../extension/service.js'
 import { downloadUrl } from '../../utils/utils.js'
 
 export async function SteganographyPayload(data: string | Uint8Array) {
-    const password = activatedSocialNetworkUI.configuration.steganography?.password?.() || 'mask'
+    const password = activatedSiteAdaptorUI.configuration.steganography?.password?.() || 'mask'
     const preset = typeof data === 'string' ? SteganographyPreset.Preset2022 : SteganographyPreset.Preset2023
     const blankImage = await downloadUrl(SteganographyPresetImage[preset]).then((x) => x.arrayBuffer())
     const secretImage = await Services.Crypto.steganographyEncodeImage(new Uint8Array(blankImage), {
@@ -13,7 +13,7 @@ export async function SteganographyPayload(data: string | Uint8Array) {
         data,
         password,
         grayscaleAlgorithm:
-            activatedSocialNetworkUI.configuration.steganography?.grayscaleAlgorithm ?? GrayscaleAlgorithm.NONE,
+            activatedSiteAdaptorUI.configuration.steganography?.grayscaleAlgorithm ?? GrayscaleAlgorithm.NONE,
     })
     const blob = new Blob([secretImage], { type: 'image/png' })
     return blob

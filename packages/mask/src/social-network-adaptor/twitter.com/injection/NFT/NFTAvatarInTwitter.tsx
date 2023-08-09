@@ -23,7 +23,7 @@ import { useInjectedCSS } from './useInjectedCSS.js'
 import { useUpdatedAvatar } from './useUpdatedAvatar.js'
 import { getAvatarType } from '../../utils/AvatarType.js'
 import { useI18N } from '../../../../utils/index.js'
-import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
+import { activatedSiteAdaptorUI } from '../../../../social-network/ui.js'
 import { searchAvatarMetaSelector, searchAvatarSelector, searchTwitterAvatarSelector } from '../../utils/selector.js'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 
@@ -202,7 +202,7 @@ function useNFTCircleAvatar(size: number) {
             ),
             confirmLabel: t('share'),
         })
-        if (confirmed) activatedSocialNetworkUI.utils.share?.(t('plugin_avatar_setup_pfp_share'))
+        if (confirmed) activatedSiteAdaptorUI.utils.share?.(t('plugin_avatar_setup_pfp_share'))
 
         MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll(
             (avatar ?? {

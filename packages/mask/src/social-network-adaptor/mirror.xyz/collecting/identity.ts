@@ -2,7 +2,7 @@ import { delay } from '@masknet/kit'
 import { EnhanceableSite } from '@masknet/shared-base'
 import { Mirror } from '@masknet/web3-providers'
 import type { Writer } from '@masknet/web3-providers/types'
-import type { SocialNetworkUI } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { creator } from '../../../social-network/utils.js'
 import { formatWriter, getMirrorUserId } from './utils.js'
 
@@ -15,7 +15,7 @@ export const getCurrentUserInfo = async () => {
 }
 
 function resolveLastRecognizedIdentityInner(
-    ref: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
+    ref: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
     const assign = async () => {
@@ -33,8 +33,8 @@ function resolveLastRecognizedIdentityInner(
 }
 
 function resolveCurrentVisitingIdentityInner(
-    ref: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
-    ownerRef: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
+    ref: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
+    ownerRef: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
     const assign = async () => {
@@ -77,7 +77,7 @@ function resolveCurrentVisitingIdentityInner(
     window.addEventListener('locationchange', assign, { signal: cancel })
 }
 
-export const IdentityProviderMirror: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
+export const IdentityProviderMirror: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: false,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
@@ -85,7 +85,7 @@ export const IdentityProviderMirror: SocialNetworkUI.CollectingCapabilities.Iden
     },
 }
 
-export const CurrentVisitingIdentityProviderMirror: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
+export const CurrentVisitingIdentityProviderMirror: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: false,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {

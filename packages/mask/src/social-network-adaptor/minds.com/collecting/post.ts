@@ -1,5 +1,5 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import type { SocialNetworkUI as Next } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import {
     makeTypedMessageEmpty,
     makeTypedMessagePromise,
@@ -19,14 +19,17 @@ import { postContentSelector } from '../utils/selector.js'
 import { getCurrentIdentifier } from '../../utils.js'
 import Services from '../../../extension/service.js'
 
-export const PostProviderMinds: Next.CollectingCapabilities.PostsProvider = {
+export const PostProviderMinds: SiteAdaptorUI.CollectingCapabilities.PostsProvider = {
     posts: creator.EmptyPostProviderState(),
     start(signal) {
         collectPostsMindsInner(this.posts, signal)
     },
 }
 
-function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider['posts'], signal: AbortSignal) {
+function collectPostsMindsInner(
+    store: SiteAdaptorUI.CollectingCapabilities.PostsProvider['posts'],
+    signal: AbortSignal,
+) {
     startWatch(
         new MutationObserverWatcher(postContentSelector()).useForeach((node, key, metadata) => {
             const activitySelector = new LiveSelector()

@@ -1,9 +1,9 @@
 import type { EncryptPayloadNetwork } from '@masknet/encryption'
 import type { EnhanceableSite, PostIdentifier } from '@masknet/shared-base'
 import type { IdentityResolved, PostContext, PostContextCreation } from '@masknet/plugin-infra/content-script'
-import type { SocialNetworkUI } from './SocialNetworkUI.js'
+import type { SiteAdaptorUI } from './SiteAdaptorUI.js'
 
-export declare namespace SocialNetwork {
+export declare namespace SiteAdaptor {
     export interface Utils {
         /** @returns post URL from PostIdentifier */
         getPostURL?(post: PostIdentifier): URL | null
@@ -26,9 +26,9 @@ export declare namespace SocialNetwork {
         networkIdentifier: EnhanceableSite
         encryptPayloadNetwork: EncryptPayloadNetwork
         /**
-         * This field _will_ be overwritten by SocialNetworkUI.permissions
+         * This field _will_ be overwritten by SiteAdaptor.permissions
          */
-        declarativePermissions: SocialNetworkUI.DeclarativePermission
+        declarativePermissions: SiteAdaptorUI.DeclarativePermission
         /** Should this UI content script activate? */
         shouldActivate(location: Location | URL): boolean
         /** This provider is not ready for production, Mask will not use it in production */

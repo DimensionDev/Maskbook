@@ -1,10 +1,10 @@
-import type { SocialNetworkUI as Next } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { creator } from '../../../social-network/index.js'
 import { openseaBase } from '../base.js'
 
-export const IdentityProviderOpensea: Next.CollectingCapabilities.IdentityResolveProvider = {
+export const IdentityProviderOpensea: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider = {
     async start(signal) {
         const ref = this.recognized
         update()

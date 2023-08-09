@@ -1,10 +1,10 @@
 import Services from '../../../extension/service.js'
-import type { SocialNetworkUI } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { type ValueRef, type ProfileInformation, MaskMessages } from '@masknet/shared-base'
 
 export function InitAutonomousStateProfiles(
     signal: AbortSignal,
-    ref: SocialNetworkUI.AutonomousState['profiles'],
+    ref: SiteAdaptorUI.AutonomousState['profiles'],
     network: string,
 ) {
     query(network, ref)

@@ -1,10 +1,10 @@
-import type { SocialNetworkUI as Next } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { fromRGB, getBackgroundColor, isDark } from '@masknet/plugin-infra/content-script'
 import { ThemeMode } from '@masknet/web3-shared-base'
 import { creator } from '../../../social-network/utils.js'
 
 function resolveThemeSettingsInner(
-    ref: Next.CollectingCapabilities.ThemeSettingsProvider['recognized'],
+    ref: SiteAdaptorUI.CollectingCapabilities.ThemeSettingsProvider['recognized'],
     cancel: AbortSignal,
 ) {
     function updateThemeColor() {
@@ -32,7 +32,7 @@ function resolveThemeSettingsInner(
     cancel.addEventListener('abort', () => observer.disconnect())
 }
 
-export const ThemeSettingsProviderMinds: Next.CollectingCapabilities.ThemeSettingsProvider = {
+export const ThemeSettingsProviderMinds: SiteAdaptorUI.CollectingCapabilities.ThemeSettingsProvider = {
     recognized: creator.EmptyThemeSettingsProviderState(),
     async start(cancel) {
         resolveThemeSettingsInner(this.recognized, cancel)

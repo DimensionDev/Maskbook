@@ -1,7 +1,7 @@
 import { isNull } from 'lodash-es'
 import { ProfileIdentifier, type SocialIdentity } from '@masknet/shared-base'
 import { Twitter } from '@masknet/web3-providers'
-import type { SocialNetwork } from '@masknet/types'
+import type { SiteAdaptor } from '@masknet/types'
 import { collectNodeText } from '../../../utils/index.js'
 import { twitterBase } from '../base.js'
 import {
@@ -15,7 +15,7 @@ import {
 /**
  * @link https://help.twitter.com/en/managing-your-account/twitter-username-rules
  */
-export const usernameValidator: NonNullable<SocialNetwork.Utils['isValidUsername']> = (name: string) => {
+export const usernameValidator: NonNullable<SiteAdaptor.Utils['isValidUsername']> = (name: string) => {
     for (const v of [/(twitter|admin)/i, /.{16,}/, /\W/]) {
         if (!isNull(v.exec(name))) {
             return false

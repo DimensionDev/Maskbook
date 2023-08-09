@@ -1,7 +1,7 @@
 import { delay } from '@masknet/kit'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createLookupTableResolver } from '@masknet/shared-base'
-import type { SocialNetworkUI as Next } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { Twitter } from '@masknet/web3-providers'
 import { TwitterBaseAPI } from '@masknet/web3-providers/types'
 import { FontSize, ThemeMode } from '@masknet/web3-shared-base'
@@ -41,7 +41,7 @@ const resolveFontSize = createLookupTableResolver<TwitterBaseAPI.Scale, FontSize
 )
 
 async function resolveThemeSettingsInner(
-    ref: Next.CollectingCapabilities.ThemeSettingsProvider['recognized'],
+    ref: SiteAdaptorUI.CollectingCapabilities.ThemeSettingsProvider['recognized'],
     cancel: AbortSignal,
 ) {
     const assign = async () => {
@@ -74,7 +74,7 @@ async function resolveThemeSettingsInner(
         )
 }
 
-export const ThemeSettingsProviderTwitter: Next.CollectingCapabilities.ThemeSettingsProvider = {
+export const ThemeSettingsProviderTwitter: SiteAdaptorUI.CollectingCapabilities.ThemeSettingsProvider = {
     recognized: creator.EmptyThemeSettingsProviderState(),
     async start(cancel) {
         await resolveThemeSettingsInner(this.recognized, cancel)

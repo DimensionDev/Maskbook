@@ -1,14 +1,14 @@
 import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { delay } from '@masknet/kit'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import type { SocialNetworkUI as Next } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { creator } from '../../../social-network/index.js'
 import { instagramBase } from '../base.js'
 import { searchInstagramAvatarSelector } from '../utils/selector.js'
 import { getAvatar, getBioDescription, getNickname, getPersonalHomepage, getUserId } from '../utils/user.js'
 
 function resolveCurrentVisitingIdentityInner(
-    ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
+    ref: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
     const avatarSelector = searchInstagramAvatarSelector()
@@ -50,7 +50,7 @@ function resolveCurrentVisitingIdentityInner(
     createWatcher(avatarSelector)
 }
 
-export const CurrentVisitingIdentityProviderInstagram: Next.CollectingCapabilities.IdentityResolveProvider = {
+export const CurrentVisitingIdentityProviderInstagram: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: false,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {

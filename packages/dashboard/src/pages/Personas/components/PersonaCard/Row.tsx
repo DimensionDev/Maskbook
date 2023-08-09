@@ -20,7 +20,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import { RenameDialog } from '../RenameDialog/index.js'
-import type { SocialNetwork } from '../../api.js'
+import type { SiteAdaptor } from '../../api.js'
 import { UploadAvatarDialog } from '../UploadAvatarDialog/index.js'
 import { MaskAvatar } from '../../../../components/MaskAvatar/index.js'
 import { LogoutPersonaDialog } from '../LogoutPersonaDialog/index.js'
@@ -61,8 +61,14 @@ const MenuText = styled('span')(`
 
 export const PersonaRowCard = memo(() => {
     const wallets = useWallets()
-    const { currentPersona, connectPersona, disconnectPersona, renamePersona, deleteBound, definedSocialNetworks } =
-        PersonaContext.useContainer()
+    const {
+        currentPersona,
+        connectPersona,
+        disconnectPersona,
+        renamePersona,
+        deleteBound,
+        definedSocialNetworkAdaptors,
+    } = PersonaContext.useContainer()
 
     const { value: hasPaymentPassword = false } = useAsync(WalletServiceRef.value.hasPassword, [])
     if (!currentPersona?.identifier.publicKeyAsHex) return null
@@ -80,7 +86,7 @@ export const PersonaRowCard = memo(() => {
             onDisconnect={disconnectPersona}
             onDeleteBound={deleteBound}
             onRename={renamePersona}
-            definedSocialNetworks={definedSocialNetworks}
+            definedSocialNetworkAdaptors={definedSocialNetworkAdaptors}
         />
     )
 })
@@ -90,7 +96,7 @@ export interface PersonaRowCardUIProps {
     address?: string
     identifier: PersonaIdentifier
     profiles: ProfileInformation[]
-    definedSocialNetworks: SocialNetwork[]
+    definedSocialNetworkAdaptors: SiteAdaptor[]
     publicKey: string
     hasSmartPay: boolean
     hasPaymentPassword: boolean
@@ -117,7 +123,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
     const { classes } = useStyles()
     const { confirmPassword } = useContext(UserContext)
 
-    const { nickname, definedSocialNetworks, identifier, profiles, publicKey, address } = props
+    const { nickname, definedSocialNetworkAdaptors, identifier, profiles, publicKey, address } = props
     const { onConnect, onDisconnect, onRename, onDeleteBound } = props
     const { value: privateKey } = useExportPrivateKey(identifier)
     const { value: words } = useExportMnemonicWords(identifier)
@@ -183,7 +189,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                     </Typography>
                 </Box>
                 <Box>
-                    {definedSocialNetworks.map(({ networkIdentifier }) => {
+                    {definedSocialNetworkAdaptors.map(({ networkIdentifier }) => {
                         const currentNetworkProfiles = profiles.filter(
                             (x) => x.identifier.network === networkIdentifier,
                         )

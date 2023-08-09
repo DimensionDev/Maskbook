@@ -1,6 +1,6 @@
 import type { PostIdentifier } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
-import type { SocialNetwork } from '@masknet/types'
+import type { SiteAdaptor } from '@masknet/types'
 import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context.js'
 import { hasPayloadLike } from '../../utils/index.js'
 import { mindsBase } from './base.js'
@@ -10,7 +10,7 @@ import { MindsAdaptor } from '../../../shared/site-adaptors/implementations/mind
 const getPostURL = (post: PostIdentifier): URL => {
     return new URL(`https://minds.com/newsfeed/${post.postId}`)
 }
-export const mindsShared: SocialNetwork.Shared & SocialNetwork.Base = {
+export const mindsShared: SiteAdaptor.Shared & SiteAdaptor.Base = {
     ...mindsBase,
     utils: {
         isValidUsername: usernameValidator,

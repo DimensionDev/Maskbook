@@ -1,7 +1,7 @@
 import stringify from 'json-stable-stringify'
 import { assertNotEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { delay, waitDocumentReadyState } from '@masknet/kit'
-import type { SocialNetworkUI } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { type Plugin, startPluginSNSAdaptor, SNSAdaptorContextRef } from '@masknet/plugin-infra/content-script'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '@masknet/shared'
 import {
@@ -27,14 +27,14 @@ import { setupReactShadowRootEnvironment } from '../utils/index.js'
 import '../utils/debug/general.js'
 import { configureSelectorMissReporter } from '../utils/startWatch.js'
 import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
-import { definedSocialNetworkUIs } from './define.js'
+import { definedSiteAdaptorsUI } from './define.js'
 
-const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
+const definedSiteAdaptorsResolved = new Map<string, SiteAdaptorUI.Definition>()
 
-export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {} as any
-export let globalUIState: Readonly<SocialNetworkUI.AutonomousState> = {} as any
+export let activatedSiteAdaptorUI: SiteAdaptorUI.Definition = {} as any
+export let activatedSiteAdaptor_state: Readonly<SiteAdaptorUI.AutonomousState> = {} as any
 
-export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.DeferredDefinition): Promise<void> {
+export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.DeferredDefinition): Promise<void> {
     assertNotEnvironment(Environment.ManifestBackground)
 
     console.log('Activating provider', ui_deferred.networkIdentifier)
@@ -49,7 +49,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         })
     })
     setupReactShadowRootEnvironment()
-    const ui = (activatedSocialNetworkUI = await loadSocialNetworkUI(ui_deferred.networkIdentifier))
+    const ui = (activatedSiteAdaptorUI = await loadSiteAdaptorUI(ui_deferred.networkIdentifier))
 
     sharedUINetworkIdentifier.value = ui_deferred.networkIdentifier
     if (ui.customization.sharedComponentOverwrite) {
@@ -67,8 +67,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             console.log('SNS adaptor updated. Uninstalling current adaptor.')
             abort.abort()
             await delay(200)
-            definedSocialNetworkUIsResolved.set(ui_deferred.networkIdentifier, newDefinition)
-            activateSocialNetworkUIInner(ui_deferred)
+            definedSiteAdaptorsResolved.set(ui_deferred.networkIdentifier, newDefinition)
+            activateSiteAdaptorUIInner(ui_deferred)
         })
     }
 
@@ -78,7 +78,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     await ui.collecting.themeSettingsProvider?.start(signal)
 
-    globalUIState = await ui.init(signal)
+    activatedSiteAdaptor_state = await ui.init(signal)
 
     startIntermediateSetupGuide()
     $unknownIdentityResolution()
@@ -149,7 +149,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     const connectPersona = async () => {
         const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
-        currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier].value = stringify({
+        currentSetupGuideStatus[activatedSiteAdaptorUI.networkIdentifier].value = stringify({
             status: SetupGuideStep.FindUsername,
             persona: currentPersonaIdentifier?.toText(),
         })
@@ -288,31 +288,14 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     }
 }
 
-export async function loadSocialNetworkUIs(): Promise<SocialNetworkUI.Definition[]> {
-    const defines = [...definedSocialNetworkUIs.values()].map(async (x) => x.load())
-    const uis = (await Promise.all(defines)).map((x) => x.default)
-
-    if (!defines) throw new Error('SNS adaptor load failed')
-
-    for (const ui of uis) {
-        definedSocialNetworkUIsResolved.set(ui.networkIdentifier, ui)
-    }
-
-    return uis
-}
-
-export async function loadSocialNetworkUI(identifier: string): Promise<SocialNetworkUI.Definition> {
-    if (definedSocialNetworkUIsResolved.has(identifier)) return definedSocialNetworkUIsResolved.get(identifier)!
-    const define = definedSocialNetworkUIs.get(identifier)
+export async function loadSiteAdaptorUI(identifier: string): Promise<SiteAdaptorUI.Definition> {
+    if (definedSiteAdaptorsResolved.has(identifier)) return definedSiteAdaptorsResolved.get(identifier)!
+    const define = definedSiteAdaptorsUI.get(identifier)
     if (!define) throw new Error('SNS adaptor not found')
     const ui = (await define.load()).default
-    definedSocialNetworkUIsResolved.set(identifier, ui)
+    definedSiteAdaptorsResolved.set(identifier, ui)
     if (import.meta.webpackHot) {
-        define.hotModuleReload?.((ui) => definedSocialNetworkUIsResolved.set(identifier, ui))
+        define.hotModuleReload?.((ui) => definedSiteAdaptorsResolved.set(identifier, ui))
     }
     return ui
-}
-export function loadSocialNetworkUISync(identifier: string): SocialNetworkUI.Definition | null {
-    if (definedSocialNetworkUIsResolved.has(identifier)) return definedSocialNetworkUIsResolved.get(identifier)!
-    return null
 }

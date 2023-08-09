@@ -1,8 +1,8 @@
 /* eslint-disable tss-unused-classes/unused-classes */
-import type { SocialNetworkUI } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { makeStyles } from '@masknet/theme'
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
-import { globalUIState, stateCreator } from '../../social-network/index.js'
+import { activatedSiteAdaptor_state, stateCreator } from '../../social-network/index.js'
 import { injectPostCommentsDefault } from '../../social-network/defaults/index.js'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector.js'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide.js'
@@ -113,7 +113,7 @@ const useInjectedDialogClassesOverwriteMinds = makeStyles()((theme) => {
     }
 })
 
-const mindsUI: SocialNetworkUI.Definition = {
+const mindsUI: SiteAdaptorUI.Definition = {
     ...mindsBase,
     ...mindsShared,
     automation: {
@@ -189,7 +189,7 @@ const mindsUI: SocialNetworkUI.Definition = {
             password() {
                 const id =
                     IdentityProviderMinds.recognized.value.identifier?.userId ||
-                    globalUIState.profiles.value?.[0].identifier.userId
+                    activatedSiteAdaptor_state.profiles.value?.[0].identifier.userId
                 if (!id) throw new Error('Cannot figure out password')
                 return ProfileIdentifier.of(EnhanceableSite.Minds, id)
                     .expect(`${id} should be a valid user id`)

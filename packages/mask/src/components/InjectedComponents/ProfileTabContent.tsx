@@ -39,7 +39,7 @@ import { NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ScopedDomainsContainer, useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
-import { activatedSocialNetworkUI } from '../../social-network/index.js'
+import { activatedSiteAdaptorUI } from '../../social-network/index.js'
 import { useI18N } from '../../utils/index.js'
 import {
     useCurrentVisitingIdentity,
@@ -55,7 +55,7 @@ import Services from '../../extension/service.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        width: isFacebook(activatedSocialNetworkUI) ? 876 : 'auto',
+        width: isFacebook(activatedSiteAdaptorUI) ? 876 : 'auto',
     },
     container: {
         background:
@@ -202,7 +202,7 @@ function Content(props: ProfileTabContentProps) {
 
     const isWeb3ProfileDisable = useIsMinimalMode(PluginID.Web3Profile)
 
-    const isOnTwitter = isTwitter(activatedSocialNetworkUI)
+    const isOnTwitter = isTwitter(activatedSiteAdaptorUI)
     const doesOwnerHaveNoAddress =
         isOwnerIdentity && personaStatus.proof?.findIndex((p) => p.platform === NextIDPlatform.Ethereum) === -1
 

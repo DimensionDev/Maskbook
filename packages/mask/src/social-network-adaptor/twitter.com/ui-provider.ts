@@ -1,9 +1,9 @@
 /* eslint-disable tss-unused-classes/unused-classes */
-import type { SocialNetworkUI } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { EnhanceableSite, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { FontSize, ThemeColor, ThemeMode } from '@masknet/web3-shared-base'
-import { globalUIState, stateCreator } from '../../social-network/index.js'
+import { activatedSiteAdaptor_state, stateCreator } from '../../social-network/index.js'
 import { twitterBase } from './base.js'
 import getSearchedKeywordAtTwitter from './collecting/getSearchedKeyword.js'
 import { twitterShared } from './shared.js'
@@ -129,7 +129,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     }
 })
 
-const twitterUI: SocialNetworkUI.Definition = {
+const twitterUI: SiteAdaptorUI.Definition = {
     ...twitterBase,
     ...twitterShared,
     automation: {
@@ -225,7 +225,7 @@ const twitterUI: SocialNetworkUI.Definition = {
             password() {
                 const id =
                     IdentityProviderTwitter.recognized.value.identifier?.userId ||
-                    globalUIState.profiles.value?.[0].identifier.userId
+                    activatedSiteAdaptor_state.profiles.value?.[0].identifier.userId
                 if (!id) throw new Error('Cannot figure out password')
                 return ProfileIdentifier.of(EnhanceableSite.Twitter, id)
                     .expect(`${id} should be a valid user id`)

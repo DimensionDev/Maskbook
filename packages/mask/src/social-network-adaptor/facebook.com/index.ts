@@ -1,7 +1,7 @@
-import { defineSocialNetworkUI } from '../../social-network/index.js'
+import { defineSiteAdaptorUI } from '../../social-network/index.js'
 import { facebookBase } from './base.js'
 
-defineSocialNetworkUI({
+defineSiteAdaptorUI({
     ...facebookBase,
     load: () => import('./ui-provider.js'),
     hotModuleReload(callback) {

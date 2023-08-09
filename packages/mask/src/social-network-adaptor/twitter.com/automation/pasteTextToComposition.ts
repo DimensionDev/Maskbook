@@ -1,6 +1,6 @@
 import { delay } from '@masknet/kit'
 import { pasteText } from '@masknet/injected-script'
-import type { SocialNetworkUI } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { MaskMessages } from '@masknet/shared-base'
 import { newPostButtonSelector, postEditorDraftContentSelector } from '../utils/selector.js'
 import { getEditorContent, hasEditor, hasFocus, isCompose } from '../utils/postBox.js'
@@ -11,7 +11,7 @@ import { selectElementContents } from '../../../utils/utils.js'
  * Wait for up to 5000 ms
  * If not complete, let user do it.
  */
-export const pasteTextToCompositionTwitter: SocialNetworkUI.AutomationCapabilities.NativeCompositionDialog['appendText'] =
+export const pasteTextToCompositionTwitter: SiteAdaptorUI.AutomationCapabilities.NativeCompositionDialog['appendText'] =
     (text, opt) => {
         const interval = 500
         const timeout = 5000

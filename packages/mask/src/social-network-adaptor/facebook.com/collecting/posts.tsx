@@ -1,6 +1,6 @@
 import { None, Some, type Option } from 'ts-results-es'
 import { Flags } from '@masknet/flags'
-import type { SocialNetworkUI as Next } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { type TypedMessage, makeTypedMessageText, makeTypedMessageTuple } from '@masknet/typed-message'
 import { creator } from '../../../social-network/utils.js'
@@ -16,13 +16,16 @@ const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobileFacebook ? '.story_body_container > div' : '[role=article]  [id]  span[dir="auto"]',
 )
 
-export const PostProviderFacebook: Next.CollectingCapabilities.PostsProvider = {
+export const PostProviderFacebook: SiteAdaptorUI.CollectingCapabilities.PostsProvider = {
     posts: creator.EmptyPostProviderState(),
     start(signal) {
         collectPostsFacebookInner(this.posts, signal)
     },
 }
-function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvider['posts'], signal: AbortSignal) {
+function collectPostsFacebookInner(
+    store: SiteAdaptorUI.CollectingCapabilities.PostsProvider['posts'],
+    signal: AbortSignal,
+) {
     startWatch(
         new MutationObserverWatcher(posts).useForeach((node, key, metadata) => {
             clickSeeMore(node)

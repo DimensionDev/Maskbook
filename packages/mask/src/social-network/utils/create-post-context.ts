@@ -27,7 +27,7 @@ import {
     makeTypedMessageTupleFromList,
     type TypedMessageTuple,
 } from '@masknet/typed-message'
-import { activatedSocialNetworkUI } from '../ui.js'
+import { activatedSiteAdaptorUI } from '../ui.js'
 import { resolveFacebookLink } from '../../social-network-adaptor/facebook.com/utils/resolveFacebookLink.js'
 
 export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSActions) {
@@ -37,7 +37,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
 
         // #region Mentioned links
         const linksSubscribe: Subscription<string[]> = (() => {
-            const isFacebook = activatedSocialNetworkUI.networkIdentifier === EnhanceableSite.Facebook
+            const isFacebook = activatedSiteAdaptorUI.networkIdentifier === EnhanceableSite.Facebook
             const links = new ValueRef<string[]>(EMPTY_LIST)
 
             function evaluate() {

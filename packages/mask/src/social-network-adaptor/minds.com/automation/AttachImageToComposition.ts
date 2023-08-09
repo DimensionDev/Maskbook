@@ -1,4 +1,4 @@
-import type { SocialNetworkUI } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { downloadUrl } from '../../../utils/utils.js'
 import { composerModalTextAreaSelector, composerPreviewSelector } from '../utils/selector.js'
 import { pasteTextToCompositionMinds } from './pasteTextToComposition.js'
@@ -9,7 +9,7 @@ const hasSucceed = () => composerPreviewSelector().evaluate()
 export function pasteImageToCompositionMinds() {
     return async function (
         url: string | Blob,
-        { recover, relatedTextPayload }: SocialNetworkUI.AutomationCapabilities.NativeCompositionAttachImageOptions,
+        { recover, relatedTextPayload }: SiteAdaptorUI.AutomationCapabilities.NativeCompositionAttachImageOptions,
     ) {
         const image = typeof url === 'string' ? await downloadUrl(url) : url
         const data = [new ClipboardItem({ [image.type]: image })]

@@ -11,13 +11,13 @@ import {
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import Services from '../../extension/service.js'
-import { activatedSocialNetworkUI } from '../../social-network/index.js'
+import { activatedSiteAdaptorUI } from '../../social-network/index.js'
 
 export function useNextIDVerify() {
     const verifyPostCollectTimer = useRef<NodeJS.Timer | null>(null)
-    const getPostIdFromNewPostToast = activatedSocialNetworkUI.configuration.nextIDConfig?.getPostIdFromNewPostToast
-    const postMessage = activatedSocialNetworkUI.automation?.nativeCompositionDialog?.appendText
-    const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform
+    const getPostIdFromNewPostToast = activatedSiteAdaptorUI.configuration.nextIDConfig?.getPostIdFromNewPostToast
+    const postMessage = activatedSiteAdaptorUI.automation?.nativeCompositionDialog?.appendText
+    const platform = activatedSiteAdaptorUI.configuration.nextIDConfig?.platform
 
     return useAsyncFn(
         async (persona?: PersonaInformation, username?: string, verifiedCallback?: () => void | Promise<void>) => {

@@ -10,7 +10,7 @@ import { startTransition, useCallback, useDeferredValue, useMemo, useState } fro
 import { useI18N } from '../../../utils/index.js'
 import { ProfileInList } from '../SelectRecipients/ProfileInList.js'
 import { useContacts } from '../SelectRecipients/useContacts.js'
-import { activatedSocialNetworkUI } from '../../../social-network/ui.js'
+import { activatedSiteAdaptorUI } from '../../../social-network/ui.js'
 
 export interface SelectProfileUIProps extends withClasses<'root'> {
     items: Profile[]
@@ -80,7 +80,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
         () => compact(frozenSelected.map((x) => x.linkedPersona?.publicKeyAsHex)),
         [frozenSelected],
     )
-    const { value = EMPTY_LIST } = useContacts(activatedSocialNetworkUI.networkIdentifier)
+    const { value = EMPTY_LIST } = useContacts(activatedSiteAdaptorUI.networkIdentifier)
 
     const onSelectedAllChange = useCallback(
         (checked: boolean) => {

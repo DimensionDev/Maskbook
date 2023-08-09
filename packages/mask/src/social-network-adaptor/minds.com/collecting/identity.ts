@@ -1,5 +1,5 @@
 import { ProfileIdentifier } from '@masknet/shared-base'
-import type { SocialNetworkUI as Next } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { Minds } from '@masknet/web3-providers'
 import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { creator } from '../../../social-network/index.js'
@@ -7,7 +7,7 @@ import { mindsBase } from '../base.js'
 import { handleSelector, selfInfoSelectors } from '../utils/selector.js'
 
 async function resolveLastRecognizedIdentityInner(
-    ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
+    ref: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
     const assign = async () => {
@@ -45,7 +45,7 @@ async function resolveLastRecognizedIdentityInner(
     createWatcher(handleSelector())
 }
 
-export const IdentityProviderMinds: Next.CollectingCapabilities.IdentityResolveProvider = {
+export const IdentityProviderMinds: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: false,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {

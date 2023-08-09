@@ -1,6 +1,6 @@
 import { type PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
-import type { SocialNetwork } from '@masknet/types'
+import type { SiteAdaptor } from '@masknet/types'
 import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context.js'
 import { hasPayloadLike } from '../../utils/index.js'
 import { twitterBase } from './base.js'
@@ -12,7 +12,7 @@ const getPostURL = (post: PostIdentifier): URL | null => {
     if (!(post.identifier instanceof ProfileIdentifier)) return null
     return new URL(`https://twitter.com/${post.identifier.userId}/status/${post.postId}`)
 }
-export const twitterShared: SocialNetwork.Shared & SocialNetwork.Base = {
+export const twitterShared: SiteAdaptor.Shared & SiteAdaptor.Base = {
     ...twitterBase,
     utils: {
         isValidUsername: usernameValidator,

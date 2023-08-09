@@ -41,7 +41,7 @@ function Personas() {
     const t = useDashboardI18N()
     const navigate = useNavigate()
     const { showSnackbar } = useCustomSnackbar()
-    const { drawerOpen, toggleDrawer, personas, currentPersona, connectPersona, definedSocialNetworks } =
+    const { drawerOpen, toggleDrawer, personas, currentPersona, connectPersona, definedSocialNetworkAdaptors } =
         PersonaContext.useContainer()
 
     useEffect(() => {
@@ -51,12 +51,12 @@ function Personas() {
     }, [personas])
 
     const [activeTab, setActiveTab] = useState(
-        firstProfileNetwork(currentPersona) ?? definedSocialNetworks[0].networkIdentifier,
+        firstProfileNetwork(currentPersona) ?? definedSocialNetworkAdaptors[0].networkIdentifier,
     )
 
     useEffect(() => {
-        setActiveTab(firstProfileNetwork(currentPersona) ?? definedSocialNetworks[0].networkIdentifier)
-    }, [currentPersona, definedSocialNetworks])
+        setActiveTab(firstProfileNetwork(currentPersona) ?? definedSocialNetworkAdaptors[0].networkIdentifier)
+    }, [currentPersona, definedSocialNetworkAdaptors])
 
     if (!personas.length) return null
 
@@ -79,7 +79,7 @@ function Personas() {
                 <ContentContainer style={{ display: 'flex', flexDirection: 'column' }}>
                     <TabContext value={activeTab}>
                         <Tabs value={activeTab ? activeTab : false} onChange={(event, tab) => setActiveTab(tab)}>
-                            {definedSocialNetworks.map(({ networkIdentifier }) => (
+                            {definedSocialNetworkAdaptors.map(({ networkIdentifier }) => (
                                 <Tab
                                     key={networkIdentifier}
                                     value={networkIdentifier}
@@ -88,7 +88,7 @@ function Personas() {
                                 />
                             ))}
                         </Tabs>
-                        {definedSocialNetworks.map(({ networkIdentifier }) => {
+                        {definedSocialNetworkAdaptors.map(({ networkIdentifier }) => {
                             if (!currentPersona) return null
                             const profile = currentPersona.linkedProfiles.find(
                                 (x) => x.identifier.network === networkIdentifier,

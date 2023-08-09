@@ -4,7 +4,7 @@ import { delay } from '@masknet/kit'
 import { TWITTER_RESERVED_SLUGS } from '@masknet/injected-script/shared'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { Twitter } from '@masknet/web3-providers'
-import type { SocialNetworkUI as Next } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { creator } from '../../../social-network/index.js'
 import { twitterBase } from '../base.js'
 import { isMobileTwitter } from '../utils/isMobile.js'
@@ -43,7 +43,7 @@ function getNickname(nickname?: string) {
 }
 
 function resolveLastRecognizedIdentityInner(
-    ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
+    ref: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
     const assign = async () => {
@@ -89,7 +89,7 @@ function resolveLastRecognizedIdentityInner(
 }
 
 function resolveLastRecognizedIdentityMobileInner(
-    ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
+    ref: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
     const onLocationChange = async () => {
@@ -117,8 +117,8 @@ function getFirstSlug() {
 }
 
 function resolveCurrentVisitingIdentityInner(
-    ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
-    ownerRef: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
+    ref: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
+    ownerRef: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
     const update = async (twitterId: string) => {
@@ -168,7 +168,7 @@ function resolveCurrentVisitingIdentityInner(
     )
 }
 
-export const IdentityProviderTwitter: Next.CollectingCapabilities.IdentityResolveProvider = {
+export const IdentityProviderTwitter: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: false,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
@@ -177,7 +177,7 @@ export const IdentityProviderTwitter: Next.CollectingCapabilities.IdentityResolv
     },
 }
 
-export const CurrentVisitingIdentityProviderTwitter: Next.CollectingCapabilities.IdentityResolveProvider = {
+export const CurrentVisitingIdentityProviderTwitter: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: false,
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {

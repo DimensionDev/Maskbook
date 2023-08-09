@@ -5,7 +5,7 @@ import { TypedMessageRender } from '@masknet/typed-message-react'
 import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context.js'
 import { Check as CheckIcon, Close as CloseIcon } from '@mui/icons-material'
 import { memo, useCallback, useMemo } from 'react'
-import { activatedSocialNetworkUI } from '../../social-network/ui.js'
+import { activatedSiteAdaptorUI } from '../../social-network/ui.js'
 import { Icons } from '@masknet/icons'
 
 export enum AdditionalIcon {
@@ -74,8 +74,8 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
             {message ? (
                 <main className={classes.content}>
                     <TypedMessageRenderContext
-                        textResizer={activatedSocialNetworkUI.networkIdentifier !== 'twitter.com'}
-                        renderFragments={activatedSocialNetworkUI?.customization.componentOverwrite?.RenderFragments}>
+                        textResizer={activatedSiteAdaptorUI.networkIdentifier !== 'twitter.com'}
+                        renderFragments={activatedSiteAdaptorUI?.customization.componentOverwrite?.RenderFragments}>
                         <TypedMessageRender message={TypedMessage} />
                     </TypedMessageRenderContext>
                 </main>

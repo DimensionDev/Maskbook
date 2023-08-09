@@ -1,9 +1,9 @@
 import { EncryptPayloadNetwork } from '@masknet/encryption'
-import type { SocialNetwork } from '@masknet/types'
+import type { SiteAdaptor } from '@masknet/types'
 import { EnhanceableSite } from '@masknet/shared-base'
 
 const origins = ['https://mobile.twitter.com/*', 'https://twitter.com/*']
-export const twitterBase: SocialNetwork.Base = {
+export const twitterBase: SiteAdaptor.Base = {
     networkIdentifier: EnhanceableSite.Twitter,
     encryptPayloadNetwork: EncryptPayloadNetwork.Twitter,
     declarativePermissions: { origins },
@@ -12,6 +12,6 @@ export const twitterBase: SocialNetwork.Base = {
     },
 }
 
-export function isTwitter(ui: SocialNetwork.Base) {
+export function isTwitter(ui: SiteAdaptor.Base) {
     return ui.networkIdentifier === EnhanceableSite.Twitter
 }

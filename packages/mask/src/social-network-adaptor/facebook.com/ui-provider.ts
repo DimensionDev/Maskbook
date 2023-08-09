@@ -1,5 +1,5 @@
 /* eslint-disable tss-unused-classes/unused-classes */
-import type { SocialNetworkUI } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { makeStyles } from '@masknet/theme'
 import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
 import { stateCreator } from '../../social-network/utils.js'
@@ -24,7 +24,7 @@ import { pasteImageToCompositionDefault } from '../../social-network/defaults/au
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector.js'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide.js'
 import { useThemeFacebookVariant } from './customization/custom.js'
-import { globalUIState } from '../../social-network/index.js'
+import { activatedSiteAdaptor_state } from '../../social-network/index.js'
 import { injectToolboxHintAtFacebook as injectToolboxAtFacebook } from './injection/Toolbar.js'
 import { injectProfileNFTAvatarInFaceBook } from './injection/NFT/ProfileNFTAvatar.js'
 import { injectNFTAvatarInFacebook } from './injection/NFT/NFTAvatarInFacebook.js'
@@ -111,7 +111,7 @@ const useInjectedDialogClassesOverwriteFacebook = makeStyles()((theme) => {
     }
 })
 
-const facebookUI: SocialNetworkUI.Definition = {
+const facebookUI: SiteAdaptorUI.Definition = {
     ...facebookBase,
     ...facebookShared,
     automation: {
@@ -216,7 +216,7 @@ const facebookUI: SocialNetworkUI.Definition = {
             password() {
                 const id =
                     IdentityProviderFacebook.recognized.value.identifier?.userId ||
-                    globalUIState.profiles.value?.[0].identifier.userId
+                    activatedSiteAdaptor_state.profiles.value?.[0].identifier.userId
                 if (!id) throw new Error('Cannot figure out password')
                 return ProfileIdentifier.of(EnhanceableSite.Facebook, id)
                     .expect(`${id} should be a valid user id`)

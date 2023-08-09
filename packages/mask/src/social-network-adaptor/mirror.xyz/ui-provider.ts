@@ -1,4 +1,4 @@
-import type { SocialNetworkUI } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { stateCreator } from '../../social-network/utils.js'
 import { injectPageInspectorDefault } from '../../social-network/defaults/index.js'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles.js'
@@ -14,7 +14,7 @@ import { ThemeSettingsProviderMirror } from './collecting/theme.js'
 import { useThemeMirrorVariant } from './customization/custom.js'
 
 // TODO: access chrome permission
-const define: SocialNetworkUI.Definition = {
+const define: SiteAdaptorUI.Definition = {
     ...mirrorBase,
     ...mirrorShared,
     automation: {},

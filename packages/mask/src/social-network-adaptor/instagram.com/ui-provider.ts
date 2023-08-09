@@ -1,4 +1,4 @@
-import type { SocialNetworkUI } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { stateCreator } from '../../social-network/index.js'
 import { instagramShared } from './shared.js'
 import { instagramBase } from './base.js'
@@ -25,7 +25,7 @@ import { injectProfileTabContentAtInstagram } from './injection/ProfileTabConten
 import { injectAvatar } from './injection/Avatar/index.js'
 import { useThemeInstagramVariant } from './customization/custom.js'
 
-const define: SocialNetworkUI.Definition = {
+const define: SiteAdaptorUI.Definition = {
     ...instagramShared,
     ...instagramBase,
     automation: {

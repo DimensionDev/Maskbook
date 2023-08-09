@@ -1,13 +1,13 @@
-import type { SocialNetwork, SocialNetworkUI } from '@masknet/types'
+import type { SiteAdaptor, SiteAdaptorUI } from '@masknet/types'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { EncryptPayloadNetwork } from '@masknet/encryption'
 import { EnhanceableSite, ValueRef, type ProfileInformation } from '@masknet/shared-base'
 import { useThemePopupVariant } from './customization/custom.js'
-import { defineSocialNetworkUI, definedSocialNetworkUIs } from '../../social-network/index.js'
+import { defineSiteAdaptorUI, definedSiteAdaptorsUI } from '../../social-network/index.js'
 import { CurrentVisitingIdentityProviderDefault, IdentityProviderDefault } from './collecting/identity.js'
 import { ThemeSettingsProviderDefault } from './collecting/theme.js'
 
-const base: SocialNetwork.Base = {
+const base: SiteAdaptor.Base = {
     encryptPayloadNetwork: EncryptPayloadNetwork.Unknown,
     networkIdentifier: EnhanceableSite.Localhost,
     declarativePermissions: { origins: [] },
@@ -15,7 +15,7 @@ const base: SocialNetwork.Base = {
         return location.protocol.includes('-extension') && !isEnvironment(Environment.ManifestBackground)
     },
 }
-const define: SocialNetworkUI.Definition = {
+const define: SiteAdaptorUI.Definition = {
     ...base,
     automation: {},
     collecting: {
@@ -30,13 +30,13 @@ const define: SocialNetworkUI.Definition = {
     injection: {},
     utils: { createPostContext: null! },
     async init(signal) {
-        const state: Readonly<SocialNetworkUI.AutonomousState> = {
+        const state: Readonly<SiteAdaptorUI.AutonomousState> = {
             profiles: new ValueRef<ProfileInformation[]>([]),
         }
         const activeTab = ((await browser.tabs.query({ active: true, currentWindow: true })) || [])[0]
         if (activeTab === undefined) return state
         const location = new URL(activeTab.url || globalThis.location.href)
-        for (const ui of definedSocialNetworkUIs.values()) {
+        for (const ui of definedSiteAdaptorsUI.values()) {
             if (ui.shouldActivate(location) && ui.networkIdentifier !== EnhanceableSite.Localhost) {
                 const _ = (await ui.load()).default
                 if (signal.aborted) return state
@@ -50,7 +50,7 @@ const define: SocialNetworkUI.Definition = {
         return state
     },
 }
-defineSocialNetworkUI({
+defineSiteAdaptorUI({
     ...base,
     async load() {
         return { default: define }

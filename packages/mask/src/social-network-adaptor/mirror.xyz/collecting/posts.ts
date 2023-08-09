@@ -1,7 +1,7 @@
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Mirror } from '@masknet/web3-providers'
 import type { PostContextCoAuthor } from '@masknet/plugin-infra/content-script'
-import type { SocialNetworkUI as Next } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { creator } from '../../../social-network/index.js'
 import { postsContentSelector } from '../utils/selectors.js'
 import { mirrorShared } from '../shared.js'
@@ -76,7 +76,7 @@ async function collectPostInfo(node: HTMLElement | null, cancel: AbortSignal) {
 }
 
 async function registerPostCollectorInner(
-    postStore: Next.CollectingCapabilities.PostsProvider['posts'],
+    postStore: SiteAdaptorUI.CollectingCapabilities.PostsProvider['posts'],
     cancel: AbortSignal,
 ) {
     startWatch(
@@ -128,7 +128,7 @@ async function registerPostCollectorInner(
     )
 }
 
-export const PostProviderMirror: Next.CollectingCapabilities.PostsProvider = {
+export const PostProviderMirror: SiteAdaptorUI.CollectingCapabilities.PostsProvider = {
     posts: creator.EmptyPostProviderState(),
     start(cancel) {
         registerPostCollectorInner(this.posts, cancel)

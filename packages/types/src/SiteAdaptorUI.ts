@@ -16,10 +16,10 @@ import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { RenderFragmentsContextType } from '@masknet/typed-message-react'
 import type { SharedComponentOverwrite } from '@masknet/shared'
 import type { ThemeSettings } from '@masknet/web3-shared-base'
-import type { SocialNetwork } from './SocialNetwork.js'
+import type { SiteAdaptor } from './SiteAdaptor.js'
 
-export namespace SocialNetworkUI {
-    export interface DeferredDefinition extends SocialNetwork.Base {
+export namespace SiteAdaptorUI {
+    export interface DeferredDefinition extends SiteAdaptor.Base {
         /**
          * Do not make side effects. It should happen in `.init()`
          * @returns the completion definition of this SNS
@@ -33,7 +33,7 @@ export namespace SocialNetworkUI {
          */
         hotModuleReload?(onHot: (hot: Definition) => void): void
     }
-    export interface Definition extends SocialNetwork.Base, SocialNetwork.Shared {
+    export interface Definition extends SiteAdaptor.Base, SiteAdaptor.Shared {
         /** @returns the states */
         init(signal: AbortSignal): Readonly<AutonomousState> | Promise<Readonly<AutonomousState>>
         injection: InjectingCapabilities.Define

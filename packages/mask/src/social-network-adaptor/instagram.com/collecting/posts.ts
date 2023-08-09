@@ -1,7 +1,7 @@
 import { type DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { type TypedMessage, makeTypedMessageImage, makeTypedMessageTuple } from '@masknet/typed-message'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import type { SocialNetworkUI } from '@masknet/types'
+import type { SiteAdaptorUI } from '@masknet/types'
 import { startWatch } from '../../../utils/startWatch.js'
 import { creator } from '../../../social-network/utils.js'
 import { instagramBase } from '../base.js'
@@ -12,14 +12,14 @@ const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     'main[role="main"] article[role="presentation"][tabindex="-1"]',
 )
 
-export const PostProviderInstagram: SocialNetworkUI.CollectingCapabilities.PostsProvider = {
+export const PostProviderInstagram: SiteAdaptorUI.CollectingCapabilities.PostsProvider = {
     posts: creator.EmptyPostProviderState(),
     start(signal) {
         collectPostsInstagramInner(this.posts, signal)
     },
 }
 function collectPostsInstagramInner(
-    store: SocialNetworkUI.CollectingCapabilities.PostsProvider['posts'],
+    store: SiteAdaptorUI.CollectingCapabilities.PostsProvider['posts'],
     signal: AbortSignal,
 ) {
     startWatch(
