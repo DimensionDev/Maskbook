@@ -24,6 +24,10 @@ module.exports = {
                 dark: 'rgb(50, 54, 91)',
                 light: 'rgb(228, 232, 241)',
             },
+            button: {
+                dark: '#262947',
+                light: '#F3F3F4',
+            },
         },
     },
     variants: {},

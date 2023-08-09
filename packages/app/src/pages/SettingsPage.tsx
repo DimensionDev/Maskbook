@@ -64,7 +64,9 @@ const SetupThemeMode = memo(() => {
     return (
         <div className="flex w-full sm:p-6 justify-center sm:items-center">
             <Typography className="w-full text-black dark:text-white text-base">Theme</Typography>
-            <Button className="bg-black text-white dark:bg-white dark:text-black" onClick={openMenu}>
+            <Button
+                className="bg-button-light  text-black dark:bg-button-dark dark:text-white hover:bg-button-light dark:hover:bg-button-dark"
+                onClick={openMenu}>
                 {mode === Appearance.dark ? 'Dark' : mode === Appearance.light ? 'Light' : 'System'}
             </Button>
             {menu}
