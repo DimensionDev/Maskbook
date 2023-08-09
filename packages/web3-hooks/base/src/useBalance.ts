@@ -1,12 +1,12 @@
-import { useEffect } from 'react'
 import { noop } from 'lodash-es'
+import { useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { ConnectionOptions } from '@masknet/web3-providers/types'
 import { useChainContext } from './useContext.js'
 import { useWeb3State } from './useWeb3State.js'
 import { useWeb3Connection } from './useWeb3Connection.js'
-import { useQuery } from '@tanstack/react-query'
 
 export function useBalance<T extends NetworkPluginID = NetworkPluginID>(pluginID?: T, options?: ConnectionOptions<T>) {
     const { account, chainId } = useChainContext({ account: options?.account })
@@ -19,7 +19,7 @@ export function useBalance<T extends NetworkPluginID = NetworkPluginID>(pluginID
 
     const result = useQuery({
         enabled: !!account && !!Web3,
-        queryKey: ['balance', pluginID, chainId, account, options],
+        queryKey: ['balance', pluginID, chainId, account],
         queryFn: async () => {
             if (!account) return 0
             return Web3.getBalance(account)

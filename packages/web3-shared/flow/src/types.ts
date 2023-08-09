@@ -5,10 +5,10 @@ import type { MutateOptions, BlockObject, TransactionObject, QueryOptions, Block
 import type { Web3State as Web3StateShared, Web3UI as Web3UIShared } from '@masknet/web3-shared-base'
 
 export enum ChainId {
-    Mainnet = 1,
-    Testnet = 2,
     // For any chains not supported yet.
     Invalid = 0,
+    Mainnet = 1,
+    Testnet = 2,
 }
 
 export enum AddressType {
