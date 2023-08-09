@@ -1,9 +1,9 @@
 export {
     encodePayload,
     parsePayload,
-    EC_KeyCurveEnum,
-    SocialNetworkEnum,
-    SocialNetworkEnumToProfileDomain,
+    EC_KeyCurve,
+    EncryptPayloadNetwork,
+    encryptPayloadNetworkToDomain,
     type EC_Key,
     type Signature,
     type PayloadParseResult,
@@ -47,7 +47,7 @@ export {
     appendEncryptionTarget,
 } from './encryption/index.js'
 
-export { socialNetworkEncoder, socialNetworkDecoder, TwitterDecoder } from './social-network-encode-decode/index.js'
+export { encodeByNetwork, decodeByNetwork, TwitterDecoder } from './social-network-encode-decode/index.js'
 
 export {
     type DecodeImageOptions,

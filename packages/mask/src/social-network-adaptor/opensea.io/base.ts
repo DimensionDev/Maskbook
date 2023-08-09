@@ -1,11 +1,11 @@
-import { SocialNetworkEnum } from '@masknet/encryption'
+import { EncryptPayloadNetwork } from '@masknet/encryption'
 import type { SocialNetwork } from '@masknet/types'
 import { EnhanceableSite } from '@masknet/shared-base'
 
 const origins = ['https://opensea.io/*']
 export const openseaBase: SocialNetwork.Base = {
     networkIdentifier: EnhanceableSite.OpenSea,
-    encryptionNetwork: SocialNetworkEnum.Unknown,
+    encryptPayloadNetwork: EncryptPayloadNetwork.Unknown,
     declarativePermissions: { origins },
     shouldActivate(location) {
         return location.host.endsWith(EnhanceableSite.OpenSea)
