@@ -58,6 +58,10 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.second,
         fontWeight: 700,
     },
+    error: {
+        color: theme.palette.maskColor.danger,
+        marginTop: theme.spacing(2),
+    },
     actionGroup: {
         display: 'flex',
         justifyContent: 'center',
@@ -113,14 +117,13 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         () => (amount && token?.decimals ? rightShift(amount, token.decimals).toFixed() : '0'),
         [amount, token?.decimals],
     )
-    const { balance, isLoading: isLoadingAvailableBalance } = useAvailableBalance(
-        NetworkPluginID.PLUGIN_EVM,
-        address,
-        gasConfig,
-        {
-            chainId,
-        },
-    )
+    const {
+        balance,
+        isLoading: isLoadingAvailableBalance,
+        isGasSufficient,
+    } = useAvailableBalance(NetworkPluginID.PLUGIN_EVM, address, gasConfig, {
+        chainId,
+    })
 
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { account } = useChainContext()
@@ -149,7 +152,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         )
 
     const inputNotReady = !recipient || !amount || isLessThan(balance, totalAmount)
-    const tokenNotReady = !token?.decimals || !balance || isLessThan(balance, totalAmount)
+    const tokenNotReady = !token?.decimals || !balance || isLessThan(balance, totalAmount) || !isGasSufficient
     const transferDisabled = inputNotReady || tokenNotReady || isLte(totalAmount, 0)
 
     // Use selectedAsset balance eagerly
@@ -231,6 +234,9 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                     />
                 </ChainContextProvider>
             </Box>
+            {isGasSufficient ? null : (
+                <Typography className={classes.error}>{t('insufficient_funds_for_gas')}</Typography>
+            )}
             <Box className={classes.actionGroup}>
                 <ActionButton variant="outlined" fullWidth onClick={() => navigate(-2)}>
                     {t('cancel')}

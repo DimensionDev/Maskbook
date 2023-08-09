@@ -230,7 +230,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         contract_version,
         publicKey,
     )
-    const { isAvailableBalance, balance, isAvailableGasBalance } = useAvailableBalance(
+    const { isAvailableBalance, balance, isGasSufficient } = useAvailableBalance(
         NetworkPluginID.PLUGIN_EVM,
         token?.address,
         gasOption ? { ...gasOption, gas: new BigNumber(defaultGas).toString() } : undefined,
@@ -267,7 +267,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
 
     const gasValidationMessage = useMemo(() => {
         if (!token) return ''
-        if (!isAvailableGasBalance) {
+        if (!isGasSufficient) {
             return t.no_enough_gas_fees()
         }
         if (!loadingTransactionValue && new BigNumber(transactionValue).isLessThanOrEqualTo(0))
