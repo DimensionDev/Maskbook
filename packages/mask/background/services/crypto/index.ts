@@ -1,4 +1,4 @@
-// Encrypt & decrypt (decryptionWithSocialNetworkDecoding is a generator, not included.)
+// Encrypt & decrypt (decryptWithDecoding is a generator, not included.)
 export { encryptTo } from './encryption.js'
 export { appendShareTarget } from './appendEncryption.js'
 

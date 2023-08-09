@@ -7,7 +7,7 @@ import { CrossIsolationMessages, EMPTY_OBJECT, MaskMessages, currentPersonaIdent
 import { useValueRef } from '@masknet/shared-base-ui'
 import type { CompositionType } from '@masknet/plugin-infra/content-script'
 import Services from '../../extension/service.js'
-import { activatedSocialNetworkUI } from '../../social-network/index.js'
+import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { useCurrentIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import { CompositionDialogUI, type CompositionRef, E2EUnavailableReason } from './CompositionUI.js'
 import { useCompositionClipboardRequest } from './useCompositionClipboardRequest.js'
@@ -122,7 +122,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     // #endregion
 
     const UI = useRef<CompositionRef>(null)
-    const networkSupport = activatedSocialNetworkUI.injection.newPostComposition?.supportedOutputTypes
+    const networkSupport = activatedSiteAdaptorUI.injection.newPostComposition?.supportedOutputTypes
     const recipients = useRecipientsList()
     const isE2E_Disabled = (encode: EncryptionMethodType) => {
         if (!connectStatus.currentPersona && !connectStatus.hasPersona) return E2EUnavailableReason.NoPersona

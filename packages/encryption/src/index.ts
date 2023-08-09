@@ -47,7 +47,7 @@ export {
     appendEncryptionTarget,
 } from './encryption/index.js'
 
-export { encodeByNetwork, decodeByNetwork, TwitterDecoder } from './social-network-encode-decode/index.js'
+export { encodeByNetwork, decodeByNetwork, TwitterDecoder } from './network-encoding/index.js'
 
 export {
     type DecodeImageOptions,

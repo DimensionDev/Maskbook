@@ -1,2 +1,2 @@
-export * from './SocialNetwork.js'
-export * from './SocialNetworkUI.js'
+export * from './SiteAdaptor.js'
+export * from './SiteAdaptorUI.js'

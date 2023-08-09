@@ -41,12 +41,12 @@ import {
 } from '../../network/gun/encryption/queryPostKey.js'
 
 export interface DecryptionContext {
-    currentSocialNetwork: EncryptPayloadNetwork
+    encryptPayloadNetwork: EncryptPayloadNetwork
     currentProfile: ProfileIdentifier | null
     authorHint: ProfileIdentifier | null
     postURL: string | undefined
 }
-export type SocialNetworkEncodedPayload =
+export type EncodedPayload =
     | {
           type: 'text'
           text: string
@@ -66,13 +66,13 @@ const downloadImage = (url: string): Promise<ArrayBuffer> => fetch(url).then((x)
  * @param encoded If the encoded content is a text, it should only contain 1 payload. Extra payload will be ignored.
  * @param context
  */
-export async function* decryptionWithSocialNetworkDecoding(
-    encoded: SocialNetworkEncodedPayload,
+export async function* decryptWithDecoding(
+    encoded: EncodedPayload,
     context: DecryptionContext,
 ): AsyncGenerator<DecryptProgress, void, undefined> {
     let decoded: string | Uint8Array
     if (encoded.type === 'text') {
-        decoded = decodeByNetwork(context.currentSocialNetwork, encoded.text)[0]
+        decoded = decodeByNetwork(context.encryptPayloadNetwork, encoded.text)[0]
     } else {
         if (!context.authorHint) {
             return yield new DecryptError(DecryptErrorReasons.UnrecognizedAuthor, undefined)
@@ -82,7 +82,7 @@ export async function* decryptionWithSocialNetworkDecoding(
             downloadImage,
         })
         if (typeof result === 'string') {
-            decoded = decodeByNetwork(context.currentSocialNetwork, result)[0]
+            decoded = decodeByNetwork(context.encryptPayloadNetwork, result)[0]
         } else if (result === null) {
             return yield new DecryptError(DecryptErrorReasons.NoPayloadFound, undefined)
         } else {
@@ -99,7 +99,7 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
     const parse = await parsePayload(payload)
     if (parse.err) return null
 
-    const { currentSocialNetwork, postURL, currentProfile, authorHint } = context
+    const { encryptPayloadNetwork, postURL, currentProfile, authorHint } = context
 
     // #region Identify the PostIdentifier
     const iv = parse.val.encryption.unwrapOr(null)?.iv.unwrapOr(null)
@@ -119,7 +119,7 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
         yield info
     }
     const id = new PostIVIdentifier(
-        encryptPayloadNetworkToDomain(currentSocialNetwork),
+        encryptPayloadNetworkToDomain(encryptPayloadNetwork),
         encodeArrayBuffer(new Uint8Array(iv)),
     )
     // #endregion
@@ -174,7 +174,7 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
                 yield* GUN_queryPostKey_version37(
                     iv,
                     author,
-                    context.currentSocialNetwork,
+                    context.encryptPayloadNetwork,
                     signal || new AbortController().signal,
                 )
             },
@@ -186,7 +186,7 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
                     -38,
                     iv,
                     author,
-                    context.currentSocialNetwork,
+                    context.encryptPayloadNetwork,
                     signal || new AbortController().signal,
                 )
             },
@@ -198,7 +198,7 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
                     -39,
                     iv,
                     author,
-                    context.currentSocialNetwork,
+                    context.encryptPayloadNetwork,
                     signal || new AbortController().signal,
                 )
             },

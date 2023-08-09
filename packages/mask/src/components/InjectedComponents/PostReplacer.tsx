@@ -17,7 +17,7 @@ import { TypedMessageRender, useTransformedValue } from '@masknet/typed-message-
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context.js'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
-import { activatedSocialNetworkUI } from '../../social-network/ui.js'
+import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/ui.js'
 
 const useStyles = makeStyles()({
     root: {
@@ -61,8 +61,8 @@ export function PostReplacer(props: PostReplacerProps) {
     return (
         <span className={classes.root}>
             <TypedMessageRenderContext
-                textResizer={activatedSocialNetworkUI.networkIdentifier !== 'twitter.com'}
-                renderFragments={activatedSocialNetworkUI?.customization.componentOverwrite?.RenderFragments}
+                textResizer={activatedSiteAdaptorUI.networkIdentifier !== 'twitter.com'}
+                renderFragments={activatedSiteAdaptorUI?.customization.componentOverwrite?.RenderFragments}
                 context={initialTransformationContext}>
                 <Transformer {...props} message={postMessage} />
             </TypedMessageRenderContext>

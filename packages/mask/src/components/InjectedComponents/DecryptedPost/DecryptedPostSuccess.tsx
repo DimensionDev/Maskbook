@@ -20,7 +20,7 @@ import { useSelectedRecipientsList } from '../../CompositionDialog/useSelectedRe
 import Services from '../../../extension/service.js'
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI.js'
 import { delay } from '@masknet/kit'
-import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
 import { RecipientsToolTip } from './RecipientsToolTip.js'
 import { Icons } from '@masknet/icons'
 
@@ -169,7 +169,7 @@ function AppendShareDetail({ recipients, selectedRecipients, onClose, whoAmI, re
                     iv,
                     profiles.map((x) => ({ profile: x.identifier, persona: x.linkedPersona })),
                     whoAmI,
-                    activatedSocialNetworkUI.encryptPayloadNetwork,
+                    activatedSiteAdaptorUI.encryptPayloadNetwork,
                 )
                 await delay(1500)
                 retry()

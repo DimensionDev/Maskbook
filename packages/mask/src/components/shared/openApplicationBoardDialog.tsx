@@ -2,8 +2,8 @@ import { useCallback } from 'react'
 import type { PluginID } from '@masknet/shared-base'
 import { ApplicationBoardModal } from '@masknet/shared'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
-import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils.js'
-import { activatedSocialNetworkUI } from '../../social-network/ui.js'
+import { getCurrentSNSNetwork } from '../../site-adaptors/utils.js'
+import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/ui.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus.js'
 import Services from '../../extension/service.js'
@@ -11,7 +11,7 @@ import Services from '../../extension/service.js'
 export function useOpenApplicationBoardDialog(quickMode?: boolean, focusPluginID?: PluginID) {
     const lastRecognized = useLastRecognizedIdentity()
     const allPersonas = usePersonasFromDB()
-    const currentSNSNetwork = getCurrentSNSNetwork(activatedSocialNetworkUI.networkIdentifier)
+    const currentSNSNetwork = getCurrentSNSNetwork(activatedSiteAdaptorUI.networkIdentifier)
     const { value: applicationCurrentStatus, loading: personaAgainstSNSConnectStatusLoading } =
         usePersonaAgainstSNSConnectStatus()
 
