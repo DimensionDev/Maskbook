@@ -23,9 +23,9 @@ registerPlugin<
 >({
     ...base,
     SiteAdaptor: {
-        load: () => import('./UI/SNSAdaptor/index.js'),
+        load: () => import('./UI/SiteAdaptor/index.js'),
         hotModuleReload: (hot) =>
-            import.meta.webpackHot?.accept('./UI/SNSAdaptor', () => hot(import('./UI/SNSAdaptor/index.js'))),
+            import.meta.webpackHot?.accept('./UI/SNSAdaptor', () => hot(import('./UI/SiteAdaptor/index.js'))),
     },
     Dashboard: {
         load: () => import('./UI/Dashboard/index.js'),
