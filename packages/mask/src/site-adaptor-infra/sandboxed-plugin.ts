@@ -62,12 +62,12 @@ function __builtInPluginInfraBridgeCallback__(this: SiteAdaptorPluginHost, id: s
         SiteAdaptor: {
             hotModuleReload: (reload) => hot?.set(id, reload),
             async load() {
-                return { default: sns }
+                return { default: site }
             },
         },
     }
 
-    const sns: Plugin.SiteAdaptor.Definition = {
+    const site: Plugin.SiteAdaptor.Definition = {
         ...base,
         init: async (signal, context) => {
             try {

@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { EnhanceableSite } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, Stack } from '@mui/material'
-import { RainbowBox } from '../SNSAdaptor/RainbowBox.js'
+import { RainbowBox } from '../SiteAdaptor/RainbowBox.js'
 
 export const SOCIAL_MEDIA_ICON_MAPPING: Record<string, React.ReactNode> = {
     [EnhanceableSite.Twitter]: <Icons.TwitterRound size={15} />,

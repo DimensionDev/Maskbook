@@ -10,7 +10,7 @@ import { Web3 } from '@masknet/web3-providers'
 import { uniswap } from '@masknet/web3-providers/helpers'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters.js'
 import type { SwapCall, Trade, TradeComputed } from '../../types/index.js'
-import { useSwapErrorCallback } from '../../SNSAdaptor/trader/hooks/useSwapErrorCallback.js'
+import { useSwapErrorCallback } from '../../SiteAdaptor/trader/hooks/useSwapErrorCallback.js'
 
 interface FailedCall {
     parameters: SwapParameters

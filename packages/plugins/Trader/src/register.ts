@@ -5,9 +5,9 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 registerPlugin<ChainId>({
     ...base,
     SiteAdaptor: {
-        load: () => import('./SNSAdaptor/index.js'),
+        load: () => import('./SiteAdaptor/index.js'),
         hotModuleReload: (hot) =>
-            import.meta.webpackHot?.accept('./SNSAdaptor', () => hot(import('./SNSAdaptor/index.js'))),
+            import.meta.webpackHot?.accept('./SiteAdaptor', () => hot(import('./SiteAdaptor/index.js'))),
     },
     Dashboard: {
         load: () => import('./Dashboard/index.js'),
