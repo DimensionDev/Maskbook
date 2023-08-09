@@ -2,10 +2,11 @@ import urlcat from 'urlcat'
 import { memo, useMemo, useState } from 'react'
 import { SocialNetworkEnum, SocialNetworkEnumToProfileDomain, socialNetworkEncoder } from '@masknet/encryption'
 import { Icons } from '@masknet/icons'
-import { InjectedDialog, useSharedI18N } from '@masknet/shared'
+import { CopyButton, InjectedDialog, useSharedI18N } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogContent, FormControlLabel, Radio, RadioGroup, Typography, useTheme } from '@mui/material'
+import { SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -29,10 +30,13 @@ const useStyles = makeStyles()((theme) => ({
         gap: 12,
         display: 'grid',
         gridTemplateColumns: 'repeat(2,1fr)',
+        paddingTop: 8,
+        paddingBottom: 8,
     },
     actions: {
         gap: 12,
         display: 'flex',
+        paddingTop: 8,
     },
     button: {
         flex: 1,
@@ -66,9 +70,7 @@ export const ShareSelectNetwork = memo<ShareSelectNetworkProps>(({ open, onClose
     const { classes } = useStyles()
     const theme = useTheme()
     const t = useSharedI18N()
-
     const [network, setNetwork] = useState<SocialNetworkEnum>(SocialNetworkEnum.Twitter)
-
     const encodedText = useMemo(() => {
         if (!message) return
         const text = socialNetworkEncoder(network, message)
@@ -78,10 +80,13 @@ export const ShareSelectNetwork = memo<ShareSelectNetworkProps>(({ open, onClose
     return (
         <InjectedDialog open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
+                <div>
+                    <CopyButton size={17.5} text={encodedText ?? ''} />
+                </div>
                 <div className={classes.textBorder}>
                     <Typography sx={{ wordBreak: 'break-all' }}>{encodedText}</Typography>
                 </div>
-                <Typography className={classes.title}>Network</Typography>
+                <Typography className={classes.title}>{t.share_to_social_networks()}</Typography>
                 <RadioGroup
                     className={classes.network}
                     defaultValue={network}
@@ -94,7 +99,7 @@ export const ShareSelectNetwork = memo<ShareSelectNetworkProps>(({ open, onClose
                         return (
                             <FormControlLabel
                                 key={site}
-                                label={SocialNetworkEnumToProfileDomain(Number.parseInt(site, 10) as SocialNetworkEnum)}
+                                label={SOCIAL_MEDIA_NAME[SocialNetworkEnumToProfileDomain(Number.parseInt(site, 10))]}
                                 value={site}
                                 control={
                                     <Radio
