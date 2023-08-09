@@ -13,6 +13,7 @@ import {
     useCurrentPersonaConnectStatus,
     usePersonaProofs,
     PluginEnableBoundary,
+    PopupHomeTabType,
 } from '@masknet/shared'
 import { PluginID, PopupRoutes, EMPTY_LIST, currentPersonaIdentifier } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
@@ -51,8 +52,9 @@ export const NextIdPage = memo(function NextIdPage() {
     const proofs = usePersonaProofs(publicKeyAsHex)
 
     const handleAddWallets = useCallback(() => {
-        openPopupWindow?.(PopupRoutes.ConnectedWallets, {
-            internal: true,
+        openPopupWindow?.(PopupRoutes.Personas, {
+            tab: PopupHomeTabType.ConnectedWallets,
+            disableNewWindow: true,
         })
     }, [openPopupWindow])
 

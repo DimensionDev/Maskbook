@@ -10,12 +10,12 @@ import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { SocialAccounts } from '../../../components/SocialAccounts/index.js'
 import { ConnectedWallet } from '../../../components/ConnectedWallet/index.js'
 import type { ConnectedWalletInfo } from '../type.js'
-import { HomeTabType } from '../../Wallet/type.js'
 import { useModalNavigate } from '../../../components/index.js'
 import { PersonaPublicKey } from '../../../components/PersonaPublicKey/index.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
 import { useParamTab } from '../../../hook/useParamTab.js'
 import { useNavigate } from 'react-router-dom'
+import { PopupHomeTabType } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -193,7 +193,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
         const modalNavigate = useModalNavigate()
         const { classes, cx } = useStyles()
 
-        const [currentTab, onChange] = useParamTab<HomeTabType>(HomeTabType.SocialAccounts)
+        const [currentTab, onChange] = useParamTab<PopupHomeTabType>(PopupHomeTabType.SocialAccounts)
 
         return (
             <div className={classes.container}>
@@ -235,11 +235,11 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                             </Box>
 
                             <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
-                                <Tab label={t('popups_social_account')} value={HomeTabType.SocialAccounts} />
-                                <Tab label={t('popups_connected_wallets')} value={HomeTabType.ConnectedWallets} />
+                                <Tab label={t('popups_social_account')} value={PopupHomeTabType.SocialAccounts} />
+                                <Tab label={t('popups_connected_wallets')} value={PopupHomeTabType.ConnectedWallets} />
                             </MaskTabList>
                         </Box>
-                        <TabPanel className={classes.panel} value={HomeTabType.SocialAccounts} data-hide-scrollbar>
+                        <TabPanel className={classes.panel} value={PopupHomeTabType.SocialAccounts} data-hide-scrollbar>
                             <SocialAccounts
                                 accounts={accounts}
                                 networks={networks}
@@ -247,7 +247,10 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                 onAccountClick={onAccountClick}
                             />
                         </TabPanel>
-                        <TabPanel className={classes.panel} value={HomeTabType.ConnectedWallets} data-hide-scrollbar>
+                        <TabPanel
+                            className={classes.panel}
+                            value={PopupHomeTabType.ConnectedWallets}
+                            data-hide-scrollbar>
                             <ConnectedWallet wallets={bindingWallets} />
                         </TabPanel>
                     </TabContext>

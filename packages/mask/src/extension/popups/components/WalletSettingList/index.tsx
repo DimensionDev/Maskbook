@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
-import { WalletIcon, FormattedBalance } from '@masknet/shared'
-import type { BindingProof } from '@masknet/shared-base'
+import { WalletIcon, FormattedBalance, PopupHomeTabType } from '@masknet/shared'
+import { PopupRoutes, type BindingProof } from '@masknet/shared-base'
 import {
     useWallets,
     useDefaultChainId,
@@ -27,6 +27,8 @@ import { useMemo, useCallback, memo } from 'react'
 import { Trans } from 'react-i18next'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { LoadingBase } from '@masknet/theme'
+import { useNavigate } from 'react-router-dom'
+import urlcat from 'urlcat'
 
 interface WalletItemProps {
     proof: BindingProof
@@ -119,6 +121,7 @@ export const WalletList = memo<WalletListProps>(function WalletList({
 }) {
     const { t } = useI18N()
     const theme = useTheme()
+    const navigate = useNavigate()
     if (!isValid) return null
 
     if (loading)
@@ -133,8 +136,22 @@ export const WalletList = memo<WalletListProps>(function WalletList({
         return (
             <Box flex={1} display="flex" justifyContent="center" alignItems="center" flexDirection="column">
                 <Icons.EmptySimple size={36} />
-                <Typography fontSize={14} color={theme.palette.maskColor.second} mt={1.5}>
-                    <Trans i18nKey="popups_empty_wallet_proofs_tips" components={{ strong: <strong /> }} />
+                <Typography fontSize={14} color={theme.palette.maskColor.second} mt={1.5} textAlign="center">
+                    <Trans
+                        i18nKey="popups_empty_wallet_proofs_tips"
+                        components={{
+                            strong: (
+                                <strong
+                                    onClick={() =>
+                                        navigate(
+                                            urlcat(PopupRoutes.Personas, { tab: PopupHomeTabType.ConnectedWallets }),
+                                        )
+                                    }
+                                    style={{ display: 'block', color: theme.palette.maskColor.main, cursor: 'pointer' }}
+                                />
+                            ),
+                        }}
+                    />
                 </Typography>
             </Box>
         )

@@ -9,8 +9,8 @@ import { Box, Typography } from '@mui/material'
 import { useWallets } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
 import Services from '../../../service.js'
-import { HomeTabType } from '../../pages/Wallet/type.js'
 import { useModalNavigate } from '../index.js'
+import { PopupHomeTabType } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -88,7 +88,7 @@ export const SelectProvider = memo(function SelectProvider() {
 
                 await Services.Helper.openPopupWindow(
                     PopupRoutes.Personas,
-                    { providerType, from: PopupModalRoutes.SelectProvider, tab: HomeTabType.ConnectedWallets },
+                    { providerType, from: PopupModalRoutes.SelectProvider, tab: PopupHomeTabType.ConnectedWallets },
                     true,
                 )
 
