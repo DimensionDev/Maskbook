@@ -37,7 +37,7 @@ const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' },
     const boxShadowMap: Record<string, string> = {
         send: alpha(theme.palette.maskColor.warn, 0.2),
         receive: alpha(theme.palette.maskColor.success, 0.2),
-        default: alpha(theme.palette.maskColor.success, 0.2),
+        default: alpha(theme.palette.maskColor.primary, 0.2),
     }
     const iconColor = colorMap[cateType] || colorMap.default
     const iconBoxShadow = `0px 6px 12px 0px ${boxShadowMap[cateType] || boxShadowMap.default}`
@@ -65,7 +65,7 @@ const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' },
             alignItems: 'center',
             justifyContent: 'center',
             border: '1px solid',
-            borderColor: iconColor,
+            borderColor: alpha(iconColor, 0.5),
             boxShadow: iconBoxShadow,
             backgroundColor: iconBackgroundColor,
             backdropFilter: 'blur(8px)',
@@ -81,6 +81,7 @@ const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' },
         txName: {
             textTransform: 'capitalize',
             whiteSpace: 'nowrap',
+            fontWeight: 700,
         },
         scamLabel: {
             display: 'inline-block',
@@ -95,6 +96,7 @@ const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' },
         },
         toAddress: {
             whiteSpace: 'nowrap',
+            color: theme.palette.maskColor.second,
         },
         operations: {
             display: 'flex',
@@ -122,6 +124,12 @@ const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' },
             color: theme.palette.maskColor.danger,
             fontWeight: 400,
             marginRight: 4,
+        },
+        assets: {
+            marginLeft: theme.spacing(1),
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-end',
         },
         asset: {
             fontSize: 14,
@@ -203,24 +211,20 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                     {transaction.isScam ? <span className={classes.scamLabel}>{t('scam_tx')}</span> : null}
                 </Typography>
             </ListItemText>
-            <Box ml="auto">
-                {transaction.assets
-                    // .filter((asset) => asset.schema === SchemaType.ERC20 || asset.schema === SchemaType.Native)
-                    .map((token, i) => {
-                        const isRend = token.direction === DebankTransactionDirection.SEND
-                        const amount = isLessThan(token.amount, '0.0001')
-                            ? '<0.0001'
-                            : trimZero(toFixed(token.amount, 4))
-                        return (
-                            <Typography key={i} className={classes.asset}>
-                                <strong className={classes.amount}>{`${isRend ? '-' : '+'} ${amount} `}</strong>
-                                <TextOverflowTooltip title={token.symbol}>
-                                    <span className={classes.symbol}>{token.symbol}</span>
-                                </TextOverflowTooltip>
-                            </Typography>
-                        )
-                    })}
-            </Box>
+            <div className={classes.assets}>
+                {transaction.assets.map((token, i) => {
+                    const isRend = token.direction === DebankTransactionDirection.SEND
+                    const amount = isLessThan(token.amount, '0.0001') ? '<0.0001' : trimZero(toFixed(token.amount, 4))
+                    return (
+                        <Typography key={i} className={classes.asset}>
+                            <strong className={classes.amount}>{`${isRend ? '-' : '+'} ${amount} `}</strong>
+                            <TextOverflowTooltip title={token.symbol}>
+                                <span className={classes.symbol}>{token.symbol}</span>
+                            </TextOverflowTooltip>
+                        </Typography>
+                    )
+                })}
+            </div>
         </ListItem>
     )
 })
