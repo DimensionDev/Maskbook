@@ -7,7 +7,7 @@ interface Props extends GeneratedIconProps {
     checkedButtonColor?: string
 }
 
-export const RadioButton = memo<Props>(function RadioButton({
+export const RadioIndicator = memo<Props>(function RadioIndicator({
     checked,
     unCheckedButtonColor,
     checkedButtonColor,

@@ -1,6 +1,6 @@
 import { memo, type HTMLProps } from 'react'
 import { Card, useTheme } from '@mui/material'
-import { CheckBoxButton, RadioButton, makeStyles } from '@masknet/theme'
+import { CheckBoxIndicator, RadioIndicator, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { type NetworkPluginID } from '@masknet/shared-base'
 import { AssetPreviewer, NetworkIcon } from '@masknet/shared'
@@ -58,6 +58,7 @@ export interface CollectibleCardProps extends HTMLProps<HTMLDivElement> {
     disableInspect?: boolean
     isSelected?: boolean
     useRadio?: boolean
+    showUnCheckedIndicator?: boolean
 }
 
 export const CollectibleCard = memo(
@@ -69,6 +70,7 @@ export const CollectibleCard = memo(
         disableInspect,
         isSelected,
         useRadio,
+        showUnCheckedIndicator,
         ...rest
     }: CollectibleCardProps) => {
         const { classes, cx } = useStyles()
@@ -85,7 +87,7 @@ export const CollectibleCard = memo(
             asset.contract?.address,
         )
 
-        const IndicatorButton = useRadio ? RadioButton : CheckBoxButton
+        const Indicator = useRadio ? RadioIndicator : CheckBoxIndicator
 
         return (
             <div className={cx(classes.root, className)} {...rest}>
@@ -100,13 +102,15 @@ export const CollectibleCard = memo(
                         fallbackImage={fallbackImage}
                     />
                 </Card>
-                <IndicatorButton
-                    size={20}
-                    checked={isSelected}
-                    className={classes.indicator}
-                    checkedButtonColor={theme.palette.maskColor.primary}
-                    unCheckedButtonColor={theme.palette.maskColor.secondaryLine}
-                />
+                {isSelected || showUnCheckedIndicator ? (
+                    <Indicator
+                        size={20}
+                        checked={isSelected}
+                        className={classes.indicator}
+                        checkedButtonColor={theme.palette.maskColor.primary}
+                        unCheckedButtonColor={theme.palette.maskColor.secondaryLine}
+                    />
+                ) : null}
             </div>
         )
     },

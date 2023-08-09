@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import { RadioButton, makeStyles } from '@masknet/theme'
+import { RadioIndicator, makeStyles } from '@masknet/theme'
 import { FiatCurrencyIcon } from '@masknet/shared'
 import { CurrencyType, resolveCurrencyName } from '@masknet/web3-shared-base'
 import { ActionModal, useActionModal, type ActionModalBaseProps } from '../../components/index.js'
@@ -63,7 +63,7 @@ const CurrencyItem = memo(function CurrencyItem({ fiatCurrencyType }: CurrencyIt
                 <FiatCurrencyIcon type={fiatCurrencyType} size={24} />
                 <Typography className={classes.text}>{resolveCurrencyName(fiatCurrencyType)}</Typography>
             </Box>
-            <RadioButton size={20} checked={checked} unCheckedButtonColor={theme.palette.maskColor.secondaryLine} />
+            <RadioIndicator size={20} checked={checked} unCheckedButtonColor={theme.palette.maskColor.secondaryLine} />
         </li>
     )
 })
