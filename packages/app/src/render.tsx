@@ -1,13 +1,15 @@
 import './setup/storage.js'
 
-import { StrictMode } from 'react'
+import { StrictMode, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { PageUIProvider } from '@masknet/shared'
-import { DisableShadowRootContext, MaskDarkTheme, MaskLightTheme, useSystemPreferencePalette } from '@masknet/theme'
+import { DisableShadowRootContext, MaskDarkTheme, MaskLightTheme } from '@masknet/theme'
 import { useMountReport } from '@masknet/web3-hooks-base'
 import { EventID } from '@masknet/web3-telemetry/types'
 import { MainUI } from './MainUI.js'
 import { useThemeMode } from './helpers/setThemeMode.js'
+import { MaskMessages } from '@masknet/shared-base'
+import { type Appearance } from '@masknet/public-api'
 
 const root = document.createElement('main')
 document.body.appendChild(root)
@@ -25,8 +27,11 @@ function App() {
     return PageUIProvider(useTheme, <MainUI />)
 }
 function useTheme() {
-    const systemThemeMode = useSystemPreferencePalette()
-    const mode = useThemeMode(systemThemeMode)
+    const themeMode = useThemeMode()
+    const [mode, setMode] = useState<Appearance>(themeMode)
+
+    useEffect(() => MaskMessages.events.appearanceSettings.on((data) => setMode(data)), [])
+
     if (mode === 'dark') return MaskDarkTheme
     return MaskLightTheme
 }

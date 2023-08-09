@@ -1,12 +1,11 @@
 import { Bars3Icon } from '@heroicons/react/20/solid'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { EmptyStatus, SearchResultInspector } from '@masknet/shared'
-import { DisableShadowRootContext, ShadowRootIsolation, useSystemPreferencePalette } from '@masknet/theme'
+import { DisableShadowRootContext, ShadowRootIsolation } from '@masknet/theme'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
 import { useCallback, useDeferredValue, useEffect, useState } from 'react'
 import { DashboardContext } from '../contexts/DashboardContext.js'
-import { setThemeMode } from '../helpers/setThemeMode.js'
-import { Appearance } from '@masknet/public-api'
+import { useSetThemeMode, useThemeMode } from '../helpers/setThemeMode.js'
 
 export interface DashboardContainerProps {
     children: React.ReactNode
@@ -22,10 +21,12 @@ export function DashboardContainer(props: DashboardContainerProps) {
         (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setSearch(e.target.value),
         [],
     )
-    const systemMode = useSystemPreferencePalette()
+    const setThemeMode = useSetThemeMode()
+    const mode = useThemeMode()
+
     useEffect(() => {
-        setThemeMode(localStorage.themeMode ?? Appearance.default, systemMode)
-    }, [systemMode, localStorage.themeMode])
+        setThemeMode(mode)
+    }, [setThemeMode, mode])
 
     return (
         <div className="xl:pl-72 ">
