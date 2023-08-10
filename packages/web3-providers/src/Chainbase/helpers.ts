@@ -32,7 +32,7 @@ export function toTransaction(chainId: ChainId, tx: Tx): Transaction<ChainId, Sc
     }
 }
 
-export function normalizeChainbaseTxStatus(status: TxStatus) {
+export function normalizeTxStatus(status: TxStatus) {
     const map = {
         0: TransactionStatusType.FAILED,
         1: TransactionStatusType.SUCCEED,

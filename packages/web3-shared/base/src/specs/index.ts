@@ -127,10 +127,7 @@ export enum TransactionStatusType {
     FAILED = 3,
 }
 
-/**
- * @deprecated use TransactionStatusType instead
- */
-export enum TransactionStateType {
+export enum TransactionReceiptStatusType {
     FAILED = 0,
     SUCCEED = 1,
     NOT_DEPEND = 2,

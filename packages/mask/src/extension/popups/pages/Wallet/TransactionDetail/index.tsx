@@ -4,7 +4,7 @@ import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
 import { useAccount, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { ChainbaseHistory, ExplorerResolver } from '@masknet/web3-providers'
-import { normalizeChainbaseTxStatus } from '@masknet/web3-providers/helpers'
+import { chainbase } from '@masknet/web3-providers/helpers'
 import { TransactionStatusType, formatBalance, multipliedBy, trimZero } from '@masknet/web3-shared-base'
 import { formatHash, formatWeiToEther, formatWeiToGwei } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography, alpha } from '@mui/material'
@@ -186,7 +186,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
     }
     const status =
         tx !== undefined
-            ? normalizeChainbaseTxStatus(tx.status)
+            ? chainbase.normalizeTxStatus(tx.status)
             : ((transactionState?.status || NOT_DEPEND) as TransactionStatusType)
     const isOut = transaction.from === account
     const link = transactionId ? ExplorerResolver.transactionLink(chainId!, transactionId) : undefined

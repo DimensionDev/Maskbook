@@ -5,7 +5,7 @@ import { useEverSeen } from '@masknet/shared-base-ui'
 import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { useNativeToken, useNetworkDescriptors, useReverseAddress } from '@masknet/web3-hooks-base'
 import { ChainbaseHistory } from '@masknet/web3-providers'
-import { normalizeChainbaseTxStatus } from '@masknet/web3-providers/helpers'
+import { chainbase } from '@masknet/web3-providers/helpers'
 import { DebankTransactionDirection } from '@masknet/web3-providers/types'
 import {
     TransactionStatusType,
@@ -197,7 +197,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
         },
     })
 
-    const status = transaction.status || (tx ? normalizeChainbaseTxStatus(tx.status) : undefined)
+    const status = transaction.status || (tx ? chainbase.normalizeTxStatus(tx.status) : undefined)
     const toAddress = (transaction.to || tx?.to_address) as string
     const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, toAddress)
 
