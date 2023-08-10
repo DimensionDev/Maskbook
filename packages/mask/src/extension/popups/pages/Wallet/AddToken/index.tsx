@@ -22,6 +22,7 @@ const useStyles = makeStyles<{ currentTab: TabType; searchError: boolean }>()((t
         flex: 1,
         padding: '16px 16px 0 16px',
         display: 'flex',
+        overflow: 'hidden',
     },
     channel: {
         flex: 1,
