@@ -15,9 +15,9 @@ import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 
 export function useNextIDVerify() {
     const verifyPostCollectTimer = useRef<NodeJS.Timer | null>(null)
-    const getPostIdFromNewPostToast = activatedSiteAdaptorUI.configuration.nextIDConfig?.getPostIdFromNewPostToast
-    const postMessage = activatedSiteAdaptorUI.automation?.nativeCompositionDialog?.appendText
-    const platform = activatedSiteAdaptorUI.configuration.nextIDConfig?.platform
+    const getPostIdFromNewPostToast = activatedSiteAdaptorUI!.configuration.nextIDConfig?.getPostIdFromNewPostToast
+    const postMessage = activatedSiteAdaptorUI!.automation?.nativeCompositionDialog?.appendText
+    const platform = activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform
 
     return useAsyncFn(
         async (persona?: PersonaInformation, username?: string, verifiedCallback?: () => void | Promise<void>) => {

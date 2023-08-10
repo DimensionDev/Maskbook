@@ -13,7 +13,7 @@ export function pasteImageToCompositionDefault(hasSucceed: () => Promise<boolean
         await waitDocumentReadyState('interactive')
         if (relatedTextPayload) {
             const p: Promise<void> | undefined =
-                activatedSiteAdaptorUI.automation.nativeCompositionDialog?.appendText?.(relatedTextPayload, {
+                activatedSiteAdaptorUI!.automation.nativeCompositionDialog?.appendText?.(relatedTextPayload, {
                     recover: false,
                 })
             await p

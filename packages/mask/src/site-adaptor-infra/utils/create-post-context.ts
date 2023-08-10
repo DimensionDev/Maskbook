@@ -37,7 +37,7 @@ export function createSiteAdaptorSpecializedPostContext(create: PostContextActio
 
         // #region Mentioned links
         const linksSubscribe: Subscription<string[]> = (() => {
-            const isFacebook = activatedSiteAdaptorUI.networkIdentifier === EnhanceableSite.Facebook
+            const isFacebook = activatedSiteAdaptorUI!.networkIdentifier === EnhanceableSite.Facebook
             const links = new ValueRef<string[]>(EMPTY_LIST)
 
             function evaluate() {

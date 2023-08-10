@@ -167,7 +167,7 @@ export function getPostIdFromNewPostToast() {
 
 export function collectVerificationPost(keyword: string) {
     const userId =
-        IdentityProviderTwitter.recognized.value.identifier || activatedSiteAdaptor_state.profiles.value[0].identifier
+        IdentityProviderTwitter.recognized.value.identifier || activatedSiteAdaptor_state!.profiles.value[0].identifier
     const postNodes = timelinePostContentSelector().evaluate()
 
     for (const postNode of postNodes) {

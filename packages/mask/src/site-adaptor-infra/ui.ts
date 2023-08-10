@@ -31,8 +31,8 @@ import { definedSiteAdaptorsUI } from './define.js'
 
 const definedSiteAdaptorsResolved = new Map<string, SiteAdaptorUI.Definition>()
 
-export let activatedSiteAdaptorUI: SiteAdaptorUI.Definition = {} as any
-export let activatedSiteAdaptor_state: Readonly<SiteAdaptorUI.AutonomousState> = {} as any
+export let activatedSiteAdaptorUI: SiteAdaptorUI.Definition | undefined
+export let activatedSiteAdaptor_state: Readonly<SiteAdaptorUI.AutonomousState> | undefined
 
 export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.DeferredDefinition): Promise<void> {
     assertNotEnvironment(Environment.ManifestBackground)
@@ -149,7 +149,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
 
     const connectPersona = async () => {
         const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
-        currentSetupGuideStatus[activatedSiteAdaptorUI.networkIdentifier].value = stringify({
+        currentSetupGuideStatus[activatedSiteAdaptorUI!.networkIdentifier].value = stringify({
             status: SetupGuideStep.FindUsername,
             persona: currentPersonaIdentifier?.toText(),
         })

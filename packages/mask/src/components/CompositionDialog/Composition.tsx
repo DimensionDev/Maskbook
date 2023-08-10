@@ -122,7 +122,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     // #endregion
 
     const UI = useRef<CompositionRef>(null)
-    const networkSupport = activatedSiteAdaptorUI.injection.newPostComposition?.supportedOutputTypes
+    const networkSupport = activatedSiteAdaptorUI!.injection.newPostComposition?.supportedOutputTypes
     const recipients = useRecipientsList()
     const isE2E_Disabled = (encode: EncryptionMethodType) => {
         if (!connectStatus.currentPersona && !connectStatus.hasPersona) return E2EUnavailableReason.NoPersona

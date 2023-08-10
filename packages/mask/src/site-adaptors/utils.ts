@@ -19,10 +19,10 @@ export function getCurrentIdentifier():
           linkedPersona?: PersonaIdentifier
       }
     | undefined {
-    const current = activatedSiteAdaptorUI.collecting.identityProvider?.recognized.value
+    const current = activatedSiteAdaptorUI!.collecting.identityProvider?.recognized.value
 
     return (
-        activatedSiteAdaptor_state.profiles.value.find((i) => i.identifier === current?.identifier) ||
-        activatedSiteAdaptor_state.profiles.value[0]
+        activatedSiteAdaptor_state!.profiles.value.find((i) => i.identifier === current?.identifier) ||
+        activatedSiteAdaptor_state!.profiles.value[0]
     )
 }

@@ -37,7 +37,7 @@ export interface CommentBoxProps {
     inputProps?: Partial<PropsOf<typeof InputBase>>
 }
 export function CommentBox(props: CommentBoxProps) {
-    const { classes } = useStyles({ site: activatedSiteAdaptorUI.networkIdentifier })
+    const { classes } = useStyles({ site: activatedSiteAdaptorUI!.networkIdentifier })
     const { t } = useI18N()
     return (
         <Box sx={{ display: 'flex', width: '100%' }}>
