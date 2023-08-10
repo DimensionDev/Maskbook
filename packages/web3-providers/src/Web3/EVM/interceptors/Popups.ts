@@ -9,10 +9,12 @@ import {
     ProviderType,
     type MessageRequest,
     type MessageResponse,
+    getNativeTokenAddress,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import { MessageStateType, isGreaterThan, isZero, toFixed, type TransferableMessage } from '@masknet/web3-shared-base'
 import { DepositPaymaster } from '../../../SmartPay/libs/DepositPaymaster.js'
-import { SmartPayBundlerAPI } from '../../../SmartPay/index.js'
+import { SmartPayAccountAPI, SmartPayBundlerAPI } from '../../../SmartPay/index.js'
 import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
 import { ContractReadonlyAPI } from '../apis/ContractReadonlyAPI.js'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
@@ -28,6 +30,7 @@ export class Popups implements Middleware<ConnectionContext> {
     private Web3 = new ConnectionReadonlyAPI()
     private Contract = new ContractReadonlyAPI()
     private Bundler = new SmartPayBundlerAPI()
+    private AbstractAccount = new SmartPayAccountAPI()
 
     private get customNetwork() {
         if (!Web3StateRef.value?.Network) throw new Error('The web3 state does not load yet.')
@@ -37,6 +40,7 @@ export class Popups implements Middleware<ConnectionContext> {
 
     private async getPaymentToken(context: ConnectionContext) {
         const maskAddress = getMaskTokenAddress(context.chainId)
+        const nativeTokenAddress = getNativeTokenAddress(context.chainId)
         try {
             const smartPayChainId = await this.Bundler.getSupportedChainId()
             if (context.chainId !== smartPayChainId || !context.owner) return DEFAULT_PAYMENT_TOKEN_STATE
@@ -50,9 +54,7 @@ export class Popups implements Middleware<ConnectionContext> {
 
             if (!signableConfig?.maxFeePerGas) return DEFAULT_PAYMENT_TOKEN_STATE
 
-            const gas = await this.Web3.estimateTransaction?.(signableConfig, undefined, {
-                chainId: context.chainId,
-                account: context.account,
+            const gas = await this.AbstractAccount.estimateTransaction?.(smartPayChainId, signableConfig, {
                 paymentToken: maskAddress,
             })
 
@@ -82,9 +84,11 @@ export class Popups implements Middleware<ConnectionContext> {
             const availableBalanceTooLow =
                 isGreaterThan(maskGasFee, maskAllowance) || isGreaterThan(maskGasFee, maskBalance)
 
+            const isNative = isNativeTokenAddress(context.paymentToken)
+
             return {
                 allowMaskAsGas: !availableBalanceTooLow,
-                paymentToken: context.paymentToken ?? !availableBalanceTooLow ? maskAddress : undefined,
+                paymentToken: isNative ? context.paymentToken : !availableBalanceTooLow ? maskAddress : undefined,
             }
         } catch (error) {
             const nativeBalance = await this.Web3.getNativeTokenBalance({
@@ -106,6 +110,9 @@ export class Popups implements Middleware<ConnectionContext> {
 
             if (context.method === EthereumMethodType.ETH_SEND_TRANSACTION && currentChainId !== context.chainId) {
                 await Providers[ProviderType.MaskWallet].switchChain(context.chainId)
+                const networks = Web3StateRef.value.Network?.networks?.getCurrentValue()
+                const target = networks?.find((x) => x.chainId === context.chainId)
+                if (target) await Web3StateRef.value.Network?.switchNetwork(target?.ID)
             }
 
             const request: TransferableMessage<MessageRequest, MessageResponse> = {

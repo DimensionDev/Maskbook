@@ -60,6 +60,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
     }, [allPersona])
 
     const { data: proofs, isLoading: loadingBinding, isFetched } = usePersonaProofs(personaPublicKey)
+
     const twitterProofs = useMemo(() => {
         if (!proofs?.length) return EMPTY_LIST
         return uniqBy(

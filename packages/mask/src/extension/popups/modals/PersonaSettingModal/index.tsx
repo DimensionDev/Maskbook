@@ -52,7 +52,7 @@ export const PersonaSettingModal = memo<ActionModalBaseProps>(function PersonaSe
     const { t } = useI18N()
     const { classes } = useStyles()
     const { user } = UserContext.useContainer()
-    const { currentPersona } = PersonaContext.useContainer()
+    const { currentPersona, avatar, proofs } = PersonaContext.useContainer()
     const navigate = useNavigate()
     const modalNavigate = useModalNavigate()
 
@@ -68,7 +68,12 @@ export const PersonaSettingModal = memo<ActionModalBaseProps>(function PersonaSe
             <Box className={classes.avatarItem}>
                 <Typography className={classes.text}>{t('popups_profile_photo')}</Typography>
                 <Box className={classes.right}>
-                    <PersonaAvatar avatar={currentPersona?.avatar} size={48} classes={{ root: classes.avatar }} />
+                    <PersonaAvatar
+                        avatar={avatar}
+                        hasProofs={!!proofs?.length}
+                        size={48}
+                        classes={{ root: classes.avatar }}
+                    />
                     <Icons.ArrowRight
                         size={24}
                         className={classes.arrow}
