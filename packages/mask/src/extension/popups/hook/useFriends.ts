@@ -16,17 +16,26 @@ export type FriendsInformation = ProfileInformation & {
     profiles: BindingProof[]
     id: string
 }
-export const PlatformSort = {
-    twitter: 0,
-    github: 1,
-    ethereum: 2,
-    ens: 3,
-    lens: 4,
-    keybase: 5,
-    farcaster: 6,
-    space_id: 7,
-    unstoppabledomains: 8,
+
+const PlatformSort: Record<NextIDPlatform, number> = {
+    [NextIDPlatform.Twitter]: 0,
+    [NextIDPlatform.GitHub]: 1,
+    [NextIDPlatform.Ethereum]: 2,
+    [NextIDPlatform.ENS]: 3,
+    [NextIDPlatform.LENS]: 4,
+    [NextIDPlatform.Keybase]: 5,
+    [NextIDPlatform.Farcaster]: 6,
+    [NextIDPlatform.SpaceId]: 7,
+    [NextIDPlatform.Unstoppable]: 8,
+    [NextIDPlatform.RSS3]: 9,
+    [NextIDPlatform.REDDIT]: 10,
+    [NextIDPlatform.SYBIL]: 11,
+    [NextIDPlatform.EthLeaderboard]: 12,
+    [NextIDPlatform.Bit]: 13,
+    [NextIDPlatform.CyberConnect]: 14,
+    [NextIDPlatform.NextID]: 15,
 }
+
 export function useFriends(): AsyncStateRetry<FriendsInformation[]> {
     const currentPersona = useCurrentPersona()
     return useAsyncRetry(async () => {
@@ -76,11 +85,7 @@ export function useFriends(): AsyncStateRetry<FriendsInformation[]> {
                         x.platform !== NextIDPlatform.NextID),
             )
 
-            filtered.sort(
-                (a, b) =>
-                    PlatformSort[a.platform as keyof typeof PlatformSort] -
-                    PlatformSort[b.platform as keyof typeof PlatformSort],
-            )
+            filtered.sort((a, b) => PlatformSort[a.platform] - PlatformSort[b.platform])
             return {
                 profiles: filtered,
                 ...friends[index],

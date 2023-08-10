@@ -34,8 +34,7 @@ export function useFriendsFromSearch(
             filtered.sort((a, b) =>
                 a.identity === searchValue || a.name === searchValue
                     ? -1
-                    : PlatformSort[a.platform as keyof typeof PlatformSort] -
-                      PlatformSort[b.platform as keyof typeof PlatformSort],
+                    : PlatformSort[a.platform] - PlatformSort[b.platform],
             )
             return {
                 proofs: filtered,
