@@ -220,7 +220,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                                     control={control}
                                 />
                             </div>
-                            {errorMsg ? (
+                            {errorMsg && !isValid ? (
                                 <Typography fontSize={14} color={theme.palette.maskColor.danger} marginTop="12px">
                                     {errorMsg}
                                 </Typography>
