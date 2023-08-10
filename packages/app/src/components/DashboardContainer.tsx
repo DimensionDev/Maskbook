@@ -6,6 +6,7 @@ import { useLookupAddress } from '@masknet/web3-hooks-base'
 import { useCallback, useDeferredValue, useEffect, useState } from 'react'
 import { DashboardContext } from '../contexts/DashboardContext.js'
 import { useSetThemeMode, useThemeMode } from '../helpers/setThemeMode.js'
+import { DashboardBody } from './DashboardBody.js'
 
 export interface DashboardContainerProps {
     children: React.ReactNode
@@ -60,18 +61,16 @@ export function DashboardContainer(props: DashboardContainerProps) {
             </div>
             {keyword ? (
                 <div className=" lg:px-8">
-                    <div className="bg-white dark:bg-black p-5 pt-0">
-                        <div className="border rounded-lg overflow-hidden dark:border-line-dark border-line-light">
-                            <DisableShadowRootContext.Provider value={false}>
-                                <ShadowRootIsolation>
-                                    <SearchResultInspector
-                                        keyword={keyword}
-                                        empty={<EmptyStatus>No results</EmptyStatus>}
-                                    />
-                                </ShadowRootIsolation>
-                            </DisableShadowRootContext.Provider>
-                        </div>
-                    </div>
+                    <DashboardBody>
+                        <DisableShadowRootContext.Provider value={false}>
+                            <ShadowRootIsolation>
+                                <SearchResultInspector
+                                    keyword={keyword}
+                                    empty={<EmptyStatus>No results</EmptyStatus>}
+                                />
+                            </ShadowRootIsolation>
+                        </DisableShadowRootContext.Provider>
+                    </DashboardBody>
                 </div>
             ) : (
                 <div className="lg:px-8">{children}</div>

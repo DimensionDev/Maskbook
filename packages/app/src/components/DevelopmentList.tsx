@@ -9,7 +9,7 @@ const statuses = {
 
 const environments = {
     Preview: 'text-gray-400 bg-gray-400/10 ring-gray-400/20',
-    Production: 'text-indigo-400 bg-indigo-400/10 ring-indigo-400/30',
+    Production: 'text-blue-400 bg-blue-400/10 ring-blue-400/30',
 }
 
 const deployments = [
