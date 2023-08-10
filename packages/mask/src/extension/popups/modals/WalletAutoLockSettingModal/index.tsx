@@ -170,5 +170,8 @@ export const WalletAutoLockSettingModal = forwardRef<
             setProps(p)
         },
     })
+
+    if (!open) return null
+
     return <WalletAutoLockSettingDrawer open={open} {...props} onClose={() => dispatch?.close(false)} />
 })
