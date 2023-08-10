@@ -47,6 +47,9 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean }>()
             color: theme.palette.maskColor.main,
             lineHeight: '18px',
             fontWeight: 700,
+            maxWidth: 290,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
         },
         identifier: {
             fontSize: 14,
