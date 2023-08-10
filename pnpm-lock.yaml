@@ -831,8 +831,8 @@ importers:
         specifier: workspace:^
         version: link:../theme
       ef.js:
-        specifier: ^0.16.6
-        version: 0.16.6
+        specifier: ^0.17.4
+        version: 0.17.4
 
   packages/flags:
     devDependencies:
@@ -19335,14 +19335,14 @@ packages:
   /ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
 
-  /ef-core@0.16.6:
-    resolution: {integrity: sha512-U+X9zMFu6DGkfsuP6ugpd3dUYxtezSWmEaJA83+eyyEGnyemajQ2kC6LOMyeI26el/Nyk8nkE7HbmMN1dsed7g==}
+  /ef-core@0.17.5:
+    resolution: {integrity: sha512-7rfi9tqobCSel9nG29GP5AAMHuUTEmS49iiBewZi7/TqHqR0BgeGCh4O3m8F+qqojhw+GEOSZqoXkbT7PfoBvA==}
     dev: false
 
-  /ef.js@0.16.6:
-    resolution: {integrity: sha512-cMDCl7ZgnfVB/IEUKz5atTNh/r/4NYxqAjstYSZme/Xh9mPHF6x7gS7EloHQz26sXZ+7IM9xJv8LpRiekeOhTg==}
+  /ef.js@0.17.4:
+    resolution: {integrity: sha512-fGU+kcDLo+ezKC+Tw68fwTLsPgOszg2hbzU3rIEjQlnHwsnfSokSR2Fi4djHi09BNs7wN+Oe/JBKxXBsRjP3IQ==}
     dependencies:
-      ef-core: 0.16.6
+      ef-core: 0.17.5
       eft-parser: 0.16.5
     dev: false
 
@@ -34780,7 +34780,7 @@ time:
   /devtools-ignore-webpack-plugin@0.1.1: '2023-03-30T15:55:35.664Z'
   /dompurify@3.0.5: '2023-07-11T08:02:01.823Z'
   /dotenv@16.3.1: '2023-06-17T16:47:53.971Z'
-  /ef.js@0.16.6: '2023-03-22T19:54:19.613Z'
+  /ef.js@0.17.4: '2023-07-11T15:21:23.449Z'
   /elliptic@6.5.4: '2021-02-02T18:22:21.969Z'
   /enquirer@2.3.6: '2020-07-02T13:00:19.453Z'
   /eslint-plugin-import@2.27.5: '2023-01-16T19:44:39.790Z'
