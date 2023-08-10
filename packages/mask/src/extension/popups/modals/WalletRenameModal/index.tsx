@@ -22,13 +22,14 @@ function WalletRenameDrawer({ wallet, ...rest }: WalletRenameDrawerProps) {
 
     const [{ loading }, handleClick] = useAsyncFn(async () => {
         if (!name || !wallet) return
-        if (name.length > 20 || name.length < 3) {
+        const _name = name.trim()
+        if (_name.length > 20 || _name.length < 3) {
             setError(t('popups_wallet_settings_rename_tips'))
             return
         }
 
         try {
-            await Web3?.renameWallet?.(wallet.address, name, { providerType: ProviderType.MaskWallet })
+            await Web3?.renameWallet?.(wallet.address, _name, { providerType: ProviderType.MaskWallet })
             setName('')
             rest.onClose?.()
         } catch (error) {
