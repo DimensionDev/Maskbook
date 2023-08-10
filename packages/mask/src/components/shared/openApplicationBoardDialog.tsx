@@ -11,7 +11,7 @@ import Services from '../../extension/service.js'
 export function useOpenApplicationBoardDialog(quickMode?: boolean, focusPluginID?: PluginID) {
     const lastRecognized = useLastRecognizedIdentity()
     const allPersonas = usePersonasFromDB()
-    const currentSite = getCurrentSite(activatedSiteAdaptorUI.networkIdentifier)
+    const currentSite = getCurrentSite(activatedSiteAdaptorUI!.networkIdentifier)
     const { value: applicationCurrentStatus, loading: personaPerSiteConnectStatusLoading } =
         usePersonaPerSiteConnectStatus()
 

@@ -225,7 +225,7 @@ const twitterUI: SiteAdaptorUI.Definition = {
             password() {
                 const id =
                     IdentityProviderTwitter.recognized.value.identifier?.userId ||
-                    activatedSiteAdaptor_state.profiles.value?.[0].identifier.userId
+                    activatedSiteAdaptor_state!.profiles.value?.[0].identifier.userId
                 if (!id) throw new Error('Cannot figure out password')
                 return ProfileIdentifier.of(EnhanceableSite.Twitter, id)
                     .expect(`${id} should be a valid user id`)

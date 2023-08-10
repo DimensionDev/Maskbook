@@ -211,7 +211,7 @@ async function makeProgress(
         postURL,
         authorHint,
         currentProfile,
-        encryptPayloadNetwork: activatedSiteAdaptorUI.encryptPayloadNetwork,
+        encryptPayloadNetwork: activatedSiteAdaptorUI!.encryptPayloadNetwork,
     }
     let iv: Uint8Array | undefined
     for await (const progress of GeneratorServices.decrypt(payload, context)) {

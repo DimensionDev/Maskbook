@@ -12,7 +12,7 @@ const defaultUseTheme = (t: Theme) => t
 
 export function useMaskSiteAdaptorMixedTheme() {
     const { mode } = useThemeSettings()
-    const useMixedTheme = useRef(activatedSiteAdaptorUI.customization.useTheme || defaultUseTheme).current
+    const useMixedTheme = useRef(activatedSiteAdaptorUI!.customization.useTheme || defaultUseTheme).current
 
     const [localization, isRTL] = useThemeLanguage(useValueRef(languageSettings))
     const theme = unstable_createMuiStrictModeTheme(

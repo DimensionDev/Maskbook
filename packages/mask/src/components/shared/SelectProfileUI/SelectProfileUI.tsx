@@ -80,7 +80,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
         () => compact(frozenSelected.map((x) => x.linkedPersona?.publicKeyAsHex)),
         [frozenSelected],
     )
-    const { value = EMPTY_LIST } = useContacts(activatedSiteAdaptorUI.networkIdentifier)
+    const { value = EMPTY_LIST } = useContacts(activatedSiteAdaptorUI!.networkIdentifier)
 
     const onSelectedAllChange = useCallback(
         (checked: boolean) => {

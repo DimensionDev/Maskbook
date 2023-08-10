@@ -16,7 +16,7 @@ let trustedHTML: (x: string) => string | TrustedHTML
     }
 }
 
-if (location.hash === '#/personas') {
+if (location.hash === '#/personas' || location.hash.includes('#/personas?tab')) {
     console.time('[SSR] Request')
     browser.runtime.sendMessage({ type: 'popups-ssr' }).then(({ html, css }) => {
         // React go first, but is that possible?

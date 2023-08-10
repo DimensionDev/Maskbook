@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { Sniffings, type NetworkPluginID } from '@masknet/shared-base'
 import {
     useChainContext,
     useReverseAddress,
@@ -7,7 +7,7 @@ import {
     useWallets,
     useWeb3Others,
 } from '@masknet/web3-hooks-base'
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { ProviderType, formatDomainName } from '@masknet/web3-shared-evm'
 import { isSameAddress, resolveNetworkWalletName } from '@masknet/web3-shared-base'
 
 export const useWalletName = (
@@ -23,7 +23,7 @@ export const useWalletName = (
 
     return useMemo(() => {
         // Binding Wallet Just display domain and network name
-        if (domain) return domain
+        if (domain) return Sniffings.is_popup_page ? formatDomainName(domain, 12) : domain
         if (isNextIdWallet && expectedPluginId) return resolveNetworkWalletName(expectedPluginId)
         const wallet = wallets.find((x) => isSameAddress(x.address, expectedAccount ?? account))
         if (providerType === ProviderType.MaskWallet && wallet?.name) return wallet?.name

@@ -55,7 +55,7 @@ import Services from '../../extension/service.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        width: isFacebook(activatedSiteAdaptorUI) ? 876 : 'auto',
+        width: isFacebook(activatedSiteAdaptorUI!) ? 876 : 'auto',
     },
     container: {
         background:
@@ -202,7 +202,7 @@ function Content(props: ProfileTabContentProps) {
 
     const isWeb3ProfileDisable = useIsMinimalMode(PluginID.Web3Profile)
 
-    const isOnTwitter = isTwitter(activatedSiteAdaptorUI)
+    const isOnTwitter = isTwitter(activatedSiteAdaptorUI!)
     const doesOwnerHaveNoAddress =
         isOwnerIdentity && personaStatus.proof?.findIndex((p) => p.platform === NextIDPlatform.Ethereum) === -1
 

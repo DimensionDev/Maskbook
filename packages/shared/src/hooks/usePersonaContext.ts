@@ -60,19 +60,25 @@ function usePersonaContext(initialState?: {
     const currentPersona = personas?.find(
         (x) => x.identifier === ECKeyIdentifier.from(currentIdentifier).unwrapOr(head(personas)?.identifier),
     )
+
     const { value: avatar } = useAsync(async () => {
         if (!currentPersona) return
         if (!initialState?.queryPersonaAvatarLastUpdateTime) return currentPersona.avatar
 
         const lastUpdateTime = await initialState.queryPersonaAvatarLastUpdateTime(currentPersona.identifier)
         const storage = Web3Storage.createKVStorage(PERSONA_AVATAR_DB_NAMESPACE)
-        const remote: PersonaAvatarData = await storage.get<PersonaAvatarData>(currentPersona.identifier.rawPublicKey)
+        try {
+            const remote: PersonaAvatarData = await storage.get<PersonaAvatarData>(
+                currentPersona.identifier.rawPublicKey,
+            )
 
-        if (lastUpdateTime && isBefore(lastUpdateTime, remote.updateAt)) {
-            return remote.imageUrl
+            if (lastUpdateTime && isBefore(lastUpdateTime, remote.updateAt)) {
+                return remote.imageUrl
+            }
+            return currentPersona.avatar
+        } catch {
+            return currentPersona.avatar
         }
-
-        return currentPersona.avatar
     }, [currentPersona, initialState?.queryPersonaAvatarLastUpdateTime])
 
     const { data: proofs, isLoading: fetchProofsLoading } = usePersonaProofs(currentPersona?.identifier.publicKeyAsHex)

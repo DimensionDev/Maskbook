@@ -82,7 +82,7 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
         switchLogoSettings[identity.identifier.userId].value = logoType ?? defaultLogoType
         setOpen(false)
         if (needShare && logoType === SwitchLogoType.Classics) {
-            activatedSiteAdaptorUI.utils.share?.(
+            activatedSiteAdaptorUI!.utils.share?.(
                 [
                     t('switch_logo_share_text'),
                     '#TwitterLogo #TwitterX #SaveTheBird\n',
@@ -90,7 +90,7 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
                 ].join('\n'),
             )
         }
-    }, [logoType, identity?.identifier?.userId, defaultLogoType, activatedSiteAdaptorUI.utils.share, needShare])
+    }, [logoType, identity?.identifier?.userId, defaultLogoType, activatedSiteAdaptorUI!.utils.share, needShare])
 
     const onChange = useCallback((logoType: SwitchLogoType) => {
         setLogoType(logoType)

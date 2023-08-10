@@ -7,7 +7,7 @@ export function useSearchedKeyword() {
     useEffect(() => {
         const onLocationChange = () => {
             if (!activatedSiteAdaptorUI?.collecting?.getSearchedKeyword) return
-            const kw = activatedSiteAdaptorUI.collecting.getSearchedKeyword()
+            const kw = activatedSiteAdaptorUI!.collecting.getSearchedKeyword()
             setKeyword(kw)
         }
         onLocationChange()

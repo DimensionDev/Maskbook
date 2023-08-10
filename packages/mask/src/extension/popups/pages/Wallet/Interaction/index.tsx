@@ -295,20 +295,24 @@ const Interaction = memo(function Interaction() {
         <Box flex={1} display="flex" flexDirection="column">
             <Box p={2} display="flex" flexDirection="column" flex={1}>
                 {content}
-                <Box
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    mt={2}
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => setExpand(!expand)}>
-                    <Typography className={classes.text}>{t('popups_wallet_view_full_detail_transaction')}</Typography>
-                    <Icons.ArrowDrop
-                        size={16}
-                        sx={{ marginLeft: 0.5 }}
-                        className={cx(classes.arrowIcon, expand ? classes.expand : undefined)}
-                    />
-                </Box>
+                {currentRequest && !signRequest.includes(currentRequest?.request.arguments.method) ? (
+                    <Box
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        mt={2}
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => setExpand(!expand)}>
+                        <Typography className={classes.text}>
+                            {t('popups_wallet_view_full_detail_transaction')}
+                        </Typography>
+                        <Icons.ArrowDrop
+                            size={16}
+                            sx={{ marginLeft: 0.5 }}
+                            className={cx(classes.arrowIcon, expand ? classes.expand : undefined)}
+                        />
+                    </Box>
+                ) : null}
 
                 {expand ? (
                     <Box

@@ -27,7 +27,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
         async (info: SubmitComposition) => {
             const { content, encode, target } = info
             const fallbackProfile: ProfileIdentifier | undefined =
-                activatedSiteAdaptor_state.profiles.value[0]?.identifier
+                activatedSiteAdaptor_state!.profiles.value[0]?.identifier
             if (encode === 'image' && !lastRecognizedIdentity) throw new Error('No Current Profile')
 
             // rawEncrypted is either string or Uint8Array
@@ -37,10 +37,10 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 content,
                 target,
                 lastRecognizedIdentity?.identifier ?? fallbackProfile,
-                activatedSiteAdaptorUI.encryptPayloadNetwork,
+                activatedSiteAdaptorUI!.encryptPayloadNetwork,
             )
             // Since we cannot directly send binary in the composition box, we need to encode it into a string.
-            const encrypted = encodeByNetwork(activatedSiteAdaptorUI.encryptPayloadNetwork, rawEncrypted)
+            const encrypted = encodeByNetwork(activatedSiteAdaptorUI!.encryptPayloadNetwork, rawEncrypted)
 
             if (encode === 'image') {
                 const decoratedText = decorateEncryptedText('', t, content.meta)
@@ -65,7 +65,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
 }
 
 function pasteTextEncode(text: string, reason: 'timeline' | 'popup' | 'reply') {
-    activatedSiteAdaptorUI.automation.nativeCompositionDialog?.appendText?.(text, {
+    activatedSiteAdaptorUI!.automation.nativeCompositionDialog?.appendText?.(text, {
         recover: true,
         reason,
     })
@@ -77,7 +77,7 @@ async function pasteImage(
 ) {
     const img = await SteganographyPayload(encrypted)
     // Don't await this, otherwise the dialog won't disappear
-    activatedSiteAdaptorUI.automation.nativeCompositionDialog!.attachImage!(img, {
+    activatedSiteAdaptorUI!.automation.nativeCompositionDialog!.attachImage!(img, {
         recover: true,
         relatedTextPayload,
         reason,
@@ -87,8 +87,8 @@ async function pasteImage(
 // TODO: Provide API to plugin to post-process post content,
 // then we can move these -PreText's and meta readers into plugin's own context
 function decorateEncryptedText(encrypted: string, t: I18NFunction, meta?: Meta): string | null {
-    const hasOfficialAccount = isTwitter(activatedSiteAdaptorUI) || isFacebook(activatedSiteAdaptorUI)
-    const officialAccount = isTwitter(activatedSiteAdaptorUI) ? t('twitter_account') : t('facebook_account')
+    const hasOfficialAccount = isTwitter(activatedSiteAdaptorUI!) || isFacebook(activatedSiteAdaptorUI!)
+    const officialAccount = isTwitter(activatedSiteAdaptorUI!) ? t('twitter_account') : t('facebook_account')
 
     // Note: since this is in the composition stage, we can assume plugins don't insert old version of meta.
     if (meta?.has(`${PluginID.RedPacket}:1`) || meta?.has(`${PluginID.RedPacket}_nft:1`)) {
@@ -104,22 +104,22 @@ function decorateEncryptedText(encrypted: string, t: I18NFunction, meta?: Meta):
             ? t('additional_post_box__encrypted_post_pre_ito_sns_official_account', {
                   encrypted,
                   account: officialAccount,
-                  sns: SOCIAL_MEDIA_NAME[activatedSiteAdaptorUI.networkIdentifier],
+                  sns: SOCIAL_MEDIA_NAME[activatedSiteAdaptorUI!.networkIdentifier],
               })
             : t('additional_post_box__encrypted_post_pre_ito', {
                   encrypted,
-                  sns: SOCIAL_MEDIA_NAME[activatedSiteAdaptorUI.networkIdentifier],
+                  sns: SOCIAL_MEDIA_NAME[activatedSiteAdaptorUI!.networkIdentifier],
               })
     } else if (meta?.has(`${PluginID.FileService}:3`)) {
         return hasOfficialAccount
             ? t('additional_post_box__encrypted_post_pre_file_service_sns_official_account', {
                   encrypted,
                   account: officialAccount,
-                  sns: SOCIAL_MEDIA_NAME[activatedSiteAdaptorUI.networkIdentifier],
+                  sns: SOCIAL_MEDIA_NAME[activatedSiteAdaptorUI!.networkIdentifier],
               })
             : t('additional_post_box__encrypted_post_pre_file_service', {
                   encrypted,
-                  sns: SOCIAL_MEDIA_NAME[activatedSiteAdaptorUI.networkIdentifier],
+                  sns: SOCIAL_MEDIA_NAME[activatedSiteAdaptorUI!.networkIdentifier],
               })
     }
     return null
