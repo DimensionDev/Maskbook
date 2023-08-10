@@ -202,7 +202,7 @@ function useNFTCircleAvatar(size: number) {
             ),
             confirmLabel: t('share'),
         })
-        if (confirmed) activatedSiteAdaptorUI.utils.share?.(t('plugin_avatar_setup_pfp_share'))
+        if (confirmed) activatedSiteAdaptorUI!.utils.share?.(t('plugin_avatar_setup_pfp_share'))
 
         MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll(
             (avatar ?? {

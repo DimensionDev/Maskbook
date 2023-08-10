@@ -16,7 +16,7 @@ export function ShadowRootAttachPointRoot(children: React.ReactNode) {
             MaskThemeProvider({
                 useMaskIconPalette: useSiteThemeMode,
                 useTheme: useMaskSiteAdaptorMixedTheme,
-                CustomSnackbarOffsetY: isFacebook(activatedSiteAdaptorUI) ? 80 : undefined,
+                CustomSnackbarOffsetY: isFacebook(activatedSiteAdaptorUI!) ? 80 : undefined,
                 children,
             }),
         (children) => SharedContextProvider({ children }),

@@ -74,7 +74,7 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
             {message ? (
                 <main className={classes.content}>
                     <TypedMessageRenderContext
-                        textResizer={activatedSiteAdaptorUI.networkIdentifier !== 'twitter.com'}
+                        textResizer={activatedSiteAdaptorUI!.networkIdentifier !== 'twitter.com'}
                         renderFragments={activatedSiteAdaptorUI?.customization.componentOverwrite?.RenderFragments}>
                         <TypedMessageRender message={TypedMessage} />
                     </TypedMessageRenderContext>

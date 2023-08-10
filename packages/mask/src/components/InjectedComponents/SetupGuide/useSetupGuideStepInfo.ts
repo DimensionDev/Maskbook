@@ -35,7 +35,7 @@ export function useSetupGuideStepInfo(destinedPersona: PersonaIdentifier) {
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [retry])
 
     useEffect(() => {
-        if (username || activatedSiteAdaptorUI.networkIdentifier !== EnhanceableSite.Twitter) return
+        if (username || activatedSiteAdaptorUI!.networkIdentifier !== EnhanceableSite.Twitter) return
         // In order to collect user info after login, need to reload twitter once
         let reloaded = false
         const handler = () => {
@@ -82,7 +82,7 @@ export function useSetupGuideStepInfo(destinedPersona: PersonaIdentifier) {
         const personaConnectedProfile = persona?.linkedProfiles.find((x) =>
             isSameProfile(
                 x.identifier,
-                ProfileIdentifier.of(activatedSiteAdaptorUI.networkIdentifier, username).expect(
+                ProfileIdentifier.of(activatedSiteAdaptorUI!.networkIdentifier, username).expect(
                     `${username} should be a valid user id`,
                 ),
             ),
@@ -91,7 +91,7 @@ export function useSetupGuideStepInfo(destinedPersona: PersonaIdentifier) {
 
         // NextID is available on this site.
         // Should show pin extension when not set
-        if (!activatedSiteAdaptorUI.configuration.nextIDConfig?.platform)
+        if (!activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform)
             return composeInfo(SetupGuideStep.Close, 'close')
 
         // Should verified persona

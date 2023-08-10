@@ -169,7 +169,7 @@ function AppendShareDetail({ recipients, selectedRecipients, onClose, whoAmI, re
                     iv,
                     profiles.map((x) => ({ profile: x.identifier, persona: x.linkedPersona })),
                     whoAmI,
-                    activatedSiteAdaptorUI.encryptPayloadNetwork,
+                    activatedSiteAdaptorUI!.encryptPayloadNetwork,
                 )
                 await delay(1500)
                 retry()

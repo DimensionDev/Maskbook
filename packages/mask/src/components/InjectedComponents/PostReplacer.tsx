@@ -61,7 +61,7 @@ export function PostReplacer(props: PostReplacerProps) {
     return (
         <span className={classes.root}>
             <TypedMessageRenderContext
-                textResizer={activatedSiteAdaptorUI.networkIdentifier !== 'twitter.com'}
+                textResizer={activatedSiteAdaptorUI!.networkIdentifier !== 'twitter.com'}
                 renderFragments={activatedSiteAdaptorUI?.customization.componentOverwrite?.RenderFragments}
                 context={initialTransformationContext}>
                 <Transformer {...props} message={postMessage} />

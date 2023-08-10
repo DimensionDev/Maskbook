@@ -17,23 +17,23 @@ async function queryPersonaFromDB(identityResolved: IdentityResolved) {
 
 async function queryPersonasFromNextID(identityResolved: IdentityResolved) {
     if (!identityResolved.identifier) return
-    if (!activatedSiteAdaptorUI.configuration.nextIDConfig?.platform) return
+    if (!activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform) return
     return NextIDProof.queryAllExistedBindingsByPlatform(
-        activatedSiteAdaptorUI.configuration.nextIDConfig?.platform,
+        activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform,
         identityResolved.identifier.userId,
     )
 }
 
 const CurrentIdentitySubscription: Subscription<ProfileInformation | undefined> = {
     getCurrentValue() {
-        const all = activatedSiteAdaptor_state.profiles.value
-        const current = (activatedSiteAdaptorUI.collecting.identityProvider?.recognized || defaultIdentityResolved)
+        const all = activatedSiteAdaptor_state!.profiles.value
+        const current = (activatedSiteAdaptorUI!.collecting.identityProvider?.recognized || defaultIdentityResolved)
             .value.identifier
         return all.find((i) => i.identifier === current) || first(all)
     },
     subscribe(sub) {
-        const a = activatedSiteAdaptor_state.profiles.addListener(sub)
-        const b = activatedSiteAdaptorUI.collecting.identityProvider?.recognized.addListener(sub)
+        const a = activatedSiteAdaptor_state!.profiles.addListener(sub)
+        const b = activatedSiteAdaptorUI!.collecting.identityProvider?.recognized.addListener(sub)
         return () => [a(), b?.()]
     },
 }
@@ -51,12 +51,12 @@ export function useCurrentIdentity() {
 }
 
 export function useLastRecognizedIdentity() {
-    return useValueRef(activatedSiteAdaptorUI.collecting.identityProvider?.recognized || defaultIdentityResolved)
+    return useValueRef(activatedSiteAdaptorUI!.collecting.identityProvider?.recognized || defaultIdentityResolved)
 }
 
 export function useCurrentVisitingIdentity() {
     return useValueRef(
-        activatedSiteAdaptorUI.collecting.currentVisitingIdentityProvider?.recognized || defaultIdentityResolved,
+        activatedSiteAdaptorUI!.collecting.currentVisitingIdentityProvider?.recognized || defaultIdentityResolved,
     )
 }
 
@@ -98,7 +98,7 @@ export function useSocialIdentity(identity: IdentityResolved | null | undefined)
 export function useSocialIdentityByUserId(userId?: string) {
     const { value: identity } = useAsync(async () => {
         if (!userId) return
-        return activatedSiteAdaptorUI.utils.getUserIdentity?.(userId)
+        return activatedSiteAdaptorUI!.utils.getUserIdentity?.(userId)
     }, [userId])
     return useSocialIdentity(identity)
 }
@@ -121,15 +121,15 @@ export function useCurrentVisitingSocialIdentity() {
 
 export function useThemeSettings() {
     const themeSettings = useValueRef(
-        (activatedSiteAdaptorUI.collecting.themeSettingsProvider?.recognized ||
+        (activatedSiteAdaptorUI!.collecting.themeSettingsProvider?.recognized ||
             defaultThemeSettings) as ValueRef<ThemeSettings>,
     )
     return useMemo<ThemeSettings>(
         () => ({
             ...defaults,
-            ...activatedSiteAdaptorUI.configuration.themeSettings,
+            ...activatedSiteAdaptorUI!.configuration.themeSettings,
             ...themeSettings,
         }),
-        [activatedSiteAdaptorUI.configuration.themeSettings, themeSettings],
+        [activatedSiteAdaptorUI!.configuration.themeSettings, themeSettings],
     )
 }
