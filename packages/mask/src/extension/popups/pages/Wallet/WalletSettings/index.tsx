@@ -17,6 +17,7 @@ import { ChangeCurrency } from './ChangeCurrency.js'
 import { ChangeOwner } from './ChangeOwner.js'
 import { ActionButton } from '@masknet/theme'
 import { WalletRemoveModal } from '../../../modals/modals.js'
+import { ConnectedSites } from './ConnectedSites.js'
 
 const WalletSettings = memo(() => {
     const { t } = useI18N()
@@ -50,6 +51,7 @@ const WalletSettings = memo(() => {
                 {wallet.owner ? <ChangeOwner /> : null}
                 <Rename />
                 <Contacts />
+                <ConnectedSites />
                 <AutoLock />
                 <ChangeCurrency />
                 <ChangePaymentPassword />

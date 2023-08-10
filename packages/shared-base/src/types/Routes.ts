@@ -68,6 +68,7 @@ export enum PopupRoutes {
     AddNetwork = '/wallet/add-network',
     Receive = '/wallet/receive',
     ExportWalletPrivateKey = '/wallet/export-private-key',
+    ConnectedSites = '/wallet/connected-sites',
     Personas = '/personas',
     Logout = '/personas/logout',
     SocialAccounts = '/personas/accounts',

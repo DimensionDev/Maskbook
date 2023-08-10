@@ -884,6 +884,7 @@
     "popups_wallet_settings_auto_lock_number_only": "This field is number required.",
     "popups_wallet_settings_current_management_account": "Current Management Account",
     "popups_wallet_settings_local_persona_or_wallet_only": "Local persona or wallet only",
+    "popups_wallet_connected_sites": "Connected sites",
     "popups_gas_fee_settings": "Gas fee settings",
     "popups_assets": "Assets",
     "popups_send": "Send",

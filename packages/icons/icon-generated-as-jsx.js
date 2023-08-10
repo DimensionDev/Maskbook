@@ -694,6 +694,11 @@ export const Airdrop = /*#__PURE__*/ __createIcon('Airdrop', [
         u: () => new URL('./general/Airdrop.svg', import.meta.url),
     },
 ])
+export const Appendices = /*#__PURE__*/ __createIcon('Appendices', [
+    {
+        u: () => new URL('./general/Appendices.svg', import.meta.url),
+    },
+])
 export const ApplicationNFT = /*#__PURE__*/ __createIcon('ApplicationNFT', [
     {
         u: () => new URL('./general/ApplicationNFT.svg', import.meta.url),

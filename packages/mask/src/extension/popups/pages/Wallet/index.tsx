@@ -34,6 +34,7 @@ const SetPaymentPassword = lazy(() => import('./SetPaymentPassword/index.js'))
 const ChangeOwner = lazy(() => import('./ChangeOwner/index.js'))
 const Receive = lazy(() => import('./Receive/index.js'))
 const ExportPrivateKey = lazy(() => import('./ExportPrivateKey/index.js'))
+const ConnectedSites = lazy(() => import('./ConnectedSites/index.js'))
 
 const r = relativeRouteOf(PopupRoutes.Wallet)
 
@@ -81,6 +82,7 @@ export default function Wallet() {
                         <Route path={r(`${PopupRoutes.EditNetwork}/:id?` as PopupRoutes)} element={<EditNetwork />} />
                         <Route path={r(PopupRoutes.Receive)} element={<Receive />} />
                         <Route path={r(PopupRoutes.ExportWalletPrivateKey)} element={<ExportPrivateKey />} />
+                        <Route path={r(PopupRoutes.ConnectedSites)} element={<ConnectedSites />} />
                     </Routes>
                 </WalletContext.Provider>
             </RestorableScrollContext.Provider>

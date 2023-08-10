@@ -121,6 +121,7 @@ export function add_url() { return new URL("./general/Add.svg", import.meta.url)
 export function add_no_border_url() { return new URL("./general/AddNoBorder.svg", import.meta.url) }
 export function add_user_url() { return new URL("./general/AddUser.svg", import.meta.url) }
 export function airdrop_url() { return new URL("./general/Airdrop.svg", import.meta.url) }
+export function appendices_url() { return new URL("./general/Appendices.svg", import.meta.url) }
 export function application_nft_url() { return new URL("./general/ApplicationNFT.svg", import.meta.url) }
 export function approve_url() { return new URL("./general/Approve.svg", import.meta.url) }
 export function arrow_back_url() { return new URL("./general/ArrowBack.svg", import.meta.url) }
