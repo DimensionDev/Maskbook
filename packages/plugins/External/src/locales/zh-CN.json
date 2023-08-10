@@ -1,9 +1,11 @@
 {
+    "plugin_external_unknown_plugin": "发现新的未知Mask插件，您想要加载它们吗？",
     "plugin_external_loader_search_holder": "查找外部插件",
     "plugin_external_loader_search_button": "查找插件",
     "plugin_external_loader_search_sub_title": "每个外部插件必须托管在一个 URL 上。",
     "plugin_external_loader_alert": "它会改变。 不要在其上构建官方产品。",
     "plugin_external_loader_example_github": "官方插件示例可在 <terms>GitHub</terms> 找到。",
+    "plugin_external_loader_intro": "Mask插件是Mask Network的早期功能，其允许任何人开发外部Mask插件。",
     "plugin_external_loader_alert_title": "外部插件：体验 Mask Network 功能！",
     "plugin_external_plugin_url": "插件 URL：",
     "plugin_external_unverified_publisher": "发布者: {{publisher}} (未验证)",
