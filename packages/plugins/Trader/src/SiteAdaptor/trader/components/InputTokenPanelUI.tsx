@@ -89,6 +89,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         top: 52.5,
         left: 12,
+        transition: 'none',
         backgroundColor: Sniffings.is_dashboard_page ? MaskColorVar.input : theme.palette.maskColor?.bottom,
         paddingRight: 8,
         [`& .${chipClasses.label}`]: {
