@@ -48,6 +48,10 @@ const formatCurrencySymbol = (symbol: string, isLead: boolean) => {
     return isLead || symbol.length === 0 ? symbol : ` ${symbol}`
 }
 
+const fiatCurrencySymbolModifier = (result: string, currency: LiteralUnion<Keys | 'USD'> = CurrencyType.USD) => {
+    return currency === CurrencyType.HKD ? `HK${result}` : result
+}
+
 // https://mask.atlassian.net/wiki/spaces/MASK/pages/122916438/Token
 export function formatCurrency(
     inputValue: BigNumber.Value,
@@ -99,6 +103,8 @@ export function formatCurrency(
         isDigitalCurrency,
     )
 
+    let result: string = ''
+
     if (
         bn.lt(customDecimalConfig?.boundary ?? onlyRemainTwoDecimal ? twoDecimalBoundary : sixDecimalBoundary) ||
         bn.isZero()
@@ -138,15 +144,13 @@ export function formatCurrency(
             })
             .join('')
 
-        return `${
+        result = `${
             (isLessThanTwelveDecimalBoundary || (onlyRemainTwoDecimal && isLessThanTwoDecimalBoundary)) && !bn.isZero()
                 ? '< '
                 : ''
         }${value}`
-    }
-
-    if (isMoreThanOrEqualToOne) {
-        return digitalCurrencyModifierValues
+    } else if (isMoreThanOrEqualToOne) {
+        result = digitalCurrencyModifierValues
             .map(({ type, value }, i) => {
                 switch (type) {
                     case 'currency':
@@ -158,29 +162,32 @@ export function formatCurrency(
                 }
             })
             .join('')
+    } else {
+        result = digitalCurrencyModifierValues
+            .map(({ type, value }, i) => {
+                switch (type) {
+                    case 'currency':
+                        return formatCurrencySymbol(symbol ?? value, i === 0)
+                    case 'fraction':
+                        const dec = decimalValue
+                            .toFormat(
+                                customDecimalConfig?.decimalExp ??
+                                    (onlyRemainTwoDecimal ? twoDecimalExp : sixDecimalExp),
+                            )
+                            .replace(/\d\./, '')
+                        return onlyRemainTwoDecimal ? dec.replace(/(\d\d)(0+)$/, '$1') : dec.replace(/(0+)$/, '')
+                    case 'integer':
+                        // When there is a carry
+                        if (bn.gt('0.99') && onlyRemainTwoDecimal) return '1'
+                        return '0'
+                    case 'literal':
+                        return ''
+                    default:
+                        return value
+                }
+            })
+            .join('')
     }
 
-    return digitalCurrencyModifierValues
-        .map(({ type, value }, i) => {
-            switch (type) {
-                case 'currency':
-                    return formatCurrencySymbol(symbol ?? value, i === 0)
-                case 'fraction':
-                    const dec = decimalValue
-                        .toFormat(
-                            customDecimalConfig?.decimalExp ?? (onlyRemainTwoDecimal ? twoDecimalExp : sixDecimalExp),
-                        )
-                        .replace(/\d\./, '')
-                    return onlyRemainTwoDecimal ? dec.replace(/(\d\d)(0+)$/, '$1') : dec.replace(/(0+)$/, '')
-                case 'integer':
-                    // When there is a carry
-                    if (bn.gt('0.99') && onlyRemainTwoDecimal) return '1'
-                    return '0'
-                case 'literal':
-                    return ''
-                default:
-                    return value
-            }
-        })
-        .join('')
+    return fiatCurrencySymbolModifier(result, currency)
 }
