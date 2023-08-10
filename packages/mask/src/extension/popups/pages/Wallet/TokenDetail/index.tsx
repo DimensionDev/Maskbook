@@ -63,6 +63,7 @@ const useStyles = makeStyles()((theme) => {
         },
         tokenIcon: {
             marginRight: 4,
+            fontSize: 12,
         },
         label: {
             fontSize: 14,
