@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { FormattedCurrency, ImageIcon, TokenIcon } from '@masknet/shared'
+import { FormattedCurrency, NetworkIcon, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles, type ActionButtonProps } from '@masknet/theme'
 import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
@@ -156,7 +156,13 @@ export const AssetsListUI = memo<AssetsListUIProps>(function AssetsListUI({ isEx
                                 logoURL={asset.logoURL}
                                 size={36}
                             />
-                            <ImageIcon className={classes.badgeIcon} size={16} icon={networkDescriptor?.icon} />
+                            <NetworkIcon
+                                pluginID={NetworkPluginID.PLUGIN_EVM}
+                                className={classes.badgeIcon}
+                                chainId={asset.chainId}
+                                size={16}
+                                icon={networkDescriptor?.icon}
+                            />
                         </Box>
                         <ListItemText
                             className={classes.text}

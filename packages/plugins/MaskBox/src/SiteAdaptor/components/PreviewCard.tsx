@@ -275,7 +275,7 @@ export function PreviewCard(props: PreviewCardProps) {
                             address={boxInfo.tokenAddress ?? ''}
                             name={boxInfo.name}
                             chainId={chainId}
-                            AvatarProps={{ sx: { width: 48, height: 48 } }}
+                            sx={{ width: 48, height: 48 }}
                         />
                         <Box className={classes.iconBox}>
                             <ImageIcon size={24} icon={networkDescriptor?.icon} className={classes.icon} />

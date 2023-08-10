@@ -123,7 +123,7 @@ export default memo(function Receive() {
         currentNetwork?.iconUrl ? (
             <ImageIcon size={60} icon={currentNetwork.iconUrl} name={currentNetwork.name} />
         ) : (
-            <Icon size={60} name={currentNetwork?.name} color={currentNetwork?.color} AvatarProps={avatarProps} />
+            <Icon size={60} name={currentNetwork?.name} color={currentNetwork?.color} {...avatarProps} />
         )
     ) : (
         <TokenIcon
