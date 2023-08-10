@@ -1,5 +1,6 @@
 {
     "promote": "在 Twitter 上即时交换代币。安装 Mask.io 以在多链Dex上探索“更好的服务器”。",
+    "account_promote$facebook": "关注 @$t(mask:facebook_account) 在 Facebook 上交换加密货币",
     "impact_warning": "价格影响提示",
     "risk_warning": "风险提示",
     "risk_warning_description": "您想要交易的金额可能比当前市场价格下跌 <span>{{impact}}</span> 。因此，您可能会损失 <span>{{lostSymbol}}</span>  或 <span>{{- lostValue}}</span>。",
