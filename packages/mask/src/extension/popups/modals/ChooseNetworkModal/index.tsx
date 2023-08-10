@@ -101,6 +101,7 @@ const NetworkItem = memo(function NetworkItem({ network, currentNetworkId }: Net
                         size={24}
                         color={network.color}
                         name={network.name}
+                        preferName={network.isCustomized}
                     />
                 )}
             </div>

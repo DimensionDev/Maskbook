@@ -4,7 +4,8 @@ import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
 import { useAccount, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { ChainbaseHistory, ExplorerResolver } from '@masknet/web3-providers'
-import { TransactionStateType, formatBalance, multipliedBy, trimZero } from '@masknet/web3-shared-base'
+import { chainbase } from '@masknet/web3-providers/helpers'
+import { TransactionStatusType, formatBalance, multipliedBy, trimZero } from '@masknet/web3-shared-base'
 import { formatHash, formatWeiToEther, formatWeiToGwei } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography, alpha } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
@@ -14,9 +15,9 @@ import { Navigate, useLocation } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { ReplaceType, WalletAssetTabs } from '../type.js'
+import { modifyTransaction } from '../utils.js'
 import type { TransactionState } from './types.js'
 import { useTransactionLogs } from './useTransactionLogs.js'
-import { modifyTransaction } from '../utils.js'
 
 const useStyles = makeStyles()((theme) => ({
     statusTitle: {
@@ -167,7 +168,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
         return <Navigate to={`${PopupRoutes.Wallet}?tab=${WalletAssetTabs.Activity}`} replace />
     }
 
-    const { FAILED, SUCCEED, NOT_DEPEND } = TransactionStateType
+    const { FAILED, SUCCEED, NOT_DEPEND } = TransactionStatusType
     const StatusIconMap = {
         [FAILED]: <Icons.BaseClose size={20} />,
         [SUCCEED]: <Icons.FillSuccess size={20} />,
@@ -183,7 +184,10 @@ export const TransactionDetail = memo(function TransactionDetail() {
         [SUCCEED]: t('transaction_success'),
         [NOT_DEPEND]: t('transaction_pending'),
     }
-    const status = (transactionState?.status || NOT_DEPEND) as TransactionStateType
+    const status =
+        tx !== undefined
+            ? chainbase.normalizeTxStatus(tx.status)
+            : ((transactionState?.status || NOT_DEPEND) as TransactionStatusType)
     const isOut = transaction.from === account
     const link = transactionId ? ExplorerResolver.transactionLink(chainId!, transactionId) : undefined
 
@@ -226,15 +230,24 @@ export const TransactionDetail = memo(function TransactionDetail() {
                 </Typography>
                 <Box className={classes.field}>
                     <Typography className={classes.fieldName}>{t('transaction_from')}</Typography>
-                    <Typography className={classes.fieldValue} component="div">
-                        <ReversedAddress address={transaction.from!} />
-                    </Typography>
+                    <ProgressiveText
+                        className={classes.fieldValue}
+                        component="div"
+                        loading={!transaction.from && loadingTx}>
+                        <ReversedAddress address={(transaction.from || tx?.from_address) as string} />
+                    </ProgressiveText>
                 </Box>
                 <Box className={classes.field}>
                     <Typography className={classes.fieldName}>{t('transaction_to')}</Typography>
                     <Typography className={classes.fieldValue} component="div">
                         <ReversedAddress address={transaction.to!} />
                     </Typography>
+                    <ProgressiveText
+                        className={classes.fieldValue}
+                        component="div"
+                        loading={!transaction.to && loadingTx}>
+                        <ReversedAddress address={(transaction.to || tx?.to_address) as string} />
+                    </ProgressiveText>
                 </Box>
                 <Typography variant="h2" className={classes.sectionName}>
                     Transaction

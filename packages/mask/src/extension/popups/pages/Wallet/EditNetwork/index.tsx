@@ -13,7 +13,7 @@ import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { type z, type ZodCustomIssue } from 'zod'
 import { useI18N, type AvailableLocaleKeys } from '../../../../../utils/index.js'
-import { createSchema } from './network-schema.js'
+import { createSchema, fetchChains } from './network-schema.js'
 import { PageTitleContext } from '../../../context.js'
 import { useTitle } from '../../../hook/index.js'
 import { useWarnings } from './useWarnings.js'
@@ -161,6 +161,15 @@ export const EditNetwork = memo(function EditNetwork() {
             try {
                 const parsedData = await schema.parseAsync(data)
                 const chainId = parsedData.chainId
+                let symbol = parsedData.currencySymbol
+                if (!symbol) {
+                    const chains = await queryClient.fetchQuery({
+                        queryKey: ['chain-list'],
+                        queryFn: fetchChains,
+                    })
+                    symbol = chains.find((x) => x.chainId === chainId)?.nativeCurrency.symbol
+                }
+                symbol ||= ''
                 const network: TransferableNetwork<ChainId, SchemaType, NetworkType> = {
                     isCustomized: true,
                     type: NetworkType.CustomNetwork,
@@ -174,8 +183,8 @@ export const EditNetwork = memo(function EditNetwork() {
                         chainId,
                         type: TokenType.Fungible,
                         schema: SchemaType.Native,
-                        name: parsedData.currencySymbol || '',
-                        symbol: parsedData.currencySymbol || '',
+                        name: symbol,
+                        symbol,
                         decimals: 18,
                         address: ZERO_ADDRESS,
                     },
@@ -219,7 +228,7 @@ export const EditNetwork = memo(function EditNetwork() {
 
     return (
         <main className={classes.main}>
-            <form className={classes.form}>
+            <form className={classes.form} data-hide-scrollbar>
                 <Typography className={classes.label}>{t('network_name')}</Typography>
                 <Input
                     fullWidth
