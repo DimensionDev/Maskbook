@@ -17,7 +17,7 @@ export type FriendsInformation = ProfileInformation & {
     id: string
 }
 
-const PlatformSort: Record<NextIDPlatform, number> = {
+export const PlatformSort: Record<NextIDPlatform, number> = {
     [NextIDPlatform.Twitter]: 0,
     [NextIDPlatform.GitHub]: 1,
     [NextIDPlatform.Ethereum]: 2,
