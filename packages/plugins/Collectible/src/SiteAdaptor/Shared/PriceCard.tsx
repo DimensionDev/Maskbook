@@ -73,7 +73,7 @@ export function PriceCard(props: PriceCardProps) {
             </div>
         ) : null
 
-    const priceUSD = formatCurrency(topListing?.price?.usd ?? 0, 'USD', { isAssetValue: true })
+    const priceUSD = formatCurrency(topListing?.price?.usd ?? 0, 'USD', { onlyRemainTwoDecimal: true })
 
     return (
         <div className={classes.wrapper}>

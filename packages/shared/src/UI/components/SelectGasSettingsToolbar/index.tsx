@@ -302,7 +302,7 @@ export function SelectGasSettingsToolbarUI({
         if (!gasFee || gasFee.isZero()) return '$0'
         if (!currentGasCurrency || isSameAddress(nativeToken?.address, currentGasCurrency)) {
             return formatCurrency(formatWeiToEther(gasFee).times(nativeTokenPrice), 'USD', {
-                isAssetValue: true,
+                onlyRemainTwoDecimal: true,
             })
         }
 
@@ -311,7 +311,7 @@ export function SelectGasSettingsToolbarUI({
         return formatCurrency(
             new BigNumber(formatBalance(gasFee, currencyToken?.decimals)).times(currencyTokenPrice),
             'USD',
-            { isAssetValue: true },
+            { onlyRemainTwoDecimal: true },
         )
     }, [
         gasFee,

@@ -17,7 +17,7 @@ export const WalletAssetsValue = memo(function WalletAssetsValue({ account, ...p
 
     return (
         <ProgressiveText {...props} loading={isLoading}>
-            <FormattedCurrency value={value} formatter={formatCurrency} options={{ isAssetValue: true }} />
+            <FormattedCurrency value={value} formatter={formatCurrency} options={{ onlyRemainTwoDecimal: true }} />
         </ProgressiveText>
     )
 })

@@ -229,7 +229,7 @@ export const GasSetting1559 = memo(
                                                 .times(nativeTokenPrice)
                                                 .times(gasLimit ?? 21000),
                                             'USD',
-                                            { isAssetValue: true },
+                                            { onlyRemainTwoDecimal: true },
                                         ),
                                     }}
                                     components={{ span: <span /> }}
