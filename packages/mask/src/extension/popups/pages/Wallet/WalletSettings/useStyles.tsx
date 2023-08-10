@@ -75,6 +75,11 @@ export const useStyles = makeStyles()((theme) => ({
         bottom: 0,
         zIndex: 100,
     },
+    ellipsis: {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        maxWidth: 150,
+    },
     removeWalletButton: {
         marginBottom: 16,
     },
