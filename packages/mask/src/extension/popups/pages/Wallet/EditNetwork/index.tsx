@@ -219,7 +219,7 @@ export const EditNetwork = memo(function EditNetwork() {
 
     return (
         <main className={classes.main}>
-            <form className={classes.form}>
+            <form className={classes.form} data-hide-scrollbar>
                 <Typography className={classes.label}>{t('network_name')}</Typography>
                 <Input
                     fullWidth

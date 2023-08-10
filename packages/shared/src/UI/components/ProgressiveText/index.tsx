@@ -1,11 +1,12 @@
 import { Skeleton, Typography, type TypographyProps } from '@mui/material'
 import { memo, type ReactNode } from 'react'
 
-export interface ProgressiveTextProps extends TypographyProps {
+export interface ProgressiveTextProps extends Omit<TypographyProps, 'component'> {
     loading?: boolean
     skeletonWidth?: string | number
     skeletonHeight?: string | number
     fallback?: ReactNode
+    component?: string
 }
 
 export const ProgressiveText = memo(function ProgressiveText({

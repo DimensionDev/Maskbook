@@ -1,9 +1,9 @@
 import urlcat from 'urlcat'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import type { Transaction } from '@masknet/web3-shared-base'
+import { TransactionStatusType, type Transaction } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { CHAINBASE_API_URL } from './constants.js'
-import type { Tx } from './types.js'
+import type { Tx, TxStatus } from './types.js'
 import { fetchCachedJSON } from '../helpers/fetchJSON.js'
 
 export async function fetchFromChainbase<T>(pathname: string) {
@@ -30,4 +30,12 @@ export function toTransaction(chainId: ChainId, tx: Tx): Transaction<ChainId, Sc
         blockNumber: Number.parseInt(tx.block_number, 10),
         nonce: tx.nonce,
     }
+}
+
+export function normalizeChainbaseTxStatus(status: TxStatus) {
+    const map = {
+        0: TransactionStatusType.FAILED,
+        1: TransactionStatusType.SUCCEED,
+    }
+    return map[status]
 }
