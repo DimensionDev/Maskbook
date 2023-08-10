@@ -69,7 +69,7 @@ const useStyles = makeStyles<{ currentTab: TabType; searchError: boolean }>()((t
     },
     searchInput: {
         position: 'absolute',
-        left: 16,
+        transform: 'translateX(-36px)',
         width: 368,
         zIndex: 50,
     },
