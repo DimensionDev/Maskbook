@@ -334,5 +334,6 @@
     "persona_required": "必须拥有身份",
     "create": "创建",
     "connect": "连接",
-    "reset": "重置"
+    "reset": "重置",
+    "editor": "编辑器"
 }
