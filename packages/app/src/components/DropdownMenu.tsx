@@ -18,7 +18,7 @@ export function DropdownMenu(props: DropdownMenuProps) {
     const [menuOpen, setMenuOpen] = useState(false)
     const menuButtonRef = useRef<HTMLDivElement>(null)
 
-    const handleItemClick = (item: DropdownMenuItem, event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const handleItemClick = (item: DropdownMenuItem, event: React.MouseEvent<HTMLAnchorElement>) => {
         event.preventDefault()
         event.stopPropagation()
         props.onItemChange(item)

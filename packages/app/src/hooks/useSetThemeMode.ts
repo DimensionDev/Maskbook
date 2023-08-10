@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { Appearance } from '@masknet/public-api'
+import { type Appearance } from '@masknet/public-api'
 import { useSystemPreferencePalette } from '@masknet/theme'
 import { setThemeMode } from '../helpers/setThemeMode.js'
 

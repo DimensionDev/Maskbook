@@ -3,7 +3,7 @@
  * @param classes - An array or object where keys are class names and values are boolean conditions to include each class.
  * @returns A string containing the combined class names.
  */
-export function classNames(...classes: (string | Record<string, boolean>)[]): string {
+export function classNames(...classes: Array<string | Record<string, boolean>>): string {
     // Filter the provided classes based on their type
     const filteredClasses = classes.filter(Boolean)
 
