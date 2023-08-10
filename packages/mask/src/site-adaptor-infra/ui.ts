@@ -62,9 +62,9 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
     const abort = new AbortController()
     const { signal } = abort
     if (import.meta.webpackHot) {
-        console.log('SNS adaptor HMR enabled.')
+        console.log('Site adaptor HMR enabled.')
         ui_deferred.hotModuleReload?.(async (newDefinition) => {
-            console.log('SNS adaptor updated. Uninstalling current adaptor.')
+            console.log('Site adaptor updated. Uninstalling current adaptor.')
             abort.abort()
             await delay(200)
             definedSiteAdaptorsResolved.set(ui_deferred.networkIdentifier, newDefinition)
@@ -287,7 +287,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
 export async function loadSiteAdaptorUI(identifier: string): Promise<SiteAdaptorUI.Definition> {
     if (definedSiteAdaptorsResolved.has(identifier)) return definedSiteAdaptorsResolved.get(identifier)!
     const define = definedSiteAdaptorsUI.get(identifier)
-    if (!define) throw new Error('SNS adaptor not found')
+    if (!define) throw new Error('Site adaptor not found')
     const ui = (await define.load()).default
     definedSiteAdaptorsResolved.set(identifier, ui)
     if (import.meta.webpackHot) {

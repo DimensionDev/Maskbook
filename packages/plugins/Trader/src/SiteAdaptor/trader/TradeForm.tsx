@@ -218,10 +218,10 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { allTradeComputed } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
 
-        const snsAdaptorMinimalPlugins = useActivatedPluginsSiteAdaptor(true)
-        const isSNSClosed = snsAdaptorMinimalPlugins?.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
+        const minimalPlugins = useActivatedPluginsSiteAdaptor(true)
+        const isGoPlusSecurityMinimal = minimalPlugins?.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
         const isDashboardClosed = useIsMinimalModeDashBoard(PluginID.GoPlusSecurity)
-        const isTokenSecurityEnable = !isSNSClosed && !isDashboardClosed
+        const isTokenSecurityEnable = !isGoPlusSecurityMinimal && !isDashboardClosed
 
         // #region token balance
         const inputTokenBalanceAmount = new BigNumber(inputTokenBalance || '0')

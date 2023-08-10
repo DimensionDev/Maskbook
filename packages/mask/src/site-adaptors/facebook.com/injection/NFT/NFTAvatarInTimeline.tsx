@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { noop } from 'lodash-es'
 import { Flags } from '@masknet/flags'
 import { makeStyles } from '@masknet/theme'
-import { NFTBadgeTimeline, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
+import { NFTBadgeTimeline, RSS3_KEY_SITE } from '@masknet/plugin-avatar'
 import { DOMProxy, type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { startWatch } from '../../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
@@ -33,7 +33,7 @@ const TimelineRainbow = memo(
                     width={width}
                     height={height}
                     classes={{ root: classes.root }}
-                    snsKey={RSS3_KEY_SNS.FACEBOOK}
+                    siteKey={RSS3_KEY_SITE.FACEBOOK}
                 />
             </div>
         )

@@ -3,7 +3,7 @@ import type { DashboardRoutes, PersonaInformation, PluginID, SingletonModalRefCr
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { SiteAdaptor, IdentityResolved } from '@masknet/plugin-infra'
 import { ApplicationBoard, ApplicationSettingTabs } from './ApplicationBoardDialog.js'
-import type { PersonaAgainstSNSConnectStatus } from '../../../types.js'
+import type { PersonaPerSiteConnectStatus } from '../../../types.js'
 import { ApplicationBoardSettingsDialog } from './ApplicationSettingsDialog.js'
 
 export interface ApplicationBoardModalOpenProps {
@@ -12,8 +12,8 @@ export interface ApplicationBoardModalOpenProps {
     currentSite: SiteAdaptor
     allPersonas: PersonaInformation[]
     lastRecognized: IdentityResolved
-    applicationCurrentStatus?: PersonaAgainstSNSConnectStatus
-    personaAgainstSNSConnectStatusLoading: boolean
+    applicationCurrentStatus?: PersonaPerSiteConnectStatus
+    personaPerSiteConnectStatusLoading: boolean
     setPluginMinimalModeEnabled: (id: string, checked: boolean) => Promise<void>
     getDecentralizedSearchSettings: () => Promise<boolean>
     setDecentralizedSearchSettings: (checked: boolean) => Promise<void>
@@ -35,8 +35,8 @@ export const ApplicationBoardModal = forwardRef<
     const [currentSite, setCurrentSite] = useState<SiteAdaptor>()
     const [allPersonas, setAllPersonas] = useState<PersonaInformation[]>()
     const [lastRecognized, setLastRecognized] = useState<IdentityResolved>()
-    const [applicationCurrentStatus, setApplicationCurrentStatus] = useState<PersonaAgainstSNSConnectStatus>()
-    const [personaAgainstSNSConnectStatusLoading, setPersonaAgainstSNSConnectStatusLoading] = useState(false)
+    const [applicationCurrentStatus, setApplicationCurrentStatus] = useState<PersonaPerSiteConnectStatus>()
+    const [personaPerSiteConnectStatusLoading, setPersonaPerSiteConnectStatusLoading] = useState(false)
     const [setPluginMinimalModeEnabled, setSetPluginMinimalModeEnabled] =
         useState<(id: string, checked: boolean) => Promise<void>>()
     const [getDecentralizedSearchSettings, setGetDecentralizedSearchSettings] = useState<() => Promise<boolean>>()
@@ -54,7 +54,7 @@ export const ApplicationBoardModal = forwardRef<
             setAllPersonas(props.allPersonas)
             setLastRecognized(props.lastRecognized)
             setApplicationCurrentStatus(props.applicationCurrentStatus)
-            setPersonaAgainstSNSConnectStatusLoading(props.personaAgainstSNSConnectStatusLoading)
+            setPersonaPerSiteConnectStatusLoading(props.personaPerSiteConnectStatusLoading)
             setSetPluginMinimalModeEnabled(() => props.setPluginMinimalModeEnabled)
             setGetDecentralizedSearchSettings(() => props.getDecentralizedSearchSettings)
             setSetDecentralizedSearchSettings(() => props.setDecentralizedSearchSettings)
@@ -73,7 +73,7 @@ export const ApplicationBoardModal = forwardRef<
             currentSite={currentSite}
             applicationCurrentStatus={applicationCurrentStatus}
             queryOwnedPersonaInformation={queryOwnedPersonaInformation}
-            personaAgainstSNSConnectStatusLoading={personaAgainstSNSConnectStatusLoading}
+            personaPerSiteConnectStatusLoading={personaPerSiteConnectStatusLoading}
             openDashboard={openDashboard}
             setPluginMinimalModeEnabled={setPluginMinimalModeEnabled}
             getDecentralizedSearchSettings={getDecentralizedSearchSettings}

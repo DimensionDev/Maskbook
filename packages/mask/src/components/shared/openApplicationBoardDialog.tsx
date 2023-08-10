@@ -5,15 +5,15 @@ import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import { getCurrentSite } from '../../site-adaptors/utils.js'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/ui.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
-import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus.js'
+import { usePersonaPerSiteConnectStatus } from '../DataSource/usePersonaPerSiteConnectStatus.js'
 import Services from '../../extension/service.js'
 
 export function useOpenApplicationBoardDialog(quickMode?: boolean, focusPluginID?: PluginID) {
     const lastRecognized = useLastRecognizedIdentity()
     const allPersonas = usePersonasFromDB()
     const currentSite = getCurrentSite(activatedSiteAdaptorUI.networkIdentifier)
-    const { value: applicationCurrentStatus, loading: personaAgainstSNSConnectStatusLoading } =
-        usePersonaAgainstSNSConnectStatus()
+    const { value: applicationCurrentStatus, loading: personaPerSiteConnectStatusLoading } =
+        usePersonaPerSiteConnectStatus()
 
     return useCallback(
         () =>
@@ -26,7 +26,7 @@ export function useOpenApplicationBoardDialog(quickMode?: boolean, focusPluginID
                 setPluginMinimalModeEnabled: Services.Settings.setPluginMinimalModeEnabled,
                 getDecentralizedSearchSettings: Services.Settings.getDecentralizedSearchSettings,
                 setDecentralizedSearchSettings: Services.Settings.setDecentralizedSearchSettings,
-                personaAgainstSNSConnectStatusLoading,
+                personaPerSiteConnectStatusLoading,
                 applicationCurrentStatus,
                 quickMode,
                 focusPluginID,
@@ -36,7 +36,7 @@ export function useOpenApplicationBoardDialog(quickMode?: boolean, focusPluginID
             lastRecognized,
             applicationCurrentStatus,
             currentSite,
-            personaAgainstSNSConnectStatusLoading,
+            personaPerSiteConnectStatusLoading,
             quickMode,
             focusPluginID,
         ],

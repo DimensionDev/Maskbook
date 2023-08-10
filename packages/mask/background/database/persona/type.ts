@@ -141,7 +141,7 @@ export interface PersonaRecord {
     hasLogout?: boolean
     /**
      * create a dummy persona which should hide to the user until
-     * connected at least one SNS identity
+     * connected at least one website
      */
     uninitialized?: boolean
 }

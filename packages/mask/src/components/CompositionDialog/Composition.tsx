@@ -14,7 +14,7 @@ import { useCompositionClipboardRequest } from './useCompositionClipboardRequest
 import { useRecipientsList } from './useRecipientsList.js'
 import { useSubmit } from './useSubmit.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
-import { useCurrentPersona } from '../DataSource/usePersonaConnectStatus.js'
+import { useCurrentPersona } from '../DataSource/useCurrentPersona.js'
 import { EncryptionMethodType } from './EncryptionMethodSelector.js'
 import { useI18N } from '../../utils/index.js'
 

@@ -5,7 +5,7 @@ import type { ExternalPluginLoadDetails } from '../types.js'
 import { base } from '../base.js'
 import { ThirdPartyPluginCompositionEntry } from '../components/CompositionEntry.js'
 import { ExternalPluginMessages } from '../messages.js'
-import { isLocalContext } from '../sns-context.js'
+import { isLocalContext } from '../site-context.js'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { MaskMessages } from '@masknet/shared-base'
 

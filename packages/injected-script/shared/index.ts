@@ -12,7 +12,7 @@ export interface InternalEvents {
      * Simulate an image upload event.
      *
      * How to use:
-     * Call this event, then invoke the file selector (SNS). It will invoke click on some input, then let's replace with the result.
+     * Call this event, then invoke the file selector (for now it's instagram). It will invoke click on some input, then let's replace with the result.
      */
     hookInputUploadOnce: [format: string, fileName: string, file: number[], triggerOnActiveElementNow: boolean]
 

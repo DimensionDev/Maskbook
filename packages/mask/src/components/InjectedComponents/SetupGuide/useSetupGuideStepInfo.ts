@@ -23,7 +23,7 @@ export function useSetupGuideStepInfo(destinedPersona: PersonaIdentifier) {
     const lastSettingState = useSetupGuideStatus()
     // #endregion
 
-    // #region Get SNS username
+    // #region Get username
     const lastRecognized = useLastRecognizedIdentity()
     const username = lastSettingState.username || lastRecognized.identifier?.userId || ''
     // #endregion
@@ -89,7 +89,7 @@ export function useSetupGuideStepInfo(destinedPersona: PersonaIdentifier) {
         )
         if (!personaConnectedProfile) return composeInfo(SetupGuideStep.FindUsername, 'doing')
 
-        // The SNS is enabled NextID
+        // NextID is available on this site.
         // Should show pin extension when not set
         if (!activatedSiteAdaptorUI.configuration.nextIDConfig?.platform)
             return composeInfo(SetupGuideStep.Close, 'close')

@@ -109,21 +109,21 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
 
         if (!currentProfileIdentify || !selectedPersona) return null
 
-        // Selected Persona not link current SNS
+        // Selected persona does not link the current site
         if (!selectedPersona.persona.linkedProfiles.find((x) => isSameProfile(x, currentProfileIdentify.identifier))) {
             isConnected = false
         }
 
         if (!isSamePersona(selectedPersona.persona, currentPersonaIdentifier)) isConnected = false
 
-        const verifiedSns = selectedPersona.proof.find(
+        const verifiedAtSite = selectedPersona.proof.find(
             (x) =>
                 isSameProfile(
                     resolveNextIDIdentityToProfile(x.identity, x.platform),
                     currentProfileIdentify.identifier,
                 ) && x.is_valid,
         )
-        if (!verifiedSns) {
+        if (!verifiedAtSite) {
             isVerified = false
         }
 

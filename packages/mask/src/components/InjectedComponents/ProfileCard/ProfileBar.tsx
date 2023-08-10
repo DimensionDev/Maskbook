@@ -114,7 +114,7 @@ export interface ProfileBarProps extends BoxProps {
 
 /**
  * What a Profile includes:
- * - SNS info
+ * - Website info
  * - Wallets
  */
 export const ProfileBar = memo<ProfileBarProps>(

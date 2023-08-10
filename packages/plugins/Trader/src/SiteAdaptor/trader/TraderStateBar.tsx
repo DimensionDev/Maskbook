@@ -99,13 +99,13 @@ export function TraderStateBar({
     )
     // #endregion
 
-    const snsAdaptorMinimalPlugins = useActivatedPluginsSiteAdaptor(true)
-    const isSNSClosed = snsAdaptorMinimalPlugins?.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
+    const minimalPlugins = useActivatedPluginsSiteAdaptor(true)
+    const isGoPlusMinimal = minimalPlugins?.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
     const isDashboardClosed = useIsMinimalModeDashBoard(PluginID.GoPlusSecurity)
 
-    const isTokenSecurityEnable = !isSNSClosed && !isDashboardClosed
+    const isTokenSecurityEnable = !isGoPlusMinimal && !isDashboardClosed
 
-    const { value: tokenSecurityInfo, error } = useTokenSecurity(
+    const { value: tokenSecurityInfo } = useTokenSecurity(
         pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         outputToken?.address.trim(),
         isTokenSecurityEnable,

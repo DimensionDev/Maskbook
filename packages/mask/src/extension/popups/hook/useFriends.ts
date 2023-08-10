@@ -7,7 +7,7 @@ import {
     NextIDPlatform,
 } from '@masknet/shared-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
-import { useCurrentPersona } from '../../../components/DataSource/usePersonaConnectStatus.js'
+import { useCurrentPersona } from '../../../components/DataSource/useCurrentPersona.js'
 import Services from '../../../extension/service.js'
 import { NextIDProof } from '@masknet/web3-providers'
 import { uniqBy } from 'lodash-es'

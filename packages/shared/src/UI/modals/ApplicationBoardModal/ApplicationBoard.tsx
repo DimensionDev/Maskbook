@@ -11,7 +11,7 @@ import {
     SelectProviderModal,
     useSharedI18N,
     PersonaContext,
-    type PersonaAgainstSNSConnectStatus,
+    type PersonaPerSiteConnectStatus,
 } from '@masknet/shared'
 import { Boundary, getMaskColor, makeStyles } from '@masknet/theme'
 import {
@@ -88,8 +88,8 @@ interface ApplicationBoardContentProps extends withClasses<'applicationWrapper' 
     currentSite?: SiteAdaptor
     lastRecognized?: IdentityResolved
     allPersonas: PersonaInformation[]
-    applicationCurrentStatus?: PersonaAgainstSNSConnectStatus
-    personaAgainstSNSConnectStatusLoading: boolean
+    applicationCurrentStatus?: PersonaPerSiteConnectStatus
+    personaPerSiteConnectStatusLoading: boolean
 }
 
 export function ApplicationBoardContent({
@@ -99,7 +99,7 @@ export function ApplicationBoardContent({
     lastRecognized,
     allPersonas,
     applicationCurrentStatus,
-    personaAgainstSNSConnectStatusLoading,
+    personaPerSiteConnectStatusLoading,
     classes,
 }: ApplicationBoardContentProps) {
     return (
@@ -109,7 +109,7 @@ export function ApplicationBoardContent({
                 lastRecognized={lastRecognized}
                 allPersonas={allPersonas}
                 applicationCurrentStatus={applicationCurrentStatus}
-                personaAgainstSNSConnectStatusLoading={personaAgainstSNSConnectStatusLoading}>
+                personaPerSiteConnectStatusLoading={personaPerSiteConnectStatusLoading}>
                 <ApplicationBoardPluginsList
                     currentSite={currentSite}
                     classes={{
@@ -130,21 +130,22 @@ interface ApplicationBoardPluginsListProps
 function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
     const { currentSite = SiteAdaptor.Twitter } = props
     const t = useSharedI18N()
-    const snsAdaptorPlugins = useActivatedPluginsSiteAdaptor('any')
+    const plugins = useActivatedPluginsSiteAdaptor('any')
     const { pluginID: currentWeb3Network } = useNetworkContext()
     const { account, chainId } = useChainContext()
     const applicationList = useMemo(
         () =>
-            snsAdaptorPlugins
+            plugins
                 .flatMap(({ ID, ApplicationEntries, enableRequirement }) => {
                     if (!ApplicationEntries) return []
                     const currentWeb3NetworkSupportedChainIds = enableRequirement.web3?.[currentWeb3Network]
                     const isWalletConnectedRequired = currentWeb3NetworkSupportedChainIds !== undefined
-                    const currentSNSIsSupportedNetwork = enableRequirement.supports.sites[currentSite]
-                    const isSNSEnabled = currentSNSIsSupportedNetwork === undefined || currentSNSIsSupportedNetwork
+                    const currentSiteIsSupportedNetwork = enableRequirement.supports.sites[currentSite]
+                    const isEnabledOnTheCurrentSite =
+                        currentSiteIsSupportedNetwork === undefined || currentSiteIsSupportedNetwork
                     return ApplicationEntries.map((entry) => ({
                         entry,
-                        enabled: isSNSEnabled,
+                        enabled: isEnabledOnTheCurrentSite,
                         pluginID: ID,
                         isWalletConnectedRequired:
                             !account && isWalletConnectedRequired && !entry.entryWalletConnectedNotRequired,
@@ -154,7 +155,7 @@ function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
                     return (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0)
                 })
                 .filter((x) => !!x.entry.RenderEntryComponent),
-        [snsAdaptorPlugins, currentWeb3Network, chainId, account],
+        [plugins, currentWeb3Network, chainId, account],
     )
     const recommendFeatureAppList = applicationList
         .filter((x) => x.entry.recommendFeature)
@@ -275,11 +276,11 @@ interface ApplicationEntryStatusContextProps {
     isPersonaConnected: boolean | undefined
     isPersonaCreated: boolean | undefined
     isNextIDVerify: boolean | undefined
-    isSNSConnectToCurrentPersona: boolean | undefined
+    isSiteConnectedToCurrentPersona: boolean | undefined
     shouldDisplayTooltipHint: boolean | undefined
     shouldVerifyNextId: boolean | undefined
     currentPersonaPublicKey: string | undefined
-    currentSNSConnectedPersonaPublicKey: string | undefined
+    currentSiteConnectedPersonaPublicKey: string | undefined
     personaAction: ((target?: string | undefined, position?: 'center' | 'top-right' | undefined) => void) | undefined
     isLoading: boolean
 }
@@ -288,11 +289,11 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
     isPersonaConnected: undefined,
     isPersonaCreated: undefined,
     isNextIDVerify: undefined,
-    isSNSConnectToCurrentPersona: undefined,
+    isSiteConnectedToCurrentPersona: undefined,
     shouldDisplayTooltipHint: undefined,
     shouldVerifyNextId: undefined,
     currentPersonaPublicKey: undefined,
-    currentSNSConnectedPersonaPublicKey: undefined,
+    currentSiteConnectedPersonaPublicKey: undefined,
     personaAction: undefined,
     isLoading: false,
 })
@@ -301,8 +302,8 @@ ApplicationEntryStatusContext.displayName = 'ApplicationEntryStatusContext'
 interface ApplicationEntryStatusProviderProps extends PropsWithChildren<{}> {
     openDashboard?: (route?: DashboardRoutes, search?: string) => void
     lastRecognized?: IdentityResolved
-    applicationCurrentStatus?: PersonaAgainstSNSConnectStatus
-    personaAgainstSNSConnectStatusLoading: boolean
+    applicationCurrentStatus?: PersonaPerSiteConnectStatus
+    personaPerSiteConnectStatusLoading: boolean
     allPersonas: PersonaInformation[]
 }
 function ApplicationEntryStatusProvider({
@@ -310,7 +311,7 @@ function ApplicationEntryStatusProvider({
     openDashboard,
     lastRecognized,
     applicationCurrentStatus,
-    personaAgainstSNSConnectStatusLoading,
+    personaPerSiteConnectStatusLoading,
     allPersonas,
 }: ApplicationEntryStatusProviderProps) {
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
@@ -321,27 +322,27 @@ function ApplicationEntryStatusProvider({
         lastRecognized,
     )
 
-    const { isSNSConnectToCurrentPersona, currentPersonaPublicKey, currentSNSConnectedPersonaPublicKey } =
+    const { isSiteConnectedToCurrentPersona, currentPersonaPublicKey, currentSiteConnectedPersonaPublicKey } =
         applicationCurrentStatus ?? {}
 
     const Context = useMemo(
-        () => ({
+        (): ApplicationEntryStatusContextProps => ({
             personaAction: personaConnectStatus.action,
             isPersonaCreated: personaConnectStatus.hasPersona,
             isPersonaConnected: personaConnectStatus.connected,
             isNextIDVerify: personaConnectStatus.verified,
-            isSNSConnectToCurrentPersona,
+            isSiteConnectedToCurrentPersona,
             shouldDisplayTooltipHint:
-                applicationCurrentStatus?.isSNSConnectToCurrentPersona === false && personaConnectStatus.connected,
+                applicationCurrentStatus?.isSiteConnectedToCurrentPersona === false && personaConnectStatus.connected,
             shouldVerifyNextId: !!(!personaConnectStatus.verified && applicationCurrentStatus),
             currentPersonaPublicKey,
-            currentSNSConnectedPersonaPublicKey,
-            isLoading: personaStatusLoading || personaAgainstSNSConnectStatusLoading,
+            currentSiteConnectedPersonaPublicKey,
+            isLoading: personaStatusLoading || personaPerSiteConnectStatusLoading,
         }),
         [
             applicationCurrentStatus,
             personaStatusLoading,
-            personaAgainstSNSConnectStatusLoading,
+            personaPerSiteConnectStatusLoading,
             personaConnectStatus.action,
             personaConnectStatus.hasPersona,
             personaConnectStatus.connected,

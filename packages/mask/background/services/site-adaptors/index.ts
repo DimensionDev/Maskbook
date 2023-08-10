@@ -1,4 +1,4 @@
-export { getDesignatedAutoStartPluginID, openSNSAndActivatePlugin } from './open-with-plugin.js'
+export { getDesignatedAutoStartPluginID, openSiteAndActivatePlugin } from './open-with-plugin.js'
 export {
     getSupportedSites,
     getSupportedOrigins,

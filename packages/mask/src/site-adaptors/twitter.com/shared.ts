@@ -1,7 +1,7 @@
 import { type PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import type { SiteAdaptor } from '@masknet/types'
-import { createSNSAdaptorSpecializedPostContext } from '../../site-adaptor-infra/utils/create-post-context.js'
+import { createSiteAdaptorSpecializedPostContext } from '../../site-adaptor-infra/utils/create-post-context.js'
 import { hasPayloadLike } from '../../utils/index.js'
 import { twitterBase } from './base.js'
 import { TwitterDecoder } from '@masknet/encryption'
@@ -39,7 +39,7 @@ export const twitterShared: SiteAdaptor.Shared & SiteAdaptor.Base = {
                 location.assign(url)
             }
         },
-        createPostContext: createSNSAdaptorSpecializedPostContext({
+        createPostContext: createSiteAdaptorSpecializedPostContext({
             hasPayloadLike: (text) => {
                 return TwitterDecoder(text).map(hasPayloadLike).unwrapOr(false)
             },

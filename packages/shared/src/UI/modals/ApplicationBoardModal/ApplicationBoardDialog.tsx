@@ -2,12 +2,7 @@ import { useState, useCallback, useEffect } from 'react'
 import { DialogContent, IconButton, Tab } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import {
-    InjectedDialog,
-    LeavePageConfirmModal,
-    useSharedI18N,
-    type PersonaAgainstSNSConnectStatus,
-} from '@masknet/shared'
+import { InjectedDialog, LeavePageConfirmModal, useSharedI18N, type PersonaPerSiteConnectStatus } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch.js'
 import { ApplicationSettingPluginList } from './ApplicationSettingPluginList.js'
@@ -49,8 +44,8 @@ interface ApplicationBoardProps {
     currentSite?: SiteAdaptor
     allPersonas: PersonaInformation[]
     lastRecognized?: IdentityResolved
-    applicationCurrentStatus?: PersonaAgainstSNSConnectStatus
-    personaAgainstSNSConnectStatusLoading: boolean
+    applicationCurrentStatus?: PersonaPerSiteConnectStatus
+    personaPerSiteConnectStatusLoading: boolean
     setPluginMinimalModeEnabled?: (id: string, checked: boolean) => Promise<void>
     getDecentralizedSearchSettings?: () => Promise<boolean>
     setDecentralizedSearchSettings?: (checked: boolean) => Promise<void>
@@ -69,7 +64,7 @@ export function ApplicationBoard({
     allPersonas,
     lastRecognized,
     applicationCurrentStatus,
-    personaAgainstSNSConnectStatusLoading,
+    personaPerSiteConnectStatusLoading,
     setPluginMinimalModeEnabled,
     getDecentralizedSearchSettings,
     setDecentralizedSearchSettings,
@@ -153,7 +148,7 @@ export function ApplicationBoard({
                             lastRecognized={lastRecognized}
                             allPersonas={allPersonas}
                             applicationCurrentStatus={applicationCurrentStatus}
-                            personaAgainstSNSConnectStatusLoading={personaAgainstSNSConnectStatusLoading}
+                            personaPerSiteConnectStatusLoading={personaPerSiteConnectStatusLoading}
                         />
                     )}
                 </DialogContent>

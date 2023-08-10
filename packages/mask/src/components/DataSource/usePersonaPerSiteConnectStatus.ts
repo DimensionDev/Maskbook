@@ -1,34 +1,36 @@
 import { useCallback } from 'react'
 import { useAsyncRetry } from 'react-use'
-import type { PersonaAgainstSNSConnectStatus } from '@masknet/shared'
+import type { PersonaPerSiteConnectStatus } from '@masknet/shared'
 import type { PersonaInformation } from '@masknet/shared-base'
 import Services from '../../extension/service.js'
 import { useLastRecognizedIdentity } from './useActivatedUI.js'
 import { usePersonasFromDB } from './usePersonasFromDB.js'
 import { useSetupGuideStatus } from '../GuideStep/useSetupGuideStatus.js'
 
-export function usePersonaAgainstSNSConnectStatus() {
+export function usePersonaPerSiteConnectStatus() {
     const personas = usePersonasFromDB()
     const lastState = useSetupGuideStatus()
     const lastRecognized = useLastRecognizedIdentity()
     const username = lastState.username || lastRecognized.identifier?.userId
-    const checkSNSConnectToCurrentPersona = useCallback(
+    const checkSiteConnectedToCurrentPersona = useCallback(
         (persona: PersonaInformation) =>
             username ? persona.linkedProfiles.some((x) => x.identifier.userId === username) : false,
         [username],
     )
 
-    return useAsyncRetry<PersonaAgainstSNSConnectStatus | undefined>(async () => {
+    return useAsyncRetry<PersonaPerSiteConnectStatus | undefined>(async () => {
         const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
         const currentPersona = (await Services.Identity.queryOwnedPersonaInformation(true)).find(
             (x) => x.identifier === currentPersonaIdentifier,
         )
-        const currentSNSConnectedPersona = personas.find(checkSNSConnectToCurrentPersona)
-        if (!currentPersona || !currentSNSConnectedPersona) return
+        const currentSiteConnectedPersona = personas.find(checkSiteConnectedToCurrentPersona)
+        if (!currentPersona || !currentSiteConnectedPersona) return
         return {
-            isSNSConnectToCurrentPersona: currentPersona ? checkSNSConnectToCurrentPersona(currentPersona) : false,
+            isSiteConnectedToCurrentPersona: currentPersona
+                ? checkSiteConnectedToCurrentPersona(currentPersona)
+                : false,
             currentPersonaPublicKey: currentPersona?.identifier.rawPublicKey,
-            currentSNSConnectedPersonaPublicKey: currentSNSConnectedPersona?.identifier.rawPublicKey,
+            currentSiteConnectedPersonaPublicKey: currentSiteConnectedPersona?.identifier.rawPublicKey,
         }
-    }, [checkSNSConnectToCurrentPersona, personas.map((x) => x.identifier.toText()).join(',')])
+    }, [checkSiteConnectedToCurrentPersona, personas.map((x) => x.identifier.toText()).join(',')])
 }

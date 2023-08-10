@@ -173,7 +173,7 @@ namespace Version38Or39 {
         if (x === EncryptPayloadNetwork.Minds) return 'minds-'
         if (x === EncryptPayloadNetwork.Instagram) return 'instagram-'
         if (x === EncryptPayloadNetwork.Unknown)
-            throw new TypeError('[@masknet/encryption] Current SNS network is not correctly configured.')
+            throw new TypeError('[@masknet/encryption] Current network is not correctly configured.')
         unreachable(x)
     }
 
@@ -343,7 +343,7 @@ namespace Version37 {
         if (x === EncryptPayloadNetwork.Minds) return '37-minds'
         if (x === EncryptPayloadNetwork.Instagram) return '37-ins'
         if (x === EncryptPayloadNetwork.Unknown)
-            throw new TypeError('[@masknet/encryption] Current SNS network is not correctly configured.')
+            throw new TypeError('[@masknet/encryption] Current network is not correctly configured.')
         unreachable(x)
     }
 }

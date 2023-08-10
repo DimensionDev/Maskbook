@@ -8,7 +8,7 @@ import { Twitter } from '@masknet/web3-providers'
 import { Icons } from '@masknet/icons'
 import { NFTAvatar } from './NFTAvatar.js'
 import { NFTInfo } from './NFTInfo.js'
-import { RSS3_KEY_SNS } from '../constants.js'
+import { RSS3_KEY_SITE } from '../constants.js'
 import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
 import { useI18N } from '../locales/index.js'
@@ -51,7 +51,7 @@ export const PersonaItem = memo(function PersonaItem(props: PersonaItemProps) {
         userId,
         Twitter.getAvatarId(avatar) ?? '',
         persona,
-        RSS3_KEY_SNS.TWITTER,
+        RSS3_KEY_SITE.TWITTER,
     )
 
     const handleSelect = useCallback(() => {

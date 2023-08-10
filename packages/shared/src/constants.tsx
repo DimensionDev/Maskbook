@@ -24,16 +24,16 @@ export const SOCIAL_MEDIA_ROUND_ICON_MAPPING: Record<EnhanceableSite | string, G
     [EnhanceableSite.Localhost]: null,
 }
 
-export enum RSS3_KEY_SNS {
+export enum RSS3_NFT_SITE_KEY {
     TWITTER = '_nfts',
     FACEBOOK = '_facebook_nfts',
     INSTAGRAM = '_instagram_nfts',
 }
 
-export const SNS_RSS3_FIELD_KEY_MAP: Partial<Record<EnhanceableSite, RSS3_KEY_SNS>> = {
-    [EnhanceableSite.Facebook]: RSS3_KEY_SNS.FACEBOOK,
-    [EnhanceableSite.Twitter]: RSS3_KEY_SNS.TWITTER,
-    [EnhanceableSite.Instagram]: RSS3_KEY_SNS.INSTAGRAM,
+export const EnhanceableSite_RSS3_NFT_SITE_KEY_map: Partial<Record<EnhanceableSite, RSS3_NFT_SITE_KEY>> = {
+    [EnhanceableSite.Facebook]: RSS3_NFT_SITE_KEY.FACEBOOK,
+    [EnhanceableSite.Twitter]: RSS3_NFT_SITE_KEY.TWITTER,
+    [EnhanceableSite.Instagram]: RSS3_NFT_SITE_KEY.INSTAGRAM,
 }
 
 export const PERSONA_AVATAR_DB_NAMESPACE = 'com.maskbook.persona.avatar.storage'

@@ -78,7 +78,7 @@ function getTopOffset() {
         // 96, height of the header of web3 tab
         return 53 + 96
     }
-    // TODO Other SNS pages
+    // TODO Other sites
     return 0
 }
 

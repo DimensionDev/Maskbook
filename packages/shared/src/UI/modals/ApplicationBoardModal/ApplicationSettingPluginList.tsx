@@ -88,9 +88,9 @@ export function ApplicationSettingPluginList() {
     const { classes } = useStyles({ iconFilterColor: undefined })
     const t = useSharedI18N()
 
-    const snsAdaptorPlugins = useActivatedPluginsSiteAdaptor('any')
+    const plugins = useActivatedPluginsSiteAdaptor('any')
     const applicationList = useMemo(() => {
-        return snsAdaptorPlugins
+        return plugins
             .flatMap(({ ID, ApplicationEntries: entries }) => {
                 if (!entries) return []
                 return entries
@@ -100,7 +100,7 @@ export function ApplicationSettingPluginList() {
             .sort((a, b) => {
                 return (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0)
             })
-    }, [snsAdaptorPlugins])
+    }, [plugins])
 
     const unlisted = useUnlistedEntries()
     const listedEntries = useMemo(() => {

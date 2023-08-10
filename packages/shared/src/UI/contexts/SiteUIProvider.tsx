@@ -8,7 +8,7 @@ import { compose, getSiteType, i18NextInstance, NetworkPluginID, pluginIDsSettin
 import { queryClient, useValueRef } from '@masknet/shared-base-ui'
 import { I18NextProviderHMR } from '../components/I18NextProviderHMR.js'
 
-export function SNS_UIProvider(children: React.ReactNode) {
+export function SiteUIProvider(children: React.ReactNode) {
     return compose(
         // Avoid the crash due to unhandled suspense
         (children) => <Suspense children={children} />,

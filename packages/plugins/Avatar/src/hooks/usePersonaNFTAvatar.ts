@@ -9,7 +9,7 @@ import {
 } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Twitter } from '@masknet/web3-providers'
-import type { RSS3_KEY_SNS } from '../constants.js'
+import type { RSS3_KEY_SITE } from '../constants.js'
 import type { AvatarMetaDB, NextIDAvatarMeta } from '../types.js'
 import { useGetNFTAvatar } from './useGetNFTAvatar.js'
 import { getNFTAvatarByUserId } from '../utils/index.js'
@@ -22,26 +22,26 @@ const cache = new LRUCache<string, NextIDAvatarMeta>({
 type GetNFTAvatar = (
     userId?: string,
     network?: EnhanceableSite,
-    snsKey?: RSS3_KEY_SNS,
+    key?: RSS3_KEY_SITE,
 ) => Promise<AvatarMetaDB | undefined>
 
-export function usePersonaNFTAvatar(userId: string, avatarId: string, persona: string, snsKey: RSS3_KEY_SNS) {
+export function usePersonaNFTAvatar(userId: string, avatarId: string, persona: string, siteKey: RSS3_KEY_SITE) {
     const getNFTAvatar = useGetNFTAvatar()
 
     return useAsyncRetry(async () => {
         if (!userId) return
         const key = `${userId}-${getSiteType()}`
         if (!cache.has(key)) {
-            const nftAvatar = await getNFTAvatarForCache(userId, snsKey, avatarId, persona, getNFTAvatar)
+            const nftAvatar = await getNFTAvatarForCache(userId, siteKey, avatarId, persona, getNFTAvatar)
             if (nftAvatar) cache.set(key, nftAvatar)
         }
         return cache.get(key)
-    }, [userId, persona, snsKey, getNFTAvatar, avatarId])
+    }, [userId, persona, siteKey, getNFTAvatar, avatarId])
 }
 
 async function getNFTAvatarForCache(
     userId: string,
-    snsKey: RSS3_KEY_SNS,
+    key: RSS3_KEY_SITE,
     avatarId: string,
     persona: string,
     fn: GetNFTAvatar,
@@ -50,7 +50,7 @@ async function getNFTAvatarForCache(
     if (avatarMetaFromPersona) return avatarMetaFromPersona
     const siteType = getEnhanceableSiteType()
     if (!siteType) return
-    const avatarMeta = await fn(userId, siteType, snsKey)
+    const avatarMeta = await fn(userId, siteType, key)
     if (!avatarMeta) return
     if (avatarId && avatarId !== avatarMeta.avatarId) return
     if (avatarMeta.pluginId === NetworkPluginID.PLUGIN_SOLANA) {
@@ -59,14 +59,14 @@ async function getNFTAvatarForCache(
     return { imageUrl: '', nickname: '', pluginId: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet, ...avatarMeta }
 }
 
-export function useCheckPersonaNFTAvatar(userId: string, avatarId: string, persona: string, snsKey: RSS3_KEY_SNS) {
+export function useCheckPersonaNFTAvatar(userId: string, avatarId: string, persona: string, siteKey: RSS3_KEY_SITE) {
     const getNFTAvatar = useGetNFTAvatar()
 
     return useAsyncRetry(async () => {
         if (!userId) return
         const key = `${userId}-${getSiteType()}`
         if (!cache.has(key)) {
-            const nftAvatar = await getNFTAvatarForCache(userId, snsKey, avatarId, persona, getNFTAvatar)
+            const nftAvatar = await getNFTAvatarForCache(userId, siteKey, avatarId, persona, getNFTAvatar)
             if (nftAvatar) cache.set(key, nftAvatar)
         }
         const metaData = cache.get(key)
@@ -84,5 +84,5 @@ export function useCheckPersonaNFTAvatar(userId: string, avatarId: string, perso
                 }
         }
         return metaData
-    }, [userId, persona, snsKey, getNFTAvatar, avatarId])
+    }, [userId, persona, siteKey, getNFTAvatar, avatarId])
 }
