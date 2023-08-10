@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Dropmenu } from '../components/Dropmenu.js'
+import { DropdownMenu } from '../components/DropdownMenu.js'
 import { DashboardBody } from '../components/DashboardBody.js'
 import { DashboardContainer } from '../components/DashboardContainer.js'
 import { DashboardHeader } from '../components/DashboardHeader.js'
@@ -31,8 +31,8 @@ const SetupThemeMode = memo(() => {
 
     return (
         <div className="flex w-full sm:p-6 justify-center sm:items-center">
-            <Typography className="w-full text-black dark:text-white text-base">Apperance</Typography>
-            <Dropmenu
+            <Typography className="w-full text-black dark:text-white text-base">Appearance</Typography>
+            <DropdownMenu
                 activeItemId={mode}
                 items={[
                     {
@@ -49,10 +49,10 @@ const SetupThemeMode = memo(() => {
                     },
                 ]}
                 onItemChange={(item) => {
-                    const apperance = item.id as Appearance
+                    const appearance = item.id as Appearance
 
-                    setThemeMode(apperance)
-                    MaskMessages.events.appearanceSettings.sendToLocal(apperance)
+                    setThemeMode(appearance)
+                    MaskMessages.events.appearanceSettings.sendToLocal(appearance)
                 }}
             />
         </div>

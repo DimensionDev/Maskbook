@@ -3,22 +3,22 @@ import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { classNames } from '../helpers/classNames.js'
 
-export interface DropmenuItem {
+export interface DropdownMenuItem {
     id: string
     label: string
 }
 
-export interface DropmenuProps {
-    items: DropmenuItem[]
+export interface DropdownMenuProps {
+    items: DropdownMenuItem[]
     activeItemId: string
-    onItemChange: (item: DropmenuItem) => void
+    onItemChange: (item: DropdownMenuItem) => void
 }
 
-export function Dropmenu(props: DropmenuProps) {
+export function DropdownMenu(props: DropdownMenuProps) {
     const [menuOpen, setMenuOpen] = useState(false)
     const menuButtonRef = useRef<HTMLDivElement>(null)
 
-    const handleItemClick = (item: DropmenuItem, event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const handleItemClick = (item: DropdownMenuItem, event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         event.preventDefault()
         event.stopPropagation()
         props.onItemChange(item)
