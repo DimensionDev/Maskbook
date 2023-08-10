@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect } from 'react'
-import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { DisableShadowRootContext, ShadowRootIsolation } from '@masknet/theme'
 import { SiteAdaptorContextRef } from '@masknet/plugin-infra/content-script'
 import { DashboardForDesktop } from './components/DashboardDesktop.js'
@@ -24,7 +24,7 @@ export function MainUI() {
     return (
         <DashboardContext.Provider>
             <Suspense fallback={null}>
-                <HashRouter>
+                <BrowserRouter>
                     <div className="bg-white dark:bg-black h-full">
                         <DashboardForMobile />
                         <DashboardForDesktop />
@@ -38,7 +38,7 @@ export function MainUI() {
                             <Route path="*" element={<Navigate to={ApplicationRoutes.Compose} />} />
                         </Routes>
                     </div>
-                </HashRouter>
+                </BrowserRouter>
 
                 <DisableShadowRootContext.Provider value={false}>
                     <ShadowRootIsolation>

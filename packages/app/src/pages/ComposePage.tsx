@@ -5,9 +5,9 @@ import { encrypt } from '@masknet/encryption'
 import { PostInfoContext } from '@masknet/plugin-infra/content-script'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import { PageContainer } from '../components/PageContainer.js'
-import { getPostPayload } from '../helpers/getPostPayload.js'
 import { createPostInfoContext } from '../helpers/createPostInfoContext.js'
 import { DecryptMessage } from '../main/DecryptMessage.js'
+import { usePostPayload } from '../hooks/usePostPayload.js'
 
 export interface ComposePageProps {}
 
@@ -16,8 +16,8 @@ async function throws(): Promise<never> {
 }
 
 export default function ComposePage(props: ComposePageProps) {
-    const payload = getPostPayload()
     const context = useMemo(() => createPostInfoContext(), [])
+    const payload = usePostPayload()
 
     const onSubmit = useCallback(async (data: SerializableTypedMessages) => {
         const encrypted = await encrypt(

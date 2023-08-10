@@ -32,7 +32,7 @@ export function DecryptMessage(props: { text: string; version: string }) {
                 <TypedMessageRender message={message} />
             </Box>
 
-            <Suspense fallback={<Typography>Plugin is loading...</Typography>}>
+            <Suspense fallback={<Typography sx={{ padding: 2 }}>Plugin is loading...</Typography>}>
                 <PluginRender message={message} />
             </Suspense>
         </RegistryContext.Provider>
