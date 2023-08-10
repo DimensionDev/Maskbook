@@ -3,7 +3,7 @@ import { scale10 } from './number.js'
 import { CurrencyType } from '../index.js'
 
 export interface FormatterCurrencyOptions {
-    onlyRemainTwoDecimal?: boolean
+    isAssetValue?: boolean
     fiatCurrencyRate?: number
     customDecimalConfig?: {
         boundary: BigNumber
@@ -12,10 +12,12 @@ export interface FormatterCurrencyOptions {
 }
 
 const BOUNDARIES = {
+    zeroDecimalBoundary: scale10(1, 0),
     twoDecimalBoundary: scale10(1, -2),
     sixDecimalBoundary: scale10(1, -6),
     eightDecimalBoundary: scale10(1, -8),
     twelveDecimalBoundary: scale10(1, -12),
+    zeroDecimalExp: 0,
     twoDecimalExp: 2,
     sixDecimalExp: 6,
     eightDecimalExp: 8,
@@ -48,8 +50,16 @@ const formatCurrencySymbol = (symbol: string, isLead: boolean) => {
     return isLead || symbol.length === 0 ? symbol : ` ${symbol}`
 }
 
-const fiatCurrencySymbolModifier = (result: string, currency: LiteralUnion<Keys | 'USD'> = CurrencyType.USD) => {
-    return currency === CurrencyType.HKD ? `HK${result}` : result
+const fiatCurrencyResultModifier = (
+    result: string,
+    currency: LiteralUnion<Keys | 'USD'> = CurrencyType.USD,
+    isAssetValue: boolean,
+) => {
+    if (currency === CurrencyType.HKD) return result.replace('$', 'HK$')
+
+    if (currency === CurrencyType.JPY && isAssetValue)
+        return result.startsWith('¥') ? '¥' + Number(result.replace('¥', '')).toFixed() : result
+    return result
 }
 
 // https://mask.atlassian.net/wiki/spaces/MASK/pages/122916438/Token
@@ -58,7 +68,7 @@ export function formatCurrency(
     currency: LiteralUnion<Keys | 'USD'> = CurrencyType.USD,
     options?: FormatterCurrencyOptions,
 ): string {
-    const { onlyRemainTwoDecimal = false, fiatCurrencyRate = 1, customDecimalConfig } = options ?? {}
+    const { isAssetValue = false, fiatCurrencyRate = 1, customDecimalConfig } = options ?? {}
     const bn = new BigNumber(inputValue).multipliedBy(fiatCurrencyRate)
     const integerValue = bn.integerValue(1)
     const decimalValue = bn.plus(integerValue.negated())
@@ -66,14 +76,20 @@ export function formatCurrency(
 
     const {
         sixDecimalBoundary,
+        zeroDecimalBoundary,
         twoDecimalBoundary,
         twelveDecimalBoundary,
         eightDecimalBoundary,
+        zeroDecimalExp,
         sixDecimalExp,
         twoDecimalExp,
         twelveDecimalExp,
     } = BOUNDARIES
 
+    const assetValueBoundary = currency === CurrencyType.JPY ? zeroDecimalBoundary : twoDecimalBoundary
+    const assetValueDecimalExp = currency === CurrencyType.JPY ? zeroDecimalExp : twoDecimalExp
+    const zeroValue = currency === CurrencyType.JPY ? '0' : '0.00'
+    const minimumValue = currency === CurrencyType.JPY ? '1' : '0.01'
     const symbol = currency ? DIGITAL_CURRENCY_SYMBOLS[currency.toUpperCase() as UpperCaseKeys] : ''
 
     let formatter: Intl.NumberFormat
@@ -82,7 +98,7 @@ export function formatCurrency(
     try {
         formatter = new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: isIntlCurrencyValid ? currency : 'USD',
+            currency: isIntlCurrencyValid ? (currency === CurrencyType.JPY ? CurrencyType.CNY : currency) : 'USD',
             currencyDisplay: 'narrowSymbol',
         })
     } catch {
@@ -105,11 +121,8 @@ export function formatCurrency(
 
     let result: string = ''
 
-    if (
-        bn.lt(customDecimalConfig?.boundary ?? onlyRemainTwoDecimal ? twoDecimalBoundary : sixDecimalBoundary) ||
-        bn.isZero()
-    ) {
-        const isLessThanTwoDecimalBoundary = bn.lt(twoDecimalBoundary)
+    if (bn.lt(customDecimalConfig?.boundary ?? isAssetValue ? assetValueBoundary : sixDecimalBoundary) || bn.isZero()) {
+        const isLessThanAssetValueDecimalBoundary = bn.lt(assetValueBoundary)
         const isLessThanTwelveDecimalBoundary = bn.lt(twelveDecimalBoundary)
         const isLessThanCustomDecimalBoundary = customDecimalConfig?.boundary
             ? bn.lt(customDecimalConfig?.boundary)
@@ -124,15 +137,15 @@ export function formatCurrency(
                     case 'fraction':
                         if (customDecimalConfig) {
                             return bn.isZero()
-                                ? '0.00'
+                                ? zeroValue
                                 : isLessThanCustomDecimalBoundary
                                 ? customDecimalConfig.boundary.toFixed()
                                 : bn.toFixed(customDecimalConfig.decimalExp).replace(/0+$/, '')
                         }
                         return bn.isZero()
-                            ? '0.00'
-                            : onlyRemainTwoDecimal
-                            ? '0.01'
+                            ? zeroValue
+                            : isAssetValue
+                            ? minimumValue
                             : isLessThanTwelveDecimalBoundary
                             ? sixDecimalBoundary.toFixed()
                             : isGreatThanEightDecimalBoundary
@@ -145,7 +158,7 @@ export function formatCurrency(
             .join('')
 
         result = `${
-            (isLessThanTwelveDecimalBoundary || (onlyRemainTwoDecimal && isLessThanTwoDecimalBoundary)) && !bn.isZero()
+            (isLessThanTwelveDecimalBoundary || (isAssetValue && isLessThanAssetValueDecimalBoundary)) && !bn.isZero()
                 ? '< '
                 : ''
         }${value}`
@@ -172,13 +185,13 @@ export function formatCurrency(
                         const dec = decimalValue
                             .toFormat(
                                 customDecimalConfig?.decimalExp ??
-                                    (onlyRemainTwoDecimal ? twoDecimalExp : sixDecimalExp),
+                                    (isAssetValue ? assetValueDecimalExp : sixDecimalExp),
                             )
                             .replace(/\d\./, '')
-                        return onlyRemainTwoDecimal ? dec.replace(/(\d\d)(0+)$/, '$1') : dec.replace(/(0+)$/, '')
+                        return isAssetValue ? dec.replace(/(\d\d)(0+)$/, '$1') : dec.replace(/(0+)$/, '')
                     case 'integer':
                         // When there is a carry
-                        if (bn.gt('0.99') && onlyRemainTwoDecimal) return '1'
+                        if (bn.gt('0.99') && isAssetValue) return '1'
                         return '0'
                     case 'literal':
                         return ''
@@ -189,5 +202,5 @@ export function formatCurrency(
             .join('')
     }
 
-    return fiatCurrencySymbolModifier(result, currency)
+    return fiatCurrencyResultModifier(result, currency, isAssetValue)
 }

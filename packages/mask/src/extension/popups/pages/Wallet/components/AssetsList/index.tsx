@@ -143,7 +143,7 @@ export const AssetsListUI = memo<AssetsListUIProps>(function AssetsListUI({ isEx
                                 <FormattedCurrency
                                     value={asset.value?.usd || 0}
                                     formatter={formatCurrency}
-                                    options={{ onlyRemainTwoDecimal: true }}
+                                    options={{ isAssetValue: true }}
                                 />
                             </Typography>
                         }>

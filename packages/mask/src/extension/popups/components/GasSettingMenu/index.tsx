@@ -168,7 +168,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
                     sign={CurrencyType.USD}
                     value={formatWeiToEther(totalGas).times(tokenPrice ?? 0)}
                     options={{
-                        onlyRemainTwoDecimal: false,
+                        isAssetValue: false,
                         customDecimalConfig: {
                             boundary: scale10(1, -4),
                             decimalExp: 4,
