@@ -10,7 +10,7 @@ import {
     useSocialAccountsBySettings,
     TokenWithSocialGroupMenu,
     useTokenMenuCollectionList,
-    SNS_RSS3_FIELD_KEY_MAP,
+    EnhanceableSite_RSS3_NFT_SITE_KEY_map,
     PriceChange,
 } from '@masknet/shared'
 import {
@@ -195,8 +195,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const isAllowanceCoin = useTransakAllowanceCoin({ address: coin.contract_address, symbol: coin.symbol })
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
-    const snsAdaptorMinimalPlugins = useActivatedPluginsSiteAdaptor(true)
-    const isTokenSecurityEnable = !isNFT && !snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
+    const minimalPlugins = useActivatedPluginsSiteAdaptor(true)
+    const isTokenSecurityEnable = !isNFT && !minimalPlugins.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
 
     const { value: tokenSecurityInfo, error } = useTokenSecurity(
         coin.chainId ?? ChainId.Mainnet,
@@ -221,7 +221,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     const collectionList = useTokenMenuCollectionList(resultList, result)
 
-    const rss3Key = SNS_RSS3_FIELD_KEY_MAP[identity?.identifier?.network as EnhanceableSite]
+    const rss3Key = EnhanceableSite_RSS3_NFT_SITE_KEY_map[identity?.identifier?.network as EnhanceableSite]
     const { value: socialAccounts = EMPTY_LIST } = useSocialAccountsBySettings(identity)
 
     const openRss3Profile = useCallback(

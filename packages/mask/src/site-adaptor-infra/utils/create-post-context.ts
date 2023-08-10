@@ -20,7 +20,7 @@ import type {
     PostContextAuthor,
     PostContextCoAuthor,
     PostContextCreation,
-    PostContextSNSActions,
+    PostContextActions,
 } from '@masknet/plugin-infra/content-script'
 import {
     extractTextFromTypedMessage,
@@ -30,7 +30,7 @@ import {
 import { activatedSiteAdaptorUI } from '../ui.js'
 import { resolveFacebookLink } from '../../site-adaptors/facebook.com/utils/resolveFacebookLink.js'
 
-export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSActions) {
+export function createSiteAdaptorSpecializedPostContext(create: PostContextActions) {
     return function createPostContext(opt: PostContextCreation): PostContext {
         const cancel: Array<() => void> = []
         opt.signal?.addEventListener('abort', () => cancel.forEach((fn) => fn?.()))

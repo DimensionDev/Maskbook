@@ -6,7 +6,14 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
 import type { AvatarMetaDB } from '@masknet/plugin-avatar'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
-import { RSS3_KEY_SNS, useNFT, useNFTAvatar, useWallet, NFTBadge, rainbowBorderKeyFrames } from '@masknet/plugin-avatar'
+import {
+    RSS3_KEY_SITE,
+    useNFT,
+    useNFTAvatar,
+    useWallet,
+    NFTBadge,
+    rainbowBorderKeyFrames,
+} from '@masknet/plugin-avatar'
 import { startWatch } from '../../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { searchInstagramAvatarSelector } from '../../utils/selector.js'
@@ -44,7 +51,7 @@ function NFTAvatarInInstagram() {
 
     const identity = useCurrentVisitingIdentity()
     const location = useLocation()
-    const { value: nftAvatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SNS.INSTAGRAM)
+    const { value: nftAvatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SITE.INSTAGRAM)
 
     const { account } = useChainContext()
     const { loading: loadingWallet, value: storage } = useWallet(nftAvatar?.userId)

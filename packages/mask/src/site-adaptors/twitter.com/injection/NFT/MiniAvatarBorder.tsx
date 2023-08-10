@@ -1,4 +1,4 @@
-import { AvatarType, NFTAvatarMiniClip, NFTBadgeTimeline, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
+import { AvatarType, NFTAvatarMiniClip, NFTBadgeTimeline, RSS3_KEY_SITE } from '@masknet/plugin-avatar'
 
 interface MiniAvatarBorderProps {
     avatarType: AvatarType
@@ -17,7 +17,7 @@ export function MiniAvatarBorder(props: MiniAvatarBorderProps) {
             avatarId={avatarId || ''}
             width={size - 4}
             height={size - 4}
-            snsKey={RSS3_KEY_SNS.TWITTER}
+            siteKey={RSS3_KEY_SITE.TWITTER}
             avatarType={avatarType}
         />
     )

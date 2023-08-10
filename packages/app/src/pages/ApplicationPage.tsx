@@ -6,7 +6,7 @@ export interface ApplicationsPageProps {}
 export default function ApplicationsPage(props: ApplicationsPageProps) {
     return (
         <PageContainer title="Applications">
-            <ApplicationBoardForm allPersonas={[]} personaAgainstSNSConnectStatusLoading={false} />
+            <ApplicationBoardForm allPersonas={[]} personaPerSiteConnectStatusLoading={false} />
         </PageContainer>
     )
 }

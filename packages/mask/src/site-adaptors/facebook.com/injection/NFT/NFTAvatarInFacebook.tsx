@@ -5,7 +5,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { useSaveStringStorage, type AvatarMetaDB, type NextIDAvatarMeta } from '@masknet/plugin-avatar'
-import { useNFT, useNFTAvatar, NFTBadge, RSS3_KEY_SNS, useWallet } from '@masknet/plugin-avatar'
+import { useNFT, useNFTAvatar, NFTBadge, RSS3_KEY_SITE, useWallet } from '@masknet/plugin-avatar'
 import { searchFacebookAvatarOnMobileSelector, searchFacebookAvatarSelector } from '../../utils/selector.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { type NFTAvatarEvent, NetworkPluginID, MaskMessages } from '@masknet/shared-base'
@@ -65,7 +65,7 @@ function NFTAvatarInFacebook() {
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const identity = useCurrentVisitingIdentity()
     const location = useLocation()
-    const { value: nftAvatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SNS.FACEBOOK)
+    const { value: nftAvatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SITE.FACEBOOK)
     const { account } = useChainContext()
     const { loading: loadingWallet, value: storage } = useWallet(nftAvatar?.userId)
     const { value: nftInfo, loading: loadingNFTInfo } = useNFT(

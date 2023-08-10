@@ -15,7 +15,7 @@ import {
 } from '@mui/material'
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { useSNSThemeMode } from '@masknet/plugin-infra/content-script'
+import { useSiteThemeMode } from '@masknet/plugin-infra/content-script'
 import { TokenIcon, FormattedAddress, Image, WalletIcon, ElementAnchor } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useNetworkDescriptor, useFungibleToken, useWeb3Others } from '@masknet/web3-hooks-base'
@@ -26,90 +26,92 @@ import { useNonFungibleTokenActivities } from '../../trending/useTrending.js'
 import { TrendingViewContext } from './context.js'
 import { useI18N } from '../../locales/index.js'
 
-const useStyles = makeStyles<{ isPopper: boolean; snsThemeMode?: string }>()((theme, { isPopper, snsThemeMode }) => ({
-    container: {
-        maxHeight: isPopper ? 320 : 266,
-        scrollbarWidth: 'none',
-        '&::-webkit-scrollbar': {
-            display: 'none',
+const useStyles = makeStyles<{ isPopper: boolean; themeMode?: 'dim' | 'dark' | 'light' }>()(
+    (theme, { isPopper, themeMode }) => ({
+        container: {
+            maxHeight: isPopper ? 320 : 266,
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
-    },
-    cell: {
-        paddingLeft: theme.spacing(0.5),
-        paddingRight: theme.spacing(0.5),
-        background: snsThemeMode === 'dim' && !isPopper ? '#15202b' : theme.palette.maskColor.bottom,
-        fontSize: 12,
-        fontWeight: 700,
-        whiteSpace: 'nowrap',
-        border: 'none',
-        '&:not(:first-child)': {
-            textAlign: 'center',
+        cell: {
+            paddingLeft: theme.spacing(0.5),
+            paddingRight: theme.spacing(0.5),
+            background: themeMode === 'dim' && !isPopper ? '#15202b' : theme.palette.maskColor.bottom,
+            fontSize: 12,
+            fontWeight: 700,
+            whiteSpace: 'nowrap',
+            border: 'none',
+            '&:not(:first-child)': {
+                textAlign: 'center',
+            },
+            '&:last-child': {
+                textAlign: 'right',
+            },
         },
-        '&:last-child': {
-            textAlign: 'right',
+        nftImage: {
+            height: 20,
+            width: 20,
+            marginRight: 4,
+            borderRadius: 4,
         },
-    },
-    nftImage: {
-        height: 20,
-        width: 20,
-        marginRight: 4,
-        borderRadius: 4,
-    },
-    nftCell: {
-        display: 'flex',
-        alignItems: 'center',
-    },
-    cellWrapper: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    methodCellWrapper: {
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-    },
-    methodCell: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: 24,
-        width: 62,
-        borderRadius: 500,
-        fontWeight: 400,
-    },
-    tokenIcon: {
-        width: 16,
-        height: 16,
-        marginRight: 4,
-    },
-    imageLoading: {
-        color: theme.palette.maskColor.main,
-        height: '15px !important',
-        width: '15px !important',
-    },
-    linkIcon: {
-        color: theme.palette.text.primary,
-    },
-    transactionLink: {
-        height: 16,
-        marginLeft: 4,
-    },
-    placeholder: {
-        paddingTop: theme.spacing(10),
-        paddingBottom: theme.spacing(10),
-        borderStyle: 'none',
-    },
-    loadMore: {
-        display: 'flex',
-        width: '100%',
-        justifyContent: 'center',
-        transform: 'translateY(-16px)',
-    },
-    loadMoreIcon: {
-        marginBottom: 16,
-    },
-}))
+        nftCell: {
+            display: 'flex',
+            alignItems: 'center',
+        },
+        cellWrapper: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        methodCellWrapper: {
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+        },
+        methodCell: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: 24,
+            width: 62,
+            borderRadius: 500,
+            fontWeight: 400,
+        },
+        tokenIcon: {
+            width: 16,
+            height: 16,
+            marginRight: 4,
+        },
+        imageLoading: {
+            color: theme.palette.maskColor.main,
+            height: '15px !important',
+            width: '15px !important',
+        },
+        linkIcon: {
+            color: theme.palette.text.primary,
+        },
+        transactionLink: {
+            height: 16,
+            marginLeft: 4,
+        },
+        placeholder: {
+            paddingTop: theme.spacing(10),
+            paddingBottom: theme.spacing(10),
+            borderStyle: 'none',
+        },
+        loadMore: {
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'center',
+            transform: 'translateY(-16px)',
+        },
+        loadMoreIcon: {
+            marginBottom: 16,
+        },
+    }),
+)
 
 export interface NonFungibleTickersTableProps {
     id: string
@@ -123,9 +125,9 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
     const t = useI18N()
     const theme = useTheme()
     const containerRef = useRef(null)
-    const snsThemeMode = useSNSThemeMode(theme)
+    const themeMode = useSiteThemeMode(theme)
     const { isCollectionProjectPopper, isTokenTagPopper } = useContext(TrendingViewContext)
-    const { classes } = useStyles({ isPopper: isCollectionProjectPopper || isTokenTagPopper, snsThemeMode })
+    const { classes } = useStyles({ isPopper: isCollectionProjectPopper || isTokenTagPopper, themeMode })
     const Others = useWeb3Others(result.pluginID)
     const { activities, fetchMore, loadingNonFungibleTokenActivities } = useNonFungibleTokenActivities(
         result.pluginID,

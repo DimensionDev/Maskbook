@@ -206,14 +206,14 @@ function Content(props: ProfileTabContentProps) {
     const doesOwnerHaveNoAddress =
         isOwnerIdentity && personaStatus.proof?.findIndex((p) => p.platform === NextIDPlatform.Ethereum) === -1
 
-    // the owner persona and sns not verify on next ID
+    // the owner persona and site not verify on next ID
     const myPersonaNotVerifiedYet = isOwnerIdentity && !personaStatus.verified
     const showNextID =
         isOnTwitter &&
         // enabled the plugin
         (isWeb3ProfileDisable ||
             myPersonaNotVerifiedYet ||
-            // the owner persona and sns verified on next ID but not verify the wallet
+            // the owner persona and site verified on next ID but not verify the wallet
             doesOwnerHaveNoAddress ||
             // the visiting persona not have social address list
             (!isOwnerIdentity && !socialAccounts.length))

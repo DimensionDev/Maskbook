@@ -1,6 +1,6 @@
 import type { Storage } from 'webextension-polyfill'
 
-const key = 'openSNSAndActivatePlugin'
+const key = 'openSiteAndActivatePlugin'
 // Note: sessionStorage is only available in MV2 or MV3 page mode.
 const sessionStorage = (globalThis as any).sessionStorage
 /**
@@ -8,7 +8,7 @@ const sessionStorage = (globalThis as any).sessionStorage
  * @param url URL to open
  * @param pluginID Plugin to activate
  */
-export async function openSNSAndActivatePlugin(url: string, pluginID: string): Promise<void> {
+export async function openSiteAndActivatePlugin(url: string, pluginID: string): Promise<void> {
     await browser.tabs.create({ active: true, url })
     if (!('session' in browser.storage)) {
         sessionStorage.setItem(key, pluginID)
