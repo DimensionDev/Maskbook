@@ -2,13 +2,13 @@
 
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import { memo } from 'react'
-import { ContactCard } from '../ContactCard/index.js'
 import { type FriendsInformation } from '../../../hook/useFriends.js'
 import { Box, Typography } from '@mui/material'
 import { Search } from '../Search/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
-import { EmptyStatus } from '@masknet/shared'
 import type { NextIDPersonaBindingsWithIdentifier } from '../../../hook/useFriendsFromSearch.js'
+import { Contacts } from '../Contacts/index.js'
+import { SearchList } from '../SearchList/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -16,6 +16,8 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.maskColor.white,
         display: 'flex',
         flexDirection: 'column',
+        maxHeight: '100vh',
+        overflowY: 'hidden',
     },
     empty: {
         position: 'absolute',
@@ -53,7 +55,7 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
     const { t } = useI18N()
     return (
         <div className={classes.container}>
-            <Box padding="16px 16px 0 16px">
+            <Box padding="16px">
                 <Search setSearchValue={setSearchValue} />
             </Box>
             {loading ? (
@@ -62,42 +64,9 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
                     <Typography>{t('loading')}</Typography>
                 </div>
             ) : searchValue ? (
-                searchResult.length === 0 ? (
-                    <EmptyStatus className={classes.empty}>
-                        {t('popups_encrypted_friends_search_no_result')}
-                    </EmptyStatus>
-                ) : (
-                    <Box display="flex" flexDirection="column" gap="12px" padding="16px">
-                        {searchResult.map((friend) => {
-                            return (
-                                <ContactCard
-                                    key={friend.persona}
-                                    nextId={friend.persona}
-                                    profiles={friend.proofs}
-                                    publicKey={friend.linkedPersona?.rawPublicKey}
-                                    isLocal={friend.isLocal}
-                                />
-                            )
-                        })}
-                    </Box>
-                )
-            ) : friends.length === 0 ? (
-                <EmptyStatus className={classes.empty}>{t('popups_encrypted_friends_no_friends')}</EmptyStatus>
+                <SearchList searchResult={searchResult} />
             ) : (
-                <Box display="flex" flexDirection="column" gap="12px" padding="16px">
-                    {friends.map((friend) => {
-                        return (
-                            <ContactCard
-                                key={friend.id}
-                                avatar={friend.avatar}
-                                nextId={friend.linkedPersona?.publicKeyAsHex}
-                                publicKey={friend.linkedPersona?.rawPublicKey}
-                                profiles={friend.profiles}
-                                isLocal
-                            />
-                        )
-                    })}
-                </Box>
+                <Contacts friends={friends} />
             )}
         </div>
     )

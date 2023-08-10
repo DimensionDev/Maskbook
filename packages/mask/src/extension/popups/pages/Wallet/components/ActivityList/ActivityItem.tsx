@@ -1,8 +1,11 @@
 import { Icons } from '@masknet/icons'
-import { ImageIcon } from '@masknet/shared'
+import { ImageIcon, ProgressiveText } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { useEverSeen } from '@masknet/shared-base-ui'
 import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { useNativeToken, useNetworkDescriptors, useReverseAddress } from '@masknet/web3-hooks-base'
+import { ChainbaseHistory } from '@masknet/web3-providers'
+import { chainbase } from '@masknet/web3-providers/helpers'
 import { DebankTransactionDirection } from '@masknet/web3-providers/types'
 import {
     TransactionStatusType,
@@ -20,6 +23,7 @@ import {
     type SchemaType,
 } from '@masknet/web3-shared-evm'
 import { Box, ListItem, ListItemText, Skeleton, Typography, alpha, type ListItemProps } from '@mui/material'
+import { useQuery } from '@tanstack/react-query'
 import { memo, useMemo } from 'react'
 import { formatTokenBalance, useI18N } from '../../../../../../utils/index.js'
 
@@ -177,15 +181,31 @@ export interface ActivityItemProps extends ListItemProps {
 export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ transaction, className, onView, ...rest }) {
     const { t } = useI18N()
     const { classes, cx } = useStyles({})
-    const toAddress = transaction.to
-    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, toAddress)
     const descriptors = useNetworkDescriptors(NetworkPluginID.PLUGIN_EVM)
     const networkDescriptor = descriptors.find((x) => x.chainId === transaction.chainId)
+
+    const blockNumber = transaction && 'blockNumber' in transaction ? (transaction.blockNumber as number) : undefined
+    const [seen, ref] = useEverSeen<HTMLLIElement>()
+    const { data: tx, isLoading: loadingTx } = useQuery({
+        // This could be a transaction of SmartPay which Debank doesn't provide detailed info for it.
+        // So we fetch via Chainbase
+        enabled: !transaction.to && seen,
+        queryKey: ['chainbase', 'transaction', transaction.chainId, transaction.id, blockNumber],
+        queryFn: async () => {
+            if (!transaction.chainId || !transaction.id) return
+            return ChainbaseHistory.getTransaction(transaction.chainId, transaction.id, blockNumber)
+        },
+    })
+
+    const status = transaction.status || (tx ? chainbase.normalizeTxStatus(tx.status) : undefined)
+    const toAddress = (transaction.to || tx?.to_address) as string
+    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, toAddress)
 
     return (
         <ListItem
             className={cx(classes.item, className, transaction.isScam ? classes.scamItem : null)}
             onClick={() => onView(transaction)}
+            ref={ref}
             {...rest}>
             <Box className={classes.txIconContainer}>
                 <TransactionIcon cateType={transaction.cateType} />
@@ -195,8 +215,11 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                 secondaryTypographyProps={{ component: 'div' }}
                 style={{ marginLeft: 15 }}
                 secondary={
-                    <Typography className={classes.toAddress}>
-                        {!transaction.status ? (
+                    <ProgressiveText
+                        className={classes.toAddress}
+                        loading={!toAddress && loadingTx}
+                        skeletonWidth={100}>
+                        {status === TransactionStatusType.FAILED ? (
                             <Typography className={classes.failedLabel} component="span">
                                 {t('failed')}
                             </Typography>
@@ -204,7 +227,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                         {t('to_address', {
                             address: domain ? formatDomainName(domain) : formatEthereumAddress(toAddress, 4),
                         })}
-                    </Typography>
+                    </ProgressiveText>
                 }>
                 <Typography className={classes.txName}>
                     {transaction.cateName}
