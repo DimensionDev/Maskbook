@@ -66,7 +66,7 @@ export const Welcome = memo(function Welcome() {
             navigate(urlcat(from, search ? new URLSearchParams(search).entries() : {}))
         }
 
-        const url = await Services.SocialNetwork.setupSite(EnhanceableSite.Twitter, false)
+        const url = await Services.SiteAdaptor.setupSite(EnhanceableSite.Twitter, false)
         if (!url) return
 
         navigate(DashboardRoutes.SignUpPersona, { replace: true })

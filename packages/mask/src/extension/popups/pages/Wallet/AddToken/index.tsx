@@ -5,16 +5,17 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { AddCollectibles, FungibleTokenList, SelectNetworkSidebar, TokenListMode } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { useRowSize } from '@masknet/shared-base-ui'
-import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
+import { MaskTabList, makeStyles, usePopupCustomSnackbar, useTabs } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useBlockedFungibleTokens, useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
-import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
-import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { TokenType, type NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab } from '@mui/material'
 import { useI18N } from '../../../../../utils/index.js'
 import { NormalHeader } from '../../../components/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
+import { WalletAssetTabs } from '../type.js'
 
 const useStyles = makeStyles<{ currentTab: TabType; searchError: boolean }>()((theme, { currentTab, searchError }) => ({
     content: {
@@ -135,12 +136,14 @@ const AddToken = memo(function AddToken() {
     const [searchError, setSearchError] = useState(false)
     const { classes } = useStyles({ currentTab, searchError })
 
+    const supportedChains = currentTab === TabType.Tokens ? TokenSupportedChains : CollectibleSupportedChains
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>(
-        defaultChainId ? Number.parseInt(defaultChainId, 10) : ChainId.Mainnet,
+        defaultChainId && supportedChains.includes(Number.parseInt(defaultChainId, 10))
+            ? Number.parseInt(defaultChainId, 10)
+            : ChainId.Mainnet,
     )
 
     const allNetworks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
-    const supportedChains = currentTab === TabType.Tokens ? TokenSupportedChains : CollectibleSupportedChains
     const networks = useMemo(() => {
         return sortBy(
             allNetworks.filter(
@@ -156,18 +159,44 @@ const AddToken = memo(function AddToken() {
             if (currentTab === TabType.Tokens && !CollectibleSupportedChains.includes(chainId)) {
                 setChainId(ChainId.Mainnet)
             }
+
+            if (
+                currentTab === TabType.Collectibles &&
+                defaultChainId &&
+                TokenSupportedChains.includes(Number.parseInt(defaultChainId, 10))
+            ) {
+                setChainId(Number.parseInt(defaultChainId, 10))
+            }
         },
-        [onChange, chainId, currentTab],
+        [onChange, chainId, defaultChainId, currentTab],
     )
 
     useTitle(t('add_assets'))
 
     const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
+    const { showSnackbar } = usePopupCustomSnackbar()
+
     const [{ loading: loadingAddCustomNFTs }, addCustomNFTs] = useAsyncFn(
         async (result: [contract: NonFungibleTokenContract<ChainId, SchemaType>, tokenIds: string[]]) => {
-            await Token?.addNonFungibleCollection?.(account, result[0], result[1])
-            navigate(PopupRoutes.Wallet)
+            const [contract, tokenIds] = result
+            await Token?.addNonFungibleCollection?.(account, contract, tokenIds)
+
+            for await (const tokenId of tokenIds) {
+                await Token?.trustToken?.(account, {
+                    id: `${contract.chainId}.${contract.address}.${tokenId}`,
+                    chainId: contract.chainId,
+                    type: TokenType.NonFungible,
+                    schema: SchemaType.ERC721,
+                    address: contract.address,
+                    tokenId,
+                })
+            }
+
+            showSnackbar(t('popups_wallet_collectible_added_successfully'), {
+                variant: 'success',
+            })
+            navigate(`${PopupRoutes.Wallet}?tab=${WalletAssetTabs.Collectibles}`, { replace: true })
         },
         [account],
     )

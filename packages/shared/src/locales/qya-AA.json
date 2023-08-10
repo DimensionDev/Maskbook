@@ -359,5 +359,6 @@
     "connect": "crwdns21979:0crwdne21979:0",
     "reset": "crwdns21981:0crwdne21981:0",
     "editor": "crwdns21983:0crwdne21983:0",
-    "typed_message_text_alert": "crwdns21985:0crwdne21985:0"
+    "typed_message_text_alert": "crwdns21985:0crwdne21985:0",
+    "share_to_social_networks": "crwdns22147:0crwdne22147:0"
 }

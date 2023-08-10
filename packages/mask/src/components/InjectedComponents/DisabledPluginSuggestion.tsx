@@ -79,7 +79,7 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.Shared.Defin
 export function PossiblePluginSuggestionUISingle(props: {
     lackHostPermission?: boolean
     define: Plugin.Shared.Definition
-    wrapperProps?: Plugin.SNSAdaptor.PluginWrapperProps | undefined
+    wrapperProps?: Plugin.SiteAdaptor.PluginWrapperProps | undefined
     content?: ReactNode
 }) {
     const { define, lackHostPermission, wrapperProps, content } = props

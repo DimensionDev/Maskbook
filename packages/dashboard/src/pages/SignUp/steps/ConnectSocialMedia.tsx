@@ -18,7 +18,7 @@ import { ActionCard } from '../../../components/ActionCard/index.js'
 export function ConnectSocialMedia() {
     const navigate = useNavigate()
     const t = useDashboardI18N()
-    const { currentPersona, connectPersona, definedSocialNetworks } = PersonaContext.useContainer()
+    const { currentPersona, connectPersona, definedSocialNetworkAdaptors } = PersonaContext.useContainer()
 
     const handleConnect = async (networkIdentifier: string) => {
         if (currentPersona) {
@@ -44,7 +44,7 @@ export function ConnectSocialMedia() {
                             {t.go_back()}
                         </Button>
                     </Stack>
-                    {definedSocialNetworks.map(({ networkIdentifier }) => (
+                    {definedSocialNetworkAdaptors.map(({ networkIdentifier }) => (
                         <ActionCard
                             key={networkIdentifier}
                             title={t.create_account_connect_social_media({

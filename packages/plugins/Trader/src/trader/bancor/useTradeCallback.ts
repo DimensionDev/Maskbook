@@ -9,7 +9,7 @@ import type { GasConfig } from '@masknet/web3-shared-evm'
 import { Web3 } from '@masknet/web3-providers'
 import { PluginTraderRPC } from '../../messages.js'
 import type { SwapBancorRequest, TradeComputed } from '../../types/index.js'
-import { useSwapErrorCallback } from '../../SNSAdaptor/trader/hooks/useSwapErrorCallback.js'
+import { useSwapErrorCallback } from '../../SiteAdaptor/trader/hooks/useSwapErrorCallback.js'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest> | null, gasConfig?: GasConfig) {
     const notifyError = useSwapErrorCallback()

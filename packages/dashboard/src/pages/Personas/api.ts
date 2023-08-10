@@ -5,12 +5,12 @@ import { ValueRef } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { Services, Messages } from '../../API.js'
 
-export type SocialNetwork = {
+export interface SiteAdaptor {
     networkIdentifier: string
 }
 
 export const useSupportedSocialNetworkSites = createHook(
-    () => Services.SocialNetwork.getSupportedSites({ isSocialNetwork: true }),
+    () => Services.SiteAdaptor.getSupportedSites({ isSocialNetwork: true }),
     noop,
 )
 

@@ -1,6 +1,12 @@
 {
+    "plugin_external_loader_search_holder": "查找外部插件",
     "plugin_external_loader_search_button": "查找插件",
+    "plugin_external_loader_search_sub_title": "每个外部插件必须托管在一个 URL 上。",
+    "plugin_external_loader_alert": "它会改变。 不要在其上构建官方产品。",
+    "plugin_external_loader_alert_title": "外部插件：体验 Mask Network 功能！",
     "plugin_external_plugin_url": "插件 URL：",
+    "plugin_external_unverified_publisher": "发布者: {{publisher}} (未验证)",
+    "plugin_external_entry_title": "🧩 加载外部插件 (Nightly 特性)",
     "plugin_external_name": "外部插件",
     "load": "加载",
     "load_all": "加载全部",

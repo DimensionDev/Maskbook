@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { MaskColors, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { IconButton, Typography } from '@mui/material'
 import { memo } from 'react'
-import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile.js'
+import { isMobileFacebook } from '../../site-adaptors/facebook.com/utils/isMobile.js'
 import { useI18N } from '../../utils/index.js'
 import GuideStep from '../GuideStep/index.js'
 

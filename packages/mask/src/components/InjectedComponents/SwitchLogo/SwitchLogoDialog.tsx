@@ -13,7 +13,7 @@ import {
 import { useValueRef } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../utils/index.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
-import { activatedSocialNetworkUI } from '../../../social-network/ui.js'
+import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -82,7 +82,7 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
         switchLogoSettings[identity.identifier.userId].value = logoType ?? defaultLogoType
         setOpen(false)
         if (needShare && logoType === SwitchLogoType.Classics) {
-            activatedSocialNetworkUI.utils.share?.(
+            activatedSiteAdaptorUI.utils.share?.(
                 [
                     t('switch_logo_share_text'),
                     '#TwitterLogo #TwitterX #SaveTheBird\n',
@@ -90,7 +90,7 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
                 ].join('\n'),
             )
         }
-    }, [logoType, identity?.identifier?.userId, defaultLogoType, activatedSocialNetworkUI.utils.share, needShare])
+    }, [logoType, identity?.identifier?.userId, defaultLogoType, activatedSiteAdaptorUI.utils.share, needShare])
 
     const onChange = useCallback((logoType: SwitchLogoType) => {
         setLogoType(logoType)

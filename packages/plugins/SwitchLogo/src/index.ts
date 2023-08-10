@@ -1,1 +1,1 @@
-export * from './SNSAdaptor/SwitchLogoButton.js'
+export * from './SiteAdaptor/SwitchLogoButton.js'

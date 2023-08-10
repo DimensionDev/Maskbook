@@ -42,7 +42,7 @@ export function BadgeRenderer({ meta, onDeleteMeta, readonly }: BadgeRendererPro
                 return null
             }
 
-            function normalizeBadgeDescriptor(desc: Plugin.SNSAdaptor.BadgeDescriptor | string | null) {
+            function normalizeBadgeDescriptor(desc: Plugin.SiteAdaptor.BadgeDescriptor | string | null) {
                 if (!desc) return null
                 if (typeof desc === 'string')
                     desc = {

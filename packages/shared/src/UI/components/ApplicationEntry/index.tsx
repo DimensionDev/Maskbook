@@ -90,7 +90,7 @@ interface ApplicationEntryProps {
     title: React.ReactNode
     secondTitle?: React.ReactNode
     disabled?: boolean
-    recommendFeature?: Plugin.SNSAdaptor.ApplicationEntry['recommendFeature']
+    recommendFeature?: Plugin.SiteAdaptor.ApplicationEntry['recommendFeature']
     iconFilterColor?: string
     tooltipHint?: React.ReactNode
     onClick: () => void

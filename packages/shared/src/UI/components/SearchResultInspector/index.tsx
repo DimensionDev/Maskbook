@@ -53,13 +53,14 @@ export interface SearchResultInspectorProps {
     profileTabType?: ProfileTabs
     searchResults?: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     currentSearchResult?: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    empty?: React.ReactNode
 }
 
 export function SearchResultInspector(props: SearchResultInspectorProps) {
     const translate = usePluginI18NField()
 
     const dSearchEnabled = useValueRef(decentralizedSearchSettings)
-    const { profileTabType } = props
+    const { profileTabType, empty = null } = props
     const keyword_ = useSearchedKeyword()
     const keyword = props.keyword || keyword_
     const activatedPlugins = useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode()
@@ -106,9 +107,9 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         return <Component result={currentResult} />
     }, [currentTab, resultList.value])
 
-    if (!dSearchEnabled && profileTabType === ProfileTabs.WEB3) return null
-    if (!keyword && !currentResult) return null
-    if (!contentComponent) return null
+    if (!dSearchEnabled && profileTabType === ProfileTabs.WEB3) return empty
+    if (!keyword && !currentResult) return empty
+    if (!contentComponent) return empty
 
     return (
         <div>

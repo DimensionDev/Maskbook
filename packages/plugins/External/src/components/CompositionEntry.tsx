@@ -7,7 +7,7 @@ import { InjectedDialog } from '@masknet/shared'
 import { MaskMessages } from '@masknet/shared-base'
 import { useI18N } from '../locales/index.js'
 
-export function ThirdPartyPluginCompositionEntry(props: Plugin.SNSAdaptor.CompositionDialogEntry_DialogProps) {
+export function ThirdPartyPluginCompositionEntry(props: Plugin.SiteAdaptor.CompositionDialogEntry_DialogProps) {
     const t = useI18N()
     useEffect(
         () =>

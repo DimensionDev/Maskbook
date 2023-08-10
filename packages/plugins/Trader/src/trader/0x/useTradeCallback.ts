@@ -8,7 +8,7 @@ import { Web3 } from '@masknet/web3-providers'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { SwapQuoteResponse, TradeComputed } from '../../types/index.js'
 import { SUPPORTED_CHAIN_ID_LIST } from './constants.js'
-import { useSwapErrorCallback } from '../../SNSAdaptor/trader/hooks/useSwapErrorCallback.js'
+import { useSwapErrorCallback } from '../../SiteAdaptor/trader/hooks/useSwapErrorCallback.js'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse> | null, gasConfig?: GasConfig) {
     const notifyError = useSwapErrorCallback()

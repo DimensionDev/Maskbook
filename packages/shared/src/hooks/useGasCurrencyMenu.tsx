@@ -2,7 +2,7 @@ import { compact, noop } from 'lodash-es'
 import { useCallback, useState } from 'react'
 import { Button, MenuItem, Typography } from '@mui/material'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles, RadioButton } from '@masknet/theme'
+import { makeStyles, RadioIndicator } from '@masknet/theme'
 import { formatBalance, isLessThan, isSameAddress } from '@masknet/web3-shared-base'
 import { useChainContext, useFungibleToken, useMaskTokenAddress, useNativeToken } from '@masknet/web3-hooks-base'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
@@ -71,7 +71,7 @@ export function useGasCurrencyMenu(
                         <TokenIcon {...nativeToken} size={30} />
                         {nativeToken.symbol}
                     </Typography>
-                    <RadioButton size={20} checked={isSameAddress(selected, nativeToken.address)} />
+                    <RadioIndicator size={20} checked={isSameAddress(selected, nativeToken.address)} />
                 </MenuItem>
             ) : null,
             maskToken ? (
@@ -87,7 +87,7 @@ export function useGasCurrencyMenu(
                             {sharedI18N.unlock()}
                         </Button>
                     ) : (
-                        <RadioButton size={20} checked={isSameAddress(selected, maskAddress)} />
+                        <RadioIndicator size={20} checked={isSameAddress(selected, maskAddress)} />
                     )}
                 </MenuItem>
             ) : null,

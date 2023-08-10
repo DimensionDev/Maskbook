@@ -8,7 +8,7 @@ export const base: Plugin.Shared.Definition = {
     description: { fallback: PLUGIN_DESCRIPTION },
     publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
     enableRequirement: {
-        networks: { type: 'opt-out', networks: {} },
+        supports: { type: 'opt-out', sites: {} },
         target: 'stable',
         host_permissions: ['https://gitcoin.co/'],
     },

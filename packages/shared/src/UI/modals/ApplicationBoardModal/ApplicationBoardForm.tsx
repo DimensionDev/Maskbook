@@ -4,7 +4,7 @@ import { ApplicationSettingTabs } from './ApplicationBoardDialog.js'
 import { TabContext, TabPanel } from '@mui/lab'
 import { IconButton, Stack, Tab } from '@mui/material'
 import type { DashboardRoutes, PersonaInformation, PluginID } from '@masknet/shared-base'
-import type { CurrentSNSNetwork, IdentityResolved } from '@masknet/plugin-infra'
+import type { SiteAdaptor, IdentityResolved } from '@masknet/plugin-infra'
 import { Icons } from '@masknet/icons'
 import { ApplicationSettingPluginList } from './ApplicationSettingPluginList.js'
 import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch.js'
@@ -21,7 +21,7 @@ const useStyles = makeStyles()(() => ({
 interface ApplicationBoardFormProps {
     openDashboard?: (route?: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
-    currentSNSNetwork?: CurrentSNSNetwork
+    currentSNSNetwork?: SiteAdaptor
     allPersonas: PersonaInformation[]
     lastRecognized?: IdentityResolved
     applicationCurrentStatus?: PersonaAgainstSNSConnectStatus

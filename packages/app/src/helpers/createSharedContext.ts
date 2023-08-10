@@ -11,7 +11,7 @@ async function reject(): Promise<never> {
 
 const emptyValueRef = new ValueRefWithReady<any>()
 
-export function createSharedContext(): Omit<Plugin.SNSAdaptor.SNSAdaptorContext, 'createKVStorage'> {
+export function createSharedContext(): Omit<Plugin.SiteAdaptor.SiteAdaptorContext, 'createKVStorage'> {
     return {
         currentPersona: UNDEFINED,
         wallets: EMPTY_ARRAY,
@@ -20,7 +20,6 @@ export function createSharedContext(): Omit<Plugin.SNSAdaptor.SNSAdaptorContext,
         },
         addWallet: reject,
         closePopupWindow: reject,
-        confirmRequest: reject,
         connectPersona: reject,
         createPersona: reject,
         currentPersonaIdentifier: emptyValueRef,
@@ -48,7 +47,6 @@ export function createSharedContext(): Omit<Plugin.SNSAdaptor.SNSAdaptorContext,
         },
         queryPersonaByProfile: reject,
         recordConnectedSites: reject,
-        rejectRequest: reject,
         removeWallet: reject,
         resetAllWallets: reject,
         selectAccount: reject,

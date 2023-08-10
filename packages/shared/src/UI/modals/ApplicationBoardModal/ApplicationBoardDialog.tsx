@@ -18,7 +18,7 @@ import {
     type PluginID,
 } from '@masknet/shared-base'
 import { ApplicationBoardContent } from './ApplicationBoard.js'
-import type { CurrentSNSNetwork, IdentityResolved } from '@masknet/plugin-infra'
+import type { SiteAdaptor, IdentityResolved } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles<{
     openSettings: boolean
@@ -46,7 +46,7 @@ interface ApplicationBoardProps {
 
     openDashboard?: (route?: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
-    currentSNSNetwork?: CurrentSNSNetwork
+    currentSNSNetwork?: SiteAdaptor
     allPersonas: PersonaInformation[]
     lastRecognized?: IdentityResolved
     applicationCurrentStatus?: PersonaAgainstSNSConnectStatus

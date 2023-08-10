@@ -160,7 +160,7 @@ const AccountDetail = memo(() => {
 
     const [, onVerify] = useAsyncFn(async () => {
         if (!selectedAccount?.identifier || !currentPersona?.identifier) return
-        await Service.SocialNetwork.connectSite(
+        await Service.SiteAdaptor.connectSite(
             currentPersona.identifier,
             selectedAccount.identifier.network,
             'nextID',

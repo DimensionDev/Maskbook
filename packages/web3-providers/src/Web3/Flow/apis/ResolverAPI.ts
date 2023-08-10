@@ -20,7 +20,12 @@ export class FlowChainResolverAPI extends ChainResolverAPI_Base<ChainId, SchemaT
 
 export class FlowExplorerResolverAPI extends ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
     constructor() {
-        super(() => CHAIN_DESCRIPTORS)
+        super(() => CHAIN_DESCRIPTORS, {
+            addressPathname: '/account/:address',
+            transactionPathname: '/transaction/:id',
+            fungibleTokenPathname: '/contract/:address',
+            nonFungibleTokenPathname: '/contract/:address',
+        })
     }
 }
 

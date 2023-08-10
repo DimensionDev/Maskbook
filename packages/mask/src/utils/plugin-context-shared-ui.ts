@@ -12,7 +12,7 @@ import type { PartialSharedUIContext } from '../../shared/plugin-infra/host.js'
 import { WalletRPC } from '../plugins/WalletService/messages.js'
 
 export const RestPartOfPluginUIContextShared: Omit<
-    Plugin.SNSAdaptor.SNSAdaptorContext,
+    Plugin.SiteAdaptor.SiteAdaptorContext,
     | keyof PartialSharedUIContext
     | 'lastRecognizedProfile'
     | 'currentVisitingProfile'
@@ -35,8 +35,6 @@ export const RestPartOfPluginUIContextShared: Omit<
         MaskMessages.events.currentPersonaIdentifier.on,
     ),
     send: WalletRPC.send,
-    confirmRequest: WalletRPC.confirmRequest,
-    rejectRequest: WalletRPC.rejectRequest,
 
     openDashboard: Services.Helper.openDashboard,
     openPopupWindow: Services.Helper.openPopupWindow,

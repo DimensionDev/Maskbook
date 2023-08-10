@@ -336,7 +336,7 @@ export class FlowConnectionAPI
     }
 
     async switchChain(chainId: ChainId, initial?: ConnectionOptions): Promise<void> {
-        await this.Web3.getWeb3ProviderInstance(initial).switchChain(chainId)
+        await this.Web3.getProviderInstance(initial).switchChain(chainId)
     }
 
     async callTransaction(query: TransactionQuery, initial?: ConnectionOptions): Promise<string> {

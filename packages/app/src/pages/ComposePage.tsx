@@ -32,7 +32,7 @@ export default function ComposePage(props: ComposePageProps) {
     return (
         <DashboardContainer>
             <main>
-                <DashboardHeader title="Message" />
+                <DashboardHeader title="Encrypted Post" />
 
                 <div className="bg-white p-5">
                     <div className="border overflow-hidden rounded-lg">

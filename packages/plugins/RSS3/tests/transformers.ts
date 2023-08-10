@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { transformPlanetResource } from '../src/SNSAdaptor/components/share.js'
+import { transformPlanetResource } from '../src/SiteAdaptor/components/share.js'
 
 // cspell:disable
 describe('transform planet relative resource', () => {

@@ -7,7 +7,7 @@ import { useChainContext, useChainIdSupport, useFungibleToken, useFungibleTokenB
 import { ExplorerResolver } from '@masknet/web3-providers'
 import { CopyButton, TokenIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { isGreaterThan, leftShift } from '@masknet/web3-shared-base'
+import { isGreaterThan, isZero, leftShift } from '@masknet/web3-shared-base'
 import { GasSettingMenu } from '../GasSettingMenu/index.js'
 import type { TransactionDetail } from '../../pages/Wallet/type.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
@@ -139,6 +139,17 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
         }
     }, [transaction?.computedPayload, isSupport1559])
 
+    const tips = useMemo(() => {
+        if (isZero(value)) {
+            return t('popups_wallet_unlock_erc20_revoke_tips')
+        }
+        if (isGreaterThan(value, leftShift(balance, token?.decimals))) {
+            return t('popups_wallet_unlock_erc20_balance_too_high_tips')
+        }
+
+        return t('popups_wallet_unlock_erc20_balance_tips', { amount: value, symbol: token?.symbol })
+    }, [value, balance, token])
+
     if (!transaction.formattedTransaction) return null
 
     return (
@@ -213,9 +224,7 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                                 ? theme.palette.maskColor.danger
                                 : theme.palette.maskColor.warn
                         }>
-                        {isGreaterThan(value, leftShift(balance, token?.decimals))
-                            ? t('popups_wallet_unlock_erc20_balance_too_high_tips')
-                            : t('popups_wallet_unlock_erc20_balance_tips', { amount: value, symbol: token?.symbol })}
+                        {tips}
                     </Typography>
                 ) : null}
                 <Typography className={classes.name}>{t('popups_wallet_unlock_erc20_requested_by')}</Typography>

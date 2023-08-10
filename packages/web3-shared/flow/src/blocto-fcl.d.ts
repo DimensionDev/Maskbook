@@ -9,7 +9,7 @@ declare module '@blocto/fcl' {
     // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
     // CONFIGURATION
-    export type Environment = 'local' | 'canarynet' | 'testnet' | 'mainnet'
+    export type Network = 'local' | 'canarynet' | 'testnet' | 'mainnet'
 
     /**
      * @see {@link https://docs.onflow.org/fcl/reference/api/#common-configuration-keys}
@@ -17,15 +17,15 @@ declare module '@blocto/fcl' {
      */
     export interface ConfigurationOptions {
         /**
+         * Used in conjunction with stored interactions.
+         */
+        'flow.network': Network
+        /**
          * API URL for the Flow Blockchain Access Node you want to be communicating
          * with. See all available access node endpoints
          * [here]{@link https://docs.onflow.org/access-api/#flow-access-node-endpoints}.
          */
         'accessNode.api': string
-        /**
-         * Used in conjunction with stored interactions.
-         */
-        env?: Environment
         /**
          * Points FCL at the Wallet or Wallet Discovery mechanism.
          */
@@ -36,6 +36,12 @@ declare module '@blocto/fcl' {
          * [discovery]{@link https://docs.onflow.org/fcl/reference/api/#discovery}.
          */
         'discovery.authn.endpoint'?: string
+
+        'discovery.wallet.method'?: string
+        /**
+         * Your applications id, can be requested by wallets and other services.
+         */
+        'app.detail.id'?: string
         /**
          * Your applications title, can be requested by wallets and other services.
          */

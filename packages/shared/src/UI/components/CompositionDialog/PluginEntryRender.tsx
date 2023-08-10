@@ -106,11 +106,11 @@ const usePermissionDialogStyles = makeStyles()((theme) => ({
 
 const cache = new Map<
     Plugin.Shared.Definition,
-    React.ComponentType<Plugin.SNSAdaptor.CompositionDialogEntry_DialogProps>
+    React.ComponentType<Plugin.SiteAdaptor.CompositionDialogEntry_DialogProps>
 >()
 function getPluginEntryDisabledDialog(define: Plugin.Shared.Definition) {
     if (!cache.has(define)) {
-        cache.set(define, (props: Plugin.SNSAdaptor.CompositionDialogEntry_DialogProps) => {
+        cache.set(define, (props: Plugin.SiteAdaptor.CompositionDialogEntry_DialogProps) => {
             const t = useSharedI18N()
             const { classes } = usePermissionDialogStyles()
             const [, onGrant] = useGrantPermissions(define.enableRequirement.host_permissions)
@@ -172,7 +172,7 @@ type ExtraPluginProps = {
     isOpenFromApplicationBoard?: boolean
 }
 const CustomEntry = memo(
-    forwardRef<PluginRef, Plugin.SNSAdaptor.CompositionDialogEntryCustom & ExtraPluginProps>((props, ref) => {
+    forwardRef<PluginRef, Plugin.SiteAdaptor.CompositionDialogEntryCustom & ExtraPluginProps>((props, ref) => {
         const { classes } = useStyles()
         const { id, label, onClick, unstable } = props
         useSetPluginRef(ref, onClick)
@@ -201,7 +201,7 @@ const CustomEntry = memo(
 )
 
 const DialogEntry = memo(
-    forwardRef<PluginRef, Plugin.SNSAdaptor.CompositionDialogEntryDialog & ExtraPluginProps>((props, ref) => {
+    forwardRef<PluginRef, Plugin.SiteAdaptor.CompositionDialogEntryDialog & ExtraPluginProps>((props, ref) => {
         const { classes } = useStyles()
         const { dialog: Dialog, id, label, unstable, keepMounted, isOpenFromApplicationBoard } = props
         const [dialogProps, setDialogProps] = useState({})

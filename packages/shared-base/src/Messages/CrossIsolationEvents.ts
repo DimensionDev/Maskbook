@@ -24,6 +24,7 @@ import type {
     PopupWalletConnectEvent,
     SwitchLogoDialogEvent,
     PasswordStatusUpdatedEvent,
+    PopupPageUpdatedEvent,
 } from './Events.js'
 
 /**
@@ -70,7 +71,7 @@ export interface CrossIsolationEvents {
     walletLockStatusUpdated: WalletLockStatusUpdatedEvent
     passwordStatusUpdated: PasswordStatusUpdatedEvent
     walletLockTimeUpdated: void
-
+    popupRouteUpdated: PopupPageUpdatedEvent
     gameDialogUpdated: GameDialogEvent
     switchLogoDialogUpdated: SwitchLogoDialogEvent
 }

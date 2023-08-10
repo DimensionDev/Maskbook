@@ -89,7 +89,7 @@ export declare namespace PayloadWellFormed {
         readonly type: 'E2E'
         readonly ownersAESKeyEncrypted: Uint8Array
         readonly iv: Uint8Array
-        readonly ephemeralPublicKey: Map<EC_KeyCurveEnum, CryptoKey>
+        readonly ephemeralPublicKey: Map<EC_KeyCurve, CryptoKey>
     }
 }
 export interface Signature {
@@ -97,16 +97,16 @@ export interface Signature {
     readonly signature: Uint8Array
 }
 export interface EC_Key<K extends EC_CryptoKey = EC_CryptoKey> {
-    readonly algr: EC_KeyCurveEnum
+    readonly algr: EC_KeyCurve
     readonly key: K
 }
-export enum EC_KeyCurveEnum {
+export enum EC_KeyCurve {
     // ed25519 = 0, Ed25519 is not supported by WebCrypto. Don't have a standard name, but maybe "Ed25519"
     // https://github.com/tQsW/webcrypto-curve25519/blob/master/explainer.md
     secp256p1 = 1, // P-256
     secp256k1 = 2, // K-256
 }
-export enum SocialNetworkEnum {
+export enum EncryptPayloadNetwork {
     Unknown = -1,
     Facebook = 0,
     Twitter = 1,
@@ -119,13 +119,13 @@ export enum SocialNetworkEnum {
  * The latest version is -37.
  */
 export type SupportedPayloadVersions = -37 | -38 | -39 | -40
-const SocialNetworkEnumToDomain: Record<SocialNetworkEnum, string> = {
-    [SocialNetworkEnum.Unknown]: 'localhost',
-    [SocialNetworkEnum.Facebook]: 'facebook.com',
-    [SocialNetworkEnum.Minds]: 'minds.com',
-    [SocialNetworkEnum.Twitter]: 'twitter.com',
-    [SocialNetworkEnum.Instagram]: 'instagram.com',
+const map: Record<EncryptPayloadNetwork, string> = {
+    [EncryptPayloadNetwork.Unknown]: 'localhost',
+    [EncryptPayloadNetwork.Facebook]: 'facebook.com',
+    [EncryptPayloadNetwork.Minds]: 'minds.com',
+    [EncryptPayloadNetwork.Twitter]: 'twitter.com',
+    [EncryptPayloadNetwork.Instagram]: 'instagram.com',
 }
-export function SocialNetworkEnumToProfileDomain(x: SocialNetworkEnum) {
-    return SocialNetworkEnumToDomain[x]
+export function encryptPayloadNetworkToDomain(x: EncryptPayloadNetwork) {
+    return map[x]
 }

@@ -1,1 +1,1 @@
-export * from './SNSAdaptor/components/BridgeStack.js'
+export * from './SiteAdaptor/components/BridgeStack.js'

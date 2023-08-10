@@ -37,3 +37,8 @@ export const SNS_RSS3_FIELD_KEY_MAP: Partial<Record<EnhanceableSite, RSS3_KEY_SN
 }
 
 export const PERSONA_AVATAR_DB_NAMESPACE = 'com.maskbook.persona.avatar.storage'
+
+export enum PopupHomeTabType {
+    SocialAccounts = 'Social Accounts',
+    ConnectedWallets = 'Connected Wallets',
+}
