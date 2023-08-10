@@ -16,6 +16,7 @@
     "plugin_wallet_snackbar_success": "交易成功",
     "plugin_wallet_snackbar_failed": "交易失败",
     "plugin_wallet_snackbar_swap_successful": "已成功兑换代币",
+    "plugin_wallet_snackbar_add_nft_successful": "新增成功",
     "plugin_wallet_snackbar_swap_token": "兑换代币",
     "share": "分享",
     "plugin_trader_fail_to_load": "无法加载趋势信息  ",
