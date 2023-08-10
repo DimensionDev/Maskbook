@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -180,8 +180,8 @@ importers:
         specifier: ^13.0.2
         version: 13.0.2(i18next@23.2.11)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
       ses:
-        specifier: 0.18.5
-        version: 0.18.5
+        specifier: 0.18.7
+        version: 0.18.7
       ts-results-es:
         specifier: ^3.6.0
         version: 3.6.0
@@ -275,7 +275,7 @@ importers:
         version: 3.0.2
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@4.9.5)
+        version: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@5.2.0-dev.20230630)
       typescript:
         specifier: 5.2.0-dev.20230630
         version: 5.2.0-dev.20230630
@@ -8006,8 +8006,8 @@ packages:
     resolution: {integrity: sha512-AHPmaAx+RYfZz0eYu6Gviiagpmiyw98ySSlQvCUhVGDRtDFe4DBS0x1bSjdF3gqUDYOczB+yYvBTtEylYSdRhg==}
     dev: false
 
-  /@endo/env-options@0.1.1:
-    resolution: {integrity: sha512-QlY6Z2r/izom+wZI0vQtU6yQf5V/EGRMwcqacmZv6j3e9bcYGZbG0ikoa8E155XETKr551BALlJhculBvlBLpg==}
+  /@endo/env-options@0.1.3:
+    resolution: {integrity: sha512-ljs5E0+Fhe5IQsciCn6jL5bsi1PYysPm4NhrPmNByw136AcjUbfZhOBmOzeXwOhxaL93cI/jTStNdWEA80Q+nQ==}
     dev: false
 
   /@es-joy/jsdoccomment@0.37.1:
@@ -10735,6 +10735,45 @@ packages:
     engines: {node: '>=14'}
     optional: true
 
+  /@pmmmwh/react-refresh-webpack-plugin@0.5.10(react-refresh@0.11.0)(webpack@5.88.0):
+    resolution: {integrity: sha512-j0Ya0hCFZPd4x40qLzbhGsh9TMtdb+CJQiso+WxLOPNasohq9cc5SNUcwsZaRH6++Xh91Xkm/xHCkuIiIu0LUA==}
+    engines: {node: '>= 10.13'}
+    peerDependencies:
+      '@types/webpack': 4.x || 5.x
+      react-refresh: '>=0.10.0 <1.0.0'
+      sockjs-client: ^1.4.0
+      type-fest: '>=0.17.0 <4.0.0'
+      webpack: '>=4.43.0 <6.0.0'
+      webpack-dev-server: 3.x || 4.x
+      webpack-hot-middleware: 2.x
+      webpack-plugin-serve: 0.x || 1.x
+    peerDependenciesMeta:
+      '@types/webpack':
+        optional: true
+      sockjs-client:
+        optional: true
+      type-fest:
+        optional: true
+      webpack-dev-server:
+        optional: true
+      webpack-hot-middleware:
+        optional: true
+      webpack-plugin-serve:
+        optional: true
+    dependencies:
+      ansi-html-community: 0.0.8
+      common-path-prefix: 3.0.0
+      core-js-pure: 3.26.1
+      error-stack-parser: 2.1.4
+      find-up: 5.0.0
+      html-entities: 2.3.3
+      loader-utils: 2.0.4
+      react-refresh: 0.11.0
+      schema-utils: 3.2.0
+      source-map: 0.7.4
+      webpack: 5.88.0(@swc/core@1.3.70)
+    dev: true
+
   /@pmmmwh/react-refresh-webpack-plugin@0.5.10(react-refresh@0.14.0)(webpack-dev-server@4.15.1)(webpack@5.88.0):
     resolution: {integrity: sha512-j0Ya0hCFZPd4x40qLzbhGsh9TMtdb+CJQiso+WxLOPNasohq9cc5SNUcwsZaRH6++Xh91Xkm/xHCkuIiIu0LUA==}
     engines: {node: '>= 10.13'}
@@ -12677,7 +12716,7 @@ packages:
       '@babel/core': 7.22.9
       '@babel/preset-flow': 7.18.6(@babel/core@7.22.9)
       '@babel/preset-react': 7.18.6(@babel/core@7.22.9)
-      '@pmmmwh/react-refresh-webpack-plugin': 0.5.10(react-refresh@0.14.0)(webpack-dev-server@4.15.1)(webpack@5.88.0)
+      '@pmmmwh/react-refresh-webpack-plugin': 0.5.10(react-refresh@0.11.0)(webpack@5.88.0)
       '@storybook/addons': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
       '@storybook/builder-webpack5': 6.5.13(@swc/core@1.3.70)(eslint@8.45.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.2.0-dev.20230630)
       '@storybook/client-logger': 6.5.13
@@ -21943,7 +21982,7 @@ packages:
       solc: 0.7.3(debug@4.3.4)
       source-map-support: 0.5.21
       stacktrace-parser: 0.1.10
-      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@4.9.5)
+      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@5.2.0-dev.20230630)
       tsort: 0.0.1
       typescript: 5.2.0-dev.20230630
       undici: 5.20.0
@@ -23850,7 +23889,7 @@ packages:
       pretty-format: 28.1.3
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@4.9.5)
+      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@5.2.0-dev.20230630)
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -27780,7 +27819,7 @@ packages:
     dependencies:
       lilconfig: 2.1.0
       postcss: 8.4.26
-      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@4.9.5)
+      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@5.2.0-dev.20230630)
       yaml: 2.1.3
     dev: false
 
@@ -30236,10 +30275,10 @@ packages:
       - supports-color
     dev: false
 
-  /ses@0.18.5:
-    resolution: {integrity: sha512-paLV2JHUqGGpbLn+V4LM9g20WVzAn9jLU22Bx5/18fo6h6nF8SwhC+3cAMYxzmHmkAzplY5lkg1ms3xSkmSzdw==}
+  /ses@0.18.7:
+    resolution: {integrity: sha512-bcQ3CY8jh+UnumfdDZCPDgRA9hWk6acpL1d7ecQLMOdMkqKkP0yv2b6Sd9AVxuxbu4cXMt158epbpwkV/5sIfw==}
     dependencies:
-      '@endo/env-options': 0.1.1
+      '@endo/env-options': 0.1.3
     dev: false
 
   /set-blocking@2.0.0:
@@ -32031,6 +32070,7 @@ packages:
       typescript: 4.9.5
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: true
 
   /ts-node@10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@5.2.0-dev.20230630):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
@@ -32328,6 +32368,7 @@ packages:
     resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
     engines: {node: '>=4.2.0'}
     hasBin: true
+    dev: true
 
   /typescript@5.2.0-dev.20230630:
     resolution: {integrity: sha512-PpI4tXtyv86eAhapMWrJF5roAxswu022vmSjDRU7NzPqT5+DlBktIlDePOrBo7OUBWNVEiUfsWuoDNbq5Sjj6Q==}
@@ -34818,7 +34859,7 @@ time:
   /rollup-plugin-terser@7.0.2: '2020-09-04T18:39:17.900Z'
   /rollup@3.26.3: '2023-07-17T10:36:34.741Z'
   /scrypt-js@3.0.1: '2020-05-19T07:06:27.834Z'
-  /ses@0.18.5: '2023-07-19T20:43:32.852Z'
+  /ses@0.18.7: '2023-08-07T21:38:49.283Z'
   /socket.io-client@2.4.0: '2021-01-04T22:41:40.900Z'
   /source-map-loader@4.0.1: '2022-10-07T16:54:15.119Z'
   /source-map@0.7.4: '2022-06-04T22:57:10.068Z'
