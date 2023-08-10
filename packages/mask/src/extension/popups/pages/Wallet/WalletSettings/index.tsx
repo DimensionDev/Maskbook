@@ -1,8 +1,7 @@
-import { memo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { memo, useCallback } from 'react'
 import { Icons } from '@masknet/icons'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
+import { NetworkPluginID, PopupModalRoutes } from '@masknet/shared-base'
+import { useWallet } from '@masknet/web3-hooks-base'
 import { Box, List, Typography, useTheme } from '@mui/material'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
@@ -17,14 +16,18 @@ import { ChangeCurrency } from './ChangeCurrency.js'
 import { ChangeOwner } from './ChangeOwner.js'
 import { ActionButton } from '@masknet/theme'
 import { WalletRemoveModal } from '../../../modals/modals.js'
+import { useModalNavigate } from '../../../components/index.js'
 
 const WalletSettings = memo(() => {
     const { t } = useI18N()
     const { classes, cx } = useStyles()
-    const navigate = useNavigate()
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const modalNavigate = useModalNavigate()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const theme = useTheme()
+
+    const handleSwitchWallet = useCallback(() => {
+        modalNavigate(PopupModalRoutes.SwitchWallet)
+    }, [modalNavigate])
 
     useTitle(t('popups_wallet_setting'))
 
@@ -32,7 +35,7 @@ const WalletSettings = memo(() => {
 
     return (
         <div className={classes.content}>
-            <Box className={cx(classes.item, classes.primaryItem)}>
+            <Box className={cx(classes.item, classes.primaryItem)} onClick={handleSwitchWallet}>
                 <Box className={classes.primaryItemBox}>
                     {wallet.owner ? (
                         <Icons.SmartPay size={24} />

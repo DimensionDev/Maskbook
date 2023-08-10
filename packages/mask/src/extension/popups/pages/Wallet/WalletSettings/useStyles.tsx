@@ -18,7 +18,6 @@ export const useStyles = makeStyles()((theme) => ({
     },
     primaryItem: {
         margin: '16px 16px 0 16px',
-        cursor: 'default',
         background: theme.palette.maskColor.primary,
     },
     primaryItemText: {
