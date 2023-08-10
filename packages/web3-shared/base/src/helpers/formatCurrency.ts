@@ -55,7 +55,7 @@ const fiatCurrencyResultModifier = (
     currency: LiteralUnion<Keys | 'USD'> = CurrencyType.USD,
     isAssetValue: boolean,
 ) => {
-    if (currency === CurrencyType.HKD) return result.replace('$', 'HK$')
+    if (currency === CurrencyType.HKD) return result.replaceAll('$', 'HK$')
 
     if (currency === CurrencyType.JPY && isAssetValue)
         return result.startsWith('¥') ? '¥' + Number(result.replace('¥', '')).toFixed() : result
