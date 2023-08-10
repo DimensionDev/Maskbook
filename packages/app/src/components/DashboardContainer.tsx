@@ -4,10 +4,11 @@ import { EmptyStatus, SearchResultInspector } from '@masknet/shared'
 import { DisableShadowRootContext, ShadowRootIsolation } from '@masknet/theme'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
 import { DashboardContext } from '../contexts/DashboardContext.js'
-import { useSetThemeMode, useThemeMode } from '../helpers/setThemeMode.js'
 import { DashboardBody } from './DashboardBody.js'
 import { DashboardHeader } from './DashboardHeader.js'
 import { SearchBox } from './SearchBox.js'
+import { useSetThemeMode } from '../hooks/useSetThemeMode.js'
+import { useThemeMode } from '../hooks/useThemeMode.js'
 
 export interface DashboardContainerProps {
     children: React.ReactNode
@@ -20,8 +21,9 @@ export function DashboardContainer(props: DashboardContainerProps) {
     const keyword = registeredAddress || search
 
     const { setSidebarOpen } = DashboardContext.useContainer()
-    const setThemeMode = useSetThemeMode()
+
     const mode = useThemeMode()
+    const setThemeMode = useSetThemeMode()
 
     useLayoutEffect(() => {
         setThemeMode(mode)

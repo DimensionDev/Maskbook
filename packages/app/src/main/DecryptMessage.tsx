@@ -1,49 +1,40 @@
 import { Suspense, lazy } from 'react'
-import { Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { RegistryContext, TypedMessageRender } from '@masknet/typed-message-react'
 import { registry } from './TypedMessageRender/registry.js'
 import { useDecrypt } from './Decrypt/useDecrypt.js'
-import { getPostPayload } from '../helpers/getPostPayload.js'
 
 const PluginRender = lazy(() => import('./plugin-render.js'))
 
-export function DecryptMessage() {
-    const postData = getPostPayload()
-    if (!postData) return <Typography className="text-black dark:text-white">No payload found.</Typography>
-
-    const [text, version] = postData
-    return <DecryptMessageWorker text={text} version={version} />
-}
-
-function DecryptMessageWorker(props: { text: string; version: string }) {
+export function DecryptMessage(props: { text: string; version: string }) {
     const { text, version } = props
     const [error, isE2E, message] = useDecrypt(text, version)
 
     if (isE2E)
         return (
-            <Typography>
+            <Typography sx={{ padding: 2 }}>
                 This message is a e2e encrypted message. You can only decrypt this message when it is encrypted to you
                 and decrypt it with Mask Network extension.
             </Typography>
         )
     if (error)
         return (
-            <Typography>
+            <Typography sx={{ padding: 2 }}>
                 We encountered an error when try to decrypt this message: <br />
                 {error.message}
             </Typography>
         )
-    if (!message) return <Typography>Decrypting...</Typography>
+    if (!message) return <Typography sx={{ padding: 2 }}>Decrypting...</Typography>
 
     return (
         <RegistryContext.Provider value={registry.getTypedMessageRender}>
-            <div className="p-5">
+            <Box sx={{ px: 2 }}>
                 <TypedMessageRender message={message} />
+            </Box>
 
-                <Suspense fallback={<Typography>Plugin is loading...</Typography>}>
-                    <PluginRender message={message} />
-                </Suspense>
-            </div>
+            <Suspense fallback={<Typography sx={{ padding: 2 }}>Plugin is loading...</Typography>}>
+                <PluginRender message={message} />
+            </Suspense>
         </RegistryContext.Provider>
     )
 }

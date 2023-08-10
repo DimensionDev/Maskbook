@@ -5,8 +5,8 @@ import { DashboardContainer } from './DashboardContainer.js'
 import { DashboardBody } from './DashboardBody.js'
 
 interface PageContainerProps {
-    children?: React.ReactNode
     title?: string
+    children?: React.ReactNode
 }
 
 export const PageContainer = memo<PageContainerProps>(({ children, title = '' }) => {
