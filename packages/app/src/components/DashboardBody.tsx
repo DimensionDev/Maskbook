@@ -6,8 +6,6 @@ export interface DashboardBodyProps {
 }
 
 export const DashboardBody = memo<DashboardBodyProps>(({ children, borderless = false }) => {
-    if (borderless) {
-    }
     return (
         <div className="bg-white dark:bg-black p-5 pt-0">
             {borderless ? (
