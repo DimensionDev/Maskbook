@@ -45,7 +45,7 @@ export const CollectionList = memo<CollectionListProps>(function CollectionList(
 
     if ((!loading && !tokens.length) || !account) {
         return (
-            <Box>
+            <Box style={{ height: 358 }}>
                 <EmptyStatus flex={1}>{t('no_NFTs_found')}</EmptyStatus>
             </Box>
         )

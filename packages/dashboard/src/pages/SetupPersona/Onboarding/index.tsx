@@ -16,6 +16,7 @@ import { compact } from 'lodash-es'
 import { isZero } from '@masknet/web3-shared-base'
 import { useAsyncRetry } from 'react-use'
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
+import { useWallets } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -78,6 +79,7 @@ export const Onboarding = memo(function Onboarding() {
     const t = useDashboardI18N()
     const { classes } = useStyles()
 
+    const wallets = useWallets()
     const [params] = useSearchParams()
     const { showSnackbar } = useCustomSnackbar()
 
@@ -171,15 +173,17 @@ export const Onboarding = memo(function Onboarding() {
                     startIcon={<Icons.TwitterStroke className={classes.twitter} size={20} />}>
                     {t.persona_onboarding_to_twitter()}
                 </PrimaryButton>
-                <PrimaryButton
-                    loading={loading}
-                    disabled={loading}
-                    onClick={onSetupPaymentPassword}
-                    size="large"
-                    sx={{ ml: 1.5 }}
-                    startIcon={<Icons.Wallet className={classes.twitter} size={20} />}>
-                    {hasPaymentPassword ? t.wallet_open_mask_wallet() : t.persona_onboarding_set_payment_password()}
-                </PrimaryButton>
+                {wallets.length ? (
+                    <PrimaryButton
+                        loading={loading}
+                        disabled={loading}
+                        onClick={onSetupPaymentPassword}
+                        size="large"
+                        sx={{ ml: 1.5 }}
+                        startIcon={<Icons.Wallet className={classes.twitter} size={20} />}>
+                        {hasPaymentPassword ? t.wallet_open_mask_wallet() : t.persona_onboarding_set_payment_password()}
+                    </PrimaryButton>
+                ) : null}
             </SetupFrameController>
         </>
     )

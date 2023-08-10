@@ -13,7 +13,7 @@ import {
 } from '@masknet/shared-base'
 import { initialPersonaInformation } from '@masknet/shared'
 
-if (location.hash === '#/personas') {
+if (location.hash === '#/personas' || location.hash.includes('#/personas?tab')) {
     console.time('[SSR] Fill data')
     await Promise.all([
         activateSiteAdaptorUI(),

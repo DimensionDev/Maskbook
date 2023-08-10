@@ -61,6 +61,7 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
                     value={newPassword}
                     error={!passwordValid}
                     helperText={!passwordValid ? t('popups_backup_password_rules') : ''}
+                    onClear={() => setNewPassword('')}
                 />
                 <PasswordField
                     placeholder={t('reenter')}
@@ -69,6 +70,7 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
                     onBlur={validRepeatPassword}
                     error={!passwordMatched}
                     helperText={!passwordMatched ? t('popups_backup_password_inconsistency') : ''}
+                    onClear={() => setRepeatPassword('')}
                 />
                 <Box>
                     <Typography fontSize={12} color={theme.palette.maskColor.second}>

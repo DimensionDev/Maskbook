@@ -208,7 +208,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                 />
                             </Box>
                             <Box className={classes.info}>
-                                <Box position="relative">
+                                <Box position="relative" height="60px">
                                     <PersonaAvatar size={60} avatar={avatar} hasProofs={hasProofs} />
                                     <Box
                                         className={classes.edit}

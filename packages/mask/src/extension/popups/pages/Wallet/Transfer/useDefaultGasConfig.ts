@@ -11,6 +11,7 @@ export function useDefaultGasConfig(chainId: ChainId, gasLimit: string) {
     })
 
     const gasOption = gasOptions?.[GasOptionType.SLOW]
+
     if (!gasOption) return
     return isSupportEIP1559
         ? {
@@ -20,6 +21,6 @@ export function useDefaultGasConfig(chainId: ChainId, gasLimit: string) {
           }
         : {
               gas: gasLimit,
-              gasPrice: gasOption.suggestedMaxPriorityFeePerGas,
+              gasPrice: gasOption.suggestedMaxFeePerGas,
           }
 }

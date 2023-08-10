@@ -7,7 +7,6 @@ import {
     ChainContextProvider,
     useChainContext,
     useFungibleToken,
-    useNativeTokenAddress,
     useNetworkDescriptor,
     useWallet,
     useWeb3Connection,
@@ -86,6 +85,8 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const { chainId, address, params, setParams } = useTokenParams()
     const chainContextValue = useMemo(() => ({ chainId }), [chainId])
     const navigate = useNavigate()
+    const [paymentAddress, setPaymentAddress] = useState<string>()
+
     // Enter from wallet home page, sending token is not decided yet
     const undecided = params.get('undecided') === 'true'
     const locationAsset = useLocation().state?.asset as Web3Helper.FungibleAssetAll | undefined
@@ -108,7 +109,6 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const network = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const { data: token, isLoading } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, address, undefined, { chainId })
 
-    const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM, { chainId })
     const isNativeToken = isNativeTokenAddress(address)
     const gasLimit = isNativeToken ? ETH_GAS_LIMIT : ERC20_GAS_LIMIT
     const defaultGasConfig = useDefaultGasConfig(chainId, gasLimit)
@@ -138,9 +138,10 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         if (!recipient || isZero(totalAmount) || !token?.decimals) return
         return Web3.transferFungibleToken(address, recipient, totalAmount, '', {
             overrides: gasConfig,
+            paymentToken: paymentAddress,
+            chainId,
         })
-    }, [address, chainId, recipient, totalAmount, token?.decimals, gasConfig])
-    const [paymentAddress, setPaymentAddress] = useState(nativeTokenAddress)
+    }, [address, chainId, recipient, totalAmount, token?.decimals, gasConfig, paymentAddress])
 
     if (undecided)
         return (
