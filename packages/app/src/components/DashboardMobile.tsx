@@ -66,7 +66,7 @@ export function DashboardForMobile(props: DashboardForMobileProps) {
                                         </li>
                                         <li>
                                             <InstallExtension />
-                                            <span className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 dark:text-white text-black ">
+                                            <span className="flex items-center gap-x-4 px-6 py-3 text-xs leading-6 text-gray-700 dark:text-gray-400">
                                                 {`Version: ${env.VERSION}`}
                                             </span>
                                         </li>

@@ -30,7 +30,7 @@ export function DashboardContainer(props: DashboardContainerProps) {
 
     return (
         <div className="xl:pl-72 ">
-            <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-6  border-b border-line-light dark:border-line-dark dark:bg-black bg-white px-4  sm:px-6 lg:px-8">
+            <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-6 border-b border-line-light dark:border-neutral-800 px-4 sm:px-6 lg:px-8">
                 <button
                     type="button"
                     className="-m-2.5 p-2.5 dark:text-white text-black xl:hidden"
@@ -60,7 +60,7 @@ export function DashboardContainer(props: DashboardContainerProps) {
             </div>
             {keyword ? (
                 <div className=" lg:px-8">
-                    <div className="bg-white dark:bg-black p-5">
+                    <div className="bg-white dark:bg-black p-5 pt-0">
                         <div className="border rounded-lg overflow-hidden dark:border-line-dark border-line-light">
                             <DisableShadowRootContext.Provider value={false}>
                                 <ShadowRootIsolation>

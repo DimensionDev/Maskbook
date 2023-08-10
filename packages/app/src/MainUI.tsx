@@ -26,7 +26,7 @@ export function MainUI() {
         <DashboardContext.Provider>
             <Suspense fallback={null}>
                 <HashRouter>
-                    <div className="dark:bg-black h-full bg-white">
+                    <div className="bg-white dark:bg-black h-full">
                         <DashboardForMobile />
                         <DashboardForDesktop />
 

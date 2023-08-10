@@ -15,8 +15,7 @@ export default function ExplorePage(props: ExplorePageProps) {
             <DashboardContainer>
                 <main id="explore">
                     <DashboardHeader title="Deployments" />
-
-                    <div className="bg-white dark:bg-black p-5">
+                    <div className="bg-white dark:bg-black p-5 pt-0">
                         <DecryptMessage />
                     </div>
                 </main>
