@@ -121,11 +121,7 @@ export function TokenTransactionConfirmModal({
                             logoURL={token?.logoURL}
                             name={token?.symbol ?? token?.name}
                             chainId={token?.chainId}
-                            AvatarProps={{
-                                sx: {
-                                    fontSize: '2.75rem',
-                                },
-                            }}
+                            sx={{ fontSize: '2.75em' }}
                             size={90}
                         />
                         <Typography className={classes.congratulation} mt="19.5px">

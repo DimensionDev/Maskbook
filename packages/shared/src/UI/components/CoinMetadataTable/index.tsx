@@ -74,7 +74,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface CoinMetadataTableProps {
-    trending?: TrendingAPI.Trending
+    trending?: TrendingAPI.Trending | null
 }
 
 const brands: Record<TrendingAPI.CommunityType, React.ReactNode> = {
