@@ -1,12 +1,12 @@
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { DashboardContainer } from '../components/DashboardContainer.js'
 import { DashboardHeader } from '../components/DashboardHeader.js'
 
 import { Button, MenuItem, Typography } from '@mui/material'
 import { useMenuConfig } from '@masknet/shared'
-import { useSystemPreferencePalette } from '@masknet/theme'
-import { setThemeMode } from '../helpers/setThemeMode.js'
+import { getThemeMode, useSaveThemeMode, useSetThemeMode } from '../helpers/setThemeMode.js'
 import { Appearance } from '@masknet/public-api'
+import { MaskMessages } from '@masknet/shared-base'
 
 export interface SettingsPageProps {}
 
@@ -15,8 +15,8 @@ export default function SettingsPage(props: SettingsPageProps) {
         <DashboardContainer>
             <main>
                 <DashboardHeader title="Settings" />
-                <div className="bg-white p-5">
-                    <div className="border overflow-hidden rounded-lg">
+                <div className="bg-white dark:bg-black p-5 pt-0">
+                    <div className="border overflow-hidden rounded-lg border-line-light dark:border-neutral-800">
                         <SetupThemeMode />
                     </div>
                 </div>
@@ -26,14 +26,18 @@ export default function SettingsPage(props: SettingsPageProps) {
 }
 
 const SetupThemeMode = memo(() => {
-    const systemMode = useSystemPreferencePalette()
+    const setThemeMode = useSetThemeMode()
+    const saveThemeMode = useSaveThemeMode()
+    const [mode, setMode] = useState<Appearance>(getThemeMode())
 
     const onClick = useCallback(
         (mode: Appearance) => {
-            localStorage.themeMode = mode
-            setThemeMode(mode, systemMode)
+            MaskMessages.events.appearanceSettings.sendToLocal(mode)
+            setThemeMode(mode)
+            saveThemeMode(mode)
+            setMode(mode)
         },
-        [localStorage.themeMode, systemMode],
+        [localStorage.themeMode, setThemeMode, saveThemeMode],
     )
 
     const [menu, openMenu] = useMenuConfig(
@@ -53,18 +57,17 @@ const SetupThemeMode = memo(() => {
                 vertical: 'bottom',
                 horizontal: 'center',
             },
+            classes: {},
         },
     )
 
     return (
         <div className="flex w-full sm:p-6 justify-center sm:items-center">
-            <Typography className="w-full text-black text-base">theme</Typography>
-            <Button className="text-black bg-black/10  hover:bg-black/10 hover:text-black" onClick={openMenu}>
-                {localStorage.themeMode === Appearance.dark
-                    ? 'Dark'
-                    : localStorage.themeMode === Appearance.light
-                    ? 'Light'
-                    : 'System'}
+            <Typography className="w-full text-black dark:text-white text-base">Theme</Typography>
+            <Button
+                className="bg-button-light  text-black dark:bg-button-dark dark:text-white hover:bg-button-light dark:hover:bg-button-dark"
+                onClick={openMenu}>
+                {mode === Appearance.dark ? 'Dark' : mode === Appearance.light ? 'Light' : 'System'}
             </Button>
             {menu}
         </div>

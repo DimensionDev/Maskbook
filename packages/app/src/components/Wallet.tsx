@@ -1,7 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { CopyButton, FormattedAddress, SelectProviderModal, WalletIcon, WalletStatusModal } from '@masknet/shared'
-import { Sniffings } from '@masknet/shared-base'
-import { MaskColors, MaskLightTheme, makeStyles } from '@masknet/theme'
+import { MaskLightTheme, makeStyles } from '@masknet/theme'
 import {
     useBalance,
     useChainContext,
@@ -15,28 +14,23 @@ import {
 } from '@masknet/web3-hooks-base'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { Link, ThemeProvider, Typography, useTheme } from '@mui/material'
+import { Link, ThemeProvider, Typography } from '@mui/material'
 import { memo } from 'react'
 
-const useStyles = makeStyles<{
-    contentBackground?: string
-    textColor?: string
-    disableChange?: boolean
-    withinRiskWarningDialog?: boolean
-}>()((theme, { contentBackground, disableChange, withinRiskWarningDialog, textColor }) => ({
+const useStyles = makeStyles()((theme) => ({
     accountInfo: {
         fontSize: 16,
         flexGrow: 1,
         marginLeft: theme.spacing(1.5),
     },
     accountName: {
-        color: !Sniffings.is_dashboard_page ? theme.palette.maskColor.dark : textColor,
+        color: theme.palette.maskColor.dark,
         fontWeight: 700,
         marginRight: 5,
         lineHeight: '18px',
     },
     balance: {
-        color: !Sniffings.is_dashboard_page ? theme.palette.maskColor.dark : textColor,
+        color: theme.palette.maskColor.dark,
         paddingTop: 2,
         lineHeight: '18px',
     },
@@ -55,10 +49,10 @@ const useStyles = makeStyles<{
         marginRight: theme.spacing(0.5),
     },
     copyIcon: {
-        color: Sniffings.is_dashboard_page ? textColor : theme.palette.maskColor.dark,
+        color: theme.palette.maskColor.dark,
     },
     linkIcon: {
-        color: Sniffings.is_dashboard_page ? textColor : theme.palette.maskColor?.dark,
+        color: theme.palette.maskColor?.dark,
     },
     walletItem: {
         display: 'flex',
@@ -78,16 +72,7 @@ interface WalletItemProps {
 }
 export const WalletItem = memo<WalletItemProps>((props) => {
     const providerDescriptor = useProviderDescriptor<'all'>()
-    const theme = useTheme()
-    const { classes, cx } = useStyles({
-        contentBackground: providerDescriptor?.backgroundGradient ?? theme.palette.maskColor.publicBg,
-        disableChange: props.disableChange,
-        withinRiskWarningDialog: props.withinRiskWarningDialog,
-        textColor:
-            providerDescriptor?.type === ProviderType.MaskWallet
-                ? theme.palette.maskColor.dark
-                : theme.palette.text.primary,
-    })
+    const { classes, cx } = useStyles()
 
     const Others = useWeb3Others()
     const { account, chainId } = useChainContext()
@@ -132,10 +117,12 @@ export const WalletItem = memo<WalletItemProps>((props) => {
                     />
                     <div className={classes.accountInfo}>
                         {ProviderType.MaskWallet === providerDescriptor?.type ? (
-                            <Typography className={classes.accountName}>{wallet?.name}</Typography>
+                            <Typography className={cx(classes.accountName, 'text-black dark:text-white')}>
+                                {wallet?.name}
+                            </Typography>
                         ) : null}
                         <div className={classes.infoRow}>
-                            <Typography className={classes.accountName}>
+                            <Typography className={cx(classes.accountName, 'text-black dark:text-white')}>
                                 {domain ? (
                                     Others.formatDomainName(domain)
                                 ) : (
@@ -144,8 +131,8 @@ export const WalletItem = memo<WalletItemProps>((props) => {
                             </Typography>
                             <ThemeProvider theme={MaskLightTheme}>
                                 <CopyButton
-                                    className={cx(classes.icon, classes.copyIcon)}
-                                    color={MaskColors.light.maskColor.dark}
+                                    className={cx(classes.icon, classes.copyIcon, 'text-black dark:text-white')}
+                                    color="text-black dark:text-white"
                                     size={17.5}
                                     text={account}
                                 />
@@ -157,14 +144,16 @@ export const WalletItem = memo<WalletItemProps>((props) => {
                                     target="_blank"
                                     title="View on Explorer"
                                     rel="noopener noreferrer">
-                                    <Icons.LinkOut className={cx(classes.icon, classes.linkIcon)} />
+                                    <Icons.LinkOut
+                                        className={cx(classes.icon, classes.linkIcon, 'text-black dark:text-white')}
+                                    />
                                 </Link>
                             ) : null}
                         </div>
 
                         {props.withinRiskWarningDialog ? null : (
                             <div className={classes.infoRow}>
-                                <Typography className={classes.balance}>
+                                <Typography className={cx(classes.balance, 'text-black dark:text-white')}>
                                     {loadingNativeToken || loadingBalance
                                         ? '-'
                                         : `${formatBalance(balance, nativeToken?.decimals, 3)} ${nativeToken?.symbol}`}
