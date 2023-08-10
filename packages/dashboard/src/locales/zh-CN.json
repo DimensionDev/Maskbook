@@ -391,6 +391,7 @@
     "register_restore_backups_text": "文本内容",
     "register_restore_backups_tabs": "恢复备份",
     "create_wallet_mnemonic_tip": "请不要忘记保存您的助记词。您需要这个才能访问您的钱包。",
+    "create_wallet_mnemonic_verification_fail": "单词选择错误。请重试！",
     "create_wallet_onboarding_got_it": "好的",
     "create_wallet_onboarding_creating_identity": "创建您的 ",
     "create_wallet_onboarding_ready": "您的钱包已开启 ",
@@ -413,6 +414,7 @@
     "create_wallet_your_wallet_address": "您的钱包地址",
     "create_wallet_key_store_not_support": "不支持的密钥存储数据",
     "create_wallet_key_store_password": "Keystore密码",
+    "create_wallet_key_store_incorrect_password": "Keystore 密码不正确。",
     "create_wallet_done": "完成",
     "create_wallet_verify_words": "验证助记词",
     "create_wallet_mnemonic_word_not_match": "助记词不正确",
@@ -459,5 +461,6 @@
     "private_key": "私钥",
     "local_backup": "本地备份",
     "incorrect_verification_code": "验证码错误。",
+    "wallet_set_payment_password_successfully": "设置支付密码成功。",
     "wallet_open_mask_wallet": "打开一个钱包"
 }
