@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { CopyButton } from '@masknet/shared'
 import { DashboardRoutes, formatPersonaFingerprint, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
@@ -83,7 +83,7 @@ export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose
     const { classes } = useStyles()
     const { personaManagers, walletManagers } = useManagers()
 
-    const { openPopupWindow, openDashboard } = useSNSAdaptorContext()
+    const { openPopupWindow, openDashboard } = useSiteAdaptorContext()
 
     return usePortalShadowRoot((container) => (
         <Popover

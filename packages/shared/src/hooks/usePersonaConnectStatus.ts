@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import type { PersonaInformation } from '@masknet/shared-base'
-import { useAllPersonas, useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useAllPersonas, useLastRecognizedIdentity, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 export function usePersonaConnectStatus(): {
     action?: () => void
@@ -10,7 +10,7 @@ export function usePersonaConnectStatus(): {
 } {
     const personas = useAllPersonas()
     const lastRecognized = useLastRecognizedIdentity()
-    const { connectPersona, createPersona } = useSNSAdaptorContext()
+    const { connectPersona, createPersona } = useSiteAdaptorContext()
 
     return useMemo(() => {
         const id = lastRecognized?.identifier

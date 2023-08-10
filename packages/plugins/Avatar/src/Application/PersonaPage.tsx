@@ -14,7 +14,7 @@ import { isValidAddress } from '@masknet/web3-shared-evm'
 import {
     useAllPersonas,
     useLastRecognizedSocialIdentity,
-    useSNSAdaptorContext,
+    useSiteAdaptorContext,
 } from '@masknet/plugin-infra/content-script'
 import { RoutePaths } from './Routes.js'
 import { useAvatarManagement } from '../contexts/index.js'
@@ -29,7 +29,7 @@ export function PersonaPage() {
     const network = socialIdentity?.identifier?.network.replace('.com', '')
     const userId = socialIdentity?.identifier?.userId
 
-    const { getPersonaAvatar, currentPersona: currentPersona_ } = useSNSAdaptorContext()
+    const { getPersonaAvatar, currentPersona: currentPersona_ } = useSiteAdaptorContext()
     const myPersonas = useAllPersonas()
     const _persona = useSubscription(currentPersona_)
     const currentPersona = myPersonas?.find(

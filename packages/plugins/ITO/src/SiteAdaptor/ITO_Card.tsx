@@ -7,7 +7,7 @@ import { useMaskClaimCallback } from './hooks/useMaskClaimCallback.js'
 import { useMaskITO_Packet } from './hooks/useMaskITO_Packet.js'
 import { type FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 import { useI18N } from '../locales/index.js'
-import { useSNSAdaptorContext } from '@masknet/plugin-infra/dom'
+import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
 import { usePostLink } from '@masknet/plugin-infra/content-script'
 import { isFacebook, isTwitter } from '@masknet/shared-base'
 
@@ -58,7 +58,7 @@ export function ITO_Card(props: ITO_CardProps) {
     const t = useI18N()
     const { classes } = useStyles()
     const { value: packet, loading: packetLoading, error: packetError, retry: packetRetry } = useMaskITO_Packet()
-    const { share } = useSNSAdaptorContext()
+    const { share } = useSiteAdaptorContext()
 
     // #region claim
     const [{ loading: isClaiming }, claimCallback] = useMaskClaimCallback()

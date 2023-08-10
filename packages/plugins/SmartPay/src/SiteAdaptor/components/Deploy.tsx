@@ -7,7 +7,7 @@ import { Icons } from '@masknet/icons'
 import {
     useCurrentPersonaInformation,
     useLastRecognizedIdentity,
-    useSNSAdaptorContext,
+    useSiteAdaptorContext,
 } from '@masknet/plugin-infra/content-script'
 import { CopyButton, ImageIcon, PersonaAction, WalletDescription } from '@masknet/shared'
 import { NetworkPluginID, formatPersonaFingerprint } from '@masknet/shared-base'
@@ -132,7 +132,7 @@ export function Deploy({ open }: { open: boolean }) {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const [manager, setManager] = useState<ManagerAccount>()
 
-    const { getPersonaAvatar } = useSNSAdaptorContext()
+    const { getPersonaAvatar } = useSiteAdaptorContext()
     const { personaManagers, walletManagers } = useManagers()
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

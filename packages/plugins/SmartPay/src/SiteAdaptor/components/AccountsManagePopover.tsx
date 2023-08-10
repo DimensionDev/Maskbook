@@ -4,7 +4,7 @@ import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { formatPersonaFingerprint, PopupRoutes } from '@masknet/shared-base'
-import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useManagers } from '../../hooks/useManagers.js'
 import { useI18N } from '../../locales/i18n_generated.js'
 
@@ -62,7 +62,7 @@ export const AccountsManagerPopover = memo<AccountsManagePopoverProps>(
         const t = useI18N()
         const { classes } = useStyles()
         const { personaManagers, walletManagers } = useManagers()
-        const { openPopupWindow } = useSNSAdaptorContext()
+        const { openPopupWindow } = useSiteAdaptorContext()
         const ownerInfo = useMemo(() => {
             const persona = personaManagers?.find((x) => isSameAddress(x.address, owner))
 

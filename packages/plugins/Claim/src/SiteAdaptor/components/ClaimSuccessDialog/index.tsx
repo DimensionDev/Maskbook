@@ -6,7 +6,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
 import { useI18N } from '../../../locales/i18n_generated.js'
-import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -73,7 +73,7 @@ export function ClaimSuccessDialog({ open, onClose, amount, tokenAddress }: Prop
     const t = useI18N()
     const { classes } = useStyles()
 
-    const { share } = useSNSAdaptorContext()
+    const { share } = useSiteAdaptorContext()
 
     const { data: tokenDetail } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress)
 

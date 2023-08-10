@@ -10,7 +10,7 @@ import {
     usePluginI18NField,
     getProfileTabContent,
     useAllPersonas,
-    useSNSAdaptorContext,
+    useSiteAdaptorContext,
     useLastRecognizedIdentity,
     useSocialIdentityByUserId,
 } from '@masknet/plugin-infra/content-script'
@@ -142,7 +142,7 @@ function Content(props: ProfileTabContentProps) {
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
-    const { openDashboard } = useSNSAdaptorContext()
+    const { openDashboard } = useSiteAdaptorContext()
 
     const {
         value: personaStatus,

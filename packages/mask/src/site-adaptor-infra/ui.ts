@@ -2,7 +2,7 @@ import stringify from 'json-stable-stringify'
 import { assertNotEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { delay, waitDocumentReadyState } from '@masknet/kit'
 import type { SiteAdaptorUI } from '@masknet/types'
-import { type Plugin, startPluginSNSAdaptor, SNSAdaptorContextRef } from '@masknet/plugin-infra/content-script'
+import { type Plugin, startPluginSNSAdaptor, SiteAdaptorContextRef } from '@masknet/plugin-infra/content-script'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '@masknet/shared'
 import {
     createSubscriptionFromAsync,
@@ -155,7 +155,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         })
     }
 
-    SNSAdaptorContextRef.value = {
+    SiteAdaptorContextRef.value = {
         ...RestPartOfPluginUIContextShared,
         lastRecognizedProfile: lastRecognizedSub,
         currentVisitingProfile: currentVisitingSub,
@@ -194,7 +194,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
             (id, signal): Plugin.SiteAdaptor.SiteAdaptorContext => {
                 return {
                     ...createPartialSharedUIContext(id, signal),
-                    ...SNSAdaptorContextRef.value,
+                    ...SiteAdaptorContextRef.value,
                 }
             },
             Services.Settings.getPluginMinimalModeEnabled,

@@ -7,7 +7,7 @@ import { Icon, LeavePageConfirmModal, PersonaSelectPanelModal, useSharedI18N } f
 import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { SmartPayFunder } from '@masknet/web3-providers'
-import { useAllPersonas, useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useAllPersonas, useLastRecognizedIdentity, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { RoutePaths } from '../../constants.js'
 import { useQueryQualifications } from '../../hooks/useQueryQualifications.js'
 import { SmartPayContext } from '../../hooks/useSmartPayContext.js'
@@ -69,7 +69,7 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
         if (!currentProfile?.identifier?.userId) return 0
         return SmartPayFunder.getRemainFrequency(currentProfile.identifier.userId)
     }, [currentProfile])
-    const { openDashboard } = useSNSAdaptorContext()
+    const { openDashboard } = useSiteAdaptorContext()
 
     const { value: qualifications, loading } = useQueryQualifications()
 

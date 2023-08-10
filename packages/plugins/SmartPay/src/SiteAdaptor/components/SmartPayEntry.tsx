@@ -5,7 +5,7 @@ import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shar
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Icons } from '@masknet/icons'
 import { useWallets } from '@masknet/web3-hooks-base'
-import { useAllPersonas, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useAllPersonas, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { PluginSmartPayMessages } from '../../message.js'
 import { useQueryQualifications } from '../../hooks/useQueryQualifications.js'
 
@@ -20,7 +20,7 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
 
     const wallets = useWallets()
     const personas = useAllPersonas()
-    const { openDashboard } = useSNSAdaptorContext()
+    const { openDashboard } = useSiteAdaptorContext()
 
     const { setDialog: setSmartPayDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent)
 

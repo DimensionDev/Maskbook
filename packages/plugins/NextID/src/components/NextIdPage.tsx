@@ -6,7 +6,7 @@ import {
     useAllPersonas,
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
-    useSNSAdaptorContext,
+    useSiteAdaptorContext,
 } from '@masknet/plugin-infra/content-script'
 import {
     PluginCardFrameMini,
@@ -30,7 +30,7 @@ export const NextIdPage = memo(function NextIdPage() {
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const allPersonas = useAllPersonas()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
-    const { openDashboard, queryPersonaByProfile, openPopupWindow } = useSNSAdaptorContext()
+    const { openDashboard, queryPersonaByProfile, openPopupWindow } = useSiteAdaptorContext()
 
     const { value: personaConnectStatus, loading: statusLoading } = useCurrentPersonaConnectStatus(
         allPersonas,

@@ -11,7 +11,7 @@ import {
     currentMaskWalletLockStatusSettings,
 } from '@masknet/shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
-import { SNSAdaptorContextRef } from '@masknet/plugin-infra/dom'
+import { SiteAdaptorContextRef } from '@masknet/plugin-infra/dom'
 import {
     createJsonRpcPayload,
     createJsonRpcResponse,
@@ -40,7 +40,7 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
             await this.approveRequest(id)
         } else {
             // TODO: make this for Mask Wallet only
-            const hasPassword = await SNSAdaptorContextRef.value.hasPaymentPassword()
+            const hasPassword = await SiteAdaptorContextRef.value.hasPaymentPassword()
             const route = !hasPassword
                 ? PopupRoutes.SetPaymentPassword
                 : currentMaskWalletLockStatusSettings.value === LockStatus.LOCKED
@@ -54,7 +54,7 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
                 PopupsHistory.push(urlcat(route, fromState))
             } else {
                 // open the popups window and wait for approvement from the user.
-                await SNSAdaptorContextRef.value.openPopupWindow(route, {
+                await SiteAdaptorContextRef.value.openPopupWindow(route, {
                     source: location.origin,
                     ...fromState,
                 })

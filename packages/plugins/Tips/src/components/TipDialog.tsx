@@ -16,7 +16,7 @@ import { NFTSection } from './NFTSection/index.js'
 import { NetworkSection } from './NetworkSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
 import { TokenSection } from './TokenSection/index.js'
-import { useSNSAdaptorContext } from '@masknet/plugin-infra/dom'
+import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -105,7 +105,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
 
     const { data: nonFungibleToken } = useNonFungibleAsset(undefined, nonFungibleTokenAddress, nonFungibleTokenId ?? '')
-    const { share } = useSNSAdaptorContext()
+    const { share } = useSiteAdaptorContext()
 
     const send = useCallback(async () => {
         const hash = await sendTip()

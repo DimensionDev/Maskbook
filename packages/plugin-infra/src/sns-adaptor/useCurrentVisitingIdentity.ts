@@ -1,8 +1,8 @@
 import { useSubscription } from 'use-subscription'
 import { UNDEFINED } from '@masknet/shared-base'
-import { useSNSAdaptorContext } from '../dom/useSNSAdaptorContext.js'
+import { useSiteAdaptorContext } from '../dom/useSiteAdaptorContext.js'
 
 export function useCurrentVisitingIdentity() {
-    const { currentVisitingProfile } = useSNSAdaptorContext()
+    const { currentVisitingProfile } = useSiteAdaptorContext()
     return useSubscription(currentVisitingProfile ?? UNDEFINED)
 }

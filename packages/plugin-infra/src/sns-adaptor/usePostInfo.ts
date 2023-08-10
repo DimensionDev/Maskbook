@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import { usePostInfoDetails } from './PostContext.js'
-import { useSNSAdaptorContext } from '../dom/useSNSAdaptorContext.js'
+import { useSiteAdaptorContext } from '../dom/useSiteAdaptorContext.js'
 
 export function usePostLink() {
-    const { getPostURL } = useSNSAdaptorContext()
+    const { getPostURL } = useSiteAdaptorContext()
     const id = usePostInfoDetails.snsID()
     const identifier = usePostInfoDetails.identifier()
     return useMemo(() => {

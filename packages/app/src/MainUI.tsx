@@ -1,7 +1,7 @@
 import { Suspense, lazy, useEffect } from 'react'
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { DisableShadowRootContext, ShadowRootIsolation } from '@masknet/theme'
-import { SNSAdaptorContextRef } from '@masknet/plugin-infra/content-script'
+import { SiteAdaptorContextRef } from '@masknet/plugin-infra/content-script'
 import { DashboardForDesktop } from './components/DashboardDesktop.js'
 import { DashboardForMobile } from './components/DashboardMobile.js'
 import { DashboardContext } from './contexts/DashboardContext.js'
@@ -19,7 +19,7 @@ const PageInspectorRender = lazy(() => import('./main/page-render.js'))
 
 export function MainUI() {
     useEffect(() => {
-        SNSAdaptorContextRef.value = createSharedContext()
+        SiteAdaptorContextRef.value = createSharedContext()
     }, [])
 
     return (

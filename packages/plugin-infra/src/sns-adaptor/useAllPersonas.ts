@@ -1,8 +1,8 @@
 import { useSubscription } from 'use-subscription'
 import { EMPTY_ARRAY } from '@masknet/shared-base'
-import { useSNSAdaptorContext } from '../dom/useSNSAdaptorContext.js'
+import { useSiteAdaptorContext } from '../dom/useSiteAdaptorContext.js'
 
 export function useAllPersonas() {
-    const { allPersonas } = useSNSAdaptorContext()
+    const { allPersonas } = useSiteAdaptorContext()
     return useSubscription(allPersonas ?? EMPTY_ARRAY)
 }

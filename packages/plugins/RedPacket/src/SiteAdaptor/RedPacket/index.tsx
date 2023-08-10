@@ -9,7 +9,7 @@ import { NetworkPluginID, isFacebook, isTwitter } from '@masknet/shared-base'
 import { ChainResolver, NetworkResolver, Web3 } from '@masknet/web3-providers'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { TransactionConfirmModal } from '@masknet/shared'
-import { usePostLink, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { usePostLink, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useI18N } from '../../locales/index.js'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
 import { useClaimCallback } from '../hooks/useClaimCallback.js'
@@ -131,7 +131,7 @@ export function RedPacket(props: RedPacketProps) {
     const { payload } = props
 
     const t = useI18N()
-    const { share } = useSNSAdaptorContext()
+    const { share } = useSiteAdaptorContext()
     const token = payload.token
     const { pluginID } = useNetworkContext()
     const payloadChainId = token?.chainId ?? ChainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet

@@ -25,7 +25,7 @@ import {
 import { useFungibleTokenWatched } from '@masknet/web3-hooks-base'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback.js'
 import type { Project } from '../types.js'
-import { usePostLink, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { usePostLink, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -51,7 +51,7 @@ export function PurchaseDialog(props: ActionBarProps) {
     const t = useI18N()
     const { classes } = useStyles()
     const { project, open, onClose, chainId } = props
-    const { share } = useSNSAdaptorContext()
+    const { share } = useSiteAdaptorContext()
 
     const {
         token: { data: token },

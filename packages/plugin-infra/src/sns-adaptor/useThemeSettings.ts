@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useSubscription } from 'use-subscription'
 import type { Theme } from '@mui/material'
 import { FontSize, ThemeColor, ThemeMode } from '@masknet/web3-shared-base'
-import { useSNSAdaptorContext } from '../dom/useSNSAdaptorContext.js'
+import { useSiteAdaptorContext } from '../dom/useSiteAdaptorContext.js'
 import { getBackgroundColor } from '../utils/theme/color-tools.js'
 
 const defaults = {
@@ -12,7 +12,7 @@ const defaults = {
 }
 
 export function useThemeSettings() {
-    const { themeSettings, getThemeSettings } = useSNSAdaptorContext()
+    const { themeSettings, getThemeSettings } = useSiteAdaptorContext()
     const settings = useSubscription(themeSettings)
     return useMemo(() => {
         return {

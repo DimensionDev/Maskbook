@@ -13,7 +13,7 @@ import {
 import { useChainContext, useNetworkContext, useNonFungibleAsset } from '@masknet/web3-hooks-base'
 import { NetworkResolver, Web3 } from '@masknet/web3-providers'
 import { TokenType } from '@masknet/web3-shared-base'
-import { usePostLink, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { usePostLink, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { NetworkPluginID, CrossIsolationMessages, isTwitter, isFacebook } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { Stack } from '@mui/system'
@@ -192,7 +192,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const { account, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>(
         pluginID === NetworkPluginID.PLUGIN_EVM ? {} : { account: '' },
     )
-    const { share } = useSNSAdaptorContext()
+    const { share } = useSiteAdaptorContext()
     const {
         value: availability,
         loading,

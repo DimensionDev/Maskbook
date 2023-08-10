@@ -2,7 +2,7 @@ import { useCallback, useRef } from 'react'
 import { useAsyncFn } from 'react-use'
 import getUnixTime from 'date-fns/getUnixTime'
 import { Typography } from '@mui/material'
-import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useLastRecognizedIdentity, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import {
     type NetworkPluginID,
     type PersonaInformation,
@@ -33,7 +33,7 @@ export function useDeploy(
     const t = useI18N()
 
     const { TransactionWatcher, Transaction } = useWeb3State()
-    const { signWithPersona, hasPaymentPassword, openPopupWindow } = useSNSAdaptorContext()
+    const { signWithPersona, hasPaymentPassword, openPopupWindow } = useSiteAdaptorContext()
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 

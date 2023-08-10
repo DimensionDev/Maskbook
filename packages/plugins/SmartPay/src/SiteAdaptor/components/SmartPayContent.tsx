@@ -42,7 +42,7 @@ import {
     isSameAddress,
     toFixed,
 } from '@masknet/web3-shared-base'
-import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useLastRecognizedIdentity, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { Others, SmartPayFunder, Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
@@ -195,7 +195,7 @@ export const SmartPayContent = memo(() => {
 
     // #region web3 state
 
-    const { openPopupWindow } = useSNSAdaptorContext()
+    const { openPopupWindow } = useSiteAdaptorContext()
     const { account, chainId, setAccount } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const wallet = useMemo(() => {

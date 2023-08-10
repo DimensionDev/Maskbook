@@ -16,7 +16,7 @@ import LensHubABI from '@masknet/web3-contracts/abis/LensHub.json'
 import type { LensHub } from '@masknet/web3-contracts/types/LensHub.js'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { BroadcastType, ProxyActionType, type FollowModuleTypedData } from '@masknet/web3-providers/types'
-import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
 import { useQueryAuthenticate } from './useQueryAuthenticate.js'
 import { useI18N } from '../../../locales/i18n_generated.js'
@@ -34,7 +34,7 @@ export function useFollow(
     const handleQueryAuthenticate = useQueryAuthenticate(account)
     const { LENS_HUB_PROXY_CONTRACT_ADDRESS } = useLensConstants(chainId)
     const lensHub = useContract<LensHub>(chainId, LENS_HUB_PROXY_CONTRACT_ADDRESS, LensHubABI as AbiItem[])
-    const { fetchJSON } = useSNSAdaptorContext()
+    const { fetchJSON } = useSiteAdaptorContext()
 
     const snackbarKeyRef = useRef<SnackbarKey>()
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()

@@ -34,7 +34,7 @@ import {
     isZero,
     rightShift,
 } from '@masknet/web3-shared-base'
-import { useSNSAdaptorContext } from '@masknet/plugin-infra/dom'
+import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
 import { Contract, Others, Web3, ChainResolver } from '@masknet/web3-providers'
 import { SchemaType, getAaveConstant, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
@@ -103,7 +103,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     const t = useI18N()
     const { classes } = useStyles()
     const isDeposit = tab === TabType.Deposit
-    const { share } = useSNSAdaptorContext()
+    const { share } = useSiteAdaptorContext()
     const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [inputAmount, setInputAmount] = useState('')
     const [estimatedGas, setEstimatedGas] = useState<BigNumber.Value>(ZERO)

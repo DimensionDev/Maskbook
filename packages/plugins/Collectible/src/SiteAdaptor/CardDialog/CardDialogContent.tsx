@@ -18,7 +18,7 @@ import {
     useAllPersonas,
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
-    useSNSAdaptorContext,
+    useSiteAdaptorContext,
 } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
@@ -84,7 +84,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
     } = Context.useContainer()
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const lastRecognized = useLastRecognizedIdentity()
-    const { currentPersonaIdentifier, openDashboard } = useSNSAdaptorContext()
+    const { currentPersonaIdentifier, openDashboard } = useSiteAdaptorContext()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const personas = useAllPersonas()
     const onBeforeAction = useCallback(() => {

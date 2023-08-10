@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js'
 import { alpha } from '@mui/system'
 import { Box } from '@mui/material'
 import { TokenSecurityBoundary } from '@masknet/plugin-go-plus-security'
-import { useActivatedPluginsSNSAdaptor, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginsSNSAdaptor, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
 import {
     PluginWalletStatusBar,
@@ -81,7 +81,7 @@ export function TraderStateBar({
     const Others = useWeb3Others()
 
     const { isSwapping } = AllProviderTradeContext.useContainer()
-    const { openPopupWindow } = useSNSAdaptorContext()
+    const { openPopupWindow } = useSiteAdaptorContext()
 
     // #region if `isPopupPage` be true, click the plugin status bar need to  open popup window
     const openSelectWalletPopup = useCallback(() => {

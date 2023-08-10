@@ -2,11 +2,11 @@ import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { EMPTY_LIST, MaskMessages, NextIDPlatform } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { useAllPersonas, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useAllPersonas, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 export function useConnectedPersonas() {
     const personasInDB = useAllPersonas()
-    const { getPersonaAvatars } = useSNSAdaptorContext()
+    const { getPersonaAvatars } = useSiteAdaptorContext()
 
     const result = useAsyncRetry(async () => {
         const allPersonaPublicKeys = personasInDB.map((x) => x.identifier.publicKeyAsHex)

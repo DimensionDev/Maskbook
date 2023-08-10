@@ -2,7 +2,7 @@ import { Button, DialogContent, Stack, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { PluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { SNSAdaptorContextRef } from '@masknet/plugin-infra/dom'
+import { SiteAdaptorContextRef } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 function onConfirm() {
-    return SNSAdaptorContextRef.value.setMinimalMode(PluginID.GoPlusSecurity, true)
+    return SiteAdaptorContextRef.value.setMinimalMode(PluginID.GoPlusSecurity, true)
 }
 interface Props {
     open: boolean

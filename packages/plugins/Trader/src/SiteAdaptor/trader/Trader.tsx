@@ -20,7 +20,7 @@ import {
     useTelemetry,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useActivatedPlugin, useSNSAdaptorContext } from '@masknet/plugin-infra/dom'
+import { useActivatedPlugin, useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
 import { NetworkPluginID, PluginID, isFacebook, isTwitter } from '@masknet/shared-base'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { type TraderAPI } from '@masknet/web3-providers/types'
@@ -60,7 +60,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const { chainId, account, setChainId } = useChainContext({
         chainId: targetChainId,
     })
-    const { share } = useSNSAdaptorContext()
+    const { share } = useSiteAdaptorContext()
 
     const { pluginID } = useNetworkContext()
     const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')

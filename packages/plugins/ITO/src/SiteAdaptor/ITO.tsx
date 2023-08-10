@@ -19,7 +19,7 @@ import { EnhanceableSite, NetworkPluginID, getSiteType, isFacebook, isTwitter } 
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { ChainResolver, ExplorerResolver } from '@masknet/web3-providers'
-import { usePostLink, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { usePostLink, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { ITO_EXCHANGE_RATION_MAX, MSG_DELIMITER, TIME_WAIT_BLOCKCHAIN } from '../constants.js'
 import { sortTokens } from './helpers.js'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
@@ -243,7 +243,7 @@ export function ITO(props: ITO_Props) {
         retry: retryAvailability,
     } = useAvailabilityComputed(payload)
 
-    const { share } = useSNSAdaptorContext()
+    const { share } = useSiteAdaptorContext()
 
     const { listOfStatus, startTime, unlockTime, isUnlocked, hasLockTime, endTime, qualificationAddress } =
         availabilityComputed

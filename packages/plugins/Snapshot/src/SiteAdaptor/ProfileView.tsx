@@ -16,7 +16,7 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { Icons } from '@masknet/icons'
 import { PluginID } from '@masknet/shared-base'
-import { useIsMinimalMode, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useIsMinimalMode, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { PluginDescriptor } from './PluginDescriptor.js'
 import { ProfileSpaceHeader } from './ProfileSpaceHeader.js'
 import { ContentTabs } from '../types.js'
@@ -93,7 +93,7 @@ export function ProfileView(props: ProfileViewProps) {
         currentSpace.spaceId,
         currentSpace.strategyName ?? space?.symbol,
     )
-    const { setPluginMinimalModeEnabled } = useSNSAdaptorContext()
+    const { setPluginMinimalModeEnabled } = useSiteAdaptorContext()
     const [{ loading: loadingModeEnabled }, onEnablePlugin] = useAsyncFn(async () => {
         await setPluginMinimalModeEnabled?.(PluginID.Snapshot, false)
     }, [setPluginMinimalModeEnabled])
