@@ -60,7 +60,7 @@ export function DashboardContainer(props: DashboardContainerProps) {
                 </div>
             </div>
             {keyword ? (
-                <div className=" lg:px-8">
+                <div className="h-(calc(100vh_-_64px)) overflow-auto lg:px-8">
                     <DashboardBody>
                         <DisableShadowRootContext.Provider value={false}>
                             <ShadowRootIsolation>
