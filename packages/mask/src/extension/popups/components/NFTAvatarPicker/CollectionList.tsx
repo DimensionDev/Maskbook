@@ -4,7 +4,7 @@ import { Box, Skeleton } from '@mui/material'
 import { memo } from 'react'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { makeStyles } from '@masknet/theme'
-import { useNetworkContext } from '@masknet/web3-hooks-base'
+import { useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
 import { range } from 'lodash-es'
 
 export interface CollectionListProps {
@@ -42,11 +42,14 @@ export const CollectionList = memo<CollectionListProps>(function CollectionList(
     const { t } = useI18N()
     const { pluginID } = useNetworkContext()
     const { classes, cx } = useStyles()
+    const wallet = useWallet()
 
     if ((!loading && !tokens.length) || !account) {
         return (
             <Box style={{ height: 358 }}>
-                <EmptyStatus flex={1}>{t('no_NFTs_found')}</EmptyStatus>
+                <EmptyStatus sx={{ height: '100%' }} flex={1}>
+                    {t('no_NFTs_found')}
+                </EmptyStatus>
             </Box>
         )
     }
@@ -68,7 +71,7 @@ export const CollectionList = memo<CollectionListProps>(function CollectionList(
             {tokens.length
                 ? tokens.map((x, index) => {
                       const isSelected = isSameNFT(pluginID, x, selected)
-                      const disabled = selected && !isSelected
+                      const disabled = (selected && !isSelected) || wallet?.owner
                       return (
                           <CollectibleCard
                               className={cx(classes.item, disabled ? classes.disabled : undefined)}
