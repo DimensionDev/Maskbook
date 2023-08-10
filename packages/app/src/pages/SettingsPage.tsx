@@ -1,4 +1,5 @@
 import { memo, useCallback, useState } from 'react'
+import { DashboardBody } from '../components/DashboardBody.js'
 import { DashboardContainer } from '../components/DashboardContainer.js'
 import { DashboardHeader } from '../components/DashboardHeader.js'
 
@@ -15,11 +16,10 @@ export default function SettingsPage(props: SettingsPageProps) {
         <DashboardContainer>
             <main>
                 <DashboardHeader title="Settings" />
-                <div className="bg-white dark:bg-black p-5 pt-0">
-                    <div className="border overflow-hidden rounded-lg border-line-light dark:border-neutral-800">
-                        <SetupThemeMode />
-                    </div>
-                </div>
+
+                <DashboardBody>
+                    <SetupThemeMode />
+                </DashboardBody>
             </main>
         </DashboardContainer>
     )

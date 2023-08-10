@@ -4,6 +4,7 @@ import { DashboardContainer } from '../components/DashboardContainer.js'
 import { DashboardHeader } from '../components/DashboardHeader.js'
 import { createPostInfoContext } from '../helpers/createPostInfoContext.js'
 import { DecryptMessage } from '../main/index.js'
+import { DashboardBody } from '../components/DashboardBody.js'
 
 export interface ExplorePageProps {}
 
@@ -14,10 +15,10 @@ export default function ExplorePage(props: ExplorePageProps) {
         <PostInfoContext.Provider value={context}>
             <DashboardContainer>
                 <main id="explore">
-                    <DashboardHeader title="Deployments" />
-                    <div className="bg-white dark:bg-black p-5 pt-0">
+                    <DashboardHeader title="Encrypted Post" />
+                    <DashboardBody>
                         <DecryptMessage />
-                    </div>
+                    </DashboardBody>
                 </main>
             </DashboardContainer>
         </PostInfoContext.Provider>
