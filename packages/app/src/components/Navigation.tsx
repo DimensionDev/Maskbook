@@ -1,7 +1,6 @@
 import {
     ArrowPathRoundedSquareIcon,
     Cog6ToothIcon,
-    RocketLaunchIcon,
     WindowIcon,
     UserCircleIcon,
     PencilSquareIcon,
@@ -15,7 +14,6 @@ import { DashboardContext } from '../contexts/DashboardContext.js'
 const navigation = [
     { name: 'Applications', icon: WindowIcon, to: ApplicationRoutes.Applications },
     { name: 'Compose', icon: PencilSquareIcon, to: ApplicationRoutes.Compose },
-    { name: 'Explore', icon: RocketLaunchIcon, to: ApplicationRoutes.Explorer },
     { name: 'Web3 Profile', icon: UserCircleIcon, to: ApplicationRoutes.Web3Profile },
     { name: 'Swap', icon: ArrowPathRoundedSquareIcon, to: ApplicationRoutes.Swap },
     { name: 'Settings', icon: Cog6ToothIcon, to: ApplicationRoutes.Settings },

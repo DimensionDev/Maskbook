@@ -13,6 +13,8 @@ import { makeTypedMessageEmpty, makeTypedMessageTuple } from '@masknet/typed-mes
 
 const emptyValueRef = new ValueRefWithReady<any>()
 
+export const INJECTION_NODE_ID = 'post-info-injection-id'
+
 export function createPostInfoContext(): PostInfo {
     return {
         nickname: NULL,
@@ -24,7 +26,7 @@ export function createPostInfoContext(): PostInfo {
             return null
         },
         rootElement: DOMProxy(),
-        suggestedInjectionPoint: document.getElementById('explore')!,
+        suggestedInjectionPoint: document.body,
         comment: undefined,
         identifier: NULL,
         url: NULL,

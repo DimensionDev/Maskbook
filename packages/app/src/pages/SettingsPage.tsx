@@ -17,7 +17,6 @@ export default function SettingsPage(props: SettingsPageProps) {
         <DashboardContainer>
             <main>
                 <DashboardHeader title="Settings" />
-
                 <DashboardBody clipEdge={false}>
                     <SetupThemeMode />
                 </DashboardBody>
