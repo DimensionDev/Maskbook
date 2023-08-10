@@ -15,8 +15,8 @@ export default function ExplorePage(props: ExplorePageProps) {
         <PostInfoContext.Provider value={context}>
             <DashboardContainer>
                 <main id="explore">
-                    <DashboardHeader title="Deployments" />
-                    <DashboardBody borderless>
+                    <DashboardHeader title="Encrypted Post" />
+                    <DashboardBody>
                         <DecryptMessage />
                     </DashboardBody>
                 </main>
