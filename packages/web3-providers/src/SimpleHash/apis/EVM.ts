@@ -40,6 +40,7 @@ import {
 } from '../helpers.js'
 import {
     type Asset,
+    type Ownership,
     type Collection,
     type PaymentToken,
     type PriceStat,
@@ -76,7 +77,11 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         return collections[0]
     }
 
-    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
+    async getAsset(
+        address: string,
+        tokenId: string,
+        { chainId = ChainId.Mainnet, account }: HubOptions_Base<ChainId> = {},
+    ) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!chain || !address || !tokenId || !isValidChainId(chainId)) return
         const path = urlcat('/api/v0/nfts/:chain/:address/:tokenId', {
@@ -85,7 +90,23 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
             tokenId,
         })
         const response = await fetchFromSimpleHash<Asset>(path)
-        return createNonFungibleAsset(response)
+        const asset = createNonFungibleAsset(response)
+
+        if (asset?.schema === SchemaType.ERC1155 && account) {
+            const pathToQueryOwner = urlcat('/api/v0/nfts/contracts', {
+                chains: chain,
+                wallet_addresses: account,
+                contract_addresses: asset.address,
+            })
+
+            const ownershipResponse = await fetchFromSimpleHash<{ wallets: Ownership[] }>(pathToQueryOwner)
+
+            if (ownershipResponse.wallets?.[0]?.contracts?.[0].token_ids?.includes(asset.tokenId)) {
+                asset.owner = { address: account }
+            }
+        }
+
+        return asset
     }
 
     async getCollectionOverview(chainId: ChainId, id: string): Promise<NonFungibleCollectionOverview | undefined> {
