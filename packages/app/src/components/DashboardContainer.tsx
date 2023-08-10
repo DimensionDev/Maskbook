@@ -1,6 +1,5 @@
-import { useCallback, useDeferredValue, useEffect, useLayoutEffect, useState } from 'react'
+import { useDeferredValue, useLayoutEffect, useState } from 'react'
 import { Bars3Icon } from '@heroicons/react/20/solid'
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { EmptyStatus, SearchResultInspector } from '@masknet/shared'
 import { DisableShadowRootContext, ShadowRootIsolation } from '@masknet/theme'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
