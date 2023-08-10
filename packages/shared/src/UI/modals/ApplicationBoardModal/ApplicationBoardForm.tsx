@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
 interface ApplicationBoardFormProps {
     openDashboard?: (route?: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
-    currentSNSNetwork?: SiteAdaptor
+    currentSite?: SiteAdaptor
     allPersonas: PersonaInformation[]
     lastRecognized?: IdentityResolved
     applicationCurrentStatus?: PersonaAgainstSNSConnectStatus
@@ -115,7 +115,7 @@ export function ApplicationBoardForm(props: ApplicationBoardFormProps) {
                         }}
                         openDashboard={props.openDashboard}
                         queryOwnedPersonaInformation={props.queryOwnedPersonaInformation}
-                        currentSNSNetwork={props.currentSNSNetwork}
+                        currentSite={props.currentSite}
                         lastRecognized={props.lastRecognized}
                         allPersonas={props.allPersonas}
                         applicationCurrentStatus={props.applicationCurrentStatus}

@@ -1,10 +1,10 @@
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useActivatedPluginsDashboard } from '../manager/dashboard.js'
-import { useActivatedPluginsSNSAdaptor } from '../manager/sns-adaptor.js'
+import { useActivatedPluginsSiteAdaptor } from '../manager/site-adaptor.js'
 
 export function useAllPluginsWeb3State<T extends NetworkPluginID>() {
-    const pluginsSNSAdaptor = useActivatedPluginsSNSAdaptor('any')
+    const pluginsSNSAdaptor = useActivatedPluginsSiteAdaptor('any')
     const pluginsDashboard = useActivatedPluginsDashboard()
     const entries = [...pluginsSNSAdaptor, ...pluginsDashboard]
         .filter((definition) => definition.Web3State)

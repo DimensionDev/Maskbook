@@ -1,4 +1,8 @@
-import { PluginI18NFieldRender, useActivatedPluginsSNSAdaptor, type Plugin } from '@masknet/plugin-infra/content-script'
+import {
+    PluginI18NFieldRender,
+    useActivatedPluginsSiteAdaptor,
+    type Plugin,
+} from '@masknet/plugin-infra/content-script'
 import { PersistentStorages, type PluginID } from '@masknet/shared-base'
 import { Boundary, ShadowRootTooltip, getMaskColor, makeStyles, useBoundedPopperProps } from '@masknet/theme'
 import { List, ListItemButton, Typography } from '@mui/material'
@@ -84,7 +88,7 @@ export function ApplicationSettingPluginList() {
     const { classes } = useStyles({ iconFilterColor: undefined })
     const t = useSharedI18N()
 
-    const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
+    const snsAdaptorPlugins = useActivatedPluginsSiteAdaptor('any')
     const applicationList = useMemo(() => {
         return snsAdaptorPlugins
             .flatMap(({ ID, ApplicationEntries: entries }) => {

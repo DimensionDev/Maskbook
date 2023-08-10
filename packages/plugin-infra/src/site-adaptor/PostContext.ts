@@ -22,15 +22,15 @@ export interface PostContextAuthor {
     readonly nickname: Subscription<string | null>
     readonly avatarURL: Subscription<URL | null>
     readonly author: Subscription<ProfileIdentifier | null>
-    /** ID on the SNS network. */
-    readonly snsID: Subscription<string | null>
+    /** post id on the network. */
+    readonly postID: Subscription<string | null>
 }
 
 export interface PostContextCoAuthor {
     nickname?: string
     avatarURL?: URL
     author: ProfileIdentifier
-    snsID: string
+    post: PostIdentifier
 }
 
 export interface PostContextComment {

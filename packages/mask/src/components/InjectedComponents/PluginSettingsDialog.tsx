@@ -3,7 +3,7 @@ import { useAsyncRetry } from 'react-use'
 import { first } from 'lodash-es'
 import { InjectedDialog, usePersonaProofs } from '@masknet/shared'
 import {
-    useActivatedPluginsSNSAdaptor,
+    useActivatedPluginsSiteAdaptor,
     usePluginI18NField,
     getSettingsTabContent,
 } from '@masknet/plugin-infra/content-script'
@@ -38,7 +38,7 @@ export function PluginSettingsDialog() {
     const translate = usePluginI18NField()
 
     const [open, setOpen] = useState(false)
-    const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
+    const activatedPlugins = useActivatedPluginsSiteAdaptor('any')
     const displayPlugins = getAvailablePlugins(activatedPlugins, (plugins) => {
         return plugins
             .flatMap((x) => x.SettingTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)

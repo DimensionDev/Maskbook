@@ -2,7 +2,7 @@ import { useCallback, useState, useRef, forwardRef, memo, useImperativeHandle, u
 import { Trans } from 'react-i18next'
 import { Result } from 'ts-results-es'
 import {
-    useActivatedPluginsSNSAdaptor,
+    useActivatedPluginsSiteAdaptor,
     type Plugin,
     PluginI18NFieldRender,
     usePluginI18NField,
@@ -45,7 +45,7 @@ export const PluginEntryRender = memo(
     >((props, ref) => {
         const [trackPluginRef] = useSetPluginEntryRenderRef(ref)
         const pluginField = usePluginI18NField()
-        const plugins = [...useActivatedPluginsSNSAdaptor('any')].sort((plugin) => {
+        const plugins = [...useActivatedPluginsSiteAdaptor('any')].sort((plugin) => {
             // TODO: support priority order
             if (plugin.ID === PluginID.RedPacket || plugin.ID === PluginID.ITO) return -1
             return 1

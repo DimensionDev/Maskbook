@@ -5,7 +5,7 @@ import { TabContext } from '@mui/lab'
 import { Link, Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import {
-    useActivatedPluginsSNSAdaptor,
+    useActivatedPluginsSiteAdaptor,
     useIsMinimalMode,
     usePluginI18NField,
     getProfileTabContent,
@@ -169,7 +169,7 @@ function Content(props: ProfileTabContentProps) {
         }
     }, [selectedSocialAccount?.address, selectedSocialAccount?.label])
 
-    const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
+    const activatedPlugins = useActivatedPluginsSiteAdaptor('any')
     const displayPlugins = getAvailablePlugins(activatedPlugins, (plugins) => {
         return plugins
             .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)

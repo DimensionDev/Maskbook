@@ -2,7 +2,7 @@ import stringify from 'json-stable-stringify'
 import { assertNotEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { delay, waitDocumentReadyState } from '@masknet/kit'
 import type { SiteAdaptorUI } from '@masknet/types'
-import { type Plugin, startPluginSNSAdaptor, SiteAdaptorContextRef } from '@masknet/plugin-infra/content-script'
+import { type Plugin, startPluginSiteAdaptor, SiteAdaptorContextRef } from '@masknet/plugin-infra/content-script'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '@masknet/shared'
 import {
     createSubscriptionFromAsync,
@@ -22,7 +22,7 @@ import { Sentry } from '@masknet/web3-telemetry'
 import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
 import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host.js'
 import Services from '../extension/service.js'
-import { getCurrentIdentifier, getCurrentSNSNetwork } from '../site-adaptors/utils.js'
+import { getCurrentIdentifier, getCurrentSite } from '../site-adaptors/utils.js'
 import { setupReactShadowRootEnvironment } from '../utils/index.js'
 import '../utils/debug/general.js'
 import { configureSelectorMissReporter } from '../utils/startWatch.js'
@@ -187,8 +187,8 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         requestHostPermission: Services.Helper.requestHostPermission,
     }
 
-    startPluginSNSAdaptor(
-        getCurrentSNSNetwork(ui.networkIdentifier),
+    startPluginSiteAdaptor(
+        getCurrentSite(ui.networkIdentifier),
         createPluginHost(
             signal,
             (id, signal): Plugin.SiteAdaptor.SiteAdaptorContext => {
@@ -227,10 +227,6 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
             if (document.visibilityState === 'hidden') return
             if (newValue.identifier === oldValue.identifier) return
             if (!newValue.identifier) return
-
-            MaskMessages.events.Native_visibleSNS_currentDetectedProfileUpdated.sendToBackgroundPage(
-                newValue.identifier,
-            )
         })
         if (provider.hasDeprecatedPlaceholderName) {
             provider.recognized.addListener((id) => {

@@ -1,7 +1,11 @@
 import { createContext, useContext, useMemo, useState, type PropsWithChildren } from 'react'
 import { useTimeout } from 'react-use'
 import { Typography } from '@mui/material'
-import { SiteAdaptor, useActivatedPluginsSNSAdaptor, type IdentityResolved } from '@masknet/plugin-infra/content-script'
+import {
+    SiteAdaptor,
+    useActivatedPluginsSiteAdaptor,
+    type IdentityResolved,
+} from '@masknet/plugin-infra/content-script'
 import {
     useCurrentPersonaConnectStatus,
     SelectProviderModal,
@@ -81,7 +85,7 @@ const useStyles = makeStyles<{
 interface ApplicationBoardContentProps extends withClasses<'applicationWrapper' | 'recommendFeatureAppListWrapper'> {
     openDashboard?: (route?: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
-    currentSNSNetwork?: SiteAdaptor
+    currentSite?: SiteAdaptor
     lastRecognized?: IdentityResolved
     allPersonas: PersonaInformation[]
     applicationCurrentStatus?: PersonaAgainstSNSConnectStatus
@@ -91,7 +95,7 @@ interface ApplicationBoardContentProps extends withClasses<'applicationWrapper' 
 export function ApplicationBoardContent({
     openDashboard,
     queryOwnedPersonaInformation,
-    currentSNSNetwork,
+    currentSite,
     lastRecognized,
     allPersonas,
     applicationCurrentStatus,
@@ -107,7 +111,7 @@ export function ApplicationBoardContent({
                 applicationCurrentStatus={applicationCurrentStatus}
                 personaAgainstSNSConnectStatusLoading={personaAgainstSNSConnectStatusLoading}>
                 <ApplicationBoardPluginsList
-                    currentSNSNetwork={currentSNSNetwork}
+                    currentSite={currentSite}
                     classes={{
                         applicationWrapper: classes?.applicationWrapper,
                         recommendFeatureAppListWrapper: classes?.recommendFeatureAppListWrapper,
@@ -120,13 +124,13 @@ export function ApplicationBoardContent({
 
 interface ApplicationBoardPluginsListProps
     extends withClasses<'applicationWrapper' | 'recommendFeatureAppListWrapper'> {
-    currentSNSNetwork?: SiteAdaptor
+    currentSite?: SiteAdaptor
 }
 
 function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
-    const { currentSNSNetwork = SiteAdaptor.Twitter } = props
+    const { currentSite = SiteAdaptor.Twitter } = props
     const t = useSharedI18N()
-    const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
+    const snsAdaptorPlugins = useActivatedPluginsSiteAdaptor('any')
     const { pluginID: currentWeb3Network } = useNetworkContext()
     const { account, chainId } = useChainContext()
     const applicationList = useMemo(
@@ -136,7 +140,7 @@ function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
                     if (!ApplicationEntries) return []
                     const currentWeb3NetworkSupportedChainIds = enableRequirement.web3?.[currentWeb3Network]
                     const isWalletConnectedRequired = currentWeb3NetworkSupportedChainIds !== undefined
-                    const currentSNSIsSupportedNetwork = enableRequirement.supports.sites[currentSNSNetwork]
+                    const currentSNSIsSupportedNetwork = enableRequirement.supports.sites[currentSite]
                     const isSNSEnabled = currentSNSIsSupportedNetwork === undefined || currentSNSIsSupportedNetwork
                     return ApplicationEntries.map((entry) => ({
                         entry,

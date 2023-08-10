@@ -46,7 +46,7 @@ interface ApplicationBoardProps {
 
     openDashboard?: (route?: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
-    currentSNSNetwork?: SiteAdaptor
+    currentSite?: SiteAdaptor
     allPersonas: PersonaInformation[]
     lastRecognized?: IdentityResolved
     applicationCurrentStatus?: PersonaAgainstSNSConnectStatus
@@ -65,7 +65,7 @@ export function ApplicationBoard({
     onClose,
     openDashboard,
     queryOwnedPersonaInformation,
-    currentSNSNetwork,
+    currentSite,
     allPersonas,
     lastRecognized,
     applicationCurrentStatus,
@@ -149,7 +149,7 @@ export function ApplicationBoard({
                         <ApplicationBoardContent
                             openDashboard={openDashboard}
                             queryOwnedPersonaInformation={queryOwnedPersonaInformation}
-                            currentSNSNetwork={currentSNSNetwork}
+                            currentSite={currentSite}
                             lastRecognized={lastRecognized}
                             allPersonas={allPersonas}
                             applicationCurrentStatus={applicationCurrentStatus}

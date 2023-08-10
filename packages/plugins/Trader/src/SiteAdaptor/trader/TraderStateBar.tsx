@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js'
 import { alpha } from '@mui/system'
 import { Box } from '@mui/material'
 import { TokenSecurityBoundary } from '@masknet/plugin-go-plus-security'
-import { useActivatedPluginsSNSAdaptor, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginsSiteAdaptor, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
 import {
     PluginWalletStatusBar,
@@ -99,7 +99,7 @@ export function TraderStateBar({
     )
     // #endregion
 
-    const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
+    const snsAdaptorMinimalPlugins = useActivatedPluginsSiteAdaptor(true)
     const isSNSClosed = snsAdaptorMinimalPlugins?.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
     const isDashboardClosed = useIsMinimalModeDashBoard(PluginID.GoPlusSecurity)
 

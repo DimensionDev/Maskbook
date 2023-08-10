@@ -3,7 +3,7 @@ import type { SiteAdaptor as SiteAdaptorType } from '@masknet/types'
 import { EnhanceableSite, type PersonaIdentifier, type ProfileIdentifier } from '@masknet/shared-base'
 import { activatedSiteAdaptorUI, activatedSiteAdaptor_state } from '../site-adaptor-infra/index.js'
 
-export function getCurrentSNSNetwork(current: SiteAdaptorType.Base['networkIdentifier']): SiteAdaptor {
+export function getCurrentSite(current: SiteAdaptorType.Base['networkIdentifier']): SiteAdaptor {
     const table: Partial<Record<EnhanceableSite, SiteAdaptor>> = {
         [EnhanceableSite.Twitter]: SiteAdaptor.Twitter,
         [EnhanceableSite.Facebook]: SiteAdaptor.Facebook,

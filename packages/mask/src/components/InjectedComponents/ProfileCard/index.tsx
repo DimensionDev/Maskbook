@@ -6,7 +6,7 @@ import { TabContext } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import {
-    useActivatedPluginsSNSAdaptor,
+    useActivatedPluginsSiteAdaptor,
     usePluginI18NField,
     getProfileCardTabContent,
 } from '@masknet/plugin-infra/content-script'
@@ -134,7 +134,7 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
         })
     }, [retrySocialAddress])
 
-    const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
+    const activatedPlugins = useActivatedPluginsSiteAdaptor('any')
     const displayPlugins = getAvailablePlugins(activatedPlugins, (plugins) => {
         return plugins
             .flatMap((x) => x.ProfileCardTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)

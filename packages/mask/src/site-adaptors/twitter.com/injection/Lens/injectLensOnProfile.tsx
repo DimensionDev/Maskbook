@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { createInjectHooksRenderer, Plugin, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
 import { startWatch } from '../../../../utils/startWatch.js'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
@@ -38,7 +38,7 @@ function ProfileLensSlot() {
 
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
-            useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
+            useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
             (plugin) => plugin.Lens?.UI?.Content,
         )
 

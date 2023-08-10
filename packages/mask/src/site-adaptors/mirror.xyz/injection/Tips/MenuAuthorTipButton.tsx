@@ -3,7 +3,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import {
     createInjectHooksRenderer,
     Plugin,
-    useActivatedPluginsSNSAdaptor,
+    useActivatedPluginsSiteAdaptor,
     useIsMinimalMode,
 } from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST, PluginID, NetworkPluginID, type SocialAccount } from '@masknet/shared-base'
@@ -66,7 +66,7 @@ function AuthorTipsButtonWrapper() {
 
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
-            useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
+            useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
             (plugin) => plugin.TipsRealm?.UI?.Content,
         )
 

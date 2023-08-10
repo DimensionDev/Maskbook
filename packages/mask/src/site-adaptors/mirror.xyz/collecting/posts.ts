@@ -8,6 +8,7 @@ import { mirrorShared } from '../shared.js'
 import { startWatch } from '../../../utils/startWatch.js'
 import { createRefsForCreatePostContext } from '../../../site-adaptor-infra/utils/create-post-context.js'
 import { formatWriter, getMirrorPageType, MirrorPageType, MIRROR_ENTRY_ID } from './utils.js'
+import { PostIdentifier } from '@masknet/shared-base'
 
 const MIRROR_LINK_PREFIX = /https(.*)mirror.xyz(.*)\//i
 
@@ -104,14 +105,19 @@ async function registerPostCollectorInner(
                     refs.nickname.value = result.writers?.author.nickname || null
                     refs.avatarURL.value = result.writers?.author.avatar || null
                     refs.postCoAuthors.value =
-                        (result?.writers?.coAuthors
-                            .map((x) => ({
-                                nickname: x.nickname,
-                                avatarURL: x.avatar ? new URL(x.avatar) : undefined,
-                                author: x.identifier,
-                                snsID: x.identifier?.userId,
-                            }))
-                            .filter(Boolean) as PostContextCoAuthor[]) || []
+                        result?.writers?.coAuthors
+                            .map(
+                                (x): PostContextCoAuthor =>
+                                    x.identifier
+                                        ? {
+                                              author: x.identifier,
+                                              avatarURL: x.avatar ? new URL(x.avatar) : undefined,
+                                              post: new PostIdentifier(x.identifier, result.postId),
+                                              nickname: x.nickname,
+                                          }
+                                        : undefined!,
+                            )
+                            .filter(Boolean) || []
                 })
             }
             run()

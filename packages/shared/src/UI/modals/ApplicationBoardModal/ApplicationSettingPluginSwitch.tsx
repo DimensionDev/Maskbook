@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { Icons } from '@masknet/icons'
-import { PluginI18NFieldRender, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { PluginI18NFieldRender, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
@@ -90,8 +90,8 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
     setDecentralizedSearchSettings,
 }: Props) {
     const { classes } = useStyles()
-    const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
-    const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
+    const snsAdaptorPlugins = useActivatedPluginsSiteAdaptor('any')
+    const snsAdaptorMinimalPlugins = useActivatedPluginsSiteAdaptor(true)
     const availablePlugins = useMemo(() => {
         return snsAdaptorPlugins
             .flatMap(({ ID, ApplicationEntries: entries }) => (entries ?? []).map((entry) => ({ entry, pluginID: ID })))

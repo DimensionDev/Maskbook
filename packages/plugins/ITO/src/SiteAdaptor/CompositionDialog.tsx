@@ -13,7 +13,14 @@ import {
     ApplicationBoardModal,
     useCurrentLinkedPersona,
 } from '@masknet/shared'
-import { PluginID, EMPTY_LIST, EnhanceableSite, NetworkPluginID, getSiteType } from '@masknet/shared-base'
+import {
+    PluginID,
+    EMPTY_LIST,
+    EnhanceableSite,
+    NetworkPluginID,
+    getSiteType,
+    type ExtensionSite,
+} from '@masknet/shared-base'
 import { useChainContext, useChainIdValid, Web3ContextProvider, useNetworkContext } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, useITOConstants } from '@masknet/web3-shared-evm'
@@ -31,12 +38,12 @@ import { type PoolSettings, useFillCallback } from './hooks/useFill.js'
 import { useI18N } from '../locales/index.js'
 
 interface StyleProps {
-    snsId: string
+    site: EnhanceableSite | ExtensionSite
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
+const useStyles = makeStyles<StyleProps>()((theme, { site }) => ({
     content: {
-        ...(snsId === EnhanceableSite.Minds ? { minWidth: 600 } : {}),
+        ...(site === EnhanceableSite.Minds ? { minWidth: 600 } : {}),
         position: 'relative',
         padding: 0,
         '::-webkit-scrollbar': {
@@ -78,7 +85,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
         chainId: chainIdValid ? undefined : ChainId.Mainnet,
     })
 
-    const { classes } = useStyles({ snsId: getSiteType() ?? EnhanceableSite.Twitter })
+    const { classes } = useStyles({ site: getSiteType() ?? EnhanceableSite.Twitter })
 
     const ITO_Definition = useActivatedPlugin(PluginID.ITO, 'any')
     const chainIdList =

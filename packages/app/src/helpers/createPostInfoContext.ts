@@ -18,7 +18,7 @@ export function createPostInfoContext(): PostInfo {
         nickname: NULL,
         avatarURL: NULL,
         author: NULL,
-        snsID: NULL,
+        postID: NULL,
 
         get rootNode() {
             return null

@@ -23,7 +23,7 @@ describe('test next id util methods', () => {
         expect(identity?.toText()).toBe('person:twitter.com/fake_id')
     })
 
-    test('should get the undefined when giving the platform is un-sns', () => {
+    test('should get the undefined when giving the platform is not a sns', () => {
         const identity = resolveNextIDIdentityToProfile('fake_id', NextIDPlatform.Ethereum)
         expect(identity).toBeUndefined()
     })

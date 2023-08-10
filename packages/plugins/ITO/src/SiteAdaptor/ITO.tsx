@@ -41,7 +41,7 @@ export interface IconProps {
 interface StyleProps {
     titleLength?: number
     tokenNumber?: number
-    snsId?: string
+    site?: string
 }
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     root: {
@@ -64,8 +64,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'end',
-        width: props.snsId === EnhanceableSite.Facebook ? '98%' : '100%',
-        maxWidth: props.snsId === EnhanceableSite.Facebook ? 'auto' : '100%',
+        width: props.site === EnhanceableSite.Facebook ? '98%' : '100%',
+        maxWidth: props.site === EnhanceableSite.Facebook ? 'auto' : '100%',
     },
     title: {
         fontSize: props.titleLength! > 31 ? '1.3rem' : '1.6rem',
@@ -111,7 +111,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     footer: {
         position: 'absolute',
         width: '90%',
-        maxWidth: props.snsId === EnhanceableSite.Facebook ? 'auto' : 470,
+        maxWidth: props.site === EnhanceableSite.Facebook ? 'auto' : 470,
         bottom: theme.spacing(2),
         display: 'flex',
         justifyContent: 'space-between',
@@ -233,7 +233,7 @@ export function ITO(props: ITO_Props) {
     const { classes, cx } = useStyles({
         titleLength: getTextUILength(title),
         tokenNumber: exchange_tokens.length,
-        snsId: getSiteType(),
+        site: getSiteType(),
     })
     // #region token detailed
     const {

@@ -27,7 +27,7 @@ import {
     ProviderType as FlowProviderType,
 } from '@masknet/web3-shared-flow'
 import { DialogDismissIconUI, ImageIcon, ProviderIcon, useSharedI18N } from '@masknet/shared'
-import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { openWindow } from '@masknet/shared-base-ui'
 
@@ -165,7 +165,7 @@ export const PluginProviderRender = memo(function PluginProviderRender({
 }: PluginProviderRenderProps) {
     const { classes, cx } = useStyles()
     const t = useSharedI18N()
-    const snsPlugins = useActivatedPluginsSNSAdaptor('any')
+    const snsPlugins = useActivatedPluginsSiteAdaptor('any')
     const dashboardPlugins = useActivatedPluginsDashboard()
     const [selectChainDialogOpen, setSelectChainDialogOpen] = useState(false)
 

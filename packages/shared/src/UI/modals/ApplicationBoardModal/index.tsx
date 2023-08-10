@@ -6,10 +6,10 @@ import { ApplicationBoard, ApplicationSettingTabs } from './ApplicationBoardDial
 import type { PersonaAgainstSNSConnectStatus } from '../../../types.js'
 import { ApplicationBoardSettingsDialog } from './ApplicationSettingsDialog.js'
 
-export type ApplicationBoardModalOpenProps = {
+export interface ApplicationBoardModalOpenProps {
     openDashboard: (route?: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
-    currentSNSNetwork: SiteAdaptor
+    currentSite: SiteAdaptor
     allPersonas: PersonaInformation[]
     lastRecognized: IdentityResolved
     applicationCurrentStatus?: PersonaAgainstSNSConnectStatus
@@ -32,7 +32,7 @@ export const ApplicationBoardModal = forwardRef<
     const [openDashboard, setOpenDashboard] = useState<(route?: DashboardRoutes, search?: string) => void>()
     const [queryOwnedPersonaInformation, setQueryOwnedPersonaInformation] =
         useState<(initializedOnly: boolean) => Promise<PersonaInformation[]>>()
-    const [currentSNSNetwork, setCurrentSNSNetwork] = useState<SiteAdaptor>()
+    const [currentSite, setCurrentSite] = useState<SiteAdaptor>()
     const [allPersonas, setAllPersonas] = useState<PersonaInformation[]>()
     const [lastRecognized, setLastRecognized] = useState<IdentityResolved>()
     const [applicationCurrentStatus, setApplicationCurrentStatus] = useState<PersonaAgainstSNSConnectStatus>()
@@ -50,7 +50,7 @@ export const ApplicationBoardModal = forwardRef<
         onOpen(props) {
             setOpenDashboard(() => props.openDashboard)
             setQueryOwnedPersonaInformation(() => props.queryOwnedPersonaInformation)
-            setCurrentSNSNetwork(props.currentSNSNetwork)
+            setCurrentSite(props.currentSite)
             setAllPersonas(props.allPersonas)
             setLastRecognized(props.lastRecognized)
             setApplicationCurrentStatus(props.applicationCurrentStatus)
@@ -70,7 +70,7 @@ export const ApplicationBoardModal = forwardRef<
             open
             allPersonas={allPersonas ?? []}
             lastRecognized={lastRecognized}
-            currentSNSNetwork={currentSNSNetwork}
+            currentSite={currentSite}
             applicationCurrentStatus={applicationCurrentStatus}
             queryOwnedPersonaInformation={queryOwnedPersonaInformation}
             personaAgainstSNSConnectStatusLoading={personaAgainstSNSConnectStatusLoading}

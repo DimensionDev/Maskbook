@@ -12,7 +12,7 @@ export interface MaskSettingsEvents {
     languageSettings: LanguageOptions
     currentPersonaIdentifier: string
 }
-export interface MaskSNSEvents {
+export interface MaskContentScriptEvents {
     // TODO: Maybe in-page UI related messages should use Context instead of messages?
     autoPasteFailed: AutoPasteFailedEvent
     replaceComposition: SerializableTypedMessages
@@ -24,10 +24,9 @@ export interface MaskSNSEvents {
     NFTAvatarUpdated: NFTAvatarEvent
     NFTAvatarTimelineUpdated: NFTAvatarEvent
     nftAvatarSettingDialogUpdated: NFTAvatarSettingDialogEvent
-    Native_visibleSNS_currentDetectedProfileUpdated: ProfileIdentifier
 }
 
-export interface MaskEvents extends MaskSettingsEvents, MaskSNSEvents {
+export interface MaskEvents extends MaskSettingsEvents, MaskContentScriptEvents {
     telemetryIDReset: string
     /** value is "bulkKey" */
     legacySettings_bulkDiscoverNS: string

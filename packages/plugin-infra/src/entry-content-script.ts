@@ -1,12 +1,6 @@
 export * from './entry-dom.js'
 
-export {
-    startPluginSNSAdaptor,
-    useActivatedPluginSNSAdaptor,
-    useActivatedPluginSNSAdaptor_Web3Supported,
-    useActivatedPluginsSNSAdaptor,
-    useIsMinimalMode,
-} from './manager/sns-adaptor.js'
+export { startPluginSiteAdaptor, useActivatedPluginsSiteAdaptor, useIsMinimalMode } from './manager/site-adaptor.js'
 
 export {
     type PostContext,
@@ -45,6 +39,6 @@ export {
     useThemeSettings,
     useThemeSize,
     useSocialIdentityByUserId,
-} from './sns-adaptor/index.js'
+} from './site-adaptor/index.js'
 
 export { getBackgroundColor, isDark, toRGB, fromRGB, shade } from './utils/theme/color-tools.js'
