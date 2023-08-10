@@ -1,9 +1,9 @@
+import { useCallback, useDeferredValue, useEffect, useState } from 'react'
 import { Bars3Icon } from '@heroicons/react/20/solid'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { EmptyStatus, SearchResultInspector } from '@masknet/shared'
 import { DisableShadowRootContext, ShadowRootIsolation } from '@masknet/theme'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
-import { useCallback, useDeferredValue, useEffect, useState } from 'react'
 import { DashboardContext } from '../contexts/DashboardContext.js'
 import { useSetThemeMode, useThemeMode } from '../helpers/setThemeMode.js'
 import { DashboardBody } from './DashboardBody.js'
@@ -31,7 +31,7 @@ export function DashboardContainer(props: DashboardContainerProps) {
 
     return (
         <div className="xl:pl-72 ">
-            <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-6 border-b border-line-light dark:border-neutral-800 px-4 sm:px-6 lg:px-8">
+            <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-6 border-b border-line-light dark:border-neutral-800 px-4 sm:px-6 lg:px-8 bg-white dark:bg-black">
                 <button
                     type="button"
                     className="-m-2.5 p-2.5 dark:text-white text-black xl:hidden"
