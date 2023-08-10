@@ -3,7 +3,7 @@ import { Box, Link } from '@mui/material'
 import { AccountAvatar } from '../../../Personas/components/AccountAvatar/index.js'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { type EnhanceableSite, formatPersonaName } from '@masknet/shared-base'
+import { type EnhanceableSite } from '@masknet/shared-base'
 
 interface SocialAccountProps {
     avatar: string
@@ -31,6 +31,13 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+export const formatUserId = (userId: string) => {
+    if (userId.length > 7) {
+        return `${userId.slice(0, 7)}...`
+    }
+    return userId
+}
+
 export const SocialAccount = memo<SocialAccountProps>(function SocialAccount({ avatar, userId, site }) {
     const { classes } = useStyles()
     return (
@@ -42,7 +49,7 @@ export const SocialAccount = memo<SocialAccountProps>(function SocialAccount({ a
                 classes={{ avatar: classes.avatar, container: classes.avatar }}
             />
             <Box className={classes.userId}>
-                {`@${formatPersonaName(userId)}`}
+                {`@${formatUserId(userId)}`}
                 <Link
                     underline="none"
                     target="_blank"

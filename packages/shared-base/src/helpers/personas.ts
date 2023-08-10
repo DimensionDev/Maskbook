@@ -4,7 +4,7 @@ import type { PersonaIdentifier, PersonaInformation, ProfileInformation, Identif
 export function formatPersonaFingerprint(fingerprint: string, size?: number) {
     if (!size) {
         if (fingerprint.length <= 26) return fingerprint
-        return `${fingerprint.slice(0, 17)}...${fingerprint.slice(-9)}`
+        return `${fingerprint.slice(0, 12)}...${fingerprint.slice(-9)}`
     }
 
     if (size <= 0) return fingerprint

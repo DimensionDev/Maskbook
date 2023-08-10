@@ -17,7 +17,26 @@ export type FriendsInformation = ProfileInformation & {
     id: string
 }
 
-export function useFriends(network: string): AsyncStateRetry<FriendsInformation[]> {
+export const PlatformSort: Record<NextIDPlatform, number> = {
+    [NextIDPlatform.Twitter]: 0,
+    [NextIDPlatform.GitHub]: 1,
+    [NextIDPlatform.Ethereum]: 2,
+    [NextIDPlatform.ENS]: 3,
+    [NextIDPlatform.LENS]: 4,
+    [NextIDPlatform.Keybase]: 5,
+    [NextIDPlatform.Farcaster]: 6,
+    [NextIDPlatform.SpaceId]: 7,
+    [NextIDPlatform.Unstoppable]: 8,
+    [NextIDPlatform.RSS3]: 9,
+    [NextIDPlatform.REDDIT]: 10,
+    [NextIDPlatform.SYBIL]: 11,
+    [NextIDPlatform.EthLeaderboard]: 12,
+    [NextIDPlatform.Bit]: 13,
+    [NextIDPlatform.CyberConnect]: 14,
+    [NextIDPlatform.NextID]: 15,
+}
+
+export function useFriends(): AsyncStateRetry<FriendsInformation[]> {
     const currentPersona = useCurrentPersona()
     return useAsyncRetry(async () => {
         const values = await Services.Identity.queryRelationPaged(
@@ -35,7 +54,7 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
         const allSettled = await Promise.allSettled(
             friends.map((item) => {
                 const id = (item.linkedPersona as ECKeyIdentifier).publicKeyAsHex
-                return NextIDProof.queryProfilesByPublicKey(id)
+                return NextIDProof.queryProfilesByPublicKey(id, 2)
             }),
         )
         const profiles: FriendsInformation[] = allSettled.map((item, index) => {
@@ -57,15 +76,16 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
             }
             const filtered = item.value.filter(
                 (x) =>
-                    x.platform === NextIDPlatform.Twitter ||
-                    x.platform === NextIDPlatform.LENS ||
-                    x.platform === NextIDPlatform.ENS ||
-                    x.platform === NextIDPlatform.Ethereum ||
-                    x.platform === NextIDPlatform.GitHub ||
-                    x.platform === NextIDPlatform.SpaceId ||
-                    x.platform === NextIDPlatform.Farcaster ||
-                    x.platform === NextIDPlatform.Unstoppable,
+                    (x.platform === NextIDPlatform.ENS && x.name.endsWith('.eth')) ||
+                    (x.platform !== NextIDPlatform.Bit &&
+                        x.platform !== NextIDPlatform.CyberConnect &&
+                        x.platform !== NextIDPlatform.REDDIT &&
+                        x.platform !== NextIDPlatform.SYBIL &&
+                        x.platform !== NextIDPlatform.EthLeaderboard &&
+                        x.platform !== NextIDPlatform.NextID),
             )
+
+            filtered.sort((a, b) => PlatformSort[a.platform] - PlatformSort[b.platform])
             return {
                 profiles: filtered,
                 ...friends[index],
@@ -73,5 +93,5 @@ export function useFriends(network: string): AsyncStateRetry<FriendsInformation[
             }
         })
         return uniqBy(profiles, ({ id }) => id).reverse()
-    }, [network, currentPersona])
+    }, [currentPersona])
 }
