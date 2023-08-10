@@ -58,6 +58,20 @@ export interface TokenItem {
     is_erc721: boolean
     /** Only NFT */
     is_erc1155: boolean
+    collection?: {
+        chain: DebankChains
+        credit_score: number
+        description: string | null
+        floor_price: number
+        /** e.g. 'matic:0x813de35e46a7d3a6ea1df82414dfadd5b283d9a9' */
+        id: string
+        is_core: boolean
+        is_scam: boolean
+        is_suspicious: boolean
+        is_verified: boolean
+        logo_url: string
+        name: string
+    }
 }
 
 export interface HistoryItem {

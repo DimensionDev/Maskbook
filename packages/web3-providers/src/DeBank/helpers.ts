@@ -84,13 +84,14 @@ function toTxAsset(
     if (process.env.NODE_ENV === 'development') {
         console.assert(token, `[Debank] no matching token in token_dict with token_id ${token_id}`)
     }
+    const fallbackName = token.is_erc1155 || token.is_erc721 ? 'Unknown NFT' : 'Unknown Token'
     return {
         id: token_id,
         chainId,
         type: token.decimals ? TokenType.Fungible : TokenType.NonFungible,
         schema,
-        name: token.name ?? 'Unknown Token',
-        symbol: token.optimized_symbol,
+        name: token.name || token.collection?.name || fallbackName,
+        symbol: token.optimized_symbol || token.collection?.name || fallbackName,
         address: token.decimals ? token_id : token.contract_id,
         decimals: token.decimals || 1,
         direction: DebankTransactionDirection.SEND,

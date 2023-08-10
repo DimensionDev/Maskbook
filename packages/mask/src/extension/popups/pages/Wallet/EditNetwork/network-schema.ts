@@ -74,18 +74,19 @@ export function createSchema(
     const baseSchema = createBaseSchema(t, duplicateNameValidator)
     const schema = baseSchema
         .superRefine(async (schema, context) => {
-            if (!schema.rpc || !schema.chainId) return true
+            if (!schema.rpc) return true
             let rpcChainId: number
             try {
                 rpcChainId = await fetchChainId(schema.rpc)
-            } catch {
+            } catch (err) {
                 context.addIssue({
                     code: z.ZodIssueCode.custom,
                     path: ['rpc'],
                     message: t('failed_to_fetch_chain_id'),
                 })
-                return
+                return false
             }
+            if (!schema.chainId) return true
             if (rpcChainId !== schema.chainId) {
                 // Background can pass i18n params by params field to frontend
                 const params = { chain_id: rpcChainId }
