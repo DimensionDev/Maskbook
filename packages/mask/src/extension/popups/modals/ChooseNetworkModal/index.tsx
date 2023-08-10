@@ -1,16 +1,14 @@
-import { memo, useEffect, useMemo, useRef } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Flags } from '@masknet/flags'
 import { Icons } from '@masknet/icons'
-import { ChainIcon, ImageIcon } from '@masknet/shared'
+import { ImageIcon, NetworkIcon } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { ActionButton, makeStyles } from '@masknet/theme'
-import { useBalance, useChainContext, useNativeToken } from '@masknet/web3-hooks-base'
+import { ActionButton, TextOverflowTooltip, makeStyles } from '@masknet/theme'
+import { useBalance, useNativeToken, useNetwork, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
-import { formatBalance, type NetworkDescriptor } from '@masknet/web3-shared-base'
-import { ProviderType, type ChainId, type NetworkType } from '@masknet/web3-shared-evm'
-import { Box, Typography } from '@mui/material'
-import { getEvmNetworks } from '../../../../utils/networks.js'
+import { formatBalance, type ReasonableNetwork } from '@masknet/web3-shared-base'
+import { ProviderType, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
+import { Typography } from '@mui/material'
 import { ActionModal, useActionModal, type ActionModalBaseProps } from '../../components/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 
@@ -29,16 +27,28 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 8,
         padding: theme.spacing(1.5),
         border: `1px solid ${theme.palette.maskColor.line}`,
+        overflow: 'auto',
+    },
+    icon: {
+        width: 24,
+        height: 24,
+        borderRadius: '50%',
+        overflow: 'hidden',
+        flexShrink: 0,
     },
     text: {
         marginLeft: theme.spacing(1),
         marginRight: 'auto',
+        overflow: 'auto',
     },
     name: {
         fontSize: 12,
         color: theme.palette.maskColor.main,
         fontWeight: 700,
         lineHeight: '16px',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
     },
     balance: {
         fontSize: 12,
@@ -49,15 +59,16 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NetworkItemProps {
-    currentChainId: ChainId
-    network: NetworkDescriptor<ChainId, NetworkType>
+    currentNetworkId: string | undefined
+    network: ReasonableNetwork<ChainId, SchemaType, NetworkType>
 }
-const NetworkItem = memo(function NetworkItem({ network, currentChainId }: NetworkItemProps) {
+const NetworkItem = memo(function NetworkItem({ network, currentNetworkId }: NetworkItemProps) {
     const { classes, theme } = useStyles()
     const { closeModal } = useActionModal()
     const chainId = network.chainId
     const liRef = useRef<HTMLLIElement>(null)
-    const selected = chainId === currentChainId
+    const selected = network.ID === currentNetworkId
+    const { Network } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     useEffect(() => {
         if (!selected) return
@@ -74,18 +85,33 @@ const NetworkItem = memo(function NetworkItem({ network, currentChainId }: Netwo
             role="option"
             ref={liRef}
             onClick={async () => {
+                await Network?.switchNetwork(network.ID)
                 await Web3.switchChain?.(chainId, {
                     providerType: ProviderType.MaskWallet,
                 })
                 closeModal()
             }}>
-            {network.icon ? <ImageIcon size={24} icon={network.icon} /> : <ChainIcon color={network.iconColor} />}
-            <Box className={classes.text}>
-                <Typography className={classes.name}>{network.name}</Typography>
+            <div className={classes.icon}>
+                {network.iconUrl ? (
+                    <ImageIcon size={24} icon={network.iconUrl} name={network.name} />
+                ) : (
+                    <NetworkIcon
+                        pluginID={NetworkPluginID.PLUGIN_EVM}
+                        chainId={network.chainId}
+                        size={24}
+                        color={network.color}
+                        name={network.name}
+                    />
+                )}
+            </div>
+            <div className={classes.text}>
+                <TextOverflowTooltip title={network.name}>
+                    <Typography className={classes.name}>{network.name}</Typography>
+                </TextOverflowTooltip>
                 <Typography className={classes.balance}>
                     {loading ? '--' : `${formatBalance(balance, token?.decimals, 0, false, true)} ${token?.symbol}`}
                 </Typography>
-            </Box>
+            </div>
             {selected ? (
                 <Icons.RadioButtonChecked size={20} />
             ) : (
@@ -99,8 +125,8 @@ export const ChooseNetworkModal = memo(function ChooseNetworkModal({ ...rest }: 
     const { t } = useI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const { chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const networks = useMemo(() => getEvmNetworks(Flags.support_testnet_switch), [])
+    const network = useNetwork(NetworkPluginID.PLUGIN_EVM)
+    const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
 
     const action = (
         <ActionButton fullWidth onClick={() => navigate(PopupRoutes.NetworkManagement)}>
@@ -108,11 +134,13 @@ export const ChooseNetworkModal = memo(function ChooseNetworkModal({ ...rest }: 
         </ActionButton>
     )
 
+    const currentNetworkId = network?.ID
+
     return (
         <ActionModal header={t('network')} action={action} keepMounted {...rest}>
             <ul className={classes.networkList}>
                 {networks.map((network) => (
-                    <NetworkItem key={network.chainId} currentChainId={currentChainId} network={network} />
+                    <NetworkItem key={network.ID} currentNetworkId={currentNetworkId} network={network} />
                 ))}
             </ul>
         </ActionModal>

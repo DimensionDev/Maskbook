@@ -22,7 +22,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import { FormattedAddress, SelectFungibleTokenModal, TokenAmountPanel } from '@masknet/shared'
 import { DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
-import { DepositPaymaster, SmartPayBundler } from '@masknet/web3-providers'
+import { ChainResolver, DepositPaymaster, SmartPayBundler } from '@masknet/web3-providers'
 import {
     TokenType,
     type FungibleToken,
@@ -44,7 +44,6 @@ import {
     isNativeTokenAddress,
     addGasMargin,
     type EIP1559GasConfig,
-    createNativeToken,
 } from '@masknet/web3-shared-evm'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { useGasConfig } from '../../hooks/useGasConfig.js'
@@ -101,9 +100,11 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         chainId,
     })
 
-    const is1559Supported = useMemo(() => Others?.chainResolver.isSupport(chainId, 'EIP1559'), [chainId])
+    const is1559Supported = useMemo(() => Others?.chainResolver.isFeatureSupported(chainId, 'EIP1559'), [chainId])
     useEffect(() => {
-        token.chainId === chainId ? setSelectedToken(token) : setSelectedToken(createNativeToken(chainId as ChainId))
+        token.chainId === chainId
+            ? setSelectedToken(token)
+            : setSelectedToken(ChainResolver.nativeCurrency(chainId as ChainId))
     }, [token, chainId])
 
     // workaround: transferERC20 should support non-evm network

@@ -18,12 +18,13 @@ import type {
     SmartPayDialogEvent,
     RenameWalletEvent,
     FollowLensDialogEvent,
-    WalletsUpdatedEvent,
     RequestsUpdatedEvent,
     WalletLockStatusUpdatedEvent,
     GameDialogEvent,
     PopupWalletConnectEvent,
     SwitchLogoDialogEvent,
+    PasswordStatusUpdatedEvent,
+    PopupPageUpdatedEvent,
 } from './Events.js'
 
 /**
@@ -65,10 +66,12 @@ export interface CrossIsolationEvents {
     smartPayDialogEvent: SmartPayDialogEvent
     followLensDialogEvent: FollowLensDialogEvent
     popupWalletConnectEvent: PopupWalletConnectEvent
-    walletsUpdated: WalletsUpdatedEvent
+    walletsUpdated: void
     requestsUpdated: RequestsUpdatedEvent
     walletLockStatusUpdated: WalletLockStatusUpdatedEvent
-
+    passwordStatusUpdated: PasswordStatusUpdatedEvent
+    walletLockTimeUpdated: void
+    popupRouteUpdated: PopupPageUpdatedEvent
     gameDialogUpdated: GameDialogEvent
     switchLogoDialogUpdated: SwitchLogoDialogEvent
 }

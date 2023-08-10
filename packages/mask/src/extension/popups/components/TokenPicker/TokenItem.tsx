@@ -3,15 +3,17 @@ import { ImageIcon, TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3Others } from '@masknet/web3-hooks-base'
-import { formatBalance, type NetworkDescriptor } from '@masknet/web3-shared-base'
-import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
-import { Box, ListItem, ListItemIcon, ListItemText, Typography, type ListItemProps, Link } from '@mui/material'
+import { type ReasonableNetwork } from '@masknet/web3-shared-base'
+import { Box, Link, ListItem, ListItemIcon, ListItemText, Typography, type ListItemProps } from '@mui/material'
 import { memo, useEffect, useMemo, useRef } from 'react'
+import { formatTokenBalance } from '../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
         item: {
+            height: 60,
             padding: theme.spacing(1, 1.5),
+            boxSizing: 'border-box',
             borderRadius: 8,
             border: `1px solid ${theme.palette.maskColor.line}`,
             marginBottom: theme.spacing(1),
@@ -30,6 +32,9 @@ const useStyles = makeStyles()((theme) => {
             border: `1px solid ${theme.palette.common.white}`,
             borderRadius: '50%',
         },
+        listText: {
+            margin: 0,
+        },
         text: {
             fontSize: 16,
             fontWeight: 700,
@@ -44,7 +49,7 @@ const useStyles = makeStyles()((theme) => {
         balance: {
             fontSize: 16,
             fontWeight: 700,
-            color: theme.palette.maskColor.second,
+            color: theme.palette.maskColor.main,
         },
         link: {
             color: theme.palette.maskColor.second,
@@ -58,7 +63,7 @@ const useStyles = makeStyles()((theme) => {
 
 export interface TokenItemProps extends Omit<ListItemProps, 'onSelect'> {
     asset: Web3Helper.FungibleAssetAll
-    network: NetworkDescriptor<ChainId, NetworkType> | undefined
+    network: ReasonableNetwork<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll, Web3Helper.NetworkTypeAll>
     selected?: boolean
     onSelect?(asset: Web3Helper.FungibleAssetAll): void
 }
@@ -87,9 +92,7 @@ export const TokenItem = memo(function TokenItem({
     return (
         <ListItem
             secondaryAction={
-                <Typography className={classes.balance}>
-                    {formatBalance(asset.balance, asset.decimals, 0, false, true, 5)}
-                </Typography>
+                <Typography className={classes.balance}>{formatTokenBalance(asset.balance, asset.decimals)}</Typography>
             }
             className={cx(classes.item, className, selected ? classes.selected : null)}
             onClick={() => onSelect?.(asset)}
@@ -104,10 +107,11 @@ export const TokenItem = memo(function TokenItem({
                         address={asset.address}
                         size={36}
                     />
-                    <ImageIcon className={classes.badgeIcon} size={16} icon={network?.icon} />
+                    <ImageIcon className={classes.badgeIcon} size={16} icon={network?.iconUrl} name={network.name} />
                 </Box>
             </ListItemIcon>
             <ListItemText
+                className={classes.listText}
                 secondary={
                     <Typography className={classes.name}>
                         {asset.name}

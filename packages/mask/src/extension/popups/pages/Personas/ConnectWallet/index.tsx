@@ -1,8 +1,8 @@
 import { memo, useCallback, useMemo } from 'react'
-import { Avatar, Box, Button, Link, Typography } from '@mui/material'
+import urlcat from 'urlcat'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router-dom'
-
+import { Avatar, Box, Button, Link, Typography } from '@mui/material'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import {
     NextIDPlatform,
@@ -14,15 +14,9 @@ import {
     PopupModalRoutes,
     MaskMessages,
 } from '@masknet/shared-base'
-import {
-    formatDomainName,
-    formatEthereumAddress,
-    explorerResolver,
-    ProviderType,
-    providerResolver,
-} from '@masknet/web3-shared-evm'
-import { FormattedAddress, PersonaContext, WalletIcon } from '@masknet/shared'
-import { NextIDProof, Web3 } from '@masknet/web3-providers'
+import { formatDomainName, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
+import { FormattedAddress, PersonaContext, PopupHomeTabType, WalletIcon } from '@masknet/shared'
+import { ExplorerResolver, NextIDProof, ProviderResolver, Web3 } from '@masknet/web3-providers'
 import {
     useChainContext,
     useNetworkContext,
@@ -38,8 +32,6 @@ import { useI18N } from '../../../../../utils/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { LoadingMask } from '../../../components/LoadingMask/index.js'
 import Services from '../../../../service.js'
-import { HomeTabType } from '../../Wallet/type.js'
-import urlcat from 'urlcat'
 import { useModalNavigate } from '../../../components/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -124,7 +116,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
 
     const walletAlias = useMemo(() => {
         if (domain) return formatDomainName(domain)
-        if (providerType !== ProviderType.MaskWallet) return `${providerResolver.providerName(providerType)} Wallet`
+        if (providerType !== ProviderType.MaskWallet) return `${ProviderResolver.providerName(providerType)} Wallet`
         return wallets.find((x) => isSameAddress(x.address, account))?.name ?? formatEthereumAddress(account, 4)
     }, [JSON.stringify(wallets), account, domain, providerType])
 
@@ -230,7 +222,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
     }, [providerType])
 
     const handleBack = useCallback(() => {
-        navigate(urlcat(PopupRoutes.Personas, { tab: HomeTabType.ConnectedWallets, disableNewWindow: true }), {
+        navigate(urlcat(PopupRoutes.Personas, { tab: PopupHomeTabType.ConnectedWallets, disableNewWindow: true }), {
             replace: true,
         })
     }, [])
@@ -252,7 +244,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
                                     <FormattedAddress address={account} size={4} formatter={formatEthereumAddress} />
                                     <Link
                                         className={classes.link}
-                                        href={account ? explorerResolver.addressLink(chainId, account) : '#'}
+                                        href={account ? ExplorerResolver.addressLink(chainId, account) : '#'}
                                         target="_blank"
                                         title={t('plugin_wallet_view_on_explorer')}
                                         rel="noopener noreferrer">

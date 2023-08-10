@@ -1,4 +1,5 @@
 import { BigNumber } from 'bignumber.js'
+import { CurrencyType } from '../index.js'
 const boundaryValues = [
     {
         maxValue: 1000,
@@ -20,6 +21,11 @@ const boundaryValues = [
         symbol: 'B',
         shiftedBy: -9,
     },
+    {
+        maxValue: 1000000000000000,
+        symbol: 'T',
+        shiftedBy: -12,
+    },
 ]
 
 /**
@@ -27,10 +33,11 @@ const boundaryValues = [
  * @returns format result
  * @param value
  * @param currency
+ * @param currencyRate
  */
-export function formatMarketCap(value: BigNumber.Value, currency = 'USD') {
+export function formatMarketCap(value: BigNumber.Value, currency = CurrencyType.USD, currencyRate = 1) {
     const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency, currencyDisplay: 'narrowSymbol' })
-    const bgValue = new BigNumber(value)
+    const bgValue = new BigNumber(value).multipliedBy(currencyRate)
 
     const boundary = boundaryValues.find(
         (x) =>

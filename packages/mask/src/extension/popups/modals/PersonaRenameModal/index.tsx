@@ -20,7 +20,7 @@ export const PersonaRenameModal = memo<ActionModalBaseProps>(function PersonaRen
 
     const [{ loading }, handleClick] = useAsyncFn(async () => {
         if (!name || !currentPersona) return
-        if (name.length > 20 || name.length < 3) {
+        if (name.length > 24 || name.length < 1) {
             setError('popups_persona_rename_tips')
             return
         }
@@ -54,7 +54,11 @@ export const PersonaRenameModal = memo<ActionModalBaseProps>(function PersonaRen
                     error={!!error}
                     helperText={error}
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => {
+                        if (e.target.value.length > 24) return
+                        if (error) setError('')
+                        setName(e.target.value)
+                    }}
                     InputProps={{
                         endAdornment: name.length ? (
                             <Icons.PopupClose

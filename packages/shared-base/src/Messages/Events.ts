@@ -248,13 +248,15 @@ export interface PersonaSignRequestEvent {
     selectedPersona?: PersonaIdentifier
 }
 
-export type WalletsUpdatedEvent = void
-
 export interface RequestsUpdatedEvent {
     hasRequest: boolean
 }
 
 export type WalletLockStatusUpdatedEvent = boolean
+
+export type PasswordStatusUpdatedEvent = boolean
+
+export type PopupPageUpdatedEvent = string
 
 export interface GameDialogEvent {
     open: boolean

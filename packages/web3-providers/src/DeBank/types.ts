@@ -3,6 +3,29 @@ export enum DebankTransactionDirection {
     RECEIVE = 'receive',
 }
 
+export type DebankChains =
+    | 'eth'
+    | 'arb'
+    | 'bsc'
+    | 'op'
+    | 'matic'
+    | 'aurora'
+    | 'avax'
+    | 'celo'
+    | 'boba'
+    | 'xdai'
+    | 'ftm'
+    | 'astar'
+    | 'cfx'
+    | 'hmy'
+    | 'movr'
+    | 'mobm'
+    | 'pls'
+    | 'cro'
+    | 'btt'
+    | 'klay'
+    | 'nova'
+
 export interface DictItem {
     name: string
     id: string
@@ -35,13 +58,27 @@ export interface TokenItem {
     is_erc721: boolean
     /** Only NFT */
     is_erc1155: boolean
+    collection?: {
+        chain: DebankChains
+        credit_score: number
+        description: string | null
+        floor_price: number
+        /** e.g. 'matic:0x813de35e46a7d3a6ea1df82414dfadd5b283d9a9' */
+        id: string
+        is_core: boolean
+        is_scam: boolean
+        is_suspicious: boolean
+        is_verified: boolean
+        logo_url: string
+        name: string
+    }
 }
 
 export interface HistoryItem {
     cate_id: keyof HistoryResponse['data']['cate_dict']
     debt_liquidated: null
     id: string
-    chain: LiteralUnion<'eth' | 'aurora' | 'matic' | 'pls' | 'ftm' | 'op' | 'klay' | 'nova'>
+    chain: DebankChains
     other_addr: string
     project_id?: string
     receives: TransferringAsset[]
@@ -104,7 +141,7 @@ export interface HistoryRecord {
 
 export interface BalanceRecord {
     balance: number
-    chain: LiteralUnion<'eth' | 'bsc'>
+    chain: DebankChains
     decimals: number
     display_symbol: null
     id: LiteralUnion<'eth'>
@@ -121,11 +158,12 @@ export interface BalanceRecord {
 }
 
 export interface WalletTokenRecord {
-    id: LiteralUnion<'eth'>
+    /** Could be chain or token address */
+    id: LiteralUnion<DebankChains, string>
     amount: string
     is_wallet: boolean
     protocol_id: string
-    chain: LiteralUnion<'eth' | 'bsc'>
+    chain: DebankChains
     decimals: number
     display_symbol: null
     is_core: boolean

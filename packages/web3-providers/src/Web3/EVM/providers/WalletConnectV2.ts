@@ -8,7 +8,6 @@ import type { UnboxPromise } from '@masknet/shared-base'
 import {
     ProviderType,
     ChainId,
-    chainResolver,
     EIP155Editor,
     isValidAddress,
     isValidChainId,
@@ -16,6 +15,7 @@ import {
     type Web3,
     type Web3Provider,
 } from '@masknet/web3-shared-evm'
+import { ChainResolverAPI } from '../apis/ResolverAPI.js'
 import { BaseProvider } from './Base.js'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
@@ -71,7 +71,7 @@ export default class WalletConnectV2Provider
     extends BaseProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
-    private signClient = new Client(this.emitter)
+    private SignClient = new Client(this.emitter)
 
     constructor() {
         super(ProviderType.WalletConnectV2)
@@ -84,21 +84,21 @@ export default class WalletConnectV2Provider
     }
 
     override get connected() {
-        return !!this.signClient.session
+        return !!this.SignClient.session
     }
 
     private async resume() {
-        if (!this.signClient.client) await this.signClient.setup()
-        if (this.signClient.account) await this.login(this.signClient.account.chainId)
+        if (!this.SignClient.client) await this.SignClient.setup()
+        if (this.SignClient.account) await this.login(this.SignClient.account.chainId)
     }
 
     private async login(chainId: ChainId) {
         const editor = EIP155Editor.fromChainId(chainId)
         if (!editor) throw new Error('Invalid chain id.')
 
-        if (this.signClient.account) return this.signClient.account
+        if (this.SignClient.account) return this.SignClient.account
 
-        const connected = await this.signClient.client?.connect({
+        const connected = await this.SignClient.client?.connect({
             requiredNamespaces: {
                 eip155: editor.eip155Namespace,
             },
@@ -112,13 +112,13 @@ export default class WalletConnectV2Provider
 
         if (uri) this.context?.closeWalletConnectDialog()
 
-        return this.signClient.account
+        return this.SignClient.account
     }
 
     private async logout() {
-        if (!this.signClient.session?.topic) return
-        await this.signClient.client?.disconnect({
-            topic: this.signClient.session.topic,
+        if (!this.SignClient.session?.topic) return
+        await this.SignClient.client?.disconnect({
+            topic: this.SignClient.session.topic,
             reason: getSdkError('USER_DISCONNECTED'),
         })
     }
@@ -139,11 +139,11 @@ export default class WalletConnectV2Provider
         })
     }
     override async connect(chainId: ChainId) {
-        await this.signClient.destroy()
-        await this.signClient.setup()
+        await this.SignClient.destroy()
+        await this.SignClient.setup()
 
         const account = await this.login(chainId)
-        if (!account) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)
+        if (!account) throw new Error(`Failed to connect to ${new ChainResolverAPI().chainFullName(chainId)}.`)
 
         return account
     }
@@ -156,12 +156,12 @@ export default class WalletConnectV2Provider
         const editor = EIP155Editor.fromChainId(this.currentChainId)
         if (!editor) throw new Error('Invalid chain id.')
 
-        if (!this.signClient.client) await this.signClient.setup()
-        if (!this.signClient.session) await this.login(this.currentChainId)
-        if (!this.signClient.client || !this.signClient.session) throw new Error('The client is not initialized')
+        if (!this.SignClient.client) await this.SignClient.setup()
+        if (!this.SignClient.session) await this.login(this.currentChainId)
+        if (!this.SignClient.client || !this.SignClient.session) throw new Error('The client is not initialized')
 
-        return this.signClient.client.request<T>({
-            topic: this.signClient.session.topic,
+        return this.SignClient.client.request<T>({
+            topic: this.SignClient.session.topic,
             chainId: editor.eip155ChainId,
             request: {
                 method: requestArguments.method,

@@ -2,7 +2,7 @@ import { CollectibleList, ElementAnchor } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useNonFungibleAssets, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useChainContext, useNonFungibleAsset, useNonFungibleAssets, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
 import { uniqWith } from 'lodash-es'
@@ -59,7 +59,13 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
     const { classes } = useStyles()
     const { chainId, address, tokenId, params, setParams } = useNonFungibleTokenParams()
 
-    const { value: fetchedTokens = EMPTY_LIST, done, next, loading } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
+    const {
+        value: fetchedTokens = EMPTY_LIST,
+        done,
+        next,
+        loading,
+        dataUpdatedAt,
+    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
     const tokens = useMemo(() => {
         const filtered = fetchedTokens.filter((x) => {
             if (isLensProfileAddress(x.address)) return false
@@ -72,7 +78,8 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
         })
     }, [fetchedTokens])
 
-    const selectedKey = address && tokenId ? `${chainId}.${address}.${tokenId}` : undefined
+    const hasSelected = address && tokenId
+    const selectedKey = hasSelected ? `${chainId}.${address}.${tokenId}` : undefined
 
     const handleChange = useCallback((value: string | null) => {
         setParams(
@@ -92,6 +99,20 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
             { replace: true },
         )
     }, [])
+
+    // Collectibles are lazy loading, we can't let the target token scroll into view before it's loaded
+    // So we fetch and prepend it to the list.
+    const { data: targetToken } = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, address || '', tokenId || '', {
+        chainId,
+    })
+    const prependTokens = useMemo(() => {
+        if (!hasSelected || !targetToken) return tokens
+        const loadedTargetToken = tokens.find(
+            (x) => x.chainId === chainId && isSameAddress(x.address, address) && x.tokenId === tokenId,
+        )
+        if (loadedTargetToken) return tokens
+        return [targetToken, ...tokens]
+    }, [hasSelected, targetToken, tokens, chainId, address, tokenId])
 
     const { account } = useChainContext()
     const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, {
@@ -113,7 +134,7 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
                 <CollectibleList
                     className={classes.collectibleList}
                     retry={next}
-                    collectibles={tokens}
+                    collectibles={prependTokens}
                     pluginID={NetworkPluginID.PLUGIN_EVM}
                     loading={loading}
                     columns={4}
@@ -124,9 +145,12 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
                     getCollectibleKey={getCollectibleKey}
                     onChange={handleChange}
                 />
-                <ElementAnchor key={fetchedTokens.length} callback={() => next?.()}>
-                    {!done && <LoadingBase size={36} />}
-                </ElementAnchor>
+                {done ? null : (
+                    // There might be chains that has no assets, setting key to token size might stuck the loading
+                    <ElementAnchor key={dataUpdatedAt} callback={() => next?.()}>
+                        <LoadingBase size={36} />
+                    </ElementAnchor>
+                )}
             </div>
             <div className={classes.actionGroup}>
                 <ActionButton fullWidth onClick={transfer} disabled={disabled} loading={state.loading}>

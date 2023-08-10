@@ -18,6 +18,8 @@ import type {
 export class NetworkState<ChainId, SchemaType, NetworkType>
     implements Web3NetworkState<ChainId, SchemaType, NetworkType>
 {
+    /** default network can't be removed */
+    private DEFAULT_NETWORK_ID = '1_ETH'
     public storage: StorageObject<{
         networkID: string
         networks: Record<string, ReasonableNetwork<ChainId, SchemaType, NetworkType>>
@@ -25,7 +27,7 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
 
     public networkID?: Subscription<string>
     public network?: Subscription<ReasonableNetwork<ChainId, SchemaType, NetworkType>>
-    public networks?: Subscription<Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>>
+    public networks: Subscription<Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>>
 
     constructor(
         protected context: Plugin.Shared.SharedUIContext,
@@ -34,7 +36,7 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
         },
     ) {
         const { storage } = PersistentStorages.Web3.createSubScope(`${this.options.pluginID}_Network`, {
-            networkID: '',
+            networkID: this.DEFAULT_NETWORK_ID,
             networks: {},
         })
 
@@ -43,16 +45,19 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
         this.networkID = this.storage.networkID.subscription
 
         this.networks = mapSubscription(this.storage.networks.subscription, (storage) => {
+            // Newest to oldest
             const customizedNetworks = Object.values(storage).sort(
-                (a, z) => a.createdAt.getTime() - z.createdAt.getTime(),
+                (a, z) => z.createdAt.getTime() - a.createdAt.getTime(),
             )
             const registeredChains = getRegisteredWeb3Chains(this.options.pluginID)
             const registeredNetworks = getRegisteredWeb3Networks(this.options.pluginID)
 
             return [
-                ...registeredNetworks.map((x) => registeredChains.find((y) => y.chainId === x.chainId)!),
+                ...registeredNetworks
+                    .filter((x) => x.isMainnet)
+                    .map((x) => registeredChains.find((y) => y.chainId === x.chainId)!),
                 ...customizedNetworks.map((x) => ({
-                    ...omit(x, 'createdAt', 'updatedAt'),
+                    ...x,
                     isCustomized: true,
                 })),
             ] as Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>
@@ -75,8 +80,9 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
     }
 
     private assertNetwork(id: string) {
-        if (!Object.hasOwn(this.storage.networks.value, id)) throw new Error('Not a valid network ID.')
-        return this.storage.networks.value[id]
+        const network = this.networks.getCurrentValue().find((x) => x.ID === id)
+        if (!network) throw new Error('Not a valid network ID.')
+        return network
     }
 
     protected async validateNetwork(network: TransferableNetwork<ChainId, SchemaType, NetworkType>) {
@@ -129,6 +135,11 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
 
     async removeNetwork(id: string) {
         this.assertNetwork(id)
+
+        // If remove current network, reset to default network
+        if (id === this.networkID?.getCurrentValue()) {
+            await this.switchNetwork(this.DEFAULT_NETWORK_ID)
+        }
 
         await Promise.all([
             this.storage.networks.setValue(omit(this.storage.networks.value, id)),

@@ -31,7 +31,7 @@ export class MessageState<Request, Response> implements Web3MessageState<Request
         this.messages = mapSubscription(this.storage.messages.subscription, (storage) => {
             return Object.values(storage)
                 .filter((x) => x.state === MessageStateType.NOT_DEPEND)
-                .sort((a, z) => z.createdAt.getTime() - a.createdAt.getTime())
+                .sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime())
         })
     }
 
@@ -124,8 +124,14 @@ export class MessageState<Request, Response> implements Web3MessageState<Request
         })
     }
 
-    async approveRequest(id: string): Promise<void> {
+    async approveRequest(id: string, updates?: Request): Promise<void> {
+        const message = this.assertMessage(id)
+
         await this.updateMessage(id, {
+            request: {
+                ...message.request,
+                ...updates,
+            },
             state: MessageStateType.APPROVED,
         })
     }

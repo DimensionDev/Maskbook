@@ -8,12 +8,9 @@ import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab, Typography, styled, tabClasses, tabsClasses } from '@mui/material'
 import { memo, useCallback, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useMount } from 'react-use'
-import { useContainer } from 'unstated-next'
 import urlcat from 'urlcat'
 import { useI18N } from '../../../../../../utils/index.js'
 import { useParamTab } from '../../../../hook/index.js'
-import { WalletContext } from '../../hooks/useWalletContext.js'
 import { WalletAssetTabs } from '../../type.js'
 import { ActivityList } from '../ActivityList/index.js'
 import { AssetsList } from '../AssetsList/index.js'
@@ -112,11 +109,6 @@ export const WalletAssets = memo(function WalletAssets() {
     const navigate = useNavigate()
     const { chainId } = useChainContext()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const { refreshAssets } = useContainer(WalletContext)
-
-    useMount(() => {
-        refreshAssets()
-    })
 
     const handleAdd = useCallback(
         (assetTab: WalletAssetTabs) => navigate(`${PopupRoutes.AddToken}/${chainId}/${assetTab}`),
@@ -152,16 +144,19 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI(
         },
         [navigate],
     )
-    const handleCollectionChange = useCallback((id: string | undefined) => {
-        setParams(
-            (params) => {
-                if (!id) params.delete(SEARCH_KEY)
-                else params.set(SEARCH_KEY, id)
-                return params.toString()
-            },
-            { replace: true },
-        )
-    }, [])
+    const handleCollectionChange = useCallback(
+        (id: string | undefined) => {
+            setParams(
+                (params) => {
+                    if (!id) params.delete(SEARCH_KEY)
+                    else params.set(SEARCH_KEY, id)
+                    return params.toString()
+                },
+                { replace: true },
+            )
+        },
+        [setParams],
+    )
 
     const scrollTargetRef = useRef<HTMLDivElement>(null)
 

@@ -5,7 +5,7 @@ import type { I18NStringField, Plugin } from '../entry.js'
 import { getAvailablePlugins } from '../utils/getAvailablePlugins.js'
 
 export function getSearchResultTabs(
-    definitions: readonly Plugin.SNSAdaptor.Definition[],
+    definitions: readonly Plugin.SiteAdaptor.Definition[],
     result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
     translate: (pluginID: string, field: I18NStringField) => string,
 ) {

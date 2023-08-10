@@ -1,25 +1,26 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
 import { Icons } from '@masknet/icons'
-import { type EnhanceableSite, type ProfileAccount, PopupModalRoutes } from '@masknet/shared-base'
-import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
+import { type EnhanceableSite, type ProfileAccount, PopupModalRoutes, PopupRoutes } from '@masknet/shared-base'
+import { MaskTabList, makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
-import { Box, Button, Tab, Typography, useTheme } from '@mui/material'
+import { Box, Tab, Typography, useTheme } from '@mui/material'
 import { memo } from 'react'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { SocialAccounts } from '../../../components/SocialAccounts/index.js'
 import { ConnectedWallet } from '../../../components/ConnectedWallet/index.js'
 import type { ConnectedWalletInfo } from '../type.js'
-import { useSearchParams } from 'react-router-dom'
-import { HomeTabType } from '../../Wallet/type.js'
 import { useModalNavigate } from '../../../components/index.js'
 import { PersonaPublicKey } from '../../../components/PersonaPublicKey/index.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
+import { useParamTab } from '../../../hook/useParamTab.js'
+import { useNavigate } from 'react-router-dom'
+import { PopupHomeTabType } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
         flex: 1,
-        backgroundColor: '#F7F9FA',
+        background: theme.palette.maskColor.bottom,
         display: 'flex',
         flexDirection: 'column',
     },
@@ -30,31 +31,46 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         position: 'relative',
     },
-    controller: {
+    content: {
+        padding: 16,
         display: 'flex',
+        justifyContent: 'flex-start',
         flexDirection: 'column',
-        rowGap: 12,
-        padding: '0 16px 16px 16px',
     },
-    emptyHeader: {
-        height: 140,
+    titleWrapper: {
+        padding: 16,
         display: 'flex',
-        justifyContent: 'center',
+        marginBottom: 12,
+        flexDirection: 'column',
         alignItems: 'center',
-        background: theme.palette.maskColor.modalTitleBg,
     },
-    placeholder: {
-        textAlign: 'center',
-        height: 233,
-        padding: theme.spacing(2, 2, 0, 2),
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-    },
-    placeholderTitle: {
+    title: {
         fontSize: 24,
-        lineHeight: 1.2,
+        lineHeight: '120%',
+        fontStyle: 'normal',
         fontWeight: 700,
+    },
+    addPersonaWrapper: {
+        display: 'flex',
+        width: 368,
+        padding: 12,
+        alignItems: 'center',
+        gap: 8,
+        marginBottom: 12,
+        boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
+        background: theme.palette.maskColor.bottom,
+        borderRadius: 8,
+        cursor: 'pointer',
+    },
+    subTitle: {
+        color: theme.palette.maskColor.main,
+        fontSize: 12,
+        fontWeight: 700,
+    },
+    description: {
+        color: theme.palette.maskColor.third,
+        fontSize: 12,
+        fontWeight: 400,
     },
     placeholderDescription: {
         fontSize: 14,
@@ -62,6 +78,7 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         color: theme.palette.maskColor.third,
         marginTop: theme.spacing(1.5),
+        textAlign: 'center',
     },
     edit: {
         position: 'absolute',
@@ -74,6 +91,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        cursor: 'pointer',
     },
     publicKey: {
         fontSize: 12,
@@ -113,6 +131,28 @@ const useStyles = makeStyles()((theme) => ({
         maxHeight: 288,
         overflow: 'auto',
     },
+    mnemonicIcon: {
+        background: theme.palette.maskColor.success,
+    },
+    personaIcon: {
+        background: theme.palette.maskColor.primary,
+    },
+    iconWrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 30,
+        height: 30,
+        minWidth: 30,
+        borderRadius: '100%',
+    },
+    emptyHeader: {
+        height: 140,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        background: theme.palette.maskColor.modalTitleBg,
+    },
 }))
 
 export interface PersonaHomeUIProps {
@@ -149,16 +189,11 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
     }) => {
         const theme = useTheme()
         const { t } = useI18N()
+        const navigate = useNavigate()
         const modalNavigate = useModalNavigate()
-        const { classes } = useStyles()
+        const { classes, cx } = useStyles()
 
-        const [params] = useSearchParams()
-
-        const [currentTab, onChange] = useTabs(
-            params.get('tab') || HomeTabType.SocialAccounts,
-            HomeTabType.SocialAccounts,
-            HomeTabType.ConnectedWallets,
-        )
+        const [currentTab, onChange] = useParamTab<PopupHomeTabType>(PopupHomeTabType.SocialAccounts)
 
         return (
             <div className={classes.container}>
@@ -175,7 +210,9 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                             <Box className={classes.info}>
                                 <Box position="relative">
                                     <PersonaAvatar size={60} avatar={avatar} hasProofs={hasProofs} />
-                                    <Box className={classes.edit}>
+                                    <Box
+                                        className={classes.edit}
+                                        onClick={() => navigate(PopupRoutes.PersonaAvatarSetting)}>
                                         <Icons.Edit size={12} />
                                     </Box>
                                 </Box>
@@ -198,11 +235,11 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                             </Box>
 
                             <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
-                                <Tab label={t('popups_social_account')} value={HomeTabType.SocialAccounts} />
-                                <Tab label={t('popups_connected_wallets')} value={HomeTabType.ConnectedWallets} />
+                                <Tab label={t('popups_social_account')} value={PopupHomeTabType.SocialAccounts} />
+                                <Tab label={t('popups_connected_wallets')} value={PopupHomeTabType.ConnectedWallets} />
                             </MaskTabList>
                         </Box>
-                        <TabPanel className={classes.panel} value={HomeTabType.SocialAccounts}>
+                        <TabPanel className={classes.panel} value={PopupHomeTabType.SocialAccounts} data-hide-scrollbar>
                             <SocialAccounts
                                 accounts={accounts}
                                 networks={networks}
@@ -210,36 +247,51 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                 onAccountClick={onAccountClick}
                             />
                         </TabPanel>
-                        <TabPanel className={classes.panel} value={HomeTabType.ConnectedWallets}>
+                        <TabPanel
+                            className={classes.panel}
+                            value={PopupHomeTabType.ConnectedWallets}
+                            data-hide-scrollbar>
                             <ConnectedWallet wallets={bindingWallets} />
                         </TabPanel>
                     </TabContext>
                 ) : (
-                    <Box sx={{ background: theme.palette.maskColor.bottom, height: '100%' }}>
+                    <Box className={classes.container} data-hide-scrollbar>
                         <Box className={classes.emptyHeader}>
                             <Icons.MaskSquare width={160} height={46} />
                         </Box>
-                        <Box className={classes.placeholder}>
-                            <Typography className={classes.placeholderTitle}>
-                                {t('popups_welcome_to_mask_network')}
-                            </Typography>
-                            <Typography className={classes.placeholderDescription}>
-                                {t('popups_persona_description')}
-                            </Typography>
+                        <Box className={classes.content}>
+                            <Box className={classes.titleWrapper}>
+                                <Typography className={classes.title}>{t('welcome_to_mask')}</Typography>
+                                <Typography className={classes.placeholderDescription}>
+                                    {t('popups_add_persona_description')}
+                                </Typography>
+                            </Box>
+                            <Box className={classes.addPersonaWrapper} onClick={onCreatePersona}>
+                                <div className={cx(classes.iconWrapper, classes.personaIcon)}>
+                                    <Icons.AddUser size={20} color={theme.palette.maskColor.white} />
+                                </div>
+                                <div>
+                                    <Typography className={classes.subTitle}>{t('popups_create_persona')}</Typography>
+                                    <Typography className={classes.description}>
+                                        {t('popups_generate_a_new_persona')}
+                                    </Typography>
+                                </div>
+                            </Box>
+
+                            <Box className={classes.addPersonaWrapper} onClick={onRestore}>
+                                <div className={cx(classes.iconWrapper, classes.mnemonicIcon)}>
+                                    <Icons.PopupRestore size={20} color={theme.palette.maskColor.white} />
+                                </div>
+                                <div>
+                                    <Typography className={classes.subTitle}>
+                                        {t('popups_restore_and_login')}
+                                    </Typography>
+                                    <Typography className={classes.description}>
+                                        {t('popups_import_persona_description')}
+                                    </Typography>
+                                </div>
+                            </Box>
                         </Box>
-                        <div className={classes.controller}>
-                            <Button
-                                onClick={onCreatePersona}
-                                startIcon={<Icons.AddUser color={theme.palette.maskColor.bottom} size={18} />}>
-                                {t('popups_create_persona')}
-                            </Button>
-                            <Button
-                                onClick={onRestore}
-                                variant="outlined"
-                                startIcon={<Icons.PopupRestore color={theme.palette.maskColor.main} size={18} />}>
-                                {t('popups_restore_and_login')}
-                            </Button>
-                        </div>
                     </Box>
                 )}
             </div>

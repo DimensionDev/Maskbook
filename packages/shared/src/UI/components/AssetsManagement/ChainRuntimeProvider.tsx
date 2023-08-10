@@ -4,7 +4,7 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
 import { noop, sortBy } from 'lodash-es'
 import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
-import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
+import { useNetworks } from '@masknet/web3-hooks-base'
 import {
     createContext,
     memo,
@@ -15,7 +15,7 @@ import {
     type Dispatch,
     useContext,
 } from 'react'
-import type { NetworkDescriptor } from '@masknet/web3-shared-base'
+import type { ReasonableNetwork } from '@masknet/web3-shared-base'
 
 interface ChainRuntimeOptions {
     pluginID: NetworkPluginID
@@ -23,7 +23,7 @@ interface ChainRuntimeOptions {
     account: string
     chainId?: Web3Helper.ChainIdAll
     setChainId: Dispatch<SetStateAction<ChainId | FlowChainId | SolanaChainId | undefined>>
-    networks: Array<NetworkDescriptor<Web3Helper.ChainIdAll, Web3Helper.NetworkTypeAll>>
+    networks: Array<ReasonableNetwork<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll, Web3Helper.NetworkTypeAll>>
 }
 
 const ChainRuntimeContext = createContext<ChainRuntimeOptions>({
@@ -57,12 +57,12 @@ export const ChainRuntimeProvider = memo<PropsWithChildren<ChainRuntimeProviderP
     children,
 }) {
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
-    const allNetworks = useNetworkDescriptors(pluginID)
+    const allNetworks = useNetworks(pluginID, true)
 
     const networks = useMemo(() => {
         const supported = SimpleHashSupportedChains[pluginID]
         return sortBy(
-            allNetworks.filter((x) => x.isMainnet && supported.includes(x.chainId)),
+            allNetworks.filter((x) => (x.network === 'mainnet' || x.isCustomized) && supported.includes(x.chainId)),
             (x) => supported.indexOf(x.chainId),
         )
     }, [allNetworks, pluginID])

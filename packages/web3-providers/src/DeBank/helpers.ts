@@ -1,8 +1,6 @@
-import { compact, isNil } from 'lodash-es'
+import { compact, isNil, memoize } from 'lodash-es'
 import {
     type ChainId,
-    chainResolver,
-    createNativeToken,
     formatEthereumAddress,
     isNativeTokenAddress,
     SchemaType,
@@ -19,25 +17,35 @@ import {
     type Transaction,
     isSameAddress,
 } from '@masknet/web3-shared-base'
-import DeBank from '@masknet/web3-constants/evm/debank.json'
+import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
 import {
     DebankTransactionDirection,
     type HistoryResponse,
     type TransferringAsset,
     type WalletTokenRecord,
 } from './types.js'
+import { DEBANK_CHAIN_TO_CHAIN_ID_MAP } from './constants.js'
 
 export function formatAssets(data: WalletTokenRecord[]): Array<FungibleAsset<ChainId, SchemaType>> {
-    const supportedChains = Object.values({ ...DeBank.CHAIN_ID, BSC: 'bnb' }).filter(Boolean)
+    const resolver = new ChainResolverAPI()
+
+    const resolveNativeAddress = memoize((chainId: ChainId) => {
+        try {
+            // chainId is beyond builtin chainIds
+            return resolver.nativeCurrency(chainId)?.address || ZERO_ADDRESS
+        } catch {
+            return ZERO_ADDRESS
+        }
+    })
 
     return data
-        .filter((x) => chainResolver.chainId(x.chain) && supportedChains.includes(x.chain))
+        .filter((x) => DEBANK_CHAIN_TO_CHAIN_ID_MAP[x.chain])
         .map((x) => {
-            const chainId = chainResolver.chainId(x.chain)!
-            const address = supportedChains.includes(x.id) ? createNativeToken(chainId).address : x.id
+            const chainId = DEBANK_CHAIN_TO_CHAIN_ID_MAP[x.chain]
+            const address = x.id in DEBANK_CHAIN_TO_CHAIN_ID_MAP ? resolveNativeAddress(chainId) : x.id
 
             return {
-                id: address,
+                id: x.id,
                 address: formatEthereumAddress(address),
                 chainId,
                 type: TokenType.Fungible,
@@ -63,10 +71,12 @@ function toTxAsset(
     token_dict: HistoryResponse['data']['token_dict'],
 ) {
     const token = token_dict[token_id]
+    // token_dict might not contain value to current token_id
+    if (!token) return null
     const schema = token.decimals
-        ? isValidAddress(token.id)
-            ? SchemaType.Native
-            : SchemaType.ERC20
+        ? isValidAddress(token.id) // for native token, token.id is symbol. e.g `matic` for Matic
+            ? SchemaType.ERC20
+            : SchemaType.Native
         : token.is_erc721
         ? SchemaType.ERC721
         : SchemaType.ERC1155
@@ -74,18 +84,19 @@ function toTxAsset(
     if (process.env.NODE_ENV === 'development') {
         console.assert(token, `[Debank] no matching token in token_dict with token_id ${token_id}`)
     }
+    const fallbackName = token.is_erc1155 || token.is_erc721 ? 'Unknown NFT' : 'Unknown Token'
     return {
         id: token_id,
         chainId,
-        type: token?.decimals ? TokenType.Fungible : TokenType.NonFungible,
+        type: token.decimals ? TokenType.Fungible : TokenType.NonFungible,
         schema,
-        name: token?.name ?? 'Unknown Token',
-        symbol: token?.optimized_symbol,
+        name: token.name || token.collection?.name || fallbackName,
+        symbol: token.optimized_symbol || token.collection?.name || fallbackName,
         address: token.decimals ? token_id : token.contract_id,
         decimals: token.decimals || 1,
         direction: DebankTransactionDirection.SEND,
         amount: amount?.toString(),
-        logoURI: token?.logo_url,
+        logoURI: token.logo_url,
     }
 }
 
@@ -94,6 +105,7 @@ export function formatTransactions({
     history_list,
     token_dict,
 }: HistoryResponse['data']): Array<Transaction<ChainId, SchemaType>> {
+    const resolver = new ChainResolverAPI()
     const transactions = history_list.map((transaction): Transaction<ChainId, SchemaType> | undefined => {
         let txType = transaction.tx?.name
         if (!txType && !isNil(transaction.cate_id)) {
@@ -102,7 +114,7 @@ export function formatTransactions({
             txType = 'contract interaction'
         }
 
-        const chainId = chainResolver.chainId(transaction.chain)
+        const chainId = resolver.chainId(transaction.chain)
         if (!chainId) return
 
         if (isSameAddress(transaction.sends[0]?.to_addr, ZERO_ADDRESS)) {
@@ -120,10 +132,10 @@ export function formatTransactions({
             from: transaction.tx?.from_addr ?? '',
             to: transaction.other_addr,
             status: transaction.tx?.status,
-            assets: [
+            assets: compact([
                 ...transaction.sends.map((asset) => toTxAsset(asset, chainId, token_dict)),
                 ...transaction.receives.map((asset) => toTxAsset(asset, chainId, token_dict)),
-            ],
+            ]),
             fee: transaction.tx
                 ? { eth: transaction.tx.eth_gas_fee?.toString(), usd: transaction.tx.usd_gas_fee?.toString() }
                 : undefined,
@@ -131,12 +143,6 @@ export function formatTransactions({
         }
     })
     return compact(transactions)
-}
-
-export function resolveDeBankAssetId(id: string) {
-    if (id === 'bsc') return 'bnb'
-    if (id === 'cfx') return 'Conflux'
-    return id
 }
 
 export function resolveDeBankAssetIdReversed(id: string) {

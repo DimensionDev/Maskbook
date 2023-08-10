@@ -8,14 +8,11 @@ import {
     isFungibleTokenSchemaType,
     isNonFungibleTokenSchemaType,
     type ChainId,
-    formatAddress,
     type ProviderType,
     type NetworkType,
     type Transaction,
     type SchemaType,
-    CHAIN_DESCRIPTORS,
-    NETWORK_DESCRIPTORS,
-    PROVIDER_DESCRIPTORS,
+    formatAddress,
     formatTokenId,
     getNetworkPluginID,
     getDefaultChainId,
@@ -25,24 +22,23 @@ import {
     getZeroAddress,
     getMaskTokenAddress,
     getNativeTokenAddress,
-    explorerResolver,
     formatSchemaType,
-    createNativeToken,
     isValidChainId,
 } from '@masknet/web3-shared-solana'
 import { createFungibleToken, createNonFungibleToken } from '@masknet/web3-shared-base'
 import { OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
+import {
+    SolanaChainResolverAPI,
+    SolanaExplorerResolverAPI,
+    SolanaProviderResolverAPI,
+    SolanaNetworkResolverAPI,
+} from './ResolverAPI.js'
 
 export class SolanaOthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
-    constructor() {
-        super({
-            chainDescriptors: CHAIN_DESCRIPTORS,
-            networkDescriptors: NETWORK_DESCRIPTORS,
-            providerDescriptors: PROVIDER_DESCRIPTORS,
-        })
-    }
-
-    override explorerResolver = explorerResolver
+    override chainResolver = new SolanaChainResolverAPI()
+    override explorerResolver = new SolanaExplorerResolverAPI()
+    override providerResolver = new SolanaProviderResolverAPI()
+    override networkResolver = new SolanaNetworkResolverAPI()
 
     override isValidDomain = isValidDomain
     override isValidChainId = isValidChainId
@@ -67,7 +63,7 @@ export class SolanaOthersAPI extends OthersAPI_Base<ChainId, SchemaType, Provide
     override formatDomainName = formatDomainName
     override formatTokenId = formatTokenId
     override formatSchemaType = formatSchemaType
-    override createNativeToken = createNativeToken
+    override createNativeToken = (chainId: ChainId) => this.chainResolver.nativeCurrency(chainId)
     override createFungibleToken = createFungibleToken
     override createNonFungibleToken = createNonFungibleToken
 }

@@ -1,5 +1,6 @@
 import { describe, test, expect } from 'vitest'
 import { formatCurrency } from '../../src/helpers/formatCurrency.js'
+import { CurrencyType } from '../../src/index.js'
 
 describe('USD Currency price format util test', () => {
     test.each([
@@ -34,8 +35,9 @@ describe('USD Currency price format util test', () => {
         { give: '1.998994883856411', expected: '$2.00', options: { onlyRemainTwoDecimal: true } },
         { give: '11.998994883856411', expected: '$12.00', options: { onlyRemainTwoDecimal: true } },
         { give: '11.998994883856411', expected: '$12.00' },
-    ])('.formatCurrency($give)', ({ give, expected, options }) => {
-        expect(formatCurrency(give, undefined, options)).toBe(expected)
+        { give: 1.2, sign: CurrencyType.CNY, expected: '¥12.00', options: { fiatCurrencyRate: 10 } },
+    ])('.formatCurrency($give)', ({ give, expected, sign, options }) => {
+        expect(formatCurrency(give, sign, options)).toBe(expected)
     })
 })
 

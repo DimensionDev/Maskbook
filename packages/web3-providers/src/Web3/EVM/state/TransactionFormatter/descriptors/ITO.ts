@@ -45,6 +45,9 @@ export class ITODescriptor extends DescriptorWithTransactionDecodedReceipt imple
                     }),
                     failedDescription: i18NextInstance.t('plugin_infra_descriptor_ito_create_fail'),
                 },
+                popup: {
+                    method: method.name,
+                },
             }
         } else if (method?.name === 'claim' || method?.name === 'swap') {
             return {
@@ -61,6 +64,9 @@ export class ITODescriptor extends DescriptorWithTransactionDecodedReceipt imple
                     }),
                     failedDescription: i18NextInstance.t('plugin_infra_descriptor_ito_claim_fail'),
                 },
+                popup: {
+                    method: method.name,
+                },
             }
         } else if (method?.name === 'destruct') {
             return {
@@ -70,6 +76,9 @@ export class ITODescriptor extends DescriptorWithTransactionDecodedReceipt imple
                 snackbar: {
                     successfulDescription: i18NextInstance.t('plugin_infra_descriptor_ito_refund_success'),
                     failedDescription: i18NextInstance.t('plugin_infra_descriptor_ito_refund_fail'),
+                },
+                popup: {
+                    method: method.name,
                 },
             }
         }

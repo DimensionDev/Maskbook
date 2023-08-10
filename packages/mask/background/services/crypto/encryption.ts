@@ -2,13 +2,13 @@ import type { EC_Public_CryptoKey, PersonaIdentifier, ProfileIdentifier } from '
 import { isTypedMessageText, type SerializableTypedMessages, type TypedMessageText } from '@masknet/typed-message'
 import {
     type EC_Key,
-    EC_KeyCurveEnum,
+    EC_KeyCurve,
     encrypt,
     type EncryptionResultE2EMap,
     type EncryptTargetE2E,
     type EncryptTargetPublic,
-    type SocialNetworkEnum,
-    SocialNetworkEnumToProfileDomain,
+    type EncryptPayloadNetwork,
+    encryptPayloadNetworkToDomain,
 } from '@masknet/encryption'
 import { encryptByLocalKey, deriveAESByECDH, queryPublicKey } from '../../database/persona/helper.js'
 import { savePostKeyToDB } from '../../database/post/helper.js'
@@ -29,17 +29,17 @@ export async function encryptTo(
     content: SerializableTypedMessages,
     target: EncryptTargetPublic | EncryptTargetE2EFromProfileIdentifier,
     whoAmI: ProfileIdentifier | undefined,
-    network: SocialNetworkEnum,
+    network: EncryptPayloadNetwork,
 ): Promise<string | Uint8Array> {
     const [keyMap, convertedTarget] = await prepareEncryptTarget(target)
 
     const authorPublicKey = whoAmI ? await queryPublicKey(whoAmI).catch(noop) : undefined
     const { identifier, output, postKey, e2e } = await encrypt(
         {
-            network: whoAmI?.network || SocialNetworkEnumToProfileDomain(network),
+            network: whoAmI?.network || encryptPayloadNetworkToDomain(network),
             author: whoAmI ? Some(whoAmI) : None,
             authorPublicKey: authorPublicKey
-                ? Some({ algr: EC_KeyCurveEnum.secp256k1, key: authorPublicKey } satisfies EC_Key<EC_Public_CryptoKey>)
+                ? Some({ algr: EC_KeyCurve.secp256k1, key: authorPublicKey } satisfies EC_Key<EC_Public_CryptoKey>)
                 : None,
             message: content,
             target: convertedTarget,
@@ -117,7 +117,7 @@ export async function prepareEncryptTarget(
                 console.error('No publicKey found for profile', id.profile.toText())
                 return
             }
-            map.push({ algr: EC_KeyCurveEnum.secp256k1, key })
+            map.push({ algr: EC_KeyCurve.secp256k1, key })
             key_map.set(key, id.profile)
         }),
     )

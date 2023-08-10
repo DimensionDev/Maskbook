@@ -52,7 +52,7 @@ const useStyles = makeStyles()((theme) => ({
     info: {},
 }))
 
-export const PopupSnackbarProvider = memo<SnackbarProviderProps>(({ ...rest }) => {
+export const PopupSnackbarProvider = memo<SnackbarProviderProps>(function PopupSnackbarProvider(props) {
     const ref = useRef<SnackbarProvider>(null)
     const { classes } = useStyles()
 
@@ -70,7 +70,7 @@ export const PopupSnackbarProvider = memo<SnackbarProviderProps>(({ ...rest }) =
                 variantInfo: classes.info,
                 variantWarning: classes.warning,
             }}
-            {...rest}
+            {...props}
         />
     )
 })
@@ -87,7 +87,9 @@ export const PopupSnackbarContent = forwardRef<HTMLDivElement, PopupSnackbarCont
 
     return (
         <SnackbarContent key={props.id} className={cx(classes.content, classes[props.variant!])} ref={ref}>
-            <Typography className={classes.title}>{props.title}</Typography>
+            <Typography className={classes.title} component="div">
+                {props.title}
+            </Typography>
         </SnackbarContent>
     )
 })

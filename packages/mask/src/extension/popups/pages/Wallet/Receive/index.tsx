@@ -1,13 +1,12 @@
-import { Flags } from '@masknet/flags'
-import { ChainIcon, CopyButton, FormattedAddress, ImageIcon, TokenIcon } from '@masknet/shared'
-import { type NetworkPluginID } from '@masknet/shared-base'
+import { ChainIcon, CopyButton, FormattedAddress, Icon, ImageIcon, TokenIcon } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetwork } from '@masknet/web3-hooks-base'
 import { type ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { Box, Skeleton, Typography } from '@mui/material'
-import { memo, useMemo } from 'react'
+import { Box, Skeleton, Typography, type AvatarProps } from '@mui/material'
+import { memo } from 'react'
 import { QRCode } from 'react-qrcode-logo'
-import { getEvmNetworks, useI18N } from '../../../../../utils/index.js'
+import { useI18N } from '../../../../../utils/index.js'
 import { useTitle, useTokenParams } from '../../../hook/index.js'
 import { useAsset } from '../hooks/useAsset.js'
 
@@ -103,6 +102,9 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
+const avatarProps: AvatarProps = {
+    sx: { fontSize: 26 },
+}
 export default memo(function Receive() {
     const { classes } = useStyles()
     const { t } = useI18N()
@@ -110,41 +112,40 @@ export default memo(function Receive() {
     const { chainId, address, rawChainId, rawAddress } = useTokenParams()
     // No specific token but only for chain
     const isChain = !rawChainId && !rawAddress
-    const networks = useMemo(() => {
-        return getEvmNetworks(Flags.support_testnet_switch).filter((x) =>
-            Flags.support_testnet_switch ? true : x.isMainnet,
-        )
-    }, [])
+    const currentNetwork = useNetwork(NetworkPluginID.PLUGIN_EVM)
 
     const asset = useAsset(chainId, address ?? '', account)
 
     useTitle(t('wallet_receive'))
 
-    // TODO custom networks
-    const currentNetwork = useMemo(() => networks.find((x) => x.chainId === chainId) ?? networks[0], [chainId])
-    const name = isChain ? currentNetwork.name : asset?.symbol
+    const name = isChain ? currentNetwork?.name : asset?.symbol
+    const MainIcon = isChain ? (
+        currentNetwork?.iconUrl ? (
+            <ImageIcon size={60} icon={currentNetwork.iconUrl} name={currentNetwork.name} />
+        ) : (
+            <Icon size={60} name={currentNetwork?.name} color={currentNetwork?.color} AvatarProps={avatarProps} />
+        )
+    ) : (
+        <TokenIcon
+            chainId={chainId as ChainId}
+            address={address}
+            name={asset?.name}
+            logoURL={asset?.logoURL}
+            size={60}
+        />
+    )
 
     return (
         <Box>
             <Box className={classes.header}>
                 <Box className={classes.iconContainer}>
-                    {isChain ? (
-                        <ImageIcon size={60} icon={currentNetwork.icon} name={currentNetwork.name} />
-                    ) : (
-                        <TokenIcon
-                            chainId={chainId as ChainId}
-                            address={address}
-                            name={asset?.name}
-                            logoURL={asset?.logoURL}
-                            size={60}
-                        />
-                    )}
+                    {MainIcon}
                     {isChain ? null : (
                         <div className={classes.badge}>
-                            {currentNetwork.isMainnet ? (
-                                <ImageIcon size={16} icon={currentNetwork.icon} />
+                            {currentNetwork?.network === 'mainnet' ? (
+                                <ImageIcon size={16} icon={currentNetwork.iconUrl} name={currentNetwork.name} />
                             ) : (
-                                <ChainIcon size={16} name={currentNetwork.name} />
+                                <ChainIcon size={16} name={currentNetwork?.name} />
                             )}
                         </div>
                     )}

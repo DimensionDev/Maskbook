@@ -1,12 +1,12 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
-
+import urlcat from 'urlcat'
 import { memo, useMemo } from 'react'
 import { NavLink, type LinkProps } from 'react-router-dom'
 import { BottomNavigation, BottomNavigationAction, Box, type BoxProps } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { PopupRoutes } from '@masknet/shared-base'
-import { useWallet } from '@masknet/web3-hooks-base'
+import { useMessages, useWallet } from '@masknet/web3-hooks-base'
 import { useHasPassword } from '../../hook/useHasPassword.js'
 import { useWalletLockStatus } from '../../pages/Wallet/hooks/useWalletLockStatus.js'
 
@@ -50,19 +50,24 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
     const { classes, cx } = useStyle()
     const wallet = useWallet()
 
-    const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
+    const messages = useMessages()
 
-    const { hasPassword, loading: getHasPasswordLoading } = useHasPassword()
+    const { isLocked, loading: lockStatusLoading } = useWalletLockStatus()
 
-    const walletPageLoading = getLockStatusLoading || getHasPasswordLoading
+    const { hasPassword, loading: hasPasswordLoading } = useHasPassword()
+
+    const walletPageLoading = lockStatusLoading || hasPasswordLoading
 
     const walletLink = useMemo(() => {
         if (walletPageLoading) return '#'
         if (!wallet) return PopupRoutes.Wallet
-        if (isLocked) return PopupRoutes.Unlock
+        if (isLocked)
+            return urlcat(PopupRoutes.Unlock, { from: messages.length ? PopupRoutes.ContractInteraction : undefined })
         if (!hasPassword) return PopupRoutes.SetPaymentPassword
+        if (messages.length) return PopupRoutes.ContractInteraction
         return PopupRoutes.Wallet
-    }, [wallet, walletPageLoading, isLocked, hasPassword])
+    }, [wallet, walletPageLoading, isLocked, hasPassword, messages])
+
     return (
         <Box className={cx(classes.container, className)} {...rest}>
             <BottomNavigation classes={{ root: classes.navigation }}>
@@ -80,7 +85,7 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
                         className={classes.iconOnly}
                     />
                 </BottomNavLink>
-                <BottomNavLink to={PopupRoutes.Contracts}>
+                <BottomNavLink to={PopupRoutes.Friends}>
                     <BottomNavigationAction
                         showLabel={false}
                         icon={<Icons.Contacts size={28} />}

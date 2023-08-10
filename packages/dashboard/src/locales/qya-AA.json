@@ -466,12 +466,13 @@
     "persona_onboarding_wallets_one": "crwdns21677:0{{count}}crwdne21677:0",
     "persona_onboarding_wallets_other": "crwdns21679:0{{count}}crwdne21679:0",
     "wallet_history_no_data": "crwdns19885:0crwdne19885:0",
-    "welcome_agreement_policy": "crwdns19513:0crwdne19513:0",
     "welcome_new_agreement_policy": "crwdns20685:0crwdne20685:0",
     "wallets_history_burn": "crwdns20005:0crwdne20005:0",
     "wallet_connect_tips": "crwdns20371:0crwdne20371:0",
     "identity_words": "crwdns21661:0crwdne21661:0",
     "private_key": "crwdns21663:0crwdne21663:0",
     "local_backup": "crwdns21665:0crwdne21665:0",
-    "incorrect_verification_code": "crwdns21667:0crwdne21667:0"
+    "incorrect_verification_code": "crwdns21667:0crwdne21667:0",
+    "wallet_set_payment_password_successfully": "crwdns22115:0crwdne22115:0",
+    "wallet_open_mask_wallet": "crwdns22117:0crwdne22117:0"
 }

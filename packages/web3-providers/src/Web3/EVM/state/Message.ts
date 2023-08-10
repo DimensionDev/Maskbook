@@ -1,6 +1,15 @@
+import urlcat from 'urlcat'
 import { omitBy } from 'lodash-es'
 import { isUndefined } from '@walletconnect/utils'
-import { NetworkPluginID } from '@masknet/shared-base'
+import {
+    EMPTY_OBJECT,
+    LockStatus,
+    NetworkPluginID,
+    PopupRoutes,
+    PopupsHistory,
+    Sniffings,
+    currentMaskWalletLockStatusSettings,
+} from '@masknet/shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 import { SNSAdaptorContextRef } from '@masknet/plugin-infra/dom'
 import {
@@ -31,28 +40,55 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
             await this.approveRequest(id)
         } else {
             // TODO: make this for Mask Wallet only
-            // open the popups window and wait for approvement from the user.
-            await SNSAdaptorContextRef.value.openPopupWindow()
+            const hasPassword = await SNSAdaptorContextRef.value.hasPaymentPassword()
+            const route = !hasPassword
+                ? PopupRoutes.SetPaymentPassword
+                : currentMaskWalletLockStatusSettings.value === LockStatus.LOCKED
+                ? PopupRoutes.Unlock
+                : PopupRoutes.ContractInteraction
+
+            const fromState =
+                route !== PopupRoutes.ContractInteraction ? { from: PopupRoutes.ContractInteraction } : EMPTY_OBJECT
+
+            if (Sniffings.is_popup_page) {
+                PopupsHistory.push(urlcat(route, fromState))
+            } else {
+                // open the popups window and wait for approvement from the user.
+                await SNSAdaptorContextRef.value.openPopupWindow(route, {
+                    source: location.origin,
+                    ...fromState,
+                })
+            }
         }
 
         return super.waitForApprovingRequest(id)
     }
 
-    override async approveRequest(id: string): Promise<void> {
+    override async approveRequest(id: string, updates?: MessageRequest): Promise<void> {
         const { request } = this.assertMessage(id)
+        const payload = updates?.arguments
+            ? {
+                  ...request.arguments,
+                  ...updates.arguments,
+              }
+            : request.arguments
         const response = request.options?.providerURL
             ? createJsonRpcResponse(
                   0,
-                  await this.Request.request(request.arguments, {
+                  await this.Request.request(payload, {
                       providerURL: request.options.providerURL,
                   }),
               )
             : await SharedContextRef.value.send(
-                  createJsonRpcPayload(0, request.arguments),
+                  createJsonRpcPayload(0, payload),
                   omitBy<TransactionOptions>(request.options, isUndefined),
               )
 
         await this.updateMessage(id, {
+            request: {
+                ...request,
+                ...updates,
+            },
             state: MessageStateType.APPROVED,
             response,
         })

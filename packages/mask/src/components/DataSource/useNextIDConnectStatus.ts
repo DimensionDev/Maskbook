@@ -9,7 +9,7 @@ import {
     currentSetupGuideStatus,
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { activatedSocialNetworkUI } from '../../social-network/index.js'
+import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { usePersonaConnectStatus } from './usePersonaConnectStatus.js'
 import { useLastRecognizedIdentity } from './useActivatedUI.js'
 import Services from '../../extension/service.js'
@@ -20,7 +20,7 @@ let isOpenedFromButton = false
 
 export const verifyPersona = (personaIdentifier?: PersonaIdentifier, username?: string) => async () => {
     if (!personaIdentifier) return
-    currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier].value = stringify({
+    currentSetupGuideStatus[activatedSiteAdaptorUI.networkIdentifier].value = stringify({
         status: SetupGuideStep.VerifyOnNextID,
         persona: personaIdentifier.toText(),
         username,
@@ -36,7 +36,7 @@ export enum NextIDVerificationStatus {
 }
 
 export function useNextIDConnectStatus(disableInitialVerify = false) {
-    const ui = activatedSocialNetworkUI
+    const ui = activatedSiteAdaptorUI
     const lastRecognized = useLastRecognizedIdentity()
     const personaConnectStatus = usePersonaConnectStatus()
     const lastState = useSetupGuideStatus()

@@ -1,13 +1,12 @@
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useFungibleAsset } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { useContainer } from 'unstated-next'
-import { WalletContext } from './index.js'
 import { type ChainId } from '@masknet/web3-shared-evm'
+import { useWalletAssets } from './useWalletAssets.js'
 
 // Use token from list first, to make sure data is consistent
 export function useAsset(chainId: ChainId, address?: string, account?: string) {
-    const { assets } = useContainer(WalletContext)
+    const { data: assets } = useWalletAssets()
     const { data: asset } = useFungibleAsset(NetworkPluginID.PLUGIN_EVM, address, { account, chainId })
     const matchedAsset = assets.find((x) => {
         if (x.chainId !== chainId) return false

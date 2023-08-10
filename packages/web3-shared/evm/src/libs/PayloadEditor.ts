@@ -1,16 +1,21 @@
 import { first, isUndefined, omitBy } from 'lodash-es'
-import { AbiCoder } from 'web3-eth-abi'
 import { type AbiItem, hexToNumber, hexToNumberString, toHex } from 'web3-utils'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Wallet, ECKeyIdentifier, Proof, ProofPayload } from '@masknet/shared-base'
 import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.json'
-import { type EIP3085Descriptor } from './EIP3085Editor.js'
 import { isValidChainId } from '../helpers/isValidChainId.js'
 import { formatEthereumAddress } from '../helpers/formatter.js'
 import { parseChainId } from '../helpers/parseChainId.js'
 import { createJsonRpcPayload } from '../helpers/createJsonRpcPayload.js'
 import { ZERO_ADDRESS, getSmartPayConstant } from '../constants/index.js'
-import { type Transaction, type TransactionOptions, type UserOperation, EthereumMethodType } from '../types/index.js'
+import {
+    type Transaction,
+    type TransactionOptions,
+    type UserOperation,
+    type EIP3085Descriptor,
+    EthereumMethodType,
+} from '../types/index.js'
+import { abiCoder } from '../helpers/abiCoder.js'
 
 type Options = Pick<TransactionOptions, 'account' | 'chainId'>
 
@@ -98,11 +103,12 @@ export class PayloadEditor {
                 const [owner] = params as [string]
 
                 // compose a fake transaction to be accepted by Transaction Watcher
+
                 return {
                     from: owner,
                     to: getSmartPayConstant(chainId, 'CREATE2_FACTORY_CONTRACT_ADDRESS'),
                     chainId,
-                    data: new AbiCoder().encodeFunctionCall(
+                    data: abiCoder.encodeFunctionCall(
                         CREATE2_FACTORY_ABI.find((x) => x.name === 'deploy')! as AbiItem,
                         ['0x', toHex(0)],
                     ),
@@ -121,10 +127,10 @@ export class PayloadEditor {
                     // it's a not-exist address, use the zero address as a placeholder
                     to: ZERO_ADDRESS,
                     chainId,
-                    data: new AbiCoder().encodeFunctionCall(
-                        CREATE2_FACTORY_ABI.find((x) => x.name === 'fund')! as AbiItem,
-                        [ownerAddress, toHex(nonce)],
-                    ),
+                    data: abiCoder.encodeFunctionCall(CREATE2_FACTORY_ABI.find((x) => x.name === 'fund')! as AbiItem, [
+                        ownerAddress,
+                        toHex(nonce),
+                    ]),
                 }
             }
             default:
@@ -138,6 +144,7 @@ export class PayloadEditor {
         return omitBy<Transaction>(
             {
                 ...raw,
+                nonce: parseHexNumber(raw?.nonce),
                 from: raw?.from ?? this.options?.account,
                 chainId: parseChainId(raw?.chainId) ?? this.options?.chainId,
             },

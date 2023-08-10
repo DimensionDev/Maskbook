@@ -8,11 +8,8 @@ import { DecryptPostSuccess } from './DecryptedPostSuccess.js'
 import { DecryptPostAwaiting } from './DecryptPostAwaiting.js'
 import { DecryptPostFailed } from './DecryptPostFailed.js'
 import { encodeArrayBuffer, safeUnreachable } from '@masknet/kit'
-import { activatedSocialNetworkUI } from '../../../social-network/index.js'
-import type {
-    DecryptionContext,
-    SocialNetworkEncodedPayload,
-} from '../../../../background/services/crypto/decryption.js'
+import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
+import type { DecryptionContext, EncodedPayload } from '../../../../background/services/crypto/decryption.js'
 import { DecryptIntermediateProgressKind, DecryptProgressKind } from '@masknet/encryption'
 import { type PostContext, usePostInfoDetails, PostInfoContext } from '@masknet/plugin-infra/content-script'
 import { Some } from 'ts-results-es'
@@ -204,7 +201,7 @@ async function makeProgress(
     postURL: string | undefined,
     authorHint: ProfileIdentifier | null,
     currentProfile: ProfileIdentifier | null,
-    payload: SocialNetworkEncodedPayload,
+    payload: EncodedPayload,
     done: (message: TypedMessage, iv: Uint8Array) => void,
     reporter: PostContext['decryptedReport'],
     reportProgress: ReportProgress,
@@ -214,10 +211,10 @@ async function makeProgress(
         postURL,
         authorHint,
         currentProfile,
-        currentSocialNetwork: activatedSocialNetworkUI.encryptionNetwork,
+        encryptPayloadNetwork: activatedSiteAdaptorUI.encryptPayloadNetwork,
     }
     let iv: Uint8Array | undefined
-    for await (const progress of GeneratorServices.decryption(payload, context)) {
+    for await (const progress of GeneratorServices.decrypt(payload, context)) {
         if (signal.aborted) return
         if (progress.type === DecryptProgressKind.Success) {
             done(progress.content, iv || new Uint8Array())

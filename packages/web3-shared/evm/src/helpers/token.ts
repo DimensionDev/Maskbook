@@ -1,27 +1,13 @@
 import { getEnumAsArray } from '@masknet/kit'
 import { createFungibleToken, createFungibleTokensFromConstants } from '@masknet/web3-shared-base'
 import Token from '@masknet/web3-constants/evm/token.json'
-import { chainResolver } from './resolver.js'
-import { CHAIN_DESCRIPTORS, getTokenConstant, ZERO_ADDRESS } from '../constants/index.js'
+import { CHAIN_DESCRIPTORS } from '../constants/index.js'
 import { ChainId, SchemaType } from '../types/index.js'
 
 export function isNativeTokenSymbol(symbol: string) {
     return CHAIN_DESCRIPTORS.filter((x) => x.network === 'mainnet' && x.nativeCurrency)
         .map((x) => x.nativeCurrency.symbol.toLowerCase())
         .includes(symbol.toLowerCase())
-}
-
-export function createNativeToken(chainId: ChainId) {
-    const nativeCurrency = chainResolver.nativeCurrency(chainId)
-    return createFungibleToken<ChainId, SchemaType.Native>(
-        chainId,
-        SchemaType.Native,
-        getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS', ZERO_ADDRESS)!,
-        nativeCurrency?.name ?? 'Ether',
-        nativeCurrency?.symbol ?? 'ETH',
-        nativeCurrency?.decimals ?? 18,
-        nativeCurrency?.logoURL,
-    )
 }
 
 export function createERC20Token(

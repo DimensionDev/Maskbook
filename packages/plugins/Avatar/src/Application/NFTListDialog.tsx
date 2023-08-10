@@ -9,6 +9,7 @@ import {
     ChainBoundary,
     CollectionList,
     PluginVerifiedWalletStatusBar,
+    PopupHomeTabType,
     UserAssetsProvider,
     useSharedI18N,
 } from '@masknet/shared'
@@ -255,8 +256,9 @@ export function NFTListDialog() {
 
                 <PluginVerifiedWalletStatusBar
                     openPopupWindow={() =>
-                        openPopupWindow(PopupRoutes.ConnectedWallets, {
-                            internal: true,
+                        openPopupWindow(PopupRoutes.Personas, {
+                            tab: PopupHomeTabType.ConnectedWallets,
+                            disableNewWindow: true,
                         })
                     }
                     verifiedWallets={walletItems}

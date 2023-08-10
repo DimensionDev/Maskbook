@@ -5,7 +5,6 @@ import { timeout } from '@masknet/kit'
 import type { FmProvider } from 'fortmatic/dist/cjs/src/core/fm-provider.js'
 import {
     ChainId,
-    chainResolver,
     ProviderURL,
     ProviderType,
     type RequestArguments,
@@ -13,6 +12,7 @@ import {
     type Web3,
 } from '@masknet/web3-shared-evm'
 import { createLookupTableResolver } from '@masknet/shared-base'
+import { ChainResolverAPI } from '../apis/ResolverAPI.js'
 import { BaseProvider } from './Base.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
@@ -123,7 +123,8 @@ export default class FortmaticProvider
         try {
             this.chainId = chainId
             const accounts = await this.login()
-            if (!accounts.length) throw new Error(`Failed to connect to ${chainResolver.chainFullName(this.chainId)}.`)
+            if (!accounts.length)
+                throw new Error(`Failed to connect to ${new ChainResolverAPI().chainFullName(this.chainId)}.`)
 
             const connected = {
                 account: first(accounts)!,

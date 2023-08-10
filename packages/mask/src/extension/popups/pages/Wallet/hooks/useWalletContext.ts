@@ -1,26 +1,23 @@
 import { useEffect, useState } from 'react'
+import { useAsync } from 'react-use'
 import { useLocation } from 'react-router-dom'
+import { type Wallet } from '@masknet/shared-base'
+import { useWallets, useCurrencyType, useFiatCurrencyRate } from '@masknet/web3-hooks-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { createContainer } from 'unstated-next'
-import { useChainContext, useRecentTransactions, useFungibleAssets, useWallets } from '@masknet/web3-hooks-base'
-import { EMPTY_LIST, NetworkPluginID, type Wallet } from '@masknet/shared-base'
-import { type FungibleAsset, isSameAddress, type RecentTransactionComputed } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType, Transaction } from '@masknet/web3-shared-evm'
+import Services from '../../../../service.js'
 
 function useWalletContext() {
     const location = useLocation()
     const wallets = useWallets()
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const {
-        data: assets = EMPTY_LIST,
-        isLoading,
-        refetch,
-    } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, { chainId })
-    const transactions = useRecentTransactions(NetworkPluginID.PLUGIN_EVM)
-    const [currentToken, setCurrentToken] = useState<FungibleAsset<ChainId, SchemaType>>()
-    const [transaction, setTransaction] = useState<RecentTransactionComputed<ChainId, Transaction>>()
-    const [selectedWallet, setSelectedWallet] = useState<Wallet | null>()
 
-    const [assetsIsExpand, setAssetsIsExpand] = useState(false)
+    const { value: personaManagers } = useAsync(async () => {
+        return Services.Identity.queryOwnedPersonaInformation(true)
+    }, [])
+
+    const [selectedWallet, setSelectedWallet] = useState<Wallet | null>()
+    const currencyType = useCurrencyType()
+    const { data: fiatCurrencyRate = 1 } = useFiatCurrencyRate()
 
     useEffect(() => {
         const contractAccount = new URLSearchParams(location.search).get('contractAccount')
@@ -30,22 +27,9 @@ function useWalletContext() {
     }, [location.search, wallets, selectedWallet])
 
     return {
-        currentToken,
-        setCurrentToken,
-        assets,
-        refreshAssets: refetch,
-        transactions,
-        assetsLoading: isLoading,
-        /**
-         * @deprecated
-         * Pass tx id as a router parameter instead
-         */
-        transaction,
-        /**
-         * @deprecated
-         * Pass tx id as a router parameter instead
-         */
-        setTransaction,
+        currencyType,
+        fiatCurrencyRate,
+        personaManagers,
         /**
          * @deprecated
          * Avoid using this, pass wallet as a router parameter instead
@@ -56,8 +40,6 @@ function useWalletContext() {
          * pass wallet as a router parameter instead
          */
         setSelectedWallet,
-        assetsIsExpand,
-        setAssetsIsExpand,
     }
 }
 

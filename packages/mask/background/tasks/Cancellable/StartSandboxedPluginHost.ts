@@ -40,7 +40,7 @@ function __builtInPluginInfraBridgeCallback__(this: BackgroundPluginHost, id: st
 
     const base: Plugin.Shared.Definition = {
         enableRequirement: {
-            networks: { type: 'opt-out', networks: {} },
+            supports: { type: 'opt-out', sites: {} },
             target: 'beta',
         },
         ID: id as PluginID,

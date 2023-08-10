@@ -386,6 +386,5 @@
     "recovery_smart_pay_wallet_description_one": "{{count}} 로컬에서 감지됩니다. 복구 성공.",
     "recovery_smart_pay_wallet_description_other": "{{count}} 로컬에서 감지됩니다. 복구 성공.",
     "welcome_request_to_collect": "제품을 개선하기 위해 이용정보 수입을 허용하시길 바랍니다.",
-    "wallet_history_no_data": "역사 기록이 없습니다.",
-    "welcome_agreement_policy": "<agreement>서비스 약관</agreement>과 <policy></policy>개인정보처리방침<policy>을 동의합니다."
+    "wallet_history_no_data": "역사 기록이 없습니다."
 }

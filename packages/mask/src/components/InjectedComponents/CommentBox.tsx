@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Box, InputBase } from '@mui/material'
-import { activatedSocialNetworkUI } from '../../social-network/index.js'
+import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { useI18N } from '../../utils/index.js'
 import { EnhanceableSite } from '@masknet/shared-base'
 
@@ -37,7 +37,7 @@ export interface CommentBoxProps {
     inputProps?: Partial<PropsOf<typeof InputBase>>
 }
 export function CommentBox(props: CommentBoxProps) {
-    const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
+    const { classes } = useStyles({ snsId: activatedSiteAdaptorUI.networkIdentifier })
     const { t } = useI18N()
     return (
         <Box sx={{ display: 'flex', width: '100%' }}>

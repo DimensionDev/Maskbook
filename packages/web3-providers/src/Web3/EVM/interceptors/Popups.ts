@@ -30,7 +30,7 @@ export class Popups implements Middleware<ConnectionContext> {
     private Bundler = new SmartPayBundlerAPI()
 
     private get customNetwork() {
-        if (!Web3StateRef.value.Network) throw new Error('The web3 state does not load yet.')
+        if (!Web3StateRef.value?.Network) throw new Error('The web3 state does not load yet.')
         const network = Web3StateRef.value.Network.network?.getCurrentValue()
         return network?.isCustomized ? network : undefined
     }
@@ -95,10 +95,7 @@ export class Popups implements Middleware<ConnectionContext> {
             if (isZero(nativeBalance))
                 return { allowMaskAsGas: true, paymentToken: context.paymentToken ?? maskAddress }
 
-            return {
-                allowMaskAsGas: false,
-                paymentToken: undefined,
-            }
+            return DEFAULT_PAYMENT_TOKEN_STATE
         }
     }
 

@@ -5,7 +5,7 @@ import { Services } from '../../../API.js'
 import {
     useOwnedPersonas,
     useSupportedSocialNetworkSites,
-    type SocialNetwork,
+    type SiteAdaptor,
     useCurrentPersonaIdentifier,
 } from '../api.js'
 import { useCreatePersona } from './useCreatePersona.js'
@@ -13,7 +13,7 @@ import { useDeleteBound } from './useOperateBindingProof.js'
 
 function usePersonaContext() {
     const currentPersonaIdentifier = useCurrentPersonaIdentifier()
-    const definedSocialNetworks: SocialNetwork[] = useSupportedSocialNetworkSites()
+    const definedSocialNetworkAdaptors: SiteAdaptor[] = useSupportedSocialNetworkSites()
     const personas = useOwnedPersonas()
     const currentPersona = personas.find((x) => x.identifier === currentPersonaIdentifier)
     const [open, setOpen] = useState(false)
@@ -34,7 +34,7 @@ function usePersonaContext() {
         changeCurrentPersona,
         deleteBound,
         currentPersona,
-        definedSocialNetworks,
+        definedSocialNetworkAdaptors,
         personas,
         openProfilePage,
         drawerOpen: open,

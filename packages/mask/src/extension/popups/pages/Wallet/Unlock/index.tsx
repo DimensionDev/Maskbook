@@ -1,6 +1,6 @@
 import { memo, useCallback, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
 import { Box, Typography, useTheme } from '@mui/material'
 import { PopupRoutes } from '@masknet/shared-base'
@@ -53,16 +53,19 @@ const Unlock = memo(() => {
     const [password, setPassword] = useState('')
     const theme = useTheme()
     const navigate = useNavigate()
+    const [params] = useSearchParams()
 
     const [{ value: verified, loading }, handleUnlock] = useAsyncFn(async () => {
+        const from = params.get('from')
+
         const verified = await WalletRPC.unlockWallet(password)
 
-        if (verified) navigate({ pathname: PopupRoutes.Wallet }, { replace: true })
+        if (verified) navigate({ pathname: from || PopupRoutes.Wallet }, { replace: true })
         return verified
-    }, [password])
+    }, [password, params])
 
     const navigateToResetWallet = useCallback(() => {
-        navigate({ pathname: PopupRoutes.ResetWallet }, { replace: true })
+        navigate({ pathname: PopupRoutes.ResetWallet })
     }, [])
 
     return (

@@ -1,9 +1,9 @@
+import { first } from 'lodash-es'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
-import { first } from 'lodash-es'
-import { fetchJSON } from '../entry-helpers.js'
-import type { FollowModuleTypedData, LensBaseAPI } from '../entry-types.js'
 import { LENS_ROOT_API } from './constants.js'
+import { fetchJSON } from '../helpers/fetchJSON.js'
+import type { FollowModuleTypedData, LensBaseAPI } from '../entry-types.js'
 
 export class LensAPI implements LensBaseAPI.Provider {
     async getProfileByHandle(handle: string): Promise<LensBaseAPI.Profile> {

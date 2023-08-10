@@ -1,9 +1,13 @@
 import type { FungibleAsset } from '@masknet/web3-shared-base'
-import { type ChainId, createNativeToken, NETWORK_DESCRIPTORS, type SchemaType } from '@masknet/web3-shared-evm'
+import { type ChainId, CHAIN_DESCRIPTORS, type SchemaType } from '@masknet/web3-shared-evm'
+import { Web3StateRef } from '../Web3/EVM/apis/Web3StateAPI.js'
 
 export function getNativeAssets(): Array<FungibleAsset<ChainId, SchemaType>> {
-    return NETWORK_DESCRIPTORS.filter((x) => x.isMainnet).map((x) => ({
-        ...createNativeToken(x.chainId),
+    const networks = Web3StateRef.value.Network?.networks?.getCurrentValue()
+    if (networks) return networks.map((x) => ({ ...x.nativeCurrency, balance: '0' }))
+
+    return CHAIN_DESCRIPTORS.filter((x) => x.network === 'mainnet').map((x) => ({
+        ...x.nativeCurrency,
         balance: '0',
     }))
 }

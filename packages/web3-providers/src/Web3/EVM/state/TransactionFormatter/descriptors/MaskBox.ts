@@ -44,6 +44,9 @@ export class MaskBoxDescriptor extends DescriptorWithTransactionDecodedReceipt i
                     }),
                     failedDescription: i18NextInstance.t('plugin_infra_descriptor_mask_box_purchase_fail'),
                 },
+                popup: {
+                    method: method.name,
+                },
             }
         }
         return

@@ -1,4 +1,4 @@
-import { createExplorerResolver, createFungibleToken, createNonFungibleToken } from '@masknet/web3-shared-base'
+import { createFungibleToken, createNonFungibleToken } from '@masknet/web3-shared-base'
 import {
     isValidDomain,
     isValidAddress,
@@ -14,9 +14,6 @@ import {
     type NetworkType,
     type Transaction,
     type SchemaType,
-    CHAIN_DESCRIPTORS,
-    NETWORK_DESCRIPTORS,
-    PROVIDER_DESCRIPTORS,
     getDefaultChainId,
     getInvalidChainId,
     getDefaultNetworkType,
@@ -26,31 +23,22 @@ import {
     getNativeTokenAddress,
     formatSchemaType,
     formatTokenId,
-    createNativeToken,
     isValidChainId,
     getNetworkPluginID,
 } from '@masknet/web3-shared-flow'
 import { OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
+import {
+    FlowChainResolverAPI,
+    FlowExplorerResolverAPI,
+    FlowProviderResolverAPI,
+    FlowNetworkResolverAPI,
+} from './ResolverAPI.js'
 
 export class FlowOthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
-    constructor() {
-        super({
-            chainDescriptors: CHAIN_DESCRIPTORS,
-            networkDescriptors: NETWORK_DESCRIPTORS,
-            providerDescriptors: PROVIDER_DESCRIPTORS,
-        })
-    }
-
-    override explorerResolver = createExplorerResolver(this.options.chainDescriptors, {
-        addressPathname: '/account/:address',
-        transactionPathname: '/transaction/:id',
-        fungibleTokenPathname: '/contract/:address',
-        nonFungibleTokenPathname: '/contract/:address',
-    })
-
-    resolveFungibleTokenLink(chainId: ChainId, address: string): string {
-        throw new Error('Method not implemented.')
-    }
+    override chainResolver = new FlowChainResolverAPI()
+    override explorerResolver = new FlowExplorerResolverAPI()
+    override providerResolver = new FlowProviderResolverAPI()
+    override networkResolver = new FlowNetworkResolverAPI()
 
     override isValidDomain = isValidDomain
     override isValidChainId = isValidChainId
@@ -74,7 +62,7 @@ export class FlowOthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderT
     override formatDomainName = formatDomainName
     override formatTokenId = formatTokenId
     override formatSchemaType = formatSchemaType
-    override createNativeToken = createNativeToken
+    override createNativeToken = (chainId: ChainId) => this.chainResolver.nativeCurrency(chainId)
     override createFungibleToken = createFungibleToken
     override createNonFungibleToken = createNonFungibleToken
 }

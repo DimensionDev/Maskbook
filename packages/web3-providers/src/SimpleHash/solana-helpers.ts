@@ -2,8 +2,9 @@ import { SourceType, TokenType, type NonFungibleAsset, type NonFungibleCollectio
 import { isValidDomain, ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-solana'
 import { isEmpty } from 'lodash-es'
 import { createPermalink as SolanaCreatePermalink } from '../NFTScan/helpers/Solana.js'
-import { getAssetFullName } from '../entry-helpers.js'
+import { getAssetFullName } from '../helpers/getAssetFullName.js'
 import type { Asset, Collection } from './type.js'
+import { SPAM_SCORE } from './constants.js'
 
 export function createSolanaNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, SchemaType> | undefined {
     if (isEmpty(asset)) return
@@ -11,7 +12,7 @@ export function createSolanaNonFungibleAsset(asset: Asset): NonFungibleAsset<Cha
     const address = asset.contract_address
     const schema = SchemaType.NonFungible
 
-    if (!chainId || !isValidChainId(chainId) || !address || asset.collection.spam_score === 100) return
+    if (!chainId || !isValidChainId(chainId) || !address || asset.collection.spam_score === SPAM_SCORE) return
     // On Solana the contract is synonymous with the mint address - the field name on collection is recommended instead
     const name = isValidDomain(asset.name)
         ? asset.name

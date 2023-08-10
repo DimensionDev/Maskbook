@@ -1,24 +1,24 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
+import { Trans } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { first } from 'lodash-es'
 import { useContainer } from 'unstated-next'
+import { Icons } from '@masknet/icons'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { PersonaContext } from '@masknet/shared'
 import { Box, Button, Link, Typography, useTheme } from '@mui/material'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { PopupRoutes, type PersonaInformation, NetworkPluginID, type Wallet } from '@masknet/shared-base'
 import { useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
-import { Providers, Web3 } from '@masknet/web3-providers'
-import { type ChainId, ProviderType, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { ExplorerResolver, Providers, Web3 } from '@masknet/web3-providers'
+import { type ChainId, ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../utils/index.js'
 import Services from '../../../../service.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
-import { Icons } from '@masknet/icons'
-import { Trans } from 'react-i18next'
 import { useHasPassword } from '../../../hook/useHasPassword.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
@@ -31,6 +31,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1.5),
         display: 'flex',
         columnGap: theme.spacing(1),
+        marginBottom: theme.spacing(1.5),
     },
     wallets: {
         display: 'grid',
@@ -41,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '20px',
         color: theme.palette.maskColor.danger,
-        marginTop: theme.spacing(2),
+        margin: theme.spacing(2, 0),
         wordWrap: 'break-word',
     },
 }))
@@ -54,7 +55,7 @@ const Logout = memo(() => {
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const { Provider } = useWeb3State()
     const { smartPayChainId } = useContainer(PopupContext)
-    const { hasPassword, loading: getHasPasswordLoading } = useHasPassword()
+    const { hasPassword, loading: hasPasswordLoading } = useHasPassword()
 
     const { user } = useContainer(UserContext)
     const { showSnackbar } = usePopupCustomSnackbar()
@@ -102,7 +103,7 @@ const Logout = memo(() => {
             currentPersona={currentPersona}
             backupPassword={user.backupPassword ?? ''}
             verifyPaymentPassword={WalletRPC.verifyPassword}
-            loading={loading || getHasPasswordLoading}
+            loading={loading || hasPasswordLoading}
             hasPassword={hasPassword}
             onLogout={onLogout}
             onCancel={() => navigate(-1)}
@@ -148,7 +149,7 @@ export const LogoutUI = memo<LogoutUIProps>(
             if (manageWallets.length && paymentPassword) {
                 const verified = await verifyPaymentPassword(paymentPassword)
                 if (!verified) {
-                    setPaymentPasswordError(t('popups_wallet_unlock_error_password'))
+                    setPaymentPasswordError(t('popups_wallet_persona_log_out_error_payment_password'))
                     return
                 }
             }
@@ -157,9 +158,9 @@ export const LogoutUI = memo<LogoutUIProps>(
         }, [onLogout, backupPassword, password, paymentPassword, manageWallets.length])
 
         const disabled = useMemo(() => {
-            if (loading || error || paymentPasswordError) return
-            if (manageWallets.length && hasPassword) return !!paymentPassword.length
-            if (backupPassword) return !!password.length
+            if (loading || error || paymentPasswordError) return true
+            if (backupPassword) return !password.length
+            if (manageWallets.length && hasPassword) return !paymentPassword.length
             return false
         }, [
             loading,
@@ -204,7 +205,7 @@ export const LogoutUI = memo<LogoutUIProps>(
                                                         height: 16,
                                                         color: theme.palette.maskColor.main,
                                                     }}
-                                                    href={explorerResolver.addressLink(chainId, x.address)}
+                                                    href={ExplorerResolver.addressLink(chainId, x.address)}
                                                     target="_blank"
                                                     rel="noopener noreferrer">
                                                     <Icons.LinkOut size={16} />

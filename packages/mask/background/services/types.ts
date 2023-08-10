@@ -1,5 +1,5 @@
 import type * as Crypto from './crypto/index.js'
-import type { decryptionWithSocialNetworkDecoding } from './crypto/decryption.js'
+import type { decryptWithDecoding } from './crypto/decryption.js'
 import type * as Helper from './helper/index.js'
 import type * as Backup from './backup/index.js'
 import type * as Identity from './identity/index.js'
@@ -20,11 +20,9 @@ export interface Services {
     Backup: BackupService
     Helper: HelperService
     Settings: SettingsService
-    /** @deprecated Renamed to SiteAdaptor */
-    SocialNetwork: SiteAdaptorService
     SiteAdaptor: SiteAdaptorService
     ThirdPartyPlugin: ThirdPartyPluginService
 }
 export type GeneratorServices = {
-    decryption: typeof decryptionWithSocialNetworkDecoding
+    decrypt: typeof decryptWithDecoding
 }

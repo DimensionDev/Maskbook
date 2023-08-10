@@ -112,11 +112,11 @@ const SelectWallet = memo(function SelectWallet() {
         if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
     }, [selected, wallets])
 
-    useTitle(t('popups_switch_Wallet'))
+    useTitle(t('popups_select_wallet'))
 
     return chainIdValid ? (
         <Box>
-            <Box pt="10px" pb={2} px={2} display="flex" flexDirection="column" columnGap={6}>
+            <Box pt={1} pb={9} px={2} display="flex" flexDirection="column" rowGap="6px">
                 {wallets
                     .filter((x) => {
                         if (chainId === smartPayChainId && !isVerifyWalletFlow && !isSettingNFTAvatarFlow) return true

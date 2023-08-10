@@ -4,7 +4,7 @@ import { delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
 import {
     EMPTY_LIST,
-    InMemoryStorages,
+    PersistentStorages,
     NetworkPluginID,
     type StorageObject,
     type UpdatableWallet,
@@ -48,10 +48,10 @@ export class BaseHostedProvider
         super(providerType)
     }
 
-    override async setup(context?: Plugin.SNSAdaptor.SNSAdaptorContext) {
+    override async setup(context?: Plugin.SiteAdaptor.SiteAdaptorContext) {
         await super.setup(context)
 
-        this.walletStorage = InMemoryStorages.Web3.createSubScope(
+        this.walletStorage = PersistentStorages.Web3.createSubScope(
             `${NetworkPluginID.PLUGIN_EVM}_${this.providerType}_hosted`,
             {
                 account: this.options.getDefaultAccount(),
@@ -146,6 +146,12 @@ export class BaseHostedProvider
     }
 
     override async renameWallet(address: string, name: string) {
+        const isNameExists = this.walletStorage?.wallets.value
+            .filter((x) => !isSameAddress(x.address, address))
+            .some((x) => x.name === name)
+
+        if (isNameExists) throw new Error('The wallet name already exists.')
+
         await this.updateWallet(address, {
             name,
         })

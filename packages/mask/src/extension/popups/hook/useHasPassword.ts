@@ -7,7 +7,7 @@ export function useHasPassword() {
     const { value: hasPassword, loading, retry } = useAsyncRetry(WalletRPC.hasPassword, [])
 
     useEffect(() => {
-        CrossIsolationMessages.events.walletLockStatusUpdated.on(retry)
+        CrossIsolationMessages.events.passwordStatusUpdated.on(retry)
     }, [retry])
 
     return { hasPassword, loading }

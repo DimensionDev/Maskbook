@@ -52,7 +52,7 @@
     "react": "0.0.0-experimental-0a360642d-20230711",
     "react-dom": "0.0.0-experimental-0a360642d-20230711",
     "react-i18next": "^13.0.2",
-    "ses": "0.18.5",
+    "ses": "0.18.7",
     "ts-results-es": "^3.6.0"
   },
   "devDependencies": {

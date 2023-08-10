@@ -6,6 +6,20 @@ import type { Web3UI as Web3UIShared, Web3State as Web3StateShared } from '@mask
 
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
 
+// Learn more at: https://eips.ethereum.org/EIPS/eip-3085
+export interface EIP3085Descriptor {
+    chainId: string
+    blockExplorerUrls?: string[]
+    chainName?: string
+    iconUrls?: string[]
+    nativeCurrency?: {
+        name: string
+        symbol: string
+        decimals: number
+    }
+    rpcUrls?: string[]
+}
+
 // Learn more about ethereum ChainId https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
 export enum ChainId {
     // Mainnet
@@ -26,6 +40,7 @@ export enum ChainId {
     // Arbitrum
     Arbitrum = 42161,
     Arbitrum_Rinkeby = 421611,
+    Arbitrum_Nova = 42170,
 
     // xDai
     xDai = 100,
@@ -69,6 +84,19 @@ export enum ChainId {
     Crossbell = 3737,
 
     Moonbeam = 1284,
+
+    Pulse = 369,
+
+    Klaytn = 8217,
+
+    Harmony = 1666600000,
+
+    Moonriver = 1285,
+
+    Cronos = 25,
+
+    /** BitTorrent Chain Mainnet */
+    BitTorrent = 199,
 
     // For any chains not supported yet.
     Invalid = 0,
@@ -212,6 +240,7 @@ export enum ProviderType {
     Fortmatic = 'Fortmatic',
     Coin98 = 'Coin98',
     Coinbase = 'Coinbase',
+    OKX = 'OKX',
     Opera = 'Opera',
     Clover = 'Clover',
     CustomNetwork = 'CustomNetwork',

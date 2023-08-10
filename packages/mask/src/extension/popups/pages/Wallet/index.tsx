@@ -1,14 +1,9 @@
-import { CrossIsolationMessages, NetworkPluginID, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
-import { useChainContext, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
-import { TransactionDescriptorType } from '@masknet/web3-shared-base'
-import { EthereumMethodType, PayloadEditor } from '@masknet/web3-shared-evm'
-import { Suspense, lazy, useEffect } from 'react'
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
-import { useAsyncRetry } from 'react-use'
+import { Suspense, lazy } from 'react'
+import { Route, Routes } from 'react-router-dom'
+import { PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
+import { useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { RestorableScrollContext } from '@masknet/shared'
-import { WalletRPC } from '../../../../plugins/WalletService/messages.js'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
-import { PopupContext } from '../../hook/usePopupContext.js'
 import { EditNetwork } from './EditNetwork/index.js'
 import { NetworkManagement } from './NetworkManagement/index.js'
 import SelectWallet from './SelectWallet/index.js'
@@ -19,6 +14,7 @@ import { WalletHeader } from './components/WalletHeader/index.js'
 import TokenDetail from './TokenDetail/index.js'
 import { TransactionDetail } from './TransactionDetail/index.js'
 import { CollectibleDetail } from './CollectibleDetail/index.js'
+import { WalletContext } from './hooks/index.js'
 
 const ImportWallet = lazy(() => import('./ImportWallet/index.js'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet/index.js'))
@@ -28,90 +24,35 @@ const DeleteWallet = lazy(() => import('./DeleteWallet/index.js'))
 const CreateWallet = lazy(() => import('./CreateWallet/index.js'))
 const BackupWallet = lazy(() => import('./BackupWallet/index.js'))
 const AddToken = lazy(() => import('./AddToken/index.js'))
-const SignRequest = lazy(() => import('./SignRequest/index.js'))
 const GasSetting = lazy(() => import('./GasSetting/index.js'))
 const Transfer = lazy(() => import('./Transfer/index.js'))
 const ContactList = lazy(() => import('./ContactList/index.js'))
-const ContractInteraction = lazy(() => import('./ContractInteraction/index.js'))
+const ContractInteraction = lazy(() => import('./Interaction/index.js'))
 const Unlock = lazy(() => import('./Unlock/index.js'))
 const ResetWallet = lazy(() => import('./ResetWallet/index.js'))
 const SetPaymentPassword = lazy(() => import('./SetPaymentPassword/index.js'))
-const LegacyWalletRecovery = lazy(() => import('./LegacyWalletRecovery/index.js'))
-const ReplaceTransaction = lazy(() => import('./ReplaceTransaction/index.js'))
 const ChangeOwner = lazy(() => import('./ChangeOwner/index.js'))
 const Receive = lazy(() => import('./Receive/index.js'))
+const ExportPrivateKey = lazy(() => import('./ExportPrivateKey/index.js'))
 
 const r = relativeRouteOf(PopupRoutes.Wallet)
 
 export default function Wallet() {
     const wallet = useWallet()
-    const location = useLocation()
-    const navigate = useNavigate()
-
-    const { smartPayChainId } = PopupContext.useContainer()
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
-        chainId: wallet?.owner && smartPayChainId ? smartPayChainId : undefined,
-    })
-
-    const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-
-    const skip = [
-        PopupRoutes.ContractInteraction,
-        PopupRoutes.WalletSignRequest,
-        PopupRoutes.GasSetting,
-        PopupRoutes.Unlock,
-    ].some((item) => item === location.pathname)
-    const { loading, retry } = useAsyncRetry(async () => {
-        if (skip) return
-
-        const payload = await WalletRPC.topUnconfirmedRequest()
-        if (!payload) return
-
-        if (payload) {
-            switch (payload.method) {
-                case EthereumMethodType.ETH_SIGN:
-                case EthereumMethodType.ETH_SIGN_TYPED_DATA:
-                case EthereumMethodType.PERSONAL_SIGN:
-                    navigate(PopupRoutes.WalletSignRequest, { replace: true })
-                    break
-                case EthereumMethodType.MASK_DEPLOY:
-                    navigate(PopupRoutes.ContractInteraction, { replace: true })
-                    break
-                default:
-                    break
-            }
-        }
-
-        const computedPayload = PayloadEditor.fromPayload(payload)
-        if (!computedPayload.config) return
-
-        const formatterTransaction = await TransactionFormatter?.formatTransaction(chainId, computedPayload.config)
-        if (
-            formatterTransaction &&
-            [TransactionDescriptorType.INTERACTION, TransactionDescriptorType.TRANSFER].includes(
-                formatterTransaction.type,
-            )
-        ) {
-            navigate(PopupRoutes.ContractInteraction, { replace: true })
-        }
-    }, [skip, chainId, TransactionFormatter])
-
-    useEffect(() => {
-        return CrossIsolationMessages.events.requestsUpdated.on(({ hasRequest }) => {
-            if (hasRequest) retry()
-        })
-    }, [])
+    const wallets = useWallets()
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
             <WalletHeader />
             <RestorableScrollContext.Provider>
-                {loading && !skip ? (
-                    <LoadingPlaceholder />
-                ) : (
+                <WalletContext.Provider>
                     <Routes>
-                        <Route path="*" element={wallet ? <WalletAssets /> : <WalletStartUp />} />
-                        <Route path={r(PopupRoutes.LegacyWalletRecovered)} element={<LegacyWalletRecovery />} />
+                        <Route
+                            path="*"
+                            element={
+                                wallet && wallets.filter((x) => !x.owner).length ? <WalletAssets /> : <WalletStartUp />
+                            }
+                        />
                         <Route path={r(PopupRoutes.ImportWallet)} element={<ImportWallet />} />
                         <Route path={r(PopupRoutes.AddDeriveWallet)} element={<AddDeriveWallet />} />
                         <Route path={r(PopupRoutes.WalletSettings)} element={<WalletSettings />} />
@@ -124,7 +65,6 @@ export default function Wallet() {
                             path={r(`${PopupRoutes.AddToken}/:chainId/:assetType` as PopupRoutes)}
                             element={<AddToken />}
                         />
-                        <Route path={r(PopupRoutes.WalletSignRequest)} element={<SignRequest />} />
                         <Route path={r(PopupRoutes.GasSetting)} element={<GasSetting />} />
                         <Route path={r(PopupRoutes.TokenDetail)} element={<TokenDetail />} />
                         <Route path={r(PopupRoutes.TransactionDetail)} element={<TransactionDetail />} />
@@ -135,14 +75,14 @@ export default function Wallet() {
                         <Route path={r(PopupRoutes.Unlock)} element={<Unlock />} />
                         <Route path={r(PopupRoutes.ResetWallet)} element={<ResetWallet />} />
                         <Route path={r(PopupRoutes.SetPaymentPassword)} element={<SetPaymentPassword />} />
-                        <Route path={r(PopupRoutes.ReplaceTransaction)} element={<ReplaceTransaction />} />
                         <Route path={r(PopupRoutes.ChangeOwner)} element={<ChangeOwner />} />
                         <Route path={r(PopupRoutes.NetworkManagement)} element={<NetworkManagement />} />
                         <Route path={r(PopupRoutes.AddNetwork)} element={<EditNetwork />} />
                         <Route path={r(`${PopupRoutes.EditNetwork}/:id?` as PopupRoutes)} element={<EditNetwork />} />
                         <Route path={r(PopupRoutes.Receive)} element={<Receive />} />
+                        <Route path={r(PopupRoutes.ExportWalletPrivateKey)} element={<ExportPrivateKey />} />
                     </Routes>
-                )}
+                </WalletContext.Provider>
             </RestorableScrollContext.Provider>
         </Suspense>
     )

@@ -33,7 +33,7 @@ export class BaseInjectedProvider
         return Promise.reject(new Error('Not available on extension site.'))
     }
 
-    override async setup(context?: Plugin.SNSAdaptor.SNSAdaptorContext | undefined) {
+    override async setup(context?: Plugin.SiteAdaptor.SiteAdaptorContext | undefined) {
         this.bridge.on('accountsChanged', this.onAccountsChanged.bind(this))
         this.bridge.on('chainChanged', this.onChainChanged.bind(this))
         this.bridge.on('disconnect', this.onDisconnect.bind(this))
@@ -83,7 +83,11 @@ export class BaseInjectedProvider
     }
 
     override async disconnect() {
-        await this.readyPromise
-        await this.bridge.disconnect()
+        try {
+            await this.readyPromise
+            await this.bridge.disconnect()
+        } catch {
+            return
+        }
     }
 }

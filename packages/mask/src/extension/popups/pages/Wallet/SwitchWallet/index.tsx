@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { ECKeyIdentifier, MAX_WALLET_LIMIT, NetworkPluginID, PopupRoutes, type Wallet } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { useChainContext, useWallet, useWallets } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworks, useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
@@ -73,6 +73,8 @@ const SwitchWallet = memo(function SwitchWallet() {
         })
     }, [])
 
+    const { Network } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
     const handleSelect = useCallback(
         async (wallet: Wallet) => {
             const address = wallet.address
@@ -85,13 +87,19 @@ const SwitchWallet = memo(function SwitchWallet() {
             })
             closeModal()
             if (wallet.owner && smartPayChainId) {
+                const network = networks.find((x) => x.chainId === smartPayChainId)
+                if (network) await Network?.switchNetwork(network.ID)
                 await Web3.switchChain?.(smartPayChainId, {
                     providerType: ProviderType.MaskWallet,
                 })
             }
         },
-        [smartPayChainId, chainId, closeModal],
+        [smartPayChainId, chainId, closeModal, Network, networks],
     )
+
+    const handleClickSettings = useCallback(async () => {
+        navigate(PopupRoutes.WalletSettings)
+    }, [])
 
     const handleLock = useCallback(async () => {
         await WalletRPC.lockWallet()
@@ -134,7 +142,12 @@ const SwitchWallet = memo(function SwitchWallet() {
                     {t('popups_lock_wallet')}
                 </Typography>
             </ActionButton>
-            <ActionButton className={classes.actionButton} fullWidth size="small" variant="outlined">
+            <ActionButton
+                className={classes.actionButton}
+                fullWidth
+                size="small"
+                variant="outlined"
+                onClick={handleClickSettings}>
                 <Icons.WalletSetting size={20} color={theme.palette.maskColor.second} />
                 <Typography className={classes.actionLabel} component="span">
                     {t('popups_wallet_settings')}

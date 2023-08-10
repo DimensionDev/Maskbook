@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
-import * as ABICoder from 'web3-eth-abi'
 import { useAsyncRetry } from 'react-use'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import addDays from 'date-fns/addDays'
@@ -9,7 +8,13 @@ import { BigNumber } from 'bignumber.js'
 import { createContainer } from 'unstated-next'
 import { unreachable } from '@masknet/kit'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
-import { useMaskBoxConstants, isZeroAddress, SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import {
+    useMaskBoxConstants,
+    isZeroAddress,
+    SchemaType,
+    isNativeTokenAddress,
+    abiCoder,
+} from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types.js'
 import { type BoxInfo, BoxState } from '../type.js'
 import { useMaskBoxInfo } from './useMaskBoxInfo.js'
@@ -45,7 +50,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
-    const coder = ABICoder as unknown as ABICoder.AbiCoder
+
     const [boxId, setBoxId] = useState(initialState?.boxId ?? '')
     const rootHash = initialState?.hashRoot || ''
     const [paymentTokenAddress, setPaymentTokenAddress] = useState('')
@@ -128,12 +133,12 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     // #region qualification
     const { value, error: errorProof, loading: loadingProof } = useMerkelProof(rootHash)
     const proofBytes = value?.proof
-        ? coder.encodeParameters(['bytes32[]'], [value?.proof?.map((p) => `0x${p}`) ?? []])
+        ? abiCoder.encodeParameters(['bytes32[]'], [value?.proof?.map((p) => `0x${p}`) ?? []])
         : undefined
     const qualification = useQualification(
         boxInfo?.qualificationAddress,
         account,
-        value?.proof ? coder.encodeParameters(['bytes', 'bytes32'], [proofBytes, rootHash]) : undefined,
+        value?.proof ? abiCoder.encodeParameters(['bytes', 'bytes32'], [proofBytes, rootHash]) : undefined,
     )
 
     // not in whitelist

@@ -9,7 +9,7 @@ import {
 } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import Services from '../../extension/service.js'
-import { activatedSocialNetworkUI } from '../../social-network/index.js'
+import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { useLastRecognizedIdentity } from './useActivatedUI.js'
 import { usePersonasFromDB } from './usePersonasFromDB.js'
 
@@ -19,7 +19,7 @@ const createPersona = () => {
 
 const connectPersona = async () => {
     const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
-    currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier].value = stringify({
+    currentSetupGuideStatus[activatedSiteAdaptorUI.networkIdentifier].value = stringify({
         status: SetupGuideStep.FindUsername,
         persona: currentPersonaIdentifier?.toText(),
     })
@@ -42,7 +42,7 @@ export function usePersonaConnectStatus() {
             connected: !!currentPersona,
             hasPersona: !!personas.length,
         }
-    }, [personas, lastRecognized.identifier?.toText(), activatedSocialNetworkUI])
+    }, [personas, lastRecognized.identifier?.toText(), activatedSiteAdaptorUI])
 }
 
 /**

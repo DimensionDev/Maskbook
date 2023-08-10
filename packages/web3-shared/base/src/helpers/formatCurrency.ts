@@ -1,8 +1,14 @@
 import { BigNumber } from 'bignumber.js'
 import { scale10 } from './number.js'
+import { CurrencyType } from '../index.js'
 
 export interface FormatterCurrencyOptions {
     onlyRemainTwoDecimal?: boolean
+    fiatCurrencyRate?: number
+    customDecimalConfig?: {
+        boundary: BigNumber
+        decimalExp: number
+    }
 }
 
 const BOUNDARIES = {
@@ -45,11 +51,11 @@ const formatCurrencySymbol = (symbol: string, isLead: boolean) => {
 // https://mask.atlassian.net/wiki/spaces/MASK/pages/122916438/Token
 export function formatCurrency(
     inputValue: BigNumber.Value,
-    currency: LiteralUnion<Keys | 'USD'> = 'USD',
+    currency: LiteralUnion<Keys | 'USD'> = CurrencyType.USD,
     options?: FormatterCurrencyOptions,
 ): string {
-    const bn = new BigNumber(inputValue)
-    const { onlyRemainTwoDecimal = false } = options ?? {}
+    const { onlyRemainTwoDecimal = false, fiatCurrencyRate = 1, customDecimalConfig } = options ?? {}
+    const bn = new BigNumber(inputValue).multipliedBy(fiatCurrencyRate)
     const integerValue = bn.integerValue(1)
     const decimalValue = bn.plus(integerValue.negated())
     const isMoreThanOrEqualToOne = bn.isGreaterThanOrEqualTo(1)
@@ -93,16 +99,30 @@ export function formatCurrency(
         isDigitalCurrency,
     )
 
-    if (bn.lt(onlyRemainTwoDecimal ? twoDecimalBoundary : sixDecimalBoundary) || bn.isZero()) {
+    if (
+        bn.lt(customDecimalConfig?.boundary ?? onlyRemainTwoDecimal ? twoDecimalBoundary : sixDecimalBoundary) ||
+        bn.isZero()
+    ) {
         const isLessThanTwoDecimalBoundary = bn.lt(twoDecimalBoundary)
         const isLessThanTwelveDecimalBoundary = bn.lt(twelveDecimalBoundary)
+        const isLessThanCustomDecimalBoundary = customDecimalConfig?.boundary
+            ? bn.lt(customDecimalConfig?.boundary)
+            : false
         const isGreatThanEightDecimalBoundary = bn.gte(eightDecimalBoundary)
+
         const value = digitalCurrencyModifierValues
             .map(({ type, value }, i) => {
                 switch (type) {
                     case 'currency':
                         return formatCurrencySymbol(symbol ?? value, i === 0)
                     case 'fraction':
+                        if (customDecimalConfig) {
+                            return bn.isZero()
+                                ? '0.00'
+                                : isLessThanCustomDecimalBoundary
+                                ? customDecimalConfig.boundary.toFixed()
+                                : bn.toFixed(customDecimalConfig.decimalExp).replace(/0+$/, '')
+                        }
                         return bn.isZero()
                             ? '0.00'
                             : onlyRemainTwoDecimal
@@ -147,7 +167,9 @@ export function formatCurrency(
                     return formatCurrencySymbol(symbol ?? value, i === 0)
                 case 'fraction':
                     const dec = decimalValue
-                        .toFormat(onlyRemainTwoDecimal ? twoDecimalExp : sixDecimalExp)
+                        .toFormat(
+                            customDecimalConfig?.decimalExp ?? (onlyRemainTwoDecimal ? twoDecimalExp : sixDecimalExp),
+                        )
                         .replace(/\d\./, '')
                     return onlyRemainTwoDecimal ? dec.replace(/(\d\d)(0+)$/, '$1') : dec.replace(/(0+)$/, '')
                 case 'integer':

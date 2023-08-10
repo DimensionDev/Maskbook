@@ -38,7 +38,7 @@ if (''.toLowerCase() === 'hint') {
     prefetch()
 }
 await import(/* webpackMode: 'eager' */ '../../setup.ui.js')
-await import(/* webpackMode: 'eager' */ '../../social-network-adaptor/browser-action/index.js')
+await import(/* webpackMode: 'eager' */ '../../site-adaptors/browser-action/index.js')
 await import(/* webpackMode: 'eager' */ './normal-client.js')
 
 // this function is never called, but it will hint webpack to preload modules we need

@@ -7,17 +7,18 @@ import {
     type NonFungibleCollection,
     ActivityType,
 } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, WNATIVE, chainResolver, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, WNATIVE, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
 import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
 import { queryClient } from '@masknet/shared-base-ui'
-import { NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
+import { Days, NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { createPermalink } from '../NFTScan/helpers/EVM.js'
-import { fetchSquashedJSON, getAssetFullName } from '../entry-helpers.js'
-import { ETH_BLUR_TOKEN_ADDRESS, SIMPLE_HASH_URL } from './constants.js'
+import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
+import { ETH_BLUR_TOKEN_ADDRESS, SIMPLE_HASH_URL, SPAM_SCORE } from './constants.js'
 import { ActivityType as ActivityTypeSimpleHash, type Asset, type Collection } from './type.js'
-import { TrendingAPI } from '../entry-types.js'
+import { fetchSquashedJSON } from '../helpers/fetchJSON.js'
+import { getAssetFullName } from '../helpers/getAssetFullName.js'
 
 export async function fetchFromSimpleHash<T>(path: string, init?: RequestInit) {
     return queryClient.fetchQuery<T>({
@@ -37,7 +38,7 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
     if (isEmpty(asset)) return
     const chainId = resolveChainId(asset.chain)
     const address = asset.contract_address
-    if (!chainId || !isValidChainId(chainId) || !address || asset.collection.spam_score === 100) return
+    if (!chainId || !isValidChainId(chainId) || !address || asset.collection.spam_score === SPAM_SCORE) return
     const schema = asset.contract.type === 'ERC721' ? SchemaType.ERC721 : SchemaType.ERC1155
     const name = asset.name || getAssetFullName(asset.contract_address, asset.contract.name, asset.name, asset.token_id)
 
@@ -61,7 +62,7 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
                   // FIXME: cannot get payment token
                   token:
                       asset.last_sale.payment_token?.symbol === 'ETH'
-                          ? chainResolver.nativeCurrency(chainId) ?? WNATIVE[chainId]
+                          ? new ChainResolverAPI().nativeCurrency(chainId) ?? WNATIVE[chainId]
                           : WNATIVE[chainId],
               }
             : undefined,
@@ -193,14 +194,14 @@ export function isLensFollower(name: string) {
     return name.endsWith('.lens-Follower')
 }
 
-export const resolveSimpleHashRange = createLookupTableResolver<TrendingAPI.Days, number>(
+export const resolveSimpleHashRange = createLookupTableResolver<Days, number>(
     {
-        [TrendingAPI.Days.ONE_DAY]: 60 * 60 * 24,
-        [TrendingAPI.Days.ONE_WEEK]: 60 * 60 * 24 * 7,
-        [TrendingAPI.Days.ONE_MONTH]: 60 * 60 * 24 * 30,
-        [TrendingAPI.Days.THREE_MONTHS]: 60 * 60 * 24 * 90,
-        [TrendingAPI.Days.ONE_YEAR]: 0,
-        [TrendingAPI.Days.MAX]: 0,
+        [Days.ONE_DAY]: 60 * 60 * 24,
+        [Days.ONE_WEEK]: 60 * 60 * 24 * 7,
+        [Days.ONE_MONTH]: 60 * 60 * 24 * 30,
+        [Days.THREE_MONTHS]: 60 * 60 * 24 * 90,
+        [Days.ONE_YEAR]: 0,
+        [Days.MAX]: 0,
     },
     () => 0,
 )

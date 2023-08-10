@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { type DashboardRoutes, PopupRoutes, MaskMessages } from '@masknet/shared-base'
+import { type DashboardRoutes, PopupRoutes, MaskMessages, CrossIsolationMessages } from '@masknet/shared-base'
 
 let currentPopupWindowId = 0
 
@@ -19,7 +19,7 @@ function isLocked() {
 async function openWindow(url: string): Promise<void> {
     const windows = await browser.windows.getAll()
     const popup = windows.find((win) => win && win.type === 'popup' && win.id === currentPopupWindowId)
-    if (popup) {
+    if (popup || currentPopupWindowId) {
         await browser.windows.update(currentPopupWindowId, { focused: true })
     } else {
         let left: number
@@ -68,11 +68,7 @@ async function openWindow(url: string): Promise<void> {
     }
 }
 
-const exclusionDetectLocked: PopupRoutes[] = [
-    PopupRoutes.PersonaSignRequest,
-    PopupRoutes.Unlock,
-    PopupRoutes.ConnectedWallets,
-]
+const exclusionDetectLocked: PopupRoutes[] = [PopupRoutes.PersonaSignRequest, PopupRoutes.Unlock]
 
 export async function openPopupWindow(
     route?: PopupRoutes,
@@ -87,6 +83,18 @@ export async function openPopupWindow(
         from: locked && route ? route : null,
         ...params,
     })
+
+    if (currentPopupWindowId) {
+        await browser.windows.update(currentPopupWindowId, { focused: true })
+        CrossIsolationMessages.events.popupRouteUpdated.sendToAll(
+            urlcat(shouldUnlockWallet ? PopupRoutes.Unlock : route ?? PopupRoutes.Wallet, {
+                toBeClose: 1,
+                from: locked && route ? route : null,
+                ...params,
+            }),
+        )
+        return
+    }
 
     return openWindow(url)
 }

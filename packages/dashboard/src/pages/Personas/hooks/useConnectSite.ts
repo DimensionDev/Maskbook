@@ -4,11 +4,11 @@ import type { ProfileIdentifier } from '@masknet/shared-base'
 import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn.js'
 
 export function useConnectSite() {
-    return useAsyncFn(Services.SocialNetwork.connectSite)
+    return useAsyncFn(Services.SiteAdaptor.connectSite)
 }
 
 export function useOpenProfilePage() {
-    return useAsyncFn(Services.SocialNetwork.openProfilePage)
+    return useAsyncFn(Services.SiteAdaptor.openProfilePage)
 }
 
 export function useDisconnectSite(): AsyncFnReturn<(identifier: ProfileIdentifier) => Promise<void>> {

@@ -1,1 +1,1 @@
-export * from './SNSAdaptor/SearchResultInspector.js'
+export * from './SiteAdaptor/SearchResultInspector.js'

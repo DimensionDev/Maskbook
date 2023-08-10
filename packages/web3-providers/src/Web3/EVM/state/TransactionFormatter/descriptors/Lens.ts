@@ -18,6 +18,9 @@ export class LensDescriptor extends BaseDescriptor implements TransactionDescrip
                         snackbar: {
                             failedDescription: 'Transaction was Rejected!',
                         },
+                        popup: {
+                            method: name,
+                        },
                     }
             }
         }

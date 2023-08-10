@@ -1,19 +1,22 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icons } from '@masknet/icons'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
-import { chainResolver, explorerResolver, getRPCConstant } from '@masknet/web3-shared-evm'
+import { useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
+import { TokenType, type TransferableNetwork } from '@masknet/web3-shared-base'
+import { NetworkType, SchemaType, ZERO_ADDRESS, type ChainId, getRPCConstant } from '@masknet/web3-shared-evm'
 import { Button, Input, Typography, alpha } from '@mui/material'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { omit } from 'lodash-es'
+import { useMutation } from '@tanstack/react-query'
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
-import { type ZodCustomIssue, type z } from 'zod'
-import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
-import { createSchema, getEvmNetworks, useI18N, type AvailableLocaleKeys } from '../../../../../utils/index.js'
+import { type z, type ZodCustomIssue } from 'zod'
+import { useI18N, type AvailableLocaleKeys } from '../../../../../utils/index.js'
+import { createSchema } from './network-schema.js'
 import { PageTitleContext } from '../../../context.js'
 import { useTitle } from '../../../hook/index.js'
+import { useWarnings } from './useWarnings.js'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -67,41 +70,35 @@ export const EditNetwork = memo(function EditNetwork() {
     const isEditing = !!id && !chainId
 
     // #region Get network
-    const networks = useMemo(() => getEvmNetworks(true), [])
-    const builtInNetwork = useMemo(() => {
-        if (!chainId) return null
-        const network = networks.find((x) => x.chainId === chainId)
+    const { Network } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
+    const network = useMemo(() => {
+        const network = networks.find((x) => x.ID === id)
         if (!network) return null
         return {
             name: network.name,
-            chainId,
-            rpc: getRPCConstant(network.chainId, 'RPC_URLS')?.[0],
-            currencySymbol: chainResolver.nativeCurrency(network.chainId)?.symbol,
-            explorer: explorerResolver.explorerUrl(network.chainId).url,
+            chainId: network.chainId,
+            rpc: network.isCustomized ? network.rpcUrl : getRPCConstant(network.chainId, 'RPC_URLS')?.[0],
+            currencySymbol: network.nativeCurrency.symbol,
+            explorer: network.explorerUrl.url,
+            isCustomized: network.isCustomized,
         }
     }, [chainId, networks])
-    const { data: storedNetworks = [] } = useQuery({
-        enabled: !builtInNetwork && !!chainId,
-        queryKey: ['system', 'wallet', 'networks'],
-        queryFn: () => WalletRPC.getNetworks(),
-    })
-    const storedNetwork = storedNetworks.find((x) => x.id === id)
-    const network = builtInNetwork || storedNetwork
     // #endregion
 
     const { showSnackbar } = usePopupCustomSnackbar()
     useTitle(network ? network.name : t('network_management_add_network'))
     const { setExtension } = useContext(PageTitleContext)
 
-    const isBuiltIn = !!builtInNetwork
+    const isBuiltIn = network ? !network.isCustomized : false
     useEffect(() => {
-        if (isBuiltIn || !id) return
+        if (isBuiltIn || !id || !Network) return
         setExtension(
             <Button
                 variant="text"
                 className={classes.iconButton}
                 onClick={async () => {
-                    await WalletRPC.deleteNetwork(id)
+                    await Network?.removeNetwork(id)
                     showSnackbar(t('deleted_network_successfully'))
                     // Trigger UI update.
                     queryClient.invalidateQueries(QUERY_KEY)
@@ -111,32 +108,35 @@ export const EditNetwork = memo(function EditNetwork() {
             </Button>,
         )
         return () => setExtension(undefined)
-    }, [isBuiltIn, id, classes.iconButton, showSnackbar, t])
+    }, [isBuiltIn, id, classes.iconButton, showSnackbar, t, Network])
 
     const schema = useMemo(() => {
-        return createSchema(t, async (name) => {
-            const networks = await WalletRPC.getNetworks()
-            return !networks.find((network) => network.name === name && network.id !== id)
-        })
-    }, [t, id])
+        return createSchema(
+            t,
+            async (name) => {
+                return !networks.find((network) => network.name === name && network.ID !== id)
+            },
+            networks,
+            id,
+        )
+    }, [t, id, networks])
 
     type FormInputs = z.infer<typeof schema>
     const {
         getValues,
+        watch,
         register,
         setError,
-        formState: { errors, isValidating, isDirty },
+        formState: { errors, isValidating, isDirty, isValid: isFormValid },
     } = useForm<FormInputs>({
-        mode: 'all',
+        mode: 'onChange',
         resolver: zodResolver(schema),
-        defaultValues: network,
+        defaultValues: network || {},
     })
     const checkZodError = useCallback(
         (message: string) => {
             try {
                 const issues = JSON.parse(message) as ZodCustomIssue[]
-                const isInvalid = issues.some((issue) => issue.path[0] !== 'currencySymbol')
-                if (!isInvalid) return true
                 issues.forEach((issue) => {
                     // We assume there is no multiple paths.
                     setError(issue.path[0] as keyof FormInputs, {
@@ -148,16 +148,46 @@ export const EditNetwork = memo(function EditNetwork() {
         },
         [setError, t],
     )
+
+    const formChainId = +watch('chainId')
+    const formSymbol = watch('currencySymbol')
+    const { chainIdWarning, symbolWarning } = useWarnings(formChainId, formSymbol)
+
     const [isSubmitting, setIsSubmitting] = useState(false)
     const { isLoading: isMutating, mutate } = useMutation<void, unknown, FormInputs>({
         mutationFn: async (data) => {
+            if (!Network) return
             setIsSubmitting(true)
             try {
+                const parsedData = await schema.parseAsync(data)
+                const chainId = parsedData.chainId
+                const network: TransferableNetwork<ChainId, SchemaType, NetworkType> = {
+                    isCustomized: true,
+                    type: NetworkType.CustomNetwork,
+                    chainId,
+                    name: parsedData.name,
+                    fullName: parsedData.name,
+                    network: 'mainnet',
+                    rpcUrl: parsedData.rpc,
+                    nativeCurrency: {
+                        id: ZERO_ADDRESS,
+                        chainId,
+                        type: TokenType.Fungible,
+                        schema: SchemaType.Native,
+                        name: parsedData.currencySymbol || '',
+                        symbol: parsedData.currencySymbol || '',
+                        decimals: 18,
+                        address: ZERO_ADDRESS,
+                    },
+                    explorerUrl: {
+                        url: '',
+                    },
+                }
                 if (isEditing) {
-                    await WalletRPC.updateNetwork(id, { ...data, id })
+                    await Network.updateNetwork(id, network)
                     showSnackbar(t('saved_network_successfully'))
                 } else {
-                    await WalletRPC.addNetwork(data)
+                    await Network.addNetwork(network)
                     showSnackbar(t('adding_network_successfully'))
                 }
                 navigate(-1)
@@ -171,13 +201,9 @@ export const EditNetwork = memo(function EditNetwork() {
     })
 
     const [isChecking, setIsChecking] = useState(false)
-    // Discard currencySymbol warning
-    const isValid = Object.keys(omit(errors, 'currencySymbol')).length === 0
-    const isNotReady = isValidating || (!isValidating && !isValid) || !isDirty || isChecking
+    const isNotReady = isValidating || !isFormValid || !isDirty || isChecking
     const disabled = isNotReady || isMutating || isSubmitting
 
-    // currency symbol error is tolerable,
-    // but react-hook-form's handleSubmit can't tolerate it
     const handleSubmit = useCallback(async () => {
         if (disabled) return
         setIsChecking(true)
@@ -202,6 +228,10 @@ export const EditNetwork = memo(function EditNetwork() {
                     {...register('name')}
                     placeholder="Cel"
                     disabled={isBuiltIn}
+                    inputProps={{
+                        placeholder: '',
+                        maxLength: 24,
+                    }}
                 />
                 {errors.name ? <Typography className={classes.error}>{errors.name.message}</Typography> : null}
 
@@ -225,7 +255,11 @@ export const EditNetwork = memo(function EditNetwork() {
                     placeholder="eg. 2"
                     disabled={isBuiltIn}
                 />
-                {errors.chainId ? <Typography className={classes.error}>{errors.chainId.message}</Typography> : null}
+                {errors.chainId ? (
+                    <Typography className={classes.error}>{errors.chainId.message}</Typography>
+                ) : chainIdWarning ? (
+                    <Typography className={classes.warn}>{chainIdWarning}</Typography>
+                ) : null}
 
                 <Typography className={classes.label}>{t('optional_currency_symbol')}</Typography>
                 <Input
@@ -234,11 +268,9 @@ export const EditNetwork = memo(function EditNetwork() {
                     error={!!errors.currencySymbol}
                     {...register('currencySymbol', { required: false })}
                     placeholder="eg. ETH"
-                    disabled={isBuiltIn}
+                    disabled={isBuiltIn || !!errors.chainId}
                 />
-                {errors.currencySymbol ? (
-                    <Typography className={classes.warn}>{errors.currencySymbol.message}</Typography>
-                ) : null}
+                {symbolWarning ? <Typography className={classes.warn}>{symbolWarning}</Typography> : null}
 
                 <Typography className={classes.label}>{t('optional_block_explorer_url')}</Typography>
                 <Input
