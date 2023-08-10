@@ -3,7 +3,7 @@ import type { SocialAccount } from '@masknet/shared-base'
 
 export interface TipTask {
     recipient?: string
-    recipientSnsId?: string
+    recipientUserId?: string
     accounts: Array<SocialAccount<Web3Helper.ChainIdAll>>
 }
 

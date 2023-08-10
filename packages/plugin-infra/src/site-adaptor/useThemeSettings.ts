@@ -38,7 +38,7 @@ export function useThemeColor() {
     return color
 }
 
-export function useSNSThemeMode(theme: Theme) {
+export function useSiteThemeMode(theme: Theme) {
     const backgroundColor = getBackgroundColor(document.body)
     const isDark = theme.palette.mode === 'dark'
     const isDarker = backgroundColor === 'rgb(0,0,0)'

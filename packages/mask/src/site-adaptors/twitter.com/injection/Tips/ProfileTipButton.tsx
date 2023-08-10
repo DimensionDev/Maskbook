@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { createInjectHooksRenderer, Plugin, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
 import { useCurrentVisitingIdentity, useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
 import { startWatch } from '../../../../utils/startWatch.js'
@@ -45,7 +45,7 @@ function ProfileTipsSlot() {
 
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
-            useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
+            useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
             (plugin) => plugin.TipsRealm?.UI?.Content,
         )
 

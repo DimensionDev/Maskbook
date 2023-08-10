@@ -22,7 +22,7 @@ export namespace SiteAdaptorUI {
     export interface DeferredDefinition extends SiteAdaptor.Base {
         /**
          * Do not make side effects. It should happen in `.init()`
-         * @returns the completion definition of this SNS
+         * @returns the completion definition of this site adaptor
          * @example load: () => import('./full-definition')
          */
         load(): Promise<{
@@ -61,7 +61,7 @@ export namespace SiteAdaptorUI {
             postInspector?(signal: AbortSignal, current: PostInfo): void
             /** Add custom actions buttons to the post */
             postActions?(signal: AbortSignal, author: PostInfo): void
-            /** Inject a tool box that displayed in the navigation bar of the SNS */
+            /** Inject a tool box that displayed in the navigation bar of the website */
             toolbox?(signal: AbortSignal, category: 'wallet' | 'application'): void
             banner?(signal: AbortSignal): void
             /**
@@ -86,7 +86,7 @@ export namespace SiteAdaptorUI {
             /**
              * @deprecated
              * TODO: by @Jack-Works This should be in the plugin infra.
-             * SNS Adaptor provides avatar enhancement point,
+             * Site Adaptor provides avatar enhancement point,
              * and plugin infra provides AvatarEnhancementProvider.
              * Only 1 plugin can provide enhancement to avatar.
              */

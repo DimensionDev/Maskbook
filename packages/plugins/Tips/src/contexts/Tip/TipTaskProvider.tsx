@@ -141,7 +141,7 @@ export const TipTaskProvider = memo(({ children, task }: Props) => {
     const contextValue = useMemo((): TipContextOptions => {
         return {
             recipient,
-            recipientSnsId: task.recipientSnsId || '',
+            recipientUserId: task.recipientUserId || '',
             recipientAddress,
             setRecipient,
             recipients,
@@ -176,7 +176,7 @@ export const TipTaskProvider = memo(({ children, task }: Props) => {
         recipient,
         recipientAddress,
         task.recipient,
-        task.recipientSnsId,
+        task.recipientUserId,
         recipients,
         tipType,
         amount,

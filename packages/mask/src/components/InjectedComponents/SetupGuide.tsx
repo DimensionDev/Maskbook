@@ -69,7 +69,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const onConnect = useCallback(async () => {
         const id = ProfileIdentifier.of(activatedSiteAdaptorUI.networkIdentifier, userId)
         if (!id.some) return
-        // attach persona with SNS profile
+        // attach persona with site profile
         await Services.Identity.attachProfile(id.val, persona, {
             connectionConfirmState: 'confirmed',
         })

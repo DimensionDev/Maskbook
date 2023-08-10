@@ -42,7 +42,7 @@ const useStyles = makeStyles()({
     },
 })
 interface CoinMarketTableProps {
-    trending?: TrendingAPI.Trending
+    trending?: TrendingAPI.Trending | null
 }
 export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ trending }: CoinMarketTableProps) {
     const t = useSharedI18N()

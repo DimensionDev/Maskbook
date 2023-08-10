@@ -38,7 +38,7 @@ const site: Plugin.SiteAdaptor.Definition = {
 export default site
 
 function Component() {
-    const tweetAddress = usePostInfoDetails.snsID()
+    const tweetAddress = usePostInfoDetails.postID()
 
     if (!tweetAddress) return null
     if (!location.href.includes(`/status/${tweetAddress}`)) return null

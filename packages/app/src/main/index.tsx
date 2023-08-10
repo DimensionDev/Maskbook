@@ -37,13 +37,13 @@ function DecryptMessageWorker(props: { text: string; version: string }) {
 
     return (
         <RegistryContext.Provider value={registry.getTypedMessageRender}>
-            <TypedMessageRender message={message} />
+            <div className="p-5">
+                <TypedMessageRender message={message} />
 
-            <Suspense fallback={<Typography>Plugin is loading...</Typography>}>
-                <div className="border mt-3 pt-3 rounded-lg">
+                <Suspense fallback={<Typography>Plugin is loading...</Typography>}>
                     <PluginRender message={message} />
-                </div>
-            </Suspense>
+                </Suspense>
+            </div>
         </RegistryContext.Provider>
     )
 }

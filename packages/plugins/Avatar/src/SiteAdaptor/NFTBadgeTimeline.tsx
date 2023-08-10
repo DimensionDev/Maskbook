@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { AvatarType } from '../types.js'
 import type { AvatarMetaDB } from '../types.js'
 import { RainbowBox } from './RainbowBox.js'
-import type { RSS3_KEY_SNS } from '../constants.js'
+import type { RSS3_KEY_SITE } from '../constants.js'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useCheckPersonaNFTAvatar } from '../index.js'
 import { MaskMessages } from '@masknet/shared-base'
@@ -12,7 +12,7 @@ interface NFTBadgeTimelineProps extends withClasses<'root'> {
     avatarId: string
     width: number
     height: number
-    snsKey: RSS3_KEY_SNS
+    siteKey: RSS3_KEY_SITE
     avatarType?: AvatarType
 }
 
@@ -23,8 +23,8 @@ const useStyles = makeStyles()(() => ({
 }))
 
 export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
-    const { userId, avatarId, width, height, snsKey } = props
-    const { loading, value: _avatar } = useCheckPersonaNFTAvatar(userId, avatarId, '', snsKey)
+    const { userId, avatarId, width, height, siteKey } = props
+    const { loading, value: _avatar } = useCheckPersonaNFTAvatar(userId, avatarId, '', siteKey)
 
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const [avatarId_, setAvatarId_] = useState(avatarId)

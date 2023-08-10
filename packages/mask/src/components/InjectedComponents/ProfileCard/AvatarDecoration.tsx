@@ -1,6 +1,6 @@
 import { Twitter } from '@masknet/web3-providers'
 import { useAsync } from 'react-use'
-import { RSS3_KEY_SNS, NFTAvatarMiniClip, NFTBadgeTimeline } from '@masknet/plugin-avatar'
+import { RSS3_KEY_SITE, NFTAvatarMiniClip, NFTBadgeTimeline } from '@masknet/plugin-avatar'
 
 interface Props {
     className?: string
@@ -27,7 +27,7 @@ export function AvatarDecoration({ clipPathId, userId, className, size }: Props)
             avatarId={avatarId}
             height={size}
             width={size}
-            snsKey={RSS3_KEY_SNS.TWITTER}
+            siteKey={RSS3_KEY_SITE.TWITTER}
         />
     )
 }

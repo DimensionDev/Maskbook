@@ -79,7 +79,9 @@ export async function getPriceStats(coinId: string, currencyId: string, days: nu
 // #region token price
 export async function getTokenPrice(platform_id: string, address: string, currencyType = CurrencyType.USD) {
     const price = await getTokenPrices(platform_id, [address], currencyType)
-    return Number(price[address.toLowerCase()][currencyType])
+    const currencies = price[address.toLowerCase()]
+    if (!currencies) return 0
+    return Number(currencies[currencyType] || 0)
 }
 
 export async function getTokensPrice(listOfAddress: string[], currencyType = CurrencyType.USD) {
@@ -112,6 +114,6 @@ export async function getTokenPriceByCoinId(coin_id: string, currency = Currency
         urlcat(COINGECKO_URL_BASE, '/simple/price', { ids: coin_id, vs_currencies: currency }),
         undefined,
     )
-    return price[coin_id][currency]
+    return price[coin_id]?.[currency] ?? 0
 }
 // #endregion

@@ -69,7 +69,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         isDirty,
         recipient,
         recipientAddress,
-        recipientSnsId,
+        recipientUserId,
         nonFungibleTokenAddress,
         nonFungibleTokenContract,
         nonFungibleTokenId,
@@ -86,16 +86,16 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
             ? t.tip_token_share_post({
                   amount,
                   symbol: token?.symbol || 'token',
-                  recipientSnsId,
+                  recipientSnsId: recipientUserId,
                   recipient: recipientAddress,
               })
             : t.tip_nft_share_post({
                   name: nonFungibleTokenContract?.name || 'NFT',
-                  recipientSnsId,
+                  recipientSnsId: recipientUserId,
                   recipient: recipientAddress,
               })
         return message
-    }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientSnsId, t])
+    }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientUserId, t])
 
     const currentTab = isTokenTip ? TokenType.Fungible : TokenType.NonFungible
     const onTabChange = useCallback((_: unknown, value: TokenType) => {

@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import {
     NFTBadge,
-    RSS3_KEY_SNS,
+    RSS3_KEY_SITE,
     usePersonaNFTAvatar,
     useWallet,
     useNFT,
@@ -131,7 +131,7 @@ function useNFTCircleAvatar(size: number) {
         identity.identifier?.userId ?? '',
         Twitter.getAvatarId(identity.avatar),
         '',
-        RSS3_KEY_SNS.TWITTER,
+        RSS3_KEY_SITE.TWITTER,
     )
     const { account } = useChainContext()
     const { loading: loadingWallet, value: storage } = useWallet(nftAvatar?.userId)

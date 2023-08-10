@@ -39,7 +39,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 lastRecognizedIdentity?.identifier ?? fallbackProfile,
                 activatedSiteAdaptorUI.encryptPayloadNetwork,
             )
-            // Since we cannot directly send binary on the SNS, we need to encode it into a string.
+            // Since we cannot directly send binary in the composition box, we need to encode it into a string.
             const encrypted = encodeByNetwork(activatedSiteAdaptorUI.encryptPayloadNetwork, rawEncrypted)
 
             if (encode === 'image') {

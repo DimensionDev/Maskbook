@@ -6,7 +6,7 @@ import { DOMProxy, type LiveSelector, MutationObserverWatcher } from '@dimension
 import { startWatch } from '../../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
-import { NFTBadgeTimeline, RSS3_KEY_SNS } from '@masknet/plugin-avatar'
+import { NFTBadgeTimeline, RSS3_KEY_SITE } from '@masknet/plugin-avatar'
 import { searchInstagramPostAvatarSelector } from '../../utils/selector.js'
 
 const useStyles = makeStyles()(() => ({
@@ -34,7 +34,7 @@ const TimeLineRainbow = memo(
                     classes={{
                         root: classes.root,
                     }}
-                    snsKey={RSS3_KEY_SNS.INSTAGRAM}
+                    siteKey={RSS3_KEY_SITE.INSTAGRAM}
                 />
             </div>
         )

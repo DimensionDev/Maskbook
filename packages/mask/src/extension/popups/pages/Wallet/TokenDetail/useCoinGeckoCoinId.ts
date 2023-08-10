@@ -12,7 +12,7 @@ export function useCoinGeckoCoinId(chainId: ChainId, address?: string) {
         enabled: !isNativeToken && !!address,
         queryKey: ['coin-gecko', 'coin-id', 'by-address', address],
         queryFn: async () => {
-            const coinInfo = await CoinGeckoTrending.getCoinInfoByAddress(address!)
+            const coinInfo = await CoinGeckoTrending.getCoinInfoByAddress(address!, chainId)
             return coinInfo?.id
         },
     })

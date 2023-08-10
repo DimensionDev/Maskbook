@@ -20,7 +20,7 @@ import type {
     PostContextAuthor,
     PostContextCoAuthor,
     PostContextCreation,
-    PostContextSNSActions,
+    PostContextActions,
 } from '@masknet/plugin-infra/content-script'
 import {
     extractTextFromTypedMessage,
@@ -30,7 +30,7 @@ import {
 import { activatedSiteAdaptorUI } from '../ui.js'
 import { resolveFacebookLink } from '../../site-adaptors/facebook.com/utils/resolveFacebookLink.js'
 
-export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSActions) {
+export function createSiteAdaptorSpecializedPostContext(create: PostContextActions) {
     return function createPostContext(opt: PostContextCreation): PostContext {
         const cancel: Array<() => void> = []
         opt.signal?.addEventListener('abort', () => cancel.forEach((fn) => fn?.()))
@@ -58,18 +58,18 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             avatarURL: opt.avatarURL,
             nickname: opt.nickname,
             author: opt.author,
-            snsID: opt.snsID,
+            postID: opt.postID,
         }
         const postIdentifier = debug({
             getCurrentValue: () => {
                 const by = opt.author.getCurrentValue()
-                const id = opt.snsID.getCurrentValue()
+                const id = opt.postID.getCurrentValue()
                 if (!id || !by) return null
                 return new PostIdentifier(by, id)
             },
             subscribe: (sub) => {
                 const a = opt.author.subscribe(sub)
-                const b = opt.snsID.subscribe(sub)
+                const b = opt.postID.subscribe(sub)
                 return () => void [a(), b()]
             },
         })
@@ -82,7 +82,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             coAuthors: opt.coAuthors,
             avatarURL: author.avatarURL,
             nickname: author.nickname,
-            snsID: author.snsID,
+            postID: author.postID,
 
             get rootNode() {
                 return opt.rootElement.realCurrent
@@ -160,7 +160,7 @@ export function createRefsForCreatePostContext() {
         }),
         nickname: createSubscriptionFromValueRef(nickname),
         author: createSubscriptionFromValueRef(postBy),
-        snsID: createSubscriptionFromValueRef(postID),
+        postID: createSubscriptionFromValueRef(postID),
         rawMessage: createSubscriptionFromValueRef(postMessage),
         postImagesProvider: debug({
             getCurrentValue: () => postMetadataImages.asValues,

@@ -15,6 +15,7 @@ import {
 import { isLessThan, isLte, isZero, leftShift, minus, rightShift } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, type GasConfig } from '@masknet/web3-shared-evm'
 import { Box, Input, Typography } from '@mui/material'
+import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
@@ -122,7 +123,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         isLoading: isLoadingAvailableBalance,
         isGasSufficient,
         gasFee,
-    } = useAvailableBalance(NetworkPluginID.PLUGIN_EVM, address, gasConfig, {
+    } = useAvailableBalance(NetworkPluginID.PLUGIN_EVM, address, { ...gasConfig, gas: gasLimit } as GasConfig, {
         chainId,
     })
 
@@ -159,7 +160,10 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     // Use selectedAsset balance eagerly
     const isLoadingBalance = selectedAsset?.balance ? false : isLoadingAvailableBalance || isLoading
     // Available token balance
-    const tokenBalance = isLoadingAvailableBalance || isLoading ? minus(selectedAsset?.balance || 0, gasFee) : balance
+    const tokenBalance = BigNumber.max(
+        0,
+        isLoadingAvailableBalance || isLoading ? minus(selectedAsset?.balance || 0, gasFee) : balance,
+    )
 
     const decimals = token?.decimals || selectedAsset?.decimals
     const uiTokenBalance = tokenBalance && decimals ? leftShift(tokenBalance, decimals).toString() : '0'

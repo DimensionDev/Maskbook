@@ -68,12 +68,9 @@ export const OfferCard = memo(function OfferCard({ offer, ...rest }: OfferCardPr
                 name={offer.priceInToken.token.name}
                 symbol={offer.priceInToken.token.symbol}
                 address={offer.priceInToken.token.address}
-                AvatarProps={{
-                    style: {
-                        width: 20,
-                        height: 20,
-                        fontSize: 14,
-                    },
+                size={20}
+                style={{
+                    fontSize: 14,
                 }}
             />
         ) : (

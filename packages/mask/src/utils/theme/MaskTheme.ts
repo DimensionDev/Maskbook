@@ -97,7 +97,5 @@ const baseTheme = (theme: 'dark' | 'light') => {
     if (theme === 'light') return merge(cloneDeep(base), lightThemePatch)
     return merge(cloneDeep(base), darkThemePatch)
 }
-/** @deprecated Only use it from useClassicMaskSNSTheme  */
+/** @deprecated Only use it from useSwapPageTheme  */
 export const MaskLightTheme = unstable_createMuiStrictModeTheme(baseTheme('light'))
-/** @deprecated Only use it from useClassicMaskSNSTheme  */
-export const MaskDarkTheme = unstable_createMuiStrictModeTheme(baseTheme('dark'))

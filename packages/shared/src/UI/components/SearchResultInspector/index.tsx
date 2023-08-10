@@ -8,7 +8,7 @@ import {
     getSearchResultContentForProfileTab,
     getSearchResultTabContent,
     getSearchResultTabs,
-    useActivatedPluginsSNSAdaptor,
+    useActivatedPluginsSiteAdaptor,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import {
@@ -64,7 +64,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const { profileTabType, empty = null } = props
     const keyword_ = useSearchedKeyword()
     const keyword = props.keyword || keyword_
-    const activatedPlugins = useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode()
+    const activatedPlugins = useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode()
 
     const resultList = useAsyncRetry(async () => {
         if (!keyword) return

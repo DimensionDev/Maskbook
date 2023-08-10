@@ -1,12 +1,12 @@
 import {
     createInjectHooksRenderer,
     Plugin,
-    useActivatedPluginsSNSAdaptor,
+    useActivatedPluginsSiteAdaptor,
     usePostInfoDetails,
 } from '@masknet/plugin-infra/content-script'
 
 const ActionsRenderer = createInjectHooksRenderer(
-    useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
+    useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
     (plugin) => plugin.TipsRealm?.UI?.Content,
 )
 

@@ -11,7 +11,7 @@ import { type ChainId, type GasConfig, GasEditor, type Transaction } from '@mask
 import { rightShift, multipliedBy, isZero, ZERO, formatBalance } from '@masknet/web3-shared-base'
 import { PluginID, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
-import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { InputTokenPanel } from './InputTokenPanel.js'
@@ -218,10 +218,10 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { allTradeComputed } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
 
-        const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
-        const isSNSClosed = snsAdaptorMinimalPlugins?.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
+        const minimalPlugins = useActivatedPluginsSiteAdaptor(true)
+        const isGoPlusSecurityMinimal = minimalPlugins?.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
         const isDashboardClosed = useIsMinimalModeDashBoard(PluginID.GoPlusSecurity)
-        const isTokenSecurityEnable = !isSNSClosed && !isDashboardClosed
+        const isTokenSecurityEnable = !isGoPlusSecurityMinimal && !isDashboardClosed
 
         // #region token balance
         const inputTokenBalanceAmount = new BigNumber(inputTokenBalance || '0')
