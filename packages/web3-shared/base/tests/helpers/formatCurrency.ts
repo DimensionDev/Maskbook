@@ -45,7 +45,8 @@ describe('USD Currency price format util test', () => {
 describe('JPY Currency format util test', () => {
     test.each([
         { give: 0, expected: '¥0' },
-        { give: 11.111, expected: '¥11.111' },
+        { give: 11.111, expected: '¥11.11' },
+        { give: 0.0111, expected: '¥0.0111' },
         { give: 11.1, expected: '¥11', options: { isAssetValue: true } },
         { give: 0.1, expected: '< ¥1', options: { isAssetValue: true } },
     ])('.format($give)', ({ give, expected, options }) => {
