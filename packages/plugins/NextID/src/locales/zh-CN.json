@@ -60,6 +60,7 @@
     "reload": "重新加载",
     "persona_load_failed": "加载失败",
     "applications_create_persona_title": "身份",
+    "applications_create_persona_hint": "使用此功能需要先创建一个身份并验证您的社交媒体账号。",
     "applications_create_persona_action": "创建身份",
     "applications_persona_title": "身份",
     "applications_persona_copy": "复制成功",
