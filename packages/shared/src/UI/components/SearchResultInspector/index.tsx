@@ -26,8 +26,8 @@ import { DSearch } from '@masknet/web3-providers'
 import { type SearchResult, SearchResultType } from '@masknet/web3-shared-base'
 import { useSearchedKeyword } from './useSearchedKeyword.js'
 
-const useStyles = makeStyles<{ isProfilePage?: boolean; searchType?: SearchResultType }>()(
-    (theme, { isProfilePage, searchType }) => ({
+const useStyles = makeStyles<{ maxHeight: string | number; isProfilePage?: boolean; searchType?: SearchResultType }>()(
+    (theme, { maxHeight, isProfilePage, searchType }) => ({
         contentWrapper: {
             background:
                 isProfilePage || (searchType !== SearchResultType.EOA && searchType !== SearchResultType.Domain)
@@ -36,7 +36,7 @@ const useStyles = makeStyles<{ isProfilePage?: boolean; searchType?: SearchResul
         },
         tabContent: {
             position: 'relative',
-            maxHeight: 478,
+            maxHeight,
             borderBottom: isProfilePage ? 'unset' : `1px solid ${theme.palette.divider}`,
             overflow: 'auto',
             '&::-webkit-scrollbar': {
@@ -54,6 +54,7 @@ export interface SearchResultInspectorProps {
     searchResults?: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     currentSearchResult?: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     empty?: React.ReactNode
+    maxHeight?: string | number
 }
 
 export function SearchResultInspector(props: SearchResultInspectorProps) {
@@ -71,8 +72,11 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     }, [keyword, props.searchResults])
 
     const currentResult = props.currentSearchResult ?? resultList.value?.[0]
-
-    const { classes } = useStyles({ isProfilePage: props.isProfilePage, searchType: currentResult?.type })
+    const { classes } = useStyles({
+        maxHeight: props.maxHeight ?? 479,
+        isProfilePage: props.isProfilePage,
+        searchType: currentResult?.type,
+    })
     const contentComponent = useMemo(() => {
         if (!currentResult || !resultList.value?.length) return null
 

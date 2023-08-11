@@ -48,6 +48,7 @@ export function DashboardContainer(props: DashboardContainerProps) {
                         <DisableShadowRootContext.Provider value={false}>
                             <ShadowRootIsolation>
                                 <SearchResultInspector
+                                    maxHeight="fix-content"
                                     keyword={keyword}
                                     empty={<EmptyStatus>No results</EmptyStatus>}
                                 />
