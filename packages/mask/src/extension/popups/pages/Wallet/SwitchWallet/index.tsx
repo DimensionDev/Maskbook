@@ -4,7 +4,7 @@ import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworks, useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, List, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -160,15 +160,17 @@ const SwitchWallet = memo(function SwitchWallet() {
         <ActionModal header={t('wallet_account')} action={action}>
             <div className={classes.content}>
                 <List dense className={classes.list}>
-                    {wallets.map((item) => (
-                        <WalletItem
-                            key={item.address}
-                            wallet={item}
-                            onSelect={handleSelect}
-                            isSelected={isSameAddress(item.address, wallet?.address)}
-                            className={classes.walletItem}
-                        />
-                    ))}
+                    {wallets.map((item) =>
+                        item.owner && chainId !== ChainId.Matic ? null : (
+                            <WalletItem
+                                key={item.address}
+                                wallet={item}
+                                onSelect={handleSelect}
+                                isSelected={isSameAddress(item.address, wallet?.address)}
+                                className={classes.walletItem}
+                            />
+                        ),
+                    )}
                 </List>
             </div>
         </ActionModal>

@@ -13,7 +13,7 @@ import { useStyles } from './useStyles.js'
 export function ChangeOwner() {
     const { t } = useI18N()
     const theme = useTheme()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const wallet = useWallet()
     const wallets = useWallets()
@@ -36,7 +36,9 @@ export function ChangeOwner() {
                 <Typography className={classes.itemText}>{t('popups_change_owner')}</Typography>
             </Box>
             <Box className={classes.itemBox}>
-                <Typography className={classes.itemText}>{walletManager?.name ?? personaManager?.nickname}</Typography>
+                <Typography className={cx(classes.itemText, classes.ellipsis)}>
+                    {walletManager?.name ?? personaManager?.nickname}
+                </Typography>
                 <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />
             </Box>
         </ListItem>

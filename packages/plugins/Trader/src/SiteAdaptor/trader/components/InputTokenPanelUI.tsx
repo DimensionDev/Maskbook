@@ -180,7 +180,7 @@ export const InputTokenPanelUI = memo<InputTokenPanelUIProps>(
             [onAmountChange, RE_MATCH_FRACTION_AMOUNT, RE_MATCH_WHOLE_AMOUNT],
         )
 
-        const priceUSD = formatCurrency(tokenValueUSD, 'USD', { onlyRemainTwoDecimal: true })
+        const priceUSD = formatCurrency(tokenValueUSD, 'USD', { onlyRemainTwoOrZeroDecimal: true })
 
         return (
             <InputBase

@@ -180,7 +180,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
         queries: tokenIds.map((tokenId) => ({
             enabled: isValid,
             queryKey: ['nft-asset', pluginID, chainId, address, tokenId],
-            queryFn: () => hub.getNonFungibleAsset(address, tokenId, { chainId }),
+            queryFn: () => hub.getNonFungibleAsset(address, tokenId, { chainId, account }),
         })),
     })
     const loadingAssets = assetsQueries.every((x) => x.isLoading)

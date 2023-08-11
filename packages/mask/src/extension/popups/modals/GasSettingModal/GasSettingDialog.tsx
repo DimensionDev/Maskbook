@@ -226,7 +226,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                         value={formatWeiToEther(totalGas).times(nativeTokenPrice ?? 0)}
                         formatter={formatCurrency}
                         options={{
-                            onlyRemainTwoDecimal: false,
+                            onlyRemainTwoOrZeroDecimal: false,
                             customDecimalConfig: {
                                 boundary: scale10(1, -4),
                                 decimalExp: 4,
