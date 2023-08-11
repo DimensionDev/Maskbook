@@ -67,9 +67,12 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
             'popups.html#/',
             PopupRoutes.Swap,
             isNativeTokenAddress(asset?.address)
-                ? {}
+                ? {
+                      chainId: asset?.chainId,
+                  }
                 : {
                       id: asset?.address,
+                      chainId: asset?.chainId,
                       name: asset?.name,
                       symbol: asset?.symbol,
                       contract_address: asset?.address,
