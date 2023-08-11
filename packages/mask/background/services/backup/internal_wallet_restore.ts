@@ -16,7 +16,6 @@ export async function internal_wallet_restore(backup: NormalizedBackup.WalletBac
     for (const wallet of backup) {
         try {
             const wallets = await WalletServiceRef.value.getWallets()
-            console.log({ wallet, index })
             const name = generateNewWalletName(wallets, index)
             index += 1
 
