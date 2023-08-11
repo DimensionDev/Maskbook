@@ -140,7 +140,7 @@ export class SolanaFungibleTokenAPI
         })
         const balance = data.result?.value.toString() ?? '0'
         return createFungibleAsset(new SolanaChainResolverAPI().nativeCurrency(chainId), balance, {
-            [CurrencyType.USD]: price.toString(),
+            [CurrencyType.USD]: price?.toString(),
         })
     }
 
