@@ -108,10 +108,11 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
     }, [t, nameAlreadyExist])
 
     const [{ loading }, edit] = useAsyncFn(async () => {
+        const _name = name.trim()
         if (type === ContactType.Recipient) {
-            await Web3State.state.AddressBook?.renameContact({ name, address })
+            await Web3State.state.AddressBook?.renameContact({ name: _name, address })
         } else if (type === ContactType.Owned) {
-            await Web3.renameWallet?.(address, name, { providerType: ProviderType.MaskWallet })
+            await Web3.renameWallet?.(address, _name, { providerType: ProviderType.MaskWallet })
         }
 
         onConfirm?.()
@@ -143,7 +144,7 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
                     onClick={edit}
                     loading={loading}
                     className={classes.button}
-                    disabled={nameAlreadyExist || !name}>
+                    disabled={nameAlreadyExist || !name.trim()}>
                     {t('confirm')}
                 </ActionButton>
             </div>
