@@ -11,6 +11,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { HubAPI } from '../apis/HubAPI.js'
 import { TokenState, type TokenStorage } from '../../Base/state/Token.js'
+import { ChainResolverAPI } from '../apis/ResolverAPI.js'
 
 export class Token extends TokenState<ChainId, SchemaType> {
     private Hub = new HubAPI().create()
@@ -55,7 +56,9 @@ export class Token extends TokenState<ChainId, SchemaType> {
             })
             await this.storage.credibleFungibleTokenList.setValue({
                 ...fungibleTokenListFromStorage,
-                [chainId]: fungibleTokenList,
+                [chainId]: fungibleTokenList.length
+                    ? fungibleTokenList
+                    : [new ChainResolverAPI().nativeCurrency(chainId)],
             })
 
             const credibleToken = fungibleTokenList?.find((x) => isSameAddress(x.address, address))
@@ -63,6 +66,7 @@ export class Token extends TokenState<ChainId, SchemaType> {
         }
 
         const credibleToken = fungibleTokenListByChainFromStorage.find((x) => isSameAddress(x.address, address))
+
         return credibleToken ?? token
     }
 

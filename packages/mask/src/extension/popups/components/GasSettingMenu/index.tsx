@@ -95,6 +95,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
         NetworkPluginID.PLUGIN_EVM,
         paymentToken ? paymentToken : nativeTokenAddress,
     )
+
     const { data: tokenPrice } = useFungibleTokenPrice(
         NetworkPluginID.PLUGIN_EVM,
         paymentToken ? paymentToken : nativeTokenAddress,
