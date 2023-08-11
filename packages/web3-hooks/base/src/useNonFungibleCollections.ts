@@ -20,8 +20,7 @@ export function useNonFungibleCollections<S extends 'all' | void = void, T exten
     const Hub = useWeb3Hub(pluginID, options)
 
     return useQuery<Array<NonFungibleCollection<Web3Helper.ChainIdScope<S, T>, Web3Helper.SchemaTypeScope<S, T>>>>({
-        queryKey: ['non-fungible-collections', pluginID, options],
-        keepPreviousData: true,
+        queryKey: ['non-fungible-collections', pluginID, account, options],
         enabled: !!account,
         queryFn: async () => {
             if (!account) return EMPTY_LIST
