@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
 import { type EnhanceableSite } from '@masknet/shared-base'
 import { base } from '../base.js'
-import { SNS_RSS3_FIELD_KEY_MAP } from '@masknet/shared'
+import { EnhanceableSite_RSS3_NFT_SITE_KEY_map } from '@masknet/shared'
 import { PLUGIN_ID } from '../constants.js'
 import { AvatarBadge } from './AvatarBadge/AvatarBadge.js'
 
@@ -40,7 +40,7 @@ const site: Plugin.SiteAdaptor.Definition = {
         UI: {
             Decorator: function ProfileAvatarRealmDecorator({ identity, socialAccounts }) {
                 if (!identity?.identifier?.userId) return null
-                const rss3Key = SNS_RSS3_FIELD_KEY_MAP[identity.identifier.network as EnhanceableSite]
+                const rss3Key = EnhanceableSite_RSS3_NFT_SITE_KEY_map[identity.identifier.network as EnhanceableSite]
                 if (!rss3Key) return null
                 return (
                     <AvatarBadge

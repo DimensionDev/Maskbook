@@ -1,7 +1,7 @@
 import { memo, type PropsWithChildren, useCallback } from 'react'
 import { Typography, Link as MaterialLink } from '@mui/material'
 import type { RenderFragmentsContextType } from '@masknet/typed-message-react'
-import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 
@@ -28,7 +28,7 @@ export const Link = memo(function Anchor(props: RenderFragmentsContextType.LinkP
 
 export function useTagEnhancer(kind: 'hash' | 'cash', content: string) {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const plugin = useActivatedPluginsSNSAdaptor('any')
+    const plugin = useActivatedPluginsSiteAdaptor('any')
         .filter((x) => x.enhanceTag)
         .at(0)
 

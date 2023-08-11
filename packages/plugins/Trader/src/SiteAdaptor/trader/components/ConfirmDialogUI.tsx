@@ -287,7 +287,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
 
         const { inputAmount, outputAmount } = cacheTrade
         const swapUsdPrice = formatCurrency(inputAmount.shiftedBy(-inputToken.decimals).times(inputTokenPrice), 'USD', {
-            onlyRemainTwoDecimal: true,
+            onlyRemainTwoOrZeroDecimal: true,
         })
         return (
             <InjectedDialog

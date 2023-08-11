@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { EMPTY_LIST, type ProfileInformation } from '@masknet/shared-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
-import { useCurrentPersona } from '../../DataSource/usePersonaConnectStatus.js'
+import { useCurrentPersona } from '../../DataSource/useCurrentPersona.js'
 import Services from '../../../extension/service.js'
 
 export function useContacts(network: string): AsyncStateRetry<ProfileInformation[]> {

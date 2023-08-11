@@ -50,7 +50,7 @@ export class FungibleTokenAPI implements FungibleTokenBaseAPI.Provider<ChainId, 
         trustedFungibleTokens?: Array<FungibleToken<ChainId, SchemaType>>,
         options?: HubOptions,
     ) {
-        if (!trustedFungibleTokens) createPageable(EMPTY_LIST, createIndicator(options?.indicator))
+        if (!trustedFungibleTokens) return createPageable(EMPTY_LIST, createIndicator(options?.indicator))
 
         const chains = uniq(trustedFungibleTokens?.map((x) => x.chainId)) ?? [ChainId.Mainnet]
         let result: Array<FungibleAsset<ChainId, SchemaType>> = EMPTY_LIST

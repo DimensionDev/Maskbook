@@ -1,7 +1,7 @@
 import { ChainIcon, CopyButton, FormattedAddress, Icon, ImageIcon, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useChainContext, useNetwork } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworks } from '@masknet/web3-hooks-base'
 import { type ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Skeleton, Typography, type AvatarProps } from '@mui/material'
 import { memo } from 'react'
@@ -112,7 +112,8 @@ export default memo(function Receive() {
     const { chainId, address, rawChainId, rawAddress } = useTokenParams()
     // No specific token but only for chain
     const isChain = !rawChainId && !rawAddress
-    const currentNetwork = useNetwork(NetworkPluginID.PLUGIN_EVM)
+    const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
+    const currentNetwork = networks.find((network) => network.chainId === chainId)
 
     const asset = useAsset(chainId, address ?? '', account)
 
@@ -123,7 +124,7 @@ export default memo(function Receive() {
         currentNetwork?.iconUrl ? (
             <ImageIcon size={60} icon={currentNetwork.iconUrl} name={currentNetwork.name} />
         ) : (
-            <Icon size={60} name={currentNetwork?.name} color={currentNetwork?.color} AvatarProps={avatarProps} />
+            <Icon size={60} name={currentNetwork?.name} color={currentNetwork?.color} {...avatarProps} />
         )
     ) : (
         <TokenIcon

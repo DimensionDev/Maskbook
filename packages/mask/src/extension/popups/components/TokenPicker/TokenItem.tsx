@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { ImageIcon, TokenIcon } from '@masknet/shared'
+import { NetworkIcon, TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3Others } from '@masknet/web3-hooks-base'
@@ -7,6 +7,7 @@ import { type ReasonableNetwork } from '@masknet/web3-shared-base'
 import { Box, Link, ListItem, ListItemIcon, ListItemText, Typography, type ListItemProps } from '@mui/material'
 import { memo, useEffect, useMemo, useRef } from 'react'
 import { formatTokenBalance } from '../../../../utils/index.js'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -31,6 +32,7 @@ const useStyles = makeStyles()((theme) => {
             bottom: -4,
             border: `1px solid ${theme.palette.common.white}`,
             borderRadius: '50%',
+            fontSize: 10,
         },
         listText: {
             margin: 0,
@@ -105,9 +107,17 @@ export const TokenItem = memo(function TokenItem({
                         className={classes.tokenIcon}
                         chainId={asset.chainId}
                         address={asset.address}
+                        name={asset.name}
                         size={36}
                     />
-                    <ImageIcon className={classes.badgeIcon} size={16} icon={network?.iconUrl} name={network.name} />
+                    <NetworkIcon
+                        className={classes.badgeIcon}
+                        pluginID={NetworkPluginID.PLUGIN_EVM}
+                        chainId={network.chainId}
+                        name={network.name}
+                        size={16}
+                        preferName={network.isCustomized}
+                    />
                 </Box>
             </ListItemIcon>
             <ListItemText

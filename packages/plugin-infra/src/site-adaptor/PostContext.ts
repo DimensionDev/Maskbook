@@ -14,7 +14,7 @@ import { useObservableValues, useValueRef } from '@masknet/shared-base-ui'
 import type { TypedMessageTuple } from '@masknet/typed-message'
 import type { SupportedPayloadVersions } from '@masknet/encryption'
 
-export interface PostContextSNSActions {
+export interface PostContextActions {
     hasPayloadLike(content: string): boolean
     getURLFromPostIdentifier?(post: PostIdentifier): URL | null
 }
@@ -22,15 +22,15 @@ export interface PostContextAuthor {
     readonly nickname: Subscription<string | null>
     readonly avatarURL: Subscription<URL | null>
     readonly author: Subscription<ProfileIdentifier | null>
-    /** ID on the SNS network. */
-    readonly snsID: Subscription<string | null>
+    /** post id on the network. */
+    readonly postID: Subscription<string | null>
 }
 
 export interface PostContextCoAuthor {
     nickname?: string
     avatarURL?: URL
     author: ProfileIdentifier
-    snsID: string
+    post: PostIdentifier
 }
 
 export interface PostContextComment {
@@ -53,7 +53,7 @@ export interface PostContextCreation extends PostContextAuthor {
     /** @deprecated It should parse image into rawMessage */
     readonly postImagesProvider?: Subscription<string[]>
     /**
-     * The raw TypedMessage that the SNS gives.
+     * The raw TypedMessage that the site gives.
      */
     readonly rawMessage: Subscription<TypedMessageTuple>
     readonly signal?: AbortSignal

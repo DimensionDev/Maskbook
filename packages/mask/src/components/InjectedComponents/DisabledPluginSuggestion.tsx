@@ -3,7 +3,7 @@ import {
     type Plugin,
     PluginI18NFieldRender,
     registeredPlugins,
-    useActivatedPluginsSNSAdaptor,
+    useActivatedPluginsSiteAdaptor,
     usePostInfoDetails,
 } from '@masknet/plugin-infra/content-script'
 import { MaskPostExtraInfoWrapper } from '@masknet/shared'
@@ -19,8 +19,8 @@ import Services from '../../extension/service.js'
 import { useI18N } from '../../utils/index.js'
 
 function useDisabledPlugins() {
-    const activated = new Set(useActivatedPluginsSNSAdaptor('any').map((x) => x.ID))
-    const minimalMode = new Set(useActivatedPluginsSNSAdaptor(true).map((x) => x.ID))
+    const activated = new Set(useActivatedPluginsSiteAdaptor('any').map((x) => x.ID))
+    const minimalMode = new Set(useActivatedPluginsSiteAdaptor(true).map((x) => x.ID))
     const disabledPlugins = useSubscription(registeredPlugins)
         .filter((plugin) => !activated.has(plugin[0]) || minimalMode.has(plugin[0]))
         .map((x) => x[1])
@@ -61,7 +61,7 @@ export function PossiblePluginSuggestionPostInspector() {
 }
 export function PossiblePluginSuggestionUI(props: { plugins: Plugin.Shared.Definition[] }) {
     const { plugins } = props
-    const _plugins = useActivatedPluginsSNSAdaptor('any')
+    const _plugins = useActivatedPluginsSiteAdaptor('any')
     if (!plugins.length) return null
     return (
         <>

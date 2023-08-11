@@ -45,7 +45,7 @@ function inject(selector: () => LiveSelector<HTMLElement>, signal: AbortSignal) 
                             size={info.width}
                             screenName={
                                 userId ||
-                                activatedSiteAdaptorUI.collecting.identityProvider?.recognized.value.identifier
+                                activatedSiteAdaptorUI!.collecting.identityProvider?.recognized.value.identifier
                                     ?.userId ||
                                 ''
                             }

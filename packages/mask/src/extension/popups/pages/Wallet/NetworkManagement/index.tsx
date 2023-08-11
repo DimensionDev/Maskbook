@@ -83,7 +83,7 @@ export const NetworkManagement = memo(function NetworkManagement() {
                             {network.iconUrl ? (
                                 <WalletIcon size={24} mainIcon={network.iconUrl} />
                             ) : (
-                                <Icon size={24} name={network.name} AvatarProps={{ sx: { fontSize: 12 } }} />
+                                <Icon size={24} name={network.name} sx={{ fontSize: 12 }} />
                             )}
                             <Box className={classes.text}>
                                 <TextOverflowTooltip title={network.name}>

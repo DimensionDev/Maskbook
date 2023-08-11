@@ -14,7 +14,7 @@ import { useCompositionClipboardRequest } from './useCompositionClipboardRequest
 import { useRecipientsList } from './useRecipientsList.js'
 import { useSubmit } from './useSubmit.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
-import { useCurrentPersona } from '../DataSource/usePersonaConnectStatus.js'
+import { useCurrentPersona } from '../DataSource/useCurrentPersona.js'
 import { EncryptionMethodType } from './EncryptionMethodSelector.js'
 import { useI18N } from '../../utils/index.js'
 
@@ -122,7 +122,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     // #endregion
 
     const UI = useRef<CompositionRef>(null)
-    const networkSupport = activatedSiteAdaptorUI.injection.newPostComposition?.supportedOutputTypes
+    const networkSupport = activatedSiteAdaptorUI!.injection.newPostComposition?.supportedOutputTypes
     const recipients = useRecipientsList()
     const isE2E_Disabled = (encode: EncryptionMethodType) => {
         if (!connectStatus.currentPersona && !connectStatus.hasPersona) return E2EUnavailableReason.NoPersona

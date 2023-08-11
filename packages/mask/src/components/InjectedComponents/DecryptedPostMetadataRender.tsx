@@ -1,4 +1,4 @@
-import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { createInjectHooksRenderer, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import type { MetadataRenderProps } from '@masknet/typed-message-react'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import {
@@ -9,7 +9,7 @@ import {
 import { MaskPostExtraPluginWrapperWithPermission } from './PermissionBoundary.js'
 
 const Decrypted = createInjectHooksRenderer(
-    useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
+    useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
     (x) => x.DecryptedInspector,
     MaskPostExtraPluginWrapperWithPermission,
 )

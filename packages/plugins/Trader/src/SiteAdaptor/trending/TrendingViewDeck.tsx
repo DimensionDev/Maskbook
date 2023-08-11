@@ -1,7 +1,7 @@
 import { useCallback, useContext, useRef, useState } from 'react'
 import { first, last } from 'lodash-es'
 import { Icons } from '@masknet/icons'
-import { useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginsSiteAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { PluginTransakMessages, useTransakAllowanceCoin } from '@masknet/plugin-transak'
 import {
     Linking,
@@ -10,7 +10,7 @@ import {
     useSocialAccountsBySettings,
     TokenWithSocialGroupMenu,
     useTokenMenuCollectionList,
-    SNS_RSS3_FIELD_KEY_MAP,
+    EnhanceableSite_RSS3_NFT_SITE_KEY_map,
     PriceChange,
 } from '@masknet/shared'
 import {
@@ -188,15 +188,15 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const isNFT = coin.type === TokenType.NonFungible
 
     // #region buy
-    const transakPluginEnabled = useActivatedPluginsSNSAdaptor('any').some((x) => x.ID === PluginID.Transak)
+    const transakPluginEnabled = useActivatedPluginsSiteAdaptor('any').some((x) => x.ID === PluginID.Transak)
     const transakIsMinimalMode = useIsMinimalMode(PluginID.Transak)
 
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const isAllowanceCoin = useTransakAllowanceCoin({ address: coin.contract_address, symbol: coin.symbol })
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
-    const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
-    const isTokenSecurityEnable = !isNFT && !snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
+    const minimalPlugins = useActivatedPluginsSiteAdaptor(true)
+    const isTokenSecurityEnable = !isNFT && !minimalPlugins.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
 
     const { value: tokenSecurityInfo, error } = useTokenSecurity(
         coin.chainId ?? ChainId.Mainnet,
@@ -221,7 +221,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     const collectionList = useTokenMenuCollectionList(resultList, result)
 
-    const rss3Key = SNS_RSS3_FIELD_KEY_MAP[identity?.identifier?.network as EnhanceableSite]
+    const rss3Key = EnhanceableSite_RSS3_NFT_SITE_KEY_map[identity?.identifier?.network as EnhanceableSite]
     const { value: socialAccounts = EMPTY_LIST } = useSocialAccountsBySettings(identity)
 
     const openRss3Profile = useCallback(

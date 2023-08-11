@@ -4,7 +4,7 @@ import { BaseContextAPI } from './BaseAPI.js'
 
 export const SiteAdaptorContextRef = new ValueRefWithReady<Plugin.SiteAdaptor.SiteAdaptorContext>()
 
-export class SNSAdaptorContextAPI extends BaseContextAPI<Plugin.SiteAdaptor.SiteAdaptorContext> {
+export class SiteAdaptorContextAPI extends BaseContextAPI<Plugin.SiteAdaptor.SiteAdaptorContext> {
     constructor() {
         super(SiteAdaptorContextRef)
     }

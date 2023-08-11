@@ -16,7 +16,7 @@ export class Base implements Translator<ConnectionContext> {
         // #region polyfill transaction config
         try {
             // add gas margin
-            if (config.gas && !context.owner) {
+            if (config.gas) {
                 config.gas = toHex(
                     BigNumber.max(
                         toHex(addGasMargin(config.gas).toFixed()),

@@ -1,2 +1,2 @@
-export * from './sns-context.js'
+export * from './site-context.js'
 export * from './messages.js'

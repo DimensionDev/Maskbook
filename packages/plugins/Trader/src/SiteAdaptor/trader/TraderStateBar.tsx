@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js'
 import { alpha } from '@mui/system'
 import { Box } from '@mui/material'
 import { TokenSecurityBoundary } from '@masknet/plugin-go-plus-security'
-import { useActivatedPluginsSNSAdaptor, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginsSiteAdaptor, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
 import {
     PluginWalletStatusBar,
@@ -99,13 +99,13 @@ export function TraderStateBar({
     )
     // #endregion
 
-    const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
-    const isSNSClosed = snsAdaptorMinimalPlugins?.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
+    const minimalPlugins = useActivatedPluginsSiteAdaptor(true)
+    const isGoPlusMinimal = minimalPlugins?.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
     const isDashboardClosed = useIsMinimalModeDashBoard(PluginID.GoPlusSecurity)
 
-    const isTokenSecurityEnable = !isSNSClosed && !isDashboardClosed
+    const isTokenSecurityEnable = !isGoPlusMinimal && !isDashboardClosed
 
-    const { value: tokenSecurityInfo, error } = useTokenSecurity(
+    const { value: tokenSecurityInfo } = useTokenSecurity(
         pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         outputToken?.address.trim(),
         isTokenSecurityEnable,

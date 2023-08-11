@@ -3,7 +3,7 @@ import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
 import {
     usePostInfoDetails,
     createInjectHooksRenderer,
-    useActivatedPluginsSNSAdaptor,
+    useActivatedPluginsSiteAdaptor,
 } from '@masknet/plugin-infra/content-script'
 import { PossiblePluginSuggestionPostInspector } from './DisabledPluginSuggestion.js'
 import { useSubscription } from 'use-subscription'
@@ -11,7 +11,7 @@ import { PersistentStorages } from '../../../shared/index.js'
 import { MaskPostExtraPluginWrapperWithPermission } from './PermissionBoundary.js'
 
 const PluginHooksRenderer = createInjectHooksRenderer(
-    useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
+    useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
     (plugin) => plugin.PostInspector,
     MaskPostExtraPluginWrapperWithPermission,
 )

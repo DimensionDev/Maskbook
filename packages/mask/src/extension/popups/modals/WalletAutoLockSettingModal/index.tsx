@@ -135,6 +135,7 @@ function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
                             classes.listItem,
                             option.name === OptionName.ONE_DAY ? classes.listItemOneDay : '',
                             option.value === (time ?? initialTime) ? classes.selected : '',
+                            option.value === '' && (time ?? initialTime) === '0' ? classes.selected : '',
                         )}
                         onClick={() => {
                             setTime(option.value)
@@ -170,5 +171,8 @@ export const WalletAutoLockSettingModal = forwardRef<
             setProps(p)
         },
     })
+
+    if (!open) return null
+
     return <WalletAutoLockSettingDrawer open={open} {...props} onClose={() => dispatch?.close(false)} />
 })

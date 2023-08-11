@@ -8,7 +8,7 @@ export const PLUGIN_ID = PluginID.Avatar
 export const PLUGIN_NAME = 'Avatar'
 export const PLUGIN_DESCRIPTION = 'NFT Avatar'
 
-export enum RSS3_KEY_SNS {
+export enum RSS3_KEY_SITE {
     TWITTER = '_nfts',
     FACEBOOK = '_facebook_nfts',
     INSTAGRAM = '_instagram_nfts',

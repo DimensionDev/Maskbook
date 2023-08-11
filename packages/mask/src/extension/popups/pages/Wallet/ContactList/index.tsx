@@ -34,7 +34,7 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean }>()
             display: 'flex',
             flexDirection: 'column',
             padding: '0',
-            maxHeight: isManage ? 470 : 380,
+            maxHeight: isManage ? 470 : 400,
             overflow: 'scroll',
             '::-webkit-scrollbar': {
                 display: 'none',
@@ -47,6 +47,9 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean }>()
             color: theme.palette.maskColor.main,
             lineHeight: '18px',
             fontWeight: 700,
+            maxWidth: 290,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
         },
         identifier: {
             fontSize: 14,
@@ -183,7 +186,7 @@ const ContactListUI = memo(function ContactListUI() {
     return (
         <div className={classes.root}>
             <Box className={classes.page}>
-                <AddContactInputPanel />
+                <AddContactInputPanel isManage={isManage} />
                 <Box className={classes.contactsPanel}>
                     {contacts.length ? (
                         <Typography className={classes.contactTitle}>

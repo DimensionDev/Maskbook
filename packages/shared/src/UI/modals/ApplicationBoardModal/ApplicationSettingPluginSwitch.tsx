@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { Icons } from '@masknet/icons'
-import { PluginI18NFieldRender, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { PluginI18NFieldRender, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
@@ -90,14 +90,14 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
     setDecentralizedSearchSettings,
 }: Props) {
     const { classes } = useStyles()
-    const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
-    const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
+    const plugins = useActivatedPluginsSiteAdaptor('any')
+    const pluginsInMinimalMode = useActivatedPluginsSiteAdaptor(true)
     const availablePlugins = useMemo(() => {
-        return snsAdaptorPlugins
+        return plugins
             .flatMap(({ ID, ApplicationEntries: entries }) => (entries ?? []).map((entry) => ({ entry, pluginID: ID })))
             .filter((x) => x.entry.category === 'dapp' && !x.entry.hiddenInList)
             .sort((a, b) => (a.entry.marketListSortingPriority ?? 0) - (b.entry.marketListSortingPriority ?? 0))
-    }, [snsAdaptorPlugins])
+    }, [plugins])
 
     const targetPluginRef = useRef<HTMLLIElement | null>()
     const noAvailablePlugins = availablePlugins.length === 0
@@ -164,7 +164,7 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
                             </section>
                             <Stack justifyContent="center">
                                 <Switch
-                                    checked={!snsAdaptorMinimalPlugins.map((x) => x.ID).includes(x.pluginID)}
+                                    checked={!pluginsInMinimalMode.map((x) => x.ID).includes(x.pluginID)}
                                     onChange={(event) => onSwitch(x.pluginID, event.target.checked)}
                                 />
                             </Stack>

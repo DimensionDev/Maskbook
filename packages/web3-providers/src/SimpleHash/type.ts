@@ -154,3 +154,8 @@ export interface Activity {
         total_price: number
     }
 }
+
+export interface Ownership {
+    wallet_address: string
+    contracts: Array<{ contract_address: string; token_ids: string[] }>
+}

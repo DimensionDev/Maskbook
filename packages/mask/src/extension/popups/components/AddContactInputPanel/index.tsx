@@ -66,7 +66,11 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const AddContactInputPanel = memo(function AddContactInputPanel(props: BoxProps) {
+interface Props extends BoxProps {
+    isManage?: boolean
+}
+
+const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, ...props }: Props) {
     const { t } = useI18N()
     const { classes, cx } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -94,7 +98,7 @@ const AddContactInputPanel = memo(function AddContactInputPanel(props: BoxProps)
 
     return (
         <Box padding={2} {...props} className={cx(classes.receiverPanel, props.className)}>
-            <Typography className={classes.toText}>{t('popups_wallet_transfer_to')}</Typography>
+            {isManage ? null : <Typography className={classes.toText}>{t('popups_wallet_transfer_to')}</Typography>}
             <div className={classes.fieldWrapper}>
                 <MaskTextField
                     placeholder={t('wallet_transfer_placeholder')}

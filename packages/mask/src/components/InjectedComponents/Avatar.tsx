@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { createInjectHooksRenderer, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { useSocialAccountsAll } from '@masknet/web3-hooks-base'
 import type { Plugin } from '@masknet/plugin-infra'
 import { EMPTY_LIST } from '@masknet/shared-base'
@@ -23,7 +23,7 @@ export function Avatar(props: AvatarProps) {
     const { value: socialAccounts = EMPTY_LIST, loading: loadingSocialAccounts } = useSocialAccountsAll(identity)
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
-            useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
+            useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
             (plugin) => {
                 const shouldDisplay =
                     plugin.AvatarRealm?.Utils?.shouldDisplay?.(identity, socialAccounts, sourceType) ?? true

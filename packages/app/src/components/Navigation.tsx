@@ -1,7 +1,6 @@
 import {
     ArrowPathRoundedSquareIcon,
     Cog6ToothIcon,
-    RocketLaunchIcon,
     WindowIcon,
     UserCircleIcon,
     PencilSquareIcon,
@@ -15,7 +14,6 @@ import { DashboardContext } from '../contexts/DashboardContext.js'
 const navigation = [
     { name: 'Applications', icon: WindowIcon, to: ApplicationRoutes.Applications },
     { name: 'Compose', icon: PencilSquareIcon, to: ApplicationRoutes.Compose },
-    { name: 'Explore', icon: RocketLaunchIcon, to: ApplicationRoutes.Explorer },
     { name: 'Web3 Profile', icon: UserCircleIcon, to: ApplicationRoutes.Web3Profile },
     { name: 'Swap', icon: ArrowPathRoundedSquareIcon, to: ApplicationRoutes.Swap },
     { name: 'Settings', icon: Cog6ToothIcon, to: ApplicationRoutes.Settings },
@@ -34,8 +32,8 @@ function NavigationLink(props: (typeof navigation)[0]) {
                 to={to}
                 className={classNames(
                     matched
-                        ? 'dark:bg-menu-dark bg-menu-light dark:text-link-dark bg-menu text-link-light'
-                        : ' text-item-light dark:text-item-dark dark:hover:text-white dark:hover:bg-menu-dark hover:text-indigo-600 hover:bg-menu-light',
+                        ? 'dark:bg-menu-dark bg-menu-light dark:text-link-dark bg-menu text-blue-600'
+                        : 'text-item-light dark:text-item-dark hover:bg-gray-100 dark:hover:text-white dark:hover:bg-gray-900',
                     'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
                 )}>
                 <props.icon className="h-6 w-6 shrink-0" aria-hidden="true" />

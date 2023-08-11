@@ -77,15 +77,17 @@ export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>
         return isGreaterThan(maskBalance, gasFee)
     }, [gasOption?.gasCurrency, nativeTokenBalance, maskBalance, gasFee, pluginID])
 
+    const balance =
+        isAvailableBalance && pluginID === NetworkPluginID.PLUGIN_EVM
+            ? BigNumber.max(new BigNumber(tokenBalance).minus(gasFee), 0).toString()
+            : tokenBalance
+
     return {
         isAvailableBalance,
         isGasSufficient,
         isGasFeeGreaterThanOneETH,
         gasFee,
-        balance:
-            isAvailableBalance && pluginID === NetworkPluginID.PLUGIN_EVM
-                ? BigNumber.max(new BigNumber(tokenBalance).minus(gasFee), 0).toString()
-                : tokenBalance,
+        balance,
         isLoading: isLoadingMaskBalance || isLoadingTokenBalance || loading,
     }
 }

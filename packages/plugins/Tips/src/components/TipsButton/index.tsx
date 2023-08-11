@@ -98,7 +98,7 @@ export function TipButton(props: Props) {
             if (!accounts.length || !receiverUserId) return
             PluginTipsMessages.tipTask.sendToLocal({
                 recipient,
-                recipientSnsId: receiverUserId,
+                recipientUserId: receiverUserId,
                 accounts,
             })
         },
@@ -109,7 +109,7 @@ export function TipButton(props: Props) {
         if (!receiverUserId || !accounts.length) return
         PluginTipsMessages.tipTaskUpdate.sendToLocal({
             recipient,
-            recipientSnsId: receiverUserId,
+            recipientUserId: receiverUserId,
             accounts,
         })
     }, [recipient, receiverUserId, accounts])

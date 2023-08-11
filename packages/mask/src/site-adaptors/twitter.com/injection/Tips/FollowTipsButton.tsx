@@ -3,7 +3,7 @@ import { noop } from 'lodash-es'
 import { Flags } from '@masknet/flags'
 import { makeStyles } from '@masknet/theme'
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { createInjectHooksRenderer, Plugin, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { startWatch } from '../../../../utils/startWatch.js'
@@ -81,7 +81,7 @@ const FollowButtonTipsSlot = memo(({ identity }: Props) => {
 
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
-            useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
+            useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
             (plugin) => plugin.TipsRealm?.UI?.Content,
         )
         return (

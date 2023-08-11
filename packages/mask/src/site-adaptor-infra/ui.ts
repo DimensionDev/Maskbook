@@ -2,7 +2,7 @@ import stringify from 'json-stable-stringify'
 import { assertNotEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { delay, waitDocumentReadyState } from '@masknet/kit'
 import type { SiteAdaptorUI } from '@masknet/types'
-import { type Plugin, startPluginSNSAdaptor, SiteAdaptorContextRef } from '@masknet/plugin-infra/content-script'
+import { type Plugin, startPluginSiteAdaptor, SiteAdaptorContextRef } from '@masknet/plugin-infra/content-script'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '@masknet/shared'
 import {
     createSubscriptionFromAsync,
@@ -22,7 +22,7 @@ import { Sentry } from '@masknet/web3-telemetry'
 import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
 import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host.js'
 import Services from '../extension/service.js'
-import { getCurrentIdentifier, getCurrentSNSNetwork } from '../site-adaptors/utils.js'
+import { getCurrentIdentifier, getCurrentSite } from '../site-adaptors/utils.js'
 import { setupReactShadowRootEnvironment } from '../utils/index.js'
 import '../utils/debug/general.js'
 import { configureSelectorMissReporter } from '../utils/startWatch.js'
@@ -31,8 +31,8 @@ import { definedSiteAdaptorsUI } from './define.js'
 
 const definedSiteAdaptorsResolved = new Map<string, SiteAdaptorUI.Definition>()
 
-export let activatedSiteAdaptorUI: SiteAdaptorUI.Definition = {} as any
-export let activatedSiteAdaptor_state: Readonly<SiteAdaptorUI.AutonomousState> = {} as any
+export let activatedSiteAdaptorUI: SiteAdaptorUI.Definition | undefined
+export let activatedSiteAdaptor_state: Readonly<SiteAdaptorUI.AutonomousState> | undefined
 
 export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.DeferredDefinition): Promise<void> {
     assertNotEnvironment(Environment.ManifestBackground)
@@ -62,9 +62,9 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
     const abort = new AbortController()
     const { signal } = abort
     if (import.meta.webpackHot) {
-        console.log('SNS adaptor HMR enabled.')
+        console.log('Site adaptor HMR enabled.')
         ui_deferred.hotModuleReload?.(async (newDefinition) => {
-            console.log('SNS adaptor updated. Uninstalling current adaptor.')
+            console.log('Site adaptor updated. Uninstalling current adaptor.')
             abort.abort()
             await delay(200)
             definedSiteAdaptorsResolved.set(ui_deferred.networkIdentifier, newDefinition)
@@ -149,7 +149,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
 
     const connectPersona = async () => {
         const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
-        currentSetupGuideStatus[activatedSiteAdaptorUI.networkIdentifier].value = stringify({
+        currentSetupGuideStatus[activatedSiteAdaptorUI!.networkIdentifier].value = stringify({
             status: SetupGuideStep.FindUsername,
             persona: currentPersonaIdentifier?.toText(),
         })
@@ -187,8 +187,8 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         requestHostPermission: Services.Helper.requestHostPermission,
     }
 
-    startPluginSNSAdaptor(
-        getCurrentSNSNetwork(ui.networkIdentifier),
+    startPluginSiteAdaptor(
+        getCurrentSite(ui.networkIdentifier),
         createPluginHost(
             signal,
             (id, signal): Plugin.SiteAdaptor.SiteAdaptorContext => {
@@ -227,10 +227,6 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
             if (document.visibilityState === 'hidden') return
             if (newValue.identifier === oldValue.identifier) return
             if (!newValue.identifier) return
-
-            MaskMessages.events.Native_visibleSNS_currentDetectedProfileUpdated.sendToBackgroundPage(
-                newValue.identifier,
-            )
         })
         if (provider.hasDeprecatedPlaceholderName) {
             provider.recognized.addListener((id) => {
@@ -291,7 +287,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
 export async function loadSiteAdaptorUI(identifier: string): Promise<SiteAdaptorUI.Definition> {
     if (definedSiteAdaptorsResolved.has(identifier)) return definedSiteAdaptorsResolved.get(identifier)!
     const define = definedSiteAdaptorsUI.get(identifier)
-    if (!define) throw new Error('SNS adaptor not found')
+    if (!define) throw new Error('Site adaptor not found')
     const ui = (await define.load()).default
     definedSiteAdaptorsResolved.set(identifier, ui)
     if (import.meta.webpackHot) {

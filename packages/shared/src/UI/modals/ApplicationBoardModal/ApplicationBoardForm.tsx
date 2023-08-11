@@ -9,7 +9,7 @@ import { Icons } from '@masknet/icons'
 import { ApplicationSettingPluginList } from './ApplicationSettingPluginList.js'
 import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch.js'
 import { ApplicationBoardContent } from './ApplicationBoard.js'
-import { useSharedI18N, type PersonaAgainstSNSConnectStatus } from '../../../index.js'
+import { useSharedI18N, type PersonaPerSiteConnectStatus } from '../../../index.js'
 import { ArrowBackRounded as ArrowBackRoundedIcon } from '@mui/icons-material'
 
 const useStyles = makeStyles()((theme) => ({
@@ -43,11 +43,11 @@ const useStyles = makeStyles()((theme) => ({
 interface ApplicationBoardFormProps {
     openDashboard?: (route?: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
-    currentSNSNetwork?: SiteAdaptor
+    currentSite?: SiteAdaptor
     allPersonas: PersonaInformation[]
     lastRecognized?: IdentityResolved
-    applicationCurrentStatus?: PersonaAgainstSNSConnectStatus
-    personaAgainstSNSConnectStatusLoading: boolean
+    applicationCurrentStatus?: PersonaPerSiteConnectStatus
+    personaPerSiteConnectStatusLoading: boolean
     setPluginMinimalModeEnabled?: (id: string, checked: boolean) => Promise<void>
     getDecentralizedSearchSettings?: () => Promise<boolean>
     setDecentralizedSearchSettings?: (checked: boolean) => Promise<void>
@@ -115,11 +115,11 @@ export function ApplicationBoardForm(props: ApplicationBoardFormProps) {
                         }}
                         openDashboard={props.openDashboard}
                         queryOwnedPersonaInformation={props.queryOwnedPersonaInformation}
-                        currentSNSNetwork={props.currentSNSNetwork}
+                        currentSite={props.currentSite}
                         lastRecognized={props.lastRecognized}
                         allPersonas={props.allPersonas}
                         applicationCurrentStatus={props.applicationCurrentStatus}
-                        personaAgainstSNSConnectStatusLoading={props.personaAgainstSNSConnectStatusLoading}
+                        personaPerSiteConnectStatusLoading={props.personaPerSiteConnectStatusLoading}
                     />
                 </>
             )}

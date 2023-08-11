@@ -7,7 +7,6 @@ import {
     formatBalance,
     formatCurrency,
     isGreaterThan,
-    isGreaterThanOrEqualTo,
     isLessThan,
     isLessThanOrEqualTo,
     isPositive,
@@ -108,7 +107,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     const gasPriceError = useMemo(() => {
         if (isSupport1559) return
         if (isZero(gasPrice)) return t('popups_wallet_gas_price_should_greater_than_zero')
-        if (gasOptions && isGreaterThanOrEqualTo(gasOptions.slow.suggestedMaxFeePerGas, formatGweiToWei(gasPrice))) {
+        if (gasOptions && isGreaterThan(gasOptions.slow.suggestedMaxFeePerGas, formatGweiToWei(gasPrice))) {
             return t('popups_wallet_gas_price_too_low')
         }
         return
@@ -227,7 +226,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                         value={formatWeiToEther(totalGas).times(nativeTokenPrice ?? 0)}
                         formatter={formatCurrency}
                         options={{
-                            onlyRemainTwoDecimal: false,
+                            onlyRemainTwoOrZeroDecimal: false,
                             customDecimalConfig: {
                                 boundary: scale10(1, -4),
                                 decimalExp: 4,

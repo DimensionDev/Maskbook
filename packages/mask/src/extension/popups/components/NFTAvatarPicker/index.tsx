@@ -2,7 +2,7 @@ import { ElementAnchor, NetworkTab, PluginVerifiedWalletStatusBar, RetryHint } f
 import { Box, Button, Stack } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
-import { useChainContext, useNetworkContext, useNonFungibleAssets } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useNonFungibleAssets, useWallet } from '@masknet/web3-hooks-base'
 import { uniqBy } from 'lodash-es'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -43,6 +43,7 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
     const { classes } = useStyles()
     const { pluginID } = useNetworkContext()
     const modalNavigate = useModalNavigate()
+    const wallet = useWallet()
     const chains = useMemo(() => {
         const networks = getRegisteredWeb3Networks(pluginID)
         return networks.filter((x) => (Flags.support_testnet_switch ? true : x.isMainnet)).map((x) => x.chainId)
@@ -95,12 +96,12 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
                     expectedAddress={account}>
                     <Button
                         fullWidth
-                        disabled={loading || !selected}
+                        disabled={loading || !selected || !!wallet?.owner}
                         onClick={() => {
                             if (!selected?.metadata?.imageURL) return
                             onChange(selected?.metadata?.imageURL)
                         }}>
-                        {t('confirm')}
+                        {wallet?.owner ? t('coming_soon') : t('confirm')}
                     </Button>
                 </PluginVerifiedWalletStatusBar>
             </Box>

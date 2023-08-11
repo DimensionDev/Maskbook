@@ -64,8 +64,8 @@ export function Banner(props: BannerProps) {
         lastRecognizedIdentity,
     )
     const { nextStep } = props
-    const networkIdentifier = activatedSiteAdaptorUI.networkIdentifier
-    const identities = useValueRef(activatedSiteAdaptor_state.profiles)
+    const networkIdentifier = activatedSiteAdaptorUI!.networkIdentifier
+    const identities = useValueRef(activatedSiteAdaptor_state!.profiles)
     const [value, onChange] = useState('')
     const defaultNextStep = useCallback(() => {
         if (nextStep === 'hidden') return
@@ -84,7 +84,7 @@ export function Banner(props: BannerProps) {
               defaultValue: lastRecognizedIdentity.identifier?.userId ?? '',
               value,
               onChange,
-              isValid: activatedSiteAdaptorUI.utils.isValidUsername || (() => true),
+              isValid: activatedSiteAdaptorUI!.utils.isValidUsername || (() => true),
           }
         : ('hidden' as const)
 

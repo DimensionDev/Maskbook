@@ -1,5 +1,6 @@
 {
     "promote": "在 Twitter 上即时交换代币。安装 Mask.io 以在多链Dex上探索“更好的服务器”。",
+    "account_promote$facebook": "关注 @$t(mask:facebook_account) 在 Facebook 上交换加密货币",
     "impact_warning": "价格影响提示",
     "risk_warning": "风险提示",
     "risk_warning_description": "您想要交易的金额可能比当前市场价格下跌 <span>{{impact}}</span> 。因此，您可能会损失 <span>{{lostSymbol}}</span>  或 <span>{{- lostValue}}</span>。",
@@ -16,6 +17,7 @@
     "plugin_wallet_snackbar_success": "交易成功",
     "plugin_wallet_snackbar_failed": "交易失败",
     "plugin_wallet_snackbar_swap_successful": "已成功兑换代币",
+    "plugin_wallet_snackbar_add_nft_successful": "新增成功",
     "plugin_wallet_snackbar_swap_token": "兑换代币",
     "share": "分享",
     "plugin_trader_fail_to_load": "无法加载趋势信息  ",

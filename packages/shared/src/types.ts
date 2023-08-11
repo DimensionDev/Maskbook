@@ -14,10 +14,10 @@ export interface PersonaConnectStatus {
     proof?: BindingProof[]
 }
 
-export interface PersonaAgainstSNSConnectStatus {
-    isSNSConnectToCurrentPersona: boolean
+export interface PersonaPerSiteConnectStatus {
+    isSiteConnectedToCurrentPersona: boolean
     currentPersonaPublicKey: string
-    currentSNSConnectedPersonaPublicKey: string
+    currentSiteConnectedPersonaPublicKey: string
 }
 
 export interface PersonaAvatarData {

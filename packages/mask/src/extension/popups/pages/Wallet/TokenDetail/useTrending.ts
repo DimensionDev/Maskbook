@@ -11,9 +11,9 @@ export function useTrending(chainId: ChainId, address?: string) {
     return useQuery({
         enabled: !isLoading,
         queryKey: ['coin-trending', 'coin-gecko', chainId, coinId, address],
-        queryFn: async (): Promise<TrendingAPI.Trending | undefined> => {
+        queryFn: async (): Promise<TrendingAPI.Trending | null | undefined> => {
             const currency = trending.getCurrency(chainId, SourceType.CoinGecko)
-            if (!currency || !coinId) return
+            if (!currency || !coinId) return null
 
             return CoinGeckoTrending.getCoinTrending(chainId, coinId, currency)
         },

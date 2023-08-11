@@ -4,7 +4,7 @@ import {
     createInjectHooksRenderer,
     type PostInfo,
     PostInfoProvider,
-    useActivatedPluginsSNSAdaptor,
+    useActivatedPluginsSiteAdaptor,
     usePostInfoDetails,
 } from '@masknet/plugin-infra/content-script'
 import { useWeb3Others, Web3ContextProvider } from '@masknet/web3-hooks-base'
@@ -13,7 +13,7 @@ import { Flags } from '@masknet/flags'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 
 const ActionsRenderer = createInjectHooksRenderer(
-    useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
+    useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
     (plugin) => plugin.TipsRealm?.UI?.Content,
 )
 

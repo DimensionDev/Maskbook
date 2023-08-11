@@ -1,4 +1,4 @@
-import { compact, noop } from 'lodash-es'
+import { compact, noop, pick } from 'lodash-es'
 import { useCallback, useState } from 'react'
 import { Button, MenuItem, Typography } from '@mui/material'
 import type { NetworkPluginID } from '@masknet/shared-base'
@@ -16,14 +16,15 @@ const useStyles = makeStyles()((theme) => ({
         background: theme.palette.maskColor.bottom,
         borderRadius: 16,
         boxShadow: theme.palette.maskColor.bottomBg,
-        padding: theme.spacing(1.5),
+        padding: theme.spacing(0.5),
     },
     item: {
         display: 'flex',
-        height: 30,
-        padding: 0,
+        height: 46,
         justifyContent: 'space-between',
         alignItems: 'center',
+        borderRadius: 8,
+        padding: theme.spacing(1),
     },
     token: {
         display: 'flex',
@@ -66,9 +67,9 @@ export function useGasCurrencyMenu(
     return useMenuConfig(
         compact([
             nativeToken ? (
-                <MenuItem className={classes.item} onClick={() => handleChange(nativeToken.address)}>
-                    <Typography className={classes.token}>
-                        <TokenIcon {...nativeToken} size={30} />
+                <MenuItem className={classes.item} disableRipple onClick={() => handleChange(nativeToken.address)}>
+                    <Typography className={classes.token} component="div">
+                        <TokenIcon {...pick(nativeToken, 'chainId', 'address', 'symbol')} size={30} />
                         {nativeToken.symbol}
                     </Typography>
                     <RadioIndicator size={20} checked={isSameAddress(selected, nativeToken.address)} />
@@ -77,9 +78,10 @@ export function useGasCurrencyMenu(
             maskToken ? (
                 <MenuItem
                     className={classes.item}
+                    disableRipple
                     onClick={!availableBalanceTooLow ? () => handleChange(maskToken.address) : noop}>
-                    <Typography className={classes.token}>
-                        <TokenIcon {...maskToken} size={30} />
+                    <Typography className={classes.token} component="div">
+                        <TokenIcon {...pick(maskToken, 'chainId', 'address', 'symbol')} size={30} />
                         {maskToken.symbol}
                     </Typography>
                     {availableBalanceTooLow ? (

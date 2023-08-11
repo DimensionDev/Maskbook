@@ -31,10 +31,10 @@ export function TipTaskManager({ children }: PropsWithChildren<{}>) {
     useEffect(() => {
         return PluginTipsMessages.tipTaskUpdate.on((task) => {
             setTasks((list) => {
-                const included = list.some((t) => t.recipientSnsId === task.recipientSnsId)
+                const included = list.some((t) => t.recipientUserId === task.recipientUserId)
                 if (!included) return list
                 if (list.some((t) => isEqual(task, t))) return list
-                return list.map((t) => (t.recipientSnsId === task.recipientSnsId ? { ...task, id: t.id } : t))
+                return list.map((t) => (t.recipientUserId === task.recipientUserId ? { ...task, id: t.id } : t))
             })
         })
     }, [])

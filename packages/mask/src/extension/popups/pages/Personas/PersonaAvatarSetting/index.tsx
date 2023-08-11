@@ -20,6 +20,7 @@ import { Web3, Web3Storage } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { MAX_FILE_SIZE } from '../../../constants.js'
 import { useTitle } from '../../../hook/useTitle.js'
+import { useUpdateEffect } from '@react-hookz/web'
 
 const useStyles = makeStyles()((theme) => ({
     tabs: {
@@ -78,6 +79,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
         ProfilePhotoType.Image,
         ProfilePhotoType.NFT,
     )
+    const [avatarLoaded, setAvatarLoaded] = useState(false)
 
     const { showSnackbar } = usePopupCustomSnackbar()
 
@@ -136,6 +138,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
                 } else {
                     sign = await Web3.signMessage('message', JSON.stringify(data), {
                         account,
+                        silent: true,
                     })
                 }
 
@@ -166,6 +169,12 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
 
     useTitle(t('popups_profile_photo'))
 
+    // reset loaded state after file be changed
+
+    useUpdateEffect(() => {
+        if (file) setAvatarLoaded(false)
+    }, [file])
+
     if (file) {
         return (
             <Box>
@@ -180,6 +189,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
                         rotate={0}
                         borderRadius={300}
                         crossOrigin="anonymous"
+                        onLoadSuccess={() => setAvatarLoaded(true)}
                     />
                     <Slider
                         max={2}
@@ -194,7 +204,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
                     <Button variant="outlined" onClick={() => setFile(null)} fullWidth>
                         {t('cancel')}
                     </Button>
-                    <ActionButton fullWidth onClick={handleConfirm} loading={uploadLoading}>
+                    <ActionButton fullWidth onClick={handleConfirm} loading={uploadLoading} disabled={!avatarLoaded}>
                         {t('confirm')}
                     </ActionButton>
                 </BottomController>

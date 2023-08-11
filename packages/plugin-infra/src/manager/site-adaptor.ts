@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { isEqual } from 'lodash-es'
 import { unreachable } from '@masknet/kit'
-import { type NetworkPluginID, ValueRefWithReady } from '@masknet/shared-base'
+import { ValueRefWithReady } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { createManager } from './manage.js'
 import { getPluginDefine } from './store.js'
@@ -14,7 +14,7 @@ events.on('activateChanged', () => (activatedSub.value = [...activated.plugins])
 const minimalModeSub = new ValueRefWithReady<string[]>([], isEqual)
 events.on('minimalModeChanged', () => (minimalModeSub.value = [...minimalMode]))
 
-export function useActivatedPluginsSNSAdaptor(minimalModeEqualsTo: 'any' | boolean) {
+export function useActivatedPluginsSiteAdaptor(minimalModeEqualsTo: 'any' | boolean) {
     const minimalMode = useValueRef(minimalModeSub)
     const result = useValueRef(activatedSub)
     return useMemo(() => {
@@ -24,10 +24,10 @@ export function useActivatedPluginsSNSAdaptor(minimalModeEqualsTo: 'any' | boole
         unreachable(minimalModeEqualsTo)
     }, [result, minimalMode, minimalModeEqualsTo])
 }
-useActivatedPluginsSNSAdaptor.visibility = {
-    useMinimalMode: useActivatedPluginsSNSAdaptor.bind(null, true),
-    useNotMinimalMode: useActivatedPluginsSNSAdaptor.bind(null, false),
-    useAnyMode: useActivatedPluginsSNSAdaptor.bind(null, 'any'),
+useActivatedPluginsSiteAdaptor.visibility = {
+    useMinimalMode: useActivatedPluginsSiteAdaptor.bind(null, true),
+    useNotMinimalMode: useActivatedPluginsSiteAdaptor.bind(null, false),
+    useAnyMode: useActivatedPluginsSiteAdaptor.bind(null, 'any'),
 }
 
 export function useIsMinimalMode(pluginID: string) {
@@ -40,8 +40,8 @@ export function useIsMinimalMode(pluginID: string) {
  * @param visibility Should invisible plugin included?
  * @returns
  */
-export function useActivatedPluginSNSAdaptor(pluginID: string, minimalModeEqualsTo: 'any' | boolean) {
-    const plugins = useActivatedPluginsSNSAdaptor(minimalModeEqualsTo)
+export function useActivatedPluginSiteAdaptor(pluginID: string, minimalModeEqualsTo: 'any' | boolean) {
+    const plugins = useActivatedPluginsSiteAdaptor(minimalModeEqualsTo)
     const minimalMode = useValueRef(minimalModeSub)
 
     return useMemo(() => {
@@ -59,17 +59,7 @@ export function useActivatedPluginSNSAdaptor(pluginID: string, minimalModeEquals
     }, [pluginID, plugins, minimalMode, minimalModeEqualsTo])
 }
 
-export function useActivatedPluginSNSAdaptor_Web3Supported(chainId: number, pluginID: string) {
-    const plugins = useActivatedPluginsSNSAdaptor('any')
-    const entries = plugins.map((plugin): [string, boolean] => {
-        if (!plugin.enableRequirement.web3) return [plugin.ID, true]
-        const supportedChainIds = plugin.enableRequirement.web3?.[pluginID as NetworkPluginID]?.supportedChainIds
-        return [plugin.ID, supportedChainIds?.includes(chainId) ?? false]
-    })
-    return Object.fromEntries(entries) as Record<string, boolean>
-}
-
-export function startPluginSNSAdaptor(
+export function startPluginSiteAdaptor(
     currentNetwork: SiteAdaptor,
     host: Plugin.__Host.Host<Plugin.SiteAdaptor.SiteAdaptorContext>,
 ) {

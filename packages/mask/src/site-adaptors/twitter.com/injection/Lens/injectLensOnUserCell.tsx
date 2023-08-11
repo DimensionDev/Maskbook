@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { createInjectHooksRenderer, Plugin, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { querySelectorAll } from '../../utils/selector.js'
@@ -65,7 +65,7 @@ function UserCellLensSlot({ userId }: Props) {
 
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
-            useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
+            useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
             (plugin) => plugin.Lens?.UI?.Content,
             undefined,
             createRootElement,

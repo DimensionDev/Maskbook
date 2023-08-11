@@ -20,5 +20,6 @@
     "facebook_account": "masknetwork",
     "done": "完成",
     "failed": "失败",
+    "promote_savings": "Hi朋友们，我刚刚在 {{chain}} 上质押了 {{- amount}} {{symbol}} 。关注@{{account}} 来查找更多的质押项目。",
     "promote_withdraw": "Hi朋友们，我刚刚在 {{chain}} 上质押了 {{- amount}} {{symbol}} 。关注@{{account}} 来查找更多的质押项目。"
 }

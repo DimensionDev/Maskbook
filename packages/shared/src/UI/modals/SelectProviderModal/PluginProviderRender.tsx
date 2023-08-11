@@ -27,7 +27,7 @@ import {
     ProviderType as FlowProviderType,
 } from '@masknet/web3-shared-flow'
 import { DialogDismissIconUI, ImageIcon, ProviderIcon, useSharedI18N } from '@masknet/shared'
-import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { openWindow } from '@masknet/shared-base-ui'
 
@@ -165,19 +165,19 @@ export const PluginProviderRender = memo(function PluginProviderRender({
 }: PluginProviderRenderProps) {
     const { classes, cx } = useStyles()
     const t = useSharedI18N()
-    const snsPlugins = useActivatedPluginsSNSAdaptor('any')
+    const plugins = useActivatedPluginsSiteAdaptor('any')
     const dashboardPlugins = useActivatedPluginsDashboard()
     const [selectChainDialogOpen, setSelectChainDialogOpen] = useState(false)
 
     const fortmaticProviderDescriptor = providers.find((x) => x.type === ProviderType.Fortmatic)
 
-    const [{ error }, handleClick] = useAsyncFn(
+    const [, handleClick] = useAsyncFn(
         async (provider: Web3Helper.ProviderDescriptorAll, fortmaticChainId?: Web3Helper.ChainIdAll) => {
             if (provider.type === ProviderType.Fortmatic && !fortmaticChainId) {
                 setSelectChainDialogOpen(true)
                 return
             }
-            const target = [...snsPlugins, ...dashboardPlugins].find(
+            const target = [...plugins, ...dashboardPlugins].find(
                 (x) => x.ID === (provider.providerAdaptorPluginID as string),
             )
             if (!target) return
@@ -211,7 +211,7 @@ export const PluginProviderRender = memo(function PluginProviderRender({
 
             onProviderIconClicked(networkDescriptor, provider, isReady, downloadLink)
         },
-        [snsPlugins, dashboardPlugins],
+        [plugins, dashboardPlugins],
     )
 
     const getTips = useCallback((provider: Web3Helper.ProviderTypeAll) => {

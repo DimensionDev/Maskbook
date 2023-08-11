@@ -174,8 +174,8 @@ export const LogoutUI = memo<LogoutUIProps>(
         ])
 
         return (
-            <Box>
-                <Box p={2}>
+            <Box flex={1} maxHeight="544px" overflow="auto" data-hide-scrollbar>
+                <Box p={2} pb={11}>
                     <Box className={classes.infoBox}>
                         <PersonaAvatar size={30} avatar={currentPersona?.avatar} />
                         <Box>
@@ -222,12 +222,13 @@ export const LogoutUI = memo<LogoutUIProps>(
                         {currentPersona && manageWallets.length ? (
                             <Typography mt={2}>
                                 <Trans
-                                    i18nKey="popups_log_out_with_smart_pay_tips"
+                                    i18nKey={
+                                        manageWallets.length > 1
+                                            ? 'popups_log_out_with_smart_pay_tips_other'
+                                            : 'popups_log_out_with_smart_pay_tips_one'
+                                    }
                                     values={{
                                         persona: currentPersona.nickname,
-                                        addresses: manageWallets
-                                            .map((x) => formatEthereumAddress(x.address, 4))
-                                            .join(','),
                                     }}
                                 />
                             </Typography>

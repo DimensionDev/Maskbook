@@ -1,11 +1,12 @@
-import { DisableShadowRootContext, ShadowRootIsolation } from '@masknet/theme'
 import { memo } from 'react'
+import { DisableShadowRootContext, ShadowRootIsolation } from '@masknet/theme'
 import { DashboardHeader } from './DashboardHeader.js'
 import { DashboardContainer } from './DashboardContainer.js'
+import { DashboardBody } from './DashboardBody.js'
 
 interface PageContainerProps {
-    children?: React.ReactNode
     title?: string
+    children?: React.ReactNode
 }
 
 export const PageContainer = memo<PageContainerProps>(({ children, title = '' }) => {
@@ -13,14 +14,11 @@ export const PageContainer = memo<PageContainerProps>(({ children, title = '' })
         <DashboardContainer>
             <main>
                 <DashboardHeader title={title} />
-
-                <div className="bg-white dark:bg-black p-5 pt-0">
-                    <div className="border rounded-lg border-line-light dark:border-neutral-800 overflow-hidden">
-                        <DisableShadowRootContext.Provider value={false}>
-                            <ShadowRootIsolation>{children}</ShadowRootIsolation>
-                        </DisableShadowRootContext.Provider>
-                    </div>
-                </div>
+                <DashboardBody>
+                    <DisableShadowRootContext.Provider value={false}>
+                        <ShadowRootIsolation>{children}</ShadowRootIsolation>
+                    </DisableShadowRootContext.Provider>
+                </DashboardBody>
             </main>
         </DashboardContainer>
     )

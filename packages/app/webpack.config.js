@@ -110,6 +110,7 @@ function Configuration(env, argv) {
             })(),
         ],
         devServer: {
+            historyApiFallback: true,
             client: {
                 overlay: false,
             },
