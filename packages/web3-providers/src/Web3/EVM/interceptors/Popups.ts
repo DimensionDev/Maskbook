@@ -1,3 +1,4 @@
+import { noop } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import {
     ErrorEditor,
@@ -9,7 +10,6 @@ import {
     ProviderType,
     type MessageRequest,
     type MessageResponse,
-    getNativeTokenAddress,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import { MessageStateType, isGreaterThan, isZero, toFixed, type TransferableMessage } from '@masknet/web3-shared-base'
@@ -40,7 +40,6 @@ export class Popups implements Middleware<ConnectionContext> {
 
     private async getPaymentToken(context: ConnectionContext) {
         const maskAddress = getMaskTokenAddress(context.chainId)
-        const nativeTokenAddress = getNativeTokenAddress(context.chainId)
         try {
             const smartPayChainId = await this.Bundler.getSupportedChainId()
             if (context.chainId !== smartPayChainId || !context.owner) return DEFAULT_PAYMENT_TOKEN_STATE
@@ -104,40 +103,48 @@ export class Popups implements Middleware<ConnectionContext> {
     }
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {
-        // Draw the Popups up and wait for user confirmation before publishing risky requests on the network
-        if (context.risky && context.writeable) {
-            const currentChainId = await this.Web3.getChainId()
+        const sendRequest = async () => {
+            // Draw the Popups up and wait for user confirmation before publishing risky requests on the network
+            if (context.risky && context.writeable) {
+                const currentChainId = await this.Web3.getChainId()
 
-            if (context.method === EthereumMethodType.ETH_SEND_TRANSACTION && currentChainId !== context.chainId) {
-                await Providers[ProviderType.MaskWallet].switchChain(context.chainId)
-                const networks = Web3StateRef.value.Network?.networks?.getCurrentValue()
-                const target = networks?.find((x) => x.chainId === context.chainId)
-                if (target) await Web3StateRef.value.Network?.switchNetwork(target?.ID)
-            }
-
-            const request: TransferableMessage<MessageRequest, MessageResponse> = {
-                state: MessageStateType.NOT_DEPEND,
-                request: {
-                    arguments: context.requestArguments,
-                    options: {
-                        ...(await this.getPaymentToken(context)),
-                        silent: context.silent,
-                        owner: context.owner,
-                        identifier: context.identifier?.toText(),
-                        providerURL: this.customNetwork ? this.customNetwork.rpcUrl : undefined,
-                    },
-                },
-            }
-
-            try {
-                const response = await Web3StateRef.value.Message?.applyAndWaitResponse(request)
-
-                if (!response) {
-                    context.abort('Failed to approve request.')
-                    await next()
-                    return
+                if (context.method === EthereumMethodType.ETH_SEND_TRANSACTION && currentChainId !== context.chainId) {
+                    await Providers[ProviderType.MaskWallet].switchChain(context.chainId)
+                    const networks = Web3StateRef.value.Network?.networks?.getCurrentValue()
+                    const target = networks?.find((x) => x.chainId === context.chainId)
+                    if (target) await Web3StateRef.value.Network?.switchNetwork(target?.ID)
                 }
 
+                const request: TransferableMessage<MessageRequest, MessageResponse> = {
+                    state: MessageStateType.NOT_DEPEND,
+                    request: {
+                        arguments: context.requestArguments,
+                        options: {
+                            ...(await this.getPaymentToken(context)),
+                            silent: context.silent,
+                            owner: context.owner,
+                            identifier: context.identifier?.toText(),
+                            providerURL: this.customNetwork ? this.customNetwork.rpcUrl : undefined,
+                        },
+                    },
+                }
+
+                if (!Web3StateRef.value.Message) throw new Error('Failed to approve request.')
+                return Web3StateRef.value.Message.applyAndWaitResponse(request)
+            } else if (context.writeable && this.customNetwork?.rpcUrl) {
+                return this.Web3.getWeb3Provider({
+                    chainId: context.chainId,
+                    account: context.account,
+                    providerURL: this.customNetwork.rpcUrl,
+                }).sendAsync(context.request, noop)
+            }
+            return
+        }
+
+        try {
+            const response = await sendRequest()
+
+            if (response) {
                 const editor = ErrorEditor.from(null, response)
 
                 if (editor.presence) {
@@ -145,9 +152,9 @@ export class Popups implements Middleware<ConnectionContext> {
                 } else {
                     context.write(response.result)
                 }
-            } catch (error) {
-                context.abort(error)
             }
+        } catch (error) {
+            context.abort(error)
         }
 
         await next()
