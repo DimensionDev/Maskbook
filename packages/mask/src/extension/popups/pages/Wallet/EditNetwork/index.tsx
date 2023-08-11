@@ -190,7 +190,7 @@ export const EditNetwork = memo(function EditNetwork() {
                         address: ZERO_ADDRESS,
                     },
                     explorerUrl: {
-                        url: '',
+                        url: parsedData.explorer,
                     },
                 }
                 if (isEditing) {

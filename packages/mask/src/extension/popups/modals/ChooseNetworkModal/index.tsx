@@ -112,7 +112,11 @@ const NetworkItem = memo(function NetworkItem({ network, currentNetworkId }: Net
                 <TextOverflowTooltip title={network.name}>
                     <Typography className={classes.name}>{network.name}</Typography>
                 </TextOverflowTooltip>
-                <ProgressiveText className={classes.balance} loading={loadingBalance} skeletonWidth={60}>
+                <ProgressiveText
+                    className={classes.balance}
+                    loading={loadingBalance}
+                    skeletonWidth={60}
+                    skeletonHeight={16}>
                     {`${formatBalance(balance, token?.decimals, 0, false, true)} ${token?.symbol}`}
                 </ProgressiveText>
             </div>

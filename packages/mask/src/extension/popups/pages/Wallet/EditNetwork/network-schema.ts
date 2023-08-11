@@ -28,7 +28,7 @@ export function createBaseSchema(t: I18NFunction, duplicateNameValidator: NameVa
             z.number(),
         ]),
         currencySymbol: z.string().optional(),
-        explorer: z.union([z.string().url(t('incorrect_explorer_url')), z.literal('')]),
+        explorer: z.string().url(t('incorrect_explorer_url')),
     })
     return schema
 }
