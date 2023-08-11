@@ -6,11 +6,18 @@ import { fromBase64URL, type EC_JsonWebKey, isK256Point, isK256PrivateKey } from
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 
 export async function internal_wallet_restore(backup: NormalizedBackup.WalletBackup[]) {
+    let index = 0
     for (const wallet of backup) {
         try {
             const wallets = await WalletServiceRef.value.getWallets()
             const nameExists = wallets.some((x) => x.name === wallet.name)
-            const name = nameExists ? `Wallet ${wallets.length + 1}` : wallet.name
+            index += 1
+            let name = wallet.name
+            if (nameExists) {
+                name = `${wallet.name}(2)`
+            } else {
+                name ||= `Wallet ${index + wallets.length}`
+            }
 
             if (wallet.privateKey.some)
                 await WalletServiceRef.value.recoverWalletFromPrivateKey(
