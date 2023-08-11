@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import type { UseFormSetError } from 'react-hook-form'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, generateNewWalletName } from '@masknet/shared-base'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
@@ -94,7 +94,7 @@ const Recovery = memo(function Recovery() {
 
     const wallets = useWallets()
 
-    const newWalletName = useMemo(() => `Wallet ${wallets.filter((x) => !x.owner).length + 1}`, [wallets])
+    const newWalletName = generateNewWalletName(wallets)
 
     const handleRestoreFromMnemonic = useCallback(
         async (values: string[]) => {

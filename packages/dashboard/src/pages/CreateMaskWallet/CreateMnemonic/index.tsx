@@ -6,7 +6,7 @@ import { Alert, alpha, Box, Button, Stack, Typography, useTheme } from '@mui/mat
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { CopyButton } from '@masknet/shared'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, generateNewWalletName } from '@masknet/shared-base'
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
@@ -16,6 +16,7 @@ import { useMnemonicWordsPuzzle, type PuzzleWord } from '../../../hooks/useMnemo
 import { useDashboardI18N } from '../../../locales/index.js'
 import { ComponentToPrint } from './ComponentToPrint.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
+import { useWallets } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -160,7 +161,8 @@ const useStyles = makeStyles()((theme) => ({
 const CreateMnemonic = memo(function CreateMnemonic() {
     const location = useLocation()
     const navigate = useNavigate()
-    const walletName = 'Wallet 1'
+    const wallets = useWallets()
+    const walletName = generateNewWalletName(wallets)
     const t = useDashboardI18N()
     const { handlePasswordAndWallets } = ResetWalletContext.useContainer()
     const [verified, setVerified] = useState(false)
