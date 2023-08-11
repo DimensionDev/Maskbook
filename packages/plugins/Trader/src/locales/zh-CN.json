@@ -1,5 +1,6 @@
 {
     "promote": "在 Twitter 上即时交换代币。安装 Mask.io 以在多链Dex上探索“更好的服务器”。",
+    "account_promote$twitter": "关注 @$t(mask:twitter_account) 在 Twitter 上交换加密货币",
     "account_promote$facebook": "关注 @$t(mask:facebook_account) 在 Facebook 上交换加密货币",
     "impact_warning": "价格影响提示",
     "risk_warning": "风险提示",
@@ -98,6 +99,7 @@
     "plugin_trader_confirm_slippage_tolerance": "滑点容许值",
     "plugin_trader_confirm_tx_cost": "(${{usd}})",
     "plugin_trader_confirm_minimum_received": "收到的最低数额",
+    "plugin_trader_confirm_tips": "最大价格滑点设置过高可能会导致最少返回数额低于期望数额。",
     "plugin_trader_price_impact_warning_tips": "若设置的滑点过低，在流动性极低的情况下交易可能会被退回。",
     "plugin_trader_price_impact_too_high_tips": "价格影响高！超过 {{impact}} 影响！",
     "plugin_trader_confirm_swap": "确认兑换",
