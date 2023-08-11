@@ -6,7 +6,6 @@ import { Avatar } from '../../../../components/InjectedComponents/Avatar.js'
 import { startWatch } from '../../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { querySelectorAll } from '../../utils/selector.js'
-import { isVerifiedUser } from '../../utils/AvatarType.js'
 
 function getTwitterId(ele: HTMLElement) {
     const profileLink = ele.querySelector('a[role="link"]') as HTMLAnchorElement
@@ -47,7 +46,6 @@ export async function injectAvatar(signal: AbortSignal) {
                     ? Plugin.SiteAdaptor.AvatarRealmSourceType.Suggestion
                     : Plugin.SiteAdaptor.AvatarRealmSourceType.Post
 
-                const isVerified = isVerifiedUser(ele)
                 const root = attachReactTreeWithContainer(proxy.afterShadow, { untilVisible: true, signal })
                 root.render(
                     <div
@@ -59,7 +57,7 @@ export async function injectAvatar(signal: AbortSignal) {
                             height: 16,
                             zIndex: 2,
                         }}>
-                        {isVerified ? <Avatar userId={twitterId} sourceType={sourceType} /> : null}
+                        <Avatar userId={twitterId} sourceType={sourceType} />
                     </div>,
                 )
                 remover = root.destroy
