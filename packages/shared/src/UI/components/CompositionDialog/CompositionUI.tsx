@@ -14,7 +14,7 @@ import { CrossIsolationMessages, EMPTY_OBJECT } from '@masknet/shared-base'
 const useStyles = makeStyles()((theme) => ({
     root: {
         '& > *': {
-            height: '36px !important',
+            gap: 8,
         },
         minHeight: 450,
         maxHeight: 464,
