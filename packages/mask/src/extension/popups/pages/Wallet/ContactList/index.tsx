@@ -292,7 +292,7 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
                 handler: deleteContact,
             })
         return options
-    }, [t, contactType])
+    }, [t, contactType, address, name])
 
     const [menu, openMenu, _, isOpenMenu] = useMenuConfig(
         menuOptions.map((option, index) => (
