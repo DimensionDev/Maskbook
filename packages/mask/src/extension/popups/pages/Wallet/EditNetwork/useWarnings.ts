@@ -1,9 +1,9 @@
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { useNetworks } from '@masknet/web3-hooks-base'
+import { fetchChains } from '@masknet/web3-providers/helpers'
+import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { useI18N } from '../../../../../utils/index.js'
-import { useQuery } from '@tanstack/react-query'
-import { fetchChains } from './network-schema.js'
 
 export function useWarnings(formChainId: number, formSymbol?: string) {
     const { t } = useI18N()

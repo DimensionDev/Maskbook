@@ -13,10 +13,11 @@ import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { type z, type ZodCustomIssue } from 'zod'
 import { useI18N, type AvailableLocaleKeys } from '../../../../../utils/index.js'
-import { createSchema, fetchChains } from './network-schema.js'
+import { createSchema } from './network-schema.js'
 import { PageTitleContext } from '../../../context.js'
 import { useTitle } from '../../../hook/index.js'
 import { useWarnings } from './useWarnings.js'
+import { fetchChains } from '@masknet/web3-providers/helpers'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
