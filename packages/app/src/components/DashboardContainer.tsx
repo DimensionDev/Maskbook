@@ -9,6 +9,7 @@ import { DashboardHeader } from './DashboardHeader.js'
 import { SearchBox } from './SearchBox.js'
 import { useSetThemeMode } from '../hooks/useSetThemeMode.js'
 import { useThemeMode } from '../hooks/useThemeMode.js'
+import { GA } from './GA.js'
 
 export interface DashboardContainerProps {
     children: React.ReactNode
@@ -31,6 +32,7 @@ export function DashboardContainer(props: DashboardContainerProps) {
 
     return (
         <div className="xl:pl-72 ">
+            <GA />
             <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-6 border-b border-line-light dark:border-neutral-800 px-4 sm:px-6 lg:px-8 bg-white dark:bg-black">
                 <button
                     type="button"
