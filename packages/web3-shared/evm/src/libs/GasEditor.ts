@@ -38,7 +38,7 @@ export class GasEditor {
     }
 
     getGasPrice() {
-        return this.EIP1559GasOptionConfig.maxFeePerGas || this.priorEIP1559GasOptionConfig.gasPrice
+        return this.EIP1559GasOptionConfig.maxFeePerGas || this.priorEIP1559GasOptionConfig.gasPrice || '0'
     }
 
     getGasConfig(fallback?: Partial<GasConfig>): GasConfig {
