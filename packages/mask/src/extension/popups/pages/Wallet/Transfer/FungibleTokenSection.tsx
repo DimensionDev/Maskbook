@@ -119,12 +119,16 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         () => (amount && token?.decimals ? rightShift(amount, token.decimals).toFixed() : '0'),
         [amount, token?.decimals],
     )
+    const patchedGasConfig = useMemo(
+        () => ({ ...gasConfig, gasCurrency: paymentAddress, gas: gasLimit }),
+        [gasConfig, paymentAddress, gasLimit],
+    )
     const {
         balance,
         isLoading: isLoadingAvailableBalance,
         isGasSufficient,
         gasFee,
-    } = useAvailableBalance(NetworkPluginID.PLUGIN_EVM, address, { ...gasConfig, gas: gasLimit } as GasConfig, {
+    } = useAvailableBalance(NetworkPluginID.PLUGIN_EVM, address, patchedGasConfig as GasConfig, {
         chainId,
     })
 
