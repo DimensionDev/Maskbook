@@ -9,7 +9,7 @@ import { useWeb3State } from './useWeb3State.js'
 import { useWeb3Connection } from './useWeb3Connection.js'
 
 export function useBalance<T extends NetworkPluginID = NetworkPluginID>(pluginID?: T, options?: ConnectionOptions<T>) {
-    const { account, chainId } = useChainContext({ account: options?.account })
+    const { account, chainId } = useChainContext({ account: options?.account, chainId: options?.chainId })
     const Web3 = useWeb3Connection(pluginID, {
         account,
         chainId,
@@ -22,7 +22,7 @@ export function useBalance<T extends NetworkPluginID = NetworkPluginID>(pluginID
         queryKey: ['balance', pluginID, chainId, account],
         queryFn: async () => {
             if (!account) return 0
-            return Web3.getBalance(account)
+            return Web3.getBalance(account, { chainId })
         },
     })
 
