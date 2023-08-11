@@ -26,7 +26,7 @@ export class ENS_API implements NameServiceAPI.Provider {
 
     async reverse(address: string) {
         return attemptUntil(
-            [this.ChainbaseDomain, this.R2D2Domain, this.TheGraphDomain].map(
+            [this.R2D2Domain, this.ChainbaseDomain, this.TheGraphDomain].map(
                 (x) => () => x.reverse(ChainId.Mainnet, address),
             ),
             undefined,
