@@ -159,20 +159,19 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
             />
         )
 
-    const inputNotReady = !recipient || !amount || isLessThan(balance, totalAmount)
-    const tokenNotReady = !token?.decimals || !balance || isLessThan(balance, totalAmount) || !isGasSufficient
-    const transferDisabled = inputNotReady || tokenNotReady || isLte(totalAmount, 0)
-
     // Use selectedAsset balance eagerly
+    // balance passed from previous page, would be used if during fetching balance.
     const isLoadingBalance = selectedAsset?.balance ? false : isLoadingAvailableBalance || isLoading
+    const optimisticBalance = BigNumber.max(0, minus(selectedAsset?.balance || 0, gasFee))
     // Available token balance
-    const tokenBalance = BigNumber.max(
-        0,
-        isLoadingAvailableBalance || isLoading ? minus(selectedAsset?.balance || 0, gasFee) : balance,
-    )
+    const tokenBalance = (isLoadingAvailableBalance || isLoading) && isZero(balance) ? optimisticBalance : balance
 
     const decimals = token?.decimals || selectedAsset?.decimals
     const uiTokenBalance = tokenBalance && decimals ? leftShift(tokenBalance, decimals).toString() : '0'
+
+    const inputNotReady = !recipient || !amount || isLessThan(tokenBalance, totalAmount)
+    const tokenNotReady = !token?.decimals || isLessThan(tokenBalance, totalAmount) || !isGasSufficient
+    const transferDisabled = inputNotReady || tokenNotReady || isLte(totalAmount, 0)
 
     return (
         <>
