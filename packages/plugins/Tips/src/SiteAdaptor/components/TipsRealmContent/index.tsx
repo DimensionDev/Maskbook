@@ -60,11 +60,12 @@ const useStyles = makeStyles<{ buttonSize: number }, 'postTipsButton'>()((theme,
 }))
 
 const { TipsSlot } = Plugin.SiteAdaptor
+
 export function TipsRealmContent({
     identity,
     slot,
     accounts,
-    iconSize = 24,
+    iconSize = 20,
     buttonSize = 34,
     onStatusUpdate,
 }: Plugin.SiteAdaptor.TipsRealmOptions) {

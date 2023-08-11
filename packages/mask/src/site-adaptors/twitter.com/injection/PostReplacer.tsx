@@ -15,10 +15,12 @@ export function injectPostReplacerAtTwitter(signal: AbortSignal, current: PostIn
     const hasVideo = !!current.rootNode?.closest('[data-testid="tweet"]')?.querySelector('video')
     if (hasVideo) return
 
-    const hasCashOrHashTag = !!current.rootNode?.querySelector(
-        ['a[role="link"][href*="cashtag_click"]', 'a[role="link"][href*="hashtag_click"]'].join(','),
+    const tags = Array.from(
+        current.rootNode?.querySelectorAll<HTMLAnchorElement>(
+            ['a[role="link"][href*="cashtag_click"]', 'a[role="link"][href*="hashtag_click"]'].join(','),
+        ) ?? [],
     )
-    if (!hasCashOrHashTag) return
+    if (!tags.map((x) => x.textContent).some((x) => x && /^[#$]\w+$/i.test(x) && x.length <= 9)) return
 
     return injectPostReplacer({
         zipPost(node) {
