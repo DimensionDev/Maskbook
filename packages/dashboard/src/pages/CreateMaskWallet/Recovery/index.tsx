@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import type { UseFormSetError } from 'react-hook-form'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { DashboardRoutes, getDefaultWalletName } from '@masknet/shared-base'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
@@ -15,6 +15,7 @@ import { RestoreFromMnemonic } from '../../../components/Restore/RestoreFromMnem
 import { RestoreWalletFromLocal } from '../../../components/Restore/RestoreWalletFromLocal.js'
 import { ResetWalletContext } from '../context.js'
 import { useAsync } from 'react-use'
+import { useWallets } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -91,6 +92,10 @@ const Recovery = memo(function Recovery() {
         setError('')
     }, [])
 
+    const wallets = useWallets()
+
+    const newWalletName = useMemo(() => `Wallet ${wallets.filter((x) => !x.owner).length + 1}`, [wallets])
+
     const handleRestoreFromMnemonic = useCallback(
         async (values: string[]) => {
             try {
@@ -120,7 +125,7 @@ const Recovery = memo(function Recovery() {
         async (data: FormInputs, onError: UseFormSetError<FormInputs>) => {
             try {
                 await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
-                await WalletServiceRef.value.recoverWalletFromPrivateKey(getDefaultWalletName(), data.privateKey)
+                await WalletServiceRef.value.recoverWalletFromPrivateKey(newWalletName, data.privateKey)
                 navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
             } catch (error) {
                 const errorMsg = (error as Error).message
@@ -130,7 +135,7 @@ const Recovery = memo(function Recovery() {
                 })
             }
         },
-        [t, navigate, location.state?.isReset, location.state?.password],
+        [t, navigate, location.state?.isReset, location.state?.password, newWalletName],
     )
 
     const onRestore = useCallback(
@@ -139,7 +144,7 @@ const Recovery = memo(function Recovery() {
                 await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
 
                 const address = await WalletServiceRef.value.recoverWalletFromKeyStoreJSON(
-                    getDefaultWalletName(),
+                    newWalletName,
                     keyStoreContent,
                     keyStorePassword,
                 )
@@ -155,7 +160,7 @@ const Recovery = memo(function Recovery() {
                 )
             }
         },
-        [t, navigate, location.state?.isReset, location.state?.password],
+        [t, navigate, location.state?.isReset, location.state?.password, newWalletName],
     )
 
     const handleRecovery = useCallback(() => {

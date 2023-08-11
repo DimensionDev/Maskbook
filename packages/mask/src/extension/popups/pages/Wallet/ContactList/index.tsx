@@ -48,6 +48,7 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean }>()
             lineHeight: '18px',
             fontWeight: 700,
             maxWidth: 290,
+            whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
         },

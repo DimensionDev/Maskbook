@@ -9,7 +9,7 @@ export async function internal_wallet_restore(backup: NormalizedBackup.WalletBac
     let index = 0
     for (const wallet of backup) {
         try {
-            const wallets = await WalletServiceRef.value.getWallets()
+            const wallets = (await WalletServiceRef.value.getWallets()).filter((x) => !x.owner)
             const nameExists = wallets.some((x) => x.name === wallet.name)
             index += 1
             let name = wallet.name
