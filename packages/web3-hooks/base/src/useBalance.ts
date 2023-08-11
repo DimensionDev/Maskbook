@@ -8,7 +8,12 @@ import { useChainContext } from './useContext.js'
 import { useWeb3State } from './useWeb3State.js'
 import { useWeb3Connection } from './useWeb3Connection.js'
 
-export function useBalance<T extends NetworkPluginID = NetworkPluginID>(pluginID?: T, options?: ConnectionOptions<T>) {
+export function useBalance<T extends NetworkPluginID = NetworkPluginID>(
+    pluginID?: T,
+    options?: ConnectionOptions<T>,
+    /** Allow to control the request */
+    enabled = true,
+) {
     const { account, chainId } = useChainContext({ account: options?.account, chainId: options?.chainId })
     const Web3 = useWeb3Connection(pluginID, {
         account,
@@ -18,7 +23,7 @@ export function useBalance<T extends NetworkPluginID = NetworkPluginID>(pluginID
     const { BalanceNotifier } = useWeb3State(pluginID)
 
     const result = useQuery({
-        enabled: !!account && !!Web3,
+        enabled: !!account && !!Web3 && enabled,
         queryKey: ['balance', pluginID, chainId, account],
         queryFn: async () => {
             if (!account) return 0
