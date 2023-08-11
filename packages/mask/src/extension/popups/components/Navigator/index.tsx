@@ -61,9 +61,9 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
     const walletLink = useMemo(() => {
         if (walletPageLoading) return '#'
         if (!wallet) return PopupRoutes.Wallet
+        if (!hasPassword) return PopupRoutes.SetPaymentPassword
         if (isLocked)
             return urlcat(PopupRoutes.Unlock, { from: messages.length ? PopupRoutes.ContractInteraction : undefined })
-        if (!hasPassword) return PopupRoutes.SetPaymentPassword
         if (messages.length) return PopupRoutes.ContractInteraction
         return PopupRoutes.Wallet
     }, [wallet, walletPageLoading, isLocked, hasPassword, messages])
