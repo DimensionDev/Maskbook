@@ -228,6 +228,7 @@ const CreateMnemonic = memo(function CreateMnemonic() {
                     isMatched={isMatched}
                     answerCallback={answerCallback}
                     puzzleAnswer={puzzleAnswer}
+                    onRefreshWords={refreshCallback}
                     verifyAnswerCallback={verifyAnswerCallback}
                     puzzleWordList={puzzleWordList}
                     onSubmit={onSubmit}
@@ -255,6 +256,7 @@ interface VerifyMnemonicUIProps {
     words: string[]
     answerCallback: (index: number, word: string) => void
     verifyAnswerCallback: (callback?: () => void) => void
+    onRefreshWords: () => void
     puzzleAnswer: {
         [key: number]: string
     }
@@ -281,12 +283,18 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
     loading,
     isReset,
     puzzleWordList,
+    onRefreshWords,
     puzzleAnswer,
     verifyAnswerCallback,
     isMatched,
 }) {
     const t = useDashboardI18N()
     const { classes, cx } = useStyles()
+
+    const handleOnBack = useCallback(() => {
+        onRefreshWords()
+        setVerified(false)
+    }, [])
 
     return (
         <>
@@ -313,11 +321,7 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
             ) : null}
             <SetupFrameController>
                 <div className={classes.buttonGroup}>
-                    <SecondaryButton
-                        className={classes.bold}
-                        width="125px"
-                        size="large"
-                        onClick={() => setVerified(false)}>
+                    <SecondaryButton className={classes.bold} width="125px" size="large" onClick={handleOnBack}>
                         {t.back()}
                     </SecondaryButton>
                     <PrimaryButton
