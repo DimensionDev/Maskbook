@@ -1,8 +1,9 @@
 import { FormattedCurrency, NetworkIcon, ProgressiveText, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { useEverSeen } from '@masknet/shared-base-ui'
+import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { useFungibleTokenBalance, useNetworks } from '@masknet/web3-hooks-base'
-import { formatCurrency, isGte, isLessThan, type FungibleAsset, isZero } from '@masknet/web3-shared-base'
+import { formatCurrency, isGte, isLessThan, isZero, type FungibleAsset } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { Box, List, ListItem, ListItemText, Skeleton, Typography, type ListItemProps } from '@mui/material'
 import { range } from 'lodash-es'
@@ -12,7 +13,6 @@ import urlcat from 'urlcat'
 import { formatTokenBalance } from '../../../../../../utils/index.js'
 import { useAssetExpand, useWalletAssets } from '../../hooks/index.js'
 import { MoreBar } from './MoreBar.js'
-import { useEverSeen } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -43,11 +43,16 @@ const useStyles = makeStyles()((theme) => ({
     },
     text: {
         marginLeft: 14,
+        maxWidth: '50%',
+        overflow: 'auto',
     },
     name: {
         fontSize: 16,
         fontWeight: 700,
         color: theme.palette.maskColor.main,
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
     },
     balance: {
         fontSize: 14,
@@ -139,7 +144,9 @@ const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: Asset
                         {asset.symbol}
                     </ProgressiveText>
                 }>
-                <Typography className={classes.name}>{asset.name}</Typography>
+                <TextOverflowTooltip title={asset.name}>
+                    <Typography className={classes.name}>{asset.name}</Typography>
+                </TextOverflowTooltip>
             </ListItemText>
         </ListItem>
     )
