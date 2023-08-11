@@ -58,7 +58,8 @@ const fiatCurrencyResultModifier = (
     if (currency === CurrencyType.HKD) return result.replaceAll('$', 'HK$')
 
     if (currency === CurrencyType.JPY && onlyRemainTwoOrZeroDecimal)
-        return result.startsWith('¥') ? '¥' + Number(result.replace('¥', '')).toFixed() : result
+        return result.startsWith('¥') ? '¥' + Number(result.replaceAll(/¥|,/g, '')).toFixed() : result
+
     return result
 }
 

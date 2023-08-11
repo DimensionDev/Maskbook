@@ -77,6 +77,7 @@ export const useStyles = makeStyles()((theme) => ({
     },
     ellipsis: {
         overflow: 'hidden',
+        whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         maxWidth: 150,
     },

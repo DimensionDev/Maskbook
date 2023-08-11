@@ -9,6 +9,7 @@ import {
     type StorageObject,
     type UpdatableWallet,
     type Wallet,
+    CrossIsolationMessages,
 } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
@@ -143,6 +144,7 @@ export class BaseHostedProvider
                     : x,
             ),
         )
+        CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)
     }
 
     override async renameWallet(address: string, name: string) {

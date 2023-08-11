@@ -48,6 +48,7 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean }>()
             lineHeight: '18px',
             fontWeight: 700,
             maxWidth: 290,
+            whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
         },
@@ -291,7 +292,7 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
                 handler: deleteContact,
             })
         return options
-    }, [t, contactType])
+    }, [t, contactType, address, name])
 
     const [menu, openMenu, _, isOpenMenu] = useMenuConfig(
         menuOptions.map((option, index) => (
