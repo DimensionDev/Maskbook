@@ -12,6 +12,8 @@ export function useFungibleTokenBalance<T extends NetworkPluginID = NetworkPlugi
     pluginID?: T,
     address?: string,
     options?: ConnectionOptions<T>,
+    /** Allow to control the request */
+    enabled = true,
 ) {
     const { account } = useChainContext({ account: options?.account })
     const Web3 = useWeb3Connection(pluginID, {
@@ -21,7 +23,7 @@ export function useFungibleTokenBalance<T extends NetworkPluginID = NetworkPlugi
     const { BalanceNotifier } = useWeb3State(pluginID)
 
     const result = useQuery({
-        enabled: !!address,
+        enabled: !!address && enabled,
         queryKey: ['fungible-token', 'balance', pluginID, account, address, options],
         queryFn: async () => {
             if (!address) return '0'

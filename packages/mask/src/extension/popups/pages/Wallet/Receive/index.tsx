@@ -1,4 +1,4 @@
-import { ChainIcon, CopyButton, FormattedAddress, Icon, ImageIcon, TokenIcon } from '@masknet/shared'
+import { CopyButton, FormattedAddress, Icon, ImageIcon, NetworkIcon, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworks } from '@masknet/web3-hooks-base'
@@ -141,13 +141,14 @@ export default memo(function Receive() {
             <Box className={classes.header}>
                 <Box className={classes.iconContainer}>
                     {MainIcon}
-                    {isChain ? null : (
+                    {isChain || !currentNetwork ? null : (
                         <div className={classes.badge}>
-                            {currentNetwork?.network === 'mainnet' ? (
-                                <ImageIcon size={16} icon={currentNetwork.iconUrl} name={currentNetwork.name} />
-                            ) : (
-                                <ChainIcon size={16} name={currentNetwork?.name} />
-                            )}
+                            <NetworkIcon
+                                pluginID={NetworkPluginID.PLUGIN_EVM}
+                                chainId={currentNetwork.chainId}
+                                size={16}
+                                name={currentNetwork.name}
+                            />
                         </div>
                     )}
                 </Box>

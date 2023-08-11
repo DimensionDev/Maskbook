@@ -1,10 +1,10 @@
 import { memo, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Icons } from '@masknet/icons'
-import { ImageIcon, NetworkIcon } from '@masknet/shared'
+import { ImageIcon, NetworkIcon, ProgressiveText } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, TextOverflowTooltip, makeStyles } from '@masknet/theme'
-import { useBalance, useNativeToken, useNetwork, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
+import { useBalance, useNetwork, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
 import { formatBalance, type ReasonableNetwork } from '@masknet/web3-shared-base'
 import { ProviderType, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
@@ -75,9 +75,12 @@ const NetworkItem = memo(function NetworkItem({ network, currentNetworkId }: Net
         liRef.current?.scrollIntoView()
     }, [selected, liRef.current])
 
-    const { data: balance, isLoading: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const { data: token, isLoading: loadingToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const loading = loadingBalance || loadingToken
+    const providerURL = network.isCustomized ? network.rpcUrl : undefined
+    const { data: balance, isLoading: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM, {
+        chainId,
+        providerURL,
+    })
+    const token = network.nativeCurrency
 
     return (
         <li
@@ -109,9 +112,13 @@ const NetworkItem = memo(function NetworkItem({ network, currentNetworkId }: Net
                 <TextOverflowTooltip title={network.name}>
                     <Typography className={classes.name}>{network.name}</Typography>
                 </TextOverflowTooltip>
-                <Typography className={classes.balance}>
-                    {loading ? '--' : `${formatBalance(balance, token?.decimals, 0, false, true)} ${token?.symbol}`}
-                </Typography>
+                <ProgressiveText
+                    className={classes.balance}
+                    loading={loadingBalance}
+                    skeletonWidth={60}
+                    skeletonHeight={16}>
+                    {`${formatBalance(balance, token?.decimals, 0, false, true)} ${token?.symbol}`}
+                </ProgressiveText>
             </div>
             {selected ? (
                 <Icons.RadioButtonChecked size={20} />

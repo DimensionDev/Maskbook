@@ -1,17 +1,18 @@
-import { Icons } from '@masknet/icons'
-import { FormattedCurrency, NetworkIcon, TokenIcon } from '@masknet/shared'
+import { FormattedCurrency, NetworkIcon, ProgressiveText, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { ActionButton, makeStyles, type ActionButtonProps } from '@masknet/theme'
-import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
-import { formatCurrency, isGte, isLessThan, type FungibleAsset } from '@masknet/web3-shared-base'
+import { useEverSeen } from '@masknet/shared-base-ui'
+import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
+import { useFungibleTokenBalance, useNetworks } from '@masknet/web3-hooks-base'
+import { formatCurrency, isGte, isLessThan, isZero, type FungibleAsset } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
-import { Box, List, ListItem, ListItemText, Skeleton, Typography } from '@mui/material'
-import { isNaN, range } from 'lodash-es'
+import { Box, List, ListItem, ListItemText, Skeleton, Typography, type ListItemProps } from '@mui/material'
+import { range } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
-import { useI18N, formatTokenBalance } from '../../../../../../utils/index.js'
+import { formatTokenBalance } from '../../../../../../utils/index.js'
 import { useAssetExpand, useWalletAssets } from '../../hooks/index.js'
+import { MoreBar } from './MoreBar.js'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -42,11 +43,16 @@ const useStyles = makeStyles()((theme) => ({
     },
     text: {
         marginLeft: 14,
+        maxWidth: '50%',
+        overflow: 'auto',
     },
     name: {
         fontSize: 16,
         fontWeight: 700,
         color: theme.palette.maskColor.main,
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
     },
     balance: {
         fontSize: 14,
@@ -65,6 +71,86 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 type Asset = FungibleAsset<ChainId, SchemaType>
+interface AssetItemProps extends ListItemProps {
+    asset: Asset
+    onItemClick(asset: Asset): void
+}
+
+const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: AssetItemProps) {
+    const { classes, cx } = useStyles()
+    const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
+    const network = networks.find((x) => x.chainId === asset.chainId)
+    const providerURL = network?.isCustomized ? network.rpcUrl : undefined
+    const [seen, ref] = useEverSeen<HTMLLIElement>()
+    // Debank might not provide asset from current custom network
+    const tryRpc = (!asset.balance || isZero(asset.balance)) && network?.isCustomized && seen
+    const { data: rpcBalance, isLoading } = useFungibleTokenBalance(
+        NetworkPluginID.PLUGIN_EVM,
+        asset.address,
+        { chainId: asset.chainId, providerURL },
+        tryRpc,
+    )
+    const balance = useMemo(() => {
+        if (tryRpc) {
+            return {
+                pending: isLoading,
+                value: isLoading ? undefined : formatTokenBalance(rpcBalance, asset.decimals),
+            }
+        }
+        return {
+            pending: false,
+            value: formatTokenBalance(asset.balance, asset.decimals),
+        }
+    }, [tryRpc, rpcBalance, asset.balance, asset.decimals, isLoading])
+    return (
+        <ListItem
+            key={`${asset.chainId}.${asset.address}`}
+            {...rest}
+            ref={ref}
+            onClick={() => onItemClick(asset)}
+            className={cx(classes.item, rest.className)}
+            secondaryAction={
+                <Typography className={classes.value}>
+                    <FormattedCurrency
+                        value={asset.value?.usd || 0}
+                        formatter={formatCurrency}
+                        options={{ onlyRemainTwoOrZeroDecimal: true }}
+                    />
+                </Typography>
+            }>
+            <Box position="relative">
+                <TokenIcon
+                    className={classes.tokenIcon}
+                    chainId={asset.chainId}
+                    address={asset.address}
+                    name={asset.name}
+                    logoURL={asset.logoURL}
+                    size={36}
+                />
+                <NetworkIcon
+                    pluginID={NetworkPluginID.PLUGIN_EVM}
+                    className={classes.badgeIcon}
+                    chainId={asset.chainId}
+                    size={16}
+                    icon={network?.iconUrl}
+                />
+            </Box>
+            <ListItemText
+                className={classes.text}
+                secondaryTypographyProps={{ component: 'div' }}
+                secondary={
+                    <ProgressiveText className={classes.balance} loading={balance.pending} skeletonWidth={60}>
+                        {balance.value}
+                        {asset.symbol}
+                    </ProgressiveText>
+                }>
+                <TextOverflowTooltip title={asset.name}>
+                    <Typography className={classes.name}>{asset.name}</Typography>
+                </TextOverflowTooltip>
+            </ListItemText>
+        </ListItem>
+    )
+})
 
 export const AssetsList = memo(function AssetsList() {
     const { classes } = useStyles()
@@ -82,105 +168,24 @@ export const AssetsList = memo(function AssetsList() {
             return x.value?.usd ? isLessThan(x.value.usd, 1) : false
         })
     }, [assets])
+    const list = assets.filter(
+        (asset) => assetsIsExpand || isNativeTokenAddress(asset.address) || isGte(asset.value?.usd ?? 0, 1),
+    )
     return (
         <>
             {isLoading ? (
                 <AssetsListSkeleton />
             ) : (
-                <AssetsListUI isExpand={assetsIsExpand} assets={assets} onItemClick={onItemClick} />
+                <List dense className={classes.list}>
+                    {list.map((asset) => (
+                        <AssetItem key={`${asset.chainId}.${asset.address}`} asset={asset} onItemClick={onItemClick} />
+                    ))}
+                </List>
             )}
             {hasLowValueToken ? (
                 <MoreBar isExpand={assetsIsExpand} onClick={onSwitch} className={classes.more} />
             ) : null}
         </>
-    )
-})
-
-export interface MoreBarProps extends ActionButtonProps {
-    isExpand: boolean
-}
-
-export const MoreBar = memo<MoreBarProps>(function MoreBar({ isExpand, ...rest }) {
-    const { t } = useI18N()
-    if (isExpand)
-        return (
-            <ActionButton variant="roundedOutlined" {...rest}>
-                <span>{t('popups_wallet_more_collapse')}</span>
-                <Icons.ArrowDrop style={{ transform: 'rotate(180deg)' }} />
-            </ActionButton>
-        )
-    return (
-        <ActionButton variant="roundedOutlined" {...rest}>
-            <span>{t('popups_wallet_more_expand')}</span>
-            <Icons.ArrowDrop />
-        </ActionButton>
-    )
-})
-
-export interface AssetsListUIProps {
-    isExpand: boolean
-    assets: Asset[]
-    onItemClick: (token: Asset) => void
-}
-
-export const AssetsListUI = memo<AssetsListUIProps>(function AssetsListUI({ isExpand, assets, onItemClick }) {
-    const { classes } = useStyles()
-    const list = assets.filter(
-        (asset) => isExpand || isNativeTokenAddress(asset.address) || isGte(asset.value?.usd ?? 0, 1),
-    )
-    const descriptors = useNetworkDescriptors(NetworkPluginID.PLUGIN_EVM)
-    return (
-        <List dense className={classes.list}>
-            {list.map((asset) => {
-                const networkDescriptor = descriptors.find((x) => x.chainId === asset.chainId)
-                return (
-                    <ListItem
-                        key={`${asset.chainId}.${asset.address}`}
-                        className={classes.item}
-                        onClick={() => onItemClick(asset)}
-                        secondaryAction={
-                            <Typography className={classes.value}>
-                                <FormattedCurrency
-                                    value={asset.value?.usd || 0}
-                                    formatter={formatCurrency}
-                                    options={{ onlyRemainTwoOrZeroDecimal: true }}
-                                />
-                            </Typography>
-                        }>
-                        <Box position="relative">
-                            <TokenIcon
-                                className={classes.tokenIcon}
-                                chainId={asset.chainId}
-                                address={asset.address}
-                                name={asset.name}
-                                logoURL={asset.logoURL}
-                                size={36}
-                            />
-                            <NetworkIcon
-                                pluginID={NetworkPluginID.PLUGIN_EVM}
-                                className={classes.badgeIcon}
-                                chainId={asset.chainId}
-                                size={16}
-                                icon={networkDescriptor?.icon}
-                            />
-                        </Box>
-                        <ListItemText
-                            className={classes.text}
-                            secondary={
-                                <Typography className={classes.balance}>
-                                    {formatTokenBalance(
-                                        isNaN(asset.balance) ? 0 : asset.balance,
-                                        isNaN(asset.decimals) ? 0 : asset.decimals,
-                                    )}
-                                    {asset.symbol}
-                                </Typography>
-                            }>
-                            <Typography className={classes.name}>{asset.name}</Typography>
-                        </ListItemText>
-                    </ListItem>
-                )
-            })}
-        </List>
     )
 })
 

@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { ImageIcon, ProgressiveText, TokenIcon, useAvailableBalance } from '@masknet/shared'
+import { NetworkIcon, ProgressiveText, TokenIcon, useAvailableBalance } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -7,12 +7,12 @@ import {
     ChainContextProvider,
     useChainContext,
     useFungibleToken,
-    useNetworkDescriptor,
+    useNetworks,
     useWallet,
     useWeb3Connection,
 } from '@masknet/web3-hooks-base'
 import { isLessThan, isLte, isZero, leftShift, minus, rightShift } from '@masknet/web3-shared-base'
-import { isNativeTokenAddress, type GasConfig } from '@masknet/web3-shared-evm'
+import { isNativeTokenAddress, type GasConfig, type ChainId } from '@masknet/web3-shared-evm'
 import { Box, Input, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useMemo, useState } from 'react'
@@ -106,7 +106,8 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         },
         [setParams],
     )
-    const network = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
+    const networks = useNetworks()
+    const network = networks.find((x) => x.chainId === chainId)
     const { data: token, isLoading } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, address, undefined, { chainId })
 
     const isNativeToken = isNativeTokenAddress(address)
@@ -118,12 +119,16 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         () => (amount && token?.decimals ? rightShift(amount, token.decimals).toFixed() : '0'),
         [amount, token?.decimals],
     )
+    const patchedGasConfig = useMemo(
+        () => ({ ...gasConfig, gasCurrency: paymentAddress, gas: gasLimit }),
+        [gasConfig, paymentAddress, gasLimit],
+    )
     const {
         balance,
         isLoading: isLoadingAvailableBalance,
         isGasSufficient,
         gasFee,
-    } = useAvailableBalance(NetworkPluginID.PLUGIN_EVM, address, { ...gasConfig, gas: gasLimit } as GasConfig, {
+    } = useAvailableBalance(NetworkPluginID.PLUGIN_EVM, address, patchedGasConfig as GasConfig, {
         chainId,
     })
 
@@ -182,8 +187,19 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                     if (picked) handleSelectAsset(picked)
                 }}>
                 <Box position="relative" height={36} width={36}>
-                    <TokenIcon className={classes.tokenIcon} chainId={chainId} address={address} />
-                    <ImageIcon className={classes.badgeIcon} size={16} icon={network?.icon} />
+                    <TokenIcon
+                        className={classes.tokenIcon}
+                        chainId={chainId}
+                        address={address}
+                        logoURL={selectedAsset?.logoURL}
+                    />
+                    <NetworkIcon
+                        pluginID={NetworkPluginID.PLUGIN_EVM}
+                        chainId={network?.chainId as ChainId}
+                        className={classes.badgeIcon}
+                        size={16}
+                        icon={network?.iconUrl}
+                    />
                 </Box>
                 <Box mr="auto" ml={2}>
                     <ProgressiveText loading={isLoading} skeletonWidth={36}>
