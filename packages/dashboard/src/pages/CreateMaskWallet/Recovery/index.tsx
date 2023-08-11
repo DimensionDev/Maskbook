@@ -14,6 +14,7 @@ import { RecoveryContext, RecoveryProvider } from '../../../contexts/index.js'
 import { RestoreFromMnemonic } from '../../../components/Restore/RestoreFromMnemonic.js'
 import { RestoreWalletFromLocal } from '../../../components/Restore/RestoreWalletFromLocal.js'
 import { ResetWalletContext } from '../context.js'
+import { useAsync } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -167,11 +168,15 @@ const Recovery = memo(function Recovery() {
         })
     }, [location.state?.password, location.state?.isReset])
 
+    const { value: hasPassword, loading: loadingHasPassword } = useAsync(WalletServiceRef.value.hasPassword, [])
+
+    const step = hasPassword ? '1' : '2'
+
     return (
         <>
             <div className={classes.between}>
                 <Typography className={cx(classes.second, classes.bold)}>
-                    {t.create_step({ step: '2', totalSteps: '2' })}
+                    {loadingHasPassword ? '' : t.create_step({ step, totalSteps: step })}
                 </Typography>
                 <Typography className={cx(classes.create, classes.bold)} onClick={handleRecovery}>
                     {t.create()}
