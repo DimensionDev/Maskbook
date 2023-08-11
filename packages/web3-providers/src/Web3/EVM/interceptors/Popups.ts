@@ -9,7 +9,6 @@ import {
     ProviderType,
     type MessageRequest,
     type MessageResponse,
-    getNativeTokenAddress,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import { MessageStateType, isGreaterThan, isZero, toFixed, type TransferableMessage } from '@masknet/web3-shared-base'
@@ -40,7 +39,6 @@ export class Popups implements Middleware<ConnectionContext> {
 
     private async getPaymentToken(context: ConnectionContext) {
         const maskAddress = getMaskTokenAddress(context.chainId)
-        const nativeTokenAddress = getNativeTokenAddress(context.chainId)
         try {
             const smartPayChainId = await this.Bundler.getSupportedChainId()
             if (context.chainId !== smartPayChainId || !context.owner) return DEFAULT_PAYMENT_TOKEN_STATE
@@ -51,13 +49,11 @@ export class Popups implements Middleware<ConnectionContext> {
             const { signableConfig } = PayloadEditor.fromPayload(context.request, {
                 chainId: context.chainId,
             })
-
             if (!signableConfig?.maxFeePerGas) return DEFAULT_PAYMENT_TOKEN_STATE
 
             const gas = await this.AbstractAccount.estimateTransaction?.(smartPayChainId, signableConfig, {
                 paymentToken: maskAddress,
             })
-
             const depositPaymaster = new DepositPaymaster(context.chainId)
             const ratio = await depositPaymaster.getRatio()
 
