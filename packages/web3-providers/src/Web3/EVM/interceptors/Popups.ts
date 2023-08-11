@@ -106,10 +106,10 @@ export class Popups implements Middleware<ConnectionContext> {
         const sendRequest = async () => {
             // Draw the Popups up and wait for user confirmation before publishing risky requests on the network
             if (context.risky && context.writeable) {
-                const currentChainId = await this.Web3.getChainId()
-
+                const MaskProvider = Providers[ProviderType.MaskWallet]
+                const currentChainId = MaskProvider.subscription.chainId.getCurrentValue()
                 if (context.method === EthereumMethodType.ETH_SEND_TRANSACTION && currentChainId !== context.chainId) {
-                    await Providers[ProviderType.MaskWallet].switchChain(context.chainId)
+                    await MaskProvider.switchChain(context.chainId)
                     const networks = Web3StateRef.value.Network?.networks?.getCurrentValue()
                     const target = networks?.find((x) => x.chainId === context.chainId)
                     if (target) await Web3StateRef.value.Network?.switchNetwork(target?.ID)

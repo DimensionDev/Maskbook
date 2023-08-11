@@ -8,7 +8,6 @@ import {
     formatCurrency,
     isGreaterThan,
     isLessThan,
-    isLessThanOrEqualTo,
     isPositive,
     isZero,
     scale10,
@@ -140,7 +139,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
 
         if (formattedMaxPriorityFee.isZero()) return
 
-        if (isLessThanOrEqualTo(formattedMaxFee, miniumMaxFeePerGas)) {
+        if (isGreaterThan(miniumMaxFeePerGas, formattedMaxFee)) {
             return t('popups_wallet_max_fee_is_too_low', {
                 minimum: formatWeiToGwei(miniumMaxFeePerGas).toFixed(2),
             })
@@ -221,7 +220,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
         <BottomDrawer open={open} title={title} onClose={onClose}>
             <Box display="flex" flexDirection="column" rowGap={1.5} mt={1.5}>
                 <Typography className={classes.preview}>
-                    {formatBalance(totalGas, nativeToken?.decimals, 4, false, true)} {nativeToken?.symbol} ≈{' '}
+                    {formatBalance(totalGas, nativeToken?.decimals, 4, false, true, 6)} {nativeToken?.symbol} ≈{' '}
                     <FormattedCurrency
                         value={formatWeiToEther(totalGas).times(nativeTokenPrice ?? 0)}
                         formatter={formatCurrency}
@@ -306,7 +305,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                         setMaxFeePerGas(
                                             formatWeiToGwei(gasOptions?.slow.baseFeePerGas ?? 0)
                                                 .plus(e.target.value)
-                                                .toString(),
+                                                .toFixed(2),
                                         )
                                     }}
                                     InputProps={{

@@ -89,10 +89,15 @@ export class HubFungibleAPI extends HubFungibleAPI_Base<
     }
 
     override getFungibleToken(address: string, initial?: HubOptions_Base<ChainId> | undefined) {
+        const currentNetwork = Web3StateRef.value?.Network?.network?.getCurrentValue()
         return attemptUntil(
             [
-                () => Web3StateRef.value.Token?.createFungibleToken?.(initial?.chainId ?? ChainId.Mainnet, address),
-                () => this.Web3.getFungibleToken(address, initial),
+                () => Web3StateRef.value?.Token?.createFungibleToken?.(initial?.chainId ?? ChainId.Mainnet, address),
+                () =>
+                    this.Web3.getFungibleToken(address, {
+                        ...initial,
+                        providerURL: currentNetwork?.isCustomized ? currentNetwork?.rpcUrl : undefined,
+                    }),
             ],
             undefined,
         )
