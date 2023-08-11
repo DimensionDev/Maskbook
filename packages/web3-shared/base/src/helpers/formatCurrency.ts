@@ -3,7 +3,7 @@ import { scale10 } from './number.js'
 import { CurrencyType } from '../index.js'
 
 export interface FormatterCurrencyOptions {
-    onlyRemainTwoDecimal?: boolean
+    onlyRemainTwoOrZeroDecimal?: boolean
     fiatCurrencyRate?: number
     customDecimalConfig?: {
         boundary: BigNumber
@@ -53,11 +53,11 @@ const formatCurrencySymbol = (symbol: string, isLead: boolean) => {
 const fiatCurrencyResultModifier = (
     result: string,
     currency: LiteralUnion<Keys | 'USD'> = CurrencyType.USD,
-    onlyRemainTwoDecimal: boolean,
+    onlyRemainTwoOrZeroDecimal: boolean,
 ) => {
     if (currency === CurrencyType.HKD) return result.replaceAll('$', 'HK$')
 
-    if (currency === CurrencyType.JPY && onlyRemainTwoDecimal)
+    if (currency === CurrencyType.JPY && onlyRemainTwoOrZeroDecimal)
         return result.startsWith('¥') ? '¥' + Number(result.replace('¥', '')).toFixed() : result
     return result
 }
@@ -68,7 +68,7 @@ export function formatCurrency(
     currency: LiteralUnion<Keys | 'USD'> = CurrencyType.USD,
     options?: FormatterCurrencyOptions,
 ): string {
-    const { onlyRemainTwoDecimal = false, fiatCurrencyRate = 1, customDecimalConfig } = options ?? {}
+    const { onlyRemainTwoOrZeroDecimal = false, fiatCurrencyRate = 1, customDecimalConfig } = options ?? {}
     const bn = new BigNumber(inputValue).multipliedBy(fiatCurrencyRate)
     const integerValue = bn.integerValue(1)
     const decimalValue = bn.plus(integerValue.negated())
@@ -122,7 +122,7 @@ export function formatCurrency(
     let result: string = ''
 
     if (
-        bn.lt(customDecimalConfig?.boundary ?? onlyRemainTwoDecimal ? assetValueBoundary : sixDecimalBoundary) ||
+        bn.lt(customDecimalConfig?.boundary ?? onlyRemainTwoOrZeroDecimal ? assetValueBoundary : sixDecimalBoundary) ||
         bn.isZero()
     ) {
         const isLessThanAssetValueDecimalBoundary = bn.lt(assetValueBoundary)
@@ -147,7 +147,7 @@ export function formatCurrency(
                         }
                         return bn.isZero()
                             ? zeroValue
-                            : onlyRemainTwoDecimal
+                            : onlyRemainTwoOrZeroDecimal
                             ? minimumValue
                             : isLessThanTwelveDecimalBoundary
                             ? sixDecimalBoundary.toFixed()
@@ -161,7 +161,7 @@ export function formatCurrency(
             .join('')
 
         result = `${
-            (isLessThanTwelveDecimalBoundary || (onlyRemainTwoDecimal && isLessThanAssetValueDecimalBoundary)) &&
+            (isLessThanTwelveDecimalBoundary || (onlyRemainTwoOrZeroDecimal && isLessThanAssetValueDecimalBoundary)) &&
             !bn.isZero()
                 ? '< '
                 : ''
@@ -189,13 +189,13 @@ export function formatCurrency(
                         const dec = decimalValue
                             .toFormat(
                                 customDecimalConfig?.decimalExp ??
-                                    (onlyRemainTwoDecimal ? assetValueDecimalExp : sixDecimalExp),
+                                    (onlyRemainTwoOrZeroDecimal ? assetValueDecimalExp : sixDecimalExp),
                             )
                             .replace(/\d\./, '')
-                        return onlyRemainTwoDecimal ? dec.replace(/(\d\d)(0+)$/, '$1') : dec.replace(/(0+)$/, '')
+                        return onlyRemainTwoOrZeroDecimal ? dec.replace(/(\d\d)(0+)$/, '$1') : dec.replace(/(0+)$/, '')
                     case 'integer':
                         // When there is a carry
-                        if (bn.gt('0.99') && onlyRemainTwoDecimal) return '1'
+                        if (bn.gt('0.99') && onlyRemainTwoOrZeroDecimal) return '1'
                         return '0'
                     case 'literal':
                         return ''
@@ -206,5 +206,5 @@ export function formatCurrency(
             .join('')
     }
 
-    return fiatCurrencyResultModifier(result, currency, onlyRemainTwoDecimal)
+    return fiatCurrencyResultModifier(result, currency, onlyRemainTwoOrZeroDecimal)
 }
