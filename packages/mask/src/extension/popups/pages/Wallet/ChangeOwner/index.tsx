@@ -203,7 +203,7 @@ export default function ChangeOwner() {
     const walletManagers = useMemo(() => wallets.filter((x) => !x.owner), [wallets])
 
     const walletManager = useMemo(
-        () => wallets.find((x) => !x.owner && isSameAddress(wallet?.owner, x.address)),
+        () => walletManagers.find((x) => !x.owner && isSameAddress(wallet?.owner, x.address)),
         [walletManagers, wallet],
     )
     const personaManager = useMemo(
