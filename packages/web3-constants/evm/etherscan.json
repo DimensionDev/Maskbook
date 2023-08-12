@@ -7,6 +7,8 @@
         "Gorli": "",
         "BSC": "https://etherscan-proxy.r2d2.to",
         "BSCT": "",
+        "Base": "https://etherscan-proxy.r2d2.to",
+        "Base_Goerli": "",
         "Matic": "https://etherscan-proxy.r2d2.to",
         "Mumbai": "",
         "Arbitrum": "https://etherscan-proxy.r2d2.to",

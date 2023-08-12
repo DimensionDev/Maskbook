@@ -29,6 +29,10 @@ export enum ChainId {
     Gorli = 5,
     Kovan = 42,
 
+    // Base
+    Base = 8453,
+    Base_Goerli = 84531,
+
     // BSC
     BSC = 56,
     BSCT = 97,
@@ -254,6 +258,7 @@ export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<in
 export enum NetworkType {
     Ethereum = 'Ethereum',
     Binance = 'Binance',
+    Base = 'Base',
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',

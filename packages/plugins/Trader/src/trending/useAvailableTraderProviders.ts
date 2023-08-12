@@ -1,10 +1,10 @@
+import { useMemo } from 'react'
 import type { NetworkType } from '@masknet/web3-shared-evm'
 import type { TradeProvider } from '@masknet/public-api'
 import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { getEVMAvailableTraderProviders } from '../utils.js'
-import { useMemo } from 'react'
 
 export function useAvailableTraderProviders(targetChainId?: Web3Helper.ChainIdAll): TradeProvider[] {
     const { chainId } = useChainContext({
