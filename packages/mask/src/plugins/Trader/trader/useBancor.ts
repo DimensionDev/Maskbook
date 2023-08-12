@@ -1,13 +1,13 @@
+import { useMemo } from 'react'
 import { TradeProvider } from '@masknet/public-api'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useCustomBlockBeatRetry } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useMemo } from 'react'
 import { Bancor } from '@masknet/web3-providers'
+import type { TraderAPI } from '@masknet/web3-providers/types'
 import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
 import { getEVMAvailableTraderProviders } from '../utils.js'
-import type { TraderAPI } from '@masknet/web3-providers/types'
 
 export function useBancor(
     inputAmount_: string,

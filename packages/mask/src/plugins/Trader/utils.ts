@@ -37,6 +37,8 @@ export function getEVMAvailableTraderProviders(networkType?: NetworkType) {
                 TradeProvider.OPENOCEAN,
                 TradeProvider.MDEX,
             ]
+        case NetworkType.Base:
+            return EMPTY_LIST
         case NetworkType.Arbitrum:
             return [TradeProvider.UNISWAP_V3, TradeProvider.OPENOCEAN, TradeProvider.DODO]
         case NetworkType.xDai:

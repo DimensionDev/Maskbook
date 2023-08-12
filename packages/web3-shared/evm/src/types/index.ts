@@ -196,6 +196,7 @@ export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<in
 export enum NetworkType {
     Ethereum = 'Ethereum',
     Binance = 'Binance',
+    Base = 'Base',
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
