@@ -302,27 +302,28 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
                             ) : null}
                             {recipient}
                         </Typography>
-                        {/* TODO actions for pending transitions */}
-                        <Box className={classes.operations}>
-                            <button
-                                type="button"
-                                className={cx(classes.button, classes.speedupButton)}
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    onSpeedup?.(transaction)
-                                }}>
-                                {t('speed_up')}
-                            </button>
-                            <button
-                                type="button"
-                                className={cx(classes.button, classes.cancelButton)}
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    onCancel?.(transaction)
-                                }}>
-                                {t('cancel')}
-                            </button>
-                        </Box>
+                        {transaction.status === 1 ? (
+                            <Box className={classes.operations}>
+                                <button
+                                    type="button"
+                                    className={cx(classes.button, classes.speedupButton)}
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        onSpeedup?.(transaction)
+                                    }}>
+                                    {t('speed_up')}
+                                </button>
+                                <button
+                                    type="button"
+                                    className={cx(classes.button, classes.cancelButton)}
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        onCancel?.(transaction)
+                                    }}>
+                                    {t('cancel')}
+                                </button>
+                            </Box>
+                        ) : null}
                     </Box>
                 }>
                 {/* TODO specify cateType */}

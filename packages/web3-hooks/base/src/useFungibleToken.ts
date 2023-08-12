@@ -32,7 +32,6 @@ export function useFungibleToken<S extends 'all' | void = void, T extends Networ
                         if (pluginID !== NetworkPluginID.PLUGIN_EVM || !isNativeTokenAddress(address) || !chainId)
                             return
                         const network = networks.find((x) => x.chainId === chainId)
-                        console.log('nativeCurrency', network?.nativeCurrency, chainId)
                         return network?.nativeCurrency
                     },
                     async () => {

@@ -25,6 +25,7 @@ export function useTransactions() {
     const networks = useNetworks()
 
     const { Transaction } = useWeb3State()
+    // TODO invalidQueries after sending transitions
     const queries = useQueries({
         queries: networks.map((network) => {
             return {
@@ -42,7 +43,7 @@ export function useTransactions() {
 
     // Some are already in debank history
     const localeTxes = useMemo(() => {
-        return allLocaleTxes.filter((tx) => !transactions.find((x) => x.hash === tx.id))
+        return allLocaleTxes.filter((tx) => !transactions.find((x) => x.id === tx.id))
     }, [allLocaleTxes, transactions])
 
     return { ...result, data: transactions, localeTxes }

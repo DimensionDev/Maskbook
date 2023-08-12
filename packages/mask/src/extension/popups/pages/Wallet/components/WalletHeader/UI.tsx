@@ -167,8 +167,8 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                                 />
                             ) : null}
                         </Box>
-                        {isLoading ? (
-                            <ProgressiveText className={classes.connected} loading={isLoading}>
+                        {isLoading ? null : (
+                            <ProgressiveText className={classes.connected} loading={isLoading} skeletonWidth={50}>
                                 <span
                                     className={cx(
                                         classes.dot,
@@ -181,7 +181,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                                     })}
                                 </span>
                             </ProgressiveText>
-                        ) : null}
+                        )}
                     </Box>
                 </div>
                 <div
