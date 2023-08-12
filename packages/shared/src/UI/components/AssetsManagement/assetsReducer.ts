@@ -14,16 +14,18 @@ export interface AssetsReducerState {
     verifiedMap: Record<string, string[]>
 }
 
-type Action =
+export type AssetsAction =
     | {
           type: 'SET_LOADING_STATUS'
           id: string
+          account: string
           loading?: boolean
           finished?: boolean
       }
     | {
           type: 'APPEND_ASSETS'
           id: string
+          account: string
           assets: Web3Helper.NonFungibleAssetScope[]
       }
     | {
@@ -42,26 +44,32 @@ export function createAssetsState() {
 
 export const initialAssetsState: AssetsReducerState = { assetsMap: {}, verifiedMap: {} }
 
-export function assetsReducer(state: AssetsReducerState, action: Action): AssetsReducerState {
+/**
+ * To distinguish assets among multiple accounts, we combine account and collection id as store-id.
+ *
+ */
+export function assetsReducer(state: AssetsReducerState, action: AssetsAction): AssetsReducerState {
     switch (action.type) {
         case 'SET_LOADING_STATUS':
             return produce(state, (draft) => {
-                const { id, loading, finished } = action
-                if (!draft.assetsMap[id]) draft.assetsMap[id] = createAssetsState()
+                const { loading, finished, id, account } = action
+                const storeId = `${account}.${id}`
+                if (!draft.assetsMap[storeId]) draft.assetsMap[storeId] = createAssetsState()
                 if (typeof loading !== 'undefined') {
-                    draft.assetsMap[id].loading = loading
+                    draft.assetsMap[storeId].loading = loading
                 }
                 if (typeof finished !== 'undefined') {
-                    draft.assetsMap[id].finished = finished
+                    draft.assetsMap[storeId].finished = finished
                 }
             })
         case 'APPEND_ASSETS':
             return produce(state, (draft) => {
-                const { id, assets } = action
-                if (!draft.assetsMap[id]) draft.assetsMap[id] = createAssetsState()
-                draft.assetsMap[id].assets = assets.length
-                    ? uniqBy([...draft.assetsMap[id].assets, ...assets], (x) => `${x.id}.${x.tokenId}`)
-                    : draft.assetsMap[id].assets ?? EMPTY_LIST
+                const { id, account, assets } = action
+                const storeId = `${account}.${id}`
+                if (!draft.assetsMap[storeId]) draft.assetsMap[storeId] = createAssetsState()
+                draft.assetsMap[storeId].assets = assets.length
+                    ? uniqBy([...draft.assetsMap[storeId].assets, ...assets], (x) => `${x.id}.${x.tokenId}`)
+                    : draft.assetsMap[storeId].assets ?? EMPTY_LIST
             })
         case 'SET_VERIFIED':
             return produce(state, (draft) => {
