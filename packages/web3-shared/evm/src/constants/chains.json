@@ -137,7 +137,7 @@
             "name": "Ether",
             "symbol": "ETH",
             "decimals": 18,
-            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/smartchain/info/logo.png/quality=85"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
         "infoURL": "https://base.org/",
         "explorers": [
@@ -163,7 +163,7 @@
             "name": "Ether",
             "symbol": "ETH",
             "decimals": 18,
-            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/smartchain/info/logo.png/quality=85"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
         "infoURL": "https://base.org",
         "explorers": [
