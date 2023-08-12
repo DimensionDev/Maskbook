@@ -77,7 +77,6 @@ const useStyles = makeStyles()((theme) => {
             marginTop: 2,
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'flex-end',
         },
         actions: {
             position: 'fixed',
@@ -137,8 +136,8 @@ const TokenDetail = memo(function TokenDetail() {
     const navigate = useNavigate()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const isNativeToken = isNativeTokenAddress(address)
-    const { data: balance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address, { chainId })
     const asset = useAsset(chainId, address, account)
+    const { data: balance = asset?.balance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address, { chainId })
     const [chartRange, setChartRange] = useState(Days.ONE_DAY)
     const {
         data: stats = EMPTY_LIST,
@@ -220,7 +219,7 @@ const TokenDetail = memo(function TokenDetail() {
                         <Box>
                             <Typography className={classes.label}>{t('balance')}</Typography>
                             {asset ? (
-                                <Typography component="div" className={classes.value}>
+                                <Typography component="div" className={classes.value} justifyContent="flex-start">
                                     <TokenIcon
                                         className={classes.tokenIcon}
                                         address={asset.address}
@@ -230,7 +229,7 @@ const TokenDetail = memo(function TokenDetail() {
                                         size={16}
                                     />
                                     <FormattedBalance
-                                        value={asset.balance}
+                                        value={balance}
                                         decimals={asset.decimals}
                                         significant={6}
                                         formatter={formatBalance}
@@ -245,7 +244,7 @@ const TokenDetail = memo(function TokenDetail() {
                         </Box>
                         <Box textAlign="right">
                             <Typography className={classes.label}>{t('value')}</Typography>
-                            <Typography component="div" className={classes.value}>
+                            <Typography component="div" className={classes.value} justifyContent="flex-end">
                                 <FormattedCurrency value={tokenValue} formatter={formatCurrency} />
                             </Typography>
                         </Box>

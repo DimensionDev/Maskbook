@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { GasOptionType, leftShift, toFixed } from '@masknet/web3-shared-base'
+import { GasOptionType, toFixed } from '@masknet/web3-shared-base'
 import { type ChainId, getDeBankConstants, type GasOption } from '@masknet/web3-shared-evm'
 import type { GasPriceResponse } from '../types.js'
 import { DEBANK_OPEN_API } from '../constants.js'
