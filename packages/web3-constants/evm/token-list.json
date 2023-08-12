@@ -7,6 +7,8 @@
         "Gorli": ["https://tokens.r2d2.to/latest/5/tokens.json"],
         "BSC": ["https://tokens.r2d2.to/latest/56/tokens.json"],
         "BSCT": ["https://tokens.r2d2.to/latest/97/tokens.json"],
+        "Base": ["https://tokens.r2d2.to/latest/8453/tokens.json"],
+        "Base_Goerli": ["https://tokens.r2d2.to/latest/84531/tokens.json"],
         "Matic": ["https://tokens.r2d2.to/latest/137/tokens.json"],
         "Mumbai": ["https://tokens.r2d2.to/latest/80001/tokens.json"],
         "Arbitrum": ["https://tokens.r2d2.to/latest/42161/tokens.json"],
