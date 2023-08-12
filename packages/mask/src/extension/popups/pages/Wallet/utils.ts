@@ -2,10 +2,12 @@ import { Web3 } from '@masknet/web3-providers'
 import type { RecentTransaction } from '@masknet/web3-shared-base'
 import {
     ProviderType,
+    formatWeiToGwei,
     type ChainId,
     type Transaction as EvmTransaction,
-    formatWeiToGwei,
 } from '@masknet/web3-shared-evm'
+import { mapKeys } from 'lodash-es'
+import { toHex } from 'web3-utils'
 import { GasSettingModal } from '../../modals/modals.js'
 import { ReplaceType } from './type.js'
 
@@ -17,7 +19,7 @@ export async function modifyTransaction(
     if (!candidate) return
     const oldGasSettings = {
         gas: candidate.gas!,
-        gasPrice: candidate.gasPrice,
+        gasPrice: candidate.gasPrice ? formatWeiToGwei(candidate.gasPrice).toFixed() : undefined,
         maxFeePerGas: candidate.maxFeePerGas ? formatWeiToGwei(candidate.maxFeePerGas).toFixed() : undefined,
         maxPriorityFeePerGas: candidate.maxPriorityFeePerGas
             ? formatWeiToGwei(candidate.maxPriorityFeePerGas).toFixed()
@@ -33,7 +35,7 @@ export async function modifyTransaction(
     const newConfig = {
         ...candidate,
         ...oldGasSettings,
-        ...gasSettings,
+        ...mapKeys(gasSettings, (value) => (typeof value === 'undefined' ? value : toHex(value))),
     }
     if (replaceType === ReplaceType.CANCEL) {
         await Web3.cancelTransaction(transaction.id, newConfig, {

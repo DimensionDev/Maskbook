@@ -384,7 +384,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                         </Box>
                         <Box>
                             <Typography className={classes.title}>
-                                {t('popups_wallet_gas_fee_settings_gas_limit')}
+                                {replaceType ? t('nonce') : t('popups_wallet_gas_fee_settings_gas_limit')}
                             </Typography>
                             <TextField
                                 value={toFixed(replaceType ? nonce : config.gas, 0)}
