@@ -23,7 +23,7 @@ export function GasSettingBar(props: GasSettingBarProps) {
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { data: nativeTokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
-    const { value: gasPriceDefault = '0' } = useGasPrice(NetworkPluginID.PLUGIN_EVM)
+    const { data: gasPriceDefault = '0' } = useGasPrice(NetworkPluginID.PLUGIN_EVM)
 
     const [gasOption, setGasOptionType] = useState<GasOptionType>(GasOptionType.NORMAL)
 

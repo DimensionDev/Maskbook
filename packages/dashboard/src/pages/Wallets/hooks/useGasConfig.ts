@@ -25,7 +25,7 @@ export function useGasConfig(gasLimit: number, minGasLimit: number): GasConfigPr
     const [priorityFee, setPriorityFee] = useState<BigNumber.Value>(0)
 
     const is1559Supported = useMemo(() => ChainResolver.isFeatureSupported(chainId, 'EIP1559'), [chainId])
-    const { value: defaultGasPrice = '0' } = useGasPrice(NetworkPluginID.PLUGIN_EVM)
+    const { data: defaultGasPrice = '0' } = useGasPrice(NetworkPluginID.PLUGIN_EVM)
     const gasPrice = customGasPrice || defaultGasPrice
     const { data: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
 

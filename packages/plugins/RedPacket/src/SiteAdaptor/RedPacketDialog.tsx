@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { compact } from 'lodash-es'
 import Web3Utils from 'web3-utils'
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
-import { useChainContext, useChainIdValid, useGasPrice, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useGasPrice } from '@masknet/web3-hooks-base'
 import { ApplicationBoardModal, InjectedDialog, NetworkTab, useCurrentLinkedPersona } from '@masknet/shared'
 import { ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
 import { type RedPacketJSONPayload } from '@masknet/web3-providers/types'
@@ -58,14 +58,12 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const t = useI18N()
     const [showHistory, setShowHistory] = useState(false)
     const [gasOption, setGasOption] = useState<GasConfig>()
-    const { pluginID } = useNetworkContext()
 
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
 
     const state = useState(DialogTabs.create)
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
     const approvalDefinition = useActivatedPlugin(PluginID.RedPacket, 'any')
     const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
     const { classes } = useStyles({ currentTab, showHistory })
@@ -77,7 +75,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         )
     }, [currentTab === tabs.tokens, approvalDefinition?.enableRequirement.web3])
 
-    const networkTabChainId = chainIdValid && chainIdList.includes(chainId) ? chainId : ChainId.Mainnet
     // #region token lucky drop
     const [settings, setSettings] = useState<RedPacketSettings>()
     // #endregion
@@ -171,7 +168,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         : t.details()
 
     // #region gas config
-    const { value: defaultGasPrice } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const { data: defaultGasPrice } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const handleGasSettingChange = useCallback(
         (gasConfig: GasConfig) => {
             const editor = GasEditor.fromConfig(chainId, gasConfig)

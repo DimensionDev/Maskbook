@@ -87,7 +87,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const { classes } = useStyles()
     const [gasLimit_, setGasLimit_] = useState(0)
 
-    const { value: defaultGasPrice = '0' } = useGasPrice(NetworkPluginID.PLUGIN_EVM)
+    const { data: defaultGasPrice = '0' } = useGasPrice(NetworkPluginID.PLUGIN_EVM)
 
     const [selectedToken, setSelectedToken] = useState(token)
 
