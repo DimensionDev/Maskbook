@@ -93,7 +93,7 @@ const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
 export const Prior1559GasSetting = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { value: gasOptions_ } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
+    const { data: gasOptions_ } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
     const navigate = useNavigate()

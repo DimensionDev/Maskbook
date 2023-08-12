@@ -8,7 +8,7 @@ import type { GasOptionAPI_Base } from '../../entry-types.js'
 
 export class DeBankGasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
     async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
-        const { CHAIN_ID = '' } = getDeBankConstants(chainId)
+        const { CHAIN_ID } = getDeBankConstants(chainId)
         if (!CHAIN_ID) throw new Error('Failed to get gas price.')
 
         const result = await fetchSquashedJSON<GasPriceResponse>(

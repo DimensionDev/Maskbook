@@ -64,10 +64,10 @@ export function useSettingsContext(initial?: {
     )
 
     const {
-        value: gasOptions,
-        loading: gasOptionsLoading,
+        data: gasOptions,
+        isLoading: gasOptionsLoading,
         error: gasOptionsError,
-        retry: gasOptionRetry,
+        refetch: gasOptionRetry,
     } = useGasOptions(pluginID, {
         chainId,
     })

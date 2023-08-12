@@ -9,12 +9,12 @@ export function useGasOption<T extends NetworkPluginID = NetworkPluginID>(
     optionType?: GasOptionType,
     options?: HubOptions<T>,
 ) {
-    const gasOptions = useGasOptions(pluginID, options)
+    const { data: gasOptions } = useGasOptions(pluginID, options)
 
     return useMemo(() => {
         return {
             ...gasOptions,
-            value: gasOptions.value?.[optionType ?? GasOptionType.NORMAL],
+            value: gasOptions?.[optionType ?? GasOptionType.NORMAL],
         }
     }, [gasOptions, optionType])
 }
