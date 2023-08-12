@@ -1,10 +1,12 @@
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { HubOptions } from '@masknet/web3-providers/types'
 import { attemptUntil } from '@masknet/web3-shared-base'
 import { useQuery } from '@tanstack/react-query'
 import { useWeb3Hub } from './useWeb3Hub.js'
 import { useChainContext } from './useContext.js'
+import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { useNetworks } from './useNetworks.js'
 
 export function useFungibleToken<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
@@ -17,6 +19,7 @@ export function useFungibleToken<S extends 'all' | void = void, T extends Networ
         chainId,
         ...options,
     })
+    const networks = useNetworks(pluginID)
 
     return useQuery({
         enabled: !!address,
@@ -25,6 +28,13 @@ export function useFungibleToken<S extends 'all' | void = void, T extends Networ
             if (!address) return
             return attemptUntil(
                 [
+                    async () => {
+                        if (pluginID !== NetworkPluginID.PLUGIN_EVM || !isNativeTokenAddress(address) || !chainId)
+                            return
+                        const network = networks.find((x) => x.chainId === chainId)
+                        console.log('nativeCurrency', network?.nativeCurrency, chainId)
+                        return network?.nativeCurrency
+                    },
                     async () => {
                         const token = await Hub.getFungibleToken(address, { chainId })
                         if (!token) return

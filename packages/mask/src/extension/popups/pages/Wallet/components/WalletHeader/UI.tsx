@@ -167,7 +167,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                                 />
                             ) : null}
                         </Box>
-                        {data?.url || isLoading ? (
+                        {isLoading ? (
                             <ProgressiveText className={classes.connected} loading={isLoading}>
                                 <span
                                     className={cx(

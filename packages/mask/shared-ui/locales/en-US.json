@@ -29,6 +29,7 @@
     "data": "Data",
     "available_balance": "Available Balance",
     "available_amount": "{{- amount}} available",
+    "failed_to_transfer_token": "Failed to transfer token: {{- message}}",
     "operation": "Operation",
     "gas_limit": "Gas Limit",
     "gas_price": "Gas Price",

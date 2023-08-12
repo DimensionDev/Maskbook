@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { NetworkIcon, ProgressiveText, TokenIcon, useAvailableBalance } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
+import { ActionButton, MaskColors, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     ChainContextProvider,
@@ -139,13 +139,18 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         chainId,
     })
     const recipient = params.get('recipient')
+    const { showSnackbar } = usePopupCustomSnackbar()
     const [state, transfer] = useAsyncFn(async () => {
         if (!recipient || isZero(totalAmount) || !token?.decimals) return
-        return Web3.transferFungibleToken(address, recipient, totalAmount, '', {
-            overrides: gasConfig,
-            paymentToken: paymentAddress,
-            chainId,
-        })
+        try {
+            await Web3.transferFungibleToken(address, recipient, totalAmount, '', {
+                overrides: gasConfig,
+                paymentToken: paymentAddress,
+                chainId,
+            })
+        } catch (err) {
+            showSnackbar(t('failed_to_transfer_token', { message: (err as Error).message }))
+        }
     }, [address, chainId, recipient, totalAmount, token?.decimals, gasConfig, paymentAddress])
 
     if (undecided)
@@ -159,20 +164,19 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
             />
         )
 
-    const inputNotReady = !recipient || !amount || isLessThan(balance, totalAmount)
-    const tokenNotReady = !token?.decimals || !balance || isLessThan(balance, totalAmount) || !isGasSufficient
-    const transferDisabled = inputNotReady || tokenNotReady || isLte(totalAmount, 0)
-
     // Use selectedAsset balance eagerly
+    // balance passed from previous page, would be used if during fetching balance.
     const isLoadingBalance = selectedAsset?.balance ? false : isLoadingAvailableBalance || isLoading
+    const optimisticBalance = BigNumber.max(0, minus(selectedAsset?.balance || 0, gasFee))
     // Available token balance
-    const tokenBalance = BigNumber.max(
-        0,
-        isLoadingAvailableBalance || isLoading ? minus(selectedAsset?.balance || 0, gasFee) : balance,
-    )
+    const tokenBalance = (isLoadingAvailableBalance || isLoading) && isZero(balance) ? optimisticBalance : balance
 
     const decimals = token?.decimals || selectedAsset?.decimals
     const uiTokenBalance = tokenBalance && decimals ? leftShift(tokenBalance, decimals).toString() : '0'
+
+    const inputNotReady = !recipient || !amount || isLessThan(tokenBalance, totalAmount)
+    const tokenNotReady = !token?.decimals || isLessThan(tokenBalance, totalAmount) || !isGasSufficient
+    const transferDisabled = inputNotReady || tokenNotReady || isLte(totalAmount, 0)
 
     return (
         <>
