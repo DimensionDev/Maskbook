@@ -221,6 +221,9 @@ export interface GasPriceRecord {
     price: number
 }
 
+/**
+ * Legacy gas response
+ */
 export interface GasPriceDictResponse {
     data: {
         fast: GasPriceRecord
@@ -231,3 +234,24 @@ export interface GasPriceDictResponse {
     error_code: number
     _seconds: number
 }
+
+export type GasPriceResponse = [
+    {
+        level: 'slow'
+        front_tx_count: number
+        price: number
+        estimated_seconds: number
+    },
+    {
+        level: 'normal'
+        front_tx_count: number
+        price: number
+        estimated_seconds: number
+    },
+    {
+        level: 'fast'
+        front_tx_count: number
+        price: number
+        estimated_seconds: number
+    },
+]

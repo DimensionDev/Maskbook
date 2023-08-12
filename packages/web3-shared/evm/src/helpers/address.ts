@@ -73,7 +73,7 @@ export function getZeroAddress() {
 }
 
 export const getNativeTokenAddress: (chainId: ChainId) => string = memoize((chainId = ChainId.Mainnet) => {
-    return getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS') ?? ''
+    return getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS') ?? ZERO_ADDRESS
 })
 
 export const getMaskTokenAddress: (chainId: ChainId) => string = memoize((chainId = ChainId.Mainnet) => {

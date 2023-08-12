@@ -22,6 +22,8 @@
         "Aurora": "aurora",
         "Aurora_Testnet": "",
         "Conflux": "Conflux",
-        "Astar": "astar"
+        "Astar": "astar",
+        "Pulse": "pls",
+        "Harmony": "hmy"
     }
 }
