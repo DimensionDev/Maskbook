@@ -229,7 +229,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                                 name={name}
                                 logoURL={logoURL}
                             />
-                            {isHiddenChainIcon ? null : (
+                            {isHiddenChainIcon || !networkDescriptor?.icon ? null : (
                                 <ImageIcon className={classes.badgeIcon} size={16} icon={networkDescriptor?.icon} />
                             )}
                         </Box>
