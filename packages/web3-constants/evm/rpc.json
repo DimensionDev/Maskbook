@@ -35,6 +35,8 @@
             "https://goerli.infura.io/v3/f39cc8734e294fba9c3938486df2b1bc",
             "https://goerli.infura.io/v3/659123dd11294baf8a294d7a11cec92c"
         ],
+        "Base": ["https://mainnet.base.org"],
+        "Base_Goerli": ["https://goerli.base.org"],
         "BSC": ["https://bsc-dataseed.binance.org/"],
         "BSCT": ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
         "Matic": [
@@ -75,6 +77,8 @@
         "Rinkeby": ["https://rinkeby.infura.io/v3/d65858b010d249419cf8687eca12b094"],
         "Kovan": ["https://kovan.infura.io/v3/d65858b010d249419cf8687eca12b094"],
         "Gorli": ["https://goerli.infura.io/v3/d65858b010d249419cf8687eca12b094"],
+        "Base": ["https://mainnet.base.org"],
+        "Base_Goerli": ["https://goerli.base.org"],
         "BSC": ["https://bsc-dataseed1.binance.org"],
         "BSCT": ["https://data-seed-prebsc-1-s1.binance.org:8545"],
         "Matic": ["https://polygon-rpc.com/"],
@@ -100,6 +104,8 @@
         "Rinkeby": [0, 1, 2, 3, 4],
         "Kovan": [0, 1, 2, 3, 4],
         "Gorli": [0, 1, 2, 3, 4],
+        "Base": [0, 0, 0, 0, 0],
+        "Base_Goerli": [0, 0, 0, 0, 0],
         "BSC": [0, 0, 0, 0, 0],
         "BSCT": [0, 0, 0, 0, 0],
         "Matic": [0, 1, 2, 3, 4],

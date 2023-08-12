@@ -45,6 +45,8 @@ compileConstants(join(__dirname, 'evm'), [
     'Rinkeby',
     'Kovan',
     'Gorli',
+    'Base',
+    'Base_Goerli',
     'BSC',
     'BSCT',
     'Matic',

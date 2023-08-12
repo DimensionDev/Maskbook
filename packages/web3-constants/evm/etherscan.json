@@ -5,6 +5,8 @@
         "Rinkeby": "",
         "Kovan": "",
         "Gorli": "",
+        "Base": "",
+        "Base_Goerli": "",
         "BSC": "https://etherscan-proxy.r2d2.to",
         "BSCT": "",
         "Matic": "https://etherscan-proxy.r2d2.to",

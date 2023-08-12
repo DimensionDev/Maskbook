@@ -5,6 +5,8 @@
         "Rinkeby": ["https://tokens.r2d2.to/latest/4/tokens.json"],
         "Kovan": ["https://irhonin.github.io/kovan-token-list/kovan-token-list.json"],
         "Gorli": ["https://tokens.r2d2.to/latest/5/tokens.json"],
+        "Base": [],
+        "Base_Goerli": [],
         "BSC": ["https://tokens.r2d2.to/latest/56/tokens.json"],
         "BSCT": ["https://tokens.r2d2.to/latest/97/tokens.json"],
         "Matic": ["https://tokens.r2d2.to/latest/137/tokens.json"],
