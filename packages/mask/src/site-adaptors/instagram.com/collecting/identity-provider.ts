@@ -1,39 +1,55 @@
-import { openDB } from 'idb/with-async-ittr'
 import type { SiteAdaptorUI } from '@masknet/types'
 import { creator } from '../../../site-adaptor-infra/index.js'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { instagramBase } from '../base.js'
-import type { IdentityResolved } from '@masknet/plugin-infra'
+import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { delay } from '@masknet/kit'
+import { searchInstagramHandleSelector } from '../utils/selector.js'
+import { getPersonalHomepage, getUserId, getAvatar } from '../utils/user.js'
+
+function resolveLastRecognizedIdentityInner(
+    ref: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
+    cancel: AbortSignal,
+) {
+    const handleSelector = searchInstagramHandleSelector()
+    const assign = async () => {
+        await delay(500)
+        const homepage = getPersonalHomepage()
+        const handle = getUserId()
+        const avatar = getAvatar()
+
+        ref.value = {
+            identifier: ProfileIdentifier.of(instagramBase.networkIdentifier, handle).unwrapOr(undefined),
+            nickname: handle,
+            avatar,
+            homepage,
+        }
+    }
+
+    assign()
+
+    const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
+        new MutationObserverWatcher(selector)
+            .addListener('onAdd', () => assign())
+            .addListener('onChange', () => assign())
+            .startWatch(
+                {
+                    childList: true,
+                    subtree: true,
+                    attributes: true,
+                    attributeFilter: ['href'],
+                },
+                cancel,
+            )
+
+        window.addEventListener('locationchange', assign, { signal: cancel })
+    }
+    createWatcher(handleSelector)
+}
 
 export const IdentityProviderInstagram: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider = {
     async start(signal) {
-        const ref = this.recognized
-        update()
-
-        async function update() {
-            if (signal.aborted) return
-            const val = await query()
-            if (val) ref.value = val
-            setTimeout(update, 10 * 1000)
-        }
+        resolveLastRecognizedIdentityInner(this.recognized, signal)
     },
     recognized: creator.EmptyIdentityResolveProviderState(),
-}
-
-async function query(): Promise<null | IdentityResolved> {
-    const db = await openDB('redux', 1, {
-        upgrade: (db) => {
-            db.createObjectStore('paths')
-        },
-    })
-    const tx = db.transaction('paths', 'readonly')
-    const id = await tx.store.get('users.viewerId')
-    if (!id) return null
-    const detail = (await tx.store.get('users.users'))[id]
-    db.close()
-    return {
-        identifier: ProfileIdentifier.of(instagramBase.networkIdentifier, detail.username).unwrapOr(undefined),
-        avatar: detail.profilePictureUrl,
-        nickname: detail.fullName,
-    }
 }

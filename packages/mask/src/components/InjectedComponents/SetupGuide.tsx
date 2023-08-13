@@ -187,6 +187,7 @@ export interface SetupGuideProps extends SetupGuideUIProps {}
 
 export function SetupGuide(props: SetupGuideProps) {
     const { classes } = useSetupGuideStyles()
+
     return (
         <div className={classes.root}>
             <SetupGuideUI {...props} />
