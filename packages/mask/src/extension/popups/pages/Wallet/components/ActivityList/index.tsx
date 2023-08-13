@@ -1,4 +1,4 @@
-import { ElementAnchor } from '@masknet/shared'
+import { ElementAnchor, EmptyStatus } from '@masknet/shared'
 import { PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { RecentTransaction, Transaction } from '@masknet/web3-shared-base'
@@ -11,6 +11,7 @@ import { ReplaceType } from '../../type.js'
 import { ActivityItem, ActivityItemSkeleton, RecentActivityItem } from './ActivityItem.js'
 import { useTransactions } from './useTransactions.js'
 import { modifyTransaction } from '../../utils.js'
+import { useI18N } from '../../../../../../utils/i18n-next-ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -27,9 +28,10 @@ const useStyles = makeStyles()((theme) => ({
 export interface ActivityListProps {}
 
 export const ActivityList = memo<ActivityListProps>(function ActivityList() {
+    const { t } = useI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const { data: transactions, localeTxes, isFetching, fetchNextPage } = useTransactions()
+    const { data: transactions, localeTxes, isLoading, isFetching, fetchNextPage } = useTransactions()
 
     const handleSpeedup = useCallback(async (transaction: RecentTransaction<ChainId, EvmTransaction>) => {
         modifyTransaction(transaction, ReplaceType.SPEED_UP)
@@ -49,6 +51,9 @@ export const ActivityList = memo<ActivityListProps>(function ActivityList() {
         },
         [navigate],
     )
+
+    if (isLoading && !localeTxes.length && !transactions.length)
+        return <EmptyStatus height="100%">{t('no_data')}</EmptyStatus>
 
     return (
         <>

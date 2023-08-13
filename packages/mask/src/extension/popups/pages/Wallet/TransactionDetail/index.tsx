@@ -33,6 +33,7 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: 'auto',
         alignItems: 'center',
         gap: 4,
+        transition: 'all 0.3s ease-in-out',
     },
     statusFail: {
         color: theme.palette.maskColor.danger,
@@ -184,10 +185,8 @@ export const TransactionDetail = memo(function TransactionDetail() {
         [SUCCEED]: t('transaction_success'),
         [NOT_DEPEND]: t('transaction_pending'),
     }
-    const status =
-        tx !== undefined
-            ? chainbase.normalizeTxStatus(tx.status)
-            : ((transactionState?.status || NOT_DEPEND) as TransactionStatusType)
+    const status = chainbase.normalizeTxStatus(tx !== undefined ? tx.status : (transactionState?.status as 0 | 1))
+    const statusPending = status === undefined && loadingTx
     const isOut = transaction.from === account
     const link = transactionId ? ExplorerResolver.transactionLink(chainId!, transactionId) : undefined
 
@@ -202,10 +201,14 @@ export const TransactionDetail = memo(function TransactionDetail() {
                     <Typography variant="h2" className={classes.statusTitle}>
                         {t('transaction_status')}
                     </Typography>
-                    <Typography component="div" className={cx(classes.status, StatusClassesMap[status])}>
+                    <ProgressiveText
+                        component="div"
+                        className={cx(classes.status, StatusClassesMap[status])}
+                        loading={statusPending}
+                        skeletonWidth={90}>
                         {StatusIconMap[status]}
                         {StatusLabelMap[status]}
-                    </Typography>
+                    </ProgressiveText>
                 </Box>
                 {transactionId ? (
                     <Box className={classes.field}>

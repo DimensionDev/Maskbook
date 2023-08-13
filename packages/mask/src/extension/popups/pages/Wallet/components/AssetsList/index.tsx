@@ -133,6 +133,7 @@ const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: Asset
                     chainId={asset.chainId}
                     size={16}
                     icon={network?.iconUrl}
+                    preferName={network?.isCustomized}
                 />
             </Box>
             <ListItemText
