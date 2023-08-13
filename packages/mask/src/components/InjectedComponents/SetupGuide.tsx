@@ -74,6 +74,11 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             connectionConfirmState: 'confirmed',
         })
 
+        if (currentIdentityResolved.avatar) {
+            await Services.Identity.updateProfileInfo(id.val, {
+                avatarURL: currentIdentityResolved.avatar,
+            })
+        }
         // auto-finish the setup process
         if (!destinedPersonaInfo) throw new Error('invalid persona')
         await Services.Identity.setupPersona(destinedPersonaInfo?.identifier)
@@ -84,7 +89,14 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         currentSetupGuideStatus[activatedSiteAdaptorUI!.networkIdentifier].value = stringify({
             status: SetupGuideStep.VerifyOnNextID,
         })
-    }, [activatedSiteAdaptorUI!.networkIdentifier, destinedPersonaInfo, step, persona, userId])
+    }, [
+        activatedSiteAdaptorUI!.networkIdentifier,
+        destinedPersonaInfo,
+        step,
+        persona,
+        userId,
+        currentIdentityResolved.avatar,
+    ])
 
     const onVerify = useCallback(async () => {
         if (!userId) return
