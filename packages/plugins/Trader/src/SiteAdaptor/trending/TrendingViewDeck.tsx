@@ -222,7 +222,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const collectionList = useTokenMenuCollectionList(resultList, result)
 
     const rss3Key = EnhanceableSite_RSS3_NFT_SITE_KEY_map[identity?.identifier?.network as EnhanceableSite]
-    const { value: socialAccounts = EMPTY_LIST } = useSocialAccountsBySettings(identity)
+    const { data: socialAccounts = EMPTY_LIST } = useSocialAccountsBySettings(identity)
 
     const openRss3Profile = useCallback(
         (address: string) => {

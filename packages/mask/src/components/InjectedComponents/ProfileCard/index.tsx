@@ -27,7 +27,6 @@ interface Props extends withClasses<'text' | 'button' | 'root'> {
 }
 
 const useStyles = makeStyles()((theme) => {
-    const isDark = theme.palette.mode === 'dark'
     return {
         root: {
             position: 'relative',
@@ -108,9 +107,9 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
     const { t } = useI18N()
     const translate = usePluginI18NField()
     const {
-        value: allSocialAccounts = EMPTY_LIST,
-        loading: loadingSocialAccounts,
-        retry: retrySocialAddress,
+        data: allSocialAccounts = EMPTY_LIST,
+        isLoading: loadingSocialAccounts,
+        refetch: retrySocialAddress,
     } = useSocialAccountsBySettings(identity, undefined, addressSorter)
     const socialAccounts = useMemo(
         () => allSocialAccounts.filter((x) => x.pluginID === NetworkPluginID.PLUGIN_EVM),

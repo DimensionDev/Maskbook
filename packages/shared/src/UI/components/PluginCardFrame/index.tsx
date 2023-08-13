@@ -1,8 +1,9 @@
-import { LoadingBase, makeStyles } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Link, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useMemo } from 'react'
 import { useSharedI18N } from '../../../locales/index.js'
+import { LoadingStatus } from '../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -81,18 +82,7 @@ export function PluginCardFrameMini({ name, provider, providerLink, children }: 
                 </Stack>
             </Stack>
             <Stack flex={1} justifyContent="center" alignItems="center" p={1.5}>
-                {children ?? (
-                    <Stack gap={0.5} justifyContent="center" alignItems="center">
-                        <LoadingBase />
-                        <Typography
-                            fontSize={14}
-                            fontWeight={400}
-                            lineHeight="18px"
-                            color={(t) => t.palette.maskColor.publicMain}>
-                            {t.plugin_card_frame_loading()}
-                        </Typography>
-                    </Stack>
-                )}
+                {children ?? <LoadingStatus iconSize={24}>{t.plugin_card_frame_loading()}</LoadingStatus>}
             </Stack>
         </Stack>
     )
