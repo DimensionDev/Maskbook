@@ -5,13 +5,12 @@ import { useWeb3State } from './useWeb3State.js'
 export function useReverseAddress<T extends NetworkPluginID>(pluginID?: T, address?: string) {
     const { NameService } = useWeb3State(pluginID)
 
-    const isBad = !address || !NameService
-    return useQuery<string | undefined>({
+    return useQuery({
         queryKey: ['reverse', address],
-        enabled: !isBad,
+        enabled: !!NameService?.reverse,
         queryFn: async () => {
-            if (isBad) return
-            return NameService.reverse?.(address)
+            if (!address) return null
+            return NameService!.reverse!(address) || null
         },
     })
 }
