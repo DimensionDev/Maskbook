@@ -72,10 +72,12 @@ export function useGasOptionsMenu(minimumGas: string, callback: (config: GasConf
             if (!option) return
             const config = isSupport1559
                 ? {
+                      gasOptionLevel: type,
                       maxPriorityFeePerGas: option.suggestedMaxPriorityFeePerGas,
                       maxFeePerGas: option.suggestedMaxFeePerGas,
                   }
                 : {
+                      gasOptionLevel: type,
                       gasPrice: option.suggestedMaxFeePerGas,
                   }
 

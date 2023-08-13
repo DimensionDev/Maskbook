@@ -234,6 +234,7 @@ export default function ChangeOwner() {
             providerType: ProviderType.MaskWallet,
             owner: wallet?.owner,
             identifier: ECKeyIdentifier.from(wallet?.identifier).unwrapOr(undefined),
+            gasOptionLevel: gasConfig?.gasOptionLevel,
             overrides: gasConfig,
         })
 

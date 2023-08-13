@@ -2,6 +2,7 @@ import { identity, pickBy } from 'lodash-es'
 import type { Web3State } from '@masknet/web3-shared-base'
 import type { ECKeyIdentifier, PartialRequired, ValueRefWithReady } from '@masknet/shared-base'
 import type { OthersAPI_Base } from './OthersAPI.js'
+import type { GasOptionLevel } from '@masknet/web3-shared-evm'
 
 export interface ConnectionOptions_Base<ChainId, ProviderType, Transaction> {
     /** Designate the signer of the transaction. */
@@ -26,6 +27,8 @@ export interface ConnectionOptions_Base<ChainId, ProviderType, Transaction> {
     overrides?: Partial<Transaction>
     /** Termination signal */
     signal?: AbortSignal
+    /** Gas option level */
+    gasOptionLevel?: GasOptionLevel
 }
 
 export class ConnectionOptionsAPI_Base<

@@ -2,7 +2,7 @@ import type EVM_Web3 from 'web3'
 import type { Transaction as Web3Transaction, TransactionReceipt as Web3TransactionReceipt } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types.js'
-import type { Web3UI as Web3UIShared, Web3State as Web3StateShared } from '@masknet/web3-shared-base'
+import type { Web3UI as Web3UIShared, Web3State as Web3StateShared, GasOptionType } from '@masknet/web3-shared-base'
 
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
 
@@ -121,12 +121,14 @@ export interface EIP1559GasConfig {
     maxFeePerGas: string
     maxPriorityFeePerGas: string
     gasPrice?: string
+    gasOptionLevel?: GasOptionLevel
 }
 
 export interface PriorEIP1559GasConfig {
     gas?: string
     gasPrice: string
     gasCurrency?: string
+    gasOptionLevel?: GasOptionLevel
 }
 
 export type GasConfig = EIP1559GasConfig | PriorEIP1559GasConfig
@@ -293,6 +295,7 @@ export interface RequestOptions {
     paymentToken?: string
     allowMaskAsGas?: boolean
     providerURL?: string
+    gasOptionLevel?: GasOptionLevel
 }
 
 export interface MessageRequest {
@@ -301,6 +304,8 @@ export interface MessageRequest {
 }
 
 export type MessageResponse = JsonRpcResponse
+
+export type GasOptionLevel = GasOptionType | 'custom'
 
 export interface Transaction {
     from?: string

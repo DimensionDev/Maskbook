@@ -178,7 +178,13 @@ export namespace Plugin.Shared {
         recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean): Promise<void>
 
         /** Sign a message with persona (w or w/o popups) */
-        signWithPersona<T>(type: SignType, message: T, identifier?: ECKeyIdentifier, silent?: boolean): Promise<string>
+        signWithPersona<T>(
+            type: SignType,
+            message: T,
+            identifier?: ECKeyIdentifier,
+            source?: string,
+            silent?: boolean,
+        ): Promise<string>
 
         /** Sign a message with wallet */
         signWithWallet<T>(type: SignType, message: T, account?: string): Promise<string>

@@ -121,6 +121,7 @@ interface WalletHeaderUIProps {
     onActionClick: () => void
     wallet: Wallet
     disabled?: boolean
+    disableCopy?: boolean
 }
 
 export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI({
@@ -130,6 +131,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
     onActionClick,
     wallet,
     disabled = false,
+    disableCopy = false,
 }) {
     const { t } = useI18N()
     const { classes, cx } = useStyles({ disabled })
@@ -196,7 +198,9 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                         </TextOverflowTooltip>
                         <Typography className={classes.identifier}>
                             <FormattedAddress address={wallet.address} formatter={formatEthereumAddress} size={4} />
-                            <CopyButton text={wallet.address} className={classes.icon} size={12} />
+                            {!disableCopy ? (
+                                <CopyButton text={wallet.address} className={classes.icon} size={12} />
+                            ) : null}
                             {addressLink ? (
                                 <Link
                                     className={classes.icon}

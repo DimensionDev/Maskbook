@@ -16,6 +16,7 @@ export class NextIDStorage implements StorageAPI.Storage {
             method: SignType,
             message: T,
             identifier?: ECKeyIdentifier,
+            source?: string,
             silent?: boolean,
         ) => Promise<string>,
     ) {
@@ -65,7 +66,13 @@ export class NextIDStorage implements StorageAPI.Storage {
 
         if (!payload?.ok) throw new Error('Invalid payload Error')
 
-        const signature = await this.signWithPersona?.(SignType.Message, payload.val.signPayload, this.signer, true)
+        const signature = await this.signWithPersona?.(
+            SignType.Message,
+            payload.val.signPayload,
+            this.signer,
+            location.origin,
+            true,
+        )
         if (!signature) throw new Error('Failed to sign payload.')
 
         await this.Storage.set(

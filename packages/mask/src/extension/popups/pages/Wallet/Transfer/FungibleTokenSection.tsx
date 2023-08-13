@@ -140,6 +140,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     })
     const recipient = params.get('recipient')
     const { showSnackbar } = usePopupCustomSnackbar()
+
     const [state, transfer] = useAsyncFn(async () => {
         if (!recipient || isZero(totalAmount) || !token?.decimals) return
         try {
@@ -147,6 +148,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                 overrides: gasConfig,
                 paymentToken: paymentAddress,
                 chainId,
+                gasOptionLevel: gasConfig?.gasOptionLevel,
             })
         } catch (err) {
             showSnackbar(t('failed_to_transfer_token', { message: (err as Error).message }))
