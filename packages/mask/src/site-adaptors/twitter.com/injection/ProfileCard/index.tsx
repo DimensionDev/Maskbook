@@ -72,7 +72,7 @@ function ProfileCardHolder() {
         }
     }, [twitterId])
 
-    const { value: resolvedIdentity, loading: resolving } = useSocialIdentity(identity)
+    const { data: resolvedIdentity, isLoading: resolving } = useSocialIdentity(identity)
 
     return (
         <Fade in={active} easing="linear" timeout={250}>

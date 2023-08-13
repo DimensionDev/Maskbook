@@ -153,7 +153,7 @@ function Content(props: ProfileTabContentProps) {
 
     const {
         currentVisitingSocialIdentity,
-        socialAccounts = [],
+        socialAccounts = EMPTY_LIST,
         currentSocialIdentity,
     } = ProfileTabContext.useContainer()
 

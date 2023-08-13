@@ -17,7 +17,7 @@ const useStyles = makeStyles()({
 
 export function TabContent({ identity, socialAccount }: TabContentProps) {
     const { classes } = useStyles()
-    const { value: socialAccounts, loading: loadingSocialAccounts } = useSocialAccountsAll(identity)
+    const { data: socialAccounts, isLoading: loadingSocialAccounts } = useSocialAccountsAll(identity)
 
     const renderIdentity = () => {
         return (
