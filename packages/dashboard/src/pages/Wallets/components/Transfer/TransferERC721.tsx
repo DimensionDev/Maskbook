@@ -217,7 +217,7 @@ export const TransferERC721 = memo(() => {
     }
 
     // gas price
-    const { value: defaultGasPrice = '0' } = useGasPrice()
+    const { data: defaultGasPrice = '0' } = useGasPrice()
     const gasPrice = gasConfig.gasPrice || defaultGasPrice
     const gasFee = useMemo(() => multipliedBy(gasLimit, gasPrice), [gasLimit, gasPrice])
     const gasFeeInUsd = formatWeiToEther(gasFee).multipliedBy(nativeTokenPrice)

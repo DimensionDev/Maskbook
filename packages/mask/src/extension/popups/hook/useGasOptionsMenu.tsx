@@ -49,7 +49,7 @@ const useStyles = makeStyles()((theme) => ({
 export function useGasOptionsMenu(minimumGas: string, callback: (config: GasConfig, type?: GasOptionType) => void) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { value: gasOptions } = useGasOptions()
+    const { data: gasOptions } = useGasOptions()
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
