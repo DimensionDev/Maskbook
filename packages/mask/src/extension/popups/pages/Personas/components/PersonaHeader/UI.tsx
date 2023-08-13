@@ -41,7 +41,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     identifier: {
         fontSize: 10,
-        color: '#767F8D',
+        color: theme.palette.maskColor.main,
         lineHeight: 1,
         display: 'flex',
         alignItems: 'center',
@@ -49,7 +49,7 @@ const useStyles = makeStyles()((theme) => ({
     icon: {
         width: 12,
         height: 12,
-        color: '#767F8D',
+        color: theme.palette.maskColor.second,
         cursor: 'pointer',
         marginLeft: 4,
     },

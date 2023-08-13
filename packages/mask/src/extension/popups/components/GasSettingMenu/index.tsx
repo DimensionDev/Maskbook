@@ -17,7 +17,6 @@ import {
     type ChainId,
     isNativeTokenAddress,
     formatWeiToEther,
-    type GasOptionLevel,
 } from '@masknet/web3-shared-evm'
 import { Typography, useTheme } from '@mui/material'
 import { Box } from '@mui/system'
@@ -58,12 +57,12 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
     const theme = useTheme()
     const { smartPayChainId } = useContainer(PopupContext)
     const [gasConfig = initConfig, setGasConfig] = useState<GasConfig | undefined>()
-    const [gasOptionType, setGasOptionType] = useState<GasOptionLevel | undefined>(
-        initConfig?.gasOptionLevel ?? GasOptionType.SLOW,
+    const [gasOptionType, setGasOptionType] = useState<GasOptionType | undefined>(
+        initConfig?.gasOptionType ?? GasOptionType.SLOW,
     )
 
     const handleChange = useCallback(
-        (config: GasConfig, type?: GasOptionLevel) => {
+        (config: GasConfig, type?: GasOptionType) => {
             setGasOptionType(type)
             setGasConfig(config)
             onChange?.(config)
@@ -136,13 +135,13 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
         const target = gasOptions[GasOptionType.SLOW]
         const result = isSupport1559
             ? {
-                  gasOptionLevel: GasOptionType.SLOW,
+                  gasOptionType: GasOptionType.SLOW,
                   maxPriorityFeePerGas: target.suggestedMaxPriorityFeePerGas,
                   maxFeePerGas: target.suggestedMaxFeePerGas,
                   gas: minimumGas,
               }
             : {
-                  gasOptionLevel: GasOptionType.SLOW,
+                  gasOptionType: GasOptionType.SLOW,
                   gasPrice: target.suggestedMaxFeePerGas,
                   gas: minimumGas,
               }

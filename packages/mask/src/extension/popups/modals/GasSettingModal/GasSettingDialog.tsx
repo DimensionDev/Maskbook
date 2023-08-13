@@ -3,6 +3,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainIdSupport, useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import {
+    GasOptionType,
     ZERO,
     formatBalance,
     formatCurrency,
@@ -183,12 +184,16 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
         onClose(
             isSupport1559
                 ? {
-                      gasOptionLevel: 'custom',
+                      gasOptionType: GasOptionType.CUSTOM,
                       gas: config.gas,
                       maxFeePerGas: formatGweiToWei(maxFeePerGas).toFixed(),
                       maxPriorityFeePerGas: formatGweiToWei(maxPriorityFeePerGas).toFixed(),
                   }
-                : { gasPrice: formatGweiToWei(gasPrice).toFixed(), gas: config.gas, gasOptionLevel: 'custom' },
+                : {
+                      gasPrice: formatGweiToWei(gasPrice).toFixed(),
+                      gas: config.gas,
+                      gasOptionType: GasOptionType.CUSTOM,
+                  },
         )
     }, [gasPrice, maxFeePerGas, maxPriorityFeePerGas, isSupport1559, onClose, config])
 

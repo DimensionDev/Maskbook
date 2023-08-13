@@ -121,14 +121,14 @@ export interface EIP1559GasConfig {
     maxFeePerGas: string
     maxPriorityFeePerGas: string
     gasPrice?: string
-    gasOptionLevel?: GasOptionLevel
+    gasOptionType?: GasOptionType
 }
 
 export interface PriorEIP1559GasConfig {
     gas?: string
     gasPrice: string
     gasCurrency?: string
-    gasOptionLevel?: GasOptionLevel
+    gasOptionType?: GasOptionType
 }
 
 export type GasConfig = EIP1559GasConfig | PriorEIP1559GasConfig
@@ -295,7 +295,7 @@ export interface RequestOptions {
     paymentToken?: string
     allowMaskAsGas?: boolean
     providerURL?: string
-    gasOptionLevel?: GasOptionLevel
+    gasOptionType?: GasOptionType
 }
 
 export interface MessageRequest {
@@ -304,8 +304,6 @@ export interface MessageRequest {
 }
 
 export type MessageResponse = JsonRpcResponse
-
-export type GasOptionLevel = GasOptionType | 'custom'
 
 export interface Transaction {
     from?: string

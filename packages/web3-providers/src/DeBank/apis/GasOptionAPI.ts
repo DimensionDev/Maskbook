@@ -35,6 +35,11 @@ export class DeBankGasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, G
                 suggestedMaxFeePerGas: toFixed(slow!.price),
                 suggestedMaxPriorityFeePerGas: '0',
             },
+            [GasOptionType.CUSTOM]: {
+                estimatedSeconds: 0,
+                suggestedMaxFeePerGas: '',
+                suggestedMaxPriorityFeePerGas: '',
+            },
         }
     }
 }

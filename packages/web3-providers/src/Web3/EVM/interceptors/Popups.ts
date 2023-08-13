@@ -125,7 +125,7 @@ export class Popups implements Middleware<ConnectionContext> {
                             owner: context.owner,
                             identifier: context.identifier?.toText(),
                             providerURL: this.customNetwork ? this.customNetwork.rpcUrl : undefined,
-                            gasOptionLevel: context.gasOptionLevel,
+                            gasOptionType: context.gasOptionType,
                         },
                     },
                 }

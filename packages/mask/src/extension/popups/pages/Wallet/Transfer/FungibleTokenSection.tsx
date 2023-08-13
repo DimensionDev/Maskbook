@@ -148,7 +148,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                 overrides: gasConfig,
                 paymentToken: paymentAddress,
                 chainId,
-                gasOptionLevel: gasConfig?.gasOptionLevel,
+                gasOptionType: gasConfig?.gasOptionType,
             })
         } catch (err) {
             showSnackbar(t('failed_to_transfer_token', { message: (err as Error).message }))

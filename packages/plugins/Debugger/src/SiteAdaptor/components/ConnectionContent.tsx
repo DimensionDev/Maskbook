@@ -253,8 +253,6 @@ export function ConnectionContent(props: ConnectionContentProps) {
         }
     }, [])
 
-    const onPersonaSign = useCallback(() => {}, [])
-
     const onConnect = useCallback(async (chainId: ChainId, providerType: ProviderType) => {
         try {
             await Web3.connect({

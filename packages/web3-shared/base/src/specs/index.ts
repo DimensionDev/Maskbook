@@ -35,6 +35,7 @@ export enum GasOptionType {
     FAST = 'fast',
     NORMAL = 'normal',
     SLOW = 'slow',
+    CUSTOM = 'custom',
 }
 
 export enum TokenType {

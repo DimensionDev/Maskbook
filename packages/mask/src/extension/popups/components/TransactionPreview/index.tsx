@@ -149,7 +149,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
         if (isSupport1559) {
             if (transaction.computedPayload.maxFeePerGas && transaction.computedPayload.maxPriorityFeePerGas)
                 return {
-                    gasOptionLevel: transaction.gasOptionLevel,
+                    gasOptionType: transaction.gasOptionType,
                     maxFeePerGas: transaction.computedPayload.maxFeePerGas,
                     maxPriorityFeePerGas: transaction.computedPayload.maxPriorityFeePerGas,
                 }
@@ -160,9 +160,9 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
 
         return {
             gasPrice: transaction.computedPayload.gasPrice,
-            gasOptionLevel: transaction.gasOptionLevel,
+            gasOptionType: transaction.gasOptionType,
         }
-    }, [transaction?.computedPayload, transaction?.gasOptionLevel, isSupport1559])
+    }, [transaction?.computedPayload, transaction?.gasOptionType, isSupport1559])
 
     const receiver = useMemo(() => {
         if (domain) return Others.formatDomainName(domain)
