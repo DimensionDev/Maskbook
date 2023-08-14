@@ -148,6 +148,7 @@ export default memo(function Receive() {
                                 chainId={currentNetwork.chainId}
                                 size={16}
                                 name={currentNetwork.name}
+                                preferName={currentNetwork.isCustomized}
                             />
                         </div>
                     )}
