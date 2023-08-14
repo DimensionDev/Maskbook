@@ -8,6 +8,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
+import { Web3StateRef } from '../apis/Web3StateAPI.js'
 
 export class Nonce implements Middleware<ConnectionContext> {
     static INITIAL_NONCE = -1
@@ -15,6 +16,12 @@ export class Nonce implements Middleware<ConnectionContext> {
     private Web3 = new ConnectionReadonlyAPI()
 
     private nonces = new Map<string, Map<ChainId, number>>()
+
+    private get customNetwork() {
+        if (!Web3StateRef.value?.Network) throw new Error('The web3 state does not load yet.')
+        const network = Web3StateRef.value.Network.network?.getCurrentValue()
+        return network?.isCustomized ? network : undefined
+    }
 
     private async syncRemoteNonce(chainId: ChainId, address: string, commitment = 0) {
         const address_ = checksumAddress(address)
