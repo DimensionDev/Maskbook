@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react'
 import { Card, Typography, Box } from '@mui/material'
 import { Stack } from '@mui/system'
 import { LoadingBase, makeStyles, parseColor } from '@masknet/theme'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, signMessage } from '@masknet/web3-shared-evm'
 import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { formatBalance, isZero, TokenType } from '@masknet/web3-shared-base'
 import { NetworkPluginID, isFacebook, isTwitter } from '@masknet/shared-base'
@@ -158,9 +158,7 @@ export function RedPacket(props: RedPacketProps) {
         payload.contract_version,
         account,
         payload.rpid,
-        payload.contract_version > 3
-            ? Web3.getWeb3().eth.accounts.sign(account, payload.password).signature
-            : payload.password,
+        payload.contract_version > 3 ? signMessage(account, payload.password).signature : payload.password,
         payloadChainId,
     )
 

@@ -36,6 +36,7 @@
     "web3-core": "1.8.0",
     "web3-core-helpers": "1.8.0",
     "web3-eth-abi": "1.8.0",
+    "web3-eth-accounts": "1.8.0",
     "web3-eth-contract": "1.8.0",
     "web3-utils": "1.8.0"
   },

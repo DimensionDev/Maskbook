@@ -4606,6 +4606,9 @@ importers:
       web3-eth-abi:
         specifier: 1.8.0
         version: 1.8.0
+      web3-eth-accounts:
+        specifier: 1.8.0
+        version: 1.8.0
       web3-eth-contract:
         specifier: 1.8.0
         version: 1.8.0
@@ -32862,6 +32865,16 @@ packages:
       safe-buffer: 5.2.1
       which-typed-array: 1.1.7
 
+  /util@0.12.5:
+    resolution: {integrity: sha512-kZf/K6hEIrWHI6XqOFUiiMa+79wE/D8Q+NCNAWclkyg3b4d2k7s0QGepNjiABc+aR3N1PAyHL7p6UcLY6LmrnA==}
+    dependencies:
+      inherits: 2.0.4
+      is-arguments: 1.1.1
+      is-generator-function: 1.0.10
+      is-typed-array: 1.1.8
+      which-typed-array: 1.1.7
+    dev: true
+
   /utila@0.4.0:
     resolution: {integrity: sha512-Z0DbgELS9/L/75wZbro8xAnT50pBVFQZ+hUEueGDU5FN51YSCYM+jdxsfCiHjwNP/4LCDD0i/graKpeBnOXKRA==}
     dev: true
@@ -33292,7 +33305,7 @@ packages:
   /web-encoding@1.1.5:
     resolution: {integrity: sha512-HYLeVCdJ0+lBYV2FvNZmv3HJ2Nt0QYXqZojk3d9FJOLkwnuhzM9tmamh8d7HPM8QqjKH8DeHkFTx+CFlWpZZDA==}
     dependencies:
-      util: 0.12.4
+      util: 0.12.5
     optionalDependencies:
       '@zxing/text-encoding': 0.9.0
     dev: true
@@ -34853,6 +34866,7 @@ time:
   /web3-core-helpers@1.8.0: '2022-09-14T10:59:29.411Z'
   /web3-core@1.8.0: '2022-09-14T10:59:33.813Z'
   /web3-eth-abi@1.8.0: '2022-09-14T10:59:27.837Z'
+  /web3-eth-accounts@1.8.0: '2022-09-14T10:59:35.229Z'
   /web3-eth-contract@1.8.0: '2022-09-14T10:59:39.169Z'
   /web3-eth@1.8.0: '2022-09-14T10:59:42.175Z'
   /web3-utils@1.8.0: '2022-09-14T10:59:26.419Z'
