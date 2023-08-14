@@ -27,7 +27,7 @@ import { Icons } from '@masknet/icons'
 import { useUpdateEffect } from '@react-hookz/web'
 import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
 import urlcat from 'urlcat'
-import { mapKeys } from 'lodash-es'
+import { compact, mapKeys, omit } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -170,35 +170,49 @@ const Interaction = memo(function Interaction() {
 
                 const result = abiCoder.encodeParameters(approveParametersType, [parameters.spender, approveAmount])
 
-                params = currentRequest.request.arguments.params.map((x) =>
-                    x === 'latest'
-                        ? x
-                        : {
-                              ...x,
-                              data: result,
-                          },
+                params = compact(
+                    currentRequest.request.arguments.params.map((x) =>
+                        x === 'latest'
+                            ? chainId !== ChainId.Celo
+                                ? x
+                                : undefined
+                            : {
+                                  ...x,
+                                  data: result,
+                                  chainId: toHex(x.chainId),
+                                  nonce: toHex(x.nonce),
+                              },
+                    ),
                 )
             } else {
-                params = currentRequest.request.arguments.params.map((x) => {
-                    if (x === 'latest') return x
+                params = compact(
+                    currentRequest.request.arguments.params.map((x) => {
+                        if (x === 'latest') {
+                            if (chainId === ChainId.Celo) return undefined
+                            return x
+                        }
 
-                    const gas = toHex(
-                        BigNumber.max(
-                            toHex(addGasMargin(gasConfig?.gas ?? x.gas).toFixed()),
-                            chainId === ChainId.Optimism ? 25000 : 21000,
-                        ).toFixed(),
-                    )
-                    return {
-                        ...x,
-                        ...(gasConfig
-                            ? mapKeys(gasConfig, (value, key) => {
-                                  if (key === 'gasCurrency' || !value) return
-                                  return toHex(value)
-                              })
-                            : {}),
-                        gas,
-                    }
-                })
+                        const gas = toHex(
+                            BigNumber.max(
+                                toHex(addGasMargin(gasConfig?.gas ?? x.gas).toFixed()),
+                                chainId === ChainId.Optimism ? 25000 : 21000,
+                            ).toFixed(),
+                        )
+
+                        return {
+                            ...x,
+                            ...(gasConfig
+                                ? mapKeys(omit(gasConfig, 'gasOptionType'), (value, key) => {
+                                      if (key === 'gasCurrency' || !value) return
+                                      return toHex(value)
+                                  })
+                                : {}),
+                            gas,
+                            chainId: toHex(x.chainId),
+                            nonce: toHex(x.nonce),
+                        }
+                    }),
+                )
             }
 
             await Message?.approveRequest(currentRequest.ID, {
