@@ -149,11 +149,12 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                 paymentToken: paymentAddress,
                 chainId,
                 gasOptionType: gasConfig?.gasOptionType,
+                providerURL: network?.rpcUrl,
             })
         } catch (err) {
-            showSnackbar(t('failed_to_transfer_token', { message: (err as Error).message }))
+            showSnackbar(t('failed_to_transfer_token', { message: (err as Error).message, variant: 'error' }))
         }
-    }, [address, chainId, recipient, totalAmount, token?.decimals, gasConfig, paymentAddress])
+    }, [address, chainId, recipient, totalAmount, token?.decimals, gasConfig, paymentAddress, network?.rpcUrl])
 
     if (undecided)
         return (
@@ -205,6 +206,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                         className={classes.badgeIcon}
                         size={16}
                         icon={network?.iconUrl}
+                        preferName={network?.isCustomized}
                     />
                 </Box>
                 <Box mr="auto" ml={2}>
