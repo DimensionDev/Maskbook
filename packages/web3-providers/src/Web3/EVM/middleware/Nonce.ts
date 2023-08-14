@@ -1,10 +1,12 @@
 import { toHex } from 'web3-utils'
+import { formatURL } from '@masknet/web3-shared-base'
 import {
     type ChainId,
     EthereumMethodType,
     ProviderType,
     type Middleware,
     checksumAddress,
+    ProviderURL,
 } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
@@ -14,25 +16,33 @@ export class Nonce implements Middleware<ConnectionContext> {
 
     private Web3 = new ConnectionReadonlyAPI()
 
-    private nonces = new Map<string, Map<ChainId, number>>()
+    // account address => providerURL => nonce
+    private nonces = new Map<string, Map<string, number>>()
 
-    private async syncRemoteNonce(chainId: ChainId, address: string, commitment = 0) {
+    private async syncRemoteNonce(chainId: ChainId, address: string, providerURL?: string, commitment = 0) {
         const address_ = checksumAddress(address)
-        const addressNonces = this.nonces.get(address_) ?? new Map<ChainId, number>()
+        const addressNonces = this.nonces.get(address_) ?? new Map<string, number>()
+
+        // the assumption here: if the providerURL is not provided, it must be a built-in provider was used.
+        // the ProviderURL.from() will throw if the chain id doesn't belong to a built-in network.
+        // and we ignore the situation that the custom network chain id is the same with a built-in network.
+        const providerURL_ = formatURL(providerURL ?? ProviderURL.from(chainId))
+
         addressNonces.set(
-            chainId,
+            providerURL_,
             commitment +
                 Math.max(
                     await this.Web3.getTransactionNonce(address, {
                         chainId,
+                        providerURL: providerURL_,
                     }),
-                    addressNonces.get(chainId) ?? Nonce.INITIAL_NONCE,
+                    addressNonces.get(providerURL_) ?? Nonce.INITIAL_NONCE,
                 ),
         )
 
         // set back into cache
         this.nonces.set(address_, addressNonces)
-        return addressNonces.get(chainId)!
+        return addressNonces.get(providerURL_)!
     }
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {
@@ -48,7 +58,7 @@ export class Nonce implements Middleware<ConnectionContext> {
                 params: [
                     {
                         ...context.config,
-                        nonce: toHex(await this.syncRemoteNonce(context.chainId, context.account)),
+                        nonce: toHex(await this.syncRemoteNonce(context.chainId, context.account, context.providerURL)),
                     },
                 ],
             }
@@ -64,10 +74,11 @@ export class Nonce implements Middleware<ConnectionContext> {
             const isAuroraErrorNonce = message.includes('ERR_INCORRECT_NONCE')
 
             // if a transaction hash was received then commit the nonce
-            if (isGeneralErrorNonce || isAuroraErrorNonce) await this.syncRemoteNonce(context.chainId, context.account)
+            if (isGeneralErrorNonce || isAuroraErrorNonce)
+                await this.syncRemoteNonce(context.chainId, context.account, context.providerURL)
             // else if a nonce error was occurred then reset the nonce
             else if (!context.error && typeof context.result === 'string')
-                await this.syncRemoteNonce(context.chainId, context.account, 1)
+                await this.syncRemoteNonce(context.chainId, context.account, context.providerURL, 1)
         } catch {
             // to scan the context to determine how to update the local nonce, allow to fail silently
         }
