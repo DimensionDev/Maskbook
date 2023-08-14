@@ -95,6 +95,44 @@ export enum ChainId {
 
     Cronos = 25,
 
+    Brise = 32520,
+
+    Canto = 7700,
+
+    DFK = 53935,
+
+    Doge = 2000,
+
+    Evmos = 9001,
+
+    HuobiEco = 128,
+
+    IoTex = 4689,
+
+    Kava = 2222,
+
+    Kcc = 321,
+
+    Milkomeda = 2001,
+
+    OKXChain = 66,
+
+    Palm = 11297108109,
+
+    RSK = 30,
+
+    SmartBitcoinCash = 10000,
+
+    Shiden = 336,
+
+    SongbirdCanary = 19,
+
+    Step = 1234,
+
+    Telos = 40,
+
+    Wanchain = 888,
+
     /** BitTorrent Chain Mainnet */
     BitTorrent = 199,
 

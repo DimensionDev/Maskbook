@@ -326,7 +326,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
                     </>
                 ) : null}
             </Box>
-            {isRecentTx ? (
+            {isRecentTx && status === NOT_DEPEND ? (
                 <Box className={classes.actionGroup}>
                     <ActionButton className={classes.speedupButton} fullWidth onClick={handleSpeedup}>
                         {t('speed_up')}

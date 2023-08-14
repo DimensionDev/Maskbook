@@ -24,10 +24,10 @@ export function useBalance<T extends NetworkPluginID = NetworkPluginID>(
 
     const result = useQuery({
         enabled: !!account && !!Web3 && enabled,
-        queryKey: ['balance', pluginID, chainId, account],
+        queryKey: ['balance', pluginID, chainId, account, options],
         queryFn: async () => {
             if (!account) return 0
-            return Web3.getBalance(account, { chainId })
+            return Web3.getBalance(account, { ...options, chainId })
         },
     })
 

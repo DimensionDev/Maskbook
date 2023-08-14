@@ -394,7 +394,8 @@
             "chainId": 42220,
             "name": "CELO",
             "symbol": "CELO",
-            "decimals": 18
+            "decimals": 18,
+            "address": "0x471ece3750da237f93b8e339c536989b8978a438"
         },
         "infoURL": "https://explorer.celo.org/",
         "explorers": [
