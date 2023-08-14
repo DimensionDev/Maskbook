@@ -30,7 +30,7 @@ export async function send(payload: JsonRpcPayload, options?: TransactionOptions
     const paymentToken = options?.paymentToken
     const signer = identifier
         ? new Signer(identifier, <T>(type: SignType, message: T, identifier?: ECKeyIdentifier) =>
-              signWithPersona(type, message, identifier, '', true),
+              signWithPersona(type, message, identifier, undefined, true),
           )
         : new Signer(owner || from!, signWithWallet)
 

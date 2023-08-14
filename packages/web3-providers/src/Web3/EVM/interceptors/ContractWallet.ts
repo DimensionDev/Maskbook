@@ -40,7 +40,7 @@ export class ContractWallet implements Middleware<ConnectionContext> {
             return new Signer(
                 context.identifier,
                 async <T>(type: SignType, message: T, identifier?: ECKeyIdentifier) => {
-                    return SharedContextRef.value.signWithPersona(type, message, identifier, location.origin, true)
+                    return SharedContextRef.value.signWithPersona(type, message, identifier, true)
                 },
             )
         if (context.owner)

@@ -102,7 +102,7 @@ export function useDeploy(
             })
 
             if (signPersona) {
-                signature = await signWithPersona(SignType.Message, payload, signPersona.identifier, location.origin)
+                signature = await signWithPersona(SignType.Message, payload, signPersona.identifier)
             } else if (signWallet) {
                 signature = await Web3.signMessage('message', payload, options)
             }
