@@ -1,26 +1,23 @@
 import { memo, useState } from 'react'
-import { Box } from '@mui/material'
+import { InputAdornment, InputBase } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { Icons } from '@masknet/icons'
+
 const useStyles = makeStyles()((theme) => ({
-    container: {
-        display: 'flex',
-        padding: '11px 12px',
-        alignItems: 'center',
-        gap: '4px',
-        alignSelf: 'stretch',
-        background: theme.palette.maskColor.input,
-        borderRadius: '8px',
+    inputRoot: {
+        padding: '4px',
+        borderRadius: 8,
         width: '100%',
+        background: theme.palette.maskColor.input,
+        fontSize: 14,
+        marginBottom: 16,
     },
-    input: {
-        flex: 1,
-        background: 'transparent',
-        border: 'none',
-        outline: 'none',
-        color: theme.palette.maskColor.main,
+    inputFocused: {
+        background: theme.palette.maskColor.bottom,
+        borderColor: theme.palette.text.third,
     },
+
     button: {
         background: 'transparent',
         border: 'none',
@@ -44,35 +41,42 @@ export const Search = memo<SearchProps>(function Search({ setSearchValue }) {
         setSearchValue(value)
     }
     return (
-        <Box className={classes.container}>
-            <Icons.Search />
-            <input
-                value={value}
-                placeholder={t('popups_encrypted_friends_search_placeholder')}
-                className={classes.input}
-                onKeyUp={(e) => handleKeyPress(e)}
-                onBlur={(e) => {
-                    setTimer(
-                        setTimeout(() => {
-                            setSearchValue(e.target.value)
-                        }, 500),
-                    )
-                }}
-                onChange={(e) => {
-                    setValue(e.target.value)
-                }}
-            />
-            {value ? (
-                <button
-                    type="reset"
-                    onClick={() => {
-                        setValue('')
-                        setSearchValue('')
-                    }}
-                    className={classes.button}>
-                    <Icons.Close />
-                </button>
-            ) : null}
-        </Box>
+        <InputBase
+            className={classes.inputRoot}
+            classes={{
+                focused: classes.inputFocused,
+            }}
+            value={value}
+            onKeyUp={(e) => handleKeyPress(e)}
+            onBlur={(e) => {
+                setTimer(
+                    setTimeout(() => {
+                        setSearchValue(e.target.value)
+                    }, 500),
+                )
+            }}
+            onChange={(e) => {
+                setValue(e.target.value)
+            }}
+            startAdornment={
+                <InputAdornment position="start">
+                    <Icons.Search />
+                </InputAdornment>
+            }
+            endAdornment={
+                value ? (
+                    <button
+                        type="reset"
+                        onClick={() => {
+                            setValue('')
+                            setSearchValue('')
+                        }}
+                        className={classes.button}>
+                        <Icons.Close />
+                    </button>
+                ) : null
+            }
+            placeholder={t('popups_encrypted_friends_search_placeholder')}
+        />
     )
 })
