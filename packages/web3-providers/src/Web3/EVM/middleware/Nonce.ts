@@ -32,6 +32,7 @@ export class Nonce implements Middleware<ConnectionContext> {
                 Math.max(
                     await this.Web3.getTransactionNonce(address, {
                         chainId,
+                        providerURL: this.customNetwork?.rpcUrl,
                     }),
                     addressNonces.get(chainId) ?? Nonce.INITIAL_NONCE,
                 ),
