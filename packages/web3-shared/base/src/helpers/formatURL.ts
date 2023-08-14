@@ -10,13 +10,15 @@ export function formatURL(url: string): string {
     const sortedSearchParams = new URLSearchParams()
     const searchParamKeys = Array.from(searchParams.keys()).sort()
     for (const key of searchParamKeys) {
-        sortedSearchParams.append(key, searchParams.get(key)!)
+        sortedSearchParams.set(key, searchParams.get(key)!)
     }
 
     // Step 4: Remove duplicate '//' or relative path
     const path = urlObj.pathname.replaceAll(/\/+/g, '/')
 
     // Step 5: Reconstruct the URL with the formatted parts
-    const formattedURL = `${urlObj.origin}${path}${sortedSearchParams.toString()}`
+    const formattedURL = `${urlObj.origin}${path}${
+        Array.from(sortedSearchParams).length ? `?${sortedSearchParams.toString()}` : ''
+    }`
     return formattedURL
 }
