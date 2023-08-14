@@ -7,6 +7,12 @@ export class ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
         return this.getDescriptors().find((x) => x.chainId === chainId)
     }
 
+    private getDescriptorRequired(chainId: ChainId) {
+        const descriptor = this.getDescriptor(chainId)
+        if (!descriptor) throw new Error(`Unknown chainId: ${chainId}.`)
+        return descriptor
+    }
+
     chainId = (name: string) =>
         this.getDescriptors().find((x) =>
             [x.name, x.type as string, x.fullName, x.shortName]
@@ -31,11 +37,11 @@ export class ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
 
     chainPrefix = (chainId: ChainId) => ''
 
-    networkType = (chainId: ChainId) => this.getDescriptor(chainId)?.type!
+    networkType = (chainId: ChainId) => this.getDescriptorRequired(chainId)?.type
 
-    explorerUrl = (chainId: ChainId) => this.getDescriptor(chainId)?.explorerUrl!
+    explorerUrl = (chainId: ChainId) => this.getDescriptorRequired(chainId)?.explorerUrl
 
-    nativeCurrency = (chainId: ChainId) => this.getDescriptor(chainId)?.nativeCurrency!
+    nativeCurrency = (chainId: ChainId) => this.getDescriptorRequired(chainId)?.nativeCurrency
 
     isValidChainId = (chainId: ChainId, testnet = false) =>
         this.getDescriptor(chainId)?.network === 'mainnet' || testnet
@@ -43,5 +49,5 @@ export class ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
     isMainnet = (chainId: ChainId) => this.getDescriptor(chainId)?.network === 'mainnet'
 
     isFeatureSupported = (chainId: ChainId, feature: string) =>
-        !!this.getDescriptor(chainId)?.features?.includes(feature) ?? false
+        !!this.getDescriptor(chainId)?.features?.includes(feature)
 }
