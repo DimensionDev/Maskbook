@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import { makeStyles, ActionButton, LoadingBase, parseColor, ShadowRootTooltip, useDetectOverflow } from '@masknet/theme'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { signMessage, type ChainId } from '@masknet/web3-shared-evm'
 import { type RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { Card, Typography, Button, Box } from '@mui/material'
 import {
@@ -11,7 +11,7 @@ import {
     TransactionConfirmModal,
 } from '@masknet/shared'
 import { useChainContext, useNetworkContext, useNonFungibleAsset } from '@masknet/web3-hooks-base'
-import { NetworkResolver, Web3 } from '@masknet/web3-providers'
+import { NetworkResolver } from '@masknet/web3-providers'
 import { TokenType } from '@masknet/web3-shared-base'
 import { usePostLink, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { NetworkPluginID, CrossIsolationMessages, isTwitter, isFacebook } from '@masknet/shared-base'
@@ -203,7 +203,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const [{ loading: isClaiming }, claimCallback] = useClaimNftRedpacketCallback(
         payload.id,
         availability?.totalAmount,
-        Web3.getWeb3().eth.accounts.sign(account, payload.privateKey).signature ?? '',
+        signMessage(account, payload.privateKey).signature ?? '',
     )
     const [showTooltip, textRef] = useDetectOverflow()
 
