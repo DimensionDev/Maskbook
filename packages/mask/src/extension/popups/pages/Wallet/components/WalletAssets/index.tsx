@@ -3,7 +3,7 @@ import { CollectionList, RestorableScroll, UserAssetsProvider } from '@masknet/s
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useAccount, useChainContext, useWallet } from '@masknet/web3-hooks-base'
+import { useAccount, useChainContext, useTrustedNonFungibleTokens, useWallet } from '@masknet/web3-hooks-base'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab, Typography, styled, tabClasses, tabsClasses } from '@mui/material'
 import { memo, useCallback, useRef } from 'react'
@@ -129,6 +129,7 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI(
 
     const { classes } = useStyles()
     const [currentTab, handleTabChange] = useParamTab<WalletAssetTabs>(WalletAssetTabs.Tokens)
+    const trustedTokens = useTrustedNonFungibleTokens()
 
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const SEARCH_KEY = 'collectionId'
@@ -213,6 +214,7 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI(
                                     disableWindowScroll
                                     scrollElementRef={scrollTargetRef}
                                     emptyText={collectiblesEmptyText}
+                                    additionalAssets={trustedTokens}
                                     onItemClick={handleItemClick}
                                     onCollectionChange={handleCollectionChange}
                                 />
