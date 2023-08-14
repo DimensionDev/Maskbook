@@ -1,5 +1,5 @@
 import { noop } from 'lodash-es'
-import { ErrorEditor, type Middleware } from '@masknet/web3-shared-evm'
+import { ErrorEditor, isMaskOnlyMethodType, type Middleware } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
 import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
@@ -14,7 +14,7 @@ export class CustomNetwork implements Middleware<ConnectionContext> {
     }
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {
-        if (!this.customNetwork || context.risky || !context.writeable) {
+        if (!this.customNetwork || context.risky || !context.writeable || isMaskOnlyMethodType(context.method)) {
             await next()
             return
         }
