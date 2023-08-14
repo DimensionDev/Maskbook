@@ -122,7 +122,6 @@
             }
         ]
     },
-
     {
         "chainId": 8453,
         "type": "Base",
@@ -148,7 +147,6 @@
             }
         ]
     },
-
     {
         "chainId": 84531,
         "type": "Base",
@@ -170,6 +168,31 @@
             {
                 "name": "basescan",
                 "url": "https://goerli.basescan.org",
+                "standard": "EIP3091"
+            }
+        ]
+    },
+    {
+        "chainId": 56,
+        "type": "Binance",
+        "name": "BNB Chain",
+        "color": "rgb(240, 185, 10)",
+        "network": "mainnet",
+        "fullName": "Binance Smart Chain Mainnet",
+        "shortName": "bnb",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 56,
+            "name": "Binance Chain Native Token",
+            "symbol": "BNB",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/smartchain/info/logo.png/quality=85"
+        },
+        "infoURL": "https://www.binance.org",
+        "explorers": [
+            {
+                "name": "bscscan",
+                "url": "https://bscscan.com",
                 "standard": "EIP3091"
             }
         ]
