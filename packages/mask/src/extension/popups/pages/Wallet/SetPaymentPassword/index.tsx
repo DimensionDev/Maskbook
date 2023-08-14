@@ -5,7 +5,7 @@ import { Trans } from 'react-i18next'
 import { Controller } from 'react-hook-form'
 import type { z as zod } from 'zod'
 import { Box, Link, Typography, useTheme } from '@mui/material'
-import { ActionButton, makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import {
     CrossIsolationMessages,
     NetworkPluginID,
@@ -133,7 +133,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const [params] = useSearchParams()
     const [isCreating, setIsCreating] = useState(!!params.get('isCreating'))
-
+    const { showSnackbar } = usePopupCustomSnackbar()
     const theme = useTheme()
 
     const {
@@ -157,6 +157,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
 
                 if (hasPassword) {
                     const from = params.get('from')
+                    showSnackbar(t('popups_wallet_set_payment_password_successfully'), { variant: 'success' })
                     CrossIsolationMessages.events.passwordStatusUpdated.sendToAll(true)
                     navigate({ pathname: from || PopupRoutes.Wallet }, { replace: true })
                 }

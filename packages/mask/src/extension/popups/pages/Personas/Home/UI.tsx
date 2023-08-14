@@ -1,11 +1,19 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
+import urlcat from 'urlcat'
 import { Icons } from '@masknet/icons'
-import { type EnhanceableSite, type ProfileAccount, PopupModalRoutes, PopupRoutes } from '@masknet/shared-base'
+import {
+    type EnhanceableSite,
+    type ProfileAccount,
+    PopupModalRoutes,
+    PopupRoutes,
+    currentMaskWalletLockStatusSettings,
+    LockStatus,
+} from '@masknet/shared-base'
 import { MaskTabList, makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Box, Tab, Typography, useTheme } from '@mui/material'
-import { memo } from 'react'
+import { memo, useCallback } from 'react'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { SocialAccounts } from '../../../components/SocialAccounts/index.js'
 import { ConnectedWallet } from '../../../components/ConnectedWallet/index.js'
@@ -195,6 +203,16 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
 
         const [currentTab, onChange] = useParamTab<PopupHomeTabType>(PopupHomeTabType.SocialAccounts)
 
+        const onChangeTab = useCallback((event: object, value: PopupHomeTabType) => {
+            if (
+                currentMaskWalletLockStatusSettings.value === LockStatus.LOCKED &&
+                value === PopupHomeTabType.ConnectedWallets
+            ) {
+                navigate(urlcat(PopupRoutes.Unlock, { from: PopupRoutes.Personas, goBack: true, popup: true }))
+                return
+            }
+            onChange(event, value)
+        }, [])
         return (
             <div className={classes.container}>
                 {!isEmpty ? (
@@ -234,7 +252,10 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                 />
                             </Box>
 
-                            <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
+                            <MaskTabList
+                                onChange={onChangeTab}
+                                aria-label="persona-tabs"
+                                classes={{ root: classes.tabs }}>
                                 <Tab label={t('popups_social_account')} value={PopupHomeTabType.SocialAccounts} />
                                 <Tab label={t('popups_connected_wallets')} value={PopupHomeTabType.ConnectedWallets} />
                             </MaskTabList>
