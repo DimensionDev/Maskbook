@@ -43,12 +43,6 @@ export class Popups implements Middleware<ConnectionContext> {
         return Web3StateRef.value.Network.networks?.getCurrentValue()
     }
 
-    private get customNetwork() {
-        if (!Web3StateRef.value?.Network) throw new Error('The web3 state does not load yet.')
-        const network = Web3StateRef.value.Network.network?.getCurrentValue()
-        return network?.isCustomized ? network : undefined
-    }
-
     private async getPaymentToken(context: ConnectionContext) {
         const maskAddress = getMaskTokenAddress(context.chainId)
         try {
@@ -127,9 +121,9 @@ export class Popups implements Middleware<ConnectionContext> {
                 await MaskProvider.switchChain(context.chainId)
 
                 // if send risky requests to a custom network, the providerURL must be provided.
-                const matchNetworkByProviderURL = context.providerURL
-                    ? this.networks?.find((x) => x.isCustomized && isSameURL(x.rpcUrl, context.providerURL!))
-                    : undefined
+                const matchNetworkByProviderURL = this.networks?.find(
+                    (x) => x.isCustomized && isSameURL(x.rpcUrl, context.providerURL),
+                )
 
                 // a built-in network will be matched by chainId
                 const matchNetworkByChainId = this.networks?.find(
@@ -154,7 +148,7 @@ export class Popups implements Middleware<ConnectionContext> {
                         silent: context.silent,
                         owner: context.owner,
                         identifier: context.identifier?.toText(),
-                        providerURL: context.providerURL ?? this.customNetwork?.rpcUrl,
+                        providerURL: context.providerURL,
                         gasOptionType: context.gasOptionType,
                     },
                 },

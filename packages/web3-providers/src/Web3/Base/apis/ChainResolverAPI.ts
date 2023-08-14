@@ -9,7 +9,7 @@ export class ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
 
     private getDescriptorRequired(chainId: ChainId) {
         const descriptor = this.getDescriptor(chainId)
-        if (!descriptor) throw new Error(`Unknown chainId: ${chainId}.`)
+        if (!descriptor) throw new Error(`Unknown chainId: ${chainId}. It might too early to access network state.`)
         return descriptor
     }
 
