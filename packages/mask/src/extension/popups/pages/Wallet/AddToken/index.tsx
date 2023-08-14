@@ -1,5 +1,4 @@
-import { sortBy } from 'lodash-es'
-import { memo, useCallback, useMemo, useState } from 'react'
+import { memo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useNavigate, useParams } from 'react-router-dom'
 import { AddCollectibles, FungibleTokenList, SelectNetworkSidebar, TokenListMode } from '@masknet/shared'
@@ -76,6 +75,7 @@ const useStyles = makeStyles<{ currentTab: TabType; searchError: boolean }>()((t
     sidebar: {
         marginTop: currentTab === TabType.Tokens ? (searchError ? 70 : 52) : 0,
         marginRight: theme.spacing(1.5),
+        height: 432,
     },
     grid: {
         gridTemplateColumns: 'repeat(auto-fill, minmax(40%, 1fr))',
@@ -97,30 +97,6 @@ enum TabType {
     Collectibles = 'Collectibles',
 }
 
-const CollectibleSupportedChains: Web3Helper.ChainIdAll[] = [
-    ChainId.Mainnet,
-    ChainId.BSC,
-    ChainId.Matic,
-    ChainId.Arbitrum,
-    ChainId.Optimism,
-    ChainId.Avalanche,
-    ChainId.xDai,
-]
-
-const TokenSupportedChains: Web3Helper.ChainIdAll[] = [
-    ChainId.Mainnet,
-    ChainId.BSC,
-    ChainId.Matic,
-    ChainId.Arbitrum,
-    ChainId.xDai,
-    ChainId.Fantom,
-    ChainId.Optimism,
-    ChainId.Avalanche,
-    ChainId.Aurora,
-    ChainId.Conflux,
-    ChainId.Astar,
-]
-
 const AddToken = memo(function AddToken() {
     const { t } = useI18N()
 
@@ -136,40 +112,13 @@ const AddToken = memo(function AddToken() {
     )
     const [searchError, setSearchError] = useState(false)
     const { classes } = useStyles({ currentTab, searchError })
+    const allNetworks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
 
-    const supportedChains = currentTab === TabType.Tokens ? TokenSupportedChains : CollectibleSupportedChains
+    const supportedChains = allNetworks.map((x) => x.chainId)
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>(
         defaultChainId && supportedChains.includes(Number.parseInt(defaultChainId, 10))
             ? Number.parseInt(defaultChainId, 10)
             : ChainId.Mainnet,
-    )
-
-    const allNetworks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
-    const networks = useMemo(() => {
-        return sortBy(
-            allNetworks.filter(
-                (x) => (x.network === 'mainnet' || x.isCustomized) && supportedChains.includes(x.chainId),
-            ),
-            (x) => supportedChains.indexOf(x.chainId),
-        )
-    }, [allNetworks, supportedChains])
-
-    const changeTab = useCallback(
-        (event: object, value: string) => {
-            onChange(event, value)
-            if (currentTab === TabType.Tokens && !CollectibleSupportedChains.includes(chainId)) {
-                setChainId(ChainId.Mainnet)
-            }
-
-            if (
-                currentTab === TabType.Collectibles &&
-                defaultChainId &&
-                TokenSupportedChains.includes(Number.parseInt(defaultChainId, 10))
-            ) {
-                setChainId(Number.parseInt(defaultChainId, 10))
-            }
-        },
-        [onChange, chainId, defaultChainId, currentTab],
     )
 
     useTitle(t('add_assets'))
@@ -206,7 +155,7 @@ const AddToken = memo(function AddToken() {
         <TabContext value={currentTab}>
             <NormalHeader
                 tabList={
-                    <MaskTabList onChange={changeTab} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
+                    <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
                         <Tab label={t('popups_wallet_token')} value={TabType.Tokens} />
                         <Tab label={t('popups_wallet_collectible')} value={TabType.Collectibles} />
                     </MaskTabList>
@@ -218,7 +167,7 @@ const AddToken = memo(function AddToken() {
                     hideAllButton
                     chainId={chainId}
                     onChainChange={(chainId) => setChainId(chainId ?? ChainId.Mainnet)}
-                    networks={networks}
+                    networks={allNetworks}
                     pluginID={NetworkPluginID.PLUGIN_EVM}
                 />
                 <div className={classes.main}>

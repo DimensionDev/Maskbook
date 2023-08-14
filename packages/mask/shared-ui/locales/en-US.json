@@ -916,6 +916,7 @@
     "popups_wallet_confirm_password": "Confirm Password",
     "popups_wallet_new_password_not_match": "The new passwords don't match",
     "popups_wallet_create_payment_password_tip": "At least 6 characters",
+    "popups_wallet_set_payment_password_successfully": "Set payment password successfully.",
     "popups_wallet_term_of_service_agree_part_1": "By proceeding you agree to the",
     "popups_wallet_term_of_service_agree_part_2": "<agreement>Service Agreement</agreement> and <policy>Privacy Policy</policy>",
     "popups_wallet_reset_tips": "Forgot payment password?",
