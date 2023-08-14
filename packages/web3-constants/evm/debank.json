@@ -24,6 +24,13 @@
         "Conflux": "Conflux",
         "Astar": "astar",
         "Pulse": "pls",
-        "Harmony": "hmy"
+        "Harmony": "hmy",
+        "Boba": "boba",
+        "Brise": "brise",
+        "Cronos": "cro",
+        "Klaytn": "klay",
+        "Moonbeam": "mobm",
+        "Moonriver": "movr",
+        "Arbitrum_Nova": "nova"
     }
 }

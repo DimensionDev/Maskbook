@@ -13,7 +13,7 @@ export const DEBANK_CHAIN_TO_CHAIN_ID_MAP: Record<DebankChains, ChainId | number
     aurora: ChainId.Aurora,
     avax: ChainId.Avalanche,
     boba: ChainId.Boba,
-    brise: 32520,
+    brise: ChainId.Brise,
     bsc: ChainId.BSC,
     btt: ChainId.BitTorrent,
     canto: 7700,
