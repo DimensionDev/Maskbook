@@ -68,7 +68,7 @@ async function openWindow(url: string): Promise<void> {
     }
 }
 
-const exclusionDetectLocked: PopupRoutes[] = [PopupRoutes.PersonaSignRequest, PopupRoutes.Unlock]
+const exclusionDetectLocked: PopupRoutes[] = [PopupRoutes.PersonaSignRequest, PopupRoutes.Unlock, PopupRoutes.Personas]
 
 export async function openPopupWindow(
     route?: PopupRoutes,

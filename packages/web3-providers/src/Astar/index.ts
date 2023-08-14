@@ -31,6 +31,11 @@ export class AstarAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> 
                 suggestedMaxFeePerGas: toFixed(result.slow ?? 0),
                 suggestedMaxPriorityFeePerGas: toFixed(priorityFeePerGas.slow),
             },
+            [GasOptionType.CUSTOM]: {
+                estimatedSeconds: 0,
+                suggestedMaxFeePerGas: '',
+                suggestedMaxPriorityFeePerGas: '',
+            },
         }
     }
 }

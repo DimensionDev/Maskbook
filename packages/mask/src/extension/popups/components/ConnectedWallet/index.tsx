@@ -107,6 +107,7 @@ export const ConnectedWallet = memo<ConnectedWalletProps>(function ConnectedWall
                     SignType.Message,
                     result.signPayload,
                     currentPersona.identifier,
+                    location.origin,
                     true,
                 )
 

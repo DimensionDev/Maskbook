@@ -1,4 +1,4 @@
-import type { TransactionDescriptor, TransactionContext } from '@masknet/web3-shared-base'
+import type { TransactionDescriptor, TransactionContext, GasOptionType } from '@masknet/web3-shared-base'
 import type { ChainId, TransactionParameter, Transaction } from '@masknet/web3-shared-evm'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 
@@ -44,6 +44,7 @@ export type TransactionDetail = {
     owner?: string
     paymentToken?: string
     allowMaskAsGas?: boolean
+    gasOptionType?: GasOptionType
     payload: JsonRpcPayload
     computedPayload: Partial<Transaction>
     formattedTransaction?: TransactionDescriptor<ChainId, Transaction, TransactionParameter>

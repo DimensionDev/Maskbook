@@ -10,15 +10,7 @@ import {
     useNativeTokenAddress,
 } from '@masknet/web3-hooks-base'
 import { DepositPaymaster } from '@masknet/web3-providers'
-import {
-    CurrencyType,
-    GasOptionType,
-    ZERO,
-    formatBalance,
-    formatCurrency,
-    scale10,
-    toFixed,
-} from '@masknet/web3-shared-base'
+import { GasOptionType, ZERO, formatBalance, formatCurrency, scale10, toFixed } from '@masknet/web3-shared-base'
 import {
     type EIP1559GasConfig,
     type GasConfig,
@@ -65,7 +57,9 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
     const theme = useTheme()
     const { smartPayChainId } = useContainer(PopupContext)
     const [gasConfig = initConfig, setGasConfig] = useState<GasConfig | undefined>()
-    const [gasOptionType, setGasOptionType] = useState<GasOptionType | undefined>(GasOptionType.SLOW)
+    const [gasOptionType, setGasOptionType] = useState<GasOptionType | undefined>(
+        initConfig?.gasOptionType ?? GasOptionType.SLOW,
+    )
 
     const handleChange = useCallback(
         (config: GasConfig, type?: GasOptionType) => {
@@ -141,11 +135,15 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
         const target = gasOptions[GasOptionType.SLOW]
         const result = isSupport1559
             ? {
+                  gasOptionType: GasOptionType.SLOW,
                   maxPriorityFeePerGas: target.suggestedMaxPriorityFeePerGas,
                   maxFeePerGas: target.suggestedMaxFeePerGas,
+                  gas: minimumGas,
               }
             : {
+                  gasOptionType: GasOptionType.SLOW,
                   gasPrice: target.suggestedMaxFeePerGas,
+                  gas: minimumGas,
               }
 
         setGasConfig((prev) => {
@@ -154,7 +152,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
         })
 
         onChange(result)
-    }, [onChange, initConfig, gasOptions, isSupport1559])
+    }, [onChange, initConfig, gasOptions, isSupport1559, minimumGas])
 
     return (
         <Box display="flex" alignItems="center">
@@ -168,7 +166,6 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
                 />
                 {' ≈ '}
                 <FormattedCurrency
-                    sign={CurrencyType.USD}
                     value={formatWeiToEther(totalGas).times(tokenPrice ?? 0)}
                     options={{
                         onlyRemainTwoOrZeroDecimal: false,

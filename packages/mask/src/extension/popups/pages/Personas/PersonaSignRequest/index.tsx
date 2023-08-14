@@ -63,6 +63,7 @@ const PersonaSignRequest = memo(() => {
                     SignType.Message,
                     message,
                     selectedPersona,
+                    location.origin,
                     true,
                 )
 
@@ -109,7 +110,7 @@ const PersonaSignRequest = memo(() => {
     }, [requestID, params])
 
     return (
-        <Box>
+        <Box p={2}>
             <SignRequestInfo message={message} source={source} />
             <BottomController>
                 <ActionButton loading={cancelLoading} onClick={handleCancel} fullWidth variant="outlined">

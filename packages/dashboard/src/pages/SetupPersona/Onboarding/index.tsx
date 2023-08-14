@@ -16,7 +16,6 @@ import { compact } from 'lodash-es'
 import { isZero } from '@masknet/web3-shared-base'
 import { useAsyncRetry } from 'react-use'
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
-import { useWallets } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -79,9 +78,10 @@ export const Onboarding = memo(function Onboarding() {
     const t = useDashboardI18N()
     const { classes } = useStyles()
 
-    const wallets = useWallets()
     const [params] = useSearchParams()
     const { showSnackbar } = useCustomSnackbar()
+
+    const isCreate = params.get('isCreate')
 
     const { value: hasPaymentPassword, loading, retry } = useAsyncRetry(WalletServiceRef.value.hasPassword, [])
 
@@ -162,7 +162,7 @@ export const Onboarding = memo(function Onboarding() {
                     startIcon={<Icons.TwitterStroke className={classes.twitter} size={20} />}>
                     {t.persona_onboarding_to_twitter()}
                 </PrimaryButton>
-                {wallets.length ? (
+                {!isCreate ? (
                     <PrimaryButton
                         loading={loading}
                         disabled={loading}

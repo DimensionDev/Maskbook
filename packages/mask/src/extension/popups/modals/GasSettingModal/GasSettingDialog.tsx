@@ -3,6 +3,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainIdSupport, useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import {
+    GasOptionType,
     ZERO,
     formatBalance,
     formatCurrency,
@@ -149,9 +150,9 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
 
     const disabled = useMemo(() => {
         if (isSupport1559) {
-            return isZero(maxPriorityFeePerGas) || !!maxFeePerGasError
+            return !maxPriorityFeePerGas || !maxFeePerGas || isZero(maxPriorityFeePerGas) || !!maxFeePerGasError
         } else {
-            return isZero(gasPrice)
+            return !gasPrice || isZero(gasPrice)
         }
     }, [maxPriorityFeePerGas, maxFeePerGas, gasOptions, isSupport1559, maxFeePerGasError])
 
@@ -183,12 +184,18 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
         onClose(
             isSupport1559
                 ? {
+                      gasOptionType: GasOptionType.CUSTOM,
+                      gas: config.gas,
                       maxFeePerGas: formatGweiToWei(maxFeePerGas).toFixed(),
                       maxPriorityFeePerGas: formatGweiToWei(maxPriorityFeePerGas).toFixed(),
                   }
-                : { gasPrice: formatGweiToWei(gasPrice).toFixed() },
+                : {
+                      gasPrice: formatGweiToWei(gasPrice).toFixed(),
+                      gas: config.gas,
+                      gasOptionType: GasOptionType.CUSTOM,
+                  },
         )
-    }, [gasPrice, maxFeePerGas, maxPriorityFeePerGas, isSupport1559, onClose])
+    }, [gasPrice, maxFeePerGas, maxPriorityFeePerGas, isSupport1559, onClose, config])
 
     useEffect(() => {
         if (!open || !gasOptions || config.gasPrice || (config.maxFeePerGas && config.maxPriorityFeePerGas)) return
@@ -283,7 +290,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                     value={maxPriorityFeePerGas}
                                     onChange={(e) => {
                                         if (!e.target.value) {
-                                            setMaxPriorityFeePerGas('0')
+                                            setMaxPriorityFeePerGas('')
                                             setMaxFeePerGas(
                                                 formatWeiToGwei(gasOptions?.slow.baseFeePerGas ?? 0).toFixed(2),
                                             )
@@ -305,7 +312,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                         setMaxFeePerGas(
                                             formatWeiToGwei(gasOptions?.slow.baseFeePerGas ?? 0)
                                                 .plus(e.target.value)
-                                                .toFixed(2),
+                                                .toFixed(2, 0),
                                         )
                                     }}
                                     InputProps={{
@@ -325,6 +332,10 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                 <TextField
                                     error={!!maxFeePerGasError}
                                     onChange={(e) => {
+                                        if (!e.target.value) {
+                                            setMaxFeePerGas('')
+                                            return
+                                        }
                                         if (
                                             (isLessThan(
                                                 e.target.value,
@@ -360,6 +371,10 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                 error={!!gasPriceError}
                                 value={gasPrice}
                                 onChange={(e) => {
+                                    if (!e.target.value) {
+                                        setGasPrice('')
+                                        return
+                                    }
                                     if (
                                         (isLessThan(
                                             e.target.value,

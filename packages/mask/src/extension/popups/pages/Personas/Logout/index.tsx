@@ -9,7 +9,13 @@ import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme
 import { PersonaContext } from '@masknet/shared'
 import { Box, Button, Link, Typography, useTheme } from '@mui/material'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { PopupRoutes, type PersonaInformation, NetworkPluginID, type Wallet } from '@masknet/shared-base'
+import {
+    PopupRoutes,
+    type PersonaInformation,
+    NetworkPluginID,
+    type Wallet,
+    PopupModalRoutes,
+} from '@masknet/shared-base'
 import { useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { ExplorerResolver, Providers, Web3 } from '@masknet/web3-providers'
 import { type ChainId, ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -23,6 +29,7 @@ import { useHasPassword } from '../../../hook/useHasPassword.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { UserContext } from '../../../hook/useUserContext.js'
+import { useModalNavigate } from '../../../components/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     infoBox: {
@@ -137,6 +144,7 @@ export const LogoutUI = memo<LogoutUIProps>(
     }) => {
         const { t } = useI18N()
         const theme = useTheme()
+        const modalNavigate = useModalNavigate()
         const { classes } = useStyles()
         const [password, setPassword] = useState('')
         const [paymentPassword, setPaymentPassword] = useState('')
@@ -146,6 +154,10 @@ export const LogoutUI = memo<LogoutUIProps>(
         useTitle(t('popups_log_out'))
 
         const onConfirm = useCallback(async () => {
+            if (!backupPassword) {
+                modalNavigate(PopupModalRoutes.SetBackupPassword)
+                return
+            }
             if (manageWallets.length && paymentPassword) {
                 const verified = await verifyPaymentPassword(paymentPassword)
                 if (!verified) {
@@ -201,14 +213,15 @@ export const LogoutUI = memo<LogoutUIProps>(
                                             {chainId ? (
                                                 <Link
                                                     style={{
-                                                        width: 16,
-                                                        height: 16,
+                                                        width: 12,
+                                                        height: 12,
                                                         color: theme.palette.maskColor.main,
+                                                        display: 'flex',
                                                     }}
                                                     href={ExplorerResolver.addressLink(chainId, x.address)}
                                                     target="_blank"
                                                     rel="noopener noreferrer">
-                                                    <Icons.LinkOut size={16} />
+                                                    <Icons.LinkOut size={12} />
                                                 </Link>
                                             ) : null}
                                         </Typography>
@@ -237,7 +250,6 @@ export const LogoutUI = memo<LogoutUIProps>(
                     {backupPassword ? (
                         manageWallets.length && hasPassword ? (
                             <PasswordField
-                                show={false}
                                 placeholder={t('popups_wallet_backup_input_password')}
                                 value={paymentPassword}
                                 error={!!paymentPasswordError}
@@ -246,14 +258,24 @@ export const LogoutUI = memo<LogoutUIProps>(
                                     if (paymentPasswordError) setPaymentPasswordError('')
                                     setPaymentPassword(e.target.value)
                                 }}
+                                onClear={() => {
+                                    setPaymentPassword('')
+                                    setPaymentPasswordError('')
+                                }}
                             />
                         ) : (
                             <PasswordField
-                                show={false}
                                 placeholder={t('popups_backup_password')}
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={(e) => {
+                                    if (error) setError(false)
+                                    setPassword(e.target.value)
+                                }}
                                 error={error}
+                                onClear={() => {
+                                    setPassword('')
+                                    setError(false)
+                                }}
                                 helperText={error ? t('popups_password_do_not_match') : ''}
                             />
                         )
@@ -263,8 +285,13 @@ export const LogoutUI = memo<LogoutUIProps>(
                     <Button variant="outlined" fullWidth onClick={onCancel}>
                         {t('cancel')}
                     </Button>
-                    <ActionButton variant="contained" color="error" fullWidth onClick={onConfirm} disabled={disabled}>
-                        {t('popups_log_out')}
+                    <ActionButton
+                        variant="contained"
+                        color={backupPassword ? 'error' : 'primary'}
+                        fullWidth
+                        onClick={onConfirm}
+                        disabled={disabled}>
+                        {backupPassword ? t('popups_log_out') : t('backup')}
                     </ActionButton>
                 </BottomController>
             </Box>

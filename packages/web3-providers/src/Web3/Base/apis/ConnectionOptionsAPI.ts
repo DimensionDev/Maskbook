@@ -1,5 +1,5 @@
 import { identity, pickBy } from 'lodash-es'
-import type { Web3State } from '@masknet/web3-shared-base'
+import type { GasOptionType, Web3State } from '@masknet/web3-shared-base'
 import type { ECKeyIdentifier, PartialRequired, ValueRefWithReady } from '@masknet/shared-base'
 import type { OthersAPI_Base } from './OthersAPI.js'
 
@@ -26,6 +26,8 @@ export interface ConnectionOptions_Base<ChainId, ProviderType, Transaction> {
     overrides?: Partial<Transaction>
     /** Termination signal */
     signal?: AbortSignal
+    /** Gas option type */
+    gasOptionType?: GasOptionType
 }
 
 export class ConnectionOptionsAPI_Base<

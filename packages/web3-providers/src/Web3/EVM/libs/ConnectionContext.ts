@@ -160,6 +160,10 @@ export class ConnectionContext {
         return this._options?.paymentToken
     }
 
+    get gasOptionType() {
+        return this._options?.gasOptionType
+    }
+
     get silent() {
         return this._options?.silent
     }
