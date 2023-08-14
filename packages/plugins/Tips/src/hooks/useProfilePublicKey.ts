@@ -7,7 +7,6 @@ export function useProfilePublicKey(userId?: string) {
     const { networkIdentifier } = useBaseUIRuntime()
     const platform = resolveNetworkToNextIDPlatform(networkIdentifier)
     return useQuery({
-        enabled: !!userId && !!platform,
         queryKey: ['next-id', 'lasted-active', platform, userId],
         queryFn: async () => {
             if (!userId || !platform) return
