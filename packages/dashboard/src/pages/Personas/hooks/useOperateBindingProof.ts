@@ -27,6 +27,7 @@ export function useDeleteBound() {
                 SignType.Message,
                 payload.signPayload,
                 persona.identifier,
+                location.origin,
                 true,
             )
             if (!signature) throw new Error('Failed to sign by persona.')

@@ -132,6 +132,7 @@ const AccountDetail = memo(() => {
                 SignType.Message,
                 result.signPayload,
                 currentPersona.identifier,
+                location.origin,
                 true,
             )
 

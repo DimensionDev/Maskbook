@@ -19,6 +19,7 @@ export async function signWithPersona<T>(
     type: SignType,
     message: T,
     identifier?: ECKeyIdentifier,
+    source?: string,
     silent = false,
 ): Promise<string> {
     const getIdentifier = async () => {
@@ -28,6 +29,7 @@ export async function signWithPersona<T>(
                 message: JSON.stringify(message),
                 requestID,
                 identifier: identifier?.toText(),
+                source,
             })
 
             return timeout(

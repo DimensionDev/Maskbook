@@ -174,6 +174,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
                 SignType.Message,
                 payload.signPayload,
                 currentPersona.identifier,
+                location.origin,
                 true,
             )
 

@@ -49,6 +49,7 @@ export const WalletHeader = memo(function WalletHeader() {
                 chainId={chainId}
                 currentNetwork={currentNetwork}
                 disabled
+                disableCopy
                 onActionClick={handleActionClick}
                 onOpenNetworkSelector={chooseNetwork}
                 wallet={wallet}

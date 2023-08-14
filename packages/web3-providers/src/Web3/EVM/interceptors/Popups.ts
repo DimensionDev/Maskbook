@@ -1,4 +1,3 @@
-import { noop } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import {
     ErrorEditor,
@@ -12,7 +11,14 @@ import {
     type MessageResponse,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
-import { MessageStateType, isGreaterThan, isZero, toFixed, type TransferableMessage } from '@masknet/web3-shared-base'
+import {
+    MessageStateType,
+    isGreaterThan,
+    isZero,
+    toFixed,
+    type TransferableMessage,
+    isSameURL,
+} from '@masknet/web3-shared-base'
 import { DepositPaymaster } from '../../../SmartPay/libs/DepositPaymaster.js'
 import { SmartPayAccountAPI, SmartPayBundlerAPI } from '../../../SmartPay/index.js'
 import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
@@ -31,6 +37,11 @@ export class Popups implements Middleware<ConnectionContext> {
     private Contract = new ContractReadonlyAPI()
     private Bundler = new SmartPayBundlerAPI()
     private AbstractAccount = new SmartPayAccountAPI()
+
+    private get networks() {
+        if (!Web3StateRef.value?.Network) throw new Error('The web3 state does not load yet.')
+        return Web3StateRef.value.Network.networks?.getCurrentValue()
+    }
 
     private get customNetwork() {
         if (!Web3StateRef.value?.Network) throw new Error('The web3 state does not load yet.')
@@ -103,55 +114,60 @@ export class Popups implements Middleware<ConnectionContext> {
     }
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {
-        const sendRequest = async () => {
-            // Draw the Popups up and wait for user confirmation before publishing risky requests on the network
-            if (context.risky && context.writeable) {
-                const MaskProvider = Providers[ProviderType.MaskWallet]
-                const currentChainId = MaskProvider.subscription.chainId.getCurrentValue()
-                if (context.method === EthereumMethodType.ETH_SEND_TRANSACTION && currentChainId !== context.chainId) {
-                    await MaskProvider.switchChain(context.chainId)
-                    const networks = Web3StateRef.value.Network?.networks?.getCurrentValue()
-                    const target = networks?.find((x) => x.chainId === context.chainId)
-                    if (target) await Web3StateRef.value.Network?.switchNetwork(target?.ID)
-                }
-
-                const request: TransferableMessage<MessageRequest, MessageResponse> = {
-                    state: MessageStateType.NOT_DEPEND,
-                    request: {
-                        arguments: context.requestArguments,
-                        options: {
-                            ...(await this.getPaymentToken(context)),
-                            silent: context.silent,
-                            owner: context.owner,
-                            identifier: context.identifier?.toText(),
-                            providerURL: context.providerURL ?? this.customNetwork?.rpcUrl,
-                        },
-                    },
-                }
-
-                if (!Web3StateRef.value.Message) throw new Error('Failed to approve request.')
-                return Web3StateRef.value.Message.applyAndWaitResponse(request)
-            } else if (context.writeable && this.customNetwork?.rpcUrl) {
-                return this.Web3.getWeb3Provider({
-                    chainId: context.chainId,
-                    account: context.account,
-                    providerURL: context.providerURL ?? this.customNetwork?.rpcUrl,
-                }).sendAsync(context.request, noop)
-            }
+        if (!context.risky || !context.writeable) {
+            await next()
             return
         }
 
         try {
-            const response = await sendRequest()
+            const MaskProvider = Providers[ProviderType.MaskWallet]
+            const currentChainId = MaskProvider.subscription.chainId.getCurrentValue()
 
-            if (response) {
-                const editor = ErrorEditor.from(null, response)
+            if (context.method === EthereumMethodType.ETH_SEND_TRANSACTION && currentChainId !== context.chainId) {
+                await MaskProvider.switchChain(context.chainId)
 
-                if (editor.presence) {
-                    context.abort(editor.error)
-                } else {
-                    context.write(response.result)
-                }
+                // if send risky requests to a custom network, the providerURL must be provided.
+                const matchNetworkByProviderURL = context.providerURL
+                    ? this.networks?.find((x) => x.isCustomized && isSameURL(x.rpcUrl, context.providerURL!))
+                    : undefined
+
+                // a built-in network will be matched by chainId
+                const matchNetworkByChainId = this.networks?.find(
+                    (x) => !x.isCustomized && x.chainId === context.chainId,
+                )
+
+                const network = matchNetworkByProviderURL ?? matchNetworkByChainId
+                if (!network)
+                    throw new Error(
+                        'Failed to locate network. The providerURL must be given when sending risky requests to a custom network.',
+                    )
+
+                await Web3StateRef.value.Network?.switchNetwork(network?.ID)
+            }
+
+            const request: TransferableMessage<MessageRequest, MessageResponse> = {
+                state: MessageStateType.NOT_DEPEND,
+                request: {
+                    arguments: context.requestArguments,
+                    options: {
+                        ...(await this.getPaymentToken(context)),
+                        silent: context.silent,
+                        owner: context.owner,
+                        identifier: context.identifier?.toText(),
+                        providerURL: context.providerURL ?? this.customNetwork?.rpcUrl,
+                        gasOptionType: context.gasOptionType,
+                    },
+                },
+            }
+
+            if (!Web3StateRef.value.Message) throw new Error('Failed to approve request.')
+            const response = await Web3StateRef.value.Message.applyAndWaitResponse(request)
+            const editor = ErrorEditor.from(null, response)
+
+            if (editor.presence) {
+                context.abort(editor.error)
+            } else {
+                context.write(response.result)
             }
         } catch (error) {
             context.abort(error)

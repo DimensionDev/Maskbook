@@ -9,6 +9,8 @@ import {
     type GasConfig,
     PayloadEditor,
     formatEthereumAddress,
+    addGasMargin,
+    ChainId,
 } from '@masknet/web3-shared-evm'
 import { toHex, toUtf8 } from 'web3-utils'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -26,6 +28,7 @@ import { useUpdateEffect } from '@react-hookz/web'
 import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
 import urlcat from 'urlcat'
 import { mapKeys } from 'lodash-es'
+import { BigNumber } from 'bignumber.js'
 
 const useStyles = makeStyles()((theme) => ({
     left: {
@@ -143,9 +146,7 @@ const Interaction = memo(function Interaction() {
         const transactionContext = await TransactionFormatter?.createContext(chainId, computedPayload)
 
         return {
-            owner: currentRequest.request.options?.owner,
-            paymentToken: currentRequest.request.options?.paymentToken,
-            allowMaskAsGas: currentRequest.request.options?.allowMaskAsGas,
+            ...currentRequest.request.options,
             payload,
             computedPayload,
             formattedTransaction,
@@ -178,19 +179,26 @@ const Interaction = memo(function Interaction() {
                           },
                 )
             } else {
-                params = !gasConfig
-                    ? currentRequest.request.arguments.params
-                    : currentRequest.request.arguments.params.map((x) =>
-                          x === 'latest'
-                              ? x
-                              : {
-                                    ...x,
-                                    ...mapKeys(gasConfig, (value, key) => {
-                                        if (key === 'gasCurrency' || !value) return
-                                        return toHex(value)
-                                    }),
-                                },
-                      )
+                params = currentRequest.request.arguments.params.map((x) => {
+                    if (x === 'latest') return x
+
+                    const gas = toHex(
+                        BigNumber.max(
+                            toHex(addGasMargin(gasConfig?.gas ?? x.gas).toFixed()),
+                            chainId === ChainId.Optimism ? 25000 : 21000,
+                        ).toFixed(),
+                    )
+                    return {
+                        ...x,
+                        ...(gasConfig
+                            ? mapKeys(gasConfig, (value, key) => {
+                                  if (key === 'gasCurrency' || !value) return
+                                  return toHex(value)
+                              })
+                            : {}),
+                        gas,
+                    }
+                })
             }
 
             await Message?.approveRequest(currentRequest.ID, {
@@ -217,6 +225,7 @@ const Interaction = memo(function Interaction() {
             )
         }
     }, [
+        chainId,
         currentRequest,
         Message,
         source,

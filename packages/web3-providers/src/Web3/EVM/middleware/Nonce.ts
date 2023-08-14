@@ -25,7 +25,7 @@ export class Nonce implements Middleware<ConnectionContext> {
 
         // the assumption here: if the providerURL is not provided, it must be a built-in provider was used.
         // the ProviderURL.from() will throw if the chain id doesn't belong to a built-in network.
-        // and we ignore the situtation that the custom network chain id is the same with a built-in network.
+        // and we ignore the situation that the custom network chain id is the same with a built-in network.
         const providerURL_ = formatURL(providerURL ?? ProviderURL.from(chainId))
 
         addressNonces.set(

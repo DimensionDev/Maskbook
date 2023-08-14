@@ -133,6 +133,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
                         SignType.Message,
                         JSON.stringify(data),
                         currentPersona.identifier,
+                        location.origin,
                         true,
                     )
                 } else {

@@ -1,8 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
-import { Typography } from '@mui/material'
-import { Box } from 'react-feather'
+import { Box, Typography } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -22,6 +21,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         rowGap: theme.spacing(1.25),
+        borderRadius: 8,
     },
     sourceText: {
         fontSize: 12,

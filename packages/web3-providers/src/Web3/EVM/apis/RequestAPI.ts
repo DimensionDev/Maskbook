@@ -17,11 +17,6 @@ export class RequestAPI extends RequestReadonlyAPI {
         return Web3StateRef.value.Provider
     }
 
-    private get Network() {
-        if (!Web3StateRef.value.Network) throw new Error('The web3 state does not load yet.')
-        return Web3StateRef.value.Network
-    }
-
     // Hijack RPC requests and process them with koa like middleware
     override get request() {
         return <T>(requestArguments: RequestArguments, initial?: ConnectionOptions) => {
