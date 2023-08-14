@@ -11,6 +11,7 @@ import {
     parseChainId,
     type Transaction,
     type RequestArguments,
+    ProviderURL,
 } from '@masknet/web3-shared-evm'
 import type { ConnectionOptions } from '../types/index.js'
 
@@ -73,6 +74,10 @@ export class ConnectionContext {
 
     get providerType() {
         return this.requestOptions?.providerType ?? this._options?.providerType ?? this._providerType
+    }
+
+    get providerURL() {
+        return this.requestOptions.providerURL ?? this._options?.providerURL ?? ProviderURL.from(this.chainId)
     }
 
     get method() {

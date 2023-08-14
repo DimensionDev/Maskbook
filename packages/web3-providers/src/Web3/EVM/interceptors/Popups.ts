@@ -124,7 +124,7 @@ export class Popups implements Middleware<ConnectionContext> {
                             silent: context.silent,
                             owner: context.owner,
                             identifier: context.identifier?.toText(),
-                            providerURL: this.customNetwork ? this.customNetwork.rpcUrl : undefined,
+                            providerURL: context.providerURL ?? this.customNetwork?.rpcUrl,
                         },
                     },
                 }
@@ -135,7 +135,7 @@ export class Popups implements Middleware<ConnectionContext> {
                 return this.Web3.getWeb3Provider({
                     chainId: context.chainId,
                     account: context.account,
-                    providerURL: this.customNetwork.rpcUrl,
+                    providerURL: context.providerURL ?? this.customNetwork?.rpcUrl,
                 }).sendAsync(context.request, noop)
             }
             return
