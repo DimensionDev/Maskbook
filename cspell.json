@@ -1,7 +1,13 @@
 {
     "version": "0.1",
     "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
-    "dictionaries": ["typescript", "node", "html", "css", "fonts"],
+    "dictionaries": [
+        "typescript",
+        "node",
+        "html",
+        "css",
+        "fonts"
+    ],
     "ignorePaths": [
         "./packages/app/postcss.config.cjs",
         "./packages/app/src/styles/index.css",
@@ -176,6 +182,7 @@
         "metas",
         "metastate",
         "metaverse",
+        "Milkomeda",
         "millify",
         "mintable",
         "mobm",
@@ -257,6 +264,7 @@
         "scroller",
         "secp",
         "serializers",
+        "Shiden",
         "siddomains",
         "sidjs",
         "sinonjs",
@@ -276,6 +284,7 @@
         "swappable",
         "sysvar",
         "tanstack",
+        "Telos",
         "testid",
         "thegraph",
         "timelock",
@@ -307,6 +316,7 @@
         "viperswap",
         "visualcompletion",
         "walletconnect",
+        "Wanchain",
         "wannaswap",
         "wault",
         "wavax",
@@ -451,15 +461,22 @@
         "yumiswap",
         "zkscan"
     ],
-    "ignoreRegExpList": ["/@servie/", "/[A-Za-z0-9]{46}/"],
+    "ignoreRegExpList": [
+        "/@servie/",
+        "/[A-Za-z0-9]{46}/"
+    ],
     "overrides": [
         {
             "filename": "**/*.md",
-            "ignoreWords": ["jkoeaghipilijlahjplgbfiocjhldnap"]
+            "ignoreWords": [
+                "jkoeaghipilijlahjplgbfiocjhldnap"
+            ]
         },
         {
             "filename": "packages/web3-shared/evm/assets/**/*.json",
-            "ignoreWords": ["görli"]
+            "ignoreWords": [
+                "görli"
+            ]
         },
         {
             "filename": "packages/mask/src/plugins/ITO/assets/regions.json",
@@ -479,7 +496,9 @@
         },
         {
             "filename": ".circleci/config.yml",
-            "ignoreWords": ["cimg"]
+            "ignoreWords": [
+                "cimg"
+            ]
         }
     ]
 }

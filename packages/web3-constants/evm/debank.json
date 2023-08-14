@@ -31,6 +31,26 @@
         "Klaytn": "klay",
         "Moonbeam": "mobm",
         "Moonriver": "movr",
-        "Arbitrum_Nova": "nova"
+        "Arbitrum_Nova": "nova",
+        "Canto": "canto",
+        "DFK": "dfk",
+        "Dogechain": "doge",
+        "Evmos": "evmos",
+        "Fuse": "fuse",
+        "HuobiEco": "heco",
+        "IoTex": "iotx",
+        "Kava": "kava",
+        "Kcc": "kcc",
+        "Metise": "metis",
+        "Milkomeda": "mada",
+        "OKXChain": "okt",
+        "Palm": "palm",
+        "RSK": "rsk",
+        "SmartBitcoinCash": "sbch",
+        "Shiden": "sdn",
+        "SongbirdCanary": "sgb",
+        "Step": "step",
+        "Telos": "tlos",
+        "Wanchain": "wan"
     }
 }
