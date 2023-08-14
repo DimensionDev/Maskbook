@@ -188,7 +188,7 @@ const Interaction = memo(function Interaction() {
                 params = compact(
                     currentRequest.request.arguments.params.map((x) => {
                         if (x === 'latest') {
-                            if (chainId === ChainId.Celo) return undefined
+                            if (chainId === ChainId.Celo) return
                             return x
                         }
 
