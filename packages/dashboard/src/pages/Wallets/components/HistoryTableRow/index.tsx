@@ -79,7 +79,7 @@ HistoryTableRow.displayName = 'HistoryTableRow'
 export interface HistoryTableRowUIProps extends HistoryTableRowProps {
     selectedChainId: Web3Helper.ChainIdAll
     formattedType: string
-    domain?: string
+    domain?: string | null
 }
 
 export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(

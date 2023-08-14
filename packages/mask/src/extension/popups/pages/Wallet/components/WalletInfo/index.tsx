@@ -84,7 +84,7 @@ export interface WalletInfoUIProps {
     onSettingClick: () => void
     onEditClick: () => void
     hideSettings: boolean
-    domain?: string
+    domain?: string | null
     formatDomainName?: (domain: string, size?: number) => string | undefined
 }
 

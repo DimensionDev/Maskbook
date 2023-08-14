@@ -7,7 +7,7 @@ import { useWeb3Others } from './useWeb3Others.js'
 
 export function useLookupAddress<T extends NetworkPluginID>(
     pluginID?: T,
-    domain?: string,
+    domain?: string | null,
     expectedChainId?: Web3Helper.Definition[T]['ChainId'],
 ) {
     const { chainId } = useChainContext({ chainId: expectedChainId })
