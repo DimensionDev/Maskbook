@@ -1,10 +1,10 @@
 import { makeStyles } from '@masknet/theme'
-import { memo } from 'react'
+import { memo, type RefObject } from 'react'
 import { ContactCard } from '../ContactCard/index.js'
 import { type FriendsInformation } from '../../../hook/useFriends.js'
 import { Box } from '@mui/material'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
-import { EmptyStatus, RestorableScroll } from '@masknet/shared'
+import { EmptyStatus } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     empty: {
@@ -34,29 +34,28 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface ContactsProps {
     friends: FriendsInformation[]
+    listRef: RefObject<HTMLElement>
 }
 
-export const Contacts = memo<ContactsProps>(function Contacts({ friends }) {
+export const Contacts = memo<ContactsProps>(function Contacts({ friends, listRef }) {
     const { classes } = useStyles()
     const { t } = useI18N()
     return friends.length === 0 ? (
         <EmptyStatus className={classes.empty}>{t('popups_encrypted_friends_no_friends')}</EmptyStatus>
     ) : (
-        <RestorableScroll scrollKey="encrypted_contacts">
-            <Box className={classes.cardContainer}>
-                {friends.map((friend) => {
-                    return (
-                        <ContactCard
-                            key={friend.id}
-                            avatar={friend.avatar}
-                            nextId={friend.linkedPersona?.publicKeyAsHex}
-                            publicKey={friend.linkedPersona?.rawPublicKey}
-                            profiles={friend.profiles}
-                            isLocal
-                        />
-                    )
-                })}
-            </Box>
-        </RestorableScroll>
+        <Box className={classes.cardContainer} ref={listRef}>
+            {friends.map((friend) => {
+                return (
+                    <ContactCard
+                        key={friend.id}
+                        avatar={friend.avatar}
+                        nextId={friend.linkedPersona?.publicKeyAsHex}
+                        publicKey={friend.linkedPersona?.rawPublicKey}
+                        profiles={friend.profiles}
+                        isLocal
+                    />
+                )
+            })}
+        </Box>
     )
 })
