@@ -151,6 +151,8 @@ export const resolveChainId: (chainId: string) => ChainId | undefined = memoize(
             return ChainId.xDai
         case 'bsc':
             return ChainId.BSC
+        case 'base':
+            return ChainId.Base
         default:
             return undefined
     }
@@ -165,6 +167,7 @@ const ChainNameMap: Record<NetworkPluginID, Record<number, string>> = {
         [ChainId.Optimism]: 'optimism',
         [ChainId.Avalanche]: 'avalanche',
         [ChainId.xDai]: 'gnosis',
+        [ChainId.Base]: 'base',
     },
     [NetworkPluginID.PLUGIN_SOLANA]: {
         [SolanaChainId.Mainnet]: 'solana',
