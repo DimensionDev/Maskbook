@@ -184,7 +184,7 @@ const Interaction = memo(function Interaction() {
                               },
                     ),
                 )
-            } else {
+            } else if (!signRequest.includes(currentRequest.request.arguments.method)) {
                 params = compact(
                     currentRequest.request.arguments.params.map((x) => {
                         if (x === 'latest') {
