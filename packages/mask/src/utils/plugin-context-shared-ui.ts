@@ -4,7 +4,9 @@ import {
     CrossIsolationMessages,
     EMPTY_LIST,
     MaskMessages,
+    type SignType,
     Sniffings,
+    type ECKeyIdentifier,
 } from '@masknet/shared-base'
 import { WalletConnectQRCodeModal } from '@masknet/shared'
 import Services from '../extension/service.js'
@@ -12,7 +14,7 @@ import type { PartialSharedUIContext } from '../../shared/plugin-infra/host.js'
 import { WalletRPC } from '../plugins/WalletService/messages.js'
 
 export const RestPartOfPluginUIContextShared: Omit<
-    Plugin.SNSAdaptor.SNSAdaptorContext,
+    Plugin.SiteAdaptor.SiteAdaptorContext,
     | keyof PartialSharedUIContext
     | 'lastRecognizedProfile'
     | 'currentVisitingProfile'
@@ -35,8 +37,6 @@ export const RestPartOfPluginUIContextShared: Omit<
         MaskMessages.events.currentPersonaIdentifier.on,
     ),
     send: WalletRPC.send,
-    confirmRequest: WalletRPC.confirmRequest,
-    rejectRequest: WalletRPC.rejectRequest,
 
     openDashboard: Services.Helper.openDashboard,
     openPopupWindow: Services.Helper.openPopupWindow,
@@ -65,7 +65,8 @@ export const RestPartOfPluginUIContextShared: Omit<
 
     recordConnectedSites: WalletRPC.recordConnectedSites,
 
-    signWithPersona: Services.Identity.signWithPersona,
+    signWithPersona: <T>(type: SignType, message: T, identifier?: ECKeyIdentifier, silent?: boolean) =>
+        Services.Identity.signWithPersona(type, message, identifier, location.origin, silent),
     signWithWallet: WalletRPC.signWithWallet,
 
     wallets: createSubscriptionFromAsync(

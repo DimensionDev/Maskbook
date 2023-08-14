@@ -13,7 +13,7 @@
     }
   },
   "dependencies": {
-    "@blocto/fcl": "^0.0.78-alpha.10",
+    "@blocto/fcl": "^1.4.0",
     "@masknet/icons": "workspace:^",
     "@masknet/injected-script": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",

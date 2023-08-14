@@ -10,7 +10,7 @@ import { Web3 } from '@masknet/web3-providers'
 import { delay, timeout } from '@masknet/kit'
 import urlcat from 'urlcat'
 import { useAsyncFn, useMount } from 'react-use'
-import type { ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 
 interface StyleProps {
     loading: boolean
@@ -104,7 +104,8 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
             const connect = async () => {
                 // wait for web3 state init
                 await delay(1500)
-                const chainId = await Web3.getChainId({ providerType })
+                const chainId =
+                    providerType === ProviderType.Fortmatic ? ChainId.Mainnet : await Web3.getChainId({ providerType })
                 return Web3.connect({
                     chainId,
                     providerType: providerType as ProviderType,

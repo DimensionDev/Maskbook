@@ -22,7 +22,8 @@
         "Aurora": "aurora",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Astar": "astar"
+        "Astar": "astar",
+        "Boba": "boba"
     },
     "COIN_ID": {
         "Mainnet": "ethereum",
@@ -47,6 +48,14 @@
         "Aurora": "ethereum",
         "Aurora_Testnet": "",
         "Conflux": "conflux-token",
-        "Astar": "astar"
+        "Astar": "astar",
+        "Pulse": "pulsechain",
+        "Moonbeam": "moonbeam",
+        "Klaytn": "klay-token",
+        "Harmony": "harmony",
+        "Moonriver": "moonriver",
+        "Cronos": "crypto-com-chain",
+        "BitTorrent": "bittorrent",
+        "Boba": "boba-network"
     }
 }

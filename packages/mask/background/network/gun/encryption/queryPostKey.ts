@@ -3,8 +3,8 @@ import {
     type DecryptStaticECDH_PostKey,
     type DecryptEphemeralECDH_PostKey,
     type EncryptionResultE2EMap,
-    SocialNetworkEnum,
-    EC_KeyCurveEnum,
+    EncryptPayloadNetwork,
+    EC_KeyCurve,
     importEC_Key,
     getEcKeyCurve,
 } from '@masknet/encryption'
@@ -46,7 +46,7 @@ namespace Version38Or39 {
         version: -38 | -39,
         iv: Uint8Array,
         minePublicKey: EC_Public_CryptoKey,
-        network: SocialNetworkEnum,
+        network: EncryptPayloadNetwork,
         abortSignal: AbortSignal,
     ): AsyncGenerator<DecryptStaticECDH_PostKey, void, undefined> {
         const minePublicKeyJWK = await CryptoKeyToJsonWebKey(minePublicKey)
@@ -107,7 +107,7 @@ namespace Version38Or39 {
     export async function publishPostAESKey_version39Or38(
         version: -39 | -38,
         postIV: Uint8Array,
-        network: SocialNetworkEnum,
+        network: EncryptPayloadNetwork,
         receiversKeys: EncryptionResultE2EMap,
     ) {
         const [postHash] = await hashIV(network, postIV)
@@ -147,7 +147,7 @@ namespace Version38Or39 {
 
     async function calculatePostKeyPartition(
         version: -38 | -39,
-        network: SocialNetworkEnum,
+        network: EncryptPayloadNetwork,
         iv: Uint8Array,
         key: EC_Public_JsonWebKey,
     ) {
@@ -158,7 +158,7 @@ namespace Version38Or39 {
         return { postHash, keyHash }
     }
 
-    async function hashIV(network: SocialNetworkEnum, iv: Uint8Array): Promise<[string, string]> {
+    async function hashIV(network: EncryptPayloadNetwork, iv: Uint8Array): Promise<[string, string]> {
         const hashPair = '9283464d-ee4e-4e8d-a7f3-cf392a88133f'
         const N = 2
 
@@ -167,13 +167,13 @@ namespace Version38Or39 {
         return [`${networkHint}${hash}`, `${networkHint}-${hash}`]
     }
 
-    function getNetworkHint(x: SocialNetworkEnum) {
-        if (x === SocialNetworkEnum.Facebook) return ''
-        if (x === SocialNetworkEnum.Twitter) return 'twitter-'
-        if (x === SocialNetworkEnum.Minds) return 'minds-'
-        if (x === SocialNetworkEnum.Instagram) return 'instagram-'
-        if (x === SocialNetworkEnum.Unknown)
-            throw new TypeError('[@masknet/encryption] Current SNS network is not correctly configured.')
+    function getNetworkHint(x: EncryptPayloadNetwork) {
+        if (x === EncryptPayloadNetwork.Facebook) return ''
+        if (x === EncryptPayloadNetwork.Twitter) return 'twitter-'
+        if (x === EncryptPayloadNetwork.Minds) return 'minds-'
+        if (x === EncryptPayloadNetwork.Instagram) return 'instagram-'
+        if (x === EncryptPayloadNetwork.Unknown)
+            throw new TypeError('[@masknet/encryption] Current network is not correctly configured.')
         unreachable(x)
     }
 
@@ -212,7 +212,7 @@ namespace Version37 {
     export async function* GUN_queryPostKey_version37(
         iv: Uint8Array,
         minePublicKey: EC_Public_CryptoKey,
-        network: SocialNetworkEnum,
+        network: EncryptPayloadNetwork,
         abortSignal: AbortSignal,
     ): AsyncGenerator<DecryptEphemeralECDH_PostKey, void, undefined> {
         const minePublicKeyJWK = await CryptoKeyToJsonWebKey(minePublicKey)
@@ -266,7 +266,7 @@ namespace Version37 {
      */
     export async function publishPostAESKey_version37(
         postIV: Uint8Array,
-        network: SocialNetworkEnum,
+        network: EncryptPayloadNetwork,
         receiversKeys: EncryptionResultE2EMap,
     ) {
         const networkPartition = getNetworkPartition(network)
@@ -297,7 +297,7 @@ namespace Version37 {
         /** encrypted key */
         e: string
         /** ephemeral public key chain */
-        c?: EC_KeyCurveEnum
+        c?: EC_KeyCurve
         /** ephemeral public key */
         k?: string
     }
@@ -307,12 +307,16 @@ namespace Version37 {
         if (typeof data !== 'object') return false
         const { e, c, k } = data as DataOnGun
         if (typeof e !== 'string') return false
-        if (![EC_KeyCurveEnum.secp256k1, EC_KeyCurveEnum.secp256p1, undefined].includes(c)) return false
+        if (![EC_KeyCurve.secp256k1, EC_KeyCurve.secp256p1, undefined].includes(c)) return false
         if (typeof k !== 'string' && k !== undefined) return false
         return true
     }
 
-    async function calculatePostKeyPartition(network: SocialNetworkEnum, iv: Uint8Array, key: EC_Public_JsonWebKey) {
+    async function calculatePostKeyPartition(
+        network: EncryptPayloadNetwork,
+        iv: Uint8Array,
+        key: EC_Public_JsonWebKey,
+    ) {
         const postHash = await hashIV(iv)
         const keyHash = await hashKey(key)
         return { postHash, keyHash, networkHint: getNetworkPartition(network) }
@@ -333,13 +337,13 @@ namespace Version37 {
         return hash.slice(0, N)
     }
 
-    function getNetworkPartition(x: SocialNetworkEnum) {
-        if (x === SocialNetworkEnum.Facebook) return '37-fb'
-        if (x === SocialNetworkEnum.Twitter) return '37-tw'
-        if (x === SocialNetworkEnum.Minds) return '37-minds'
-        if (x === SocialNetworkEnum.Instagram) return '37-ins'
-        if (x === SocialNetworkEnum.Unknown)
-            throw new TypeError('[@masknet/encryption] Current SNS network is not correctly configured.')
+    function getNetworkPartition(x: EncryptPayloadNetwork) {
+        if (x === EncryptPayloadNetwork.Facebook) return '37-fb'
+        if (x === EncryptPayloadNetwork.Twitter) return '37-tw'
+        if (x === EncryptPayloadNetwork.Minds) return '37-minds'
+        if (x === EncryptPayloadNetwork.Instagram) return '37-ins'
+        if (x === EncryptPayloadNetwork.Unknown)
+            throw new TypeError('[@masknet/encryption] Current network is not correctly configured.')
         unreachable(x)
     }
 }

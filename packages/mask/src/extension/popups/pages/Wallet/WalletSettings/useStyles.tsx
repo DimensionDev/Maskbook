@@ -18,7 +18,6 @@ export const useStyles = makeStyles()((theme) => ({
     },
     primaryItem: {
         margin: '16px 16px 0 16px',
-        cursor: 'default',
         background: theme.palette.maskColor.primary,
     },
     primaryItemText: {
@@ -75,6 +74,12 @@ export const useStyles = makeStyles()((theme) => ({
         width: '100%',
         bottom: 0,
         zIndex: 100,
+    },
+    ellipsis: {
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        maxWidth: 150,
     },
     removeWalletButton: {
         marginBottom: 16,

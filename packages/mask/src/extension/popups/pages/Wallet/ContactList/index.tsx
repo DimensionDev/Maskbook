@@ -34,8 +34,11 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean }>()
             display: 'flex',
             flexDirection: 'column',
             padding: '0',
-            maxHeight: isManage ? 470 : 380,
+            maxHeight: isManage ? 470 : 400,
             overflow: 'scroll',
+            '::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         contactsList: {
             padding: 0,
@@ -44,6 +47,10 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean }>()
             color: theme.palette.maskColor.main,
             lineHeight: '18px',
             fontWeight: 700,
+            maxWidth: 290,
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
         },
         identifier: {
             fontSize: 14,
@@ -76,7 +83,6 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean }>()
             fontSize: 18,
             height: 18,
             width: 18,
-            color: theme.palette.maskColor.main,
             cursor: 'pointer',
             marginLeft: 4,
         },
@@ -181,7 +187,7 @@ const ContactListUI = memo(function ContactListUI() {
     return (
         <div className={classes.root}>
             <Box className={classes.page}>
-                <AddContactInputPanel />
+                <AddContactInputPanel isManage={isManage} />
                 <Box className={classes.contactsPanel}>
                     {contacts.length ? (
                         <Typography className={classes.contactTitle}>
@@ -286,9 +292,9 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
                 handler: deleteContact,
             })
         return options
-    }, [t, contactType])
+    }, [t, contactType, address, name])
 
-    const [menu, openMenu] = useMenuConfig(
+    const [menu, openMenu, _, isOpenMenu] = useMenuConfig(
         menuOptions.map((option, index) => (
             <MenuItem key={index} className={classes.menuItem} onClick={option.handler}>
                 {option.icon}
@@ -312,7 +318,7 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
     return (
         <ListItem
             classes={{ root: classes.contactsListItem }}
-            onClick={() => onSelectContact?.(address, name)}
+            onClick={() => !isOpenMenu && onSelectContact?.(address, name)}
             {...rest}>
             <div className={classes.contactsListItemInfo}>
                 <EmojiAvatar address={address} className={classes.emojiAvatar} sx={{ width: 24, height: 24 }} />
@@ -325,12 +331,19 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
                             href={ExplorerResolver.addressLink(chainId, address ?? '')}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <Icons.PopupLink className={classes.icon} />
+                            <Icons.PopupLink className={classes.icon} color={theme.palette.maskColor.second} />
                         </Link>
                     </Typography>
                 </div>
             </div>
-            <Icons.More size={24} className={classes.iconMore} onClick={openMenu} />
+            <Icons.More
+                size={24}
+                className={classes.iconMore}
+                onClick={(event) => {
+                    event.stopPropagation()
+                    openMenu(event)
+                }}
+            />
             {menu}
         </ListItem>
     )

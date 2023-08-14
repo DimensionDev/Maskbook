@@ -1,26 +1,27 @@
+import { memo, useState } from 'react'
+import { useAsyncFn } from 'react-use'
+import { useNavigate, useParams } from 'react-router-dom'
 import { AddCollectibles, FungibleTokenList, SelectNetworkSidebar, TokenListMode } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { useRowSize } from '@masknet/shared-base-ui'
-import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
+import { MaskTabList, makeStyles, usePopupCustomSnackbar, useTabs } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useBlockedFungibleTokens, useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
-import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
-import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { TokenType, type NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab } from '@mui/material'
-import { sortBy } from 'lodash-es'
-import { memo, useCallback, useMemo, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useAsyncFn } from 'react-use'
 import { useI18N } from '../../../../../utils/index.js'
 import { NormalHeader } from '../../../components/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
+import { WalletAssetTabs } from '../type.js'
 
 const useStyles = makeStyles<{ currentTab: TabType; searchError: boolean }>()((theme, { currentTab, searchError }) => ({
     content: {
         flex: 1,
         padding: '16px 16px 0 16px',
         display: 'flex',
+        overflow: 'hidden',
     },
     channel: {
         flex: 1,
@@ -67,13 +68,14 @@ const useStyles = makeStyles<{ currentTab: TabType; searchError: boolean }>()((t
     },
     searchInput: {
         position: 'absolute',
-        left: 16,
+        transform: 'translateX(-36px)',
         width: 368,
         zIndex: 50,
     },
     sidebar: {
         marginTop: currentTab === TabType.Tokens ? (searchError ? 70 : 52) : 0,
         marginRight: theme.spacing(1.5),
+        height: 432,
     },
     grid: {
         gridTemplateColumns: 'repeat(auto-fill, minmax(40%, 1fr))',
@@ -95,30 +97,6 @@ enum TabType {
     Collectibles = 'Collectibles',
 }
 
-const CollectibleSupportedChains: Web3Helper.ChainIdAll[] = [
-    ChainId.Mainnet,
-    ChainId.BSC,
-    ChainId.Matic,
-    ChainId.Arbitrum,
-    ChainId.Optimism,
-    ChainId.Avalanche,
-    ChainId.xDai,
-]
-
-const TokenSupportedChains: Web3Helper.ChainIdAll[] = [
-    ChainId.Mainnet,
-    ChainId.BSC,
-    ChainId.Matic,
-    ChainId.Arbitrum,
-    ChainId.xDai,
-    ChainId.Fantom,
-    ChainId.Optimism,
-    ChainId.Avalanche,
-    ChainId.Aurora,
-    ChainId.Conflux,
-    ChainId.Astar,
-]
-
 const AddToken = memo(function AddToken() {
     const { t } = useI18N()
 
@@ -134,40 +112,41 @@ const AddToken = memo(function AddToken() {
     )
     const [searchError, setSearchError] = useState(false)
     const { classes } = useStyles({ currentTab, searchError })
-
-    const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>(
-        defaultChainId ? Number.parseInt(defaultChainId, 10) : ChainId.Mainnet,
-    )
-
     const allNetworks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
-    const supportedChains = currentTab === TabType.Tokens ? TokenSupportedChains : CollectibleSupportedChains
-    const networks = useMemo(() => {
-        return sortBy(
-            allNetworks.filter(
-                (x) => (x.network === 'mainnet' || x.isCustomized) && supportedChains.includes(x.chainId),
-            ),
-            (x) => supportedChains.indexOf(x.chainId),
-        )
-    }, [allNetworks, supportedChains])
 
-    const changeTab = useCallback(
-        (event: object, value: string) => {
-            onChange(event, value)
-            if (currentTab === TabType.Tokens && !CollectibleSupportedChains.includes(chainId)) {
-                setChainId(ChainId.Mainnet)
-            }
-        },
-        [onChange, chainId, currentTab],
+    const supportedChains = allNetworks.map((x) => x.chainId)
+    const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>(
+        defaultChainId && supportedChains.includes(Number.parseInt(defaultChainId, 10))
+            ? Number.parseInt(defaultChainId, 10)
+            : ChainId.Mainnet,
     )
 
     useTitle(t('add_assets'))
 
     const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
+    const { showSnackbar } = usePopupCustomSnackbar()
+
     const [{ loading: loadingAddCustomNFTs }, addCustomNFTs] = useAsyncFn(
         async (result: [contract: NonFungibleTokenContract<ChainId, SchemaType>, tokenIds: string[]]) => {
-            await Token?.addNonFungibleCollection?.(account, result[0], result[1])
-            navigate(PopupRoutes.Wallet)
+            const [contract, tokenIds] = result
+            await Token?.addNonFungibleCollection?.(account, contract, tokenIds)
+
+            for await (const tokenId of tokenIds) {
+                await Token?.trustToken?.(account, {
+                    id: `${contract.chainId}.${contract.address}.${tokenId}`,
+                    chainId: contract.chainId,
+                    type: TokenType.NonFungible,
+                    schema: SchemaType.ERC721,
+                    address: contract.address,
+                    tokenId,
+                })
+            }
+
+            showSnackbar(t('popups_wallet_collectible_added_successfully'), {
+                variant: 'success',
+            })
+            navigate(`${PopupRoutes.Wallet}?tab=${WalletAssetTabs.Collectibles}`, { replace: true })
         },
         [account],
     )
@@ -176,7 +155,7 @@ const AddToken = memo(function AddToken() {
         <TabContext value={currentTab}>
             <NormalHeader
                 tabList={
-                    <MaskTabList onChange={changeTab} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
+                    <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
                         <Tab label={t('popups_wallet_token')} value={TabType.Tokens} />
                         <Tab label={t('popups_wallet_collectible')} value={TabType.Collectibles} />
                     </MaskTabList>
@@ -188,7 +167,7 @@ const AddToken = memo(function AddToken() {
                     hideAllButton
                     chainId={chainId}
                     onChainChange={(chainId) => setChainId(chainId ?? ChainId.Mainnet)}
-                    networks={networks}
+                    networks={allNetworks}
                     pluginID={NetworkPluginID.PLUGIN_EVM}
                 />
                 <div className={classes.main}>

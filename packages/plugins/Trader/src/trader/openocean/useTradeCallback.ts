@@ -7,7 +7,7 @@ import type { GasConfig, Transaction } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
 import type { SwapOOSuccessResponse, TradeComputed } from '../../types/index.js'
-import { useSwapErrorCallback } from '../../SNSAdaptor/trader/hooks/useSwapErrorCallback.js'
+import { useSwapErrorCallback } from '../../SiteAdaptor/trader/hooks/useSwapErrorCallback.js'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapOOSuccessResponse> | null, gasConfig?: GasConfig) {
     const notifyError = useSwapErrorCallback()

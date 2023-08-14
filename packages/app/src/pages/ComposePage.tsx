@@ -1,17 +1,24 @@
-import { DisableShadowRootContext, ShadowRootIsolation } from '@masknet/theme'
-import { DashboardContainer } from '../components/DashboardContainer.js'
-import { DashboardHeader } from '../components/DashboardHeader.js'
-import { CompositionDialogUI, ShareSelectNetworkModal } from '@masknet/shared'
-import { useCallback } from 'react'
-import { encrypt } from '@masknet/encryption'
+import { useCallback, useMemo } from 'react'
 import { None } from 'ts-results-es'
+import { CompositionDialogUI, ShareSelectNetworkModal } from '@masknet/shared'
+import { encrypt } from '@masknet/encryption'
+import { PostInfoContext } from '@masknet/plugin-infra/content-script'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
+import { PageContainer } from '../components/PageContainer.js'
+import { createPostInfoContext } from '../helpers/createPostInfoContext.js'
+import { DecryptMessage } from '../main/DecryptMessage.js'
+import { usePostPayload } from '../hooks/usePostPayload.js'
 
 export interface ComposePageProps {}
+
 async function throws(): Promise<never> {
     throw new Error('Unreachable')
 }
+
 export default function ComposePage(props: ComposePageProps) {
+    const context = useMemo(() => createPostInfoContext(), [])
+    const payload = usePostPayload()
+
     const onSubmit = useCallback(async (data: SerializableTypedMessages) => {
         const encrypted = await encrypt(
             {
@@ -29,21 +36,19 @@ export default function ComposePage(props: ComposePageProps) {
         })
     }, [])
 
-    return (
-        <DashboardContainer>
-            <main>
-                <DashboardHeader title="Message" />
+    if (payload) {
+        return (
+            <PageContainer title="Decrypted Post">
+                <PostInfoContext.Provider value={context}>
+                    <DecryptMessage text={payload[0]} version={payload[1]} />
+                </PostInfoContext.Provider>
+            </PageContainer>
+        )
+    }
 
-                <div className="bg-white p-5">
-                    <div className="border overflow-hidden rounded-lg">
-                        <DisableShadowRootContext.Provider value={false}>
-                            <ShadowRootIsolation>
-                                <CompositionDialogUI maxLength={560} onSubmit={onSubmit} />
-                            </ShadowRootIsolation>
-                        </DisableShadowRootContext.Provider>
-                    </div>
-                </div>
-            </main>
-        </DashboardContainer>
+    return (
+        <PageContainer title="Encrypted Post">
+            <CompositionDialogUI maxLength={560} onSubmit={onSubmit} />
+        </PageContainer>
     )
 }

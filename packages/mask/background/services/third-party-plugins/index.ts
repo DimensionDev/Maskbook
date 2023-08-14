@@ -6,7 +6,7 @@ import {
     ThirdPartyPluginPermission,
 } from '../../../shared/definitions/routes.js'
 // TODO: those types are defined in the plugin/External
-type MaskSDK_SNS_ContextIdentifier = string
+type MaskSDK_Site_ContextIdentifier = string
 type Manifest = any
 
 export async function fetchManifest(addr: string): Promise<Manifest> {
@@ -20,13 +20,13 @@ export async function fetchManifest(addr: string): Promise<Manifest> {
             .join('\n'),
     )
 }
-const hostedMeta = new Map<MaskSDK_SNS_ContextIdentifier, [string, unknown]>()
-export async function getHostedMeta(context: MaskSDK_SNS_ContextIdentifier) {
+const hostedMeta = new Map<MaskSDK_Site_ContextIdentifier, [string, unknown]>()
+export async function getHostedMeta(context: MaskSDK_Site_ContextIdentifier) {
     return hostedMeta.get(context)
 }
 export async function openPluginPopup(
     url: string,
-    meta?: [context: MaskSDK_SNS_ContextIdentifier, metaKey: string, meta: unknown],
+    meta?: [context: MaskSDK_Site_ContextIdentifier, metaKey: string, meta: unknown],
 ) {
     new URL(url) // it must be a full qualified URL otherwise throws
     if (meta) hostedMeta.set(meta[0], [meta[1], meta[2]])

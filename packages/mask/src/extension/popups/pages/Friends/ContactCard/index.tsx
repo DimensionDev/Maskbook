@@ -10,7 +10,6 @@ import {
     ECKeyIdentifier,
 } from '@masknet/shared-base'
 import { CopyButton, PersonaContext } from '@masknet/shared'
-import urlcat from 'urlcat'
 import { useNavigate } from 'react-router-dom'
 import { NextIDPlatform } from '@masknet/shared-base'
 import { attachNextIDToProfile } from '../../../../../utils/utils.js'
@@ -114,7 +113,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                     )}
                     <Box>
                         <Typography fontSize={14} fontWeight={700} lineHeight="18px">
-                            {publicKey ? formatPersonaFingerprint(publicKey, 4) : null}
+                            {publicKey ? formatPersonaFingerprint(publicKey) : null}
                         </Typography>
                         <Typography
                             fontSize={12}
@@ -129,7 +128,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                                 underline="none"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                href={urlcat('https://web3.bio/', { s: nextId })}
+                                href={`https://web3.bio/${nextId}`}
                                 className={classes.icon}>
                                 <Icons.LinkOut size={12} />
                             </Link>

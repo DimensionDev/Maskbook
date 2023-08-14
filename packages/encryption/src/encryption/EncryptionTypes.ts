@@ -6,7 +6,7 @@ import type {
     PostIVIdentifier,
 } from '@masknet/base'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
-import type { EC_Key, EC_KeyCurveEnum } from '../payload/index.js'
+import type { EC_Key, EC_KeyCurve } from '../payload/index.js'
 import type { Option } from 'ts-results-es'
 
 export interface EncryptOptions {
@@ -67,7 +67,7 @@ export interface EncryptIO {
      * Generate a pair of new EC key used for ECDH.
      * This should be only provided in the test environment to create a deterministic result.
      */
-    getRandomECKey?(algr: EC_KeyCurveEnum): Promise<readonly [EC_Public_CryptoKey, EC_Private_CryptoKey]>
+    getRandomECKey?(algr: EC_KeyCurve): Promise<readonly [EC_Public_CryptoKey, EC_Private_CryptoKey]>
 }
 export interface EncryptResult {
     postKey: AESCryptoKey

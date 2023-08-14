@@ -1,19 +1,21 @@
 import { Icons } from '@masknet/icons'
 import { CopyButton, ProgressiveText, ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { MaskColors, makeStyles } from '@masknet/theme'
+import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
 import { useAccount, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { ChainbaseHistory, ExplorerResolver } from '@masknet/web3-providers'
-import { TransactionStateType, formatBalance, multipliedBy, trimZero } from '@masknet/web3-shared-base'
+import { chainbase } from '@masknet/web3-providers/helpers'
+import { TransactionStatusType, formatBalance, multipliedBy, trimZero } from '@masknet/web3-shared-base'
 import { formatHash, formatWeiToEther, formatWeiToGwei } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography, alpha } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { capitalize } from 'lodash-es'
-import { memo } from 'react'
+import { memo, useCallback } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
-import { WalletAssetTabs } from '../type.js'
+import { ReplaceType, WalletAssetTabs } from '../type.js'
+import { modifyTransaction } from '../utils.js'
 import type { TransactionState } from './types.js'
 import { useTransactionLogs } from './useTransactionLogs.js'
 
@@ -31,6 +33,7 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: 'auto',
         alignItems: 'center',
         gap: 4,
+        transition: 'all 0.3s ease-in-out',
     },
     statusFail: {
         color: theme.palette.maskColor.danger,
@@ -102,6 +105,27 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         fontSize: 12,
     },
+    actionGroup: {
+        display: 'flex',
+        justifyContent: 'center',
+        background: theme.palette.maskColor.secondaryBottom,
+        boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
+        backdropFilter: 'blur(8px)',
+        gap: theme.spacing(2),
+        padding: theme.spacing(2),
+        width: '100%',
+        bottom: 0,
+        zIndex: 100,
+        marginTop: 'auto',
+    },
+    speedupButton: {
+        backgroundColor: MaskColors.light.maskColor.primary,
+        color: MaskColors.light.maskColor.white,
+        '&:hover': {
+            backgroundColor: MaskColors.light.maskColor.primary,
+            color: MaskColors.light.maskColor.white,
+        },
+    },
 }))
 
 export const TransactionDetail = memo(function TransactionDetail() {
@@ -109,10 +133,8 @@ export const TransactionDetail = memo(function TransactionDetail() {
     const { classes, cx, theme } = useStyles()
     const location = useLocation()
     const transactionState = location.state.transaction as TransactionState
-    const transaction =
-        transactionState && 'candidates' in transactionState
-            ? transactionState.candidates[transactionState.id]
-            : transactionState
+    const isRecentTx = transactionState && 'candidates' in transactionState
+    const transaction = isRecentTx ? transactionState.candidates[transactionState.id] : transactionState
     const account = useAccount()
     const chainId = transactionState?.chainId
     const transactionId = transactionState?.id
@@ -127,17 +149,27 @@ export const TransactionDetail = memo(function TransactionDetail() {
         enabled: !!transaction,
         queryKey: ['chainbase', 'transaction', transaction?.chainId, transactionId, blockNumber],
         queryFn: async () => {
-            if (!transaction || !chainId || !transactionId) return
+            if (!chainId || !transactionId) return
             return ChainbaseHistory.getTransaction(chainId, transactionId, blockNumber)
         },
     })
+
+    const handleSpeedup = useCallback(() => {
+        if (!isRecentTx) return
+        return modifyTransaction(transactionState, ReplaceType.SPEED_UP)
+    }, [isRecentTx, transactionState])
+
+    const handleCancel = useCallback(() => {
+        if (!isRecentTx) return
+        modifyTransaction(transactionState, ReplaceType.CANCEL)
+    }, [isRecentTx, transactionState])
 
     const logs = useTransactionLogs(transactionState)
     if (!transaction) {
         return <Navigate to={`${PopupRoutes.Wallet}?tab=${WalletAssetTabs.Activity}`} replace />
     }
 
-    const { FAILED, SUCCEED, NOT_DEPEND } = TransactionStateType
+    const { FAILED, SUCCEED, NOT_DEPEND } = TransactionStatusType
     const StatusIconMap = {
         [FAILED]: <Icons.BaseClose size={20} />,
         [SUCCEED]: <Icons.FillSuccess size={20} />,
@@ -153,7 +185,8 @@ export const TransactionDetail = memo(function TransactionDetail() {
         [SUCCEED]: t('transaction_success'),
         [NOT_DEPEND]: t('transaction_pending'),
     }
-    const status = (transactionState?.status || NOT_DEPEND) as TransactionStateType
+    const status = chainbase.normalizeTxStatus(tx !== undefined ? tx.status : (transactionState?.status as 0 | 1))
+    const statusPending = status === undefined && loadingTx
     const isOut = transaction.from === account
     const link = transactionId ? ExplorerResolver.transactionLink(chainId!, transactionId) : undefined
 
@@ -162,125 +195,147 @@ export const TransactionDetail = memo(function TransactionDetail() {
     const gasCost = gasFee && nativeTokenPrice ? gasFee.times(nativeTokenPrice) : undefined
 
     return (
-        <Box p={2} overflow="auto" data-hide-scrollbar>
-            <Box display="flex" alignItems="center">
-                <Typography variant="h2" className={classes.statusTitle}>
-                    {t('transaction_status')}
-                </Typography>
-                <Typography component="div" className={cx(classes.status, StatusClassesMap[status])}>
-                    {StatusIconMap[status]}
-                    {StatusLabelMap[status]}
-                </Typography>
-            </Box>
-            {transactionId ? (
+        <>
+            <Box p={2} overflow="auto" data-hide-scrollbar>
+                <Box display="flex" alignItems="center">
+                    <Typography variant="h2" className={classes.statusTitle}>
+                        {t('transaction_status')}
+                    </Typography>
+                    <ProgressiveText
+                        component="div"
+                        className={cx(classes.status, StatusClassesMap[status])}
+                        loading={statusPending}
+                        skeletonWidth={90}>
+                        {StatusIconMap[status]}
+                        {StatusLabelMap[status]}
+                    </ProgressiveText>
+                </Box>
+                {transactionId ? (
+                    <Box className={classes.field}>
+                        <Typography className={classes.fieldName}>{t('transaction_hash')}</Typography>
+                        <Typography className={classes.fieldValue}>
+                            {formatHash(transactionId, 4)}
+                            <CopyButton size={16} text={transactionId} sx={{ ml: 0.5 }} />
+                        </Typography>
+                    </Box>
+                ) : null}
                 <Box className={classes.field}>
-                    <Typography className={classes.fieldName}>{t('transaction_hash')}</Typography>
+                    <Typography className={classes.fieldName}>{t('transaction_link')}</Typography>
                     <Typography className={classes.fieldValue}>
-                        {formatHash(transactionId, 4)}
-                        <CopyButton size={16} text={transactionId} sx={{ ml: 0.5 }} />
+                        {t('view_on_explorer')}
+                        <Link href={link} target="_blank" ml={0.5} fontSize={0}>
+                            <Icons.LinkOut size={16} color={theme.palette.maskColor.second} />
+                        </Link>
                     </Typography>
                 </Box>
-            ) : null}
-            <Box className={classes.field}>
-                <Typography className={classes.fieldName}>{t('transaction_link')}</Typography>
-                <Typography className={classes.fieldValue}>
-                    {t('view_on_explorer')}
-                    <Link href={link} target="_blank" ml={0.5} fontSize={0}>
-                        <Icons.LinkOut size={16} color={theme.palette.maskColor.second} />
-                    </Link>
+                <Typography variant="h2" className={classes.sectionName}>
+                    {t('transaction_base')}
                 </Typography>
-            </Box>
-            <Typography variant="h2" className={classes.sectionName}>
-                {t('transaction_base')}
-            </Typography>
-            <Box className={classes.field}>
-                <Typography className={classes.fieldName}>{t('transaction_from')}</Typography>
-                <Typography className={classes.fieldValue} component="div">
-                    <ReversedAddress address={transaction.from!} />
-                </Typography>
-            </Box>
-            <Box className={classes.field}>
-                <Typography className={classes.fieldName}>{t('transaction_to')}</Typography>
-                <Typography className={classes.fieldValue} component="div">
-                    <ReversedAddress address={transaction.to!} />
-                </Typography>
-            </Box>
-            <Typography variant="h2" className={classes.sectionName}>
-                Transaction
-            </Typography>
-            <Box className={classes.field}>
-                <Typography className={classes.fieldName}>{t('nonce')}</Typography>
-                <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
-                    {tx?.nonce}
-                </ProgressiveText>
-            </Box>
-            <Box className={classes.field}>
-                <Typography className={classes.fieldName}>{t('amount')}</Typography>
-                <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
-                    {tx && nativeToken
-                        ? `${isOut ? '-' : '+'}${formatBalance(tx.value, nativeToken.decimals, 6)} ${
-                              nativeToken.symbol
-                          }`
-                        : ''}
-                </ProgressiveText>
-            </Box>
-            <Box className={classes.field}>
-                <Typography className={classes.fieldName}>{t('transaction_gas_limit')}</Typography>
-                <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
-                    {tx?.gas}
-                </ProgressiveText>
-            </Box>
-            <Box className={classes.field}>
-                <Typography className={classes.fieldName}>{t('transaction_gas_used')}</Typography>
-                <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
-                    {tx?.gas_used}
-                    {gasUsedPercent ? ` (${trimZero(gasUsedPercent.toFixed(1))}%)` : ''}
-                </ProgressiveText>
-            </Box>
-            <Box className={classes.field}>
-                <Typography className={classes.fieldName}>{t('transaction_gas_price')}</Typography>
-                <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
-                    {tx ? formatWeiToGwei(tx.gas_price).toFixed(6) : ''}
-                </ProgressiveText>
-            </Box>
-            {tx?.max_priority_fee_per_gas ? (
                 <Box className={classes.field}>
-                    <Typography className={classes.fieldName}>{t('transaction_priority_fee')}</Typography>
-                    <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
-                        {tx ? formatWeiToGwei(tx.max_priority_fee_per_gas).toFixed(6) : ''}
+                    <Typography className={classes.fieldName}>{t('transaction_from')}</Typography>
+                    <ProgressiveText
+                        className={classes.fieldValue}
+                        component="div"
+                        loading={!transaction.from && loadingTx}>
+                        <ReversedAddress address={(transaction.from || tx?.from_address) as string} />
                     </ProgressiveText>
                 </Box>
-            ) : null}
-            {tx?.max_fee_per_gas ? (
                 <Box className={classes.field}>
-                    <Typography className={classes.fieldName}>{t('transaction_max_fee')}</Typography>
-                    <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
-                        {tx ? formatWeiToGwei(tx.max_fee_per_gas).toFixed(6) : ''}
+                    <Typography className={classes.fieldName}>{t('transaction_to')}</Typography>
+                    <ProgressiveText
+                        className={classes.fieldValue}
+                        component="div"
+                        loading={!transaction.to && loadingTx}>
+                        <ReversedAddress address={(transaction.to || tx?.to_address) as string} />
                     </ProgressiveText>
                 </Box>
-            ) : null}
-            <Box className={classes.field}>
-                <Typography className={classes.fieldName}>{t('transaction_fee')}</Typography>
-                <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
-                    {gasFee ? `${gasFee.toFixed(6)} ${nativeToken?.symbol}` : ''}
-                    {gasCost ? ` ≈ $${gasCost.toFixed(2)}` : ''}
-                </ProgressiveText>
+                <Typography variant="h2" className={classes.sectionName}>
+                    Transaction
+                </Typography>
+                <Box className={classes.field}>
+                    <Typography className={classes.fieldName}>{t('nonce')}</Typography>
+                    <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
+                        {tx?.nonce}
+                    </ProgressiveText>
+                </Box>
+                <Box className={classes.field}>
+                    <Typography className={classes.fieldName}>{t('amount')}</Typography>
+                    <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
+                        {tx && nativeToken
+                            ? `${isOut ? '-' : '+'}${formatBalance(tx.value || '0', nativeToken.decimals, 6)} ${
+                                  nativeToken.symbol
+                              }`
+                            : ''}
+                    </ProgressiveText>
+                </Box>
+                <Box className={classes.field}>
+                    <Typography className={classes.fieldName}>{t('transaction_gas_limit')}</Typography>
+                    <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
+                        {tx?.gas}
+                    </ProgressiveText>
+                </Box>
+                <Box className={classes.field}>
+                    <Typography className={classes.fieldName}>{t('transaction_gas_used')}</Typography>
+                    <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
+                        {tx?.gas_used}
+                        {gasUsedPercent ? ` (${trimZero(gasUsedPercent.toFixed(1))}%)` : ''}
+                    </ProgressiveText>
+                </Box>
+                <Box className={classes.field}>
+                    <Typography className={classes.fieldName}>{t('transaction_gas_price')}</Typography>
+                    <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
+                        {tx ? formatWeiToGwei(tx.gas_price).toFixed(6) : ''}
+                    </ProgressiveText>
+                </Box>
+                {tx?.max_priority_fee_per_gas ? (
+                    <Box className={classes.field}>
+                        <Typography className={classes.fieldName}>{t('transaction_priority_fee')}</Typography>
+                        <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
+                            {tx ? formatWeiToGwei(tx.max_priority_fee_per_gas).toFixed(6) : ''}
+                        </ProgressiveText>
+                    </Box>
+                ) : null}
+                {tx?.max_fee_per_gas ? (
+                    <Box className={classes.field}>
+                        <Typography className={classes.fieldName}>{t('transaction_max_fee')}</Typography>
+                        <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
+                            {tx ? formatWeiToGwei(tx.max_fee_per_gas).toFixed(6) : ''}
+                        </ProgressiveText>
+                    </Box>
+                ) : null}
+                <Box className={classes.field}>
+                    <Typography className={classes.fieldName}>{t('transaction_fee')}</Typography>
+                    <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
+                        {gasFee ? `${gasFee.toFixed(6)} ${nativeToken?.symbol}` : ''}
+                        {gasCost ? ` ≈ $${gasCost.toFixed(2)}` : ''}
+                    </ProgressiveText>
+                </Box>
+                {logs?.length ? (
+                    <>
+                        <Typography variant="h2" className={classes.sectionName}>
+                            {t('activity_log')}
+                        </Typography>
+                        <ol className={classes.logs}>
+                            {logs.map((log, index) => (
+                                <li key={index} className={classes.log}>
+                                    <div className={classes.index}>{index + 1}</div>
+                                    <Typography className={classes.logText}>{log}</Typography>
+                                </li>
+                            ))}
+                        </ol>
+                    </>
+                ) : null}
             </Box>
-            {logs?.length ? (
-                <>
-                    <Typography variant="h2" className={classes.sectionName}>
-                        {t('activity_log')}
-                    </Typography>
-                    <ol className={classes.logs}>
-                        {logs.map((log, index) => (
-                            <li key={index} className={classes.log}>
-                                <div className={classes.index}>{index + 1}</div>
-                                <Typography className={classes.logText}>{log}</Typography>
-                            </li>
-                        ))}
-                    </ol>
-                </>
+            {isRecentTx && status === NOT_DEPEND ? (
+                <Box className={classes.actionGroup}>
+                    <ActionButton className={classes.speedupButton} fullWidth onClick={handleSpeedup}>
+                        {t('speed_up')}
+                    </ActionButton>
+                    <ActionButton color="error" fullWidth onClick={handleCancel}>
+                        {t('cancel')}
+                    </ActionButton>
+                </Box>
             ) : null}
-        </Box>
+        </>
     )
 })

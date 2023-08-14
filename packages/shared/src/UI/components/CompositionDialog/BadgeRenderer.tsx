@@ -1,4 +1,4 @@
-import { useActivatedPluginsSNSAdaptor, type Plugin, usePluginI18NField } from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginsSiteAdaptor, type Plugin, usePluginI18NField } from '@masknet/plugin-infra/content-script'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import type { TypedMessage } from '@masknet/typed-message'
 import { Box, Chip } from '@mui/material'
@@ -19,7 +19,7 @@ export interface BadgeRendererProps {
 }
 
 export function BadgeRenderer({ meta, onDeleteMeta, readonly }: BadgeRendererProps) {
-    const plugins = useActivatedPluginsSNSAdaptor('any')
+    const plugins = useActivatedPluginsSiteAdaptor('any')
     const i18n = usePluginI18NField()
     const t = useSharedI18N()
     if (!meta) return null
@@ -42,7 +42,7 @@ export function BadgeRenderer({ meta, onDeleteMeta, readonly }: BadgeRendererPro
                 return null
             }
 
-            function normalizeBadgeDescriptor(desc: Plugin.SNSAdaptor.BadgeDescriptor | string | null) {
+            function normalizeBadgeDescriptor(desc: Plugin.SiteAdaptor.BadgeDescriptor | string | null) {
                 if (!desc) return null
                 if (typeof desc === 'string')
                     desc = {

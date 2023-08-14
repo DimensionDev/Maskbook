@@ -9,6 +9,7 @@ import {
     type StorageObject,
     type UpdatableWallet,
     type Wallet,
+    CrossIsolationMessages,
 } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
@@ -48,7 +49,7 @@ export class BaseHostedProvider
         super(providerType)
     }
 
-    override async setup(context?: Plugin.SNSAdaptor.SNSAdaptorContext) {
+    override async setup(context?: Plugin.SiteAdaptor.SiteAdaptorContext) {
         await super.setup(context)
 
         this.walletStorage = PersistentStorages.Web3.createSubScope(
@@ -143,6 +144,7 @@ export class BaseHostedProvider
                     : x,
             ),
         )
+        CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)
     }
 
     override async renameWallet(address: string, name: string) {

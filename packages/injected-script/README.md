@@ -1,6 +1,6 @@
 # Injected scripts
 
-This package is intended to be run inside the SNS Network to provide some extra functionality.
+This package is intended to be run inside the website to provide some extra functionality.
 
 This package has 3 project:
 

@@ -10,13 +10,13 @@ import {
     useNativeTokenAddress,
 } from '@masknet/web3-hooks-base'
 import { DepositPaymaster } from '@masknet/web3-providers'
-import { CurrencyType, GasOptionType, ZERO, formatBalance, toFixed } from '@masknet/web3-shared-base'
+import { GasOptionType, ZERO, formatBalance, formatCurrency, scale10, toFixed } from '@masknet/web3-shared-base'
 import {
-    formatWeiToEther,
     type EIP1559GasConfig,
     type GasConfig,
     type ChainId,
     isNativeTokenAddress,
+    formatWeiToEther,
 } from '@masknet/web3-shared-evm'
 import { Typography, useTheme } from '@mui/material'
 import { Box } from '@mui/system'
@@ -57,11 +57,13 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
     const theme = useTheme()
     const { smartPayChainId } = useContainer(PopupContext)
     const [gasConfig = initConfig, setGasConfig] = useState<GasConfig | undefined>()
-    const [gasOptionType, setGasOptionType] = useState<GasOptionType | undefined>(GasOptionType.SLOW)
+    const [gasOptionType, setGasOptionType] = useState<GasOptionType | undefined>(
+        initConfig?.gasOptionType ?? GasOptionType.SLOW,
+    )
 
     const handleChange = useCallback(
         (config: GasConfig, type?: GasOptionType) => {
-            if (type) setGasOptionType(type)
+            setGasOptionType(type)
             setGasConfig(config)
             onChange?.(config)
         },
@@ -76,7 +78,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
         paymentToken,
     )
 
-    const { value: gasOptions } = useGasOptions()
+    const { data: gasOptions } = useGasOptions()
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: defaultChainId })
     const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
@@ -86,7 +88,10 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
     const { data: token } = useFungibleToken(
         NetworkPluginID.PLUGIN_EVM,
         paymentToken ? paymentToken : nativeTokenAddress,
+        undefined,
+        { chainId },
     )
+
     const { data: tokenPrice } = useFungibleTokenPrice(
         NetworkPluginID.PLUGIN_EVM,
         paymentToken ? paymentToken : nativeTokenAddress,
@@ -99,8 +104,9 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
             case GasOptionType.NORMAL:
                 return t('popups_wallet_gas_fee_settings_high')
             case GasOptionType.SLOW:
-            default:
                 return t('popups_wallet_gas_fee_settings_medium')
+            default:
+                return t('popups_wallet_gas_fee_settings_custom')
         }
     }, [gasOptionType])
 
@@ -125,15 +131,19 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
 
     // If there is no init configuration, set a default config
     useEffect(() => {
-        if (initConfig || !gasOptions || !onChange) return
+        if (!!initConfig || !gasOptions || !onChange) return
         const target = gasOptions[GasOptionType.SLOW]
         const result = isSupport1559
             ? {
+                  gasOptionType: GasOptionType.SLOW,
                   maxPriorityFeePerGas: target.suggestedMaxPriorityFeePerGas,
                   maxFeePerGas: target.suggestedMaxFeePerGas,
+                  gas: minimumGas,
               }
             : {
+                  gasOptionType: GasOptionType.SLOW,
                   gasPrice: target.suggestedMaxFeePerGas,
+                  gas: minimumGas,
               }
 
         setGasConfig((prev) => {
@@ -142,7 +152,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
         })
 
         onChange(result)
-    }, [onChange, initConfig, gasOptions, isSupport1559])
+    }, [onChange, initConfig, gasOptions, isSupport1559, minimumGas])
 
     return (
         <Box display="flex" alignItems="center">
@@ -156,11 +166,15 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
                 />
                 {' ≈ '}
                 <FormattedCurrency
-                    sign={CurrencyType.USD}
                     value={formatWeiToEther(totalGas).times(tokenPrice ?? 0)}
                     options={{
-                        onlyRemainTwoDecimal: true,
+                        onlyRemainTwoOrZeroDecimal: false,
+                        customDecimalConfig: {
+                            boundary: scale10(1, -4),
+                            decimalExp: 4,
+                        },
                     }}
+                    formatter={formatCurrency}
                 />
             </Typography>
             {!disable ? (

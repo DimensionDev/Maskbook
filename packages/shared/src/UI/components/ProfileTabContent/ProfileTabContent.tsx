@@ -5,12 +5,12 @@ import { TabContext } from '@mui/lab'
 import { Link, Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import {
-    useActivatedPluginsSNSAdaptor,
+    useActivatedPluginsSiteAdaptor,
     useIsMinimalMode,
     usePluginI18NField,
     getProfileTabContent,
     useAllPersonas,
-    useSNSAdaptorContext,
+    useSiteAdaptorContext,
     useLastRecognizedIdentity,
     useSocialIdentityByUserId,
 } from '@masknet/plugin-infra/content-script'
@@ -142,7 +142,7 @@ function Content(props: ProfileTabContentProps) {
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
-    const { openDashboard } = useSNSAdaptorContext()
+    const { openDashboard } = useSiteAdaptorContext()
 
     const {
         value: personaStatus,
@@ -153,7 +153,7 @@ function Content(props: ProfileTabContentProps) {
 
     const {
         currentVisitingSocialIdentity,
-        socialAccounts = [],
+        socialAccounts = EMPTY_LIST,
         currentSocialIdentity,
     } = ProfileTabContext.useContainer()
 
@@ -169,7 +169,7 @@ function Content(props: ProfileTabContentProps) {
         }
     }, [selectedSocialAccount?.address, selectedSocialAccount?.label])
 
-    const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
+    const activatedPlugins = useActivatedPluginsSiteAdaptor('any')
     const displayPlugins = getAvailablePlugins(activatedPlugins, (plugins) => {
         return plugins
             .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
@@ -193,14 +193,14 @@ function Content(props: ProfileTabContentProps) {
     const doesOwnerHaveNoAddress =
         isOwnerIdentity && personaStatus.proof?.findIndex((p) => p.platform === NextIDPlatform.Ethereum) === -1
 
-    // the owner persona and sns not verify on next ID
+    // the owner persona+site is not verified on next ID
     const myPersonaNotVerifiedYet = isOwnerIdentity && !personaStatus.verified
     const showNextID1 =
         isOnTwitter &&
         // enabled the plugin
         (isWeb3ProfileDisable ||
             myPersonaNotVerifiedYet ||
-            // the owner persona and sns verified on next ID but not verify the wallet
+            // the owner persona+site is verified on next ID but the wallet isn't
             doesOwnerHaveNoAddress ||
             // the visiting persona not have social address list
             (!isOwnerIdentity && !socialAccounts.length))

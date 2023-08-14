@@ -40,6 +40,7 @@ import {
 } from '../helpers.js'
 import {
     type Asset,
+    type Ownership,
     type Collection,
     type PaymentToken,
     type PriceStat,
@@ -54,7 +55,7 @@ import { NonFungibleMarketplace } from '../../NFTScan/helpers/utils.js'
 import { ChainResolverAPI, ExplorerResolverAPI } from '../../Web3/EVM/apis/ResolverAPI.js'
 import type { HubOptions_Base, NonFungibleTokenAPI, TrendingAPI } from '../../entry-types.js'
 import { historicalPriceState } from '../historicalPriceState.js'
-import { SIMPLE_HASH_HISTORICAL_PRICE_START_TIME } from '../constants.js'
+import { SIMPLE_HASH_HISTORICAL_PRICE_START_TIME, SPAM_SCORE } from '../constants.js'
 
 export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     private Looksrare = new LooksRareAPI()
@@ -76,7 +77,11 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         return collections[0]
     }
 
-    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
+    async getAsset(
+        address: string,
+        tokenId: string,
+        { chainId = ChainId.Mainnet, account }: HubOptions_Base<ChainId> = {},
+    ) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!chain || !address || !tokenId || !isValidChainId(chainId)) return
         const path = urlcat('/api/v0/nfts/:chain/:address/:tokenId', {
@@ -85,7 +90,23 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
             tokenId,
         })
         const response = await fetchFromSimpleHash<Asset>(path)
-        return createNonFungibleAsset(response)
+        const asset = createNonFungibleAsset(response)
+
+        if (asset?.schema === SchemaType.ERC1155 && account) {
+            const pathToQueryOwner = urlcat('/api/v0/nfts/contracts', {
+                chains: chain,
+                wallet_addresses: account,
+                contract_addresses: asset.address,
+            })
+
+            const ownershipResponse = await fetchFromSimpleHash<{ wallets: Ownership[] }>(pathToQueryOwner)
+
+            if (ownershipResponse.wallets?.[0]?.contracts?.[0].token_ids?.includes(asset.tokenId)) {
+                asset.owner = { address: account }
+            }
+        }
+
+        return asset
     }
 
     async getCollectionOverview(chainId: ChainId, id: string): Promise<NonFungibleCollectionOverview | undefined> {
@@ -285,7 +306,7 @@ export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, 
         const filteredCollections = response.collections
             // Might got bad data responded including id field and other fields empty
             .filter((x) => {
-                if (!x?.id || x.spam_score === 100) return false
+                if (!x?.id || x.spam_score === SPAM_SCORE) return false
                 return (
                     isValidChainId(resolveChainId(x.chain)) &&
                     x.top_contracts.length > 0 &&

@@ -1,6 +1,7 @@
 import { CustomEventId, decodeEvent } from '../shared/index.js'
 import { Coin98Provider, Coin98ProviderType } from './Coin98.js'
 import { CoinbaseProvider } from './Coinbase.js'
+import { OKXProvider } from './OKX.js'
 import { PhantomProvider } from './Phantom.js'
 import { SolflareProvider } from './Solflare.js'
 import { MetaMaskProvider } from './MetaMask.js'
@@ -17,12 +18,14 @@ export const injectedPhantomProvider = new PhantomProvider()
 export const injectedSolflareProvider = new SolflareProvider()
 export const injectedMetaMaskProvider = new MetaMaskProvider()
 export const injectedCoinbaseProvider = new CoinbaseProvider()
+export const injectedOKXProvider = new OKXProvider()
 export const injectedOperaProvider = new OperaProvider()
 export const injectedCloverProvider = new CloverProvider()
 
 // Please keep this list update to date
 const Providers = [
     injectedCoinbaseProvider,
+    injectedOKXProvider,
     injectedOperaProvider,
     injectedCloverProvider,
     injectedMetaMaskProvider,

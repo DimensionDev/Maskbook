@@ -1,14 +1,14 @@
 import { useEffect } from 'react'
 import { useCustomSnackbar } from '@masknet/theme'
 import { Button, Box, Typography } from '@mui/material'
-import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { createInjectHooksRenderer, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { MaskMessages } from '@masknet/shared-base'
 import { useMatchXS } from '@masknet/shared-base-ui'
 import { useAutoPasteFailedDialog } from './AutoPasteFailedDialog.js'
 import { useI18N } from '../../utils/index.js'
 
 const GlobalInjection = createInjectHooksRenderer(
-    useActivatedPluginsSNSAdaptor.visibility.useAnyMode,
+    useActivatedPluginsSiteAdaptor.visibility.useAnyMode,
     (x) => x.GlobalInjection,
 )
 

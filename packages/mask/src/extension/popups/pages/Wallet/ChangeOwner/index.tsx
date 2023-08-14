@@ -1,11 +1,12 @@
 import urlcat from 'urlcat'
-import { Contract, ExplorerResolver, Web3 } from '@masknet/web3-providers'
 import { useMemo, useState } from 'react'
+import { useAsync, useAsyncFn } from 'react-use'
+import { useNavigate } from 'react-router-dom'
+import type { AbiItem } from 'web3-utils'
+import { useContainer } from 'unstated-next'
+import { Contract, ExplorerResolver, Web3 } from '@masknet/web3-providers'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useAsync, useAsyncFn } from 'react-use'
-import { useContainer } from 'unstated-next'
 import { Box, Link, Popover, Typography, alpha } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { CopyButton } from '@masknet/shared'
@@ -22,7 +23,6 @@ import { useTitle } from '../../../hook/useTitle.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
 import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
 import { WalletContext } from '../hooks/useWalletContext.js'
-import type { AbiItem } from 'web3-utils'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -187,7 +187,6 @@ export default function ChangeOwner() {
     const { t } = useI18N()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
-    const location = useLocation()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const [manageAccount, setManageAccount] = useState<ManagerAccount>()
 
@@ -204,7 +203,7 @@ export default function ChangeOwner() {
     const walletManagers = useMemo(() => wallets.filter((x) => !x.owner), [wallets])
 
     const walletManager = useMemo(
-        () => wallets.find((x) => !x.owner && isSameAddress(wallet?.owner, x.address)),
+        () => walletManagers.find((x) => !x.owner && isSameAddress(wallet?.owner, x.address)),
         [walletManagers, wallet],
     )
     const personaManager = useMemo(
@@ -235,6 +234,7 @@ export default function ChangeOwner() {
             providerType: ProviderType.MaskWallet,
             owner: wallet?.owner,
             identifier: ECKeyIdentifier.from(wallet?.identifier).unwrapOr(undefined),
+            gasOptionType: gasConfig?.gasOptionType,
             overrides: gasConfig,
         })
 

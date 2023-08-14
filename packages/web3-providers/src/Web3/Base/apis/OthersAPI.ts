@@ -80,7 +80,7 @@ export class OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Tran
     formatTokenId(id?: string | undefined, size?: number | undefined): string {
         throw new Error('Method not implemented.')
     }
-    formatDomainName(domain?: string | undefined, size?: number | undefined): string {
+    formatDomainName(domain?: string | null | undefined, size?: number | undefined): string {
         throw new Error('Method not implemented.')
     }
     formatSchemaType(schema: SchemaType): string {

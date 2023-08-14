@@ -85,6 +85,9 @@ const useStyles = makeStyles()((theme) => ({
         backdropFilter: 'blur(16px)',
         borderRadius: theme.spacing(0, 0, 1.5, 1.5),
     },
+    input: {
+        fontSize: 12,
+    },
 }))
 
 export interface AddCollectiblesProps<T extends NetworkPluginID = NetworkPluginID>
@@ -177,7 +180,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
         queries: tokenIds.map((tokenId) => ({
             enabled: isValid,
             queryKey: ['nft-asset', pluginID, chainId, address, tokenId],
-            queryFn: () => hub.getNonFungibleAsset(address, tokenId, { chainId }),
+            queryFn: () => hub.getNonFungibleAsset(address, tokenId, { chainId, account }),
         })),
     })
     const loadingAssets = assetsQueries.every((x) => x.isLoading)
@@ -192,12 +195,12 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
         [handleSubmit],
     )
     const [selectedTokenIdsMap, setSelectedTokenIdsMap] = useState<Record<string, string[]>>({})
-    const selectedTokenIds = selectedTokenIdsMap[address] || EMPTY_LIST
+    const selectedTokenIds = selectedTokenIdsMap[formatEthereumAddress(address)] || EMPTY_LIST
 
     const toggleSelect = useCallback(
         (asset: Web3Helper.NonFungibleAssetAll) => {
             setSelectedTokenIdsMap((idsMap) => {
-                const ids = idsMap[address] ?? []
+                const ids = idsMap[formatEthereumAddress(address)] ?? []
                 const newIds = ids.includes(asset.tokenId)
                     ? ids.filter((x) => x !== asset.tokenId)
                     : [...ids, asset.tokenId]
@@ -238,6 +241,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                                             color={validationMsgForAddress ? theme.palette.maskColor.danger : undefined}
                                         />
                                     ) : null,
+                                    classes: { input: classes.input },
                                 }}
                             />
                             {validationMsgForAddress ? (
@@ -268,6 +272,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                                             color={errors.tokenIds ? theme.palette.maskColor.danger : undefined}
                                         />
                                     ) : null,
+                                    classes: { input: classes.input },
                                 }}
                             />
 
@@ -286,7 +291,9 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                 </Typography>
             ) : null}
             <div className={classes.main}>
-                {(isLoadingContract || loadingAssets) && isValid && !allFailed ? (
+                {!address || tokenIds.length === 0 ? null : (isLoadingContract || loadingAssets) &&
+                  isValid &&
+                  !allFailed ? (
                     <LoadingStatus flexGrow={1} />
                 ) : isError ? (
                     <ReloadStatus flexGrow={1} onRetry={refetch} />
@@ -310,8 +317,8 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                                         actionLabel={t.send()}
                                         disableAction
                                         onItemClick={isMine ? toggleSelect : undefined}
-                                        indicatorIcon={Icons.Checkbox}
                                         isSelected={selectedTokenIds.includes(asset.tokenId)}
+                                        showUnCheckedIndicator
                                     />
                                 )
                             })}

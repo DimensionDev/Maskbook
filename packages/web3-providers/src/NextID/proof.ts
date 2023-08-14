@@ -15,6 +15,7 @@ import {
     createBindingProofFromProfileQuery,
     EMPTY_LIST,
     getDomainSystem,
+    Sniffings,
 } from '@masknet/shared-base'
 import { env } from '@masknet/flags'
 import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
@@ -26,7 +27,7 @@ import type { NextIDBaseAPI } from '../entry-types.js'
 const BASE_URL =
     env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
 
-const relationServiceDomainQuery = `domain(domainSystem: $domainSystem, name: $domain) {
+const relationServiceDomainQuery = (depth?: number) => `domain(domainSystem: $domainSystem, name: $domain) {
     source
     system
     name
@@ -47,7 +48,7 @@ const relationServiceDomainQuery = `domain(domainSystem: $domainSystem, name: $d
         chain
         id
       }
-      neighborWithTraversal(depth: 5) {
+      neighborWithTraversal(depth: ${depth ?? 5}) {
         ... on ProofRecord {
           source
           from {
@@ -106,7 +107,7 @@ const relationServiceDomainQuery = `domain(domainSystem: $domainSystem, name: $d
     }
     }`
 
-const relationServiceIdentityQuery = `
+const relationServiceIdentityQuery = (depth?: number) => `
     identity(platform: $platform, identity: $identity) {
         platform
         identity
@@ -125,7 +126,7 @@ const relationServiceIdentityQuery = `
           address
           id
         }
-        neighborWithTraversal(depth: 5) {
+        neighborWithTraversal(depth: ${depth ?? 5}) {
           ... on ProofRecord {
             source
             from {
@@ -271,9 +272,13 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     }
 
     async queryExistedBindingByPersona(personaPublicKey: string) {
-        const { ids } = await this.fetchFromProofService<NextIDBindings>(
-            getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey),
-        )
+        const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
+        /**
+         * Because popup and background share memory, caching often causes queries to be updated late.
+         * Since popups don't have a lot of queries in them, the cache is cleared before each request
+         */
+        if (Sniffings.is_popup_page) await staleNextIDCached(url)
+        const { ids } = await this.fetchFromProofService<NextIDBindings>(url)
         // Will have only one item when query by personaPublicKey
         return first(ids)
     }
@@ -348,7 +353,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         }
     }
 
-    async queryProfilesByDomain(domain?: string) {
+    async queryProfilesByDomain(domain?: string, depth?: number) {
         const domainSystem = getDomainSystem(domain)
         if (domainSystem === 'unknown') return EMPTY_LIST
         const { data } = await fetchSquashedJSON<{
@@ -368,7 +373,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 variables: { domainSystem, domain: domain?.toLowerCase() },
                 query: `
                     query GET_PROFILES_QUERY($domainSystem:String, $domain: String) {
-                      ${relationServiceDomainQuery}
+                      ${relationServiceDomainQuery(depth)}
                     }
                 `,
             }),
@@ -379,7 +384,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return bindings.filter((x) => ![NextIDPlatform.NextID].includes(x.platform) && x.identity)
     }
 
-    async queryProfilesByAddress(address: string) {
+    async queryProfilesByAddress(address: string, depth?: number) {
         const { data } = await fetchSquashedJSON<{
             data: {
                 identity: {
@@ -395,7 +400,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 variables: { platform: NextIDPlatform.Ethereum, identity: address.toLowerCase() },
                 query: `
                     query GET_PROFILES_QUERY($platform: String, $identity: String) {
-                       ${relationServiceIdentityQuery}
+                       ${relationServiceIdentityQuery(depth)}
                       }
                 `,
             }),
@@ -407,7 +412,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         )
     }
 
-    async queryProfilesByPublicKey(publicKey: string) {
+    async queryProfilesByPublicKey(publicKey: string, depth?: number) {
         const { data } = await fetchJSON<{
             data: {
                 identity: {
@@ -423,7 +428,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 variables: { platform: NextIDPlatform.NextID, identity: publicKey },
                 query: `
                     query GET_PROFILES_QUERY($platform: String, $identity: String) {
-                       ${relationServiceIdentityQuery}
+                       ${relationServiceIdentityQuery(depth)}
                       }
                 `,
             }),
@@ -432,7 +437,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return bindings
     }
 
-    async queryProfilesByTwitterId(twitterId: string) {
+    async queryProfilesByTwitterId(twitterId: string, depth?: number) {
         const { data } = await fetchSquashedJSON<{
             data: {
                 identity: {
@@ -448,7 +453,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 variables: { platform: NextIDPlatform.Twitter, identity: twitterId.toLowerCase() },
                 query: `
                         query GET_PROFILES_BY_TWITTER_ID($platform: String, $identity: String) {
-                            ${relationServiceIdentityQuery}
+                            ${relationServiceIdentityQuery(depth)}
                         }
                 `,
             }),
@@ -457,7 +462,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return bindings.filter((x) => ![NextIDPlatform.NextID].includes(x.platform) && x.identity)
     }
 
-    async queryAllLens(twitterId: string): Promise<NextIDBaseAPI.LensAccount[]> {
+    async queryAllLens(twitterId: string, depth?: number): Promise<NextIDBaseAPI.LensAccount[]> {
         const lowerCaseId = twitterId.toLowerCase()
         const { data } = await fetchSquashedJSON<{
             data: {
@@ -475,7 +480,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 variables: { domainSystem: 'lens', domain: lowerCaseId },
                 query: `
                         query GET_LENS_PROFILES($domainSystem: String, $domain: String) {
-                            ${relationServiceDomainQuery}
+                            ${relationServiceDomainQuery(depth)}
                         }
                 `,
             }),

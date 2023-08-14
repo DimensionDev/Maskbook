@@ -22,14 +22,14 @@ registerPlugin<
     TransactionParameter
 >({
     ...base,
-    SNSAdaptor: {
-        load: () => import('./UI/SNSAdaptor/index.js'),
+    SiteAdaptor: {
+        load: () => import('./SiteAdaptor/index.js'),
         hotModuleReload: (hot) =>
-            import.meta.webpackHot?.accept('./UI/SNSAdaptor', () => hot(import('./UI/SNSAdaptor/index.js'))),
+            import.meta.webpackHot?.accept('./SiteAdaptor', () => hot(import('./SiteAdaptor/index.js'))),
     },
     Dashboard: {
-        load: () => import('./UI/Dashboard/index.js'),
+        load: () => import('./Dashboard/index.js'),
         hotModuleReload: (hot) =>
-            import.meta.webpackHot?.accept('./UI/Dashboard', () => hot(import('./UI/Dashboard/index.js'))),
+            import.meta.webpackHot?.accept('./Dashboard', () => hot(import('./Dashboard/index.js'))),
     },
 })

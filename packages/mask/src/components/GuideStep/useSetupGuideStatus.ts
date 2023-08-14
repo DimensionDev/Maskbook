@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
 import { currentSetupGuideStatus, type SetupGuideContext } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { activatedSocialNetworkUI } from '../../social-network/index.js'
+import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 
 export function useSetupGuideStatus() {
-    const context = useValueRef(currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier])
+    const context = useValueRef(currentSetupGuideStatus[activatedSiteAdaptorUI!.networkIdentifier])
     return useMemo<SetupGuideContext>(() => {
         try {
             return JSON.parse(context)

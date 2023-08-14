@@ -1,9 +1,9 @@
 import { useAsyncFn } from 'react-use'
 import { type ECKeyIdentifier, SignType } from '@masknet/shared-base'
-import { useSNSAdaptorContext } from '@masknet/plugin-infra/dom'
+import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
 
 export function usePersonaSign(message?: string, currentIdentifier?: ECKeyIdentifier) {
-    const { signWithPersona } = useSNSAdaptorContext()
+    const { signWithPersona } = useSiteAdaptorContext()
 
     return useAsyncFn(async () => {
         if (!message || !currentIdentifier) return

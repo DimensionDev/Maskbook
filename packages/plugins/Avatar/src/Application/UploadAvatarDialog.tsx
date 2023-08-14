@@ -9,7 +9,7 @@ import { Twitter } from '@masknet/web3-providers'
 import { usePersonaConnectStatus } from '@masknet/shared'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
-import { useSNSAdaptorContext } from '@masknet/plugin-infra/dom'
+import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../locales/i18n_generated.js'
 import { type AvatarInfo, useSave } from '../hooks/save/useSave.js'
 import { useAvatarManagement } from '../contexts/index.js'
@@ -63,7 +63,7 @@ export function UploadAvatarDialog() {
     const { image, account, token, pluginID } = selectedTokenInfo ?? {}
     const isBindAccount = proofs.some((x) => isSameAddress(x.identity, selectedTokenInfo?.account))
     const { pluginID: currentPluginID } = useNetworkContext(pluginID)
-    const { currentVisitingProfile } = useSNSAdaptorContext()
+    const { currentVisitingProfile } = useSiteAdaptorContext()
     const identifier = useSubscription(currentVisitingProfile)
     const [editor, setEditor] = useState<AvatarEditor | null>(null)
     const [scale, setScale] = useState(1)

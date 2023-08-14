@@ -10,7 +10,7 @@ import type { GeneratorServices, Services } from './types.js'
 // #endregion
 
 // #region Setup GeneratorServices
-import { decryptionWithSocialNetworkDecoding } from './crypto/decryption.js'
+import { decryptWithDecoding } from './crypto/decryption.js'
 assertEnvironment(Environment.ManifestBackground)
 
 const debugMode = process.env.NODE_ENV === 'development'
@@ -32,7 +32,7 @@ if (import.meta.webpackHot) {
     import.meta.webpackHot.accept(['./backup'], () => hmr.dispatchEvent(new Event('backup')))
     import.meta.webpackHot.accept(['./helper'], () => hmr.dispatchEvent(new Event('helper')))
     import.meta.webpackHot.accept(['./settings'], () => hmr.dispatchEvent(new Event('settings')))
-    import.meta.webpackHot.accept(['./site-adaptors'], () => hmr.dispatchEvent(new Event('socialNetwork')))
+    import.meta.webpackHot.accept(['./site-adaptors'], () => hmr.dispatchEvent(new Event('site-adaptors')))
     import.meta.webpackHot.accept(['./third-party-plugins'], () => hmr.dispatchEvent(new Event('thirdPartyPlugin')))
 }
 
@@ -67,12 +67,12 @@ function setup<K extends keyof Services>(key: K, implementation: () => Promise<S
 }
 {
     const GeneratorService: GeneratorServices = {
-        decryption: decryptionWithSocialNetworkDecoding,
+        decrypt: decryptWithDecoding,
     }
     import.meta.webpackHot?.accept(['./crypto/decryption'], async () => {
-        GeneratorService.decryption = (
+        GeneratorService.decrypt = (
             await import(/* webpackPreload: true */ './crypto/decryption.js')
-        ).decryptionWithSocialNetworkDecoding
+        ).decryptWithDecoding
     })
     const channel = message.events.GeneratorServices.bind(MessageTarget.Broadcast)
 

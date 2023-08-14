@@ -1,7 +1,7 @@
-import { PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
-import { useWallet } from '@masknet/web3-hooks-base'
 import { Suspense, lazy } from 'react'
 import { Route, Routes } from 'react-router-dom'
+import { PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
+import { useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { RestorableScrollContext } from '@masknet/shared'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
 import { EditNetwork } from './EditNetwork/index.js'
@@ -31,7 +31,6 @@ const ContractInteraction = lazy(() => import('./Interaction/index.js'))
 const Unlock = lazy(() => import('./Unlock/index.js'))
 const ResetWallet = lazy(() => import('./ResetWallet/index.js'))
 const SetPaymentPassword = lazy(() => import('./SetPaymentPassword/index.js'))
-const LegacyWalletRecovery = lazy(() => import('./LegacyWalletRecovery/index.js'))
 const ChangeOwner = lazy(() => import('./ChangeOwner/index.js'))
 const Receive = lazy(() => import('./Receive/index.js'))
 const ExportPrivateKey = lazy(() => import('./ExportPrivateKey/index.js'))
@@ -40,6 +39,7 @@ const r = relativeRouteOf(PopupRoutes.Wallet)
 
 export default function Wallet() {
     const wallet = useWallet()
+    const wallets = useWallets()
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
@@ -47,8 +47,12 @@ export default function Wallet() {
             <RestorableScrollContext.Provider>
                 <WalletContext.Provider>
                     <Routes>
-                        <Route path="*" element={wallet ? <WalletAssets /> : <WalletStartUp />} />
-                        <Route path={r(PopupRoutes.LegacyWalletRecovered)} element={<LegacyWalletRecovery />} />
+                        <Route
+                            path="*"
+                            element={
+                                wallet && wallets.filter((x) => !x.owner).length ? <WalletAssets /> : <WalletStartUp />
+                            }
+                        />
                         <Route path={r(PopupRoutes.ImportWallet)} element={<ImportWallet />} />
                         <Route path={r(PopupRoutes.AddDeriveWallet)} element={<AddDeriveWallet />} />
                         <Route path={r(PopupRoutes.WalletSettings)} element={<WalletSettings />} />

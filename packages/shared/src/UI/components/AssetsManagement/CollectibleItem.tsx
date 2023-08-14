@@ -118,8 +118,8 @@ export const CollectibleItem = memo(
             verifiedBy = EMPTY_LIST,
             onActionClick,
             onItemClick,
-            indicatorIcon,
             isSelected,
+            showUnCheckedIndicator,
             ...rest
         } = props
         const t = useSharedI18N()
@@ -161,8 +161,8 @@ export const CollectibleItem = memo(
                         asset={asset}
                         disableNetworkIcon={disableNetworkIcon}
                         onClick={handleClick}
-                        indicatorIcon={indicatorIcon}
                         isSelected={isSelected}
+                        showUnCheckedIndicator={showUnCheckedIndicator}
                     />
                     <div className={cx(classes.info, classes.ease)}>
                         {disableName ? null : (

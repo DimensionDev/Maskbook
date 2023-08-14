@@ -10,7 +10,7 @@ import {
     formatPersonaFingerprint,
 } from '@masknet/shared-base'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
-import type { SocialNetwork } from '../../api.js'
+import type { SiteAdaptor } from '../../api.js'
 import { usePersonaProofs } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
@@ -56,19 +56,19 @@ export interface PersonaCardProps {
 }
 
 export const PersonaCard = memo<PersonaCardProps>((props) => {
-    const { connectPersona, disconnectPersona, definedSocialNetworks } = PersonaContext.useContainer()
+    const { connectPersona, disconnectPersona, definedSocialNetworkAdaptors } = PersonaContext.useContainer()
     return (
         <PersonaCardUI
             {...props}
             onConnect={connectPersona}
             onDisconnect={disconnectPersona}
-            definedSocialNetworks={definedSocialNetworks}
+            definedSocialNetworkAdaptors={definedSocialNetworkAdaptors}
         />
     )
 })
 
 export interface PersonaCardUIProps extends PersonaCardProps {
-    definedSocialNetworks: SocialNetwork[]
+    definedSocialNetworkAdaptors: SiteAdaptor[]
     onConnect: (
         identifier: PersonaIdentifier,
         networkIdentifier: string,
@@ -80,7 +80,7 @@ export interface PersonaCardUIProps extends PersonaCardProps {
 }
 
 export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
-    const { nickname, active = false, definedSocialNetworks, identifier, profiles, publicKey } = props
+    const { nickname, active = false, definedSocialNetworkAdaptors, identifier, profiles, publicKey } = props
     const { onConnect, onDisconnect, onClick } = props
     const { classes, cx } = useStyles()
     const proofs = usePersonaProofs(publicKey)
@@ -97,7 +97,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                     </Typography>
                 </div>
                 <div className={classes.content}>
-                    {definedSocialNetworks.map(({ networkIdentifier }) => {
+                    {definedSocialNetworkAdaptors.map(({ networkIdentifier }) => {
                         const currentNetworkProfiles = profiles.filter(
                             (x) => x.identifier.network === networkIdentifier,
                         )

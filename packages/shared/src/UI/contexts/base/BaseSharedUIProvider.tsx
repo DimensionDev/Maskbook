@@ -18,16 +18,16 @@ const BaseUIContext = createContext<ContextOptions>({
 BaseUIContext.displayName = 'BaseUIContext'
 
 export function BaseSharedUIProvider({ children }: PropsWithChildren<{}>) {
-    const snsId = useValueRef(sharedUINetworkIdentifier)
+    const site = useValueRef(sharedUINetworkIdentifier)
     const overwrite = useValueRef(sharedUIComponentOverwrite)
 
     const contextValue = useMemo(() => {
         const value: ContextOptions = {
-            networkIdentifier: snsId,
+            networkIdentifier: site,
             componentOverwrite: overwrite,
         }
         return value
-    }, [snsId, overwrite])
+    }, [site, overwrite])
 
     return <BaseUIContext.Provider value={contextValue}>{children}</BaseUIContext.Provider>
 }

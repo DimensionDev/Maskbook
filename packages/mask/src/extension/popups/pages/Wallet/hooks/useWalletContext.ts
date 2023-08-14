@@ -1,9 +1,9 @@
-import { type Wallet } from '@masknet/shared-base'
-import { useWallets, useCurrencyType, useFiatCurrencyRate } from '@masknet/web3-hooks-base'
-import { isSameAddress } from '@masknet/web3-shared-base'
 import { useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
 import { useLocation } from 'react-router-dom'
+import { type Wallet } from '@masknet/shared-base'
+import { useWallets, useCurrencyType, useFiatCurrencyRate } from '@masknet/web3-hooks-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { createContainer } from 'unstated-next'
 import Services from '../../../../service.js'
 

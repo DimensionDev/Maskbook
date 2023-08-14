@@ -1,19 +1,19 @@
 import { makeStyles } from '@masknet/theme'
 import { Box, InputBase } from '@mui/material'
-import { activatedSocialNetworkUI } from '../../social-network/index.js'
+import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { useI18N } from '../../utils/index.js'
 import { EnhanceableSite } from '@masknet/shared-base'
 
 interface StyleProps {
-    snsId: string
+    site: EnhanceableSite
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
+const useStyles = makeStyles<StyleProps>()((_theme, { site }) => ({
     root: {
         flex: 1,
         fontSize: 13,
         background: '#3a3b3c',
-        width: snsId === EnhanceableSite.Minds ? '96%' : '100%',
+        width: site === EnhanceableSite.Minds ? '96%' : '100%',
         height: 34,
         borderRadius: 20,
         padding: '2px 1em',
@@ -37,7 +37,7 @@ export interface CommentBoxProps {
     inputProps?: Partial<PropsOf<typeof InputBase>>
 }
 export function CommentBox(props: CommentBoxProps) {
-    const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
+    const { classes } = useStyles({ site: activatedSiteAdaptorUI!.networkIdentifier })
     const { t } = useI18N()
     return (
         <Box sx={{ display: 'flex', width: '100%' }}>

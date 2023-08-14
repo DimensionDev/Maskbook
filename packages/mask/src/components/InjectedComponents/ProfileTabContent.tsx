@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useAsync, useUpdateEffect } from 'react-use'
+import { useUpdateEffect } from 'react-use'
 import { first } from 'lodash-es'
 import { TabContext } from '@mui/lab'
 import { Link, Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import {
-    useActivatedPluginsSNSAdaptor,
+    useActivatedPluginsSiteAdaptor,
     useIsMinimalMode,
     usePluginI18NField,
     getProfileTabContent,
@@ -38,8 +38,8 @@ import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme
 import { NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ScopedDomainsContainer, useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
-import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
-import { activatedSocialNetworkUI } from '../../social-network/index.js'
+import { isTwitter } from '../../site-adaptors/twitter.com/base.js'
+import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { useI18N } from '../../utils/index.js'
 import {
     useCurrentVisitingIdentity,
@@ -47,15 +47,16 @@ import {
     useSocialIdentity,
     useSocialIdentityByUserId,
 } from '../DataSource/useActivatedUI.js'
-import { isFacebook } from '../../social-network-adaptor/facebook.com/base.js'
+import { isFacebook } from '../../site-adaptors/facebook.com/base.js'
 import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
 import { SearchResultInspector } from './SearchResultInspector.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 import Services from '../../extension/service.js'
+import { useQuery } from '@tanstack/react-query'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        width: isFacebook(activatedSocialNetworkUI) ? 876 : 'auto',
+        width: isFacebook(activatedSiteAdaptorUI!) ? 876 : 'auto',
     },
     container: {
         background:
@@ -156,15 +157,15 @@ function Content(props: ProfileTabContentProps) {
     } = useCurrentPersonaConnectStatus(allPersonas, currentIdentifier, Services.Helper.openDashboard, lastRecognized)
 
     const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
-    const { value: currentSocialIdentity } = useSocialIdentity(currentVisitingSocialIdentity)
+    const { data: currentSocialIdentity } = useSocialIdentity(currentVisitingSocialIdentity)
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
     const isOwnerIdentity = currentVisitingSocialIdentity?.isOwner
 
     const {
-        value: socialAccounts = EMPTY_LIST,
-        loading: loadingSocialAccounts,
+        data: socialAccounts = EMPTY_LIST,
+        isLoading: loadingSocialAccounts,
         error: loadSocialAccounts,
-        retry: retrySocialAccounts,
+        refetch: retrySocialAccounts,
     } = useSocialAccountsBySettings(currentSocialIdentity, undefined, addressSorter)
     const [selectedAddress = first(socialAccounts)?.address, setSelectedAddress] = useState<string>()
     const selectedSocialAccount = socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))
@@ -181,7 +182,7 @@ function Content(props: ProfileTabContentProps) {
         })
     }, [retrySocialAccounts])
 
-    const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
+    const activatedPlugins = useActivatedPluginsSiteAdaptor('any')
     const displayPlugins = getAvailablePlugins(activatedPlugins, (plugins) => {
         return plugins
             .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
@@ -202,18 +203,18 @@ function Content(props: ProfileTabContentProps) {
 
     const isWeb3ProfileDisable = useIsMinimalMode(PluginID.Web3Profile)
 
-    const isOnTwitter = isTwitter(activatedSocialNetworkUI)
+    const isOnTwitter = isTwitter(activatedSiteAdaptorUI!)
     const doesOwnerHaveNoAddress =
         isOwnerIdentity && personaStatus.proof?.findIndex((p) => p.platform === NextIDPlatform.Ethereum) === -1
 
-    // the owner persona and sns not verify on next ID
+    // the owner persona and site not verify on next ID
     const myPersonaNotVerifiedYet = isOwnerIdentity && !personaStatus.verified
     const showNextID =
         isOnTwitter &&
         // enabled the plugin
         (isWeb3ProfileDisable ||
             myPersonaNotVerifiedYet ||
-            // the owner persona and sns verified on next ID but not verify the wallet
+            // the owner persona and site verified on next ID but not verify the wallet
             doesOwnerHaveNoAddress ||
             // the visiting persona not have social address list
             (!isOwnerIdentity && !socialAccounts.length))
@@ -292,12 +293,12 @@ function Content(props: ProfileTabContentProps) {
     const [currentTrendingIndex, setCurrentTrendingIndex] = useState(0)
     const trendingResult = collectionList?.[currentTrendingIndex]
 
-    const { value: identity } = useSocialIdentityByUserId(currentVisitingUserId)
+    const { data: identity } = useSocialIdentityByUserId(currentVisitingUserId)
 
-    const { value: nextIdBindings = EMPTY_LIST } = useAsync(async () => {
+    const { data: nextIdBindings = EMPTY_LIST } = useQuery(['profiles', 'by-twitter-id', currentVisitingUserId], () => {
         if (!currentVisitingUserId) return EMPTY_LIST
         return NextIDProof.queryProfilesByTwitterId(currentVisitingUserId)
-    }, [currentVisitingUserId])
+    })
 
     if (hidden) return null
 
@@ -335,7 +336,7 @@ function Content(props: ProfileTabContentProps) {
         )
     }
 
-    if (!currentVisitingUserId || loadingSocialAccounts || loadingPersonaStatus)
+    if (!currentVisitingUserId || (loadingSocialAccounts && !socialAccounts.length) || loadingPersonaStatus)
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
@@ -409,16 +410,11 @@ function Content(props: ProfileTabContentProps) {
 
     return (
         <div className={classes.root}>
-            {tabs.length > 0 && !showNextID && (
+            {tabs.length > 0 && !showNextID ? (
                 <div className={classes.container}>
                     <div className={classes.title}>
                         <div className={classes.walletItem}>
-                            <Button
-                                id="wallets"
-                                variant="text"
-                                size="small"
-                                ref={buttonRef}
-                                className={classes.walletButton}>
+                            <Button variant="text" size="small" ref={buttonRef} className={classes.walletButton}>
                                 <AddressItem
                                     isMenu
                                     onClick={(event) => {
@@ -507,7 +503,7 @@ function Content(props: ProfileTabContentProps) {
                         </TabContext>
                     </div>
                 </div>
-            )}
+            ) : null}
             <div className={classes.content}>{contentComponent}</div>
         </div>
     )

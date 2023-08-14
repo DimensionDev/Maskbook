@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { createInjectHooksRenderer, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { useSocialAccountsAll } from '@masknet/web3-hooks-base'
 import type { Plugin } from '@masknet/plugin-infra'
 import { EMPTY_LIST } from '@masknet/shared-base'
@@ -12,18 +12,18 @@ const useStyles = makeStyles()(() => ({
 
 interface AvatarProps extends withClasses<'root'> {
     userId: string
-    sourceType?: Plugin.SNSAdaptor.AvatarRealmSourceType
+    sourceType?: Plugin.SiteAdaptor.AvatarRealmSourceType
 }
 
 export function Avatar(props: AvatarProps) {
     const { userId, sourceType } = props
     const { classes } = useStyles(undefined, { props })
 
-    const { value: identity } = useSocialIdentityByUserId(userId)
-    const { value: socialAccounts = EMPTY_LIST, loading: loadingSocialAccounts } = useSocialAccountsAll(identity)
+    const { data: identity } = useSocialIdentityByUserId(userId)
+    const { data: socialAccounts = EMPTY_LIST, isLoading: loadingSocialAccounts } = useSocialAccountsAll(identity)
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
-            useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
+            useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
             (plugin) => {
                 const shouldDisplay =
                     plugin.AvatarRealm?.Utils?.shouldDisplay?.(identity, socialAccounts, sourceType) ?? true

@@ -4,7 +4,7 @@ import { Box, Skeleton } from '@mui/material'
 import { memo } from 'react'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { makeStyles } from '@masknet/theme'
-import { useNetworkContext } from '@masknet/web3-hooks-base'
+import { useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
 import { range } from 'lodash-es'
 
 export interface CollectionListProps {
@@ -12,7 +12,7 @@ export interface CollectionListProps {
     tokens: Web3Helper.NonFungibleAssetAll[]
     account?: string
     selected?: Web3Helper.NonFungibleAssetAll
-    onItemClick: (item: Web3Helper.NonFungibleAssetAll) => void
+    onItemClick: (item?: Web3Helper.NonFungibleAssetAll) => void
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -27,6 +27,9 @@ const useStyles = makeStyles()((theme) => ({
         height: 86,
         maxHeight: 86,
     },
+    disabled: {
+        opacity: 0.5,
+    },
 }))
 
 export const CollectionList = memo<CollectionListProps>(function CollectionList({
@@ -38,12 +41,15 @@ export const CollectionList = memo<CollectionListProps>(function CollectionList(
 }) {
     const { t } = useI18N()
     const { pluginID } = useNetworkContext()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
+    const wallet = useWallet()
 
     if ((!loading && !tokens.length) || !account) {
         return (
-            <Box>
-                <EmptyStatus flex={1}>{t('no_NFTs_found')}</EmptyStatus>
+            <Box style={{ height: 358 }}>
+                <EmptyStatus sx={{ height: '100%' }} flex={1}>
+                    {t('no_NFTs_found')}
+                </EmptyStatus>
             </Box>
         )
     }
@@ -63,17 +69,24 @@ export const CollectionList = memo<CollectionListProps>(function CollectionList(
     return (
         <Box className={classes.container}>
             {tokens.length
-                ? tokens.map((x, index) => (
-                      <CollectibleCard
-                          className={classes.item}
-                          asset={x}
-                          key={index}
-                          disableNetworkIcon
-                          onClick={() => onItemClick(x)}
-                          isSelected={isSameNFT(pluginID, x, selected)}
-                          useRadio
-                      />
-                  ))
+                ? tokens.map((x, index) => {
+                      const isSelected = isSameNFT(pluginID, x, selected)
+                      const disabled = (selected && !isSelected) || wallet?.owner
+                      return (
+                          <CollectibleCard
+                              className={cx(classes.item, disabled ? classes.disabled : undefined)}
+                              asset={x}
+                              key={index}
+                              disableNetworkIcon
+                              onClick={() => {
+                                  if (disabled) return
+                                  onItemClick(!selected ? x : undefined)
+                              }}
+                              isSelected={isSameNFT(pluginID, x, selected)}
+                              useRadio
+                          />
+                      )
+                  })
                 : null}
         </Box>
     )

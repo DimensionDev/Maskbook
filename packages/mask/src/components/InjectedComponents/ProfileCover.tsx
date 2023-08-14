@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { PluginID } from '@masknet/shared-base'
-import { useActivatedPluginsSNSAdaptor, createInjectHooksRenderer } from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginsSiteAdaptor, createInjectHooksRenderer } from '@masknet/plugin-infra/content-script'
 import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI.js'
 
 export interface ProfileCoverProps extends withClasses<'root'> {}
@@ -20,7 +20,7 @@ export function ProfileCover(props: ProfileCoverProps) {
 
     // TODO: Multi-plugin rendering support
     const component = useMemo(() => {
-        const Component = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
+        const Component = createInjectHooksRenderer(useActivatedPluginsSiteAdaptor.visibility.useAnyMode, (x) => {
             const cover = x.ProfileCover?.find((x) => x.ID === `${PluginID.Debugger}_cover`)
             return cover?.UI?.Cover
         })

@@ -1,5 +1,5 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
-
+import urlcat from 'urlcat'
 import { memo, useMemo } from 'react'
 import { NavLink, type LinkProps } from 'react-router-dom'
 import { BottomNavigation, BottomNavigationAction, Box, type BoxProps } from '@mui/material'
@@ -9,7 +9,6 @@ import { PopupRoutes } from '@masknet/shared-base'
 import { useMessages, useWallet } from '@masknet/web3-hooks-base'
 import { useHasPassword } from '../../hook/useHasPassword.js'
 import { useWalletLockStatus } from '../../pages/Wallet/hooks/useWalletLockStatus.js'
-import urlcat from 'urlcat'
 
 const useStyle = makeStyles()((theme) => ({
     navigation: {
@@ -53,18 +52,18 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
 
     const messages = useMessages()
 
-    const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
+    const { isLocked, loading: lockStatusLoading } = useWalletLockStatus()
 
-    const { hasPassword, loading: getHasPasswordLoading } = useHasPassword()
+    const { hasPassword, loading: hasPasswordLoading } = useHasPassword()
 
-    const walletPageLoading = getLockStatusLoading || getHasPasswordLoading
+    const walletPageLoading = lockStatusLoading || hasPasswordLoading
 
     const walletLink = useMemo(() => {
         if (walletPageLoading) return '#'
         if (!wallet) return PopupRoutes.Wallet
+        if (!hasPassword) return PopupRoutes.SetPaymentPassword
         if (isLocked)
             return urlcat(PopupRoutes.Unlock, { from: messages.length ? PopupRoutes.ContractInteraction : undefined })
-        if (!hasPassword) return PopupRoutes.SetPaymentPassword
         if (messages.length) return PopupRoutes.ContractInteraction
         return PopupRoutes.Wallet
     }, [wallet, walletPageLoading, isLocked, hasPassword, messages])

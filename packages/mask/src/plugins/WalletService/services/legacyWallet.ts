@@ -3,7 +3,7 @@ import * as wallet_ts from /* webpackDefer: true */ 'wallet.ts'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
 import { fromHex, toHex, type LegacyWalletRecord } from '@masknet/shared-base'
-import { isSameAddress, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
+import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import { createTransaction } from '../../../../background/database/utils/openDB.js'
 import { createWalletDBAccess } from '../database/Wallet.db.js'
 import { LegacyWalletRecordOutDB } from './helpers.js'
@@ -17,11 +17,6 @@ function sortWallet(a: LegacyWalletRecord, b: LegacyWalletRecord) {
 }
 
 export async function getLegacyWallets() {
-    const wallets = await getAllWalletRecords()
-    return wallets.filter((x) => x._private_key_ || x.mnemonic.length)
-}
-
-export async function getLegacyWalletRecords() {
     const wallets = await getAllWalletRecords()
     return wallets.filter((x) => x._private_key_ || x.mnemonic.length)
 }
@@ -50,20 +45,6 @@ async function makePrivateKey(record: LegacyWalletRecord) {
         ? await recoverWalletFromPrivateKey(record._private_key_)
         : await recoverWalletFromMnemonicWords(record.mnemonic, record.passphrase, record.path)
     return `0x${toHex(privateKey)}`
-}
-
-export async function freezeLegacyWallet(address: string) {
-    const walletStore = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet').objectStore('Wallet')
-    for await (const cursor of walletStore) {
-        const wallet = cursor.value
-        if (isSameAddress(wallet.address, address)) {
-            await cursor.update({
-                ...wallet,
-                updatedAt: new Date(9999, 1, 1),
-            })
-            break
-        }
-    }
 }
 
 async function recoverWalletFromMnemonicWords(

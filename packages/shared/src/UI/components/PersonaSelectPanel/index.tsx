@@ -18,7 +18,7 @@ import { ApplicationBoardModal, LeavePageConfirmModal, useSharedI18N } from '../
 import { ErrorPanel } from './ErrorPanel.js'
 import type { PersonaNextIDMixture } from './PersonaItemUI.js'
 import { PersonaItemUI } from './PersonaItemUI.js'
-import { useLastRecognizedIdentity, useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useLastRecognizedIdentity, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useConnectedPersonas } from '../../../hooks/useConnectedPersonas.js'
 import { useCurrentPersona } from '../../../hooks/useCurrentPersona.js'
 import { useNextIDVerify } from '../../../hooks/useNextIDVerify.js'
@@ -64,7 +64,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     const [, handleVerifyNextID] = useNextIDVerify()
     const currentProfileIdentify = useLastRecognizedIdentity()
     const { value: personas = EMPTY_LIST, loading, error, retry } = useConnectedPersonas()
-    const { openDashboard, attachProfile, setCurrentPersonaIdentifier } = useSNSAdaptorContext()
+    const { openDashboard, attachProfile, setCurrentPersonaIdentifier } = useSiteAdaptorContext()
 
     useEffect(() => {
         if (!currentPersonaIdentifier) {
@@ -109,21 +109,21 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
 
         if (!currentProfileIdentify || !selectedPersona) return null
 
-        // Selected Persona not link current SNS
+        // Selected persona does not link the current site
         if (!selectedPersona.persona.linkedProfiles.find((x) => isSameProfile(x, currentProfileIdentify.identifier))) {
             isConnected = false
         }
 
         if (!isSamePersona(selectedPersona.persona, currentPersonaIdentifier)) isConnected = false
 
-        const verifiedSns = selectedPersona.proof.find(
+        const verifiedAtSite = selectedPersona.proof.find(
             (x) =>
                 isSameProfile(
                     resolveNextIDIdentityToProfile(x.identity, x.platform),
                     currentProfileIdentify.identifier,
                 ) && x.is_valid,
         )
-        if (!verifiedSns) {
+        if (!verifiedAtSite) {
             isVerified = false
         }
 

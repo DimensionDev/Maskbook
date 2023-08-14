@@ -84,7 +84,13 @@ export const SelectNetworkSidebar = memo(function SelectNetworkSidebar({
                     className={classes.networkButton}
                     disableRipple
                     onClick={() => onChainChange?.(x.chainId)}>
-                    <NetworkIcon pluginID={pluginID} chainId={x.chainId} name={x.name} size={24} />
+                    <NetworkIcon
+                        pluginID={pluginID}
+                        chainId={x.chainId}
+                        name={x.name}
+                        size={24}
+                        preferName={x.isCustomized}
+                    />
                     {chainId === x.chainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
                 </Button>
             ))}

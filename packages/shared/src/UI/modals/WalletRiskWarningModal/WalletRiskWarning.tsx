@@ -104,6 +104,7 @@ export function WalletRiskWarning({ account, open, pluginID, onClose }: WalletRi
                     variant="body2"
                     children={
                         <Trans
+                            ns="shared"
                             i18nKey="wallet_risk_warning_content"
                             components={{
                                 br: <br />,

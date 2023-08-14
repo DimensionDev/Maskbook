@@ -1,12 +1,6 @@
-import { useAsyncRetry } from 'react-use'
-import {
-    EMPTY_LIST,
-    NetworkPluginID,
-    type SocialAddress,
-    type SocialAddressType,
-    type SocialIdentity,
-} from '@masknet/shared-base'
+import { NetworkPluginID, type SocialAddress, type SocialAddressType, type SocialIdentity } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { useQuery } from '@tanstack/react-query'
 import { useWeb3State } from './useWeb3State.js'
 
 type AddressList = Array<SocialAddress<Web3Helper.ChainIdAll>>
@@ -23,16 +17,19 @@ export function useSocialAddressesAll(
     const { IdentityService: EVM_IdentityService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { IdentityService: SolanaIdentityService } = useWeb3State(NetworkPluginID.PLUGIN_SOLANA)
 
-    return useAsyncRetry<Array<SocialAddress<Web3Helper.ChainIdAll>>>(async () => {
-        const userId = identity?.identifier?.userId
-        if (!userId || userId === '$unknown') return EMPTY_LIST
+    const userId = identity?.identifier?.userId
 
-        const allSettled = await Promise.allSettled<AddressList>(
-            [EVM_IdentityService, SolanaIdentityService].map((x) => x?.lookup(identity) ?? []),
-        )
+    return useQuery({
+        enabled: !!identity && userId !== '$unknown',
+        queryKey: ['all-social-addresses', userId, identity, includes],
+        queryFn: async () => {
+            const allSettled = await Promise.allSettled<AddressList>(
+                [EVM_IdentityService, SolanaIdentityService].map((x) => x?.lookup(identity!) ?? []),
+            )
 
-        const listOfAddress = allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
-        const sorted = sorter && listOfAddress.length ? listOfAddress.sort(sorter) : listOfAddress
-        return includes?.length ? sorted.filter((x) => includes.includes(x.type)) : sorted
-    }, [identity, sorter, includes?.join(','), EVM_IdentityService?.lookup, SolanaIdentityService?.lookup])
+            const listOfAddress = allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
+            const sorted = sorter && listOfAddress.length ? listOfAddress.sort(sorter) : listOfAddress
+            return includes?.length ? sorted.filter((x) => includes.includes(x.type)) : sorted
+        },
+    })
 }

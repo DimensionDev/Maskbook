@@ -1,4 +1,4 @@
-import { appendEncryptionTarget, type SocialNetworkEnum, type SupportedPayloadVersions } from '@masknet/encryption'
+import { appendEncryptionTarget, type EncryptPayloadNetwork, type SupportedPayloadVersions } from '@masknet/encryption'
 import type { PostIVIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { deriveAESByECDH } from '../../database/persona/helper.js'
 import { updatePostDB, queryPostDB } from '../../database/post/index.js'
@@ -14,7 +14,7 @@ export async function appendShareTarget(
     post: PostIVIdentifier,
     target: EncryptTargetE2EFromProfileIdentifier['target'],
     whoAmI: ProfileIdentifier,
-    network: SocialNetworkEnum,
+    network: EncryptPayloadNetwork,
 ): Promise<void> {
     if (version === -39 || version === -40) throw new TypeError('invalid version')
     const key = await getPostKeyCache(post)

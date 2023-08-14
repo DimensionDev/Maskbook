@@ -35,6 +35,7 @@ export enum GasOptionType {
     FAST = 'fast',
     NORMAL = 'normal',
     SLOW = 'slow',
+    CUSTOM = 'custom',
 }
 
 export enum TokenType {
@@ -127,7 +128,7 @@ export enum TransactionStatusType {
     FAILED = 3,
 }
 
-export enum TransactionStateType {
+export enum TransactionReceiptStatusType {
     FAILED = 0,
     SUCCEED = 1,
     NOT_DEPEND = 2,
@@ -1008,7 +1009,10 @@ export interface TokenState<ChainId, SchemaType> extends Startable {
     /** Remove a token */
     removeToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
     /** Unblock a token */
-    trustToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
+    trustToken?: (
+        address: string,
+        token: Token<ChainId, SchemaType> | NonFungibleToken<ChainId, SchemaType>,
+    ) => Promise<void>
     /** Block a token */
     blockToken?: (
         address: string,

@@ -27,7 +27,7 @@ export class BaseContractWalletProvider
         super(providerType)
     }
 
-    override async setup(context?: Plugin.SNSAdaptor.SNSAdaptorContext) {
+    override async setup(context?: Plugin.SiteAdaptor.SiteAdaptorContext) {
         await super.setup(context)
 
         this.ownerStorage = InMemoryStorages.Web3.createSubScope(

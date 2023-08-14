@@ -20,30 +20,6 @@ import { ZERO_ADDRESS } from './primitives.js'
 
 const PLUGIN_ID = NetworkPluginID.PLUGIN_EVM
 
-export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>> = CHAINS.map((x) => ({
-    ...x,
-    ID: `${x.chainId}_${x.name}`,
-    coinMarketCapChainId: '',
-    coinGeckoChainId: '',
-    coinGeckoPlatformId: '',
-    type: (x.type as NetworkType | undefined) ?? NetworkType.Ethereum,
-    color: x.color ?? 'rgb(24, 163, 138)',
-    nativeCurrency: {
-        id: getTokenConstant(x.chainId, 'NATIVE_TOKEN_ADDRESS', ZERO_ADDRESS)!,
-        address: getTokenConstant(x.chainId, 'NATIVE_TOKEN_ADDRESS', ZERO_ADDRESS)!,
-        type: TokenType.Fungible,
-        schema: SchemaType.Native,
-        ...x.nativeCurrency,
-    },
-    // not accessible
-    rpcUrl: '',
-    iconUrl: x.nativeCurrency.logoURL,
-    explorerUrl: {
-        url: x.explorers?.[0]?.url ?? x.infoURL,
-    },
-    isCustomized: false,
-}))
-
 export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>> = [
     {
         ID: `${PLUGIN_ID}_ethereum`,
@@ -282,6 +258,33 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
     },
 ]
 
+export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>> = CHAINS.map((x) => {
+    const network = NETWORK_DESCRIPTORS.find((y) => y.chainId === x.chainId)
+    return {
+        ...x,
+        ID: `${x.chainId}_${x.name}`,
+        coinMarketCapChainId: '',
+        coinGeckoChainId: '',
+        coinGeckoPlatformId: '',
+        type: (x.type as NetworkType | undefined) || NetworkType.Ethereum,
+        color: network?.iconColor || x.color || 'rgb(138, 138, 138)',
+        nativeCurrency: {
+            id: getTokenConstant(x.chainId, 'NATIVE_TOKEN_ADDRESS', ZERO_ADDRESS)!,
+            address: getTokenConstant(x.chainId, 'NATIVE_TOKEN_ADDRESS', ZERO_ADDRESS)!,
+            type: TokenType.Fungible,
+            schema: SchemaType.Native,
+            ...x.nativeCurrency,
+        },
+        // not accessible
+        rpcUrl: '',
+        iconUrl: network?.icon || x.nativeCurrency.logoURL,
+        explorerUrl: {
+            url: x.explorers?.[0]?.url || x.infoURL,
+        },
+        isCustomized: false,
+    }
+})
+
 export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderType>> = [
     {
         ID: `${PLUGIN_ID}_maskwallet`,
@@ -388,11 +391,26 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         enableRequirements: {
             supportedChainIds: [ChainId.Mainnet, ChainId.Arbitrum, ChainId.Avalanche, ChainId.Optimism, ChainId.Matic],
             supportedEnhanceableSites: EnhanceableSiteList,
-            supportedExtensionSites: ExtensionSiteList,
+            supportedExtensionSites: [],
         },
         homeLink: 'https://www.coinbase.com/wallet',
         shortenLink: 'coinbase.com',
         downloadLink: 'https://www.coinbase.com/wallet/downloads',
+    },
+    {
+        ID: `${PLUGIN_ID}_okx`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.OKX,
+        name: 'OKX Wallet',
+        icon: new URL('../assets/okx.png', import.meta.url).href,
+        enableRequirements: {
+            supportedChainIds: [ChainId.Mainnet, ChainId.Arbitrum, ChainId.Avalanche, ChainId.Optimism, ChainId.Matic],
+            supportedEnhanceableSites: EnhanceableSiteList,
+            supportedExtensionSites: [],
+        },
+        homeLink: 'https://www.okx.com/web3',
+        shortenLink: 'okx.com',
+        downloadLink: 'https://www.okx.com/web3',
     },
     {
         ID: `${PLUGIN_ID}_opera`,

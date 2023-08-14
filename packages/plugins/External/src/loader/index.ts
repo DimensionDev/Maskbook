@@ -1,11 +1,11 @@
 import { useAsyncRetry } from 'react-use'
 import type { Manifest } from '../types.js'
 import { fetchBlob } from '@masknet/web3-providers/helpers'
-import { useSNSAdaptorContext } from '@masknet/plugin-infra/dom'
+import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
 
 // TODO: support suspense
 export function useExternalPluginManifest(url: string) {
-    const { fetchManifest } = useSNSAdaptorContext()
+    const { fetchManifest } = useSiteAdaptorContext()
     return useAsyncRetry(async () => fetchManifest?.(url), [url, fetchManifest])
 }
 

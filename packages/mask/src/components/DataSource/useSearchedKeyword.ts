@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
-import { activatedSocialNetworkUI } from '../../social-network/index.js'
+import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 
 export function useSearchedKeyword() {
     const [keyword, setKeyword] = useState('')
 
     useEffect(() => {
         const onLocationChange = () => {
-            if (!activatedSocialNetworkUI?.collecting?.getSearchedKeyword) return
-            const kw = activatedSocialNetworkUI.collecting.getSearchedKeyword()
+            if (!activatedSiteAdaptorUI?.collecting?.getSearchedKeyword) return
+            const kw = activatedSiteAdaptorUI!.collecting.getSearchedKeyword()
             setKeyword(kw)
         }
         onLocationChange()

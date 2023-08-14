@@ -53,11 +53,13 @@ export class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.Cha
         }
     }
 
-    async getCoinInfoByAddress(address: string): Promise<TrendingAPI.CoinInfo | undefined> {
+    async getCoinInfoByAddress(address: string, chainId?: number): Promise<TrendingAPI.CoinInfo | undefined> {
+        const chainIds = chainId ? [chainId] : COINGECKO_CHAIN_ID_LIST
         return attemptUntil(
-            COINGECKO_CHAIN_ID_LIST.map((chainId) => async () => {
+            chainIds.map((chainId) => async () => {
                 try {
-                    const { PLATFORM_ID = '' } = getCoinGeckoConstants(chainId)
+                    const { PLATFORM_ID } = getCoinGeckoConstants(chainId)
+                    if (!PLATFORM_ID) return
                     const requestPath = `${COINGECKO_URL_BASE}/coins/${PLATFORM_ID}/contract/${address.toLowerCase()}`
                     const response = await fetchJSON<{ name: string; id: string; error: string }>(requestPath)
                     return response.error ? undefined : { name: response.name, id: response.id, chainId }

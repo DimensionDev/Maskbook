@@ -1,18 +1,29 @@
 import { Icons } from '@masknet/icons'
-import { ImageIcon } from '@masknet/shared'
+import { ImageIcon, ProgressiveText } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { useEverSeen } from '@masknet/shared-base-ui'
+import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { useNativeToken, useNetworkDescriptors, useReverseAddress } from '@masknet/web3-hooks-base'
+import { ChainbaseHistory } from '@masknet/web3-providers'
+import { chainbase } from '@masknet/web3-providers/helpers'
 import { DebankTransactionDirection } from '@masknet/web3-providers/types'
-import { isLessThan, type RecentTransaction, type Transaction } from '@masknet/web3-shared-base'
 import {
-    SchemaType,
+    TransactionStatusType,
+    isLessThan,
+    toFixed,
+    trimZero,
+    type RecentTransaction,
+    type Transaction,
+} from '@masknet/web3-shared-base'
+import {
     formatDomainName,
     formatEthereumAddress,
     type ChainId,
     type Transaction as EvmTransaction,
+    type SchemaType,
 } from '@masknet/web3-shared-evm'
-import { Box, ListItem, ListItemText, Typography, type ListItemProps, alpha, Skeleton } from '@mui/material'
+import { Box, ListItem, ListItemText, Skeleton, Typography, alpha, type ListItemProps } from '@mui/material'
+import { useQuery } from '@tanstack/react-query'
 import { memo, useMemo } from 'react'
 import { formatTokenBalance, useI18N } from '../../../../../../utils/index.js'
 
@@ -30,7 +41,7 @@ const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' },
     const boxShadowMap: Record<string, string> = {
         send: alpha(theme.palette.maskColor.warn, 0.2),
         receive: alpha(theme.palette.maskColor.success, 0.2),
-        default: alpha(theme.palette.maskColor.success, 0.2),
+        default: alpha(theme.palette.maskColor.primary, 0.2),
     }
     const iconColor = colorMap[cateType] || colorMap.default
     const iconBoxShadow = `0px 6px 12px 0px ${boxShadowMap[cateType] || boxShadowMap.default}`
@@ -58,7 +69,7 @@ const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' },
             alignItems: 'center',
             justifyContent: 'center',
             border: '1px solid',
-            borderColor: iconColor,
+            borderColor: alpha(iconColor, 0.5),
             boxShadow: iconBoxShadow,
             backgroundColor: iconBackgroundColor,
             backdropFilter: 'blur(8px)',
@@ -73,6 +84,23 @@ const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' },
         },
         txName: {
             textTransform: 'capitalize',
+            whiteSpace: 'nowrap',
+            fontWeight: 700,
+        },
+        scamLabel: {
+            display: 'inline-block',
+            padding: '4px 6px',
+            backgroundColor: theme.palette.maskColor.third,
+            color: theme.palette.maskColor.white,
+            fontSize: 12,
+            lineHeight: '16px',
+            fontWeight: 700,
+            marginLeft: 4,
+            borderRadius: 4,
+        },
+        toAddress: {
+            whiteSpace: 'nowrap',
+            color: theme.palette.maskColor.second,
         },
         operations: {
             display: 'flex',
@@ -101,16 +129,31 @@ const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' },
             fontWeight: 400,
             marginRight: 4,
         },
+        assets: {
+            marginLeft: theme.spacing(1),
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-end',
+        },
         asset: {
             fontSize: 14,
             fontWeight: 700,
             color: theme.palette.maskColor.main,
+            textAlign: 'right',
+            display: 'inline-flex',
+            alignItems: 'center',
         },
         amount: {
             fontWeight: 700,
         },
         symbol: {
+            display: 'inline-block',
             fontWeight: 400,
+            maxWidth: '9ch',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            marginLeft: theme.spacing(0.5),
         },
     }
 })
@@ -138,15 +181,31 @@ export interface ActivityItemProps extends ListItemProps {
 export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ transaction, className, onView, ...rest }) {
     const { t } = useI18N()
     const { classes, cx } = useStyles({})
-    const toAddress = transaction.to
-    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, toAddress)
     const descriptors = useNetworkDescriptors(NetworkPluginID.PLUGIN_EVM)
     const networkDescriptor = descriptors.find((x) => x.chainId === transaction.chainId)
+
+    const blockNumber = transaction && 'blockNumber' in transaction ? (transaction.blockNumber as number) : undefined
+    const [seen, ref] = useEverSeen<HTMLLIElement>()
+    const { data: tx, isLoading: loadingTx } = useQuery({
+        // This could be a transaction of SmartPay which Debank doesn't provide detailed info for it.
+        // So we fetch via Chainbase
+        enabled: !transaction.to && seen,
+        queryKey: ['chainbase', 'transaction', transaction.chainId, transaction.id, blockNumber],
+        queryFn: async () => {
+            if (!transaction.chainId || !transaction.id) return
+            return ChainbaseHistory.getTransaction(transaction.chainId, transaction.id, blockNumber)
+        },
+    })
+
+    const status = transaction.status || (tx ? chainbase.normalizeTxStatus(tx.status) : undefined)
+    const toAddress = (transaction.to || tx?.to_address) as string
+    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, toAddress)
 
     return (
         <ListItem
             className={cx(classes.item, className, transaction.isScam ? classes.scamItem : null)}
             onClick={() => onView(transaction)}
+            ref={ref}
             {...rest}>
             <Box className={classes.txIconContainer}>
                 <TransactionIcon cateType={transaction.cateType} />
@@ -156,36 +215,39 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                 secondaryTypographyProps={{ component: 'div' }}
                 style={{ marginLeft: 15 }}
                 secondary={
-                    <Box>
-                        <Typography>
-                            {!transaction.status ? (
-                                <Typography className={classes.failedLabel} component="span">
-                                    {t('failed')}
-                                </Typography>
-                            ) : null}
-                            {t('to_address', {
-                                address: domain ? formatDomainName(domain) : formatEthereumAddress(toAddress, 4),
-                            })}
-                        </Typography>
-                        {/* TODO actions for pending transitions */}
-                    </Box>
-                }>
-                <Typography className={classes.txName}>{transaction.cateName}</Typography>
-            </ListItemText>
-            <Box ml="auto">
-                {transaction.assets
-                    .filter((asset) => asset.schema === SchemaType.ERC20)
-                    .map((token, i) => {
-                        const isRend = token.direction === DebankTransactionDirection.SEND
-                        const amount = isLessThan(token.amount, '0.000001') ? '<0.000001' : token.amount
-                        return (
-                            <Typography key={i} className={classes.asset}>
-                                <strong className={classes.amount}>{`${isRend ? '-' : '+'} ${amount} `}</strong>
-                                <span className={classes.symbol}>{token.symbol}</span>
+                    <ProgressiveText
+                        className={classes.toAddress}
+                        loading={!toAddress && loadingTx}
+                        skeletonWidth={100}>
+                        {status === TransactionStatusType.FAILED ? (
+                            <Typography className={classes.failedLabel} component="span">
+                                {t('failed')}
                             </Typography>
-                        )
-                    })}
-            </Box>
+                        ) : null}
+                        {t('to_address', {
+                            address: domain ? formatDomainName(domain) : formatEthereumAddress(toAddress, 4),
+                        })}
+                    </ProgressiveText>
+                }>
+                <Typography className={classes.txName}>
+                    {transaction.cateName}
+                    {transaction.isScam ? <span className={classes.scamLabel}>{t('scam_tx')}</span> : null}
+                </Typography>
+            </ListItemText>
+            <div className={classes.assets}>
+                {transaction.assets.map((token, i) => {
+                    const isRend = token.direction === DebankTransactionDirection.SEND
+                    const amount = isLessThan(token.amount, '0.0001') ? '<0.0001' : trimZero(toFixed(token.amount, 4))
+                    return (
+                        <Typography key={i} className={classes.asset}>
+                            <strong className={classes.amount}>{`${isRend ? '-' : '+'} ${amount} `}</strong>
+                            <TextOverflowTooltip title={token.symbol}>
+                                <span className={classes.symbol}>{token.symbol}</span>
+                            </TextOverflowTooltip>
+                        </Typography>
+                    )
+                })}
+            </div>
         </ListItem>
     )
 })
@@ -233,38 +295,39 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
                 secondary={
                     <Box>
                         <Typography>
-                            {!transaction.status ? (
+                            {transaction.status === TransactionStatusType.FAILED ? (
                                 <Typography className={classes.failedLabel} component="span">
                                     {t('failed')}
                                 </Typography>
                             ) : null}
                             {recipient}
                         </Typography>
-                        {/* TODO actions for pending transitions */}
-                        <Box className={classes.operations}>
-                            <button
-                                type="button"
-                                className={cx(classes.button, classes.speedupButton)}
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    onSpeedup?.(transaction)
-                                }}>
-                                {t('speed_up')}
-                            </button>
-                            <button
-                                type="button"
-                                className={cx(classes.button, classes.cancelButton)}
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    onCancel?.(transaction)
-                                }}>
-                                {t('cancel')}
-                            </button>
-                        </Box>
+                        {transaction.status === 1 ? (
+                            <Box className={classes.operations}>
+                                <button
+                                    type="button"
+                                    className={cx(classes.button, classes.speedupButton)}
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        onSpeedup?.(transaction)
+                                    }}>
+                                    {t('speed_up')}
+                                </button>
+                                <button
+                                    type="button"
+                                    className={cx(classes.button, classes.cancelButton)}
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        onCancel?.(transaction)
+                                    }}>
+                                    {t('cancel')}
+                                </button>
+                            </Box>
+                        ) : null}
                     </Box>
                 }>
                 {/* TODO specify cateType */}
-                <Typography className={classes.txName}>Send</Typography>
+                <Typography className={classes.txName}>{t('send')}</Typography>
             </ListItemText>
             <Box ml="auto">
                 {candidate.value && nativeToken ? (

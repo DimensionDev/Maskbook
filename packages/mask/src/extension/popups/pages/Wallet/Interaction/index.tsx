@@ -9,6 +9,8 @@ import {
     type GasConfig,
     PayloadEditor,
     formatEthereumAddress,
+    addGasMargin,
+    ChainId,
 } from '@masknet/web3-shared-evm'
 import { toHex, toUtf8 } from 'web3-utils'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -25,7 +27,8 @@ import { Icons } from '@masknet/icons'
 import { useUpdateEffect } from '@react-hookz/web'
 import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
 import urlcat from 'urlcat'
-import { mapKeys } from 'lodash-es'
+import { compact, mapKeys, omit } from 'lodash-es'
+import { BigNumber } from 'bignumber.js'
 
 const useStyles = makeStyles()((theme) => ({
     left: {
@@ -117,7 +120,7 @@ const Interaction = memo(function Interaction() {
     const source = params.get('source')
     const currentRequest = useMemo(() => {
         if (!messages?.length) return
-        return messages.reverse()[index]
+        return messages[index]
     }, [messages, index])
 
     const message = useMemo(() => {
@@ -143,9 +146,7 @@ const Interaction = memo(function Interaction() {
         const transactionContext = await TransactionFormatter?.createContext(chainId, computedPayload)
 
         return {
-            owner: currentRequest.request.options?.owner,
-            paymentToken: currentRequest.request.options?.paymentToken,
-            allowMaskAsGas: currentRequest.request.options?.allowMaskAsGas,
+            ...currentRequest.request.options,
             payload,
             computedPayload,
             formattedTransaction,
@@ -169,28 +170,49 @@ const Interaction = memo(function Interaction() {
 
                 const result = abiCoder.encodeParameters(approveParametersType, [parameters.spender, approveAmount])
 
-                params = currentRequest.request.arguments.params.map((x) =>
-                    x === 'latest'
-                        ? x
-                        : {
-                              ...x,
-                              data: result,
-                          },
+                params = compact(
+                    currentRequest.request.arguments.params.map((x) =>
+                        x === 'latest'
+                            ? chainId !== ChainId.Celo
+                                ? x
+                                : undefined
+                            : {
+                                  ...x,
+                                  data: result,
+                                  chainId: toHex(x.chainId),
+                                  nonce: toHex(x.nonce),
+                              },
+                    ),
                 )
-            } else {
-                params = !gasConfig
-                    ? currentRequest.request.arguments.params
-                    : currentRequest.request.arguments.params.map((x) =>
-                          x === 'latest'
-                              ? x
-                              : {
-                                    ...x,
-                                    ...mapKeys(gasConfig, (value, key) => {
-                                        if (key === 'gasCurrency' || !value) return
-                                        return toHex(value)
-                                    }),
-                                },
-                      )
+            } else if (!signRequest.includes(currentRequest.request.arguments.method)) {
+                params = compact(
+                    currentRequest.request.arguments.params.map((x) => {
+                        if (x === 'latest') {
+                            if (chainId === ChainId.Celo) return
+                            return x
+                        }
+
+                        const gas = toHex(
+                            BigNumber.max(
+                                toHex(addGasMargin(gasConfig?.gas ?? x.gas).toFixed()),
+                                chainId === ChainId.Optimism ? 25000 : 21000,
+                            ).toFixed(),
+                        )
+
+                        return {
+                            ...x,
+                            ...(gasConfig
+                                ? mapKeys(omit(gasConfig, 'gasOptionType'), (value, key) => {
+                                      if (key === 'gasCurrency' || !value) return
+                                      return toHex(value)
+                                  })
+                                : {}),
+                            gas,
+                            chainId: toHex(x.chainId),
+                            nonce: toHex(x.nonce),
+                        }
+                    }),
+                )
             }
 
             await Message?.approveRequest(currentRequest.ID, {
@@ -217,6 +239,7 @@ const Interaction = memo(function Interaction() {
             )
         }
     }, [
+        chainId,
         currentRequest,
         Message,
         source,
@@ -295,23 +318,29 @@ const Interaction = memo(function Interaction() {
         <Box flex={1} display="flex" flexDirection="column">
             <Box p={2} display="flex" flexDirection="column" flex={1}>
                 {content}
-                <Box
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    mt={2}
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => setExpand(!expand)}>
-                    <Typography className={classes.text}>{t('popups_wallet_view_full_detail_transaction')}</Typography>
-                    <Icons.ArrowDrop
-                        size={16}
-                        sx={{ marginLeft: 0.5 }}
-                        className={cx(classes.arrowIcon, expand ? classes.expand : undefined)}
-                    />
-                </Box>
+                {currentRequest && !signRequest.includes(currentRequest?.request.arguments.method) ? (
+                    <Box
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        mt={2}
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => setExpand(!expand)}>
+                        <Typography className={classes.text}>
+                            {t('popups_wallet_view_full_detail_transaction')}
+                        </Typography>
+                        <Icons.ArrowDrop
+                            size={16}
+                            sx={{ marginLeft: 0.5 }}
+                            className={cx(classes.arrowIcon, expand ? classes.expand : undefined)}
+                        />
+                    </Box>
+                ) : null}
 
                 {expand ? (
-                    <Box className={classes.transactionDetail}>
+                    <Box
+                        className={classes.transactionDetail}
+                        style={{ marginBottom: expand && messages.length <= 1 ? 72 : 16 }}>
                         {transaction?.formattedTransaction?.popup?.spender && approveAmount ? (
                             <>
                                 <Box display="flex" alignItems="center" columnGap={1.25}>

@@ -11,7 +11,7 @@ export const base: Plugin.Shared.Definition = {
     },
     publisher: { name: { fallback: 'ArtBlocks' }, link: 'https://www.artblocks.io/' },
     enableRequirement: {
-        networks: { type: 'opt-out', networks: {} },
+        supports: { type: 'opt-out', sites: {} },
         target: 'stable',
     },
     contribution: {

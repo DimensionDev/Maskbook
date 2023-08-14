@@ -49,6 +49,7 @@ export const WalletHeader = memo(function WalletHeader() {
                 chainId={chainId}
                 currentNetwork={currentNetwork}
                 disabled
+                disableCopy
                 onActionClick={handleActionClick}
                 onOpenNetworkSelector={chooseNetwork}
                 wallet={wallet}
@@ -56,7 +57,8 @@ export const WalletHeader = memo(function WalletHeader() {
         )
     }
 
-    if (!wallet || !hasPassword || matchUnlock || matchResetWallet) return <WalletSetupHeaderUI />
+    if (!wallet || !hasPassword || matchUnlock || matchResetWallet)
+        return <WalletSetupHeaderUI showBack={!!matchResetWallet} />
 
     return matchWallet ? (
         <WalletHeaderUI

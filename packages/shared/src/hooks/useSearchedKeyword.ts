@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 export function useSearchedKeyword() {
     const [keyword, setKeyword] = useState('')
-    const { getSearchedKeyword } = useSNSAdaptorContext()
+    const { getSearchedKeyword } = useSiteAdaptorContext()
 
     useEffect(() => {
         const onLocationChange = () => {

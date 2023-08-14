@@ -1,4 +1,4 @@
-import { CurrentSNSNetwork, type Plugin } from '@masknet/plugin-infra'
+import { SiteAdaptor, type Plugin } from '@masknet/plugin-infra'
 import { PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { languages } from './locales/languages.js'
@@ -11,11 +11,11 @@ export const base: Plugin.Shared.Definition = {
     },
     publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
     enableRequirement: {
-        networks: {
+        supports: {
             type: 'opt-out',
-            networks: {
-                [CurrentSNSNetwork.Facebook]: false,
-                [CurrentSNSNetwork.Minds]: false,
+            sites: {
+                [SiteAdaptor.Facebook]: false,
+                [SiteAdaptor.Minds]: false,
             },
         },
         target: 'stable',

@@ -15,7 +15,7 @@ import {
     MaskMessages,
 } from '@masknet/shared-base'
 import { formatDomainName, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
-import { FormattedAddress, PersonaContext, WalletIcon } from '@masknet/shared'
+import { FormattedAddress, PersonaContext, PopupHomeTabType, WalletIcon } from '@masknet/shared'
 import { ExplorerResolver, NextIDProof, ProviderResolver, Web3 } from '@masknet/web3-providers'
 import {
     useChainContext,
@@ -32,7 +32,6 @@ import { useI18N } from '../../../../../utils/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { LoadingMask } from '../../../components/LoadingMask/index.js'
 import Services from '../../../../service.js'
-import { HomeTabType } from '../../Wallet/type.js'
 import { useModalNavigate } from '../../../components/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -175,6 +174,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
                 SignType.Message,
                 payload.signPayload,
                 currentPersona.identifier,
+                location.origin,
                 true,
             )
 
@@ -223,7 +223,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
     }, [providerType])
 
     const handleBack = useCallback(() => {
-        navigate(urlcat(PopupRoutes.Personas, { tab: HomeTabType.ConnectedWallets, disableNewWindow: true }), {
+        navigate(urlcat(PopupRoutes.Personas, { tab: PopupHomeTabType.ConnectedWallets, disableNewWindow: true }), {
             replace: true,
         })
     }, [])

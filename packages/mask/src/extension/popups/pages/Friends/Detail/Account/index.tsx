@@ -9,7 +9,7 @@ import { url } from '../../ContactCard/Account/index.js'
 import type { SupportedPlatforms } from '../../ContactCard/Account/index.js'
 
 interface AccountProps {
-    userId: string
+    userId?: string
     icon: SupportedPlatforms
 }
 
@@ -39,45 +39,49 @@ const useStyles = makeStyles()((theme) => ({
 export const Account = memo<AccountProps>(function Account({ userId, icon }) {
     const { classes } = useStyles()
     return (
-        <Box
-            padding="12px"
-            display="flex"
-            flexDirection="column"
-            gap="10px"
-            alignItems="center"
-            className={classes.container}>
-            {(() => {
-                switch (icon) {
-                    case NextIDPlatform.LENS:
-                        return <Icons.Lens width={40} height={40} />
-                    case NextIDPlatform.Ethereum:
-                        return <Icons.ETH width={40} height={40} />
-                    case NextIDPlatform.ENS:
-                        return <Icons.ENS width={40} height={40} />
-                    case NextIDPlatform.GitHub:
-                        return <Icons.GitHub width={40} height={40} />
-                    case NextIDPlatform.Farcaster:
-                        return <Icons.Farcaster width={40} height={40} />
-                    case NextIDPlatform.SpaceId:
-                        return <Icons.SpaceId width={40} height={40} />
-                    case NextIDPlatform.Unstoppable:
-                        return <Icons.Unstoppable width={40} height={40} />
-                    default:
-                        safeUnreachable(icon)
-                        return null
-                }
-            })()}
-            <Box className={classes.userId}>
-                {icon === 'ethereum' ? formatEthereumAddress(userId, 4) : formatPersonaName(userId)}
-                <Link
-                    underline="none"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={url[icon] + userId}
-                    className={classes.iconBlack}>
-                    <Icons.LinkOut size={16} />
-                </Link>
+        userId && (
+            <Box
+                padding="12px"
+                display="flex"
+                flexDirection="column"
+                gap="10px"
+                alignItems="center"
+                className={classes.container}>
+                {(() => {
+                    switch (icon) {
+                        case NextIDPlatform.LENS:
+                            return <Icons.Lens width={40} height={40} />
+                        case NextIDPlatform.Ethereum:
+                            return <Icons.ETH width={40} height={40} />
+                        case NextIDPlatform.ENS:
+                            return <Icons.ENS width={40} height={40} />
+                        case NextIDPlatform.GitHub:
+                            return <Icons.GitHub width={40} height={40} />
+                        case NextIDPlatform.Farcaster:
+                            return <Icons.Farcaster width={40} height={40} />
+                        case NextIDPlatform.SpaceId:
+                            return <Icons.SpaceId width={40} height={40} />
+                        case NextIDPlatform.Unstoppable:
+                            return <Icons.Unstoppable width={40} height={40} />
+                        case NextIDPlatform.Keybase:
+                            return <Icons.Keybase width={40} height={40} />
+                        default:
+                            safeUnreachable(icon)
+                            return null
+                    }
+                })()}
+                <Box className={classes.userId}>
+                    {icon === NextIDPlatform.Ethereum ? formatEthereumAddress(userId, 4) : formatPersonaName(userId)}
+                    <Link
+                        underline="none"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href={url[icon] + userId}
+                        className={classes.iconBlack}>
+                        <Icons.LinkOut size={16} />
+                    </Link>
+                </Box>
             </Box>
-        </Box>
+        )
     )
 })

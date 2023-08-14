@@ -52,6 +52,10 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.danger,
         fontSize: 14,
     },
+    warning: {
+        color: theme.palette.maskColor.warn,
+        fontSize: 14,
+    },
     fieldWrapper: {
         flex: 1,
     },
@@ -62,7 +66,11 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const AddContactInputPanel = memo(function AddContactInputPanel(props: BoxProps) {
+interface Props extends BoxProps {
+    isManage?: boolean
+}
+
+const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, ...props }: Props) {
     const { t } = useI18N()
     const { classes, cx } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -71,6 +79,7 @@ const AddContactInputPanel = memo(function AddContactInputPanel(props: BoxProps)
         userInput,
         setUserInput,
         inputValidationMessage: addressValidationMessage,
+        inputWarningMessage,
     } = ContactsContext.useContainer()
 
     const theme = useTheme()
@@ -89,7 +98,7 @@ const AddContactInputPanel = memo(function AddContactInputPanel(props: BoxProps)
 
     return (
         <Box padding={2} {...props} className={cx(classes.receiverPanel, props.className)}>
-            <Typography className={classes.toText}>{t('popups_wallet_transfer_to')}</Typography>
+            {isManage ? null : <Typography className={classes.toText}>{t('popups_wallet_transfer_to')}</Typography>}
             <div className={classes.fieldWrapper}>
                 <MaskTextField
                     placeholder={t('wallet_transfer_placeholder')}
@@ -107,6 +116,11 @@ const AddContactInputPanel = memo(function AddContactInputPanel(props: BoxProps)
                         classes: { input: classes.inputText },
                     }}
                 />
+                {inputWarningMessage && !addressValidationMessage ? (
+                    <Typography className={classes.warning} mt={1}>
+                        {inputWarningMessage}
+                    </Typography>
+                ) : null}
                 {addressValidationMessage ? (
                     <Typography className={classes.validation} mt={1}>
                         {addressValidationMessage}

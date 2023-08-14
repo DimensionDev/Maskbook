@@ -47,7 +47,7 @@ export const appearanceSettings = createGlobalSettings<Appearance>('appearance',
 /**
  * ! DO NOT use this directly to query the plugin status !
  *
- * use `useActivatedPluginsSNSAdaptor().find((x) => x.ID === PLUGIN_ID)` or
+ * use `useActivatedPluginsSiteAdaptor().find((x) => x.ID === PLUGIN_ID)` or
  * `useActivatedPluginsDashboard().find((x) => x.ID === PLUGIN_ID)` instead
  * @deprecated DO NOT EXPORT THIS
  */

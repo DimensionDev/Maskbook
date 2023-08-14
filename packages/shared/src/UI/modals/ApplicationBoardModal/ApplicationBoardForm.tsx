@@ -4,28 +4,50 @@ import { ApplicationSettingTabs } from './ApplicationBoardDialog.js'
 import { TabContext, TabPanel } from '@mui/lab'
 import { IconButton, Stack, Tab } from '@mui/material'
 import type { DashboardRoutes, PersonaInformation, PluginID } from '@masknet/shared-base'
-import type { CurrentSNSNetwork, IdentityResolved } from '@masknet/plugin-infra'
+import type { SiteAdaptor, IdentityResolved } from '@masknet/plugin-infra'
 import { Icons } from '@masknet/icons'
 import { ApplicationSettingPluginList } from './ApplicationSettingPluginList.js'
 import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch.js'
 import { ApplicationBoardContent } from './ApplicationBoard.js'
-import { useSharedI18N, type PersonaAgainstSNSConnectStatus } from '../../../index.js'
+import { useSharedI18N, type PersonaPerSiteConnectStatus } from '../../../index.js'
+import { ArrowBackRounded as ArrowBackRoundedIcon } from '@mui/icons-material'
 
-const useStyles = makeStyles()(() => ({
+const useStyles = makeStyles()((theme) => ({
     applicationWrapper: {
         maxHeight: 'initial',
         width: 'auto',
+    },
+    title: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        padding: 1,
+        flexDirection: 'column',
+        background:
+            theme.palette.mode === 'light'
+                ? 'linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)'
+                : 'linear-gradient(rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.06) 100%);',
+    },
+    tool: {
+        display: 'flex',
+        justifyContent: 'end',
+        padding: 1,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        background:
+            theme.palette.mode === 'light'
+                ? 'linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)'
+                : 'linear-gradient(rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.06) 100%)',
     },
     recommendFeatureAppListWrapper: {},
 }))
 interface ApplicationBoardFormProps {
     openDashboard?: (route?: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
-    currentSNSNetwork?: CurrentSNSNetwork
+    currentSite?: SiteAdaptor
     allPersonas: PersonaInformation[]
     lastRecognized?: IdentityResolved
-    applicationCurrentStatus?: PersonaAgainstSNSConnectStatus
-    personaAgainstSNSConnectStatusLoading: boolean
+    applicationCurrentStatus?: PersonaPerSiteConnectStatus
+    personaPerSiteConnectStatusLoading: boolean
     setPluginMinimalModeEnabled?: (id: string, checked: boolean) => Promise<void>
     getDecentralizedSearchSettings?: () => Promise<boolean>
     setDecentralizedSearchSettings?: (checked: boolean) => Promise<void>
@@ -47,21 +69,13 @@ export function ApplicationBoardForm(props: ApplicationBoardFormProps) {
         <>
             {openSettings ? (
                 <TabContext value={currentTab}>
-                    <Stack
-                        sx={{
-                            display: 'flex',
-                            justifyContent: 'flex-end',
-                            padding: 1,
-                            flexDirection: 'column',
-                            background:
-                                'linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%);',
-                        }}>
+                    <Stack className={classes.title}>
                         <div style={{ display: 'flex', flex: 1, justifyContent: 'start', padding: 8 }}>
                             <IconButton
                                 size="small"
                                 sx={{ margin: '-5px' }}
                                 onClick={() => setOpenSettings((openSettings) => !openSettings)}>
-                                <Icons.ArrowBack size={24} />
+                                <ArrowBackRoundedIcon />
                             </IconButton>
                         </div>
                         <MaskTabList variant="base" onChange={onChange} aria-label="ApplicationBoard">
@@ -84,16 +98,7 @@ export function ApplicationBoardForm(props: ApplicationBoardFormProps) {
                 </TabContext>
             ) : (
                 <>
-                    <Stack
-                        sx={{
-                            display: 'flex',
-                            justifyContent: 'end',
-                            padding: 1,
-                            marginLeft: 'auto',
-                            marginRight: 'auto',
-                            background:
-                                'linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%);',
-                        }}>
+                    <Stack className={classes.tool}>
                         <div style={{ display: 'flex', flex: 1, justifyContent: 'flex-end', padding: 8 }}>
                             <IconButton
                                 size="small"
@@ -110,11 +115,11 @@ export function ApplicationBoardForm(props: ApplicationBoardFormProps) {
                         }}
                         openDashboard={props.openDashboard}
                         queryOwnedPersonaInformation={props.queryOwnedPersonaInformation}
-                        currentSNSNetwork={props.currentSNSNetwork}
+                        currentSite={props.currentSite}
                         lastRecognized={props.lastRecognized}
                         allPersonas={props.allPersonas}
                         applicationCurrentStatus={props.applicationCurrentStatus}
-                        personaAgainstSNSConnectStatusLoading={props.personaAgainstSNSConnectStatusLoading}
+                        personaPerSiteConnectStatusLoading={props.personaPerSiteConnectStatusLoading}
                     />
                 </>
             )}

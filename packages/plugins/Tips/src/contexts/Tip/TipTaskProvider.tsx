@@ -78,7 +78,7 @@ export const TipTaskProvider = memo(({ children, task }: Props) => {
     const token = tokenMap[key] ?? nativeTokenDetailed
 
     // #region balance
-    const { isAvailableBalance, balance, isAvailableGasBalance } = useAvailableBalance(
+    const { isAvailableBalance, balance, isGasSufficient } = useAvailableBalance(
         targetPluginID,
         token?.address,
         gasOption,
@@ -96,7 +96,7 @@ export const TipTaskProvider = memo(({ children, task }: Props) => {
         token,
         nonFungibleTokenId,
         nonFungibleTokenAddress,
-        isAvailableGasBalance,
+        isGasSufficient,
     })
 
     const { value: nonFungibleTokenContract } = useNonFungibleTokenContract(targetPluginID, nonFungibleTokenAddress)
@@ -141,7 +141,7 @@ export const TipTaskProvider = memo(({ children, task }: Props) => {
     const contextValue = useMemo((): TipContextOptions => {
         return {
             recipient,
-            recipientSnsId: task.recipientSnsId || '',
+            recipientUserId: task.recipientUserId || '',
             recipientAddress,
             setRecipient,
             recipients,
@@ -168,7 +168,7 @@ export const TipTaskProvider = memo(({ children, task }: Props) => {
             validatingRecipient,
             recipientValidation,
             isAvailableBalance,
-            isAvailableGasBalance,
+            isGasSufficient,
             balance,
         }
     }, [
@@ -176,7 +176,7 @@ export const TipTaskProvider = memo(({ children, task }: Props) => {
         recipient,
         recipientAddress,
         task.recipient,
-        task.recipientSnsId,
+        task.recipientUserId,
         recipients,
         tipType,
         amount,

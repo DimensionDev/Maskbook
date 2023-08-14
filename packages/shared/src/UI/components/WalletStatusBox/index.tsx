@@ -133,7 +133,6 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const { data: nativeToken, isLoading: loadingNativeToken } = useNativeToken()
     const networkDescriptor = useNetworkDescriptor()
     const { data: domain } = useReverseAddress(undefined, account)
-
     const { summary: pendingSummary, transactionList } = usePendingTransactions()
 
     if (!Others.isValidAddress(account)) {

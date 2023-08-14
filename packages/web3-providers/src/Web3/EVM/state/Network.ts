@@ -1,4 +1,3 @@
-import { z } from 'zod'
 import { type Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
@@ -19,9 +18,7 @@ export class Network extends NetworkState<ChainId, SchemaType, NetworkType> {
     ): Promise<boolean> {
         const schema = createSchema(this.networks?.getCurrentValue() ?? [])
         const result = await schema.safeParseAsync(network)
-        if (result.success) return true
-        // distinguish warnings
-        return result.error.errors.some((x) => !(x.code === z.ZodIssueCode.custom && x.path[1] === 'symbol'))
+        return result.success
     }
 
     protected override async pingNetwork(

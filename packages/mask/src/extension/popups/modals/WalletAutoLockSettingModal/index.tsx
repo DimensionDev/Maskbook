@@ -2,6 +2,7 @@ import { forwardRef, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import millisecondsToMinutes from 'date-fns/millisecondsToMinutes'
 import minutesToMilliseconds from 'date-fns/minutesToMilliseconds'
+import hoursToMilliseconds from 'date-fns/hoursToMilliseconds'
 import { Box, TextField, Typography, useTheme } from '@mui/material'
 import { type SingletonModalRefCreator } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
@@ -54,6 +55,8 @@ enum OptionName {
 
 const DEFAULT_MIN_AUTO_LOCKER_TIME = 1000 * 60 * 15 // 15 mins
 
+const ONE_DAY_IN_MILLISECONDS = hoursToMilliseconds(24)
+
 function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
     const { t } = useI18N()
     const theme = useTheme()
@@ -67,7 +70,9 @@ function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
     const error = Number.isNaN(Number(time ?? initialTime))
 
     const [{ loading }, setAutoLockerTime] = useAsyncFn(async (time: number) => {
-        await WalletRPC.setAutoLockerTime(time === 0 ? time : Math.max(time, DEFAULT_MIN_AUTO_LOCKER_TIME))
+        await WalletRPC.setAutoLockerTime(
+            time > ONE_DAY_IN_MILLISECONDS || time === 0 ? 0 : Math.max(time, DEFAULT_MIN_AUTO_LOCKER_TIME),
+        )
         props.onClose?.()
     }, [])
 
@@ -135,6 +140,11 @@ function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
                             classes.listItem,
                             option.name === OptionName.ONE_DAY ? classes.listItemOneDay : '',
                             option.value === (time ?? initialTime) ? classes.selected : '',
+                            option.value === '' && (time ?? initialTime) === '0' ? classes.selected : '',
+                            option.value === '' &&
+                                minutesToMilliseconds(Number(time ?? initialTime)) > ONE_DAY_IN_MILLISECONDS
+                                ? classes.selected
+                                : '',
                         )}
                         onClick={() => {
                             setTime(option.value)
@@ -170,5 +180,8 @@ export const WalletAutoLockSettingModal = forwardRef<
             setProps(p)
         },
     })
+
+    if (!open) return null
+
     return <WalletAutoLockSettingDrawer open={open} {...props} onClose={() => dispatch?.close(false)} />
 })

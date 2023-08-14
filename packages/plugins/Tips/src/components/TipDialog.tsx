@@ -16,7 +16,7 @@ import { NFTSection } from './NFTSection/index.js'
 import { NetworkSection } from './NetworkSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
 import { TokenSection } from './TokenSection/index.js'
-import { useSNSAdaptorContext } from '@masknet/plugin-infra/dom'
+import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -69,7 +69,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         isDirty,
         recipient,
         recipientAddress,
-        recipientSnsId,
+        recipientUserId,
         nonFungibleTokenAddress,
         nonFungibleTokenContract,
         nonFungibleTokenId,
@@ -86,16 +86,16 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
             ? t.tip_token_share_post({
                   amount,
                   symbol: token?.symbol || 'token',
-                  recipientSnsId,
+                  recipientSnsId: recipientUserId,
                   recipient: recipientAddress,
               })
             : t.tip_nft_share_post({
                   name: nonFungibleTokenContract?.name || 'NFT',
-                  recipientSnsId,
+                  recipientSnsId: recipientUserId,
                   recipient: recipientAddress,
               })
         return message
-    }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientSnsId, t])
+    }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientUserId, t])
 
     const currentTab = isTokenTip ? TokenType.Fungible : TokenType.NonFungible
     const onTabChange = useCallback((_: unknown, value: TokenType) => {
@@ -105,7 +105,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
 
     const { data: nonFungibleToken } = useNonFungibleAsset(undefined, nonFungibleTokenAddress, nonFungibleTokenId ?? '')
-    const { share } = useSNSAdaptorContext()
+    const { share } = useSiteAdaptorContext()
 
     const send = useCallback(async () => {
         const hash = await sendTip()

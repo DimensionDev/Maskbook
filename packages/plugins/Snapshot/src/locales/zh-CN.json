@@ -7,6 +7,7 @@
     "plugin_snapshot_info_end": "结束日期",
     "plugin_snapshot_info_snapshot": "Snapshot",
     "plugin_snapshot_info_dao": "DAO",
+    "plugin_snapshot_description": "在相应项目或协议的Twitter页面显示 Snapshot 提议。",
     "plugin_snapshot_result_title": "结果",
     "plugin_snapshot_votes_title": "投票",
     "plugin_snapshot_votes_yourself": "您",

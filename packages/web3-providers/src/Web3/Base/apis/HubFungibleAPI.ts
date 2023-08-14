@@ -88,7 +88,7 @@ export class HubFungibleAPI_Base<
         const providers = this.getProviders(initial)
         return attemptUntil(
             providers.map((x) => () => x.getFungibleTokenPrice?.(options.chainId, address)),
-            0,
+            undefined,
         )
     }
 

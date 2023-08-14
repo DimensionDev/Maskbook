@@ -452,7 +452,7 @@
     "persona_phrase_title": "Your Recovery phrase",
     "persona_phrase_tips": "Please select the correct method to restore the backup.",
     "persona_phrase_copy_description": "The mnemonic has been copied, please keep it in a safe place.",
-    "persona_phrase_create_tips": "Never share recovery phrase with anyone, sotre it seurely!",
+    "persona_phrase_create_tips": "Never share 12-word secret recovery phrase with anyone!",
     "persona_phrase_create_check_tips": "I wrote down all the words in order",
     "persona_onboarding_to_twitter": "Experience in Twitter",
     "persona_onboarding_set_payment_password": "Set Payment Password",
@@ -466,12 +466,13 @@
     "persona_onboarding_wallets_one": "{{count}} Wallet 🚀",
     "persona_onboarding_wallets_other": "{{count}} Wallets 🚀",
     "wallet_history_no_data": "No history records.",
-    "welcome_agreement_policy": "I have read and agree to the <agreement>Service Agreement</agreement> and <policy>Privacy Policy</policy>.",
     "welcome_new_agreement_policy": "By continuing to the app, you agree to these <agreement>Service Agreement</agreement> and <policy>Privacy Policy</policy>.",
     "wallets_history_burn": "Burn",
     "wallet_connect_tips": "You’re connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet.",
     "identity_words": "Identity Words",
     "private_key": "Private Key",
     "local_backup": "Local Backup",
-    "incorrect_verification_code": "Incorrect verification code."
+    "incorrect_verification_code": "Incorrect verification code.",
+    "wallet_set_payment_password_successfully": "Set payment password successfully.",
+    "wallet_open_mask_wallet": "Open Mask Wallet"
 }

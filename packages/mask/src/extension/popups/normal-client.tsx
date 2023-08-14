@@ -1,4 +1,4 @@
-import { activateSocialNetworkUI } from '../../setup.ui.js'
+import { activateSiteAdaptorUI } from '../../setup.ui.js'
 import { startPluginDashboard } from '@masknet/plugin-infra/dashboard'
 import { createNormalReactRoot, hydrateNormalReactRoot } from '../../utils/index.js'
 import { createPluginHost, createPartialSharedUIContext } from '../../../shared/plugin-infra/host.js'
@@ -13,10 +13,13 @@ import {
 } from '@masknet/shared-base'
 import { initialPersonaInformation } from '@masknet/shared'
 
-if (location.hash === '#/personas') {
+if (
+    location.hash === '#/personas' ||
+    (location.hash.includes('#/personas') && location.hash.includes('tab=Connected+Wallets'))
+) {
     console.time('[SSR] Fill data')
     await Promise.all([
-        activateSocialNetworkUI(),
+        activateSiteAdaptorUI(),
         currentPersonaIdentifier.readyPromise,
         pluginIDsSettings.readyPromise,
         Services.Identity.queryOwnedPersonaInformation(false).then((value) =>
@@ -49,7 +52,7 @@ if (location.hash === '#/personas') {
     }
     console.timeEnd('[SSR] Hydrate')
 } else {
-    await activateSocialNetworkUI()
+    await activateSiteAdaptorUI()
     createNormalReactRoot(<Popups />)
     startPluginHost()
 }

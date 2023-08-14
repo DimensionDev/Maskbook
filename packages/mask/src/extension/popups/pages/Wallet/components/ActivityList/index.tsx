@@ -1,22 +1,17 @@
-import { ElementAnchor } from '@masknet/shared'
+import { ElementAnchor, EmptyStatus } from '@masknet/shared'
 import { PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Web3 } from '@masknet/web3-providers'
 import type { RecentTransaction, Transaction } from '@masknet/web3-shared-base'
-import {
-    ProviderType,
-    type ChainId,
-    type Transaction as EvmTransaction,
-    type SchemaType,
-} from '@masknet/web3-shared-evm'
+import { type ChainId, type Transaction as EvmTransaction, type SchemaType } from '@masknet/web3-shared-evm'
 import { List } from '@mui/material'
 import { range } from 'lodash-es'
 import { memo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { GasSettingModal } from '../../../../modals/modals.js'
 import { ReplaceType } from '../../type.js'
 import { ActivityItem, ActivityItemSkeleton, RecentActivityItem } from './ActivityItem.js'
 import { useTransactions } from './useTransactions.js'
+import { modifyTransaction } from '../../utils.js'
+import { useI18N } from '../../../../../../utils/i18n-next-ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -33,57 +28,18 @@ const useStyles = makeStyles()((theme) => ({
 export interface ActivityListProps {}
 
 export const ActivityList = memo<ActivityListProps>(function ActivityList() {
+    const { t } = useI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const { data: transactions, localeTxes, isFetching, fetchNextPage } = useTransactions()
+    const { data: transactions, localeTxes, isLoading, isFetching, fetchNextPage } = useTransactions()
 
-    const modifyTransaction = useCallback(
-        async (transaction: RecentTransaction<ChainId, EvmTransaction>, replaceType: ReplaceType) => {
-            const candidate = transaction.candidates[transaction.indexId]
-            if (!candidate) return
-            const oldConfig = {
-                gas: candidate.gas!,
-                gasPrice: candidate.gasPrice,
-                maxFeePerGas: candidate.maxFeePerGas,
-                maxPriorityFeePerGas: candidate.maxPriorityFeePerGas,
-            }
-            const settings = await GasSettingModal.openAndWaitForClose({
-                chainId: transaction.chainId,
-                config: oldConfig,
-                nonce: candidate.nonce!,
-                replaceType,
-            })
-            if (!settings) return
-            const newConfig = {
-                ...oldConfig,
-                ...settings,
-            }
-            if (replaceType === ReplaceType.CANCEL) {
-                await Web3.cancelTransaction(transaction?.id, newConfig, {
-                    providerType: ProviderType.MaskWallet,
-                })
-            } else {
-                await Web3.replaceTransaction(transaction?.id, newConfig, {
-                    providerType: ProviderType.MaskWallet,
-                })
-            }
-        },
-        [navigate],
-    )
+    const handleSpeedup = useCallback(async (transaction: RecentTransaction<ChainId, EvmTransaction>) => {
+        modifyTransaction(transaction, ReplaceType.SPEED_UP)
+    }, [])
 
-    const handleSpeedup = useCallback(
-        async (transaction: RecentTransaction<ChainId, EvmTransaction>) => {
-            modifyTransaction(transaction, ReplaceType.SPEED_UP)
-        },
-        [navigate, modifyTransaction],
-    )
-
-    const handleCancel = useCallback(
-        (transaction: RecentTransaction<ChainId, EvmTransaction>) => {
-            modifyTransaction(transaction, ReplaceType.CANCEL)
-        },
-        [navigate, modifyTransaction],
-    )
+    const handleCancel = useCallback((transaction: RecentTransaction<ChainId, EvmTransaction>) => {
+        modifyTransaction(transaction, ReplaceType.CANCEL)
+    }, [])
 
     const handleView = useCallback(
         (transaction: Transaction<ChainId, SchemaType> | RecentTransaction<ChainId, EvmTransaction>) => {
@@ -95,6 +51,9 @@ export const ActivityList = memo<ActivityListProps>(function ActivityList() {
         },
         [navigate],
     )
+
+    if (isLoading && !localeTxes.length && !transactions.length)
+        return <EmptyStatus height="100%">{t('no_data')}</EmptyStatus>
 
     return (
         <>

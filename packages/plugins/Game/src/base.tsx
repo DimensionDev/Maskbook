@@ -1,4 +1,4 @@
-import { CurrentSNSNetwork, type Plugin } from '@masknet/plugin-infra'
+import { SiteAdaptor, type Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { GamePluginID } from './constants.js'
@@ -12,14 +12,14 @@ export const base: Plugin.Shared.Definition = {
     },
     publisher: { name: { fallback: '' }, link: 'https://github.com/HelloWeb3Team' },
     enableRequirement: {
-        networks: {
+        supports: {
             type: 'opt-in',
-            networks: {
-                [CurrentSNSNetwork.Twitter]: true,
-                [CurrentSNSNetwork.Facebook]: true,
-                [CurrentSNSNetwork.Instagram]: true,
-                [CurrentSNSNetwork.Minds]: true,
-                [CurrentSNSNetwork.__SPA__]: true,
+            sites: {
+                [SiteAdaptor.Twitter]: true,
+                [SiteAdaptor.Facebook]: true,
+                [SiteAdaptor.Instagram]: true,
+                [SiteAdaptor.Minds]: true,
+                [SiteAdaptor.MaskIO]: true,
             },
         },
         web3: {

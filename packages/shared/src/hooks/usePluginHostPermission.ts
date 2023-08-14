@@ -2,10 +2,10 @@ import { useEffect } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import type { Plugin } from '@masknet/plugin-infra'
 import { MaskMessages } from '@masknet/shared-base'
-import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 export function usePluginHostPermissionCheck(plugins: Plugin.Shared.Definition[]) {
-    const { hasHostPermission } = useSNSAdaptorContext()
+    const { hasHostPermission } = useSiteAdaptorContext()
     const plugins_ = plugins.filter((x) => x.enableRequirement.host_permissions?.length)
     // query if plugin is disabled due to lack of permission
     const { retry, value: lackPermission } = useAsyncRetry(async () => {
@@ -27,7 +27,7 @@ export function usePluginHostPermissionCheck(plugins: Plugin.Shared.Definition[]
 }
 
 export function useCheckPermissions(permissions: string[]) {
-    const { hasHostPermission } = useSNSAdaptorContext()
+    const { hasHostPermission } = useSiteAdaptorContext()
     const asyncResult = useAsyncRetry(async () => {
         if (!permissions.length) return true
         return hasHostPermission?.(permissions)
@@ -39,7 +39,7 @@ export function useCheckPermissions(permissions: string[]) {
 }
 
 export function useGrantPermissions(permissions?: string[]) {
-    const { requestHostPermission } = useSNSAdaptorContext()
+    const { requestHostPermission } = useSiteAdaptorContext()
     return useAsyncFn(async () => {
         if (!permissions?.length) return
         return requestHostPermission?.(permissions)

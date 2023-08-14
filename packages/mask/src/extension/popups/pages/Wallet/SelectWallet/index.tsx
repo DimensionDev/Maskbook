@@ -3,7 +3,7 @@ import { useAsync } from 'react-use'
 import { first } from 'lodash-es'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ECKeyIdentifier, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { useChainContext, useChainIdValid, useWallets } from '@masknet/web3-hooks-base'
+import { useChainContext, useChainIdValid, useNetworks, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { ProviderType, type ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, Typography } from '@mui/material'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -46,6 +46,7 @@ const SelectWallet = memo(function SelectWallet() {
     const isVerifyWalletFlow = params.get('verifyWallet')
     const isSettingNFTAvatarFlow = params.get('setNFTAvatar')
 
+    const { Network } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { proofs } = PersonaContext.useContainer()
 
     const { data: bindingWallets } = useVerifiedWallets(proofs)
@@ -53,6 +54,8 @@ const SelectWallet = memo(function SelectWallet() {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         chainId: chainIdSearched ? (Number.parseInt(chainIdSearched, 10) as ChainId) : undefined,
     })
+
+    const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
     const { smartPayChainId } = PopupContext.useContainer()
 
@@ -105,8 +108,17 @@ const SelectWallet = memo(function SelectWallet() {
                       address: selected,
                   },
         ])
+
+        if (smartPayChainId && wallet?.owner && chainId !== smartPayChainId) {
+            await Web3.switchChain?.(smartPayChainId, {
+                providerType: ProviderType.MaskWallet,
+            })
+
+            const network = networks.find((x) => x.chainId === smartPayChainId)
+            if (network) await Network?.switchNetwork(network.ID)
+        }
         return Services.Helper.removePopupWindow()
-    }, [isVerifyWalletFlow, selected, chainId, wallets, smartPayChainId, isSettingNFTAvatarFlow])
+    }, [isVerifyWalletFlow, selected, chainId, wallets, smartPayChainId, isSettingNFTAvatarFlow, networks, Network])
 
     useEffect(() => {
         if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
@@ -116,10 +128,10 @@ const SelectWallet = memo(function SelectWallet() {
 
     return chainIdValid ? (
         <Box>
-            <Box pt="10px" pb={2} px={2} display="flex" flexDirection="column" columnGap={6}>
+            <Box pt={1} pb={9} px={2} display="flex" flexDirection="column" rowGap="6px">
                 {wallets
                     .filter((x) => {
-                        if (chainId === smartPayChainId && !isVerifyWalletFlow && !isSettingNFTAvatarFlow) return true
+                        if (!isVerifyWalletFlow && !isSettingNFTAvatarFlow) return true
                         return !x.owner
                     })
                     .map((item) => {

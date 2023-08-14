@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import type { NetworkPluginID, SingletonModalRefCreator } from '@masknet/shared-base'
+import { type NetworkPluginID, type SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { TransactionSnackbar } from './TransactionSnackbar.js'
 

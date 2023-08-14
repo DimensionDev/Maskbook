@@ -1,11 +1,11 @@
 import { Suspense } from 'react'
-import { useSNSThemeMode } from '@masknet/plugin-infra/content-script'
+import { useSiteThemeMode } from '@masknet/plugin-infra/content-script'
 import { SharedContextProvider } from '@masknet/shared'
 import { CSSVariableInjector, MaskThemeProvider } from '@masknet/theme'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { compose } from '@masknet/shared-base'
-import { activatedSocialNetworkUI } from './social-network/index.js'
-import { isFacebook } from './social-network-adaptor/facebook.com/base.js'
+import { activatedSiteAdaptorUI } from './site-adaptor-infra/index.js'
+import { isFacebook } from './site-adaptors/facebook.com/base.js'
 import { useMaskSiteAdaptorMixedTheme } from './utils/theme/useMaskSiteAdaptorMixedTheme.js'
 
 export function ShadowRootAttachPointRoot(children: React.ReactNode) {
@@ -14,9 +14,9 @@ export function ShadowRootAttachPointRoot(children: React.ReactNode) {
         (children) => <ErrorBoundary children={children} />,
         (children) =>
             MaskThemeProvider({
-                useMaskIconPalette: useSNSThemeMode,
+                useMaskIconPalette: useSiteThemeMode,
                 useTheme: useMaskSiteAdaptorMixedTheme,
-                CustomSnackbarOffsetY: isFacebook(activatedSocialNetworkUI) ? 80 : undefined,
+                CustomSnackbarOffsetY: isFacebook(activatedSiteAdaptorUI!) ? 80 : undefined,
                 children,
             }),
         (children) => SharedContextProvider({ children }),

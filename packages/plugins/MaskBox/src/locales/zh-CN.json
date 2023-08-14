@@ -12,5 +12,6 @@
     "failed": "加载失败",
     "retry": "重新加载",
     "action_title": "{{title}} ({{price}} {{symbol}}/时间)",
-    "plugin_mask_box_name": "Mask盲盒"
+    "plugin_mask_box_name": "Mask盲盒",
+    "plugin_mask_box_description": "支持多链的去中心化NFT盲盒发布平台。"
 }

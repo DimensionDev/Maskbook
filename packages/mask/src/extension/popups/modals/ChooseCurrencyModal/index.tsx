@@ -1,10 +1,10 @@
 import { memo, useCallback } from 'react'
-import { RadioButton, makeStyles } from '@masknet/theme'
+import { RadioIndicator, makeStyles } from '@masknet/theme'
 import { FiatCurrencyIcon } from '@masknet/shared'
 import { CurrencyType, resolveCurrencyName } from '@masknet/web3-shared-base'
 import { ActionModal, useActionModal, type ActionModalBaseProps } from '../../components/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, useTheme } from '@mui/material'
 import { useCurrencyType } from '@masknet/web3-hooks-base'
 import { Web3State } from '@masknet/web3-providers'
 
@@ -45,6 +45,7 @@ interface CurrencyItemProps {
 const CurrencyItem = memo(function CurrencyItem({ fiatCurrencyType }: CurrencyItemProps) {
     const { cx, classes } = useStyles()
     const { closeModal } = useActionModal()
+    const theme = useTheme()
     const currentCurrencyType = useCurrencyType()
     const checked = fiatCurrencyType === currentCurrencyType
 
@@ -62,7 +63,7 @@ const CurrencyItem = memo(function CurrencyItem({ fiatCurrencyType }: CurrencyIt
                 <FiatCurrencyIcon type={fiatCurrencyType} size={24} />
                 <Typography className={classes.text}>{resolveCurrencyName(fiatCurrencyType)}</Typography>
             </Box>
-            <RadioButton size={20} checked={checked} />
+            <RadioIndicator size={20} checked={checked} unCheckedButtonColor={theme.palette.maskColor.secondaryLine} />
         </li>
     )
 })

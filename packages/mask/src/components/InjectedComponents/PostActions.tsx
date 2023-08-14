@@ -1,17 +1,17 @@
 import {
     createInjectHooksRenderer,
     Plugin,
-    useActivatedPluginsSNSAdaptor,
+    useActivatedPluginsSiteAdaptor,
     usePostInfoDetails,
 } from '@masknet/plugin-infra/content-script'
 
 const ActionsRenderer = createInjectHooksRenderer(
-    useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
+    useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
     (plugin) => plugin.TipsRealm?.UI?.Content,
 )
 
 export function PostActions() {
     const identifier = usePostInfoDetails.author()
     if (!identifier) return null
-    return <ActionsRenderer identity={identifier} slot={Plugin.SNSAdaptor.TipsSlot.Post} />
+    return <ActionsRenderer identity={identifier} slot={Plugin.SiteAdaptor.TipsSlot.Post} />
 }

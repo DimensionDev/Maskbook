@@ -1,11 +1,11 @@
 import { useAsyncRetry } from 'react-use'
 import { useSubscription } from 'use-subscription'
 import { NextIDProof } from '@masknet/web3-providers'
-import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { NextIDPlatform } from '@masknet/shared-base'
 
 export function usePersonaVerify() {
-    const { lastRecognizedProfile, getNextIDPlatform, queryPersonaByProfile } = useSNSAdaptorContext()
+    const { lastRecognizedProfile, getNextIDPlatform, queryPersonaByProfile } = useSiteAdaptorContext()
     const visitingPersonaIdentifier = useSubscription(lastRecognizedProfile)
     return useAsyncRetry(async () => {
         if (!visitingPersonaIdentifier?.identifier) return

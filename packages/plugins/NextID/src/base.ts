@@ -1,4 +1,4 @@
-import { CurrentSNSNetwork, type Plugin } from '@masknet/plugin-infra'
+import { SiteAdaptor, type Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { PLUGIN_DESCRIPTION, PLUGIN_ID, PLUGIN_NAME } from './constants.js'
@@ -10,10 +10,10 @@ export const base: Plugin.Shared.Definition = {
     description: { fallback: PLUGIN_DESCRIPTION },
     publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
     enableRequirement: {
-        networks: {
+        supports: {
             type: 'opt-in',
-            networks: {
-                [CurrentSNSNetwork.Twitter]: true,
+            sites: {
+                [SiteAdaptor.Twitter]: true,
             },
         },
         target: 'stable',

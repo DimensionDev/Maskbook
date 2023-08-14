@@ -1,25 +1,34 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
+import urlcat from 'urlcat'
 import { Icons } from '@masknet/icons'
-import { type EnhanceableSite, type ProfileAccount, PopupModalRoutes } from '@masknet/shared-base'
+import {
+    type EnhanceableSite,
+    type ProfileAccount,
+    PopupModalRoutes,
+    PopupRoutes,
+    currentMaskWalletLockStatusSettings,
+    LockStatus,
+} from '@masknet/shared-base'
 import { MaskTabList, makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Box, Tab, Typography, useTheme } from '@mui/material'
-import { memo } from 'react'
+import { memo, useCallback } from 'react'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { SocialAccounts } from '../../../components/SocialAccounts/index.js'
 import { ConnectedWallet } from '../../../components/ConnectedWallet/index.js'
 import type { ConnectedWalletInfo } from '../type.js'
-import { HomeTabType } from '../../Wallet/type.js'
 import { useModalNavigate } from '../../../components/index.js'
 import { PersonaPublicKey } from '../../../components/PersonaPublicKey/index.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
 import { useParamTab } from '../../../hook/useParamTab.js'
+import { useNavigate } from 'react-router-dom'
+import { PopupHomeTabType } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
         flex: 1,
-        backgroundColor: '#F7F9FA',
+        background: theme.palette.maskColor.bottom,
         display: 'flex',
         flexDirection: 'column',
     },
@@ -77,6 +86,7 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         color: theme.palette.maskColor.third,
         marginTop: theme.spacing(1.5),
+        textAlign: 'center',
     },
     edit: {
         position: 'absolute',
@@ -89,6 +99,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        cursor: 'pointer',
     },
     publicKey: {
         fontSize: 12,
@@ -186,11 +197,22 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
     }) => {
         const theme = useTheme()
         const { t } = useI18N()
+        const navigate = useNavigate()
         const modalNavigate = useModalNavigate()
         const { classes, cx } = useStyles()
 
-        const [currentTab, onChange] = useParamTab<HomeTabType>(HomeTabType.SocialAccounts)
+        const [currentTab, onChange] = useParamTab<PopupHomeTabType>(PopupHomeTabType.SocialAccounts)
 
+        const onChangeTab = useCallback((event: object, value: PopupHomeTabType) => {
+            if (
+                currentMaskWalletLockStatusSettings.value === LockStatus.LOCKED &&
+                value === PopupHomeTabType.ConnectedWallets
+            ) {
+                navigate(urlcat(PopupRoutes.Unlock, { from: PopupRoutes.Personas, goBack: true, popup: true }))
+                return
+            }
+            onChange(event, value)
+        }, [])
         return (
             <div className={classes.container}>
                 {!isEmpty ? (
@@ -204,9 +226,11 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                 />
                             </Box>
                             <Box className={classes.info}>
-                                <Box position="relative">
+                                <Box position="relative" height="60px">
                                     <PersonaAvatar size={60} avatar={avatar} hasProofs={hasProofs} />
-                                    <Box className={classes.edit}>
+                                    <Box
+                                        className={classes.edit}
+                                        onClick={() => navigate(PopupRoutes.PersonaAvatarSetting)}>
                                         <Icons.Edit size={12} />
                                     </Box>
                                 </Box>
@@ -228,12 +252,15 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                 />
                             </Box>
 
-                            <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
-                                <Tab label={t('popups_social_account')} value={HomeTabType.SocialAccounts} />
-                                <Tab label={t('popups_connected_wallets')} value={HomeTabType.ConnectedWallets} />
+                            <MaskTabList
+                                onChange={onChangeTab}
+                                aria-label="persona-tabs"
+                                classes={{ root: classes.tabs }}>
+                                <Tab label={t('popups_social_account')} value={PopupHomeTabType.SocialAccounts} />
+                                <Tab label={t('popups_connected_wallets')} value={PopupHomeTabType.ConnectedWallets} />
                             </MaskTabList>
                         </Box>
-                        <TabPanel className={classes.panel} value={HomeTabType.SocialAccounts} data-hide-scrollbar>
+                        <TabPanel className={classes.panel} value={PopupHomeTabType.SocialAccounts} data-hide-scrollbar>
                             <SocialAccounts
                                 accounts={accounts}
                                 networks={networks}
@@ -241,7 +268,10 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                 onAccountClick={onAccountClick}
                             />
                         </TabPanel>
-                        <TabPanel className={classes.panel} value={HomeTabType.ConnectedWallets} data-hide-scrollbar>
+                        <TabPanel
+                            className={classes.panel}
+                            value={PopupHomeTabType.ConnectedWallets}
+                            data-hide-scrollbar>
                             <ConnectedWallet wallets={bindingWallets} />
                         </TabPanel>
                     </TabContext>

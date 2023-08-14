@@ -25,6 +25,7 @@ export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
         symbol,
         tokenType = TokenType.Fungible,
         disableDefaultIcon,
+        name,
         ...rest
     } = props
     const { data: token } = useFungibleToken(pluginID, address, undefined, { chainId: propChainId })
@@ -44,7 +45,7 @@ export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
     })
 
     if (data && disableDefaultIcon) return null
-    const text = token?.name || token?.symbol || symbol || '?' // `?` prevent to fallback to avatar icon
+    const text = token?.name || token?.symbol || symbol || name || '?' // `?` prevent to fallback to avatar icon
     const url = logoURL || token?.logoURL || data
     return <Icon {...rest} logoURL={url} name={text} />
 })

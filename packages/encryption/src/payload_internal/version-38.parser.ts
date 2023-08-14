@@ -1,5 +1,5 @@
 /* eslint @masknet/unicode-specific-set: ["error", { "only": "code" }] */
-import { type EC_Key, type PayloadParseResult, EC_KeyCurveEnum, type Signature } from '../payload/index.js'
+import { type EC_Key, type PayloadParseResult, EC_KeyCurve, type Signature } from '../payload/index.js'
 import { CryptoException, PayloadException } from '../types/index.js'
 import { Result, Ok, Some } from 'ts-results-es'
 import {
@@ -136,10 +136,10 @@ async function decodeECDHPublicKey(compressedPublic: string): Promise<OptionalRe
         key_ops: ['deriveKey', 'deriveBits'],
         kty: 'EC',
     }
-    const imported = await importEC(jwk, EC_KeyCurveEnum.secp256k1)
+    const imported = await importEC(jwk, EC_KeyCurve.secp256k1)
     if (imported.err) return imported
     return OptionalResult.Some<EC_Key>({
-        algr: EC_KeyCurveEnum.secp256k1,
+        algr: EC_KeyCurve.secp256k1,
         key: imported.val,
     })
 }

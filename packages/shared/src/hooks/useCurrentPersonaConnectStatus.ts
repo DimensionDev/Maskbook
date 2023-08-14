@@ -81,7 +81,7 @@ export function useCurrentPersonaConnectStatus(
             }
         }
 
-        // handle had persona but not connect current sns
+        // handle had persona but not connect current site
         if (!currentProfile) {
             return {
                 action: openPersonListDialog,
@@ -91,7 +91,7 @@ export function useCurrentPersonaConnectStatus(
             }
         }
 
-        // handle had persona and connected current sns, then check the nextID
+        // handle had persona and connected current site, then check the nextID
         try {
             const nextIDInfo = await NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex)
             const verifiedProfile = nextIDInfo?.proofs.find(

@@ -13,7 +13,7 @@ import {
 } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import Services from '../../../extension/service.js'
-import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { useSetupGuideStatus } from '../../GuideStep/useSetupGuideStatus.js'
 
@@ -23,7 +23,7 @@ export function useSetupGuideStepInfo(destinedPersona: PersonaIdentifier) {
     const lastSettingState = useSetupGuideStatus()
     // #endregion
 
-    // #region Get SNS username
+    // #region Get username
     const lastRecognized = useLastRecognizedIdentity()
     const username = lastSettingState.username || lastRecognized.identifier?.userId || ''
     // #endregion
@@ -35,7 +35,7 @@ export function useSetupGuideStepInfo(destinedPersona: PersonaIdentifier) {
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [retry])
 
     useEffect(() => {
-        if (username || activatedSocialNetworkUI.networkIdentifier !== EnhanceableSite.Twitter) return
+        if (username || activatedSiteAdaptorUI!.networkIdentifier !== EnhanceableSite.Twitter) return
         // In order to collect user info after login, need to reload twitter once
         let reloaded = false
         const handler = () => {
@@ -82,16 +82,16 @@ export function useSetupGuideStepInfo(destinedPersona: PersonaIdentifier) {
         const personaConnectedProfile = persona?.linkedProfiles.find((x) =>
             isSameProfile(
                 x.identifier,
-                ProfileIdentifier.of(activatedSocialNetworkUI.networkIdentifier, username).expect(
+                ProfileIdentifier.of(activatedSiteAdaptorUI!.networkIdentifier, username).expect(
                     `${username} should be a valid user id`,
                 ),
             ),
         )
         if (!personaConnectedProfile) return composeInfo(SetupGuideStep.FindUsername, 'doing')
 
-        // The SNS is enabled NextID
+        // NextID is available on this site.
         // Should show pin extension when not set
-        if (!activatedSocialNetworkUI.configuration.nextIDConfig?.platform)
+        if (!activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform)
             return composeInfo(SetupGuideStep.Close, 'close')
 
         // Should verified persona

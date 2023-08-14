@@ -1,14 +1,15 @@
+import { ThemeProvider } from '@emotion/react'
 import type { PluginID } from '@masknet/shared-base'
-import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
+import { MaskLightTheme, makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Button, Portal, Typography } from '@mui/material'
 import React, {
     cloneElement,
     createContext,
     useEffect,
     useLayoutEffect,
+    useMemo,
     useRef,
     useState,
-    useMemo,
     type ReactElement,
 } from 'react'
 import { usePluginGuideRecord } from './usePluginGuideRecord.js'
@@ -188,15 +189,13 @@ export function PluginGuide({
                                                 {title}
                                             </Typography>
                                         </div>
-                                        <div className={classes.buttonContainer}>
-                                            <Button
-                                                variant="outlined"
-                                                color="primary"
-                                                className={classes.button}
-                                                onClick={onNext}>
-                                                {actionText}
-                                            </Button>
-                                        </div>
+                                        <ThemeProvider theme={MaskLightTheme}>
+                                            <div className={classes.buttonContainer}>
+                                                <Button color="primary" className={classes.button} onClick={onNext}>
+                                                    {actionText}
+                                                </Button>
+                                            </div>
+                                        </ThemeProvider>
                                     </div>
                                 </Box>
                             </div>

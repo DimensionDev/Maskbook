@@ -3,12 +3,13 @@ import { useCallback, useEffect, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { Icons } from '@masknet/icons'
-import { useSNSAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import {
     AddCollectiblesModal,
     ChainBoundary,
     CollectionList,
     PluginVerifiedWalletStatusBar,
+    PopupHomeTabType,
     UserAssetsProvider,
     useSharedI18N,
 } from '@masknet/shared'
@@ -87,7 +88,7 @@ export function NFTListDialog() {
     const [disabled, setDisabled] = useState(false)
     const [pendingTokenCount, setPendingTokenCount] = useState(0)
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
-    const { openPopupWindow } = useSNSAdaptorContext()
+    const { openPopupWindow } = useSiteAdaptorContext()
     const targetWallet = wallets.find((x) => isSameAddress(targetAccount, x.address))
 
     useEffect(() => {
@@ -255,8 +256,9 @@ export function NFTListDialog() {
 
                 <PluginVerifiedWalletStatusBar
                     openPopupWindow={() =>
-                        openPopupWindow(PopupRoutes.ConnectedWallets, {
-                            internal: true,
+                        openPopupWindow(PopupRoutes.Personas, {
+                            tab: PopupHomeTabType.ConnectedWallets,
+                            disableNewWindow: true,
                         })
                     }
                     verifiedWallets={walletItems}

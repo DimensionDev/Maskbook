@@ -16,7 +16,7 @@ import { Days, NetworkPluginID, createLookupTableResolver } from '@masknet/share
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { createPermalink } from '../NFTScan/helpers/EVM.js'
 import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
-import { ETH_BLUR_TOKEN_ADDRESS, SIMPLE_HASH_URL } from './constants.js'
+import { ETH_BLUR_TOKEN_ADDRESS, SIMPLE_HASH_URL, SPAM_SCORE } from './constants.js'
 import { ActivityType as ActivityTypeSimpleHash, type Asset, type Collection } from './type.js'
 import { fetchSquashedJSON } from '../helpers/fetchJSON.js'
 import { getAssetFullName } from '../helpers/getAssetFullName.js'
@@ -39,7 +39,7 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
     if (isEmpty(asset)) return
     const chainId = resolveChainId(asset.chain)
     const address = asset.contract_address
-    if (!chainId || !isValidChainId(chainId) || !address || asset.collection.spam_score === 100) return
+    if (!chainId || !isValidChainId(chainId) || !address || asset.collection.spam_score === SPAM_SCORE) return
     const schema = asset.contract.type === 'ERC721' ? SchemaType.ERC721 : SchemaType.ERC1155
     const name = asset.name || getAssetFullName(asset.contract_address, asset.contract.name, asset.name, asset.token_id)
 

@@ -6,13 +6,14 @@ import {
     useAllPersonas,
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
-    useSNSAdaptorContext,
+    useSiteAdaptorContext,
 } from '@masknet/plugin-infra/content-script'
 import {
     PluginCardFrameMini,
     useCurrentPersonaConnectStatus,
     usePersonaProofs,
     PluginEnableBoundary,
+    PopupHomeTabType,
 } from '@masknet/shared'
 import { PluginID, PopupRoutes, EMPTY_LIST, currentPersonaIdentifier } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
@@ -29,7 +30,7 @@ export const NextIdPage = memo(function NextIdPage() {
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const allPersonas = useAllPersonas()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
-    const { openDashboard, queryPersonaByProfile, openPopupWindow } = useSNSAdaptorContext()
+    const { openDashboard, queryPersonaByProfile, openPopupWindow } = useSiteAdaptorContext()
 
     const { value: personaConnectStatus, loading: statusLoading } = useCurrentPersonaConnectStatus(
         allPersonas,
@@ -51,8 +52,9 @@ export const NextIdPage = memo(function NextIdPage() {
     const proofs = usePersonaProofs(publicKeyAsHex)
 
     const handleAddWallets = useCallback(() => {
-        openPopupWindow?.(PopupRoutes.ConnectedWallets, {
-            internal: true,
+        openPopupWindow?.(PopupRoutes.Personas, {
+            tab: PopupHomeTabType.ConnectedWallets,
+            disableNewWindow: true,
         })
     }, [openPopupWindow])
 

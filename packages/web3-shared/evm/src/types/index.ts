@@ -2,7 +2,7 @@ import type EVM_Web3 from 'web3'
 import type { Transaction as Web3Transaction, TransactionReceipt as Web3TransactionReceipt } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types.js'
-import type { Web3UI as Web3UIShared, Web3State as Web3StateShared } from '@masknet/web3-shared-base'
+import type { Web3UI as Web3UIShared, Web3State as Web3StateShared, GasOptionType } from '@masknet/web3-shared-base'
 
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
 
@@ -40,6 +40,7 @@ export enum ChainId {
     // Arbitrum
     Arbitrum = 42161,
     Arbitrum_Rinkeby = 421611,
+    Arbitrum_Nova = 42170,
 
     // xDai
     xDai = 100,
@@ -84,6 +85,57 @@ export enum ChainId {
 
     Moonbeam = 1284,
 
+    Pulse = 369,
+
+    Klaytn = 8217,
+
+    Harmony = 1666600000,
+
+    Moonriver = 1285,
+
+    Cronos = 25,
+
+    Brise = 32520,
+
+    Canto = 7700,
+
+    DFK = 53935,
+
+    Doge = 2000,
+
+    Evmos = 9001,
+
+    HuobiEco = 128,
+
+    IoTex = 4689,
+
+    Kava = 2222,
+
+    Kcc = 321,
+
+    Milkomeda = 2001,
+
+    OKXChain = 66,
+
+    Palm = 11297108109,
+
+    RSK = 30,
+
+    SmartBitcoinCash = 10000,
+
+    Shiden = 336,
+
+    SongbirdCanary = 19,
+
+    Step = 1234,
+
+    Telos = 40,
+
+    Wanchain = 888,
+
+    /** BitTorrent Chain Mainnet */
+    BitTorrent = 199,
+
     // For any chains not supported yet.
     Invalid = 0,
 }
@@ -107,12 +159,14 @@ export interface EIP1559GasConfig {
     maxFeePerGas: string
     maxPriorityFeePerGas: string
     gasPrice?: string
+    gasOptionType?: GasOptionType
 }
 
 export interface PriorEIP1559GasConfig {
     gas?: string
     gasPrice: string
     gasCurrency?: string
+    gasOptionType?: GasOptionType
 }
 
 export type GasConfig = EIP1559GasConfig | PriorEIP1559GasConfig
@@ -226,6 +280,7 @@ export enum ProviderType {
     Fortmatic = 'Fortmatic',
     Coin98 = 'Coin98',
     Coinbase = 'Coinbase',
+    OKX = 'OKX',
     Opera = 'Opera',
     Clover = 'Clover',
     CustomNetwork = 'CustomNetwork',
@@ -278,6 +333,7 @@ export interface RequestOptions {
     paymentToken?: string
     allowMaskAsGas?: boolean
     providerURL?: string
+    gasOptionType?: GasOptionType
 }
 
 export interface MessageRequest {
@@ -330,6 +386,7 @@ export interface TransactionOptions {
     identifier?: string
     paymentToken?: string
     allowMaskAsGas?: boolean
+    providerURL?: string
 
     // popups control
     disableClose?: boolean

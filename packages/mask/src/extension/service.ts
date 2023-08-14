@@ -38,7 +38,6 @@ export const Services: ServicesType = {
     Backup: add<BackupService>('Backup'),
     Helper: add<HelperService>('Helper'),
     SiteAdaptor: add<SiteAdaptorService>('SiteAdaptor'),
-    SocialNetwork: add<SiteAdaptorService>('SiteAdaptor'),
     Settings: add<SettingsService>('Settings'),
     ThirdPartyPlugin: add<ThirdPartyPluginService>('ThirdPartyPlugin'),
 }

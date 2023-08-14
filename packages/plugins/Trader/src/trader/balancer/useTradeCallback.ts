@@ -8,7 +8,7 @@ import { Web3 } from '@masknet/web3-providers'
 import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
 import { type SwapResponse, type TradeComputed, TradeStrategy } from '../../types/index.js'
 import { useTradeAmount } from './useTradeAmount.js'
-import { useSwapErrorCallback } from '../../SNSAdaptor/trader/hooks/useSwapErrorCallback.js'
+import { useSwapErrorCallback } from '../../SiteAdaptor/trader/hooks/useSwapErrorCallback.js'
 
 export function useTradeCallback(
     trade: TradeComputed<SwapResponse> | null,

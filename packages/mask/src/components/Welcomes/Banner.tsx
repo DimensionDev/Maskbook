@@ -7,7 +7,7 @@ import { DashboardRoutes, currentPersonaIdentifier } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { MaskColors, makeStyles } from '@masknet/theme'
 import Services from '../../extension/service.js'
-import { activatedSocialNetworkUI, globalUIState } from '../../social-network/index.js'
+import { activatedSiteAdaptorUI, activatedSiteAdaptor_state } from '../../site-adaptor-infra/index.js'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 
@@ -64,8 +64,8 @@ export function Banner(props: BannerProps) {
         lastRecognizedIdentity,
     )
     const { nextStep } = props
-    const networkIdentifier = activatedSocialNetworkUI.networkIdentifier
-    const identities = useValueRef(globalUIState.profiles)
+    const networkIdentifier = activatedSiteAdaptorUI!.networkIdentifier
+    const identities = useValueRef(activatedSiteAdaptor_state!.profiles)
     const [value, onChange] = useState('')
     const defaultNextStep = useCallback(() => {
         if (nextStep === 'hidden') return
@@ -84,7 +84,7 @@ export function Banner(props: BannerProps) {
               defaultValue: lastRecognizedIdentity.identifier?.userId ?? '',
               value,
               onChange,
-              isValid: activatedSocialNetworkUI.utils.isValidUsername || (() => true),
+              isValid: activatedSiteAdaptorUI!.utils.isValidUsername || (() => true),
           }
         : ('hidden' as const)
 

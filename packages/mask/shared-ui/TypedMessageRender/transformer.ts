@@ -23,10 +23,10 @@ export enum Order {
 /**
  * Message transformation order:
  *
- * sns_parsed_message
+ * parsed_message
  * |> flatten
  * |> parse links and tags (@user, #tag, $NAME)
- * |> Mask Payload parser (installed in SNS Adaptor starts)
+ * |> Mask Payload parser (installed in Site Adaptor starts)
  * |> plugins
  */
 export const TypedMessageTransformers = composeTransformers()

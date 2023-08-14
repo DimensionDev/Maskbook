@@ -3,7 +3,7 @@ import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { Box, Typography } from '@mui/material'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Trend } from '../../../assets/index.js'
 import { EnhanceableSite, PopupRoutes } from '@masknet/shared-base'
@@ -14,6 +14,8 @@ import { OnboardingWriter } from '../../../components/OnboardingWriter/index.js'
 import { useSearchParams } from 'react-router-dom'
 import { compact } from 'lodash-es'
 import { isZero } from '@masknet/web3-shared-base'
+import { useAsyncRetry } from 'react-use'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -77,9 +79,14 @@ export const Onboarding = memo(function Onboarding() {
     const { classes } = useStyles()
 
     const [params] = useSearchParams()
+    const { showSnackbar } = useCustomSnackbar()
+
+    const isCreate = params.get('isCreate')
+
+    const { value: hasPaymentPassword, loading, retry } = useAsyncRetry(WalletServiceRef.value.hasPassword, [])
 
     const onSetupTwitter = useCallback(async () => {
-        const url = await Services.SocialNetwork.setupSite(EnhanceableSite.Twitter, false)
+        const url = await Services.SiteAdaptor.setupSite(EnhanceableSite.Twitter, false)
         if (!url) return
         await delay(300)
         await browser.tabs.create({
@@ -90,8 +97,11 @@ export const Onboarding = memo(function Onboarding() {
     }, [])
 
     const onSetupPaymentPassword = useCallback(async () => {
-        await Services.Helper.openPopupWindow(PopupRoutes.SetPaymentPassword, { isCreating: true })
-    }, [])
+        await Services.Helper.openPopupWindow(
+            hasPaymentPassword ? PopupRoutes.Wallet : PopupRoutes.SetPaymentPassword,
+            { isCreating: true },
+        )
+    }, [hasPaymentPassword])
 
     const words = useMemo(() => {
         const count = params.get('count')
@@ -152,13 +162,17 @@ export const Onboarding = memo(function Onboarding() {
                     startIcon={<Icons.TwitterStroke className={classes.twitter} size={20} />}>
                     {t.persona_onboarding_to_twitter()}
                 </PrimaryButton>
-                <PrimaryButton
-                    onClick={onSetupPaymentPassword}
-                    size="large"
-                    sx={{ ml: 1.5 }}
-                    startIcon={<Icons.Wallet className={classes.twitter} size={20} />}>
-                    {t.persona_onboarding_set_payment_password()}
-                </PrimaryButton>
+                {!isCreate ? (
+                    <PrimaryButton
+                        loading={loading}
+                        disabled={loading}
+                        onClick={onSetupPaymentPassword}
+                        size="large"
+                        sx={{ ml: 1.5 }}
+                        startIcon={<Icons.Wallet className={classes.twitter} size={20} />}>
+                        {hasPaymentPassword ? t.wallet_open_mask_wallet() : t.persona_onboarding_set_payment_password()}
+                    </PrimaryButton>
+                ) : null}
             </SetupFrameController>
         </>
     )

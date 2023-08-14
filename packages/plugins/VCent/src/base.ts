@@ -8,7 +8,7 @@ export const base: Plugin.Shared.Definition = {
     description: { fallback: PLUGIN_DESCRIPTION },
     publisher: { name: { fallback: 'rob-low' }, link: 'https://github.com/rob-lw' },
     enableRequirement: {
-        networks: { type: 'opt-out', networks: {} },
+        supports: { type: 'opt-out', sites: {} },
         target: 'stable',
     },
     i18n: languages,

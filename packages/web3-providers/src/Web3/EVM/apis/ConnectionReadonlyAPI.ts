@@ -26,6 +26,7 @@ import {
     isCryptoPunksContractAddress,
     getEthereumConstant,
     getTokenConstant,
+    createAccount,
 } from '@masknet/web3-shared-evm'
 import {
     type FungibleToken,
@@ -445,7 +446,7 @@ export class ConnectionReadonlyAPI
 
     createAccount(initial?: ConnectionOptions_Base<ChainId, ProviderType, Transaction> | undefined): Account<ChainId> {
         const options = this.ConnectionOptions.fill(initial)
-        const account = this.getWeb3().eth.accounts.create()
+        const account = createAccount()
         return {
             account: account.address,
             chainId: options.chainId,

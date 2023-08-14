@@ -1,19 +1,19 @@
 import { forwardRef, useState } from 'react'
 import type { DashboardRoutes, PersonaInformation, PluginID, SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
-import type { CurrentSNSNetwork, IdentityResolved } from '@masknet/plugin-infra'
+import type { SiteAdaptor, IdentityResolved } from '@masknet/plugin-infra'
 import { ApplicationBoard, ApplicationSettingTabs } from './ApplicationBoardDialog.js'
-import type { PersonaAgainstSNSConnectStatus } from '../../../types.js'
+import type { PersonaPerSiteConnectStatus } from '../../../types.js'
 import { ApplicationBoardSettingsDialog } from './ApplicationSettingsDialog.js'
 
-export type ApplicationBoardModalOpenProps = {
+export interface ApplicationBoardModalOpenProps {
     openDashboard: (route?: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
-    currentSNSNetwork: CurrentSNSNetwork
+    currentSite: SiteAdaptor
     allPersonas: PersonaInformation[]
     lastRecognized: IdentityResolved
-    applicationCurrentStatus?: PersonaAgainstSNSConnectStatus
-    personaAgainstSNSConnectStatusLoading: boolean
+    applicationCurrentStatus?: PersonaPerSiteConnectStatus
+    personaPerSiteConnectStatusLoading: boolean
     setPluginMinimalModeEnabled: (id: string, checked: boolean) => Promise<void>
     getDecentralizedSearchSettings: () => Promise<boolean>
     setDecentralizedSearchSettings: (checked: boolean) => Promise<void>
@@ -32,11 +32,11 @@ export const ApplicationBoardModal = forwardRef<
     const [openDashboard, setOpenDashboard] = useState<(route?: DashboardRoutes, search?: string) => void>()
     const [queryOwnedPersonaInformation, setQueryOwnedPersonaInformation] =
         useState<(initializedOnly: boolean) => Promise<PersonaInformation[]>>()
-    const [currentSNSNetwork, setCurrentSNSNetwork] = useState<CurrentSNSNetwork>()
+    const [currentSite, setCurrentSite] = useState<SiteAdaptor>()
     const [allPersonas, setAllPersonas] = useState<PersonaInformation[]>()
     const [lastRecognized, setLastRecognized] = useState<IdentityResolved>()
-    const [applicationCurrentStatus, setApplicationCurrentStatus] = useState<PersonaAgainstSNSConnectStatus>()
-    const [personaAgainstSNSConnectStatusLoading, setPersonaAgainstSNSConnectStatusLoading] = useState(false)
+    const [applicationCurrentStatus, setApplicationCurrentStatus] = useState<PersonaPerSiteConnectStatus>()
+    const [personaPerSiteConnectStatusLoading, setPersonaPerSiteConnectStatusLoading] = useState(false)
     const [setPluginMinimalModeEnabled, setSetPluginMinimalModeEnabled] =
         useState<(id: string, checked: boolean) => Promise<void>>()
     const [getDecentralizedSearchSettings, setGetDecentralizedSearchSettings] = useState<() => Promise<boolean>>()
@@ -50,11 +50,11 @@ export const ApplicationBoardModal = forwardRef<
         onOpen(props) {
             setOpenDashboard(() => props.openDashboard)
             setQueryOwnedPersonaInformation(() => props.queryOwnedPersonaInformation)
-            setCurrentSNSNetwork(props.currentSNSNetwork)
+            setCurrentSite(props.currentSite)
             setAllPersonas(props.allPersonas)
             setLastRecognized(props.lastRecognized)
             setApplicationCurrentStatus(props.applicationCurrentStatus)
-            setPersonaAgainstSNSConnectStatusLoading(props.personaAgainstSNSConnectStatusLoading)
+            setPersonaPerSiteConnectStatusLoading(props.personaPerSiteConnectStatusLoading)
             setSetPluginMinimalModeEnabled(() => props.setPluginMinimalModeEnabled)
             setGetDecentralizedSearchSettings(() => props.getDecentralizedSearchSettings)
             setSetDecentralizedSearchSettings(() => props.setDecentralizedSearchSettings)
@@ -70,10 +70,10 @@ export const ApplicationBoardModal = forwardRef<
             open
             allPersonas={allPersonas ?? []}
             lastRecognized={lastRecognized}
-            currentSNSNetwork={currentSNSNetwork}
+            currentSite={currentSite}
             applicationCurrentStatus={applicationCurrentStatus}
             queryOwnedPersonaInformation={queryOwnedPersonaInformation}
-            personaAgainstSNSConnectStatusLoading={personaAgainstSNSConnectStatusLoading}
+            personaPerSiteConnectStatusLoading={personaPerSiteConnectStatusLoading}
             openDashboard={openDashboard}
             setPluginMinimalModeEnabled={setPluginMinimalModeEnabled}
             getDecentralizedSearchSettings={getDecentralizedSearchSettings}

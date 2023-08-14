@@ -6,7 +6,7 @@ import { Box } from '@mui/system'
 import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
-import { DashboardRoutes, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { DashboardRoutes, EMPTY_LIST, NetworkPluginID, generateNewWalletName } from '@masknet/shared-base'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM, currySameAddress } from '@masknet/web3-shared-base'
 import { useWallets } from '@masknet/web3-hooks-base'
 import { DeriveWalletTable } from '@masknet/shared'
@@ -71,7 +71,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
             isReset: boolean
         }
     }
-    const walletName = 'Wallet 1'
+
     const { mnemonic, password, isReset } = state.usr
     const indexes = useRef(new Set<number>())
     const { handlePasswordAndWallets } = ResetWalletContext.useContainer()
@@ -113,7 +113,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
 
         const firstPath = first(unDeriveWallets)
         const firstWallet = await WalletServiceRef.value.recoverWalletFromMnemonicWords(
-            `${walletName}${firstPath!}`,
+            generateNewWalletName(wallets),
             mnemonic,
             `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${firstPath}`,
         )
@@ -121,9 +121,9 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         await Promise.all(
             unDeriveWallets
                 .slice(1)
-                .map(async (pathIndex) =>
+                .map(async (pathIndex, index) =>
                     WalletServiceRef.value.recoverWalletFromMnemonicWords(
-                        `${walletName}${pathIndex}`,
+                        generateNewWalletName(wallets, index + 1),
                         mnemonic,
                         `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${pathIndex}`,
                     ),
@@ -133,7 +133,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         await WalletServiceRef.value.resolveMaskAccount([{ address: firstWallet }])
 
         navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
-    }, [indexes, mnemonic, walletName, wallets.length, isReset, password])
+    }, [indexes, mnemonic, wallets.length, isReset, password])
 
     const onCheck = useCallback(
         async (checked: boolean, index: number) => {

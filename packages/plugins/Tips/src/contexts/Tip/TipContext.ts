@@ -8,7 +8,7 @@ import type { ValidationTuple } from '../../types/index.js'
 
 export interface TipContextOptions {
     recipient: SocialAccount<Web3Helper.ChainIdAll> | undefined
-    recipientSnsId: string
+    recipientUserId: string
     recipientAddress: string
     setRecipient: Dispatch<SetStateAction<string>>
     tipType: TokenType
@@ -34,14 +34,14 @@ export interface TipContextOptions {
     validatingRecipient: boolean
     recipientValidation: ValidationTuple
     isAvailableBalance: boolean
-    isAvailableGasBalance: boolean
+    isGasSufficient: boolean
     balance: string
 }
 
 export const TipContext = createContext<TipContextOptions>({
     recipient: undefined,
     recipientAddress: '',
-    recipientSnsId: '',
+    recipientUserId: '',
     setRecipient: noop,
     tipType: TokenType.NonFungible,
     setTipType: noop,
@@ -66,7 +66,7 @@ export const TipContext = createContext<TipContextOptions>({
     validatingRecipient: false,
     recipientValidation: [true],
     isAvailableBalance: false,
-    isAvailableGasBalance: false,
+    isGasSufficient: false,
     balance: '',
 })
 TipContext.displayName = 'TipContext'

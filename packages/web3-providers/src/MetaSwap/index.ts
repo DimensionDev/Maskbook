@@ -40,6 +40,11 @@ export class MetaSwapAPI implements GasOptionAPI_Base.Provider<ChainId, GasOptio
                 suggestedMaxFeePerGas: formatAmountAsWei(result.low?.suggestedMaxFeePerGas),
                 suggestedMaxPriorityFeePerGas: formatAmountAsWei(result.low?.suggestedMaxPriorityFeePerGas),
             },
+            [GasOptionType.CUSTOM]: {
+                estimatedSeconds: 0,
+                suggestedMaxFeePerGas: '',
+                suggestedMaxPriorityFeePerGas: '',
+            },
         }
     }
 }

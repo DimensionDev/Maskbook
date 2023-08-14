@@ -16,8 +16,8 @@
             }
         },
         {
-            "input": "./packages/mask/src/social-network-adaptor/twitter.com/locales/en-US.json",
-            "output": "./packages/mask/src/social-network-adaptor/twitter.com/locales/i18n_generated",
+            "input": "./packages/mask/src/site-adaptors/twitter.com/locales/en-US.json",
+            "output": "./packages/mask/src/site-adaptors/twitter.com/locales/i18n_generated",
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",

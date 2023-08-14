@@ -60,7 +60,7 @@ const ConnectWalletPage = memo(() => {
     const navigate = useNavigate()
     const { setSigned } = PopupContext.useContainer()
     const wallets = useWallets()
-    const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
+    const { isLocked, loading: lockStatusLoading } = useWalletLockStatus()
     const { ProviderIconClickBait } = useWeb3UI(NetworkPluginID.PLUGIN_EVM).SelectProviderDialog ?? {}
 
     const mainnet = getRegisteredWeb3Networks(NetworkPluginID.PLUGIN_EVM).find((x) => x.chainId === ChainId.Mainnet)
@@ -76,7 +76,7 @@ const ConnectWalletPage = memo(() => {
                     providerType: ProviderType.MaskWallet,
                 })
 
-                if (isLocked && !getLockStatusLoading) {
+                if (isLocked && !lockStatusLoading) {
                     navigate(urlcat(PopupRoutes.Unlock, { from: PopupRoutes.SelectWallet, goBack: true, popup: true }))
                     return
                 }
@@ -105,7 +105,7 @@ const ConnectWalletPage = memo(() => {
                 })
             }
         },
-        [isLocked, getLockStatusLoading, wallets.length],
+        [isLocked, lockStatusLoading, wallets.length],
     )
     useTitle(t('plugin_wallet_on_connect'))
 

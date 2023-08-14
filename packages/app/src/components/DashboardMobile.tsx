@@ -1,25 +1,11 @@
 import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import {
-    ChartBarSquareIcon,
-    Cog6ToothIcon,
-    FolderIcon,
-    GlobeAltIcon,
-    ServerIcon,
-    SignalIcon,
-    XMarkIcon,
-} from '@heroicons/react/24/outline'
-import { classNames } from '../helpers/classNames.js'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 import { DashboardContext } from '../contexts/DashboardContext.js'
-
-const navigation = [
-    { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-    { name: 'Deployments', href: '#', icon: ServerIcon, current: true },
-    { name: 'Activity', href: '#', icon: SignalIcon, current: false },
-    { name: 'Domains', href: '#', icon: GlobeAltIcon, current: false },
-    { name: 'Usage', href: '#', icon: ChartBarSquareIcon, current: false },
-    { name: 'Settings', href: '#', icon: Cog6ToothIcon, current: false },
-]
+import { WalletItem } from './Wallet.js'
+import { Navigation } from './Navigation.js'
+import { InstallExtension } from './Install.js'
+import { env } from '@masknet/flags'
 
 export interface DashboardForMobileProps {}
 
@@ -69,37 +55,20 @@ export function DashboardForMobile(props: DashboardForMobileProps) {
                                 </div>
                             </Transition.Child>
                             {/* Sidebar component, swap this element with another sidebar if you like */}
-                            <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-zinc-900 px-6 ring-1 ring-white/10">
+                            <div className="flex grow flex-col gap-y-5 overflow-y-auto dark:bg-black bg-white px-6">
                                 <div className="flex h-16 shrink-0 items-center">
-                                    <img
-                                        className="h-8 w-auto"
-                                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                                        alt="Your Company"
-                                    />
+                                    <WalletItem />
                                 </div>
                                 <nav className="flex flex-1 flex-col">
-                                    <ul role="list" className="flex flex-1 flex-col gap-y-7">
+                                    <ul role="list" className="flex flex-1 flex-col gap-y-7  justify-between">
                                         <li>
-                                            <ul role="list" className="-mx-2 space-y-1">
-                                                {navigation.map((item) => (
-                                                    <li key={item.name}>
-                                                        <a
-                                                            href={item.href}
-                                                            className={classNames(
-                                                                item.current
-                                                                    ? 'bg-gray-800 text-white'
-                                                                    : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                                                                'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
-                                                            )}>
-                                                            <item.icon
-                                                                className="h-6 w-6 shrink-0"
-                                                                aria-hidden="true"
-                                                            />
-                                                            {item.name}
-                                                        </a>
-                                                    </li>
-                                                ))}
-                                            </ul>
+                                            <Navigation />
+                                        </li>
+                                        <li>
+                                            <InstallExtension />
+                                            <span className="flex items-center gap-x-4 px-6 py-3 text-xs leading-6 text-gray-700 dark:text-gray-400">
+                                                {`Version: ${env.VERSION}`}
+                                            </span>
                                         </li>
                                     </ul>
                                 </nav>

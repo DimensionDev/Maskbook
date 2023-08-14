@@ -2,15 +2,22 @@ import { ec as EC } from 'elliptic'
 import { concatArrayBuffer } from '@masknet/kit'
 import type { NormalizedBackup } from '@masknet/backup-format'
 import { currySameAddress, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
-import { fromBase64URL, type EC_JsonWebKey, isK256Point, isK256PrivateKey } from '@masknet/shared-base'
+import {
+    fromBase64URL,
+    type EC_JsonWebKey,
+    isK256Point,
+    isK256PrivateKey,
+    generateNewWalletName,
+} from '@masknet/shared-base'
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 
 export async function internal_wallet_restore(backup: NormalizedBackup.WalletBackup[]) {
+    let index = 0
     for (const wallet of backup) {
         try {
             const wallets = await WalletServiceRef.value.getWallets()
-            const nameExists = wallets.some((x) => x.name === wallet.name)
-            const name = nameExists ? `Wallet ${wallets.length + 1}` : wallet.name
+            const name = generateNewWalletName(wallets, index)
+            index += 1
 
             if (wallet.privateKey.some)
                 await WalletServiceRef.value.recoverWalletFromPrivateKey(

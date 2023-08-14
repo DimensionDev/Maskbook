@@ -132,6 +132,7 @@ const AccountDetail = memo(() => {
                 SignType.Message,
                 result.signPayload,
                 currentPersona.identifier,
+                location.origin,
                 true,
             )
 
@@ -160,7 +161,7 @@ const AccountDetail = memo(() => {
 
     const [, onVerify] = useAsyncFn(async () => {
         if (!selectedAccount?.identifier || !currentPersona?.identifier) return
-        await Service.SocialNetwork.connectSite(
+        await Service.SiteAdaptor.connectSite(
             currentPersona.identifier,
             selectedAccount.identifier.network,
             'nextID',
@@ -174,7 +175,7 @@ const AccountDetail = memo(() => {
     useEffect(() => {
         if (!selectedAccount) navigate(PopupRoutes.Personas, { replace: true })
         setExtension(
-            !selectedAccount?.is_valid ? (
+            !selectedAccount?.is_valid && selectedAccount?.linkedPersona ? (
                 <Icons.Trash size={24} onClick={handleDetachProfile} />
             ) : (
                 <Icons.Disconnect
@@ -188,7 +189,7 @@ const AccountDetail = memo(() => {
                                     i18nKey="popups_persona_disconnect_tips"
                                     components={{ strong: <strong style={{ color: theme.palette.maskColor.main }} /> }}
                                     values={{
-                                        identity: selectedAccount.identifier.userId,
+                                        identity: selectedAccount?.identifier.userId,
                                         personaName: currentPersona?.nickname,
                                     }}
                                 />

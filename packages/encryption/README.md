@@ -8,7 +8,7 @@ This package is designed with OCap and prepared to run under SES.
 
 ```plain
 raw message (text or image)
-|> Social Network decoding (socialNetworkID)
+|> Network specific decoding (NetworkID)
 |> Standard Decryption
 ```
 

@@ -6,7 +6,7 @@ import { TabContext } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import {
-    useActivatedPluginsSNSAdaptor,
+    useActivatedPluginsSiteAdaptor,
     usePluginI18NField,
     getProfileCardTabContent,
 } from '@masknet/plugin-infra/content-script'
@@ -27,7 +27,6 @@ interface Props extends withClasses<'text' | 'button' | 'root'> {
 }
 
 const useStyles = makeStyles()((theme) => {
-    const isDark = theme.palette.mode === 'dark'
     return {
         root: {
             position: 'relative',
@@ -108,9 +107,9 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
     const { t } = useI18N()
     const translate = usePluginI18NField()
     const {
-        value: allSocialAccounts = EMPTY_LIST,
-        loading: loadingSocialAccounts,
-        retry: retrySocialAddress,
+        data: allSocialAccounts = EMPTY_LIST,
+        isLoading: loadingSocialAccounts,
+        refetch: retrySocialAddress,
     } = useSocialAccountsBySettings(identity, undefined, addressSorter)
     const socialAccounts = useMemo(
         () => allSocialAccounts.filter((x) => x.pluginID === NetworkPluginID.PLUGIN_EVM),
@@ -134,7 +133,7 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
         })
     }, [retrySocialAddress])
 
-    const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
+    const activatedPlugins = useActivatedPluginsSiteAdaptor('any')
     const displayPlugins = getAvailablePlugins(activatedPlugins, (plugins) => {
         return plugins
             .flatMap((x) => x.ProfileCardTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)

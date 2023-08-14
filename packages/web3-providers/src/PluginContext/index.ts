@@ -1,2 +1,2 @@
 export * from './apis/SharedContextAPI.js'
-export * from './apis/SNSAdaptorContextAPI.js'
+export * from './apis/SiteAdaptorContextAPI.js'

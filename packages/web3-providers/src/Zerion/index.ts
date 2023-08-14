@@ -276,6 +276,11 @@ export class ZerionGasAPI implements GasOptionAPI_Base.Provider<ChainId, GasOpti
                 suggestedMaxFeePerGas: toFixed(result?.slow),
                 suggestedMaxPriorityFeePerGas: '0',
             },
+            [GasOptionType.CUSTOM]: {
+                estimatedSeconds: 0,
+                suggestedMaxFeePerGas: '',
+                suggestedMaxPriorityFeePerGas: '',
+            },
         }
     }
 }

@@ -75,11 +75,12 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => (
     chainName: {
         flexGrow: 1,
         lineHeight: '18px',
-        color: '#15181B',
+        color: theme.palette.maskColor.main,
         fontWeight: 700,
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         whiteSpace: 'nowrap',
+        maxWidth: 154,
     },
     connected: {
         display: 'flex',
@@ -120,6 +121,7 @@ interface WalletHeaderUIProps {
     onActionClick: () => void
     wallet: Wallet
     disabled?: boolean
+    disableCopy?: boolean
 }
 
 export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI({
@@ -129,6 +131,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
     onActionClick,
     wallet,
     disabled = false,
+    disableCopy = false,
 }) {
     const { t } = useI18N()
     const { classes, cx } = useStyles({ disabled })
@@ -166,8 +169,8 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                                 />
                             ) : null}
                         </Box>
-                        {data?.url || isLoading ? (
-                            <ProgressiveText className={classes.connected} loading={isLoading}>
+                        {isLoading ? null : (
+                            <ProgressiveText className={classes.connected} loading={isLoading} skeletonWidth={50}>
                                 <span
                                     className={cx(
                                         classes.dot,
@@ -180,7 +183,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                                     })}
                                 </span>
                             </ProgressiveText>
-                        ) : null}
+                        )}
                     </Box>
                 </div>
                 <div
@@ -195,7 +198,9 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                         </TextOverflowTooltip>
                         <Typography className={classes.identifier}>
                             <FormattedAddress address={wallet.address} formatter={formatEthereumAddress} size={4} />
-                            <CopyButton text={wallet.address} className={classes.icon} size={12} />
+                            {!disableCopy ? (
+                                <CopyButton text={wallet.address} className={classes.icon} size={12} />
+                            ) : null}
                             {addressLink ? (
                                 <Link
                                     className={classes.icon}

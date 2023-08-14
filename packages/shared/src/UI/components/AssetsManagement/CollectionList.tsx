@@ -78,7 +78,7 @@ function getTopOffset() {
         // 96, height of the header of web3 tab
         return 53 + 96
     }
-    // TODO Other SNS pages
+    // TODO Other sites
     return 0
 }
 
@@ -165,13 +165,13 @@ export const CollectionList = memo(function CollectionList({
     const handleInitialRender = useCallback(
         (collection: Web3Helper.NonFungibleCollectionAll) => {
             const id = collection.id!
-            const assetsState = assetsMapRef.current[id]
+            const assetsState = assetsMapRef.current[`${account}.${id}`]
             // To reduce requests, check if has been initialized
             if (assetsState?.assets.length || assetsState?.loading) return
             loadVerifiedBy(id)
             loadAssets(collection)
         },
-        [loadAssets, loadVerifiedBy],
+        [loadAssets, loadVerifiedBy, account],
     )
 
     const sidebar = disableSidebar ? null : (

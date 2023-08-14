@@ -1,20 +1,20 @@
 import { Icons } from '@masknet/icons'
-import { ImageIcon, ProgressiveText, TokenIcon, useAvailableBalance } from '@masknet/shared'
+import { NetworkIcon, ProgressiveText, TokenIcon, useAvailableBalance } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
+import { ActionButton, MaskColors, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     ChainContextProvider,
     useChainContext,
     useFungibleToken,
-    useNativeTokenAddress,
-    useNetworkDescriptor,
+    useNetworks,
     useWallet,
     useWeb3Connection,
 } from '@masknet/web3-hooks-base'
-import { isLessThan, isLte, isZero, leftShift, rightShift } from '@masknet/web3-shared-base'
-import { isNativeTokenAddress, type GasConfig } from '@masknet/web3-shared-evm'
+import { isLessThan, isLte, isZero, leftShift, minus, rightShift } from '@masknet/web3-shared-base'
+import { isNativeTokenAddress, type GasConfig, type ChainId } from '@masknet/web3-shared-evm'
 import { Box, Input, Typography } from '@mui/material'
+import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
@@ -23,6 +23,7 @@ import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
 import { TokenPicker } from '../../../components/index.js'
 import { useTokenParams } from '../../../hook/index.js'
 import { ChooseTokenModal } from '../../../modals/modals.js'
+import { useDefaultGasConfig } from './useDefaultGasConfig.js'
 
 const useStyles = makeStyles()((theme) => ({
     asset: {
@@ -57,6 +58,10 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.second,
         fontWeight: 700,
     },
+    error: {
+        color: theme.palette.maskColor.danger,
+        margin: theme.spacing(2, 2, 0),
+    },
     actionGroup: {
         display: 'flex',
         justifyContent: 'center',
@@ -80,6 +85,8 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const { chainId, address, params, setParams } = useTokenParams()
     const chainContextValue = useMemo(() => ({ chainId }), [chainId])
     const navigate = useNavigate()
+    const [paymentAddress, setPaymentAddress] = useState<string>()
+
     // Enter from wallet home page, sending token is not decided yet
     const undecided = params.get('undecided') === 'true'
     const locationAsset = useLocation().state?.asset as Web3Helper.FungibleAssetAll | undefined
@@ -99,26 +106,31 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         },
         [setParams],
     )
-    const network = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
+    const networks = useNetworks()
+    const network = networks.find((x) => x.chainId === chainId)
     const { data: token, isLoading } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, address, undefined, { chainId })
 
-    const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM, { chainId })
     const isNativeToken = isNativeTokenAddress(address)
     const gasLimit = isNativeToken ? ETH_GAS_LIMIT : ERC20_GAS_LIMIT
-    const [gasConfig, setGasConfig] = useState<GasConfig>()
+    const defaultGasConfig = useDefaultGasConfig(chainId, gasLimit)
+    const [gasConfig = defaultGasConfig, setGasConfig] = useState<GasConfig>()
     const [amount, setAmount] = useState('')
     const totalAmount = useMemo(
         () => (amount && token?.decimals ? rightShift(amount, token.decimals).toFixed() : '0'),
         [amount, token?.decimals],
     )
-    const { balance, isLoading: isLoadingAvailableBalance } = useAvailableBalance(
-        NetworkPluginID.PLUGIN_EVM,
-        address,
-        gasConfig,
-        {
-            chainId,
-        },
+    const patchedGasConfig = useMemo(
+        () => ({ ...gasConfig, gasCurrency: paymentAddress, gas: gasLimit }),
+        [gasConfig, paymentAddress, gasLimit],
     )
+    const {
+        balance,
+        isLoading: isLoadingAvailableBalance,
+        isGasSufficient,
+        gasFee,
+    } = useAvailableBalance(NetworkPluginID.PLUGIN_EVM, address, patchedGasConfig as GasConfig, {
+        chainId,
+    })
 
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { account } = useChainContext()
@@ -127,13 +139,22 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         chainId,
     })
     const recipient = params.get('recipient')
+    const { showSnackbar } = usePopupCustomSnackbar()
+
     const [state, transfer] = useAsyncFn(async () => {
         if (!recipient || isZero(totalAmount) || !token?.decimals) return
-        return Web3.transferFungibleToken(address, recipient, totalAmount, '', {
-            overrides: gasConfig,
-        })
-    }, [address, chainId, recipient, totalAmount, token?.decimals, gasConfig])
-    const [paymentAddress, setPaymentAddress] = useState(nativeTokenAddress)
+        try {
+            await Web3.transferFungibleToken(address, recipient, totalAmount, '', {
+                overrides: gasConfig,
+                paymentToken: paymentAddress,
+                chainId,
+                gasOptionType: gasConfig?.gasOptionType,
+                providerURL: network?.rpcUrl,
+            })
+        } catch (err) {
+            showSnackbar(t('failed_to_transfer_token', { message: (err as Error).message, variant: 'error' }))
+        }
+    }, [address, chainId, recipient, totalAmount, token?.decimals, gasConfig, paymentAddress, network?.rpcUrl])
 
     if (undecided)
         return (
@@ -146,16 +167,19 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
             />
         )
 
-    const inputNotReady = !recipient || !amount || isLessThan(balance, totalAmount)
-    const tokenNotReady = !token?.decimals || !balance || isLessThan(balance, totalAmount)
-    const transferDisabled = inputNotReady || tokenNotReady || isLte(totalAmount, 0)
-
     // Use selectedAsset balance eagerly
+    // balance passed from previous page, would be used if during fetching balance.
     const isLoadingBalance = selectedAsset?.balance ? false : isLoadingAvailableBalance || isLoading
-    const tokenBalance = isLoadingAvailableBalance || isLoading ? selectedAsset?.balance : balance
+    const optimisticBalance = BigNumber.max(0, minus(selectedAsset?.balance || 0, gasFee))
+    // Available token balance
+    const tokenBalance = (isLoadingAvailableBalance || isLoading) && isZero(balance) ? optimisticBalance : balance
 
     const decimals = token?.decimals || selectedAsset?.decimals
     const uiTokenBalance = tokenBalance && decimals ? leftShift(tokenBalance, decimals).toString() : '0'
+
+    const inputNotReady = !recipient || !amount || isLessThan(tokenBalance, totalAmount)
+    const tokenNotReady = !token?.decimals || isLessThan(tokenBalance, totalAmount) || !isGasSufficient
+    const transferDisabled = inputNotReady || tokenNotReady || isLte(totalAmount, 0)
 
     return (
         <>
@@ -170,17 +194,31 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                     if (picked) handleSelectAsset(picked)
                 }}>
                 <Box position="relative" height={36} width={36}>
-                    <TokenIcon className={classes.tokenIcon} chainId={chainId} address={address} />
-                    <ImageIcon className={classes.badgeIcon} size={16} icon={network?.icon} />
+                    <TokenIcon
+                        className={classes.tokenIcon}
+                        chainId={chainId}
+                        address={address}
+                        logoURL={selectedAsset?.logoURL}
+                    />
+                    <NetworkIcon
+                        pluginID={NetworkPluginID.PLUGIN_EVM}
+                        chainId={network?.chainId as ChainId}
+                        className={classes.badgeIcon}
+                        size={16}
+                        icon={network?.iconUrl}
+                        preferName={network?.isCustomized}
+                    />
                 </Box>
                 <Box mr="auto" ml={2}>
                     <ProgressiveText loading={isLoading} skeletonWidth={36}>
                         {token?.symbol}
                     </ProgressiveText>
                     <ProgressiveText loading={isLoadingBalance} skeletonWidth={60}>
-                        {t('available_amount', {
-                            amount: formatTokenBalance(tokenBalance, token?.decimals),
-                        })}
+                        {isNativeToken
+                            ? t('available_amount', {
+                                  amount: formatTokenBalance(tokenBalance, token?.decimals),
+                              })
+                            : formatTokenBalance(tokenBalance, token?.decimals)}
                     </ProgressiveText>
                 </Box>
                 <Icons.ArrowDrop size={24} />
@@ -216,15 +254,20 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                 <Typography className={classes.label}>{t('gas_fee')}</Typography>
                 <ChainContextProvider value={chainContextValue}>
                     <GasSettingMenu
+                        initConfig={gasConfig}
                         minimumGas={gasLimit}
                         defaultChainId={chainId}
                         paymentToken={paymentAddress}
+                        allowMaskAsGas
                         onPaymentTokenChange={setPaymentAddress}
                         owner={wallet?.owner}
                         onChange={setGasConfig}
                     />
                 </ChainContextProvider>
             </Box>
+            {isGasSufficient ? null : (
+                <Typography className={classes.error}>{t('insufficient_funds_for_gas')}</Typography>
+            )}
             <Box className={classes.actionGroup}>
                 <ActionButton variant="outlined" fullWidth onClick={() => navigate(-2)}>
                     {t('cancel')}

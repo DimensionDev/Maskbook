@@ -49,7 +49,7 @@ const PersonaHome = memo(() => {
     const handleConnect = useCallback(
         async (networkIdentifier: EnhanceableSite) => {
             if (currentPersona) {
-                await Services.SocialNetwork.connectSite(
+                await Services.SiteAdaptor.connectSite(
                     currentPersona.identifier,
                     networkIdentifier,
                     'local',

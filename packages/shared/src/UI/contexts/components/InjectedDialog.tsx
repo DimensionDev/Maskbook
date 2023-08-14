@@ -121,9 +121,9 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
 }
 
 export function InjectedDialog(props: InjectedDialogProps) {
-    const snsId = useValueRef(sharedUINetworkIdentifier)
+    const site = useValueRef(sharedUINetworkIdentifier)
     const overwrite = useValueRef(sharedUIComponentOverwrite)
-    const clean = snsId === EnhanceableSite.Minds || snsId === EnhanceableSite.Facebook
+    const clean = site === EnhanceableSite.Minds || site === EnhanceableSite.Facebook
 
     const useSiteOverwrite = useRef(overwrite.InjectedDialog?.classes || (() => ({ classes: undefined }))).current
     const siteOverwrite = useSiteOverwrite().classes
