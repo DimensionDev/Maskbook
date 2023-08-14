@@ -152,7 +152,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                 providerURL: network?.rpcUrl,
             })
         } catch (err) {
-            showSnackbar(t('failed_to_transfer_token', { message: (err as Error).message }))
+            showSnackbar(t('failed_to_transfer_token', { message: (err as Error).message, variant: 'error' }))
         }
     }, [address, chainId, recipient, totalAmount, token?.decimals, gasConfig, paymentAddress, network?.rpcUrl])
 

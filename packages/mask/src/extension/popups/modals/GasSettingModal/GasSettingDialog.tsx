@@ -142,7 +142,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
 
         if (isGreaterThan(miniumMaxFeePerGas, formattedMaxFee)) {
             return t('popups_wallet_max_fee_is_too_low', {
-                minimum: formatWeiToGwei(miniumMaxFeePerGas).toFixed(2),
+                minimum: formatWeiToGwei(miniumMaxFeePerGas).toFixed(2, BigNumber.ROUND_UP),
             })
         }
         return
@@ -260,7 +260,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                 {gasOptions?.normal.baseFeePerGas && isSupport1559 && (!error || !replaceType) ? (
                     <Alert severity="info">
                         {t('popups_wallet_gas_price_current_base_fee', {
-                            baseFee: formatWeiToGwei(gasOptions.normal.baseFeePerGas).toFixed(2),
+                            baseFee: formatWeiToGwei(gasOptions.normal.baseFeePerGas).toFixed(2, BigNumber.ROUND_UP),
                         })}
                     </Alert>
                 ) : null}
@@ -312,7 +312,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                         setMaxFeePerGas(
                                             formatWeiToGwei(gasOptions?.slow.baseFeePerGas ?? 0)
                                                 .plus(e.target.value)
-                                                .toFixed(2, 0),
+                                                .toFixed(2, BigNumber.ROUND_UP),
                                         )
                                     }}
                                     InputProps={{
