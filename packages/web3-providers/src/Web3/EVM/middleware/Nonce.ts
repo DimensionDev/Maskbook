@@ -1,14 +1,15 @@
 import { toHex } from 'web3-utils'
+import { formatURL } from '@masknet/web3-shared-base'
 import {
     type ChainId,
     EthereumMethodType,
     ProviderType,
     type Middleware,
     checksumAddress,
+    ProviderURL,
 } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
-import { formatURL } from '@masknet/web3-shared-base'
 
 export class Nonce implements Middleware<ConnectionContext> {
     static INITIAL_NONCE = -1
@@ -18,12 +19,17 @@ export class Nonce implements Middleware<ConnectionContext> {
     // account address => providerURL => nonce
     private nonces = new Map<string, Map<string, number>>()
 
-    private async syncRemoteNonce(chainId: ChainId, address: string, providerURL: string, commitment = 0) {
+    private async syncRemoteNonce(chainId: ChainId, address: string, providerURL?: string, commitment = 0) {
         const address_ = checksumAddress(address)
         const addressNonces = this.nonces.get(address_) ?? new Map<string, number>()
-        const providerURL_ = formatURL(providerURL)
+
+        // the assumption here: if the providerURL is not provided, it must be a built-in provider was used.
+        // the ProviderURL.from() will throw if the chain id doesn't belong to a built-in network.
+        // and we ignore the situtation that the custom network chain id is the same with a built-in network.
+        const providerURL_ = formatURL(providerURL ?? ProviderURL.from(chainId))
+
         addressNonces.set(
-            providerURL,
+            providerURL_,
             commitment +
                 Math.max(
                     await this.Web3.getTransactionNonce(address, {

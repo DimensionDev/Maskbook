@@ -1,11 +1,11 @@
 import * as _metamask_eth_sig_util from /* webpackDefer: true */ '@metamask/eth-sig-util'
 import type { Transaction } from '@masknet/web3-shared-evm'
 import { SignType, toHex } from '@masknet/shared-base'
-import { ConnectionAPI } from './ConnectionAPI.js'
+import { ConnectionReadonlyAPI } from './ConnectionReadonlyAPI.js'
 import type { SignerAPI_Base } from '../../../entry-types.js'
 
 export class SignerAPI implements SignerAPI_Base.Provider {
-    private Web3 = new ConnectionAPI()
+    private Web3 = new ConnectionReadonlyAPI()
 
     async sign<T>(type: SignType, key: Buffer, message: T): Promise<string> {
         switch (type) {
