@@ -23,7 +23,7 @@ export class CustomNetwork implements Middleware<ConnectionContext> {
             const response = await this.Web3.getWeb3Provider({
                 chainId: context.chainId,
                 account: context.account,
-                providerURL: context.providerURL ?? this.customNetwork?.rpcUrl,
+                providerURL: context.providerURL,
             }).sendAsync(context.request, noop)
 
             const editor = ErrorEditor.from(null, response)
