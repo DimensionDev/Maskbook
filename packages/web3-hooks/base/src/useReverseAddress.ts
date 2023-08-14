@@ -10,7 +10,7 @@ export function useReverseAddress<T extends NetworkPluginID>(pluginID?: T, addre
         enabled: !!NameService?.reverse,
         queryFn: async () => {
             if (!address) return null
-            return NameService!.reverse!(address) || null
+            return (await NameService?.reverse?.(address)) || null
         },
     })
 }
