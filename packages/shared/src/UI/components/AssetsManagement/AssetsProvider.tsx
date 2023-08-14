@@ -121,15 +121,15 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
             if (!collection.id) return
 
             const { id, chainId } = collection
-            const storeId = `${account}.${id}`
             const stateKey = `${id}.${chainId}`
+            const storeId = `${account}.${stateKey}`
             const realId = collectionId ?? id
             const assetsState = assetsMapRef.current[storeId]
 
             // Fetch less in collection list, and more every time in expanded collection.
             // Also expand size if for id chunk, since there might be more assets than chunk size
             const size = assetsState?.assets.length || collectionId ? 20 : 4
-            const indicator = (!collectionId && indicatorMapRef.current.get(id)) || createIndicator()
+            const indicator = (!collectionId && indicatorMapRef.current.get(storeId)) || createIndicator()
             dispatch({ type: 'SET_LOADING_STATUS', account, id: stateKey, loading: true })
             const pageable = await Hub.getNonFungibleAssetsByCollectionAndOwner(realId, account, {
                 indicator,
@@ -144,7 +144,7 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
                 )
             }
             if (pageable.nextIndicator) {
-                indicatorMapRef.current.set(id, pageable.nextIndicator as PageIndicator)
+                indicatorMapRef.current.set(storeId, pageable.nextIndicator as PageIndicator)
             }
             dispatch({ type: 'APPEND_ASSETS', id: stateKey, account, assets: pageable.data })
             // If collectionId is set, that means we are loading part of a merged collection.
@@ -162,7 +162,8 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
 
             const { id, chainId } = collection
             const stateKey = `${id}.${chainId}`
-            const assetsState = assetsMapRef.current[stateKey]
+            const storeId = `${account}.${stateKey}`
+            const assetsState = assetsMapRef.current[storeId]
             if (assetsState?.finished || assetsState?.loading) return
             const allIds = id.split(',')
 
@@ -194,7 +195,7 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
             const listings = assets.filter((x) => !blockedList.includes(x.tokenId))
             if (!listings.length) await loadAssetsViaHub(collection)
         },
-        [loadAssetsViaHub],
+        [loadAssetsViaHub, account],
     )
 
     const loadVerifiedBy = useCallback(
