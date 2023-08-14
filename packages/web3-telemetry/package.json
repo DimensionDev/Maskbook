@@ -33,6 +33,10 @@
     "@sentry/browser": "^7.59.3",
     "@sentry/tracing": "^7.59.3",
     "@sentry/types": "^7.59.3",
+    "mixpanel-browser": "^2.47.0",
     "react-use": "^17.4.0"
+  },
+  "devDependencies": {
+    "@types/mixpanel-browser": "^2.47.1"
   }
 }

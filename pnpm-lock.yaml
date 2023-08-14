@@ -4706,9 +4706,16 @@ importers:
       '@sentry/types':
         specifier: ^7.59.3
         version: 7.59.3
+      mixpanel-browser:
+        specifier: ^2.47.0
+        version: 2.47.0
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
+    devDependencies:
+      '@types/mixpanel-browser':
+        specifier: ^2.47.1
+        version: 2.47.1
 
 packages:
 
@@ -13685,6 +13692,10 @@ packages:
 
   /@types/minimist@1.2.2:
     resolution: {integrity: sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==}
+
+  /@types/mixpanel-browser@2.47.1:
+    resolution: {integrity: sha512-4Oif1hbjmStA6KI1OLer19rbKjlPd67ujp5Wipfa7rIskA/lOFZbp6kYsPjXD0f5AiiCQTbf0R/SnnzgOaKrbA==}
+    dev: true
 
   /@types/ms@0.7.31:
     resolution: {integrity: sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==}
@@ -26032,6 +26043,10 @@ packages:
     engines: {node: '>= 8.0.0'}
     dev: true
 
+  /mixpanel-browser@2.47.0:
+    resolution: {integrity: sha512-Ldrva0fRBEIFWmEibBQO1PulfpJVF3pf28Guk09lDirDaSQqqU/xs9zQLwN2rL5VwVtsP1aD3JaCgaa98EjojQ==}
+    dev: false
+
   /mkdirp-promise@5.0.1:
     resolution: {integrity: sha512-Hepn5kb1lJPtVW84RFT40YG1OddBNTOVUZR2bzQUHc+Z03en8/3uX0+060JDhcEzyO08HmipsN9DcnFMxhIL9w==}
     engines: {node: '>=4'}
@@ -34700,6 +34715,7 @@ time:
   /@types/gulp@4.0.13: '2023-06-28T19:02:46.170Z'
   /@types/json-stable-stringify@1.0.34: '2022-03-02T17:32:27.548Z'
   /@types/lodash-es@4.17.8: '2023-07-13T19:02:53.728Z'
+  /@types/mixpanel-browser@2.47.1: '2023-07-07T08:32:43.724Z'
   /@types/node@20.4.2: '2023-07-12T23:02:45.591Z'
   /@types/proper-lockfile@4.1.2: '2021-07-07T17:17:09.492Z'
   /@types/punycode@2.1.0: '2018-12-07T19:12:11.241Z'
@@ -34790,6 +34806,7 @@ time:
   /lru-cache@10.0.0: '2023-06-15T17:45:24.798Z'
   /merkletreejs@0.3.10: '2023-04-24T07:24:06.338Z'
   /millify@6.1.0: '2023-03-12T05:25:33.920Z'
+  /mixpanel-browser@2.47.0: '2023-04-28T16:00:31.950Z'
   /mock-socket@9.2.1: '2023-02-14T12:46:15.982Z'
   /msw@1.2.1: '2023-03-24T14:26:16.989Z'
   /next-tick@1.1.0: '2020-02-11T04:03:15.049Z'
