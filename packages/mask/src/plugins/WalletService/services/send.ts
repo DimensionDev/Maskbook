@@ -18,6 +18,7 @@ import { signWithPersona } from '../../../../background/services/identity/index.
  * The entrance of all RPC requests to MaskWallet.
  */
 export async function send(payload: JsonRpcPayload, options?: TransactionOptions) {
+    const { owner, paymentToken, providerURL } = options ?? {}
     const {
         pid = 0,
         from,
@@ -25,9 +26,7 @@ export async function send(payload: JsonRpcPayload, options?: TransactionOptions
         signableMessage,
         signableConfig,
     } = PayloadEditor.fromPayload(payload, options)
-    const owner = options?.owner
     const identifier = ECKeyIdentifier.from(options?.identifier).unwrapOr(undefined)
-    const paymentToken = options?.paymentToken
     const signer = identifier
         ? new Signer(identifier, <T>(type: SignType, message: T, identifier?: ECKeyIdentifier) =>
               signWithPersona(type, message, identifier, undefined, true),
@@ -52,6 +51,7 @@ export async function send(payload: JsonRpcPayload, options?: TransactionOptions
                         pid,
                         await Web3Readonly.sendSignedTransaction(await signer.signTransaction(signableConfig), {
                             chainId,
+                            providerURL,
                         }),
                     )
                 }
@@ -101,6 +101,7 @@ export async function send(payload: JsonRpcPayload, options?: TransactionOptions
                     },
                     {
                         chainId,
+                        providerURL,
                     },
                 )
                 return createJsonRpcResponse(pid, result)
