@@ -90,6 +90,7 @@ export const PopupSnackbarContent = forwardRef<HTMLDivElement, PopupSnackbarCont
             <Typography className={classes.title} component="div">
                 {props.title}
             </Typography>
+            {props.message}
         </SnackbarContent>
     )
 })
@@ -108,7 +109,7 @@ export function usePopupCustomSnackbar() {
             return enqueueSnackbar(text, {
                 variant: options.variant,
                 content: (key, title) => {
-                    return <PopupSnackbarContent id={key} title={title} variant={variant} />
+                    return <PopupSnackbarContent id={key} title={title} message={message} variant={variant} />
                 },
                 autoHideDuration: 2000,
                 ...rest,
