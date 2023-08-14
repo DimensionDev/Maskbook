@@ -267,7 +267,7 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
         coinGeckoChainId: '',
         coinGeckoPlatformId: '',
         type: (x.type as NetworkType | undefined) || NetworkType.Ethereum,
-        color: network?.iconColor || x.color || 'rgb(24, 163, 138)',
+        color: network?.iconColor || x.color || 'rgb(138, 138, 138)',
         nativeCurrency: {
             id: getTokenConstant(x.chainId, 'NATIVE_TOKEN_ADDRESS', ZERO_ADDRESS)!,
             address: getTokenConstant(x.chainId, 'NATIVE_TOKEN_ADDRESS', ZERO_ADDRESS)!,

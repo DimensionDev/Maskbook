@@ -4,7 +4,13 @@ export class ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
     constructor(private getDescriptors: () => Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>) {}
 
     private getDescriptor(chainId: ChainId) {
-        return this.getDescriptors().find((x) => x.chainId === chainId)!
+        return this.getDescriptors().find((x) => x.chainId === chainId)
+    }
+
+    private getDescriptorRequired(chainId: ChainId) {
+        const descriptor = this.getDescriptor(chainId)
+        if (!descriptor) throw new Error(`Unknown chainId: ${chainId}. It might too early to access network state.`)
+        return descriptor
     }
 
     chainId = (name: string) =>
@@ -15,32 +21,33 @@ export class ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
                 .includes(name?.toLowerCase()),
         )?.chainId
 
-    coinMarketCapChainId = (chainId: ChainId) => this.getDescriptor(chainId).coinMarketCapChainId
+    coinMarketCapChainId = (chainId: ChainId) => this.getDescriptor(chainId)?.coinMarketCapChainId ?? ''
 
-    coinGeckoChainId = (chainId: ChainId) => this.getDescriptor(chainId).coinGeckoChainId
+    coinGeckoChainId = (chainId: ChainId) => this.getDescriptor(chainId)?.coinGeckoChainId ?? ''
 
-    coinGeckoPlatformId = (chainId: ChainId) => this.getDescriptor(chainId).coinGeckoPlatformId
+    coinGeckoPlatformId = (chainId: ChainId) => this.getDescriptor(chainId)?.coinGeckoPlatformId ?? ''
 
-    chainName = (chainId: ChainId) => this.getDescriptor(chainId).name
+    chainName = (chainId: ChainId) => this.getDescriptor(chainId)?.name ?? 'Custom Network'
 
-    chainFullName = (chainId: ChainId) => this.getDescriptor(chainId).fullName
+    chainFullName = (chainId: ChainId) => this.getDescriptor(chainId)?.fullName ?? 'Custom Network'
 
-    chainShortName = (chainId: ChainId) => this.getDescriptor(chainId).shortName
+    chainShortName = (chainId: ChainId) => this.getDescriptor(chainId)?.shortName ?? 'CUSTOM'
 
-    chainColor = (chainId: ChainId) => this.getDescriptor(chainId).color
+    chainColor = (chainId: ChainId) => this.getDescriptor(chainId)?.color ?? 'rgb(138, 138, 138)'
 
     chainPrefix = (chainId: ChainId) => ''
 
-    networkType = (chainId: ChainId) => this.getDescriptor(chainId).type
+    networkType = (chainId: ChainId) => this.getDescriptorRequired(chainId)?.type
 
-    explorerUrl = (chainId: ChainId) => this.getDescriptor(chainId).explorerUrl
+    explorerUrl = (chainId: ChainId) => this.getDescriptorRequired(chainId)?.explorerUrl
 
-    nativeCurrency = (chainId: ChainId) => this.getDescriptor(chainId).nativeCurrency
+    nativeCurrency = (chainId: ChainId) => this.getDescriptorRequired(chainId)?.nativeCurrency
 
-    isValidChainId = (chainId: ChainId, testnet = false) => this.getDescriptor(chainId).network === 'mainnet' || testnet
+    isValidChainId = (chainId: ChainId, testnet = false) =>
+        this.getDescriptor(chainId)?.network === 'mainnet' || testnet
 
-    isMainnet = (chainId: ChainId) => this.getDescriptor(chainId).network === 'mainnet'
+    isMainnet = (chainId: ChainId) => this.getDescriptor(chainId)?.network === 'mainnet'
 
     isFeatureSupported = (chainId: ChainId, feature: string) =>
-        !!this.getDescriptor(chainId).features?.includes(feature)
+        !!this.getDescriptor(chainId)?.features?.includes(feature)
 }
