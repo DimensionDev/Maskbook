@@ -21,7 +21,7 @@
     "@servie/events": "^3.0.0",
     "@types/dompurify": "^3.0.2",
     "@types/json-stable-stringify": "^1.0.34",
-    "@types/react": "18.2.15",
+    "@types/react": "18.2.16",
     "anchorme": "^2.1.2",
     "async-call-rpc": "^6.3.1",
     "bignumber.js": "9.1.1",
