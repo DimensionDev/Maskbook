@@ -1,4 +1,4 @@
-import { first } from 'lodash-es'
+import { first, omit } from 'lodash-es'
 import type Web3 from 'web3'
 import { numberToHex, toHex, toNumber } from 'web3-utils'
 import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet } from '@masknet/shared-base'
@@ -678,7 +678,7 @@ export class ConnectionReadonlyAPI
                         from: options.account,
                         chainId: options.chainId,
                         ...transaction,
-                    }).fill(options.overrides),
+                    }).fill(omit(options.overrides, ['gas', 'gasPrice', 'maxPriorityFeePerGas', 'maxFeePerGas'])),
                 ],
             })
         } catch {

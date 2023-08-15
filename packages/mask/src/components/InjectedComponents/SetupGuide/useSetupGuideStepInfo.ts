@@ -87,6 +87,7 @@ export function useSetupGuideStepInfo(destinedPersona: PersonaIdentifier) {
                 ),
             ),
         )
+
         if (!personaConnectedProfile) return composeInfo(SetupGuideStep.FindUsername, 'doing')
 
         // NextID is available on this site.

@@ -112,7 +112,8 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
                 })
             }
 
-            const result = await timeout(connect(), 30 * 1000)
+            // Fortmatic takes extra time because it requires the user to enter an account and password, a verification code
+            const result = await timeout(connect(), providerType === ProviderType.Fortmatic ? 5 * 60 * 1000 : 30 * 1000)
             if (!result) return
             navigate(PopupRoutes.ConnectWallet, {
                 replace: true,

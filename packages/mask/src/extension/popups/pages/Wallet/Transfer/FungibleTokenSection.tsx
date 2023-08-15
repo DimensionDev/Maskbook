@@ -24,6 +24,7 @@ import { TokenPicker } from '../../../components/index.js'
 import { useTokenParams } from '../../../hook/index.js'
 import { ChooseTokenModal } from '../../../modals/modals.js'
 import { useDefaultGasConfig } from './useDefaultGasConfig.js'
+import { omit } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     asset: {
@@ -145,7 +146,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         if (!recipient || isZero(totalAmount) || !token?.decimals) return
         try {
             await Web3.transferFungibleToken(address, recipient, totalAmount, '', {
-                overrides: gasConfig,
+                overrides: omit(gasConfig, 'gas'),
                 paymentToken: paymentAddress,
                 chainId,
                 gasOptionType: gasConfig?.gasOptionType,

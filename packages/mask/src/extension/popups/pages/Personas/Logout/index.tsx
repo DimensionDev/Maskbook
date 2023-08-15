@@ -36,6 +36,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 8,
         padding: theme.spacing(1.5),
         display: 'flex',
+        alignItems: 'center',
         columnGap: theme.spacing(1),
         marginBottom: theme.spacing(1.5),
     },
@@ -98,7 +99,7 @@ const Logout = memo(() => {
             showSnackbar(t('popups_log_out_successfully'))
             navigate(PopupRoutes.Personas, { replace: true })
         } catch {
-            showSnackbar(t('popups_log_out_failed'))
+            showSnackbar(t('popups_log_out_failed'), { variant: 'error' })
         }
     }, [currentPersona, Provider, wallet, wallets, smartPayChainId, manageWallets.length])
 
@@ -153,7 +154,7 @@ export const LogoutUI = memo<LogoutUIProps>(
         useTitle(t('popups_log_out'))
 
         const onConfirm = useCallback(async () => {
-            if (!backupPassword) {
+            if (!backupPassword && !!manageWallets.length) {
                 modalNavigate(PopupModalRoutes.SetBackupPassword)
                 return
             }
@@ -171,7 +172,10 @@ export const LogoutUI = memo<LogoutUIProps>(
         const disabled = useMemo(() => {
             if (loading || error || paymentPasswordError) return true
             if (backupPassword) return !password.length
-            if (manageWallets.length && hasPassword) return !paymentPassword.length
+            if (manageWallets.length) {
+                if (!backupPassword) return false
+                if (hasPassword) return !paymentPassword.length
+            }
             return false
         }, [
             loading,
@@ -204,8 +208,11 @@ export const LogoutUI = memo<LogoutUIProps>(
                                     <Box>
                                         <Typography fontWeight={700}>{x.name}</Typography>
                                         <Typography
+                                            marginTop={0.5}
                                             color={theme.palette.maskColor.second}
+                                            fontWeight={700}
                                             fontSize={10}
+                                            lineHeight="10px"
                                             display="flex"
                                             alignItems="center">
                                             {formatEthereumAddress(x.address, 4)}
@@ -216,6 +223,7 @@ export const LogoutUI = memo<LogoutUIProps>(
                                                         height: 12,
                                                         color: theme.palette.maskColor.main,
                                                         display: 'flex',
+                                                        marginLeft: 4,
                                                     }}
                                                     href={ExplorerResolver.addressLink(chainId, x.address)}
                                                     target="_blank"
@@ -290,7 +298,7 @@ export const LogoutUI = memo<LogoutUIProps>(
                         fullWidth
                         onClick={onConfirm}
                         disabled={disabled}>
-                        {backupPassword ? t('popups_log_out') : t('backup')}
+                        {backupPassword && manageWallets.length ? t('popups_log_out') : t('backup')}
                     </ActionButton>
                 </BottomController>
             </Box>

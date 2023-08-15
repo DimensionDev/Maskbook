@@ -2,7 +2,7 @@ import { identity, pickBy } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import { ZERO_ADDRESS } from '../constants/index.js'
 import { isEmptyHex } from '../helpers/address.js'
-import type { Transaction } from '../types/index.js'
+import { ChainId, type Transaction } from '../types/index.js'
 
 export class AccountTransaction {
     constructor(private transaction?: Transaction) {}
@@ -48,7 +48,7 @@ export class AccountTransaction {
                 to,
                 data,
                 value: value ? toHex(value) : undefined,
-                chainId: chainId ? toHex(chainId) : undefined,
+                chainId: chainId && chainId !== ChainId.Astar ? toHex(chainId) : undefined,
                 gas: gas ? toHex(gas) : undefined,
                 gasPrice: gasPrice ? toHex(gasPrice) : undefined,
                 maxPriorityFeePerGas: maxPriorityFeePerGas ? toHex(maxPriorityFeePerGas) : undefined,

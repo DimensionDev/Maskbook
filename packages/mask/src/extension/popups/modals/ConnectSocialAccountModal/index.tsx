@@ -17,13 +17,7 @@ export const ConnectSocialAccountModal = memo<ActionModalBaseProps>(function Con
     const handleConnect = useCallback(
         async (networkIdentifier: EnhanceableSite) => {
             if (currentPersona) {
-                await Services.SiteAdaptor.connectSite(
-                    currentPersona.identifier,
-                    networkIdentifier,
-                    'local',
-                    undefined,
-                    false,
-                )
+                await Services.SiteAdaptor.connectSite(currentPersona.identifier, networkIdentifier, 'local', undefined)
             }
         },
         [currentPersona],

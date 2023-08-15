@@ -9,7 +9,6 @@ import {
     type GasConfig,
     PayloadEditor,
     formatEthereumAddress,
-    addGasMargin,
     ChainId,
 } from '@masknet/web3-shared-evm'
 import { toHex, toUtf8 } from 'web3-utils'
@@ -28,7 +27,6 @@ import { useUpdateEffect } from '@react-hookz/web'
 import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
 import urlcat from 'urlcat'
 import { compact, mapKeys, omit } from 'lodash-es'
-import { BigNumber } from 'bignumber.js'
 
 const useStyles = makeStyles()((theme) => ({
     left: {
@@ -192,13 +190,6 @@ const Interaction = memo(function Interaction() {
                             return x
                         }
 
-                        const gas = toHex(
-                            BigNumber.max(
-                                toHex(addGasMargin(gasConfig?.gas ?? x.gas).toFixed()),
-                                chainId === ChainId.Optimism ? 25000 : 21000,
-                            ).toFixed(),
-                        )
-
                         return {
                             ...x,
                             ...(gasConfig
@@ -207,7 +198,6 @@ const Interaction = memo(function Interaction() {
                                       return toHex(value)
                                   })
                                 : {}),
-                            gas,
                             chainId: toHex(x.chainId),
                             nonce: toHex(x.nonce),
                         }
