@@ -120,6 +120,6 @@ export function useFriends(): AsyncStateRetry<FriendsInformation[]> {
                 id: friends[index].persona.publicKeyAsHex,
             }
         })
-        return uniqBy(profiles, ({ id }) => id).reverse()
+        return uniqBy(profiles, ({ id }) => id)
     }, [currentPersona])
 }

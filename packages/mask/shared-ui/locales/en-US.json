@@ -1059,6 +1059,7 @@
     "popups_encrypted_friends_search_no_result": "No search results",
     "popups_encrypted_friends_no_friends": "No encrypted friends, you can try searching.",
     "popups_encrypted_friends_add_friends": "Add",
+    "popups_encrypted_friends_no_associated_accounts": "No associated accounts",
     "popups_select_wallet": "Select Wallet",
     "popups_switch_persona": "Switch Persona",
     "popups_recovery": "Recovery",
