@@ -1,4 +1,5 @@
 import { Icons } from '@masknet/icons'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import { ECKeyIdentifier, MAX_WALLET_LIMIT, NetworkPluginID, PopupRoutes, type Wallet } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworks, useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
@@ -13,7 +14,6 @@ import { PopupContext } from '../../../hook/usePopupContext.js'
 import { ActionModal, useActionModal } from '../../../components/index.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
 import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
-import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

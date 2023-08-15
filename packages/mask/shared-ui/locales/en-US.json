@@ -1214,7 +1214,7 @@
     "chain_id": "Chain ID",
     "optional_currency_symbol": "Currency Symbol (Optional)",
     "optional_block_explorer_url": "Block Explorer URL",
-    "account_already_exists": "This account name already exists",
+    "account_already_exists": "This wallet name already exists.",
     "network_already_exists": "This network name already exists",
     "incorrect_rpc_url": "Invalid RPC URL.",
     "incorrect_explorer_url": "Invalid block explorer URL.",

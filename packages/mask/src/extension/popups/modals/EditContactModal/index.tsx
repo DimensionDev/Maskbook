@@ -10,7 +10,7 @@ import { EmojiAvatar } from '@masknet/shared'
 import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Web3, Web3State } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { useContacts } from '@masknet/web3-hooks-base'
+import { useContacts, useWallets } from '@masknet/web3-hooks-base'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { ContactType } from '../../pages/Wallet/type.js'
@@ -97,9 +97,11 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
     const { t } = useI18N()
 
     const contacts = useContacts()
+    const wallets = useWallets()
 
     const nameAlreadyExist = Boolean(
-        contacts?.find((contact) => contact.name === name && !isSameAddress(contact.address, address)),
+        contacts?.find((contact) => contact.name === name && !isSameAddress(contact.address, address)) ||
+            wallets?.find((wallet) => wallet.name === name),
     )
 
     const validationMessage = useMemo(() => {
