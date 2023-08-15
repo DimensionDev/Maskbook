@@ -1,4 +1,5 @@
 import { Icons } from '@masknet/icons'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import { ECKeyIdentifier, MAX_WALLET_LIMIT, NetworkPluginID, PopupRoutes, type Wallet } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworks, useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
@@ -13,7 +14,6 @@ import { PopupContext } from '../../../hook/usePopupContext.js'
 import { ActionModal, useActionModal } from '../../../components/index.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
 import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
-import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -160,17 +160,26 @@ const SwitchWallet = memo(function SwitchWallet() {
         <ActionModal header={t('wallet_account')} action={action}>
             <div className={classes.content}>
                 <List dense className={classes.list}>
-                    {wallets.map((item) =>
-                        item.owner && chainId !== ChainId.Matic ? null : (
-                            <WalletItem
-                                key={item.address}
-                                wallet={item}
-                                onSelect={handleSelect}
-                                isSelected={isSameAddress(item.address, wallet?.address)}
-                                className={classes.walletItem}
-                            />
-                        ),
-                    )}
+                    {wallets
+                        .sort((a, b) => {
+                            if (a.createdAt.getTime() - b.createdAt.getTime() > 10000) {
+                                return 1
+                            } else if (a.createdAt.getTime() - b.createdAt.getTime() < 10000) {
+                                return -1
+                            }
+                            return a.name > b.name ? 1 : -1
+                        })
+                        .map((item) =>
+                            item.owner && chainId !== ChainId.Matic ? null : (
+                                <WalletItem
+                                    key={item.address}
+                                    wallet={item}
+                                    onSelect={handleSelect}
+                                    isSelected={isSameAddress(item.address, wallet?.address)}
+                                    className={classes.walletItem}
+                                />
+                            ),
+                        )}
                 </List>
             </div>
         </ActionModal>
