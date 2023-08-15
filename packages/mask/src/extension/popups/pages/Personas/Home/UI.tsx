@@ -177,6 +177,7 @@ export interface PersonaHomeUIProps {
     onConnect: (networkIdentifier: EnhanceableSite) => void
     onAccountClick: (account: ProfileAccount) => void
     bindingWallets?: ConnectedWalletInfo[]
+    hasPaymentPassword?: boolean
 }
 
 export const PersonaHomeUI = memo<PersonaHomeUIProps>(
@@ -194,6 +195,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
         onAccountClick,
         bindingWallets,
         hasProofs,
+        hasPaymentPassword,
     }) => {
         const theme = useTheme()
         const { t } = useI18N()
@@ -203,16 +205,20 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
 
         const [currentTab, onChange] = useParamTab<PopupHomeTabType>(PopupHomeTabType.SocialAccounts)
 
-        const onChangeTab = useCallback((event: object, value: PopupHomeTabType) => {
-            if (
-                currentMaskWalletLockStatusSettings.value === LockStatus.LOCKED &&
-                value === PopupHomeTabType.ConnectedWallets
-            ) {
-                navigate(urlcat(PopupRoutes.Unlock, { from: PopupRoutes.Personas, goBack: true, popup: true }))
-                return
-            }
-            onChange(event, value)
-        }, [])
+        const onChangeTab = useCallback(
+            (event: object, value: PopupHomeTabType) => {
+                if (
+                    currentMaskWalletLockStatusSettings.value === LockStatus.LOCKED &&
+                    value === PopupHomeTabType.ConnectedWallets &&
+                    hasPaymentPassword
+                ) {
+                    navigate(urlcat(PopupRoutes.Unlock, { from: PopupRoutes.Personas, goBack: true, popup: true }))
+                    return
+                }
+                onChange(event, value)
+            },
+            [hasPaymentPassword],
+        )
         return (
             <div className={classes.container}>
                 {!isEmpty ? (

@@ -26,7 +26,7 @@ import {
 import { NetworkPluginID } from '@masknet/shared-base'
 import { unreachable } from '@masknet/kit'
 import { isString } from 'lodash-es'
-import { FormattedBalance, FormattedCurrency, ImageIcon, TokenIcon } from '@masknet/shared'
+import { FormattedCurrency, ImageIcon, TokenIcon } from '@masknet/shared'
 import { GasSettingMenu } from '../GasSettingMenu/index.js'
 import type { TransactionDetail } from '../../pages/Wallet/type.js'
 
@@ -203,12 +203,16 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                                 name={token?.name}
                                 className={classes.tokenIcon}
                             />
-                            <FormattedBalance
-                                value={amount}
-                                decimals={token?.decimals}
-                                significant={4}
-                                formatter={formatBalance}
-                            />
+                            {amount
+                                ? formatBalance(
+                                      amount,
+                                      token?.decimals,
+                                      4,
+                                      false,
+                                      true,
+                                      leftShift(amount, token?.decimals).isGreaterThan(1) ? 6 : 12,
+                                  )
+                                : null}
                         </>
                     ) : null}
                 </Typography>

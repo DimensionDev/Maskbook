@@ -13,6 +13,7 @@ import Services from '../../../../service.js'
 import { HydrateFinished } from '../../../../../utils/createNormalReactRoot.js'
 import { useSupportSocialNetworks } from '../../../hook/useSupportSocialNetworks.js'
 import { useVerifiedWallets } from '../../../hook/useVerifiedWallets.js'
+import { useHasPassword } from '../../../hook/useHasPassword.js'
 
 const PersonaHome = memo(() => {
     const navigate = useNavigate()
@@ -23,6 +24,8 @@ const PersonaHome = memo(() => {
     const { value: definedSocialNetworks = EMPTY_LIST } = useSupportSocialNetworks()
 
     const { data: bindingWallets } = useVerifiedWallets(proofs)
+
+    const { hasPassword } = useHasPassword()
 
     const onCreatePersona = useCallback(() => {
         browser.tabs.create({
@@ -81,6 +84,7 @@ const PersonaHome = memo(() => {
             onRestore={onRestore}
             onConnect={handleConnect}
             onAccountClick={handleAccountClick}
+            hasPaymentPassword={hasPassword}
         />
     )
 })

@@ -23,13 +23,17 @@ export class Base implements Translator<ConnectionContext> {
         // #region polyfill transaction config
         try {
             // add gas margin
-            if (config.gas && context.providerType !== ProviderType.MaskWallet) {
-                config.gas = toHex(
-                    BigNumber.max(
-                        toHex(addGasMargin(config.gas).toFixed()),
-                        context.chainId === ChainId.Optimism ? 25000 : 21000,
-                    ).toFixed(),
-                )
+            if (config.gas) {
+                if (context.providerType !== ProviderType.MaskWallet) {
+                    config.gas = toHex(
+                        BigNumber.max(
+                            toHex(addGasMargin(config.gas).toFixed()),
+                            context.chainId === ChainId.Optimism ? 25000 : 21000,
+                        ).toFixed(),
+                    )
+                } else {
+                    config.gas = toHex(config.gas)
+                }
             }
 
             // add gas price
