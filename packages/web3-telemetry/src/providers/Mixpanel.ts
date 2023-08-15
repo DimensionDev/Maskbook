@@ -1,5 +1,5 @@
+import urlcat from 'urlcat'
 import { isUndefined, omit, omitBy } from 'lodash-es'
-import mixpanel, { track } from 'mixpanel-browser'
 import { Flags, type BuildInfoFile } from '@masknet/flags'
 import {
     TelemetryID,
@@ -44,16 +44,9 @@ interface Event {
     device_id: string
 }
 
-const PROJECT_TOKEN = 'b815b822fd131650e92ff8539eb5e793'
-
 export class MixpanelAPI extends BaseAPI<Event, never> implements Provider {
     constructor(private env: BuildInfoFile) {
         super(Flags.mixpanel_sample_rate)
-
-        telemetrySettings.addListener((x) => {
-            mixpanel.init(PROJECT_TOKEN)
-            mixpanel.identify(TelemetryID.value)
-        })
     }
 
     private createEvent(options: EventOptions) {
