@@ -95,7 +95,7 @@ export class SentryAPI extends BaseAPI<never, Event> implements Provider {
                 if (!event.tags?.group_id) {
                     // ignored in the development mode
                     if (process.env.NODE_ENV === 'development') {
-                        console.log(`[LOG EXCEPTION]: ${event}`)
+                        console.log(`[LOG EXCEPTION]: ${JSON.stringify(event, null, 2)}`)
                         return null
                     }
 

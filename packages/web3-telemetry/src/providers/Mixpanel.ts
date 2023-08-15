@@ -1,18 +1,17 @@
 import { isUndefined, omitBy } from 'lodash-es'
 import { v4 as uuid } from 'uuid'
 import { Flags, type BuildInfoFile } from '@masknet/flags'
-import { TelemetryID, getExtensionId, getSiteType, getAgentType } from '@masknet/shared-base'
+import { TelemetryID } from '@masknet/shared-base'
 import { BaseAPI } from './Base.js'
 import type { EventOptions, ExceptionOptions, Provider } from '../types/index.js'
-import { getABTestSeed, joinsABTest } from '../entry-helpers.js'
 import { MixpanelEventAPI, type Event } from '../apis/Mixpanel.js'
 
 export class MixpanelAPI extends BaseAPI<Event, never> implements Provider {
-    private eventAPI = new MixpanelEventAPI()
-
     constructor(private env: BuildInfoFile) {
         super(Flags.mixpanel_sample_rate)
     }
+
+    private eventAPI = new MixpanelEventAPI(this.env)
 
     private createEvent(options: EventOptions): Event {
         return omitBy<Event>(
@@ -30,19 +29,6 @@ export class MixpanelAPI extends BaseAPI<Event, never> implements Provider {
                     network_id: options.network?.networkID,
                     network: options.network?.networkType,
                     provider: options.network?.providerType,
-
-                    agent: getAgentType(),
-                    site: getSiteType(),
-                    ua: navigator.userAgent,
-                    extension_id: getExtensionId(),
-
-                    channel: this.env.channel,
-                    version: this.env.VERSION,
-                    branch_name: this.env.BRANCH_NAME,
-
-                    device_ab: joinsABTest(),
-                    device_seed: getABTestSeed(),
-                    device_id: TelemetryID.value,
                 },
             },
             isUndefined,
@@ -55,8 +41,12 @@ export class MixpanelAPI extends BaseAPI<Event, never> implements Provider {
         if (!Flags.sentry_event_enabled) return
         if (!this.shouldRecord()) return
 
-        const event = this.createEvent(options)
-        this.eventAPI.trackEvents([event])
+        if (process.env.NODE_ENV === 'development') {
+            console.log(`[LOG EVENT]: ${JSON.stringify(options, null, 2)}`)
+        } else {
+            const event = this.createEvent(options)
+            this.eventAPI.trackEvent(event)
+        }
     }
 
     override captureException(options: ExceptionOptions): void {

@@ -1,8 +1,24 @@
 import urlcat from 'urlcat'
-import type { EnhanceableSite, ExtensionSite, NetworkPluginID, PluginID } from '@masknet/shared-base'
+import { isUndefined, omitBy } from 'lodash-es'
+import type { BuildInfoFile } from '@masknet/flags'
+import {
+    TelemetryID,
+    type EnhanceableSite,
+    type ExtensionSite,
+    type NetworkPluginID,
+    type PluginID,
+    getAgentType,
+    getSiteType,
+    getExtensionId,
+} from '@masknet/shared-base'
 import type { EventID } from '../types/index.js'
+import { getABTestSeed, joinsABTest } from '../entry-helpers.js'
 
 const PROJECT_TOKEN = 'b815b822fd131650e92ff8539eb5e793'
+
+function resolveCORS(url: string) {
+    return `https://cors-next.r2d2.to/?${encodeURIComponent(url)}`
+}
 
 export interface Event {
     event: EventID
@@ -10,12 +26,43 @@ export interface Event {
     properties: {
         type: string
 
+        // the previous event name
+        previous_event?: EventID
+        // the previous event ID
+        previous_event_id?: string
+
+        // ip address
+        ip?: string
         // timestamp like Date.now()
         time: number
         // a unique id to make distinguish of users
         distinct_id: string
         // a unique id to make distinguish of events (uuid)
         $insert_id: string
+
+        // screen height
+        $screen_height?: number
+        // screen width
+        $screen_width?: number
+        // a unique user id
+        $user_id?: string
+        // os name
+        $os?: string
+        // browser name
+        $browser?: string
+        // browser version
+        $browser_version?: string
+        // name of device
+        $device?: string
+        // a unique device id
+        $device_id?: string
+
+        // the city of the event sender parsed from the IP property or the Latitude and Longitude properties.
+        $city?: string
+        // the region (state or province) of the event sender parsed from the IP property or the Latitude and Longitude properties.
+        $region?: string
+        // timezone of the event sender, parsed from IP.
+        $timezone?: string
 
         // network metadata
         chain_id?: number
@@ -25,7 +72,7 @@ export interface Event {
         provider?: string
 
         // browser env
-        agent: string
+        agent?: string
         site?: EnhanceableSite | ExtensionSite
         ua?: string
         extension_id?: string
@@ -36,25 +83,72 @@ export interface Event {
         branch_name?: string
 
         // ab-testing
-        device_ab: boolean
-        device_seed: number
-        device_id: string
+        device_ab?: boolean
+        device_seed?: number
+        device_id?: string
     }
 }
 
 export class MixpanelEventAPI {
+    private lastEvent?: Event
+
+    constructor(private env: BuildInfoFile) {}
+
+    private attachEvent(event: Event): Event {
+        return (this.lastEvent = {
+            event: event.event,
+            properties: omitBy<Event['properties']>(
+                {
+                    previous_event: this.lastEvent?.event,
+                    previous_event_id: this.lastEvent?.properties.$insert_id,
+
+                    $user_id: TelemetryID.value,
+                    $device_id: TelemetryID.value,
+
+                    $screen_height: screen.height,
+                    $screen_width: screen.width,
+                    $browser: navigator.appName,
+                    $browser_version: navigator.appVersion,
+
+                    agent: getAgentType(),
+                    site: getSiteType(),
+                    ua: navigator.userAgent,
+                    extension_id: getExtensionId(),
+
+                    channel: this.env.channel,
+                    version: this.env.VERSION,
+                    branch_name: this.env.BRANCH_NAME,
+
+                    device_ab: joinsABTest(),
+                    device_seed: getABTestSeed(),
+                    device_id: TelemetryID.value,
+
+                    ...event.properties,
+                },
+                isUndefined,
+            ) as Event['properties'],
+        })
+    }
+
     // for collecting data on the server-slide
     // learn more at: https://developer.mixpanel.com/reference/import-events
-    async importEvents(events: Event[]) {
+    async importEvent(_: Event) {
+        const event = this.attachEvent(_)
+
         const response = await fetch(
-            urlcat('https://api.mixpanel.com/import', { strict: 1, project_id: PROJECT_TOKEN }),
+            resolveCORS(
+                urlcat('https://api.mixpanel.com/import', {
+                    strict: 1,
+                    project_id: PROJECT_TOKEN,
+                }),
+            ),
             {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(events),
+                body: JSON.stringify([event]),
             },
         )
         const json: {
@@ -65,35 +159,49 @@ export class MixpanelEventAPI {
         } = await response.json()
 
         if (json.error) throw new Error(json.error)
-        return json.num_records_imported!
     }
 
     // for collecting data on the client-slide
     // Learn more at: https://developer.mixpanel.com/reference/track-event
-    async trackEvents(events: Event[]) {
-        const response = await fetch(urlcat('https://api.mixpanel.com/track', { ip: 1, verbose: 0, img: 1 }), {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(
-                events.map((x) => ({
-                    token: PROJECT_TOKEN,
-                    ...x,
-                })),
+    async trackEvent(_: Event) {
+        const event = this.attachEvent(_)
+
+        const response = await fetch(
+            resolveCORS(
+                urlcat('https://api.mixpanel.com/track', {
+                    // in the debug mode the API returns more information
+                    verbose: process.env.NODE_ENV === 'development' ? 1 : 0,
+                }),
             ),
-        })
+            {
+                method: 'POST',
+                headers: {
+                    // Accept: 'application/json',
+                    Accept: 'text/plain',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify([
+                    {
+                        event: event.event,
+                        properties: {
+                            ...event.properties,
+                            token: PROJECT_TOKEN,
+                        },
+                    },
+                ]),
+            },
+        )
 
-        if (response.status !== 200) {
-            const json: {
-                error: string
-                status: string
-            } = await response.json()
+        const json:
+            | {
+                  error: string
+                  status: string
+              }
+            | 0
+            | 1 = await response.json()
 
-            throw new Error(json.error)
-        }
-
-        return
+        if (json === 0) throw new Error('No data objects in the body are invalid.')
+        if (json === 1) return
+        return new Error(json.error)
     }
 }
