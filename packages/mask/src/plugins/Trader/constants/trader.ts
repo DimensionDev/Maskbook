@@ -34,6 +34,8 @@ export const BLOCK_TIME_SCALE: Record<ChainId, number> = {
     [ChainId.Kovan]: 3,
     [ChainId.BSC]: 6,
     [ChainId.BSCT]: 6,
+    [ChainId.Base]: 6,
+    [ChainId.Base_Goerli]: 6,
     [ChainId.Matic]: 6,
     [ChainId.Mumbai]: 6,
     [ChainId.Arbitrum]: 6,

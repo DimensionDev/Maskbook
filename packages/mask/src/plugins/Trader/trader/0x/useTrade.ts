@@ -1,14 +1,14 @@
-import { ChainId, chainResolver, isNativeTokenAddress, NetworkType } from '@masknet/web3-shared-evm'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { safeUnreachable } from '@masknet/kit'
+import { isZero } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useChainContext, useCustomBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
+import { ChainId, chainResolver, isNativeTokenAddress, NetworkType } from '@masknet/web3-shared-evm'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants/index.js'
 import { PluginTraderRPC } from '../../messages.js'
 import { type SwapQuoteResponse, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from '../0x/useSlippageTolerance.js'
-import { useChainContext, useCustomBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
-import { isZero } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 
@@ -17,6 +17,7 @@ export function getNativeTokenLabel(networkType: NetworkType) {
         case NetworkType.Ethereum:
             return 'ETH'
         case NetworkType.Binance:
+        case NetworkType.Base:
         case NetworkType.Polygon:
         case NetworkType.Arbitrum:
         case NetworkType.xDai:

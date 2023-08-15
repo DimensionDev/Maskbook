@@ -123,6 +123,56 @@
         ]
     },
     {
+        "chainId": 8453,
+        "type": "Base",
+        "name": "Base Mainnet",
+        "color": "rgb(0, 82, 255)",
+        "network": "mainnet",
+        "fullName": "Base Mainnet",
+        "shortName": "base",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 8453,
+            "name": "Ether",
+            "symbol": "ETH",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
+        },
+        "infoURL": "https://base.org/",
+        "explorers": [
+            {
+                "name": "basescan",
+                "url": "https://basescan.org",
+                "standard": "EIP3091"
+            }
+        ]
+    },
+    {
+        "chainId": 84531,
+        "type": "Base",
+        "name": "Base Goerli",
+        "color": "rgb(0, 82, 255)",
+        "network": "testnet",
+        "fullName": "Base Goerli",
+        "shortName": "base",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 84531,
+            "name": "Ether",
+            "symbol": "ETH",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
+        },
+        "infoURL": "https://base.org",
+        "explorers": [
+            {
+                "name": "basescan",
+                "url": "https://goerli.basescan.org",
+                "standard": "EIP3091"
+            }
+        ]
+    },
+    {
         "chainId": 56,
         "type": "Binance",
         "name": "BNB Chain",

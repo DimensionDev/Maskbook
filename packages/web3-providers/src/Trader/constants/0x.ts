@@ -3,6 +3,7 @@ import { NetworkType } from '@masknet/web3-shared-evm'
 export const ZRX_BASE_URL: Record<NetworkType, string> = {
     [NetworkType.Ethereum]: 'https://api.0x.org',
     [NetworkType.Binance]: 'https://bsc.api.0x.org/',
+    [NetworkType.Base]: '',
     [NetworkType.Polygon]: 'https://polygon.api.0x.org/',
     [NetworkType.Arbitrum]: 'https://arbitrum.api.0x.org/',
     [NetworkType.xDai]: 'https://xdai.api.0x.org/',
