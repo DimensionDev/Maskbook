@@ -1,5 +1,4 @@
 import { Icons } from '@masknet/icons'
-import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import { ECKeyIdentifier, MAX_WALLET_LIMIT, NetworkPluginID, PopupRoutes, type Wallet } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworks, useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
