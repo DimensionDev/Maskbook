@@ -13,6 +13,7 @@ import {
 } from '@masknet/shared-base'
 import type { EventID } from '../types/index.js'
 import { getABTestSeed, joinsABTest } from '../entry-helpers.js'
+
 export interface Event {
     event: EventID
 
@@ -136,7 +137,6 @@ export class MixpanelEventAPI {
                 strict: 1,
                 project_id: this.token,
             }),
-
             {
                 method: 'POST',
                 headers: {
@@ -187,14 +187,13 @@ export class MixpanelEventAPI {
 
         const json:
             | {
-                  error: string
+                  error?: string
                   status: string
               }
-            | 0
-            | 1 = await response.json()
+            | 0 = await response.json()
 
         if (json === 0) throw new Error('No data objects in the body are invalid.')
-        if (json === 1) return
-        return new Error(json.error)
+        if (typeof json === 'object' && json.error) throw new Error(json.error)
+        return
     }
 }
