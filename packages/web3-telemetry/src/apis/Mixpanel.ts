@@ -42,7 +42,7 @@ export interface Event {
     }
 }
 
-export class MixpanelAPI {
+export class MixpanelEventAPI {
     // for collecting data on the server-slide
     // learn more at: https://developer.mixpanel.com/reference/import-events
     async importEvents(events: Event[]) {

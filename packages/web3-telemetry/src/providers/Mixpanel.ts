@@ -1,5 +1,5 @@
-import urlcat from 'urlcat'
 import { isUndefined, omit, omitBy } from 'lodash-es'
+import { v4 as uuid } from 'uuid'
 import { Flags, type BuildInfoFile } from '@masknet/flags'
 import {
     TelemetryID,
@@ -12,48 +12,27 @@ import {
     type ExtensionSite,
 } from '@masknet/shared-base'
 import { BaseAPI } from './Base.js'
-import type { EventID, EventOptions, ExceptionOptions, Provider } from '../types/index.js'
-import { telemetrySettings } from '../settings/index.js'
+import type { EventOptions, ExceptionOptions, Provider } from '../types/index.js'
 import { getABTestSeed, joinsABTest } from '../entry-helpers.js'
-
-interface Event {
-    ID: EventID
-    type: string
-
-    // network metadata
-    chain_id?: number
-    plugin_id?: PluginID
-    network_id?: NetworkPluginID
-    network?: string
-    provider?: string
-
-    // browser env
-    agent: string
-    site?: EnhanceableSite | ExtensionSite
-    ua?: string
-    extension_id?: string
-
-    // build env
-    channel?: string
-    version?: string
-    branch_name?: string
-
-    // ab-testing
-    device_ab: boolean
-    device_seed: number
-    device_id: string
-}
+import { MixpanelEventAPI, type Event } from '../apis/Mixpanel.js'
 
 export class MixpanelAPI extends BaseAPI<Event, never> implements Provider {
+    private eventAPI = new MixpanelEventAPI()
+
     constructor(private env: BuildInfoFile) {
         super(Flags.mixpanel_sample_rate)
     }
 
-    private createEvent(options: EventOptions) {
-        return omitBy<Event>(
-            {
-                ID: options.eventID,
+    private createEvent(options: EventOptions): Event {
+        return {
+            event: options.eventID,
+            properties: {
                 type: options.eventType,
+
+                time: Date.now(),
+                distinct_id: TelemetryID.value,
+                $insert_id: uuid(),
+
                 chain_id: options.network?.chainId,
                 plugin_id: options.network?.pluginID,
                 network_id: options.network?.networkID,
@@ -73,8 +52,7 @@ export class MixpanelAPI extends BaseAPI<Event, never> implements Provider {
                 device_seed: getABTestSeed(),
                 device_id: TelemetryID.value,
             },
-            isUndefined,
-        ) as unknown as Event
+        }
     }
 
     override captureEvent(options: EventOptions): void {
@@ -84,7 +62,7 @@ export class MixpanelAPI extends BaseAPI<Event, never> implements Provider {
         if (!this.shouldRecord()) return
 
         const event = this.createEvent(options)
-        track(event.ID, omit(event, 'ID'))
+        this.eventAPI.trackEvents([event])
     }
 
     override captureException(options: ExceptionOptions): void {

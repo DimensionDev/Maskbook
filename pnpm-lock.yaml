@@ -3521,6 +3521,13 @@ importers:
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-0a360642d-20230711)
+      uuid:
+        specifier: ^9.0.0
+        version: 9.0.0
+    devDependencies:
+      '@types/uuid':
+        specifier: ^9.0.2
+        version: 9.0.2
 
   packages/polyfills:
     dependencies:
