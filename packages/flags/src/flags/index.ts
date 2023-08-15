@@ -49,6 +49,12 @@ export const flags = {
     sentry_fetch_transaction_enabled: prodOnly,
     sentry_async_transaction_enabled: devOnly,
 
+    mixpanel_earliest_version: env.VERSION || env.VERSION,
+    mixpanel_sample_rate: 1,
+    mixpanel_enabled: prodOnly,
+    mixpanel_event_enabled: prodOnly,
+    mixpanel_exception_enabled: prodOnly,
+
     // wallet connect
     wc_v1_bridge_url: 'https://bridge.walletconnect.org',
     wc_v2_relay_url: 'wss://relay.walletconnect.com',

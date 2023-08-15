@@ -95,7 +95,7 @@ export interface ExceptionOptions extends CommonOptions {
     error: Error
 }
 
-export interface Provider<Event, Exception> {
+export interface Provider {
     user?: UserOptions
     device?: DeviceOptions
     network?: NetworkOptions

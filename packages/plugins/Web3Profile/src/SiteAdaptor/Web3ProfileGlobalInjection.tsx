@@ -1,5 +1,5 @@
 import { memo, useEffect, useState } from 'react'
-import { Sentry } from '@masknet/web3-telemetry'
+import { Mixpanel } from '@masknet/web3-telemetry'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
@@ -15,7 +15,7 @@ export const Web3ProfileGlobalInjection = memo(function Web3ProfileGlobalInjecti
         return CrossIsolationMessages.events.web3ProfileDialogEvent.on(({ open }) => {
             setProfileOpen(open)
             if (open)
-                Sentry.captureEvent({
+                Mixpanel.captureEvent({
                     eventType: EventType.Access,
                     eventID: EventID.AccessWeb3ProfileDialog,
                 })

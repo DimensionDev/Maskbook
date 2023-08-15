@@ -11,19 +11,17 @@ import { isSameVersion } from '../helpers/isSameVersion.js'
 import { removeSensitiveTelemetryInfo } from '../helpers/removeSensitiveTelemetryInfo.js'
 import {
     type Provider,
-    type UserOptions,
-    type DeviceOptions,
-    type NetworkOptions,
-    type CommonOptions,
     type EventOptions,
     type ExceptionOptions,
-    type EventType,
+    GroupID,
     type ExceptionType,
     type EventID,
+    type EventType,
     type ExceptionID,
-    GroupID,
+    type CommonOptions,
 } from '../types/index.js'
 import { telemetrySettings } from '../settings/index.js'
+import { BaseAPI } from './Base.js'
 
 const IGNORE_ERRORS = [
     // FIXME
@@ -47,8 +45,10 @@ const IGNORE_ERRORS = [
     'An attempt was made to break through the security policy of the user agent.',
 ]
 
-export class SentryAPI implements Provider<Event, Event> {
+export class SentryAPI extends BaseAPI<never, Event> implements Provider {
     constructor(env: BuildInfoFile) {
+        super(Flags.sentry_sample_rate)
+
         const release =
             env.channel === 'stable' && process.env.NODE_ENV === 'production'
                 ? env.COMMIT_HASH
@@ -95,8 +95,7 @@ export class SentryAPI implements Provider<Event, Event> {
                 if (!event.tags?.group_id) {
                     // ignored in the development mode
                     if (process.env.NODE_ENV === 'development') {
-                        // eslint-disable-next-line @typescript-eslint/no-base-to-string
-                        console.log(`[LOG EXCEPTION]: ${event}`)
+                        console.log(`[LOG EXCEPTION]: ${JSON.stringify(event, null, 2)}`)
                         return null
                     }
 
@@ -136,74 +135,6 @@ export class SentryAPI implements Provider<Event, Event> {
         telemetrySettings.addListener((x) => (x ? this.enable() : this.disable()))
     }
 
-    // The sentry needs to be opened at the runtime.
-    private status = 'off'
-    private userOptions?: UserOptions
-    private deviceOptions?: DeviceOptions
-    private networkOptions?: NetworkOptions
-
-    get user() {
-        return {
-            ...this.userOptions,
-        }
-    }
-
-    set user(options: UserOptions) {
-        this.userOptions = {
-            ...this.userOptions,
-            ...options,
-        }
-    }
-
-    get device() {
-        return {
-            ...this.deviceOptions,
-        }
-    }
-
-    set device(options: DeviceOptions) {
-        this.deviceOptions = {
-            ...this.deviceOptions,
-            ...options,
-        }
-    }
-
-    get network() {
-        return {
-            ...this.networkOptions,
-        }
-    }
-
-    set network(options: NetworkOptions) {
-        this.networkOptions = {
-            ...this.networkOptions,
-            ...options,
-        }
-    }
-
-    private getOptions(initials?: CommonOptions): CommonOptions {
-        return {
-            user: {
-                ...this.userOptions,
-                ...initials?.user,
-            },
-            device: {
-                ...this.deviceOptions,
-                ...initials?.device,
-            },
-            network: {
-                ...this.networkOptions,
-                ...initials?.network,
-            },
-        }
-    }
-
-    private shouldRecord(sampleRate: number = Flags.sentry_sample_rate) {
-        const rate = sampleRate % 1
-        if (rate >= 1 || rate < 0) return true
-        return crypto.getRandomValues(new Uint8Array(1))[0] > 255 - Math.floor(255 * sampleRate)
-    }
-
     private createCommonEvent(
         groupID: GroupID,
         type: EventType | ExceptionType,
@@ -229,46 +160,20 @@ export class SentryAPI implements Provider<Event, Event> {
         }
     }
 
-    private createEvent(options: EventOptions): Event {
-        return this.createCommonEvent(GroupID.Event, options.eventType, options.eventID, options)
-    }
-
     private createException(options: ExceptionOptions): Event {
         return this.createCommonEvent(GroupID.Exception, options.exceptionType, options.exceptionID, options)
     }
 
-    enable() {
-        this.status = 'on'
+    override captureEvent(options: EventOptions) {
+        // we don't trace event by sentry after mixpanel introduced
+        return
     }
 
-    disable() {
-        this.status = 'off'
-    }
-
-    captureEvent(options: EventOptions) {
-        if (this.status === 'off') return
-        if (!Flags.sentry_enabled) return
-        if (!Flags.sentry_event_enabled) return
-        if (process.env.NODE_ENV === 'development') {
-            console.log(`[LOG EVENT]: ${JSON.stringify(this.createEvent(options))}`)
-        } else {
-            const transaction = Sentry.startTransaction({
-                name: options.eventID,
-            })
-            const span = transaction.startChild({
-                op: 'task',
-                description: this.createEvent(options).message,
-            })
-            span.finish()
-            transaction.finish()
-        }
-    }
-
-    captureException(options: ExceptionOptions) {
+    override captureException(options: ExceptionOptions) {
         if (this.status === 'off') return
         if (!Flags.sentry_enabled) return
         if (!Flags.sentry_exception_enabled) return
-        if (!this.shouldRecord(options.sampleRate)) return
+        if (!this.shouldRecord()) return
         if (process.env.NODE_ENV === 'development') {
             console.log(`[LOG EXCEPTION]: ${JSON.stringify(this.createException(options))}`)
         } else {
