@@ -37,12 +37,12 @@ export function useFriendsFromSearch(
                     : PlatformSort[a.platform] - PlatformSort[b.platform],
             )
             return {
-                proofs: filtered,
+                proofs: uniqBy(filtered, ({ identity }) => identity),
                 linkedPersona: identifier,
                 activated_at: item.activated_at,
                 persona: item.persona,
                 isLocal: localList
-                    ? localList.some((x) => x.linkedPersona?.publicKeyAsHex === identifier.publicKeyAsHex)
+                    ? localList.some((x) => x.persona.publicKeyAsHex === identifier.publicKeyAsHex)
                     : false,
             }
         })
