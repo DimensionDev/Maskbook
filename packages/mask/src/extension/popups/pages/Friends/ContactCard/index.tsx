@@ -15,6 +15,7 @@ import { NextIDPlatform } from '@masknet/shared-base'
 import { attachNextIDToProfile } from '../../../../../utils/utils.js'
 import { ConnectedAccounts } from './ConnectedAccounts/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
+import Services from '../../../../service.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -88,18 +89,20 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
     const handleAddFriend = useCallback(async () => {
         if (!currentPersona) return
         const twitter = profiles.find((p) => p.platform === NextIDPlatform.Twitter)
-        let profileIdentifier
-        if (!twitter) profileIdentifier = ProfileIdentifier.of('nextid', nextId).unwrap()
-        else profileIdentifier = ProfileIdentifier.of('twitter.com', twitter.identity).unwrap()
         const personaIdentifier = ECKeyIdentifier.fromHexPublicKeyK256(nextId).expect(
             `${nextId} should be a valid hex public key in k256`,
         )
-        await attachNextIDToProfile({
-            identifier: profileIdentifier,
-            linkedPersona: personaIdentifier,
-            fromNextID: true,
-            linkedTwitterNames: twitter ? [twitter.identity] : [],
-        })
+        if (!twitter) {
+            await Services.Identity.createNewRelation(personaIdentifier, currentPersona.identifier)
+        } else {
+            const profileIdentifier = ProfileIdentifier.of('twitter.com', twitter.identity).unwrap()
+            await attachNextIDToProfile({
+                identifier: profileIdentifier,
+                linkedPersona: personaIdentifier,
+                fromNextID: true,
+                linkedTwitterNames: twitter ? [twitter.identity] : [],
+            })
+        }
         setLocal(true)
     }, [profiles, nextId, currentPersona])
 

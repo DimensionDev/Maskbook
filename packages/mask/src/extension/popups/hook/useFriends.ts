@@ -3,18 +3,25 @@ import {
     type ECKeyIdentifier,
     EMPTY_LIST,
     type BindingProof,
-    type ProfileInformation,
     NextIDPlatform,
+    type ProfileIdentifier,
 } from '@masknet/shared-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { useCurrentPersona } from '../../../components/DataSource/useCurrentPersona.js'
 import Services from '../../../extension/service.js'
 import { NextIDProof } from '@masknet/web3-providers'
 import { uniqBy } from 'lodash-es'
+import { isProfileIdentifier } from '@masknet/shared'
 
-export type FriendsInformation = ProfileInformation & {
+export type FriendsInformation = Friends & {
     profiles: BindingProof[]
     id: string
+}
+
+type Friends = {
+    persona: ECKeyIdentifier
+    profile?: ProfileIdentifier
+    avatar?: string
 }
 
 export const PlatformSort: Record<NextIDPlatform, number> = {
@@ -48,30 +55,51 @@ export function useFriends(): AsyncStateRetry<FriendsInformation[]> {
             1000,
         )
         if (values.length === 0) return EMPTY_LIST
-        const friends = (await Services.Identity.queryProfilesInformation(values.map((x) => x.profile))).filter(
-            (item) => item.linkedPersona !== undefined && item.linkedPersona !== currentPersona?.identifier,
+        const friends: Friends[] = []
+        await Promise.all(
+            values.map(async (x) => {
+                if (isProfileIdentifier(x.profile)) {
+                    const res = await Services.Identity.queryProfilesInformation([x.profile])
+                    if (res[0].linkedPersona !== undefined && res[0].linkedPersona !== currentPersona?.identifier)
+                        friends.push({
+                            persona: res[0].linkedPersona,
+                            profile: x.profile,
+                            avatar: res[0].avatar,
+                        })
+                } else {
+                    if (x.profile !== currentPersona?.identifier) friends.push({ persona: x.profile })
+                }
+            }),
         )
         const allSettled = await Promise.allSettled(
             friends.map((item) => {
-                const id = (item.linkedPersona as ECKeyIdentifier).publicKeyAsHex
+                const id = item.persona.publicKeyAsHex
                 return NextIDProof.queryProfilesByPublicKey(id, 2)
             }),
         )
         const profiles: FriendsInformation[] = allSettled.map((item, index) => {
-            if (!(item.status !== 'rejected')) {
-                return {
-                    profiles: [
-                        {
-                            platform: NextIDPlatform.Twitter,
-                            identity: friends[index].identifier.userId,
-                            is_valid: true,
-                            last_checked_at: '',
-                            name: friends[index].identifier.userId,
-                            created_at: '',
-                        },
-                    ],
-                    ...friends[index],
-                    id: (friends[index].linkedPersona as ECKeyIdentifier).publicKeyAsHex,
+            if (item.status === 'rejected') {
+                if (friends[index].profile) {
+                    return {
+                        profiles: [
+                            {
+                                platform: NextIDPlatform.Twitter,
+                                identity: friends[index].profile!.userId,
+                                is_valid: true,
+                                last_checked_at: '',
+                                name: friends[index].profile!.userId,
+                                created_at: '',
+                            },
+                        ],
+                        ...friends[index],
+                        id: friends[index].persona.publicKeyAsHex,
+                    }
+                } else {
+                    return {
+                        profiles: [],
+                        ...friends[index],
+                        id: friends[index].persona.publicKeyAsHex,
+                    }
                 }
             }
             const filtered = item.value.filter(
@@ -89,7 +117,7 @@ export function useFriends(): AsyncStateRetry<FriendsInformation[]> {
             return {
                 profiles: filtered,
                 ...friends[index],
-                id: (friends[index].linkedPersona as ECKeyIdentifier).publicKeyAsHex,
+                id: friends[index].persona.publicKeyAsHex,
             }
         })
         return uniqBy(profiles, ({ id }) => id).reverse()

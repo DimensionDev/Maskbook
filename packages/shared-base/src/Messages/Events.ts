@@ -238,7 +238,7 @@ export interface AutoPasteFailedEvent {
     image?: Blob
 }
 
-export type RelationChangedEvent = UpdateEvent<ProfileIdentifier> & {
+export type RelationChangedEvent = UpdateEvent<ProfileIdentifier | PersonaIdentifier> & {
     favor: RelationFavor
 }
 

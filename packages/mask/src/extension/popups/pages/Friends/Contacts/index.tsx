@@ -49,8 +49,8 @@ export const Contacts = memo<ContactsProps>(function Contacts({ friends, listRef
                     <ContactCard
                         key={friend.id}
                         avatar={friend.avatar}
-                        nextId={friend.linkedPersona?.publicKeyAsHex}
-                        publicKey={friend.linkedPersona?.rawPublicKey}
+                        nextId={friend.persona?.publicKeyAsHex}
+                        publicKey={friend.persona?.rawPublicKey}
                         profiles={friend.profiles}
                         isLocal
                     />
