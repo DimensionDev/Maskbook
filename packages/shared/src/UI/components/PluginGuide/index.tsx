@@ -1,6 +1,5 @@
-import { ThemeProvider } from '@emotion/react'
 import type { PluginID } from '@masknet/shared-base'
-import { MaskLightTheme, makeStyles, usePortalShadowRoot } from '@masknet/theme'
+import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Button, Portal, Typography } from '@mui/material'
 import React, {
     cloneElement,
@@ -75,6 +74,11 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         width: '100%',
         borderRadius: '20px',
+        backgroundColor: theme.palette.maskColor.bottom,
+        color: theme.palette.maskColor.main,
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.bottom,
+        },
     },
 }))
 
@@ -189,13 +193,11 @@ export function PluginGuide({
                                                 {title}
                                             </Typography>
                                         </div>
-                                        <ThemeProvider theme={MaskLightTheme}>
-                                            <div className={classes.buttonContainer}>
-                                                <Button color="primary" className={classes.button} onClick={onNext}>
-                                                    {actionText}
-                                                </Button>
-                                            </div>
-                                        </ThemeProvider>
+                                        <div className={classes.buttonContainer}>
+                                            <Button color="primary" className={classes.button} onClick={onNext}>
+                                                {actionText}
+                                            </Button>
+                                        </div>
                                     </div>
                                 </Box>
                             </div>
