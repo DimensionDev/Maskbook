@@ -54,6 +54,7 @@ export const flags = {
     mixpanel_enabled: prodOnly,
     mixpanel_event_enabled: prodOnly,
     mixpanel_exception_enabled: prodOnly,
+    mixpanel_token: 'b815b822fd131650e92ff8539eb5e793',
 
     // wallet connect
     wc_v1_bridge_url: 'https://bridge.walletconnect.org',

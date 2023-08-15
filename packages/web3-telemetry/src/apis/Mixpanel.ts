@@ -13,13 +13,6 @@ import {
 } from '@masknet/shared-base'
 import type { EventID } from '../types/index.js'
 import { getABTestSeed, joinsABTest } from '../entry-helpers.js'
-
-const PROJECT_TOKEN = 'b815b822fd131650e92ff8539eb5e793'
-
-function resolveCORS(url: string) {
-    return `https://cors-next.r2d2.to/?${encodeURIComponent(url)}`
-}
-
 export interface Event {
     event: EventID
 
@@ -92,7 +85,10 @@ export interface Event {
 export class MixpanelEventAPI {
     private lastEvent?: Event
 
-    constructor(private env: BuildInfoFile) {}
+    constructor(
+        private token: string,
+        private env: BuildInfoFile,
+    ) {}
 
     private attachEvent(event: Event): Event {
         return (this.lastEvent = {
@@ -136,12 +132,11 @@ export class MixpanelEventAPI {
         const event = this.attachEvent(_)
 
         const response = await fetch(
-            resolveCORS(
-                urlcat('https://api.mixpanel.com/import', {
-                    strict: 1,
-                    project_id: PROJECT_TOKEN,
-                }),
-            ),
+            urlcat('https://mixpanel.r2d2.to/import', {
+                strict: 1,
+                project_id: this.token,
+            }),
+
             {
                 method: 'POST',
                 headers: {
@@ -167,12 +162,10 @@ export class MixpanelEventAPI {
         const event = this.attachEvent(_)
 
         const response = await fetch(
-            resolveCORS(
-                urlcat('https://api.mixpanel.com/track', {
-                    // in the debug mode the API returns more information
-                    verbose: process.env.NODE_ENV === 'development' ? 1 : 0,
-                }),
-            ),
+            urlcat('https://mixpanel.r2d2.to/track', {
+                // in the debug mode the API returns more information
+                verbose: process.env.NODE_ENV === 'development' ? 1 : 0,
+            }),
             {
                 method: 'POST',
                 headers: {
@@ -185,7 +178,7 @@ export class MixpanelEventAPI {
                         event: event.event,
                         properties: {
                             ...event.properties,
-                            token: PROJECT_TOKEN,
+                            token: this.token,
                         },
                     },
                 ]),

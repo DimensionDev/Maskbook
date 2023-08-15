@@ -11,7 +11,7 @@ export class MixpanelAPI extends BaseAPI<Event, never> implements Provider {
         super(Flags.mixpanel_sample_rate)
     }
 
-    private eventAPI = new MixpanelEventAPI(this.env)
+    private eventAPI = new MixpanelEventAPI(Flags.mixpanel_token, this.env)
 
     private createEvent(options: EventOptions): Event {
         return omitBy<Event>(
