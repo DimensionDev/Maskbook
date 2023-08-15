@@ -18,6 +18,7 @@ export function getNativeTokenLabel(networkType: NetworkType) {
         case NetworkType.Ethereum:
             return 'ETH'
         case NetworkType.Binance:
+        case NetworkType.Base:
         case NetworkType.Polygon:
         case NetworkType.Arbitrum:
         case NetworkType.xDai:

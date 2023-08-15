@@ -12,13 +12,10 @@ import {
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 
 export async function internal_wallet_restore(backup: NormalizedBackup.WalletBackup[]) {
-    let index = 0
     for (const wallet of backup) {
         try {
             const wallets = await WalletServiceRef.value.getWallets()
-            const name = generateNewWalletName(wallets, index)
-            index += 1
-
+            const name = wallet.name || generateNewWalletName(wallets)
             if (wallet.privateKey.some)
                 await WalletServiceRef.value.recoverWalletFromPrivateKey(
                     name,

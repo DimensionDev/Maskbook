@@ -1,14 +1,14 @@
+import { useMemo } from 'react'
 import { type TradeProvider } from '@masknet/public-api'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useCustomBlockBeatRetry } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useMemo } from 'react'
 import { UniSwapV2Like } from '@masknet/web3-providers'
 import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
+import type { TraderAPI } from '@masknet/web3-providers/types'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
 import { getEVMAvailableTraderProviders } from '../utils.js'
 import { BLOCK_TIME_SCALE } from '../constants/trader.js'
-import type { TraderAPI } from '@masknet/web3-providers/types'
 
 export function useUniswapV2Like(
     traderProvider: TradeProvider,

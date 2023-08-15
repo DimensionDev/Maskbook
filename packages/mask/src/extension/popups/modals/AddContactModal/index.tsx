@@ -113,7 +113,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
                     loading={loading}
                     onClick={addContact}
                     className={classes.button}
-                    disabled={addressError || nameExistError || !name}>
+                    disabled={addressError || nameExistError || !name.trim() || !address}>
                     {t('confirm')}
                 </ActionButton>
             </div>
