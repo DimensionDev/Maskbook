@@ -51,6 +51,6 @@ export function useERC721TokenTransferCallback(address?: string) {
                     })
             })
         },
-        [account],
+        [address, account],
     )
 }
