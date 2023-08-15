@@ -31,11 +31,9 @@ export function useFriendsFromSearch(
             const identifier = ECKeyIdentifier.fromHexPublicKeyK256(item.persona).expect(
                 `${item.persona} should be a valid hex public key in k256`,
             )
-            filtered.sort((a, b) =>
-                a.identity === searchValue || a.name === searchValue
-                    ? -1
-                    : PlatformSort[a.platform] - PlatformSort[b.platform],
-            )
+            filtered.sort((a, b) => PlatformSort[a.platform] - PlatformSort[b.platform])
+            const searchItem = filtered.findIndex((x) => x.identity === searchValue || x.name === searchValue)
+            if (searchItem !== -1) filtered.unshift(filtered.splice(searchItem, 1)[0])
             return {
                 proofs: uniqBy(filtered, ({ identity }) => identity),
                 linkedPersona: identifier,

@@ -7,13 +7,11 @@ import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { resolveNextIDPlatform, usePersonasFromNextID } from '@masknet/shared'
 import { useSearchValue } from '../../../hook/useSearchValue.js'
 import { useFriendsFromSearch } from '../../../hook/useFriendsFromSearch.js'
-import { useLoadMore } from '../../../hook/useLoadMore.js'
 
 const FriendsHome = memo(function FriendsHome() {
     const { t } = useI18N()
     const { loading, value = EMPTY_LIST } = useFriends()
     const listRef = useRef<HTMLElement>(null)
-    const loadMore = useLoadMore(listRef)
     const [searchValue, setSearchValue] = useState('')
     const type = resolveNextIDPlatform(searchValue)
     const { loading: resolveLoading, value: _value = '' } = useSearchValue(searchValue, type)
