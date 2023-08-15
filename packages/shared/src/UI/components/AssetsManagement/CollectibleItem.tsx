@@ -17,6 +17,7 @@ const useStyles = makeStyles<void, 'action' | 'collectibleCard' | 'info'>()((the
         borderRadius: 8,
         overflow: 'visible',
         zIndex: 0,
+        willChange: 'opacity',
     },
     withAction: {
         '&:hover': {
@@ -42,6 +43,9 @@ const useStyles = makeStyles<void, 'action' | 'collectibleCard' | 'info'>()((the
             '0%': { opacity: 0 },
         },
         animation: 'fade-in 500ms ease-in-out',
+        '@media (prefers-reduced-motion: reduce)': {
+            animation: 'none',
+        },
     },
     collectibleCard: {
         width: '100%',
