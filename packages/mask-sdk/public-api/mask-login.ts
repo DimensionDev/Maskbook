@@ -5,5 +5,5 @@ declare namespace Mask {
      * @public
      * @remarks Since API=0
      */
-    export const credentials: CredentialsContainer
+    export const credentials: undefined | CredentialsContainer
 }

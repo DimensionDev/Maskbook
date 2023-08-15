@@ -1,5 +1,5 @@
 declare namespace Mask {
-    export const socialNetwork: SocialNetwork
+    export const socialNetwork: undefined | SocialNetwork
     /**
      * A set of API available when the web page is opened by the Mask Network as an External Plugin.
      *
