@@ -77,8 +77,7 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
         if (!blockedIds.length) return assetsMap
         const listingMap: Record<string, AssetsState> = { ...assetsMap }
         let updated = false
-        for (const id in assetsMap) {
-            const storeId = `${account}.${id}`
+        for (const storeId in assetsMap) {
             const originalAssets = assetsMap[storeId].assets
             const newAssets = originalAssets.filter((x) => {
                 const assetId = `${x.chainId}.${x.address}.${x.tokenId}`.toLowerCase()
@@ -91,7 +90,7 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
         }
         // Update accordingly
         return updated ? listingMap : assetsMap
-    }, [assetsMap, account, blockedIds])
+    }, [assetsMap, blockedIds])
 
     const assetsMapRef = useRef<AssetsReducerState['assetsMap']>({})
     const listingAssetsMapRef = useRef<AssetsReducerState['assetsMap']>({})
