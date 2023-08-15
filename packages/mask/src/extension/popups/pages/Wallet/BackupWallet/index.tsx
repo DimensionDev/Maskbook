@@ -13,7 +13,7 @@ import formatDateTime from 'date-fns/format'
 import { saveFileFromBuffer } from '../../../../../../shared/index.js'
 import { encodeText } from '@masknet/kit'
 import { MimeType } from '@masknet/shared-base'
-import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
+import Services from '../../../../service.js'
 
 const useStyles = makeStyles()({
     content: {
@@ -117,8 +117,8 @@ const BackupWallet = memo(() => {
         if (!wallet?.hasStoredKeyInfo) return
         try {
             return {
-                jsonFile: await WalletRPC.exportKeyStoreJSON(wallet.address, password),
-                privateKey: await WalletRPC.exportPrivateKey(wallet.address, password),
+                jsonFile: await Services.Wallet.exportKeyStoreJSON(wallet.address, password),
+                privateKey: await Services.Wallet.exportPrivateKey(wallet.address, password),
             }
         } catch (error) {
             if (error instanceof Error) {

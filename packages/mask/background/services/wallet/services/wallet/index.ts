@@ -8,7 +8,8 @@ import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import * as Mask from '../maskwallet/index.js'
 import * as database from './database/index.js'
 import * as password from './password.js'
-import { MAX_DERIVE_COUNT } from '../../constants.js'
+
+const MAX_DERIVE_COUNT = 99
 
 function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {
     const splitted = path.split('/')
@@ -52,7 +53,7 @@ export async function getWallets(): Promise<Wallet[]> {
     return wallets.filter((x) => x.hasStoredKeyInfo).map(sanitizeWallet)
 }
 
-export function createMnemonicWords() {
+export async function createMnemonicWords() {
     return bip39.generateMnemonic().split(' ')
 }
 

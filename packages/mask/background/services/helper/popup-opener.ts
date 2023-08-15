@@ -1,20 +1,8 @@
 import urlcat from 'urlcat'
-import { type DashboardRoutes, PopupRoutes, MaskMessages, CrossIsolationMessages } from '@masknet/shared-base'
+import { type DashboardRoutes, PopupRoutes, CrossIsolationMessages } from '@masknet/shared-base'
+import { isLocked } from '../wallet/services/index.js'
 
 let currentPopupWindowId = 0
-
-function isLocked() {
-    return new Promise<boolean>((resolve) => {
-        const off = MaskMessages.events.wallet_is_locked.on(([type, value]) => {
-            if (type === 'request') return
-            off()
-            resolve(value)
-            // in case something went wrong
-            setTimeout(() => resolve(false), 200)
-        })
-        MaskMessages.events.wallet_is_locked.sendToLocal(['request'])
-    })
-}
 
 async function openWindow(url: string): Promise<void> {
     const windows = await browser.windows.getAll()

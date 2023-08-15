@@ -5,7 +5,7 @@ import type { JsonRpcPayload } from 'web3-core-helpers'
 import { PayloadEditor } from '@masknet/web3-shared-evm'
 import { useChainContext, useNativeTokenAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import { CrossIsolationMessages, ECKeyIdentifier, NetworkPluginID } from '@masknet/shared-base'
-import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
+import Services from '../../../../service.js'
 
 export const useUnconfirmedRequest = () => {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -13,7 +13,7 @@ export const useUnconfirmedRequest = () => {
     const nativeTokenAddress = useNativeTokenAddress()
 
     const result = useAsyncRetry(async () => {
-        const payload = await WalletRPC.topUnconfirmedRequest()
+        const payload = await Services.Wallet.topUnconfirmedRequest()
         if (!payload) return
 
         const computedPayload = PayloadEditor.fromPayload(payload).config

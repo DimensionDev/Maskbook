@@ -10,7 +10,7 @@ import { PopupRoutes, type SingletonModalRefCreator, type Wallet } from '@maskne
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { PasswordField } from '../../components/PasswordField/index.js'
-import { WalletRPC } from '../../../../plugins/WalletService/messages.js'
+import Services from '../../../service.js'
 
 interface WalletRemoveDrawerProps extends BottomDrawerProps {
     error: string
@@ -29,7 +29,7 @@ function WalletRenameDrawer({ wallet, error, password, setPassword, setError, ..
         if (!password || !wallet) return
 
         try {
-            const verified = await WalletRPC.verifyPassword(password)
+            const verified = await Services.Wallet.verifyPassword(password)
 
             if (!verified) {
                 setError(t('create_wallet_incorrect_payment_password'))
@@ -38,7 +38,7 @@ function WalletRenameDrawer({ wallet, error, password, setPassword, setError, ..
             await Web3.removeWallet?.(wallet.address, password, { providerType: ProviderType.MaskWallet })
             rest.onClose?.()
 
-            const wallets = await WalletRPC.getWallets()
+            const wallets = await Services.Wallet.getWallets()
 
             if (!wallets.length) {
                 navigate(PopupRoutes.WalletStartUp, { replace: true })

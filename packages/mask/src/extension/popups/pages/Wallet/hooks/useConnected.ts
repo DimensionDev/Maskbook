@@ -1,6 +1,5 @@
 import { getSiteType } from '@masknet/shared-base'
 import { useQuery } from '@tanstack/react-query'
-import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 import Services from '../../../../service.js'
 
 export function useConnected() {
@@ -11,7 +10,7 @@ export function useConnected() {
         const siteType = getSiteType(url)
 
         if (!siteType) return { connected: false, url }
-        const connected = await WalletRPC.getConnectedStatus(siteType)
+        const connected = await Services.Wallet.getConnectedStatus(siteType)
         return {
             connected,
             url,

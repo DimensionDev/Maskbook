@@ -1,5 +1,4 @@
 import { Icons } from '@masknet/icons'
-import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import { ECKeyIdentifier, MAX_WALLET_LIMIT, NetworkPluginID, PopupRoutes, type Wallet } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworks, useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
@@ -13,7 +12,7 @@ import { useI18N } from '../../../../../utils/index.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 import { ActionModal, useActionModal } from '../../../components/index.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
-import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
+import Services from '../../../../service.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -54,7 +53,7 @@ const SwitchWallet = memo(function SwitchWallet() {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const handleClickCreate = useCallback(async () => {
         if (!wallets.filter((x) => x.hasDerivationPath).length) {
-            const hasPaymentPassword = await WalletServiceRef.value.hasPassword()
+            const hasPaymentPassword = await Services.Wallet.hasPassword()
             await browser.tabs.create({
                 active: true,
                 url: browser.runtime.getURL(
@@ -102,7 +101,7 @@ const SwitchWallet = memo(function SwitchWallet() {
     }, [])
 
     const handleLock = useCallback(async () => {
-        await WalletRPC.lockWallet()
+        await Services.Wallet.lockWallet()
         navigate(PopupRoutes.Unlock)
     }, [])
 
