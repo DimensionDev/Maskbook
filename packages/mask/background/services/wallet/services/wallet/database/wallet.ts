@@ -2,7 +2,7 @@ import { omit } from 'lodash-es'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { CrossIsolationMessages, type ImportSource, asyncIteratorToArray } from '@masknet/shared-base'
 import { formatEthereumAddress, isValidAddress } from '@masknet/web3-shared-evm'
-import { PluginDB } from '../../../database/Plugin.db.js'
+import { walletDatabase } from '../../../database/Plugin.db.js'
 import type { WalletRecord } from '../type.js'
 
 function WalletRecordOutDB(record: WalletRecord) {
@@ -17,7 +17,7 @@ function WalletRecordOutDB(record: WalletRecord) {
 export async function getWallet(address: string) {
     if (!address) return null
     if (!isValidAddress(address)) throw new Error('Not a valid address.')
-    const wallet = (await PluginDB.get('wallet', formatEthereumAddress(address))) ?? null
+    const wallet = (await walletDatabase.get('wallet', formatEthereumAddress(address))) ?? null
     return wallet ? WalletRecordOutDB(wallet) : null
 }
 
@@ -28,7 +28,7 @@ export async function getWalletRequired(address: string) {
 }
 
 export async function hasWallet(address: string) {
-    return PluginDB.has('wallet', formatEthereumAddress(address))
+    return walletDatabase.has('wallet', formatEthereumAddress(address))
 }
 
 export async function hasWalletRequired(address: string) {
@@ -50,7 +50,7 @@ export async function hasStoredKeyInfoRequired(storedKeyInfo?: api.IStoredKeyInf
 }
 
 async function getWalletRecords() {
-    return (await asyncIteratorToArray(PluginDB.iterate('wallet'))).map((x) => x.value)
+    return (await asyncIteratorToArray(walletDatabase.iterate('wallet'))).map((x) => x.value)
 }
 
 export async function getWallets() {
@@ -81,7 +81,7 @@ export async function addWallet(
 
     const now = new Date()
     const address_ = formatEthereumAddress(address)
-    await PluginDB.add({
+    await walletDatabase.add({
         id: address_,
         type: 'wallet',
         source,
@@ -107,7 +107,7 @@ export async function updateWallet(
     const wallet = await getWallet(address)
     if (!wallet) throw new Error('The wallet does not exist')
 
-    await PluginDB.add({
+    await walletDatabase.add({
         type: 'wallet',
         ...wallet,
         name: updates.name ?? wallet.name,
@@ -119,12 +119,12 @@ export async function updateWallet(
 }
 
 export async function deleteWallet(address: string) {
-    await PluginDB.remove('wallet', address)
+    await walletDatabase.remove('wallet', address)
     CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)
 }
 
 export async function resetAllWallets() {
-    for await (const x of PluginDB.iterate_mutate('wallet')) {
+    for await (const x of walletDatabase.iterate_mutate('wallet')) {
         await x.delete()
     }
     CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)

@@ -1,10 +1,10 @@
 import { useAsyncRetry } from 'react-use'
 import { useEffect } from 'react'
-import { WalletRPC } from '../../../plugins/WalletService/messages.js'
+import Services from '../../service.js'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 
 export function useHasPassword() {
-    const { value: hasPassword, loading, retry } = useAsyncRetry(WalletRPC.hasPassword, [])
+    const { value: hasPassword, loading, retry } = useAsyncRetry(Services.Wallet.hasPassword, [])
 
     useEffect(() => {
         CrossIsolationMessages.events.passwordStatusUpdated.on(retry)

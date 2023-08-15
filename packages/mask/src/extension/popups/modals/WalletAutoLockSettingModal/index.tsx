@@ -7,7 +7,7 @@ import { Box, TextField, Typography, useTheme } from '@mui/material'
 import { type SingletonModalRefCreator } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useSingletonModal } from '@masknet/shared-base-ui'
-import { WalletRPC } from '../../../../plugins/WalletService/messages.js'
+import Services from '../../../service.js'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { useWalletAutoLockTime } from '../../pages/Wallet/hooks/useWalletAutoLockTime.js'
@@ -70,7 +70,7 @@ function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
     const error = Number.isNaN(Number(time ?? initialTime))
 
     const [{ loading }, setAutoLockerTime] = useAsyncFn(async (time: number) => {
-        await WalletRPC.setAutoLockerTime(
+        await Services.Wallet.setAutoLockerTime(
             time > ONE_DAY_IN_MILLISECONDS || time === 0 ? 0 : Math.max(time, DEFAULT_MIN_AUTO_LOCKER_TIME),
         )
         props.onClose?.()

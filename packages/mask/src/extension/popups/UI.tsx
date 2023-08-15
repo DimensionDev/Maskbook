@@ -22,7 +22,6 @@ import {
     useLocation,
     type HistoryRouterProps,
 } from 'react-router-dom'
-import { WalletRPC } from '../../plugins/WalletService/messages.js'
 import { usePopupTheme } from '../../utils/theme/usePopupTheme.js'
 import Services from '../service.js'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
@@ -148,7 +147,7 @@ export default function Popups() {
     )
 
     useMountReport(EventID.AccessPopups)
-    useIdleTimer({ onAction: WalletRPC.setAutoLockTimer, throttle: 10000 })
+    useIdleTimer({ onAction: Services.Wallet.setAutoLockTimer, throttle: 10000 })
 
     useEffect(() => CrossIsolationMessages.events.popupRouteUpdated.on((url) => PopupsHistory.replace(url)), [])
     return PageUIProvider(

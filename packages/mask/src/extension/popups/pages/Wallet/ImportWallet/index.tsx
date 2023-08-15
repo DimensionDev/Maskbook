@@ -18,7 +18,6 @@ import Services from '../../../../service.js'
 import { PageHeader } from '../components/PageHeader/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
-import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -134,7 +133,7 @@ const ImportWallet = memo(() => {
                 switch (currentTab) {
                     case tabs.mnemonic:
                         // valid the mnemonic
-                        await WalletRPC.getDerivableAccounts(mnemonic, 0, 1)
+                        await Services.Wallet.getDerivableAccounts(mnemonic, 0, 1)
                         const params = query({ name: data.name })
                         navigate(PopupRoutes.AddDeriveWallet + '?' + params, {
                             replace: true,
@@ -142,7 +141,7 @@ const ImportWallet = memo(() => {
                         })
                         break
                     case tabs.json:
-                        const address = await WalletRPC.recoverWalletFromKeyStoreJSON(
+                        const address = await Services.Wallet.recoverWalletFromKeyStoreJSON(
                             data.name,
                             keyStoreContent,
                             keyStorePassword,
@@ -151,18 +150,18 @@ const ImportWallet = memo(() => {
                             account: address,
                             providerType: ProviderType.MaskWallet,
                         })
-                        await WalletRPC.resolveMaskAccount([{ address }])
+                        await Services.Wallet.resolveMaskAccount([{ address }])
                         await Services.Helper.removePopupWindow()
                         navigate(PopupRoutes.Wallet, { replace: true })
                         break
                     case tabs.privateKey:
-                        const account = await WalletRPC.recoverWalletFromPrivateKey(data.name, privateKey)
+                        const account = await Services.Wallet.recoverWalletFromPrivateKey(data.name, privateKey)
                         await Web3.connect({
                             account,
                             chainId: ChainId.Mainnet,
                             providerType: ProviderType.MaskWallet,
                         })
-                        await WalletRPC.resolveMaskAccount([{ address: account }])
+                        await Services.Wallet.resolveMaskAccount([{ address: account }])
                         await Services.Helper.removePopupWindow()
                         navigate(PopupRoutes.Wallet, { replace: true })
                         break

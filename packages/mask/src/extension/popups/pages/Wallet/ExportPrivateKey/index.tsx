@@ -12,7 +12,7 @@ import { encodeText } from '@masknet/kit'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { BottomController } from '../../../components/BottomController/index.js'
-import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
+import Services from '../../../../service.js'
 import { NormalHeader } from '../../../components/index.js'
 import { saveFileFromBuffer } from '../../../../../../shared/index.js'
 
@@ -59,8 +59,8 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
         if (!wallet) return
 
         return {
-            jsonFile: await WalletRPC.exportKeyStoreJSON(wallet.address, state?.password),
-            privateKey: await WalletRPC.exportPrivateKey(wallet.address, state?.password),
+            jsonFile: await Services.Wallet.exportKeyStoreJSON(wallet.address, state?.password),
+            privateKey: await Services.Wallet.exportPrivateKey(wallet.address, state?.password),
         }
     }, [wallet, state?.password])
 

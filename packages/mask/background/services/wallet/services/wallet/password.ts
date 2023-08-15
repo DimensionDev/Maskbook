@@ -1,7 +1,6 @@
 import { validate } from 'uuid'
 import { getDefaultWalletPassword } from '@masknet/shared-base'
 import * as database from './database/index.js'
-import { i18n } from '../../../../../shared-ui/locales_legacy/index.js'
 
 let inMemoryPassword = ''
 
@@ -48,7 +47,7 @@ export async function setDefaultPassword() {
 }
 
 /** Clear the verified password in memory forces the user to re-enter the password. */
-export function clearPassword() {
+export async function clearPassword() {
     inMemoryPassword = ''
 }
 
@@ -85,14 +84,14 @@ export async function changePassword(oldPassword: string, newPassword: string, m
     INTERNAL_setPassword(newPassword)
 }
 
-export function validatePassword(unverifiedPassword: string) {
+export async function validatePassword(unverifiedPassword: string) {
     if (!unverifiedPassword) return false
     if (unverifiedPassword.length < 6) return false
     if (unverifiedPassword.length > 20) return false
     return true
 }
 
-export function validatePasswordRequired(unverifiedPassword: string) {
-    if (!validatePassword(unverifiedPassword)) throw new Error(i18n.t('popups_wallet_password_satisfied_requirement'))
+export async function validatePasswordRequired(unverifiedPassword: string) {
+    if (!validatePassword(unverifiedPassword)) throw new Error('The password is not satisfied the requirement.')
     return true
 }
