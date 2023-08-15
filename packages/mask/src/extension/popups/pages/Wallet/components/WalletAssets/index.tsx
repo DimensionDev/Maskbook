@@ -1,24 +1,18 @@
 import { Icons } from '@masknet/icons'
-import { CollectionList, RestorableScroll, UserAssetsProvider } from '@masknet/shared'
+import { RestorableScroll, UserAssetsProvider } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { useAccount, useChainContext, useTrustedNonFungibleTokens, useWallet } from '@masknet/web3-hooks-base'
+import { useAccount, useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
-import { Box, Button, Tab, Typography, styled, tabClasses, tabsClasses } from '@mui/material'
+import { Box, Button, Tab, styled, tabClasses, tabsClasses } from '@mui/material'
 import { memo, useCallback, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import urlcat from 'urlcat'
 import { useI18N } from '../../../../../../utils/index.js'
 import { useParamTab } from '../../../../hook/index.js'
 import { WalletAssetTabs } from '../../type.js'
 import { ActivityList } from '../ActivityList/index.js'
 import { AssetsList } from '../AssetsList/index.js'
-
-const gridProps = {
-    columns: 'repeat(auto-fill, minmax(20%, 1fr))',
-    gap: '8px',
-}
+import { WalletCollections } from './WalletCollections.js'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -83,13 +77,6 @@ const useStyles = makeStyles()((theme) => {
             boxShadow: `0px 4px 6px 0px ${isDark ? 'rgba(0, 0, 0, 0.10)' : 'rgba(102, 108, 135, 0.10)'}`,
             marginLeft: 'auto',
         },
-        importNft: {
-            cursor: 'pointer',
-            color: isDark ? theme.palette.maskColor.main : theme.palette.maskColor.highlight,
-            fontSize: 14,
-            fontWeight: 400,
-            textAlign: 'center',
-        },
     }
 })
 
@@ -118,57 +105,21 @@ export const WalletAssets = memo(function WalletAssets() {
     return wallet ? <WalletAssetsUI onAddToken={handleAdd} /> : null
 })
 
-export interface WalletAssetsUIProps {
+interface WalletAssetsUIProps {
     onAddToken: (assetTab: WalletAssetTabs) => void
 }
 
 export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI({ onAddToken }) {
     const { t } = useI18N()
-    const navigate = useNavigate()
-    const [params, setParams] = useSearchParams()
+    const [params] = useSearchParams()
 
     const { classes } = useStyles()
     const [currentTab, handleTabChange] = useParamTab<WalletAssetTabs>(WalletAssetTabs.Tokens)
-    const trustedTokens = useTrustedNonFungibleTokens()
 
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const SEARCH_KEY = 'collectionId'
 
-    const handleItemClick = useCallback(
-        (asset: Web3Helper.NonFungibleTokenAll) => {
-            const path = urlcat(PopupRoutes.CollectibleDetail, {
-                chainId: asset.chainId,
-                address: asset.address,
-                id: asset.tokenId,
-            })
-            navigate(path, { state: { asset } })
-        },
-        [navigate],
-    )
-    const handleCollectionChange = useCallback(
-        (id: string | undefined) => {
-            setParams(
-                (params) => {
-                    if (!id) params.delete(SEARCH_KEY)
-                    else params.set(SEARCH_KEY, id)
-                    return params.toString()
-                },
-                { replace: true },
-            )
-        },
-        [setParams],
-    )
-
     const scrollTargetRef = useRef<HTMLDivElement>(null)
-
-    const collectiblesEmptyText = (
-        <>
-            <Typography component="div">{t('do_not_see_your_nft')}</Typography>
-            <Typography className={classes.importNft} role="button" onClick={() => onAddToken(currentTab)}>
-                {t('import_nft')}
-            </Typography>
-        </>
-    )
 
     return (
         <div className={classes.content}>
@@ -208,16 +159,7 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI(
                         </RestorableScroll>
                         <TabPanel value={WalletAssetTabs.Collectibles} className={classes.tabPanel}>
                             <RestorableScroll scrollKey="collectibles" targetRef={scrollTargetRef}>
-                                <CollectionList
-                                    gridProps={gridProps}
-                                    disableSidebar
-                                    disableWindowScroll
-                                    scrollElementRef={scrollTargetRef}
-                                    emptyText={collectiblesEmptyText}
-                                    additionalAssets={trustedTokens}
-                                    onItemClick={handleItemClick}
-                                    onCollectionChange={handleCollectionChange}
-                                />
+                                <WalletCollections onAddToken={onAddToken} scrollTargetRef={scrollTargetRef} />
                             </RestorableScroll>
                         </TabPanel>
                         <RestorableScroll scrollKey="activities">
