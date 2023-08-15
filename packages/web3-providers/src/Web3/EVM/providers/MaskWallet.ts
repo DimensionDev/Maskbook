@@ -140,7 +140,7 @@ export class MaskWalletProvider
         await super.removeWallets(wallets)
         for (const wallet of wallets) {
             if (isSameAddress(this.hostedAccount, wallet.address)) await this.walletStorage?.account.setValue('')
-            await this.context?.removeWallet(wallet.address)
+            if (!wallet.owner) await this.context?.removeWallet(wallet.address)
         }
     }
 

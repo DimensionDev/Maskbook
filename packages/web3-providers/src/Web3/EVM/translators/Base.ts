@@ -1,14 +1,7 @@
 import { BigNumber } from 'bignumber.js'
 import { toHex } from 'web3-utils'
 import { GasOptionType, isLessThan, toFixed } from '@masknet/web3-shared-base'
-import {
-    addGasMargin,
-    ChainId,
-    formatWeiToGwei,
-    PayloadEditor,
-    ProviderType,
-    type Translator,
-} from '@masknet/web3-shared-evm'
+import { ChainId, formatWeiToGwei, PayloadEditor, ProviderType, type Translator } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { HubAPI } from '../apis/HubAPI.js'
 import { ChainResolverAPI } from '../apis/ResolverAPI.js'
@@ -27,7 +20,7 @@ export class Base implements Translator<ConnectionContext> {
                 if (context.providerType !== ProviderType.MaskWallet) {
                     config.gas = toHex(
                         BigNumber.max(
-                            toHex(addGasMargin(config.gas).toFixed()),
+                            toHex(config.gas),
                             context.chainId === ChainId.Optimism ? 25000 : 21000,
                         ).toFixed(),
                     )
