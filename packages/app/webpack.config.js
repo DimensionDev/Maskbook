@@ -89,8 +89,9 @@ function Configuration(env, argv) {
                 'process.nextTick': require.resolve('next-tick'),
             }),
             new webpack.DefinePlugin({
-                'process.env.WEB3_CONSTANTS_RPC': process.env.WEB3_CONSTANTS_RPC ?? '{}',
-                'process.env.MASK_SENTRY_DSN': process.env.MASK_SENTRY_DSN ?? '{}',
+                NODE_DEBUG: false,
+                WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC ?? '',
+                MASK_SENTRY_DSN: process.env.MASK_SENTRY_DSN ?? '',
                 'process.env.NODE_DEBUG': 'undefined',
                 'process.version': JSON.stringify('v19.0.0'),
                 'process.browser': 'true',
