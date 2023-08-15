@@ -995,7 +995,6 @@
     "popups_wallet_contract_interaction_edit": "编辑",
     "popups_wallet_contract_interaction_total": "总共",
     "popups_wallet_password_not_match": "密码不一致。",
-    "popups_wallet_password_satisfied_requirement": "密码格式不符合要求。",
     "popups_wallet_password_length_error": "密码长度不符合要求。",
     "popups_wallet_password_change_successful": "设置支付密码成功。",
     "popups_wallet_unlock_wallet": "解锁钱包",
