@@ -160,26 +160,17 @@ const SwitchWallet = memo(function SwitchWallet() {
         <ActionModal header={t('wallet_account')} action={action}>
             <div className={classes.content}>
                 <List dense className={classes.list}>
-                    {wallets
-                        .sort((a, b) => {
-                            if (a.createdAt.getTime() - b.createdAt.getTime() > 10000) {
-                                return 1
-                            } else if (a.createdAt.getTime() - b.createdAt.getTime() < 10000) {
-                                return -1
-                            }
-                            return a.name > b.name ? 1 : -1
-                        })
-                        .map((item) =>
-                            item.owner && chainId !== ChainId.Matic ? null : (
-                                <WalletItem
-                                    key={item.address}
-                                    wallet={item}
-                                    onSelect={handleSelect}
-                                    isSelected={isSameAddress(item.address, wallet?.address)}
-                                    className={classes.walletItem}
-                                />
-                            ),
-                        )}
+                    {wallets.map((item) =>
+                        item.owner && chainId !== ChainId.Matic ? null : (
+                            <WalletItem
+                                key={item.address}
+                                wallet={item}
+                                onSelect={handleSelect}
+                                isSelected={isSameAddress(item.address, wallet?.address)}
+                                className={classes.walletItem}
+                            />
+                        ),
+                    )}
                 </List>
             </div>
         </ActionModal>

@@ -9,5 +9,13 @@ export function useWallets<T extends NetworkPluginID>(
     providerType?: Web3Helper.Definition[T]['ProviderType'],
 ) {
     // We got stored Mask wallets only.
-    return useSubscription(Providers[ProviderType.MaskWallet].subscription.wallets ?? EMPTY_ARRAY)
+    const wallets = useSubscription(Providers[ProviderType.MaskWallet].subscription.wallets ?? EMPTY_ARRAY)
+    return wallets.sort((a, b) => {
+        if (a.createdAt.getTime() - b.createdAt.getTime() > 10000) {
+            return 1
+        } else if (a.createdAt.getTime() - b.createdAt.getTime() < 10000) {
+            return -1
+        }
+        return a.name > b.name ? 1 : -1
+    })
 }
