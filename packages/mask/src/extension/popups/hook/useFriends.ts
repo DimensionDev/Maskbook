@@ -49,7 +49,7 @@ export function useFriends(): AsyncStateRetry<FriendsInformation[]> {
         )
         if (values.length === 0) return EMPTY_LIST
         const friends = (await Services.Identity.queryProfilesInformation(values.map((x) => x.profile))).filter(
-            (item) => item.linkedPersona !== undefined,
+            (item) => item.linkedPersona !== undefined && item.linkedPersona !== currentPersona?.identifier,
         )
         const allSettled = await Promise.allSettled(
             friends.map((item) => {
