@@ -1,14 +1,13 @@
 import { useMemo } from 'react'
 import { type TradeProvider } from '@masknet/public-api'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useCustomBlockBeatRetry } from '@masknet/web3-hooks-base'
+import { useChainContext, useCustomBlockBeatRetry, useNetwork } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { UniSwapV2Like } from '@masknet/web3-providers'
 import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import type { TraderAPI } from '@masknet/web3-providers/types'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
 import { getEVMAvailableTraderProviders } from '../utils.js'
-import { BLOCK_TIME_SCALE } from '../constants/trader.js'
 
 export function useUniswapV2Like(
     traderProvider: TradeProvider,
@@ -19,7 +18,8 @@ export function useUniswapV2Like(
     temporarySlippage?: number,
     isNativeTokenWrapper?: boolean,
 ) {
-    const { chainId, account, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const network = useNetwork()
     const slippageSetting = useSlippageTolerance()
 
     const slippage = useMemo(() => {
@@ -27,10 +27,11 @@ export function useUniswapV2Like(
     }, [temporarySlippage, slippageSetting])
 
     const provider = useMemo(() => {
-        const providers = getEVMAvailableTraderProviders(networkType as NetworkType)
+        if (!network) return
+        const providers = getEVMAvailableTraderProviders(network.type as NetworkType)
         if (!providers.includes(traderProvider)) return
         return new UniSwapV2Like(traderProvider)
-    }, [traderProvider, networkType])
+    }, [traderProvider, network])
     return useCustomBlockBeatRetry<NetworkPluginID.PLUGIN_EVM, TraderAPI.TradeInfo | undefined | null>(
         NetworkPluginID.PLUGIN_EVM,
         async () => {
@@ -40,6 +41,6 @@ export function useUniswapV2Like(
                 : provider.getTradeInfo(chainId as ChainId, account, inputAmount_, slippage, inputToken, outputToken)
         },
         [inputAmount_, isNativeTokenWrapper, chainId, account, provider, inputToken, outputToken],
-        BLOCK_TIME_SCALE[chainId],
+        scale,
     )
 }

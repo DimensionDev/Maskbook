@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { TradeProvider } from '@masknet/public-api'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useCustomBlockBeatRetry } from '@masknet/web3-hooks-base'
+import { useChainContext, useCustomBlockBeatRetry, useNetwork } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { OpenOcean } from '@masknet/web3-providers'
 import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
@@ -17,7 +17,8 @@ export function useOpenOcean(
     temporarySlippage?: number,
     isNativeTokenWrapper?: boolean,
 ) {
-    const { chainId, account, networkType } = useChainContext()
+    const { chainId, account } = useChainContext()
+    const network = useNetwork()
     const slippageSetting = useSlippageTolerance()
 
     const slippage = useMemo(() => {
@@ -25,10 +26,12 @@ export function useOpenOcean(
     }, [temporarySlippage, slippageSetting])
 
     const provider = useMemo(() => {
-        const providers = getEVMAvailableTraderProviders(networkType as NetworkType)
+        if (!network) return
+        const providers = getEVMAvailableTraderProviders(network.type as NetworkType)
+
         if (!providers.includes(TradeProvider.OPENOCEAN)) return
         return new OpenOcean()
-    }, [networkType])
+    }, [network])
     return useCustomBlockBeatRetry<NetworkPluginID.PLUGIN_EVM, TraderAPI.TradeInfo | undefined | null>(
         NetworkPluginID.PLUGIN_EVM,
         async () => {
