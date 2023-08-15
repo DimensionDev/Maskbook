@@ -1,7 +1,6 @@
 import Ethereum from '@masknet/web3-constants/evm/ethereum.json'
 import DeBank from '@masknet/web3-constants/evm/debank.json'
 import CoinGecko from '@masknet/web3-constants/evm/coingecko.json'
-import CoinMarketCap from '@masknet/web3-constants/evm/coinmarketcap.json'
 import Gitcoin from '@masknet/web3-constants/evm/gitcoin.json'
 import OpenOcean from '@masknet/web3-constants/evm/openocean.json'
 import ITO from '@masknet/web3-constants/evm/ito.json'
@@ -68,11 +67,6 @@ export const getCoinGeckoConstant = transform(ChainId, CoinGecko)
 export const getCoinGeckoConstants = transformAll(ChainId, CoinGecko)
 export const useCoinGeckoConstant = transformHook(getCoinGeckoConstants)
 export const useCoinGeckoConstants = transformAllHook(getCoinGeckoConstants)
-
-export const getCoinMarketCapConstant = transform(ChainId, CoinMarketCap)
-export const getCoinMarketCapConstants = transformAll(ChainId, CoinMarketCap)
-export const useCoinMarketCapConstant = transformHook(getCoinMarketCapConstants)
-export const useCoinMarketCapConstants = transformAllHook(getCoinMarketCapConstants)
 
 export const getGitcoinConstant = transform(ChainId, Gitcoin)
 export const getGitcoinConstants = transformAll(ChainId, Gitcoin)
