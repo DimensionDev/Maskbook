@@ -671,7 +671,7 @@ export class ConnectionReadonlyAPI
     async estimateTransaction(transaction: Transaction, fallback = 21000, initial?: ConnectionOptions) {
         try {
             const options = this.ConnectionOptions.fill(initial)
-            return this.Request.request<string>({
+            return await this.Request.request<string>({
                 method: EthereumMethodType.ETH_ESTIMATE_GAS,
                 params: [
                     new AccountTransaction({

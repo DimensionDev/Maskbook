@@ -89,7 +89,6 @@ export const TransferERC721 = memo(() => {
     } | null>(null)
     const [minPopoverWidth, setMinPopoverWidth] = useState(0)
     const [contract, setContract] = useState<NonFungibleTokenContract<ChainId, SchemaType>>()
-    const [gasLimit_, setGasLimit_] = useState(0)
     const network = useNetworkDescriptor()
 
     const { data: nativeToken } = useNativeToken(pluginID, { chainId })
@@ -171,7 +170,7 @@ export const TransferERC721 = memo(() => {
     }, [allFormFields.recipient, clearErrors, registeredAddress])
     // #endregion
 
-    const erc721GasLimit = useGasLimit(
+    const { data: erc721GasLimit } = useGasLimit(
         SchemaType.ERC721,
         contract?.address,
         undefined,
@@ -179,9 +178,7 @@ export const TransferERC721 = memo(() => {
         allFormFields.tokenId,
     )
 
-    useEffect(() => {
-        setGasLimit_(erc721GasLimit.value ? erc721GasLimit.value : GAS_LIMIT)
-    }, [erc721GasLimit.value])
+    const gasLimit_ = erc721GasLimit ? erc721GasLimit : GAS_LIMIT
     const { gasConfig, onCustomGasSetting, gasLimit } = useGasConfig(gasLimit_, GAS_LIMIT)
 
     const Web3 = useWeb3Connection(pluginID, {
