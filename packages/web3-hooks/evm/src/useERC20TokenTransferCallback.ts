@@ -54,6 +54,6 @@ export function useERC20TokenTransferCallback(
                     })
             })
         },
-        [account, address, amount, recipient, chainId],
+        [account, address, amount, chainId, recipient],
     )
 }

@@ -1,11 +1,11 @@
+import { range } from 'lodash-es'
+import { memo, useCallback, useRef, type RefObject, type ReactNode } from 'react'
 import { ElementAnchor, EmptyStatus, RetryHint, isSameNFT } from '@masknet/shared'
 import { EMPTY_OBJECT, Sniffings } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Box, useForkRef } from '@mui/material'
 import type { BoxProps } from '@mui/system'
-import { range } from 'lodash-es'
-import { memo, useCallback, useRef, type RefObject, type ReactNode } from 'react'
 import { useSharedI18N } from '../../../locales/index.js'
 import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
 import { Collection, CollectionSkeleton, LazyCollection, type CollectionProps } from './Collection.js'
@@ -81,7 +81,6 @@ function getTopOffset() {
     // TODO Other sites
     return 0
 }
-
 export interface CollectionListProps
     extends BoxProps,
         Pick<CollectionProps, 'disableAction' | 'onActionClick' | 'onItemClick'> {

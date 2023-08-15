@@ -1,6 +1,7 @@
 import { EthereumMethodType, PayloadEditor, type RequestArguments } from '@masknet/web3-shared-evm'
 import { ComposerAPI } from './ComposerAPI.js'
 import { Web3StateRef } from './Web3StateAPI.js'
+import { ConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
 import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import { createContext } from '../helpers/createContext.js'
 import { Providers } from '../providers/index.js'
@@ -11,6 +12,7 @@ import { createWeb3ProviderFromRequest } from '../../../helpers/createWeb3Provid
 export class RequestAPI extends RequestReadonlyAPI {
     private Composer = new ComposerAPI()
     private Request = new RequestReadonlyAPI(this.options)
+    protected override ConnectionOptions = new ConnectionOptionsAPI(this.options)
 
     private get Provider() {
         if (!Web3StateRef.value.Provider) throw new Error('The web3 state does not load yet.')
