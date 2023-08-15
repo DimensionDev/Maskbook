@@ -1,16 +1,7 @@
-import { isUndefined, omit, omitBy } from 'lodash-es'
+import { isUndefined, omitBy } from 'lodash-es'
 import { v4 as uuid } from 'uuid'
 import { Flags, type BuildInfoFile } from '@masknet/flags'
-import {
-    TelemetryID,
-    type NetworkPluginID,
-    type PluginID,
-    getExtensionId,
-    getSiteType,
-    getAgentType,
-    type EnhanceableSite,
-    type ExtensionSite,
-} from '@masknet/shared-base'
+import { TelemetryID, getExtensionId, getSiteType, getAgentType } from '@masknet/shared-base'
 import { BaseAPI } from './Base.js'
 import type { EventOptions, ExceptionOptions, Provider } from '../types/index.js'
 import { getABTestSeed, joinsABTest } from '../entry-helpers.js'
@@ -24,35 +15,38 @@ export class MixpanelAPI extends BaseAPI<Event, never> implements Provider {
     }
 
     private createEvent(options: EventOptions): Event {
-        return {
-            event: options.eventID,
-            properties: {
-                type: options.eventType,
+        return omitBy<Event>(
+            {
+                event: options.eventID,
+                properties: {
+                    type: options.eventType,
 
-                time: Date.now(),
-                distinct_id: TelemetryID.value,
-                $insert_id: uuid(),
+                    time: Date.now(),
+                    distinct_id: TelemetryID.value,
+                    $insert_id: uuid(),
 
-                chain_id: options.network?.chainId,
-                plugin_id: options.network?.pluginID,
-                network_id: options.network?.networkID,
-                network: options.network?.networkType,
-                provider: options.network?.providerType,
+                    chain_id: options.network?.chainId,
+                    plugin_id: options.network?.pluginID,
+                    network_id: options.network?.networkID,
+                    network: options.network?.networkType,
+                    provider: options.network?.providerType,
 
-                agent: getAgentType(),
-                site: getSiteType(),
-                ua: navigator.userAgent,
-                extension_id: getExtensionId(),
+                    agent: getAgentType(),
+                    site: getSiteType(),
+                    ua: navigator.userAgent,
+                    extension_id: getExtensionId(),
 
-                channel: this.env.channel,
-                version: this.env.VERSION,
-                branch_name: this.env.BRANCH_NAME,
+                    channel: this.env.channel,
+                    version: this.env.VERSION,
+                    branch_name: this.env.BRANCH_NAME,
 
-                device_ab: joinsABTest(),
-                device_seed: getABTestSeed(),
-                device_id: TelemetryID.value,
+                    device_ab: joinsABTest(),
+                    device_seed: getABTestSeed(),
+                    device_id: TelemetryID.value,
+                },
             },
-        }
+            isUndefined,
+        ) as Event
     }
 
     override captureEvent(options: EventOptions): void {

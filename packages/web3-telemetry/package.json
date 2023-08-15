@@ -34,6 +34,10 @@
     "@sentry/tracing": "^7.59.3",
     "@sentry/types": "^7.59.3",
     "react-use": "^17.4.0",
-    "urlcat": "^3.1.0"
+    "urlcat": "^3.1.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/uuid": "^9.0.2"
   }
 }
