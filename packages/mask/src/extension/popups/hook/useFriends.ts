@@ -60,7 +60,7 @@ export function useFriends(): AsyncStateRetry<FriendsInformation[]> {
         )
         if (values.length === 0) return EMPTY_LIST
         const friends: Friend[] = (
-            await Promise.all(
+            await Promise.all<Promise<Friend | undefined>>(
                 values.map(async (x) => {
                     if (isProfileIdentifier(x.profile)) {
                         const res = await Services.Identity.queryProfilesInformation([x.profile])
@@ -77,7 +77,7 @@ export function useFriends(): AsyncStateRetry<FriendsInformation[]> {
                     }
                 }),
             )
-        ).filter(emptyFilter) as Friend[]
+        ).filter(emptyFilter)
         const allSettled = await Promise.allSettled(
             friends.map((item) => {
                 const id = item.persona.publicKeyAsHex
