@@ -12,7 +12,7 @@ export function useWarnings(formChainId: number, formSymbol?: string) {
     const chainIdWarning = useMemo(() => {
         if (!formChainId) return
         const duplicated = networks.find((x) => x.chainId === formChainId)
-        if (!duplicated) return
+        if (!duplicated?.isCustomized) return
         return t('chain_id_is_used_by', { name: duplicated.name })
     }, [formChainId, networks])
     const { data: chains = EMPTY_LIST } = useQuery(['chain-list'], fetchChains)
