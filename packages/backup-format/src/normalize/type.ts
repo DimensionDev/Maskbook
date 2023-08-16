@@ -6,6 +6,7 @@ import type {
     ProfileIdentifier,
     RelationFavor,
     PostIVIdentifier,
+    ECKeyIdentifier,
 } from '@masknet/shared-base'
 import type { Option } from 'ts-results-es'
 
@@ -55,7 +56,7 @@ export namespace NormalizedBackup {
         updatedAt: Option<Date>
     }
     export interface RelationBackup {
-        profile: ProfileIdentifier
+        profile: ProfileIdentifier | ECKeyIdentifier
         persona: PersonaIdentifier
         favor: RelationFavor
     }
