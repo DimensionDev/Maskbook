@@ -115,7 +115,7 @@ export class ConnectionReadonlyAPI
                 method: EthereumMethodType.MASK_WALLETS,
                 params: [],
             },
-            this.ConnectionOptions.fill(initial),
+            initial,
         )
     }
 
@@ -671,16 +671,19 @@ export class ConnectionReadonlyAPI
     async estimateTransaction(transaction: Transaction, fallback = 21000, initial?: ConnectionOptions) {
         try {
             const options = this.ConnectionOptions.fill(initial)
-            return await this.Request.request<string>({
-                method: EthereumMethodType.ETH_ESTIMATE_GAS,
-                params: [
-                    new AccountTransaction({
-                        from: options.account,
-                        chainId: options.chainId,
-                        ...transaction,
-                    }).fill(omit(options.overrides, ['gas', 'gasPrice', 'maxPriorityFeePerGas', 'maxFeePerGas'])),
-                ],
-            })
+            return await this.Request.request<string>(
+                {
+                    method: EthereumMethodType.ETH_ESTIMATE_GAS,
+                    params: [
+                        new AccountTransaction({
+                            from: options.account,
+                            chainId: options.chainId,
+                            ...transaction,
+                        }).fill(omit(options.overrides, ['gas', 'gasPrice', 'maxPriorityFeePerGas', 'maxFeePerGas'])),
+                    ],
+                },
+                options,
+            )
         } catch {
             return toHex(fallback)
         }
@@ -697,8 +700,7 @@ export class ConnectionReadonlyAPI
     }
 
     async getTransactionStatus(hash: string, initial?: ConnectionOptions): Promise<TransactionStatusType> {
-        const options = this.ConnectionOptions.fill(initial)
-        const receipt = await this.getTransactionReceipt(hash, options)
+        const receipt = await this.getTransactionReceipt(hash, initial)
         return getTransactionStatusType(receipt)
     }
 

@@ -68,7 +68,7 @@ export class ConnectionAPI
                 method: EthereumMethodType.MASK_ADD_WALLET,
                 params: [wallet],
             },
-            this.ConnectionOptions.fill(initial),
+            initial,
         )
     }
 
@@ -82,7 +82,7 @@ export class ConnectionAPI
                 method: EthereumMethodType.MASK_UPDATE_WALLET,
                 params: [address, wallet],
             },
-            this.ConnectionOptions.fill(initial),
+            initial,
         )
     }
 
@@ -92,7 +92,7 @@ export class ConnectionAPI
                 method: EthereumMethodType.MASK_RENAME_WALLET,
                 params: [address, name],
             },
-            this.ConnectionOptions.fill(initial),
+            initial,
         )
     }
 
@@ -106,7 +106,7 @@ export class ConnectionAPI
                 method: EthereumMethodType.MASK_REMOVE_WALLET,
                 params: [address, password],
             },
-            this.ConnectionOptions.fill(initial),
+            initial,
         )
     }
 
@@ -116,7 +116,7 @@ export class ConnectionAPI
                 method: EthereumMethodType.MASK_RESET_ALL_WALLETS,
                 params: [],
             },
-            this.ConnectionOptions.fill(initial),
+            initial,
         )
     }
 
@@ -126,7 +126,7 @@ export class ConnectionAPI
                 method: EthereumMethodType.MASK_UPDATE_WALLETS,
                 params: wallets,
             },
-            this.ConnectionOptions.fill(initial),
+            initial,
         )
     }
 
@@ -136,7 +136,7 @@ export class ConnectionAPI
                 method: EthereumMethodType.MASK_REMOVE_WALLETS,
                 params: wallets,
             },
-            this.ConnectionOptions.fill(initial),
+            initial,
         )
     }
 
@@ -285,13 +285,12 @@ export class ConnectionAPI
     }
 
     override async signTransaction(transaction: Transaction, initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
         return this.Request.request<string>(
             {
                 method: EthereumMethodType.ETH_SIGN_TRANSACTION,
                 params: [transaction],
             },
-            options,
+            initial,
         )
     }
 
@@ -300,24 +299,22 @@ export class ConnectionAPI
     }
 
     override supportedChainIds(initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
         return this.Request.request<ChainId[]>(
             {
                 method: EthereumMethodType.ETH_SUPPORTED_CHAIN_IDS,
                 params: [],
             },
-            options,
+            initial,
         )
     }
 
     override supportedEntryPoints(initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
         return this.Request.request<string[]>(
             {
                 method: EthereumMethodType.ETH_SUPPORTED_ENTRY_POINTS,
                 params: [],
             },
-            options,
+            initial,
         )
     }
 
@@ -406,24 +403,22 @@ export class ConnectionAPI
     }
 
     override async fund(proof: Proof, initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
         return this.Request.request<string>(
             {
                 method: EthereumMethodType.MASK_FUND,
                 params: [proof],
             },
-            options,
+            initial,
         )
     }
 
     override async deploy(owner: string, identifier?: ECKeyIdentifier, initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
         return this.Request.request<string>(
             {
                 method: EthereumMethodType.MASK_DEPLOY,
                 params: [owner, identifier],
             },
-            options,
+            initial,
         )
     }
 
@@ -433,7 +428,7 @@ export class ConnectionAPI
                 method: EthereumMethodType.MASK_LOGIN,
                 params: [],
             },
-            this.ConnectionOptions.fill(initial),
+            initial,
         )
     }
 
@@ -443,7 +438,7 @@ export class ConnectionAPI
                 method: EthereumMethodType.MASK_LOGOUT,
                 params: [],
             },
-            this.ConnectionOptions.fill(initial),
+            initial,
         )
     }
 
@@ -511,18 +506,16 @@ export class ConnectionAPI
     }
 
     override replaceTransaction(hash: string, transaction: Transaction, initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
         return this.Request.request<void>(
             {
                 method: EthereumMethodType.MASK_REPLACE_TRANSACTION,
                 params: [hash, transaction],
             },
-            options,
+            initial,
         )
     }
 
     override cancelTransaction(hash: string, transaction: Transaction, initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
         return this.Request.request<void>(
             {
                 method: EthereumMethodType.MASK_REPLACE_TRANSACTION,
@@ -536,7 +529,7 @@ export class ConnectionAPI
                     },
                 ],
             },
-            options,
+            initial,
         )
     }
 }
