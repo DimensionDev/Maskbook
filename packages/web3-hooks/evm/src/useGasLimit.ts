@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { unreachable } from '@masknet/kit'
 import { Contract, Web3 } from '@masknet/web3-providers'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { type NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useChainContext } from '@masknet/web3-hooks-base'
 
