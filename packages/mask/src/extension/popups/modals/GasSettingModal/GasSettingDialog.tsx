@@ -154,7 +154,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
         } else {
             return !gasPrice || isZero(gasPrice)
         }
-    }, [maxPriorityFeePerGas, maxFeePerGas, gasOptions, isSupport1559, maxFeePerGasError])
+    }, [maxPriorityFeePerGas, maxFeePerGas, gasOptions, isSupport1559, maxFeePerGasError, gasPrice])
 
     const error = gasPriceError || maxPriorityFeePerGasError || maxFeePerGasError
 
