@@ -1,6 +1,6 @@
-import type { Block, Transaction, TransactionDetailed, UTXO } from '@masknet/web3-shared-bitcoin'
+import type { Block, BlockHeader, Transaction, TransactionDetailed, UTXO } from '@masknet/web3-shared-bitcoin'
 
-export namespace BlockchainAPI {
+export namespace BlockchainBaseAPI {
     export interface Provider {
         /**
          * Get the block latest block
@@ -18,6 +18,13 @@ export namespace BlockchainAPI {
          * @returns
          */
         getBlockByHeight?: (height: number) => Promise<Block>
+
+        /**
+         * Get block header by height
+         * @param height
+         * @returns
+         */
+        getBlockHeaderByHeight?: (height: number) => Promise<BlockHeader>
 
         /**
          * Get transaction with given hash
@@ -38,15 +45,22 @@ export namespace BlockchainAPI {
         getUnspentOutputs?: (address: string) => Promise<UTXO[]>
 
         /**
-         * Leave for API-based wallet.
+         * Estimate fee by block confirmations (per kilobyte)
+         * @param confirmations
+         * @returns
+         */
+        estimateFeeByConfirmations?: (confirmations: number) => Promise<string>
+
+        /**
+         * Sign a transaction and return a signed string. Leave for API-based wallet.
          */
         signTransaction?: (transaction: Transaction) => Promise<string>
 
         /**
          * Broadcast a transaction and return the transaction hash.
-         * @param signed The signed transaction
+         * @param signed The signed transaction in hex
          * @returns
          */
-        broadcastTransaction?: (signed: string) => Promise<string>
+        broadcastSignedTransaction?: (signed: string) => Promise<string>
     }
 }

@@ -47,7 +47,7 @@ export function deocdeBase58Address(type: ProtocolType, address: string) {
         const length = decoded.length
 
         // should be 25 bytes per btc address spec
-        if (length != 25) return
+        if (length !== 25) return
 
         const checksum = decoded.slice(length - 4, length).toString('binary')
         const body = decoded.slice(0, length - 4)

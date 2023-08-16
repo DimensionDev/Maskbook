@@ -57,16 +57,31 @@ export interface UTXO {
     amount: string
 }
 
-export interface Block {
+export interface BlockHeader {
     hash: string
-    /** The address of the miner */
-    miner?: string
-    /** The difficulty at the block was mint. */
-    difficulty?: string
-    /** The mint timestamp */
-    timestamp: number
+    /** The number of confirmations, or -1 if the block is not on the main chain */
+    confirmations: number
+    /** The difficulty at the block was mint */
+    difficulty: string
+    /** The block version */
+    version: number
+    /** The merkle root */
+    merkleroot: string
     /** The block height */
     height: number
+    /** The number of transactions made by the sender prior to this one encoded as hexadecimal */
+    nonce: number
+    /** The number of transactions in the block */
+    nTx: number
+    /** The mint timestamp */
+    timestamp: number
+}
+
+export interface Block extends BlockHeader {
+    /** The address of the miner */
+    miner: string
+    /** a list of transaction hash */
+    txs: string[]
 }
 
 /**
@@ -90,7 +105,7 @@ export interface TransactionDetailed {
     hash: string
     from: string
     to: string
-    confirmations: number
+    locktime: number
     block_hash: string
     block_height: number
     timestamp: number
