@@ -69,15 +69,15 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
         return PopupRoutes.Wallet
     }, [wallet, walletPageLoading, isLocked, hasPassword, messages])
 
-    const onOpenDashboardSettings = useCallback(() => {
-        browser.tabs.create({
+    const onOpenDashboardSettings = useCallback(async async async () => {
+        await browser.tabs.create({
             active: true,
             url: browser.runtime.getURL(`/dashboard.html#${DashboardRoutes.Settings}`),
         })
         if (navigator.userAgent.includes('Firefox')) {
             window.close()
         }
-        Services.Helper.removePopupWindow()
+        await Services.Helper.removePopupWindow()
     }, [])
 
     return (
