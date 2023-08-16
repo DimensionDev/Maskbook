@@ -6,12 +6,10 @@ import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     inputRoot: {
-        padding: '4px',
         borderRadius: 8,
         width: '100%',
         background: theme.palette.maskColor.input,
         fontSize: 14,
-        marginBottom: 16,
     },
     inputFocused: {
         background: theme.palette.maskColor.bottom,
