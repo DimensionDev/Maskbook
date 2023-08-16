@@ -4,7 +4,6 @@ import * as wallet_ts from /* webpackDefer: true */ 'wallet.ts'
 import { isNonNull } from '@masknet/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import type { NormalizedBackup } from '@masknet/backup-format'
-import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import {
     toBase64URL,
     type EC_Public_JsonWebKey,
@@ -12,6 +11,7 @@ import {
     type LegacyWalletRecord,
 } from '@masknet/shared-base'
 import type { WalletRecord } from '../../../shared/definitions/wallet.js'
+import { exportMnemonicWords, exportPrivateKey, getLegacyWallets, getWallets } from '../wallet/services/index.js'
 
 export async function internal_wallet_backup() {
     const wallet = await Promise.all([backupAllWallets(), backupAllLegacyWallets()])
@@ -19,17 +19,13 @@ export async function internal_wallet_backup() {
 }
 
 async function backupAllWallets(): Promise<NormalizedBackup.WalletBackup[]> {
-    const wallets = await WalletServiceRef.value.getWallets()
+    const wallets = await getWallets()
     const allSettled = await Promise.allSettled(
         wallets.map(async (wallet) => {
             return {
                 ...wallet,
-                mnemonic: wallet.derivationPath
-                    ? await WalletServiceRef.value.exportMnemonicWords(wallet.address)
-                    : undefined,
-                privateKey: wallet.derivationPath
-                    ? undefined
-                    : await WalletServiceRef.value.exportPrivateKey(wallet.address),
+                mnemonic: wallet.derivationPath ? await exportMnemonicWords(wallet.address) : undefined,
+                privateKey: wallet.derivationPath ? undefined : await exportPrivateKey(wallet.address),
             }
         }),
     )
@@ -39,7 +35,7 @@ async function backupAllWallets(): Promise<NormalizedBackup.WalletBackup[]> {
 }
 
 async function backupAllLegacyWallets(): Promise<NormalizedBackup.WalletBackup[]> {
-    const x = await WalletServiceRef.value.getLegacyWallets()
+    const x = await getLegacyWallets()
     return x.map(LegacyWalletRecordToJSONFormat)
 }
 function WalletRecordToJSONFormat(

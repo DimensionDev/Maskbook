@@ -11,8 +11,8 @@ async function resolveLastRecognizedIdentityInner(
     cancel: AbortSignal,
 ) {
     const assign = async () => {
-        const handle = selfInfoSelectors().handle.evaluate()
-        const avatar = selfInfoSelectors().avatar.evaluate()
+        const handle = selfInfoSelectors().handle
+        const avatar = selfInfoSelectors().avatar
 
         ref.value = {
             identifier: ProfileIdentifier.of(mindsBase.networkIdentifier, handle).unwrapOr(undefined),

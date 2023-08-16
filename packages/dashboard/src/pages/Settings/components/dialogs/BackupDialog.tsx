@@ -1,9 +1,9 @@
-import { useContext, useEffect, useMemo, useState } from 'react'
-import { useAsync, useAsyncFn } from 'react-use'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { useAsync, useAsyncFn, useAsyncRetry } from 'react-use'
 import formatDateTime from 'date-fns/format'
-import { Box } from '@mui/material'
+import { Box, Link, Typography } from '@mui/material'
 import { encryptBackup } from '@masknet/backup-format'
-import { MimeType } from '@masknet/shared-base'
+import { CrossIsolationMessages, MimeType, PopupRoutes } from '@masknet/shared-base'
 import { MaskDialog, useCustomSnackbar } from '@masknet/theme'
 import { encode } from '@msgpack/msgpack'
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
@@ -12,7 +12,7 @@ import { LoadingButton } from '../../../../components/LoadingButton/index.js'
 import { MaskAlert } from '../../../../components/MaskAlert/index.js'
 import PasswordFiled from '../../../../components/PasswordField/index.js'
 import { LoadingCard } from '../../../../components/LoadingCard/index.js'
-import { useDashboardI18N } from '../../../../locales/index.js'
+import { DashboardTrans, useDashboardI18N } from '../../../../locales/index.js'
 import { fetchUploadLink, uploadBackupValue, type VerifyCodeRequest } from '../../api.js'
 import { UserContext } from '../../hooks/UserContext.js'
 import BackupContentSelector, { type BackupContentCheckedStatus } from '../BackupContentSelector.js'
@@ -40,6 +40,8 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
     const { user, updateUser } = useContext(UserContext)
 
     const { value: previewInfo, loading: searching } = useAsync(() => Services.Backup.generateBackupPreviewInfo())
+
+    const { value: hasPassword, retry } = useAsyncRetry(WalletServiceRef.value.hasPassword, [])
 
     const [{ loading }, handleBackup] = useAsyncFn(async () => {
         if (backupPassword !== user.backupPassword) {
@@ -100,6 +102,12 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
         })
     }
 
+    const onSetupPaymentPassword = useCallback(async () => {
+        await Services.Helper.openPopupWindow(hasPassword ? PopupRoutes.Wallet : PopupRoutes.SetPaymentPassword, {
+            isCreating: true,
+        })
+    }, [hasPassword])
+
     const backupDisabled = useMemo(() => {
         return !backupPassword || (showPassword.wallet && !paymentPassword) || loading
     }, [backupPassword, paymentPassword, loading])
@@ -111,6 +119,10 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
     useEffect(() => {
         setIncorrectPaymentPassword(false)
     }, [paymentPassword])
+
+    useEffect(() => {
+        CrossIsolationMessages.events.passwordStatusUpdated.on(retry)
+    }, [retry])
 
     return (
         <MaskDialog maxWidth="xs" title={title} open={open} onClose={onClose}>
@@ -126,7 +138,13 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
                         </Box>
                     ) : null}
 
-                    {previewInfo ? <BackupContentSelector json={previewInfo} onChange={handleContentChange} /> : null}
+                    {previewInfo ? (
+                        <BackupContentSelector
+                            hasPassword={hasPassword}
+                            json={previewInfo}
+                            onChange={handleContentChange}
+                        />
+                    ) : null}
 
                     <PasswordFiled
                         fullWidth
@@ -148,6 +166,21 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
                             error={incorrectPaymentPassword}
                             helperText={incorrectPaymentPassword ? t.settings_dialogs_incorrect_password() : ''}
                         />
+                    ) : null}
+
+                    {!hasPassword ? (
+                        <Typography sx={{ fontSize: 13, lineHeight: '20px', mb: 2 }}>
+                            <DashboardTrans.settings_backup_preview_set_payment_password
+                                components={{
+                                    settings: (
+                                        <Link
+                                            sx={{ fontWeight: 700, color: 'inherit', cursor: 'pointer' }}
+                                            onClick={onSetupPaymentPassword}
+                                        />
+                                    ),
+                                }}
+                            />
+                        </Typography>
                     ) : null}
 
                     <LoadingButton fullWidth disabled={backupDisabled} onClick={handleBackup} loading={loading}>

@@ -155,7 +155,7 @@ export const LogoutUI = memo<LogoutUIProps>(
 
         const onConfirm = useCallback(async () => {
             if (!backupPassword && !!manageWallets.length) {
-                modalNavigate(PopupModalRoutes.SetBackupPassword)
+                modalNavigate(PopupModalRoutes.SetBackupPassword, { to: PopupRoutes.ExportPrivateKey })
                 return
             }
             if (manageWallets.length && paymentPassword) {
@@ -294,11 +294,11 @@ export const LogoutUI = memo<LogoutUIProps>(
                     </Button>
                     <ActionButton
                         variant="contained"
-                        color={backupPassword ? 'error' : 'primary'}
+                        color={!backupPassword && manageWallets.length ? 'primary' : 'error'}
                         fullWidth
                         onClick={onConfirm}
                         disabled={disabled}>
-                        {backupPassword && manageWallets.length ? t('popups_log_out') : t('backup')}
+                        {!backupPassword && manageWallets.length ? t('backup') : t('popups_log_out')}
                     </ActionButton>
                 </BottomController>
             </Box>
