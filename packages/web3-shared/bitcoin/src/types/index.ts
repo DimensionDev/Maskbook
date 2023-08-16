@@ -9,11 +9,9 @@ export enum ChainId {
     // Mainnet
     Mainnet = 87, // 'W'.charCodeAt(0),
     Testnet = 84, // 'T'.charCodeAt(0),
-    Stagenet = 83, // 'S'.charCodeAt(0),
 
-    BitcoinCash = 66, // 'B'.charCodeAt(0),
-
-    DogoCoin = 68, // 'D'.charCodeAt(0),
+    // Dogecoin
+    Dogecoin = 68, // 'D'.charCodeAt(0),
 }
 
 export enum AddressType {
@@ -39,9 +37,7 @@ export enum TransactionEventType {
 export enum NetworkType {
     Mainnet = 'Mainnet',
     Testnet = 'Testnet',
-    Stagenet = 'Stagenet',
-    DogoCoin = 'DogoCoin',
-    BitcoinCash = 'BitcoinCash',
+    Dogecoin = 'Dogecoin',
 }
 
 export enum ProviderType {

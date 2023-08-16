@@ -178,8 +178,7 @@ const ChainNameMap: Record<NetworkPluginID, Record<number, string>> = {
     },
     [NetworkPluginID.PLUGIN_BITCOIN]: {
         [BitcoinChainId.Mainnet]: 'bitcoin',
-        [BitcoinChainId.BitcoinCash]: 'bitcoin_cash',
-        [BitcoinChainId.DogoCoin]: 'dogocoin',
+        [BitcoinChainId.DogeCoin]: 'dogecoin',
     },
 }
 
