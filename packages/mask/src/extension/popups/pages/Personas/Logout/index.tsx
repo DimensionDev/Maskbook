@@ -9,13 +9,7 @@ import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme
 import { PersonaContext } from '@masknet/shared'
 import { Box, Button, Link, Typography, useTheme } from '@mui/material'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import {
-    PopupRoutes,
-    type PersonaInformation,
-    NetworkPluginID,
-    type Wallet,
-    PopupModalRoutes,
-} from '@masknet/shared-base'
+import { PopupRoutes, type PersonaInformation, type Wallet, PopupModalRoutes } from '@masknet/shared-base'
 import { useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { ExplorerResolver, Providers, Web3 } from '@masknet/web3-providers'
 import { type ChainId, ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -59,7 +53,7 @@ const Logout = memo(() => {
     const { currentPersona } = PersonaContext.useContainer()
     const navigate = useNavigate()
     const wallet = useWallet()
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const wallets = useWallets()
     const { Provider } = useWeb3State()
     const { smartPayChainId } = useContainer(PopupContext)
     const { hasPassword, loading: hasPasswordLoading } = useHasPassword()

@@ -2,7 +2,7 @@ import { memo, useCallback, useMemo, useContext, useEffect } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { Box, Link, List, ListItem, MenuItem, Typography, useTheme, type ListItemProps } from '@mui/material'
-import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { type NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useWallets } from '@masknet/web3-hooks-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -147,7 +147,7 @@ const ContactListUI = memo(function ContactListUI() {
         | undefined
     const isManage = state?.type === 'manage'
     const { classes } = useStyles({ isManage })
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const wallets = useWallets()
     const { userInput, address, contacts, inputValidationMessage } = ContactsContext.useContainer()
     const [params] = useSearchParams()
 
