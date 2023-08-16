@@ -6,7 +6,7 @@ import { LoadingButton } from '@mui/lab'
 import { TableContainer, TablePagination, tablePaginationClasses, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { PopupRoutes } from '@masknet/shared-base'
 import { currySameAddress, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import { useNativeToken, useWallets } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
@@ -65,7 +65,7 @@ const AddDeriveWallet = memo(() => {
           }
         | undefined
     const { classes } = useStyles()
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const wallets = useWallets()
     const walletName = new URLSearchParams(location.search).get('name')
     const { mnemonic } = state || {}
 

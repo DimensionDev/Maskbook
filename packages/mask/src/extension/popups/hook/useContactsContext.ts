@@ -17,7 +17,7 @@ function useContactsContext({ defaultName, defaultAddress }: ContextOptions = { 
     const { t } = useI18N()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const contacts = useContacts()
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const wallets = useWallets()
     const [userInput, setUserInput] = useState(defaultName || defaultAddress)
     const { value: registeredAddress, error: resolveDomainError } = useLookupAddress(
         NetworkPluginID.PLUGIN_EVM,
