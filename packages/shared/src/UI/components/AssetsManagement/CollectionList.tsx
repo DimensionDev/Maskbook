@@ -1,7 +1,7 @@
-import { range } from 'lodash-es'
-import { memo, useCallback, useRef, type RefObject, type ReactNode } from 'react'
+import { compact, range } from 'lodash-es'
+import { memo, useCallback, useRef, type RefObject, type ReactNode, useMemo } from 'react'
 import { ElementAnchor, EmptyStatus, RetryHint, isSameNFT } from '@masknet/shared'
-import { EMPTY_OBJECT, Sniffings } from '@masknet/shared-base'
+import { EMPTY_LIST, EMPTY_OBJECT, Sniffings } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Box, useForkRef } from '@mui/material'
@@ -160,6 +160,12 @@ export const CollectionList = memo(function CollectionList({
 
     const { assetsMapRef, getAssets, getBLockedTokenIds, getVerifiedBy, loadAssets, loadVerifiedBy, isAllHidden } =
         useUserAssets()
+    const additional = useMemo(() => {
+        if (!additionalAssets?.length) return EMPTY_LIST
+        const collectionAddresses = compact(collections.map((x) => x.address?.toLowerCase()))
+        // If it's in our collections, no need to treat it as additional one
+        return additionalAssets.filter((x) => !collectionAddresses.includes(x.address.toLowerCase()))
+    }, [additionalAssets, account, collections])
 
     const handleInitialRender = useCallback(
         (collection: Web3Helper.NonFungibleCollectionAll) => {
@@ -248,7 +254,7 @@ export const CollectionList = memo(function CollectionList({
                                     expanded
                                 />
                             ) : null}
-                            {additionalAssets?.map((asset) => (
+                            {additional.map((asset) => (
                                 <CollectibleItem
                                     key={`additional.${asset.chainId}.${asset.address}.${asset.tokenId}`}
                                     className={className}

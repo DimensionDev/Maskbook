@@ -106,12 +106,10 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
                     storage.fungibleTokenList.subscription,
                     storage.fungibleTokenBlockedBy.subscription,
                 ),
-                ([account, tokens, blockedBy]) =>
-                    safeEmptyList(
-                        tokens[account.toLowerCase()]?.filter(
-                            (x) => !blockedBy[account.toLowerCase()]?.includes(x.address),
-                        ),
-                    ),
+                ([account, tokens, blockedBy]) => {
+                    const key = account.toLowerCase()
+                    return safeEmptyList(tokens[key]?.filter((x) => !blockedBy[key]?.includes(x.address)))
+                },
             )
             this.trustedNonFungibleTokens = mapSubscription(
                 mergeSubscription(
@@ -119,12 +117,10 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
                     storage.nonFungibleTokenList.subscription,
                     storage.nonFungibleTokenBlockedBy.subscription,
                 ),
-                ([account, tokens, blockedBy]) =>
-                    safeEmptyList(
-                        tokens[account.toLowerCase()]?.filter(
-                            (x) => !blockedBy[account.toLowerCase()]?.includes(x.address),
-                        ),
-                    ),
+                ([account, tokens, blockedBy]) => {
+                    const key = account.toLowerCase()
+                    return safeEmptyList(tokens[key]?.filter((x) => !blockedBy[key]?.includes(x.address)))
+                },
             )
             this.blockedFungibleTokens = mapSubscription(
                 mergeSubscription(
@@ -242,7 +238,7 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
             tokenIds: string[]
         }
         const key = owner.toLowerCase()
-        const collectionMap = this.storage.nonFungibleCollectionMap
+        const { nonFungibleCollectionMap: collectionMap, nonFungibleTokenBlockedBy: blockedBy } = this.storage
         const list: StorageCollection[] = collectionMap.value[key] || []
         const newList = produce(list, (draft) => {
             const index = draft.findIndex(
@@ -259,9 +255,18 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
                 draft.push(newRecord as Draft<StorageCollection>)
             }
         })
-        collectionMap.setValue({
+        await collectionMap.setValue({
             ...collectionMap.value,
             [key]: newList,
+        })
+
+        // Also remove from block ids
+        const ids = tokenIds.map((x) => `${contract.chainId}.${contract.address.toLowerCase()}.${x}`)
+        const blockIds = blockedBy.value[key]
+        if (!blockIds?.length) return
+        await blockedBy.setValue({
+            ...blockedBy.value,
+            [key]: blockIds.filter((x) => !ids.includes(x)),
         })
     }
 }
