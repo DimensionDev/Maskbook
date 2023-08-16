@@ -1,9 +1,9 @@
+import { useQuery } from '@tanstack/react-query'
 import { unreachable } from '@masknet/kit'
 import { Contract, Web3 } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { useChainContext, useNetworkBy } from '@masknet/web3-hooks-base'
-import { useQuery } from '@tanstack/react-query'
+import { useChainContext } from '@masknet/web3-hooks-base'
 
 export function useGasLimit(
     schemaType?: SchemaType,
@@ -14,10 +14,8 @@ export function useGasLimit(
     expectedChainId?: ChainId,
 ) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
-    const network = useNetworkBy(NetworkPluginID.PLUGIN_EVM, chainId)
     const options = {
         chainId,
-        providerURL: network?.rpcUrl,
     }
 
     return useQuery({
