@@ -275,6 +275,7 @@
     "settings_backup_preview_contacts": "Contacts",
     "settings_backup_preview_file": "File",
     "settings_backup_preview_wallets": "Mask Wallet",
+    "settings_backup_preview_set_payment_password": "You need to set a password to enable the wallet functionality before you can back up the wallet. <settings> Go to settings </settings>",
     "settings_backup_preview_created_at": "Backup Time",
     "settings_language_title": "Language",
     "settings_language_desc": "Select the language you would like to use",

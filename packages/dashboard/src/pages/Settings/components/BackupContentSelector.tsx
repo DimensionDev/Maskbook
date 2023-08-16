@@ -34,14 +34,15 @@ export interface BackupContentCheckedStatus {
 export interface BackupContentSelectorProps {
     json: BackupSummary
     onChange(data: BackupContentCheckedStatus): void
+    hasPassword?: boolean
 }
 
-export default function BackupContentSelector({ json, onChange }: BackupContentSelectorProps) {
+export default function BackupContentSelector({ json, onChange, hasPassword }: BackupContentSelectorProps) {
     const t = useDashboardI18N()
     const records = [
         {
             name: t.settings_backup_preview_personas(),
-            value: json.personas,
+            value: json.personas.length,
         },
         {
             name: t.settings_backup_preview_associated_accounts(),
@@ -95,9 +96,10 @@ export default function BackupContentSelector({ json, onChange }: BackupContentS
                 </Box>
             </SelectItem>
             {json.wallets ? (
-                <SelectItem>
+                <SelectItem sx={{ opacity: !hasPassword ? '0.5' : undefined }}>
                     <CheckboxContainer>
                         <Checkbox
+                            disabled={!hasPassword}
                             checked={walletChecked}
                             onChange={(event) => setWalletChecked(event.target.checked)}
                             name="wallet"
@@ -105,7 +107,7 @@ export default function BackupContentSelector({ json, onChange }: BackupContentS
                     </CheckboxContainer>
                     <BackupItem sx={{ flex: 1 }}>
                         <Typography variant="body2">{t.settings_backup_preview_wallets()}</Typography>
-                        <Typography variant="body2">{json.wallets}</Typography>
+                        <Typography variant="body2">{json.wallets.length}</Typography>
                     </BackupItem>
                 </SelectItem>
             ) : null}

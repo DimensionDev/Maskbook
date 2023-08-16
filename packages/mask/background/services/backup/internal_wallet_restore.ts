@@ -9,23 +9,25 @@ import {
     isK256PrivateKey,
     generateNewWalletName,
 } from '@masknet/shared-base'
-import { WalletServiceRef } from '@masknet/plugin-infra/dom'
+import {
+    getDerivableAccounts,
+    getWallets,
+    recoverWalletFromMnemonicWords,
+    recoverWalletFromPrivateKey,
+} from '../wallet/services/index.js'
 
 export async function internal_wallet_restore(backup: NormalizedBackup.WalletBackup[]) {
     for (const wallet of backup) {
         try {
-            const wallets = await WalletServiceRef.value.getWallets()
+            const wallets = await getWallets()
             const name = wallet.name || generateNewWalletName(wallets)
             if (wallet.privateKey.some)
-                await WalletServiceRef.value.recoverWalletFromPrivateKey(
-                    name,
-                    await JWKToKey(wallet.privateKey.val, 'private'),
-                )
+                await recoverWalletFromPrivateKey(name, await JWKToKey(wallet.privateKey.val, 'private'))
             else if (wallet.mnemonic.some) {
                 // fix a backup bug of pre-v2.2.2 versions
-                const accounts = await WalletServiceRef.value.getDerivableAccounts(wallet.mnemonic.val.words, 1, 5)
+                const accounts = await getDerivableAccounts(wallet.mnemonic.val.words, 1, 5)
                 const index = accounts.findIndex(currySameAddress(wallet.address))
-                await WalletServiceRef.value.recoverWalletFromMnemonicWords(
+                await recoverWalletFromMnemonicWords(
                     name,
                     wallet.mnemonic.val.words,
                     index > -1 ? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${index}` : wallet.mnemonic.val.path,
