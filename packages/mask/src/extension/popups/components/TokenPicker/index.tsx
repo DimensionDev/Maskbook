@@ -2,9 +2,9 @@ import { SelectNetworkSidebar } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useFungibleAssets, useNetworks } from '@masknet/web3-hooks-base'
+import { useFungibleAssets, useNetworks, useWallet } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { type ChainId } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, List, type BoxProps } from '@mui/material'
 import { memo, useMemo, useState } from 'react'
 import { TokenItem, type TokenItemProps } from './TokenItem.js'
@@ -51,13 +51,18 @@ export const TokenPicker = memo(function TokenPicker({
         return assets.filter((x) => x.chainId === sidebarChainId)
     }, [assets, sidebarChainId])
 
+    const isSmartPay = !!useWallet(NetworkPluginID.PLUGIN_EVM)?.owner
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
+    const filteredNetworks = useMemo(() => {
+        if (isSmartPay) return networks.filter((x) => x.chainId === ChainId.Matic && !x.isCustomized)
+        return networks
+    }, [networks, isSmartPay])
 
     return (
         <Box className={cx(classes.picker, className)} {...rest}>
             <SelectNetworkSidebar
                 className={classes.sidebar}
-                networks={networks}
+                networks={filteredNetworks}
                 pluginID={NetworkPluginID.PLUGIN_EVM}
                 chainId={sidebarChainId}
                 hideAllButton
@@ -65,7 +70,7 @@ export const TokenPicker = memo(function TokenPicker({
             />
             <List className={classes.list} data-hide-scrollbar>
                 {availableAssets.map((asset) => {
-                    const network = networks.find((x) => x.chainId === asset.chainId)!
+                    const network = filteredNetworks.find((x) => x.chainId === asset.chainId)!
                     const selected = asset.chainId === chainId && isSameAddress(asset.address, address)
                     return (
                         <TokenItem
