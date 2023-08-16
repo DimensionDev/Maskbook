@@ -29,7 +29,7 @@ export { hasWallet, addWallet, updateWallet } from './database/wallet.js'
 export {
     setPassword,
     hasPassword,
-    hasDefaultPassword,
+    hasPasswordWithDefault,
     verifyPassword,
     changePassword,
     resetPassword,
