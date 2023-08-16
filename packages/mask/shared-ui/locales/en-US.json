@@ -30,6 +30,7 @@
     "available_balance": "Available Balance",
     "available_amount": "{{- amount}} available",
     "failed_to_transfer_token": "Failed to transfer token: {{- message}}",
+    "failed_to_transfer_nft": "Network error or execute smart contract failed.",
     "operation": "Operation",
     "gas_limit": "Gas Limit",
     "gas_price": "Gas Price",
