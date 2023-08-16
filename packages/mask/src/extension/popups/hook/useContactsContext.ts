@@ -1,12 +1,12 @@
-import { useMemo, useState } from 'react'
-import { createContainer } from 'unstated-next'
 import { NetworkPluginID, type Wallet } from '@masknet/shared-base'
-import { useContacts, useChainContext, useLookupAddress, useWallets, useAddressType } from '@masknet/web3-hooks-base'
-import { AddressType, isValidAddress, isValidDomain } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../utils/index.js'
-import { type Contact } from '@masknet/web3-shared-base'
-import { useAsync } from 'react-use'
+import { useAddressType, useChainContext, useContacts, useLookupAddress, useWallets } from '@masknet/web3-hooks-base'
 import { GoPlusLabs } from '@masknet/web3-providers'
+import { isSameAddress, type Contact } from '@masknet/web3-shared-base'
+import { AddressType, isValidAddress, isValidDomain } from '@masknet/web3-shared-evm'
+import { useMemo, useState } from 'react'
+import { useAsync } from 'react-use'
+import { createContainer } from 'unstated-next'
+import { useI18N } from '../../../utils/index.js'
 
 interface ContextOptions {
     defaultName: string
@@ -31,9 +31,15 @@ function useContactsContext({ defaultName, defaultAddress }: ContextOptions = { 
         }
         if (isValidAddress(userInput)) return userInput
         // UserInput is wallet name
-        const contact: Wallet | Contact | undefined = [...wallets, ...contacts].find((x) => x.name === userInput)
-        return contact?.address
-    }, [userInput, registeredAddress, contacts, wallets])
+        const matches = [...wallets, ...contacts].filter((x) => x.name === userInput)
+        if (!matches.length) return defaultAddress
+        const contact: Wallet | Contact =
+            matches.length > 1
+                ? // There might be wallets or contacts with the same name
+                  matches.find((x) => isSameAddress(x.address, defaultAddress)) || matches[0]
+                : matches[0]
+        return contact.address
+    }, [userInput, defaultAddress, registeredAddress, contacts, wallets])
 
     const { value: addressType } = useAddressType(NetworkPluginID.PLUGIN_EVM, address, {
         chainId,
