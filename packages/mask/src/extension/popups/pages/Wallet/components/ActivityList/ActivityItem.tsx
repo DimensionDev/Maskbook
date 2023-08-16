@@ -1,9 +1,11 @@
+import { memo, useMemo } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { Icons } from '@masknet/icons'
 import { ImageIcon, NetworkIcon, ProgressiveText } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useEverSeen } from '@masknet/shared-base-ui'
 import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
-import { useNativeToken, useNetworkBy, useNetworkDescriptors, useReverseAddress } from '@masknet/web3-hooks-base'
+import { useNativeToken, useNetwork, useNetworkDescriptors, useReverseAddress } from '@masknet/web3-hooks-base'
 import { ChainbaseHistory } from '@masknet/web3-providers'
 import { chainbase } from '@masknet/web3-providers/helpers'
 import { DebankTransactionDirection } from '@masknet/web3-providers/types'
@@ -23,8 +25,6 @@ import {
     type SchemaType,
 } from '@masknet/web3-shared-evm'
 import { Box, ListItem, ListItemText, Skeleton, Typography, alpha, type ListItemProps } from '@mui/material'
-import { useQuery } from '@tanstack/react-query'
-import { memo, useMemo } from 'react'
 import { formatTokenBalance, useI18N } from '../../../../../../utils/index.js'
 import { parseReceiverFromERC20TransferInput } from '../../utils.js'
 
@@ -276,7 +276,7 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
     const toAddress = candidate.to
     const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, toAddress)
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId: transaction.chainId })
-    const network = useNetworkBy(NetworkPluginID.PLUGIN_EVM, transaction.chainId)
+    const network = useNetwork(NetworkPluginID.PLUGIN_EVM, transaction.chainId)
 
     const recipient = useMemo(() => {
         if (domain) return t('to_address', { address: formatDomainName(domain) })

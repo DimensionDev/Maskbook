@@ -7,7 +7,6 @@ import {
     useFungibleTokenBalance,
     useMaskTokenAddress,
     useNativeTokenBalance,
-    useNetworkBy,
 } from '@masknet/web3-hooks-base'
 import { DepositPaymaster, SmartPayBundler } from '@masknet/web3-providers'
 import type { ConnectionOptions } from '@masknet/web3-providers/types'
@@ -33,10 +32,8 @@ export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>
         undefined,
         maskTokenAddress,
     )
-    const network = useNetworkBy(pluginID, chainId)
     const { data: tokenBalance = '0', isLoading: isLoadingTokenBalance } = useFungibleTokenBalance(pluginID, address, {
         chainId,
-        providerURL: network?.rpcUrl,
     })
 
     // #region paymaster ratio
