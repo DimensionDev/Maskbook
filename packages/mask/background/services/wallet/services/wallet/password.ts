@@ -51,12 +51,12 @@ export async function clearPassword() {
     inMemoryPassword = ''
 }
 
-/** Has set a password. */
+/** Has set a password (could not be the default one). */
 export async function hasPassword() {
     return database.hasSafeSecret()
 }
 
-/** Has set a password. */
+/** Has set a password (could be the default one). */
 export async function hasDefaultPassword() {
     return database.hasSecret()
 }
