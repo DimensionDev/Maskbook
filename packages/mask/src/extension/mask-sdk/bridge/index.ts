@@ -16,37 +16,16 @@ export const maskSDKServer: BridgeAPI = {
     ...SiteMethods,
 }
 
-// Those methods are safe. We can forward them directly without validate or permission control.
-const forwardingMethods = [
-    'eth_blockNumber',
-    'eth_chainId',
-    'eth_gasPrice',
-    'eth_getBalance',
-    'eth_getBalance',
-    'eth_getBlockByNumber',
-    'eth_getBlockTransactionCountByHash',
-    'eth_getBlockTransactionCountByNumber',
-    'eth_getCode',
-    'eth_getFilterChanges',
-    'eth_getFilterLogs',
-    'eth_getLogs',
-    'eth_getProof',
-]
-const dangerousMethod = []
-const unknownIfIsSafe = ['eth_estimateGas', 'eth_feeHistory']
-const don_tKnowIfNeedImplement = ['eth_call']
-const unknownUsage = ['eth_coinbase']
-const readonlyImpl: Record<EthereumMethodType, () => Promise<unknown>> = {} as any
+const readonlyImpl: Record<EthereumMethodType, (params: unknown[] | undefined) => Promise<unknown>> = {} as any
 for (const method of readonlyMethodType) {
-    readonlyImpl[method] = async () => {}
+    readonlyImpl[method] = async (params: unknown[] | undefined) => {
+        return Services.Wallet.send({ jsonrpc: '2.0', method, params })
+    }
 }
 const impl = {
     __proto__: null,
 
-    eth_chainId() {
-        return '0x1'
-    },
-
+    ...readonlyImpl,
     // Reference:
     // https://ethereum.github.io/execution-apis/api-documentation/
     // https://docs.metamask.io/wallet/reference/eth_subscribe/
