@@ -66,7 +66,6 @@ export async function queryPersonas(): Promise<undefined | PersonaInformation[]>
     let result: Promise<PersonaInformation[]> | undefined
     await createPersonaDBReadonlyAccess(async (t) => {
         const personas = await queryPersonasDB({}, t)
-        console.log(personas)
         if (!personas.length) return
         result = toPersonaInformation(personas, t).mustNotAwaitThisWithInATransaction
     })

@@ -49,6 +49,7 @@ export const Search = memo<SearchProps>(function Search({ setSearchValue }) {
             value={value}
             onKeyUp={(e) => handleKeyPress(e)}
             onBlur={(e) => {
+                if (timer) clearTimeout(timer)
                 setTimer(
                     setTimeout(() => {
                         setSearchValue(e.target.value)

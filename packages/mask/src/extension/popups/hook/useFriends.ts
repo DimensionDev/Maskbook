@@ -13,12 +13,12 @@ import { NextIDProof } from '@masknet/web3-providers'
 import { uniqBy } from 'lodash-es'
 import { isProfileIdentifier } from '@masknet/shared'
 
-export type FriendsInformation = Friends & {
+export type FriendsInformation = Friend & {
     profiles: BindingProof[]
     id: string
 }
 
-type Friends = {
+type Friend = {
     persona: ECKeyIdentifier
     profile?: ProfileIdentifier
     avatar?: string
@@ -43,6 +43,10 @@ export const PlatformSort: Record<NextIDPlatform, number> = {
     [NextIDPlatform.NextID]: 15,
 }
 
+function emptyFilter(x: Friend | undefined): x is Friend {
+    return x !== undefined
+}
+
 export function useFriends(): AsyncStateRetry<FriendsInformation[]> {
     const currentPersona = useCurrentPersona()
     return useAsyncRetry(async () => {
@@ -55,22 +59,25 @@ export function useFriends(): AsyncStateRetry<FriendsInformation[]> {
             1000,
         )
         if (values.length === 0) return EMPTY_LIST
-        const friends: Friends[] = []
-        await Promise.all(
-            values.map(async (x) => {
-                if (isProfileIdentifier(x.profile)) {
-                    const res = await Services.Identity.queryProfilesInformation([x.profile])
-                    if (res[0].linkedPersona !== undefined && res[0].linkedPersona !== currentPersona?.identifier)
-                        friends.push({
-                            persona: res[0].linkedPersona,
-                            profile: x.profile,
-                            avatar: res[0].avatar,
-                        })
-                } else {
-                    if (x.profile !== currentPersona?.identifier) friends.push({ persona: x.profile })
-                }
-            }),
-        )
+        const friends: Friend[] = (
+            await Promise.all(
+                values.map(async (x) => {
+                    if (isProfileIdentifier(x.profile)) {
+                        const res = await Services.Identity.queryProfilesInformation([x.profile])
+                        if (res[0].linkedPersona !== undefined && res[0].linkedPersona !== currentPersona?.identifier)
+                            return {
+                                persona: res[0].linkedPersona,
+                                profile: x.profile,
+                                avatar: res[0].avatar,
+                            }
+                        return
+                    } else {
+                        if (x.profile !== currentPersona?.identifier) return { persona: x.profile }
+                        return
+                    }
+                }),
+            )
+        ).filter(emptyFilter) as Friend[]
         const allSettled = await Promise.allSettled(
             friends.map((item) => {
                 const id = item.persona.publicKeyAsHex
