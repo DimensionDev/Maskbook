@@ -10,7 +10,7 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { useCurrentPersona } from '../../../components/DataSource/useCurrentPersona.js'
 import Services from '../../../extension/service.js'
 import { NextIDProof } from '@masknet/web3-providers'
-import { uniqBy } from 'lodash-es'
+import { first, uniqBy } from 'lodash-es'
 import { isProfileIdentifier } from '@masknet/shared'
 
 export type FriendsInformation = Friend & {
@@ -63,12 +63,12 @@ export function useFriends(): AsyncStateRetry<FriendsInformation[]> {
             await Promise.all<Promise<Friend | undefined>>(
                 values.map(async (x) => {
                     if (isProfileIdentifier(x.profile)) {
-                        const res = await Services.Identity.queryProfilesInformation([x.profile])
-                        if (res[0].linkedPersona !== undefined && res[0].linkedPersona !== currentPersona?.identifier)
+                        const res = first(await Services.Identity.queryProfilesInformation([x.profile]))
+                        if (res?.linkedPersona !== undefined && res?.linkedPersona !== currentPersona?.identifier)
                             return {
-                                persona: res[0].linkedPersona,
+                                persona: res.linkedPersona,
                                 profile: x.profile,
-                                avatar: res[0].avatar,
+                                avatar: res.avatar,
                             }
                         return
                     } else {

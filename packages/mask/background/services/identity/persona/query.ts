@@ -62,16 +62,6 @@ export async function queryPersona(id: PersonaIdentifier): Promise<undefined | P
     return result
 }
 
-export async function queryPersonas(): Promise<undefined | PersonaInformation[]> {
-    let result: Promise<PersonaInformation[]> | undefined
-    await createPersonaDBReadonlyAccess(async (t) => {
-        const personas = await queryPersonasDB({}, t)
-        if (!personas.length) return
-        result = toPersonaInformation(personas, t).mustNotAwaitThisWithInATransaction
-    })
-    return result
-}
-
 export async function queryPersonaEOAByMnemonic(mnemonicWord: string, password: string) {
     const verify = bip39.validateMnemonic(mnemonicWord)
     if (!verify) throw new Error('Verify error')

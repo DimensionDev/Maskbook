@@ -61,7 +61,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         flexDirection: 'column',
         gap: 12,
-        color: theme.palette.text.secondary,
+        color: theme.palette.maskColor.second,
         whiteSpace: 'nowrap',
     },
     emptyContainer: {
