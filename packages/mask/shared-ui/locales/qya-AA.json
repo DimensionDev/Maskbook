@@ -1059,6 +1059,7 @@
     "popups_encrypted_friends_search_no_result": "crwdns22109:0crwdne22109:0",
     "popups_encrypted_friends_no_friends": "crwdns22111:0crwdne22111:0",
     "popups_encrypted_friends_add_friends": "crwdns22113:0crwdne22113:0",
+    "popups_encrypted_friends_no_associated_accounts": "crwdns22163:0crwdne22163:0",
     "popups_select_wallet": "crwdns21997:0crwdne21997:0",
     "popups_switch_persona": "crwdns21805:0crwdne21805:0",
     "popups_recovery": "crwdns21807:0crwdne21807:0",
