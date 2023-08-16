@@ -121,7 +121,7 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
     }, [paymentPassword])
 
     useEffect(() => {
-        CrossIsolationMessages.events.passwordStatusUpdated.on(retry)
+        return CrossIsolationMessages.events.passwordStatusUpdated.on(retry)
     }, [retry])
 
     return (
