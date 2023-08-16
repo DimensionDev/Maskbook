@@ -1,9 +1,9 @@
 import { Icons } from '@masknet/icons'
-import { ImageIcon, ProgressiveText } from '@masknet/shared'
+import { ImageIcon, NetworkIcon, ProgressiveText } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useEverSeen } from '@masknet/shared-base-ui'
 import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
-import { useNativeToken, useNetworkDescriptors, useReverseAddress } from '@masknet/web3-hooks-base'
+import { useNativeToken, useNetworkBy, useNetworkDescriptors, useReverseAddress } from '@masknet/web3-hooks-base'
 import { ChainbaseHistory } from '@masknet/web3-providers'
 import { chainbase } from '@masknet/web3-providers/helpers'
 import { DebankTransactionDirection } from '@masknet/web3-providers/types'
@@ -275,9 +275,8 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
     const candidate = transaction.candidates[transaction.indexId]
     const toAddress = candidate.to
     const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, toAddress)
-    const descriptors = useNetworkDescriptors(NetworkPluginID.PLUGIN_EVM)
-    const networkDescriptor = descriptors.find((x) => x.chainId === transaction.chainId)
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId: transaction.chainId })
+    const network = useNetworkBy(NetworkPluginID.PLUGIN_EVM, transaction.chainId)
 
     const recipient = useMemo(() => {
         if (domain) return t('to_address', { address: formatDomainName(domain) })
@@ -289,7 +288,14 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
             <Box className={classes.txIconContainer}>
                 {/* TODO specify cateType */}
                 <TransactionIcon cateType={'send'} />
-                <ImageIcon className={classes.badgeIcon} size={16} icon={networkDescriptor?.icon} />
+                <NetworkIcon
+                    pluginID={NetworkPluginID.PLUGIN_EVM}
+                    className={classes.badgeIcon}
+                    chainId={transaction.chainId}
+                    size={16}
+                    icon={network?.iconUrl}
+                    preferName={network?.isCustomized}
+                />
             </Box>
             <ListItemText
                 secondaryTypographyProps={{ component: 'div' }}

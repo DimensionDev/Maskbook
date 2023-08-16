@@ -1,8 +1,8 @@
 import { unreachable } from '@masknet/kit'
 import { Contract, Web3 } from '@masknet/web3-providers'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkBy } from '@masknet/web3-hooks-base'
 import { useQuery } from '@tanstack/react-query'
 
 export function useGasLimit(
@@ -14,6 +14,11 @@ export function useGasLimit(
     expectedChainId?: ChainId,
 ) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
+    const network = useNetworkBy(NetworkPluginID.PLUGIN_EVM, chainId)
+    const options = {
+        chainId,
+        providerURL: network?.rpcUrl,
+    }
 
     return useQuery({
         queryKey: ['gas-limit', chainId, schemaType, account, recipient, tokenId, amount],
@@ -31,24 +36,18 @@ export function useGasLimit(
                             value: amount,
                         },
                         undefined,
-                        {
-                            chainId,
-                        },
+                        options,
                     )
                     return Number.parseInt(gas ?? '0', 16)
                 case SchemaType.ERC20:
-                    return Contract.getERC20Contract(contractAddress, {
-                        chainId,
-                    })
+                    return Contract.getERC20Contract(contractAddress, options)
                         ?.methods?.transfer(recipient, amount ?? 0)
                         .estimateGas({
                             from: account,
                         })
                 case SchemaType.SBT:
                 case SchemaType.ERC721:
-                    return Contract.getERC721Contract(contractAddress, {
-                        chainId,
-                    })
+                    return Contract.getERC721Contract(contractAddress, options)
                         ?.methods.transferFrom(account, recipient, tokenId ?? '')
                         .estimateGas({
                             from: account,
