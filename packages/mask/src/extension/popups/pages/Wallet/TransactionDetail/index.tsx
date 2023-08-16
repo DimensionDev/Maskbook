@@ -15,7 +15,7 @@ import { Navigate, useLocation } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { ReplaceType, WalletAssetTabs } from '../type.js'
-import { modifyTransaction } from '../utils.js'
+import { modifyTransaction, parseReceiverFromERC20TransferInput } from '../utils.js'
 import type { TransactionState } from './types.js'
 import { useTransactionLogs } from './useTransactionLogs.js'
 
@@ -194,6 +194,8 @@ export const TransactionDetail = memo(function TransactionDetail() {
     const gasFee = tx ? formatWeiToEther(multipliedBy(tx.gas_price, tx.gas)) : undefined
     const gasCost = gasFee && nativeTokenPrice ? gasFee.times(nativeTokenPrice) : undefined
 
+    const receiverAddress = parseReceiverFromERC20TransferInput(tx?.input)
+
     return (
         <>
             <Box p={2} overflow="auto" data-hide-scrollbar>
@@ -246,7 +248,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
                         className={classes.fieldValue}
                         component="div"
                         loading={!transaction.to && loadingTx}>
-                        <ReversedAddress address={(transaction.to || tx?.to_address) as string} />
+                        <ReversedAddress address={(receiverAddress || transaction.to || tx?.to_address) as string} />
                     </ProgressiveText>
                 </Box>
                 <Typography variant="h2" className={classes.sectionName}>

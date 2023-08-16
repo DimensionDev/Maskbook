@@ -1,4 +1,5 @@
 import { Web3 } from '@masknet/web3-providers'
+import ERC20_ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import type { RecentTransaction } from '@masknet/web3-shared-base'
 import {
     ProviderType,
@@ -10,6 +11,9 @@ import { mapKeys } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import { GasSettingModal } from '../../modals/modals.js'
 import { ReplaceType } from './type.js'
+import { Interface } from '@ethersproject/abi'
+
+const erc20InterFace = new Interface(ERC20_ABI)
 
 export async function modifyTransaction(
     transaction: RecentTransaction<ChainId, EvmTransaction>,
@@ -45,5 +49,16 @@ export async function modifyTransaction(
         await Web3.replaceTransaction(transaction.id, newConfig, {
             providerType: ProviderType.MaskWallet,
         })
+    }
+}
+
+// The Debank transaction history api does not return the input data,
+//  so can not do the decoding within its scope.
+export function parseReceiverFromERC20TransferInput(input?: string) {
+    try {
+        const decodedInputParam = erc20InterFace.decodeFunctionData('transfer', input ?? '')
+        return decodedInputParam[0] as string
+    } catch {
+        return ''
     }
 }

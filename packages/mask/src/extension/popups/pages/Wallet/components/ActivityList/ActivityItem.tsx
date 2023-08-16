@@ -26,6 +26,7 @@ import { Box, ListItem, ListItemText, Skeleton, Typography, alpha, type ListItem
 import { useQuery } from '@tanstack/react-query'
 import { memo, useMemo } from 'react'
 import { formatTokenBalance, useI18N } from '../../../../../../utils/index.js'
+import { parseReceiverFromERC20TransferInput } from '../../utils.js'
 
 const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' }, __) => {
     const colorMap: Record<string, string> = {
@@ -188,17 +189,18 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
     const [seen, ref] = useEverSeen<HTMLLIElement>()
     const { data: tx, isLoading: loadingTx } = useQuery({
         // This could be a transaction of SmartPay which Debank doesn't provide detailed info for it.
+        // This also could be an ERC20 transfer, which Debank returns the token contract rather than receiver as `to_address`.
         // So we fetch via Chainbase
-        enabled: !transaction.to && seen,
+        enabled: (!transaction.to || transaction.type === 'transfer') && seen,
         queryKey: ['chainbase', 'transaction', transaction.chainId, transaction.id, blockNumber],
         queryFn: async () => {
             if (!transaction.chainId || !transaction.id) return
             return ChainbaseHistory.getTransaction(transaction.chainId, transaction.id, blockNumber)
         },
     })
-
+    const receiverAddress = parseReceiverFromERC20TransferInput(tx?.input)
     const status = transaction.status || (tx ? chainbase.normalizeTxStatus(tx.status) : undefined)
-    const toAddress = (transaction.to || tx?.to_address) as string
+    const toAddress = (receiverAddress || transaction.to || tx?.to_address) as string
     const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, toAddress)
 
     return (
