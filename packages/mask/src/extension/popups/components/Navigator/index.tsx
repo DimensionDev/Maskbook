@@ -69,7 +69,7 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
         return PopupRoutes.Wallet
     }, [wallet, walletPageLoading, isLocked, hasPassword, messages])
 
-    const onOpenDashboardSettings = useCallback(async async async () => {
+    const onOpenDashboardSettings = useCallback(async () => {
         await browser.tabs.create({
             active: true,
             url: browser.runtime.getURL(`/dashboard.html#${DashboardRoutes.Settings}`),
