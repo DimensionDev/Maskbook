@@ -18,7 +18,7 @@ import {
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types.js'
 import { type BoxInfo, BoxState } from '../type.js'
 import { useMaskBoxInfo } from './useMaskBoxInfo.js'
-import { useMerkelProof } from './useMerkleProof.js'
+import { useMerkleProof } from './useMerkleProof.js'
 import { useMaskBoxStatus } from './useMaskBoxStatus.js'
 import { useMaskBoxCreationSuccessEvent } from './useMaskBoxCreationSuccessEvent.js'
 import { useMaskBoxTokensForSale } from './useMaskBoxTokensForSale.js'
@@ -131,7 +131,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     // #endregion
 
     // #region qualification
-    const { value, error: errorProof, loading: loadingProof } = useMerkelProof(rootHash)
+    const { value, error: errorProof, loading: loadingProof } = useMerkleProof(rootHash)
     const proofBytes = value?.proof
         ? abiCoder.encodeParameters(['bytes32[]'], [value?.proof?.map((p) => `0x${p}`) ?? []])
         : undefined

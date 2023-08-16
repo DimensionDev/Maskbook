@@ -1,3 +1,5 @@
+/* cspell: disable */
+
 // This version has been skillfully assembled by incorporating elements from previous projects,
 // while also making efficient use of libraries that are already integrated into the current project.
 // Learn more:
@@ -41,7 +43,7 @@ const Bech32Types: Record<string, string> = {
     [ProtocolType.BitcoinTestnet]: 'tb',
 }
 
-export function deocdeBase58Address(type: ProtocolType, address: string) {
+export function decodeBase58Address(type: ProtocolType, address: string) {
     try {
         const decoded = Buffer.from(base58.decode(address))
         const length = decoded.length
