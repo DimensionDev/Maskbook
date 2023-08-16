@@ -58,13 +58,22 @@ export interface UTXO {
 }
 
 export interface Block {
-    miner: string
-    difficulty: string
+    hash: string
+    /** The address of the miner */
+    miner?: string
+    /** The difficulty at the block was mint. */
+    difficulty?: string
+    /** The mint timestamp */
     timestamp: number
-    block_height: number
+    /** The block height */
+    height: number
 }
 
+/**
+ * The transaction to be signed and sent to provider.
+ */
 export interface Transaction {
+    hash: string
     /** Address of the sender wallet */
     from: string
     /** Address of the recipient wallet */
