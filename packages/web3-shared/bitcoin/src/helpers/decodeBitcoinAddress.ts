@@ -25,7 +25,7 @@ export enum ProtocolType {
 const P2SHTypes: Record<string, string> = {
     [ProtocolType.Bitcoin]: '05', //  5 Decimal 3 prefix
     [ProtocolType.BitcoinTestnet]: 'c4', // 196 Decimal 2 prefix
-    [ProtocolType.Dogecoin]: '16', //22 Decimal 9A prefix
+    [ProtocolType.Dogecoin]: '16', // 22 Decimal 9A prefix
     [ProtocolType.DogecoinTestnet]: 'c4', // 196 Decimal 2 prefix
 }
 
@@ -53,9 +53,9 @@ export function deocdeBase58Address(type: ProtocolType, address: string) {
         const body = decoded.slice(0, length - 4)
 
         const sha3_once = sha256(body)
-        const sha3_twice = sha256(new Buffer(sha3_once, 'hex'))
+        const sha3_twice = sha256(Buffer.from(sha3_once, 'hex'))
 
-        const validChecksum = new Buffer(sha3_twice, 'hex').toString('binary').substr(0, 4)
+        const validChecksum = Buffer.from(sha3_twice, 'hex').toString('binary').slice(0, 4)
         if (checksum !== validChecksum) return
 
         const prefix = decoded.toString('hex').slice(0, 2)
