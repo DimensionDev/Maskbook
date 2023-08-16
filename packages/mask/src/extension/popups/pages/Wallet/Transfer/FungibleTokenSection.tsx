@@ -11,8 +11,9 @@ import {
     useWallet,
     useWeb3Connection,
 } from '@masknet/web3-hooks-base'
+import { useGasLimit } from '@masknet/web3-hooks-evm'
 import { isLessThan, isLte, isZero, leftShift, minus, rightShift } from '@masknet/web3-shared-base'
-import { isNativeTokenAddress, type GasConfig, type ChainId } from '@masknet/web3-shared-evm'
+import { SchemaType, isNativeTokenAddress, type ChainId, type GasConfig } from '@masknet/web3-shared-evm'
 import { Box, Input, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useMemo, useState } from 'react'
@@ -24,7 +25,6 @@ import { TokenPicker } from '../../../components/index.js'
 import { useTokenParams } from '../../../hook/index.js'
 import { ChooseTokenModal } from '../../../modals/modals.js'
 import { useDefaultGasConfig } from './useDefaultGasConfig.js'
-import { omit } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     asset: {
@@ -84,6 +84,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { chainId, address, params, setParams } = useTokenParams()
+    const recipient = params.get('recipient')
     const chainContextValue = useMemo(() => ({ chainId }), [chainId])
     const navigate = useNavigate()
     const [paymentAddress, setPaymentAddress] = useState<string>()
@@ -111,15 +112,25 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const network = networks.find((x) => x.chainId === chainId)
     const { data: token, isLoading } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, address, undefined, { chainId })
 
-    const isNativeToken = isNativeTokenAddress(address)
-    const gasLimit = isNativeToken ? ETH_GAS_LIMIT : ERC20_GAS_LIMIT
-    const defaultGasConfig = useDefaultGasConfig(chainId, gasLimit)
-    const [gasConfig = defaultGasConfig, setGasConfig] = useState<GasConfig>()
     const [amount, setAmount] = useState('')
     const totalAmount = useMemo(
         () => (amount && token?.decimals ? rightShift(amount, token.decimals).toFixed() : '0'),
         [amount, token?.decimals],
     )
+    const isNativeToken = isNativeTokenAddress(address)
+    const fallbackGasLimit = isNativeToken ? ETH_GAS_LIMIT : ERC20_GAS_LIMIT
+    const gasResult = useGasLimit(
+        isNativeToken ? SchemaType.Native : SchemaType.ERC20,
+        address,
+        totalAmount,
+        recipient || undefined,
+        undefined,
+        chainId,
+    )
+    const gasLimit = gasResult.data?.toString() ?? fallbackGasLimit
+    const { isLoading: isLoadingGasLimit } = gasResult
+    const defaultGasConfig = useDefaultGasConfig(chainId, gasLimit)
+    const [gasConfig = defaultGasConfig, setGasConfig] = useState<GasConfig>()
     const patchedGasConfig = useMemo(
         () => ({ ...gasConfig, gasCurrency: paymentAddress, gas: gasLimit }),
         [gasConfig, paymentAddress, gasLimit],
@@ -139,14 +150,13 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         account,
         chainId,
     })
-    const recipient = params.get('recipient')
     const { showSnackbar } = usePopupCustomSnackbar()
 
     const [state, transfer] = useAsyncFn(async () => {
         if (!recipient || isZero(totalAmount) || !token?.decimals) return
         try {
             await Web3.transferFungibleToken(address, recipient, totalAmount, '', {
-                overrides: omit(gasConfig, 'gas'),
+                overrides: gasConfig,
                 paymentToken: paymentAddress,
                 chainId,
                 gasOptionType: gasConfig?.gasOptionType,
@@ -178,9 +188,9 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const decimals = token?.decimals || selectedAsset?.decimals
     const uiTokenBalance = tokenBalance && decimals ? leftShift(tokenBalance, decimals).toString() : '0'
 
-    const inputNotReady = !recipient || !amount || isLessThan(tokenBalance, totalAmount)
+    const inputNotReady = !recipient || !amount || isLessThan(tokenBalance, totalAmount) || isLte(totalAmount, 0)
     const tokenNotReady = !token?.decimals || isLessThan(tokenBalance, totalAmount) || !isGasSufficient
-    const transferDisabled = inputNotReady || tokenNotReady || isLte(totalAmount, 0)
+    const transferDisabled = inputNotReady || tokenNotReady || isLoadingGasLimit
 
     return (
         <>

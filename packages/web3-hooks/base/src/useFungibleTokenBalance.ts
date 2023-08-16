@@ -23,7 +23,7 @@ export function useFungibleTokenBalance<T extends NetworkPluginID = NetworkPlugi
     const { BalanceNotifier } = useWeb3State(pluginID)
 
     const result = useQuery({
-        enabled: !!address && enabled,
+        enabled,
         queryKey: ['fungible-token', 'balance', pluginID, account, address, options],
         queryFn: async () => {
             if (!address) return '0'
