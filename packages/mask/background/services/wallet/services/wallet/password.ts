@@ -56,6 +56,11 @@ export async function hasPassword() {
     return database.hasSafeSecret()
 }
 
+/** Has set a password. */
+export async function hasDefaultPassword() {
+    return database.hasSecret()
+}
+
 /** Has a verified password in memory. */
 export async function hasVerifiedPassword() {
     return validatePassword(inMemoryPassword)

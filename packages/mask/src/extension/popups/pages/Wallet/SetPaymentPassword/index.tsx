@@ -152,7 +152,12 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
     const [{ loading }, onConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             try {
-                await Services.Wallet.changePassword(getDefaultWalletPassword(), data.password)
+                const hasDefaultPassword = await Services.Wallet.hasDefaultPassword()
+                if (hasDefaultPassword) {
+                    await Services.Wallet.changePassword(getDefaultWalletPassword(), data.password)
+                } else {
+                    await Services.Wallet.setPassword(data.password)
+                }
                 const hasPassword = await Services.Wallet.hasPassword()
 
                 if (hasPassword) {
