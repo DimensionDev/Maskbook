@@ -11,7 +11,7 @@ WalletServiceRef.value = {
     getLegacyWallets: Services.Wallet.getLegacyWallets,
     getWallets: Services.Wallet.getWallets,
     hasPassword: Services.Wallet.hasPassword,
-    hasPasswordWithDefault: Services.Wallet.hasPasswordWithDefault,
+    hasPasswordWithDefaultOne: Services.Wallet.hasPasswordWithDefaultOne,
     recoverWalletFromKeyStoreJSON: Services.Wallet.recoverWalletFromKeyStoreJSON,
     recoverWalletFromMnemonicWords: Services.Wallet.recoverWalletFromMnemonicWords,
     recoverWalletFromPrivateKey: Services.Wallet.recoverWalletFromPrivateKey,

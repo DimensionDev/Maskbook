@@ -57,7 +57,7 @@ export async function hasPassword() {
 }
 
 /** Has set a password (could be the default one). */
-export async function hasPasswordWithDefault() {
+export async function hasPasswordWithDefaultOne() {
     return database.hasSecret()
 }
 
