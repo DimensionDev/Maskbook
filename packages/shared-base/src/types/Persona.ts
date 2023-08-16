@@ -52,10 +52,10 @@ export interface RelationProfile {
 }
 
 export interface Relation {
-    profile: ProfileIdentifier
+    profile: ProfileIdentifier | PersonaIdentifier
     linked: PersonaIdentifier
     favor: RelationFavor
-    network: string
+    network?: string
 }
 
 export enum ProofType {

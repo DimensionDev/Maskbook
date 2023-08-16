@@ -7,12 +7,14 @@ import { Icons } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
 import { formatPersonaFingerprint, type BindingProof } from '@masknet/shared-base'
 import { useTheme } from '@mui/system'
-import { CopyButton } from '@masknet/shared'
+import { CopyButton, EmptyStatus } from '@masknet/shared'
 import { ConnectedAccounts } from './ConnectAccounts/index.js'
+import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
         maxHeight: '100vh',
+        height: '100%',
         overflowY: 'hidden',
     },
     header: {
@@ -50,6 +52,25 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         color: theme.palette.maskColor.second,
     },
+    empty: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%,-50%)',
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+        gap: 12,
+        color: theme.palette.maskColor.second,
+        whiteSpace: 'nowrap',
+    },
+    emptyContainer: {
+        position: 'relative',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        flex: 1,
+    },
 }))
 
 export interface FriendsDetailUIProps {
@@ -72,6 +93,7 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
     const { classes } = useStyles()
     const navigate = useNavigate()
     const handleBack = useCallback(() => navigate(-1), [])
+    const { t } = useI18N()
     const theme = useTheme()
     return (
         <Box display="flex" flexDirection="column" alignItems="center" width="100%" className={classes.container}>
@@ -118,7 +140,15 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
                     </Typography>
                 </Box>
             </Box>
-            <ConnectedAccounts profiles={profiles} />
+            {profiles.length ? (
+                <ConnectedAccounts profiles={profiles} />
+            ) : (
+                <div className={classes.emptyContainer}>
+                    <EmptyStatus className={classes.empty}>
+                        {t('popups_encrypted_friends_no_associated_accounts')}
+                    </EmptyStatus>
+                </div>
+            )}
         </Box>
     )
 })
