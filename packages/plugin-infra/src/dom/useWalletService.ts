@@ -25,6 +25,7 @@ export interface WalletBackupProvider {
     setPassword(newPassword: string): Promise<void>
     verifyPassword(unverifiedPassword: string): Promise<boolean>
     hasPassword(): Promise<boolean>
+    hasPasswordWithDefaultOne(): Promise<boolean>
     resetPassword(newPassword: string): Promise<void>
     setDefaultPassword(): Promise<void>
 
