@@ -22,7 +22,7 @@ function getStyleProps() {
     const selectedSpanStyle = selectedSpanEle ? window.getComputedStyle(selectedSpanEle) : EMPTY_STYLE
 
     return {
-        color: spanStyle.color,
+        color: 'var(--secondary-text)',
         font: spanStyle.font,
         fontSize: spanStyle.fontSize,
         padding: divStyle.paddingLeft,
@@ -69,7 +69,7 @@ const useStyles = makeStyles()((theme) => {
             borderRadius: 6,
         },
         selected: {
-            color: `${props.line} !important`,
+            color: 'var(--accent)',
         },
         line: {
             borderRadius: 9999,
@@ -78,7 +78,7 @@ const useStyles = makeStyles()((theme) => {
             width: '100%',
             alignSelf: 'center',
             height: 3,
-            backgroundColor: props.line,
+            backgroundColor: 'var(--accent)',
         },
     }
 })
