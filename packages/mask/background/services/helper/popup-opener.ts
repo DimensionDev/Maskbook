@@ -92,16 +92,6 @@ export async function openWalletStartUpWindow(params: Record<string, any>) {
     return openPopupWindow(PopupRoutes.Wallet, params)
 }
 
-export async function openPopupConnectWindow(params: Record<string, any> = {}): Promise<void> {
-    const url = urlcat('popups-connect.html#', PopupRoutes.ConnectWallet, {
-        toBeClose: 1,
-        from: PopupRoutes.ConnectWallet,
-        ...params,
-    })
-
-    return openWindow(url)
-}
-
 export async function removePopupWindow(): Promise<void> {
     if (!currentPopupWindowId) return
     browser.windows.remove(currentPopupWindowId)

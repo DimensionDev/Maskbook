@@ -40,7 +40,6 @@ export const RestPartOfPluginUIContextShared: Omit<
     openDashboard: Services.Helper.openDashboard,
     openPopupWindow: Services.Helper.openPopupWindow,
     closePopupWindow: Services.Helper.removePopupWindow,
-    openPopupConnectWindow: Services.Helper.openPopupConnectWindow,
     fetchJSON: Services.Helper.fetchJSON,
 
     openWalletConnectDialog: async (uri: string) => {

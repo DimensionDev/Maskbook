@@ -165,11 +165,11 @@ export const LogoutUI = memo<LogoutUIProps>(
 
         const disabled = useMemo(() => {
             if (loading || error || paymentPasswordError) return true
-            if (backupPassword) return !password.length
             if (manageWallets.length) {
-                if (!backupPassword) return false
                 if (hasPassword) return !paymentPassword.length
+                if (!backupPassword) return false
             }
+            if (backupPassword) return !password.length
             return false
         }, [
             loading,
