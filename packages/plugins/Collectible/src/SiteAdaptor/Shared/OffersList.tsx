@@ -50,7 +50,7 @@ export function OffersList(props: OffersListProps) {
                 <LoadingBase />
             </div>
         )
-    if (error || !offers.length)
+    if (error && offers.length === 0)
         return (
             <div className={classes.wrapper}>
                 <ReloadStatus onRetry={onRetry} />
