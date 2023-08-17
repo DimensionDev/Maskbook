@@ -46,7 +46,6 @@ export class Popups implements Middleware<ConnectionContext> {
     private async getPaymentToken(context: ConnectionContext) {
         const maskAddress = getMaskTokenAddress(context.chainId)
         try {
-            if (!context.paymentToken) return DEFAULT_PAYMENT_TOKEN_STATE
             const smartPayChainId = await this.Bundler.getSupportedChainId()
             if (context.chainId !== smartPayChainId || !context.owner) return DEFAULT_PAYMENT_TOKEN_STATE
 
@@ -89,7 +88,7 @@ export class Popups implements Middleware<ConnectionContext> {
             const availableBalanceTooLow =
                 isGreaterThan(maskGasFee, maskAllowance) || isGreaterThan(maskGasFee, maskBalance)
 
-            const isNative = isNativeTokenAddress(context.paymentToken)
+            const isNative = !context.paymentToken || isNativeTokenAddress(context.paymentToken)
 
             return {
                 allowMaskAsGas: !availableBalanceTooLow,

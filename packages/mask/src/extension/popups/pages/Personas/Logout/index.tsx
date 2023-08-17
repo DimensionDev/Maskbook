@@ -182,6 +182,69 @@ export const LogoutUI = memo<LogoutUIProps>(
             password,
         ])
 
+        const passwordField = useMemo(() => {
+            if (manageWallets.length) {
+                if (hasPassword) {
+                    return (
+                        <PasswordField
+                            placeholder={t('popups_wallet_logout_input_payment_password')}
+                            value={paymentPassword}
+                            error={!!paymentPasswordError}
+                            helperText={paymentPasswordError}
+                            onChange={(e) => {
+                                if (paymentPasswordError) setPaymentPasswordError('')
+                                setPaymentPassword(e.target.value)
+                            }}
+                            onClear={() => {
+                                setPaymentPassword('')
+                                setPaymentPasswordError('')
+                            }}
+                        />
+                    )
+                } else if (backupPassword) {
+                    return (
+                        <PasswordField
+                            placeholder={t('popups_wallet_backup_input_password')}
+                            value={password}
+                            onChange={(e) => {
+                                if (error) setError(false)
+                                setPassword(e.target.value)
+                            }}
+                            error={error}
+                            onClear={() => {
+                                setPassword('')
+                                setError(false)
+                            }}
+                            helperText={error ? t('popups_password_do_not_match') : ''}
+                        />
+                    )
+                }
+
+                return
+            }
+
+            if (backupPassword) {
+                return (
+                    <PasswordField
+                        placeholder={t('popups_wallet_backup_input_password')}
+                        value={password}
+                        onChange={(e) => {
+                            if (error) setError(false)
+                            setPassword(e.target.value)
+                        }}
+                        error={error}
+                        onClear={() => {
+                            setPassword('')
+                            setError(false)
+                        }}
+                        helperText={error ? t('popups_password_do_not_match') : ''}
+                    />
+                )
+            }
+
+            return
+        }, [manageWallets, hasPassword, paymentPassword, paymentPasswordError, backupPassword, password, error, t])
+
         return (
             <Box flex={1} maxHeight="544px" overflow="auto" data-hide-scrollbar>
                 <Box p={2} pb={11}>
@@ -248,39 +311,7 @@ export const LogoutUI = memo<LogoutUIProps>(
                             </Typography>
                         ) : null}
                     </Typography>
-                    {backupPassword ? (
-                        manageWallets.length && hasPassword ? (
-                            <PasswordField
-                                placeholder={t('popups_wallet_backup_input_password')}
-                                value={paymentPassword}
-                                error={!!paymentPasswordError}
-                                helperText={paymentPasswordError}
-                                onChange={(e) => {
-                                    if (paymentPasswordError) setPaymentPasswordError('')
-                                    setPaymentPassword(e.target.value)
-                                }}
-                                onClear={() => {
-                                    setPaymentPassword('')
-                                    setPaymentPasswordError('')
-                                }}
-                            />
-                        ) : (
-                            <PasswordField
-                                placeholder={t('popups_backup_password')}
-                                value={password}
-                                onChange={(e) => {
-                                    if (error) setError(false)
-                                    setPassword(e.target.value)
-                                }}
-                                error={error}
-                                onClear={() => {
-                                    setPassword('')
-                                    setError(false)
-                                }}
-                                helperText={error ? t('popups_password_do_not_match') : ''}
-                            />
-                        )
-                    ) : null}
+                    {passwordField}
                 </Box>
                 <BottomController>
                     <Button variant="outlined" fullWidth onClick={onCancel}>
