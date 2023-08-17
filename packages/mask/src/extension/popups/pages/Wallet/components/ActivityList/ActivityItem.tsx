@@ -6,7 +6,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useEverSeen } from '@masknet/shared-base-ui'
 import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { useNativeToken, useNetwork, useNetworkDescriptors, useReverseAddress } from '@masknet/web3-hooks-base'
-import { ChainbaseHistory } from '@masknet/web3-providers'
+import { ChainbaseHistory, Web3 } from '@masknet/web3-providers'
 import { chainbase } from '@masknet/web3-providers/helpers'
 import { DebankTransactionDirection } from '@masknet/web3-providers/types'
 import {
@@ -198,9 +198,22 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
             return ChainbaseHistory.getTransaction(transaction.chainId, transaction.id, blockNumber)
         },
     })
-    const receiverAddress = parseReceiverFromERC20TransferInput(tx?.input)
+    const { data: txInput, isLoading: loadingTxInput } = useQuery({
+        // Enable this when chainbase does not support the current chain.
+        enabled: !!transaction && !loadingTx && !tx?.input && transaction.type === 'transfer',
+        queryKey: [transaction?.chainId, transaction?.id],
+        queryFn: async () => {
+            if (!transaction?.chainId || !transaction?.id) return
+            const tx = await Web3.getTransaction(transaction.id, { chainId: transaction.chainId })
+            return tx?.input
+        },
+    })
+
+    const receiverAddress = parseReceiverFromERC20TransferInput(tx?.input ?? txInput)
     const status = transaction.status || (tx ? chainbase.normalizeTxStatus(tx.status) : undefined)
     const toAddress = (receiverAddress || transaction.to || tx?.to_address) as string
+    const loadingToAddress =
+        transaction.type === 'transfer' ? !receiverAddress && (loadingTx || loadingTxInput) : !toAddress && loadingTx
     const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, toAddress)
 
     return (
@@ -217,10 +230,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                 secondaryTypographyProps={{ component: 'div' }}
                 style={{ marginLeft: 15 }}
                 secondary={
-                    <ProgressiveText
-                        className={classes.toAddress}
-                        loading={!toAddress && loadingTx}
-                        skeletonWidth={100}>
+                    <ProgressiveText className={classes.toAddress} loading={loadingToAddress} skeletonWidth={100}>
                         {status === TransactionStatusType.FAILED ? (
                             <Typography className={classes.failedLabel} component="span">
                                 {t('failed')}

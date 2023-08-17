@@ -877,6 +877,7 @@ export interface RecentTransaction<ChainId, Transaction> {
     createdAt: Date
     /** record updated at */
     updatedAt: Date
+    type?: LiteralUnion<'burn' | 'contract interaction'>
 }
 
 export type RecentTransactionComputed<ChainId, Transaction> = RecentTransaction<ChainId, Transaction> & {
