@@ -3,7 +3,7 @@ import { CopyButton, ProgressiveText, ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
 import { useAccount, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
-import { ChainbaseHistory, ExplorerResolver } from '@masknet/web3-providers'
+import { ChainbaseHistory, ExplorerResolver, Web3 } from '@masknet/web3-providers'
 import { chainbase } from '@masknet/web3-providers/helpers'
 import { TransactionStatusType, formatBalance, multipliedBy, trimZero } from '@masknet/web3-shared-base'
 import { formatHash, formatWeiToEther, formatWeiToGwei } from '@masknet/web3-shared-evm'
@@ -154,6 +154,16 @@ export const TransactionDetail = memo(function TransactionDetail() {
         },
     })
 
+    const { data: txInput, isLoading: loadingTxInput } = useQuery({
+        enabled: !!transaction && !loadingTx && !tx?.input && transactionState?.type === 'transfer',
+        queryKey: [transaction?.chainId, transactionId],
+        queryFn: async () => {
+            if (!chainId || !transactionId) return
+            const tx = await Web3.getTransaction(transactionId, { chainId })
+            return tx?.input
+        },
+    })
+
     const handleSpeedup = useCallback(() => {
         if (!isRecentTx) return
         return modifyTransaction(transactionState, ReplaceType.SPEED_UP)
@@ -194,8 +204,12 @@ export const TransactionDetail = memo(function TransactionDetail() {
     const gasFee = tx ? formatWeiToEther(multipliedBy(tx.gas_price, tx.gas)) : undefined
     const gasCost = gasFee && nativeTokenPrice ? gasFee.times(nativeTokenPrice) : undefined
 
-    const receiverAddress = parseReceiverFromERC20TransferInput(tx?.input)
+    const receiverAddress = parseReceiverFromERC20TransferInput(tx?.input || txInput)
 
+    const loadingToAddress =
+        transactionState?.type === 'transfer'
+            ? !receiverAddress && (loadingTx || loadingTxInput)
+            : !transaction.to && loadingTx
     return (
         <>
             <Box p={2} overflow="auto" data-hide-scrollbar>
@@ -244,10 +258,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
                 </Box>
                 <Box className={classes.field}>
                     <Typography className={classes.fieldName}>{t('transaction_to')}</Typography>
-                    <ProgressiveText
-                        className={classes.fieldValue}
-                        component="div"
-                        loading={!transaction.to && loadingTx}>
+                    <ProgressiveText className={classes.fieldValue} component="div" loading={loadingToAddress}>
                         <ReversedAddress address={(receiverAddress || transaction.to || tx?.to_address) as string} />
                     </ProgressiveText>
                 </Box>

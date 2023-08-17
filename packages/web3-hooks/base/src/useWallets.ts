@@ -16,6 +16,7 @@ export function useWallets() {
         const numA = a.name.split('Wallet ')[1]
         const numB = b.name.split('Wallet ')[1]
         try {
+            if (!numA && numB && !Number.isNaN(numB)) return 1
             if (!Number.isNaN(numA) && !Number.isNaN(numB)) {
                 return Number(numA) > Number(numB) ? 1 : -1
             } else {
