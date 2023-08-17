@@ -128,7 +128,7 @@ export function useFriendsPaged() {
             })
             return { friends: uniqBy(profiles, ({ id }) => id), nextPageOffset }
         },
-        getNextPageParam: ({ nextPageOffset }, allPages) => {
+        getNextPageParam: ({ nextPageOffset }) => {
             if (nextPageOffset >= records.length) return
             return nextPageOffset
         },
