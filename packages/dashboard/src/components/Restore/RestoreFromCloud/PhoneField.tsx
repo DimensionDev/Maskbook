@@ -93,7 +93,10 @@ export const PhoneField = memo(function PhoneField() {
             <Box mt={1.5}>
                 <SendingCodeField
                     value={code}
-                    onChange={(code) => dispatch({ type: 'SET_PHONE', form: { code } })}
+                    onChange={(code) => {
+                        setCodeError('')
+                        dispatch({ type: 'SET_PHONE', form: { code } })
+                    }}
                     errorMessage={sendCodeError?.message || codeError}
                     onSend={handleSendCode}
                     placeholder={t.data_recovery_mobile_code()}
