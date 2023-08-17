@@ -5,7 +5,7 @@ import { useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { isGreaterThan, isSameAddress, resolveNextIDPlatformWalletName } from '@masknet/web3-shared-base'
 
 export function useVerifiedWallets(proofs?: BindingProof[]) {
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const wallets = useWallets()
     const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     return useQuery({

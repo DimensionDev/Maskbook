@@ -7,7 +7,7 @@ import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { PopupRoutes } from '@masknet/shared-base'
 import { ManageWallet } from '@masknet/shared'
 import { useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -83,7 +83,7 @@ const DeleteWallet = memo(() => {
     const currentWallet = useWallet()
     const wallet = selectedWallet ?? currentWallet
 
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const wallets = useWallets()
     const { classes } = useStyles()
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState('')

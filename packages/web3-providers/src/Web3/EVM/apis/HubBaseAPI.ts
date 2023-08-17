@@ -50,6 +50,7 @@ export class HubBaseAPI extends HubBaseAPI_Base<
         try {
             const isEIP1559 = new ChainResolverAPI().isFeatureSupported(options.chainId, 'EIP1559')
             if (isEIP1559 && chainId !== ChainId.Astar) return await this.MetaSwap.getGasOptions(options.chainId)
+            if (chainId === ChainId.Aurora) return this.GasOptions.getGasOptions(options.chainId)
             if (chainId === ChainId.Astar) return await this.AstarGas.getGasOptions(options.chainId)
             return await this.DeBankGasOption.getGasOptions(options.chainId)
         } catch (error) {

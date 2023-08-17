@@ -1,14 +1,15 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 import urlcat from 'urlcat'
-import { memo, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { NavLink, type LinkProps } from 'react-router-dom'
 import { BottomNavigation, BottomNavigationAction, Box, type BoxProps } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { PopupRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, PopupRoutes } from '@masknet/shared-base'
 import { useMessages, useWallet } from '@masknet/web3-hooks-base'
 import { useHasPassword } from '../../hook/useHasPassword.js'
 import { useWalletLockStatus } from '../../pages/Wallet/hooks/useWalletLockStatus.js'
+import Services from '../../../service.js'
 
 const useStyle = makeStyles()((theme) => ({
     navigation: {
@@ -68,6 +69,17 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
         return PopupRoutes.Wallet
     }, [wallet, walletPageLoading, isLocked, hasPassword, messages])
 
+    const onOpenDashboardSettings = useCallback(async () => {
+        await browser.tabs.create({
+            active: true,
+            url: browser.runtime.getURL(`/dashboard.html#${DashboardRoutes.Settings}`),
+        })
+        if (navigator.userAgent.includes('Firefox')) {
+            window.close()
+        }
+        await Services.Helper.removePopupWindow()
+    }, [])
+
     return (
         <Box className={cx(classes.container, className)} {...rest}>
             <BottomNavigation classes={{ root: classes.navigation }}>
@@ -92,13 +104,13 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
                         className={classes.iconOnly}
                     />
                 </BottomNavLink>
-                <BottomNavLink to={PopupRoutes.Settings}>
-                    <BottomNavigationAction
-                        showLabel={false}
-                        icon={<Icons.Settings2 size={28} />}
-                        className={classes.iconOnly}
-                    />
-                </BottomNavLink>
+
+                <BottomNavigationAction
+                    onClick={onOpenDashboardSettings}
+                    showLabel={false}
+                    icon={<Icons.Settings2 size={28} />}
+                    className={classes.iconOnly}
+                />
             </BottomNavigation>
         </Box>
     )

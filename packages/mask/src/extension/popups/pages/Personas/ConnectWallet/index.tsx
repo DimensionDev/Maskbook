@@ -103,7 +103,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
     const { pluginID } = useNetworkContext<NetworkPluginID.PLUGIN_EVM>()
 
     const { providerType, chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const wallets = useWallets(pluginID)
+    const wallets = useWallets()
 
     const providerDescriptor = useProviderDescriptor(pluginID, providerType)
     const { data: domain } = useReverseAddress(pluginID, account)
