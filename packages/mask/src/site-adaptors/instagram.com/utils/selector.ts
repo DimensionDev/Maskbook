@@ -25,7 +25,8 @@ export const bioDescriptionSelector = () => querySelector<E>('section main heade
 
 export const personalHomepageSelector = () => querySelector<E>(' section main header section > div:last-child  a')
 
-export const searchNickNameSelector = () => querySelector<E>('section main header section > div:last-child > span')
+export const searchNickNameSelector = () =>
+    querySelector<E>('section main header section > div:last-child > div > span')
 
 export const searchUserIdSelector = () => querySelector<HTMLHeadingElement>('section main header section h2')
 
@@ -65,10 +66,7 @@ export const searchInstagramPostAvatarSelector = () =>
 export const inpageAvatarSelector = () =>
     querySelectorAll<HTMLDivElement>('[role=main] article[role=presentation] header [role=button]')
 
-export const searchInstagramHandleSelector = () =>
-    querySelector<HTMLAnchorElement>(
-        'div[style="transform: translateX(0px);"] > div > div > div:last-child > div > span[aria-describedby] > div > a',
-    )
+export const searchInstagramHandleSelector = () => querySelector<HTMLAnchorElement>('section main header section a h2')
 export const searchInstagramSelfAvatarSelector = () =>
     querySelector(
         'div[style="transform: translateX(0px);"] > div > div > div:last-child > div > span[aria-describedby] > div > a img[crossorigin="anonymous"]',
