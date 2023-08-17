@@ -101,7 +101,7 @@ export class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainI
 
         const collections = response.collections
             // Might got bad data responded including id field and other fields empty
-            .filter((x) => x?.id && isValidChainId(resolveSolanaChainId(x.chain)) && x.spam_score !== SPAM_SCORE)
+            .filter((x) => x?.id && isValidChainId(resolveSolanaChainId(x.chain)) && x.spam_score >= SPAM_SCORE)
             .map((x) => createSolanaNonFungibleCollection(x))
 
         return createPageable(collections, createIndicator(indicator))
