@@ -20,7 +20,8 @@ export async function internal_wallet_restore(backup: NormalizedBackup.WalletBac
     for (const wallet of backup) {
         try {
             const wallets = await getWallets()
-            const name = wallet.name || generateNewWalletName(wallets)
+            const nameExists = wallets.some((x) => x.name === wallet.name)
+            const name = (wallet.name + nameExists ? ' (1)' : '') || generateNewWalletName(wallets)
             if (wallet.privateKey.some)
                 await recoverWalletFromPrivateKey(name, await JWKToKey(wallet.privateKey.val, 'private'))
             else if (wallet.mnemonic.some) {
