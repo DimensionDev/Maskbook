@@ -17,6 +17,7 @@ import { startWatch } from '../../../utils/startWatch.js'
 
 export function injectProfileTabAtInstagram(signal: AbortSignal) {
     let tabInjected = false
+    console.log(searchProfileTabPageSelector().evaluate())
     const contentWatcher = new MutationObserverWatcher(searchProfileTabPageSelector()).useForeach(() => {
         const elePage = searchProfileTabPageSelector().evaluate()
         if (elePage && !tabInjected) {
