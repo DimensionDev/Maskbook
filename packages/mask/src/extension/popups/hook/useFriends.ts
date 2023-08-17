@@ -1,4 +1,3 @@
-import { useRef } from 'react'
 import {
     type ECKeyIdentifier,
     EMPTY_LIST,
@@ -11,8 +10,7 @@ import Services from '../../../extension/service.js'
 import { NextIDProof } from '@masknet/web3-providers'
 import { first, uniqBy } from 'lodash-es'
 import { isProfileIdentifier } from '@masknet/shared'
-import { useInfiniteQuery, type UseInfiniteQueryResult } from '@tanstack/react-query'
-import type { RelationRecord } from '../../../../background/database/persona/type.js'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 
 export type FriendsInformation = Friend & {
     profiles: BindingProof[]
@@ -44,29 +42,29 @@ export const PlatformSort: Record<NextIDPlatform, number> = {
     [NextIDPlatform.NextID]: 15,
 }
 
-export function useFriendsPaged(): UseInfiniteQueryResult<FriendsInformation[]> {
-    const cachedValues = useRef<RelationRecord[]>([])
+export function useFriendsPaged() {
     const currentPersona = useCurrentPersona()
-    return useInfiniteQuery(
-        ['friends', currentPersona],
-        async ({ pageParam }) => {
-            if (!cachedValues.current.length && currentPersona) {
-                const values = await Services.Identity.queryRelationPaged(
-                    currentPersona?.identifier,
-                    {
-                        network: 'all',
-                        pageOffset: 0,
-                    },
-                    3000,
-                )
-                if (values.length === 0) return EMPTY_LIST
-                cachedValues.current = values
-            }
+    const { data: records = EMPTY_LIST, isLoading } = useQuery(['relation-records', currentPersona], async () => {
+        return Services.Identity.queryRelationPaged(
+            currentPersona?.identifier,
+            {
+                network: 'all',
+                pageOffset: 0,
+            },
+            3000,
+        )
+    })
+    return useInfiniteQuery({
+        queryKey: ['friends', currentPersona],
+        enabled: !isLoading,
+        queryFn: async ({ pageParam }) => {
             const friends: Friend[] = []
-            const startIndex = pageParam ? 10 * Number(pageParam) : 0
-            for (let i = startIndex; i < cachedValues.current.length; i += 1) {
+            const startIndex = pageParam ? Number(pageParam) : 0
+            let nextPageOffset = 0
+            for (let i = startIndex; i < records.length; i += 1) {
+                nextPageOffset = i
                 if (friends.length === 10) break
-                const x = cachedValues.current[i]
+                const x = records[i]
                 if (isProfileIdentifier(x.profile)) {
                     const res = first(await Services.Identity.queryProfilesInformation([x.profile]))
                     if (res?.linkedPersona !== undefined && res?.linkedPersona !== currentPersona?.identifier)
@@ -128,10 +126,11 @@ export function useFriendsPaged(): UseInfiniteQueryResult<FriendsInformation[]> 
                     id: friends[index].persona.publicKeyAsHex,
                 }
             })
-            return uniqBy(profiles, ({ id }) => id)
+            return { friends: uniqBy(profiles, ({ id }) => id), nextPageOffset }
         },
-        {
-            getNextPageParam: (_, allPages) => allPages.length,
+        getNextPageParam: ({ nextPageOffset }, allPages) => {
+            if (nextPageOffset >= records.length) return
+            return nextPageOffset
         },
-    )
+    })
 }

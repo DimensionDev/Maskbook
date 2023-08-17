@@ -1,7 +1,7 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
 import { makeStyles, LoadingBase } from '@masknet/theme'
-import { memo, type RefObject } from 'react'
+import { memo } from 'react'
 import { type FriendsInformation } from '../../../hook/useFriends.js'
 import { Box, Typography } from '@mui/material'
 import { Search } from '../Search/index.js'
@@ -42,7 +42,7 @@ export interface FriendsHomeUIProps {
     loading: boolean
     friends: FriendsInformation[]
     setSearchValue: (v: string) => void
-    listRef: RefObject<HTMLElement>
+    fetchNextPage: () => void
 }
 
 export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
@@ -51,7 +51,7 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
     setSearchValue,
     searchResult,
     searchValue,
-    listRef,
+    fetchNextPage,
 }) {
     const { classes, cx } = useStyles()
     const { t } = useI18N()
@@ -68,7 +68,9 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
             ) : searchValue ? (
                 <SearchList searchResult={searchResult} />
             ) : (
-                <Contacts friends={friends} listRef={listRef} />
+                <>
+                    <Contacts friends={friends} fetchNextPage={fetchNextPage} />
+                </>
             )}
         </div>
     )
