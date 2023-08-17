@@ -46,7 +46,7 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
             const fromState =
                 route !== PopupRoutes.ContractInteraction ? { from: PopupRoutes.ContractInteraction } : EMPTY_OBJECT
 
-            if (Sniffings.is_popup_page) {
+            if (Sniffings.is_popup_page && !location.hash.includes('/swap')) {
                 PopupsHistory.push(urlcat(route, fromState))
             } else {
                 // open the popups window and wait for approvement from the user.
