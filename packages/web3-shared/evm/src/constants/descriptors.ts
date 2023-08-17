@@ -412,7 +412,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         icon: new URL('../assets/coinbase.png', import.meta.url).href,
         enableRequirements: {
             supportedChainIds: [ChainId.Mainnet, ChainId.Arbitrum, ChainId.Avalanche, ChainId.Optimism, ChainId.Matic],
-            supportedEnhanceableSites: EnhanceableSiteList,
+            supportedEnhanceableSites: [],
             supportedExtensionSites: [],
         },
         homeLink: 'https://www.coinbase.com/wallet',
@@ -427,7 +427,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         icon: new URL('../assets/okx.png', import.meta.url).href,
         enableRequirements: {
             supportedChainIds: [ChainId.Mainnet, ChainId.Arbitrum, ChainId.Avalanche, ChainId.Optimism, ChainId.Matic],
-            supportedEnhanceableSites: EnhanceableSiteList,
+            supportedEnhanceableSites: [],
             supportedExtensionSites: [],
         },
         homeLink: 'https://www.okx.com/web3',
