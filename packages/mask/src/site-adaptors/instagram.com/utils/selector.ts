@@ -13,7 +13,7 @@ const querySelectorAll = <T extends E>(selector: string) => {
 export const searchProfileTabListLastChildSelector = () =>
     querySelector<E>('section main  div[role="tablist"] > :last-child')
 
-export const searchProfileTabPageSelector = () => querySelector('section main[role="main"] > div > :nth-child(2)')
+export const searchProfileTabPageSelector = () => querySelector('section main[role="main"] > div > :last-child')
 
 export const searchProfileTabSelector = () =>
     querySelector<E>('section main div[role="tablist"]  a[aria-selected="false"]')
