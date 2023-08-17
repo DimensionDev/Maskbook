@@ -26,7 +26,7 @@ import { Icons } from '@masknet/icons'
 import { useUpdateEffect } from '@react-hookz/web'
 import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
 import urlcat from 'urlcat'
-import { compact, mapKeys, omit } from 'lodash-es'
+import { compact, mapValues, omit } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     left: {
@@ -193,11 +193,12 @@ const Interaction = memo(function Interaction() {
                         return {
                             ...x,
                             ...(gasConfig
-                                ? mapKeys(omit(gasConfig, 'gasOptionType'), (value, key) => {
+                                ? mapValues(omit(gasConfig, 'gasOptionType'), (value, key) => {
                                       if (key === 'gasCurrency' || !value) return
                                       return toHex(value)
                                   })
                                 : {}),
+
                             chainId: toHex(x.chainId),
                             nonce: toHex(x.nonce),
                         }

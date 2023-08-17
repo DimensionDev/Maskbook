@@ -9,6 +9,7 @@
     "gas_fee": "Gas Fee",
     "token_insufficient_balance": "Insufficient balance",
     "manage_wallet": "Manage wallet",
+    "failed_to_transfer_nft": "Network error or execute smart contract failed.",
     "save": "Save",
     "save_successfully": "Save successfully",
     "save_failed": "Save failed",

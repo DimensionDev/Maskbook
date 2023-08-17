@@ -15,7 +15,7 @@ export function useWallet<T extends NetworkPluginID>(
     providerType?: Web3Helper.Definition[T]['ProviderType'],
 ) {
     const { account } = useChainContext()
-    const wallets = useWallets(pluginID, providerType)
+    const wallets = useWallets()
 
     return useMemo(() => {
         return account ? wallets.find((x) => isSameAddress?.(x.address, account)) ?? null : null

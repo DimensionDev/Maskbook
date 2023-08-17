@@ -88,7 +88,7 @@ export class Popups implements Middleware<ConnectionContext> {
             const availableBalanceTooLow =
                 isGreaterThan(maskGasFee, maskAllowance) || isGreaterThan(maskGasFee, maskBalance)
 
-            const isNative = isNativeTokenAddress(context.paymentToken)
+            const isNative = !context.paymentToken || isNativeTokenAddress(context.paymentToken)
 
             return {
                 allowMaskAsGas: !availableBalanceTooLow,

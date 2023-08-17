@@ -1,8 +1,8 @@
-import { memo, useCallback, useMemo, useContext, useEffect } from 'react'
+import { memo, useCallback, useContext, useEffect } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { Box, Link, List, ListItem, MenuItem, Typography, useTheme, type ListItemProps } from '@mui/material'
-import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { type NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useWallets } from '@masknet/web3-hooks-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -147,7 +147,7 @@ const ContactListUI = memo(function ContactListUI() {
         | undefined
     const isManage = state?.type === 'manage'
     const { classes } = useStyles({ isManage })
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const wallets = useWallets()
     const { userInput, address, contacts, inputValidationMessage } = ContactsContext.useContainer()
     const [params] = useSearchParams()
 
@@ -277,22 +277,18 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
         })
     }, [address, name, t])
 
-    const menuOptions = useMemo(() => {
-        const options = [
-            {
-                name: t('edit'),
-                icon: <Icons.Edit2 size={20} color={theme.palette.maskColor.second} />,
-                handler: editContact,
-            },
-        ]
-        if (contactType === ContactType.Recipient)
-            options.push({
-                name: t('delete'),
-                icon: <Icons.Decrease size={20} color={theme.palette.maskColor.second} />,
-                handler: deleteContact,
-            })
-        return options
-    }, [t, contactType, address, name])
+    const menuOptions = [
+        {
+            name: t('edit'),
+            icon: <Icons.Edit2 size={20} color={theme.palette.maskColor.second} />,
+            handler: editContact,
+        },
+        {
+            name: t('delete'),
+            icon: <Icons.Decrease size={20} color={theme.palette.maskColor.second} />,
+            handler: deleteContact,
+        },
+    ]
 
     const [menu, openMenu, _, isOpenMenu] = useMenuConfig(
         menuOptions.map((option, index) => (
@@ -336,14 +332,16 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
                     </Typography>
                 </div>
             </div>
-            <Icons.More
-                size={24}
-                className={classes.iconMore}
-                onClick={(event) => {
-                    event.stopPropagation()
-                    openMenu(event)
-                }}
-            />
+            {contactType === ContactType.Recipient ? (
+                <Icons.More
+                    size={24}
+                    className={classes.iconMore}
+                    onClick={(event) => {
+                        event.stopPropagation()
+                        openMenu(event)
+                    }}
+                />
+            ) : null}
             {menu}
         </ListItem>
     )

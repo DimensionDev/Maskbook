@@ -138,6 +138,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const {
         balance,
         isLoading: isLoadingAvailableBalance,
+        isAvailableBalance,
         isGasSufficient,
         gasFee,
     } = useAvailableBalance(NetworkPluginID.PLUGIN_EVM, address, patchedGasConfig as GasConfig, {
@@ -225,7 +226,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                         {token?.symbol}
                     </ProgressiveText>
                     <ProgressiveText loading={isLoadingBalance} skeletonWidth={60}>
-                        {isNativeToken
+                        {isAvailableBalance
                             ? t('available_amount', {
                                   amount: formatTokenBalance(tokenBalance, token?.decimals),
                               })

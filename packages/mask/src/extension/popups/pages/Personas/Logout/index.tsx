@@ -9,13 +9,7 @@ import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme
 import { PersonaContext } from '@masknet/shared'
 import { Box, Button, Link, Typography, useTheme } from '@mui/material'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import {
-    PopupRoutes,
-    type PersonaInformation,
-    NetworkPluginID,
-    type Wallet,
-    PopupModalRoutes,
-} from '@masknet/shared-base'
+import { PopupRoutes, type PersonaInformation, type Wallet, PopupModalRoutes } from '@masknet/shared-base'
 import { useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { ExplorerResolver, Providers, Web3 } from '@masknet/web3-providers'
 import { type ChainId, ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -59,7 +53,7 @@ const Logout = memo(() => {
     const { currentPersona } = PersonaContext.useContainer()
     const navigate = useNavigate()
     const wallet = useWallet()
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const wallets = useWallets()
     const { Provider } = useWeb3State()
     const { smartPayChainId } = useContainer(PopupContext)
     const { hasPassword, loading: hasPasswordLoading } = useHasPassword()
@@ -188,6 +182,69 @@ export const LogoutUI = memo<LogoutUIProps>(
             password,
         ])
 
+        const passwordField = useMemo(() => {
+            if (manageWallets.length) {
+                if (hasPassword) {
+                    return (
+                        <PasswordField
+                            placeholder={t('popups_wallet_logout_input_payment_password')}
+                            value={paymentPassword}
+                            error={!!paymentPasswordError}
+                            helperText={paymentPasswordError}
+                            onChange={(e) => {
+                                if (paymentPasswordError) setPaymentPasswordError('')
+                                setPaymentPassword(e.target.value)
+                            }}
+                            onClear={() => {
+                                setPaymentPassword('')
+                                setPaymentPasswordError('')
+                            }}
+                        />
+                    )
+                } else if (backupPassword) {
+                    return (
+                        <PasswordField
+                            placeholder={t('popups_wallet_backup_input_password')}
+                            value={password}
+                            onChange={(e) => {
+                                if (error) setError(false)
+                                setPassword(e.target.value)
+                            }}
+                            error={error}
+                            onClear={() => {
+                                setPassword('')
+                                setError(false)
+                            }}
+                            helperText={error ? t('popups_password_do_not_match') : ''}
+                        />
+                    )
+                }
+
+                return
+            }
+
+            if (backupPassword) {
+                return (
+                    <PasswordField
+                        placeholder={t('popups_wallet_backup_input_password')}
+                        value={password}
+                        onChange={(e) => {
+                            if (error) setError(false)
+                            setPassword(e.target.value)
+                        }}
+                        error={error}
+                        onClear={() => {
+                            setPassword('')
+                            setError(false)
+                        }}
+                        helperText={error ? t('popups_password_do_not_match') : ''}
+                    />
+                )
+            }
+
+            return
+        }, [manageWallets, hasPassword, paymentPassword, paymentPasswordError, backupPassword, password, error, t])
+
         return (
             <Box flex={1} maxHeight="544px" overflow="auto" data-hide-scrollbar>
                 <Box p={2} pb={11}>
@@ -254,39 +311,7 @@ export const LogoutUI = memo<LogoutUIProps>(
                             </Typography>
                         ) : null}
                     </Typography>
-                    {backupPassword ? (
-                        manageWallets.length && hasPassword ? (
-                            <PasswordField
-                                placeholder={t('popups_wallet_backup_input_password')}
-                                value={paymentPassword}
-                                error={!!paymentPasswordError}
-                                helperText={paymentPasswordError}
-                                onChange={(e) => {
-                                    if (paymentPasswordError) setPaymentPasswordError('')
-                                    setPaymentPassword(e.target.value)
-                                }}
-                                onClear={() => {
-                                    setPaymentPassword('')
-                                    setPaymentPasswordError('')
-                                }}
-                            />
-                        ) : (
-                            <PasswordField
-                                placeholder={t('popups_backup_password')}
-                                value={password}
-                                onChange={(e) => {
-                                    if (error) setError(false)
-                                    setPassword(e.target.value)
-                                }}
-                                error={error}
-                                onClear={() => {
-                                    setPassword('')
-                                    setError(false)
-                                }}
-                                helperText={error ? t('popups_password_do_not_match') : ''}
-                            />
-                        )
-                    ) : null}
+                    {passwordField}
                 </Box>
                 <BottomController>
                     <Button variant="outlined" fullWidth onClick={onCancel}>
