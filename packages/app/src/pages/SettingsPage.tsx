@@ -31,7 +31,9 @@ const SetupThemeMode = memo(() => {
 
     return (
         <div className="flex w-full sm:p-6 justify-center sm:items-center">
-            <Typography className="w-full text-black dark:text-white text-base">Appearance</Typography>
+            <Typography className="w-full text-black dark:text-white text-base flex items-center px-3">
+                Appearance
+            </Typography>
             <DropdownMenu
                 activeItemId={mode}
                 items={[
