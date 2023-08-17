@@ -51,6 +51,7 @@ export const DEBANK_CHAIN_TO_CHAIN_ID_MAP: Record<DebankChains, ChainId | number
     tlos: ChainId.Telos,
     wan: ChainId.Wanchain,
     xdai: ChainId.xDai,
+    base: ChainId.Base,
 }
 
 /**
@@ -89,6 +90,7 @@ export const CHIAN_ID_TO_DEBANK_CHAIN_MAP: Record<number, DebankChains> = {
     4689: 'iotx',
     7700: 'canto',
     8217: 'klay',
+    8453: 'base',
     9001: 'evmos',
     10000: 'sbch',
     32520: 'brise',

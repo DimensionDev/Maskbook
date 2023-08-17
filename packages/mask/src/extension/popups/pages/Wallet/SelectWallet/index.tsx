@@ -60,7 +60,7 @@ const SelectWallet = memo(function SelectWallet() {
 
     const { value: localWallets = [] } = useAsync(async () => Services.Wallet.getWallets(), [])
 
-    const allWallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const allWallets = useWallets()
 
     const wallets = useMemo(() => {
         if (!allWallets.length && localWallets.length) return localWallets

@@ -7,6 +7,7 @@ export enum DebankTransactionDirection {
  * Collect from https://docs.cloud.debank.com/en/readme/api-pro-reference/chain#returns-1
  */
 export type DebankChains =
+    | 'base'
     | 'eth'
     | 'arb'
     | 'astar'

@@ -30,6 +30,7 @@
     "available_balance": "crwdns19861:0crwdne19861:0",
     "available_amount": "crwdns21907:0{{- amount}}crwdne21907:0",
     "failed_to_transfer_token": "crwdns22155:0{{- message}}crwdne22155:0",
+    "failed_to_transfer_nft": "crwdns22165:0crwdne22165:0",
     "operation": "crwdns10075:0crwdne10075:0",
     "gas_limit": "crwdns10077:0crwdne10077:0",
     "gas_price": "crwdns10079:0crwdne10079:0",

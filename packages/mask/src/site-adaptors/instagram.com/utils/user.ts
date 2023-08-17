@@ -13,6 +13,7 @@ export function getBioDescription() {
 
 export const getPersonalHomepage = () => {
     const node = searchInstagramHandleSelector().evaluate()
+
     if (!node) return
     return node.href
 }
@@ -25,8 +26,7 @@ export const getNickname = () => {
 export const getUserId = () => {
     const node = searchInstagramHandleSelector().evaluate()
     if (!node) return
-    const userId = new URL(node.href).pathname.replaceAll('/', '')
-    return userId
+    return collectNodeText(node) ?? ''
 }
 
 export const getAvatar = () => {
