@@ -259,7 +259,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
                 <Box className={classes.field}>
                     <Typography className={classes.fieldName}>{t('transaction_to')}</Typography>
                     <ProgressiveText className={classes.fieldValue} component="div" loading={loadingToAddress}>
-                        <ReversedAddress address={(receiverAddress || transaction.to || tx?.to_address) as string} />
+                        <ReversedAddress address={(transaction.to || tx?.to_address) as string} />
                     </ProgressiveText>
                 </Box>
                 <Typography variant="h2" className={classes.sectionName}>

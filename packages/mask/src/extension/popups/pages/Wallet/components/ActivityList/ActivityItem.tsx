@@ -1,17 +1,22 @@
-import { memo, useMemo } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import { Icons } from '@masknet/icons'
-import { ImageIcon, NetworkIcon, ProgressiveText } from '@masknet/shared'
+import { ImageIcon, NetworkIcon, ProgressiveText, ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useEverSeen } from '@masknet/shared-base-ui'
 import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
-import { useNativeToken, useNetwork, useNetworkDescriptors, useReverseAddress } from '@masknet/web3-hooks-base'
+import {
+    useAccount,
+    useNativeToken,
+    useNetwork,
+    useNetworkDescriptors,
+    useReverseAddress,
+} from '@masknet/web3-hooks-base'
 import { ChainbaseHistory, Web3 } from '@masknet/web3-providers'
 import { chainbase } from '@masknet/web3-providers/helpers'
 import { DebankTransactionDirection } from '@masknet/web3-providers/types'
 import {
     TransactionStatusType,
     isLessThan,
+    isSameAddress,
     toFixed,
     trimZero,
     type RecentTransaction,
@@ -25,6 +30,9 @@ import {
     type SchemaType,
 } from '@masknet/web3-shared-evm'
 import { Box, ListItem, ListItemText, Skeleton, Typography, alpha, type ListItemProps } from '@mui/material'
+import { useQuery } from '@tanstack/react-query'
+import { memo, useMemo } from 'react'
+import { Trans } from 'react-i18next'
 import { formatTokenBalance, useI18N } from '../../../../../../utils/index.js'
 import { parseReceiverFromERC20TransferInput } from '../../utils.js'
 
@@ -211,10 +219,12 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
 
     const receiverAddress = parseReceiverFromERC20TransferInput(tx?.input ?? txInput)
     const status = transaction.status || (tx ? chainbase.normalizeTxStatus(tx.status) : undefined)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const fromAddress = (transaction.from || tx?.from_address) as string
     const toAddress = (receiverAddress || transaction.to || tx?.to_address) as string
     const loadingToAddress =
         transaction.type === 'transfer' ? !receiverAddress && (loadingTx || loadingTxInput) : !toAddress && loadingTx
-    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, toAddress)
+    const isReceive = isSameAddress(toAddress, account) || !isSameAddress(fromAddress, account)
 
     return (
         <ListItem
@@ -230,15 +240,28 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                 secondaryTypographyProps={{ component: 'div' }}
                 style={{ marginLeft: 15 }}
                 secondary={
-                    <ProgressiveText className={classes.toAddress} loading={loadingToAddress} skeletonWidth={100}>
+                    <ProgressiveText
+                        className={classes.toAddress}
+                        loading={loadingToAddress}
+                        skeletonWidth={100}
+                        component="div">
                         {status === TransactionStatusType.FAILED ? (
                             <Typography className={classes.failedLabel} component="span">
                                 {t('failed')}
                             </Typography>
                         ) : null}
-                        {t('to_address', {
-                            address: domain ? formatDomainName(domain) : formatEthereumAddress(toAddress, 4),
-                        })}
+                        <Trans
+                            i18nKey="other_address"
+                            context={isReceive ? 'from' : 'to'}
+                            value={{
+                                address: isReceive ? fromAddress : toAddress,
+                            }}
+                            components={{
+                                addr: (
+                                    <ReversedAddress address={isReceive ? fromAddress : toAddress} component="span" />
+                                ),
+                            }}
+                        />
                     </ProgressiveText>
                 }>
                 <Typography className={classes.txName}>
@@ -248,11 +271,11 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
             </ListItemText>
             <div className={classes.assets}>
                 {transaction.assets.map((token, i) => {
-                    const isRend = token.direction === DebankTransactionDirection.SEND
+                    const isSend = token.direction === DebankTransactionDirection.SEND
                     const amount = isLessThan(token.amount, '0.0001') ? '<0.0001' : trimZero(toFixed(token.amount, 4))
                     return (
                         <Typography key={i} className={classes.asset}>
-                            <strong className={classes.amount}>{`${isRend ? '-' : '+'} ${amount} `}</strong>
+                            <strong className={classes.amount}>{`${isSend ? '-' : '+'} ${amount} `}</strong>
                             <TextOverflowTooltip title={token.symbol}>
                                 <span className={classes.symbol}>{token.symbol}</span>
                             </TextOverflowTooltip>
