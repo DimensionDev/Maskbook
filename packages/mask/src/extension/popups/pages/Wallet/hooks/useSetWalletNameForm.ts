@@ -15,8 +15,8 @@ export function useSetWalletNameForm(defaultName?: string) {
         return zod.object({
             name: zod
                 .string()
-                .min(1)
-                .max(12)
+                .min(3, t('popups_wallet_settings_rename_tips'))
+                .max(18, t('popups_wallet_settings_rename_tips'))
                 .refine((name) => {
                     return name.trim().length !== 0
                 }, t('wallet_name_length_error'))

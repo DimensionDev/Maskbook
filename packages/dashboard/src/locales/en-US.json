@@ -473,7 +473,7 @@
     "identity_words": "Identity Words",
     "private_key": "Private Key",
     "local_backup": "Local Backup",
-    "incorrect_verification_code": "Incorrect verification code.",
+    "incorrect_verification_code": "Invalid verification code.",
     "wallet_set_payment_password_successfully": "Set payment password successfully.",
     "wallet_open_mask_wallet": "Open Mask Wallet"
 }
