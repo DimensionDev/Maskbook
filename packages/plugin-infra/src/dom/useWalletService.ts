@@ -35,6 +35,7 @@ export interface WalletBackupProvider {
     createWalletFromMnemonicWords(name: string, mnemonic: string, derivationPath?: string): Promise<string>
     recoverWalletFromPrivateKey(name: string, privateKey: string): Promise<string>
     recoverWalletFromKeyStoreJSON(name: string, json: string, jsonPassword: string): Promise<string>
+    renameWallet(address: string, name: string): Promise<void>
     recoverWalletFromMnemonicWords(name: string, mnemonic: string, derivationPath?: string): Promise<string>
     resolveMaskAccount(accounts: MaskAccount[]): Promise<void>
     generateAddressFromMnemonicWords(
