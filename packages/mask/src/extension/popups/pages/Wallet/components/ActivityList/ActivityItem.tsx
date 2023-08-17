@@ -283,7 +283,8 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
     const { classes, cx } = useStyles({})
     // candidate is current transaction
     const candidate = transaction.candidates[transaction.indexId]
-    const toAddress = candidate.to
+    const receiverAddress = parseReceiverFromERC20TransferInput(candidate.data)
+    const toAddress = receiverAddress || candidate.to
     const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, toAddress)
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId: transaction.chainId })
     const network = useNetwork(NetworkPluginID.PLUGIN_EVM, transaction.chainId)
