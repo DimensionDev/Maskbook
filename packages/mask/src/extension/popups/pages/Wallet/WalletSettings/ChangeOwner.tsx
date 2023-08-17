@@ -1,14 +1,14 @@
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Icons } from '@masknet/icons'
-import { useContainer } from 'unstated-next'
 import { Box, ListItem, Typography, useTheme } from '@mui/material'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
-import { WalletContext } from '../hooks/useWalletContext.js'
 import { useStyles } from './useStyles.js'
+import { useQuery } from '@tanstack/react-query'
+import Services from '../../../../service.js'
 
 export function ChangeOwner() {
     const { t } = useI18N()
@@ -18,7 +18,9 @@ export function ChangeOwner() {
     const wallet = useWallet()
     const wallets = useWallets()
 
-    const { personaManagers } = useContainer(WalletContext)
+    const { data: personaManagers } = useQuery(['persona-managers'], async () => {
+        return Services.Identity.queryOwnedPersonaInformation(true)
+    })
 
     const walletManager = useMemo(
         () => wallets.find((x) => !x.owner && isSameAddress(wallet?.owner, x.address)),
