@@ -37,6 +37,7 @@ const SimpleHashSupportedChains: Record<NetworkPluginID, number[]> = {
     [NetworkPluginID.PLUGIN_EVM]: [
         ChainId.Mainnet,
         ChainId.BSC,
+        ChainId.Base,
         ChainId.Matic,
         ChainId.Arbitrum,
         ChainId.Optimism,
