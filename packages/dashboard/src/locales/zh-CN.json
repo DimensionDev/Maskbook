@@ -275,6 +275,7 @@
     "settings_backup_preview_contacts": "联系人",
     "settings_backup_preview_file": "文件",
     "settings_backup_preview_wallets": "Mask钱包",
+    "settings_backup_preview_set_payment_password": "您需要先设置密码才能启用钱包功能完成备份。 <settings> 转到设置 </settings>",
     "settings_backup_preview_created_at": "备份时间",
     "settings_language_title": "语言",
     "settings_language_desc": "选择您要使用的语言",
