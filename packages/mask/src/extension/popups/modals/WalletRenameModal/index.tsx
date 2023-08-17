@@ -25,7 +25,7 @@ function WalletRenameDrawer({ wallet, ...rest }: WalletRenameDrawerProps) {
     const [{ loading }, handleClick] = useAsyncFn(async () => {
         if (!name || !wallet) return
         const _name = name.trim()
-        if (_name.length > 20 || _name.length < 3) {
+        if (_name.length > 18 || _name.length < 3) {
             setError(t('popups_wallet_settings_rename_tips'))
             return
         }
