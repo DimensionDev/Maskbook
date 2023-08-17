@@ -352,6 +352,10 @@ export function TrendingView(props: TrendingViewProps) {
                     backgroundColor:
                         isTokenTagPopper || isCollectionProjectPopper ? theme.palette.maskColor.bottom : 'transparent',
                     flexGrow: 1,
+                    overflow: 'auto',
+                    '&::-webkit-scrollbar': {
+                        display: 'none',
+                    },
                 }}>
                 {currentTab === ContentTabs.Market && trending.dataProvider ? (
                     <CoinMarketPanel trending={trending} result={result} />
