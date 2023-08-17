@@ -13,7 +13,6 @@ WalletServiceRef.value = {
     hasPassword: Services.Wallet.hasPassword,
     hasPasswordWithDefaultOne: Services.Wallet.hasPasswordWithDefaultOne,
     recoverWalletFromKeyStoreJSON: Services.Wallet.recoverWalletFromKeyStoreJSON,
-    renameWallet: Services.Wallet.renameWallet,
     recoverWalletFromMnemonicWords: Services.Wallet.recoverWalletFromMnemonicWords,
     recoverWalletFromPrivateKey: Services.Wallet.recoverWalletFromPrivateKey,
     resetPassword: Services.Wallet.resetPassword,
