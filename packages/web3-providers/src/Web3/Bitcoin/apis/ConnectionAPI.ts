@@ -27,13 +27,12 @@ import {
 import { EMPTY_OBJECT, type Account } from '@masknet/shared-base'
 import { PublicKey, sendAndConfirmRawTransaction, type BlockResponse } from '@solana/web3.js'
 import type { ConnectionAPI_Base } from '../../Base/apis/ConnectionAPI.js'
-import { MagicEdenAPI } from '../../../MagicEden/index.js'
 import { BitcoinWeb3API } from './Web3API.js'
 import { BitcoinWeb3StateRef } from './Web3StateAPI.js'
 import { BitcoinConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
-import { BitcoinFungibleTokenListAPI } from './FungibleTokenListAPI.js'
 import type { ConnectionOptions } from '../types/index.js'
-import { ChainResolverAPI } from './ResolverAPI.js'
+import { BitcoinChainResolverAPI } from './ResolverAPI.js'
+import { BitcoinFungibleTokenAPI } from './FungibleTokenAPI.js'
 
 export class BitcoinConnectionAPI
     implements
@@ -55,9 +54,8 @@ export class BitcoinConnectionAPI
 {
     constructor(private options?: ConnectionOptions) {}
 
-    private MagicEden = new MagicEdenAPI()
-    private FungibleTokenList = new BitcoinFungibleTokenListAPI()
     private Web3 = new BitcoinWeb3API(this.options)
+    private FungibleToken = new BitcoinFungibleTokenAPI()
     private ConnectionOptions = new BitcoinConnectionOptionsAPI(this.options)
 
     getAccount(initial?: ConnectionOptions | undefined): Promise<string> {
@@ -271,7 +269,7 @@ export class BitcoinConnectionAPI
 
     async getNativeToken(initial?: ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
-        const token = new ChainResolverAPI().nativeCurrency(options.chainId)
+        const token = new BitcoinChainResolverAPI().nativeCurrency(options.chainId)
         if (!token) throw new Error('Failed to create native token.')
         return token
     }

@@ -20,13 +20,18 @@ import {
 } from '@masknet/web3-shared-bitcoin'
 import { createFungibleToken, createNonFungibleToken } from '@masknet/web3-shared-base'
 import { OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
-import { ChainResolverAPI, ExplorerResolverAPI, ProviderResolverAPI, NetworkResolverAPI } from './ResolverAPI.js'
+import {
+    BitcoinChainResolverAPI,
+    BitcoinExplorerResolverAPI,
+    BitcoinProviderResolverAPI,
+    BitcoinNetworkResolverAPI,
+} from './ResolverAPI.js'
 
 export class BitcoinOthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
-    override chainResolver = new ChainResolverAPI()
-    override explorerResolver = new ExplorerResolverAPI()
-    override providerResolver = new ProviderResolverAPI()
-    override networkResolver = new NetworkResolverAPI()
+    override chainResolver = new BitcoinChainResolverAPI()
+    override explorerResolver = new BitcoinExplorerResolverAPI()
+    override providerResolver = new BitcoinProviderResolverAPI()
+    override networkResolver = new BitcoinNetworkResolverAPI()
 
     override isValidDomain = () => false
     override isValidChainId = isValidChainId
@@ -51,7 +56,7 @@ export class BitcoinOthersAPI extends OthersAPI_Base<ChainId, SchemaType, Provid
     override formatDomainName = formatDomainName
     override formatTokenId = () => ''
     override formatSchemaType = formatSchemaType
-    override createNativeToken = (chainId: ChainId) => new ChainResolverAPI().nativeCurrency(chainId)
+    override createNativeToken = (chainId: ChainId) => new BitcoinChainResolverAPI().nativeCurrency(chainId)
     override createFungibleToken = createFungibleToken
     override createNonFungibleToken = createNonFungibleToken
 }

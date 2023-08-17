@@ -15,7 +15,7 @@ import {
     getDefaultNetworkType,
 } from '@masknet/web3-shared-bitcoin'
 import { BitcoinProviders } from '@masknet/web3-providers'
-import { ChainResolverAPI } from '../apis/ResolverAPI.js'
+import { BitcoinChainResolverAPI } from '../apis/ResolverAPI.js'
 import { ProviderState } from '../../Base/state/Provider.js'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
@@ -30,7 +30,7 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             getDefaultProviderType,
             getDefaultNetworkType,
             getNetworkTypeFromChainId: (chainId: ChainId) =>
-                new ChainResolverAPI().networkType(chainId) ?? NetworkType.Mainnet,
+                new BitcoinChainResolverAPI().networkType(chainId) ?? NetworkType.Mainnet,
         })
     }
 }

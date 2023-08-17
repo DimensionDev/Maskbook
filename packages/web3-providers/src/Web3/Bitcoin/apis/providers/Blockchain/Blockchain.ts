@@ -1,4 +1,4 @@
-import type { BlockchainBaseAPI } from '../types/Blockchain.js'
+import type { BlockchainBaseAPI } from '../../../../../entry-types.js'
 
 /**
  * Learn more: https://www.blockchain.com/explorer/api/blockchain_api
