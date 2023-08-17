@@ -9,9 +9,9 @@ export function useWallets() {
     return wallets.sort((a, b) => {
         if (a.owner && !b.owner) return 1
         if (a.createdAt.getTime() - b.createdAt.getTime() > 10000) {
-            return -1
-        } else if (b.createdAt.getTime() - a.createdAt.getTime() > 10000) {
             return 1
+        } else if (b.createdAt.getTime() - a.createdAt.getTime() > 10000) {
+            return -1
         }
         const numA = a.name.split('Wallet ')[1]
         const numB = b.name.split('Wallet ')[1]
