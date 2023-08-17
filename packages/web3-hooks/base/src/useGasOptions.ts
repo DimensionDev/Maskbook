@@ -12,6 +12,6 @@ export function useGasOptions<T extends NetworkPluginID = NetworkPluginID>(plugi
 
     return useQuery(['get-gas-options', pluginID, chainId, options], async () => {
         if (!Others.isValidChainId(chainId)) return
-        return Hub.getGasOptions(chainId)
+        return Hub.getGasOptions(chainId, options)
     })
 }
