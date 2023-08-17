@@ -1,8 +1,8 @@
 import { uniqWith } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import { delay } from '@masknet/kit'
-import { WalletServiceRef } from '@masknet/plugin-infra/content-script'
-import type { Plugin } from '@masknet/plugin-infra/content-script'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
+import type { Plugin } from '@masknet/plugin-infra'
 import {
     EMPTY_LIST,
     PersistentStorages,
