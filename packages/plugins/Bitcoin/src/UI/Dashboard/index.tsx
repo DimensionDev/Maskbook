@@ -26,7 +26,7 @@ const dashboard: Plugin.Dashboard.Definition<
     async init(signal, context) {
         SharedPluginContext.setup(context)
 
-        // const state = await BitcoinWeb3State.create(context)
+        const state = await BitcoinWeb3State.create(context)
 
         // BitcoinWeb3State.setup(state)
         // dashboard.BitcoinWeb3State = state

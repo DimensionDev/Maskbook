@@ -13,7 +13,7 @@ import { ExplorerResolverAPI_Base } from '../../Base/apis/ExplorerResolverAPI.js
 import { ProviderResolverAPI_Base } from '../../Base/apis/ProviderResolverAPI.js'
 import { NetworkResolverAPI_Base } from '../../Base/apis/NetworkExplorerAPI.js'
 
-export class ChainResolverAPI extends ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
+export class BitcoinChainResolverAPI extends ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
     constructor() {
         super(() => {
             if (!BitcoinWeb3StateRef.value?.Network?.networks) return CHAIN_DESCRIPTORS
@@ -22,7 +22,7 @@ export class ChainResolverAPI extends ChainResolverAPI_Base<ChainId, SchemaType,
     }
 }
 
-export class ExplorerResolverAPI extends ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
+export class BitcoinExplorerResolverAPI extends ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
     constructor() {
         super(() => {
             if (!BitcoinWeb3StateRef.value?.Network?.networks) return CHAIN_DESCRIPTORS
@@ -31,13 +31,13 @@ export class ExplorerResolverAPI extends ExplorerResolverAPI_Base<ChainId, Schem
     }
 }
 
-export class ProviderResolverAPI extends ProviderResolverAPI_Base<ChainId, ProviderType> {
+export class BitcoinProviderResolverAPI extends ProviderResolverAPI_Base<ChainId, ProviderType> {
     constructor() {
         super(() => PROVIDER_DESCRIPTORS)
     }
 }
 
-export class NetworkResolverAPI extends NetworkResolverAPI_Base<ChainId, NetworkType> {
+export class BitcoinNetworkResolverAPI extends NetworkResolverAPI_Base<ChainId, NetworkType> {
     constructor() {
         super(() => NETWORK_DESCRIPTORS)
     }

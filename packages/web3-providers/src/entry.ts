@@ -101,6 +101,14 @@ import {
     SolanaProviderResolverAPI,
     SolanaNetworkResolverAPI,
 } from './Web3/Solana/apis/ResolverAPI.js'
+import {
+    BitcoinChainResolverAPI,
+    BitcoinExplorerResolverAPI,
+    BitcoinProviderResolverAPI,
+    BitcoinNetworkResolverAPI,
+} from './Web3/Bitcoin/apis/ResolverAPI.js'
+import { BitcoinWeb3StateAPI } from './Web3/Bitcoin/apis/Web3StateAPI.js'
+import { BitcoinFungibleTokenAPI } from './Web3/Bitcoin/apis/FungibleTokenAPI.js'
 
 export { UniSwapV2Like } from './Trader/UniSwapV2.js'
 export { UniSwapV3Like } from './Trader/UniSwapV3.js'
@@ -201,6 +209,16 @@ export const SolanaWeb3State = new SolanaWeb3StateAPI()
 export const SolanaWeb3 = Web3All.use(NetworkPluginID.PLUGIN_SOLANA)!
 export const SolanaHub = HubAll.use(NetworkPluginID.PLUGIN_SOLANA)!
 export const SolanaOthers = OthersAll.use(NetworkPluginID.PLUGIN_SOLANA)!
+
+export const BitcoinChainResolver = new BitcoinChainResolverAPI()
+export const BitcoinExplorerResolver = new BitcoinExplorerResolverAPI()
+export const BitcoinProviderResolver = new BitcoinProviderResolverAPI()
+export const BitcoinNetworkResolver = new BitcoinNetworkResolverAPI()
+export const BitcoinFungible = new BitcoinFungibleTokenAPI()
+export const BitcoinWeb3State = new BitcoinWeb3StateAPI()
+export const BitcoinWeb3 = Web3All.use(NetworkPluginID.PLUGIN_BITCOIN)!
+export const BitcoinHub = HubAll.use(NetworkPluginID.PLUGIN_BITCOIN)!
+export const BitcoinOthers = OthersAll.use(NetworkPluginID.PLUGIN_BITCOIN)!
 
 // Etherscan
 export const EtherscanExplorer = new EtherscanExplorerAPI()
