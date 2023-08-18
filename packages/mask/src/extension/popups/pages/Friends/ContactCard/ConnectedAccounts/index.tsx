@@ -28,7 +28,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface ConnectedAccountsProps {
     avatar?: string
-    profiles: BindingProof[]
+    profiles?: BindingProof[]
     nextId?: string
     publicKey?: string
     isLocal?: boolean
@@ -53,10 +53,10 @@ export const ConnectedAccounts = memo<ConnectedAccountsProps>(function ({
             height="58px"
             className={classes.connectedAccounts}
             width="100%">
-            {profiles.slice(0, 2).map((profile, index) => {
+            {profiles?.slice(0, 2).map((profile, index) => {
                 return <AccountRender key={index} profile={profile} />
             })}
-            {profiles.length > 2 ? (
+            {profiles && profiles.length > 2 ? (
                 <ButtonBase
                     className={classes.more}
                     onClick={() => {
@@ -71,7 +71,7 @@ export const ConnectedAccounts = memo<ConnectedAccountsProps>(function ({
                         })
                     }}>
                     <Typography fontSize={12} fontWeight={400} lineHeight="16px" color={theme.palette.maskColor.main}>
-                        {`+${profiles.length - 2}`}
+                        {`+${profiles?.length - 2}`}
                     </Typography>
                 </ButtonBase>
             ) : null}

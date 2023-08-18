@@ -10,8 +10,9 @@ import { useFriendsFromSearch } from '../../../hook/useFriendsFromSearch.js'
 
 const FriendsHome = memo(function FriendsHome() {
     const { t } = useI18N()
-    const { data, fetchNextPage, hasNextPage, isLoading } = useFriendsPaged()
+    const { data, fetchNextPage, hasNextPage, isLoading, profilesArray } = useFriendsPaged()
     const value = useMemo(() => (data ? data.pages.flatMap((x) => x.friends) : EMPTY_LIST), [data])
+    const profiles = useMemo(() => (profilesArray ? profilesArray.pages.flat(1) : EMPTY_LIST), [profilesArray])
     const [searchValue, setSearchValue] = useState('')
     const type = resolveNextIDPlatform(searchValue)
     const { loading: resolveLoading, value: _value = '' } = useSearchValue(searchValue, type)
@@ -33,6 +34,7 @@ const FriendsHome = memo(function FriendsHome() {
             searchValue={searchValue}
             searchResult={searchedList}
             fetchNextPage={fetchMore}
+            profiles={profiles}
         />
     )
 })

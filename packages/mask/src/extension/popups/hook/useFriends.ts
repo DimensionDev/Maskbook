@@ -7,17 +7,18 @@ import {
 } from '@masknet/shared-base'
 import { useCurrentPersona } from '../../../components/DataSource/useCurrentPersona.js'
 import Services from '../../../extension/service.js'
-import { NextIDProof } from '@masknet/web3-providers'
-import { first, uniqBy } from 'lodash-es'
+import { first } from 'lodash-es'
 import { isProfileIdentifier } from '@masknet/shared'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { NextIDProof } from '@masknet/web3-providers'
+import { useEffect } from 'react'
 
 export type FriendsInformation = Friend & {
     profiles: BindingProof[]
     id: string
 }
 
-type Friend = {
+export type Friend = {
     persona: ECKeyIdentifier
     profile?: ProfileIdentifier
     avatar?: string
@@ -44,20 +45,23 @@ export const PlatformSort: Record<NextIDPlatform, number> = {
 
 export function useFriendsPaged() {
     const currentPersona = useCurrentPersona()
-    const { data: records = EMPTY_LIST, isLoading } = useQuery(['relation-records', currentPersona], async () => {
-        return Services.Identity.queryRelationPaged(
-            currentPersona?.identifier,
-            {
-                network: 'all',
-                pageOffset: 0,
-            },
-            3000,
-        )
-    })
-    return useInfiniteQuery({
+    const { data: records = EMPTY_LIST, isLoading: recordsLoading } = useQuery(
+        ['relation-records', currentPersona],
+        async () => {
+            return Services.Identity.queryRelationPaged(
+                currentPersona?.identifier,
+                {
+                    network: 'all',
+                    pageOffset: 0,
+                },
+                3000,
+            )
+        },
+    )
+    const { data, hasNextPage, fetchNextPage, isLoading, isFetchingNextPage } = useInfiniteQuery({
         queryKey: ['friends', currentPersona],
-        enabled: !isLoading,
-        queryFn: async ({ pageParam }) => {
+        enabled: !recordsLoading,
+        queryFn: async ({ pageParam = 0 }) => {
             const friends: Friend[] = []
             const startIndex = pageParam ? Number(pageParam) : 0
             let nextPageOffset = 0
@@ -77,60 +81,76 @@ export function useFriendsPaged() {
                     if (x.profile !== currentPersona?.identifier) friends.push({ persona: x.profile })
                 }
             }
+            return { friends, nextPageOffset }
+        },
+        getNextPageParam: ({ nextPageOffset }) => {
+            if (nextPageOffset >= records.length - 1) return
+            return nextPageOffset
+        },
+    })
+    const { data: profilesArray, fetchNextPage: fetchNextProfilesPage } = useInfiniteQuery(
+        ['nextid-profiles', currentPersona],
+        async ({ pageParam = 0 }) => {
+            const friends = data?.pages[Number(pageParam)].friends
+            if (!friends) return EMPTY_LIST
             const allSettled = await Promise.allSettled(
                 friends.map((item) => {
                     const id = item.persona.publicKeyAsHex
                     return NextIDProof.queryProfilesByPublicKey(id, 2)
                 }),
             )
-            const profiles: FriendsInformation[] = allSettled.map((item, index) => {
+            const profiles: BindingProof[][] = allSettled.map((item, index) => {
                 if (item.status === 'rejected') {
                     if (friends[index].profile) {
-                        return {
-                            profiles: [
-                                {
-                                    platform: NextIDPlatform.Twitter,
-                                    identity: friends[index].profile!.userId,
-                                    is_valid: true,
-                                    last_checked_at: '',
-                                    name: friends[index].profile!.userId,
-                                    created_at: '',
-                                },
-                            ],
-                            ...friends[index],
-                            id: friends[index].persona.publicKeyAsHex,
-                        }
+                        return [
+                            {
+                                platform: NextIDPlatform.Twitter,
+                                identity: friends[index].profile!.userId,
+                                is_valid: true,
+                                last_checked_at: '',
+                                name: friends[index].profile!.userId,
+                                created_at: '',
+                            },
+                        ]
                     } else {
-                        return {
-                            profiles: [],
-                            ...friends[index],
-                            id: friends[index].persona.publicKeyAsHex,
-                        }
+                        return []
                     }
                 }
-                const filtered = item.value.filter(
-                    (x) =>
-                        (x.platform === NextIDPlatform.ENS && x.name.endsWith('.eth')) ||
-                        (x.platform !== NextIDPlatform.Bit &&
-                            x.platform !== NextIDPlatform.CyberConnect &&
-                            x.platform !== NextIDPlatform.REDDIT &&
-                            x.platform !== NextIDPlatform.SYBIL &&
-                            x.platform !== NextIDPlatform.EthLeaderboard &&
-                            x.platform !== NextIDPlatform.NextID),
-                )
-
-                filtered.sort((a, b) => PlatformSort[a.platform] - PlatformSort[b.platform])
-                return {
-                    profiles: filtered,
-                    ...friends[index],
-                    id: friends[index].persona.publicKeyAsHex,
-                }
+                const filtered = item.value
+                    .filter(
+                        (x) =>
+                            (x.platform === NextIDPlatform.ENS && x.name.endsWith('.eth')) ||
+                            (x.platform !== NextIDPlatform.Bit &&
+                                x.platform !== NextIDPlatform.CyberConnect &&
+                                x.platform !== NextIDPlatform.REDDIT &&
+                                x.platform !== NextIDPlatform.SYBIL &&
+                                x.platform !== NextIDPlatform.EthLeaderboard &&
+                                x.platform !== NextIDPlatform.NextID),
+                    )
+                    .sort((a, b) => PlatformSort[a.platform] - PlatformSort[b.platform])
+                return filtered
             })
-            return { friends: uniqBy(profiles, ({ id }) => id), nextPageOffset }
+            return profiles
         },
-        getNextPageParam: ({ nextPageOffset }) => {
-            if (nextPageOffset >= records.length) return
-            return nextPageOffset
+        {
+            enabled: !!data,
+            getNextPageParam: (_, allPages) => {
+                if (!data || allPages.length >= data.pages.length) return undefined
+                return allPages.length
+            },
         },
-    })
+    )
+    useEffect(() => {
+        if (data?.pages && profilesArray && profilesArray?.pages.length < data.pages.length) {
+            fetchNextProfilesPage()
+        }
+    }, [data])
+    return {
+        data,
+        isLoading: isLoading || recordsLoading,
+        hasNextPage,
+        fetchNextPage,
+        isFetchingNextPage,
+        profilesArray,
+    }
 }
