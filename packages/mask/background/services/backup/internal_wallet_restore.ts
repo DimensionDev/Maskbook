@@ -8,6 +8,7 @@ import {
     isK256Point,
     isK256PrivateKey,
     generateNewWalletName,
+    handleDuplicatedWalletName,
 } from '@masknet/shared-base'
 import {
     getDerivableAccounts,
@@ -20,17 +21,8 @@ export async function internal_wallet_restore(backup: NormalizedBackup.WalletBac
     for (const wallet of backup) {
         try {
             const wallets = await getWallets()
-            let nameExistsIndex = 0
-            let nameExists = wallets.some((x) => x.name === wallet.name)
+            const name = wallet.name ? handleDuplicatedWalletName(wallets, wallet.name) : generateNewWalletName(wallets)
 
-            while (nameExists) {
-                nameExistsIndex += 1
-                // eslint-disable-next-line @typescript-eslint/no-loop-func
-                nameExists = wallets.some((x) => x.name === `${wallet.name} (${nameExistsIndex})`)
-            }
-
-            const name =
-                (wallet.name + nameExistsIndex ? ` (${nameExistsIndex})` : '') || generateNewWalletName(wallets)
             if (wallet.privateKey.some)
                 await recoverWalletFromPrivateKey(name, await JWKToKey(wallet.privateKey.val, 'private'))
             else if (wallet.mnemonic.some) {
