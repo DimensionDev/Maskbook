@@ -218,7 +218,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
     })
 
     const receiverAddress = parseReceiverFromERC20TransferInput(tx?.input ?? txInput)
-    const status = transaction.status || (tx ? chainbase.normalizeTxStatus(tx.status) : undefined)
+    const status = transaction.status ?? (tx ? chainbase.normalizeTxStatus(tx.status) : undefined)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const fromAddress = (transaction.from || tx?.from_address) as string
     const toAddress = (receiverAddress || transaction.to || tx?.to_address) as string

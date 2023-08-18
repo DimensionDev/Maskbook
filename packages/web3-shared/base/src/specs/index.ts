@@ -846,8 +846,7 @@ export interface Transaction<ChainId, SchemaType> {
     to: string
     /** unix timestamp */
     timestamp: number
-    /** 0: failed 1: succeed */
-    status?: 0 | 1
+    status: TransactionStatusType
     /** transferred assets */
     assets: Array<TransactionAsset<ChainId, SchemaType>>
     /** estimated tx fee */

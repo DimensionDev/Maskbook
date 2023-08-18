@@ -16,6 +16,7 @@ import {
     TokenType,
     type Transaction,
     isSameAddress,
+    TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
 import {
@@ -101,6 +102,15 @@ function toTxAsset(
     }
 }
 
+/** 0: failed 1: succeed */
+function normalizeTxStatus(status: 0 | 1): TransactionStatusType {
+    const map = {
+        0: TransactionStatusType.FAILED,
+        1: TransactionStatusType.SUCCEED,
+    }
+    return map[status]
+}
+
 export function formatTransactions(
     { cate_dict, history_list, token_dict }: HistoryResponse['data'],
     ownerAddress: string,
@@ -135,7 +145,7 @@ export function formatTransactions(
             timestamp: transaction.time_at * 1000,
             from,
             to,
-            status: transaction.tx?.status,
+            status: normalizeTxStatus(transaction.tx?.status!),
             assets: compact([
                 ...transaction.sends.map((asset) => toTxAsset(asset, chainId, token_dict, SEND)),
                 ...transaction.receives.map((asset) => toTxAsset(asset, chainId, token_dict, RECEIVE)),

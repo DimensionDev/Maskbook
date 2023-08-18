@@ -21,8 +21,9 @@ export async function fetchFromChainbase<T>(pathname: string) {
 export function toTransaction(chainId: ChainId, tx: Tx): Transaction<ChainId, SchemaType> {
     return {
         id: tx.transaction_hash,
+        hash: tx.transaction_hash,
         chainId,
-        status: tx.status,
+        status: normalizeTxStatus(tx.status),
         timestamp: new Date(tx.block_timestamp).getTime(),
         from: tx.from_address,
         to: tx.to_address,
@@ -32,6 +33,7 @@ export function toTransaction(chainId: ChainId, tx: Tx): Transaction<ChainId, Sc
     }
 }
 
+/** 0 is fail, 1 is succeed */
 export function normalizeTxStatus(status: TxStatus) {
     const map = {
         0: TransactionStatusType.FAILED,

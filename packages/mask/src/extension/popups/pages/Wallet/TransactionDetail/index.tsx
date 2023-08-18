@@ -202,7 +202,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
         [SUCCEED]: t('transaction_success'),
         [NOT_DEPEND]: t('transaction_pending'),
     }
-    const status = chainbase.normalizeTxStatus(tx !== undefined ? tx.status : (transactionState?.status as 0 | 1))
+    const status = tx !== undefined ? chainbase.normalizeTxStatus(tx.status) : transactionState?.status!
     const statusPending = status === undefined && loadingTx
     const isOut = transaction.from === account
     const link = transactionId ? ExplorerResolver.transactionLink(chainId!, transactionId) : undefined
