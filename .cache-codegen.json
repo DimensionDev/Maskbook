@@ -1,0 +1,15 @@
+{
+    "version": 1,
+    "urls": [
+        {
+            "$schema": "../schema.json",
+            "input": "https://example.com/api.json",
+            "output": "./cache_generated/",
+            "generator": {
+                "src": "./generate_or_fetch_something.js",
+                "key": "api",
+                "ttl": 1800
+            }
+        }
+    ]
+}
