@@ -181,14 +181,14 @@ const Interaction = memo(function Interaction() {
                             : {
                                   ...x,
                                   data: result,
-                                  chainId: toHex(x.chainId),
-                                  nonce: toHex(x.nonce),
                               },
                     ),
                 )
-            } else if (!signRequest.includes(currentRequest.request.arguments.method)) {
+            }
+
+            if (!signRequest.includes(currentRequest.request.arguments.method)) {
                 params = compact(
-                    currentRequest.request.arguments.params.map((x) => {
+                    params.map((x) => {
                         if (x === 'latest') {
                             if (chainId === ChainId.Celo) return
                             return x
@@ -267,7 +267,15 @@ const Interaction = memo(function Interaction() {
         }
 
         if (transaction?.formattedTransaction?.popup?.spender) {
-            return <UnlockERC20Token transaction={transaction} handleChange={(value) => setApproveAmount(value)} />
+            return (
+                <UnlockERC20Token
+                    onConfigChange={handleChangeGasConfig}
+                    paymentToken={paymentToken}
+                    onPaymentTokenChange={(paymentToken) => setPaymentToken(paymentToken)}
+                    transaction={transaction}
+                    handleChange={(value) => setApproveAmount(value)}
+                />
+            )
         }
 
         return (

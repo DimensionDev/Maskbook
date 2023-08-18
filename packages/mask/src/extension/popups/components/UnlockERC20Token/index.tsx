@@ -11,6 +11,7 @@ import { isGreaterThan, isZero, leftShift, rightShift } from '@masknet/web3-shar
 import { GasSettingMenu } from '../GasSettingMenu/index.js'
 import type { TransactionDetail } from '../../pages/Wallet/type.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import type { GasConfig } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -101,9 +102,18 @@ const useStyles = makeStyles()((theme) => ({
 export interface UnlockERC20TokenProps {
     transaction: TransactionDetail
     handleChange: (amount: string) => void
+    paymentToken?: string
+    onConfigChange: (config: GasConfig) => void
+    onPaymentTokenChange: (paymentToken: string) => void
 }
 
-export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20Token({ transaction, handleChange }) {
+export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20Token({
+    transaction,
+    handleChange,
+    onConfigChange,
+    onPaymentTokenChange,
+    paymentToken,
+}) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const theme = useTheme()
@@ -260,8 +270,10 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                     <GasSettingMenu
                         minimumGas={transaction.computedPayload.gas}
                         initConfig={initConfig}
-                        disable
-                        paymentToken={transaction.paymentToken}
+                        onChange={onConfigChange}
+                        onPaymentTokenChange={onPaymentTokenChange}
+                        owner={transaction.owner}
+                        paymentToken={paymentToken}
                         allowMaskAsGas={transaction.allowMaskAsGas}
                     />
                 ) : null}
