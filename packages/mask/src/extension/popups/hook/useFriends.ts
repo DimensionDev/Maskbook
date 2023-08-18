@@ -142,20 +142,20 @@ export function useFriendsPaged() {
         },
     )
     useEffect(() => {
-        let isMouted = true
+        let isMounted = true
         const fetchNext = async () => {
             if (!data?.pages || !profilesArray) return
             let profilesLength = profilesArray?.pages?.length
             setIsFetchingProfiles(true)
             while (profilesLength <= data.pages.length) {
                 profilesLength += 1
-                if (!isMouted) break
+                if (!isMounted) break
             }
             setIsFetchingProfiles(false)
         }
         if (!isFetchingProfiles) fetchNext()
         return () => {
-            isMouted = false
+            isMounted = false
         }
     }, [data, fetchNextProfilesPage, profilesArray])
     return {
