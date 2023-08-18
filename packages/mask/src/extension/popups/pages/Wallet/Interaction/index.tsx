@@ -20,13 +20,13 @@ import { useAsync, useAsyncFn } from 'react-use'
 import Services from '../../../../service.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { TransactionPreview } from '../../../components/TransactionPreview/index.js'
-import { WalletAssetTabs } from '../type.js'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
 import { Icons } from '@masknet/icons'
 import { useUpdateEffect } from '@react-hookz/web'
 import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
-import urlcat from 'urlcat'
 import { compact, mapValues, omit } from 'lodash-es'
+import urlcat from 'urlcat'
+import { WalletAssetTabs } from '../type.js'
 
 const useStyles = makeStyles()((theme) => ({
     left: {
@@ -166,7 +166,11 @@ const Interaction = memo(function Interaction() {
                     transaction?.formattedTransaction._tx.data.slice(10),
                 )
 
-                const result = abiCoder.encodeParameters(approveParametersType, [parameters.spender, approveAmount])
+                const parametersString = abiCoder
+                    .encodeParameters(approveParametersType, [parameters.spender, toHex(approveAmount)])
+                    .slice(2)
+
+                const result = `${transaction.formattedTransaction._tx.data.slice(0, 10)}${parametersString}`
 
                 params = compact(
                     currentRequest.request.arguments.params.map((x) =>
@@ -177,14 +181,14 @@ const Interaction = memo(function Interaction() {
                             : {
                                   ...x,
                                   data: result,
-                                  chainId: toHex(x.chainId),
-                                  nonce: toHex(x.nonce),
                               },
                     ),
                 )
-            } else if (!signRequest.includes(currentRequest.request.arguments.method)) {
+            }
+
+            if (!signRequest.includes(currentRequest.request.arguments.method)) {
                 params = compact(
-                    currentRequest.request.arguments.params.map((x) => {
+                    params.map((x) => {
                         if (x === 'latest') {
                             if (chainId === ChainId.Celo) return
                             return x
@@ -263,7 +267,15 @@ const Interaction = memo(function Interaction() {
         }
 
         if (transaction?.formattedTransaction?.popup?.spender) {
-            return <UnlockERC20Token transaction={transaction} handleChange={(value) => setApproveAmount(value)} />
+            return (
+                <UnlockERC20Token
+                    onConfigChange={handleChangeGasConfig}
+                    paymentToken={paymentToken}
+                    onPaymentTokenChange={(paymentToken) => setPaymentToken(paymentToken)}
+                    transaction={transaction}
+                    handleChange={(value) => setApproveAmount(value)}
+                />
+            )
         }
 
         return (
