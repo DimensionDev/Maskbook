@@ -125,7 +125,7 @@
     {
         "chainId": 8453,
         "type": "Base",
-        "name": "Base Mainnet",
+        "name": "Base",
         "color": "rgb(0, 82, 255)",
         "network": "mainnet",
         "fullName": "Base Mainnet",
