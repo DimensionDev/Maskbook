@@ -161,7 +161,8 @@ export const TransactionDetail = memo(function TransactionDetail() {
     })
 
     const { data: txInput, isLoading: loadingTxInput } = useQuery({
-        enabled: !!transaction && !loadingTx && !tx?.input && transactionState?.type === 'transfer',
+        enabled:
+            !!transaction && !loadingTx && !tx?.input && transactionState?.type === 'transfer' && !candidateState.data,
         queryKey: [transaction?.chainId, transactionId],
         queryFn: async () => {
             if (!chainId || !transactionId) return
