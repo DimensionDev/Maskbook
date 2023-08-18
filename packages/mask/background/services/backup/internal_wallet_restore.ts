@@ -1,14 +1,13 @@
 import { ec as EC } from 'elliptic'
 import { concatArrayBuffer } from '@masknet/kit'
 import type { NormalizedBackup } from '@masknet/backup-format'
-import { currySameAddress, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
+import { currySameAddress, HD_PATH_WITHOUT_INDEX_ETHEREUM, handleDuplicatedWalletName } from '@masknet/web3-shared-base'
 import {
     fromBase64URL,
     type EC_JsonWebKey,
     isK256Point,
     isK256PrivateKey,
     generateNewWalletName,
-    handleDuplicatedWalletName,
 } from '@masknet/shared-base'
 import {
     getDerivableAccounts,

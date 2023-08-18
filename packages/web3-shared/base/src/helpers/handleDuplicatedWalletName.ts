@@ -1,5 +1,5 @@
 import { isUndefined, max } from 'lodash-es'
-import type { Wallet } from '../index.js'
+import type { Wallet } from '@masknet/shared-base'
 
 export function handleDuplicatedWalletName(wallets: Wallet[], name: string) {
     const maxIndex =
