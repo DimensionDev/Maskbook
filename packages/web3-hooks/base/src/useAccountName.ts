@@ -8,7 +8,7 @@ import { useWeb3Others } from './useWeb3Others.js'
 export function useAccountName<T extends NetworkPluginID>(pluginID?: T, expectedAccount?: string) {
     const { account, providerType } = useChainContext<T>({ account: expectedAccount })
     const Others = useWeb3Others(pluginID)
-    const wallets = useWallets(pluginID)
+    const wallets = useWallets()
 
     return useMemo(() => {
         // if the currently selected account is a mask wallet, then use the wallet name as the account name

@@ -3,12 +3,12 @@ import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useWallets } from '@masknet/web3-hooks-base'
-import { NetworkPluginID, generateNewWalletName } from '@masknet/shared-base'
+import { generateNewWalletName } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 
 export function useSetWalletNameForm(defaultName?: string) {
     const { t } = useI18N()
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const wallets = useWallets()
 
     const schema = useMemo(() => {
         return zod.object({

@@ -946,6 +946,7 @@
     "popups_wallet_backup_json_file_confirm_password_tip": "crwdns7803:0crwdne7803:0",
     "popups_wallet_backup_private_key_tip": "crwdns7805:0crwdne7805:0",
     "popups_wallet_backup_input_password": "crwdns7807:0crwdne7807:0",
+    "popups_wallet_logout_input_payment_password": "crwdns22169:0crwdne22169:0",
     "popups_wallet_backup_json_file_drag_tip": "crwdns7809:0crwdne7809:0",
     "popups_wallet_backup_json_file_click_tip": "crwdns7811:0crwdne7811:0",
     "popups_wallet_enter_your_wallet_name": "crwdns7813:0crwdne7813:0",
