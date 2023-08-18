@@ -1,5 +1,5 @@
 import { max } from 'lodash-es'
-import type { Wallet } from '../index.js'
+import type { Wallet } from '@masknet/shared-base'
 
 export function generateNewWalletName(wallets: Wallet[], index = 0, preIndex?: number) {
     const maxIndex =
