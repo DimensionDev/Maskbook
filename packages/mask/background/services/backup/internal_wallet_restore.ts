@@ -8,6 +8,7 @@ import {
     isK256Point,
     isK256PrivateKey,
     generateNewWalletName,
+    handleDuplicatedWalletName,
 } from '@masknet/shared-base'
 import {
     getDerivableAccounts,
@@ -20,7 +21,7 @@ export async function internal_wallet_restore(backup: NormalizedBackup.WalletBac
     for (const wallet of backup) {
         try {
             const wallets = await getWallets()
-            const name = wallet.name || generateNewWalletName(wallets)
+            const name = wallet.name ? handleDuplicatedWalletName(wallets, wallet.name) : generateNewWalletName(wallets)
             if (wallet.privateKey.some)
                 await recoverWalletFromPrivateKey(name, await JWKToKey(wallet.privateKey.val, 'private'))
             else if (wallet.mnemonic.some) {
