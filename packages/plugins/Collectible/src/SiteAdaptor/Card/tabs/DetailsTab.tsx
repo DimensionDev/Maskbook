@@ -27,7 +27,7 @@ export function DetailsTab(props: DetailsTabProps) {
     const { classes } = useStyles()
     const { sourceType, rarity } = Context.useContainer()
 
-    if (isLoading || !asset || rarity.loading)
+    if (isLoading || !asset || rarity.isLoading)
         return (
             <CollectibleCard>
                 <div className={classes.body}>
@@ -41,7 +41,7 @@ export function DetailsTab(props: DetailsTabProps) {
                 <div className={classes.info}>
                     <DetailsCard sourceType={sourceType} asset={asset} />
                 </div>
-                <PropertiesCard rank={rarity.value?.rank} asset={asset} />
+                <PropertiesCard rank={rarity.data?.rank} asset={asset} />
             </div>
         </CollectibleCard>
     )

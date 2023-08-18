@@ -51,7 +51,7 @@ export const AboutTab = memo(function AboutTab({ asset, orders }: AboutTabProps)
             <PriceCard topListing={topListing} />
             <DetailsCard asset={asset} />
             <DescriptionCard asset={asset} />
-            <PropertiesCard timeline asset={asset} rank={rarity.value?.rank} />
+            <PropertiesCard timeline asset={asset} rank={rarity.data?.rank} />
         </div>
     )
 })
