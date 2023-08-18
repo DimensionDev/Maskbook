@@ -42,11 +42,14 @@ export const ActivityList = memo<ActivityListProps>(function ActivityList() {
     }, [])
 
     const handleView = useCallback(
-        (transaction: Transaction<ChainId, SchemaType> | RecentTransaction<ChainId, EvmTransaction>) => {
+        (
+            transaction: Transaction<ChainId, SchemaType> | RecentTransaction<ChainId, EvmTransaction>,
+            candidate?: EvmTransaction,
+        ) => {
             navigate(PopupRoutes.TransactionDetail, {
                 // No available API to fetch a transaction info yet.
                 // Just pass target transaction to the detail page.
-                state: { transaction },
+                state: { transaction, candidate },
             })
         },
         [navigate],

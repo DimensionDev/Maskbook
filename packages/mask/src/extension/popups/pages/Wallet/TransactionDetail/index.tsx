@@ -6,7 +6,12 @@ import { useAccount, useNativeToken, useNativeTokenPrice } from '@masknet/web3-h
 import { ChainbaseHistory, ExplorerResolver, Web3 } from '@masknet/web3-providers'
 import { chainbase } from '@masknet/web3-providers/helpers'
 import { TransactionStatusType, formatBalance, multipliedBy, trimZero } from '@masknet/web3-shared-base'
-import { formatHash, formatWeiToEther, formatWeiToGwei } from '@masknet/web3-shared-evm'
+import {
+    formatHash,
+    formatWeiToEther,
+    formatWeiToGwei,
+    type Transaction as EvmTransaction,
+} from '@masknet/web3-shared-evm'
 import { Box, Link, Typography, alpha } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { capitalize } from 'lodash-es'
@@ -133,6 +138,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
     const { classes, cx, theme } = useStyles()
     const location = useLocation()
     const transactionState = location.state.transaction as TransactionState
+    const candidateState = location.state.candidate as EvmTransaction
     const isRecentTx = transactionState && 'candidates' in transactionState
     const transaction = isRecentTx ? transactionState.candidates[transactionState.id] : transactionState
     const account = useAccount()
@@ -204,7 +210,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
     const gasFee = tx ? formatWeiToEther(multipliedBy(tx.gas_price, tx.gas)) : undefined
     const gasCost = gasFee && nativeTokenPrice ? gasFee.times(nativeTokenPrice) : undefined
 
-    const receiverAddress = parseReceiverFromERC20TransferInput(tx?.input || txInput)
+    const receiverAddress = parseReceiverFromERC20TransferInput(candidateState?.data || tx?.input || txInput)
 
     const loadingToAddress =
         transactionState?.type === 'transfer'

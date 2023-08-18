@@ -289,7 +289,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
 
 interface RecentActivityItemProps extends Omit<ActivityItemProps, 'transaction' | 'onView'> {
     transaction: RecentTransaction<ChainId, EvmTransaction>
-    onView: (tx: RecentTransaction<ChainId, EvmTransaction>) => void
+    onView: (tx: RecentTransaction<ChainId, EvmTransaction>, candidate?: EvmTransaction) => void
     onSpeedup?: (tx: RecentTransaction<ChainId, EvmTransaction>) => void
     onCancel?: (tx: RecentTransaction<ChainId, EvmTransaction>) => void
 }
@@ -318,7 +318,7 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
     }, [domain, t])
 
     return (
-        <ListItem className={cx(classes.item, className)} onClick={() => onView(transaction)} {...rest}>
+        <ListItem className={cx(classes.item, className)} onClick={() => onView(transaction, candidate)} {...rest}>
             <Box className={classes.txIconContainer}>
                 {/* TODO specify cateType */}
                 <TransactionIcon cateType={'send'} />
