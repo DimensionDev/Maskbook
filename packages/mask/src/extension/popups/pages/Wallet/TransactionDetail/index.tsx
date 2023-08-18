@@ -211,6 +211,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
     const gasCost = gasFee && nativeTokenPrice ? gasFee.times(nativeTokenPrice) : undefined
 
     const receiverAddress = parseReceiverFromERC20TransferInput(candidateState?.data || tx?.input || txInput)
+    const toAddress = receiverAddress || transaction.to || tx?.to_address
 
     const loadingToAddress =
         transactionState?.type === 'transfer'
@@ -265,7 +266,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
                 <Box className={classes.field}>
                     <Typography className={classes.fieldName}>{t('transaction_to')}</Typography>
                     <ProgressiveText className={classes.fieldValue} component="div" loading={loadingToAddress}>
-                        <ReversedAddress address={(transaction.to || tx?.to_address) as string} />
+                        <ReversedAddress address={toAddress as string} />
                     </ProgressiveText>
                 </Box>
                 <Typography variant="h2" className={classes.sectionName}>

@@ -55,6 +55,7 @@ export async function modifyTransaction(
 // The Debank transaction history api does not return the input data,
 //  so can not do the decoding within its scope.
 export function parseReceiverFromERC20TransferInput(input?: string) {
+    if (!input) return ''
     try {
         const decodedInputParam = erc20InterFace.decodeFunctionData('transfer', input ?? '')
         return decodedInputParam[0] as string
