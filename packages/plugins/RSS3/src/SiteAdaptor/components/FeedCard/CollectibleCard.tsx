@@ -11,7 +11,7 @@ import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType, getCost, getLastAction } from '../share.js'
 import { AddressLabel, formatValue, Label } from './common.js'
 
-const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center'>()((theme, _, refs) => ({
+const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center' | 'failedImage'>()((theme, _, refs) => ({
     summary: {
         color: theme.palette.maskColor.third,
     },
@@ -22,6 +22,7 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center'>()((t
         },
     },
     center: {},
+    failedImage: {},
     body: {
         display: 'flex',
         flexDirection: 'row',
@@ -36,6 +37,12 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center'>()((t
                 width: 552,
                 height: 'auto',
                 aspectRatio: 'auto',
+            },
+            [`.${refs.image}.${refs.failedImage}`]: {
+                height: 100,
+                width: 100,
+                marginLeft: 'auto',
+                marginRight: 'auto',
             },
             [`.${refs.info}`]: {
                 marginLeft: 0,
@@ -278,7 +285,7 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
                         [classes.center]: !verbose && !metadata.description,
                     })}>
                     <Image
-                        classes={{ container: classes.image }}
+                        classes={{ container: classes.image, failed: classes.failedImage }}
                         src={metadata.image}
                         width={imageWidth}
                         height={imageHeight}

@@ -11,7 +11,7 @@ import { CardType } from '../share.js'
 import { Label, LinkifyOptions, htmlToPlain } from './common.js'
 import { useMarkdownStyles } from './useMarkdownStyles.js'
 
-const useStyles = makeStyles<void, 'image' | 'verbose' | 'content'>()((theme, _, refs) => ({
+const useStyles = makeStyles<void, 'image' | 'verbose' | 'content' | 'failedImage'>()((theme, _, refs) => ({
     summary: {
         color: theme.palette.maskColor.third,
     },
@@ -19,6 +19,7 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'content'>()((theme, _,
         color: theme.palette.maskColor.main,
     },
     image: {},
+    failedImage: {},
     verbose: {},
     target: {
         display: 'flex',
@@ -43,6 +44,12 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'content'>()((theme, _,
                 height: '100%',
                 borderRadius: 8,
                 marginTop: theme.spacing(1),
+            },
+            [`.${refs.image}.${refs.failedImage}`]: {
+                height: 100,
+                width: 100,
+                marginLeft: 'auto',
+                marginRight: 'auto',
             },
             [`.${refs.content}`]: {
                 marginLeft: 0,
@@ -122,7 +129,7 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
                 {verbose ? <Typography className={classes.originalLabel}>{t.original()}</Typography> : null}
                 {commentTarget?.media?.[0].mime_type?.startsWith('image/') ? (
                     <Image
-                        classes={{ container: classes.image }}
+                        classes={{ container: classes.image, failed: classes.failedImage }}
                         src={resolveResourceURL(commentTarget.media[0].address)}
                         height={imageSize}
                         width={imageSize}
