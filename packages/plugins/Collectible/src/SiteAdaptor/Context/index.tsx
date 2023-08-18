@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { createContainer } from 'unstated-next'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import {
     useNonFungibleAsset,
     useNonFungibleListings,
@@ -33,6 +33,7 @@ function useContext(initialState?: InitialState) {
         account: ownerAddress,
         sourceType,
     })
+    const offers = useMemo(() => orders.data?.pages.flatMap((x) => x.data) ?? EMPTY_LIST, [orders.data?.pages])
     const events = useNonFungibleEvents(pluginID, tokenAddress, tokenId, {
         chainId,
         account: ownerAddress,
@@ -55,12 +56,15 @@ function useContext(initialState?: InitialState) {
 
         tokenId,
         tokenAddress,
+        ownerAddress,
 
         asset,
         orders,
+        offers,
         events,
         rarity,
     }
 }
 
 export const Context = createContainer(useContext)
+Context.Provider.displayName = 'CollectibleContextProvider'
