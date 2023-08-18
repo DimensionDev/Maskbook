@@ -12,6 +12,7 @@ import type { NetworkDescriptor } from '@masknet/web3-shared-base'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
+import { first } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -66,7 +67,7 @@ export const NetworkSelector = memo(() => {
 
     return (
         <NetworkSelectorUI
-            currentNetwork={actualNetworks.find((x) => x.chainId === chainId) ?? actualNetworks[0]}
+            currentNetwork={actualNetworks.find((x) => x.chainId === chainId) ?? first(actualNetworks)}
             onChainChange={onChainChange}
             networks={actualNetworks}
         />
@@ -74,7 +75,7 @@ export const NetworkSelector = memo(() => {
 })
 
 export interface NetworkSelectorUIProps {
-    currentNetwork: NetworkDescriptor<ChainId, NetworkType>
+    currentNetwork?: NetworkDescriptor<ChainId, NetworkType>
     networks: Array<NetworkDescriptor<ChainId, NetworkType>>
     onChainChange: (chainId: ChainId) => void
 }
@@ -93,7 +94,7 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork,
                     <MenuItem
                         key={chainId}
                         onClick={() => onChainChange(chainId)}
-                        selected={chainId === currentNetwork.chainId}>
+                        selected={chainId === currentNetwork?.chainId}>
                         {network.isMainnet ? (
                             <WalletIcon size={20} mainIcon={network.icon} />
                         ) : Flags.support_testnet_switch ? (
@@ -116,10 +117,10 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork,
                         <WalletIcon size={20} mainIcon={currentNetwork.icon} />
                     ) : (
                         <div className={classes.iconWrapper}>
-                            <ChainIcon color={currentNetwork.iconColor} />
+                            <ChainIcon color={currentNetwork?.iconColor} />
                         </div>
                     )}
-                    <Typography className={classes.title}>{currentNetwork.name}</Typography>
+                    <Typography className={classes.title}>{currentNetwork?.name}</Typography>
                 </div>
                 <Icons.ArrowDownRound size={16} color="#fff" />
             </Box>
