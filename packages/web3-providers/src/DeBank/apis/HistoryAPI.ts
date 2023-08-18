@@ -33,7 +33,7 @@ export class DeBankHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaType
                 start_time: indicator?.id,
             }),
         )
-        const transactions = formatTransactions(result)
+        const transactions = formatTransactions(result, address)
         const timeStamp = last(result.history_list)?.time_at
         return createPageable(
             transactions,
@@ -54,7 +54,7 @@ export class DeBankHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaType
                 chain_ids: this.getChainIds(),
             }),
         )
-        const transactions = formatTransactions(result)
+        const transactions = formatTransactions(result, address)
         const timeStamp = last(result.history_list)?.time_at
         return createPageable(
             transactions,

@@ -100,11 +100,10 @@ function toTxAsset(
     }
 }
 
-export function formatTransactions({
-    cate_dict,
-    history_list,
-    token_dict,
-}: HistoryResponse['data']): Array<Transaction<ChainId, SchemaType>> {
+export function formatTransactions(
+    { cate_dict, history_list, token_dict }: HistoryResponse['data'],
+    ownerAddress: string,
+): Array<Transaction<ChainId, SchemaType>> {
     const resolver = new ChainResolverAPI()
     const transactions = history_list.map((transaction): Transaction<ChainId, SchemaType> | undefined => {
         let txType = transaction.tx?.name
@@ -120,6 +119,9 @@ export function formatTransactions({
         if (isSameAddress(transaction.sends[0]?.to_addr, ZERO_ADDRESS)) {
             txType = 'burn'
         }
+        const isIn = transaction.cate_id === 'receive'
+        const from = transaction.tx?.from_addr ?? (isIn ? transaction.other_addr : '')
+        const to = isIn ? ownerAddress : transaction.other_addr
         return {
             id: transaction.id,
             chainId,
@@ -129,8 +131,8 @@ export function formatTransactions({
                 ? cate_dict[transaction.cate_id].name
                 : transaction.tx?.name || 'Contract Interaction',
             timestamp: transaction.time_at * 1000,
-            from: transaction.tx?.from_addr ?? '',
-            to: transaction.other_addr,
+            from,
+            to,
             status: transaction.tx?.status,
             assets: compact([
                 ...transaction.sends.map((asset) => toTxAsset(asset, chainId, token_dict)),
