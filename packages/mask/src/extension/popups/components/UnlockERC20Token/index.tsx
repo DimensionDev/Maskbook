@@ -46,9 +46,11 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '16px',
     },
     address: {
-        fontSize: 10,
+        fontSize: 12,
+        transform: 'scale(0.8333)',
         color: theme.palette.maskColor.second,
         fontWeight: 400,
+        transformOrigin: 'left',
     },
     link: {
         width: 16,
@@ -178,7 +180,11 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                 {token?.address ? (
                     <Box display="flex" columnGap={1} alignItems="center">
                         <CopyButton text={token.address} size={16} />
-                        <Link href={ExplorerResolver.addressLink(chainId, token.address)} className={classes.link}>
+                        <Link
+                            href={ExplorerResolver.addressLink(chainId, token.address)}
+                            className={classes.link}
+                            target="_blank"
+                            rel="noopener noreferrer">
                             <Icons.LinkOut size={16} />
                         </Link>
                     </Box>
@@ -234,6 +240,8 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                         <Typography className={classes.spenderAddress}>
                             {transaction.formattedTransaction.popup?.spender}{' '}
                             <Link
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 href={ExplorerResolver.addressLink(
                                     chainId,
                                     transaction.formattedTransaction.popup.spender,
