@@ -2,17 +2,18 @@ import { isUndefined, max } from 'lodash-es'
 import type { Wallet } from '@masknet/shared-base'
 
 export function handleDuplicatedWalletName(wallets: Wallet[], name: string) {
-    const num = name.match(/\(\d+\)/)?.[0]
-    const _name = num ? name.split(` ${num}`)?.[0] : name
+    const num = name.match(/\((\d+)\)/)?.[1]
+    const _name = num ? name.split(` (${num})`)?.[0] : name
 
     const maxIndex =
-        max(
-            wallets
+        max([
+            ...wallets
                 .filter((x) => !x.owner)
                 .map((x) => x.name.split(`${_name} `)[1]?.match(/\((\d+)\)/)?.[1])
                 .filter((x) => x && !Number.isNaN(x))
                 .map(Number),
-        ) ?? (wallets.some((wallet) => wallet.name === _name) ? 0 : undefined)
+            num && !Number.isNaN(num) ? Number(num) - 1 : 0,
+        ]) ?? (wallets.some((wallet) => wallet.name === _name) ? 0 : undefined)
 
     if (isUndefined(maxIndex)) return name
 
