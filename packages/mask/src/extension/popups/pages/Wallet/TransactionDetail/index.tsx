@@ -138,7 +138,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
     const { classes, cx, theme } = useStyles()
     const location = useLocation()
     const transactionState = location.state.transaction as TransactionState
-    const candidateState = location.state.candidate as EvmTransaction
+    const candidateState = location.state.candidate as EvmTransaction | undefined
     const isRecentTx = transactionState && 'candidates' in transactionState
     const transaction = isRecentTx ? transactionState.candidates[transactionState.id] : transactionState
     const account = useAccount()
@@ -162,7 +162,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
 
     const { data: txInput, isLoading: loadingTxInput } = useQuery({
         enabled:
-            !!transaction && !loadingTx && !tx?.input && transactionState?.type === 'transfer' && !candidateState.data,
+            !!transaction && !loadingTx && !tx?.input && transactionState?.type === 'transfer' && !candidateState?.data,
         queryKey: [transaction?.chainId, transactionId],
         queryFn: async () => {
             if (!chainId || !transactionId) return
