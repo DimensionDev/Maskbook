@@ -11,7 +11,7 @@ export const maskSDKServer: BridgeAPI = {
     eth_request,
     async reload() {
         if (process.env.NODE_ENV === 'production') return
-        Services.SiteAdaptor.attachMaskSDKToCurrentActivePage
+        await Services.SiteAdaptor.attachMaskSDKToCurrentActivePage()
     },
     ...SiteMethods,
 }
