@@ -11,7 +11,7 @@ import { first } from 'lodash-es'
 import { isProfileIdentifier } from '@masknet/shared'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { NextIDProof } from '@masknet/web3-providers'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export type FriendsInformation = Friend & {
     profiles: BindingProof[]
@@ -44,6 +44,7 @@ export const PlatformSort: Record<NextIDPlatform, number> = {
 }
 
 export function useFriendsPaged() {
+    const [isFetchingProfiles, setIsFetchingProfiles] = useState(false)
     const currentPersona = useCurrentPersona()
     const { data: records = EMPTY_LIST, isLoading: recordsLoading } = useQuery(
         ['relation-records', currentPersona],
@@ -141,10 +142,23 @@ export function useFriendsPaged() {
         },
     )
     useEffect(() => {
-        if (data?.pages && profilesArray && profilesArray?.pages.length < data.pages.length) {
-            fetchNextProfilesPage()
+        let isMouted = true
+        const fetchNext = async () => {
+            if (!data?.pages || !profilesArray) return
+            let profilesLength = profilesArray?.pages?.length
+            setIsFetchingProfiles(true)
+            while (profilesLength <= data.pages.length) {
+                console.log(profilesLength, data.pages.length, await fetchNextProfilesPage())
+                profilesLength += 1
+                if (!isMouted) break
+            }
+            setIsFetchingProfiles(false)
         }
-    }, [data])
+        if (!isFetchingProfiles) fetchNext()
+        return () => {
+            isMouted = false
+        }
+    }, [data, fetchNextProfilesPage, profilesArray])
     return {
         data,
         isLoading: isLoading || recordsLoading,
