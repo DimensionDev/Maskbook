@@ -224,7 +224,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
     const toAddress = (receiverAddress || transaction.to || tx?.to_address) as string
     const loadingToAddress =
         transaction.type === 'transfer' ? !receiverAddress && (loadingTx || loadingTxInput) : !toAddress && loadingTx
-    const isReceive = isSameAddress(toAddress, account) || !isSameAddress(fromAddress, account)
+    const isOut = isSameAddress(fromAddress, account)
 
     return (
         <ListItem
@@ -252,14 +252,12 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                         ) : null}
                         <Trans
                             i18nKey="other_address"
-                            context={isReceive ? 'from' : 'to'}
+                            context={isOut ? 'to' : 'from'}
                             value={{
-                                address: isReceive ? fromAddress : toAddress,
+                                address: isOut ? toAddress : fromAddress,
                             }}
                             components={{
-                                addr: (
-                                    <ReversedAddress address={isReceive ? fromAddress : toAddress} component="span" />
-                                ),
+                                addr: <ReversedAddress address={isOut ? toAddress : fromAddress} component="span" />,
                             }}
                         />
                     </ProgressiveText>
