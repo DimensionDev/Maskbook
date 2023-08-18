@@ -132,6 +132,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             flex: 'initial !important',
             '&:disabled': {
                 color: theme.palette.common.white,
+                background: theme.palette.common.black,
             },
             '&:hover': {
                 color: theme.palette.common.white,
