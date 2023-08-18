@@ -69,6 +69,7 @@ function toTxAsset(
     { token_id, amount }: TransferringAsset,
     chainId: ChainId,
     token_dict: HistoryResponse['data']['token_dict'],
+    direction: DebankTransactionDirection,
 ) {
     const token = token_dict[token_id]
     // token_dict might not contain value to current token_id
@@ -94,7 +95,7 @@ function toTxAsset(
         symbol: token.optimized_symbol || token.collection?.name || fallbackName,
         address: token.decimals ? token_id : token.contract_id,
         decimals: token.decimals || 1,
-        direction: DebankTransactionDirection.SEND,
+        direction,
         amount: amount?.toString(),
         logoURI: token.logo_url,
     }
@@ -122,6 +123,7 @@ export function formatTransactions(
         const isIn = transaction.cate_id === 'receive'
         const from = transaction.tx?.from_addr ?? (isIn ? transaction.other_addr : '')
         const to = isIn ? ownerAddress : transaction.other_addr
+        const { SEND, RECEIVE } = DebankTransactionDirection
         return {
             id: transaction.id,
             chainId,
@@ -135,8 +137,8 @@ export function formatTransactions(
             to,
             status: transaction.tx?.status,
             assets: compact([
-                ...transaction.sends.map((asset) => toTxAsset(asset, chainId, token_dict)),
-                ...transaction.receives.map((asset) => toTxAsset(asset, chainId, token_dict)),
+                ...transaction.sends.map((asset) => toTxAsset(asset, chainId, token_dict, SEND)),
+                ...transaction.receives.map((asset) => toTxAsset(asset, chainId, token_dict, RECEIVE)),
             ]),
             fee: transaction.tx
                 ? { eth: transaction.tx.eth_gas_fee?.toString(), usd: transaction.tx.usd_gas_fee?.toString() }
