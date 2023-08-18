@@ -15,12 +15,11 @@ export const querySelectorAll = <T extends E>(selector: string) => {
 // #region "Enhanced Profile"
 export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
-        '[data-testid="primaryColumn"] div + [role="navigation"][aria-label] [data-testid="ScrollSnap-nextButtonWrapper"]',
-    )
-
+        '[data-testid="primaryColumn"] div + [role="navigation"][aria-label] [data-testid="ScrollSnap-List"]  a[href*="/like"]',
+    ).closest(1)
 export const searchProfileTabPageSelector = () =>
     searchProfileTabListLastChildSelector()
-        .closest(3)
+        .closest(5)
         .querySelector<E>('section > div[aria-label]:not([role="progressbar"])')
 
 export const searchProfileTabLoseConnectionPageSelector: () => LiveSelector<E, true> = () =>
