@@ -168,7 +168,7 @@ const Interaction = memo(function Interaction() {
 
                 const parametersString = abiCoder
                     .encodeParameters(approveParametersType, [parameters.spender, toHex(approveAmount)])
-                    .slice(10)
+                    .slice(2)
 
                 const result = `${transaction.formattedTransaction._tx.data.slice(0, 10)}${parametersString}`
 
