@@ -8,7 +8,7 @@ describe('handleDuplicatedWalletName util test', () => {
         { wallets: [{ name: 'b' }] as Wallet[], name: 'a', expected: 'a' },
         { wallets: [{ name: 'b' }] as Wallet[], name: 'a', expected: 'a' },
         { wallets: [{ name: 'a (1)' }, { name: 'a (5)' }] as Wallet[], name: 'a', expected: 'a (6)' },
-        { wallets: [{ name: 'b' }] as Wallet[], name: 'a', expected: 'a' },
+        { wallets: [{ name: 'a (3)' }] as Wallet[], name: 'a (1)', expected: 'a (4)' },
     ])('.format($give)', ({ wallets, name, expected }) => {
         expect(handleDuplicatedWalletName(wallets, name)).toBe(expected)
     })
