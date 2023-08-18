@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+import { useSubscription } from 'use-subscription'
 import { emptyTransformationContext, type TransformationContext } from '@masknet/typed-message'
 import {
     RenderFragmentsContext,
@@ -10,8 +12,6 @@ import {
     type TextResizer,
 } from '@masknet/typed-message-react'
 import { TypedMessageRenderRegistry } from './registry.js'
-import { useSubscription } from 'use-subscription'
-import { useMemo } from 'react'
 import { Container, Link } from './Components/Text.js'
 import { TypedMessageTransformers } from './transformer.js'
 
