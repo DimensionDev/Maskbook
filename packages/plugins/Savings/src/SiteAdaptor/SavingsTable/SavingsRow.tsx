@@ -72,7 +72,7 @@ export const SavingsRow = memo(function SavingsRow({ protocol, isDeposit, onWith
                         name={protocol.bareToken.name}
                         address={protocol.bareToken.address}
                         className={classes.logo}
-                        chainId={chainId}
+                        chainId={protocol.bareToken.chainId}
                     />
                     <img src={ProviderIconURLs[protocol.type]} className={classes.logoMini} />
                 </div>
