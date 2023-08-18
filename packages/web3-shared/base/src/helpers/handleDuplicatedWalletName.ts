@@ -12,7 +12,7 @@ export function handleDuplicatedWalletName(wallets: Wallet[], name: string) {
                 .map((x) => x.name.split(`${_name} `)[1]?.match(/\((\d+)\)/)?.[1])
                 .filter((x) => x && !Number.isNaN(x))
                 .map(Number),
-            num && !Number.isNaN(num) ? Number(num) - 1 : 0,
+            ...(num && !Number.isNaN(num) ? [Number(num) - 1] : []),
         ]) ?? (wallets.some((wallet) => wallet.name === _name) ? 0 : undefined)
 
     if (isUndefined(maxIndex)) return name
