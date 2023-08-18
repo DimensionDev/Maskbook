@@ -101,7 +101,7 @@ export const toolboxInSidebarSelector: () => LiveSelector<E, true> = () =>
     /* cspell:disable-next-line */
     querySelector<E>('[data-pagelet="LeftRail"] > div > div > :nth-child(2) > ul > li:nth-child(2)')
 
-export const toolboxInSpecialSiddbarSelector: () => LiveSelector<E> = () =>
+export const toolboxInSpecialSidebarSelector: () => LiveSelector<E> = () =>
     querySelector(
         '[role="navigation"] > div > div > div > :nth-child(2) > div > div > :nth-child(2) ul > li:nth-child(2)',
     )

@@ -4,7 +4,7 @@ import { startWatch } from '../../../utils/startWatch.js'
 import {
     toolboxInSidebarSelector,
     toolboxInSidebarSelectorWithNoLeftRailStart,
-    toolboxInSpecialSiddbarSelector,
+    toolboxInSpecialSidebarSelector,
 } from '../utils/selector.js'
 import { ToolboxAtFacebook } from './ToolbarUI.js'
 
@@ -23,7 +23,7 @@ function isNormalLeftRailStartBar() {
 
 export function injectToolboxHintAtFacebook(signal: AbortSignal, category: 'wallet' | 'application') {
     const watcher = new MutationObserverWatcher(
-        isNormalLeftRailStartBar() ? toolboxInSidebarSelector() : toolboxInSpecialSiddbarSelector(),
+        isNormalLeftRailStartBar() ? toolboxInSidebarSelector() : toolboxInSpecialSidebarSelector(),
     )
     startWatch(watcher, signal)
     const hasTopNavBar = !!document.querySelector<HTMLElement>('#ssrb_top_nav_start ~ [role="banner"]')
