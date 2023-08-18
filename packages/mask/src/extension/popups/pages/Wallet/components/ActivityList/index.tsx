@@ -55,7 +55,7 @@ export const ActivityList = memo<ActivityListProps>(function ActivityList() {
         [navigate],
     )
 
-    if (isLoading && !localeTxes.length && !transactions.length)
+    if (!isLoading && !localeTxes.length && !transactions.length)
         return <EmptyStatus height="100%">{t('no_data')}</EmptyStatus>
 
     return (
