@@ -104,7 +104,7 @@ function Configuration(env, argv) {
                     COMMIT_DATE,
                     COMMIT_HASH,
                     DIRTY,
-                    VERSION: '2.21.0',
+                    VERSION: '2.22.0',
                 }
                 return emitJSONFile({ content: json, name: 'build-info.json' })
             })(),
