@@ -22,7 +22,7 @@ export function useFungibleToken<S extends 'all' | void = void, T extends Networ
     const networks = useNetworks(pluginID)
 
     return useQuery({
-        enabled: !!address,
+        enabled: true,
         queryKey: ['fungible-token', pluginID, address, chainId, options],
         queryFn: async () => {
             if (!address) return
