@@ -143,6 +143,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         gasFee,
     } = useAvailableBalance(NetworkPluginID.PLUGIN_EVM, address, patchedGasConfig as GasConfig, {
         chainId,
+        providerURL: network?.rpcUrl,
     })
 
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
