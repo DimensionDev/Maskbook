@@ -67,7 +67,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface ContactCardProps {
     avatar?: string
-    profiles: BindingProof[]
+    profiles?: BindingProof[]
     nextId?: string
     publicKey?: string
     isLocal?: boolean
@@ -88,7 +88,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
     const { t } = useI18N()
     const handleAddFriend = useCallback(async () => {
         if (!currentPersona) return
-        const twitter = profiles.find((p) => p.platform === NextIDPlatform.Twitter)
+        const twitter = profiles?.find((p) => p.platform === NextIDPlatform.Twitter)
         const personaIdentifier = ECKeyIdentifier.fromHexPublicKeyK256(nextId).expect(
             `${nextId} should be a valid hex public key in k256`,
         )

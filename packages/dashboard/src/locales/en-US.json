@@ -454,7 +454,7 @@
     "persona_phrase_tips": "Please select the correct method to restore the backup.",
     "persona_phrase_copy_description": "The mnemonic has been copied, please keep it in a safe place.",
     "persona_phrase_create_tips": "Never share 12-word secret recovery phrase with anyone!",
-    "persona_phrase_create_check_tips": "I wrote down all the words in order",
+    "persona_phrase_create_check_tips": "I wrote down the words in the correct order",
     "persona_onboarding_to_twitter": "Experience in Twitter",
     "persona_onboarding_set_payment_password": "Set Payment Password",
     "persona_onboarding_pin_tips": "Pin Mask Network to the toolbar for easier access:",

@@ -1,10 +1,11 @@
 import { makeStyles } from '@masknet/theme'
-import { memo, type RefObject } from 'react'
+import { memo } from 'react'
 import { ContactCard } from '../ContactCard/index.js'
-import { type FriendsInformation } from '../../../hook/useFriends.js'
 import { Box } from '@mui/material'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
-import { EmptyStatus } from '@masknet/shared'
+import { EmptyStatus, ElementAnchor } from '@masknet/shared'
+import { type Friend } from '../../../hook/useFriends.js'
+import { type BindingProof } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     empty: {
@@ -33,29 +34,31 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ContactsProps {
-    friends: FriendsInformation[]
-    listRef: RefObject<HTMLElement>
+    friends: Friend[]
+    fetchNextPage: () => void
+    profiles: BindingProof[][]
 }
 
-export const Contacts = memo<ContactsProps>(function Contacts({ friends, listRef }) {
+export const Contacts = memo<ContactsProps>(function Contacts({ friends, fetchNextPage, profiles }) {
     const { classes } = useStyles()
     const { t } = useI18N()
     return friends.length === 0 ? (
         <EmptyStatus className={classes.empty}>{t('popups_encrypted_friends_no_friends')}</EmptyStatus>
     ) : (
-        <Box className={classes.cardContainer} ref={listRef}>
-            {friends.map((friend) => {
+        <Box className={classes.cardContainer}>
+            {friends.map((friend, index) => {
                 return (
                     <ContactCard
-                        key={friend.id}
+                        key={friend.persona.publicKeyAsHex}
                         avatar={friend.avatar}
                         nextId={friend.persona?.publicKeyAsHex}
                         publicKey={friend.persona?.rawPublicKey}
-                        profiles={friend.profiles}
+                        profiles={profiles[index] || []}
                         isLocal
                     />
                 )
             })}
+            <ElementAnchor callback={fetchNextPage} height={10} />
         </Box>
     )
 })

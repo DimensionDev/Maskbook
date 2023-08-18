@@ -1,6 +1,6 @@
-import { memo, useState, useRef } from 'react'
+import { memo, useState, useMemo, useCallback } from 'react'
 import { FriendsHomeUI } from './UI.js'
-import { useFriends } from '../../../hook/useFriends.js'
+import { useFriendsPaged } from '../../../hook/useFriends.js'
 import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
@@ -10,8 +10,9 @@ import { useFriendsFromSearch } from '../../../hook/useFriendsFromSearch.js'
 
 const FriendsHome = memo(function FriendsHome() {
     const { t } = useI18N()
-    const { loading, value = EMPTY_LIST } = useFriends()
-    const listRef = useRef<HTMLElement>(null)
+    const { data, fetchNextPage, hasNextPage, isLoading, profilesArray } = useFriendsPaged()
+    const value = useMemo(() => (data ? data.pages.flatMap((x) => x.friends) : EMPTY_LIST), [data])
+    const profiles = useMemo(() => (profilesArray ? profilesArray.pages.flat(1) : EMPTY_LIST), [profilesArray])
     const [searchValue, setSearchValue] = useState('')
     const type = resolveNextIDPlatform(searchValue)
     const { loading: resolveLoading, value: _value = '' } = useSearchValue(searchValue, type)
@@ -21,16 +22,19 @@ const FriendsHome = memo(function FriendsHome() {
         false,
     )
     const { value: searchedList = EMPTY_LIST } = useFriendsFromSearch(searchResult, value, _value)
+    const fetchMore = useCallback(() => {
+        hasNextPage ? fetchNextPage() : null
+    }, [hasNextPage, fetchNextPage])
     useTitle(t('popups_encrypted_friends'))
-
     return (
         <FriendsHomeUI
-            listRef={listRef}
             friends={value}
-            loading={loading || resolveLoading || searchLoading}
+            loading={isLoading || resolveLoading || searchLoading}
             setSearchValue={setSearchValue}
             searchValue={searchValue}
             searchResult={searchedList}
+            fetchNextPage={fetchMore}
+            profiles={profiles}
         />
     )
 })

@@ -1,14 +1,15 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
 import { makeStyles, LoadingBase } from '@masknet/theme'
-import { memo, type RefObject } from 'react'
-import { type FriendsInformation } from '../../../hook/useFriends.js'
+import { memo } from 'react'
 import { Box, Typography } from '@mui/material'
 import { Search } from '../Search/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import type { NextIDPersonaBindingsWithIdentifier } from '../../../hook/useFriendsFromSearch.js'
 import { Contacts } from '../Contacts/index.js'
 import { SearchList } from '../SearchList/index.js'
+import { type Friend } from '../../../hook/useFriends.js'
+import { type BindingProof } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -40,9 +41,10 @@ export interface FriendsHomeUIProps {
     searchValue: string
     searchResult: NextIDPersonaBindingsWithIdentifier[]
     loading: boolean
-    friends: FriendsInformation[]
+    friends: Friend[]
+    profiles: BindingProof[][]
     setSearchValue: (v: string) => void
-    listRef: RefObject<HTMLElement>
+    fetchNextPage: () => void
 }
 
 export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
@@ -51,7 +53,8 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
     setSearchValue,
     searchResult,
     searchValue,
-    listRef,
+    fetchNextPage,
+    profiles,
 }) {
     const { classes, cx } = useStyles()
     const { t } = useI18N()
@@ -68,7 +71,9 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
             ) : searchValue ? (
                 <SearchList searchResult={searchResult} />
             ) : (
-                <Contacts friends={friends} listRef={listRef} />
+                <>
+                    <Contacts friends={friends} fetchNextPage={fetchNextPage} profiles={profiles} />
+                </>
             )}
         </div>
     )
