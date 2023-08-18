@@ -1,7 +1,7 @@
 import { max } from 'lodash-es'
 import type { Wallet } from '../index.js'
 
-export function generateNewWalletName(wallets: Wallet[], index = 0) {
+export function generateNewWalletName(wallets: Wallet[], index = 0, preIndex?: number) {
     const maxIndex =
         max(
             wallets
@@ -11,5 +11,7 @@ export function generateNewWalletName(wallets: Wallet[], index = 0) {
                 .map(Number),
         ) ?? 0
 
-    return `Wallet ${maxIndex + index + 1}`
+    const finalIndex = preIndex && preIndex > maxIndex ? preIndex : maxIndex + index + 1
+
+    return `Wallet ${finalIndex}`
 }
