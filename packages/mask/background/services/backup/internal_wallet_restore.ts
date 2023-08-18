@@ -5,7 +5,7 @@ import {
     currySameAddress,
     HD_PATH_WITHOUT_INDEX_ETHEREUM,
     generateNewWalletName,
-    handleDuplicatedWalletName,
+    generateUniqueWalletName,
 } from '@masknet/web3-shared-base'
 import { fromBase64URL, type EC_JsonWebKey, isK256Point, isK256PrivateKey } from '@masknet/shared-base'
 import {
@@ -23,7 +23,7 @@ export async function internal_wallet_restore(backup: NormalizedBackup.WalletBac
             const index = matchedDefaultNameFormat?.[1]
             const name =
                 wallet.name && !index
-                    ? handleDuplicatedWalletName(wallets, wallet.name)
+                    ? generateUniqueWalletName(wallets, wallet.name)
                     : generateNewWalletName(
                           wallets,
                           undefined,

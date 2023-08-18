@@ -1,7 +1,7 @@
 import { isUndefined, max } from 'lodash-es'
 import type { Wallet } from '@masknet/shared-base'
 
-export function handleDuplicatedWalletName(wallets: Wallet[], name: string) {
+export function generateUniqueWalletName(wallets: Wallet[], name: string) {
     const num = name.match(/\((\d+)\)/)?.[1]
     const _name = num ? name.split(` (${num})`)?.[0] : name
 

@@ -1,8 +1,8 @@
 import { describe, test, expect } from 'vitest'
 import type { Wallet } from '@masknet/shared-base'
-import { handleDuplicatedWalletName } from '../../src/helpers/handleDuplicatedWalletName.js'
+import { generateUniqueWalletName } from '../../src/helpers/generateUniqueWalletName.js'
 
-describe('handleDuplicatedWalletName util test', () => {
+describe('generateUniqueWalletName util test', () => {
     test.each([
         { wallets: [{ name: 'a' }] as Wallet[], name: 'a', expected: 'a (1)' },
         { wallets: [{ name: 'b' }] as Wallet[], name: 'a', expected: 'a' },
@@ -11,6 +11,6 @@ describe('handleDuplicatedWalletName util test', () => {
         { wallets: [{ name: 'a (3)' }] as Wallet[], name: 'a (1)', expected: 'a (4)' },
         { wallets: [{ name: 'a (3)' }] as Wallet[], name: 'a (11)', expected: 'a (11)' },
     ])('.format($wallets $name)', ({ wallets, name, expected }) => {
-        expect(handleDuplicatedWalletName(wallets, name)).toBe(expected)
+        expect(generateUniqueWalletName(wallets, name)).toBe(expected)
     })
 })
