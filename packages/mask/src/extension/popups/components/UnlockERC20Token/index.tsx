@@ -7,7 +7,7 @@ import { useChainContext, useChainIdSupport, useFungibleToken, useFungibleTokenB
 import { ExplorerResolver } from '@masknet/web3-providers'
 import { CopyButton, TokenIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { isGreaterThan, isZero, leftShift } from '@masknet/web3-shared-base'
+import { isGreaterThan, isZero, leftShift, rightShift } from '@masknet/web3-shared-base'
 import { GasSettingMenu } from '../GasSettingMenu/index.js'
 import type { TransactionDetail } from '../../pages/Wallet/type.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
@@ -31,7 +31,6 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1),
         marginTop: theme.spacing(1.25),
         display: 'flex',
-        justifyContent: 'space-between',
         alignItems: 'center',
         borderRadius: 99,
     },
@@ -173,7 +172,7 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                     name={token?.name}
                     className={classes.tokenIcon}
                 />
-                <Box flex={1} ml={1}>
+                <Box width="262px" mr="18px" ml={1}>
                     <Typography className={classes.name}>{token?.symbol}</Typography>
                     <Typography className={classes.address}>{token?.address}</Typography>
                 </Box>
@@ -197,7 +196,7 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                     value={value}
                     onChange={(e) => {
                         setValue(e.target.value)
-                        handleChange(e.target.value)
+                        handleChange(rightShift(e.target.value, token?.decimals).toString())
                     }}
                     InputProps={{
                         endAdornment: (
@@ -207,7 +206,7 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                                 onClick={() => {
                                     const result = leftShift(balance, token?.decimals).toString()
                                     setValue(leftShift(balance, token?.decimals).toString())
-                                    handleChange(result)
+                                    handleChange(balance)
                                 }}>
                                 {t('max')}
                             </Button>

@@ -10,6 +10,7 @@ import {
     type MessageRequest,
     type MessageResponse,
     isNativeTokenAddress,
+    getNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import {
     MessageStateType,
@@ -27,11 +28,6 @@ import { Web3StateRef } from '../apis/Web3StateAPI.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { Providers } from '../providers/index.js'
 
-const DEFAULT_PAYMENT_TOKEN_STATE = {
-    allowMaskAsGas: false,
-    paymentToken: undefined,
-}
-
 export class Popups implements Middleware<ConnectionContext> {
     private Web3 = new ConnectionReadonlyAPI()
     private Contract = new ContractReadonlyAPI()
@@ -45,9 +41,19 @@ export class Popups implements Middleware<ConnectionContext> {
 
     private async getPaymentToken(context: ConnectionContext) {
         const maskAddress = getMaskTokenAddress(context.chainId)
+        const nativeTokenAddress = getNativeTokenAddress(context.chainId)
+
+        const DEFAULT_PAYMENT_TOKEN_STATE = {
+            allowMaskAsGas: false,
+            paymentToken: nativeTokenAddress,
+        }
         try {
             const smartPayChainId = await this.Bundler.getSupportedChainId()
-            if (context.chainId !== smartPayChainId || !context.owner) return DEFAULT_PAYMENT_TOKEN_STATE
+            if (context.chainId !== smartPayChainId || !context.owner)
+                return {
+                    allowMaskAsGas: false,
+                    paymentToken: undefined,
+                }
 
             const { PAYMASTER_MASK_CONTRACT_ADDRESS } = getSmartPayConstants(context.chainId)
             if (!PAYMASTER_MASK_CONTRACT_ADDRESS) return DEFAULT_PAYMENT_TOKEN_STATE
@@ -88,11 +94,15 @@ export class Popups implements Middleware<ConnectionContext> {
             const availableBalanceTooLow =
                 isGreaterThan(maskGasFee, maskAllowance) || isGreaterThan(maskGasFee, maskBalance)
 
-            const isNative = !context.paymentToken || isNativeTokenAddress(context.paymentToken)
+            const isNative = isNativeTokenAddress(context.paymentToken)
 
             return {
                 allowMaskAsGas: !availableBalanceTooLow,
-                paymentToken: isNative ? context.paymentToken : !availableBalanceTooLow ? maskAddress : undefined,
+                paymentToken: isNative
+                    ? context.paymentToken
+                    : !availableBalanceTooLow
+                    ? maskAddress
+                    : nativeTokenAddress,
             }
         } catch (error) {
             const nativeBalance = await this.Web3.getNativeTokenBalance({

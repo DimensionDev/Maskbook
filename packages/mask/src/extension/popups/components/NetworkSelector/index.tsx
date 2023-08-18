@@ -112,7 +112,7 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork,
         <>
             <Box className={classes.root} onClick={openMenu}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    {currentNetwork.isMainnet ? (
+                    {currentNetwork?.isMainnet ? (
                         <WalletIcon size={20} mainIcon={currentNetwork.icon} />
                     ) : (
                         <div className={classes.iconWrapper}>

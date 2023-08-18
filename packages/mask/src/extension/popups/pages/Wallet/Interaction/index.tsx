@@ -20,13 +20,13 @@ import { useAsync, useAsyncFn } from 'react-use'
 import Services from '../../../../service.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { TransactionPreview } from '../../../components/TransactionPreview/index.js'
-import { WalletAssetTabs } from '../type.js'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
 import { Icons } from '@masknet/icons'
 import { useUpdateEffect } from '@react-hookz/web'
 import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
-import urlcat from 'urlcat'
 import { compact, mapValues, omit } from 'lodash-es'
+import urlcat from 'urlcat'
+import { WalletAssetTabs } from '../type.js'
 
 const useStyles = makeStyles()((theme) => ({
     left: {
@@ -166,7 +166,11 @@ const Interaction = memo(function Interaction() {
                     transaction?.formattedTransaction._tx.data.slice(10),
                 )
 
-                const result = abiCoder.encodeParameters(approveParametersType, [parameters.spender, approveAmount])
+                const parametersString = abiCoder
+                    .encodeParameters(approveParametersType, [parameters.spender, toHex(approveAmount)])
+                    .slice(10)
+
+                const result = `${transaction.formattedTransaction._tx.data.slice(0, 10)}${parametersString}`
 
                 params = compact(
                     currentRequest.request.arguments.params.map((x) =>
