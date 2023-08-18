@@ -10,6 +10,7 @@ import { useMessages, useWallet } from '@masknet/web3-hooks-base'
 import { useHasPassword } from '../../hook/useHasPassword.js'
 import { useWalletLockStatus } from '../../pages/Wallet/hooks/useWalletLockStatus.js'
 import Services from '../../../service.js'
+import { useCurrentPersona } from '../../../../components/DataSource/useCurrentPersona.js'
 
 const useStyle = makeStyles()((theme) => ({
     navigation: {
@@ -57,6 +58,8 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
 
     const { hasPassword, loading: hasPasswordLoading } = useHasPassword()
 
+    const currentPersona = useCurrentPersona()
+
     const walletPageLoading = lockStatusLoading || hasPasswordLoading
 
     const walletLink = useMemo(() => {
@@ -72,13 +75,15 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
     const onOpenDashboardSettings = useCallback(async () => {
         await browser.tabs.create({
             active: true,
-            url: browser.runtime.getURL(`/dashboard.html#${DashboardRoutes.Settings}`),
+            url: browser.runtime.getURL(
+                `/dashboard.html#${currentPersona ? DashboardRoutes.Settings : DashboardRoutes.SignUpPersona}`,
+            ),
         })
         if (navigator.userAgent.includes('Firefox')) {
             window.close()
         }
         await Services.Helper.removePopupWindow()
-    }, [])
+    }, [currentPersona])
 
     return (
         <Box className={cx(classes.container, className)} {...rest}>

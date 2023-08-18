@@ -1,15 +1,13 @@
 import { ec as EC } from 'elliptic'
 import { concatArrayBuffer } from '@masknet/kit'
 import type { NormalizedBackup } from '@masknet/backup-format'
-import { currySameAddress, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import {
-    fromBase64URL,
-    type EC_JsonWebKey,
-    isK256Point,
-    isK256PrivateKey,
+    currySameAddress,
+    HD_PATH_WITHOUT_INDEX_ETHEREUM,
     generateNewWalletName,
-    handleDuplicatedWalletName,
-} from '@masknet/shared-base'
+    generateUniqueWalletName,
+} from '@masknet/web3-shared-base'
+import { fromBase64URL, type EC_JsonWebKey, isK256Point, isK256PrivateKey } from '@masknet/shared-base'
 import {
     getDerivableAccounts,
     getWallets,
@@ -21,7 +19,16 @@ export async function internal_wallet_restore(backup: NormalizedBackup.WalletBac
     for (const wallet of backup) {
         try {
             const wallets = await getWallets()
-            const name = wallet.name ? handleDuplicatedWalletName(wallets, wallet.name) : generateNewWalletName(wallets)
+            const matchedDefaultNameFormat = wallet.name.match(/Wallet (\d+)/)
+            const index = matchedDefaultNameFormat?.[1]
+            const name =
+                wallet.name && !index
+                    ? generateUniqueWalletName(wallets, wallet.name)
+                    : generateNewWalletName(
+                          wallets,
+                          undefined,
+                          index && !Number.isNaN(index) ? Number(index) : undefined,
+                      )
             if (wallet.privateKey.some)
                 await recoverWalletFromPrivateKey(name, await JWKToKey(wallet.privateKey.val, 'private'))
             else if (wallet.mnemonic.some) {

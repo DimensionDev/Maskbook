@@ -214,7 +214,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
     }, [modalNavigate])
 
     const handleDone = useCallback(async () => {
-        await Web3.disconnect({ providerType })
+        if (providerType !== ProviderType.MaskWallet) await Web3.disconnect({ providerType })
         if (providerType === ProviderType.MaskWallet || providerType === ProviderType.WalletConnect) {
             navigate(-1)
             return
