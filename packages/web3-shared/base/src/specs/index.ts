@@ -837,7 +837,7 @@ type TransactionAsset<ChainId, SchemaType> = Token<ChainId, SchemaType> & {
 export interface Transaction<ChainId, SchemaType> {
     id: string
     chainId: ChainId
-    type?: LiteralUnion<'burn' | 'contract interaction'>
+    type?: LiteralUnion<'burn' | 'contract interaction' | 'transfer'>
     cateType?: LiteralUnion<'approve' | 'receive' | 'send'>
     cateName?: string
     /** address */
