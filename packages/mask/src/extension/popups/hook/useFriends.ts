@@ -1,4 +1,3 @@
-import { useAsyncRetry } from 'react-use'
 import {
     type ECKeyIdentifier,
     EMPTY_LIST,
@@ -6,19 +5,20 @@ import {
     NextIDPlatform,
     type ProfileIdentifier,
 } from '@masknet/shared-base'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { useCurrentPersona } from '../../../components/DataSource/useCurrentPersona.js'
 import Services from '../../../extension/service.js'
-import { NextIDProof } from '@masknet/web3-providers'
-import { first, uniqBy } from 'lodash-es'
+import { first } from 'lodash-es'
 import { isProfileIdentifier } from '@masknet/shared'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { NextIDProof } from '@masknet/web3-providers'
+import { useEffect, useState } from 'react'
 
 export type FriendsInformation = Friend & {
     profiles: BindingProof[]
     id: string
 }
 
-type Friend = {
+export type Friend = {
     persona: ECKeyIdentifier
     profile?: ProfileIdentifier
     avatar?: string
@@ -43,52 +43,67 @@ export const PlatformSort: Record<NextIDPlatform, number> = {
     [NextIDPlatform.NextID]: 15,
 }
 
-function emptyFilter(x: Friend | undefined): x is Friend {
-    return x !== undefined
-}
-
-export function useFriends(): AsyncStateRetry<FriendsInformation[]> {
+export function useFriendsPaged() {
+    const [isFetchingProfiles, setIsFetchingProfiles] = useState(false)
     const currentPersona = useCurrentPersona()
-    return useAsyncRetry(async () => {
-        const values = await Services.Identity.queryRelationPaged(
-            currentPersona?.identifier,
-            {
-                network: 'all',
-                pageOffset: 0,
-            },
-            1000,
-        )
-        if (values.length === 0) return EMPTY_LIST
-        const friends: Friend[] = (
-            await Promise.all<Promise<Friend | undefined>>(
-                values.map(async (x) => {
-                    if (isProfileIdentifier(x.profile)) {
-                        const res = first(await Services.Identity.queryProfilesInformation([x.profile]))
-                        if (res?.linkedPersona !== undefined && res?.linkedPersona !== currentPersona?.identifier)
-                            return {
-                                persona: res.linkedPersona,
-                                profile: x.profile,
-                                avatar: res.avatar,
-                            }
-                        return
-                    } else {
-                        if (x.profile !== currentPersona?.identifier) return { persona: x.profile }
-                        return
-                    }
+    const { data: records = EMPTY_LIST, isLoading: recordsLoading } = useQuery(
+        ['relation-records', currentPersona],
+        async () => {
+            return Services.Identity.queryRelationPaged(
+                currentPersona?.identifier,
+                {
+                    network: 'all',
+                    pageOffset: 0,
+                },
+                3000,
+            )
+        },
+    )
+    const { data, hasNextPage, fetchNextPage, isLoading, isFetchingNextPage } = useInfiniteQuery({
+        queryKey: ['friends', currentPersona],
+        enabled: !recordsLoading,
+        queryFn: async ({ pageParam = 0 }) => {
+            const friends: Friend[] = []
+            const startIndex = pageParam ? Number(pageParam) : 0
+            let nextPageOffset = 0
+            for (let i = startIndex; i < records.length; i += 1) {
+                nextPageOffset = i
+                if (friends.length === 10) break
+                const x = records[i]
+                if (isProfileIdentifier(x.profile)) {
+                    const res = first(await Services.Identity.queryProfilesInformation([x.profile]))
+                    if (res?.linkedPersona !== undefined && res?.linkedPersona !== currentPersona?.identifier)
+                        friends.push({
+                            persona: res.linkedPersona,
+                            profile: x.profile,
+                            avatar: res.avatar,
+                        })
+                } else {
+                    if (x.profile !== currentPersona?.identifier) friends.push({ persona: x.profile })
+                }
+            }
+            return { friends, nextPageOffset }
+        },
+        getNextPageParam: ({ nextPageOffset }) => {
+            if (nextPageOffset >= records.length - 1) return
+            return nextPageOffset
+        },
+    })
+    const { data: profilesArray, fetchNextPage: fetchNextProfilesPage } = useInfiniteQuery(
+        ['nextid-profiles', currentPersona],
+        async ({ pageParam = 0 }) => {
+            const friends = data?.pages[Number(pageParam)].friends
+            if (!friends) return EMPTY_LIST
+            const allSettled = await Promise.allSettled(
+                friends.map((item) => {
+                    const id = item.persona.publicKeyAsHex
+                    return NextIDProof.queryProfilesByPublicKey(id, 2)
                 }),
             )
-        ).filter(emptyFilter)
-        const allSettled = await Promise.allSettled(
-            friends.map((item) => {
-                const id = item.persona.publicKeyAsHex
-                return NextIDProof.queryProfilesByPublicKey(id, 2)
-            }),
-        )
-        const profiles: FriendsInformation[] = allSettled.map((item, index) => {
-            if (item.status === 'rejected') {
-                if (friends[index].profile) {
-                    return {
-                        profiles: [
+            const profiles: BindingProof[][] = allSettled.map((item, index) => {
+                if (item.status === 'rejected') {
+                    if (friends[index].profile) {
+                        return [
                             {
                                 platform: NextIDPlatform.Twitter,
                                 identity: friends[index].profile!.userId,
@@ -97,36 +112,59 @@ export function useFriends(): AsyncStateRetry<FriendsInformation[]> {
                                 name: friends[index].profile!.userId,
                                 created_at: '',
                             },
-                        ],
-                        ...friends[index],
-                        id: friends[index].persona.publicKeyAsHex,
-                    }
-                } else {
-                    return {
-                        profiles: [],
-                        ...friends[index],
-                        id: friends[index].persona.publicKeyAsHex,
+                        ]
+                    } else {
+                        return []
                     }
                 }
+                const filtered = item.value
+                    .filter(
+                        (x) =>
+                            (x.platform === NextIDPlatform.ENS && x.name.endsWith('.eth')) ||
+                            (x.platform !== NextIDPlatform.Bit &&
+                                x.platform !== NextIDPlatform.CyberConnect &&
+                                x.platform !== NextIDPlatform.REDDIT &&
+                                x.platform !== NextIDPlatform.SYBIL &&
+                                x.platform !== NextIDPlatform.EthLeaderboard &&
+                                x.platform !== NextIDPlatform.NextID),
+                    )
+                    .sort((a, b) => PlatformSort[a.platform] - PlatformSort[b.platform])
+                return filtered
+            })
+            return profiles
+        },
+        {
+            enabled: !!data,
+            getNextPageParam: (_, allPages) => {
+                if (!data || allPages.length >= data.pages.length) return undefined
+                return allPages.length
+            },
+        },
+    )
+    useEffect(() => {
+        let isMounted = true
+        const fetchNext = async () => {
+            if (!data?.pages || !profilesArray) return
+            let profilesLength = profilesArray?.pages?.length
+            setIsFetchingProfiles(true)
+            while (profilesLength <= data.pages.length) {
+                await fetchNextProfilesPage()
+                profilesLength += 1
+                if (!isMounted) break
             }
-            const filtered = item.value.filter(
-                (x) =>
-                    (x.platform === NextIDPlatform.ENS && x.name.endsWith('.eth')) ||
-                    (x.platform !== NextIDPlatform.Bit &&
-                        x.platform !== NextIDPlatform.CyberConnect &&
-                        x.platform !== NextIDPlatform.REDDIT &&
-                        x.platform !== NextIDPlatform.SYBIL &&
-                        x.platform !== NextIDPlatform.EthLeaderboard &&
-                        x.platform !== NextIDPlatform.NextID),
-            )
-
-            filtered.sort((a, b) => PlatformSort[a.platform] - PlatformSort[b.platform])
-            return {
-                profiles: filtered,
-                ...friends[index],
-                id: friends[index].persona.publicKeyAsHex,
-            }
-        })
-        return uniqBy(profiles, ({ id }) => id)
-    }, [currentPersona])
+            setIsFetchingProfiles(false)
+        }
+        if (!isFetchingProfiles) fetchNext()
+        return () => {
+            isMounted = false
+        }
+    }, [data, fetchNextProfilesPage, profilesArray])
+    return {
+        data,
+        isLoading: isLoading || recordsLoading,
+        hasNextPage,
+        fetchNextPage,
+        isFetchingNextPage,
+        profilesArray,
+    }
 }

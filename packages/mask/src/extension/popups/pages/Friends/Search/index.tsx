@@ -3,15 +3,14 @@ import { InputAdornment, InputBase } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { Icons } from '@masknet/icons'
+import { useCurrentLinkedPersona } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     inputRoot: {
-        padding: '4px',
         borderRadius: 8,
         width: '100%',
         background: theme.palette.maskColor.input,
         fontSize: 14,
-        marginBottom: 16,
     },
     inputFocused: {
         background: theme.palette.maskColor.bottom,
@@ -35,6 +34,7 @@ export const Search = memo<SearchProps>(function Search({ setSearchValue }) {
     const { t } = useI18N()
     const [value, setValue] = useState<string>('')
     const [timer, setTimer] = useState<NodeJS.Timeout | null>(null)
+    const currentPersona = useCurrentLinkedPersona()
     const handleKeyPress = (e: React.KeyboardEvent) => {
         if (e.key !== 'Enter') return
         if (timer) clearTimeout(timer)
@@ -46,6 +46,7 @@ export const Search = memo<SearchProps>(function Search({ setSearchValue }) {
             classes={{
                 focused: classes.inputFocused,
             }}
+            disabled={!currentPersona}
             value={value}
             onKeyUp={(e) => handleKeyPress(e)}
             onBlur={(e) => {

@@ -2,7 +2,7 @@ import { useAsyncRetry } from 'react-use'
 import { ECKeyIdentifier, EMPTY_LIST, type NextIDPersonaBindings } from '@masknet/shared-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { uniqBy } from 'lodash-es'
-import type { FriendsInformation } from './useFriends.js'
+import type { Friend } from './useFriends.js'
 import { NextIDPlatform } from '@masknet/shared-base'
 import { PlatformSort } from './useFriends.js'
 
@@ -12,7 +12,7 @@ export type NextIDPersonaBindingsWithIdentifier = NextIDPersonaBindings & { link
 
 export function useFriendsFromSearch(
     searchResult?: NextIDPersonaBindings[],
-    localList?: FriendsInformation[],
+    localList?: Friend[],
     searchValue?: string,
 ): AsyncStateRetry<NextIDPersonaBindingsWithIdentifier[]> {
     return useAsyncRetry(async () => {
