@@ -1,12 +1,11 @@
-import { Icons } from '@masknet/icons'
-import { ElementAnchor, EmptyStatus, RetryHint } from '@masknet/shared'
+import { ElementAnchor, EmptyStatus, LoadingStatus, ReloadStatus } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import type { AsyncStatePageable } from '@masknet/web3-hooks-base'
-import type { NonFungibleTokenEvent } from '@masknet/web3-shared-base'
+import { useNonFungibleEvents } from '@masknet/web3-hooks-base'
 import { Stack } from '@mui/material'
+import { useMemo } from 'react'
 import { useI18N } from '../../locales/i18n_generated.js'
+import { Context } from '../Context/index.js'
 import { ActivityCard } from './ActivityCard.js'
 
 const useStyles = makeStyles()({
@@ -22,47 +21,41 @@ const useStyles = makeStyles()({
     },
 })
 
-export interface ActivitiesListProps {
-    events: AsyncStatePageable<NonFungibleTokenEvent<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
-}
-
-export function ActivitiesList(props: ActivitiesListProps) {
-    const { events } = props
-    const _events = events.value ?? EMPTY_LIST
+export function ActivitiesList() {
+    const { pluginID, tokenAddress, tokenId, chainId, ownerAddress } = Context.useContainer()
 
     const t = useI18N()
     const { classes } = useStyles()
 
-    if (events.loading && !_events.length)
-        return (
-            <div className={classes.wrapper}>
-                <LoadingBase />
-            </div>
-        )
+    const { data, isLoading, error, hasNextPage, fetchNextPage, refetch } = useNonFungibleEvents(
+        pluginID,
+        tokenAddress,
+        tokenId,
+        {
+            chainId,
+            account: ownerAddress,
+        },
+    )
+    const events = useMemo(() => data?.pages.flatMap((x) => x.data) ?? EMPTY_LIST, [data?.pages])
+    if (isLoading && !events.length) return <LoadingStatus className={classes.wrapper} />
 
-    if (events.error || !events.value)
-        return (
-            <div className={classes.wrapper}>
-                <RetryHint
-                    ButtonProps={{ startIcon: <Icons.Restore color="white" size={18} />, sx: { width: 256 } }}
-                    retry={() => events.retry()}
-                />
-            </div>
-        )
+    if (error) return <ReloadStatus className={classes.wrapper} onRetry={refetch} />
 
-    if (!_events.length) return <EmptyStatus height={215}>{t.plugin_collectible_nft_activity_empty()}</EmptyStatus>
+    if (!events.length) return <EmptyStatus height={215}>{t.plugin_collectible_nft_activity_empty()}</EmptyStatus>
 
     return (
         <div className={classes.wrapper} style={{ justifyContent: 'unset' }}>
-            {_events?.map((x, idx) => <ActivityCard key={idx} activity={x} />)}
+            {events.map((x, idx) => (
+                <ActivityCard key={idx} activity={x} />
+            ))}
             <Stack pb="1px" width="100%" direction="row" justifyContent="center">
-                {!events.ended && (
+                {hasNextPage ? (
                     <Stack py={1}>
-                        <ElementAnchor callback={() => events.next()}>
-                            {events.loading ? <LoadingBase /> : null}
+                        <ElementAnchor callback={() => fetchNextPage()}>
+                            {isLoading ? <LoadingBase /> : null}
                         </ElementAnchor>
                     </Stack>
-                )}
+                ) : null}
             </Stack>
         </div>
     )
