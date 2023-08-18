@@ -148,6 +148,7 @@ export function useFriendsPaged() {
             let profilesLength = profilesArray?.pages?.length
             setIsFetchingProfiles(true)
             while (profilesLength <= data.pages.length) {
+                await fetchNextProfilesPage()
                 profilesLength += 1
                 if (!isMounted) break
             }
