@@ -22,7 +22,6 @@ export async function internal_wallet_restore(backup: NormalizedBackup.WalletBac
         try {
             const wallets = await getWallets()
             const name = wallet.name ? handleDuplicatedWalletName(wallets, wallet.name) : generateNewWalletName(wallets)
-
             if (wallet.privateKey.some)
                 await recoverWalletFromPrivateKey(name, await JWKToKey(wallet.privateKey.val, 'private'))
             else if (wallet.mnemonic.some) {
