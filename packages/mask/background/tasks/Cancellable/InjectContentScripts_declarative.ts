@@ -2,6 +2,7 @@ import { noop } from 'lodash-es'
 import { hmr } from '../../../utils-pure/index.js'
 import type { Scripting } from 'webextension-polyfill'
 import { injectedScriptURL, fetchInjectContentScriptList } from '../../utils/injectScript.js'
+import { Sniffings } from '@masknet/shared-base'
 
 const { signal } = hmr(import.meta.webpackHot)
 if (typeof browser.scripting?.registerContentScripts === 'function') {
@@ -19,7 +20,7 @@ async function unregisterExistingScripts() {
 }
 
 function prepareMainWorldScript(matches: string[]): Scripting.RegisteredContentScript[] {
-    if (globalThis.navigator?.userAgent.includes('Firefox')) return []
+    if (Sniffings.is_firefox) return []
     const result: Scripting.RegisteredContentScript = {
         id: 'injected',
         allFrames: true,

@@ -6,6 +6,7 @@ import {
     injectUserScriptMV2,
     injectedScriptURL,
 } from '../../utils/injectScript.js'
+import { Sniffings } from '@masknet/shared-base'
 
 const { signal } = hmr(import.meta.webpackHot)
 if (typeof browser.scripting?.registerContentScripts === 'undefined') InjectContentScript(signal)
@@ -18,11 +19,12 @@ async function onCommittedListener(arg: WebNavigation.OnCommittedDetailsType): P
     const detail: ExtensionTypes.InjectDetails = { runAt: 'document_start', frameId: arg.frameId }
     const err = ignoreInjectError(arg)
 
-    if (globalThis.navigator?.userAgent.includes('Firefox')) {
+    // don't add await here. we don't want this to block the content script
+    if (Sniffings.is_firefox) {
         browser.tabs.executeScript(arg.tabId, { ...detail, file: injectedScriptURL }).catch(err)
     } else {
-        browser.tabs
-            .executeScript(arg.tabId, { ...detail, code: await injectUserScriptMV2(injectedScriptURL) })
+        injectUserScriptMV2(injectedScriptURL)
+            .then(async (code) => browser.tabs.executeScript(arg.tabId, { ...detail, code }))
             .catch(err)
     }
 

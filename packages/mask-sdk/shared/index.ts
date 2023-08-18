@@ -1,6 +1,6 @@
 /// <reference path="../dist/public-api.d.ts" />
 export interface BridgeAPI {
-    persona_sign_web3(message: string): Promise<string>
+    persona_signMessage(message: string): Promise<string>
     site_appendComposition(message: string, metadata?: ReadonlyMap<string, unknown>): Promise<void>
     eth_request(request: unknown): Promise<unknown>
     reload(): Promise<void>

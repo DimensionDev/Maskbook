@@ -5,7 +5,7 @@ import { SiteMethods } from './site_context.js'
 import { readonlyMethodType, type EthereumMethodType } from '@masknet/web3-shared-evm'
 
 export const maskSDKServer: BridgeAPI = {
-    async persona_sign_web3(message) {
+    async persona_signMessage(message) {
         return Services.Identity.signWithPersona(SignType.Message, String(message))
     },
     eth_request,
@@ -23,26 +23,24 @@ for (const method of readonlyMethodType) {
     }
 }
 const impl = {
-    __proto__: null,
-
     ...readonlyImpl,
     // Reference:
     // https://ethereum.github.io/execution-apis/api-documentation/
     // https://docs.metamask.io/wallet/reference/eth_subscribe/
 }
+Object.setPrototypeOf(impl, null)
+
 async function eth_request(request: unknown) {
     if (typeof request !== 'object' || request === null) throw invalidRequest()
 
-    const method = (request as any).method
+    const { method } = request as any
     if (typeof method !== 'string' || !method) throw invalidMethod()
     if (!(method in impl)) throw unknownMethod(method)
 
-    let params: unknown
-    if (params && params !== undefined) {
-        if (typeof params !== 'object' || !params) throw invalidParams()
-    }
+    const { params } = request as any
+    if (params !== undefined && !Array.isArray(params)) throw invalidParams()
 
-    return (impl as any)[method](params)
+    return impl[method as keyof typeof impl](params)
 }
 function invalidRequest() {
     throw new MaskEthereumProviderRpcError({
