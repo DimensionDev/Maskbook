@@ -15,7 +15,6 @@ import TokenDetail from './TokenDetail/index.js'
 import { TransactionDetail } from './TransactionDetail/index.js'
 import { CollectibleDetail } from './CollectibleDetail/index.js'
 
-const ImportWallet = lazy(() => import('./ImportWallet/index.js'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet/index.js'))
 const WalletSettings = lazy(() => import('./WalletSettings/index.js'))
 const CreateWallet = lazy(() => import('./CreateWallet/index.js'))
@@ -48,7 +47,6 @@ export default function Wallet() {
                             wallet && wallets.filter((x) => !x.owner).length ? <WalletAssets /> : <WalletStartUp />
                         }
                     />
-                    <Route path={r(PopupRoutes.ImportWallet)} element={<ImportWallet />} />
                     <Route path={r(PopupRoutes.AddDeriveWallet)} element={<AddDeriveWallet />} />
                     <Route path={r(PopupRoutes.WalletSettings)} element={<WalletSettings />} />
                     <Route path={r(PopupRoutes.CreateWallet)} element={<CreateWallet />} />

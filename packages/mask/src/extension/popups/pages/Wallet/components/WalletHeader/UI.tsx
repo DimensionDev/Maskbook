@@ -219,7 +219,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
             {!disabled ? (
                 <>
                     <WalletAssetsValue className={classes.balance} skeletonWidth={100} skeletonHeight="2em" />
-                    <ActionGroup mt={2} />
+                    <ActionGroup chainId={chainId} mt={2} />
                 </>
             ) : null}
         </Box>

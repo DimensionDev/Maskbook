@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { Box, MenuItem, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
@@ -9,8 +9,9 @@ import { ChainIcon, useMenuConfig, WalletIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { Flags } from '@masknet/flags'
 import type { NetworkDescriptor } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
+import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -48,6 +49,14 @@ export const NetworkSelector = memo(() => {
     const { account, chainId, providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const networks = getRegisteredWeb3Networks(NetworkPluginID.PLUGIN_EVM)
 
+    const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')
+    const chainIdList = traderDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
+
+    const actualNetworks = useMemo(
+        () => networks.filter((x) => chainIdList.includes(x.chainId)),
+        [networks, chainIdList],
+    )
+
     const onChainChange = useCallback(
         async (chainId: Web3Helper.Definition[NetworkPluginID.PLUGIN_EVM]['ChainId']) => {
             await Web3.switchChain?.(chainId)
@@ -57,9 +66,9 @@ export const NetworkSelector = memo(() => {
 
     return (
         <NetworkSelectorUI
-            currentNetwork={networks.find((x) => x.chainId === chainId) ?? networks[0]}
+            currentNetwork={actualNetworks.find((x) => x.chainId === chainId) ?? actualNetworks[0]}
             onChainChange={onChainChange}
-            networks={networks}
+            networks={actualNetworks}
         />
     )
 })

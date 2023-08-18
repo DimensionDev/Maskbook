@@ -148,20 +148,26 @@ export const LogoutUI = memo<LogoutUIProps>(
         useTitle(t('popups_log_out'))
 
         const onConfirm = useCallback(async () => {
-            if (!backupPassword && !!manageWallets.length) {
-                modalNavigate(PopupModalRoutes.SetBackupPassword, { to: PopupRoutes.ExportPrivateKey })
-                return
-            }
-            if (manageWallets.length && paymentPassword) {
-                const verified = await verifyPaymentPassword(paymentPassword)
-                if (!verified) {
-                    setPaymentPasswordError(t('popups_wallet_persona_log_out_error_payment_password'))
+            if (manageWallets.length) {
+                if (hasPassword) {
+                    const verified = await verifyPaymentPassword(paymentPassword)
+                    if (!verified) {
+                        setPaymentPassword(t('popups_wallet_persona_log_out_error_payment_password'))
+                        return
+                    }
+                } else if (!backupPassword) {
+                    modalNavigate(PopupModalRoutes.SetBackupPassword, { to: PopupRoutes.ExportPrivateKey })
                     return
                 }
             }
-            if (!backupPassword || backupPassword === password) onLogout()
-            else setError(true)
-        }, [onLogout, backupPassword, password, paymentPassword, manageWallets.length])
+            if (backupPassword && backupPassword !== password) {
+                setError(true)
+                return
+            }
+
+            onLogout()
+            return
+        }, [onLogout, backupPassword, password, paymentPassword, manageWallets.length, hasPassword])
 
         const disabled = useMemo(() => {
             if (loading || error || paymentPasswordError) return true
@@ -319,11 +325,11 @@ export const LogoutUI = memo<LogoutUIProps>(
                     </Button>
                     <ActionButton
                         variant="contained"
-                        color={!backupPassword && manageWallets.length ? 'primary' : 'error'}
+                        color={!backupPassword && manageWallets.length && !hasPassword ? 'primary' : 'error'}
                         fullWidth
                         onClick={onConfirm}
                         disabled={disabled}>
-                        {!backupPassword && manageWallets.length ? t('backup') : t('popups_log_out')}
+                        {!backupPassword && manageWallets.length && !hasPassword ? t('backup') : t('popups_log_out')}
                     </ActionButton>
                 </BottomController>
             </Box>

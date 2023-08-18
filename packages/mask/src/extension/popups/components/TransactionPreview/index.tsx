@@ -180,7 +180,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                     {receiver ? <Typography className={classes.title}>{receiver}</Typography> : null}
                 </Box>
                 <Box mt={2} display="flex" columnGap={0.5} alignItems="center">
-                    <Typography className={classes.addressTitle}>{t('address')}:</Typography>
+                    <Typography className={classes.addressTitle}>{t('to')}:</Typography>
                     <Typography fontSize={11} fontWeight={700} lineHeight="16px">
                         {to}
                     </Typography>

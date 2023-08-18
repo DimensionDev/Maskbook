@@ -307,7 +307,7 @@ const Interaction = memo(function Interaction() {
 
     return (
         <Box flex={1} display="flex" flexDirection="column">
-            <Box p={2} display="flex" flexDirection="column" flex={1}>
+            <Box p={2} display="flex" flexDirection="column" flex={1} maxHeight="458px" overflow="auto">
                 {content}
                 {currentRequest && !signRequest.includes(currentRequest?.request.arguments.method) ? (
                     <Box
@@ -331,7 +331,7 @@ const Interaction = memo(function Interaction() {
                 {expand ? (
                     <Box
                         className={classes.transactionDetail}
-                        style={{ marginBottom: expand && messages.length <= 1 ? 72 : 16 }}>
+                        style={{ marginBottom: expand && messages.length <= 1 ? 0 : 16 }}>
                         {transaction?.formattedTransaction?.popup?.spender && approveAmount ? (
                             <>
                                 <Box display="flex" alignItems="center" columnGap={1.25}>
