@@ -13,7 +13,7 @@ import {
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { ErrorBoundary, queryClient } from '@masknet/shared-base-ui'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
-import { TelemetryProvider, EnvironmentContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { TelemetryProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { i18NextInstance, NetworkPluginID, queryRemoteI18NBundle } from '@masknet/shared-base'
 
 import '../utils/kv-storage.js'
@@ -42,35 +42,33 @@ export default function DashboardRoot() {
     // #endregion
 
     return (
-        <EnvironmentContextProvider value={Web3ContextType}>
-            <Web3ContextProvider value={Web3ContextType}>
-                <QueryClientProvider client={queryClient}>
-                    {process.env.NODE_ENV === 'development' ? (
-                        <ReactQueryDevtools position="bottom-right" toggleButtonProps={{ style: { width: 24 } }} />
-                    ) : null}
-                    <TelemetryProvider>
-                        <I18NextProviderHMR i18n={i18NextInstance}>
-                            <StyledEngineProvider injectFirst>
-                                <ThemeProvider theme={theme}>
-                                    <DialogStackingProvider>
-                                        <PersonaContext.Provider>
-                                            <ErrorBoundary>
-                                                <CssBaseline />
-                                                <CustomSnackbarProvider>
-                                                    <SharedContextProvider>
-                                                        <Pages />
-                                                        <PluginRender />
-                                                    </SharedContextProvider>
-                                                </CustomSnackbarProvider>
-                                            </ErrorBoundary>
-                                        </PersonaContext.Provider>
-                                    </DialogStackingProvider>
-                                </ThemeProvider>
-                            </StyledEngineProvider>
-                        </I18NextProviderHMR>
-                    </TelemetryProvider>
-                </QueryClientProvider>
-            </Web3ContextProvider>
-        </EnvironmentContextProvider>
+        <Web3ContextProvider value={Web3ContextType}>
+            <QueryClientProvider client={queryClient}>
+                {process.env.NODE_ENV === 'development' ? (
+                    <ReactQueryDevtools position="bottom-right" toggleButtonProps={{ style: { width: 24 } }} />
+                ) : null}
+                <TelemetryProvider>
+                    <I18NextProviderHMR i18n={i18NextInstance}>
+                        <StyledEngineProvider injectFirst>
+                            <ThemeProvider theme={theme}>
+                                <DialogStackingProvider>
+                                    <PersonaContext.Provider>
+                                        <ErrorBoundary>
+                                            <CssBaseline />
+                                            <CustomSnackbarProvider>
+                                                <SharedContextProvider>
+                                                    <Pages />
+                                                    <PluginRender />
+                                                </SharedContextProvider>
+                                            </CustomSnackbarProvider>
+                                        </ErrorBoundary>
+                                    </PersonaContext.Provider>
+                                </DialogStackingProvider>
+                            </ThemeProvider>
+                        </StyledEngineProvider>
+                    </I18NextProviderHMR>
+                </TelemetryProvider>
+            </QueryClientProvider>
+        </Web3ContextProvider>
     )
 }

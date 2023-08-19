@@ -1,7 +1,7 @@
 import { Suspense, useMemo } from 'react'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { StyledEngineProvider, type Theme } from '@mui/material'
-import { EnvironmentContextProvider, Web3ContextProvider, TelemetryProvider } from '@masknet/web3-hooks-base'
+import { Web3ContextProvider, TelemetryProvider } from '@masknet/web3-hooks-base'
 import { CSSVariableInjector, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { compose, getSiteType, i18NextInstance, NetworkPluginID, pluginIDsSettings } from '@masknet/shared-base'
@@ -36,20 +36,18 @@ function MaskUIRoot({ children, useTheme, fallback }: MaskUIRootProps) {
     return (
         <DialogStackingProvider hasGlobalBackdrop={false}>
             <MaskThemeProvider useMaskIconPalette={(theme) => theme.palette.mode} useTheme={useTheme}>
-                <EnvironmentContextProvider value={context}>
-                    <QueryClientProvider client={queryClient}>
-                        <Web3ContextProvider value={context}>
-                            <TelemetryProvider>
-                                <SharedContextProvider>
-                                    <Suspense fallback={fallback}>
-                                        <CSSVariableInjector />
-                                        {children}
-                                    </Suspense>
-                                </SharedContextProvider>
-                            </TelemetryProvider>
-                        </Web3ContextProvider>
-                    </QueryClientProvider>
-                </EnvironmentContextProvider>
+                <QueryClientProvider client={queryClient}>
+                    <Web3ContextProvider value={context}>
+                        <TelemetryProvider>
+                            <SharedContextProvider>
+                                <Suspense fallback={fallback}>
+                                    <CSSVariableInjector />
+                                    {children}
+                                </Suspense>
+                            </SharedContextProvider>
+                        </TelemetryProvider>
+                    </Web3ContextProvider>
+                </QueryClientProvider>
             </MaskThemeProvider>
         </DialogStackingProvider>
     )
