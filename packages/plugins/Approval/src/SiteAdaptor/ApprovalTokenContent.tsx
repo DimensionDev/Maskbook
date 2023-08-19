@@ -15,7 +15,7 @@ import {
     type NetworkDescriptor,
     type FungibleTokenSpender,
     formatSpendingCap,
-    formatBalance,
+    leftShift,
 } from '@masknet/web3-shared-base'
 import { ChainBoundary, TokenIcon } from '@masknet/shared'
 import { useI18N } from '../locales/index.js'
@@ -207,7 +207,11 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
     const { data: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, spender.tokenInfo.address, undefined, {
         chainId,
     })
-    const amount = spender.amount ? spender.amount : formatBalance(spender.rawAmount, token?.decimals)
+    const amount = spender.amount
+        ? spender.amount
+        : spender.rawAmount
+        ? leftShift(spender.rawAmount, token?.decimals)
+        : undefined
 
     return (
         <div className={classes.listItemWrapper}>
@@ -242,7 +246,9 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                     </div>
                     <div>
                         <Typography className={classes.secondaryText}>{t.approved_amount()}</Typography>
-                        <Typography className={classes.primaryText}>{formatSpendingCap(amount)}</Typography>
+                        {amount ? (
+                            <Typography className={classes.primaryText}>{formatSpendingCap(amount)}</Typography>
+                        ) : null}
                     </div>
                 </div>
                 <ChainBoundary

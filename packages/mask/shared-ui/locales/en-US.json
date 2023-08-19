@@ -1102,6 +1102,8 @@
     "popups_wallet_unlock_erc20_revoke_tips": "The approval for this contract will be revoked in the event of using 0 as the default input.",
     "popups_wallet_unlock_erc20_approve_amount": "Approve amount",
     "popups_wallet_unlock_erc20_granted_to": "Granted to",
+    "popups_wallet_unlock_erc721_title": "Give permission to access <br /> your {{symbol}}?",
+    "popups_wallet_unlock_erc721_tips": "By granting permission, you are allowing the following <br /> contract to access your NFTs",
     "popups_wallet_rpc_error": "There was a network or RPC provider error, please try again later!",
     "popups_wallet_gas_price_should_greater_than_zero": "Gas price should be greater than 0",
     "nft_wallet_label": "Wallet",

@@ -47,8 +47,7 @@ export class ERC721Descriptor extends BaseDescriptor implements TransactionDescr
                     }
                 }
                 case 'setApprovalForAll': {
-                    const schemaType = await this.Web3.getSchemaType(context.to)
-                    if (parameters?.operator === undefined || parameters?.approved === undefined || !schemaType) break
+                    if (parameters?.operator === undefined || parameters?.approved === undefined) break
 
                     const action = parameters?.approved === false ? 'Revoke' : 'Unlock'
                     const symbol = await this.getContractSymbol(context.chainId, context.to)
@@ -78,6 +77,10 @@ export class ERC721Descriptor extends BaseDescriptor implements TransactionDescr
                             }),
                         },
                         popup: {
+                            erc721Spender:
+                                typeof parameters.operator === 'string' && action === 'Unlock'
+                                    ? parameters.operator
+                                    : undefined,
                             method: name,
                         },
                     }
