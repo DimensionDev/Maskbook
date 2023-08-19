@@ -1,7 +1,7 @@
+import { useMemo } from 'react'
 import { getPluginDefine } from '@masknet/plugin-infra'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useMemo } from 'react'
 import { useChainContext, useNetworkContext } from './useContext.js'
 
 export function useProviderDescriptor<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
