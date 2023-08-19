@@ -10,6 +10,10 @@ import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'
 import { useProviderType } from './useProviderType.js'
 
+interface EnvironmentContext<T extends NetworkPluginID = NetworkPluginID> {
+    pluginID: T
+}
+
 interface NetworkContext<T extends NetworkPluginID = NetworkPluginID> {
     pluginID: T
     setPluginID: (pluginID: T) => void
@@ -31,11 +35,18 @@ interface ChainContextSetter<T extends NetworkPluginID = NetworkPluginID> {
     setProviderType?: (providerType: Web3Helper.Definition[T]['ProviderType']) => void
 }
 
+const EnvironmentContext = createContext<EnvironmentContext>(null!)
+EnvironmentContext.displayName = 'EnvironmentContext'
+
 const NetworkContext = createContext<NetworkContext>(null!)
 NetworkContext.displayName = 'NetworkContext'
 
 const ChainContext = createContext<ChainContextGetter & ChainContextSetter>(null!)
 ChainContext.displayName = 'ChainContext'
+
+export function EnvironmentContextProvider({ value, children }: ProviderProps<EnvironmentContext>) {
+    return <EnvironmentContext.Provider value={value}>{children}</EnvironmentContext.Provider>
+}
 
 /**
  * Provide the current selected network plugin ID
@@ -128,6 +139,25 @@ export function Web3ContextProvider({
 }
 
 /**
+ * Provide the top most network context
+ * @param props
+ * @returns
+ */
+export function RevokeNetworkContextProvider({ children }: { children: ReactNode | undefined }) {
+    const { pluginID } = useContext(EnvironmentContext)
+    const value = useMemo(
+        () => ({
+            pluginID,
+            setPluginID: () => {
+                throw new Error('Set pluginID is not allowed.')
+            },
+        }),
+        [pluginID],
+    )
+    return <NetworkContext.Provider value={value} children={children} />
+}
+
+/**
  * Provide the top most chain context
  * @param props
  * @returns
@@ -188,13 +218,21 @@ export function RootWeb3ContextProvider({
         >
     >
 >) {
-    const site = getSiteType()
     const pluginIDs = useValueRef(pluginIDsSettings)
     const contextValue = useMemo(() => {
+        const site = getSiteType()
         return { pluginID: value?.pluginID ?? (site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM) }
-    }, [site, pluginIDs, JSON.stringify(value)])
+    }, [pluginIDs, JSON.stringify(value)])
 
     return <Web3ContextProvider value={contextValue}>{children}</Web3ContextProvider>
+}
+
+export function useEnvironmentContext(overrides?: EnvironmentContext) {
+    const context = useContext(EnvironmentContext)
+    return {
+        ...context,
+        ...omitBy(overrides, isUndefined),
+    }
 }
 
 export function useNetworkContext<T extends NetworkPluginID = NetworkPluginID>(overrides?: T) {
