@@ -14,7 +14,7 @@ import { useChainContext, useNetworkContext, useNonFungibleAsset } from '@maskne
 import { NetworkResolver } from '@masknet/web3-providers'
 import { TokenType } from '@masknet/web3-shared-base'
 import { usePostLink, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { NetworkPluginID, CrossIsolationMessages, isTwitter, isFacebook } from '@masknet/shared-base'
+import { NetworkPluginID, CrossIsolationMessages, Sniffings } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { Stack } from '@mui/system'
 import { useI18N } from '../locales/index.js'
@@ -216,8 +216,8 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     // #region on share
     const postLink = usePostLink()
     const shareText = useMemo(() => {
-        const isOnTwitter = isTwitter()
-        const isOnFacebook = isFacebook()
+        const isOnTwitter = Sniffings.is_twitter_page
+        const isOnFacebook = Sniffings.is_facebook_page
         const options = {
             sender: payload.senderName,
             payload: postLink.toString(),
@@ -261,7 +261,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             title: t.lucky_drop(),
             share,
         })
-    }, [nonFungibleToken, availability?.claimed_id, availability?.token_address, share])
+    }, [nonFungibleToken, availability?.claimed_id, availability?.token_address, share, shareText])
 
     const openNFTDialog = useCallback(() => {
         if (!payload.chainId || !pluginID || !availability?.claimed_id || !availability?.token_address) return

@@ -10,5 +10,5 @@ export function formatSpendingCap(amount: BigNumber.Value) {
         ? 'Infinite'
         : isLessThan(amount, '1e-6')
         ? '< 0.000001'
-        : new BigNumber(amount).toString()
+        : new BigNumber(amount).toFixed(6)
 }

@@ -13,8 +13,8 @@ import {
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { ErrorBoundary, queryClient } from '@masknet/shared-base-ui'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
-import { DefaultWeb3ContextProvider, TelemetryProvider } from '@masknet/web3-hooks-base'
-import { i18NextInstance, queryRemoteI18NBundle } from '@masknet/shared-base'
+import { RootWeb3ContextProvider, TelemetryProvider } from '@masknet/web3-hooks-base'
+import { NetworkPluginID, i18NextInstance, queryRemoteI18NBundle } from '@masknet/shared-base'
 
 import '../utils/kv-storage.js'
 
@@ -41,7 +41,7 @@ export default function DashboardRoot() {
     // #endregion
 
     return (
-        <DefaultWeb3ContextProvider>
+        <RootWeb3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
             <QueryClientProvider client={queryClient}>
                 {process.env.NODE_ENV === 'development' ? (
                     <ReactQueryDevtools position="bottom-right" toggleButtonProps={{ style: { width: 24 } }} />
@@ -68,6 +68,6 @@ export default function DashboardRoot() {
                     </I18NextProviderHMR>
                 </TelemetryProvider>
             </QueryClientProvider>
-        </DefaultWeb3ContextProvider>
+        </RootWeb3ContextProvider>
     )
 }

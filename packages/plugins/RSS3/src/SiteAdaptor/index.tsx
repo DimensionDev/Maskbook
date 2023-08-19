@@ -96,6 +96,7 @@ const createSearchTabConfig = (
 }
 
 const ActivitiesTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig('Activities', {}, 2)
+const ActivitiesTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig('Activities', {}, 2)
 const ActivitiesTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig('Activities', {}, 2)
 
 const DonationTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(

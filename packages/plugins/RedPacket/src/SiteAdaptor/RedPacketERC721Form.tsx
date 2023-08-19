@@ -352,10 +352,12 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         setIsNFTRedPacketLoaded?.(balance > 0)
     }, [balance > 0])
 
+    const handleClose = useCallback(() => setOpenSelectNFTDialog(false), [])
+
     if (openSelectNFTDialog) {
         return (
             <SelectNftTokenDialog
-                onClose={() => setOpenSelectNFTDialog(false)}
+                onClose={handleClose}
                 contract={collection}
                 existTokenDetailedList={tokenDetailedList}
                 setExistTokenDetailedList={setExistTokenDetailedList}
@@ -370,7 +372,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                 message={message}
                 contract={collection}
                 tokenList={tokenDetailedList}
-                onBack={() => setOpenNFTConfirmDialog(false)}
+                onBack={handleClose}
                 onClose={onClose}
                 senderName={senderName}
                 gasOption={gasOption}

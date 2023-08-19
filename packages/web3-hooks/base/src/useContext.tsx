@@ -10,7 +10,7 @@ import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'
 import { useProviderType } from './useProviderType.js'
 
-interface EnvironmentContext<T extends NetworkPluginID = NetworkPluginID> {
+interface ReadonlyNetworkContext<T extends NetworkPluginID = NetworkPluginID> {
     pluginID: T
 }
 
@@ -35,8 +35,8 @@ interface ChainContextSetter<T extends NetworkPluginID = NetworkPluginID> {
     setProviderType?: (providerType: Web3Helper.Definition[T]['ProviderType']) => void
 }
 
-const EnvironmentContext = createContext<EnvironmentContext>(null!)
-EnvironmentContext.displayName = 'EnvironmentContext'
+const ReadonlyNetworkContext = createContext<ReadonlyNetworkContext>(null!)
+ReadonlyNetworkContext.displayName = 'ReadonlyNetworkContext'
 
 const NetworkContext = createContext<NetworkContext>(null!)
 NetworkContext.displayName = 'NetworkContext'
@@ -44,8 +44,13 @@ NetworkContext.displayName = 'NetworkContext'
 const ChainContext = createContext<ChainContextGetter & ChainContextSetter>(null!)
 ChainContext.displayName = 'ChainContext'
 
-export function EnvironmentContextProvider({ value, children }: ProviderProps<EnvironmentContext>) {
-    return <EnvironmentContext.Provider value={value}>{children}</EnvironmentContext.Provider>
+/**
+ * Provide the current readonly network plugin ID (readonly)
+ * @param props
+ * @returns
+ */
+export function ReadonlyNetworkContextProvider({ value, children }: ProviderProps<ReadonlyNetworkContext>) {
+    return <ReadonlyNetworkContext.Provider value={value}>{children}</ReadonlyNetworkContext.Provider>
 }
 
 /**
@@ -144,7 +149,7 @@ export function Web3ContextProvider({
  * @returns
  */
 export function RevokeNetworkContextProvider({ children }: { children: ReactNode | undefined }) {
-    const { pluginID } = useContext(EnvironmentContext)
+    const { pluginID } = useContext(ReadonlyNetworkContext)
     const value = useMemo(
         () => ({
             pluginID,
@@ -224,11 +229,15 @@ export function RootWeb3ContextProvider({
         return { pluginID: value?.pluginID ?? (site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM) }
     }, [pluginIDs, JSON.stringify(value)])
 
-    return <Web3ContextProvider value={contextValue}>{children}</Web3ContextProvider>
+    return (
+        <ReadonlyNetworkContextProvider value={contextValue}>
+            <Web3ContextProvider value={contextValue}>{children}</Web3ContextProvider>
+        </ReadonlyNetworkContextProvider>
+    )
 }
 
-export function useEnvironmentContext(overrides?: EnvironmentContext) {
-    const context = useContext(EnvironmentContext)
+export function useEnvironmentContext(overrides?: ReadonlyNetworkContext) {
+    const context = useContext(ReadonlyNetworkContext)
     return {
         ...context,
         ...omitBy(overrides, isUndefined),

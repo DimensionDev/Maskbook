@@ -24,7 +24,7 @@ import { useActivatedPlugin, useSiteAdaptorContext } from '@masknet/plugin-infra
 import { NetworkPluginID, PluginID, isFacebook, isTwitter } from '@masknet/shared-base'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { type TraderAPI } from '@masknet/web3-providers/types'
-import { DepositPaymaster, SmartPayBundler } from '@masknet/web3-providers'
+import { DepositPaymaster, SmartPayBundler, Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../../locales/index.js'
 import { isNativeTokenWrapper } from '../../helpers/index.js'
 import { PluginTraderMessages } from '../../messages.js'
@@ -235,6 +235,9 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
         setTemporarySlippage(undefined)
 
         if (typeof hash !== 'string') return
+
+        const result = await Web3.confirmTransaction(hash)
+        if (!result.status) return
 
         const confirmed = await ConfirmModal.openAndWaitForClose({
             title: t.swap(),
