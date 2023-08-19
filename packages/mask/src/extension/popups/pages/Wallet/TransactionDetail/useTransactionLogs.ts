@@ -23,7 +23,7 @@ export function useTransactionLogs(transactionState: TransactionState) {
         queryKey: ['transactions', transactionState?.chainId, account],
         queryFn: async () => {
             if (!transactionState?.chainId) return
-            return Transaction?.getTransactions?.(transactionState?.chainId, account) ?? []
+            return Transaction?.getTransactions?.(transactionState?.chainId, account) ?? EMPTY_LIST
         },
     })
     const logs = useMemo(() => {
@@ -43,7 +43,7 @@ export function useTransactionLogs(transactionState: TransactionState) {
             ].filter(Boolean)
         }
         return EMPTY_LIST
-    }, [transactionState, t])
+    }, [transactionState, t, txes])
 
     return logs
 }

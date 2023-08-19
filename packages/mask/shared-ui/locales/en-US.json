@@ -1222,7 +1222,7 @@
     "account_already_exists": "This wallet name already exists.",
     "network_already_exists": "This network name already exists",
     "incorrect_rpc_url": "Invalid RPC URL.",
-    "incorrect_explorer_url": "Invalid block explorer URL.",
+    "incorrect_explorer_url": "Invalid Block Explorer URL.",
     "rpc_url_is_used_by": "This RPC URL is currently used by the {{- name}} network",
     "chain_id_is_used_by": "This Chain ID is currently used by the {{- name}} network. ",
     "failed_to_fetch_chain_id": "Could not fetch chain ID. Is your RPC URL correct?",

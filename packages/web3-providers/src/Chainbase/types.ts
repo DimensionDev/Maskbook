@@ -94,6 +94,7 @@ export interface Tx {
     max_priority_fee_per_gas: number
     saving_fee: number
     burnt_fee: number
+    tx_fee: number
 }
 
 export interface ENSRecord {
