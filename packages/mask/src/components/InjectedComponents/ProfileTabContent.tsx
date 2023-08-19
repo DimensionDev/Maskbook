@@ -39,7 +39,6 @@ import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme
 import { NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ScopedDomainsContainer, useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
-import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { useI18N } from '../../utils/index.js'
 import {
     useCurrentVisitingIdentity,
@@ -47,7 +46,6 @@ import {
     useSocialIdentity,
     useSocialIdentityByUserId,
 } from '../DataSource/useActivatedUI.js'
-import { isFacebook } from '../../site-adaptors/facebook.com/base.js'
 import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
 import { SearchResultInspector } from './SearchResultInspector.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
@@ -56,7 +54,7 @@ import { useQuery } from '@tanstack/react-query'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        width: isFacebook(activatedSiteAdaptorUI!) ? 876 : 'auto',
+        width: Sniffings.is_facebook_page ? 876 : 'auto',
     },
     container: {
         background:

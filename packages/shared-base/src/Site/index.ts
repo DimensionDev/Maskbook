@@ -64,6 +64,9 @@ export function isTwitter() {
     return url.origin === 'twitter.com'
 }
 
+/**
+ * @deprecated Use `Sniffings.is_facebook_page` instead
+ */
 export function isFacebook() {
     const url = new URL(window.location.href)
     return url.origin === 'facebook.com'
