@@ -10,7 +10,7 @@ import {
     useNetworkDescriptor,
     useAllowTestnet,
     useChainIdValid,
-    ActualChainContextProvider,
+    RevokeChainContextProvider,
     useWeb3Others,
     useWeb3Connection,
 } from '@masknet/web3-hooks-base'
@@ -225,9 +225,9 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
 
 export const ChainBoundary = memo(function <T extends NetworkPluginID>(props: ChainBoundaryProps<T>) {
     return (
-        <ActualChainContextProvider>
+        <RevokeChainContextProvider>
             <ChainBoundaryWithoutContext {...props} />
-        </ActualChainContextProvider>
+        </RevokeChainContextProvider>
     )
 })
 

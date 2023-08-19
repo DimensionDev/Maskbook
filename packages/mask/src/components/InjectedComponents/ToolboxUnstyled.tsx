@@ -130,11 +130,11 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
             <Container>
                 <ListItemButton onClick={openWallet}>
                     <ListItemIcon>
-                        {!!account && providerDescriptor?.type !== ProviderType.MaskWallet ? (
+                        {!!account && providerDescriptor && providerDescriptor.type !== ProviderType.MaskWallet ? (
                             <WalletIcon
                                 size={iconSize}
                                 badgeSize={badgeSize}
-                                mainIcon={providerDescriptor?.icon} // switch the icon to meet design
+                                mainIcon={providerDescriptor.icon} // switch the icon to meet design
                                 badgeIconBorderColor={theme.palette.background.paper}
                             />
                         ) : (

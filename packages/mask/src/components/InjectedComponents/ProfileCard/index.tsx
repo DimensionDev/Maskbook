@@ -10,15 +10,15 @@ import {
     usePluginI18NField,
     getProfileCardTabContent,
 } from '@masknet/plugin-infra/content-script'
+import { addressSorter, useSocialAccountsBySettings } from '@masknet/shared'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
 import { useLocationChange } from '@masknet/shared-base-ui'
 import { EMPTY_LIST, PluginID, NetworkPluginID, type SocialIdentity, MaskMessages } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { ScopedDomainsContainer, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { DefaultWeb3ContextProvider, ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
-import { addressSorter, useSocialAccountsBySettings } from '@masknet/shared'
 import { useI18N } from '../../../utils/index.js'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
@@ -172,7 +172,7 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
         )
 
     return (
-        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
+        <DefaultWeb3ContextProvider value={{ chainId: ChainId.Mainnet }}>
             <div className={classes.root}>
                 <div className={classes.header}>
                     <ProfileCardTitle
@@ -224,7 +224,7 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
                     <Icons.RSS3 size={24} sx={{ ml: '4px' }} />
                 </div>
             </div>
-        </Web3ContextProvider>
+        </DefaultWeb3ContextProvider>
     )
 })
 

@@ -1,26 +1,26 @@
 import { memo, useCallback, useRef, useState } from 'react'
-import { useI18N } from '../../../../../utils/i18n-next-ui.js'
-import { ActionButton, MaskTabList, makeStyles, usePopupCustomSnackbar, useTabs } from '@masknet/theme'
-import { TabContext, TabPanel } from '@mui/lab'
-import { Box, Button, Slider, Tab, Typography } from '@mui/material'
-import { Icons } from '@masknet/icons'
 import { useAsyncFn, useDropArea } from 'react-use'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import AvatarEditor from 'react-avatar-editor'
+import { Box, Button, Slider, Tab, Typography } from '@mui/material'
+import { TabContext, TabPanel } from '@mui/lab'
+import { Icons } from '@masknet/icons'
+import { ActionButton, MaskTabList, makeStyles, usePopupCustomSnackbar, useTabs } from '@masknet/theme'
+import { useUpdateEffect } from '@react-hookz/web'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { Web3, Web3Storage } from '@masknet/web3-providers'
+import { PERSONA_AVATAR_DB_NAMESPACE, PersonaContext, type PersonaAvatarData } from '@masknet/shared'
 import { BottomController } from '../../../components/BottomController/index.js'
-import { Web3ContextProvider, useChainContext } from '@masknet/web3-hooks-base'
+import { DefaultWeb3ContextProvider, useChainContext } from '@masknet/web3-hooks-base'
 import { NormalHeader, useModalNavigate } from '../../../components/index.js'
-import { NetworkPluginID, PopupModalRoutes, PopupRoutes, SignType } from '@masknet/shared-base'
+import { PopupModalRoutes, PopupRoutes, SignType } from '@masknet/shared-base'
 import { ProfilePhotoType } from '../../Wallet/type.js'
 import { NFTAvatarPicker } from '../../../components/NFTAvatarPicker/index.js'
-import { PERSONA_AVATAR_DB_NAMESPACE, PersonaContext, type PersonaAvatarData } from '@masknet/shared'
 import { useVerifiedWallets } from '../../../hook/useVerifiedWallets.js'
 import Services from '../../../../service.js'
-import { Web3, Web3Storage } from '@masknet/web3-providers'
-import { isSameAddress } from '@masknet/web3-shared-base'
 import { MAX_FILE_SIZE } from '../../../constants.js'
 import { useTitle } from '../../../hook/useTitle.js'
-import { useUpdateEffect } from '@react-hookz/web'
+import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     tabs: {
@@ -279,8 +279,8 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
 
 export default function PersonaAvatarPage() {
     return (
-        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+        <DefaultWeb3ContextProvider>
             <PersonaAvatarSetting />
-        </Web3ContextProvider>
+        </DefaultWeb3ContextProvider>
     )
 }

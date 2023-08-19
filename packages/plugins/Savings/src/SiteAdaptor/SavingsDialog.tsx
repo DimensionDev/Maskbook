@@ -9,7 +9,7 @@ import {
     Web3ContextProvider,
     useChainContext,
     useFungibleTokens,
-    ActualChainContextProvider,
+    RevokeChainContextProvider,
     useNetworkContext,
     ChainContextProvider,
 } from '@masknet/web3-hooks-base'
@@ -184,14 +184,14 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                     </TabContext>
                 </ChainContextProvider>
                 {selectedProtocol ? (
-                    <ActualChainContextProvider>
+                    <RevokeChainContextProvider>
                         <SavingsFormDialog
                             tab={currentTab}
                             chainId={chainId}
                             protocol={selectedProtocol}
                             onClose={() => setSelectedProtocol(null)}
                         />
-                    </ActualChainContextProvider>
+                    </RevokeChainContextProvider>
                 ) : null}
             </AllProviderTradeContext.Provider>
         </Web3ContextProvider>
