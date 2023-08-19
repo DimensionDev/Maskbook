@@ -780,6 +780,8 @@ export interface TransactionDescriptor<ChainId, Transaction, Parameter = string 
     popup?: {
         /** The spender address of erc20 approve */
         spender?: string
+        /** The spender address of erc721 approve */
+        erc721Spender?: string
         /** The method name of contract function */
         method?: string
         /** The Non-Fungible token description */

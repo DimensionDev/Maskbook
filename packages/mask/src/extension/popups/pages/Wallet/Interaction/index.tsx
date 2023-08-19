@@ -27,6 +27,7 @@ import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
 import { compact, mapValues, omit } from 'lodash-es'
 import urlcat from 'urlcat'
 import { WalletAssetTabs } from '../type.js'
+import { UnlockERC721Token } from '../../../components/UnlockERC721Token/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     left: {
@@ -274,6 +275,17 @@ const Interaction = memo(function Interaction() {
                     onPaymentTokenChange={(paymentToken) => setPaymentToken(paymentToken)}
                     transaction={transaction}
                     handleChange={(value) => setApproveAmount(value)}
+                />
+            )
+        }
+
+        if (transaction?.formattedTransaction?.popup?.erc721Spender) {
+            return (
+                <UnlockERC721Token
+                    onConfigChange={handleChangeGasConfig}
+                    paymentToken={paymentToken}
+                    onPaymentTokenChange={(paymentToken) => setPaymentToken(paymentToken)}
+                    transaction={transaction}
                 />
             )
         }
