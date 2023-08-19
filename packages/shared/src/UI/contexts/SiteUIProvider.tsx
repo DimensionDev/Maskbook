@@ -1,11 +1,11 @@
-import { Suspense, useMemo } from 'react'
+import { Suspense } from 'react'
 import { createPortal } from 'react-dom'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { Web3ContextProvider, TelemetryProvider } from '@masknet/web3-hooks-base'
+import { TelemetryProvider, RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { DialogStackingProvider } from '@masknet/theme'
-import { compose, getSiteType, i18NextInstance, NetworkPluginID, pluginIDsSettings } from '@masknet/shared-base'
-import { queryClient, useValueRef } from '@masknet/shared-base-ui'
+import { compose, i18NextInstance } from '@masknet/shared-base'
+import { queryClient } from '@masknet/shared-base-ui'
 import { I18NextProviderHMR } from '../components/I18NextProviderHMR.js'
 
 export function SiteUIProvider(children: React.ReactNode) {
@@ -17,13 +17,6 @@ export function SiteUIProvider(children: React.ReactNode) {
 }
 
 function MaskUIRoot({ children }: React.PropsWithChildren<{}>) {
-    const site = getSiteType()
-    const pluginIDs = useValueRef(pluginIDsSettings)
-
-    const context = useMemo(() => {
-        return { pluginID: site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM }
-    }, [site, pluginIDs])
-
     return (
         <DialogStackingProvider hasGlobalBackdrop={false}>
             <QueryClientProvider client={queryClient}>
@@ -33,11 +26,11 @@ function MaskUIRoot({ children }: React.PropsWithChildren<{}>) {
                           document.body,
                       )
                     : null}
-                <Web3ContextProvider value={context}>
+                <RootWeb3ContextProvider>
                     <TelemetryProvider>
                         <I18NextProviderHMR i18n={i18NextInstance}>{children}</I18NextProviderHMR>
                     </TelemetryProvider>
-                </Web3ContextProvider>
+                </RootWeb3ContextProvider>
             </QueryClientProvider>
         </DialogStackingProvider>
     )

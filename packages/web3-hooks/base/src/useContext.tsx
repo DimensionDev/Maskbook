@@ -1,7 +1,8 @@
 import React, { createContext, type ReactNode, useContext, useState, useMemo, type ProviderProps, memo } from 'react'
 import { isUndefined, omitBy } from 'lodash-es'
 import { useSubscription } from 'use-subscription'
-import { compose, Sniffings, NetworkPluginID } from '@masknet/shared-base'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { compose, Sniffings, NetworkPluginID, getSiteType, pluginIDsSettings } from '@masknet/shared-base'
 import { Providers, type BaseContractWalletProvider } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -146,6 +147,11 @@ export function RevokeChainContextProvider({ children }: { children: ReactNode |
     return <ChainContext.Provider value={value} children={children} />
 }
 
+/**
+ * The default Web3 context provider that uses the EVM plugin
+ * @param props
+ * @returns
+ */
 export function DefaultWeb3ContextProvider({
     value,
     children,
@@ -161,6 +167,32 @@ export function DefaultWeb3ContextProvider({
     const contextValue = useMemo(() => {
         return { pluginID: value?.pluginID ?? NetworkPluginID.PLUGIN_EVM, ...value }
     }, [JSON.stringify(value)])
+
+    return <Web3ContextProvider value={contextValue}>{children}</Web3ContextProvider>
+}
+
+/**
+ * The root Web3 context provider that uses the plugin ID from global settings
+ * @param props
+ * @returns
+ */
+export function RootWeb3ContextProvider({
+    value,
+    children,
+}: Partial<
+    ProviderProps<
+        Partial<
+            {
+                pluginID: NetworkPluginID
+            } & ChainContextGetter
+        >
+    >
+>) {
+    const site = getSiteType()
+    const pluginIDs = useValueRef(pluginIDsSettings)
+    const contextValue = useMemo(() => {
+        return { pluginID: value?.pluginID ?? (site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM) }
+    }, [site, pluginIDs, JSON.stringify(value)])
 
     return <Web3ContextProvider value={contextValue}>{children}</Web3ContextProvider>
 }
