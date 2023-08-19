@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { useCustomSnackbar, makeStyles } from '@masknet/theme'
 import { alpha, Button, Typography } from '@mui/material'
-import { type HTMLProps, memo, useCallback } from 'react'
+import { type HTMLProps, memo, useCallback, useRef } from 'react'
 import { useDropArea } from 'react-use'
 import { useSharedI18N } from '../../../index.js'
 
@@ -85,13 +85,16 @@ export const UploadDropArea = memo(
                 onSelectFile(files[0])
             }
         }
+        const handleFilesRef = useRef<(file: File[] | FileList | null) => void>()
+        handleFilesRef.current = handleFiles
+
         const selectFile = useCallback(() => {
             const input = document.createElement('input')
             input.type = 'file'
             input.hidden = true
             if (accept) input.accept = accept
             input.addEventListener('input', function onInput(event) {
-                handleFiles((event.currentTarget as any).files as FileList)
+                handleFilesRef.current?.((event.currentTarget as any).files as FileList)
                 input.removeEventListener('input', onInput)
                 document.body.removeChild(input)
             })
