@@ -6,8 +6,8 @@ import { ChainId, signMessage } from '@masknet/web3-shared-evm'
 import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { formatBalance, isZero, TokenType } from '@masknet/web3-shared-base'
 import { NetworkPluginID, isFacebook, isTwitter } from '@masknet/shared-base'
-import { ChainResolver, NetworkResolver } from '@masknet/web3-providers'
-import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { ChainResolver } from '@masknet/web3-providers'
+import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-hooks-base'
 import { TransactionConfirmModal } from '@masknet/shared'
 import { usePostLink, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useI18N } from '../../locales/index.js'
@@ -135,7 +135,7 @@ export function RedPacket(props: RedPacketProps) {
     const token = payload.token
     const { pluginID } = useNetworkContext()
     const payloadChainId = token?.chainId ?? ChainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
-    const { account, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         chainId: payloadChainId,
         account: pluginID === NetworkPluginID.PLUGIN_EVM ? undefined : '',
     })
@@ -162,13 +162,14 @@ export function RedPacket(props: RedPacketProps) {
         payloadChainId,
     )
 
+    const network = useNetwork(pluginID, payload.chainId)
     const shareText = useMemo(() => {
         const isOnTwitter = isTwitter()
         const isOnFacebook = isFacebook()
         const shareTextOption = {
             sender: payload.sender.name,
             payload: postLink.toString(),
-            network: NetworkResolver.networkName(networkType) ?? 'Mainnet',
+            network: network?.name ?? 'Mainnet',
             account: isTwitter() ? t.twitter_account() : t.facebook_account(),
             interpolation: { escapeValue: false },
         }
@@ -181,7 +182,7 @@ export function RedPacket(props: RedPacketProps) {
         return isOnTwitter || isOnFacebook
             ? t.share_unclaimed_message_official_account(shareTextOption)
             : t.share_unclaimed_message_not_twitter(shareTextOption)
-    }, [payload, postLink, networkType, claimTxHash, listOfStatus, t])
+    }, [payload, postLink, claimTxHash, listOfStatus, t, network?.name])
 
     const [{ loading: isRefunding }, _isRefunded, refundCallback] = useRefundCallback(
         payload.contract_version,
