@@ -5,7 +5,7 @@ import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
 import { useAccount, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { ChainbaseHistory, ExplorerResolver, Web3 } from '@masknet/web3-providers'
 import { chainbase } from '@masknet/web3-providers/helpers'
-import { TransactionStatusType, formatBalance, trimZero } from '@masknet/web3-shared-base'
+import { TransactionStatusType, formatBalance, isSameAddress, trimZero } from '@masknet/web3-shared-base'
 import {
     formatHash,
     formatWeiToEther,
@@ -206,7 +206,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
     }
     const status = tx ? chainbase.normalizeTxStatus(tx.status) : transactionState?.status!
     const statusPending = status === undefined && loadingTx
-    const isOut = transaction.from === account
+    const isOut = isSameAddress(transaction.from, account)
     const link = transactionId ? ExplorerResolver.transactionLink(chainId!, transactionId) : undefined
 
     const gasUsedPercent = tx ? (tx.gas_used * 100) / tx.gas : 0
