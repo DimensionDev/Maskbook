@@ -1,7 +1,7 @@
 import { Image } from '@masknet/shared'
 import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { isSameAddress, resolveResourceURL } from '@masknet/web3-shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { useMemo } from 'react'
@@ -23,6 +23,10 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center' | 'fa
     },
     center: {},
     failedImage: {},
+    soloImage: {
+        // If only single image, place it center
+        marginTop: theme.spacing(5),
+    },
     body: {
         display: 'flex',
         flexDirection: 'row',
@@ -274,6 +278,7 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
     const imageWidth = verbose ? '100%' : 64
     const imageHeight = verbose ? 'auto' : 64
     const attributes = metadata && 'attributes' in metadata ? metadata.attributes?.filter((x) => x.trait_type) : []
+    const soloImage = verbose && !metadata?.description && !attributes?.length
 
     return (
         <CardFrame type={cardType} feed={feed} {...rest}>
@@ -285,8 +290,11 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
                         [classes.center]: !verbose && !metadata.description,
                     })}>
                     <Image
-                        classes={{ container: classes.image, failed: classes.failedImage }}
-                        src={metadata.image}
+                        classes={{
+                            container: cx(classes.image, soloImage ? classes.soloImage : undefined),
+                            failed: classes.failedImage,
+                        }}
+                        src={resolveResourceURL(metadata.image)}
                         width={imageWidth}
                         height={imageHeight}
                     />
