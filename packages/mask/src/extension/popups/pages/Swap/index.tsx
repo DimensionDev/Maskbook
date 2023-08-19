@@ -1,11 +1,10 @@
+import { useMemo } from 'react'
 import { AllProviderTradeContext } from '@masknet/plugin-trader'
 import { Appearance } from '@masknet/public-api'
 import { SharedContextProvider } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { applyMaskColorVars, makeStyles } from '@masknet/theme'
-import { ChainContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { ChainContextProvider, DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ThemeProvider, Typography } from '@mui/material'
-import { useMemo } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { useSwapPageTheme } from '../../../../utils/theme/useSwapPageTheme.js'
 import { NetworkSelector } from '../../components/NetworkSelector/index.js'
@@ -80,11 +79,11 @@ export default function SwapPage() {
                                 <NetworkSelector />
                             </header>
                             <main className={classes.main}>
-                                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+                                <DefaultWeb3ContextProvider>
                                     <AllProviderTradeContext.Provider>
                                         <SwapBox />
                                     </AllProviderTradeContext.Provider>
-                                </Web3ContextProvider>
+                                </DefaultWeb3ContextProvider>
                             </main>
                         </div>
                     </div>

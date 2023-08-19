@@ -1,5 +1,4 @@
-import { NetworkPluginID } from '@masknet/shared-base'
-import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProfileTabContent, ProfileTabContext } from '@masknet/shared'
 import { currentSocialIdentity, currentVisitingSocialIdentity, socialAccounts } from '../mock.js'
 import { PageContainer } from '../components/PageContainer.js'
@@ -9,7 +8,7 @@ export interface Web3ProfilePageProps {}
 export default function Web3ProfilePage(props: Web3ProfilePageProps) {
     return (
         <PageContainer title="Web3 Profile">
-            <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+            <DefaultWeb3ContextProvider>
                 <ProfileTabContext.Provider
                     initialState={{
                         currentVisitingSocialIdentity,
@@ -18,7 +17,7 @@ export default function Web3ProfilePage(props: Web3ProfilePageProps) {
                     }}>
                     <ProfileTabContent />
                 </ProfileTabContext.Provider>
-            </Web3ContextProvider>
+            </DefaultWeb3ContextProvider>
         </PageContainer>
     )
 }
