@@ -1,10 +1,8 @@
 import { useCallback, useEffect, useState, type PropsWithChildren } from 'react'
 import { useMount } from 'react-use'
 import { Typography } from '@mui/material'
-import { MaskMessages, ProfileTabs } from '@masknet/shared-base'
+import { MaskMessages, ProfileTabs, Sniffings } from '@masknet/shared-base'
 import { useMatchXS, useLocationChange } from '@masknet/shared-base-ui'
-import { isTwitter } from '../../site-adaptors/twitter.com/base.js'
-import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 
 export interface ProfileTabProps extends withClasses<'tab' | 'button' | 'selected'>, PropsWithChildren<{}> {
     clear(): void
@@ -29,7 +27,7 @@ export function ProfileTab(props: ProfileTabProps) {
 
     const onClick = useCallback(() => {
         // Change the url hashtag to trigger `locationchange` event from e.g. 'hostname/medias#web3 => hostname/medias'
-        isTwitter(activatedSiteAdaptorUI!) && location.assign('#' + type)
+        Sniffings.is_twitter_page && location.assign('#' + type)
         switchToTab()
     }, [switchToTab, type])
 

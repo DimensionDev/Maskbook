@@ -31,6 +31,7 @@ import {
     NextIDPlatform,
     PluginID,
     ProfileTabs,
+    Sniffings,
     currentPersonaIdentifier,
 } from '@masknet/shared-base'
 import { useValueRef, useLocationChange } from '@masknet/shared-base-ui'
@@ -38,7 +39,6 @@ import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme
 import { NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ScopedDomainsContainer, useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
-import { isTwitter } from '../../site-adaptors/twitter.com/base.js'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { useI18N } from '../../utils/index.js'
 import {
@@ -203,7 +203,7 @@ function Content(props: ProfileTabContentProps) {
 
     const isWeb3ProfileDisable = useIsMinimalMode(PluginID.Web3Profile)
 
-    const isOnTwitter = isTwitter(activatedSiteAdaptorUI!)
+    const isOnTwitter = Sniffings.is_twitter_page
     const doesOwnerHaveNoAddress =
         isOwnerIdentity && personaStatus.proof?.findIndex((p) => p.platform === NextIDPlatform.Ethereum) === -1
 
