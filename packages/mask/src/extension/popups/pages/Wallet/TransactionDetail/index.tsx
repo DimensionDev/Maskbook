@@ -5,7 +5,7 @@ import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
 import { useAccount, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { ChainbaseHistory, ExplorerResolver, Web3 } from '@masknet/web3-providers'
 import { chainbase } from '@masknet/web3-providers/helpers'
-import { TransactionStatusType, formatBalance, multipliedBy, trimZero } from '@masknet/web3-shared-base'
+import { TransactionStatusType, formatBalance, trimZero } from '@masknet/web3-shared-base'
 import {
     formatHash,
     formatWeiToEther,
@@ -14,6 +14,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography, alpha } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
+import { BigNumber } from 'bignumber.js'
 import { capitalize } from 'lodash-es'
 import { memo, useCallback } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
@@ -28,6 +29,7 @@ const useStyles = makeStyles()((theme) => ({
     statusTitle: {
         fontSize: 14,
         fontWeight: 700,
+        textTransform: 'capitalize',
     },
     status: {
         padding: theme.spacing(1),
@@ -208,7 +210,8 @@ export const TransactionDetail = memo(function TransactionDetail() {
     const link = transactionId ? ExplorerResolver.transactionLink(chainId!, transactionId) : undefined
 
     const gasUsedPercent = tx ? (tx.gas_used * 100) / tx.gas : 0
-    const gasFee = tx ? formatWeiToEther(multipliedBy(tx.gas_price, tx.gas)) : undefined
+    const gasFeeInState = !isRecentTx && !tx ? transactionState?.fee?.eth : undefined
+    const gasFee = tx ? formatWeiToEther(tx.tx_fee) : gasFeeInState ? new BigNumber(gasFeeInState) : undefined
     const gasCost = gasFee && nativeTokenPrice ? gasFee.times(nativeTokenPrice) : undefined
 
     const receiverAddress = parseReceiverFromERC20TransferInput(candidateState?.data || tx?.input || txInput)
@@ -305,7 +308,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
                 <Box className={classes.field}>
                     <Typography className={classes.fieldName}>{t('transaction_gas_price')}</Typography>
                     <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
-                        {tx ? formatWeiToGwei(tx.gas_price).toFixed(6) : ''}
+                        {tx ? formatWeiToGwei(tx.effective_gas_price).toFixed(6) : ''}
                     </ProgressiveText>
                 </Box>
                 {tx?.max_priority_fee_per_gas ? (
