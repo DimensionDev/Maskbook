@@ -82,7 +82,7 @@ export function FeedDetailsDialog({ type, feed, onClose, actionIndex, ...rest }:
             name,
             ownerDisplay: name ? Others.formatDomainName(name) : Others.formatAddress(feed.owner, 4) ?? address,
         }
-    }, [address, name, Others.formatDomainName, Others.formatAddress])
+    }, [address, name, Others.formatDomainName, Others.formatAddress, feed.owner])
 
     return (
         <FeedOwnerContext.Provider value={feedOwner}>
