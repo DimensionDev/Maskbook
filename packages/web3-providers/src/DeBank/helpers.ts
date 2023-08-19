@@ -115,7 +115,6 @@ export function formatTransactions(
     { cate_dict, history_list, token_dict }: HistoryResponse['data'],
     ownerAddress: string,
 ): Array<Transaction<ChainId, SchemaType>> {
-    const resolver = new ChainResolverAPI()
     const transactions = history_list.map((transaction): Transaction<ChainId, SchemaType> | undefined => {
         let txType = transaction.tx?.name
         if (!txType && !isNil(transaction.cate_id)) {
@@ -124,7 +123,7 @@ export function formatTransactions(
             txType = 'contract interaction'
         }
 
-        const chainId = resolver.chainId(transaction.chain)
+        const chainId = DEBANK_CHAIN_TO_CHAIN_ID_MAP[transaction.chain]
         if (!chainId) return
 
         if (isSameAddress(transaction.sends[0]?.to_addr, ZERO_ADDRESS)) {
