@@ -157,7 +157,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
         enabled: !!transaction,
         queryKey: ['chainbase', 'transaction', transaction?.chainId, transactionId, blockNumber],
         queryFn: async () => {
-            if (!chainId || !transactionId) return
+            if (!chainId || !transactionId) return null
             return ChainbaseHistory.getTransaction(chainId, transactionId, blockNumber)
         },
     })
@@ -204,7 +204,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
         [SUCCEED]: t('transaction_success'),
         [NOT_DEPEND]: t('transaction_pending'),
     }
-    const status = tx !== undefined ? chainbase.normalizeTxStatus(tx.status) : transactionState?.status!
+    const status = tx ? chainbase.normalizeTxStatus(tx.status) : transactionState?.status!
     const statusPending = status === undefined && loadingTx
     const isOut = transaction.from === account
     const link = transactionId ? ExplorerResolver.transactionLink(chainId!, transactionId) : undefined
