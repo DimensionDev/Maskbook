@@ -1,9 +1,8 @@
 import { DialogContent } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { HubContent } from './HubContent.js'
 import { PluginDebuggerMessages } from '../../messages.js'
 
@@ -14,9 +13,9 @@ export function HubDialog(props: HubDialogProps) {
     return (
         <InjectedDialog title="Hub" fullWidth open={open} onClose={closeDialog}>
             <DialogContent>
-                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
+                <DefaultWeb3ContextProvider value={{ chainId: ChainId.Mainnet }}>
                     <HubContent onClose={closeDialog} />
-                </Web3ContextProvider>
+                </DefaultWeb3ContextProvider>
             </DialogContent>
         </InjectedDialog>
     )

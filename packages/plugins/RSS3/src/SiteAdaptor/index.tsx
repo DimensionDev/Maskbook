@@ -2,7 +2,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { Box } from '@mui/material'
 import { NetworkPluginID, type SocialAccount, type SocialIdentity, SocialAddressType } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { Web3ContextProvider, useMountReport } from '@masknet/web3-hooks-base'
+import { DefaultWeb3ContextProvider, useMountReport } from '@masknet/web3-hooks-base'
 import { EventID } from '@masknet/web3-telemetry/types'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { SearchResultType } from '@masknet/web3-shared-base'
@@ -36,9 +36,9 @@ const createProfileTabConfig = (label: string, props: FeedPageProps, priority = 
                 })
 
                 return (
-                    <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+                    <DefaultWeb3ContextProvider>
                         <FeedsPage key={key} address={socialAccount?.address} {...props} />
-                    </Web3ContextProvider>
+                    </DefaultWeb3ContextProvider>
                 )
             },
         },
@@ -80,9 +80,9 @@ const createSearchTabConfig = (
 
                 return (
                     <Box style={{ minHeight: 300 }}>
-                        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+                        <DefaultWeb3ContextProvider>
                             <FeedsPage key={key} address={socialAccount?.address} {...props} />
-                        </Web3ContextProvider>
+                        </DefaultWeb3ContextProvider>
                     </Box>
                 )
             },
@@ -96,7 +96,6 @@ const createSearchTabConfig = (
 }
 
 const ActivitiesTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig('Activities', {}, 2)
-const ActivitiesTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig('Activities', {}, 2)
 const ActivitiesTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig('Activities', {}, 2)
 
 const DonationTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(

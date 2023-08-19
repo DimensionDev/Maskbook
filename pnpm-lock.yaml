@@ -4172,6 +4172,9 @@ importers:
       '@masknet/shared-base':
         specifier: workspace:^
         version: link:../../shared-base
+      '@masknet/shared-base-ui':
+        specifier: workspace:^
+        version: link:../../shared-base-ui
       '@masknet/web3-helpers':
         specifier: workspace:^
         version: link:../../web3-helpers
