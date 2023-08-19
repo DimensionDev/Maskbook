@@ -16,11 +16,11 @@ export function useApr(protocol: SavingsProtocol, enabled: boolean) {
 }
 
 export function useBalance(protocol: SavingsProtocol, enabled: boolean) {
-    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId: protocol.bareToken.chainId })
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
     return useQuery({
-        queryKey: ['savings', 'balance', protocol.bareToken.chainId, protocol.bareToken.address, account],
+        queryKey: ['savings', 'balance', chainId, protocol.bareToken.address, account],
         enabled: enabled && !!web3,
-        queryFn: () => protocol.getBalance(protocol.bareToken.chainId, web3!, account),
+        queryFn: () => protocol.getBalance(chainId, web3!, account),
     })
 }
