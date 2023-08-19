@@ -412,7 +412,7 @@
     {
         "chainId": 250,
         "type": "Fantom",
-        "name": "FTM",
+        "name": "Fantom",
         "fullName": "Fantom Opera",
         "network": "mainnet",
         "shortName": "ftm",
@@ -458,7 +458,7 @@
     {
         "chainId": 43114,
         "type": "Avalanche",
-        "name": "AVAX",
+        "name": "Avalanche",
         "color": "rgb(232, 65, 66)",
         "network": "mainnet",
         "shortName": "AVAX",
