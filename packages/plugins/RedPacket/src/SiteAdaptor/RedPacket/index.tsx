@@ -162,7 +162,8 @@ export function RedPacket(props: RedPacketProps) {
         payloadChainId,
     )
 
-    const network = useNetwork(pluginID, payload.chainId)
+    // TODO payload.chainId is undefined on production mode
+    const network = useNetwork(pluginID, payload.chainId || payload.token?.chainId)
     const shareText = useMemo(() => {
         const isOnTwitter = isTwitter()
         const isOnFacebook = isFacebook()
