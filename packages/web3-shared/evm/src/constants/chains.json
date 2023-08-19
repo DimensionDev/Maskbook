@@ -175,7 +175,7 @@
     {
         "chainId": 56,
         "type": "Binance",
-        "name": "BNB Chain",
+        "name": "BNB",
         "color": "rgb(240, 185, 10)",
         "network": "mainnet",
         "fullName": "Binance Smart Chain Mainnet",
@@ -200,7 +200,7 @@
     {
         "chainId": 97,
         "type": "Binance",
-        "name": "BNB Chain",
+        "name": "BNB",
         "color": "rgb(240, 185, 10)",
         "network": "chapel",
         "fullName": "Binance Smart Chain Testnet",
@@ -863,13 +863,13 @@
     },
     {
         "chainId": 128,
-        "name": "Huobi ECO",
-        "type": "Huobi ECO Chain Mainnet",
+        "name": "HECO",
+        "type": "HECO",
         "network": "mainnet",
         "features": [],
         "nativeCurrency": {
             "chainId": 128,
-            "name": "Huobi ECO Chain Native Token",
+            "name": "HECO",
             "symbol": "HT",
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/heco/info/logo.png/quality=85"
@@ -878,7 +878,7 @@
         "shortName": "heco",
         "explorers": [
             {
-                "name": "Huobi ECO Chain Mainnet",
+                "name": "HECO",
                 "url": "https://www.hecoinfo.com/en-us/"
             }
         ]
