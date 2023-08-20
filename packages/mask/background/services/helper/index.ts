@@ -8,6 +8,7 @@ export {
     openDashboard,
     queryCurrentActiveTab,
     openWalletStartUpWindow,
+    queryCurrentPopupWindowId,
 } from './popup-opener.js'
 export {
     queryExtensionPermission,

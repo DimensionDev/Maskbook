@@ -17,6 +17,7 @@ import { ConnectedAccounts } from './ConnectedAccounts/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import Services from '../../../../service.js'
 import { queryClient } from '@masknet/shared-base-ui'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -134,7 +135,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                                 underline="none"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                href={`https://web3.bio/${nextId}`}
+                                href={urlcat('https://web3.bio/', { s: nextId })}
                                 className={classes.icon}>
                                 <Icons.LinkOut size={12} />
                             </Link>

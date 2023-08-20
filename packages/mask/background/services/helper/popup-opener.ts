@@ -87,6 +87,10 @@ export async function openPopupWindow(
     return openWindow(url)
 }
 
+export async function queryCurrentPopupWindowId() {
+    return currentPopupWindowId
+}
+
 export async function openWalletStartUpWindow(params: Record<string, any>) {
     await removePopupWindow()
     return openPopupWindow(PopupRoutes.Wallet, params)

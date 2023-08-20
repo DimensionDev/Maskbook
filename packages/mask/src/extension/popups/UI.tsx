@@ -145,7 +145,10 @@ export default function Popups() {
 
     useMountReport(EventID.AccessPopups)
     useIdleTimer({ onAction: Services.Wallet.setAutoLockTimer, throttle: 10000 })
-    useEffect(() => CrossIsolationMessages.events.popupRouteUpdated.on((url) => PopupsHistory.replace(url)), [])
+    useEffect(() => {
+        if (location.hash.includes('/swap')) return
+        return CrossIsolationMessages.events.popupRouteUpdated.on((url) => PopupsHistory.replace(url))
+    }, [])
 
     return PageUIProvider(
         usePopupTheme,

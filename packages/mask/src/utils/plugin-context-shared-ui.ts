@@ -45,11 +45,16 @@ export const RestPartOfPluginUIContextShared: Omit<
     openWalletConnectDialog: async (uri: string) => {
         if (Sniffings.is_popup_page) {
             CrossIsolationMessages.events.popupWalletConnectEvent.sendToAll({ uri, open: true })
-            return
+            await new Promise((resolve) => {
+                CrossIsolationMessages.events.popupWalletConnectEvent.on(({ open }) => {
+                    if (!open) resolve(true)
+                })
+            })
+        } else {
+            await WalletConnectQRCodeModal.openAndWaitForClose({
+                uri,
+            })
         }
-        await WalletConnectQRCodeModal.openAndWaitForClose({
-            uri,
-        })
     },
     closeWalletConnectDialog: () => {
         if (Sniffings.is_popup_page) {

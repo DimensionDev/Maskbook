@@ -8,7 +8,6 @@ import { useNetworkContext, useProviderDescriptor, useWeb3State } from '@masknet
 import { PopupModalRoutes, type NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import { delay, timeout } from '@masknet/kit'
-import urlcat from 'urlcat'
 import { useAsyncFn, useMount } from 'react-use'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 
@@ -92,7 +91,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
     }, [provider.type, Provider])
 
     const handleClose = useCallback(() => {
-        navigate(urlcat(PopupRoutes.Personas, { disableNewWindow: true }), { replace: true })
+        navigate(PopupRoutes.Personas, { replace: true })
     }, [])
 
     const [{ loading, error }, handleConnect] = useAsyncFn(async () => {
@@ -136,13 +135,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
     const { classes } = useStyles({ loading, timeout: isTimeout })
 
     const handleChooseAnotherWallet = useCallback(() => {
-        modalNavigate(
-            PopupModalRoutes.SelectProvider,
-            {
-                disableNewWindow: true,
-            },
-            { replace: true },
-        )
+        modalNavigate(PopupModalRoutes.SelectProvider, { replace: true })
     }, [modalNavigate])
 
     useMount(() => handleConnect())
