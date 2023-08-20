@@ -1,11 +1,10 @@
-import { memo, type ReactNode } from 'react'
+import { memo } from 'react'
 import { Box, Link } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { NextIDPlatform, formatPersonaName } from '@masknet/shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { url } from '../../ContactCard/Account/index.js'
-import type { SupportedPlatforms } from '../../ContactCard/Account/index.js'
+import { PlatformIconMap, PlatformUrlMap, type SupportedPlatforms } from '../../common.js'
 
 interface AccountProps {
     userId?: string
@@ -35,21 +34,10 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const IconMap: Record<SupportedPlatforms, ReactNode> = {
-    [NextIDPlatform.LENS]: <Icons.Lens size={40} />,
-    [NextIDPlatform.Ethereum]: <Icons.ETH size={40} />,
-    [NextIDPlatform.ENS]: <Icons.ENS size={40} />,
-    [NextIDPlatform.GitHub]: <Icons.GitHub size={40} />,
-    [NextIDPlatform.Farcaster]: <Icons.Farcaster size={40} />,
-    [NextIDPlatform.SpaceId]: <Icons.SpaceId size={40} />,
-    [NextIDPlatform.Unstoppable]: <Icons.Unstoppable size={40} />,
-    [NextIDPlatform.Keybase]: <Icons.Keybase size={40} />,
-}
-
 export const Account = memo<AccountProps>(function Account({ userId, platform }) {
     const { classes } = useStyles()
     if (!userId) return null
-    const icon = IconMap[platform]
+    const Icon = PlatformIconMap[platform]
     return (
         <Box
             padding="12px"
@@ -58,14 +46,14 @@ export const Account = memo<AccountProps>(function Account({ userId, platform })
             gap="10px"
             alignItems="center"
             className={classes.container}>
-            {icon}
+            <Icon size={40} />
             <Box className={classes.userId}>
                 {platform === NextIDPlatform.Ethereum ? formatEthereumAddress(userId, 4) : formatPersonaName(userId)}
                 <Link
                     underline="none"
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={url[platform] + userId}
+                    href={PlatformUrlMap[platform] + userId}
                     className={classes.iconBlack}>
                     <Icons.LinkOut size={16} />
                 </Link>

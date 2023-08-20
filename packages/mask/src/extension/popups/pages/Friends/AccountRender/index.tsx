@@ -1,10 +1,10 @@
-import { memo } from 'react'
-import { type BindingProof, NextIDPlatform, EnhanceableSite } from '@masknet/shared-base'
-import { SocialAccount as DetailSocialAccount } from '../Detail/SocialAccount/index.js'
-import { Account as DetailAccount } from '../Detail/Account/index.js'
-import { SocialAccount } from '../ContactCard/SocialAccount/index.js'
-import { Account } from '../ContactCard/Account/index.js'
 import { safeUnreachable } from '@masknet/kit'
+import { EnhanceableSite, NextIDPlatform, type BindingProof } from '@masknet/shared-base'
+import { memo } from 'react'
+import { Account } from '../ContactCard/Account/index.js'
+import { SocialAccount } from '../ContactCard/SocialAccount/index.js'
+import { Account as DetailAccount } from '../Detail/Account/index.js'
+import { SocialAccount as DetailSocialAccount } from '../Detail/SocialAccount/index.js'
 
 interface AccountRenderProps {
     profile: BindingProof
@@ -42,7 +42,7 @@ export const AccountRender = memo<AccountRenderProps>(function AccountRender({ p
             return detail ? (
                 <DetailAccount userId={_userID} platform={profile.platform} />
             ) : (
-                <Account userId={_userID} icon={profile.platform} />
+                <Account userId={_userID} platform={profile.platform} />
             )
         case NextIDPlatform.CyberConnect:
         case NextIDPlatform.Bit:
