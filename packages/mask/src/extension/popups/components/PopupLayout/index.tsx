@@ -54,7 +54,6 @@ const PATTERNS = [
     PopupRoutes.Personas,
     PopupRoutes.Wallet,
     PopupRoutes.Unlock,
-    PopupRoutes.WalletSettings,
     PopupRoutes.SetPaymentPassword,
     PopupRoutes.Friends,
 ]
