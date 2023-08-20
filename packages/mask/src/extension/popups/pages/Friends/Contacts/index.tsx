@@ -58,7 +58,7 @@ export const Contacts = memo<ContactsProps>(function Contacts({ friends, fetchNe
                     />
                 )
             })}
-            <ElementAnchor callback={fetchNextPage} height={10} />
+            <ElementAnchor callback={() => fetchNextPage()} height={10} />
         </Box>
     )
 })

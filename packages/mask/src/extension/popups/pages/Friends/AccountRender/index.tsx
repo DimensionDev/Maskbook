@@ -12,50 +12,48 @@ interface AccountRenderProps {
 }
 
 export const AccountRender = memo<AccountRenderProps>(function AccountRender({ profile, detail }) {
-    return (function () {
-        switch (profile.platform) {
-            case NextIDPlatform.Twitter:
-                return detail ? (
-                    <DetailSocialAccount
-                        avatar={''}
-                        userId={profile.name ? profile.name : profile.identity}
-                        site={EnhanceableSite.Twitter}
-                    />
-                ) : (
-                    <SocialAccount
-                        avatar={''}
-                        userId={profile.name ? profile.name : profile.identity}
-                        site={EnhanceableSite.Twitter}
-                    />
-                )
-            case NextIDPlatform.ENS:
-            case NextIDPlatform.Ethereum:
-            case NextIDPlatform.GitHub:
-            case NextIDPlatform.SpaceId:
-            case NextIDPlatform.LENS:
-            case NextIDPlatform.Unstoppable:
-            case NextIDPlatform.Farcaster:
-            case NextIDPlatform.Keybase:
-                const _userID =
-                    profile.platform === NextIDPlatform.ENS || profile.platform === NextIDPlatform.Keybase
-                        ? profile.name
-                        : profile.identity
-                return detail ? (
-                    <DetailAccount userId={_userID} icon={profile.platform} />
-                ) : (
-                    <Account userId={_userID} icon={profile.platform} />
-                )
-            case NextIDPlatform.CyberConnect:
-            case NextIDPlatform.Bit:
-            case NextIDPlatform.SYBIL:
-            case NextIDPlatform.EthLeaderboard:
-            case NextIDPlatform.REDDIT:
-            case NextIDPlatform.RSS3:
-            case NextIDPlatform.NextID:
-                return null
-            default:
-                safeUnreachable(profile.platform)
-                return null
-        }
-    })()
+    switch (profile.platform) {
+        case NextIDPlatform.Twitter:
+            return detail ? (
+                <DetailSocialAccount
+                    avatar=""
+                    userId={profile.name ? profile.name : profile.identity}
+                    site={EnhanceableSite.Twitter}
+                />
+            ) : (
+                <SocialAccount
+                    avatar=""
+                    userId={profile.name ? profile.name : profile.identity}
+                    site={EnhanceableSite.Twitter}
+                />
+            )
+        case NextIDPlatform.ENS:
+        case NextIDPlatform.Ethereum:
+        case NextIDPlatform.GitHub:
+        case NextIDPlatform.SpaceId:
+        case NextIDPlatform.LENS:
+        case NextIDPlatform.Unstoppable:
+        case NextIDPlatform.Farcaster:
+        case NextIDPlatform.Keybase:
+            const _userID =
+                profile.platform === NextIDPlatform.ENS || profile.platform === NextIDPlatform.Keybase
+                    ? profile.name
+                    : profile.identity
+            return detail ? (
+                <DetailAccount userId={_userID} icon={profile.platform} />
+            ) : (
+                <Account userId={_userID} icon={profile.platform} />
+            )
+        case NextIDPlatform.CyberConnect:
+        case NextIDPlatform.Bit:
+        case NextIDPlatform.SYBIL:
+        case NextIDPlatform.EthLeaderboard:
+        case NextIDPlatform.REDDIT:
+        case NextIDPlatform.RSS3:
+        case NextIDPlatform.NextID:
+            return null
+        default:
+            safeUnreachable(profile.platform)
+            return null
+    }
 })

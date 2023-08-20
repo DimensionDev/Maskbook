@@ -1,4 +1,4 @@
-import { memo, useState, useMemo, useCallback } from 'react'
+import { memo, useState, useMemo } from 'react'
 import { FriendsHomeUI } from './UI.js'
 import { useFriendsPaged } from '../../../hook/useFriends.js'
 import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
@@ -10,30 +10,29 @@ import { useFriendsFromSearch } from '../../../hook/useFriendsFromSearch.js'
 
 const FriendsHome = memo(function FriendsHome() {
     const { t } = useI18N()
-    const { data, fetchNextPage, hasNextPage, isLoading, profilesArray } = useFriendsPaged()
-    const value = useMemo(() => (data ? data.pages.flatMap((x) => x.friends) : EMPTY_LIST), [data])
+    useTitle(t('popups_encrypted_friends'))
+
+    const { data, fetchNextPage, isLoading, profilesArray } = useFriendsPaged()
+    const friends = useMemo(() => (data ? data.pages.flatMap((x) => x.friends) : EMPTY_LIST), [data])
     const profiles = useMemo(() => (profilesArray ? profilesArray.pages.flat(1) : EMPTY_LIST), [profilesArray])
     const [searchValue, setSearchValue] = useState('')
     const type = resolveNextIDPlatform(searchValue)
-    const { loading: resolveLoading, value: _value = '' } = useSearchValue(searchValue, type)
+    const { loading: resolveLoading, value: keyword = '' } = useSearchValue(searchValue, type)
     const { loading: searchLoading, value: searchResult } = usePersonasFromNextID(
-        _value,
+        keyword,
         type ?? NextIDPlatform.NextID,
         false,
     )
-    const { value: searchedList = EMPTY_LIST } = useFriendsFromSearch(searchResult, value, _value)
-    const fetchMore = useCallback(() => {
-        hasNextPage ? fetchNextPage() : null
-    }, [hasNextPage, fetchNextPage])
-    useTitle(t('popups_encrypted_friends'))
+    const { value: searchedList = EMPTY_LIST } = useFriendsFromSearch(searchResult, friends, keyword)
+
     return (
         <FriendsHomeUI
-            friends={value}
+            friends={friends}
             loading={isLoading || resolveLoading || searchLoading}
             setSearchValue={setSearchValue}
             searchValue={searchValue}
             searchResult={searchedList}
-            fetchNextPage={fetchMore}
+            fetchNextPage={fetchNextPage}
             profiles={profiles}
         />
     )

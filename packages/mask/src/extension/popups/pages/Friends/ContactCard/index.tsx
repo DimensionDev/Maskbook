@@ -16,6 +16,7 @@ import { attachNextIDToProfile } from '../../../../../utils/utils.js'
 import { ConnectedAccounts } from './ConnectedAccounts/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import Services from '../../../../service.js'
+import { queryClient } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -103,6 +104,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                 linkedTwitterNames: twitter ? [twitter.identity] : [],
             })
         }
+        queryClient.invalidateQueries(['friends', currentPersona?.identifier.rawPublicKey])
         setLocal(true)
     }, [profiles, nextId, currentPersona])
 
