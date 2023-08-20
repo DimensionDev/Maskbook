@@ -1,6 +1,6 @@
 import Color from 'color'
-import { useEffect, useState } from 'react'
-import { useAsync } from 'react-use'
+import { useEffect, useState, useRef } from 'react'
+import { useAsync, useWindowSize } from 'react-use'
 import { useCollectionByTwitterHandler } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
@@ -20,6 +20,7 @@ import {
     searchProfileTabLoseConnectionPageSelector,
     searchNameTag,
     isProfilePageLike,
+    nextTabListSelector,
 } from '../utils/selector.js'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI.js'
 import Services from '../../../extension/service.js'
@@ -91,6 +92,11 @@ const useStyles = makeStyles()((theme) => {
             alignSelf: 'center',
             height: 4,
             backgroundColor: props.line,
+        },
+        bar: {
+            display: 'flex',
+            zIndex: 0,
+            position: 'relative',
         },
     }
 })
@@ -265,12 +271,7 @@ export function injectProfileTabAtTwitter(signal: AbortSignal) {
                 },
                 shadowRootDelegatesFocus: false,
             })
-            attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(
-                <div style={{ display: 'flex' }}>
-                    <ProfileTabForTokenAndPersona />
-                    <ProfileTabForDAO />
-                </div>,
-            )
+            attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(<InjectprofileTab />)
             tabInjected = true
         }
     })
@@ -280,4 +281,96 @@ export function injectProfileTabAtTwitter(signal: AbortSignal) {
         missingReportRule: { name: 'ProfileTab', rule: isProfilePageLike },
         shadowRootDelegatesFocus: false,
     })
+}
+
+function showNextArrow() {
+    const next = nextTabListSelector().evaluate()
+    if (!next) return
+
+    next.style.setProperty('pointer-events', 'auto', 'important')
+    next.style.opacity = '1'
+
+    const first = next.firstElementChild as HTMLDivElement
+    if (!first) return
+    first.style.backgroundColor = 'rgba(39, 44, 48, 0.75)'
+    first.style.opacity = '1'
+    const svg = next.querySelector('svg')
+    if (!svg) return
+    svg.style.color = 'rgb(255, 255, 255)'
+}
+
+function hiddenNextArrow() {
+    const next = nextTabListSelector().evaluate()
+    if (!next) return
+    next.style.removeProperty('opacity')
+    next.style.removeProperty('pointer-events')
+
+    const first = next.firstElementChild as HTMLDivElement
+    if (!first) return
+    first.style.backgroundColor = 'rgba(15, 20, 25, 0.75)'
+    first.style.removeProperty('opacity')
+    const svg = next.querySelector('svg')
+    if (!svg) return
+    svg.style.removeProperty('color')
+}
+
+function InjectprofileTab() {
+    const ref = useRef<HTMLDivElement>(null)
+    const { classes } = useStyles()
+    const windowSize = useWindowSize()
+    const timeoutRef = useRef<any>()
+
+    function onMouseEnter() {
+        console.log('enter')
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current)
+            timeoutRef.current = null
+        }
+        const parent = searchProfileTabListLastChildSelector().closest<HTMLElement>(1).evaluate()
+        if (!parent || !ref.current) return
+        if (Math.abs(parent.scrollWidth - (parent.scrollLeft + parent.clientWidth)) < 10) return
+        if (parent.clientWidth < parent.scrollWidth) {
+            showNextArrow()
+        }
+    }
+
+    function onMouseLeave() {
+        console.log('leave')
+        if (!timeoutRef.current) timeoutRef.current = setTimeout(hiddenNextArrow, 500)
+    }
+
+    function onNextClick() {
+        hiddenNextArrow()
+    }
+
+    const tabList = searchProfileTabListSelector().evaluate()
+    const nextArrow = nextTabListSelector().evaluate()
+    console.log('next', nextArrow)
+    useEffect(() => {
+        ref.current?.addEventListener('mouseenter', onMouseEnter)
+        ref.current?.addEventListener('mouseleave', onMouseLeave)
+        nextArrow?.addEventListener('click', onNextClick)
+
+        tabList.map((v) => {
+            v.closest('div')?.addEventListener('mouseenter', onMouseEnter)
+            v.closest('div')?.addEventListener('mouseleave', onMouseLeave)
+        })
+        return () => {
+            ref.current?.removeEventListener('mouseenter', onMouseEnter)
+            ref.current?.removeEventListener('mouseleave', onMouseLeave)
+            nextArrow?.removeEventListener('click', onNextClick)
+
+            tabList.map((v) => {
+                v.closest('div')?.removeEventListener('mouseenter', onMouseEnter)
+                v.closest('div')?.removeEventListener('mouseleave', onMouseLeave)
+            })
+        }
+    }, [windowSize, tabList, ref.current, nextArrow])
+
+    return (
+        <div ref={ref} className={classes.bar}>
+            <ProfileTabForTokenAndPersona />
+            <ProfileTabForDAO />
+        </div>
+    )
 }
