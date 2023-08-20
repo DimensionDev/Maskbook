@@ -72,17 +72,19 @@ export function TipButton(props: Props) {
     }, [pluginID, isVisitingUser])
 
     const accountsByIdentity = useTipsAccounts(identity, personaPubkey)
-    const accounts = useMemo(
-        () =>
-            [...receivingAccounts, ...accountsByIdentity].sort((a, z) => {
+    const accounts = useMemo(() => {
+        return [...receivingAccounts, ...accountsByIdentity]
+            .sort((a, z) => {
                 const aHasNextId = a.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID)
                 const zHasNextId = z.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID)
                 if (aHasNextId === zHasNextId) return 0
                 return aHasNextId ? -1 : zHasNextId ? 1 : 0
-            }),
-
-        [receivingAccounts, accountsByIdentity],
-    )
+            })
+            .sort((a, z) => {
+                if (a.pluginID === z.pluginID) return 0
+                return a.pluginID === pluginID ? -1 : 1
+            })
+    }, [receivingAccounts, accountsByIdentity, pluginID])
 
     const disabled = loadingPersona || accounts.length === 0 || !isRuntimeAvailable
 
