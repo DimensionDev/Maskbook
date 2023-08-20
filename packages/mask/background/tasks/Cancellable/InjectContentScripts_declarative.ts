@@ -1,13 +1,8 @@
 import { noop } from 'lodash-es'
-import { Flags } from '@masknet/flags'
 import { hmr } from '../../../utils-pure/index.js'
-import {
-    fetchInjectContentScriptList,
-    contentScriptURL,
-    injectedScriptURL,
-    maskSDK_URL,
-} from './InjectContentScripts_imperative.js'
 import type { Scripting } from 'webextension-polyfill'
+import { injectedScriptURL, fetchInjectContentScriptList } from '../../utils/injectScript.js'
+import { Sniffings } from '@masknet/shared-base'
 
 const { signal } = hmr(import.meta.webpackHot)
 if (typeof browser.scripting?.registerContentScripts === 'function') {
@@ -25,8 +20,7 @@ async function unregisterExistingScripts() {
 }
 
 function prepareMainWorldScript(matches: string[]): Scripting.RegisteredContentScript[] {
-    if (Flags.has_firefox_xray_vision) return []
-
+    if (Sniffings.is_firefox) return []
     const result: Scripting.RegisteredContentScript = {
         id: 'injected',
         allFrames: true,
@@ -37,7 +31,6 @@ function prepareMainWorldScript(matches: string[]): Scripting.RegisteredContentS
         runAt: 'document_start',
         matches,
     }
-    if (Flags.mask_SDK_ready) result.js!.push(maskSDK_URL)
     return [result]
 }
 
@@ -52,18 +45,16 @@ async function prepareContentScript(matches: string[]): Promise<Scripting.Regist
         runAt: 'document_start',
         matches,
     }
-    if (Flags.mask_SDK_ready) xrayScript.js!.push(maskSDK_URL)
-
     const content: Scripting.RegisteredContentScript = {
         id: 'content',
         allFrames: true,
-        js: await fetchInjectContentScriptList(contentScriptURL),
+        js: await fetchInjectContentScriptList(),
         persistAcrossSessions: false,
         // @ts-expect-error Chrome API
         world: 'ISOLATED',
         runAt: 'document_idle',
         matches,
     }
-    if (Flags.has_firefox_xray_vision) return [xrayScript, content]
+    if (globalThis.navigator?.userAgent.includes('Firefox')) return [xrayScript, content]
     return [content]
 }
