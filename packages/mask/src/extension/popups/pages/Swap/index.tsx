@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { AllProviderTradeContext } from '@masknet/plugin-trader'
 import { Appearance } from '@masknet/public-api'
 import { SharedContextProvider } from '@masknet/shared'
@@ -10,6 +10,9 @@ import { useSwapPageTheme } from '../../../../utils/theme/useSwapPageTheme.js'
 import { NetworkSelector } from '../../components/NetworkSelector/index.js'
 import { useTokenParams } from '../../hook/useTokenParams.js'
 import { SwapBox } from './SwapBox/index.js'
+import { SiteAdaptorContextRef } from '@masknet/plugin-infra/dom'
+import { TwitterAdaptor } from '../../../../../shared/site-adaptors/implementations/twitter.com.js'
+import { openWindow } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -65,6 +68,34 @@ export default function SwapPage() {
     const { chainId } = useTokenParams()
     applyMaskColorVars(document.body, Appearance.light)
     const chainContextValue = useMemo(() => ({ chainId }), [chainId])
+
+    useEffect(() => {
+        SiteAdaptorContextRef.value = {
+            ...SiteAdaptorContextRef.value,
+            share(text) {
+                const url = TwitterAdaptor.getShareLinkURL!(text)
+                const width = 700
+                const height = 520
+                const openedWindow = openWindow(url, 'share', {
+                    width,
+                    height,
+                    screenX: window.screenX + (window.innerWidth - width) / 2,
+                    screenY: window.screenY + (window.innerHeight - height) / 2,
+                    opener: true,
+                    referrer: true,
+                    behaviors: {
+                        toolbar: true,
+                        status: true,
+                        resizable: true,
+                        scrollbars: true,
+                    },
+                })
+                if (openedWindow === null) {
+                    location.assign(url)
+                }
+            },
+        }
+    }, [])
 
     return (
         <ThemeProvider theme={theme}>
