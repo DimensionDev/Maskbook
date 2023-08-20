@@ -27,6 +27,7 @@ import { LidoProtocol } from '../protocols/LDOProtocol.js'
 import { AAVEProtocol } from '../protocols/AAVEProtocol.js'
 import { LDO_PAIRS } from '../constants.js'
 import { useI18N } from '../locales/index.js'
+import { useUpdateEffect } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -68,8 +69,9 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const { pluginID } = useNetworkContext()
 
     const { chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const [chainId, setChainId] = useState(ChainId.Mainnet)
+    const [chainId, setChainId] = useState<ChainId>(ChainId.Mainnet)
     const [selectedProtocol, setSelectedProtocol] = useState<SavingsProtocol | null>(null)
+
     const { data: aaveTokens, isLoading: loadingAAve } = useQuery({
         enabled: open && chainId === ChainId.Mainnet,
         queryKey: ['savings', 'aave', 'tokens', chainId],
@@ -116,12 +118,21 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
         [chainId, detailedAaveTokens],
     )
 
+    useUpdateEffect(() => {
+        if (chains.includes(currentChainId)) {
+            setChainId(currentChainId)
+        } else {
+            setChainId(ChainId.Mainnet)
+        }
+    }, [currentChainId])
+
     const [currentTab, onChange, tabs] = useTabs(TabType.Deposit, TabType.Withdraw)
+    const chainContextValue = useMemo(() => ({ chainId }), [chainId])
 
     return (
-        <Web3ContextProvider value={{ pluginID, chainId: currentChainId }}>
+        <Web3ContextProvider value={{ pluginID, chainId: ChainId.Mainnet }}>
             <AllProviderTradeContext.Provider>
-                <ChainContextProvider value={{ chainId: currentChainId }}>
+                <ChainContextProvider value={chainContextValue}>
                     <TabContext value={currentTab}>
                         <InjectedDialog
                             open={open}
@@ -143,7 +154,6 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                         requireChains
                                         chains={chains.filter(Boolean)}
                                         pluginID={NetworkPluginID.PLUGIN_EVM}
-                                        onChange={(chainId) => setChainId(chainId as ChainId)}
                                     />
                                 </div>
                                 <div className={classes.tableTabWrapper}>
