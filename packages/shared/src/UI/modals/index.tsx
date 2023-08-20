@@ -1,5 +1,6 @@
 import { memo } from 'react'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { WalletStatusModal } from './WalletStatusModal/index.js'
 import { SelectProviderModal } from './SelectProviderModal/index.js'
 import { WalletConnectQRCodeModal } from './WalletConnectQRCodeModal/index.js'
@@ -23,7 +24,7 @@ export * from './modals.js'
 
 export const Modals = memo(function Modals() {
     return (
-        <>
+        <RootWeb3ContextProvider>
             <ConnectWalletModal ref={modals.ConnectWalletModal.register} />
             <WalletConnectQRCodeModal ref={modals.WalletConnectQRCodeModal.register} />
             <SelectProviderModal ref={modals.SelectProviderModal.register} />
@@ -42,6 +43,6 @@ export const Modals = memo(function Modals() {
             <PersonaSelectPanelModal ref={modals.PersonaSelectPanelModal.register} />
             <ApplicationBoardSettingsModal ref={modals.ApplicationBoardSettingsModal.register} />
             <ShareSelectNetworkModal ref={modals.ShareSelectNetworkModal.register} />
-        </>
+        </RootWeb3ContextProvider>
     )
 })
