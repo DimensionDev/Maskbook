@@ -40,7 +40,7 @@ export const AccountRender = memo<AccountRenderProps>(function AccountRender({ p
                     ? profile.name
                     : profile.identity
             return detail ? (
-                <DetailAccount userId={_userID} icon={profile.platform} />
+                <DetailAccount userId={_userID} platform={profile.platform} />
             ) : (
                 <Account userId={_userID} icon={profile.platform} />
             )
