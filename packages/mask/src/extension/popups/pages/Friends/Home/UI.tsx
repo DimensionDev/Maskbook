@@ -71,9 +71,7 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
             ) : searchValue ? (
                 <SearchList searchResult={searchResult} />
             ) : (
-                <>
-                    <Contacts friends={friends} fetchNextPage={fetchNextPage} profiles={profiles} />
-                </>
+                <Contacts friends={friends} fetchNextPage={fetchNextPage} profiles={profiles} />
             )}
         </div>
     )

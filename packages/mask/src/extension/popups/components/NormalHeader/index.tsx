@@ -1,7 +1,7 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
 import { memo, useCallback, useContext, type ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
@@ -36,6 +36,7 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
         paddingLeft: theme.spacing(1),
         paddingRight: theme.spacing(1),
+        gridArea: '1 / 2',
     },
     logo: {
         width: 96,
@@ -44,7 +45,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NormalHeaderProps {
-    onlyTitle?: boolean
     tabList?: ReactNode
     onClose?: () => void
 }
@@ -56,8 +56,8 @@ function canNavBack() {
     return false
 }
 export const NormalHeader = memo<NormalHeaderProps>(function NormalHeader(props) {
-    const { onlyTitle, onClose, tabList } = props
-    const { cx, classes } = useStyles()
+    const { onClose, tabList } = props
+    const { classes } = useStyles()
     const navigate = useNavigate()
     const { title, extension, customBackHandler } = useContext(PageTitleContext)
 
@@ -65,24 +65,20 @@ export const NormalHeader = memo<NormalHeaderProps>(function NormalHeader(props)
     const showTitle = title !== undefined
 
     const handleBack = useCallback(() => navigate(-1), [])
+    const { hasNavigator } = useOutletContext() as { hasNavigator: boolean }
 
-    if (onlyTitle)
-        return (
-            <Box className={cx(classes.container, classes.header)} style={{ justifyContent: 'center' }}>
-                <Typography className={classes.title}>{title}</Typography>
-            </Box>
-        )
+    const leftAction = hasNavigator ? null : canBack ? (
+        <Icons.Comeback className={classes.icon} onClick={customBackHandler ?? handleBack} />
+    ) : (
+        <Icons.Close className={classes.icon} onClick={onClose} />
+    )
 
     return (
         <Box className={classes.container}>
             <Box className={classes.header}>
                 {showTitle ? (
                     <>
-                        {canBack ? (
-                            <Icons.Comeback className={classes.icon} onClick={customBackHandler ?? handleBack} />
-                        ) : (
-                            <Icons.Close className={classes.icon} onClick={onClose} />
-                        )}
+                        {leftAction}
                         <Typography className={classes.title}>{title}</Typography>
                         {extension}
                     </>
