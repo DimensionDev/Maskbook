@@ -2,7 +2,7 @@ import { memo, type ReactNode, useCallback, useMemo } from 'react'
 import { Button, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import type { DashboardRoutes, PersonaInformation, PluginID } from '@masknet/shared-base'
+import { DashboardRoutes, type PersonaInformation, type PluginID } from '@masknet/shared-base'
 import { type PersonaConnectStatus, useCurrentPersonaConnectStatus, useSharedI18N } from '../../../index.js'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 
@@ -106,7 +106,11 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
 
         const handleClick = useCallback(() => {
             beforeAction?.(status)
-            if (!status.verified || !status.hasPersona || !status.connected)
+
+            if (!status.hasPersona || !status.connected)
+                status.action?.(DashboardRoutes.SignUpPersona, handlerPosition, enableVerify, !createConfirm)
+
+            if (!status.verified && status.hasPersona && status.connected)
                 status.action?.(directTo, handlerPosition, enableVerify, !createConfirm)
             afterAction?.(status)
         }, [directTo, handlerPosition, status, createConfirm])
