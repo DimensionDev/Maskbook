@@ -31,7 +31,7 @@ export function useTransactionLogs(transactionState: TransactionState) {
         const isRecentTx = 'candidates' in transactionState
         const localTransaction: RecentTransaction<ChainId, EvmTransaction> | undefined = isRecentTx
             ? transactionState
-            : txes?.find((x) => x.id === transactionState.hash)
+            : txes?.find((x) => x.id === transactionState.id)
         if (localTransaction) {
             return [
                 t('transaction_confirmed_at', {
