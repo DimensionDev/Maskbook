@@ -6,7 +6,7 @@ import { isEmptyHex } from '../helpers/address.js'
 import { ChainId, type Transaction } from '../types/index.js'
 
 const normalizeHex = memoize((value: string | number) => {
-    // fix a abnormal hex value like: 0x02c68af0bb140000
+    // fix an abnormal hex value like: 0x02c68af0bb140000
     if (typeof value === 'string' && value.length > 3 && value.startsWith('0x0'))
         return toHex(new BigNumber(value).toFixed())
     return toHex(value)
