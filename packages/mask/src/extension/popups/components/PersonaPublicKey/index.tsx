@@ -47,7 +47,7 @@ export const PersonaPublicKey = memo<PersonaPublicKeyProps>(function PersonaPubl
                 underline="none"
                 target="_blank"
                 rel="noopener noreferrer"
-                href={urlcat('https://web3.bio/:address', { address: publicHexString })}
+                href={urlcat('https://web3.bio/', { s: publicHexString })}
                 className={classes.icon}>
                 <Icons.LinkOut size={iconSize} />
             </Link>
