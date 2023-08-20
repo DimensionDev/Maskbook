@@ -458,6 +458,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                 focusedTrade={focusedTrade}
                 gasPrice={gasPrice}
                 onSwap={onSwap}
+                refresh={() => allTradeComputed.map((x) => x.retry())}
             />
         </>
     )

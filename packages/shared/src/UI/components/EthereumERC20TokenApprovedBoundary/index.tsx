@@ -38,6 +38,7 @@ export interface EthereumERC20TokenApprovedBoundaryProps extends withClasses<'bu
     contractName?: string
     showHelperToken?: boolean
     failedContent?: React.ReactNode
+    callback?: () => void
 }
 
 export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenApprovedBoundaryProps) {
@@ -51,6 +52,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
         contractName,
         showHelperToken = true,
         failedContent,
+        callback,
     } = props
 
     const t = useSharedI18N()
@@ -72,7 +74,16 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     )
 
     const [{ type: approveStateType, allowance }, transactionState, approveCallback, _resetApproveCallback] =
-        useERC20TokenApproveCallback(token?.address ?? '', amount, spender ?? '', refetch, token?.chainId)
+        useERC20TokenApproveCallback(
+            token?.address ?? '',
+            amount,
+            spender ?? '',
+            () => {
+                callback?.()
+                refetch()
+            },
+            token?.chainId,
+        )
 
     const loading = spendersLoading || approveStateType === ApproveStateType.UPDATING || transactionState.loadingApprove
 

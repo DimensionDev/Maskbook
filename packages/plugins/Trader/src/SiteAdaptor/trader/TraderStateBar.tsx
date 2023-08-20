@@ -61,6 +61,7 @@ export interface TradeStateBarProps {
     inputTokenBalance?: string
     gasPrice?: string
     onSwap: () => void
+    refresh: () => void
 }
 export function TraderStateBar({
     trades,
@@ -71,6 +72,7 @@ export function TraderStateBar({
     inputTokenBalance,
     gasPrice,
     onSwap,
+    refresh,
 }: TradeStateBarProps) {
     const t = useI18N()
     const { classes } = useStyles()
@@ -202,7 +204,8 @@ export function TraderStateBar({
                             color: 'primary',
                             style: { borderRadius: 8 },
                             size: 'medium',
-                        }}>
+                        }}
+                        callback={refresh}>
                         <ChainBoundary expectedChainId={chainId} expectedPluginID={pluginID}>
                             <TokenSecurityBoundary
                                 tokenInfo={{

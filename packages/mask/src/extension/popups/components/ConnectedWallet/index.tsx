@@ -122,6 +122,7 @@ export const ConnectedWallet = memo<ConnectedWalletProps>(function ConnectedWall
                     result.createdAt,
                     { signature },
                 )
+
                 // Broadcast updates.
                 MaskMessages.events.ownProofChanged.sendToAll()
                 showSnackbar(t('popups_wallet_disconnect_success'))
