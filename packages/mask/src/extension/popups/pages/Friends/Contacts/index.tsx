@@ -1,11 +1,11 @@
+import { ElementAnchor, EmptyStatus } from '@masknet/shared'
+import { EMPTY_LIST, type BindingProof } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { memo } from 'react'
-import { ContactCard } from '../ContactCard/index.js'
 import { Box } from '@mui/material'
+import { memo } from 'react'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
-import { EmptyStatus, ElementAnchor } from '@masknet/shared'
 import { type Friend } from '../../../hook/useFriends.js'
-import { type BindingProof } from '@masknet/shared-base'
+import { ContactCard } from '../ContactCard/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     empty: {
@@ -53,7 +53,7 @@ export const Contacts = memo<ContactsProps>(function Contacts({ friends, fetchNe
                         avatar={friend.avatar}
                         nextId={friend.persona?.publicKeyAsHex}
                         publicKey={friend.persona?.rawPublicKey}
-                        profiles={profiles[index] || []}
+                        profiles={profiles[index] || EMPTY_LIST}
                         isLocal
                     />
                 )
