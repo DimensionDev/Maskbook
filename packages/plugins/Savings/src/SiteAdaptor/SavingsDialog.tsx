@@ -6,7 +6,6 @@ import { DialogActions, DialogContent, Tab } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import {
     Web3ContextProvider,
-    useChainContext,
     useFungibleTokens,
     RevokeChainContextProvider,
     useNetworkContext,
@@ -67,7 +66,6 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const { classes } = useStyles()
     const { pluginID } = useNetworkContext()
 
-    const { chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [chainId, setChainId] = useState(ChainId.Mainnet)
     const [selectedProtocol, setSelectedProtocol] = useState<SavingsProtocol | null>(null)
     const { data: aaveTokens, isLoading: loadingAAve } = useQuery({
@@ -119,9 +117,9 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const [currentTab, onChange, tabs] = useTabs(TabType.Deposit, TabType.Withdraw)
 
     return (
-        <Web3ContextProvider value={{ pluginID, chainId: currentChainId }}>
+        <Web3ContextProvider value={{ pluginID, chainId }}>
             <AllProviderTradeContext.Provider>
-                <ChainContextProvider value={{ chainId: currentChainId }}>
+                <ChainContextProvider value={{ chainId }}>
                     <TabContext value={currentTab}>
                         <InjectedDialog
                             open={open}
