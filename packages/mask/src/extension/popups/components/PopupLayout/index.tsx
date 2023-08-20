@@ -3,7 +3,7 @@
 import { PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { GlobalStyles, Paper } from '@mui/material'
-import { memo, type PropsWithChildren } from 'react'
+import { memo, useMemo, type PropsWithChildren } from 'react'
 import { matchPath, Outlet, useLocation } from 'react-router-dom'
 import { Navigator } from '../Navigator/index.js'
 
@@ -64,6 +64,7 @@ export const PopupLayout = memo(function PopupLayout({ children }: PropsWithChil
 
     const location = useLocation()
     const matched = PATTERNS.some((pattern) => matchPath(pattern, location.pathname))
+    const outletContext = useMemo(() => ({ hasNavigator: matched }), [matched])
 
     return (
         <>
@@ -71,7 +72,7 @@ export const PopupLayout = memo(function PopupLayout({ children }: PropsWithChil
             <Paper elevation={0} style={{ height: '100vh', overflowY: 'auto', minHeight: 600, borderRadius: 0 }}>
                 <div className={classes.container}>
                     <div className={classes.body} data-hide-scrollbar>
-                        {children ?? <Outlet />}
+                        {children ?? <Outlet context={outletContext} />}
                     </div>
                     {matched ? <Navigator className={classes.navigator} /> : null}
                 </div>
