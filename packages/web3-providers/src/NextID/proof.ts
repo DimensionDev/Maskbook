@@ -229,7 +229,6 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     async clearPersonaQueryCache(personaPublicKey: string) {
         const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
         await staleNextIDCached(url)
-        return
     }
 
     async bindProof(
