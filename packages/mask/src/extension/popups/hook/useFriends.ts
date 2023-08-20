@@ -60,7 +60,7 @@ export function useFriendsPaged() {
         },
     )
     const { data, hasNextPage, fetchNextPage, isLoading, isFetchingNextPage } = useInfiniteQuery({
-        queryKey: ['friends', currentPersona],
+        queryKey: ['friends', currentPersona?.identifier.rawPublicKey],
         enabled: !recordsLoading,
         queryFn: async ({ pageParam = 0 }) => {
             const friends: Friend[] = []
@@ -118,16 +118,17 @@ export function useFriendsPaged() {
                     }
                 }
                 const filtered = item.value
-                    .filter(
-                        (x) =>
+                    .filter((x) => {
+                        return (
                             (x.platform === NextIDPlatform.ENS && x.name.endsWith('.eth')) ||
                             (x.platform !== NextIDPlatform.Bit &&
                                 x.platform !== NextIDPlatform.CyberConnect &&
                                 x.platform !== NextIDPlatform.REDDIT &&
                                 x.platform !== NextIDPlatform.SYBIL &&
                                 x.platform !== NextIDPlatform.EthLeaderboard &&
-                                x.platform !== NextIDPlatform.NextID),
-                    )
+                                x.platform !== NextIDPlatform.NextID)
+                        )
+                    })
                     .sort((a, b) => PlatformSort[a.platform] - PlatformSort[b.platform])
                 return filtered
             })
