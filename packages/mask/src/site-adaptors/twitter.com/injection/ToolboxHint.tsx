@@ -33,7 +33,7 @@ export function injectToolboxHintAtTwitter(signal: AbortSignal, category: 'walle
     })
     attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(
         <RootWeb3ContextProvider>
-            <ToolboxHintAtTwitter category={category} />,
+            <ToolboxHintAtTwitter category={category} />
         </RootWeb3ContextProvider>,
     )
     injectProfile(signal)
