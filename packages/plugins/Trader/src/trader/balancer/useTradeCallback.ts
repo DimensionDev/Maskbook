@@ -8,7 +8,6 @@ import { Web3 } from '@masknet/web3-providers'
 import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
 import { type SwapResponse, type TradeComputed, TradeStrategy } from '../../types/index.js'
 import { useTradeAmount } from './useTradeAmount.js'
-import { useSwapErrorCallback } from '../../SiteAdaptor/trader/hooks/useSwapErrorCallback.js'
 
 export function useTradeCallback(
     trade: TradeComputed<SwapResponse> | null,
@@ -16,7 +15,6 @@ export function useTradeCallback(
     allowedSlippage = SLIPPAGE_DEFAULT,
     gasConfig?: GasConfig,
 ) {
-    const notifyError = useSwapErrorCallback()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { pluginID } = useNetworkContext()
     const Others = useWeb3Others()
@@ -98,10 +96,7 @@ export function useTradeCallback(
             if (!receipt?.status) return
             return receipt?.transactionHash
         } catch (error) {
-            if (error instanceof Error) {
-                notifyError(error.message)
-            }
             return
         }
-    }, [chainId, trade, tradeAmount, exchangeProxyContract, BALANCER_ETH_ADDRESS, pluginID, notifyError, Others])
+    }, [chainId, trade, tradeAmount, exchangeProxyContract, BALANCER_ETH_ADDRESS, pluginID, Others])
 }

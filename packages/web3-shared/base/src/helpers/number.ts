@@ -107,11 +107,6 @@ export function toFixed(value: BigNumber.Value = 0, decimalPlaces?: number) {
     return !isUndefined(decimalPlaces) ? n.toFixed(decimalPlaces) : n.toFixed()
 }
 
-export function formatInteger(value: BigNumber.Value | null | undefined, fallback?: string | number) {
-    if (value === undefined || value === null) return fallback
-    return new BigNumber(value).toFormat(0)
-}
-
 /** Trim ending zeros of decimals */
 export function trimZero(digit: string) {
     const result = digit.replaceAll(/\.([1-9]*)?0+$/g, (_, p1) => {

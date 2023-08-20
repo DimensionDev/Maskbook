@@ -81,7 +81,7 @@ export const PersonaHeaderUI = memo<PersonaHeaderUIProps>(({ avatar, fingerprint
                             underline="none"
                             target="_blank"
                             rel="noopener noreferrer"
-                            href={urlcat('https://web3.bio/:address', { address: publicHexString })}
+                            href={urlcat('https://web3.bio/', { s: publicHexString })}
                             className={classes.icon}>
                             <Icons.LinkOut size={12} />
                         </Link>

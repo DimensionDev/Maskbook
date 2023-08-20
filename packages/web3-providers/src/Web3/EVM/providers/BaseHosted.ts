@@ -154,7 +154,9 @@ export class BaseHostedProvider
             .some((x) => x.name === name)
 
         if (isNameExists) throw new Error('The wallet name already exists.')
-        await WalletServiceRef.value.renameWallet(address, name)
+
+        if (!this.walletStorage?.wallets.value.find((x) => isSameAddress(x.address, address))?.owner)
+            await WalletServiceRef.value.renameWallet(address, name)
         await this.updateWallet(address, {
             name,
         })

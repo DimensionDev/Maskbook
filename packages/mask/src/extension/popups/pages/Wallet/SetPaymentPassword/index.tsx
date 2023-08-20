@@ -133,9 +133,10 @@ interface WalletItemProps {
 const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
     const { classes } = useStyles()
     const { address, owner } = wallet
+    const chainId = owner ? ChainId.Matic : ChainId.Mainnet
     const { data: balance = '0', isLoading } = useBalance(NetworkPluginID.PLUGIN_EVM, {
         account: address,
-        chainId: owner ? ChainId.Matic : ChainId.Mainnet,
+        chainId,
     })
     const theme = useTheme()
 
@@ -151,7 +152,7 @@ const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
                         underline="none"
                         target="_blank"
                         rel="noopener noreferrer"
-                        href={ExplorerResolver.addressLink(ChainId.Mainnet, address)}
+                        href={ExplorerResolver.addressLink(chainId, address)}
                         marginLeft="4px"
                         width={16}
                         height={16}>

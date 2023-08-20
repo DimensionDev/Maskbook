@@ -188,6 +188,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
             const result = await bindProof(payload, walletSignature, personaSignature)
 
             if (result) showSnackbar(t('popups_verify_wallet_sign_success_tips'))
+
             // Broadcast updates
             MaskMessages.events.ownProofChanged.sendToAll()
             return true

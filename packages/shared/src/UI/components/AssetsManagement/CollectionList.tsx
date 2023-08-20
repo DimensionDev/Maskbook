@@ -158,8 +158,16 @@ export const CollectionList = memo(function CollectionList({
         [onCollectionChange, scrollToTop],
     )
 
-    const { assetsMapRef, getAssets, getBLockedTokenIds, getVerifiedBy, loadAssets, loadVerifiedBy, isAllHidden } =
-        useUserAssets()
+    const {
+        assetsMapRef,
+        getAssets,
+        getBLockedTokenIds,
+        getVerifiedBy,
+        loadAssets,
+        loadVerifiedBy,
+        isAllHidden,
+        isEmpty,
+    } = useUserAssets()
     const additional = useMemo(() => {
         if (!additionalAssets?.length) return EMPTY_LIST
         const collectionAddresses = compact(collections.map((x) => x.address?.toLowerCase()))
@@ -210,7 +218,7 @@ export const CollectionList = memo(function CollectionList({
             </Box>
         )
 
-    if ((!loading && !collections.length) || !account || isAllHidden) {
+    if ((!loading && !collections.length) || !account || isAllHidden || isEmpty) {
         return (
             <Box className={cx(classes.container, className)} {...rest}>
                 <div className={classes.columns}>

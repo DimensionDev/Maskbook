@@ -47,7 +47,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'flex-end',
     },
     skeleton: {
-        backgroundColor: theme.palette.maskColor.main,
+        backgroundColor: theme.palette.maskColor.publicLine,
     },
 }))
 
