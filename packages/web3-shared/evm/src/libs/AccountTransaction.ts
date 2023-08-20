@@ -1,11 +1,15 @@
 import { BigNumber } from 'bignumber.js'
-import { identity, pickBy } from 'lodash-es'
+import { identity, pickBy, memoize } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import { ZERO_ADDRESS } from '../constants/index.js'
 import { isEmptyHex } from '../helpers/address.js'
 import { ChainId, type Transaction } from '../types/index.js'
 
-const normalizeHex = (value: BigNumber.Value) => toHex(new BigNumber(value).toFixed())
+const normalizeHex = memoize((value: string | number) => {
+    if (typeof value === 'string' && value.length > 3 && value.startsWith('0x0'))
+        return toHex(new BigNumber(value).toFixed())
+    return toHex(value)
+})
 
 export class AccountTransaction {
     constructor(private transaction?: Transaction) {}
