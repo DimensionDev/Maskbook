@@ -117,6 +117,7 @@ function FungibleTokenBalance({ protocol, isDeposit, protocolBalance }: Props) {
     const { data: tokenBalance = '0' } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         isDeposit ? protocol.bareToken.address : '',
+        { chainId: protocol.bareToken.chainId },
     )
 
     return (

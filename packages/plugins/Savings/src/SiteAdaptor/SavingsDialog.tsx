@@ -10,6 +10,7 @@ import {
     RevokeChainContextProvider,
     useNetworkContext,
     ChainContextProvider,
+    useChainContext,
 } from '@masknet/web3-hooks-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
@@ -66,8 +67,9 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const { classes } = useStyles()
     const { pluginID } = useNetworkContext()
 
-    const [chainId, setChainId] = useState(ChainId.Mainnet)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: ChainId.Mainnet })
     const [selectedProtocol, setSelectedProtocol] = useState<SavingsProtocol | null>(null)
+
     const { data: aaveTokens, isLoading: loadingAAve } = useQuery({
         enabled: open && chainId === ChainId.Mainnet,
         queryKey: ['savings', 'aave', 'tokens', chainId],
@@ -117,7 +119,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const [currentTab, onChange, tabs] = useTabs(TabType.Deposit, TabType.Withdraw)
 
     return (
-        <Web3ContextProvider value={{ pluginID, chainId }}>
+        <Web3ContextProvider value={{ pluginID, chainId: ChainId.Mainnet }}>
             <AllProviderTradeContext.Provider>
                 <ChainContextProvider value={{ chainId }}>
                     <TabContext value={currentTab}>
@@ -141,7 +143,6 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                         requireChains
                                         chains={chains.filter(Boolean)}
                                         pluginID={NetworkPluginID.PLUGIN_EVM}
-                                        onChange={(chainId) => setChainId(chainId as ChainId)}
                                     />
                                 </div>
                                 <div className={classes.tableTabWrapper}>
