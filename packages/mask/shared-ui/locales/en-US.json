@@ -1063,6 +1063,8 @@
     "popups_encrypted_friends_no_friends": "No encrypted contacts, you can try searching.",
     "popups_encrypted_friends_add_friends": "Add",
     "popups_encrypted_friends_no_associated_accounts": "No associated accounts",
+    "popups_encrypted_friends_deleted_successfully": "Deleted successfully",
+    "popups_encrypted_friends_added_successfully": "Added successfully",
     "popups_select_wallet": "Select Wallet",
     "popups_switch_persona": "Switch Persona",
     "popups_recovery": "Recovery",

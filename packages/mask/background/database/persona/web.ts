@@ -645,6 +645,19 @@ export async function updateRelationDB(
 }
 
 /** @internal */
+export async function deletePersonaRelationDB(
+    persona: PersonaIdentifier,
+    linkedPersona: PersonaIdentifier,
+    t: RelationTransaction<'readwrite'>,
+    silent = false,
+): Promise<void> {
+    const old = await t.objectStore('relations').get(IDBKeyRange.only([linkedPersona.toText(), persona.toText()]))
+    if (!old) return
+    await t.objectStore('relations').delete(IDBKeyRange.only([linkedPersona.toText(), persona.toText()]))
+    if (!silent) MaskMessages.events.relationsChanged.sendToAll([{ of: persona, reason: 'delete', favor: old.favor }])
+}
+
+/** @internal */
 export async function createOrUpdateRelationDB(
     record: Omit<RelationRecord, 'network'>,
     t: RelationTransaction<'readwrite'>,

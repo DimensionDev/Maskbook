@@ -129,7 +129,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
             .filter((x) => !frozenPubkeyList.includes(x.linkedPersona?.publicKeyAsHex!))
     }, [keyword, frozenPubkeyList, fuse, items])
 
-    const profiles = uniqBy([...frozenSelected, ...items, ...results, ...value], (x) => x.identifier)
+    const profiles = uniqBy([...frozenSelected, ...results, ...value], (x) => x.identifier)
 
     return (
         <div className={classes.root}>
