@@ -58,7 +58,7 @@ export function TipButton(props: Props) {
 
     const { pluginID } = useNetworkContext()
     const visitingIdentity = useCurrentVisitingIdentity()
-    const { value: identity } = useSocialIdentityByUserId(receiverUserId)
+    const { data: identity } = useSocialIdentityByUserId(receiverUserId)
 
     const isVisitingUser = visitingIdentity?.identifier?.userId === receiverUserId
     const isRuntimeAvailable = useMemo(() => {

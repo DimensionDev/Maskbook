@@ -272,7 +272,7 @@ function Content(props: ProfileTabContentProps) {
     const [currentTrendingIndex, setCurrentTrendingIndex] = useState(0)
     const trendingResult = collectionList?.[currentTrendingIndex]
 
-    const { value: identity } = useSocialIdentityByUserId(currentVisitingUserId)
+    const { data: identity } = useSocialIdentityByUserId(currentVisitingUserId)
 
     const { value: nextIdBindings = EMPTY_LIST } = useAsync(async () => {
         if (!currentVisitingUserId) return EMPTY_LIST
