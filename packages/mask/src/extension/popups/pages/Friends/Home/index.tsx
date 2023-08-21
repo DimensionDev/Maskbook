@@ -36,7 +36,7 @@ const FriendsHome = memo(function FriendsHome() {
 
     return (
         <FriendsHomeUI
-            friends={friends}
+            friends={data?.pages ?? EMPTY_LIST}
             loading={isLoading || resolveLoading || searchLoading}
             setSearchValue={setSearchValue}
             searchValue={searchValue}

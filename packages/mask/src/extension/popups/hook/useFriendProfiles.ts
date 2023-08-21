@@ -9,11 +9,6 @@ import { useCurrentPersona } from '../../../components/DataSource/useCurrentPers
 import { useQuery } from '@tanstack/react-query'
 import { NextIDProof } from '@masknet/web3-providers'
 
-export type FriendsInformation = Friend & {
-    profiles: BindingProof[]
-    id: string
-}
-
 export type Friend = {
     persona: ECKeyIdentifier
     profile?: ProfileIdentifier

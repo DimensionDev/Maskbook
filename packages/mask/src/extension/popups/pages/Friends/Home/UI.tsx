@@ -41,7 +41,7 @@ export interface FriendsHomeUIProps {
     searchValue: string
     searchResult: NextIDPersonaBindingsWithIdentifier[]
     loading: boolean
-    friends: Friend[]
+    friends: Array<{ friends: Friend[]; nextPageOffset: number }>
     setSearchValue: (v: string) => void
     fetchNextPage: () => void
     fetchNextSearchPage: () => void
@@ -73,7 +73,7 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
             ) : searchValue ? (
                 <SearchList searchResult={searchResult} fetchNextPage={fetchNextSearchPage} refetch={refetch} />
             ) : (
-                <Contacts friends={friends} fetchNextPage={fetchNextPage} />
+                <Contacts friendsArray={friends} fetchNextPage={fetchNextPage} />
             )}
         </div>
     )

@@ -33,19 +33,19 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ContactsProps {
-    friends: Friend[]
+    friendsArray: Array<{ friends: Friend[]; nextPageOffset: number }>
     fetchNextPage: () => void
 }
 
-export const Contacts = memo<ContactsProps>(function Contacts({ friends, fetchNextPage }) {
+export const Contacts = memo<ContactsProps>(function Contacts({ friendsArray, fetchNextPage }) {
     const { classes } = useStyles()
     const { t } = useI18N()
-    return friends.length === 0 ? (
+    return friendsArray.length === 0 ? (
         <EmptyStatus className={classes.empty}>{t('popups_encrypted_friends_no_friends')}</EmptyStatus>
     ) : (
         <Box className={classes.cardContainer}>
-            {friends.map((friend, index) => {
-                return (
+            {friendsArray.map(({ friends }) => {
+                return friends.map((friend) => (
                     <ContactCard
                         key={friend.persona.publicKeyAsHex}
                         avatar={friend.avatar}
@@ -54,7 +54,7 @@ export const Contacts = memo<ContactsProps>(function Contacts({ friends, fetchNe
                         profile={friend.profile}
                         isLocal
                     />
-                )
+                ))
             })}
             <ElementAnchor callback={() => fetchNextPage()} height={10} />
         </Box>
