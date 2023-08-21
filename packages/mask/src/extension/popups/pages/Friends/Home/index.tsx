@@ -38,7 +38,7 @@ const FriendsHome = memo(function FriendsHome() {
         },
     )
     const searchResult = useMemo(() => searchResultArray?.pages.flat() ?? EMPTY_LIST, [searchResultArray])
-    const { value: searchedList = EMPTY_LIST } = useFriendsFromSearch(searchResult, friends, keyword)
+    const searchedList = useFriendsFromSearch(searchResult, friends, keyword)
 
     return (
         <FriendsHomeUI

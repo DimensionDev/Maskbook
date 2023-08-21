@@ -1,7 +1,6 @@
-import { useAsyncRetry } from 'react-use'
 import { ECKeyIdentifier, EMPTY_LIST, type NextIDPersonaBindings } from '@masknet/shared-base'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { uniqBy } from 'lodash-es'
+import { useMemo } from 'react'
 import type { Friend } from './useFriends.js'
 import { PlatformSort } from './useFriends.js'
 import { useCurrentLinkedPersona } from '@masknet/shared'
@@ -15,9 +14,9 @@ export function useFriendsFromSearch(
     searchResult?: NextIDPersonaBindings[],
     localList?: Friend[],
     searchValue?: string,
-): AsyncStateRetry<NextIDPersonaBindingsWithIdentifier[]> {
+): NextIDPersonaBindingsWithIdentifier[] {
     const currentIdentifier = useCurrentLinkedPersona()
-    return useAsyncRetry(async () => {
+    return useMemo(() => {
         if (!searchResult?.length) return EMPTY_LIST
         const profiles: NextIDPersonaBindingsWithIdentifier[] = searchResult
             .filter((x) => x.persona !== currentIdentifier?.identifier.publicKeyAsHex)
