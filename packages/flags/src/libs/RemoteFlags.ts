@@ -14,6 +14,7 @@ export class RemoteFlags<T extends Record<string, unknown>> extends Flags<T> {
     private lastFetchResult: FetchResult<T> | null = null
 
     private get lastStorageResult() {
+        if (typeof localStorage === 'undefined') return null
         try {
             const json = localStorage.getItem(this.KEY)
             const result: FetchResult<T> | null = json ? JSON.parse(json) : null
