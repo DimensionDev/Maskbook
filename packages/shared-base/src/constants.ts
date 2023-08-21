@@ -30,4 +30,4 @@ export const UNIT_TEST_ERC20_ADDRESS = '0xdAC17F958D2ee523a2206206994597C13D831e
 export const EMPTY_LIST = Object.freeze([]) as never[]
 export const EMPTY_OBJECT = Object.freeze({}) as Record<string, never>
 
-export const DEFAULT_PLUGIN_PLULISHER = { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' }
+export const DEFAULT_PLUGIN_PUBLISHER = { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' }

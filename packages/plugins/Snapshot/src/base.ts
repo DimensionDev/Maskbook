@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { DEFAULT_PLUGIN_PLULISHER } from '@masknet/shared-base'
+import { DEFAULT_PLUGIN_PUBLISHER } from '@masknet/shared-base'
 import { SNAPSHOT_PLUGIN_ID } from './constants.js'
 import { languages } from './locales/languages.js'
 
@@ -9,7 +9,7 @@ export const base: Plugin.Shared.Definition = {
     description: {
         fallback: 'A plugin for https://snapshot.org/',
     },
-    publisher: DEFAULT_PLUGIN_PLULISHER,
+    publisher: DEFAULT_PLUGIN_PUBLISHER,
     enableRequirement: {
         supports: { type: 'opt-out', sites: {} },
         target: 'stable',

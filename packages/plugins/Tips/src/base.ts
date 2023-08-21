@@ -1,5 +1,5 @@
 import { SiteAdaptor, type Plugin } from '@masknet/plugin-infra'
-import { PluginID, NetworkPluginID, DEFAULT_PLUGIN_PLULISHER } from '@masknet/shared-base'
+import { PluginID, NetworkPluginID, DEFAULT_PLUGIN_PUBLISHER } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { languages } from './locales/languages.js'
 
@@ -9,7 +9,7 @@ export const base: Plugin.Shared.Definition = {
     description: {
         fallback: 'Tips Entrance',
     },
-    publisher: DEFAULT_PLUGIN_PLULISHER,
+    publisher: DEFAULT_PLUGIN_PUBLISHER,
     enableRequirement: {
         supports: {
             type: 'opt-out',
