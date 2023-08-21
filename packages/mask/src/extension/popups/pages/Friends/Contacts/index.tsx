@@ -1,7 +1,7 @@
+import { memo } from 'react'
 import { ElementAnchor, EmptyStatus } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Box } from '@mui/material'
-import { memo } from 'react'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { type Friend } from '../../../hook/useFriends.js'
 import { ContactCard } from '../ContactCard/index.js'
