@@ -27,7 +27,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     const currentIdentity = useCurrentIdentity()
     const type = resolveNextIDPlatform(valueToSearch)
     const _value = resolveValueToSearch(valueToSearch)
-    const { loading: searchLoading, value: NextIDResults } = usePersonasFromNextID(
+    const { isLoading: searchLoading, data: NextIDResults } = usePersonasFromNextID(
         _value,
         type ?? NextIDPlatform.NextID,
         false,

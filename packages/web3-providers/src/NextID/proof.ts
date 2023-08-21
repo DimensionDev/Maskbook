@@ -308,7 +308,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     ): Promise<NextIDPersonaBindings | null> {
         if (!platform && !identity) return null
 
-        const result = await this.queryExistedBindingByPlatform(platform, identity, 1)
+        const result = await this.queryAllExistedBindingsByPlatform(platform, identity)
         if (publicKey) return result.find((x) => x.persona === publicKey) ?? null
         return first(result) ?? null
     }
