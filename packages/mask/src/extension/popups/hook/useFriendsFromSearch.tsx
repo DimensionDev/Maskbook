@@ -3,9 +3,9 @@ import { ECKeyIdentifier, EMPTY_LIST, type NextIDPersonaBindings } from '@maskne
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { uniqBy } from 'lodash-es'
 import type { Friend } from './useFriends.js'
-import { NextIDPlatform } from '@masknet/shared-base'
 import { PlatformSort } from './useFriends.js'
 import { useCurrentLinkedPersona } from '@masknet/shared'
+import { profilesFilter } from './useFriendProfiles.js'
 
 export type NextIDPersonaBindingsWithIdentifier = NextIDPersonaBindings & { linkedPersona: ECKeyIdentifier } & {
     isLocal?: boolean
@@ -22,16 +22,7 @@ export function useFriendsFromSearch(
         const profiles: NextIDPersonaBindingsWithIdentifier[] = searchResult
             .filter((x) => x.persona !== currentIdentifier?.identifier.publicKeyAsHex)
             .map((item) => {
-                const filtered = item.proofs.filter(
-                    (x) =>
-                        (x.platform === NextIDPlatform.ENS && x.name.endsWith('.eth')) ||
-                        (x.platform !== NextIDPlatform.Bit &&
-                            x.platform !== NextIDPlatform.CyberConnect &&
-                            x.platform !== NextIDPlatform.REDDIT &&
-                            x.platform !== NextIDPlatform.SYBIL &&
-                            x.platform !== NextIDPlatform.EthLeaderboard &&
-                            x.platform !== NextIDPlatform.NextID),
-                )
+                const filtered = item.proofs.filter(profilesFilter)
                 const identifier = ECKeyIdentifier.fromHexPublicKeyK256(item.persona).expect(
                     `${item.persona} should be a valid hex public key in k256`,
                 )

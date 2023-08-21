@@ -39,6 +39,18 @@ export const PlatformSort: Record<NextIDPlatform, number> = {
     [NextIDPlatform.NextID]: 15,
 }
 
+export const profilesFilter = (x: BindingProof) => {
+    return (
+        (x.platform === NextIDPlatform.ENS && x.name.endsWith('.eth')) ||
+        (x.platform !== NextIDPlatform.Bit &&
+            x.platform !== NextIDPlatform.CyberConnect &&
+            x.platform !== NextIDPlatform.REDDIT &&
+            x.platform !== NextIDPlatform.SYBIL &&
+            x.platform !== NextIDPlatform.EthLeaderboard &&
+            x.platform !== NextIDPlatform.NextID)
+    )
+}
+
 export function useFriendProfiles(seen: boolean, nextId?: string, twitterId?: string) {
     const currentPersona = useCurrentPersona()
 
@@ -73,18 +85,6 @@ export function useFriendProfiles(seen: boolean, nextId?: string, twitterId?: st
             return EMPTY_LIST
         }
     }
-    const filtered = profiles
-        .filter((x) => {
-            return (
-                (x.platform === NextIDPlatform.ENS && x.name.endsWith('.eth')) ||
-                (x.platform !== NextIDPlatform.Bit &&
-                    x.platform !== NextIDPlatform.CyberConnect &&
-                    x.platform !== NextIDPlatform.REDDIT &&
-                    x.platform !== NextIDPlatform.SYBIL &&
-                    x.platform !== NextIDPlatform.EthLeaderboard &&
-                    x.platform !== NextIDPlatform.NextID)
-            )
-        })
-        .sort((a, b) => PlatformSort[a.platform] - PlatformSort[b.platform])
+    const filtered = profiles.filter(profilesFilter).sort((a, b) => PlatformSort[a.platform] - PlatformSort[b.platform])
     return filtered
 }
