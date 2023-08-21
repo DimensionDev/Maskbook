@@ -1,6 +1,6 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
-import { lazy, memo, useMemo, type PropsWithChildren } from 'react'
+import { lazy, memo, useMemo, Suspense, type PropsWithChildren } from 'react'
 import { matchPath, Outlet, useLocation } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
@@ -13,6 +13,7 @@ const GlobalCss = (
             body: {
                 width: 400,
                 minWidth: 400,
+                minHeight: 600,
                 overflowX: 'hidden',
                 margin: '0 auto !important',
                 maxWidth: '100%',
@@ -69,12 +70,12 @@ export const PopupLayout = memo(function PopupLayout({ children }: PropsWithChil
     return (
         <>
             {GlobalCss}
-            <Paper elevation={0} style={{ height: '100vh', overflowY: 'auto', minHeight: 600, borderRadius: 0 }}>
+            <Paper elevation={0} sx={{ height: '100vh', overflowY: 'auto', minHeight: 600, borderRadius: 0 }}>
                 <div className={classes.container}>
                     <div className={classes.body} data-hide-scrollbar>
                         {children ?? <Outlet context={outletContext} />}
                     </div>
-                    {matched ? <LoadMaskSDK /> : null}
+                    <Suspense fallback={null}>{matched ? <LoadMaskSDK /> : null}</Suspense>
                     {matched ? <Navigator className={classes.navigator} /> : null}
                 </div>
             </Paper>

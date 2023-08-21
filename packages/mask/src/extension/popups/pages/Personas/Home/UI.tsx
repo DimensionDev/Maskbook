@@ -223,7 +223,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
             <div className={classes.container}>
                 {!isEmpty ? (
                     <TabContext value={currentTab}>
-                        <Box style={{ background: theme.palette.maskColor.modalTitleBg }}>
+                        <Box sx={{ background: theme.palette.maskColor.modalTitleBg }}>
                             <Box className={classes.header}>
                                 <Icons.MaskSquare className={classes.logo} />
                                 <Icons.HamburgerMenu

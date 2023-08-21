@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext } from 'react'
+import { memo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PersonaContext } from '@masknet/shared'
 import {
@@ -10,7 +10,6 @@ import {
 } from '@masknet/shared-base'
 import { PersonaHomeUI } from './UI.js'
 import Services from '../../../../service.js'
-import { HydrateFinished } from '../../../../../utils/createNormalReactRoot.js'
 import { useSupportSocialNetworks } from '../../../hook/useSupportSocialNetworks.js'
 import { useVerifiedWallets } from '../../../hook/useVerifiedWallets.js'
 import { useHasPassword } from '../../../hook/useHasPassword.js'
@@ -19,12 +18,8 @@ const PersonaHome = memo(() => {
     const navigate = useNavigate()
     const { avatar, currentPersona, setSelectedAccount, personas, accounts, proofs } = PersonaContext.useContainer()
 
-    useContext(HydrateFinished)()
-
     const { value: definedSocialNetworks = EMPTY_LIST } = useSupportSocialNetworks()
-
     const { data: bindingWallets } = useVerifiedWallets(proofs)
-
     const { hasPassword } = useHasPassword()
 
     const onCreatePersona = useCallback(() => {

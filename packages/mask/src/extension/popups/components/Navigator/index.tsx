@@ -1,6 +1,6 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 import urlcat from 'urlcat'
-import { memo, useCallback, useMemo } from 'react'
+import { createContext, memo, use, useCallback, useContext, useMemo, useRef } from 'react'
 import { NavLink, type LinkProps } from 'react-router-dom'
 import { BottomNavigation, BottomNavigationAction, Box, type BoxProps } from '@mui/material'
 import { Icons } from '@masknet/icons'
@@ -9,8 +9,8 @@ import { DashboardRoutes, PopupRoutes } from '@masknet/shared-base'
 import { useMessages, useWallet } from '@masknet/web3-hooks-base'
 import { useHasPassword } from '../../hook/useHasPassword.js'
 import { useWalletLockStatus } from '../../pages/Wallet/hooks/useWalletLockStatus.js'
+import { HydrateFinished } from '../../../../utils/createNormalReactRoot.js'
 import Services from '../../../service.js'
-import { useCurrentPersona } from '../../../../components/DataSource/useCurrentPersona.js'
 
 const useStyle = makeStyles()((theme) => ({
     navigation: {
@@ -50,40 +50,18 @@ const BottomNavLink = memo<LinkProps>(function BottomNavLink({ children, to }) {
 
 export const Navigator = memo(function Navigator({ className, ...rest }: BoxProps) {
     const { classes, cx } = useStyle()
-    const wallet = useWallet()
-
-    const messages = useMessages()
-
-    const { isLocked, loading: lockStatusLoading } = useWalletLockStatus()
-
-    const { hasPassword, loading: hasPasswordLoading } = useHasPassword()
-
-    const currentPersona = useCurrentPersona()
-
-    const walletPageLoading = lockStatusLoading || hasPasswordLoading
-
-    const walletLink = useMemo(() => {
-        if (walletPageLoading) return '#'
-        if (!wallet) return PopupRoutes.Wallet
-        if (!hasPassword) return PopupRoutes.SetPaymentPassword
-        if (isLocked)
-            return urlcat(PopupRoutes.Unlock, { from: messages.length ? PopupRoutes.ContractInteraction : undefined })
-        if (messages.length) return PopupRoutes.ContractInteraction
-        return PopupRoutes.Wallet
-    }, [wallet, walletPageLoading, isLocked, hasPassword, messages])
-
+    const walletLink = useRef(use(WalletLinkContext)).current()
     const onOpenDashboardSettings = useCallback(async () => {
         await browser.tabs.create({
             active: true,
-            url: browser.runtime.getURL(
-                `/dashboard.html#${currentPersona ? DashboardRoutes.Settings : DashboardRoutes.SignUpPersona}`,
-            ),
+            url: browser.runtime.getURL(`/dashboard.html#${DashboardRoutes.Settings}`),
         })
         if (navigator.userAgent.includes('Firefox')) {
             window.close()
         }
         await Services.Helper.removePopupWindow()
-    }, [currentPersona])
+    }, [])
+    useContext(HydrateFinished)()
 
     return (
         <Box className={cx(classes.container, className)} {...rest}>
@@ -119,4 +97,22 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
             </BottomNavigation>
         </Box>
     )
+})
+
+export const WalletLinkContext = createContext(function useWalletLink() {
+    const wallet = useWallet()
+    const messages = useMessages()
+    const { isLocked, loading: lockStatusLoading } = useWalletLockStatus()
+    const { hasPassword, loading: hasPasswordLoading } = useHasPassword()
+    const walletPageLoading = lockStatusLoading || hasPasswordLoading
+    const walletLink = useMemo(() => {
+        if (walletPageLoading) return '#'
+        if (!wallet) return PopupRoutes.Wallet
+        if (!hasPassword) return PopupRoutes.SetPaymentPassword
+        if (isLocked)
+            return urlcat(PopupRoutes.Unlock, { from: messages.length ? PopupRoutes.ContractInteraction : undefined })
+        if (messages.length) return PopupRoutes.ContractInteraction
+        return PopupRoutes.Wallet
+    }, [wallet, walletPageLoading, isLocked, hasPassword, messages])
+    return walletLink
 })

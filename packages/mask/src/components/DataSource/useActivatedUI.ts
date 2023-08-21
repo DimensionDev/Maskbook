@@ -125,15 +125,15 @@ export function useCurrentVisitingSocialIdentity() {
 
 export function useThemeSettings() {
     const themeSettings = useValueRef(
-        (activatedSiteAdaptorUI!.collecting.themeSettingsProvider?.recognized ||
+        (activatedSiteAdaptorUI?.collecting.themeSettingsProvider?.recognized ||
             defaultThemeSettings) as ValueRef<ThemeSettings>,
     )
     return useMemo<ThemeSettings>(
         () => ({
             ...defaults,
-            ...activatedSiteAdaptorUI!.configuration.themeSettings,
+            ...activatedSiteAdaptorUI?.configuration.themeSettings,
             ...themeSettings,
         }),
-        [activatedSiteAdaptorUI!.configuration.themeSettings, themeSettings],
+        [activatedSiteAdaptorUI?.configuration.themeSettings, themeSettings],
     )
 }

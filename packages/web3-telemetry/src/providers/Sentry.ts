@@ -56,7 +56,6 @@ export class SentryAPI extends BaseAPI<never, Event> implements Provider {
                     : `mask-${env.VERSION}-reproducible`
                 : undefined
         if (typeof Sentry === 'undefined') {
-            if (process.env.NODE_ENV !== 'test') console.warn('Sentry is not defined')
             return
         }
 
