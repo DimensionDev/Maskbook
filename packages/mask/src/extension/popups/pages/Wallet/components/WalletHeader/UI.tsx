@@ -14,12 +14,12 @@ import { WalletAssetsValue } from './WalletAssetsValue.js'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => ({
     container: {
-        background:
-            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
         padding: '16px',
+        lineHeight: 0,
         // padding bottom space for assets tabs
         paddingBottom: !disabled ? 34 : 16,
-        lineHeight: 0,
+        background:
+            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
     },
     topbar: {
         display: 'flex',
