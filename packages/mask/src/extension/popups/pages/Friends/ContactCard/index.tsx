@@ -150,7 +150,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                                 underline="none"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                href={`https://web3.bio/${nextId}`}
+                                href={urlcat('https://web3.bio/', { s: nextId })}
                                 className={classes.icon}>
                                 <Icons.LinkOut size={12} />
                             </Link>
