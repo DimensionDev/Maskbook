@@ -281,7 +281,9 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
             {transaction.type === 'approve' && approveAmount && approveToken ? (
                 <Typography className={classes.asset}>
                     <strong className={classes.amount}>
-                        {formatTokenBalance(approveAmount?.toString(), approveToken.decimals)}
+                        {approveAmount === 'Infinite'
+                            ? approveAmount
+                            : formatTokenBalance(approveAmount, approveToken.decimals)}
                     </strong>
                     <TextOverflowTooltip title={approveToken.symbol} PopperProps={popperProps}>
                         <span className={classes.symbol}>{approveToken.symbol}</span>
