@@ -1,6 +1,6 @@
 import { memo, useState, useCallback } from 'react'
 import { Icons } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { Box, Typography, Link, useTheme, ButtonBase as Button, Avatar } from '@mui/material'
 import {
     formatPersonaFingerprint,
@@ -16,7 +16,10 @@ import { attachNextIDToProfile } from '../../../../../utils/utils.js'
 import { ConnectedAccounts } from './ConnectedAccounts/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import Services from '../../../../service.js'
-import { queryClient } from '@masknet/shared-base-ui'
+import { useEverSeen } from '@masknet/shared-base-ui'
+import { useFriendProfiles } from '../../../hook/useFriendProfiles.js'
+import { type UseQueryResult, type RefetchOptions } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
@@ -69,31 +72,40 @@ const useStyles = makeStyles()((theme) => ({
 
 interface ContactCardProps {
     avatar?: string
-    profiles?: BindingProof[]
+    proofProfiles?: BindingProof[]
     nextId?: string
     publicKey?: string
     isLocal?: boolean
+    profile?: ProfileIdentifier
+    refetch?: (options?: RefetchOptions) => Promise<UseQueryResult>
 }
 
 export const ContactCard = memo<ContactCardProps>(function ContactCard({
     avatar,
     nextId,
-    profiles,
     publicKey,
     isLocal,
+    profile,
+    refetch,
+    proofProfiles,
 }) {
     const theme = useTheme()
     const { classes } = useStyles()
     const navigate = useNavigate()
+    const { showSnackbar } = usePopupCustomSnackbar()
     const [local, setLocal] = useState(false)
+    const [seen, ref] = useEverSeen<HTMLLIElement>()
     const { currentPersona } = PersonaContext.useContainer()
     const { t } = useI18N()
+    const profiles = useFriendProfiles(seen, nextId, profile?.userId)
+    const queryClient = useQueryClient()
     const handleAddFriend = useCallback(async () => {
         if (!currentPersona) return
         const twitter = profiles?.find((p) => p.platform === NextIDPlatform.Twitter)
         const personaIdentifier = ECKeyIdentifier.fromHexPublicKeyK256(nextId).expect(
             `${nextId} should be a valid hex public key in k256`,
         )
+        const rawPublicKey = currentPersona.identifier.rawPublicKey
         if (!twitter) {
             await Services.Identity.createNewRelation(personaIdentifier, currentPersona.identifier)
         } else {
@@ -105,12 +117,15 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                 linkedTwitterNames: twitter ? [twitter.identity] : [],
             })
         }
-        queryClient.invalidateQueries(['friends', currentPersona?.identifier.rawPublicKey])
+        showSnackbar(t('popups_encrypted_friends_added_successfully'), { variant: 'success' })
         setLocal(true)
-    }, [profiles, nextId, currentPersona])
+        queryClient.invalidateQueries(['relation-records', rawPublicKey])
+        queryClient.invalidateQueries(['friends', rawPublicKey])
+        refetch?.()
+    }, [profiles, nextId, currentPersona, queryClient])
 
     return (
-        <Box className={classes.card}>
+        <Box className={classes.card} ref={ref}>
             <Box className={classes.titleWrap}>
                 <Box className={classes.title}>
                     {avatar ? (
@@ -170,7 +185,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                 nextId={nextId}
                 publicKey={publicKey}
                 isLocal={isLocal}
-                profiles={profiles}
+                profiles={proofProfiles ? proofProfiles : profiles}
             />
         </Box>
     )

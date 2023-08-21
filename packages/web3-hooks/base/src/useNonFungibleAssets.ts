@@ -21,7 +21,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
             .map((x) => x.chainId)
     }, [networks, options?.chainId])
 
-    const { data, isFetching, fetchNextPage, hasNextPage, refetch, error, dataUpdatedAt } = useInfiniteQuery({
+    const { data, isLoading, fetchNextPage, hasNextPage, refetch, error, dataUpdatedAt } = useInfiniteQuery({
         queryKey: ['non-fungible-assets', account, availableChainIds],
         queryFn: async ({ pageParam }) => {
             const chainId = pageParam?.chainId || availableChainIds[0]
@@ -53,7 +53,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
     return {
         value: list,
         next: nextPage,
-        loading: isFetching,
+        loading: isLoading,
         done: !hasNextPage,
         retry: refetch,
         error,

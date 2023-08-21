@@ -1,17 +1,9 @@
-import {
-    type ECKeyIdentifier,
-    EMPTY_LIST,
-    type BindingProof,
-    NextIDPlatform,
-    type ProfileIdentifier,
-} from '@masknet/shared-base'
+import { type ECKeyIdentifier, EMPTY_LIST, type BindingProof, type ProfileIdentifier } from '@masknet/shared-base'
 import { useCurrentPersona } from '../../../components/DataSource/useCurrentPersona.js'
 import Services from '../../../extension/service.js'
 import { first } from 'lodash-es'
 import { isProfileIdentifier } from '@masknet/shared'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
-import { NextIDProof } from '@masknet/web3-providers'
-import { useEffect, useState } from 'react'
 
 export type FriendsInformation = Friend & {
     profiles: BindingProof[]
@@ -24,30 +16,10 @@ export type Friend = {
     avatar?: string
 }
 
-export const PlatformSort: Record<NextIDPlatform, number> = {
-    [NextIDPlatform.Twitter]: 0,
-    [NextIDPlatform.GitHub]: 1,
-    [NextIDPlatform.Ethereum]: 2,
-    [NextIDPlatform.ENS]: 3,
-    [NextIDPlatform.LENS]: 4,
-    [NextIDPlatform.Keybase]: 5,
-    [NextIDPlatform.Farcaster]: 6,
-    [NextIDPlatform.SpaceId]: 7,
-    [NextIDPlatform.Unstoppable]: 8,
-    [NextIDPlatform.RSS3]: 9,
-    [NextIDPlatform.REDDIT]: 10,
-    [NextIDPlatform.SYBIL]: 11,
-    [NextIDPlatform.EthLeaderboard]: 12,
-    [NextIDPlatform.Bit]: 13,
-    [NextIDPlatform.CyberConnect]: 14,
-    [NextIDPlatform.NextID]: 15,
-}
-
 export function useFriendsPaged() {
-    const [isFetchingProfiles, setIsFetchingProfiles] = useState(false)
     const currentPersona = useCurrentPersona()
     const { data: records = EMPTY_LIST, isLoading: recordsLoading } = useQuery(
-        ['relation-records', currentPersona],
+        ['relation-records', currentPersona?.identifier.rawPublicKey],
         async () => {
             return Services.Identity.queryRelationPaged(
                 currentPersona?.identifier,
@@ -59,7 +31,7 @@ export function useFriendsPaged() {
             )
         },
     )
-    const { data, hasNextPage, fetchNextPage, isLoading, isFetchingNextPage } = useInfiniteQuery({
+    const { data, hasNextPage, fetchNextPage, isLoading, isFetchingNextPage, refetch } = useInfiniteQuery({
         queryKey: ['friends', currentPersona?.identifier.rawPublicKey],
         enabled: !recordsLoading,
         queryFn: async ({ pageParam = 0 }) => {
@@ -89,83 +61,12 @@ export function useFriendsPaged() {
             return nextPageOffset
         },
     })
-    const { data: profilesArray, fetchNextPage: fetchNextProfilesPage } = useInfiniteQuery(
-        ['nextid-profiles', currentPersona],
-        async ({ pageParam = 0 }) => {
-            const friends = data?.pages[Number(pageParam)].friends
-            if (!friends) return EMPTY_LIST
-            const allSettled = await Promise.allSettled(
-                friends.map((item) => {
-                    const id = item.persona.publicKeyAsHex
-                    return NextIDProof.queryProfilesByPublicKey(id, 2)
-                }),
-            )
-            const profiles: BindingProof[][] = allSettled.map((item, index) => {
-                if (item.status === 'rejected') {
-                    if (friends[index].profile) {
-                        return [
-                            {
-                                platform: NextIDPlatform.Twitter,
-                                identity: friends[index].profile!.userId,
-                                is_valid: true,
-                                last_checked_at: '',
-                                name: friends[index].profile!.userId,
-                                created_at: '',
-                            },
-                        ]
-                    } else {
-                        return []
-                    }
-                }
-                const filtered = item.value
-                    .filter((x) => {
-                        return (
-                            (x.platform === NextIDPlatform.ENS && x.name.endsWith('.eth')) ||
-                            (x.platform !== NextIDPlatform.Bit &&
-                                x.platform !== NextIDPlatform.CyberConnect &&
-                                x.platform !== NextIDPlatform.REDDIT &&
-                                x.platform !== NextIDPlatform.SYBIL &&
-                                x.platform !== NextIDPlatform.EthLeaderboard &&
-                                x.platform !== NextIDPlatform.NextID)
-                        )
-                    })
-                    .sort((a, b) => PlatformSort[a.platform] - PlatformSort[b.platform])
-                return filtered
-            })
-            return profiles
-        },
-        {
-            enabled: !!data,
-            getNextPageParam: (_, allPages) => {
-                if (!data || allPages.length >= data.pages.length) return undefined
-                return allPages.length
-            },
-        },
-    )
-    useEffect(() => {
-        let isMounted = true
-        const fetchNext = async () => {
-            if (!data?.pages || !profilesArray) return
-            let profilesLength = profilesArray?.pages?.length
-            setIsFetchingProfiles(true)
-            while (profilesLength <= data.pages.length) {
-                await fetchNextProfilesPage()
-                profilesLength += 1
-                if (!isMounted) break
-            }
-            setIsFetchingProfiles(false)
-        }
-        if (!isFetchingProfiles) fetchNext()
-        return () => {
-            isMounted = false
-        }
-    }, [data, fetchNextProfilesPage, profilesArray])
     return {
         data,
         isLoading: isLoading || recordsLoading,
         hasNextPage,
         fetchNextPage,
         isFetchingNextPage,
-        profilesArray,
+        refetch,
     }
 }

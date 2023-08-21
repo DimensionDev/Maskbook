@@ -1,6 +1,6 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
-import { lazy, memo, useMemo, Suspense, type PropsWithChildren } from 'react'
+import { memo, useMemo, type PropsWithChildren } from 'react'
 import { matchPath, Outlet, useLocation } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
@@ -58,7 +58,6 @@ const PATTERNS = [
     PopupRoutes.SetPaymentPassword,
     PopupRoutes.Friends,
 ]
-const LoadMaskSDK = lazy(() => import('./LoadMaskSDK.js'))
 
 export const PopupLayout = memo(function PopupLayout({ children }: PropsWithChildren<{}>) {
     const { classes } = useStyles()
@@ -75,7 +74,6 @@ export const PopupLayout = memo(function PopupLayout({ children }: PropsWithChil
                     <div className={classes.body} data-hide-scrollbar>
                         {children ?? <Outlet context={outletContext} />}
                     </div>
-                    <Suspense fallback={null}>{matched ? <LoadMaskSDK /> : null}</Suspense>
                     {matched ? <Navigator className={classes.navigator} /> : null}
                 </div>
             </Paper>

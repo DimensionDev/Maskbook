@@ -2,7 +2,6 @@ import { memo } from 'react'
 import { Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ElementAnchor, EmptyStatus } from '@masknet/shared'
-import { EMPTY_LIST, type BindingProof } from '@masknet/shared-base'
 import { ContactCard } from '../ContactCard/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { type Friend } from '../../../hook/useFriends.js'
@@ -34,29 +33,28 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ContactsProps {
-    friends: Friend[]
+    friendsArray: Array<{ friends: Friend[]; nextPageOffset: number }>
     fetchNextPage: () => void
-    profiles: BindingProof[][]
 }
 
-export const Contacts = memo<ContactsProps>(function Contacts({ friends, fetchNextPage, profiles }) {
+export const Contacts = memo<ContactsProps>(function Contacts({ friendsArray, fetchNextPage }) {
     const { classes } = useStyles()
     const { t } = useI18N()
-    return friends.length === 0 ? (
+    return friendsArray.length === 0 ? (
         <EmptyStatus className={classes.empty}>{t('popups_encrypted_friends_no_friends')}</EmptyStatus>
     ) : (
         <Box className={classes.cardContainer}>
-            {friends.map((friend, index) => {
-                return (
+            {friendsArray.map(({ friends }) => {
+                return friends.map((friend) => (
                     <ContactCard
                         key={friend.persona.publicKeyAsHex}
                         avatar={friend.avatar}
                         nextId={friend.persona?.publicKeyAsHex}
                         publicKey={friend.persona?.rawPublicKey}
-                        profiles={profiles[index] || EMPTY_LIST}
+                        profile={friend.profile}
                         isLocal
                     />
-                )
+                ))
             })}
             <ElementAnchor callback={() => fetchNextPage()} height={10} />
         </Box>
