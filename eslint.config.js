@@ -4,6 +4,7 @@ import TypescriptParser from '@typescript-eslint/parser'
 import UnicornPlugin from 'eslint-plugin-unicorn'
 import UnusedImportsPlugin from 'eslint-plugin-unused-imports'
 import UnusedClassesPlugin from 'eslint-plugin-tss-unused-classes'
+import NoScrollbarPlugin from 'eslint-plugin-no-scrollbar'
 import ReactPlugin from 'eslint-plugin-react'
 import ReactHooksPlugin from 'eslint-plugin-react-hooks'
 import ImportPlugin from 'eslint-plugin-import'
@@ -155,7 +156,6 @@ const avoidMistakeRules = {
     // 'array-callback-return': 'error', // .map .some ... calls should have a return value
     'default-case-last': 'error', // default: should be the last
     eqeqeq: 'error', // ===
-    'no-scrollbar': 'error', // ::-webkit-scrollbar
     'no-cond-assign': 'error', // if (a = b)
     'no-duplicate-case': 'error', // switch
     'no-empty-character-class': 'error', // RegEx /[]/ means a empty character class, not "[]"
@@ -202,6 +202,7 @@ const codeStyleRules = {
     // Useless code
     'no-constant-condition': 'warn', // if (false)
     'no-debugger': 'warn',
+    'no-scrollbar/no-scrollbar': 'error', // ::-webkit-scrollbar
     'no-extra-bind': 'warn', // unused bind on a function that does not uses this
     'no-extra-boolean-cast': 'warn', // if (!!expr)
     'no-empty-pattern': 'warn', // const { a: {} } = expr
@@ -475,6 +476,7 @@ const plugins = {
     react: ReactPlugin,
     import: ImportPlugin,
     unicorn: UnicornPlugin,
+    'no-scrollbar': NoScrollbarPlugin,
     '@typescript-eslint': TypeScriptPlugin,
     '@masknet': MasknetPlugin,
     'unused-imports': UnusedImportsPlugin,
