@@ -158,12 +158,11 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI(
                                     <AssetsList />
                                 </TabPanel>
                             </RestorableScroll>
-
-                            <RestorableScroll scrollKey="collectibles" targetRef={scrollTargetRef}>
-                                <TabPanel value={WalletAssetTabs.Collectibles} className={classes.tabPanel}>
+                            <TabPanel value={WalletAssetTabs.Collectibles} className={classes.tabPanel}>
+                                <RestorableScroll scrollKey="collectibles" targetRef={scrollTargetRef}>
                                     <WalletCollections onAddToken={onAddToken} scrollTargetRef={scrollTargetRef} />
-                                </TabPanel>
-                            </RestorableScroll>
+                                </RestorableScroll>
+                            </TabPanel>
 
                             <RestorableScroll scrollKey="activities">
                                 <TabPanel value={WalletAssetTabs.Activity} className={classes.tabPanel}>
