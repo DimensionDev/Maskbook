@@ -44,7 +44,7 @@ export const PlatformSort: Record<NextIDPlatform, number> = {
 export function useFriendsPaged() {
     const currentPersona = useCurrentPersona()
     const { data: records = EMPTY_LIST, isLoading: recordsLoading } = useQuery(
-        ['relation-records', currentPersona],
+        ['relation-records', currentPersona?.identifier.rawPublicKey],
         async () => {
             return Services.Identity.queryRelationPaged(
                 currentPersona?.identifier,
@@ -56,7 +56,7 @@ export function useFriendsPaged() {
             )
         },
     )
-    const { data, hasNextPage, fetchNextPage, isLoading, isFetchingNextPage } = useInfiniteQuery({
+    const { data, hasNextPage, fetchNextPage, isLoading, isFetchingNextPage, refetch } = useInfiniteQuery({
         queryKey: ['friends', currentPersona?.identifier.rawPublicKey],
         enabled: !recordsLoading,
         queryFn: async ({ pageParam = 0 }) => {
@@ -92,5 +92,6 @@ export function useFriendsPaged() {
         hasNextPage,
         fetchNextPage,
         isFetchingNextPage,
+        refetch,
     }
 }

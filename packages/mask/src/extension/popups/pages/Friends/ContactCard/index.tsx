@@ -18,6 +18,7 @@ import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import Services from '../../../../service.js'
 import { queryClient, useEverSeen } from '@masknet/shared-base-ui'
 import { useFriendProfiles } from '../../../hook/useFriendProfiles.js'
+import { type UseQueryResult, type RefetchOptions } from '@tanstack/react-query'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -69,11 +70,12 @@ const useStyles = makeStyles()((theme) => ({
 
 interface ContactCardProps {
     avatar?: string
-    profiles?: BindingProof[]
+    proofProfiles?: BindingProof[]
     nextId?: string
     publicKey?: string
     isLocal?: boolean
     profile?: ProfileIdentifier
+    refetch?: (options?: RefetchOptions) => Promise<UseQueryResult>
 }
 
 export const ContactCard = memo<ContactCardProps>(function ContactCard({
@@ -82,6 +84,8 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
     publicKey,
     isLocal,
     profile,
+    refetch,
+    proofProfiles,
 }) {
     const theme = useTheme()
     const { classes } = useStyles()
@@ -97,6 +101,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
         const personaIdentifier = ECKeyIdentifier.fromHexPublicKeyK256(nextId).expect(
             `${nextId} should be a valid hex public key in k256`,
         )
+        const rawPublicKey = currentPersona.identifier.rawPublicKey
         if (!twitter) {
             await Services.Identity.createNewRelation(personaIdentifier, currentPersona.identifier)
         } else {
@@ -108,8 +113,10 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                 linkedTwitterNames: twitter ? [twitter.identity] : [],
             })
         }
-        queryClient.invalidateQueries(['friends', currentPersona?.identifier.rawPublicKey])
         setLocal(true)
+        queryClient.invalidateQueries(['relation-records', rawPublicKey])
+        queryClient.invalidateQueries(['friends', rawPublicKey])
+        refetch?.()
     }, [profiles, nextId, currentPersona])
 
     return (
@@ -173,7 +180,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                 nextId={nextId}
                 publicKey={publicKey}
                 isLocal={isLocal}
-                profiles={profiles}
+                profiles={proofProfiles ? proofProfiles : profiles}
             />
         </Box>
     )

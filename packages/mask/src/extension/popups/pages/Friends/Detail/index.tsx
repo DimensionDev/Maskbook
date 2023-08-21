@@ -16,8 +16,10 @@ export const FriendsDetail = memo(function FriendsDetail() {
         const personaIdentifier = ECKeyIdentifier.fromHexPublicKeyK256(nextId).expect(
             `${nextId} should be a valid hex public key in k256`,
         )
+        if (currentPersona) await Services.Identity.deletePersonaRelation(personaIdentifier, currentPersona?.identifier)
         await Services.Identity.deletePersona(personaIdentifier, 'safe delete')
         setDeleted(true)
+        queryClient.invalidateQueries(['relation-records', rawPublicKey])
         queryClient.invalidateQueries(['friends', rawPublicKey])
     }, [nextId, rawPublicKey])
 

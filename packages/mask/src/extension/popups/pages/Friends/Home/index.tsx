@@ -1,27 +1,42 @@
 import { memo, useState, useMemo } from 'react'
 import { FriendsHomeUI } from './UI.js'
 import { useFriendsPaged } from '../../../hook/useFriends.js'
-import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
-import { resolveNextIDPlatform, usePersonasFromNextID } from '@masknet/shared'
+import { resolveNextIDPlatform } from '@masknet/shared'
 import { useSearchValue } from '../../../hook/useSearchValue.js'
 import { useFriendsFromSearch } from '../../../hook/useFriendsFromSearch.js'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { NextIDProof } from '@masknet/web3-providers'
 
 const FriendsHome = memo(function FriendsHome() {
     const { t } = useI18N()
     useTitle(t('popups_encrypted_friends'))
 
-    const { data, fetchNextPage, isLoading } = useFriendsPaged()
-    const friends = useMemo(() => (data ? data.pages.flatMap((x) => x.friends) : EMPTY_LIST), [data])
+    const { data, fetchNextPage, isLoading, refetch } = useFriendsPaged()
+    const friends = useMemo(() => data?.pages.flatMap((x) => x.friends) ?? EMPTY_LIST, [data])
     const [searchValue, setSearchValue] = useState('')
     const type = resolveNextIDPlatform(searchValue)
     const { loading: resolveLoading, value: keyword = '' } = useSearchValue(searchValue, type)
-    const { loading: searchLoading, value: searchResult } = usePersonasFromNextID(
-        keyword,
-        type ?? NextIDPlatform.NextID,
-        false,
+    const {
+        isLoading: searchLoading,
+        data: searchResultArray,
+        fetchNextPage: fetchNextSearchPage,
+    } = useInfiniteQuery(
+        ['search-personas', keyword, type],
+        async ({ pageParam }) => {
+            if (!type) return EMPTY_LIST
+            return await NextIDProof.queryExistedBindingByPlatform(type, keyword, pageParam ?? 1)
+        },
+        { enabled: !!keyword && !!type, getNextPageParam: (_, allPages) => allPages.length + 1 },
     )
+    const searchResult = useMemo(() => searchResultArray?.pages.flat() ?? EMPTY_LIST, [searchResultArray])
+    // const { loading: searchLoading, value: searchResult } = usePersonasFromNextID(
+    //     keyword,
+    //     type ?? NextIDPlatform.NextID,
+    //     false,
+    // )
     const { value: searchedList = EMPTY_LIST } = useFriendsFromSearch(searchResult, friends, keyword)
 
     return (
@@ -32,6 +47,8 @@ const FriendsHome = memo(function FriendsHome() {
             searchValue={searchValue}
             searchResult={searchedList}
             fetchNextPage={fetchNextPage}
+            fetchNextSearchPage={fetchNextSearchPage}
+            refetch={refetch}
         />
     )
 })
