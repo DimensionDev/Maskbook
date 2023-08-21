@@ -40,7 +40,6 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
         const profileItems = items.recipients.filter((x) => x.identifier.userId !== myUserId)
         // Selected might contain profiles that fetched asynchronously from
         // Next.ID, which are not stored locally
-        console.log(NextIDItems, selected, items.recipients, myUserId, 'aaaaaaaaaaaaaaaaaaaaaaaaaaa')
         return uniqBy(profileItems.concat(NextIDItems, selected), ({ linkedPersona }) => linkedPersona?.rawPublicKey)
     }, [NextIDItems, selected, items.recipients, myUserId])
 
