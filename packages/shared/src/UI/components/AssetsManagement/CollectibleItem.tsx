@@ -1,4 +1,4 @@
-import { ShadowRootTooltip, makeStyles, useDetectOverflow } from '@masknet/theme'
+import { ShadowRootTooltip, makeStyles, useBoundedPopperProps, useDetectOverflow } from '@masknet/theme'
 import { isLens, isLensCollect, isLensFollower, isXnsContractAddress } from '@masknet/web3-shared-evm'
 import { Button, Skeleton, Typography } from '@mui/material'
 import { forwardRef, memo, useCallback, useMemo, type HTMLProps } from 'react'
@@ -129,7 +129,7 @@ export const CollectibleItem = memo(
         const t = useSharedI18N()
         const { classes, cx } = useStyles()
         const name = asset.collection?.name ?? ''
-
+        const popperProps = useBoundedPopperProps()
         const handleClick = useCallback(() => {
             onItemClick?.(asset)
         }, [onItemClick, asset])
@@ -154,7 +154,7 @@ export const CollectibleItem = memo(
             ) : undefined
 
         return (
-            <ShadowRootTooltip title={tooltip} placement="top" disableInteractive arrow>
+            <ShadowRootTooltip PopperProps={popperProps} title={tooltip} placement="top" disableInteractive arrow>
                 <div
                     className={cx(classes.card, classes.fadeIn, className, disableAction ? null : classes.withAction)}
                     {...rest}
