@@ -10,6 +10,7 @@ import { useTheme } from '@mui/system'
 import { CopyButton, EmptyStatus } from '@masknet/shared'
 import { ConnectedAccounts } from './ConnectAccounts/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -135,7 +136,7 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
                             underline="none"
                             target="_blank"
                             rel="noopener noreferrer"
-                            href={`https://web3.bio/${nextId}`}
+                            href={urlcat('https://web3.bio/', { s: nextId })}
                             className={classes.icon}>
                             <Icons.LinkOut size={12} />
                         </Link>
