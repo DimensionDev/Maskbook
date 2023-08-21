@@ -1,3 +1,4 @@
+import { defer, delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import {
     createSubscriptionFromAsync,
@@ -44,12 +45,19 @@ export const RestPartOfPluginUIContextShared: Omit<
 
     openWalletConnectDialog: async (uri: string) => {
         if (Sniffings.is_popup_page) {
+            const [promise, resolve, reject] = defer<boolean>()
+            const callback = ({ open }: { open: boolean }) => (!open ? resolve(true) : undefined)
+
+            delay(5000).then(() => reject(new Error('timeout')))
+            CrossIsolationMessages.events.popupWalletConnectEvent.on(callback)
             CrossIsolationMessages.events.popupWalletConnectEvent.sendToAll({ uri, open: true })
-            return
+
+            await promise.finally(() => CrossIsolationMessages.events.popupWalletConnectEvent.off(callback))
+        } else {
+            await WalletConnectQRCodeModal.openAndWaitForClose({
+                uri,
+            })
         }
-        await WalletConnectQRCodeModal.openAndWaitForClose({
-            uri,
-        })
     },
     closeWalletConnectDialog: () => {
         if (Sniffings.is_popup_page) {

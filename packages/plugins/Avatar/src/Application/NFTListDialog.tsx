@@ -258,7 +258,6 @@ export function NFTListDialog() {
                     openPopupWindow={() =>
                         openPopupWindow(PopupRoutes.Personas, {
                             tab: PopupHomeTabType.ConnectedWallets,
-                            disableNewWindow: true,
                         })
                     }
                     verifiedWallets={walletItems}

@@ -68,7 +68,6 @@ export function PluginSettingsDialog() {
         () =>
             Services.Helper.openPopupWindow(PopupRoutes.Personas, {
                 tab: PopupHomeTabType.ConnectedWallets,
-                disableNewWindow: true,
             }),
         [],
     )
