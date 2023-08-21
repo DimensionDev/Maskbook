@@ -1,20 +1,15 @@
 import { getSiteType } from '@masknet/shared-base'
 import { useQuery } from '@tanstack/react-query'
 import Services from '../../../../service.js'
-
-/**
- * Get source page from hash
- */
-const getSourceUrl = () => {
-    const search = location.hash.slice(location.hash.indexOf('?'))
-    return new URLSearchParams(search).get('source') ?? ''
-}
+import { useSearchParams } from 'react-router-dom'
 
 export function useConnected() {
-    return useQuery(['connected-status'], async () => {
+    const [params] = useSearchParams()
+    const source = params.get('source') ?? ''
+    return useQuery(['connected-status', source], async () => {
         const result = await Services.Helper.queryCurrentActiveTab()
         if (!result) return
-        const url = result.url || getSourceUrl()
+        const url = result.url || source
         const siteType = getSiteType(url)
 
         if (!siteType) return { connected: false, url }
