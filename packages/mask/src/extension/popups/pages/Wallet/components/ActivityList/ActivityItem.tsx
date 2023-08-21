@@ -258,13 +258,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                                 address: isOut ? toAddress : fromAddress,
                             }}
                             components={{
-                                addr: (
-                                    <ReversedAddress
-                                        address={isOut ? toAddress : fromAddress}
-                                        component="span"
-                                        PopperProps={{ style: { zIndex: 0 } }}
-                                    />
-                                ),
+                                addr: <ReversedAddress address={isOut ? toAddress : fromAddress} component="span" />,
                             }}
                         />
                     </ProgressiveText>
