@@ -51,6 +51,7 @@ export const Contacts = memo<ContactsProps>(function Contacts({ friends, fetchNe
                         avatar={friend.avatar}
                         nextId={friend.persona?.publicKeyAsHex}
                         publicKey={friend.persona?.rawPublicKey}
+                        profile={friend.profile}
                         isLocal
                     />
                 )

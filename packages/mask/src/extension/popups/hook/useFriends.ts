@@ -10,8 +10,6 @@ import Services from '../../../extension/service.js'
 import { first } from 'lodash-es'
 import { isProfileIdentifier } from '@masknet/shared'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
-import { NextIDProof } from '@masknet/web3-providers'
-import { useEffect, useState } from 'react'
 
 export type FriendsInformation = Friend & {
     profiles: BindingProof[]
@@ -44,7 +42,6 @@ export const PlatformSort: Record<NextIDPlatform, number> = {
 }
 
 export function useFriendsPaged() {
-    const [isFetchingProfiles, setIsFetchingProfiles] = useState(false)
     const currentPersona = useCurrentPersona()
     const { data: records = EMPTY_LIST, isLoading: recordsLoading } = useQuery(
         ['relation-records', currentPersona],
@@ -89,77 +86,6 @@ export function useFriendsPaged() {
             return nextPageOffset
         },
     })
-    const { data: profilesArray, fetchNextPage: fetchNextProfilesPage } = useInfiniteQuery(
-        ['nextid-profiles', currentPersona],
-        async ({ pageParam = 0 }) => {
-            const friends = data?.pages[Number(pageParam)].friends
-            if (!friends) return EMPTY_LIST
-            const allSettled = await Promise.allSettled(
-                friends.map((item) => {
-                    const id = item.persona.publicKeyAsHex
-                    return NextIDProof.queryProfilesByPublicKey(id, 2)
-                }),
-            )
-            const profiles: BindingProof[][] = allSettled.map((item, index) => {
-                if (item.status === 'rejected') {
-                    if (friends[index].profile) {
-                        return [
-                            {
-                                platform: NextIDPlatform.Twitter,
-                                identity: friends[index].profile!.userId,
-                                is_valid: true,
-                                last_checked_at: '',
-                                name: friends[index].profile!.userId,
-                                created_at: '',
-                            },
-                        ]
-                    } else {
-                        return []
-                    }
-                }
-                const filtered = item.value
-                    .filter((x) => {
-                        return (
-                            (x.platform === NextIDPlatform.ENS && x.name.endsWith('.eth')) ||
-                            (x.platform !== NextIDPlatform.Bit &&
-                                x.platform !== NextIDPlatform.CyberConnect &&
-                                x.platform !== NextIDPlatform.REDDIT &&
-                                x.platform !== NextIDPlatform.SYBIL &&
-                                x.platform !== NextIDPlatform.EthLeaderboard &&
-                                x.platform !== NextIDPlatform.NextID)
-                        )
-                    })
-                    .sort((a, b) => PlatformSort[a.platform] - PlatformSort[b.platform])
-                return filtered
-            })
-            return profiles
-        },
-        {
-            enabled: !!data,
-            getNextPageParam: (_, allPages) => {
-                if (!data || allPages.length >= data.pages.length) return undefined
-                return allPages.length
-            },
-        },
-    )
-    useEffect(() => {
-        let isMounted = true
-        const fetchNext = async () => {
-            if (!data?.pages || !profilesArray) return
-            let profilesLength = profilesArray?.pages?.length
-            setIsFetchingProfiles(true)
-            while (profilesLength <= data.pages.length) {
-                await fetchNextProfilesPage()
-                profilesLength += 1
-                if (!isMounted) break
-            }
-            setIsFetchingProfiles(false)
-        }
-        if (!isFetchingProfiles) fetchNext()
-        return () => {
-            isMounted = false
-        }
-    }, [data, fetchNextProfilesPage, profilesArray])
     return {
         data,
         isLoading: isLoading || recordsLoading,

@@ -16,8 +16,8 @@ import { attachNextIDToProfile } from '../../../../../utils/utils.js'
 import { ConnectedAccounts } from './ConnectedAccounts/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import Services from '../../../../service.js'
-import { queryClient } from '@masknet/shared-base-ui'
-import urlcat from 'urlcat'
+import { queryClient, useEverSeen } from '@masknet/shared-base-ui'
+import { useFriendProfiles } from '../../../hook/useFriendProfiles.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -73,21 +73,24 @@ interface ContactCardProps {
     nextId?: string
     publicKey?: string
     isLocal?: boolean
+    profile?: ProfileIdentifier
 }
 
 export const ContactCard = memo<ContactCardProps>(function ContactCard({
     avatar,
     nextId,
-    profiles,
     publicKey,
     isLocal,
+    profile,
 }) {
     const theme = useTheme()
     const { classes } = useStyles()
     const navigate = useNavigate()
     const [local, setLocal] = useState(false)
+    const [seen, ref] = useEverSeen<HTMLLIElement>()
     const { currentPersona } = PersonaContext.useContainer()
     const { t } = useI18N()
+    const profiles = useFriendProfiles(seen, nextId, profile?.userId)
     const handleAddFriend = useCallback(async () => {
         if (!currentPersona) return
         const twitter = profiles?.find((p) => p.platform === NextIDPlatform.Twitter)
@@ -110,7 +113,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
     }, [profiles, nextId, currentPersona])
 
     return (
-        <Box className={classes.card}>
+        <Box className={classes.card} ref={ref}>
             <Box className={classes.titleWrap}>
                 <Box className={classes.title}>
                     {avatar ? (
