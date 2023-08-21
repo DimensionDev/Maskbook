@@ -32,11 +32,6 @@ const FriendsHome = memo(function FriendsHome() {
         { enabled: !!keyword && !!type, getNextPageParam: (_, allPages) => allPages.length + 1 },
     )
     const searchResult = useMemo(() => searchResultArray?.pages.flat() ?? EMPTY_LIST, [searchResultArray])
-    // const { loading: searchLoading, value: searchResult } = usePersonasFromNextID(
-    //     keyword,
-    //     type ?? NextIDPlatform.NextID,
-    //     false,
-    // )
     const { value: searchedList = EMPTY_LIST } = useFriendsFromSearch(searchResult, friends, keyword)
 
     return (
