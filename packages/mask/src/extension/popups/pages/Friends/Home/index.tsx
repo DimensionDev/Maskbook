@@ -29,7 +29,13 @@ const FriendsHome = memo(function FriendsHome() {
             if (!type) return EMPTY_LIST
             return await NextIDProof.queryExistedBindingByPlatform(type, keyword, pageParam ?? 1)
         },
-        { enabled: !!keyword && !!type, getNextPageParam: (_, allPages) => allPages.length + 1 },
+        {
+            enabled: !!keyword && !!type,
+            getNextPageParam: (lastPage, allPages) => {
+                if (lastPage.length === 0) return undefined
+                return allPages.length + 1
+            },
+        },
     )
     const searchResult = useMemo(() => searchResultArray?.pages.flat() ?? EMPTY_LIST, [searchResultArray])
     const { value: searchedList = EMPTY_LIST } = useFriendsFromSearch(searchResult, friends, keyword)
