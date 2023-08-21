@@ -155,6 +155,7 @@ const avoidMistakeRules = {
     // 'array-callback-return': 'error', // .map .some ... calls should have a return value
     'default-case-last': 'error', // default: should be the last
     eqeqeq: 'error', // ===
+    'no-scrollbar': 'error', // ::-webkit-scrollbar
     'no-cond-assign': 'error', // if (a = b)
     'no-duplicate-case': 'error', // switch
     'no-empty-character-class': 'error', // RegEx /[]/ means a empty character class, not "[]"
