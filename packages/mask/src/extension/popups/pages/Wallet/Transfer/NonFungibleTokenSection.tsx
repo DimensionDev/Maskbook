@@ -7,9 +7,9 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
 import { uniqWith } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
+import { useAsyncFn } from 'react-use'
 import { useI18N } from '../../../../../utils/index.js'
 import { useNonFungibleTokenParams } from '../../../hook/index.js'
-import { useAsyncFn } from 'react-use'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -145,7 +145,7 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
                     retry={next}
                     collectibles={prependTokens}
                     pluginID={NetworkPluginID.PLUGIN_EVM}
-                    loading={loading}
+                    loading={loading || !done}
                     columns={4}
                     gap={1}
                     selectable

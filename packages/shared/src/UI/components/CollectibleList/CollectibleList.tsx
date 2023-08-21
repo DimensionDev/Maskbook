@@ -104,8 +104,9 @@ export const CollectibleList = memo(function CollectibleList(props: CollectibleL
 
     return (
         <Box className={cx(classes.list, className)} {...rest} ref={listRef}>
-            {loading && collectibles.length === 0 ? <LoadingSkeleton className={classes.root} /> : null}
-            {error || (collectibles.length === 0 && !loading) ? (
+            {loading && collectibles.length === 0 ? (
+                <LoadingSkeleton className={classes.root} />
+            ) : error || (collectibles.length === 0 && !loading) ? (
                 <ReloadStatus className={classes.text} message={t.no_collectible_found()} onRetry={retry} />
             ) : (
                 <Box className={classes.root}>
