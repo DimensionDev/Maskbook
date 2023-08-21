@@ -3,7 +3,7 @@ import { useAsyncFn } from 'react-use'
 import { alpha } from '@mui/system'
 import { Typography } from '@mui/material'
 import { buttonClasses } from '@mui/material/Button'
-import { ActionButton, makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { type SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { EmojiAvatar } from '@masknet/shared'
@@ -52,6 +52,11 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: 12,
         fontSize: 18,
         fontWeight: 700,
+        maxWidth: 300,
+        margin: 'auto',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
     },
 }))
 
@@ -65,8 +70,11 @@ function DeleteContactDrawer({ onConfirm, address, name, ...rest }: DeleteContac
     const { classes, cx } = useStyles()
     const { t } = useI18N()
 
+    const { showSnackbar } = usePopupCustomSnackbar()
+
     const [{ loading }, deleteContact] = useAsyncFn(async () => {
         await Web3State.state.AddressBook?.removeContact(address)
+        showSnackbar(t('wallet_delete_contact_successfully'))
         onConfirm?.()
     }, [address, onConfirm])
 
