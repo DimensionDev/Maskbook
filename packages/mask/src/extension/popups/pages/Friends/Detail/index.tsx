@@ -27,7 +27,7 @@ export const FriendsDetail = memo(function FriendsDetail() {
         setDeleted(true)
         queryClient.invalidateQueries(['relation-records', rawPublicKey])
         queryClient.invalidateQueries(['friends', rawPublicKey])
-    }, [nextId, rawPublicKey])
+    }, [nextId, rawPublicKey, queryClient])
 
     return (
         <FriendsDetailUI
