@@ -13,6 +13,9 @@ export const facebookBase: SiteAdaptor.Base = {
     },
 }
 
+/**
+ * @deprecated Use `Sniffings.is_facebook_page` instead
+ */
 export function isFacebook(ui: SiteAdaptor.Base) {
     return ui.networkIdentifier === EnhanceableSite.Facebook
 }

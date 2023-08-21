@@ -56,16 +56,6 @@ export function getAgentType() {
     return 'unknown'
 }
 
-export function isTwitter() {
-    const url = new URL(window.location.href)
-    return url.origin === 'twitter.com'
-}
-
-export function isFacebook() {
-    const url = new URL(window.location.href)
-    return url.origin === 'facebook.com'
-}
-
 export function isEnhanceableSiteType() {
     return !!getEnhanceableSiteType()
 }

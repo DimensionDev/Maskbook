@@ -1,10 +1,8 @@
 import { encodeByNetwork } from '@masknet/encryption'
-import { PluginID, type ProfileIdentifier, SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
+import { PluginID, type ProfileIdentifier, SOCIAL_MEDIA_NAME, Sniffings } from '@masknet/shared-base'
 import type { Meta } from '@masknet/typed-message'
 import { useCallback } from 'react'
 import Services from '../../extension/service.js'
-import { isFacebook } from '../../site-adaptors/facebook.com/base.js'
-import { isTwitter } from '../../site-adaptors/twitter.com/base.js'
 import { activatedSiteAdaptorUI, activatedSiteAdaptor_state } from '../../site-adaptor-infra/index.js'
 import { type I18NFunction, useI18N } from '../../utils/index.js'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
@@ -87,8 +85,8 @@ async function pasteImage(
 // TODO: Provide API to plugin to post-process post content,
 // then we can move these -PreText's and meta readers into plugin's own context
 function decorateEncryptedText(encrypted: string, t: I18NFunction, meta?: Meta): string | null {
-    const hasOfficialAccount = isTwitter(activatedSiteAdaptorUI!) || isFacebook(activatedSiteAdaptorUI!)
-    const officialAccount = isTwitter(activatedSiteAdaptorUI!) ? t('twitter_account') : t('facebook_account')
+    const hasOfficialAccount = Sniffings.is_twitter_page || Sniffings.is_facebook_page
+    const officialAccount = Sniffings.is_twitter_page ? t('twitter_account') : t('facebook_account')
 
     // Note: since this is in the composition stage, we can assume plugins don't insert old version of meta.
     if (meta?.has(`${PluginID.RedPacket}:1`) || meta?.has(`${PluginID.RedPacket}_nft:1`)) {
