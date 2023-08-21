@@ -1,5 +1,12 @@
 import { BigNumber } from 'bignumber.js'
-import { type FungibleAsset, leftShift, multipliedBy, TokenType, type Transaction } from '@masknet/web3-shared-base'
+import {
+    type FungibleAsset,
+    leftShift,
+    multipliedBy,
+    TokenType,
+    type Transaction,
+    TransactionStatusType,
+} from '@masknet/web3-shared-base'
 import { ChainId, getTokenConstant, SchemaType, formatEthereumAddress, isValidAddress } from '@masknet/web3-shared-evm'
 import {
     type ZerionAddressPosition,
@@ -44,6 +51,15 @@ export function formatAsset(chainId: ChainId, data: ZerionAddressPosition): Fung
     }
 }
 
+function normalizeTxStatus(status: ZerionTransactionStatus): TransactionStatusType {
+    const map: Record<ZerionTransactionStatus, TransactionStatusType> = {
+        [ZerionTransactionStatus.FAILED]: TransactionStatusType.FAILED,
+        [ZerionTransactionStatus.CONFIRMED]: TransactionStatusType.SUCCEED,
+        [ZerionTransactionStatus.PENDING]: TransactionStatusType.NOT_DEPEND,
+    }
+    return map[status]
+}
+
 export function formatTransactions(
     chainId: ChainId,
     data: ZerionTransactionItem[],
@@ -62,7 +78,7 @@ export function formatTransactions(
                 from: transaction.address_from ?? '',
                 to: transaction.address_to ?? '',
                 timestamp: transaction.mined_at,
-                status: transaction.status === ZerionTransactionStatus.FAILED ? 0 : 1,
+                status: normalizeTxStatus(transaction.status),
                 assets:
                     transaction.changes?.map(({ asset, direction, value }) => {
                         return {

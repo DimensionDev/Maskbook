@@ -1,8 +1,8 @@
-import type { NetworkPluginID, PageIndicator } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { HubOptions } from '@masknet/web3-providers/types'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { useChainContext } from './useContext.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
-import { usePageableAsync } from './usePageableAsync.js'
 
 export function useNonFungibleEvents<T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
@@ -15,12 +15,13 @@ export function useNonFungibleEvents<T extends NetworkPluginID = NetworkPluginID
         account,
         ...options,
     })
-
-    return usePageableAsync(
-        async (nextIndicator?: PageIndicator) => {
-            return Hub.getNonFungibleTokenEvents(address ?? '', id ?? '', { indicator: nextIndicator })
+    return useInfiniteQuery({
+        queryKey: ['non-fungible', 'events', pluginID, address, id, options],
+        queryFn: ({ pageParam: nextIndicator }) => {
+            return Hub.getNonFungibleTokenEvents(address ?? '', id ?? '', {
+                indicator: nextIndicator,
+            })
         },
-        [address, id, Hub],
-        `${address}_${id}`,
-    )
+        getNextPageParam: (x) => x.nextIndicator,
+    })
 }

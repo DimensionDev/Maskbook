@@ -157,7 +157,6 @@ const CreateWalletForm = memo(function CreateWalletForm() {
                 </Box>
 
                 <Typography className={classes.tipsBottom}>{t.create_wallet_payment_password_tip_2()}</Typography>
-                <Typography className={classes.tipsBottom}>{t.create_wallet_payment_password_tip_3()}</Typography>
             </form>
             <SetupFrameController>
                 <PrimaryButton

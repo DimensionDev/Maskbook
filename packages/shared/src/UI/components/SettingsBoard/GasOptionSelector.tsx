@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Divider, Skeleton } from '@mui/material'
-import type { GasOptionType } from '@masknet/web3-shared-base'
+import { GasOptionType } from '@masknet/web3-shared-base'
 import type { ChainId, GasOption, Transaction } from '@masknet/web3-shared-evm'
 import { Others } from '@masknet/web3-providers'
 import { GasOption as GasOptionItem } from './GasOption.js'
@@ -83,6 +83,7 @@ export function GasOptionSelector(props: GasOptionSelectorProps) {
             <div className={classes.content}>
                 {Object.entries(options).map(([type, option], i) => {
                     const type_ = type as GasOptionType
+                    if (type === GasOptionType.CUSTOM) return
                     return (
                         <React.Fragment key={type}>
                             {i === 0 ? null : <Divider />}

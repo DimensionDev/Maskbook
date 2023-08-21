@@ -54,7 +54,6 @@ export const NextIdPage = memo(function NextIdPage() {
     const handleAddWallets = useCallback(() => {
         openPopupWindow?.(PopupRoutes.Personas, {
             tab: PopupHomeTabType.ConnectedWallets,
-            disableNewWindow: true,
         })
     }, [openPopupWindow])
 

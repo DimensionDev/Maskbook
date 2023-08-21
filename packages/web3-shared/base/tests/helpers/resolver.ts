@@ -78,29 +78,29 @@ describe('resolveIPFS_URL', () => {
     const cases = [CIDv0, CIDv1].flatMap((cid) => {
         return [
             { give: '', expected: '' },
-            { give: cid, expected: `https://gateway.ipfscdn.io/ipfs/${cid}` },
-            { give: `${cid}/image`, expected: `https://gateway.ipfscdn.io/ipfs/${cid}/image` },
-            { give: `ipfs://${cid}`, expected: `https://gateway.ipfscdn.io/ipfs/${cid}` },
-            { give: `ipfs://ipfs/${cid}`, expected: `https://gateway.ipfscdn.io/ipfs/${cid}` },
-            { give: `https://gateway.ipfscdn.io/ipfs/${IMAGE_DATA_PARTIAL}`, expected: IMAGE_DATA_PARTIAL },
-            { give: `https://gateway.ipfscdn.io/ipfs/${cid}`, expected: `https://gateway.ipfscdn.io/ipfs/${cid}` },
-            { give: `https://ipfs.altava.com/ipfs/${cid}`, expected: `https://gateway.ipfscdn.io/ipfs/${cid}` },
+            { give: cid, expected: `https://hoot.it/ipfs/${cid}` },
+            { give: `${cid}/image`, expected: `https://hoot.it/ipfs/${cid}/image` },
+            { give: `ipfs://${cid}`, expected: `https://hoot.it/ipfs/${cid}` },
+            { give: `ipfs://ipfs/${cid}`, expected: `https://hoot.it/ipfs/${cid}` },
+            { give: `https://hoot.it/ipfs/${IMAGE_DATA_PARTIAL}`, expected: IMAGE_DATA_PARTIAL },
+            { give: `https://hoot.it/ipfs/${cid}`, expected: `https://hoot.it/ipfs/${cid}` },
+            { give: `https://ipfs.altava.com/ipfs/${cid}`, expected: `https://hoot.it/ipfs/${cid}` },
             {
                 give: `https://ipfs.altava.com/ipfs/${cid}/image`,
-                expected: `https://gateway.ipfscdn.io/ipfs/${cid}/image`,
+                expected: `https://hoot.it/ipfs/${cid}/image`,
             },
             {
                 give: `https://ipfs.io/ipfs/${cid}`,
-                expected: `https://gateway.ipfscdn.io/ipfs/${cid}`,
+                expected: `https://hoot.it/ipfs/${cid}`,
             },
             {
                 give: `https://ipfs.io/ipfs/${cid}/image`,
-                expected: `https://gateway.ipfscdn.io/ipfs/${cid}/image`,
+                expected: `https://hoot.it/ipfs/${cid}/image`,
             },
             { give: MASK_URL, expected: MASK_URL },
             {
-                give: `https://gateway.ipfscdn.io/ipfs/${cid}?id=67874`,
-                expected: `https://gateway.ipfscdn.io/ipfs/${cid}`,
+                give: `https://hoot.it/ipfs/${cid}?id=67874`,
+                expected: `https://hoot.it/ipfs/${cid}`,
             },
             // should not trim query from non-IPFS url
             {
@@ -108,8 +108,8 @@ describe('resolveIPFS_URL', () => {
                 expected: 'https://www.companioninabox.art/api/companion.png?id=726&iteration=0',
             },
             // the host part has a CID
-            { give: `https://${cid}.ipfs.dweb.link`, expected: `https://gateway.ipfscdn.io/ipfs/${cid}` },
-            // { give: `https://${cid}.ipfs.dweb.link/460.png?ext=png`, expected: `https://gateway.ipfscdn.io/ipfs/${cid}/460.png`},
+            { give: `https://${cid}.ipfs.dweb.link`, expected: `https://hoot.it/ipfs/${cid}` },
+            // { give: `https://${cid}.ipfs.dweb.link/460.png?ext=png`, expected: `https://hoot.it/ipfs/${cid}/460.png`},
         ].map(({ give, expected }) => [
             { give, expected },
             { give: `https://cors-next.r2d2.to?${encodeURIComponent(give)}`, expected },

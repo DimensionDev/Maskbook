@@ -7,7 +7,7 @@ import {
     useActivatedPluginsSiteAdaptor,
     usePostInfoDetails,
 } from '@masknet/plugin-infra/content-script'
-import { useWeb3Others, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { DefaultWeb3ContextProvider, useWeb3Others } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Flags } from '@masknet/flags'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
@@ -49,11 +49,11 @@ export function PostActions() {
 function createPostActionsInjector() {
     return function injectPostActions(postInfo: PostInfo, signal: AbortSignal) {
         const jsx = (
-            <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+            <DefaultWeb3ContextProvider>
                 <PostInfoProvider post={postInfo}>
                     <PostActions />
                 </PostInfoProvider>
-            </Web3ContextProvider>
+            </DefaultWeb3ContextProvider>
         )
         if (postInfo.actionsElement) {
             const root = attachReactTreeWithContainer(postInfo.actionsElement.afterShadow, {
@@ -63,7 +63,9 @@ function createPostActionsInjector() {
 
             const parentNode = postInfo.actionsElement?.realCurrent?.parentNode as HTMLDivElement
             if (parentNode?.lastElementChild) {
-                ;(parentNode.lastElementChild as HTMLDivElement).style.flex = '1'
+                const htmlDivElement = parentNode.lastElementChild as HTMLDivElement
+
+                htmlDivElement.style.flex = '1'
                 parentNode.style.flex = '1 1 auto'
             }
             root.render(jsx)

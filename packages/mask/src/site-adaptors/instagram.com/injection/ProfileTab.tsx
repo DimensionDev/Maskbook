@@ -38,7 +38,6 @@ function getStyleProps(activeColor: { activeColor: string; color: string }) {
     const style = eleTab ? window.getComputedStyle(eleTab) : EMPTY_STYLE
     return {
         color: activeColor.color,
-        font: style.font,
         fontSize: style.fontSize,
         padding: style.paddingBottom,
         height: style.height,
@@ -59,14 +58,14 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
             marginRight: 60,
         },
         button: {
-            color: props.color,
-            font: props.font,
             fontSize: props.fontSize,
             height: props.height,
             justifyContent: 'center',
             alignItems: 'center',
             display: 'flex',
             borderTop: '1px solid transparent',
+            fontWeight: 'var(--font-weight-system-semibold)',
+            color: 'rgb(var(--ig-secondary-text))',
         },
         selected: {
             borderTop: `1px solid ${props.hover}`,
@@ -87,7 +86,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
 
 interface StyleProps {
     color: string
-    font: string
     hover: string
     fontSize: string
     height: string
@@ -127,7 +125,6 @@ export function ProfileTabAtInstagram() {
     const location = useLocation()
     const [styles, setStyles] = useState<StyleProps>({
         color: '',
-        font: '',
         hover: '',
         fontSize: '',
         height: '',

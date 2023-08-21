@@ -1,8 +1,6 @@
-import { styled, ListItemButton, Typography, ListItemIcon, useMediaQuery } from '@mui/material'
+import { styled, ListItemButton, Typography, ListItemIcon } from '@mui/material'
 import { ToolboxHintUnstyled } from '../../../components/InjectedComponents/ToolboxUnstyled.js'
 import { useMemo } from 'react'
-
-const FB_BREAKPOINT = 1159
 
 const Container = styled('div')`
     padding: 0 4px;
@@ -20,6 +18,7 @@ const Text = styled(Typography)`
     /* This CSS variable is inherit from Facebook. */
     color: var(--primary-text);
     font-weight: 500;
+    padding-left: 0.1rem;
 `
 const Icon = styled(ListItemIcon, {
     shouldForwardProp(name) {
@@ -31,27 +30,28 @@ const Icon = styled(ListItemIcon, {
 }>`
     min-width: ${(props) => (!props.hasSpecificLeftRailStartBar ? '24px' : props.hasTopNavBar ? '46px' : 'auto')};
     margin-right: ${(props) => (props.hasTopNavBar && props.hasSpecificLeftRailStartBar ? '0px' : '12px')};
-    @media screen and (max-height: ${FB_BREAKPOINT}px) {
-        min-width: ${(props) => (props.hasTopNavBar ? '36px' : 'auto')};
-    }
+    padding-left: 4px;
 `
+
 export function ToolboxAtFacebook(props: {
     category: 'wallet' | 'application'
     hasTopNavBar: boolean
     hasSpecificLeftRailStartBar: boolean
 }) {
-    const showMenuName = useMediaQuery(`(max-width: ${FB_BREAKPOINT}px)`)
     const ListItemIcon = useMemo(() => {
         return ({ children }: React.PropsWithChildren<{}>) => (
-            <Icon hasTopNavBar={props.hasTopNavBar} hasSpecificLeftRailStartBar={props.hasSpecificLeftRailStartBar}>
+            <Icon
+                data-testid="abc"
+                hasTopNavBar={props.hasTopNavBar}
+                hasSpecificLeftRailStartBar={props.hasSpecificLeftRailStartBar}>
                 {children}
             </Icon>
         )
     }, [props.hasTopNavBar, props.hasSpecificLeftRailStartBar])
+
     return (
         <ToolboxHintUnstyled
-            mini={showMenuName}
-            iconSize={showMenuName || !props.hasTopNavBar || !props.hasSpecificLeftRailStartBar ? 24 : 32}
+            iconSize={32}
             Container={props.hasTopNavBar ? ContainerHasNavBar : Container}
             ListItemButton={Item}
             Typography={Text}

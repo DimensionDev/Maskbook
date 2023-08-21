@@ -1,19 +1,18 @@
-import { memo } from 'react'
-import { useAsyncFn } from 'react-use'
-import { useNavigate } from 'react-router-dom'
-import { Controller } from 'react-hook-form'
-import { LoadingButton } from '@mui/lab'
-import type { z as zod } from 'zod'
 import { makeStyles } from '@masknet/theme'
-import { useWallet } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
-import { StyledInput } from '../../../components/StyledInput/index.js'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { ProviderType } from '@masknet/web3-shared-evm'
+import { LoadingButton } from '@mui/lab'
+import { memo } from 'react'
+import { Controller } from 'react-hook-form'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useAsyncFn } from 'react-use'
+import type { z as zod } from 'zod'
 import { useI18N } from '../../../../../utils/index.js'
-import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm.js'
-import { WalletContext } from '../hooks/useWalletContext.js'
+import { StyledInput } from '../../../components/StyledInput/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
+import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm.js'
 
 const useStyles = makeStyles()({
     content: {
@@ -35,13 +34,18 @@ const useStyles = makeStyles()({
     },
 })
 
+/**
+ * @deprecated unused
+ */
 const WalletRename = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
     const { classes } = useStyles()
-    const { selectedWallet } = WalletContext.useContainer()
-    const currentWallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const wallet = selectedWallet ?? currentWallet
+    const currentWallet = useWallet()
+    const wallets = useWallets()
+    const [params] = useSearchParams()
+    const paramWallet = wallets.find((x) => isSameAddress(x.address, params.get('wallet') || ''))
+    const wallet = paramWallet ?? currentWallet
 
     const {
         control,

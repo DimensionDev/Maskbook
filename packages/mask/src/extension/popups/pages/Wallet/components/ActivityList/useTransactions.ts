@@ -30,7 +30,7 @@ export function useTransactions() {
     const queries = useQueries({
         queries: networks.map((network) => {
             return {
-                enabled: !!account,
+                enabled: !!account && (transactions.length > 0 || !result.isLoading),
                 queryKey: ['transitions', network.chainId, account],
                 queryFn: async () => {
                     return Transaction?.getTransactions?.(network.chainId, account) ?? []
@@ -44,8 +44,13 @@ export function useTransactions() {
 
     // Some are already in debank history
     const localeTxes = useMemo(() => {
+        const now = Date.now()
+        const duration = 1800_000
         return sortBy(
-            allLocaleTxes.filter((tx) => !transactions.find((x) => x.id === tx.id)),
+            allLocaleTxes.filter((tx) => {
+                // show txes from the past half txes
+                return !transactions.find((x) => x.id === tx.id) && now - tx.updatedAt.getTime() < duration
+            }),
             (x) => -x.createdAt.getTime(),
         )
     }, [allLocaleTxes, transactions])

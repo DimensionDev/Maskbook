@@ -1,20 +1,21 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { Icons } from '@masknet/icons'
+import { EmptyStatus, LoadingStatus, Markdown, RetryHint } from '@masknet/shared'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
+import { TabContext } from '@mui/lab'
+import { Box, CardContent, CardHeader, Paper, Tab, Typography } from '@mui/material'
 import formatDateTime from 'date-fns/format'
 import isAfter from 'date-fns/isAfter'
 import isValidDate from 'date-fns/isValid'
-import { Icons } from '@masknet/icons'
-import { EmptyStatus, LoadingStatus, Markdown, RetryHint } from '@masknet/shared'
-import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { TabContext } from '@mui/lab'
-import { Box, CardContent, CardHeader, Paper, Tab, Typography } from '@mui/material'
-import { CollectiblePaper } from './CollectiblePaper.js'
+import { useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useI18N } from '../../locales/i18n_generated.js'
+import { Context } from '../Context/index.js'
 import { LinkingAvatar } from '../Shared/LinkingAvatar.js'
+import { CollectiblePaper } from './CollectiblePaper.js'
 import { AboutTab } from './tabs/AboutTab.js'
 import { ActivitiesTab } from './tabs/ActivitiesTab.js'
 import { DetailsTab } from './tabs/DetailsTab.js'
 import { OffersTab } from './tabs/OffersTab.js'
-import { Context } from '../Context/index.js'
-import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles<{ currentTab: string }>()((theme, { currentTab }) => {
     return {
@@ -115,7 +116,7 @@ export function Collectible() {
     const t = useI18N()
     const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activities')
     const { classes } = useStyles({ currentTab })
-    const { asset, events, orders } = Context.useContainer()
+    const { asset, orders } = Context.useContainer()
     const titleRef = useRef<HTMLDivElement>(null)
     const [outVerified, setOutVerified] = useState(false)
 
@@ -130,6 +131,8 @@ export function Collectible() {
             setOutVerified(scrollWidth > offsetWidth)
         }
     }, [])
+
+    const offers = useMemo(() => orders.data?.pages.flatMap((x) => x.data) ?? EMPTY_LIST, [orders.data?.pages])
 
     if (asset.isLoading) return <LoadingStatus height={148} p={1} />
 
@@ -156,15 +159,15 @@ export function Collectible() {
             [tabs.details]: <DetailsTab asset={asset.data} isLoading={asset.isLoading} />,
             [tabs.offers]: (
                 <OffersTab
-                    offers={orders.value}
-                    loading={orders.loading}
-                    error={orders.error}
-                    finished={orders.ended}
-                    onRetry={orders.retry}
-                    onNext={orders.next}
+                    offers={offers}
+                    loading={orders.isLoading}
+                    error={orders.error as Error | undefined}
+                    finished={!orders.hasNextPage}
+                    onRetry={orders.refetch}
+                    onNext={orders.fetchNextPage}
                 />
             ),
-            [tabs.activities]: <ActivitiesTab events={events} />,
+            [tabs.activities]: <ActivitiesTab />,
         }
 
         return tabMap[currentTab] || null

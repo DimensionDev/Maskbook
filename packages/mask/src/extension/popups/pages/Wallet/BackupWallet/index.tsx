@@ -1,19 +1,20 @@
-import { memo, useState } from 'react'
-import { useAsyncFn } from 'react-use'
-import { Button, styled, Tab, tabClasses, Tabs, tabsClasses, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { TabContext, TabPanel } from '@mui/lab'
 import { Icons } from '@masknet/icons'
-import { useWallet } from '@masknet/web3-hooks-base'
-import { useI18N } from '../../../../../utils/index.js'
-import { PasswordField } from '../../../components/PasswordField/index.js'
-import { WalletContext } from '../hooks/useWalletContext.js'
-import { useTitle } from '../../../hook/useTitle.js'
-import formatDateTime from 'date-fns/format'
-import { saveFileFromBuffer } from '../../../../../../shared/index.js'
 import { encodeText } from '@masknet/kit'
 import { MimeType } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { useWallet, useWallets } from '@masknet/web3-hooks-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { TabContext, TabPanel } from '@mui/lab'
+import { Button, Tab, Tabs, Typography, styled, tabClasses, tabsClasses } from '@mui/material'
+import formatDateTime from 'date-fns/format'
+import { memo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import { useAsyncFn } from 'react-use'
+import { saveFileFromBuffer } from '../../../../../../shared/index.js'
+import { useI18N } from '../../../../../utils/index.js'
 import Services from '../../../../service.js'
+import { PasswordField } from '../../../components/PasswordField/index.js'
+import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles()({
     content: {
@@ -102,12 +103,17 @@ enum BackupTabs {
     PrivateKey = 'Private Key',
 }
 
+/**
+ * @deprecated unused
+ */
 const BackupWallet = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { selectedWallet } = WalletContext.useContainer()
     const currentWallet = useWallet()
-    const wallet = selectedWallet ?? currentWallet
+    const wallets = useWallets()
+    const [params] = useSearchParams()
+    const paramWallet = wallets.find((x) => isSameAddress(x.address, params.get('wallet') || ''))
+    const wallet = paramWallet ?? currentWallet
 
     const [currentTab, setCurrentTab] = useState(BackupTabs.JsonFile)
     const [password, setPassword] = useState('')

@@ -188,6 +188,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
             const result = await bindProof(payload, walletSignature, personaSignature)
 
             if (result) showSnackbar(t('popups_verify_wallet_sign_success_tips'))
+
             // Broadcast updates
             MaskMessages.events.ownProofChanged.sendToAll()
             return true
@@ -208,22 +209,25 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
     }, [signResult])
 
     const handleChooseAnotherWallet = useCallback(() => {
-        modalNavigate(PopupModalRoutes.SelectProvider, {
-            disableNewWindow: true,
-        })
+        modalNavigate(PopupModalRoutes.SelectProvider)
     }, [modalNavigate])
 
     const handleDone = useCallback(async () => {
-        await Web3.disconnect({ providerType })
-        if (providerType === ProviderType.MaskWallet || providerType === ProviderType.WalletConnect) {
+        if (providerType !== ProviderType.MaskWallet) await Web3.disconnect({ providerType })
+        if (providerType === ProviderType.MaskWallet) {
             navigate(-1)
             return
         }
+        if (providerType === ProviderType.WalletConnect) {
+            navigate(urlcat(PopupRoutes.Personas, { tab: PopupHomeTabType.ConnectedWallets }), {
+                replace: true,
+            })
+        }
         await Services.Helper.removePopupWindow()
-    }, [providerType])
+    }, [providerType, navigate])
 
     const handleBack = useCallback(() => {
-        navigate(urlcat(PopupRoutes.Personas, { tab: PopupHomeTabType.ConnectedWallets, disableNewWindow: true }), {
+        navigate(urlcat(PopupRoutes.Personas, { tab: PopupHomeTabType.ConnectedWallets }), {
             replace: true,
         })
     }, [])

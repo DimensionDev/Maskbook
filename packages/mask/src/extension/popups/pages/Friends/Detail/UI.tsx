@@ -10,6 +10,7 @@ import { useTheme } from '@mui/system'
 import { CopyButton, EmptyStatus } from '@masknet/shared'
 import { ConnectedAccounts } from './ConnectAccounts/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -79,7 +80,7 @@ export interface FriendsDetailUIProps {
     nextId: string
     publicKey?: string
     isLocal?: boolean
-    handleDelete: () => void
+    onDelete: () => void
 }
 
 export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetailUI({
@@ -88,7 +89,7 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
     publicKey,
     profiles,
     isLocal,
-    handleDelete,
+    onDelete,
 }) {
     const { classes } = useStyles()
     const navigate = useNavigate()
@@ -104,7 +105,7 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
                     </button>
                     <Box />
                     {isLocal ? (
-                        <button onClick={handleDelete} type="submit" className={classes.back}>
+                        <button onClick={onDelete} type="submit" className={classes.back}>
                             <Icons.Delete />
                         </button>
                     ) : null}
@@ -133,7 +134,7 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
                             underline="none"
                             target="_blank"
                             rel="noopener noreferrer"
-                            href={`https://web3.bio/${nextId}`}
+                            href={urlcat('https://web3.bio/', { s: nextId })}
                             className={classes.icon}>
                             <Icons.LinkOut size={12} />
                         </Link>

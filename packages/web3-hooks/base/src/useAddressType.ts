@@ -13,6 +13,6 @@ export function useAddressType<S extends 'all' | void = void, T extends NetworkP
 
     return useAsyncRetry<Web3Helper.AddressTypeScope<S, T> | undefined>(async () => {
         if (!address) return
-        return Web3.getAddressType(address)
-    }, [address, Web3])
+        return Web3.getAddressType(address, options)
+    }, [address, Web3, options?.chainId])
 }

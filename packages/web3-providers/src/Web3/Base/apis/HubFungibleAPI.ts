@@ -1,15 +1,16 @@
-import { isEmpty } from 'lodash-es'
+import { EMPTY_LIST, createIndicator, createPageable, type Pageable } from '@masknet/shared-base'
+import { queryClient } from '@masknet/shared-base-ui'
 import {
     attemptUntil,
-    type FungibleTokenSecurity,
-    type FungibleToken,
     type FungibleAsset,
+    type FungibleToken,
+    type FungibleTokenSecurity,
     type FungibleTokenSpender,
 } from '@masknet/web3-shared-base'
-import { type Pageable, createPageable, createIndicator, EMPTY_LIST } from '@masknet/shared-base'
-import { HubProviderAPI_Base } from './HubProviderAPI.js'
+import { isEmpty } from 'lodash-es'
+import type { AuthorizationAPI, FungibleTokenAPI, PriceAPI, TokenIconAPI, TokenListAPI } from '../../../entry-types.js'
 import type { HubOptions_Base } from './HubOptionsAPI.js'
-import type { AuthorizationAPI, FungibleTokenAPI, TokenListAPI, TokenIconAPI, PriceAPI } from '../../../entry-types.js'
+import { HubProviderAPI_Base } from './HubProviderAPI.js'
 
 export class HubFungibleAPI_Base<
     ChainId,
@@ -60,10 +61,12 @@ export class HubFungibleAPI_Base<
     ): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
         const options = this.HubOptions.fill({ ...initial, chainId })
         const providers = this.getProviders(initial)
-        return attemptUntil(
-            providers.map((x) => () => x.getFungibleTokenList?.(options.chainId)),
-            EMPTY_LIST,
-        )
+        return queryClient.fetchQuery(['get-fungible-token-list', options.chainId, initial], async () => {
+            return attemptUntil(
+                providers.map((x) => () => x.getFungibleTokenList?.(options.chainId)),
+                EMPTY_LIST,
+            )
+        })
     }
 
     async getFungibleTokenIconURLs(

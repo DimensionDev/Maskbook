@@ -20,13 +20,14 @@ import { useAsync, useAsyncFn } from 'react-use'
 import Services from '../../../../service.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { TransactionPreview } from '../../../components/TransactionPreview/index.js'
-import { WalletAssetTabs } from '../type.js'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
 import { Icons } from '@masknet/icons'
 import { useUpdateEffect } from '@react-hookz/web'
 import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
-import urlcat from 'urlcat'
 import { compact, mapValues, omit } from 'lodash-es'
+import urlcat from 'urlcat'
+import { WalletAssetTabs } from '../type.js'
+import { UnlockERC721Token } from '../../../components/UnlockERC721Token/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     left: {
@@ -166,7 +167,11 @@ const Interaction = memo(function Interaction() {
                     transaction?.formattedTransaction._tx.data.slice(10),
                 )
 
-                const result = abiCoder.encodeParameters(approveParametersType, [parameters.spender, approveAmount])
+                const parametersString = abiCoder
+                    .encodeParameters(approveParametersType, [parameters.spender, toHex(approveAmount)])
+                    .slice(2)
+
+                const result = `${transaction.formattedTransaction._tx.data.slice(0, 10)}${parametersString}`
 
                 params = compact(
                     currentRequest.request.arguments.params.map((x) =>
@@ -177,14 +182,14 @@ const Interaction = memo(function Interaction() {
                             : {
                                   ...x,
                                   data: result,
-                                  chainId: toHex(x.chainId),
-                                  nonce: toHex(x.nonce),
                               },
                     ),
                 )
-            } else if (!signRequest.includes(currentRequest.request.arguments.method)) {
+            }
+
+            if (!signRequest.includes(currentRequest.request.arguments.method)) {
                 params = compact(
-                    currentRequest.request.arguments.params.map((x) => {
+                    params.map((x) => {
                         if (x === 'latest') {
                             if (chainId === ChainId.Celo) return
                             return x
@@ -263,7 +268,26 @@ const Interaction = memo(function Interaction() {
         }
 
         if (transaction?.formattedTransaction?.popup?.spender) {
-            return <UnlockERC20Token transaction={transaction} handleChange={(value) => setApproveAmount(value)} />
+            return (
+                <UnlockERC20Token
+                    onConfigChange={handleChangeGasConfig}
+                    paymentToken={paymentToken}
+                    onPaymentTokenChange={(paymentToken) => setPaymentToken(paymentToken)}
+                    transaction={transaction}
+                    handleChange={(value) => setApproveAmount(value)}
+                />
+            )
+        }
+
+        if (transaction?.formattedTransaction?.popup?.erc721Spender) {
+            return (
+                <UnlockERC721Token
+                    onConfigChange={handleChangeGasConfig}
+                    paymentToken={paymentToken}
+                    onPaymentTokenChange={(paymentToken) => setPaymentToken(paymentToken)}
+                    transaction={transaction}
+                />
+            )
         }
 
         return (
@@ -307,7 +331,7 @@ const Interaction = memo(function Interaction() {
 
     return (
         <Box flex={1} display="flex" flexDirection="column">
-            <Box p={2} display="flex" flexDirection="column" flex={1}>
+            <Box p={2} display="flex" flexDirection="column" flex={1} maxHeight="458px" overflow="auto">
                 {content}
                 {currentRequest && !signRequest.includes(currentRequest?.request.arguments.method) ? (
                     <Box
@@ -331,7 +355,7 @@ const Interaction = memo(function Interaction() {
                 {expand ? (
                     <Box
                         className={classes.transactionDetail}
-                        style={{ marginBottom: expand && messages.length <= 1 ? 72 : 16 }}>
+                        style={{ marginBottom: expand && messages.length <= 1 ? 0 : 16 }}>
                         {transaction?.formattedTransaction?.popup?.spender && approveAmount ? (
                             <>
                                 <Box display="flex" alignItems="center" columnGap={1.25}>

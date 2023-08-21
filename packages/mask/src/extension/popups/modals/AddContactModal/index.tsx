@@ -1,18 +1,19 @@
 import { forwardRef, useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { ActionButton, MaskTextField, makeStyles } from '@masknet/theme'
+import { ActionButton, MaskTextField, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { alpha } from '@mui/system'
 import { buttonClasses } from '@mui/material/Button'
 import type { SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { EmojiAvatar } from '@masknet/shared'
 import { isValidAddress } from '@masknet/web3-shared-evm'
-import { Typography } from '@mui/material'
+import { IconButton, InputAdornment, Typography, useTheme } from '@mui/material'
 import { Web3State } from '@masknet/web3-providers'
-import { useContacts } from '@masknet/web3-hooks-base'
+import { useContacts, useWallets } from '@masknet/web3-hooks-base'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { isSameAddress } from '@masknet/web3-shared-base'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -62,11 +63,17 @@ interface AddContactModalProps extends BottomDrawerProps {
 function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...rest }: AddContactModalProps) {
     const { classes, cx } = useStyles()
     const { t } = useI18N()
+    const theme = useTheme()
 
     const contacts = useContacts()
+    const wallets = useWallets()
+
+    const { showSnackbar } = usePopupCustomSnackbar()
 
     const addressError = Boolean(address) && !isValidAddress(address)
-    const nameExistError = Boolean(contacts?.find((contact) => contact.name === name))
+    const nameExistError = Boolean(
+        contacts?.find((contact) => contact.name === name) || wallets.find((wallet) => wallet.name === name),
+    )
     const addressExistError = useMemo(
         () => contacts.some((contact) => isSameAddress(address, contact.address)),
         [contacts, address],
@@ -74,6 +81,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
 
     const [{ loading }, addContact] = useAsyncFn(async () => {
         await Web3State.state.AddressBook?.addContact({ name, address })
+        showSnackbar(t('wallet_add_contact_successfully'))
         onConfirm?.()
     }, [name, address, onConfirm, t])
 
@@ -92,7 +100,10 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
                 placeholder={t('wallet_name_wallet')}
                 className={classes.input}
                 value={name}
-                onChange={(ev) => setName(ev.target.value)}
+                onChange={(ev) => {
+                    if (name.length > 18) return
+                    setName(ev.target.value)
+                }}
                 error={nameExistError}
                 autoFocus
             />
@@ -103,6 +114,16 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
                 value={address}
                 onChange={(ev) => setAddress(ev.target.value)}
                 error={addressError || addressExistError}
+                InputProps={{
+                    endAdornment:
+                        addressError || addressExistError ? (
+                            <InputAdornment position="end">
+                                <IconButton onClick={() => setAddress('')} edge="end" size="small">
+                                    <Icons.Close size={18} color={theme.palette.maskColor.danger} />
+                                </IconButton>
+                            </InputAdornment>
+                        ) : null,
+                }}
             />
             {validationMessage ? <Typography className={classes.helperText}>{validationMessage}</Typography> : null}
             <div className={classes.buttonGroup}>
@@ -113,7 +134,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
                     loading={loading}
                     onClick={addContact}
                     className={classes.button}
-                    disabled={addressError || nameExistError || !name.trim() || !address}>
+                    disabled={addressError || nameExistError || addressExistError || !name.trim() || !address}>
                     {t('confirm')}
                 </ActionButton>
             </div>

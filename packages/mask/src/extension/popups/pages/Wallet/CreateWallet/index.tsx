@@ -81,6 +81,9 @@ const CreateWallet = memo(function CreateWallet() {
                             placeholder={t('popups_wallet_enter_your_wallet_name')}
                             error={!!errorMessage || !!errors.name?.message}
                             helperText={errorMessage || errors.name?.message}
+                            inputProps={{
+                                maxLength: 18,
+                            }}
                         />
                     )}
                 />

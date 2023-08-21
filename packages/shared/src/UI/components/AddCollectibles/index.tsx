@@ -328,7 +328,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
             <Stack className={classes.toolbar} direction="row" justifyContent="center">
                 <ActionButton
                     fullWidth
-                    startIcon={<Icons.Wallet size={18} />}
+                    startIcon={<Icons.Avatar size={18} />}
                     disabled={disabled}
                     onClick={handleClose}>
                     {t.add_collectibles()}

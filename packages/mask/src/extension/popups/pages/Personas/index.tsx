@@ -1,16 +1,9 @@
 import { lazy, memo, useEffect } from 'react'
 import { useMount } from 'react-use'
 import { Route, Routes, useNavigate, useSearchParams } from 'react-router-dom'
-import {
-    CrossIsolationMessages,
-    NetworkPluginID,
-    PopupModalRoutes,
-    PopupRoutes,
-    relativeRouteOf,
-} from '@masknet/shared-base'
-
+import { CrossIsolationMessages, PopupModalRoutes, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { PersonaHeader } from './components/PersonaHeader/index.js'
-import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { useModalNavigate } from '../../components/index.js'
 
 const Home = lazy(() => import(/* webpackPreload: true */ './Home/index.js'))
@@ -34,6 +27,7 @@ const Persona = memo(() => {
         return CrossIsolationMessages.events.popupWalletConnectEvent.on(({ open, uri }) => {
             if (!open || location.href.includes(PopupRoutes.WalletConnect)) return
             navigate(PopupRoutes.WalletConnect, {
+                replace: true,
                 state: {
                     uri,
                 },
@@ -50,20 +44,19 @@ const Persona = memo(() => {
     }, [params])
 
     return (
-        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+        <DefaultWeb3ContextProvider>
             <PersonaHeader />
             <Routes>
                 <Route path={r(PopupRoutes.Logout)} element={<Logout />} />
                 <Route path={r(PopupRoutes.PersonaSignRequest)} element={<PersonaSignRequest />} />
                 <Route path={r(PopupRoutes.AccountDetail)} element={<AccountDetail />} />
-
                 <Route path={r(PopupRoutes.ConnectWallet)} element={<ConnectWallet />} />
                 <Route path={r(PopupRoutes.WalletConnect)} element={<WalletConnect />} />
                 <Route path={r(PopupRoutes.ExportPrivateKey)} element={<ExportPrivateKey />} />
                 <Route path={r(PopupRoutes.PersonaAvatarSetting)} element={<PersonaAvatarSetting />} />
                 <Route path="*" element={<Home />} />
             </Routes>
-        </Web3ContextProvider>
+        </DefaultWeb3ContextProvider>
     )
 })
 

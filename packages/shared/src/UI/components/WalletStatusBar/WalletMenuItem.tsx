@@ -1,7 +1,6 @@
 import { memo } from 'react'
 import { Button, ListItemIcon, MenuItem } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useSharedI18N } from '../../../locales/index.js'
 import { resolveNextID_NetworkPluginID } from '@masknet/web3-shared-base'
 import type { NetworkPluginID, NextIDPlatform } from '@masknet/shared-base'
 import { useWalletName } from './hooks/useWalletName.js'
@@ -14,8 +13,9 @@ import {
     useWeb3Others,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { WalletDescription, type WalletDescriptionProps } from './WalletDescription.js'
 import { makeStyles } from '@masknet/theme'
+import { WalletDescription, type WalletDescriptionProps } from './WalletDescription.js'
+import { useSharedI18N } from '../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {

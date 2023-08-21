@@ -271,7 +271,7 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
 
     const deleteContact = useCallback(() => {
         return DeleteContactModal.openAndWaitForClose({
-            title: t('wallet_edit_contact'),
+            title: t('wallet_delete_contact'),
             address,
             name,
         })

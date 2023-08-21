@@ -1,9 +1,8 @@
 import { usePriceLineChart, type Dimension, useDimension } from '@masknet/shared'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { useRef, type HTMLProps, useMemo } from 'react'
-import { useContainer } from 'unstated-next'
-import { WalletContext } from '../hooks/useWalletContext.js'
 import { multipliedBy } from '@masknet/web3-shared-base'
+import { useCurrencyType, useFiatCurrencyRate } from '@masknet/web3-hooks-base'
 
 export const DIMENSION: Dimension = {
     top: 32,
@@ -20,7 +19,8 @@ interface TrendingChartProps extends HTMLProps<SVGSVGElement> {
 
 export function TrendingChart({ stats, ...props }: TrendingChartProps) {
     const svgRef = useRef<SVGSVGElement>(null)
-    const { currencyType, fiatCurrencyRate } = useContainer(WalletContext)
+    const currencyType = useCurrencyType()
+    const { data: fiatCurrencyRate = 1 } = useFiatCurrencyRate()
     const chartData = useMemo(
         () =>
             stats.map(([date, price]) => ({

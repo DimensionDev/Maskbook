@@ -31,6 +31,7 @@ export function useZrx(
         if (!providers.includes(TradeProvider.ZRX)) return
         return new Zrx()
     }, [network])
+
     return useCustomBlockBeatRetry<NetworkPluginID.PLUGIN_EVM, TraderAPI.TradeInfo | undefined | null>(
         NetworkPluginID.PLUGIN_EVM,
         async () => {

@@ -10,8 +10,8 @@ import {
     useSaveStringStorage,
 } from '@masknet/plugin-avatar'
 import { getAvatarId } from '../../utils/user.js'
-import { InjectedDialog } from '@masknet/shared'
-import { DialogContent } from '@mui/material'
+import { InjectedDialog, SelectProviderModal } from '@masknet/shared'
+import { Button, DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Instagram } from '@masknet/web3-providers'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
@@ -21,6 +21,12 @@ import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()(() => ({
     root: {},
+    wallet: {
+        height: 120,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 }))
 
 export function NFTAvatarSettingDialog() {
@@ -79,15 +85,24 @@ export function NFTAvatarSettingDialog() {
         return MaskMessages.events.nftAvatarSettingDialogUpdated.on((data) => setOpen(data.open))
     })
 
+    const onClick = useCallback(() => {
+        SelectProviderModal.open()
+    }, [])
     return (
         <InjectedDialog keepMounted open={open} onClose={onClose} title={t('set_nft_profile_photo')}>
             <DialogContent style={{ padding: 16 }}>
-                <NFTAvatar
-                    onChange={onChange}
-                    classes={{
-                        root: classes.root,
-                    }}
-                />
+                {account ? (
+                    <NFTAvatar
+                        onChange={onChange}
+                        classes={{
+                            root: classes.root,
+                        }}
+                    />
+                ) : (
+                    <div className={classes.wallet}>
+                        <Button onClick={onClick}>{t('connect_your_wallet')}</Button>
+                    </div>
+                )}
             </DialogContent>
         </InjectedDialog>
     )

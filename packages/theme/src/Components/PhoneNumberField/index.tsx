@@ -41,6 +41,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 8,
         boxSizing: 'border-box',
         marginBottom: theme.spacing(1.5),
+        backgroundColor: theme.palette.maskColor.bottom,
     },
     itemText: {
         fontSize: 14,
@@ -52,6 +53,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(2),
         borderRadius: 24,
         backgroundColor: theme.palette.maskColor.bottom,
+        backgroundImage: 'none',
         boxShadow:
             theme.palette.mode === 'light'
                 ? '0px 4px 30px 0px rgba(0, 0, 0, 0.10)'
@@ -59,12 +61,14 @@ const useStyles = makeStyles()((theme) => ({
     },
     autocompletePaper: {
         boxShadow: 'none',
+        backgroundColor: theme.palette.maskColor.bottom,
     },
     listbox: {
         border: 'none',
         boxShadow: 'none',
         maxHeight: 320,
         marginTop: theme.spacing(1),
+        backgroundColor: theme.palette.maskColor.bottom,
         '&::-webkit-scrollbar': {
             display: 'none',
         },
@@ -188,29 +192,28 @@ export function PhoneNumberField({ value, error, placeholder, onBlur, onChange }
                     <Autocomplete<DialingRecord>
                         open
                         options={countries}
-                        classes={{ listbox: classes.listbox, paper: classes.autocompletePaper }}
-                        renderInput={(params) => {
-                            return (
-                                <MaskTextField
-                                    placeholder="Search Area"
-                                    value={keyword}
-                                    autoFocus
-                                    fullWidth
-                                    InputProps={{
-                                        ref: params.InputProps.ref,
-                                        style: { height: 40, borderRadius: 8, padding: 8 },
-                                        inputProps: { ...params.inputProps, style: { paddingLeft: 4 } },
-                                        startAdornment: <Icons.Search size={18} />,
-                                        endAdornment: keyword ? (
-                                            <Icons.Close size={18} onClick={() => setKeyword('')} />
-                                        ) : null,
-                                    }}
-                                    onChange={(event) => {
-                                        setKeyword(event.currentTarget.value)
-                                    }}
-                                />
-                            )
+                        classes={{
+                            listbox: classes.listbox,
+                            paper: classes.autocompletePaper,
                         }}
+                        renderInput={(params) => (
+                            <MaskTextField
+                                placeholder="Search Area"
+                                value={keyword}
+                                autoFocus
+                                fullWidth
+                                InputProps={{
+                                    ref: params.InputProps.ref,
+                                    style: { height: 40, borderRadius: 8, padding: 8 },
+                                    inputProps: { ...params.inputProps, style: { paddingLeft: 4 } },
+                                    startAdornment: <Icons.Search size={18} />,
+                                    endAdornment: keyword ? (
+                                        <Icons.Close size={18} onClick={() => setKeyword('')} />
+                                    ) : null,
+                                }}
+                                onChange={(event) => setKeyword(event.currentTarget.value)}
+                            />
+                        )}
                         renderTags={() => null}
                         getOptionLabel={(option) => option.country_region}
                         PopperComponent={PopperComponent as unknown as typeof Popper}

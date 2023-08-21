@@ -3,12 +3,18 @@ import { CopyButton, ProgressiveText, ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
 import { useAccount, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
-import { ChainbaseHistory, ExplorerResolver } from '@masknet/web3-providers'
+import { ChainbaseHistory, ExplorerResolver, Web3 } from '@masknet/web3-providers'
 import { chainbase } from '@masknet/web3-providers/helpers'
-import { TransactionStatusType, formatBalance, multipliedBy, trimZero } from '@masknet/web3-shared-base'
-import { formatHash, formatWeiToEther, formatWeiToGwei } from '@masknet/web3-shared-evm'
+import { TransactionStatusType, formatBalance, isSameAddress, trimZero } from '@masknet/web3-shared-base'
+import {
+    formatHash,
+    formatWeiToEther,
+    formatWeiToGwei,
+    type Transaction as EvmTransaction,
+} from '@masknet/web3-shared-evm'
 import { Box, Link, Typography, alpha } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
+import { BigNumber } from 'bignumber.js'
 import { capitalize } from 'lodash-es'
 import { memo, useCallback } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
@@ -23,6 +29,7 @@ const useStyles = makeStyles()((theme) => ({
     statusTitle: {
         fontSize: 14,
         fontWeight: 700,
+        textTransform: 'capitalize',
     },
     status: {
         padding: theme.spacing(1),
@@ -132,7 +139,8 @@ export const TransactionDetail = memo(function TransactionDetail() {
     const { t } = useI18N()
     const { classes, cx, theme } = useStyles()
     const location = useLocation()
-    const transactionState = location.state.transaction as TransactionState
+    const transactionState = location.state.transaction as TransactionState | undefined
+    const candidateState = location.state.candidate as EvmTransaction | undefined
     const isRecentTx = transactionState && 'candidates' in transactionState
     const transaction = isRecentTx ? transactionState.candidates[transactionState.id] : transactionState
     const account = useAccount()
@@ -149,8 +157,19 @@ export const TransactionDetail = memo(function TransactionDetail() {
         enabled: !!transaction,
         queryKey: ['chainbase', 'transaction', transaction?.chainId, transactionId, blockNumber],
         queryFn: async () => {
-            if (!chainId || !transactionId) return
+            if (!chainId || !transactionId) return null
             return ChainbaseHistory.getTransaction(chainId, transactionId, blockNumber)
+        },
+    })
+
+    const { data: txInput, isLoading: loadingTxInput } = useQuery({
+        enabled:
+            !!transaction && !loadingTx && !tx?.input && transactionState?.type === 'transfer' && !candidateState?.data,
+        queryKey: [transaction?.chainId, transactionId],
+        queryFn: async () => {
+            if (!chainId || !transactionId) return
+            const tx = await Web3.getTransaction(transactionId, { chainId })
+            return tx?.input
         },
     })
 
@@ -185,17 +204,23 @@ export const TransactionDetail = memo(function TransactionDetail() {
         [SUCCEED]: t('transaction_success'),
         [NOT_DEPEND]: t('transaction_pending'),
     }
-    const status = chainbase.normalizeTxStatus(tx !== undefined ? tx.status : (transactionState?.status as 0 | 1))
+    const status = tx ? chainbase.normalizeTxStatus(tx.status) : transactionState?.status!
     const statusPending = status === undefined && loadingTx
-    const isOut = transaction.from === account
+    const isOut = isSameAddress(transaction.from, account)
     const link = transactionId ? ExplorerResolver.transactionLink(chainId!, transactionId) : undefined
 
     const gasUsedPercent = tx ? (tx.gas_used * 100) / tx.gas : 0
-    const gasFee = tx ? formatWeiToEther(multipliedBy(tx.gas_price, tx.gas)) : undefined
+    const gasFeeInState = !isRecentTx && !tx ? transactionState?.fee?.eth : undefined
+    const gasFee = tx ? formatWeiToEther(tx.tx_fee) : gasFeeInState ? new BigNumber(gasFeeInState) : undefined
     const gasCost = gasFee && nativeTokenPrice ? gasFee.times(nativeTokenPrice) : undefined
 
-    const receiverAddress = parseReceiverFromERC20TransferInput(tx?.input)
+    const receiverAddress = parseReceiverFromERC20TransferInput(candidateState?.data || tx?.input || txInput)
+    const toAddress = receiverAddress || transaction.to || tx?.to_address
 
+    const loadingToAddress =
+        transactionState?.type === 'transfer'
+            ? !receiverAddress && (loadingTx || loadingTxInput)
+            : !transaction.to && loadingTx
     return (
         <>
             <Box p={2} overflow="auto" data-hide-scrollbar>
@@ -244,11 +269,8 @@ export const TransactionDetail = memo(function TransactionDetail() {
                 </Box>
                 <Box className={classes.field}>
                     <Typography className={classes.fieldName}>{t('transaction_to')}</Typography>
-                    <ProgressiveText
-                        className={classes.fieldValue}
-                        component="div"
-                        loading={!transaction.to && loadingTx}>
-                        <ReversedAddress address={(receiverAddress || transaction.to || tx?.to_address) as string} />
+                    <ProgressiveText className={classes.fieldValue} component="div" loading={loadingToAddress}>
+                        <ReversedAddress address={toAddress as string} />
                     </ProgressiveText>
                 </Box>
                 <Typography variant="h2" className={classes.sectionName}>
@@ -286,7 +308,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
                 <Box className={classes.field}>
                     <Typography className={classes.fieldName}>{t('transaction_gas_price')}</Typography>
                     <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
-                        {tx ? formatWeiToGwei(tx.gas_price).toFixed(6) : ''}
+                        {tx ? formatWeiToGwei(tx.effective_gas_price).toFixed(6) : ''}
                     </ProgressiveText>
                 </Box>
                 {tx?.max_priority_fee_per_gas ? (

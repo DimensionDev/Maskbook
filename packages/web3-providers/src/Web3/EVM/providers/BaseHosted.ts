@@ -1,7 +1,8 @@
 import { uniqWith } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import { delay } from '@masknet/kit'
-import type { Plugin } from '@masknet/plugin-infra/content-script'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
+import type { Plugin } from '@masknet/plugin-infra'
 import {
     EMPTY_LIST,
     PersistentStorages,
@@ -154,6 +155,8 @@ export class BaseHostedProvider
 
         if (isNameExists) throw new Error('The wallet name already exists.')
 
+        if (!this.walletStorage?.wallets.value.find((x) => isSameAddress(x.address, address))?.owner)
+            await WalletServiceRef.value.renameWallet(address, name)
         await this.updateWallet(address, {
             name,
         })

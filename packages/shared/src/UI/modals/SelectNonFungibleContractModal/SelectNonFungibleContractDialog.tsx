@@ -146,6 +146,14 @@ export const SelectNonFungibleContractDialog = memo(
             await Token?.addNonFungibleCollection?.(account, contract, tokenIds)
         }, [account, pluginID, chainId])
 
+        const handleSelectCollection = useCallback(
+            (collection: NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) => {
+                onSubmit?.(collection)
+                onClose?.()
+            },
+            [onClose],
+        )
+
         return (
             <InjectedDialog
                 titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
@@ -182,10 +190,7 @@ export const SelectNonFungibleContractDialog = memo(
                                     className={classes.contractItem}
                                     pluginID={pluginID}
                                     collection={collection}
-                                    onSelect={(collection) => {
-                                        onSubmit?.(collection)
-                                        onClose?.()
-                                    }}
+                                    onSelect={handleSelectCollection}
                                 />
                             ))}
                         </List>

@@ -165,8 +165,6 @@ export namespace Plugin.Shared {
 
         /** Fetch json from background */
         fetchJSON<T>(input: RequestInfo | URL, init?: RequestInit): Promise<T>
-        /** Open popup connect window */
-        openPopupConnectWindow(): Promise<void>
 
         /** Open walletconnect dialog */
         openWalletConnectDialog(uri: string): Promise<void>

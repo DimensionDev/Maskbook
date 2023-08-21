@@ -1,6 +1,7 @@
 import { createLookupTableResolver } from '@masknet/shared-base'
 import { isZero } from '@masknet/web3-shared-base'
 import { BigNumber } from 'bignumber.js'
+import { memoize } from 'lodash-es'
 import { SchemaType } from '../types/index.js'
 import { checksumAddress, isValidAddress } from './address.js'
 import { isEnsSubdomain, isValidDomain } from './isValidDomain.js'
@@ -9,12 +10,15 @@ export function formatAmount(amount: BigNumber.Value = '0', decimals = 0) {
     return new BigNumber(amount).shiftedBy(decimals).toFixed()
 }
 
-export function formatEthereumAddress(address: string, size = 0) {
-    if (!isValidAddress(address)) return address
-    const address_ = checksumAddress(address)
-    if (size === 0 || size >= 20) return address_
-    return `${address_.slice(0, Math.max(0, 2 + size))}...${address_.slice(-size)}`
-}
+export const formatEthereumAddress: (address: string, size?: number) => string = memoize(
+    function formatEthereumAddress(address: string, size = 0) {
+        if (!isValidAddress(address)) return address
+        const address_ = checksumAddress(address)
+        if (size === 0 || size >= 20) return address_
+        return `${address_.slice(0, Math.max(0, 2 + size))}...${address_.slice(-size)}`
+    },
+    (addr, size) => `${addr}.${size}`,
+)
 
 export function formatHash(hash: string, size = 0) {
     if (size === 0) return hash

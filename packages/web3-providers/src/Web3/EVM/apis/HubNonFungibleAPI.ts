@@ -18,12 +18,10 @@ import { ApprovalAPI } from '../../../Approval/index.js'
 import { ChainbaseNonFungibleTokenAPI } from '../../../Chainbase/index.js'
 import { GemAPI } from '../../../Gem/index.js'
 import { GoPlusAuthorizationAPI } from '../../../GoPlusLabs/index.js'
-import { LooksRareAPI } from '../../../LooksRare/index.js'
 import { NFTScanNonFungibleTokenAPI_EVM } from '../../../NFTScan/index.js'
 import { OpenSeaAPI } from '../../../OpenSea/index.js'
 import { R2D2TokenListAPI } from '../../../R2D2/index.js'
 import { RabbyAPI } from '../../../Rabby/index.js'
-import { RaribleAPI } from '../../../Rarible/index.js'
 import { SimpleHashAPI_EVM } from '../../../SimpleHash/index.js'
 import { X2Y2API } from '../../../X2Y2/index.js'
 import { ZerionNonFungibleTokenAPI } from '../../../Zerion/index.js'
@@ -44,12 +42,10 @@ export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<
     private ChainbaseNonFungibleToken = new ChainbaseNonFungibleTokenAPI()
     private Gem = new GemAPI()
     private GoPlusAuthorization_ = new GoPlusAuthorizationAPI()
-    private LooksRare = new LooksRareAPI()
     private NFTScanNonFungibleTokenEVM = new NFTScanNonFungibleTokenAPI_EVM()
     private OpenSea = new OpenSeaAPI()
     private R2D2TokenList_ = new R2D2TokenListAPI()
     private Rabby_ = new RabbyAPI()
-    private Rarible = new RaribleAPI()
     private SimpleHashEVM = new SimpleHashAPI_EVM()
     private X2Y2 = new X2Y2API()
     private ZerionNonFungibleToken = new ZerionNonFungibleTokenAPI()
@@ -69,11 +65,9 @@ export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<
                 [SourceType.Chainbase]: this.ChainbaseNonFungibleToken,
                 [SourceType.Zerion]: this.ZerionNonFungibleToken,
                 [SourceType.NFTScan]: this.NFTScanNonFungibleTokenEVM,
-                [SourceType.Rarible]: this.Rarible,
                 [SourceType.OpenSea]: this.OpenSea,
                 [SourceType.Approval]: this.Approval_,
                 [SourceType.Alchemy_EVM]: this.AlchemyEVM,
-                [SourceType.LooksRare]: this.LooksRare,
                 [SourceType.Zora]: this.Zora,
                 [SourceType.Gem]: this.Gem,
                 [SourceType.GoPlus]: this.GoPlusAuthorization_,
@@ -87,10 +81,8 @@ export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<
                       this.SimpleHashEVM,
                       this.NFTScanNonFungibleTokenEVM,
                       this.ZerionNonFungibleToken,
-                      this.Rarible,
                       this.OpenSea,
                       this.AlchemyEVM,
-                      this.LooksRare,
                       this.Zora,
                       this.Gem,
                       this.Approval_,
@@ -102,10 +94,8 @@ export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<
                       this.SimpleHashEVM,
                       this.NFTScanNonFungibleTokenEVM,
                       this.ZerionNonFungibleToken,
-                      this.Rarible,
                       this.AlchemyEVM,
                       this.OpenSea,
-                      this.LooksRare,
                       this.Zora,
                       this.Approval_,
                       this.Gem,

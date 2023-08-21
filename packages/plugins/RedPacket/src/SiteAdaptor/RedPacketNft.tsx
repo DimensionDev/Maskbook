@@ -10,11 +10,10 @@ import {
     NFTFallbackImage,
     TransactionConfirmModal,
 } from '@masknet/shared'
-import { useChainContext, useNetworkContext, useNonFungibleAsset } from '@masknet/web3-hooks-base'
-import { NetworkResolver } from '@masknet/web3-providers'
+import { useChainContext, useNetwork, useNetworkContext, useNonFungibleAsset } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
 import { usePostLink, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { NetworkPluginID, CrossIsolationMessages, isTwitter, isFacebook } from '@masknet/shared-base'
+import { NetworkPluginID, CrossIsolationMessages, Sniffings } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { Stack } from '@mui/system'
 import { useI18N } from '../locales/index.js'
@@ -189,7 +188,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const t = useI18N()
 
     const { pluginID } = useNetworkContext()
-    const { account, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>(
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>(
         pluginID === NetworkPluginID.PLUGIN_EVM ? {} : { account: '' },
     )
     const { share } = useSiteAdaptorContext()
@@ -210,18 +209,19 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     useEffect(() => {
         retryAvailability()
     }, [account])
+    const network = useNetwork(pluginID, payload.chainId)
 
     const outdated = !!(availability?.isClaimedAll || availability?.isCompleted || availability?.expired)
     const { classes, cx } = useStyles({ claimed: !!availability?.isClaimed, outdated })
     // #region on share
     const postLink = usePostLink()
     const shareText = useMemo(() => {
-        const isOnTwitter = isTwitter()
-        const isOnFacebook = isFacebook()
+        const isOnTwitter = Sniffings.is_twitter_page
+        const isOnFacebook = Sniffings.is_facebook_page
         const options = {
             sender: payload.senderName,
             payload: postLink.toString(),
-            network: NetworkResolver.networkName(networkType) || '',
+            network: network?.name || '',
             account_promote: t.account_promote({
                 context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
             }),
@@ -231,7 +231,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             return t.nft_share_claimed_message(options)
         }
         return t.nft_share_foreshow_message(options)
-    }, [availability?.isClaimed, t])
+    }, [availability?.isClaimed, t, network?.name])
 
     const onShare = useCallback(() => {
         if (shareText) share?.(shareText)
@@ -261,7 +261,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             title: t.lucky_drop(),
             share,
         })
-    }, [nonFungibleToken, availability?.claimed_id, availability?.token_address, share])
+    }, [nonFungibleToken, availability?.claimed_id, availability?.token_address, share, shareText])
 
     const openNFTDialog = useCallback(() => {
         if (!payload.chainId || !pluginID || !availability?.claimed_id || !availability?.token_address) return

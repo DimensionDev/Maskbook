@@ -4,7 +4,7 @@ import { first } from 'lodash-es'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ECKeyIdentifier, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { useChainContext, useChainIdValid, useNetworks, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
-import { ProviderType, type ChainId } from '@masknet/web3-shared-evm'
+import { ProviderType, ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, Typography } from '@mui/material'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
@@ -130,6 +130,7 @@ const SelectWallet = memo(function SelectWallet() {
             <Box pt={1} pb={9} px={2} display="flex" flexDirection="column" rowGap="6px">
                 {wallets
                     .filter((x) => {
+                        if (x.owner && chainId !== ChainId.Matic) return false
                         if (!isVerifyWalletFlow && !isSettingNFTAvatarFlow) return true
                         return !x.owner
                     })

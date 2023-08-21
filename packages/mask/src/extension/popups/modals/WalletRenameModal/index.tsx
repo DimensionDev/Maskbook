@@ -9,6 +9,7 @@ import { ActionButton } from '@masknet/theme'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { Web3 } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
+import { useContacts } from '@masknet/web3-hooks-base'
 
 interface WalletRenameDrawerProps extends BottomDrawerProps {
     wallet?: Wallet
@@ -19,12 +20,20 @@ function WalletRenameDrawer({ wallet, ...rest }: WalletRenameDrawerProps) {
     const theme = useTheme()
     const [name, setName] = useState('')
     const [error, setError] = useState('')
+    const contacts = useContacts()
 
     const [{ loading }, handleClick] = useAsyncFn(async () => {
         if (!name || !wallet) return
         const _name = name.trim()
-        if (_name.length > 20 || _name.length < 3) {
+        if (_name.length > 18 || _name.length < 3) {
             setError(t('popups_wallet_settings_rename_tips'))
+            return
+        }
+
+        const nameExists = contacts.some((x) => x.name === _name)
+
+        if (nameExists) {
+            setError(t('popups_wallet_settings_name_exists'))
             return
         }
 
@@ -36,7 +45,7 @@ function WalletRenameDrawer({ wallet, ...rest }: WalletRenameDrawerProps) {
             setError((error as Error).message)
             return
         }
-    }, [name, wallet?.address])
+    }, [name, wallet?.address, contacts])
 
     return (
         <BottomDrawer {...rest}>

@@ -16,6 +16,7 @@ import {
     linearProgressClasses,
     selectClasses,
     filledInputClasses,
+    formHelperTextClasses,
 } from '@mui/material'
 import type { MaskColor } from './colors.js'
 
@@ -915,6 +916,9 @@ export const TextField = (mode: PaletteMode, colors: MaskColor) => ({
                     borderRadius: 8,
                     [`& .${filledInputClasses.root}`]: {
                         borderRadius: 8,
+                    },
+                    [`& .${formHelperTextClasses.root}`]: {
+                        marginLeft: 0,
                     },
                 },
             },

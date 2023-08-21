@@ -1,12 +1,12 @@
-import { EMPTY_LIST, NetworkPluginID, type SocialIdentity } from '@masknet/shared-base'
+import { useCallback } from 'react'
+import { useAsyncRetry } from 'react-use'
+import { EMPTY_LIST, type SocialIdentity } from '@masknet/shared-base'
 import { useDialogStacking } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { DSearch } from '@masknet/web3-providers'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import { SearchResultType, SourceType } from '@masknet/web3-shared-base'
-import { useCallback } from 'react'
-import { useAsyncRetry } from 'react-use'
 import { TrendingPopper } from './TrendingPopper.js'
 import { TrendingView } from './TrendingView.js'
 import { TrendingViewProvider } from './context.js'
@@ -40,9 +40,9 @@ export function TagInspector() {
     )
     const { stack } = useDialogStacking()
     return (
-        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+        <DefaultWeb3ContextProvider>
             <TrendingPopper locked={stack.length > 0}>{createTrendingView}</TrendingPopper>
-        </Web3ContextProvider>
+        </DefaultWeb3ContextProvider>
     )
 }
 

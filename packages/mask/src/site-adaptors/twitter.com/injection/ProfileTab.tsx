@@ -266,10 +266,10 @@ export function injectProfileTabAtTwitter(signal: AbortSignal) {
                 shadowRootDelegatesFocus: false,
             })
             attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(
-                <>
+                <div style={{ display: 'flex' }}>
                     <ProfileTabForTokenAndPersona />
                     <ProfileTabForDAO />
-                </>,
+                </div>,
             )
             tabInjected = true
         }

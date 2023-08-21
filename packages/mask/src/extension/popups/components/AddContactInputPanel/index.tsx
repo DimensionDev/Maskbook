@@ -1,11 +1,12 @@
-import { memo, useCallback } from 'react'
-import { Box, Typography, useTheme, type BoxProps } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { MaskTextField, makeStyles } from '@masknet/theme'
+import { type NetworkPluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
-import { ExplorerResolver } from '@masknet/web3-providers'
+import { MaskTextField, makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { ExplorerResolver } from '@masknet/web3-providers'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { Box, Typography, useTheme, type BoxProps } from '@mui/material'
+import { memo, useCallback, useMemo } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { ContactsContext } from '../../hook/useContactsContext.js'
 import { AddContactModal } from '../../modals/modals.js'
@@ -78,6 +79,8 @@ const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, ...p
         address,
         userInput,
         setUserInput,
+        contacts,
+        wallets,
         inputValidationMessage: addressValidationMessage,
         inputWarningMessage,
     } = ContactsContext.useContainer()
@@ -89,11 +92,16 @@ const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, ...p
         return AddContactModal.openAndWaitForClose({
             title: t('wallet_add_contact'),
             address,
-            name: userInput,
+            name: '',
         })
     }, [address, userInput])
 
-    const addable = !addressValidationMessage && (address || userInput)
+    const isAdded = useMemo(
+        () => [...contacts, ...wallets].some((x) => isSameAddress(address, x.address)),
+        [contacts, wallets, address],
+    )
+
+    const addable = !addressValidationMessage && (address || userInput) && !isAdded
     const shouldShowAddress = !!address && address !== userInput
 
     return (
