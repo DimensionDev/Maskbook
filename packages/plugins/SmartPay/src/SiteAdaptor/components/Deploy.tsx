@@ -140,7 +140,7 @@ export function Deploy({ open }: { open: boolean }) {
 
     const { signer } = SmartPayContext.useContainer()
     const { signWallet, signPersona } = signer || {}
-    const maskProviderDescriptor = useProviderDescriptor(NetworkPluginID.PLUGIN_EVM, ProviderType.MaskWallet)
+    const providerDescriptor = useProviderDescriptor(NetworkPluginID.PLUGIN_EVM, ProviderType.MaskWallet)
     const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const currentVisitingProfile = useLastRecognizedIdentity()
 
@@ -311,9 +311,9 @@ export function Deploy({ open }: { open: boolean }) {
                     <Box className={classes.walletStatus}>
                         <WalletDescription
                             pending={false}
-                            providerIcon={maskProviderDescriptor?.icon}
+                            providerIcon={providerDescriptor?.icon}
                             networkIcon={polygonDescriptor?.icon}
-                            iconFilterColor={maskProviderDescriptor?.iconFilterColor}
+                            iconFilterColor={providerDescriptor?.iconFilterColor}
                             name={signWallet?.name}
                             formattedAddress={
                                 signWallet?.address ? formatEthereumAddress(signWallet.address, 4) : undefined

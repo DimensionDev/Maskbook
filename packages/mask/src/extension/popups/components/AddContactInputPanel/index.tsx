@@ -92,7 +92,7 @@ const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, ...p
         return AddContactModal.openAndWaitForClose({
             title: t('wallet_add_contact'),
             address,
-            name: userInput,
+            name: '',
         })
     }, [address, userInput])
 
