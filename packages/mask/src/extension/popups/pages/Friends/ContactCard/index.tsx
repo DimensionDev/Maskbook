@@ -16,9 +16,10 @@ import { attachNextIDToProfile } from '../../../../../utils/utils.js'
 import { ConnectedAccounts } from './ConnectedAccounts/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import Services from '../../../../service.js'
-import { queryClient, useEverSeen } from '@masknet/shared-base-ui'
+import { useEverSeen } from '@masknet/shared-base-ui'
 import { useFriendProfiles } from '../../../hook/useFriendProfiles.js'
 import { type UseQueryResult, type RefetchOptions } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -95,6 +96,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
     const { currentPersona } = PersonaContext.useContainer()
     const { t } = useI18N()
     const profiles = useFriendProfiles(seen, nextId, profile?.userId)
+    const queryClient = useQueryClient()
     const handleAddFriend = useCallback(async () => {
         if (!currentPersona) return
         const twitter = profiles?.find((p) => p.platform === NextIDPlatform.Twitter)

@@ -5,6 +5,7 @@ import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js
 import { useModalNavigate, NormalHeader } from '../../components/index.js'
 import { FriendsDetail } from './Detail/index.js'
 import { RestorableScrollContext } from '@masknet/shared'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const Home = lazy(() => import(/* webpackPreload: true */ './Home/index.js'))
 const r = relativeRouteOf(PopupRoutes.Friends)
@@ -25,10 +26,12 @@ const Contacts = memo(function Contacts() {
         <Suspense fallback={<LoadingPlaceholder />}>
             {matchDetail ? null : <NormalHeader />}
             <RestorableScrollContext.Provider>
-                <Routes>
-                    <Route path="*" element={<Home />} />
-                    <Route path={`${r(PopupRoutes.FriendsDetail)}/:id?`} element={<FriendsDetail />} />
-                </Routes>
+                <QueryClientProvider client={new QueryClient()}>
+                    <Routes>
+                        <Route path="*" element={<Home />} />
+                        <Route path={`${r(PopupRoutes.FriendsDetail)}/:id?`} element={<FriendsDetail />} />
+                    </Routes>
+                </QueryClientProvider>
             </RestorableScrollContext.Provider>
         </Suspense>
     )
