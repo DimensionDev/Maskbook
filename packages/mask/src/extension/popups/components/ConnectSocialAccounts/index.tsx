@@ -1,8 +1,8 @@
+import { memo } from 'react'
+import { Box, Typography } from '@mui/material'
 import { SOCIAL_MEDIA_ROUND_ICON_MAPPING } from '@masknet/shared'
 import { SOCIAL_MEDIA_NAME, EnhanceableSite } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Box, Typography } from '@mui/material'
-import { memo } from 'react'
 
 const SOCIAL_MEDIA_ICON_FILTER_COLOR: Record<EnhanceableSite | string, string> = {
     [EnhanceableSite.Twitter]: 'drop-shadow(0px 6px 12px rgba(29, 161, 242, 0.20))',
@@ -11,7 +11,6 @@ const SOCIAL_MEDIA_ICON_FILTER_COLOR: Record<EnhanceableSite | string, string> =
     [EnhanceableSite.Instagram]: 'drop-shadow(0px 6px 12px rgba(246, 100, 16, 0.20))',
     [EnhanceableSite.OpenSea]: '',
     [EnhanceableSite.Mirror]: '',
-    [EnhanceableSite.Mask]: '',
     [EnhanceableSite.Localhost]: '',
 }
 
