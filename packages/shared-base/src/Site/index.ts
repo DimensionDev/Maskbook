@@ -56,22 +56,6 @@ export function getAgentType() {
     return 'unknown'
 }
 
-/**
- * @deprecated Use `Sniffings.is_twitter_page` instead
- */
-export function isTwitter() {
-    const url = new URL(window.location.href)
-    return url.origin === 'twitter.com'
-}
-
-/**
- * @deprecated Use `Sniffings.is_facebook_page` instead
- */
-export function isFacebook() {
-    const url = new URL(window.location.href)
-    return url.origin === 'facebook.com'
-}
-
 export function isEnhanceableSiteType() {
     return !!getEnhanceableSiteType()
 }
