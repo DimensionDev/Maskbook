@@ -241,8 +241,8 @@ importers:
         specifier: 2.27.5
         version: 2.27.5(@typescript-eslint/parser@6.1.0)(eslint@8.45.0)
       eslint-plugin-no-scrollbar:
-        specifier: ^1.0.0
-        version: 1.0.0(eslint@8.45.0)
+        specifier: ^1.0.5
+        version: 1.0.5(eslint@8.45.0)
       eslint-plugin-react:
         specifier: ^7.32.2
         version: 7.32.2(eslint@8.45.0)
@@ -278,7 +278,7 @@ importers:
         version: 3.0.2
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@5.2.0-dev.20230630)
+        version: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@4.9.5)
       typescript:
         specifier: 5.2.0-dev.20230630
         version: 5.2.0-dev.20230630
@@ -19844,8 +19844,8 @@ packages:
       - supports-color
     dev: false
 
-  /eslint-plugin-no-scrollbar@1.0.0(eslint@8.45.0):
-    resolution: {integrity: sha512-4rRkLOBFTK6AV53xFoxQfLO2adt779URQ1KvhoHLg5UnDGQ9X/MS1cAejZjx7sAZfnvi/Jj6SuWKqU1gOwDDcA==}
+  /eslint-plugin-no-scrollbar@1.0.5(eslint@8.45.0):
+    resolution: {integrity: sha512-0pq0HwNieRos65HcyOskn2MfJelmaxGZXrLssLQ4PNXAA3BazAG3z0DBqFvII018PeCpoFam/SafCEEH1Ma51w==}
     peerDependencies:
       eslint: ^8.47.0
     dependencies:
@@ -22015,7 +22015,7 @@ packages:
       solc: 0.7.3(debug@4.3.4)
       source-map-support: 0.5.21
       stacktrace-parser: 0.1.10
-      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@5.2.0-dev.20230630)
+      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@4.9.5)
       tsort: 0.0.1
       typescript: 5.2.0-dev.20230630
       undici: 5.20.0
@@ -23922,7 +23922,7 @@ packages:
       pretty-format: 28.1.3
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@5.2.0-dev.20230630)
+      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@4.9.5)
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -27852,7 +27852,7 @@ packages:
     dependencies:
       lilconfig: 2.1.0
       postcss: 8.4.26
-      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@5.2.0-dev.20230630)
+      ts-node: 10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@4.9.5)
       yaml: 2.1.3
     dev: false
 
@@ -32079,7 +32079,6 @@ packages:
       typescript: 4.9.5
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: true
 
   /ts-node@10.9.1(@swc/core@1.3.70)(@types/node@20.4.2)(typescript@5.2.0-dev.20230630):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
@@ -32377,7 +32376,6 @@ packages:
     resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
     engines: {node: '>=4.2.0'}
     hasBin: true
-    dev: true
 
   /typescript@5.2.0-dev.20230630:
     resolution: {integrity: sha512-PpI4tXtyv86eAhapMWrJF5roAxswu022vmSjDRU7NzPqT5+DlBktIlDePOrBo7OUBWNVEiUfsWuoDNbq5Sjj6Q==}
@@ -34804,7 +34802,7 @@ time:
   /elliptic@6.5.4: '2021-02-02T18:22:21.969Z'
   /enquirer@2.3.6: '2020-07-02T13:00:19.453Z'
   /eslint-plugin-import@2.27.5: '2023-01-16T19:44:39.790Z'
-  /eslint-plugin-no-scrollbar@1.0.0: '2023-08-21T08:31:13.490Z'
+  /eslint-plugin-no-scrollbar@1.0.5: '2023-08-21T16:05:37.804Z'
   /eslint-plugin-react-hooks@4.6.0: '2022-06-14T19:46:28.829Z'
   /eslint-plugin-react@7.32.2: '2023-01-29T06:47:00.630Z'
   /eslint-plugin-tss-unused-classes@0.0.4: '2022-08-24T15:19:52.509Z'
