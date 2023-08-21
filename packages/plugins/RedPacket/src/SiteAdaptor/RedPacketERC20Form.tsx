@@ -211,7 +211,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     // #region gas
     const { account: publicKey } = useMemo(() => Web3.createAccount(), [])
     const contract_version = 4
-    const { value: params } = useCreateParams(creatingParams, contract_version, publicKey)
+    const { value: params } = useCreateParams(chainId, creatingParams, contract_version, publicKey)
     // #endregion
 
     // balance
