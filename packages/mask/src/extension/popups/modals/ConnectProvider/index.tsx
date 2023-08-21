@@ -1,15 +1,15 @@
 import { memo, useCallback, useMemo } from 'react'
-import { ActionModal, type ActionModalBaseProps, useModalNavigate } from '../../components/index.js'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useAsyncFn, useMount } from 'react-use'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { Box, Button, Typography } from '@mui/material'
+import { delay, timeout } from '@masknet/kit'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useNetworkContext, useProviderDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
 import { PopupModalRoutes, type NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
-import { delay, timeout } from '@masknet/kit'
-import { useAsyncFn, useMount } from 'react-use'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
+import { ActionModal, type ActionModalBaseProps, useModalNavigate } from '../../components/index.js'
+import { useI18N } from '../../../../utils/i18n-next-ui.js'
 
 interface StyleProps {
     loading: boolean
@@ -87,8 +87,9 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
     const provider = useProviderDescriptor<void, NetworkPluginID.PLUGIN_EVM>(pluginID, providerType)
 
     const providerExist = useMemo(() => {
+        if (!provider?.type) return false
         return Provider?.isReady(provider.type)
-    }, [provider.type, Provider])
+    }, [provider?.type, Provider])
 
     const handleClose = useCallback(() => {
         navigate(PopupRoutes.Personas, { replace: true })
@@ -99,6 +100,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
 
         const providerType = params.get('providerType') as ProviderType | undefined
         if (!providerType) return
+
         try {
             const connect = async () => {
                 // wait for web3 state init
@@ -161,9 +163,11 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
                       )}
             </Typography>
             <Box mt={4} p={1.5} display="flex" justifyContent="center" flexDirection="column" alignItems="center">
-                <Box className={classes.icon}>
-                    <img src={provider.icon} style={{ width: 32, height: 32 }} />
-                </Box>
+                {provider?.icon ? (
+                    <Box className={classes.icon}>
+                        <img src={provider.icon} style={{ width: 32, height: 32 }} />
+                    </Box>
+                ) : null}
                 {isTimeout ? (
                     <Button variant="roundedContained" size="small" sx={{ width: 84, mt: 1.5 }} onClick={handleConnect}>
                         {t('retry')}
