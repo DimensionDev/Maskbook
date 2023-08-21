@@ -1,6 +1,6 @@
 import { memo, useState, useCallback } from 'react'
 import { Icons } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { Box, Typography, Link, useTheme, ButtonBase as Button, Avatar } from '@mui/material'
 import {
     formatPersonaFingerprint,
@@ -20,6 +20,7 @@ import { useEverSeen } from '@masknet/shared-base-ui'
 import { useFriendProfiles } from '../../../hook/useFriendProfiles.js'
 import { type UseQueryResult, type RefetchOptions } from '@tanstack/react-query'
 import { useQueryClient } from '@tanstack/react-query'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -91,6 +92,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
     const theme = useTheme()
     const { classes } = useStyles()
     const navigate = useNavigate()
+    const { showSnackbar } = usePopupCustomSnackbar()
     const [local, setLocal] = useState(false)
     const [seen, ref] = useEverSeen<HTMLLIElement>()
     const { currentPersona } = PersonaContext.useContainer()
@@ -115,6 +117,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                 linkedTwitterNames: twitter ? [twitter.identity] : [],
             })
         }
+        showSnackbar(t('popups_encrypted_friends_added_successfully'), { variant: 'success' })
         setLocal(true)
         queryClient.invalidateQueries(['relation-records', rawPublicKey])
         queryClient.invalidateQueries(['friends', rawPublicKey])
@@ -147,7 +150,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                                 underline="none"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                href={`https://web3.bio/${nextId}`}
+                                href={urlcat('https://web3.bio/', { s: nextId })}
                                 className={classes.icon}>
                                 <Icons.LinkOut size={12} />
                             </Link>
