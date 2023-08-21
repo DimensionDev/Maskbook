@@ -278,7 +278,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
             </ListItemText>
 
             {transaction.type === 'approve' && approveAmount && approveToken ? (
-                <Typography className={classes.asset}>
+                <Typography className={classes.asset} component="div">
                     <strong className={classes.amount}>
                         {approveAmount === 'Infinite'
                             ? approveAmount
@@ -296,7 +296,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                             ? '<0.0001'
                             : trimZero(toFixed(token.amount, 4))
                         return (
-                            <Typography key={i} className={classes.asset}>
+                            <Typography key={i} className={classes.asset} component="div">
                                 <strong className={classes.amount}>{`${isSend ? '-' : '+'} ${amount} `}</strong>
                                 <TextOverflowTooltip title={token.symbol} PopperProps={popperProps}>
                                     <span className={classes.symbol}>{token.symbol}</span>
