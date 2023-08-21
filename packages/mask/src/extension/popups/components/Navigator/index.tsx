@@ -51,6 +51,7 @@ const BottomNavLink = memo<LinkProps>(function BottomNavLink({ children, to }) {
 export const Navigator = memo(function Navigator({ className, ...rest }: BoxProps) {
     const { classes, cx } = useStyle()
     const walletLink = useRef(use(WalletLinkContext)).current()
+
     const onOpenDashboardSettings = useCallback(async () => {
         await browser.tabs.create({
             active: true,
@@ -61,6 +62,7 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
         }
         await Services.Helper.removePopupWindow()
     }, [])
+
     useContext(HydrateFinished)()
 
     return (
