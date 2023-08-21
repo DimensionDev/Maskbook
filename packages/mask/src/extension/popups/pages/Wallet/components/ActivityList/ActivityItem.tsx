@@ -227,7 +227,6 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
         transaction.type === 'transfer' ? !receiverAddress && (loadingTx || loadingTxInput) : !toAddress && loadingTx
     const isOut = isSameAddress(fromAddress, account)
     const popperProps = useBoundedPopperProps()
-    if (transaction.type === 'approve') console.log({ transaction, tx })
     const approveAmount = parseAmountFromERC20ApproveInput(tx?.input ?? txInput)
     const { data: approveToken } = useFungibleToken(
         NetworkPluginID.PLUGIN_EVM,
