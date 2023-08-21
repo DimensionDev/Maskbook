@@ -2,7 +2,7 @@ import { NetworkPluginID, type Wallet } from '@masknet/shared-base'
 import { useAddressType, useChainContext, useContacts, useLookupAddress, useWallets } from '@masknet/web3-hooks-base'
 import { GoPlusLabs } from '@masknet/web3-providers'
 import { isSameAddress, type Contact } from '@masknet/web3-shared-base'
-import { AddressType, isValidAddress, isValidDomain } from '@masknet/web3-shared-evm'
+import { AddressType, type ChainId, isValidAddress, isValidDomain } from '@masknet/web3-shared-evm'
 import { useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { createContainer } from 'unstated-next'
@@ -11,11 +11,14 @@ import { useI18N } from '../../../utils/index.js'
 interface ContextOptions {
     defaultName: string
     defaultAddress: string
+    defaultChainId?: ChainId
 }
 
-function useContactsContext({ defaultName, defaultAddress }: ContextOptions = { defaultName: '', defaultAddress: '' }) {
+function useContactsContext(
+    { defaultName, defaultChainId, defaultAddress }: ContextOptions = { defaultName: '', defaultAddress: '' },
+) {
     const { t } = useI18N()
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: defaultChainId })
     const contacts = useContacts()
     const wallets = useWallets()
     const [userInput, setUserInput] = useState(defaultName || defaultAddress)
