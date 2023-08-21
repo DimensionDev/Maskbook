@@ -5,6 +5,7 @@ import { useEverSeen } from '@masknet/shared-base-ui'
 import { TextOverflowTooltip, makeStyles, useBoundedPopperProps } from '@masknet/theme'
 import {
     useAccount,
+    useFungibleToken,
     useNativeToken,
     useNetwork,
     useNetworkDescriptors,
@@ -34,7 +35,7 @@ import { useQuery } from '@tanstack/react-query'
 import { memo, useMemo } from 'react'
 import { Trans } from 'react-i18next'
 import { formatTokenBalance, useI18N } from '../../../../../../utils/index.js'
-import { parseReceiverFromERC20TransferInput } from '../../utils.js'
+import { parseAmountFromERC20ApproveInput, parseReceiverFromERC20TransferInput } from '../../utils.js'
 
 const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' }, __) => {
     const colorMap: Record<string, string> = {
@@ -199,7 +200,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
         // This could be a transaction of SmartPay which Debank doesn't provide detailed info for it.
         // This also could be an ERC20 transfer, which Debank returns the token contract rather than receiver as `to_address`.
         // So we fetch via Chainbase
-        enabled: (!transaction.to || transaction.type === 'transfer') && seen,
+        enabled: (!transaction.to || transaction.type === 'transfer' || transaction.type === 'approve') && seen,
         queryKey: ['chainbase', 'transaction', transaction.chainId, transaction.id, blockNumber],
         queryFn: async () => {
             if (!transaction.chainId || !transaction.id) return
@@ -226,6 +227,13 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
         transaction.type === 'transfer' ? !receiverAddress && (loadingTx || loadingTxInput) : !toAddress && loadingTx
     const isOut = isSameAddress(fromAddress, account)
     const popperProps = useBoundedPopperProps()
+    const approveAmount = parseAmountFromERC20ApproveInput(tx?.input ?? txInput)
+    const { data: approveToken } = useFungibleToken(
+        NetworkPluginID.PLUGIN_EVM,
+        transaction.type === 'approve' ? tx?.to_address : '',
+        undefined,
+        { chainId: transaction.chainId },
+    )
 
     return (
         <ListItem
@@ -268,20 +276,36 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                     {transaction.isScam ? <span className={classes.scamLabel}>{t('scam_tx')}</span> : null}
                 </Typography>
             </ListItemText>
-            <div className={classes.assets}>
-                {transaction.assets.map((token, i) => {
-                    const isSend = token.direction === DebankTransactionDirection.SEND
-                    const amount = isLessThan(token.amount, '0.0001') ? '<0.0001' : trimZero(toFixed(token.amount, 4))
-                    return (
-                        <Typography key={i} className={classes.asset}>
-                            <strong className={classes.amount}>{`${isSend ? '-' : '+'} ${amount} `}</strong>
-                            <TextOverflowTooltip title={token.symbol} PopperProps={popperProps}>
-                                <span className={classes.symbol}>{token.symbol}</span>
-                            </TextOverflowTooltip>
-                        </Typography>
-                    )
-                })}
-            </div>
+
+            {transaction.type === 'approve' && approveAmount && approveToken ? (
+                <Typography className={classes.asset}>
+                    <strong className={classes.amount}>
+                        {approveAmount === 'Infinite'
+                            ? approveAmount
+                            : formatTokenBalance(approveAmount, approveToken.decimals)}
+                    </strong>
+                    <TextOverflowTooltip title={approveToken.symbol} PopperProps={popperProps}>
+                        <span className={classes.symbol}>{approveToken.symbol}</span>
+                    </TextOverflowTooltip>
+                </Typography>
+            ) : (
+                <div className={classes.assets}>
+                    {transaction.assets.map((token, i) => {
+                        const isSend = token.direction === DebankTransactionDirection.SEND
+                        const amount = isLessThan(token.amount, '0.0001')
+                            ? '<0.0001'
+                            : trimZero(toFixed(token.amount, 4))
+                        return (
+                            <Typography key={i} className={classes.asset}>
+                                <strong className={classes.amount}>{`${isSend ? '-' : '+'} ${amount} `}</strong>
+                                <TextOverflowTooltip title={token.symbol} PopperProps={popperProps}>
+                                    <span className={classes.symbol}>{token.symbol}</span>
+                                </TextOverflowTooltip>
+                            </Typography>
+                        )
+                    })}
+                </div>
+            )}
         </ListItem>
     )
 })
