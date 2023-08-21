@@ -9,7 +9,6 @@ import type { NextIDPersonaBindingsWithIdentifier } from '../../../hook/useFrien
 import { Contacts } from '../Contacts/index.js'
 import { SearchList } from '../SearchList/index.js'
 import { type Friend } from '../../../hook/useFriends.js'
-import { type BindingProof } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -42,7 +41,6 @@ export interface FriendsHomeUIProps {
     searchResult: NextIDPersonaBindingsWithIdentifier[]
     loading: boolean
     friends: Friend[]
-    profiles: BindingProof[][]
     setSearchValue: (v: string) => void
     fetchNextPage: () => void
 }
@@ -54,7 +52,6 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
     searchResult,
     searchValue,
     fetchNextPage,
-    profiles,
 }) {
     const { classes, cx } = useStyles()
     const { t } = useI18N()
@@ -71,7 +68,7 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
             ) : searchValue ? (
                 <SearchList searchResult={searchResult} />
             ) : (
-                <Contacts friends={friends} fetchNextPage={fetchNextPage} profiles={profiles} />
+                <Contacts friends={friends} fetchNextPage={fetchNextPage} />
             )}
         </div>
     )

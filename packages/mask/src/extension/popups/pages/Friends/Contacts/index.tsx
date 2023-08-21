@@ -1,5 +1,4 @@
 import { ElementAnchor, EmptyStatus } from '@masknet/shared'
-import { EMPTY_LIST, type BindingProof } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box } from '@mui/material'
 import { memo } from 'react'
@@ -36,10 +35,9 @@ const useStyles = makeStyles()((theme) => ({
 export interface ContactsProps {
     friends: Friend[]
     fetchNextPage: () => void
-    profiles: BindingProof[][]
 }
 
-export const Contacts = memo<ContactsProps>(function Contacts({ friends, fetchNextPage, profiles }) {
+export const Contacts = memo<ContactsProps>(function Contacts({ friends, fetchNextPage }) {
     const { classes } = useStyles()
     const { t } = useI18N()
     return friends.length === 0 ? (
@@ -53,7 +51,6 @@ export const Contacts = memo<ContactsProps>(function Contacts({ friends, fetchNe
                         avatar={friend.avatar}
                         nextId={friend.persona?.publicKeyAsHex}
                         publicKey={friend.persona?.rawPublicKey}
-                        profiles={profiles[index] || EMPTY_LIST}
                         isLocal
                     />
                 )

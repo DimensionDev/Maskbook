@@ -166,6 +166,5 @@ export function useFriendsPaged() {
         hasNextPage,
         fetchNextPage,
         isFetchingNextPage,
-        profilesArray,
     }
 }

@@ -12,9 +12,8 @@ const FriendsHome = memo(function FriendsHome() {
     const { t } = useI18N()
     useTitle(t('popups_encrypted_friends'))
 
-    const { data, fetchNextPage, isLoading, profilesArray } = useFriendsPaged()
+    const { data, fetchNextPage, isLoading } = useFriendsPaged()
     const friends = useMemo(() => (data ? data.pages.flatMap((x) => x.friends) : EMPTY_LIST), [data])
-    const profiles = useMemo(() => (profilesArray ? profilesArray.pages.flat(1) : EMPTY_LIST), [profilesArray])
     const [searchValue, setSearchValue] = useState('')
     const type = resolveNextIDPlatform(searchValue)
     const { loading: resolveLoading, value: keyword = '' } = useSearchValue(searchValue, type)
@@ -33,7 +32,6 @@ const FriendsHome = memo(function FriendsHome() {
             searchValue={searchValue}
             searchResult={searchedList}
             fetchNextPage={fetchNextPage}
-            profiles={profiles}
         />
     )
 })
