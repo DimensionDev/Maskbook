@@ -12,6 +12,7 @@ import { toHex } from 'web3-utils'
 import { GasSettingModal } from '../../modals/modals.js'
 import { ReplaceType } from './type.js'
 import { Interface } from '@ethersproject/abi'
+import type { BigNumber } from 'bignumber.js'
 
 const erc20InterFace = new Interface(ERC20_ABI)
 
@@ -61,5 +62,17 @@ export function parseReceiverFromERC20TransferInput(input?: string) {
         return decodedInputParam[0] as string
     } catch {
         return ''
+    }
+}
+
+// The Debank transaction history api does not return the input data and approved token info,
+//  so can not do the decoding within its scope.
+export function parseAmountFromERC20ApproveInput(input?: string) {
+    if (!input) return
+    try {
+        const decodedInputParam = erc20InterFace.decodeFunctionData('approve', input ?? '')
+        return decodedInputParam[1] as BigNumber
+    } catch {
+        return
     }
 }
