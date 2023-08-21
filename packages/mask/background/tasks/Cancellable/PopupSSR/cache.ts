@@ -24,7 +24,7 @@ export function startListen(
         if ('session' in browser.storage) {
             ;(browser.storage.session as Storage.StorageArea).set({ [CACHE_KEY]: cache })
         }
-        console.log('[Popup SSR] Page ready.')
+        console.log('[Popup SSR] Page ready.', cache)
     }
     const throttledTask = throttle(task, 2000, { leading: true })
 
@@ -66,6 +66,7 @@ async function prepareData(): Promise<PopupSSR_Props> {
         avatar: currentPersona?.avatar,
         currentFingerPrint: id?.rawPublicKey,
         hasPersona: !!currentPersona,
+        currentPublicKeyHex: id?.publicKeyAsHex,
         linkedProfilesCount: currentPersona?.linkedProfiles.length ?? 0,
         nickname: currentPersona?.nickname,
         networks: networks.map((x) => x.networkIdentifier as EnhanceableSite),

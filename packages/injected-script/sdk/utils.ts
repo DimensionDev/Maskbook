@@ -1,8 +1,10 @@
 import { CustomEventId, type InternalEvents, encodeEvent } from '../shared/index.js'
 
+let warned = false
 export function sendEvent<K extends keyof InternalEvents>(name: K, ...params: InternalEvents[K]) {
-    if (typeof location === 'object' && location.protocol.includes('extension')) {
+    if (!warned && typeof location === 'object' && location.protocol.includes('extension')) {
         console.warn('This code is not expected to be run in the extension pages. Please check your code.')
+        warned = true
     }
     if (typeof document === 'undefined') return
     document.dispatchEvent(
