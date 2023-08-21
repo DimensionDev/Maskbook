@@ -14,11 +14,6 @@ import { WalletAssetsValue } from './WalletAssetsValue.js'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => ({
     container: {
-        // An opaque background to hide overflow tooltip.
-        background: theme.palette.common.white,
-        zIndex: 4,
-    },
-    innerContainer: {
         padding: '16px',
         lineHeight: 0,
         // padding bottom space for assets tabs
@@ -147,88 +142,86 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
     const networkName = currentNetwork?.name || currentNetwork?.fullName
     return (
         <Box className={classes.container}>
-            <Box className={classes.innerContainer}>
-                <div className={classes.topbar}>
-                    <div
-                        className={classes.networkSelector}
-                        onClick={(event) => {
-                            if (!disabled && !wallet.owner) onOpenNetworkSelector(event)
-                        }}>
-                        {currentNetwork?.iconUrl ? (
-                            <ImageIcon size={30} icon={currentNetwork?.iconUrl} name={currentNetwork?.name || '?'} />
-                        ) : (
-                            <ChainIcon size={30} color={currentNetwork?.color} name={currentNetwork?.name} />
-                        )}
+            <div className={classes.topbar}>
+                <div
+                    className={classes.networkSelector}
+                    onClick={(event) => {
+                        if (!disabled && !wallet.owner) onOpenNetworkSelector(event)
+                    }}>
+                    {currentNetwork?.iconUrl ? (
+                        <ImageIcon size={30} icon={currentNetwork?.iconUrl} name={currentNetwork?.name || '?'} />
+                    ) : (
+                        <ChainIcon size={30} color={currentNetwork?.color} name={currentNetwork?.name} />
+                    )}
 
-                        <Box ml={0.5} overflow="auto">
-                            <Box overflow="auto" display="flex">
-                                <TextOverflowTooltip title={networkName}>
-                                    <Typography className={classes.chainName} component="div">
-                                        {networkName}
-                                    </Typography>
-                                </TextOverflowTooltip>
-                                {!disabled && !wallet.owner ? (
-                                    <Icons.ArrowDrop
-                                        size={20}
-                                        className={classes.arrow}
-                                        style={{ transform: status ? 'rotate(-180deg)' : undefined }}
-                                    />
-                                ) : null}
-                            </Box>
-                            {isLoading ? null : (
-                                <ProgressiveText className={classes.connected} loading={isLoading} skeletonWidth={50}>
-                                    <span
-                                        className={cx(
-                                            classes.dot,
-                                            connected ? classes.connectedDot : classes.unconnectedDot,
-                                        )}
-                                    />
-                                    <span>
-                                        {t('popups_wallet_connected_status', {
-                                            context: connected ? 'connected' : 'unconnected',
-                                        })}
-                                    </span>
-                                </ProgressiveText>
-                            )}
-                        </Box>
-                    </div>
-                    <div
-                        className={classes.action}
-                        onClick={() => {
-                            if (!disabled) onActionClick()
-                        }}>
-                        {wallet.owner ? <Icons.SmartPay size={30} /> : <Icons.MaskBlue size={30} />}
-                        <Box ml={0.5} overflow="hidden">
-                            <TextOverflowTooltip title={wallet.name}>
-                                <Typography className={classes.nickname}>{wallet.name}</Typography>
+                    <Box ml={0.5} overflow="auto">
+                        <Box overflow="auto" display="flex">
+                            <TextOverflowTooltip title={networkName}>
+                                <Typography className={classes.chainName} component="div">
+                                    {networkName}
+                                </Typography>
                             </TextOverflowTooltip>
-                            <Typography className={classes.identifier}>
-                                <FormattedAddress address={wallet.address} formatter={formatEthereumAddress} size={4} />
-                                {!disableCopy ? (
-                                    <CopyButton text={wallet.address} className={classes.icon} size={12} />
-                                ) : null}
-                                {addressLink ? (
-                                    <Link
-                                        className={classes.icon}
-                                        onClick={(event) => event.stopPropagation()}
-                                        href={addressLink}
-                                        target="_blank"
-                                        rel="noopener noreferrer">
-                                        <Icons.PopupLink size={12} />
-                                    </Link>
-                                ) : null}
-                            </Typography>
+                            {!disabled && !wallet.owner ? (
+                                <Icons.ArrowDrop
+                                    size={20}
+                                    className={classes.arrow}
+                                    style={{ transform: status ? 'rotate(-180deg)' : undefined }}
+                                />
+                            ) : null}
                         </Box>
-                        {!disabled ? <Icons.ArrowDrop className={classes.arrow} /> : null}
-                    </div>
+                        {isLoading ? null : (
+                            <ProgressiveText className={classes.connected} loading={isLoading} skeletonWidth={50}>
+                                <span
+                                    className={cx(
+                                        classes.dot,
+                                        connected ? classes.connectedDot : classes.unconnectedDot,
+                                    )}
+                                />
+                                <span>
+                                    {t('popups_wallet_connected_status', {
+                                        context: connected ? 'connected' : 'unconnected',
+                                    })}
+                                </span>
+                            </ProgressiveText>
+                        )}
+                    </Box>
                 </div>
-                {!disabled ? (
-                    <>
-                        <WalletAssetsValue className={classes.balance} skeletonWidth={100} skeletonHeight="2em" />
-                        <ActionGroup chainId={chainId} mt={2} />
-                    </>
-                ) : null}
-            </Box>
+                <div
+                    className={classes.action}
+                    onClick={() => {
+                        if (!disabled) onActionClick()
+                    }}>
+                    {wallet.owner ? <Icons.SmartPay size={30} /> : <Icons.MaskBlue size={30} />}
+                    <Box ml={0.5} overflow="hidden">
+                        <TextOverflowTooltip title={wallet.name}>
+                            <Typography className={classes.nickname}>{wallet.name}</Typography>
+                        </TextOverflowTooltip>
+                        <Typography className={classes.identifier}>
+                            <FormattedAddress address={wallet.address} formatter={formatEthereumAddress} size={4} />
+                            {!disableCopy ? (
+                                <CopyButton text={wallet.address} className={classes.icon} size={12} />
+                            ) : null}
+                            {addressLink ? (
+                                <Link
+                                    className={classes.icon}
+                                    onClick={(event) => event.stopPropagation()}
+                                    href={addressLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    <Icons.PopupLink size={12} />
+                                </Link>
+                            ) : null}
+                        </Typography>
+                    </Box>
+                    {!disabled ? <Icons.ArrowDrop className={classes.arrow} /> : null}
+                </div>
+            </div>
+            {!disabled ? (
+                <>
+                    <WalletAssetsValue className={classes.balance} skeletonWidth={100} skeletonHeight="2em" />
+                    <ActionGroup chainId={chainId} mt={2} />
+                </>
+            ) : null}
         </Box>
     )
 })

@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { ImageIcon, NetworkIcon, ProgressiveText, ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useEverSeen } from '@masknet/shared-base-ui'
-import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
+import { TextOverflowTooltip, makeStyles, useBoundedPopperProps } from '@masknet/theme'
 import {
     useAccount,
     useNativeToken,
@@ -225,6 +225,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
     const loadingToAddress =
         transaction.type === 'transfer' ? !receiverAddress && (loadingTx || loadingTxInput) : !toAddress && loadingTx
     const isOut = isSameAddress(fromAddress, account)
+    const popperProps = useBoundedPopperProps()
 
     return (
         <ListItem
@@ -280,7 +281,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                     return (
                         <Typography key={i} className={classes.asset}>
                             <strong className={classes.amount}>{`${isSend ? '-' : '+'} ${amount} `}</strong>
-                            <TextOverflowTooltip title={token.symbol} PopperProps={{ style: { zIndex: 0 } }}>
+                            <TextOverflowTooltip title={token.symbol} PopperProps={popperProps}>
                                 <span className={classes.symbol}>{token.symbol}</span>
                             </TextOverflowTooltip>
                         </Typography>

@@ -2,7 +2,7 @@ import { type ComponentProps, memo } from 'react'
 import { type NetworkPluginID } from '@masknet/shared-base'
 import { useReverseAddress, useWeb3Others } from '@masknet/web3-hooks-base'
 import { Typography, type TooltipProps } from '@mui/material'
-import { ShadowRootTooltip } from '@masknet/theme'
+import { ShadowRootTooltip, useBoundedPopperProps } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 
 export interface ReverseAddressProps extends ComponentProps<typeof Typography> {
@@ -26,9 +26,12 @@ export const ReversedAddress = memo<ReverseAddressProps>(({ address, pluginID, s
             {uiLabel}
         </Typography>
     )
+    const popperProps = useBoundedPopperProps()
 
     return hasEllipsis ? (
-        <ShadowRootTooltip PopperProps={{ style: PopperProps?.style }} title={showDomain ? domain : address}>
+        <ShadowRootTooltip
+            title={showDomain ? domain : address}
+            PopperProps={{ ...popperProps, style: { whiteSpace: 'break-spaces', zIndex: 10 } }}>
             {node}
         </ShadowRootTooltip>
     ) : (
