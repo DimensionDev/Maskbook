@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { DEFAULT_PLUGIN_PLULISHER, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { RedPacketMetaKey, RedPacketNftMetaKey, RedPacketPluginID } from './constants.js'
 import { languages } from './locales/languages.js'
@@ -11,7 +11,7 @@ export const base: Plugin.Shared.Definition = {
         fallback:
             'Lucky drop is a special feature in Mask Network which was launched in early 2020. Once users have installed the Chrome/Firefox plugin, they can claim and give out cryptocurrencies on Twitter.',
     },
-    publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
+    publisher: DEFAULT_PLUGIN_PLULISHER,
     enableRequirement: {
         supports: {
             type: 'opt-out',

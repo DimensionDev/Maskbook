@@ -1,6 +1,7 @@
+import { DEFAULT_PLUGIN_PLULISHER } from '@masknet/shared-base'
+import { type Plugin, SiteAdaptor } from '@masknet/plugin-infra'
 import { PLUGIN_ID } from './constants.js'
 import { languages } from './locales/languages.js'
-import { type Plugin, SiteAdaptor } from '@masknet/plugin-infra'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
@@ -8,7 +9,7 @@ export const base: Plugin.Shared.Definition = {
     description: {
         fallback: 'Web3 Profile Card on social account avatar.',
     },
-    publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
+    publisher: DEFAULT_PLUGIN_PLULISHER,
     enableRequirement: {
         supports: {
             type: 'opt-in',
