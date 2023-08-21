@@ -27,6 +27,7 @@ import { BaseContractWalletProvider } from './BaseContractWallet.js'
 import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
 import { SmartPayOwnerAPI } from '../../../SmartPay/apis/OwnerAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
+import { env } from '@masknet/flags'
 
 export class MaskWalletProvider
     extends BaseContractWalletProvider
@@ -35,6 +36,15 @@ export class MaskWalletProvider
     private Request = new RequestReadonlyAPI()
 
     private ref = new ValueRef<Wallet[]>(EMPTY_LIST)
+
+    private openPopupWindow: (route?: PopupRoutes, params?: Record<string, any>) => Promise<void> = async (...args) => {
+        await this.context?.openPopupWindow(...args)
+    }
+
+    private openSelectWalletWindow =
+        env.channel === 'stable' && process.env.NODE_ENV === 'production'
+            ? this.openPopupWindow
+            : debounce(this.openPopupWindow, 1000)
 
     constructor() {
         super(ProviderType.MaskWallet)
@@ -184,7 +194,7 @@ export class MaskWalletProvider
             }
         }
 
-        await this.context?.openPopupWindow(this.wallets.length ? PopupRoutes.SelectWallet : PopupRoutes.Wallet, {
+        await this.openSelectWalletWindow?.(this.wallets.length ? PopupRoutes.SelectWallet : PopupRoutes.Wallet, {
             chainId,
         })
 

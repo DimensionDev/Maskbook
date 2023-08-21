@@ -1,6 +1,6 @@
 import { Web3 } from '@masknet/web3-providers'
 import ERC20_ABI from '@masknet/web3-contracts/abis/ERC20.json'
-import type { RecentTransaction } from '@masknet/web3-shared-base'
+import { toFixed, type RecentTransaction } from '@masknet/web3-shared-base'
 import {
     ProviderType,
     formatWeiToGwei,
@@ -12,8 +12,11 @@ import { toHex } from 'web3-utils'
 import { GasSettingModal } from '../../modals/modals.js'
 import { ReplaceType } from './type.js'
 import { Interface } from '@ethersproject/abi'
+import type { BigNumber } from 'bignumber.js'
 
 const erc20InterFace = new Interface(ERC20_ABI)
+
+const MaxUint256 = toFixed('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
 
 export async function modifyTransaction(
     transaction: RecentTransaction<ChainId, EvmTransaction>,
@@ -61,5 +64,18 @@ export function parseReceiverFromERC20TransferInput(input?: string) {
         return decodedInputParam[0] as string
     } catch {
         return ''
+    }
+}
+
+// The Debank transaction history api does not return the input data and approved token info,
+//  so can not do the decoding within its scope.
+export function parseAmountFromERC20ApproveInput(input?: string) {
+    if (!input) return
+    try {
+        const decodedInputParam = erc20InterFace.decodeFunctionData('approve', input ?? '')
+        const result = (decodedInputParam[1] as BigNumber).toString()
+        return MaxUint256 === result ? 'Infinite' : result
+    } catch {
+        return
     }
 }
