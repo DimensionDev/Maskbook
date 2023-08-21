@@ -1,3 +1,4 @@
+/// <reference types="react/canary" />
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 import urlcat from 'urlcat'
 import { createContext, memo, use, useCallback, useContext, useMemo, useRef } from 'react'
