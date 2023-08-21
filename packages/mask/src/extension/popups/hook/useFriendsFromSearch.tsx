@@ -2,9 +2,9 @@ import { ECKeyIdentifier, EMPTY_LIST, type NextIDPersonaBindings } from '@maskne
 import { uniqBy } from 'lodash-es'
 import { useMemo } from 'react'
 import type { Friend } from './useFriends.js'
-import { PlatformSort } from './useFriends.js'
 import { useCurrentLinkedPersona } from '@masknet/shared'
 import { profilesFilter } from './useFriendProfiles.js'
+import { PlatformSort } from '../pages/Friends/common.js'
 
 export type NextIDPersonaBindingsWithIdentifier = NextIDPersonaBindings & { linkedPersona: ECKeyIdentifier } & {
     isLocal?: boolean

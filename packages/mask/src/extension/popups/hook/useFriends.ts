@@ -1,10 +1,4 @@
-import {
-    type ECKeyIdentifier,
-    EMPTY_LIST,
-    type BindingProof,
-    NextIDPlatform,
-    type ProfileIdentifier,
-} from '@masknet/shared-base'
+import { type ECKeyIdentifier, EMPTY_LIST, type BindingProof, type ProfileIdentifier } from '@masknet/shared-base'
 import { useCurrentPersona } from '../../../components/DataSource/useCurrentPersona.js'
 import Services from '../../../extension/service.js'
 import { first } from 'lodash-es'
@@ -20,25 +14,6 @@ export type Friend = {
     persona: ECKeyIdentifier
     profile?: ProfileIdentifier
     avatar?: string
-}
-
-export const PlatformSort: Record<NextIDPlatform, number> = {
-    [NextIDPlatform.Twitter]: 0,
-    [NextIDPlatform.GitHub]: 1,
-    [NextIDPlatform.Ethereum]: 2,
-    [NextIDPlatform.ENS]: 3,
-    [NextIDPlatform.LENS]: 4,
-    [NextIDPlatform.Keybase]: 5,
-    [NextIDPlatform.Farcaster]: 6,
-    [NextIDPlatform.SpaceId]: 7,
-    [NextIDPlatform.Unstoppable]: 8,
-    [NextIDPlatform.RSS3]: 9,
-    [NextIDPlatform.REDDIT]: 10,
-    [NextIDPlatform.SYBIL]: 11,
-    [NextIDPlatform.EthLeaderboard]: 12,
-    [NextIDPlatform.Bit]: 13,
-    [NextIDPlatform.CyberConnect]: 14,
-    [NextIDPlatform.NextID]: 15,
 }
 
 export function useFriendsPaged() {

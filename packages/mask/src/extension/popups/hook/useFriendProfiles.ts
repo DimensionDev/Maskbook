@@ -8,6 +8,7 @@ import {
 import { useCurrentPersona } from '../../../components/DataSource/useCurrentPersona.js'
 import { useQuery } from '@tanstack/react-query'
 import { NextIDProof } from '@masknet/web3-providers'
+import { UnsupportedPlatforms, PlatformSort } from '../pages/Friends/common.js'
 
 export type Friend = {
     persona: ECKeyIdentifier
@@ -15,35 +16,8 @@ export type Friend = {
     avatar?: string
 }
 
-export const PlatformSort: Record<NextIDPlatform, number> = {
-    [NextIDPlatform.Twitter]: 0,
-    [NextIDPlatform.GitHub]: 1,
-    [NextIDPlatform.Ethereum]: 2,
-    [NextIDPlatform.ENS]: 3,
-    [NextIDPlatform.LENS]: 4,
-    [NextIDPlatform.Keybase]: 5,
-    [NextIDPlatform.Farcaster]: 6,
-    [NextIDPlatform.SpaceId]: 7,
-    [NextIDPlatform.Unstoppable]: 8,
-    [NextIDPlatform.RSS3]: 9,
-    [NextIDPlatform.REDDIT]: 10,
-    [NextIDPlatform.SYBIL]: 11,
-    [NextIDPlatform.EthLeaderboard]: 12,
-    [NextIDPlatform.Bit]: 13,
-    [NextIDPlatform.CyberConnect]: 14,
-    [NextIDPlatform.NextID]: 15,
-}
-
 export const profilesFilter = (x: BindingProof) => {
-    return (
-        (x.platform === NextIDPlatform.ENS && x.name.endsWith('.eth')) ||
-        (x.platform !== NextIDPlatform.Bit &&
-            x.platform !== NextIDPlatform.CyberConnect &&
-            x.platform !== NextIDPlatform.REDDIT &&
-            x.platform !== NextIDPlatform.SYBIL &&
-            x.platform !== NextIDPlatform.EthLeaderboard &&
-            x.platform !== NextIDPlatform.NextID)
-    )
+    return (x.platform === NextIDPlatform.ENS && x.name.endsWith('.eth')) || !UnsupportedPlatforms.includes(x.platform)
 }
 
 export function useFriendProfiles(seen: boolean, nextId?: string, twitterId?: string) {
