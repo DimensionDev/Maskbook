@@ -87,6 +87,8 @@ const useStyles = makeStyles()((theme) => ({
 
 const ETH_GAS_LIMIT = '21000'
 const ERC20_GAS_LIMIT = '50000'
+// Change chain in SelectNetworkSidebar is pending status, but it should affect ContactsContext
+const PENDING_CHAIN_ID = 'pendingChainId'
 export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const { t } = useI18N()
     const { classes } = useStyles()
@@ -109,6 +111,23 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                     p.set('chainId', asset.chainId.toString())
                     p.set('address', asset.address)
                     p.delete('undecided')
+                    p.delete(PENDING_CHAIN_ID)
+                    return p.toString()
+                },
+                { replace: true },
+            )
+        },
+        [setParams],
+    )
+    const setPendingChainId = useCallback(
+        (chainId: Web3Helper.ChainIdAll | undefined) => {
+            setParams(
+                (p) => {
+                    if (!chainId) {
+                        p.delete(PENDING_CHAIN_ID)
+                    } else {
+                        p.set(PENDING_CHAIN_ID, chainId.toString())
+                    }
                     return p.toString()
                 },
                 { replace: true },
@@ -200,6 +219,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                 chainId={chainId}
                 address={address}
                 onSelect={handleSelectAsset}
+                onChainChange={setPendingChainId}
             />
         )
 
