@@ -36,6 +36,13 @@ export class MaskWalletProvider
 
     private ref = new ValueRef<Wallet[]>(EMPTY_LIST)
 
+    private openPopupWindow = debounce<(route?: PopupRoutes, params?: Record<string, any>) => Promise<void>>(
+        async (...args) => {
+            await this.context?.openPopupWindow(...args)
+        },
+        1000,
+    )
+
     constructor() {
         super(ProviderType.MaskWallet)
     }
@@ -184,7 +191,7 @@ export class MaskWalletProvider
             }
         }
 
-        await this.context?.openPopupWindow(this.wallets.length ? PopupRoutes.SelectWallet : PopupRoutes.Wallet, {
+        await this.openPopupWindow?.(this.wallets.length ? PopupRoutes.SelectWallet : PopupRoutes.Wallet, {
             chainId,
         })
 
