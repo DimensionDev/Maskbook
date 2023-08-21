@@ -257,7 +257,13 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                                 address: isOut ? toAddress : fromAddress,
                             }}
                             components={{
-                                addr: <ReversedAddress address={isOut ? toAddress : fromAddress} component="span" />,
+                                addr: (
+                                    <ReversedAddress
+                                        address={isOut ? toAddress : fromAddress}
+                                        component="span"
+                                        PopperProps={{ style: { zIndex: 0 } }}
+                                    />
+                                ),
                             }}
                         />
                     </ProgressiveText>
@@ -274,7 +280,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                     return (
                         <Typography key={i} className={classes.asset}>
                             <strong className={classes.amount}>{`${isSend ? '-' : '+'} ${amount} `}</strong>
-                            <TextOverflowTooltip title={token.symbol}>
+                            <TextOverflowTooltip title={token.symbol} PopperProps={{ style: { zIndex: 0 } }}>
                                 <span className={classes.symbol}>{token.symbol}</span>
                             </TextOverflowTooltip>
                         </Typography>

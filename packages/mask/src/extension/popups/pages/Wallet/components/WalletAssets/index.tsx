@@ -26,6 +26,7 @@ const useStyles = makeStyles()((theme) => {
         },
         header: {
             display: 'flex',
+            zIndex: 5,
         },
         tab: {
             height: 34,
