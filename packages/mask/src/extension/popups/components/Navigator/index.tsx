@@ -9,8 +9,8 @@ import { DashboardRoutes, PopupRoutes } from '@masknet/shared-base'
 import { useMessages, useWallet } from '@masknet/web3-hooks-base'
 import { useHasPassword } from '../../hook/useHasPassword.js'
 import { useWalletLockStatus } from '../../pages/Wallet/hooks/useWalletLockStatus.js'
-import Services from '../../../service.js'
 import { HydrateFinished } from '../../../../utils/createNormalReactRoot.js'
+import Services from '../../../service.js'
 
 const useStyle = makeStyles()((theme) => ({
     navigation: {

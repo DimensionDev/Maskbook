@@ -1,4 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import { DEFAULT_PLUGIN_PUBLISHER } from '@masknet/shared-base'
 import {
     CHAIN_DESCRIPTORS,
     type ChainId,
@@ -15,7 +16,7 @@ export const base: Plugin.Shared.Definition<ChainId, SchemaType, ProviderType, N
     ID: PLUGIN_ID,
     name: { fallback: PLUGIN_NAME },
     description: { fallback: PLUGIN_DESCRIPTION },
-    publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
+    publisher: DEFAULT_PLUGIN_PUBLISHER,
     enableRequirement: {
         supports: { type: 'opt-out', sites: {} },
         target: 'stable',

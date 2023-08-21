@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useState } from 'react'
+import { useMemo, useCallback, useState, memo } from 'react'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import {
     formatEthereumAddress,
@@ -70,6 +70,9 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: theme.spacing(1.5),
         padding: theme.spacing(1.5, 1.5, 1, 1.5),
         boxSizing: 'border-box',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     tokenSelectorWrapper: {
         position: 'relative',
@@ -77,9 +80,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         borderRadius: 8,
         padding: 0,
-        marginBottom: theme.spacing(1),
         background: theme.palette.mode === 'light' ? '#fff' : '#2F3336',
-        width: 120,
         height: 150,
         overflow: 'hidden',
     },
@@ -121,6 +122,31 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
     },
 }))
+
+interface NFTCardProps {
+    token: NonFungibleToken<ChainId, SchemaType>
+}
+
+const NFTCard = memo(function NFTCard(props: NFTCardProps) {
+    const { token } = props
+    const { classes } = useStyles()
+    return (
+        <ListItem className={classes.tokenSelectorWrapper}>
+            <AssetPreviewer
+                url={token.metadata?.mediaURL || token.metadata?.imageURL}
+                classes={{
+                    fallbackImage: classes.fallbackImage,
+                    root: classes.assetImgWrapper,
+                }}
+            />
+            <div className={classes.nftNameWrapper}>
+                <Typography className={classes.nftName} color="textSecondary">
+                    {formatTokenId(token.tokenId, 2)}
+                </Typography>
+            </div>
+        </ListItem>
+    )
+})
 export interface RedpacketNftConfirmDialogProps {
     onBack: () => void
     onClose: () => void
@@ -248,14 +274,10 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                         </Typography>
                     </div>
                 </Grid>
-                <Grid item xs={12}>
-                    <List className={classes.tokenSelector}>
-                        {tokenList.map((value, i) => (
-                            <div key={i}>
-                                <NFTCard token={value} />
-                            </div>
-                        ))}
-                    </List>
+                <Grid item xs={12} component={List} className={classes.tokenSelector}>
+                    {tokenList.map((value, i) => (
+                        <NFTCard key={i} token={value} />
+                    ))}
                 </Grid>
 
                 <Grid item xs={6}>
@@ -293,30 +315,5 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 </PluginWalletStatusBar>
             </Box>
         </DialogContent>
-    )
-}
-
-interface NFTCardProps {
-    token: NonFungibleToken<ChainId, SchemaType>
-}
-
-function NFTCard(props: NFTCardProps) {
-    const { token } = props
-    const { classes, cx } = useStyles()
-    return (
-        <ListItem className={cx(classes.tokenSelectorWrapper)}>
-            <AssetPreviewer
-                url={token.metadata?.mediaURL || token.metadata?.imageURL}
-                classes={{
-                    fallbackImage: classes.fallbackImage,
-                    root: classes.assetImgWrapper,
-                }}
-            />
-            <div className={classes.nftNameWrapper}>
-                <Typography className={classes.nftName} color="textSecondary">
-                    {formatTokenId(token.tokenId, 2)}
-                </Typography>
-            </div>
-        </ListItem>
     )
 }

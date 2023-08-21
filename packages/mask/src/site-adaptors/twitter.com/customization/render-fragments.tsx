@@ -1,7 +1,8 @@
-import type { RenderFragmentsContextType } from '@masknet/typed-message-react'
 import { memo } from 'react'
 import { Link } from '@mui/material'
+import type { RenderFragmentsContextType } from '@masknet/typed-message-react'
 import { useTagEnhancer } from '../../../../shared-ui/TypedMessageRender/Components/Text.js'
+
 export const TwitterRenderFragments: RenderFragmentsContextType = {
     AtLink: memo(function (props) {
         const target = '/' + props.children.slice(1)

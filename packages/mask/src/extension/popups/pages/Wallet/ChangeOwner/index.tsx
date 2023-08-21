@@ -22,7 +22,8 @@ import { PopupContext } from '../../../hook/usePopupContext.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
 import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
-import { WalletContext } from '../hooks/useWalletContext.js'
+import { useQuery } from '@tanstack/react-query'
+import Services from '../../../../service.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -191,7 +192,9 @@ export default function ChangeOwner() {
     const [manageAccount, setManageAccount] = useState<ManagerAccount>()
 
     const { smartPayChainId } = useContainer(PopupContext)
-    const { personaManagers } = useContainer(WalletContext)
+    const { data: personaManagers } = useQuery(['persona-managers'], async () => {
+        return Services.Identity.queryOwnedPersonaInformation(true)
+    })
     const chainContextValue = useMemo(() => ({ chainId: smartPayChainId }), [smartPayChainId])
     const [paymentToken, setPaymentToken] = useState('')
     const [gasConfig, setGasConfig] = useState<GasConfig>()

@@ -7,6 +7,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 export const SupportedChainList = [
     'Ethereum',
     'BNB Chain',
+    'Base',
     'Polygon',
     'Arbitrum One',
     'Optimism',

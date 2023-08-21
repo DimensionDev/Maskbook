@@ -6,10 +6,10 @@ import {
     useActivatedPluginsSiteAdaptor,
     useIsMinimalMode,
 } from '@masknet/plugin-infra/content-script'
-import { EMPTY_LIST, PluginID, NetworkPluginID, type SocialAccount } from '@masknet/shared-base'
+import { EMPTY_LIST, PluginID, type SocialAccount } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { Web3ContextProvider, useWeb3Others, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useWeb3Others, useNetworkContext, DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { menuAuthorSelector as selector } from '../../utils/selectors.js'
@@ -19,9 +19,9 @@ export function injectTipsButtonOnMenu(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())
     startWatch(watcher, signal)
     attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(
-        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+        <DefaultWeb3ContextProvider>
             <AuthorTipsButtonWrapper />
-        </Web3ContextProvider>,
+        </DefaultWeb3ContextProvider>,
     )
 }
 

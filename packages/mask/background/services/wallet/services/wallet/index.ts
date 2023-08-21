@@ -160,7 +160,7 @@ export async function deriveWallet(name: string) {
 
 export async function renameWallet(address: string, name: string) {
     const name_ = name.trim()
-    if (name_.length <= 0 || name_.length > 12) throw new Error('Invalid wallet name.')
+    if (name_.length <= 0) throw new Error('Invalid wallet name.')
     await database.updateWallet(address, {
         name: name_,
     })

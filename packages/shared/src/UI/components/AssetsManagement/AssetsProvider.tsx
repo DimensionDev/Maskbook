@@ -34,6 +34,7 @@ interface AssetsContextOptions {
     loadVerifiedBy(id: string): Promise<void>
     /** All collectibles get hidden */
     isAllHidden: boolean
+    isEmpty: boolean
 }
 
 export const AssetsContext = createContext<AssetsContextOptions>({
@@ -44,6 +45,7 @@ export const AssetsContext = createContext<AssetsContextOptions>({
     loadAssets: () => Promise.resolve(),
     loadVerifiedBy: () => Promise.resolve(),
     isAllHidden: false,
+    isEmpty: false,
 })
 
 /** Min merged collection chunk size */
@@ -104,6 +106,12 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
     })
 
     const { collections } = CollectionsContext.useContainer()
+    const isEmpty = useMemo(() => {
+        // Collections assets are lazy loading, can't judge if not all collections been load
+        if (Object.keys(assetsMap).length < collections.length) return false
+        // Spam score of some collections might be OK, but NFTs of them might be treated as spam #MF-5091
+        return getAssetsTotal(assetsMap) === 0
+    }, [assetsMap, collections.length])
     const isAllHidden = useMemo(() => {
         // Collections assets are lazy loading, can't judge if not all collections been load
         if (Object.keys(assetsMap).length < collections.length) return false
@@ -226,6 +234,7 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
     const contextValue = useMemo((): AssetsContextOptions => {
         return {
             isAllHidden,
+            isEmpty,
             getAssets,
             getBLockedTokenIds,
             getVerifiedBy,
@@ -233,7 +242,7 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
             loadVerifiedBy,
             assetsMapRef: listingAssetsMapRef,
         }
-    }, [getAssets, getBLockedTokenIds, getVerifiedBy, loadAssets, loadVerifiedBy, isAllHidden])
+    }, [getAssets, getBLockedTokenIds, getVerifiedBy, loadAssets, loadVerifiedBy, isAllHidden, isEmpty])
     return <AssetsContext.Provider value={contextValue}>{children}</AssetsContext.Provider>
 })
 

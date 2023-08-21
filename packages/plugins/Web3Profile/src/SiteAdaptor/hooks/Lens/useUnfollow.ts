@@ -60,6 +60,7 @@ export function useUnfollow(
                             typedData.typedData.value,
                         ),
                     ),
+                    { chainId: ChainId.Matic },
                 )
 
                 const { v, r, s } = splitSignature(signature)
@@ -84,7 +85,7 @@ export function useUnfollow(
                         followNFTContract?.methods.burnWithSig(tokenId, [v, r, s, deadline]),
                         { from: account },
                     )
-                    hash = await Web3.sendTransaction(tx)
+                    hash = await Web3.sendTransaction(tx, { chainId: ChainId.Matic })
                     onSuccess?.(cloneEvent)
                     setLoading(false)
                 }
@@ -92,6 +93,7 @@ export function useUnfollow(
                 if (!hash) return
 
                 const receipt = await Web3.confirmTransaction(hash, {
+                    chainId: ChainId.Matic,
                     signal: AbortSignal.timeout(3 * 60 * 1000),
                 })
                 if (!receipt.status) return

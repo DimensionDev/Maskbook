@@ -78,7 +78,7 @@ const Onboarding = memo(function Onboarding() {
         return [
             <Typography key="identity">
                 {t.create_wallet_onboarding_creating_identity()}
-                {t.wallet()}
+                {t.onboarding_wallet()}
             </Typography>,
             <Typography key="account">
                 {t.create_wallet_onboarding_generating_accounts()}

@@ -1,17 +1,3 @@
-import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
-import { PageUIProvider, PersonaContext } from '@masknet/shared'
-import {
-    CrossIsolationMessages,
-    NetworkPluginID,
-    PopupModalRoutes,
-    PopupRoutes as PopupPaths,
-    PopupsHistory,
-} from '@masknet/shared-base'
-import { PopupSnackbarProvider } from '@masknet/theme'
-import { TelemetryProvider, Web3ContextProvider, useMountReport } from '@masknet/web3-hooks-base'
-import { ProviderType } from '@masknet/web3-shared-evm'
-import { EventID } from '@masknet/web3-telemetry/types'
-import { Box } from '@mui/material'
 import { Suspense, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useIdleTimer } from 'react-idle-timer'
 import {
@@ -22,6 +8,19 @@ import {
     useLocation,
     type HistoryRouterProps,
 } from 'react-router-dom'
+import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
+import { PageUIProvider, PersonaContext } from '@masknet/shared'
+import {
+    CrossIsolationMessages,
+    PopupModalRoutes,
+    PopupRoutes as PopupPaths,
+    PopupsHistory,
+} from '@masknet/shared-base'
+import { PopupSnackbarProvider } from '@masknet/theme'
+import { ProviderType } from '@masknet/web3-shared-evm'
+import { TelemetryProvider, DefaultWeb3ContextProvider, useMountReport } from '@masknet/web3-hooks-base'
+import { EventID } from '@masknet/web3-telemetry/types'
+import { Box } from '@mui/material'
 import { usePopupTheme } from '../../utils/theme/usePopupTheme.js'
 import Services from '../service.js'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
@@ -61,8 +60,6 @@ function PluginRenderDelayed() {
     if (!canRenderPlugin) return null
     return <PluginRender />
 }
-
-const Web3ContextType = { pluginID: NetworkPluginID.PLUGIN_EVM, providerType: ProviderType.MaskWallet }
 
 const personaInitialState = {
     queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
@@ -148,12 +145,15 @@ export default function Popups() {
 
     useMountReport(EventID.AccessPopups)
     useIdleTimer({ onAction: Services.Wallet.setAutoLockTimer, throttle: 10000 })
+    useEffect(() => {
+        if (location.hash.includes('/swap')) return
+        return CrossIsolationMessages.events.popupRouteUpdated.on((url) => PopupsHistory.replace(url))
+    }, [])
 
-    useEffect(() => CrossIsolationMessages.events.popupRouteUpdated.on((url) => PopupsHistory.replace(url)), [])
     return PageUIProvider(
         usePopupTheme,
         <PopupSnackbarProvider>
-            <Web3ContextProvider value={Web3ContextType}>
+            <DefaultWeb3ContextProvider value={{ providerType: ProviderType.MaskWallet }}>
                 <TelemetryProvider>
                     <PopupContext.Provider>
                         <PageTitleContext.Provider value={titleContext}>
@@ -166,7 +166,7 @@ export default function Popups() {
                         </PageTitleContext.Provider>
                     </PopupContext.Provider>
                 </TelemetryProvider>
-            </Web3ContextProvider>
+            </DefaultWeb3ContextProvider>
         </PopupSnackbarProvider>,
         null,
     )

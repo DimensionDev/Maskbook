@@ -91,6 +91,7 @@ function resolveType(content: string) {
     if (content.startsWith('$')) return 'cash'
     return 'normal'
 }
+
 export const postContentMessageParser = (node: HTMLElement) => {
     function make(node: Node): TypedMessage | TypedMessage[] {
         if (node.nodeType === Node.TEXT_NODE) {

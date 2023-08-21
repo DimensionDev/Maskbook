@@ -13,6 +13,9 @@ export class ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
         return descriptor
     }
 
+    /**
+     * Guess chain id by name, it's not perfectly accurate
+     */
     chainId = (name: string) =>
         this.getDescriptors().find((x) =>
             [x.name, x.type as string, x.fullName, x.shortName]

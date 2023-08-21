@@ -7,8 +7,8 @@ export {
     removePopupWindow,
     openDashboard,
     queryCurrentActiveTab,
-    openPopupConnectWindow,
     openWalletStartUpWindow,
+    queryCurrentPopupWindowId,
 } from './popup-opener.js'
 export {
     queryExtensionPermission,

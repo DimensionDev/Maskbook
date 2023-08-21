@@ -45,7 +45,7 @@ export const SelectProvider = memo(function SelectProvider() {
     const wallets = useWallets()
     const navigate = useNavigate()
     const [params] = useSearchParams()
-    const disableNewWindow = params.get('disableNewWindow')
+
     const onlyMask = params.get('onlyMask')
     const providers = getRegisteredWeb3Providers(NetworkPluginID.PLUGIN_EVM)
     const modalNavigate = useModalNavigate()
@@ -73,7 +73,8 @@ export const SelectProvider = memo(function SelectProvider() {
                     return
                 }
             } else {
-                if (disableNewWindow) {
+                const currentPopupWindowId = await Services.Helper.queryCurrentPopupWindowId()
+                if (currentPopupWindowId) {
                     modalNavigate(
                         PopupModalRoutes.ConnectProvider,
                         {
@@ -95,7 +96,7 @@ export const SelectProvider = memo(function SelectProvider() {
                 return
             }
         },
-        [wallets, disableNewWindow, onlyMask],
+        [wallets, onlyMask],
     )
 
     return (

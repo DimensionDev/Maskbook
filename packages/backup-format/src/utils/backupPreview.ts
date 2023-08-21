@@ -30,13 +30,15 @@ export function getBackupSummary(json: NormalizedBackup.Data): BackupSummary {
             .sort((p) => (p.nickname.unwrapOr(false) ? -1 : 0))
             .map((p) => p.nickname.unwrapOr(p.identifier.rawPublicKey).trim()),
     )
+    const contacts = [...json.profiles.values()].filter((profile) => {
+        return !ownerProfiles.includes(profile.identifier.toText()) && profile.linkedPersona.some
+    })
     return {
         // Names or publicKeys */
         personas,
         accounts: sumBy(ownerPersonas, (persona) => persona.linkedProfiles.size),
         posts: json.posts.size,
-        contacts: [...json.profiles.values()].filter((profile) => !ownerProfiles.includes(profile.identifier.toText()))
-            .length,
+        contacts: contacts.length,
         relations: json.relations.length,
         files,
         wallets: json.wallets.map((wallet) => wallet.address),

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { CrossIsolationMessages, NetworkPluginID, type PluginID } from '@masknet/shared-base'
+import { CrossIsolationMessages, type PluginID } from '@masknet/shared-base'
 
 import RedPacketDialog from './RedPacketDialog.js'
-import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
 
 export function RedPacketInjection() {
     const [open, setOpen] = useState(false)
@@ -17,8 +17,8 @@ export function RedPacketInjection() {
 
     if (!open) return null
     return (
-        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+        <DefaultWeb3ContextProvider>
             <RedPacketDialog open onClose={() => setOpen(false)} source={source} />
-        </Web3ContextProvider>
+        </DefaultWeb3ContextProvider>
     )
 }

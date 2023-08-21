@@ -1,16 +1,18 @@
+import { useEffect, useMemo } from 'react'
 import { AllProviderTradeContext } from '@masknet/plugin-trader'
 import { Appearance } from '@masknet/public-api'
 import { SharedContextProvider } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { applyMaskColorVars, makeStyles } from '@masknet/theme'
-import { ChainContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { ChainContextProvider, DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ThemeProvider, Typography } from '@mui/material'
-import { useMemo } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { useSwapPageTheme } from '../../../../utils/theme/useSwapPageTheme.js'
 import { NetworkSelector } from '../../components/NetworkSelector/index.js'
 import { useTokenParams } from '../../hook/useTokenParams.js'
 import { SwapBox } from './SwapBox/index.js'
+import { SiteAdaptorContextRef } from '@masknet/plugin-infra/dom'
+import { TwitterAdaptor } from '../../../../../shared/site-adaptors/implementations/twitter.com.js'
+import { openWindow } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -67,6 +69,34 @@ export default function SwapPage() {
     applyMaskColorVars(document.body, Appearance.light)
     const chainContextValue = useMemo(() => ({ chainId }), [chainId])
 
+    useEffect(() => {
+        SiteAdaptorContextRef.value = {
+            ...SiteAdaptorContextRef.value,
+            share(text) {
+                const url = TwitterAdaptor.getShareLinkURL!(text)
+                const width = 700
+                const height = 520
+                const openedWindow = openWindow(url, 'share', {
+                    width,
+                    height,
+                    screenX: window.screenX + (window.innerWidth - width) / 2,
+                    screenY: window.screenY + (window.innerHeight - height) / 2,
+                    opener: true,
+                    referrer: true,
+                    behaviors: {
+                        toolbar: true,
+                        status: true,
+                        resizable: true,
+                        scrollbars: true,
+                    },
+                })
+                if (openedWindow === null) {
+                    location.assign(url)
+                }
+            },
+        }
+    }, [])
+
     return (
         <ThemeProvider theme={theme}>
             <SharedContextProvider>
@@ -80,11 +110,11 @@ export default function SwapPage() {
                                 <NetworkSelector />
                             </header>
                             <main className={classes.main}>
-                                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+                                <DefaultWeb3ContextProvider>
                                     <AllProviderTradeContext.Provider>
                                         <SwapBox />
                                     </AllProviderTradeContext.Provider>
-                                </Web3ContextProvider>
+                                </DefaultWeb3ContextProvider>
                             </main>
                         </div>
                     </div>

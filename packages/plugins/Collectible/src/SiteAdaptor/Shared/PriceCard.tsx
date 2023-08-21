@@ -1,4 +1,4 @@
-import { makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Skeleton, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -46,6 +46,9 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'flex-end',
     },
+    skeleton: {
+        backgroundColor: theme.palette.maskColor.publicLine,
+    },
 }))
 
 export interface PriceCardProps {
@@ -54,12 +57,12 @@ export interface PriceCardProps {
 
 export function PriceCard(props: PriceCardProps) {
     const { topListing } = props
-    const { setSourceType, sourceType, orders } = Context.useContainer()
+    const { setSourceType, sourceType = topListing?.source, orders } = Context.useContainer()
     const t = useI18N()
     const { classes } = useStyles()
-    if (((!topListing && orders.error) || orders.loading) && !sourceType) return null
+    if (((!topListing && orders.error) || orders.isLoading) && !sourceType) return null
 
-    if (!topListing && !orders.loading)
+    if (!topListing && !orders.isLoading)
         return sourceType ? (
             <div className={classes.wrapper}>
                 <div className={classes.priceZone}>
@@ -75,27 +78,27 @@ export function PriceCard(props: PriceCardProps) {
 
     const priceUSD = formatCurrency(topListing?.price?.usd ?? 0, 'USD', { onlyRemainTwoOrZeroDecimal: true })
 
+    const renderTokenSymbol = () => {
+        const { symbol, logoURL } = topListing?.priceInToken?.token ?? {}
+        if (symbol?.toUpperCase() === 'ETH') return <Icons.ETH size={18} />
+        if (logoURL) return <img width={18} height={18} src={logoURL} alt="" />
+        if (symbol?.toUpperCase() === 'WETH') return <Icons.WETH size={18} />
+
+        return (
+            <Typography className={classes.fallbackSymbol}>
+                {topListing?.priceInToken?.token.symbol || topListing?.priceInToken?.token.name}
+            </Typography>
+        )
+    }
+
     return (
         <div className={classes.wrapper}>
             <div className={classes.priceZone}>
-                {orders.loading ? (
+                {orders.isLoading ? (
                     <PriceLoadingSkeleton />
                 ) : (
                     <div className={classes.offerBox}>
-                        {topListing?.priceInToken?.token.symbol.toUpperCase() === 'ETH' ? (
-                            <Icons.ETH size={18} />
-                        ) : (
-                            (topListing?.priceInToken?.token.logoURL && (
-                                <img width={18} height={18} src={topListing.priceInToken.token.logoURL} alt="" />
-                            )) ||
-                            (topListing?.priceInToken?.token.symbol.toUpperCase() === 'WETH' ? (
-                                <Icons.WETH size={18} />
-                            ) : (
-                                <Typography className={classes.fallbackSymbol}>
-                                    {topListing?.priceInToken?.token.symbol || topListing?.priceInToken?.token.name}
-                                </Typography>
-                            ))
-                        )}
+                        {renderTokenSymbol()}
                         <Typography className={classes.textBase}>
                             <strong style={{ fontSize: '18px', lineHeight: '18px' }}>
                                 {formatBalance(
@@ -107,28 +110,29 @@ export function PriceCard(props: PriceCardProps) {
                         </Typography>
                         {topListing?.price?.usd ? (
                             <Typography className={classes.textBase}>
-                                ({priceUSD.includes('<') || isZero(topListing?.price?.usd) ? '' : '\u2248'}
+                                ({priceUSD.includes('<') || isZero(topListing?.price?.usd) ? '' : '≈'}
                                 {priceUSD})
                             </Typography>
                         ) : null}
                     </div>
                 )}
-                {topListing?.source ? (
-                    <SourceProviderSwitcher selected={topListing?.source} onSelect={setSourceType} />
-                ) : null}
+                {sourceType ? <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} /> : null}
             </div>
         </div>
     )
 }
 
 function PriceLoadingSkeleton() {
+    const { classes } = useStyles()
     return (
         <Stack gap={0.5} direction="row" height={24} alignItems="center">
-            <Skeleton variant="circular" animation="wave" sx={{ bgColor: 'grey.100' }} width={18} height={18} />
+            <LoadingBase size={20} />
             <Skeleton
-                variant="rectangular"
+                variant="text"
                 animation="wave"
-                sx={{ borderRadius: '2px', bgColor: 'grey.100' }}
+                classes={{
+                    root: classes.skeleton,
+                }}
                 width={88}
                 height={18}
             />

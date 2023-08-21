@@ -160,6 +160,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
     }, [progress])
 
     useAsync(async () => {
+        if (!errorInfo) return
         const transaction = errorInfo?.request?.params?.[0] as Web3Helper.Definition[T]['Transaction'] | undefined
         const computed = transaction ? await TransactionFormatter?.formatTransaction?.(chainId, transaction) : undefined
         const title = computed?.snackbar?.failedTitle ?? computed?.title

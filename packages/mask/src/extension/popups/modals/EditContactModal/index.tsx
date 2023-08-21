@@ -1,6 +1,6 @@
 import { forwardRef, useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { ActionButton, MaskTextField, makeStyles } from '@masknet/theme'
+import { ActionButton, MaskTextField, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { buttonClasses } from '@mui/material/Button'
 import { alpha } from '@mui/system'
 import { Box, Typography } from '@mui/material'
@@ -99,6 +99,8 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
     const contacts = useContacts()
     const wallets = useWallets()
 
+    const { showSnackbar } = usePopupCustomSnackbar()
+
     const nameAlreadyExist = Boolean(
         contacts?.find((contact) => contact.name === name && !isSameAddress(contact.address, address)) ||
             wallets?.find((wallet) => wallet.name === name),
@@ -117,6 +119,8 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
             await Web3.renameWallet?.(address, _name, { providerType: ProviderType.MaskWallet })
         }
 
+        showSnackbar(t('wallet_edit_contact_successfully'))
+
         onConfirm?.()
     }, [name, address, type, onConfirm])
 
@@ -132,7 +136,10 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
                     placeholder={t('wallet_name_wallet')}
                     className={classes.input}
                     value={name}
-                    onChange={(ev) => setName(ev.target.value)}
+                    onChange={(ev) => {
+                        if (name.length > 18) return
+                        setName(ev.target.value)
+                    }}
                     error={nameAlreadyExist}
                 />
             </Box>

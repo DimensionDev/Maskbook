@@ -13,7 +13,13 @@ import {
 } from '@masknet/web3-hooks-base'
 import { useGasLimit } from '@masknet/web3-hooks-evm'
 import { isLessThan, isLte, isZero, leftShift, minus, rightShift } from '@masknet/web3-shared-base'
-import { SchemaType, isNativeTokenAddress, type ChainId, type GasConfig } from '@masknet/web3-shared-evm'
+import {
+    SchemaType,
+    isNativeTokenAddress,
+    type ChainId,
+    type GasConfig,
+    getNativeTokenAddress,
+} from '@masknet/web3-shared-evm'
 import { Box, Input, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useMemo, useState } from 'react'
@@ -25,6 +31,7 @@ import { TokenPicker } from '../../../components/index.js'
 import { useTokenParams } from '../../../hook/index.js'
 import { ChooseTokenModal } from '../../../modals/modals.js'
 import { useDefaultGasConfig } from './useDefaultGasConfig.js'
+import { PopupContext } from '../../../hook/usePopupContext.js'
 
 const useStyles = makeStyles()((theme) => ({
     asset: {
@@ -80,10 +87,13 @@ const useStyles = makeStyles()((theme) => ({
 
 const ETH_GAS_LIMIT = '21000'
 const ERC20_GAS_LIMIT = '50000'
+// Change chain in SelectNetworkSidebar is pending status, but it should affect ContactsContext
+const PENDING_CHAIN_ID = 'pendingChainId'
 export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { chainId, address, params, setParams } = useTokenParams()
+    const { smartPayChainId } = PopupContext.useContainer()
     const recipient = params.get('recipient')
     const chainContextValue = useMemo(() => ({ chainId }), [chainId])
     const navigate = useNavigate()
@@ -101,6 +111,23 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                     p.set('chainId', asset.chainId.toString())
                     p.set('address', asset.address)
                     p.delete('undecided')
+                    p.delete(PENDING_CHAIN_ID)
+                    return p.toString()
+                },
+                { replace: true },
+            )
+        },
+        [setParams],
+    )
+    const setPendingChainId = useCallback(
+        (chainId: Web3Helper.ChainIdAll | undefined) => {
+            setParams(
+                (p) => {
+                    if (!chainId) {
+                        p.delete(PENDING_CHAIN_ID)
+                    } else {
+                        p.set(PENDING_CHAIN_ID, chainId.toString())
+                    }
                     return p.toString()
                 },
                 { replace: true },
@@ -143,6 +170,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         gasFee,
     } = useAvailableBalance(NetworkPluginID.PLUGIN_EVM, address, patchedGasConfig as GasConfig, {
         chainId,
+        providerURL: network?.rpcUrl,
     })
 
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
@@ -155,10 +183,15 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
 
     const [state, transfer] = useAsyncFn(async () => {
         if (!recipient || isZero(totalAmount) || !token?.decimals) return
+        const nativeTokenAddress = getNativeTokenAddress(chainId)
         try {
             await Web3.transferFungibleToken(address, recipient, totalAmount, '', {
                 overrides: gasConfig,
-                paymentToken: paymentAddress,
+                paymentToken: paymentAddress
+                    ? paymentAddress
+                    : chainId === smartPayChainId
+                    ? nativeTokenAddress
+                    : undefined,
                 chainId,
                 gasOptionType: gasConfig?.gasOptionType,
                 providerURL: network?.rpcUrl,
@@ -166,7 +199,17 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         } catch (err) {
             showSnackbar(t('failed_to_transfer_token', { message: (err as Error).message }), { variant: 'error' })
         }
-    }, [address, chainId, recipient, totalAmount, token?.decimals, gasConfig, paymentAddress, network?.rpcUrl])
+    }, [
+        address,
+        chainId,
+        recipient,
+        totalAmount,
+        token?.decimals,
+        gasConfig,
+        paymentAddress,
+        network?.rpcUrl,
+        smartPayChainId,
+    ])
 
     if (undecided)
         return (
@@ -176,6 +219,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                 chainId={chainId}
                 address={address}
                 onSelect={handleSelectAsset}
+                onChainChange={setPendingChainId}
             />
         )
 

@@ -16,7 +16,7 @@ import {
 import { useBalance, useReverseAddress, useWallets } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { FormattedBalance } from '@masknet/shared'
+import { FormattedBalance, ProgressiveText } from '@masknet/shared'
 import { ExplorerResolver } from '@masknet/web3-providers'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
@@ -125,6 +125,52 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
 }))
+
+interface WalletItemProps {
+    wallet: Wallet
+}
+
+const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
+    const { classes } = useStyles()
+    const { address, owner } = wallet
+    const chainId = owner ? ChainId.Matic : ChainId.Mainnet
+    const { data: balance = '0', isLoading } = useBalance(NetworkPluginID.PLUGIN_EVM, {
+        account: address,
+        chainId,
+    })
+    const theme = useTheme()
+
+    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address)
+
+    return (
+        <Box className={classes.addWalletWrapper}>
+            {owner ? <Icons.SmartPay size={30} /> : <Icons.ETH size={30} />}
+            <div>
+                <Typography className={classes.subTitle}>
+                    {domain || formatEthereumAddress(address, 4)}{' '}
+                    <Link
+                        underline="none"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href={ExplorerResolver.addressLink(chainId, address)}
+                        marginLeft="4px"
+                        width={16}
+                        height={16}>
+                        <Icons.LinkOut size={16} color={theme.palette.maskColor.main} />
+                    </Link>
+                </Typography>
+                <ProgressiveText loading={isLoading} className={classes.description} fontSize={12} skeletonWidth={50}>
+                    <FormattedBalance
+                        value={balance}
+                        decimals={18}
+                        symbol={owner ? 'Matic' : 'ETH'}
+                        formatter={formatBalance}
+                    />
+                </ProgressiveText>
+            </div>
+        </Box>
+    )
+})
 
 const SetPaymentPassword = memo(function SetPaymentPassword() {
     const { t } = useI18N()
@@ -302,45 +348,4 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
         </Box>
     )
 })
-
-interface WalletItemProps {
-    wallet: Wallet
-}
-
-function WalletItem({ wallet }: WalletItemProps) {
-    const { classes } = useStyles()
-    const { address, owner } = wallet
-    const { data: balance = '0' } = useBalance(NetworkPluginID.PLUGIN_EVM, {
-        account: address,
-        chainId: ChainId.Mainnet,
-    })
-    const theme = useTheme()
-
-    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address)
-
-    return (
-        <Box className={classes.addWalletWrapper}>
-            {owner ? <Icons.SmartPay size={30} /> : <Icons.ETH size={30} />}
-            <div>
-                <Typography className={classes.subTitle}>
-                    {domain || formatEthereumAddress(address, 4)}{' '}
-                    <Link
-                        underline="none"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href={ExplorerResolver.addressLink(ChainId.Mainnet, address)}
-                        marginLeft="4px"
-                        width={16}
-                        height={16}>
-                        <Icons.LinkOut size={16} color={theme.palette.maskColor.main} />
-                    </Link>
-                </Typography>
-                <Typography className={classes.description} fontSize={12}>
-                    <FormattedBalance value={balance} decimals={18} symbol="ETH" formatter={formatBalance} />
-                </Typography>
-            </div>
-        </Box>
-    )
-}
-
 export default SetPaymentPassword

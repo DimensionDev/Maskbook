@@ -141,8 +141,7 @@ const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: Asset
                 secondaryTypographyProps={{ component: 'div' }}
                 secondary={
                     <ProgressiveText className={classes.balance} loading={balance.pending} skeletonWidth={60}>
-                        {balance.value}
-                        {asset.symbol}
+                        {balance.value} {asset.symbol}
                     </ProgressiveText>
                 }>
                 <TextOverflowTooltip title={asset.name}>

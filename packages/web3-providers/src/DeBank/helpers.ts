@@ -16,6 +16,7 @@ import {
     TokenType,
     type Transaction,
     isSameAddress,
+    TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
 import {
@@ -69,6 +70,7 @@ function toTxAsset(
     { token_id, amount }: TransferringAsset,
     chainId: ChainId,
     token_dict: HistoryResponse['data']['token_dict'],
+    direction: DebankTransactionDirection,
 ) {
     const token = token_dict[token_id]
     // token_dict might not contain value to current token_id
@@ -94,18 +96,25 @@ function toTxAsset(
         symbol: token.optimized_symbol || token.collection?.name || fallbackName,
         address: token.decimals ? token_id : token.contract_id,
         decimals: token.decimals || 1,
-        direction: DebankTransactionDirection.SEND,
+        direction,
         amount: amount?.toString(),
         logoURI: token.logo_url,
     }
 }
 
-export function formatTransactions({
-    cate_dict,
-    history_list,
-    token_dict,
-}: HistoryResponse['data']): Array<Transaction<ChainId, SchemaType>> {
-    const resolver = new ChainResolverAPI()
+/** 0: failed 1: succeed */
+function normalizeTxStatus(status: 0 | 1): TransactionStatusType {
+    const map = {
+        0: TransactionStatusType.FAILED,
+        1: TransactionStatusType.SUCCEED,
+    }
+    return map[status]
+}
+
+export function formatTransactions(
+    { cate_dict, history_list, token_dict }: HistoryResponse['data'],
+    ownerAddress: string,
+): Array<Transaction<ChainId, SchemaType>> {
     const transactions = history_list.map((transaction): Transaction<ChainId, SchemaType> | undefined => {
         let txType = transaction.tx?.name
         if (!txType && !isNil(transaction.cate_id)) {
@@ -114,12 +123,16 @@ export function formatTransactions({
             txType = 'contract interaction'
         }
 
-        const chainId = resolver.chainId(transaction.chain)
+        const chainId = DEBANK_CHAIN_TO_CHAIN_ID_MAP[transaction.chain]
         if (!chainId) return
 
         if (isSameAddress(transaction.sends[0]?.to_addr, ZERO_ADDRESS)) {
             txType = 'burn'
         }
+        const isIn = transaction.cate_id === 'receive'
+        const from = transaction.tx?.from_addr ?? (isIn ? transaction.other_addr : '')
+        const to = isIn ? ownerAddress : transaction.other_addr
+        const { SEND, RECEIVE } = DebankTransactionDirection
         return {
             id: transaction.id,
             chainId,
@@ -129,12 +142,12 @@ export function formatTransactions({
                 ? cate_dict[transaction.cate_id].name
                 : transaction.tx?.name || 'Contract Interaction',
             timestamp: transaction.time_at * 1000,
-            from: transaction.tx?.from_addr ?? '',
-            to: transaction.other_addr,
-            status: transaction.tx?.status,
+            from,
+            to,
+            status: normalizeTxStatus(transaction.tx?.status!),
             assets: compact([
-                ...transaction.sends.map((asset) => toTxAsset(asset, chainId, token_dict)),
-                ...transaction.receives.map((asset) => toTxAsset(asset, chainId, token_dict)),
+                ...transaction.sends.map((asset) => toTxAsset(asset, chainId, token_dict, SEND)),
+                ...transaction.receives.map((asset) => toTxAsset(asset, chainId, token_dict, RECEIVE)),
             ]),
             fee: transaction.tx
                 ? { eth: transaction.tx.eth_gas_fee?.toString(), usd: transaction.tx.usd_gas_fee?.toString() }

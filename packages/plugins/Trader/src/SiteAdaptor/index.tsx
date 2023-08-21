@@ -1,10 +1,10 @@
 import { Trans } from 'react-i18next'
 import type { Plugin } from '@masknet/plugin-infra'
 import { TrendingView } from './trending/TrendingView.js'
-import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { DefaultWeb3ContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
+import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -66,9 +66,9 @@ const site: Plugin.SiteAdaptor.Definition<ChainId> = {
         return (
             <>
                 <TagInspector />
-                <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+                <DefaultWeb3ContextProvider>
                     <TraderDialog />
-                </Web3ContextProvider>
+                </DefaultWeb3ContextProvider>
             </>
         )
     },

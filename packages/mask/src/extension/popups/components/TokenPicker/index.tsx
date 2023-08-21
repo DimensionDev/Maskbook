@@ -6,7 +6,7 @@ import { useFungibleAssets, useNetworks, useWallet } from '@masknet/web3-hooks-b
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, List, type BoxProps } from '@mui/material'
-import { memo, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { TokenItem, type TokenItemProps } from './TokenItem.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -31,6 +31,7 @@ export interface TokenPickerProps extends Omit<BoxProps, 'onSelect'>, Pick<Token
     defaultChainId?: ChainId
     chainId?: ChainId
     address?: string
+    onChainChange?: (chainId: Web3Helper.ChainIdAll | undefined) => void
 }
 
 export const TokenPicker = memo(function TokenPicker({
@@ -39,6 +40,7 @@ export const TokenPicker = memo(function TokenPicker({
     address,
     className,
     onSelect,
+    onChainChange,
     ...rest
 }: TokenPickerProps) {
     const { classes, cx } = useStyles()
@@ -46,6 +48,13 @@ export const TokenPicker = memo(function TokenPicker({
         chainId,
     })
     const [sidebarChainId, setSidebarChainId] = useState<Web3Helper.ChainIdAll | undefined>(defaultChainId)
+    const handleChainChange = useCallback(
+        (chainId: Web3Helper.ChainIdAll | undefined) => {
+            onChainChange?.(chainId)
+            setSidebarChainId(chainId)
+        },
+        [onChainChange],
+    )
     const availableAssets = useMemo(() => {
         if (!sidebarChainId) return assets
         return assets.filter((x) => x.chainId === sidebarChainId)
@@ -66,7 +75,7 @@ export const TokenPicker = memo(function TokenPicker({
                 pluginID={NetworkPluginID.PLUGIN_EVM}
                 chainId={sidebarChainId}
                 hideAllButton
-                onChainChange={setSidebarChainId}
+                onChainChange={handleChainChange}
             />
             <List className={classes.list} data-hide-scrollbar>
                 {availableAssets.map((asset) => {
