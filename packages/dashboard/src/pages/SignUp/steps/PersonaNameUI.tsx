@@ -71,7 +71,7 @@ export function PersonaNameUI({ onNext, error, loading }: PersonaNameUIProps) {
                         size="large"
                         color="primary"
                         onClick={() => onNext(personaName)}
-                        disabled={!personaName || loading}>
+                        disabled={!personaName.trim().length || loading}>
                         {t.continue()}
                     </PrimaryButton>
                 </div>
