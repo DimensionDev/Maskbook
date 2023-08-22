@@ -28,6 +28,7 @@ function Configuration(env, argv) {
         name: 'mask',
         entry: './src/index.tsx',
         output: {
+            filename: '[name].[contenthash].js',
             path: fileURLToPath(new URL('./dist', import.meta.url)),
             publicPath: 'auto',
             clean: true,
