@@ -8,7 +8,7 @@ const PluginRender = lazy(() => import('./plugin-render.js'))
 
 export function DecryptMessage(props: { text: string; version: string }) {
     const { text, version } = props
-    const [error, isE2E, message] = useDecrypt(text, version)
+    const [error, isE2E, message, payload] = useDecrypt(text, version)
 
     if (isE2E)
         return (
@@ -31,7 +31,6 @@ export function DecryptMessage(props: { text: string; version: string }) {
             <Box sx={{ px: 2 }}>
                 <TypedMessageRender message={message} />
             </Box>
-
             <Suspense fallback={<Typography sx={{ padding: 2 }}>Plugin is loading...</Typography>}>
                 <PluginRender message={message} />
             </Suspense>

@@ -17,6 +17,7 @@ export async function parsePayloadText(encoded: string): Promise<PayloadParseRes
         'https://mask.io/?PostData_v1=' +
             encodeURI(encoded).replaceAll(/@$/g, '%40').replaceAll('%2F', '/').replaceAll('%3D', '='),
     ).unwrapOr('')
+
     if (typeof payload === 'string') {
         payload = payload.replaceAll('%20', '+')
     }
