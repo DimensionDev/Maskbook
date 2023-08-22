@@ -1,6 +1,5 @@
 import { Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import { DisableShadowRootContext, ShadowRootIsolation } from '@masknet/theme'
 import { SiteAdaptorContextRef } from '@masknet/plugin-infra/content-script'
 import { DashboardForDesktop } from './components/DashboardDesktop.js'
 import { DashboardForMobile } from './components/DashboardMobile.js'
@@ -40,11 +39,7 @@ export function MainUI() {
                     </div>
                 </BrowserRouter>
 
-                <DisableShadowRootContext.Provider value={false}>
-                    <ShadowRootIsolation>
-                        <PageInspectorRender />
-                    </ShadowRootIsolation>
-                </DisableShadowRootContext.Provider>
+                <PageInspectorRender />
             </Suspense>
         </DashboardContext.Provider>
     )
