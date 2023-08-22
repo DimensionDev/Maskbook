@@ -22,7 +22,7 @@ export function useFriendsPaged() {
     const {
         data: records = EMPTY_LIST,
         isLoading: recordsLoading,
-        refetch: refechRecords,
+        refetch: refetchRecords,
     } = useQuery(['relation-records', currentPersona?.identifier.rawPublicKey], async () => {
         return Services.Identity.queryRelationPaged(
             currentPersona?.identifier,
@@ -72,8 +72,8 @@ export function useFriendsPaged() {
     })
     const refetch = useCallback(() => {
         refetchFriends()
-        refechRecords()
-    }, [refetchFriends, refechRecords])
+        refetchRecords()
+    }, [refetchFriends, refetchRecords])
     return {
         data,
         isLoading: isLoading || recordsLoading,
