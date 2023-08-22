@@ -1,7 +1,5 @@
 {
     "EXAMPLE_PROGRAM_ID": {
-        "Mainnet": "",
-        "Testnet": "",
-        "Devnet": ""
+        "Mainnet": ""
     }
 }
