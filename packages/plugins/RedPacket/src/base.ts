@@ -25,6 +25,7 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.BSC,
                     ChainId.Matic,
                     ChainId.Arbitrum,
+                    ChainId.Base,
                     ChainId.xDai,
                     ChainId.Fantom,
                     ChainId.Optimism,
