@@ -8,72 +8,83 @@ interface ConstantsConfig {
     [key: string]: Record<string, Primitive | Primitive[]>
 }
 
-async function compressConstants(folderPath: string, names: string[]) {
+async function readConstantsFile(filePath: string): Promise<ConstantsConfig> {
+    const data = await fs.readFile(filePath, 'utf-8')
+    return JSON.parse(data)
+}
+
+async function writeConstantsFile(filePath: string, constants: ConstantsConfig): Promise<void> {
+    await fs.writeFile(filePath, JSON.stringify(constants, null, 4), 'utf-8')
+}
+
+function getDefaultPrimitiveValue(value: Primitive | Primitive[]): Primitive | Primitive[] {
+    if (typeof value === 'string') {
+        return ''
+    } else if (typeof value === 'number') {
+        return 0
+    } else if (typeof value === 'boolean') {
+        return false
+    } else if (Array.isArray(value)) {
+        return []
+    }
+    return ''
+}
+
+function filterNonBlankPairs(
+    values: Record<string, Primitive | Primitive[]>,
+    names: string[],
+): Array<[string, Primitive | Primitive[]]> {
+    return Object.entries(values).filter(([key, value]) => value !== '' || !names.includes(key) || key === 'Mainnet')
+}
+
+async function processConstants(
+    folderPath: string,
+    keys: string[],
+    action: (constants: ConstantsConfig, names: string[]) => ConstantsConfig,
+): Promise<void> {
     for (const file of await fs.readdir(folderPath)) {
         const filePath = resolve(folderPath, file)
-        const data = await fs.readFile(filePath, 'utf-8')
-        const constants: ConstantsConfig = JSON.parse(data)
-        for (const name of Object.keys(constants)) {
-            const values = constants[name]
-            const nonBlankPairs: Array<[string, Primitive | Primitive[]]> = []
-
-            for (const [key, value] of Object.entries(values)) {
-                if (value !== '' || !names.includes(key) || key === 'Mainnet') {
-                    nonBlankPairs.push([key, value])
-                }
-            }
-
-            constants[name] = Object.fromEntries(nonBlankPairs)
-        }
-        await fs.writeFile(filePath, JSON.stringify(constants, null, 4), 'utf-8')
+        const constants = await readConstantsFile(filePath)
+        const updatedConstants = action(constants, keys)
+        await writeConstantsFile(filePath, updatedConstants)
     }
 
     run(undefined, 'npx', 'prettier', '--write', folderPath)
 }
 
-async function completeConstants(folderPath: string, names: string[]) {
-    for (const file of await fs.readdir(folderPath)) {
-        const filePath = resolve(folderPath, file)
-        const data = await fs.readFile(filePath, 'utf-8')
-        const constants: ConstantsConfig = JSON.parse(data)
+function compressAction(constants: ConstantsConfig, names: string[]): ConstantsConfig {
+    const updatedConstants: ConstantsConfig = {}
+    for (const name of Object.keys(constants)) {
+        const values = constants[name]
+        const nonBlankPairs = filterNonBlankPairs(values, names)
+        updatedConstants[name] = Object.fromEntries(nonBlankPairs)
+    }
+    return updatedConstants
+}
 
-        for (const name of Object.keys(constants)) {
-            const values = constants[name]
-            const updatedValues: Record<string, Primitive | Primitive[]> = {}
+function completeAction(constants: ConstantsConfig, names: string[]): ConstantsConfig {
+    const updatedConstants: ConstantsConfig = {}
+    for (const name of Object.keys(constants)) {
+        const values = constants[name]
+        const updatedValues: Record<string, Primitive | Primitive[]> = {}
 
-            for (const key of names) {
-                if (key in values) {
-                    updatedValues[key] = values[key]
-                } else {
-                    // Set default values based on value type
-                    let defaultValue: Primitive | Primitive[] = ''
-                    if (typeof values[Object.keys(values)[0]] === 'string') {
-                        defaultValue = ''
-                    } else if (typeof values[Object.keys(values)[0]] === 'number') {
-                        defaultValue = 0
-                    } else if (typeof values[Object.keys(values)[0]] === 'boolean') {
-                        defaultValue = false
-                    } else if (Array.isArray(values[Object.keys(values)[0]])) {
-                        defaultValue = []
-                    }
-
-                    updatedValues[key] = defaultValue
-                }
+        for (const key of names) {
+            if (key in values) {
+                updatedValues[key] = values[key]
+            } else {
+                updatedValues[key] = getDefaultPrimitiveValue(values[Object.keys(values)[0]])
             }
-
-            for (const key of Object.keys(values)) {
-                if (!names.includes(key)) {
-                    updatedValues[key] = values[key]
-                }
-            }
-
-            constants[name] = updatedValues
         }
 
-        await fs.writeFile(filePath, JSON.stringify(constants, null, 4), 'utf-8')
-    }
+        for (const key of Object.keys(values)) {
+            if (!names.includes(key)) {
+                updatedValues[key] = values[key]
+            }
+        }
 
-    run(undefined, 'npx', 'prettier', '--write', folderPath)
+        updatedConstants[name] = updatedValues
+    }
+    return updatedConstants
 }
 
 const EVM_KEYS = [
@@ -112,15 +123,15 @@ async function main() {
     const args = process.argv.slice(2)
 
     if (args.includes('--compress')) {
-        compressConstants(join(__dirname, 'evm'), EVM_KEYS)
-        compressConstants(join(__dirname, 'solana'), SOLANA_KEYS)
-        compressConstants(join(__dirname, 'flow'), FLOW_KEYS)
+        await processConstants(join(__dirname, 'evm'), EVM_KEYS, compressAction)
+        await processConstants(join(__dirname, 'solana'), SOLANA_KEYS, compressAction)
+        await processConstants(join(__dirname, 'flow'), FLOW_KEYS, compressAction)
     }
 
     if (args.includes('--complete')) {
-        completeConstants(join(__dirname, 'evm'), EVM_KEYS)
-        completeConstants(join(__dirname, 'solana'), SOLANA_KEYS)
-        completeConstants(join(__dirname, 'flow'), FLOW_KEYS)
+        await processConstants(join(__dirname, 'evm'), EVM_KEYS, completeAction)
+        await processConstants(join(__dirname, 'solana'), SOLANA_KEYS, completeAction)
+        await processConstants(join(__dirname, 'flow'), FLOW_KEYS, completeAction)
     }
 }
 
