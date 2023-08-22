@@ -44,7 +44,7 @@ export function DropdownMenu(props: DropdownMenuProps) {
         <Menu as="div" className="relative inline-block text-left">
             <div ref={menuButtonRef}>
                 <Menu.Button
-                    className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white dark:bg-black px-3 py-2 text-sm font-semibold text-black dark:text-white whitespace-nowrap"
+                    className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white dark:bg-[#16161a] px-3 py-2 text-sm font-semibold text-black dark:text-white whitespace-nowrap"
                     onClick={() => setMenuOpen(!menuOpen)}>
                     {activeItemLabel}
                     <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -60,7 +60,7 @@ export function DropdownMenu(props: DropdownMenuProps) {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
                 show={menuOpen}>
-                <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white dark:bg-black shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border dark:border-neutral-800">
+                <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white dark:bg-[#16161a] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border dark:border-neutral-800">
                     <div className="py-1">
                         {props.items.map((item) => (
                             <Menu.Item key={item.id}>

@@ -34,7 +34,7 @@ export function SearchBox(props: SearchBoxProps) {
                 />
                 <input
                     id="search-field"
-                    className="dark:bg-black bg-white block h-full w-full border-0 bg-transparent py-0 pl-8 pr-0 dark:text-white text-black focus:ring-0 sm:text-sm"
+                    className="dark:bg-[#16161a] bg-white block h-full w-full border-0 bg-transparent py-0 pl-8 pr-0 dark:text-white text-black focus:ring-0 sm:text-sm"
                     placeholder="eg: Twitter accounts, Persona public keys, wallet addresses or ENS"
                     type="search"
                     name="search"
