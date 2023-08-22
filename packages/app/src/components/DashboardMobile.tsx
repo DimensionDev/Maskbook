@@ -1,11 +1,11 @@
 import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import { env } from '@masknet/flags'
 import { DashboardContext } from '../contexts/DashboardContext.js'
 import { WalletItem } from './Wallet.js'
 import { Navigation } from './Navigation.js'
 import { InstallExtension } from './Install.js'
-import { env } from '@masknet/flags'
 
 export interface DashboardForMobileProps {}
 

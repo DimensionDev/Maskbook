@@ -1,12 +1,12 @@
 import { memo } from 'react'
+import { Typography } from '@mui/material'
+import { Appearance } from '@masknet/public-api'
+import { MaskMessages } from '@masknet/shared-base'
+
 import { DropdownMenu } from '../components/DropdownMenu.js'
 import { DashboardBody } from '../components/DashboardBody.js'
 import { DashboardContainer } from '../components/DashboardContainer.js'
 import { DashboardHeader } from '../components/DashboardHeader.js'
-
-import { Typography } from '@mui/material'
-import { Appearance } from '@masknet/public-api'
-import { MaskMessages } from '@masknet/shared-base'
 import { useSetThemeMode } from '../hooks/useSetThemeMode.js'
 import { useThemeMode } from '../hooks/useThemeMode.js'
 

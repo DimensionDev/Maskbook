@@ -1,3 +1,4 @@
+import { decodeArrayBuffer } from '@masknet/kit'
 import type { AESCryptoKey } from '@masknet/base'
 import {
     decrypt as lib_decrypt,
@@ -8,7 +9,6 @@ import {
     type PayloadParseResult,
 } from '@masknet/encryption'
 import type { TypedMessage } from '@masknet/typed-message'
-import { decodeArrayBuffer } from '@masknet/kit'
 
 const cache = new Map<string, AESCryptoKey>()
 
