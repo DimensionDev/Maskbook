@@ -58,8 +58,8 @@ export const NetworkTab = memo(function NetworkTab({
             return prev
         })
 
-        if (!chains.includes(chainId) && chains.includes(ChainId.Mainnet)) setChainId(ChainId.Mainnet)
-    }, [chains, chainId, isValidChainId])
+        if (!isValidChainId) setChainId(ChainId.Mainnet)
+    }, [chainId, isValidChainId])
 
     return (
         <TabContext value={tab}>
