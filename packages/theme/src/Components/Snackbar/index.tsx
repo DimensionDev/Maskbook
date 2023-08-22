@@ -50,6 +50,9 @@ export const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, {
             display: 'flex',
             alignItems: 'center',
         },
+        '& :focus:not(:focus-visible)': {
+            outline: 0,
+        },
     } as const
     const defaultVariant = {
         background: theme.palette.maskColor.bottom,
