@@ -63,7 +63,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const state = useState(DialogTabs.create)
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account, chainId: _chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const approvalDefinition = useActivatedPlugin(PluginID.RedPacket, 'any')
     const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
     const { classes } = useStyles({ currentTab, showHistory })
@@ -74,6 +74,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 : [ChainId.Mainnet, ChainId.BSC, ChainId.Matic],
         )
     }, [currentTab === tabs.tokens, approvalDefinition?.enableRequirement.web3])
+    const chainId = chainIdList.includes(_chainId) ? _chainId : ChainId.Mainnet
 
     // #region token lucky drop
     const [settings, setSettings] = useState<RedPacketSettings>()
@@ -234,6 +235,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                 }}>
                                 <TabPanel value={tabs.tokens} style={{ padding: 0, height: 474 }}>
                                     <RedPacketERC20Form
+                                        expectedChainId={chainId}
                                         origin={settings}
                                         onClose={onClose}
                                         onNext={onNext}
@@ -265,6 +267,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
                     {step === CreateRedPacketPageStep.ConfirmPage ? (
                         <RedPacketConfirmDialog
+                            expectedChainId={chainId}
                             onClose={onClose}
                             onBack={onBack}
                             onCreated={handleCreated}
