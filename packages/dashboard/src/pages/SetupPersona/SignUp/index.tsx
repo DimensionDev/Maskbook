@@ -118,7 +118,7 @@ export const SignUp = memo(function SignUp() {
                         size="large"
                         color="primary"
                         onClick={() => onNext()}
-                        disabled={!personaName}>
+                        disabled={!personaName.trim().length}>
                         {t.continue()}
                     </PrimaryButton>
                 </div>
