@@ -6,19 +6,20 @@ import { parseLink } from '@masknet/typed-message/internal'
 /** @internal */
 export interface RenderTextProps {
     text: string
+    style?: React.CSSProperties
 }
 
 /** @internal */
 export const RenderTextFragment = memo(function RenderText(props: RenderTextProps) {
     const { Text = DefaultRenderFragments.Text } = useContext(RenderFragmentsContext)
-    return createElement(Fragment, {}, ...parseText(props.text, Text))
+    return createElement(Fragment, {}, ...parseText(props.text, props.style, Text))
 })
 
 /** @internal */
 export const RenderLinkFragment = memo(function RenderLink(
     props: Pick<TypedMessageAnchor, 'category'> & RenderFragmentsContextType.LinkProps,
 ) {
-    const { children, href, category, suggestedPostImage } = props
+    const { children, href, category, suggestedPostImage, style } = props
     const context = useContext(RenderFragmentsContext)
     const {
         Text = DefaultRenderFragments.Text,
@@ -27,25 +28,35 @@ export const RenderLinkFragment = memo(function RenderLink(
         CashLink = Text,
         HashLink = Text,
     } = context
-    if (category === 'cash') return <CashLink children={children} suggestedPostImage={suggestedPostImage} />
-    if (category === 'hash') return <HashLink children={children} suggestedPostImage={suggestedPostImage} />
-    if (category === 'user') return <AtLink children={children} suggestedPostImage={suggestedPostImage} />
-    return <Link children={children} href={href} suggestedPostImage={suggestedPostImage} />
+    const sharedProps = { style, children, suggestedPostImage }
+    if (category === 'cash') return <CashLink {...sharedProps} />
+    if (category === 'hash') return <HashLink {...sharedProps} />
+    if (category === 'user') return <AtLink {...sharedProps} />
+    return <Link {...sharedProps} href={href} />
 })
 
-function parseText(string: string, Text: NonNullable<RenderFragmentsContextType['Text']>) {
-    const links = parseLink(string).flatMap((x, index) => {
-        if (x.type === 'text') {
-            return sliceString(x.content).map((x, i) =>
-                x === '\n' ? <br key={`${index}/${i}`} /> : <Text children={x} key={`${index}/${i}`} />,
+function parseText(
+    string: string,
+    style: React.CSSProperties | undefined,
+    Text: NonNullable<RenderFragmentsContextType['Text']>,
+) {
+    const links = parseLink(string).flatMap((frag, index) => {
+        if (frag.type === 'text') {
+            return sliceString(frag.content).map((text, i) =>
+                text === '\n' ? (
+                    <br style={style} key={`${index} of ${i}`} />
+                ) : (
+                    <Text children={text} style={style} key={`${index} of ${i}`} />
+                ),
             )
         }
-        if (x.category === 'normal' && !x.content.match(/^https?:\/\//gi)) x.content = 'http://' + x.content
+        if (frag.category === 'normal' && !frag.content.match(/^https?:\/\//gi)) frag.content = 'http://' + frag.content
         return (
             <RenderLinkFragment
-                category={x.category}
-                href={x.content}
-                children={x.content}
+                style={style}
+                category={frag.category}
+                href={frag.content}
+                children={frag.content}
                 suggestedPostImage={undefined}
             />
         )

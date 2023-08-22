@@ -1,4 +1,4 @@
-import type { NonSerializableWithAltTypedMessage } from '../base.js'
+import type { Meta, NonSerializableWithAltTypedMessage } from '../base.js'
 import { createIsType } from '../utils/internal.js'
 import { makeTypedMessageText, type TypedMessageImage, type TypedMessageText } from '../core/index.js'
 
@@ -20,6 +20,7 @@ export function makeTypedMessageAnchor(
     href: TypedMessageAnchor['href'],
     content: TypedMessageAnchor['content'],
     postImage?: TypedMessageImage,
+    meta?: Meta | undefined,
 ): TypedMessageAnchor {
     return {
         type: 'x-anchor',
@@ -27,7 +28,8 @@ export function makeTypedMessageAnchor(
         category,
         href,
         content,
-        alt: makeTypedMessageText(`[${content}](${href})`),
+        alt: makeTypedMessageText(`[${content}](${href})`, meta),
         postImage,
+        meta,
     }
 }
