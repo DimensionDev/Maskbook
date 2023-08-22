@@ -25,7 +25,7 @@ export function MainUI() {
     return (
         <DashboardContext.Provider>
             <BrowserRouter>
-                <div className="bg-white dark:bg-black h-full">
+                <div className="bg-white dark:bg-[#16161a] h-full">
                     <DashboardForMobile />
                     <DashboardForDesktop />
                     <Suspense

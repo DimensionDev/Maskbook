@@ -22,14 +22,13 @@ const useStyles = makeStyles()((theme) => ({
         padding: 8,
     },
     title: {
-        paddingTop: 8,
-        paddingBottom: 8,
+        paddingTop: 16,
+        paddingBottom: 0,
         fontWeight: 700,
     },
     network: {
-        gap: 12,
-        display: 'grid',
-        gridTemplateColumns: 'repeat(2,1fr)',
+        display: 'flex',
+        flexDirection: 'row',
         paddingTop: 8,
         paddingBottom: 8,
     },
@@ -94,29 +93,30 @@ export const ShareSelectNetwork = memo<ShareSelectNetworkProps>(({ open, onClose
                         const network = Number.parseInt(e.currentTarget.value, 10) as EncryptPayloadNetwork
                         setNetwork(network)
                     }}>
-                    {Object.entries(SharedUrl).map(([site, converter]) => {
-                        if (!converter) return undefined
-                        return (
-                            <FormControlLabel
-                                key={site}
-                                label={SOCIAL_MEDIA_NAME[encryptPayloadNetworkToDomain(Number.parseInt(site, 10))]}
-                                value={site}
-                                control={
-                                    <Radio
-                                        color="primary"
-                                        value={site}
-                                        icon={
-                                            <Icons.RadioButtonUnChecked
-                                                color={theme.palette.maskColor.line}
-                                                size={18}
-                                            />
-                                        }
-                                        checkedIcon={<Icons.RadioButtonChecked size={18} />}
-                                    />
-                                }
-                            />
-                        )
-                    })}
+                    {Object.entries(SharedUrl)
+                        .filter(([_, converter]) => converter)
+                        .map(([site]) => {
+                            return (
+                                <FormControlLabel
+                                    key={site}
+                                    label={SOCIAL_MEDIA_NAME[encryptPayloadNetworkToDomain(Number.parseInt(site, 10))]}
+                                    value={site}
+                                    control={
+                                        <Radio
+                                            color="primary"
+                                            value={site}
+                                            icon={
+                                                <Icons.RadioButtonUnChecked
+                                                    color={theme.palette.maskColor.line}
+                                                    size={18}
+                                                />
+                                            }
+                                            checkedIcon={<Icons.RadioButtonChecked size={18} />}
+                                        />
+                                    }
+                                />
+                            )
+                        })}
                 </RadioGroup>
                 <div className={classes.actions}>
                     <Button className={classes.button} variant="roundedOutlined" onClick={onClose}>

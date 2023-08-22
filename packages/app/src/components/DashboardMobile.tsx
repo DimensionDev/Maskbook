@@ -55,7 +55,7 @@ export function DashboardForMobile(props: DashboardForMobileProps) {
                                 </div>
                             </Transition.Child>
                             {/* Sidebar component, swap this element with another sidebar if you like */}
-                            <div className="flex grow flex-col gap-y-5 overflow-y-auto dark:bg-black bg-white px-6">
+                            <div className="flex grow flex-col gap-y-5 overflow-y-auto dark:bg-[#16161a] bg-white px-6">
                                 <div className="flex h-16 shrink-0 items-center">
                                     <WalletItem />
                                 </div>
