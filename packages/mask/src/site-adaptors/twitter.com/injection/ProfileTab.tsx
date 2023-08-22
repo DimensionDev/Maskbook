@@ -314,6 +314,10 @@ function hiddenNextArrow() {
     svg.style.removeProperty('color')
 }
 
+function onNextClick() {
+    hiddenNextArrow()
+}
+
 function InjectProfileTab() {
     const ref = useRef<HTMLDivElement>(null)
     const { classes } = useStyles()
@@ -321,7 +325,6 @@ function InjectProfileTab() {
     const timeoutRef = useRef<any>()
 
     function onMouseEnter() {
-        console.log('enter')
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current)
             timeoutRef.current = null
@@ -335,17 +338,11 @@ function InjectProfileTab() {
     }
 
     function onMouseLeave() {
-        console.log('leave')
         if (!timeoutRef.current) timeoutRef.current = setTimeout(hiddenNextArrow, 500)
-    }
-
-    function onNextClick() {
-        hiddenNextArrow()
     }
 
     const tabList = searchProfileTabListSelector().evaluate()
     const nextArrow = nextTabListSelector().evaluate()
-    console.log('next', nextArrow)
     useEffect(() => {
         ref.current?.addEventListener('mouseenter', onMouseEnter)
         ref.current?.addEventListener('mouseleave', onMouseLeave)
