@@ -93,7 +93,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     // #region amount minus estimate gas fee
-    const { value: createParams } = useCreateParams(settings!, contract_version, publicKey)
+    const { value: createParams } = useCreateParams(chainId, settings!, contract_version, publicKey)
     const isNativeToken = isSameAddress(settings?.token?.address, nativeTokenAddress)
     const { transactionValue, estimateGasFee } = useTransactionValue(
         settings?.total,
@@ -113,6 +113,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         isNativeToken ? 3 : 0,
     )
     const [{ loading: isCreating }, createCallback] = useCreateCallback(
+        chainId,
         { ...settings!, total },
         contract_version,
         publicKey,
@@ -188,7 +189,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const wallet = useWallet()
     const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
-    const { value: params } = useCreateParams(settings!, contract_version, publicKey)
+    const { value: params } = useCreateParams(chainId, settings!, contract_version, publicKey)
 
     return (
         <>
