@@ -96,11 +96,13 @@ export const NetworkManagement = memo(function NetworkManagement() {
                     )
                 })}
             </List>
-            <div className={classes.footer}>
-                <ActionButton fullWidth onClick={() => navigate(PopupRoutes.AddNetwork)}>
-                    {t('network_management_add_network')}
-                </ActionButton>
-            </div>
+            {process.env.NODE_ENV === 'development' ? (
+                <div className={classes.footer}>
+                    <ActionButton fullWidth onClick={() => navigate(PopupRoutes.AddNetwork)}>
+                        {t('network_management_add_network')}
+                    </ActionButton>
+                </div>
+            ) : null}
         </main>
     )
 })
