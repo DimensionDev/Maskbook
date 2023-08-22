@@ -212,7 +212,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
     const gasUsedPercent = tx ? (tx.gas_used * 100) / tx.gas : 0
     const gasFeeInState = !isRecentTx && !tx ? transactionState?.fee?.eth : undefined
     const gasFee = tx
-        ? formatWeiToEther(multipliedBy(tx.gas_used, tx.gas_price))
+        ? formatWeiToEther(multipliedBy(tx.gas_used, tx.effective_gas_price))
         : gasFeeInState
         ? new BigNumber(gasFeeInState)
         : undefined
