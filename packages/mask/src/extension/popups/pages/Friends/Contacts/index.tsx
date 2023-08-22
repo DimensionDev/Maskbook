@@ -1,11 +1,11 @@
 import { memo } from 'react'
+import { first } from 'lodash-es'
 import { ElementAnchor, EmptyStatus } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Box } from '@mui/material'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { type Friend } from '../../../hook/useFriends.js'
 import { ContactCard } from '../ContactCard/index.js'
-import { first } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     empty: {
