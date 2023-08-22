@@ -5,6 +5,7 @@ import { Box } from '@mui/material'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { type Friend } from '../../../hook/useFriends.js'
 import { ContactCard } from '../ContactCard/index.js'
+import { first } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     empty: {
@@ -40,7 +41,7 @@ export interface ContactsProps {
 export const Contacts = memo<ContactsProps>(function Contacts({ friendsArray, fetchNextPage }) {
     const { classes } = useStyles()
     const { t } = useI18N()
-    return friendsArray.length === 0 ? (
+    return !first(friendsArray) || first(friendsArray)?.friends.length === 0 ? (
         <EmptyStatus className={classes.empty}>{t('popups_encrypted_friends_no_friends')}</EmptyStatus>
     ) : (
         <Box className={classes.cardContainer}>
