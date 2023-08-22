@@ -23,10 +23,10 @@ export const FriendsDetail = memo(function FriendsDetail() {
         )
         if (currentPersona) await Services.Identity.deletePersonaRelation(personaIdentifier, currentPersona?.identifier)
         await Services.Identity.deletePersona(personaIdentifier, 'safe delete')
-        showSnackbar(t('popups_encrypted_friends_deleted_successfully'), { variant: 'success' })
-        setDeleted(true)
         queryClient.invalidateQueries(['relation-records', rawPublicKey])
         queryClient.invalidateQueries(['friends', rawPublicKey])
+        showSnackbar(t('popups_encrypted_friends_deleted_successfully'), { variant: 'success' })
+        setDeleted(true)
     }, [nextId, rawPublicKey, queryClient])
 
     return (

@@ -18,7 +18,6 @@ import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import Services from '../../../../service.js'
 import { useEverSeen } from '@masknet/shared-base-ui'
 import { useFriendProfiles } from '../../../hook/useFriendProfiles.js'
-import { type UseQueryResult, type RefetchOptions } from '@tanstack/react-query'
 import { useQueryClient } from '@tanstack/react-query'
 import urlcat from 'urlcat'
 
@@ -77,7 +76,7 @@ interface ContactCardProps {
     publicKey?: string
     isLocal?: boolean
     profile?: ProfileIdentifier
-    refetch?: (options?: RefetchOptions) => Promise<UseQueryResult>
+    refetch?: () => void
 }
 
 export const ContactCard = memo<ContactCardProps>(function ContactCard({
@@ -94,6 +93,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
     const navigate = useNavigate()
     const { showSnackbar } = usePopupCustomSnackbar()
     const [local, setLocal] = useState(false)
+    const [adding, setAdding] = useState(false)
     const [seen, ref] = useEverSeen<HTMLLIElement>()
     const { currentPersona } = PersonaContext.useContainer()
     const { t } = useI18N()
@@ -101,11 +101,12 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
     const queryClient = useQueryClient()
     const handleAddFriend = useCallback(async () => {
         if (!currentPersona) return
-        const twitter = profiles?.find((p) => p.platform === NextIDPlatform.Twitter)
+        const twitter = proofProfiles?.find((p) => p.platform === NextIDPlatform.Twitter)
         const personaIdentifier = ECKeyIdentifier.fromHexPublicKeyK256(nextId).expect(
             `${nextId} should be a valid hex public key in k256`,
         )
         const rawPublicKey = currentPersona.identifier.rawPublicKey
+        setAdding(true)
         if (!twitter) {
             await Services.Identity.createNewRelation(personaIdentifier, currentPersona.identifier)
         } else {
@@ -119,10 +120,11 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
         }
         showSnackbar(t('popups_encrypted_friends_added_successfully'), { variant: 'success' })
         setLocal(true)
-        queryClient.invalidateQueries(['relation-records', rawPublicKey])
-        queryClient.invalidateQueries(['friends', rawPublicKey])
+        setAdding(false)
+        await queryClient.invalidateQueries(['relation-records', rawPublicKey])
+        await queryClient.invalidateQueries(['friends', rawPublicKey])
         refetch?.()
-    }, [profiles, nextId, currentPersona, queryClient])
+    }, [profiles, nextId, currentPersona, queryClient, refetch])
 
     return (
         <Box className={classes.card} ref={ref}>
@@ -175,7 +177,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                         <Icons.ArrowRight />
                     </Button>
                 ) : (
-                    <Button className={classes.addButton} onClick={handleAddFriend}>
+                    <Button className={classes.addButton} onClick={handleAddFriend} disabled={adding}>
                         {t('popups_encrypted_friends_add_friends')}
                     </Button>
                 )}

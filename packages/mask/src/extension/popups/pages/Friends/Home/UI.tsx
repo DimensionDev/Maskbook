@@ -9,7 +9,6 @@ import type { NextIDPersonaBindingsWithIdentifier } from '../../../hook/useFrien
 import { Contacts } from '../Contacts/index.js'
 import { SearchList } from '../SearchList/index.js'
 import { type Friend } from '../../../hook/useFriends.js'
-import { type UseQueryResult, type RefetchOptions } from '@tanstack/react-query'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -45,7 +44,7 @@ export interface FriendsHomeUIProps {
     setSearchValue: (v: string) => void
     fetchNextPage: () => void
     fetchNextSearchPage: () => void
-    refetch: (options?: RefetchOptions) => Promise<UseQueryResult>
+    refetch: () => void
 }
 
 export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
