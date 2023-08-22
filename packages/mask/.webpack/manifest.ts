@@ -84,8 +84,7 @@ function editManifest(manifest: ManifestV2 | ManifestV3, flags: ModifyAcceptFlag
     else if (flags.channel === 'beta') manifest.name += ' (beta)'
     else if (flags.channel === 'insider') manifest.name += ' (insider)'
 
-    if (flags.mode === 'development') fixTheExtensionID(manifest)
-    if (flags.mode === 'production' && flags.channel !== 'stable') fixTheExtensionID(manifest)
+    fixTheExtensionID(manifest)
     if (flags.devtools) manifest.devtools_page = 'devtools-background.html'
 
     const topPackageJSON = JSON.parse(readFileSync(new URL('../../../package.json', import.meta.url), 'utf-8'))
