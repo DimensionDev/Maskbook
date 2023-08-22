@@ -1,4 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-    <path fill="#fff" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-    <path fill="#FF3545" fill-rule="evenodd" d="M12 7.1a.9.9 0 0 1 .9.9v5.42a.9.9 0 0 1-1.8 0V8a.9.9 0 0 1 .9-.9Zm0 8.896a.9.9 0 0 1 .9.9v.023a.9.9 0 0 1-1.8 0v-.023a.9.9 0 0 1 .9-.9Z" clip-rule="evenodd"/>
-</svg>
+<svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m21 12a9 9 0 1 1 -18 0 9 9 0 0 1 18 0z" fill="#fff"/><path clip-rule="evenodd" d="m12 7.1a.9.9 0 0 1 .9.9v5.42a.9.9 0 0 1 -1.8 0v-5.42a.9.9 0 0 1 .9-.9zm0 8.896a.9.9 0 0 1 .9.9v.023a.9.9 0 0 1 -1.8 0v-.023a.9.9 0 0 1 .9-.9z" fill="#ff3545" fill-rule="evenodd"/></svg>

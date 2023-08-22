@@ -1,11 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-    <circle cx="12" cy="12" r="12" fill="url(#ReceiveColorful_svg__a)"/>
-    <path fill="#fff" fill-rule="evenodd" d="M12 15.707 7.903 11.61a.718.718 0 1 1 1.015-1.015l2.364 2.364V6.167a.718.718 0 1 1 1.436 0v6.792l2.364-2.364a.718.718 0 1 1 1.015 1.015L12 15.708Z" clip-rule="evenodd"/>
-    <path fill="#fff" fill-rule="evenodd" d="M6.436 14.423v2.692h11.128v-2.692H19v3.23a.897.897 0 0 1-.897.898H5.897A.897.897 0 0 1 5 17.654v-3.231h1.436Z" clip-rule="evenodd"/>
-    <defs>
-        <linearGradient id="ReceiveColorful_svg__a" x1="12" x2="12" y1="0" y2="24" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#0041B9"/>
-            <stop offset="1" stop-color="#1C68F3"/>
-        </linearGradient>
-    </defs>
-</svg>
+<svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="userSpaceOnUse" x1="12" x2="12" y1="0" y2="24"><stop offset="0" stop-color="#0041b9"/><stop offset="1" stop-color="#1c68f3"/></linearGradient><circle cx="12" cy="12" fill="url(#a)" r="12"/><g clip-rule="evenodd" fill="#fff" fill-rule="evenodd"><path d="m12 15.707-4.097-4.097a.718.718 0 1 1 1.015-1.015l2.364 2.364v-6.792a.718.718 0 1 1 1.436 0v6.792l2.364-2.364a.718.718 0 1 1 1.015 1.015l-4.097 4.098z"/><path d="m6.436 14.423v2.692h11.128v-2.692h1.436v3.23a.897.897 0 0 1 -.897.898h-12.206a.897.897 0 0 1 -.897-.897v-3.231z"/></g></svg>
