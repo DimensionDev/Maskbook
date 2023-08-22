@@ -1,6 +1,6 @@
 import { ECKeyIdentifier } from '@masknet/shared-base'
 import { memo, useCallback, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useCurrentPersona } from '../../../../../components/DataSource/useCurrentPersona.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import Services from '../../../../service.js'
@@ -14,6 +14,7 @@ export const FriendsDetail = memo(function FriendsDetail() {
     const { t } = useI18N()
     const { showSnackbar } = usePopupCustomSnackbar()
     const { avatar, profiles, nextId, publicKey, isLocal } = location.state
+    const navigate = useNavigate()
     const [deleted, setDeleted] = useState(false)
     const currentPersona = useCurrentPersona()
     const rawPublicKey = currentPersona?.identifier.rawPublicKey
@@ -57,6 +58,7 @@ export const FriendsDetail = memo(function FriendsDetail() {
             )
             showSnackbar(t('popups_encrypted_friends_deleted_successfully'), { variant: 'success' })
             setDeleted(true)
+            navigate('/friends')
         },
         onSettled: () => {
             queryClient.invalidateQueries(['relation-records', rawPublicKey])
