@@ -10,7 +10,7 @@ import {
     useNativeTokenPrice,
     useWallet,
 } from '@masknet/web3-hooks-base'
-import { type GasConfig, useRedPacketConstants } from '@masknet/web3-shared-evm'
+import { type GasConfig, useRedPacketConstants, type ChainId } from '@masknet/web3-shared-evm'
 import { type RedPacketRecord, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
@@ -71,14 +71,15 @@ export interface ConfirmRedPacketFormProps {
     settings?: RedPacketSettings
     gasOption?: GasConfig
     onGasOptionChange?: (config: GasConfig) => void
+    expectedChainId: ChainId
 }
 
 export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const t = useI18N()
-    const { settings, onCreated, onClose, gasOption, onGasOptionChange } = props
+    const { settings, onCreated, onClose, gasOption, onGasOptionChange, expectedChainId } = props
     const { classes, cx } = useStyles()
     const { isLoading: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM)
-    const { account, chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account, chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
     useEffect(() => {
         if (settings?.token?.chainId !== chainId) onClose()
     }, [chainId, onClose])
