@@ -8,15 +8,18 @@ interface ConstantsConfig {
     [key: string]: Record<string, Primitive | Primitive[]>
 }
 
+// Function to read the constants from a file
 async function readConstantsFile(filePath: string): Promise<ConstantsConfig> {
     const data = await fs.readFile(filePath, 'utf-8')
     return JSON.parse(data)
 }
 
+// Function to write constants to a file
 async function writeConstantsFile(filePath: string, constants: ConstantsConfig): Promise<void> {
     await fs.writeFile(filePath, JSON.stringify(constants, null, 4), 'utf-8')
 }
 
+// Function to get the default value for a given value type
 function getDefaultPrimitiveValue(value: Primitive | Primitive[]): Primitive | Primitive[] {
     if (typeof value === 'string') {
         return ''
@@ -30,6 +33,7 @@ function getDefaultPrimitiveValue(value: Primitive | Primitive[]): Primitive | P
     return ''
 }
 
+// Function to filter out non-blank pairs from the constants
 function filterNonBlankPairs(
     values: Record<string, Primitive | Primitive[]>,
     names: string[],
@@ -37,6 +41,7 @@ function filterNonBlankPairs(
     return Object.entries(values).filter(([key, value]) => value !== '' || !names.includes(key) || key === 'Mainnet')
 }
 
+// Function to process constants based on the provided action
 async function processConstants(
     folderPath: string,
     keys: string[],
@@ -49,9 +54,11 @@ async function processConstants(
         await writeConstantsFile(filePath, updatedConstants)
     }
 
+    // Run the prettier tool after processing
     run(undefined, 'npx', 'prettier', '--write', folderPath)
 }
 
+// Action to compress constants
 function compressAction(constants: ConstantsConfig, names: string[]): ConstantsConfig {
     const updatedConstants: ConstantsConfig = {}
     for (const name of Object.keys(constants)) {
@@ -62,6 +69,7 @@ function compressAction(constants: ConstantsConfig, names: string[]): ConstantsC
     return updatedConstants
 }
 
+// Action to complete constants
 function completeAction(constants: ConstantsConfig, names: string[]): ConstantsConfig {
     const updatedConstants: ConstantsConfig = {}
     for (const name of Object.keys(constants)) {
@@ -119,6 +127,7 @@ const SOLANA_KEYS = ['Mainnet', 'Testnet', 'Devnet']
 
 const FLOW_KEYS = ['Mainnet', 'Testnet']
 
+// Main function to parse command line arguments and perform actions
 async function main() {
     const args = process.argv.slice(2)
 
@@ -135,4 +144,6 @@ async function main() {
     }
 }
 
-main()
+if (process.env.NODE_ENV !== 'test') {
+    main()
+}
