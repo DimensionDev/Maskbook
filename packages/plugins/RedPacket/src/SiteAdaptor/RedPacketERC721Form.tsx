@@ -403,70 +403,74 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         chainId={chainId}
                     />
                 </Box>
-                {collection && balance && done ? (
-                    <>
-                        <Box className={classes.selectWrapper}>
-                            <div
-                                className={cx(
-                                    classes.optionLeft,
-                                    classes.option,
-                                    balance === 0 ? classes.disabledSelector : null,
-                                )}
-                                onClick={() => {
-                                    setSelectOption(NFTSelectOption.All)
-                                    setExistTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
-                                    setAllTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
-                                }}>
+                {collection && balance ? (
+                    done ? (
+                        <>
+                            <Box className={classes.selectWrapper}>
                                 <div
                                     className={cx(
-                                        classes.checkIconWrapper,
-                                        selectOption === NFTSelectOption.All ? classes.checked : '',
-                                    )}>
-                                    <CheckIcon className={classes.checkIcon} />
-                                </div>
-                                <Typography color="textPrimary">
-                                    {balance === 0
-                                        ? 'All'
-                                        : t.nft_select_all_option({
-                                              total: Math.min(RED_PACKET_MAX_SHARES, balance).toString(),
-                                          })}
-                                </Typography>
-                            </div>
-                            <div className={classes.option} onClick={() => setSelectOption(NFTSelectOption.Partial)}>
-                                <div
-                                    className={cx(
-                                        classes.checkIconWrapper,
-                                        selectOption === NFTSelectOption.Partial ? classes.checked : '',
-                                    )}>
-                                    <CheckIcon className={classes.checkIcon} />
-                                </div>
-                                <Typography color="textPrimary">{t.nft_select_partially_option()}</Typography>
-                            </div>
-                        </Box>
-                        <div className={classes.tokenSelectorParent}>
-                            <List className={classes.tokenSelector}>
-                                {tokenDetailedList.map((value, i) => (
-                                    <div key={i}>
-                                        <NFTCard token={value} removeToken={removeToken} />
+                                        classes.optionLeft,
+                                        classes.option,
+                                        balance === 0 ? classes.disabledSelector : null,
+                                    )}
+                                    onClick={() => {
+                                        setSelectOption(NFTSelectOption.All)
+                                        setExistTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
+                                        setAllTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
+                                    }}>
+                                    <div
+                                        className={cx(
+                                            classes.checkIconWrapper,
+                                            selectOption === NFTSelectOption.All ? classes.checked : '',
+                                        )}>
+                                        <CheckIcon className={classes.checkIcon} />
                                     </div>
-                                ))}
-                                <ListItem
-                                    onClick={() => setOpenSelectNFTDialog(true)}
-                                    className={cx(classes.tokenSelectorWrapper, classes.addWrapper)}>
-                                    <AddCircleOutlineIcon className={classes.addIcon} onClick={() => void 0} />
-                                </ListItem>
-                            </List>
-                        </div>
-                    </>
-                ) : (
-                    <>
-                        <div className={classes.skeleton}>
-                            <Skeleton className={classes.rectangle} height={24} variant="rectangular" width={140} />
-                            <Skeleton className={classes.rectangle} height={24} variant="rectangular" width={140} />
-                        </div>
-                        <Skeleton className={classes.rectangle} height={180} variant="rectangular" width="100%" />
-                    </>
-                )}
+                                    <Typography color="textPrimary">
+                                        {balance === 0
+                                            ? 'All'
+                                            : t.nft_select_all_option({
+                                                  total: Math.min(RED_PACKET_MAX_SHARES, balance).toString(),
+                                              })}
+                                    </Typography>
+                                </div>
+                                <div
+                                    className={classes.option}
+                                    onClick={() => setSelectOption(NFTSelectOption.Partial)}>
+                                    <div
+                                        className={cx(
+                                            classes.checkIconWrapper,
+                                            selectOption === NFTSelectOption.Partial ? classes.checked : '',
+                                        )}>
+                                        <CheckIcon className={classes.checkIcon} />
+                                    </div>
+                                    <Typography color="textPrimary">{t.nft_select_partially_option()}</Typography>
+                                </div>
+                            </Box>
+                            <div className={classes.tokenSelectorParent}>
+                                <List className={classes.tokenSelector}>
+                                    {tokenDetailedList.map((value, i) => (
+                                        <div key={i}>
+                                            <NFTCard token={value} removeToken={removeToken} />
+                                        </div>
+                                    ))}
+                                    <ListItem
+                                        onClick={() => setOpenSelectNFTDialog(true)}
+                                        className={cx(classes.tokenSelectorWrapper, classes.addWrapper)}>
+                                        <AddCircleOutlineIcon className={classes.addIcon} onClick={() => void 0} />
+                                    </ListItem>
+                                </List>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div className={classes.skeleton}>
+                                <Skeleton className={classes.rectangle} height={24} variant="rectangular" width={140} />
+                                <Skeleton className={classes.rectangle} height={24} variant="rectangular" width={140} />
+                            </div>
+                            <Skeleton className={classes.rectangle} height={180} variant="rectangular" width="100%" />
+                        </>
+                    )
+                ) : null}
 
                 <div className={classes.line}>
                     <RedpacketMessagePanel onChange={(val: string) => setMessage(val)} message={message} />
