@@ -14,6 +14,7 @@ import { TabContext } from '@mui/lab'
 import { Stack, Tab, Typography } from '@mui/material'
 import { WalletIcon } from '../WalletIcon/index.js'
 import { SmartPayBundler } from '@masknet/web3-providers'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 interface NetworkTabProps {
     chains: Web3Helper.ChainIdAll[]
@@ -56,7 +57,9 @@ export const NetworkTab = memo(function NetworkTab({
             if (isValidChainId && chainId && prev !== chainId?.toString()) return chainId.toString()
             return prev
         })
-    }, [chainId, isValidChainId])
+
+        if (!chains.includes(chainId) && chains.includes(ChainId.Mainnet)) setChainId(ChainId.Mainnet)
+    }, [chains, chainId, isValidChainId])
 
     return (
         <TabContext value={tab}>
