@@ -1,29 +1,5 @@
 {
     "CRYPTOPUNKS_CONTRACT_ADDRESS": {
-        "Mainnet": "0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB",
-        "Ropsten": "",
-        "Rinkeby": "",
-        "Kovan": "",
-        "Gorli": "",
-        "BSC": "",
-        "BSCT": "",
-        "Base": "",
-        "Base_Goerli": "",
-        "Matic": "",
-        "Mumbai": "",
-        "Arbitrum": "",
-        "Arbitrum_Rinkeby": "",
-        "xDai": "",
-        "Optimism": "",
-        "Optimism_Kovan": "",
-        "Optimism_Goerli": "",
-        "Avalanche": "",
-        "Avalanche_Fuji": "",
-        "Celo": "",
-        "Fantom": "",
-        "Aurora": "",
-        "Aurora_Testnet": "",
-        "Conflux": "",
-        "Astar": ""
+        "Mainnet": "0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB"
     }
 }

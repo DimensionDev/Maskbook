@@ -1,29 +1,14 @@
 {
     "REFERRER_ADDRESS": {
         "Mainnet": "0x934B510D4C9103E6a87AEf13b816fb080286D649",
-        "Ropsten": "",
-        "Rinkeby": "",
-        "Kovan": "",
-        "Gorli": "",
         "BSC": "0x934B510D4C9103E6a87AEf13b816fb080286D649",
-        "BSCT": "",
-        "Base": "",
-        "Base_Goerli": "",
         "Matic": "0x934B510D4C9103E6a87AEf13b816fb080286D649",
-        "Mumbai": "",
         "Arbitrum": "0x934B510D4C9103E6a87AEf13b816fb080286D649",
-        "Arbitrum_Rinkeby": "",
         "xDai": "0x934B510D4C9103E6a87AEf13b816fb080286D649",
         "Optimism": "0x934B510D4C9103E6a87AEf13b816fb080286D649",
-        "Optimism_Kovan": "",
-        "Optimism_Goerli": "",
         "Avalanche": "0x934B510D4C9103E6a87AEf13b816fb080286D649",
         "Avalanche_Fuji": "0x934B510D4C9103E6a87AEf13b816fb080286D649",
         "Celo": "0x934B510D4C9103E6a87AEf13b816fb080286D649",
-        "Fantom": "0x934B510D4C9103E6a87AEf13b816fb080286D649",
-        "Aurora": "",
-        "Aurora_Testnet": "",
-        "Conflux": "",
-        "Astar": ""
+        "Fantom": "0x934B510D4C9103E6a87AEf13b816fb080286D649"
     }
 }
