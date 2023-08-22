@@ -11,9 +11,9 @@ export const InstallExtension = memo(() => {
                 <div className="flex justify-between flex-1">
                     <p className="flex flex-1 text-sm text-gray-700 dark:text-gray-400">Install Extension</p>
                     <div className="flex">
-                        <img className="mr-1 w-[20px] h-[20px]" src={ChromeIcon.toString()} />
-                        <img className="mr-1 w-[20px] h-[20px]" src={FirefoxIcon.toString()} />
-                        <img className="w-[20px] h-[20px]" src={OperaIcon.toString()} />
+                        <img className="mr-1 w-[20px] h-[20px]" src={ChromeIcon.toString()} alt="Google Chrome" />
+                        <img className="mr-1 w-[20px] h-[20px]" src={FirefoxIcon.toString()} alt="Firefox" />
+                        <img className="w-[20px] h-[20px]" src={OperaIcon.toString()} alt="Opera" />
                     </div>
                 </div>
             </div>
