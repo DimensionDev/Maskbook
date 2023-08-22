@@ -81,6 +81,7 @@ export interface FriendsDetailUIProps {
     publicKey?: string
     isLocal?: boolean
     onDelete: () => void
+    deleting?: boolean
 }
 
 export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetailUI({
@@ -90,6 +91,7 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
     profiles,
     isLocal,
     onDelete,
+    deleting,
 }) {
     const { classes } = useStyles()
     const navigate = useNavigate()
@@ -105,7 +107,7 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
                     </button>
                     <Box />
                     {isLocal ? (
-                        <button onClick={onDelete} type="submit" className={classes.back}>
+                        <button onClick={onDelete} type="submit" className={classes.back} disabled={deleting}>
                             <Icons.Delete />
                         </button>
                     ) : null}

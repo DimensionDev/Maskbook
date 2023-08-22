@@ -1,10 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-    <circle cx="12" cy="12" r="12" fill="url(#SendColorful_svg__a)"/>
-    <path fill="#fff" fill-rule="evenodd" d="M17.8 7.22 4.752 11.48l3.183 1.904a.703.703 0 0 1 .343.603v2.134l2.155-.874a.703.703 0 0 1 .608.038l4.88 2.737 1.877-10.8Zm.317-1.287a.703.703 0 0 1 .91.789L16.93 18.801a.703.703 0 0 1-1.036.493l-5.224-2.93-2.548 1.033a.703.703 0 0 1-.967-.651v-2.52L3.38 11.969a.703.703 0 0 1 .143-1.272l14.594-4.764ZM15.77 9.351a.562.562 0 0 1-.056.793l-3.969 3.448a.562.562 0 0 1-.737-.85l3.969-3.447a.562.562 0 0 1 .793.056Z" clip-rule="evenodd"/>
-    <defs>
-        <linearGradient id="SendColorful_svg__a" x1="12" x2="12" y1="0" y2="24" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#F75F1E"/>
-            <stop offset="1" stop-color="#FBA33B"/>
-        </linearGradient>
-    </defs>
-</svg>
+<svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="userSpaceOnUse" x1="12" x2="12" y1="0" y2="24"><stop offset="0" stop-color="#f75f1e"/><stop offset="1" stop-color="#fba33b"/></linearGradient><circle cx="12" cy="12" fill="url(#a)" r="12"/><path clip-rule="evenodd" d="m17.8 7.22-13.048 4.26 3.183 1.904a.703.703 0 0 1 .343.603v2.134l2.155-.874a.703.703 0 0 1 .608.038l4.88 2.737 1.877-10.8zm.317-1.287a.703.703 0 0 1 .91.789l-2.097 12.079a.703.703 0 0 1 -1.036.493l-5.224-2.93-2.548 1.033a.703.703 0 0 1 -.967-.651v-2.52l-3.775-2.257a.703.703 0 0 1 .143-1.272zm-2.347 3.418a.562.562 0 0 1 -.056.793l-3.969 3.448a.562.562 0 0 1 -.737-.85l3.969-3.447a.562.562 0 0 1 .793.056z" fill="#fff" fill-rule="evenodd"/></svg>

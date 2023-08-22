@@ -170,6 +170,11 @@ export default class WalletConnectProvider
     }
 
     private async login(expectedChainId?: ChainId) {
+        // it fails to remove storage when use rainbow wallet
+        if (this.connector?.peerMeta?.url === 'https://rainbow.me') {
+            window.localStorage.removeItem('walletconnect')
+        }
+
         this.connector = this.createConnector()
         this.connection = this.createConnection()
 

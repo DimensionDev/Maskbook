@@ -4,6 +4,7 @@ import Services from '../../../extension/service.js'
 import { first } from 'lodash-es'
 import { isProfileIdentifier } from '@masknet/shared'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { useCallback } from 'react'
 
 export type FriendsInformation = Friend & {
     profiles: BindingProof[]
@@ -18,20 +19,28 @@ export type Friend = {
 
 export function useFriendsPaged() {
     const currentPersona = useCurrentPersona()
-    const { data: records = EMPTY_LIST, isLoading: recordsLoading } = useQuery(
-        ['relation-records', currentPersona?.identifier.rawPublicKey],
-        async () => {
-            return Services.Identity.queryRelationPaged(
-                currentPersona?.identifier,
-                {
-                    network: 'all',
-                    pageOffset: 0,
-                },
-                3000,
-            )
-        },
-    )
-    const { data, hasNextPage, fetchNextPage, isLoading, isFetchingNextPage, refetch } = useInfiniteQuery({
+    const {
+        data: records = EMPTY_LIST,
+        isLoading: recordsLoading,
+        refetch: refetchRecords,
+    } = useQuery(['relation-records', currentPersona?.identifier.rawPublicKey], async () => {
+        return Services.Identity.queryRelationPaged(
+            currentPersona?.identifier,
+            {
+                network: 'all',
+                pageOffset: 0,
+            },
+            3000,
+        )
+    })
+    const {
+        data,
+        hasNextPage,
+        fetchNextPage,
+        isLoading,
+        isFetchingNextPage,
+        refetch: refetchFriends,
+    } = useInfiniteQuery({
         queryKey: ['friends', currentPersona?.identifier.rawPublicKey],
         enabled: !recordsLoading,
         queryFn: async ({ pageParam = 0 }) => {
@@ -61,6 +70,10 @@ export function useFriendsPaged() {
             return nextPageOffset
         },
     })
+    const refetch = useCallback(() => {
+        refetchFriends()
+        refetchRecords()
+    }, [refetchFriends, refetchRecords])
     return {
         data,
         isLoading: isLoading || recordsLoading,

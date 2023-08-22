@@ -35,13 +35,13 @@ export function NFTAvatarDialog({ startPicking, ...rest }: NFTAvatarDialogProps)
     const initialEntries = useMemo(() => {
         return [RoutePaths.Exit, startPicking ? RoutePaths.NFTPicker : RoutePaths.Personas]
     }, [!startPicking])
-    const { loading, value: socialIdentity } = useLastRecognizedSocialIdentity()
+    const { isLoading, data: socialIdentity } = useLastRecognizedSocialIdentity()
     return (
         <MemoryRouter initialEntries={initialEntries} initialIndex={1}>
             <AvatarManagementProvider socialIdentity={socialIdentity}>
                 <RouterDialog {...rest}>
                     <DialogContent className={classes.root}>
-                        {loading ? (
+                        {isLoading ? (
                             <Box className={classes.Box}>
                                 <LoadingBase />
                             </Box>

@@ -1,3 +1,4 @@
+/// <reference types="react/canary" />
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 import urlcat from 'urlcat'
 import { createContext, memo, use, useCallback, useContext, useMemo, useRef } from 'react'
@@ -11,6 +12,7 @@ import { useHasPassword } from '../../hook/useHasPassword.js'
 import { useWalletLockStatus } from '../../pages/Wallet/hooks/useWalletLockStatus.js'
 import { HydrateFinished } from '../../../../utils/createNormalReactRoot.js'
 import Services from '../../../service.js'
+import { useCurrentPersona } from '../../../../components/DataSource/useCurrentPersona.js'
 
 const useStyle = makeStyles()((theme) => ({
     navigation: {
@@ -51,16 +53,22 @@ const BottomNavLink = memo<LinkProps>(function BottomNavLink({ children, to }) {
 export const Navigator = memo(function Navigator({ className, ...rest }: BoxProps) {
     const { classes, cx } = useStyle()
     const walletLink = useRef(use(WalletLinkContext)).current()
+
+    const currentPersona = useCurrentPersona()
+
     const onOpenDashboardSettings = useCallback(async () => {
         await browser.tabs.create({
             active: true,
-            url: browser.runtime.getURL(`/dashboard.html#${DashboardRoutes.Settings}`),
+            url: browser.runtime.getURL(
+                `/dashboard.html#${currentPersona ? DashboardRoutes.Settings : DashboardRoutes.SignUpPersona}`,
+            ),
         })
         if (navigator.userAgent.includes('Firefox')) {
             window.close()
         }
         await Services.Helper.removePopupWindow()
-    }, [])
+    }, [currentPersona])
+
     useContext(HydrateFinished)()
 
     return (

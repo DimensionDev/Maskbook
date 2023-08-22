@@ -25,7 +25,7 @@ export function PersonaPage() {
     const dismissAlert = useCallback(() => setVisible(false), [])
     const navigate = useNavigate()
     const { setProofs, setTokenInfo, setProof } = useAvatarManagement()
-    const { loading, value: socialIdentity } = useLastRecognizedSocialIdentity()
+    const { isLoading, data: socialIdentity } = useLastRecognizedSocialIdentity()
     const network = socialIdentity?.identifier?.network.replace('.com', '')
     const userId = socialIdentity?.identifier?.userId
 
@@ -36,10 +36,10 @@ export function PersonaPage() {
         (x: PersonaInformation) => x.identifier.rawPublicKey.toLowerCase() === _persona?.rawPublicKey.toLowerCase(),
     )
 
-    const { value: bindingPersonas = EMPTY_LIST } = usePersonasFromNextID(
+    const { data: bindingPersonas = EMPTY_LIST } = usePersonasFromNextID(
         _persona?.publicKeyAsHex ?? '',
         NextIDPlatform.NextID,
-        true,
+        false,
     )
 
     const bindingProofs = useMemo(
@@ -67,7 +67,7 @@ export function PersonaPage() {
     return (
         <>
             <DialogContent sx={{ flex: 1, height: 464, padding: 2 }}>
-                {loading ? (
+                {isLoading ? (
                     <Stack justifyContent="center" alignItems="center" height="100%">
                         <LoadingBase />
                     </Stack>

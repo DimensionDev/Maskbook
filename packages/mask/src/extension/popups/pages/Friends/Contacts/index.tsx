@@ -1,4 +1,5 @@
 import { memo } from 'react'
+import { first } from 'lodash-es'
 import { Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ElementAnchor, EmptyStatus } from '@masknet/shared'
@@ -40,7 +41,7 @@ export interface ContactsProps {
 export const Contacts = memo<ContactsProps>(function Contacts({ friendsArray, fetchNextPage }) {
     const { classes } = useStyles()
     const { t } = useI18N()
-    return friendsArray.length === 0 ? (
+    return !first(friendsArray) || first(friendsArray)?.friends.length === 0 ? (
         <EmptyStatus className={classes.empty}>{t('popups_encrypted_friends_no_friends')}</EmptyStatus>
     ) : (
         <Box className={classes.cardContainer}>
