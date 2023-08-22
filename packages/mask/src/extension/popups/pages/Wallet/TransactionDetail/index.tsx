@@ -5,7 +5,7 @@ import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
 import { useAccount, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { ChainbaseHistory, ExplorerResolver, Web3 } from '@masknet/web3-providers'
 import { chainbase } from '@masknet/web3-providers/helpers'
-import { TransactionStatusType, formatBalance, isSameAddress, trimZero } from '@masknet/web3-shared-base'
+import { TransactionStatusType, formatBalance, isSameAddress, multipliedBy, trimZero } from '@masknet/web3-shared-base'
 import {
     formatHash,
     formatWeiToEther,
@@ -211,7 +211,11 @@ export const TransactionDetail = memo(function TransactionDetail() {
 
     const gasUsedPercent = tx ? (tx.gas_used * 100) / tx.gas : 0
     const gasFeeInState = !isRecentTx && !tx ? transactionState?.fee?.eth : undefined
-    const gasFee = tx ? formatWeiToEther(tx.tx_fee) : gasFeeInState ? new BigNumber(gasFeeInState) : undefined
+    const gasFee = tx
+        ? formatWeiToEther(multipliedBy(tx.gas_used, tx.gas_price))
+        : gasFeeInState
+        ? new BigNumber(gasFeeInState)
+        : undefined
     const gasCost = gasFee && nativeTokenPrice ? gasFee.times(nativeTokenPrice) : undefined
 
     const receiverAddress = parseReceiverFromERC20TransferInput(candidateState?.data || tx?.input || txInput)
