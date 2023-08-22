@@ -17,6 +17,9 @@ export enum ExceptionType {
 }
 
 export enum EventID {
+    EntryAppLuckOpen = 'entry_app_luck_open',
+    EntryAppLuckCreate = 'entry_app_luck_create',
+    EntryAppLuckSend = 'entry_app_luck_send',
     // Open the Web3 tabs but no persona detected
     AccessWeb3TabCreatePersonaTab = 'AccessWeb3TabCreatePersonaTab',
     // Open the Web3 tabs the NFTs tab presents

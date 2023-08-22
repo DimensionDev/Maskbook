@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { compact } from 'lodash-es'
 import Web3Utils from 'web3-utils'
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
-import { useChainContext, useGasPrice } from '@masknet/web3-hooks-base'
+import { useChainContext, useGasPrice, useTelemetry } from '@masknet/web3-hooks-base'
 import { ApplicationBoardModal, InjectedDialog, NetworkTab, useCurrentLinkedPersona } from '@masknet/shared'
 import { ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
 import { type RedPacketJSONPayload } from '@masknet/web3-providers/types'
@@ -23,6 +23,7 @@ import { RedPacketERC20Form } from './RedPacketERC20Form.js'
 import { RedPacketERC721Form } from './RedPacketERC721Form.js'
 import { openComposition } from './openComposition.js'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles<{ currentTab: 'tokens' | 'collectibles'; showHistory: boolean }>()(
     (theme, { currentTab, showHistory }) => ({
@@ -65,6 +66,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const approvalDefinition = useActivatedPlugin(PluginID.RedPacket, 'any')
+    const telemetry = useTelemetry()
     const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
     const { classes } = useStyles({ currentTab, showHistory })
     const chainIdList = useMemo(() => {
@@ -116,6 +118,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
             senderName && (payload.sender.name = senderName)
             openComposition(RedPacketMetaKey, reduceUselessPayloadInfo(payload))
+            telemetry.captureEvent(EventType.Access, EventID.EntryAppLuckCreate)
             ApplicationBoardModal.close()
             onClose()
         },

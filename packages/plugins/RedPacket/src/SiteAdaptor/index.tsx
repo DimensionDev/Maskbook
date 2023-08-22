@@ -18,6 +18,8 @@ import { RedPacketInPost } from './RedPacketInPost.js'
 import { RedPacketNftInPost } from './RedPacketNftInPost.js'
 import { openDialog } from './emitter.js'
 import { Typography } from '@mui/material'
+import { useTelemetry } from '@masknet/web3-hooks-base'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
 
 function Render(
     props: React.PropsWithChildren<{
@@ -105,17 +107,17 @@ const site: Plugin.SiteAdaptor.Definition = {
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
+                    const telemetry = useTelemetry()
                     return (
                         <ApplicationEntry
                             title={name}
                             recommendFeature={recommendFeature}
                             {...EntryComponentProps}
                             icon={icon}
-                            onClick={
-                                EntryComponentProps.onClick
-                                    ? () => EntryComponentProps.onClick?.(openDialog)
-                                    : openDialog
-                            }
+                            onClick={() => {
+                                EntryComponentProps.onClick ? EntryComponentProps.onClick?.(openDialog) : openDialog()
+                                telemetry.captureEvent(EventType.Access, EventID.EntryAppLuckOpen)
+                            }}
                         />
                     )
                 },
