@@ -62,6 +62,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
         setFile(null)
         setBackupValue('')
         setSummary(null)
+        setPassword('')
         setRestoreStatus(RestoreStatus.WaitingInput)
     }, [])
 
