@@ -271,7 +271,7 @@ export function injectProfileTabAtTwitter(signal: AbortSignal) {
                 },
                 shadowRootDelegatesFocus: false,
             })
-            attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(<InjectprofileTab />)
+            attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(<InjectProfileTab />)
             tabInjected = true
         }
     })
@@ -314,7 +314,7 @@ function hiddenNextArrow() {
     svg.style.removeProperty('color')
 }
 
-function InjectprofileTab() {
+function InjectProfileTab() {
     const ref = useRef<HTMLDivElement>(null)
     const { classes } = useStyles()
     const windowSize = useWindowSize()
