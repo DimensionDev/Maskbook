@@ -314,58 +314,87 @@ function hiddenNextArrow() {
     svg.style.removeProperty('color')
 }
 
-function onNextClick() {
-    hiddenNextArrow()
-}
-
 function InjectProfileTab() {
-    const ref = useRef<HTMLDivElement>(null)
+    const web3TabRef = useRef<HTMLDivElement>(null)
     const { classes } = useStyles()
     const windowSize = useWindowSize()
     const timeoutRef = useRef<any>()
+    const [isClick, setIsClick] = useState(false)
 
     function onMouseEnter() {
+        if (isClick) return
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current)
             timeoutRef.current = null
         }
         const parent = searchProfileTabListLastChildSelector().closest<HTMLElement>(1).evaluate()
-        if (!parent || !ref.current) return
+        if (!parent || !web3TabRef.current) return
         if (Math.abs(parent.scrollWidth - (parent.scrollLeft + parent.clientWidth)) < 10) return
         if (parent.clientWidth < parent.scrollWidth) {
             showNextArrow()
         }
     }
 
+    function onNextClick() {
+        const nextArrow = nextTabListSelector().evaluate()
+        if (!nextArrow) return
+        nextArrow.style.removeProperty('cursor')
+        setIsClick(true)
+        hiddenNextArrow()
+        if (timeoutRef.current) clearTimeout(timeoutRef.current)
+        timeoutRef.current = null
+    }
+
     function onMouseLeave() {
         if (!timeoutRef.current) timeoutRef.current = setTimeout(hiddenNextArrow, 500)
+        setIsClick(false)
+    }
+
+    function onEnterNextArrow() {
+        if (isClick) return
+        const nextArrow = nextTabListSelector().evaluate()
+        if (!nextArrow) return
+        nextArrow.style.cursor = 'pointer'
+        if (timeoutRef.current) clearTimeout(timeoutRef.current)
+        timeoutRef.current = null
+
+        showNextArrow()
+    }
+
+    function onLeaveNextArrow() {
+        const nextArrow = nextTabListSelector().evaluate()
+        if (!nextArrow) return
+        nextArrow.style.removeProperty('cursor')
+        onMouseLeave()
     }
 
     const tabList = searchProfileTabListSelector().evaluate()
     const nextArrow = nextTabListSelector().evaluate()
     useEffect(() => {
-        ref.current?.addEventListener('mouseenter', onMouseEnter)
-        ref.current?.addEventListener('mouseleave', onMouseLeave)
+        web3TabRef.current?.addEventListener('mouseenter', onMouseEnter)
+        web3TabRef.current?.addEventListener('mouseleave', onMouseLeave)
         nextArrow?.addEventListener('click', onNextClick)
-
+        nextArrow?.addEventListener('mouseenter', onEnterNextArrow)
+        nextArrow?.addEventListener('mouseleave', onLeaveNextArrow)
         tabList.map((v) => {
             v.closest('div')?.addEventListener('mouseenter', onMouseEnter)
             v.closest('div')?.addEventListener('mouseleave', onMouseLeave)
         })
         return () => {
-            ref.current?.removeEventListener('mouseenter', onMouseEnter)
-            ref.current?.removeEventListener('mouseleave', onMouseLeave)
+            web3TabRef.current?.removeEventListener('mouseenter', onMouseEnter)
+            web3TabRef.current?.removeEventListener('mouseleave', onMouseLeave)
             nextArrow?.removeEventListener('click', onNextClick)
-
+            nextArrow?.removeEventListener('mouseenter', onEnterNextArrow)
+            nextArrow?.removeEventListener('mouseleave', onLeaveNextArrow)
             tabList.map((v) => {
                 v.closest('div')?.removeEventListener('mouseenter', onMouseEnter)
                 v.closest('div')?.removeEventListener('mouseleave', onMouseLeave)
             })
         }
-    }, [windowSize, tabList, ref.current, nextArrow])
+    }, [windowSize, tabList, web3TabRef.current, nextArrow])
 
     return (
-        <div ref={ref} className={classes.bar}>
+        <div ref={web3TabRef} className={classes.bar}>
             <ProfileTabForTokenAndPersona />
             <ProfileTabForDAO />
         </div>
