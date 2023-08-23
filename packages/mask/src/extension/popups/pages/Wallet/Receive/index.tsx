@@ -109,9 +109,9 @@ export default memo(function Receive() {
     const { classes } = useStyles()
     const { t } = useI18N()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { chainId, address, rawChainId, rawAddress } = useTokenParams()
+    const { chainId, address, rawAddress } = useTokenParams()
     // No specific token but only for chain
-    const isChain = !rawChainId && !rawAddress
+    const isChain = !rawAddress
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
     const currentNetwork = networks.find((network) => network.chainId === chainId)
 
