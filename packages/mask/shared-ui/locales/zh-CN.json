@@ -1075,7 +1075,7 @@
     "popups_backup_password_tips": "请在导出私钥之前设置您的备份密码。",
     "popups_backup_password_inconsistency": "新密码两次输入不一致",
     "popups_backup_password_incorrect": "密码不正确。",
-    "popups_backup_password_invalid": "密码必须介于 8 到 20 之间",
+    "popups_backup_password_invalid": "请输入导出个人私钥的备份密码。",
     "popups_backup_password_set_successfully": "备份密码设置成功。",
     "popups_export_private_key_tips": "此导出仅用于导出私钥。我们不导出任何其他数据。如果您需要导入更多数据，请前往设置： <a> 全局备份 </a>",
     "popups_export_json_file_tips": "此文件已加密并以您当前的密码存储。 使用当前密码导入钱包时解密此文件。",
