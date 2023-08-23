@@ -27,7 +27,7 @@ const Persona = memo(() => {
         return CrossIsolationMessages.events.popupWalletConnectEvent.on(({ open, uri }) => {
             if (!open || location.href.includes(PopupRoutes.WalletConnect)) return
             navigate(PopupRoutes.WalletConnect, {
-                replace: true,
+                replace: location.hash.includes('/modal/select-provider'),
                 state: {
                     uri,
                 },
