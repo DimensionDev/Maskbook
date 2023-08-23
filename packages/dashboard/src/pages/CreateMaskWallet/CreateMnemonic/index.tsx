@@ -335,7 +335,7 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
                         size="large"
                         color="primary"
                         onClick={() => verifyAnswerCallback(onSubmit)}>
-                        {isReset ? t.restore() : t.verify()}
+                        {t.verify()}
                     </PrimaryButton>
                 </div>
             </SetupFrameController>
