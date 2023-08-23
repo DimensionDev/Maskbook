@@ -1214,7 +1214,7 @@
     "plugin_wallet_connect_fortmatic": "Connect Fortmatic",
     "plugin_wallet_choose_network": "Choose Network",
     "plugin_disabled_tip": "You need to open the DAPP to view the specific content.",
-    "management_network": "Management network",
+    "management_network": "Manage Network",
     "network_management_add_network": "Add Network",
     "network_name": "Network Name",
     "rpc_url": "RPC URL",
