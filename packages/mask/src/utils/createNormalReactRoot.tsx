@@ -46,7 +46,7 @@ export function hydrateNormalReactRoot(jsx: JSX.Element, dom?: HTMLElement) {
         // in dev mode each component will be called twice therefore we only add 0.5
         called += process.env.NODE_ENV === 'development' ? 0.5 : 1
         // this is a magic number, the times we re-render before the real UI show up.
-        if (called < 10) return
+        if (called < 25) return
         replace()
     }
     const replace = once(() => {
