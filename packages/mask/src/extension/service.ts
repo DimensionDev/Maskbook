@@ -10,7 +10,7 @@ import {
     type AsyncVersionOf,
     type AsyncGeneratorVersionOf,
 } from 'async-call-rpc/full'
-import { WebExtensionMessage, MessageTarget, assertNotEnvironment, Environment } from '@dimensiondev/holoflows-kit'
+import { WebExtensionMessage, assertNotEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { serializer } from '../../../shared-base/src/serializer/index.js'
 import type {
     BackupService,
@@ -52,7 +52,7 @@ export const GeneratorServices: AsyncGeneratorVersionOf<GeneratorServicesType> =
  * @param generator Is the service is a generator?
  */
 function add<T extends object>(key: string, generator = false): AsyncVersionOf<T> {
-    const channel: EventBasedChannel | CallbackBasedChannel = message.events[key].bind(MessageTarget.Broadcast)
+    const channel: EventBasedChannel | CallbackBasedChannel = message.events[key].bind(Environment.ManifestBackground)
 
     const RPC = (generator ? AsyncGeneratorCall : AsyncCall) as any as typeof AsyncCall
     const service = RPC<T>(null, {
@@ -60,7 +60,7 @@ function add<T extends object>(key: string, generator = false): AsyncVersionOf<T
         serializer,
         log,
         channel,
-        strict: false,
+        strict: true,
         thenable: false,
     })
     Reflect.set(globalThis, key + 'Service', service)

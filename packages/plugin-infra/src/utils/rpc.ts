@@ -31,7 +31,7 @@ export function createPluginRPC<T extends Record<string, (...args: any) => Promi
             key,
             channel: {
                 on: message.on,
-                send: message.sendByBroadcast,
+                send: isBackground ? message.sendByBroadcast : message.sendToBackgroundPage,
             },
             preferLocalImplementation: isBackground,
             serializer,

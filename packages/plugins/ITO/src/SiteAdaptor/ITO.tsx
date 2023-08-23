@@ -15,7 +15,7 @@ import { Box, Card, Link, Typography } from '@mui/material'
 import { TokenIcon, ChainBoundary, WalletConnectedBoundary, useAssetAsBlobURL } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { OpenInNew as OpenInNewIcon } from '@mui/icons-material'
-import { EnhanceableSite, NetworkPluginID, getSiteType, isFacebook, isTwitter } from '@masknet/shared-base'
+import { EnhanceableSite, NetworkPluginID, Sniffings, getSiteType } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { ChainResolver, ExplorerResolver } from '@masknet/web3-providers'
@@ -278,8 +278,8 @@ export function ITO(props: ITO_Props) {
     const isBuyer =
         chainId === payload.chain_id && (isGreaterThan(availability?.swapped ?? 0, 0) || !!availability?.claimed)
 
-    const isOnTwitter = isTwitter()
-    const isOnFacebook = isFacebook()
+    const isOnTwitter = Sniffings.is_twitter_page
+    const isOnFacebook = Sniffings.is_facebook_page
     const context = isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : undefined
     const successShareText = t.plugin_ito_claim_success_share({
         context,
