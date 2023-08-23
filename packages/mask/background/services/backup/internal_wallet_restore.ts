@@ -8,17 +8,12 @@ import {
     generateUniqueWalletName,
 } from '@masknet/web3-shared-base'
 import { fromBase64URL, type EC_JsonWebKey, isK256Point, isK256PrivateKey } from '@masknet/shared-base'
-import {
-    getDerivableAccounts,
-    getWallets,
-    recoverWalletFromMnemonicWords,
-    recoverWalletFromPrivateKey,
-} from '../wallet/services/index.js'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 
 export async function internal_wallet_restore(backup: NormalizedBackup.WalletBackup[]) {
     for (const wallet of backup) {
         try {
-            const wallets = await getWallets()
+            const wallets = await WalletServiceRef.value.getWallets()
             const matchedDefaultNameFormat = wallet.name.match(/Wallet (\d+)/)
             const index = matchedDefaultNameFormat?.[1]
             const name =
@@ -30,12 +25,15 @@ export async function internal_wallet_restore(backup: NormalizedBackup.WalletBac
                           index && !Number.isNaN(index) ? Number(index) : undefined,
                       )
             if (wallet.privateKey.some)
-                await recoverWalletFromPrivateKey(name, await JWKToKey(wallet.privateKey.val, 'private'))
+                await WalletServiceRef.value.recoverWalletFromPrivateKey(
+                    name,
+                    await JWKToKey(wallet.privateKey.val, 'private'),
+                )
             else if (wallet.mnemonic.some) {
                 // fix a backup bug of pre-v2.2.2 versions
-                const accounts = await getDerivableAccounts(wallet.mnemonic.val.words, 1, 5)
+                const accounts = await WalletServiceRef.value.getDerivableAccounts(wallet.mnemonic.val.words, 1, 5)
                 const index = accounts.findIndex(currySameAddress(wallet.address))
-                await recoverWalletFromMnemonicWords(
+                await WalletServiceRef.value.recoverWalletFromMnemonicWords(
                     name,
                     wallet.mnemonic.val.words,
                     index > -1 ? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${index}` : wallet.mnemonic.val.path,
