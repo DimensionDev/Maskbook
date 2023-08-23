@@ -34,7 +34,6 @@ export {
     changePassword,
     resetPassword,
     setDefaultPassword,
-    validatePassword,
     clearPassword,
 } from './password.js'
 
