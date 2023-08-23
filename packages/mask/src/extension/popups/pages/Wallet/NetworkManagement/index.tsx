@@ -64,7 +64,7 @@ export const NetworkManagement = memo(function NetworkManagement() {
     const { t } = useI18N()
     const { classes, theme } = useStyles()
     const navigate = useNavigate()
-    useTitle(t('management_network'))
+    useTitle(t('manage_network'))
 
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
 
