@@ -414,6 +414,7 @@
     "create_wallet_form_title": "ウォレットを作成します",
     "set_payment_password": "支払いパスワードを設定",
     "write_down_recovery_phrase": "復元フレーズを書きます",
+    "store_recovery_phrase_tip": "これらの単語を正しく書き留めるか、コピーして安全な場所に保管してください。",
     "create_wallet_re_enter_payment_password": "支払いパスワードを再入力",
     "create_wallet_your_wallet_address": "あなたのウォレットアドレス",
     "create_wallet_done": "完了",
