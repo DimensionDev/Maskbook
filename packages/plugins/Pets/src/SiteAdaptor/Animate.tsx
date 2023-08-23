@@ -2,9 +2,7 @@ import { useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { useEssay, useDefaultEssay, useCurrentVisitingUser } from '../hooks/index.js'
-import { ModelNFT } from './ModelNFT.js'
 import { NormalNFT } from './NormalNFT.js'
-import { ImageType } from '../types.js'
 import { PluginPetMessages } from '../messages.js'
 import { petShowSettings } from '../settings.js'
 
@@ -56,11 +54,7 @@ function AnimatePic() {
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             key={visitor.userId}>
-            {showMeta.type === ImageType.GLB ? (
-                <ModelNFT start={start} showMeta={showMeta} />
-            ) : (
-                <NormalNFT start={start} infoShow={infoShow} showMeta={showMeta} handleClose={handleClose} />
-            )}
+            <NormalNFT start={start} infoShow={infoShow} showMeta={showMeta} handleClose={handleClose} />
         </div>
     )
 }
