@@ -50,7 +50,7 @@ function getStyleProps() {
     }
 }
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<{ minWidth?: number }>()((theme, { minWidth }) => {
     const props = getStyleProps()
     return {
         root: {
@@ -65,7 +65,7 @@ const useStyles = makeStyles()((theme) => {
             zIndex: 1,
             position: 'relative',
             display: 'flex',
-            minWidth: 56,
+            minWidth: minWidth ?? 56,
             justifyContent: 'center',
             alignItems: 'center',
             textAlign: 'center',
@@ -97,6 +97,7 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             zIndex: 0,
             position: 'relative',
+            minWidth: 56,
         },
     }
 })
@@ -186,7 +187,6 @@ function resetTwitterActivatedContent() {
 }
 
 export function ProfileTabForTokenAndPersona() {
-    const { classes } = useStyles()
     const [hidden, setHidden] = useState(false)
     const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
@@ -196,7 +196,12 @@ export function ProfileTabForTokenAndPersona() {
         (collectionResult as NonFungibleCollectionResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>)?.collection
             ?.socialLinks?.twitter ||
         (collectionResult as FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>)?.socialLinks?.twitter
-
+    const { classes } = useStyles({
+        minWidth:
+            currentVisitingUserId && twitterHandler?.toLowerCase().endsWith(currentVisitingUserId.toLowerCase())
+                ? 0
+                : 56,
+    })
     useEffect(() => {
         return MaskMessages.events.profileTabHidden.on((data) => {
             setHidden(data.hidden)
@@ -224,7 +229,6 @@ export function ProfileTabForTokenAndPersona() {
 }
 
 export function ProfileTabForDAO() {
-    const { classes } = useStyles()
     const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId ?? ''
     const { value: spaceList, loading } = useSnapshotSpacesByTwitterHandler(currentVisitingUserId)
@@ -234,7 +238,7 @@ export function ProfileTabForDAO() {
     }, [])
 
     const [hidden, setHidden] = useState(snapshotDisabled === BooleanPreference.True)
-
+    const { classes } = useStyles({ minWidth: hidden ? 56 : 0 })
     useEffect(() => {
         return MaskMessages.events.profileTabHidden.on((data) => {
             setHidden(data.hidden)
@@ -316,7 +320,7 @@ function hiddenNextArrow() {
 
 function InjectProfileTab() {
     const web3TabRef = useRef<HTMLDivElement>(null)
-    const { classes } = useStyles()
+    const { classes } = useStyles({ minWidth: 56 })
     const windowSize = useWindowSize()
     const timeoutRef = useRef<any>()
     const [isClick, setIsClick] = useState(false)
