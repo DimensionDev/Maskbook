@@ -159,7 +159,10 @@ const SelectWallet = memo(function SelectWallet() {
                     fullWidth
                     onClick={handleConfirm}
                     disabled={
-                        isVerifyWalletFlow ? !!bindingWallets?.some((x) => isSameAddress(x.identity, selected)) : false
+                        isVerifyWalletFlow
+                            ? !!bindingWallets?.some((x) => isSameAddress(x.identity, selected)) ||
+                              !!wallets?.some((x) => isSameAddress(x.address, selected) && !!x.owner)
+                            : false
                     }>
                     {t('confirm')}
                 </ActionButton>
