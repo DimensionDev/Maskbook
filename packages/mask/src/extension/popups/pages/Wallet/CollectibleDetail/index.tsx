@@ -118,6 +118,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     traitValue: {
         fontSize: 13,
+        fontWeight: 700,
         color: theme.palette.maskColor.primary,
         marginTop: theme.spacing(0.5),
         overflow: 'hidden',

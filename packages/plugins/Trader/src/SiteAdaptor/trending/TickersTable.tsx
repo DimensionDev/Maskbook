@@ -135,7 +135,9 @@ export function TickersTable({ tickers }: TickersTableProps) {
                     </ShadowRootTooltip>
                 )
             })(),
-            price: price ? <FormattedCurrency value={price} formatter={formatCurrency} /> : null,
+            price: price ? (
+                <FormattedCurrency value={price} formatter={formatCurrency} sign={CurrencyType.USD} />
+            ) : null,
         }
 
         const cells = Object.entries(pick(cellMap, columns)).map(([name, cell]) => (
