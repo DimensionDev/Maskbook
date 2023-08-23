@@ -4,7 +4,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { TokenIcon, WalletIcon, FungibleCoinMarketTable } from '@masknet/shared'
-import { formatInteger, formatSupply, TokenType } from '@masknet/web3-shared-base'
+import { CurrencyType, formatInteger, formatSupply, TokenType } from '@masknet/web3-shared-base'
 import type { Trending } from '../../types/index.js'
 import { useHighestFloorPrice, useNFT_TrendingOverview, useOneDaySaleAmounts } from '../../trending/useTrending.js'
 import { useI18N } from '../../locales/index.js'
@@ -182,5 +182,9 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
 
 export function CoinMarketTable(props: CoinMarketTableProps) {
     const isNFT = props.trending.coin.type === TokenType.NonFungible
-    return isNFT ? <NonFungibleCoinMarketTable {...props} /> : <FungibleCoinMarketTable {...props} />
+    return isNFT ? (
+        <NonFungibleCoinMarketTable {...props} />
+    ) : (
+        <FungibleCoinMarketTable {...props} sign={CurrencyType.USD} />
+    )
 }
