@@ -162,6 +162,7 @@ const ContactListUI = memo(function ContactListUI() {
     useEffect(() => {
         if (!isManage) return
         setExtension(<Icons.Add color={theme.palette.maskColor.main} sx={{ cursor: 'pointer' }} onClick={addContact} />)
+        return () => setExtension(undefined)
     }, [isManage])
 
     useTitle(isManage ? t('contacts') : t('popups_send'))

@@ -1,10 +1,10 @@
-import { PopupRoutes } from '@masknet/shared-base'
-import { useUpdateEffect } from '@react-hookz/web'
 import { memo, useContext } from 'react'
+import { useUpdateEffect } from '@react-hookz/web'
+import { PopupRoutes } from '@masknet/shared-base'
+import { PersonaContext } from '@masknet/shared'
 import { useLocation, useMatch } from 'react-router-dom'
 import { NormalHeader } from '../../../../components/index.js'
 import { PageTitleContext } from '../../../../context.js'
-import { PersonaContext } from '@masknet/shared'
 import { PersonaHeaderUI } from './UI.js'
 
 export const PersonaHeader = memo(function PersonaHeader() {
@@ -15,6 +15,7 @@ export const PersonaHeader = memo(function PersonaHeader() {
     const matchWalletConnect = useMatch(PopupRoutes.WalletConnect)
     const matchProfilePhoto = useMatch(PopupRoutes.PersonaAvatarSetting)
     const matchSignRequest = useMatch(PopupRoutes.PersonaSignRequest)
+
     useUpdateEffect(() => {
         setExtension(undefined)
     }, [location.pathname, setExtension])

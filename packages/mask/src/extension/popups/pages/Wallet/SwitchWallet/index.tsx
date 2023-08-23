@@ -51,6 +51,7 @@ const SwitchWallet = memo(function SwitchWallet() {
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+
     const handleClickCreate = useCallback(async () => {
         if (!wallets.filter((x) => x.hasDerivationPath).length) {
             const hasPaymentPassword = await Services.Wallet.hasPassword()
