@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
-import { formatMarketCap, formatSupply } from '@masknet/web3-shared-base'
+import { type CurrencyType, formatCurrency, formatSupply } from '@masknet/web3-shared-base'
 import {
     Paper,
     Skeleton,
@@ -15,6 +15,7 @@ import {
 import { memo } from 'react'
 import { useSharedI18N } from '../../../locales/index.js'
 import { useCurrencyType, useFiatCurrencyRate } from '@masknet/web3-hooks-base'
+import { FormattedCurrency } from '../../wallet/FormattedCurrency.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -43,8 +44,9 @@ const useStyles = makeStyles()({
 })
 interface CoinMarketTableProps {
     trending?: TrendingAPI.Trending | null
+    sign?: CurrencyType
 }
-export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ trending }: CoinMarketTableProps) {
+export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ trending, sign }: CoinMarketTableProps) {
     const t = useSharedI18N()
     const { classes } = useStyles()
     const currencyType = useCurrencyType()
@@ -69,9 +71,15 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.cell}>
-                                {market?.market_cap && !isLoading
-                                    ? formatMarketCap(market.market_cap, currencyType, fiatCurrencyRate)
-                                    : '--'}
+                                {market?.market_cap && !isLoading ? (
+                                    <FormattedCurrency
+                                        value={market.market_cap}
+                                        formatter={formatCurrency}
+                                        sign={sign}
+                                    />
+                                ) : (
+                                    '--'
+                                )}
                             </TableCell>
                         </TableRow>
 
@@ -93,9 +101,15 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.cell}>
-                                {market?.total_volume && !isLoading
-                                    ? formatMarketCap(market.total_volume, currencyType, fiatCurrencyRate)
-                                    : '--'}
+                                {market?.total_volume && !isLoading ? (
+                                    <FormattedCurrency
+                                        value={market.total_volume}
+                                        formatter={formatCurrency}
+                                        sign={sign}
+                                    />
+                                ) : (
+                                    '--'
+                                )}
                             </TableCell>
                         </TableRow>
                         <TableRow>

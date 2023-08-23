@@ -46,6 +46,7 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.maskColor.second,
             marginTop: theme.spacing(1),
             fontSize: 16,
+            height: 30,
             display: 'flex',
             alignItems: 'center',
         },
@@ -98,6 +99,10 @@ const useStyles = makeStyles()((theme) => {
             marginTop: 10,
             textAlign: 'center',
             color: theme.palette.maskColor.second,
+        },
+        copyButton: {
+            marginLeft: 8,
+            color: theme.palette.maskColor.main,
         },
     }
 })
@@ -160,7 +165,7 @@ export default memo(function Receive() {
                 )}
                 <Typography className={classes.address}>
                     <FormattedAddress address={account} formatter={formatEthereumAddress} size={4} />
-                    <CopyButton text={account} size={24} ml={2} style={{ marginLeft: 16 }} />
+                    <CopyButton text={account} size={18} className={classes.copyButton} />
                 </Typography>
             </Box>
             <div className={classes.halo}>
