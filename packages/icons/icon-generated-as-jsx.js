@@ -3206,7 +3206,7 @@ export const WalletSetting = /*#__PURE__*/ __createIcon('WalletSetting', [
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
-                viewBox: '0 0 24 24',
+                viewBox: '0 0 20 20',
                 children: /*#__PURE__*/ _jsxs('g', {
                     fill: 'currentColor',
                     children: [
