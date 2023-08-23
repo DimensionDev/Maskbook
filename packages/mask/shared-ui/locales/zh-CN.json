@@ -1096,7 +1096,7 @@
     "popups_wallet_sign_message": "消息签名",
     "popups_wallet_unlock_erc20_title": "给予权限来访问 <br /> 您的{{symbol}}？",
     "popups_wallet_unlock_erc20_tips": "通过授予权限，您正在允许以下 <br /> 合约来获取您的资金",
-    "popups_wallet_unlock_erc20_placeholder": "请输入分享人数",
+    "popups_wallet_unlock_erc20_placeholder": "输入最大支出限额",
     "popups_wallet_unlock_erc20_requested_by": "支出限额请求者",
     "popups_wallet_unlock_erc20_balance_tips": "允许第三方来使用钱包中的额度 {{amount}} {{symbol}}",
     "popups_wallet_unlock_erc20_balance_too_high_tips": "这允许第三方使用您所有的代币余额，直到达到上限或您取消支出上限为止。 如果不打算这样做，则考虑设定较低的支出上限。",
