@@ -17,6 +17,7 @@ import { useI18N } from '../../../../../utils/index.js'
 import Services from '../../../../service.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
 import { useHasPassword } from '../../../hook/useHasPassword.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
@@ -103,7 +104,7 @@ const Logout = memo(() => {
             manageWallets={manageWallets}
             currentPersona={currentPersona}
             backupPassword={user.backupPassword ?? ''}
-            verifyPaymentPassword={Services.Wallet.verifyPassword}
+            verifyPaymentPassword={WalletRPC.verifyPassword}
             loading={loading || hasPasswordLoading}
             hasPassword={hasPassword}
             onLogout={onLogout}

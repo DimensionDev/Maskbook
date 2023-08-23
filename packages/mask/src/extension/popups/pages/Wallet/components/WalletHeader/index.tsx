@@ -3,6 +3,7 @@ import { useChainContext, useNetwork, useWallet } from '@masknet/web3-hooks-base
 import { useQuery } from '@tanstack/react-query'
 import { memo, useCallback, useEffect } from 'react'
 import { matchPath, useLocation, useMatch } from 'react-router-dom'
+import { WalletRPC } from '../../../../../../plugins/WalletService/messages.js'
 import { NormalHeader, useModalNavigate } from '../../../../components/index.js'
 import { WalletHeaderUI } from './UI.js'
 import { WalletSetupHeaderUI } from './WalletSetupHeaderUI.js'
@@ -19,7 +20,7 @@ export const WalletHeader = memo(function WalletHeader() {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const location = useLocation()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const { data: hasPassword, refetch } = useQuery(['has-password'], Services.Wallet.hasPassword)
+    const { data: hasPassword, refetch } = useQuery(['has-password'], WalletRPC.hasPassword)
     useEffect(() => {
         refetch()
     }, [location.pathname])

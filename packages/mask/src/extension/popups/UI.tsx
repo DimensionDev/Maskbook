@@ -23,6 +23,7 @@ import { EventID } from '@masknet/web3-telemetry/types'
 import { Box } from '@mui/material'
 import { usePopupTheme } from '../../utils/theme/usePopupTheme.js'
 import Services from '../service.js'
+import { WalletRPC } from '../../plugins/WalletService/messages.js'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import { PopupLayout } from './components/PopupLayout/index.js'
 import { wrapModal } from './components/index.js'
@@ -144,7 +145,7 @@ export default function Popups() {
     )
 
     useMountReport(EventID.AccessPopups)
-    useIdleTimer({ onAction: Services.Wallet.setAutoLockTimer, throttle: 10000 })
+    useIdleTimer({ onAction: WalletRPC.setAutoLockTimer, throttle: 10000 })
     useEffect(() => {
         if (location.hash.includes('/swap')) return
         return CrossIsolationMessages.events.popupRouteUpdated.on((url) => PopupsHistory.replace(url))

@@ -7,7 +7,7 @@ import { Box, Typography, useTheme } from '@mui/material'
 import { PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../../utils/index.js'
-import Services from '../../../../service.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { PopupHomeTabType } from '@masknet/shared'
 
@@ -60,7 +60,7 @@ const Unlock = memo(() => {
     const [{ value: verified, loading }, handleUnlock] = useAsyncFn(async () => {
         const from = params.get('from')
 
-        const verified = await Services.Wallet.unlockWallet(password)
+        const verified = await WalletRPC.unlockWallet(password)
 
         if (verified)
             navigate(

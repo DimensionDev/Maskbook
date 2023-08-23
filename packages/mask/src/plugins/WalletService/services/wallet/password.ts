@@ -89,14 +89,14 @@ export async function changePassword(oldPassword: string, newPassword: string, m
     INTERNAL_setPassword(newPassword)
 }
 
-export async function validatePassword(unverifiedPassword: string) {
+export function validatePassword(unverifiedPassword: string) {
     if (!unverifiedPassword) return false
     if (unverifiedPassword.length < 6) return false
     if (unverifiedPassword.length > 20) return false
     return true
 }
 
-export async function validatePasswordRequired(unverifiedPassword: string) {
+export function validatePasswordRequired(unverifiedPassword: string) {
     if (!validatePassword(unverifiedPassword)) throw new Error('The password is not satisfied the requirement.')
     return true
 }

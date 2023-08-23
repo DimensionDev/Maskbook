@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid'
 import { decodeText, encodeText } from '@masknet/kit'
 import { getDefaultWalletPassword } from '@masknet/shared-base'
-import { walletDatabase } from '../../../database/Plugin.db.js'
+import { PluginDB } from '../../../database/Plugin.db.js'
 
 const SECRET_ID = '0'
 
@@ -45,7 +45,7 @@ async function deriveKey(iv: ArrayBuffer, password: string) {
 }
 
 async function getSecret() {
-    return walletDatabase.get('secret', SECRET_ID)
+    return PluginDB.get('secret', SECRET_ID)
 }
 
 /**
@@ -70,13 +70,13 @@ export async function hasSafeSecret() {
  * @param password
  */
 export async function resetSecret(password: string) {
-    await walletDatabase.remove('secret', SECRET_ID)
+    await PluginDB.remove('secret', SECRET_ID)
     const iv = getIV()
     const key = await deriveKey(iv, password)
     const primaryKey = await createAES()
     const primaryKeyWrapped = await wrapKey(primaryKey, key)
     const message = uuid() // the primary key never change
-    await walletDatabase.add({
+    await PluginDB.add({
         id: SECRET_ID,
         type: 'secret',
         iv,
@@ -99,7 +99,7 @@ export async function encryptSecret(password: string) {
     const primaryKey = await createAES()
     const primaryKeyWrapped = await wrapKey(primaryKey, key)
     const message = uuid() // the master secret never change
-    await walletDatabase.add({
+    await PluginDB.add({
         id: SECRET_ID,
         type: 'secret',
         iv,
@@ -124,7 +124,7 @@ export async function updateSecret(oldPassword: string, newPassword: string) {
     const key = await deriveKey(iv, newPassword)
     const primaryKey = await createAES()
     const primaryKeyWrapped = await wrapKey(primaryKey, key)
-    await walletDatabase.add({
+    await PluginDB.add({
         id: SECRET_ID,
         type: 'secret',
         iv,

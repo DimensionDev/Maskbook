@@ -24,7 +24,7 @@ import { formatCurrency, GasOptionType, isLessThan, pow10, TransactionDescriptor
 import { useI18N } from '../../../../../utils/index.js'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
-import Services from '../../../../service.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 import { FormattedCurrency } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
@@ -228,7 +228,7 @@ export const Prior1559GasSetting = memo(() => {
                 gas: toHex(new BigNumber(data.gasLimit).toString()),
                 gasPrice: toHex(formatGweiToWei(data.gasPrice).toString()),
             }))
-            await Services.Wallet.updateUnconfirmedRequest({
+            await WalletRPC.updateUnconfirmedRequest({
                 ...value.payload,
                 params: config,
             })

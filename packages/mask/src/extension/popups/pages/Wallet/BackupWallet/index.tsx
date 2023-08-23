@@ -12,7 +12,7 @@ import { useSearchParams } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { saveFileFromBuffer } from '../../../../../../shared/index.js'
 import { useI18N } from '../../../../../utils/index.js'
-import Services from '../../../../service.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
 
@@ -123,8 +123,8 @@ const BackupWallet = memo(() => {
         if (!wallet?.hasStoredKeyInfo) return
         try {
             return {
-                jsonFile: await Services.Wallet.exportKeyStoreJSON(wallet.address, password),
-                privateKey: await Services.Wallet.exportPrivateKey(wallet.address, password),
+                jsonFile: await WalletRPC.exportKeyStoreJSON(wallet.address, password),
+                privateKey: await WalletRPC.exportPrivateKey(wallet.address, password),
             }
         } catch (error) {
             if (error instanceof Error) {

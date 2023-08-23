@@ -18,11 +18,11 @@ export function LegacyWalletRecordIntoDB(x: LegacyWalletRecord) {
 export function LegacyWalletRecordOutDB(x: LegacyWalletRecordInDatabase) {
     const record = x as LegacyWalletRecord
     record.address = formatEthereumAddress(record.address)
-    record.erc20_token_whitelist ??= new Set()
-    record.erc20_token_blacklist ??= new Set()
-    record.erc721_token_whitelist ??= new Set()
-    record.erc721_token_blacklist ??= new Set()
-    record.erc1155_token_whitelist ??= new Set()
-    record.erc1155_token_blacklist ??= new Set()
+    record.erc20_token_whitelist = x.erc20_token_whitelist ?? new Set()
+    record.erc20_token_blacklist = x.erc20_token_blacklist ?? new Set()
+    record.erc721_token_whitelist = x.erc721_token_whitelist ?? new Set()
+    record.erc721_token_blacklist = x.erc721_token_blacklist ?? new Set()
+    record.erc1155_token_whitelist = x.erc1155_token_whitelist ?? new Set()
+    record.erc1155_token_blacklist = x.erc1155_token_blacklist ?? new Set()
     return record
 }

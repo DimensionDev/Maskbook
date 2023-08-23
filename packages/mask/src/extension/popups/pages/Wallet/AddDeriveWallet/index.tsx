@@ -13,7 +13,7 @@ import { Web3 } from '@masknet/web3-providers'
 import { DeriveWalletTable } from '@masknet/shared'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
-import Services from '../../../../service.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -75,7 +75,7 @@ const AddDeriveWallet = memo(() => {
         if (mnemonic) {
             const unDeriveWallets = Array.from(indexes.current)
 
-            const derivableAccounts = await Services.Wallet.getDerivableAccounts(mnemonic, page)
+            const derivableAccounts = await WalletRPC.getDerivableAccounts(mnemonic, page)
 
             return derivableAccounts.map((derivedWallet, index) => {
                 const added = !!wallets.find(currySameAddress(derivedWallet.address))
@@ -108,7 +108,7 @@ const AddDeriveWallet = memo(() => {
         if (!unDeriveWallets.length) return
 
         const firstPath = first(unDeriveWallets)
-        const firstWallet = await Services.Wallet.createWalletFromMnemonicWords(
+        const firstWallet = await WalletRPC.createWalletFromMnemonicWords(
             `${walletName}${firstPath!}`,
             mnemonic,
             `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${firstPath}`,
@@ -118,7 +118,7 @@ const AddDeriveWallet = memo(() => {
             unDeriveWallets
                 .slice(1)
                 .map(async (pathIndex) =>
-                    Services.Wallet.createWalletFromMnemonicWords(
+                    WalletRPC.createWalletFromMnemonicWords(
                         `${walletName}${pathIndex}`,
                         mnemonic,
                         `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${pathIndex}`,
@@ -127,7 +127,7 @@ const AddDeriveWallet = memo(() => {
         )
 
         await Web3.connect({ account: firstWallet, providerType: ProviderType.MaskWallet })
-        await Services.Wallet.resolveMaskAccount([{ address: firstWallet }])
+        await WalletRPC.resolveMaskAccount([{ address: firstWallet }])
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [mnemonic, walletName, wallets.length])
 

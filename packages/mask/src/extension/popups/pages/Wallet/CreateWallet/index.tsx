@@ -10,7 +10,7 @@ import { Controller } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import type { z as zod } from 'zod'
-import Services from '../../../../service.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { useTitle } from '../../../hook/useTitle.js'
@@ -51,7 +51,7 @@ const CreateWallet = memo(function CreateWallet() {
 
     const [{ loading }, onCreate] = useAsyncFn(async ({ name }: zod.infer<typeof schema>) => {
         try {
-            const address = await Services.Wallet.deriveWallet(name)
+            const address = await WalletRPC.deriveWallet(name)
             await pollResult(address)
             await Web3.connect({
                 account: address,

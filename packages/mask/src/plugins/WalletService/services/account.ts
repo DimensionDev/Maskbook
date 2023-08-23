@@ -21,17 +21,19 @@ interface MaskAccount {
 let deferred: DeferTuple<MaskAccount[], Error> | null
 
 export async function selectMaskAccount(): Promise<MaskAccount[]> {
-    const [promise] = (deferred = defer())
-    return promise
+    deferred = defer()
+    return deferred?.[0] ?? []
 }
 
 export async function resolveMaskAccount(accounts: MaskAccount[]) {
-    deferred?.[1](accounts)
+    const [, resolve] = deferred ?? []
+    resolve?.(accounts)
     deferred = null
 }
 
 export async function rejectMaskAccount() {
-    deferred?.[1]([])
+    const [, resolve] = deferred ?? []
+    resolve?.([])
     deferred = null
 }
 // #endregion

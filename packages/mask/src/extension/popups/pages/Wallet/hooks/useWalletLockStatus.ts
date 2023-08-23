@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { useEffect } from 'react'
-import Services from '../../../../service.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 
 export function useWalletLockStatus() {
@@ -10,7 +10,7 @@ export function useWalletLockStatus() {
         error,
         retry,
     } = useAsyncRetry(async () => {
-        return Services.Wallet.isLocked()
+        return WalletRPC.isLocked()
     }, [])
 
     useEffect(() => {

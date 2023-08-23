@@ -29,7 +29,7 @@ import { useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
-import Services from '../../../../service.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 import { FormattedCurrency } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
@@ -269,7 +269,7 @@ export const GasSetting1559 = memo(() => {
                       },
             )
 
-            await Services.Wallet.updateUnconfirmedRequest({
+            await WalletRPC.updateUnconfirmedRequest({
                 ...value.payload,
                 owner: value.owner,
                 identifier: value.identifier?.toText(),

@@ -11,6 +11,7 @@ import { ActionButton, makeStyles } from '@masknet/theme'
 import { PersonaContext } from '@masknet/shared'
 import { Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 import { useTitle } from '../../../hook/useTitle.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
@@ -58,7 +59,7 @@ const SelectWallet = memo(function SelectWallet() {
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
     const { smartPayChainId } = PopupContext.useContainer()
 
-    const { value: localWallets = [] } = useAsync(async () => Services.Wallet.getWallets(), [])
+    const { value: localWallets = [] } = useAsync(async () => WalletRPC.getWallets(), [])
 
     const allWallets = useWallets()
 
@@ -72,7 +73,7 @@ const SelectWallet = memo(function SelectWallet() {
         if (isVerifyWalletFlow) {
             navigate(-1)
         } else {
-            await Services.Wallet.resolveMaskAccount([])
+            await WalletRPC.resolveMaskAccount([])
             await Services.Helper.removePopupWindow()
         }
     }, [isVerifyWalletFlow])
@@ -96,7 +97,7 @@ const SelectWallet = memo(function SelectWallet() {
 
         const wallet = wallets.find((x) => isSameAddress(x.address, selected))
 
-        await Services.Wallet.resolveMaskAccount([
+        await WalletRPC.resolveMaskAccount([
             wallet?.owner
                 ? {
                       address: selected,

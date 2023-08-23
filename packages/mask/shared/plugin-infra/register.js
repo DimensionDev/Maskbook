@@ -4,6 +4,8 @@
 import '@masknet/plugin-example/register'
 import '@masknet/plugin-debugger/register'
 
+import '../../src/plugins/WalletService/register.js'
+
 import '@masknet/plugin-wallet/register'
 import '@masknet/plugin-evm/register'
 import '@masknet/plugin-flow/register'

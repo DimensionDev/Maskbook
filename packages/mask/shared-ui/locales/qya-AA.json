@@ -998,6 +998,7 @@
     "popups_wallet_contract_interaction_edit": "crwdns8069:0crwdne8069:0",
     "popups_wallet_contract_interaction_total": "crwdns8071:0crwdne8071:0",
     "popups_wallet_password_not_match": "crwdns18660:0crwdne18660:0",
+    "popups_wallet_password_satisfied_requirement": "crwdns9317:0crwdne9317:0",
     "popups_wallet_password_length_error": "crwdns9319:0crwdne9319:0",
     "popups_wallet_password_change_successful": "crwdns22101:0crwdne22101:0",
     "popups_wallet_unlock_wallet": "crwdns8073:0crwdne8073:0",

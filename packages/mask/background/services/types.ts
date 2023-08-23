@@ -6,7 +6,6 @@ import type * as Identity from './identity/index.js'
 import type * as Settings from './settings/index.js'
 import type * as SiteAdaptor from './site-adaptors/index.js'
 import type * as ThirdPartyPlugin from './third-party-plugins/index.js'
-import type * as Wallet from './wallet/services/index.js'
 
 export type CryptoService = typeof Crypto
 export type IdentityService = typeof Identity
@@ -15,7 +14,6 @@ export type HelperService = typeof Helper
 export type SettingsService = typeof Settings
 export type SiteAdaptorService = typeof SiteAdaptor
 export type ThirdPartyPluginService = typeof ThirdPartyPlugin
-export type WalletService = typeof Wallet
 export interface Services {
     Crypto: CryptoService
     Identity: IdentityService
@@ -24,7 +22,6 @@ export interface Services {
     Settings: SettingsService
     SiteAdaptor: SiteAdaptorService
     ThirdPartyPlugin: ThirdPartyPluginService
-    Wallet: WalletService
 }
 export type GeneratorServices = {
     decrypt: typeof decryptWithDecoding

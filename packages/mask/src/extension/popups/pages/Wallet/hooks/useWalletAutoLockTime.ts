@@ -1,11 +1,11 @@
 import { useAsyncRetry } from 'react-use'
 import { useEffect } from 'react'
-import Services from '../../../../service.js'
+import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 
 export function useWalletAutoLockTime() {
     const result = useAsyncRetry(async () => {
-        return Services.Wallet.getAutoLockerDuration()
+        return WalletRPC.getAutoLockerDuration()
     }, [])
 
     useEffect(() => {

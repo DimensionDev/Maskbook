@@ -1,5 +1,5 @@
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { walletDatabase } from '../../../database/Plugin.db.js'
+import { PluginDB } from '../../../database/Plugin.db.js'
 
 const DEFAULT_LOCK_DURATION = 1000 * 60 * 15 // 15 mins
 
@@ -12,7 +12,7 @@ export type LockerRecord = {
 }
 
 async function getAutoLockerRecord() {
-    return walletDatabase.get('locker', ID)
+    return PluginDB.get('locker', ID)
 }
 
 export async function getAutoLockerDuration() {
@@ -21,6 +21,6 @@ export async function getAutoLockerDuration() {
 }
 
 export async function setAutoLockerTime(duration: number) {
-    await walletDatabase.add({ type: 'locker', id: ID, duration })
+    await PluginDB.add({ type: 'locker', id: ID, duration })
     CrossIsolationMessages.events.walletLockTimeUpdated.sendToAll()
 }

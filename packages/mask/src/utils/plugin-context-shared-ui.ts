@@ -12,6 +12,7 @@ import {
 import { WalletConnectQRCodeModal } from '@masknet/shared'
 import Services from '../extension/service.js'
 import type { PartialSharedUIContext } from '../../shared/plugin-infra/host.js'
+import { WalletRPC } from '../plugins/WalletService/messages.js'
 
 export const RestPartOfPluginUIContextShared: Omit<
     Plugin.SiteAdaptor.SiteAdaptorContext,
@@ -36,7 +37,7 @@ export const RestPartOfPluginUIContextShared: Omit<
         undefined,
         MaskMessages.events.currentPersonaIdentifier.on,
     ),
-    send: Services.Wallet.send,
+    send: WalletRPC.send,
 
     openDashboard: Services.Helper.openDashboard,
     openPopupWindow: Services.Helper.openPopupWindow,
@@ -67,25 +68,25 @@ export const RestPartOfPluginUIContextShared: Omit<
         WalletConnectQRCodeModal.close()
     },
 
-    selectAccount: Services.Wallet.selectMaskAccount,
+    selectAccount: WalletRPC.selectMaskAccount,
 
-    recordConnectedSites: Services.Wallet.recordConnectedSites,
+    recordConnectedSites: WalletRPC.recordConnectedSites,
 
     signWithPersona: <T>(type: SignType, message: T, identifier?: ECKeyIdentifier, silent?: boolean) =>
         Services.Identity.signWithPersona(type, message, identifier, location.origin, silent),
-    signWithWallet: Services.Wallet.signWithWallet,
+    signWithWallet: WalletRPC.signWithWallet,
 
     wallets: createSubscriptionFromAsync(
-        () => Services.Wallet.getWallets(),
+        () => WalletRPC.getWallets(),
         EMPTY_LIST,
         CrossIsolationMessages.events.walletsUpdated.on,
     ),
 
-    getWallets: Services.Wallet.getWallets,
-    addWallet: Services.Wallet.addWallet,
-    updateWallet: Services.Wallet.updateWallet,
-    removeWallet: Services.Wallet.removeWallet,
-    resetAllWallets: Services.Wallet.resetAllWallets,
+    getWallets: WalletRPC.getWallets,
+    addWallet: WalletRPC.addWallet,
+    updateWallet: WalletRPC.updateWallet,
+    removeWallet: WalletRPC.removeWallet,
+    resetAllWallets: WalletRPC.resetAllWallets,
 
-    hasPaymentPassword: Services.Wallet.hasPassword,
+    hasPaymentPassword: WalletRPC.hasPassword,
 }
