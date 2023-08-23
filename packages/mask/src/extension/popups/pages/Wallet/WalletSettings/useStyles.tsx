@@ -10,7 +10,7 @@ export const useStyles = makeStyles()((theme) => ({
     },
     list: {
         padding: '12px 16px 0px 16px',
-        minHeight: 400,
+        height: 400,
         overflow: 'auto',
         '::-webkit-scrollbar': {
             display: 'none',
