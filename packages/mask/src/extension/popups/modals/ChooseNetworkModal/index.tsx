@@ -138,7 +138,7 @@ export const ChooseNetworkModal = memo(function ChooseNetworkModal({ ...rest }: 
 
     const action = (
         <ActionButton fullWidth onClick={() => navigate(PopupRoutes.NetworkManagement)}>
-            Management network
+            {t('manage_network')}
         </ActionButton>
     )
 
