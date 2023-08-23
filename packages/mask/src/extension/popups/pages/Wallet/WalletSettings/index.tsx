@@ -56,8 +56,12 @@ const WalletSettings = memo(() => {
                 <AutoLock />
                 <ChangeCurrency />
                 <ChangePaymentPassword />
-                {wallet.owner ? null : <ShowPrivateKey />}
-                <ChangeNetwork />
+                {wallet.owner ? null : (
+                    <>
+                        <ShowPrivateKey />
+                        <ChangeNetwork />
+                    </>
+                )}
             </List>
             <Box className={classes.bottomAction}>
                 <ActionButton
