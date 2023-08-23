@@ -1,5 +1,5 @@
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { useAsyncFn, useUnmount } from 'react-use'
+import { useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import {
     type EnhanceableSite,
@@ -200,11 +200,8 @@ const AccountDetail = memo(() => {
                 />
             ),
         )
+        return () => setExtension(undefined)
     }, [selectedAccount, handleDetachProfile, currentPersona, handleConfirmReleaseBind])
-
-    useUnmount(() => {
-        setExtension(null)
-    })
 
     useUpdateEffect(() => {
         setPendingUnlistedConfig(unlistedAddressConfig)

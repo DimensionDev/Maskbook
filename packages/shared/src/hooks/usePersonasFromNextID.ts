@@ -12,7 +12,8 @@ export function usePersonasFromNextID(userId: string, platform: NextIDPlatform, 
         enabled: Boolean(platform && userId),
         queryFn: async () => {
             if (!platform || !userId) return EMPTY_LIST
-            return NextIDProof.queryAllExistedBindingsByPlatform(platform, userId, exact)
+            const res = await NextIDProof.queryAllExistedBindingsByPlatform(platform, userId, exact)
+            return res ? res : EMPTY_LIST
         },
     })
 

@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useCallback, useEffect, useMemo } from 'react'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { Box, Typography } from '@mui/material'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
@@ -6,7 +6,7 @@ import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Trend } from '../../../assets/index.js'
-import { EnhanceableSite, PopupRoutes } from '@masknet/shared-base'
+import { CrossIsolationMessages, EnhanceableSite, PopupRoutes } from '@masknet/shared-base'
 
 import { Services } from '../../../API.js'
 import { delay } from '@masknet/kit'
@@ -102,6 +102,17 @@ export const Onboarding = memo(function Onboarding() {
             { isCreating: true },
         )
     }, [hasPaymentPassword])
+
+    useEffect(() => {
+        return CrossIsolationMessages.events.passwordStatusUpdated.on((hasPassword) => {
+            if (!hasPassword) return
+            retry()
+            showSnackbar(t.persona_onboarding_set_payment_password(), {
+                variant: 'success',
+                message: t.wallet_set_payment_password_successfully(),
+            })
+        })
+    }, [retry])
 
     const words = useMemo(() => {
         const count = params.get('count')
