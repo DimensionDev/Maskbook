@@ -1,7 +1,7 @@
+import { memo, useRef, type ReactNode, useEffect } from 'react'
 import { Icons } from '@masknet/icons'
 import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { Box, Drawer, Typography } from '@mui/material'
-import { memo, useRef, type PropsWithChildren, useEffect } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -26,14 +26,15 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface BottomDrawerProps extends PropsWithChildren {
+export interface BottomDrawerProps extends withClasses<'title' | 'root' | 'header'> {
     open: boolean
+    children?: ReactNode
     title: string
     onClose?: () => void
 }
 
-export const BottomDrawer = memo<BottomDrawerProps>(function BottomDrawer({ open, onClose, children, title }) {
-    const { classes } = useStyles()
+export const BottomDrawer = memo<BottomDrawerProps>(function BottomDrawer({ open, onClose, children, title, ...rest }) {
+    const { classes } = useStyles(undefined, { props: rest })
     const handleClose = () => onClose?.()
     const everOpenRef = useRef(false)
     useEffect(() => {
