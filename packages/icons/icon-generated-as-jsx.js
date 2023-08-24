@@ -492,16 +492,6 @@ export const TelegramRound = /*#__PURE__*/ __createIcon('TelegramRound', [
         u: () => new URL('./brands/TelegramRound.svg', import.meta.url),
     },
 ])
-export const Twitter3 = /*#__PURE__*/ __createIcon('twitter3', [
-    {
-        c: ['dark'],
-        u: () => new URL('./brands/twitter3.dark.svg', import.meta.url),
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./brands/twitter3.light.svg', import.meta.url),
-    },
-])
 export const TwitterColored = /*#__PURE__*/ __createIcon('TwitterColored', [
     {
         u: () => new URL('./brands/TwitterColored.svg', import.meta.url),
@@ -540,6 +530,16 @@ export const Uniswap = /*#__PURE__*/ __createIcon('Uniswap', [
 export const WETH = /*#__PURE__*/ __createIcon('WETH', [
     {
         u: () => new URL('./brands/WETH.svg', import.meta.url),
+    },
+])
+export const X = /*#__PURE__*/ __createIcon('X', [
+    {
+        c: ['dark'],
+        u: () => new URL('./brands/X.dark.svg', import.meta.url),
+    },
+    {
+        c: ['light'],
+        u: () => new URL('./brands/X.light.svg', import.meta.url),
     },
 ])
 export const X2Y2 = /*#__PURE__*/ __createIcon('X2Y2', [
