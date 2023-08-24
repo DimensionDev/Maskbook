@@ -11,6 +11,7 @@ import Services from '../../../service.js'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { useWalletAutoLockTime } from '../../pages/Wallet/hooks/useWalletAutoLockTime.js'
+import { isPositive } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -115,7 +116,11 @@ function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
                     fullWidth
                     placeholder={'15'}
                     value={time ?? initialTime}
-                    onChange={(e) => setTime(e.target.value)}
+                    onChange={(e) => {
+                        if (!e.target.value) setTime('')
+                        if (!isPositive(e.target.value)) return
+                        setTime(e.target.value)
+                    }}
                     InputProps={{
                         endAdornment: (
                             <Typography color={theme.palette.maskColor.third}>
@@ -123,6 +128,10 @@ function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
                             </Typography>
                         ),
                         disableUnderline: true,
+                        inputProps: {
+                            min: 0,
+                            type: 'number',
+                        },
                     }}
                 />
             </Box>
