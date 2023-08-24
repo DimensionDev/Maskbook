@@ -7,7 +7,7 @@ import { Box, Skeleton, Typography, type AvatarProps } from '@mui/material'
 import { memo } from 'react'
 import { QRCode } from 'react-qrcode-logo'
 import { useI18N } from '../../../../../utils/index.js'
-import { useTitle, useTokenParams } from '../../../hook/index.js'
+import { useTitle, useTokenParams } from '../../../hooks/index.js'
 import { useAsset } from '../hooks/useAsset.js'
 
 const useStyles = makeStyles()((theme) => {

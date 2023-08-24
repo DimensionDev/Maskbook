@@ -20,7 +20,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { useI18N } from '../../../../../utils/index.js'
 import { PageTitleContext } from '../../../context.js'
-import { useTitle, useTokenParams } from '../../../hook/index.js'
+import { useTitle, useTokenParams } from '../../../hooks/index.js'
 import { ConfirmModal } from '../../../modals/modals.js'
 import { TransferTabType } from '../type.js'
 

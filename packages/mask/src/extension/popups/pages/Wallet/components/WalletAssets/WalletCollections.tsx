@@ -9,7 +9,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { useI18N } from '../../../../../../utils/index.js'
 import { WalletAssetTabs } from '../../type.js'
-import { useParamTab } from '../../../../hook/index.js'
+import { useParamTab } from '../../../../hooks/index.js'
 
 const gridProps = {
     columns: 'repeat(auto-fill, minmax(20%, 1fr))',

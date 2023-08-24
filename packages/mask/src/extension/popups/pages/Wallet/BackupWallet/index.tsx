@@ -14,7 +14,7 @@ import { saveFileFromBuffer } from '../../../../../../shared/index.js'
 import { useI18N } from '../../../../../utils/index.js'
 import Services from '../../../../service.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
-import { useTitle } from '../../../hook/useTitle.js'
+import { useTitle } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()({
     content: {

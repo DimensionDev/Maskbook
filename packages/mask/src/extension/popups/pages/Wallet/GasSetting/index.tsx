@@ -5,7 +5,7 @@ import { ChainResolver } from '@masknet/web3-providers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils/index.js'
-import { useTitle } from '../../../hook/useTitle.js'
+import { useTitle } from '../../../hooks/index.js'
 import { GasSetting1559 } from './GasSetting1559.js'
 import { Prior1559GasSetting } from './Prior1559GasSetting.js'
 

@@ -6,7 +6,7 @@ import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { PasswordField } from '../../components/PasswordField/index.js'
-import { UserContext } from '../../hook/useUserContext.js'
+import { UserContext } from '../../hooks/index.js'
 import { MATCH_PASSWORD_RE } from '../../constants.js'
 
 export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBackupPasswordModal() {

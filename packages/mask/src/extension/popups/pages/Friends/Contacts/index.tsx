@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { ElementAnchor, EmptyStatus } from '@masknet/shared'
 import { ContactCard } from '../ContactCard/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
-import { type Friend } from '../../../hook/useFriends.js'
+import { type Friend } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     empty: {

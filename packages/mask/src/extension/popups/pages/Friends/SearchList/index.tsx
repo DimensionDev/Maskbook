@@ -4,7 +4,7 @@ import { ContactCard } from '../ContactCard/index.js'
 import { Box } from '@mui/material'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { EmptyStatus, RestorableScroll, ElementAnchor } from '@masknet/shared'
-import type { NextIDPersonaBindingsWithIdentifier } from '../../../hook/useFriendsFromSearch.js'
+import type { NextIDPersonaBindingsWithIdentifier } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     empty: {

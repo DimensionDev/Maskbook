@@ -14,8 +14,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../../../../../utils/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
-import { useTitle } from '../../../hook/useTitle.js'
-import { PopupContext } from '../../../hook/usePopupContext.js'
+import { useTitle, PopupContext } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()({
     content: {

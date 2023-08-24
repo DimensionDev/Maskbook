@@ -21,7 +21,7 @@ import type { ConnectedWalletInfo } from '../type.js'
 import { useModalNavigate } from '../../../components/index.js'
 import { PersonaPublicKey } from '../../../components/PersonaPublicKey/index.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
-import { useParamTab } from '../../../hook/useParamTab.js'
+import { useParamTab } from '../../../hooks/index.js'
 import { useNavigate } from 'react-router-dom'
 import { PopupHomeTabType } from '@masknet/shared'
 

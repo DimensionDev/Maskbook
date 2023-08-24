@@ -26,8 +26,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { useContainer } from 'unstated-next'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
-import { useGasOptionsMenu } from '../../hook/useGasOptionsMenu.js'
-import { PopupContext } from '../../hook/usePopupContext.js'
+import { useGasOptionsMenu, PopupContext } from '../../hooks/index.js'
 
 interface GasSettingMenuProps {
     minimumGas: string

@@ -5,10 +5,9 @@ import { memo } from 'react'
 import { Box, Typography } from '@mui/material'
 import { Search } from '../Search/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
-import type { NextIDPersonaBindingsWithIdentifier } from '../../../hook/useFriendsFromSearch.js'
+import type { NextIDPersonaBindingsWithIdentifier, Friend } from '../../../hooks/index.js'
 import { Contacts } from '../Contacts/index.js'
 import { SearchList } from '../SearchList/index.js'
-import { type Friend } from '../../../hook/useFriends.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

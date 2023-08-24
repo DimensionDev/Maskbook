@@ -13,7 +13,7 @@ import {
 } from '@masknet/shared-base'
 import { PersonaContext } from '@masknet/shared'
 import { usePopupCustomSnackbar } from '@masknet/theme'
-import { useTitle } from '../../../hook/useTitle.js'
+import { useTitle } from '../../../hooks/index.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { AccountDetailUI } from './UI.js'
 import Service from '../../../../service.js'
