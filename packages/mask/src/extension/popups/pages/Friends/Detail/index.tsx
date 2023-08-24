@@ -7,7 +7,7 @@ import Services from '../../../../service.js'
 import { FriendsDetailUI } from './UI.js'
 import { useQueryClient, useMutation, type InfiniteData } from '@tanstack/react-query'
 import { usePopupCustomSnackbar } from '@masknet/theme'
-import { type Friend } from '../../../hook/useFriends.js'
+import { type Friend } from '../../../hooks/index.js'
 
 export const FriendsDetail = memo(function FriendsDetail() {
     const location = useLocation()

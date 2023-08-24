@@ -1,12 +1,9 @@
 import { memo, useState, useMemo } from 'react'
 import { FriendsHomeUI } from './UI.js'
-import { useFriendsPaged } from '../../../hook/useFriends.js'
+import { useFriendsPaged, useTitle, useSearchValue, useFriendsFromSearch } from '../../../hooks/index.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { useTitle } from '../../../hook/useTitle.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { resolveNextIDPlatform } from '@masknet/shared'
-import { useSearchValue } from '../../../hook/useSearchValue.js'
-import { useFriendsFromSearch } from '../../../hook/useFriendsFromSearch.js'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { NextIDProof } from '@masknet/web3-providers'
 

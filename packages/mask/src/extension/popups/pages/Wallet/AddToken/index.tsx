@@ -13,7 +13,7 @@ import { TabContext, TabPanel } from '@mui/lab'
 import { Tab } from '@mui/material'
 import { useI18N } from '../../../../../utils/index.js'
 import { NormalHeader } from '../../../components/index.js'
-import { useTitle } from '../../../hook/useTitle.js'
+import { useTitle } from '../../../hooks/index.js'
 import { WalletAssetTabs } from '../type.js'
 
 const useStyles = makeStyles<{ currentTab: TabType; searchError: boolean }>()((theme, { currentTab, searchError }) => ({

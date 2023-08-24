@@ -17,10 +17,10 @@ import { ConnectedAccounts } from './ConnectedAccounts/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import Services from '../../../../service.js'
 import { useEverSeen } from '@masknet/shared-base-ui'
-import { useFriendProfiles } from '../../../hook/useFriendProfiles.js'
+import { useFriendProfiles } from '../../../hooks/index.js'
 import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query'
 import urlcat from 'urlcat'
-import { type Friend } from '../../../hook/useFriends.js'
+import { type Friend } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {

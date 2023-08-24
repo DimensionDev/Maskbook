@@ -1,10 +1,10 @@
-import { type ECKeyIdentifier, EMPTY_LIST, type BindingProof, type ProfileIdentifier } from '@masknet/shared-base'
+import { isProfileIdentifier } from '@masknet/shared'
+import { EMPTY_LIST, type BindingProof, type ECKeyIdentifier, type ProfileIdentifier } from '@masknet/shared-base'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { first } from 'lodash-es'
+import { useCallback } from 'react'
 import { useCurrentPersona } from '../../../components/DataSource/useCurrentPersona.js'
 import Services from '../../../extension/service.js'
-import { first } from 'lodash-es'
-import { isProfileIdentifier } from '@masknet/shared'
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
-import { useCallback } from 'react'
 
 export type FriendsInformation = Friend & {
     profiles: BindingProof[]

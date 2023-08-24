@@ -1,20 +1,8 @@
-import {
-    type ECKeyIdentifier,
-    type BindingProof,
-    NextIDPlatform,
-    type ProfileIdentifier,
-    EMPTY_LIST,
-} from '@masknet/shared-base'
-import { useCurrentPersona } from '../../../components/DataSource/useCurrentPersona.js'
-import { useQuery } from '@tanstack/react-query'
+import { EMPTY_LIST, NextIDPlatform, type BindingProof } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { UnsupportedPlatforms, PlatformSort } from '../pages/Friends/common.js'
-
-export type Friend = {
-    persona: ECKeyIdentifier
-    profile?: ProfileIdentifier
-    avatar?: string
-}
+import { useQuery } from '@tanstack/react-query'
+import { useCurrentPersona } from '../../../components/DataSource/useCurrentPersona.js'
+import { PlatformSort, UnsupportedPlatforms } from '../pages/Friends/common.js'
 
 export const profilesFilter = (x: BindingProof) => {
     return (x.platform === NextIDPlatform.ENS && x.name.endsWith('.eth')) || !UnsupportedPlatforms.includes(x.platform)

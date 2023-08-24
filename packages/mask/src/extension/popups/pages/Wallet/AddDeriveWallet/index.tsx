@@ -12,7 +12,7 @@ import { useNativeToken, useWallets } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
 import { DeriveWalletTable } from '@masknet/shared'
 import { useI18N } from '../../../../../utils/index.js'
-import { useTitle } from '../../../hook/useTitle.js'
+import { useTitle } from '../../../hooks/index.js'
 import Services from '../../../../service.js'
 
 const useStyles = makeStyles()({

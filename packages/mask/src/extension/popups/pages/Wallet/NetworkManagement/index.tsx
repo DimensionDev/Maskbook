@@ -6,7 +6,7 @@ import { Box, List, ListItem, Typography, alpha } from '@mui/material'
 import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
-import { useTitle } from '../../../hook/index.js'
+import { useTitle } from '../../../hooks/index.js'
 import { useNetworks } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({

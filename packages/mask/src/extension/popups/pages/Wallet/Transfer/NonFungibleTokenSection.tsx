@@ -9,7 +9,7 @@ import { uniqWith } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useI18N } from '../../../../../utils/index.js'
-import { useNonFungibleTokenParams } from '../../../hook/index.js'
+import { useNonFungibleTokenParams } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

@@ -10,9 +10,7 @@ import {
 } from '@masknet/shared-base'
 import { PersonaHomeUI } from './UI.js'
 import Services from '../../../../service.js'
-import { useSupportSocialNetworks } from '../../../hook/useSupportSocialNetworks.js'
-import { useVerifiedWallets } from '../../../hook/useVerifiedWallets.js'
-import { useHasPassword } from '../../../hook/useHasPassword.js'
+import { useSupportSocialNetworks, useVerifiedWallets, useHasPassword } from '../../../hooks/index.js'
 
 const PersonaHome = memo(() => {
     const navigate = useNavigate()

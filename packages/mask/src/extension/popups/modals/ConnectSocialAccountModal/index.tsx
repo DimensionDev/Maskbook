@@ -4,7 +4,7 @@ import { EMPTY_LIST, type EnhanceableSite } from '@masknet/shared-base'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
 import { ConnectSocialAccounts } from '../../components/ConnectSocialAccounts/index.js'
-import { useSupportSocialNetworks } from '../../hook/useSupportSocialNetworks.js'
+import { useSupportSocialNetworks } from '../../hooks/index.js'
 import Services from '../../../service.js'
 import { PersonaContext } from '@masknet/shared'
 

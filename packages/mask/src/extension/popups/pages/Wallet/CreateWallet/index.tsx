@@ -13,7 +13,7 @@ import type { z as zod } from 'zod'
 import Services from '../../../../service.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
-import { useTitle } from '../../../hook/useTitle.js'
+import { useTitle } from '../../../hooks/index.js'
 import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm.js'
 
 const useStyles = makeStyles()((theme) => ({

@@ -8,7 +8,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { Box, Typography, useTheme, type BoxProps } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
 import { useI18N } from '../../../../utils/index.js'
-import { ContactsContext } from '../../hook/useContactsContext.js'
+import { ContactsContext } from '../../hooks/index.js'
 import { AddContactModal } from '../../modals/modals.js'
 
 const useStyles = makeStyles()((theme) => ({

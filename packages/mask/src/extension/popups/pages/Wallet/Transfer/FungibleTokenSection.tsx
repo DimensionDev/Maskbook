@@ -28,10 +28,9 @@ import { useAsyncFn } from 'react-use'
 import { formatTokenBalance, useI18N } from '../../../../../utils/index.js'
 import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
 import { TokenPicker } from '../../../components/index.js'
-import { useTokenParams } from '../../../hook/index.js'
+import { useTokenParams, PopupContext } from '../../../hooks/index.js'
 import { ChooseTokenModal } from '../../../modals/modals.js'
 import { useDefaultGasConfig } from './useDefaultGasConfig.js'
-import { PopupContext } from '../../../hook/usePopupContext.js'
 
 const useStyles = makeStyles()((theme) => ({
     asset: {
