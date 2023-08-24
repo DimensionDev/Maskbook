@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { NetworkPluginID, PopupModalRoutes } from '@masknet/shared-base'
 import { ActionButton } from '@masknet/theme'
 import { useWallet } from '@masknet/web3-hooks-base'
-import { Box, List, Typography, useTheme } from '@mui/material'
+import { Box, List, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
 import { useI18N } from '../../../../../utils/index.js'
 import { useModalNavigate } from '../../../components/index.js'
@@ -20,10 +20,9 @@ import { useStyles } from './useStyles.js'
 
 const WalletSettings = memo(() => {
     const { t } = useI18N()
-    const { classes, cx } = useStyles()
+    const { classes, cx, theme } = useStyles()
     const modalNavigate = useModalNavigate()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const theme = useTheme()
 
     const handleSwitchWallet = useCallback(() => {
         modalNavigate(PopupModalRoutes.SwitchWallet)

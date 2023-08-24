@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { Box, ListItem, Typography, useTheme } from '@mui/material'
+import { Box, ListItem, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils/index.js'
 import { useStyles } from './useStyles.js'
 import { useCallback } from 'react'
@@ -10,8 +10,7 @@ import { resolveCurrencyName } from '@masknet/web3-shared-base'
 
 export function ChangeCurrency() {
     const { t } = useI18N()
-    const theme = useTheme()
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
 
     const modalNavigate = useModalNavigate()
 
