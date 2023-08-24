@@ -74,7 +74,12 @@ export function PersonaRecovery() {
                 showSnackbar(t.create_account_persona_successfully(), { variant: 'success' })
 
                 await delay(300)
-                navigate(urlcat(DashboardRoutes.SignUpPersonaOnboarding, { count: accounts.length }), { replace: true })
+                navigate(
+                    urlcat(DashboardRoutes.SignUpPersonaOnboarding, {
+                        count: accounts.filter((x) => x.deployed).length,
+                    }),
+                    { replace: true },
+                )
             } catch (error) {
                 setError((error as Error).message)
             }
