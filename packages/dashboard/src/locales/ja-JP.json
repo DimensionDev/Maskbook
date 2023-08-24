@@ -417,6 +417,7 @@
     "store_recovery_phrase_tip": "これらの単語を正しく書き留めるか、コピーして安全な場所に保管してください。",
     "create_wallet_payment_password_place_holder": "6 文字以上お願いします。",
     "create_wallet_re_enter_payment_password": "支払いパスワードを再入力",
+    "create_wallet_payment_password_tip_1": "支払いパスワードは6文字以上20文字以下で設定してください。",
     "create_wallet_your_wallet_address": "あなたのウォレットアドレス",
     "create_wallet_done": "完了",
     "create_wallet_verify_words": "ニーモニックワードを検証します",
