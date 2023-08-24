@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Icons } from '@masknet/icons'
-import { Box, ListItem, Typography, useTheme } from '@mui/material'
+import { Box, ListItem, Typography } from '@mui/material'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -12,8 +12,7 @@ import Services from '../../../../service.js'
 
 export function ChangeOwner() {
     const { t } = useI18N()
-    const theme = useTheme()
-    const { classes, cx } = useStyles()
+    const { classes, cx, theme } = useStyles()
     const navigate = useNavigate()
     const wallet = useWallet()
     const wallets = useWallets()
