@@ -171,7 +171,7 @@ export const Onboarding = memo(function Onboarding() {
                     onClick={onSetupTwitter}
                     size="large"
                     startIcon={
-                        <Icons.Twitter3
+                        <Icons.X
                             variant={theme.palette.mode === 'dark' ? 'light' : 'dark'}
                             className={classes.twitter}
                             size={20}
