@@ -1206,7 +1206,6 @@
     "plugin_wallet_connect_fortmatic": "连接 Fortmatic",
     "plugin_wallet_choose_network": "选择网络",
     "plugin_disabled_tip": "您需要打开 DAPP 才能查看特定内容。",
-    "management_network": "管理网络",
     "network_management_add_network": "添加网络",
     "network_name": "网络名称",
     "rpc_url": "RPC URL",
