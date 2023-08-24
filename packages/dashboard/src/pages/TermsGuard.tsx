@@ -1,7 +1,7 @@
+import urlcat from 'urlcat'
 import { type PropsWithChildren, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
-import urlcat from 'urlcat'
 import { TermsAgreedContext } from '../hooks/useTermsAgreed.js'
 
 function TermsGuardInner({ children }: PropsWithChildren<{}>) {
