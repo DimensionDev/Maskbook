@@ -21,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
     },
     titleWrapper: {
-        padding: 16,
+        padding: theme.spacing(2, 0),
         display: 'flex',
         marginBottom: 12,
         flexDirection: 'column',
@@ -60,7 +60,6 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         fontWeight: 700,
         color: theme.palette.maskColor.third,
-        width: 270,
         marginTop: theme.spacing(1.5),
         textAlign: 'center',
     },
