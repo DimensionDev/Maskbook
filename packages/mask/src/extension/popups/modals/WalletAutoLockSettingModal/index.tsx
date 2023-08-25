@@ -115,10 +115,12 @@ function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
                     error={error}
                     fullWidth
                     placeholder="1440"
-                    value={time ?? initialTime}
+                    value={time || initialTime}
                     onChange={(e) => {
                         if (!e.target.value) setTime('')
-                        if (!isPositive(e.target.value)) return
+                        if (!isPositive(e.target.value)) {
+                            return
+                        }
                         setTime(e.target.value)
                     }}
                     InputProps={{

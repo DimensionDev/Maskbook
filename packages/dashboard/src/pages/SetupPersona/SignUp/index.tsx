@@ -116,7 +116,6 @@ export const SignUp = memo(function SignUp() {
                     <PrimaryButton
                         width="125px"
                         size="large"
-                        color="primary"
                         onClick={() => onNext()}
                         disabled={!personaName.trim().length}>
                         {t.continue()}
