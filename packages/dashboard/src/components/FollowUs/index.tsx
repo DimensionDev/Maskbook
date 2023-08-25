@@ -1,4 +1,4 @@
-import { styled, Typography } from '@mui/material'
+import { styled, Typography, useTheme } from '@mui/material'
 import { openWindow } from '@masknet/shared-base-ui'
 import { Icons } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales/index.js'
@@ -31,12 +31,14 @@ function openMaskNetwork() {
 }
 export function FollowUs() {
     const t = useDashboardI18N()
+    const theme = useTheme()
+
     return (
         <div style={{ padding: '0 16px', height: 80, marginBottom: 16 }} onClick={() => openMaskNetwork()}>
             <FollowUsContainer>
                 <Typography>{t.follow_us()}</Typography>
                 <TwitterColoredContainer>
-                    <Icons.TwitterColored size={24} />
+                    <Icons.TwitterX variant="light" size={24} />
                 </TwitterColoredContainer>
             </FollowUsContainer>
         </div>
