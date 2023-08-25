@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
         [`&.${buttonClasses.disabled}`]: {
             background: theme.palette.maskColor.primaryMain,
             opacity: 0.6,
-            color: theme.palette.background.paper,
+            color: theme.palette.maskColor.bottom,
         },
     },
 }))
