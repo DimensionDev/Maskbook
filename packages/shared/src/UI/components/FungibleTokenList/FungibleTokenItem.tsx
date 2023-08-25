@@ -125,7 +125,6 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
         const isTrust = useTokenTrusted(address, token.chainId)
 
         const { pluginID } = useNetworkContext<T>()
-        // const networkDescriptor = useNetworkDescriptor(undefined, chainId)
         const network = useNetwork(pluginID, chainId)
 
         const { source, selected } = useMemo(() => {
