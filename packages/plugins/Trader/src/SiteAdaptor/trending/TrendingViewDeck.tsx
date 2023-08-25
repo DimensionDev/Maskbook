@@ -329,7 +329,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             {t.buy_now()}
                                         </Button>
                                     ) : null}
-                                    {isNFT ? (
+                                    {isNFT && first(coin.home_urls) ? (
                                         <Button
                                             color="primary"
                                             className={classes.buyButton}
