@@ -15,6 +15,8 @@ import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { ResetWalletContext } from '../context.js'
+import { Web3 } from '@masknet/web3-providers'
+import { ProviderType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -130,6 +132,10 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
                 ),
         )
 
+        await Web3.connect({
+            account: firstWallet,
+            providerType: ProviderType.MaskWallet,
+        })
         await WalletServiceRef.value.resolveMaskAccount([{ address: firstWallet }])
 
         navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
@@ -177,13 +183,13 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
                         className={classes.paginationButton}
                         disabled={page === 0 || confirmLoading}
                         onClick={() => setPage((prev) => prev - 1)}>
-                        <Typography fontWeight={700}>{t.previous()}</Typography>
+                        <Typography fontWeight={700}>{t.previous_page()}</Typography>
                     </SecondaryButton>
                     <SecondaryButton
                         className={classes.paginationButton}
                         disabled={confirmLoading}
                         onClick={() => setPage((prev) => prev + 1)}>
-                        <Typography fontWeight={700}>{t.next()}</Typography>
+                        <Typography fontWeight={700}>{t.next_page()}</Typography>
                     </SecondaryButton>
                 </div>
             ) : null}

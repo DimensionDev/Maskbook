@@ -12,6 +12,8 @@
     "public_key": "Public Key",
     "refresh": "Refresh",
     "next": "Next",
+    "previous_page": "Previous",
+    "next_page": "Next",
     "cancel": "Cancel",
     "back": "Back",
     "agree": "Agree",
