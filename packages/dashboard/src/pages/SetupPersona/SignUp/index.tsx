@@ -95,7 +95,7 @@ export const SignUp = memo(function SignUp() {
                 {t.persona_create_tips()}
             </Typography>
             <Typography className={classes.second} mt={3} mb={2}>
-                {t.persona()}
+                {t.persona_name()}
             </Typography>
             <MaskTextField
                 onChange={(e) => {
