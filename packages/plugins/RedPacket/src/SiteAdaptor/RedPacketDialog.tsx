@@ -193,7 +193,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 open={props.open}
                 title={title}
                 titleTail={
-                    step === CreateRedPacketPageStep.NewRedPacketPage && !showHistory ? (
+                    step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog && !showHistory ? (
                         <Icons.History onClick={() => setShowHistory((history) => !history)} />
                     ) : null
                 }
