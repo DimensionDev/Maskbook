@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useMemo } from 'react'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
-import { Box, Typography, useTheme } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
@@ -77,7 +77,7 @@ const useStyles = makeStyles()((theme) => ({
 export const Onboarding = memo(function Onboarding() {
     const t = useDashboardI18N()
     const { classes } = useStyles()
-    const theme = useTheme()
+
     const [params] = useSearchParams()
     const { showSnackbar } = useCustomSnackbar()
 
@@ -170,13 +170,7 @@ export const Onboarding = memo(function Onboarding() {
                 <PrimaryButton
                     onClick={onSetupTwitter}
                     size="large"
-                    startIcon={
-                        <Icons.X
-                            variant={theme.palette.mode === 'dark' ? 'light' : 'dark'}
-                            className={classes.twitter}
-                            size={20}
-                        />
-                    }>
+                    startIcon={<Icons.TwitterStroke className={classes.twitter} size={20} />}>
                     {t.persona_onboarding_to_twitter()}
                 </PrimaryButton>
                 {!isCreate ? (

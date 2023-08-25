@@ -128,7 +128,7 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
                             (logoType || defaultLogoType) === SwitchLogoType.New ? classes.selected : '',
                         )}
                         onClick={() => onChange(SwitchLogoType.New)}>
-                        <Icons.X />
+                        <Icons.Twitter3 />
                         <Typography fontSize={14} fontWeight={700}>
                             {t('switch_logo_new_logo')}
                         </Typography>
