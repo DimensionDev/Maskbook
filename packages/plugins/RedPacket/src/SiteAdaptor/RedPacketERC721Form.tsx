@@ -192,7 +192,10 @@ const useStyles = makeStyles()((theme) => {
         },
         approveAllTip: {
             color: '#FF5F5F',
-            margin: '16px 4px 24px 4px',
+            margin: '8px 4px 8px 4px',
+        },
+        toolbar: {
+            marginTop: 0,
         },
         disabledSelector: {
             opacity: 0.5,
@@ -479,8 +482,9 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     <Typography className={classes.approveAllTip}>{t.nft_approve_all_tip()}</Typography>
                 ) : null}
                 {nativeTokenDetailed && nativeTokenPrice ? (
-                    <Box margin={2}>
+                    <Box mx={2}>
                         <SelectGasSettingsToolbar
+                            className={classes.toolbar}
                             nativeToken={nativeTokenDetailed}
                             nativeTokenPrice={nativeTokenPrice}
                             supportMultiCurrency={!!wallet?.owner && chainId === smartPayChainId}
