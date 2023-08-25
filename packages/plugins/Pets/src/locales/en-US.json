@@ -20,5 +20,7 @@
     "pets_dialog_menu_about": "About us",
     "plugin_pets_name": "Non-F Friends",
     "plugin_pets_description": "Discover the infinite possibilities of #NFTs.",
-    "share_twitter": "I just set up my Non-Fungible Friend with @realMaskNetwork. Visit my profile to check it out! Install Mask Network extension from mask.io and set yours.\n #mask_io #nonfungiblefriends\nhttps://twitter.com/NonFFriend/status/1508791087149641731"
+    "share_twitter": "I just set up my Non-Fungible Friend with @realMaskNetwork. Visit my profile to check it out! Install Mask Network extension from mask.io and set yours.\n #mask_io #nonfungiblefriends\nhttps://twitter.com/NonFFriend/status/1508791087149641731",
+    "pet_setting_tooltip$default": "Click the Mask icon in the sidebar and access the Non-F Friends app to configure your personalized desktop NFT pet.",
+    "pet_setting_tooltip$punk": "I'm CryptoPunk #6128! Voyagers, welcome to the uncharted waters of WEB3!"
 }
