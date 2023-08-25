@@ -156,6 +156,11 @@ const Recovery = memo(function Recovery() {
                     keyStoreContent,
                     keyStorePassword,
                 )
+                await Web3.connect({
+                    account: address,
+                    providerType: ProviderType.MaskWallet,
+                    silent: true,
+                })
                 await WalletServiceRef.value.resolveMaskAccount([{ address }])
                 navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
             } catch (error) {
