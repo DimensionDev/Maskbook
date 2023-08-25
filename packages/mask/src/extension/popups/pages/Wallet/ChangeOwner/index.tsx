@@ -450,7 +450,10 @@ export default function ChangeOwner() {
                 <ActionButton
                     variant="contained"
                     className={cx(classes.button, classes.secondaryButton)}
-                    onClick={() => navigate(-1)}>
+                    onClick={async () => {
+                        navigate(-1)
+                        await Services.Helper.removePopupWindow()
+                    }}>
                     {t('cancel')}
                 </ActionButton>
                 <ActionButton
