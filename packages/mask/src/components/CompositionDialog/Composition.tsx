@@ -17,6 +17,8 @@ import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 import { useCurrentPersona } from '../DataSource/useCurrentPersona.js'
 import { EncryptionMethodType } from './EncryptionMethodSelector.js'
 import { useI18N } from '../../utils/index.js'
+import { useTelemetry } from '@masknet/web3-hooks-base'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles()((theme) => ({
     dialogRoot: {
@@ -68,6 +70,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     // #region Open
     const [open, setOpen] = useState(false)
     const [isOpenFromApplicationBoard, setIsOpenFromApplicationBoard] = useState(false)
+    const telemetry = useTelemetry()
 
     const onClose = useCallback(() => {
         setOpen(false)
@@ -108,7 +111,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     }, [type])
     useEffect(() => {
         if (!open) return
-
+        telemetry.captureEvent(EventType.Access, EventID.EntryMaskComposeOpen)
         return MaskMessages.events.replaceComposition.on((message) => {
             const ui = UI.current
             if (!ui) return

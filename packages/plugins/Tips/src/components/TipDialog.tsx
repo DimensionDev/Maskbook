@@ -6,7 +6,14 @@ import { ChainBoundary, InjectedDialog, PluginWalletStatusBar, TransactionConfir
 import { NetworkPluginID, getSiteType, pluginIDsSettings } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { ActionButton, MaskTabList, makeStyles } from '@masknet/theme'
-import { useChainContext, useNetworkContext, useNonFungibleAsset, useWallet } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useNetworkContext,
+    useNonFungibleAsset,
+    useWallet,
+    useMountReport,
+    useTelemetry,
+} from '@masknet/web3-hooks-base'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { TokenType } from '@masknet/web3-shared-base'
 import { TargetRuntimeContext } from '../contexts/TargetRuntimeContext.js'
@@ -17,6 +24,7 @@ import { NetworkSection } from './NetworkSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
 import { TokenSection } from './TokenSection/index.js'
 import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -79,6 +87,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const { pluginID } = useNetworkContext()
     const wallet = useWallet()
     const { chainId } = useChainContext()
+    const telemetry = useTelemetry()
 
     const isTokenTip = tipType === TokenType.Fungible
     const shareText = useMemo(() => {
@@ -128,6 +137,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
             title: t.tips(),
             share,
         })
+        telemetry.captureEvent(EventType.Access, EventID.EntryTimelineTipsSend)
         onClose?.()
     }, [
         sendTip,
@@ -157,6 +167,8 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     useUpdateEffect(() => {
         if (!!wallet?.owner && smartPayChainId) setTargetChainId(smartPayChainId)
     }, [!!wallet?.owner, smartPayChainId])
+
+    useMountReport(EventID.EntryTimelineTipsOpen)
 
     return (
         <TabContext value={currentTab}>

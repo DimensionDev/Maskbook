@@ -24,6 +24,7 @@
     "@masknet/web3-providers": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
+    "@masknet/web3-telemetry": "workspace:^",
     "@types/use-subscription": "^1.0.0",
     "react-use": "^17.4.0",
     "ts-results": "^3.3.0",

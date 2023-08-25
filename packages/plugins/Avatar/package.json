@@ -25,6 +25,7 @@
     "@masknet/web3-providers": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
+    "@masknet/web3-telemetry": "workspace:^",
     "@types/react-avatar-editor": "^13.0.0",
     "@types/use-subscription": "^1.0.0",
     "@types/uuid": "^9.0.2",

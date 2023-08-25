@@ -16,7 +16,14 @@ import {
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useNetworkContext, useWallets, useWeb3Connection, useWeb3Hub } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useNetworkContext,
+    useTelemetry,
+    useWallets,
+    useWeb3Connection,
+    useWeb3Hub,
+} from '@masknet/web3-hooks-base'
 import { isGreaterThan, isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
@@ -26,6 +33,7 @@ import { useI18N } from '../locales/index.js'
 import { type AllChainsNonFungibleToken, PFP_TYPE } from '../types.js'
 import { toPNG } from '../utils/index.js'
 import { RoutePaths } from './Routes.js'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -90,6 +98,7 @@ export function NFTListDialog() {
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
     const { openPopupWindow } = useSiteAdaptorContext()
     const targetWallet = wallets.find((x) => isSameAddress(targetAccount, x.address))
+    const telemetry = useTelemetry()
 
     useEffect(() => {
         setChainId(ChainId.Mainnet)
@@ -110,7 +119,7 @@ export function NFTListDialog() {
     const onSave = useCallback(async () => {
         if (!selectedToken?.metadata?.imageURL) return
         setDisabled(true)
-
+        telemetry.captureEvent(EventType.Access, EventID.EntryAppNftpfpOpen)
         try {
             const image = await toPNG(selectedToken.metadata.imageURL)
             if (!image) {

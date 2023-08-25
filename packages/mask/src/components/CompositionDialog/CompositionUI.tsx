@@ -28,6 +28,8 @@ import {
     type PluginEntryRenderRef,
 } from '@masknet/shared'
 import type { EncryptTargetE2EFromProfileIdentifier } from '../../../background/services/crypto/encryption.js'
+import { useTelemetry } from '@masknet/web3-hooks-base'
+import { EventType, EventID } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -131,6 +133,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         const [isSelectRecipientOpen, setSelectRecipientOpen] = useState(false)
         const Editor = useRef<TypedMessageEditorRef | null>(null)
         const PluginEntry = useRef<PluginEntryRenderRef>(null)
+        const telemetry = useTelemetry()
 
         const [sending, setSending] = useState(false)
 
@@ -242,7 +245,16 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                             selectedRecipientLength={recipients.length}
                             onClick={(target) => {
                                 setEncryptionKind(target)
-                                if (target === EncryptionTargetType.E2E) setSelectRecipientOpen(true)
+                                if (target === EncryptionTargetType.E2E) {
+                                    telemetry.captureEvent(EventType.Interact, EventID.EntryMaskComposeVisibleSelected)
+                                    setSelectRecipientOpen(true)
+                                }
+                                if (target === EncryptionTargetType.Public) {
+                                    telemetry.captureEvent(EventType.Interact, EventID.EntryMaskComposeVisibleAll)
+                                }
+                                if (target === EncryptionTargetType.Self) {
+                                    telemetry.captureEvent(EventType.Interact, EventID.EntryMaskComposeVisiblePrivate)
+                                }
                             }}
                         />
 

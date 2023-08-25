@@ -123,7 +123,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
         queryClient.invalidateQueries(['friends', rawPublicKey])
         refetch?.()
     }, [profiles, nextId, currentPersona, queryClient])
-
+    console.log(profiles)
     return (
         <Box className={classes.card} ref={ref}>
             <Box className={classes.titleWrap}>
