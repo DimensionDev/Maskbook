@@ -7,26 +7,22 @@ const insiderOnly = env.channel === 'insider' || devOnly
 const betaOrInsiderOnly = insiderOnly || env.channel === 'beta'
 
 export const flags = {
-    isolated_dashboard_bridge_enabled: false,
     mask_SDK_ready: betaOrInsiderOnly,
     support_testnet_switch: betaOrInsiderOnly,
 
     shadowRootInit: {
-        mode: '__REACT_DEVTOOLS_GLOBAL_HOOK__' in globalThis || betaOrInsiderOnly || testOnly ? 'open' : 'closed',
+        mode:
+            '__REACT_DEVTOOLS_GLOBAL_HOOK__' in globalThis || betaOrInsiderOnly || testOnly || process.env.MASK_APP
+                ? 'open'
+                : 'closed',
         delegatesFocus: true,
     } as const satisfies ShadowRootInit,
-
-    // #region Experimental features
-    trader_all_api_cached_enabled: devOnly,
-    /** Prohibit the use of test networks in production */
-    wallet_allow_testnet: betaOrInsiderOnly || process.env.NODE_ENV !== 'production',
-    // #endregion
 
     using_emoji_flag: true,
     post_actions_enabled: true,
     sandboxedPluginRuntime: false,
 
-    /** The earliest version for the sentry to watch events and exceptions. */
+    // sentry
     sentry_earliest_version: env.VERSION || env.VERSION,
     sentry_sample_rate: 0.05,
     sentry_enabled: prodOnly,
@@ -35,6 +31,7 @@ export const flags = {
     sentry_fetch_transaction_enabled: prodOnly,
     sentry_async_transaction_enabled: devOnly,
 
+    // mixpanel
     mixpanel_earliest_version: env.VERSION || env.VERSION,
     mixpanel_sample_rate: 1,
     mixpanel_enabled: prodOnly,
