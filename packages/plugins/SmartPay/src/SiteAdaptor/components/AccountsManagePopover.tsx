@@ -88,17 +88,17 @@ export const AccountsManagerPopover = memo<AccountsManagePopoverProps>(
         }, [owner, personaManagers, walletManagers])
 
         const handleChangeOwner = useCallback(async () => {
-            if (isSameAddress(address, account)) return
-            const result = await connection.connect({
-                account: address,
-                chainId,
-                providerType: ProviderType.MaskWallet,
-                silent: true,
-            })
+            // switch account
+            if (!isSameAddress(address, account)) {
+                await connection.connect({
+                    account: address,
+                    chainId,
+                    providerType: ProviderType.MaskWallet,
+                    silent: true,
+                })
 
-            if (network) await Network?.switchNetwork(network.ID)
-
-            if (!result) return
+                if (network) await Network?.switchNetwork(network.ID)
+            }
             await openPopupWindow(PopupRoutes.ChangeOwner, { contractAccount: address, toBeClose: true })
         }, [address, connection, account, chainId, network])
 
