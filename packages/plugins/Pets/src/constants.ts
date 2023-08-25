@@ -4,9 +4,6 @@ import { ImageType } from './types.js'
 export const PetsPluginID = PluginID.Pets
 export const TWITTER = 'twitter.com'
 export const MASK_TWITTER = 'realMaskNetwork'
-export const DEFAULT_SET_WORD =
-    'Click the wallet icon on the left side of the page and set up your Non-Fungible Friend in "NFTs" tab!'
-export const DEFAULT_PUNK_MASK_WORD = "I'm CryptoPunk #6128! Voyagers, welcome to the uncharted waters of WEB3!"
 export const NFF_TWITTER = 'https://twitter.com/NonFFriend'
 
 export const initMeta = {
