@@ -152,8 +152,7 @@ export default memo(function Receive() {
                                 pluginID={NetworkPluginID.PLUGIN_EVM}
                                 chainId={currentNetwork.chainId}
                                 size={16}
-                                name={currentNetwork.name}
-                                preferName={currentNetwork.isCustomized}
+                                network={currentNetwork}
                             />
                         </div>
                     )}

@@ -92,9 +92,7 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork,
                             pluginID={NetworkPluginID.PLUGIN_EVM}
                             chainId={network.chainId}
                             size={20}
-                            color={network.color}
-                            name={network.name}
-                            preferName={network.isCustomized}
+                            network={network}
                         />
                     )}
 
@@ -119,9 +117,7 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork,
                             pluginID={NetworkPluginID.PLUGIN_EVM}
                             chainId={currentNetwork.chainId}
                             size={20}
-                            color={currentNetwork.color}
-                            name={currentNetwork.name}
-                            preferName={currentNetwork?.isCustomized}
+                            network={currentNetwork}
                         />
                     )}
                     <Typography className={classes.title}>{currentNetwork?.name}</Typography>

@@ -7,7 +7,7 @@ import {
     ChainContextProvider,
     useChainContext,
     useFungibleToken,
-    useNetworks,
+    useNetwork,
     useWallet,
     useWeb3Connection,
 } from '@masknet/web3-hooks-base'
@@ -134,8 +134,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         },
         [setParams],
     )
-    const networks = useNetworks()
-    const network = networks.find((x) => x.chainId === chainId)
+    const network = useNetwork(NetworkPluginID.PLUGIN_EVM, chainId)
     const { data: token, isLoading } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, address, undefined, { chainId })
 
     const [amount, setAmount] = useState('')
@@ -260,8 +259,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                         chainId={network?.chainId as ChainId}
                         className={classes.badgeIcon}
                         size={16}
-                        icon={network?.iconUrl}
-                        preferName={network?.isCustomized}
+                        network={network}
                     />
                 </Box>
                 <Box mr="auto" ml={2}>

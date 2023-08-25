@@ -350,8 +350,7 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
                     className={classes.badgeIcon}
                     chainId={transaction.chainId}
                     size={16}
-                    icon={network?.iconUrl}
-                    preferName={network?.isCustomized}
+                    network={network}
                 />
             </Box>
             <ListItemText

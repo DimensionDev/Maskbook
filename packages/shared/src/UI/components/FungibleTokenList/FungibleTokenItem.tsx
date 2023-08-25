@@ -4,7 +4,7 @@ import { formatBalance, type FungibleToken } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { TokenIcon } from '../TokenIcon/index.js'
 import { Icons } from '@masknet/icons'
-import { useFungibleTokenBalance, useNetworkDescriptor, useWeb3Others } from '@masknet/web3-hooks-base'
+import { useFungibleTokenBalance, useNetwork, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, LoadingBase, ActionButton } from '@masknet/theme'
 import { useSharedI18N } from '../../../locales/index.js'
@@ -12,7 +12,7 @@ import { TokenListMode } from './type.js'
 import { SettingSwitch } from '../SettingSwitch/index.js'
 import { useTokenBlocked, useTokenTrusted } from './useTokenBlocked.js'
 import { FormattedBalance } from '../../wallet/index.js'
-import { DotLoading, ImageIcon } from '../index.js'
+import { DotLoading, NetworkIcon } from '../index.js'
 import { useAsyncFn } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
@@ -124,7 +124,9 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
         const isBlocked = useTokenBlocked(address)
         const isTrust = useTokenTrusted(address, token.chainId)
 
-        const networkDescriptor = useNetworkDescriptor(undefined, chainId)
+        const { pluginID } = useNetworkContext<T>()
+        // const networkDescriptor = useNetworkDescriptor(undefined, chainId)
+        const network = useNetwork(pluginID, chainId)
 
         const { source, selected } = useMemo(() => {
             return {
@@ -229,8 +231,13 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                                 name={name}
                                 logoURL={logoURL}
                             />
-                            {isHiddenChainIcon || !networkDescriptor?.icon ? null : (
-                                <ImageIcon className={classes.badgeIcon} size={16} icon={networkDescriptor?.icon} />
+                            {isHiddenChainIcon || !network?.iconUrl ? null : (
+                                <NetworkIcon
+                                    pluginID={pluginID}
+                                    chainId={chainId}
+                                    className={classes.badgeIcon}
+                                    size={16}
+                                />
                             )}
                         </Box>
                     </ListItemIcon>
