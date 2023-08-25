@@ -27,13 +27,11 @@ export enum EventID {
     EntryAppSwapOpen = 'entry_app_swap_open',
     EntryAppApprovalOpen = 'entry_app_approval_open',
     EntryAppCheckOpen = 'entry_app_check_open',
-    // todo
     EntryTimelineDsearchToken = 'entry_timeline_dsearch_token',
     EntryTimelineDsearchNft = 'entry_timeline_dsearch_nft',
     EntryTimelineDsearchAddress = 'entry_timeline_dsearch_address',
     EntryTimelineDsearchEns = 'entry_timeline_dsearch_ens',
     EntryTimelineDsearchName = 'entry_timeline_dsearch_name',
-
     EntryTimelineTipsOpen = 'entry_timeline_tips_open',
     EntryTimelineTipsSend = 'entry_timeline_tips_send',
     EntryTimelineHoverTokenDuration = 'entry_timeline_hover_token_duration',
