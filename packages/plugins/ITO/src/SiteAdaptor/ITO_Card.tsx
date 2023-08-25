@@ -9,7 +9,7 @@ import { type FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 import { useI18N } from '../locales/index.js'
 import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
 import { usePostLink } from '@masknet/plugin-infra/content-script'
-import { isFacebook, isTwitter } from '@masknet/shared-base'
+import { Sniffings } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -65,8 +65,8 @@ export function ITO_Card(props: ITO_CardProps) {
     const openShareTxDialog = useOpenShareTxDialog()
     const postLink = usePostLink()
     const shareText = useMemo(() => {
-        const isOnTwitter = isTwitter()
-        const isOnFacebook = isFacebook()
+        const isOnTwitter = Sniffings.is_twitter_page
+        const isOnFacebook = Sniffings.is_facebook_page
         const cashTag = isOnTwitter ? '$' : ''
         return t.plugin_ito_share_text({
             symbol: `${cashTag}${token?.symbol}`,

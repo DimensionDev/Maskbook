@@ -20,7 +20,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useActivatedPlugin, useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
-import { NetworkPluginID, PluginID, isFacebook, isTwitter } from '@masknet/shared-base'
+import { NetworkPluginID, PluginID, Sniffings } from '@masknet/shared-base'
 import { type TraderAPI } from '@masknet/web3-providers/types'
 import { DepositPaymaster, SmartPayBundler, Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../../locales/index.js'
@@ -208,9 +208,9 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     }, [isTrading])
 
     const shareText = useMemo(() => {
-        const isOnTwitter = isTwitter()
-        const isOnFacebook = isFacebook()
-        const cashTag = isTwitter() ? '$' : ''
+        const isTwitter = Sniffings.is_twitter_page
+        const isFacebook = Sniffings.is_facebook_page
+        const cashTag = isTwitter ? '$' : ''
         return focusedTrade?.value && inputToken && outputToken
             ? t.share_text({
                   input_amount: formatBalance(focusedTrade.value.value?.inputAmount, inputToken.decimals, 6),
@@ -218,7 +218,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                   output_amount: formatBalance(focusedTrade.value.value?.outputAmount, outputToken.decimals, 6),
                   output_symbol: `${cashTag}${outputToken.symbol}`,
                   account_promote: t.account_promote({
-                      context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
+                      context: isTwitter ? 'twitter' : isFacebook ? 'facebook' : 'default',
                   }),
               })
             : ''

@@ -11,11 +11,9 @@ import { ActionButton, makeStyles } from '@masknet/theme'
 import { PersonaContext } from '@masknet/shared'
 import { Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
-import { useTitle } from '../../../hook/useTitle.js'
-import { PopupContext } from '../../../hook/usePopupContext.js'
+import { useTitle, PopupContext, useVerifiedWallets } from '../../../hooks/index.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
-import { useVerifiedWallets } from '../../../hook/useVerifiedWallets.js'
 import Services from '../../../../service.js'
 import { ProfilePhotoType } from '../type.js'
 import urlcat from 'urlcat'
@@ -159,7 +157,9 @@ const SelectWallet = memo(function SelectWallet() {
                     fullWidth
                     onClick={handleConfirm}
                     disabled={
-                        isVerifyWalletFlow ? !!bindingWallets?.some((x) => isSameAddress(x.identity, selected)) : false
+                        isVerifyWalletFlow
+                            ? !!wallets?.some((x) => isSameAddress(x.address, selected) && !!x.owner)
+                            : false
                     }>
                     {t('confirm')}
                 </ActionButton>

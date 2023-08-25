@@ -10,8 +10,7 @@ import { Icons } from '@masknet/icons'
 import { EmojiAvatar, FormattedAddress, useMenuConfig } from '@masknet/shared'
 import { ExplorerResolver } from '@masknet/web3-providers'
 import { useI18N } from '../../../../../utils/index.js'
-import { useTitle } from '../../../hook/useTitle.js'
-import { ContactsContext } from '../../../hook/useContactsContext.js'
+import { useTitle, ContactsContext } from '../../../hooks/index.js'
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
 import { DeleteContactModal, EditContactModal, AddContactModal } from '../../../modals/modals.js'
 import { ContactType } from '../type.js'
@@ -162,6 +161,7 @@ const ContactListUI = memo(function ContactListUI() {
     useEffect(() => {
         if (!isManage) return
         setExtension(<Icons.Add color={theme.palette.maskColor.main} sx={{ cursor: 'pointer' }} onClick={addContact} />)
+        return () => setExtension(undefined)
     }, [isManage])
 
     useTitle(isManage ? t('contacts') : t('popups_send'))

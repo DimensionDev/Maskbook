@@ -12,6 +12,9 @@ export const twitterBase: SiteAdaptor.Base = {
     },
 }
 
+/**
+ * @deprecated Use `Sniffings.is_twitter_page` instead
+ */
 export function isTwitter(ui: SiteAdaptor.Base) {
     return ui.networkIdentifier === EnhanceableSite.Twitter
 }

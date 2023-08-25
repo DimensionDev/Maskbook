@@ -3,19 +3,9 @@ import type { SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { TokenType } from '@masknet/web3-shared-base'
-import { TransactionConfirm } from './TokenTransactionConfirm.js'
+import { TransactionConfirm, type TransactionConfirmProps } from './TokenTransactionConfirm.js'
 
-export interface TransactionConfirmModalOpenProps {
-    shareText: string
-    onSubmit?(): void
-    share?: (text: string) => void
-    amount: string | null
-    token?: Web3Helper.FungibleTokenAll | null
-    tokenType: TokenType
-    title?: string
-    messageTextForNFT?: string
-    messageTextForFT?: string
-}
+export interface TransactionConfirmModalOpenProps extends Omit<TransactionConfirmProps, 'open' | 'onClose'> {}
 
 export interface TransactionConfirmModalProps {}
 
@@ -32,6 +22,8 @@ export const TransactionConfirmModal = forwardRef<
     const [messageTextForNFT, setMessageTextForNFT] = useState<string>()
     const [messageTextForFT, setMessageTextForFT] = useState<string>()
     const [title, setTitle] = useState<string>()
+    const [nonFungibleTokenId, setNonFungibleTokenId] = useState<string>()
+    const [nonFungibleTokenAddress, setNonFungibleTokenAddress] = useState<string>()
 
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
@@ -44,6 +36,8 @@ export const TransactionConfirmModal = forwardRef<
             setTitle(props.title)
             setMessageTextForFT(props.messageTextForFT)
             setMessageTextForNFT(props.messageTextForNFT)
+            setNonFungibleTokenId(props.nonFungibleTokenId ?? undefined)
+            setNonFungibleTokenAddress(props.nonFungibleTokenAddress ?? undefined)
         },
     })
 
@@ -55,6 +49,8 @@ export const TransactionConfirmModal = forwardRef<
             onClose={() => dispatch?.close()}
             amount={amount}
             tokenType={tokenType}
+            nonFungibleTokenId={nonFungibleTokenId}
+            nonFungibleTokenAddress={nonFungibleTokenAddress}
             token={token}
             onSubmit={onSubmit}
             share={share}

@@ -103,17 +103,18 @@ export interface RedPacketFormProps {
     setERC721DialogHeight?: (height: number) => void
     gasOption?: GasConfig
     onGasOptionChange?: (config: GasConfig) => void
+    expectedChainId: ChainId
 }
 
 export function RedPacketERC20Form(props: RedPacketFormProps) {
     const t = useI18N()
     const { classes, cx } = useStyles()
     const theme = useTheme()
-    const { onChange, onNext, origin, gasOption, onGasOptionChange } = props
+    const { onChange, onNext, origin, gasOption, onGasOptionChange, expectedChainId } = props
     // context
     const wallet = useWallet()
     const { pluginID } = useNetworkContext()
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
     const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
@@ -211,7 +212,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     // #region gas
     const { account: publicKey } = useMemo(() => Web3.createAccount(), [])
     const contract_version = 4
-    const { value: params } = useCreateParams(creatingParams, contract_version, publicKey)
+    const { value: params } = useCreateParams(chainId, creatingParams, contract_version, publicKey)
     // #endregion
 
     // balance

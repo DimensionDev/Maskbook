@@ -7,7 +7,7 @@ import { Box, Skeleton, Typography, type AvatarProps } from '@mui/material'
 import { memo } from 'react'
 import { QRCode } from 'react-qrcode-logo'
 import { useI18N } from '../../../../../utils/index.js'
-import { useTitle, useTokenParams } from '../../../hook/index.js'
+import { useTitle, useTokenParams } from '../../../hooks/index.js'
 import { useAsset } from '../hooks/useAsset.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -46,6 +46,7 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.maskColor.second,
             marginTop: theme.spacing(1),
             fontSize: 16,
+            height: 30,
             display: 'flex',
             alignItems: 'center',
         },
@@ -99,6 +100,10 @@ const useStyles = makeStyles()((theme) => {
             textAlign: 'center',
             color: theme.palette.maskColor.second,
         },
+        copyButton: {
+            marginLeft: 8,
+            color: theme.palette.maskColor.main,
+        },
     }
 })
 
@@ -109,9 +114,9 @@ export default memo(function Receive() {
     const { classes } = useStyles()
     const { t } = useI18N()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { chainId, address, rawChainId, rawAddress } = useTokenParams()
+    const { chainId, address, rawAddress } = useTokenParams()
     // No specific token but only for chain
-    const isChain = !rawChainId && !rawAddress
+    const isChain = !rawAddress
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
     const currentNetwork = networks.find((network) => network.chainId === chainId)
 
@@ -147,8 +152,7 @@ export default memo(function Receive() {
                                 pluginID={NetworkPluginID.PLUGIN_EVM}
                                 chainId={currentNetwork.chainId}
                                 size={16}
-                                name={currentNetwork.name}
-                                preferName={currentNetwork.isCustomized}
+                                network={currentNetwork}
                             />
                         </div>
                     )}
@@ -160,7 +164,7 @@ export default memo(function Receive() {
                 )}
                 <Typography className={classes.address}>
                     <FormattedAddress address={account} formatter={formatEthereumAddress} size={4} />
-                    <CopyButton text={account} size={24} ml={2} style={{ marginLeft: 16 }} />
+                    <CopyButton text={account} size={18} className={classes.copyButton} />
                 </Typography>
             </Box>
             <div className={classes.halo}>

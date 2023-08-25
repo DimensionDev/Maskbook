@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { useWallet } from '@masknet/web3-hooks-base'
-import { Box, ListItem, Typography, useTheme } from '@mui/material'
+import { Box, ListItem, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils/index.js'
 import { useStyles } from './useStyles.js'
 import { WalletRenameModal } from '../../../modals/modals.js'
@@ -8,8 +8,7 @@ import { WalletRenameModal } from '../../../modals/modals.js'
 export function Rename() {
     const { t } = useI18N()
     const wallet = useWallet()
-    const theme = useTheme()
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
 
     if (!wallet) return null
 

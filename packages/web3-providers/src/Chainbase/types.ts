@@ -72,7 +72,7 @@ export interface NFT_FloorPrice {
 export type TxStatus = 0 | 1
 export interface Tx {
     chain_id: ChainId
-    type: 0
+    type: 0 | 2
     status: TxStatus
     block_number: string
     // e.g., 2022-05-17T20:41:19Z

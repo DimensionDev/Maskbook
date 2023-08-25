@@ -102,9 +102,7 @@ const NetworkItem = memo(function NetworkItem({ network, currentNetworkId }: Net
                         pluginID={NetworkPluginID.PLUGIN_EVM}
                         chainId={network.chainId}
                         size={24}
-                        color={network.color}
-                        name={network.name}
-                        preferName={network.isCustomized}
+                        network={network}
                     />
                 )}
             </div>
@@ -138,7 +136,7 @@ export const ChooseNetworkModal = memo(function ChooseNetworkModal({ ...rest }: 
 
     const action = (
         <ActionButton fullWidth onClick={() => navigate(PopupRoutes.NetworkManagement)}>
-            Management network
+            {t('manage_network')}
         </ActionButton>
     )
 

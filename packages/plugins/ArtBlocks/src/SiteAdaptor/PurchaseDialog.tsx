@@ -10,7 +10,7 @@ import {
 } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { type FungibleToken, leftShift } from '@masknet/web3-shared-base'
-import { NetworkPluginID, isFacebook, isTwitter } from '@masknet/shared-base'
+import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { SchemaType, useArtBlocksConstants, type ChainId } from '@masknet/web3-shared-evm'
 import {
     Card,
@@ -72,7 +72,7 @@ export function PurchaseDialog(props: ActionBarProps) {
     const postLink = usePostLink()
 
     const shareText = [
-        isTwitter() || isFacebook()
+        Sniffings.is_twitter_page || Sniffings.is_facebook_page
             ? t.plugin_artblocks_share({
                   name: project.name,
                   price: price.toFixed(),

@@ -6,6 +6,7 @@ import { useI18N } from '../../../../../utils/index.js'
 import { Trans } from 'react-i18next'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { PopupRoutes } from '@masknet/shared-base'
+import Services from '../../../../service.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -82,6 +83,7 @@ const ResetWallet = memo(() => {
             active: true,
             url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet/form?reset=true'),
         })
+        await Services.Helper.removePopupWindow()
     }, [])
 
     return (

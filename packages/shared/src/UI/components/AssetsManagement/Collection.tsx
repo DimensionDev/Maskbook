@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import { useEverSeen } from '@masknet/shared-base-ui'
-import { ShadowRootTooltip, makeStyles, useDetectOverflow } from '@masknet/theme'
+import { ShadowRootTooltip, makeStyles, useBoundedPopperProps, useDetectOverflow } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Skeleton, Typography, useForkRef } from '@mui/material'
 import { range } from 'lodash-es'
@@ -115,6 +115,7 @@ export const Collection = memo(
     }: CollectionProps) => {
         const t = useSharedI18N()
         const { compact, containerRef } = useCompactDetection()
+        const popperProps = useBoundedPopperProps()
         const { classes, cx } = useStyles({ compact })
 
         useLayoutEffect(() => {
@@ -166,6 +167,7 @@ export const Collection = memo(
         ))
         return (
             <ShadowRootTooltip
+                PopperProps={popperProps}
                 title={nameOverflow ? collection.name : undefined}
                 placement="top"
                 disableInteractive

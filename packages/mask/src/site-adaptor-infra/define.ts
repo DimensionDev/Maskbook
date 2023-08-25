@@ -4,18 +4,17 @@ import type { SiteAdaptorUI } from '@masknet/types'
 const definedSiteAdaptorsUILocal = new Map<string, SiteAdaptorUI.DeferredDefinition>()
 export const definedSiteAdaptorsUI: ReadonlyMap<string, SiteAdaptorUI.DeferredDefinition> = definedSiteAdaptorsUILocal
 
-export function activateSiteAdaptorUI() {
+export async function activateSiteAdaptorUI(): Promise<'notFound' | 'success' | 'error' | 'needMaskSDK'> {
     const ui_deferred = [...definedSiteAdaptorsUI.values()].find((x) => x.shouldActivate(location))
-    if (!ui_deferred) return Promise.resolve(false)
-    return import('./ui.js')
-        .then((x) => x.activateSiteAdaptorUIInner(ui_deferred))
-        .then(
-            () => true,
-            (error) => {
-                console.error('Mask: Failed to initialize Social Network Adaptor', error)
-                return false
-            },
-        )
+    if (!ui_deferred) return 'notFound'
+    const { activateSiteAdaptorUIInner } = await import('./ui.js')
+    try {
+        await activateSiteAdaptorUIInner(ui_deferred)
+        return 'success'
+    } catch (error) {
+        console.error('Mask: Failed to initialize Social Network Adaptor', error)
+        return 'error'
+    }
 }
 export function defineSiteAdaptorUI(UI: SiteAdaptorUI.DeferredDefinition) {
     if (UI.notReadyForProduction) {

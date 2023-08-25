@@ -9,7 +9,7 @@ export interface DashboardBodyProps {
 
 export const DashboardBody = memo<DashboardBodyProps>(({ children, borderless = false, clipEdge = true }) => {
     return (
-        <div className="bg-white dark:bg-black p-5 pt-0">
+        <div className="bg-white dark:bg-[#16161a] p-5 pt-0">
             {borderless ? (
                 children
             ) : (

@@ -20,7 +20,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { useI18N } from '../../../../../utils/index.js'
 import { PageTitleContext } from '../../../context.js'
-import { useTitle, useTokenParams } from '../../../hook/index.js'
+import { useTitle, useTokenParams } from '../../../hooks/index.js'
 import { ConfirmModal } from '../../../modals/modals.js'
 import { TransferTabType } from '../type.js'
 
@@ -72,11 +72,16 @@ const useStyles = makeStyles()((theme) => ({
     },
     priceLabel: {
         fontSize: 14,
+        fontWeight: 700,
         color: theme.palette.maskColor.second,
     },
     priceValue: {
         color: theme.palette.maskColor.main,
+        fontWeight: 700,
         marginTop: theme.spacing(1.5),
+    },
+    noneValue: {
+        color: theme.palette.maskColor.second,
     },
     sectionTitle: {
         fontSize: 14,
@@ -113,6 +118,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     traitValue: {
         fontSize: 13,
+        fontWeight: 700,
         color: theme.palette.maskColor.primary,
         marginTop: theme.spacing(0.5),
         overflow: 'hidden',
@@ -143,7 +149,7 @@ const formatTimestamp = (timestamp: string) => {
 }
 
 export const CollectibleDetail = memo(function CollectibleDetail() {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { t } = useI18N()
     const navigate = useNavigate()
     const location = useLocation()
@@ -242,16 +248,20 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
             </div>
             <div className={classes.prices}>
                 <div className={classes.price}>
-                    <Typography className={classes.priceLabel}>{t('collectible_last_sale_price')}</Typography>
-                    <Typography className={classes.priceValue}>
+                    <Typography variant="h2" className={classes.priceLabel}>
+                        {t('collectible_last_sale_price')}
+                    </Typography>
+                    <Typography className={cx(classes.priceValue, lastSale ? '' : classes.noneValue)}>
                         {lastSale
                             ? `${formatBalance(lastSale.amount, lastSale.token.decimals)} ${lastSale.token.symbol}`
                             : t('none')}
                     </Typography>
                 </div>
                 <div className={classes.price}>
-                    <Typography className={classes.priceLabel}>{t('floor_price')}</Typography>
-                    <Typography className={classes.priceValue}>
+                    <Typography variant="h2" className={classes.priceLabel}>
+                        {t('floor_price')}
+                    </Typography>
+                    <Typography className={cx(classes.priceValue, floorPrice ? '' : classes.noneValue)}>
                         {floorPrice
                             ? `${formatBalance(floorPrice.value, floorPrice.payment_token.decimals)} ${
                                   floorPrice.payment_token.symbol
@@ -264,7 +274,7 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
                 {t('collectible_description')}
             </Typography>
             <Typography variant="body1" className={classes.text}>
-                {assetDesc}
+                {assetDesc || t('none')}
             </Typography>
             {isLoading || asset?.traits?.length ? (
                 <>

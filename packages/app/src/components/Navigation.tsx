@@ -1,3 +1,5 @@
+import { memo } from 'react'
+import { Link, useMatch } from 'react-router-dom'
 import {
     ArrowPathRoundedSquareIcon,
     Cog6ToothIcon,
@@ -5,18 +7,28 @@ import {
     UserCircleIcon,
     PencilSquareIcon,
 } from '@heroicons/react/24/outline'
+import {
+    WindowIcon as WindowIconSolid,
+    Cog6ToothIcon as Cog6ToothIconSolid,
+    UserCircleIcon as UserCircleIconSolid,
+    PencilSquareIcon as PencilSquareIconSolid,
+    ArrowPathRoundedSquareIcon as ArrowPathRoundedSquareIconSolid,
+} from '@heroicons/react/24/solid'
 import { ApplicationRoutes } from '../constants/ApplicationRoutes.js'
-import { memo } from 'react'
-import { Link, useMatch } from 'react-router-dom'
 import { classNames } from '../helpers/classNames.js'
 import { DashboardContext } from '../contexts/DashboardContext.js'
 
 const navigation = [
-    { name: 'Applications', icon: WindowIcon, to: ApplicationRoutes.Applications },
-    { name: 'Compose', icon: PencilSquareIcon, to: ApplicationRoutes.Compose },
-    { name: 'Web3 Profile', icon: UserCircleIcon, to: ApplicationRoutes.Web3Profile },
-    { name: 'Swap', icon: ArrowPathRoundedSquareIcon, to: ApplicationRoutes.Swap },
-    { name: 'Settings', icon: Cog6ToothIcon, to: ApplicationRoutes.Settings },
+    { name: 'Applications', icon: WindowIcon, iconMatched: WindowIconSolid, to: ApplicationRoutes.Applications },
+    { name: 'Compose', icon: PencilSquareIcon, iconMatched: PencilSquareIconSolid, to: ApplicationRoutes.Compose },
+    { name: 'Web3 Profile', icon: UserCircleIcon, iconMatched: UserCircleIconSolid, to: ApplicationRoutes.Web3Profile },
+    {
+        name: 'Swap',
+        icon: ArrowPathRoundedSquareIcon,
+        iconMatched: ArrowPathRoundedSquareIconSolid,
+        to: ApplicationRoutes.Swap,
+    },
+    { name: 'Settings', icon: Cog6ToothIcon, iconMatched: Cog6ToothIconSolid, to: ApplicationRoutes.Settings },
 ]
 
 function NavigationLink(props: (typeof navigation)[0]) {
@@ -33,10 +45,14 @@ function NavigationLink(props: (typeof navigation)[0]) {
                 className={classNames(
                     matched
                         ? 'dark:bg-menu-dark bg-menu-light dark:text-link-dark bg-menu text-blue-600'
-                        : 'text-item-light dark:text-item-dark hover:bg-gray-100 dark:hover:text-white dark:hover:bg-gray-900',
-                    'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
+                        : 'text-item-light dark:text-item-dark ',
+                    'group flex gap-x-3 rounded-md px-2 py-3 text-md leading-6 font-semibold hover:bg-gray-200 dark:hover:bg-[#2d2d32]',
                 )}>
-                <props.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
+                {matched ? (
+                    <props.iconMatched className="h-6 w-6 shrink-0" aria-hidden="true" />
+                ) : (
+                    <props.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
+                )}
                 {name}
             </Link>
         </li>

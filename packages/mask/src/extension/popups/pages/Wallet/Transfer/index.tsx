@@ -6,13 +6,16 @@ import { useSearchParams } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
 import { NormalHeader } from '../../../components/index.js'
-import { ContactsContext } from '../../../hook/useContactsContext.js'
-import { useParamTab } from '../../../hook/useParamTab.js'
-import { useTitle } from '../../../hook/useTitle.js'
+import {
+    ContactsContext,
+    useParamTab,
+    useTitle,
+    useNonFungibleTokenParams,
+    useTokenParams,
+} from '../../../hooks/index.js'
 import { FungibleTokenSection } from './FungibleTokenSection.js'
 import { NonFungibleTokenSection } from './NonFungibleTokenSection.js'
 import { TransferTabType } from '../type.js'
-import { useNonFungibleTokenParams, useTokenParams } from '../../../hook/useTokenParams.js'
 
 const useStyles = makeStyles()((theme) => ({
     page: {

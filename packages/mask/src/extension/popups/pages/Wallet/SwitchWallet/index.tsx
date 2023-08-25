@@ -9,7 +9,7 @@ import { Box, List, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
-import { PopupContext } from '../../../hook/usePopupContext.js'
+import { PopupContext } from '../../../hooks/index.js'
 import { ActionModal, useActionModal } from '../../../components/index.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
 import Services from '../../../../service.js'
@@ -51,6 +51,7 @@ const SwitchWallet = memo(function SwitchWallet() {
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+
     const handleClickCreate = useCallback(async () => {
         if (!wallets.filter((x) => x.hasDerivationPath).length) {
             const hasPaymentPassword = await Services.Wallet.hasPassword()

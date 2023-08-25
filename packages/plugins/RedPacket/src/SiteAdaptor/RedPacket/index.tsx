@@ -1,6 +1,6 @@
 import { usePostLink, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { TransactionConfirmModal } from '@masknet/shared'
-import { NetworkPluginID, isFacebook, isTwitter } from '@masknet/shared-base'
+import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, parseColor } from '@masknet/theme'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-hooks-base'
@@ -167,13 +167,13 @@ export function RedPacket(props: RedPacketProps) {
     // TODO payload.chainId is undefined on production mode
     const network = useNetwork(pluginID, payload.chainId || payload.token?.chainId)
     const shareText = useMemo(() => {
-        const isOnTwitter = isTwitter()
-        const isOnFacebook = isFacebook()
+        const isOnTwitter = Sniffings.is_twitter_page
+        const isOnFacebook = Sniffings.is_facebook_page
         const shareTextOption = {
             sender: payload.sender.name,
             payload: postLink.toString(),
             network: network?.name ?? 'Mainnet',
-            account: isTwitter() ? t.twitter_account() : t.facebook_account(),
+            account: isOnTwitter ? t.twitter_account() : t.facebook_account(),
             interpolation: { escapeValue: false },
         }
         if (listOfStatus.includes(RedPacketStatus.claimed) || claimTxHash) {

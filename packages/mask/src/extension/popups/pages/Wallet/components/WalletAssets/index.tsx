@@ -8,7 +8,7 @@ import { Box, Button, Tab, styled, tabClasses, tabsClasses } from '@mui/material
 import { memo, useCallback, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useI18N } from '../../../../../../utils/index.js'
-import { useParamTab } from '../../../../hook/index.js'
+import { useParamTab } from '../../../../hooks/index.js'
 import { WalletAssetTabs } from '../../type.js'
 import { ActivityList } from '../ActivityList/index.js'
 import { AssetsList } from '../AssetsList/index.js'

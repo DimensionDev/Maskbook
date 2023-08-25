@@ -1,5 +1,5 @@
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { useAsyncFn, useUnmount } from 'react-use'
+import { useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import {
     type EnhanceableSite,
@@ -13,7 +13,7 @@ import {
 } from '@masknet/shared-base'
 import { PersonaContext } from '@masknet/shared'
 import { usePopupCustomSnackbar } from '@masknet/theme'
-import { useTitle } from '../../../hook/useTitle.js'
+import { useTitle } from '../../../hooks/index.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { AccountDetailUI } from './UI.js'
 import Service from '../../../../service.js'
@@ -204,11 +204,8 @@ const AccountDetail = memo(() => {
                 />
             ),
         )
+        return () => setExtension(undefined)
     }, [selectedAccount, handleDetachProfile, currentPersona, handleConfirmReleaseBind])
-
-    useUnmount(() => {
-        setExtension(null)
-    })
 
     useUpdateEffect(() => {
         setPendingUnlistedConfig(unlistedAddressConfig)

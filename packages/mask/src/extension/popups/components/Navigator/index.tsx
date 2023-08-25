@@ -8,10 +8,11 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { DashboardRoutes, PopupRoutes } from '@masknet/shared-base'
 import { useMessages, useWallet } from '@masknet/web3-hooks-base'
-import { useHasPassword } from '../../hook/useHasPassword.js'
+import { useHasPassword } from '../../hooks/index.js'
 import { useWalletLockStatus } from '../../pages/Wallet/hooks/useWalletLockStatus.js'
 import { HydrateFinished } from '../../../../utils/createNormalReactRoot.js'
 import Services from '../../../service.js'
+import { useCurrentPersona } from '../../../../components/DataSource/useCurrentPersona.js'
 
 const useStyle = makeStyles()((theme) => ({
     navigation: {
@@ -53,16 +54,20 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
     const { classes, cx } = useStyle()
     const walletLink = useRef(use(WalletLinkContext)).current()
 
+    const currentPersona = useCurrentPersona()
+
     const onOpenDashboardSettings = useCallback(async () => {
         await browser.tabs.create({
             active: true,
-            url: browser.runtime.getURL(`/dashboard.html#${DashboardRoutes.Settings}`),
+            url: browser.runtime.getURL(
+                `/dashboard.html#${currentPersona ? DashboardRoutes.Settings : DashboardRoutes.SignUpPersona}`,
+            ),
         })
         if (navigator.userAgent.includes('Firefox')) {
             window.close()
         }
         await Services.Helper.removePopupWindow()
-    }, [])
+    }, [currentPersona])
 
     useContext(HydrateFinished)()
 

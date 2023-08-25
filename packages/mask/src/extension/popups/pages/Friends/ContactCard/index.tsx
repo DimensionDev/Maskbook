@@ -1,4 +1,4 @@
-import { memo, useState, useCallback } from 'react'
+import { memo, useState, useCallback, useMemo } from 'react'
 import { Icons } from '@masknet/icons'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { Box, Typography, Link, useTheme, ButtonBase as Button, Avatar } from '@mui/material'
@@ -17,10 +17,10 @@ import { ConnectedAccounts } from './ConnectedAccounts/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import Services from '../../../../service.js'
 import { useEverSeen } from '@masknet/shared-base-ui'
-import { useFriendProfiles } from '../../../hook/useFriendProfiles.js'
-import { type UseQueryResult, type RefetchOptions } from '@tanstack/react-query'
-import { useQueryClient } from '@tanstack/react-query'
+import { useFriendProfiles } from '../../../hooks/index.js'
+import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query'
 import urlcat from 'urlcat'
+import { type Friend } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -77,7 +77,7 @@ interface ContactCardProps {
     publicKey?: string
     isLocal?: boolean
     profile?: ProfileIdentifier
-    refetch?: (options?: RefetchOptions) => Promise<UseQueryResult>
+    refetch?: () => void
 }
 
 export const ContactCard = memo<ContactCardProps>(function ContactCard({
@@ -98,32 +98,82 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
     const { currentPersona } = PersonaContext.useContainer()
     const { t } = useI18N()
     const profiles = useFriendProfiles(seen, nextId, profile?.userId)
+    const rawPublicKey = currentPersona?.identifier.rawPublicKey
     const queryClient = useQueryClient()
-    const handleAddFriend = useCallback(async () => {
-        if (!currentPersona) return
-        const twitter = profiles?.find((p) => p.platform === NextIDPlatform.Twitter)
+
+    const friendInfo = useMemo(() => {
+        if (!rawPublicKey) return
+        const twitter = proofProfiles?.find((p) => p.platform === NextIDPlatform.Twitter)
         const personaIdentifier = ECKeyIdentifier.fromHexPublicKeyK256(nextId).expect(
             `${nextId} should be a valid hex public key in k256`,
         )
-        const rawPublicKey = currentPersona.identifier.rawPublicKey
         if (!twitter) {
-            await Services.Identity.createNewRelation(personaIdentifier, currentPersona.identifier)
+            return {
+                persona: personaIdentifier,
+            }
         } else {
             const profileIdentifier = ProfileIdentifier.of('twitter.com', twitter.identity).unwrap()
+            return {
+                persona: personaIdentifier,
+                profile: profileIdentifier,
+            }
+        }
+    }, [profiles, nextId, rawPublicKey])
+
+    const handleAddFriend = useCallback(async () => {
+        if (!friendInfo || !currentPersona) return
+        const { persona, profile } = friendInfo
+        if (!profile) {
+            await Services.Identity.createNewRelation(persona, currentPersona.identifier)
+        } else {
             await attachNextIDToProfile({
-                identifier: profileIdentifier,
-                linkedPersona: personaIdentifier,
+                identifier: profile,
+                linkedPersona: persona,
                 fromNextID: true,
-                linkedTwitterNames: twitter ? [twitter.identity] : [],
+                linkedTwitterNames: [profile.userId],
             })
         }
-        showSnackbar(t('popups_encrypted_friends_added_successfully'), { variant: 'success' })
-        setLocal(true)
-        queryClient.invalidateQueries(['relation-records', rawPublicKey])
-        queryClient.invalidateQueries(['friends', rawPublicKey])
-        refetch?.()
-    }, [profiles, nextId, currentPersona, queryClient])
-    console.log(profiles)
+    }, [nextId, queryClient, currentPersona, refetch, friendInfo])
+
+    const { mutate: onAdd, isLoading } = useMutation({
+        mutationFn: handleAddFriend,
+        onMutate: async (friend: Friend | undefined) => {
+            if (!friend) return
+            await queryClient.cancelQueries(['relation-records', rawPublicKey])
+            await queryClient.cancelQueries(['friends', rawPublicKey])
+            const old = queryClient.getQueryData(['friends', rawPublicKey])
+            queryClient.setQueryData(
+                ['friends', rawPublicKey],
+                (
+                    oldData:
+                        | InfiniteData<{
+                              friends: Friend[]
+                              nextPageOffset: number
+                          }>
+                        | undefined,
+                ) => {
+                    if (!oldData) return undefined
+                    return {
+                        ...oldData,
+                        pages: oldData.pages[0]
+                            ? [
+                                  { friends: [friend, ...oldData.pages[0].friends], nextPageOffset: 10 },
+                                  ...oldData.pages.slice(1),
+                              ]
+                            : [{ friends: [friend], nextPageOffset: 0 }],
+                    }
+                },
+            )
+            showSnackbar(t('popups_encrypted_friends_added_successfully'), { variant: 'success' })
+            setLocal(true)
+        },
+        onSettled: async () => {
+            await queryClient.invalidateQueries(['relation-records', rawPublicKey])
+            await queryClient.invalidateQueries(['friends', rawPublicKey])
+            refetch?.()
+        },
+    })
+
     return (
         <Box className={classes.card} ref={ref}>
             <Box className={classes.titleWrap}>
@@ -175,7 +225,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                         <Icons.ArrowRight />
                     </Button>
                 ) : (
-                    <Button className={classes.addButton} onClick={handleAddFriend}>
+                    <Button className={classes.addButton} onClick={() => onAdd(friendInfo)} disabled={isLoading}>
                         {t('popups_encrypted_friends_add_friends')}
                     </Button>
                 )}

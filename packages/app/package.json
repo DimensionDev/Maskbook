@@ -119,6 +119,8 @@
         "swc-loader": "^0.2.3",
         "webpack": "Jack-Works/webpack#lazy-import",
         "webpack-cli": "^5.1.4",
-        "webpack-dev-server": "^4.15.1"
+        "webpack-dev-server": "^4.15.1",
+        "terser-webpack-plugin": "^5.3.9",
+        "@types/terser-webpack-plugin": "^5.2.0"
     }
 }

@@ -5,7 +5,7 @@ declare namespace Mask {
      * @remarks Since API=0
      * @public
      */
-    export const persona: Persona
+    export const persona: undefined | Persona
     export interface Persona {
         /**
          * API might change any time.

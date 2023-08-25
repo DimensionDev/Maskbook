@@ -349,16 +349,16 @@ export async function generateAddressFromMnemonicWords(
     mnemonic: string,
     derivationPath = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
 ) {
-    const masterPassword = await password.INTERNAL_getMasterPasswordRequired()
+    const oneTimePassword = 'MASK'
     const imported = await Mask.importMnemonic({
         mnemonic,
-        password: masterPassword,
+        password: oneTimePassword,
     })
     if (!imported?.StoredKey) throw new Error('Failed to import the wallet.')
     const created = await Mask.createAccountOfCoinAtPath({
         coin: api.Coin.Ethereum,
         name,
-        password: masterPassword,
+        password: oneTimePassword,
         derivationPath,
         StoredKeyData: imported.StoredKey.data,
     })

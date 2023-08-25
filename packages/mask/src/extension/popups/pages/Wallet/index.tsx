@@ -42,7 +42,7 @@ export default function Wallet() {
             <RestorableScrollContext.Provider>
                 <Routes>
                     <Route
-                        path="*"
+                        index
                         element={
                             wallet && wallets.filter((x) => !x.owner).length ? <WalletAssets /> : <WalletStartUp />
                         }

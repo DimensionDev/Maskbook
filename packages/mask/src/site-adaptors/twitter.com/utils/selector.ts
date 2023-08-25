@@ -17,6 +17,8 @@ export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> 
     querySelector<E>(
         '[data-testid="primaryColumn"] div + [role="navigation"][aria-label] [data-testid="ScrollSnap-List"]  a[href*="/like"]',
     ).closest(1)
+export const nextTabListSelector: () => LiveSelector<E, true> = () =>
+    querySelector('[data-testid="ScrollSnap-nextButtonWrapper"]')
 export const searchProfileTabPageSelector = () =>
     searchProfileTabListLastChildSelector()
         .closest(5)

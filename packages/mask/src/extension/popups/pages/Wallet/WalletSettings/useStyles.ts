@@ -7,14 +7,12 @@ export const useStyles = makeStyles()((theme) => ({
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
+        overflow: 'auto',
     },
     list: {
         padding: '12px 16px 0px 16px',
-        height: 400,
         overflow: 'auto',
-        '::-webkit-scrollbar': {
-            display: 'none',
-        },
+        flexGrow: 1,
     },
     primaryItem: {
         margin: '16px 16px 0 16px',
@@ -64,16 +62,12 @@ export const useStyles = makeStyles()((theme) => ({
         height: 24,
     },
     bottomAction: {
-        position: 'absolute',
         paddingTop: 16,
         display: 'flex',
         justifyContent: 'center',
         background: theme.palette.maskColor.secondaryBottom,
         boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
         backdropFilter: 'blur(8px)',
-        width: '100%',
-        bottom: 0,
-        zIndex: 100,
     },
     ellipsis: {
         overflow: 'hidden',

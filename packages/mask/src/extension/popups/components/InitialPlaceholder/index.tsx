@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useEnterDashboard } from '../../hook/useEnterDashboard.js'
+import { useEnterDashboard } from '../../hooks/index.js'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../../../../utils/index.js'
 

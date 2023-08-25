@@ -1,30 +1,7 @@
 {
     "LIDO_stETH_ADDRESS": {
         "Mainnet": "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84",
-        "Ropsten": "",
-        "Rinkeby": "",
-        "Kovan": "",
-        "Gorli": "0x1643E812aE58766192Cf7D2Cf9567dF2C37e9B7F",
-        "BSC": "",
-        "BSCT": "",
-        "Base": "",
-        "Base_Goerli": "",
-        "Matic": "",
-        "Mumbai": "",
-        "Arbitrum": "",
-        "Arbitrum_Rinkeby": "",
-        "xDai": "",
-        "Optimism": "",
-        "Optimism_Kovan": "",
-        "Optimism_Goerli": "",
-        "Avalanche": "",
-        "Avalanche_Fuji": "",
-        "Celo": "",
-        "Fantom": "",
-        "Aurora": "",
-        "Aurora_Testnet": "",
-        "Conflux": "",
-        "Astar": ""
+        "Gorli": "0x1643E812aE58766192Cf7D2Cf9567dF2C37e9B7F"
     },
     "LIDO_REFERRAL_ADDRESS": {
         "Mainnet": "0x934b510d4c9103e6a87aef13b816fb080286d649",
@@ -34,23 +11,16 @@
         "Gorli": "0x934b510d4c9103e6a87aef13b816fb080286d649",
         "BSC": "0x934b510d4c9103e6a87aef13b816fb080286d649",
         "BSCT": "0x934b510d4c9103e6a87aef13b816fb080286d649",
-        "Base": "",
-        "Base_Goerli": "",
         "Matic": "0x934b510d4c9103e6a87aef13b816fb080286d649",
         "Mumbai": "0x934b510d4c9103e6a87aef13b816fb080286d649",
         "Arbitrum": "0x934b510d4c9103e6a87aef13b816fb080286d649",
         "Arbitrum_Rinkeby": "0x934b510d4c9103e6a87aef13b816fb080286d649",
         "xDai": "0x934b510d4c9103e6a87aef13b816fb080286d649",
-        "Optimism": "",
-        "Optimism_Kovan": "",
-        "Optimism_Goerli": "",
         "Avalanche": "0x934b510d4c9103e6a87aef13b816fb080286d649",
         "Avalanche_Fuji": "0x934b510d4c9103e6a87aef13b816fb080286d649",
         "Celo": "0x934b510d4c9103e6a87aef13b816fb080286d649",
         "Fantom": "0x934b510d4c9103e6a87aef13b816fb080286d649",
         "Aurora": "0x934b510d4c9103e6a87aef13b816fb080286d649",
-        "Aurora_Testnet": "0x934b510d4c9103e6a87aef13b816fb080286d649",
-        "Conflux": "",
-        "Astar": ""
+        "Aurora_Testnet": "0x934b510d4c9103e6a87aef13b816fb080286d649"
     }
 }

@@ -17,6 +17,7 @@ import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
+    useAccount,
     useChainContext,
     useNetworkContext,
     useTelemetry,
@@ -25,7 +26,7 @@ import {
     useWeb3Hub,
 } from '@masknet/web3-hooks-base'
 import { isGreaterThan, isSameAddress } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { type ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { supportPluginIds } from '../constants.js'
 import { useAvatarManagement } from '../contexts/index.js'
@@ -88,6 +89,7 @@ export function NFTListDialog() {
     const navigate = useNavigate()
 
     const { pluginID } = useNetworkContext()
+    const originAccount = useAccount()
     const { account, chainId, setChainId, setAccount } = useChainContext()
     const [assetChainId, setAssetChainId] = useState<ChainId>()
     const wallets = useWallets()
@@ -99,11 +101,6 @@ export function NFTListDialog() {
     const { openPopupWindow } = useSiteAdaptorContext()
     const targetWallet = wallets.find((x) => isSameAddress(targetAccount, x.address))
     const telemetry = useTelemetry()
-
-    useEffect(() => {
-        setChainId(ChainId.Mainnet)
-        setSelectedToken(undefined)
-    }, [pfpType])
 
     useEffect(() => setSelectedToken(undefined), [chainId])
 
@@ -192,6 +189,10 @@ export function NFTListDialog() {
     useUpdateEffect(() => {
         setTargetAccount(account)
     }, [account])
+
+    useUpdateEffect(() => {
+        setAccount(originAccount)
+    }, [originAccount])
 
     return (
         <>

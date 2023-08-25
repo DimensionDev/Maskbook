@@ -64,6 +64,8 @@
 ### React devtools default editor
 
 ; devtoolsEditorURI=vscode://file/{path}:{line}
+; devtoolsEditorURI=mvim://open?url=file://{path}&line={line}
+; devtoolsEditorURI=raycast://script-commands/your-custom-script?arguments={path}&arguments={line}
 # (default) VSCode
 
 # devtoolsEditorURI=...

@@ -1,3 +1,15 @@
+import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
+import { PageUIProvider, PersonaContext } from '@masknet/shared'
+import {
+    CrossIsolationMessages,
+    PopupModalRoutes,
+    PopupRoutes as PopupPaths,
+    PopupsHistory,
+} from '@masknet/shared-base'
+import { PopupSnackbarProvider } from '@masknet/theme'
+import { DefaultWeb3ContextProvider, TelemetryProvider } from '@masknet/web3-hooks-base'
+import { ProviderType } from '@masknet/web3-shared-evm'
+import { Box } from '@mui/material'
 import { Suspense, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useIdleTimer } from 'react-idle-timer'
 import {
@@ -8,26 +20,13 @@ import {
     useLocation,
     type HistoryRouterProps,
 } from 'react-router-dom'
-import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
-import { PageUIProvider, PersonaContext } from '@masknet/shared'
-import {
-    CrossIsolationMessages,
-    PopupModalRoutes,
-    PopupRoutes as PopupPaths,
-    PopupsHistory,
-} from '@masknet/shared-base'
-import { PopupSnackbarProvider } from '@masknet/theme'
-import { ProviderType } from '@masknet/web3-shared-evm'
-import { TelemetryProvider, DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
-import { Box } from '@mui/material'
 import { usePopupTheme } from '../../utils/theme/usePopupTheme.js'
 import Services from '../service.js'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import { PopupLayout } from './components/PopupLayout/index.js'
 import { wrapModal } from './components/index.js'
 import { PageTitleContext } from './context.js'
-import { PopupContext } from './hook/usePopupContext.js'
-import { UserContext } from './hook/useUserContext.js'
+import { PopupContext, UserContext } from './hooks/index.js'
 import { ConnectProviderModal } from './modals/ConnectProvider/index.js'
 import { SelectProviderModal } from './modals/SelectProviderModal/index.js'
 import {
