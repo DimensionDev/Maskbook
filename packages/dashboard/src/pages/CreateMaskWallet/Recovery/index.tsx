@@ -1,22 +1,24 @@
-import { memo, useCallback, useMemo, useState } from 'react'
-import type { UseFormSetError } from 'react-hook-form'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { generateNewWalletName } from '@masknet/web3-shared-base'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
+import { useWallets } from '@masknet/web3-hooks-base'
+import { Web3 } from '@masknet/web3-providers'
+import { generateNewWalletName } from '@masknet/web3-shared-base'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import { WalletServiceRef } from '@masknet/plugin-infra/dom'
-import { SetupFrameController } from '../../../components/SetupFrame/index.js'
-import { useDashboardI18N } from '../../../locales/i18n_generated.js'
-import { RestoreFromPrivateKey, type FormInputs } from '../../../components/Restore/RestoreFromPrivateKey.js'
-import { RecoveryContext, RecoveryProvider } from '../../../contexts/index.js'
-import { RestoreFromMnemonic } from '../../../components/Restore/RestoreFromMnemonic.js'
-import { RestoreWalletFromLocal } from '../../../components/Restore/RestoreWalletFromLocal.js'
-import { ResetWalletContext } from '../context.js'
+import { memo, useCallback, useMemo, useState } from 'react'
+import type { UseFormSetError } from 'react-hook-form'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useAsync } from 'react-use'
-import { useWallets } from '@masknet/web3-hooks-base'
+import { RestoreFromMnemonic } from '../../../components/Restore/RestoreFromMnemonic.js'
+import { RestoreFromPrivateKey, type FormInputs } from '../../../components/Restore/RestoreFromPrivateKey.js'
+import { RestoreWalletFromLocal } from '../../../components/Restore/RestoreWalletFromLocal.js'
+import { SetupFrameController } from '../../../components/SetupFrame/index.js'
+import { RecoveryContext, RecoveryProvider } from '../../../contexts/index.js'
+import { useDashboardI18N } from '../../../locales/i18n_generated.js'
+import { ResetWalletContext } from '../context.js'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -126,7 +128,11 @@ const Recovery = memo(function Recovery() {
         async (data: FormInputs, onError: UseFormSetError<FormInputs>) => {
             try {
                 await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
-                await WalletServiceRef.value.recoverWalletFromPrivateKey(newWalletName, data.privateKey)
+                const account = await WalletServiceRef.value.recoverWalletFromPrivateKey(newWalletName, data.privateKey)
+                await Web3.connect({
+                    account,
+                    providerType: ProviderType.MaskWallet,
+                })
                 navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
             } catch (error) {
                 const errorMsg = (error as Error).message
