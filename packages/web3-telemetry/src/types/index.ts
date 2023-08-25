@@ -43,7 +43,6 @@ export enum EventID {
     EntryTimelineHoverUserActivitiesSwitchTo = 'entry_timeline_hover_user_activities_switch_to',
     EntryTimelineHoverUserDonationsSwitchTo = 'entry_timeline_hover_user_donations_switch_to',
     EntryTimelineHoverUserSocialSwitchTo = 'entry_timeline_hover_user_social_switch_to',
-
     EntryPopupSoaccountConnectTwitter = 'entry_popup_soaccount_connect_twitter',
     EntryPopupSoaccountConnectFb = 'entry_popup_soaccount_connect_fb',
     EntryPopupSoaccountConnectMinds = 'entry_popup_soaccount_connect_minds',
@@ -66,41 +65,11 @@ export enum EventID {
     EntryMaskComposeVisiblePrivate = 'entry_mask_compose_visible_private',
     EntryMaskComposeVisibleSelected = 'entry_mask_compose_visible_selected',
     EntryMaskComposeEncrypt = 'entry_mask_compose_encrypt',
-
-    // Open the Web3 tabs but no persona detected
-    AccessWeb3TabCreatePersonaTab = 'AccessWeb3TabCreatePersonaTab',
-    // Open the Web3 tabs the NFTs tab presents
-    AccessWeb3TabNFTsTab = 'AccessWeb3TabNFTsTab',
-    // Open the Web3 tabs the Activities tab presents
-    AccessWeb3TabActivitiesTab = 'AccessWeb3TabActivitiesTab',
-    // Open the Web3 tabs the Donation tab presents
-    AccessWeb3TabDonationTab = 'AccessWeb3TabDonationTab',
-    // Open the Web3 tabs the Social tab presents
-    AccessWeb3TabSocialTab = 'AccessWeb3TabSocialTab',
-    // Open the web3 profile dialog
-    AccessWeb3ProfileDialog = 'AccessWeb3ProfileDialog',
-    // Open the Web3 profile dialog the NFTs tab presents
-    AccessWeb3ProfileDialogNFTsTab = 'AccessWeb3ProfileDialogNFTsTab',
-    // Open the Web3 profile dialog the Activities tab presents
-    AccessWeb3ProfileDialogActivitiesTab = 'AccessWeb3ProfileDialogActivitiesTab',
-    // Open the Web3 profile dialog the Donation tab presents
-    AccessWeb3ProfileDialogDonationTab = 'AccessWeb3ProfileDialogDonationTab',
-    // Open the Web3 profile dialog the Social tab presents
-    AccessWeb3ProfileDialogSocialTab = 'AccessWeb3ProfileDialogSocialTab',
-    // Open the trader plugin
-    AccessTradePlugin = 'AccessTradePlugin',
-    // Send the trader transaction successfully
-    SendTraderTransactionSuccessfully = 'SendTraderTransactionSuccessfully',
-    // The toolbar has successfully injected
-    AccessToolbox = 'AccessToolbox',
-    // Open the application board dialog
-    AccessApplicationBoard = 'AccessApplicationBoard',
-    // Open the SPA
-    AccessApp = 'AccessApp',
-    // Open the dashboard page
-    AccessDashboard = 'AccessDashboard',
-    // Open the popups page
-    AccessPopups = 'AccessPopups',
+    EntryProfileUserNftsClickNft = 'entry_profile_user_nfts_click_nft',
+    EntryProfileUserNftsSwitchChain = 'entry_profile_user_nfts_switch_chain',
+    EntryProfileUserActivitiesSwitchTo = 'entry_profile_user_activities_switch_to',
+    EntryProfileUserDonationsSwitchTo = 'entry_profile_user_donations_switch_to',
+    EntryProfileUserSocialSwitchTo = 'entry_profile_user_social_switch_to',
     // For debug only
     Debug = 'Debug',
 }

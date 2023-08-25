@@ -16,13 +16,11 @@ import {
     useNetworkContext,
     useWallet,
     useWeb3Others,
-    useMountReport,
     useTelemetry,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useActivatedPlugin, useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
 import { NetworkPluginID, PluginID, isFacebook, isTwitter } from '@masknet/shared-base'
-import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { type TraderAPI } from '@masknet/web3-providers/types'
 import { DepositPaymaster, SmartPayBundler, Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../../locales/index.js'
@@ -270,7 +268,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             maxWidthOfContent: 420,
         })
         if (confirmed) share?.(shareText)
-        telemetry.captureEvent(EventType.Interact, EventID.SendTraderTransactionSuccessfully)
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
             amount: '',
@@ -347,8 +344,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             token: undefined,
         })
     })
-
-    useMountReport(EventID.AccessTradePlugin)
 
     // #region if trade has been changed, update the focused trade
     useUpdateEffect(() => {

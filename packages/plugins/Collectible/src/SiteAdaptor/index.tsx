@@ -7,8 +7,8 @@ import { CollectionList, UserAssetsProvider } from '@masknet/shared'
 import { CrossIsolationMessages, NetworkPluginID, PluginID, SocialAddressType, parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { EventID } from '@masknet/web3-telemetry/types'
-import { Web3ContextProvider, useMountReport } from '@masknet/web3-hooks-base'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
+import { Web3ContextProvider, useTelemetry } from '@masknet/web3-hooks-base'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import { base } from '../base.js'
 import { PLUGIN_ID, PLUGIN_NAME } from '../constants.js'
@@ -17,9 +17,13 @@ import { DialogInspector } from './DialogInspector.js'
 import { PostInspector } from './PostInspector.js'
 
 function useInspectCollectible(pluginID?: NetworkPluginID) {
+    const telemetry = useTelemetry()
     return useCallback(
-        function inspectCollectible(asset: Web3Helper.NonFungibleAssetAll) {
+        function inspectCollectible(asset: Web3Helper.NonFungibleAssetAll, from?: 'web3Profile' | 'profileCard') {
             if (!pluginID) return
+            if (from === 'web3Profile') telemetry.captureEvent(EventType.Interact, EventID.EntryProfileUserNftsClickNft)
+            if (from === 'profileCard')
+                telemetry.captureEvent(EventType.Interact, EventID.EntryTimelineHoverUserNftClickNft)
             CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
                 open: true,
                 chainId: asset.chainId,
@@ -41,13 +45,15 @@ const TabConfig: Plugin.SiteAdaptor.ProfileTab = {
     priority: 4,
     UI: {
         TabContent({ socialAccount }) {
-            useMountReport(EventID.AccessWeb3TabNFTsTab)
             const inspectCollectible = useInspectCollectible(socialAccount?.pluginID)
             if (!socialAccount) return null
             return (
                 <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
                     <UserAssetsProvider pluginID={socialAccount.pluginID} account={socialAccount.address}>
-                        <CollectionList gridProps={gridProps} onItemClick={inspectCollectible} />
+                        <CollectionList
+                            gridProps={gridProps}
+                            onItemClick={(asset) => inspectCollectible(asset, 'web3Profile')}
+                        />
                     </UserAssetsProvider>
                 </Web3ContextProvider>
             )
@@ -94,7 +100,6 @@ const site: Plugin.SiteAdaptor.Definition = {
             priority: 4,
             UI: {
                 TabContent({ socialAccount }) {
-                    useMountReport(EventID.AccessWeb3ProfileDialogNFTsTab)
                     const inspectCollectible = useInspectCollectible(socialAccount?.pluginID)
 
                     if (!socialAccount) return null
@@ -106,7 +111,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                                     height={392}
                                     gridProps={gridProps}
                                     disableWindowScroll
-                                    onItemClick={inspectCollectible}
+                                    onItemClick={(asset) => inspectCollectible(asset, 'profileCard')}
                                 />
                             </UserAssetsProvider>
                         </Web3ContextProvider>

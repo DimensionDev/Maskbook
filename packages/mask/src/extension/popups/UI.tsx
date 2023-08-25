@@ -18,8 +18,7 @@ import {
 } from '@masknet/shared-base'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { TelemetryProvider, DefaultWeb3ContextProvider, useMountReport } from '@masknet/web3-hooks-base'
-import { EventID } from '@masknet/web3-telemetry/types'
+import { TelemetryProvider, DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { Box } from '@mui/material'
 import { usePopupTheme } from '../../utils/theme/usePopupTheme.js'
 import Services from '../service.js'
@@ -143,7 +142,6 @@ export default function Popups() {
         [title, extension, customBackHandler],
     )
 
-    useMountReport(EventID.AccessPopups)
     useIdleTimer({ onAction: Services.Wallet.setAutoLockTimer, throttle: 10000 })
     useEffect(() => {
         if (location.hash.includes('/swap')) return

@@ -27,11 +27,11 @@ const createProfileTabConfig = (label: string, props: FeedPageProps, priority = 
                 useMountReport(() => {
                     switch (props.tag) {
                         case RSS3BaseAPI.Tag.Donation:
-                            return EventID.AccessWeb3ProfileDialogDonationTab
+                            return EventID.EntryTimelineHoverUserDonationsSwitchTo
                         case RSS3BaseAPI.Tag.Social:
-                            return EventID.AccessWeb3ProfileDialogSocialTab
+                            return EventID.EntryTimelineHoverUserSocialSwitchTo
                         default:
-                            return EventID.AccessWeb3ProfileDialogActivitiesTab
+                            return EventID.EntryTimelineHoverUserActivitiesSwitchTo
                     }
                 })
 
@@ -70,11 +70,11 @@ const createSearchTabConfig = (
                 useMountReport(() => {
                     switch (props.tag) {
                         case RSS3BaseAPI.Tag.Donation:
-                            return EventID.AccessWeb3TabDonationTab
+                            return EventID.EntryProfileUserDonationsSwitchTo
                         case RSS3BaseAPI.Tag.Social:
-                            return EventID.AccessWeb3TabSocialTab
+                            return EventID.EntryProfileUserSocialSwitchTo
                         default:
-                            return EventID.AccessWeb3TabActivitiesTab
+                            return EventID.EntryProfileUserActivitiesSwitchTo
                     }
                 })
 
