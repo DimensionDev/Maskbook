@@ -129,7 +129,7 @@ const Recovery = memo(function Recovery() {
             try {
                 await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
                 const account = await WalletServiceRef.value.recoverWalletFromPrivateKey(newWalletName, data.privateKey)
-                Web3.connect({
+                await Web3.connect({
                     account,
                     providerType: ProviderType.MaskWallet,
                 })
