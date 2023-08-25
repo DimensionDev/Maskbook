@@ -8,6 +8,7 @@ import {
     useChainContext,
     useNativeToken,
     useNonFungibleAssetsByCollection,
+    useTelemetry,
     Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
@@ -40,6 +41,7 @@ import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
 import { ContentTabs } from '../../types/index.js'
 import { FailedTrendingView } from './FailedTrendingView.js'
 import { useI18N } from '../../locales/index.js'
+import { EventType, EventID } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -147,6 +149,7 @@ export function TrendingView(props: TrendingViewProps) {
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
     const isWeb3ProfileMinimalMode = useIsMinimalMode(PluginID.Web3Profile)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const telemetry = useTelemetry()
 
     const { data: nativeToken } = useNativeToken<'all'>(NetworkPluginID.PLUGIN_EVM, {
         chainId: result.chainId ?? chainId,
@@ -280,6 +283,7 @@ export function TrendingView(props: TrendingViewProps) {
         props.onUpdate?.()
     }, [loadingTrending])
     // #endregion
+
     const collectionId =
         trending?.coin.type === TokenType.NonFungible
             ? result.pluginID === NetworkPluginID.PLUGIN_SOLANA
@@ -341,7 +345,32 @@ export function TrendingView(props: TrendingViewProps) {
                     <MaskTabList
                         variant="base"
                         classes={{ root: classes.tabListRoot }}
-                        onChange={(_, v: ContentTabs) => setTab(v)}
+                        onChange={(_, v: ContentTabs) => {
+                            setTab(v)
+                            if (isProfilePage) {
+                                if (isNFT) {
+                                    if (v === ContentTabs.Price) {
+                                        telemetry.captureEvent(EventType.Access, EventID.EntryProfileNftTrendSwitchTo)
+                                    }
+                                    if (v === ContentTabs.NFTItems) {
+                                        telemetry.captureEvent(EventType.Access, EventID.EntryProfileNftItemsSwitchTo)
+                                    }
+                                    if (v === ContentTabs.Exchange) {
+                                        telemetry.captureEvent(
+                                            EventType.Access,
+                                            EventID.EntryProfileNftActivitiesSwitchTo,
+                                        )
+                                    }
+                                } else {
+                                    if (v === ContentTabs.Price) {
+                                        telemetry.captureEvent(EventType.Access, EventID.EntryProfileTokenSwitchTrend)
+                                    }
+                                    if (v === ContentTabs.Exchange) {
+                                        telemetry.captureEvent(EventType.Access, EventID.EntryProfileTokenSwitchMarket)
+                                    }
+                                }
+                            }
+                        }}
                         aria-label="Network Tabs">
                         {tabComponents}
                     </MaskTabList>

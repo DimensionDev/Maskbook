@@ -1,4 +1,4 @@
-import { useCallback, useContext, useRef, useState } from 'react'
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { first, last } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { useActivatedPluginsSiteAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
@@ -24,7 +24,7 @@ import {
 import { useAnchor, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { MaskColors, MaskLightTheme, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useTelemetry } from '@masknet/web3-hooks-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { SourceType, TokenType, formatCurrency } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -45,6 +45,7 @@ import { TrendingViewDescriptor } from './TrendingViewDescriptor.js'
 import { CoinIcon } from './components/index.js'
 import { TrendingViewContext } from './context.js'
 import { useI18N } from '../../locales/index.js'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -179,8 +180,11 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const { coin, market } = trending
     const [walletMenuOpen, setWalletMenuOpen] = useState(false)
     const closeMenu = useCallback(() => setWalletMenuOpen(false), [])
-    const { isCollectionProjectPopper, isTokenTagPopper, isPreciseSearch } = useContext(TrendingViewContext)
+    const { isCollectionProjectPopper, isTokenTagPopper, isPreciseSearch, isProfilePage } =
+        useContext(TrendingViewContext)
     const { anchorEl, anchorBounding } = useAnchor()
+    const [timer, setTimer] = useState<NodeJS.Timeout>()
+    const telemetry = useTelemetry()
 
     const t = useI18N()
     const theme = useTheme()
@@ -245,6 +249,28 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         },
         [JSON.stringify(identity), isCollectionProjectPopper, anchorBounding, anchorEl],
     )
+
+    useEffect(() => {
+        if (timer) clearTimeout(timer)
+        if (isCollectionProjectPopper) {
+            setTimer(
+                setTimeout(() => {
+                    telemetry.captureEvent(EventType.Access, EventID.EntryTimelineHoverNftDuration)
+                }, 1000),
+            )
+        }
+        if (isTokenTagPopper) {
+            setTimer(
+                setTimeout(() => {
+                    telemetry.captureEvent(EventType.Access, EventID.EntryTimelineHoverTokenDuration)
+                }, 1000),
+            )
+        }
+        return () => {
+            if (timer) clearTimeout(timer)
+            setTimer(undefined)
+        }
+    }, [isCollectionProjectPopper, isTokenTagPopper, isProfilePage, telemetry])
 
     const floorPrice =
         trending.dataProvider === SourceType.CoinMarketCap
