@@ -1,12 +1,13 @@
-import { memo, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { Box, Button, Popover, Typography } from '@mui/material'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { formatPersonaFingerprint, PopupRoutes } from '@masknet/shared-base'
+import { formatPersonaFingerprint, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useManagers } from '../../hooks/useManagers.js'
 import { useI18N } from '../../locales/i18n_generated.js'
+import { useAccount, useChainContext, useNetwork, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -63,6 +64,12 @@ export const AccountsManagerPopover = memo<AccountsManagePopoverProps>(
         const { classes } = useStyles()
         const { personaManagers, walletManagers } = useManagers()
         const { openPopupWindow } = useSiteAdaptorContext()
+
+        const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+        const account = useAccount()
+        const network = useNetwork(NetworkPluginID.PLUGIN_EVM, chainId)
+        const { Network } = useWeb3State()
+        const connection = useWeb3Connection()
         const ownerInfo = useMemo(() => {
             const persona = personaManagers?.find((x) => isSameAddress(x.address, owner))
 
@@ -79,6 +86,21 @@ export const AccountsManagerPopover = memo<AccountsManagePopoverProps>(
                 publicKey: formatEthereumAddress(wallet.address, 4),
             }
         }, [owner, personaManagers, walletManagers])
+
+        const handleChangeOwner = useCallback(async () => {
+            if (isSameAddress(address, account)) return
+            const result = await connection.connect({
+                account: address,
+                chainId,
+                providerType: ProviderType.MaskWallet,
+                silent: true,
+            })
+
+            if (network) await Network?.switchNetwork(network.ID)
+
+            if (!result) return
+            await openPopupWindow(PopupRoutes.ChangeOwner, { contractAccount: address, toBeClose: true })
+        }, [address, connection, account, chainId, network])
 
         return usePortalShadowRoot((container) => (
             <Popover
@@ -110,12 +132,7 @@ export const AccountsManagerPopover = memo<AccountsManagePopoverProps>(
                         <Typography className={classes.name}>{ownerInfo?.name}</Typography>
                         <Typography className={classes.second}>{ownerInfo?.publicKey}</Typography>
                     </Box>
-                    <Button
-                        className={classes.changeOwner}
-                        variant="roundedContained"
-                        onClick={() =>
-                            openPopupWindow(PopupRoutes.ChangeOwner, { contractAccount: address, toBeClose: true })
-                        }>
+                    <Button className={classes.changeOwner} variant="roundedContained" onClick={handleChangeOwner}>
                         {t.change_owner()}
                     </Button>
                 </Box>

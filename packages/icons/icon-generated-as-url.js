@@ -134,6 +134,7 @@ export function check_url() { return new URL("./general/Check.svg", import.meta.
 export function checkbox_url() { return new URL("./general/Checkbox.svg", import.meta.url) }
 export function checkbox_blank_url() { return new URL("./general/CheckboxBlank.svg", import.meta.url) }
 export function checkbox_border_url() { return new URL("./general/CheckboxBorder.svg", import.meta.url) }
+export function checkbox_no_url() { return new URL("./general/CheckboxNo.svg", import.meta.url) }
 export function check_circle_url() { return new URL("./general/CheckCircle.svg", import.meta.url) }
 export function chevron_up_url() { return new URL("./general/ChevronUp.svg", import.meta.url) }
 export function circle_close_url() { return new URL("./general/CircleClose.svg", import.meta.url) }

@@ -11,6 +11,7 @@ import {
     CircularProgress,
     Checkbox,
     useTheme,
+    checkboxClasses,
 } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
@@ -218,7 +219,7 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(function Der
                 <Checkbox
                     disabled={added}
                     defaultChecked={selected || added}
-                    icon={<Icons.CheckboxBorder size={16} color={theme.palette.maskColor.primary} />}
+                    icon={<Icons.CheckboxNo size={16} color={theme.palette.maskColor.secondaryLine} />}
                     checkedIcon={<Icons.Checkbox size={16} />}
                     sx={{
                         color: theme.palette.maskColor.primary,
@@ -226,8 +227,11 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(function Der
                         width: 16,
                         height: 16,
                         borderRadius: 1,
-                        '&.Mui-checked': {
+                        [`&.${checkboxClasses.checked}`]: {
                             color: theme.palette.maskColor.primary,
+                        },
+                        [`&.${checkboxClasses.disabled}`]: {
+                            color: `${theme.palette.maskColor.secondaryMain}!important`,
                         },
                     }}
                     onChange={(e) => onCheck(e.target.checked)}

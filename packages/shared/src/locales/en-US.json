@@ -303,7 +303,7 @@
     "upload_error$oversized": "The file is too large; limit is {{limit}}.",
     "upload_file_title$failed": "Failed to upload file",
     "upload_file_message$failed": "Exceeded the maximum file size of 10MB.",
-    "upload_drag_n_drop": "Drag & Drop your files here",
+    "upload_drag_n_drop": "Drag & Drop your file here",
     "upload_size_limit": "Size limit: 10 MB",
     "upload_or": "or",
     "upload_browse_files": "Browse Files",

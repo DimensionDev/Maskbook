@@ -41,12 +41,7 @@ export default function Wallet() {
             <WalletHeader />
             <RestorableScrollContext.Provider>
                 <Routes>
-                    <Route
-                        index
-                        element={
-                            wallet && wallets.filter((x) => !x.owner).length ? <WalletAssets /> : <WalletStartUp />
-                        }
-                    />
+                    <Route path="*" element={wallet && wallets.length ? <WalletAssets /> : <WalletStartUp />} />
                     <Route path={r(PopupRoutes.AddDeriveWallet)} element={<AddDeriveWallet />} />
                     <Route path={r(PopupRoutes.WalletSettings)} element={<WalletSettings />} />
                     <Route path={r(PopupRoutes.CreateWallet)} element={<CreateWallet />} />
