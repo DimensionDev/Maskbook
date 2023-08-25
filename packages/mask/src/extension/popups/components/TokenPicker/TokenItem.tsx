@@ -154,9 +154,8 @@ export const TokenItem = memo(function TokenItem({
                         className={classes.badgeIcon}
                         pluginID={NetworkPluginID.PLUGIN_EVM}
                         chainId={network.chainId}
-                        name={network.name}
                         size={16}
-                        preferName={network.isCustomized}
+                        network={network}
                     />
                 </Box>
             </ListItemIcon>
