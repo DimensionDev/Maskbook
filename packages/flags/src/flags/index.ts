@@ -1,4 +1,6 @@
 import { env } from './buildInfo.js'
+
+const testOnly = process.env.NODE_ENV === 'test'
 const devOnly = process.env.NODE_ENV === 'development'
 const prodOnly = process.env.NODE_ENV === 'production'
 const insiderOnly = env.channel === 'insider' || devOnly
@@ -10,7 +12,7 @@ export const flags = {
     support_testnet_switch: betaOrInsiderOnly,
 
     shadowRootInit: {
-        mode: '__REACT_DEVTOOLS_GLOBAL_HOOK__' in globalThis || betaOrInsiderOnly ? 'open' : 'closed',
+        mode: '__REACT_DEVTOOLS_GLOBAL_HOOK__' in globalThis || betaOrInsiderOnly || testOnly ? 'open' : 'closed',
         delegatesFocus: true,
     } as const satisfies ShadowRootInit,
 
@@ -20,22 +22,8 @@ export const flags = {
     wallet_allow_testnet: betaOrInsiderOnly || process.env.NODE_ENV !== 'production',
     // #endregion
 
-    bsc_enabled: true,
-    polygon_enabled: true,
-    arbitrum_enabled: true,
-    xdai_enabled: true,
-    optimism_enabled: true,
-    avalanche_enabled: true,
-    fantom_enabled: true,
-    celo_enabled: true,
-    aurora_enabled: true,
-    astar_enabled: true,
-    nft_airdrop_enabled: false,
-    post_actions_enabled: true,
-    next_id_tip_enabled: true,
-
     using_emoji_flag: true,
-
+    post_actions_enabled: true,
     sandboxedPluginRuntime: false,
 
     /** The earliest version for the sentry to watch events and exceptions. */
