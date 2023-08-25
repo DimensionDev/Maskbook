@@ -9,9 +9,9 @@ import { dirname, join } from 'path'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import webpack from 'webpack'
 import { createRequire } from 'module'
-import { getGitInfo } from './.webpack/git-info.js'
 import { emitJSONFile } from '@nice-labs/emit-file-webpack-plugin'
 import Terser from 'terser-webpack-plugin'
+import { getGitInfo } from './.webpack/git-info.js'
 
 const require = createRequire(import.meta.url)
 const __dirname = fileURLToPath(dirname(import.meta.url))
@@ -112,6 +112,7 @@ function Configuration(env, argv) {
                 'process.nextTick': require.resolve('next-tick'),
             }),
             new webpack.DefinePlugin({
+                'process.env.MASK_APP': 'true',
                 'process.env.WEB3_CONSTANTS_RPC': process.env.WEB3_CONSTANTS_RPC ?? '{}',
                 'process.env.MASK_SENTRY_DSN': process.env.MASK_SENTRY_DSN ?? '{}',
                 'process.env.NODE_DEBUG': 'undefined',
