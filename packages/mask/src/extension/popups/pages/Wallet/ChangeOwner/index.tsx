@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     list: {
         padding: 0,
-        height: 212,
+        maxHeight: 212,
         overflow: 'auto',
         '::-webkit-scrollbar': {
             display: 'none',
@@ -67,6 +67,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 10,
         fontWeight: 400,
         color: theme.palette.maskColor.secondaryMain,
+        WebkitTextSizeAdjust: '100%',
     },
     walletAddress: {
         transform: 'translateY(3px)',
@@ -373,7 +374,7 @@ export default function ChangeOwner() {
                     }}
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
                     PaperProps={{
-                        style: { minWidth: `${anchorEl?.clientWidth ?? 568}px`, height: 212 },
+                        style: { minWidth: `${anchorEl?.clientWidth ?? 568}px`, maxHeight: 212 },
                         className: classes.paper,
                     }}
                     disableRestoreFocus>

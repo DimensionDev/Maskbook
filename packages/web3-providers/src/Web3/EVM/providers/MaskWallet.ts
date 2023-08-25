@@ -28,6 +28,7 @@ import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
 import { SmartPayOwnerAPI } from '../../../SmartPay/apis/OwnerAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import { env } from '@masknet/flags'
+import { Web3StateRef } from '../apis/Web3StateAPI.js'
 
 export class MaskWalletProvider
     extends BaseContractWalletProvider
@@ -121,6 +122,11 @@ export class MaskWalletProvider
             if (!this.hostedAccount && primaryWallet) {
                 await this.switchAccount(primaryWallet.address)
                 await this.switchChain(primaryWallet.owner ? smartPayChainId : ChainId.Mainnet)
+                if (primaryWallet.owner) {
+                    const networks = Web3StateRef.value.Network?.networks?.getCurrentValue()
+                    const target = networks?.find((x) => x.chainId === smartPayChainId)
+                    if (target) Web3StateRef.value.Network?.switchNetwork(target.ID)
+                }
             }
         })
 
