@@ -26,6 +26,8 @@ import {
 import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { TrendingViewContext } from './context.js'
 import { usePriceStats } from '../../trending/usePriceStats.js'
 import { useTrendingById } from '../../trending/useTrending.js'
@@ -280,6 +282,7 @@ export function TrendingView(props: TrendingViewProps) {
         props.onUpdate?.()
     }, [loadingTrending])
     // #endregion
+
     const collectionId =
         trending?.coin.type === TokenType.NonFungible
             ? result.pluginID === NetworkPluginID.PLUGIN_SOLANA
@@ -341,7 +344,27 @@ export function TrendingView(props: TrendingViewProps) {
                     <MaskTabList
                         variant="base"
                         classes={{ root: classes.tabListRoot }}
-                        onChange={(_, v: ContentTabs) => setTab(v)}
+                        onChange={(_, v: ContentTabs) => {
+                            setTab(v)
+
+                            if (!isProfilePage) return
+
+                            if (isNFT) {
+                                if (v === ContentTabs.Price) {
+                                    Telemetry.captureEvent(EventType.Access, EventID.EntryProfileNFT_TrendSwitchTo)
+                                } else if (v === ContentTabs.NFTItems) {
+                                    Telemetry.captureEvent(EventType.Access, EventID.EntryProfileNFT_ItemsSwitchTo)
+                                } else if (v === ContentTabs.Exchange) {
+                                    Telemetry.captureEvent(EventType.Access, EventID.EntryProfileNFT_ActivitiesSwitchTo)
+                                }
+                            } else {
+                                if (v === ContentTabs.Price) {
+                                    Telemetry.captureEvent(EventType.Access, EventID.EntryProfileTokenSwitchTrend)
+                                } else if (v === ContentTabs.Exchange) {
+                                    Telemetry.captureEvent(EventType.Access, EventID.EntryProfileTokenSwitchMarket)
+                                }
+                            }
+                        }}
                         aria-label="Network Tabs">
                         {tabComponents}
                     </MaskTabList>

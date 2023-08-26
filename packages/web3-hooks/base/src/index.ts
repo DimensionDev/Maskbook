@@ -107,10 +107,8 @@ export * from './useWeb3State.js'
 export * from './useWeb3UI.js'
 export * from './useSnapshotSpacesByTwitterHandler.js'
 export * from './useIterator.js'
-export * from './useTelemetry.js'
 export * from './useMountReport.js'
 export * from './useUnmountReport.js'
 
 // contexts
 export * from './ScopedDomains/index.js'
-export * from './Telemetry/index.js'

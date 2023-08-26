@@ -25,6 +25,7 @@
     "@masknet/web3-providers": "workspace:^",
     "@masknet/plugin-wallet": "workspace:^",
     "@masknet/theme": "workspace:^",
+    "@masknet/web3-telemetry": "workspace:^",
     "react-use": "^17.4.0",
     "urlcat": "^3.1.0",
     "bignumber.js": "9.1.1",

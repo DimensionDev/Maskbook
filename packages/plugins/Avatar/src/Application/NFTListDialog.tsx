@@ -27,6 +27,8 @@ import {
 import { isGreaterThan, isSameAddress } from '@masknet/web3-shared-base'
 import { type ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { supportPluginIds } from '../constants.js'
 import { useAvatarManagement } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'
@@ -113,7 +115,7 @@ export function NFTListDialog() {
     const onSave = useCallback(async () => {
         if (!selectedToken?.metadata?.imageURL) return
         setDisabled(true)
-
+        Telemetry.captureEvent(EventType.Access, EventID.EntryAppNFT_PFP_Open)
         try {
             const image = await toPNG(selectedToken.metadata.imageURL)
             if (!image) {

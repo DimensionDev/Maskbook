@@ -26,6 +26,7 @@
     "@masknet/web3-providers": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
+    "@masknet/web3-telemetry": "workspace:^",
     "@react-hookz/web": "^23.1.0",
     "bignumber.js": "9.1.1",
     "date-fns": "^2.30.0",

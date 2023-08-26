@@ -13,7 +13,7 @@ import {
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { ErrorBoundary, queryClient } from '@masknet/shared-base-ui'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
-import { RootWeb3ContextProvider, TelemetryProvider } from '@masknet/web3-hooks-base'
+import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, i18NextInstance, queryRemoteI18NBundle } from '@masknet/shared-base'
 
 import '../utils/kv-storage.js'
@@ -46,27 +46,25 @@ export default function DashboardRoot() {
                 {process.env.NODE_ENV === 'development' ? (
                     <ReactQueryDevtools position="bottom-right" toggleButtonProps={{ style: { width: 24 } }} />
                 ) : null}
-                <TelemetryProvider>
-                    <I18NextProviderHMR i18n={i18NextInstance}>
-                        <StyledEngineProvider injectFirst>
-                            <ThemeProvider theme={theme}>
-                                <DialogStackingProvider>
-                                    <PersonaContext.Provider>
-                                        <ErrorBoundary>
-                                            <CssBaseline />
-                                            <CustomSnackbarProvider>
-                                                <SharedContextProvider>
-                                                    <Pages />
-                                                    <PluginRender />
-                                                </SharedContextProvider>
-                                            </CustomSnackbarProvider>
-                                        </ErrorBoundary>
-                                    </PersonaContext.Provider>
-                                </DialogStackingProvider>
-                            </ThemeProvider>
-                        </StyledEngineProvider>
-                    </I18NextProviderHMR>
-                </TelemetryProvider>
+                <I18NextProviderHMR i18n={i18NextInstance}>
+                    <StyledEngineProvider injectFirst>
+                        <ThemeProvider theme={theme}>
+                            <DialogStackingProvider>
+                                <PersonaContext.Provider>
+                                    <ErrorBoundary>
+                                        <CssBaseline />
+                                        <CustomSnackbarProvider>
+                                            <SharedContextProvider>
+                                                <Pages />
+                                                <PluginRender />
+                                            </SharedContextProvider>
+                                        </CustomSnackbarProvider>
+                                    </ErrorBoundary>
+                                </PersonaContext.Provider>
+                            </DialogStackingProvider>
+                        </ThemeProvider>
+                    </StyledEngineProvider>
+                </I18NextProviderHMR>
             </QueryClientProvider>
         </RootWeb3ContextProvider>
     )

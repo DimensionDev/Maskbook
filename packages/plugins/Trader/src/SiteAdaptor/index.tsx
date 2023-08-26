@@ -9,6 +9,8 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Others } from '@masknet/web3-providers'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { base } from '../base.js'
 import { TrendingViewProvider } from './trending/context.js'
 import { TraderDialog } from './trader/TraderDialog.js'
@@ -87,11 +89,10 @@ const site: Plugin.SiteAdaptor.Definition<ChainId> = {
                             title={name}
                             icon={icon}
                             iconFilterColor={iconFilterColor}
-                            onClick={
-                                EntryComponentProps.onClick
-                                    ? () => EntryComponentProps.onClick?.(openDialog)
-                                    : openDialog
-                            }
+                            onClick={() => {
+                                EntryComponentProps.onClick ? EntryComponentProps.onClick?.(openDialog) : openDialog()
+                                Telemetry.captureEvent(EventType.Access, EventID.EntryAppSwapOpen)
+                            }}
                         />
                     )
                 },

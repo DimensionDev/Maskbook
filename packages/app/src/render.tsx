@@ -4,8 +4,6 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { PageUIProvider } from '@masknet/shared'
 import { DisableShadowRootContext } from '@masknet/theme'
-import { useMountReport } from '@masknet/web3-hooks-base'
-import { EventID } from '@masknet/web3-telemetry/types'
 import { MainUI } from './MainUI.js'
 import { useTheme } from './hooks/useTheme.js'
 
@@ -21,7 +19,5 @@ createRoot(root).render(
 )
 
 function App() {
-    useMountReport(EventID.AccessPopups)
-
     return PageUIProvider(useTheme, <MainUI />)
 }

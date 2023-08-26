@@ -3,6 +3,10 @@ import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { PluginID } from '@masknet/shared-base'
 import { ApplicationEntry } from '@masknet/shared'
+import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
+import { Typography } from '@mui/material'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { base } from '../base.js'
 import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants.js'
 import {
@@ -11,13 +15,11 @@ import {
     renderWithRedPacketMetadata,
     renderWithRedPacketNftMetadata,
 } from './helpers.js'
-import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { RedPacketInjection } from './RedPacketInjection.js'
 import RedPacketDialog from './RedPacketDialog.js'
 import { RedPacketInPost } from './RedPacketInPost.js'
 import { RedPacketNftInPost } from './RedPacketNftInPost.js'
 import { openDialog } from './emitter.js'
-import { Typography } from '@mui/material'
 
 function Render(
     props: React.PropsWithChildren<{
@@ -111,11 +113,10 @@ const site: Plugin.SiteAdaptor.Definition = {
                             recommendFeature={recommendFeature}
                             {...EntryComponentProps}
                             icon={icon}
-                            onClick={
-                                EntryComponentProps.onClick
-                                    ? () => EntryComponentProps.onClick?.(openDialog)
-                                    : openDialog
-                            }
+                            onClick={() => {
+                                EntryComponentProps.onClick ? EntryComponentProps.onClick?.(openDialog) : openDialog()
+                                Telemetry.captureEvent(EventType.Access, EventID.EntryAppLuckOpen)
+                            }}
                         />
                     )
                 },

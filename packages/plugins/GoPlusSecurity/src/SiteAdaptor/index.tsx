@@ -4,6 +4,8 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { base } from '../base.js'
 import { GoPlusGlobalInjection } from './GoPlusGlobalInjection.js'
 
@@ -15,7 +17,6 @@ const site: Plugin.SiteAdaptor.Definition = {
         (() => {
             const icon = <Icons.SecurityChecker size={36} />
             const name = <Trans ns={PluginID.GoPlusSecurity} i18nKey="__plugin_name" />
-
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {
@@ -24,12 +25,13 @@ const site: Plugin.SiteAdaptor.Definition = {
                             title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
                             disabled={disabled}
                             icon={icon}
-                            onClick={() =>
+                            onClick={() => {
                                 CrossIsolationMessages.events.checkSecurityDialogEvent.sendToLocal({
                                     open: true,
                                     searchHidden: false,
                                 })
-                            }
+                                Telemetry.captureEvent(EventType.Access, EventID.EntryAppCheckOpen)
+                            }}
                         />
                     )
                 },

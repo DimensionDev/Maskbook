@@ -24,12 +24,10 @@ import {
     useReverseAddress,
     useChainIdMainnet,
     useRecentTransactions,
-    useMountReport,
 } from '@masknet/web3-hooks-base'
 import { WalletIcon, SelectProviderModal, WalletStatusModal } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { EventID } from '@masknet/web3-telemetry/types'
 import { useI18N } from '../../utils/index.js'
 import GuideStep from '../GuideStep/index.js'
 import { useOpenApplicationBoardDialog } from '../shared/openApplicationBoardDialog.js'
@@ -76,7 +74,6 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
 
     const openApplicationBoardDialog = useOpenApplicationBoardDialog()
 
-    useMountReport(EventID.AccessToolbox)
     return (
         <>
             <GuideStep step={1} total={4} tip={t('user_guide_tip_1')}>

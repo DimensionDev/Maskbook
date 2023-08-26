@@ -5,6 +5,8 @@ import { makeStyles } from '@masknet/theme'
 import { useCurrentPersonaConnectStatus, InjectedDialog, PersonaAction } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_OBJECT, MaskMessages, currentPersonaIdentifier } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import type { CompositionType } from '@masknet/plugin-infra/content-script'
 import Services from '../../extension/service.js'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
@@ -39,6 +41,7 @@ const useStyles = makeStyles()((theme) => ({
         boxShadow: 'none',
     },
 }))
+
 export interface PostDialogProps {
     type?: CompositionType
     requireClipboardPermission?: boolean
@@ -108,6 +111,8 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     }, [type])
     useEffect(() => {
         if (!open) return
+
+        Telemetry.captureEvent(EventType.Access, EventID.EntryMaskComposeOpen)
 
         return MaskMessages.events.replaceComposition.on((message) => {
             const ui = UI.current

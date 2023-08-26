@@ -14,6 +14,8 @@ import {
     SourceType,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import {
     ChainId as ChainIdEVM,
     isValidAddress as isValidAddressEVM,
@@ -468,19 +470,26 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         const [_, name = ''] = keyword.match(/(\w+)/) ?? []
 
         // BoredApeYC or CryptoPunks nft twitter project
-        if (type === SearchResultType.CollectionListByTwitterHandler)
+        if (type === SearchResultType.CollectionListByTwitterHandler) {
+            Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchNft)
             return this.searchCollectionListByTwitterHandler(keyword) as Promise<T[]>
+        }
 
         // token:MASK
         const { word, field } = this.parseKeyword(keyword)
-        if (word && ['token', 'twitter'].includes(field ?? '')) return this.searchTokenByName(word) as Promise<T[]>
-
+        if (word && ['token', 'twitter'].includes(field ?? '')) {
+            Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchToken)
+            return this.searchTokenByName(word) as Promise<T[]>
+        }
         // vitalik.lens, vitalik.bit, etc. including ENS BNB
         // Can't get .bit domain via RSS3 profile API.
         if (isValidHandle(keyword) && !keyword.endsWith('.bit')) {
+            if (keyword.endsWith('.eth')) Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchEns)
+            else Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchName)
             return this.searchRSS3Handle(keyword) as Promise<T[]>
         }
         if (keyword.endsWith('.bit')) {
+            Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchName)
             return this.searchRSS3NameService(keyword) as Promise<T[]>
         }
         // vitalik.eth
@@ -491,6 +500,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             const tokenList = await this.searchTokenByAddress(keyword)
             if (tokenList.length) return tokenList as T[]
 
+            Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchAddress)
             const addressList = await this.searchAddress(keyword)
             if (addressList.length) return addressList as T[]
         }

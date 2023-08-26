@@ -1,7 +1,9 @@
+import { useCallback } from 'react'
 import { encodeByNetwork } from '@masknet/encryption'
 import { PluginID, type ProfileIdentifier, SOCIAL_MEDIA_NAME, Sniffings } from '@masknet/shared-base'
 import type { Meta } from '@masknet/typed-message'
-import { useCallback } from 'react'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import Services from '../../extension/service.js'
 import { activatedSiteAdaptorUI, activatedSiteAdaptor_state } from '../../site-adaptor-infra/index.js'
 import { type I18NFunction, useI18N } from '../../utils/index.js'
@@ -56,6 +58,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 const decoratedText = decorateEncryptedText(encrypted, t, content.meta)
                 pasteTextEncode(decoratedText ?? t('additional_post_box__encrypted_post_pre', { encrypted }), reason)
             }
+            Telemetry.captureEvent(EventType.Interact, EventID.EntryMaskComposeEncrypt)
             onClose()
         },
         [t, lastRecognizedIdentity, onClose, reason],

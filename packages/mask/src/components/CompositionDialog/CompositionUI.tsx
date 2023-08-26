@@ -8,14 +8,16 @@ import {
     useRef,
     useState,
 } from 'react'
+import { LoadingButton } from '@mui/lab'
+import { Button, DialogActions, Typography, alpha } from '@mui/material'
 import type { EncryptTargetPublic } from '@masknet/encryption'
 import { Icons } from '@masknet/icons'
 import { CompositionContext, type CompositionType } from '@masknet/plugin-infra/content-script'
 import { EncryptionTargetType, type ProfileInformation } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
-import { LoadingButton } from '@mui/lab'
-import { Button, DialogActions, Typography, alpha } from '@mui/material'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { useI18N } from '../../utils/index.js'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients.js'
 import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMethodSelector.js'
@@ -242,7 +244,16 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                             selectedRecipientLength={recipients.length}
                             onClick={(target) => {
                                 setEncryptionKind(target)
-                                if (target === EncryptionTargetType.E2E) setSelectRecipientOpen(true)
+                                if (target === EncryptionTargetType.E2E) {
+                                    Telemetry.captureEvent(EventType.Interact, EventID.EntryMaskComposeVisibleSelected)
+                                    setSelectRecipientOpen(true)
+                                }
+                                if (target === EncryptionTargetType.Public) {
+                                    Telemetry.captureEvent(EventType.Interact, EventID.EntryMaskComposeVisibleAll)
+                                }
+                                if (target === EncryptionTargetType.Self) {
+                                    Telemetry.captureEvent(EventType.Interact, EventID.EntryMaskComposeVisiblePrivate)
+                                }
                             }}
                         />
 

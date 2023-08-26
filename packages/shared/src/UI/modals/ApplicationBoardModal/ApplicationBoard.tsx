@@ -21,8 +21,7 @@ import {
     type PersonaInformation,
 } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { EventID } from '@masknet/web3-telemetry/types'
-import { useChainContext, useNetworkContext, useMountReport } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { ApplicationRecommendArea } from './ApplicationRecommendArea.js'
 import { useUnlistedEntries, type Application } from './ApplicationSettingPluginList.js'
 
@@ -176,8 +175,6 @@ function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
         },
         { props },
     )
-
-    useMountReport(EventID.AccessApplicationBoard)
 
     return (
         <>

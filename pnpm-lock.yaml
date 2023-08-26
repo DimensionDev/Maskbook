@@ -1546,6 +1546,9 @@ importers:
       '@masknet/web3-shared-evm':
         specifier: workspace:^
         version: link:../../web3-shared/evm
+      '@masknet/web3-telemetry':
+        specifier: workspace:^
+        version: link:../../web3-telemetry
       bignumber.js:
         specifier: 9.1.1
         version: 9.1.1
@@ -1654,6 +1657,9 @@ importers:
       '@masknet/web3-shared-evm':
         specifier: workspace:^
         version: link:../../web3-shared/evm
+      '@masknet/web3-telemetry':
+        specifier: workspace:^
+        version: link:../../web3-telemetry
       '@types/react-avatar-editor':
         specifier: ^13.0.0
         version: 13.0.0(patch_hash=6wzwgbn4gsisp2tjbg76iifhqq)
@@ -2369,6 +2375,9 @@ importers:
       '@masknet/web3-shared-evm':
         specifier: workspace:^
         version: link:../../web3-shared/evm
+      '@masknet/web3-telemetry':
+        specifier: workspace:^
+        version: link:../../web3-telemetry
       react-feather:
         specifier: ^2.0.10
         version: 2.0.10(react@0.0.0-experimental-0a360642d-20230711)
@@ -2831,6 +2840,9 @@ importers:
       '@masknet/web3-shared-evm':
         specifier: workspace:^
         version: link:../../web3-shared/evm
+      '@masknet/web3-telemetry':
+        specifier: workspace:^
+        version: link:../../web3-telemetry
       '@react-hookz/web':
         specifier: ^23.1.0
         version: 23.1.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
@@ -3203,6 +3215,9 @@ importers:
       '@masknet/web3-shared-evm':
         specifier: workspace:^
         version: link:../../web3-shared/evm
+      '@masknet/web3-telemetry':
+        specifier: workspace:^
+        version: link:../../web3-telemetry
       '@types/use-subscription':
         specifier: ^1.0.0
         version: 1.0.0

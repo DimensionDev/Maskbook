@@ -7,9 +7,8 @@ import {
     PopupsHistory,
 } from '@masknet/shared-base'
 import { PopupSnackbarProvider } from '@masknet/theme'
-import { DefaultWeb3ContextProvider, TelemetryProvider, useMountReport } from '@masknet/web3-hooks-base'
+import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { EventID } from '@masknet/web3-telemetry/types'
 import { Box } from '@mui/material'
 import { Suspense, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useIdleTimer } from 'react-idle-timer'
@@ -142,7 +141,6 @@ export default function Popups() {
         [title, extension, customBackHandler],
     )
 
-    useMountReport(EventID.AccessPopups)
     useIdleTimer({ onAction: Services.Wallet.setAutoLockTimer, throttle: 10000 })
     useEffect(() => {
         if (location.hash.includes('/swap')) return
@@ -153,18 +151,16 @@ export default function Popups() {
         usePopupTheme,
         <PopupSnackbarProvider>
             <DefaultWeb3ContextProvider value={{ providerType: ProviderType.MaskWallet }}>
-                <TelemetryProvider>
-                    <PopupContext.Provider>
-                        <PageTitleContext.Provider value={titleContext}>
-                            <HistoryRouter history={PopupsHistory as unknown as HistoryRouterProps['history']}>
-                                <PopupRoutes />
-                                <Modals />
-                                {/* TODO: Should only load plugins when the page is plugin-aware. */}
-                                <PluginRenderDelayed />
-                            </HistoryRouter>
-                        </PageTitleContext.Provider>
-                    </PopupContext.Provider>
-                </TelemetryProvider>
+                <PopupContext.Provider>
+                    <PageTitleContext.Provider value={titleContext}>
+                        <HistoryRouter history={PopupsHistory as unknown as HistoryRouterProps['history']}>
+                            <PopupRoutes />
+                            <Modals />
+                            {/* TODO: Should only load plugins when the page is plugin-aware. */}
+                            <PluginRenderDelayed />
+                        </HistoryRouter>
+                    </PageTitleContext.Provider>
+                </PopupContext.Provider>
             </DefaultWeb3ContextProvider>
         </PopupSnackbarProvider>,
         null,
