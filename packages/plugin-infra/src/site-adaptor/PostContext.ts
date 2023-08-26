@@ -11,7 +11,7 @@ import {
     type ProfileIdentifier,
 } from '@masknet/shared-base'
 import { useObservableValues, useValueRef } from '@masknet/shared-base-ui'
-import type { TypedMessageTuple } from '@masknet/typed-message'
+import type { TypedMessage } from '@masknet/typed-message'
 import type { SupportedPayloadVersions } from '@masknet/encryption'
 
 export interface PostContextActions {
@@ -55,7 +55,7 @@ export interface PostContextCreation extends PostContextAuthor {
     /**
      * The raw TypedMessage that the site gives.
      */
-    readonly rawMessage: Subscription<TypedMessageTuple>
+    readonly rawMessage: Subscription<TypedMessage>
     readonly signal?: AbortSignal
 }
 export interface PostContext extends PostContextAuthor {
@@ -78,7 +78,7 @@ export interface PostContext extends PostContextAuthor {
     readonly postMetadataImages: Subscription<string[]>
     // #endregion
     // #region Raw post content (not decrypted)
-    readonly rawMessage: Subscription<TypedMessageTuple>
+    readonly rawMessage: Subscription<TypedMessage>
     readonly encryptComment: ValueRef<null | ((commentToEncrypt: string) => Promise<string>)>
     readonly decryptComment: ValueRef<null | ((commentEncrypted: string) => Promise<string | null>)>
     // #endregion

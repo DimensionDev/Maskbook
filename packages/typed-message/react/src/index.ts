@@ -4,7 +4,6 @@ export { useMetadataRender, type MetadataRenderProps } from './Renderer/Metadata
 
 // Render behavior
 export { TextResizeContext, type TextResizer } from './Renderer/utils/TextResizerContext.js'
-export { unstable_TUPLE_RENDER_STYLE } from './Renderer/Core/Tuple.js'
 export { DebugElementProvider } from './Renderer/utils/DebugElementProvider.js'
 
 // Render Registry

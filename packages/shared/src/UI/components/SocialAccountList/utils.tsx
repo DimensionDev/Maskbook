@@ -7,7 +7,7 @@ export const resolveNextIDPlatformIcon = createLookupTableResolver<NextIDPlatfor
         [NextIDPlatform.NextID]: null,
         [NextIDPlatform.GitHub]: Icons.GitHub,
         [NextIDPlatform.Keybase]: Icons.Keybase,
-        [NextIDPlatform.Twitter]: Icons.TwitterRound,
+        [NextIDPlatform.Twitter]: Icons.TwitterXRound,
         [NextIDPlatform.ENS]: Icons.ENS,
         [NextIDPlatform.RSS3]: null,
         [NextIDPlatform.LENS]: Icons.Lens,

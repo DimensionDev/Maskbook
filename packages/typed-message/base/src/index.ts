@@ -61,6 +61,7 @@ export {
     type TypedMessageMaskPayload,
     isTypedMessageMaskPayload,
     makeTypedMessageMaskPayload,
+    unstable_STYLE_META,
 } from './extension/index.js'
 export { decodeTypedMessageFromDocument, encodeTypedMessageToDocument } from './binary-encode/index.js'
 export {

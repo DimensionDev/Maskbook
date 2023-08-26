@@ -1,5 +1,5 @@
 import { memo, useContext, useEffect, useState } from 'react'
-import type { TypedMessageImage } from '@masknet/typed-message'
+import { unstable_STYLE_META, type TypedMessageImage } from '@masknet/typed-message'
 import { useMetadataRender } from '../MetadataRender.js'
 import { RenderFragmentsContext, DefaultRenderFragments } from '../utils/RenderFragments.js'
 
@@ -24,7 +24,7 @@ export const TypedMessageImageRender = memo(function TypedMessageImageRender(pro
 
     return (
         <>
-            <Image src={finalSrc} width={width} height={height} />
+            <Image style={Object(props.meta?.get(unstable_STYLE_META))} src={finalSrc} width={width} height={height} />
             {meta}
         </>
     )
