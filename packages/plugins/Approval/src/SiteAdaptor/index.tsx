@@ -4,11 +4,12 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { Web3ContextProvider, useNetworkContext } from '@masknet/web3-hooks-base'
+import { NetworkPluginID, PluginID } from '@masknet/shared-base'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { base } from '../base.js'
 import { ApprovalDialog } from './ApprovalDialog.js'
-import { Web3ContextProvider, useNetworkContext, useTelemetry } from '@masknet/web3-hooks-base'
-import { NetworkPluginID, PluginID } from '@masknet/shared-base'
-import { EventType, EventID } from '@masknet/web3-telemetry/types'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
@@ -24,7 +25,6 @@ const site: Plugin.SiteAdaptor.Definition = {
                     const [open, setOpen] = useState(false)
                     const { pluginID } = useNetworkContext()
                     const clickHandler = () => setOpen(true)
-                    const telemetry = useTelemetry()
                     return (
                         <>
                             <ApplicationEntry
@@ -36,7 +36,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                                     EntryComponentProps.onClick
                                         ? EntryComponentProps.onClick?.(clickHandler, NetworkPluginID.PLUGIN_EVM)
                                         : clickHandler()
-                                    telemetry.captureEvent(EventType.Access, EventID.EntryAppApprovalOpen)
+                                    Telemetry.captureEvent(EventType.Access, EventID.EntryAppApprovalOpen)
                                 }}
                             />
                             {open ? (

@@ -8,14 +8,16 @@ import {
     useRef,
     useState,
 } from 'react'
+import { LoadingButton } from '@mui/lab'
+import { Button, DialogActions, Typography, alpha } from '@mui/material'
 import type { EncryptTargetPublic } from '@masknet/encryption'
 import { Icons } from '@masknet/icons'
 import { CompositionContext, type CompositionType } from '@masknet/plugin-infra/content-script'
 import { EncryptionTargetType, type ProfileInformation } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
-import { LoadingButton } from '@mui/lab'
-import { Button, DialogActions, Typography, alpha } from '@mui/material'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { useI18N } from '../../utils/index.js'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients.js'
 import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMethodSelector.js'
@@ -28,8 +30,6 @@ import {
     type PluginEntryRenderRef,
 } from '@masknet/shared'
 import type { EncryptTargetE2EFromProfileIdentifier } from '../../../background/services/crypto/encryption.js'
-import { useTelemetry } from '@masknet/web3-hooks-base'
-import { EventType, EventID } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -133,7 +133,6 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         const [isSelectRecipientOpen, setSelectRecipientOpen] = useState(false)
         const Editor = useRef<TypedMessageEditorRef | null>(null)
         const PluginEntry = useRef<PluginEntryRenderRef>(null)
-        const telemetry = useTelemetry()
 
         const [sending, setSending] = useState(false)
 
@@ -246,14 +245,14 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                             onClick={(target) => {
                                 setEncryptionKind(target)
                                 if (target === EncryptionTargetType.E2E) {
-                                    telemetry.captureEvent(EventType.Interact, EventID.EntryMaskComposeVisibleSelected)
+                                    Telemetry.captureEvent(EventType.Interact, EventID.EntryMaskComposeVisibleSelected)
                                     setSelectRecipientOpen(true)
                                 }
                                 if (target === EncryptionTargetType.Public) {
-                                    telemetry.captureEvent(EventType.Interact, EventID.EntryMaskComposeVisibleAll)
+                                    Telemetry.captureEvent(EventType.Interact, EventID.EntryMaskComposeVisibleAll)
                                 }
                                 if (target === EncryptionTargetType.Self) {
-                                    telemetry.captureEvent(EventType.Interact, EventID.EntryMaskComposeVisiblePrivate)
+                                    Telemetry.captureEvent(EventType.Interact, EventID.EntryMaskComposeVisiblePrivate)
                                 }
                             }}
                         />

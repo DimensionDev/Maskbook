@@ -1,15 +1,15 @@
+import { useCallback } from 'react'
 import { encodeByNetwork } from '@masknet/encryption'
 import { PluginID, type ProfileIdentifier, SOCIAL_MEDIA_NAME, Sniffings } from '@masknet/shared-base'
 import type { Meta } from '@masknet/typed-message'
-import { useCallback } from 'react'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import Services from '../../extension/service.js'
 import { activatedSiteAdaptorUI, activatedSiteAdaptor_state } from '../../site-adaptor-infra/index.js'
 import { type I18NFunction, useI18N } from '../../utils/index.js'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import type { SubmitComposition } from './CompositionUI.js'
 import { SteganographyPayload } from './SteganographyPayload.js'
-import { useTelemetry } from '@masknet/web3-hooks-base'
-import { EventID, EventType } from '@masknet/web3-telemetry/types'
 
 export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'reply') {
     const { t: originalTran } = useI18N()
@@ -22,7 +22,6 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
     )
 
     const lastRecognizedIdentity = useLastRecognizedIdentity()
-    const telemetry = useTelemetry()
 
     return useCallback(
         async (info: SubmitComposition) => {
@@ -59,7 +58,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 const decoratedText = decorateEncryptedText(encrypted, t, content.meta)
                 pasteTextEncode(decoratedText ?? t('additional_post_box__encrypted_post_pre', { encrypted }), reason)
             }
-            telemetry.captureEvent(EventType.Interact, EventID.EntryMaskComposeEncrypt)
+            Telemetry.captureEvent(EventType.Interact, EventID.EntryMaskComposeEncrypt)
             onClose()
         },
         [t, lastRecognizedIdentity, onClose, reason],

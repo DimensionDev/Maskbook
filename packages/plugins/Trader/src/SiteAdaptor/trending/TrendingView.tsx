@@ -8,7 +8,6 @@ import {
     useChainContext,
     useNativeToken,
     useNonFungibleAssetsByCollection,
-    useTelemetry,
     Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
@@ -27,6 +26,8 @@ import {
 import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { TrendingViewContext } from './context.js'
 import { usePriceStats } from '../../trending/usePriceStats.js'
 import { useTrendingById } from '../../trending/useTrending.js'
@@ -41,7 +42,6 @@ import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
 import { ContentTabs } from '../../types/index.js'
 import { FailedTrendingView } from './FailedTrendingView.js'
 import { useI18N } from '../../locales/index.js'
-import { EventType, EventID } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -149,7 +149,6 @@ export function TrendingView(props: TrendingViewProps) {
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
     const isWeb3ProfileMinimalMode = useIsMinimalMode(PluginID.Web3Profile)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const telemetry = useTelemetry()
 
     const { data: nativeToken } = useNativeToken<'all'>(NetworkPluginID.PLUGIN_EVM, {
         chainId: result.chainId ?? chainId,
@@ -347,27 +346,22 @@ export function TrendingView(props: TrendingViewProps) {
                         classes={{ root: classes.tabListRoot }}
                         onChange={(_, v: ContentTabs) => {
                             setTab(v)
-                            if (isProfilePage) {
-                                if (isNFT) {
-                                    if (v === ContentTabs.Price) {
-                                        telemetry.captureEvent(EventType.Access, EventID.EntryProfileNFT_TrendSwitchTo)
-                                    }
-                                    if (v === ContentTabs.NFTItems) {
-                                        telemetry.captureEvent(EventType.Access, EventID.EntryProfileNFT_ItemsSwitchTo)
-                                    }
-                                    if (v === ContentTabs.Exchange) {
-                                        telemetry.captureEvent(
-                                            EventType.Access,
-                                            EventID.EntryProfileNFT_ActivitiesSwitchTo,
-                                        )
-                                    }
-                                } else {
-                                    if (v === ContentTabs.Price) {
-                                        telemetry.captureEvent(EventType.Access, EventID.EntryProfileTokenSwitchTrend)
-                                    }
-                                    if (v === ContentTabs.Exchange) {
-                                        telemetry.captureEvent(EventType.Access, EventID.EntryProfileTokenSwitchMarket)
-                                    }
+
+                            if (!isProfilePage) return
+
+                            if (isNFT) {
+                                if (v === ContentTabs.Price) {
+                                    Telemetry.captureEvent(EventType.Access, EventID.EntryProfileNFT_TrendSwitchTo)
+                                } else if (v === ContentTabs.NFTItems) {
+                                    Telemetry.captureEvent(EventType.Access, EventID.EntryProfileNFT_ItemsSwitchTo)
+                                } else if (v === ContentTabs.Exchange) {
+                                    Telemetry.captureEvent(EventType.Access, EventID.EntryProfileNFT_ActivitiesSwitchTo)
+                                }
+                            } else {
+                                if (v === ContentTabs.Price) {
+                                    Telemetry.captureEvent(EventType.Access, EventID.EntryProfileTokenSwitchTrend)
+                                } else if (v === ContentTabs.Exchange) {
+                                    Telemetry.captureEvent(EventType.Access, EventID.EntryProfileTokenSwitchMarket)
                                 }
                             }
                         }}

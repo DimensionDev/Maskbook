@@ -1,21 +1,27 @@
 import { env } from '@masknet/flags'
-import { BaseAPI } from './Base.js'
 import { MixpanelAPI } from './Mixpanel.js'
 import { SentryAPI } from './Sentry.js'
-import type { EventOptions, ExceptionOptions } from '../entry-types.js'
+import type { EventID, EventType, ExceptionID, ExceptionType } from '../entry-types.js'
 
 /**
  * A proxy class for all telemetry providers.
  */
-export class TelemetryAPI extends BaseAPI<unknown, unknown> {
+export class TelemetryAPI {
     private Sentry = new SentryAPI(env)
     private Mixpanel = new MixpanelAPI(env)
 
-    override captureEvent(options: EventOptions) {
-        this.Mixpanel.captureEvent(options)
+    captureEvent(eventType: EventType, eventID: EventID) {
+        this.Mixpanel.captureEvent({
+            eventType,
+            eventID,
+        })
     }
 
-    override captureException(options: ExceptionOptions): void {
-        this.Sentry.captureException(options)
+    captureException(exceptionType: ExceptionType, exceptionID: ExceptionID, error: Error): void {
+        this.Sentry.captureException({
+            exceptionType,
+            exceptionID,
+            error,
+        })
     }
 }

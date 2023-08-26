@@ -1,7 +1,7 @@
 import { Trans } from 'react-i18next'
 import type { Plugin } from '@masknet/plugin-infra'
 import { TrendingView } from './trending/TrendingView.js'
-import { DefaultWeb3ContextProvider, Web3ContextProvider, useTelemetry } from '@masknet/web3-hooks-base'
+import { DefaultWeb3ContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
@@ -9,12 +9,13 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Others } from '@masknet/web3-providers'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { base } from '../base.js'
 import { TrendingViewProvider } from './trending/context.js'
 import { TraderDialog } from './trader/TraderDialog.js'
 import { TagInspector } from './trending/TagInspector.js'
 import { enhanceTag } from './cashTag.js'
-import { EventType, EventID } from '@masknet/web3-telemetry/types'
 
 function openDialog() {
     return CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
@@ -82,7 +83,6 @@ const site: Plugin.SiteAdaptor.Definition<ChainId> = {
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
-                    const telemetry = useTelemetry()
                     return (
                         <ApplicationEntry
                             {...EntryComponentProps}
@@ -91,7 +91,7 @@ const site: Plugin.SiteAdaptor.Definition<ChainId> = {
                             iconFilterColor={iconFilterColor}
                             onClick={() => {
                                 EntryComponentProps.onClick ? EntryComponentProps.onClick?.(openDialog) : openDialog()
-                                telemetry.captureEvent(EventType.Access, EventID.EntryAppSwapOpen)
+                                Telemetry.captureEvent(EventType.Access, EventID.EntryAppSwapOpen)
                             }}
                         />
                     )

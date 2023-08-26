@@ -4,10 +4,10 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { base } from '../base.js'
 import { GoPlusGlobalInjection } from './GoPlusGlobalInjection.js'
-import { EventType, EventID } from '@masknet/web3-telemetry/types'
-import { useTelemetry } from '@masknet/web3-hooks-base'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
@@ -17,7 +17,6 @@ const site: Plugin.SiteAdaptor.Definition = {
         (() => {
             const icon = <Icons.SecurityChecker size={36} />
             const name = <Trans ns={PluginID.GoPlusSecurity} i18nKey="__plugin_name" />
-            const telemetry = useTelemetry()
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {
@@ -31,7 +30,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                                     open: true,
                                     searchHidden: false,
                                 })
-                                telemetry.captureEvent(EventType.Access, EventID.EntryAppCheckOpen)
+                                Telemetry.captureEvent(EventType.Access, EventID.EntryAppCheckOpen)
                             }}
                         />
                     )

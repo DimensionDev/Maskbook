@@ -4,10 +4,11 @@ import { Icons } from '@masknet/icons'
 import { type Plugin, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { useChainContext, useNetworkContext, useTelemetry, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { EventType, EventID } from '@masknet/web3-telemetry/types'
+import { Telemetry } from '@masknet/web3-telemetry'
 import { NFTAvatarDialog } from '../Application/NFTAvatarDialog.js'
 import { base } from '../base.js'
-import { EventType, EventID } from '@masknet/web3-telemetry/types'
 
 function clickHandler() {
     CrossIsolationMessages.events.avatarSettingDialogEvent.sendToLocal({
@@ -46,7 +47,6 @@ const site: Plugin.SiteAdaptor.Definition = {
             }
             return {
                 RenderEntryComponent(EntryComponentProps) {
-                    const telemetry = useTelemetry()
                     return (
                         <ApplicationEntry
                             title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
@@ -57,7 +57,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                                 EntryComponentProps.onClick
                                     ? EntryComponentProps.onClick?.(clickHandler)
                                     : clickHandler()
-                                telemetry.captureEvent(EventType.Access, EventID.EntryAppNftpfpOpen)
+                                Telemetry.captureEvent(EventType.Access, EventID.EntryAppNftpfpOpen)
                             }}
                             tooltipHint={
                                 EntryComponentProps.tooltipHint ??

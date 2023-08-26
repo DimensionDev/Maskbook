@@ -7,8 +7,9 @@ import { CollectionList, UserAssetsProvider } from '@masknet/shared'
 import { CrossIsolationMessages, NetworkPluginID, PluginID, SocialAddressType, parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
-import { Web3ContextProvider, useTelemetry } from '@masknet/web3-hooks-base'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import { base } from '../base.js'
 import { PLUGIN_ID, PLUGIN_NAME } from '../constants.js'
@@ -17,13 +18,12 @@ import { DialogInspector } from './DialogInspector.js'
 import { PostInspector } from './PostInspector.js'
 
 function useInspectCollectible(pluginID?: NetworkPluginID) {
-    const telemetry = useTelemetry()
     return useCallback(
         function inspectCollectible(asset: Web3Helper.NonFungibleAssetAll, from?: 'web3Profile' | 'profileCard') {
             if (!pluginID) return
-            if (from === 'web3Profile') telemetry.captureEvent(EventType.Interact, EventID.EntryProfileUserNftsClickNft)
-            if (from === 'profileCard')
-                telemetry.captureEvent(EventType.Interact, EventID.EntryTimelineHoverUserNftClickNft)
+            if (from === 'web3Profile') Telemetry.captureEvent(EventType.Interact, EventID.EntryProfileUserNftsClickNft)
+            else if (from === 'profileCard')
+                Telemetry.captureEvent(EventType.Interact, EventID.EntryTimelineHoverUserNftClickNft)
             CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
                 open: true,
                 chainId: asset.chainId,

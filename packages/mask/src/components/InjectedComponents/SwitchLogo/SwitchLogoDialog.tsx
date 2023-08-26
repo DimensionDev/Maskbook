@@ -3,6 +3,8 @@ import { InjectedDialog, useOpenApplicationSettings } from '@masknet/shared'
 import { Button, Checkbox, DialogContent, FormControlLabel, IconButton, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import {
     CrossIsolationMessages,
     SwitchLogoDialogStatus,
@@ -14,8 +16,6 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../utils/index.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
-import { useTelemetry } from '@masknet/web3-hooks-base'
-import { EventType, EventID } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -71,7 +71,6 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
     const [logoType, setLogoType] = useState<SwitchLogoType>(SwitchLogoType.Classics)
     const [needShare, setNeedShare] = useState(true)
     const [open, setOpen] = useState(false)
-    const telemetry = useTelemetry()
 
     useEffect(() => {
         return CrossIsolationMessages.events.switchLogoDialogUpdated.on(async (data) => {
@@ -83,7 +82,7 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
     const onSave = useCallback(async () => {
         if (!identity?.identifier?.userId || !switchLogoSettings) return
         switchLogoSettings[identity.identifier.userId].value = logoType ?? defaultLogoType
-        telemetry.captureEvent(EventType.Access, EventID.EntrySwitchLogoSave)
+        Telemetry.captureEvent(EventType.Access, EventID.EntrySwitchLogoSave)
         setOpen(false)
         if (needShare && logoType === SwitchLogoType.Classics) {
             activatedSiteAdaptorUI!.utils.share?.(

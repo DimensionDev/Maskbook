@@ -1,5 +1,16 @@
 import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { first, last } from 'lodash-es'
+import {
+    Avatar,
+    Button,
+    CardContent,
+    IconButton,
+    Paper,
+    Stack,
+    ThemeProvider,
+    Typography,
+    useTheme,
+} from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useActivatedPluginsSiteAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { PluginTransakMessages, useTransakAllowanceCoin } from '@masknet/plugin-transak'
@@ -24,28 +35,18 @@ import {
 import { useAnchor, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { MaskColors, MaskLightTheme, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useTelemetry } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { SourceType, TokenType, formatCurrency } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import {
-    Avatar,
-    Button,
-    CardContent,
-    IconButton,
-    Paper,
-    Stack,
-    ThemeProvider,
-    Typography,
-    useTheme,
-} from '@mui/material'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { ContentTabs, type Currency, type Stat } from '../../types/index.js'
 import { TrendingCard, type TrendingCardProps } from './TrendingCard.js'
 import { TrendingViewDescriptor } from './TrendingViewDescriptor.js'
 import { CoinIcon } from './components/index.js'
 import { TrendingViewContext } from './context.js'
 import { useI18N } from '../../locales/index.js'
-import { EventID, EventType } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -184,7 +185,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         useContext(TrendingViewContext)
     const { anchorEl, anchorBounding } = useAnchor()
     const [timer, setTimer] = useState<NodeJS.Timeout>()
-    const telemetry = useTelemetry()
 
     const t = useI18N()
     const theme = useTheme()
@@ -252,25 +252,26 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     useEffect(() => {
         if (timer) clearTimeout(timer)
+
         if (isCollectionProjectPopper) {
-            setTimer(
-                setTimeout(() => {
-                    telemetry.captureEvent(EventType.Access, EventID.EntryTimelineHoverNftDuration)
-                }, 1000),
-            )
+            const timer = setTimeout(() => {
+                Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineHoverNftDuration)
+            }, 1000)
+
+            setTimer(timer)
         }
         if (isTokenTagPopper) {
-            setTimer(
-                setTimeout(() => {
-                    telemetry.captureEvent(EventType.Access, EventID.EntryTimelineHoverTokenDuration)
-                }, 1000),
-            )
+            const timer = setTimeout(() => {
+                Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineHoverTokenDuration)
+            }, 1000)
+
+            setTimer(timer)
         }
         return () => {
             if (timer) clearTimeout(timer)
             setTimer(undefined)
         }
-    }, [isCollectionProjectPopper, isTokenTagPopper, isProfilePage, telemetry])
+    }, [isCollectionProjectPopper, isTokenTagPopper, isProfilePage])
 
     const floorPrice =
         trending.dataProvider === SourceType.CoinMarketCap

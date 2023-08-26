@@ -7,7 +7,7 @@ import {
     PopupsHistory,
 } from '@masknet/shared-base'
 import { PopupSnackbarProvider } from '@masknet/theme'
-import { DefaultWeb3ContextProvider, TelemetryProvider } from '@masknet/web3-hooks-base'
+import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
 import { Suspense, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
@@ -151,18 +151,16 @@ export default function Popups() {
         usePopupTheme,
         <PopupSnackbarProvider>
             <DefaultWeb3ContextProvider value={{ providerType: ProviderType.MaskWallet }}>
-                <TelemetryProvider>
-                    <PopupContext.Provider>
-                        <PageTitleContext.Provider value={titleContext}>
-                            <HistoryRouter history={PopupsHistory as unknown as HistoryRouterProps['history']}>
-                                <PopupRoutes />
-                                <Modals />
-                                {/* TODO: Should only load plugins when the page is plugin-aware. */}
-                                <PluginRenderDelayed />
-                            </HistoryRouter>
-                        </PageTitleContext.Provider>
-                    </PopupContext.Provider>
-                </TelemetryProvider>
+                <PopupContext.Provider>
+                    <PageTitleContext.Provider value={titleContext}>
+                        <HistoryRouter history={PopupsHistory as unknown as HistoryRouterProps['history']}>
+                            <PopupRoutes />
+                            <Modals />
+                            {/* TODO: Should only load plugins when the page is plugin-aware. */}
+                            <PluginRenderDelayed />
+                        </HistoryRouter>
+                    </PageTitleContext.Provider>
+                </PopupContext.Provider>
             </DefaultWeb3ContextProvider>
         </PopupSnackbarProvider>,
         null,
