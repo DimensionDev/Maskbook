@@ -3,8 +3,8 @@ import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { parseId } from '../utils/url.js'
 import {
-    isTypedMessageAnchor,
-    isTypedMessageText,
+    FlattenTypedMessage,
+    extractTextFromTypedMessage,
     makeTypedMessageEmpty,
     makeTypedMessageImage,
     makeTypedMessagePromise,
@@ -175,18 +175,11 @@ export function collectVerificationPost(keyword: string) {
         if (!tweetNode) continue
         const postId = getPostId(tweetNode)
         const postContent = postContentMessageParser(postNode)
-        const content = postContent
-            .map((x) => {
-                if (isTypedMessageText(x)) return x.content ?? ''
-                if (isTypedMessageAnchor(x) && x.category === 'user') return x.content ?? ''
-                if (isTypedMessageAnchor(x) && x.category === 'normal')
-                    return (x.content ?? '').replaceAll(/http(.*)\/\//g, '')
-                return ''
-            })
-            .join('')
+        const content = extractTextFromTypedMessage(postContent)
         const isVerified =
             postId &&
-            content.toLowerCase().replaceAll(/\r\n|\n|\r/gm, '') ===
+            content.some &&
+            content.val.toLowerCase().replaceAll(/\r\n|\n|\r/gm, '') ===
                 keyword.toLowerCase().replaceAll(/\r\n|\n|\r/gm, '')
 
         if (isVerified && userId) {
@@ -224,7 +217,9 @@ function collectPostInfo(
         })
         .catch(() => makeTypedMessageEmpty())
 
-    info.postMessage.value = makeTypedMessageTuple([...messages, makeTypedMessagePromise(images)])
+    info.postMessage.value = FlattenTypedMessage.NoContext(
+        makeTypedMessageTuple([messages, makeTypedMessagePromise(images)]),
+    )
 }
 
 function collectLinks(

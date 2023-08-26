@@ -9,8 +9,8 @@ import {
     ParseLinkTransformer,
     type TypedMessage,
     visitEachTypedMessageChild,
+    unstable_STYLE_META,
 } from '@masknet/typed-message'
-import { unstable_TUPLE_RENDER_STYLE } from '@masknet/typed-message-react'
 
 export enum Order {
     Flatten = 1000,
@@ -85,7 +85,7 @@ TypedMessageTransformers.addTransformer(function visitor(message, context) {
                             makeTypedMessageAnchor('normal', 'https://mask.io', 'Mask.io'),
                             makeTypedMessageText(') '),
                         ],
-                        new Map([[unstable_TUPLE_RENDER_STYLE, { opacity: 0.5 }]]),
+                        new Map([[unstable_STYLE_META, { opacity: 0.5 }]]),
                     ),
                 )
             } else {
