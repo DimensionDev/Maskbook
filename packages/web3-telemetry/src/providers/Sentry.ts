@@ -163,12 +163,12 @@ export class SentryAPI extends BaseAPI<never, Event> implements Provider {
         return this.createCommonEvent(GroupID.Exception, options.exceptionType, options.exceptionID, options)
     }
 
-    override async captureEvent(options: EventOptions): Promise<void> {
+    override captureEvent(options: EventOptions) {
         // we don't trace event by sentry after mixpanel introduced
         return
     }
 
-    override async captureException(options: ExceptionOptions): Promise<void> {
+    override captureException(options: ExceptionOptions) {
         if (this.status === 'off') return
         if (!Flags.sentry_enabled) return
         if (!Flags.sentry_exception_enabled) return
@@ -176,7 +176,7 @@ export class SentryAPI extends BaseAPI<never, Event> implements Provider {
         if (process.env.NODE_ENV === 'development') {
             console.log(`[LOG EXCEPTION]: ${JSON.stringify(this.createException(options))}`)
         } else {
-            await Sentry.captureException(options.error, this.createException(options))
+            Sentry.captureException(options.error, this.createException(options))
         }
     }
 }

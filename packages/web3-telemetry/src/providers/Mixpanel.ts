@@ -35,7 +35,7 @@ export class MixpanelAPI extends BaseAPI<Event, never> implements Provider {
         ) as Event
     }
 
-    override async captureEvent(options: EventOptions): Promise<void> {
+    override captureEvent(options: EventOptions) {
         if (this.status === 'off') return
         if (!Flags.sentry_enabled) return
         if (!Flags.sentry_event_enabled) return
@@ -45,11 +45,11 @@ export class MixpanelAPI extends BaseAPI<Event, never> implements Provider {
             console.log(`[LOG EVENT]: ${JSON.stringify(options, null, 2)}`)
         } else {
             const event = this.createEvent(options)
-            await this.eventAPI.trackEvent(event)
+            this.eventAPI.trackEvent(event)
         }
     }
 
-    override async captureException(options: ExceptionOptions): Promise<void> {
+    override captureException(options: ExceptionOptions) {
         // mixpanel is for events only
         return
     }

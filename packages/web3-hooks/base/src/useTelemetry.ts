@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Sentry, Mixpanel } from '@masknet/web3-telemetry'
+import { Telemetry } from '@masknet/web3-telemetry'
 import type { EventID, EventType, ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
 import { useTelemetryContext } from './Telemetry/index.js'
 
@@ -9,14 +9,14 @@ export function useTelemetry() {
     return useMemo(() => {
         return {
             captureEvent(eventType: EventType, eventID: EventID) {
-                Mixpanel.captureEvent({
+                Telemetry.captureEvent({
                     ...options,
                     eventType,
                     eventID,
                 })
             },
             captureException(exceptionType: ExceptionType, exceptionID: ExceptionID, error: Error) {
-                Sentry.captureException({
+                Telemetry.captureException({
                     ...options,
                     exceptionType,
                     exceptionID,
