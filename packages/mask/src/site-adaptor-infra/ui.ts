@@ -41,10 +41,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
     configureSelectorMissReporter((name) => {
         const error = new Error(`Selector "${name}" does not match anything ${location.href}.`)
         error.stack = ''
-        Telemetry.captureException({
-            error,
-            exceptionID: ExceptionID.Debug,
-            exceptionType: ExceptionType.Error,
+        Telemetry.captureException(ExceptionType.Error, ExceptionID.Debug, error, {
             sampleRate: 0.01,
         })
     })
