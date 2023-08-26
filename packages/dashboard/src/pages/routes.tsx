@@ -1,8 +1,6 @@
 import React, { lazy, Suspense } from 'react'
 import { Route, Routes, Navigate, HashRouter } from 'react-router-dom'
 import { useCustomSnackbar } from '@masknet/theme'
-import { useMountReport } from '@masknet/web3-hooks-base'
-import { EventID } from '@masknet/web3-telemetry/types'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { useDashboardI18N } from '../locales/index.js'
 import { TermsGuard } from './TermsGuard.js'
@@ -19,8 +17,6 @@ const CreateWallet = lazy(() => import('./CreateMaskWallet/index.js'))
 export function Pages() {
     const t = useDashboardI18N()
     const { showSnackbar } = useCustomSnackbar()
-
-    useMountReport(EventID.AccessDashboard)
 
     return (
         <Suspense fallback={null}>

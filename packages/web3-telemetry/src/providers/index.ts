@@ -1,6 +1,3 @@
-import { env } from '@masknet/flags'
-import { SentryAPI } from './Sentry.js'
-import { MixpanelAPI } from './Mixpanel.js'
+import { TelemetryAPI } from './Telemetry.js'
 
-export const Sentry = new SentryAPI(env)
-export const Mixpanel = new MixpanelAPI(env)
+export const Telemetry = new TelemetryAPI()

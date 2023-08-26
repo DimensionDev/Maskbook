@@ -35,7 +35,7 @@ export class MixpanelAPI extends BaseAPI<Event, never> implements Provider {
         ) as Event
     }
 
-    override captureEvent(options: EventOptions): void {
+    override captureEvent(options: EventOptions) {
         if (this.status === 'off') return
         if (!Flags.sentry_enabled) return
         if (!Flags.sentry_event_enabled) return
@@ -49,7 +49,7 @@ export class MixpanelAPI extends BaseAPI<Event, never> implements Provider {
         }
     }
 
-    override captureException(options: ExceptionOptions): void {
+    override captureException(options: ExceptionOptions) {
         // mixpanel is for events only
         return
     }

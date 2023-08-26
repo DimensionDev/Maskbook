@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 import { createPortal } from 'react-dom'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { TelemetryProvider, RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { DialogStackingProvider } from '@masknet/theme'
 import { compose, i18NextInstance } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
@@ -27,9 +27,7 @@ function MaskUIRoot({ children }: React.PropsWithChildren<{}>) {
                       )
                     : null}
                 <RootWeb3ContextProvider>
-                    <TelemetryProvider>
-                        <I18NextProviderHMR i18n={i18NextInstance}>{children}</I18NextProviderHMR>
-                    </TelemetryProvider>
+                    <I18NextProviderHMR i18n={i18NextInstance}>{children}</I18NextProviderHMR>
                 </RootWeb3ContextProvider>
             </QueryClientProvider>
         </DialogStackingProvider>
