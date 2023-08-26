@@ -20,7 +20,9 @@ export const ConnectSocialAccountModal = memo<ActionModalBaseProps>(function Con
         async (networkIdentifier: EnhanceableSite) => {
             if (!currentPersona) return
             await Services.SiteAdaptor.connectSite(currentPersona.identifier, networkIdentifier, 'local', undefined)
-            Telemetry.captureEvent(EventType.Access, EventMap[networkIdentifier])
+
+            const eventID = EventMap[networkIdentifier]
+            if (eventID) Telemetry.captureEvent(EventType.Access, eventID)
         },
         [currentPersona],
     )
