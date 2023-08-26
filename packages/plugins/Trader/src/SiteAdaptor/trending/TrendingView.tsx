@@ -350,15 +350,15 @@ export function TrendingView(props: TrendingViewProps) {
                             if (isProfilePage) {
                                 if (isNFT) {
                                     if (v === ContentTabs.Price) {
-                                        telemetry.captureEvent(EventType.Access, EventID.EntryProfileNftTrendSwitchTo)
+                                        telemetry.captureEvent(EventType.Access, EventID.EntryProfileNFT_TrendSwitchTo)
                                     }
                                     if (v === ContentTabs.NFTItems) {
-                                        telemetry.captureEvent(EventType.Access, EventID.EntryProfileNftItemsSwitchTo)
+                                        telemetry.captureEvent(EventType.Access, EventID.EntryProfileNFT_ItemsSwitchTo)
                                     }
                                     if (v === ContentTabs.Exchange) {
                                         telemetry.captureEvent(
                                             EventType.Access,
-                                            EventID.EntryProfileNftActivitiesSwitchTo,
+                                            EventID.EntryProfileNFT_ActivitiesSwitchTo,
                                         )
                                     }
                                 } else {
