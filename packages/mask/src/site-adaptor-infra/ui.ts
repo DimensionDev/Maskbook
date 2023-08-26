@@ -18,7 +18,7 @@ import {
     SetupGuideStep,
 } from '@masknet/shared-base'
 import { Flags } from '@masknet/flags'
-import { Sentry } from '@masknet/web3-telemetry'
+import { Telemetry } from '@masknet/web3-telemetry'
 import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
 import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host.js'
 import Services from '../extension/service.js'
@@ -41,7 +41,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
     configureSelectorMissReporter((name) => {
         const error = new Error(`Selector "${name}" does not match anything ${location.href}.`)
         error.stack = ''
-        Sentry.captureException({
+        Telemetry.captureException({
             error,
             exceptionID: ExceptionID.Debug,
             exceptionType: ExceptionType.Error,

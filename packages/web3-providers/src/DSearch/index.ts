@@ -471,26 +471,25 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
         // BoredApeYC or CryptoPunks nft twitter project
         if (type === SearchResultType.CollectionListByTwitterHandler) {
-            Telemetry.captureEvent({ eventType: EventType.Access, eventID: EventID.EntryTimelineDsearchNft })
+            Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchNft)
             return this.searchCollectionListByTwitterHandler(keyword) as Promise<T[]>
         }
 
         // token:MASK
         const { word, field } = this.parseKeyword(keyword)
         if (word && ['token', 'twitter'].includes(field ?? '')) {
-            Telemetry.captureEvent({ eventType: EventType.Access, eventID: EventID.EntryTimelineDsearchToken })
+            Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchToken)
             return this.searchTokenByName(word) as Promise<T[]>
         }
         // vitalik.lens, vitalik.bit, etc. including ENS BNB
         // Can't get .bit domain via RSS3 profile API.
         if (isValidHandle(keyword) && !keyword.endsWith('.bit')) {
-            if (keyword.endsWith('.eth'))
-                Telemetry.captureEvent({ eventType: EventType.Access, eventID: EventID.EntryTimelineDsearchEns })
-            else Telemetry.captureEvent({ eventType: EventType.Access, eventID: EventID.EntryTimelineDsearchName })
+            if (keyword.endsWith('.eth')) Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchEns)
+            else Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchName)
             return this.searchRSS3Handle(keyword) as Promise<T[]>
         }
         if (keyword.endsWith('.bit')) {
-            Telemetry.captureEvent({ eventType: EventType.Access, eventID: EventID.EntryTimelineDsearchName })
+            Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchName)
             return this.searchRSS3NameService(keyword) as Promise<T[]>
         }
         // vitalik.eth
@@ -501,7 +500,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             const tokenList = await this.searchTokenByAddress(keyword)
             if (tokenList.length) return tokenList as T[]
 
-            Telemetry.captureEvent({ eventType: EventType.Access, eventID: EventID.EntryTimelineDsearchAddress })
+            Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchAddress)
             const addressList = await this.searchAddress(keyword)
             if (addressList.length) return addressList as T[]
         }

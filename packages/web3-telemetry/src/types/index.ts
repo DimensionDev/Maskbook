@@ -23,8 +23,8 @@ export enum EventID {
     // todo
     EntryAppLuckSend = 'entry_app_luck_send',
 
-    EntryAppNftpfpOpen = 'entry_app_nftpfp_open',
-    EntryAppNftpfpSetting = 'entry_app_nftpfp_setting',
+    EntryAppNFT_PFP_Open = 'entry_app_nft_pfp_open',
+    EntryAppNFT_PFP_Setting = 'entry_app_nft_pfp_setting',
     EntryAppSwapOpen = 'entry_app_swap_open',
     EntryAppApprovalOpen = 'entry_app_approval_open',
     EntryAppCheckOpen = 'entry_app_check_open',
