@@ -16,7 +16,6 @@ import {
     useNetworkContext,
     useWallet,
     useWeb3Others,
-    useTelemetry,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useActivatedPlugin, useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
@@ -50,7 +49,6 @@ export interface TraderRef {
 
 export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, ref) => {
     const theme = useTheme()
-    const telemetry = useTelemetry()
     const wallet = useWallet()
     const { defaultOutputCoin, chainId: targetChainId, defaultInputCoin, settings = false } = props
     const t = useI18N()
@@ -272,7 +270,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
             amount: '',
         })
-    }, [tradeCallback, shareText, telemetry, focusedTrade, share])
+    }, [tradeCallback, shareText, focusedTrade, share])
 
     const onConfirmDialogClose = useCallback(() => {
         setOpenConfirmDialog(false)

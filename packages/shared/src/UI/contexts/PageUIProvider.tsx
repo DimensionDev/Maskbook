@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { StyledEngineProvider, type Theme } from '@mui/material'
-import { TelemetryProvider, RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { CSSVariableInjector, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { compose, i18NextInstance } from '@masknet/shared-base'
@@ -31,14 +31,12 @@ function MaskUIRoot({ children, useTheme, fallback }: MaskUIRootProps) {
             <MaskThemeProvider useMaskIconPalette={(theme) => theme.palette.mode} useTheme={useTheme}>
                 <QueryClientProvider client={queryClient}>
                     <RootWeb3ContextProvider>
-                        <TelemetryProvider>
-                            <SharedContextProvider>
-                                <Suspense fallback={fallback}>
-                                    <CSSVariableInjector />
-                                    {children}
-                                </Suspense>
-                            </SharedContextProvider>
-                        </TelemetryProvider>
+                        <SharedContextProvider>
+                            <Suspense fallback={fallback}>
+                                <CSSVariableInjector />
+                                {children}
+                            </Suspense>
+                        </SharedContextProvider>
                     </RootWeb3ContextProvider>
                 </QueryClientProvider>
             </MaskThemeProvider>

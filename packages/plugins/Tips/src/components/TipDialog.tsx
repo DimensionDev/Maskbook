@@ -12,10 +12,12 @@ import {
     useNonFungibleAsset,
     useWallet,
     useMountReport,
-    useTelemetry,
 } from '@masknet/web3-hooks-base'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { TokenType } from '@masknet/web3-shared-base'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
+import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
 import { TargetRuntimeContext } from '../contexts/TargetRuntimeContext.js'
 import { useTip } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'
@@ -23,8 +25,6 @@ import { NFTSection } from './NFTSection/index.js'
 import { NetworkSection } from './NetworkSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
 import { TokenSection } from './TokenSection/index.js'
-import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
-import { EventID, EventType } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -87,7 +87,6 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const { pluginID } = useNetworkContext()
     const wallet = useWallet()
     const { chainId } = useChainContext()
-    const telemetry = useTelemetry()
 
     const isTokenTip = tipType === TokenType.Fungible
     const shareText = useMemo(() => {
@@ -137,7 +136,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
             title: t.tips(),
             share,
         })
-        telemetry.captureEvent(EventType.Access, EventID.EntryTimelineTipsSend)
+        Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineTipsSend)
         onClose?.()
     }, [
         sendTip,

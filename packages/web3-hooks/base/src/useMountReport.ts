@@ -1,15 +1,13 @@
 import { useMount } from 'react-use'
 import { type Unresolved, resolve } from '@masknet/shared-base'
 import { type EventID, EventType } from '@masknet/web3-telemetry/types'
-import { useTelemetry } from './useTelemetry.js'
+import { Telemetry } from '@masknet/web3-telemetry'
 
 /**
  * Log an access event
  */
 export function useMountReport(eventID: Unresolved<EventID>) {
-    const telemetry = useTelemetry()
-
     useMount(() => {
-        telemetry.captureEvent(EventType.Access, resolve(eventID))
+        Telemetry.captureEvent(EventType.Access, resolve(eventID))
     })
 }

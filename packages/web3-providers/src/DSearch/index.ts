@@ -14,6 +14,8 @@ import {
     SourceType,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import {
     ChainId as ChainIdEVM,
     isValidAddress as isValidAddressEVM,
@@ -44,8 +46,6 @@ import { getHandlers } from './rules.js'
 import { DSEARCH_BASE_URL } from './constants.js'
 import { fetchFromDSearch } from './helpers.js'
 import type { DSearchBaseAPI } from '../entry-types.js'
-import { Mixpanel } from '@masknet/web3-telemetry'
-import { EventType, EventID } from '@masknet/web3-telemetry/types'
 
 const isValidAddress = (address?: string): boolean => {
     return isValidAddressEVM(address) || isValidAddressFlow(address) || isValidAddressSolana(address)
@@ -471,26 +471,26 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
         // BoredApeYC or CryptoPunks nft twitter project
         if (type === SearchResultType.CollectionListByTwitterHandler) {
-            Mixpanel.captureEvent({ eventType: EventType.Access, eventID: EventID.EntryTimelineDsearchNft })
+            Telemetry.captureEvent({ eventType: EventType.Access, eventID: EventID.EntryTimelineDsearchNft })
             return this.searchCollectionListByTwitterHandler(keyword) as Promise<T[]>
         }
 
         // token:MASK
         const { word, field } = this.parseKeyword(keyword)
         if (word && ['token', 'twitter'].includes(field ?? '')) {
-            Mixpanel.captureEvent({ eventType: EventType.Access, eventID: EventID.EntryTimelineDsearchToken })
+            Telemetry.captureEvent({ eventType: EventType.Access, eventID: EventID.EntryTimelineDsearchToken })
             return this.searchTokenByName(word) as Promise<T[]>
         }
         // vitalik.lens, vitalik.bit, etc. including ENS BNB
         // Can't get .bit domain via RSS3 profile API.
         if (isValidHandle(keyword) && !keyword.endsWith('.bit')) {
             if (keyword.endsWith('.eth'))
-                Mixpanel.captureEvent({ eventType: EventType.Access, eventID: EventID.EntryTimelineDsearchEns })
-            else Mixpanel.captureEvent({ eventType: EventType.Access, eventID: EventID.EntryTimelineDsearchName })
+                Telemetry.captureEvent({ eventType: EventType.Access, eventID: EventID.EntryTimelineDsearchEns })
+            else Telemetry.captureEvent({ eventType: EventType.Access, eventID: EventID.EntryTimelineDsearchName })
             return this.searchRSS3Handle(keyword) as Promise<T[]>
         }
         if (keyword.endsWith('.bit')) {
-            Mixpanel.captureEvent({ eventType: EventType.Access, eventID: EventID.EntryTimelineDsearchName })
+            Telemetry.captureEvent({ eventType: EventType.Access, eventID: EventID.EntryTimelineDsearchName })
             return this.searchRSS3NameService(keyword) as Promise<T[]>
         }
         // vitalik.eth
@@ -501,7 +501,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             const tokenList = await this.searchTokenByAddress(keyword)
             if (tokenList.length) return tokenList as T[]
 
-            Mixpanel.captureEvent({ eventType: EventType.Access, eventID: EventID.EntryTimelineDsearchAddress })
+            Telemetry.captureEvent({ eventType: EventType.Access, eventID: EventID.EntryTimelineDsearchAddress })
             const addressList = await this.searchAddress(keyword)
             if (addressList.length) return addressList as T[]
         }

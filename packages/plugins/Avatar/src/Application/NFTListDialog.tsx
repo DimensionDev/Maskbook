@@ -20,7 +20,6 @@ import {
     useAccount,
     useChainContext,
     useNetworkContext,
-    useTelemetry,
     useWallets,
     useWeb3Connection,
     useWeb3Hub,
@@ -28,13 +27,14 @@ import {
 import { isGreaterThan, isSameAddress } from '@masknet/web3-shared-base'
 import { type ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { supportPluginIds } from '../constants.js'
 import { useAvatarManagement } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'
 import { type AllChainsNonFungibleToken, PFP_TYPE } from '../types.js'
 import { toPNG } from '../utils/index.js'
 import { RoutePaths } from './Routes.js'
-import { EventID, EventType } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -100,7 +100,6 @@ export function NFTListDialog() {
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
     const { openPopupWindow } = useSiteAdaptorContext()
     const targetWallet = wallets.find((x) => isSameAddress(targetAccount, x.address))
-    const telemetry = useTelemetry()
 
     useEffect(() => setSelectedToken(undefined), [chainId])
 
@@ -116,7 +115,7 @@ export function NFTListDialog() {
     const onSave = useCallback(async () => {
         if (!selectedToken?.metadata?.imageURL) return
         setDisabled(true)
-        telemetry.captureEvent(EventType.Access, EventID.EntryAppNftpfpOpen)
+        Telemetry.captureEvent(EventType.Access, EventID.EntryAppNftpfpOpen)
         try {
             const image = await toPNG(selectedToken.metadata.imageURL)
             if (!image) {
