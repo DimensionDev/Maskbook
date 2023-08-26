@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useMemo } from 'react'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, useTheme } from '@mui/material'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
@@ -80,7 +80,7 @@ export const Onboarding = memo(function Onboarding() {
 
     const [params] = useSearchParams()
     const { showSnackbar } = useCustomSnackbar()
-
+    const theme = useTheme()
     const isCreate = params.get('isCreate')
 
     const { value: hasPaymentPassword, loading, retry } = useAsyncRetry(WalletServiceRef.value.hasPassword, [])
@@ -170,7 +170,13 @@ export const Onboarding = memo(function Onboarding() {
                 <PrimaryButton
                     onClick={onSetupTwitter}
                     size="large"
-                    startIcon={<Icons.TwitterStroke className={classes.twitter} size={20} />}>
+                    startIcon={
+                        <Icons.TwitterX
+                            variant={theme.palette.mode === 'dark' ? 'light' : 'dark'}
+                            className={classes.twitter}
+                            size={20}
+                        />
+                    }>
                     {t.persona_onboarding_to_twitter()}
                 </PrimaryButton>
                 {!isCreate ? (

@@ -95,14 +95,15 @@ export function solana_url() { return new URL("./brands/Solana.svg", import.meta
 export function sushi_swap_url() { return new URL("./brands/SushiSwap.png", import.meta.url) }
 export function sybil_url() { return new URL("./brands/Sybil.png", import.meta.url) }
 export function telegram_round_url() { return new URL("./brands/TelegramRound.svg", import.meta.url) }
-export function twitter_3_dark_url() { return new URL("./brands/twitter3.dark.svg", import.meta.url) }
-export function twitter_3_light_url() { return new URL("./brands/twitter3.light.svg", import.meta.url) }
 export function twitter_colored_url() { return new URL("./brands/TwitterColored.svg", import.meta.url) }
 export function twitter_other_colored_url() { return new URL("./brands/TwitterOtherColored.svg", import.meta.url) }
 export function twitter_round_url() { return new URL("./brands/TwitterRound.svg", import.meta.url) }
 export function twitter_round_black_white_url() { return new URL("./brands/TwitterRoundBlackWhite.svg", import.meta.url) }
 export function twitter_round_gray_url() { return new URL("./brands/TwitterRoundGray.svg", import.meta.url) }
 export function twitter_round_with_no_border_url() { return new URL("./brands/TwitterRoundWithNoBorder.svg", import.meta.url) }
+export function twitter_x_dark_url() { return new URL("./brands/TwitterX.dark.svg", import.meta.url) }
+export function twitter_x_light_url() { return new URL("./brands/TwitterX.light.svg", import.meta.url) }
+export function twitter_x_round_url() { return new URL("./brands/TwitterXRound.svg", import.meta.url) }
 export function uniswap_url() { return new URL("./brands/Uniswap.svg", import.meta.url) }
 export function weth_url() { return new URL("./brands/WETH.svg", import.meta.url) }
 export function x_2_y_2_url() { return new URL("./brands/X2Y2.svg", import.meta.url) }
