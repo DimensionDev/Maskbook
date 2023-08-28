@@ -54,7 +54,7 @@ enum OptionName {
     NEVER = 'Never',
 }
 
-const DEFAULT_MIN_AUTO_LOCKER_TIME = 1000 * 60 * 15 // 15 mins
+const DEFAULT_MIN_AUTO_LOCKER_TIME = 1000 * 60 * 60 * 24 // One day
 
 const ONE_DAY_IN_MILLISECONDS = hoursToMilliseconds(24)
 
@@ -114,7 +114,7 @@ function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
                     sx={{ mt: 2 }}
                     error={error}
                     fullWidth
-                    placeholder={'15'}
+                    placeholder={'1440'}
                     value={time || initialTime}
                     onChange={(e) => {
                         if (!e.target.value) setTime('')
