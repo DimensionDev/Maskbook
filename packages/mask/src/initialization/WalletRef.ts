@@ -19,6 +19,7 @@ WalletServiceRef.value = {
     resetPassword: Services.Wallet.resetPassword,
     resolveMaskAccount: Services.Wallet.resolveMaskAccount,
     setDefaultPassword: Services.Wallet.setDefaultPassword,
+    isLocked: Services.Wallet.isLocked,
     setPassword: Services.Wallet.setPassword,
     verifyPassword: Services.Wallet.verifyPassword,
     exportPrivateKey: Services.Wallet.exportPrivateKey,

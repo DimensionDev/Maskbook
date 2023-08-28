@@ -59,18 +59,23 @@ const Unlock = memo(() => {
 
     const [{ value: verified, loading }, handleUnlock] = useAsyncFn(async () => {
         const from = params.get('from')
-
+        const toBeClose = params.get('toBeClose')
         const verified = await Services.Wallet.unlockWallet(password)
 
-        if (verified)
-            navigate(
-                from
-                    ? urlcat(from, {
-                          tab: from === PopupRoutes.Personas ? PopupHomeTabType.ConnectedWallets : undefined,
-                      })
-                    : PopupRoutes.Wallet,
-                { replace: true },
-            )
+        if (verified) {
+            if (toBeClose) {
+                await Services.Helper.removePopupWindow()
+            } else {
+                navigate(
+                    from
+                        ? urlcat(from, {
+                              tab: from === PopupRoutes.Personas ? PopupHomeTabType.ConnectedWallets : undefined,
+                          })
+                        : PopupRoutes.Wallet,
+                    { replace: true },
+                )
+            }
+        }
         return verified
     }, [password, params])
 
