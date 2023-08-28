@@ -19,7 +19,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     content: {
         background: theme.palette.maskColor.bottom,
-        minWidth: 'clamp(720px, 66.6667%, 66.6667%)',
+        minWidth: 'clamp(720px, 66.6667%, 720px)',
+        boxSizing: 'content-box',
         paddingTop: '12.5vh',
         paddingBottom: '12.5vh',
         paddingRight: theme.spacing(8),
