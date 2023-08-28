@@ -28,7 +28,7 @@ export interface WalletBackupProvider {
     hasPasswordWithDefaultOne(): Promise<boolean>
     resetPassword(newPassword: string): Promise<void>
     setDefaultPassword(): Promise<void>
-
+    isLocked(): Promise<boolean>
     createMnemonicWords(): Promise<string[]>
     exportMnemonicWords(address: string): Promise<string>
     exportPrivateKey(address: string): Promise<string>
