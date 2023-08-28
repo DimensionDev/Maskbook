@@ -58,6 +58,9 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         color: theme.palette.maskColor.second,
         fontWeight: 400,
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
     },
     value: {
         fontSize: 16,
@@ -139,9 +142,11 @@ const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: Asset
                 className={classes.text}
                 secondaryTypographyProps={{ component: 'div' }}
                 secondary={
-                    <ProgressiveText className={classes.balance} loading={balance.pending} skeletonWidth={60}>
-                        {balance.value} {asset.symbol}
-                    </ProgressiveText>
+                    <TextOverflowTooltip title={`${balance.value} ${asset.symbol}`}>
+                        <ProgressiveText className={classes.balance} loading={balance.pending} skeletonWidth={60}>
+                            {balance.value} {asset.symbol}
+                        </ProgressiveText>
+                    </TextOverflowTooltip>
                 }>
                 <TextOverflowTooltip title={asset.name}>
                     <Typography className={classes.name}>{asset.name}</Typography>
