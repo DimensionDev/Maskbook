@@ -11,10 +11,7 @@ export const flags = {
     support_testnet_switch: betaOrInsiderOnly,
 
     shadowRootInit: {
-        mode:
-            '__REACT_DEVTOOLS_GLOBAL_HOOK__' in globalThis || betaOrInsiderOnly || testOnly || process.env.MASK_APP
-                ? 'open'
-                : 'closed',
+        mode: '__REACT_DEVTOOLS_GLOBAL_HOOK__' in globalThis || betaOrInsiderOnly || testOnly ? 'open' : 'closed',
         delegatesFocus: true,
     } as const satisfies ShadowRootInit,
 
