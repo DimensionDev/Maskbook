@@ -868,6 +868,8 @@
     "popups_wallet_settings_change_network": "crwdns22059:0crwdne22059:0",
     "popups_wallet_settings_auto_unlock_time": "crwdns22061:0crwdne22061:0",
     "popups_wallet_settings_auto_unlock_time_mins": "crwdns22063:0{{time}}crwdne22063:0",
+    "popups_wallet_settings_auto-unlock_time_hour_one": "crwdns22209:0{{count}}crwdne22209:0",
+    "popups_wallet_settings_auto-unlock_time_hour_other": "crwdns22211:0{{count}}crwdne22211:0",
     "popups_wallet_settings_auto_unlock_time_title": "crwdns22065:0crwdne22065:0",
     "popups_wallet_settings_change_payment_password": "crwdns22067:0crwdne22067:0",
     "popups_wallet_settings_show_private_key": "crwdns22069:0crwdne22069:0",
