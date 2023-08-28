@@ -1,7 +1,13 @@
 import { FormattedCurrency } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useChainIdSupport, useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
+import {
+    useChainIdSupport,
+    useFungibleToken,
+    useFungibleTokenPrice,
+    useGasOptions,
+    useNativeTokenAddress,
+} from '@masknet/web3-hooks-base'
 import {
     GasOptionType,
     ZERO,
@@ -27,6 +33,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { BottomDrawer } from '../../components/index.js'
 import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
+import { useGasRatio } from '../../hook/useGasRatio.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -77,10 +84,22 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     const { t } = useI18N()
     const theme = useTheme()
     const { classes } = useStyles()
+    const gasRatio = useGasRatio(config.paymentToken)
     const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
     const { data: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const { data: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+
+    const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const { data: token } = useFungibleToken(
+        NetworkPluginID.PLUGIN_EVM,
+        config.paymentToken ? config.paymentToken : nativeTokenAddress,
+        undefined,
+        { chainId },
+    )
+
+    const { data: tokenPrice } = useFungibleTokenPrice(
+        NetworkPluginID.PLUGIN_EVM,
+        config.paymentToken ? config.paymentToken : nativeTokenAddress,
+    )
 
     const [gasPrice = config.gasPrice || '', setGasPrice] = useState<string>()
     const [maxPriorityFeePerGas = config.maxPriorityFeePerGas || '', setMaxPriorityFeePerGas] = useState<string>()
@@ -99,10 +118,11 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
 
     const totalGas = useMemo(() => {
         if (!config.gas) return '0'
-        return formatGweiToWei((isSupport1559 ? maxFeePerGas : gasPrice) || ZERO)
-            .times(config.gas || ZERO)
-            .toFixed()
-    }, [gasPrice, config.gas, maxFeePerGas, isSupport1559])
+        const result = formatGweiToWei((isSupport1559 ? maxFeePerGas : gasPrice) || ZERO).times(config.gas || ZERO)
+
+        if (!gasRatio) return toFixed(result)
+        return toFixed(result.multipliedBy(gasRatio))
+    }, [gasPrice, config.gas, maxFeePerGas, isSupport1559, gasRatio])
 
     const gasPriceError = useMemo(() => {
         if (isSupport1559) return
@@ -227,9 +247,9 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
         <BottomDrawer open={open} title={title} onClose={onClose}>
             <Box display="flex" flexDirection="column" rowGap={1.5} mt={1.5}>
                 <Typography className={classes.preview}>
-                    {formatBalance(totalGas, nativeToken?.decimals, 4, false, true, 6)} {nativeToken?.symbol} ≈{' '}
+                    {formatBalance(totalGas, token?.decimals, 4, false, true, 6)} {token?.symbol} ≈{' '}
                     <FormattedCurrency
-                        value={formatWeiToEther(totalGas).times(nativeTokenPrice ?? 0)}
+                        value={formatWeiToEther(totalGas).times(tokenPrice ?? 0)}
                         formatter={formatCurrency}
                         options={{
                             onlyRemainTwoOrZeroDecimal: false,
