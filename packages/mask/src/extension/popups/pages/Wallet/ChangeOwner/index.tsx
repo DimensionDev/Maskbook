@@ -64,14 +64,15 @@ const useStyles = makeStyles()((theme) => ({
     },
     primaryItemSecondText: {
         display: 'flex',
-        fontSize: 10,
+        fontSize: 12,
         fontWeight: 400,
         color: theme.palette.maskColor.secondaryMain,
         WebkitTextSizeAdjust: '100%',
     },
     walletAddress: {
-        transform: 'translateY(3px)',
         marginRight: 4,
+        transform: 'scale(0.8333)',
+        transformOrigin: 'left',
     },
     walletInfo: {
         marginLeft: 12,
@@ -271,7 +272,9 @@ export default function ChangeOwner() {
                         <div className={classes.walletInfo}>
                             <Typography className={classes.primaryItemText}>{wallet?.name}</Typography>
                             <Typography className={classes.primaryItemSecondText}>
-                                <span className={classes.walletAddress}>{wallet?.address}</span>
+                                <span className={classes.walletAddress} style={{ width: 264 }}>
+                                    {wallet?.address}
+                                </span>
                                 {wallet?.address ? (
                                     <>
                                         <CopyButton size={16} className={classes.linkIcon} text={wallet.address} />
@@ -309,7 +312,9 @@ export default function ChangeOwner() {
                                 {walletManager?.name ?? personaManager?.nickname}
                             </Typography>
                             <Typography className={classes.primaryItemSecondText}>
-                                <span className={classes.walletAddress}>{managerAddress}</span>
+                                <span className={classes.walletAddress} style={{ width: 264 }}>
+                                    {managerAddress}
+                                </span>
                                 {managerAddress ? (
                                     <>
                                         <CopyButton size={16} className={classes.linkIcon} text={managerAddress} />
