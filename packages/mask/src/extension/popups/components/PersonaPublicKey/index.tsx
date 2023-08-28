@@ -4,7 +4,6 @@ import { formatPersonaFingerprint } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Link, Typography } from '@mui/material'
 import { memo } from 'react'
-import urlcat from 'urlcat'
 
 const useStyles = makeStyles<{ iconSize: number }>()((theme, { iconSize }) => ({
     text: {
@@ -47,7 +46,7 @@ export const PersonaPublicKey = memo<PersonaPublicKeyProps>(function PersonaPubl
                 underline="none"
                 target="_blank"
                 rel="noopener noreferrer"
-                href={urlcat('https://web3.bio/', { s: publicHexString })}
+                href={`https://web3.bio/${publicHexString}`}
                 className={classes.icon}>
                 <Icons.LinkOut size={iconSize} />
             </Link>

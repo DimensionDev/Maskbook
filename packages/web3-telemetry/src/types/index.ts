@@ -19,10 +19,7 @@ export enum ExceptionType {
 export enum EventID {
     EntryAppLuckOpen = 'entry_app_luck_open',
     EntryAppLuckCreate = 'entry_app_luck_create',
-
-    // todo
     EntryAppLuckSend = 'entry_app_luck_send',
-
     EntryAppNFT_PFP_Open = 'entry_app_nft_pfp_open',
     EntryAppNFT_PFP_Setting = 'entry_app_nft_pfp_setting',
     EntryAppSwapOpen = 'entry_app_swap_open',
