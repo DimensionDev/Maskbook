@@ -22,7 +22,7 @@ const useStyle = makeStyles()((theme) => ({
         backdropFilter: 'blur(8px)',
         background: theme.palette.maskColor.secondaryBottom,
         boxShadow: theme.palette.maskColor.bottomBg,
-        borderRadius: '8px',
+        borderRadius: '12px 12px 0 0',
     },
     action: {
         color: theme.palette.maskColor.third,
