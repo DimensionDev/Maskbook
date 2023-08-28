@@ -868,6 +868,8 @@
     "popups_wallet_settings_change_network": "Change Network",
     "popups_wallet_settings_auto_unlock_time": "Auto-lock Time",
     "popups_wallet_settings_auto_unlock_time_mins": "{{time}} Mins",
+    "popups_wallet_settings_auto-unlock_time_hour_one": "{{count}} Hour",
+    "popups_wallet_settings_auto-unlock_time_hour_other": "{{count}} Hours",
     "popups_wallet_settings_auto_unlock_time_title": "Auto-lock",
     "popups_wallet_settings_change_payment_password": "Change Payment Password",
     "popups_wallet_settings_show_private_key": "Show Private Key",

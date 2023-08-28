@@ -41,6 +41,7 @@ import {
     VerifyBackupPasswordModal,
 } from './modals/index.js'
 import SwitchWallet from './pages/Wallet/SwitchWallet/index.js'
+import { noop } from 'lodash-es'
 
 const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet/index.js'))
 const Personas = lazy(() => import(/* webpackPreload: true */ './pages/Personas/index.js'))
@@ -141,7 +142,10 @@ export default function Popups() {
         [title, extension, customBackHandler],
     )
 
-    useIdleTimer({ onAction: Services.Wallet.setAutoLockTimer, throttle: 10000 })
+    useIdleTimer({
+        onAction: !location.hash.includes('/swap') ? Services.Wallet.setAutoLockTimer : noop,
+        throttle: 10000,
+    })
     useEffect(() => {
         if (location.hash.includes('/swap')) return
         return CrossIsolationMessages.events.popupRouteUpdated.on((url) => PopupsHistory.replace(url))

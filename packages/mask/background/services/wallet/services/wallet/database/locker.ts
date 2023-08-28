@@ -1,7 +1,7 @@
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { walletDatabase } from '../../../database/Plugin.db.js'
 
-const DEFAULT_LOCK_DURATION = 1000 * 60 * 15 // 15 mins
+const DEFAULT_LOCK_DURATION = 1000 * 60 * 60 * 24 // One day
 
 const ID = 'locker'
 
