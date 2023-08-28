@@ -1,23 +1,24 @@
-import { useCallback, useMemo } from 'react'
-import { useAsync, useUpdateEffect } from 'react-use'
-import { TabContext, TabPanel } from '@mui/lab'
-import { DialogContent, Tab } from '@mui/material'
+import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
 import { ChainBoundary, InjectedDialog, PluginWalletStatusBar, TransactionConfirmModal } from '@masknet/shared'
 import { NetworkPluginID, getSiteType, pluginIDsSettings } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { ActionButton, MaskTabList, makeStyles } from '@masknet/theme'
 import {
     useChainContext,
+    useMountReport,
     useNetworkContext,
     useNonFungibleAsset,
+    useReverseAddress,
     useWallet,
-    useMountReport,
 } from '@masknet/web3-hooks-base'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { TokenType } from '@masknet/web3-shared-base'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
-import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
+import { TabContext, TabPanel } from '@mui/lab'
+import { DialogContent, Tab } from '@mui/material'
+import { useCallback, useMemo } from 'react'
+import { useAsync, useUpdateEffect } from 'react-use'
 import { TargetRuntimeContext } from '../contexts/TargetRuntimeContext.js'
 import { useTip } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'
@@ -85,25 +86,30 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         validation: [isValid, validateMessage],
     } = useTip()
     const { pluginID } = useNetworkContext()
+    const { data: recipientEns } = useReverseAddress(pluginID, recipientAddress)
     const wallet = useWallet()
     const { chainId } = useChainContext()
 
     const isTokenTip = tipType === TokenType.Fungible
     const shareText = useMemo(() => {
+        const recipientName = recipient?.label || recipientEns
+        const context = recipientName ? 'name' : 'address'
         const message = isTokenTip
             ? t.tip_token_share_post({
                   amount,
                   symbol: token?.symbol || 'token',
                   recipientSnsId: recipientUserId,
-                  recipient: recipientAddress,
+                  recipient: recipientName || recipientAddress,
+                  context,
               })
             : t.tip_nft_share_post({
                   name: nonFungibleTokenContract?.name || 'NFT',
                   recipientSnsId: recipientUserId,
-                  recipient: recipientAddress,
+                  recipient: recipientName || recipientAddress,
+                  context,
               })
         return message
-    }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientUserId, t])
+    }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientUserId, t, recipientEns])
 
     const currentTab = isTokenTip ? TokenType.Fungible : TokenType.NonFungible
     const onTabChange = useCallback((_: unknown, value: TokenType) => {
