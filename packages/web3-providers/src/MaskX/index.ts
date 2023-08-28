@@ -52,7 +52,7 @@ export class MaskX_API implements MaskX_BaseAPI.Provider {
         initial: MaskX_BaseAPI.Options = { size: 20, page: 1 },
     ): Promise<MaskX_BaseAPI.Response> {
         const response = await this.fetchFromMaskX(
-            urlcat('/v1/identity', {
+            urlcat('/prod/identity', {
                 identity: handle,
                 platform,
                 ...this.getOptions(initial),
@@ -66,7 +66,7 @@ export class MaskX_API implements MaskX_BaseAPI.Provider {
         initial: MaskX_BaseAPI.Options = { size: 20, page: 1 },
     ): Promise<MaskX_BaseAPI.Response> {
         const response = await this.fetchFromMaskX(
-            urlcat('/v1/identity/search', {
+            urlcat('/prod/identity/search', {
                 identity: handle,
                 platform,
                 ...this.getOptions(initial),
@@ -75,7 +75,7 @@ export class MaskX_API implements MaskX_BaseAPI.Provider {
         return this.getResponse(response)
     }
     async getAllIdentities(initial: MaskX_BaseAPI.Options = { size: 20, page: 1 }): Promise<MaskX_BaseAPI.Response> {
-        const response = await this.fetchFromMaskX(urlcat('/v1/identity/all', this.getOptions(initial)))
+        const response = await this.fetchFromMaskX(urlcat('/prod/identity/all', this.getOptions(initial)))
         return this.getResponse(response)
     }
 }

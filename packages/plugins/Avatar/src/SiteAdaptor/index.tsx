@@ -5,6 +5,8 @@ import { type Plugin, PluginI18NFieldRender } from '@masknet/plugin-infra/conten
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { EventType, EventID } from '@masknet/web3-telemetry/types'
+import { Telemetry } from '@masknet/web3-telemetry'
 import { NFTAvatarDialog } from '../Application/NFTAvatarDialog.js'
 import { base } from '../base.js'
 
@@ -51,11 +53,12 @@ const site: Plugin.SiteAdaptor.Definition = {
                             icon={icon}
                             recommendFeature={recommendFeature}
                             {...EntryComponentProps}
-                            onClick={
+                            onClick={() => {
                                 EntryComponentProps.onClick
-                                    ? () => EntryComponentProps.onClick?.(clickHandler)
-                                    : clickHandler
-                            }
+                                    ? EntryComponentProps.onClick?.(clickHandler)
+                                    : clickHandler()
+                                Telemetry.captureEvent(EventType.Access, EventID.EntryAppNFT_PFP_Open)
+                            }}
                             tooltipHint={
                                 EntryComponentProps.tooltipHint ??
                                 (EntryComponentProps.disabled ? undefined : <Trans i18nKey="application_hint" />)

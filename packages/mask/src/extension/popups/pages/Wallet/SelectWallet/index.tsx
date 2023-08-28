@@ -4,19 +4,16 @@ import { first } from 'lodash-es'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ECKeyIdentifier, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { useChainContext, useChainIdValid, useNetworks, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
-import { ProviderType, type ChainId } from '@masknet/web3-shared-evm'
+import { ProviderType, ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, Typography } from '@mui/material'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { PersonaContext } from '@masknet/shared'
 import { Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
-import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
-import { useTitle } from '../../../hook/useTitle.js'
-import { PopupContext } from '../../../hook/usePopupContext.js'
+import { useTitle, PopupContext, useVerifiedWallets } from '../../../hooks/index.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
-import { useVerifiedWallets } from '../../../hook/useVerifiedWallets.js'
 import Services from '../../../../service.js'
 import { ProfilePhotoType } from '../type.js'
 import urlcat from 'urlcat'
@@ -59,9 +56,9 @@ const SelectWallet = memo(function SelectWallet() {
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
     const { smartPayChainId } = PopupContext.useContainer()
 
-    const { value: localWallets = [] } = useAsync(async () => WalletRPC.getWallets(), [])
+    const { value: localWallets = [] } = useAsync(async () => Services.Wallet.getWallets(), [])
 
-    const allWallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const allWallets = useWallets()
 
     const wallets = useMemo(() => {
         if (!allWallets.length && localWallets.length) return localWallets
@@ -73,7 +70,7 @@ const SelectWallet = memo(function SelectWallet() {
         if (isVerifyWalletFlow) {
             navigate(-1)
         } else {
-            await WalletRPC.resolveMaskAccount([])
+            await Services.Wallet.resolveMaskAccount([])
             await Services.Helper.removePopupWindow()
         }
     }, [isVerifyWalletFlow])
@@ -97,7 +94,7 @@ const SelectWallet = memo(function SelectWallet() {
 
         const wallet = wallets.find((x) => isSameAddress(x.address, selected))
 
-        await WalletRPC.resolveMaskAccount([
+        await Services.Wallet.resolveMaskAccount([
             wallet?.owner
                 ? {
                       address: selected,
@@ -131,6 +128,7 @@ const SelectWallet = memo(function SelectWallet() {
             <Box pt={1} pb={9} px={2} display="flex" flexDirection="column" rowGap="6px">
                 {wallets
                     .filter((x) => {
+                        if (x.owner && chainId !== ChainId.Matic) return false
                         if (!isVerifyWalletFlow && !isSettingNFTAvatarFlow) return true
                         return !x.owner
                     })
@@ -159,7 +157,9 @@ const SelectWallet = memo(function SelectWallet() {
                     fullWidth
                     onClick={handleConfirm}
                     disabled={
-                        isVerifyWalletFlow ? !!bindingWallets?.some((x) => isSameAddress(x.identity, selected)) : false
+                        isVerifyWalletFlow
+                            ? !!wallets?.some((x) => isSameAddress(x.address, selected) && !!x.owner)
+                            : false
                     }>
                     {t('confirm')}
                 </ActionButton>

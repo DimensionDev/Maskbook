@@ -492,16 +492,6 @@ export const TelegramRound = /*#__PURE__*/ __createIcon('TelegramRound', [
         u: () => new URL('./brands/TelegramRound.svg', import.meta.url),
     },
 ])
-export const Twitter3 = /*#__PURE__*/ __createIcon('twitter3', [
-    {
-        c: ['dark'],
-        u: () => new URL('./brands/twitter3.dark.svg', import.meta.url),
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./brands/twitter3.light.svg', import.meta.url),
-    },
-])
 export const TwitterColored = /*#__PURE__*/ __createIcon('TwitterColored', [
     {
         u: () => new URL('./brands/TwitterColored.svg', import.meta.url),
@@ -530,6 +520,21 @@ export const TwitterRoundGray = /*#__PURE__*/ __createIcon('TwitterRoundGray', [
 export const TwitterRoundWithNoBorder = /*#__PURE__*/ __createIcon('TwitterRoundWithNoBorder', [
     {
         u: () => new URL('./brands/TwitterRoundWithNoBorder.svg', import.meta.url),
+    },
+])
+export const TwitterX = /*#__PURE__*/ __createIcon('TwitterX', [
+    {
+        c: ['dark'],
+        u: () => new URL('./brands/TwitterX.dark.svg', import.meta.url),
+    },
+    {
+        c: ['light'],
+        u: () => new URL('./brands/TwitterX.light.svg', import.meta.url),
+    },
+])
+export const TwitterXRound = /*#__PURE__*/ __createIcon('TwitterXRound', [
+    {
+        u: () => new URL('./brands/TwitterXRound.svg', import.meta.url),
     },
 ])
 export const Uniswap = /*#__PURE__*/ __createIcon('Uniswap', [
@@ -3160,7 +3165,6 @@ export const Wallet = /*#__PURE__*/ __createIcon('Wallet', [
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
-                fill: 'none',
                 viewBox: '0 0 24 24',
                 children: /*#__PURE__*/ _jsxs('g', {
                     fill: 'currentColor',
@@ -3212,7 +3216,7 @@ export const WalletSetting = /*#__PURE__*/ __createIcon('WalletSetting', [
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
-                viewBox: '0 0 24 24',
+                viewBox: '0 0 20 20',
                 children: /*#__PURE__*/ _jsxs('g', {
                     fill: 'currentColor',
                     children: [

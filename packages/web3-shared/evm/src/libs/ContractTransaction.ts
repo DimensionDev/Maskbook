@@ -55,25 +55,18 @@ export class ContractTransaction<T extends BaseContract | null> {
         const transaction = resolve(transactionResolver, this.contract)
         const transactionEncoded = this.fill(transactionResolver, overrides)
 
+        // estimate gas
         if (!transactionEncoded.gas) {
-            try {
-                const gas = await transaction?.estimateGas({
-                    from: transactionEncoded.from,
-                    to: transactionEncoded.to,
-                    data: transactionEncoded.data,
-                    value: transactionEncoded.value,
-                })
+            const gas = await transaction?.estimateGas({
+                from: transactionEncoded.from,
+                to: transactionEncoded.to,
+                data: transactionEncoded.data,
+                value: transactionEncoded.value,
+            })
 
-                if (gas) {
-                    transactionEncoded.gas = gas.toFixed()
-                }
-            } catch {
-                // do nothing
-            } finally {
-                if (transactionEncoded.gas) {
-                    transactionEncoded.gas = toHex(transactionEncoded.gas)
-                }
-            }
+            if (!gas) throw new Error('Estimate gas failed')
+
+            transactionEncoded.gas = toHex(gas)
         }
 
         return transactionEncoded

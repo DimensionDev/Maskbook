@@ -64,6 +64,7 @@ export const Welcome = memo(function Welcome() {
         if (hasRedirect) {
             const search = params.get('search')
             navigate(urlcat(from, search ? new URLSearchParams(search).entries() : {}))
+            return
         }
 
         const url = await Services.SiteAdaptor.setupSite(EnhanceableSite.Twitter, false)

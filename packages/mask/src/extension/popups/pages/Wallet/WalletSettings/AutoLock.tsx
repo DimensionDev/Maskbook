@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { Box, ListItem, Typography, useTheme } from '@mui/material'
+import { Box, ListItem, Typography } from '@mui/material'
 import millisecondsToMinutes from 'date-fns/millisecondsToMinutes'
 import { useI18N } from '../../../../../utils/index.js'
 import { useStyles } from './useStyles.js'
@@ -8,8 +8,7 @@ import { useWalletAutoLockTime } from '../hooks/useWalletAutoLockTime.js'
 
 export function AutoLock() {
     const { t } = useI18N()
-    const theme = useTheme()
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
 
     const { value } = useWalletAutoLockTime()
 

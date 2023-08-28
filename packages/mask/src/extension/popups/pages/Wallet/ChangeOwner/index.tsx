@@ -18,11 +18,11 @@ import { formatEthereumAddress, ProviderType, type GasConfig } from '@masknet/we
 import { useI18N } from '../../../../../utils/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { StyledRadio } from '../../../components/StyledRadio/index.js'
-import { PopupContext } from '../../../hook/usePopupContext.js'
-import { useTitle } from '../../../hook/useTitle.js'
+import { PopupContext, useTitle } from '../../../hooks/index.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
 import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
-import { WalletContext } from '../hooks/useWalletContext.js'
+import { useQuery } from '@tanstack/react-query'
+import Services from '../../../../service.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -191,7 +191,9 @@ export default function ChangeOwner() {
     const [manageAccount, setManageAccount] = useState<ManagerAccount>()
 
     const { smartPayChainId } = useContainer(PopupContext)
-    const { personaManagers } = useContainer(WalletContext)
+    const { data: personaManagers } = useQuery(['persona-managers'], async () => {
+        return Services.Identity.queryOwnedPersonaInformation(true)
+    })
     const chainContextValue = useMemo(() => ({ chainId: smartPayChainId }), [smartPayChainId])
     const [paymentToken, setPaymentToken] = useState('')
     const [gasConfig, setGasConfig] = useState<GasConfig>()
@@ -203,7 +205,7 @@ export default function ChangeOwner() {
     const walletManagers = useMemo(() => wallets.filter((x) => !x.owner), [wallets])
 
     const walletManager = useMemo(
-        () => wallets.find((x) => !x.owner && isSameAddress(wallet?.owner, x.address)),
+        () => walletManagers.find((x) => !x.owner && isSameAddress(wallet?.owner, x.address)),
         [walletManagers, wallet],
     )
     const personaManager = useMemo(
@@ -234,6 +236,7 @@ export default function ChangeOwner() {
             providerType: ProviderType.MaskWallet,
             owner: wallet?.owner,
             identifier: ECKeyIdentifier.from(wallet?.identifier).unwrapOr(undefined),
+            gasOptionType: gasConfig?.gasOptionType,
             overrides: gasConfig,
         })
 

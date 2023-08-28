@@ -1,27 +1,6 @@
 {
     "SID_CONTRACT_ADDRESS": {
         "Mainnet": "",
-        "Ropsten": "",
-        "Rinkeby": "",
-        "Kovan": "",
-        "Gorli": "",
-        "BSC": "0xE3b1D32e43Ce8d658368e2CBFF95D57Ef39Be8a6",
-        "BSCT": "",
-        "Matic": "",
-        "Mumbai": "",
-        "Arbitrum": "",
-        "Arbitrum_Rinkeby": "",
-        "xDai": "",
-        "Optimism": "",
-        "Optimism_Kovan": "",
-        "Optimism_Goerli": "",
-        "Avalanche": "",
-        "Avalanche_Fuji": "",
-        "Celo": "",
-        "Fantom": "",
-        "Aurora": "",
-        "Aurora_Testnet": "",
-        "Conflux": "",
-        "Astar": ""
+        "BSC": "0xE3b1D32e43Ce8d658368e2CBFF95D57Ef39Be8a6"
     }
 }

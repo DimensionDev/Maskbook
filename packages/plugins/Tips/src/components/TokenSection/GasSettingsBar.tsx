@@ -1,9 +1,9 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { useAsync } from 'react-use'
 import { SelectGasSettingsToolbar } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useGasPrice, useNativeTokenPrice, useWallet } from '@masknet/web3-hooks-base'
-import { ChainResolver, SmartPayBundler } from '@masknet/web3-providers'
+import { useChainContext, useGasPrice, useNativeTokenPrice, useNetwork, useWallet } from '@masknet/web3-hooks-base'
+import { SmartPayBundler } from '@masknet/web3-providers'
 import { type GasConfig, isNativeTokenAddress, GasEditor } from '@masknet/web3-shared-evm'
 import { useGasLimit } from './useGasLimit.js'
 import { useTip } from '../../contexts/index.js'
@@ -21,8 +21,9 @@ export function GasSettingsBar() {
     const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
         chainId,
     })
-    const { value: defaultGasPrice = '1' } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const nativeToken = useMemo(() => ChainResolver.nativeCurrency(chainId), [chainId])
+    const { data: defaultGasPrice = '1' } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const network = useNetwork(NetworkPluginID.PLUGIN_EVM, chainId)
+    const nativeToken = network?.nativeCurrency
     const GAS_LIMIT = isNativeToken ? ETH_GAS_LIMIT : ERC20_GAS_LIMIT
     const { value: gasLimit = GAS_LIMIT } = useGasLimit()
 
@@ -43,7 +44,7 @@ export function GasSettingsBar() {
     return (
         <SelectGasSettingsToolbar
             supportMultiCurrency={!!wallet?.owner && chainId === smartPayChainId}
-            nativeToken={nativeToken}
+            nativeToken={nativeToken!}
             nativeTokenPrice={nativeTokenPrice}
             gasConfig={gasOption}
             gasLimit={gasLimit}

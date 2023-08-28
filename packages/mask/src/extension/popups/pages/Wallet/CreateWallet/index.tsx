@@ -10,10 +10,10 @@ import { Controller } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import type { z as zod } from 'zod'
-import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
+import Services from '../../../../service.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
-import { useTitle } from '../../../hook/useTitle.js'
+import { useTitle } from '../../../hooks/index.js'
 import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -51,10 +51,11 @@ const CreateWallet = memo(function CreateWallet() {
 
     const [{ loading }, onCreate] = useAsyncFn(async ({ name }: zod.infer<typeof schema>) => {
         try {
-            const address = await WalletRPC.deriveWallet(name)
+            const address = await Services.Wallet.deriveWallet(name)
             await pollResult(address)
             await Web3.connect({
                 account: address,
+                providerType: ProviderType.MaskWallet,
             })
             navigate(PopupRoutes.Wallet, { replace: true })
         } catch (error) {
@@ -81,6 +82,9 @@ const CreateWallet = memo(function CreateWallet() {
                             placeholder={t('popups_wallet_enter_your_wallet_name')}
                             error={!!errorMessage || !!errors.name?.message}
                             helperText={errorMessage || errors.name?.message}
+                            inputProps={{
+                                maxLength: 18,
+                            }}
                         />
                     )}
                 />

@@ -1,15 +1,23 @@
 import { Icons } from '@masknet/icons'
-import { ImageIcon, ProgressiveText } from '@masknet/shared'
+import { ImageIcon, NetworkIcon, ProgressiveText, ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useEverSeen } from '@masknet/shared-base-ui'
-import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
-import { useNativeToken, useNetworkDescriptors, useReverseAddress } from '@masknet/web3-hooks-base'
-import { ChainbaseHistory } from '@masknet/web3-providers'
+import { TextOverflowTooltip, makeStyles, useBoundedPopperProps } from '@masknet/theme'
+import {
+    useAccount,
+    useFungibleToken,
+    useNativeToken,
+    useNetwork,
+    useNetworkDescriptors,
+    useReverseAddress,
+} from '@masknet/web3-hooks-base'
+import { ChainbaseHistory, Web3 } from '@masknet/web3-providers'
 import { chainbase } from '@masknet/web3-providers/helpers'
 import { DebankTransactionDirection } from '@masknet/web3-providers/types'
 import {
     TransactionStatusType,
     isLessThan,
+    isSameAddress,
     toFixed,
     trimZero,
     type RecentTransaction,
@@ -25,7 +33,9 @@ import {
 import { Box, ListItem, ListItemText, Skeleton, Typography, alpha, type ListItemProps } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { memo, useMemo } from 'react'
+import { Trans } from 'react-i18next'
 import { formatTokenBalance, useI18N } from '../../../../../../utils/index.js'
+import { parseAmountFromERC20ApproveInput, parseReceiverFromERC20TransferInput } from '../../utils.js'
 
 const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' }, __) => {
     const colorMap: Record<string, string> = {
@@ -188,18 +198,42 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
     const [seen, ref] = useEverSeen<HTMLLIElement>()
     const { data: tx, isLoading: loadingTx } = useQuery({
         // This could be a transaction of SmartPay which Debank doesn't provide detailed info for it.
+        // This also could be an ERC20 transfer, which Debank returns the token contract rather than receiver as `to_address`.
         // So we fetch via Chainbase
-        enabled: !transaction.to && seen,
+        enabled: (!transaction.to || transaction.type === 'transfer' || transaction.type === 'approve') && seen,
         queryKey: ['chainbase', 'transaction', transaction.chainId, transaction.id, blockNumber],
         queryFn: async () => {
             if (!transaction.chainId || !transaction.id) return
             return ChainbaseHistory.getTransaction(transaction.chainId, transaction.id, blockNumber)
         },
     })
+    const { data: txInput, isLoading: loadingTxInput } = useQuery({
+        // Enable this when chainbase does not support the current chain.
+        enabled: !!transaction && !loadingTx && !tx?.input && transaction.type === 'transfer',
+        queryKey: [transaction?.chainId, transaction?.id],
+        queryFn: async () => {
+            if (!transaction?.chainId || !transaction?.id) return
+            const tx = await Web3.getTransaction(transaction.id, { chainId: transaction.chainId })
+            return tx?.input
+        },
+    })
 
-    const status = transaction.status || (tx ? chainbase.normalizeTxStatus(tx.status) : undefined)
-    const toAddress = (transaction.to || tx?.to_address) as string
-    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, toAddress)
+    const receiverAddress = parseReceiverFromERC20TransferInput(tx?.input ?? txInput)
+    const status = transaction.status ?? (tx ? chainbase.normalizeTxStatus(tx.status) : undefined)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const fromAddress = (transaction.from || tx?.from_address) as string
+    const toAddress = (receiverAddress || transaction.to || tx?.to_address) as string
+    const loadingToAddress =
+        transaction.type === 'transfer' ? !receiverAddress && (loadingTx || loadingTxInput) : !toAddress && loadingTx
+    const isOut = isSameAddress(fromAddress, account)
+    const popperProps = useBoundedPopperProps()
+    const approveAmount = parseAmountFromERC20ApproveInput(tx?.input ?? txInput)
+    const { data: approveToken } = useFungibleToken(
+        NetworkPluginID.PLUGIN_EVM,
+        transaction.type === 'approve' ? tx?.to_address : '',
+        undefined,
+        { chainId: transaction.chainId },
+    )
 
     return (
         <ListItem
@@ -217,16 +251,24 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                 secondary={
                     <ProgressiveText
                         className={classes.toAddress}
-                        loading={!toAddress && loadingTx}
-                        skeletonWidth={100}>
+                        loading={loadingToAddress}
+                        skeletonWidth={100}
+                        component="div">
                         {status === TransactionStatusType.FAILED ? (
                             <Typography className={classes.failedLabel} component="span">
                                 {t('failed')}
                             </Typography>
                         ) : null}
-                        {t('to_address', {
-                            address: domain ? formatDomainName(domain) : formatEthereumAddress(toAddress, 4),
-                        })}
+                        <Trans
+                            i18nKey="other_address"
+                            context={isOut ? 'to' : 'from'}
+                            value={{
+                                address: isOut ? toAddress : fromAddress,
+                            }}
+                            components={{
+                                addr: <ReversedAddress address={isOut ? toAddress : fromAddress} component="span" />,
+                            }}
+                        />
                     </ProgressiveText>
                 }>
                 <Typography className={classes.txName}>
@@ -234,27 +276,43 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                     {transaction.isScam ? <span className={classes.scamLabel}>{t('scam_tx')}</span> : null}
                 </Typography>
             </ListItemText>
-            <div className={classes.assets}>
-                {transaction.assets.map((token, i) => {
-                    const isRend = token.direction === DebankTransactionDirection.SEND
-                    const amount = isLessThan(token.amount, '0.0001') ? '<0.0001' : trimZero(toFixed(token.amount, 4))
-                    return (
-                        <Typography key={i} className={classes.asset}>
-                            <strong className={classes.amount}>{`${isRend ? '-' : '+'} ${amount} `}</strong>
-                            <TextOverflowTooltip title={token.symbol}>
-                                <span className={classes.symbol}>{token.symbol}</span>
-                            </TextOverflowTooltip>
-                        </Typography>
-                    )
-                })}
-            </div>
+
+            {transaction.type === 'approve' && approveAmount && approveToken ? (
+                <Typography className={classes.asset} component="div">
+                    <strong className={classes.amount}>
+                        {approveAmount === 'Infinite'
+                            ? approveAmount
+                            : formatTokenBalance(approveAmount, approveToken.decimals)}
+                    </strong>
+                    <TextOverflowTooltip title={approveToken.symbol} PopperProps={popperProps}>
+                        <span className={classes.symbol}>{approveToken.symbol}</span>
+                    </TextOverflowTooltip>
+                </Typography>
+            ) : (
+                <div className={classes.assets}>
+                    {transaction.assets.map((token, i) => {
+                        const isSend = token.direction === DebankTransactionDirection.SEND
+                        const amount = isLessThan(token.amount, '0.0001')
+                            ? '<0.0001'
+                            : trimZero(toFixed(token.amount, 4))
+                        return (
+                            <Typography key={i} className={classes.asset} component="div">
+                                <strong className={classes.amount}>{`${isSend ? '-' : '+'} ${amount} `}</strong>
+                                <TextOverflowTooltip title={token.symbol} PopperProps={popperProps}>
+                                    <span className={classes.symbol}>{token.symbol}</span>
+                                </TextOverflowTooltip>
+                            </Typography>
+                        )
+                    })}
+                </div>
+            )}
         </ListItem>
     )
 })
 
 interface RecentActivityItemProps extends Omit<ActivityItemProps, 'transaction' | 'onView'> {
     transaction: RecentTransaction<ChainId, EvmTransaction>
-    onView: (tx: RecentTransaction<ChainId, EvmTransaction>) => void
+    onView: (tx: RecentTransaction<ChainId, EvmTransaction>, candidate?: EvmTransaction) => void
     onSpeedup?: (tx: RecentTransaction<ChainId, EvmTransaction>) => void
     onCancel?: (tx: RecentTransaction<ChainId, EvmTransaction>) => void
 }
@@ -271,11 +329,11 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
     const { classes, cx } = useStyles({})
     // candidate is current transaction
     const candidate = transaction.candidates[transaction.indexId]
-    const toAddress = candidate.to
+    const receiverAddress = parseReceiverFromERC20TransferInput(candidate.data)
+    const toAddress = receiverAddress || candidate.to
     const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, toAddress)
-    const descriptors = useNetworkDescriptors(NetworkPluginID.PLUGIN_EVM)
-    const networkDescriptor = descriptors.find((x) => x.chainId === transaction.chainId)
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId: transaction.chainId })
+    const network = useNetwork(NetworkPluginID.PLUGIN_EVM, transaction.chainId)
 
     const recipient = useMemo(() => {
         if (domain) return t('to_address', { address: formatDomainName(domain) })
@@ -283,11 +341,17 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
     }, [domain, t])
 
     return (
-        <ListItem className={cx(classes.item, className)} onClick={() => onView(transaction)} {...rest}>
+        <ListItem className={cx(classes.item, className)} onClick={() => onView(transaction, candidate)} {...rest}>
             <Box className={classes.txIconContainer}>
                 {/* TODO specify cateType */}
                 <TransactionIcon cateType={'send'} />
-                <ImageIcon className={classes.badgeIcon} size={16} icon={networkDescriptor?.icon} />
+                <NetworkIcon
+                    pluginID={NetworkPluginID.PLUGIN_EVM}
+                    className={classes.badgeIcon}
+                    chainId={transaction.chainId}
+                    size={16}
+                    network={network}
+                />
             </Box>
             <ListItemText
                 secondaryTypographyProps={{ component: 'div' }}
@@ -302,27 +366,28 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
                             ) : null}
                             {recipient}
                         </Typography>
-                        {/* TODO actions for pending transitions */}
-                        <Box className={classes.operations}>
-                            <button
-                                type="button"
-                                className={cx(classes.button, classes.speedupButton)}
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    onSpeedup?.(transaction)
-                                }}>
-                                {t('speed_up')}
-                            </button>
-                            <button
-                                type="button"
-                                className={cx(classes.button, classes.cancelButton)}
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    onCancel?.(transaction)
-                                }}>
-                                {t('cancel')}
-                            </button>
-                        </Box>
+                        {transaction.status === 1 ? (
+                            <Box className={classes.operations}>
+                                <button
+                                    type="button"
+                                    className={cx(classes.button, classes.speedupButton)}
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        onSpeedup?.(transaction)
+                                    }}>
+                                    {t('speed_up')}
+                                </button>
+                                <button
+                                    type="button"
+                                    className={cx(classes.button, classes.cancelButton)}
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        onCancel?.(transaction)
+                                    }}>
+                                    {t('cancel')}
+                                </button>
+                            </Box>
+                        ) : null}
                     </Box>
                 }>
                 {/* TODO specify cateType */}

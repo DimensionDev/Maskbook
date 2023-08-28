@@ -9,6 +9,7 @@
     "gas_fee": "Gas Fee",
     "token_insufficient_balance": "余额不足",
     "manage_wallet": "钱包管理",
+    "failed_to_transfer_nft": "网络错误或执行智能合同失败。",
     "save": "保存",
     "save_successfully": "保存成功",
     "save_failed": "保存失败",

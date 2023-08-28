@@ -1,6 +1,6 @@
-import { memo, useState, useCallback } from 'react'
+import { memo, useState, useCallback, useMemo } from 'react'
 import { Icons } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { Box, Typography, Link, useTheme, ButtonBase as Button, Avatar } from '@mui/material'
 import {
     formatPersonaFingerprint,
@@ -15,6 +15,12 @@ import { NextIDPlatform } from '@masknet/shared-base'
 import { attachNextIDToProfile } from '../../../../../utils/utils.js'
 import { ConnectedAccounts } from './ConnectedAccounts/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
+import Services from '../../../../service.js'
+import { useEverSeen } from '@masknet/shared-base-ui'
+import { useFriendProfiles } from '../../../hooks/index.js'
+import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query'
+import urlcat from 'urlcat'
+import { type Friend } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -66,44 +72,110 @@ const useStyles = makeStyles()((theme) => ({
 
 interface ContactCardProps {
     avatar?: string
-    profiles: BindingProof[]
+    proofProfiles?: BindingProof[]
     nextId?: string
     publicKey?: string
     isLocal?: boolean
+    profile?: ProfileIdentifier
+    refetch?: () => void
 }
 
 export const ContactCard = memo<ContactCardProps>(function ContactCard({
     avatar,
     nextId,
-    profiles,
     publicKey,
     isLocal,
+    profile,
+    refetch,
+    proofProfiles,
 }) {
     const theme = useTheme()
     const { classes } = useStyles()
     const navigate = useNavigate()
+    const { showSnackbar } = usePopupCustomSnackbar()
     const [local, setLocal] = useState(false)
+    const [seen, ref] = useEverSeen<HTMLLIElement>()
     const { currentPersona } = PersonaContext.useContainer()
     const { t } = useI18N()
-    const handleAddFriend = useCallback(async () => {
-        if (!currentPersona) return
-        const twitter = profiles.find((p) => p.platform === NextIDPlatform.Twitter)
-        if (!twitter) return
-        const profileIdentifier = ProfileIdentifier.of('twitter.com', twitter.identity).unwrap()
+    const profiles = useFriendProfiles(seen, nextId, profile?.userId)
+    const rawPublicKey = currentPersona?.identifier.rawPublicKey
+    const queryClient = useQueryClient()
+
+    const friendInfo = useMemo(() => {
+        if (!rawPublicKey) return
+        const twitter = proofProfiles?.find((p) => p.platform === NextIDPlatform.Twitter)
         const personaIdentifier = ECKeyIdentifier.fromHexPublicKeyK256(nextId).expect(
             `${nextId} should be a valid hex public key in k256`,
         )
-        await attachNextIDToProfile({
-            identifier: profileIdentifier,
-            linkedPersona: personaIdentifier,
-            fromNextID: true,
-            linkedTwitterNames: [twitter.identity],
-        })
-        setLocal(true)
-    }, [profiles, nextId, currentPersona])
+        if (!twitter) {
+            return {
+                persona: personaIdentifier,
+            }
+        } else {
+            const profileIdentifier = ProfileIdentifier.of('twitter.com', twitter.identity).unwrap()
+            return {
+                persona: personaIdentifier,
+                profile: profileIdentifier,
+            }
+        }
+    }, [profiles, nextId, rawPublicKey])
+
+    const handleAddFriend = useCallback(async () => {
+        if (!friendInfo || !currentPersona) return
+        const { persona, profile } = friendInfo
+        if (!profile) {
+            await Services.Identity.createNewRelation(persona, currentPersona.identifier)
+        } else {
+            await attachNextIDToProfile({
+                identifier: profile,
+                linkedPersona: persona,
+                fromNextID: true,
+                linkedTwitterNames: [profile.userId],
+            })
+        }
+    }, [nextId, queryClient, currentPersona, refetch, friendInfo])
+
+    const { mutate: onAdd, isLoading } = useMutation({
+        mutationFn: handleAddFriend,
+        onMutate: async (friend: Friend | undefined) => {
+            if (!friend) return
+            await queryClient.cancelQueries(['relation-records', rawPublicKey])
+            await queryClient.cancelQueries(['friends', rawPublicKey])
+            const old = queryClient.getQueryData(['friends', rawPublicKey])
+            queryClient.setQueryData(
+                ['friends', rawPublicKey],
+                (
+                    oldData:
+                        | InfiniteData<{
+                              friends: Friend[]
+                              nextPageOffset: number
+                          }>
+                        | undefined,
+                ) => {
+                    if (!oldData) return undefined
+                    return {
+                        ...oldData,
+                        pages: oldData.pages[0]
+                            ? [
+                                  { friends: [friend, ...oldData.pages[0].friends], nextPageOffset: 10 },
+                                  ...oldData.pages.slice(1),
+                              ]
+                            : [{ friends: [friend], nextPageOffset: 0 }],
+                    }
+                },
+            )
+            showSnackbar(t('popups_encrypted_friends_added_successfully'), { variant: 'success' })
+            setLocal(true)
+        },
+        onSettled: async () => {
+            await queryClient.invalidateQueries(['relation-records', rawPublicKey])
+            await queryClient.invalidateQueries(['friends', rawPublicKey])
+            refetch?.()
+        },
+    })
 
     return (
-        <Box className={classes.card}>
+        <Box className={classes.card} ref={ref}>
             <Box className={classes.titleWrap}>
                 <Box className={classes.title}>
                     {avatar ? (
@@ -128,7 +200,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                                 underline="none"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                href={`https://web3.bio/${nextId}`}
+                                href={urlcat('https://web3.bio/', { s: nextId })}
                                 className={classes.icon}>
                                 <Icons.LinkOut size={12} />
                             </Link>
@@ -153,7 +225,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                         <Icons.ArrowRight />
                     </Button>
                 ) : (
-                    <Button className={classes.addButton} onClick={handleAddFriend}>
+                    <Button className={classes.addButton} onClick={() => onAdd(friendInfo)} disabled={isLoading}>
                         {t('popups_encrypted_friends_add_friends')}
                     </Button>
                 )}
@@ -163,7 +235,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                 nextId={nextId}
                 publicKey={publicKey}
                 isLocal={isLocal}
-                profiles={profiles}
+                profiles={proofProfiles ? proofProfiles : profiles}
             />
         </Box>
     )

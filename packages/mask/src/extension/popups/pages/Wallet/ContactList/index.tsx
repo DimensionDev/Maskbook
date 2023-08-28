@@ -1,8 +1,8 @@
-import { memo, useCallback, useMemo, useContext, useEffect } from 'react'
+import { memo, useCallback, useContext, useEffect } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { Box, Link, List, ListItem, MenuItem, Typography, useTheme, type ListItemProps } from '@mui/material'
-import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { type NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useWallets } from '@masknet/web3-hooks-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -10,8 +10,7 @@ import { Icons } from '@masknet/icons'
 import { EmojiAvatar, FormattedAddress, useMenuConfig } from '@masknet/shared'
 import { ExplorerResolver } from '@masknet/web3-providers'
 import { useI18N } from '../../../../../utils/index.js'
-import { useTitle } from '../../../hook/useTitle.js'
-import { ContactsContext } from '../../../hook/useContactsContext.js'
+import { useTitle, ContactsContext } from '../../../hooks/index.js'
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
 import { DeleteContactModal, EditContactModal, AddContactModal } from '../../../modals/modals.js'
 import { ContactType } from '../type.js'
@@ -48,6 +47,7 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean }>()
             lineHeight: '18px',
             fontWeight: 700,
             maxWidth: 290,
+            whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
         },
@@ -146,7 +146,7 @@ const ContactListUI = memo(function ContactListUI() {
         | undefined
     const isManage = state?.type === 'manage'
     const { classes } = useStyles({ isManage })
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const wallets = useWallets()
     const { userInput, address, contacts, inputValidationMessage } = ContactsContext.useContainer()
     const [params] = useSearchParams()
 
@@ -161,6 +161,7 @@ const ContactListUI = memo(function ContactListUI() {
     useEffect(() => {
         if (!isManage) return
         setExtension(<Icons.Add color={theme.palette.maskColor.main} sx={{ cursor: 'pointer' }} onClick={addContact} />)
+        return () => setExtension(undefined)
     }, [isManage])
 
     useTitle(isManage ? t('contacts') : t('popups_send'))
@@ -270,28 +271,24 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
 
     const deleteContact = useCallback(() => {
         return DeleteContactModal.openAndWaitForClose({
-            title: t('wallet_edit_contact'),
+            title: t('wallet_delete_contact'),
             address,
             name,
         })
     }, [address, name, t])
 
-    const menuOptions = useMemo(() => {
-        const options = [
-            {
-                name: t('edit'),
-                icon: <Icons.Edit2 size={20} color={theme.palette.maskColor.second} />,
-                handler: editContact,
-            },
-        ]
-        if (contactType === ContactType.Recipient)
-            options.push({
-                name: t('delete'),
-                icon: <Icons.Decrease size={20} color={theme.palette.maskColor.second} />,
-                handler: deleteContact,
-            })
-        return options
-    }, [t, contactType])
+    const menuOptions = [
+        {
+            name: t('edit'),
+            icon: <Icons.Edit2 size={20} color={theme.palette.maskColor.second} />,
+            handler: editContact,
+        },
+        {
+            name: t('delete'),
+            icon: <Icons.Decrease size={20} color={theme.palette.maskColor.second} />,
+            handler: deleteContact,
+        },
+    ]
 
     const [menu, openMenu, _, isOpenMenu] = useMenuConfig(
         menuOptions.map((option, index) => (
@@ -335,14 +332,16 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
                     </Typography>
                 </div>
             </div>
-            <Icons.More
-                size={24}
-                className={classes.iconMore}
-                onClick={(event) => {
-                    event.stopPropagation()
-                    openMenu(event)
-                }}
-            />
+            {contactType === ContactType.Recipient ? (
+                <Icons.More
+                    size={24}
+                    className={classes.iconMore}
+                    onClick={(event) => {
+                        event.stopPropagation()
+                        openMenu(event)
+                    }}
+                />
+            ) : null}
             {menu}
         </ListItem>
     )

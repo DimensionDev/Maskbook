@@ -94,7 +94,7 @@ function usePersonaContext(initialState?: {
         if (!proofs) return localProfiles
 
         const remoteProfiles = proofs
-            .filter((x) => !!NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP[x.platform])
+            .filter((x) => !!NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP[x.platform] && x.is_valid)
             .map<ProfileAccount>((x) => {
                 const network = NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP[x.platform]
                 return {

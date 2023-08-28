@@ -6,9 +6,11 @@ import {
     makeTypedMessageAnchor,
     makeTypedMessageEmpty,
     type TypedMessage,
-    isTypedMessageEmpty,
-    isTypedMessageText,
     makeTypedMessageImage,
+    type Meta,
+    unstable_STYLE_META,
+    makeTypedMessageTuple,
+    FlattenTypedMessage,
 } from '@masknet/typed-message'
 import { collectNodeText, collectTwitterEmoji } from '../../../utils/index.js'
 
@@ -91,11 +93,12 @@ function resolveType(content: string) {
     if (content.startsWith('$')) return 'cash'
     return 'normal'
 }
-export const postContentMessageParser = (node: HTMLElement) => {
-    function make(node: Node): TypedMessage | TypedMessage[] {
+
+export function postContentMessageParser(node: HTMLElement): TypedMessage {
+    function make(node: Node): TypedMessage {
         if (node.nodeType === Node.TEXT_NODE) {
             if (!node.nodeValue) return makeTypedMessageEmpty()
-            return makeTypedMessageText(node.nodeValue)
+            return makeTypedMessageText(node.nodeValue, getElementStyle(node.parentElement))
         } else if (node instanceof HTMLAnchorElement) {
             const anchor = node
             const href = anchor.getAttribute('title') ?? anchor.getAttribute('href')
@@ -107,6 +110,7 @@ export const postContentMessageParser = (node: HTMLElement) => {
                 href ?? '',
                 content,
                 altImage ? makeTypedMessageImage(altImage.src, altImage) : undefined,
+                getElementStyle(node),
             )
         } else if (node instanceof HTMLImageElement) {
             const image = node
@@ -121,15 +125,24 @@ export const postContentMessageParser = (node: HTMLElement) => {
 
             return makeTypedMessageText(alt)
         } else if (node.childNodes.length) {
-            const flattened = flattenDeep(Array.from(node.childNodes).map(make))
-            // conjunct text messages under same node
-            if (flattened.every(isTypedMessageText))
-                return makeTypedMessageText(flattened.map((x) => x.content).join(''))
-            return flattened
+            const messages = makeTypedMessageTuple(flattenDeep(Array.from(node.childNodes).map(make)))
+            return FlattenTypedMessage.NoContext(messages)
         } else return makeTypedMessageEmpty()
     }
     const lang = node.parentElement!.querySelector<HTMLDivElement>('[lang]')
-    return lang ? Array.from(lang.childNodes).flatMap(make) : []
+    return lang
+        ? FlattenTypedMessage.NoContext(makeTypedMessageTuple(Array.from(lang.childNodes).flatMap(make)))
+        : makeTypedMessageEmpty()
+}
+
+function getElementStyle(element: Element | null): Meta | undefined {
+    if (!element) return undefined
+    const computed = getComputedStyle(element)
+    const style: React.CSSProperties = {}
+    if (computed.fontWeight !== '400') style.fontWeight = computed.fontWeight
+    if (computed.fontStyle !== 'normal') style.fontStyle = computed.fontStyle
+    if (style.fontWeight || style.fontStyle) return new Map([[unstable_STYLE_META, style]])
+    return undefined
 }
 
 export const postImagesParser = async (node: HTMLElement): Promise<string[]> => {
@@ -151,6 +164,6 @@ export const postParser = (node: HTMLElement) => {
 
         pid: getPostId(node),
 
-        messages: postContentMessageParser(node).filter((x) => !isTypedMessageEmpty(x)),
+        messages: postContentMessageParser(node),
     }
 }

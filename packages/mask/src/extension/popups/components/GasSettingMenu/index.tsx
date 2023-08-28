@@ -10,15 +10,7 @@ import {
     useNativeTokenAddress,
 } from '@masknet/web3-hooks-base'
 import { DepositPaymaster } from '@masknet/web3-providers'
-import {
-    CurrencyType,
-    GasOptionType,
-    ZERO,
-    formatBalance,
-    formatCurrency,
-    scale10,
-    toFixed,
-} from '@masknet/web3-shared-base'
+import { GasOptionType, ZERO, formatBalance, formatCurrency, scale10, toFixed } from '@masknet/web3-shared-base'
 import {
     type EIP1559GasConfig,
     type GasConfig,
@@ -34,8 +26,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { useContainer } from 'unstated-next'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
-import { useGasOptionsMenu } from '../../hook/useGasOptionsMenu.js'
-import { PopupContext } from '../../hook/usePopupContext.js'
+import { useGasOptionsMenu, PopupContext } from '../../hooks/index.js'
 
 interface GasSettingMenuProps {
     minimumGas: string
@@ -65,7 +56,9 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
     const theme = useTheme()
     const { smartPayChainId } = useContainer(PopupContext)
     const [gasConfig = initConfig, setGasConfig] = useState<GasConfig | undefined>()
-    const [gasOptionType, setGasOptionType] = useState<GasOptionType | undefined>(GasOptionType.SLOW)
+    const [gasOptionType, setGasOptionType] = useState<GasOptionType | undefined>(
+        initConfig?.gasOptionType ?? GasOptionType.SLOW,
+    )
 
     const handleChange = useCallback(
         (config: GasConfig, type?: GasOptionType) => {
@@ -84,7 +77,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
         paymentToken,
     )
 
-    const { value: gasOptions } = useGasOptions()
+    const { data: gasOptions } = useGasOptions()
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: defaultChainId })
     const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
@@ -94,7 +87,10 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
     const { data: token } = useFungibleToken(
         NetworkPluginID.PLUGIN_EVM,
         paymentToken ? paymentToken : nativeTokenAddress,
+        undefined,
+        { chainId },
     )
+
     const { data: tokenPrice } = useFungibleTokenPrice(
         NetworkPluginID.PLUGIN_EVM,
         paymentToken ? paymentToken : nativeTokenAddress,
@@ -138,11 +134,15 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
         const target = gasOptions[GasOptionType.SLOW]
         const result = isSupport1559
             ? {
+                  gasOptionType: GasOptionType.SLOW,
                   maxPriorityFeePerGas: target.suggestedMaxPriorityFeePerGas,
                   maxFeePerGas: target.suggestedMaxFeePerGas,
+                  gas: minimumGas,
               }
             : {
+                  gasOptionType: GasOptionType.SLOW,
                   gasPrice: target.suggestedMaxFeePerGas,
+                  gas: minimumGas,
               }
 
         setGasConfig((prev) => {
@@ -151,7 +151,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
         })
 
         onChange(result)
-    }, [onChange, initConfig, gasOptions, isSupport1559])
+    }, [onChange, initConfig, gasOptions, isSupport1559, minimumGas])
 
     return (
         <Box display="flex" alignItems="center">
@@ -165,7 +165,6 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
                 />
                 {' ≈ '}
                 <FormattedCurrency
-                    sign={CurrencyType.USD}
                     value={formatWeiToEther(totalGas).times(tokenPrice ?? 0)}
                     options={{
                         onlyRemainTwoOrZeroDecimal: false,

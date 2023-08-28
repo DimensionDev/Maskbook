@@ -30,6 +30,7 @@ import type {
     RelationRecordDB,
     PersonaRecord,
 } from './type.js'
+
 /**
  * Database structure:
  *
@@ -644,6 +645,19 @@ export async function updateRelationDB(
 }
 
 /** @internal */
+export async function deletePersonaRelationDB(
+    persona: PersonaIdentifier,
+    linkedPersona: PersonaIdentifier,
+    t: RelationTransaction<'readwrite'>,
+    silent = false,
+): Promise<void> {
+    const old = await t.objectStore('relations').get(IDBKeyRange.only([linkedPersona.toText(), persona.toText()]))
+    if (!old) return
+    await t.objectStore('relations').delete(IDBKeyRange.only([linkedPersona.toText(), persona.toText()]))
+    if (!silent) MaskMessages.events.relationsChanged.sendToAll([{ of: persona, reason: 'delete', favor: old.favor }])
+}
+
+/** @internal */
 export async function createOrUpdateRelationDB(
     record: Omit<RelationRecord, 'network'>,
     t: RelationTransaction<'readwrite'>,
@@ -717,23 +731,43 @@ function personaRecordOutDB(x: PersonaRecordDB): PersonaRecord {
 }
 
 function relationRecordToDB(x: Omit<RelationRecord, 'network'>): RelationRecordDB {
-    return {
-        ...x,
-        network: x.profile.network,
-        profile: x.profile.toText(),
-        linked: x.linked.toText(),
+    if (x.profile instanceof ProfileIdentifier) {
+        return {
+            ...x,
+            network: x.profile.network,
+            profile: x.profile.toText(),
+            linked: x.linked.toText(),
+        }
+    } else {
+        return {
+            ...x,
+            profile: x.profile.toText(),
+            linked: x.linked.toText(),
+        }
     }
 }
 
 function relationRecordOutDB(x: RelationRecordDB): RelationRecord {
-    return {
-        ...x,
-        profile: ProfileIdentifier.from(x.profile).expect(
-            `data stored in the profile database should be a valid ProfileIdentifier, but found ${x.profile}`,
-        ),
-        linked: ECKeyIdentifier.from(x.linked).expect(
-            `data stored in the profile database should be a valid ECKeyIdentifier, but found ${x.linked}`,
-        ),
+    if (x.profile.startsWith('person:')) {
+        return {
+            ...x,
+            profile: ProfileIdentifier.from(x.profile).expect(
+                `data stored in the profile database should be a valid ProfileIdentifier, but found ${x.profile}`,
+            ),
+            linked: ECKeyIdentifier.from(x.linked).expect(
+                `data stored in the profile database should be a valid ECKeyIdentifier, but found ${x.linked}`,
+            ),
+        }
+    } else {
+        return {
+            ...x,
+            profile: ECKeyIdentifier.from(x.profile).expect(
+                `data stored in the profile database should be a valid ECKeyIdentifier, but found ${x.profile}`,
+            ),
+            linked: ECKeyIdentifier.from(x.linked).expect(
+                `data stored in the profile database should be a valid ECKeyIdentifier, but found ${x.linked}`,
+            ),
+        }
     }
 }
 

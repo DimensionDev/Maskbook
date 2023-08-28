@@ -1,4 +1,3 @@
-import { env } from '@masknet/flags'
-import { SentryAPI } from './Sentry.js'
+import { TelemetryAPI } from './Telemetry.js'
 
-export const Sentry = new SentryAPI(env)
+export const Telemetry = new TelemetryAPI()

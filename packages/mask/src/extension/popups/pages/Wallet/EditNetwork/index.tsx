@@ -3,9 +3,9 @@ import { Icons } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
-import { useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
 import { TokenType, type TransferableNetwork } from '@masknet/web3-shared-base'
-import { NetworkType, SchemaType, ZERO_ADDRESS, type ChainId, getRPCConstant } from '@masknet/web3-shared-evm'
+import { NetworkType, SchemaType, ZERO_ADDRESS, ChainId, getRPCConstant, ProviderType } from '@masknet/web3-shared-evm'
 import { Button, Input, Typography, alpha } from '@mui/material'
 import { useMutation } from '@tanstack/react-query'
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
@@ -13,10 +13,12 @@ import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { type z, type ZodCustomIssue } from 'zod'
 import { useI18N, type AvailableLocaleKeys } from '../../../../../utils/index.js'
-import { createSchema, fetchChains } from './network-schema.js'
+import { createSchema } from './network-schema.js'
 import { PageTitleContext } from '../../../context.js'
-import { useTitle } from '../../../hook/index.js'
+import { useTitle } from '../../../hooks/index.js'
 import { useWarnings } from './useWarnings.js'
+import { fetchChains } from '@masknet/web3-providers/helpers'
+import { Web3 } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -68,6 +70,7 @@ export const EditNetwork = memo(function EditNetwork() {
     const id = useParams<{ id: string }>().id
     const chainId = id?.match(/^\d+$/) ? Number.parseInt(id, 10) : undefined
     const isEditing = !!id && !chainId
+    const { chainId: currentChainId, setChainId } = useChainContext()
 
     // #region Get network
     const { Network } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
@@ -98,6 +101,12 @@ export const EditNetwork = memo(function EditNetwork() {
                 variant="text"
                 className={classes.iconButton}
                 onClick={async () => {
+                    if (currentChainId === network?.chainId) {
+                        await Web3.switchChain?.(ChainId.Mainnet, {
+                            providerType: ProviderType.MaskWallet,
+                        })
+                        setChainId(ChainId.Mainnet)
+                    }
                     await Network?.removeNetwork(id)
                     showSnackbar(t('deleted_network_successfully'))
                     // Trigger UI update.
@@ -108,7 +117,7 @@ export const EditNetwork = memo(function EditNetwork() {
             </Button>,
         )
         return () => setExtension(undefined)
-    }, [isBuiltIn, id, classes.iconButton, showSnackbar, t, Network])
+    }, [isBuiltIn, id, classes.iconButton, showSnackbar, t, Network, currentChainId])
 
     const schema = useMemo(() => {
         return createSchema(
@@ -189,7 +198,7 @@ export const EditNetwork = memo(function EditNetwork() {
                         address: ZERO_ADDRESS,
                     },
                     explorerUrl: {
-                        url: '',
+                        url: parsedData.explorer,
                     },
                 }
                 if (isEditing) {

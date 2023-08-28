@@ -149,7 +149,7 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
                     )
                 case ActivityStatus.ENDED:
                     return (
-                        <Translate.start_time_tips
+                        <Translate.end_time_tips
                             values={{ time: format(endTime, 'MM-dd-yyyy HH:mm') }}
                             components={{ strong: <strong className={classes.strong} /> }}
                         />

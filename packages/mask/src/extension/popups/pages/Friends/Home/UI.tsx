@@ -2,11 +2,10 @@
 
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import { memo } from 'react'
-import { type FriendsInformation } from '../../../hook/useFriends.js'
 import { Box, Typography } from '@mui/material'
 import { Search } from '../Search/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
-import type { NextIDPersonaBindingsWithIdentifier } from '../../../hook/useFriendsFromSearch.js'
+import type { NextIDPersonaBindingsWithIdentifier, Friend } from '../../../hooks/index.js'
 import { Contacts } from '../Contacts/index.js'
 import { SearchList } from '../SearchList/index.js'
 
@@ -28,7 +27,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         flexDirection: 'column',
         gap: 12,
-        color: theme.palette.text.secondary,
+        color: theme.palette.maskColor.second,
         whiteSpace: 'nowrap',
     },
     mainText: {
@@ -40,8 +39,11 @@ export interface FriendsHomeUIProps {
     searchValue: string
     searchResult: NextIDPersonaBindingsWithIdentifier[]
     loading: boolean
-    friends: FriendsInformation[]
+    friends: Array<{ friends: Friend[]; nextPageOffset: number }>
     setSearchValue: (v: string) => void
+    fetchNextPage: () => void
+    fetchNextSearchPage: () => void
+    refetch: () => void
 }
 
 export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
@@ -50,6 +52,9 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
     setSearchValue,
     searchResult,
     searchValue,
+    fetchNextPage,
+    fetchNextSearchPage,
+    refetch,
 }) {
     const { classes, cx } = useStyles()
     const { t } = useI18N()
@@ -58,15 +63,15 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
             <Box padding="16px">
                 <Search setSearchValue={setSearchValue} />
             </Box>
-            {loading ? (
+            {loading && !(searchValue ? searchResult.length : friends.length) ? (
                 <div className={cx(classes.empty, classes.mainText)}>
                     <LoadingBase />
                     <Typography>{t('loading')}</Typography>
                 </div>
             ) : searchValue ? (
-                <SearchList searchResult={searchResult} />
+                <SearchList searchResult={searchResult} fetchNextPage={fetchNextSearchPage} refetch={refetch} />
             ) : (
-                <Contacts friends={friends} />
+                <Contacts friendsArray={friends} fetchNextPage={fetchNextPage} />
             )}
         </div>
     )

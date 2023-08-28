@@ -25,5 +25,7 @@
     "plugin_artblocks_share": "我刚刚从{{name}} 使用{{- price}} {{symbol}} 购买了一件美丽的艺术品。安装@realMaskNetwork来获取您的作品。",
     "plugin_artblocks_share_no_official_account": "我刚刚在{{name}} 使用{{- price}} {{symbol}} 购买了一件美丽的艺术品。欢迎加入！",
     "plugin_tips_disconnect_introduction": "您确定要断开 {{persona}} 与钱包 <strong>{{address}}<strong/> 的连接吗？",
+    "plugin_tips_not_evm_alert": "小费功能目前仅支持 EVM 链。将来会添加对其他链的支持。",
+    "plugin_artblocks_description": "Artblocks 依托算法生成内容技术，给用户提供随心铸造 NFT 的体验。",
     "plugin_artblocks_name": "Artblocks"
 }

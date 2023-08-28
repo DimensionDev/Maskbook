@@ -93,7 +93,9 @@ export const Prior1559GasSetting = memo(
 
         const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
 
-        const { value: gasOptions, loading: getGasOptionsLoading } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
+        const { data: gasOptions, isLoading: getGasOptionsLoading } = useGasOptions(NetworkPluginID.PLUGIN_EVM, {
+            chainId,
+        })
 
         const options = useMemo(
             () =>
@@ -102,17 +104,17 @@ export const Prior1559GasSetting = memo(
                           {
                               title: t.popups_wallet_gas_fee_settings_low(),
                               gasOption: GasOptionType.SLOW,
-                              gasPrice: gasOptions[GasOptionType.SLOW].suggestedMaxFeePerGas ?? '0',
+                              gasPrice: gasOptions[GasOptionType.SLOW].suggestedMaxFeePerGas || '0',
                           },
                           {
                               title: t.popups_wallet_gas_fee_settings_medium(),
                               gasOption: GasOptionType.NORMAL,
-                              gasPrice: gasOptions[GasOptionType.NORMAL].suggestedMaxFeePerGas ?? '0',
+                              gasPrice: gasOptions[GasOptionType.NORMAL].suggestedMaxFeePerGas || '0',
                           },
                           {
                               title: t.popups_wallet_gas_fee_settings_high(),
                               gasOption: GasOptionType.FAST,
-                              gasPrice: gasOptions[GasOptionType.FAST].suggestedMaxFeePerGas ?? 0,
+                              gasPrice: gasOptions[GasOptionType.FAST].suggestedMaxFeePerGas || 0,
                           },
                       ]
                     : null,
@@ -143,7 +145,7 @@ export const Prior1559GasSetting = memo(
             mode: 'onChange',
             resolver: zodResolver(schema),
             defaultValues: {
-                gasLimit: new BigNumber(gasLimit ?? 0).toString(),
+                gasLimit: new BigNumber(gasLimit || 0).toString(),
                 gasPrice: '',
             },
             context: {
@@ -160,7 +162,7 @@ export const Prior1559GasSetting = memo(
         useEffect(() => {
             const minGasPrice = minGasPriceOfChain[chainId]
             if (currentGasOption || minGasPrice) {
-                setValue('gasPrice', formatWeiToGwei(currentGasOption?.gasPrice ?? minGasPrice ?? 0).toString())
+                setValue('gasPrice', formatWeiToGwei(currentGasOption?.gasPrice || minGasPrice || 0).toString())
             }
         }, [currentGasOption, setValue, chainId])
 
@@ -187,7 +189,7 @@ export const Prior1559GasSetting = memo(
                                 onClick={() => setGasOptionType(gasOption)}
                                 className={selectedGasOption === gasOption ? classes.selected : undefined}>
                                 <Typography className={classes.optionsTitle}>{title}</Typography>
-                                <Typography>{formatWeiToGwei(gasPrice ?? 0).toString()} Gwei</Typography>
+                                <Typography>{formatWeiToGwei(gasPrice || 0).toString()} Gwei</Typography>
                                 <Typography className={classes.gasUSD}>
                                     <Trans
                                         i18nKey="popups_wallet_gas_fee_settings_usd"
@@ -219,7 +221,7 @@ export const Prior1559GasSetting = memo(
                             <Trans
                                 i18nKey="popups_wallet_gas_fee_settings_usd"
                                 values={{
-                                    usd: formatGweiToEther(gasPrice ?? 0)
+                                    usd: formatGweiToEther(gasPrice || 0)
                                         .times(nativeTokenPrice)
                                         .times(inputGasLimit || 1)
                                         .toFixed(2),

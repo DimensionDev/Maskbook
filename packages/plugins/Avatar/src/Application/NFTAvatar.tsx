@@ -5,7 +5,7 @@ import { Avatar, Box, Stack } from '@mui/material'
 import { RainbowBox } from '../SiteAdaptor/RainbowBox.js'
 
 export const SOCIAL_MEDIA_ICON_MAPPING: Record<string, React.ReactNode> = {
-    [EnhanceableSite.Twitter]: <Icons.TwitterRound size={15} />,
+    [EnhanceableSite.Twitter]: <Icons.TwitterXRound size={14} />,
     [EnhanceableSite.Localhost]: null,
 }
 
@@ -54,6 +54,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                     overflow: 'hidden',
                     borderRadius: '100%',
                     backgroundColor: 'white',
+                    padding: '1px',
                 }}>
                 {SOCIAL_MEDIA_ICON_MAPPING[EnhanceableSite.Twitter]}
             </Stack>

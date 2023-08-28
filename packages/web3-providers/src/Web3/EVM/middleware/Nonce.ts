@@ -14,17 +14,20 @@ export class Nonce implements Middleware<ConnectionContext> {
 
     private Web3 = new ConnectionReadonlyAPI()
 
+    // account address => chainId => nonce
     private nonces = new Map<string, Map<ChainId, number>>()
 
-    private async syncRemoteNonce(chainId: ChainId, address: string, commitment = 0) {
+    private async syncRemoteNonce(chainId: ChainId, address: string, providerURL?: string, commitment = 0) {
         const address_ = checksumAddress(address)
         const addressNonces = this.nonces.get(address_) ?? new Map<ChainId, number>()
+
         addressNonces.set(
             chainId,
             commitment +
                 Math.max(
                     await this.Web3.getTransactionNonce(address, {
                         chainId,
+                        providerURL,
                     }),
                     addressNonces.get(chainId) ?? Nonce.INITIAL_NONCE,
                 ),
@@ -48,7 +51,7 @@ export class Nonce implements Middleware<ConnectionContext> {
                 params: [
                     {
                         ...context.config,
-                        nonce: toHex(await this.syncRemoteNonce(context.chainId, context.account)),
+                        nonce: toHex(await this.syncRemoteNonce(context.chainId, context.account, context.providerURL)),
                     },
                 ],
             }
@@ -63,11 +66,12 @@ export class Nonce implements Middleware<ConnectionContext> {
             const isGeneralErrorNonce = /\bnonce|transaction\b/im.test(message) && /\b(low|high|old)\b/im.test(message)
             const isAuroraErrorNonce = message.includes('ERR_INCORRECT_NONCE')
 
+            // if a nonce error was occurred then reset the nonce
+            if (isGeneralErrorNonce || isAuroraErrorNonce)
+                await this.syncRemoteNonce(context.chainId, context.account, context.providerURL)
             // if a transaction hash was received then commit the nonce
-            if (isGeneralErrorNonce || isAuroraErrorNonce) await this.syncRemoteNonce(context.chainId, context.account)
-            // else if a nonce error was occurred then reset the nonce
             else if (!context.error && typeof context.result === 'string')
-                await this.syncRemoteNonce(context.chainId, context.account, 1)
+                await this.syncRemoteNonce(context.chainId, context.account, context.providerURL, 1)
         } catch {
             // to scan the context to determine how to update the local nonce, allow to fail silently
         }

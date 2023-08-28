@@ -1,9 +1,9 @@
+import { noop } from 'lodash-es'
+import { useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { ConnectionOptions } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { useQuery } from '@tanstack/react-query'
-import { noop } from 'lodash-es'
-import { useEffect } from 'react'
 import { useChainContext } from './useContext.js'
 import { useWeb3Connection } from './useWeb3Connection.js'
 import { useWeb3State } from './useWeb3State.js'
@@ -12,6 +12,8 @@ export function useFungibleTokenBalance<T extends NetworkPluginID = NetworkPlugi
     pluginID?: T,
     address?: string,
     options?: ConnectionOptions<T>,
+    /** Allow to control the request */
+    enabled = true,
 ) {
     const { account } = useChainContext({ account: options?.account })
     const Web3 = useWeb3Connection(pluginID, {
@@ -21,11 +23,11 @@ export function useFungibleTokenBalance<T extends NetworkPluginID = NetworkPlugi
     const { BalanceNotifier } = useWeb3State(pluginID)
 
     const result = useQuery({
-        enabled: !!address,
+        enabled,
         queryKey: ['fungible-token', 'balance', pluginID, account, address, options],
         queryFn: async () => {
             if (!address) return '0'
-            return Web3.getFungibleTokenBalance(address, undefined)
+            return Web3.getFungibleTokenBalance(address, undefined, options)
         },
     })
 

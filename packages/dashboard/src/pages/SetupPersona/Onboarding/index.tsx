@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useMemo } from 'react'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, useTheme } from '@mui/material'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
@@ -16,7 +16,6 @@ import { compact } from 'lodash-es'
 import { isZero } from '@masknet/web3-shared-base'
 import { useAsyncRetry } from 'react-use'
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
-import { useWallets } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -79,9 +78,10 @@ export const Onboarding = memo(function Onboarding() {
     const t = useDashboardI18N()
     const { classes } = useStyles()
 
-    const wallets = useWallets()
     const [params] = useSearchParams()
     const { showSnackbar } = useCustomSnackbar()
+    const theme = useTheme()
+    const isCreate = params.get('isCreate')
 
     const { value: hasPaymentPassword, loading, retry } = useAsyncRetry(WalletServiceRef.value.hasPassword, [])
 
@@ -102,6 +102,17 @@ export const Onboarding = memo(function Onboarding() {
             { isCreating: true },
         )
     }, [hasPaymentPassword])
+
+    useEffect(() => {
+        return CrossIsolationMessages.events.passwordStatusUpdated.on((hasPassword) => {
+            if (!hasPassword) return
+            retry()
+            showSnackbar(t.persona_onboarding_set_payment_password(), {
+                variant: 'success',
+                message: t.wallet_set_payment_password_successfully(),
+            })
+        })
+    }, [retry])
 
     const words = useMemo(() => {
         const count = params.get('count')
@@ -131,17 +142,6 @@ export const Onboarding = memo(function Onboarding() {
         ])
     }, [t])
 
-    useEffect(() => {
-        return CrossIsolationMessages.events.passwordStatusUpdated.on((hasPassword) => {
-            if (!hasPassword) return
-            retry()
-            showSnackbar(t.persona_onboarding_set_payment_password(), {
-                variant: 'success',
-                message: t.wallet_set_payment_password_successfully(),
-            })
-        })
-    }, [retry])
-
     return (
         <>
             <Box className={classes.card}>
@@ -170,10 +170,16 @@ export const Onboarding = memo(function Onboarding() {
                 <PrimaryButton
                     onClick={onSetupTwitter}
                     size="large"
-                    startIcon={<Icons.TwitterStroke className={classes.twitter} size={20} />}>
+                    startIcon={
+                        <Icons.TwitterX
+                            variant={theme.palette.mode === 'dark' ? 'light' : 'dark'}
+                            className={classes.twitter}
+                            size={20}
+                        />
+                    }>
                     {t.persona_onboarding_to_twitter()}
                 </PrimaryButton>
-                {wallets.length ? (
+                {!isCreate ? (
                     <PrimaryButton
                         loading={loading}
                         disabled={loading}

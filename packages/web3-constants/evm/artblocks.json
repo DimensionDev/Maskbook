@@ -1,27 +1,6 @@
 {
     "GEN_ART_721_MINTER": {
         "Mainnet": "0x1DEC9E52f1320F7Deb29cBCd7B7d67f3dF785142",
-        "Ropsten": "0xfd50294f1ddeccdf6ea55bc57a15916328177653",
-        "Rinkeby": "",
-        "Kovan": "",
-        "Gorli": "",
-        "BSC": "",
-        "BSCT": "",
-        "Matic": "",
-        "Mumbai": "",
-        "Arbitrum": "",
-        "Arbitrum_Rinkeby": "",
-        "xDai": "",
-        "Optimism": "",
-        "Optimism_Kovan": "",
-        "Optimism_Goerli": "",
-        "Avalanche": "",
-        "Avalanche_Fuji": "",
-        "Celo": "",
-        "Fantom": "",
-        "Aurora": "",
-        "Aurora_Testnet": "",
-        "Conflux": "",
-        "Astar": ""
+        "Ropsten": "0xfd50294f1ddeccdf6ea55bc57a15916328177653"
     }
 }

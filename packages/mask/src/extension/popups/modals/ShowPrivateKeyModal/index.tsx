@@ -7,7 +7,7 @@ import { PopupRoutes, type SingletonModalRefCreator } from '@masknet/shared-base
 import { ActionButton } from '@masknet/theme'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { PasswordField } from '../../components/PasswordField/index.js'
-import { WalletRPC } from '../../../../plugins/WalletService/messages.js'
+import Services from '../../../service.js'
 import { useNavigate } from 'react-router-dom'
 
 interface ShowPrivateKeyDrawerProps extends BottomDrawerProps {
@@ -23,13 +23,13 @@ function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest 
     const navigate = useNavigate()
 
     const [{ loading }, handleClick] = useAsyncFn(async () => {
-        const verified = await WalletRPC.verifyPassword(password)
+        const verified = await Services.Wallet.verifyPassword(password)
 
         if (!verified) {
             setError(t('create_wallet_incorrect_payment_password'))
             return
         }
-        await WalletRPC.unlockWallet(password)
+        await Services.Wallet.unlockWallet(password)
         navigate(PopupRoutes.ExportWalletPrivateKey, {
             state: {
                 password,

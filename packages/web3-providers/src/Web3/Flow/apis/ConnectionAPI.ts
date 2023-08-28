@@ -305,8 +305,7 @@ export class FlowConnectionAPI
     }
 
     async signMessage(type: string, message: string, initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        const web3 = this.getWeb3(options)
+        const web3 = this.getWeb3(initial)
         const data = new TextEncoder().encode(message)
         const signed = first(await web3.currentUser.signUserMessage(toHex(data)))
         if (!signed) throw new Error('Failed to sign message.')

@@ -1,6 +1,5 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
-import { Suspense } from 'react'
 import { initReactI18next } from 'react-i18next'
 import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom/server.js'
@@ -15,6 +14,8 @@ import { addMaskI18N } from '../../../shared-ui/locales/languages.js'
 import type { PopupSSR_Props } from '../../../background/tasks/Cancellable/PopupSSR/type.js'
 import { PersonaHomeUI } from './pages/Personas/Home/UI.js'
 import { usePopupTheme } from '../../utils/theme/usePopupTheme.js'
+import { PopupLayout } from './components/PopupLayout/index.js'
+import { WalletLinkContext } from './components/Navigator/index.js'
 
 const init = once(() =>
     i18NextInstance.init().then(() => {
@@ -43,36 +44,35 @@ export async function render(props: PopupSSR_Props) {
     return { html, css }
 }
 
+const walletLink = () => '#'
 function PopupSSR(props: PopupSSR_Props) {
     return (
         // MaskUIRoot
         <DisableShadowRootContext.Provider value>
-            <Suspense fallback={null}>
-                <Suspense fallback={null}>
-                    <StaticRouter location={PopupRoutes.Personas}>
-                        <MaskThemeProvider
-                            useTheme={usePopupTheme}
-                            CustomSnackbarOffsetY={0}
-                            useMaskIconPalette={() => 'light'}>
-                            {/* Persona */}
-                            <Suspense fallback={null}>
-                                <PersonaHomeUI
-                                    accounts={props.accounts ?? EMPTY_LIST}
-                                    networks={props.networks}
-                                    onRestore={noop}
-                                    onCreatePersona={noop}
-                                    onConnect={noop}
-                                    onAccountClick={noop}
-                                    avatar={props.avatar}
-                                    fingerprint={props.currentFingerPrint || ''}
-                                    isEmpty={!props.hasPersona}
-                                    nickname={props.nickname}
-                                />
-                            </Suspense>
-                        </MaskThemeProvider>
-                    </StaticRouter>
-                </Suspense>
-            </Suspense>
+            <StaticRouter location={PopupRoutes.Personas}>
+                <MaskThemeProvider
+                    useTheme={usePopupTheme}
+                    CustomSnackbarOffsetY={0}
+                    useMaskIconPalette={() => 'light'}>
+                    <WalletLinkContext.Provider value={walletLink}>
+                        <PopupLayout>
+                            <PersonaHomeUI
+                                accounts={props.accounts ?? EMPTY_LIST}
+                                networks={props.networks}
+                                onRestore={noop}
+                                onCreatePersona={noop}
+                                onConnect={noop}
+                                onAccountClick={noop}
+                                avatar={props.avatar}
+                                publicKey={props.currentPublicKeyHex}
+                                fingerprint={props.currentFingerPrint}
+                                isEmpty={!props.hasPersona}
+                                nickname={props.nickname}
+                            />
+                        </PopupLayout>
+                    </WalletLinkContext.Provider>
+                </MaskThemeProvider>
+            </StaticRouter>
         </DisableShadowRootContext.Provider>
     )
 }

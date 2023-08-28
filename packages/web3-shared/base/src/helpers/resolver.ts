@@ -197,7 +197,7 @@ const MATCH_IPFS_CID_AT_STARTS_RE = new RegExp(`^https://(?:${MATCH_IPFS_CID_RAW
 const MATCH_IPFS_CID_AND_PATHNAME_RE = new RegExp(`(?:${MATCH_IPFS_CID_RAW})\\/?.*`)
 const MATCH_LOCAL_RESOURCE_URL_RE = /^(data|blob:|\w+-extension:\/\/|<svg\s)/
 const CORS_HOST = 'https://cors-next.r2d2.to'
-const IPFS_GATEWAY_HOST = 'https://gateway.ipfscdn.io'
+const IPFS_GATEWAY_HOST = 'https://hoot.it'
 
 export function isIPFS_CID(cid: string) {
     return MATCH_IPFS_CID_STRICT_RE.test(cid)

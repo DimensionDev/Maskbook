@@ -1,40 +1,8 @@
-import { z } from 'zod'
 import { fetchChainId } from '@masknet/web3-providers/helpers'
-import type { I18NFunction } from '../../../../../utils/i18n-next-ui.js'
 import { isSameURL, type ReasonableNetwork } from '@masknet/web3-shared-base'
 import { getRPCConstant, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
-
-interface ChainConfig {
-    name: string
-    chain: string
-    icon: string
-    rpc: string[]
-    features: Array<{ name: LiteralUnion<'EIP155' | 'EIP1559'> }>
-    faucets: []
-    nativeCurrency: {
-        name: string
-        symbol: string
-        decimals: number
-    }
-    infoURL: string
-    shortName: string
-    chainId: number
-    networkId: number
-    slip44: number
-    ens: {
-        registry: string
-    }
-    explorers: Array<{
-        name: string
-        url: string
-        standard: LiteralUnion<'EIP3091'>
-    }>
-}
-
-export async function fetchChains(): Promise<ChainConfig[]> {
-    const res = await fetch('https://chainid.network/chains.json')
-    return res.json()
-}
+import { z } from 'zod'
+import type { I18NFunction } from '../../../../../utils/i18n-next-ui.js'
 
 type NameValidator = (name: string) => boolean | Promise<boolean>
 
@@ -60,7 +28,7 @@ export function createBaseSchema(t: I18NFunction, duplicateNameValidator: NameVa
             z.number(),
         ]),
         currencySymbol: z.string().optional(),
-        explorer: z.union([z.string().url(t('incorrect_explorer_url')), z.literal('')]),
+        explorer: z.string().url(t('incorrect_explorer_url')),
     })
     return schema
 }

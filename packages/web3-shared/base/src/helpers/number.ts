@@ -1,5 +1,5 @@
 import { BigNumber } from 'bignumber.js'
-import { isUndefined } from 'lodash-es'
+import { isUndefined, trimEnd } from 'lodash-es'
 
 export const ZERO = new BigNumber('0')
 export const ONE = new BigNumber('1')
@@ -107,16 +107,17 @@ export function toFixed(value: BigNumber.Value = 0, decimalPlaces?: number) {
     return !isUndefined(decimalPlaces) ? n.toFixed(decimalPlaces) : n.toFixed()
 }
 
-export function formatInteger(value: BigNumber.Value | null | undefined, fallback?: string | number) {
-    if (value === undefined || value === null) return fallback
-    return new BigNumber(value).toFormat(0)
-}
-
 /** Trim ending zeros of decimals */
 export function trimZero(digit: string) {
-    return digit.replaceAll(/\.([1-9]*)?0+$/g, (_, p1) => {
+    const result = digit.replaceAll(/\.([1-9]*)?0+$/g, (_, p1) => {
         return p1 ? `.${p1}` : ''
     })
+
+    if (isLessThan(result, 1)) {
+        return trimEnd(result, '0')
+    }
+
+    return result
 }
 
 export function addThousandSeparators(num: string | number) {

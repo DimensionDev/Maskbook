@@ -8,7 +8,7 @@ import { PersonaAvatar } from '../../components/PersonaAvatar/index.js'
 import { Icons } from '@masknet/icons'
 import { PersonaPublicKey } from '../../components/PersonaPublicKey/index.js'
 import { PopupModalRoutes, PopupRoutes } from '@masknet/shared-base'
-import { UserContext } from '../../hook/useUserContext.js'
+import { UserContext } from '../../hooks/index.js'
 import { useNavigate } from 'react-router-dom'
 
 const useStyles = makeStyles()((theme) => ({
@@ -113,6 +113,7 @@ export const PersonaSettingModal = memo<ActionModalBaseProps>(function PersonaSe
                             !user.backupPassword
                                 ? PopupModalRoutes.SetBackupPassword
                                 : PopupModalRoutes.verifyBackupPassword,
+                            { to: PopupRoutes.ExportPrivateKey },
                         )
                     }}
                 />

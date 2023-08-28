@@ -1,4 +1,6 @@
-export function isSameURL(a: string | URL, b: string | URL): boolean {
+export function isSameURL(a: string | URL | undefined, b: string | URL | undefined): boolean {
+    if (!a || !b) return false
+
     // Parse the input URLs if they are strings
     let urlA: URL
     let urlB: URL

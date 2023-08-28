@@ -68,11 +68,11 @@ export interface NFT_FloorPrice {
     updated_at: string
 }
 
-/** 0 is success, 1 is fail */
+/** 0 is fail, 1 is succeed */
 export type TxStatus = 0 | 1
 export interface Tx {
     chain_id: ChainId
-    type: 0
+    type: 0 | 2
     status: TxStatus
     block_number: string
     // e.g., 2022-05-17T20:41:19Z
@@ -94,6 +94,7 @@ export interface Tx {
     max_priority_fee_per_gas: number
     saving_fee: number
     burnt_fee: number
+    tx_fee: number
 }
 
 export interface ENSRecord {

@@ -80,8 +80,7 @@ export class SolanaConnectionAPI
     }
 
     async switchChain(chainId: ChainId, initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        await this.Web3.getProviderInstance(options).switchChain(chainId)
+        await this.Web3.getProviderInstance(initial).switchChain(chainId)
     }
 
     approveFungibleToken(
@@ -120,10 +119,9 @@ export class SolanaConnectionAPI
         memo?: string,
         initial?: ConnectionOptions,
     ): Promise<string> {
-        const options = this.ConnectionOptions.fill(initial)
         return isNativeTokenAddress(address)
-            ? this.Transfer.transferSol(recipient, amount, options)
-            : this.Transfer.transferSplToken(address, recipient, amount, options)
+            ? this.Transfer.transferSol(recipient, amount, initial)
+            : this.Transfer.transferSplToken(address, recipient, amount, initial)
     }
 
     transferNonFungibleToken(
@@ -134,8 +132,7 @@ export class SolanaConnectionAPI
         schema?: SchemaType,
         initial?: ConnectionOptions,
     ): Promise<string> {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.Transfer.transferSplToken(address, recipient, amount, options)
+        return this.Transfer.transferSplToken(address, recipient, amount, initial)
     }
 
     async connect(initial?: ConnectionOptions): Promise<Account<ChainId>> {
@@ -161,8 +158,7 @@ export class SolanaConnectionAPI
     }
 
     async getBalance(account: string, initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        const balance = await this.Web3.getWeb3Connection(options).getBalance(decodeAddress(account))
+        const balance = await this.Web3.getWeb3Connection(initial).getBalance(decodeAddress(account))
         return balance.toFixed()
     }
 
@@ -237,25 +233,21 @@ export class SolanaConnectionAPI
     }
 
     async getBlock(no: number, initial?: ConnectionOptions): Promise<BlockResponse | null> {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.Web3.getWeb3Connection(options).getBlock(no as number)
+        return this.Web3.getWeb3Connection(initial).getBlock(no as number)
     }
 
     async getBlockNumber(initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.Web3.getWeb3Connection(options).getSlot()
+        return this.Web3.getWeb3Connection(initial).getSlot()
     }
 
     async getBlockTimestamp(initial?: ConnectionOptions): Promise<number> {
-        const options = this.ConnectionOptions.fill(initial)
-        const slot = await this.getBlockNumber(options)
-        const response = await this.Web3.getWeb3Connection(options).getBlockTime(slot)
+        const slot = await this.getBlockNumber(initial)
+        const response = await this.Web3.getWeb3Connection(initial).getBlockTime(slot)
         return response ?? 0
     }
 
     getTransaction(id: string, initial?: ConnectionOptions): Promise<TransactionDetailed | null> {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.Web3.getWeb3Connection(options).getTransaction(id)
+        return this.Web3.getWeb3Connection(initial).getTransaction(id)
     }
 
     async getTransactionReceipt(id: string, initial?: ConnectionOptions): Promise<TransactionReceipt | null> {
@@ -263,16 +255,14 @@ export class SolanaConnectionAPI
     }
 
     async getTransactionStatus(id: string, initial?: ConnectionOptions): Promise<TransactionStatusType> {
-        const options = this.ConnectionOptions.fill(initial)
-        const response = await this.Web3.getWeb3Connection(options).getSignatureStatus(id)
+        const response = await this.Web3.getWeb3Connection(initial).getSignatureStatus(id)
         if (response.value?.err) return TransactionStatusType.FAILED
         if (response.value?.confirmations && response.value.confirmations > 0) return TransactionStatusType.SUCCEED
         return TransactionStatusType.NOT_DEPEND
     }
 
     async getTransactionNonce(account: string, initial?: ConnectionOptions): Promise<number> {
-        const options = this.ConnectionOptions.fill(initial)
-        const response = await this.Web3.getWeb3Connection(options).getNonce(decodeAddress(account))
+        const response = await this.Web3.getWeb3Connection(initial).getNonce(decodeAddress(account))
         return response?.nonce ? Number.parseInt(response.nonce, 10) : 0
     }
 
@@ -374,14 +364,12 @@ export class SolanaConnectionAPI
     }
 
     async sendTransaction(transaction: Transaction, initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
         const signedTransaction = await this.signTransaction(transaction)
-        return sendAndConfirmRawTransaction(this.Web3.getWeb3Connection(options), signedTransaction.serialize())
+        return sendAndConfirmRawTransaction(this.Web3.getWeb3Connection(initial), signedTransaction.serialize())
     }
 
     sendSignedTransaction(signature: TransactionSignature, initial?: ConnectionOptions): Promise<string> {
-        const options = this.ConnectionOptions.fill(initial)
-        return sendAndConfirmRawTransaction(this.Web3.getWeb3Connection(options), signature.serialize())
+        return sendAndConfirmRawTransaction(this.Web3.getWeb3Connection(initial), signature.serialize())
     }
 
     replaceTransaction(hash: string, config: Transaction, options?: ConnectionOptions): Promise<void> {
@@ -392,8 +380,7 @@ export class SolanaConnectionAPI
     }
 
     async signMessage(type: string, message: string, initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.Web3.getProviderInstance(options).signMessage(message)
+        return this.Web3.getProviderInstance(initial).signMessage(message)
     }
 
     async verifyMessage(
@@ -402,17 +389,14 @@ export class SolanaConnectionAPI
         signature: string,
         initial?: ConnectionOptions,
     ): Promise<boolean> {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.Web3.getProviderInstance(options).verifyMessage(message, signature)
+        return this.Web3.getProviderInstance(initial).verifyMessage(message, signature)
     }
 
     async signTransaction(transaction: Transaction, initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.Web3.getProviderInstance(options).signTransaction(transaction)
+        return this.Web3.getProviderInstance(initial).signTransaction(transaction)
     }
 
     signTransactions(transactions: Transaction[], initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        return Promise.all(transactions.map((x) => this.signTransaction(x, options)))
+        return Promise.all(transactions.map((x) => this.signTransaction(x, initial)))
     }
 }

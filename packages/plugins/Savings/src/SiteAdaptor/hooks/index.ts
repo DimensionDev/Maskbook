@@ -3,10 +3,11 @@ import { AAVEProtocol } from '../../protocols/AAVEProtocol.js'
 import type { SavingsProtocol } from '../../types.js'
 import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 export function useApr(protocol: SavingsProtocol, enabled: boolean) {
     const isAAve = protocol instanceof AAVEProtocol
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: ChainId.Mainnet })
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
     return useQuery({
         queryKey: ['savings', 'apr', chainId, isAAve ? protocol.bareToken.address : 'lido'],
@@ -16,7 +17,7 @@ export function useApr(protocol: SavingsProtocol, enabled: boolean) {
 }
 
 export function useBalance(protocol: SavingsProtocol, enabled: boolean) {
-    const { chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
     return useQuery({
         queryKey: ['savings', 'balance', chainId, protocol.bareToken.address, account],

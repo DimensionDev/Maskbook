@@ -1,7 +1,8 @@
 import { uniqWith } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import { delay } from '@masknet/kit'
-import type { Plugin } from '@masknet/plugin-infra/content-script'
+import { WalletServiceRef } from '@masknet/plugin-infra/dom'
+import type { Plugin } from '@masknet/plugin-infra'
 import {
     EMPTY_LIST,
     PersistentStorages,
@@ -9,6 +10,7 @@ import {
     type StorageObject,
     type UpdatableWallet,
     type Wallet,
+    CrossIsolationMessages,
 } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
@@ -143,6 +145,7 @@ export class BaseHostedProvider
                     : x,
             ),
         )
+        CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)
     }
 
     override async renameWallet(address: string, name: string) {
@@ -152,6 +155,8 @@ export class BaseHostedProvider
 
         if (isNameExists) throw new Error('The wallet name already exists.')
 
+        if (!this.walletStorage?.wallets.value.find((x) => isSameAddress(x.address, address))?.owner)
+            await WalletServiceRef.value.renameWallet(address, name)
         await this.updateWallet(address, {
             name,
         })

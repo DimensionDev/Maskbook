@@ -2,15 +2,13 @@ import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@maskne
 import { PageUIProvider, PersonaContext } from '@masknet/shared'
 import {
     CrossIsolationMessages,
-    NetworkPluginID,
     PopupModalRoutes,
     PopupRoutes as PopupPaths,
     PopupsHistory,
 } from '@masknet/shared-base'
 import { PopupSnackbarProvider } from '@masknet/theme'
-import { TelemetryProvider, Web3ContextProvider, useMountReport } from '@masknet/web3-hooks-base'
+import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { EventID } from '@masknet/web3-telemetry/types'
 import { Box } from '@mui/material'
 import { Suspense, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useIdleTimer } from 'react-idle-timer'
@@ -22,15 +20,13 @@ import {
     useLocation,
     type HistoryRouterProps,
 } from 'react-router-dom'
-import { WalletRPC } from '../../plugins/WalletService/messages.js'
 import { usePopupTheme } from '../../utils/theme/usePopupTheme.js'
 import Services from '../service.js'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import { PopupLayout } from './components/PopupLayout/index.js'
 import { wrapModal } from './components/index.js'
 import { PageTitleContext } from './context.js'
-import { PopupContext } from './hook/usePopupContext.js'
-import { UserContext } from './hook/useUserContext.js'
+import { PopupContext, UserContext } from './hooks/index.js'
 import { ConnectProviderModal } from './modals/ConnectProvider/index.js'
 import { SelectProviderModal } from './modals/SelectProviderModal/index.js'
 import {
@@ -62,8 +58,6 @@ function PluginRenderDelayed() {
     if (!canRenderPlugin) return null
     return <PluginRender />
 }
-
-const Web3ContextType = { pluginID: NetworkPluginID.PLUGIN_EVM, providerType: ProviderType.MaskWallet }
 
 const personaInitialState = {
     queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
@@ -147,27 +141,27 @@ export default function Popups() {
         [title, extension, customBackHandler],
     )
 
-    useMountReport(EventID.AccessPopups)
-    useIdleTimer({ onAction: WalletRPC.setAutoLockTimer, throttle: 10000 })
+    useIdleTimer({ onAction: Services.Wallet.setAutoLockTimer, throttle: 10000 })
+    useEffect(() => {
+        if (location.hash.includes('/swap')) return
+        return CrossIsolationMessages.events.popupRouteUpdated.on((url) => PopupsHistory.replace(url))
+    }, [])
 
-    useEffect(() => CrossIsolationMessages.events.popupRouteUpdated.on((url) => PopupsHistory.replace(url)), [])
     return PageUIProvider(
         usePopupTheme,
         <PopupSnackbarProvider>
-            <Web3ContextProvider value={Web3ContextType}>
-                <TelemetryProvider>
-                    <PopupContext.Provider>
-                        <PageTitleContext.Provider value={titleContext}>
-                            <HistoryRouter history={PopupsHistory as unknown as HistoryRouterProps['history']}>
-                                <PopupRoutes />
-                                <Modals />
-                                {/* TODO: Should only load plugins when the page is plugin-aware. */}
-                                <PluginRenderDelayed />
-                            </HistoryRouter>
-                        </PageTitleContext.Provider>
-                    </PopupContext.Provider>
-                </TelemetryProvider>
-            </Web3ContextProvider>
+            <DefaultWeb3ContextProvider value={{ providerType: ProviderType.MaskWallet }}>
+                <PopupContext.Provider>
+                    <PageTitleContext.Provider value={titleContext}>
+                        <HistoryRouter history={PopupsHistory as unknown as HistoryRouterProps['history']}>
+                            <PopupRoutes />
+                            <Modals />
+                            {/* TODO: Should only load plugins when the page is plugin-aware. */}
+                            <PluginRenderDelayed />
+                        </HistoryRouter>
+                    </PageTitleContext.Provider>
+                </PopupContext.Provider>
+            </DefaultWeb3ContextProvider>
         </PopupSnackbarProvider>,
         null,
     )

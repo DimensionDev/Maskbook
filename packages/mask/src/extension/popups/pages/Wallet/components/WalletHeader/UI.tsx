@@ -14,12 +14,12 @@ import { WalletAssetsValue } from './WalletAssetsValue.js'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => ({
     container: {
-        background:
-            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
         padding: '16px',
+        lineHeight: 0,
         // padding bottom space for assets tabs
         paddingBottom: !disabled ? 34 : 16,
-        lineHeight: 0,
+        background:
+            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
     },
     topbar: {
         display: 'flex',
@@ -121,6 +121,7 @@ interface WalletHeaderUIProps {
     onActionClick: () => void
     wallet: Wallet
     disabled?: boolean
+    disableCopy?: boolean
 }
 
 export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI({
@@ -130,6 +131,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
     onActionClick,
     wallet,
     disabled = false,
+    disableCopy = false,
 }) {
     const { t } = useI18N()
     const { classes, cx } = useStyles({ disabled })
@@ -167,8 +169,8 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                                 />
                             ) : null}
                         </Box>
-                        {data?.url || isLoading ? (
-                            <ProgressiveText className={classes.connected} loading={isLoading}>
+                        {isLoading ? null : (
+                            <ProgressiveText className={classes.connected} loading={isLoading} skeletonWidth={50}>
                                 <span
                                     className={cx(
                                         classes.dot,
@@ -181,7 +183,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                                     })}
                                 </span>
                             </ProgressiveText>
-                        ) : null}
+                        )}
                     </Box>
                 </div>
                 <div
@@ -196,7 +198,9 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                         </TextOverflowTooltip>
                         <Typography className={classes.identifier}>
                             <FormattedAddress address={wallet.address} formatter={formatEthereumAddress} size={4} />
-                            <CopyButton text={wallet.address} className={classes.icon} size={12} />
+                            {!disableCopy ? (
+                                <CopyButton text={wallet.address} className={classes.icon} size={12} />
+                            ) : null}
                             {addressLink ? (
                                 <Link
                                     className={classes.icon}
@@ -215,7 +219,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
             {!disabled ? (
                 <>
                     <WalletAssetsValue className={classes.balance} skeletonWidth={100} skeletonHeight="2em" />
-                    <ActionGroup mt={2} />
+                    <ActionGroup chainId={chainId} mt={2} />
                 </>
             ) : null}
         </Box>

@@ -14,10 +14,7 @@ export const Container = memo(function Container(props: PropsWithChildren<{}>) {
 })
 
 export const Link = memo(function Anchor(props: RenderFragmentsContextType.LinkProps) {
-    let text = props.children
-    if (text.startsWith('https://mask.io')) {
-        text = 'Mask.io'
-    }
+    const text = props.children.startsWith('https://mask.io') ? 'Mask.io' : props.children
     return (
         <MaterialLink href={props.href} fontSize="inherit">
             {text}

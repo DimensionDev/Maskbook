@@ -17,40 +17,58 @@ export enum ExceptionType {
 }
 
 export enum EventID {
-    // Open the Web3 tabs but no persona detected
-    AccessWeb3TabCreatePersonaTab = 'AccessWeb3TabCreatePersonaTab',
-    // Open the Web3 tabs the NFTs tab presents
-    AccessWeb3TabNFTsTab = 'AccessWeb3TabNFTsTab',
-    // Open the Web3 tabs the Activities tab presents
-    AccessWeb3TabActivitiesTab = 'AccessWeb3TabActivitiesTab',
-    // Open the Web3 tabs the Donation tab presents
-    AccessWeb3TabDonationTab = 'AccessWeb3TabDonationTab',
-    // Open the Web3 tabs the Social tab presents
-    AccessWeb3TabSocialTab = 'AccessWeb3TabSocialTab',
-    // Open the web3 profile dialog
-    AccessWeb3ProfileDialog = 'AccessWeb3ProfileDialog',
-    // Open the Web3 profile dialog the NFTs tab presents
-    AccessWeb3ProfileDialogNFTsTab = 'AccessWeb3ProfileDialogNFTsTab',
-    // Open the Web3 profile dialog the Activities tab presents
-    AccessWeb3ProfileDialogActivitiesTab = 'AccessWeb3ProfileDialogActivitiesTab',
-    // Open the Web3 profile dialog the Donation tab presents
-    AccessWeb3ProfileDialogDonationTab = 'AccessWeb3ProfileDialogDonationTab',
-    // Open the Web3 profile dialog the Social tab presents
-    AccessWeb3ProfileDialogSocialTab = 'AccessWeb3ProfileDialogSocialTab',
-    // Open the trader plugin
-    AccessTradePlugin = 'AccessTradePlugin',
-    // Send the trader transaction successfully
-    SendTraderTransactionSuccessfully = 'SendTraderTransactionSuccessfully',
-    // The toolbar has successfully injected
-    AccessToolbox = 'AccessToolbox',
-    // Open the application board dialog
-    AccessApplicationBoard = 'AccessApplicationBoard',
-    // Open the SPA
-    AccessApp = 'AccessApp',
-    // Open the dashboard page
-    AccessDashboard = 'AccessDashboard',
-    // Open the popups page
-    AccessPopups = 'AccessPopups',
+    EntryAppLuckOpen = 'entry_app_luck_open',
+    EntryAppLuckCreate = 'entry_app_luck_create',
+
+    // todo
+    EntryAppLuckSend = 'entry_app_luck_send',
+
+    EntryAppNFT_PFP_Open = 'entry_app_nft_pfp_open',
+    EntryAppNFT_PFP_Setting = 'entry_app_nft_pfp_setting',
+    EntryAppSwapOpen = 'entry_app_swap_open',
+    EntryAppApprovalOpen = 'entry_app_approval_open',
+    EntryAppCheckOpen = 'entry_app_check_open',
+    EntryTimelineDsearchToken = 'entry_timeline_dsearch_token',
+    EntryTimelineDsearchNft = 'entry_timeline_dsearch_nft',
+    EntryTimelineDsearchAddress = 'entry_timeline_dsearch_address',
+    EntryTimelineDsearchEns = 'entry_timeline_dsearch_ens',
+    EntryTimelineDsearchName = 'entry_timeline_dsearch_name',
+    EntryTimelineTipsOpen = 'entry_timeline_tips_open',
+    EntryTimelineTipsSend = 'entry_timeline_tips_send',
+    EntryTimelineHoverTokenDuration = 'entry_timeline_hover_token_duration',
+    EntryTimelineHoverNftDuration = 'entry_timeline_hover_nft_duration',
+    EntryTimelineHoverUserNftClickNft = 'entry_timeline_hover_user_nft_click_nft',
+    EntryTimelineHoverUserNftSwitchChain = 'entry_timeline_hover_user_nft_switch_chain',
+    EntryTimelineHoverUserActivitiesSwitchTo = 'entry_timeline_hover_user_activities_switch_to',
+    EntryTimelineHoverUserDonationsSwitchTo = 'entry_timeline_hover_user_donations_switch_to',
+    EntryTimelineHoverUserSocialSwitchTo = 'entry_timeline_hover_user_social_switch_to',
+    EntryPopupSocialAccountConnectTwitter = 'entry_popup_social_account_connect_twitter',
+    EntryPopupSocialAccountConnectFb = 'entry_popup_social_account_connect_fb',
+    EntryPopupSocialAccountConnectMinds = 'entry_popup_social_account_connect_minds',
+    EntryPopupSocialAccountConnectIns = 'entry_popup_social_account_connect_ins',
+    EntryPopupSocialAccountVerifyTwitter = 'entry_popup_social_account_verify_twitter',
+    EntryPopupSocialAccountDisconnectTwitter = 'entry_popup_social_account_disconnect_twitter',
+    EntryPopupSocialAccountDisconnectFb = 'entry_popup_social_account_disconnect_fb',
+    EntryPopupSocialAccountDisconnectMinds = 'entry_popup_social_account_disconnect_minds',
+    EntryPopupSocialAccountDisconnectIns = 'entry_popup_social_account_disconnect_ins',
+    EntryPopupWalletCreate = 'entry_popup_wallet_create',
+    EntryPopupWalletImport = 'entry_popup_wallet_import',
+    EntryProfileTokenSwitchTrend = 'entry_profile_token_switch_trend',
+    EntryProfileTokenSwitchMarket = 'entry_profile_token_switch_market',
+    EntryProfileNFT_ItemsSwitchTo = 'entry_profile_nft_items_switch_to',
+    EntryProfileNFT_TrendSwitchTo = 'entry_profile_nft_trend_switch_to',
+    EntryProfileNFT_ActivitiesSwitchTo = 'entry_profile_nft_activities_switch_to',
+    EntrySwitchLogoSave = 'entry_switch_logo_save',
+    EntryMaskComposeOpen = 'entry_mask_compose_open',
+    EntryMaskComposeVisibleAll = 'entry_mask_compose_visible_all',
+    EntryMaskComposeVisiblePrivate = 'entry_mask_compose_visible_private',
+    EntryMaskComposeVisibleSelected = 'entry_mask_compose_visible_selected',
+    EntryMaskComposeEncrypt = 'entry_mask_compose_encrypt',
+    EntryProfileUserNftsClickNft = 'entry_profile_user_nfts_click_nft',
+    EntryProfileUserNftsSwitchChain = 'entry_profile_user_nfts_switch_chain',
+    EntryProfileUserActivitiesSwitchTo = 'entry_profile_user_activities_switch_to',
+    EntryProfileUserDonationsSwitchTo = 'entry_profile_user_donations_switch_to',
+    EntryProfileUserSocialSwitchTo = 'entry_profile_user_social_switch_to',
     // For debug only
     Debug = 'Debug',
 }
@@ -95,7 +113,7 @@ export interface ExceptionOptions extends CommonOptions {
     error: Error
 }
 
-export interface Provider<Event, Exception> {
+export interface Provider {
     user?: UserOptions
     device?: DeviceOptions
     network?: NetworkOptions

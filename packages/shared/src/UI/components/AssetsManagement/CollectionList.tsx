@@ -1,11 +1,11 @@
+import { compact, range } from 'lodash-es'
+import { memo, useCallback, useRef, type RefObject, type ReactNode, useMemo } from 'react'
 import { ElementAnchor, EmptyStatus, RetryHint, isSameNFT } from '@masknet/shared'
-import { EMPTY_OBJECT, Sniffings } from '@masknet/shared-base'
+import { EMPTY_LIST, EMPTY_OBJECT, Sniffings } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Box, useForkRef } from '@mui/material'
 import type { BoxProps } from '@mui/system'
-import { range } from 'lodash-es'
-import { memo, useCallback, useRef, type RefObject, type ReactNode } from 'react'
 import { useSharedI18N } from '../../../locales/index.js'
 import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
 import { Collection, CollectionSkeleton, LazyCollection, type CollectionProps } from './Collection.js'
@@ -81,7 +81,6 @@ function getTopOffset() {
     // TODO Other sites
     return 0
 }
-
 export interface CollectionListProps
     extends BoxProps,
         Pick<CollectionProps, 'disableAction' | 'onActionClick' | 'onItemClick'> {
@@ -159,19 +158,33 @@ export const CollectionList = memo(function CollectionList({
         [onCollectionChange, scrollToTop],
     )
 
-    const { assetsMapRef, getAssets, getBLockedTokenIds, getVerifiedBy, loadAssets, loadVerifiedBy, isAllHidden } =
-        useUserAssets()
+    const {
+        assetsMapRef,
+        getAssets,
+        getBLockedTokenIds,
+        getVerifiedBy,
+        loadAssets,
+        loadVerifiedBy,
+        isAllHidden,
+        isEmpty,
+    } = useUserAssets()
+    const additional = useMemo(() => {
+        if (!additionalAssets?.length) return EMPTY_LIST
+        const collectionAddresses = compact(collections.map((x) => x.address?.toLowerCase()))
+        // If it's in our collections, no need to treat it as additional one
+        return additionalAssets.filter((x) => !collectionAddresses.includes(x.address.toLowerCase()))
+    }, [additionalAssets, account, collections])
 
     const handleInitialRender = useCallback(
         (collection: Web3Helper.NonFungibleCollectionAll) => {
             const id = collection.id!
-            const assetsState = assetsMapRef.current[id]
+            const assetsState = assetsMapRef.current[`${account}.${id}`]
             // To reduce requests, check if has been initialized
             if (assetsState?.assets.length || assetsState?.loading) return
             loadVerifiedBy(id)
             loadAssets(collection)
         },
-        [loadAssets, loadVerifiedBy],
+        [loadAssets, loadVerifiedBy, account],
     )
 
     const sidebar = disableSidebar ? null : (
@@ -205,7 +218,7 @@ export const CollectionList = memo(function CollectionList({
             </Box>
         )
 
-    if ((!loading && !collections.length) || !account || isAllHidden) {
+    if ((!loading && !collections.length) || !account || isAllHidden || isEmpty) {
         return (
             <Box className={cx(classes.container, className)} {...rest}>
                 <div className={classes.columns}>
@@ -249,7 +262,7 @@ export const CollectionList = memo(function CollectionList({
                                     expanded
                                 />
                             ) : null}
-                            {additionalAssets?.map((asset) => (
+                            {additional.map((asset) => (
                                 <CollectibleItem
                                     key={`additional.${asset.chainId}.${asset.address}.${asset.tokenId}`}
                                     className={className}

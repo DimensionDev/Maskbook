@@ -5,7 +5,7 @@ import { Trans } from 'react-i18next'
 import { Controller } from 'react-hook-form'
 import type { z as zod } from 'zod'
 import { Box, Link, Typography, useTheme } from '@mui/material'
-import { ActionButton, makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import {
     CrossIsolationMessages,
     NetworkPluginID,
@@ -16,12 +16,12 @@ import {
 import { useBalance, useReverseAddress, useWallets } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { FormattedBalance } from '@masknet/shared'
+import { FormattedBalance, ProgressiveText } from '@masknet/shared'
 import { ExplorerResolver } from '@masknet/web3-providers'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { usePasswordForm } from '../hooks/usePasswordForm.js'
-import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
+import Services from '../../../../service.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -94,7 +94,8 @@ const useStyles = makeStyles()((theme) => ({
         boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
         position: 'absolute',
         backdropFilter: 'blur(8px)',
-        width: '100%',
+        left: 0,
+        right: 0,
         bottom: 0,
         zIndex: 100,
     },
@@ -125,14 +126,60 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+interface WalletItemProps {
+    wallet: Wallet
+}
+
+const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
+    const { classes } = useStyles()
+    const { address, owner } = wallet
+    const chainId = owner ? ChainId.Matic : ChainId.Mainnet
+    const { data: balance = '0', isLoading } = useBalance(NetworkPluginID.PLUGIN_EVM, {
+        account: address,
+        chainId,
+    })
+    const theme = useTheme()
+
+    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address)
+
+    return (
+        <Box className={classes.addWalletWrapper}>
+            {owner ? <Icons.SmartPay size={30} /> : <Icons.ETH size={30} />}
+            <div>
+                <Typography className={classes.subTitle}>
+                    {domain || formatEthereumAddress(address, 4)}{' '}
+                    <Link
+                        underline="none"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href={ExplorerResolver.addressLink(chainId, address)}
+                        marginLeft="4px"
+                        width={16}
+                        height={16}>
+                        <Icons.LinkOut size={16} color={theme.palette.maskColor.main} />
+                    </Link>
+                </Typography>
+                <ProgressiveText loading={isLoading} className={classes.description} fontSize={12} skeletonWidth={50}>
+                    <FormattedBalance
+                        value={balance}
+                        decimals={18}
+                        symbol={owner ? 'Matic' : 'ETH'}
+                        formatter={formatBalance}
+                    />
+                </ProgressiveText>
+            </div>
+        </Box>
+    )
+})
+
 const SetPaymentPassword = memo(function SetPaymentPassword() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const wallets = useWallets()
     const [params] = useSearchParams()
     const [isCreating, setIsCreating] = useState(!!params.get('isCreating'))
-
+    const { showSnackbar } = usePopupCustomSnackbar()
     const theme = useTheme()
 
     const {
@@ -151,11 +198,17 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
     const [{ loading }, onConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             try {
-                await WalletRPC.changePassword(getDefaultWalletPassword(), data.password)
-                const hasPassword = await WalletRPC.hasPassword()
+                const hasPasswordWithDefaultOne = await Services.Wallet.hasPasswordWithDefaultOne()
+                if (hasPasswordWithDefaultOne) {
+                    await Services.Wallet.changePassword(getDefaultWalletPassword(), data.password)
+                } else {
+                    await Services.Wallet.setPassword(data.password)
+                }
+                const hasPassword = await Services.Wallet.hasPassword()
 
                 if (hasPassword) {
                     const from = params.get('from')
+                    showSnackbar(t('popups_wallet_set_payment_password_successfully'), { variant: 'success' })
                     CrossIsolationMessages.events.passwordStatusUpdated.sendToAll(true)
                     navigate({ pathname: from || PopupRoutes.Wallet }, { replace: true })
                 }
@@ -295,45 +348,4 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
         </Box>
     )
 })
-
-interface WalletItemProps {
-    wallet: Wallet
-}
-
-function WalletItem({ wallet }: WalletItemProps) {
-    const { classes } = useStyles()
-    const { address, owner } = wallet
-    const { data: balance = '0' } = useBalance(NetworkPluginID.PLUGIN_EVM, {
-        account: address,
-        chainId: ChainId.Mainnet,
-    })
-    const theme = useTheme()
-
-    const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address)
-
-    return (
-        <Box className={classes.addWalletWrapper}>
-            {owner ? <Icons.SmartPay size={30} /> : <Icons.ETH size={30} />}
-            <div>
-                <Typography className={classes.subTitle}>
-                    {domain || formatEthereumAddress(address, 4)}{' '}
-                    <Link
-                        underline="none"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href={ExplorerResolver.addressLink(ChainId.Mainnet, address)}
-                        marginLeft="4px"
-                        width={16}
-                        height={16}>
-                        <Icons.LinkOut size={16} color={theme.palette.maskColor.main} />
-                    </Link>
-                </Typography>
-                <Typography className={classes.description} fontSize={12}>
-                    <FormattedBalance value={balance} decimals={18} symbol="ETH" formatter={formatBalance} />
-                </Typography>
-            </div>
-        </Box>
-    )
-}
-
 export default SetPaymentPassword

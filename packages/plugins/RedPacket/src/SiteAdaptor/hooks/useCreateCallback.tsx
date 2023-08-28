@@ -62,11 +62,12 @@ interface CreateParams {
 }
 
 export function useCreateParamsCallback(
+    expectedChainId: ChainId,
     redPacketSettings: RedPacketSettings | undefined,
     version: number,
     publicKey: string,
 ) {
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
     const redPacketContract = useRedPacketContract(chainId, version)
     const getCreateParams = useCallback(async (): Promise<CreateParams | null> => {
@@ -115,20 +116,26 @@ export function useCreateParamsCallback(
     return getCreateParams
 }
 
-export function useCreateParams(redPacketSettings: RedPacketSettings, version: number, publicKey: string) {
-    const getCreateParams = useCreateParamsCallback(redPacketSettings, version, publicKey)
+export function useCreateParams(
+    expectedChainId: ChainId,
+    redPacketSettings: RedPacketSettings,
+    version: number,
+    publicKey: string,
+) {
+    const getCreateParams = useCreateParamsCallback(expectedChainId, redPacketSettings, version, publicKey)
     return useAsync(() => getCreateParams(), [JSON.stringify(redPacketSettings), version, publicKey])
 }
 
 export function useCreateCallback(
+    expectedChainId: ChainId,
     redPacketSettings: RedPacketSettings,
     version: number,
     publicKey: string,
     gasOption?: GasConfig,
 ) {
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
     const redPacketContract = useRedPacketContract(chainId, version)
-    const getCreateParams = useCreateParamsCallback(redPacketSettings, version, publicKey)
+    const getCreateParams = useCreateParamsCallback(expectedChainId, redPacketSettings, version, publicKey)
 
     return useAsyncFn(async () => {
         const { token } = redPacketSettings

@@ -1,11 +1,19 @@
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
+import urlcat from 'urlcat'
 import { Icons } from '@masknet/icons'
-import { type EnhanceableSite, type ProfileAccount, PopupModalRoutes, PopupRoutes } from '@masknet/shared-base'
+import {
+    type EnhanceableSite,
+    type ProfileAccount,
+    PopupModalRoutes,
+    PopupRoutes,
+    currentMaskWalletLockStatusSettings,
+    LockStatus,
+} from '@masknet/shared-base'
 import { MaskTabList, makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Box, Tab, Typography, useTheme } from '@mui/material'
-import { memo } from 'react'
+import { memo, useCallback } from 'react'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { SocialAccounts } from '../../../components/SocialAccounts/index.js'
 import { ConnectedWallet } from '../../../components/ConnectedWallet/index.js'
@@ -13,7 +21,7 @@ import type { ConnectedWalletInfo } from '../type.js'
 import { useModalNavigate } from '../../../components/index.js'
 import { PersonaPublicKey } from '../../../components/PersonaPublicKey/index.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
-import { useParamTab } from '../../../hook/useParamTab.js'
+import { useParamTab } from '../../../hooks/index.js'
 import { useNavigate } from 'react-router-dom'
 import { PopupHomeTabType } from '@masknet/shared'
 
@@ -169,6 +177,7 @@ export interface PersonaHomeUIProps {
     onConnect: (networkIdentifier: EnhanceableSite) => void
     onAccountClick: (account: ProfileAccount) => void
     bindingWallets?: ConnectedWalletInfo[]
+    hasPaymentPassword?: boolean
 }
 
 export const PersonaHomeUI = memo<PersonaHomeUIProps>(
@@ -186,6 +195,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
         onAccountClick,
         bindingWallets,
         hasProofs,
+        hasPaymentPassword,
     }) => {
         const theme = useTheme()
         const { t } = useI18N()
@@ -195,11 +205,25 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
 
         const [currentTab, onChange] = useParamTab<PopupHomeTabType>(PopupHomeTabType.SocialAccounts)
 
+        const onChangeTab = useCallback(
+            (event: object, value: PopupHomeTabType) => {
+                if (
+                    currentMaskWalletLockStatusSettings.value === LockStatus.LOCKED &&
+                    value === PopupHomeTabType.ConnectedWallets &&
+                    hasPaymentPassword
+                ) {
+                    navigate(urlcat(PopupRoutes.Unlock, { from: PopupRoutes.Personas, goBack: true, popup: true }))
+                    return
+                }
+                onChange(event, value)
+            },
+            [hasPaymentPassword],
+        )
         return (
             <div className={classes.container}>
                 {!isEmpty ? (
                     <TabContext value={currentTab}>
-                        <Box style={{ background: theme.palette.maskColor.modalTitleBg }}>
+                        <Box sx={{ background: theme.palette.maskColor.modalTitleBg }}>
                             <Box className={classes.header}>
                                 <Icons.MaskSquare className={classes.logo} />
                                 <Icons.HamburgerMenu
@@ -234,7 +258,10 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                 />
                             </Box>
 
-                            <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
+                            <MaskTabList
+                                onChange={onChangeTab}
+                                aria-label="persona-tabs"
+                                classes={{ root: classes.tabs }}>
                                 <Tab label={t('popups_social_account')} value={PopupHomeTabType.SocialAccounts} />
                                 <Tab label={t('popups_connected_wallets')} value={PopupHomeTabType.ConnectedWallets} />
                             </MaskTabList>

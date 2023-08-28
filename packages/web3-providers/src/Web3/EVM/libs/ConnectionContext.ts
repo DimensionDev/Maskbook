@@ -75,6 +75,10 @@ export class ConnectionContext {
         return this.requestOptions?.providerType ?? this._options?.providerType ?? this._providerType
     }
 
+    get providerURL() {
+        return this.requestOptions.providerURL ?? this._options?.providerURL
+    }
+
     get method() {
         return this.request.method as EthereumMethodType
     }
@@ -158,6 +162,10 @@ export class ConnectionContext {
 
     get paymentToken() {
         return this._options?.paymentToken
+    }
+
+    get gasOptionType() {
+        return this._options?.gasOptionType
     }
 
     get silent() {

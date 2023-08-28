@@ -7,6 +7,7 @@ import { MetaMaskLike } from '../interceptors/MetaMaskLike.js'
 import { Fortmatic } from '../interceptors/Fortmatic.js'
 import { ContractWallet } from '../interceptors/ContractWallet.js'
 import { Popups } from '../interceptors/Popups.js'
+import { CustomNetwork } from '../interceptors/CustomNetwork.js'
 import { SmartPayAccountAPI, SmartPayBundlerAPI, SmartPayFunderAPI } from '../../../SmartPay/index.js'
 
 export class Interceptor implements Middleware<ConnectionContext> {
@@ -18,6 +19,7 @@ export class Interceptor implements Middleware<ConnectionContext> {
         [ProviderType.None]: Composer.from(new NoneWallet()),
         [ProviderType.MaskWallet]: Composer.from(
             new Popups(),
+            new CustomNetwork(),
             new ContractWallet(ProviderType.MaskWallet, this.Account, this.Bundler, this.Funder),
             new MaskWallet(),
         ),

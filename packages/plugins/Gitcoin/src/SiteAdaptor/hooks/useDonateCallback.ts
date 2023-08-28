@@ -57,7 +57,7 @@ export function useDonateCallback(
     }, [address, grantAmount, tipAmount, token, GITCOIN_MAINTAINER_ADDRESS, GITCOIN_ETH_ADDRESS])
 
     const { gasPrice } = useGasConfig(chainId)
-    const { value: defaultGasPrice = '1' } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const { data: defaultGasPrice = '1' } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const gasState = useAsync(async () => {
         if (!bulkCheckoutContract || !token) return '0'
         const price = !gasPrice || gasPrice === '0' ? defaultGasPrice : gasPrice

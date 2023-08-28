@@ -15,7 +15,6 @@ const matchEnhanceableSiteHost: Record<EnhanceableSite, RegExp> = {
     [EnhanceableSite.Instagram]: /instagram\.com/i,
     [EnhanceableSite.OpenSea]: /opensea\.io/i,
     [EnhanceableSite.Mirror]: /mirror\.xyz/i,
-    [EnhanceableSite.Mask]: /mask\.io/i,
 }
 
 const matchExtensionSitePathname: Record<ExtensionSite, RegExp> = {
@@ -55,16 +54,6 @@ export function getAgentType() {
     if (Sniffings.is_firefox) return 'firefox'
     if (Sniffings.is_chromium) return 'chromium'
     return 'unknown'
-}
-
-export function isTwitter() {
-    const url = new URL(window.location.href)
-    return url.origin === 'twitter.com'
-}
-
-export function isFacebook() {
-    const url = new URL(window.location.href)
-    return url.origin === 'facebook.com'
 }
 
 export function isEnhanceableSiteType() {

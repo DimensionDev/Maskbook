@@ -99,15 +99,19 @@ export const inpageAvatarSelector = () => querySelectorAll('[type="nested/pressa
 
 export const toolboxInSidebarSelector: () => LiveSelector<E, true> = () =>
     /* cspell:disable-next-line */
-    querySelector<E>('#ssrb_left_rail_start')
-        .closest(1)
-        .querySelector('h2')
-        .closest(1)
-        .querySelector('div > div > div > :nth-child(2) > ul > li:nth-child(2)')
+    querySelector<E>('[data-pagelet="LeftRail"] > div > div > :nth-child(2) > ul > li:nth-child(2)')
 
-export const toolboxInSidebarSelectorWithNoLeftRailStart: () => LiveSelector<E, true> = () =>
+export const toolboxInSpecialSidebarSelector: () => LiveSelector<E> = () =>
+    querySelector(
+        '[role="navigation"] > div > div > div > :nth-child(2) > div > div > :nth-child(2) ul > li:nth-child(2)',
+    )
+export const toolboxInSidebarSelectorWithNoLeftRailStart: () => LiveSelector<E> = () =>
     /* cspell:disable-next-line */
-    querySelector<E>('a[role="link"][href="/watch/?ref=tab"]').closest(7)
+    querySelector<E, false>('[role="banner"]')
+        .closest(1)
+        .querySelector('div + div > div > div > div > div > div > div > div > ul')
+        .closest(1)
+        .querySelector('div:nth-child(2) > ul > li:nth-child(2)')
 
 // for getting normal tab style
 export const profileTabUnselectedSelector: () => LiveSelector<E, true> = () =>

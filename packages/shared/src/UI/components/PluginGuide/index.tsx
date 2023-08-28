@@ -6,9 +6,9 @@ import React, {
     createContext,
     useEffect,
     useLayoutEffect,
+    useMemo,
     useRef,
     useState,
-    useMemo,
     type ReactElement,
 } from 'react'
 import { usePluginGuideRecord } from './usePluginGuideRecord.js'
@@ -74,6 +74,11 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         width: '100%',
         borderRadius: '20px',
+        backgroundColor: theme.palette.maskColor.bottom,
+        color: theme.palette.maskColor.main,
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.bottom,
+        },
     },
 }))
 
@@ -189,11 +194,7 @@ export function PluginGuide({
                                             </Typography>
                                         </div>
                                         <div className={classes.buttonContainer}>
-                                            <Button
-                                                variant="outlined"
-                                                color="primary"
-                                                className={classes.button}
-                                                onClick={onNext}>
+                                            <Button color="primary" className={classes.button} onClick={onNext}>
                                                 {actionText}
                                             </Button>
                                         </div>

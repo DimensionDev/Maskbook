@@ -1,11 +1,11 @@
-import { Suspense, useMemo } from 'react'
+import { Suspense } from 'react'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { StyledEngineProvider, type Theme } from '@mui/material'
-import { EnvironmentContextProvider, Web3ContextProvider, TelemetryProvider } from '@masknet/web3-hooks-base'
+import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { CSSVariableInjector, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
-import { compose, getSiteType, i18NextInstance, NetworkPluginID, pluginIDsSettings } from '@masknet/shared-base'
-import { ErrorBoundary, queryClient, useValueRef } from '@masknet/shared-base-ui'
+import { compose, i18NextInstance } from '@masknet/shared-base'
+import { ErrorBoundary, queryClient } from '@masknet/shared-base-ui'
 
 export function PageUIProvider(useTheme: () => Theme, children: React.ReactNode, fallback?: React.ReactNode) {
     return compose(
@@ -26,30 +26,19 @@ interface MaskUIRootProps extends React.PropsWithChildren<{}> {
 }
 
 function MaskUIRoot({ children, useTheme, fallback }: MaskUIRootProps) {
-    const site = getSiteType()
-    const pluginIDs = useValueRef(pluginIDsSettings)
-
-    const context = useMemo(() => {
-        return { pluginID: site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM }
-    }, [site, pluginIDs])
-
     return (
         <DialogStackingProvider hasGlobalBackdrop={false}>
             <MaskThemeProvider useMaskIconPalette={(theme) => theme.palette.mode} useTheme={useTheme}>
-                <EnvironmentContextProvider value={context}>
-                    <QueryClientProvider client={queryClient}>
-                        <Web3ContextProvider value={context}>
-                            <TelemetryProvider>
-                                <SharedContextProvider>
-                                    <Suspense fallback={fallback}>
-                                        <CSSVariableInjector />
-                                        {children}
-                                    </Suspense>
-                                </SharedContextProvider>
-                            </TelemetryProvider>
-                        </Web3ContextProvider>
-                    </QueryClientProvider>
-                </EnvironmentContextProvider>
+                <QueryClientProvider client={queryClient}>
+                    <RootWeb3ContextProvider>
+                        <SharedContextProvider>
+                            <Suspense fallback={fallback}>
+                                <CSSVariableInjector />
+                                {children}
+                            </Suspense>
+                        </SharedContextProvider>
+                    </RootWeb3ContextProvider>
+                </QueryClientProvider>
             </MaskThemeProvider>
         </DialogStackingProvider>
     )

@@ -1,13 +1,24 @@
 import { Icons } from '@masknet/icons'
-import { NetworkIcon, TokenIcon } from '@masknet/shared'
+import { NetworkIcon, ProgressiveText, TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useWeb3Others } from '@masknet/web3-hooks-base'
-import { type ReasonableNetwork } from '@masknet/web3-shared-base'
-import { Box, Link, ListItem, ListItemIcon, ListItemText, Typography, type ListItemProps } from '@mui/material'
+import { useFungibleTokenBalance, useWeb3Others } from '@masknet/web3-hooks-base'
+import { isZero, type ReasonableNetwork } from '@masknet/web3-shared-base'
+import {
+    Box,
+    Link,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    Typography,
+    type ListItemProps,
+    useForkRef,
+} from '@mui/material'
 import { memo, useEffect, useMemo, useRef } from 'react'
 import { formatTokenBalance } from '../../../../utils/index.js'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { useEverSeen } from '@masknet/shared-base-ui'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -91,14 +102,43 @@ export const TokenItem = memo(function TokenItem({
         liRef.current?.scrollIntoView()
     }, [selected, liRef.current])
 
+    // #region Try getting balance through RPC.
+    const providerURL = network?.isCustomized ? network.rpcUrl : undefined
+    const [seen, ref] = useEverSeen<HTMLLIElement>()
+    // Debank might not provide asset from current custom network
+    const tryRpc = (!asset.balance || isZero(asset.balance)) && network?.isCustomized && seen
+    const { data: rpcBalance, isLoading } = useFungibleTokenBalance(
+        NetworkPluginID.PLUGIN_EVM,
+        asset.address,
+        { chainId: asset.chainId as ChainId, providerURL },
+        tryRpc,
+    )
+    const balance = useMemo(() => {
+        if (tryRpc) {
+            return {
+                pending: isLoading,
+                value: isLoading ? undefined : formatTokenBalance(rpcBalance, asset.decimals),
+            }
+        }
+        return {
+            pending: false,
+            value: formatTokenBalance(asset.balance, asset.decimals),
+        }
+    }, [tryRpc, rpcBalance, asset.balance, asset.decimals, isLoading])
+    // #endregion
+
+    const forkedRef = useForkRef(liRef, ref)
+
     return (
         <ListItem
             secondaryAction={
-                <Typography className={classes.balance}>{formatTokenBalance(asset.balance, asset.decimals)}</Typography>
+                <ProgressiveText className={classes.balance} loading={balance.pending} skeletonWidth={50}>
+                    {balance.value}
+                </ProgressiveText>
             }
             className={cx(classes.item, className, selected ? classes.selected : null)}
             onClick={() => onSelect?.(asset)}
-            ref={liRef}
+            ref={forkedRef}
             {...rest}>
             <ListItemIcon>
                 {/* TODO utility TokenIcon with badge */}
@@ -114,9 +154,8 @@ export const TokenItem = memo(function TokenItem({
                         className={classes.badgeIcon}
                         pluginID={NetworkPluginID.PLUGIN_EVM}
                         chainId={network.chainId}
-                        name={network.name}
                         size={16}
-                        preferName={network.isCustomized}
+                        network={network}
                     />
                 </Box>
             </ListItemIcon>

@@ -16,4 +16,5 @@ export const readyPromise = new Promise<InitInformation>((resolve) => {
 export const contentScript: BridgeAPI = AsyncCall<BridgeAPI>(self, {
     channel: createMaskSDKChannel('user'),
     serializer,
+    log: false,
 })

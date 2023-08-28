@@ -23,7 +23,7 @@ import { memo, useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { PageTitleContext } from '../../../context.js'
-import { useTitle, useTokenParams } from '../../../hook/index.js'
+import { useTitle, useTokenParams } from '../../../hooks/index.js'
 import { ConfirmModal } from '../../../modals/modals.js'
 import { ActionGroup } from '../components/index.js'
 import { useAsset } from '../hooks/index.js'
@@ -69,6 +69,7 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 14,
             fontWeight: 700,
             color: theme.palette.maskColor.second,
+            textTransform: 'capitalize',
         },
         value: {
             fontSize: 14,
@@ -77,7 +78,6 @@ const useStyles = makeStyles()((theme) => {
             marginTop: 2,
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'flex-end',
         },
         actions: {
             position: 'fixed',
@@ -137,9 +137,15 @@ const TokenDetail = memo(function TokenDetail() {
     const navigate = useNavigate()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const isNativeToken = isNativeTokenAddress(address)
-    const { data: balance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address, { chainId })
     const asset = useAsset(chainId, address, account)
-    const { data: tokenPrice, isLoading: isLoadingPrice } = useTokenPrice(chainId, address)
+    const { data: balance = asset?.balance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address, { chainId })
+    const [chartRange, setChartRange] = useState(Days.ONE_DAY)
+    const {
+        data: stats = EMPTY_LIST,
+        refetch,
+        isLoading: isLoadingStats,
+    } = useCoinTrendingStats(chainId, address, chartRange)
+    const { data: tokenPrice = stats.at(-1)?.[1], isLoading: isLoadingPrice } = useTokenPrice(chainId, address)
     const tokenValue = useMemo(() => {
         if (asset?.value?.usd) return asset.value.usd
         if (!asset?.decimals || !tokenPrice || !balance) return 0
@@ -149,13 +155,6 @@ const TokenDetail = memo(function TokenDetail() {
     const { data: trending, isLoading: isLoadingTrending, isError } = useTrending(chainId, address)
     const priceChange =
         trending?.market?.price_change_percentage_24h_in_currency || trending?.market?.price_change_24h || 0
-
-    const [chartRange, setChartRange] = useState(Days.ONE_DAY)
-    const {
-        data: stats = EMPTY_LIST,
-        refetch,
-        isLoading: isLoadingStats,
-    } = useCoinTrendingStats(chainId, address, chartRange)
 
     useTitle(asset ? `${asset.symbol}(${asset.name})` : 'Loading Asset...')
     const { showSnackbar } = usePopupCustomSnackbar()
@@ -196,7 +195,9 @@ const TokenDetail = memo(function TokenDetail() {
             <Box className={classes.page}>
                 <Box padding={2}>
                     <ProgressiveText className={classes.assetValue} loading={isLoadingPrice} skeletonWidth={80}>
-                        {tokenPrice ? <FormattedCurrency value={tokenPrice} formatter={formatCurrency} /> : null}
+                        {typeof tokenPrice !== 'undefined' ? (
+                            <FormattedCurrency value={tokenPrice} formatter={formatCurrency} />
+                        ) : null}
                     </ProgressiveText>
                     <PriceChange className={classes.priceChange} change={priceChange} loading={isLoadingTrending} />
                     <PriceChartRange days={chartRange} onDaysChange={setChartRange} gap="10px" mt={2} />
@@ -219,7 +220,7 @@ const TokenDetail = memo(function TokenDetail() {
                         <Box>
                             <Typography className={classes.label}>{t('balance')}</Typography>
                             {asset ? (
-                                <Typography component="div" className={classes.value}>
+                                <Typography component="div" className={classes.value} justifyContent="flex-start">
                                     <TokenIcon
                                         className={classes.tokenIcon}
                                         address={asset.address}
@@ -229,7 +230,7 @@ const TokenDetail = memo(function TokenDetail() {
                                         size={16}
                                     />
                                     <FormattedBalance
-                                        value={asset.balance}
+                                        value={balance}
                                         decimals={asset.decimals}
                                         significant={6}
                                         formatter={formatBalance}
@@ -244,7 +245,7 @@ const TokenDetail = memo(function TokenDetail() {
                         </Box>
                         <Box textAlign="right">
                             <Typography className={classes.label}>{t('value')}</Typography>
-                            <Typography component="div" className={classes.value}>
+                            <Typography component="div" className={classes.value} justifyContent="flex-end">
                                 <FormattedCurrency value={tokenValue} formatter={formatCurrency} />
                             </Typography>
                         </Box>

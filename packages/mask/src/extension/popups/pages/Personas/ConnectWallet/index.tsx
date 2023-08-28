@@ -27,7 +27,7 @@ import {
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 
-import { useTitle } from '../../../hook/useTitle.js'
+import { useTitle } from '../../../hooks/index.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { LoadingMask } from '../../../components/LoadingMask/index.js'
@@ -103,7 +103,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
     const { pluginID } = useNetworkContext<NetworkPluginID.PLUGIN_EVM>()
 
     const { providerType, chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const wallets = useWallets(pluginID)
+    const wallets = useWallets()
 
     const providerDescriptor = useProviderDescriptor(pluginID, providerType)
     const { data: domain } = useReverseAddress(pluginID, account)
@@ -174,6 +174,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
                 SignType.Message,
                 payload.signPayload,
                 currentPersona.identifier,
+                location.origin,
                 true,
             )
 
@@ -187,6 +188,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
             const result = await bindProof(payload, walletSignature, personaSignature)
 
             if (result) showSnackbar(t('popups_verify_wallet_sign_success_tips'))
+
             // Broadcast updates
             MaskMessages.events.ownProofChanged.sendToAll()
             return true
@@ -207,22 +209,25 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
     }, [signResult])
 
     const handleChooseAnotherWallet = useCallback(() => {
-        modalNavigate(PopupModalRoutes.SelectProvider, {
-            disableNewWindow: true,
-        })
+        modalNavigate(PopupModalRoutes.SelectProvider)
     }, [modalNavigate])
 
     const handleDone = useCallback(async () => {
-        await Web3.disconnect({ providerType })
-        if (providerType === ProviderType.MaskWallet || providerType === ProviderType.WalletConnect) {
+        if (providerType !== ProviderType.MaskWallet) await Web3.disconnect({ providerType })
+        if (providerType === ProviderType.MaskWallet) {
             navigate(-1)
             return
         }
+        if (providerType === ProviderType.WalletConnect) {
+            navigate(urlcat(PopupRoutes.Personas, { tab: PopupHomeTabType.ConnectedWallets }), {
+                replace: true,
+            })
+        }
         await Services.Helper.removePopupWindow()
-    }, [providerType])
+    }, [providerType, navigate])
 
     const handleBack = useCallback(() => {
-        navigate(urlcat(PopupRoutes.Personas, { tab: PopupHomeTabType.ConnectedWallets, disableNewWindow: true }), {
+        navigate(urlcat(PopupRoutes.Personas, { tab: PopupHomeTabType.ConnectedWallets }), {
             replace: true,
         })
     }, [])

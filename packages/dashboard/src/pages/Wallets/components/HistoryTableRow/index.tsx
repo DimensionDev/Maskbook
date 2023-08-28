@@ -6,7 +6,7 @@ import { Icons } from '@masknet/icons'
 import { useReverseAddress, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { TokenType, type Transaction } from '@masknet/web3-shared-base'
+import { TokenType, TransactionStatusType, type Transaction } from '@masknet/web3-shared-base'
 import { Box, Link, Stack, TableCell, TableRow, Tooltip, Typography } from '@mui/material'
 import { DebankTransactionDirection, ZerionTransactionDirection } from '@masknet/web3-providers/types'
 import { TransactionIcon } from '../TransactionIcon/index.js'
@@ -79,7 +79,7 @@ HistoryTableRow.displayName = 'HistoryTableRow'
 export interface HistoryTableRowUIProps extends HistoryTableRowProps {
     selectedChainId: Web3Helper.ChainIdAll
     formattedType: string
-    domain?: string
+    domain?: string | null
 }
 
 export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
@@ -95,7 +95,7 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
                             transactionType={transaction.type}
                             type={transaction.type}
                             address={transaction.to}
-                            failed={transaction.status === 0}
+                            failed={transaction.status === TransactionStatusType.FAILED}
                         />
                         <Stack pl={2}>
                             <Typography textAlign="left" className={classes.type} variant="body2">

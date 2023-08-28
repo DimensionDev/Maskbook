@@ -3,28 +3,54 @@ export enum DebankTransactionDirection {
     RECEIVE = 'receive',
 }
 
+/**
+ * Collect from https://docs.cloud.debank.com/en/readme/api-pro-reference/chain#returns-1
+ */
 export type DebankChains =
+    | 'base'
     | 'eth'
     | 'arb'
-    | 'bsc'
-    | 'op'
-    | 'matic'
+    | 'astar'
     | 'aurora'
     | 'avax'
-    | 'celo'
     | 'boba'
-    | 'xdai'
-    | 'ftm'
-    | 'astar'
-    | 'cfx'
-    | 'hmy'
-    | 'movr'
-    | 'mobm'
-    | 'pls'
-    | 'cro'
+    | 'brise'
+    | 'bsc'
     | 'btt'
+    | 'canto'
+    | 'celo'
+    | 'cfx'
+    | 'cro'
+    | 'dfk'
+    | 'doge'
+    | 'evmos'
+    | 'ftm'
+    | 'fuse'
+    | 'heco'
+    | 'hmy'
+    | 'iotx'
+    | 'kava'
+    | 'kcc'
     | 'klay'
+    | 'mada'
+    | 'matic'
+    | 'metis'
+    | 'mobm'
+    | 'movr'
     | 'nova'
+    | 'okt'
+    | 'op'
+    | 'palm'
+    | 'pls'
+    | 'rsk'
+    | 'sbch'
+    | 'sdn'
+    | 'sgb'
+    | 'step'
+    | 'swm'
+    | 'tlos'
+    | 'wan'
+    | 'xdai'
 
 export interface DictItem {
     name: string
@@ -196,6 +222,9 @@ export interface GasPriceRecord {
     price: number
 }
 
+/**
+ * Legacy gas response
+ */
 export interface GasPriceDictResponse {
     data: {
         fast: GasPriceRecord
@@ -206,3 +235,24 @@ export interface GasPriceDictResponse {
     error_code: number
     _seconds: number
 }
+
+export type GasPriceResponse = [
+    {
+        level: 'slow'
+        front_tx_count: number
+        price: number
+        estimated_seconds: number
+    },
+    {
+        level: 'normal'
+        front_tx_count: number
+        price: number
+        estimated_seconds: number
+    },
+    {
+        level: 'fast'
+        front_tx_count: number
+        price: number
+        estimated_seconds: number
+    },
+]

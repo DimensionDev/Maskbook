@@ -85,9 +85,8 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const [minPopoverWidth, setMinPopoverWidth] = useState(0)
 
     const { classes } = useStyles()
-    const [gasLimit_, setGasLimit_] = useState(0)
 
-    const { value: defaultGasPrice = '0' } = useGasPrice(NetworkPluginID.PLUGIN_EVM)
+    const { data: defaultGasPrice = '0' } = useGasPrice(NetworkPluginID.PLUGIN_EVM)
 
     const [selectedToken, setSelectedToken] = useState(token)
 
@@ -130,7 +129,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
 
     // transfer amount
     const transferAmount = rightShift(amount || '0', selectedToken.decimals).toFixed()
-    const erc20GasLimit = useGasLimit(
+    const { data: erc20GasLimit = 0 } = useGasLimit(
         selectedToken.type === TokenType.Fungible
             ? selectedToken.symbol === nativeToken?.symbol
                 ? SchemaType.Native
@@ -140,13 +139,10 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         transferAmount,
         isValidAddress(address) ? address : registeredAddress,
     )
+    const gasLimit_ = isNativeToken ? GAS_LIMIT : erc20GasLimit
     const { gasConfig, onCustomGasSetting, gasLimit, maxFee } = useGasConfig(gasLimit_, GAS_LIMIT)
 
     const gasPrice = gasConfig.gasPrice || defaultGasPrice
-
-    useEffect(() => {
-        setGasLimit_(isNativeToken ? GAS_LIMIT : erc20GasLimit.value ?? 0)
-    }, [isNativeToken, erc20GasLimit.value])
 
     const gasFee = useMemo(() => {
         const price = is1559Supported && maxFee ? new BigNumber(maxFee) : gasPrice

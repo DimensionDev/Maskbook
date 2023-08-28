@@ -24,7 +24,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     content: {
         width: '100vw',
-        padding: '8px 0',
+        padding: '8px',
+        boxSizing: 'border-box',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -33,6 +34,10 @@ const useStyles = makeStyles()((theme) => ({
     title: {
         lineHeight: '18px',
         padding: '0 8px',
+    },
+    message: {
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
     },
     success: {
         background: alpha(theme.palette.maskColor.success, 0.5),
@@ -82,17 +87,20 @@ export interface PopupSnackbarContentProps {
     variant?: VariantType
 }
 
-export const PopupSnackbarContent = forwardRef<HTMLDivElement, PopupSnackbarContentProps>((props, ref) => {
-    const { classes, cx } = useStyles()
+export const PopupSnackbarContent = forwardRef<HTMLDivElement, PopupSnackbarContentProps>(
+    ({ id, title, message, variant }, ref) => {
+        const { classes, cx } = useStyles()
 
-    return (
-        <SnackbarContent key={props.id} className={cx(classes.content, classes[props.variant!])} ref={ref}>
-            <Typography className={classes.title} component="div">
-                {props.title}
-            </Typography>
-        </SnackbarContent>
-    )
-})
+        return (
+            <SnackbarContent key={id} className={cx(classes.content, classes[variant!])} ref={ref}>
+                <Typography className={classes.title} component="div">
+                    {title}
+                </Typography>
+                {typeof message === 'string' ? <Typography className={classes.message}>{message}</Typography> : message}
+            </SnackbarContent>
+        )
+    },
+)
 
 export function usePopupCustomSnackbar() {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
@@ -108,7 +116,7 @@ export function usePopupCustomSnackbar() {
             return enqueueSnackbar(text, {
                 variant: options.variant,
                 content: (key, title) => {
-                    return <PopupSnackbarContent id={key} title={title} variant={variant} />
+                    return <PopupSnackbarContent id={key} title={title} message={message} variant={variant} />
                 },
                 autoHideDuration: 2000,
                 ...rest,

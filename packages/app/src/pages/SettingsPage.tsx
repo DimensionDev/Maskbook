@@ -1,12 +1,12 @@
 import { memo } from 'react'
+import { Typography } from '@mui/material'
+import { Appearance } from '@masknet/public-api'
+import { MaskMessages } from '@masknet/shared-base'
+
 import { DropdownMenu } from '../components/DropdownMenu.js'
 import { DashboardBody } from '../components/DashboardBody.js'
 import { DashboardContainer } from '../components/DashboardContainer.js'
 import { DashboardHeader } from '../components/DashboardHeader.js'
-
-import { Typography } from '@mui/material'
-import { Appearance } from '@masknet/public-api'
-import { MaskMessages } from '@masknet/shared-base'
 import { useSetThemeMode } from '../hooks/useSetThemeMode.js'
 import { useThemeMode } from '../hooks/useThemeMode.js'
 
@@ -31,7 +31,9 @@ const SetupThemeMode = memo(() => {
 
     return (
         <div className="flex w-full sm:p-6 justify-center sm:items-center">
-            <Typography className="w-full text-black dark:text-white text-base">Appearance</Typography>
+            <Typography className="w-full text-black dark:text-white text-base flex items-center px-3">
+                Appearance
+            </Typography>
             <DropdownMenu
                 activeItemId={mode}
                 items={[

@@ -4,13 +4,11 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { NextIDPlatform, formatPersonaName } from '@masknet/shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { safeUnreachable } from '@masknet/kit'
-import { url } from '../../ContactCard/Account/index.js'
-import type { SupportedPlatforms } from '../../ContactCard/Account/index.js'
+import { PlatformIconMap, PlatformUrlMap, type SupportedPlatforms } from '../../common.js'
 
 interface AccountProps {
     userId?: string
-    icon: SupportedPlatforms
+    platform: SupportedPlatforms
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -36,52 +34,30 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const Account = memo<AccountProps>(function Account({ userId, icon }) {
+export const Account = memo<AccountProps>(function Account({ userId, platform }) {
     const { classes } = useStyles()
+    if (!userId) return null
+    const Icon = PlatformIconMap[platform]
     return (
-        userId && (
-            <Box
-                padding="12px"
-                display="flex"
-                flexDirection="column"
-                gap="10px"
-                alignItems="center"
-                className={classes.container}>
-                {(() => {
-                    switch (icon) {
-                        case NextIDPlatform.LENS:
-                            return <Icons.Lens width={40} height={40} />
-                        case NextIDPlatform.Ethereum:
-                            return <Icons.ETH width={40} height={40} />
-                        case NextIDPlatform.ENS:
-                            return <Icons.ENS width={40} height={40} />
-                        case NextIDPlatform.GitHub:
-                            return <Icons.GitHub width={40} height={40} />
-                        case NextIDPlatform.Farcaster:
-                            return <Icons.Farcaster width={40} height={40} />
-                        case NextIDPlatform.SpaceId:
-                            return <Icons.SpaceId width={40} height={40} />
-                        case NextIDPlatform.Unstoppable:
-                            return <Icons.Unstoppable width={40} height={40} />
-                        case NextIDPlatform.Keybase:
-                            return <Icons.Keybase width={40} height={40} />
-                        default:
-                            safeUnreachable(icon)
-                            return null
-                    }
-                })()}
-                <Box className={classes.userId}>
-                    {icon === NextIDPlatform.Ethereum ? formatEthereumAddress(userId, 4) : formatPersonaName(userId)}
-                    <Link
-                        underline="none"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href={url[icon] + userId}
-                        className={classes.iconBlack}>
-                        <Icons.LinkOut size={16} />
-                    </Link>
-                </Box>
+        <Box
+            padding="12px"
+            display="flex"
+            flexDirection="column"
+            gap="10px"
+            alignItems="center"
+            className={classes.container}>
+            <Icon size={40} />
+            <Box className={classes.userId}>
+                {platform === NextIDPlatform.Ethereum ? formatEthereumAddress(userId, 4) : formatPersonaName(userId)}
+                <Link
+                    underline="none"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={PlatformUrlMap[platform] + userId}
+                    className={classes.iconBlack}>
+                    <Icons.LinkOut size={16} />
+                </Link>
             </Box>
-        )
+        </Box>
     )
 })

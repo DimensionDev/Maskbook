@@ -10,10 +10,10 @@ export const useSocialAccountsBySettings = (
     sorter?: (a: SocialAccount<Web3Helper.ChainIdAll>, z: SocialAccount<Web3Helper.ChainIdAll>) => number,
 ) => {
     const {
-        value: socialAccounts = EMPTY_LIST,
-        loading: loadingSocialAccounts,
+        data: socialAccounts = EMPTY_LIST,
+        isLoading: loadingSocialAccounts,
         error: loadSocialAccountsError,
-        retry: retrySocialAccounts,
+        refetch: refetchSocialAccounts,
     } = useSocialAccountsAll(identity, typeWhitelist, sorter)
     const userId = identity?.identifier?.userId
     const {
@@ -21,7 +21,7 @@ export const useSocialAccountsBySettings = (
         isFetching: loadingHiddenAddress,
         isInitialLoading,
         error: loadingHiddenAddressError,
-        refetch: retryLoadHiddenAddress,
+        refetch: refetchLoadHiddenAddress,
     } = useHiddenAddressConfigOf(identity?.publicKey, PluginID.Web3Profile, userId)
 
     const addresses = useMemo(() => {
@@ -33,16 +33,16 @@ export const useSocialAccountsBySettings = (
         })
     }, [socialAccounts, hiddenAddress, loadingHiddenAddress])
 
-    const retry = useCallback(() => {
-        retrySocialAccounts()
-        retryLoadHiddenAddress()
+    const refetch = useCallback(() => {
+        refetchSocialAccounts()
+        refetchLoadHiddenAddress()
     }, [])
 
     return {
-        value: addresses,
-        loading: loadingSocialAccounts || loadingHiddenAddress,
+        data: addresses,
+        isLoading: loadingSocialAccounts || loadingHiddenAddress,
         isInitialLoading,
         error: loadSocialAccountsError || loadingHiddenAddressError,
-        retry,
+        refetch,
     }
 }

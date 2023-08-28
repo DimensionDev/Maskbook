@@ -26,6 +26,7 @@ import { useQualificationVerify } from './hooks/useQualificationVerify.js'
 import { useSwapCallback } from './hooks/useSwapCallback.js'
 import { useI18N } from '../locales/index.js'
 import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
+import { useAsyncFn } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     button: {},
@@ -159,16 +160,18 @@ export function SwapDialog(props: SwapDialogProps) {
         payload.contract_address,
     )
 
-    const [{ loading: isSwapping }, swapCallback] = useSwapCallback(
+    const swapCallback = useSwapCallback(
         payload,
         swapAmount.toFixed(),
         swapToken ? swapToken : { address: NATIVE_TOKEN_ADDRESS },
         qualificationInfo?.isQualificationHasLucky,
     )
-    const onSwap = useCallback(async () => {
-        const receipt = await swapCallback()
-        if (typeof receipt?.transactionHash === 'string') {
-            const { to_value } = (receipt.events?.SwapSuccess?.returnValues ?? { to_value: 0 }) as {
+    const [{ loading: isSwapping }, onSwap] = useAsyncFn(async () => {
+        const result = await swapCallback()
+        const { receipt, events } = result ?? {}
+
+        if (typeof receipt?.transactionHash === 'string' && events) {
+            const { to_value } = (events?.SwapSuccess?.returnValues ?? { to_value: 0 }) as {
                 to_value: string
             }
 

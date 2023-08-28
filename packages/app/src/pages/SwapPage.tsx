@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import { AllProviderTradeContext, Trader } from '@masknet/plugin-trader'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { Web3ContextProvider, useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
+import { DefaultWeb3ContextProvider, useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { createERC20Token, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { PageContainer } from '../components/PageContainer.js'
@@ -31,14 +31,14 @@ export default function SwapPage(props: SwapPageProps) {
 
     return (
         <PageContainer title="Swap">
-            <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+            <DefaultWeb3ContextProvider>
                 <AllProviderTradeContext.Provider>
                     <Trader
                         defaultInputCoin={coin as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>}
                         chainId={chainId}
                     />
                 </AllProviderTradeContext.Provider>
-            </Web3ContextProvider>
+            </DefaultWeb3ContextProvider>
         </PageContainer>
     )
 }

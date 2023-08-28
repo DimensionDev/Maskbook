@@ -64,10 +64,10 @@ export function useSettingsContext(initial?: {
     )
 
     const {
-        value: gasOptions,
-        loading: gasOptionsLoading,
+        data: gasOptions,
+        isLoading: gasOptionsLoading,
         error: gasOptionsError,
-        retry: gasOptionRetry,
+        refetch: gasOptionRetry,
     } = useGasOptions(pluginID, {
         chainId,
     })
@@ -107,6 +107,7 @@ export function useSettingsContext(initial?: {
             [GasOptionType.FAST]: t.gas_settings_gas_option_type_fast(),
             [GasOptionType.NORMAL]: t.gas_settings_gas_option_type_normal(),
             [GasOptionType.SLOW]: t.gas_settings_gas_option_type_slow(),
+            [GasOptionType.CUSTOM]: '',
         },
 
         pluginID,

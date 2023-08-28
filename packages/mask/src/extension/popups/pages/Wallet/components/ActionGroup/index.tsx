@@ -1,14 +1,15 @@
 import { Icons } from '@masknet/icons'
-import { PopupRoutes, type NetworkPluginID } from '@masknet/shared-base'
+import { PopupRoutes, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isNativeTokenAddress, type ChainId } from '@masknet/web3-shared-evm'
 import { Box, Typography, type BoxProps } from '@mui/material'
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { useI18N } from '../../../../../../utils/index.js'
+import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -42,6 +43,10 @@ const useStyles = makeStyles()((theme) => {
                 transform: 'scale(0.97)',
             },
         },
+        disabled: {
+            opacity: 0.5,
+            cursor: 'unset',
+        },
         label: {
             color: theme.palette.maskColor.main,
             marginLeft: theme.spacing(1),
@@ -52,7 +57,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 interface Props extends BoxProps {
-    chainId?: ChainId
+    chainId: ChainId
     address?: string
     asset?: Web3Helper.FungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
 }
@@ -62,14 +67,23 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
     const { t } = useI18N()
     const navigate = useNavigate()
     const location = useLocation()
+    const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')
+    const chainIdList = traderDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
+
+    const disabledSwap = useMemo(() => !chainIdList.includes(chainId), [chainId, chainIdList])
+
     const handleSwap = useCallback(() => {
+        if (disabledSwap) return
         const url = urlcat(
             'popups.html#/',
             PopupRoutes.Swap,
             isNativeTokenAddress(asset?.address)
-                ? {}
+                ? {
+                      chainId: asset?.chainId,
+                  }
                 : {
                       id: asset?.address,
+                      chainId: asset?.chainId,
                       name: asset?.name,
                       symbol: asset?.symbol,
                       contract_address: asset?.address,
@@ -77,7 +91,7 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
                   },
         )
         openWindow(browser.runtime.getURL(url), 'SWAP_DIALOG')
-    }, [asset])
+    }, [asset, disabledSwap])
 
     return (
         <Box className={cx(classes.container, className)} {...rest}>
@@ -112,7 +126,11 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
                 <Icons.ArrowDownward size={20} color={theme.palette.maskColor.main} />
                 <Typography className={classes.label}>{t('wallet_receive')}</Typography>
             </button>
-            <button type="button" className={classes.button} onClick={handleSwap}>
+            <button
+                disabled={disabledSwap}
+                type="button"
+                className={cx(classes.button, disabledSwap ? classes.disabled : undefined)}
+                onClick={handleSwap}>
                 <Icons.Cached size={20} color={theme.palette.maskColor.main} />
                 <Typography className={classes.label}>{t('wallet_swap')}</Typography>
             </button>

@@ -2,7 +2,7 @@ import { useCallback, useState, useEffect } from 'react'
 import { useUpdate } from 'react-use'
 import { findLastIndex, uniq } from 'lodash-es'
 import { AssetPreviewer } from '@masknet/shared'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import type { NonFungibleCollection, NonFungibleToken } from '@masknet/web3-shared-base'
 import { SchemaType, formatTokenId, type ChainId } from '@masknet/web3-shared-evm'
 import { DialogContent, Box, InputBase, Button, Typography, ListItem, useTheme } from '@mui/material'
@@ -248,7 +248,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const [loadingToken, setLoadingToken] = useState(false)
     const [searchTokenListInput, setSearchTokenListInput] = useState('')
     const [tokenIdListInput, setTokenIdListInput] = useState<string>('')
-    const [tokenIdFilterList, setTokenIdFilterList] = useState<string[]>([])
+    const [tokenIdFilterList, setTokenIdFilterList] = useState<string[]>(EMPTY_LIST)
     const isSelectSharesExceed =
         (tokenDetailedOwnerList.length === 0 ? RED_PACKET_MAX_SHARES - 1 : RED_PACKET_MAX_SHARES) <
         tokenDetailedSelectedList.length
@@ -266,7 +266,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     }, [contract])
 
     useEffect(() => {
-        setTokenIdFilterList([])
+        setTokenIdFilterList(EMPTY_LIST)
     }, [tokenIdListInput])
 
     const update = useUpdate()
@@ -483,19 +483,18 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                         ) : null}
 
                         <div className={classes.tokenSelector}>
-                            {tokenDetailedOwnerList.map((token, i) => {
+                            {tokenDetailedOwnerList.map((token) => {
                                 const findToken = tokenDetailedSelectedList.find((t) => t.tokenId === token.tokenId)
-
-                                return tokenIdFilterList.length > 0 &&
-                                    !tokenIdFilterList.includes(token.tokenId) ? null : (
-                                    <div key={i}>
-                                        <NFTCard
-                                            findToken={findToken}
-                                            token={token}
-                                            selectToken={selectToken}
-                                            isSelectSharesExceed={isSelectSharesExceed}
-                                        />
-                                    </div>
+                                if (tokenIdFilterList.length > 0 && !tokenIdFilterList.includes(token.tokenId))
+                                    return null
+                                return (
+                                    <NFTCard
+                                        key={token.tokenId}
+                                        findToken={findToken}
+                                        token={token}
+                                        selectToken={selectToken}
+                                        isSelectSharesExceed={isSelectSharesExceed}
+                                    />
                                 )
                             })}
                         </div>

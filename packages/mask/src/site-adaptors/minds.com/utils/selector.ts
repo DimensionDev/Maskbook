@@ -30,14 +30,11 @@ export const postEditorDraftContentSelector = () => {
     return querySelector<HTMLElement>('m-composer__modal m-composer__textarea textarea.m-composerTextarea__message')
 }
 
-export const handleSelector = () => querySelector<HTMLScriptElement>('.m-sidebarNavigation ul > li:nth-child(8) a span')
+export const handleSelector = () => querySelector('.m-sidebarNavigation__item--user > a > div > span')
 
 export const selfInfoSelectors = () => ({
-    handle: handleSelector().map((x) => x.innerText.replace(/@/, '').trim()),
-    avatar: querySelector<HTMLScriptElement>('.m-user-menu .minds-avatar').map((x) =>
-        // get everything between the parens (the url)
-        x.style.backgroundImage.match(/\((.*?)\)/)![1].replaceAll(/('|")/g, ''),
-    ),
+    handle: handleSelector().evaluate()?.innerText.trim(),
+    avatar: querySelector<HTMLImageElement>('.m-sidebarNavigation__item--user > a > div > img').evaluate()?.src,
 })
 
 export const inpageAvatarSelector = () =>

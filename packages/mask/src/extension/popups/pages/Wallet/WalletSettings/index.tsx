@@ -1,30 +1,29 @@
-import { memo, useCallback } from 'react'
 import { Icons } from '@masknet/icons'
 import { NetworkPluginID, PopupModalRoutes } from '@masknet/shared-base'
-import { useWallet } from '@masknet/web3-hooks-base'
-import { Box, List, Typography, useTheme } from '@mui/material'
-import { useI18N } from '../../../../../utils/index.js'
-import { useTitle } from '../../../hook/useTitle.js'
-import { Rename } from './Rename.js'
-import { Contacts } from './Contacts.js'
-import { useStyles } from './useStyles.js'
-import { AutoLock } from './AutoLock.js'
-import { ChangePaymentPassword } from './ChangePaymentPassword.js'
-import { ShowPrivateKey } from './ShowPrivateKey.js'
-import { ChangeNetwork } from './ChangeNetwork.js'
-import { ChangeCurrency } from './ChangeCurrency.js'
-import { ChangeOwner } from './ChangeOwner.js'
 import { ActionButton } from '@masknet/theme'
-import { WalletRemoveModal } from '../../../modals/modals.js'
-import { ConnectedSites } from './ConnectedSites.js'
+import { useWallet } from '@masknet/web3-hooks-base'
+import { Box, List, Typography } from '@mui/material'
+import { memo, useCallback } from 'react'
+import { useI18N } from '../../../../../utils/index.js'
 import { useModalNavigate } from '../../../components/index.js'
+import { useTitle } from '../../../hooks/index.js'
+import { WalletRemoveModal } from '../../../modals/modals.js'
+import { AutoLock } from './AutoLock.js'
+import { ChangeCurrency } from './ChangeCurrency.js'
+import { ChangeNetwork } from './ChangeNetwork.js'
+import { ChangeOwner } from './ChangeOwner.js'
+import { ChangePaymentPassword } from './ChangePaymentPassword.js'
+import { Contacts } from './Contacts.js'
+import { Rename } from './Rename.js'
+import { ShowPrivateKey } from './ShowPrivateKey.js'
+import { useStyles } from './useStyles.js'
+import { ConnectedSites } from './ConnectedSites.js'
 
 const WalletSettings = memo(() => {
     const { t } = useI18N()
-    const { classes, cx } = useStyles()
+    const { classes, cx, theme } = useStyles()
     const modalNavigate = useModalNavigate()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const theme = useTheme()
 
     const handleSwitchWallet = useCallback(() => {
         modalNavigate(PopupModalRoutes.SwitchWallet)
@@ -50,7 +49,7 @@ const WalletSettings = memo(() => {
                 </Box>
                 <Icons.ArrowDownRound color={theme.palette.maskColor.white} size={24} />
             </Box>
-            <List dense className={classes.list}>
+            <List dense className={classes.list} data-hide-scrollbar>
                 {wallet.owner ? <ChangeOwner /> : null}
                 <Rename />
                 <Contacts />
@@ -58,8 +57,12 @@ const WalletSettings = memo(() => {
                 <AutoLock />
                 <ChangeCurrency />
                 <ChangePaymentPassword />
-                {wallet.owner ? null : <ShowPrivateKey />}
-                <ChangeNetwork />
+                {wallet.owner ? null : (
+                    <>
+                        <ShowPrivateKey />
+                        <ChangeNetwork />
+                    </>
+                )}
             </List>
             <Box className={classes.bottomAction}>
                 <ActionButton

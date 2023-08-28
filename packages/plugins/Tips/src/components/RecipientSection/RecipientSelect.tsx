@@ -76,7 +76,7 @@ const useStyles = makeStyles<void, 'icon' | 'pluginIcon' | 'text'>()((theme, _, 
 })
 
 const PluginIcon = ({ pluginID }: { pluginID: NetworkPluginID }) => {
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
     const mapping = {
         [NetworkPluginID.PLUGIN_EVM]: (
             <Icons.ETH

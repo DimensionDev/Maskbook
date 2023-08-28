@@ -3,24 +3,22 @@ import { Icons, type GeneratedIcon } from '@masknet/icons'
 import { EnhanceableSite } from '@masknet/shared-base'
 
 export const SOCIAL_MEDIA_ICON_MAPPING: Record<EnhanceableSite | string, ReactNode> = {
-    [EnhanceableSite.Twitter]: <Icons.TwitterColored />,
+    [EnhanceableSite.Twitter]: <Icons.TwitterX />,
     [EnhanceableSite.Facebook]: <Icons.FacebookColored />,
     [EnhanceableSite.Minds]: <Icons.Minds />,
     [EnhanceableSite.Instagram]: <Icons.InstagramColored />,
     [EnhanceableSite.OpenSea]: <Icons.OpenSeaColored />,
     [EnhanceableSite.Mirror]: <Icons.Mirror />,
-    [EnhanceableSite.Mask]: <Icons.MaskBlue />,
     [EnhanceableSite.Localhost]: null,
 }
 
 export const SOCIAL_MEDIA_ROUND_ICON_MAPPING: Record<EnhanceableSite | string, GeneratedIcon | null> = {
-    [EnhanceableSite.Twitter]: Icons.TwitterRound,
+    [EnhanceableSite.Twitter]: Icons.TwitterXRound,
     [EnhanceableSite.Facebook]: Icons.FacebookRound,
     [EnhanceableSite.Minds]: Icons.MindsRound,
     [EnhanceableSite.Instagram]: Icons.InstagramRoundColored,
     [EnhanceableSite.OpenSea]: Icons.OpenSeaColored,
     [EnhanceableSite.Mirror]: Icons.Mirror,
-    [EnhanceableSite.Mask]: Icons.MaskBlue,
     [EnhanceableSite.Localhost]: null,
 }
 

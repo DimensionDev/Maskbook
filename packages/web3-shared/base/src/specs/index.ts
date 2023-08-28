@@ -35,6 +35,7 @@ export enum GasOptionType {
     FAST = 'fast',
     NORMAL = 'normal',
     SLOW = 'slow',
+    CUSTOM = 'custom',
 }
 
 export enum TokenType {
@@ -779,6 +780,8 @@ export interface TransactionDescriptor<ChainId, Transaction, Parameter = string 
     popup?: {
         /** The spender address of erc20 approve */
         spender?: string
+        /** The spender address of erc721 approve */
+        erc721Spender?: string
         /** The method name of contract function */
         method?: string
         /** The Non-Fungible token description */
@@ -836,7 +839,7 @@ type TransactionAsset<ChainId, SchemaType> = Token<ChainId, SchemaType> & {
 export interface Transaction<ChainId, SchemaType> {
     id: string
     chainId: ChainId
-    type?: LiteralUnion<'burn' | 'contract interaction'>
+    type?: LiteralUnion<'burn' | 'contract interaction' | 'transfer'>
     cateType?: LiteralUnion<'approve' | 'receive' | 'send'>
     cateName?: string
     /** address */
@@ -845,8 +848,7 @@ export interface Transaction<ChainId, SchemaType> {
     to: string
     /** unix timestamp */
     timestamp: number
-    /** 0: failed 1: succeed */
-    status?: 0 | 1
+    status: TransactionStatusType
     /** transferred assets */
     assets: Array<TransactionAsset<ChainId, SchemaType>>
     /** estimated tx fee */
@@ -876,6 +878,7 @@ export interface RecentTransaction<ChainId, Transaction> {
     createdAt: Date
     /** record updated at */
     updatedAt: Date
+    type?: LiteralUnion<'burn' | 'contract interaction'>
 }
 
 export type RecentTransactionComputed<ChainId, Transaction> = RecentTransaction<ChainId, Transaction> & {

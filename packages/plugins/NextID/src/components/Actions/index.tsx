@@ -2,8 +2,6 @@ import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Button, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useMountReport } from '@masknet/web3-hooks-base'
-import { EventID } from '@masknet/web3-telemetry/types'
 import { useI18N } from '../../locales/index.js'
 import { PersonaSelectPanel } from '@masknet/shared'
 
@@ -30,8 +28,6 @@ interface CreatePersonaActionProps {
 export const CreatePersonaAction = memo<CreatePersonaActionProps>(({ disabled, onCreate }) => {
     const t = useI18N()
     const { classes } = useStyles()
-
-    useMountReport(EventID.AccessWeb3TabCreatePersonaTab)
 
     return (
         <>

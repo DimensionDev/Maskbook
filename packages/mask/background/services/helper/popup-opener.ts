@@ -1,20 +1,8 @@
 import urlcat from 'urlcat'
-import { type DashboardRoutes, PopupRoutes, MaskMessages, CrossIsolationMessages } from '@masknet/shared-base'
+import { type DashboardRoutes, PopupRoutes, CrossIsolationMessages } from '@masknet/shared-base'
+import { isLocked } from '../wallet/services/index.js'
 
 let currentPopupWindowId = 0
-
-function isLocked() {
-    return new Promise<boolean>((resolve) => {
-        const off = MaskMessages.events.wallet_is_locked.on(([type, value]) => {
-            if (type === 'request') return
-            off()
-            resolve(value)
-            // in case something went wrong
-            setTimeout(() => resolve(false), 200)
-        })
-        MaskMessages.events.wallet_is_locked.sendToLocal(['request'])
-    })
-}
 
 async function openWindow(url: string): Promise<void> {
     const windows = await browser.windows.getAll()
@@ -68,7 +56,7 @@ async function openWindow(url: string): Promise<void> {
     }
 }
 
-const exclusionDetectLocked: PopupRoutes[] = [PopupRoutes.PersonaSignRequest, PopupRoutes.Unlock]
+const exclusionDetectLocked: PopupRoutes[] = [PopupRoutes.PersonaSignRequest, PopupRoutes.Unlock, PopupRoutes.Personas]
 
 export async function openPopupWindow(
     route?: PopupRoutes,
@@ -99,19 +87,13 @@ export async function openPopupWindow(
     return openWindow(url)
 }
 
+export async function queryCurrentPopupWindowId() {
+    return currentPopupWindowId
+}
+
 export async function openWalletStartUpWindow(params: Record<string, any>) {
     await removePopupWindow()
     return openPopupWindow(PopupRoutes.Wallet, params)
-}
-
-export async function openPopupConnectWindow(params: Record<string, any> = {}): Promise<void> {
-    const url = urlcat('popups-connect.html#', PopupRoutes.ConnectWallet, {
-        toBeClose: 1,
-        from: PopupRoutes.ConnectWallet,
-        ...params,
-    })
-
-    return openWindow(url)
 }
 
 export async function removePopupWindow(): Promise<void> {

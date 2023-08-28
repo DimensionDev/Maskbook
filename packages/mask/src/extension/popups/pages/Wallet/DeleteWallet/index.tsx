@@ -1,22 +1,20 @@
 import { first } from 'lodash-es'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useContainer } from 'unstated-next'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { PopupRoutes } from '@masknet/shared-base'
 import { ManageWallet } from '@masknet/shared'
 import { useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../../../../../utils/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
-import { WalletContext } from '../hooks/useWalletContext.js'
-import { useTitle } from '../../../hook/useTitle.js'
-import { PopupContext } from '../../../hook/usePopupContext.js'
+import { useTitle, PopupContext } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()({
     content: {
@@ -76,14 +74,18 @@ const useStyles = makeStyles()({
     },
 })
 
+/**
+ * @deprecated unused
+ */
 const DeleteWallet = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
-    const { selectedWallet } = WalletContext.useContainer()
     const currentWallet = useWallet()
-    const wallet = selectedWallet ?? currentWallet
+    const wallets = useWallets()
+    const [params] = useSearchParams()
+    const paramWallet = wallets.find((x) => isSameAddress(x.address, params.get('wallet') || ''))
+    const wallet = paramWallet ?? currentWallet
 
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const { classes } = useStyles()
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState('')

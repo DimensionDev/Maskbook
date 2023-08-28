@@ -134,7 +134,6 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
     const openPopupsWindow = useCallback(() => {
         openPopupWindow(PopupRoutes.Personas, {
             tab: PopupHomeTabType.ConnectedWallets,
-            disableNewWindow: true,
         })
     }, [])
 

@@ -19,7 +19,7 @@ const supportSources: SocialAddressType[] = [
  * and put the default one at the front.
  */
 export function useTipsAccounts(identity: IdentityResolved | undefined, personaPubkey: string | undefined) {
-    const { value: socialAccounts = EMPTY_LIST } = useSocialAccountsAll(identity, supportSources)
+    const { data: socialAccounts = EMPTY_LIST } = useSocialAccountsAll(identity, supportSources)
     const userId = identity?.identifier?.userId
     const { data: hiddenAddresses } = useHiddenAddressConfigOf(personaPubkey, PluginID.Web3Profile, userId)
     return useMemo(() => {

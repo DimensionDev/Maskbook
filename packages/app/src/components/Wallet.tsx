@@ -25,6 +25,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     accountName: {
         color: theme.palette.maskColor.dark,
+        fontSize: 16,
         fontWeight: 700,
         marginRight: 5,
         lineHeight: '18px',
@@ -39,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     link: {
-        fontSize: 14,
+        fontSize: 16,
         display: 'flex',
         alignItems: 'center',
     },
@@ -89,7 +90,7 @@ export const WalletItem = memo<WalletItemProps>((props) => {
             {!account ? (
                 <a
                     href="#"
-                    className="flex items-center gap-x-4  py-3 text-sm font-semibold leading-6 text-white hover:text-white"
+                    className="flex items-center gap-x-4 py-3 text-md font-semibold leading-6 text-white hover:text-white"
                     onClick={(ev) => {
                         ev.preventDefault()
                         ev.stopPropagation()
@@ -103,14 +104,14 @@ export const WalletItem = memo<WalletItemProps>((props) => {
                         alt=""
                     />
                     <span className="sr-only">Your profile</span>
-                    <span className="dark:text-white  text-black" aria-hidden="true">
+                    <span className="dark:text-white text-black" aria-hidden="true">
                         {account ? Others.formatAddress(account, 4) : 'Connect Wallet'}
                     </span>
                 </a>
             ) : (
                 <div className={classes.walletItem} onClick={() => SelectProviderModal.open()}>
                     <WalletIcon
-                        size={30}
+                        size={40}
                         badgeSize={12}
                         mainIcon={providerDescriptor?.icon}
                         badgeIcon={networkDescriptor?.icon}

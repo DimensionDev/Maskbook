@@ -4,7 +4,8 @@ import { makeStyles } from '@masknet/theme'
 import { Web3, Contract, ChainResolver } from '@masknet/web3-providers'
 import { NetworkPluginID, ProofType } from '@masknet/shared-base'
 import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
-import { useChainContext, useNetworkContext, useNetworks, useTelemetry, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
+import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID, ExceptionType, ExceptionID } from '@masknet/web3-telemetry/types'
 
 export interface ConnectionContentProps {
@@ -22,7 +23,6 @@ export function ConnectionContent(props: ConnectionContentProps) {
     const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { Network } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const telemetry = useTelemetry()
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
 
     const customNetwork = useMemo(() => {
@@ -65,12 +65,12 @@ export function ConnectionContent(props: ConnectionContentProps) {
     }, [customNetwork, Network])
 
     const onCaptureEvent = useCallback(async () => {
-        telemetry.captureEvent(EventType.Debug, EventID.Debug)
-    }, [telemetry])
+        Telemetry.captureEvent(EventType.Debug, EventID.Debug)
+    }, [])
 
     const onCaptureException = useCallback(async () => {
-        telemetry.captureException(ExceptionType.Error, ExceptionID.Debug, new Error(`An error message ${Date.now()}.`))
-    }, [telemetry])
+        Telemetry.captureException(ExceptionType.Error, ExceptionID.Debug, new Error(`An error message ${Date.now()}.`))
+    }, [])
 
     const onEstimateCallback = useCallback(async () => {
         const contract = Contract.getERC20Contract('0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7', {

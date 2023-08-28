@@ -1,14 +1,14 @@
-import { useEffect, useMemo } from 'react'
-import { useAsync, useAsyncRetry } from 'react-use'
-import { first, isEqual } from 'lodash-es'
-import { type Subscription, useSubscription } from 'use-subscription'
-import { MaskMessages, ValueRef, type ProfileInformation, type SocialIdentity } from '@masknet/shared-base'
-import { useValueRef } from '@masknet/shared-base-ui'
 import type { IdentityResolved } from '@masknet/plugin-infra'
+import { MaskMessages, ValueRef, type ProfileInformation } from '@masknet/shared-base'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { NextIDProof } from '@masknet/web3-providers'
 import { FontSize, ThemeColor, ThemeMode, type ThemeSettings } from '@masknet/web3-shared-base'
-import { activatedSiteAdaptorUI, activatedSiteAdaptor_state } from '../../site-adaptor-infra/index.js'
+import { useQuery } from '@tanstack/react-query'
+import { first, isEqual } from 'lodash-es'
+import { useEffect, useMemo } from 'react'
+import { useSubscription, type Subscription } from 'use-subscription'
 import Services from '../../extension/service.js'
+import { activatedSiteAdaptorUI, activatedSiteAdaptor_state } from '../../site-adaptor-infra/index.js'
 
 async function queryPersonaFromDB(identityResolved: IdentityResolved) {
     if (!identityResolved.identifier) return
@@ -62,44 +62,48 @@ export function useCurrentVisitingIdentity() {
 
 export function useCurrentLinkedPersona() {
     const currentIdentity = useCurrentIdentity()
-    return useAsync(async () => {
+    return useQuery(['current-linked-persona', currentIdentity?.linkedPersona], async () => {
         if (!currentIdentity?.linkedPersona) return
         return Services.Identity.queryPersona(currentIdentity.linkedPersona)
-    }, [currentIdentity?.linkedPersona])
+    })
 }
 
 /**
  * Get the social identity of the given identity
  */
 export function useSocialIdentity(identity: IdentityResolved | null | undefined) {
-    const result = useAsyncRetry<SocialIdentity | undefined>(async () => {
-        if (!identity) return
-        try {
-            const bindings = await queryPersonasFromNextID(identity)
-            const persona = await queryPersonaFromDB(identity)
-            const personaBindings =
-                bindings?.filter((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()) ?? []
-            return {
-                ...identity,
-                publicKey: persona?.identifier.publicKeyAsHex,
-                hasBinding: personaBindings.length > 0,
-                binding: first(personaBindings),
+    const result = useQuery({
+        enabled: !!identity,
+        queryKey: ['social-identity', identity],
+        queryFn: async () => {
+            if (!identity) return
+            try {
+                const bindings = await queryPersonasFromNextID(identity)
+                const persona = await queryPersonaFromDB(identity)
+                const personaBindings =
+                    bindings?.filter((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()) ?? []
+                return {
+                    ...identity,
+                    publicKey: persona?.identifier.publicKeyAsHex,
+                    hasBinding: personaBindings.length > 0,
+                    binding: first(personaBindings),
+                }
+            } catch {
+                return identity
             }
-        } catch {
-            return identity
-        }
-    }, [JSON.stringify(identity)])
+        },
+    })
 
-    useEffect(() => MaskMessages.events.ownProofChanged.on(result.retry), [result.retry])
+    useEffect(() => MaskMessages.events.ownProofChanged.on(() => result.refetch()), [result.refetch])
 
     return result
 }
 
 export function useSocialIdentityByUserId(userId?: string) {
-    const { value: identity } = useAsync(async () => {
+    const { data: identity } = useQuery(['social-identity', 'by-id', userId], async () => {
         if (!userId) return
         return activatedSiteAdaptorUI!.utils.getUserIdentity?.(userId)
-    }, [userId])
+    })
     return useSocialIdentity(identity)
 }
 
@@ -121,15 +125,15 @@ export function useCurrentVisitingSocialIdentity() {
 
 export function useThemeSettings() {
     const themeSettings = useValueRef(
-        (activatedSiteAdaptorUI!.collecting.themeSettingsProvider?.recognized ||
+        (activatedSiteAdaptorUI?.collecting.themeSettingsProvider?.recognized ||
             defaultThemeSettings) as ValueRef<ThemeSettings>,
     )
     return useMemo<ThemeSettings>(
         () => ({
             ...defaults,
-            ...activatedSiteAdaptorUI!.configuration.themeSettings,
+            ...activatedSiteAdaptorUI?.configuration.themeSettings,
             ...themeSettings,
         }),
-        [activatedSiteAdaptorUI!.configuration.themeSettings, themeSettings],
+        [activatedSiteAdaptorUI?.configuration.themeSettings, themeSettings],
     )
 }

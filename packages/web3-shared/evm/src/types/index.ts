@@ -2,7 +2,7 @@ import type EVM_Web3 from 'web3'
 import type { Transaction as Web3Transaction, TransactionReceipt as Web3TransactionReceipt } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types.js'
-import type { Web3UI as Web3UIShared, Web3State as Web3StateShared } from '@masknet/web3-shared-base'
+import type { Web3UI as Web3UIShared, Web3State as Web3StateShared, GasOptionType } from '@masknet/web3-shared-base'
 
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
 
@@ -28,6 +28,10 @@ export enum ChainId {
     Rinkeby = 4,
     Gorli = 5,
     Kovan = 42,
+
+    // Base
+    Base = 8453,
+    Base_Goerli = 84531,
 
     // BSC
     BSC = 56,
@@ -95,6 +99,44 @@ export enum ChainId {
 
     Cronos = 25,
 
+    Brise = 32520,
+
+    Canto = 7700,
+
+    DFK = 53935,
+
+    Doge = 2000,
+
+    Evmos = 9001,
+
+    HuobiEco = 128,
+
+    IoTex = 4689,
+
+    Kava = 2222,
+
+    Kcc = 321,
+
+    Milkomeda = 2001,
+
+    OKXChain = 66,
+
+    Palm = 11297108109,
+
+    RSK = 30,
+
+    SmartBitcoinCash = 10000,
+
+    Shiden = 336,
+
+    SongbirdCanary = 19,
+
+    Step = 1234,
+
+    Telos = 40,
+
+    Wanchain = 888,
+
     /** BitTorrent Chain Mainnet */
     BitTorrent = 199,
 
@@ -121,12 +163,14 @@ export interface EIP1559GasConfig {
     maxFeePerGas: string
     maxPriorityFeePerGas: string
     gasPrice?: string
+    gasOptionType?: GasOptionType
 }
 
 export interface PriorEIP1559GasConfig {
     gas?: string
     gasPrice: string
     gasCurrency?: string
+    gasOptionType?: GasOptionType
 }
 
 export type GasConfig = EIP1559GasConfig | PriorEIP1559GasConfig
@@ -214,6 +258,7 @@ export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<in
 export enum NetworkType {
     Ethereum = 'Ethereum',
     Binance = 'Binance',
+    Base = 'Base',
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
@@ -293,6 +338,7 @@ export interface RequestOptions {
     paymentToken?: string
     allowMaskAsGas?: boolean
     providerURL?: string
+    gasOptionType?: GasOptionType
 }
 
 export interface MessageRequest {
@@ -345,6 +391,7 @@ export interface TransactionOptions {
     identifier?: string
     paymentToken?: string
     allowMaskAsGas?: boolean
+    providerURL?: string
 
     // popups control
     disableClose?: boolean

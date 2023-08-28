@@ -123,9 +123,59 @@
         ]
     },
     {
+        "chainId": 8453,
+        "type": "Base",
+        "name": "Base",
+        "color": "rgb(0, 82, 255)",
+        "network": "mainnet",
+        "fullName": "Base Mainnet",
+        "shortName": "base",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 8453,
+            "name": "Ether",
+            "symbol": "ETH",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
+        },
+        "infoURL": "https://base.org/",
+        "explorers": [
+            {
+                "name": "basescan",
+                "url": "https://basescan.org",
+                "standard": "EIP3091"
+            }
+        ]
+    },
+    {
+        "chainId": 84531,
+        "type": "Base",
+        "name": "Base Goerli",
+        "color": "rgb(0, 82, 255)",
+        "network": "testnet",
+        "fullName": "Base Goerli",
+        "shortName": "base",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 84531,
+            "name": "Ether",
+            "symbol": "ETH",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
+        },
+        "infoURL": "https://base.org",
+        "explorers": [
+            {
+                "name": "basescan",
+                "url": "https://goerli.basescan.org",
+                "standard": "EIP3091"
+            }
+        ]
+    },
+    {
         "chainId": 56,
         "type": "Binance",
-        "name": "BNB Chain",
+        "name": "BNB",
         "color": "rgb(240, 185, 10)",
         "network": "mainnet",
         "fullName": "Binance Smart Chain Mainnet",
@@ -150,7 +200,7 @@
     {
         "chainId": 97,
         "type": "Binance",
-        "name": "BNB Chain",
+        "name": "BNB",
         "color": "rgb(240, 185, 10)",
         "network": "chapel",
         "fullName": "Binance Smart Chain Testnet",
@@ -362,7 +412,7 @@
     {
         "chainId": 250,
         "type": "Fantom",
-        "name": "FTM",
+        "name": "Fantom",
         "fullName": "Fantom Opera",
         "network": "mainnet",
         "shortName": "ftm",
@@ -394,7 +444,8 @@
             "chainId": 42220,
             "name": "CELO",
             "symbol": "CELO",
-            "decimals": 18
+            "decimals": 18,
+            "address": "0x471ece3750da237f93b8e339c536989b8978a438"
         },
         "infoURL": "https://explorer.celo.org/",
         "explorers": [
@@ -407,7 +458,7 @@
     {
         "chainId": 43114,
         "type": "Avalanche",
-        "name": "AVAX",
+        "name": "Avalanche",
         "color": "rgb(232, 65, 66)",
         "network": "mainnet",
         "shortName": "AVAX",
@@ -676,13 +727,13 @@
     },
     {
         "chainId": 66,
-        "name": "OKXChain",
-        "type": "OKXChain Mainnet",
+        "name": "OKX",
+        "type": "OKX",
         "network": "mainnet",
         "features": [],
         "nativeCurrency": {
             "chainId": 66,
-            "name": "OKXChain Global Utility Token",
+            "name": "OKT",
             "symbol": "OKT",
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/okt/info/logo.png/quality=85"
@@ -812,13 +863,13 @@
     },
     {
         "chainId": 128,
-        "name": "Huobi ECO",
-        "type": "Huobi ECO Chain Mainnet",
+        "name": "HECO",
+        "type": "HECO",
         "network": "mainnet",
         "features": [],
         "nativeCurrency": {
             "chainId": 128,
-            "name": "Huobi ECO Chain Native Token",
+            "name": "HECO",
             "symbol": "HT",
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/heco/info/logo.png/quality=85"
@@ -827,7 +878,7 @@
         "shortName": "heco",
         "explorers": [
             {
-                "name": "Huobi ECO Chain Mainnet",
+                "name": "HECO",
                 "url": "https://www.hecoinfo.com/en-us/"
             }
         ]

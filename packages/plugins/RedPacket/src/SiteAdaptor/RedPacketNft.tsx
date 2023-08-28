@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import { makeStyles, ActionButton, LoadingBase, parseColor, ShadowRootTooltip, useDetectOverflow } from '@masknet/theme'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { signMessage, type ChainId } from '@masknet/web3-shared-evm'
 import { type RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { Card, Typography, Button, Box } from '@mui/material'
 import {
@@ -10,16 +10,22 @@ import {
     NFTFallbackImage,
     TransactionConfirmModal,
 } from '@masknet/shared'
-import { useChainContext, useNetworkContext, useNonFungibleAsset } from '@masknet/web3-hooks-base'
-import { NetworkResolver, Web3 } from '@masknet/web3-providers'
+import {
+    useChainContext,
+    useNetwork,
+    useNetworkContext,
+    useNonFungibleAsset,
+    useWeb3Hub,
+} from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
 import { usePostLink, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { NetworkPluginID, CrossIsolationMessages, isTwitter, isFacebook } from '@masknet/shared-base'
+import { NetworkPluginID, CrossIsolationMessages, Sniffings } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { Stack } from '@mui/system'
 import { useI18N } from '../locales/index.js'
 import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
+import { useNftRedPacketContract } from './hooks/useNftRedPacketContract.js'
 
 const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, { claimed, outdated }) => ({
     root: {
@@ -189,7 +195,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const t = useI18N()
 
     const { pluginID } = useNetworkContext()
-    const { account, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>(
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>(
         pluginID === NetworkPluginID.PLUGIN_EVM ? {} : { account: '' },
     )
     const { share } = useSiteAdaptorContext()
@@ -203,25 +209,26 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const [{ loading: isClaiming }, claimCallback] = useClaimNftRedpacketCallback(
         payload.id,
         availability?.totalAmount,
-        Web3.getWeb3().eth.accounts.sign(account, payload.privateKey).signature ?? '',
+        signMessage(account, payload.privateKey).signature ?? '',
     )
     const [showTooltip, textRef] = useDetectOverflow()
 
     useEffect(() => {
         retryAvailability()
     }, [account])
+    const network = useNetwork(pluginID, payload.chainId)
 
     const outdated = !!(availability?.isClaimedAll || availability?.isCompleted || availability?.expired)
     const { classes, cx } = useStyles({ claimed: !!availability?.isClaimed, outdated })
     // #region on share
     const postLink = usePostLink()
     const shareText = useMemo(() => {
-        const isOnTwitter = isTwitter()
-        const isOnFacebook = isFacebook()
+        const isOnTwitter = Sniffings.is_twitter_page
+        const isOnFacebook = Sniffings.is_facebook_page
         const options = {
             sender: payload.senderName,
             payload: postLink.toString(),
-            network: NetworkResolver.networkName(networkType) || '',
+            network: network?.name || '',
             account_promote: t.account_promote({
                 context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
             }),
@@ -231,37 +238,12 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             return t.nft_share_claimed_message(options)
         }
         return t.nft_share_foreshow_message(options)
-    }, [availability?.isClaimed, t])
+    }, [availability?.isClaimed, t, network?.name])
 
     const onShare = useCallback(() => {
         if (shareText) share?.(shareText)
     }, [shareText, share])
     // #endregion
-
-    const { data: nonFungibleToken } = useNonFungibleAsset(
-        undefined,
-        availability?.token_address,
-        availability?.claimed_id,
-    )
-
-    const openTransactionConfirmModal = useCallback(() => {
-        if (!availability || availability?.claimed_id === '0' || !availability?.token_address) return
-
-        TransactionConfirmModal.open({
-            shareText,
-            amount: '1',
-            tokenType: TokenType.NonFungible,
-            messageTextForNFT: t.claim_nft_successful({
-                name: nonFungibleToken?.contract?.name || 'NFT',
-            }),
-            messageTextForFT: t.claim_token_successful({
-                amount: '1',
-                name: '',
-            }),
-            title: t.lucky_drop(),
-            share,
-        })
-    }, [nonFungibleToken, availability?.claimed_id, availability?.token_address, share])
 
     const openNFTDialog = useCallback(() => {
         if (!payload.chainId || !pluginID || !availability?.claimed_id || !availability?.token_address) return
@@ -282,14 +264,57 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             chainId: payload.chainId,
         },
     )
+    const Hub = useWeb3Hub(pluginID, {
+        account,
+    })
+    const nftRedPacketContract = useNftRedPacketContract(payload.chainId)
+    const checkResult = useCallback(async () => {
+        if (!nftRedPacketContract) return
+        const availability = await nftRedPacketContract.methods.check_availability(payload.id).call({
+            // check availability is ok w/o account
+            from: account,
+        })
+        if (availability.claimed_id === '0') return
+
+        const isOnTwitter = Sniffings.is_twitter_page
+        const isOnFacebook = Sniffings.is_facebook_page
+        const options = {
+            sender: payload.senderName,
+            payload: postLink.toString(),
+            network: network?.name || '',
+            account_promote: t.account_promote({
+                context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
+            }),
+            interpolation: { escapeValue: false },
+        } as const
+        const shareText = t.nft_share_foreshow_message(options)
+        const token = await Hub.getNonFungibleAsset(payload.contractAddress, availability.claimed_id)
+
+        TransactionConfirmModal.open({
+            shareText,
+            amount: '1',
+            nonFungibleTokenId: availability.claimed_id,
+            nonFungibleTokenAddress: payload.contractAddress,
+            tokenType: TokenType.NonFungible,
+            messageTextForNFT: t.claim_nft_successful({
+                name: token?.contract?.name || 'NFT',
+            }),
+            messageTextForFT: t.claim_token_successful({
+                amount: '1',
+                name: '',
+            }),
+            title: t.lucky_drop(),
+            share,
+        })
+    }, [nftRedPacketContract, payload.id, account, share, Hub])
 
     const claim = useCallback(async () => {
         const hash = await claimCallback()
+        await checkResult()
         if (typeof hash === 'string') {
-            openTransactionConfirmModal()
             retryAvailability()
         }
-    }, [claimCallback, retryAvailability, openTransactionConfirmModal])
+    }, [claimCallback, retryAvailability])
 
     if (availabilityError)
         return (

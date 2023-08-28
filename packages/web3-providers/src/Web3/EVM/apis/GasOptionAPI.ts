@@ -74,6 +74,11 @@ export class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOpti
                 suggestedMaxFeePerGas: toFixed(baseFeePerGas + slow),
                 suggestedMaxPriorityFeePerGas: toFixed(slow),
             },
+            [GasOptionType.CUSTOM]: {
+                estimatedSeconds: 0,
+                suggestedMaxFeePerGas: '',
+                suggestedMaxPriorityFeePerGas: '',
+            },
         }
     }
 
@@ -99,6 +104,11 @@ export class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOpti
                 estimatedSeconds: 60,
                 suggestedMaxFeePerGas: toFixed(gasPrice),
                 suggestedMaxPriorityFeePerGas: '0',
+            },
+            [GasOptionType.CUSTOM]: {
+                estimatedSeconds: 0,
+                suggestedMaxFeePerGas: '',
+                suggestedMaxPriorityFeePerGas: '',
             },
         }
     }

@@ -1,15 +1,17 @@
+import { defer, delay } from '@masknet/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import {
     createSubscriptionFromAsync,
     CrossIsolationMessages,
     EMPTY_LIST,
     MaskMessages,
+    type SignType,
     Sniffings,
+    type ECKeyIdentifier,
 } from '@masknet/shared-base'
 import { WalletConnectQRCodeModal } from '@masknet/shared'
 import Services from '../extension/service.js'
 import type { PartialSharedUIContext } from '../../shared/plugin-infra/host.js'
-import { WalletRPC } from '../plugins/WalletService/messages.js'
 
 export const RestPartOfPluginUIContextShared: Omit<
     Plugin.SiteAdaptor.SiteAdaptorContext,
@@ -34,22 +36,28 @@ export const RestPartOfPluginUIContextShared: Omit<
         undefined,
         MaskMessages.events.currentPersonaIdentifier.on,
     ),
-    send: WalletRPC.send,
+    send: Services.Wallet.send,
 
     openDashboard: Services.Helper.openDashboard,
     openPopupWindow: Services.Helper.openPopupWindow,
     closePopupWindow: Services.Helper.removePopupWindow,
-    openPopupConnectWindow: Services.Helper.openPopupConnectWindow,
     fetchJSON: Services.Helper.fetchJSON,
 
     openWalletConnectDialog: async (uri: string) => {
         if (Sniffings.is_popup_page) {
+            const [promise, resolve, reject] = defer<boolean>()
+            const callback = ({ open }: { open: boolean }) => (!open ? resolve(true) : undefined)
+
+            delay(5000).then(() => reject(new Error('timeout')))
+            CrossIsolationMessages.events.popupWalletConnectEvent.on(callback)
             CrossIsolationMessages.events.popupWalletConnectEvent.sendToAll({ uri, open: true })
-            return
+
+            await promise.finally(() => CrossIsolationMessages.events.popupWalletConnectEvent.off(callback))
+        } else {
+            await WalletConnectQRCodeModal.openAndWaitForClose({
+                uri,
+            })
         }
-        await WalletConnectQRCodeModal.openAndWaitForClose({
-            uri,
-        })
     },
     closeWalletConnectDialog: () => {
         if (Sniffings.is_popup_page) {
@@ -59,24 +67,25 @@ export const RestPartOfPluginUIContextShared: Omit<
         WalletConnectQRCodeModal.close()
     },
 
-    selectAccount: WalletRPC.selectMaskAccount,
+    selectAccount: Services.Wallet.selectMaskAccount,
 
-    recordConnectedSites: WalletRPC.recordConnectedSites,
+    recordConnectedSites: Services.Wallet.recordConnectedSites,
 
-    signWithPersona: Services.Identity.signWithPersona,
-    signWithWallet: WalletRPC.signWithWallet,
+    signWithPersona: <T>(type: SignType, message: T, identifier?: ECKeyIdentifier, silent?: boolean) =>
+        Services.Identity.signWithPersona(type, message, identifier, location.origin, silent),
+    signWithWallet: Services.Wallet.signWithWallet,
 
     wallets: createSubscriptionFromAsync(
-        () => WalletRPC.getWallets(),
+        () => Services.Wallet.getWallets(),
         EMPTY_LIST,
         CrossIsolationMessages.events.walletsUpdated.on,
     ),
 
-    getWallets: WalletRPC.getWallets,
-    addWallet: WalletRPC.addWallet,
-    updateWallet: WalletRPC.updateWallet,
-    removeWallet: WalletRPC.removeWallet,
-    resetAllWallets: WalletRPC.resetAllWallets,
+    getWallets: Services.Wallet.getWallets,
+    addWallet: Services.Wallet.addWallet,
+    updateWallet: Services.Wallet.updateWallet,
+    removeWallet: Services.Wallet.removeWallet,
+    resetAllWallets: Services.Wallet.resetAllWallets,
 
-    hasPaymentPassword: WalletRPC.hasPassword,
+    hasPaymentPassword: Services.Wallet.hasPassword,
 }

@@ -34,6 +34,7 @@ interface AssetsContextOptions {
     loadVerifiedBy(id: string): Promise<void>
     /** All collectibles get hidden */
     isAllHidden: boolean
+    isEmpty: boolean
 }
 
 export const AssetsContext = createContext<AssetsContextOptions>({
@@ -44,6 +45,7 @@ export const AssetsContext = createContext<AssetsContextOptions>({
     loadAssets: () => Promise.resolve(),
     loadVerifiedBy: () => Promise.resolve(),
     isAllHidden: false,
+    isEmpty: false,
 })
 
 /** Min merged collection chunk size */
@@ -77,14 +79,14 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
         if (!blockedIds.length) return assetsMap
         const listingMap: Record<string, AssetsState> = { ...assetsMap }
         let updated = false
-        for (const id in assetsMap) {
-            const originalAssets = assetsMap[id].assets
+        for (const storeId in assetsMap) {
+            const originalAssets = assetsMap[storeId].assets
             const newAssets = originalAssets.filter((x) => {
                 const assetId = `${x.chainId}.${x.address}.${x.tokenId}`.toLowerCase()
                 return !blockedIds.includes(assetId)
             })
             if (newAssets.length !== originalAssets.length) {
-                listingMap[id] = { ...listingMap[id], assets: newAssets }
+                listingMap[storeId] = { ...listingMap[storeId], assets: newAssets }
                 updated = true
             }
         }
@@ -104,6 +106,12 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
     })
 
     const { collections } = CollectionsContext.useContainer()
+    const isEmpty = useMemo(() => {
+        // Collections assets are lazy loading, can't judge if not all collections been load
+        if (Object.keys(assetsMap).length < collections.length) return false
+        // Spam score of some collections might be OK, but NFTs of them might be treated as spam #MF-5091
+        return getAssetsTotal(assetsMap) === 0
+    }, [assetsMap, collections.length])
     const isAllHidden = useMemo(() => {
         // Collections assets are lazy loading, can't judge if not all collections been load
         if (Object.keys(assetsMap).length < collections.length) return false
@@ -121,14 +129,15 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
 
             const { id, chainId } = collection
             const stateKey = `${id}.${chainId}`
+            const storeId = `${account}.${stateKey}`
             const realId = collectionId ?? id
-            const assetsState = assetsMapRef.current[id]
+            const assetsState = assetsMapRef.current[storeId]
 
             // Fetch less in collection list, and more every time in expanded collection.
             // Also expand size if for id chunk, since there might be more assets than chunk size
             const size = assetsState?.assets.length || collectionId ? 20 : 4
-            const indicator = (!collectionId && indicatorMapRef.current.get(id)) || createIndicator()
-            dispatch({ type: 'SET_LOADING_STATUS', id: stateKey, loading: true })
+            const indicator = (!collectionId && indicatorMapRef.current.get(storeId)) || createIndicator()
+            dispatch({ type: 'SET_LOADING_STATUS', account, id: stateKey, loading: true })
             const pageable = await Hub.getNonFungibleAssetsByCollectionAndOwner(realId, account, {
                 indicator,
                 size,
@@ -142,13 +151,13 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
                 )
             }
             if (pageable.nextIndicator) {
-                indicatorMapRef.current.set(id, pageable.nextIndicator as PageIndicator)
+                indicatorMapRef.current.set(storeId, pageable.nextIndicator as PageIndicator)
             }
-            dispatch({ type: 'APPEND_ASSETS', id: stateKey, assets: pageable.data })
+            dispatch({ type: 'APPEND_ASSETS', id: stateKey, account, assets: pageable.data })
             // If collectionId is set, that means we are loading part of a merged collection.
             // And we will let the merged collection's iterator decide if it has ended
             const finished = !collectionId && !pageable.nextIndicator
-            dispatch({ type: 'SET_LOADING_STATUS', id: stateKey, finished, loading: false })
+            dispatch({ type: 'SET_LOADING_STATUS', id: stateKey, account, finished, loading: false })
             return pageable.data
         },
         [Hub, account],
@@ -160,7 +169,8 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
 
             const { id, chainId } = collection
             const stateKey = `${id}.${chainId}`
-            const assetsState = assetsMapRef.current[stateKey]
+            const storeId = `${account}.${stateKey}`
+            const assetsState = assetsMapRef.current[storeId]
             if (assetsState?.finished || assetsState?.loading) return
             const allIds = id.split(',')
 
@@ -179,7 +189,7 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
                 assetsLoaderIterators.current.set(stateKey, iterator)
                 const result = await iterator.next()
                 if (result.done) {
-                    dispatch({ type: 'SET_LOADING_STATUS', id: stateKey, finished: true, loading: false })
+                    dispatch({ type: 'SET_LOADING_STATUS', id: stateKey, account, finished: true, loading: false })
                     return
                 }
                 assets = result.value
@@ -192,7 +202,7 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
             const listings = assets.filter((x) => !blockedList.includes(x.tokenId))
             if (!listings.length) await loadAssetsViaHub(collection)
         },
-        [loadAssetsViaHub],
+        [loadAssetsViaHub, account],
     )
 
     const loadVerifiedBy = useCallback(
@@ -207,10 +217,10 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
 
     const getAssets = useCallback(
         (collection: Web3Helper.NonFungibleCollectionAll) => {
-            const key = `${collection.id}.${collection.chainId}`
+            const key = `${account}.${collection.id}.${collection.chainId}`
             return listingAssetsMap[key] ?? createAssetsState()
         },
-        [listingAssetsMap],
+        [listingAssetsMap, account],
     )
     const getBLockedTokenIds = useCallback(
         (collection: Web3Helper.NonFungibleCollectionAll) => {
@@ -224,6 +234,7 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
     const contextValue = useMemo((): AssetsContextOptions => {
         return {
             isAllHidden,
+            isEmpty,
             getAssets,
             getBLockedTokenIds,
             getVerifiedBy,
@@ -231,7 +242,7 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
             loadVerifiedBy,
             assetsMapRef: listingAssetsMapRef,
         }
-    }, [getAssets, getBLockedTokenIds, getVerifiedBy, loadAssets, loadVerifiedBy, isAllHidden])
+    }, [getAssets, getBLockedTokenIds, getVerifiedBy, loadAssets, loadVerifiedBy, isAllHidden, isEmpty])
     return <AssetsContext.Provider value={contextValue}>{children}</AssetsContext.Provider>
 })
 

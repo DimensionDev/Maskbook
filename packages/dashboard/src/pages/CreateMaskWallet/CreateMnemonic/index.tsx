@@ -7,6 +7,7 @@ import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { CopyButton } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
+import { generateNewWalletName } from '@masknet/web3-shared-base'
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
@@ -16,6 +17,7 @@ import { useMnemonicWordsPuzzle, type PuzzleWord } from '../../../hooks/useMnemo
 import { useDashboardI18N } from '../../../locales/index.js'
 import { ComponentToPrint } from './ComponentToPrint.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
+import { useWallets } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -160,7 +162,8 @@ const useStyles = makeStyles()((theme) => ({
 const CreateMnemonic = memo(function CreateMnemonic() {
     const location = useLocation()
     const navigate = useNavigate()
-    const walletName = 'Wallet 1'
+    const wallets = useWallets()
+    const walletName = generateNewWalletName(wallets)
     const t = useDashboardI18N()
     const { handlePasswordAndWallets } = ResetWalletContext.useContainer()
     const [verified, setVerified] = useState(false)
@@ -193,7 +196,7 @@ const CreateMnemonic = memo(function CreateMnemonic() {
     }, [words.join(' '), walletName, hasPassword])
 
     const [{ loading }, onSubmit] = useAsyncFn(async () => {
-        handlePasswordAndWallets(location.state?.password, location.state?.isReset)
+        await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
 
         const address = await WalletServiceRef.value.createWalletFromMnemonicWords(walletName, words.join(' '))
         await WalletServiceRef.value.resolveMaskAccount([
@@ -228,6 +231,7 @@ const CreateMnemonic = memo(function CreateMnemonic() {
                     isMatched={isMatched}
                     answerCallback={answerCallback}
                     puzzleAnswer={puzzleAnswer}
+                    onRefreshWords={refreshCallback}
                     verifyAnswerCallback={verifyAnswerCallback}
                     puzzleWordList={puzzleWordList}
                     onSubmit={onSubmit}
@@ -255,6 +259,7 @@ interface VerifyMnemonicUIProps {
     words: string[]
     answerCallback: (index: number, word: string) => void
     verifyAnswerCallback: (callback?: () => void) => void
+    onRefreshWords: () => void
     puzzleAnswer: {
         [key: number]: string
     }
@@ -281,12 +286,18 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
     loading,
     isReset,
     puzzleWordList,
+    onRefreshWords,
     puzzleAnswer,
     verifyAnswerCallback,
     isMatched,
 }) {
     const t = useDashboardI18N()
     const { classes, cx } = useStyles()
+
+    const handleOnBack = useCallback(() => {
+        onRefreshWords()
+        setVerified(false)
+    }, [])
 
     return (
         <>
@@ -313,11 +324,7 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
             ) : null}
             <SetupFrameController>
                 <div className={classes.buttonGroup}>
-                    <SecondaryButton
-                        className={classes.bold}
-                        width="125px"
-                        size="large"
-                        onClick={() => setVerified(false)}>
+                    <SecondaryButton className={classes.bold} width="125px" size="large" onClick={handleOnBack}>
                         {t.back()}
                     </SecondaryButton>
                     <PrimaryButton
@@ -328,7 +335,7 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
                         size="large"
                         color="primary"
                         onClick={() => verifyAnswerCallback(onSubmit)}>
-                        {isReset ? t.restore() : t.verify()}
+                        {t.verify()}
                     </PrimaryButton>
                 </div>
             </SetupFrameController>

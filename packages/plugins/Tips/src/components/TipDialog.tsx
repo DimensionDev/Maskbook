@@ -6,9 +6,18 @@ import { ChainBoundary, InjectedDialog, PluginWalletStatusBar, TransactionConfir
 import { NetworkPluginID, getSiteType, pluginIDsSettings } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { ActionButton, MaskTabList, makeStyles } from '@masknet/theme'
-import { useChainContext, useNetworkContext, useNonFungibleAsset, useWallet } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useNetworkContext,
+    useNonFungibleAsset,
+    useWallet,
+    useMountReport,
+} from '@masknet/web3-hooks-base'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { TokenType } from '@masknet/web3-shared-base'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
+import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
 import { TargetRuntimeContext } from '../contexts/TargetRuntimeContext.js'
 import { useTip } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'
@@ -16,7 +25,6 @@ import { NFTSection } from './NFTSection/index.js'
 import { NetworkSection } from './NetworkSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
 import { TokenSection } from './TokenSection/index.js'
-import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -128,6 +136,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
             title: t.tips(),
             share,
         })
+        Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineTipsSend)
         onClose?.()
     }, [
         sendTip,
@@ -157,6 +166,8 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     useUpdateEffect(() => {
         if (!!wallet?.owner && smartPayChainId) setTargetChainId(smartPayChainId)
     }, [!!wallet?.owner, smartPayChainId])
+
+    useMountReport(EventID.EntryTimelineTipsOpen)
 
     return (
         <TabContext value={currentTab}>

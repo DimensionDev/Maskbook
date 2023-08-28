@@ -12,22 +12,19 @@ export class SolanaTransferAPI {
     private ConnectionOptions = new SolanaConnectionOptionsAPI(this.options)
 
     private async attachRecentBlockHash(transaction: Transaction, initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        const connection = this.Web3.getWeb3Connection(options)
+        const connection = this.Web3.getWeb3Connection(initial)
         const blockHash = await connection.getRecentBlockhash()
         transaction.recentBlockhash = blockHash.blockhash
         return transaction
     }
 
     private async signTransaction(transaction: Transaction, initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.Web3.getProviderInstance(options).signTransaction(transaction)
+        return this.Web3.getProviderInstance(initial).signTransaction(transaction)
     }
 
     private async sendTransaction(transaction: Transaction, initial?: ConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
         const signedTransaction = await this.signTransaction(transaction)
-        return sendAndConfirmRawTransaction(this.Web3.getWeb3Connection(options), signedTransaction.serialize())
+        return sendAndConfirmRawTransaction(this.Web3.getWeb3Connection(initial), signedTransaction.serialize())
     }
 
     async transferSol(recipient: string, amount: string, initial?: ConnectionOptions) {

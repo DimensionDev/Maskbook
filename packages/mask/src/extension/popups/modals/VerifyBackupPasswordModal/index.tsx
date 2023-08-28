@@ -4,7 +4,7 @@ import { Box } from '@mui/material'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { PasswordField } from '../../components/PasswordField/index.js'
-import { UserContext } from '../../hook/useUserContext.js'
+import { UserContext } from '../../hooks/index.js'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { MATCH_PASSWORD_RE } from '../../constants.js'
@@ -47,7 +47,13 @@ export const VerifyBackupPasswordModal = memo<ActionModalBaseProps>(function Ver
                     }}
                     value={password}
                     error={!passwordMatched}
-                    helperText={!passwordMatched ? t('popups_backup_password_incorrect') : null}
+                    helperText={
+                        !passwordValid
+                            ? t('popups_backup_password_invalid')
+                            : !passwordMatched
+                            ? t('popups_backup_password_incorrect')
+                            : null
+                    }
                 />
             </Box>
         </ActionModal>

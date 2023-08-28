@@ -6,14 +6,14 @@ import { LoadingButton } from '@mui/lab'
 import { TableContainer, TablePagination, tablePaginationClasses, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { PopupRoutes } from '@masknet/shared-base'
 import { currySameAddress, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import { useNativeToken, useWallets } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
 import { DeriveWalletTable } from '@masknet/shared'
 import { useI18N } from '../../../../../utils/index.js'
-import { useTitle } from '../../../hook/useTitle.js'
-import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
+import { useTitle } from '../../../hooks/index.js'
+import Services from '../../../../service.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -65,7 +65,7 @@ const AddDeriveWallet = memo(() => {
           }
         | undefined
     const { classes } = useStyles()
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const wallets = useWallets()
     const walletName = new URLSearchParams(location.search).get('name')
     const { mnemonic } = state || {}
 
@@ -75,7 +75,7 @@ const AddDeriveWallet = memo(() => {
         if (mnemonic) {
             const unDeriveWallets = Array.from(indexes.current)
 
-            const derivableAccounts = await WalletRPC.getDerivableAccounts(mnemonic, page)
+            const derivableAccounts = await Services.Wallet.getDerivableAccounts(mnemonic, page)
 
             return derivableAccounts.map((derivedWallet, index) => {
                 const added = !!wallets.find(currySameAddress(derivedWallet.address))
@@ -108,7 +108,7 @@ const AddDeriveWallet = memo(() => {
         if (!unDeriveWallets.length) return
 
         const firstPath = first(unDeriveWallets)
-        const firstWallet = await WalletRPC.createWalletFromMnemonicWords(
+        const firstWallet = await Services.Wallet.createWalletFromMnemonicWords(
             `${walletName}${firstPath!}`,
             mnemonic,
             `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${firstPath}`,
@@ -118,7 +118,7 @@ const AddDeriveWallet = memo(() => {
             unDeriveWallets
                 .slice(1)
                 .map(async (pathIndex) =>
-                    WalletRPC.createWalletFromMnemonicWords(
+                    Services.Wallet.createWalletFromMnemonicWords(
                         `${walletName}${pathIndex}`,
                         mnemonic,
                         `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${pathIndex}`,
@@ -127,7 +127,7 @@ const AddDeriveWallet = memo(() => {
         )
 
         await Web3.connect({ account: firstWallet, providerType: ProviderType.MaskWallet })
-        await WalletRPC.resolveMaskAccount([{ address: firstWallet }])
+        await Services.Wallet.resolveMaskAccount([{ address: firstWallet }])
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [mnemonic, walletName, wallets.length])
 

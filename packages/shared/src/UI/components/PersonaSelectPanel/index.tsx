@@ -63,7 +63,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
 
     const [, handleVerifyNextID] = useNextIDVerify()
     const currentProfileIdentify = useLastRecognizedIdentity()
-    const { value: personas = EMPTY_LIST, loading, error, retry } = useConnectedPersonas()
+    const { data: personas = EMPTY_LIST, isLoading, error, refetch } = useConnectedPersonas()
     const { openDashboard, attachProfile, setCurrentPersonaIdentifier } = useSiteAdaptorContext()
 
     useEffect(() => {
@@ -88,7 +88,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     )
 
     useLayoutEffect(() => {
-        if (personas.length || loading || error) return
+        if (personas.length || isLoading || error) return
 
         onClose?.()
         LeavePageConfirmModal.open({
@@ -101,7 +101,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
                 actionHint: t.applications_create_persona_action(),
             },
         })
-    }, [!personas.length, loading, !error, openDashboard])
+    }, [!personas.length, isLoading, !error, openDashboard])
 
     const actionButton = useMemo(() => {
         let isConnected = true
@@ -205,7 +205,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
         selectedPersona?.persona.linkedProfiles,
     ])
 
-    if (loading) {
+    if (isLoading) {
         return (
             <Stack justifyContent="center" alignItems="center" height="100%">
                 <LoadingBase size={24} />
@@ -214,7 +214,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     }
 
     if (error) {
-        return <ErrorPanel onRetry={retry} />
+        return <ErrorPanel onRetry={refetch} />
     }
 
     if (!personas.length) {

@@ -1,16 +1,19 @@
 import { useCallback, useMemo, useState } from 'react'
 import { compact } from 'lodash-es'
 import Web3Utils from 'web3-utils'
+import { DialogContent, Tab } from '@mui/material'
+import { TabContext, TabPanel } from '@mui/lab'
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
-import { useChainContext, useChainIdValid, useGasPrice, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useGasPrice } from '@masknet/web3-hooks-base'
 import { ApplicationBoardModal, InjectedDialog, NetworkTab, useCurrentLinkedPersona } from '@masknet/shared'
 import { ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
 import { type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { DialogContent, Tab } from '@mui/material'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { TabContext, TabPanel } from '@mui/lab'
 import { Icons } from '@masknet/icons'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
+import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../locales/index.js'
 import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
@@ -22,7 +25,6 @@ import { RedPacketPast } from './RedPacketPast.js'
 import { RedPacketERC20Form } from './RedPacketERC20Form.js'
 import { RedPacketERC721Form } from './RedPacketERC721Form.js'
 import { openComposition } from './openComposition.js'
-import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles<{ currentTab: 'tokens' | 'collectibles'; showHistory: boolean }>()(
     (theme, { currentTab, showHistory }) => ({
@@ -58,14 +60,12 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const t = useI18N()
     const [showHistory, setShowHistory] = useState(false)
     const [gasOption, setGasOption] = useState<GasConfig>()
-    const { pluginID } = useNetworkContext()
 
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
 
     const state = useState(DialogTabs.create)
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
+    const { account, chainId: _chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const approvalDefinition = useActivatedPlugin(PluginID.RedPacket, 'any')
     const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
     const { classes } = useStyles({ currentTab, showHistory })
@@ -76,8 +76,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 : [ChainId.Mainnet, ChainId.BSC, ChainId.Matic],
         )
     }, [currentTab === tabs.tokens, approvalDefinition?.enableRequirement.web3])
+    const chainId = chainIdList.includes(_chainId) ? _chainId : ChainId.Mainnet
 
-    const networkTabChainId = chainIdValid && chainIdList.includes(chainId) ? chainId : ChainId.Mainnet
     // #region token lucky drop
     const [settings, setSettings] = useState<RedPacketSettings>()
     // #endregion
@@ -119,6 +119,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
             senderName && (payload.sender.name = senderName)
             openComposition(RedPacketMetaKey, reduceUselessPayloadInfo(payload))
+            Telemetry.captureEvent(EventType.Access, EventID.EntryAppLuckCreate)
             ApplicationBoardModal.close()
             onClose()
         },
@@ -171,7 +172,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         : t.details()
 
     // #region gas config
-    const { value: defaultGasPrice } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const { data: defaultGasPrice } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const handleGasSettingChange = useCallback(
         (gasConfig: GasConfig) => {
             const editor = GasEditor.fromConfig(chainId, gasConfig)
@@ -237,6 +238,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                 }}>
                                 <TabPanel value={tabs.tokens} style={{ padding: 0, height: 474 }}>
                                     <RedPacketERC20Form
+                                        expectedChainId={chainId}
                                         origin={settings}
                                         onClose={onClose}
                                         onNext={onNext}
@@ -268,6 +270,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
                     {step === CreateRedPacketPageStep.ConfirmPage ? (
                         <RedPacketConfirmDialog
+                            expectedChainId={chainId}
                             onClose={onClose}
                             onBack={onBack}
                             onCreated={handleCreated}

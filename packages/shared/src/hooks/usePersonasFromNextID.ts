@@ -1,16 +1,22 @@
 import { useEffect } from 'react'
-import { useAsyncRetry } from 'react-use'
-import { EMPTY_LIST, MaskMessages, type NextIDPlatform } from '@masknet/shared-base'
+import { EMPTY_LIST, MaskMessages, type NextIDPersonaBindings, type NextIDPlatform } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
+import { useQuery } from '@tanstack/react-query'
 
 /**
  * Get all personas bound with the given identity from NextID service
  */
 export function usePersonasFromNextID(userId: string, platform: NextIDPlatform, exact?: boolean) {
-    const asyncRetry = useAsyncRetry(async () => {
-        if (!platform || !userId) return EMPTY_LIST
-        return NextIDProof.queryAllExistedBindingsByPlatform(platform, userId, exact)
-    }, [platform, userId, exact])
-    useEffect(() => MaskMessages.events.ownProofChanged.on(asyncRetry.retry), [asyncRetry.retry])
-    return asyncRetry
+    const result = useQuery<NextIDPersonaBindings[], Error>({
+        queryKey: ['next-id', 'personas', userId],
+        enabled: Boolean(platform && userId),
+        queryFn: async () => {
+            if (!platform || !userId) return EMPTY_LIST
+            const res = await NextIDProof.queryAllExistedBindingsByPlatform(platform, userId, exact)
+            return res ? res : EMPTY_LIST
+        },
+    })
+
+    useEffect(() => MaskMessages.events.ownProofChanged.on(() => result.refetch), [result.refetch])
+    return result
 }

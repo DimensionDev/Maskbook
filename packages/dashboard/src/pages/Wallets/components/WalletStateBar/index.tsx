@@ -92,7 +92,7 @@ interface WalletStateBarUIProps {
     provider?: Web3Helper.ProviderDescriptorAll
     name?: string
     address?: string
-    domain?: string
+    domain?: string | null
     openConnectWalletDialog(): void
 }
 

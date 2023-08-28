@@ -9,6 +9,7 @@ import {
     type GasConfig,
     PayloadEditor,
     formatEthereumAddress,
+    ChainId,
 } from '@masknet/web3-shared-evm'
 import { toHex, toUtf8 } from 'web3-utils'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -19,13 +20,14 @@ import { useAsync, useAsyncFn } from 'react-use'
 import Services from '../../../../service.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { TransactionPreview } from '../../../components/TransactionPreview/index.js'
-import { WalletAssetTabs } from '../type.js'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
 import { Icons } from '@masknet/icons'
 import { useUpdateEffect } from '@react-hookz/web'
 import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
+import { compact, mapValues, omit } from 'lodash-es'
 import urlcat from 'urlcat'
-import { mapKeys } from 'lodash-es'
+import { WalletAssetTabs } from '../type.js'
+import { UnlockERC721Token } from '../../../components/UnlockERC721Token/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     left: {
@@ -143,9 +145,7 @@ const Interaction = memo(function Interaction() {
         const transactionContext = await TransactionFormatter?.createContext(chainId, computedPayload)
 
         return {
-            owner: currentRequest.request.options?.owner,
-            paymentToken: currentRequest.request.options?.paymentToken,
-            allowMaskAsGas: currentRequest.request.options?.allowMaskAsGas,
+            ...currentRequest.request.options,
             payload,
             computedPayload,
             formattedTransaction,
@@ -167,30 +167,48 @@ const Interaction = memo(function Interaction() {
                     transaction?.formattedTransaction._tx.data.slice(10),
                 )
 
-                const result = abiCoder.encodeParameters(approveParametersType, [parameters.spender, approveAmount])
+                const parametersString = abiCoder
+                    .encodeParameters(approveParametersType, [parameters.spender, toHex(approveAmount)])
+                    .slice(2)
 
-                params = currentRequest.request.arguments.params.map((x) =>
-                    x === 'latest'
-                        ? x
-                        : {
-                              ...x,
-                              data: result,
-                          },
+                const result = `${transaction.formattedTransaction._tx.data.slice(0, 10)}${parametersString}`
+
+                params = compact(
+                    currentRequest.request.arguments.params.map((x) =>
+                        x === 'latest'
+                            ? chainId !== ChainId.Celo
+                                ? x
+                                : undefined
+                            : {
+                                  ...x,
+                                  data: result,
+                              },
+                    ),
                 )
-            } else {
-                params = !gasConfig
-                    ? currentRequest.request.arguments.params
-                    : currentRequest.request.arguments.params.map((x) =>
-                          x === 'latest'
-                              ? x
-                              : {
-                                    ...x,
-                                    ...mapKeys(gasConfig, (value, key) => {
-                                        if (key === 'gasCurrency' || !value) return
-                                        return toHex(value)
-                                    }),
-                                },
-                      )
+            }
+
+            if (!signRequest.includes(currentRequest.request.arguments.method)) {
+                params = compact(
+                    params.map((x) => {
+                        if (x === 'latest') {
+                            if (chainId === ChainId.Celo) return
+                            return x
+                        }
+
+                        return {
+                            ...x,
+                            ...(gasConfig
+                                ? mapValues(omit(gasConfig, 'gasOptionType'), (value, key) => {
+                                      if (key === 'gasCurrency' || !value) return
+                                      return toHex(value)
+                                  })
+                                : {}),
+
+                            chainId: toHex(x.chainId),
+                            nonce: toHex(x.nonce),
+                        }
+                    }),
+                )
             }
 
             await Message?.approveRequest(currentRequest.ID, {
@@ -217,6 +235,7 @@ const Interaction = memo(function Interaction() {
             )
         }
     }, [
+        chainId,
         currentRequest,
         Message,
         source,
@@ -249,7 +268,26 @@ const Interaction = memo(function Interaction() {
         }
 
         if (transaction?.formattedTransaction?.popup?.spender) {
-            return <UnlockERC20Token transaction={transaction} handleChange={(value) => setApproveAmount(value)} />
+            return (
+                <UnlockERC20Token
+                    onConfigChange={handleChangeGasConfig}
+                    paymentToken={paymentToken}
+                    onPaymentTokenChange={(paymentToken) => setPaymentToken(paymentToken)}
+                    transaction={transaction}
+                    handleChange={(value) => setApproveAmount(value)}
+                />
+            )
+        }
+
+        if (transaction?.formattedTransaction?.popup?.erc721Spender) {
+            return (
+                <UnlockERC721Token
+                    onConfigChange={handleChangeGasConfig}
+                    paymentToken={paymentToken}
+                    onPaymentTokenChange={(paymentToken) => setPaymentToken(paymentToken)}
+                    transaction={transaction}
+                />
+            )
         }
 
         return (
@@ -293,7 +331,7 @@ const Interaction = memo(function Interaction() {
 
     return (
         <Box flex={1} display="flex" flexDirection="column">
-            <Box p={2} display="flex" flexDirection="column" flex={1}>
+            <Box p={2} display="flex" flexDirection="column" flex={1} maxHeight="458px" overflow="auto">
                 {content}
                 {currentRequest && !signRequest.includes(currentRequest?.request.arguments.method) ? (
                     <Box
@@ -317,7 +355,7 @@ const Interaction = memo(function Interaction() {
                 {expand ? (
                     <Box
                         className={classes.transactionDetail}
-                        style={{ marginBottom: expand && messages.length <= 1 ? 72 : 16 }}>
+                        style={{ marginBottom: expand && messages.length <= 1 ? 0 : 16 }}>
                         {transaction?.formattedTransaction?.popup?.spender && approveAmount ? (
                             <>
                                 <Box display="flex" alignItems="center" columnGap={1.25}>

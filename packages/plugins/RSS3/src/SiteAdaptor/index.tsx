@@ -2,7 +2,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { Box } from '@mui/material'
 import { NetworkPluginID, type SocialAccount, type SocialIdentity, SocialAddressType } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { Web3ContextProvider, useMountReport } from '@masknet/web3-hooks-base'
+import { DefaultWeb3ContextProvider, useMountReport } from '@masknet/web3-hooks-base'
 import { EventID } from '@masknet/web3-telemetry/types'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { SearchResultType } from '@masknet/web3-shared-base'
@@ -27,18 +27,18 @@ const createProfileTabConfig = (label: string, props: FeedPageProps, priority = 
                 useMountReport(() => {
                     switch (props.tag) {
                         case RSS3BaseAPI.Tag.Donation:
-                            return EventID.AccessWeb3ProfileDialogDonationTab
+                            return EventID.EntryTimelineHoverUserDonationsSwitchTo
                         case RSS3BaseAPI.Tag.Social:
-                            return EventID.AccessWeb3ProfileDialogSocialTab
+                            return EventID.EntryTimelineHoverUserSocialSwitchTo
                         default:
-                            return EventID.AccessWeb3ProfileDialogActivitiesTab
+                            return EventID.EntryTimelineHoverUserActivitiesSwitchTo
                     }
                 })
 
                 return (
-                    <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+                    <DefaultWeb3ContextProvider>
                         <FeedsPage key={key} address={socialAccount?.address} {...props} />
-                    </Web3ContextProvider>
+                    </DefaultWeb3ContextProvider>
                 )
             },
         },
@@ -70,19 +70,19 @@ const createSearchTabConfig = (
                 useMountReport(() => {
                     switch (props.tag) {
                         case RSS3BaseAPI.Tag.Donation:
-                            return EventID.AccessWeb3TabDonationTab
+                            return EventID.EntryProfileUserDonationsSwitchTo
                         case RSS3BaseAPI.Tag.Social:
-                            return EventID.AccessWeb3TabSocialTab
+                            return EventID.EntryProfileUserSocialSwitchTo
                         default:
-                            return EventID.AccessWeb3TabActivitiesTab
+                            return EventID.EntryProfileUserActivitiesSwitchTo
                     }
                 })
 
                 return (
                     <Box style={{ minHeight: 300 }}>
-                        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
+                        <DefaultWeb3ContextProvider>
                             <FeedsPage key={key} address={socialAccount?.address} {...props} />
-                        </Web3ContextProvider>
+                        </DefaultWeb3ContextProvider>
                     </Box>
                 )
             },

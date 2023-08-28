@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react'
-import { useUpdateEffect } from 'react-use'
 import { useQuery } from '@tanstack/react-query'
 import { chunk, compact, flatten } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
@@ -7,11 +6,11 @@ import { DialogActions, DialogContent, Tab } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import {
     Web3ContextProvider,
-    useChainContext,
     useFungibleTokens,
-    ActualChainContextProvider,
+    RevokeChainContextProvider,
     useNetworkContext,
     ChainContextProvider,
+    useChainContext,
 } from '@masknet/web3-hooks-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
@@ -68,9 +67,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const { classes } = useStyles()
     const { pluginID } = useNetworkContext()
 
-    const { chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const [chainId, setChainId] = useState<ChainId>(ChainId.Mainnet)
-
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: ChainId.Mainnet })
     const [selectedProtocol, setSelectedProtocol] = useState<SavingsProtocol | null>(null)
 
     const { data: aaveTokens, isLoading: loadingAAve } = useQuery({
@@ -119,21 +116,12 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
         [chainId, detailedAaveTokens],
     )
 
-    useUpdateEffect(() => {
-        if (chains.includes(currentChainId)) {
-            setChainId(currentChainId)
-        } else {
-            setChainId(ChainId.Mainnet)
-        }
-    }, [currentChainId])
-
     const [currentTab, onChange, tabs] = useTabs(TabType.Deposit, TabType.Withdraw)
-    const chainContextValue = useMemo(() => ({ chainId }), [chainId])
 
     return (
-        <Web3ContextProvider value={{ pluginID, chainId: ChainId.Mainnet }}>
+        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
             <AllProviderTradeContext.Provider>
-                <ChainContextProvider value={chainContextValue}>
+                <ChainContextProvider value={{ chainId }}>
                     <TabContext value={currentTab}>
                         <InjectedDialog
                             open={open}
@@ -184,14 +172,14 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                     </TabContext>
                 </ChainContextProvider>
                 {selectedProtocol ? (
-                    <ActualChainContextProvider>
+                    <RevokeChainContextProvider>
                         <SavingsFormDialog
                             tab={currentTab}
                             chainId={chainId}
                             protocol={selectedProtocol}
                             onClose={() => setSelectedProtocol(null)}
                         />
-                    </ActualChainContextProvider>
+                    </RevokeChainContextProvider>
                 ) : null}
             </AllProviderTradeContext.Provider>
         </Web3ContextProvider>

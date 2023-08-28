@@ -1,4 +1,4 @@
-import { first } from 'lodash-es'
+import { first, omit } from 'lodash-es'
 import type Web3 from 'web3'
 import { numberToHex, toHex, toNumber } from 'web3-utils'
 import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet } from '@masknet/shared-base'
@@ -26,6 +26,7 @@ import {
     isCryptoPunksContractAddress,
     getEthereumConstant,
     getTokenConstant,
+    createAccount,
 } from '@masknet/web3-shared-evm'
 import {
     type FungibleToken,
@@ -114,7 +115,7 @@ export class ConnectionReadonlyAPI
                 method: EthereumMethodType.MASK_WALLETS,
                 params: [],
             },
-            this.ConnectionOptions.fill(initial),
+            initial,
         )
     }
 
@@ -445,7 +446,7 @@ export class ConnectionReadonlyAPI
 
     createAccount(initial?: ConnectionOptions_Base<ChainId, ProviderType, Transaction> | undefined): Account<ChainId> {
         const options = this.ConnectionOptions.fill(initial)
-        const account = this.getWeb3().eth.accounts.create()
+        const account = createAccount()
         return {
             account: account.address,
             chainId: options.chainId,
@@ -670,16 +671,19 @@ export class ConnectionReadonlyAPI
     async estimateTransaction(transaction: Transaction, fallback = 21000, initial?: ConnectionOptions) {
         try {
             const options = this.ConnectionOptions.fill(initial)
-            return this.Request.request<string>({
-                method: EthereumMethodType.ETH_ESTIMATE_GAS,
-                params: [
-                    new AccountTransaction({
-                        from: options.account,
-                        chainId: options.chainId,
-                        ...transaction,
-                    }).fill(options.overrides),
-                ],
-            })
+            return await this.Request.request<string>(
+                {
+                    method: EthereumMethodType.ETH_ESTIMATE_GAS,
+                    params: [
+                        new AccountTransaction({
+                            from: options.account,
+                            chainId: options.chainId,
+                            ...transaction,
+                        }).fill(omit(options.overrides, ['gas', 'gasPrice', 'maxPriorityFeePerGas', 'maxFeePerGas'])),
+                    ],
+                },
+                options,
+            )
         } catch {
             return toHex(fallback)
         }
@@ -696,8 +700,7 @@ export class ConnectionReadonlyAPI
     }
 
     async getTransactionStatus(hash: string, initial?: ConnectionOptions): Promise<TransactionStatusType> {
-        const options = this.ConnectionOptions.fill(initial)
-        const receipt = await this.getTransactionReceipt(hash, options)
+        const receipt = await this.getTransactionReceipt(hash, initial)
         return getTransactionStatusType(receipt)
     }
 

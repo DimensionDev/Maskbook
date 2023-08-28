@@ -39,6 +39,10 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             padding: 24,
             boxSizing: 'border-box',
             paddingBottom: 72,
+            overflow: 'auto',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         tabWrapper: {
             width: 'calc(100% - 336px)',
@@ -76,7 +80,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
     const {
         asset,
         orders,
-        events,
+        offers,
         origin,
         parentPluginID = NetworkPluginID.PLUGIN_EVM,
         pluginID,
@@ -121,17 +125,17 @@ export function CardDialogContent(props: CardDialogContentProps) {
 
                 <div className={classes.tabWrapper}>
                     {currentTab === TabType.About ? (
-                        <AboutTab orders={orders.value} asset={asset.data} />
+                        <AboutTab orders={offers} asset={asset.data} />
                     ) : currentTab === TabType.Offers ? (
                         <OffersTab
-                            offers={orders.value}
-                            loading={orders.loading}
-                            finished={orders.ended}
-                            onNext={orders.next}
-                            onRetry={orders.retry}
+                            offers={offers}
+                            loading={orders.isLoading}
+                            finished={!orders.hasNextPage}
+                            onNext={orders.fetchNextPage}
+                            onRetry={orders.refetch}
                         />
                     ) : (
-                        <ActivitiesTab events={events} />
+                        <ActivitiesTab />
                     )}
                 </div>
             </div>

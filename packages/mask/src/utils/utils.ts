@@ -61,13 +61,17 @@ export async function attachNextIDToProfile(nextID: ProfileInformationFromNextID
 
     if (!nextID?.fromNextID || !nextID.linkedPersona || !whoAmI) return
     const [rpc, emit] = batch(notify(Services.Identity))
-    nextID.linkedTwitterNames?.forEach((x) => {
-        const newItem = {
-            ...nextID,
-            nickname: x,
-            identifier: ProfileIdentifier.of('twitter.com', x).expect(`${x} should be a valid user id`),
-        }
-        rpc.attachNextIDPersonaToProfile(newItem, whoAmI)
-    })
+    await Promise.allSettled(
+        nextID.linkedTwitterNames?.map((x) => {
+            return rpc.attachNextIDPersonaToProfile(
+                {
+                    ...nextID,
+                    nickname: x,
+                    identifier: ProfileIdentifier.of('twitter.com', x).expect(`${x} should be a valid user id`),
+                },
+                whoAmI,
+            )
+        }) ?? [],
+    )
     emit()
 }

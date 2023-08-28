@@ -17,7 +17,7 @@ export interface Collection {
     collection_id: string
     description: string
     external_url: string
-    spam_score?: number
+    spam_score: number
     discord_url: string
     floor_prices: Array<{
         marketplace_id: LiteralUnion<'blur' | 'looksrare' | 'opensea' | 'x2y2'>

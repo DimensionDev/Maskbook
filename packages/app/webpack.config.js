@@ -9,8 +9,9 @@ import { dirname, join } from 'path'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import webpack from 'webpack'
 import { createRequire } from 'module'
-import { getGitInfo } from './.webpack/git-info.js'
 import { emitJSONFile } from '@nice-labs/emit-file-webpack-plugin'
+import Terser from 'terser-webpack-plugin'
+import { getGitInfo } from './.webpack/git-info.js'
 
 const require = createRequire(import.meta.url)
 const __dirname = fileURLToPath(dirname(import.meta.url))
@@ -24,13 +25,35 @@ function Configuration(env, argv) {
     const mode = env.WEBPACK_SERVE ? 'development' : 'production'
     return {
         mode,
+        name: 'mask',
         entry: './src/index.tsx',
         output: {
+            filename: '[name].[contenthash].js',
             path: fileURLToPath(new URL('./dist', import.meta.url)),
             publicPath: 'auto',
             clean: true,
         },
-        experiments: { asyncWebAssembly: true, topLevelAwait: true },
+        optimization: {
+            minimizer: [
+                new Terser({
+                    terserOptions: {
+                        compress: {
+                            ecma: 2020,
+                            // TODO: reduce_vars causes our @masknet/shared-base serializer not be able to serialize Some<T> from ts-results-es package, investigate why.
+                            reduce_vars: false,
+                            sequences: false,
+                            passes: 2,
+                        },
+                    },
+                }),
+            ],
+        },
+        experiments: {
+            backCompat: false,
+            asyncWebAssembly: true,
+            syncImportAssertion: true,
+            deferImport: { asyncModule: 'error' },
+        },
         resolve: {
             extensionAlias: {
                 '.js': ['.tsx', '.ts', '.js'],
@@ -47,7 +70,7 @@ function Configuration(env, argv) {
                 'text-encoding': require.resolve('@sinonjs/text-encoding'),
             },
         },
-        devtool: mode === 'development' ? /** default option */ undefined : 'source-map',
+        devtool: mode === 'development' ? /** default option */ 'eval-source-map' : 'source-map',
         module: {
             rules: [
                 {
@@ -89,10 +112,11 @@ function Configuration(env, argv) {
                 'process.nextTick': require.resolve('next-tick'),
             }),
             new webpack.DefinePlugin({
+                'process.env.MASK_APP': 'true',
                 'process.env.WEB3_CONSTANTS_RPC': process.env.WEB3_CONSTANTS_RPC ?? '{}',
                 'process.env.MASK_SENTRY_DSN': process.env.MASK_SENTRY_DSN ?? '{}',
                 'process.env.NODE_DEBUG': 'undefined',
-                'process.version': JSON.stringify('v19.0.0'),
+                'process.version': JSON.stringify('v20.0.0'),
                 'process.browser': 'true',
             }),
             (() => {
@@ -104,7 +128,7 @@ function Configuration(env, argv) {
                     COMMIT_DATE,
                     COMMIT_HASH,
                     DIRTY,
-                    VERSION: '2.21.0',
+                    VERSION: '2.22.0',
                 }
                 return emitJSONFile({ content: json, name: 'build-info.json' })
             })(),

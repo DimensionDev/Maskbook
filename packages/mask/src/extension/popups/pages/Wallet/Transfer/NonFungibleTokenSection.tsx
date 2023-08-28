@@ -1,15 +1,15 @@
 import { CollectibleList, ElementAnchor } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { ActionButton, LoadingBase, makeStyles } from '@masknet/theme'
+import { ActionButton, LoadingBase, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useNonFungibleAsset, useNonFungibleAssets, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
 import { uniqWith } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
-import { useI18N } from '../../../../../utils/index.js'
-import { useNonFungibleTokenParams } from '../../../hook/index.js'
 import { useAsyncFn } from 'react-use'
+import { useI18N } from '../../../../../utils/index.js'
+import { useNonFungibleTokenParams } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -120,9 +120,18 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
         chainId,
     })
     const recipient = params.get('recipient')
+
+    const { showSnackbar } = usePopupCustomSnackbar()
+
     const [state, transfer] = useAsyncFn(async () => {
-        if (!address || !tokenId || !recipient) return
-        return Web3.transferNonFungibleToken(address!, tokenId, recipient, '1')
+        try {
+            if (!address || !tokenId || !recipient) return
+            await Web3.transferNonFungibleToken(address!, tokenId, recipient, '1')
+            return
+        } catch (error) {
+            showSnackbar(t('failed_to_transfer_nft'), { variant: 'error' })
+            return
+        }
     }, [address, tokenId || recipient])
 
     const tokenNotReady = !address || !tokenId
@@ -136,7 +145,7 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
                     retry={next}
                     collectibles={prependTokens}
                     pluginID={NetworkPluginID.PLUGIN_EVM}
-                    loading={loading}
+                    loading={loading || !done}
                     columns={4}
                     gap={1}
                     selectable

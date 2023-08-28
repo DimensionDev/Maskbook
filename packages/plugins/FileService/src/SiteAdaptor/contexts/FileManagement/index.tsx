@@ -140,6 +140,7 @@ export const FileManagementProvider = memo(({ children, compositionType }: Props
                 payloadTxID,
                 landingTxID,
             }
+
             await PluginFileServiceRPC.setFileInfo(fileInfo)
             removeUnloadingFile(id)
             refetchFiles()
@@ -157,10 +158,11 @@ export const FileManagementProvider = memo(({ children, compositionType }: Props
         [compositionType, navigate],
     )
 
+    const recentFiles = useMemo(() => files.slice(0, 4), [files])
     const contextValue: FileManagementContextOptions = useMemo(() => {
         return {
             files,
-            recentFiles: files.slice(0, 4),
+            recentFiles,
             refetchFiles,
             uploadingFiles,
             uploadStateMap,
@@ -169,7 +171,7 @@ export const FileManagementProvider = memo(({ children, compositionType }: Props
             setUploadingFiles,
             attachToPost,
         }
-    }, [files, uploadStateMap, uploadingFiles, attachToPost, refetchFiles])
+    }, [files, recentFiles, uploadStateMap, uploadingFiles, attachToPost, refetchFiles, uploadFile])
 
     return <FileManagementContext.Provider value={contextValue}>{children}</FileManagementContext.Provider>
 })

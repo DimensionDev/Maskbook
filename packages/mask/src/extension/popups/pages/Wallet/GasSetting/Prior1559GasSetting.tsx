@@ -24,7 +24,7 @@ import { formatCurrency, GasOptionType, isLessThan, pow10, TransactionDescriptor
 import { useI18N } from '../../../../../utils/index.js'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
-import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
+import Services from '../../../../service.js'
 import { FormattedCurrency } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
@@ -93,7 +93,7 @@ const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
 export const Prior1559GasSetting = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { value: gasOptions_ } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
+    const { data: gasOptions_ } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
     const navigate = useNavigate()
@@ -228,7 +228,7 @@ export const Prior1559GasSetting = memo(() => {
                 gas: toHex(new BigNumber(data.gasLimit).toString()),
                 gasPrice: toHex(formatGweiToWei(data.gasPrice).toString()),
             }))
-            await WalletRPC.updateUnconfirmedRequest({
+            await Services.Wallet.updateUnconfirmedRequest({
                 ...value.payload,
                 params: config,
             })

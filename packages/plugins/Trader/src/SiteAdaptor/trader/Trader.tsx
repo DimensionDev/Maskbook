@@ -16,15 +16,12 @@ import {
     useNetworkContext,
     useWallet,
     useWeb3Others,
-    useMountReport,
-    useTelemetry,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useActivatedPlugin, useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
-import { NetworkPluginID, PluginID, isFacebook, isTwitter } from '@masknet/shared-base'
-import { EventID, EventType } from '@masknet/web3-telemetry/types'
+import { NetworkPluginID, PluginID, Sniffings } from '@masknet/shared-base'
 import { type TraderAPI } from '@masknet/web3-providers/types'
-import { DepositPaymaster, SmartPayBundler } from '@masknet/web3-providers'
+import { DepositPaymaster, SmartPayBundler, Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../../locales/index.js'
 import { isNativeTokenWrapper } from '../../helpers/index.js'
 import { PluginTraderMessages } from '../../messages.js'
@@ -52,7 +49,6 @@ export interface TraderRef {
 
 export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, ref) => {
     const theme = useTheme()
-    const telemetry = useTelemetry()
     const wallet = useWallet()
     const { defaultOutputCoin, chainId: targetChainId, defaultInputCoin, settings = false } = props
     const t = useI18N()
@@ -210,9 +206,9 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     }, [isTrading])
 
     const shareText = useMemo(() => {
-        const isOnTwitter = isTwitter()
-        const isOnFacebook = isFacebook()
-        const cashTag = isTwitter() ? '$' : ''
+        const isTwitter = Sniffings.is_twitter_page
+        const isFacebook = Sniffings.is_facebook_page
+        const cashTag = isTwitter ? '$' : ''
         return focusedTrade?.value && inputToken && outputToken
             ? t.share_text({
                   input_amount: formatBalance(focusedTrade.value.value?.inputAmount, inputToken.decimals, 6),
@@ -220,7 +216,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                   output_amount: formatBalance(focusedTrade.value.value?.outputAmount, outputToken.decimals, 6),
                   output_symbol: `${cashTag}${outputToken.symbol}`,
                   account_promote: t.account_promote({
-                      context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
+                      context: isTwitter ? 'twitter' : isFacebook ? 'facebook' : 'default',
                   }),
               })
             : ''
@@ -235,6 +231,9 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
         setTemporarySlippage(undefined)
 
         if (typeof hash !== 'string') return
+
+        const result = await Web3.confirmTransaction(hash)
+        if (!result.status) return
 
         const confirmed = await ConfirmModal.openAndWaitForClose({
             title: t.swap(),
@@ -267,12 +266,11 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             maxWidthOfContent: 420,
         })
         if (confirmed) share?.(shareText)
-        telemetry.captureEvent(EventType.Interact, EventID.SendTraderTransactionSuccessfully)
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
             amount: '',
         })
-    }, [tradeCallback, shareText, telemetry, focusedTrade, share])
+    }, [tradeCallback, shareText, focusedTrade, share])
 
     const onConfirmDialogClose = useCallback(() => {
         setOpenConfirmDialog(false)
@@ -344,8 +342,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             token: undefined,
         })
     })
-
-    useMountReport(EventID.AccessTradePlugin)
 
     // #region if trade has been changed, update the focused trade
     useUpdateEffect(() => {
@@ -455,6 +451,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                 focusedTrade={focusedTrade}
                 gasPrice={gasPrice}
                 onSwap={onSwap}
+                refresh={() => allTradeComputed.map((x) => x.retry())}
             />
         </>
     )

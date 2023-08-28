@@ -1,3 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-    <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" d="m12.916 6.25 2.917-2.917m1.666-1.666-1.666 1.666 1.666-1.666ZM9.491 9.675a4.583 4.583 0 1 1-6.482 6.482A4.583 4.583 0 0 1 9.49 9.676h0Zm0 0 3.425-3.425L9.49 9.675Zm3.425-3.425 2.5 2.5 2.917-2.917-2.5-2.5-2.917 2.917Z"/>
-</svg>
+<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="m12.916 6.25 2.917-2.917m1.666-1.666-1.666 1.666zm-8.008 8.008a4.583 4.583 0 1 1 -6.482 6.482 4.583 4.583 0 0 1 6.481-6.481zm0 0 3.425-3.425-3.426 3.425zm3.425-3.425 2.5 2.5 2.917-2.917-2.5-2.5z" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25"/></svg>

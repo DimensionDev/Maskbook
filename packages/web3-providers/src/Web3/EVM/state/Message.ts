@@ -14,19 +14,15 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { SiteAdaptorContextRef } from '@masknet/plugin-infra/dom'
 import {
     createJsonRpcPayload,
-    createJsonRpcResponse,
     type MessageRequest,
     type MessageResponse,
     type TransactionOptions,
 } from '@masknet/web3-shared-evm'
 import { MessageStateType, type ReasonableMessage } from '@masknet/web3-shared-base'
 import { MessageState } from '../../Base/state/Message.js'
-import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
 import { SharedContextRef } from '../../../PluginContext/index.js'
 
 export class Message extends MessageState<MessageRequest, MessageResponse> {
-    private Request = new RequestReadonlyAPI()
-
     constructor(context: Plugin.Shared.SharedUIContext) {
         super(context, { pluginID: NetworkPluginID.PLUGIN_EVM })
     }
@@ -50,7 +46,7 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
             const fromState =
                 route !== PopupRoutes.ContractInteraction ? { from: PopupRoutes.ContractInteraction } : EMPTY_OBJECT
 
-            if (Sniffings.is_popup_page) {
+            if (Sniffings.is_popup_page && !location.hash.includes('/swap')) {
                 PopupsHistory.push(urlcat(route, fromState))
             } else {
                 // open the popups window and wait for approvement from the user.
@@ -66,23 +62,19 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
 
     override async approveRequest(id: string, updates?: MessageRequest): Promise<void> {
         const { request } = this.assertMessage(id)
-        const payload = updates?.arguments
-            ? {
-                  ...request.arguments,
-                  ...updates.arguments,
-              }
-            : request.arguments
-        const response = request.options?.providerURL
-            ? createJsonRpcResponse(
-                  0,
-                  await this.Request.request(payload, {
-                      providerURL: request.options.providerURL,
-                  }),
-              )
-            : await SharedContextRef.value.send(
-                  createJsonRpcPayload(0, payload),
-                  omitBy<TransactionOptions>(request.options, isUndefined),
-              )
+
+        const response = await SharedContextRef.value.send(
+            createJsonRpcPayload(
+                0,
+                updates?.arguments
+                    ? {
+                          ...request.arguments,
+                          ...updates.arguments,
+                      }
+                    : request.arguments,
+            ),
+            omitBy<TransactionOptions>(request.options, isUndefined),
+        )
 
         await this.updateMessage(id, {
             request: {

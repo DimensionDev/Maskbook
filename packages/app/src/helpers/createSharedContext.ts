@@ -34,7 +34,6 @@ export function createSharedContext(): Omit<Plugin.SiteAdaptor.SiteAdaptorContex
         hasPaymentPassword: reject,
         lastRecognizedProfile: UNDEFINED,
         openDashboard: reject,
-        openPopupConnectWindow: reject,
         openPopupWindow: reject,
         fetchJSON: reject,
         openWalletConnectDialog: async (uri: string) => {

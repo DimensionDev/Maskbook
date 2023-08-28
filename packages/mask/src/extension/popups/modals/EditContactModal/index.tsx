@@ -1,6 +1,6 @@
 import { forwardRef, useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { ActionButton, MaskTextField, makeStyles } from '@masknet/theme'
+import { ActionButton, MaskTextField, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { buttonClasses } from '@mui/material/Button'
 import { alpha } from '@mui/system'
 import { Box, Typography } from '@mui/material'
@@ -10,7 +10,7 @@ import { EmojiAvatar } from '@masknet/shared'
 import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Web3, Web3State } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { useContacts } from '@masknet/web3-hooks-base'
+import { useContacts, useWallets } from '@masknet/web3-hooks-base'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { ContactType } from '../../pages/Wallet/type.js'
@@ -97,9 +97,13 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
     const { t } = useI18N()
 
     const contacts = useContacts()
+    const wallets = useWallets()
+
+    const { showSnackbar } = usePopupCustomSnackbar()
 
     const nameAlreadyExist = Boolean(
-        contacts?.find((contact) => contact.name === name && !isSameAddress(contact.address, address)),
+        contacts?.find((contact) => contact.name === name && !isSameAddress(contact.address, address)) ||
+            wallets?.find((wallet) => wallet.name === name),
     )
 
     const validationMessage = useMemo(() => {
@@ -108,11 +112,14 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
     }, [t, nameAlreadyExist])
 
     const [{ loading }, edit] = useAsyncFn(async () => {
+        const _name = name.trim()
         if (type === ContactType.Recipient) {
-            await Web3State.state.AddressBook?.renameContact({ name, address })
+            await Web3State.state.AddressBook?.renameContact({ name: _name, address })
         } else if (type === ContactType.Owned) {
-            await Web3.renameWallet?.(address, name, { providerType: ProviderType.MaskWallet })
+            await Web3.renameWallet?.(address, _name, { providerType: ProviderType.MaskWallet })
         }
+
+        showSnackbar(t('wallet_edit_contact_successfully'))
 
         onConfirm?.()
     }, [name, address, type, onConfirm])
@@ -129,7 +136,10 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
                     placeholder={t('wallet_name_wallet')}
                     className={classes.input}
                     value={name}
-                    onChange={(ev) => setName(ev.target.value)}
+                    onChange={(ev) => {
+                        if (name.length > 18) return
+                        setName(ev.target.value)
+                    }}
                     error={nameAlreadyExist}
                 />
             </Box>
@@ -143,7 +153,7 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
                     onClick={edit}
                     loading={loading}
                     className={classes.button}
-                    disabled={nameAlreadyExist || !name}>
+                    disabled={nameAlreadyExist || !name.trim()}>
                     {t('confirm')}
                 </ActionButton>
             </div>

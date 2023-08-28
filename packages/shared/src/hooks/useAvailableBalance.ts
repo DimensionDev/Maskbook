@@ -33,6 +33,7 @@ export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>
         maskTokenAddress,
     )
     const { data: tokenBalance = '0', isLoading: isLoadingTokenBalance } = useFungibleTokenBalance(pluginID, address, {
+        ...options,
         chainId,
     })
 

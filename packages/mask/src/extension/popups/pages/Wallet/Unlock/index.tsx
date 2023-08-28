@@ -1,3 +1,4 @@
+import urlcat from 'urlcat'
 import { memo, useCallback, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -6,8 +7,9 @@ import { Box, Typography, useTheme } from '@mui/material'
 import { PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../../utils/index.js'
-import { WalletRPC } from '../../../../../plugins/WalletService/messages.js'
+import Services from '../../../../service.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
+import { PopupHomeTabType } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -58,9 +60,17 @@ const Unlock = memo(() => {
     const [{ value: verified, loading }, handleUnlock] = useAsyncFn(async () => {
         const from = params.get('from')
 
-        const verified = await WalletRPC.unlockWallet(password)
+        const verified = await Services.Wallet.unlockWallet(password)
 
-        if (verified) navigate({ pathname: from || PopupRoutes.Wallet }, { replace: true })
+        if (verified)
+            navigate(
+                from
+                    ? urlcat(from, {
+                          tab: from === PopupRoutes.Personas ? PopupHomeTabType.ConnectedWallets : undefined,
+                      })
+                    : PopupRoutes.Wallet,
+                { replace: true },
+            )
         return verified
     }, [password, params])
 

@@ -64,7 +64,7 @@ type PersonaIdentifierStoredInDB = {
 
 /** @internal */
 export type RelationRecordDB = Omit<RelationRecord, 'profile' | 'linked'> & {
-    network: string
+    network?: string
     profile: string
     linked: string
 }
@@ -100,9 +100,9 @@ export interface PersonaDB extends DBSchema {
 }
 
 export interface RelationRecord {
-    profile: ProfileIdentifier
+    profile: ProfileIdentifier | PersonaIdentifier
     linked: PersonaIdentifier
-    network: string
+    network?: string
     favor: RelationFavor
 }
 

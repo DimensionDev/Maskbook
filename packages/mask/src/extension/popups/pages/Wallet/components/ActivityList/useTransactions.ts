@@ -4,6 +4,7 @@ import { DeBankHistory } from '@masknet/web3-providers'
 import { type RecentTransaction } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction as EvmTransaction } from '@masknet/web3-shared-evm'
 import { useInfiniteQuery, useQueries } from '@tanstack/react-query'
+import { sortBy } from 'lodash-es'
 import { useMemo } from 'react'
 
 /**
@@ -25,10 +26,11 @@ export function useTransactions() {
     const networks = useNetworks()
 
     const { Transaction } = useWeb3State()
+    // TODO invalidQueries after sending transitions
     const queries = useQueries({
         queries: networks.map((network) => {
             return {
-                enabled: !!account,
+                enabled: !!account && (transactions.length > 0 || !result.isLoading),
                 queryKey: ['transitions', network.chainId, account],
                 queryFn: async () => {
                     return Transaction?.getTransactions?.(network.chainId, account) ?? []
@@ -42,7 +44,15 @@ export function useTransactions() {
 
     // Some are already in debank history
     const localeTxes = useMemo(() => {
-        return allLocaleTxes.filter((tx) => !transactions.find((x) => x.hash === tx.id))
+        const now = Date.now()
+        const duration = 1800_000
+        return sortBy(
+            allLocaleTxes.filter((tx) => {
+                // show txes from the past half txes
+                return !transactions.find((x) => x.id === tx.id) && now - tx.updatedAt.getTime() < duration
+            }),
+            (x) => -x.createdAt.getTime(),
+        )
     }, [allLocaleTxes, transactions])
 
     return { ...result, data: transactions, localeTxes }

@@ -1,6 +1,8 @@
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { useAsyncFn, useUnmount } from 'react-use'
+import { Trans } from 'react-i18next'
+import { useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router-dom'
+import { useTheme } from '@mui/material'
 import {
     type EnhanceableSite,
     PopupRoutes,
@@ -13,19 +15,20 @@ import {
 } from '@masknet/shared-base'
 import { PersonaContext } from '@masknet/shared'
 import { usePopupCustomSnackbar } from '@masknet/theme'
-import { useTitle } from '../../../hook/useTitle.js'
+import { Icons } from '@masknet/icons'
+import { useUnlistedAddressConfig } from '@masknet/web3-hooks-base'
+import { useUpdateEffect } from '@react-hookz/web'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventType } from '@masknet/web3-telemetry/types'
+import { NextIDProof } from '@masknet/web3-providers'
+import { useTitle } from '../../../hooks/index.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { AccountDetailUI } from './UI.js'
 import Service from '../../../../service.js'
 import { PageTitleContext } from '../../../context.js'
-import { Icons } from '@masknet/icons'
-import { useUnlistedAddressConfig } from '@masknet/web3-hooks-base'
-import { useUpdateEffect } from '@react-hookz/web'
 import { isEqualWith, uniq, sortBy, isEqual } from 'lodash-es'
 import { DisconnectModal } from '../../../modals/modals.js'
-import { NextIDProof } from '@masknet/web3-providers'
-import { Trans } from 'react-i18next'
-import { useTheme } from '@mui/material'
+import { DisconnectEventMap } from '../common.js'
 
 const AccountDetail = memo(() => {
     const { t } = useI18N()
@@ -90,6 +93,7 @@ const AccountDetail = memo(() => {
             showSnackbar(t('popups_disconnect_success'), {
                 variant: 'success',
             })
+            Telemetry.captureEvent(EventType.Access, DisconnectEventMap[selectedAccount.identifier.network])
             navigate(-1)
         } catch {
             showSnackbar(t('popups_disconnect_failed'), {
@@ -132,6 +136,7 @@ const AccountDetail = memo(() => {
                 SignType.Message,
                 result.signPayload,
                 currentPersona.identifier,
+                location.origin,
                 true,
             )
 
@@ -199,11 +204,8 @@ const AccountDetail = memo(() => {
                 />
             ),
         )
+        return () => setExtension(undefined)
     }, [selectedAccount, handleDetachProfile, currentPersona, handleConfirmReleaseBind])
-
-    useUnmount(() => {
-        setExtension(null)
-    })
 
     useUpdateEffect(() => {
         setPendingUnlistedConfig(unlistedAddressConfig)

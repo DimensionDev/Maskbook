@@ -77,7 +77,7 @@ async function getAssetFUSD(chainId: ChainId, account: string) {
         ),
         balance,
         {
-            [CurrencyType.USD]: price.toString(),
+            [CurrencyType.USD]: price?.toString(),
         },
     )
 }
@@ -105,7 +105,7 @@ async function getAssetFLOW(chainId: ChainId, account: string) {
         ),
         balance,
         {
-            [CurrencyType.USD]: price.toString(),
+            [CurrencyType.USD]: price?.toString(),
         },
     )
 }
@@ -133,7 +133,7 @@ async function getAssetTether(chainId: ChainId, account: string) {
         ),
         balance,
         {
-            [CurrencyType.USD]: price.toString(),
+            [CurrencyType.USD]: price?.toString(),
         },
     )
 }

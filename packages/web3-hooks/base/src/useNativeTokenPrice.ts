@@ -13,6 +13,9 @@ export function useNativeTokenPrice<T extends NetworkPluginID = NetworkPluginID>
     return useQuery({
         enabled: !!nativeTokenAddress,
         queryKey: ['native-token', 'price', pluginID, chainId, nativeTokenAddress, options],
-        queryFn: async () => Hub.getFungibleTokenPrice(chainId, nativeTokenAddress!),
+        queryFn: async () =>
+            Hub.getFungibleTokenPrice(chainId, nativeTokenAddress!, {
+                chainId,
+            }),
     })
 }

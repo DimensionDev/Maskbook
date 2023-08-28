@@ -42,7 +42,7 @@ const MASK_LIGHT_FALLBACK = new URL('./mask-light.png', import.meta.url).href
 
 export interface ImageProps
     extends ImgHTMLAttributes<HTMLImageElement>,
-        withClasses<'container' | 'fallbackImage' | 'imageLoading'> {
+        withClasses<'container' | 'fallbackImage' | 'imageLoading' | 'failed'> {
     size?: number | string
     rounded?: boolean
     fallback?: string | JSX.Element | null

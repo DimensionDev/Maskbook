@@ -1,27 +1,6 @@
 {
     "LENS_PROFILE_CONTRACT_ADDRESS": {
         "Mainnet": "",
-        "Ropsten": "",
-        "Rinkeby": "",
-        "Kovan": "",
-        "Gorli": "",
-        "BSC": "",
-        "BSCT": "",
-        "Matic": "0xDb46d1Dc155634FbC732f92E853b10B288AD5a1d",
-        "Mumbai": "",
-        "Arbitrum": "",
-        "Arbitrum_Rinkeby": "",
-        "xDai": "",
-        "Optimism": "",
-        "Optimism_Kovan": "",
-        "Optimism_Goerli": "",
-        "Avalanche": "",
-        "Avalanche_Fuji": "",
-        "Celo": "",
-        "Fantom": "",
-        "Aurora": "",
-        "Aurora_Testnet": "",
-        "Conflux": "",
-        "Astar": ""
+        "Matic": "0xDb46d1Dc155634FbC732f92E853b10B288AD5a1d"
     }
 }

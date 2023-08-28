@@ -15,7 +15,6 @@ import {
     createBindingProofFromProfileQuery,
     EMPTY_LIST,
     getDomainSystem,
-    Sniffings,
 } from '@masknet/shared-base'
 import { env } from '@masknet/flags'
 import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
@@ -227,6 +226,11 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return fetchCachedJSON<T>(request, init)
     }
 
+    async clearPersonaQueryCache(personaPublicKey: string) {
+        const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
+        await staleNextIDCached(url)
+    }
+
     async bindProof(
         uuid: string,
         personaPublicKey: string,
@@ -273,11 +277,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
     async queryExistedBindingByPersona(personaPublicKey: string) {
         const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
-        /**
-         * Because popup and background share memory, caching often causes queries to be updated late.
-         * Since popups don't have a lot of queries in them, the cache is cleared before each request
-         */
-        if (Sniffings.is_popup_page) await staleNextIDCached(url)
+
         const { ids } = await this.fetchFromProofService<NextIDBindings>(url)
         // Will have only one item when query by personaPublicKey
         return first(ids)
@@ -308,7 +308,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     ): Promise<NextIDPersonaBindings | null> {
         if (!platform && !identity) return null
 
-        const result = await this.queryExistedBindingByPlatform(platform, identity, 1)
+        const result = await this.queryAllExistedBindingsByPlatform(platform, identity)
         if (publicKey) return result.find((x) => x.persona === publicKey) ?? null
         return first(result) ?? null
     }

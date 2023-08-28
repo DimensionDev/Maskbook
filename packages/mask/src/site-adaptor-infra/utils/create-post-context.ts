@@ -22,11 +22,7 @@ import type {
     PostContextCreation,
     PostContextActions,
 } from '@masknet/plugin-infra/content-script'
-import {
-    extractTextFromTypedMessage,
-    makeTypedMessageTupleFromList,
-    type TypedMessageTuple,
-} from '@masknet/typed-message'
+import { extractTextFromTypedMessage, makeTypedMessageEmpty, type TypedMessage } from '@masknet/typed-message'
 import { activatedSiteAdaptorUI } from '../ui.js'
 import { resolveFacebookLink } from '../../site-adaptors/facebook.com/utils/resolveFacebookLink.js'
 
@@ -147,7 +143,7 @@ export function createRefsForCreatePostContext() {
     const postBy = new ValueRef<ProfileIdentifier | null>(null)
     const postCoAuthors = new ValueRef<PostContextCoAuthor[]>([])
     const postID = new ValueRef<string | null>(null)
-    const postMessage = new ValueRef<TypedMessageTuple>(makeTypedMessageTupleFromList())
+    const postMessage = new ValueRef<TypedMessage>(makeTypedMessageEmpty())
     const postMetadataImages = new ObservableSet<string>()
     const postMetadataMentionedLinks = new ObservableMap<unknown, string>()
     const subscriptions: Omit<PostContextCreation, 'rootElement' | 'actionsElement' | 'suggestedInjectionPoint'> = {

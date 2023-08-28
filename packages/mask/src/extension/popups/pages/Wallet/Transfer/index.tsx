@@ -1,14 +1,18 @@
 import { MaskTabList, makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Box, Tab } from '@mui/material'
-import { memo, useMemo } from 'react'
+import { memo, useEffect, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
 import { NormalHeader } from '../../../components/index.js'
-import { ContactsContext } from '../../../hook/useContactsContext.js'
-import { useParamTab } from '../../../hook/useParamTab.js'
-import { useTitle } from '../../../hook/useTitle.js'
+import {
+    ContactsContext,
+    useParamTab,
+    useTitle,
+    useNonFungibleTokenParams,
+    useTokenParams,
+} from '../../../hooks/index.js'
 import { FungibleTokenSection } from './FungibleTokenSection.js'
 import { NonFungibleTokenSection } from './NonFungibleTokenSection.js'
 import { TransferTabType } from '../type.js'
@@ -50,10 +54,21 @@ const Transfer = memo(function Transfer() {
     const { classes } = useStyles()
 
     useTitle(t('popups_send'))
-    const [params] = useSearchParams()
+    const [params, setParams] = useSearchParams()
     const undecided = params.get('undecided') === 'true'
 
     const [currentTab, handleTabChange] = useParamTab<TransferTabType>(TransferTabType.Token)
+
+    const { address } = ContactsContext.useContainer()
+    useEffect(() => {
+        setParams(
+            (p) => {
+                p.set('recipient', address)
+                return p.toString()
+            },
+            { replace: true },
+        )
+    }, [address, setParams])
 
     return (
         <Box className={classes.page}>
@@ -89,7 +104,17 @@ const TransferPage = memo(function TransferPage() {
     const [params] = useSearchParams()
     const defaultAddress = params.get('recipient') || ''
     const defaultName = params.get('recipientName') || ''
-    const initialState = useMemo(() => ({ defaultAddress, defaultName }), [defaultAddress, defaultName])
+    const { chainId } = useTokenParams()
+    const { chainId: nftChainId } = useNonFungibleTokenParams()
+    const tab = params.get('tab')
+    const rawPendingChainId = params.get('pendingChainId')
+    const pendingChainId = rawPendingChainId ? Number.parseInt(rawPendingChainId, 10) : undefined
+    const defaultChainId = pendingChainId ?? (tab === TransferTabType.Token ? chainId : nftChainId)
+
+    const initialState = useMemo(
+        () => ({ defaultAddress, defaultName, defaultChainId }),
+        [defaultAddress, defaultName, defaultChainId],
+    )
     return (
         <ContactsContext.Provider initialState={initialState}>
             <Transfer />

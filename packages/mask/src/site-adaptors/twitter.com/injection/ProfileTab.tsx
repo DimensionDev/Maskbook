@@ -1,6 +1,6 @@
 import Color from 'color'
-import { useEffect, useState } from 'react'
-import { useAsync } from 'react-use'
+import { useEffect, useState, useRef } from 'react'
+import { useAsync, useWindowSize } from 'react-use'
 import { useCollectionByTwitterHandler } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
@@ -20,6 +20,7 @@ import {
     searchProfileTabLoseConnectionPageSelector,
     searchNameTag,
     isProfilePageLike,
+    nextTabListSelector,
 } from '../utils/selector.js'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI.js'
 import Services from '../../../extension/service.js'
@@ -49,7 +50,7 @@ function getStyleProps() {
     }
 }
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<{ minWidth?: number }>()((theme, { minWidth }) => {
     const props = getStyleProps()
     return {
         root: {
@@ -64,7 +65,7 @@ const useStyles = makeStyles()((theme) => {
             zIndex: 1,
             position: 'relative',
             display: 'flex',
-            minWidth: 56,
+            minWidth: minWidth ?? 56,
             justifyContent: 'center',
             alignItems: 'center',
             textAlign: 'center',
@@ -91,6 +92,12 @@ const useStyles = makeStyles()((theme) => {
             alignSelf: 'center',
             height: 4,
             backgroundColor: props.line,
+        },
+        bar: {
+            display: 'flex',
+            zIndex: 0,
+            position: 'relative',
+            minWidth: 56,
         },
     }
 })
@@ -180,7 +187,6 @@ function resetTwitterActivatedContent() {
 }
 
 export function ProfileTabForTokenAndPersona() {
-    const { classes } = useStyles()
     const [hidden, setHidden] = useState(false)
     const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
@@ -190,7 +196,12 @@ export function ProfileTabForTokenAndPersona() {
         (collectionResult as NonFungibleCollectionResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>)?.collection
             ?.socialLinks?.twitter ||
         (collectionResult as FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>)?.socialLinks?.twitter
-
+    const { classes } = useStyles({
+        minWidth:
+            currentVisitingUserId && twitterHandler?.toLowerCase().endsWith(currentVisitingUserId.toLowerCase())
+                ? 0
+                : 56,
+    })
     useEffect(() => {
         return MaskMessages.events.profileTabHidden.on((data) => {
             setHidden(data.hidden)
@@ -218,7 +229,6 @@ export function ProfileTabForTokenAndPersona() {
 }
 
 export function ProfileTabForDAO() {
-    const { classes } = useStyles()
     const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId ?? ''
     const { value: spaceList, loading } = useSnapshotSpacesByTwitterHandler(currentVisitingUserId)
@@ -228,7 +238,7 @@ export function ProfileTabForDAO() {
     }, [])
 
     const [hidden, setHidden] = useState(snapshotDisabled === BooleanPreference.True)
-
+    const { classes } = useStyles({ minWidth: hidden ? 56 : 0 })
     useEffect(() => {
         return MaskMessages.events.profileTabHidden.on((data) => {
             setHidden(data.hidden)
@@ -265,12 +275,7 @@ export function injectProfileTabAtTwitter(signal: AbortSignal) {
                 },
                 shadowRootDelegatesFocus: false,
             })
-            attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(
-                <>
-                    <ProfileTabForTokenAndPersona />
-                    <ProfileTabForDAO />
-                </>,
-            )
+            attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(<InjectProfileTab />)
             tabInjected = true
         }
     })
@@ -280,4 +285,122 @@ export function injectProfileTabAtTwitter(signal: AbortSignal) {
         missingReportRule: { name: 'ProfileTab', rule: isProfilePageLike },
         shadowRootDelegatesFocus: false,
     })
+}
+
+function showNextArrow() {
+    const next = nextTabListSelector().evaluate()
+    if (!next) return
+
+    next.style.setProperty('pointer-events', 'auto', 'important')
+    next.style.opacity = '1'
+
+    const first = next.firstElementChild as HTMLDivElement
+    if (!first) return
+    first.style.backgroundColor = 'rgba(39, 44, 48, 0.75)'
+    first.style.opacity = '1'
+    const svg = next.querySelector('svg')
+    if (!svg) return
+    svg.style.color = 'rgb(255, 255, 255)'
+}
+
+function hiddenNextArrow() {
+    const next = nextTabListSelector().evaluate()
+    if (!next) return
+    next.style.removeProperty('opacity')
+    next.style.removeProperty('pointer-events')
+
+    const first = next.firstElementChild as HTMLDivElement
+    if (!first) return
+    first.style.backgroundColor = 'rgba(15, 20, 25, 0.75)'
+    first.style.removeProperty('opacity')
+    const svg = next.querySelector('svg')
+    if (!svg) return
+    svg.style.removeProperty('color')
+}
+
+function InjectProfileTab() {
+    const web3TabRef = useRef<HTMLDivElement>(null)
+    const { classes } = useStyles({ minWidth: 56 })
+    const windowSize = useWindowSize()
+    const timeoutRef = useRef<any>()
+    const [isClick, setIsClick] = useState(false)
+
+    function onMouseEnter() {
+        if (isClick) return
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current)
+            timeoutRef.current = null
+        }
+        const parent = searchProfileTabListLastChildSelector().closest<HTMLElement>(1).evaluate()
+        if (!parent || !web3TabRef.current) return
+        if (Math.abs(parent.scrollWidth - (parent.scrollLeft + parent.clientWidth)) < 10) return
+        if (parent.clientWidth < parent.scrollWidth) {
+            showNextArrow()
+        }
+    }
+
+    function onNextClick() {
+        const nextArrow = nextTabListSelector().evaluate()
+        if (!nextArrow) return
+        nextArrow.style.removeProperty('cursor')
+        setIsClick(true)
+        hiddenNextArrow()
+        if (timeoutRef.current) clearTimeout(timeoutRef.current)
+        timeoutRef.current = null
+    }
+
+    function onMouseLeave() {
+        if (!timeoutRef.current) timeoutRef.current = setTimeout(hiddenNextArrow, 500)
+        setIsClick(false)
+    }
+
+    function onEnterNextArrow() {
+        if (isClick) return
+        const nextArrow = nextTabListSelector().evaluate()
+        if (!nextArrow) return
+        nextArrow.style.cursor = 'pointer'
+        if (timeoutRef.current) clearTimeout(timeoutRef.current)
+        timeoutRef.current = null
+
+        showNextArrow()
+    }
+
+    function onLeaveNextArrow() {
+        const nextArrow = nextTabListSelector().evaluate()
+        if (!nextArrow) return
+        nextArrow.style.removeProperty('cursor')
+        onMouseLeave()
+    }
+
+    const tabList = searchProfileTabListSelector().evaluate()
+    const nextArrow = nextTabListSelector().evaluate()
+    useEffect(() => {
+        web3TabRef.current?.addEventListener('mouseenter', onMouseEnter)
+        web3TabRef.current?.addEventListener('mouseleave', onMouseLeave)
+        nextArrow?.addEventListener('click', onNextClick)
+        nextArrow?.addEventListener('mouseenter', onEnterNextArrow)
+        nextArrow?.addEventListener('mouseleave', onLeaveNextArrow)
+        tabList.map((v) => {
+            v.closest('div')?.addEventListener('mouseenter', onMouseEnter)
+            v.closest('div')?.addEventListener('mouseleave', onMouseLeave)
+        })
+        return () => {
+            web3TabRef.current?.removeEventListener('mouseenter', onMouseEnter)
+            web3TabRef.current?.removeEventListener('mouseleave', onMouseLeave)
+            nextArrow?.removeEventListener('click', onNextClick)
+            nextArrow?.removeEventListener('mouseenter', onEnterNextArrow)
+            nextArrow?.removeEventListener('mouseleave', onLeaveNextArrow)
+            tabList.map((v) => {
+                v.closest('div')?.removeEventListener('mouseenter', onMouseEnter)
+                v.closest('div')?.removeEventListener('mouseleave', onMouseLeave)
+            })
+        }
+    }, [windowSize, tabList, web3TabRef.current, nextArrow])
+
+    return (
+        <div ref={web3TabRef} className={classes.bar}>
+            <ProfileTabForTokenAndPersona />
+            <ProfileTabForDAO />
+        </div>
+    )
 }

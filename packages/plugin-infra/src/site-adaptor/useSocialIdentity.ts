@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
-import { useAsyncRetry } from 'react-use'
 import { MaskMessages, type SocialIdentity } from '@masknet/shared-base'
 import type { IdentityResolved } from '../types.js'
 import { useSiteAdaptorContext } from '../dom/useSiteAdaptorContext.js'
+import { useQuery } from '@tanstack/react-query'
 
 /**
  * Get the social identity of the given identity
@@ -10,16 +10,18 @@ import { useSiteAdaptorContext } from '../dom/useSiteAdaptorContext.js'
 export function useSocialIdentity(identity: IdentityResolved | null | undefined) {
     const { getSocialIdentity, getNextIDPlatform } = useSiteAdaptorContext()
 
-    const result = useAsyncRetry<SocialIdentity | undefined>(async () => {
-        if (!identity) return
+    const platform = getNextIDPlatform()
 
-        const platform = getNextIDPlatform()
-        if (!platform) return
+    const result = useQuery<SocialIdentity | undefined, Error>({
+        queryKey: ['next-id', identity, platform],
+        enabled: Boolean(identity && platform),
+        queryFn: async () => {
+            if (!platform || !identity) return
+            return getSocialIdentity(platform, identity)
+        },
+    })
 
-        return getSocialIdentity(platform, identity)
-    }, [identity])
-
-    useEffect(() => MaskMessages.events.ownProofChanged.on(result.retry), [result.retry])
+    useEffect(() => MaskMessages.events.ownProofChanged.on(() => result.refetch()), [result.refetch])
 
     return result
 }

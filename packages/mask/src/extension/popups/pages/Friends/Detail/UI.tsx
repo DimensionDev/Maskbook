@@ -7,12 +7,15 @@ import { Icons } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
 import { formatPersonaFingerprint, type BindingProof } from '@masknet/shared-base'
 import { useTheme } from '@mui/system'
-import { CopyButton } from '@masknet/shared'
+import { CopyButton, EmptyStatus } from '@masknet/shared'
 import { ConnectedAccounts } from './ConnectAccounts/index.js'
+import { useI18N } from '../../../../../utils/i18n-next-ui.js'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
         maxHeight: '100vh',
+        height: '100%',
         overflowY: 'hidden',
     },
     header: {
@@ -50,6 +53,25 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         color: theme.palette.maskColor.second,
     },
+    empty: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%,-50%)',
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+        gap: 12,
+        color: theme.palette.maskColor.second,
+        whiteSpace: 'nowrap',
+    },
+    emptyContainer: {
+        position: 'relative',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        flex: 1,
+    },
 }))
 
 export interface FriendsDetailUIProps {
@@ -58,7 +80,8 @@ export interface FriendsDetailUIProps {
     nextId: string
     publicKey?: string
     isLocal?: boolean
-    handleDelete: () => void
+    onDelete: () => void
+    deleting?: boolean
 }
 
 export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetailUI({
@@ -67,11 +90,13 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
     publicKey,
     profiles,
     isLocal,
-    handleDelete,
+    onDelete,
+    deleting,
 }) {
     const { classes } = useStyles()
     const navigate = useNavigate()
     const handleBack = useCallback(() => navigate(-1), [])
+    const { t } = useI18N()
     const theme = useTheme()
     return (
         <Box display="flex" flexDirection="column" alignItems="center" width="100%" className={classes.container}>
@@ -82,7 +107,7 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
                     </button>
                     <Box />
                     {isLocal ? (
-                        <button onClick={handleDelete} type="submit" className={classes.back}>
+                        <button onClick={onDelete} type="submit" className={classes.back} disabled={deleting}>
                             <Icons.Delete />
                         </button>
                     ) : null}
@@ -111,14 +136,22 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
                             underline="none"
                             target="_blank"
                             rel="noopener noreferrer"
-                            href={`https://web3.bio/${nextId}`}
+                            href={urlcat('https://web3.bio/', { s: nextId })}
                             className={classes.icon}>
                             <Icons.LinkOut size={12} />
                         </Link>
                     </Typography>
                 </Box>
             </Box>
-            <ConnectedAccounts profiles={profiles} />
+            {profiles.length ? (
+                <ConnectedAccounts profiles={profiles} />
+            ) : (
+                <div className={classes.emptyContainer}>
+                    <EmptyStatus className={classes.empty}>
+                        {t('popups_encrypted_friends_no_associated_accounts')}
+                    </EmptyStatus>
+                </div>
+            )}
         </Box>
     )
 })

@@ -1,13 +1,20 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { first } from 'lodash-es'
-import { InjectedDialog, usePersonaProofs } from '@masknet/shared'
+import { InjectedDialog, PopupHomeTabType, usePersonaProofs } from '@masknet/shared'
 import {
     useActivatedPluginsSiteAdaptor,
     usePluginI18NField,
     getSettingsTabContent,
 } from '@masknet/plugin-infra/content-script'
-import { PluginID, NextIDPlatform, EMPTY_LIST, CrossIsolationMessages, MaskMessages } from '@masknet/shared-base'
+import {
+    PluginID,
+    NextIDPlatform,
+    EMPTY_LIST,
+    CrossIsolationMessages,
+    MaskMessages,
+    PopupRoutes,
+} from '@masknet/shared-base'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
@@ -59,8 +66,8 @@ export function PluginSettingsDialog() {
 
     const openPopupWindow = useCallback(
         () =>
-            Services.Helper.openPopupConnectWindow({
-                internal: true,
+            Services.Helper.openPopupWindow(PopupRoutes.Personas, {
+                tab: PopupHomeTabType.ConnectedWallets,
             }),
         [],
     )

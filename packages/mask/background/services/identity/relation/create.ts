@@ -3,7 +3,7 @@ import type { ProfileIdentifier, PersonaIdentifier } from '@masknet/shared-base'
 import { createRelationsTransaction, createRelationDB } from '../../../database/persona/db.js'
 
 export async function createNewRelation(
-    profile: ProfileIdentifier,
+    profile: ProfileIdentifier | PersonaIdentifier,
     linked: PersonaIdentifier,
     favor = RelationFavor.UNCOLLECTED,
 ): Promise<void> {

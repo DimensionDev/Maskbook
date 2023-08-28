@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import { useTitle } from '../../../hook/useTitle.js'
+import { useTitle } from '../../../hooks/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { Box, Button, Link, Typography, useTheme } from '@mui/material'
 

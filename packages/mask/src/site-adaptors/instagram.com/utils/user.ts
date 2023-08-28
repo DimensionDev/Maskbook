@@ -1,11 +1,9 @@
 import { collectNodeText } from '../../../utils/index.js'
 import {
     bioDescriptionSelector,
-    personalHomepageSelector,
-    searchInstagramAvatarSelector,
+    searchInstagramHandleSelector,
     searchNickNameSelector,
-    searchUserIdInEditPageSelector,
-    searchUserIdSelector,
+    searchInstagramSelfAvatarSelector,
 } from './selector.js'
 
 export function getBioDescription() {
@@ -14,10 +12,10 @@ export function getBioDescription() {
 }
 
 export const getPersonalHomepage = () => {
-    const node = personalHomepageSelector().evaluate()
-    if (!node?.textContent) return ''
-    if (node.textContent.startsWith('http')) return node.textContent
-    return `https://${node.textContent}`
+    const node = searchInstagramHandleSelector().evaluate()
+
+    if (!node) return
+    return node.href
 }
 
 export const getNickname = () => {
@@ -26,15 +24,15 @@ export const getNickname = () => {
 }
 
 export const getUserId = () => {
-    const node = searchUserIdSelector().evaluate()
-    const secondNode = searchUserIdInEditPageSelector().evaluate()
-    return node ? collectNodeText(node) : secondNode ? collectNodeText(secondNode) : ''
+    const node = searchInstagramHandleSelector().evaluate()
+    if (!node) return
+    return collectNodeText(node) ?? ''
 }
 
 export const getAvatar = () => {
-    const node = searchInstagramAvatarSelector().evaluate()
-    if (!node) return ''
+    const node = searchInstagramSelfAvatarSelector().evaluate()
 
+    if (!node) return ''
     const imageURL = node.getAttribute('src') ?? ''
     return imageURL.trim()
 }

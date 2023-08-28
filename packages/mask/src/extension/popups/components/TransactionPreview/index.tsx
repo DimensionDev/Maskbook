@@ -26,7 +26,7 @@ import {
 import { NetworkPluginID } from '@masknet/shared-base'
 import { unreachable } from '@masknet/kit'
 import { isString } from 'lodash-es'
-import { FormattedBalance, FormattedCurrency, ImageIcon, TokenIcon } from '@masknet/shared'
+import { FormattedCurrency, ImageIcon, TokenIcon } from '@masknet/shared'
 import { GasSettingMenu } from '../GasSettingMenu/index.js'
 import type { TransactionDetail } from '../../pages/Wallet/type.js'
 
@@ -149,6 +149,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
         if (isSupport1559) {
             if (transaction.computedPayload.maxFeePerGas && transaction.computedPayload.maxPriorityFeePerGas)
                 return {
+                    gasOptionType: transaction.gasOptionType,
                     maxFeePerGas: transaction.computedPayload.maxFeePerGas,
                     maxPriorityFeePerGas: transaction.computedPayload.maxPriorityFeePerGas,
                 }
@@ -159,8 +160,9 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
 
         return {
             gasPrice: transaction.computedPayload.gasPrice,
+            gasOptionType: transaction.gasOptionType,
         }
-    }, [transaction?.computedPayload, isSupport1559])
+    }, [transaction?.computedPayload, transaction?.gasOptionType, isSupport1559])
 
     const receiver = useMemo(() => {
         if (domain) return Others.formatDomainName(domain)
@@ -178,7 +180,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                     {receiver ? <Typography className={classes.title}>{receiver}</Typography> : null}
                 </Box>
                 <Box mt={2} display="flex" columnGap={0.5} alignItems="center">
-                    <Typography className={classes.addressTitle}>{t('address')}:</Typography>
+                    <Typography className={classes.addressTitle}>{t('to')}:</Typography>
                     <Typography fontSize={11} fontWeight={700} lineHeight="16px">
                         {to}
                     </Typography>
@@ -201,18 +203,26 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                                 name={token?.name}
                                 className={classes.tokenIcon}
                             />
-                            <FormattedBalance
-                                value={amount}
-                                decimals={token?.decimals}
-                                significant={4}
-                                formatter={formatBalance}
-                            />
+                            {amount
+                                ? formatBalance(
+                                      amount,
+                                      token?.decimals,
+                                      4,
+                                      false,
+                                      true,
+                                      leftShift(amount, token?.decimals).isGreaterThan(1) ? 6 : 12,
+                                  )
+                                : null}
                         </>
                     ) : null}
                 </Typography>
                 {!isGreaterThan(tokenValueUSD, pow10(9)) && !tokenId ? (
                     <Typography className={classes.value}>
-                        <FormattedCurrency value={tokenValueUSD} formatter={formatCurrency} />
+                        <FormattedCurrency
+                            value={tokenValueUSD}
+                            formatter={formatCurrency}
+                            options={{ onlyRemainTwoOrZeroDecimal: true }}
+                        />
                     </Typography>
                 ) : null}
             </Box>

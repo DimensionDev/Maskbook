@@ -21,12 +21,11 @@ export function BaseSharedUIProvider({ children }: PropsWithChildren<{}>) {
     const site = useValueRef(sharedUINetworkIdentifier)
     const overwrite = useValueRef(sharedUIComponentOverwrite)
 
-    const contextValue = useMemo(() => {
-        const value: ContextOptions = {
+    const contextValue = useMemo<ContextOptions>(() => {
+        return {
             networkIdentifier: site,
             componentOverwrite: overwrite,
         }
-        return value
     }, [site, overwrite])
 
     return <BaseUIContext.Provider value={contextValue}>{children}</BaseUIContext.Provider>

@@ -1,10 +1,11 @@
 import { useAsyncRetry, useUpdateEffect } from 'react-use'
 import { Services } from '../../../API.js'
-import type { ProfileInformation, Relation, RelationFavor } from '@masknet/shared-base'
+import type { ProfileInformation, RelationFavor, Relation } from '@masknet/shared-base'
 import { useRef } from 'react'
 import { last } from 'lodash-es'
 import { PersonaContext } from './usePersonaContext.js'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
+import { isProfileIdentifier } from '@masknet/shared'
 
 export interface Contacts extends ProfileInformation {
     favor: RelationFavor | undefined
@@ -37,7 +38,7 @@ export function useContacts(network: string, page: number, size = 20): AsyncStat
 
         if (values.length === 0) return []
 
-        const identifiers = values.map((x) => x.profile)
+        const identifiers = values.map((x) => x.profile).filter(isProfileIdentifier)
         const [avatars, profiles] = await Promise.all([
             Services.Identity.queryAvatarsDataURL(identifiers),
             Services.Identity.queryProfilesInformation(identifiers),

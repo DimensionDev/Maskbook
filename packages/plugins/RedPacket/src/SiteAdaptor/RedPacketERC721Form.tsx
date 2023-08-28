@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useMemo } from 'react'
-import { Box, Typography, List, ListItem } from '@mui/material'
+import { Box, Typography, List, ListItem, Skeleton } from '@mui/material'
 import { makeStyles, ActionButton, ShadowRootTooltip } from '@masknet/theme'
 import { Check as CheckIcon, Close as CloseIcon, AddCircleOutline as AddCircleOutlineIcon } from '@mui/icons-material'
 import { useI18N } from '../locales/index.js'
@@ -207,6 +207,14 @@ const useStyles = makeStyles()((theme) => {
             margin: 0,
             padding: 0,
         },
+        skeleton: {
+            display: 'flex',
+            marginBottom: 12,
+        },
+        rectangle: {
+            borderRadius: 8,
+            marginRight: 12,
+        },
     }
 })
 interface RedPacketERC721FormProps {
@@ -268,7 +276,11 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         { chainId },
     )
 
-    const { value: assets_ = EMPTY_LIST, next } = useNonFungibleAssetsByCollectionAndOwner(
+    const {
+        value: assets_ = EMPTY_LIST,
+        next,
+        done,
+    } = useNonFungibleAssetsByCollectionAndOwner(
         collection?.assets?.length
             ? ''
             : collection?.source === SourceType.SimpleHash
@@ -352,10 +364,12 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         setIsNFTRedPacketLoaded?.(balance > 0)
     }, [balance > 0])
 
+    const handleClose = useCallback(() => setOpenSelectNFTDialog(false), [])
+
     if (openSelectNFTDialog) {
         return (
             <SelectNftTokenDialog
-                onClose={() => setOpenSelectNFTDialog(false)}
+                onClose={handleClose}
                 contract={collection}
                 existTokenDetailedList={tokenDetailedList}
                 setExistTokenDetailedList={setExistTokenDetailedList}
@@ -370,7 +384,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                 message={message}
                 contract={collection}
                 tokenList={tokenDetailedList}
-                onBack={() => setOpenNFTConfirmDialog(false)}
+                onBack={handleClose}
                 onClose={onClose}
                 senderName={senderName}
                 gasOption={gasOption}
@@ -390,61 +404,74 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     />
                 </Box>
                 {collection && balance ? (
-                    <Box className={classes.selectWrapper}>
-                        <div
-                            className={cx(
-                                classes.optionLeft,
-                                classes.option,
-                                balance === 0 ? classes.disabledSelector : null,
-                            )}
-                            onClick={() => {
-                                setSelectOption(NFTSelectOption.All)
-                                setExistTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
-                                setAllTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
-                            }}>
-                            <div
-                                className={cx(
-                                    classes.checkIconWrapper,
-                                    selectOption === NFTSelectOption.All ? classes.checked : '',
-                                )}>
-                                <CheckIcon className={classes.checkIcon} />
-                            </div>
-                            <Typography color="textPrimary">
-                                {balance === 0
-                                    ? 'All'
-                                    : t.nft_select_all_option({
-                                          total: Math.min(RED_PACKET_MAX_SHARES, balance).toString(),
-                                      })}
-                            </Typography>
-                        </div>
-                        <div className={classes.option} onClick={() => setSelectOption(NFTSelectOption.Partial)}>
-                            <div
-                                className={cx(
-                                    classes.checkIconWrapper,
-                                    selectOption === NFTSelectOption.Partial ? classes.checked : '',
-                                )}>
-                                <CheckIcon className={classes.checkIcon} />
-                            </div>
-                            <Typography color="textPrimary">{t.nft_select_partially_option()}</Typography>
-                        </div>
-                    </Box>
-                ) : null}
-                {collection && balance ? (
-                    <div className={classes.tokenSelectorParent}>
-                        <List className={classes.tokenSelector}>
-                            {tokenDetailedList.map((value, i) => (
-                                <div key={i}>
-                                    <NFTCard token={value} removeToken={removeToken} />
+                    done ? (
+                        <>
+                            <Box className={classes.selectWrapper}>
+                                <div
+                                    className={cx(
+                                        classes.optionLeft,
+                                        classes.option,
+                                        balance === 0 ? classes.disabledSelector : null,
+                                    )}
+                                    onClick={() => {
+                                        setSelectOption(NFTSelectOption.All)
+                                        setExistTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
+                                        setAllTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
+                                    }}>
+                                    <div
+                                        className={cx(
+                                            classes.checkIconWrapper,
+                                            selectOption === NFTSelectOption.All ? classes.checked : '',
+                                        )}>
+                                        <CheckIcon className={classes.checkIcon} />
+                                    </div>
+                                    <Typography color="textPrimary">
+                                        {balance === 0
+                                            ? 'All'
+                                            : t.nft_select_all_option({
+                                                  total: Math.min(RED_PACKET_MAX_SHARES, balance).toString(),
+                                              })}
+                                    </Typography>
                                 </div>
-                            ))}
-                            <ListItem
-                                onClick={() => setOpenSelectNFTDialog(true)}
-                                className={cx(classes.tokenSelectorWrapper, classes.addWrapper)}>
-                                <AddCircleOutlineIcon className={classes.addIcon} onClick={() => void 0} />
-                            </ListItem>
-                        </List>
-                    </div>
+                                <div
+                                    className={classes.option}
+                                    onClick={() => setSelectOption(NFTSelectOption.Partial)}>
+                                    <div
+                                        className={cx(
+                                            classes.checkIconWrapper,
+                                            selectOption === NFTSelectOption.Partial ? classes.checked : '',
+                                        )}>
+                                        <CheckIcon className={classes.checkIcon} />
+                                    </div>
+                                    <Typography color="textPrimary">{t.nft_select_partially_option()}</Typography>
+                                </div>
+                            </Box>
+                            <div className={classes.tokenSelectorParent}>
+                                <List className={classes.tokenSelector}>
+                                    {tokenDetailedList.map((value, i) => (
+                                        <div key={i}>
+                                            <NFTCard token={value} removeToken={removeToken} />
+                                        </div>
+                                    ))}
+                                    <ListItem
+                                        onClick={() => setOpenSelectNFTDialog(true)}
+                                        className={cx(classes.tokenSelectorWrapper, classes.addWrapper)}>
+                                        <AddCircleOutlineIcon className={classes.addIcon} onClick={() => void 0} />
+                                    </ListItem>
+                                </List>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div className={classes.skeleton}>
+                                <Skeleton className={classes.rectangle} height={24} variant="rectangular" width={140} />
+                                <Skeleton className={classes.rectangle} height={24} variant="rectangular" width={140} />
+                            </div>
+                            <Skeleton className={classes.rectangle} height={180} variant="rectangular" width="100%" />
+                        </>
+                    )
                 ) : null}
+
                 <div className={classes.line}>
                     <RedpacketMessagePanel onChange={(val: string) => setMessage(val)} message={message} />
                 </div>

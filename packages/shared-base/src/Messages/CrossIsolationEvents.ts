@@ -28,7 +28,6 @@ import type {
 } from './Events.js'
 
 /**
- * @deprecated
  * Prefer MaskMessages.
  *
  * Only use this in the following cases:

@@ -16,6 +16,7 @@ import { useDashboardI18N } from '../../../locales/index.js'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext.js'
 import { ComponentToPrint } from './ComponentToPrint.js'
 import { Words } from './Words.js'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -120,7 +121,7 @@ export const SignUpMnemonic = memo(function SignUpMnemonic() {
         try {
             const identifier = await createPersona(words.join(' '), state.personaName)
             await changeCurrentPersona(identifier)
-            navigate(DashboardRoutes.SignUpPersonaOnboarding)
+            navigate(urlcat(DashboardRoutes.SignUpPersonaOnboarding, { isCreate: true }))
         } catch (error) {
             showSnackbar((error as Error).message, { variant: 'error' })
         }

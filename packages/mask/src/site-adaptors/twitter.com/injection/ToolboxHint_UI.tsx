@@ -8,11 +8,15 @@ import { useThemeSettings } from '../../../components/DataSource/useActivatedUI.
 import { searchHomeLinkName } from '../utils/selector.js'
 import { ButtonStyle } from '../constant.js'
 
-const TWITTER_BREAKPOINT = 1265
+const HORIZONTAL_BREAKPOINT = 1265
+const VERTICAL_BREAKPOINT = 855
 
 const Container = styled('div')`
     cursor: pointer;
     padding: 4px 0;
+    @media screen and (max-height: ${VERTICAL_BREAKPOINT}px) {
+        padding: 0;
+    }
 `
 const ListItem = styled(ListItemButton)`
     border-radius: 9999px;
@@ -22,7 +26,7 @@ const ListItem = styled(ListItemButton)`
         ${({ theme }) => (theme.palette.mode === 'dark' ? 'background: rgba(217, 217, 217, 0.1);' : '')}
     }
     /* twitter break point */
-    @media screen and (max-width: ${TWITTER_BREAKPOINT}px) {
+    @media screen and (max-width: ${HORIZONTAL_BREAKPOINT}px) {
         height: 50px;
     }
 `
@@ -49,7 +53,7 @@ export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application'
             </Text>
         )
     }, [buttonStyle.iconSize, textMarginLeft])
-    const _mini = useMediaQuery(`(max-width: ${TWITTER_BREAKPOINT}px)`)
+    const _mini = useMediaQuery(`(max-width: ${HORIZONTAL_BREAKPOINT}px)`)
     const [mini, setMini] = useState(_mini)
 
     useEffect(() => {

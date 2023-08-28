@@ -1,18 +1,20 @@
-import { useCallback, useMemo } from 'react'
-import { Card, Typography, Box } from '@mui/material'
-import { Stack } from '@mui/system'
-import { LoadingBase, makeStyles, parseColor } from '@masknet/theme'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
-import { formatBalance, isZero, TokenType } from '@masknet/web3-shared-base'
-import { NetworkPluginID, isFacebook, isTwitter } from '@masknet/shared-base'
-import { ChainResolver, NetworkResolver, Web3 } from '@masknet/web3-providers'
-import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import { TransactionConfirmModal } from '@masknet/shared'
 import { usePostLink, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { TransactionConfirmModal } from '@masknet/shared'
+import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { LoadingBase, makeStyles, parseColor } from '@masknet/theme'
+import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
+import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-hooks-base'
+import { ChainResolver } from '@masknet/web3-providers'
+import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
+import { TokenType, formatBalance, isZero } from '@masknet/web3-shared-base'
+import { ChainId, signMessage } from '@masknet/web3-shared-evm'
+import { Box, Card, Typography } from '@mui/material'
+import { Stack } from '@mui/system'
+import { useCallback, useMemo } from 'react'
 import { useI18N } from '../../locales/index.js'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
 import { useClaimCallback } from '../hooks/useClaimCallback.js'
+import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
 
@@ -135,7 +137,7 @@ export function RedPacket(props: RedPacketProps) {
     const token = payload.token
     const { pluginID } = useNetworkContext()
     const payloadChainId = token?.chainId ?? ChainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
-    const { account, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         chainId: payloadChainId,
         account: pluginID === NetworkPluginID.PLUGIN_EVM ? undefined : '',
     })
@@ -158,20 +160,20 @@ export function RedPacket(props: RedPacketProps) {
         payload.contract_version,
         account,
         payload.rpid,
-        payload.contract_version > 3
-            ? Web3.getWeb3().eth.accounts.sign(account, payload.password).signature
-            : payload.password,
+        payload.contract_version > 3 ? signMessage(account, payload.password).signature : payload.password,
         payloadChainId,
     )
 
+    // TODO payload.chainId is undefined on production mode
+    const network = useNetwork(pluginID, payload.chainId || payload.token?.chainId)
     const shareText = useMemo(() => {
-        const isOnTwitter = isTwitter()
-        const isOnFacebook = isFacebook()
+        const isOnTwitter = Sniffings.is_twitter_page
+        const isOnFacebook = Sniffings.is_facebook_page
         const shareTextOption = {
             sender: payload.sender.name,
             payload: postLink.toString(),
-            network: NetworkResolver.networkName(networkType) ?? 'Mainnet',
-            account: isTwitter() ? t.twitter_account() : t.facebook_account(),
+            network: network?.name ?? 'Mainnet',
+            account: isOnTwitter ? t.twitter_account() : t.facebook_account(),
             interpolation: { escapeValue: false },
         }
         if (listOfStatus.includes(RedPacketStatus.claimed) || claimTxHash) {
@@ -183,7 +185,7 @@ export function RedPacket(props: RedPacketProps) {
         return isOnTwitter || isOnFacebook
             ? t.share_unclaimed_message_official_account(shareTextOption)
             : t.share_unclaimed_message_not_twitter(shareTextOption)
-    }, [payload, postLink, networkType, claimTxHash, listOfStatus, t])
+    }, [payload, postLink, claimTxHash, listOfStatus, t, network?.name])
 
     const [{ loading: isRefunding }, _isRefunded, refundCallback] = useRefundCallback(
         payload.contract_version,
@@ -192,38 +194,42 @@ export function RedPacket(props: RedPacketProps) {
         payloadChainId,
     )
 
-    const openTransactionConfirmModal = useCallback(() => {
-        if (isZero(availability?.claimed_amount ?? '0')) return
-
+    const redPacketContract = useRedPacketContract(payloadChainId, payload.contract_version) as HappyRedPacketV4
+    const checkResult = useCallback(async () => {
+        const data = await redPacketContract.methods.check_availability(payload.rpid).call({
+            // check availability is ok w/o account
+            from: account,
+        })
+        if (isZero(data.claimed_amount)) return
         TransactionConfirmModal.open({
             shareText,
-            amount: formatBalance(availability?.claimed_amount, token?.decimals, 2),
+            amount: formatBalance(data.claimed_amount, token?.decimals, 2),
             token,
             tokenType: TokenType.Fungible,
             messageTextForNFT: t.claim_nft_successful({
                 name: 'NFT',
             }),
             messageTextForFT: t.claim_token_successful({
-                amount: formatBalance(availability?.claimed_amount, token?.decimals, 2),
+                amount: formatBalance(data.claimed_amount, token?.decimals, 2),
                 name: `$${token?.symbol}`,
             }),
             title: t.lucky_drop(),
             share,
         })
-    }, [JSON.stringify(token), availability?.claimed_amount, share])
+    }, [JSON.stringify(token), redPacketContract, payload.rpid, account, share])
 
     const onClaimOrRefund = useCallback(async () => {
         let hash: string | undefined
         if (canClaim) {
             hash = await claimCallback()
-            openTransactionConfirmModal()
+            checkResult()
         } else if (canRefund) {
             hash = await refundCallback()
         }
         if (typeof hash === 'string') {
             revalidateAvailability()
         }
-    }, [canClaim, canRefund, claimCallback, openTransactionConfirmModal])
+    }, [canClaim, canRefund, claimCallback])
 
     const myStatus = useMemo(() => {
         if (!availability) return ''

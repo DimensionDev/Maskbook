@@ -6,7 +6,7 @@ import { Box, List, ListItem, Typography, alpha } from '@mui/material'
 import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useI18N } from '../../../../../utils/index.js'
-import { useTitle } from '../../../hook/index.js'
+import { useTitle } from '../../../hooks/index.js'
 import { useNetworks } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -64,7 +64,7 @@ export const NetworkManagement = memo(function NetworkManagement() {
     const { t } = useI18N()
     const { classes, theme } = useStyles()
     const navigate = useNavigate()
-    useTitle(t('management_network'))
+    useTitle(t('manage_network'))
 
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
 
@@ -96,11 +96,13 @@ export const NetworkManagement = memo(function NetworkManagement() {
                     )
                 })}
             </List>
-            <div className={classes.footer}>
-                <ActionButton fullWidth onClick={() => navigate(PopupRoutes.AddNetwork)}>
-                    {t('network_management_add_network')}
-                </ActionButton>
-            </div>
+            {process.env.NODE_ENV === 'development' ? (
+                <div className={classes.footer}>
+                    <ActionButton fullWidth onClick={() => navigate(PopupRoutes.AddNetwork)}>
+                        {t('network_management_add_network')}
+                    </ActionButton>
+                </div>
+            ) : null}
         </main>
     )
 })

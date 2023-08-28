@@ -26,10 +26,12 @@ export function isZeroString(str?: string): str is undefined {
     return !str || str === '0'
 }
 
-export function isValidAddress(address?: string): address is string {
+export const isValidAddress: (address?: string) => address is string = memoize(function isValidAddress(
+    address?: string,
+): address is string {
     if (!address) return false
     return isAddress(address)
-}
+})
 
 export function isZeroAddress(address?: string): address is string {
     return isSameAddress(address, ZERO_ADDRESS)
@@ -73,7 +75,7 @@ export function getZeroAddress() {
 }
 
 export const getNativeTokenAddress: (chainId: ChainId) => string = memoize((chainId = ChainId.Mainnet) => {
-    return getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS') ?? ''
+    return getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS') ?? ZERO_ADDRESS
 })
 
 export const getMaskTokenAddress: (chainId: ChainId) => string = memoize((chainId = ChainId.Mainnet) => {

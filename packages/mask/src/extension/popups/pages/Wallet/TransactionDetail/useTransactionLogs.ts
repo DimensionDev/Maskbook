@@ -23,7 +23,7 @@ export function useTransactionLogs(transactionState: TransactionState) {
         queryKey: ['transactions', transactionState?.chainId, account],
         queryFn: async () => {
             if (!transactionState?.chainId) return
-            return Transaction?.getTransactions?.(transactionState?.chainId, account) ?? []
+            return Transaction?.getTransactions?.(transactionState?.chainId, account) ?? EMPTY_LIST
         },
     })
     const logs = useMemo(() => {
@@ -31,7 +31,7 @@ export function useTransactionLogs(transactionState: TransactionState) {
         const isRecentTx = 'candidates' in transactionState
         const localTransaction: RecentTransaction<ChainId, EvmTransaction> | undefined = isRecentTx
             ? transactionState
-            : txes?.find((x) => x.id === transactionState.hash)
+            : txes?.find((x) => x.id === transactionState.id)
         if (localTransaction) {
             return [
                 t('transaction_confirmed_at', {
@@ -43,7 +43,7 @@ export function useTransactionLogs(transactionState: TransactionState) {
             ].filter(Boolean)
         }
         return EMPTY_LIST
-    }, [transactionState, t])
+    }, [transactionState, t, txes])
 
     return logs
 }

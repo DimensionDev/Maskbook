@@ -2,6 +2,7 @@
 declare module NodeJS {
     interface ProcessEnv {
         readonly NODE_ENV: 'development' | 'production' | 'test'
+        readonly MASK_APP: boolean
         readonly MASK_SENTRY_DSN: string
         /**
          * Run skip tests like
