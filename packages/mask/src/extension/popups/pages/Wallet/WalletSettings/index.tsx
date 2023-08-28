@@ -63,21 +63,23 @@ const WalletSettings = memo(() => {
                     </>
                 )}
             </List>
-            <Box className={classes.bottomAction}>
-                <ActionButton
-                    fullWidth
-                    onClick={async () =>
-                        await WalletRemoveModal.openAndWaitForClose({
-                            title: t('remove'),
-                            wallet,
-                        })
-                    }
-                    width={368}
-                    color="error"
-                    className={classes.removeWalletButton}>
-                    {t('popups_wallet_settings_remove_wallet')}
-                </ActionButton>
-            </Box>
+            {wallet.owner ? null : (
+                <Box className={classes.bottomAction}>
+                    <ActionButton
+                        fullWidth
+                        onClick={async () =>
+                            await WalletRemoveModal.openAndWaitForClose({
+                                title: t('remove'),
+                                wallet,
+                            })
+                        }
+                        width={368}
+                        color="error"
+                        className={classes.removeWalletButton}>
+                        {t('popups_wallet_settings_remove_wallet')}
+                    </ActionButton>
+                </Box>
+            )}
         </div>
     )
 })
