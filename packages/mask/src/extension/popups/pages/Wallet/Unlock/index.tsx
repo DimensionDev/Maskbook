@@ -64,7 +64,7 @@ const Unlock = memo(() => {
 
         if (verified) {
             if (toBeClose) {
-                Services.Helper.removePopupWindow()
+                await Services.Helper.removePopupWindow()
             } else {
                 navigate(
                     from
