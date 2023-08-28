@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { useTitle } from '../../../hook/useTitle.js'
+import { useTitle } from '../../../hooks/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 const ConnectedSites = memo(function ConnectedSites() {
     const { t } = useI18N()
