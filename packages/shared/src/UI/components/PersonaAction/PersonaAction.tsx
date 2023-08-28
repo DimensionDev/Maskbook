@@ -1,11 +1,11 @@
+import type { IdentityResolved } from '@masknet/plugin-infra'
+import type { PersonaInformation } from '@masknet/shared-base'
+import { formatPersonaFingerprint } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
-import { PlatformAvatar } from './PlatformAvatar.js'
-import type { PersonaInformation } from '@masknet/shared-base'
-import type { IdentityResolved } from '@masknet/plugin-infra'
 import { type PropsWithChildren } from 'react'
-import { formatPublicKey } from '../../../utils/index.js'
-import { CopyButton } from '../index.js'
+import { CopyButton } from '../CopyButton/index.js'
+import { PlatformAvatar } from './PlatformAvatar.js'
 
 const useStyles = makeStyles()((theme) => ({
     bottomFixed: {
@@ -52,7 +52,7 @@ export function PersonaAction(props: PersonaActionProps) {
                     <Box sx={{ display: 'flex' }}>
                         <Typography className={classes.personaKey}>
                             {currentPersona?.identifier
-                                ? formatPublicKey(currentPersona.identifier.rawPublicKey)
+                                ? formatPersonaFingerprint(currentPersona.identifier.rawPublicKey, 4)
                                 : '--'}
                         </Typography>
                         <CopyButton
