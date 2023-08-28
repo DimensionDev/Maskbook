@@ -58,6 +58,8 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 const decoratedText = decorateEncryptedText(encrypted, t, content.meta)
                 pasteTextEncode(decoratedText ?? t('additional_post_box__encrypted_post_pre', { encrypted }), reason)
             }
+            if (content.meta?.has(`${PluginID.RedPacket}:1`) || content.meta?.has(`${PluginID.RedPacket}_nft:1`))
+                Telemetry.captureEvent(EventType.Interact, EventID.EntryAppLuckSend)
             Telemetry.captureEvent(EventType.Interact, EventID.EntryMaskComposeEncrypt)
             onClose()
         },

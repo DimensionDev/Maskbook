@@ -1,4 +1,7 @@
 import { memo, useState, useCallback, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useEverSeen } from '@masknet/shared-base-ui'
+import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query'
 import { Icons } from '@masknet/icons'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { Box, Typography, Link, useTheme, ButtonBase as Button, Avatar } from '@mui/material'
@@ -10,17 +13,12 @@ import {
     ECKeyIdentifier,
 } from '@masknet/shared-base'
 import { CopyButton, PersonaContext } from '@masknet/shared'
-import { useNavigate } from 'react-router-dom'
 import { NextIDPlatform } from '@masknet/shared-base'
 import { attachNextIDToProfile } from '../../../../../utils/utils.js'
 import { ConnectedAccounts } from './ConnectedAccounts/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import Services from '../../../../service.js'
-import { useEverSeen } from '@masknet/shared-base-ui'
-import { useFriendProfiles } from '../../../hooks/index.js'
-import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query'
-import urlcat from 'urlcat'
-import { type Friend } from '../../../hooks/index.js'
+import { type Friend, useFriendProfiles } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -200,7 +198,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                                 underline="none"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                href={urlcat('https://web3.bio/', { s: nextId })}
+                                href={`https://web3.bio/${nextId}`}
                                 className={classes.icon}>
                                 <Icons.LinkOut size={12} />
                             </Link>
