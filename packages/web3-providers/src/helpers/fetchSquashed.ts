@@ -3,6 +3,7 @@ const { fetch: originalFetch } = globalThis
 export enum Expiration {
     ONE_SECOND = 1000,
     ONE_MINUTE = 60000,
+    THIRTY_MINUTES = 1800000,
     ONE_HOUR = 3600000,
 }
 

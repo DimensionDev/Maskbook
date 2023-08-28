@@ -225,8 +225,8 @@ const getExistedBindingQueryURL = (platform: string, identity: string, personaPu
 export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     fetchFromProofService<T>(request: Request | RequestInfo, init?: RequestInit) {
         return fetchCachedJSON<T>(request, init, {
-            squashExpiration: Expiration.ONE_HOUR,
-            cacheDuration: Duration.ONE_DAY,
+            squashExpiration: Expiration.THIRTY_MINUTES,
+            cacheDuration: Duration.THIRTY_MINUTES,
         })
     }
 
@@ -280,9 +280,9 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     }
 
     async queryExistedBindingByPersona(personaPublicKey: string) {
-        const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
-
-        const { ids } = await this.fetchFromProofService<NextIDBindings>(url)
+        const { ids } = await this.fetchFromProofService<NextIDBindings>(
+            getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey),
+        )
         // Will have only one item when query by personaPublicKey
         return first(ids)
     }
