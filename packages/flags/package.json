@@ -16,7 +16,8 @@
       }
     },
     "types": "./dist/index.d.ts",
-    "devDependencies": {
-      "urlcat": "^3.1.0"
+    "dependencies": {
+      "urlcat": "^3.1.0",
+      "@dimensiondev/holoflows-kit": "0.9.0-20230307045856-46252fb"
     }
   }
