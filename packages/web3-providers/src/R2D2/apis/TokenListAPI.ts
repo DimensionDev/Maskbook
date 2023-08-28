@@ -16,7 +16,7 @@ const fetchTokenList = memoizePromise(
             url,
             { cache: 'default' },
             {
-                cacheDuration: Duration.LONG,
+                cacheDuration: Duration.TWELVE_HOURS,
             },
         )
     },

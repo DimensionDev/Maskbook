@@ -3,10 +3,11 @@ import type { Fetcher } from './fetch.js'
 const { fetch: originalFetch } = globalThis
 
 export enum Duration {
-    MINIMAL = 10000, // 10 seconds
-    SHORT = 60000, // 1 min
-    MEDIUM = 1800000, // 30 mins
-    LONG = 43200000, // 12 hours
+    TEN_SECONDS = 10000,
+    ONE_MINUTE = 60000,
+    THIRTY_MINUTES = 1800000,
+    TWELVE_HOURS = 43200000,
+    ONE_DAY = 86400000,
 }
 
 function __open__(url: string) {
@@ -56,7 +57,7 @@ export async function fetchCached(
     input: RequestInfo | URL,
     init?: RequestInit,
     next = originalFetch,
-    duration = Duration.SHORT,
+    duration = Duration.ONE_MINUTE,
 ): Promise<Response> {
     // why: the caches doesn't define in test env
     if (process.env.NODE_ENV === 'test') return next(input, init)
@@ -89,7 +90,7 @@ export async function staleCached(info: RequestInfo | URL, init?: RequestInit): 
 
 export function createFetchCached({
     next = originalFetch,
-    duration = Duration.SHORT,
+    duration = Duration.ONE_MINUTE,
 }: {
     next?: Fetcher
     duration?: number
