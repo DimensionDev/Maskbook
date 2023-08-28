@@ -4,7 +4,6 @@ import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, Link, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { formatPersonaFingerprint, formatPersonaName } from '@masknet/shared-base'
-import urlcat from 'urlcat'
 // import { CopyIconButton } from '../../../../components/CopyIconButton/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -81,7 +80,7 @@ export const PersonaHeaderUI = memo<PersonaHeaderUIProps>(({ avatar, fingerprint
                             underline="none"
                             target="_blank"
                             rel="noopener noreferrer"
-                            href={urlcat('https://web3.bio/', { s: publicHexString })}
+                            href={`https://web3.bio/${publicHexString}`}
                             className={classes.icon}>
                             <Icons.LinkOut size={12} />
                         </Link>

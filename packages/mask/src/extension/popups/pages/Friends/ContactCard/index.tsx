@@ -19,7 +19,6 @@ import Services from '../../../../service.js'
 import { useEverSeen } from '@masknet/shared-base-ui'
 import { useFriendProfiles } from '../../../hook/useFriendProfiles.js'
 import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query'
-import urlcat from 'urlcat'
 import { type Friend } from '../../../hook/useFriends.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -200,7 +199,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                                 underline="none"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                href={urlcat('https://web3.bio/', { s: nextId })}
+                                href={`https://web3.bio/${nextId}`}
                                 className={classes.icon}>
                                 <Icons.LinkOut size={12} />
                             </Link>
