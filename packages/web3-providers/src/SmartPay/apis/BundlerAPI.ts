@@ -15,7 +15,7 @@ export class SmartPayBundlerAPI implements BundlerAPI.Provider {
                 method: 'GET',
             },
             {
-                cacheDuration: Duration.LONG,
+                cacheDuration: Duration.TWELVE_HOURS,
             },
         )
     }

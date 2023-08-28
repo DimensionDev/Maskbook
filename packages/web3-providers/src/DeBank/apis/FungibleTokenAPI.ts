@@ -23,7 +23,7 @@ export class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId
             }),
             undefined,
             {
-                cacheDuration: Duration.MINIMAL,
+                cacheDuration: Duration.TEN_SECONDS,
             },
         )
 
