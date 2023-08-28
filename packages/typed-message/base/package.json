@@ -1,6 +1,6 @@
 {
   "name": "@masknet/typed-message",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "sideEffects": false,
   "description": "TypedMessage definition used in Mask Network.",
   "publishConfig": {
