@@ -1,7 +1,7 @@
 import { forwardRef, useState } from 'react'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
-import { Box, Typography, useTheme } from '@mui/material'
+import { Box, Typography, useTheme, type InputProps } from '@mui/material'
 import { useAsyncFn } from 'react-use'
 import { type SingletonModalRefCreator } from '@masknet/shared-base'
 import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
@@ -61,6 +61,15 @@ function ChangePaymentPasswordDrawer({
             setOriginalPasswordWrong((error as Error).message)
         }
     }, [oldPassword, newPassword, confirmNewPassword, t])
+
+    const inputProps: InputProps = {
+        endAdornment: null,
+        disableUnderline: true,
+        autoFocus: true,
+        inputProps: {
+            maxLength: 18,
+        },
+    }
     return (
         <BottomDrawer {...rest}>
             <Typography
@@ -74,6 +83,7 @@ function ChangePaymentPasswordDrawer({
                 <PasswordField
                     sx={{ mt: 2 }}
                     fullWidth
+                    autoFocus
                     placeholder={t('popups_wallet_old_payment_password')}
                     error={!!originalPasswordWrong}
                     value={oldPassword}
@@ -82,10 +92,7 @@ function ChangePaymentPasswordDrawer({
                         setOriginalPasswordWrong('')
                         setPasswordTooShort('')
                     }}
-                    InputProps={{
-                        endAdornment: null,
-                        disableUnderline: true,
-                    }}
+                    InputProps={inputProps}
                 />
                 <PasswordField
                     sx={{ mt: 2 }}
@@ -98,10 +105,7 @@ function ChangePaymentPasswordDrawer({
                         setPasswordNotMatch('')
                         setPasswordTooShort('')
                     }}
-                    InputProps={{
-                        endAdornment: null,
-                        disableUnderline: true,
-                    }}
+                    InputProps={inputProps}
                 />
                 <PasswordField
                     sx={{ mt: 2 }}
@@ -114,10 +118,7 @@ function ChangePaymentPasswordDrawer({
                         setPasswordNotMatch('')
                         setPasswordTooShort('')
                     }}
-                    InputProps={{
-                        endAdornment: null,
-                        disableUnderline: true,
-                    }}
+                    InputProps={inputProps}
                 />
             </Box>
             <Typography fontSize={14} color={theme.palette.maskColor.danger} mt={1.5} height={32}>
