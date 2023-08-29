@@ -298,6 +298,8 @@ export interface Token<ChainId, SchemaType> {
     type: TokenType
     schema: SchemaType
     address: string
+    /** Added by user */
+    isCustomToken?: boolean
 }
 
 export interface FungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {

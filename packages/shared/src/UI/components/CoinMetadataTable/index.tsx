@@ -84,7 +84,7 @@ const brands: Record<TrendingAPI.CommunityType, React.ReactNode> = {
     instagram: <Icons.Instagram size={16} />,
     medium: <Icons.Medium size={16} />,
     reddit: <Icons.RedditRound size={16} />,
-    telegram: <Icons.TelegramRound size={16} />,
+    telegram: <Icons.TelegramRoundGray size={16} />,
     twitter: <Icons.TwitterXRound size={16} />,
     youtube: <Icons.YouTube size={16} />,
     other: null,

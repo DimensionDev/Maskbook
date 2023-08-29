@@ -8,7 +8,7 @@ import {
     formatBalance,
 } from '@masknet/web3-shared-base'
 import { createIndicator, createPageable, EMPTY_LIST } from '@masknet/shared-base'
-import { ChainId, getEthereumConstant, type SchemaType } from '@masknet/web3-shared-evm'
+import { type ChainId, getEthereumConstant, type SchemaType } from '@masknet/web3-shared-evm'
 import { ContractReadonlyAPI } from './ContractReadonlyAPI.js'
 import { CoinGeckoPriceAPI_EVM } from '../../../CoinGecko/index.js'
 import type { HubOptions } from '../types/index.js'
@@ -52,7 +52,7 @@ export class FungibleTokenAPI implements FungibleTokenBaseAPI.Provider<ChainId, 
     ) {
         if (!trustedFungibleTokens) return createPageable(EMPTY_LIST, createIndicator(options?.indicator))
 
-        const chains = uniq(trustedFungibleTokens?.map((x) => x.chainId)) ?? [ChainId.Mainnet]
+        const chains = uniq(trustedFungibleTokens.map((x) => x.chainId))
         let result: Array<FungibleAsset<ChainId, SchemaType>> = EMPTY_LIST
 
         for (const chainId of chains) {
@@ -60,12 +60,15 @@ export class FungibleTokenAPI implements FungibleTokenBaseAPI.Provider<ChainId, 
             if (!contract) return createPageable(EMPTY_LIST, createIndicator(options?.indicator))
 
             const balances = await contract.methods
-                .balances([address], trustedFungibleTokens?.map((x) => x.address) ?? [])
+                .balances(
+                    [address],
+                    trustedFungibleTokens.map((x) => x.address),
+                )
                 .call()
 
             const requests = balances
                 .map((x, i) => {
-                    if (!trustedFungibleTokens?.[i]) return
+                    if (!trustedFungibleTokens[i]) return
                     return this.createAssets(trustedFungibleTokens[i], chainId, Number.parseInt(x, 10))
                 })
                 .filter(Boolean)
