@@ -28,7 +28,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     tabPanel: {
         padding: 0,
-        height: 508,
+        overflow: 'auto',
     },
     uploadBox: {
         background: theme.palette.maskColor.whiteBlue,
@@ -213,7 +213,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
     }
 
     return (
-        <Box flex={1}>
+        <Box flex={1} display="flex" flexDirection="column" overflow="auto" data-hide-scrollbar>
             <TabContext value={currentTab}>
                 <NormalHeader
                     tabList={
