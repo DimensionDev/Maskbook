@@ -33,7 +33,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { BottomDrawer } from '../../components/index.js'
 import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
-import { useGasRatio } from '../../hook/useGasRatio.js'
+import { useGasRatio } from '../../hooks/useGasRatio.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
