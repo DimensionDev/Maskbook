@@ -1,8 +1,8 @@
 import { useAsync } from 'react-use'
 import { useContainer } from 'unstated-next'
-import { PopupContext } from './usePopupContext.js'
 import { DepositPaymaster } from '@masknet/web3-providers'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { PopupContext } from './usePopupContext.js'
 
 export function useGasRatio(paymentToken?: string) {
     const { smartPayChainId } = useContainer(PopupContext)
