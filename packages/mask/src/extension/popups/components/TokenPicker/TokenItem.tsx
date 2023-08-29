@@ -15,7 +15,7 @@ import {
     useForkRef,
 } from '@mui/material'
 import { memo, useEffect, useMemo, useRef } from 'react'
-import { formatTokenBalance } from '../../../../utils/index.js'
+import { formatTokenBalance, useI18N } from '../../../../utils/index.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useEverSeen } from '@masknet/shared-base-ui'
 import type { ChainId } from '@masknet/web3-shared-evm'
@@ -23,7 +23,6 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 const useStyles = makeStyles()((theme) => {
     return {
         item: {
-            height: 60,
             padding: theme.spacing(1, 1.5),
             boxSizing: 'border-box',
             borderRadius: 8,
@@ -90,6 +89,7 @@ export const TokenItem = memo(function TokenItem({
     ...rest
 }: TokenItemProps) {
     const { classes, cx } = useStyles()
+    const { t } = useI18N()
 
     const Others = useWeb3Others()
     const explorerLink = useMemo(() => {
@@ -161,18 +161,22 @@ export const TokenItem = memo(function TokenItem({
             </ListItemIcon>
             <ListItemText
                 className={classes.listText}
+                secondaryTypographyProps={{ component: 'div' }}
                 secondary={
-                    <Typography className={classes.name}>
-                        {asset.name}
-                        <Link
-                            onClick={(event) => event.stopPropagation()}
-                            href={explorerLink}
-                            className={classes.link}
-                            target="_blank"
-                            rel="noopener noreferrer">
-                            <Icons.LinkOut size={18} />
-                        </Link>
-                    </Typography>
+                    <>
+                        <Typography className={classes.name}>
+                            {asset.name}
+                            <Link
+                                onClick={(event) => event.stopPropagation()}
+                                href={explorerLink}
+                                className={classes.link}
+                                target="_blank"
+                                rel="noopener noreferrer">
+                                <Icons.LinkOut size={18} />
+                            </Link>
+                        </Typography>
+                        {asset.isCustomToken ? <Typography>{t('added_by_user')}</Typography> : null}
+                    </>
                 }>
                 <Typography className={classes.text}>{asset.symbol}</Typography>
             </ListItemText>

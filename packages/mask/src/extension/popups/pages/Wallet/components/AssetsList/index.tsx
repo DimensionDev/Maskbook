@@ -10,7 +10,7 @@ import { range } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
-import { formatTokenBalance } from '../../../../../../utils/index.js'
+import { formatTokenBalance, useI18N } from '../../../../../../utils/index.js'
 import { useAssetExpand, useWalletAssets } from '../../hooks/index.js'
 import { MoreBar } from './MoreBar.js'
 
@@ -62,6 +62,12 @@ const useStyles = makeStyles()((theme) => ({
         textOverflow: 'ellipsis',
         overflow: 'hidden',
     },
+    customToken: {
+        color: theme.palette.maskColor.third,
+        fontSize: 13,
+        fontWeight: 400,
+        lineHeight: '18px',
+    },
     value: {
         fontSize: 16,
         fontWeight: 700,
@@ -81,6 +87,7 @@ interface AssetItemProps extends ListItemProps {
 
 const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: AssetItemProps) {
     const { classes, cx } = useStyles()
+    const { t } = useI18N()
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
     const network = networks.find((x) => x.chainId === asset.chainId)
     const providerURL = network?.isCustomized ? network.rpcUrl : undefined
@@ -142,11 +149,16 @@ const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: Asset
                 className={classes.text}
                 secondaryTypographyProps={{ component: 'div' }}
                 secondary={
-                    <TextOverflowTooltip title={`${balance.value} ${asset.symbol}`}>
-                        <ProgressiveText className={classes.balance} loading={balance.pending} skeletonWidth={60}>
-                            {balance.value} {asset.symbol}
-                        </ProgressiveText>
-                    </TextOverflowTooltip>
+                    <>
+                        <TextOverflowTooltip title={`${balance.value} ${asset.symbol}`}>
+                            <ProgressiveText className={classes.balance} loading={balance.pending} skeletonWidth={60}>
+                                {balance.value} {asset.symbol}
+                            </ProgressiveText>
+                        </TextOverflowTooltip>
+                        {asset.isCustomToken ? (
+                            <Typography className={classes.customToken}>{t('added_by_user')}</Typography>
+                        ) : null}
+                    </>
                 }>
                 <TextOverflowTooltip title={asset.name}>
                     <Typography className={classes.name}>{asset.name}</Typography>
