@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, useTransition } from 'react'
+import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 import { uniqBy } from 'lodash-es'
 import { EMPTY_LIST, EMPTY_OBJECT, type NetworkPluginID } from '@masknet/shared-base'
 import { SearchableList, makeStyles, type MaskFixedSizeListProps, type MaskTextFieldProps } from '@masknet/theme'
@@ -236,7 +236,6 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
     // #region add token by address
     const [keyword, setKeyword] = useState('')
-    const [searchError, setSearchError] = useState<string>()
 
     const { value: addressType } = useAddressType(pluginID, !Others.isValidAddress?.(keyword ?? '') ? '' : keyword, {
         chainId,
@@ -245,27 +244,17 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     const isAddressNotContract = addressType !== AddressType.Contract && Others.isValidAddress(keyword)
 
     const searchedTokenAddress = useMemo(() => {
-        if (!keyword) {
-            setSearchError(undefined)
-            onSearchError?.(false)
-            return
-        }
-
-        if (
-            (keyword.startsWith('0x') || keyword.startsWith('0X')) &&
-            keyword.length > 3 &&
-            !Others.isValidAddress(keyword)
-        ) {
-            onSearchError?.(true)
-            setSearchError(t.erc20_search_wrong_address())
-            return
-        }
+        if (!keyword) return
 
         return Others.isValidAddress(keyword) &&
             !sortedFungibleTokensForList.some((x) => isSameAddress(x.address, keyword))
             ? keyword
             : ''
     }, [keyword, sortedFungibleTokensForList])
+    const searchError = keyword.match(/^0x.+/i) && !Others.isValidAddress(keyword) ? t.erc20_search_wrong_address() : ''
+    useEffect(() => {
+        onSearchError?.(!!searchError)
+    }, [searchError, !searchError])
 
     const { data: searchedToken } = useFungibleToken(pluginID, searchedTokenAddress, undefined, {
         chainId,
