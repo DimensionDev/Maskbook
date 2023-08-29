@@ -57,7 +57,7 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
 
             const list = unionWith(
                 assets,
-                trustedAssets,
+                trustedAssets.map((x) => ({ ...x, isCustomToken: true })),
                 (a, z) => isSameAddress(a.address, z.address) && a.chainId === z.chainId,
             )
             return list.filter((x) => networkIds.includes(x.chainId))
