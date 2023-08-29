@@ -13,101 +13,116 @@ import { useMarkdownStyles } from './useMarkdownStyles.js'
 import { Icons } from '@masknet/icons'
 import Linkify from 'linkify-react'
 
-const useStyles = makeStyles<void, 'title' | 'image' | 'content' | 'info' | 'body' | 'center' | 'playButton'>()(
-    (theme, _, refs) => ({
-        summary: {
-            color: theme.palette.maskColor.third,
+const useStyles = makeStyles<
+    void,
+    'title' | 'image' | 'content' | 'info' | 'body' | 'center' | 'playButton' | 'failedImage'
+>()((theme, _, refs) => ({
+    summary: {
+        color: theme.palette.maskColor.third,
+    },
+    title: {
+        fontWeight: 700,
+        marginTop: theme.spacing(1),
+        color: theme.palette.maskColor.main,
+    },
+    info: {},
+    center: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    failedImage: {},
+    soloImage: {
+        // If only single image, place it center
+        marginTop: theme.spacing(5),
+        [`&.${refs.image}`]: {
+            marginTop: theme.spacing(5),
         },
-        title: {
-            fontWeight: 700,
-            marginTop: theme.spacing(1),
-            color: theme.palette.maskColor.main,
+    },
+    image: {
+        [`& + .${refs.info}`]: {
+            marginLeft: theme.spacing(1.5),
         },
-        info: {},
-        center: {
-            display: 'flex',
-            alignItems: 'center',
+        img: {
+            objectFit: 'cover',
         },
-        image: {
-            [`& + .${refs.info}`]: {
-                marginLeft: theme.spacing(1.5),
-            },
-            img: {
-                objectFit: 'cover',
-            },
+    },
+    playButton: {
+        color: theme.palette.maskColor.main,
+        width: 64,
+        height: 64,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0,
+        backgroundColor: theme.palette.maskColor.bg,
+        [`& + .${refs.info}`]: {
+            marginLeft: theme.spacing(1.5),
         },
-        playButton: {
-            color: theme.palette.maskColor.main,
+    },
+    body: {
+        display: 'flex',
+        flexDirection: 'row',
+        marginTop: theme.spacing(0.5),
+        [`.${refs.image}`]: {
             width: 64,
-            height: 64,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-            backgroundColor: theme.palette.maskColor.bg,
-            [`& + .${refs.info}`]: {
-                marginLeft: theme.spacing(1.5),
-            },
-        },
-        body: {
-            display: 'flex',
-            flexDirection: 'row',
-            marginTop: theme.spacing(0.5),
-            [`.${refs.image}`]: {
-                width: 64,
-                aspectRatio: '1 / 1',
-                borderRadius: 8,
-                overflow: 'hidden',
-                flexShrink: 0,
-            },
-        },
-        content: {
-            marginTop: theme.spacing(1),
-            fontSize: 14,
-            color: theme.palette.maskColor.main,
-            lineHeight: '18px',
-            maxHeight: 80,
+            aspectRatio: '1 / 1',
+            borderRadius: 8,
             overflow: 'hidden',
-            display: '-webkit-box',
-            WebkitBoxOrient: 'vertical',
-            WebkitLineClamp: 3,
-            wordBreak: 'break-all',
+            flexShrink: 0,
         },
-        verbose: {
-            [`.${refs.title}`]: {
-                lineHeight: '18px',
-                marginBottom: theme.spacing(1.5),
-            },
-            [`.${refs.body}`]: {
-                display: 'block',
-            },
-            [`.${refs.content}`]: {
-                display: 'block',
-                maxHeight: 'none',
-                overflow: 'unset',
-            },
-            [`.${refs.image}`]: {
-                width: 552,
+    },
+    content: {
+        marginTop: theme.spacing(1),
+        fontSize: 14,
+        color: theme.palette.maskColor.main,
+        lineHeight: '18px',
+        maxHeight: 80,
+        overflow: 'hidden',
+        display: '-webkit-box',
+        WebkitBoxOrient: 'vertical',
+        WebkitLineClamp: 3,
+        wordBreak: 'break-all',
+    },
+    verbose: {
+        [`.${refs.title}`]: {
+            lineHeight: '18px',
+            marginBottom: theme.spacing(1.5),
+        },
+        [`.${refs.body}`]: {
+            display: 'block',
+        },
+        [`.${refs.content}`]: {
+            display: 'block',
+            maxHeight: 'none',
+            overflow: 'unset',
+        },
+        [`.${refs.image}`]: {
+            width: 552,
+            marginTop: theme.spacing(1.5),
+            [`& + .${refs.info}`]: {
                 marginTop: theme.spacing(1.5),
-                [`& + .${refs.info}`]: {
-                    marginTop: theme.spacing(1.5),
-                    marginLeft: 0,
-                },
-                aspectRatio: 'auto',
-                img: {
-                    objectFit: 'unset',
-                },
-            },
-            [`.${refs.info}`]: {
                 marginLeft: 0,
             },
-            [`.${refs.playButton}`]: {
-                marginLeft: 'auto',
-                marginRight: 'auto',
+            aspectRatio: 'auto',
+            img: {
+                objectFit: 'unset',
             },
         },
-    }),
-)
+        [`.${refs.image}.${refs.failedImage}`]: {
+            height: 100,
+            width: 100,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+        [`.${refs.info}`]: {
+            marginLeft: 0,
+        },
+        [`.${refs.playButton}`]: {
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+    },
+}))
 
 const { Tag, Type } = RSS3BaseAPI
 export function isNoteFeed(feed: RSS3BaseAPI.Web3Feed): feed is RSS3BaseAPI.NoteFeed {
@@ -176,6 +191,10 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
     const media = metadata?.media?.[0]
     // Image post on Forcaster
     const isImagePost = metadata?.body ? /https?:\/\/.*?\.(jpg|png)$/.test(metadata.body) : false
+    const soloImage = rest.verbose && isImagePost
+    if (rest.verbose) {
+        console.log({ soloImage, isImagePost, body: metadata?.body })
+    }
 
     return (
         <CardFrame
@@ -198,7 +217,10 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
             <div className={classes.body}>
                 {media?.mime_type.startsWith('image/') || isImagePost ? (
                     <Image
-                        classes={{ container: classes.image }}
+                        classes={{
+                            container: cx(classes.image, soloImage ? classes.soloImage : undefined),
+                            failed: classes.failedImage,
+                        }}
                         src={isImagePost ? metadata!.body : resolveResourceURL(media!.address)}
                         height={imageSize}
                         width={imageSize}
