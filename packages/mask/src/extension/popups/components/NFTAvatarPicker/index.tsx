@@ -13,6 +13,19 @@ import { useModalNavigate } from '../index.js'
 import { Flags } from '@masknet/flags'
 
 const useStyles = makeStyles()((theme) => ({
+    picker: {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'auto',
+    },
+    container: {
+        overflow: 'auto',
+        paddingBottom: 80,
+    },
+    collectionList: {
+        paddingTop: 0,
+    },
     bottomBar: {
         position: 'fixed',
         bottom: 0,
@@ -25,11 +38,6 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         height: 72,
         maxHeight: 72,
-    },
-    container: {
-        maxHeight: 446,
-        overflow: 'scroll',
-        paddingBottom: 80,
     },
 }))
 
@@ -62,9 +70,7 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
         loading,
     } = useNonFungibleAssets(pluginID, undefined, { chainId, account })
 
-    const tokens = useMemo(() => {
-        return uniqBy(assets, (x) => x.contract?.address.toLowerCase() + x.tokenId).filter((x) => x.chainId === chainId)
-    }, [assets, chainId])
+    const tokens = useMemo(() => uniqBy(assets, (x) => x.contract?.address.toLowerCase() + x.tokenId), [assets])
 
     const handleChangeWallet = useCallback(() => modalNavigate(PopupModalRoutes.SelectProvider, { onlyMask: true }), [])
 
@@ -75,12 +81,13 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
     }, [])
 
     return (
-        <Box maxHeight={508}>
-            <Box height={62}>
+        <Box className={classes.picker}>
+            <Box height={62} flexShrink={0}>
                 <NetworkTab chains={chains} pluginID={pluginID} />
             </Box>
-            <Box className={classes.container}>
+            <Box className={classes.container} data-hide-scrollbar>
                 <CollectionList
+                    className={classes.collectionList}
                     tokens={tokens}
                     loading={loading}
                     account={account}
@@ -89,10 +96,12 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
                 />
                 {error && !done && tokens.length ? (
                     <Stack py={1} style={{ gridColumnStart: 1, gridColumnEnd: 6 }}>
-                        <RetryHint hint={false} retry={next} />
+                        <RetryHint hint={false} retry={retry} />
                     </Stack>
                 ) : null}
-                <ElementAnchor callback={next}>{!done && tokens.length !== 0 && <LoadingBase />}</ElementAnchor>
+                <ElementAnchor key={tokens.length} callback={next}>
+                    {!done && tokens.length !== 0 && <LoadingBase />}
+                </ElementAnchor>
             </Box>
             <Box>
                 <PluginVerifiedWalletStatusBar

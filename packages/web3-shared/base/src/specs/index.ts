@@ -293,6 +293,7 @@ export interface ProviderDescriptor<ChainId, ProviderType> {
 }
 
 export interface Token<ChainId, SchemaType> {
+    /** For NFT, it could be `${chainId}.${contractAddress}.${tokenId}` */
     id: string
     chainId: ChainId
     type: TokenType
