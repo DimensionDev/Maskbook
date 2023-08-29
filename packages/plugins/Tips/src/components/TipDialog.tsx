@@ -130,7 +130,8 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
             amount,
             tokenType: tipType,
             token,
-
+            nonFungibleTokenId,
+            nonFungibleTokenAddress,
             messageTextForNFT: t.send_specific_tip_successfully({
                 amount: '1',
                 name: nonFungibleToken?.contract?.name || 'NFT',
