@@ -19,15 +19,15 @@ const useStyles = makeStyles()((theme) => ({
     },
     content: {
         background: theme.palette.maskColor.bottom,
-        minWidth: 'clamp(720px, 66.6667%, 720px)',
-        boxSizing: 'content-box',
+        minWidth: 'clamp(720px, 66.6667%, 66.666%)',
         paddingTop: '12.5vh',
         paddingBottom: '12.5vh',
         paddingRight: theme.spacing(8),
         display: 'flex',
         flexDirection: 'column',
+        marginRight: 'auto',
         [theme.breakpoints.up('lg')]: {
-            paddingLeft: '20%',
+            paddingLeft: 'clamp(40px, calc(66.6667% - 720px), 20%)',
         },
         [theme.breakpoints.down('lg')]: {
             paddingLeft: 40,
