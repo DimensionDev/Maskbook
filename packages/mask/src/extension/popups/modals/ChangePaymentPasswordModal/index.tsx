@@ -67,7 +67,7 @@ function ChangePaymentPasswordDrawer({
         disableUnderline: true,
         autoFocus: true,
         inputProps: {
-            maxLength: 18,
+            maxLength: 20,
         },
     }
     return (
