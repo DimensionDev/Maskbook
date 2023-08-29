@@ -112,7 +112,7 @@ importers:
     dependencies:
       '@dimensiondev/holoflows-kit':
         specifier: 0.9.0-20230307045856-46252fb
-        version: 0.9.0-20230307045856-46252fb(@types/webextension-polyfill@0.10.1)
+        version: 0.9.0-20230307045856-46252fb
       '@emotion/cache':
         specifier: 11.10.3
         version: 11.10.3(patch_hash=anquw7u43yedhv6g6kmhzkdhze)
@@ -844,7 +844,7 @@ importers:
     dependencies:
       '@dimensiondev/holoflows-kit':
         specifier: 0.9.0-20230307045856-46252fb
-        version: 0.9.0-20230307045856-46252fb(@types/webextension-polyfill@0.10.1)
+        version: 0.9.0-20230307045856-46252fb
       urlcat:
         specifier: ^3.1.0
         version: 3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e)
@@ -7857,7 +7857,7 @@ packages:
       '@msgpack/msgpack': 1.12.2
     dev: false
 
-  /@dimensiondev/holoflows-kit@0.9.0-20230307045856-46252fb(@types/webextension-polyfill@0.10.1):
+  /@dimensiondev/holoflows-kit@0.9.0-20230307045856-46252fb:
     resolution: {integrity: sha512-SprqopLhwmps3Zjrr/fsl+kPmYv6hEc9gZvF3EDtr4v2D2zj1PUkUwktku7fBgzvidivOxyarsLGgGorzhsK6Q==, tarball: https://npm.pkg.github.com/download/@DimensionDev/holoflows-kit/0.9.0-20230307045856-46252fb/70734fddff9acedef83c8f3925fd0ae615c00be7}
     peerDependencies:
       '@types/webextension-polyfill': ^0.10.0
@@ -7866,7 +7866,6 @@ packages:
         optional: true
     dependencies:
       '@servie/events': 3.0.0
-      '@types/webextension-polyfill': 0.10.1
       event-iterator: 2.0.0
       lodash-es: 4.17.21
       tslib: 2.6.0
