@@ -3,22 +3,15 @@ import { Box, ListItem, Typography, useTheme } from '@mui/material'
 import { useI18N } from '../../../../../utils/index.js'
 import { useStyles } from './useStyles.js'
 import { useNavigate } from 'react-router-dom'
-import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
-import { useQuery } from '@tanstack/react-query'
-import { useWallet } from '@masknet/web3-hooks-base'
-import Services from '../../../../service.js'
+import { PopupRoutes } from '@masknet/shared-base'
+import { useConnectedSites } from '../../../hooks/useConnectedSites.js'
 
 export function ConnectedSites() {
     const { t } = useI18N()
     const theme = useTheme()
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const { data: sites } = useQuery(
-        ['connectedSites', wallet?.address],
-        async () => await Services.Wallet.getConnectedSites(),
-        { enabled: !!wallet?.address },
-    )
+    const { data: sites } = useConnectedSites()
 
     return (
         <ListItem className={classes.item} onClick={() => navigate(PopupRoutes.ConnectedSites)}>

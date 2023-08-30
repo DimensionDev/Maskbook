@@ -7,12 +7,14 @@ import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { useWallet } from '@masknet/web3-hooks-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { useMutation } from '@tanstack/react-query'
+import { getEnumAsArray } from '@masknet/kit'
+import { isEqual } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
         width: '100%',
         height: '100%',
-        background: theme.palette.maskColor.mask,
+        background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.40) 0%, rgba(0, 0, 0, 0.40) 100%), rgba(28, 104, 243, 0.20)',
         backdropFilter: 'blur(5px)',
         position: 'absolute',
         top: 0,
@@ -97,15 +99,6 @@ interface DisconnectModalProps {
     setOpen: (open: boolean) => void
 }
 
-const stringToEnum: Record<string, EnhanceableSite> = {
-    'twitter.com': EnhanceableSite.Twitter,
-    'facebook.com': EnhanceableSite.Facebook,
-    'minds.com': EnhanceableSite.Minds,
-    'instagram.com': EnhanceableSite.Instagram,
-    'opensea.io': EnhanceableSite.OpenSea,
-    'mirror.xyz': EnhanceableSite.Mirror,
-}
-
 const DisconnectModal = memo(function DisconnectModal({ site, setOpen }: DisconnectModalProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
@@ -113,7 +106,8 @@ const DisconnectModal = memo(function DisconnectModal({ site, setOpen }: Disconn
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const handleDisconnect = useCallback(async () => {
         if (!site) return
-        await Services.Wallet.recordConnectedSites(stringToEnum[site], false)
+        if (!getEnumAsArray(EnhanceableSite).some((x) => isEqual(x.key, site))) return
+        await Services.Wallet.recordConnectedSites(site as EnhanceableSite, false)
     }, [site, wallet])
     const { mutate: onDisconnect } = useMutation({
         mutationFn: handleDisconnect,

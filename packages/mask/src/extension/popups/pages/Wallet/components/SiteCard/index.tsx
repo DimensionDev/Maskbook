@@ -1,9 +1,11 @@
-import { memo, useState, type ReactNode } from 'react'
+import { memo, useState, useMemo } from 'react'
 import { useI18N } from '../../../../../../utils/i18n-next-ui.js'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import DisconnectModal from '../DisconnectModal/index.js'
+import { SOCIAL_MEDIA_ROUND_ICON_MAPPING } from '@masknet/shared'
+import { SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -43,34 +45,16 @@ interface SiteCardProps {
     site: string
 }
 
-const siteMap: Record<string, { icon: ReactNode; name: string }> = {
-    'twitter.com': {
-        icon: <Icons.TwitterX />,
-        name: 'Twitter',
-    },
-    'facebook.com': {
-        icon: <Icons.Facebook />,
-        name: 'Facebook',
-    },
-    'minds.com': {
-        icon: <Icons.Minds />,
-        name: 'Minds',
-    },
-    'instagram.com': {
-        icon: <Icons.Instagram />,
-        name: 'Instagram',
-    },
-}
-
 const SiteCard = memo(function SiteCard({ site }: SiteCardProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [open, setOpen] = useState(false)
+    const Icon = useMemo(() => SOCIAL_MEDIA_ROUND_ICON_MAPPING[site], [site])
     return (
         <Box className={classes.container}>
-            {siteMap[site].icon}
+            <Icon size={24} />
             <Box className={classes.site}>
-                <Typography className={classes.siteName}>{siteMap[site].name}</Typography>
+                <Typography className={classes.siteName}>{SOCIAL_MEDIA_NAME[site]}</Typography>
                 <Typography className={classes.siteUrl}>{site}</Typography>
             </Box>
             <button className={classes.button} onClick={() => setOpen(true)} type="button">

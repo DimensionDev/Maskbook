@@ -1,13 +1,10 @@
 import { memo } from 'react'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { useTitle } from '../../../hooks/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import SiteCard from '../components/SiteCard/index.js'
-import { useQuery } from '@tanstack/react-query'
-import Services from '../../../../service.js'
-import { useWallet } from '@masknet/web3-hooks-base'
+import { useConnectedSites } from '../../../hooks/useConnectedSites.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -36,12 +33,7 @@ const ConnectedSites = memo(function ConnectedSites() {
     const { t } = useI18N()
     const { classes } = useStyles()
     useTitle(t('popups_wallet_connected_sites'))
-    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const { data: sites } = useQuery(
-        ['connectedSites', wallet?.address],
-        async () => await Services.Wallet.getConnectedSites(),
-        { enabled: !!wallet?.address },
-    )
+    const { data: sites } = useConnectedSites()
     return (
         <Box className={classes.container}>
             <Typography className={classes.desc}>{t('popups_wallet_connected_sites_description')}</Typography>
