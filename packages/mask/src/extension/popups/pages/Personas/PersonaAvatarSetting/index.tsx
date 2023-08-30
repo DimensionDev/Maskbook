@@ -84,7 +84,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
 
     const { proofs, currentPersona } = PersonaContext.useContainer()
 
-    const { data: bindingWallets } = useVerifiedWallets(proofs)
+    const bindingWallets = useVerifiedWallets(proofs)
 
     const inputRef = useRef<HTMLInputElement>(null)
     const [file, setFile] = useState<File | string | null>()
@@ -108,7 +108,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
 
     const handleChangeTab = useCallback(
         (event: unknown, value: any) => {
-            if (value === ProfilePhotoType.NFT && !bindingWallets?.length && !account) {
+            if (value === ProfilePhotoType.NFT && !bindingWallets.length && !account) {
                 modalNavigate(PopupModalRoutes.SelectProvider, { onlyMask: true })
                 return
             }
@@ -127,7 +127,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
                     updateAt: Date.now(),
                 }
                 // Verify Wallet sign with persona
-                if (bindingWallets?.some((x) => isSameAddress(x.identity, account))) {
+                if (bindingWallets.some((x) => isSameAddress(x.identity, account))) {
                     sign = await Services.Identity.signWithPersona(
                         SignType.Message,
                         JSON.stringify(data),

@@ -1,19 +1,21 @@
+import { Icons } from '@masknet/icons'
+import { FormattedAddress, ImageIcon, PersonaContext, ProgressiveText } from '@masknet/shared'
+import { MaskMessages, NetworkPluginID, NextIDAction, PopupModalRoutes, SignType } from '@masknet/shared-base'
+import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { useChainContext, useNetworkDescriptor, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
+import { ExplorerResolver, NextIDProof } from '@masknet/web3-providers'
+import { isSameAddress, resolveNextIDPlatformWalletName } from '@masknet/web3-shared-base'
+import { ChainId, formatDomainName, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { Box, Link, Typography, useTheme } from '@mui/material'
+import { useQueries } from '@tanstack/react-query'
 import { memo, useCallback } from 'react'
 import { Trans } from 'react-i18next'
-import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
-import { Box, Link, Typography, useTheme } from '@mui/material'
-import type { ConnectedWalletInfo } from '../../pages/Personas/type.js'
-import { MaskMessages, NetworkPluginID, NextIDAction, PopupModalRoutes, SignType } from '@masknet/shared-base'
-import { useChainContext, useNetworkDescriptor } from '@masknet/web3-hooks-base'
-import { FormattedAddress, ImageIcon, PersonaContext } from '@masknet/shared'
-import { ChainId, formatDomainName, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { Icons } from '@masknet/icons'
-import { ExplorerResolver, NextIDProof } from '@masknet/web3-providers'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
-import { DisconnectModal } from '../../modals/modals.js'
 import Services from '../../../service.js'
-import { useModalNavigate } from '../index.js'
-import { SelectProvider } from '../SelectProvider/index.js'
+import { DisconnectModal } from '../../modals/modals.js'
+import type { ConnectedWalletInfo } from '../../pages/Personas/type.js'
+import { useModalNavigate } from '../ActionModal/index.js'
+import { useVerifiedWallets } from '../../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     walletList: {
@@ -72,19 +74,31 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ConnectedWalletProps {
-    wallets?: ConnectedWalletInfo[]
-}
-
-export const ConnectedWallet = memo<ConnectedWalletProps>(function ConnectedWallet({ wallets }) {
+export const ConnectedWallet = memo(function ConnectedWallet() {
     const { t } = useI18N()
     const theme = useTheme()
     const { classes } = useStyles()
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const localWallets = useWallets()
     const { showSnackbar } = usePopupCustomSnackbar()
-    const { currentPersona } = PersonaContext.useContainer()
+    const { currentPersona, proofs } = PersonaContext.useContainer()
     const modalNavigate = useModalNavigate()
+    const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const wallets = useVerifiedWallets(proofs)
+
+    const queries = useQueries({
+        queries: wallets.map((wallet, index) => ({
+            enabled: !!NameService,
+            queryKey: ['persona-connected-wallet', wallet.identity, index],
+            queryFn: async () => {
+                const domain = await NameService?.reverse?.(wallet.identity)
+                if (domain) return domain
+                const localWallet = localWallets.find((x) => isSameAddress(x.address, wallet.identity))?.name
+                return localWallet || null
+            },
+        })),
+    })
 
     // TODO: remove this after next dot id support multiple chain
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Mainnet)
@@ -133,60 +147,68 @@ export const ConnectedWallet = memo<ConnectedWalletProps>(function ConnectedWall
         [currentPersona],
     )
 
-    if (!wallets?.length) {
-        return <SelectProvider />
-    }
-
     return (
         <Box className={classes.walletList}>
-            {wallets.map((wallet, index) => (
-                <Box className={classes.wallet} key={index}>
-                    <Box display="flex" alignItems="center">
-                        <ImageIcon size={24} icon={networkDescriptor?.icon} className={classes.walletIcon} />
-                        <Typography className={classes.walletInfo} component="div">
-                            <Typography className={classes.walletName} component="span">
-                                {formatDomainName(wallet.name, 13)}
-                            </Typography>
+            {wallets.map((wallet, index) => {
+                const query = queries[index]
+                let walletName = query.data || ''
+                if (!walletName && !query.isLoading) {
+                    walletName = `${resolveNextIDPlatformWalletName(wallet.platform)} ${wallets.length - index}`
+                }
+                return (
+                    <Box className={classes.wallet} key={index}>
+                        <Box display="flex" alignItems="center">
+                            <ImageIcon size={24} icon={networkDescriptor?.icon} className={classes.walletIcon} />
+                            <Typography className={classes.walletInfo} component="div">
+                                <ProgressiveText
+                                    className={classes.walletName}
+                                    component="span"
+                                    skeletonWidth={60}
+                                    skeletonHeight={16}
+                                    loading={query.isLoading}>
+                                    {formatDomainName(walletName, 13)}
+                                </ProgressiveText>
 
-                            <Typography component="span" className={classes.address}>
-                                <FormattedAddress
-                                    address={wallet.identity}
-                                    size={4}
-                                    formatter={formatEthereumAddress}
-                                />
-                                <Link
-                                    style={{ width: 14, height: 14, color: theme.palette.maskColor.main }}
-                                    href={ExplorerResolver.addressLink(chainId, wallet.identity ?? '')}
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    <Icons.LinkOut size={14} sx={{ ml: 0.25 }} />
-                                </Link>
-                            </Typography>
-                        </Typography>
-                    </Box>
-                    <Icons.Disconnect
-                        size={16}
-                        onClick={async () => {
-                            if (!currentPersona) return
-                            const confirmed = await DisconnectModal.openAndWaitForClose({
-                                title: t('popups_release_bind_wallet_title'),
-                                tips: (
-                                    <Trans
-                                        i18nKey="popups_wallet_disconnect_tips"
-                                        components={{
-                                            strong: <strong style={{ color: theme.palette.maskColor.main }} />,
-                                        }}
-                                        values={{
-                                            wallet: formatEthereumAddress(wallet.identity, 4),
-                                        }}
+                                <Typography component="span" className={classes.address}>
+                                    <FormattedAddress
+                                        address={wallet.identity}
+                                        size={4}
+                                        formatter={formatEthereumAddress}
                                     />
-                                ),
-                            })
-                            if (confirmed) return handleConfirmRelease(wallet)
-                        }}
-                    />
-                </Box>
-            ))}
+                                    <Link
+                                        style={{ width: 14, height: 14, color: theme.palette.maskColor.main }}
+                                        href={ExplorerResolver.addressLink(chainId, wallet.identity ?? '')}
+                                        target="_blank"
+                                        rel="noopener noreferrer">
+                                        <Icons.LinkOut size={14} sx={{ ml: 0.25 }} />
+                                    </Link>
+                                </Typography>
+                            </Typography>
+                        </Box>
+                        <Icons.Disconnect
+                            size={16}
+                            onClick={async () => {
+                                if (!currentPersona) return
+                                const confirmed = await DisconnectModal.openAndWaitForClose({
+                                    title: t('popups_release_bind_wallet_title'),
+                                    tips: (
+                                        <Trans
+                                            i18nKey="popups_wallet_disconnect_tips"
+                                            components={{
+                                                strong: <strong style={{ color: theme.palette.maskColor.main }} />,
+                                            }}
+                                            values={{
+                                                wallet: formatEthereumAddress(wallet.identity, 4),
+                                            }}
+                                        />
+                                    ),
+                                })
+                                if (confirmed) return handleConfirmRelease(wallet)
+                            }}
+                        />
+                    </Box>
+                )
+            })}
             <Box className={classes.connect} onClick={() => modalNavigate(PopupModalRoutes.SelectProvider)}>
                 <Icons.Connect size={16} />
                 <Typography fontSize={12} fontWeight={700} lineHeight="16px">
