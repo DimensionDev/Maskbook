@@ -5,7 +5,7 @@
 
 import { AsyncCall, AsyncGeneratorCall } from 'async-call-rpc/full'
 import { assertEnvironment, Environment, MessageTarget, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import { getLocalImplementation, serializer } from '@masknet/shared-base'
+import { getLocalImplementation, serializer, setDebugObject } from '@masknet/shared-base'
 import type { GeneratorServices, Services } from './types.js'
 // #endregion
 
@@ -26,6 +26,8 @@ setup('SiteAdaptor', () => import(/* webpackPreload: true */ './site-adaptors/in
 setup('Settings', () => import(/* webpackPreload: true */ './settings/index.js'), false)
 setup('ThirdPartyPlugin', () => import(/* webpackPreload: true */ './third-party-plugins/index.js'))
 setup('Wallet', () => import(/* webpackPreload: true */ './wallet/services/index.js'))
+const DebugService = Object.create(null)
+setDebugObject('Service', DebugService)
 
 if (import.meta.webpackHot) {
     import.meta.webpackHot.accept(['./crypto'], () => hmr.dispatchEvent(new Event('crypto')))
@@ -43,9 +45,7 @@ function setup<K extends keyof Services>(key: K, implementation: () => Promise<S
 
     async function load() {
         const val = await getLocalImplementation(true, `Services.${key}`, implementation, channel)
-        if (debugMode) {
-            Reflect.defineProperty(globalThis, key + 'Service', { configurable: true, enumerable: true, value: val })
-        }
+        DebugService[key] = val
         return val
     }
     if (import.meta.webpackHot) hmr.addEventListener(key, load)

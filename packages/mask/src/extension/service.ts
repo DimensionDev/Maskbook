@@ -24,6 +24,7 @@ import type {
     Services as ServicesType,
     WalletService,
 } from '../../background/services/types.js'
+import { setDebugObject } from '@masknet/shared-base'
 assertNotEnvironment(Environment.ManifestBackground)
 
 const message = new WebExtensionMessage<Record<string, any>>({ domain: '$' })
@@ -43,6 +44,7 @@ export const Services: ServicesType = {
     ThirdPartyPlugin: add<ThirdPartyPluginService>('ThirdPartyPlugin'),
     Wallet: add<WalletService>('Wallet'),
 }
+setDebugObject('Services', Services)
 export default Services
 export const GeneratorServices: AsyncGeneratorVersionOf<GeneratorServicesType> = add('GeneratorServices', true) as any
 
@@ -63,6 +65,5 @@ function add<T extends object>(key: string, generator = false): AsyncVersionOf<T
         strict: true,
         thenable: false,
     })
-    Reflect.set(globalThis, key + 'Service', service)
     return service
 }

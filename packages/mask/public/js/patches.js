@@ -3,6 +3,41 @@ if (!globalThis[Symbol.for('mask_init_patch')]) {
     globalThis[Symbol.for('mask_init_patch')] = true
     // Fix for globalThis !== window in content script in Firefox
     patch1: try {
+        /**
+         * Many methods on `window` requires `this` points to a Window object
+         * Like `alert()`. If you call alert as `const w = { alert }; w.alert()`,
+         * there will be an Illegal invocation.
+         *
+         * To prevent `this` binding lost, we need to rebind it.
+         *
+         * @param desc {PropertyDescriptor | undefined}
+         * @param global {Window}
+         */
+        const PatchThisOfDescriptorToGlobal = (desc, global) => {
+            if (!desc) return
+            const { get, set, value } = desc
+            if (get)
+                desc.get = function () {
+                    if (this === globalThis) return get.apply(window)
+                    return get.apply(this)
+                }
+            if (set)
+                desc.set = function (val) {
+                    if (this === globalThis) return set.apply(global, val)
+                    return set.apply(this, val)
+                }
+            if (value && typeof value === 'function') {
+                const desc2 = Object.getOwnPropertyDescriptors(value)
+                desc.value = function () {
+                    if (new.target) return Reflect.construct(value, arguments, new.target)
+                    return Reflect.apply(value, this === globalThis ? global : this, arguments)
+                }
+                Object.defineProperties(desc.value, desc2)
+                try {
+                    desc.value.prototype = value.prototype
+                } catch {}
+            }
+        }
         // MV3 service worker
         if (typeof window === 'undefined') break patch1
         // In the content script, globalThis !== window.
@@ -30,41 +65,6 @@ if (!globalThis[Symbol.for('mask_init_patch')]) {
         }
         console.log('[Mask] applying intrinsic patches', patch)
         Object.defineProperties(window, patch)
-        /**
-         * Many methods on `window` requires `this` points to a Window object
-         * Like `alert()`. If you call alert as `const w = { alert }; w.alert()`,
-         * there will be an Illegal invocation.
-         *
-         * To prevent `this` binding lost, we need to rebind it.
-         *
-         * @param desc {PropertyDescriptor | undefined}
-         * @param global {Window}
-         */
-        function PatchThisOfDescriptorToGlobal(desc, global) {
-            if (!desc) return
-            const { get, set, value } = desc
-            if (get)
-                desc.get = function () {
-                    if (this === globalThis) return get.apply(window)
-                    return get.apply(this)
-                }
-            if (set)
-                desc.set = function (val) {
-                    if (this === globalThis) return set.apply(global, val)
-                    return set.apply(this, val)
-                }
-            if (value && typeof value === 'function') {
-                const desc2 = Object.getOwnPropertyDescriptors(value)
-                desc.value = function () {
-                    if (new.target) return Reflect.construct(value, arguments, new.target)
-                    return Reflect.apply(value, this === globalThis ? global : this, arguments)
-                }
-                Object.defineProperties(desc.value, desc2)
-                try {
-                    desc.value.prototype = value.prototype
-                } catch {}
-            }
-        }
     } catch {}
 
     patch2: try {

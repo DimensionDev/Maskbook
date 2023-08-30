@@ -16,6 +16,7 @@ import {
     queryRemoteI18NBundle,
     type SetupGuideContext,
     SetupGuideStep,
+    setDebugObject,
 } from '@masknet/shared-base'
 import { Flags } from '@masknet/flags'
 import { Telemetry } from '@masknet/web3-telemetry'
@@ -55,7 +56,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
     }
 
     console.log('Provider activated. You can access it by globalThis.ui', ui)
-    Object.assign(globalThis, { ui })
+    setDebugObject('ui', ui)
 
     const abort = new AbortController()
     const { signal } = abort
