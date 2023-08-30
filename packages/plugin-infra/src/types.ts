@@ -37,7 +37,6 @@ import type {
     ProviderDescriptor,
     SearchResult,
     ThemeSettings,
-    Web3EnableRequirement,
     Web3State,
     Web3UI,
 } from '@masknet/web3-shared-base'
@@ -316,7 +315,12 @@ export namespace Plugin.Shared {
         /** The website this plugin supports. */
         supports: SupportedSitesDeclare
         /** The Web3 Network this plugin supports */
-        web3?: Web3EnableRequirement
+        web3?: Record<
+            NetworkPluginID,
+            {
+                supportedChainIds?: number[]
+            }
+        >
         /**
          * Requested origins.
          * Only put necessary permissions here.
