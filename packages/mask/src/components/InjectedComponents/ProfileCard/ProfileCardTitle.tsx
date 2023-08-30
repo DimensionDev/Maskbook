@@ -78,7 +78,7 @@ function Web3ProfileSettingButton() {
                 } else {
                     PersonaSelectPanelModal.open({
                         enableVerify: !status.verified,
-                        target: PluginID.Web3Profile,
+                        finishTarget: PluginID.Web3Profile,
                     })
                 }
             }}

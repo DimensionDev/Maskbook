@@ -52,7 +52,7 @@ export const PersonaGuard = memo(function PersonaGuard({
         }
         PersonaSelectPanelModal.open({
             enableVerify: true,
-            target: forwardTarget,
+            finishTarget: forwardTarget,
         })
     }, [loading, connectedAndVerified, forwardTarget])
 
