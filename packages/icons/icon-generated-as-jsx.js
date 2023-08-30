@@ -1036,6 +1036,27 @@ export const CheckboxBorder = /*#__PURE__*/ __createIcon('CheckboxBorder', [
         s: true,
     },
 ])
+export const CheckboxNo = /*#__PURE__*/ __createIcon('CheckboxNo', [
+    {
+        u: () => new URL('./general/CheckboxNo.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 16 16',
+                children: /*#__PURE__*/ _jsx('rect', {
+                    width: '14',
+                    height: '14',
+                    x: '1',
+                    y: '1',
+                    stroke: 'currentColor',
+                    strokeWidth: '2',
+                    rx: '3',
+                }),
+            }),
+        s: true,
+    },
+])
 export const CheckCircle = /*#__PURE__*/ __createIcon('CheckCircle', [
     {
         u: () => new URL('./general/CheckCircle.svg', import.meta.url),

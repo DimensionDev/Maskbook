@@ -12,6 +12,7 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.maskColor.thirdMain,
         color: theme.palette.maskColor.main,
         border: 'none!important',
+        fontWeight: 700,
         ['&:hover']: {
             background: theme.palette.maskColor.bottom,
             boxShadow: '0px 8px 25px rgba(0, 0, 0, 0.1)',

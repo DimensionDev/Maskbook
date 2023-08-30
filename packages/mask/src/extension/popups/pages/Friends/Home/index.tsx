@@ -24,7 +24,7 @@ const FriendsHome = memo(function FriendsHome() {
         ['search-personas', keyword, type],
         async ({ pageParam }) => {
             if (!type) return EMPTY_LIST
-            return await NextIDProof.queryExistedBindingByPlatform(type, keyword, pageParam ?? 1)
+            return await NextIDProof.queryExistedBindingByPlatform(type, keyword, pageParam ?? 1, false)
         },
         {
             enabled: !!keyword && !!type,

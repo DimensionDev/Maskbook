@@ -291,7 +291,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return first(ids)
     }
 
-    async queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page = 1) {
+    async queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page = 1, exact = true) {
         if (!platform && !identity) return []
 
         const response = await this.fetchFromProofService<NextIDBindings>(
@@ -299,7 +299,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 platform,
                 identity,
                 page,
-                exact: true,
+                exact,
                 // TODO workaround for the API, and will sort the result manually
             }),
         )
@@ -314,7 +314,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     ): Promise<NextIDPersonaBindings | null> {
         if (!platform && !identity) return null
 
-        const result = await this.queryAllExistedBindingsByPlatform(platform, identity)
+        const result = await this.queryAllExistedBindingsByPlatform(platform, identity, true)
         if (publicKey) return result.find((x) => x.persona === publicKey) ?? null
         return first(result) ?? null
     }

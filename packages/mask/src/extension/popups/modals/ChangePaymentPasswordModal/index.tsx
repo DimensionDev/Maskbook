@@ -4,11 +4,16 @@ import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { Box, Typography, useTheme, type InputProps } from '@mui/material'
 import { useAsyncFn } from 'react-use'
 import { type SingletonModalRefCreator } from '@masknet/shared-base'
-import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
+import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 
+const useStyles = makeStyles()((theme) => ({
+    title: {
+        paddingLeft: theme.spacing(3),
+    },
+}))
 interface ChangePaymentPasswordDrawer extends BottomDrawerProps {
     oldPassword: string
     newPassword: string
@@ -41,6 +46,7 @@ function ChangePaymentPasswordDrawer({
 }: ChangePaymentPasswordDrawer) {
     const { t } = useI18N()
     const theme = useTheme()
+    const { classes } = useStyles()
 
     const { showSnackbar } = usePopupCustomSnackbar()
 
@@ -71,7 +77,7 @@ function ChangePaymentPasswordDrawer({
         },
     }
     return (
-        <BottomDrawer {...rest}>
+        <BottomDrawer {...rest} classes={{ title: classes.title }}>
             <Typography
                 fontWeight={700}
                 textAlign="center"

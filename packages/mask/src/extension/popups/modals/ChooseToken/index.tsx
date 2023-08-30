@@ -5,7 +5,7 @@ import { forwardRef, memo, useState } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { BottomDrawer, TokenPicker, type BottomDrawerProps, type TokenPickerProps } from '../../components/index.js'
 
-interface ChooseTokenModalProps extends BottomDrawerProps, Omit<TokenPickerProps, 'title'> {}
+interface ChooseTokenModalProps extends BottomDrawerProps, Omit<TokenPickerProps, 'title' | 'classes'> {}
 const ChooseTokenDrawer = memo(function ChooseTokenDrawer({ title, open, onClose, ...others }: ChooseTokenModalProps) {
     return (
         <BottomDrawer title={title} open={open} onClose={onClose}>

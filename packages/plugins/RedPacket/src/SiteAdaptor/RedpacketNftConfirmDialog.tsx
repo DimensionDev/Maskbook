@@ -30,7 +30,6 @@ import { openComposition } from './openComposition.js'
 const useStyles = makeStyles()((theme) => ({
     root: {
         fontSize: 16,
-        height: 700,
     },
     link: {
         display: 'flex',
@@ -62,7 +61,7 @@ const useStyles = makeStyles()((theme) => ({
         gridTemplateColumns: 'repeat(4, 1fr)',
         gap: 16,
         width: '100%',
-        height: 420,
+        maxHeight: 420,
         overflowY: 'auto',
         background: theme.palette.background.default,
         borderRadius: 12,
@@ -217,7 +216,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
 
     return (
         <DialogContent className={classes.root}>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} pb={9}>
                 <Grid item xs={6}>
                     <Typography color="textPrimary" variant="body1" className={classes.text}>
                         {t.nft_account_name()}

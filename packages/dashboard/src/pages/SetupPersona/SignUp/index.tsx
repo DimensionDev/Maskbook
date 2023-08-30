@@ -95,13 +95,14 @@ export const SignUp = memo(function SignUp() {
                 {t.persona_create_tips()}
             </Typography>
             <Typography className={classes.second} mt={3} mb={2}>
-                {t.persona()}
+                {t.persona_name()}
             </Typography>
             <MaskTextField
                 onChange={(e) => {
                     if (error) setError('')
                     setPersonaName(e.target.value)
                 }}
+                placeholder={t.persona_setup_persona_example()}
                 required
                 InputProps={{ disableUnderline: true }}
                 inputProps={{ maxLength: 24 }}
@@ -116,7 +117,6 @@ export const SignUp = memo(function SignUp() {
                     <PrimaryButton
                         width="125px"
                         size="large"
-                        color="primary"
                         onClick={() => onNext()}
                         disabled={!personaName.trim().length}>
                         {t.continue()}

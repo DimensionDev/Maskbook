@@ -135,6 +135,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         await Web3.connect({
             account: firstWallet,
             providerType: ProviderType.MaskWallet,
+            silent: true,
         })
         await WalletServiceRef.value.resolveMaskAccount([{ address: firstWallet }])
 
