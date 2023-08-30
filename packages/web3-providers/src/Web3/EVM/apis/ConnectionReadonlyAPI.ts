@@ -42,6 +42,7 @@ import {
     createNonFungibleTokenMetadata,
     createNonFungibleTokenContract,
     createNonFungibleTokenCollection,
+    isGreaterThan,
 } from '@masknet/web3-shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { ChainResolverAPI } from './ResolverAPI.js'
@@ -273,6 +274,12 @@ export class ConnectionReadonlyAPI
             const contract = this.Contract.getERC721Contract(address, options)
             try {
                 ownerId = await contract?.methods.ownerOf(tokenId).call()
+            } catch {}
+        } else if (options.account) {
+            const contract = this.Contract.getERC1155Contract(address, options)
+            try {
+                const balance = await contract?.methods.balanceOf(options.account, tokenId).call()
+                ownerId = balance && isGreaterThan(balance, '0') ? options.account : undefined
             } catch {}
         }
 
