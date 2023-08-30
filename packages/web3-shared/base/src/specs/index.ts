@@ -742,19 +742,6 @@ export type SearchResult<ChainId, SchemaType> =
     | NonFungibleCollectionResult<ChainId, SchemaType>
     | DAOResult<ChainId>
 
-/**
- * Plugin can declare what chain it supports to trigger side effects (e.g. create a new transaction).
- * When the current chain is not supported, the composition entry will be hidden.
- */
-export type Web3EnableRequirement = Partial<
-    Record<
-        NetworkPluginID,
-        {
-            supportedChainIds?: number[]
-        }
-    >
->
-
 export interface TransactionDescriptor<ChainId, Transaction, Parameter = string | undefined> {
     chainId: ChainId
     /** The transaction type */
@@ -822,16 +809,6 @@ export interface TransactionContext<ChainId, Parameter = string | undefined> {
     children?: Array<TransactionContext<ChainId, Parameter>>
 }
 
-export interface AddressName {
-    id: string
-    /** eg. vitalik.eth */
-    label: string
-    /** eg. 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045 */
-    ownerAddress: string
-    /** eg. 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045 */
-    resolvedAddress?: string
-}
-
 type TransactionAsset<ChainId, SchemaType> = Token<ChainId, SchemaType> & {
     name: string
     symbol: string
@@ -887,13 +864,6 @@ export interface RecentTransaction<ChainId, Transaction> {
 export type RecentTransactionComputed<ChainId, Transaction> = RecentTransaction<ChainId, Transaction> & {
     /** a dynamically computed field in the hook which means the minted (initial) transaction */
     _tx: Transaction
-}
-
-export interface TokenList<ChainId, SchemaType> {
-    name: string
-    description?: string
-    /** fungible or non-fungible tokens */
-    tokens: Array<Token<ChainId, SchemaType>>
 }
 
 export interface BalanceEvent<ChainId> {
@@ -1216,11 +1186,6 @@ export interface ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType> 
         network: NetworkDescriptor<ChainId, NetworkType>,
         provider: ProviderDescriptor<ChainId, ProviderType>,
     ) => void
-}
-
-export interface AddressFormatterProps {
-    address: string
-    size?: number
 }
 
 export interface Web3UI<ChainId, ProviderType, NetworkType> {
