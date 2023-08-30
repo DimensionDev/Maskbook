@@ -1,10 +1,16 @@
-import { type HTMLProps, useCallback, useMemo } from 'react'
+import { type HTMLProps, useCallback, useMemo, useEffect } from 'react'
 import { compact, uniqWith } from 'lodash-es'
 import { FormControl, Typography } from '@mui/material'
 import { Web3 } from '@masknet/web3-providers'
-import { Icons } from '@masknet/icons'
 import { useChainContext, useNonFungibleAssets, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
-import { AddCollectiblesModal, ElementAnchor, RetryHint, CollectibleList } from '@masknet/shared'
+import {
+    AddCollectiblesModal,
+    ElementAnchor,
+    RetryHint,
+    CollectibleList,
+    LoadingStatus,
+    EmptyStatus,
+} from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -40,10 +46,6 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         height: '100%',
         padding: theme.spacing(4),
-    },
-    loadingText: {
-        marginTop: theme.spacing(1),
-        fontSize: 14,
     },
     collectibleList: {
         paddingRight: 0,
@@ -85,7 +87,7 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
         setNonFungibleTokenId,
         setNonFungibleTokenAddress,
     } = useTip()
-    const { classes, theme, cx } = useStyles()
+    const { classes, cx } = useStyles()
     const t = useI18N()
     const selectedKey = tokenAddress || tokenId ? `${tokenAddress}_${tokenId}` : undefined
     const { pluginID } = useNetworkContext()
@@ -144,6 +146,12 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
         setNonFungibleTokenId(tokens[0].tokenId)
     }, [account, pluginID, chainId, Token?.addNonFungibleCollection])
 
+    // fetched tokens are all filtered out, keep fetching next page
+    useEffect(() => {
+        if (tokens.length) return
+        next()
+    }, [!tokens.length, fetchedTokens.length, next])
+
     return (
         <div className={cx(classes.root, className)} {...rest}>
             <FormControl className={classes.header}>
@@ -186,24 +194,16 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
                             </div>
                         )
                     }
-                    if (tokens.length === 0 && loadError && account) {
+                    if (tokens.length === 0 && (!done || loading) && account) {
+                        return <LoadingStatus className={classes.statusBox} iconSize={36} />
+                    }
+                    if (fetchedTokens.length === 0 && loadError && account && done) {
                         return <RetryHint retry={next} />
                     }
-                    if (tokens.length === 0 && (!done || loading) && account) {
-                        return (
-                            <div className={classes.statusBox}>
-                                <LoadingBase size={36} />
-                                <Typography className={classes.loadingText}>{t.tip_loading()}</Typography>
-                            </div>
-                        )
-                    }
                     return (
-                        <div className={classes.statusBox}>
-                            <Icons.EmptySimple size={36} color={theme.palette.maskColor.third} />
-                            <Typography className={classes.loadingText} color={theme.palette.maskColor.second}>
-                                {t.tip_empty_nft()}
-                            </Typography>
-                        </div>
+                        <EmptyStatus className={classes.statusBox} iconSize={36}>
+                            {t.tip_empty_nft()}
+                        </EmptyStatus>
                     )
                 })()}
             </div>

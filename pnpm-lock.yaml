@@ -841,7 +841,10 @@ importers:
         version: 0.17.4
 
   packages/flags:
-    devDependencies:
+    dependencies:
+      '@dimensiondev/holoflows-kit':
+        specifier: 0.9.0-20230307045856-46252fb
+        version: 0.9.0-20230307045856-46252fb
       urlcat:
         specifier: ^3.1.0
         version: 3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e)
@@ -32806,6 +32809,7 @@ packages:
     resolution: {integrity: sha512-qY6b94/aGMIHh70EEQ/4hfR2LUGZ+fPQNp64cf7yRX9kAp4XG2tx7LgYUU1Qkh17bFylME0u4n3lOezonougPw==}
     dependencies:
       qs: 6.11.0
+    dev: false
     patched: true
 
   /use-subscription@1.6.0(react@0.0.0-experimental-0a360642d-20230711):

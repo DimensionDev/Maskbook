@@ -1,12 +1,14 @@
-import { memo, useCallback, useMemo } from 'react'
 import { delay, getEnumAsArray } from '@masknet/kit'
-import { makeStyles } from '@masknet/theme'
-import { DialogContent } from '@mui/material'
-import { ConnectWalletModal, InjectedDialog, useSharedI18N } from '@masknet/shared'
-import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
-import { openWindow } from '@masknet/shared-base-ui'
 import { getRegisteredWeb3Providers } from '@masknet/plugin-infra'
+import { ConnectWalletModal, InjectedDialog, useSharedI18N } from '@masknet/shared'
+import { DashboardRoutes, NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { openWindow } from '@masknet/shared-base-ui'
+import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { Providers } from '@masknet/web3-providers'
+import { ProviderType } from '@masknet/web3-shared-evm'
+import { DialogContent } from '@mui/material'
+import { memo, useCallback, useMemo } from 'react'
 import { PluginProviderRender } from './PluginProviderRender.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -43,9 +45,18 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
                 if (downloadLink) openWindow(downloadLink)
                 return
             }
+            // Create wallet first if no wallets yet.
+            if (
+                provider.type === ProviderType.MaskWallet &&
+                !Providers[ProviderType.MaskWallet].subscription.wallets.getCurrentValue().length
+            ) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                globalThis.HelperService.openDashboard(DashboardRoutes.CreateMaskWalletForm)
+                return
+            }
 
             onClose()
-
             await delay(500)
 
             const connected = await ConnectWalletModal.openAndWaitForClose({

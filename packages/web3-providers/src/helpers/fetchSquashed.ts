@@ -1,7 +1,10 @@
 const { fetch: originalFetch } = globalThis
 
 export enum Expiration {
-    SHORT = 1000,
+    ONE_SECOND = 1000,
+    ONE_MINUTE = 60000,
+    THIRTY_MINUTES = 1800000,
+    ONE_HOUR = 3600000,
 }
 
 const CACHE = new Map<
@@ -33,12 +36,31 @@ async function defaultResolver(request: Request) {
     return `${request.method} ${request.url} ${request.method === 'POST' ? await request.text() : 'NULL'}`
 }
 
+export async function stableSquashedCached(
+    info: RequestInfo | URL,
+    init?: RequestInit,
+    resolver = defaultResolver,
+): Promise<Response | void> {
+    const request = new Request(info, init)
+
+    // skip not cacheable requests
+    if (request.method !== 'GET' && request.method !== 'POST') return
+
+    // skip all non-http requests
+    const url = request.url
+    if (!url.startsWith('http')) return
+
+    const key = await resolver(request)
+    if (!key) return
+    CACHE.delete(key)
+}
+
 export async function fetchSquashed(
     input: RequestInfo | URL,
     init?: RequestInit,
     next = originalFetch,
     resolver = defaultResolver,
-    expiration = Expiration.SHORT,
+    expiration = Expiration.ONE_SECOND,
 ): Promise<Response> {
     // why: the caches doesn't define in test env
     if (process.env.NODE_ENV === 'test') return next(input, init)

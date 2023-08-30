@@ -79,6 +79,7 @@ const CreateWallet = memo(function CreateWallet() {
                     render={({ field }) => (
                         <StyledInput
                             {...field}
+                            autoFocus
                             placeholder={t('popups_wallet_enter_your_wallet_name')}
                             error={!!errorMessage || !!errors.name?.message}
                             helperText={errorMessage || errors.name?.message}

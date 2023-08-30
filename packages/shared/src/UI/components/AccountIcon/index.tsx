@@ -106,7 +106,7 @@ export function AccountIcon({ socialAccount, classes: externalClasses }: Account
 
             {fromTwitter ? (
                 <AccountTooltips platform={AddressPlatform.Twitter} type={fromTwitter}>
-                    <Icons.TwitterRound
+                    <Icons.TwitterXRound
                         className={cx(classes.actionIcon, classes.icon, classes.roundedIcon)}
                         style={iconStyle}
                     />

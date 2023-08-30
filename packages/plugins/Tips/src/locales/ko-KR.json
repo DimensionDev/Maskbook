@@ -30,8 +30,6 @@
     "tip_wallets_missed": "월렛을 찾을 수 없습니다.",
     "tip_contracts": "컨트랙트",
     "promote": "Https://mask.io/download-links에서 앱을 다운받고 팁을 발송해 보세요.",
-    "tip_token_share_post": "@{{recipientSnsId}}의 월렛 주소 {{recipient}} 에 {{- amount}} {{symbol}} 팁을 보냈습니다.\n\n$t(promote)",
-    "tip_nft_share_post": "@{{recipientSnsId}}의 월렛 주소 {{recipient}} 에 {{name}} 팁을 보냈습니다.\n\n$t(promote)",
     "tip_add": "추가",
     "tip_adding": "추가 중",
     "tip_add_collectibles": "수장품 추가",

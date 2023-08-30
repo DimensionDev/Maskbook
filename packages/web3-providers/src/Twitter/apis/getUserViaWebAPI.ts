@@ -48,8 +48,8 @@ export async function getUserViaWebAPI(screenName: string): Promise<TwitterBaseA
     if (!request) return null
 
     const response = await fetchGlobal(request, undefined, {
-        cacheDuration: Duration.SHORT,
-        squashExpiration: Expiration.SHORT,
+        cacheDuration: Duration.ONE_MINUTE,
+        squashExpiration: Expiration.ONE_SECOND,
     })
     if (response.ok) {
         const json: TwitterBaseAPI.UserByScreenNameResponse = await response.json()

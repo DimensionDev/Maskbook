@@ -38,6 +38,7 @@ export type GasSetting = {
     gasPrice?: string
     maxPriorityFeePerGas?: string
     maxFeePerGas?: string
+    paymentToken?: string
 }
 
 export type TransactionDetail = {

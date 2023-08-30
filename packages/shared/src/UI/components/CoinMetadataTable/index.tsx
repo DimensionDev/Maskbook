@@ -78,15 +78,15 @@ export interface CoinMetadataTableProps {
 }
 
 const brands: Record<TrendingAPI.CommunityType, React.ReactNode> = {
-    discord: <Icons.DiscordRoundGray size={16} />,
-    facebook: <Icons.FacebookRoundGray size={16} />,
-    github: <Icons.GitHubGray size={16} />,
-    instagram: <Icons.InstagramRoundGray size={16} />,
-    medium: <Icons.MediumGray size={16} />,
-    reddit: <Icons.RedditRoundGray size={16} />,
+    discord: <Icons.DiscordRound size={16} />,
+    facebook: <Icons.FacebookColored size={16} />,
+    github: <Icons.GitHub size={16} />,
+    instagram: <Icons.Instagram size={16} />,
+    medium: <Icons.Medium size={16} />,
+    reddit: <Icons.RedditRound size={16} />,
     telegram: <Icons.TelegramRoundGray size={16} />,
     twitter: <Icons.TwitterXRound size={16} />,
-    youtube: <Icons.YouTubeGray size={16} />,
+    youtube: <Icons.YouTube size={16} />,
     other: null,
 }
 
@@ -200,7 +200,7 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
                                 </TableRow>
                             )
                         })}
-                        {!!trending?.coin.community_urls?.length && (
+                        {trending?.coin.community_urls?.length ? (
                             <TableRow>
                                 <TableCell className={classes.cell}>
                                     <Typography className={classes.label} variant="body2">
@@ -231,7 +231,7 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
                                     </Stack>
                                 </TableCell>
                             </TableRow>
-                        )}
+                        ) : null}
                     </TableBody>
                 </Table>
             </TableContainer>

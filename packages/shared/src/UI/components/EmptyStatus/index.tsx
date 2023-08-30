@@ -18,11 +18,15 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const EmptyStatus = memo(function EmptyStatus({ className, children, ...rest }: BoxProps) {
+interface Props extends BoxProps {
+    iconSize?: number
+}
+
+export const EmptyStatus = memo(function EmptyStatus({ className, children, iconSize = 32, ...rest }: Props) {
     const { classes, cx } = useStyles()
     return (
         <Box className={cx(classes.statusBox, className)} p={2} {...rest}>
-            <Icons.EmptySimple size={32} />
+            <Icons.EmptySimple size={iconSize} />
             <Typography className={classes.text} component="div">
                 {children}
             </Typography>

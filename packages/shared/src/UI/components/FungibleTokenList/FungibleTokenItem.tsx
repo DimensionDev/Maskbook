@@ -268,6 +268,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                                             rel="noopener noreferrer">
                                             <Icons.PopupLink size={18} className={classes.link} />
                                         </Link>
+                                        {token.isCustomToken ? <span>{t.added_by_user()}</span> : null}
                                     </>
                                 )}
                             </span>

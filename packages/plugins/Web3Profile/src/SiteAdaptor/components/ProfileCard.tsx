@@ -93,6 +93,10 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.second,
         marginTop: theme.spacing(0.5),
     },
+    providerIcon: {
+        padding: 1,
+        background: theme.palette.maskColor.white,
+    },
 }))
 
 interface Props extends CardProps {
@@ -170,8 +174,9 @@ export const ProfileCard = memo(function ProfileCard({
                 }}
                 avatar={
                     <PlatformAvatar
+                        classes={{ providerIcon: classes.providerIcon }}
                         networkIcon={avatarUrl}
-                        providerIcon={new URL('../assets/Twitter.png', import.meta.url).href}
+                        providerIcon={new URL('../assets/TwitterXRound.svg', import.meta.url).href}
                         size={36}
                     />
                 }

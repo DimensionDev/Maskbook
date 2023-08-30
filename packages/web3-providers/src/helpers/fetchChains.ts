@@ -31,6 +31,6 @@ export interface ChainConfig {
 export async function fetchChains() {
     return fetchCachedJSON<ChainConfig[]>('https://chainid.network/chains.json', undefined, {
         squashExpiration: 0,
-        cacheDuration: Duration.LONG,
+        cacheDuration: Duration.TWELVE_HOURS,
     })
 }

@@ -1,3 +1,8 @@
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { noop } from 'lodash-es'
+import { BigNumber } from 'bignumber.js'
+import { Box } from '@mui/system'
+import { Typography, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { FormattedBalance, FormattedCurrency, useGasCurrencyMenu } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -9,24 +14,11 @@ import {
     useGasOptions,
     useNativeTokenAddress,
 } from '@masknet/web3-hooks-base'
-import { DepositPaymaster } from '@masknet/web3-providers'
 import { GasOptionType, ZERO, formatBalance, formatCurrency, scale10, toFixed } from '@masknet/web3-shared-base'
-import {
-    type EIP1559GasConfig,
-    type GasConfig,
-    type ChainId,
-    isNativeTokenAddress,
-    formatWeiToEther,
-} from '@masknet/web3-shared-evm'
-import { Typography, useTheme } from '@mui/material'
-import { Box } from '@mui/system'
-import { BigNumber } from 'bignumber.js'
-import { noop } from 'lodash-es'
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { useAsync } from 'react-use'
-import { useContainer } from 'unstated-next'
+import { type EIP1559GasConfig, type GasConfig, type ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
-import { useGasOptionsMenu, PopupContext } from '../../hooks/index.js'
+import { useGasOptionsMenu } from '../../hooks/index.js'
+import { useGasRatio } from '../../hooks/useGasRatio.js'
 
 interface GasSettingMenuProps {
     minimumGas: string
@@ -54,7 +46,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
 }) {
     const { t } = useI18N()
     const theme = useTheme()
-    const { smartPayChainId } = useContainer(PopupContext)
+    const gasRatio = useGasRatio(paymentToken)
     const [gasConfig = initConfig, setGasConfig] = useState<GasConfig | undefined>()
     const [gasOptionType, setGasOptionType] = useState<GasOptionType | undefined>(
         initConfig?.gasOptionType ?? GasOptionType.SLOW,
@@ -69,7 +61,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
         [onChange],
     )
 
-    const [menu, openMenu] = useGasOptionsMenu(minimumGas, !disable ? handleChange : noop)
+    const [menu, openMenu] = useGasOptionsMenu(minimumGas, !disable ? handleChange : noop, paymentToken)
 
     const [paymentTokenMenu, openPaymentTokenMenu] = useGasCurrencyMenu(
         NetworkPluginID.PLUGIN_EVM,
@@ -108,15 +100,6 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
                 return t('popups_wallet_gas_fee_settings_custom')
         }
     }, [gasOptionType])
-
-    const { value: smartPayRatio } = useAsync(async () => {
-        if (!smartPayChainId) return
-        const depositPaymaster = new DepositPaymaster(smartPayChainId)
-        const ratio = await depositPaymaster.getRatio()
-
-        return ratio
-    }, [smartPayChainId])
-    const gasRatio = paymentToken && !isNativeTokenAddress(paymentToken) ? smartPayRatio : undefined
 
     const totalGas = useMemo(() => {
         if (!gasConfig) return ZERO

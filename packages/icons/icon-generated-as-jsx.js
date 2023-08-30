@@ -20,24 +20,9 @@ export const Arweave = /*#__PURE__*/ __createIcon('Arweave', [
         u: () => new URL('./brands/Arweave.png', import.meta.url),
     },
 ])
-export const Astar = /*#__PURE__*/ __createIcon('Astar', [
-    {
-        u: () => new URL('./brands/Astar.png', import.meta.url),
-    },
-])
-export const Aurora = /*#__PURE__*/ __createIcon('Aurora', [
-    {
-        u: () => new URL('./brands/Aurora.svg', import.meta.url),
-    },
-])
 export const Avalanche = /*#__PURE__*/ __createIcon('Avalanche', [
     {
         u: () => new URL('./brands/Avalanche.svg', import.meta.url),
-    },
-])
-export const Blocto = /*#__PURE__*/ __createIcon('Blocto', [
-    {
-        u: () => new URL('./brands/Blocto.svg', import.meta.url),
     },
 ])
 export const BSC = /*#__PURE__*/ __createIcon('BSC', [
@@ -73,11 +58,6 @@ export const Crossbell = /*#__PURE__*/ __createIcon('Crossbell', [
 export const CrossSync = /*#__PURE__*/ __createIcon('CrossSync', [
     {
         u: () => new URL('./brands/CrossSync.svg', import.meta.url),
-    },
-])
-export const CryptoArt = /*#__PURE__*/ __createIcon('CryptoArt', [
-    {
-        u: () => new URL('./brands/CryptoArt.png', import.meta.url),
     },
 ])
 export const CyberConnect = /*#__PURE__*/ __createIcon('CyberConnect', [
@@ -131,11 +111,6 @@ export const ETH = /*#__PURE__*/ __createIcon('ETH', [
 export const EtherScan = /*#__PURE__*/ __createIcon('EtherScan', [
     {
         u: () => new URL('./brands/EtherScan.svg', import.meta.url),
-    },
-])
-export const EVMChains = /*#__PURE__*/ __createIcon('EVMChains', [
-    {
-        u: () => new URL('./brands/EVMChains.svg', import.meta.url),
     },
 ])
 export const FacebookColored = /*#__PURE__*/ __createIcon('FacebookColored', [
@@ -201,11 +176,6 @@ export const GitHubGray = /*#__PURE__*/ __createIcon('GitHubGray', [
 export const Gnosis = /*#__PURE__*/ __createIcon('Gnosis', [
     {
         u: () => new URL('./brands/Gnosis.svg', import.meta.url),
-    },
-])
-export const GoPlusLab = /*#__PURE__*/ __createIcon('GoPlusLab', [
-    {
-        u: () => new URL('./brands/GoPlusLab.svg', import.meta.url),
     },
 ])
 export const Instagram = /*#__PURE__*/ __createIcon('Instagram', [
@@ -337,11 +307,6 @@ export const MetaMask = /*#__PURE__*/ __createIcon('MetaMask', [
         u: () => new URL('./brands/MetaMask.svg', import.meta.url),
     },
 ])
-export const MetaMaskWallet = /*#__PURE__*/ __createIcon('MetaMaskWallet', [
-    {
-        u: () => new URL('./brands/MetaMaskWallet.svg', import.meta.url),
-    },
-])
 export const Minds = /*#__PURE__*/ __createIcon('Minds', [
     {
         u: () => new URL('./brands/Minds.svg', import.meta.url),
@@ -385,16 +350,6 @@ export const NextIDMini = /*#__PURE__*/ __createIcon('NextIDMini', [
 export const NFTScan = /*#__PURE__*/ __createIcon('NFTScan', [
     {
         u: () => new URL('./brands/NFTScan.svg', import.meta.url),
-    },
-])
-export const NonFungibleFriends = /*#__PURE__*/ __createIcon('NonFungibleFriends', [
-    {
-        u: () => new URL('./brands/NonFungibleFriends.png', import.meta.url),
-    },
-])
-export const OKX = /*#__PURE__*/ __createIcon('OKX', [
-    {
-        u: () => new URL('./brands/OKX.svg', import.meta.url),
     },
 ])
 export const OpenSea = /*#__PURE__*/ __createIcon('OpenSea', [
@@ -507,19 +462,9 @@ export const TwitterRound = /*#__PURE__*/ __createIcon('TwitterRound', [
         u: () => new URL('./brands/TwitterRound.svg', import.meta.url),
     },
 ])
-export const TwitterRoundBlackWhite = /*#__PURE__*/ __createIcon('TwitterRoundBlackWhite', [
-    {
-        u: () => new URL('./brands/TwitterRoundBlackWhite.svg', import.meta.url),
-    },
-])
 export const TwitterRoundGray = /*#__PURE__*/ __createIcon('TwitterRoundGray', [
     {
         u: () => new URL('./brands/TwitterRoundGray.svg', import.meta.url),
-    },
-])
-export const TwitterRoundWithNoBorder = /*#__PURE__*/ __createIcon('TwitterRoundWithNoBorder', [
-    {
-        u: () => new URL('./brands/TwitterRoundWithNoBorder.svg', import.meta.url),
     },
 ])
 export const TwitterX = /*#__PURE__*/ __createIcon('TwitterX', [
@@ -598,11 +543,6 @@ export const ZkScan = /*#__PURE__*/ __createIcon('zkScan', [
 export const Zora = /*#__PURE__*/ __createIcon('Zora', [
     {
         u: () => new URL('./brands/Zora.svg', import.meta.url),
-    },
-])
-export const Zrx = /*#__PURE__*/ __createIcon('zrx', [
-    {
-        u: () => new URL('./brands/zrx.svg', import.meta.url),
     },
 ])
 export const Add = /*#__PURE__*/ __createIcon('Add', [
@@ -692,11 +632,6 @@ export const AddUser = /*#__PURE__*/ __createIcon('AddUser', [
                 }),
             }),
         s: true,
-    },
-])
-export const Airdrop = /*#__PURE__*/ __createIcon('Airdrop', [
-    {
-        u: () => new URL('./general/Airdrop.svg', import.meta.url),
     },
 ])
 export const Appendices = /*#__PURE__*/ __createIcon('Appendices', [
@@ -847,16 +782,6 @@ export const ArrowUpRound = /*#__PURE__*/ __createIcon('ArrowUpRound', [
                 }),
             }),
         s: true,
-    },
-])
-export const AssetLoading = /*#__PURE__*/ __createIcon('AssetLoading', [
-    {
-        u: () => new URL('./general/AssetLoading.svg', import.meta.url),
-    },
-])
-export const Author = /*#__PURE__*/ __createIcon('Author', [
-    {
-        u: () => new URL('./general/Author.svg', import.meta.url),
     },
 ])
 export const BackUp = /*#__PURE__*/ __createIcon('BackUp', [
@@ -1323,11 +1248,6 @@ export const Copy = /*#__PURE__*/ __createIcon(
     ],
     [16, 17],
 )
-export const Cram = /*#__PURE__*/ __createIcon('Cram', [
-    {
-        u: () => new URL('./general/Cram.svg', import.meta.url),
-    },
-])
 export const Currency = /*#__PURE__*/ __createIcon('Currency', [
     {
         u: () => new URL('./general/Currency.svg', import.meta.url),
@@ -1359,25 +1279,6 @@ export const Currency = /*#__PURE__*/ __createIcon('Currency', [
         s: true,
     },
 ])
-export const Dashboard = /*#__PURE__*/ __createIcon(
-    'Dashboard',
-    [
-        {
-            u: () => new URL('./general/Dashboard.svg', import.meta.url),
-            j: () =>
-                /*#__PURE__*/ _jsx('svg', {
-                    xmlns: 'http://www.w3.org/2000/svg',
-                    viewBox: '0 0 25 24',
-                    children: /*#__PURE__*/ _jsx('path', {
-                        fill: 'currentColor',
-                        d: 'M3.667 13h8V3h-8v10Zm0 8h8v-6h-8v6Zm10 0h8V11h-8v10Zm0-18v6h8V3h-8Z',
-                    }),
-                }),
-            s: true,
-        },
-    ],
-    [25, 24],
-)
 export const Decrease = /*#__PURE__*/ __createIcon('decrease', [
     {
         u: () => new URL('./general/decrease.svg', import.meta.url),
@@ -1496,36 +1397,6 @@ export const Documents = /*#__PURE__*/ __createIcon('Documents', [
         s: true,
     },
 ])
-export const DoubleArrowUp = /*#__PURE__*/ __createIcon(
-    'DoubleArrowUp',
-    [
-        {
-            u: () => new URL('./general/DoubleArrowUp.svg', import.meta.url),
-            j: () =>
-                /*#__PURE__*/ _jsxs('svg', {
-                    xmlns: 'http://www.w3.org/2000/svg',
-                    fill: 'currentColor',
-                    viewBox: '0 0 14 12',
-                    children: [
-                        /*#__PURE__*/ _jsx('path', {
-                            fill: '#767F8D',
-                            fillRule: 'evenodd',
-                            d: 'M13.585 7.55a.667.667 0 0 1-.943 0L7.28 2.188 1.918 7.55a.667.667 0 1 1-.942-.943L6.809.774c.26-.26.682-.26.943 0l5.833 5.833c.26.26.26.683 0 .943Z',
-                            clipRule: 'evenodd',
-                        }),
-                        /*#__PURE__*/ _jsx('path', {
-                            fill: '#767F8D',
-                            fillRule: 'evenodd',
-                            d: 'M13.583 11.716a.667.667 0 0 1-.943 0L7.278 6.354l-5.362 5.362a.667.667 0 0 1-.942-.942L6.807 4.94c.26-.26.682-.26.943 0l5.833 5.833c.26.26.26.683 0 .943Z',
-                            clipRule: 'evenodd',
-                        }),
-                    ],
-                }),
-            s: true,
-        },
-    ],
-    [14, 12],
-)
 export const Download = /*#__PURE__*/ __createIcon('Download', [
     {
         u: () => new URL('./general/Download.svg', import.meta.url),
@@ -1878,11 +1749,6 @@ export const Identity = /*#__PURE__*/ __createIcon('Identity', [
         u: () => new URL('./general/Identity.light.svg', import.meta.url),
     },
 ])
-export const ImportWallet = /*#__PURE__*/ __createIcon('ImportWallet', [
-    {
-        u: () => new URL('./general/ImportWallet.png', import.meta.url),
-    },
-])
 export const Info = /*#__PURE__*/ __createIcon('Info', [
     {
         c: ['dark'],
@@ -2070,11 +1936,6 @@ export const Lock = /*#__PURE__*/ __createIcon('Lock', [
         u: () => new URL('./general/Lock.svg', import.meta.url),
     },
 ])
-export const Marketing = /*#__PURE__*/ __createIcon('Marketing', [
-    {
-        u: () => new URL('./general/Marketing.svg', import.meta.url),
-    },
-])
 export const MaskAvatar = /*#__PURE__*/ __createIcon('MaskAvatar', [
     {
         c: ['dark'],
@@ -2190,19 +2051,9 @@ export const NextIdPersonaWarning = /*#__PURE__*/ __createIcon('NextIdPersonaWar
         u: () => new URL('./general/NextIdPersonaWarning.svg', import.meta.url),
     },
 ])
-export const NFTLink = /*#__PURE__*/ __createIcon('NFTLink', [
-    {
-        u: () => new URL('./general/NFTLink.svg', import.meta.url),
-    },
-])
 export const NFTRedPacket = /*#__PURE__*/ __createIcon('NFTRedPacket', [
     {
         u: () => new URL('./general/NFTRedPacket.svg', import.meta.url),
-    },
-])
-export const NFTSelected = /*#__PURE__*/ __createIcon('NFTSelected', [
-    {
-        u: () => new URL('./general/NFTSelected.svg', import.meta.url),
     },
 ])
 export const OutlinedMask = /*#__PURE__*/ __createIcon('OutlinedMask', [
@@ -2210,27 +2061,6 @@ export const OutlinedMask = /*#__PURE__*/ __createIcon('OutlinedMask', [
         u: () => new URL('./general/OutlinedMask.svg', import.meta.url),
     },
 ])
-export const Personas = /*#__PURE__*/ __createIcon(
-    'Personas',
-    [
-        {
-            u: () => new URL('./general/Personas.svg', import.meta.url),
-            j: () =>
-                /*#__PURE__*/ _jsx('svg', {
-                    xmlns: 'http://www.w3.org/2000/svg',
-                    viewBox: '0 0 25 24',
-                    children: /*#__PURE__*/ _jsx('path', {
-                        fill: 'currentColor',
-                        fillRule: 'evenodd',
-                        d: 'M17.627 7.291a5.274 5.274 0 0 1-5.294 5.292A5.275 5.275 0 0 1 7.04 7.291 5.274 5.274 0 0 1 12.333 2a5.273 5.273 0 0 1 5.294 5.291ZM12.333 22c-4.337 0-8-.705-8-3.425 0-2.721 3.686-3.401 8-3.401 4.339 0 8 .705 8 3.425 0 2.72-3.685 3.4-8 3.4Z',
-                        clipRule: 'evenodd',
-                    }),
-                }),
-            s: true,
-        },
-    ],
-    [25, 24],
-)
 export const PersonasOutline = /*#__PURE__*/ __createIcon(
     'PersonasOutline',
     [
@@ -2288,11 +2118,6 @@ export const Plugins = /*#__PURE__*/ __createIcon('Plugins', [
         u: () => new URL('./general/Plugins.svg', import.meta.url),
     },
 ])
-export const Poll = /*#__PURE__*/ __createIcon('Poll', [
-    {
-        u: () => new URL('./general/Poll.svg', import.meta.url),
-    },
-])
 export const PopupClose = /*#__PURE__*/ __createIcon('PopupClose', [
     {
         u: () => new URL('./general/PopupClose.svg', import.meta.url),
@@ -2306,30 +2131,6 @@ export const PopupClose = /*#__PURE__*/ __createIcon('PopupClose', [
                     strokeLinejoin: 'round',
                     strokeWidth: '1.25',
                     d: 'm6 6 12 12M6 18 18 6',
-                }),
-            }),
-        s: true,
-    },
-])
-export const PopupCopy = /*#__PURE__*/ __createIcon('PopupCopy', [
-    {
-        u: () => new URL('./general/PopupCopy.svg', import.meta.url),
-        j: () =>
-            /*#__PURE__*/ _jsx('svg', {
-                xmlns: 'http://www.w3.org/2000/svg',
-                viewBox: '0 0 12 12',
-                children: /*#__PURE__*/ _jsxs('g', {
-                    fill: 'currentColor',
-                    fillRule: 'evenodd',
-                    clipRule: 'evenodd',
-                    children: [
-                        /*#__PURE__*/ _jsx('path', {
-                            d: 'M5.802 9.272c-.674 0-1.26-.2-1.683-.595-.425-.397-.644-.954-.644-1.588V3.53c0-.63.218-1.185.64-1.582.418-.394 1-.596 1.669-.6h3.289c.674 0 1.261.2 1.683.594.425.397.644.955.644 1.588v3.56c0 .63-.217 1.184-.639 1.58-.419.395-1.001.597-1.67.6H9.09l-3.287.002v-.4.4Zm0-.8c-.517 0-.893-.152-1.137-.38-.24-.225-.39-.559-.39-1.003V3.53c0-.441.148-.774.387-.999.242-.227.614-.38 1.125-.383h3.286c.517 0 .893.151 1.137.379.24.225.39.56.39 1.003v3.56c0 .44-.148.773-.387.998-.241.227-.614.38-1.125.383l-3.286.001Z',
-                        }),
-                        /*#__PURE__*/ _jsx('path', {
-                            d: 'M4.058 10.83c-.674 0-1.26-.2-1.683-.595-.425-.397-.644-.955-.644-1.588v-3.56c0-.812.363-1.489 1.026-1.866a.4.4 0 0 1 .395.696c-.385.219-.621.612-.621 1.17v3.56c0 .444.15.778.39 1.003.244.228.62.38 1.137.38l3.286-.002c.572-.003.971-.193 1.209-.47a.4.4 0 1 1 .607.521c-.421.49-1.063.745-1.813.75H4.058v-.4.4Z',
-                        }),
-                    ],
                 }),
             }),
         s: true,
@@ -2586,11 +2387,6 @@ export const Retweet = /*#__PURE__*/ __createIcon('Retweet', [
         u: () => new URL('./general/Retweet.light.svg', import.meta.url),
     },
 ])
-export const Reward = /*#__PURE__*/ __createIcon('Reward', [
-    {
-        u: () => new URL('./general/Reward.svg', import.meta.url),
-    },
-])
 export const Right = /*#__PURE__*/ __createIcon('Right', [
     {
         u: () => new URL('./general/Right.svg', import.meta.url),
@@ -2798,29 +2594,14 @@ export const SharpMask = /*#__PURE__*/ __createIcon('SharpMask', [
         s: true,
     },
 ])
-export const SignInAccount = /*#__PURE__*/ __createIcon('SignInAccount', [
-    {
-        u: () => new URL('./general/SignInAccount.svg', import.meta.url),
-    },
-])
 export const SignUpAccount = /*#__PURE__*/ __createIcon('SignUpAccount', [
     {
         u: () => new URL('./general/SignUpAccount.png', import.meta.url),
     },
 ])
-export const Slider = /*#__PURE__*/ __createIcon('Slider', [
-    {
-        u: () => new URL('./general/Slider.svg', import.meta.url),
-    },
-])
 export const SmartPay = /*#__PURE__*/ __createIcon('SmartPay', [
     {
         u: () => new URL('./general/SmartPay.svg', import.meta.url),
-    },
-])
-export const SquareBack = /*#__PURE__*/ __createIcon('SquareBack', [
-    {
-        u: () => new URL('./general/SquareBack.svg', import.meta.url),
     },
 ])
 export const Star = /*#__PURE__*/ __createIcon('Star', [
@@ -2910,11 +2691,6 @@ export const Time = /*#__PURE__*/ __createIcon('Time', [
         s: true,
     },
 ])
-export const Tip = /*#__PURE__*/ __createIcon('Tip', [
-    {
-        u: () => new URL('./general/Tip.svg', import.meta.url),
-    },
-])
 export const Tips = /*#__PURE__*/ __createIcon('Tips', [
     {
         u: () => new URL('./general/Tips.svg', import.meta.url),
@@ -2964,11 +2740,6 @@ export const Trash = /*#__PURE__*/ __createIcon(
 export const TrashLine = /*#__PURE__*/ __createIcon('TrashLine', [
     {
         u: () => new URL('./general/TrashLine.svg', import.meta.url),
-    },
-])
-export const TriangleWarning = /*#__PURE__*/ __createIcon('TriangleWarning', [
-    {
-        u: () => new URL('./general/TriangleWarning.svg', import.meta.url),
     },
 ])
 export const Tutorial = /*#__PURE__*/ __createIcon('Tutorial', [
@@ -3247,16 +3018,6 @@ export const Web = /*#__PURE__*/ __createIcon('Web', [
         u: () => new URL('./general/Web.svg', import.meta.url),
     },
 ])
-export const MenuLabs = /*#__PURE__*/ __createIcon('MenuLabs', [
-    {
-        u: () => new URL('./menus/MenuLabs.png', import.meta.url),
-    },
-])
-export const MenuLabsActive = /*#__PURE__*/ __createIcon('MenuLabsActive', [
-    {
-        u: () => new URL('./menus/MenuLabsActive.png', import.meta.url),
-    },
-])
 export const MenuPersonas = /*#__PURE__*/ __createIcon('MenuPersonas', [
     {
         u: () => new URL('./menus/MenuPersonas.png', import.meta.url),
@@ -3333,11 +3094,6 @@ export const DecentralizedSearch = /*#__PURE__*/ __createIcon('DecentralizedSear
         u: () => new URL('./plugins/DecentralizedSearch.svg', import.meta.url),
     },
 ])
-export const Dhedge = /*#__PURE__*/ __createIcon('Dhedge', [
-    {
-        u: () => new URL('./plugins/Dhedge.svg', import.meta.url),
-    },
-])
 export const ENS = /*#__PURE__*/ __createIcon('ENS', [
     {
         u: () => new URL('./plugins/ENS.png', import.meta.url),
@@ -3378,11 +3134,6 @@ export const GoodGhosting = /*#__PURE__*/ __createIcon('GoodGhosting', [
         u: () => new URL('./plugins/GoodGhosting.light.svg', import.meta.url),
     },
 ])
-export const ImagePayload = /*#__PURE__*/ __createIcon('ImagePayload', [
-    {
-        u: () => new URL('./plugins/ImagePayload.svg', import.meta.url),
-    },
-])
 export const Markets = /*#__PURE__*/ __createIcon('Markets', [
     {
         u: () => new URL('./plugins/Markets.png', import.meta.url),
@@ -3391,11 +3142,6 @@ export const Markets = /*#__PURE__*/ __createIcon('Markets', [
 export const MarketsClaim = /*#__PURE__*/ __createIcon('MarketsClaim', [
     {
         u: () => new URL('./plugins/MarketsClaim.svg', import.meta.url),
-    },
-])
-export const MarketTrend = /*#__PURE__*/ __createIcon('MarketTrend', [
-    {
-        u: () => new URL('./plugins/MarketTrend.svg', import.meta.url),
     },
 ])
 export const MaskBox = /*#__PURE__*/ __createIcon('MaskBox', [
@@ -3453,11 +3199,6 @@ export const SpaceId = /*#__PURE__*/ __createIcon('SpaceId', [
         u: () => new URL('./plugins/SpaceId.svg', import.meta.url),
     },
 ])
-export const SwapService = /*#__PURE__*/ __createIcon('SwapService', [
-    {
-        u: () => new URL('./plugins/SwapService.svg', import.meta.url),
-    },
-])
 export const TipCoin = /*#__PURE__*/ __createIcon('TipCoin', [
     {
         u: () => new URL('./plugins/TipCoin.svg', import.meta.url),
@@ -3466,16 +3207,6 @@ export const TipCoin = /*#__PURE__*/ __createIcon('TipCoin', [
 export const Transak = /*#__PURE__*/ __createIcon('Transak', [
     {
         u: () => new URL('./plugins/Transak.png', import.meta.url),
-    },
-])
-export const Trending = /*#__PURE__*/ __createIcon('Trending', [
-    {
-        u: () => new URL('./plugins/Trending.svg', import.meta.url),
-    },
-])
-export const Unlock = /*#__PURE__*/ __createIcon('Unlock', [
-    {
-        u: () => new URL('./plugins/Unlock.svg', import.meta.url),
     },
 ])
 export const Unstoppable = /*#__PURE__*/ __createIcon('Unstoppable', [

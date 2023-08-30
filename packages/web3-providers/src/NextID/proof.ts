@@ -22,6 +22,7 @@ import { staleNextIDCached } from './helpers.js'
 import PRESET_LENS from './preset-lens.json'
 import { fetchCachedJSON, fetchJSON, fetchSquashedJSON } from '../helpers/fetchJSON.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
+import { Duration, Expiration, stableSquashedCached } from '../entry-helpers.js'
 
 const BASE_URL =
     env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
@@ -223,7 +224,10 @@ const getExistedBindingQueryURL = (platform: string, identity: string, personaPu
 
 export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     fetchFromProofService<T>(request: Request | RequestInfo, init?: RequestInit) {
-        return fetchCachedJSON<T>(request, init)
+        return fetchCachedJSON<T>(request, init, {
+            squashExpiration: Expiration.THIRTY_MINUTES,
+            cacheDuration: Duration.THIRTY_MINUTES,
+        })
     }
 
     async clearPersonaQueryCache(personaPublicKey: string) {
@@ -273,12 +277,16 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         await staleNextIDCached(cacheKeyOfExistedBinding)
         await staleNextIDCached(cacheKeyOfQueryPersona)
         await staleNextIDCached(cacheKeyOfQueryPlatform)
+
+        await stableSquashedCached(cacheKeyOfQueryPersona)
+        await stableSquashedCached(cacheKeyOfQueryPlatform)
+        await stableSquashedCached(cacheKeyOfExistedBinding)
     }
 
     async queryExistedBindingByPersona(personaPublicKey: string) {
-        const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
-
-        const { ids } = await this.fetchFromProofService<NextIDBindings>(url)
+        const { ids } = await this.fetchFromProofService<NextIDBindings>(
+            getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey),
+        )
         // Will have only one item when query by personaPublicKey
         return first(ids)
     }
@@ -293,8 +301,6 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                 page,
                 exact: true,
                 // TODO workaround for the API, and will sort the result manually
-                // sort: 'activated_at',
-                // order: 'desc',
             }),
         )
 

@@ -3,11 +3,11 @@ import { range } from 'lodash-es'
 import { CollectibleCard, EmptyStatus, isSameNFT } from '@masknet/shared'
 import { useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { Box, Skeleton } from '@mui/material'
+import { Box, Skeleton, type BoxProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 
-export interface CollectionListProps {
+export interface CollectionListProps extends BoxProps {
     loading: boolean
     tokens: Web3Helper.NonFungibleAssetAll[]
     account?: string
@@ -38,6 +38,7 @@ export const CollectionList = memo<CollectionListProps>(function CollectionList(
     account,
     selected,
     onItemClick,
+    ...rest
 }) {
     const { t } = useI18N()
     const { pluginID } = useNetworkContext()
@@ -56,7 +57,7 @@ export const CollectionList = memo<CollectionListProps>(function CollectionList(
 
     if (loading && !tokens.length) {
         return (
-            <Box className={classes.container}>
+            <Box {...rest} className={cx(classes.container, rest.className)}>
                 {range(20).map((_, index) => (
                     <Box className={classes.item} key={index}>
                         <Skeleton animation="wave" variant="rectangular" sx={{ borderRadius: '8px' }} height="100%" />
@@ -67,7 +68,7 @@ export const CollectionList = memo<CollectionListProps>(function CollectionList(
     }
 
     return (
-        <Box className={classes.container}>
+        <Box {...rest} className={cx(classes.container, rest.className)}>
             {tokens.length
                 ? tokens.map((x, index) => {
                       const isSelected = isSameNFT(pluginID, x, selected)

@@ -210,15 +210,13 @@ export interface ChainDescriptor<ChainId, SchemaType, NetworkType> {
     isCustomized: boolean
 }
 
-export type Network<ChainId, SchemaType, NetworkType> = ChainDescriptor<ChainId, SchemaType, NetworkType>
-
 export type ReasonableNetwork<ChainId, SchemaType, NetworkType> = ChainDescriptor<ChainId, SchemaType, NetworkType> & {
     createdAt: Date
     updatedAt: Date
 }
 
 export type TransferableNetwork<ChainId, SchemaType, NetworkType> = Omit<
-    Network<ChainId, SchemaType, NetworkType>,
+    ChainDescriptor<ChainId, SchemaType, NetworkType>,
     'ID'
 >
 
@@ -229,14 +227,12 @@ export interface MessageDescriptor<Request, Response> {
     response?: Response
 }
 
-export type Message<Request, Response> = MessageDescriptor<Request, Response>
-
-export type ReasonableMessage<Request, Response> = Message<Request, Response> & {
+export type ReasonableMessage<Request, Response> = MessageDescriptor<Request, Response> & {
     createdAt: Date
     updatedAt: Date
 }
 
-export type TransferableMessage<Request, Response> = Omit<Message<Request, Response>, 'ID'>
+export type TransferableMessage<Request, Response> = Omit<MessageDescriptor<Request, Response>, 'ID'>
 
 export interface NetworkDescriptor<ChainId, NetworkType> {
     /** An unique ID for each network */
@@ -293,11 +289,14 @@ export interface ProviderDescriptor<ChainId, ProviderType> {
 }
 
 export interface Token<ChainId, SchemaType> {
+    /** For NFT, it could be `${chainId}.${contractAddress}.${tokenId}` */
     id: string
     chainId: ChainId
     type: TokenType
     schema: SchemaType
     address: string
+    /** Added by user */
+    isCustomToken?: boolean
 }
 
 export interface FungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {
@@ -739,19 +738,6 @@ export type SearchResult<ChainId, SchemaType> =
     | NonFungibleCollectionResult<ChainId, SchemaType>
     | DAOResult<ChainId>
 
-/**
- * Plugin can declare what chain it supports to trigger side effects (e.g. create a new transaction).
- * When the current chain is not supported, the composition entry will be hidden.
- */
-export type Web3EnableRequirement = Partial<
-    Record<
-        NetworkPluginID,
-        {
-            supportedChainIds?: number[]
-        }
-    >
->
-
 export interface TransactionDescriptor<ChainId, Transaction, Parameter = string | undefined> {
     chainId: ChainId
     /** The transaction type */
@@ -819,16 +805,6 @@ export interface TransactionContext<ChainId, Parameter = string | undefined> {
     children?: Array<TransactionContext<ChainId, Parameter>>
 }
 
-export interface AddressName {
-    id: string
-    /** eg. vitalik.eth */
-    label: string
-    /** eg. 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045 */
-    ownerAddress: string
-    /** eg. 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045 */
-    resolvedAddress?: string
-}
-
 type TransactionAsset<ChainId, SchemaType> = Token<ChainId, SchemaType> & {
     name: string
     symbol: string
@@ -884,13 +860,6 @@ export interface RecentTransaction<ChainId, Transaction> {
 export type RecentTransactionComputed<ChainId, Transaction> = RecentTransaction<ChainId, Transaction> & {
     /** a dynamically computed field in the hook which means the minted (initial) transaction */
     _tx: Transaction
-}
-
-export interface TokenList<ChainId, SchemaType> {
-    name: string
-    description?: string
-    /** fungible or non-fungible tokens */
-    tokens: Array<Token<ChainId, SchemaType>>
 }
 
 export interface BalanceEvent<ChainId> {
@@ -1213,11 +1182,6 @@ export interface ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType> 
         network: NetworkDescriptor<ChainId, NetworkType>,
         provider: ProviderDescriptor<ChainId, ProviderType>,
     ) => void
-}
-
-export interface AddressFormatterProps {
-    address: string
-    size?: number
 }
 
 export interface Web3UI<ChainId, ProviderType, NetworkType> {
