@@ -210,15 +210,13 @@ export interface ChainDescriptor<ChainId, SchemaType, NetworkType> {
     isCustomized: boolean
 }
 
-export type Network<ChainId, SchemaType, NetworkType> = ChainDescriptor<ChainId, SchemaType, NetworkType>
-
 export type ReasonableNetwork<ChainId, SchemaType, NetworkType> = ChainDescriptor<ChainId, SchemaType, NetworkType> & {
     createdAt: Date
     updatedAt: Date
 }
 
 export type TransferableNetwork<ChainId, SchemaType, NetworkType> = Omit<
-    Network<ChainId, SchemaType, NetworkType>,
+    ChainDescriptor<ChainId, SchemaType, NetworkType>,
     'ID'
 >
 
@@ -229,14 +227,12 @@ export interface MessageDescriptor<Request, Response> {
     response?: Response
 }
 
-export type Message<Request, Response> = MessageDescriptor<Request, Response>
-
-export type ReasonableMessage<Request, Response> = Message<Request, Response> & {
+export type ReasonableMessage<Request, Response> = MessageDescriptor<Request, Response> & {
     createdAt: Date
     updatedAt: Date
 }
 
-export type TransferableMessage<Request, Response> = Omit<Message<Request, Response>, 'ID'>
+export type TransferableMessage<Request, Response> = Omit<MessageDescriptor<Request, Response>, 'ID'>
 
 export interface NetworkDescriptor<ChainId, NetworkType> {
     /** An unique ID for each network */
