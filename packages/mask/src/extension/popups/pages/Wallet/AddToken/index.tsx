@@ -8,7 +8,7 @@ import { MaskTabList, makeStyles, usePopupCustomSnackbar, useTabs } from '@maskn
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useBlockedFungibleTokens, useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
 import { TokenType, type NonFungibleTokenContract } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab } from '@mui/material'
 import { useI18N } from '../../../../../utils/index.js'
@@ -133,13 +133,12 @@ const AddToken = memo(function AddToken() {
             await Token?.addNonFungibleCollection?.(account, contract, tokenIds)
 
             for await (const tokenId of tokenIds) {
-                await Token?.trustToken?.(account, {
+                await Token?.addToken?.(account, {
                     id: `${contract.chainId}.${contract.address}.${tokenId}`,
                     chainId: contract.chainId,
                     type: TokenType.NonFungible,
-                    schema: SchemaType.ERC721,
+                    schema: contract.schema,
                     address: contract.address,
-                    tokenId,
                 })
             }
 

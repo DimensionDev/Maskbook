@@ -17,6 +17,7 @@ import { Contacts } from './Contacts.js'
 import { Rename } from './Rename.js'
 import { ShowPrivateKey } from './ShowPrivateKey.js'
 import { useStyles } from './useStyles.js'
+import { ConnectedSites } from './ConnectedSites.js'
 
 const WalletSettings = memo(() => {
     const { t } = useI18N()
@@ -52,6 +53,7 @@ const WalletSettings = memo(() => {
                 {wallet.owner ? <ChangeOwner /> : null}
                 <Rename />
                 <Contacts />
+                <ConnectedSites />
                 <AutoLock />
                 <ChangeCurrency />
                 <ChangePaymentPassword />

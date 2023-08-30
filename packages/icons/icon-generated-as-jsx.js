@@ -634,6 +634,11 @@ export const AddUser = /*#__PURE__*/ __createIcon('AddUser', [
         s: true,
     },
 ])
+export const Appendices = /*#__PURE__*/ __createIcon('Appendices', [
+    {
+        u: () => new URL('./general/Appendices.svg', import.meta.url),
+    },
+])
 export const ApplicationNFT = /*#__PURE__*/ __createIcon('ApplicationNFT', [
     {
         u: () => new URL('./general/ApplicationNFT.svg', import.meta.url),

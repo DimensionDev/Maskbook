@@ -20,5 +20,7 @@
     "pets_dialog_menu_about": "crwdns17988:0crwdne17988:0",
     "plugin_pets_name": "crwdns21713:0crwdne21713:0",
     "plugin_pets_description": "crwdns21715:0crwdne21715:0",
-    "share_twitter": "crwdns20169:0crwdne20169:0"
+    "share_twitter": "crwdns20169:0crwdne20169:0",
+    "pet_setting_tooltip$default": "crwdns22219:0crwdne22219:0",
+    "pet_setting_tooltip$punk": "crwdns22221:0crwdne22221:0"
 }
