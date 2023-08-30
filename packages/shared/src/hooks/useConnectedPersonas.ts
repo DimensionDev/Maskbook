@@ -18,6 +18,7 @@ export function useConnectedPersonas() {
         Array<{ persona: PersonaInformation; proof: BindingProof[]; avatar: string | undefined }>,
         Error
     >({
+        queryKey: ['connected-persona', personasInDB, getPersonaAvatars],
         queryFn: async () => {
             const allPersonaPublicKeys = personasInDB.map((x) => x.identifier.publicKeyAsHex)
             const allPersonaIdentifiers = personasInDB.map((x) => x.identifier)
