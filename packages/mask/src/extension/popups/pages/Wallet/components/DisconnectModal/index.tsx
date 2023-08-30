@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: '36px',
         textAlign: 'center',
     },
-    confirmButoon: {
+    confirmButton: {
         background: theme.palette.maskColor.warn,
         borderRadius: '99px',
         display: 'flex',
@@ -155,7 +155,7 @@ const DisconnectModal = memo(function DisconnectModal({ site, setOpen }: Disconn
                 <Typography className={classes.desc}>{t('popups_wallet_disconnect_confirm')}</Typography>
                 <button
                     type="button"
-                    className={classes.confirmButoon}
+                    className={classes.confirmButton}
                     onClick={() => {
                         onDisconnect()
                     }}>
