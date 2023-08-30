@@ -36,7 +36,6 @@
     { "path": "./Trader/" },
     { "path": "./Transak/" },
     { "path": "./VCent/" },
-    { "path": "./Wallet/" },
     { "path": "./Web3Profile/" },
     { "path": "./template/" }
   ]
