@@ -52,7 +52,7 @@ const SiteCard = memo(function SiteCard({ site }: SiteCardProps) {
     const Icon = useMemo(() => SOCIAL_MEDIA_ROUND_ICON_MAPPING[site], [site])
     return (
         <Box className={classes.container}>
-            <Icon size={24} />
+            {Icon ? <Icon size={24} /> : null}
             <Box className={classes.site}>
                 <Typography className={classes.siteName}>{SOCIAL_MEDIA_NAME[site]}</Typography>
                 <Typography className={classes.siteUrl}>{site}</Typography>

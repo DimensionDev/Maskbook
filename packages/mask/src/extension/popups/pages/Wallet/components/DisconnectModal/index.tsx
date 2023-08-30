@@ -106,7 +106,7 @@ const DisconnectModal = memo(function DisconnectModal({ site, setOpen }: Disconn
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const handleDisconnect = useCallback(async () => {
         if (!site) return
-        if (!getEnumAsArray(EnhanceableSite).some((x) => isEqual(x.key, site))) return
+        if (!getEnumAsArray(EnhanceableSite).some((x) => isEqual(x.value, site))) return
         await Services.Wallet.recordConnectedSites(site as EnhanceableSite, false)
     }, [site, wallet])
     const { mutate: onDisconnect } = useMutation({
