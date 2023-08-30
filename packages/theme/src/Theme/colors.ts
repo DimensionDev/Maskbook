@@ -51,6 +51,7 @@ export const MaskColors = {
             publicBg: '#F9F9F9',
             publicInput: '#F2F6FA',
             borderSecondary: '#d2dbe0',
+            mask: 'linear-gradient(0deg, rgba(0, 0, 0, 0.40) 0%, rgba(0, 0, 0, 0.40) 100%), rgba(28, 104, 243, 0.20)',
         },
         shadow: {
             popup: '0px 4px 30px rgba(0, 0, 0, 0.1)',

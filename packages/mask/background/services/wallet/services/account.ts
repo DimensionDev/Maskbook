@@ -11,6 +11,14 @@ export async function getConnectedStatus(site: EnhanceableSite | ExtensionSite) 
     return recordSites.get(site)
 }
 
+export async function disconnectAll() {
+    return recordSites.clear()
+}
+
+export async function getConnectedSites() {
+    return [...recordSites.entries()].filter(([, connected]) => connected).map(([site]) => site)
+}
+
 interface MaskAccount {
     address: string
     owner?: string

@@ -36,6 +36,7 @@ declare module '@mui/material/styles/createPalette.d' {
             publicThirdMain: string
             publicBg: string
             borderSecondary: string
+            mask: string
         }
         shadow: {
             popup: string
