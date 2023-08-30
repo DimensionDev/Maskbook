@@ -176,11 +176,21 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
         return Boolean(isValidTokenIds(watchedTokenIds) && !validationMsgForAddress && address && tokenIds.length > 0)
     }, [watchedTokenIds, validationMsgForAddress])
 
+    const Web3 = useWeb3Connection(pluginID, {
+        chainId,
+    })
     const assetsQueries = useQueries({
         queries: tokenIds.map((tokenId) => ({
             enabled: isValid,
             queryKey: ['nft-asset', pluginID, chainId, address, tokenId],
-            queryFn: () => hub.getNonFungibleAsset(address, tokenId, { chainId, account }),
+            queryFn: async () => {
+                try {
+                    return await hub.getNonFungibleAsset(address, tokenId, { chainId, account })
+                } catch (err) {
+                    const token = await Web3.getNonFungibleToken(address, tokenId)
+                    return { ...token, owner: { address: token.ownerId } }
+                }
+            },
         })),
     })
     const loadingAssets = assetsQueries.every((x) => x.isLoading)
