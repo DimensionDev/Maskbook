@@ -20,7 +20,7 @@ const initGasSetting = {
 
 export const GasSettingModal = forwardRef<
     SingletonModalRefCreator<GasSettingModalOpenProps, GasSettingModalCloseProps>
->((_, ref) => {
+>(function GasSettingModal(_, ref) {
     const [chainId, setChainId] = useState<ChainId | undefined>()
     const [replaceType, setReplaceType] = useState<ReplaceType>()
     const [gasConfig = initGasSetting, setGasConfig] = useState<GasSetting>()

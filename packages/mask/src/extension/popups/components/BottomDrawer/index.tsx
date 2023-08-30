@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { Box, Drawer, Typography } from '@mui/material'
-import { memo, type PropsWithChildren } from 'react'
+import { memo, useRef, type PropsWithChildren, useEffect } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -35,6 +35,10 @@ export interface BottomDrawerProps extends PropsWithChildren {
 export const BottomDrawer = memo<BottomDrawerProps>(function BottomDrawer({ open, onClose, children, title }) {
     const { classes } = useStyles()
     const handleClose = () => onClose?.()
+    const everOpenRef = useRef(false)
+    useEffect(() => {
+        if (open) everOpenRef.current = true
+    }, [open])
     return (
         <Drawer anchor="bottom" onClose={handleClose} open={open} classes={{ paper: classes.root }}>
             <Box className={classes.header}>
@@ -43,7 +47,7 @@ export const BottomDrawer = memo<BottomDrawerProps>(function BottomDrawer({ open
                 </TextOverflowTooltip>
                 <Icons.Close size={24} onClick={handleClose} />
             </Box>
-            {children}
+            {open || everOpenRef.current ? children : null}
         </Drawer>
     )
 })
