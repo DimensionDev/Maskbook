@@ -24,7 +24,6 @@
     { "path": "../plugins/Solana/" },
     { "path": "../plugins/EVM/" },
     { "path": "../plugins/Flow/" },
-    { "path": "../plugins/Wallet/" },
     { "path": "../backup-format/" },
     { "path": "../shared-base" },
     { "path": "../shared-base-ui" },

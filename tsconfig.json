@@ -106,7 +106,7 @@
       "@masknet/sandboxed-plugin-runtime/extension-page": ["./packages/sandboxed-plugin-runtime/src/extension-page"],
       "@masknet/base": ["./packages/base/src"],
       "@masknet/config": ["./packages/config/src"],
-      // @masknet/scripts: inserpackages/app/src
+      // @masknet/scripts: insert-here
 
       // Plugins
       "@masknet/plugin-debugger": ["./packages/plugins/Debugger/src"],
@@ -144,10 +144,8 @@
       "@masknet/plugin-profilecard": ["./packages/plugins/ProfileCard/src"],
       "@masknet/plugin-savings": ["./packages/plugins/Savings/src"],
       "@masknet/plugin-snapshot": ["./packages/plugins/Snapshot/src"],
-
-      "@masknet/plugin-switch-logo": ["./packages/plugins/SwitchLogo/src"],
       // @masknet/scripts: insert-here 3
-      "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]
+      "@masknet/plugin-switch-logo": ["./packages/plugins/SwitchLogo/src"]
     }
   },
   "files": [],

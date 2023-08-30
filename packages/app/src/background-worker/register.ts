@@ -1,4 +1,3 @@
-import '@masknet/plugin-wallet/register'
 import '@masknet/plugin-evm/register'
 import '@masknet/plugin-gitcoin/register'
 import '@masknet/plugin-collectible/register'

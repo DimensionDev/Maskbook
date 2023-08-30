@@ -4,7 +4,6 @@
 import '@masknet/plugin-example/register'
 import '@masknet/plugin-debugger/register'
 
-import '@masknet/plugin-wallet/register'
 import '@masknet/plugin-evm/register'
 import '@masknet/plugin-flow/register'
 import '@masknet/plugin-solana/register'

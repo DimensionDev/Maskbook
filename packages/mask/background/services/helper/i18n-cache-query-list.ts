@@ -8,7 +8,6 @@ export default {
     'dashboard/src/locales/%locale%.json': 'dashboard',
     'plugins/Example/src/locales/%locale%.json': 'io.mask.example',
     'plugins/Debugger/src/locales/%locale%.json': 'io.mask.debugger',
-    'plugins/Wallet/src/locales/%locale%.json': 'com.maskbook.wallet',
     'plugins/Flow/src/locales/%locale%.json': 'com.mask.flow',
     'plugins/FileService/src/locales/%locale%.json': 'com.maskbook.fileservice',
     'plugins/ScamSniffer/src/locales/%locale%.json': 'io.scamsniffer.mask-plugin',

@@ -25,7 +25,7 @@ import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext.js'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
-export default function DashboardRoot() {
+export default function DashboardRoot(props: React.PropsWithChildren<{}>) {
     useEffect(() => queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
 
     // #region theme
@@ -57,6 +57,7 @@ export default function DashboardRoot() {
                                             <SharedContextProvider>
                                                 <Pages />
                                                 <PluginRender />
+                                                {props.children}
                                             </SharedContextProvider>
                                         </CustomSnackbarProvider>
                                     </ErrorBoundary>

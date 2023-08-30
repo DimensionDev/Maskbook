@@ -1,7 +1,7 @@
 import { delay, getEnumAsArray } from '@masknet/kit'
 import { getRegisteredWeb3Providers } from '@masknet/plugin-infra'
 import { ConnectWalletModal, InjectedDialog, useSharedI18N } from '@masknet/shared'
-import { DashboardRoutes, NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -28,9 +28,10 @@ export interface SelectProviderProps {
     requiredSupportChainIds?: Web3Helper.ChainIdAll[]
     onConnect?: () => void
     onClose: () => void
+    createWallet(): void
 }
 export const SelectProvider = memo(function SelectProvider(props: SelectProviderProps) {
-    const { open, requiredSupportPluginID, requiredSupportChainIds, onConnect, onClose } = props
+    const { open, requiredSupportPluginID, requiredSupportChainIds, onConnect, onClose, createWallet } = props
     const t = useSharedI18N()
     const { classes } = useStyles()
 
@@ -50,9 +51,7 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
                 provider.type === ProviderType.MaskWallet &&
                 !Providers[ProviderType.MaskWallet].subscription.wallets.getCurrentValue().length
             ) {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                globalThis.HelperService.openDashboard(DashboardRoutes.CreateMaskWalletForm)
+                createWallet()
                 return
             }
 

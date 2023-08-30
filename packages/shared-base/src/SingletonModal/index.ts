@@ -21,6 +21,12 @@ export class SingletonModal<
     CloseProps = void,
     T extends SingletonModalRefCreator<OpenProps, CloseProps> = SingletonModalRefCreator<OpenProps, CloseProps>,
 > {
+    constructor() {
+        this.open = this.open.bind(this)
+        this.close = this.close.bind(this)
+        this.abort = this.abort.bind(this)
+        this.openAndWaitForClose = this.openAndWaitForClose.bind(this)
+    }
     readonly emitter = new Emitter<{
         open: [OpenProps]
         close: [CloseProps]
