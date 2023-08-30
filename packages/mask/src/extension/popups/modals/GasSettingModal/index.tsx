@@ -1,9 +1,11 @@
-import { forwardRef, useState } from 'react'
+import { forwardRef, useMemo, useState } from 'react'
 import { GasSettingDialog } from './GasSettingDialog.js'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { SingletonModalRefCreator } from '@masknet/shared-base'
 import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
-import type { GasSetting, ReplaceType } from '../../pages/Wallet/type.js'
+import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
+import { BottomDrawer } from '../../components/index.js'
+import { useI18N } from '../../../../utils/index.js'
 
 export type GasSettingModalOpenProps = {
     chainId: ChainId
@@ -21,6 +23,7 @@ const initGasSetting = {
 export const GasSettingModal = forwardRef<
     SingletonModalRefCreator<GasSettingModalOpenProps, GasSettingModalCloseProps>
 >(function GasSettingModal(_, ref) {
+    const { t } = useI18N()
     const [chainId, setChainId] = useState<ChainId | undefined>()
     const [replaceType, setReplaceType] = useState<ReplaceType>()
     const [gasConfig = initGasSetting, setGasConfig] = useState<GasSetting>()
@@ -33,15 +36,27 @@ export const GasSettingModal = forwardRef<
             setNonce(props.nonce ?? '')
         },
     })
+    const title = useMemo(() => {
+        switch (replaceType) {
+            case ReplaceType.CANCEL:
+                return t('cancel')
+            case ReplaceType.SPEED_UP:
+                return t('speed_up')
+            default:
+                return t('popups_wallet_gas_fee')
+        }
+    }, [replaceType])
 
     return (
-        <GasSettingDialog
-            nonce={nonce}
-            onClose={(config) => dispatch?.close(config)}
-            open={open}
-            chainId={chainId}
-            replaceType={replaceType}
-            config={gasConfig}
-        />
+        <BottomDrawer open={open} title={title} onClose={() => dispatch?.close(undefined)}>
+            <GasSettingDialog
+                nonce={nonce}
+                onClose={(config) => dispatch?.close(config)}
+                open={open}
+                chainId={chainId}
+                replaceType={replaceType}
+                config={gasConfig}
+            />
+        </BottomDrawer>
     )
 })
