@@ -315,11 +315,13 @@ export namespace Plugin.Shared {
         /** The website this plugin supports. */
         supports: SupportedSitesDeclare
         /** The Web3 Network this plugin supports */
-        web3?: Record<
-            NetworkPluginID,
-            {
-                supportedChainIds?: number[]
-            }
+        web3?: Partial<
+            Record<
+                NetworkPluginID,
+                {
+                    supportedChainIds?: number[]
+                }
+            >
         >
         /**
          * Requested origins.
