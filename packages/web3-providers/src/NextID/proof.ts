@@ -22,7 +22,7 @@ import { staleNextIDCached } from './helpers.js'
 import PRESET_LENS from './preset-lens.json'
 import { fetchCachedJSON, fetchJSON, fetchSquashedJSON } from '../helpers/fetchJSON.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
-import { Duration, Expiration } from '../entry-helpers.js'
+import { Duration, Expiration, stableSquashedCached } from '../entry-helpers.js'
 
 const BASE_URL =
     env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
@@ -277,6 +277,10 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         await staleNextIDCached(cacheKeyOfExistedBinding)
         await staleNextIDCached(cacheKeyOfQueryPersona)
         await staleNextIDCached(cacheKeyOfQueryPlatform)
+
+        await stableSquashedCached(cacheKeyOfQueryPersona)
+        await stableSquashedCached(cacheKeyOfQueryPlatform)
+        await stableSquashedCached(cacheKeyOfExistedBinding)
     }
 
     async queryExistedBindingByPersona(personaPublicKey: string) {
