@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PersonaContext } from '@masknet/shared'
 import {
@@ -7,17 +7,18 @@ import {
     PopupRoutes,
     type EnhanceableSite,
     type ProfileAccount,
+    NextIDPlatform,
 } from '@masknet/shared-base'
 import { PersonaHomeUI } from './UI.js'
 import Services from '../../../../service.js'
-import { useSupportSocialNetworks, useVerifiedWallets, useHasPassword } from '../../../hooks/index.js'
+import { useSupportSocialNetworks, useHasPassword } from '../../../hooks/index.js'
 
 const PersonaHome = memo(() => {
     const navigate = useNavigate()
     const { avatar, currentPersona, setSelectedAccount, personas, accounts, proofs } = PersonaContext.useContainer()
 
     const { value: definedSocialNetworks = EMPTY_LIST } = useSupportSocialNetworks()
-    const { data: bindingWallets } = useVerifiedWallets(proofs)
+    const bindingWallets = useMemo(() => proofs?.filter((x) => x.platform === NextIDPlatform.Ethereum), [proofs])
     const { hasPassword } = useHasPassword()
 
     const onCreatePersona = useCallback(() => {

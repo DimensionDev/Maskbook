@@ -46,7 +46,7 @@ const SelectWallet = memo(function SelectWallet() {
     const { Network } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { proofs } = PersonaContext.useContainer()
 
-    const { data: bindingWallets } = useVerifiedWallets(proofs)
+    const bindingWallets = useVerifiedWallets(proofs)
 
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         chainId: chainIdSearched ? (Number.parseInt(chainIdSearched, 10) as ChainId) : undefined,

@@ -24,6 +24,7 @@ import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
 import { useParamTab } from '../../../hooks/index.js'
 import { useNavigate } from 'react-router-dom'
 import { PopupHomeTabType } from '@masknet/shared'
+import { SelectProvider } from '../../../components/SelectProvider/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -278,7 +279,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                             className={classes.panel}
                             value={PopupHomeTabType.ConnectedWallets}
                             data-hide-scrollbar>
-                            <ConnectedWallet wallets={bindingWallets} />
+                            {bindingWallets?.length ? <ConnectedWallet /> : <SelectProvider />}
                         </TabPanel>
                     </TabContext>
                 ) : (
