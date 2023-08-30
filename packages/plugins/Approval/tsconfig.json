@@ -17,7 +17,6 @@
     { "path": "../../web3-shared/base" },
     { "path": "../../web3-shared/evm" },
     { "path": "../../web3-providers" },
-    { "path": "../../typed-message/base" },
-    { "path": "../Wallet" }
+    { "path": "../../typed-message/base" }
   ]
 }

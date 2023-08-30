@@ -35,8 +35,7 @@ startPluginDashboard(
     ),
 )
 createNormalReactRoot(
-    <>
-        <IntegratedDashboard />
+    <IntegratedDashboard>
         <Modals createWallet={() => Services.Helper.openDashboard(DashboardRoutes.CreateMaskWalletForm)} />
-    </>,
+    </IntegratedDashboard>,
 )
