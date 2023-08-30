@@ -1,5 +1,5 @@
 import { defer, timeout } from '@masknet/kit'
-import { PopupRoutes } from '@masknet/shared-base'
+import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Providers, Web3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -8,13 +8,14 @@ import { Box } from '@mui/material'
 import { memo, useState } from 'react'
 import { Controller } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { useAsyncFn } from 'react-use'
+import { useAsync, useAsyncFn } from 'react-use'
 import type { z as zod } from 'zod'
 import Services from '../../../../service.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm.js'
+import { useWeb3State } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -45,9 +46,19 @@ const CreateWallet = memo(function CreateWallet() {
     const {
         control,
         handleSubmit,
+        setValue,
         formState: { errors, isValid },
         schema,
     } = useSetWalletNameForm()
+
+    const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { loading: isLoadingEns } = useAsync(async () => {
+        if (!NameService?.reverse) return
+        const nextWallet = await Services.Wallet.deriveWallet('', false)
+        if (!nextWallet) return
+        const ens = await NameService.reverse(nextWallet)
+        if (ens) setValue('name', ens)
+    }, [!NameService?.reverse, setValue])
 
     const [{ loading }, onCreate] = useAsyncFn(async ({ name }: zod.infer<typeof schema>) => {
         try {
@@ -68,7 +79,7 @@ const CreateWallet = memo(function CreateWallet() {
     const onSubmit = handleSubmit(onCreate)
 
     useTitle(t('popups_add_wallet'))
-    const disabled = !isValid || loading
+    const disabled = !isValid || loading || isLoadingEns
 
     return (
         <div className={classes.content}>
@@ -80,6 +91,7 @@ const CreateWallet = memo(function CreateWallet() {
                         <StyledInput
                             {...field}
                             autoFocus
+                            disabled={isLoadingEns}
                             placeholder={t('popups_wallet_enter_your_wallet_name')}
                             error={!!errorMessage || !!errors.name?.message}
                             helperText={errorMessage || errors.name?.message}
