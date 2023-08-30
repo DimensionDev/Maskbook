@@ -31,7 +31,6 @@ import { Alert, Box, Button, TextField, Typography, useTheme } from '@mui/materi
 import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
-import { BottomDrawer } from '../../components/index.js'
 import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
 import { useGasRatio } from '../../hooks/useGasRatio.js'
 
@@ -178,17 +177,6 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
 
     const error = gasPriceError || maxPriorityFeePerGasError || maxFeePerGasError
 
-    const title = useMemo(() => {
-        switch (replaceType) {
-            case ReplaceType.CANCEL:
-                return t('cancel')
-            case ReplaceType.SPEED_UP:
-                return t('speed_up')
-            default:
-                return t('popups_wallet_gas_fee')
-        }
-    }, [replaceType])
-
     const tips = useMemo(() => {
         switch (replaceType) {
             case ReplaceType.CANCEL:
@@ -244,169 +232,130 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     }, [open, isSupport1559, gasOptions, replaceType, config])
 
     return (
-        <BottomDrawer open={open} title={title} onClose={onClose}>
-            <Box display="flex" flexDirection="column" rowGap={1.5} mt={1.5}>
-                <Typography className={classes.preview}>
-                    {formatBalance(totalGas, token?.decimals, 4, false, true, 6)} {token?.symbol} ≈{' '}
-                    <FormattedCurrency
-                        value={formatWeiToEther(totalGas).times(tokenPrice ?? 0)}
-                        formatter={formatCurrency}
-                        options={{
-                            onlyRemainTwoOrZeroDecimal: false,
-                            customDecimalConfig: {
-                                boundary: scale10(1, -4),
-                                decimalExp: 4,
-                            },
-                        }}
-                    />
+        <Box display="flex" flexDirection="column" rowGap={1.5} mt={1.5}>
+            <Typography className={classes.preview}>
+                {formatBalance(totalGas, token?.decimals, 4, false, true, 6)} {token?.symbol} ≈{' '}
+                <FormattedCurrency
+                    value={formatWeiToEther(totalGas).times(tokenPrice ?? 0)}
+                    formatter={formatCurrency}
+                    options={{
+                        onlyRemainTwoOrZeroDecimal: false,
+                        customDecimalConfig: {
+                            boundary: scale10(1, -4),
+                            decimalExp: 4,
+                        },
+                    }}
+                />
+            </Typography>
+            {tips ? (
+                <Typography
+                    className={classes.tips}
+                    sx={{
+                        color:
+                            replaceType === ReplaceType.CANCEL
+                                ? theme.palette.maskColor.danger
+                                : theme.palette.maskColor.warn,
+                    }}>
+                    {tips}
                 </Typography>
-                {tips ? (
-                    <Typography
-                        className={classes.tips}
-                        sx={{
-                            color:
-                                replaceType === ReplaceType.CANCEL
-                                    ? theme.palette.maskColor.danger
-                                    : theme.palette.maskColor.warn,
-                        }}>
-                        {tips}
-                    </Typography>
-                ) : null}
-                {estimateSecond && !replaceType ? (
-                    <Typography className={classes.seconds}>
-                        {t('popups_wallet_gas_price_estimate_second', { seconds: estimateSecond })}
-                    </Typography>
-                ) : null}
-                {gasOptions?.normal.baseFeePerGas && isSupport1559 && (!error || !replaceType) ? (
-                    <Alert severity="info">
-                        {t('popups_wallet_gas_price_current_base_fee', {
-                            baseFee: formatWeiToGwei(gasOptions.normal.baseFeePerGas).toFixed(2, BigNumber.ROUND_UP),
-                        })}
-                    </Alert>
-                ) : null}
-                {isSupport1559 ? (
-                    <>
-                        <Box>
-                            <Typography className={classes.title}>
-                                {replaceType ? t('nonce') : t('popups_wallet_gas_fee_settings_gas_limit')}
-                            </Typography>
-                            <TextField
-                                value={toFixed(replaceType ? nonce : config.gas, 0)}
-                                disabled
-                                fullWidth
-                                InputProps={{
-                                    disableUnderline: true,
-                                    type: 'number',
-                                }}
-                            />
-                        </Box>
-                        <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" columnGap={2}>
-                            <Box>
-                                <Typography className={classes.title}>
-                                    {t('popups_wallet_gas_fee_settings_max_priority_fee')}
-                                </Typography>
-                                <TextField
-                                    error={!!maxPriorityFeePerGasError}
-                                    value={maxPriorityFeePerGas}
-                                    onChange={(e) => {
-                                        if (!e.target.value) {
-                                            setMaxPriorityFeePerGas('')
-                                            setMaxFeePerGas(
-                                                formatWeiToGwei(gasOptions?.slow.baseFeePerGas ?? 0).toFixed(2),
-                                            )
-                                            return
-                                        }
-
-                                        if (
-                                            (isLessThan(
-                                                e.target.value,
-                                                formatWeiToGwei(gasOptions?.slow.suggestedMaxPriorityFeePerGas ?? 0),
-                                            ) &&
-                                                !!replaceType) ||
-                                            !isPositive(e.target.value)
-                                        ) {
-                                            return
-                                        }
-
-                                        setMaxPriorityFeePerGas(e.target.value)
-                                        setMaxFeePerGas(
-                                            formatWeiToGwei(gasOptions?.slow.baseFeePerGas ?? 0)
-                                                .plus(e.target.value)
-                                                .toFixed(2, BigNumber.ROUND_UP),
-                                        )
-                                    }}
-                                    InputProps={{
-                                        endAdornment: <Typography className={classes.unit}>{t('gwei')}</Typography>,
-                                        disableUnderline: true,
-                                        inputProps: {
-                                            min: 0,
-                                            type: 'number',
-                                        },
-                                    }}
-                                />
-                            </Box>
-                            <Box>
-                                <Typography className={classes.title}>
-                                    {t('popups_wallet_gas_fee_settings_max_fee')}
-                                </Typography>
-                                <TextField
-                                    error={!!maxFeePerGasError}
-                                    onChange={(e) => {
-                                        if (!e.target.value) {
-                                            setMaxFeePerGas('')
-                                            return
-                                        }
-                                        if (
-                                            (isLessThan(
-                                                e.target.value,
-                                                formatWeiToGwei(gasOptions?.slow.baseFeePerGas ?? 0).plus(
-                                                    maxPriorityFeePerGas,
-                                                ),
-                                            ) &&
-                                                !!replaceType) ||
-                                            !isPositive(e.target.value)
-                                        )
-                                            return
-
-                                        setMaxFeePerGas(e.target.value || '0')
-                                    }}
-                                    value={maxFeePerGas}
-                                    InputProps={{
-                                        endAdornment: <Typography className={classes.unit}>{t('gwei')}</Typography>,
-                                        disableUnderline: true,
-                                        type: 'number',
-                                        inputProps: {
-                                            min: 0,
-                                        },
-                                    }}
-                                />
-                            </Box>
-                        </Box>
-                    </>
-                ) : (
+            ) : null}
+            {estimateSecond && !replaceType ? (
+                <Typography className={classes.seconds}>
+                    {t('popups_wallet_gas_price_estimate_second', { seconds: estimateSecond })}
+                </Typography>
+            ) : null}
+            {gasOptions?.normal.baseFeePerGas && isSupport1559 && (!error || !replaceType) ? (
+                <Alert severity="info">
+                    {t('popups_wallet_gas_price_current_base_fee', {
+                        baseFee: formatWeiToGwei(gasOptions.normal.baseFeePerGas).toFixed(2, BigNumber.ROUND_UP),
+                    })}
+                </Alert>
+            ) : null}
+            {isSupport1559 ? (
+                <>
+                    <Box>
+                        <Typography className={classes.title}>
+                            {replaceType ? t('nonce') : t('popups_wallet_gas_fee_settings_gas_limit')}
+                        </Typography>
+                        <TextField
+                            value={toFixed(replaceType ? nonce : config.gas, 0)}
+                            disabled
+                            fullWidth
+                            InputProps={{
+                                disableUnderline: true,
+                                type: 'number',
+                            }}
+                        />
+                    </Box>
                     <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" columnGap={2}>
                         <Box>
-                            <Typography className={classes.title}>{t('popups_wallet_gas_price')}</Typography>
+                            <Typography className={classes.title}>
+                                {t('popups_wallet_gas_fee_settings_max_priority_fee')}
+                            </Typography>
                             <TextField
-                                error={!!gasPriceError}
-                                value={gasPrice}
+                                error={!!maxPriorityFeePerGasError}
+                                value={maxPriorityFeePerGas}
                                 onChange={(e) => {
                                     if (!e.target.value) {
-                                        setGasPrice('')
+                                        setMaxPriorityFeePerGas('')
+                                        setMaxFeePerGas(formatWeiToGwei(gasOptions?.slow.baseFeePerGas ?? 0).toFixed(2))
                                         return
                                     }
+
                                     if (
                                         (isLessThan(
                                             e.target.value,
-                                            formatWeiToGwei(gasOptions?.slow.suggestedMaxFeePerGas ?? 0),
+                                            formatWeiToGwei(gasOptions?.slow.suggestedMaxPriorityFeePerGas ?? 0),
                                         ) &&
                                             !!replaceType) ||
                                         !isPositive(e.target.value)
                                     ) {
                                         return
                                     }
-                                    setGasPrice(e.target.value || '0')
+
+                                    setMaxPriorityFeePerGas(e.target.value)
+                                    setMaxFeePerGas(
+                                        formatWeiToGwei(gasOptions?.slow.baseFeePerGas ?? 0)
+                                            .plus(e.target.value)
+                                            .toFixed(2, BigNumber.ROUND_UP),
+                                    )
                                 }}
+                                InputProps={{
+                                    endAdornment: <Typography className={classes.unit}>{t('gwei')}</Typography>,
+                                    disableUnderline: true,
+                                    inputProps: {
+                                        min: 0,
+                                        type: 'number',
+                                    },
+                                }}
+                            />
+                        </Box>
+                        <Box>
+                            <Typography className={classes.title}>
+                                {t('popups_wallet_gas_fee_settings_max_fee')}
+                            </Typography>
+                            <TextField
+                                error={!!maxFeePerGasError}
+                                onChange={(e) => {
+                                    if (!e.target.value) {
+                                        setMaxFeePerGas('')
+                                        return
+                                    }
+                                    if (
+                                        (isLessThan(
+                                            e.target.value,
+                                            formatWeiToGwei(gasOptions?.slow.baseFeePerGas ?? 0).plus(
+                                                maxPriorityFeePerGas,
+                                            ),
+                                        ) &&
+                                            !!replaceType) ||
+                                        !isPositive(e.target.value)
+                                    )
+                                        return
+
+                                    setMaxFeePerGas(e.target.value || '0')
+                                }}
+                                value={maxFeePerGas}
                                 InputProps={{
                                     endAdornment: <Typography className={classes.unit}>{t('gwei')}</Typography>,
                                     disableUnderline: true,
@@ -417,27 +366,62 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                 }}
                             />
                         </Box>
-                        <Box>
-                            <Typography className={classes.title}>
-                                {replaceType ? t('nonce') : t('popups_wallet_gas_fee_settings_gas_limit')}
-                            </Typography>
-                            <TextField
-                                value={toFixed(replaceType ? nonce : config.gas, 0)}
-                                disabled
-                                fullWidth
-                                InputProps={{
-                                    disableUnderline: true,
-                                    type: 'number',
-                                }}
-                            />
-                        </Box>
                     </Box>
-                )}
-                {error ? <Alert severity="error">{error}</Alert> : null}
-                <Button onClick={handleConfirm} disabled={disabled}>
-                    {t('confirm')}
-                </Button>
-            </Box>
-        </BottomDrawer>
+                </>
+            ) : (
+                <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" columnGap={2}>
+                    <Box>
+                        <Typography className={classes.title}>{t('popups_wallet_gas_price')}</Typography>
+                        <TextField
+                            error={!!gasPriceError}
+                            value={gasPrice}
+                            onChange={(e) => {
+                                if (!e.target.value) {
+                                    setGasPrice('')
+                                    return
+                                }
+                                if (
+                                    (isLessThan(
+                                        e.target.value,
+                                        formatWeiToGwei(gasOptions?.slow.suggestedMaxFeePerGas ?? 0),
+                                    ) &&
+                                        !!replaceType) ||
+                                    !isPositive(e.target.value)
+                                ) {
+                                    return
+                                }
+                                setGasPrice(e.target.value || '0')
+                            }}
+                            InputProps={{
+                                endAdornment: <Typography className={classes.unit}>{t('gwei')}</Typography>,
+                                disableUnderline: true,
+                                type: 'number',
+                                inputProps: {
+                                    min: 0,
+                                },
+                            }}
+                        />
+                    </Box>
+                    <Box>
+                        <Typography className={classes.title}>
+                            {replaceType ? t('nonce') : t('popups_wallet_gas_fee_settings_gas_limit')}
+                        </Typography>
+                        <TextField
+                            value={toFixed(replaceType ? nonce : config.gas, 0)}
+                            disabled
+                            fullWidth
+                            InputProps={{
+                                disableUnderline: true,
+                                type: 'number',
+                            }}
+                        />
+                    </Box>
+                </Box>
+            )}
+            {error ? <Alert severity="error">{error}</Alert> : null}
+            <Button onClick={handleConfirm} disabled={disabled}>
+                {t('confirm')}
+            </Button>
+        </Box>
     )
 })
