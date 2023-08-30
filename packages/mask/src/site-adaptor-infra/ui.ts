@@ -3,7 +3,7 @@ import { assertNotEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { delay, waitDocumentReadyState } from '@masknet/kit'
 import type { SiteAdaptorUI } from '@masknet/types'
 import { type Plugin, startPluginSiteAdaptor, SiteAdaptorContextRef } from '@masknet/plugin-infra/content-script'
-import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '@masknet/shared'
+import { Modals, sharedUIComponentOverwrite, sharedUINetworkIdentifier, type ModalProps } from '@masknet/shared'
 import {
     createSubscriptionFromAsync,
     createSubscriptionFromValueRef,
@@ -23,11 +23,12 @@ import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
 import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host.js'
 import Services from '../extension/service.js'
 import { getCurrentIdentifier, getCurrentSite } from '../site-adaptors/utils.js'
-import { setupReactShadowRootEnvironment } from '../utils/index.js'
+import { attachReactTreeWithoutContainer, setupReactShadowRootEnvironment } from '../utils/index.js'
 import '../utils/debug/general.js'
 import { configureSelectorMissReporter } from '../utils/startWatch.js'
 import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
 import { definedSiteAdaptorsUI } from './define.js'
+import { createElement } from 'react'
 
 const definedSiteAdaptorsResolved = new Map<string, SiteAdaptorUI.Definition>()
 
@@ -197,6 +198,12 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
             Services.Settings.getPluginMinimalModeEnabled,
             Services.Helper.hasHostPermission,
         ),
+    )
+    attachReactTreeWithoutContainer(
+        'Modals',
+        createElement(Modals, {
+            createWallet: () => Services.Helper.openDashboard(DashboardRoutes.CreateMaskWalletForm),
+        } satisfies ModalProps),
     )
 
     // TODO: receive the signal

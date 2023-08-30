@@ -62,7 +62,6 @@
         "@masknet/plugin-trader": "workspace:^",
         "@masknet/plugin-transak": "workspace:^",
         "@masknet/plugin-vcent": "workspace:^",
-        "@masknet/plugin-wallet": "workspace:^",
         "@masknet/plugin-web3-profile": "workspace:^",
         "@masknet/public-api": "workspace:^",
         "@masknet/shared": "workspace:^",

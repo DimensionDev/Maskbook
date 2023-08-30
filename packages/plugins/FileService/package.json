@@ -16,7 +16,6 @@
     "@dimensiondev/common-protocols": "1.6.0-20210723072221-8f46a92",
     "@masknet/icons": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",
-    "@masknet/plugin-wallet": "workspace:^",
     "@masknet/shared": "workspace:^",
     "@masknet/shared-base": "workspace:^",
     "@masknet/shared-base-ui": "workspace:^",

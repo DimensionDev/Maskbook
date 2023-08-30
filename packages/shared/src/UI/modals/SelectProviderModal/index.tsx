@@ -11,7 +11,9 @@ export type SelectProviderModalOpenProps = {
 
 export type SelectProviderModalCloseProps = boolean
 
-export interface SelectProviderModalProps {}
+export interface SelectProviderModalProps {
+    createWallet(): void
+}
 
 export const SelectProviderModal = forwardRef<
     SingletonModalRefCreator<SelectProviderModalOpenProps, SelectProviderModalCloseProps>,
@@ -35,6 +37,7 @@ export const SelectProviderModal = forwardRef<
     return (
         <SelectProvider
             open
+            createWallet={props.createWallet}
             requiredSupportPluginID={requiredSupportPluginID}
             requiredSupportChainIds={requiredSupportChainIds}
             onConnect={() => dispatch?.close(true)}

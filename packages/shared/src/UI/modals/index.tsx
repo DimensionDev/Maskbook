@@ -22,12 +22,15 @@ import { ShareSelectNetworkModal } from './ShareSelectNetwork/index.js'
 import * as modals from './modals.js'
 export * from './modals.js'
 
-export const Modals = memo(function Modals() {
+export interface ModalProps {
+    createWallet(): void
+}
+export const Modals = memo(function Modals(props: ModalProps) {
     return (
         <RootWeb3ContextProvider>
             <ConnectWalletModal ref={modals.ConnectWalletModal.register} />
             <WalletConnectQRCodeModal ref={modals.WalletConnectQRCodeModal.register} />
-            <SelectProviderModal ref={modals.SelectProviderModal.register} />
+            <SelectProviderModal createWallet={props.createWallet} ref={modals.SelectProviderModal.register} />
             <WalletStatusModal ref={modals.WalletStatusModal.register} />
             <WalletRiskWarningModal ref={modals.WalletRiskWarningModal.register} />
             <LeavePageConfirmModal ref={modals.LeavePageConfirmModal.register} />

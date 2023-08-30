@@ -8,7 +8,6 @@
   "include": ["src", "src/**/*.json"],
   "references": [
     { "path": "../../plugin-infra" },
-    { "path": "../../plugins/Wallet" },
     { "path": "../../web3-helpers" },
     { "path": "../../web3-hooks/base" },
     { "path": "../../web3-hooks/evm" },
