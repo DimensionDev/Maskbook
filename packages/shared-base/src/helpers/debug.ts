@@ -2,6 +2,7 @@ class Opaque {
     #DebugOnlyValue: unknown
     constructor(key: string, value: unknown) {
         this.#DebugOnlyValue = {
+            __proto__: null,
             get ['set globalThis.' + key]() {
                 console.log(`[DEBUG] globalThis.${key} =`, value)
                 ;(globalThis as any)[key] = value
