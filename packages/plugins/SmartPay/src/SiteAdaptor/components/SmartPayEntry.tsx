@@ -59,7 +59,7 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
         if ((value.hasVerifiedPersona || personas.length) && !value.signPersona && !value.signWallet) {
             return PersonaSelectPanelModal.open({
                 enableVerify: true,
-                target: PluginID.SmartPay,
+                finishTarget: PluginID.SmartPay,
             })
         }
         return setSmartPayDialog({
