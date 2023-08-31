@@ -7,7 +7,7 @@ export const OptionalResult = {
     },
     None: Ok(None) as OptionalResult<any, any>,
     fromResult<T, E>(x: Result<T, CheckedError<E>>): OptionalResult<T, E> {
-        if (x.err) return x
-        return Ok(Some(x.val))
+        if (x.isErr()) return x
+        return Ok(Some(x.value))
     },
 }

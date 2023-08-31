@@ -20,7 +20,7 @@ export function getBackupSummary(json: NormalizedBackup.Data): BackupSummary {
         files = Number((json.plugins?.['com.maskbook.fileservice'] as any)?.length || 0)
     } catch {}
 
-    const ownerPersonas = [...json.personas.values()].filter((persona) => !persona.privateKey.none)
+    const ownerPersonas = [...json.personas.values()].filter((persona) => !persona.privateKey.isNone())
     const ownerProfiles = flatten(ownerPersonas.map((persona) => [...persona.linkedProfiles.keys()])).map((item) =>
         item.toText(),
     )
@@ -31,7 +31,7 @@ export function getBackupSummary(json: NormalizedBackup.Data): BackupSummary {
             .map((p) => p.nickname.unwrapOr(p.identifier.rawPublicKey).trim()),
     )
     const contacts = [...json.profiles.values()].filter((profile) => {
-        return !ownerProfiles.includes(profile.identifier.toText()) && profile.linkedPersona.some
+        return !ownerProfiles.includes(profile.identifier.toText()) && profile.linkedPersona.isSome()
     })
     return {
         // Names or publicKeys */

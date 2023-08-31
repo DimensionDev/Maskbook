@@ -19,7 +19,7 @@ export function collectNodeText(node: HTMLElement | null | undefined, options: C
             if (each.nodeType === document.TEXT_NODE) return (each as Text).nodeValue || ''
             if (each instanceof HTMLAnchorElement) {
                 const result = options.onHTMLAnchorElement?.(each)
-                if (result?.some) return result.val
+                if (result?.isSome()) return result.value
                 const href = each.getAttribute('href')
                 return [href, each.innerText].join(' ')
             }

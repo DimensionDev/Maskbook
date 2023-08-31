@@ -19,21 +19,21 @@ export async function encode37(payload: PayloadWellFormed.Payload) {
 
     const payload_arr: AcceptableArray = [0]
 
-    if (payload.author.some) {
-        const { network, userId } = payload.author.val
+    if (payload.author.isSome()) {
+        const { network, userId } = payload.author.value
         payload_arr[Index.authorNetwork] = network
         payload_arr[Index.authorID] = userId
     }
-    if (payload.authorPublicKey.some) {
-        const { algr, key } = payload.authorPublicKey.val
+    if (payload.authorPublicKey.isSome()) {
+        const { algr, key } = payload.authorPublicKey.value
         payload_arr[Index.authorPublicKeyAlgorithm] = algr
         const raw = await exportCryptoKeyToRaw(key)
-        if (raw.ok) {
-            if (algr === EC_KeyCurve.secp256k1) payload_arr[Index.authorPublicKey] = await compressK256KeyRaw(raw.val)
-            else payload_arr[Index.authorPublicKey] = raw.val
+        if (raw.isOk()) {
+            if (algr === EC_KeyCurve.secp256k1) payload_arr[Index.authorPublicKey] = await compressK256KeyRaw(raw.value)
+            else payload_arr[Index.authorPublicKey] = raw.value
         } else {
             payload_arr[Index.authorPublicKey] = null
-            warn(key, raw.err)
+            warn(key, raw.isErr())
         }
     }
     if (payload.encryption.type === 'E2E') {
@@ -42,10 +42,10 @@ export async function encode37(payload: PayloadWellFormed.Payload) {
         const subArr: Array<KeyMaterials | number | Uint8Array> = [1, ownersAESKeyEncrypted, iv, keyMaterials]
         for (const [alg, key] of ephemeralPublicKey.entries()) {
             const k = await exportCryptoKeyToRaw(key)
-            if (k.err) warn(key, k.err)
+            if (k.isErr()) warn(key, k.isErr())
             else {
-                if (alg === EC_KeyCurve.secp256k1) keyMaterials[alg] = await compressK256KeyRaw(k.val)
-                else keyMaterials[alg] = k.val
+                if (alg === EC_KeyCurve.secp256k1) keyMaterials[alg] = await compressK256KeyRaw(k.value)
+                else keyMaterials[alg] = k.value
             }
         }
         payload_arr[Index.encryption] = subArr

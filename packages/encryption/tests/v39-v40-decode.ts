@@ -21,10 +21,10 @@ test('Parse v40 payload', async () => {
 
 test('Encode v39 or v40 payload is not supported', async () => {
     const v39 = await encodePayload.NoSign({ version: -39 } as any)
-    expect(v39.err).toBeTruthy()
-    expect((v39.val as any).message).toBe(PayloadException.UnknownVersion)
+    if (v39.isErr()) expect(v39.error.message).toBe(PayloadException.UnknownVersion)
+    else expect(v39.isErr()).toBeTruthy()
 
     const v40 = await encodePayload.NoSign({ version: -39 } as any)
-    expect(v40.err).toBeTruthy()
-    expect((v40.val as any).message).toBe(PayloadException.UnknownVersion)
+    if (v40.isErr()) expect(v40.error.message).toBe(PayloadException.UnknownVersion)
+    else expect(v40.isErr()).toBeTruthy()
 })

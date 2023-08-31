@@ -13,7 +13,7 @@ export function decodeByNetwork(network: EncryptPayloadNetwork, content: string)
     const result: Array<string | Uint8Array> = []
     for (const payload of possiblePayload) {
         const decoded = sharedDecoder(payload)
-        if (decoded.some) result.push(decoded.val)
+        if (decoded.isSome()) result.push(decoded.value)
         else result.push(payload)
     }
     return result

@@ -29,16 +29,16 @@ export async function internal_wallet_restore(backup: NormalizedBackup.WalletBac
                           undefined,
                           index && !Number.isNaN(index) ? Number(index) : undefined,
                       )
-            if (wallet.privateKey.some)
-                await recoverWalletFromPrivateKey(name, await JWKToKey(wallet.privateKey.val, 'private'))
-            else if (wallet.mnemonic.some) {
+            if (wallet.privateKey.isSome())
+                await recoverWalletFromPrivateKey(name, await JWKToKey(wallet.privateKey.value, 'private'))
+            else if (wallet.mnemonic.isSome()) {
                 // fix a backup bug of pre-v2.2.2 versions
-                const accounts = await getDerivableAccounts(wallet.mnemonic.val.words, 1, 5)
+                const accounts = await getDerivableAccounts(wallet.mnemonic.value.words, 1, 5)
                 const index = accounts.findIndex(currySameAddress(wallet.address))
                 await recoverWalletFromMnemonicWords(
                     name,
-                    wallet.mnemonic.val.words,
-                    index > -1 ? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${index}` : wallet.mnemonic.val.path,
+                    wallet.mnemonic.value.words,
+                    index > -1 ? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${index}` : wallet.mnemonic.value.path,
                 )
             }
         } catch (error) {

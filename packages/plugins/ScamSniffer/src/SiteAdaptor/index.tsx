@@ -37,7 +37,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             nickname,
             userId: author?.userId,
             links: [...links],
-            content: message.some ? message.val : null,
+            content: message.isSome() ? message.value : null,
         }
         const [scamProject, setScamProject] = useState<ScamResult | null>(null)
         useAsync(async () => {

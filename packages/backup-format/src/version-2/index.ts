@@ -52,8 +52,8 @@ export async function normalizeBackupVersion2(item: BackupJSONFileVersion2): Pro
         }
         for (const [profile] of persona.linkedProfiles) {
             const id = ProfileIdentifier.from(profile)
-            if (id.none) continue
-            normalizedPersona.linkedProfiles.set(id.val, null)
+            if (id.isNone()) continue
+            normalizedPersona.linkedProfiles.set(id.value, null)
         }
         if (persona.mnemonic) {
             const { words, parameter } = persona.mnemonic
@@ -65,16 +65,16 @@ export async function normalizeBackupVersion2(item: BackupJSONFileVersion2): Pro
 
     for (const profile of profiles) {
         const identifier = ProfileIdentifier.from(profile.identifier)
-        if (identifier.none) continue
+        if (identifier.isNone()) continue
         const normalizedProfile: NormalizedBackup.ProfileBackup = {
-            identifier: identifier.val,
+            identifier: identifier.value,
             createdAt: Some(new Date(profile.createdAt)),
             updatedAt: Some(new Date(profile.updatedAt)),
             nickname: profile.nickname ? Some(profile.nickname) : None,
             linkedPersona: ECKeyIdentifier.from(profile.linkedPersona),
             localKey: isAESJsonWebKey(profile.localKey) ? Some(profile.localKey) : None,
         }
-        backup.profiles.set(identifier.val, normalizedProfile)
+        backup.profiles.set(identifier.value, normalizedProfile)
     }
 
     for (const persona of backup.personas.values()) {
@@ -92,10 +92,10 @@ export async function normalizeBackupVersion2(item: BackupJSONFileVersion2): Pro
         const postBy = ProfileIdentifier.from(post.postBy)
         const encryptBy = ECKeyIdentifier.from(post.encryptBy)
 
-        if (identifier.none) continue
+        if (identifier.isNone()) continue
         const interestedMeta = new Map<string, any>()
         const normalizedPost: NormalizedBackup.PostBackup = {
-            identifier: identifier.val,
+            identifier: identifier.value,
             foundAt: new Date(post.foundAt),
             postBy,
             interestedMeta,
@@ -113,9 +113,9 @@ export async function normalizeBackupVersion2(item: BackupJSONFileVersion2): Pro
                 const map = new Map<ProfileIdentifier, NormalizedBackup.RecipientReason[]>()
                 for (const [recipient, { reason }] of post.recipients) {
                     const id = ProfileIdentifier.from(recipient)
-                    if (id.none) continue
+                    if (id.isNone()) continue
                     const reasons: NormalizedBackup.RecipientReason[] = []
-                    map.set(id.val, reasons)
+                    map.set(id.value, reasons)
                     for (const r of reason) {
                         // we ignore the original reason because we no longer support group / auto sharing
                         reasons.push({ type: 'direct', at: new Date(r.at) })
@@ -126,17 +126,17 @@ export async function normalizeBackupVersion2(item: BackupJSONFileVersion2): Pro
         }
         if (post.interestedMeta) normalizedPost.interestedMeta = MetaFromJson(post.interestedMeta)
 
-        backup.posts.set(identifier.val, normalizedPost)
+        backup.posts.set(identifier.value, normalizedPost)
     }
 
     for (const relation of relations || []) {
         const { profile, persona, favor } = relation
         const a = ProfileIdentifier.from(profile)
         const b = ECKeyIdentifier.from(persona)
-        if (a.some && b.some) {
+        if (a.isSome() && b.isSome()) {
             backup.relations.push({
-                profile: a.val,
-                persona: b.val,
+                profile: a.value,
+                persona: b.value,
                 favor,
             })
         }
@@ -232,7 +232,7 @@ export function generateBackupVersion2(item: NormalizedBackup.Data): BackupJSONF
         const item: BackupJSONFileVersion2['posts'][0] = {
             identifier: id.toText(),
             foundAt: Number(data.foundAt),
-            postBy: data.postBy.some ? data.postBy.val.toText() : 'person:localhost/$unknown',
+            postBy: data.postBy.isSome() ? data.postBy.value.toText() : 'person:localhost/$unknown',
             interestedMeta: MetaToJson(data.interestedMeta),
             encryptBy: data.encryptBy.unwrapOr(undefined)?.toText(),
             summary: data.summary.unwrapOr(undefined),
@@ -242,11 +242,11 @@ export function generateBackupVersion2(item: NormalizedBackup.Data): BackupJSONF
             recipients: [],
         }
         result.posts.push(item)
-        if (data.recipients.some) {
-            if (data.recipients.val.type === 'public') item.recipients = 'everyone'
-            else if (data.recipients.val.type === 'e2e') {
+        if (data.recipients.isSome()) {
+            if (data.recipients.value.type === 'public') item.recipients = 'everyone'
+            else if (data.recipients.value.type === 'e2e') {
                 item.recipients = []
-                for (const [recipient, reasons] of data.recipients.val.receivers) {
+                for (const [recipient, reasons] of data.recipients.value.receivers) {
                     if (!reasons.length) continue
                     item.recipients.push([
                         recipient.toText(),
@@ -260,7 +260,7 @@ export function generateBackupVersion2(item: NormalizedBackup.Data): BackupJSONF
                         },
                     ])
                 }
-            } else safeUnreachable(data.recipients.val)
+            } else safeUnreachable(data.recipients.value)
         }
     }
 

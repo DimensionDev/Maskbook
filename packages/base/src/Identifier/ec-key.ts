@@ -38,8 +38,8 @@ export class ECKeyIdentifier extends Identifier {
         if (!key.extractable) return Err('key is not extractable')
         if ((key.algorithm as EcKeyAlgorithm).namedCurve !== 'K-256') return Err('curve is not K-256')
         const jwk = await Result.wrapAsync(() => crypto.subtle.exportKey('jwk', key))
-        if (jwk.err) return jwk
-        return ECKeyIdentifier.fromJsonWebKey(jwk.val as EC_JsonWebKey)
+        if (jwk.isErr()) return jwk
+        return ECKeyIdentifier.fromJsonWebKey(jwk.value as EC_JsonWebKey)
     }
     async toJsonWebKey(usage: 'sign_and_verify' | 'derive'): Promise<EC_Public_JsonWebKey> {
         const key = await decompressK256Key(this.rawPublicKey)

@@ -178,8 +178,8 @@ export function collectVerificationPost(keyword: string) {
         const content = extractTextFromTypedMessage(postContent)
         const isVerified =
             postId &&
-            content.some &&
-            content.val.toLowerCase().replaceAll(/\r\n|\n|\r/gm, '') ===
+            content.isSome() &&
+            content.value.toLowerCase().replaceAll(/\r\n|\n|\r/gm, '') ===
                 keyword.toLowerCase().replaceAll(/\r\n|\n|\r/gm, '')
 
         if (isVerified && userId) {

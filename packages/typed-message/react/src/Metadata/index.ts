@@ -53,8 +53,8 @@ export function readTypedMessageMetadataUntyped<T>(
     if (!jsonSchema) console.warn('You should add a JSON Schema to verify the metadata in the TypedMessage')
     else {
         const match = isDataMatchJSONSchema(data, jsonSchema)
-        if (match.err) {
-            console.warn('The problematic metadata is dropped', data, 'errors:', match.val)
+        if (match.isErr()) {
+            console.warn('The problematic metadata is dropped', data, 'errors:', match.error)
             return Err.EMPTY
         }
     }
@@ -74,7 +74,7 @@ export function isDataMatchJSONSchema(data: any, jsonSchema: object) {
 export function createRenderWithMetadata<T>(metadataReader: (meta: TypedMessage['meta']) => Result<T, void>) {
     return (metadata: TypedMessage['meta'], render: (data: T) => ReactNode | null): ReactNode | null => {
         const message = metadataReader(metadata)
-        if (message.ok) return render(message.val)
+        if (message.isOk()) return render(message.value)
         return null
     }
 }
@@ -109,6 +109,6 @@ export function renderWithMetadataUntyped(
     jsonSchema?: object,
 ): ReactNode | null {
     const message = readTypedMessageMetadataUntyped(metadata, key, jsonSchema)
-    if (message.ok) return render(message.val)
+    if (message.isOk()) return render(message.value)
     return null
 }

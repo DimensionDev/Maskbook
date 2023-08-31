@@ -32,8 +32,8 @@ const site: Plugin.SiteAdaptor.Definition = {
     DecryptedInspector(props) {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
-            if (x.none) return null
-            return parseURLs(x.val).find(isGitcoin)
+            if (x.isNone()) return null
+            return parseURLs(x.value).find(isGitcoin)
         }, [props.message])
         const id = link?.match(/\d+/)?.[0]
         if (!id) return null

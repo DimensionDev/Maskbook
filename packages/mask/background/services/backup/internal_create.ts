@@ -147,10 +147,10 @@ export async function createNewBackup(options: InternalBackupOptions): Promise<N
 
             async function backupPlugin() {
                 const result = await timeout(backupCreator!(), 3000, 'Timeout to backup creator.')
-                if (result.none) return
+                if (result.isNone()) return
                 // We limit the plugin contributed backups must be simple objects.
                 // We may allow plugin to store binary if we're moving to binary backup format like MessagePack.
-                plugins[plugin.ID] = result.map(JSON.stringify).map(JSON.parse).val
+                plugins[plugin.ID] = result.map(JSON.stringify).map(JSON.parse).value
             }
             if (process.env.NODE_ENV === 'development') return backupPlugin()
             return backupPlugin().catch((error) =>

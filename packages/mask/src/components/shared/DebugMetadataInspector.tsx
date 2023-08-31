@@ -156,9 +156,10 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
             return 'Invalid JSON'
         }
         const validator = getMetadataSchema(field)
-        if (validator.some) {
-            const valid = isDataMatchJSONSchema(JSON.parse(newData), validator.val)
-            if (valid.err) return 'Metadata content is invalid:\n' + valid.val.map((x) => '    ' + x.message).join('\n')
+        if (validator.isSome()) {
+            const valid = isDataMatchJSONSchema(JSON.parse(newData), validator.value)
+            if (valid.isErr())
+                return 'Metadata content is invalid:\n' + valid.error.map((x) => '    ' + x.message).join('\n')
         }
         return true
     }

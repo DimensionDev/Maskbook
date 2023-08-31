@@ -30,10 +30,9 @@ function useDisabledPlugins() {
 export function useDisabledPluginSuggestionFromPost(postContent: Option<string>, metaLinks: readonly string[]) {
     const disabled = useDisabledPlugins().filter((x) => x.contribution?.postContent)
 
-    const { some } = postContent
     const matches = disabled.filter((x) => {
         for (const pattern of x.contribution!.postContent!) {
-            if (some && postContent.val.match(pattern)) return true
+            if (postContent.isSome() && postContent.value.match(pattern)) return true
             if (metaLinks.some((link) => link.match(pattern))) return true
         }
         return false

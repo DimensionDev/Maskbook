@@ -97,24 +97,24 @@ export async function* decryptWithDecoding(
 const inMemoryCache = new Map<PostIVIdentifier, TypedMessage>()
 async function* decryption(payload: string | Uint8Array, context: DecryptionContext) {
     const parse = await parsePayload(payload)
-    if (parse.err) return null
+    if (parse.isErr()) return null
 
     const { encryptPayloadNetwork, postURL, currentProfile, authorHint } = context
 
     // #region Identify the PostIdentifier
-    const iv = parse.val.encryption.unwrapOr(null)?.iv.unwrapOr(null)
+    const iv = parse.value.encryption.unwrapOr(null)?.iv.unwrapOr(null)
     {
         if (!iv) return null
         // iv is required to identify the post and it also used in comment encryption.
         const info: DecryptReportedInfo = {
             type: DecryptProgressKind.Info,
             iv,
-            version: parse.val.version,
+            version: parse.value.version,
         }
-        if (parse.val.encryption.ok) {
-            const val = parse.val.encryption.val
+        if (parse.value.encryption.isOk()) {
+            const val = parse.value.encryption.value
             info.publicShared = val.type === 'public'
-            if (val.type === 'E2E') info.isAuthorOfPost = val.ownersAESKeyEncrypted.ok
+            if (val.type === 'E2E') info.isAuthorOfPost = val.ownersAESKeyEncrypted.isOk()
         }
         yield info
     }
@@ -141,7 +141,7 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
 
     const progress = decrypt(
         {
-            message: parse.val,
+            message: parse.value,
             onDecrypted(message) {
                 inMemoryCache.set(id, message)
             },

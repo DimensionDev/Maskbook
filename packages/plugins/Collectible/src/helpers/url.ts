@@ -196,13 +196,8 @@ export function getPayloadFromURLs(urls: readonly string[]): CollectiblePayload 
 }
 
 export function getPayloadFromURL(url?: string): CollectiblePayload | undefined {
-    if (!url) return
-    let _url: URL
-    try {
-        _url = new URL(url)
-    } catch {
-        return
-    }
+    if (!url || !URL.canParse(url)) return
+    const _url = new URL(url)
 
     for (const rule of RULES) {
         const isHostMatched = rule.hosts.includes(_url.hostname)

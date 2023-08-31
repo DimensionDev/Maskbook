@@ -16,7 +16,7 @@ const reader_v2 = createTypedMessageMetadataReader<JSON_PayloadOutMask>(ITO_Meta
 export const renderWithITO_Metadata = createRenderWithMetadata(ITO_MetadataReader)
 export function ITO_MetadataReader(meta: TypedMessage['meta']): Result<JSON_PayloadOutMask, void> {
     const v2 = reader_v2(meta)
-    if (v2.ok) return v2
+    if (v2.isOk()) return v2
     return reader_v1(meta)
 }
 

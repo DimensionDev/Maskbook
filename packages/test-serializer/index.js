@@ -17,11 +17,11 @@ function serialize(val, config, indentation, depth, refs, printer) {
         // crypto.subtle.exportKey('jwk', val).then(console.log)
         return 'CryptoKey { [opaque crypto key material] }'
     }
-    const inner = printer(val.val, config, indentation, depth, refs)
+    const inner = printer(val.value || val.error, config, indentation, depth, refs)
     if (val.ok) return `Ok(${inner})`
-    if (val.err) return `Err(${inner})`
-    if (val.none) return 'None'
-    if (val.some) return `Some(${inner})`
+    if (val.isErr()) return `Err(${inner})`
+    if (val.isNone()) return 'None'
+    if (val.isSome()) return `Some(${inner})`
 }
 function test(val) {
     if (!val) return false

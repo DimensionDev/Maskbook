@@ -17,7 +17,6 @@ import {
     ListItemText,
 } from '@mui/material'
 import { useState } from 'react'
-import { Result } from 'ts-results-es'
 // import { PermissionAwareRedirectOf } from '../../../extension/popups'
 import { useExternalPluginManifest } from '../loader/index.js'
 import { Link as LinkIcon, Person as PublisherIcon, Description as DescriptionIcon } from '@mui/icons-material'
@@ -32,7 +31,7 @@ export function PluginLoader() {
             : 'https://dimensiondev.github.io/Mask-Plugin-Example/',
     )
     const [url, setURL] = useState<null | string>(null)
-    const invalidURL = Result.wrap(() => new URL(input)).err
+    const invalidURL = !URL.canParse(input)
     const t = useI18N()
 
     return (

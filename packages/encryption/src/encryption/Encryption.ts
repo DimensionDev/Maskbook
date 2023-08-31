@@ -94,17 +94,17 @@ async function e2e_v37(
     io: EncryptIO,
 ): Promise<[PayloadWellFormed.EndToEndEncryption, EncryptResult['e2e']]> {
     const { authorPublic, postIV, postKeyEncoded } = context
-    if (!authorPublic.some) throw new EncryptError(EncryptErrorReasons.PublicKeyNotFound)
+    if (!authorPublic.isSome()) throw new EncryptError(EncryptErrorReasons.PublicKeyNotFound)
 
     const { ephemeralKeys, getEphemeralKey } = createEphemeralKeysMap(io)
     const ecdhResult = v37_addReceiver(true, { ...context, getEphemeralKey }, target, io)
 
     const ownersAESKeyEncrypted = Promise.resolve().then(async () => {
-        const [, ephemeralPrivateKey] = await getEphemeralKey(authorPublic.val.algr)
+        const [, ephemeralPrivateKey] = await getEphemeralKey(authorPublic.value.algr)
 
         // we get rid of localKey in v38
         const aes = await crypto.subtle.deriveKey(
-            { name: 'ECDH', public: authorPublic.val.key },
+            { name: 'ECDH', public: authorPublic.value.key },
             ephemeralPrivateKey,
             { name: 'AES-GCM', length: 256 },
             true,

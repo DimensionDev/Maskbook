@@ -40,8 +40,8 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                     await store.clear()
                     for (const each of old) {
                         const id = PostIdentifier.from(each.identifier)
-                        if (id.some) {
-                            const { postId, identifier } = id.val
+                        if (id.isSome()) {
+                            const { postId, identifier } = id.value
                             each.identifier = new PostIVIdentifier(identifier.network, postId).toText()
                             await store.add(each)
                         }
@@ -224,11 +224,11 @@ export async function queryPostsDB(
     const selected: PostRecord[] = []
     for await (const { value } of t.objectStore('post')) {
         const idResult = PostIVIdentifier.from(value.identifier)
-        if (idResult.none) {
+        if (idResult.isNone()) {
             console.warn('Invalid identifier', value.identifier)
             continue
         }
-        const id = idResult.val
+        const id = idResult.value
         if (typeof query === 'string') {
             if (id.network === query) selected.push(postOutDB(value))
         } else {
@@ -293,10 +293,10 @@ function postOutDB(db: LatestPostDBRecord): PostRecord {
         recipients = new Map()
         for (const [id, { reason }] of db.recipients) {
             const identifier = ProfileIdentifier.from(id)
-            if (identifier.none) continue
+            if (identifier.isNone()) continue
             const detail = reason[0]
             if (!detail) continue
-            recipients.set(identifier.val, detail.at)
+            recipients.set(identifier.value, detail.at)
         }
     }
     return {

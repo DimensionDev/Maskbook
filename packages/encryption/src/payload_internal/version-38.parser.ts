@@ -56,10 +56,10 @@ export async function parse38(payload: string): PayloadParserResult {
         encryption: Ok(encryption),
         encrypted: decodeUint8Array(encryptedText),
     }
-    if (authorUserID.err) {
+    if (authorUserID.isErr()) {
         normalized.author = authorUserID.mapErr(CheckedError.mapErr(PayloadException.DecodeFailed))
-    } else if (authorUserID.val.some) {
-        normalized.author = ProfileIdentifier.from(`person:${authorUserID.val.val}`)
+    } else if (authorUserID.value.isSome()) {
+        normalized.author = ProfileIdentifier.from(`person:${authorUserID.value.value}`)
             .map((x) => Some(x))
             .toResult(undefined)
             .mapErr(CheckedError.mapErr(PayloadException.DecodeFailed))
@@ -67,11 +67,11 @@ export async function parse38(payload: string): PayloadParserResult {
     if (authorPublicKey) {
         normalized.authorPublicKey = await decodeECDHPublicKey(authorPublicKey)
     }
-    if (signature && raw_iv.ok && raw_aes.ok && normalized.encrypted.ok) {
+    if (signature && raw_iv.isOk() && raw_aes.isOk() && normalized.encrypted.isOk()) {
         const message = encodeText(`4/4|${AESKeyEncrypted}|${iv}|${encryptedText}`)
         const sig = decodeUint8Array(signature)
-        if (sig.ok) {
-            normalized.signature = OptionalResult.Some<Signature>({ signee: message, signature: sig.val })
+        if (sig.isOk()) {
+            normalized.signature = OptionalResult.Some<Signature>({ signee: message, signature: sig.value })
         } else {
             normalized.signature = sig
         }
@@ -103,15 +103,15 @@ async function decodePublicSharedAESKey(
     iv: Result<Uint8Array, CheckedError<CryptoException>>,
     encryptedKey: Result<Uint8Array, CheckedError<CryptoException>>,
 ): Promise<PayloadParseResult.PublicEncryption['AESKey']> {
-    if (iv.err) return iv
-    if (encryptedKey.err) return encryptedKey
+    if (iv.isErr()) return iv
+    if (encryptedKey.isErr()) return encryptedKey
     const publicSharedKey = await get_v38PublicSharedCryptoKey()
-    if (publicSharedKey.err) return publicSharedKey
+    if (publicSharedKey.isErr()) return publicSharedKey
 
     const import_AES_GCM_256 = CheckedError.withErr(importAES, CryptoException.InvalidCryptoKey)
     const decrypt = CheckedError.withErr(decryptWithAES, CryptoException.InvalidCryptoKey)
 
-    const jwk_in_u8arr = await decrypt(publicSharedKey.val, iv.val, encryptedKey.val)
+    const jwk_in_u8arr = await decrypt(publicSharedKey.value, iv.value, encryptedKey.value)
     const jwk_in_text = await andThenAsync(jwk_in_u8arr, decodeTextCrypto)
     const jwk = await andThenAsync(jwk_in_text, JSONParse)
     const aes = await andThenAsync(jwk, import_AES_GCM_256)
@@ -126,8 +126,8 @@ async function decodeECDHPublicKey(compressedPublic: string): Promise<OptionalRe
         ),
     )
 
-    if (key.err) return key
-    const { x, y } = key.val
+    if (key.isErr()) return key
+    const { x, y } = key.value
     const jwk: JsonWebKey = {
         crv: 'K-256',
         ext: true,
@@ -137,9 +137,9 @@ async function decodeECDHPublicKey(compressedPublic: string): Promise<OptionalRe
         kty: 'EC',
     }
     const imported = await importEC(jwk, EC_KeyCurve.secp256k1)
-    if (imported.err) return imported
+    if (imported.isErr()) return imported
     return OptionalResult.Some<EC_Key>({
         algr: EC_KeyCurve.secp256k1,
-        key: imported.val,
+        key: imported.value,
     })
 }

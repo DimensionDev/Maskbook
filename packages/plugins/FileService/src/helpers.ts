@@ -20,9 +20,9 @@ const reader_v3 = createTypedMessageMetadataReader<FileInfo[]>(META_KEY_3, schem
 
 export function FileInfoMetadataReader(meta: TypedMessage['meta']): Result<FileInfo[], void> {
     const v3 = reader_v3(meta)
-    if (v3.ok) return v3
+    if (v3.isOk()) return v3
     const v2 = reader_v2(meta).map((info) => [info])
-    if (v2.ok) return v2
+    if (v2.isOk()) return v2
     return reader_v1(meta).map(migrateFileInfoV1)
 }
 
