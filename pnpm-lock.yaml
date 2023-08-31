@@ -602,8 +602,8 @@ importers:
         specifier: ^2.2.3
         version: 2.2.3
       ts-results-es:
-        specifier: ^3.6.0
-        version: 3.6.0
+        specifier: ^4.0.0
+        version: 4.0.0
 
   packages/config: {}
 
@@ -1596,9 +1596,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
+      ts-results-es:
+        specifier: ^4.0.0
+        version: 4.0.0
       urlcat:
         specifier: ^3.1.0
         version: 3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e)
@@ -1668,9 +1668,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
+      ts-results-es:
+        specifier: ^4.0.0
+        version: 4.0.0
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-0a360642d-20230711)
@@ -1803,9 +1803,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
+      ts-results-es:
+        specifier: ^4.0.0
+        version: 4.0.0
       unstated-next:
         specifier: ^1.1.0
         version: 1.1.0
@@ -2047,9 +2047,9 @@ importers:
       '@masknet/shared-base':
         specifier: workspace:^
         version: link:../../shared-base
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
+      ts-results-es:
+        specifier: ^4.0.0
+        version: 4.0.0
 
   packages/plugins/External:
     dependencies:
@@ -2077,9 +2077,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
+      ts-results-es:
+        specifier: ^4.0.0
+        version: 4.0.0
 
   packages/plugins/FileService:
     dependencies:
@@ -2241,9 +2241,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
+      ts-results-es:
+        specifier: ^4.0.0
+        version: 4.0.0
       unstated-next:
         specifier: ^1.1.0
         version: 1.1.0
@@ -2308,9 +2308,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
+      ts-results-es:
+        specifier: ^4.0.0
+        version: 4.0.0
       urlcat:
         specifier: ^3.1.0
         version: 3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e)
@@ -2485,9 +2485,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
+      ts-results-es:
+        specifier: ^4.0.0
+        version: 4.0.0
       urlcat:
         specifier: ^3.1.0
         version: 3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e)
@@ -2569,9 +2569,9 @@ importers:
       rss3-next:
         specifier: ^0.6.17
         version: 0.6.17(patch_hash=db27yqpr4wdtpwfyvaxcqd4jpi)(typescript@5.3.0-dev.20230830)
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
+      ts-results-es:
+        specifier: ^4.0.0
+        version: 4.0.0
       unstated-next:
         specifier: ^1.1.0
         version: 1.1.0
@@ -2623,9 +2623,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
+      ts-results-es:
+        specifier: ^4.0.0
+        version: 4.0.0
 
   packages/plugins/Pets:
     dependencies:
@@ -2662,9 +2662,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
+      ts-results-es:
+        specifier: ^4.0.0
+        version: 4.0.0
       urlcat:
         specifier: ^3.1.0
         version: 3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e)
@@ -2695,9 +2695,9 @@ importers:
       '@masknet/web3-providers':
         specifier: workspace:^
         version: link:../../web3-providers
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
+      ts-results-es:
+        specifier: ^4.0.0
+        version: 4.0.0
 
   packages/plugins/RSS3:
     dependencies:
@@ -2830,9 +2830,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
+      ts-results-es:
+        specifier: ^4.0.0
+        version: 4.0.0
       web3-core:
         specifier: 1.8.0
         version: 1.8.0(patch_hash=ie6z5nhvcuo3lg2pk6xeacwpbi)
@@ -2884,9 +2884,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
+      ts-results-es:
+        specifier: ^4.0.0
+        version: 4.0.0
       web3:
         specifier: 1.8.0
         version: 1.8.0(patch_hash=dcxxuqxbti2wcxbar42oow5yze)
@@ -2932,9 +2932,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
+      ts-results-es:
+        specifier: ^4.0.0
+        version: 4.0.0
       urlcat:
         specifier: ^3.1.0
         version: 3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e)
@@ -3076,9 +3076,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
+      ts-results-es:
+        specifier: ^4.0.0
+        version: 4.0.0
       urlcat:
         specifier: ^3.1.0
         version: 3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e)
@@ -3199,9 +3199,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
+      ts-results-es:
+        specifier: ^4.0.0
+        version: 4.0.0
       unstated-next:
         specifier: ^1.1.0
         version: 1.1.0
@@ -3313,9 +3313,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
+      ts-results-es:
+        specifier: ^4.0.0
+        version: 4.0.0
       unstated-next:
         specifier: ^1.1.0
         version: 1.1.0
@@ -3358,9 +3358,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
+      ts-results-es:
+        specifier: ^4.0.0
+        version: 4.0.0
 
   packages/plugins/VCent:
     dependencies:
@@ -3391,9 +3391,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      ts-results:
-        specifier: ^3.3.0
-        version: 3.3.0
+      ts-results-es:
+        specifier: ^4.0.0
+        version: 4.0.0
       urlcat:
         specifier: ^3.1.0
         version: 3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e)
@@ -4012,8 +4012,8 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       ts-results-es:
-        specifier: ^3.6.0
-        version: 3.6.0
+        specifier: ^4.0.0
+        version: 4.0.0
 
   packages/typed-message/react:
     dependencies:
@@ -34494,16 +34494,8 @@ packages:
       typescript: 5.3.0-dev.20230830
     dev: true
 
-  /ts-results-es@3.6.0:
-    resolution: {integrity: sha512-swha7PpeUNX93LzwhNtlk97FZZdTkCsI4j2ShletEmQ4cEi9SWy95x8XRTpfOP8gr16ikEBSi4U8xD43BYHDFg==}
-    dev: false
-
   /ts-results-es@4.0.0:
     resolution: {integrity: sha512-v8vi0R4hu3Z5CugRPGA2qnIns4a4j+3/Bkh5Iak041AsBNOYA6DNjoijvHDli76Grt6KvihU6errHX03Fz9Jzw==}
-    dev: false
-
-  /ts-results@3.3.0:
-    resolution: {integrity: sha512-FWqxGX2NHp5oCyaMd96o2y2uMQmSu8Dey6kvyuFdRJ2AzfmWo3kWa4UsPlCGlfQ/qu03m09ZZtppMoY8EMHuiA==}
     dev: false
 
   /tsconfig-paths@3.14.2:
@@ -37338,9 +37330,7 @@ time:
   /tiny-secp256k1@2.2.3: '2023-06-29T08:38:53.395Z'
   /tinycolor2@1.6.0: '2023-02-03T23:33:07.774Z'
   /ts-node@10.9.1: '2022-07-14T02:33:44.792Z'
-  /ts-results-es@3.6.0: '2023-03-14T13:51:58.281Z'
   /ts-results-es@4.0.0: '2023-08-08T10:13:15.427Z'
-  /ts-results@3.3.0: '2021-05-23T18:25:35.300Z'
   /tslib@2.6.2: '2023-08-18T17:41:58.755Z'
   /tss-react@4.9.0: '2023-08-18T06:18:25.345Z'
   /typechain@8.3.1: '2023-07-24T07:52:39.458Z'

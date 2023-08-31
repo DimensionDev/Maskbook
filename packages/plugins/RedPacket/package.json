@@ -31,7 +31,7 @@
     "bignumber.js": "9.1.1",
     "date-fns": "^2.30.0",
     "react-use": "^17.4.0",
-    "ts-results": "^3.3.0",
+    "ts-results-es": "^4.0.0",
     "web3-core": "1.8.0",
     "web3-utils": "1.8.0"
   }

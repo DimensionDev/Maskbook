@@ -25,6 +25,6 @@
     "@masknet/web3-shared-evm": "workspace:^",
     "@masknet/web3-telemetry": "workspace:^",
     "react-use": "^17.4.0",
-    "ts-results": "^3.3.0"
+    "ts-results-es": "^4.0.0"
   }
 }

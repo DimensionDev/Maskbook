@@ -36,7 +36,7 @@
     "date-fns": "^2.30.0",
     "json-stable-stringify": "^1.0.2",
     "react-use": "^17.4.0",
-    "ts-results": "^3.3.0",
+    "ts-results-es": "^4.0.0",
     "urlcat": "^3.1.0",
     "use-subscription": "^1.8.0",
     "uuid": "^9.0.0",
