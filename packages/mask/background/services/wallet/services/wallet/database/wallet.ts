@@ -74,6 +74,7 @@ export async function addWallet(
         name?: string
         derivationPath?: string
         storedKeyInfo?: api.IStoredKeyInfo
+        primaryWallet?: string
     },
 ) {
     const wallet = await getWallet(address)
@@ -89,6 +90,7 @@ export async function addWallet(
         name: updates?.name?.trim() ?? `Account ${(await getWallets()).length + 1}`,
         derivationPath: updates?.derivationPath,
         storedKeyInfo: updates?.storedKeyInfo,
+        primaryWallet: updates?.primaryWallet,
         createdAt: now,
         updatedAt: now,
     })
@@ -102,6 +104,7 @@ export async function updateWallet(
         name: string
         derivationPath?: string
         latestDerivationPath?: string
+        primaryWallet?: string
     }>,
 ) {
     const wallet = await getWallet(address)

@@ -176,6 +176,7 @@ export function encrypted_files_url() { return new URL("./general/EncryptedFiles
 export function europe_url() { return new URL("./general/Europe.svg", import.meta.url) }
 export function eye_dark_url() { return new URL("./general/Eye.dark.svg", import.meta.url) }
 export function eye_light_url() { return new URL("./general/Eye.light.svg", import.meta.url) }
+export function eye_color_url() { return new URL("./general/EyeColor.svg", import.meta.url) }
 export function eye_off_dark_url() { return new URL("./general/EyeOff.dark.svg", import.meta.url) }
 export function eye_off_light_url() { return new URL("./general/EyeOff.light.svg", import.meta.url) }
 export function facebook_url() { return new URL("./general/Facebook.svg", import.meta.url) }

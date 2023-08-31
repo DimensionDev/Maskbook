@@ -9,6 +9,8 @@ import { useSingletonModal } from '@masknet/shared-base-ui'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import Services from '../../../service.js'
 import { useNavigate } from 'react-router-dom'
+import { useWallet } from '@masknet/web3-hooks-base'
+import { noop } from 'lodash-es'
 
 interface ShowPrivateKeyDrawerProps extends BottomDrawerProps {
     error: string
@@ -20,6 +22,7 @@ interface ShowPrivateKeyDrawerProps extends BottomDrawerProps {
 function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest }: ShowPrivateKeyDrawerProps) {
     const { t } = useI18N()
     const theme = useTheme()
+    const wallet = useWallet()
     const navigate = useNavigate()
 
     const [{ loading }, handleClick] = useAsyncFn(async () => {
@@ -29,14 +32,17 @@ function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest 
             setError(t('create_wallet_incorrect_payment_password'))
             return
         }
+        if (!wallet) return
         await Services.Wallet.unlockWallet(password)
         navigate(PopupRoutes.ExportWalletPrivateKey, {
             state: {
                 password,
+                hasMnemonic:
+                    wallet?.primaryWallet ?? !!(await Services.Wallet.exportMnemonicWords(wallet.address).catch(noop)),
             },
         })
         rest.onClose?.()
-    }, [password])
+    }, [password, wallet])
 
     return (
         <BottomDrawer {...rest}>

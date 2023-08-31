@@ -42,6 +42,8 @@ export interface Wallet {
     deployed?: boolean
     /** persona identifier */
     identifier?: string
+    /** primary wallet address for derived wallets */
+    primaryWallet?: string
 }
 
 export type UpdatableWallet = Pick<Wallet, 'address' | 'name' | 'owner' | 'identifier'>
