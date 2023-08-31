@@ -9,4 +9,8 @@ export class FiatCurrencyRateAPI implements FiatCurrencyRateBaseAPI.Provider {
         const result = await fetchJSON<FiatCurrencyRateBaseAPI.Result>(BASE_URL)
         return result.rates[type.toUpperCase()]
     }
+    async getRates() {
+        const result = await fetchJSON<FiatCurrencyRateBaseAPI.Result>(BASE_URL)
+        return result.rates
+    }
 }
