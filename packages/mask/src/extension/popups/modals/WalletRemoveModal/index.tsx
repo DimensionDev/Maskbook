@@ -38,13 +38,7 @@ function WalletRemoveDrawer({ wallet, error, password, setPassword, setError, ..
             await Web3.removeWallet?.(wallet.address, password, { providerType: ProviderType.MaskWallet })
             rest.onClose?.()
 
-            const wallets = await Services.Wallet.getWallets()
-
-            if (!wallets.length) {
-                navigate(PopupRoutes.WalletStartUp, { replace: true })
-            } else {
-                navigate(PopupRoutes.Wallet, { replace: true })
-            }
+            navigate(PopupRoutes.Wallet, { replace: true })
         } catch (error) {
             setError((error as Error).message)
             return
@@ -71,10 +65,10 @@ function WalletRemoveDrawer({ wallet, error, password, setPassword, setError, ..
                 <PasswordField
                     sx={{ mt: 2 }}
                     fullWidth
+                    autoFocus
                     placeholder={t('popups_wallet_payment_password')}
                     error={!!error}
                     value={password}
-                    autoFocus
                     onChange={(e) => {
                         setPassword(e.target.value)
                         setError('')

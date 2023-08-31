@@ -102,7 +102,7 @@ const CreateWallet = memo(function CreateWallet() {
                     )}
                 />
             </Box>
-            <ActionButton loading={loading} fullWidth disabled={disabled} onClick={onSubmit}>
+            <ActionButton loading={loading || isLoadingEns} fullWidth disabled={disabled} onClick={onSubmit}>
                 {t('add')}
             </ActionButton>
         </div>
