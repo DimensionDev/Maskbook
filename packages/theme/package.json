@@ -20,7 +20,7 @@
     "@masknet/icons": "workspace:^",
     "@masknet/shared-base": "workspace:^",
     "@masknet/storybook-shared": "workspace:^",
-    "@types/qrcode": "^1.5.1",
+    "@types/qrcode": "^1.5.2",
     "@types/tinycolor2": "^1.4.3",
     "fuse.js": "6.6.2",
     "guess-calling-code": "^1.1.7",
@@ -28,12 +28,12 @@
     "react-use": "^17.4.0",
     "react-window": "^1.8.9",
     "tinycolor2": "^1.6.0",
-    "tss-react": "^4.8.8",
+    "tss-react": "^4.9.0",
     "unstated-next": "^1.1.0",
     "use-subscription": "^1.8.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.9",
+    "@babel/core": "^7.22.11",
     "@storybook/addon-actions": "^6.5.13",
     "@storybook/addon-essentials": "^6.5.13",
     "@storybook/addon-links": "^6.5.13",

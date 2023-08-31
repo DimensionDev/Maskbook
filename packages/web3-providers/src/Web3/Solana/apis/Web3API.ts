@@ -11,10 +11,10 @@ const createWeb3SDK = memoize(
 )
 
 export class SolanaWeb3API {
-    constructor(private options?: ConnectionOptions) {}
-
-    private ConnectionOptions = new SolanaConnectionOptionsAPI(this.options)
-
+    constructor(private options?: ConnectionOptions) {
+        this.ConnectionOptions = new SolanaConnectionOptionsAPI(this.options)
+    }
+    private ConnectionOptions
     getProviderInstance(initial?: ConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
         return SolanaProviders[options.providerType]

@@ -21,8 +21,8 @@ export function ProfileAvatarBadge({ userId, className, ...rest }: Props) {
     useEffect(() => {
         const button = buttonRef.current
         if (!button) return
-        let closeTimer: NodeJS.Timeout
-        let openTimer: NodeJS.Timeout
+        let closeTimer: ReturnType<typeof setTimeout>
+        let openTimer: ReturnType<typeof setTimeout>
         const enter = () => {
             clearTimeout(openTimer)
             clearTimeout(closeTimer)

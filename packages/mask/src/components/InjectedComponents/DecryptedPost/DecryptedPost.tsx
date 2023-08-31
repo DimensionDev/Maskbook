@@ -57,7 +57,7 @@ function isProgressEqual(a: PossibleProgress, b: PossibleProgress) {
     if (a.type === 'success') return isTypedMessageEqual(a, b as SuccessDecryption)
     if (a.type === 'error') return a.error === (b as FailureDecryption).error
     if (a.type === 'progress') return a.progress === (b as DecryptionProgress).progress
-    safeUnreachable(a)
+    safeUnreachable(a.type)
     return false
 }
 export function DecryptPost(props: DecryptPostProps) {

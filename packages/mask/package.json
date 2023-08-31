@@ -92,14 +92,14 @@
     "@types/d3": "5.16.4",
     "@types/elliptic": "^6.4.14",
     "@types/json-stable-stringify": "^1.0.34",
-    "@types/node": "20.4.2",
+    "@types/node": "20.5.7",
     "@types/react-avatar-editor": "^13.0.0",
     "@types/react-highlight-words": "^0.16.4",
     "@types/react-window": "^1.8.5",
     "@types/remarkable": "^2.0.3",
     "@types/use-subscription": "^1.0.0",
-    "@types/uuid": "^9.0.2",
-    "@types/webextension-polyfill": "^0.10.1",
+    "@types/uuid": "^9.0.3",
+    "@types/webextension-polyfill": "^0.10.2",
     "@uniswap/sdk-core": "^3.0.1",
     "@uniswap/v2-sdk": "3.0.0-alpha.2",
     "@uniswap/v3-sdk": "3.9.0",
@@ -158,11 +158,11 @@
     "web3-eth-contract": "1.8.0",
     "web3-utils": "1.8.0",
     "webextension-polyfill": "^0.10.0",
-    "zod": "^3.21.4"
+    "zod": "^3.22.2"
   },
   "devDependencies": {
     "@nice-labs/emit-file-webpack-plugin": "^1.1.4",
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
     "@types/color": "^3.0.3",
     "@types/react-devtools-inline": "^4.24.3",
     "copy-webpack-plugin": "^11.0.0",
@@ -180,6 +180,6 @@
     "webpack-target-webextension": "^1.1.0"
   },
   "peerDependencies": {
-    "tss-react": "^4.8.2"
+    "tss-react": "^4.9.0"
   }
 }

@@ -54,10 +54,12 @@ export class FlowConnectionAPI
             Web3Provider
         >
 {
-    constructor(private options?: ConnectionOptions) {}
-
-    private Web3 = new FlowWeb3API(this.options)
-    private ConnectionOptions = new FlowConnectionOptionsAPI(this.options)
+    constructor(options?: ConnectionOptions) {
+        this.ConnectionOptions = new FlowConnectionOptionsAPI(options)
+        this.Web3 = new FlowWeb3API(options)
+    }
+    private Web3
+    private ConnectionOptions
 
     getWeb3(initial?: ConnectionOptions) {
         return this.Web3.getWeb3(initial)
