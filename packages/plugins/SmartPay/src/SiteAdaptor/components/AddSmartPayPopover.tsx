@@ -102,7 +102,7 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
         ) {
             PersonaSelectPanelModal.open({
                 enableVerify: true,
-                target: PluginID.SmartPay,
+                finishTarget: PluginID.SmartPay,
             })
             return
         }
