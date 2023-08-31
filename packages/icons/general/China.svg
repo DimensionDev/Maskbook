@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 15 15">
+    <g clip-path="url('#China_svg__clip0_8497_47018')">
+        <path fill="#F93939" d="M0 0h15v15H0z"/>
+        <path fill="#F93939" d="M19 0H2a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h17a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Z"/>
+        <path fill="#FFDA2C" fill-rule="evenodd" d="m5.498 7.23-1.47.773.28-1.637-1.188-1.16 1.643-.237.735-1.49.734 1.49 1.643.237-1.19 1.16.282 1.636-1.469-.772ZM9 3h1v1H9V3Zm1 2h1v1h-1V5Zm0 2h1v1h-1V7ZM9 9h1v1H9V9Z" clip-rule="evenodd"/>
+    </g>
+    <defs>
+        <clipPath id="China_svg__clip0_8497_47018">
+            <path fill="#fff" d="M0 0h15v15H0z"/>
+        </clipPath>
+    </defs>
+</svg>

@@ -109,6 +109,7 @@ export function zora_url() { return new URL("./brands/Zora.svg", import.meta.url
 export function add_url() { return new URL("./general/Add.svg", import.meta.url) }
 export function add_no_border_url() { return new URL("./general/AddNoBorder.svg", import.meta.url) }
 export function add_user_url() { return new URL("./general/AddUser.svg", import.meta.url) }
+export function america_url() { return new URL("./general/America.svg", import.meta.url) }
 export function appendices_url() { return new URL("./general/Appendices.svg", import.meta.url) }
 export function application_nft_url() { return new URL("./general/ApplicationNFT.svg", import.meta.url) }
 export function approve_url() { return new URL("./general/Approve.svg", import.meta.url) }
@@ -138,6 +139,7 @@ export function checkbox_border_url() { return new URL("./general/CheckboxBorder
 export function checkbox_no_url() { return new URL("./general/CheckboxNo.svg", import.meta.url) }
 export function check_circle_url() { return new URL("./general/CheckCircle.svg", import.meta.url) }
 export function chevron_up_url() { return new URL("./general/ChevronUp.svg", import.meta.url) }
+export function china_url() { return new URL("./general/China.svg", import.meta.url) }
 export function circle_close_url() { return new URL("./general/CircleClose.svg", import.meta.url) }
 export function circle_loading_url() { return new URL("./general/CircleLoading.svg", import.meta.url) }
 export function circle_warning_url() { return new URL("./general/CircleWarning.svg", import.meta.url) }
@@ -171,6 +173,7 @@ export function empty_url() { return new URL("./general/Empty.png", import.meta.
 export function empty_simple_dark_url() { return new URL("./general/EmptySimple.dark.svg", import.meta.url) }
 export function empty_simple_light_url() { return new URL("./general/EmptySimple.light.svg", import.meta.url) }
 export function encrypted_files_url() { return new URL("./general/EncryptedFiles.svg", import.meta.url) }
+export function europe_url() { return new URL("./general/Europe.svg", import.meta.url) }
 export function eye_dark_url() { return new URL("./general/Eye.dark.svg", import.meta.url) }
 export function eye_light_url() { return new URL("./general/Eye.light.svg", import.meta.url) }
 export function eye_off_dark_url() { return new URL("./general/EyeOff.dark.svg", import.meta.url) }
@@ -191,6 +194,7 @@ export function hamburger_menu_url() { return new URL("./general/HamburgerMenu.s
 export function history_dark_url() { return new URL("./general/History.dark.svg", import.meta.url) }
 export function history_light_url() { return new URL("./general/History.light.svg", import.meta.url) }
 export function hkd_url() { return new URL("./general/HKD.svg", import.meta.url) }
+export function hong_kong_url() { return new URL("./general/HongKong.svg", import.meta.url) }
 export function identity_dark_url() { return new URL("./general/Identity.dark.svg", import.meta.url) }
 export function identity_light_url() { return new URL("./general/Identity.light.svg", import.meta.url) }
 export function info_dark_url() { return new URL("./general/Info.dark.svg", import.meta.url) }
@@ -199,6 +203,7 @@ export function interaction_url() { return new URL("./general/Interaction.svg", 
 export function interaction_circle_url() { return new URL("./general/InteractionCircle.svg", import.meta.url) }
 export function ito_url() { return new URL("./general/ITO.svg", import.meta.url) }
 export function ito_label_url() { return new URL("./general/ITOLabel.svg", import.meta.url) }
+export function japan_url() { return new URL("./general/Japan.svg", import.meta.url) }
 export function jpy_url() { return new URL("./general/JPY.svg", import.meta.url) }
 export function key_square_url() { return new URL("./general/KeySquare.svg", import.meta.url) }
 export function left_arrow_url() { return new URL("./general/LeftArrow.svg", import.meta.url) }

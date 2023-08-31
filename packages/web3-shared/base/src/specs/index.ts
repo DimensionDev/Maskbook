@@ -24,6 +24,7 @@ export enum CurrencyType {
     CNY = 'cny',
     HKD = 'hkd',
     JPY = 'jpy',
+    EUR = 'eur',
 }
 
 export enum OrderSide {
