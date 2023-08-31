@@ -20,7 +20,7 @@ interface WalletRemoveDrawerProps extends BottomDrawerProps {
     wallet?: Wallet
 }
 
-function WalletRenameDrawer({ wallet, error, password, setPassword, setError, ...rest }: WalletRemoveDrawerProps) {
+function WalletRemoveDrawer({ wallet, error, password, setPassword, setError, ...rest }: WalletRemoveDrawerProps) {
     const { t } = useI18N()
     const theme = useTheme()
     const navigate = useNavigate()
@@ -71,10 +71,10 @@ function WalletRenameDrawer({ wallet, error, password, setPassword, setError, ..
                 <PasswordField
                     sx={{ mt: 2 }}
                     fullWidth
-                    show={false}
                     placeholder={t('popups_wallet_payment_password')}
                     error={!!error}
                     value={password}
+                    autoFocus
                     onChange={(e) => {
                         setPassword(e.target.value)
                         setError('')
@@ -118,7 +118,7 @@ export const WalletRemoveModal = forwardRef<SingletonModalRefCreator<WalletRemov
         },
     })
     return (
-        <WalletRenameDrawer
+        <WalletRemoveDrawer
             password={password}
             setPassword={setPassword}
             error={error}
