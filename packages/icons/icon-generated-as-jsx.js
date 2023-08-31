@@ -634,6 +634,11 @@ export const AddUser = /*#__PURE__*/ __createIcon('AddUser', [
         s: true,
     },
 ])
+export const America = /*#__PURE__*/ __createIcon('America', [
+    {
+        u: () => new URL('./general/America.svg', import.meta.url),
+    },
+])
 export const Appendices = /*#__PURE__*/ __createIcon('Appendices', [
     {
         u: () => new URL('./general/Appendices.svg', import.meta.url),
@@ -1084,6 +1089,11 @@ export const ChevronUp = /*#__PURE__*/ __createIcon('ChevronUp', [
                 }),
             }),
         s: true,
+    },
+])
+export const China = /*#__PURE__*/ __createIcon('China', [
+    {
+        u: () => new URL('./general/China.svg', import.meta.url),
     },
 ])
 export const CircleClose = /*#__PURE__*/ __createIcon('CircleClose', [
@@ -1574,6 +1584,11 @@ export const EncryptedFiles = /*#__PURE__*/ __createIcon('EncryptedFiles', [
         u: () => new URL('./general/EncryptedFiles.svg', import.meta.url),
     },
 ])
+export const Europe = /*#__PURE__*/ __createIcon('Europe', [
+    {
+        u: () => new URL('./general/Europe.svg', import.meta.url),
+    },
+])
 export const Eye = /*#__PURE__*/ __createIcon('Eye', [
     {
         c: ['dark'],
@@ -1760,6 +1775,11 @@ export const HKD = /*#__PURE__*/ __createIcon('HKD', [
         u: () => new URL('./general/HKD.svg', import.meta.url),
     },
 ])
+export const HongKong = /*#__PURE__*/ __createIcon('HongKong', [
+    {
+        u: () => new URL('./general/HongKong.svg', import.meta.url),
+    },
+])
 export const Identity = /*#__PURE__*/ __createIcon('Identity', [
     {
         c: ['dark'],
@@ -1846,6 +1866,11 @@ export const ITO = /*#__PURE__*/ __createIcon('ITO', [
 export const ITOLabel = /*#__PURE__*/ __createIcon('ITOLabel', [
     {
         u: () => new URL('./general/ITOLabel.svg', import.meta.url),
+    },
+])
+export const Japan = /*#__PURE__*/ __createIcon('Japan', [
+    {
+        u: () => new URL('./general/Japan.svg', import.meta.url),
     },
 ])
 export const JPY = /*#__PURE__*/ __createIcon('JPY', [

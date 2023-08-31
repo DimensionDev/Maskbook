@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 15 15">
+    <g clip-path="url('#America_svg__clip0_8497_46318')">
+        <path fill="#fff" d="M0 0h15v15H0z"/>
+        <path fill="#1A47B8" fill-rule="evenodd" d="M0 0h9v7H0V0Z" clip-rule="evenodd"/>
+        <path fill="#F93939" fill-rule="evenodd" d="M9 0v1h12V0H9Zm0 2v1h12V2H9Zm0 2v1h12V4H9Zm0 2v1h12V6H9ZM0 8v1h21V8H0Zm0 2v1h21v-1H0Zm0 2v1h21v-1H0Zm0 2v1h21v-1H0Z" clip-rule="evenodd"/>
+        <path fill="#fff" fill-rule="evenodd" d="M1 1v1h1V1H1Zm2 0v1h1V1H3Zm2 0v1h1V1H5Zm2 0v1h1V1H7ZM6 2v1h1V2H6ZM4 2v1h1V2H4ZM2 2v1h1V2H2ZM1 3v1h1V3H1Zm2 0v1h1V3H3Zm2 0v1h1V3H5Zm2 0v1h1V3H7ZM1 5v1h1V5H1Zm2 0v1h1V5H3Zm2 0v1h1V5H5Zm2 0v1h1V5H7ZM6 4v1h1V4H6ZM4 4v1h1V4H4ZM2 4v1h1V4H2Z" clip-rule="evenodd"/>
+    </g>
+    <defs>
+        <clipPath id="America_svg__clip0_8497_46318">
+            <path fill="#fff" d="M0 0h15v15H0z"/>
+        </clipPath>
+    </defs>
+</svg>
