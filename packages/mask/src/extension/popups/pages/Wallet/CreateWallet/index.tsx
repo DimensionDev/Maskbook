@@ -54,7 +54,7 @@ const CreateWallet = memo(function CreateWallet() {
     const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { loading: isLoadingEns } = useAsync(async () => {
         if (!NameService?.reverse) return
-        const nextWallet = await Services.Wallet.deriveWallet('', false)
+        const nextWallet = await Services.Wallet.generateNextDerivationAddress()
         if (!nextWallet) return
         const ens = await NameService.reverse(nextWallet)
         if (ens) setValue('name', ens)

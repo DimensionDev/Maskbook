@@ -100,10 +100,7 @@ export async function getDerivableAccounts(mnemonic: string, page: number, pageS
     return accounts
 }
 
-/**
- * You only want to get next derive wallet, set the 2nd parameter to false
- */
-export async function deriveWallet(name: string, create = true) {
+export async function deriveWallet(name: string) {
     const masterPassword = await password.INTERNAL_getMasterPasswordRequired()
 
     // derive wallet base on the primary wallet
@@ -142,12 +139,10 @@ export async function deriveWallet(name: string, create = true) {
         // check its existence in DB
         if (await database.hasWallet(created.account.address)) continue
 
-        if (create) {
-            // update the primary wallet
-            await database.updateWallet(primaryWallet.address, {
-                latestDerivationPath,
-            })
-        }
+        // update the primary wallet
+        await database.updateWallet(primaryWallet.address, {
+            latestDerivationPath,
+        })
 
         // found a valid candidate, get the private key of it
         const exported = await Mask.exportPrivateKeyOfPath({
@@ -158,13 +153,55 @@ export async function deriveWallet(name: string, create = true) {
         })
         if (!exported?.privateKey) throw new Error(`Failed to export private key at path: ${latestDerivationPath}`)
 
-        if (create) {
-            // import the candidate by the private key
-            return createWalletFromPrivateKey(name, exported.privateKey)
-        } else {
-            // Get wallet address only
-            return getWalletFromPrivateKey(exported.privateKey)
-        }
+        // import the candidate by the private key
+        return createWalletFromPrivateKey(name, exported.privateKey)
+    }
+}
+
+export async function generateNextDerivationAddress() {
+    const masterPassword = await password.INTERNAL_getMasterPasswordRequired()
+
+    // derive wallet base on the primary wallet
+    const primaryWallet = await getWalletPrimary()
+    if (!primaryWallet?.storedKeyInfo) throw new Error('Cannot find the primary wallet.')
+
+    let derivedTimes = 0
+    let latestDerivationPath = primaryWallet.latestDerivationPath ?? primaryWallet.derivationPath
+    if (!latestDerivationPath) throw new Error('Failed to derive wallet without derivation path.')
+
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+        derivedTimes += 1
+
+        // protect from endless looping
+        if (derivedTimes >= MAX_DERIVE_COUNT) throw new Error('Exceed the max derivation times.')
+
+        // bump index
+        latestDerivationPath = bumpDerivationPath(latestDerivationPath)
+
+        // derive a new wallet
+        const created = await Mask.createAccountOfCoinAtPath({
+            coin: api.Coin.Ethereum,
+            name: '',
+            password: masterPassword,
+            derivationPath: latestDerivationPath,
+            StoredKeyData: primaryWallet.storedKeyInfo.data,
+        })
+        if (!created?.account?.address) throw new Error(`Failed to create account at path: ${latestDerivationPath}.`)
+
+        // check its existence in DB
+        if (await database.hasWallet(created.account.address)) continue
+
+        // found a valid candidate, get the private key of it
+        const exported = await Mask.exportPrivateKeyOfPath({
+            coin: api.Coin.Ethereum,
+            password: masterPassword,
+            derivationPath: latestDerivationPath,
+            StoredKeyData: primaryWallet.storedKeyInfo.data,
+        })
+        if (!exported?.privateKey) throw new Error(`Failed to export private key at path: ${latestDerivationPath}`)
+
+        return generateAddressFromPrivateKey(exported.privateKey)
     }
 }
 
@@ -318,7 +355,7 @@ export function createWalletFromPrivateKey(name: string, privateKey: string) {
     return addWalletFromPrivateKey(ImportSource.LocalGenerated, name, privateKey)
 }
 
-export async function getWalletFromPrivateKey(privateKey: string) {
+export async function generateAddressFromPrivateKey(privateKey: string) {
     const masterPassword = await password.INTERNAL_getMasterPasswordRequired()
     const imported = await Mask.importPrivateKey({
         coin: api.Coin.Ethereum,
@@ -350,7 +387,7 @@ export function recoverWalletFromPrivateKey(name: string, privateKey: string) {
     return addWalletFromPrivateKey(ImportSource.UserProvided, name, privateKey)
 }
 
-export async function getWalletFromKeyStoreJSON(json: string, jsonPassword: string) {
+export async function generateAddressFromKeyStoreJSON(json: string, jsonPassword: string) {
     const masterPassword = await password.INTERNAL_getMasterPasswordRequired()
     const imported = await Mask.importJSON({
         coin: api.Coin.Ethereum,
@@ -371,7 +408,7 @@ export async function getWalletFromKeyStoreJSON(json: string, jsonPassword: stri
     return created.account.address
 }
 
-export async function recoverWalletFromKeyStoreJSON(name: string, json: string, jsonPassword: string, add = true) {
+export async function recoverWalletFromKeyStoreJSON(name: string, json: string, jsonPassword: string) {
     const masterPassword = await password.INTERNAL_getMasterPasswordRequired()
     const imported = await Mask.importJSON({
         coin: api.Coin.Ethereum,
@@ -389,7 +426,6 @@ export async function recoverWalletFromKeyStoreJSON(name: string, json: string, 
         StoredKeyData: imported.StoredKey.data,
     })
     if (!created?.account?.address) throw new Error('Failed to create the wallet.')
-    if (!add) return created.account.address
 
     return database.addWallet(ImportSource.UserProvided, created.account.address, {
         name,
