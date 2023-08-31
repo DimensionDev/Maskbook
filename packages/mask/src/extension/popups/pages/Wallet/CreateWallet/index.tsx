@@ -65,8 +65,8 @@ const CreateWallet = memo(function CreateWallet() {
             const address = await Services.Wallet.deriveWallet(name)
             await pollResult(address)
             await Web3.connect({
-                account: address,
                 providerType: ProviderType.MaskWallet,
+                account: address,
             })
             navigate(-1)
         } catch (error) {
