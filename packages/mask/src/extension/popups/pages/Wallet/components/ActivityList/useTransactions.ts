@@ -1,5 +1,5 @@
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { useAccount, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
 import { DeBankHistory } from '@masknet/web3-providers'
 import { type RecentTransaction } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction as EvmTransaction } from '@masknet/web3-shared-evm'
@@ -12,7 +12,7 @@ import { useMemo } from 'react'
  * Transactions from debank are fetching page by page.
  */
 export function useTransactions() {
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { account } = useChainContext()
     const result = useInfiniteQuery({
         queryKey: ['debank', 'all-history', account],
         queryFn: async ({ pageParam }) => {

@@ -6,7 +6,7 @@ export function useFiatCurrencyRate() {
     const fiatCurrencyType = useCurrencyType()
 
     return useQuery({
-        queryKey: [fiatCurrencyType],
+        queryKey: ['fiat-currency-rate', fiatCurrencyType],
         queryFn: async () => FiatCurrencyRate.getRate(fiatCurrencyType),
     })
 }
