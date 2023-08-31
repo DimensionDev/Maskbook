@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo } from 'react'
+import { useEffect, useLayoutEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { first } from 'lodash-es'
 import { TabContext } from '@mui/lab'
@@ -25,6 +25,8 @@ import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 import { DSearch } from '@masknet/web3-providers'
 import { type SearchResult, SearchResultType } from '@masknet/web3-shared-base'
 import { useSearchedKeyword } from '../DataSource/useSearchedKeyword.js'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles<{ isProfilePage?: boolean; searchType?: SearchResultType }>()(
     (theme, { isProfilePage, searchType }) => ({
@@ -68,6 +70,19 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         if (!keyword) return
         return props.searchResults ?? DSearch.search(keyword)
     }, [keyword, props.searchResults])
+
+    useEffect(() => {
+        if (profileTabType || !resultList.value?.length) return
+        const type = resultList.value[0].type
+        if (
+            type === SearchResultType.CollectionListByTwitterHandler ||
+            type === SearchResultType.NonFungibleCollection ||
+            type === SearchResultType.NonFungibleToken
+        )
+            Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchNft)
+        if (type === SearchResultType.FungibleToken)
+            Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchToken)
+    }, [resultList, profileTabType])
 
     const currentResult = props.currentSearchResult ?? resultList.value?.[0]
 

@@ -2120,6 +2120,9 @@ importers:
       '@masknet/web3-shared-base':
         specifier: workspace:^
         version: link:../../web3-shared/base
+      '@masknet/web3-telemetry':
+        specifier: workspace:^
+        version: link:../../web3-telemetry
       '@msgpack/msgpack':
         specifier: ^3.0.0-beta2
         version: 3.0.0-beta2

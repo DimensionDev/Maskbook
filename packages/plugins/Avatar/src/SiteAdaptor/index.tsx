@@ -57,7 +57,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                                 EntryComponentProps.onClick
                                     ? EntryComponentProps.onClick?.(clickHandler)
                                     : clickHandler()
-                                Telemetry.captureEvent(EventType.Access, EventID.EntryAppNFT_PFP_Open)
+                                Telemetry.captureEvent(EventType.Access, EventID.EntryAppNFTPFPOpen)
                             }}
                             tooltipHint={
                                 EntryComponentProps.tooltipHint ??

@@ -253,25 +253,20 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     useEffect(() => {
         if (timer) clearTimeout(timer)
 
-        if (isCollectionProjectPopper) {
+        if (isCollectionProjectPopper || isTokenTagPopper) {
             const timer = setTimeout(() => {
-                Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineHoverNftDuration)
+                Telemetry.captureEvent(
+                    EventType.Access,
+                    isNFT ? EventID.EntryTimelineHoverNftDuration : EventID.EntryTimelineHoverTokenDuration,
+                )
             }, 1000)
-
-            setTimer(timer)
-        }
-        if (isTokenTagPopper) {
-            const timer = setTimeout(() => {
-                Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineHoverTokenDuration)
-            }, 1000)
-
             setTimer(timer)
         }
         return () => {
             if (timer) clearTimeout(timer)
             setTimer(undefined)
         }
-    }, [isCollectionProjectPopper, isTokenTagPopper, isProfilePage])
+    }, [isCollectionProjectPopper, isTokenTagPopper, isProfilePage, isNFT])
 
     const floorPrice =
         trending.dataProvider === SourceType.CoinMarketCap

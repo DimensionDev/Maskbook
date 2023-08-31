@@ -67,17 +67,6 @@ const createSearchTabConfig = (
                 }
                 const key = [socialAccount?.address ?? '-', props.tag ?? '-'].join('_')
 
-                useMountReport(() => {
-                    switch (props.tag) {
-                        case RSS3BaseAPI.Tag.Donation:
-                            return EventID.EntryProfileUserDonationsSwitchTo
-                        case RSS3BaseAPI.Tag.Social:
-                            return EventID.EntryProfileUserSocialSwitchTo
-                        default:
-                            return EventID.EntryProfileUserActivitiesSwitchTo
-                    }
-                })
-
                 return (
                     <Box style={{ minHeight: 300 }}>
                         <DefaultWeb3ContextProvider>
