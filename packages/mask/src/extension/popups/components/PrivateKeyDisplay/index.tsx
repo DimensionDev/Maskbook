@@ -58,7 +58,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     view: {
         color: theme.palette.maskColor.main,
-        curosr: 'pointer',
+        cursor: 'pointer',
         position: 'absolute',
         bottom: 6,
         right: 12,
@@ -158,7 +158,7 @@ export const PrivateKeyDisplay = memo<PrimaryKeyDisplayProps>(function PrivateKe
                     </Box>
                     <Typography className={classes.copy} onClick={handleCopy}>
                         <Icons.Copy size={20} />
-                        {t('popups_walelt_backup_copy_private_key')}
+                        {t('popups_wallet_backup_copy_private_key')}
                     </Typography>
                 </>
             ) : null}
