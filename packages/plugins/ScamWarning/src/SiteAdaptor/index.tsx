@@ -28,8 +28,8 @@ const site: Plugin.SiteAdaptor.Definition = {
     DecryptedInspector: function Comp(props) {
         const links = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
-            if (x.none) return null
-            return parseURLs(x.val, false)
+            if (x.isNone()) return null
+            return parseURLs(x.value, false)
         }, [props.message])
         if (!links) return null
         return <PreviewCard links={links} />

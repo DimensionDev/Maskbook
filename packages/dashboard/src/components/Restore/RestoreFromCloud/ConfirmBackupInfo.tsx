@@ -41,7 +41,7 @@ export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
         }
 
         const summary = await Services.Backup.generateBackupSummary(backupDecrypted)
-        if (summary.err) {
+        if (summary.isErr()) {
             dispatch({ type: 'SET_LOADING', loading: false })
             return setErrorMessage(t.sign_in_account_cloud_backup_decrypt_failed())
         }
@@ -49,7 +49,7 @@ export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
 
         dispatch({ type: 'SET_PASSWORD', password })
         dispatch({ type: 'TO_STEP', step: RestoreStep.Restore })
-        dispatch({ type: 'SET_BACKUP_SUMMARY', summary: summary.val, backupDecrypted })
+        dispatch({ type: 'SET_BACKUP_SUMMARY', summary: summary.value, backupDecrypted })
     }, [password, account, backupFileInfo])
 
     const handleSwitchAccount = useCallback(() => {

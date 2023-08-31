@@ -184,7 +184,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const { isCollectionProjectPopper, isTokenTagPopper, isPreciseSearch, isProfilePage } =
         useContext(TrendingViewContext)
     const { anchorEl, anchorBounding } = useAnchor()
-    const [timer, setTimer] = useState<NodeJS.Timeout>()
+    const [timer, setTimer] = useState<ReturnType<typeof setTimeout>>()
 
     const t = useI18N()
     const theme = useTheme()

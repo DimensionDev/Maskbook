@@ -81,8 +81,8 @@ export function createSubscriptionFromAsyncSuspense<T>(
     return {
         getCurrentValue: () => {
             // TODO: suspense
-            if (value.none) throw promise
-            return value.val
+            if (value.isNone()) throw promise
+            return value.value
         },
         subscribe: (sub: () => void) => {
             if (signal?.aborted) return noop
@@ -117,8 +117,8 @@ export function mapSubscription<T, Q>(sub: Subscription<T>, mapper: (val: T) => 
     sub.subscribe(() => (value = None))
     return {
         getCurrentValue() {
-            if (value.none) value = Some(mapper(sub.getCurrentValue()))
-            return value.val
+            if (value.isNone()) value = Some(mapper(sub.getCurrentValue()))
+            return value.value
         },
         subscribe: sub.subscribe,
     }

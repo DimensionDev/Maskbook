@@ -38,7 +38,7 @@ const site: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal) {},
     DecryptedInspector(props) {
-        if (RedPacketMetadataReader(props.message.meta).ok)
+        if (RedPacketMetadataReader(props.message.meta).isOk())
             return (
                 <Render name="Lucky Drop">
                     {renderWithRedPacketMetadata(props.message.meta, (r) => (
@@ -47,7 +47,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 </Render>
             )
 
-        if (RedPacketNftMetadataReader(props.message.meta).ok)
+        if (RedPacketNftMetadataReader(props.message.meta).isOk())
             return (
                 <Render name="NFT Lucky Drop">
                     {renderWithRedPacketNftMetadata(props.message.meta, (r) => (

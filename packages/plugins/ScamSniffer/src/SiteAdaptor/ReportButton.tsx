@@ -37,7 +37,7 @@ function ReportButton() {
         nickname,
         userId: author?.userId,
         links: [...links],
-        content: message.some ? message.val : null,
+        content: message.isSome() ? message.value : null,
     }
     const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
         setSending(true)

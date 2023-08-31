@@ -6,11 +6,12 @@ import { SolanaConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
 import type { ConnectionOptions } from '../types/index.js'
 
 export class SolanaTransferAPI {
-    constructor(private options?: ConnectionOptions) {}
-
-    private Web3 = new SolanaWeb3API(this.options)
-    private ConnectionOptions = new SolanaConnectionOptionsAPI(this.options)
-
+    constructor(private options?: ConnectionOptions) {
+        this.Web3 = new SolanaWeb3API(this.options)
+        this.ConnectionOptions = new SolanaConnectionOptionsAPI(this.options)
+    }
+    private Web3
+    private ConnectionOptions
     private async attachRecentBlockHash(transaction: Transaction, initial?: ConnectionOptions) {
         const connection = this.Web3.getWeb3Connection(initial)
         const blockHash = await connection.getRecentBlockhash()

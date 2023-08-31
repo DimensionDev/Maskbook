@@ -90,8 +90,8 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
         const str = tab === 'file' ? content : text
 
         const summary = await Services.Backup.generateBackupSummary(str)
-        if (summary.ok) {
-            setPreview(summary.val)
+        if (summary.isOk()) {
+            setPreview(summary.value)
         } else {
             setPreview(null)
         }

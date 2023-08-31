@@ -26,7 +26,7 @@ export function CollectionProjectAvatarBadge({ address, userId, className, ident
         const button = buttonRef.current
         if (!button) return
 
-        let openTimer: NodeJS.Timeout
+        let openTimer: ReturnType<typeof setTimeout>
         const enter = () => {
             clearTimeout(openTimer)
             openTimer = setTimeout(() => {

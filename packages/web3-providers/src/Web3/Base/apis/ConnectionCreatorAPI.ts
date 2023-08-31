@@ -51,16 +51,17 @@ export class ConnectionCreatorAPI_Base<T extends NetworkPluginID> {
             Web3Helper.Definition[T]['Transaction'],
             Web3Helper.Definition[T]['TransactionParameter']
         >,
-    ) {}
-
-    private createCached = memoize(
-        this.creator,
-        resolver<
-            Web3Helper.Definition[T]['ChainId'],
-            Web3Helper.Definition[T]['ProviderType'],
-            Web3Helper.Definition[T]['Transaction']
-        >,
-    )
+    ) {
+        this.createCached = memoize(
+            creator,
+            resolver<
+                Web3Helper.Definition[T]['ChainId'],
+                Web3Helper.Definition[T]['ProviderType'],
+                Web3Helper.Definition[T]['Transaction']
+            >,
+        )
+    }
+    private createCached
 
     create(
         initial?: ConnectionOptions_Base<

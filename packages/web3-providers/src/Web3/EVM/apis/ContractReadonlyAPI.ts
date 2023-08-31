@@ -44,9 +44,10 @@ import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import type { ConnectionOptions } from '../types/index.js'
 
 export class ContractReadonlyAPI {
-    constructor(protected options?: ConnectionOptions) {}
-
-    protected Request = new RequestReadonlyAPI(this.options)
+    constructor(protected options?: ConnectionOptions) {
+        this.Request = new RequestReadonlyAPI(options)
+    }
+    protected Request
 
     getWeb3Contract<T extends BaseContract>(address: string | undefined, ABI: AbiItem[], initial?: ConnectionOptions) {
         const web3 = this.Request.getWeb3(initial)

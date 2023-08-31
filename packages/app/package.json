@@ -94,7 +94,7 @@
         "cssnano": "^6.0.1",
         "date-fns": "^2.30.0",
         "idb": "^7.1.1",
-        "postcss": "^8.4.26",
+        "postcss": "^8.4.29",
         "postcss-cli": "^10.1.0",
         "purgecss": "^5.0.0",
         "react-router-dom": "^6.14.2",
@@ -107,8 +107,9 @@
     },
     "devDependencies": {
         "@nice-labs/emit-file-webpack-plugin": "^1.1.4",
-        "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
+        "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
         "@sinonjs/text-encoding": "^0.7.2",
+        "@types/terser-webpack-plugin": "^5.2.0",
         "copy-webpack-plugin": "^11.0.0",
         "css-loader": "^6.8.1",
         "html-webpack-plugin": "^5.5.3",
@@ -116,10 +117,9 @@
         "source-map-loader": "^4.0.1",
         "style-loader": "^3.3.3",
         "swc-loader": "^0.2.3",
+        "terser-webpack-plugin": "^5.3.9",
         "webpack": "Jack-Works/webpack#lazy-import",
         "webpack-cli": "^5.1.4",
-        "webpack-dev-server": "^4.15.1",
-        "terser-webpack-plugin": "^5.3.9",
-        "@types/terser-webpack-plugin": "^5.2.0"
+        "webpack-dev-server": "^4.15.1"
     }
 }

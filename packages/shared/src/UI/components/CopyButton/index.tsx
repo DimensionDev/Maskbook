@@ -40,7 +40,7 @@ export const CopyButton = memo<CopyButtonProps>(function CopyButton({
     const [, copyToClipboard] = useCopyToClipboard()
     const [copied, setCopied] = useState(false)
     const [active, setActive] = useState(false)
-    const timerRef = useRef<NodeJS.Timeout>()
+    const timerRef = useRef<ReturnType<typeof setTimeout>>()
 
     const handleCopy = useCallback(
         async (ev: MouseEvent<HTMLAnchorElement>) => {

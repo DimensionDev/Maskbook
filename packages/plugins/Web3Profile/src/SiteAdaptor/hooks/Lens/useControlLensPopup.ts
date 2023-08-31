@@ -4,7 +4,7 @@ import { emitter } from '../../emitter.js'
 const LEAVE_DURATION = 500
 export function useControlLensPopup(holderRef: RefObject<HTMLDivElement>) {
     const hoverRef = useRef(false)
-    const closeTimerRef = useRef<NodeJS.Timeout>()
+    const closeTimerRef = useRef<ReturnType<typeof setTimeout>>()
 
     const [active, setActive] = useState(false)
 

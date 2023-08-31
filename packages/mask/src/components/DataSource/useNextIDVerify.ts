@@ -14,7 +14,7 @@ import Services from '../../extension/service.js'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 
 export function useNextIDVerify() {
-    const verifyPostCollectTimer = useRef<NodeJS.Timer | null>(null)
+    const verifyPostCollectTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
     const getPostIdFromNewPostToast = activatedSiteAdaptorUI!.configuration.nextIDConfig?.getPostIdFromNewPostToast
     const postMessage = activatedSiteAdaptorUI!.automation?.nativeCompositionDialog?.appendText
     const platform = activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform

@@ -88,11 +88,14 @@ export class ConnectionReadonlyAPI
             Web3Provider
         >
 {
-    constructor(protected options?: ConnectionOptions) {}
-
-    protected Request = new RequestReadonlyAPI(this.options)
-    protected Contract = new ContractReadonlyAPI(this.options)
-    protected ConnectionOptions = new ConnectionOptionsReadonlyAPI(this.options)
+    constructor(protected options?: ConnectionOptions) {
+        this.Contract = new ContractReadonlyAPI(this.options)
+        this.Request = new RequestReadonlyAPI(this.options)
+        this.ConnectionOptions = new ConnectionOptionsReadonlyAPI(this.options)
+    }
+    protected Request
+    protected Contract
+    protected ConnectionOptions
 
     getWeb3(initial?: ConnectionOptions) {
         return this.Request.getWeb3(initial)

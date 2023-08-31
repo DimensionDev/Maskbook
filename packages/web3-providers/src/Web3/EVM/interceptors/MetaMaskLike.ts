@@ -3,11 +3,10 @@ import { ConnectionAPI } from '../apis/ConnectionAPI.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 
 export class MetaMaskLike implements Middleware<ConnectionContext> {
-    constructor(private providerType: ProviderType) {}
-
-    private Web3 = new ConnectionAPI({
-        providerType: this.providerType,
-    })
+    constructor(providerType: ProviderType) {
+        this.Web3 = new ConnectionAPI({ providerType })
+    }
+    private Web3
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {
         // Evoke the unlock popup when metamask-like is locked before send transaction or sign message.

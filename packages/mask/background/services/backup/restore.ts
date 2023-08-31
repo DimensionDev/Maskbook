@@ -13,8 +13,8 @@ export async function generateBackupSummary(raw: string) {
         const backup = await normalizeBackup(backupObj)
 
         const personas = [...backup.personas.values()].map((x) => {
-            if (!x.address.none) return x.address.unwrap()
-            if (x.privateKey.none) return
+            if (!x.address.isNone()) return x.address.unwrap()
+            if (x.privateKey.isNone()) return
             const privateKey = x.privateKey.unwrap()
             if (!privateKey.d) return
             const address = bufferToHex(publicToAddress(privateToPublic(Buffer.from(fromBase64URL(privateKey.d)))))

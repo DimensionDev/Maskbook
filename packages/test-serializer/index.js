@@ -1,3 +1,4 @@
+import { Some, None, Ok, Err } from 'ts-results-es'
 function serialize(val, config, indentation, depth, refs, printer) {
     const nextIndent = indentation + config.indent
     if (val instanceof Uint8Array) {
@@ -17,11 +18,10 @@ function serialize(val, config, indentation, depth, refs, printer) {
         // crypto.subtle.exportKey('jwk', val).then(console.log)
         return 'CryptoKey { [opaque crypto key material] }'
     }
-    const inner = printer(val.val, config, indentation, depth, refs)
-    if (val.ok) return `Ok(${inner})`
-    if (val.err) return `Err(${inner})`
-    if (val.none) return 'None'
-    if (val.some) return `Some(${inner})`
+    if (val instanceof Ok) return `Ok(${printer(val.value, config, indentation, depth, refs)})`
+    if (val instanceof Err) return `Err(${printer(val.error, config, indentation, depth, refs)})`
+    if (val === None) return 'None'
+    if (val instanceof Some) return `Some(${printer(val.value, config, indentation, depth, refs)})`
 }
 function test(val) {
     if (!val) return false
@@ -29,7 +29,11 @@ function test(val) {
     if (isCryptoKey(val)) return true
     if (isDOMException(val)) return true
     if (val instanceof Error) return true
-    return Object.hasOwn(val, 'ok') || Object.hasOwn(val, 'none')
+    if (val instanceof Ok) return true
+    if (val instanceof Err) return true
+    if (val === None) return true
+    if (val instanceof Some) return true
+    return false
 }
 
 function isDOMException(a) {

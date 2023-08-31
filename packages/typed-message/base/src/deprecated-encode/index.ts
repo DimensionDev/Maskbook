@@ -12,13 +12,12 @@ export function encodeTypedMessageV38Format(message: TypedMessageText) {
 export function decodeTypedMessageV38ToV40Format(raw: Uint8Array, version: -38 | -39 | -40) {
     const decoder = new TextDecoder()
     const text = Result.wrap(() => decoder.decode(raw))
-    const { val, err } = text
-    if (err) return text
+    if (text.isErr()) return text
 
     if (version === -38) {
         const maybeMetadata = (() => {
-            if (!val.includes('\u{1F9E9}')) return None
-            const [maybeJSON] = val.split('\u{1F9E9}')
+            if (!text.value.includes('\u{1F9E9}')) return None
+            const [maybeJSON] = text.value.split('\u{1F9E9}')
             return Result.wrap(() => JSON.parse(maybeJSON))
                 .toOption()
                 .map((val) => {
@@ -27,10 +26,10 @@ export function decodeTypedMessageV38ToV40Format(raw: Uint8Array, version: -38 |
                 })
         })()
         return Ok(
-            maybeMetadata.some
-                ? makeTypedMessageText(val.replace(/.+\u{1F9E9}/u, ''), maybeMetadata.val)
-                : makeTypedMessageText(val),
+            maybeMetadata.isSome()
+                ? makeTypedMessageText(text.value.replace(/.+\u{1F9E9}/u, ''), maybeMetadata.value)
+                : makeTypedMessageText(text.value),
         )
     }
-    return Ok(makeTypedMessageText(val))
+    return Ok(makeTypedMessageText(text.value))
 }

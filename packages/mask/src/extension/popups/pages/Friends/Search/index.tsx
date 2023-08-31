@@ -33,7 +33,7 @@ export const Search = memo<SearchProps>(function Search({ setSearchValue }) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const [value, setValue] = useState<string>('')
-    const [timer, setTimer] = useState<NodeJS.Timeout | null>(null)
+    const [timer, setTimer] = useState<ReturnType<typeof setTimeout> | null>(null)
     const currentPersona = useCurrentLinkedPersona()
     const handleKeyPress = (e: React.KeyboardEvent) => {
         if (e.key !== 'Enter') return

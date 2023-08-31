@@ -68,14 +68,14 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     const onConnect = useCallback(async () => {
         const id = ProfileIdentifier.of(activatedSiteAdaptorUI!.networkIdentifier, userId)
-        if (!id.some) return
+        if (!id.isSome()) return
         // attach persona with site profile
-        await Services.Identity.attachProfile(id.val, persona, {
+        await Services.Identity.attachProfile(id.value, persona, {
             connectionConfirmState: 'confirmed',
         })
 
         if (currentIdentityResolved.avatar) {
-            await Services.Identity.updateProfileInfo(id.val, {
+            await Services.Identity.updateProfileInfo(id.value, {
                 avatarURL: currentIdentityResolved.avatar,
             })
         }

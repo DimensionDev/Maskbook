@@ -18,8 +18,8 @@ const site: Plugin.SiteAdaptor.Definition = {
     DecryptedInspector(props) {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
-            if (x.none) return null
-            return parseURLs(x.val).find(isMaskBox)
+            if (x.isNone()) return null
+            return parseURLs(x.value).find(isMaskBox)
         }, [props.message])
         if (!link) return null
         return <Renderer url={link} />

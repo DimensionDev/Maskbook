@@ -31,10 +31,10 @@ const definition: Plugin.SiteAdaptor.Definition = {
     },
     DecryptedInspector(props) {
         const metadata = FileInfoMetadataReader(props.message.meta)
-        if (!metadata.ok) return null
+        if (!metadata.isOk()) return null
         return (
             <ThemeProvider theme={MaskLightTheme}>
-                <FileViewer files={metadata.val} />
+                <FileViewer files={metadata.value} />
             </ThemeProvider>
         )
     },

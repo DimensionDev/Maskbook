@@ -85,8 +85,8 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
         if (!backupValue) return
 
         const summary = await Services.Backup.generateBackupSummary(backupValue)
-        if (summary.ok) {
-            setSummary(summary.val)
+        if (summary.isOk()) {
+            setSummary(summary.value)
             setRestoreStatus(RestoreStatus.Verified)
         } else {
             showSnackbar(t.sign_in_account_cloud_backup_not_support(), { variant: 'error' })

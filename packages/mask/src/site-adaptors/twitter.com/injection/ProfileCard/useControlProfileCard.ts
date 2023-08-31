@@ -13,7 +13,7 @@ const LEAVE_DURATION = 500
 
 export function useControlProfileCard(holderRef: RefObject<HTMLDivElement>): Result {
     const hoverRef = useRef(false)
-    const closeTimerRef = useRef<NodeJS.Timeout>()
+    const closeTimerRef = useRef<ReturnType<typeof setTimeout>>()
     const skipClick = useRef(false)
 
     const [active, setActive] = useState(false)

@@ -13,7 +13,7 @@ import {
 } from '@masknet/web3-shared-base'
 
 class Checker<ChainId extends PropertyKey, Transaction> {
-    private timer: NodeJS.Timeout | null = null
+    private timer: ReturnType<typeof setTimeout> | null = null
 
     constructor(
         protected checkers: Array<TransactionChecker<ChainId, Transaction>>,

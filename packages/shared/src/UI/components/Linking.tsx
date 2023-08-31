@@ -9,8 +9,8 @@ export interface LinkingProps {
 
 export function Linking(props: LinkingProps) {
     const { href, LinkProps, TypographyProps, children } = props
-    try {
-        const { hostname } = new URL(href ?? '')
+    if (href && URL.canParse(href)) {
+        const { hostname } = new URL(href)
         return (
             <Link
                 color={(theme) => theme.palette.maskColor.main}
@@ -27,7 +27,7 @@ export function Linking(props: LinkingProps) {
                 )}
             </Link>
         )
-    } catch {
+    } else {
         return (
             <span className={LinkProps?.className} title={LinkProps?.title}>
                 {children ? (
