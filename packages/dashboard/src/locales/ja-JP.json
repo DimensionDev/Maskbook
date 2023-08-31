@@ -422,6 +422,9 @@
     "create_wallet_payment_password_tip_1": "支払いパスワードは6文字以上20文字以下で設定してください。",
     "create_wallet_payment_password_tip_2": "支払いパスワードはウォレットデータを暗号化し、取引の確認とロック解除に必要です。 お使いのデバイスに安全に保存されているため、取り戻すことはできません。覚えておいてください。",
     "create_wallet_your_wallet_address": "あなたのウォレットアドレス",
+    "create_wallet_key_store_not_support": "非対応のキーストアデータ",
+    "create_wallet_key_store_password": "キーストアのパスワード",
+    "create_wallet_key_store_incorrect_password": "キーストアのパスワードが正しくありません。",
     "create_wallet_done": "完了",
     "create_wallet_verify_words": "ニーモニックワードを検証します",
     "create_wallet_mnemonic_word_not_match": "ニーモニックワードが正しくありません",
@@ -429,6 +432,11 @@
     "recovery_smart_pay_wallet_description_one": "{{count}} ローカルの SmartPay ウォレットが検出され、正常に復元されました。",
     "recovery_smart_pay_wallet_description_other": "{{count}} ローカル SmartPay ウォレットが検出され、正常に復元されました。",
     "welcome_request_to_collect": "お客様の利用情報を収集し、改善に役立てます。",
+    "welcome_to_use_mask_network": "Mask Networkへようこそ",
+    "create_step": "ステップ {{step}}/{{totalSteps}}",
+    "persona_create_title": "新規Mask IDを作成",
+    "persona_create_tips": "あなたのペルソナを作成して始めましょう",
+    "data_recovery_title": "データを復元する",
     "wallet_history_no_data": "履歴記録はありません。",
     "wallets_history_burn": "バーン"
 }
