@@ -17,6 +17,7 @@ import { CollectibleDetail } from './CollectibleDetail/index.js'
 
 const WalletSettings = lazy(() => import('./WalletSettings/index.js'))
 const CreateWallet = lazy(() => import('./CreateWallet/index.js'))
+const DeriveWallet = lazy(() => import('./CreateWallet/Derive.js'))
 const AddToken = lazy(() => import('./AddToken/index.js'))
 const GasSetting = lazy(() => import('./GasSetting/index.js'))
 const Transfer = lazy(() => import('./Transfer/index.js'))
@@ -44,6 +45,7 @@ export default function Wallet() {
                     <Route path="*" element={wallet && wallets.length ? <WalletAssets /> : <WalletStartUp />} />
                     <Route path={r(PopupRoutes.WalletSettings)} element={<WalletSettings />} />
                     <Route path={r(PopupRoutes.CreateWallet)} element={<CreateWallet />} />
+                    <Route path={r(PopupRoutes.DeriveWallet)} element={<DeriveWallet />} />
                     <Route path={r(`${PopupRoutes.Contacts}/:address?` as PopupRoutes)} element={<ContactList />} />
                     <Route
                         path={r(`${PopupRoutes.AddToken}/:chainId/:assetType` as PopupRoutes)}
