@@ -1,11 +1,18 @@
 import { Icons } from '@masknet/icons'
-import { CopyButton, ProgressiveText, ReversedAddress } from '@masknet/shared'
+import { CopyButton, FormattedCurrency, ProgressiveText, ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
 import { useAccount, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { ChainbaseHistory, ExplorerResolver, Web3 } from '@masknet/web3-providers'
 import { chainbase } from '@masknet/web3-providers/helpers'
-import { TransactionStatusType, formatBalance, isSameAddress, multipliedBy, trimZero } from '@masknet/web3-shared-base'
+import {
+    TransactionStatusType,
+    formatBalance,
+    formatCurrency,
+    isSameAddress,
+    multipliedBy,
+    trimZero,
+} from '@masknet/web3-shared-base'
 import {
     formatHash,
     formatWeiToEther,
@@ -335,7 +342,14 @@ export const TransactionDetail = memo(function TransactionDetail() {
                     <Typography className={classes.fieldName}>{t('transaction_fee')}</Typography>
                     <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
                         {gasFee ? `${gasFee.toFixed(6)} ${nativeToken?.symbol}` : ''}
-                        {gasCost ? ` ≈ $${gasCost.toFixed(2)}` : ''}
+                        {gasCost ? (
+                            <>
+                                {' ≈ '}
+                                <FormattedCurrency value={gasCost} formatter={formatCurrency} />
+                            </>
+                        ) : (
+                            ''
+                        )}
                     </ProgressiveText>
                 </Box>
                 {logs?.length ? (
