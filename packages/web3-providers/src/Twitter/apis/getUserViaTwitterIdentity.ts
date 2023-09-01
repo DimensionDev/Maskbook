@@ -3,7 +3,7 @@ import { fetchCachedJSON } from '../../helpers/fetchJSON.js'
 import { staleCached } from '../../helpers/fetchCached.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'
 
-const TWITTER_IDENTITY_URL = 'https://mr8asf7i4h.execute-api.us-east-1.amazonaws.com/prod/twitter-identity'
+const TWITTER_IDENTITY_URL = 'https://a8fq5hs9nk.execute-api.us-east-1.amazonaws.com/prod/twitter'
 
 function identityToLegacyUser(response: TwitterBaseAPI.IdentifyResponse): TwitterBaseAPI.User {
     return {
