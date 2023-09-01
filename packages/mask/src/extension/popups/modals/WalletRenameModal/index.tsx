@@ -60,6 +60,7 @@ function WalletRenameDrawer({ wallet, ...rest }: WalletRenameDrawerProps) {
                 <TextField
                     sx={{ mt: 2 }}
                     fullWidth
+                    autoFocus
                     placeholder={wallet?.name}
                     error={!!error}
                     value={name}

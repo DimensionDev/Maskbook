@@ -1,5 +1,5 @@
 import { defer, timeout } from '@masknet/kit'
-import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Providers, Web3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -65,10 +65,10 @@ const CreateWallet = memo(function CreateWallet() {
             const address = await Services.Wallet.deriveWallet(name)
             await pollResult(address)
             await Web3.connect({
-                account: address,
                 providerType: ProviderType.MaskWallet,
+                account: address,
             })
-            navigate(PopupRoutes.Wallet, { replace: true })
+            navigate(-1)
         } catch (error) {
             if (error instanceof Error) {
                 setErrorMessage(errorMessage)
@@ -102,7 +102,7 @@ const CreateWallet = memo(function CreateWallet() {
                     )}
                 />
             </Box>
-            <ActionButton loading={loading} fullWidth disabled={disabled} onClick={onSubmit}>
+            <ActionButton loading={loading || isLoadingEns} fullWidth disabled={disabled} onClick={onSubmit}>
                 {t('add')}
             </ActionButton>
         </div>
