@@ -24,8 +24,8 @@ async function backupAllWallets(): Promise<NormalizedBackup.WalletBackup[]> {
         wallets.map(async (wallet) => {
             return {
                 ...wallet,
-                mnemonic: wallet.derivationPath ? await exportMnemonicWords(wallet.address) : undefined,
-                privateKey: wallet.derivationPath ? undefined : await exportPrivateKey(wallet.address),
+                mnemonic: wallet.latestDerivationPath ? await exportMnemonicWords(wallet.address) : undefined,
+                privateKey: wallet.latestDerivationPath ? undefined : await exportPrivateKey(wallet.address),
             }
         }),
     )

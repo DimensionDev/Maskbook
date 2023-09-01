@@ -1079,6 +1079,8 @@
     "popups_switch_persona": "Switch Persona",
     "popups_recovery": "Recovery",
     "popups_next_id": "Next.ID",
+    "popups_wallet_group_title": "Wallet Group #{{index}}",
+    "popups_wallet_imported_group_title": "Imported Wallets",
     "popups_backup_persona": "Backup Persona",
     "popups_persona_rename_tips": "Persona name must between 1 to 24 characters.",
     "popups_backup_password_rules": "Password should contain uppercase and lowercase letters, special characters and numbers. ",

@@ -38,7 +38,7 @@ function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest 
             state: {
                 password,
                 hasMnemonic:
-                    wallet?.primaryWallet ?? !!(await Services.Wallet.exportMnemonicWords(wallet.address).catch(noop)),
+                    wallet?.mnemonicId ?? !!(await Services.Wallet.exportMnemonicWords(wallet.address).catch(noop)),
             },
         })
         rest.onClose?.()

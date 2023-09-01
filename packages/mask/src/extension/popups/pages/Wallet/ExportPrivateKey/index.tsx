@@ -1,13 +1,13 @@
-import { memo, useMemo } from 'react'
+import { memo } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAsync, useAsyncFn } from 'react-use'
 import { Box, Tab, Typography, useTheme } from '@mui/material'
-import { EMPTY_LIST, ImportSource, MimeType } from '@masknet/shared-base'
+import { ImportSource, MimeType } from '@masknet/shared-base'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Icons } from '@masknet/icons'
 import formatDateTime from 'date-fns/format'
 import { ActionButton, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { useWallet, useWallets } from '@masknet/web3-hooks-base'
+import { useWallet } from '@masknet/web3-hooks-base'
 import { encodeText } from '@masknet/kit'
 import { useTitle } from '../../../hooks/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
@@ -16,8 +16,8 @@ import Services from '../../../../service.js'
 import { NormalHeader } from '../../../components/index.js'
 import { saveFileFromBuffer } from '../../../../../../shared/index.js'
 import { MnemonicDisplay } from '../../../components/MnemonicDisplay/index.js'
-import { isSameAddress } from '@masknet/web3-shared-base'
 import { PrivateKeyDisplay } from '../../../components/PrivateKeyDisplay/index.js'
+import { useWalletGroup } from '../../../hooks/useWalletGroup.js'
 
 enum TabType {
     Mnemonic = 'Mnemonic',
@@ -59,7 +59,7 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
     const theme = useTheme()
     const { classes } = useStyles()
     const wallet = useWallet()
-    const wallets = useWallets()
+    const walletGroup = useWalletGroup()
 
     const { state } = useLocation()
 
@@ -77,37 +77,28 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
     const { loading: getMnemonicLoading, value: mnemonic } = useAsync(async () => {
         if (!wallet) return
 
-        const words = await Services.Wallet.exportMnemonicWords(wallet.primaryWallet || wallet.address)
+        const words = await Services.Wallet.exportMnemonicWords(wallet.address).catch(() => '')
         if (!words) {
-            if (wallet.source !== ImportSource.LocalGenerated) return
-            const primary = wallets.find((x) => x.derivationPath && x.source === ImportSource.LocalGenerated)
-            if (!primary) return
-            const primaryWalletWords = await Services.Wallet.exportMnemonicWords(primary.address)
-            if (!primaryWalletWords) return
+            const primaryWallet = wallet.mnemonicId
+                ? await Services.Wallet.getPrimaryWalletByMnemonicId(wallet.mnemonicId)
+                : wallet.source === ImportSource.LocalGenerated
+                ? await Services.Wallet.getWalletPrimary()
+                : null
 
+            if (!primaryWallet) return
+            const primaryWalletWords = await Services.Wallet.exportMnemonicWords(primaryWallet.address)
+            if (!primaryWalletWords) return
             return primaryWalletWords.split(' ')
         }
+
         return words.split(' ')
-    }, [wallet, wallets])
+    }, [wallet])
 
     const [currentTab, onChange] = useTabs(
         state.hasMnemonic ? TabType.Mnemonic : TabType.PrivateKey,
         TabType.PrivateKey,
         TabType.JsonFile,
     )
-
-    const walletGroup = useMemo(() => {
-        if (!wallet) return EMPTY_LIST
-        const group = wallets.filter((x) => isSameAddress(wallet?.primaryWallet, x?.primaryWallet))
-        /**
-         * Since older versions of the data did not have a primaryWallet field,
-         * set the local generate to the group
-         */
-        if (!group.length && wallet.source === ImportSource.LocalGenerated) {
-            return wallets.filter((x) => x.source === ImportSource.LocalGenerated)
-        }
-        return group
-    }, [wallets, wallet])
 
     useTitle(wallet?.name ? wallet.name : '')
 
@@ -154,8 +145,10 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
                         maxHeight="450px"
                         overflow="auto"
                         data-hide-scrollbar>
-                        {walletGroup.length ? (
-                            walletGroup.map((x, index) => <PrivateKeyDisplay wallet={x} key={index} />)
+                        {wallet?.mnemonicId ? (
+                            walletGroup?.groups[wallet.mnemonicId].map((x, index) => (
+                                <PrivateKeyDisplay wallet={x} key={index} />
+                            ))
                         ) : wallet ? (
                             <PrivateKeyDisplay wallet={wallet} hiddenArrow />
                         ) : null}

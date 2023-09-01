@@ -42,8 +42,11 @@ export interface Wallet {
     deployed?: boolean
     /** persona identifier */
     identifier?: string
-    /** primary wallet address for derived wallets */
-    primaryWallet?: string
+    /**
+     * mnemonicId represents a wallet under the same set of mnemonics,
+     * used for wallet grouping
+     */
+    mnemonicId?: string
 }
 
 export type UpdatableWallet = Pick<Wallet, 'address' | 'name' | 'owner' | 'identifier'>

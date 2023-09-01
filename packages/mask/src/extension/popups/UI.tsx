@@ -39,6 +39,7 @@ import {
     SetBackupPasswordModal,
     SwitchPersonaModal,
     VerifyBackupPasswordModal,
+    WalletGroupModal,
 } from './modals/index.js'
 import SwitchWallet from './pages/Wallet/SwitchWallet/index.js'
 import { noop } from 'lodash-es'
@@ -125,6 +126,7 @@ const PopupRoutes = memo(function PopupRoutes() {
                                 path={PopupModalRoutes.ConnectProvider}
                                 element={wrapModal(<ConnectProviderModal />)}
                             />
+                            <Route path={PopupModalRoutes.WalletAccount} element={wrapModal(<WalletGroupModal />)} />
                         </Routes>
                     ) : null}
                 </UserContext.Provider>

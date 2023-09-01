@@ -87,6 +87,7 @@ export interface WalletItemProps extends Omit<ListItemProps, 'onSelect'> {
     wallet: Wallet
     isSelected: boolean
     onSelect(wallet: Wallet): void
+    hiddenTag?: boolean
 }
 
 export const WalletItem = memo<WalletItemProps>(function WalletItem({
@@ -94,6 +95,7 @@ export const WalletItem = memo<WalletItemProps>(function WalletItem({
     onSelect,
     isSelected,
     className,
+    hiddenTag,
     ...rest
 }) {
     const { t } = useI18N()
@@ -117,7 +119,7 @@ export const WalletItem = memo<WalletItemProps>(function WalletItem({
                         <Typography className={classes.name}>
                             {`${wallet.name}${domain ? ` (${formatDomainName(domain)})` : ''}`}
                         </Typography>
-                        {wallet.source === ImportSource.LocalGenerated ? null : (
+                        {wallet.source === ImportSource.LocalGenerated || hiddenTag ? null : (
                             <Typography component="span" className={classes.badge}>
                                 {t('wallet_imported')}
                             </Typography>

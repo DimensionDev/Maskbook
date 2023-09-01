@@ -43,6 +43,12 @@ export async function hasStoredKeyInfo(storedKeyInfo?: api.IStoredKeyInfo) {
     return wallets.filter((x) => x.storedKeyInfo?.hash).some((x) => x.storedKeyInfo?.hash === storedKeyInfo?.hash)
 }
 
+export async function getWalletByStoreKeyInfo(storedKeyInfo?: api.IStoredKeyInfo) {
+    const wallets = await getWallets()
+    if (!storedKeyInfo) return
+    return wallets.filter((x) => x.storedKeyInfo?.hash).find((x) => x.storedKeyInfo?.hash === storedKeyInfo.hash)
+}
+
 export async function hasStoredKeyInfoRequired(storedKeyInfo?: api.IStoredKeyInfo) {
     const has = await hasStoredKeyInfo(storedKeyInfo)
     if (!has) throw new Error('The stored key info does not exist.')
@@ -74,7 +80,7 @@ export async function addWallet(
         name?: string
         derivationPath?: string
         storedKeyInfo?: api.IStoredKeyInfo
-        primaryWallet?: string
+        mnemonicId?: string
     },
 ) {
     const wallet = await getWallet(address)
@@ -90,7 +96,7 @@ export async function addWallet(
         name: updates?.name?.trim() ?? `Account ${(await getWallets()).length + 1}`,
         derivationPath: updates?.derivationPath,
         storedKeyInfo: updates?.storedKeyInfo,
-        primaryWallet: updates?.primaryWallet,
+        mnemonicId: updates?.mnemonicId,
         createdAt: now,
         updatedAt: now,
     })
@@ -104,7 +110,7 @@ export async function updateWallet(
         name: string
         derivationPath?: string
         latestDerivationPath?: string
-        primaryWallet?: string
+        mnemonicId?: string
     }>,
 ) {
     const wallet = await getWallet(address)
@@ -116,6 +122,7 @@ export async function updateWallet(
         name: updates.name ?? wallet.name,
         derivationPath: updates?.derivationPath ?? wallet.derivationPath,
         latestDerivationPath: updates?.latestDerivationPath ?? wallet.latestDerivationPath,
+        mnemonicId: updates?.mnemonicId ?? wallet.mnemonicId,
         updatedAt: new Date(),
     })
     CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)

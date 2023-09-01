@@ -58,6 +58,15 @@ export async function createMnemonicWords() {
     return bip39.generateMnemonic().split(' ')
 }
 
+export async function getPrimaryWalletByMnemonicId(mnemonicId?: string) {
+    if (!mnemonicId) return
+    const wallets = await database.getWallets()
+
+    return (
+        wallets.find((x) => x.mnemonicId === mnemonicId && x.storedKeyInfo?.type === api.StoredKeyType.Mnemonic) ?? null
+    )
+}
+
 export async function getWalletPrimary() {
     return (
         first(
@@ -66,6 +75,18 @@ export async function getWalletPrimary() {
                 .sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime()),
         ) ?? null
     )
+}
+
+export async function getMnemonicId(storedKeyInfo: api.IStoredKeyInfo) {
+    const masterPassword = await password.INTERNAL_getMasterPasswordRequired()
+    const firstWallet = await Mask.createAccountOfCoinAtPath({
+        coin: api.Coin.Ethereum,
+        password: masterPassword,
+        derivationPath: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+        StoredKeyData: storedKeyInfo.data,
+    })
+    if (!firstWallet?.account?.address) return
+    return firstWallet?.account?.address
 }
 
 export async function getDerivableAccounts(mnemonic: string, page: number, pageSize = 10) {
@@ -111,6 +132,8 @@ export async function deriveWallet(name: string) {
     let latestDerivationPath = primaryWallet.latestDerivationPath ?? primaryWallet.derivationPath
     if (!latestDerivationPath) throw new Error('Failed to derive wallet without derivation path.')
 
+    const mnemonicId = await getMnemonicId(primaryWallet.storedKeyInfo)
+
     // eslint-disable-next-line no-constant-condition
     while (true) {
         derivedTimes += 1
@@ -137,7 +160,14 @@ export async function deriveWallet(name: string) {
         if (!created?.account?.address) throw new Error(`Failed to create account at path: ${latestDerivationPath}.`)
 
         // check its existence in DB
-        if (await database.hasWallet(created.account.address)) continue
+        if (await database.hasWallet(created.account.address)) {
+            const localWallet = await database.getWallet(created.account.address)
+            if (localWallet?.mnemonicId)
+                await database.updateWallet(localWallet.address, {
+                    mnemonicId,
+                })
+            continue
+        }
 
         // update the primary wallet
         await database.updateWallet(primaryWallet.address, {
@@ -154,7 +184,7 @@ export async function deriveWallet(name: string) {
         if (!exported?.privateKey) throw new Error(`Failed to export private key at path: ${latestDerivationPath}`)
 
         // import the candidate by the private key
-        return createWalletFromPrivateKey(name, exported.privateKey, primaryWallet.address)
+        return createWalletFromPrivateKey(name, exported.privateKey, mnemonicId, latestDerivationPath)
     }
 }
 
@@ -249,16 +279,7 @@ async function addWalletFromMnemonicWords(
 
     if (!imported?.StoredKey) throw new Error('Failed to import the wallet.')
 
-    const primaryWallet = await Mask.createAccountOfCoinAtPath({
-        coin: api.Coin.Ethereum,
-        name,
-        password: masterPassword,
-        derivationPath: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-        StoredKeyData: imported?.StoredKey.data,
-    })
-
-    if (!primaryWallet?.account?.address) throw new Error('Failed to create the wallet.')
-
+    const mnemonicId = await getMnemonicId(imported.StoredKey)
     if (await database.hasStoredKeyInfo(imported.StoredKey)) {
         const exported = await Mask.exportPrivateKeyOfPath({
             coin: api.Coin.Ethereum,
@@ -267,7 +288,8 @@ async function addWalletFromMnemonicWords(
             StoredKeyData: imported.StoredKey.data,
         })
         if (!exported?.privateKey) throw new Error(`Failed to export private key at path: ${derivationPath}`)
-        return addWalletFromPrivateKey(source, name, exported.privateKey, primaryWallet.account.address)
+
+        return addWalletFromPrivateKey(source, name, exported.privateKey, mnemonicId, derivationPath)
     } else {
         const created = await Mask.createAccountOfCoinAtPath({
             coin: api.Coin.Ethereum,
@@ -281,12 +303,18 @@ async function addWalletFromMnemonicWords(
             name,
             derivationPath,
             storedKeyInfo: imported.StoredKey,
-            primaryWallet: primaryWallet.account.address,
+            mnemonicId,
         })
     }
 }
 
-async function addWalletFromPrivateKey(source: ImportSource, name: string, privateKey: string, primaryWallet?: string) {
+async function addWalletFromPrivateKey(
+    source: ImportSource,
+    name: string,
+    privateKey: string,
+    mnemonicId?: string,
+    derivationPath?: string,
+) {
     const masterPassword = await password.INTERNAL_getMasterPasswordRequired()
     const imported = await Mask.importPrivateKey({
         coin: api.Coin.Ethereum,
@@ -306,7 +334,8 @@ async function addWalletFromPrivateKey(source: ImportSource, name: string, priva
     return database.addWallet(source, created.account.address, {
         name,
         storedKeyInfo: imported.StoredKey,
-        primaryWallet,
+        mnemonicId,
+        derivationPath,
     })
 }
 
@@ -318,8 +347,13 @@ export function createWalletFromMnemonicWords(
     return addWalletFromMnemonicWords(ImportSource.LocalGenerated, name, mnemonic, derivationPath)
 }
 
-export function createWalletFromPrivateKey(name: string, privateKey: string, primaryWallet?: string) {
-    return addWalletFromPrivateKey(ImportSource.LocalGenerated, name, privateKey, primaryWallet)
+export function createWalletFromPrivateKey(
+    name: string,
+    privateKey: string,
+    mnemonicId?: string,
+    derivationPath?: string,
+) {
+    return addWalletFromPrivateKey(ImportSource.LocalGenerated, name, privateKey, mnemonicId, derivationPath)
 }
 
 export function recoverWalletFromMnemonicWords(

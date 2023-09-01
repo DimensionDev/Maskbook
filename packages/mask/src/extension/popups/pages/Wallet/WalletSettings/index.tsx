@@ -26,7 +26,7 @@ const WalletSettings = memo(() => {
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
 
     const handleSwitchWallet = useCallback(() => {
-        modalNavigate(PopupModalRoutes.SwitchWallet)
+        modalNavigate(PopupModalRoutes.WalletAccount)
     }, [modalNavigate])
 
     useTitle(t('popups_wallet_setting'))
