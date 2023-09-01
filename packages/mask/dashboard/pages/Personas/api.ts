@@ -3,7 +3,8 @@ import { use, cache } from 'react'
 import { noop } from 'lodash-es'
 import { ValueRef } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { Services, Messages } from '../../API.js'
+import { Messages } from '../../API.js'
+import { Services } from '../../../shared-ui/service.js'
 
 export interface SiteAdaptor {
     networkIdentifier: string

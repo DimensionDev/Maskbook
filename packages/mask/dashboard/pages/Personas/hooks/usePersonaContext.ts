@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { createContainer } from 'unstated-next'
 import { useConnectSite, useDisconnectSite, useOpenProfilePage } from './useConnectSite.js'
-import { Services } from '../../../API.js'
+import { Services } from '../../../../shared-ui/service.js'
 import {
     useOwnedPersonas,
     useSupportedSocialNetworkSites,

@@ -1,5 +1,6 @@
 import { useAsyncFn } from 'react-use'
-import { Messages, Services } from '../../../API.js'
+import { Messages } from '../../../API.js'
+import { Services } from '../../../../shared-ui/service.js'
 import { delay } from '@masknet/kit'
 import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn.js'
 

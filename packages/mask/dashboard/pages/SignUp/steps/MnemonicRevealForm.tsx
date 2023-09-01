@@ -18,7 +18,7 @@ import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContain
 import { useMnemonicWordsPuzzle } from '../../../hooks/useMnemonicWordsPuzzle.js'
 import { useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext.js'
-import { Services } from '../../../API.js'
+import { Services } from '../../../../shared-ui/service.js'
 import { PreviewDialog } from './PreviewDialog.js'
 import { Icons } from '@masknet/icons'
 import { useAsync } from 'react-use'

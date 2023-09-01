@@ -4,7 +4,7 @@ import { Box, FormControlLabel, formControlLabelClasses, Radio, RadioGroup, styl
 import { BackupInfoCard } from '../../../../components/Restore/BackupInfoCard.js'
 import type { BackupFileInfo } from '../../type.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
-import { Services } from '../../../../API.js'
+import { Services } from '../../../../../shared-ui/service.js'
 import { fetchBackupValue } from '../../api.js'
 import { useAsyncFn } from 'react-use'
 import { decryptBackup } from '@masknet/backup-format'

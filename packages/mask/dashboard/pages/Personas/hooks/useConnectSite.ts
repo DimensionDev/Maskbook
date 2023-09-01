@@ -1,5 +1,5 @@
 import { useAsyncFn } from 'react-use'
-import { Services } from '../../../API.js'
+import { Services } from '../../../../shared-ui/service.js'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn.js'
 

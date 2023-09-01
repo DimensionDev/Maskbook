@@ -7,7 +7,7 @@ import { CrossIsolationMessages, MimeType, PopupRoutes } from '@masknet/shared-b
 import { MaskDialog, useCustomSnackbar } from '@masknet/theme'
 import { encode } from '@msgpack/msgpack'
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
-import { Services } from '../../../../API.js'
+import { Services } from '../../../../../shared-ui/service.js'
 import { LoadingButton } from '../../../../components/LoadingButton/index.js'
 import { MaskAlert } from '../../../../components/MaskAlert/index.js'
 import PasswordFiled from '../../../../components/PasswordField/index.js'

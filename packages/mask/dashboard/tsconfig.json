@@ -7,7 +7,7 @@
   },
   "include": ["./", "./**/*.json"],
   "references": [
-    { "path": "../background" },
+    { "path": "../shared-ui" },
     { "path": "../../public-api" },
     { "path": "../../theme/" },
     { "path": "../../web3-hooks/base/" },

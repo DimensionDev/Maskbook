@@ -1,5 +1,6 @@
 import { delay } from '@masknet/kit'
-import { Messages, Services } from '../API.js'
+import { Messages } from '../API.js'
+import { Services } from '../../shared-ui/service.js'
 
 export function useCreatePersonaV2() {
     return async (mnemonicWord: string, nickName: string) => {

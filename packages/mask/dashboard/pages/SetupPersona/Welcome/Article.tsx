@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import type { HTMLProps } from 'react'
 import { useAsync } from 'react-use'
-import { Services } from '../../../API.js'
+import { Services } from '../../../../shared-ui/service.js'
 import { sortBy } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({

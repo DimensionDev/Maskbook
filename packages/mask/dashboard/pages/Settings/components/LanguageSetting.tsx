@@ -1,6 +1,6 @@
 import { MenuItem, type SelectChangeEvent } from '@mui/material'
 import { useLanguage } from '../../Personas/api.js'
-import { Services } from '../../../API.js'
+import { Services } from '../../../../shared-ui/service.js'
 import SettingSelect from './SettingSelect.js'
 import { LanguageOptions } from '@masknet/public-api'
 import { useDashboardI18N } from '../../../locales/index.js'

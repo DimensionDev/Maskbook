@@ -4,7 +4,7 @@ import { Icons } from '@masknet/icons'
 import { getMaskColor, MaskColorVar, makeStyles } from '@masknet/theme'
 import { type PostInformation, PluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
-import { Services } from '../../../../API.js'
+import { Services } from '../../../../../shared-ui/service.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
 

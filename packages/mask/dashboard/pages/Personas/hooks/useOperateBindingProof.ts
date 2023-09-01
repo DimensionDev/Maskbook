@@ -7,7 +7,8 @@ import {
     type ProfileIdentifier,
     SignType,
 } from '@masknet/shared-base'
-import { Services, Messages } from '../../../API.js'
+import { Messages } from '../../../API.js'
+import { Services } from '../../../../shared-ui/service.js'
 
 export function useDeleteBound() {
     return useAsyncFn(

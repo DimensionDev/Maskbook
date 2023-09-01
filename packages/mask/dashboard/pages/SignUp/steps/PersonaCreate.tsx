@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { SignUpRoutePath } from '../routePath.js'
-import { Services } from '../../../API.js'
+import { Services } from '../../../../shared-ui/service.js'
 import { PersonaNameUI } from './PersonaNameUI.js'
 
 export function PersonaCreate() {
