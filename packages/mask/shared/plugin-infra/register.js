@@ -1,6 +1,4 @@
 // This file is a JavaScript file because it's reference to the plugins should not be counted as a project reference.
-// If your plugin also works in isolated dashboard, please also register it in
-// packages/dashboard/src/initialization/plugins.ts
 import '@masknet/plugin-example/register'
 import '@masknet/plugin-debugger/register'
 

@@ -1,4 +1,4 @@
-import { IntegratedDashboard, setMessages, setService } from '@masknet/dashboard'
+import { IntegratedDashboard, setMessages, setService } from '../../../dashboard/entry.js'
 import { startPluginDashboard } from '@masknet/plugin-infra/dashboard'
 import { DashboardRoutes, MaskMessages, createSubscriptionFromAsync } from '@masknet/shared-base'
 import { createPartialSharedUIContext, createPluginHost } from '../../../shared/plugin-infra/host.js'

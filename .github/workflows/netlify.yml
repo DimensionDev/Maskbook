@@ -38,16 +38,6 @@ jobs:
         uses: DimensionDev/github-token-action@latest
         with:
             registry: true
-      - name: Restore Webpack cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            packages/dashboard/node_modules/.cache/
-            packages/theme/node_modules/.cache/
-          key: netlify-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
-          restore-keys: |
-            netlify-${{ hashFiles('pnpm-lock.yaml') }}
-            netlify-
       - run: git config --global url."https://github.com/".insteadOf git@github.com
       - run: pnpm install
       - run: npx gulp build-ci-netlify
