@@ -1,6 +1,6 @@
 /// <reference types="react/canary" />
 import { Flags } from '@masknet/flags'
-import Services from '../../../service.js'
+import Services from '#services'
 import { Button, SnackbarContent, Box } from '@mui/material'
 import { Suspense, cache, use, useState } from 'react'
 import { ErrorBoundary } from '@masknet/shared-base-ui'

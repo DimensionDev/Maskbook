@@ -8,7 +8,7 @@ import {
     SignType,
 } from '@masknet/shared-base'
 import { MaskMessages } from '@masknet/shared-base'
-import { Services } from '../../../../shared-ui/service.js'
+import Services from '#services'
 
 export function useDeleteBound() {
     return useAsyncFn(

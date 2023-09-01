@@ -1,6 +1,6 @@
 import { delay } from '@masknet/kit'
 import { MaskMessages } from '@masknet/shared-base'
-import { Services } from '../../shared-ui/service.js'
+import Services from '#services'
 
 export function useCreatePersonaV2() {
     return async (mnemonicWord: string, nickName: string) => {

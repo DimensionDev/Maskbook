@@ -1,6 +1,6 @@
 import { createKVStorageHost, type KVStorageBackend } from '@masknet/shared-base'
 import { MaskMessages } from '@masknet/shared-base'
-import { Services } from '../../shared-ui/service.js'
+import Services from '#services'
 
 const memory: KVStorageBackend = {
     beforeAutoSync: Promise.resolve(),

@@ -10,7 +10,7 @@ import { PopupRoutes, type SingletonModalRefCreator, type Wallet } from '@maskne
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { PasswordField } from '../../components/PasswordField/index.js'
-import Services from '../../../service.js'
+import Services from '#services'
 
 interface WalletRemoveDrawerProps extends BottomDrawerProps {
     error: string

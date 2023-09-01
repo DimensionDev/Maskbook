@@ -49,7 +49,7 @@ import {
 import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
 import { SearchResultInspector } from './SearchResultInspector.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
-import Services from '../../extension/service.js'
+import Services from '#services'
 import { useQuery } from '@tanstack/react-query'
 
 const useStyles = makeStyles()((theme) => ({

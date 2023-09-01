@@ -1,5 +1,5 @@
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
-import Services from '../extension/service.js'
+import Services from '#services'
 
 WalletServiceRef.value = {
     changePassword: Services.Wallet.changePassword,

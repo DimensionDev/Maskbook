@@ -5,7 +5,7 @@ import { getDefaultWalletPassword, CrossIsolationMessages, PopupRoutes } from '@
 import { Web3 } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
-import { Services } from '../../../shared-ui/service.js'
+import Services from '#services'
 
 function useContext() {
     const wallets = useWallets()

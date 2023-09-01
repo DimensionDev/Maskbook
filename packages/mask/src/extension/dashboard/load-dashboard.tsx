@@ -4,7 +4,7 @@ import { DashboardRoutes, MaskMessages, createSubscriptionFromAsync } from '@mas
 import { createPartialSharedUIContext, createPluginHost } from '../../../shared/plugin-infra/host.js'
 import { createNormalReactRoot } from '../../utils/createNormalReactRoot.js'
 import { RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui.js'
-import Services from '../service.js'
+import Services from '#services'
 import { Modals } from '@masknet/shared'
 
 startPluginDashboard(

@@ -21,7 +21,7 @@ import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../../utils/index.js'
-import Services from '../../extension/service.js'
+import Services from '#services'
 
 const useStyles = makeStyles()((theme) => ({
     titleTailButton: {

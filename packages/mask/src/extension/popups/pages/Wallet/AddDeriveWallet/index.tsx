@@ -13,7 +13,7 @@ import { Web3 } from '@masknet/web3-providers'
 import { DeriveWalletTable } from '@masknet/shared'
 import { useI18N } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hooks/index.js'
-import Services from '../../../../service.js'
+import Services from '#services'
 
 const useStyles = makeStyles()({
     container: {

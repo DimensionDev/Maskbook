@@ -8,7 +8,7 @@ import { Icons } from '@masknet/icons'
 import { Trend } from '../../../assets/index.js'
 import { CrossIsolationMessages, EnhanceableSite, PopupRoutes } from '@masknet/shared-base'
 
-import { Services } from '../../../../shared-ui/service.js'
+import Services from '#services'
 import { delay } from '@masknet/kit'
 import { OnboardingWriter } from '../../../components/OnboardingWriter/index.js'
 import { useSearchParams } from 'react-router-dom'

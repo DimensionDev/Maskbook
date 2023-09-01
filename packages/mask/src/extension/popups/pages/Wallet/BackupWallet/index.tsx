@@ -12,7 +12,7 @@ import { useSearchParams } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { saveFileFromBuffer } from '../../../../../../shared/index.js'
 import { useI18N } from '../../../../../utils/index.js'
-import Services from '../../../../service.js'
+import Services from '#services'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { useTitle } from '../../../hooks/index.js'
 

@@ -1,7 +1,7 @@
 import { DashboardRoutes, EnhanceableSite } from '@masknet/shared-base'
 import { useState, useCallback, memo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Services } from '../../../../shared-ui/service.js'
+import Services from '#services'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { delay } from '@masknet/kit'
 import { MaskTextField, makeStyles } from '@masknet/theme'

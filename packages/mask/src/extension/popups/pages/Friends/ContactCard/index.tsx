@@ -17,7 +17,7 @@ import { NextIDPlatform } from '@masknet/shared-base'
 import { attachNextIDToProfile } from '../../../../../utils/utils.js'
 import { ConnectedAccounts } from './ConnectedAccounts/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
-import Services from '../../../../service.js'
+import Services from '#services'
 import { type Friend, useFriendProfiles } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => ({

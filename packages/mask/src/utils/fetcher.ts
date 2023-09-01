@@ -1,4 +1,4 @@
-import Services from '../extension/service.js'
+import Services from '#services'
 
 const { fetch: original_fetch } = globalThis
 

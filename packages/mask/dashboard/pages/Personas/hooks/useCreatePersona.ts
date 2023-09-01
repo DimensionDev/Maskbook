@@ -1,6 +1,6 @@
 import { useAsyncFn } from 'react-use'
 import { MaskMessages } from '@masknet/shared-base'
-import { Services } from '../../../../shared-ui/service.js'
+import Services from '#services'
 import { delay } from '@masknet/kit'
 import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn.js'
 

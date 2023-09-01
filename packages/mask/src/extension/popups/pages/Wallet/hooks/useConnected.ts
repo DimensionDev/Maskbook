@@ -1,6 +1,6 @@
 import { getSiteType } from '@masknet/shared-base'
 import { useQuery } from '@tanstack/react-query'
-import Services from '../../../../service.js'
+import Services from '#services'
 import { useSearchParams } from 'react-router-dom'
 
 export function useConnected() {

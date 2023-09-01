@@ -1,5 +1,5 @@
 import { useAsyncRetry, useUpdateEffect } from 'react-use'
-import { Services } from '../../../../shared-ui/service.js'
+import Services from '#services'
 import type { ProfileInformation, RelationFavor, Relation } from '@masknet/shared-base'
 import { useRef } from 'react'
 import { last } from 'lodash-es'

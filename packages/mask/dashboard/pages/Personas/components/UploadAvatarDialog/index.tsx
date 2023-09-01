@@ -4,7 +4,7 @@ import { Box, Button, DialogContent, Slider } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
 import AvatarEditor from 'react-avatar-editor'
 import { useStateList } from 'react-use'
-import { Services } from '../../../../../shared-ui/service.js'
+import Services from '#services'
 import FileUpload from '../../../../components/FileUpload/index.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
 

@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { useAsyncRetry, useUpdateEffect } from 'react-use'
 import { last } from 'lodash-es'
 import type { PostInformation } from '@masknet/shared-base'
-import { Services } from '../../../../shared-ui/service.js'
+import Services from '#services'
 import { PersonaContext } from './usePersonaContext.js'
 
 export const usePostHistory = (network: string, page: number, size = 20) => {

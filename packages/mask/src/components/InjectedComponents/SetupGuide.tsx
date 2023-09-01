@@ -16,7 +16,7 @@ import {
 } from '@masknet/shared-base'
 import { useI18N } from '../../utils/index.js'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
-import Services from '../../extension/service.js'
+import Services from '#services'
 import { FindUsername } from './SetupGuide/FindUsername.js'
 import { VerifyNextID } from './SetupGuide/VerifyNextID.js'
 import { PinExtension } from './SetupGuide/PinExtension.js'

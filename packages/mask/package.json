@@ -3,6 +3,12 @@
   "private": true,
   "license": "AGPL-3.0-or-later",
   "type": "module",
+  "imports": {
+    "#services": {
+      "types": "./dist/shared-ui/service.d.ts",
+      "default": "./shared-ui/service.ts"
+    }
+  },
   "exports": {
     ".": null
   },

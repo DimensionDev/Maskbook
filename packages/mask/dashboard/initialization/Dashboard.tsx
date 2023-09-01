@@ -20,7 +20,7 @@ import '../utils/kv-storage.js'
 
 import { Pages } from '../pages/routes.js'
 import { useAppearance } from '../pages/Personas/api.js'
-import { Services } from '../../shared-ui/service.js'
+import Services from '#services'
 import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext.js'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)

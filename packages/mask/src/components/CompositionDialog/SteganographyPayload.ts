@@ -1,7 +1,7 @@
 import { GrayscaleAlgorithm, SteganographyPreset } from '@masknet/encryption'
 import { SteganographyPresetImage } from '../../resources/image-payload/index.js'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
-import Services from '../../extension/service.js'
+import Services from '#services'
 import { downloadUrl } from '../../utils/utils.js'
 
 export async function SteganographyPayload(data: string | Uint8Array) {

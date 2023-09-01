@@ -1,7 +1,7 @@
 import { useAsync } from 'react-use'
 import { currentPersonaIdentifier } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
-import Services from '../../extension/service.js'
+import Services from '#services'
 
 /**
  * Get current setting persona

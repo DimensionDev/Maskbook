@@ -13,7 +13,7 @@ import { RestorePersonaFromLocal } from '../../../components/Restore/RestorePers
 import { RestoreFromCloud } from '../../../components/Restore/RestoreFromCloud/index.js'
 import { RecoveryProvider, RecoveryContext } from '../../../contexts/index.js'
 import { RestoreFromMnemonic } from '../../../components/Restore/RestoreFromMnemonic.js'
-import { Services } from '../../../../shared-ui/service.js'
+import Services from '#services'
 import { PersonaContext } from '../../../pages/Personas/hooks/usePersonaContext.js'
 import { delay } from '@masknet/kit'
 import { UserProvider } from '../../Settings/hooks/UserContext.js'
