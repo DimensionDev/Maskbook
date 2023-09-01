@@ -44,6 +44,7 @@ function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest 
                 <PasswordField
                     sx={{ mt: 2 }}
                     fullWidth
+                    autoFocus
                     placeholder={t('popups_wallet_payment_password')}
                     error={!!error}
                     value={password}
@@ -51,10 +52,6 @@ function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest 
                         setPassword(e.target.value)
                         setError('')
                     }}
-                    InputProps={{
-                        disableUnderline: true,
-                    }}
-                    show={false}
                 />
             </Box>
             {error ? (
