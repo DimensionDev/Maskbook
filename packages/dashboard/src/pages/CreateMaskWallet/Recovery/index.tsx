@@ -19,6 +19,8 @@ import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { RecoveryContext, RecoveryProvider } from '../../../contexts/index.js'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { ResetWalletContext } from '../context.js'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/dist/types'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -134,6 +136,7 @@ const Recovery = memo(function Recovery() {
                     providerType: ProviderType.MaskWallet,
                     silent: true,
                 })
+                Telemetry.captureEvent(EventType.Access, EventID.EntryPopupWalletImport)
                 navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
             } catch (error) {
                 const errorMsg = (error as Error).message
@@ -162,6 +165,7 @@ const Recovery = memo(function Recovery() {
                     silent: true,
                 })
                 await WalletServiceRef.value.resolveMaskAccount([{ address }])
+                Telemetry.captureEvent(EventType.Access, EventID.EntryPopupWalletImport)
                 navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
             } catch (error) {
                 const errorMsg = (error as Error).message

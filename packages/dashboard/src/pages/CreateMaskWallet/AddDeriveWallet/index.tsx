@@ -17,6 +17,9 @@ import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { ResetWalletContext } from '../context.js'
 import { Web3 } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventType } from '@masknet/web3-telemetry/types'
+import { EventID } from '@masknet/web3-telemetry/dist/entry-types.js'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -138,7 +141,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
             silent: true,
         })
         await WalletServiceRef.value.resolveMaskAccount([{ address: firstWallet }])
-
+        Telemetry.captureEvent(EventType.Access, EventID.EntryPopupWalletImport)
         navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
     }, [indexes, mnemonic, wallets.length, isReset, password])
 
