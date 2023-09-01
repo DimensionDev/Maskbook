@@ -10,7 +10,7 @@ import {
     NextIDPlatform,
 } from '@masknet/shared-base'
 import { PersonaHomeUI } from './UI.js'
-import Services from '../../../../service.js'
+import Services from '#services'
 import { useSupportSocialNetworks, useHasPassword } from '../../../hooks/index.js'
 
 const PersonaHome = memo(() => {

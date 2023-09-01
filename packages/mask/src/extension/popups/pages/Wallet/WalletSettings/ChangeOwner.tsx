@@ -8,7 +8,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { useStyles } from './useStyles.js'
 import { useQuery } from '@tanstack/react-query'
-import Services from '../../../../service.js'
+import Services from '#services'
 
 export function ChangeOwner() {
     const { t } = useI18N()

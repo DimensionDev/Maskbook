@@ -11,7 +11,7 @@ import { useMessages, useWallet } from '@masknet/web3-hooks-base'
 import { useHasPassword } from '../../hooks/index.js'
 import { useWalletLockStatus } from '../../pages/Wallet/hooks/useWalletLockStatus.js'
 import { HydrateFinished } from '../../../../utils/createNormalReactRoot.js'
-import Services from '../../../service.js'
+import Services from '#services'
 import { useCurrentPersona } from '../../../../components/DataSource/useCurrentPersona.js'
 
 const useStyle = makeStyles()((theme) => ({

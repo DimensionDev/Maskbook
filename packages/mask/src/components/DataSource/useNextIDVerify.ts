@@ -10,7 +10,7 @@ import {
     MaskMessages,
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import Services from '../../extension/service.js'
+import Services from '#services'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 
 export function useNextIDVerify() {

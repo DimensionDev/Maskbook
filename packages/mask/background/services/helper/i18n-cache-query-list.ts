@@ -5,7 +5,7 @@ export default {
     'mask/src/site-adaptors/twitter.com/locales/%locale%.json': 'DO_NOT_USE',
     'shared/src/locales/%locale%.json': 'shared',
     'shared-base-ui/src/locales/%locale%.json': 'shareBase',
-    'dashboard/src/locales/%locale%.json': 'dashboard',
+    'mask/dashboard/locales/%locale%.json': 'dashboard',
     'plugins/Example/src/locales/%locale%.json': 'io.mask.example',
     'plugins/Debugger/src/locales/%locale%.json': 'io.mask.debugger',
     'plugins/Flow/src/locales/%locale%.json': 'com.mask.flow',

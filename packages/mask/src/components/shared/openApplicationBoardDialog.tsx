@@ -6,7 +6,7 @@ import { getCurrentSite } from '../../site-adaptors/utils.js'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/ui.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 import { usePersonaPerSiteConnectStatus } from '../DataSource/usePersonaPerSiteConnectStatus.js'
-import Services from '../../extension/service.js'
+import Services from '#services'
 
 export function useOpenApplicationBoardDialog(quickMode?: boolean, focusPluginID?: PluginID) {
     const lastRecognized = useLastRecognizedIdentity()

@@ -6,7 +6,7 @@ import { matchPath, useLocation, useMatch } from 'react-router-dom'
 import { NormalHeader, useModalNavigate } from '../../../../components/index.js'
 import { WalletHeaderUI } from './UI.js'
 import { WalletSetupHeaderUI } from './WalletSetupHeaderUI.js'
-import Services from '../../../../../service.js'
+import Services from '#services'
 
 const CUSTOM_HEADER_PATTERNS = [
     `${PopupRoutes.AddToken}/:chainId/:assetType`,

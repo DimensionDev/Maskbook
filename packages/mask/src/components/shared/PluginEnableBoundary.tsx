@@ -5,7 +5,7 @@ import type { PluginID } from '@masknet/shared-base'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
-import Services from '../../extension/service.js'
+import Services from '#services'
 import { useI18N } from '../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({

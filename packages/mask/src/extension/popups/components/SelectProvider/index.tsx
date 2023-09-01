@@ -8,7 +8,7 @@ import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
 import { useWallets } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
-import Services from '../../../service.js'
+import Services from '#services'
 import { useModalNavigate } from '../index.js'
 import { PopupHomeTabType } from '@masknet/shared'
 

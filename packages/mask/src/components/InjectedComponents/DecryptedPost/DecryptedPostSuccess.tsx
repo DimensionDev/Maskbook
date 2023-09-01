@@ -17,7 +17,7 @@ import { DecryptedUI_PluginRendererWithSuggestion } from '../DecryptedPostMetada
 import { PostInfoContext, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { useRecipientsList } from '../../CompositionDialog/useRecipientsList.js'
 import { useSelectedRecipientsList } from '../../CompositionDialog/useSelectedRecipientsList.js'
-import Services from '../../../extension/service.js'
+import Services from '#services'
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI.js'
 import { delay } from '@masknet/kit'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'

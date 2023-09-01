@@ -14,7 +14,7 @@ import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { useTitle, PopupContext, useVerifiedWallets } from '../../../hooks/index.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
-import Services from '../../../../service.js'
+import Services from '#services'
 import { ProfilePhotoType } from '../type.js'
 import urlcat from 'urlcat'
 

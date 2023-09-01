@@ -1,4 +1,4 @@
-import Services from '../../../extension/service.js'
+import Services from '#services'
 import type { SiteAdaptorUI } from '@masknet/types'
 import { type ValueRef, type ProfileInformation, MaskMessages } from '@masknet/shared-base'
 

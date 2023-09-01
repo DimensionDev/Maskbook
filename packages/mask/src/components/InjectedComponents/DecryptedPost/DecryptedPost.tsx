@@ -2,7 +2,7 @@ import { Fragment, useContext, useEffect, useReducer } from 'react'
 import { extractTextFromTypedMessage, isTypedMessageEqual, type TypedMessage } from '@masknet/typed-message'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 
-import Services, { GeneratorServices } from '../../../extension/service.js'
+import Services, { GeneratorServices } from '#services'
 import type { DecryptionProgress, FailureDecryption, SuccessDecryption } from './types.js'
 import { DecryptPostSuccess } from './DecryptedPostSuccess.js'
 import { DecryptPostAwaiting } from './DecryptPostAwaiting.js'

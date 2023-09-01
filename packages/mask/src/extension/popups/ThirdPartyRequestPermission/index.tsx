@@ -1,6 +1,6 @@
 import { useAsync } from 'react-use'
 import { useLocation } from 'react-router-dom'
-import Services from '../../service.js'
+import Services from '#services'
 import { ThirdPartyRequestPermission } from './ThirdPartyRequestPermission.js'
 
 export default function () {

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useAsyncRetry } from 'react-use'
-import Services from '../../extension/service.js'
+import Services from '#services'
 import type { CompositionProps } from './CompositionUI.js'
 import { MaskMessages } from '@masknet/shared-base'
 

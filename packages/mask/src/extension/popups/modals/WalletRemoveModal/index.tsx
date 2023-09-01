@@ -10,7 +10,7 @@ import { forwardRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
-import Services from '../../../service.js'
+import Services from '#services'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 

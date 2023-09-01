@@ -10,9 +10,7 @@
     { "path": "./packages/mask-sdk/public-api" },
     { "path": "./packages/flags/" },
     { "path": "./packages/sentry/" },
-    { "path": "./packages/dashboard" },
     // Storybooks are considered as a "project" not depended by any other project
-    { "path": "./packages/dashboard/stories" },
     { "path": "./packages/theme/stories" },
     // Tests
     // @masknet/scripts: insert-here 1
@@ -69,7 +67,6 @@
 
       "@masknet/app": ["./packages/app/src"],
       "@masknet/backup-format": ["./packages/backup-format/src"],
-      "@masknet/dashboard": ["./packages/dashboard/src"],
       "@masknet/encryption": ["./packages/encryption/src"],
       "@masknet/external-plugin-previewer": ["./packages/external-plugin-previewer/src"],
       "@masknet/gun-utils": ["./packages/gun-utils/src"],

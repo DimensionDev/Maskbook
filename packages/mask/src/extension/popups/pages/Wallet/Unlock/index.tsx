@@ -7,7 +7,7 @@ import { Box, Typography, useTheme } from '@mui/material'
 import { PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../../utils/index.js'
-import Services from '../../../../service.js'
+import Services from '#services'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { PopupHomeTabType } from '@masknet/shared'
 

@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import type { ProfileInformation } from '@masknet/shared-base'
-import Services from '../../extension/service.js'
+import Services from '#services'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
 import type { LazyRecipients } from './CompositionUI.js'
 

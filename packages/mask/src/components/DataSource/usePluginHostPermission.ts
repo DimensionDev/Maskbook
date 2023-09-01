@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import type { Plugin } from '@masknet/plugin-infra'
 import { MaskMessages } from '@masknet/shared-base'
-import Services from '../../extension/service.js'
+import Services from '#services'
 
 export function usePluginHostPermissionCheck(plugins: Plugin.Shared.Definition[]) {
     const plugins_ = plugins.filter((x) => x.enableRequirement.host_permissions?.length)
