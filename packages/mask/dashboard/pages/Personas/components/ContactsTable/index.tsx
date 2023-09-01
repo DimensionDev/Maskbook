@@ -9,7 +9,7 @@ import { makeStyles } from '@masknet/theme'
 import { EmptyContactPlaceholder } from '../EmptyContactPlaceholder/index.js'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
-import { Messages } from '../../../../API.js'
+import { MaskMessages } from '@masknet/shared-base'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import { ContactTableRow } from '../ContactTableRow/index.js'
 
@@ -57,7 +57,7 @@ export const ContactsTable = memo<ContactsTableProps>(({ network }) => {
     }, [network])
 
     useEffect(() => {
-        return Messages.events.relationsChanged.on(retry)
+        return MaskMessages.events.relationsChanged.on(retry)
     }, [retry])
 
     useUpdateEffect(() => {

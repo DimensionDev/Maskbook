@@ -7,7 +7,7 @@ import {
     type ProfileIdentifier,
     SignType,
 } from '@masknet/shared-base'
-import { Messages } from '../../../API.js'
+import { MaskMessages } from '@masknet/shared-base'
 import { Services } from '../../../../shared-ui/service.js'
 
 export function useDeleteBound() {
@@ -44,7 +44,7 @@ export function useDeleteBound() {
                 },
             )
             Services.Identity.detachProfile(profile)
-            Messages.events.ownProofChanged.sendToAll(undefined)
+            MaskMessages.events.ownProofChanged.sendToAll(undefined)
         },
     )
 }

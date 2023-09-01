@@ -1,5 +1,5 @@
 import { createKVStorageHost, type KVStorageBackend } from '@masknet/shared-base'
-import { Messages } from '../API.js'
+import { MaskMessages } from '@masknet/shared-base'
 import { Services } from '../../shared-ui/service.js'
 
 const memory: KVStorageBackend = {
@@ -20,8 +20,8 @@ const indexedDB: KVStorageBackend = {
         await Services.Settings.__kv_storage_write__('indexedDB', ...args)
     },
 }
-const createPersistentKVStorage = createKVStorageHost(indexedDB, Messages.events.__kv_backend_persistent__)
-const createInMemoryKVStorage = createKVStorageHost(memory, Messages.events.__kv_backend_in_memory__)
+const createPersistentKVStorage = createKVStorageHost(indexedDB, MaskMessages.events.__kv_backend_persistent__)
+const createInMemoryKVStorage = createKVStorageHost(memory, MaskMessages.events.__kv_backend_in_memory__)
 
 export const InMemoryStorages = {
     Plugin: createInMemoryKVStorage('plugin', {}),

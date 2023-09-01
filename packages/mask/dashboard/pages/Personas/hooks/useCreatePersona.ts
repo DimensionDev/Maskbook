@@ -1,5 +1,5 @@
 import { useAsyncFn } from 'react-use'
-import { Messages } from '../../../API.js'
+import { MaskMessages } from '@masknet/shared-base'
 import { Services } from '../../../../shared-ui/service.js'
 import { delay } from '@masknet/kit'
 import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn.js'
@@ -9,6 +9,6 @@ export function useCreatePersona(): AsyncFnReturn<(nickName: string) => Promise<
         // TODO: should second parameter be the password?
         await Services.Identity.createPersonaByMnemonic(nickName, '')
         await delay(300)
-        Messages.events.ownPersonaChanged.sendToAll(undefined)
+        MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
     })
 }

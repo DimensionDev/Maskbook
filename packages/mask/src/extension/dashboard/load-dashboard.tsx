@@ -1,4 +1,4 @@
-import { IntegratedDashboard, setMessages } from '../../../dashboard/entry.js'
+import { IntegratedDashboard } from '../../../dashboard/entry.js'
 import { startPluginDashboard } from '@masknet/plugin-infra/dashboard'
 import { DashboardRoutes, MaskMessages, createSubscriptionFromAsync } from '@masknet/shared-base'
 import { createPartialSharedUIContext, createPluginHost } from '../../../shared/plugin-infra/host.js'
@@ -6,8 +6,6 @@ import { createNormalReactRoot } from '../../utils/createNormalReactRoot.js'
 import { RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui.js'
 import Services from '../service.js'
 import { Modals } from '@masknet/shared'
-
-setMessages(MaskMessages)
 
 startPluginDashboard(
     createPluginHost(
