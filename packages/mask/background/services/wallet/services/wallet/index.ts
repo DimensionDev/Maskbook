@@ -154,7 +154,54 @@ export async function deriveWallet(name: string) {
         if (!exported?.privateKey) throw new Error(`Failed to export private key at path: ${latestDerivationPath}`)
 
         // import the candidate by the private key
-        return createWalletFromPrivateKey(name, exported.privateKey)
+        return addWalletFromPrivateKey(ImportSource.LocalGenerated, name, exported.privateKey)
+    }
+}
+
+export async function generateNextDerivationAddress() {
+    const masterPassword = await password.INTERNAL_getMasterPasswordRequired()
+
+    // derive wallet base on the primary wallet
+    const primaryWallet = await getWalletPrimary()
+    if (!primaryWallet?.storedKeyInfo) throw new Error('Cannot find the primary wallet.')
+
+    let derivedTimes = 0
+    let latestDerivationPath = primaryWallet.latestDerivationPath ?? primaryWallet.derivationPath
+    if (!latestDerivationPath) throw new Error('Failed to derive wallet without derivation path.')
+
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+        derivedTimes += 1
+
+        // protect from endless looping
+        if (derivedTimes >= MAX_DERIVE_COUNT) throw new Error('Exceed the max derivation times.')
+
+        // bump index
+        latestDerivationPath = bumpDerivationPath(latestDerivationPath)
+
+        // derive a new wallet
+        const created = await Mask.createAccountOfCoinAtPath({
+            coin: api.Coin.Ethereum,
+            name: '',
+            password: masterPassword,
+            derivationPath: latestDerivationPath,
+            StoredKeyData: primaryWallet.storedKeyInfo.data,
+        })
+        if (!created?.account?.address) throw new Error(`Failed to create account at path: ${latestDerivationPath}.`)
+
+        // check its existence in DB
+        if (await database.hasWallet(created.account.address)) continue
+
+        // found a valid candidate, get the private key of it
+        const exported = await Mask.exportPrivateKeyOfPath({
+            coin: api.Coin.Ethereum,
+            password: masterPassword,
+            derivationPath: latestDerivationPath,
+            StoredKeyData: primaryWallet.storedKeyInfo.data,
+        })
+        if (!exported?.privateKey) throw new Error(`Failed to export private key at path: ${latestDerivationPath}`)
+
+        return generateAddressFromPrivateKey(exported.privateKey)
     }
 }
 
@@ -174,6 +221,10 @@ export async function removeWallet(address: string, unverifiedPassword: string) 
 
 export async function resetAllWallets() {
     await database.resetAllWallets()
+}
+
+export async function signWithWallet<T>(type: SignType, message: T, address: string) {
+    return Signer.sign(type, toBuffer(`0x${await exportPrivateKey(address)}`), message)
 }
 
 export async function exportMnemonicWords(address: string, unverifiedPassword?: string) {
@@ -296,26 +347,6 @@ async function addWalletFromPrivateKey(source: ImportSource, name: string, priva
     })
 }
 
-export function createWalletFromMnemonicWords(
-    name: string,
-    mnemonic: string,
-    derivationPath = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-) {
-    return addWalletFromMnemonicWords(ImportSource.LocalGenerated, name, mnemonic, derivationPath)
-}
-
-export function createWalletFromPrivateKey(name: string, privateKey: string) {
-    return addWalletFromPrivateKey(ImportSource.LocalGenerated, name, privateKey)
-}
-
-export function recoverWalletFromMnemonicWords(
-    name: string,
-    mnemonic: string,
-    derivationPath = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-) {
-    return addWalletFromMnemonicWords(ImportSource.UserProvided, name, mnemonic, derivationPath)
-}
-
 export function recoverWalletFromPrivateKey(name: string, privateKey: string) {
     return addWalletFromPrivateKey(ImportSource.UserProvided, name, privateKey)
 }
@@ -338,10 +369,68 @@ export async function recoverWalletFromKeyStoreJSON(name: string, json: string, 
         StoredKeyData: imported.StoredKey.data,
     })
     if (!created?.account?.address) throw new Error('Failed to create the wallet.')
+
     return database.addWallet(ImportSource.UserProvided, created.account.address, {
         name,
         storedKeyInfo: imported.StoredKey,
     })
+}
+
+export function createWalletFromMnemonicWords(
+    name: string,
+    mnemonic: string,
+    derivationPath = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+) {
+    return addWalletFromMnemonicWords(ImportSource.LocalGenerated, name, mnemonic, derivationPath)
+}
+
+export function recoverWalletFromMnemonicWords(
+    name: string,
+    mnemonic: string,
+    derivationPath = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+) {
+    return addWalletFromMnemonicWords(ImportSource.UserProvided, name, mnemonic, derivationPath)
+}
+
+export async function generateAddressFromPrivateKey(privateKey: string) {
+    const masterPassword = await password.INTERNAL_getMasterPasswordRequired()
+    const imported = await Mask.importPrivateKey({
+        coin: api.Coin.Ethereum,
+        name: '',
+        password: masterPassword,
+        privateKey: privateKey.replace(/^0x/, '').trim(),
+    })
+    if (!imported?.StoredKey) throw new Error('Failed to import the wallet.')
+    const created = await Mask.createAccountOfCoinAtPath({
+        coin: api.Coin.Ethereum,
+        name: '',
+        password: masterPassword,
+        derivationPath: null,
+        StoredKeyData: imported.StoredKey.data,
+    })
+    if (!created?.account?.address) throw new Error('Failed to create the wallet.')
+    return created.account.address
+}
+
+export async function generateAddressFromKeyStoreJSON(json: string, jsonPassword: string) {
+    const masterPassword = await password.INTERNAL_getMasterPasswordRequired()
+    const imported = await Mask.importJSON({
+        coin: api.Coin.Ethereum,
+        json,
+        keyStoreJsonPassword: jsonPassword,
+        name: '',
+        password: masterPassword,
+    })
+    if (!imported?.StoredKey) throw new Error('Failed to import the wallet.')
+    const created = await Mask.createAccountOfCoinAtPath({
+        coin: api.Coin.Ethereum,
+        derivationPath: null,
+        name: '',
+        password: masterPassword,
+        StoredKeyData: imported.StoredKey.data,
+    })
+    if (!created?.account?.address) throw new Error('Failed to create the wallet.')
+    return created.account.address
 }
 
 export async function generateAddressFromMnemonicWords(
@@ -363,8 +452,4 @@ export async function generateAddressFromMnemonicWords(
         StoredKeyData: imported.StoredKey.data,
     })
     return created?.account?.address ?? undefined
-}
-
-export async function signWithWallet<T>(type: SignType, message: T, address: string) {
-    return Signer.sign(type, toBuffer(`0x${await exportPrivateKey(address)}`), message)
 }

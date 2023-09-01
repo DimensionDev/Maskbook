@@ -1,7 +1,7 @@
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
-import { useWallets } from '@masknet/web3-hooks-base'
+import { useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
 import { generateNewWalletName } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
@@ -97,7 +97,7 @@ const Recovery = memo(function Recovery() {
 
     const wallets = useWallets()
 
-    const newWalletName = generateNewWalletName(wallets)
+    const newWalletName = useMemo(() => generateNewWalletName(wallets), [wallets])
 
     const handleRestoreFromMnemonic = useCallback(
         async (values: string[]) => {
@@ -124,11 +124,15 @@ const Recovery = memo(function Recovery() {
         [t, navigate, location.state?.isReset, location.state?.password],
     )
 
+    const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const handleRestoreFromPrivateKey = useCallback(
         async (data: FormInputs, onError: UseFormSetError<FormInputs>) => {
             try {
                 await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
-                const account = await WalletServiceRef.value.recoverWalletFromPrivateKey(newWalletName, data.privateKey)
+                const address = await WalletServiceRef.value.generateAddressFromPrivateKey(data.privateKey)
+                const ens = await NameService?.reverse?.(address)
+                const walletName = ens || newWalletName
+                const account = await WalletServiceRef.value.recoverWalletFromPrivateKey(walletName, data.privateKey)
                 await Web3.connect({
                     account,
                     providerType: ProviderType.MaskWallet,
@@ -150,9 +154,15 @@ const Recovery = memo(function Recovery() {
         async (keyStoreContent: string, keyStorePassword: string) => {
             try {
                 await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
+                const jsonAddress = await WalletServiceRef.value.generateAddressFromKeyStoreJSON(
+                    keyStoreContent,
+                    keyStorePassword,
+                )
+                const ens = await NameService?.reverse?.(jsonAddress)
+                const walletName = ens || newWalletName
 
                 const address = await WalletServiceRef.value.recoverWalletFromKeyStoreJSON(
-                    newWalletName,
+                    walletName,
                     keyStoreContent,
                     keyStorePassword,
                 )

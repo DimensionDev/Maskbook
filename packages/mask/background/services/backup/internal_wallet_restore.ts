@@ -1,34 +1,35 @@
-import { ec as EC } from 'elliptic'
-import { concatArrayBuffer } from '@masknet/kit'
 import type { NormalizedBackup } from '@masknet/backup-format'
-import {
-    currySameAddress,
-    HD_PATH_WITHOUT_INDEX_ETHEREUM,
-    generateNewWalletName,
-    generateUniqueWalletName,
-} from '@masknet/web3-shared-base'
-import { fromBase64URL, type EC_JsonWebKey, isK256Point, isK256PrivateKey } from '@masknet/shared-base'
+import { concatArrayBuffer } from '@masknet/kit'
+import { fromBase64URL, isK256Point, isK256PrivateKey, type EC_JsonWebKey } from '@masknet/shared-base'
+import { ChainbaseDomain } from '@masknet/web3-providers'
+import { HD_PATH_WITHOUT_INDEX_ETHEREUM, currySameAddress, generateNewWalletName } from '@masknet/web3-shared-base'
+import { ec as EC } from 'elliptic'
 import {
     getDerivableAccounts,
     getWallets,
     recoverWalletFromMnemonicWords,
     recoverWalletFromPrivateKey,
 } from '../wallet/services/index.js'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 export async function internal_wallet_restore(backup: NormalizedBackup.WalletBackup[]) {
     for (const wallet of backup) {
         try {
             const wallets = await getWallets()
             const matchedDefaultNameFormat = wallet.name.match(/Wallet (\d+)/)
-            const index = matchedDefaultNameFormat?.[1]
-            const name =
-                wallet.name && !index
-                    ? generateUniqueWalletName(wallets, wallet.name)
-                    : generateNewWalletName(
-                          wallets,
-                          undefined,
-                          index && !Number.isNaN(index) ? Number(index) : undefined,
-                      )
+            const digitIndex = matchedDefaultNameFormat?.[1]
+            let name = wallet.name
+            if (!name) {
+                const ens = await ChainbaseDomain.reverse(ChainId.Mainnet, wallet.address)
+                if (ens) name = ens
+            }
+            if (!name) {
+                name = generateNewWalletName(
+                    wallets,
+                    undefined,
+                    digitIndex && !Number.isNaN(digitIndex) ? Number(digitIndex) : undefined,
+                )
+            }
             if (wallet.privateKey.isSome())
                 await recoverWalletFromPrivateKey(name, await JWKToKey(wallet.privateKey.value, 'private'))
             else if (wallet.mnemonic.isSome()) {
