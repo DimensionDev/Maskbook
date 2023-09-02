@@ -87,6 +87,7 @@ export namespace NormalizedBackup {
     export interface WalletBackup {
         address: string
         name: string
+        mnemonicId: Option<string>
         passphrase: Option<string>
         publicKey: Option<EC_Public_JsonWebKey>
         privateKey: Option<EC_Private_JsonWebKey>

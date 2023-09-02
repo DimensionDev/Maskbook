@@ -12,6 +12,7 @@ import {
 } from '@masknet/shared-base'
 import type { WalletRecord } from '../../../shared/definitions/wallet.js'
 import { exportMnemonicWords, exportPrivateKey, getLegacyWallets, getWallets } from '../wallet/services/index.js'
+import { api } from '@dimensiondev/mask-wallet-core/proto'
 
 export async function internal_wallet_backup() {
     const wallet = await Promise.all([backupAllWallets(), backupAllLegacyWallets()])
@@ -24,8 +25,14 @@ async function backupAllWallets(): Promise<NormalizedBackup.WalletBackup[]> {
         wallets.map(async (wallet) => {
             return {
                 ...wallet,
-                mnemonic: wallet.latestDerivationPath ? await exportMnemonicWords(wallet.address) : undefined,
-                privateKey: wallet.latestDerivationPath ? undefined : await exportPrivateKey(wallet.address),
+                mnemonic:
+                    wallet.storedKeyInfo?.type === api.StoredKeyType.Mnemonic
+                        ? await exportMnemonicWords(wallet.address)
+                        : undefined,
+                privateKey:
+                    wallet.storedKeyInfo?.type === api.StoredKeyType.Mnemonic
+                        ? undefined
+                        : await exportPrivateKey(wallet.address),
             }
         }),
     )
@@ -49,6 +56,7 @@ function WalletRecordToJSONFormat(
         address: wallet.address,
         createdAt: wallet.createdAt,
         updatedAt: wallet.updatedAt,
+        mnemonicId: None,
         mnemonic: None,
         passphrase: None,
         publicKey: None,
@@ -64,6 +72,7 @@ function WalletRecordToJSONFormat(
 
     if (wallet.privateKey) backup.privateKey = Some(keyToJWK(wallet.privateKey, 'private'))
 
+    if (wallet.mnemonicId) backup.mnemonicId = Some(wallet.mnemonicId)
     return backup
 }
 
@@ -73,6 +82,7 @@ function LegacyWalletRecordToJSONFormat(wallet: LegacyWalletRecord): NormalizedB
         address: wallet.address,
         createdAt: wallet.createdAt,
         updatedAt: wallet.updatedAt,
+        mnemonicId: None,
         mnemonic: None,
         passphrase: None,
         privateKey: None,

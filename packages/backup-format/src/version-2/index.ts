@@ -157,6 +157,7 @@ export async function normalizeBackupVersion2(item: BackupJSONFileVersion2): Pro
             address: wallet.address,
             name: wallet.name,
             passphrase: wallet.passphrase ? Some(wallet.passphrase) : None,
+            mnemonicId: wallet.mnemonicId ? Some(wallet.mnemonicId) : None,
             publicKey: isEC_Public_JsonWebKey(wallet.publicKey) ? Some(wallet.publicKey) : None,
             privateKey: isEC_Private_JsonWebKey(wallet.privateKey) ? Some(wallet.privateKey) : None,
             mnemonic: wallet.mnemonic
@@ -368,6 +369,7 @@ interface BackupJSONFileVersion2 {
         }
         createdAt: number // Unix timestamp
         updatedAt: number // Unix timestamp
+        mnemonicId?: string
     }>
     grantedHostPermissions: string[]
     plugin?: Record<string, unknown>

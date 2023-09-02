@@ -30,7 +30,11 @@ export async function internal_wallet_restore(backup: NormalizedBackup.WalletBac
                           index && !Number.isNaN(index) ? Number(index) : undefined,
                       )
             if (wallet.privateKey.isSome())
-                await recoverWalletFromPrivateKey(name, await JWKToKey(wallet.privateKey.value, 'private'))
+                await recoverWalletFromPrivateKey(
+                    name,
+                    await JWKToKey(wallet.privateKey.value, 'private'),
+                    wallet.mnemonicId.unwrapOr(undefined),
+                )
             else if (wallet.mnemonic.isSome()) {
                 // fix a backup bug of pre-v2.2.2 versions
                 const accounts = await getDerivableAccounts(wallet.mnemonic.value.words, 1, 5)
