@@ -19,6 +19,7 @@ export function useSocialIdentity(identity: IdentityResolved | null | undefined)
             if (!platform || !identity) return
             return getSocialIdentity(platform, identity)
         },
+        refetchOnWindowFocus: false,
     })
 
     useEffect(() => MaskMessages.events.ownProofChanged.on(() => result.refetch()), [result.refetch])
