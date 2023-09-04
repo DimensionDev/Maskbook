@@ -18,8 +18,7 @@ import { ResetWalletContext } from '../context.js'
 import { Web3 } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Telemetry } from '@masknet/web3-telemetry'
-import { EventType } from '@masknet/web3-telemetry/types'
-import { EventID } from '@masknet/web3-telemetry/dist/entry-types.js'
+import { EventType, EventID } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
