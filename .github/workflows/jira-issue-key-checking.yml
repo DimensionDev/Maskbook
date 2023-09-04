@@ -6,6 +6,8 @@ on:
       - opened
       - edited
       - synchronize
+  merge_group:
+    types: [checks_requested]
 
 permissions:
   contents: read
@@ -15,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: DimensionDev/jira-issue-key-checker@master
+        if: ${{ github.event.pull_request  }}
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           jira-prefix: 'MF'

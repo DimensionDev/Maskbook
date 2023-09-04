@@ -29,7 +29,7 @@ jobs:
           exit 1
 
       - name: Check target branch of develop
-        if: ${{ github.base_ref == 'develop' && github.event.pull_request.milestone != null }} # merge to develop
+        if: ${{ github.event.pull_request && github.base_ref == 'develop' && github.event.pull_request.milestone != null }} # merge to develop
         run: |
           if [[ ${{ github.event.pull_request.milestone.title }} =~ ^[0-9]+.[0-9]+.0$ ]]
           then
@@ -40,7 +40,7 @@ jobs:
           fi
 
       - name: Check target branch of release/*
-        if: ${{ startsWith(github.base_ref, 'release/') }} # merge to release/*
+        if: ${{ github.event.pull_request && startsWith(github.base_ref, 'release/') }} # merge to release/*
         run: |
           if [[ ${{ github.event.pull_request.milestone.title }} =~ ^[0-9]+.[0-9]+.0$ ]]
           then
@@ -50,7 +50,7 @@ jobs:
           fi
 
       - name: Check target branch of hotfix/*
-        if: ${{ startsWith(github.base_ref, 'hotfix/') }} # merge to hotfix/*
+        if: ${{ github.event.pull_request && startsWith(github.base_ref, 'hotfix/') }} # merge to hotfix/*
         run: |
           if [[ ${{ github.event.pull_request.milestone.title }} =~ ^[0-9]+.[0-9]+.0$ ]]
           then
