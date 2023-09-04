@@ -1,11 +1,11 @@
 import * as bip39 from 'bip39'
 import { first, last, omit } from 'lodash-es'
+import { sha3 } from 'web3-utils'
 import { toBuffer } from '@ethereumjs/util'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { Signer } from '@masknet/web3-providers'
 import { ImportSource, type SignType, type Wallet } from '@masknet/shared-base'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
-import { sha3 } from 'web3-utils'
 import * as Mask from '../maskwallet/index.js'
 import * as database from './database/index.js'
 import * as password from './password.js'
@@ -17,6 +17,12 @@ function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {
     const index = Number.parseInt(last(splitted) ?? '', 10)
     if (Number.isNaN(index) || index < 0 || splitted.length !== 6) throw new Error('Invalid derivation path.')
     return [...splitted.slice(0, -1), index + 1].join('/')
+}
+
+function createMnemonicId(mnemonic: string) {
+    const id = sha3(mnemonic)
+    if (!id) throw new Error('Failed to create mnemonic id.')
+    return id
 }
 
 function sanitizeWallet(wallet: Wallet): Wallet {
@@ -78,12 +84,6 @@ export async function getWalletPrimary() {
     )
 }
 
-export async function getMnemonicIdByWords(mnemonic: string) {
-    const id = sha3(mnemonic)
-    if (!id) return
-    return id
-}
-
 export async function getDerivableAccounts(mnemonic: string, page: number, pageSize = 10) {
     const oneTimePassword = 'MASK'
     const imported = await Mask.importMnemonic({
@@ -128,7 +128,7 @@ export async function deriveWallet(name: string) {
     if (!latestDerivationPath) throw new Error('Failed to derive wallet without derivation path.')
 
     const mnemonic = await exportMnemonicWords(primaryWallet.address, masterPassword)
-    const mnemonicId = await getMnemonicIdByWords(mnemonic)
+    const mnemonicId = createMnemonicId(mnemonic)
 
     // eslint-disable-next-line no-constant-condition
     while (true) {
@@ -328,7 +328,7 @@ async function addWalletFromMnemonicWords(
 
     if (!imported?.StoredKey) throw new Error('Failed to import the wallet.')
 
-    const mnemonicId = await getMnemonicIdByWords(mnemonic)
+    const mnemonicId = createMnemonicId(mnemonic)
     if (await database.hasStoredKeyInfo(imported.StoredKey)) {
         const exported = await Mask.exportPrivateKeyOfPath({
             coin: api.Coin.Ethereum,
