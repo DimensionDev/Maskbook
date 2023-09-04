@@ -12,7 +12,6 @@ import {
 } from '@masknet/shared-base'
 import type { WalletRecord } from '../../../shared/definitions/wallet.js'
 import { exportMnemonicWords, exportPrivateKey, getLegacyWallets, getWallets } from '../wallet/services/index.js'
-import { api } from '@dimensiondev/mask-wallet-core/proto'
 
 export async function internal_wallet_backup() {
     const wallet = await Promise.all([backupAllWallets(), backupAllLegacyWallets()])
@@ -25,14 +24,8 @@ async function backupAllWallets(): Promise<NormalizedBackup.WalletBackup[]> {
         wallets.map(async (wallet) => {
             return {
                 ...wallet,
-                mnemonic:
-                    wallet.storedKeyInfo?.type === api.StoredKeyType.Mnemonic
-                        ? await exportMnemonicWords(wallet.address)
-                        : undefined,
-                privateKey:
-                    wallet.storedKeyInfo?.type === api.StoredKeyType.Mnemonic
-                        ? undefined
-                        : await exportPrivateKey(wallet.address),
+                mnemonic: !wallet.configurable ? await exportMnemonicWords(wallet.address) : undefined,
+                privateKey: !wallet.configurable ? undefined : await exportPrivateKey(wallet.address),
             }
         }),
     )

@@ -289,6 +289,8 @@ export function generateBackupVersion2(item: NormalizedBackup.Data): BackupJSONF
                 .unwrapOr(undefined),
             createdAt: Number(data.createdAt),
             updatedAt: Number(data.updatedAt),
+            derivationPath: data.derivationPath.unwrapOr(undefined),
+            mnemonicId: data.mnemonicId.unwrapOr(undefined),
         })
     }
     return result

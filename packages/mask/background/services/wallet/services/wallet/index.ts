@@ -89,6 +89,16 @@ export async function getMnemonicId(storedKeyInfo: api.IStoredKeyInfo) {
     return firstWallet?.account?.address
 }
 
+export async function getMnemonicIdByWords(mnemonic: string) {
+    const masterPassword = await password.INTERNAL_getMasterPasswordRequired()
+    const imported = await Mask.importMnemonic({
+        mnemonic,
+        password: masterPassword,
+    })
+    if (!imported?.StoredKey) return
+    return getMnemonicId(imported.StoredKey)
+}
+
 export async function getDerivableAccounts(mnemonic: string, page: number, pageSize = 10) {
     const oneTimePassword = 'MASK'
     const imported = await Mask.importMnemonic({
@@ -276,18 +286,19 @@ export async function exportPrivateKey(address: string, unverifiedPassword?: str
     const masterPassword = await password.INTERNAL_getMasterPasswordRequired()
     const wallet = await database.getWalletRequired(address)
     if (!wallet.storedKeyInfo) throw new Error(`Cannot export private key of ${address}.`)
-    const exported = wallet.derivationPath
-        ? await Mask.exportPrivateKeyOfPath({
-              coin: api.Coin.Ethereum,
-              derivationPath: wallet.derivationPath ?? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-              password: masterPassword,
-              StoredKeyData: wallet.storedKeyInfo.data,
-          })
-        : await Mask.exportPrivateKey({
-              coin: api.Coin.Ethereum,
-              password: masterPassword,
-              StoredKeyData: wallet.storedKeyInfo.data,
-          })
+    const exported =
+        wallet.derivationPath && !wallet.configurable
+            ? await Mask.exportPrivateKeyOfPath({
+                  coin: api.Coin.Ethereum,
+                  derivationPath: wallet.derivationPath ?? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+                  password: masterPassword,
+                  StoredKeyData: wallet.storedKeyInfo.data,
+              })
+            : await Mask.exportPrivateKey({
+                  coin: api.Coin.Ethereum,
+                  password: masterPassword,
+                  StoredKeyData: wallet.storedKeyInfo.data,
+              })
 
     if (!exported?.privateKey) throw new Error(`Failed to export private key of ${address}.`)
     return exported.privateKey
@@ -298,20 +309,21 @@ export async function exportKeyStoreJSON(address: string, unverifiedPassword?: s
     const masterPassword = await password.INTERNAL_getMasterPasswordRequired()
     const wallet = await database.getWalletRequired(address)
     if (!wallet.storedKeyInfo) throw new Error(`Cannot export private key of ${address}.`)
-    const exported = wallet.derivationPath
-        ? await Mask.exportKeyStoreJSONOfPath({
-              coin: api.Coin.Ethereum,
-              derivationPath: wallet.derivationPath ?? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-              password: masterPassword,
-              newPassword: unverifiedPassword,
-              StoredKeyData: wallet.storedKeyInfo.data,
-          })
-        : await Mask.exportKeyStoreJSONOfAddress({
-              coin: api.Coin.Ethereum,
-              password: masterPassword,
-              newPassword: unverifiedPassword,
-              StoredKeyData: wallet.storedKeyInfo.data,
-          })
+    const exported =
+        wallet.derivationPath && !wallet.configurable
+            ? await Mask.exportKeyStoreJSONOfPath({
+                  coin: api.Coin.Ethereum,
+                  derivationPath: wallet.derivationPath ?? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+                  password: masterPassword,
+                  newPassword: unverifiedPassword,
+                  StoredKeyData: wallet.storedKeyInfo.data,
+              })
+            : await Mask.exportKeyStoreJSONOfAddress({
+                  coin: api.Coin.Ethereum,
+                  password: masterPassword,
+                  newPassword: unverifiedPassword,
+                  StoredKeyData: wallet.storedKeyInfo.data,
+              })
     if (!exported?.json) throw new Error(`Failed to export keystore JSON of ${address}.`)
     return exported.json
 }

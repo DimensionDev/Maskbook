@@ -92,19 +92,21 @@ export const WalletGroupModal = memo<ActionModalBaseProps>(function WalletGroupM
                         </Box>
                     )
                 })}
-                <Box>
-                    <Typography className={classes.title}>{t('popups_wallet_imported_group_title')}</Typography>
-                    <Box className={classes.title}>
-                        {walletGroup.imported.map((wallet) => (
-                            <WalletItem
-                                key={wallet.address}
-                                wallet={wallet}
-                                isSelected={isSameAddress(wallet.address, currentWallet?.address)}
-                                onSelect={handleSelect}
-                            />
-                        ))}
+                {walletGroup.imported.length ? (
+                    <Box>
+                        <Typography className={classes.title}>{t('popups_wallet_imported_group_title')}</Typography>
+                        <Box className={classes.title}>
+                            {walletGroup.imported.map((wallet) => (
+                                <WalletItem
+                                    key={wallet.address}
+                                    wallet={wallet}
+                                    isSelected={isSameAddress(wallet.address, currentWallet?.address)}
+                                    onSelect={handleSelect}
+                                />
+                            ))}
+                        </Box>
                     </Box>
-                </Box>
+                ) : null}
             </Box>
         </ActionModal>
     )
