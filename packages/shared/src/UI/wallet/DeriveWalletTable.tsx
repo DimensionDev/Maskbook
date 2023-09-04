@@ -92,10 +92,10 @@ interface DeriveWalletTableProps {
         address: string
         added: boolean
         selected: boolean
+        pathIndex: number
     }>
     onCheck: (checked: boolean, index: number) => void
     symbol: string
-    page: number
     hiddenHeader?: boolean
 }
 
@@ -105,7 +105,6 @@ export const DeriveWalletTable = memo<DeriveWalletTableProps>(function DeriveWal
     onCheck,
     symbol,
     hiddenHeader,
-    page,
 }) {
     const { classes } = useStyles()
     const t = useSharedI18N()
@@ -131,49 +130,34 @@ export const DeriveWalletTable = memo<DeriveWalletTableProps>(function DeriveWal
                     ? dataSource.map((item, index) => (
                           <DeriveWalletTableRow
                               address={item.address}
-                              page={page}
-                              key={index}
-                              index={index}
+                              pathIndex={item.pathIndex}
+                              key={item.address}
                               selected={item.selected}
                               added={item.added}
-                              onCheck={(checked) => onCheck(checked, index)}
+                              onCheck={(checked) => onCheck(checked, item.pathIndex)}
                               symbol={symbol}
                           />
                       ))
-                    : range(10).map((index) => (
-                          <TableRow key={index} className={classes.tableRow}>
-                              <TableCell align="center" variant="body" className={classes.cell}>
-                                  <Skeleton animation="wave" variant="rectangular" width="90%" height={16} />
-                              </TableCell>
-                              <TableCell align="center" variant="body" className={classes.cell}>
-                                  <Skeleton animation="wave" variant="rectangular" width="90%" height={16} />
-                              </TableCell>
-                              <TableCell align="center" variant="body" className={classes.cell}>
-                                  <Skeleton animation="wave" variant="rectangular" width="90%" height={16} />
-                              </TableCell>
-                          </TableRow>
-                      ))}
+                    : range(10).map((index) => <DeriveWalletTableRowSkeleton key={index} />)}
             </TableBody>
         </Table>
     )
 })
 export interface DeriveWalletTableRowProps {
     address: string
+    pathIndex: number
     added: boolean
-    index: number
-    page: number
     selected: boolean
     onCheck: (checked: boolean) => void
     symbol: string
 }
 export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(function DeriveWalletTableRow({
     address,
+    pathIndex,
     added,
     onCheck,
     selected,
     symbol,
-    index,
-    page,
 }) {
     const { classes, cx } = useStyles()
     const { data: balance, isFetching } = useBalance(NetworkPluginID.PLUGIN_EVM, {
@@ -186,7 +170,7 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(function Der
     return (
         <TableRow key={address} className={cx(classes.tableRow, classes.tableRowWithHoverEffect)}>
             <TableCell align="left" variant="body" className={classes.cell}>
-                <Typography className={classes.second}>{page * 10 + index + 1}</Typography>
+                <Typography className={classes.second}>{pathIndex + 1}</Typography>
                 <Typography className={classes.title}>
                     <FormattedAddress address={address} size={4} formatter={formatEthereumAddress} />
                 </Typography>
@@ -236,6 +220,25 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(function Der
                     }}
                     onChange={(e) => onCheck(e.target.checked)}
                 />
+            </TableCell>
+        </TableRow>
+    )
+})
+
+const DeriveWalletTableRowSkeleton = memo(function DeriveWalletTableRow() {
+    const { classes, cx } = useStyles()
+
+    return (
+        <TableRow className={cx(classes.tableRow, classes.tableRowWithHoverEffect)}>
+            <TableCell align="left" variant="body" className={classes.cell}>
+                <Skeleton className={classes.second} width={20} height={18} />
+                <Skeleton className={classes.title} width={100} height={18} />
+            </TableCell>
+            <TableCell align="left" variant="body" className={cx(classes.cell, classes.center)}>
+                <Skeleton className={classes.title} width={60} height={18} />
+            </TableCell>
+            <TableCell align="right" variant="body" className={classes.cell}>
+                <Skeleton width={24} height={18} />
             </TableCell>
         </TableRow>
     )

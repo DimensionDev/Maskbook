@@ -15,7 +15,6 @@ import TokenDetail from './TokenDetail/index.js'
 import { TransactionDetail } from './TransactionDetail/index.js'
 import { CollectibleDetail } from './CollectibleDetail/index.js'
 
-const AddDeriveWallet = lazy(() => import('./AddDeriveWallet/index.js'))
 const WalletSettings = lazy(() => import('./WalletSettings/index.js'))
 const CreateWallet = lazy(() => import('./CreateWallet/index.js'))
 const AddToken = lazy(() => import('./AddToken/index.js'))
@@ -43,7 +42,6 @@ export default function Wallet() {
             <RestorableScrollContext.Provider>
                 <Routes>
                     <Route path="*" element={wallet && wallets.length ? <WalletAssets /> : <WalletStartUp />} />
-                    <Route path={r(PopupRoutes.AddDeriveWallet)} element={<AddDeriveWallet />} />
                     <Route path={r(PopupRoutes.WalletSettings)} element={<WalletSettings />} />
                     <Route path={r(PopupRoutes.CreateWallet)} element={<CreateWallet />} />
                     <Route path={r(`${PopupRoutes.Contacts}/:address?` as PopupRoutes)} element={<ContactList />} />
