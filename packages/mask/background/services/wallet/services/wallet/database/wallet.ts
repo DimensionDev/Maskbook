@@ -74,6 +74,7 @@ export async function addWallet(
         name?: string
         derivationPath?: string
         storedKeyInfo?: api.IStoredKeyInfo
+        mnemonicId?: string
     },
 ) {
     const wallet = await getWallet(address)
@@ -89,6 +90,7 @@ export async function addWallet(
         name: updates?.name?.trim() ?? `Account ${(await getWallets()).length + 1}`,
         derivationPath: updates?.derivationPath,
         storedKeyInfo: updates?.storedKeyInfo,
+        mnemonicId: updates?.mnemonicId,
         createdAt: now,
         updatedAt: now,
     })
@@ -102,6 +104,7 @@ export async function updateWallet(
         name: string
         derivationPath?: string
         latestDerivationPath?: string
+        mnemonicId?: string
     }>,
 ) {
     const wallet = await getWallet(address)
@@ -113,6 +116,7 @@ export async function updateWallet(
         name: updates.name ?? wallet.name,
         derivationPath: updates?.derivationPath ?? wallet.derivationPath,
         latestDerivationPath: updates?.latestDerivationPath ?? wallet.latestDerivationPath,
+        mnemonicId: updates?.mnemonicId ?? wallet.mnemonicId,
         updatedAt: new Date(),
     })
     CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)

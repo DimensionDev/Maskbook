@@ -36,6 +36,7 @@ export enum PopupModalRoutes {
     PersonaRename = '/modal/persona-rename',
     SetBackupPassword = '/modal/set-backup-password',
     verifyBackupPassword = '/modal/verify-backup-password',
+    WalletAccount = '/modal/wallet-accounts',
 }
 
 export enum PopupRoutes {

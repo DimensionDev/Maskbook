@@ -1599,6 +1599,32 @@ export const Eye = /*#__PURE__*/ __createIcon('Eye', [
         u: () => new URL('./general/Eye.light.svg', import.meta.url),
     },
 ])
+export const EyeColor = /*#__PURE__*/ __createIcon('EyeColor', [
+    {
+        u: () => new URL('./general/EyeColor.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsxs('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 21 21',
+                children: [
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: 'currentColor',
+                        fillRule: 'evenodd',
+                        d: 'M10.58 8.1a2.31 2.31 0 1 0 0 4.63 2.31 2.31 0 0 0 0-4.62Zm-3.65 2.32a3.65 3.65 0 1 1 7.3 0 3.65 3.65 0 0 1-7.3 0Z',
+                        clipRule: 'evenodd',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: 'currentColor',
+                        fillRule: 'evenodd',
+                        d: 'M2.43 7.9c2-3.14 4.93-5.04 8.15-5.04 3.22 0 6.16 1.9 8.15 5.04.46.72.67 1.64.67 2.52 0 .88-.2 1.8-.67 2.52-2 3.14-4.93 5.04-8.15 5.04-3.22 0-6.16-1.9-8.15-5.04a4.76 4.76 0 0 1-.67-2.52c0-.88.2-1.8.67-2.52Zm8.15-3.71c-2.66 0-5.21 1.56-7.03 4.42-.29.46-.46 1.11-.46 1.8 0 .7.17 1.36.46 1.81 1.82 2.86 4.37 4.43 7.03 4.43s5.21-1.57 7.03-4.43c.29-.45.46-1.1.46-1.8s-.17-1.35-.46-1.8c-1.82-2.87-4.37-4.43-7.03-4.43Z',
+                        clipRule: 'evenodd',
+                    }),
+                ],
+            }),
+        s: true,
+    },
+])
 export const EyeOff = /*#__PURE__*/ __createIcon('EyeOff', [
     {
         c: ['dark'],

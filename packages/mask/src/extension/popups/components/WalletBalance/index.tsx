@@ -34,8 +34,11 @@ export const WalletBalance = memo(function WalletBalance({
     }
 
     return (
-        <Typography {...props}>
-            {`${formatBalance(balance, nativeToken.decimals, 0, false, true)} ${nativeToken.symbol}`}
+        <Typography display="flex" {...props}>
+            {formatBalance(balance, nativeToken.decimals, 0, false, true)}
+            <Typography component="span" ml={0.5}>
+                {nativeToken.symbol}
+            </Typography>
         </Typography>
     )
 })

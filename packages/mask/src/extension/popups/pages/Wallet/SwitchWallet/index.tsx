@@ -8,11 +8,11 @@ import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, List, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Services from '#services'
 import { useI18N } from '../../../../../utils/index.js'
 import { PopupContext } from '../../../hooks/index.js'
 import { ActionModal, useActionModal } from '../../../components/index.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
-import Services from '#services'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -53,7 +53,7 @@ const SwitchWallet = memo(function SwitchWallet() {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const handleClickCreate = useCallback(async () => {
-        if (!wallets.filter((x) => x.hasDerivationPath).length) {
+        if (!wallets.some((x) => !x.configurable)) {
             const hasPaymentPassword = await Services.Wallet.hasPassword()
             await browser.tabs.create({
                 active: true,

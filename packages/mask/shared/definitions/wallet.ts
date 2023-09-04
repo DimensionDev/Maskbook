@@ -7,6 +7,7 @@ export interface WalletRecord {
     address: string
     source: ImportSource
     type: 'wallet'
+    mnemonicId?: string
     derivationPath?: string
     latestDerivationPath?: string
     storedKeyInfo?: api.IStoredKeyInfo
