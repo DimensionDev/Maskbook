@@ -4,24 +4,24 @@
 
 ### Minor Changes
 
--   95ed3afc1: unstable_TUPLE_RENDER_STYLE has been renamed to unstable_STYLE_META and moved from react package to base package
--   95ed3afc1: refactor!: upgrade to ts-results-es 4.0.0
--   95ed3afc1: now unstable_STYLE_META will be rendered by the default render
+- 95ed3afc1: unstable_TUPLE_RENDER_STYLE has been renamed to unstable_STYLE_META and moved from react package to base package
+- 95ed3afc1: refactor!: upgrade to ts-results-es 4.0.0
+- 95ed3afc1: now unstable_STYLE_META will be rendered by the default render
 
 ### Patch Changes
 
--   Updated dependencies [95ed3afc1]
--   Updated dependencies [95ed3afc1]
--   Updated dependencies [95ed3afc1]
-    -   @masknet/typed-message@0.2.0
+- Updated dependencies [95ed3afc1]
+- Updated dependencies [95ed3afc1]
+- Updated dependencies [95ed3afc1]
+  - @masknet/typed-message@0.2.0
 
 ## 0.1.0
 
 ### Minor Changes
 
--   15bbd2649: initial release
+- 15bbd2649: initial release
 
 ### Patch Changes
 
--   Updated dependencies [15bbd2649]
-    -   @masknet/typed-message@0.1.0
+- Updated dependencies [15bbd2649]
+  - @masknet/typed-message@0.1.0
