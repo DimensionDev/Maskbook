@@ -19,19 +19,19 @@ const useStyles = makeStyles()((theme) => ({
     },
     content: {
         background: theme.palette.maskColor.bottom,
-        minWidth: 'clamp(720px, 66.6667%, 66.666%)',
+        minWidth: 720,
+        width: 'clamp(720px, 66.6667%, 66.666%)',
         paddingTop: '12.5vh',
         paddingBottom: '12.5vh',
-        paddingRight: theme.spacing(8),
+        marginRight: theme.spacing(8),
         display: 'flex',
         flexDirection: 'column',
-        marginRight: 'auto',
         [theme.breakpoints.up('lg')]: {
-            paddingLeft: 'clamp(40px, calc(66.6667% - 720px), 20%)',
+            marginLeft: 'clamp(40px, calc(66.6667% - 720px), 20%)',
         },
         [theme.breakpoints.down('lg')]: {
-            paddingLeft: 40,
-            paddingRight: 40,
+            marginLeft: 40,
+            marginRight: 40,
         },
     },
     sidebar: {
