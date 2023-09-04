@@ -244,7 +244,7 @@ function Content(props: ProfileTabContentProps) {
     }, [currentVisitingUserId])
 
     useEffect(() => {
-        if (!(profileTabType === ProfileTabs.WEB3)) return
+        if (profileTabType !== ProfileTabs.WEB3) return
         if (currentTab === `${PluginID.RSS3}_Social`)
             Telemetry.captureEvent(EventType.Access, EventID.EntryProfileUserSocialSwitchTo)
         if (currentTab === `${PluginID.RSS3}_Activities`)
