@@ -34,6 +34,7 @@ export async function internal_wallet_restore(backup: NormalizedBackup.WalletBac
                     name,
                     await JWKToKey(wallet.privateKey.value, 'private'),
                     wallet.mnemonicId.unwrapOr(undefined),
+                    wallet.derivationPath.unwrapOr(undefined),
                 )
             else if (wallet.mnemonic.isSome()) {
                 // fix a backup bug of pre-v2.2.2 versions

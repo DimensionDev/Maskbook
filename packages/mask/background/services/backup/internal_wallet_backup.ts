@@ -56,6 +56,7 @@ function WalletRecordToJSONFormat(
         address: wallet.address,
         createdAt: wallet.createdAt,
         updatedAt: wallet.updatedAt,
+        derivationPath: None,
         mnemonicId: None,
         mnemonic: None,
         passphrase: None,
@@ -73,6 +74,8 @@ function WalletRecordToJSONFormat(
     if (wallet.privateKey) backup.privateKey = Some(keyToJWK(wallet.privateKey, 'private'))
 
     if (wallet.mnemonicId) backup.mnemonicId = Some(wallet.mnemonicId)
+
+    if (wallet.derivationPath) backup.derivationPath = Some(wallet.derivationPath)
     return backup
 }
 
@@ -82,6 +85,7 @@ function LegacyWalletRecordToJSONFormat(wallet: LegacyWalletRecord): NormalizedB
         address: wallet.address,
         createdAt: wallet.createdAt,
         updatedAt: wallet.updatedAt,
+        derivationPath: None,
         mnemonicId: None,
         mnemonic: None,
         passphrase: None,

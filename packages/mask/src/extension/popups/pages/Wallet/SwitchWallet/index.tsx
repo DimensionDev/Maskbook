@@ -53,7 +53,7 @@ const SwitchWallet = memo(function SwitchWallet() {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const handleClickCreate = useCallback(async () => {
-        if (!wallets.filter((x) => x.hasDerivationPath).length) {
+        if (!wallets.filter((x) => x.latestDerivationPath).length) {
             const hasPaymentPassword = await Services.Wallet.hasPassword()
             await browser.tabs.create({
                 active: true,

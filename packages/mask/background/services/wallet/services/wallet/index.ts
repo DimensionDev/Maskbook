@@ -360,13 +360,17 @@ export function recoverWalletFromMnemonicWords(
     name: string,
     mnemonic: string,
     derivationPath = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-    mnemonicId?: string,
 ) {
     return addWalletFromMnemonicWords(ImportSource.UserProvided, name, mnemonic, derivationPath)
 }
 
-export function recoverWalletFromPrivateKey(name: string, privateKey: string, mnemonicId?: string) {
-    return addWalletFromPrivateKey(ImportSource.UserProvided, name, privateKey)
+export function recoverWalletFromPrivateKey(
+    name: string,
+    privateKey: string,
+    mnemonicId?: string,
+    derivationPath?: string,
+) {
+    return addWalletFromPrivateKey(ImportSource.UserProvided, name, privateKey, mnemonicId, derivationPath)
 }
 
 export async function recoverWalletFromKeyStoreJSON(name: string, json: string, jsonPassword: string) {
