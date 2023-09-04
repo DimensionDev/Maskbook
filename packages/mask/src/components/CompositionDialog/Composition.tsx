@@ -8,7 +8,7 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import type { CompositionType } from '@masknet/plugin-infra/content-script'
-import Services from '../../extension/service.js'
+import Services from '#services'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { useCurrentIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import { CompositionDialogUI, type CompositionRef, E2EUnavailableReason } from './CompositionUI.js'
@@ -113,6 +113,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
         if (!open) return
 
         Telemetry.captureEvent(EventType.Access, EventID.EntryMaskComposeOpen)
+        Telemetry.captureEvent(EventType.Interact, EventID.EntryMaskComposeVisibleAll)
 
         return MaskMessages.events.replaceComposition.on((message) => {
             const ui = UI.current

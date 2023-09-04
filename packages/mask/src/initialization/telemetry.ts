@@ -1,5 +1,5 @@
 import { TelemetryID } from '../../../shared-base/src/Telemetry/index.js'
-import Services from '../extension/service.js'
+import Services from '#services'
 
 const timeStart = Date.now()
 const task = Services.Helper.getTelemetryID().then((id) => {

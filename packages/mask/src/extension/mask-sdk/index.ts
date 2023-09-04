@@ -1,7 +1,7 @@
 import { createMaskSDKServer } from '@masknet/sdk'
 import './hmr-sdk.js'
 import { hmr_sdkServer } from './hmr-bridge.js'
-import Services from '../service.js'
+import Services from '#services'
 import { currentSiteContext } from './bridge/site_context.js'
 
 const maskSDK = createMaskSDKServer(hmr_sdkServer)

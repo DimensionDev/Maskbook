@@ -18,6 +18,8 @@ import { setupStorage, type StorageOptions } from './storage.js'
 import { openBrowser, openPicker } from './emitter.js'
 import { FileServiceInjection } from './FileServiceInjection.js'
 import { Modals } from './modals/index.js'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
 
 type BadgeRenderer<T> = (f: T) => Plugin.SiteAdaptor.BadgeDescriptor
 
@@ -78,11 +80,12 @@ const definition: Plugin.SiteAdaptor.Definition = {
                             {...EntryComponentProps}
                             icon={icon}
                             iconFilterColor={iconFilterColor}
-                            onClick={
+                            onClick={() => {
                                 EntryComponentProps.onClick
-                                    ? () => EntryComponentProps.onClick?.(clickHandler)
-                                    : clickHandler
-                            }
+                                    ? EntryComponentProps.onClick?.(clickHandler)
+                                    : clickHandler()
+                                Telemetry.captureEvent(EventType.Access, EventID.EntryAppFileOpen)
+                            }}
                         />
                     )
                 },

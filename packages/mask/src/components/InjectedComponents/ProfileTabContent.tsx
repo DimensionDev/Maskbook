@@ -49,8 +49,10 @@ import {
 import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
 import { SearchResultInspector } from './SearchResultInspector.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
-import Services from '../../extension/service.js'
+import Services from '#services'
 import { useQuery } from '@tanstack/react-query'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventType, EventID } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -240,6 +242,16 @@ function Content(props: ProfileTabContentProps) {
         onChange(undefined, first(tabs)?.id)
         setSelectedAddress(undefined)
     }, [currentVisitingUserId])
+
+    useEffect(() => {
+        if (profileTabType !== ProfileTabs.WEB3) return
+        if (currentTab === `${PluginID.RSS3}_Social`)
+            Telemetry.captureEvent(EventType.Access, EventID.EntryProfileUserSocialSwitchTo)
+        if (currentTab === `${PluginID.RSS3}_Activities`)
+            Telemetry.captureEvent(EventType.Access, EventID.EntryProfileUserActivitiesSwitchTo)
+        if (currentTab === `${PluginID.RSS3}_Donation`)
+            Telemetry.captureEvent(EventType.Access, EventID.EntryProfileUserDonationsSwitchTo)
+    }, [profileTabType, currentTab])
 
     useEffect(() => {
         return MaskMessages.events.profileTabHidden.on((data) => {

@@ -55,8 +55,8 @@
             }
         },
         {
-            "input": "./packages/dashboard/src/locales/en-US.json",
-            "output": "./packages/dashboard/src/locales/i18n_generated",
+            "input": "./packages/mask/dashboard/locales/en-US.json",
+            "output": "./packages/mask/dashboard/locales/i18n_generated",
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",

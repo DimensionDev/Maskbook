@@ -5,13 +5,6 @@ import { codegen } from '../codegen/index.js'
 const STATIC_PATH = new URL('netlify/storybook-static/', PKG_PATH)
 
 // prettier-ignore
-const dashboardSB = createBuildStorybook6(
-    new URL('dashboard/', PKG_PATH),
-    new URL('dashboard/', STATIC_PATH),
-    'dashboard-storybook',
-)
-
-// prettier-ignore
 const themeSB = createBuildStorybook6(
     new URL('theme/', PKG_PATH),
     new URL('theme/', STATIC_PATH),
@@ -25,6 +18,6 @@ const [buildStorybookShared] = fromNPMTask(
 )
 
 // Note: run multiple webpack task in parallel might cause OOM
-export const buildNetlify: TaskFunction = series(codegen, buildStorybookShared, dashboardSB, themeSB)
+export const buildNetlify: TaskFunction = series(codegen, buildStorybookShared, themeSB)
 
 task(buildNetlify, 'build-ci-netlify', 'Build for Netlify')

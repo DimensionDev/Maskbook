@@ -6,7 +6,6 @@
         "./packages/app/postcss.config.cjs",
         "./packages/app/src/styles/index.css",
         "./packages/app/tailwind.config.cjs",
-        "./packages/dashboard/src/assets/welcome.splinecode",
         "./packages/web3-contracts/types/**",
         ".github",
         ".gitignore",

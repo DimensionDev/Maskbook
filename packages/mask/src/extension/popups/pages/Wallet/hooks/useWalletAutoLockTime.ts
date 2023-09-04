@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { useEffect } from 'react'
-import Services from '../../../../service.js'
+import Services from '#services'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 
 export function useWalletAutoLockTime() {

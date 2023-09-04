@@ -29,7 +29,7 @@ import { useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
-import Services from '../../../../service.js'
+import Services from '#services'
 import { FormattedCurrency } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({

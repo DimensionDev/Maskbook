@@ -1,6 +1,6 @@
 import { MaskEthereumProviderRpcError, type BridgeAPI } from '@masknet/sdk'
 import { SignType } from '@masknet/shared-base'
-import Services from '../../service.js'
+import Services from '#services'
 import { SiteMethods } from './site_context.js'
 import { readonlyMethodType, type EthereumMethodType } from '@masknet/web3-shared-evm'
 

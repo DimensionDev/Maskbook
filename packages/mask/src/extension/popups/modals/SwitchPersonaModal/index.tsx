@@ -6,7 +6,7 @@ import { ActionButton, makeStyles } from '@masknet/theme'
 import { PersonaContext } from '@masknet/shared'
 import { PersonaItem } from './PersonaItem.js'
 import { DashboardRoutes, type PersonaInformation } from '@masknet/shared-base'
-import Services from '../../../service.js'
+import Services from '#services'
 import { useNavigate } from 'react-router-dom'
 import { Icons } from '@masknet/icons'
 

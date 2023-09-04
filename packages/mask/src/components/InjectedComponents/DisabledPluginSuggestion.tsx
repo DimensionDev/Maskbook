@@ -15,7 +15,7 @@ import { type ReactNode, useCallback } from 'react'
 import { useAsync } from 'react-use'
 import type { Option } from 'ts-results-es'
 import { useSubscription } from 'use-subscription'
-import Services from '../../extension/service.js'
+import Services from '#services'
 import { useI18N } from '../../utils/index.js'
 
 function useDisabledPlugins() {

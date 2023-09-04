@@ -12,7 +12,7 @@ import {
     useThemeSettings,
 } from '../../../../components/DataSource/useActivatedUI.js'
 import { usePersonasFromDB } from '../../../../components/DataSource/usePersonasFromDB.js'
-import { Services } from '../../../../extension/service.js'
+import Services from '#services'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { ButtonStyle } from '../../constant.js'
 import { searchProfileAvatarSelector, searchProfileSaveSelector } from '../../utils/selector.js'

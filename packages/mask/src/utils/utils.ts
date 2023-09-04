@@ -4,7 +4,7 @@
  */
 import { isNull } from 'lodash-es'
 import { pasteImage } from '@masknet/injected-script'
-import Services from '../extension/service.js'
+import Services from '#services'
 import { ProfileIdentifier, type ProfileInformationFromNextID } from '@masknet/shared-base'
 import { batch, notify } from 'async-call-rpc/full'
 /**

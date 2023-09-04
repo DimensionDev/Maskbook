@@ -21,7 +21,7 @@ import { ExplorerResolver } from '@masknet/web3-providers'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
 import { usePasswordForm } from '../hooks/usePasswordForm.js'
-import Services from '../../../../service.js'
+import Services from '#services'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 
 const useStyles = makeStyles()((theme) => ({

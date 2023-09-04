@@ -12,7 +12,7 @@ import { useI18N } from '../../../../../utils/index.js'
 import { PopupContext } from '../../../hooks/index.js'
 import { ActionModal, useActionModal } from '../../../components/index.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
-import Services from '../../../../service.js'
+import Services from '#services'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

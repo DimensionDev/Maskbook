@@ -33,6 +33,9 @@ const WalletSettings = memo(() => {
 
     if (!wallet) return null
 
+    // The wallet has derivationPath is also the one with minimum derivation path
+    const isMinimumDerivationPath = !!wallet.derivationPath
+
     return (
         <div className={classes.content}>
             <Box className={cx(classes.item, classes.primaryItem)} onClick={handleSwitchWallet}>
@@ -68,6 +71,7 @@ const WalletSettings = memo(() => {
                 <Box className={classes.bottomAction}>
                     <ActionButton
                         fullWidth
+                        disabled={isMinimumDerivationPath}
                         onClick={async () =>
                             await WalletRemoveModal.openAndWaitForClose({
                                 title: t('remove'),

@@ -607,202 +607,6 @@ importers:
 
   packages/config: {}
 
-  packages/dashboard:
-    dependencies:
-      '@hookform/resolvers':
-        specifier: ^3.1.1
-        version: 3.1.1(react-hook-form@7.45.2)
-      '@masknet/backup-format':
-        specifier: workspace:^
-        version: link:../backup-format
-      '@masknet/icons':
-        specifier: workspace:^
-        version: link:../icons
-      '@masknet/plugin-evm':
-        specifier: workspace:^
-        version: link:../plugins/EVM
-      '@masknet/plugin-example':
-        specifier: workspace:^
-        version: link:../plugins/Example
-      '@masknet/plugin-flow':
-        specifier: workspace:^
-        version: link:../plugins/Flow
-      '@masknet/plugin-infra':
-        specifier: workspace:^
-        version: link:../plugin-infra
-      '@masknet/plugin-solana':
-        specifier: workspace:^
-        version: link:../plugins/Solana
-      '@masknet/plugin-transak':
-        specifier: workspace:^
-        version: link:../plugins/Transak
-      '@masknet/public-api':
-        specifier: workspace:^
-        version: link:../public-api
-      '@masknet/shared':
-        specifier: workspace:^
-        version: link:../shared
-      '@masknet/shared-base':
-        specifier: workspace:^
-        version: link:../shared-base
-      '@masknet/shared-base-ui':
-        specifier: workspace:^
-        version: link:../shared-base-ui
-      '@masknet/storybook-shared':
-        specifier: workspace:^
-        version: link:../storybook-shared
-      '@masknet/theme':
-        specifier: workspace:^
-        version: link:../theme
-      '@masknet/web3-helpers':
-        specifier: workspace:^
-        version: link:../web3-helpers
-      '@masknet/web3-hooks-base':
-        specifier: workspace:^
-        version: link:../web3-hooks/base
-      '@masknet/web3-hooks-evm':
-        specifier: workspace:^
-        version: link:../web3-hooks/evm
-      '@masknet/web3-providers':
-        specifier: workspace:^
-        version: link:../web3-providers
-      '@masknet/web3-shared-base':
-        specifier: workspace:^
-        version: link:../web3-shared/base
-      '@masknet/web3-shared-evm':
-        specifier: workspace:^
-        version: link:../web3-shared/evm
-      '@masknet/web3-shared-flow':
-        specifier: workspace:^
-        version: link:../web3-shared/flow
-      '@masknet/web3-shared-solana':
-        specifier: workspace:^
-        version: link:../web3-shared/solana
-      '@masknet/web3-telemetry':
-        specifier: workspace:^
-        version: link:../web3-telemetry
-      '@msgpack/msgpack':
-        specifier: ^3.0.0-beta2
-        version: 3.0.0-beta2
-      '@servie/events':
-        specifier: ^3.0.0
-        version: 3.0.0
-      '@splinetool/react-spline':
-        specifier: ^2.2.6
-        version: 2.2.6(@splinetool/runtime@0.9.342)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      '@splinetool/runtime':
-        specifier: ^0.9.342
-        version: 0.9.342(patch_hash=pai5dnfr6cjujs6g7ajnubnady)
-      '@tanstack/react-query-devtools':
-        specifier: ^4.29.25
-        version: 4.29.25(@tanstack/react-query@4.29.25)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      '@types/color':
-        specifier: ^3.0.3
-        version: 3.0.3
-      '@types/react-avatar-editor':
-        specifier: ^13.0.0
-        version: 13.0.0(patch_hash=6wzwgbn4gsisp2tjbg76iifhqq)
-      async-call-rpc:
-        specifier: ^6.3.1
-        version: 6.3.1
-      bignumber.js:
-        specifier: 9.1.1
-        version: 9.1.1
-      color:
-        specifier: ^4.2.3
-        version: 4.2.3
-      date-fns:
-        specifier: ^2.30.0
-        version: 2.30.0
-      guess-calling-code:
-        specifier: ^1.1.7
-        version: 1.1.7(patch_hash=ei2t5rxej4o7ihqzxjp5seoenm)
-      html-to-image:
-        specifier: ^1.11.11
-        version: 1.11.11
-      immer:
-        specifier: ^10.0.2
-        version: 10.0.2
-      json-stable-stringify:
-        specifier: ^1.0.2
-        version: 1.0.2
-      react-avatar-editor:
-        specifier: ^13.0.0
-        version: 13.0.0(@babel/core@7.22.11)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      react-hook-form:
-        specifier: ^7.45.2
-        version: 7.45.2(react@0.0.0-experimental-0a360642d-20230711)
-      react-qrcode-logo:
-        specifier: ^2.9.0
-        version: 2.9.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      react-router-dom:
-        specifier: ^6.14.2
-        version: 6.14.2(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      react-to-print:
-        specifier: ^2.14.12
-        version: 2.14.12(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      react-use:
-        specifier: ^17.4.0
-        version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      unstated-next:
-        specifier: ^1.1.0
-        version: 1.1.0
-      urlcat:
-        specifier: ^3.1.0
-        version: 3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e)
-      use-subscription:
-        specifier: ^1.8.0
-        version: 1.8.0(react@0.0.0-experimental-0a360642d-20230711)
-      uuid:
-        specifier: ^9.0.0
-        version: 9.0.0
-      wallet.ts:
-        specifier: ^1.0.1
-        version: 1.0.1
-      web3-core-helpers:
-        specifier: 1.8.0
-        version: 1.8.0
-      web3-utils:
-        specifier: 1.8.0
-        version: 1.8.0
-      zod:
-        specifier: ^3.22.2
-        version: 3.22.2
-    devDependencies:
-      '@babel/core':
-        specifier: ^7.22.11
-        version: 7.22.11
-      '@storybook/addon-actions':
-        specifier: ^6.5.13
-        version: 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      '@storybook/addon-essentials':
-        specifier: ^6.5.13
-        version: 6.5.13(@babel/core@7.22.11)(@storybook/builder-webpack5@6.5.13)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)(webpack@5.88.0)
-      '@storybook/addon-links':
-        specifier: ^6.5.13
-        version: 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      '@storybook/builder-webpack5':
-        specifier: ^6.5.13
-        version: 6.5.13(@swc/core@1.3.81)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)
-      '@storybook/manager-webpack5':
-        specifier: ^6.5.13
-        version: 6.5.13(@swc/core@1.3.81)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)
-      '@storybook/react':
-        specifier: ^6.5.13
-        version: 6.5.13(@babel/core@7.22.11)(@storybook/builder-webpack5@6.5.13)(@storybook/manager-webpack5@6.5.13)(@swc/core@1.3.81)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(require-from-string@2.0.2)(typescript@5.3.0-dev.20230830)
-      '@types/use-subscription':
-        specifier: ^1.0.0
-        version: 1.0.0
-      '@types/uuid':
-        specifier: ^9.0.3
-        version: 9.0.3
-      babel-loader:
-        specifier: ^9.1.3
-        version: 9.1.3(@babel/core@7.22.11)(webpack@5.88.0)
-      webpack:
-        specifier: Jack-Works/webpack#lazy-import
-        version: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
-
   packages/encryption:
     dependencies:
       '@masknet/base':
@@ -898,9 +702,6 @@ importers:
       '@masknet/backup-format':
         specifier: workspace:^
         version: link:../backup-format
-      '@masknet/dashboard':
-        specifier: workspace:^
-        version: link:../dashboard
       '@masknet/encryption':
         specifier: workspace:^
         version: link:../encryption
@@ -1108,6 +909,9 @@ importers:
       '@sinonjs/text-encoding':
         specifier: ^0.7.2
         version: 0.7.2
+      '@splinetool/react-spline':
+        specifier: 2.2.6
+        version: 2.2.6(@splinetool/runtime@0.9.342)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
       '@tanstack/react-query-devtools':
         specifier: ^4.29.25
         version: 4.29.25(@tanstack/react-query@4.29.25)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
@@ -1204,6 +1008,12 @@ importers:
       graphql-request:
         specifier: ^6.0.0
         version: 6.0.0(graphql@16.6.0)
+      guess-calling-code:
+        specifier: ^1.1.7
+        version: 1.1.7(patch_hash=ei2t5rxej4o7ihqzxjp5seoenm)
+      html-to-image:
+        specifier: ^1.11.11
+        version: 1.11.11
       https-browserify:
         specifier: ^1.0.0
         version: 1.0.0
@@ -1236,7 +1046,7 @@ importers:
         version: 1.30.1(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
       react-avatar-editor:
         specifier: ^13.0.0
-        version: 13.0.0(@babel/core@7.22.11)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
+        version: 13.0.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
       react-draggable:
         specifier: ^4.4.5
         version: 4.4.5(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
@@ -1258,6 +1068,9 @@ importers:
       react-router-dom:
         specifier: ^6.14.2
         version: 6.14.2(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
+      react-to-print:
+        specifier: ^2.14.13
+        version: 2.14.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
       react-transition-group:
         specifier: ^4.4.5
         version: 4.4.5(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
@@ -1661,7 +1474,7 @@ importers:
         version: 10.0.0
       react-avatar-editor:
         specifier: ^13.0.0
-        version: 13.0.0(@babel/core@7.22.11)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
+        version: 13.0.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
       react-router-dom:
         specifier: ^6.14.2
         version: 6.14.2(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
@@ -2116,6 +1929,9 @@ importers:
       '@masknet/web3-shared-base':
         specifier: workspace:^
         version: link:../../web3-shared/base
+      '@masknet/web3-telemetry':
+        specifier: workspace:^
+        version: link:../../web3-telemetry
       '@msgpack/msgpack':
         specifier: ^3.0.0-beta2
         version: 3.0.0-beta2
@@ -3911,7 +3727,7 @@ importers:
         version: 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
       '@storybook/react':
         specifier: ^6.5.13
-        version: 6.5.13(@babel/core@7.22.11)(@storybook/builder-webpack5@6.5.13)(@storybook/manager-webpack5@6.5.13)(@swc/core@1.3.81)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(require-from-string@2.0.2)(typescript@5.3.0-dev.20230830)
+        version: 6.5.13(@swc/core@1.3.81)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(require-from-string@2.0.2)(typescript@5.3.0-dev.20230830)
       stream-browserify:
         specifier: '3'
         version: 3.0.0
@@ -7365,7 +7181,7 @@ packages:
       '@babel/helper-plugin-utils': 7.20.2
     dev: true
 
-  /@babel/plugin-transform-runtime@7.17.12(@babel/core@7.22.11):
+  /@babel/plugin-transform-runtime@7.17.12:
     resolution: {integrity: sha512-xsl5MeGjWnmV6Ui9PfILM2+YRpa3GqLOrczPpXV3N2KCgQGU+sU8OfzuMbjkIdfvZEZIm+3y0V7w58sk0SGzlw==}
     engines: {node: '>=6.9.0'}
     peerDependencies:
@@ -7374,12 +7190,11 @@ packages:
       '@babel/core':
         optional: true
     dependencies:
-      '@babel/core': 7.22.11
       '@babel/helper-module-imports': 7.18.6
       '@babel/helper-plugin-utils': 7.20.2
       babel-plugin-polyfill-corejs2: 0.3.3(@babel/core@7.22.11)
-      babel-plugin-polyfill-corejs3: 0.5.2(@babel/core@7.22.11)
-      babel-plugin-polyfill-regenerator: 0.3.1(@babel/core@7.22.11)
+      babel-plugin-polyfill-corejs3: 0.5.2
+      babel-plugin-polyfill-regenerator: 0.3.1
       semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
@@ -7811,6 +7626,23 @@ packages:
       '@babel/plugin-transform-dotall-regex': 7.18.6(@babel/core@7.22.9)
       '@babel/types': 7.21.4
       esutils: 2.0.3
+    dev: true
+
+  /@babel/preset-react@7.18.6:
+    resolution: {integrity: sha512-zXr6atUmyYdiWRVLOZahakYmOBHtWc2WGCkP8PYTgZi0iJXDY2CN180TdrIW4OGOAdLc7TifzDIvtx6izaRIzg==}
+    engines: {node: '>=6.9.0'}
+    peerDependencies:
+      '@babel/core': ^7.0.0-0
+    peerDependenciesMeta:
+      '@babel/core':
+        optional: true
+    dependencies:
+      '@babel/helper-plugin-utils': 7.20.2
+      '@babel/helper-validator-option': 7.22.5
+      '@babel/plugin-transform-react-display-name': 7.18.6(@babel/core@7.22.11)
+      '@babel/plugin-transform-react-jsx': 7.19.0(@babel/core@7.22.11)
+      '@babel/plugin-transform-react-jsx-development': 7.18.6(@babel/core@7.22.11)
+      '@babel/plugin-transform-react-pure-annotations': 7.18.6(@babel/core@7.22.11)
     dev: true
 
   /@babel/preset-react@7.18.6(@babel/core@7.22.11):
@@ -13138,61 +12970,6 @@ packages:
       - webpack-command
     dev: true
 
-  /@storybook/addon-docs@6.5.13(@babel/core@7.22.11)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)(webpack@5.88.0):
-    resolution: {integrity: sha512-RG/NjsheD9FixZ789RJlNyNccaR2Cuy7CtAwph4oUNi3aDFjtOI8Oe9L+FOT7qtVnZLw/YMjF+pZxoDqJNKLPw==}
-    peerDependencies:
-      '@storybook/mdx2-csf': ^0.0.3
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-0a360642d-20230711
-      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-0a360642d-20230711
-    peerDependenciesMeta:
-      '@storybook/mdx2-csf':
-        optional: true
-      react:
-        optional: true
-      react-dom:
-        optional: true
-    dependencies:
-      '@babel/plugin-transform-react-jsx': 7.19.0(@babel/core@7.22.11)
-      '@babel/preset-env': 7.20.2(@babel/core@7.22.11)
-      '@jest/transform': 26.6.2
-      '@mdx-js/react': 1.6.22(react@0.0.0-experimental-0a360642d-20230711)
-      '@storybook/addons': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      '@storybook/api': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      '@storybook/components': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      '@storybook/core-common': 6.5.13(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)
-      '@storybook/core-events': 6.5.13
-      '@storybook/csf': 0.0.2--canary.4566f4d.1
-      '@storybook/docs-tools': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      '@storybook/mdx1-csf': 0.0.1(@babel/core@7.22.11)
-      '@storybook/node-logger': 6.5.13
-      '@storybook/postinstall': 6.5.13
-      '@storybook/preview-web': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      '@storybook/source-loader': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      '@storybook/store': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      '@storybook/theming': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      babel-loader: 8.3.0(@babel/core@7.22.11)(webpack@5.88.0)
-      core-js: 3.29.0
-      fast-deep-equal: 3.1.3
-      global: 4.4.0
-      lodash: 4.17.21
-      react: 0.0.0-experimental-0a360642d-20230711
-      react-dom: 0.0.0-experimental-0a360642d-20230711(react@0.0.0-experimental-0a360642d-20230711)
-      regenerator-runtime: 0.13.11
-      remark-external-links: 8.0.0
-      remark-slug: 6.1.0
-      ts-dedent: 2.2.0
-      util-deprecate: 1.0.2
-    transitivePeerDependencies:
-      - '@babel/core'
-      - eslint
-      - supports-color
-      - typescript
-      - vue-template-compiler
-      - webpack
-      - webpack-cli
-      - webpack-command
-    dev: true
-
   /@storybook/addon-docs@6.5.13(@babel/core@7.22.11)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)(webpack@5.88.2):
     resolution: {integrity: sha512-RG/NjsheD9FixZ789RJlNyNccaR2Cuy7CtAwph4oUNi3aDFjtOI8Oe9L+FOT7qtVnZLw/YMjF+pZxoDqJNKLPw==}
     peerDependencies:
@@ -13244,95 +13021,6 @@ packages:
       - typescript
       - vue-template-compiler
       - webpack
-      - webpack-cli
-      - webpack-command
-    dev: true
-
-  /@storybook/addon-essentials@6.5.13(@babel/core@7.22.11)(@storybook/builder-webpack5@6.5.13)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)(webpack@5.88.0):
-    resolution: {integrity: sha512-G9FVAWV7ixjVLWeLgIX+VT90tcAk6yQxfZQegfg5ucRilGysJCDaNnoab4xuuvm1R40TfFhba3iAGZtQYsddmw==}
-    peerDependencies:
-      '@babel/core': ^7.9.6
-      '@storybook/angular': '*'
-      '@storybook/builder-manager4': '*'
-      '@storybook/builder-manager5': '*'
-      '@storybook/builder-webpack4': '*'
-      '@storybook/builder-webpack5': '*'
-      '@storybook/html': '*'
-      '@storybook/vue': '*'
-      '@storybook/vue3': '*'
-      '@storybook/web-components': '*'
-      lit: '*'
-      lit-html: '*'
-      react: '*'
-      react-dom: '*'
-      svelte: '*'
-      sveltedoc-parser: '*'
-      vue: '*'
-      webpack: '*'
-    peerDependenciesMeta:
-      '@babel/core':
-        optional: true
-      '@storybook/angular':
-        optional: true
-      '@storybook/builder-manager4':
-        optional: true
-      '@storybook/builder-manager5':
-        optional: true
-      '@storybook/builder-webpack4':
-        optional: true
-      '@storybook/builder-webpack5':
-        optional: true
-      '@storybook/html':
-        optional: true
-      '@storybook/vue':
-        optional: true
-      '@storybook/vue3':
-        optional: true
-      '@storybook/web-components':
-        optional: true
-      lit:
-        optional: true
-      lit-html:
-        optional: true
-      react:
-        optional: true
-      react-dom:
-        optional: true
-      svelte:
-        optional: true
-      sveltedoc-parser:
-        optional: true
-      vue:
-        optional: true
-      webpack:
-        optional: true
-    dependencies:
-      '@babel/core': 7.22.11
-      '@storybook/addon-actions': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      '@storybook/addon-backgrounds': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      '@storybook/addon-controls': 6.5.13(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)
-      '@storybook/addon-docs': 6.5.13(@babel/core@7.22.11)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)(webpack@5.88.0)
-      '@storybook/addon-measure': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      '@storybook/addon-outline': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      '@storybook/addon-toolbars': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      '@storybook/addon-viewport': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      '@storybook/addons': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      '@storybook/api': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      '@storybook/builder-webpack5': 6.5.13(@swc/core@1.3.81)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)
-      '@storybook/core-common': 6.5.13(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)
-      '@storybook/node-logger': 6.5.13
-      core-js: 3.29.0
-      react: 0.0.0-experimental-0a360642d-20230711
-      react-dom: 0.0.0-experimental-0a360642d-20230711(react@0.0.0-experimental-0a360642d-20230711)
-      regenerator-runtime: 0.13.11
-      ts-dedent: 2.2.0
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
-    transitivePeerDependencies:
-      - '@storybook/mdx2-csf'
-      - eslint
-      - supports-color
-      - typescript
-      - vue-template-compiler
       - webpack-cli
       - webpack-command
     dev: true
@@ -14451,6 +14139,99 @@ packages:
       '@storybook/csf': 0.0.2--canary.4566f4d.1
       '@storybook/docs-tools': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
       '@storybook/manager-webpack5': 6.5.13(@swc/core@1.3.81)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)
+      '@storybook/node-logger': 6.5.13
+      '@storybook/react-docgen-typescript-plugin': /react-docgen-typescript-plugin@1.0.2(typescript@5.3.0-dev.20230830)(webpack@5.88.2)
+      '@storybook/semver': 7.3.2
+      '@storybook/store': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
+      '@types/estree': 0.0.51
+      '@types/node': 20.5.7
+      '@types/webpack-env': 1.18.0
+      acorn: 7.4.1
+      acorn-jsx: 5.3.2(acorn@7.4.1)
+      acorn-walk: 7.2.0
+      babel-plugin-add-react-displayname: 0.0.5
+      babel-plugin-react-docgen: 4.2.1
+      core-js: 3.29.0
+      escodegen: 2.0.0
+      fs-extra: 9.1.0
+      global: 4.4.0
+      html-tags: 3.2.0
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 0.0.0-experimental-0a360642d-20230711
+      react-dom: 0.0.0-experimental-0a360642d-20230711(react@0.0.0-experimental-0a360642d-20230711)
+      react-element-to-jsx-string: 14.3.4(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
+      react-refresh: 0.11.0
+      read-pkg-up: 7.0.1
+      regenerator-runtime: 0.13.11
+      require-from-string: 2.0.2
+      ts-dedent: 2.2.0
+      typescript: 5.3.0-dev.20230830
+      util-deprecate: 1.0.2
+      webpack: 5.88.2(@swc/core@1.3.81)
+    transitivePeerDependencies:
+      - '@storybook/mdx2-csf'
+      - '@swc/core'
+      - '@types/webpack'
+      - bluebird
+      - bufferutil
+      - encoding
+      - esbuild
+      - eslint
+      - sockjs-client
+      - supports-color
+      - type-fest
+      - uglify-js
+      - utf-8-validate
+      - vue-template-compiler
+      - webpack-cli
+      - webpack-command
+      - webpack-dev-server
+      - webpack-hot-middleware
+      - webpack-plugin-serve
+    dev: true
+
+  /@storybook/react@6.5.13(@swc/core@1.3.81)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(require-from-string@2.0.2)(typescript@5.3.0-dev.20230830):
+    resolution: {integrity: sha512-4gO8qihEkVZ8RNm9iQd7G2iZz4rRAHizJ6T5m58Sn21fxfyg9zAMzhgd0JzXuPXR8lTTj4AvRyPv1Qx7b43smg==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+    peerDependencies:
+      '@babel/core': ^7.11.5
+      '@storybook/builder-webpack4': '*'
+      '@storybook/builder-webpack5': '*'
+      '@storybook/manager-webpack4': '*'
+      '@storybook/manager-webpack5': '*'
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-0a360642d-20230711
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-0a360642d-20230711
+      require-from-string: ^2.0.2
+      typescript: '*'
+    peerDependenciesMeta:
+      '@babel/core':
+        optional: true
+      '@storybook/builder-webpack4':
+        optional: true
+      '@storybook/builder-webpack5':
+        optional: true
+      '@storybook/manager-webpack4':
+        optional: true
+      '@storybook/manager-webpack5':
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
+      typescript:
+        optional: true
+    dependencies:
+      '@babel/preset-flow': 7.18.6(@babel/core@7.22.11)
+      '@babel/preset-react': 7.18.6
+      '@pmmmwh/react-refresh-webpack-plugin': 0.5.11(react-refresh@0.11.0)(webpack@5.88.2)
+      '@storybook/addons': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
+      '@storybook/client-logger': 6.5.13
+      '@storybook/core': 6.5.13(@storybook/builder-webpack5@6.5.13)(@storybook/manager-webpack5@6.5.13)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)(webpack@5.88.2)
+      '@storybook/core-common': 6.5.13(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)
+      '@storybook/csf': 0.0.2--canary.4566f4d.1
+      '@storybook/docs-tools': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
       '@storybook/node-logger': 6.5.13
       '@storybook/react-docgen-typescript-plugin': /react-docgen-typescript-plugin@1.0.2(typescript@5.3.0-dev.20230830)(webpack@5.88.2)
       '@storybook/semver': 7.3.2
@@ -17688,22 +17469,6 @@ packages:
       webpack: 4.46.0
     dev: true
 
-  /babel-loader@9.1.3(@babel/core@7.22.11)(webpack@5.88.0):
-    resolution: {integrity: sha512-xG3ST4DglodGf8qSwv0MdeWLhrDsw/32QMdTO5T1ZIp9gQur0HkCyFs7Awskr10JKXFXwpAhiCuYX5oGXnRGbw==}
-    engines: {node: '>= 14.15.0'}
-    peerDependencies:
-      '@babel/core': ^7.12.0
-      webpack: '>=5'
-    peerDependenciesMeta:
-      '@babel/core':
-        optional: true
-    dependencies:
-      '@babel/core': 7.22.11
-      find-cache-dir: 4.0.0
-      schema-utils: 4.0.0
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
-    dev: true
-
   /babel-loader@9.1.3(@babel/core@7.22.11)(webpack@5.88.2):
     resolution: {integrity: sha512-xG3ST4DglodGf8qSwv0MdeWLhrDsw/32QMdTO5T1ZIp9gQur0HkCyFs7Awskr10JKXFXwpAhiCuYX5oGXnRGbw==}
     engines: {node: '>= 14.15.0'}
@@ -17823,7 +17588,7 @@ packages:
       - supports-color
     dev: true
 
-  /babel-plugin-polyfill-corejs3@0.5.2(@babel/core@7.22.11):
+  /babel-plugin-polyfill-corejs3@0.5.2:
     resolution: {integrity: sha512-G3uJih0XWiID451fpeFaYGVuxHEjzKTHtc9uGFEjR6hHrvNzeS/PX+LLLcetJcytsB5m4j+K3o/EpXJNb/5IEQ==}
     peerDependencies:
       '@babel/core': ^7.0.0-0
@@ -17831,7 +17596,6 @@ packages:
       '@babel/core':
         optional: true
     dependencies:
-      '@babel/core': 7.22.11
       '@babel/helper-define-polyfill-provider': 0.3.3(@babel/core@7.22.11)
       core-js-compat: 3.30.1
     transitivePeerDependencies:
@@ -17868,7 +17632,7 @@ packages:
       - supports-color
     dev: true
 
-  /babel-plugin-polyfill-regenerator@0.3.1(@babel/core@7.22.11):
+  /babel-plugin-polyfill-regenerator@0.3.1:
     resolution: {integrity: sha512-Y2B06tvgHYt1x0yz17jGkGeeMr5FeKUu+ASJ+N6nB5lQ8Dapfg42i0OVrf8PNGJ3zKL4A23snMi1IRwrqqND7A==}
     peerDependencies:
       '@babel/core': ^7.0.0-0
@@ -17876,7 +17640,6 @@ packages:
       '@babel/core':
         optional: true
     dependencies:
-      '@babel/core': 7.22.11
       '@babel/helper-define-polyfill-provider': 0.3.3(@babel/core@7.22.11)
     transitivePeerDependencies:
       - supports-color
@@ -30988,7 +30751,7 @@ packages:
       strip-json-comments: 2.0.1
     dev: true
 
-  /react-avatar-editor@13.0.0(@babel/core@7.22.11)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711):
+  /react-avatar-editor@13.0.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711):
     resolution: {integrity: sha512-0xw63MbRRQdDy7YI1IXU9+7tTFxYEFLV8CABvryYOGjZmXRTH2/UA0mafe57ns62uaEFX181kA4XlGlxCaeXKA==}
     peerDependencies:
       react: ^0.14.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-0a360642d-20230711
@@ -30999,7 +30762,7 @@ packages:
       react-dom:
         optional: true
     dependencies:
-      '@babel/plugin-transform-runtime': 7.17.12(@babel/core@7.22.11)
+      '@babel/plugin-transform-runtime': 7.17.12
       '@babel/runtime': 7.20.13
       prop-types: 15.8.1
       react: 0.0.0-experimental-0a360642d-20230711
@@ -31313,8 +31076,8 @@ packages:
       react: 0.0.0-experimental-0a360642d-20230711
     dev: false
 
-  /react-to-print@2.14.12(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711):
-    resolution: {integrity: sha512-qFJAwvDFd95Z+FWNqitt+HaB1/z+Zdd0MMrNOPUSus3fG32vqv512yB+HXhQ94J3HKoyqaIg44v0Zfc6xUBqlg==}
+  /react-to-print@2.14.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711):
+    resolution: {integrity: sha512-PqUGgTRZvkyBzWgaZHVBECWPX2nGEc3HOUy6WNXof6HT4yTFI92wtIkqQtr4jfvHbadqjwTgzgh6vgN8KXlWWw==}
     peerDependencies:
       react: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-0a360642d-20230711
       react-dom: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-0a360642d-20230711
@@ -31324,7 +31087,6 @@ packages:
       react-dom:
         optional: true
     dependencies:
-      prop-types: 15.8.1
       react: 0.0.0-experimental-0a360642d-20230711
       react-dom: 0.0.0-experimental-0a360642d-20230711(react@0.0.0-experimental-0a360642d-20230711)
     dev: false
@@ -37305,7 +37067,7 @@ time:
   /react-qrcode-logo@2.9.0: '2023-02-25T14:35:39.109Z'
   /react-refresh@0.14.0: '2022-06-14T19:47:06.215Z'
   /react-router-dom@6.14.2: '2023-07-17T20:54:19.824Z'
-  /react-to-print@2.14.12: '2023-02-19T04:32:07.452Z'
+  /react-to-print@2.14.13: '2023-06-07T08:18:39.357Z'
   /react-transition-group@4.4.5: '2022-08-01T08:36:58.958Z'
   /react-use@17.4.0: '2022-05-20T12:10:53.726Z'
   /react-window@1.8.9: '2023-04-17T19:30:25.509Z'

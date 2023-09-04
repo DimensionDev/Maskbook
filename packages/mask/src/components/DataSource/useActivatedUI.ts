@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query'
 import { first, isEqual } from 'lodash-es'
 import { useEffect, useMemo } from 'react'
 import { useSubscription, type Subscription } from 'use-subscription'
-import Services from '../../extension/service.js'
+import Services from '#services'
 import { activatedSiteAdaptorUI, activatedSiteAdaptor_state } from '../../site-adaptor-infra/index.js'
 
 async function queryPersonaFromDB(identityResolved: IdentityResolved) {

@@ -4,7 +4,7 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { first } from 'lodash-es'
 import { useCallback } from 'react'
 import { useCurrentPersona } from '../../../components/DataSource/useCurrentPersona.js'
-import Services from '../../../extension/service.js'
+import Services from '#services'
 
 export type FriendsInformation = Friend & {
     profiles: BindingProof[]

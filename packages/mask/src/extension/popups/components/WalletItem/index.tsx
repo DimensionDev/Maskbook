@@ -106,6 +106,8 @@ export const WalletItem = memo<WalletItemProps>(function WalletItem({
         onSelect(wallet)
     }, [wallet])
 
+    const extraName = domain && domain !== wallet.name ? ` (${formatDomainName(domain)})` : ''
+
     return (
         <ListItem
             className={cx(classes.item, className)}
@@ -116,9 +118,7 @@ export const WalletItem = memo<WalletItemProps>(function WalletItem({
             <Box className={classes.text}>
                 <Box width={180} overflow="auto">
                     <Typography className={classes.mainLine} component="div">
-                        <Typography className={classes.name}>
-                            {`${wallet.name}${domain ? ` (${formatDomainName(domain)})` : ''}`}
-                        </Typography>
+                        <Typography className={classes.name}>{`${wallet.name}${extraName}`}</Typography>
                         {wallet.source === ImportSource.LocalGenerated || hiddenTag ? null : (
                             <Typography component="span" className={classes.badge}>
                                 {t('wallet_imported')}

@@ -5,7 +5,7 @@ import type { JsonRpcPayload } from 'web3-core-helpers'
 import { PayloadEditor } from '@masknet/web3-shared-evm'
 import { useChainContext, useNativeTokenAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import { CrossIsolationMessages, ECKeyIdentifier, NetworkPluginID } from '@masknet/shared-base'
-import Services from '../../../../service.js'
+import Services from '#services'
 
 export const useUnconfirmedRequest = () => {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

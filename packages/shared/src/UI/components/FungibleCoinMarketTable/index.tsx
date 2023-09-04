@@ -1,6 +1,7 @@
 import { makeStyles } from '@masknet/theme'
+import { useFiatCurrencyRate } from '@masknet/web3-hooks-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
-import { type CurrencyType, formatCurrency, formatSupply } from '@masknet/web3-shared-base'
+import { formatCurrency, formatSupply, type CurrencyType } from '@masknet/web3-shared-base'
 import {
     Paper,
     Skeleton,
@@ -14,8 +15,8 @@ import {
 } from '@mui/material'
 import { memo } from 'react'
 import { useSharedI18N } from '../../../locales/index.js'
-import { useCurrencyType, useFiatCurrencyRate } from '@masknet/web3-hooks-base'
 import { FormattedCurrency } from '../../wallet/FormattedCurrency.js'
+import { ProgressiveText } from '../ProgressiveText/index.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -49,8 +50,7 @@ interface CoinMarketTableProps {
 export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ trending, sign }: CoinMarketTableProps) {
     const t = useSharedI18N()
     const { classes } = useStyles()
-    const currencyType = useCurrencyType()
-    const { data: fiatCurrencyRate = 1, isLoading } = useFiatCurrencyRate()
+    const { isLoading } = useFiatCurrencyRate()
 
     const market = trending?.market
 
@@ -71,12 +71,14 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.cell}>
-                                {market?.market_cap && !isLoading ? (
-                                    <FormattedCurrency
-                                        value={market.market_cap}
-                                        formatter={formatCurrency}
-                                        sign={sign}
-                                    />
+                                {market?.market_cap ? (
+                                    <ProgressiveText loading={isLoading} skeletonWidth={60}>
+                                        <FormattedCurrency
+                                            value={market.market_cap}
+                                            formatter={formatCurrency}
+                                            sign={sign}
+                                        />
+                                    </ProgressiveText>
                                 ) : (
                                     '--'
                                 )}
@@ -101,12 +103,14 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.cell}>
-                                {market?.total_volume && !isLoading ? (
-                                    <FormattedCurrency
-                                        value={market.total_volume}
-                                        formatter={formatCurrency}
-                                        sign={sign}
-                                    />
+                                {market?.total_volume ? (
+                                    <ProgressiveText loading={isLoading} skeletonWidth={60}>
+                                        <FormattedCurrency
+                                            value={market.total_volume}
+                                            formatter={formatCurrency}
+                                            sign={sign}
+                                        />
+                                    </ProgressiveText>
                                 ) : (
                                     '--'
                                 )}
