@@ -52,6 +52,7 @@ const TabConfig: Plugin.SiteAdaptor.ProfileTab = {
                     <UserAssetsProvider pluginID={socialAccount.pluginID} account={socialAccount.address}>
                         <CollectionList
                             gridProps={gridProps}
+                            from="web3Profile"
                             onItemClick={(asset) => inspectCollectible(asset, 'web3Profile')}
                         />
                     </UserAssetsProvider>
@@ -111,6 +112,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                                     height={392}
                                     gridProps={gridProps}
                                     disableWindowScroll
+                                    from="profileCard"
                                     onItemClick={(asset) => inspectCollectible(asset, 'profileCard')}
                                 />
                             </UserAssetsProvider>

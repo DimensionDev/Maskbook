@@ -470,17 +470,13 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         const [_, name = ''] = keyword.match(/(\w+)/) ?? []
 
         // BoredApeYC or CryptoPunks nft twitter project
-        if (type === SearchResultType.CollectionListByTwitterHandler) {
-            Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchNft)
+        if (type === SearchResultType.CollectionListByTwitterHandler)
             return this.searchCollectionListByTwitterHandler(keyword) as Promise<T[]>
-        }
 
         // token:MASK
         const { word, field } = this.parseKeyword(keyword)
-        if (word && ['token', 'twitter'].includes(field ?? '')) {
-            Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchToken)
-            return this.searchTokenByName(word) as Promise<T[]>
-        }
+        if (word && ['token', 'twitter'].includes(field ?? '')) return this.searchTokenByName(word) as Promise<T[]>
+
         // vitalik.lens, vitalik.bit, etc. including ENS BNB
         // Can't get .bit domain via RSS3 profile API.
         if (isValidHandle(keyword) && !keyword.endsWith('.bit')) {

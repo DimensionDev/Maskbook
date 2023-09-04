@@ -113,6 +113,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
         if (!open) return
 
         Telemetry.captureEvent(EventType.Access, EventID.EntryMaskComposeOpen)
+        Telemetry.captureEvent(EventType.Interact, EventID.EntryMaskComposeVisibleAll)
 
         return MaskMessages.events.replaceComposition.on((message) => {
             const ui = UI.current

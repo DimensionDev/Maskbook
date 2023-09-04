@@ -124,6 +124,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const send = useCallback(async () => {
         const hash = await sendTip()
         if (typeof hash !== 'string') return
+        Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineTipsSend)
 
         await TransactionConfirmModal.openAndWaitForClose({
             shareText,
@@ -143,7 +144,6 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
             title: t.tips(),
             share,
         })
-        Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineTipsSend)
         onClose?.()
     }, [
         sendTip,

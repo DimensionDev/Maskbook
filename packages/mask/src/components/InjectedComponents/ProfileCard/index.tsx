@@ -20,6 +20,8 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { DefaultWeb3ContextProvider, ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
 import { useI18N } from '../../../utils/index.js'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventType, EventID } from '@masknet/web3-telemetry/types'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
     identity: SocialIdentity
@@ -152,6 +154,12 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
     const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
     const component = useMemo(() => {
+        if (currentTab === `${PluginID.RSS3}_Social`)
+            Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineHoverUserSocialSwitchTo)
+        if (currentTab === `${PluginID.RSS3}_Activities`)
+            Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineHoverUserActivitiesSwitchTo)
+        if (currentTab === `${PluginID.RSS3}_Donation`)
+            Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineHoverUserDonationsSwitchTo)
         const Component = getProfileCardTabContent(currentTab)
         return <Component identity={identity} socialAccount={selectedSocialAccount} />
     }, [currentTab, identity?.publicKey, selectedSocialAccount])

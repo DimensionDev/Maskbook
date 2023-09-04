@@ -25,6 +25,7 @@ export enum EventID {
     EntryAppSwapOpen = 'entry_app_swap_open',
     EntryAppApprovalOpen = 'entry_app_approval_open',
     EntryAppCheckOpen = 'entry_app_check_open',
+    EntryAppFileOpen = 'entry_app_file_open',
     EntryTimelineDsearchToken = 'entry_timeline_dsearch_token',
     EntryTimelineDsearchNft = 'entry_timeline_dsearch_nft',
     EntryTimelineDsearchAddress = 'entry_timeline_dsearch_address',

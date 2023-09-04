@@ -16,6 +16,8 @@ import { SelectNetworkSidebar } from '../SelectNetworkSidebar/index.js'
 import { CollectionsContext } from './CollectionsProvider.js'
 import { useChainRuntime } from './ChainRuntimeProvider.js'
 import { CollectionHeader } from './CollectionHeader.js'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap = 1.5 }) => {
     const gapIsNumber = typeof gap === 'number'
@@ -94,6 +96,7 @@ export interface CollectionListProps
     pendingAdditionalAssetCount?: number
     emptyText?: ReactNode
     scrollElementRef?: RefObject<HTMLElement>
+    from?: 'web3Profile' | 'profileCard'
     onChainChange?: (chainId?: Web3Helper.ChainIdAll) => void
     onCollectionChange?: (collectionId: string | undefined) => void
 }
@@ -113,6 +116,7 @@ export const CollectionList = memo(function CollectionList({
     onItemClick,
     onChainChange,
     onCollectionChange,
+    from,
     ...rest
 }: CollectionListProps) {
     const t = useSharedI18N()
@@ -128,6 +132,10 @@ export const CollectionList = memo(function CollectionList({
             onChainChange?.(chainId)
             setCurrentCollectionId(undefined)
             onCollectionChange?.(undefined)
+            if (from === 'profileCard')
+                Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineHoverUserNftSwitchChain)
+            if (from === 'web3Profile')
+                Telemetry.captureEvent(EventType.Access, EventID.EntryProfileUserNftsSwitchChain)
         },
         [onChainChange],
     )

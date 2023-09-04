@@ -2,8 +2,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { Box } from '@mui/material'
 import { NetworkPluginID, type SocialAccount, type SocialIdentity, SocialAddressType } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { DefaultWeb3ContextProvider, useMountReport } from '@masknet/web3-hooks-base'
-import { EventID } from '@masknet/web3-telemetry/types'
+import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import { base } from '../base.js'
@@ -23,17 +22,6 @@ const createProfileTabConfig = (label: string, props: FeedPageProps, priority = 
         UI: {
             TabContent: ({ socialAccount }) => {
                 const key = [socialAccount?.address ?? '-', props.tag ?? '-'].join('_')
-
-                useMountReport(() => {
-                    switch (props.tag) {
-                        case RSS3BaseAPI.Tag.Donation:
-                            return EventID.EntryTimelineHoverUserDonationsSwitchTo
-                        case RSS3BaseAPI.Tag.Social:
-                            return EventID.EntryTimelineHoverUserSocialSwitchTo
-                        default:
-                            return EventID.EntryTimelineHoverUserActivitiesSwitchTo
-                    }
-                })
 
                 return (
                     <DefaultWeb3ContextProvider>
@@ -66,17 +54,6 @@ const createSearchTabConfig = (
                     supportedAddressTypes: [SocialAddressType.ENS],
                 }
                 const key = [socialAccount?.address ?? '-', props.tag ?? '-'].join('_')
-
-                useMountReport(() => {
-                    switch (props.tag) {
-                        case RSS3BaseAPI.Tag.Donation:
-                            return EventID.EntryProfileUserDonationsSwitchTo
-                        case RSS3BaseAPI.Tag.Social:
-                            return EventID.EntryProfileUserSocialSwitchTo
-                        default:
-                            return EventID.EntryProfileUserActivitiesSwitchTo
-                    }
-                })
 
                 return (
                     <Box style={{ minHeight: 300 }}>

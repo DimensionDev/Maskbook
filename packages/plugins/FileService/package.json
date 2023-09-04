@@ -24,6 +24,7 @@
     "@masknet/typed-message-react": "workspace:^",
     "@masknet/web3-providers": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
+    "@masknet/web3-telemetry": "workspace:^",
     "@msgpack/msgpack": "^3.0.0-beta2",
     "@servie/events": "^3.0.0",
     "arweave": "^1.13.6",

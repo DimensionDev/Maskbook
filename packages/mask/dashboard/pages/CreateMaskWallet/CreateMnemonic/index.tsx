@@ -18,6 +18,8 @@ import { useDashboardI18N } from '../../../locales/index.js'
 import { ComponentToPrint } from './ComponentToPrint.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useWallets } from '@masknet/web3-hooks-base'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventType, EventID } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -204,7 +206,7 @@ const CreateMnemonic = memo(function CreateMnemonic() {
                 address,
             },
         ])
-
+        Telemetry.captureEvent(EventType.Access, EventID.EntryPopupWalletCreate)
         navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
     }, [walletName, words, location.state?.isReset, location.state?.password])
 
