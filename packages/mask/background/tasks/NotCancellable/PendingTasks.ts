@@ -6,10 +6,11 @@ function checkMessages(messages: Array<ReasonableMessage<Request, Response>>) {
         .filter((x) => x.state === MessageStateType.NOT_DEPEND)
         .sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime())
     const length = pendingTasks.length
-    browser.browserAction.setBadgeBackgroundColor({
+    const action = browser.action || browser.browserAction
+    action.setBadgeBackgroundColor({
         color: '#d32f2f',
     })
-    browser.browserAction.setBadgeText({
+    action.setBadgeText({
         text: length ? length.toString() : '',
     })
 }
