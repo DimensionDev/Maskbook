@@ -22,6 +22,7 @@ jobs:
         with:
           node-version: "20"
       - name: Check Spell
+        if: ${{ github.event.pull_request }}
         run: |
           git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
           git diff --name-only origin/${{ github.event.pull_request.base.ref }} | xargs npx cspell lint --no-must-find-files --no-progress
