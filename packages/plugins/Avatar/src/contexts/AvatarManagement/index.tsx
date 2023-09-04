@@ -71,16 +71,13 @@ export const AvatarManagementProvider = memo(({ children, socialIdentity }: Prop
     const [selectedTokenInfo, setSelectedTokenInfo] = useState<SelectTokenInfo>()
 
     const contextValue: AvatarManagementContextOptions = useMemo(() => {
-        setProof(first(nextIDPersonas))
-        setProofs(nextIDWallets)
-        setSelectedAccount(account || first(nextIDWallets)?.identity || '')
         return {
             pfpType: PFP_TYPE.PFP,
-            targetAccount: selectedAccount,
+            targetAccount: selectedAccount ?? (account || first(nextIDWallets)?.identity || ''),
             setTargetAccount: setSelectedAccount,
-            proof,
+            proof: proof ?? first(nextIDPersonas),
             setProof,
-            proofs: proofs.length ? proofs : nextIDWallets,
+            proofs: proofs ?? nextIDWallets,
             setProofs,
             tokenInfo,
             setTokenInfo,
