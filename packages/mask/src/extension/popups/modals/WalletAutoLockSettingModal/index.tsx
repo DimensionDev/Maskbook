@@ -11,7 +11,8 @@ import Services from '#services'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { useWalletAutoLockTime } from '../../pages/Wallet/hooks/useWalletAutoLockTime.js'
-import { isPositive } from '@masknet/web3-shared-base'
+import { isPositive, isZero } from '@masknet/web3-shared-base'
+import { isEmpty, isUndefined } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -54,7 +55,7 @@ enum OptionName {
     NEVER = 'Never',
 }
 
-const DEFAULT_MIN_AUTO_LOCKER_TIME = 1000 * 60 * 60 * 24 // One day
+const DEFAULT_MIN_AUTO_LOCKER_TIME = 1000 * 60 * 15 // 15 minutes
 
 const ONE_DAY_IN_MILLISECONDS = hoursToMilliseconds(24)
 
@@ -68,11 +69,11 @@ function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
 
     const initialTime = millisecondsToMinutes(autoLockerTime).toString()
 
-    const error = Number.isNaN(Number(time ?? initialTime))
+    const error = Number.isNaN(isUndefined(time) ? initialTime : time)
 
     const [{ loading }, setAutoLockerTime] = useAsyncFn(async (time: number) => {
         await Services.Wallet.setAutoLockerTime(
-            time > ONE_DAY_IN_MILLISECONDS || time === 0 ? 0 : Math.max(time, DEFAULT_MIN_AUTO_LOCKER_TIME),
+            time > ONE_DAY_IN_MILLISECONDS || isZero(time) ? 0 : Math.max(time, DEFAULT_MIN_AUTO_LOCKER_TIME),
         )
         props.onClose?.()
     }, [])
@@ -115,7 +116,8 @@ function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
                     error={error}
                     fullWidth
                     placeholder="1440"
-                    value={time || initialTime}
+                    value={isUndefined(time) ? (!isZero(initialTime) ? initialTime : '') : time}
+                    disabled={!isUndefined(time) ? isEmpty(time) : isZero(initialTime)}
                     onChange={(e) => {
                         if (!e.target.value) setTime('')
                         if (!isPositive(e.target.value)) {

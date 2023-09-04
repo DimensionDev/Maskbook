@@ -118,7 +118,8 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
 
         if (!pathIndexes.length) return
 
-        await handlePasswordAndWallets(password, isReset)
+        const result = await handlePasswordAndWallets(password, isReset)
+        if (!result) return
 
         const firstPath = first(pathIndexes)
         const firstWallet = await WalletServiceRef.value.recoverWalletFromMnemonicWords(
