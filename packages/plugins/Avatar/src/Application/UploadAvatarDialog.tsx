@@ -107,7 +107,7 @@ export function UploadAvatarDialog() {
         }, 'image/png')
     }, [account, editor, identifier, navigate, currentPersona, proof, isBindAccount, saveAvatar])
 
-    if (!account || !image || !token) return null
+    if (!account || !image || !token || !proof) return null
 
     return (
         <>
