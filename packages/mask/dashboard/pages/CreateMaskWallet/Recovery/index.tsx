@@ -130,7 +130,8 @@ const Recovery = memo(function Recovery() {
     const handleRestoreFromPrivateKey = useCallback(
         async (data: FormInputs, onError: UseFormSetError<FormInputs>) => {
             try {
-                await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
+                const result = await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
+                if (!result) return
                 const address = await WalletServiceRef.value.generateAddressFromPrivateKey(data.privateKey)
                 const ens = await NameService?.reverse?.(address)
                 const walletName = ens || newWalletName
@@ -156,7 +157,8 @@ const Recovery = memo(function Recovery() {
     const onRestore = useCallback(
         async (keyStoreContent: string, keyStorePassword: string) => {
             try {
-                await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
+                const result = await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
+                if (!result) return
                 const jsonAddress = await WalletServiceRef.value.generateAddressFromKeyStoreJSON(
                     keyStoreContent,
                     keyStorePassword,

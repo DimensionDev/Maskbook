@@ -29,12 +29,11 @@ function useContext() {
             if (!hasPassword) await WalletServiceRef.value.setDefaultPassword()
             const isLocked = await WalletServiceRef.value.isLocked()
 
-            if (hasPassword && isLocked) {
-                await Services.Helper.openPopupWindow(PopupRoutes.Unlock, { toBeClose: true })
-                return false
-            }
             if (isReset) {
                 await resetWallets(password, isReset)
+            } else if (hasPassword && isLocked) {
+                await Services.Helper.openPopupWindow(PopupRoutes.Unlock, { toBeClose: true })
+                return false
             } else if (password && !hasPassword) {
                 await WalletServiceRef.value.changePassword(getDefaultWalletPassword(), password)
             }
