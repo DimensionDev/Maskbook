@@ -1,7 +1,7 @@
 import { ImportSource, type Wallet } from '@masknet/shared-base'
 import { useWallets } from '@masknet/web3-hooks-base'
 import { groupBy, uniqBy } from 'lodash-es'
-import Services from '../../service.js'
+import Services from '#services'
 import { useAsync } from 'react-use'
 
 export function useWalletGroup() {
