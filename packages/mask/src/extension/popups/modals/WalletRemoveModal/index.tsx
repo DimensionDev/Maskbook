@@ -38,9 +38,14 @@ function WalletRemoveDrawer({ wallet, error, password, setPassword, setError, ..
                 setError(t('create_wallet_incorrect_payment_password'))
                 return
             }
-            await Web3.removeWallet?.(wallet.address, password, { providerType: ProviderType.MaskWallet })
             const index = wallets.findIndex((x) => isSameAddress(x.address, wallet.address))
-            const nextWallet = wallets[index + 1] || wallets[0]
+            const remainWallets = wallets.filter(
+                (x) => !isSameAddress(x.address, wallet.address) && !isSameAddress(x.owner, wallet.address),
+            )
+            let nextWallet = wallets[index + 1] || wallets[0]
+            if (!remainWallets.includes(nextWallet)) nextWallet = remainWallets[0]
+
+            await Web3.removeWallet?.(wallet.address, password, { providerType: ProviderType.MaskWallet })
             await Web3.connect({
                 providerType: ProviderType.MaskWallet,
                 account: nextWallet.address,
