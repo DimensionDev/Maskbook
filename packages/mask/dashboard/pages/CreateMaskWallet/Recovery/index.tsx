@@ -20,7 +20,7 @@ import { RecoveryContext, RecoveryProvider } from '../../../contexts/index.js'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { ResetWalletContext } from '../context.js'
 import { Telemetry } from '@masknet/web3-telemetry'
-import { EventID, EventType } from '@masknet/web3-telemetry/dist/types'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
