@@ -17,8 +17,8 @@ const importAES256 = CheckedError.withErr(importAES, CryptoException.InvalidCryp
 const importEC = CheckedError.withErr(importEC_Key, CryptoException.InvalidCryptoKey)
 export async function parse37(input: Uint8Array): PayloadParserResult {
     const signatureContainer = parseSignatureContainer(input)
-    if (signatureContainer.err) return signatureContainer
-    const { payload, signature } = signatureContainer.val
+    if (signatureContainer.isErr()) return signatureContainer
+    const { payload, signature } = signatureContainer.value
     return parsePayload37(payload, signature)
 }
 
@@ -98,8 +98,8 @@ function importAsymmetryKey(algr: unknown, key: unknown, name: string) {
                     pubKey = await decompressK256Raw(pubKey)
                 }
                 const key = await importEC(pubKey, algr)
-                if (key.err) return key
-                return Ok<EC_Key>({ algr, key: key.val })
+                if (key.isErr()) return key
+                return Ok<EC_Key>({ algr, key: key.value })
             }
         }
         return new CheckedError(CryptoException.UnsupportedAlgorithm, null).toErr()

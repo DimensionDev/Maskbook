@@ -1,17 +1,13 @@
 export function isSameURL(a: string | URL | undefined, b: string | URL | undefined): boolean {
     if (!a || !b) return false
 
-    // Parse the input URLs if they are strings
-    let urlA: URL
-    let urlB: URL
+    // If either URL is invalid, return false
+    if (typeof a === 'string' && !URL.canParse(a)) return false
+    if (typeof b === 'string' && !URL.canParse(b)) return false
 
-    try {
-        urlA = typeof a === 'string' ? new URL(a) : a
-        urlB = typeof b === 'string' ? new URL(b) : b
-    } catch (error) {
-        // If either URL is invalid, return false
-        return false
-    }
+    // Parse the input URLs if they are strings
+    const urlA = typeof a === 'string' ? new URL(a) : a
+    const urlB = typeof b === 'string' ? new URL(b) : b
 
     // Compare the important parts of the URLs
     if (urlA.protocol !== urlB.protocol || urlA.hostname !== urlB.hostname || urlA.pathname !== urlB.pathname) {

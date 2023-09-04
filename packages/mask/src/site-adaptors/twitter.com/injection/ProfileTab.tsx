@@ -23,7 +23,7 @@ import {
     nextTabListSelector,
 } from '../utils/selector.js'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI.js'
-import Services from '../../../extension/service.js'
+import Services from '#services'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js'
 import { startWatch } from '../../../utils/startWatch.js'
 

@@ -1,6 +1,6 @@
 import { useSubscription } from 'use-subscription'
 import { MaskMessages, createSubscriptionFromAsyncSuspense } from '@masknet/shared-base'
-import Services from '../../extension/service.js'
+import Services from '#services'
 
 const personas = createSubscriptionFromAsyncSuspense(
     () => Services.Identity.queryOwnedPersonaInformation(true),

@@ -5,9 +5,10 @@ import { createWeb3FromURL } from '../../../helpers/createWeb3FromURL.js'
 import { createWeb3ProviderFromURL } from '../../../helpers/createWeb3ProviderFromURL.js'
 
 export class RequestReadonlyAPI {
-    constructor(protected options?: ConnectionOptions) {}
-
-    protected ConnectionOptions = new ConnectionOptionsReadonlyAPI(this.options)
+    constructor(protected options?: ConnectionOptions) {
+        this.ConnectionOptions = new ConnectionOptionsReadonlyAPI(options)
+    }
+    protected ConnectionOptions
 
     get request() {
         return async <T>(requestArguments: RequestArguments, initial?: ConnectionOptions) => {

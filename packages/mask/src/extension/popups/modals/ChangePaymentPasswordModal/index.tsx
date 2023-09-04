@@ -1,13 +1,13 @@
-import { forwardRef, useState } from 'react'
-import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
-import { Box, Typography, useTheme, type InputProps } from '@mui/material'
-import { useAsyncFn } from 'react-use'
-import { type SingletonModalRefCreator } from '@masknet/shared-base'
-import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
-import { useSingletonModal } from '@masknet/shared-base-ui'
-import { PasswordField } from '../../components/PasswordField/index.js'
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
+import { type SingletonModalRefCreator } from '@masknet/shared-base'
+import { useSingletonModal } from '@masknet/shared-base-ui'
+import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { Box, Typography, useTheme, type InputProps } from '@mui/material'
+import { forwardRef, useState } from 'react'
+import { useAsyncFn } from 'react-use'
+import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { PasswordField } from '../../components/PasswordField/index.js'
+import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -71,7 +71,6 @@ function ChangePaymentPasswordDrawer({
     const inputProps: InputProps = {
         endAdornment: null,
         disableUnderline: true,
-        autoFocus: true,
         inputProps: {
             maxLength: 20,
         },

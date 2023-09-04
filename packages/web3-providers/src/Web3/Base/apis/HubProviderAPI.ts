@@ -11,18 +11,19 @@ export class HubProviderAPI_Base<
     Transaction,
     TransactionParameter,
 > {
-    constructor(protected options?: HubOptions_Base<ChainId>) {}
-
-    protected HubOptions = new HubOptionsAPI_Base<
-        ChainId,
-        SchemaType,
-        ProviderType,
-        NetworkType,
-        MessageRequest,
-        MessageResponse,
-        Transaction,
-        TransactionParameter
-    >(this.options)
+    constructor(protected options?: HubOptions_Base<ChainId>) {
+        this.HubOptions = new HubOptionsAPI_Base<
+            ChainId,
+            SchemaType,
+            ProviderType,
+            NetworkType,
+            MessageRequest,
+            MessageResponse,
+            Transaction,
+            TransactionParameter
+        >(options)
+    }
+    protected HubOptions
 
     protected getPredicateProviders<P>(
         providers: Partial<Record<SourceType, P>>,

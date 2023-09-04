@@ -14,7 +14,7 @@ export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostI
             if (!content) return
 
             for (const a of content.querySelectorAll('a')) {
-                if (TwitterDecoder(a.title).some) hideDOM(a)
+                if (TwitterDecoder(a.title).isSome()) hideDOM(a)
 
                 if (/^https?:\/\/mask(\.io|book\.com)$/i.test(a.title)) hideDOM(a)
             }

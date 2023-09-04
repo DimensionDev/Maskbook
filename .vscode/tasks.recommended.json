@@ -20,15 +20,6 @@
             "script": "start",
             "isBackground": true,
             "group": "build",
-            "path": "packages/dashboard/",
-            "label": "Develop dashboard",
-            "problemMatcher": []
-        },
-        {
-            "type": "npm",
-            "script": "start",
-            "isBackground": true,
-            "group": "build",
             "path": "packages/theme/",
             "label": "Develop theme",
             "problemMatcher": []

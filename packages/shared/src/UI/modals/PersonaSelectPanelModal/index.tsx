@@ -8,7 +8,6 @@ export interface PersonaSelectPanelModalOpenProps {
     finishTarget?: string
     enableVerify?: boolean
     position?: PositionOption
-    target?: string
 }
 
 export interface PersonaSelectPanelModalProps {}

@@ -59,12 +59,14 @@ export class SolanaConnectionAPI
     private MagicEden = new MagicEdenAPI()
     private FungibleToken = new SolanaFungibleTokenAPI()
 
-    constructor(private options?: ConnectionOptions) {}
-
-    private Web3 = new SolanaWeb3API(this.options)
-    private Transfer = new SolanaTransferAPI(this.options)
-    private ConnectionOptions = new SolanaConnectionOptionsAPI(this.options)
-
+    constructor(options?: ConnectionOptions) {
+        this.Web3 = new SolanaWeb3API(options)
+        this.Transfer = new SolanaTransferAPI(options)
+        this.ConnectionOptions = new SolanaConnectionOptionsAPI(options)
+    }
+    private Web3
+    private Transfer
+    private ConnectionOptions
     getAccount(initial?: ConnectionOptions | undefined): Promise<string> {
         const options = this.ConnectionOptions.fill(initial)
         return Promise.resolve(options.account)

@@ -36,7 +36,7 @@ function createGun() {
         }
         private declare abort: () => void
         private declare keepAlive: () => void
-        declare timer: NodeJS.Timer | undefined
+        declare timer: ReturnType<typeof setTimeout> | undefined
         override send(data: any) {
             this.keepAlive()
             super.send(data)

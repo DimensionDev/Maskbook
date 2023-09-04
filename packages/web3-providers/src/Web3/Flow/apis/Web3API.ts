@@ -10,9 +10,10 @@ const createWeb3SDK = memoize(
 )
 
 export class FlowWeb3API {
-    constructor(private options?: ConnectionOptions) {}
-
-    private ConnectionOptions = new FlowConnectionOptionsAPI(this.options)
+    constructor(private options?: ConnectionOptions) {
+        this.ConnectionOptions = new FlowConnectionOptionsAPI(this.options)
+    }
+    private ConnectionOptions
 
     getWeb3(initial?: ConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)

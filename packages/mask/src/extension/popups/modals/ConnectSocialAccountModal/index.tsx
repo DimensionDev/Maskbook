@@ -7,7 +7,7 @@ import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
 import { ConnectSocialAccounts } from '../../components/ConnectSocialAccounts/index.js'
 import { useSupportSocialNetworks } from '../../hooks/index.js'
-import Services from '../../../service.js'
+import Services from '#services'
 import { EventMap } from '../../pages/Personas/common.js'
 
 export const ConnectSocialAccountModal = memo<ActionModalBaseProps>(function ConnectSocialAccountModal({ ...rest }) {

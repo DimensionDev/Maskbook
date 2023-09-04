@@ -25,8 +25,8 @@ export async function get_v38PublicSharedCryptoKey() {
     if (v38PublicSharedCryptoKey) return Ok(v38PublicSharedCryptoKey)
 
     const imported = await import_AES_GCM_256(v38PublicSharedJwk)
-    if (imported.err) return imported
-    v38PublicSharedCryptoKey = imported.val
+    if (imported.isErr()) return imported
+    v38PublicSharedCryptoKey = imported.value
     return Ok(v38PublicSharedCryptoKey)
 }
 
@@ -48,6 +48,6 @@ export function parseAuthor(network: unknown, id: unknown): PayloadParseResult.P
     if (net.includes('/')) return new CheckedError(PayloadException.InvalidPayload, 'Invalid network').toErr()
 
     const identifier = ProfileIdentifier.of(net, id)
-    if (identifier.some) return OptionalResult.Some(identifier.val)
+    if (identifier.isSome()) return OptionalResult.Some(identifier.value)
     return OptionalResult.None
 }

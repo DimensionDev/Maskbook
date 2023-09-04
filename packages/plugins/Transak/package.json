@@ -23,6 +23,6 @@
     "@types/json-stable-stringify": "^1.0.34",
     "json-stable-stringify": "^1.0.2",
     "react-use": "^17.4.0",
-    "ts-results": "^3.3.0"
+    "ts-results-es": "^4.0.0"
   }
 }

@@ -4,7 +4,7 @@ import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { Box, Button, Link, Typography, useTheme } from '@mui/material'
 
 import { PersonaContext } from '@masknet/shared'
-import Services from '../../../../service.js'
+import Services from '#services'
 import { useAsync, useCopyToClipboard } from 'react-use'
 import { Trans } from 'react-i18next'
 import { BottomController } from '../../../components/BottomController/index.js'

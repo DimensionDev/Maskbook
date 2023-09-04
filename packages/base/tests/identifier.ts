@@ -66,15 +66,15 @@ describe('ProfileIdentifier', () => {
     })
 
     test('.from()', () => {
-        expect(ProfileIdentifier.from(undefined).none).toBe(true)
-        expect(ProfileIdentifier.from(null).none).toBe(true)
-        expect(ProfileIdentifier.from('other:a.com/test').none).toBe(true)
-        expect(ProfileIdentifier.from('person:localhost/$unknown').none).toBe(true)
+        expect(ProfileIdentifier.from(undefined).isNone()).toBe(true)
+        expect(ProfileIdentifier.from(null).isNone()).toBe(true)
+        expect(ProfileIdentifier.from('other:a.com/test').isNone()).toBe(true)
+        expect(ProfileIdentifier.from('person:localhost/$unknown').isNone()).toBe(true)
     })
 
     test('.of()', () => {
-        expect(ProfileIdentifier.of(null, 'test_twitter_1').none).toBe(true)
-        expect(ProfileIdentifier.of('twitter.com', null).none).toBe(true)
-        expect(ProfileIdentifier.of('localhost', '$unknown').none).toBe(true)
+        expect(ProfileIdentifier.of(null, 'test_twitter_1').isNone()).toBe(true)
+        expect(ProfileIdentifier.of('twitter.com', null).isNone()).toBe(true)
+        expect(ProfileIdentifier.of('localhost', '$unknown').isNone()).toBe(true)
     })
 })

@@ -12,8 +12,8 @@ async function cleanRelationDB(anotherList: Set<ProfileIdentifier>) {
     await consistentPersonaDBWriteAccess(async (t) => {
         for await (const x of t.objectStore('relations')) {
             const profileIdentifier = ProfileIdentifier.from(x.value.profile)
-            if (profileIdentifier.some) {
-                if (anotherList.has(profileIdentifier.val)) x.delete()
+            if (profileIdentifier.isSome()) {
+                if (anotherList.has(profileIdentifier.value)) x.delete()
             }
         }
     })
@@ -31,7 +31,7 @@ async function cleanProfileWithNoLinkedPersona(signal: AbortSignal) {
             if (x.value.linkedPersona) continue
             if (expired < x.value.updatedAt) continue
             const id = ProfileIdentifier.from(x.value.identifier)
-            if (id.some) cleanedList.add(id.val)
+            if (id.isSome()) cleanedList.add(id.value)
             await x.delete()
         }
     }, false)

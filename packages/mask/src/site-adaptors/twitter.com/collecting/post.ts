@@ -15,7 +15,7 @@ import type { SiteAdaptorUI } from '@masknet/types'
 import type { EventListener } from '@servie/events'
 import { memoize, noop } from 'lodash-es'
 import utils from 'web3-utils'
-import Services from '../../../extension/service.js'
+import Services from '#services'
 import { creator, activatedSiteAdaptor_state } from '../../../site-adaptor-infra/index.js'
 import { createRefsForCreatePostContext } from '../../../site-adaptor-infra/utils/create-post-context.js'
 import { untilElementAvailable } from '../../../utils/dom.js'
@@ -178,8 +178,8 @@ export function collectVerificationPost(keyword: string) {
         const content = extractTextFromTypedMessage(postContent)
         const isVerified =
             postId &&
-            content.some &&
-            content.val.toLowerCase().replaceAll(/\r\n|\n|\r/gm, '') ===
+            content.isSome() &&
+            content.value.toLowerCase().replaceAll(/\r\n|\n|\r/gm, '') ===
                 keyword.toLowerCase().replaceAll(/\r\n|\n|\r/gm, '')
 
         if (isVerified && userId) {

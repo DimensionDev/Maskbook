@@ -27,7 +27,7 @@ async function main(version: string, data: string): Promise<false | TypedMessage
     const payload = version === '1' ? await parsePayloadText(data) : await parsePayloadBinary(data)
     if (!payload) return false
 
-    if (payload.encryption.ok && payload.encryption.val.type === 'E2E')
+    if (payload.encryption.isOk() && payload.encryption.value.type === 'E2E')
         return new DecryptError(DecryptErrorReasons.PrivateKeyNotFound, undefined)
 
     return decrypt(data, payload)

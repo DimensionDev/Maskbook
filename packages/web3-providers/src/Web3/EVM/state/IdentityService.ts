@@ -182,8 +182,8 @@ export class IdentityService extends IdentityServiceState<ChainId> {
             PluginID.Avatar,
         )
 
-        if (!response.ok || !response.val.ownerAddress) return
-        return this.createSocialAddress(SocialAddressType.Mask, response.val.ownerAddress)
+        if (!response.isOk() || !response.value.ownerAddress) return
+        return this.createSocialAddress(SocialAddressType.Mask, response.value.ownerAddress)
     }
 
     /** Read a social address from NextID. */

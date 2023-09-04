@@ -20,11 +20,13 @@ export function FormattedCurrency({
 }: FormattedCurrencyProps) {
     const currentSign = useCurrencyType()
     const { data: currentFiatCurrencyRate } = useFiatCurrencyRate()
+    const rate = options?.fiatCurrencyRate ?? (sign === CurrencyType.USD ? 1 : currentFiatCurrencyRate)
+
     return (
         <Fragment>
-            {formatter(value, sign ?? currentSign, {
+            {formatter(value, rate === 1 ? CurrencyType.USD : sign ?? currentSign, {
                 ...options,
-                fiatCurrencyRate: options?.fiatCurrencyRate ?? sign === CurrencyType.USD ? 1 : currentFiatCurrencyRate,
+                fiatCurrencyRate: rate,
             })}
         </Fragment>
     )

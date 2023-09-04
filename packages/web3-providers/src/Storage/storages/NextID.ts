@@ -39,17 +39,17 @@ export class NextIDStorage implements StorageAPI.Storage {
             key,
         )
 
-        if (!response.ok) return
+        if (!response.isOk()) return
 
-        return response.val
+        return response.value
     }
 
     async getAll<T>(key: string) {
         const response = await this.Storage.getAllByIdentity<T>(this.platform, this.proofIdentity, key)
 
-        if (!response.ok) return
+        if (!response.isOk()) return
 
-        return response.val
+        return response.value
     }
 
     async set<T>(key: string, value: T) {
@@ -63,18 +63,18 @@ export class NextIDStorage implements StorageAPI.Storage {
             key,
         )
 
-        if (!payload?.ok) throw new Error('Invalid payload Error')
+        if (!payload?.isOk()) throw new Error('Invalid payload Error')
 
-        const signature = await this.signWithPersona?.(SignType.Message, payload.val.signPayload, this.signer, true)
+        const signature = await this.signWithPersona?.(SignType.Message, payload.value.signPayload, this.signer, true)
         if (!signature) throw new Error('Failed to sign payload.')
 
         await this.Storage.set(
-            payload.val.uuid,
+            payload.value.uuid,
             this.publicKeyAsHex,
             toBase64(fromHex(signature)),
             this.platform,
             this.proofIdentity,
-            payload.val.createdAt,
+            payload.value.createdAt,
             value,
             key,
         )

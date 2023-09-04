@@ -13,7 +13,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useTitle, PopupContext } from '../../../hooks/index.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { useWalletLockStatus } from '../hooks/useWalletLockStatus.js'
-import Services from '../../../../service.js'
+import Services from '#services'
 
 const useStyles = makeStyles()((theme) => ({
     box: {

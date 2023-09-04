@@ -6,7 +6,7 @@ import { useI18N } from '../../../../../utils/index.js'
 import { Trans } from 'react-i18next'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { PopupRoutes } from '@masknet/shared-base'
-import Services from '../../../../service.js'
+import Services from '#services'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

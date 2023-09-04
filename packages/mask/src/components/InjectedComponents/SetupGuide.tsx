@@ -16,7 +16,7 @@ import {
 } from '@masknet/shared-base'
 import { useI18N } from '../../utils/index.js'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
-import Services from '../../extension/service.js'
+import Services from '#services'
 import { FindUsername } from './SetupGuide/FindUsername.js'
 import { VerifyNextID } from './SetupGuide/VerifyNextID.js'
 import { PinExtension } from './SetupGuide/PinExtension.js'
@@ -68,14 +68,14 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     const onConnect = useCallback(async () => {
         const id = ProfileIdentifier.of(activatedSiteAdaptorUI!.networkIdentifier, userId)
-        if (!id.some) return
+        if (!id.isSome()) return
         // attach persona with site profile
-        await Services.Identity.attachProfile(id.val, persona, {
+        await Services.Identity.attachProfile(id.value, persona, {
             connectionConfirmState: 'confirmed',
         })
 
         if (currentIdentityResolved.avatar) {
-            await Services.Identity.updateProfileInfo(id.val, {
+            await Services.Identity.updateProfileInfo(id.value, {
                 avatarURL: currentIdentityResolved.avatar,
             })
         }

@@ -27,13 +27,13 @@
     "@masknet/web3-telemetry": "workspace:^",
     "@types/react-avatar-editor": "^13.0.0",
     "@types/use-subscription": "^1.0.0",
-    "@types/uuid": "^9.0.2",
+    "@types/uuid": "^9.0.3",
     "bignumber.js": "9.1.1",
     "lru-cache": "^10.0.0",
     "react-avatar-editor": "^13.0.0",
     "react-router-dom": "^6.14.2",
     "react-use": "^17.4.0",
-    "ts-results": "^3.3.0",
+    "ts-results-es": "^4.0.0",
     "use-subscription": "^1.8.0",
     "uuid": "^9.0.0"
   }

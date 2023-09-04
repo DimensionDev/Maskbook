@@ -41,9 +41,10 @@ export class HubCreatorAPI_Base<T extends NetworkPluginID> {
             Web3Helper.Definition[T]['Transaction'],
             Web3Helper.Definition[T]['TransactionParameter']
         >,
-    ) {}
-
-    private createCached = memoize(this.creator, resolver<Web3Helper.Definition[T]['ChainId']>)
+    ) {
+        this.createCached = memoize(creator, resolver<Web3Helper.Definition[T]['ChainId']>)
+    }
+    private createCached
 
     create(initial?: HubOptions_Base<Web3Helper.Definition[T]['ChainId']>) {
         return this.createCached(initial)

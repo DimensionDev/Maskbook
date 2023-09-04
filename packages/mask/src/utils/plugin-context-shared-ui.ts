@@ -10,7 +10,7 @@ import {
     type ECKeyIdentifier,
 } from '@masknet/shared-base'
 import { WalletConnectQRCodeModal } from '@masknet/shared'
-import Services from '../extension/service.js'
+import Services from '#services'
 import type { PartialSharedUIContext } from '../../shared/plugin-infra/host.js'
 
 export const RestPartOfPluginUIContextShared: Omit<

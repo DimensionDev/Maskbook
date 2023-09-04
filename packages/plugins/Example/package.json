@@ -15,6 +15,6 @@
   "dependencies": {
     "@masknet/plugin-infra": "workspace:^",
     "@masknet/shared-base": "workspace:^",
-    "ts-results": "^3.3.0"
+    "ts-results-es": "^4.0.0"
   }
 }

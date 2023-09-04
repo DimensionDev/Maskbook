@@ -101,8 +101,8 @@ async function getAvatarFromNextIDStorage(
         PLUGIN_ID,
     )
 
-    if (!avatarId && response.ok) return response.val
-    if (response.ok && response.val?.avatarId === avatarId) return response.val
+    if (!avatarId && response.isOk()) return response.value
+    if (response.isOk() && response.value?.avatarId === avatarId) return response.value
     return
 }
 

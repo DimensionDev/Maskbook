@@ -26,8 +26,8 @@ function parse(input: string | null | undefined): Option<Identifier> {
     } else if (input.startsWith('post:')) {
         const [postID, ...rest] = input.slice('post:'.length).split('/')
         const inner = parse(rest.join('/'))
-        if (inner.none) return None
-        if (inner.val instanceof ProfileIdentifier) return Some(new PostIdentifier(inner.val, postID))
+        if (inner.isNone()) return None
+        if (inner.value instanceof ProfileIdentifier) return Some(new PostIdentifier(inner.value, postID))
         return None
     } else if (input.startsWith('post_iv:')) {
         const [network, postIV] = input.slice('post_iv:'.length).split('/')

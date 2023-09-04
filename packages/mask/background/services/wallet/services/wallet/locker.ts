@@ -25,7 +25,7 @@ export async function unlockWallet(unverifiedPassword: string) {
     }
 }
 
-let autoLockTimer: NodeJS.Timeout | undefined
+let autoLockTimer: ReturnType<typeof setTimeout> | undefined
 
 export async function setAutoLockTimer() {
     const autoLockDuration = await getAutoLockerDuration()

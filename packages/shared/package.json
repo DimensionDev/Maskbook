@@ -63,10 +63,10 @@
     "web3-core-helpers": "1.8.0",
     "web3-utils": "1.8.0",
     "webextension-polyfill": "^0.10.0",
-    "zod": "^3.21.4"
+    "zod": "^3.22.2"
   },
   "devDependencies": {
-    "@types/qrcode": "^1.5.1",
+    "@types/qrcode": "^1.5.2",
     "@types/remarkable": "^2.0.3",
     "@types/use-subscription": "^1.0.0"
   }

@@ -2,7 +2,7 @@ import { Fragment, useContext, useEffect, useReducer } from 'react'
 import { extractTextFromTypedMessage, isTypedMessageEqual, type TypedMessage } from '@masknet/typed-message'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 
-import Services, { GeneratorServices } from '../../../extension/service.js'
+import Services, { GeneratorServices } from '#services'
 import type { DecryptionProgress, FailureDecryption, SuccessDecryption } from './types.js'
 import { DecryptPostSuccess } from './DecryptedPostSuccess.js'
 import { DecryptPostAwaiting } from './DecryptPostAwaiting.js'
@@ -57,7 +57,7 @@ function isProgressEqual(a: PossibleProgress, b: PossibleProgress) {
     if (a.type === 'success') return isTypedMessageEqual(a, b as SuccessDecryption)
     if (a.type === 'error') return a.error === (b as FailureDecryption).error
     if (a.type === 'progress') return a.progress === (b as DecryptionProgress).progress
-    safeUnreachable(a)
+    safeUnreachable(a.type)
     return false
 }
 export function DecryptPost(props: DecryptPostProps) {

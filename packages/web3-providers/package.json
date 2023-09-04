@@ -63,7 +63,7 @@
     "@solana/spl-token": "^0.1.8",
     "@solana/web3.js": "^1.75.0",
     "@types/socket.io-client": "^1.4.36",
-    "@types/uuid": "^9.0.2",
+    "@types/uuid": "^9.0.3",
     "@uniswap/sdk-core": "^3.0.1",
     "@uniswap/v2-sdk": "3.0.0-alpha.2",
     "@uniswap/v3-sdk": "3.9.0",
@@ -97,7 +97,7 @@
     "web3-eth": "1.8.0",
     "web3-eth-abi": "1.8.0",
     "web3-utils": "1.8.0",
-    "zod": "^3.21.4"
+    "zod": "^3.22.2"
   },
   "devDependencies": {
     "@types/bn.js": "^4.11.6",

@@ -245,8 +245,13 @@ function RenderEntryComponent({ application }: { application: Application }) {
             }
         }
         if (!application.entry.nextIdRequired) return
-        if (ApplicationEntryStatus.isPersonaCreated === false) return () => ApplicationEntryStatus.personaAction?.()
-        if (ApplicationEntryStatus.shouldVerifyNextId) return () => ApplicationEntryStatus.personaAction?.()
+        if (
+            ApplicationEntryStatus.isPersonaCreated === false ||
+            ApplicationEntryStatus.shouldVerifyNextId ||
+            !ApplicationEntryStatus.isPersonaConnected
+        )
+            return () => ApplicationEntryStatus.personaAction?.(application.pluginID)
+
         return
     }, [ApplicationEntryStatus, application])
 

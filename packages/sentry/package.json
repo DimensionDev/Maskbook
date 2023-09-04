@@ -1,15 +1,15 @@
 {
   "name": "@masknet/sentry-wrapper",
   "dependencies": {
-    "@sentry/browser": "7.59.3"
+    "@sentry/browser": "7.66.0"
   },
   "private": true,
   "type": "module",
   "main": "./dist/sentry.js",
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^15.1.0",
+    "@rollup/plugin-node-resolve": "^15.2.1",
     "@rollup/plugin-replace": "^5.0.2",
-    "rollup": "^3.26.3"
+    "rollup": "^3.28.1"
   },
   "scripts": {
     "build": "rollup -c rollup.config.js"

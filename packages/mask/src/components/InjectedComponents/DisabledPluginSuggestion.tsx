@@ -15,7 +15,7 @@ import { type ReactNode, useCallback } from 'react'
 import { useAsync } from 'react-use'
 import type { Option } from 'ts-results-es'
 import { useSubscription } from 'use-subscription'
-import Services from '../../extension/service.js'
+import Services from '#services'
 import { useI18N } from '../../utils/index.js'
 
 function useDisabledPlugins() {
@@ -30,10 +30,9 @@ function useDisabledPlugins() {
 export function useDisabledPluginSuggestionFromPost(postContent: Option<string>, metaLinks: readonly string[]) {
     const disabled = useDisabledPlugins().filter((x) => x.contribution?.postContent)
 
-    const { some } = postContent
     const matches = disabled.filter((x) => {
         for (const pattern of x.contribution!.postContent!) {
-            if (some && postContent.val.match(pattern)) return true
+            if (postContent.isSome() && postContent.value.match(pattern)) return true
             if (metaLinks.some((link) => link.match(pattern))) return true
         }
         return false

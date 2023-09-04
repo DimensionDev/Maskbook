@@ -17,7 +17,7 @@ import { mindsShared } from '../shared.js'
 import { postParser } from '../utils/fetch.js'
 import { postContentSelector } from '../utils/selector.js'
 import { getCurrentIdentifier } from '../../utils.js'
-import Services from '../../../extension/service.js'
+import Services from '#services'
 
 export const PostProviderMinds: SiteAdaptorUI.CollectingCapabilities.PostsProvider = {
     posts: creator.EmptyPostProviderState(),

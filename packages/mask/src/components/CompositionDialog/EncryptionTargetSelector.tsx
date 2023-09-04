@@ -12,7 +12,7 @@ import { E2EUnavailableReason } from './CompositionUI.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import { useI18N } from '../../utils/index.js'
-import Services from '../../extension/service.js'
+import Services from '#services'
 
 const useStyles = makeStyles()((theme) => ({
     optionTitle: {

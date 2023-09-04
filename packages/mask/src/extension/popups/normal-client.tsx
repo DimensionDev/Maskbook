@@ -2,7 +2,7 @@ import { activateSiteAdaptorUI } from '../../setup.ui.js'
 import { startPluginDashboard } from '@masknet/plugin-infra/dashboard'
 import { createNormalReactRoot, hydrateNormalReactRoot } from '../../utils/index.js'
 import { createPluginHost, createPartialSharedUIContext } from '../../../shared/plugin-infra/host.js'
-import { Services } from '../service.js'
+import Services from '#services'
 import Popups from './UI.js'
 import { RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui.js'
 import {

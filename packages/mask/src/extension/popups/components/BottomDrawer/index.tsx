@@ -12,6 +12,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         width: '100%',
         textAlign: 'center',
+        position: 'relative',
     },
     title: {
         fontSize: 24,
@@ -23,6 +24,11 @@ const useStyles = makeStyles()((theme) => ({
         paddingLeft: theme.spacing(4),
         textOverflow: 'ellipsis',
         overflow: 'hidden',
+    },
+    closeButton: {
+        position: 'absolute',
+        right: 0,
+        top: '0',
     },
 }))
 
@@ -46,7 +52,7 @@ export const BottomDrawer = memo<BottomDrawerProps>(function BottomDrawer({ open
                 <TextOverflowTooltip title={title}>
                     <Typography className={classes.title}>{title}</Typography>
                 </TextOverflowTooltip>
-                <Icons.Close size={24} onClick={handleClose} />
+                <Icons.Close className={classes.closeButton} size={24} onClick={handleClose} />
             </Box>
             {open || everOpenRef.current ? children : null}
         </Drawer>

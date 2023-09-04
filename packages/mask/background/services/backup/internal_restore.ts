@@ -116,7 +116,7 @@ async function restorePersonas(backup: NormalizedBackup.Data) {
 
         if (!relations.length) {
             for (const persona of personas.values()) {
-                if (persona.privateKey.none) continue
+                if (persona.privateKey.isNone()) continue
 
                 for (const profile of profiles.values()) {
                     promises.push(
@@ -146,17 +146,17 @@ function restorePosts(backup: Iterable<NormalizedBackup.PostBackup>) {
                 postBy: post.postBy.unwrapOr(undefined),
                 recipients: 'everyone',
             }
-            if (post.encryptBy.some) rec.encryptBy = post.encryptBy.val
-            if (post.postCryptoKey.some) rec.postCryptoKey = post.postCryptoKey.val
-            if (post.summary.some) rec.summary = post.summary.val
-            if (post.url.some) rec.url = post.url.val
+            if (post.encryptBy.isSome()) rec.encryptBy = post.encryptBy.value
+            if (post.postCryptoKey.isSome()) rec.postCryptoKey = post.postCryptoKey.value
+            if (post.summary.isSome()) rec.summary = post.summary.value
+            if (post.url.isSome()) rec.url = post.url.value
             if (post.interestedMeta.size) rec.interestedMeta = post.interestedMeta
-            if (post.recipients.some) {
-                const { val } = post.recipients
-                if (val.type === 'public') rec.recipients = 'everyone'
+            if (post.recipients.isSome()) {
+                const { value } = post.recipients
+                if (value.type === 'public') rec.recipients = 'everyone'
                 else {
                     const map = new Map<ProfileIdentifier, LatestRecipientDetailDB>()
-                    for (const [id, detail] of val.receivers) {
+                    for (const [id, detail] of value.receivers) {
                         map.set(id, {
                             reason: detail.map((x): LatestRecipientReasonDB => ({ at: x.at, type: 'direct' })),
                         })
@@ -196,11 +196,11 @@ async function restorePlugins(backup: NormalizedBackup.Data['plugins']) {
             continue
         }
         works.add(
-            (async () => {
+            (async (): Promise<void> => {
                 const result = await onRestore(item)
-                if (result.err) {
+                if (result.isErr()) {
                     const msg = `[@masknet/plugin-infra] Plugin ${plugin.ID} failed to restore its backup.`
-                    throw new Error(msg, { cause: result.err })
+                    throw new Error(msg, { cause: result.error })
                 }
             })(),
         )

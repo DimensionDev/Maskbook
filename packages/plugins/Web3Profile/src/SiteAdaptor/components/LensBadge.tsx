@@ -31,7 +31,7 @@ export const LensBadge = memo(({ slot, accounts, userId }: Props) => {
     useEffect(() => {
         const button = buttonRef.current
         if (!button) return
-        let openTimer: NodeJS.Timeout
+        let openTimer: ReturnType<typeof setTimeout>
         const enter = () => {
             clearTimeout(openTimer)
 

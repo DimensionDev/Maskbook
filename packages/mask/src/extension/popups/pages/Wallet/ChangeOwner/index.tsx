@@ -22,7 +22,7 @@ import { PopupContext, useTitle } from '../../../hooks/index.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
 import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
 import { useQuery } from '@tanstack/react-query'
-import Services from '../../../../service.js'
+import Services from '#services'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

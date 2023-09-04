@@ -130,8 +130,8 @@ export function createSiteAdaptorSpecializedPostContext(create: PostContextActio
                 const currentAuthor = author.author.getCurrentValue()
                 if (opts.iv && currentAuthor)
                     postIVIdentifier.value = new PostIVIdentifier(currentAuthor.network, opts.iv)
-                if (opts.sharedPublic?.some) isPublicShared.value = opts.sharedPublic.val
-                if (opts.isAuthorOfPost) isAuthorOfPost.value = opts.isAuthorOfPost.val
+                if (opts.sharedPublic?.isSome()) isPublicShared.value = opts.sharedPublic.value
+                if (opts.isAuthorOfPost) isAuthorOfPost.value = opts.isAuthorOfPost.value
                 if (opts.version) version.value = opts.version
             },
         }
@@ -149,10 +149,8 @@ export function createRefsForCreatePostContext() {
     const subscriptions: Omit<PostContextCreation, 'rootElement' | 'actionsElement' | 'suggestedInjectionPoint'> = {
         avatarURL: mapSubscription(createSubscriptionFromValueRef(avatarURL), (x) => {
             if (!x) return null
-            try {
-                return new URL(x)
-            } catch {}
-            return null
+            if (!URL.canParse(x)) return null
+            return new URL(x)
         }),
         nickname: createSubscriptionFromValueRef(nickname),
         author: createSubscriptionFromValueRef(postBy),

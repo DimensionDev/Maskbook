@@ -74,8 +74,8 @@ export async function normalizeBackupVersion1(file: BackupJSONFileVersion1): Pro
         }
         if (isAESJsonWebKey(localKey)) {
             profile.localKey = Some(localKey)
-            if (profile.linkedPersona.some && backup.personas.has(profile.linkedPersona.val)) {
-                backup.personas.get(profile.linkedPersona.val)!.localKey = Some(localKey)
+            if (profile.linkedPersona.isSome() && backup.personas.has(profile.linkedPersona.value)) {
+                backup.personas.get(profile.linkedPersona.value)!.localKey = Some(localKey)
             }
         }
     }

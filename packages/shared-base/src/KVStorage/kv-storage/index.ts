@@ -113,7 +113,7 @@ function createState(
     const initializedPromise: Promise<void> = backend.beforeAutoSync
         .then(() => backend.getValue(propKey))
         .then((val) => {
-            if (val.some) usingDefaultValue = false
+            if (val.isSome()) usingDefaultValue = false
             return val.unwrapOr(defaultValue)
         })
         .then((val) => {

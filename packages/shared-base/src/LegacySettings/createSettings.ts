@@ -27,7 +27,7 @@ function setupValueRef<T>(settings: ValueRef<T>, key: string) {
         .then(() => getValue(key))
         .then((value) => {
             duringInitialValueSet = true
-            if (value.some) settings.value = value.val
+            if (value.isSome()) settings.value = value.value
             else if (settings instanceof ValueRefWithReady) settings.nowReady?.()
         })
         .finally(() => (duringInitialValueSet = false))

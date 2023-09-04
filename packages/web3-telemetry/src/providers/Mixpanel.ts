@@ -9,9 +9,9 @@ import { MixpanelEventAPI, type Event } from '../apis/Mixpanel.js'
 export class MixpanelAPI extends BaseAPI<Event, never> implements Provider {
     constructor(private env: BuildInfoFile) {
         super(Flags.mixpanel_sample_rate)
+        this.eventAPI = new MixpanelEventAPI(Flags.mixpanel_project_token, env)
     }
-
-    private eventAPI = new MixpanelEventAPI(Flags.mixpanel_project_token, this.env)
+    private eventAPI
 
     private createEvent(options: EventOptions): Event {
         return omitBy<Event>(

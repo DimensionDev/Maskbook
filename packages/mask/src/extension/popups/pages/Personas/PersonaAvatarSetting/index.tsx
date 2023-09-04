@@ -17,7 +17,7 @@ import { PopupModalRoutes, PopupRoutes, SignType } from '@masknet/shared-base'
 import { ProfilePhotoType } from '../../Wallet/type.js'
 import { NFTAvatarPicker } from '../../../components/NFTAvatarPicker/index.js'
 import { useVerifiedWallets, useTitle } from '../../../hooks/index.js'
-import Services from '../../../../service.js'
+import Services from '#services'
 import { MAX_FILE_SIZE } from '../../../constants.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 

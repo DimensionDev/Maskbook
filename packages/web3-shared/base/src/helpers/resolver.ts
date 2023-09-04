@@ -77,6 +77,22 @@ export const resolveCurrencyName = createLookupTableResolver<CurrencyType, strin
         [CurrencyType.CNY]: 'CNY',
         [CurrencyType.JPY]: 'JPY',
         [CurrencyType.HKD]: 'HKD',
+        [CurrencyType.EUR]: 'EUR',
+    },
+    (CurrencyType) => {
+        throw new Error(`Unknown currency type: ${CurrencyType}.`)
+    },
+)
+export const resolveCurrencyFullName = createLookupTableResolver<CurrencyType, string>(
+    {
+        [CurrencyType.BTC]: 'Bitcoin',
+        [CurrencyType.ETH]: 'Ethereum',
+        [CurrencyType.NATIVE]: 'Ethereum',
+        [CurrencyType.USD]: 'United States Dollar',
+        [CurrencyType.CNY]: 'Chinese Yuan',
+        [CurrencyType.JPY]: 'Japanese Yen',
+        [CurrencyType.HKD]: 'Hong Kong Dollar',
+        [CurrencyType.EUR]: 'Euro',
     },
     (CurrencyType) => {
         throw new Error(`Unknown currency type: ${CurrencyType}.`)

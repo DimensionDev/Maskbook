@@ -7,7 +7,7 @@ import { PopupRoutes, type SingletonModalRefCreator } from '@masknet/shared-base
 import { ActionButton } from '@masknet/theme'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { PasswordField } from '../../components/PasswordField/index.js'
-import Services from '../../../service.js'
+import Services from '#services'
 import { useNavigate } from 'react-router-dom'
 
 interface ShowPrivateKeyDrawerProps extends BottomDrawerProps {
@@ -44,6 +44,7 @@ function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest 
                 <PasswordField
                     sx={{ mt: 2 }}
                     fullWidth
+                    autoFocus
                     placeholder={t('popups_wallet_payment_password')}
                     error={!!error}
                     value={password}
@@ -51,10 +52,6 @@ function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest 
                         setPassword(e.target.value)
                         setError('')
                     }}
-                    InputProps={{
-                        disableUnderline: true,
-                    }}
-                    show={false}
                 />
             </Box>
             {error ? (

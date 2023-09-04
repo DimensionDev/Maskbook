@@ -27,8 +27,8 @@ const site: Plugin.SiteAdaptor.Definition = {
     DecryptedInspector: function Component(props): JSX.Element | null {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
-            if (x.none) return null
-            return parseURLs(x.val).find(isCyberConnectUrl)
+            if (x.isNone()) return null
+            return parseURLs(x.value).find(isCyberConnectUrl)
         }, [props.message])
         if (!link) return null
         return <Renderer url={link} />

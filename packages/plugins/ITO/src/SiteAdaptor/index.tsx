@@ -27,9 +27,9 @@ const site: Plugin.SiteAdaptor.Definition = {
     init(signal) {},
     DecryptedInspector(props) {
         const payload = ITO_MetadataReader(props.message.meta)
-        usePluginWrapper(payload.ok)
-        if (!payload.ok) return null
-        return <PostInspector payload={set(payloadIntoMask(payload.val), 'token', payload.val.token)} />
+        usePluginWrapper(payload.isOk())
+        if (!payload.isOk()) return null
+        return <PostInspector payload={set(payloadIntoMask(payload.value), 'token', payload.value.token)} />
     },
     CompositionDialogMetadataBadgeRender: new Map([
         [ITO_MetaKey_1, onAttached_ITO],

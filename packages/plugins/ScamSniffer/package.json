@@ -25,7 +25,7 @@
     "@masknet/web3-hooks-base": "workspace:^",
     "@scamsniffer/detector": "0.0.21",
     "react-use": "^17.4.0",
-    "ts-results": "^3.3.0",
+    "ts-results-es": "^4.0.0",
     "urlcat": "^3.1.0"
   }
 }

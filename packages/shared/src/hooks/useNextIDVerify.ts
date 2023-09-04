@@ -13,7 +13,7 @@ import { NextIDProof } from '@masknet/web3-providers'
 import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 export function useNextIDVerify() {
-    const verifyPostCollectTimer = useRef<NodeJS.Timer | null>(null)
+    const verifyPostCollectTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
     const { getPostIdFromNewPostToast, postMessage, getNextIDPlatform, signWithPersona } = useSiteAdaptorContext()
     const platform = getNextIDPlatform()
 

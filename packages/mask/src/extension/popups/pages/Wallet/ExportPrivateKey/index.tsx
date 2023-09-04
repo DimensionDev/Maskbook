@@ -12,7 +12,7 @@ import { encodeText } from '@masknet/kit'
 import { useTitle } from '../../../hooks/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { BottomController } from '../../../components/BottomController/index.js'
-import Services from '../../../../service.js'
+import Services from '#services'
 import { NormalHeader } from '../../../components/index.js'
 import { saveFileFromBuffer } from '../../../../../../shared/index.js'
 

@@ -5,7 +5,7 @@ import { memoizePromise } from '@masknet/kit'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { Flags } from '@masknet/flags'
-import Services from '../../../extension/service.js'
+import Services from '#services'
 import { startWatch, type WatchOptions } from '../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import {

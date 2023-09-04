@@ -27,7 +27,7 @@ function __TwitterEncoderBinary(data: Uint8Array) {
 
 export function TwitterDecoder(raw: string): Option<string | Uint8Array> {
     const newVersion = TwitterDecoderBinary(raw)
-    if (newVersion.some) return newVersion
+    if (newVersion.isSome()) return newVersion
 
     return TwitterDecoderText(raw)
 }
@@ -55,24 +55,21 @@ function TwitterDecoderText(raw: string): Option<string> {
     const payloadLink = parseURLs(raw)
         .map((x) => x.replace(/\u2026$/, ''))
         .filter((x) => x.endsWith('%40'))[0]
-    try {
-        const { search, pathname } = new URL(payloadLink)
-        const payload = search ? search.slice(1) : pathname.slice(1)
-        if (!payload) return None
-        return Some(
-            '\u{1F3BC}' +
-                payload
-                    // https://github.com/sindresorhus/eslint-plugin-unicorn/issues/1476
-                    // eslint-disable-next-line unicorn/better-regex
-                    .replace(/^PostData_v\d=/i, '')
-                    .replace(/^%20/, '')
-                    .replace(/%40$/, '')
-                    .replace('-', '+')
-                    .replace('_', '=')
-                    .replaceAll('.', '|') +
-                ':||',
-        )
-    } catch {
-        return None
-    }
+    if (!URL.canParse(payloadLink)) return None
+    const { search, pathname } = new URL(payloadLink)
+    const payload = search ? search.slice(1) : pathname.slice(1)
+    if (!payload) return None
+    return Some(
+        '\u{1F3BC}' +
+            payload
+                // https://github.com/sindresorhus/eslint-plugin-unicorn/issues/1476
+                // eslint-disable-next-line unicorn/better-regex
+                .replace(/^PostData_v\d=/i, '')
+                .replace(/^%20/, '')
+                .replace(/%40$/, '')
+                .replace('-', '+')
+                .replace('_', '=')
+                .replaceAll('.', '|') +
+            ':||',
+    )
 }

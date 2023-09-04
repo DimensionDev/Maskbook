@@ -15,7 +15,7 @@
     "@masknet/shared-base": "workspace:^",
     "@msgpack/msgpack": "^3.0.0-beta2",
     "elliptic": "^6.5.4",
-    "pvtsutils": "^1.3.2"
+    "pvtsutils": "^1.3.5"
   },
   "devDependencies": {
     "@types/elliptic": "^6.4.14"

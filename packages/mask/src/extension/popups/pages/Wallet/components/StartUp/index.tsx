@@ -6,7 +6,7 @@ import { makeStyles } from '@masknet/theme'
 import { DashboardRoutes, Sniffings } from '@masknet/shared-base'
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../../../../../../utils/index.js'
-import Services from '../../../../../service.js'
+import Services from '#services'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

@@ -21,7 +21,7 @@ import {
     type HistoryRouterProps,
 } from 'react-router-dom'
 import { usePopupTheme } from '../../utils/theme/usePopupTheme.js'
-import Services from '../service.js'
+import Services from '#services'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import { PopupLayout } from './components/PopupLayout/index.js'
 import { wrapModal } from './components/index.js'
