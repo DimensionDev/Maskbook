@@ -6,7 +6,7 @@ import { HD_PATH_WITHOUT_INDEX_ETHEREUM, currySameAddress, generateNewWalletName
 import { ec as EC } from 'elliptic'
 import {
     getDerivableAccounts,
-    getMnemonicIdByWords,
+    createMnemonicId,
     getWallets,
     recoverWalletFromMnemonicWords,
     recoverWalletFromPrivateKey,
@@ -26,7 +26,7 @@ export async function internal_wallet_restore(backup: NormalizedBackup.WalletBac
         for (const wallet of mnemonicWallets) {
             if (wallet.mnemonic.isSome()) {
                 const accounts = await getDerivableAccounts(wallet.mnemonic.value.words, 0, 10)
-                const mnemonicId = await getMnemonicIdByWords(wallet.mnemonic.value.words)
+                const mnemonicId = await createMnemonicId(wallet.mnemonic.value.words)
                 if (!mnemonicId) continue
 
                 accounts.forEach((x) => {

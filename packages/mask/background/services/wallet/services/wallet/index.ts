@@ -19,12 +19,6 @@ function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {
     return [...splitted.slice(0, -1), index + 1].join('/')
 }
 
-function createMnemonicId(mnemonic: string) {
-    const id = sha3(mnemonic)
-    if (!id) throw new Error('Failed to create mnemonic id.')
-    return id
-}
-
 function sanitizeWallet(wallet: Wallet): Wallet {
     return omit(wallet, ['storedKeyInfo'])
 }
@@ -63,6 +57,12 @@ export async function getWallets(): Promise<Wallet[]> {
 
 export async function createMnemonicWords() {
     return bip39.generateMnemonic().split(' ')
+}
+
+export async function createMnemonicId(mnemonic: string) {
+    const id = sha3(mnemonic)
+    if (!id) throw new Error('Failed to create mnemonic id.')
+    return id
 }
 
 export async function getPrimaryWalletByMnemonicId(mnemonicId?: string) {
@@ -128,7 +128,7 @@ export async function deriveWallet(name: string) {
     if (!latestDerivationPath) throw new Error('Failed to derive wallet without derivation path.')
 
     const mnemonic = await exportMnemonicWords(primaryWallet.address, masterPassword)
-    const mnemonicId = createMnemonicId(mnemonic)
+    const mnemonicId = await createMnemonicId(mnemonic)
 
     // eslint-disable-next-line no-constant-condition
     while (true) {
@@ -328,7 +328,7 @@ async function addWalletFromMnemonicWords(
 
     if (!imported?.StoredKey) throw new Error('Failed to import the wallet.')
 
-    const mnemonicId = createMnemonicId(mnemonic)
+    const mnemonicId = await createMnemonicId(mnemonic)
     if (await database.hasStoredKeyInfo(imported.StoredKey)) {
         const exported = await Mask.exportPrivateKeyOfPath({
             coin: api.Coin.Ethereum,
