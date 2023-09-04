@@ -1,24 +1,26 @@
-import { memo, useCallback, useRef, useState } from 'react'
-import { useAsync, useAsyncFn, useLocation } from 'react-use'
-import { useNavigate } from 'react-router-dom'
-import { first } from 'lodash-es'
-import { Box } from '@mui/system'
-import { Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
 import { WalletServiceRef } from '@masknet/plugin-infra/dom'
-import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
-import { HD_PATH_WITHOUT_INDEX_ETHEREUM, currySameAddress, generateNewWalletName } from '@masknet/web3-shared-base'
-import { useWallets } from '@masknet/web3-hooks-base'
 import { DeriveWalletTable } from '@masknet/shared'
-import { SetupFrameController } from '../../../components/SetupFrame/index.js'
-import { useDashboardI18N } from '../../../locales/i18n_generated.js'
-import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
-import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
-import { ResetWalletContext } from '../context.js'
+import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { useWallets } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
+import { HD_PATH_WITHOUT_INDEX_ETHEREUM, currySameAddress, generateNewWalletName } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Telemetry } from '@masknet/web3-telemetry'
-import { EventType, EventID } from '@masknet/web3-telemetry/types'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
+import { Typography } from '@mui/material'
+import { Box } from '@mui/system'
+import { useQuery } from '@tanstack/react-query'
+import { first, sortBy, uniq } from 'lodash-es'
+import { memo, useCallback, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAsyncFn, useLocation } from 'react-use'
+import { sha3 } from 'web3-utils'
+import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
+import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
+import { SetupFrameController } from '../../../components/SetupFrame/index.js'
+import { useDashboardI18N } from '../../../locales/i18n_generated.js'
+import { ResetWalletContext } from '../context.js'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -77,7 +79,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
     }
 
     const { mnemonic, password, isReset } = state.usr
-    const indexes = useRef(new Set<number>())
+    const [pathIndexes, setPathIndexes] = useState<number[]>([])
     const { handlePasswordAndWallets } = ResetWalletContext.useContainer()
 
     const wallets = useWallets()
@@ -88,34 +90,37 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
 
     const [page, setPage] = useState(0)
 
-    const { loading, value: dataSource } = useAsync(async () => {
-        if (mnemonic) {
-            const unDeriveWallets = Array.from(indexes.current)
+    const { data: walletChunks = EMPTY_LIST, isLoading } = useQuery({
+        // Avoid leaking mnemonic to react-query
+        queryKey: ['derivedWallet', sha3(mnemonic), page],
+        queryFn: async () => {
+            if (!mnemonic) return EMPTY_LIST
+            return await WalletServiceRef.value.getDerivableAccounts(mnemonic, page)
+        },
+    })
 
-            const derivableAccounts = await WalletServiceRef.value.getDerivableAccounts(mnemonic, page)
-
-            return derivableAccounts.map((derivedWallet, index) => {
-                const added = !!wallets.find(currySameAddress(derivedWallet.address))
-                const selected = unDeriveWallets.find((item) => item === index + page * 10) !== undefined
-                return {
-                    added,
-                    selected,
-                    address: derivedWallet.address,
-                }
-            })
-        }
-        return EMPTY_LIST
-    }, [mnemonic, wallets.length, page])
+    const dataSource = useMemo(() => {
+        return walletChunks.map((derivedWallet) => {
+            const added = !!wallets.find(currySameAddress(derivedWallet.address))
+            const pathIndex = derivedWallet.index
+            const selected = pathIndexes.find((item) => item === pathIndex) !== undefined
+            return {
+                added,
+                selected,
+                pathIndex,
+                address: derivedWallet.address,
+            }
+        })
+    }, [walletChunks, wallets])
 
     const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
         if (!mnemonic) return
 
-        const unDeriveWallets = Array.from(indexes.current)
-        if (!unDeriveWallets.length) return
+        if (!pathIndexes.length) return
 
         await handlePasswordAndWallets(password, isReset)
 
-        const firstPath = first(unDeriveWallets)
+        const firstPath = first(pathIndexes)
         const firstWallet = await WalletServiceRef.value.recoverWalletFromMnemonicWords(
             generateNewWalletName(wallets),
             mnemonic,
@@ -123,7 +128,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         )
 
         await Promise.all(
-            unDeriveWallets
+            pathIndexes
                 .slice(1)
                 .map(async (pathIndex, index) =>
                     WalletServiceRef.value.recoverWalletFromMnemonicWords(
@@ -142,14 +147,13 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         await WalletServiceRef.value.resolveMaskAccount([{ address: firstWallet }])
         Telemetry.captureEvent(EventType.Access, EventID.EntryPopupWalletImport)
         navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
-    }, [indexes, mnemonic, wallets.length, isReset, password])
+    }, [mnemonic, wallets.length, isReset, password, pathIndexes])
 
-    const onCheck = useCallback(
-        async (checked: boolean, index: number) => {
-            checked ? indexes.current.add(page * 10 + index) : indexes.current.delete(page * 10 + index)
-        },
-        [page],
-    )
+    const onCheck = useCallback(async (checked: boolean, pathIndex: number) => {
+        setPathIndexes((list) => {
+            return checked ? sortBy(uniq([...list, pathIndex])) : list.filter((x) => x !== pathIndex)
+        })
+    }, [])
 
     return (
         <>
@@ -172,35 +176,32 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
             </Typography>
 
             <DeriveWalletTable
-                page={page}
                 hiddenHeader
-                loading={loading}
+                loading={isLoading}
                 dataSource={dataSource}
                 onCheck={onCheck}
-                symbol={'ETH'}
+                symbol="ETH"
             />
 
-            {!loading ? (
-                <div className={classes.pagination}>
-                    <SecondaryButton
-                        className={classes.paginationButton}
-                        disabled={page === 0 || confirmLoading}
-                        onClick={() => setPage((prev) => prev - 1)}>
-                        <Typography fontWeight={700}>{t.previous_page()}</Typography>
-                    </SecondaryButton>
-                    <SecondaryButton
-                        className={classes.paginationButton}
-                        disabled={confirmLoading}
-                        onClick={() => setPage((prev) => prev + 1)}>
-                        <Typography fontWeight={700}>{t.next_page()}</Typography>
-                    </SecondaryButton>
-                </div>
-            ) : null}
+            <div className={classes.pagination}>
+                <SecondaryButton
+                    className={classes.paginationButton}
+                    disabled={page === 0 || confirmLoading}
+                    onClick={() => setPage((prev) => prev - 1)}>
+                    <Typography fontWeight={700}>{t.previous_page()}</Typography>
+                </SecondaryButton>
+                <SecondaryButton
+                    className={classes.paginationButton}
+                    disabled={confirmLoading}
+                    onClick={() => setPage((prev) => prev + 1)}>
+                    <Typography fontWeight={700}>{t.next_page()}</Typography>
+                </SecondaryButton>
+            </div>
 
             <SetupFrameController>
                 <PrimaryButton
                     loading={confirmLoading}
-                    disabled={confirmLoading || loading}
+                    disabled={confirmLoading || isLoading}
                     className={classes.bold}
                     width="125px"
                     size="large"
