@@ -1578,7 +1578,7 @@ importers:
         specifier: workspace:^
         version: link:../../theme
       '@masknet/typed-message':
-        specifier: workspace:^0.1.0
+        specifier: workspace:^0.2.0
         version: link:../../typed-message/base
       '@masknet/web3-helpers':
         specifier: workspace:^
@@ -2341,7 +2341,7 @@ importers:
         specifier: workspace:^
         version: link:../../theme
       '@masknet/typed-message':
-        specifier: workspace:^0.1.0
+        specifier: workspace:^0.2.0
         version: link:../../typed-message/base
       '@masknet/web3-contracts':
         specifier: workspace:^
