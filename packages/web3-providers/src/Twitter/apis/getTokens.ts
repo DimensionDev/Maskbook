@@ -61,7 +61,7 @@ const getScriptSquashed = squashPromise('GET_TWITTER_SCRIPTS', getScripts, 60_00
 
 export async function getTokens(operationName?: string) {
     const { mainContent, userNFT_Content, API_Content } = await getScriptSquashed()
-    const bearerToken = getScriptContentMatched(mainContent ?? '', /"(\w{20,}%3D\w{20,})"/)
+    const bearerToken = getScriptContentMatched(mainContent ?? '', /Bearer (\w{59,}%3D\w{42,})/)
     const queryToken = getScriptContentMatched(userNFT_Content ?? '', /{\s?id:\s?"([\w-]+)"/)
     const csrfToken = getCSRFToken()
     const queryId = operationName
