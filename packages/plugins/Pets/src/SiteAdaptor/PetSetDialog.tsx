@@ -1,5 +1,11 @@
-import { useMemo, useState, type ReactNode } from 'react'
-import { useTimeout } from 'react-use'
+import { Icons } from '@masknet/icons'
+import { PluginWalletStatusBar, useSharedI18N } from '@masknet/shared'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { ActionButton, LoadingBase, ShadowRootPopper, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { useWallet } from '@masknet/web3-hooks-base'
+import { Web3Storage } from '@masknet/web3-providers'
+import { isSameAddress, type Constant } from '@masknet/web3-shared-base'
 import {
     Autocomplete,
     Box,
@@ -13,15 +19,9 @@ import {
     inputBaseClasses,
     useTheme,
 } from '@mui/material'
-import { Icons } from '@masknet/icons'
-import { PluginWalletStatusBar, useSharedI18N } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useValueRef } from '@masknet/shared-base-ui'
-import { ActionButton, LoadingBase, ShadowRootPopper, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { useWallet } from '@masknet/web3-hooks-base'
-import type { Constant } from '@masknet/web3-shared-base'
-import { Web3Storage } from '@masknet/web3-providers'
-import { GLB3DIcon, PetsPluginID, initCollection, initMeta } from '../constants.js'
+import { useMemo, useState, type ReactNode } from 'react'
+import { useTimeout } from 'react-use'
+import { GLB3DIcon, PetsPluginID, initMeta } from '../constants.js'
 import { useNFTs, useUser } from '../hooks/index.js'
 import { useI18N } from '../locales/index.js'
 import { PluginPetMessages } from '../messages.js'
@@ -126,10 +126,10 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
 
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const user = useUser()
-    const { nfts, state } = useNFTs()
+    const { nfts, isLoading } = useNFTs()
     const blacklist = Object.values(configNFTs ?? {}).map((v) => v.Mainnet)
 
-    const [collection, setCollection] = useState<FilterContract>(initCollection)
+    const [collection, setCollection] = useState<FilterContract>()
     const [isCollectionsError, setCollectionsError] = useState(false)
 
     const [metaData, setMetaData] = useState<PetMetaDB>(initMeta)
@@ -147,7 +147,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     }
 
     const saveHandle = async () => {
-        if (!collection.name) {
+        if (!collection?.name) {
             setCollectionsError(true)
             return
         }
@@ -178,9 +178,9 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
         }
     }
 
-    const onCollectionChange = (v: string) => {
-        if (!user) return
-        const matched = nfts.find((item) => item.name === v)
+    const onCollectionChange = (v: FilterContract | null) => {
+        if (!user || !v) return
+        const matched = nfts.find((item) => isSameAddress(item.contract, v.contract))
         if (matched) {
             setCollection(matched)
             setTokenInfoSelect(null)
@@ -216,15 +216,16 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     }
 
     const imageChose = useMemo(() => {
-        if (!metaData.image) return ''
+        if (!metaData.image || !collection) return ''
         const imageChosen = collection.tokens.find((item) => item.tokenId === metaData.tokenId)
         return imageChosen?.metadata?.imageURL
-    }, [metaData.image, collection.tokens])
+    }, [metaData.image, collection?.tokens])
 
     const mediaChose = useMemo(() => {
+        if (!collection) return
         const imageChosen = collection.tokens.find((item) => item.tokenId === metaData.tokenId)
         return imageChosen?.metadata?.mediaURL
-    }, [metaData.tokenId, collection.tokens])
+    }, [metaData.tokenId, collection?.tokens])
 
     const renderImg = (item: FilterContract) => {
         return <ImageLoader className={classes.thumbnail} src={item.icon} />
@@ -232,88 +233,90 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
 
     const paperComponent = (children: ReactNode | undefined) => <Box className={classes.boxPaper}>{children}</Box>
 
-    const nftsRender = useMemo(() => {
-        return (
-            <Autocomplete
-                id="collection-box"
-                options={nfts}
-                onChange={(_event, newValue) => onCollectionChange(newValue?.name ?? '')}
-                getOptionLabel={(option) => option.name}
-                PopperComponent={ShadowRootPopper}
-                PaperComponent={({ children }) => paperComponent(children)}
-                renderOption={(props, option) => (
-                    <MenuItem
-                        key={option.contract}
-                        value={option.name}
-                        disabled={!option.tokens.length || blacklist.includes(option.contract)}
-                        className={classes.menuItem}>
-                        <Box {...props} component="span" className={classes.itemFix}>
-                            {renderImg(option)}
-                            <Typography className={classes.itemTxt}>{option.name}</Typography>
-                            <Typography>
-                                {blacklist.includes(option.contract) ? t.pets_dialog_unverified() : ''}
-                            </Typography>
+    const nftsRender = (
+        <Autocomplete
+            id="collection-box"
+            options={nfts}
+            value={collection}
+            onChange={(_event, newValue) => onCollectionChange(newValue)}
+            isOptionEqualToValue={(op, value) => isSameAddress(op.contract, value.contract)}
+            getOptionLabel={(option) => option.name}
+            PopperComponent={ShadowRootPopper}
+            PaperComponent={({ children }) => paperComponent(children)}
+            renderOption={(props, option) => (
+                <MenuItem
+                    {...props}
+                    key={option.contract}
+                    value={option.name}
+                    disabled={!option.tokens.length || blacklist.includes(option.contract)}
+                    className={classes.menuItem}>
+                    <Box component="span" className={classes.itemFix} key={option.contract}>
+                        {renderImg(option)}
+                        <Typography className={classes.itemTxt}>{option.name}</Typography>
+                        <Typography>{blacklist.includes(option.contract) ? t.pets_dialog_unverified() : ''}</Typography>
+                    </Box>
+                </MenuItem>
+            )}
+            renderInput={(params) => (
+                <InputBase
+                    {...params.InputProps}
+                    fullWidth
+                    placeholder={t.pets_dialog_contract()}
+                    error={isCollectionsError}
+                    className={classes.input}
+                    inputProps={{ ...params.inputProps }}
+                    endAdornment={
+                        <Box pr={2} display="flex" alignItems="center">
+                            {isLoading ? <LoadingBase size={20} /> : <Icons.ArrowDrop className={classes.arrowIcon} />}
                         </Box>
-                    </MenuItem>
-                )}
-                renderInput={(params) => (
-                    <InputBase
-                        {...params.InputProps}
-                        fullWidth
-                        placeholder={t.pets_dialog_contract()}
-                        error={isCollectionsError}
-                        className={classes.input}
-                        inputProps={{ ...params.inputProps }}
-                        endAdornment={
-                            <Box pr={2} display="flex" alignItems="center">
-                                {state ? <LoadingBase size={20} /> : <Icons.ArrowDrop className={classes.arrowIcon} />}
-                            </Box>
-                        }
-                    />
-                )}
-            />
-        )
-    }, [nfts])
+                    }
+                />
+            )}
+        />
+    )
 
-    const tokensRender = useMemo(() => {
-        return (
-            <Autocomplete
-                id="token-box"
-                options={collection.tokens}
-                inputValue={inputTokenName}
-                onChange={(_event, newValue) => onImageChange(newValue)}
-                getOptionLabel={(option) => option?.metadata?.name ?? ''}
-                PaperComponent={({ children }) => paperComponent(children)}
-                PopperComponent={ShadowRootPopper}
-                renderOption={(props, option) => (
-                    <Box component="li" className={classes.itemFix} {...props}>
+    const tokensRender = (
+        <Autocomplete
+            id="token-box"
+            options={collection?.tokens ?? EMPTY_LIST}
+            inputValue={inputTokenName}
+            onChange={(_event, newValue) => onImageChange(newValue)}
+            getOptionLabel={(option) => option?.metadata?.name ?? ''}
+            PaperComponent={({ children }) => paperComponent(children)}
+            isOptionEqualToValue={(op, value) =>
+                isSameAddress(op.address, value.address) && op.tokenId === value.tokenId
+            }
+            PopperComponent={ShadowRootPopper}
+            renderOption={(props, option) => (
+                <MenuItem {...props} key={option.tokenId}>
+                    <Box className={classes.itemFix}>
                         {!option.glbSupport ? (
-                            <img className={classes.thumbnail} src={option.metadata?.imageURL} />
+                            <img className={classes.thumbnail} key="thumbnail" src={option.metadata?.imageURL} />
                         ) : null}
-                        <Typography color={(theme) => theme.palette.maskColor.main}>
+                        <Typography color={(theme) => theme.palette.maskColor.main} key="name">
                             {option?.metadata?.name}
                         </Typography>
-                        {option.glbSupport ? <img className={classes.glbIcon} src={GLB3DIcon} /> : null}
+                        {option.glbSupport ? <img className={classes.glbIcon} key="glb" src={GLB3DIcon} /> : null}
                     </Box>
-                )}
-                renderInput={(params) => (
-                    <InputBase
-                        {...params.InputProps}
-                        fullWidth
-                        placeholder={t.pets_dialog_token()}
-                        error={isImageError}
-                        className={classes.input}
-                        inputProps={{ ...params.inputProps }}
-                        endAdornment={
-                            <Box pr={2} display="flex" alignItems="center">
-                                <Icons.ArrowDrop className={classes.arrowIcon} />
-                            </Box>
-                        }
-                    />
-                )}
-            />
-        )
-    }, [collection.tokens, tokenInfoSelect])
+                </MenuItem>
+            )}
+            renderInput={(params) => (
+                <InputBase
+                    {...params.InputProps}
+                    fullWidth
+                    placeholder={t.pets_dialog_token()}
+                    error={isImageError}
+                    className={classes.input}
+                    inputProps={{ ...params.inputProps }}
+                    endAdornment={
+                        <Box pr={2} display="flex" alignItems="center">
+                            <Icons.ArrowDrop className={classes.arrowIcon} />
+                        </Box>
+                    }
+                />
+            )}
+        />
+    )
 
     return (
         <>
@@ -336,7 +339,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                             fullWidth
                             multiline
                             rows={3}
-                            disabled={!collection.name}
+                            disabled={!collection?.name}
                             value={metaData.word}
                             onChange={(e) => setMsgValueCheck(e.target.value)}
                             onBlur={() => setHolderChange(true)}
@@ -375,7 +378,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     fullWidth
                     className={classes.btn}
                     onClick={saveHandle}
-                    disabled={!collection.name || !metaData.image || !!wallet?.owner}>
+                    disabled={!collection?.name || !metaData.image || !!wallet?.owner}>
                     {wallet?.owner ? sharedI18N.coming_soon() : t.pets_dialog_btn()}
                 </ActionButton>
             </PluginWalletStatusBar>
