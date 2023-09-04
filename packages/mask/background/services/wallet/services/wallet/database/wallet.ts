@@ -43,12 +43,6 @@ export async function hasStoredKeyInfo(storedKeyInfo?: api.IStoredKeyInfo) {
     return wallets.filter((x) => x.storedKeyInfo?.hash).some((x) => x.storedKeyInfo?.hash === storedKeyInfo?.hash)
 }
 
-export async function getWalletByStoreKeyInfo(storedKeyInfo?: api.IStoredKeyInfo) {
-    const wallets = await getWallets()
-    if (!storedKeyInfo) return
-    return wallets.filter((x) => x.storedKeyInfo?.hash).find((x) => x.storedKeyInfo?.hash === storedKeyInfo.hash)
-}
-
 export async function hasStoredKeyInfoRequired(storedKeyInfo?: api.IStoredKeyInfo) {
     const has = await hasStoredKeyInfo(storedKeyInfo)
     if (!has) throw new Error('The stored key info does not exist.')

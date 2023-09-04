@@ -5,6 +5,7 @@ import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { Signer } from '@masknet/web3-providers'
 import { ImportSource, type SignType, type Wallet } from '@masknet/shared-base'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
+import { sha3 } from 'web3-utils'
 import * as Mask from '../maskwallet/index.js'
 import * as database from './database/index.js'
 import * as password from './password.js'
@@ -77,26 +78,10 @@ export async function getWalletPrimary() {
     )
 }
 
-export async function getMnemonicId(storedKeyInfo: api.IStoredKeyInfo) {
-    const masterPassword = await password.INTERNAL_getMasterPasswordRequired()
-    const firstWallet = await Mask.createAccountOfCoinAtPath({
-        coin: api.Coin.Ethereum,
-        password: masterPassword,
-        derivationPath: `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
-        StoredKeyData: storedKeyInfo.data,
-    })
-    if (!firstWallet?.account?.address) return
-    return firstWallet?.account?.address
-}
-
 export async function getMnemonicIdByWords(mnemonic: string) {
-    const masterPassword = await password.INTERNAL_getMasterPasswordRequired()
-    const imported = await Mask.importMnemonic({
-        mnemonic,
-        password: masterPassword,
-    })
-    if (!imported?.StoredKey) return
-    return getMnemonicId(imported.StoredKey)
+    const id = sha3(mnemonic)
+    if (!id) return
+    return id
 }
 
 export async function getDerivableAccounts(mnemonic: string, page: number, pageSize = 10) {
@@ -142,7 +127,8 @@ export async function deriveWallet(name: string) {
     let latestDerivationPath = primaryWallet.latestDerivationPath ?? primaryWallet.derivationPath
     if (!latestDerivationPath) throw new Error('Failed to derive wallet without derivation path.')
 
-    const mnemonicId = await getMnemonicId(primaryWallet.storedKeyInfo)
+    const mnemonic = await exportMnemonicWords(primaryWallet.address, masterPassword)
+    const mnemonicId = await getMnemonicIdByWords(mnemonic)
 
     // eslint-disable-next-line no-constant-condition
     while (true) {
@@ -342,7 +328,7 @@ async function addWalletFromMnemonicWords(
 
     if (!imported?.StoredKey) throw new Error('Failed to import the wallet.')
 
-    const mnemonicId = await getMnemonicId(imported.StoredKey)
+    const mnemonicId = await getMnemonicIdByWords(mnemonic)
     if (await database.hasStoredKeyInfo(imported.StoredKey)) {
         const exported = await Mask.exportPrivateKeyOfPath({
             coin: api.Coin.Ethereum,
