@@ -12,6 +12,7 @@ import {
     EMPTY_OBJECT,
     NextIDAction,
     SignType,
+    MaskMessages,
 } from '@masknet/shared-base'
 import { PersonaContext } from '@masknet/shared'
 import { usePopupCustomSnackbar } from '@masknet/theme'
@@ -150,8 +151,12 @@ const AccountDetail = memo(() => {
                 result.createdAt,
                 { signature },
             )
+            // Broadcast updates
+            MaskMessages.events.ownProofChanged.sendToAll()
 
             await Service.Identity.detachProfile(selectedAccount.identifier)
+            MaskMessages.events.ownPersonaChanged.sendToAll()
+
             showSnackbar(t('popups_disconnect_success'), {
                 variant: 'success',
             })
