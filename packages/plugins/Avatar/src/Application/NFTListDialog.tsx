@@ -115,7 +115,7 @@ export function NFTListDialog() {
     const onSave = useCallback(async () => {
         if (!selectedToken?.metadata?.imageURL) return
         setDisabled(true)
-        Telemetry.captureEvent(EventType.Access, EventID.EntryAppNFTPFPSetting)
+        Telemetry.captureEvent(EventType.Access, EventID.EntryAppNFT_PFP_Setting)
         try {
             const image = await toPNG(selectedToken.metadata.imageURL)
             if (!image) {
