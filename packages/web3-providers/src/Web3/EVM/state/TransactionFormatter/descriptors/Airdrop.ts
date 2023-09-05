@@ -1,5 +1,5 @@
-import { isSameAddress, type TransactionContext } from '@masknet/web3-shared-base'
-import { getITOConstants, type ChainId, type TransactionParameter } from '@masknet/web3-shared-evm'
+import { type TransactionContext } from '@masknet/web3-shared-base'
+import { type ChainId, type TransactionParameter } from '@masknet/web3-shared-evm'
 import { BaseDescriptor } from './Base.js'
 import { getTokenAmountDescription } from '../utils.js'
 import type { TransactionDescriptor } from '../types.js'
@@ -10,8 +10,7 @@ export class AirdropDescriptor extends BaseDescriptor implements TransactionDesc
 
     override async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
         const context = context_ as TransactionContext<ChainId>
-        const { ITO2_CONTRACT_ADDRESS } = getITOConstants(context.chainId)
-        if (!context.methods?.length || isSameAddress(context.to, ITO2_CONTRACT_ADDRESS)) return
+        if (!context.methods?.length) return
 
         for (const { name, parameters } of context.methods) {
             if (name === 'claim' && parameters?._eventIndex !== undefined) {

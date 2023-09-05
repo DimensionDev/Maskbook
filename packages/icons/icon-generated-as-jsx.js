@@ -1967,16 +1967,6 @@ export const InteractionCircle = /*#__PURE__*/ __createIcon('InteractionCircle',
         s: true,
     },
 ])
-export const ITO = /*#__PURE__*/ __createIcon('ITO', [
-    {
-        u: () => new URL('./general/ITO.svg', import.meta.url),
-    },
-])
-export const ITOLabel = /*#__PURE__*/ __createIcon('ITOLabel', [
-    {
-        u: () => new URL('./general/ITOLabel.svg', import.meta.url),
-    },
-])
 export const JPY = /*#__PURE__*/ __createIcon('JPY', [
     {
         u: () => new URL('./general/JPY.svg', import.meta.url),

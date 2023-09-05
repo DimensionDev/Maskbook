@@ -8,7 +8,6 @@ import '@masknet/plugin-cyberconnect/register'
 import '@masknet/plugin-vcent/register'
 
 import '@masknet/plugin-handle/register'
-import '@masknet/plugin-ito/register'
 import '@masknet/plugin-redpacket/register'
 import '@masknet/plugin-file-service/register'
 

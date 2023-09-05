@@ -46,7 +46,7 @@
     "smart_pay_description": "Smart Pay 是基于 ERC-4337 提案创建的新型智能合约钱包，目前仅部署在 Polygon 网络上。ERC 4337 是一种新的钱包提案，可以为钱包设计打开多创意的大门和更多重要的功能。未来我们也会基于该提案在 Mask Network 生态内推出更多有趣的功能。",
     "setup_smart_pay_title": "在使用 Smart Pay 前需要知道的事：",
     "setup_smart_pay_one": "<strong>你的智能合约钱包目前仅部署在 Polygon 网络上。请勿使用相同钱包在其他链上接收资产。</strong> 我们将会在未来支持智能合约钱包部署在更多链条上。",
-    "setup_smart_pay_two": "可以在 Mask Network 生态内体验免 gas 的去中心化应用，如红包，ITO 和 Tips 等。",
+    "setup_smart_pay_two": "可以在 Mask Network 生态内体验免 gas 的去中心化应用，如红包和 Tips 等。",
     "setup_smart_pay_three": "您的私钥和 Json 文件只能在 SmartPay 中使用。",
     "scan_address_to_payment": "扫描地址以接收付款",
     "remain_mask_tips": "Mask 代币可用于支付 gas 费用。",

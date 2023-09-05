@@ -85,8 +85,6 @@ export const TransactionIconUI = memo<TransactionIconUIProps>(({ isFailed, isRed
             case HistoryAPI.TransactionType.CREATE_LUCKY_DROP:
             case HistoryAPI.TransactionType.CREATE_RED_PACKET:
                 return <Icons.RedPacket className={classes.icon} />
-            case HistoryAPI.TransactionType.FILL_POOL:
-                return <Icons.ITO color={MaskColorVar.warning} className={classes.icon} />
             default:
                 return <Icons.Interaction color={MaskColorVar.warning} className={classes.icon} />
         }

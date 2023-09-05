@@ -507,18 +507,6 @@
             }
         },
         {
-            "input": "./packages/plugins/ITO/src/locales/en-US.json",
-            "output": "./packages/plugins/ITO/src/locales/i18n_generated",
-            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
-            "generator": {
-                "type": "i18next/react-hooks",
-                "hooks": "useI18N",
-                "namespace": "com.maskbook.ito",
-                "trans": "Translate",
-                "emitTS": true
-            }
-        },
-        {
             "input": "./packages/plugins/Savings/src/locales/en-US.json",
             "output": "./packages/plugins/Savings/src/locales/i18n_generated",
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },

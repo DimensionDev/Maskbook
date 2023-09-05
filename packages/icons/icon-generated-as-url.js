@@ -215,8 +215,6 @@ export function info_dark_url() { return new URL("./general/Info.dark.svg", impo
 export function info_light_url() { return new URL("./general/Info.light.svg", import.meta.url) }
 export function interaction_url() { return new URL("./general/Interaction.svg", import.meta.url) }
 export function interaction_circle_url() { return new URL("./general/InteractionCircle.svg", import.meta.url) }
-export function ito_url() { return new URL("./general/ITO.svg", import.meta.url) }
-export function ito_label_url() { return new URL("./general/ITOLabel.svg", import.meta.url) }
 export function jpy_url() { return new URL("./general/JPY.svg", import.meta.url) }
 export function key_square_url() { return new URL("./general/KeySquare.svg", import.meta.url) }
 export function left_arrow_url() { return new URL("./general/LeftArrow.svg", import.meta.url) }
