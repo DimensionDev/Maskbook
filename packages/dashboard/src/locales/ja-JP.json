@@ -321,8 +321,6 @@
     "settings_alert_merge_success": "クラウドバックアップをローカルデータに統合できました。",
     "labs_file_service": "ファイルサービス",
     "labs_file_service_desc": "ユーザー向け分散ファイルストレージです。",
-    "labs_markets": "マーケット",
-    "labs_markets_desc": "クリプトの友人にデジタル資産を販売します。",
     "labs_red_packet": "幸運ドロップ",
     "labs_red_packet_desc": "あなたの幸運を暗号化された幸運の小包としてあなたの友人に送信します。",
     "labs_swap": "スワップ",

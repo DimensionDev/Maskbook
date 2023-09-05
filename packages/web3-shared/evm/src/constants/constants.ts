@@ -3,7 +3,6 @@ import DeBank from '@masknet/web3-constants/evm/debank.json'
 import CoinGecko from '@masknet/web3-constants/evm/coingecko.json'
 import Gitcoin from '@masknet/web3-constants/evm/gitcoin.json'
 import OpenOcean from '@masknet/web3-constants/evm/openocean.json'
-import ITO from '@masknet/web3-constants/evm/ito.json'
 import RedPacket from '@masknet/web3-constants/evm/red-packet.json'
 import NftRedPacket from '@masknet/web3-constants/evm/nft-red-packet.json'
 import Token from '@masknet/web3-constants/evm/token.json'
@@ -77,11 +76,6 @@ export const getOpenOceanConstant = transform(ChainId, OpenOcean)
 export const getOpenOceanConstants = transformAll(ChainId, OpenOcean)
 export const useOpenOceanConstant = transformHook(getOpenOceanConstants)
 export const useOpenOceanConstants = transformAllHook(getOpenOceanConstants)
-
-export const getITOConstant = transform(ChainId, ITO)
-export const getITOConstants = transformAll(ChainId, ITO)
-export const useITOConstant = transformHook(getITOConstants)
-export const useITOConstants = transformAllHook(getITOConstants)
 
 export const getRedPacketConstant = transform(ChainId, RedPacket)
 export const getRedPacketConstants = transformAll(ChainId, RedPacket)

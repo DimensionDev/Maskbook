@@ -176,7 +176,7 @@
         "metas",
         "metastate",
         "metaverse",
-        "Milkomeda",
+        "milkomeda",
         "millify",
         "mintable",
         "mobm",
@@ -258,7 +258,7 @@
         "scroller",
         "secp",
         "serializers",
-        "Shiden",
+        "shiden",
         "siddomains",
         "sidjs",
         "sinonjs",
@@ -278,7 +278,7 @@
         "swappable",
         "sysvar",
         "tanstack",
-        "Telos",
+        "telos",
         "testid",
         "thegraph",
         "timelock",
@@ -310,7 +310,7 @@
         "viperswap",
         "visualcompletion",
         "walletconnect",
-        "Wanchain",
+        "wanchain",
         "wannaswap",
         "wault",
         "wavax",
@@ -464,10 +464,6 @@
         {
             "filename": "packages/web3-shared/evm/assets/**/*.json",
             "ignoreWords": ["görli"]
-        },
-        {
-            "filename": "packages/mask/src/plugins/ITO/assets/regions.json",
-            "enabled": false
         },
         {
             "filename": "**/qya-AA.json",

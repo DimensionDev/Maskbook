@@ -80,7 +80,7 @@ export const AvatarManagementProvider = memo(({ children, socialIdentity }: Prop
             setTargetAccount: setSelectedAccount,
             proof,
             setProof,
-            proofs,
+            proofs: proofs.length ? proofs : nextIDWallets,
             setProofs,
             tokenInfo,
             setTokenInfo,
