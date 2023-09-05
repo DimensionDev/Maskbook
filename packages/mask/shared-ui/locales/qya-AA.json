@@ -880,6 +880,7 @@
     "popups_wallet_settings_rename_tips": "crwdns22071:0crwdne22071:0",
     "popups_wallet_settings_name_exists": "crwdns22073:0crwdne22073:0",
     "popups_wallet_settings_remove_wallet": "crwdns22075:0crwdne22075:0",
+    "remove_wallet_message": "crwdns22259:0{{wallet}}crwdnd22259:0{{other_wallets}}crwdne22259:0",
     "popups_wallet_settings_are_you_sure_remove_wallet": "crwdns22077:0crwdne22077:0",
     "popups_wallet_settings_address_exists": "crwdns22079:0crwdne22079:0",
     "popups_wallet_settings_auto_lock_tips": "crwdns22081:0crwdne22081:0",
@@ -1306,5 +1307,7 @@
     "switch_logo_new_logo": "crwdns21921:0crwdne21921:0",
     "switch_logo_share_text": "crwdns21923:0crwdne21923:0",
     "switch_logo_share_mask": "crwdns21925:0crwdne21925:0",
-    "switch_logo_description": "crwdns21927:0crwdne21927:0"
+    "switch_logo_description": "crwdns21927:0crwdne21927:0",
+    "add_new_address_to_an_existing_group": "crwdns22255:0crwdne22255:0",
+    "or_create_a_new_wallet_group": "crwdns22257:0crwdne22257:0"
 }
