@@ -115,7 +115,6 @@ function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
                     sx={{ mt: 2 }}
                     error={error}
                     fullWidth
-                    placeholder="1440"
                     value={isUndefined(time) ? (!isZero(initialTime) ? initialTime : '') : time}
                     disabled={!isUndefined(time) ? isEmpty(time) : isZero(initialTime)}
                     onChange={(e) => {
