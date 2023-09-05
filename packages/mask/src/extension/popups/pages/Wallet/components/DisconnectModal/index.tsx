@@ -3,7 +3,7 @@ import { useI18N } from '../../../../../../utils/i18n-next-ui.js'
 import { Box, Typography } from '@mui/material'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import Services from '#services'
-import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
+import { EnhanceableSite, ExtensionSite, NetworkPluginID } from '@masknet/shared-base'
 import { useWallet } from '@masknet/web3-hooks-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { useMutation } from '@tanstack/react-query'
@@ -106,8 +106,8 @@ const DisconnectModal = memo(function DisconnectModal({ site, setOpen }: Disconn
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const handleDisconnect = useCallback(async () => {
         if (!site) return
-        if (!getEnumAsArray(EnhanceableSite).some((x) => isEqual(x.value, site))) return
-        await Services.Wallet.recordConnectedSites(site as EnhanceableSite, false)
+        if (!getEnumAsArray({ ...EnhanceableSite, ...ExtensionSite }).some((x) => isEqual(x.value, site))) return
+        await Services.Wallet.recordConnectedSites(site as EnhanceableSite | ExtensionSite, false)
     }, [site, wallet])
     const { mutate: onDisconnect } = useMutation({
         mutationFn: handleDisconnect,
