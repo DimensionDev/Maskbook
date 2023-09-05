@@ -1,8 +1,9 @@
-import { useCallback, useEffect } from 'react'
+import { useEffect } from 'react'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { NFTAvatarButton } from '@masknet/plugin-avatar'
-import { ConnectPersonaBoundary, useCurrentPersonaConnectStatus } from '@masknet/shared'
+import { ConnectPersonaBoundary } from '@masknet/shared'
+import { useAccount } from '@masknet/web3-hooks-base'
 import { PluginID, CrossIsolationMessages, currentPersonaIdentifier } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { startWatch } from '../../../../utils/startWatch.js'
@@ -13,7 +14,6 @@ import { ButtonStyle, type ButtonProps } from '../../constant.js'
 import { useLastRecognizedIdentity, useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
 import { usePersonasFromDB } from '../../../../components/DataSource/usePersonasFromDB.js'
 import Services from '#services'
-import { useAccount } from '@masknet/web3-hooks-base'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     injectOpenNFTAvatarEditProfileButtonAtProfilePage(signal)
@@ -52,38 +52,18 @@ function useNFTAvatarButtonStyles() {
     const style = ButtonStyle[themeSettings.size]
     return useStyles(style)
 }
-
+function clickHandler() {
+    CrossIsolationMessages.events.avatarSettingDialogEvent.sendToLocal({
+        open: true,
+        startPicking: true,
+    })
+}
 function OpenNFTAvatarEditProfileButtonInTwitter() {
-    const { classes } = useNFTAvatarButtonStyles()
     const account = useAccount()
+    const { classes } = useNFTAvatarButtonStyles()
     const allPersonas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
-    const { value: status, loading } = useCurrentPersonaConnectStatus(
-        allPersonas,
-        currentIdentifier,
-        Services.Helper.openDashboard,
-        lastRecognized,
-    )
-
-    const clickHandler = useCallback(() => {
-        if (account) {
-            CrossIsolationMessages.events.avatarSettingDialogEvent.sendToLocal({
-                open: true,
-                startPicking: true,
-            })
-            return
-        }
-        if (!status.connected || !status.verified || !status.hasPersona || !status.currentPersona) {
-            status.action?.(PluginID.Avatar)
-            return
-        }
-
-        CrossIsolationMessages.events.avatarSettingDialogEvent.sendToLocal({
-            open: true,
-            startPicking: true,
-        })
-    }, [status, account])
 
     useEffect(() => {
         return CrossIsolationMessages.events.personaBindFinished.on((ev) => {
@@ -91,10 +71,13 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
         })
     }, [clickHandler])
 
-    if (loading) return null
-
     return (
         <ConnectPersonaBoundary
+            beforeAction={() => {
+                if (account) {
+                    clickHandler()
+                }
+            }}
             personas={allPersonas}
             identity={lastRecognized}
             currentPersonaIdentifier={currentIdentifier}
