@@ -38,7 +38,9 @@ export const RestPartOfPluginUIContextShared: Omit<
     ),
     send: Services.Wallet.send,
 
-    openDashboard: Services.Helper.openDashboard,
+    openDashboard: async (...args) => {
+        await Services.Helper.openDashboard(...args)
+    },
     openPopupWindow: Services.Helper.openPopupWindow,
     closePopupWindow: Services.Helper.removePopupWindow,
     fetchJSON: Services.Helper.fetchJSON,
