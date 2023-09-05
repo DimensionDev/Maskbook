@@ -35,7 +35,6 @@ export enum PluginID {
     Game = 'com.maskbook.game',
     Snapshot = 'org.snapshot',
     Savings = 'com.savings',
-    ITO = 'com.maskbook.ito',
     Wallet = 'com.maskbook.wallet',
     FileService = 'com.maskbook.fileservice',
     CyberConnect = 'me.cyberconnect.app',

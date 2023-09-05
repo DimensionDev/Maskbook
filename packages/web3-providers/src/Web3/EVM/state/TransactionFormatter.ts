@@ -21,7 +21,6 @@ import { TransferTokenDescriptor } from './TransactionFormatter/descriptors/Tran
 import { ContractDeploymentDescriptor } from './TransactionFormatter/descriptors/ContractDeployment.js'
 import { CancelDescriptor } from './TransactionFormatter/descriptors/Cancel.js'
 import { BaseDescriptor } from './TransactionFormatter/descriptors/Base.js'
-import { ITODescriptor } from './TransactionFormatter/descriptors/ITO.js'
 import { GitcoinDescriptor } from './TransactionFormatter/descriptors/Gitcoin.js'
 import { MaskBoxDescriptor } from './TransactionFormatter/descriptors/MaskBox.js'
 import { RedPacketDescriptor } from './TransactionFormatter/descriptors/RedPacket.js'
@@ -45,7 +44,6 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
             new AirdropDescriptor(),
             new LensDescriptor(),
             new SavingsDescriptor(),
-            new ITODescriptor(),
             new GitcoinDescriptor(),
             new MaskBoxDescriptor(),
             new RedPacketDescriptor(),
