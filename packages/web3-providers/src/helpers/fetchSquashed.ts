@@ -36,6 +36,25 @@ async function defaultResolver(request: Request) {
     return `${request.method} ${request.url} ${request.method === 'POST' ? await request.text() : 'NULL'}`
 }
 
+export async function stableSquashedCached(
+    info: RequestInfo | URL,
+    init?: RequestInit,
+    resolver = defaultResolver,
+): Promise<Response | void> {
+    const request = new Request(info, init)
+
+    // skip not cacheable requests
+    if (request.method !== 'GET' && request.method !== 'POST') return
+
+    // skip all non-http requests
+    const url = request.url
+    if (!url.startsWith('http')) return
+
+    const key = await resolver(request)
+    if (!key) return
+    CACHE.delete(key)
+}
+
 export async function fetchSquashed(
     input: RequestInfo | URL,
     init?: RequestInit,

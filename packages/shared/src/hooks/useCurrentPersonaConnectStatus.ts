@@ -118,12 +118,13 @@ export function useCurrentPersonaConnectStatus(
         }
     }, [currentPersonaIdentifier, personas, identity?.identifier, create, openPersonListDialog])
 
-    useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [retry])
-
     useEffect(() => {
-        return MaskMessages.events.ownProofChanged.on(() => {
-            retry()
-        })
+        const cleanPersonaChangedListener = MaskMessages.events.ownPersonaChanged.on(retry)
+        const cleanProofsChangedListener = MaskMessages.events.ownProofChanged.on(retry)
+        return () => {
+            cleanPersonaChangedListener()
+            cleanProofsChangedListener()
+        }
     }, [retry])
 
     return { value, loading, retry, error }
