@@ -12,7 +12,7 @@ import { injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog } from './NFTAv
 import { ButtonStyle, type ButtonProps } from '../../constant.js'
 import { useLastRecognizedIdentity, useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
 import { usePersonasFromDB } from '../../../../components/DataSource/usePersonasFromDB.js'
-import Services from '#services'
+import Services from '../../../../extension/service.js'
 import { useAccount } from '@masknet/web3-hooks-base'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
