@@ -1,21 +1,15 @@
-import { defer, timeout } from '@masknet/kit'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { ActionButton, makeStyles } from '@masknet/theme'
-import { Providers, Web3 } from '@masknet/web3-providers'
-import { isSameAddress } from '@masknet/web3-shared-base'
-import { ProviderType } from '@masknet/web3-shared-evm'
-import { Box } from '@mui/material'
-import { memo, useState } from 'react'
-import { Controller } from 'react-hook-form'
+import { Icons } from '@masknet/icons'
+import { PopupRoutes } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { List, ListItem, ListItemIcon, ListItemText, Tooltip, Typography } from '@mui/material'
+import { first, sortBy } from 'lodash-es'
+import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAsync, useAsyncFn } from 'react-use'
-import type { z as zod } from 'zod'
-import Services from '#services'
 import { useI18N } from '../../../../../utils/index.js'
-import { StyledInput } from '../../../components/StyledInput/index.js'
 import { useTitle } from '../../../hooks/index.js'
-import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm.js'
-import { useWeb3State } from '@masknet/web3-hooks-base'
+import { useWalletGroup } from '../../../hooks/useWalletGroup.js'
+import { ImportCreateWallet } from '../components/ImportCreateWallet/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -25,86 +19,115 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         overflow: 'auto',
     },
+    sectionTitle: {
+        fontSize: 14,
+        fontWeight: 700,
+        lineHeight: '18px',
+        marginBottom: theme.spacing(2),
+        color: theme.palette.maskColor.second,
+    },
+    groups: {
+        padding: 0,
+        marginBottom: theme.spacing(2),
+    },
+    group: {
+        boxShadow: theme.palette.maskColor.bottomBg,
+        padding: theme.spacing(1.5),
+        backdropFilter: 'blur(8px)',
+        borderRadius: 8,
+        cursor: 'pointer',
+        '&:not(:first-of-type)': {
+            marginTop: theme.spacing(2),
+        },
+    },
+    secondaryAction: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    groupIcon: {
+        marginRight: 0,
+        minWidth: 'auto',
+    },
+    groupText: {
+        margin: theme.spacing(0, 0, 0, 1),
+    },
+    groupName: {
+        fontSize: 12,
+        fontWeight: 700,
+        lineHeight: '16px',
+        color: theme.palette.maskColor.main,
+    },
+    walletCount: {
+        marginRight: theme.spacing(1),
+        fontSize: 12,
+        color: theme.palette.maskColor.main,
+        fontWeight: 700,
+        lineHeight: '16px',
+    },
 }))
-
-async function pollResult(address: string) {
-    const subscription = Providers[ProviderType.MaskWallet].subscription.wallets
-    if (subscription.getCurrentValue().find((x) => isSameAddress(x.address, address))) return
-    const [promise, resolve] = defer()
-    const unsubscribe = subscription.subscribe(() => {
-        if (subscription.getCurrentValue().find((x) => isSameAddress(x.address, address))) resolve(true)
-    })
-    return timeout(promise, 10_000, 'It takes too long to create a wallet. You might try again.').finally(unsubscribe)
-}
 
 const CreateWallet = memo(function CreateWallet() {
     const { t } = useI18N()
+    const { classes, theme } = useStyles()
     const navigate = useNavigate()
-    const { classes } = useStyles()
-    const [errorMessage, setErrorMessage] = useState('')
 
-    const {
-        control,
-        handleSubmit,
-        setValue,
-        formState: { errors, isValid },
-        schema,
-    } = useSetWalletNameForm()
-
-    const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const { loading: isLoadingEns } = useAsync(async () => {
-        if (!NameService?.reverse) return
-        const nextWallet = await Services.Wallet.generateNextDerivationAddress()
-        if (!nextWallet) return
-        const ens = await NameService.reverse(nextWallet)
-        if (ens) setValue('name', ens)
-    }, [!NameService?.reverse, setValue])
-
-    const [{ loading }, onCreate] = useAsyncFn(async ({ name }: zod.infer<typeof schema>) => {
-        try {
-            const address = await Services.Wallet.deriveWallet(name)
-            await pollResult(address)
-            await Web3.connect({
-                providerType: ProviderType.MaskWallet,
-                account: address,
-            })
-            navigate(-1)
-        } catch (error) {
-            if (error instanceof Error) {
-                setErrorMessage(errorMessage)
-            }
-        }
-    }, [])
-
-    const onSubmit = handleSubmit(onCreate)
+    const walletGroup = useWalletGroup()
+    const groups = walletGroup?.groups ? Object.entries(walletGroup.groups) : []
 
     useTitle(t('popups_add_wallet'))
-    const disabled = !isValid || loading || isLoadingEns
 
     return (
         <div className={classes.content}>
-            <Box flexGrow={1} overflow="auto">
-                <Controller
-                    name="name"
-                    control={control}
-                    render={({ field }) => (
-                        <StyledInput
-                            {...field}
-                            autoFocus
-                            disabled={isLoadingEns}
-                            placeholder={t('popups_wallet_enter_your_wallet_name')}
-                            error={!!errorMessage || !!errors.name?.message}
-                            helperText={errorMessage || errors.name?.message}
-                            inputProps={{
-                                maxLength: 18,
-                            }}
-                        />
-                    )}
-                />
-            </Box>
-            <ActionButton loading={loading || isLoadingEns} fullWidth disabled={disabled} onClick={onSubmit}>
-                {t('add')}
-            </ActionButton>
+            {groups.length ? (
+                <>
+                    <Typography className={classes.sectionTitle}>
+                        {t('add_new_address_to_an_existing_group')}
+                    </Typography>
+                    <List className={classes.groups}>
+                        {groups.map(([key, wallets], index) => {
+                            const theFirstWallet = first(sortBy(wallets, (w) => w.createdAt.getMilliseconds()))
+                            return (
+                                <ListItem
+                                    classes={{ secondaryAction: classes.secondaryAction }}
+                                    key={key}
+                                    className={classes.group}
+                                    onClick={() => {
+                                        navigate(PopupRoutes.DeriveWallet, {
+                                            state: {
+                                                mnemonicId: key,
+                                            },
+                                        })
+                                    }}>
+                                    <ListItemIcon className={classes.groupIcon}>
+                                        <Icons.MaskBlue size={24} color={theme.palette.maskColor.white} />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        className={classes.groupText}
+                                        secondary={
+                                            theFirstWallet?.address ? (
+                                                <Tooltip title={theFirstWallet?.address}>
+                                                    <Typography component="span">
+                                                        {formatEthereumAddress(theFirstWallet?.address, 4)}
+                                                    </Typography>
+                                                </Tooltip>
+                                            ) : null
+                                        }>
+                                        <Typography className={classes.groupName}>
+                                            {t('popups_wallet_group_title', { index: index + 1 })}
+                                        </Typography>
+                                    </ListItemText>
+                                    <Typography className={classes.walletCount}>{wallets.length}</Typography>
+                                    <Icons.ArrowRight size={20} />
+                                </ListItem>
+                            )
+                        })}
+                    </List>
+                </>
+            ) : null}
+
+            <Typography className={classes.sectionTitle}>{t('or_create_a_new_wallet_group')}</Typography>
+            <ImportCreateWallet />
         </div>
     )
 })

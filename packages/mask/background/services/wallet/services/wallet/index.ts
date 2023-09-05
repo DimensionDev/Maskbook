@@ -74,14 +74,13 @@ export async function getPrimaryWalletByMnemonicId(mnemonicId?: string) {
     )
 }
 
-export async function getWalletPrimary() {
-    return (
-        first(
-            (await database.getWallets())
-                .filter((x) => x.storedKeyInfo?.type === api.StoredKeyType.Mnemonic)
-                .sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime()),
-        ) ?? null
-    )
+export async function getWalletPrimary(mnemonicId?: string) {
+    const wallets = await database.getWallets()
+    const { Mnemonic } = api.StoredKeyType
+    const list = wallets
+        .filter((x) => x.storedKeyInfo?.type === Mnemonic && (mnemonicId ? mnemonicId === x.mnemonicId : true))
+        .sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime())
+    return first(list) ?? null
 }
 
 export async function getDerivableAccounts(mnemonic: string, page: number, pageSize = 10) {
@@ -116,19 +115,22 @@ export async function getDerivableAccounts(mnemonic: string, page: number, pageS
     return accounts
 }
 
-export async function deriveWallet(name: string) {
+export async function deriveWallet(name: string, defaultMnemonicId?: string) {
     const masterPassword = await password.INTERNAL_getMasterPasswordRequired()
 
     // derive wallet base on the primary wallet
-    const primaryWallet = await getWalletPrimary()
+    const primaryWallet = await getWalletPrimary(defaultMnemonicId)
     if (!primaryWallet?.storedKeyInfo) throw new Error('Cannot find the primary wallet.')
 
     let derivedTimes = 0
     let latestDerivationPath = primaryWallet.latestDerivationPath ?? primaryWallet.derivationPath
     if (!latestDerivationPath) throw new Error('Failed to derive wallet without derivation path.')
 
-    const mnemonic = await exportMnemonicWords(primaryWallet.address, masterPassword)
-    const mnemonicId = await createMnemonicId(mnemonic)
+    let mnemonicId = defaultMnemonicId
+    if (!mnemonicId) {
+        const mnemonic = await exportMnemonicWords(primaryWallet.address, masterPassword)
+        mnemonicId = await createMnemonicId(mnemonic)
+    }
 
     // eslint-disable-next-line no-constant-condition
     while (true) {

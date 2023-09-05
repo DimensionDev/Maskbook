@@ -48,6 +48,7 @@ export enum PopupRoutes {
     WalletRename = '/wallet/rename',
     DeleteWallet = '/wallet/delete',
     CreateWallet = '/wallet/create',
+    DeriveWallet = '/wallet/derive',
     SelectWallet = '/wallet/select',
     BackupWallet = '/wallet/backup',
     AddToken = '/wallet/addToken',

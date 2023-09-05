@@ -1,7 +1,7 @@
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useBalance, useNativeToken } from '@masknet/web3-hooks-base'
 import { formatBalance } from '@masknet/web3-shared-base'
-import { Skeleton, Typography, type TypographyProps } from '@mui/material'
+import { Box, Skeleton, Typography, type TypographyProps } from '@mui/material'
 import { memo } from 'react'
 
 interface WalletBalanceProps extends TypographyProps {
@@ -36,9 +36,9 @@ export const WalletBalance = memo(function WalletBalance({
     return (
         <Typography display="flex" {...props}>
             {formatBalance(balance, nativeToken.decimals, 0, false, true)}
-            <Typography component="span" ml={0.5}>
+            <Box component="span" ml={0.5}>
                 {nativeToken.symbol}
-            </Typography>
+            </Box>
         </Typography>
     )
 })
