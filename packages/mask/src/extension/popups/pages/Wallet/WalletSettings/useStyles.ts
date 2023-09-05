@@ -78,4 +78,12 @@ export const useStyles = makeStyles()((theme) => ({
     removeWalletButton: {
         marginBottom: 16,
     },
+    bold: {
+        fontSize: 14,
+        fontWeight: 700,
+    },
+    confirmMessage: {
+        fontSize: 14,
+        lineHeight: '18px',
+    },
 }))
