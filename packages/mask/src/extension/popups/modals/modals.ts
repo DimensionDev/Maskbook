@@ -1,6 +1,7 @@
 import { SingletonModal } from '@masknet/shared-base'
 import type { DisconnectModalOpenProps, DisconnectModalCloseProps } from './DisconnectModal/index.js'
 import type { ConfirmModalOpenProps } from './ConfirmModal/index.js'
+import type { ConfirmDialogOpenProps } from './ConfirmDialog/index.js'
 import type { AddContactModalOpenProps } from './AddContactModal/index.js'
 import type { EditContactModalOpenProps } from './EditContactModal/index.js'
 import type { WalletRenameModalOpenProps } from './WalletRenameModal/index.js'
@@ -14,6 +15,7 @@ import type { ChooseTokenModalCloseProps, ChooseTokenModalOpenProps } from './Ch
 
 export const DisconnectModal = new SingletonModal<DisconnectModalOpenProps, DisconnectModalCloseProps>()
 export const ConfirmModal = new SingletonModal<ConfirmModalOpenProps, boolean>()
+export const ConfirmDialog = new SingletonModal<ConfirmDialogOpenProps, boolean>()
 export const AddContactModal = new SingletonModal<AddContactModalOpenProps, boolean>()
 export const EditContactModal = new SingletonModal<EditContactModalOpenProps, boolean>()
 export const WalletRenameModal = new SingletonModal<WalletRenameModalOpenProps, boolean>()

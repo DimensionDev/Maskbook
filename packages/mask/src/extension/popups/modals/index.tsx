@@ -1,6 +1,7 @@
 import { memo } from 'react'
 import { DisconnectModal } from './DisconnectModal/index.js'
 import { ConfirmModal } from './ConfirmModal/index.js'
+import { ConfirmDialog } from './ConfirmDialog/index.js'
 import { AddContactModal } from './AddContactModal/index.js'
 import { EditContactModal } from './EditContactModal/index.js'
 import { DeleteContactModal } from './DeleteContactModal/index.js'
@@ -21,6 +22,7 @@ export const Modals = memo(function Modals() {
         <>
             <DisconnectModal ref={modals.DisconnectModal.register} />
             <ConfirmModal ref={modals.ConfirmModal.register} />
+            <ConfirmDialog ref={modals.ConfirmDialog.register} />
             <AddContactModal ref={modals.AddContactModal.register} />
             <EditContactModal ref={modals.EditContactModal.register} />
             <DeleteContactModal ref={modals.DeleteContactModal.register} />
