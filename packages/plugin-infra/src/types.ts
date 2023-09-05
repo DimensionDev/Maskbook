@@ -154,7 +154,7 @@ export namespace Plugin.Shared {
         selectAccount(): Promise<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
 
         /** Open Dashboard with a new window */
-        openDashboard(route?: DashboardRoutes, search?: string): ReturnType<typeof browser.tabs.create>
+        openDashboard(route?: DashboardRoutes, search?: string): Promise<void>
 
         /** Open popup window */
         openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
