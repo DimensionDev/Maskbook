@@ -116,6 +116,7 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
             afterAction?.(status)
         }, [directTo, handlerPosition, status, createConfirm])
 
+        if (statusLoading) return null
         return (
             <Stack className={classes.root} display="inline-flex" onClick={handleClick}>
                 <Stack style={{ pointerEvents: status.action ? 'none' : 'auto' }} display="inline-flex">
