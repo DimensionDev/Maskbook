@@ -45,6 +45,7 @@
     { "path": "../shared" },
     { "path": "../shared-ui" },
     { "path": "../dashboard/" },
-    { "path": "../../types" }
+    { "path": "../../types" },
+    { "path": "../entry-sdk/" }
   ]
 }

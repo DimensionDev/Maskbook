@@ -13,7 +13,7 @@ import {
     appearanceSettings,
     BooleanPreference,
 } from '@masknet/shared-base'
-import { queryPersonasDB } from '../../../background/database/persona/db.js'
+import { queryPersonasDB } from '../../database/persona/web.js'
 
 function create<T>(settings: ValueRefWithReady<T>) {
     async function get() {

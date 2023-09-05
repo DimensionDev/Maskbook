@@ -1,0 +1,12 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "../dist/entry-sdk/",
+    "tsBuildInfoFile": "../dist/entry-sdk.tsbuildinfo",
+    "emitDeclarationOnly": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"]
+  },
+  "include": ["./"],
+  "references": [{ "path": "../utils-pure" }]
+}

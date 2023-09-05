@@ -1,8 +1,8 @@
 import { first } from 'lodash-es'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { createWalletDBAccess } from '../database/Wallet.db.js'
-import { createTransaction } from '../../../../background/database/utils/openDB.js'
-import { openPopupWindow } from '../../../../background/services/helper/index.js'
+import { createTransaction } from '../../../database/utils/openDB.js'
+import { openPopupWindow } from '../../helper/popup-opener.js'
 import type { RequestPayload } from '../database/types.js'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 

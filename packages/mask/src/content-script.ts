@@ -11,7 +11,7 @@ if (!Reflect.get(globalThis, loaded)) {
         // This can happens in the following cases:
         // - User clicked the connect button in the popup, thus we inject the content script.
         // - We have permission for this site (granted previously?) so the user expect Mask to work here.
-        const { startMaskSDK } = await import('./extension/mask-sdk/index.js')
+        const { startMaskSDK } = await import('../entry-sdk/index.js')
         startMaskSDK()
     }
 }
