@@ -12,7 +12,7 @@ import {
     Signer,
 } from '@masknet/web3-shared-evm'
 import { signWithWallet } from './wallet/index.js'
-import { signWithPersona } from '../../../../background/services/identity/index.js'
+import { signWithPersona } from '../../identity/persona/sign.js'
 
 /**
  * The entrance of all RPC requests to MaskWallet.

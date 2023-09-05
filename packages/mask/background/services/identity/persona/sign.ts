@@ -9,8 +9,8 @@ import {
     type SignType,
     MaskMessages,
 } from '@masknet/shared-base'
-import { queryPersonasWithPrivateKey } from '../../../../background/database/persona/db.js'
-import { openPopupWindow } from '../../../../background/services/helper/index.js'
+import { queryPersonasWithPrivateKey } from '../../../database/persona/web.js'
+import { openPopupWindow } from '../../helper/popup-opener.js'
 
 /**
  * Generate a signature w or w/o confirmation from user

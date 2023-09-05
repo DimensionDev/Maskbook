@@ -1,5 +1,5 @@
 import { type DBSchema, openDB } from 'idb/with-async-ittr'
-import { createDBAccess } from '../../../../background/database/utils/openDB.js'
+import { createDBAccess } from '../../../database/utils/openDB.js'
 import type { LegacyWalletRecordInDatabase, UnconfirmedRequestChunkRecordInDatabase } from './types.js'
 
 function path<T>(x: T) {

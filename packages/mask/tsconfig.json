@@ -1,5 +1,12 @@
 {
   "extends": "../../tsconfig.json",
   "files": [],
-  "references": [{ "path": "./src" }, { "path": "./dashboard/" }, { "path": "./devtools" }]
+  "references": [
+    // this folder contains codes to be moved out
+    { "path": "./src" },
+    // entries of Mask extension
+    { "path": "./dashboard/" },
+    { "path": "./devtools" },
+    { "path": "./entry-sdk/" }
+  ]
 }

@@ -1,5 +1,5 @@
 import { MaskMessages } from '@masknet/shared-base'
-import { hmr } from '../../../utils-pure/index.js'
+import { hmr } from '../utils-pure/index.js'
 
 const { signal } = hmr(import.meta.webpackHot)
 
