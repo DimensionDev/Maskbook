@@ -1,11 +1,15 @@
-import { first } from 'lodash-es'
+import { NameServiceID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
-import { LENS_ROOT_API } from './constants.js'
-import { fetchJSON } from '../helpers/fetchJSON.js'
+import { first } from 'lodash-es'
 import type { FollowModuleTypedData, LensBaseAPI } from '../entry-types.js'
+import { fetchJSON } from '../helpers/fetchJSON.js'
+import { LENS_ROOT_API } from './constants.js'
 
 export class LensAPI implements LensBaseAPI.Provider {
+    get id() {
+        return NameServiceID.Lens
+    }
     async getProfileByHandle(handle: string): Promise<LensBaseAPI.Profile> {
         const { data } = await fetchJSON<{ data: { profile: LensBaseAPI.Profile } }>(LENS_ROOT_API, {
             method: 'POST',
@@ -115,6 +119,29 @@ export class LensAPI implements LensBaseAPI.Provider {
             }),
         })
         return data.defaultProfile
+    }
+    async reverse(address: string) {
+        if (!isValidAddress(address)) return
+        type Response = { data: { defaultProfile?: Pick<LensBaseAPI.Profile, 'id' | 'name' | 'handle'> } }
+        const { data } = await fetchJSON<Response>(LENS_ROOT_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query: /* GraphQL */ `
+                    query handleOfDefaultProfile($address: EthereumAddress!) {
+                        defaultProfile(request: { ethereumAddress: $address }) {
+                            id
+                            name
+                            handle
+                        }
+                    }
+                `,
+                variables: { address },
+            }),
+        })
+        return data.defaultProfile?.handle
     }
 
     async queryProfilesByAddress(address: string) {
@@ -520,7 +547,7 @@ export class LensAPI implements LensBaseAPI.Provider {
 
     async queryTransactionPublicationId(txId: string) {
         const result = await fetchJSON<{
-            data: { dataAvailabilityTransaction: LensBaseAPI.TransactionPublication }
+            data: { dataAvailabilityTransaction?: LensBaseAPI.TransactionPublication }
         }>(LENS_ROOT_API, {
             method: 'POST',
             headers: {
@@ -545,6 +572,6 @@ export class LensAPI implements LensBaseAPI.Provider {
             }),
         })
 
-        return result?.data?.dataAvailabilityTransaction.publicationId
+        return result?.data?.dataAvailabilityTransaction?.publicationId
     }
 }

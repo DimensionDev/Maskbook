@@ -94,7 +94,7 @@ export class NameServiceState<
                 return
             }
         })
-        return attemptUntil(callbacks, undefined, () => false)
+        return attemptUntil(callbacks, undefined, (result) => !result)
     }
 
     createResolvers(): NameServiceAPI.Provider[] {
