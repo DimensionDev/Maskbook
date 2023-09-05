@@ -24,7 +24,7 @@ export const WalletHeader = memo(function WalletHeader() {
         refetch()
     }, [location.pathname])
 
-    const currentNetwork = useNetwork(NetworkPluginID.PLUGIN_EVM)
+    const currentNetwork = useNetwork(NetworkPluginID.PLUGIN_EVM, chainId)
     const matchUnlock = useMatch(PopupRoutes.Unlock)
     const matchResetWallet = useMatch(PopupRoutes.ResetWallet)
     const matchWallet = useMatch(PopupRoutes.Wallet)
