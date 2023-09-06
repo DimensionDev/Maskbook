@@ -72,6 +72,7 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
                 <PasswordField
                     placeholder={t('password')}
                     onChange={(e) => setNewPassword(e.target.value)}
+                    autoFocus
                     onBlur={validPassword}
                     value={newPassword}
                     error={!!passwordValidError}

@@ -54,6 +54,7 @@ export const PersonaRenameModal = memo<ActionModalBaseProps>(function PersonaRen
                     error={!!error}
                     helperText={error}
                     value={name}
+                    autoFocus
                     onChange={(e) => {
                         if (e.target.value.length > 24) return
                         if (error) setError('')

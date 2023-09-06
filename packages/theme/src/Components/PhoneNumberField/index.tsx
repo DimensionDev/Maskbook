@@ -156,6 +156,7 @@ export function PhoneNumberField({ value, error, placeholder, onBlur, onChange }
         <>
             <MaskTextField
                 fullWidth
+                autoFocus
                 value={value.phone}
                 onChange={handlePhoneChange}
                 onBlur={onBlur}
