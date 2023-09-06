@@ -250,7 +250,10 @@ function RenderEntryComponent({ application }: { application: Application }) {
             ApplicationEntryStatus.shouldVerifyNextId ||
             !ApplicationEntryStatus.isPersonaConnected
         )
-            return () => ApplicationEntryStatus.personaAction?.(application.pluginID)
+            return () =>
+                ApplicationEntryStatus.personaAction?.(
+                    ApplicationEntryStatus.isPersonaCreated ? application.pluginID : undefined,
+                )
 
         return
     }, [ApplicationEntryStatus, application])

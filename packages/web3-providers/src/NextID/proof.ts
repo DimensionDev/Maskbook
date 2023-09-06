@@ -223,11 +223,13 @@ const getExistedBindingQueryURL = (platform: string, identity: string, personaPu
     })
 
 export class NextIDProofAPI implements NextIDBaseAPI.Proof {
-    fetchFromProofService<T>(request: Request | RequestInfo, init?: RequestInit) {
-        return fetchCachedJSON<T>(request, init, {
-            squashExpiration: Expiration.THIRTY_MINUTES,
-            cacheDuration: Duration.THIRTY_MINUTES,
-        })
+    fetchFromProofService<T>(request: Request | RequestInfo, init?: RequestInit, disableCache?: boolean) {
+        return disableCache
+            ? fetchJSON<T>(request, init)
+            : fetchCachedJSON<T>(request, init, {
+                  squashExpiration: Expiration.THIRTY_MINUTES,
+                  cacheDuration: Duration.THIRTY_MINUTES,
+              })
     }
 
     async clearPersonaQueryCache(personaPublicKey: string) {
@@ -319,7 +321,12 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return first(result) ?? null
     }
 
-    async queryAllExistedBindingsByPlatform(platform: NextIDPlatform, identity: string, exact?: boolean) {
+    async queryAllExistedBindingsByPlatform(
+        platform: NextIDPlatform,
+        identity: string,
+        exact?: boolean,
+        disableCache?: boolean,
+    ) {
         if (!platform && !identity) return []
 
         const nextIDPersonaBindings: NextIDPersonaBindings[] = []
@@ -333,6 +340,8 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                     page,
                     order: 'desc',
                 }),
+                undefined,
+                disableCache,
             )
             const personaBindings = result.ids
             if (personaBindings.length === 0) return nextIDPersonaBindings

@@ -25,6 +25,11 @@ const LogoSelector = new LiveSelector()
     .querySelector<HTMLElement>('h1[role="heading"] a > div > svg')
     .enableSingleMode()
 
+const defaultXIcon = `
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M13.882 10.46 21.313 2h-1.76l-6.456 7.344L7.944 2H2l7.793 11.107L2 21.977h1.76l6.814-7.757 5.443 7.757h5.944L13.88 10.46Zm-2.413 2.744-.79-1.107L4.395 3.3H7.1l5.071 7.103.788 1.106 6.592 9.232h-2.705l-5.378-7.537Z"/>
+    </svg>
+`
 const LetterHTML = LogoSelector.evaluate()?.innerHTML
 
 const useStyles = makeStyles()(() => ({
@@ -75,7 +80,7 @@ export function SwitchLogoButton() {
             node.innerHTML = BlueBirdHTML
         } else {
             // eslint-disable-next-line @masknet/browser-no-set-html
-            node.innerHTML = LetterHTML || ''
+            node.innerHTML = LetterHTML || defaultXIcon
         }
     }, [logoType, disable])
 
