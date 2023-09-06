@@ -1,8 +1,11 @@
+import { Icons } from '@masknet/icons'
 import { Image, Markdown } from '@masknet/shared'
+import { useEverSeen } from '@masknet/shared-base-ui'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { resolveIPFS_URL, resolveResourceURL } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
+import Linkify from 'linkify-react'
 import { useCallback } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel, usePublicationId } from '../../hooks/index.js'
@@ -10,8 +13,6 @@ import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
 import { Label, LinkifyOptions, htmlToPlain } from './common.js'
 import { useMarkdownStyles } from './useMarkdownStyles.js'
-import { Icons } from '@masknet/icons'
-import Linkify from 'linkify-react'
 
 const useStyles = makeStyles<
     void,
@@ -145,7 +146,11 @@ const toHex = (num: number) => {
     return str.length % 2 === 0 ? str : str.padStart(str.length + 1, '0')
 }
 
-function resolveDetailLink(publicationId?: string, metadata?: RSS3BaseAPI.PostMetadata, related_urls?: string[]) {
+function resolveDetailLink(
+    publicationId?: string | null,
+    metadata?: RSS3BaseAPI.PostMetadata,
+    related_urls?: string[],
+) {
     if (publicationId) return `https://lenstube.xyz/watch/${publicationId}`
     if (!metadata) return null
 
@@ -186,15 +191,14 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
         [action.platform, action.related_urls?.[0]],
     )
 
-    const { data: publicationId, isLoading } = usePublicationId(feed.hash)
-
     const media = metadata?.media?.[0]
+    const [seen, ref] = useEverSeen()
+    const enablePublicationId = seen && !!media?.mime_type.startsWith('video/')
+    const { data: publicationId, isLoading } = usePublicationId(enablePublicationId ? feed.hash : null)
+
     // Image post on Forcaster
     const isImagePost = metadata?.body ? /https?:\/\/.*?\.(jpg|png)$/.test(metadata.body) : false
     const soloImage = rest.verbose && isImagePost
-    if (rest.verbose) {
-        console.log({ soloImage, isImagePost, body: metadata?.body })
-    }
 
     return (
         <CardFrame
@@ -214,7 +218,7 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
                     }}
                 />
             </Typography>
-            <div className={classes.body}>
+            <div className={classes.body} ref={ref}>
                 {media?.mime_type.startsWith('image/') || isImagePost ? (
                     <Image
                         classes={{
