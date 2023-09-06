@@ -12,7 +12,7 @@ import { memo, useCallback } from 'react'
 import { Trans } from 'react-i18next'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import Services from '#services'
-import { DisconnectModal } from '../../modals/modals.js'
+import { ConfirmDialog } from '../../modals/modals.js'
 import type { ConnectedWalletInfo } from '../../pages/Personas/type.js'
 import { useModalNavigate } from '../ActionModal/index.js'
 import { useVerifiedWallets } from '../../hooks/index.js'
@@ -189,9 +189,10 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
                             size={16}
                             onClick={async () => {
                                 if (!currentPersona) return
-                                const confirmed = await DisconnectModal.openAndWaitForClose({
+                                const confirmed = await ConfirmDialog.openAndWaitForClose({
                                     title: t('popups_release_bind_wallet_title'),
-                                    tips: (
+                                    confirmVariant: 'warning',
+                                    message: (
                                         <Trans
                                             i18nKey="popups_wallet_disconnect_tips"
                                             components={{

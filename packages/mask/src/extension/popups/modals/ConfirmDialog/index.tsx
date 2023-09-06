@@ -31,6 +31,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     message: {
         marginTop: theme.spacing(3),
+        padding: theme.spacing(0, 2),
         lineHeight: '20px',
         fontSize: 14,
         color: theme.palette.maskColor.second,
@@ -57,6 +58,8 @@ export interface ConfirmDialogProps extends Omit<DialogProps, 'title' | 'onSubmi
     description?: ReactNode | string
     confirmLabel?: string
     cancelLabel?: string
+    /** Change color of confirm button */
+    confirmVariant?: 'error' | 'warning'
     onConfirm(): void
     onClose?(): void
 }
@@ -69,6 +72,7 @@ export const Dialog = memo(
         description,
         confirmLabel = 'Confirm',
         cancelLabel = 'Cancel',
+        confirmVariant = 'error',
         onConfirm,
         onClose,
         ...rest
@@ -91,7 +95,11 @@ export const Dialog = memo(
                         <ActionButton fullWidth variant="roundedOutlined" onClick={() => onClose?.()}>
                             {cancelLabel}
                         </ActionButton>
-                        <ActionButton fullWidth variant="roundedContained" color="error" onClick={() => onConfirm()}>
+                        <ActionButton
+                            fullWidth
+                            variant="roundedContained"
+                            color={confirmVariant}
+                            onClick={() => onConfirm()}>
                             {confirmLabel}
                         </ActionButton>
                     </Box>
