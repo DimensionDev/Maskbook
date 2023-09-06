@@ -28,7 +28,7 @@ import { AccountDetailUI } from './UI.js'
 import Service from '#services'
 import { PageTitleContext } from '../../../context.js'
 import { isEqualWith, uniq, sortBy, isEqual } from 'lodash-es'
-import { DisconnectModal } from '../../../modals/modals.js'
+import { ConfirmDialog } from '../../../modals/modals.js'
 import { DisconnectEventMap } from '../common.js'
 
 const AccountDetail = memo(() => {
@@ -191,12 +191,19 @@ const AccountDetail = memo(() => {
                     size={24}
                     onClick={async () => {
                         if (!currentPersona) return
-                        const confirmed = await DisconnectModal.openAndWaitForClose({
+                        const confirmed = await ConfirmDialog.openAndWaitForClose({
                             title: t('popups_disconnect_persona'),
-                            tips: (
+                            confirmVariant: 'warning',
+                            message: (
                                 <Trans
                                     i18nKey="popups_persona_disconnect_tips"
-                                    components={{ strong: <strong style={{ color: theme.palette.maskColor.main }} /> }}
+                                    components={{
+                                        strong: (
+                                            <strong
+                                                style={{ color: theme.palette.maskColor.main, wordBreak: 'keep-all' }}
+                                            />
+                                        ),
+                                    }}
                                     values={{
                                         identity: selectedAccount?.identifier.userId,
                                         personaName: currentPersona?.nickname,
