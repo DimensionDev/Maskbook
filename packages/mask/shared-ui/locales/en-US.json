@@ -921,7 +921,7 @@
     "popups_verify_wallet_bind_fail_tips": "Failed to add the wallet, please try again.",
     "popups_verify_wallet_congratulation_tips": "Connecting {{persona}} with {{wallet}} successfully.",
     "popups_switch_Wallet": "Switch Wallet",
-    "popups_encrypted_friends": "Encrypted Contacts",
+    "popups_encrypted_friends": "Contacts",
     "popups_encrypted_friends_search_placeholder": "Search Next.ID, Twitter, Lens, ENS or Address",
     "popups_encrypted_friends_search_no_result": "No search results",
     "popups_encrypted_friends_no_friends": "No encrypted contacts, you can try searching.",
