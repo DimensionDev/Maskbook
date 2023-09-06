@@ -31,6 +31,7 @@
     "tip_wallets_missed": "未找到钱包。",
     "tip_contracts": "合约",
     "promote": "安装 https://mask.io/download-links 来发送您的第一笔小费。",
+    "tip_token_share_post$name": "我刚刚打赏了 {{- amount}} {{symbol}} 到@{{recipientSnsId}} 的钱包地址 {{recipient}}\n\n$t(promote)",
     "tip_add": "添加",
     "tip_adding": "添加中",
     "tip_add_collectibles": "添加 NFT",
