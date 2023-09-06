@@ -92,7 +92,7 @@ const DeriveWallet = memo(function DeriveWallet() {
     const [{ loading }, create] = useAsyncFn(async () => {
         try {
             const nextWallet = await Services.Wallet.generateNextDerivationAddress()
-            const ens = await NameService?.reverse?.(nextWallet)
+            const ens = await NameService?.safeReverse?.(nextWallet)
             const name = ens || generateNewWalletName(allWallets)
             const address = await Services.Wallet.deriveWallet(name, mnemonicId)
             await pollResult(address)

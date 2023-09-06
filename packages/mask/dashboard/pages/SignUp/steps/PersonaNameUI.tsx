@@ -57,6 +57,7 @@ export function PersonaNameUI({ onNext, error, loading }: PersonaNameUIProps) {
                     setPersonaName(e.target.value)
                 }}
                 required
+                autoFocus
                 InputProps={{ disableUnderline: true }}
                 inputProps={{ maxLength: 24 }}
                 error={!!error}

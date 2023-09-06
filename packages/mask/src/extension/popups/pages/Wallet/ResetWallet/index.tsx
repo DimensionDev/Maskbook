@@ -1,12 +1,13 @@
-import { memo, useCallback, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Box, Button, Typography, useTheme } from '@mui/material'
-import { ActionButton, makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../../../utils/index.js'
-import { Trans } from 'react-i18next'
-import { StyledInput } from '../../../components/StyledInput/index.js'
-import { PopupRoutes } from '@masknet/shared-base'
 import Services from '#services'
+import { PopupRoutes } from '@masknet/shared-base'
+import { ActionButton, makeStyles } from '@masknet/theme'
+import { Web3 } from '@masknet/web3-providers'
+import { Box, Button, Typography } from '@mui/material'
+import { memo, useCallback, useState } from 'react'
+import { Trans } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
+import { useI18N } from '../../../../../utils/index.js'
+import { StyledInput } from '../../../components/StyledInput/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -55,7 +56,8 @@ const useStyles = makeStyles()((theme) => ({
         boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
         position: 'absolute',
         backdropFilter: 'blur(8px)',
-        width: '100%',
+        left: 0,
+        right: 0,
         bottom: 0,
         zIndex: 100,
         padding: '16px',
@@ -68,10 +70,9 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const ResetWallet = memo(() => {
+const ResetWallet = memo(function ResetWallet() {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const theme = useTheme()
     const navigate = useNavigate()
     const [answer, setAnswer] = useState('')
     const disabled = answer !== 'RESET'
@@ -79,10 +80,12 @@ const ResetWallet = memo(() => {
     const onBack = useCallback(() => navigate(PopupRoutes.Unlock), [])
 
     const onConfirm = useCallback(async () => {
+        await Web3.resetAllWallets?.()
         await browser.tabs.create({
             active: true,
             url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet/form?reset=true'),
         })
+
         await Services.Helper.removePopupWindow()
     }, [])
 
@@ -102,6 +105,7 @@ const ResetWallet = memo(() => {
                 <Typography className={classes.description}>{t('popups_wallet_reset_wallet_description_3')}</Typography>
                 <StyledInput
                     type="text"
+                    autoFocus
                     placeholder="RESET"
                     value={answer}
                     onChange={(ev) => {

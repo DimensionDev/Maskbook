@@ -97,6 +97,13 @@ export class NameServiceState<
         return attemptUntil(callbacks, undefined, (result) => !result)
     }
 
+    async safeReverse(address: string) {
+        try {
+            return await this.reverse(address)
+        } catch {}
+        return
+    }
+
     createResolvers(): NameServiceAPI.Provider[] {
         throw new Error('Method not implemented.')
     }

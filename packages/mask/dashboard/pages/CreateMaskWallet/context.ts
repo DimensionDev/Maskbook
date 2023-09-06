@@ -12,7 +12,7 @@ function useContext() {
 
     const resetWallets = useCallback(
         async (password: string | undefined, isReset: boolean | undefined) => {
-            if (!(isReset && wallets.length && password)) return
+            if (!isReset || !wallets.length || !password) return
             await WalletServiceRef.value.resetPassword(password)
             await Web3.resetAllWallets?.({
                 providerType: ProviderType.MaskWallet,
