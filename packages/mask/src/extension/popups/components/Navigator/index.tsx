@@ -69,6 +69,7 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
     }, [!currentPersona])
 
     useContext(HydrateFinished)()
+    const messages = useMessages()
 
     return (
         <Box className={cx(classes.container, className)} {...rest}>
@@ -84,7 +85,7 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
                 <BottomNavigationAction
                     tabIndex={-1}
                     showLabel={false}
-                    icon={<Icons.WalletNav size={28} />}
+                    icon={messages.length ? <Icons.BusyWalletNav size={28} /> : <Icons.WalletNav size={28} />}
                     className={classes.action}
                 />
             </BottomNavLink>

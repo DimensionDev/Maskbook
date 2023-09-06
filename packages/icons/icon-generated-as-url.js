@@ -128,6 +128,7 @@ export function base_user_url() { return new URL("./general/BaseUser.svg", impor
 export function best_trade_url() { return new URL("./general/BestTrade.svg", import.meta.url) }
 export function blue_pin_url() { return new URL("./general/BluePin.svg", import.meta.url) }
 export function bordered_success_url() { return new URL("./general/BorderedSuccess.svg", import.meta.url) }
+export function busy_wallet_nav_url() { return new URL("./general/BusyWalletNav.svg", import.meta.url) }
 export function buy_url() { return new URL("./general/Buy.svg", import.meta.url) }
 export function cached_url() { return new URL("./general/Cached.svg", import.meta.url) }
 export function candle_url() { return new URL("./general/candle.svg", import.meta.url) }
