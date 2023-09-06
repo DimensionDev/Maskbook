@@ -1,5 +1,4 @@
 import { SingletonModal } from '@masknet/shared-base'
-import type { DisconnectModalOpenProps, DisconnectModalCloseProps } from './DisconnectModal/index.js'
 import type { ConfirmModalOpenProps } from './ConfirmModal/index.js'
 import type { ConfirmDialogOpenProps } from './ConfirmDialog/index.js'
 import type { AddContactModalOpenProps } from './AddContactModal/index.js'
@@ -13,8 +12,6 @@ import type { ChangePaymentPasswordOpenProps } from './ChangePaymentPasswordModa
 import type { ShowPrivateKeyModalOpenProps } from './ShowPrivateKeyModal/index.js'
 import type { ChooseTokenModalCloseProps, ChooseTokenModalOpenProps } from './ChooseToken/index.js'
 
-/** @deprecated use ConfirmDialog instead */
-export const DisconnectModal = new SingletonModal<DisconnectModalOpenProps, DisconnectModalCloseProps>()
 export const ConfirmModal = new SingletonModal<ConfirmModalOpenProps, boolean>()
 export const ConfirmDialog = new SingletonModal<ConfirmDialogOpenProps, boolean>()
 export const AddContactModal = new SingletonModal<AddContactModalOpenProps, boolean>()
