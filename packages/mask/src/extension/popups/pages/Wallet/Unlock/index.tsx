@@ -66,14 +66,12 @@ const Unlock = memo(() => {
             if (toBeClose) {
                 await Services.Helper.removePopupWindow()
             } else {
-                navigate(
-                    from
-                        ? urlcat(from, {
-                              tab: from === PopupRoutes.Personas ? PopupHomeTabType.ConnectedWallets : undefined,
-                          })
-                        : PopupRoutes.Wallet,
-                    { replace: true },
-                )
+                const path = from
+                    ? urlcat(from, {
+                          tab: from === PopupRoutes.Personas ? PopupHomeTabType.ConnectedWallets : undefined,
+                      })
+                    : PopupRoutes.Wallet
+                navigate(path, { replace: true })
             }
         }
         return verified
@@ -93,6 +91,7 @@ const Unlock = memo(() => {
                     <PasswordField
                         placeholder="Password"
                         value={password}
+                        autoFocus
                         onKeyDown={(event) => {
                             if (event.key === 'Enter') handleUnlock()
                         }}

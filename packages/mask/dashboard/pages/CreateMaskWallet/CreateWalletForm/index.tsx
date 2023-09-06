@@ -131,6 +131,7 @@ const CreateWalletForm = memo(function CreateWalletForm() {
                         render={({ field }) => (
                             <PasswordField
                                 {...field}
+                                autoFocus
                                 className={classes.input}
                                 placeholder={t.create_wallet_payment_password_place_holder()}
                                 error={!isValid && !!errors.password?.message}

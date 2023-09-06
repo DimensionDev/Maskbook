@@ -170,7 +170,9 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(function Der
     return (
         <TableRow key={address} className={cx(classes.tableRow, classes.tableRowWithHoverEffect)}>
             <TableCell align="left" variant="body" className={classes.cell}>
-                <Typography className={classes.second}>{pathIndex + 1}</Typography>
+                <Typography className={classes.second} minWidth={20}>
+                    {pathIndex + 1}
+                </Typography>
                 <Typography className={classes.title}>
                     <FormattedAddress address={address} size={4} formatter={formatEthereumAddress} />
                 </Typography>
@@ -238,7 +240,7 @@ const DeriveWalletTableRowSkeleton = memo(function DeriveWalletTableRow() {
                 <Skeleton className={classes.title} width={60} height={18} />
             </TableCell>
             <TableCell align="right" variant="body" className={classes.cell}>
-                <Skeleton width={24} height={18} />
+                <Skeleton width={16} height={18} />
             </TableCell>
         </TableRow>
     )
