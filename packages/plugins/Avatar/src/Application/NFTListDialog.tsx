@@ -186,11 +186,11 @@ export function NFTListDialog() {
     })
 
     useUpdateEffect(() => {
-        setTargetAccount(account)
+        if (account) setTargetAccount(account)
     }, [account])
 
     useUpdateEffect(() => {
-        setAccount(originAccount)
+        if (originAccount) setAccount(originAccount)
     }, [originAccount])
 
     return (

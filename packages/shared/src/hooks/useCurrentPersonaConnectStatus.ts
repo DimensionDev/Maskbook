@@ -50,9 +50,9 @@ export function useCurrentPersonaConnectStatus(
     }, [])
 
     const openPersonListDialog = useCallback(
-        (target?: string, position?: 'center' | 'top-right', enableVerify = true) => {
+        (finishTarget?: string, position?: 'center' | 'top-right', enableVerify = true) => {
             PersonaSelectPanelModal.open({
-                target,
+                finishTarget,
                 position,
                 enableVerify,
             })

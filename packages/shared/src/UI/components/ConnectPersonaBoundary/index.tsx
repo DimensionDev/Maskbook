@@ -108,7 +108,12 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
             beforeAction?.(status)
 
             if (!status.hasPersona || !status.connected) {
-                status.action?.(DashboardRoutes.SignUpPersona, handlerPosition, enableVerify, !createConfirm)
+                status.action?.(
+                    directTo ?? DashboardRoutes.SignUpPersona,
+                    handlerPosition,
+                    enableVerify,
+                    !createConfirm,
+                )
                 return
             }
 

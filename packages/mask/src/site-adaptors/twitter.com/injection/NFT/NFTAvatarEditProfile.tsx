@@ -3,7 +3,6 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { NFTAvatarButton } from '@masknet/plugin-avatar'
 import { ConnectPersonaBoundary } from '@masknet/shared'
-import { useAccount } from '@masknet/web3-hooks-base'
 import { PluginID, CrossIsolationMessages, currentPersonaIdentifier } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { startWatch } from '../../../../utils/startWatch.js'
@@ -59,25 +58,28 @@ function clickHandler() {
     })
 }
 function OpenNFTAvatarEditProfileButtonInTwitter() {
-    const account = useAccount()
     const { classes } = useNFTAvatarButtonStyles()
     const allPersonas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
     useEffect(() => {
-        return CrossIsolationMessages.events.personaBindFinished.on((ev) => {
-            if (ev.pluginID === PluginID.Avatar) clickHandler()
-        })
+        const clearTasks = [
+            CrossIsolationMessages.events.personaBindFinished.on((ev) => {
+                if (ev.pluginID === PluginID.Avatar) clickHandler()
+            }),
+            CrossIsolationMessages.events.applicationDialogEvent.on((ev) => {
+                if (ev.pluginID === PluginID.Avatar) clickHandler()
+            }),
+        ]
+
+        return () => {
+            clearTasks.forEach((task) => task())
+        }
     }, [clickHandler])
 
     return (
         <ConnectPersonaBoundary
-            beforeAction={() => {
-                if (account) {
-                    clickHandler()
-                }
-            }}
             personas={allPersonas}
             identity={lastRecognized}
             currentPersonaIdentifier={currentIdentifier}
