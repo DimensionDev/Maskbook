@@ -13,6 +13,7 @@ import type { ChangePaymentPasswordOpenProps } from './ChangePaymentPasswordModa
 import type { ShowPrivateKeyModalOpenProps } from './ShowPrivateKeyModal/index.js'
 import type { ChooseTokenModalCloseProps, ChooseTokenModalOpenProps } from './ChooseToken/index.js'
 
+/** @deprecated use ConfirmDialog instead */
 export const DisconnectModal = new SingletonModal<DisconnectModalOpenProps, DisconnectModalCloseProps>()
 export const ConfirmModal = new SingletonModal<ConfirmModalOpenProps, boolean>()
 export const ConfirmDialog = new SingletonModal<ConfirmDialogOpenProps, boolean>()
