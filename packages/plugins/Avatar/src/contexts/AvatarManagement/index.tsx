@@ -92,7 +92,7 @@ export const AvatarManagementProvider = memo(({ children }: Props) => {
                 publicKey: linkedPersona?.identifier.publicKeyAsHex,
                 hasBinding: personaBindings.length > 0,
                 binding,
-                nextIdWalelts: binding?.proofs.filter(
+                nextIdWallets: binding?.proofs.filter(
                     (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
                 ),
                 nextIdPersonas: binding?.proofs.filter(
@@ -109,11 +109,11 @@ export const AvatarManagementProvider = memo(({ children }: Props) => {
             binding: data?.binding,
             isLoading,
             pfpType: PFP_TYPE.PFP,
-            targetAccount: selectedAccount || account || first(data?.nextIdWalelts)?.identity || '',
+            targetAccount: selectedAccount || account || first(data?.nextIdWallets)?.identity || '',
             setTargetAccount: setSelectedAccount,
             proof: proof ?? first(data?.nextIdPersonas),
             setProof,
-            proofs: proofs.length ? proofs : data?.nextIdWalelts ?? EMPTY_LIST,
+            proofs: proofs.length ? proofs : data?.nextIdWallets ?? EMPTY_LIST,
             setProofs,
             tokenInfo,
             setTokenInfo,
