@@ -187,7 +187,7 @@ const ContactListUI = memo(function ContactListUI() {
     return (
         <div className={classes.root}>
             <Box className={classes.page}>
-                <AddContactInputPanel isManage={isManage} />
+                <AddContactInputPanel isManage={isManage} autoFocus />
                 <Box className={classes.contactsPanel}>
                     {contacts.length ? (
                         <Typography className={classes.contactTitle}>

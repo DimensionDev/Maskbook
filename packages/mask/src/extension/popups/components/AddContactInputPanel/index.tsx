@@ -5,7 +5,7 @@ import { MaskTextField, makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { ExplorerResolver } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { Box, Typography, useTheme, type BoxProps } from '@mui/material'
+import { Box, Typography, useTheme, type BoxProps, type InputProps } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
 import { useI18N } from '../../../../utils/index.js'
 import { ContactsContext } from '../../hooks/index.js'
@@ -69,9 +69,10 @@ const useStyles = makeStyles()((theme) => ({
 
 interface Props extends BoxProps {
     isManage?: boolean
+    autoFocus?: InputProps['autoFocus']
 }
 
-const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, ...props }: Props) {
+const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, autoFocus, ...props }: Props) {
     const { t } = useI18N()
     const { classes, cx } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -113,6 +114,7 @@ const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, ...p
                     value={userInput}
                     onChange={(ev) => setUserInput(ev.target.value)}
                     wrapperProps={{ className: classes.input }}
+                    autoFocus={autoFocus}
                     InputProps={{
                         spellCheck: false,
                         endAdornment: addable ? (

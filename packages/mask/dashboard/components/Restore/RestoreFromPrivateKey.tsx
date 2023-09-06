@@ -75,6 +75,7 @@ export const RestoreFromPrivateKey = memo(function RestoreFromPrivateKey({
                 render={({ field }) => (
                     <MaskTextField
                         {...field}
+                        autoFocus
                         InputProps={{
                             className: classes.input,
                         }}

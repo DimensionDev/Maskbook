@@ -102,6 +102,7 @@ export const SignUp = memo(function SignUp() {
                     if (error) setError('')
                     setPersonaName(e.target.value)
                 }}
+                autoFocus
                 placeholder={t.persona_setup_persona_example()}
                 required
                 InputProps={{ disableUnderline: true }}

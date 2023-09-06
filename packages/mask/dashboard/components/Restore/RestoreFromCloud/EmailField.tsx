@@ -82,6 +82,7 @@ export const EmailField = memo(function EmailField() {
             <MaskTextField
                 fullWidth
                 value={account}
+                autoFocus
                 onBlur={validCheck}
                 onChange={(event) => {
                     setError('')

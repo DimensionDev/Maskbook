@@ -53,6 +53,7 @@ export const DesktopMnemonicConfirm = memo(function DesktopMnemonicConfirm(props
                         <MaskTextField
                             sx={{ width: '100%', userSelect: 'none' }}
                             value={word}
+                            autoFocus={i === 0}
                             InputProps={{
                                 disableUnderline: true,
                                 className: classes.input,

@@ -87,7 +87,7 @@ const Transfer = memo(function Transfer() {
                     }
                 />
                 <div className={classes.body}>
-                    <AddContactInputPanel p={0} m="16px 16px 0" />
+                    <AddContactInputPanel p={0} m="16px 16px 0" autoFocus />
                     <TabPanel value={TransferTabType.Token} className={classes.panel} data-hide-scrollbar>
                         <FungibleTokenSection />
                     </TabPanel>

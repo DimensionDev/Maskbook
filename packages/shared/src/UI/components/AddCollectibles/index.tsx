@@ -240,6 +240,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                         <>
                             <MaskTextField
                                 {...field}
+                                autoFocus
                                 placeholder={t.add_collectibles_address_placeholder()}
                                 error={!!(errors.address || validationMsgForAddress)}
                                 InputProps={{
