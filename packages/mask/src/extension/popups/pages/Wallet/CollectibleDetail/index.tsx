@@ -5,14 +5,7 @@ import { TextOverflowTooltip, makeStyles, usePopupCustomSnackbar } from '@maskne
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useNonFungibleAsset, useWeb3State } from '@masknet/web3-hooks-base'
 import { TokenType, formatBalance } from '@masknet/web3-shared-base'
-import {
-    SchemaType,
-    formatEthereumAddress,
-    isLensCollect,
-    isLensFollower,
-    isLensProfileAddress,
-    isValidAddress,
-} from '@masknet/web3-shared-evm'
+import { SchemaType, formatTrait, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
 import { Button, Skeleton, Typography } from '@mui/material'
 import formatDateTime from 'date-fns/format'
 import { memo, useContext, useEffect, useMemo } from 'react'
@@ -283,12 +276,7 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
                     </Typography>
                     <div className={classes.traits}>
                         {asset?.traits?.map((trait, index) => {
-                            const isAddress = isValidAddress(trait.value)
-                            const uiValue = isAddress
-                                ? formatEthereumAddress(trait.value, 4)
-                                : trait.displayType === 'date'
-                                ? formatTimestamp(trait.value)
-                                : trait.value
+                            const uiValue = formatTrait(trait)
 
                             return (
                                 <div key={index} className={classes.trait}>
