@@ -1,11 +1,9 @@
-import format from 'date-fns/format'
-import isAfter from 'date-fns/isAfter'
-import isValid from 'date-fns/isValid'
-import { makeStyles } from '@masknet/theme'
+import { ShadowRootTooltip, TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { formatTrait } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import { Rank } from './Rank.js'
 import { useI18N } from '../../locales/i18n_generated.js'
+import { Rank } from './Rank.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -75,13 +73,6 @@ export interface PropertiesCardProps {
     timeline?: boolean
 }
 
-function isReasonableDate(value: string | number) {
-    const date = new Date(value)
-    if (!isValid(date)) return false
-    // 2015.7.30, Ethereum's birthday
-    return isAfter(date, new Date(2015, 7, 30))
-}
-
 export function PropertiesCard(props: PropertiesCardProps) {
     const { asset, rank, timeline } = props
     const { classes, cx } = useStyles()
@@ -102,17 +93,22 @@ export function PropertiesCard(props: PropertiesCardProps) {
                 ) : null}
             </div>
             <div className={classes.content}>
-                {asset.traits?.map((x, i) => (
-                    <div key={i} className={classes.traitsItem}>
-                        <Typography className={classes.traitTitle}>{x.type}</Typography>
-                        <Typography className={classes.traitValue} title={x.value}>
-                            {isReasonableDate(x.value) ? format(new Date(x.value), 'yyyy-MM-dd') : x.value}
-                        </Typography>
-                        {typeof x.rarity === 'string' ? (
-                            <Typography className={classes.traitRarity}>({x.rarity})</Typography>
-                        ) : null}
-                    </div>
-                ))}
+                {asset.traits?.map((trait, i) => {
+                    const uiValue = formatTrait(trait)
+                    return (
+                        <div key={i} className={classes.traitsItem}>
+                            <TextOverflowTooltip title={trait.type} as={ShadowRootTooltip} placement="top">
+                                <Typography className={classes.traitTitle}>{trait.type}</Typography>
+                            </TextOverflowTooltip>
+                            <TextOverflowTooltip title={trait.value} as={ShadowRootTooltip}>
+                                <Typography className={classes.traitValue}>{uiValue}</Typography>
+                            </TextOverflowTooltip>
+                            {typeof trait.rarity === 'string' ? (
+                                <Typography className={classes.traitRarity}>({trait.rarity})</Typography>
+                            ) : null}
+                        </div>
+                    )
+                })}
             </div>
         </div>
     )

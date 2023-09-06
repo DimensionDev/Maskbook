@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { SourceType } from '@masknet/web3-shared-base'
@@ -29,22 +29,30 @@ const useStyles = makeStyles()((theme) => ({
     listItem: {
         width: '100%',
         display: 'flex',
+        gap: 8,
         justifyContent: 'space-between',
         alignItems: 'center',
         textTransform: 'capitalize',
+        overflow: 'auto',
     },
     title: {
         color: theme.palette.maskColor.second,
     },
     content: {
-        maxWidth: '60%',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
+        flexGrow: 1,
+        textAlign: 'right',
+        overflow: 'auto',
         display: 'flex',
         alignItems: 'center',
+        justifyContent: 'flex-end',
         gap: 6,
         color: theme.palette.maskColor.main,
+    },
+    value: {
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        flexGrow: 1,
     },
     link: {
         color: theme.palette.maskColor.second,
@@ -97,8 +105,10 @@ export function DetailsCard(props: DetailsCardProps) {
                 return (
                     <div key={x.title} className={classes.listItem}>
                         <Typography className={classes.title}>{x.title}</Typography>
-                        <Typography className={classes.content}>
-                            {x.value}{' '}
+                        <Typography className={classes.content} component="div">
+                            <TextOverflowTooltip title={x.value} as={ShadowRootTooltip}>
+                                <Typography className={classes.value}>{x.value} </Typography>
+                            </TextOverflowTooltip>
                             {x.link ? (
                                 <Link
                                     className={classes.link}

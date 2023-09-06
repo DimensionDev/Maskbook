@@ -23,6 +23,7 @@
     "bignumber.js": "9.1.1",
     "ethereum-blockies": "^0.1.1",
     "ethers": "^5.7.2",
+   "date-fns": "^2.30.0",
     "fortmatic": "^2.2.1",
     "fuse.js": "6.6.2",
     "punycode": "^2.3.0",
