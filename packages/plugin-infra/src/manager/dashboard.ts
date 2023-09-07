@@ -1,9 +1,10 @@
 import { isEqual } from 'lodash-es'
 import { ALL_EVENTS } from '@servie/events'
-import { ValueRefWithReady } from '@masknet/shared-base'
+import { ValueRefWithReady, getSiteType } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { createManager } from './manage.js'
 import type { Plugin } from '../types.js'
+import { getPluginDefine } from './store.js'
 
 const { activated, startDaemon, events, minimalMode } = createManager((def) => def.Dashboard)
 
@@ -27,5 +28,16 @@ export function useActivatedPluginDashboard(pluginID: string) {
 }
 
 export function startPluginDashboard(host: Plugin.__Host.Host<Plugin.Dashboard.DashboardContext>) {
-    startDaemon(host)
+    startDaemon(host, (id) => {
+        const def = getPluginDefine(id)
+        if (!def) return false
+
+        const currentNetwork = getSiteType()
+        if (!currentNetwork) return false
+
+        const status = def.enableRequirement.supports.sites[currentNetwork]
+        if (def.enableRequirement.supports.type === 'opt-in' && status !== true) return false
+        if (def.enableRequirement.supports.type === 'opt-out' && status === true) return false
+        return true
+    })
 }

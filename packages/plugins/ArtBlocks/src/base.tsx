@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { ExtensionSite } from '@masknet/shared-base'
+import { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
 import { ARTBLOCKS_PLUGIN_ID, PLUGIN_NAME, URL_PATTERN } from './constants.js'
 import { languages } from './locales/languages.js'
 
@@ -15,6 +15,7 @@ export const base: Plugin.Shared.Definition = {
         supports: {
             type: 'opt-out',
             sites: {
+                [EnhanceableSite.Localhost]: true,
                 [ExtensionSite.Dashboard]: true,
                 [ExtensionSite.Popup]: true,
                 [ExtensionSite.PopupConnect]: true,

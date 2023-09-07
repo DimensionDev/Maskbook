@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { isEqual } from 'lodash-es'
 import { unreachable } from '@masknet/kit'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { type EnhanceableSite, ValueRefWithReady, type ExtensionSite } from '@masknet/shared-base'
+import { type EnhanceableSite, ValueRefWithReady } from '@masknet/shared-base'
 import { createManager } from './manage.js'
 import { getPluginDefine } from './store.js'
 import type { Plugin } from '../types.js'
@@ -60,13 +60,13 @@ export function useActivatedPluginSiteAdaptor(pluginID: string, minimalModeEqual
 }
 
 export function startPluginSiteAdaptor(
-    currentNetwork: EnhanceableSite | ExtensionSite,
+    currentNetwork: EnhanceableSite,
     host: Plugin.__Host.Host<Plugin.SiteAdaptor.SiteAdaptorContext>,
 ) {
     startDaemon(host, (id) => {
         const def = getPluginDefine(id)
         if (!def) return false
-        // boolean | undefined
+
         const status = def.enableRequirement.supports.sites[currentNetwork]
         if (def.enableRequirement.supports.type === 'opt-in' && status !== true) return false
         if (def.enableRequirement.supports.type === 'opt-out' && status === true) return false

@@ -33,7 +33,6 @@ export function useOpenApplicationBoardDialog(quickMode?: boolean, focusPluginID
             allPersonas,
             lastRecognized,
             applicationCurrentStatus,
-            currentSite,
             personaPerSiteConnectStatusLoading,
             quickMode,
             focusPluginID,

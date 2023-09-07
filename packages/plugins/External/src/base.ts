@@ -1,6 +1,6 @@
 import { Flags } from '@masknet/flags'
 import type { Plugin } from '@masknet/plugin-infra'
-import { PluginID, DEFAULT_PLUGIN_PUBLISHER, ExtensionSite } from '@masknet/shared-base'
+import { PluginID, DEFAULT_PLUGIN_PUBLISHER, ExtensionSite, EnhanceableSite } from '@masknet/shared-base'
 import { languages } from './locales/languages.js'
 
 export const base: Plugin.Shared.Definition = {
@@ -12,6 +12,7 @@ export const base: Plugin.Shared.Definition = {
         supports: {
             type: 'opt-out',
             sites: {
+                [EnhanceableSite.Localhost]: true,
                 [ExtensionSite.Dashboard]: true,
                 [ExtensionSite.Popup]: true,
                 [ExtensionSite.PopupConnect]: true,
