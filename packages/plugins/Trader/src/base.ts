@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { DEFAULT_PLUGIN_PUBLISHER, NetworkPluginID } from '@masknet/shared-base'
+import { DEFAULT_PLUGIN_PUBLISHER, ExtensionSite, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from './constants/index.js'
 import { languages } from './locales/languages.js'
@@ -10,7 +10,14 @@ export const base: Plugin.Shared.Definition<ChainId> = {
     description: { fallback: 'View trending of cryptocurrencies, swap ERC20 tokens in various DEX markets.' },
     publisher: DEFAULT_PLUGIN_PUBLISHER,
     enableRequirement: {
-        supports: { type: 'opt-out', sites: {} },
+        supports: {
+            type: 'opt-out',
+            sites: {
+                [ExtensionSite.Dashboard]: true,
+                [ExtensionSite.Popup]: true,
+                [ExtensionSite.PopupConnect]: true,
+            },
+        },
         target: 'stable',
         web3: {
             [NetworkPluginID.PLUGIN_EVM]: {

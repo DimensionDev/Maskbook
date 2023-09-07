@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { DEFAULT_PLUGIN_PUBLISHER } from '@masknet/shared-base'
+import { DEFAULT_PLUGIN_PUBLISHER, ExtensionSite } from '@masknet/shared-base'
 import { languages } from './locales/languages.js'
 import { PLUGIN_ID } from './constants.js'
 
@@ -9,7 +9,14 @@ export const base: Plugin.Shared.Definition = {
     description: { fallback: 'The mystery box with NFT inside which is provided by Mask Network.' },
     publisher: DEFAULT_PLUGIN_PUBLISHER,
     enableRequirement: {
-        supports: { type: 'opt-out', sites: {} },
+        supports: {
+            type: 'opt-out',
+            sites: {
+                [ExtensionSite.Dashboard]: true,
+                [ExtensionSite.Popup]: true,
+                [ExtensionSite.PopupConnect]: true,
+            },
+        },
         target: 'stable',
     },
     experimentalMark: true,

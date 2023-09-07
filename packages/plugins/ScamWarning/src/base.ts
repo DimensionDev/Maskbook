@@ -1,4 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import { ExtensionSite } from '@masknet/shared-base'
 import { PLUGIN_DESCRIPTION, PLUGIN_ID, PLUGIN_NAME } from './constants.js'
 import { languages } from './locales/languages.js'
 
@@ -8,7 +9,14 @@ export const base: Plugin.Shared.Definition = {
     description: { fallback: PLUGIN_DESCRIPTION },
     publisher: { name: { fallback: 'CryptoScamDB' }, link: 'https://cryptoscamdb.org' },
     enableRequirement: {
-        supports: { type: 'opt-out', sites: {} },
+        supports: {
+            type: 'opt-out',
+            sites: {
+                [ExtensionSite.Dashboard]: true,
+                [ExtensionSite.Popup]: true,
+                [ExtensionSite.PopupConnect]: true,
+            },
+        },
         target: 'stable',
     },
     experimentalMark: true,

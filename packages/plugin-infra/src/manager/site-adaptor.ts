@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 import { isEqual } from 'lodash-es'
 import { unreachable } from '@masknet/kit'
-import { type EnhanceableSite, ValueRefWithReady } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
+import { type EnhanceableSite, ValueRefWithReady, type ExtensionSite } from '@masknet/shared-base'
 import { createManager } from './manage.js'
 import { getPluginDefine } from './store.js'
 import type { Plugin } from '../types.js'
@@ -60,7 +60,7 @@ export function useActivatedPluginSiteAdaptor(pluginID: string, minimalModeEqual
 }
 
 export function startPluginSiteAdaptor(
-    currentNetwork: EnhanceableSite,
+    currentNetwork: EnhanceableSite | ExtensionSite,
     host: Plugin.__Host.Host<Plugin.SiteAdaptor.SiteAdaptorContext>,
 ) {
     startDaemon(host, (id) => {

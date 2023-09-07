@@ -1,8 +1,8 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import { ExtensionSite, NetworkPluginID } from '@masknet/shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { PLUGIN_DESCRIPTION, PLUGIN_ID, PLUGIN_NAME } from './constants.js'
 import { languages } from './locales/languages.js'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
@@ -10,7 +10,14 @@ export const base: Plugin.Shared.Definition = {
     description: { fallback: PLUGIN_DESCRIPTION },
     publisher: { name: { fallback: '' }, link: '' },
     enableRequirement: {
-        supports: { type: 'opt-out', sites: {} },
+        supports: {
+            type: 'opt-out',
+            sites: {
+                [ExtensionSite.Dashboard]: true,
+                [ExtensionSite.Popup]: true,
+                [ExtensionSite.PopupConnect]: true,
+            },
+        },
         target: 'stable',
         web3: {
             [NetworkPluginID.PLUGIN_EVM]: {

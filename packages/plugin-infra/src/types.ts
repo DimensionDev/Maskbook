@@ -337,7 +337,7 @@ export namespace Plugin.Shared {
          * out-out means the listed site is not supported.
          */
         type: 'opt-in' | 'opt-out'
-        sites: Partial<Record<EnhanceableSite, boolean>>
+        sites: Partial<Record<EnhanceableSite | ExtensionSite, boolean>>
     }
 
     export type I18NLanguage = string
