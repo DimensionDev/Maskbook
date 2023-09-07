@@ -1,4 +1,4 @@
-import { SiteAdaptor, type Plugin } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { GamePluginID } from './constants.js'
@@ -14,13 +14,7 @@ export const base: Plugin.Shared.Definition = {
     enableRequirement: {
         supports: {
             type: 'opt-in',
-            sites: {
-                [SiteAdaptor.Twitter]: true,
-                [SiteAdaptor.Facebook]: true,
-                [SiteAdaptor.Instagram]: true,
-                [SiteAdaptor.Minds]: true,
-                [SiteAdaptor.MaskIO]: true,
-            },
+            sites: {},
         },
         web3: {
             [NetworkPluginID.PLUGIN_EVM]: {

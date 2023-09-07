@@ -1,3 +1,4 @@
+import { createElement } from 'react'
 import stringify from 'json-stable-stringify'
 import { assertNotEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { delay, waitDocumentReadyState } from '@masknet/kit'
@@ -23,13 +24,12 @@ import { Telemetry } from '@masknet/web3-telemetry'
 import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
 import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host.js'
 import Services from '#services'
-import { getCurrentIdentifier, getCurrentSite } from '../site-adaptors/utils.js'
+import { getCurrentIdentifier } from '../site-adaptors/utils.js'
 import { attachReactTreeWithoutContainer, setupReactShadowRootEnvironment } from '../utils/index.js'
 import '../utils/debug/general.js'
 import { configureSelectorMissReporter } from '../utils/startWatch.js'
 import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
 import { definedSiteAdaptorsUI } from './define.js'
-import { createElement } from 'react'
 
 const definedSiteAdaptorsResolved = new Map<string, SiteAdaptorUI.Definition>()
 
@@ -187,7 +187,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
     }
 
     startPluginSiteAdaptor(
-        getCurrentSite(ui.networkIdentifier),
+        ui.networkIdentifier,
         createPluginHost(
             signal,
             (id, signal): Plugin.SiteAdaptor.SiteAdaptorContext => {

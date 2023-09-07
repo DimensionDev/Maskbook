@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
 import { isEqual } from 'lodash-es'
 import { unreachable } from '@masknet/kit'
-import { ValueRefWithReady } from '@masknet/shared-base'
+import { type EnhanceableSite, ValueRefWithReady } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { createManager } from './manage.js'
 import { getPluginDefine } from './store.js'
-import type { SiteAdaptor, Plugin } from '../types.js'
+import type { Plugin } from '../types.js'
 
 const { events, activated, startDaemon, minimalMode } = createManager((def) => def.SiteAdaptor)
 const activatedSub = new ValueRefWithReady<Plugin.SiteAdaptor.Definition[]>([], isEqual)
@@ -60,7 +60,7 @@ export function useActivatedPluginSiteAdaptor(pluginID: string, minimalModeEqual
 }
 
 export function startPluginSiteAdaptor(
-    currentNetwork: SiteAdaptor,
+    currentNetwork: EnhanceableSite,
     host: Plugin.__Host.Host<Plugin.SiteAdaptor.SiteAdaptorContext>,
 ) {
     startDaemon(host, (id) => {

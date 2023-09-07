@@ -2,7 +2,6 @@ import { useCallback } from 'react'
 import type { PluginID } from '@masknet/shared-base'
 import { ApplicationBoardModal } from '@masknet/shared'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
-import { getCurrentSite } from '../../site-adaptors/utils.js'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/ui.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 import { usePersonaPerSiteConnectStatus } from '../DataSource/usePersonaPerSiteConnectStatus.js'
@@ -11,7 +10,6 @@ import Services from '#services'
 export function useOpenApplicationBoardDialog(quickMode?: boolean, focusPluginID?: PluginID) {
     const lastRecognized = useLastRecognizedIdentity()
     const allPersonas = usePersonasFromDB()
-    const currentSite = getCurrentSite(activatedSiteAdaptorUI!.networkIdentifier)
     const { value: applicationCurrentStatus, loading: personaPerSiteConnectStatusLoading } =
         usePersonaPerSiteConnectStatus()
 
@@ -21,7 +19,7 @@ export function useOpenApplicationBoardDialog(quickMode?: boolean, focusPluginID
                 allPersonas,
                 lastRecognized,
                 openDashboard: Services.Helper.openDashboard,
-                currentSite,
+                currentSite: activatedSiteAdaptorUI!.networkIdentifier,
                 queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
                 setPluginMinimalModeEnabled: Services.Settings.setPluginMinimalModeEnabled,
                 getDecentralizedSearchSettings: Services.Settings.getDecentralizedSearchSettings,
