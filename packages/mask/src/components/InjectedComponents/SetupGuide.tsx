@@ -22,6 +22,9 @@ import { VerifyNextID } from './SetupGuide/VerifyNextID.js'
 import { PinExtension } from './SetupGuide/PinExtension.js'
 import { useSetupGuideStepInfo } from './SetupGuide/useSetupGuideStepInfo.js'
 import { useNextIDVerify } from '../DataSource/useNextIDVerify.js'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
+import { EventMap } from '../../extension/popups/pages/Personas/common.js'
 
 // #region setup guide ui
 interface SetupGuideUIProps {
@@ -83,6 +86,8 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         if (!destinedPersonaInfo) throw new Error('invalid persona')
         await Services.Identity.setupPersona(destinedPersonaInfo?.identifier)
 
+        Telemetry.captureEvent(EventType.Access, EventMap[activatedSiteAdaptorUI!.networkIdentifier])
+
         setOperation(true)
         if (step !== SetupGuideStep.FindUsername) return
 
@@ -112,6 +117,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             setOperation(true)
         }
         await handleVerifyNextID(destinedPersonaInfo, userId, afterVerify)
+        Telemetry.captureEvent(EventType.Access, EventID.EntryPopupSocialAccountVerifyTwitter)
     }, [userId, destinedPersonaInfo])
 
     const onVerifyDone = useCallback(() => {
