@@ -750,7 +750,7 @@
     "popups_wallet_settings_name_exists": "The wallet name already exists.",
     "popups_wallet_settings_remove_wallet": "Remove Wallet",
     "remove_wallet_message": "Current wallet (<bold>{{wallet}}</bold>) is the management account of SmartPay wallet (<bold>{{other_wallets}}</bold>).<br/>Deleting the current wallet will result in the deletion of the SmartPay wallet simultaneously.",
-    "popups_wallet_settings_are_you_sure_remove_wallet": "Are you sure to Romove this wallet?",
+    "popups_wallet_settings_are_you_sure_remove_wallet": "Are you sure to remove this wallet?",
     "popups_wallet_settings_address_exists": "The wallet address already exists.",
     "popups_wallet_settings_auto_lock_tips": "Please set up the amount of time before we automatically lock your wallet.",
     "popups_wallet_settings_minutes": "Minutes",

@@ -11,7 +11,7 @@ import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
-        paddingLeft: theme.spacing(3),
+        paddingLeft: 0,
     },
 }))
 interface ChangePaymentPasswordDrawer extends BottomDrawerProps {
