@@ -84,9 +84,8 @@ export class NameServiceState<
         if (!this.options.isValidAddress(address)) return
         const callbacks = this.createResolvers().map((resolver) => {
             return async () => {
-                const name =
-                    this.storage.value[resolver.id][this.options.formatAddress(address)] ||
-                    (await resolver.reverse?.(address))
+                let name: string | undefined = this.storage.value[resolver.id][this.options.formatAddress(address)]
+                if (!name) name = await resolver.reverse?.(address)
                 if (name) {
                     await this.addName(resolver.id, address, name)
                     return name

@@ -156,6 +156,8 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         })
     }, [])
 
+    const disabled = confirmLoading || isLoading || !pathIndexes.length
+
     return (
         <>
             <div className={classes.between}>
@@ -202,7 +204,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
             <SetupFrameController>
                 <PrimaryButton
                     loading={confirmLoading}
-                    disabled={confirmLoading || isLoading}
+                    disabled={disabled}
                     className={classes.bold}
                     width="125px"
                     size="large"
