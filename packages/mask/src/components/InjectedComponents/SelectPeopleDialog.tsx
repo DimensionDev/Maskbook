@@ -9,6 +9,8 @@ import { useRecipientsList } from '../CompositionDialog/useRecipientsList.js'
 import { useTwitterIdByWalletSearch } from '../shared/SelectRecipients/useTwitterIdByWalletSearch.js'
 import { SelectProfileUI } from '../shared/SelectProfileUI/index.js'
 import { useI18N } from '../../utils/index.js'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventType, EventID } from '@masknet/web3-telemetry/types'
 
 export interface SelectProfileDialogProps {
     open: boolean
@@ -107,6 +109,11 @@ export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose,
         if (!open) return
         recipientsList.request()
     }, [open, recipientsList.request])
+
+    useEffect(() => {
+        if (!open) return
+        Telemetry.captureEvent(EventType.Access, EventID.EntryMaskComposeVisibleSelected)
+    }, [open])
 
     const canCommit = committed || people.length === 0
 
