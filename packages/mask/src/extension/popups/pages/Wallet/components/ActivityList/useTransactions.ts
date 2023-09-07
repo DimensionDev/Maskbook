@@ -1,11 +1,12 @@
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { queryClient } from '@masknet/shared-base-ui'
 import { useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
 import { DeBankHistory } from '@masknet/web3-providers'
 import { type RecentTransaction } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction as EvmTransaction } from '@masknet/web3-shared-evm'
 import { useInfiniteQuery, useQueries } from '@tanstack/react-query'
 import { sortBy } from 'lodash-es'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 
 /**
  * Get locale transitions and merge them with ones from debank history.
@@ -38,6 +39,12 @@ export function useTransactions() {
             }
         }),
     })
+    useEffect(() => {
+        return Transaction?.transactions?.subscribe(() => {
+            queryClient.invalidateQueries(['transitions'])
+        })
+    }, [])
+
     const allLocaleTxes = useMemo(() => {
         return queries.flatMap((x) => x.data ?? []) as Array<RecentTransaction<ChainId, EvmTransaction>>
     }, [queries])
