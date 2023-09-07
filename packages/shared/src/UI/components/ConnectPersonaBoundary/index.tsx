@@ -108,7 +108,12 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
             beforeAction?.(status)
 
             if (!status.hasPersona || !status.connected) {
-                status.action?.(DashboardRoutes.SignUpPersona, handlerPosition, enableVerify, !createConfirm)
+                status.action?.(
+                    directTo ?? DashboardRoutes.SignUpPersona,
+                    handlerPosition,
+                    enableVerify,
+                    !createConfirm,
+                )
                 return
             }
 
@@ -116,6 +121,7 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
             afterAction?.(status)
         }, [directTo, handlerPosition, status, createConfirm])
 
+        if (statusLoading) return null
         return (
             <Stack className={classes.root} display="inline-flex" onClick={handleClick}>
                 <Stack style={{ pointerEvents: status.action ? 'none' : 'auto' }} display="inline-flex">

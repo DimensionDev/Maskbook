@@ -864,7 +864,7 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                 root: {
                     overflow: 'unset!important',
                     borderRadius: 8,
-                    backgroundColor: colors.maskColor.input,
+                    backgroundColor: `${colors.maskColor.input}!important`,
                     // Increase priority
                     [`&.${inputBaseClasses.focused}.${inputBaseClasses.focused}`]: {
                         outline: `2px solid ${alpha(colors.maskColor.primary, 0.2)}`,
@@ -888,6 +888,13 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                                 borderRadius: 8,
                             },
                         },
+                    },
+                    '&.Mui-disabled': {
+                        background: colors.maskColor.input,
+                    },
+                    [`& .${inputBaseClasses.input}.Mui-disabled`]: {
+                        opacity: 0.5,
+                        color: colors.maskColor.third,
                     },
                 },
                 input: {

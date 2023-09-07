@@ -102,17 +102,6 @@ function decorateEncryptedText(encrypted: string, t: I18NFunction, meta?: Meta):
                   token: meta?.has(`${PluginID.RedPacket}:1`) ? 'a token' : 'an NFT',
               })
             : t('additional_post_box__encrypted_post_pre_red_packet', { encrypted })
-    } else if (meta?.has(`${PluginID.ITO}:2`)) {
-        return hasOfficialAccount
-            ? t('additional_post_box__encrypted_post_pre_ito_sns_official_account', {
-                  encrypted,
-                  account: officialAccount,
-                  sns: SOCIAL_MEDIA_NAME[activatedSiteAdaptorUI!.networkIdentifier],
-              })
-            : t('additional_post_box__encrypted_post_pre_ito', {
-                  encrypted,
-                  sns: SOCIAL_MEDIA_NAME[activatedSiteAdaptorUI!.networkIdentifier],
-              })
     } else if (meta?.has(`${PluginID.FileService}:3`)) {
         return hasOfficialAccount
             ? t('additional_post_box__encrypted_post_pre_file_service_sns_official_account', {

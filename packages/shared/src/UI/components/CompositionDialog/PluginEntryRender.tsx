@@ -47,7 +47,7 @@ export const PluginEntryRender = memo(
         const pluginField = usePluginI18NField()
         const plugins = [...useActivatedPluginsSiteAdaptor('any')].sort((plugin) => {
             // TODO: support priority order
-            if (plugin.ID === PluginID.RedPacket || plugin.ID === PluginID.ITO) return -1
+            if (plugin.ID === PluginID.RedPacket) return -1
             return 1
         })
         const lackPermission = usePluginHostPermissionCheck(plugins)

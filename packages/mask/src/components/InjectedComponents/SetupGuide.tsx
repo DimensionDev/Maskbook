@@ -110,7 +110,12 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         const platform = activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform
         if (!platform) return
 
-        const isBound = await NextIDProof.queryIsBound(destinedPersonaInfo.identifier.publicKeyAsHex, platform, userId)
+        const isBound = await NextIDProof.queryIsBound(
+            destinedPersonaInfo.identifier.publicKeyAsHex,
+            platform,
+            userId,
+            true,
+        )
         if (isBound) return
 
         const afterVerify = () => {

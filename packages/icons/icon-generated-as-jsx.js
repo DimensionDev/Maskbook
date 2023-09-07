@@ -1920,16 +1920,6 @@ export const InteractionCircle = /*#__PURE__*/ __createIcon('InteractionCircle',
         s: true,
     },
 ])
-export const ITO = /*#__PURE__*/ __createIcon('ITO', [
-    {
-        u: () => new URL('./general/ITO.svg', import.meta.url),
-    },
-])
-export const ITOLabel = /*#__PURE__*/ __createIcon('ITOLabel', [
-    {
-        u: () => new URL('./general/ITOLabel.svg', import.meta.url),
-    },
-])
 export const Japan = /*#__PURE__*/ __createIcon('Japan', [
     {
         u: () => new URL('./general/Japan.svg', import.meta.url),

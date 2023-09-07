@@ -16,16 +16,14 @@ import {
     EMPTY_LIST,
     getDomainSystem,
 } from '@masknet/shared-base'
-import { env } from '@masknet/flags'
-import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
+import { PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
 import { staleNextIDCached } from './helpers.js'
 import PRESET_LENS from './preset-lens.json'
 import { fetchCachedJSON, fetchJSON, fetchSquashedJSON } from '../helpers/fetchJSON.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
 import { Duration, Expiration, stableSquashedCached } from '../entry-helpers.js'
 
-const BASE_URL =
-    env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
+const BASE_URL = PROOF_BASE_URL_PROD
 
 const relationServiceDomainQuery = (depth?: number) => `domain(domainSystem: $domainSystem, name: $domain) {
     source
@@ -223,16 +221,19 @@ const getExistedBindingQueryURL = (platform: string, identity: string, personaPu
     })
 
 export class NextIDProofAPI implements NextIDBaseAPI.Proof {
-    fetchFromProofService<T>(request: Request | RequestInfo, init?: RequestInit) {
-        return fetchCachedJSON<T>(request, init, {
-            squashExpiration: Expiration.THIRTY_MINUTES,
-            cacheDuration: Duration.THIRTY_MINUTES,
-        })
+    fetchFromProofService<T>(request: Request | RequestInfo, init?: RequestInit, disableCache?: boolean) {
+        return disableCache
+            ? fetchJSON<T>(request, init)
+            : fetchCachedJSON<T>(request, init, {
+                  squashExpiration: Expiration.THIRTY_MINUTES,
+                  cacheDuration: Duration.THIRTY_MINUTES,
+              })
     }
 
     async clearPersonaQueryCache(personaPublicKey: string) {
         const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
         await staleNextIDCached(url)
+        await stableSquashedCached(url)
     }
 
     async bindProof(
@@ -319,7 +320,12 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return first(result) ?? null
     }
 
-    async queryAllExistedBindingsByPlatform(platform: NextIDPlatform, identity: string, exact?: boolean) {
+    async queryAllExistedBindingsByPlatform(
+        platform: NextIDPlatform,
+        identity: string,
+        exact?: boolean,
+        disableCache?: boolean,
+    ) {
         if (!platform && !identity) return []
 
         const nextIDPersonaBindings: NextIDPersonaBindings[] = []
@@ -333,6 +339,8 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
                     page,
                     order: 'desc',
                 }),
+                undefined,
+                disableCache,
             )
             const personaBindings = result.ids
             if (personaBindings.length === 0) return nextIDPersonaBindings
@@ -346,12 +354,14 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return []
     }
 
-    async queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string) {
+    async queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string, disableCache = false) {
         try {
             if (!platform && !identity) return false
 
             const result = await this.fetchFromProofService<BindingProof | undefined>(
                 getExistedBindingQueryURL(platform, identity, personaPublicKey),
+                undefined,
+                disableCache,
             )
             return !!result?.is_valid
         } catch {

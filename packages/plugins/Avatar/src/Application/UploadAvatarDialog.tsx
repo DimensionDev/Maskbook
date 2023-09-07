@@ -14,6 +14,7 @@ import { useI18N } from '../locales/i18n_generated.js'
 import { type AvatarInfo, useSave } from '../hooks/save/useSave.js'
 import { useAvatarManagement } from '../contexts/index.js'
 import { RoutePaths } from './Routes.js'
+import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -70,16 +71,16 @@ export function UploadAvatarDialog() {
     const { showSnackbar } = useCustomSnackbar()
     const [disabled, setDisabled] = useState(false)
     const { currentPersona } = usePersonaConnectStatus()
-
+    const identity = useLastRecognizedIdentity()
     const [, saveAvatar] = useSave(currentPluginID)
     const navigate = useNavigate()
 
     const onSave = useCallback(async () => {
-        if (!editor || !account || !token || !currentPersona?.identifier || !proof) return
+        if (!editor || !account || !token || !currentPersona?.identifier) return
         editor.getImageScaledToCanvas().toBlob(async (blob) => {
-            if (!blob) return
+            if (!blob || !identity?.identifier?.userId) return
             setDisabled(true)
-            const avatarData = await uploadAvatar(blob, proof.identity)
+            const avatarData = await uploadAvatar(blob, identity.identifier.userId)
             if (!avatarData) {
                 setDisabled(false)
                 return
@@ -105,9 +106,9 @@ export function UploadAvatarDialog() {
             await delay(500)
             location.reload()
         }, 'image/png')
-    }, [account, editor, identifier, navigate, currentPersona, proof, isBindAccount, saveAvatar])
+    }, [account, editor, identifier, navigate, currentPersona, proof, isBindAccount, saveAvatar, identity])
 
-    if (!account || !image || !token || !proof) return null
+    if (!account || !image || !token) return null
 
     return (
         <>

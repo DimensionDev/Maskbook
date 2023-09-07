@@ -114,9 +114,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
     }, [walletChunks, wallets])
 
     const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
-        if (!mnemonic) return
-
-        if (!pathIndexes.length) return
+        if (!mnemonic || !pathIndexes.length) return
 
         const result = await handlePasswordAndWallets(password, isReset)
         if (!result) return

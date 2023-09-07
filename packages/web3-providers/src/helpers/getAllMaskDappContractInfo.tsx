@@ -2,7 +2,6 @@ import {
     type ChainId,
     getMaskBoxConstant,
     getRedPacketConstant,
-    getITOConstant,
     getNftRedPacketConstant,
     NetworkType,
 } from '@masknet/web3-shared-evm'
@@ -14,8 +13,6 @@ export function getAllMaskDappContractInfo(chainId: ChainId, type: 'token' | 'nf
     const HAPPY_RED_PACKET_ADDRESS_V2 = getRedPacketConstant(chainId, 'HAPPY_RED_PACKET_ADDRESS_V2')
     const HAPPY_RED_PACKET_ADDRESS_V3 = getRedPacketConstant(chainId, 'HAPPY_RED_PACKET_ADDRESS_V3')
     const HAPPY_RED_PACKET_ADDRESS_V4 = getRedPacketConstant(chainId, 'HAPPY_RED_PACKET_ADDRESS_V4')
-    const ITO_CONTRACT_ADDRESS = getITOConstant(chainId, 'ITO_CONTRACT_ADDRESS')
-    const ITO2_CONTRACT_ADDRESS = getITOConstant(chainId, 'ITO2_CONTRACT_ADDRESS')
     const MASK_BOX_CONTRACT_ADDRESS = getMaskBoxConstant(chainId, 'MASK_BOX_CONTRACT_ADDRESS')
     const RED_PACKET_NFT_ADDRESS = getNftRedPacketConstant(chainId, 'RED_PACKET_NFT_ADDRESS')
     return type === 'token'
@@ -39,16 +36,6 @@ export function getAllMaskDappContractInfo(chainId: ChainId, type: 'token' | 'nf
                   address: HAPPY_RED_PACKET_ADDRESS_V4,
                   name: 'Lucky Drop V4',
                   logo: <Icons.RedPacket />,
-              },
-              {
-                  address: ITO_CONTRACT_ADDRESS,
-                  name: 'ITO V1',
-                  logo: <Icons.ITO />,
-              },
-              {
-                  address: ITO2_CONTRACT_ADDRESS,
-                  name: 'ITO V2',
-                  logo: <Icons.ITO />,
               },
           ]
         : [
