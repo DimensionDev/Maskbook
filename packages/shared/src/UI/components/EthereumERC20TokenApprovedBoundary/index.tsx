@@ -89,7 +89,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
 
     const onApprove = useCallback(async () => {
         if (approved || loading) return
-        await approveCallback(false)
+        await approveCallback(true)
     }, [approved, loading, approveCallback])
 
     // not a valid erc20 token, please given token as undefined
