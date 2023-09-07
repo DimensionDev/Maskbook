@@ -355,12 +355,14 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return []
     }
 
-    async queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string) {
+    async queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string, disableCache = false) {
         try {
             if (!platform && !identity) return false
 
             const result = await this.fetchFromProofService<BindingProof | undefined>(
                 getExistedBindingQueryURL(platform, identity, personaPublicKey),
+                undefined,
+                disableCache,
             )
             return !!result?.is_valid
         } catch {
