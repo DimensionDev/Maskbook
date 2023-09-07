@@ -1,4 +1,3 @@
-import { activateSiteAdaptorUI } from '../../setup.ui.js'
 import { startPluginDashboard } from '@masknet/plugin-infra/dashboard'
 import { createNormalReactRoot, hydrateNormalReactRoot } from '../../utils/index.js'
 import { createPluginHost, createPartialSharedUIContext } from '../../../shared/plugin-infra/host.js'
@@ -19,7 +18,6 @@ if (
 ) {
     console.time('[SSR] Fill data')
     await Promise.all([
-        activateSiteAdaptorUI(),
         currentPersonaIdentifier.readyPromise,
         pluginIDsSettings.readyPromise,
         Services.Identity.queryOwnedPersonaInformation(false).then((value) =>
@@ -52,7 +50,6 @@ if (
     }
     console.timeEnd('[SSR] Hydrate')
 } else {
-    await activateSiteAdaptorUI()
     createNormalReactRoot(<Popups />)
     startPluginHost()
 }
