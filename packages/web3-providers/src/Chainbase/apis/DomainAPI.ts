@@ -6,6 +6,12 @@ import { fetchFromChainbase } from '../helpers.js'
 import type { ENSRecord } from '../types.js'
 import type { DomainAPI } from '../../entry-types.js'
 
+const suffixMap: Partial<Record<ChainId, string>> = {
+    [ChainId.Mainnet]: 'eth',
+    [ChainId.BSC]: 'bnb',
+    [ChainId.Arbitrum]: 'arb',
+}
+
 export class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
     private async getAddress(chainId: ChainId, name: string) {
         if (!isValidChainId(chainId)) return
@@ -27,7 +33,8 @@ export class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
 
         const name = first(response)?.name
         if (!name) return
-        return isValidDomain(name) ? name : isValidDomain(`${name}.eth`) ? `${name}.eth` : undefined
+        const suffix = suffixMap[chainId] || 'eth'
+        return isValidDomain(name) ? name : isValidDomain(`${name}.${suffix}`) ? `${name}.${suffix}` : undefined
     }
 
     async lookup(chainId: ChainId, name: string): Promise<string | undefined> {
