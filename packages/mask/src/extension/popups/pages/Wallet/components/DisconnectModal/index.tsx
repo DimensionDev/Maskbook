@@ -3,12 +3,10 @@ import { useI18N } from '../../../../../../utils/i18n-next-ui.js'
 import { Box, Typography } from '@mui/material'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import Services from '#services'
-import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useWallet } from '@masknet/web3-hooks-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { useMutation } from '@tanstack/react-query'
-import { getEnumAsArray } from '@masknet/kit'
-import { isEqual } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -95,51 +93,41 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface DisconnectModalProps {
-    site: string
+    origin: string
     setOpen: (open: boolean) => void
 }
 
-const DisconnectModal = memo(function DisconnectModal({ site, setOpen }: DisconnectModalProps) {
+const DisconnectModal = memo(function DisconnectModal({ origin, setOpen }: DisconnectModalProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { showSnackbar } = usePopupCustomSnackbar()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const handleDisconnect = useCallback(async () => {
-        if (!site) return
-        if (!getEnumAsArray(EnhanceableSite).some((x) => isEqual(x.value, site))) return
-        await Services.Wallet.recordConnectedSites(site as EnhanceableSite, false)
-    }, [site, wallet])
     const { mutate: onDisconnect } = useMutation({
-        mutationFn: handleDisconnect,
+        mutationFn: useCallback(async (): Promise<void> => {
+            if (!wallet) return
+            await Services.Wallet.disconnectWalletFromOrigin(wallet.address, origin)
+        }, []),
         onMutate: async () => {
-            await queryClient.cancelQueries(['connectedSites', wallet?.address])
-            queryClient.setQueryData(['connectedSites', wallet?.address], (oldData: string[] | undefined) => {
-                if (!oldData) return undefined
-                return oldData.filter((x) => x !== site)
-            })
+            await queryClient.invalidateQueries(['wallet-connected-origins', wallet?.address])
             showSnackbar(t('popups_wallet_disconnect_site_success'), { variant: 'success' })
             setOpen(false)
         },
         onSettled: () => {
-            queryClient.invalidateQueries(['connectedSites', wallet?.address])
+            queryClient.invalidateQueries(['wallet-connected-origins', wallet?.address])
         },
     })
-    const handleDisconnectAll = useCallback(async () => {
-        await Services.Wallet.disconnectAll()
-    }, [])
     const { mutate: onDisconnectAll } = useMutation({
-        mutationFn: handleDisconnectAll,
+        mutationFn: useCallback(async (): Promise<void> => {
+            if (!wallet) return
+            await Services.Wallet.disconnectAllOriginsConnectedFromWallet(wallet!.address)
+        }, [wallet?.address]),
         onMutate: async () => {
-            await queryClient.cancelQueries(['connectedSites', wallet?.address])
-            queryClient.setQueryData(['connectedSites', wallet?.address], (oldData) => {
-                if (!oldData) return undefined
-                return []
-            })
+            await queryClient.invalidateQueries(['wallet-connected-origins', wallet?.address])
             showSnackbar(t('popups_wallet_disconnect_site_success'), { variant: 'success' })
             setOpen(false)
         },
         onSettled: () => {
-            queryClient.invalidateQueries(['connectedSites', wallet?.address])
+            queryClient.invalidateQueries(['wallet-connected-origins', wallet?.address])
         },
     })
     return (
@@ -150,25 +138,18 @@ const DisconnectModal = memo(function DisconnectModal({ site, setOpen }: Disconn
                 <button
                     type="button"
                     className={classes.confirmButton}
-                    onClick={() => {
-                        onDisconnect()
-                    }}>
+                    disabled={!wallet}
+                    onClick={() => onDisconnect()}>
                     {t('confirm')}
                 </button>
-                <button
-                    type="button"
-                    className={classes.cancelButton}
-                    onClick={() => {
-                        setOpen(false)
-                    }}>
+                <button type="button" className={classes.cancelButton} onClick={() => setOpen(false)}>
                     {t('cancel')}
                 </button>
                 <button
                     type="button"
                     className={classes.disconnectAll}
-                    onClick={() => {
-                        onDisconnectAll()
-                    }}>
+                    disabled={!wallet}
+                    onClick={() => onDisconnectAll()}>
                     {t('popups_wallet_disconnect_all')}
                 </button>
             </Box>

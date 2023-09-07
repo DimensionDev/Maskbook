@@ -70,8 +70,8 @@ export const RestPartOfPluginUIContextShared: Omit<
     },
 
     selectAccount: Services.Wallet.selectMaskAccount,
-
-    recordConnectedSites: Services.Wallet.recordConnectedSites,
+    connectWalletToOrigin: Services.Wallet.connectWalletToOrigin,
+    disconnectAllWalletsFromOrigin: Services.Wallet.disconnectAllWalletsFromOrigin,
 
     signWithPersona: <T>(type: SignType, message: T, identifier?: ECKeyIdentifier, silent?: boolean) =>
         Services.Identity.signWithPersona(type, message, identifier, location.origin, silent),

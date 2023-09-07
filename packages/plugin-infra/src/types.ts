@@ -9,8 +9,6 @@ import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
     BindingProof,
     ECKeyIdentifier,
-    EnhanceableSite,
-    ExtensionSite,
     NetworkPluginID,
     NextIDPlatform,
     PostIdentifier,
@@ -171,8 +169,10 @@ export namespace Plugin.Shared {
         /** Close walletconnect dialog */
         closeWalletConnectDialog(): void
 
-        /** Record which sites are connected to the Mask wallet  */
-        recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean): Promise<void>
+        /** Connect origin to Mask wallet  */
+        connectWalletToOrigin(wallet: string, origin: string): Promise<void>
+        /** Disconnect origin from Mask wallet  */
+        disconnectAllWalletsFromOrigin(origin: string): Promise<void>
 
         /** Sign a message with persona (w or w/o popups) */
         signWithPersona<T>(type: SignType, message: T, identifier?: ECKeyIdentifier, silent?: boolean): Promise<string>

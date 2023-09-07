@@ -3,8 +3,8 @@ import { useTitle } from '../../../hooks/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import SiteCard from '../components/SiteCard/index.js'
-import { useConnectedSites } from '../../../hooks/useConnectedSites.js'
+import OriginCard from '../components/OriginCard/index.js'
+import { useConnectedOrigins } from '../../../hooks/useConnectedOrigins.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -33,11 +33,15 @@ const ConnectedSites = memo(function ConnectedSites() {
     const { t } = useI18N()
     const { classes } = useStyles()
     useTitle(t('popups_wallet_connected_sites'))
-    const { data: sites } = useConnectedSites()
+    const _ = useConnectedOrigins()
+    const origins = _.data ? [..._.data].sort((a, b) => a.localeCompare(b, 'en-US')) : undefined
+
     return (
         <Box className={classes.container}>
             <Typography className={classes.desc}>{t('popups_wallet_connected_sites_description')}</Typography>
-            <Box className={classes.cardList}>{sites?.map((site) => <SiteCard key={site} site={site} />)}</Box>
+            <Box className={classes.cardList}>
+                {origins?.map((origin) => <OriginCard key={origin} origin={origin} />)}
+            </Box>
         </Box>
     )
 })

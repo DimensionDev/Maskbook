@@ -17,7 +17,7 @@ import { Contacts } from './Contacts.js'
 import { Rename } from './Rename.js'
 import { ShowPrivateKey } from './ShowPrivateKey.js'
 import { useStyles } from './useStyles.js'
-import { ConnectedSites } from './ConnectedSites.js'
+import { ConnectedOrigins } from './ConnectedOrigins.js'
 import { first, sortBy } from 'lodash-es'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Trans } from 'react-i18next'
@@ -75,7 +75,7 @@ const WalletSettings = memo(() => {
                 {wallet.owner ? <ChangeOwner /> : null}
                 <Rename />
                 <Contacts />
-                <ConnectedSites />
+                <ConnectedOrigins />
                 <AutoLock />
                 <ChangeCurrency />
                 <ChangePaymentPassword />

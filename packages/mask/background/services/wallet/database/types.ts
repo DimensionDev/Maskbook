@@ -19,3 +19,9 @@ export interface LegacyWalletRecordInDatabase extends LegacyWalletRecord {}
 export interface UnconfirmedRequestChunkRecordInDatabase extends UnconfirmedRequestChunkRecord {
     record_id: string
 }
+
+export interface WalletConnectedOrigin {
+    type: 'connected_origin'
+    id: string
+    origins: ReadonlySet<string>
+}

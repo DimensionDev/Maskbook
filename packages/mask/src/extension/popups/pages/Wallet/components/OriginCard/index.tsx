@@ -1,5 +1,4 @@
 import { memo, useState, useMemo } from 'react'
-import { useI18N } from '../../../../../../utils/i18n-next-ui.js'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
@@ -41,28 +40,27 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface SiteCardProps {
-    site: string
+interface OriginCardProps {
+    origin: string
 }
 
-const SiteCard = memo(function SiteCard({ site }: SiteCardProps) {
-    const { t } = useI18N()
+const OriginCard = memo(function OriginCard({ origin }: OriginCardProps) {
     const { classes } = useStyles()
     const [open, setOpen] = useState(false)
-    const Icon = useMemo(() => SOCIAL_MEDIA_ROUND_ICON_MAPPING[site], [site])
+    const Icon = useMemo(() => SOCIAL_MEDIA_ROUND_ICON_MAPPING[origin], [origin])
     return (
         <Box className={classes.container}>
             {Icon ? <Icon size={24} /> : null}
             <Box className={classes.site}>
-                <Typography className={classes.siteName}>{SOCIAL_MEDIA_NAME[site]}</Typography>
-                <Typography className={classes.siteUrl}>{site}</Typography>
+                <Typography className={classes.siteName}>{SOCIAL_MEDIA_NAME[origin]}</Typography>
+                <Typography className={classes.siteUrl}>{origin}</Typography>
             </Box>
             <button className={classes.button} onClick={() => setOpen(true)} type="button">
                 <Icons.Disconnect />
             </button>
             {open ? (
                 <DisconnectModal
-                    site={site}
+                    origin={origin}
                     setOpen={(open: boolean) => {
                         setOpen(open)
                     }}
@@ -72,4 +70,4 @@ const SiteCard = memo(function SiteCard({ site }: SiteCardProps) {
     )
 })
 
-export default SiteCard
+export default OriginCard

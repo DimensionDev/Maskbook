@@ -6,10 +6,10 @@ import {
     type ECKeyIdentifier,
     EMPTY_LIST,
     ExtensionSite,
-    getSiteType,
     PopupRoutes,
     ValueRef,
     ImportSource,
+    getExtensionSiteType,
 } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
@@ -180,13 +180,12 @@ export class MaskWalletProvider
         },
         silent?: boolean,
     ) {
-        const siteType = getSiteType()
-        if (siteType === ExtensionSite.Popup || silent) {
+        if (getExtensionSiteType() === ExtensionSite.Popup || silent) {
             if (isValidAddress(address)) {
                 await this.switchAccount(address, owner)
                 await this.switchChain(chainId)
 
-                if (siteType) await this.context?.recordConnectedSites(siteType, true)
+                await this.context?.connectWalletToOrigin(address, location.origin)
 
                 return {
                     account: address,
@@ -222,7 +221,7 @@ export class MaskWalletProvider
 
         // switch chain
         if (chainId !== this.hostedChainId) await this.switchChain(chainId)
-        if (siteType) await this.context?.recordConnectedSites(siteType, true)
+        await this.context?.connectWalletToOrigin(account.address, location.origin)
 
         return {
             chainId,
@@ -231,8 +230,7 @@ export class MaskWalletProvider
     }
 
     override async disconnect() {
-        const siteType = getSiteType()
-        if (siteType) await this.context?.recordConnectedSites(siteType, false)
+        await this.context?.disconnectAllWalletsFromOrigin(location.origin)
     }
 
     override async request<T>(
