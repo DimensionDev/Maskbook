@@ -761,22 +761,9 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                     },
                     style: {
                         fontSize: 14,
-                        [`&.${inputBaseClasses.focused} > .${inputBaseClasses.input}`]: {
-                            padding: '10px 12px',
-                            [`&.${selectClasses.select}`]: {
-                                padding: '10px 12px',
-                                height: 18,
-                                minHeight: 'unset',
-                            },
-                        },
                         [`& .${inputBaseClasses.input}`]: {
                             padding: '11px 12px',
                             height: 18,
-                            [`&.${selectClasses.select}`]: {
-                                padding: '11px 12px',
-                                height: 18,
-                                minHeight: 'unset',
-                            },
                         },
                         [`&.${inputBaseClasses.adornedStart}:last-child`]: {
                             paddingLeft: 12,
@@ -864,12 +851,12 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                 root: {
                     overflow: 'unset!important',
                     borderRadius: 8,
-                    backgroundColor: `${colors.maskColor.input}!important`,
+                    backgroundColor: colors.maskColor.input,
+                    border: '1px solid transparent',
                     // Increase priority
                     [`&.${inputBaseClasses.focused}.${inputBaseClasses.focused}`]: {
                         outline: `2px solid ${alpha(colors.maskColor.primary, 0.2)}`,
                         border: `1px solid ${alpha(colors.maskColor.primary, 0.5)}`,
-                        boxShadow: `0px 0px 3px ${colors.maskColor.primary}`,
                         backgroundColor: colors.maskColor.bottom,
                     },
                     // For Select Menu
