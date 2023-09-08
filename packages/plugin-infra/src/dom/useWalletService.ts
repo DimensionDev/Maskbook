@@ -7,20 +7,15 @@ export interface MaskAccount {
     identifier?: ECKeyIdentifier
 }
 
+export type DeriveWallet = {
+    index: number
+    address: string
+    derivationPath: string
+}
 export interface WalletBackupProvider {
     getLegacyWallets(): Promise<LegacyWalletRecord[]>
     getWallets(): Promise<Wallet[]>
-    getDerivableAccounts(
-        mnemonic: string,
-        page: number,
-        pageSize?: number,
-    ): Promise<
-        Array<{
-            index: number
-            address: string
-            derivationPath: string
-        }>
-    >
+    getDerivableAccounts(mnemonic: string, page: number, pageSize?: number): Promise<DeriveWallet[]>
     changePassword(oldPassword: string, newPassword: string): Promise<void>
     setPassword(newPassword: string): Promise<void>
     verifyPassword(unverifiedPassword: string): Promise<boolean>

@@ -98,7 +98,7 @@ const WalletSettings = memo(() => {
                                     .map((x) => formatEthereumAddress(x.address, 4))
                                     .join(',')
                                 const confirmed = await ConfirmDialog.openAndWaitForClose({
-                                    title: t('popups_wallet_settings_remove_wallet'),
+                                    title: t('remove_wallet_title'),
                                     message: (
                                         <Typography className={classes.confirmMessage}>
                                             <Trans
