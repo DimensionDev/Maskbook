@@ -85,5 +85,8 @@ export const useStyles = makeStyles()((theme) => ({
     confirmMessage: {
         fontSize: 14,
         lineHeight: '18px',
+        wordBreak: 'break-word',
+        maxHeight: '60vh',
+        overflow: 'auto',
     },
 }))
