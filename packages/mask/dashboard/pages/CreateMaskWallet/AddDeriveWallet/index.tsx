@@ -4,17 +4,22 @@ import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useWallets } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
-import { HD_PATH_WITHOUT_INDEX_ETHEREUM, currySameAddress, generateNewWalletName } from '@masknet/web3-shared-base'
+import {
+    HD_PATH_WITHOUT_INDEX_ETHEREUM,
+    currySameAddress,
+    generateNewWalletName,
+    isSameAddress,
+} from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import { useQuery } from '@tanstack/react-query'
+import { useQueries, useQuery } from '@tanstack/react-query'
 import { first, sortBy, uniq } from 'lodash-es'
 import { memo, useCallback, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useAsyncFn, useLocation } from 'react-use'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useAsyncFn } from 'react-use'
 import { sha3 } from 'web3-utils'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
@@ -71,35 +76,56 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
     const { cx, classes } = useStyles()
     const navigate = useNavigate()
     const state = useLocation().state as {
-        usr: {
-            mnemonic: string
-            password: string
-            isReset: boolean
-        }
+        mnemonic: string
+        password: string
+        isReset: boolean
     }
 
-    const { mnemonic, password, isReset } = state.usr
+    const { mnemonic, password, isReset } = state
+    // Avoid leaking mnemonic to react-query
+    const mnemonicHash = sha3(mnemonic)
     const [pathIndexes, setPathIndexes] = useState<number[]>([])
     const { handlePasswordAndWallets } = ResetWalletContext.useContainer()
 
     const wallets = useWallets()
-
-    const handleRecovery = useCallback(() => {
-        navigate(DashboardRoutes.CreateMaskWalletMnemonic)
-    }, [])
+    const existedSiblingQueries = useQueries({
+        queries: isReset
+            ? wallets.map((wallet) => ({
+                  queryKey: ['derive-address', mnemonicHash, wallet.derivationPath],
+                  queryFn: async () => {
+                      const derived = await WalletServiceRef.value.generateAddressFromMnemonicWords(
+                          '',
+                          mnemonic,
+                          wallet.derivationPath,
+                      )
+                      const pathIndex = wallet.derivationPath?.split('/').pop()
+                      if (pathIndex && isSameAddress(derived, wallet.address)) {
+                          return Number.parseInt(pathIndex, 10)
+                      }
+                      return null
+                  },
+              }))
+            : EMPTY_LIST,
+    })
+    const mergedIndexes = useMemo(() => {
+        if (!isReset) return pathIndexes
+        const existedSiblingsIndexes = existedSiblingQueries
+            .flatMap((x) => x.data)
+            .filter((x) => typeof x === 'number') as number[]
+        return sortBy(uniq([...pathIndexes, ...existedSiblingsIndexes]))
+    }, [pathIndexes, existedSiblingQueries, isReset])
 
     const [page, setPage] = useState(0)
 
     const { data: walletChunks = EMPTY_LIST, isLoading } = useQuery({
-        // Avoid leaking mnemonic to react-query
-        queryKey: ['derivedWallet', sha3(mnemonic), page],
+        queryKey: ['derived-wallets', mnemonicHash, page],
         queryFn: async () => {
             if (!mnemonic) return EMPTY_LIST
             return await WalletServiceRef.value.getDerivableAccounts(mnemonic, page)
         },
     })
 
-    const dataSource = useMemo(() => {
+    const tableData = useMemo(() => {
         return walletChunks.map((derivedWallet) => {
             const added = !!wallets.find(currySameAddress(derivedWallet.address))
             const pathIndex = derivedWallet.index
@@ -111,27 +137,28 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
                 address: derivedWallet.address,
             }
         })
-    }, [walletChunks, wallets])
+    }, [walletChunks, wallets, pathIndexes])
 
     const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
-        if (!mnemonic || !pathIndexes.length) return
+        if (!mnemonic || !mergedIndexes.length) return
 
         const result = await handlePasswordAndWallets(password, isReset)
         if (!result) return
+        const existedWallets = isReset ? [] : wallets
 
-        const firstPath = first(pathIndexes)
+        const firstIndex = first(mergedIndexes)
         const firstWallet = await WalletServiceRef.value.recoverWalletFromMnemonicWords(
-            generateNewWalletName(wallets),
+            generateNewWalletName(existedWallets),
             mnemonic,
-            `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${firstPath}`,
+            `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${firstIndex}`,
         )
 
         await Promise.all(
-            pathIndexes
+            mergedIndexes
                 .slice(1)
                 .map(async (pathIndex, index) =>
                     WalletServiceRef.value.recoverWalletFromMnemonicWords(
-                        generateNewWalletName(wallets, index + 1),
+                        generateNewWalletName(existedWallets, index + 1),
                         mnemonic,
                         `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${pathIndex}`,
                     ),
@@ -146,15 +173,20 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         await WalletServiceRef.value.resolveMaskAccount([{ address: firstWallet }])
         Telemetry.captureEvent(EventType.Access, EventID.EntryPopupWalletImport)
         navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
-    }, [mnemonic, wallets.length, isReset, password, pathIndexes])
+    }, [mnemonic, wallets.length, isReset, password, mergedIndexes])
 
     const onCheck = useCallback(async (checked: boolean, pathIndex: number) => {
         setPathIndexes((list) => {
-            return checked ? sortBy(uniq([...list, pathIndex])) : list.filter((x) => x !== pathIndex)
+            // Will sort and deduplicate in mergedIndexes
+            return checked ? [...list, pathIndex] : list.filter((x) => x !== pathIndex)
         })
     }, [])
 
-    const disabled = confirmLoading || isLoading || !pathIndexes.length
+    const handleRecovery = useCallback(() => {
+        navigate(DashboardRoutes.CreateMaskWalletMnemonic)
+    }, [])
+
+    const disabled = confirmLoading || isLoading || !mergedIndexes.length
 
     return (
         <>
@@ -176,13 +208,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
                 {t.wallet_derivation_path({ path: HD_PATH_WITHOUT_INDEX_ETHEREUM })}
             </Typography>
 
-            <DeriveWalletTable
-                hiddenHeader
-                loading={isLoading}
-                dataSource={dataSource}
-                onCheck={onCheck}
-                symbol="ETH"
-            />
+            <DeriveWalletTable hiddenHeader loading={isLoading} dataSource={tableData} onCheck={onCheck} symbol="ETH" />
 
             <div className={classes.pagination}>
                 <SecondaryButton
