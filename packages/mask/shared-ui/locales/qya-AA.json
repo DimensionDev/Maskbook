@@ -749,6 +749,7 @@
     "popups_wallet_settings_rename_tips": "crwdns22071:0crwdne22071:0",
     "popups_wallet_settings_name_exists": "crwdns22073:0crwdne22073:0",
     "popups_wallet_settings_remove_wallet": "crwdns22075:0crwdne22075:0",
+    "remove_wallet_title": "crwdns22261:0crwdne22261:0",
     "remove_wallet_message": "crwdns22259:0{{wallet}}crwdnd22259:0{{other_wallets}}crwdne22259:0",
     "popups_wallet_settings_are_you_sure_remove_wallet": "crwdns22077:0crwdne22077:0",
     "popups_wallet_settings_address_exists": "crwdns22079:0crwdne22079:0",
