@@ -49,7 +49,7 @@ export function createSharedContext(): Omit<Plugin.SiteAdaptor.SiteAdaptorContex
         disconnectAllWalletsFromOrigin: reject,
         removeWallet: reject,
         resetAllWallets: reject,
-        selectAccount: reject,
+        selectMaskWalletAccount: reject,
         setMinimalMode: reject,
         signWithPersona: reject,
         signWithWallet: reject,

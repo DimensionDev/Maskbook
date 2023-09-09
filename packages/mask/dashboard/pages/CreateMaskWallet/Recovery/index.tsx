@@ -1,4 +1,3 @@
-import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import { DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { useWallets, useWeb3State } from '@masknet/web3-hooks-base'
@@ -21,6 +20,7 @@ import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { ResetWalletContext } from '../context.js'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
+import Services from '#services'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -105,7 +105,7 @@ const Recovery = memo(function Recovery() {
         async (values: string[]) => {
             try {
                 const mnemonic = values.join(' ')
-                await WalletServiceRef.value.getDerivableAccounts(mnemonic, 0, 1)
+                await Services.Wallet.getDerivableAccounts(mnemonic, 0, 1)
 
                 navigate(DashboardRoutes.AddDeriveWallet, {
                     replace: false,
@@ -132,10 +132,10 @@ const Recovery = memo(function Recovery() {
             try {
                 const result = await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
                 if (!result) return
-                const address = await WalletServiceRef.value.generateAddressFromPrivateKey(data.privateKey)
+                const address = await Services.Wallet.generateAddressFromPrivateKey(data.privateKey)
                 const ens = await NameService?.reverse?.(address)
                 const walletName = ens || newWalletName
-                const account = await WalletServiceRef.value.recoverWalletFromPrivateKey(walletName, data.privateKey)
+                const account = await Services.Wallet.recoverWalletFromPrivateKey(walletName, data.privateKey)
                 await Web3.connect({
                     account,
                     providerType: ProviderType.MaskWallet,
@@ -159,14 +159,14 @@ const Recovery = memo(function Recovery() {
             try {
                 const result = await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
                 if (!result) return
-                const jsonAddress = await WalletServiceRef.value.generateAddressFromKeyStoreJSON(
+                const jsonAddress = await Services.Wallet.generateAddressFromKeyStoreJSON(
                     keyStoreContent,
                     keyStorePassword,
                 )
                 const ens = await NameService?.reverse?.(jsonAddress)
                 const walletName = ens || newWalletName
 
-                const address = await WalletServiceRef.value.recoverWalletFromKeyStoreJSON(
+                const address = await Services.Wallet.recoverWalletFromKeyStoreJSON(
                     walletName,
                     keyStoreContent,
                     keyStorePassword,
@@ -176,7 +176,7 @@ const Recovery = memo(function Recovery() {
                     providerType: ProviderType.MaskWallet,
                     silent: true,
                 })
-                await WalletServiceRef.value.resolveMaskAccount([{ address }])
+                await Services.Wallet.resolveMaskAccountRequest(null, [{ address }])
                 Telemetry.captureEvent(EventType.Access, EventID.EntryPopupWalletImport)
                 navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
             } catch (error) {
@@ -202,7 +202,7 @@ const Recovery = memo(function Recovery() {
         })
     }, [location.state?.password, location.state?.isReset])
 
-    const { value: hasPassword, loading: loadingHasPassword } = useAsync(WalletServiceRef.value.hasPassword, [])
+    const { value: hasPassword, loading: loadingHasPassword } = useAsync(Services.Wallet.hasPassword, [])
 
     const step = hasPassword ? '1' : '2'
 

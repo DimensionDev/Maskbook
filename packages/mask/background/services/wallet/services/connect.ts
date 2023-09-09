@@ -1,7 +1,10 @@
 import { defer, type DeferTuple } from '@masknet/kit'
-import type { ECKeyIdentifier } from '@masknet/shared-base'
+import { PopupRoutes, type ECKeyIdentifier } from '@masknet/shared-base'
 import { walletDatabase } from '../database/Plugin.db.js'
 import { produce } from 'immer'
+import { openPopupWindow } from '../../helper/popup-opener.js'
+import { Providers } from '@masknet/web3-providers'
+import { type ChainId, ProviderType } from '@masknet/web3-shared-evm'
 
 export async function connectWalletToOrigin(wallet: string, origin: string) {
     assertOrigin(origin)
@@ -61,25 +64,37 @@ function assertOrigin(origin: string) {
         )
 }
 
-interface MaskAccount {
+export interface MaskAccount {
     address: string
     owner?: string
     identifier?: ECKeyIdentifier
 }
 
-let deferred: DeferTuple<MaskAccount[], Error> | null
+const requests = new Map<string | null, DeferTuple<MaskAccount[], Error>>()
 
-export async function selectMaskAccount(): Promise<MaskAccount[]> {
-    const [promise] = (deferred = defer())
-    return promise
+/**
+ * @param chainId Chain ID
+ * @param origin Origin of the request website, pass `null` if it is used inside Mask Network, for example, connect in dashboard or in twitter.com by the site adaptor
+ */
+export async function selectMaskAccount(chainId: ChainId, origin: string | null): Promise<MaskAccount[]> {
+    await openPopupWindow(Providers[ProviderType.MaskWallet].wallets ? PopupRoutes.SelectWallet : PopupRoutes.Wallet, {
+        chainId,
+        origin,
+    })
+    requests.set(origin, defer())
+    return requests.get(origin)![0]
 }
 
-export async function resolveMaskAccount(accounts: MaskAccount[]) {
-    deferred?.[1](accounts)
-    deferred = null
-}
+export async function resolveMaskAccountRequest(
+    origin: string | null,
+    result: MaskAccount[] | PromiseSettledResult<MaskAccount[]>,
+) {
+    const tuple = requests.get(origin)
+    if (!tuple) return
 
-export async function rejectMaskAccount() {
-    deferred?.[1]([])
-    deferred = null
+    if (Array.isArray(result)) tuple[1](result)
+    else if (result.status === 'fulfilled') tuple[1](result.value)
+    else tuple[2](result.reason)
+
+    requests.delete(origin)
 }

@@ -15,7 +15,6 @@ import { useSearchParams } from 'react-router-dom'
 import { compact } from 'lodash-es'
 import { isZero } from '@masknet/web3-shared-base'
 import { useAsyncRetry } from 'react-use'
-import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -83,7 +82,7 @@ export const Onboarding = memo(function Onboarding() {
     const theme = useTheme()
     const isCreate = params.get('isCreate')
 
-    const { value: hasPaymentPassword, loading, retry } = useAsyncRetry(WalletServiceRef.value.hasPassword, [])
+    const { value: hasPaymentPassword, loading, retry } = useAsyncRetry(Services.Wallet.hasPassword, [])
 
     const onSetupTwitter = useCallback(async () => {
         const url = await Services.SiteAdaptor.setupSite(EnhanceableSite.Twitter, false)

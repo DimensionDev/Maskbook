@@ -82,7 +82,7 @@ const ConnectWalletPage = memo(() => {
 
                 if (!wallets.length) {
                     await Services.Helper.openWalletStartUpWindow({
-                        toBeClose: 1,
+                        closeAfterDone: 1,
                     })
                     return
                 }

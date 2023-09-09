@@ -1,4 +1,3 @@
-import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import { DeriveWalletTable } from '@masknet/shared'
 import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
@@ -26,6 +25,7 @@ import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { ResetWalletContext } from '../context.js'
+import Services from '#services'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -93,7 +93,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
             ? wallets.map((wallet) => ({
                   queryKey: ['derive-address', mnemonicHash, wallet.derivationPath],
                   queryFn: async () => {
-                      const derived = await WalletServiceRef.value.generateAddressFromMnemonicWords(
+                      const derived = await Services.Wallet.generateAddressFromMnemonicWords(
                           '',
                           mnemonic,
                           wallet.derivationPath,
@@ -121,7 +121,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         queryKey: ['derived-wallets', mnemonicHash, page],
         queryFn: async () => {
             if (!mnemonic) return EMPTY_LIST
-            return await WalletServiceRef.value.getDerivableAccounts(mnemonic, page)
+            return await Services.Wallet.getDerivableAccounts(mnemonic, page)
         },
     })
 
@@ -147,7 +147,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         const existedWallets = isReset ? [] : wallets
 
         const firstIndex = first(mergedIndexes)
-        const firstWallet = await WalletServiceRef.value.recoverWalletFromMnemonicWords(
+        const firstWallet = await Services.Wallet.recoverWalletFromMnemonicWords(
             generateNewWalletName(existedWallets),
             mnemonic,
             `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${firstIndex}`,
@@ -157,7 +157,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
             mergedIndexes
                 .slice(1)
                 .map(async (pathIndex, index) =>
-                    WalletServiceRef.value.recoverWalletFromMnemonicWords(
+                    Services.Wallet.recoverWalletFromMnemonicWords(
                         generateNewWalletName(existedWallets, index + 1),
                         mnemonic,
                         `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${pathIndex}`,
@@ -170,7 +170,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
             providerType: ProviderType.MaskWallet,
             silent: true,
         })
-        await WalletServiceRef.value.resolveMaskAccount([{ address: firstWallet }])
+        await Services.Wallet.resolveMaskAccountRequest(null, [{ address: firstWallet }])
         Telemetry.captureEvent(EventType.Access, EventID.EntryPopupWalletImport)
         navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
     }, [mnemonic, wallets.length, isReset, password, mergedIndexes])

@@ -39,7 +39,7 @@ import type {
     Web3UI,
 } from '@masknet/web3-shared-base'
 import type { LinkedProfileDetails } from '@masknet/public-api'
-import type { TransactionOptions } from '@masknet/web3-shared-evm'
+import type { ChainId, TransactionOptions } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { CompositionType } from './entry-content-script.js'
 
@@ -149,7 +149,9 @@ export namespace Plugin.Shared {
         wallets: Subscription<Wallet[]>
 
         /** Select a Mask Wallet account */
-        selectAccount(): Promise<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
+        selectMaskWalletAccount(
+            chainId: ChainId,
+        ): Promise<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
 
         /** Open Dashboard with a new window */
         openDashboard(route?: DashboardRoutes, search?: string): Promise<void>

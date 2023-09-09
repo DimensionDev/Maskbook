@@ -5,7 +5,7 @@ import { Box, Typography } from '@mui/material'
 import { memo } from 'react'
 import { useI18N } from '../../../../../../utils/index.js'
 import { useAsyncFn } from 'react-use'
-import { WalletServiceRef } from '@masknet/plugin-infra/dom'
+import Services from '#services'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -58,7 +58,7 @@ export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onCh
     const { classes, cx, theme } = useStyles()
     const [, handleChoose] = useAsyncFn(
         async (route: DashboardRoutes) => {
-            const hasPassword = await WalletServiceRef.value.hasPassword()
+            const hasPassword = await Services.Wallet.hasPassword()
             await browser.tabs.create({
                 active: true,
                 url: browser.runtime.getURL(

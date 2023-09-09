@@ -5,7 +5,6 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Box, IconButton, MenuItem, Stack, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine/index.js'
 import {
     type PersonaIdentifier,
@@ -28,6 +27,7 @@ import { UserContext } from '../../../Settings/hooks/UserContext.js'
 import { PreviewDialog as ExportPersonaDialog } from '../../../SignUp/steps/PreviewDialog.js'
 import { useExportPrivateKey } from '../../hooks/useExportPrivateKey.js'
 import { useExportMnemonicWords } from '../../hooks/useExportMnemonicWords.js'
+import Services from '#services'
 
 const useStyles = makeStyles()((theme) => ({
     setting: {
@@ -70,7 +70,7 @@ export const PersonaRowCard = memo(() => {
         definedSocialNetworkAdaptors,
     } = PersonaContext.useContainer()
 
-    const { value: hasPaymentPassword = false } = useAsync(WalletServiceRef.value.hasPassword, [])
+    const { value: hasPaymentPassword = false } = useAsync(Services.Wallet.hasPassword, [])
     if (!currentPersona?.identifier.publicKeyAsHex) return null
 
     return (

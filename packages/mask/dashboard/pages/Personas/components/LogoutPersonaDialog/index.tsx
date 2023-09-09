@@ -9,7 +9,6 @@ import { MaskDialog } from '@masknet/theme'
 import { ManageWallet } from '@masknet/shared'
 import { useWallets } from '@masknet/web3-hooks-base'
 import { formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
-import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import Services from '#services'
 import { DashboardTrans, useDashboardI18N } from '../../../../locales/index.js'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
@@ -48,7 +47,7 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(
 
         const onConfirm = useCallback(async () => {
             if (manageWallets.length && password) {
-                const verified = await WalletServiceRef.value.verifyPassword(password)
+                const verified = await Services.Wallet.verifyPassword(password)
                 if (!verified) {
                     setError(t.settings_dialogs_incorrect_password())
                     return

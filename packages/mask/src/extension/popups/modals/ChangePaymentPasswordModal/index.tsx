@@ -1,4 +1,3 @@
-import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import { type SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
@@ -8,6 +7,7 @@ import { useAsyncFn } from 'react-use'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
+import Services from '#services'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -60,7 +60,7 @@ function ChangePaymentPasswordDrawer({
             return
         }
         try {
-            await WalletServiceRef.value.changePassword(oldPassword, newPassword)
+            await Services.Wallet.changePassword(oldPassword, newPassword)
             showSnackbar(t('popups_wallet_password_change_successful'))
             rest.onClose?.()
         } catch (error) {

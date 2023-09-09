@@ -67,7 +67,7 @@ export async function openPopupWindow(
     const shouldUnlockWallet = locked && !exclusionDetectLocked.includes(route ?? PopupRoutes.Wallet) && !ignoreLock
 
     const url = urlcat('popups.html#', shouldUnlockWallet ? PopupRoutes.Unlock : route ?? PopupRoutes.Wallet, {
-        toBeClose: 1,
+        closeAfterDone: 1,
         from: locked && route ? route : null,
         ...params,
     })
@@ -76,7 +76,7 @@ export async function openPopupWindow(
         await browser.windows.update(currentPopupWindowId, { focused: true })
         CrossIsolationMessages.events.popupRouteUpdated.sendToAll(
             urlcat(shouldUnlockWallet ? PopupRoutes.Unlock : route ?? PopupRoutes.Wallet, {
-                toBeClose: 1,
+                closeAfterDone: 1,
                 from: locked && route ? route : null,
                 ...params,
             }),

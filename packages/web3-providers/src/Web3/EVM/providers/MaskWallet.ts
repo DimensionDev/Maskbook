@@ -6,7 +6,6 @@ import {
     type ECKeyIdentifier,
     EMPTY_LIST,
     ExtensionSite,
-    PopupRoutes,
     ValueRef,
     ImportSource,
     getExtensionSiteType,
@@ -27,7 +26,6 @@ import { BaseContractWalletProvider } from './BaseContractWallet.js'
 import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
 import { SmartPayOwnerAPI } from '../../../SmartPay/apis/OwnerAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
-import { env } from '@masknet/flags'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
 
 export class MaskWalletProvider
@@ -37,15 +35,6 @@ export class MaskWalletProvider
     private Request = new RequestReadonlyAPI()
 
     private ref = new ValueRef<Wallet[]>(EMPTY_LIST)
-
-    private openPopupWindow: (route?: PopupRoutes, params?: Record<string, any>) => Promise<void> = async (...args) => {
-        await this.context?.openPopupWindow(...args)
-    }
-
-    private openSelectWalletWindow =
-        env.channel === 'stable' && process.env.NODE_ENV === 'production'
-            ? this.openPopupWindow
-            : debounce(this.openPopupWindow, 1000)
 
     constructor() {
         super(ProviderType.MaskWallet)
@@ -179,13 +168,14 @@ export class MaskWalletProvider
             identifier?: ECKeyIdentifier
         },
         silent?: boolean,
+        origin?: string | null,
     ) {
         if (getExtensionSiteType() === ExtensionSite.Popup || silent) {
             if (isValidAddress(address)) {
                 await this.switchAccount(address, owner)
                 await this.switchChain(chainId)
 
-                await this.context?.connectWalletToOrigin(address, location.origin)
+                origin && (await this.context?.connectWalletToOrigin(address, origin))
 
                 return {
                     account: address,
@@ -199,11 +189,7 @@ export class MaskWalletProvider
             }
         }
 
-        await this.openSelectWalletWindow?.(this.wallets.length ? PopupRoutes.SelectWallet : PopupRoutes.Wallet, {
-            chainId,
-        })
-
-        const account = first(await this.context?.selectAccount())
+        const account = first(await this.context?.selectMaskWalletAccount(chainId))
         if (!account) throw new Error(`Failed to connect to ${new ChainResolverAPI().chainFullName(chainId)}`)
 
         // switch account

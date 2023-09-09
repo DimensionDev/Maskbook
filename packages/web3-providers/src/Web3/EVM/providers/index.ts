@@ -15,7 +15,7 @@ import type { WalletAPI } from '../../../entry-types.js'
 
 export interface EVM_Provider extends WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3> {}
 
-export const Providers: Record<ProviderType, EVM_Provider> = {
+export const Providers = {
     [ProviderType.None]: new NoneProvider(),
     [ProviderType.MaskWallet]: new MaskWalletProvider(),
     [ProviderType.MetaMask]: new MetaMaskProvider(),
@@ -28,4 +28,4 @@ export const Providers: Record<ProviderType, EVM_Provider> = {
     [ProviderType.Fortmatic]: new FortmaticProvider(),
     [ProviderType.Opera]: new OperaProvider(),
     [ProviderType.CustomNetwork]: new CustomNetworkProvider(),
-}
+} satisfies Record<ProviderType, EVM_Provider>

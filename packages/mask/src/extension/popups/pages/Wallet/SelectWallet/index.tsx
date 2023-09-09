@@ -39,6 +39,7 @@ const SelectWallet = memo(function SelectWallet() {
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const [params] = useSearchParams()
+    const origin = params.get('origin')
     const chainIdSearched = params.get('chainId')
     const isVerifyWalletFlow = params.get('verifyWallet')
     const isSettingNFTAvatarFlow = params.get('setNFTAvatar')
@@ -70,10 +71,10 @@ const SelectWallet = memo(function SelectWallet() {
         if (isVerifyWalletFlow) {
             navigate(-1)
         } else {
-            await Services.Wallet.resolveMaskAccount([])
+            await Services.Wallet.resolveMaskAccountRequest(origin, [])
             await Services.Helper.removePopupWindow()
         }
-    }, [isVerifyWalletFlow])
+    }, [isVerifyWalletFlow, origin])
 
     const handleConfirm = useCallback(async () => {
         if (isVerifyWalletFlow || isSettingNFTAvatarFlow) {
@@ -94,7 +95,7 @@ const SelectWallet = memo(function SelectWallet() {
 
         const wallet = wallets.find((x) => isSameAddress(x.address, selected))
 
-        await Services.Wallet.resolveMaskAccount([
+        await Services.Wallet.resolveMaskAccountRequest(origin, [
             wallet?.owner
                 ? {
                       address: selected,
@@ -115,7 +116,17 @@ const SelectWallet = memo(function SelectWallet() {
             if (network) await Network?.switchNetwork(network.ID)
         }
         return Services.Helper.removePopupWindow()
-    }, [isVerifyWalletFlow, selected, chainId, wallets, smartPayChainId, isSettingNFTAvatarFlow, networks, Network])
+    }, [
+        isVerifyWalletFlow,
+        selected,
+        chainId,
+        wallets,
+        smartPayChainId,
+        isSettingNFTAvatarFlow,
+        networks,
+        Network,
+        origin,
+    ])
 
     useEffect(() => {
         if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')

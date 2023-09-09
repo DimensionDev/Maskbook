@@ -59,11 +59,11 @@ const Unlock = memo(() => {
 
     const [{ value: verified, loading }, handleUnlock] = useAsyncFn(async () => {
         const from = params.get('from')
-        const toBeClose = params.get('toBeClose')
+        const closeAfterDone = params.get('closeAfterDone')
         const verified = await Services.Wallet.unlockWallet(password)
 
         if (verified) {
-            if (toBeClose && !from) {
+            if (closeAfterDone && !from) {
                 await Services.Helper.removePopupWindow()
             } else {
                 const path = from
