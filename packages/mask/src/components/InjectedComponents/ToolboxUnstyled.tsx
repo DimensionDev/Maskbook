@@ -131,7 +131,7 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
                             <WalletIcon
                                 size={iconSize}
                                 badgeSize={badgeSize}
-                                mainIcon={providerDescriptor.icon} // switch the icon to meet design
+                                mainIcon={providerDescriptor.icon}
                                 badgeIconBorderColor={theme.palette.background.paper}
                             />
                         ) : (
