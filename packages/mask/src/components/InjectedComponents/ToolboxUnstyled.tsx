@@ -178,7 +178,7 @@ function useToolbox() {
     const pendingTransactions = useRecentTransactions(undefined, TransactionStatusType.NOT_DEPEND)
     // #endregion
 
-    const { data: domain } = useReverseAddress(undefined, account)
+    const { data: domain } = useReverseAddress(undefined, account, true)
 
     function renderButtonText() {
         if (!account) return t('plugin_wallet_connect_wallet')
