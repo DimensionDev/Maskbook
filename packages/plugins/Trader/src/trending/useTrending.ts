@@ -1,7 +1,7 @@
+import { flatten } from 'lodash-es'
 import { useEffect, useRef, useState } from 'react'
 import { useAsync, useAsyncFn, useAsyncRetry } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
-import { flatten } from 'lodash-es'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'

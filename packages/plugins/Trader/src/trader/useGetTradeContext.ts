@@ -1,7 +1,9 @@
 import { getTraderConstants } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
-import type { TradeContext as TradeContext_ } from '../types/index.js'
 import { TradeProvider } from '@masknet/public-api'
+import { unreachable } from '@masknet/kit'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { TradeContext as TradeContext_ } from '../types/index.js'
 import {
     PANCAKESWAP_BASE_AGAINST_TOKENS,
     PANCAKESWAP_CUSTOM_BASES,
@@ -30,8 +32,6 @@ import {
     YUMISWAP_BASE_AGAINST_TOKENS,
     YUMISWAP_CUSTOM_BASES,
 } from '../constants/index.js'
-import { unreachable } from '@masknet/kit'
-import { useChainContext } from '@masknet/web3-hooks-base'
 
 export function useGetTradeContext(tradeProvider?: TradeProvider) {
     const { chainId } = useChainContext()

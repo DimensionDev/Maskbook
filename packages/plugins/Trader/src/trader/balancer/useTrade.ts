@@ -1,12 +1,12 @@
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { useChainContext, useCustomBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, useTokenConstants } from '@masknet/web3-shared-evm'
-import { BALANCER_SWAP_TYPE } from '../../constants/index.js'
-import { PluginTraderRPC } from '../../messages.js'
-import { type SwapResponse, TradeStrategy } from '../../types/index.js'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { BALANCER_SWAP_TYPE } from '../../constants/index.js'
+import { PluginTraderRPC } from '../../messages.js'
+import { type SwapResponse, TradeStrategy } from '../../types/index.js'
 
 export function useTrade(
     strategy: TradeStrategy,

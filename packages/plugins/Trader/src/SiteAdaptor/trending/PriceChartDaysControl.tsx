@@ -1,7 +1,7 @@
 import { Link, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Days } from '@masknet/shared-base'
-import { resolveDaysName } from '../../pipes.js'
+import { resolveDaysName } from '../../helpers/resolveDaysName.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

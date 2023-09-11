@@ -44,7 +44,7 @@ import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { ContentTabs, type Currency, type Stat } from '../../types/index.js'
 import { TrendingCard, type TrendingCardProps } from './TrendingCard.js'
 import { TrendingViewDescriptor } from './TrendingViewDescriptor.js'
-import { CoinIcon } from './components/index.js'
+import { CoinIcon } from './CoinIcon.js'
 import { TrendingViewContext } from './context.js'
 import { useI18N } from '../../locales/index.js'
 

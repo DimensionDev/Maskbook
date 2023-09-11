@@ -4,14 +4,10 @@ import type { Trade as V3Trade } from '@uniswap/v3-sdk'
 import type { Currency, TradeType } from '@uniswap/sdk-core'
 import { unreachable } from '@masknet/kit'
 import { TradeProvider } from '@masknet/public-api'
-import type {
-    SwapQuoteResponse,
-    SwapResponse,
-    SwapBancorRequest,
-    SwapRouteSuccessResponse,
-    TradeComputed,
-    SwapOOSuccessResponse,
-} from '../types/index.js'
+import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
+import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn.js'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useTradeCallback as useNativeTokenWrapperCallback } from './native/useTradeCallback.js'
 import { useTradeCallback as useZrxCallback } from './0x/useTradeCallback.js'
 import { useTradeCallback as useUniswapCallback } from './uniswap/useTradeCallback.js'
@@ -21,12 +17,16 @@ import { useTradeCallback as useBancorCallback } from './bancor/useTradeCallback
 import { useTradeCallback as useOpenOceanCallback } from './openocean/useTradeCallback.js'
 import { useExchangeProxyContract } from '../contracts/balancer/useExchangeProxyContract.js'
 import type { NativeTokenWrapper } from './native/useTradeComputed.js'
-import { isNativeTokenWrapper } from '../helpers/index.js'
+import { isNativeTokenWrapper } from '../helpers/isNativeTokenWrapper.js'
 import { useGetTradeContext } from './useGetTradeContext.js'
-import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
-import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn.js'
-import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import type {
+    SwapQuoteResponse,
+    SwapResponse,
+    SwapBancorRequest,
+    SwapRouteSuccessResponse,
+    TradeComputed,
+    SwapOOSuccessResponse,
+} from '../types/index.js'
 
 export function useTradeCallback(
     provider?: TradeProvider,
