@@ -4,7 +4,7 @@ import type { TradeProvider } from '@masknet/public-api'
 import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { getEVMAvailableTraderProviders } from '../getEVMAvailableTraderProviders.js'
+import { getEVMAvailableTraderProviders } from '../helpers/getEVMAvailableTraderProviders.js'
 
 export function useAvailableTraderProviders(targetChainId?: Web3Helper.ChainIdAll): TradeProvider[] {
     const { chainId } = useChainContext({
