@@ -1,17 +1,16 @@
 /// <reference types="react/canary" />
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
 import urlcat from 'urlcat'
-import { createContext, memo, use, useCallback, useContext, useMemo, useRef } from 'react'
+import { createContext, memo, use, useContext, useMemo, useRef } from 'react'
 import { NavLink, type LinkProps } from 'react-router-dom'
 import { BottomNavigationAction, Box, type BoxProps } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { DashboardRoutes, PopupRoutes } from '@masknet/shared-base'
+import { PopupRoutes } from '@masknet/shared-base'
 import { useMessages, useWallet } from '@masknet/web3-hooks-base'
 import { useHasPassword } from '../../hooks/index.js'
 import { useWalletLockStatus } from '../../pages/Wallet/hooks/useWalletLockStatus.js'
 import { HydrateFinished } from '../../../../utils/createNormalReactRoot.js'
-import Services from '#services'
 import { useCurrentPersona } from '../../../../components/DataSource/useCurrentPersona.js'
 
 const useStyle = makeStyles()((theme) => ({
@@ -55,19 +54,6 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
 
     const currentPersona = useCurrentPersona()
 
-    const onOpenDashboardSettings = useCallback(async () => {
-        await browser.tabs.create({
-            active: true,
-            url: browser.runtime.getURL(
-                `/dashboard.html#${currentPersona ? DashboardRoutes.Settings : DashboardRoutes.SignUpPersona}`,
-            ),
-        })
-        if (navigator.userAgent.includes('Firefox')) {
-            window.close()
-        }
-        await Services.Helper.removePopupWindow()
-    }, [!currentPersona])
-
     useContext(HydrateFinished)()
     const messages = useMessages()
 
@@ -97,13 +83,14 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
                     className={classes.action}
                 />
             </BottomNavLink>
-
-            <BottomNavigationAction
-                onClick={onOpenDashboardSettings}
-                showLabel={false}
-                icon={<Icons.Settings2 size={28} />}
-                className={classes.action}
-            />
+            <BottomNavLink to={PopupRoutes.Settings}>
+                <BottomNavigationAction
+                    className={classes.action}
+                    tabIndex={-1}
+                    showLabel={false}
+                    icon={<Icons.Settings2 size={28} />}
+                />
+            </BottomNavLink>
         </Box>
     )
 })

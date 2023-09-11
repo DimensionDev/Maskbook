@@ -110,6 +110,7 @@ export function add_url() { return new URL("./general/Add.svg", import.meta.url)
 export function add_no_border_url() { return new URL("./general/AddNoBorder.svg", import.meta.url) }
 export function add_user_url() { return new URL("./general/AddUser.svg", import.meta.url) }
 export function america_url() { return new URL("./general/America.svg", import.meta.url) }
+export function appearance_url() { return new URL("./general/Appearance.svg", import.meta.url) }
 export function appendices_url() { return new URL("./general/Appendices.svg", import.meta.url) }
 export function application_nft_url() { return new URL("./general/ApplicationNFT.svg", import.meta.url) }
 export function approve_url() { return new URL("./general/Approve.svg", import.meta.url) }
@@ -184,6 +185,7 @@ export function facebook_url() { return new URL("./general/Facebook.svg", import
 export function file_url() { return new URL("./general/File.svg", import.meta.url) }
 export function file_message_url() { return new URL("./general/FileMessage.svg", import.meta.url) }
 export function fill_success_url() { return new URL("./general/FillSuccess.svg", import.meta.url) }
+export function filter_url() { return new URL("./general/Filter.svg", import.meta.url) }
 export function folder_url() { return new URL("./general/Folder.svg", import.meta.url) }
 export function gas_url() { return new URL("./general/Gas.svg", import.meta.url) }
 export function gas_station_url() { return new URL("./general/GasStation.svg", import.meta.url) }
@@ -193,8 +195,7 @@ export function gear_settings_url() { return new URL("./general/GearSettings.svg
 export function globe_url() { return new URL("./general/Globe.svg", import.meta.url) }
 export function gray_masks_url() { return new URL("./general/GrayMasks.svg", import.meta.url) }
 export function hamburger_menu_url() { return new URL("./general/HamburgerMenu.svg", import.meta.url) }
-export function history_dark_url() { return new URL("./general/History.dark.svg", import.meta.url) }
-export function history_light_url() { return new URL("./general/History.light.svg", import.meta.url) }
+export function history_url() { return new URL("./general/History.svg", import.meta.url) }
 export function hkd_url() { return new URL("./general/HKD.svg", import.meta.url) }
 export function hong_kong_url() { return new URL("./general/HongKong.svg", import.meta.url) }
 export function identity_dark_url() { return new URL("./general/Identity.dark.svg", import.meta.url) }

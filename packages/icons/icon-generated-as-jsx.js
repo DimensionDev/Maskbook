@@ -639,6 +639,23 @@ export const America = /*#__PURE__*/ __createIcon('America', [
         u: () => new URL('./general/America.svg', import.meta.url),
     },
 ])
+export const Appearance = /*#__PURE__*/ __createIcon('Appearance', [
+    {
+        u: () => new URL('./general/Appearance.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                width: '24',
+                height: '24',
+                fill: 'none',
+                xmlns: 'http://www.w3.org/2000/svg',
+                children: /*#__PURE__*/ _jsx('path', {
+                    d: 'M10.09 13.908 5.39 11.622l3.707-3.503L9.692 3l4.576 2.538 5.072-.878-.879 5.071L21 14.307l-5.118.598-3.504 3.705-2.286-4.702ZM7.828 14.566l1.608 1.609-4.825 4.826-1.609-1.609 4.826-4.826Z',
+                    fill: 'currentColor',
+                }),
+            }),
+        s: true,
+    },
+])
 export const Appendices = /*#__PURE__*/ __createIcon('Appendices', [
     {
         u: () => new URL('./general/Appendices.svg', import.meta.url),
@@ -1691,6 +1708,25 @@ export const FillSuccess = /*#__PURE__*/ __createIcon('FillSuccess', [
         u: () => new URL('./general/FillSuccess.svg', import.meta.url),
     },
 ])
+export const Filter = /*#__PURE__*/ __createIcon('Filter', [
+    {
+        u: () => new URL('./general/Filter.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                width: '24',
+                height: '24',
+                fill: 'none',
+                xmlns: 'http://www.w3.org/2000/svg',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fillRule: 'evenodd',
+                    clipRule: 'evenodd',
+                    d: 'M2.535 16.26a.8.8 0 0 1 .8-.8h7.234a.8.8 0 0 1 0 1.6H3.335a.8.8 0 0 1-.8-.8ZM17.784 14.18a2.08 2.08 0 1 0-.002 4.159 2.08 2.08 0 0 0 .002-4.159Zm-3.68 2.08a3.68 3.68 0 1 1 7.36 0 3.68 3.68 0 0 1-7.36 0ZM12.629 7.737a.8.8 0 0 1 .8-.8h7.235a.8.8 0 0 1 0 1.6H13.43a.8.8 0 0 1-.8-.8ZM2.535 7.737a3.68 3.68 0 1 1 7.36 0 3.68 3.68 0 0 1-7.36 0Zm3.68-2.08a2.08 2.08 0 1 0 0 4.16 2.08 2.08 0 0 0 0-4.16Z',
+                    fill: 'currentColor',
+                }),
+            }),
+        s: true,
+    },
+])
 export const Folder = /*#__PURE__*/ __createIcon('Folder', [
     {
         u: () => new URL('./general/Folder.svg', import.meta.url),
@@ -1824,12 +1860,41 @@ export const HamburgerMenu = /*#__PURE__*/ __createIcon('HamburgerMenu', [
 ])
 export const History = /*#__PURE__*/ __createIcon('History', [
     {
-        c: ['dark'],
-        u: () => new URL('./general/History.dark.svg', import.meta.url),
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./general/History.light.svg', import.meta.url),
+        u: () => new URL('./general/History.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsxs('svg', {
+                width: '24',
+                height: '24',
+                fill: 'none',
+                xmlns: 'http://www.w3.org/2000/svg',
+                children: [
+                    /*#__PURE__*/ _jsx('path', {
+                        fillRule: 'evenodd',
+                        clipRule: 'evenodd',
+                        d: 'M3.743 3.919c-.63.677-.974 1.703-.974 3.08v10c0 1.378.344 2.403.974 3.08.619.668 1.628 1.12 3.226 1.12h7.375a.8.8 0 1 1 0 1.6H6.969c-1.903 0-3.393-.547-4.399-1.63-.996-1.073-1.401-2.547-1.401-4.17V7c0-1.622.405-3.097 1.401-4.17C3.576 1.748 5.066 1.2 6.97 1.2h8c1.902 0 3.393.548 4.399 1.63.995 1.073 1.4 2.548 1.4 4.17v4.205a.8.8 0 1 1-1.6 0V6.999c0-1.377-.343-2.403-.973-3.08-.62-.667-1.628-1.12-3.226-1.12h-8c-1.598 0-2.607.453-3.226 1.12Z',
+                        fill: 'currentColor',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        fillRule: 'evenodd',
+                        clipRule: 'evenodd',
+                        d: 'M18.95 14.418a3.442 3.442 0 1 0 0 6.884 3.442 3.442 0 0 0 0-6.884Zm-4.842 3.442a4.842 4.842 0 1 1 9.684 0 4.842 4.842 0 0 1-9.684 0Z',
+                        fill: 'currentColor',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        fillRule: 'evenodd',
+                        clipRule: 'evenodd',
+                        d: 'M18.949 14.895a.7.7 0 0 1 .7.7v2.278a.7.7 0 1 1-1.4 0v-2.279a.7.7 0 0 1 .7-.7Z',
+                        fill: 'currentColor',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        fillRule: 'evenodd',
+                        clipRule: 'evenodd',
+                        d: 'M18.343 17.522a.7.7 0 0 1 .957-.256l1.668.963a.7.7 0 1 1-.7 1.213l-1.668-.963a.7.7 0 0 1-.257-.957ZM14.95 2a.8.8 0 0 1 .8.8v2c0 .658.542 1.2 1.2 1.2h2a.8.8 0 0 1 0 1.6h-2a2.806 2.806 0 0 1-2.8-2.8v-2a.8.8 0 0 1 .8-.8ZM6.167 10.388a.8.8 0 0 1 .8-.8h6a.8.8 0 0 1 0 1.6h-6a.8.8 0 0 1-.8-.8ZM6.167 15.238a.8.8 0 0 1 .8-.8h4.814a.8.8 0 0 1 0 1.6H6.967a.8.8 0 0 1-.8-.8Z',
+                        fill: 'currentColor',
+                    }),
+                ],
+            }),
+        s: true,
     },
 ])
 export const HKD = /*#__PURE__*/ __createIcon('HKD', [
