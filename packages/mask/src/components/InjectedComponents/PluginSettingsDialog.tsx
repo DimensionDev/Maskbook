@@ -91,7 +91,6 @@ export function PluginSettingsDialog() {
                 bindingWallets={bindingWallets}
                 currentPersona={currentPersona}
                 pluginID={currentTab}
-                onOpenPopup={Services.Helper.openPopupWindow}
             />
         )
     }, [currentTab, bindingWallets, currentPersona])

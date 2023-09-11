@@ -69,7 +69,7 @@ export const RestPartOfPluginUIContextShared: Omit<
         WalletConnectQRCodeModal.close()
     },
 
-    selectMaskWalletAccount: (chainId) => Services.Wallet.selectMaskAccount(chainId),
+    selectMaskWalletAccount: Services.Wallet.selectMaskAccount,
 
     grantEIP2255Permission: Services.Wallet.grantEIP2255Permission,
     disconnectAllWalletsFromOrigin: Services.Wallet.disconnectAllWalletsFromOrigin,

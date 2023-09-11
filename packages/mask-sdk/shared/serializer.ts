@@ -2,31 +2,28 @@ import { JSONSerialization } from 'async-call-rpc/base.min'
 import type { Serialization } from 'async-call-rpc/base.min'
 import { MaskEthereumProviderRpcError } from './error.js'
 export type { Serialization } from 'async-call-rpc/base.min'
-export const serializer: Serialization = JSONSerialization(
-    [
-        (key, value) => {
-            if (value === undefined) return { $type: 'undefined' }
-            if (value instanceof ArrayBuffer) return ArrayBufferEncode(value)
-            if (value instanceof Uint8Array) return U8ArrayEncode(value)
-            if (value instanceof Map) return MapEncode(value)
-            if (value instanceof MaskEthereumProviderRpcError) return MaskEthereumProviderRpcErrorEncode(value)
-            return value
-        },
-        (key, value) => {
-            if (typeof value === 'object' && value !== null && '$type' in value) {
-                if (value.$type === 'undefined') return undefined
-                return (
-                    ArrayBufferDecode(value) ||
-                    U8ArrayDecode(value) ||
-                    MapDecode(value) ||
-                    MaskEthereumProviderRpcErrorDecode(value)
-                )
-            }
-            return value
-        },
-    ],
-    2,
-)
+export const serializer: Serialization = JSONSerialization([
+    (key, value) => {
+        if (value === undefined) return { $type: 'undefined' }
+        if (value instanceof ArrayBuffer) return ArrayBufferEncode(value)
+        if (value instanceof Uint8Array) return U8ArrayEncode(value)
+        if (value instanceof Map) return MapEncode(value)
+        if (value instanceof MaskEthereumProviderRpcError) return MaskEthereumProviderRpcErrorEncode(value)
+        return value
+    },
+    (key, value) => {
+        if (typeof value === 'object' && value !== null && '$type' in value) {
+            if (value.$type === 'undefined') return undefined
+            return (
+                ArrayBufferDecode(value) ||
+                U8ArrayDecode(value) ||
+                MapDecode(value) ||
+                MaskEthereumProviderRpcErrorDecode(value)
+            )
+        }
+        return value
+    },
+])
 
 const [ArrayBufferEncode, ArrayBufferDecode] = createClassSerializer(
     ArrayBuffer,

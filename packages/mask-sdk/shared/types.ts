@@ -13,6 +13,6 @@ export interface EIP2255RequestedPermission {
 }
 export interface EIP2255PermissionRequest {
     [methodName: string]: {
-        [caveatName: string]: any
+        [caveatName: string]: unknown
     }
 }

@@ -4,7 +4,7 @@ import { createWalletDBAccess } from '../database/Wallet.db.js'
 import { createTransaction } from '../../../database/utils/openDB.js'
 import { openPopupWindow } from '../../helper/popup-opener.js'
 import type { RequestPayload } from '../database/types.js'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages, PopupRoutes } from '@masknet/shared-base'
 
 const MAX_UNCONFIRMED_REQUESTS_SIZE = 1
 const MAIN_RECORD_ID = '0'
@@ -33,7 +33,7 @@ export async function pushUnconfirmedRequest(payload: RequestPayload) {
 
     // validate if it's still possible to push a new request
     if (requests.length >= MAX_UNCONFIRMED_REQUESTS_SIZE) {
-        await openPopupWindow()
+        await openPopupWindow(PopupRoutes.Wallet)
         throw new Error('Unable to add more request.')
     }
 

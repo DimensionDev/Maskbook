@@ -39,7 +39,7 @@ export async function EIP2255_wallet_requestPermissions(
         if (method !== 'eth_accounts') {
             throw new MaskEthereumProviderRpcError(
                 ErrorCode.MethodNotFound,
-                ErrorMessages.UnknownMethod.replace('$', method),
+                ErrorMessages.UnknownMethod.replaceAll('$', method),
             )
         }
     }

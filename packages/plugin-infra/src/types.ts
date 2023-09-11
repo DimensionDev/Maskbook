@@ -172,7 +172,7 @@ export namespace Plugin.Shared {
         closeWalletConnectDialog(): void
 
         /** Connect origin to Mask wallet  */
-        grantEIP2255Permission(id: string, grantedWalletAddress: Iterable<string>): Promise<void>
+        grantEIP2255Permission(id: string, grantedWalletAddress: Set<string> | string[]): Promise<void>
         /** Disconnect origin from Mask wallet  */
         disconnectAllWalletsFromOrigin(origin: string): Promise<void>
 
@@ -856,7 +856,7 @@ export namespace Plugin.SiteAdaptor {
 
     export interface SettingsTabUIProps {
         onClose: () => void
-        onOpenPopup: (route?: PopupRoutes, params?: Record<string, any>) => void
+        // onOpenPopup: (route?: PopupRoutes, params?: Record<string, any>) => void
         bindingWallets?: BindingProof[]
         currentPersona?: ECKeyIdentifier
         pluginID: PluginID

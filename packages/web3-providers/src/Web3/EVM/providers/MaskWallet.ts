@@ -175,7 +175,9 @@ export class MaskWalletProvider
                 await this.switchAccount(address, owner)
                 await this.switchChain(chainId)
 
-                externalRequestID && (await this.context?.grantEIP2255Permission(externalRequestID, [address]))
+                if (externalRequestID) {
+                    await this.context?.grantEIP2255Permission(externalRequestID, [address])
+                }
 
                 return {
                     account: address,
@@ -188,6 +190,11 @@ export class MaskWalletProvider
                 chainId: this.hostedChainId,
             }
         }
+
+        if (externalRequestID)
+            throw new TypeError(
+                'externalRequestID is not expected in MaskWalletProvider.connect() when the page is not popup page.',
+            )
 
         const account = first(await this.context?.selectMaskWalletAccount(chainId))
         if (!account) throw new Error(`Failed to connect to ${new ChainResolverAPI().chainFullName(chainId)}`)

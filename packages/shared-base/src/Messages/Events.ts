@@ -47,6 +47,7 @@ export interface MaskEvents extends MaskSettingsEvents, MaskContentScriptEvents 
     maskSDKHotModuleReload: void
     __kv_backend_persistent__: [string, unknown]
     __kv_backend_in_memory__: [string, unknown]
+    popupRouteUpdated: string
 }
 
 export interface UpdateEvent<Data> {
@@ -248,8 +249,6 @@ export interface RequestsUpdatedEvent {
 export type WalletLockStatusUpdatedEvent = boolean
 
 export type PasswordStatusUpdatedEvent = boolean
-
-export type PopupPageUpdatedEvent = string
 
 export interface GameDialogEvent {
     open: boolean
