@@ -280,7 +280,7 @@ const Settings = memo(function Settings() {
                                     { referrer: false },
                                 )
                             }>
-                            <ListItemText classes={itemClasses} secondary={t('popups_settings_service_argeement')} />
+                            <ListItemText classes={itemClasses} secondary={t('popups_settings_service_agreement')} />
                             <Icons.ArrowRight size={24} />
                         </ListItem>
                         <ListItem
