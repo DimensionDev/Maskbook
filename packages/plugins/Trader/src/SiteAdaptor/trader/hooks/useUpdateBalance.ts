@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
-import { useChainContext, useBalance, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
-import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { AllProviderTradeActionType, AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { useChainContext, useBalance, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
+import { AllProviderTradeActionType, AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext.js'
 
 export function useUpdateBalance(chainId: Web3Helper.ChainIdAll) {
     const { account } = useChainContext()
