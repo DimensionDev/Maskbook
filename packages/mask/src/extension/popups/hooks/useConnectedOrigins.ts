@@ -6,7 +6,7 @@ import Services from '#services'
 export function useConnectedOrigins() {
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     return useQuery(
-        ['wallet-connected-origins', wallet?.address],
+        ['wallet-granted-origins', wallet?.address],
         async () => await Services.Wallet.getAllConnectedOrigins(wallet!.address),
         {
             enabled: !!wallet?.address,

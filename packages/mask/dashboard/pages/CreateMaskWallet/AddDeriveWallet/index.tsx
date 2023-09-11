@@ -170,7 +170,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
             providerType: ProviderType.MaskWallet,
             silent: true,
         })
-        await Services.Wallet.resolveMaskAccountRequest(null, [{ address: firstWallet }])
+        await Services.Wallet.resolveMaskAccount([{ address: firstWallet }])
         Telemetry.captureEvent(EventType.Access, EventID.EntryPopupWalletImport)
         navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
     }, [mnemonic, wallets.length, isReset, password, mergedIndexes])

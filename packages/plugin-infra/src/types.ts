@@ -172,7 +172,7 @@ export namespace Plugin.Shared {
         closeWalletConnectDialog(): void
 
         /** Connect origin to Mask wallet  */
-        connectWalletToOrigin(wallet: string, origin: string): Promise<void>
+        grantEIP2255Permission(id: string, grantedWalletAddress: Iterable<string>): Promise<void>
         /** Disconnect origin from Mask wallet  */
         disconnectAllWalletsFromOrigin(origin: string): Promise<void>
 

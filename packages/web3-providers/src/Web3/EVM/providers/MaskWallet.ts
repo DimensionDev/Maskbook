@@ -168,14 +168,14 @@ export class MaskWalletProvider
             identifier?: ECKeyIdentifier
         },
         silent?: boolean,
-        origin?: string | null,
+        externalRequestID?: string | null,
     ) {
         if (getExtensionSiteType() === ExtensionSite.Popup || silent) {
             if (isValidAddress(address)) {
                 await this.switchAccount(address, owner)
                 await this.switchChain(chainId)
 
-                origin && (await this.context?.connectWalletToOrigin(address, origin))
+                externalRequestID && (await this.context?.grantEIP2255Permission(externalRequestID, [address]))
 
                 return {
                     account: address,
@@ -207,8 +207,6 @@ export class MaskWalletProvider
 
         // switch chain
         if (chainId !== this.hostedChainId) await this.switchChain(chainId)
-        await this.context?.connectWalletToOrigin(account.address, location.origin)
-
         return {
             chainId,
             account: account.address,

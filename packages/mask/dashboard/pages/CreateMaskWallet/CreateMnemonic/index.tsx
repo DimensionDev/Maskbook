@@ -201,7 +201,7 @@ const CreateMnemonic = memo(function CreateMnemonic() {
         const result = await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
         if (!result) return
         const address = await Services.Wallet.createWalletFromMnemonicWords(walletName, words.join(' '))
-        await Services.Wallet.resolveMaskAccountRequest(null, [{ address }])
+        await Services.Wallet.resolveMaskAccount([{ address }])
         Telemetry.captureEvent(EventType.Access, EventID.EntryPopupWalletCreate)
         navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
     }, [walletName, words, location.state?.isReset, location.state?.password])

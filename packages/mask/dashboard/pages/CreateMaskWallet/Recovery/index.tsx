@@ -176,7 +176,7 @@ const Recovery = memo(function Recovery() {
                     providerType: ProviderType.MaskWallet,
                     silent: true,
                 })
-                await Services.Wallet.resolveMaskAccountRequest(null, [{ address }])
+                await Services.Wallet.resolveMaskAccount([{ address }])
                 Telemetry.captureEvent(EventType.Access, EventID.EntryPopupWalletImport)
                 navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
             } catch (error) {

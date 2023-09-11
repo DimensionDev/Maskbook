@@ -69,8 +69,9 @@ export const RestPartOfPluginUIContextShared: Omit<
         WalletConnectQRCodeModal.close()
     },
 
-    selectMaskWalletAccount: (chainId) => Services.Wallet.selectMaskAccount(chainId, null),
-    connectWalletToOrigin: Services.Wallet.connectWalletToOrigin,
+    selectMaskWalletAccount: (chainId) => Services.Wallet.selectMaskAccount(chainId),
+
+    grantEIP2255Permission: Services.Wallet.grantEIP2255Permission,
     disconnectAllWalletsFromOrigin: Services.Wallet.disconnectAllWalletsFromOrigin,
 
     signWithPersona: <T>(type: SignType, message: T, identifier?: ECKeyIdentifier, silent?: boolean) =>

@@ -45,7 +45,7 @@ export function createSharedContext(): Omit<Plugin.SiteAdaptor.SiteAdaptorContex
             WalletConnectQRCodeModal.close()
         },
         queryPersonaByProfile: reject,
-        connectWalletToOrigin: reject,
+        grantEIP2255Permission: reject,
         disconnectAllWalletsFromOrigin: reject,
         removeWallet: reject,
         resetAllWallets: reject,

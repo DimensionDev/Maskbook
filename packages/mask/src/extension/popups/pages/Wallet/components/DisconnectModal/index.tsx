@@ -108,12 +108,12 @@ const DisconnectModal = memo(function DisconnectModal({ origin, setOpen }: Disco
             await Services.Wallet.disconnectWalletFromOrigin(wallet.address, origin)
         }, []),
         onMutate: async () => {
-            await queryClient.invalidateQueries(['wallet-connected-origins', wallet?.address])
+            await queryClient.invalidateQueries(['wallet-granted-origins', wallet?.address])
             showSnackbar(t('popups_wallet_disconnect_site_success'), { variant: 'success' })
             setOpen(false)
         },
         onSettled: () => {
-            queryClient.invalidateQueries(['wallet-connected-origins', wallet?.address])
+            queryClient.invalidateQueries(['wallet-granted-origins', wallet?.address])
         },
     })
     const { mutate: onDisconnectAll } = useMutation({
@@ -122,12 +122,12 @@ const DisconnectModal = memo(function DisconnectModal({ origin, setOpen }: Disco
             await Services.Wallet.disconnectAllOriginsConnectedFromWallet(wallet!.address)
         }, [wallet?.address]),
         onMutate: async () => {
-            await queryClient.invalidateQueries(['wallet-connected-origins', wallet?.address])
+            await queryClient.invalidateQueries(['wallet-granted-origins', wallet?.address])
             showSnackbar(t('popups_wallet_disconnect_site_success'), { variant: 'success' })
             setOpen(false)
         },
         onSettled: () => {
-            queryClient.invalidateQueries(['wallet-connected-origins', wallet?.address])
+            queryClient.invalidateQueries(['wallet-granted-origins', wallet?.address])
         },
     })
     return (

@@ -1,4 +1,5 @@
 export * from './connect.js'
+export * from './select.js'
 export * from './wallet/index.js'
 export * from './legacyWallet.js'
 export * from './rpc.js'

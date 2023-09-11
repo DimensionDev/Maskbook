@@ -1,3 +1,4 @@
+import type { EIP2255Permission } from '@masknet/sdk'
 import type { LegacyWalletRecord } from '@masknet/shared-base'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 
@@ -20,8 +21,8 @@ export interface UnconfirmedRequestChunkRecordInDatabase extends UnconfirmedRequ
     record_id: string
 }
 
-export interface WalletConnectedOrigin {
-    type: 'connected_origin'
+export interface WalletGrantedPermission {
+    type: 'granted_permission'
     id: string
-    origins: ReadonlySet<string>
+    origins: ReadonlyMap<string, Set<EIP2255Permission>>
 }
