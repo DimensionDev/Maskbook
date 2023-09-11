@@ -1,12 +1,12 @@
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { useTraderConstants, ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { leftShift } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useChainContext, useCustomBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
 import { PluginTraderRPC } from '../../messages.js'
 import { type SwapBancorRequest, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
-import { leftShift } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useCustomBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
-import type { Web3Helper } from '@masknet/web3-helpers'
 
 export function useTrade(
     strategy: TradeStrategy,

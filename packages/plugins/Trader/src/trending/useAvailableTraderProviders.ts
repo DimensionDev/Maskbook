@@ -2,9 +2,9 @@ import { useMemo } from 'react'
 import type { NetworkType } from '@masknet/web3-shared-evm'
 import type { TradeProvider } from '@masknet/public-api'
 import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { getEVMAvailableTraderProviders } from '../utils.js'
+import { getEVMAvailableTraderProviders } from '../helpers/getEVMAvailableTraderProviders.js'
 
 export function useAvailableTraderProviders(targetChainId?: Web3Helper.ChainIdAll): TradeProvider[] {
     const { chainId } = useChainContext({
@@ -21,7 +21,7 @@ export function useAvailableTraderProviders(targetChainId?: Web3Helper.ChainIdAl
             case NetworkPluginID.PLUGIN_FLOW:
             case NetworkPluginID.PLUGIN_SOLANA:
             default:
-                return []
+                return EMPTY_LIST
         }
     }, [networkType, pluginID])
 }

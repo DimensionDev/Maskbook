@@ -7,7 +7,7 @@ import { UniSwapV2Like } from '@masknet/web3-providers'
 import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import type { TraderAPI } from '@masknet/web3-providers/types'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
-import { getEVMAvailableTraderProviders } from '../utils.js'
+import { getEVMAvailableTraderProviders } from '../helpers/getEVMAvailableTraderProviders.js'
 
 export function useUniswapV2Like(
     traderProvider: TradeProvider,

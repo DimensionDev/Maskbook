@@ -1,12 +1,12 @@
 import { useReducer, useState } from 'react'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { createContainer } from 'unstated-next'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useAllTradeComputed } from './useAllTradeComputed.js'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import type { TraderAPI } from '@masknet/web3-providers/types'
-import { BLOCK_TIME_SCALE } from '../constants/trader.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
+import { useAllTradeComputed } from './useAllTradeComputed.js'
+import { BLOCK_TIME_SCALE } from '../constants/trader.js'
 
 export const INITIAL_STATE = {
     inputAmount: '',

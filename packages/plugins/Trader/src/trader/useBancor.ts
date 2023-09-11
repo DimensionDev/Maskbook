@@ -7,7 +7,7 @@ import { Bancor } from '@masknet/web3-providers'
 import type { TraderAPI } from '@masknet/web3-providers/types'
 import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
-import { getEVMAvailableTraderProviders } from '../utils.js'
+import { getEVMAvailableTraderProviders } from '../helpers/getEVMAvailableTraderProviders.js'
 
 export function useBancor(
     inputAmount_: string,

@@ -49,7 +49,7 @@ async function openWindow(url: string): Promise<void> {
         if (id) {
             currentPopupWindowId = id
             browser.windows.onRemoved.addListener(function listener(windowID: number) {
-                if (!(windowID === id)) return
+                if (windowID !== id) return
                 currentPopupWindowId = 0
                 browser.windows.onRemoved.removeListener(listener)
             })
