@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { type ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
-import { resolveTradeProviderName } from '../../pipes.js'
+import { resolveTradeProviderName } from '../../helpers/resolveTradeProviderName.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { multipliedBy, formatBalance, ZERO, formatCurrency, formatPercentage } from '@masknet/web3-shared-base'
 import { PluginTraderRPC } from '../../messages.js'
