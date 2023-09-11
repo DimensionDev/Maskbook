@@ -71,7 +71,7 @@ export function useDeploy(
                 return
 
             const hasPassword = await hasPaymentPassword()
-            if (!hasPassword) return openPopupWindow(PopupRoutes.SetPaymentPassword)
+            if (!hasPassword) return openPopupWindow(PopupRoutes.SetPaymentPassword, {})
 
             if (contractAccount.funded && !contractAccount.deployed) {
                 const hash = await Web3.deploy?.(signAccount.address, signAccount.identifier, options)

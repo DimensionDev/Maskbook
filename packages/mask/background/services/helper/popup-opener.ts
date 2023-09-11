@@ -1,7 +1,6 @@
 import urlcat, { type ParamMap } from 'urlcat'
-import { type DashboardRoutes, PopupRoutes, MaskMessages, type PopupModalRoutes } from '@masknet/shared-base'
+import { type DashboardRoutes, PopupRoutes, MaskMessages, type PopupRoutesParamsMap } from '@masknet/shared-base'
 import { isLocked } from '../wallet/services/index.js'
-import type { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 
 let currentPopupWindowId = 0
 
@@ -71,39 +70,9 @@ async function openOrUpdatePopupWindow(route: PopupRoutes, params: ParamMap) {
 
 const noWalletUnlockNeeded: PopupRoutes[] = [PopupRoutes.PersonaSignRequest, PopupRoutes.Unlock, PopupRoutes.Personas]
 
-export interface PopupRoutesParamsMap {
-    [PopupRoutes.PersonaSignRequest]: {
-        message: string
-        requestID: string
-        identifier: string | undefined
-        source: string | undefined
-    }
-    [PopupRoutes.SelectWallet]: {
-        chainId: ChainId
-        external_request?: string
-    }
-    [PopupRoutes.Personas]: {
-        providerType?: ProviderType
-        // TODO: different tab should be different routes
-        // tab: PopupHomeTabType
-        tab: 'Social Accounts' | 'Connected Wallets'
-        from?: PopupModalRoutes
-    }
-    [PopupRoutes.Unlock]: {
-        closeAfterDone?: boolean
-        from?: string | null
-    }
-    [PopupRoutes.SetPaymentPassword]: {
-        isCreating?: boolean
-    }
-    [PopupRoutes.Wallet]: {
-        closeAfterDone?: boolean
-        isCreating?: boolean
-    }
-}
 export async function openPopupWindow<T extends PopupRoutes>(
     route: T,
-    params?: T extends keyof PopupRoutesParamsMap ? PopupRoutesParamsMap[T] : never,
+    params: T extends keyof PopupRoutesParamsMap ? PopupRoutesParamsMap[T] : undefined,
     evenWhenWalletLocked?: boolean,
 ): Promise<void> {
     if (noWalletUnlockNeeded.includes(route) || evenWhenWalletLocked || !(await isLocked())) {
@@ -123,9 +92,9 @@ export async function queryCurrentPopupWindowId() {
     return currentPopupWindowId
 }
 
-export async function openWalletStartUpWindow(params: PopupRoutesParamsMap[PopupRoutes.Wallet]) {
+export async function openWalletStartUpWindow() {
     await removePopupWindow()
-    return openPopupWindow(PopupRoutes.Wallet, params)
+    return openPopupWindow(PopupRoutes.Wallet, {})
 }
 
 export async function removePopupWindow(): Promise<void> {

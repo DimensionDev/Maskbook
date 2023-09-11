@@ -33,7 +33,7 @@ export async function pushUnconfirmedRequest(payload: RequestPayload) {
 
     // validate if it's still possible to push a new request
     if (requests.length >= MAX_UNCONFIRMED_REQUESTS_SIZE) {
-        await openPopupWindow(PopupRoutes.Wallet)
+        await openPopupWindow(PopupRoutes.Wallet, {})
         throw new Error('Unable to add more request.')
     }
 

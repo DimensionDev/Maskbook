@@ -99,7 +99,7 @@ export const AccountsManagerPopover = memo<AccountsManagePopoverProps>(
 
                 if (network) await Network?.switchNetwork(network.ID)
             }
-            await openPopupWindow(PopupRoutes.ChangeOwner, { contractAccount: address, closeAfterDone: true })
+            await openPopupWindow(PopupRoutes.ChangeOwner, { contractAccount: address })
         }, [address, connection, account, chainId, network])
 
         return usePortalShadowRoot((container) => (

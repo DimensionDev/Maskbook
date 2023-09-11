@@ -44,7 +44,7 @@ export async function EIP2255_wallet_requestPermissions(
         }
     }
     if (!Providers[ProviderType.MaskWallet].wallets) {
-        await openPopupWindow(PopupRoutes.Wallet)
+        await openPopupWindow(PopupRoutes.Wallet, {})
         // TODO: we should connet the flow so that user can create a newly created wallet.
         throw new MaskEthereumProviderRpcError(ErrorCode.InternalError, 'Wallet not created.')
     }

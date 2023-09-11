@@ -177,7 +177,7 @@ export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose
                         variant="roundedContained"
                         size="small"
                         sx={{ height: 32 }}
-                        onClick={() => openPopupWindow(PopupRoutes.WalletStartUp)}>
+                        onClick={() => openPopupWindow(PopupRoutes.WalletStartUp, undefined)}>
                         {t.create()}
                     </Button>
                 </Box>

@@ -91,3 +91,37 @@ export enum PopupRoutes {
     ExportPrivateKey = '/personas/export-private-key',
     PersonaAvatarSetting = '/personas/avatar-setting',
 }
+export interface PopupRoutesParamsMap {
+    [PopupRoutes.PersonaSignRequest]: {
+        message: string
+        requestID: string
+        identifier: string | undefined
+        source: string | undefined
+    }
+    [PopupRoutes.SelectWallet]: {
+        chainId: number
+        external_request?: string
+    }
+    [PopupRoutes.Personas]: {
+        providerType?: string
+        tab: string
+        from?: PopupModalRoutes
+    }
+    [PopupRoutes.Unlock]: {
+        closeAfterDone?: boolean
+        from?: string | null
+    }
+    [PopupRoutes.SetPaymentPassword]: {
+        isCreating?: boolean
+        source?: string
+    }
+    [PopupRoutes.ContractInteraction]: {
+        source?: string
+    }
+    [PopupRoutes.Wallet]: {
+        closeAfterDone?: boolean
+        isCreating?: boolean
+    }
+    [PopupRoutes.ChangeOwner]: { contractAccount: string | undefined }
+    [PopupRoutes.Contacts]: { selectedToken: string | undefined }
+}

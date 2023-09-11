@@ -70,7 +70,7 @@ const Onboarding = memo(function Onboarding() {
     const { classes } = useStyles()
 
     const onOpenPopupWallet = useCallback(async () => {
-        await Services.Helper.openPopupWindow(PopupRoutes.Wallet)
+        await Services.Helper.openPopupWindow(PopupRoutes.Wallet, {})
         window.close()
     }, [])
 

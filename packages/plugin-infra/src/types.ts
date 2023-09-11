@@ -26,6 +26,7 @@ import type {
     SocialIdentity,
     BooleanPreference,
     ImportSource,
+    PopupRoutesParamsMap,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -157,7 +158,11 @@ export namespace Plugin.Shared {
         openDashboard(route?: DashboardRoutes, search?: string): Promise<void>
 
         /** Open popup window */
-        openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
+        openPopupWindow<T extends PopupRoutes>(
+            route: T,
+            params: T extends keyof PopupRoutesParamsMap ? PopupRoutesParamsMap[T] : undefined,
+            evenWhenWalletLocked?: boolean,
+        ): Promise<void>
 
         /** Close popup window */
         closePopupWindow(): Promise<void>
