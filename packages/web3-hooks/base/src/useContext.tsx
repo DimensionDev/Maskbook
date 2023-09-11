@@ -1,7 +1,6 @@
-import React, { createContext, type ReactNode, useContext, useState, useMemo, type ProviderProps, memo } from 'react'
+import { createContext, type ReactNode, useContext, useState, useMemo, type ProviderProps, memo } from 'react'
 import { isUndefined, omitBy } from 'lodash-es'
-import { useSubscription } from 'use-subscription'
-import { useValueRef } from '@masknet/shared-base-ui'
+import { usePersistSubscription, useValueRef } from '@masknet/shared-base-ui'
 import { compose, Sniffings, NetworkPluginID, getSiteType, pluginIDsSettings } from '@masknet/shared-base'
 import { Providers, type BaseContractWalletProvider } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
@@ -88,8 +87,9 @@ export const ChainContextProvider = memo(function ChainContextProvider({
 
     const maskProvider = Providers[ProviderType.MaskWallet] as BaseContractWalletProvider
 
-    const maskAccount = useSubscription(maskProvider.subscription.account)
-    const maskChainId = useSubscription(maskProvider.subscription.chainId)
+    // The initial value of subscription.account could be empty string
+    const maskAccount = usePersistSubscription('@@mask-account', maskProvider.subscription.account, (x) => !!x)
+    const maskChainId = usePersistSubscription('@@mask-chain-id', maskProvider.subscription.chainId)
 
     const [_account, setAccount] = useState<string>()
     const [_chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
