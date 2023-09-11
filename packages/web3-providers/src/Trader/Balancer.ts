@@ -34,7 +34,7 @@ const createSOR_ = memoize((chainId: ChainId) => {
     )
 })
 
-export class Balancer implements TraderAPI.Provider {
+export class BalancerAPI implements TraderAPI.Provider {
     private Contract = new ContractReadonlyAPI()
 
     public provider = TradeProvider.BALANCER
@@ -45,7 +45,7 @@ export class Balancer implements TraderAPI.Provider {
         return sor
     }
 
-    private async updatePools(force = false, chainId = ChainId.Mainnet) {
+    async updatePools(force = false, chainId = ChainId.Mainnet) {
         const sor = this.createSOR(chainId)
 
         // this fetches all pools list from URL in constructor then onChain balances using Multicall
@@ -55,13 +55,7 @@ export class Balancer implements TraderAPI.Provider {
         }
     }
 
-    private async getSwaps(
-        tokenIn: string,
-        tokenOut: string,
-        swapType: BALANCER_SWAP_TYPE,
-        amount: string,
-        chainId: ChainId,
-    ) {
+    async getSwaps(tokenIn: string, tokenOut: string, swapType: BALANCER_SWAP_TYPE, amount: string, chainId: ChainId) {
         const sor = this.createSOR(chainId)
 
         // this calculates the cost to make a swap which is used as an input to sor to allow it to make gas efficient recommendations.

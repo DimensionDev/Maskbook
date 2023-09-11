@@ -101,13 +101,18 @@ import {
     SolanaProviderResolverAPI,
     SolanaNetworkResolverAPI,
 } from './Web3/Solana/apis/ResolverAPI.js'
+import { BancorAPI } from './Trader/Bancor.js'
+import { BalancerAPI } from './Trader/Balancer.js'
+import { OpenOceanAPI } from './Trader/OpenOcean.js'
+import { ZeroX_API } from './Trader/ZeroX.js'
+
+export const Bancor = new BancorAPI()
+export const Balancer = new BalancerAPI()
+export const OpenOcean = new OpenOceanAPI()
+export const ZeroX = new ZeroX_API()
 
 export { UniSwapV2Like } from './Trader/UniSwapV2.js'
 export { UniSwapV3Like } from './Trader/UniSwapV3.js'
-export { Balancer } from './Trader/Balancer.js'
-export { Zrx } from './Trader/Zrx.js'
-export { Bancor } from './Trader/Bancor.js'
-export { OpenOcean } from './Trader/OpenOcean.js'
 
 export { DepositPaymaster } from './SmartPay/libs/DepositPaymaster.js'
 export { ContractWallet } from './SmartPay/libs/ContractWallet.js'

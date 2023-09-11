@@ -23,13 +23,13 @@ import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js
 import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 
-export class OpenOcean implements TraderAPI.Provider {
+export class OpenOceanAPI implements TraderAPI.Provider {
     private Web3 = new ConnectionReadonlyAPI()
     private Contract = new ContractReadonlyAPI()
 
     public provider = TradeProvider.OPENOCEAN
 
-    private async swapOO(request: SwapOORequest) {
+    async swapOO(request: SwapOORequest) {
         const payload = await fetchJSON<{
             data: string
             outAmount: string

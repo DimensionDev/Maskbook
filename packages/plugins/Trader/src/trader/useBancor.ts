@@ -29,7 +29,7 @@ export function useBancor(
         if (!network) return
         const providers = getEVMAvailableTraderProviders(network.type as NetworkType)
         if (!providers.includes(TradeProvider.BANCOR)) return
-        return new Bancor()
+        return Bancor
     }, [network])
     return useCustomBlockBeatRetry<NetworkPluginID.PLUGIN_EVM, TraderAPI.TradeInfo | undefined | null>(
         NetworkPluginID.PLUGIN_EVM,

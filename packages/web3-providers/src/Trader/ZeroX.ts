@@ -22,7 +22,7 @@ import type {
     SwapValidationErrorResponse,
 } from './types/0x.js'
 import { BIPS_BASE } from './constants/index.js'
-import { ZRX_AFFILIATE_ADDRESS } from './constants/0x.js'
+import { ZRX_AFFILIATE_ADDRESS, ZRX_NATIVE_TOKEN_ADDRESS } from './constants/0x.js'
 import { TradeStrategy, type TradeComputed, type TraderAPI } from '../types/Trader.js'
 import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
@@ -30,8 +30,6 @@ import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 
 const ZRX_BASE_URL = 'https://zrx-proxy.r2d2.to/'
-
-const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 
 export function getNativeTokenLabel(networkType: NetworkType) {
     switch (networkType) {
@@ -54,20 +52,20 @@ export function getNativeTokenLabel(networkType: NetworkType) {
         case NetworkType.Astar:
         case NetworkType.Moonbeam:
         case NetworkType.CustomNetwork:
-            return NATIVE_TOKEN_ADDRESS
+            return ZRX_NATIVE_TOKEN_ADDRESS
         default:
             safeUnreachable(networkType)
             return ''
     }
 }
 
-export class Zrx implements TraderAPI.Provider {
+export class ZeroX_API implements TraderAPI.Provider {
     private Web3 = new ConnectionReadonlyAPI()
     private Contract = new ContractReadonlyAPI()
 
     public provider = TradeProvider.ZRX
 
-    private async swapQuote(request: SwapQuoteRequest, chainId: ChainId) {
+    async swapQuote(request: SwapQuoteRequest, chainId: ChainId) {
         const params: Record<string, string | number> = {}
         Object.entries(request).map(([key, value]) => {
             params[key] = value
@@ -76,6 +74,8 @@ export class Zrx implements TraderAPI.Provider {
             params.slippagePercentage = new BigNumber(request.slippagePercentage).dividedBy(BIPS_BASE).toFixed()
         if (request.buyTokenPercentageFee)
             params.buyTokenPercentageFee = new BigNumber(request.buyTokenPercentageFee).dividedBy(100).toFixed()
+
+        params.affiliateAddress = ZRX_AFFILIATE_ADDRESS
 
         const response_ = await fetchJSON<SwapQuoteResponse | SwapErrorResponse>(
             urlcat(ZRX_BASE_URL, 'swap/v1/quote', {

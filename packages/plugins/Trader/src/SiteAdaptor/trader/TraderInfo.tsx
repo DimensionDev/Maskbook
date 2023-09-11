@@ -5,9 +5,9 @@ import { type ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { TradeProvider } from '@masknet/public-api'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TraderAPI } from '@masknet/web3-providers/types'
+import { Balancer } from '@masknet/web3-providers'
 import { multipliedBy, formatBalance, ZERO, formatCurrency, formatPercentage } from '@masknet/web3-shared-base'
 import { useChainContext, useNativeTokenPrice, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
-import { PluginTraderRPC } from '../../messages.js'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting.js'
 import { resolveTradeProviderName } from '../../helpers/resolveTradeProviderName.js'
 import { DefaultTraderPlaceholderUI, TraderInfoUI } from './components/TraderInfoUI.js'
@@ -29,7 +29,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
         if (pluginID !== NetworkPluginID.PLUGIN_EVM)
             if (trade.value?.provider === TradeProvider.BALANCER)
                 // force update balancer's pools each time user enters into the swap tab
-                await PluginTraderRPC.updatePools(true, chainId as ChainId)
+                await Balancer.updatePools(true, chainId as ChainId)
     }, [trade.value?.provider, chainId, pluginID])
     // #endregion
 

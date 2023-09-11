@@ -46,13 +46,13 @@ const calculateMinimumReturn = ({
     return leftShift(minReturnWei, toToken.decimals).toFixed()
 }
 
-export class Bancor implements TraderAPI.Provider {
+export class BancorAPI implements TraderAPI.Provider {
     public provider = TradeProvider.BANCOR
 
     private Web3 = new ConnectionReadonlyAPI()
     private Contract = new ContractReadonlyAPI()
 
-    private async swapTransactionBancor(request: SwapBancorRequest) {
+    async swapTransactionBancor(request: SwapBancorRequest) {
         const baseUrl = BANCOR_API_BASE_URL[request.chainId]
         const url = urlcat(baseUrl, '/transactions/swap', {
             source_dlt_type: 'ethereum',
@@ -66,7 +66,7 @@ export class Bancor implements TraderAPI.Provider {
 
         return fetchJSON<TradeTransactionCreationResponse>(url)
     }
-    private async swapBancor(request: SwapBancorRequest) {
+    async swapBancor(request: SwapBancorRequest) {
         const baseUrl = BANCOR_API_BASE_URL[request.chainId]
         const { fromToken, toToken, slippage } = request
         const url = urlcat(baseUrl, '/pricing/target-amount', {

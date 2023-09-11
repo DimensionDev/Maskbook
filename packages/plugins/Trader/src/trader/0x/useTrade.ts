@@ -5,11 +5,9 @@ import { useChainContext, useCustomBlockBeatRetry, useNetworkContext } from '@ma
 import { isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { ChainResolver } from '@masknet/web3-providers'
-import { ZRX_AFFILIATE_ADDRESS } from '../../constants/index.js'
-import { PluginTraderRPC } from '../../messages.js'
-import { type SwapQuoteResponse, TradeStrategy } from '../../types/index.js'
+import { ChainResolver, ZeroX } from '@masknet/web3-providers'
 import { useSlippageTolerance } from '../0x/useSlippageTolerance.js'
+import { type SwapQuoteResponse, TradeStrategy } from '../../types/index.js'
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 
@@ -69,7 +67,7 @@ export function useTrade(
             const buyToken = isNativeTokenAddress(outputToken.address)
                 ? getNativeTokenLabel(ChainResolver.networkType(chainId as ChainId) ?? (networkType as NetworkType))
                 : outputToken.address
-            return PluginTraderRPC.swapQuote(
+            return ZeroX.swapQuote(
                 {
                     sellToken,
                     buyToken,
@@ -78,9 +76,8 @@ export function useTrade(
                     buyAmount: isExactIn ? void 0 : outputAmount,
                     skipValidation: true,
                     slippagePercentage: slippage,
-                    affiliateAddress: ZRX_AFFILIATE_ADDRESS,
                 },
-                ChainResolver.networkType(chainId as ChainId) ?? (networkType as NetworkType),
+                chainId as ChainId,
             )
         },
         [

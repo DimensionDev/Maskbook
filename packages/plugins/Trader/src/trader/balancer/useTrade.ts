@@ -4,8 +4,8 @@ import { ChainId, isNativeTokenAddress, useTokenConstants } from '@masknet/web3-
 import { isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { Balancer } from '@masknet/web3-providers'
 import { BALANCER_SWAP_TYPE } from '../../constants/index.js'
-import { PluginTraderRPC } from '../../messages.js'
 import { type SwapResponse, TradeStrategy } from '../../types/index.js'
 
 export function useTrade(
@@ -30,7 +30,7 @@ export function useTrade(
             // the WETH address is used for looking for available pools
             const sellToken = isNativeTokenAddress(inputToken.address) ? WNATIVE_ADDRESS : inputToken.address
             const buyToken = isNativeTokenAddress(outputToken.address) ? WNATIVE_ADDRESS : outputToken.address
-            const { swaps, routes } = await PluginTraderRPC.getSwaps(
+            const { swaps, routes } = await Balancer.getSwaps(
                 sellToken,
                 buyToken,
                 isExactIn ? BALANCER_SWAP_TYPE.EXACT_IN : BALANCER_SWAP_TYPE.EXACT_OUT,

@@ -4,9 +4,9 @@ import { leftShift } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useCustomBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
-import { PluginTraderRPC } from '../../messages.js'
 import { type SwapBancorRequest, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
+import { Bancor } from '@masknet/web3-providers'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -42,7 +42,7 @@ export function useTrade(
                 ? { ...outputToken, address: BANCOR_ETH_ADDRESS ?? '' }
                 : outputToken
 
-            return PluginTraderRPC.swapBancor({
+            return Bancor.swapBancor({
                 strategy,
                 fromToken,
                 toToken,
