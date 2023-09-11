@@ -1,6 +1,6 @@
 import type { ChainId } from '@masknet/web3-shared-evm'
-import type { TradeStrategy } from '../types/index.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { TradeStrategy } from '../types/index.js'
 
 export type SwapBancorRequest = {
     strategy: TradeStrategy
