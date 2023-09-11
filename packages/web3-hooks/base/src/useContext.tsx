@@ -87,7 +87,8 @@ export const ChainContextProvider = memo(function ChainContextProvider({
 
     const maskProvider = Providers[ProviderType.MaskWallet] as BaseContractWalletProvider
 
-    const maskAccount = usePersistSubscription('@@mask-account', maskProvider.subscription.account)
+    // The initial value of subscription.account could be empty string
+    const maskAccount = usePersistSubscription('@@mask-account', maskProvider.subscription.account, (x) => !!x)
     const maskChainId = usePersistSubscription('@@mask-chain-id', maskProvider.subscription.chainId)
 
     const [_account, setAccount] = useState<string>()
