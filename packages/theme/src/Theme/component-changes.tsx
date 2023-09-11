@@ -856,7 +856,7 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                     // Increase priority
                     [`&.${inputBaseClasses.focused}.${inputBaseClasses.focused}`]: {
                         outline: `2px solid ${alpha(colors.maskColor.primary, 0.2)}`,
-                        border: `1px solid ${alpha(colors.maskColor.primary, 0.5)}`,
+                        borderColor: alpha(colors.maskColor.primary, 0.5),
                         backgroundColor: colors.maskColor.bottom,
                     },
                     // For Select Menu
