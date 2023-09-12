@@ -1,8 +1,7 @@
+import { unreachable } from '@masknet/kit'
 import { TradeProvider } from '@masknet/public-api'
 import { type ChainId, getTraderConstants } from '@masknet/web3-shared-evm'
-import { unreachable } from '@masknet/kit'
-import type { Trade } from '@uniswap/v2-sdk'
-import { type Currency, type Percent, type TradeType } from '@uniswap/sdk-core'
+import type { TraderAPI } from '@masknet/web3-providers/types'
 import {
     ARTHSWAP_BASE_AGAINST_TOKENS,
     ARTHSWAP_CUSTOM_BASES,
@@ -10,7 +9,6 @@ import {
     ASTAREXCHANGE_CUSTOM_BASES,
     MDEX_BASE_AGAINST_TOKENS,
     MDEX_CUSTOM_BASES,
-    ONE_HUNDRED_PERCENT,
     PANCAKESWAP_BASE_AGAINST_TOKENS,
     PANCAKESWAP_CUSTOM_BASES,
     PANGOLIN_BASE_AGAINST_TOKENS,
@@ -31,11 +29,9 @@ import {
     WANNASWAP_CUSTOM_BASES,
     YUMISWAP_BASE_AGAINST_TOKENS,
     YUMISWAP_CUSTOM_BASES,
-    ZERO_PERCENT,
 } from '../constants/index.js'
-import type { TradeContext } from '../../types/Trader.js'
 
-export function getTradeContext(chainId: ChainId, tradeProvider?: TradeProvider): TradeContext | null {
+export function getTradeContext(chainId: ChainId, tradeProvider?: TradeProvider): TraderAPI.TradeContext | null {
     const DEX_TRADE = getTraderConstants(chainId)
     switch (tradeProvider) {
         case TradeProvider.UNISWAP_V2:
@@ -247,31 +243,5 @@ export function getTradeContext(chainId: ChainId, tradeProvider?: TradeProvider)
         default:
             if (tradeProvider) unreachable(tradeProvider)
             return null
-    }
-}
-
-export function isTradeBetter(
-    tradeA?: Trade<Currency, Currency, TradeType> | null,
-    tradeB?: Trade<Currency, Currency, TradeType> | null,
-    minimumDelta: Percent = ZERO_PERCENT,
-): boolean | undefined {
-    if (tradeA && !tradeB) return false
-    if (tradeB && !tradeA) return true
-    if (!tradeA || !tradeB) return undefined
-
-    if (
-        tradeA.tradeType !== tradeB.tradeType ||
-        !tradeA.inputAmount.currency.equals(tradeB.inputAmount.currency) ||
-        !tradeB.outputAmount.currency.equals(tradeB.outputAmount.currency)
-    ) {
-        throw new Error('Comparing incomparable trades')
-    }
-
-    if (minimumDelta.equalTo(ZERO_PERCENT)) {
-        return tradeA.executionPrice.lessThan(tradeB.executionPrice)
-    } else {
-        return tradeA.executionPrice.asFraction
-            .multiply(minimumDelta.add(ONE_HUNDRED_PERCENT))
-            .lessThan(tradeB.executionPrice)
     }
 }

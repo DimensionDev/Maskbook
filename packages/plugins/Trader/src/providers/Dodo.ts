@@ -3,15 +3,15 @@ import { TradeProvider } from '@masknet/public-api'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { leftShift } from '@masknet/web3-shared-base'
+import type { TraderAPI } from '@masknet/web3-providers/types'
+import { fetchJSON } from '@masknet/web3-providers/helpers'
 import type {
     SwapRouteRequest,
     SwapRouteResponse,
     SwapRouteErrorResponse,
     SwapRouteSuccessResponse,
     SwapRouteData,
-} from './types/dodo.js'
-import type { TraderAPI } from '../types/Trader.js'
-import { fetchJSON } from '../entry-helpers.js'
+} from '../types/index.js'
 
 const DODO_BASE_URL = 'https://dodoex.r2d2.to'
 

@@ -2,15 +2,16 @@ import { useAsyncFn } from 'react-use'
 import { toHex } from 'web3-utils'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
+import { TraderAPI } from '@masknet/web3-providers/types'
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy.js'
 import { type GasConfig, useTraderConstants, ContractTransaction } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
-import { TradeStrategy, type SwapResponse, type TradeComputed } from '@masknet/web3-providers/types'
 import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
 import { useTradeAmount } from './useTradeAmount.js'
+import type { SwapResponse } from '../../types/index.js'
 
 export function useTradeCallback(
-    trade: TradeComputed<SwapResponse> | null,
+    trade: TraderAPI.TradeComputed<SwapResponse> | null,
     exchangeProxyContract: ExchangeProxy | null,
     allowedSlippage = SLIPPAGE_DEFAULT,
     gasConfig?: GasConfig,
@@ -61,15 +62,21 @@ export function useTradeCallback(
 
         // trade with the native token
         let transactionValue = '0'
-        if (trade.strategy === TradeStrategy.ExactIn && Others.isNativeTokenSchemaType(trade.inputToken.schema))
+        if (
+            trade.strategy === TraderAPI.TradeStrategy.ExactIn &&
+            Others.isNativeTokenSchemaType(trade.inputToken.schema)
+        )
             transactionValue = trade.inputAmount.toFixed()
-        else if (trade.strategy === TradeStrategy.ExactOut && Others.isNativeTokenSchemaType(trade.outputToken.schema))
+        else if (
+            trade.strategy === TraderAPI.TradeStrategy.ExactOut &&
+            Others.isNativeTokenSchemaType(trade.outputToken.schema)
+        )
             transactionValue = trade.outputAmount.toFixed()
 
         try {
             // send transaction and wait for hash
             const tx = await new ContractTransaction(exchangeProxyContract).fillAll(
-                trade.strategy === TradeStrategy.ExactIn
+                trade.strategy === TraderAPI.TradeStrategy.ExactIn
                     ? exchangeProxyContract.methods.multihopBatchSwapExactIn(
                           swap_,
                           inputTokenAddress,

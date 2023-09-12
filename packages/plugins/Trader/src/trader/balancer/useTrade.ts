@@ -4,11 +4,12 @@ import { ChainId, isNativeTokenAddress, useTokenConstants } from '@masknet/web3-
 import { isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { Balancer } from '@masknet/web3-providers'
-import { type SwapResponse, TradeStrategy, BALANCER_SWAP_TYPE } from '@masknet/web3-providers/types'
+import { TraderAPI } from '@masknet/web3-providers/types'
+import { SwapType, type SwapResponse } from '../../types/index.js'
+import { Balancer } from '../../providers/index.js'
 
 export function useTrade(
-    strategy: TradeStrategy,
+    strategy: TraderAPI.TradeStrategy,
     inputAmount: string,
     outputAmount: string,
     inputToken?: Web3Helper.FungibleTokenAll,
@@ -23,7 +24,7 @@ export function useTrade(
         async () => {
             if (!WNATIVE_ADDRESS || pluginID !== NetworkPluginID.PLUGIN_EVM) return null
             if (!inputToken || !outputToken) return null
-            const isExactIn = strategy === TradeStrategy.ExactIn
+            const isExactIn = strategy === TraderAPI.TradeStrategy.ExactIn
             if (isZero(inputAmount) && isExactIn) return null
             if (isZero(outputAmount) && !isExactIn) return null
             // the WETH address is used for looking for available pools
@@ -32,7 +33,7 @@ export function useTrade(
             const { swaps, routes } = await Balancer.getSwaps(
                 sellToken,
                 buyToken,
-                isExactIn ? BALANCER_SWAP_TYPE.EXACT_IN : BALANCER_SWAP_TYPE.EXACT_OUT,
+                isExactIn ? SwapType.EXACT_IN : SwapType.EXACT_OUT,
                 isExactIn ? inputAmount : outputAmount,
                 targetChainId as ChainId,
             )

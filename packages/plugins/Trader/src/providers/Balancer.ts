@@ -1,6 +1,7 @@
 import { first, memoize } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import { SOR } from '@balancer-labs/sor'
+import { JsonRpcProvider } from '@ethersproject/providers'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     getTokenConstants,
@@ -15,12 +16,10 @@ import {
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy.js'
 import { TradeProvider } from '@masknet/public-api'
 import { ZERO, isSameAddress, isZero } from '@masknet/web3-shared-base'
-import { JsonRpcProvider } from '@ethersproject/providers'
-import { BALANCER_SOR_GAS_PRICE, BALANCER_MAX_NO_POOLS } from './constants/balancer.js'
-import { TradeStrategy, type TradeComputed, type TraderAPI } from '../types/Trader.js'
-import { BALANCER_SWAP_TYPE, type SwapResponse, type Route } from './types/balancer.js'
-import { ONE_BIPS, SLIPPAGE_DEFAULT } from './constants/index.js'
-import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
+import { ContractReadonly } from '@masknet/web3-providers'
+import { TraderAPI } from '@masknet/web3-providers/types'
+import { ONE_BIPS, SLIPPAGE_DEFAULT, BALANCER_SOR_GAS_PRICE, BALANCER_MAX_NO_POOLS } from '../constants/index.js'
+import { SwapType, type SwapResponse, type Route } from '../types/index.js'
 
 const MIN_VALUE = new BigNumber('1e-5')
 const createSOR_ = memoize((chainId: ChainId) => {
@@ -35,8 +34,6 @@ const createSOR_ = memoize((chainId: ChainId) => {
 })
 
 export class BalancerAPI implements TraderAPI.Provider {
-    private Contract = new ContractReadonlyAPI()
-
     public provider = TradeProvider.BALANCER
 
     private createSOR(chainId: ChainId) {
@@ -55,7 +52,7 @@ export class BalancerAPI implements TraderAPI.Provider {
         }
     }
 
-    async getSwaps(tokenIn: string, tokenOut: string, swapType: BALANCER_SWAP_TYPE, amount: string, chainId: ChainId) {
+    async getSwaps(tokenIn: string, tokenOut: string, swapType: SwapType, amount: string, chainId: ChainId) {
         const sor = this.createSOR(chainId)
 
         // this calculates the cost to make a swap which is used as an input to sor to allow it to make gas efficient recommendations.
@@ -141,7 +138,7 @@ export class BalancerAPI implements TraderAPI.Provider {
 
         if (!sellToken || !buyToken) return null
 
-        return this.getSwaps(sellToken, buyToken, BALANCER_SWAP_TYPE.EXACT_IN, inputAmount, chainId)
+        return this.getSwaps(sellToken, buyToken, SwapType.EXACT_IN, inputAmount, chainId)
     }
 
     public async getTradeInfo(
@@ -162,7 +159,7 @@ export class BalancerAPI implements TraderAPI.Provider {
             const priceImpact = new BigNumber(inputAmount_).div(tradeAmount).times('1e18').div(spotPrice).minus(1)
 
             const computed = {
-                strategy: TradeStrategy.ExactIn,
+                strategy: TraderAPI.TradeStrategy.ExactIn,
                 inputAmount: new BigNumber(inputAmount_),
                 outputAmount: new BigNumber(tradeAmount),
                 inputToken,
@@ -174,7 +171,7 @@ export class BalancerAPI implements TraderAPI.Provider {
                 path: [],
                 fee: ZERO,
                 trade_: trade,
-            } as TradeComputed<SwapResponse>
+            } as TraderAPI.TradeComputed<SwapResponse>
 
             try {
                 const gas = await this.getTradeGasLimit(account, chainId, computed)
@@ -214,10 +211,10 @@ export class BalancerAPI implements TraderAPI.Provider {
         const tradeAmount = new BigNumber(inputAmount || '0')
         if (tradeAmount.isZero() || !inputToken || !outputToken || !WNATIVE_ADDRESS) return null
 
-        const wrapperContract = this.Contract.getWETHContract(WNATIVE_ADDRESS, { chainId })
+        const wrapperContract = ContractReadonly.getWETHContract(WNATIVE_ADDRESS, { chainId })
 
         const computed = {
-            strategy: TradeStrategy.ExactIn,
+            strategy: TraderAPI.TradeStrategy.ExactIn,
             inputToken,
             outputToken,
             inputAmount: tradeAmount,
@@ -254,9 +251,9 @@ export class BalancerAPI implements TraderAPI.Provider {
         }
     }
 
-    public async getTradeGasLimit(account: string, chainId: ChainId, trade: TradeComputed<SwapResponse>) {
+    public async getTradeGasLimit(account: string, chainId: ChainId, trade: TraderAPI.TradeComputed<SwapResponse>) {
         const { BALANCER_ETH_ADDRESS, BALANCER_EXCHANGE_PROXY_ADDRESS } = getTraderConstants(chainId)
-        const exchangeProxyContract = this.Contract.getExchangeProxyContract(BALANCER_EXCHANGE_PROXY_ADDRESS, {
+        const exchangeProxyContract = ContractReadonly.getExchangeProxyContract(BALANCER_EXCHANGE_PROXY_ADDRESS, {
             chainId,
         })
 
@@ -291,12 +288,12 @@ export class BalancerAPI implements TraderAPI.Provider {
         // trade with the native token
         let transactionValue = '0'
         if (
-            trade.strategy === TradeStrategy.ExactIn &&
+            trade.strategy === TraderAPI.TradeStrategy.ExactIn &&
             isNativeTokenSchemaType(trade.inputToken?.schema as SchemaType | undefined)
         )
             transactionValue = trade.inputAmount.toFixed()
         else if (
-            trade.strategy === TradeStrategy.ExactOut &&
+            trade.strategy === TraderAPI.TradeStrategy.ExactOut &&
             isNativeTokenSchemaType(trade.outputToken?.schema as SchemaType | undefined)
         )
             transactionValue = trade.outputAmount.toFixed()
@@ -306,7 +303,7 @@ export class BalancerAPI implements TraderAPI.Provider {
         )
 
         const tx = await new ContractTransaction(exchangeProxyContract).fillAll(
-            trade.strategy === TradeStrategy.ExactIn
+            trade.strategy === TraderAPI.TradeStrategy.ExactIn
                 ? exchangeProxyContract.methods.multihopBatchSwapExactIn(
                       swap_,
                       inputTokenAddress,

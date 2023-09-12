@@ -14,18 +14,16 @@ import {
 } from '@masknet/web3-shared-evm'
 import { TradeProvider } from '@masknet/public-api'
 import { ONE, isZero, leftShift, rightShift, ZERO } from '@masknet/web3-shared-base'
-import { TradeStrategy, type TradeComputed, type TraderAPI } from '../types/Trader.js'
+import { TraderAPI } from '@masknet/web3-providers/types'
+import { fetchJSON } from '@masknet/web3-providers/helpers'
+import { ContractReadonly, Web3Readonly } from '@masknet/web3-providers'
 import type {
     BancorApiErrorResponse,
     ExpectedTargetAmountResponse,
     SwapBancorRequest,
     TradeTransactionCreationResponse,
-} from './types/bancor.js'
-import { BANCOR_API_BASE_URL } from './constants/bancor.js'
-import { BIPS_BASE } from './constants/index.js'
-import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
-import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
-import { fetchJSON } from '../helpers/fetchJSON.js'
+} from '../types/index.js'
+import { BANCOR_API_BASE_URL, BIPS_BASE } from '../constants/index.js'
 
 const roundDecimal = (value: number | string | undefined, decimals: number) => {
     return Math.round(Number(value || 0) * Math.pow(10, decimals)) / Math.pow(10, decimals)
@@ -48,9 +46,6 @@ const calculateMinimumReturn = ({
 
 export class BancorAPI implements TraderAPI.Provider {
     public provider = TradeProvider.BANCOR
-
-    private Web3 = new ConnectionReadonlyAPI()
-    private Contract = new ContractReadonlyAPI()
 
     async swapTransactionBancor(request: SwapBancorRequest) {
         const baseUrl = BANCOR_API_BASE_URL[request.chainId]
@@ -116,7 +111,7 @@ export class BancorAPI implements TraderAPI.Provider {
             : outputToken
 
         return this.swapBancor({
-            strategy: TradeStrategy.ExactIn,
+            strategy: TraderAPI.TradeStrategy.ExactIn,
             fromToken,
             toToken,
             fromAmount: leftShift(inputAmount, inputToken.decimals).toFixed(),
@@ -143,8 +138,8 @@ export class BancorAPI implements TraderAPI.Provider {
             const outputAmountWei = rightShift(trade.toAmount || '0', outputToken?.decimals)
             const minimumReceivedWei = rightShift(trade.minimumReceived, outputToken?.decimals)
 
-            const computed: TradeComputed<SwapBancorRequest> = {
-                strategy: TradeStrategy.ExactIn,
+            const computed: TraderAPI.TradeComputed<SwapBancorRequest> = {
+                strategy: TraderAPI.TradeStrategy.ExactIn,
                 inputToken,
                 outputToken,
                 inputAmount: inputAmountWei,
@@ -193,10 +188,10 @@ export class BancorAPI implements TraderAPI.Provider {
         const tradeAmount = new BigNumber(inputAmount || '0')
         if (tradeAmount.isZero() || !inputToken || !outputToken || !WNATIVE_ADDRESS) return null
 
-        const wrapperContract = this.Contract.getWETHContract(WNATIVE_ADDRESS, { chainId })
+        const wrapperContract = ContractReadonly.getWETHContract(WNATIVE_ADDRESS, { chainId })
 
         const computed = {
-            strategy: TradeStrategy.ExactIn,
+            strategy: TraderAPI.TradeStrategy.ExactIn,
             inputToken,
             outputToken,
             inputAmount: tradeAmount,
@@ -233,7 +228,11 @@ export class BancorAPI implements TraderAPI.Provider {
         }
     }
 
-    public async getTradeGasLimit(account: string, chainId: ChainId, tradeComputed: TradeComputed<SwapBancorRequest>) {
+    public async getTradeGasLimit(
+        account: string,
+        chainId: ChainId,
+        tradeComputed: TraderAPI.TradeComputed<SwapBancorRequest>,
+    ) {
         if (!account || !tradeComputed?.trade_) return '0'
         const trade = tradeComputed.trade_
         const data = await this.swapTransactionBancor(trade)
@@ -241,7 +240,8 @@ export class BancorAPI implements TraderAPI.Provider {
         // Note that if approval is required, the API will also return the necessary approval transaction.
         const transaction = data.length === 1 ? data[0] : data[1]
 
-        const config = pick(transaction.transaction, ['to', 'data', 'value', 'from'])
-        return this.Web3.estimateTransaction(config, 0, { chainId })
+        return Web3Readonly.estimateTransaction(pick(transaction.transaction, ['to', 'data', 'value', 'from']), 0, {
+            chainId,
+        })
     }
 }

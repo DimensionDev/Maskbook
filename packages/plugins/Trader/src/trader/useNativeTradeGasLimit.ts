@@ -1,15 +1,15 @@
 import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
+import { TraderAPI } from '@masknet/web3-providers/types'
 import { type ChainId, ContractTransaction } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useNativeTokenWrapperContract } from '@masknet/web3-hooks-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { type TradeComputed, TradeStrategy } from '@masknet/web3-providers/types'
 import type { NativeTokenWrapper } from './native/useTradeComputed.js'
 
 export function useNativeTradeGasLimit(
-    trade: TradeComputed<NativeTokenWrapper> | null,
+    trade: TraderAPI.TradeComputed<NativeTokenWrapper> | null,
     chainId?: Web3Helper.ChainIdAll,
 ): AsyncState<string> {
     const { account } = useChainContext()
@@ -32,8 +32,10 @@ export function useNativeTradeGasLimit(
         if (!tradeAmount || !wrapperContract) return '0'
 
         if (
-            (trade.strategy === TradeStrategy.ExactIn && Others.isNativeTokenSchemaType(trade.inputToken.schema)) ||
-            (trade.strategy === TradeStrategy.ExactOut && Others.isNativeTokenSchemaType(trade.outputToken.schema))
+            (trade.strategy === TraderAPI.TradeStrategy.ExactIn &&
+                Others.isNativeTokenSchemaType(trade.inputToken.schema)) ||
+            (trade.strategy === TraderAPI.TradeStrategy.ExactOut &&
+                Others.isNativeTokenSchemaType(trade.outputToken.schema))
         ) {
             const tx = await new ContractTransaction(wrapperContract).fillAll(wrapperContract.methods.deposit(), {
                 from: account,

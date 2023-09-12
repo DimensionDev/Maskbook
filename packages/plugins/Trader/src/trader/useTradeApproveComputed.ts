@@ -4,13 +4,14 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { type FungibleToken, ZERO } from '@masknet/web3-shared-base'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import type { SwapQuoteResponse, TradeComputed } from '@masknet/web3-providers/types'
-import { useGetTradeContext } from './useGetTradeContext.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { useGetTradeContext } from './useGetTradeContext.js'
+import type { SwapQuoteResponse } from '../types/index.js'
+import type { TraderAPI } from '@masknet/web3-providers/types'
 
 // Only Support EVM ERC20
 export function useTradeApproveComputed(
-    trade: TradeComputed | null,
+    trade: TraderAPI.TradeComputed | null,
     provider?: TradeProvider,
     token?: Web3Helper.FungibleTokenAll,
 ) {

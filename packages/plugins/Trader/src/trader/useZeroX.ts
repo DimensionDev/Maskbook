@@ -3,13 +3,13 @@ import { TradeProvider } from '@masknet/public-api'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useCustomBlockBeatRetry, useNetwork } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ZeroX } from '@masknet/web3-providers'
 import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import type { TraderAPI } from '@masknet/web3-providers/types'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
-import { getEVMAvailableTraderProviders } from '../helpers/getEVMAvailableTraderProviders.js'
+import { getEVMAvailableTraderProviders } from '../helpers/index.js'
+import { ZeroX } from '../providers/index.js'
 
-export function useZrx(
+export function useZeroX(
     inputAmount_: string,
     scale: number,
     inputToken?: Web3Helper.FungibleTokenAll,

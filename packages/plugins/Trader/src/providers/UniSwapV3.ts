@@ -5,20 +5,20 @@ import { type ChainId, getTraderConstants } from '@masknet/web3-shared-evm'
 import { CurrencyAmount, TradeType } from '@uniswap/sdk-core'
 import type { Currency, Token } from '@uniswap/sdk-core'
 import { FeeAmount, Pool, type Route, computePoolAddress, encodeRouteToPath, Trade } from '@uniswap/v3-sdk'
+import { ContractReadonly, Multicall } from '@masknet/web3-providers'
+import type { TraderAPI } from '@masknet/web3-providers/types'
 import { isZero } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { PoolState, type Trade as TradeResult } from './types/uniswap.js'
-import { getTradeContext } from './helpers/trade.js'
-import { computeAllRoutes } from './helpers/uniswap.js'
-import type { TradeContext } from '../types/Trader.js'
 import { UniSwapV2LikeAPI } from './UniSwapV2.js'
+import { PoolState, type Trade as TradeResult } from '../types/index.js'
+import { getTradeContext, computeAllRoutes } from '../helpers/index.js'
 
 export class UniSwapV3LikeAPI extends UniSwapV2LikeAPI {
     constructor() {
         super(TradeProvider.UNISWAP_V3)
     }
 
-    private getPoolAddresses(transformed: Array<[Token, Token, FeeAmount] | null>, context: TradeContext) {
+    private getPoolAddresses(transformed: Array<[Token, Token, FeeAmount] | null>, context: TraderAPI.TradeContext) {
         try {
             return transformed.map((value) => {
                 if (!context?.IS_UNISWAP_V3_LIKE) return ''
@@ -69,26 +69,26 @@ export class UniSwapV3LikeAPI extends UniSwapV2LikeAPI {
         )
 
         const poolAddresses = this.getPoolAddresses(transformed, context)
-        const poolContracts = compact(poolAddresses.map((x) => this.Contract.getPoolStateV3(x, { chainId })))
+        const poolContracts = compact(poolAddresses.map((x) => ContractReadonly.getPoolStateV3(x, { chainId })))
 
-        const slot0sCalls = this.Multicall.createMultipleContractSingleData(
+        const slot0sCalls = Multicall.createMultipleContractSingleData(
             poolContracts,
             Array.from<'slot0'>({ length: poolContracts.length }).fill('slot0'),
             [],
         )
-        const liquiditiesCalls = this.Multicall.createMultipleContractSingleData(
+        const liquiditiesCalls = Multicall.createMultipleContractSingleData(
             poolContracts,
             Array.from<'liquidity'>({ length: poolContracts.length }).fill('liquidity'),
             [],
         )
 
-        const slot0s = await this.Multicall.call(
+        const slot0s = await Multicall.call(
             chainId,
             poolContracts,
             Array.from<'slot0'>({ length: poolContracts.length }).fill('slot0'),
             slot0sCalls,
         )
-        const liquidities = await this.Multicall.call(
+        const liquidities = await Multicall.call(
             chainId,
             poolContracts,
             Array.from<'liquidity'>({ length: poolContracts.length }).fill('liquidity'),
@@ -128,7 +128,7 @@ export class UniSwapV3LikeAPI extends UniSwapV2LikeAPI {
         const { UNISWAP_V3_QUOTER_ADDRESS } = getTraderConstants(chainId)
         if (!UNISWAP_V3_QUOTER_ADDRESS) return null
 
-        const quoterContract = this.Contract.getQuoterContract(UNISWAP_V3_QUOTER_ADDRESS, { chainId })
+        const quoterContract = ContractReadonly.getQuoterContract(UNISWAP_V3_QUOTER_ADDRESS, { chainId })
 
         const allCurrencyCombinations = this.getAllCommonPairs(chainId, currencyAmountIn?.currency, currencyOut)
 
@@ -162,13 +162,13 @@ export class UniSwapV3LikeAPI extends UniSwapV2LikeAPI {
 
         if (!quoterContract) return null
 
-        const quotesCalls = this.Multicall.createSingleContractMultipleData(
+        const quotesCalls = Multicall.createSingleContractMultipleData(
             quoterContract,
             Array.from<'quoteExactInput'>({ length: quoteExactInInputs.length }).fill('quoteExactInput'),
             quoteExactInInputs,
         )
 
-        const quotesResults = await this.Multicall.call(
+        const quotesResults = await Multicall.call(
             chainId,
             Array.from({ length: quoteExactInInputs.length }).map(() => quoterContract),
             Array.from<'quoteExactInput'>({ length: quoteExactInInputs.length }).fill('quoteExactInput'),

@@ -101,11 +101,6 @@ import {
     SolanaProviderResolverAPI,
     SolanaNetworkResolverAPI,
 } from './Web3/Solana/apis/ResolverAPI.js'
-import { BancorAPI } from './Trader/Bancor.js'
-import { BalancerAPI } from './Trader/Balancer.js'
-import { OpenOceanAPI } from './Trader/OpenOcean.js'
-import { ZeroX_API } from './Trader/ZeroX.js'
-import { DodoAPI } from './Trader/Dodo.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const Lido = new LidoAPI()
@@ -199,16 +194,6 @@ export { DepositPaymaster } from './SmartPay/libs/DepositPaymaster.js'
 export { ContractWallet } from './SmartPay/libs/ContractWallet.js'
 export { Create2Factory } from './SmartPay/libs/Create2Factory.js'
 export { UserTransaction } from './SmartPay/libs/UserTransaction.js'
-
-// Trader
-export const Bancor = new BancorAPI()
-export const Balancer = new BalancerAPI()
-export const Dodo = new DodoAPI()
-export const OpenOcean = new OpenOceanAPI()
-export const ZeroX = new ZeroX_API()
-
-export { UniSwapV2LikeAPI } from './Trader/UniSwapV2.js'
-export { UniSwapV3LikeAPI } from './Trader/UniSwapV3.js'
 
 // Etherscan
 export const EtherscanExplorer = new EtherscanExplorerAPI()

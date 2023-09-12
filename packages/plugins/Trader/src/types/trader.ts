@@ -1,3 +1,14 @@
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import type { ChainIdOptionalRecord, ChainId, SchemaType } from '@masknet/web3-shared-evm'
+
+export interface ERC20TokenTable {
+    [tokenAddress: string]: Array<FungibleToken<ChainId, SchemaType.ERC20>>
+}
+
+export type ERC20TokenCustomizedBase = Readonly<ChainIdOptionalRecord<ERC20TokenTable>>
+
+export type ERC20AgainstToken = Readonly<ChainIdOptionalRecord<Array<FungibleToken<ChainId, SchemaType.ERC20>>>>
+
 export enum WarningLevel {
     LOW = 1,
     MEDIUM = 2,
@@ -17,74 +28,4 @@ export enum ContentTab {
 export enum TokenPanel {
     Input = 0,
     Output = 1,
-}
-
-// ZRX supported source swap list
-// Learn more: https://matcha.xyz/
-export enum ZrxTradePool {
-    ZRX = '0x',
-    ACryptoS = 'ACryptoS',
-    ApeSwap = 'ApeSwap',
-    BakerySwap = 'BakerySwap',
-    Balancer = 'Balancer',
-    BalancerV2 = 'Balancer_V2',
-    Bancor = 'Bancor',
-    Belt = 'Belt',
-    CafeSwap = 'CafeSwap',
-    CheeseSwap = 'CheeseSwap',
-    ComethSwap = 'ComethSwap',
-    Component = 'Component',
-    Cream = 'CREAM',
-    CryptoCom = 'CryptoCom',
-    Curve = 'Curve',
-    CurveV2 = 'Curve_V2',
-    Dfyn = 'Dfyn',
-    Dodo = 'DODO',
-    DodoV2 = 'DODO_V2',
-    Ellipsis = 'Ellipsis',
-    Eth2Dai = 'Eth2Dai',
-    FirebirdOneSwap = 'FirebirdOneSwap',
-    IronSwap = 'IronSwap',
-    JetSwap = 'JetSwap',
-    JulSwap = 'JulSwap',
-    Kyber = 'Kyber',
-    KyberDMM = 'KyberDMM',
-    Lido = 'Lido',
-    Linkswap = 'Linkswap',
-    LiquidityProvider = 'LiquidityProvider',
-    MStable = 'mStable',
-    MakerPsm = 'MakerPsm',
-    Mesh = 'Mesh',
-    Mooniswap = 'Mooniswap',
-    MultiBridge = 'MultiBridge',
-    MultiHop = 'MultiHop',
-    Native = 'Native',
-    Nerve = 'Nerve',
-    Oasis = 'Oasis',
-    PancakeSwap = 'PancakeSwap',
-    PancakeSwapV2 = 'PancakeSwap_V2',
-    QuickSwap = 'QuickSwap',
-    Saddle = 'Saddle',
-    Shell = 'Shell',
-    Smoothy = 'Smoothy',
-    SnowSwap = 'SnowSwap',
-    SushiSwap = 'SushiSwap',
-    Swerve = 'Swerve',
-    Uniswap = 'Uniswap',
-    UniswapV2 = 'Uniswap_V2',
-    UniswapV3 = 'Uniswap_V3',
-    WaultSwap = 'WaultSwap',
-    xSigma = 'xSigma',
-    TraderJoe = 'TraderJoe',
-    PangolinDex = 'PangolinDex',
-    Trisolaris = 'Trisolaris',
-    WannaSwap = 'WannaSwap',
-    Mdex = 'Mdex',
-    Arthswap = 'ArthSwap',
-    Versa = 'Versa',
-    VenomSwap = 'VenomSwap',
-    OpenSwap = 'OpenSwap',
-    DefiKingdoms = 'DefiKingdoms',
-    YumiSwap = 'YumiSwap',
-    AstarExchange = 'AstarExchange',
 }

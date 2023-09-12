@@ -5,16 +5,15 @@ import { SwapRouter } from '@uniswap/v3-sdk'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TradeProvider } from '@masknet/public-api'
-import { uniswap } from '@masknet/web3-providers/helpers'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import type { SwapCall, Trade, TradeComputed } from '@masknet/web3-providers/types'
-import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
+import type { TraderAPI } from '@masknet/web3-providers/types'
+import type { Trade, SwapCall } from '../../types/index.js'
+import { swapCallParameters } from '../../helpers/index.js'
+import { SLIPPAGE_DEFAULT, UNISWAP_BIPS_BASE } from '../../constants/index.js'
 import { useRouterV2Contract } from '../../contracts/uniswap/useRouterV2Contract.js'
 import { useSwapRouterContract } from '../../contracts/uniswap/useSwapRouterContract.js'
 import { useTransactionDeadline } from './useTransactionDeadline.js'
 import { useGetTradeContext } from '../useGetTradeContext.js'
-
-const UNISWAP_BIPS_BASE = 10000
 
 /**
  * Returns the swap calls that can be used to make the trade
@@ -23,7 +22,7 @@ const UNISWAP_BIPS_BASE = 10000
  * @param tradeProvider
  */
 export function useSwapParameters(
-    trade: TradeComputed<Trade> | null, // trade to execute, required
+    trade: TraderAPI.TradeComputed<Trade> | null, // trade to execute, required
     tradeProvider?: TradeProvider,
     allowedSlippage: number = SLIPPAGE_DEFAULT,
 ) {
@@ -50,7 +49,7 @@ export function useSwapParameters(
             if (!routerV2Contract) return []
 
             const parameters = [
-                uniswap.swapCallParameters(
+                swapCallParameters(
                     trade_,
                     {
                         feeOnTransfer: false,
@@ -63,7 +62,7 @@ export function useSwapParameters(
             ]
             if (trade_.tradeType === TradeType.EXACT_INPUT)
                 parameters.push(
-                    uniswap.swapCallParameters(
+                    swapCallParameters(
                         trade_,
                         {
                             feeOnTransfer: true,

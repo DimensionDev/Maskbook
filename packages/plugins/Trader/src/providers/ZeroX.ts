@@ -1,6 +1,7 @@
 import urlcat from 'urlcat'
 import { BigNumber } from 'bignumber.js'
 import { first, pick } from 'lodash-es'
+import { safeUnreachable } from '@masknet/kit'
 import { TradeProvider } from '@masknet/public-api'
 import {
     NetworkType,
@@ -13,21 +14,17 @@ import {
 } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ZERO, isZero } from '@masknet/web3-shared-base'
-import { safeUnreachable } from '@masknet/kit'
+import { fetchJSON } from '@masknet/web3-providers/helpers'
+import { TraderAPI } from '@masknet/web3-providers/types'
+import { ChainResolver, ContractReadonly, Web3Readonly } from '@masknet/web3-providers'
 import type {
     SwapErrorResponse,
     SwapQuoteRequest,
     SwapQuoteResponse,
     SwapServerErrorResponse,
     SwapValidationErrorResponse,
-} from './types/0x.js'
-import { BIPS_BASE } from './constants/index.js'
-import { ZRX_AFFILIATE_ADDRESS, ZRX_NATIVE_TOKEN_ADDRESS } from './constants/0x.js'
-import { TradeStrategy, type TradeComputed, type TraderAPI } from '../types/Trader.js'
-import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
-import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
-import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
-import { fetchJSON } from '../helpers/fetchJSON.js'
+} from '../types/index.js'
+import { BIPS_BASE, ZRX_AFFILIATE_ADDRESS, ZRX_NATIVE_TOKEN_ADDRESS } from '../constants/index.js'
 
 const ZRX_BASE_URL = 'https://zrx-proxy.r2d2.to/'
 
@@ -60,9 +57,6 @@ export function getNativeTokenLabel(networkType: NetworkType) {
 }
 
 export class ZeroX_API implements TraderAPI.Provider {
-    private Web3 = new ConnectionReadonlyAPI()
-    private Contract = new ContractReadonlyAPI()
-
     public provider = TradeProvider.ZRX
 
     async swapQuote(request: SwapQuoteRequest, chainId: ChainId) {
@@ -106,7 +100,7 @@ export class ZeroX_API implements TraderAPI.Provider {
     ) {
         if (isZero(inputAmount) || !inputToken || !outputToken) return null
 
-        const networkType = new ChainResolverAPI().networkType(chainId as ChainId)
+        const networkType = ChainResolver.networkType(chainId as ChainId)
 
         if (!networkType) return
         const sellToken = isNativeTokenAddress(inputToken.address)
@@ -148,7 +142,7 @@ export class ZeroX_API implements TraderAPI.Provider {
             const outputAmount = new BigNumber(trade.buyAmount)
 
             const computed = {
-                strategy: TradeStrategy.ExactIn,
+                strategy: TraderAPI.TradeStrategy.ExactIn,
                 inputToken,
                 outputToken,
                 inputAmount,
@@ -162,7 +156,7 @@ export class ZeroX_API implements TraderAPI.Provider {
                 priceImpact: ZERO,
 
                 trade_: { ...trade, buyAmount: outputAmount.toFixed() },
-            } as TradeComputed<SwapQuoteResponse>
+            } as TraderAPI.TradeComputed<SwapQuoteResponse>
 
             try {
                 const gas = await this.getTradeGasLimit(account, chainId, computed)
@@ -201,10 +195,10 @@ export class ZeroX_API implements TraderAPI.Provider {
         const tradeAmount = new BigNumber(inputAmount || '0')
         if (tradeAmount.isZero() || !inputToken || !outputToken || !WNATIVE_ADDRESS) return null
 
-        const wrapperContract = this.Contract.getWETHContract(WNATIVE_ADDRESS, { chainId })
+        const wrapperContract = ContractReadonly.getWETHContract(WNATIVE_ADDRESS, { chainId })
 
         const computed = {
-            strategy: TradeStrategy.ExactIn,
+            strategy: TraderAPI.TradeStrategy.ExactIn,
             inputToken,
             outputToken,
             inputAmount: tradeAmount,
@@ -241,7 +235,11 @@ export class ZeroX_API implements TraderAPI.Provider {
         }
     }
 
-    public async getTradeGasLimit(account: string, chainId: ChainId, trade: TradeComputed<SwapQuoteResponse>) {
+    public async getTradeGasLimit(
+        account: string,
+        chainId: ChainId,
+        trade: TraderAPI.TradeComputed<SwapQuoteResponse>,
+    ) {
         if (!account || !trade.trade_) return '0'
 
         const config = {
@@ -249,6 +247,6 @@ export class ZeroX_API implements TraderAPI.Provider {
             ...pick(trade.trade_, 'to', 'data', 'value'),
         }
 
-        return this.Web3.estimateTransaction(config, 0, { chainId })
+        return Web3Readonly.estimateTransaction(config, 0, { chainId })
     }
 }

@@ -1,11 +1,12 @@
 import { toHex } from 'web3-utils'
 import { flatMap, compact } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { ZERO, isZero, toFixed } from '@masknet/web3-shared-base'
 import { CurrencyAmount, type Currency, type Token, TradeType, Percent } from '@uniswap/sdk-core'
 import { Pair as UniSwapPair, Trade as UniSwapTrade } from '@uniswap/v2-sdk'
 import { SwapRouter as V3Router } from '@uniswap/v3-sdk'
+import type { TradeProvider } from '@masknet/public-api'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { ZERO, isZero, toFixed } from '@masknet/web3-shared-base'
 import {
     isValidChainId,
     ChainId,
@@ -15,12 +16,24 @@ import {
     ContractTransaction,
 } from '@masknet/web3-shared-evm'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import type { TradeProvider } from '@masknet/public-api'
-import { getTradeContext, isTradeBetter } from './helpers/trade.js'
-import { getPairAddress } from './helpers/pair.js'
-import { MulticallAPI } from '../Multicall/index.js'
-import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
-import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
+import { ContractReadonly, Web3Readonly, Multicall } from '@masknet/web3-providers'
+import { TraderAPI } from '@masknet/web3-providers/types'
+import {
+    getPairAddress,
+    getTradeContext,
+    isTradeBetter,
+    toUniswapToken,
+    swapCallParameters,
+    toUniswapCurrency,
+    toUniswapCurrencyAmount,
+    computeRealizedLPFeePercent,
+    toUniswapPercent,
+    uniswapCurrencyAmountTo,
+    uniswapPriceTo,
+    uniswapPercentTo,
+    uniswapTokenTo,
+    swapErrorToUserReadableMessage,
+} from '../helpers/index.js'
 import {
     BETTER_TRADE_LESS_HOPS_THRESHOLD,
     DEFAULT_TRANSACTION_DEADLINE,
@@ -28,7 +41,7 @@ import {
     MAX_HOP,
     SLIPPAGE_DEFAULT,
     UNISWAP_BIPS_BASE,
-} from './constants/index.js'
+} from '../constants/index.js'
 import {
     PairState,
     type FailedCall,
@@ -36,27 +49,9 @@ import {
     type SwapCallEstimate,
     type TokenPair,
     type Trade,
-} from './types/uniswap.js'
-import {
-    computeRealizedLPFeePercent,
-    swapCallParameters,
-    swapErrorToUserReadableMessage,
-    toUniswapCurrency,
-    toUniswapCurrencyAmount,
-    toUniswapPercent,
-    toUniswapToken,
-    uniswapCurrencyAmountTo,
-    uniswapPercentTo,
-    uniswapPriceTo,
-    uniswapTokenTo,
-} from './helpers/uniswap.js'
-import { TradeStrategy, type TradeComputed, type TraderAPI } from '../types/Trader.js'
+} from '../types/index.js'
 
 export class UniSwapV2LikeAPI implements TraderAPI.Provider {
-    protected Web3 = new ConnectionReadonlyAPI()
-    protected Contract = new ContractReadonlyAPI()
-    protected Multicall = new MulticallAPI()
-
     constructor(public provider: TradeProvider) {}
 
     public getAllCommonPairs(chainId: ChainId, currencyA?: Currency, currencyB?: Currency) {
@@ -127,14 +122,14 @@ export class UniSwapV2LikeAPI implements TraderAPI.Provider {
 
         const contracts = compact(
             compact([...new Set(listOfPairAddress)]).map((address) =>
-                this.Contract.getPairContract(address, { chainId }),
+                ContractReadonly.getPairContract(address, { chainId }),
             ),
         )
 
         const names = Array.from<'getReserves'>({ length: contracts.length }).fill('getReserves')
 
-        const calls = this.Multicall.createMultipleContractSingleData(contracts, names, [])
-        const results = await this.Multicall.call(chainId, contracts, names, calls)
+        const calls = Multicall.createMultipleContractSingleData(contracts, names, [])
+        const results = await Multicall.call(chainId, contracts, names, calls)
 
         if (!results) return EMPTY_LIST
 
@@ -181,18 +176,18 @@ export class UniSwapV2LikeAPI implements TraderAPI.Provider {
     private async getSwapParameters(
         chainId: ChainId,
         account: string,
-        trade: TradeComputed<Trade> | null,
+        trade: TraderAPI.TradeComputed<Trade> | null,
         allowedSlippage: number = SLIPPAGE_DEFAULT,
     ) {
         const context = getTradeContext(chainId, this.provider)
-        const timestamp = await this.Web3.getBlockTimestamp({ chainId })
+        const timestamp = await Web3Readonly.getBlockTimestamp({ chainId })
         const timestamp_ = new BigNumber(timestamp ?? '0')
         const deadline = timestamp_.plus(
             chainId === ChainId.Mainnet ? DEFAULT_TRANSACTION_DEADLINE : L2_TRANSACTION_DEADLINE,
         )
 
-        const routerV2Contract = this.Contract.getRouterV2Contract(context?.ROUTER_CONTRACT_ADDRESS, { chainId })
-        const swapRouterContract = this.Contract.getSwapRouterContract(context?.ROUTER_CONTRACT_ADDRESS, {
+        const routerV2Contract = ContractReadonly.getRouterV2Contract(context?.ROUTER_CONTRACT_ADDRESS, { chainId })
+        const swapRouterContract = ContractReadonly.getSwapRouterContract(context?.ROUTER_CONTRACT_ADDRESS, {
             chainId,
         })
 
@@ -348,7 +343,7 @@ export class UniSwapV2LikeAPI implements TraderAPI.Provider {
 
             const percent_ = toUniswapPercent(slippage, 10000)
             const computed = {
-                strategy: TradeStrategy.ExactIn,
+                strategy: TraderAPI.TradeStrategy.ExactIn,
                 inputToken,
                 outputToken,
                 inputAmount: uniswapCurrencyAmountTo(trade.inputAmount),
@@ -398,10 +393,10 @@ export class UniSwapV2LikeAPI implements TraderAPI.Provider {
         const tradeAmount = new BigNumber(inputAmount || '0')
         if (tradeAmount.isZero() || !inputToken || !outputToken || !WNATIVE_ADDRESS) return null
 
-        const wrapperContract = this.Contract.getWETHContract(WNATIVE_ADDRESS, { chainId })
+        const wrapperContract = ContractReadonly.getWETHContract(WNATIVE_ADDRESS, { chainId })
 
         const computed = {
-            strategy: TradeStrategy.ExactIn,
+            strategy: TraderAPI.TradeStrategy.ExactIn,
             inputToken,
             outputToken,
             inputAmount: tradeAmount,
@@ -438,7 +433,7 @@ export class UniSwapV2LikeAPI implements TraderAPI.Provider {
         }
     }
 
-    public async getTradeGasLimit(account: string, chainId: ChainId, trade: TradeComputed<Trade> | null) {
+    public async getTradeGasLimit(account: string, chainId: ChainId, trade: TraderAPI.TradeComputed<Trade> | null) {
         const tradeParameters = await this.getSwapParameters(chainId, account, trade)
 
         // step 1: estimate each trade parameter
@@ -453,13 +448,13 @@ export class UniSwapV2LikeAPI implements TraderAPI.Provider {
                 }
 
                 try {
-                    const gas = await this.Web3.estimateTransaction(config, 0, { chainId })
+                    const gas = await Web3Readonly.estimateTransaction(config, 0, { chainId })
                     return {
                         call: x,
                         gasEstimate: gas ?? '0',
                     }
                 } catch (error) {
-                    return this.Web3.callTransaction(config, { chainId })
+                    return Web3Readonly.callTransaction(config, { chainId })
                         .then(() => {
                             return {
                                 call: x,

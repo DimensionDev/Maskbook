@@ -1,5 +1,5 @@
-import { type Currency, type Percent, type TradeType } from '@uniswap/sdk-core'
 import type { Trade } from '@uniswap/v2-sdk'
+import type { Currency, Percent, TradeType } from '@uniswap/sdk-core'
 import { ONE_HUNDRED_PERCENT, ZERO_PERCENT } from '../constants/index.js'
 
 export function isTradeBetter(

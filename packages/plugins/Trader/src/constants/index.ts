@@ -1,3 +1,7 @@
+export * from './0x.js'
+export * from './balancer.js'
+export * from './bancor.js'
+export * from './openocean.js'
 export * from './uniswap.js'
 export * from './trader.js'
 export * from './trending.js'

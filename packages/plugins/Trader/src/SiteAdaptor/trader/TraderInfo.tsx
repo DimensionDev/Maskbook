@@ -5,12 +5,12 @@ import { type ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { TradeProvider } from '@masknet/public-api'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TraderAPI } from '@masknet/web3-providers/types'
-import { Balancer } from '@masknet/web3-providers'
 import { multipliedBy, formatBalance, ZERO, formatCurrency, formatPercentage } from '@masknet/web3-shared-base'
 import { useChainContext, useNativeTokenPrice, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting.js'
-import { resolveTradeProviderName } from '../../helpers/resolveTradeProviderName.js'
 import { DefaultTraderPlaceholderUI, TraderInfoUI } from './components/TraderInfoUI.js'
+import { Balancer } from '../../providers/index.js'
+import { resolveTradeProviderName } from '../../helpers/index.js'
 
 export interface TraderInfoProps {
     trade: AsyncStateRetry<TraderAPI.TradeInfo>

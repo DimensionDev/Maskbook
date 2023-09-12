@@ -3,11 +3,11 @@ import { TradeProvider } from '@masknet/public-api'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useCustomBlockBeatRetry, useNetwork } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { Bancor } from '@masknet/web3-providers'
 import type { TraderAPI } from '@masknet/web3-providers/types'
 import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
-import { getEVMAvailableTraderProviders } from '../helpers/getEVMAvailableTraderProviders.js'
+import { getEVMAvailableTraderProviders } from '../helpers/index.js'
+import { Bancor } from '../providers/index.js'
 
 export function useBancor(
     inputAmount_: string,

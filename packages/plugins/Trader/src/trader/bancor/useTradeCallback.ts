@@ -6,10 +6,15 @@ import { ZERO } from '@masknet/web3-shared-base'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { GasConfig } from '@masknet/web3-shared-evm'
-import { Bancor, Web3 } from '@masknet/web3-providers'
-import type { SwapBancorRequest, TradeComputed } from '@masknet/web3-providers/types'
+import { Web3 } from '@masknet/web3-providers'
+import type { TraderAPI } from '@masknet/web3-providers/types'
+import { Bancor } from '../../providers/index.js'
+import type { SwapBancorRequest } from '../../types/index.js'
 
-export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest> | null, gasConfig?: GasConfig) {
+export function useTradeCallback(
+    tradeComputed: TraderAPI.TradeComputed<SwapBancorRequest> | null,
+    gasConfig?: GasConfig,
+) {
     const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 

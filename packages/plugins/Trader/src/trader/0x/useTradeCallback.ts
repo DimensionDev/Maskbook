@@ -5,11 +5,15 @@ import stringify from 'json-stable-stringify'
 import type { GasConfig, Transaction } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
-import type { SwapQuoteResponse, TradeComputed } from '@masknet/web3-providers/types'
+import type { TraderAPI } from '@masknet/web3-providers/types'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { SUPPORTED_CHAIN_ID_LIST } from './constants.js'
+import type { SwapQuoteResponse } from '../../types/index.js'
 
-export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse> | null, gasConfig?: GasConfig) {
+export function useTradeCallback(
+    tradeComputed: TraderAPI.TradeComputed<SwapQuoteResponse> | null,
+    gasConfig?: GasConfig,
+) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { pluginID } = useNetworkContext()
 

@@ -1,23 +1,22 @@
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
-import { Dodo } from '@masknet/web3-providers'
 import { isZero } from '@masknet/web3-shared-base'
-import { NetworkPluginID, type UnboxPromise } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import type { TraderAPI } from '@masknet/web3-providers/types'
 import { ChainId, ProviderURL, isNativeTokenAddress, useTraderConstants } from '@masknet/web3-shared-evm'
 import { useChainContext, useCustomBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { TradeStrategy } from '@masknet/web3-providers/types'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
-
-type SwapRouteData = UnboxPromise<ReturnType<typeof Dodo.swapRoute>> | null
+import { Dodo } from '../../providers/index.js'
+import type { SwapRouteData } from '../../types/index.js'
 
 export function useTrade(
-    strategy: TradeStrategy,
+    strategy: TraderAPI.TradeStrategy,
     inputAmount: string,
     outputAmount: string,
     inputToken?: Web3Helper.FungibleTokenAll,
     outputToken?: Web3Helper.FungibleTokenAll,
     temporarySlippage?: number,
-): AsyncStateRetry<SwapRouteData> {
+): AsyncStateRetry<SwapRouteData | null> {
     const slippageSetting = useSlippageTolerance()
     const slippage = temporarySlippage || slippageSetting
     const { account, chainId } = useChainContext()

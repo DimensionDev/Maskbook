@@ -16,17 +16,13 @@ import {
     isNativeTokenSchemaType,
 } from '@masknet/web3-shared-evm'
 import { ZERO, isZero, leftShift, pow10 } from '@masknet/web3-shared-base'
-import { OPENOCEAN_BASE_URL, OPENOCEAN_SUPPORTED_CHAINS } from './constants/openocean.js'
-import type { SwapOOData, SwapOORequest } from './types/openocean.js'
-import { TradeStrategy, type TradeComputed, type TraderAPI } from '../types/Trader.js'
-import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
-import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
-import { fetchJSON } from '../helpers/fetchJSON.js'
+import { ContractReadonly, Web3Readonly } from '@masknet/web3-providers'
+import { TraderAPI } from '@masknet/web3-providers/types'
+import { fetchJSON } from '@masknet/web3-providers/helpers'
+import { OPENOCEAN_BASE_URL, OPENOCEAN_SUPPORTED_CHAINS } from '../constants/index.js'
+import type { SwapOOData, SwapOORequest } from '../types/index.js'
 
 export class OpenOceanAPI implements TraderAPI.Provider {
-    private Web3 = new ConnectionReadonlyAPI()
-    private Contract = new ContractReadonlyAPI()
-
     public provider = TradeProvider.OPENOCEAN
 
     async swapOO(request: SwapOORequest) {
@@ -121,8 +117,8 @@ export class OpenOceanAPI implements TraderAPI.Provider {
             const outputAmount = new BigNumber(trade.resAmount).multipliedBy(pow10(outputToken.decimals)).integerValue()
             const priceImpact = new BigNumber(trade.priceImpact ?? 0)
 
-            const computed: TradeComputed<SwapOOData> = {
-                strategy: TradeStrategy.ExactIn,
+            const computed: TraderAPI.TradeComputed<SwapOOData> = {
+                strategy: TraderAPI.TradeStrategy.ExactIn,
                 inputToken,
                 outputToken,
                 inputAmount,
@@ -174,10 +170,10 @@ export class OpenOceanAPI implements TraderAPI.Provider {
         const tradeAmount = new BigNumber(inputAmount || '0')
         if (tradeAmount.isZero() || !inputToken || !outputToken || !WNATIVE_ADDRESS) return null
 
-        const wrapperContract = this.Contract.getWETHContract(WNATIVE_ADDRESS, { chainId })
+        const wrapperContract = ContractReadonly.getWETHContract(WNATIVE_ADDRESS, { chainId })
 
         const computed = {
-            strategy: TradeStrategy.ExactIn,
+            strategy: TraderAPI.TradeStrategy.ExactIn,
             inputToken,
             outputToken,
             inputAmount: tradeAmount,
@@ -214,7 +210,7 @@ export class OpenOceanAPI implements TraderAPI.Provider {
         }
     }
 
-    public getTradeGasLimit(account: string, chainId: ChainId, tradeComputed: TradeComputed<SwapOOData>) {
+    public getTradeGasLimit(account: string, chainId: ChainId, tradeComputed: TraderAPI.TradeComputed<SwapOOData>) {
         if (!tradeComputed.trade_?.estimatedGas) return tradeComputed.trade_?.estimatedGas
         const config = {
             from: account,
@@ -223,6 +219,6 @@ export class OpenOceanAPI implements TraderAPI.Provider {
 
         if (!config.value) return '0'
 
-        return this.Web3.estimateTransaction(config, 0, { chainId })
+        return Web3Readonly.estimateTransaction(config, 0, { chainId })
     }
 }

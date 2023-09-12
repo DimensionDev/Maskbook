@@ -3,11 +3,13 @@ import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { pick } from 'lodash-es'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { Bancor, Web3 } from '@masknet/web3-providers'
-import type { SwapBancorRequest, TradeComputed } from '@masknet/web3-providers/types'
+import { Web3Readonly } from '@masknet/web3-providers'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import type { TraderAPI } from '@masknet/web3-providers/types'
+import { Bancor } from '../../providers/index.js'
+import type { SwapBancorRequest } from '../../types/index.js'
 
-export function useTradeGasLimit(tradeComputed: TradeComputed<SwapBancorRequest> | null): AsyncState<string> {
+export function useTradeGasLimit(tradeComputed: TraderAPI.TradeComputed<SwapBancorRequest> | null): AsyncState<string> {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { pluginID } = useNetworkContext()
 
@@ -26,7 +28,7 @@ export function useTradeGasLimit(tradeComputed: TradeComputed<SwapBancorRequest>
             const tradeTransaction = data.length === 1 ? data[0] : data[1]
 
             const config = pick(tradeTransaction.transaction, ['to', 'data', 'value', 'from'])
-            return await Web3.estimateTransaction?.(config, undefined, {
+            return await Web3Readonly.estimateTransaction?.(config, undefined, {
                 chainId,
             })
         } catch {

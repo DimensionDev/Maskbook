@@ -14,7 +14,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { TradeComputed } from '@masknet/web3-providers/types'
+import type { TraderAPI } from '@masknet/web3-providers/types'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting.js'
 import { currentSlippageSettings } from '../../settings.js'
 import { ConfirmDialogUI } from './components/ConfirmDialogUI.js'
@@ -26,7 +26,7 @@ import { PluginTraderMessages } from '../../messages.js'
 export interface ConfirmDialogProps {
     open: boolean
     onClose: () => void
-    trade: TradeComputed
+    trade: TraderAPI.TradeComputed
     inputToken: Web3Helper.FungibleTokenAll
     outputToken: Web3Helper.FungibleTokenAll
     gas?: string

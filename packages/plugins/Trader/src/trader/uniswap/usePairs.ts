@@ -9,7 +9,7 @@ import { useMultipleContractSingleData } from '@masknet/web3-hooks-evm'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { usePairContracts } from '../../contracts/uniswap/usePairContract.js'
-import { getPairAddress } from '../../helpers/getPairAddress.js'
+import { getPairAddress } from '../../helpers/index.js'
 import { useGetTradeContext } from '../useGetTradeContext.js'
 import { useTargetBlockNumber } from '../useTargetBlockNumber.js'
 
