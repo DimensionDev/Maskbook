@@ -9,8 +9,8 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { useSingleContractMultipleData } from '@masknet/web3-hooks-evm'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { useQuoterContract } from '../../contracts/uniswap/useQuoterContract.js'
-import { useAllV3Routes } from './useAllV3Routes.js'
 import { DEFAULT_MULTICALL_GAS_LIMIT } from '../../constants/index.js'
+import { useAllV3Routes } from './useAllV3Routes.js'
 import { useTargetBlockNumber } from '../useTargetBlockNumber.js'
 
 export enum V3TradeState {

@@ -6,9 +6,13 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { GasConfig, Transaction } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
-import type { SwapOOSuccessResponse, TradeComputed } from '../../types/index.js'
+import type { TraderAPI } from '@masknet/web3-providers/types'
+import type { SwapRouteSuccessResponse } from '../../types/index.js'
 
-export function useTradeCallback(tradeComputed: TradeComputed<SwapOOSuccessResponse> | null, gasConfig?: GasConfig) {
+export function useTradeCallback(
+    tradeComputed: TraderAPI.TradeComputed<SwapRouteSuccessResponse> | null,
+    gasConfig?: GasConfig,
+) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { pluginID } = useNetworkContext()
 
@@ -24,13 +28,10 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapOOSuccessRespo
     }, [account, tradeComputed, gasConfig])
 
     return useAsyncFn(async () => {
-        if (!account || !config) {
-            return
-        }
+        if (!account || !config) return
 
         try {
             const gas = await Web3.estimateTransaction?.(config, undefined, { chainId })
-
             const hash = await Web3.sendTransaction(
                 {
                     ...config,
@@ -40,6 +41,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapOOSuccessRespo
             )
             const receipt = await Web3.getTransactionReceipt(hash)
             if (!receipt?.status) return
+
             return receipt?.transactionHash
         } catch (error) {
             return

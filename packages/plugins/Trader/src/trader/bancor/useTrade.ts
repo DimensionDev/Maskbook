@@ -4,12 +4,13 @@ import { leftShift } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useCustomBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
-import { PluginTraderRPC } from '../../messages.js'
-import { type SwapBancorRequest, TradeStrategy } from '../../types/index.js'
+import { TraderAPI } from '@masknet/web3-providers/types'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
+import type { SwapBancorRequest } from '../../types/index.js'
+import { Bancor } from '../../providers/index.js'
 
 export function useTrade(
-    strategy: TradeStrategy,
+    strategy: TraderAPI.TradeStrategy,
     inputAmountWei: string,
     outputAmountWei: string,
     inputToken?: Web3Helper.FungibleTokenAll,
@@ -24,7 +25,7 @@ export function useTrade(
 
     const inputAmount = leftShift(inputAmountWei, inputToken?.decimals).toFixed()
     const outputAmount = leftShift(outputAmountWei, outputToken?.decimals).toFixed()
-    const isExactIn = strategy === TradeStrategy.ExactIn
+    const isExactIn = strategy === TraderAPI.TradeStrategy.ExactIn
 
     return useCustomBlockBeatRetry(
         NetworkPluginID.PLUGIN_EVM,
@@ -42,7 +43,7 @@ export function useTrade(
                 ? { ...outputToken, address: BANCOR_ETH_ADDRESS ?? '' }
                 : outputToken
 
-            return PluginTraderRPC.swapBancor({
+            return Bancor.swapBancor({
                 strategy,
                 fromToken,
                 toToken,

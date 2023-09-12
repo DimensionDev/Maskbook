@@ -1,10 +1,10 @@
 import { memo, useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { useFungibleTokenPrice, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
-import { InputTokenPanelUI } from './components/InputTokenPanelUI.js'
 import type { SelectTokenChipProps } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatEtherToWei } from '@masknet/web3-shared-evm'
+import { InputTokenPanelUI } from './components/InputTokenPanelUI.js'
 
 export interface InputTokenPanelProps extends withClasses<'root'> {
     balance: string

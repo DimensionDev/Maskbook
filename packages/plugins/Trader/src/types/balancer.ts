@@ -1,5 +1,10 @@
-import type { Swap } from '@balancer-labs/sor/dist/types.js'
 import type { BigNumber } from 'bignumber.js'
+import type { Swap } from '@balancer-labs/sor/dist/types.js'
+
+export enum SwapType {
+    EXACT_IN = 'swapExactIn',
+    EXACT_OUT = 'swapExactOut',
+}
 
 export interface Route {
     share: number

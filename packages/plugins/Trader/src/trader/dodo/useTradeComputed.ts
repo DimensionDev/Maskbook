@@ -1,19 +1,20 @@
-import { BigNumber } from 'bignumber.js'
 import { useMemo } from 'react'
+import { BigNumber } from 'bignumber.js'
 import { rightShift, ZERO } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { type SwapRouteData, type TradeComputed, TradeStrategy } from '../../types/index.js'
+import { TraderAPI } from '@masknet/web3-providers/types'
+import type { SwapRouteData } from '../../types/index.js'
 
 export function useTradeComputed(
     trade: SwapRouteData | null,
-    strategy: TradeStrategy,
+    strategy: TraderAPI.TradeStrategy,
     inputToken?: Web3Helper.FungibleTokenAll,
     outputToken?: Web3Helper.FungibleTokenAll,
 ) {
     return useMemo(() => {
         if (!trade) return null
         if (!inputToken || !outputToken) return null
-        const isExactIn = strategy === TradeStrategy.ExactIn
+        const isExactIn = strategy === TraderAPI.TradeStrategy.ExactIn
         if (!isExactIn) return null
         const inputAmount = rightShift(trade.fromAmount, inputToken.decimals).integerValue()
         const executionPrice = new BigNumber(trade.resPricePerToToken)
@@ -37,6 +38,6 @@ export function useTradeComputed(
             priceImpact,
 
             trade_: { ...trade },
-        } as TradeComputed<SwapRouteData>
+        } as TraderAPI.TradeComputed<SwapRouteData>
     }, [trade, strategy, inputToken, outputToken])
 }
