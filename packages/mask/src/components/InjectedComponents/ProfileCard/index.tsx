@@ -181,57 +181,57 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
 
     return (
         <DefaultWeb3ContextProvider value={{ chainId: ChainId.Mainnet }}>
-            <div className={classes.root}>
-                <div className={classes.header}>
-                    <ProfileCardTitle
-                        socialAccounts={socialAccounts}
-                        address={activeAddress}
-                        onAddressChange={setSelectedAddress}
-                        identity={identity}
-                    />
-                    {tabs.length > 0 && currentTab ? (
-                        <div className={classes.tabs}>
-                            <TabContext value={currentTab}>
-                                <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
-                                    {tabs.map((tab) => (
-                                        <Tab
-                                            key={tab.id}
-                                            label={tab.label}
-                                            value={tab.id}
-                                            classes={{ root: classes.tabRoot, textColorPrimary: classes.tabRoot }}
-                                        />
-                                    ))}
-                                </MaskTabList>
-                            </TabContext>
-                        </div>
-                    ) : null}
-                </div>
-                <div className={classes.content}>
-                    <ScopedDomainsContainer.Provider>{component}</ScopedDomainsContainer.Provider>
-                </div>
-                <div className={classes.footer}>
-                    <Icons.Web3ProfileCard className={classes.cardIcon} size={24} />
-                    <Typography className={classes.cardName}>{t('web3_profile_card_name')}</Typography>
-                    <Typography variant="body1" className={classes.powered}>
-                        <Trans
-                            i18nKey="powered_by_whom"
-                            values={{ whom: 'RSS3' }}
-                            components={{
-                                span: (
-                                    <Typography
-                                        fontWeight={700}
-                                        fontSize="inherit"
-                                        variant="body1"
-                                        component="strong"
-                                        color={(theme) => theme.palette.text.primary}
-                                    />
-                                ),
-                            }}
+            <ScopedDomainsContainer.Provider>
+                <div className={classes.root}>
+                    <div className={classes.header}>
+                        <ProfileCardTitle
+                            socialAccounts={socialAccounts}
+                            address={activeAddress}
+                            onAddressChange={setSelectedAddress}
+                            identity={identity}
                         />
-                    </Typography>
-                    <Icons.RSS3 size={24} sx={{ ml: '4px' }} />
+                        {tabs.length > 0 && currentTab ? (
+                            <div className={classes.tabs}>
+                                <TabContext value={currentTab}>
+                                    <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
+                                        {tabs.map((tab) => (
+                                            <Tab
+                                                key={tab.id}
+                                                label={tab.label}
+                                                value={tab.id}
+                                                classes={{ root: classes.tabRoot, textColorPrimary: classes.tabRoot }}
+                                            />
+                                        ))}
+                                    </MaskTabList>
+                                </TabContext>
+                            </div>
+                        ) : null}
+                    </div>
+                    <div className={classes.content}>{component}</div>
+                    <div className={classes.footer}>
+                        <Icons.Web3ProfileCard className={classes.cardIcon} size={24} />
+                        <Typography className={classes.cardName}>{t('web3_profile_card_name')}</Typography>
+                        <Typography variant="body1" className={classes.powered}>
+                            <Trans
+                                i18nKey="powered_by_whom"
+                                values={{ whom: 'RSS3' }}
+                                components={{
+                                    span: (
+                                        <Typography
+                                            fontWeight={700}
+                                            fontSize="inherit"
+                                            variant="body1"
+                                            component="strong"
+                                            color={(theme) => theme.palette.text.primary}
+                                        />
+                                    ),
+                                }}
+                            />
+                        </Typography>
+                        <Icons.RSS3 size={24} sx={{ ml: '4px' }} />
+                    </div>
                 </div>
-            </div>
+            </ScopedDomainsContainer.Provider>
         </DefaultWeb3ContextProvider>
     )
 })

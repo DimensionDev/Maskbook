@@ -1,12 +1,13 @@
-import { type PropsWithChildren, useCallback, memo } from 'react'
-import { groupBy, toPairs } from 'lodash-es'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
-import { TokenMenuList, AccountIcon, AddressItem, useTokenMenuCollectionList } from '@masknet/shared'
+import { AccountIcon, AddressItem, TokenMenuList, useTokenMenuCollectionList } from '@masknet/shared'
 import type { SocialAccount } from '@masknet/shared-base'
-import { type SearchResultType, isSameAddress } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Divider, Typography, MenuItem, Menu, type MenuProps } from '@mui/material'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
+import { isSameAddress, type SearchResultType } from '@masknet/web3-shared-base'
+import { Divider, Menu, MenuItem, Typography, type MenuProps } from '@mui/material'
+import { groupBy, toPairs } from 'lodash-es'
+import { memo, useCallback, type PropsWithChildren } from 'react'
 import { useSharedI18N } from '../../../locales/index.js'
 
 const MENU_ITEM_HEIGHT = 40
@@ -100,6 +101,7 @@ export const TokenWithSocialGroupMenu = memo(function TokenWithSocialGroupMenu({
     const { classes } = useStyles()
     const t = useSharedI18N()
 
+    const { setPair } = ScopedDomainsContainer.useContainer()
     const onSelect = useCallback(
         (value: Web3Helper.TokenResultAll, index: number) => {
             onTokenChange?.(value, index)
@@ -157,6 +159,7 @@ export const TokenWithSocialGroupMenu = memo(function TokenWithSocialGroupMenu({
                             value={x.address}
                             onClick={() => {
                                 onAddressChange?.(x.address)
+                                setPair(x.address, x.label)
                                 onClose?.()
                             }}>
                             <div className={classes.addressItem}>
