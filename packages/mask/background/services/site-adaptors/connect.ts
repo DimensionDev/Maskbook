@@ -42,7 +42,7 @@ export async function getSupportedOrigins(options: SitesQueryOptions = {}): Prom
         origins: string[]
     }>
 > {
-    return [...definedSiteAdaptors.values()]
+    return sortBy([...definedSiteAdaptors.values()], (x) => x.sortIndex)
         .filter((x) => (options.isSocialNetwork === undefined ? true : x.isSocialNetwork === options.isSocialNetwork))
         .map((x) => ({ networkIdentifier: x.networkIdentifier, origins: [...x.declarativePermissions.origins] }))
 }
@@ -64,6 +64,21 @@ export async function getOriginsWithoutPermission(options: SitesQueryOptions = {
         }
     })
     return compact(await Promise.all(promises))
+}
+
+export async function getOriginsWithPermission() {
+    const groups = await getSupportedOrigins()
+    const promises = groups.map(async ({ origins, networkIdentifier }) => {
+        const unGrantedOrigins = compact(
+            await Promise.all(origins.map((origin) => hasPermission(origin).then((yes) => (yes ? null : origin)))),
+        )
+        return {
+            networkIdentifier,
+            hasPermission: !unGrantedOrigins.length,
+        }
+    })
+
+    return Promise.all(promises)
 }
 
 export async function getSitesWithoutPermission(): Promise<SiteAdaptor.Definition[]> {
@@ -100,6 +115,11 @@ export async function setupSite(network: string, newTab: boolean) {
     return
 }
 
+export async function requestPermissionBySite(network: string) {
+    const worker = definedSiteAdaptors.get(network)
+    if (!worker) return
+    return requestSiteAdaptorsPermission([worker])
+}
 export async function connectSite(
     identifier: PersonaIdentifier,
     network: string,

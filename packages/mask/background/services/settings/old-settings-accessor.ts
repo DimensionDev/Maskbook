@@ -12,6 +12,7 @@ import {
     decentralizedSearchSettings,
     appearanceSettings,
     BooleanPreference,
+    InjectSwitchSettings,
 } from '@masknet/shared-base'
 import { queryPersonasDB } from '../../database/persona/web.js'
 
@@ -29,6 +30,7 @@ function create<T>(settings: ValueRefWithReady<T>) {
 export const [isTelemetryEnabled, setTelemetryEnabled] = create(telemetrySettings)
 export const [getTheme, setTheme] = create(appearanceSettings)
 export const [getLanguage, setLanguage] = create(languageSettings)
+export const [getInjectSwitchSettings, setInjectSwitchSettings] = create(InjectSwitchSettings)
 
 export async function getCurrentPersonaIdentifier(): Promise<PersonaIdentifier | undefined> {
     await currentPersonaIdentifier.readyPromise

@@ -29,6 +29,21 @@ export const pluginIDsSettings = createGlobalSettings<Record<EnhanceableSite | E
     isEqual,
 )
 
+export const InjectSwitchSettings = createGlobalSettings<Record<EnhanceableSite, boolean>>(
+    'InjectSwitchBySite',
+    {
+        [EnhanceableSite.Twitter]: true,
+        [EnhanceableSite.Facebook]: true,
+        [EnhanceableSite.Instagram]: true,
+        [EnhanceableSite.OpenSea]: true,
+        [EnhanceableSite.Minds]: true,
+        [EnhanceableSite.Localhost]: true,
+        [EnhanceableSite.Mirror]: true,
+        [EnhanceableSite.App]: true,
+    },
+    isEqual,
+)
+
 export const currentMaskWalletLockStatusSettings = createGlobalSettings<LockStatus>(
     `${PluginID.Wallet}+maskWalletLockStatus`,
     LockStatus.INIT,

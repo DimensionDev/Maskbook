@@ -1362,6 +1362,22 @@ export const Currency = /*#__PURE__*/ __createIcon('Currency', [
         s: true,
     },
 ])
+export const Dark = /*#__PURE__*/ __createIcon('Dark', [
+    {
+        u: () => new URL('./general/Dark.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 16 16',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fill: 'currentColor',
+                    d: 'M9.266 1.878a3.979 3.979 0 0 0 1.007 7.827 3.979 3.979 0 0 0 3.849-2.971 6.25 6.25 0 1 1-4.855-4.855Z',
+                }),
+            }),
+        s: true,
+    },
+])
 export const Decrease = /*#__PURE__*/ __createIcon('decrease', [
     {
         u: () => new URL('./general/decrease.svg', import.meta.url),
@@ -2789,6 +2805,22 @@ export const SuccessForSnackBar = /*#__PURE__*/ __createIcon('SuccessForSnackBar
         u: () => new URL('./general/SuccessForSnackBar.svg', import.meta.url),
     },
 ])
+export const Sun = /*#__PURE__*/ __createIcon('Sun', [
+    {
+        u: () => new URL('./general/Sun.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 16 16',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fill: 'currentColor',
+                    d: 'M8 12.992c.254 0 .466.183.51.425l.008.093v.972a.518.518 0 0 1-1.027.093l-.009-.093v-.972c0-.286.232-.518.518-.518Zm4.181-1.528.081.066.688.688a.518.518 0 0 1-.651.798l-.081-.066-.688-.688a.518.518 0 0 1 .651-.798Zm-7.711.066c.177.177.199.45.066.651l-.066.081-.688.688a.518.518 0 0 1-.798-.651l.066-.081.688-.688a.518.518 0 0 1 .732 0ZM8 4.296a3.704 3.704 0 1 1 0 7.408 3.704 3.704 0 0 1 0-7.408Zm6.482 3.186a.518.518 0 0 1 .093 1.027l-.093.009h-.972a.518.518 0 0 1-.093-1.027l.093-.009h.972Zm-11.992 0a.518.518 0 0 1 .093 1.027l-.093.009h-.972a.518.518 0 0 1-.093-1.027l.093-.009h.972ZM12.95 3.05c.177.177.199.45.066.651l-.066.081-.688.688a.518.518 0 0 1-.798-.651l.066-.081.688-.688a.518.518 0 0 1 .732 0ZM3.7 2.984l.081.066.688.688a.518.518 0 0 1-.651.798l-.081-.066-.688-.688a.518.518 0 0 1 .651-.798ZM8 1c.254 0 .466.183.51.425l.008.093v.972a.518.518 0 0 1-1.027.093l-.009-.093v-.972C7.482 1.232 7.714 1 8 1Z',
+                }),
+            }),
+        s: true,
+    },
+])
 export const Swap = /*#__PURE__*/ __createIcon('Swap', [
     {
         u: () => new URL('./general/Swap.svg', import.meta.url),
@@ -3599,6 +3631,21 @@ export const UnknownOut = /*#__PURE__*/ __createIcon('UnknownOut', [
         u: () => new URL('./rss3/UnknownOut.svg', import.meta.url),
     },
 ])
+export const CN = /*#__PURE__*/ __createIcon('CN', [
+    {
+        u: () => new URL('./settings/CN.svg', import.meta.url),
+    },
+])
+export const JP = /*#__PURE__*/ __createIcon('JP', [
+    {
+        u: () => new URL('./settings/JP.svg', import.meta.url),
+    },
+])
+export const KR = /*#__PURE__*/ __createIcon('KR', [
+    {
+        u: () => new URL('./settings/KR.svg', import.meta.url),
+    },
+])
 export const SettingsAppearance = /*#__PURE__*/ __createIcon('SettingsAppearance', [
     {
         c: ['dark'],
@@ -3677,5 +3724,10 @@ export const SettingsSync = /*#__PURE__*/ __createIcon('SettingsSync', [
     {
         c: ['light'],
         u: () => new URL('./settings/SettingsSync.light.svg', import.meta.url),
+    },
+])
+export const UK = /*#__PURE__*/ __createIcon('UK', [
+    {
+        u: () => new URL('./settings/UK.svg', import.meta.url),
     },
 ])

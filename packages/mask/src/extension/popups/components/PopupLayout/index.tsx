@@ -31,13 +31,14 @@ const GlobalCss = (
     />
 )
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     container: {
         height: '100%',
         minHeight: 600,
         overflow: 'auto',
         display: 'flex',
         flexDirection: 'column',
+        background: theme.palette.maskColor.bottom,
     },
     body: {
         flexGrow: 1,
@@ -49,7 +50,7 @@ const useStyles = makeStyles()({
         flexShrink: 0,
         flexGrow: 0,
     },
-})
+}))
 
 const PATTERNS = [
     PopupRoutes.Personas,

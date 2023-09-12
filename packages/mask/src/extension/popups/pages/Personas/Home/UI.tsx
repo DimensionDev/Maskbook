@@ -160,7 +160,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        background: theme.palette.maskColor.modalTitleBg,
+        background: theme.palette.maskColor.whiteBlue,
     },
 }))
 

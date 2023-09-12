@@ -157,6 +157,7 @@ export function connect_url() { return new URL("./general/Connect.svg", import.m
 export function contacts_url() { return new URL("./general/Contacts.svg", import.meta.url) }
 export function copy_url() { return new URL("./general/Copy.svg", import.meta.url) }
 export function currency_url() { return new URL("./general/Currency.svg", import.meta.url) }
+export function dark_url() { return new URL("./general/Dark.svg", import.meta.url) }
 export function decrease_url() { return new URL("./general/decrease.svg", import.meta.url) }
 export function default_token_dark_url() { return new URL("./general/DefaultToken.dark.svg", import.meta.url) }
 export function default_token_dim_url() { return new URL("./general/DefaultToken.dim.svg", import.meta.url) }
@@ -275,6 +276,7 @@ export function smart_pay_url() { return new URL("./general/SmartPay.svg", impor
 export function star_url() { return new URL("./general/Star.svg", import.meta.url) }
 export function success_url() { return new URL("./general/Success.svg", import.meta.url) }
 export function success_for_snack_bar_url() { return new URL("./general/SuccessForSnackBar.svg", import.meta.url) }
+export function sun_url() { return new URL("./general/Sun.svg", import.meta.url) }
 export function swap_url() { return new URL("./general/Swap.svg", import.meta.url) }
 export function swap_colorful_url() { return new URL("./general/SwapColorful.svg", import.meta.url) }
 export function switch_logo_dark_url() { return new URL("./general/SwitchLogo.dark.svg", import.meta.url) }
@@ -383,6 +385,9 @@ export function unknown_burn_url() { return new URL("./rss3/UnknownBurn.svg", im
 export function unknown_cancel_url() { return new URL("./rss3/UnknownCancel.svg", import.meta.url) }
 export function unknown_in_url() { return new URL("./rss3/UnknownIn.svg", import.meta.url) }
 export function unknown_out_url() { return new URL("./rss3/UnknownOut.svg", import.meta.url) }
+export function cn_url() { return new URL("./settings/CN.svg", import.meta.url) }
+export function jp_url() { return new URL("./settings/JP.svg", import.meta.url) }
+export function kr_url() { return new URL("./settings/KR.svg", import.meta.url) }
 export function settings_appearance_dark_url() { return new URL("./settings/SettingsAppearance.dark.svg", import.meta.url) }
 export function settings_appearance_light_url() { return new URL("./settings/SettingsAppearance.light.svg", import.meta.url) }
 export function settings_backup_dark_url() { return new URL("./settings/SettingsBackup.dark.svg", import.meta.url) }
@@ -399,3 +404,4 @@ export function settings_restore_dark_url() { return new URL("./settings/Setting
 export function settings_restore_light_url() { return new URL("./settings/SettingsRestore.light.svg", import.meta.url) }
 export function settings_sync_dark_url() { return new URL("./settings/SettingsSync.dark.svg", import.meta.url) }
 export function settings_sync_light_url() { return new URL("./settings/SettingsSync.light.svg", import.meta.url) }
+export function uk_url() { return new URL("./settings/UK.svg", import.meta.url) }

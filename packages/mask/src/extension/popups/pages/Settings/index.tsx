@@ -1,14 +1,17 @@
-import { Box, List, ListItem, ListItemText, Typography } from '@mui/material'
+import { Box, List, ListItem, ListItemText, Typography, useTheme } from '@mui/material'
 import { memo, useMemo } from 'react'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { useTitle } from '../../hooks/useTitle.js'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { NormalHeader } from '../../components/index.js'
+import { NormalHeader, useModalNavigate } from '../../components/index.js'
 import { env } from '@masknet/flags'
 import { useAppearance, useLanguage } from '../../../../../dashboard/pages/Personas/api.js'
 import { Appearance, LanguageOptions } from '@masknet/public-api'
 import { openWindow } from '@masknet/shared-base-ui'
+import { PopupModalRoutes } from '@masknet/shared-base'
+import { useSupportedSites } from '../../hooks/useSupportedSites.js'
+import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -87,8 +90,10 @@ const FAQ_LINK = 'realmasknetwork.notion.site'
 const HOME_LINK = 'Mask.io'
 
 const Settings = memo(function Settings() {
+    const theme = useTheme()
     const { t } = useI18N()
     const { classes } = useStyles()
+    const modalNavigate = useModalNavigate()
     const lang = useLanguage()
     const mode = useAppearance()
     useTitle(t('settings'))
@@ -122,6 +127,8 @@ const Settings = memo(function Settings() {
         [classes],
     )
 
+    const { data } = useSupportedSites()
+
     return (
         <>
             <NormalHeader />
@@ -139,7 +146,9 @@ const Settings = memo(function Settings() {
                         </Box>
                     </Box>
                     <List className={classes.list}>
-                        <ListItem className={classes.listItem}>
+                        <ListItem
+                            className={classes.listItem}
+                            onClick={() => modalNavigate(PopupModalRoutes.SelectLanguage)}>
                             <ListItemText
                                 classes={itemClasses}
                                 primary={t('popups_settings_language')}
@@ -147,7 +156,9 @@ const Settings = memo(function Settings() {
                             />
                             <Icons.ArrowRight size={24} />
                         </ListItem>
-                        <ListItem className={classes.listItem}>
+                        <ListItem
+                            className={classes.listItem}
+                            onClick={() => modalNavigate(PopupModalRoutes.SelectAppearance)}>
                             <ListItemText
                                 classes={itemClasses}
                                 primary={t('popups_settings_appearance')}
@@ -155,8 +166,22 @@ const Settings = memo(function Settings() {
                             />
                             <Icons.ArrowRight size={24} />
                         </ListItem>
-                        <ListItem className={classes.listItem}>
-                            <ListItemText classes={itemClasses} primary={t('popups_settings_supported_sites')} />
+                        <ListItem
+                            className={classes.listItem}
+                            onClick={() => modalNavigate(PopupModalRoutes.SupportedSitesModal)}>
+                            <ListItemText
+                                classes={itemClasses}
+                                primary={t('popups_settings_supported_sites')}
+                                secondary={
+                                    <Trans
+                                        i18nKey="popups_settings_supported_website"
+                                        components={{
+                                            strong: <span style={{ color: theme.palette.maskColor.main }} />,
+                                        }}
+                                        values={{ count: data?.filter((x) => x.allowInject && x.hasPermission).length }}
+                                    />
+                                }
+                            />
                             <Icons.ArrowRight size={24} />
                         </ListItem>
                     </List>

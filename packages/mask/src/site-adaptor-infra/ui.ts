@@ -40,6 +40,10 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
     assertNotEnvironment(Environment.ManifestBackground)
 
     console.log('Activating provider', ui_deferred.networkIdentifier)
+
+    const injectSwitchSettings = await Services.Settings.getInjectSwitchSettings()
+    if (!injectSwitchSettings[ui_deferred.networkIdentifier]) return
+
     configureSelectorMissReporter((name) => {
         const error = new Error(`Selector "${name}" does not match anything ${location.href}.`)
         error.stack = ''

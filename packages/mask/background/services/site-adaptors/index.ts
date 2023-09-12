@@ -4,7 +4,11 @@ export {
     getSupportedOrigins,
     getOriginsWithoutPermission,
     getSitesWithoutPermission,
+    getOriginsWithPermission,
+    requestPermissionBySite,
+    hasSetup,
+    setupSite,
+    connectSite,
 } from './connect.js'
 export { openProfilePage, openShareLink } from './open-page.js'
-export { hasSetup, setupSite, connectSite } from './connect.js'
 export { attachMaskSDKToCurrentActivePage, shouldSuggestConnectInPopup } from './sdk.js'
