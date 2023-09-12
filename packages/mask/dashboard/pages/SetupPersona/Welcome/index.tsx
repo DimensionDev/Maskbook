@@ -3,7 +3,6 @@ import { makeStyles } from '@masknet/theme'
 import { Checkbox, FormControlLabel, Typography } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import urlcat from 'urlcat'
 import Services from '#services'
 import { TermsAgreedContext } from '../../../hooks/useTermsAgreed.js'
 import { DashboardTrans, useDashboardI18N } from '../../../locales/index.js'
@@ -62,8 +61,8 @@ export const Welcome = memo(function Welcome() {
         const from = params.get('from')
         const hasRedirect = from && from !== DashboardRoutes.Personas
         if (hasRedirect) {
-            const search = params.get('search')
-            navigate(urlcat(from, search ? new URLSearchParams(search).entries() : {}))
+            const search = params.get('search') || ''
+            navigate(from + search)
             return
         }
 

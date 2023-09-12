@@ -17,7 +17,7 @@ import { Box } from '@mui/system'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { first, sortBy, uniq } from 'lodash-es'
 import { memo, useCallback, useMemo, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { sha3 } from 'web3-utils'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
@@ -26,6 +26,7 @@ import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { ResetWalletContext } from '../context.js'
 import Services from '#services'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -80,6 +81,8 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         password: string
         isReset: boolean
     }
+    const [params] = useSearchParams()
+    const external_request = params.get('external_request')
 
     const { mnemonic, password, isReset } = state
     // Avoid leaking mnemonic to react-query
@@ -172,8 +175,8 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         })
         await Services.Wallet.resolveMaskAccount([{ address: firstWallet }])
         Telemetry.captureEvent(EventType.Access, EventID.EntryPopupWalletImport)
-        navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
-    }, [mnemonic, wallets.length, isReset, password, mergedIndexes])
+        navigate(urlcat(DashboardRoutes.SignUpMaskWalletOnboarding, { external_request }), { replace: true })
+    }, [mnemonic, wallets.length, isReset, password, mergedIndexes, external_request])
 
     const onCheck = useCallback(async (checked: boolean, pathIndex: number) => {
         setPathIndexes((list) => {
@@ -183,8 +186,8 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
     }, [])
 
     const handleRecovery = useCallback(() => {
-        navigate(DashboardRoutes.CreateMaskWalletMnemonic)
-    }, [])
+        navigate(urlcat(DashboardRoutes.CreateMaskWalletMnemonic, { external_request }))
+    }, [navigate, external_request])
 
     const disabled = confirmLoading || isLoading || !mergedIndexes.length
 

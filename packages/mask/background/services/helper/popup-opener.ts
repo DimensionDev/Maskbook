@@ -56,13 +56,12 @@ async function openWindow(url: string): Promise<void> {
     }
 }
 async function openOrUpdatePopupWindow(route: PopupRoutes, params: ParamMap) {
-    const url = urlcat('popups.html#', route, params)
-    if (!currentPopupWindowId) return openWindow(url)
+    if (!currentPopupWindowId) return openWindow(urlcat('popups.html#', route, params))
 
     await browser.windows.update(currentPopupWindowId, { focused: true })
     MaskMessages.events.popupRouteUpdated.sendToAll(
         urlcat(route, {
-            closeAfterDone: true,
+            close_after_unlock: true,
             ...params,
         }),
     )
@@ -77,12 +76,12 @@ export async function openPopupWindow<T extends PopupRoutes>(
 ): Promise<void> {
     if (noWalletUnlockNeeded.includes(route) || evenWhenWalletLocked || !(await isLocked())) {
         return openOrUpdatePopupWindow(route, {
-            closeAfterDone: true,
+            close_after_unlock: true,
             ...params,
         })
     } else {
         return openOrUpdatePopupWindow(PopupRoutes.Unlock, {
-            closeAfterDone: true,
+            close_after_unlock: true,
             from: urlcat(route, params as ParamMap),
         } satisfies PopupRoutesParamsMap[PopupRoutes.Unlock])
     }

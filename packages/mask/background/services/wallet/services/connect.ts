@@ -43,21 +43,21 @@ export async function EIP2255_wallet_requestPermissions(
             )
         }
     }
-    if (!Providers[ProviderType.MaskWallet].wallets) {
-        await openPopupWindow(PopupRoutes.Wallet, {})
-        // TODO: we should connet the flow so that user can create a newly created wallet.
-        throw new MaskEthereumProviderRpcError(ErrorCode.InternalError, 'Wallet not created.')
-    }
     const id = Math.random().toString(36).slice(2)
     requests.set(id, {
         origin,
         request,
         promise: defer(),
     })
-    await openPopupWindow(PopupRoutes.SelectWallet, {
-        chainId: ChainId.Mainnet,
-        external_request: id,
-    })
+
+    if (!Providers[ProviderType.MaskWallet].wallets) {
+        await openPopupWindow(PopupRoutes.Wallet, { external_request: id })
+    } else {
+        await openPopupWindow(PopupRoutes.SelectWallet, {
+            chainId: ChainId.Mainnet,
+            external_request: id,
+        })
+    }
     return requests.get(id)!.promise[0]
 }
 export async function getEIP2255PermissionDetail(id: string) {

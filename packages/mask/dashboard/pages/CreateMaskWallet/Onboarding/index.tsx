@@ -10,6 +10,7 @@ import { PopupRoutes } from '@masknet/shared-base'
 
 import Services from '#services'
 import { OnboardingWriter } from '../../../components/OnboardingWriter/index.js'
+import { useSearchParams } from 'react-router-dom'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -68,11 +69,17 @@ const useStyles = makeStyles()((theme) => ({
 const Onboarding = memo(function Onboarding() {
     const t = useDashboardI18N()
     const { classes } = useStyles()
+    const [params] = useSearchParams()
+    const external_request = params.get('external_request')
 
     const onOpenPopupWallet = useCallback(async () => {
-        await Services.Helper.openPopupWindow(PopupRoutes.Wallet, {})
+        if (external_request) {
+            await Services.Helper.openPopupWindow(PopupRoutes.SelectWallet, { external_request })
+        } else {
+            await Services.Helper.openPopupWindow(PopupRoutes.Wallet, {})
+        }
         window.close()
-    }, [])
+    }, [external_request])
 
     const words = useMemo(() => {
         return [

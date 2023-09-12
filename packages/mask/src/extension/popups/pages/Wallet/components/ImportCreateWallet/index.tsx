@@ -6,6 +6,8 @@ import { memo } from 'react'
 import { useI18N } from '../../../../../../utils/index.js'
 import { useAsyncFn } from 'react-use'
 import Services from '#services'
+import urlcat from 'urlcat'
+import { useSearchParams } from 'react-router-dom'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -56,20 +58,22 @@ interface Props {
 export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onChoose }) {
     const { t } = useI18N()
     const { classes, cx, theme } = useStyles()
+    const [params] = useSearchParams()
+    const external_request = params.get('external_request')
     const [, handleChoose] = useAsyncFn(
         async (route: DashboardRoutes) => {
             const hasPassword = await Services.Wallet.hasPassword()
+            const url = urlcat(hasPassword ? route : DashboardRoutes.CreateMaskWalletForm, {
+                recover: route === DashboardRoutes.RecoveryMaskWallet && !hasPassword ? true : undefined,
+                external_request,
+            })
             await browser.tabs.create({
                 active: true,
-                url: browser.runtime.getURL(
-                    `/dashboard.html#${hasPassword ? route : DashboardRoutes.CreateMaskWalletForm}${
-                        route === DashboardRoutes.RecoveryMaskWallet && !hasPassword ? '?recover=true' : ''
-                    }`,
-                ),
+                url: browser.runtime.getURL(`/dashboard.html#${url}`),
             })
             onChoose?.(route)
         },
-        [onChoose],
+        [onChoose, external_request],
     )
 
     return (

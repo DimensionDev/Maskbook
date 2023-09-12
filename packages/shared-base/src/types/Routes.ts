@@ -99,7 +99,7 @@ export interface PopupRoutesParamsMap {
         source: string | undefined
     }
     [PopupRoutes.SelectWallet]: {
-        chainId: number
+        chainId?: number
         external_request?: string
     }
     [PopupRoutes.Personas]: {
@@ -108,7 +108,7 @@ export interface PopupRoutesParamsMap {
         from?: PopupModalRoutes
     }
     [PopupRoutes.Unlock]: {
-        closeAfterDone?: boolean
+        close_after_unlock?: boolean
         from?: string | null
     }
     [PopupRoutes.SetPaymentPassword]: {
@@ -119,8 +119,8 @@ export interface PopupRoutesParamsMap {
         source?: string
     }
     [PopupRoutes.Wallet]: {
-        closeAfterDone?: boolean
         isCreating?: boolean
+        external_request?: string
     }
     [PopupRoutes.ChangeOwner]: { contractAccount: string | undefined }
     [PopupRoutes.Contacts]: { selectedToken: string | undefined }
