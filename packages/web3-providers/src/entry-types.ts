@@ -41,13 +41,19 @@ export * from './types/Snapshot.js'
 export * from './types/PluginContext.js'
 export * from './types/Trader.js'
 
-// Implementations
+// Provider Implementations
 export * from './DeBank/types.js'
 export * from './Zerion/types.js'
 export * from './RSS3/types.js'
 export * from './GoPlusLabs/types.js'
 export * from './Web3/Router/types/index.js'
 export * from './RedPacket/types.js'
+export * from './Trader/types/0x.js'
+export * from './Trader/types/balancer.js'
+export * from './Trader/types/bancor.js'
+export * from './Trader/types/dodo.js'
+export * from './Trader/types/openocean.js'
+export * from './Trader/types/uniswap.js'
 
 export type { ConnectionOptions_Base } from './Web3/Base/apis/ConnectionOptionsAPI.js'
 export type { HubOptions_Base } from './Web3/Base/apis/HubOptionsAPI.js'

@@ -4,8 +4,8 @@ import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { pick } from 'lodash-es'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Bancor, Web3 } from '@masknet/web3-providers'
+import type { SwapBancorRequest, TradeComputed } from '@masknet/web3-providers/types'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import type { SwapBancorRequest, TradeComputed } from '../../types/index.js'
 
 export function useTradeGasLimit(tradeComputed: TradeComputed<SwapBancorRequest> | null): AsyncState<string> {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

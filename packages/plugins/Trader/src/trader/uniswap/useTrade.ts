@@ -5,9 +5,9 @@ import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { uniswap } from '@masknet/web3-providers/helpers'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { TradeStrategy } from '@masknet/web3-providers/types'
 import { useV2BestTradeExactIn, useV2BestTradeExactOut } from './useV2BestTrade.js'
 import { useV3BestTradeExactIn, useV3BestTradeExactOut } from './useV3BestTrade.js'
-import { TradeStrategy } from '../../types/index.js'
 
 function useTrade(
     strategy: TradeStrategy = TradeStrategy.ExactIn,

@@ -5,8 +5,8 @@ import { isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { OpenOcean } from '@masknet/web3-providers'
+import type { SwapOOData, TradeStrategy } from '@masknet/web3-providers/types'
 import { OPENOCEAN_SUPPORTED_CHAINS } from './constants.js'
-import type { SwapOOData, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
 
 export function useTrade(

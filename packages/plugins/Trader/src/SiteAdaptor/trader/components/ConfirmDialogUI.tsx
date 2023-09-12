@@ -9,7 +9,7 @@ import { FormattedBalance, InjectedDialog, TokenIcon, PluginWalletStatusBar, Dot
 import { makeStyles, MaskColorVar, parseColor } from '@masknet/theme'
 import { formatBalance, formatCurrency, formatPercentage, isZero } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { TradeComputed } from '../../../types/index.js'
+import type { TradeComputed } from '@masknet/web3-providers/types'
 import { ONE_BIPS, MIN_SLIPPAGE, MAX_SLIPPAGE } from '../../../constants/index.js'
 import { useI18N } from '../../../locales/index.js'
 

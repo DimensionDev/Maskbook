@@ -7,12 +7,13 @@ import type { Currency, Token } from '@uniswap/sdk-core'
 import { FeeAmount, Pool, type Route, computePoolAddress, encodeRouteToPath, Trade } from '@uniswap/v3-sdk'
 import { isZero } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { PoolState, type Trade as TradeResult } from './types/uniswap.js'
 import { getTradeContext } from './helpers/trade.js'
 import { computeAllRoutes } from './helpers/uniswap.js'
-import { PoolState, type TradeContext, type Trade as TradeResult } from '../types/Trader.js'
-import { UniSwapV2Like } from './UniSwapV2.js'
+import type { TradeContext } from '../types/Trader.js'
+import { UniSwapV2LikeAPI } from './UniSwapV2.js'
 
-export class UniSwapV3Like extends UniSwapV2Like {
+export class UniSwapV3LikeAPI extends UniSwapV2LikeAPI {
     constructor() {
         super(TradeProvider.UNISWAP_V3)
     }

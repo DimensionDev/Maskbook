@@ -17,7 +17,7 @@ import { useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-sc
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
 import type { TraderAPI } from '@masknet/web3-providers/types'
 import { InputTokenPanel } from './InputTokenPanel.js'
-import { TokenPanelType } from '../../types/index.js'
+import { TokenPanel } from '../../types/index.js'
 import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
@@ -178,7 +178,7 @@ export interface AllTradeFormProps extends withClasses<'root'> {
     outputToken?: Web3Helper.FungibleTokenAll
     inputTokenBalance?: string
     onInputAmountChange: (amount: string) => void
-    onTokenChipClick?: (token: TokenPanelType) => void
+    onTokenChipClick?: (token: TokenPanel) => void
     onRefreshClick?: () => void
     trades: Array<AsyncStateRetry<TraderAPI.TradeInfo>>
     focusedTrade?: AsyncStateRetry<TraderAPI.TradeInfo>
@@ -367,8 +367,8 @@ export const TradeForm = memo<AllTradeFormProps>(
                         maxAmount={maxAmount}
                         SelectTokenChip={{
                             ChipProps: {
-                                onClick: () => onTokenChipClick(TokenPanelType.Input),
-                                onDelete: () => onTokenChipClick(TokenPanelType.Input),
+                                onClick: () => onTokenChipClick(TokenPanel.Input),
+                                onDelete: () => onTokenChipClick(TokenPanel.Input),
                                 deleteIcon: (
                                     <Icons.Drop
                                         className={cx(classes.dropIcon, !inputToken ? classes.whiteDrop : null)}
@@ -394,8 +394,8 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 }}
                                 token={outputToken}
                                 ChipProps={{
-                                    onClick: () => onTokenChipClick(TokenPanelType.Output),
-                                    onDelete: () => onTokenChipClick(TokenPanelType.Output),
+                                    onClick: () => onTokenChipClick(TokenPanel.Output),
+                                    onDelete: () => onTokenChipClick(TokenPanel.Output),
                                     deleteIcon: (
                                         <Icons.Drop
                                             className={cx(classes.dropIcon, !outputToken ? classes.whiteDrop : null)}

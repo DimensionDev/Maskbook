@@ -7,7 +7,7 @@ import { TradeProvider } from '@masknet/public-api'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { TokenType, isGreaterThan, isSameAddress, pow10 } from '@masknet/web3-shared-base'
 import { type ChainId, WNATIVE, SchemaType, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import type { Trade } from '../../types/Trader.js'
+import type { Trade } from '../types/uniswap.js'
 import { INPUT_FRACTION_AFTER_FEE, ONE_HUNDRED_PERCENT } from '../constants/index.js'
 
 export function toUniswapChainId(chainId: ChainId) {

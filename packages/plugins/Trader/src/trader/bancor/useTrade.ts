@@ -3,10 +3,10 @@ import { useTraderConstants, ChainId, isNativeTokenAddress } from '@masknet/web3
 import { leftShift } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useCustomBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
-import { type SwapBancorRequest, TradeStrategy } from '../../types/index.js'
-import { useSlippageTolerance } from './useSlippageTolerance.js'
 import { Bancor } from '@masknet/web3-providers'
+import { type SwapBancorRequest, TradeStrategy } from '@masknet/web3-providers/types'
+import { useChainContext, useCustomBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useSlippageTolerance } from './useSlippageTolerance.js'
 
 export function useTrade(
     strategy: TradeStrategy,

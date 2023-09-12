@@ -8,8 +8,8 @@ import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import { uniswap } from '@masknet/web3-providers/helpers'
+import type { SwapCall, Trade, TradeComputed } from '@masknet/web3-providers/types'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters.js'
-import type { SwapCall, Trade, TradeComputed } from '../../types/index.js'
 import { useSwapErrorCallback } from '../../SiteAdaptor/trader/hooks/useSwapErrorCallback.js'
 
 interface FailedCall {

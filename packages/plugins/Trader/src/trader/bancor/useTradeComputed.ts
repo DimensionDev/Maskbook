@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
-import { rightShift, ZERO } from '@masknet/web3-shared-base'
-import type { SwapBancorRequest, TradeComputed, TradeStrategy } from '../../types/index.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { rightShift, ZERO } from '@masknet/web3-shared-base'
+import type { SwapBancorRequest, TradeComputed, TradeStrategy } from '@masknet/web3-providers/types'
+
 export function useTradeComputed(
     trade: SwapBancorRequest | null,
     strategy: TradeStrategy,

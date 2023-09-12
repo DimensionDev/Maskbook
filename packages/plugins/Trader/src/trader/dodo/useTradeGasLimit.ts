@@ -4,9 +4,9 @@ import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import { pick } from 'lodash-es'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
+import type { SwapRouteData, TradeComputed } from '@masknet/web3-providers/types'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Transaction } from '@masknet/web3-shared-evm'
-import type { SwapRouteData, TradeComputed } from '../../types/index.js'
 
 export function useTradeGasLimit(tradeComputed: TradeComputed<SwapRouteData> | null): AsyncState<string> {
     const { pluginID } = useNetworkContext()

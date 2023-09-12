@@ -2,7 +2,7 @@ import { useAsyncFn } from 'react-use'
 import { useWeb3Others } from '@masknet/web3-hooks-base'
 import type { GasConfig, ChainId } from '@masknet/web3-shared-evm'
 import { useNativeTokenWrapperCallback } from '@masknet/web3-hooks-evm'
-import { type TradeComputed, TradeStrategy } from '../../types/index.js'
+import { TradeStrategy, type TradeComputed } from '@masknet/web3-providers/types'
 import type { NativeTokenWrapper } from './useTradeComputed.js'
 
 export function useTradeCallback(

@@ -6,8 +6,8 @@ import { isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainResolver, ZeroX } from '@masknet/web3-providers'
+import { type SwapQuoteResponse, TradeStrategy } from '@masknet/web3-providers/types'
 import { useSlippageTolerance } from '../0x/useSlippageTolerance.js'
-import { type SwapQuoteResponse, TradeStrategy } from '../../types/index.js'
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 

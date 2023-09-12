@@ -3,7 +3,7 @@ import { Trade as V2Trade } from '@uniswap/v2-sdk'
 import { TradeType } from '@uniswap/sdk-core'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { uniswap } from '@masknet/web3-providers/helpers'
-import { type Trade, type TradeComputed, TradeStrategy } from '../../types/index.js'
+import { type Trade, type TradeComputed, TradeStrategy } from '@masknet/web3-providers/types'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
 import { useTradeBreakdown } from './useTradeBreakdown.js'
 

@@ -129,7 +129,11 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
     const { isCollectionProjectPopper, isTokenTagPopper } = useContext(TrendingViewContext)
     const { classes } = useStyles({ isPopper: isCollectionProjectPopper || isTokenTagPopper, themeMode })
     const Others = useWeb3Others(result.pluginID)
-    const { activities, fetchMore, loading } = useNonFungibleTokenActivities(result.pluginID, id, chainId)
+    const { activities, fetchActivities, loadingActivities } = useNonFungibleTokenActivities(
+        result.pluginID,
+        id,
+        chainId,
+    )
     const headCellMap: Record<Cells, string> = {
         nft: t.plugin_trader_table_nft(),
         method: t.plugin_trader_table_method(),
@@ -217,7 +221,7 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
 
     return (
         <TableContainer className={classes.container} ref={containerRef}>
-            {activities.length === 0 && loading ? (
+            {activities.length === 0 && loadingActivities ? (
                 <Stack height={298} width={566} alignItems="center" justifyContent="center">
                     <LoadingBase />
                     <Typography fontSize="14px" mt={1.5}>
@@ -258,8 +262,10 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
                     </Table>
 
                     <Stack py={1} className={classes.loadMore}>
-                        <ElementAnchor callback={fetchMore}>
-                            {activities.length > 0 && loading ? <LoadingBase className={classes.loadMoreIcon} /> : null}
+                        <ElementAnchor callback={fetchActivities}>
+                            {activities.length > 0 && loadingActivities ? (
+                                <LoadingBase className={classes.loadMoreIcon} />
+                            ) : null}
                         </ElementAnchor>
                     </Stack>
                 </>

@@ -7,7 +7,7 @@ import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import { Bancor, Web3 } from '@masknet/web3-providers'
-import type { SwapBancorRequest, TradeComputed } from '../../types/index.js'
+import type { SwapBancorRequest, TradeComputed } from '@masknet/web3-providers/types'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest> | null, gasConfig?: GasConfig) {
     const { pluginID } = useNetworkContext()

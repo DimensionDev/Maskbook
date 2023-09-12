@@ -5,8 +5,8 @@ import stringify from 'json-stable-stringify'
 import type { GasConfig, Transaction } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
+import type { SwapQuoteResponse, TradeComputed } from '@masknet/web3-providers/types'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import type { SwapQuoteResponse, TradeComputed } from '../../types/index.js'
 import { SUPPORTED_CHAIN_ID_LIST } from './constants.js'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse> | null, gasConfig?: GasConfig) {

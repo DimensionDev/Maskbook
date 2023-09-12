@@ -1,8 +1,3 @@
-import type { BigNumber } from 'bignumber.js'
-import type { ChainIdOptionalRecord } from '@masknet/web3-shared-evm'
-import type { TradeProvider } from '@masknet/public-api'
-import type { Web3Helper } from '@masknet/web3-helpers'
-
 export enum WarningLevel {
     LOW = 1,
     MEDIUM = 2,
@@ -11,12 +6,17 @@ export enum WarningLevel {
     BLOCKED = 5,
 }
 
-export enum ContentTabs {
+export enum ContentTab {
     Market = 'market',
     Price = 'price',
     Exchange = 'exchange',
     Swap = 'swap',
     NFTItems = 'nft-items',
+}
+
+export enum TokenPanel {
+    Input = 0,
+    Output = 1,
 }
 
 // ZRX supported source swap list
@@ -87,48 +87,4 @@ export enum ZrxTradePool {
     DefiKingdoms = 'DefiKingdoms',
     YumiSwap = 'YumiSwap',
     AstarExchange = 'AstarExchange',
-}
-
-export interface TradeComputed<T = unknown> {
-    strategy: TradeStrategy
-    inputToken?: Web3Helper.FungibleTokenAll
-    outputToken?: Web3Helper.FungibleTokenAll
-    inputAmount: BigNumber
-    outputAmount: BigNumber
-    executionPrice: BigNumber
-    priceImpact: BigNumber
-    maximumSold: BigNumber
-    minimumReceived: BigNumber
-    fee: BigNumber
-    path?: Array<
-        Array<
-            | PartialRequired<Web3Helper.FungibleTokenAll, 'address'>
-            | PartialRequired<Web3Helper.FungibleTokenAll, 'address'>
-        >
-    >
-    trade_?: T
-}
-
-export enum TradeStrategy {
-    ExactIn = 0,
-    ExactOut = 1,
-}
-
-export enum TokenPanelType {
-    Input = 0,
-    Output = 1,
-}
-
-export interface TradeContext {
-    TYPE: TradeProvider
-    IS_UNISWAP_V2_LIKE?: boolean
-    IS_UNISWAP_V3_LIKE?: boolean
-    GRAPH_API?: string
-    INIT_CODE_HASH?: string
-    ROUTER_CONTRACT_ADDRESS?: string
-    FACTORY_CONTRACT_ADDRESS?: string
-    SPENDER_CONTRACT_ADDRESS?: string
-    ADDITIONAL_TOKENS?: ChainIdOptionalRecord<Record<string, Web3Helper.FungibleTokenAll[]>>
-    AGAINST_TOKENS?: ChainIdOptionalRecord<Web3Helper.FungibleTokenAll[]>
-    CUSTOM_TOKENS?: ChainIdOptionalRecord<Record<string, Web3Helper.FungibleTokenAll[]>>
 }

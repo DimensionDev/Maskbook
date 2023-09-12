@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
+import { TradeProvider } from '@masknet/public-api'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { type FungibleToken, ZERO } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import { TradeProvider } from '@masknet/public-api'
-import type { SwapQuoteResponse, TradeComputed } from '../types/index.js'
+import type { SwapQuoteResponse, TradeComputed } from '@masknet/web3-providers/types'
 import { useGetTradeContext } from './useGetTradeContext.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 

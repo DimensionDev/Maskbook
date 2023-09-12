@@ -12,8 +12,9 @@ import {
     useWeb3Others,
     useNetworkContext,
 } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import type { TradeComputed } from '@masknet/web3-providers/types'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting.js'
 import { currentSlippageSettings } from '../../settings.js'
 import { ConfirmDialogUI } from './components/ConfirmDialogUI.js'
@@ -21,7 +22,6 @@ import { PriceImpactDialogUI } from './components/PriceImpactDialogUI.js'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
 import { PluginTraderMessages } from '../../messages.js'
-import type { TradeComputed } from '../../types/index.js'
 
 export interface ConfirmDialogProps {
     open: boolean

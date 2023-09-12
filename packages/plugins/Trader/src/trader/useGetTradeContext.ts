@@ -1,9 +1,9 @@
-import { getTraderConstants } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
-import { TradeProvider } from '@masknet/public-api'
 import { unreachable } from '@masknet/kit'
+import { getTraderConstants } from '@masknet/web3-shared-evm'
+import { TradeProvider } from '@masknet/public-api'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import type { TradeContext as TradeContext_ } from '../types/index.js'
+import type { TradeContext } from '@masknet/web3-providers/types'
 import {
     PANCAKESWAP_BASE_AGAINST_TOKENS,
     PANCAKESWAP_CUSTOM_BASES,
@@ -35,7 +35,7 @@ import {
 
 export function useGetTradeContext(tradeProvider?: TradeProvider) {
     const { chainId } = useChainContext()
-    return useMemo<TradeContext_ | null>(() => {
+    return useMemo<TradeContext | null>(() => {
         const DEX_TRADE = getTraderConstants(chainId)
         switch (tradeProvider) {
             case TradeProvider.UNISWAP_V2:

@@ -5,8 +5,7 @@ import { isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Balancer } from '@masknet/web3-providers'
-import { BALANCER_SWAP_TYPE } from '../../constants/index.js'
-import { type SwapResponse, TradeStrategy } from '../../types/index.js'
+import { type SwapResponse, TradeStrategy, BALANCER_SWAP_TYPE } from '@masknet/web3-providers/types'
 
 export function useTrade(
     strategy: TradeStrategy,

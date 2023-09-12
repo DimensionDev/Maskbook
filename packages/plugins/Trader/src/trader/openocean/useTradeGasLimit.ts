@@ -6,7 +6,7 @@ import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Transaction } from '@masknet/web3-shared-evm'
 import { Web3 } from '@masknet/web3-providers'
-import type { SwapOOData, TradeComputed } from '../../types/index.js'
+import type { SwapOOData, TradeComputed } from '@masknet/web3-providers/types'
 
 export function useTradeGasLimit(tradeComputed: TradeComputed<SwapOOData> | null): AsyncState<string> {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

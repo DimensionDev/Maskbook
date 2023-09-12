@@ -30,6 +30,14 @@ import {
     UNISWAP_BIPS_BASE,
 } from './constants/index.js'
 import {
+    PairState,
+    type FailedCall,
+    type SuccessfulCall,
+    type SwapCallEstimate,
+    type TokenPair,
+    type Trade,
+} from './types/uniswap.js'
+import {
     computeRealizedLPFeePercent,
     swapCallParameters,
     swapErrorToUserReadableMessage,
@@ -42,19 +50,9 @@ import {
     uniswapPriceTo,
     uniswapTokenTo,
 } from './helpers/uniswap.js'
-import {
-    PairState,
-    type TokenPair,
-    type Trade,
-    TradeStrategy,
-    type TradeComputed,
-    type SwapCallEstimate,
-    type SuccessfulCall,
-    type FailedCall,
-    type TraderAPI,
-} from '../types/Trader.js'
+import { TradeStrategy, type TradeComputed, type TraderAPI } from '../types/Trader.js'
 
-export class UniSwapV2Like implements TraderAPI.Provider {
+export class UniSwapV2LikeAPI implements TraderAPI.Provider {
     protected Web3 = new ConnectionReadonlyAPI()
     protected Contract = new ContractReadonlyAPI()
     protected Multicall = new MulticallAPI()

@@ -1,13 +1,21 @@
 import { noop } from 'lodash-es'
+import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn.js'
 import type { Trade as V2Trade } from '@uniswap/v2-sdk'
 import type { Trade as V3Trade } from '@uniswap/v3-sdk'
 import type { Currency, TradeType } from '@uniswap/sdk-core'
 import { unreachable } from '@masknet/kit'
 import { TradeProvider } from '@masknet/public-api'
 import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
-import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn.js'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import type {
+    SwapQuoteResponse,
+    SwapResponse,
+    SwapBancorRequest,
+    SwapRouteSuccessResponse,
+    TradeComputed,
+    SwapOOSuccessResponse,
+} from '@masknet/web3-providers/types'
 import { useTradeCallback as useNativeTokenWrapperCallback } from './native/useTradeCallback.js'
 import { useTradeCallback as useZrxCallback } from './0x/useTradeCallback.js'
 import { useTradeCallback as useUniswapCallback } from './uniswap/useTradeCallback.js'
@@ -19,14 +27,6 @@ import { useExchangeProxyContract } from '../contracts/balancer/useExchangeProxy
 import type { NativeTokenWrapper } from './native/useTradeComputed.js'
 import { isNativeTokenWrapper } from '../helpers/isNativeTokenWrapper.js'
 import { useGetTradeContext } from './useGetTradeContext.js'
-import type {
-    SwapQuoteResponse,
-    SwapResponse,
-    SwapBancorRequest,
-    SwapRouteSuccessResponse,
-    TradeComputed,
-    SwapOOSuccessResponse,
-} from '../types/index.js'
 
 export function useTradeCallback(
     provider?: TradeProvider,

@@ -27,7 +27,7 @@ import { isNativeTokenWrapper } from '../../helpers/isNativeTokenWrapper.js'
 import { PluginTraderMessages } from '../../messages.js'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { useTradeCallback } from '../../trader/useTradeCallback.js'
-import { TokenPanelType } from '../../types/index.js'
+import { TokenPanel } from '../../types/index.js'
 import { useSortedTrades } from './hooks/useSortedTrades.js'
 import { useUpdateBalance } from './hooks/useUpdateBalance.js'
 import { TradeForm } from './TradeForm.js'
@@ -170,7 +170,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const excludeTokens = [inputToken, outputToken].filter(Boolean).map((x) => x?.address) as string[]
 
     const onTokenChipClick = useCallback(
-        async (panelType: TokenPanelType) => {
+        async (panelType: TokenPanel) => {
             if (!account) {
                 SelectProviderModal.open()
                 return
@@ -183,7 +183,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             if (!picked) return
             dispatchTradeStore({
                 type:
-                    panelType === TokenPanelType.Input
+                    panelType === TokenPanel.Input
                         ? AllProviderTradeActionType.UPDATE_INPUT_TOKEN
                         : AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
                 token: picked,

@@ -1,12 +1,12 @@
 import { useAsyncFn } from 'react-use'
 import { toHex } from 'web3-utils'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { Web3 } from '@masknet/web3-providers'
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy.js'
 import { type GasConfig, useTraderConstants, ContractTransaction } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { Web3 } from '@masknet/web3-providers'
+import { TradeStrategy, type SwapResponse, type TradeComputed } from '@masknet/web3-providers/types'
 import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
-import { type SwapResponse, type TradeComputed, TradeStrategy } from '../../types/index.js'
 import { useTradeAmount } from './useTradeAmount.js'
 
 export function useTradeCallback(

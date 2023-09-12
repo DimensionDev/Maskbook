@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { uniswap } from '@masknet/web3-providers/helpers'
-import type { Trade } from '../../types/index.js'
+import type { Trade } from '@masknet/web3-providers/types'
 
 export function useTradeBreakdown(trade: Trade | null) {
     return useMemo(() => {

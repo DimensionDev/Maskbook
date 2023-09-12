@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { ZERO } from '@masknet/web3-shared-base'
-import type { SwapQuoteResponse, TradeComputed, TradeStrategy } from '../../types/index.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { SwapQuoteResponse, TradeComputed, TradeStrategy } from '@masknet/web3-providers/types'
 
 export function useTradeComputed(
     trade: SwapQuoteResponse | null,

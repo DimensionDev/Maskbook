@@ -6,7 +6,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { GasConfig, Transaction } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
-import type { SwapOOSuccessResponse, TradeComputed } from '../../types/index.js'
+import type { SwapOOSuccessResponse, TradeComputed } from '@masknet/web3-providers/types'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapOOSuccessResponse> | null, gasConfig?: GasConfig) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

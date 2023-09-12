@@ -1,5 +1,5 @@
 import { ChainId, DAIe, ETHER, PNG, USDCe, USDTe, WBTCe, WNATIVE, WNATIVE_ONLY } from '@masknet/web3-shared-evm'
-import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types.js'
+import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from '@masknet/web3-providers/types'
 
 /**
  * Some tokens can only be swapped via certain pairs,

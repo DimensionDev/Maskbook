@@ -5,9 +5,8 @@ import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useNativeTokenWrapperContract } from '@masknet/web3-hooks-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { TradeComputed } from '../types/index.js'
+import { type TradeComputed, TradeStrategy } from '@masknet/web3-providers/types'
 import type { NativeTokenWrapper } from './native/useTradeComputed.js'
-import { TradeStrategy } from '../types/index.js'
 
 export function useNativeTradeGasLimit(
     trade: TradeComputed<NativeTokenWrapper> | null,
