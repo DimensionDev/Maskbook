@@ -41,8 +41,8 @@ export default function DashboardRoot(props: React.PropsWithChildren<{}>) {
     // #endregion
 
     return (
-        <RootWeb3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
-            <QueryClientProvider client={queryClient}>
+        <QueryClientProvider client={queryClient}>
+            <RootWeb3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
                 {process.env.NODE_ENV === 'development' ? (
                     <ReactQueryDevtools position="bottom-right" toggleButtonProps={{ style: { width: 24 } }} />
                 ) : null}
@@ -66,7 +66,7 @@ export default function DashboardRoot(props: React.PropsWithChildren<{}>) {
                         </ThemeProvider>
                     </StyledEngineProvider>
                 </I18NextProviderHMR>
-            </QueryClientProvider>
-        </RootWeb3ContextProvider>
+            </RootWeb3ContextProvider>
+        </QueryClientProvider>
     )
 }
