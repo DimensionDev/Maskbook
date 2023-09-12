@@ -861,7 +861,6 @@ export namespace Plugin.SiteAdaptor {
 
     export interface SettingsTabUIProps {
         onClose: () => void
-        // onOpenPopup: (route?: PopupRoutes, params?: Record<string, any>) => void
         bindingWallets?: BindingProof[]
         currentPersona?: ECKeyIdentifier
         pluginID: PluginID
