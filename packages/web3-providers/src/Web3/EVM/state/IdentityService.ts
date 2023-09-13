@@ -334,7 +334,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
 
         const handle = identity.identifier?.userId
         const verifiedResult = await Promise.allSettled(
-            uniqBy(identities, (x) => x.address.toLowerCase()).map(async (x) => {
+            identities.map(async (x) => {
                 const address = x.address.toLowerCase()
                 const isReliable = await Firefly.verifyTwitterHandlerByAddress(address, handle)
                 return isReliable ? address : null

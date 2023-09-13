@@ -12,7 +12,7 @@ import { CrossIsolationMessages, EMPTY_LIST, type SocialAccount, type SocialIden
 import { useAnchor } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useWeb3Others } from '@masknet/web3-hooks-base'
+import { ScopedDomainsContainer, useChainContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -138,7 +138,12 @@ export const ProfileBar = memo<ProfileBarProps>(
                 window.removeEventListener('scroll', closeMenu, false)
             }
         }, [])
-        const selectedAddress = socialAccounts.find((x) => isSameAddress(x.address, address))
+        const selectedAccount = socialAccounts.find((x) => isSameAddress(x.address, address))
+        const { setPair } = ScopedDomainsContainer.useContainer()
+        useEffect(() => {
+            if (!selectedAccount?.address || !selectedAccount.label) return
+            setPair(selectedAccount?.address, selectedAccount?.label)
+        }, [selectedAccount])
 
         return (
             <Box className={cx(classes.root, className)} {...rest}>
@@ -169,7 +174,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                     {address ? (
                         <div className={classes.addressRow}>
                             <AddressItem
-                                socialAccount={selectedAddress}
+                                socialAccount={selectedAccount}
                                 disableLinkIcon
                                 TypographyProps={{ className: classes.address }}
                             />
