@@ -43,6 +43,7 @@ import {
     SelectLanguageModal,
     SelectAppearanceModal,
     SupportedSitesModal,
+    ChangeBackupPasswordModal,
 } from './modals/index.js'
 import SwitchWallet from './pages/Wallet/SwitchWallet/index.js'
 import { noop } from 'lodash-es'
@@ -143,6 +144,10 @@ const PopupRoutes = memo(function PopupRoutes() {
                             <Route
                                 path={PopupModalRoutes.SupportedSitesModal}
                                 element={wrapModal(<SupportedSitesModal />)}
+                            />
+                            <Route
+                                path={PopupModalRoutes.ChangeBackupPassword}
+                                element={wrapModal(<ChangeBackupPasswordModal />)}
                             />
                         </Routes>
                     ) : null}

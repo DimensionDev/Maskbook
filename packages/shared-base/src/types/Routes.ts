@@ -40,6 +40,7 @@ export enum PopupModalRoutes {
     SelectLanguage = '/modal/select-language',
     SelectAppearance = '/modal/select-appearance',
     SupportedSitesModal = '/modal/supported-sites',
+    ChangeBackupPassword = '/modal/change-backup-password',
 }
 
 export enum PopupRoutes {

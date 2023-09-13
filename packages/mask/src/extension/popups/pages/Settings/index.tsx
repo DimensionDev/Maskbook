@@ -12,6 +12,7 @@ import { openWindow } from '@masknet/shared-base-ui'
 import { PopupModalRoutes } from '@masknet/shared-base'
 import { useSupportedSites } from '../../hooks/useSupportedSites.js'
 import { Trans } from 'react-i18next'
+import { UserContext } from '../../hooks/useUserContext.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -71,6 +72,9 @@ const useStyles = makeStyles()((theme) => ({
             borderBottom: 'none',
         },
     },
+    listItemText: {
+        margin: 0,
+    },
     listItemPrimaryText: {
         color: theme.palette.maskColor.third,
         fontSize: 12,
@@ -94,8 +98,12 @@ const Settings = memo(function Settings() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const modalNavigate = useModalNavigate()
+
     const lang = useLanguage()
     const mode = useAppearance()
+
+    const { user } = UserContext.useContainer()
+
     useTitle(t('settings'))
 
     const LANGUAGE_OPTIONS_MAP = useMemo(
@@ -121,6 +129,7 @@ const Settings = memo(function Settings() {
 
     const itemClasses = useMemo(
         () => ({
+            root: classes.listItemText,
             primary: classes.listItemPrimaryText,
             secondary: classes.listItemSecondaryText,
         }),
@@ -225,11 +234,23 @@ const Settings = memo(function Settings() {
                             />
                             <Icons.ArrowRight size={24} />
                         </ListItem>
-                        <ListItem className={classes.listItem}>
+                        <ListItem
+                            className={classes.listItem}
+                            onClick={() =>
+                                modalNavigate(
+                                    user.backupPassword
+                                        ? PopupModalRoutes.ChangeBackupPassword
+                                        : PopupModalRoutes.SetBackupPassword,
+                                )
+                            }>
                             <ListItemText
                                 classes={itemClasses}
-                                primary={t('popups_settings_restore_database')}
-                                secondary={t('popups_settings_backup_password')}
+                                primary={t('popups_settings_backup_password')}
+                                secondary={
+                                    user.backupPassword
+                                        ? t('popups_settings_set_backup_password')
+                                        : t('popups_settings_backup_password')
+                                }
                             />
                             <Icons.ArrowRight size={24} />
                         </ListItem>

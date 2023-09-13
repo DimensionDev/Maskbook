@@ -26,8 +26,8 @@ const useStyles = makeStyles()((theme) => ({
         minWidth: 24,
         height: 12,
         '& > *': {
-            width: 16,
-            height: 12,
+            width: '16px !important',
+            height: '12px !important',
         },
     },
     text: {
