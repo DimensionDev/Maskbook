@@ -11,8 +11,8 @@ export const base: Plugin.Shared.Definition = {
     },
     publisher: DEFAULT_PLUGIN_PUBLISHER,
     enableRequirement: {
-        supports: { type: 'opt-out', sites: {} },
-        target: 'stable',
+        supports: { type: 'opt-in', sites: {} },
+        target: 'insider',
     },
     contribution: { postContent: new Set([/https:\/\/app.cyberconnect.me/]) },
     i18n: languages,
