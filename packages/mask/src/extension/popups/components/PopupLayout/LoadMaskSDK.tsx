@@ -7,7 +7,7 @@ import { ErrorBoundary } from '@masknet/shared-base-ui'
 
 const f = cache(Services.SiteAdaptor.shouldSuggestConnectInPopup)
 export default function MaskSDK() {
-    if (!Flags.mask_SDK_ready) return null
+    if (!Flags.maskSDKEnabled) return null
     return (
         <ErrorBoundary>
             <Suspense>
@@ -28,7 +28,7 @@ function MaskSDKLoader() {
             <br />
             <Link
                 onClick={async () => {
-                    await Services.SiteAdaptor.attachMaskSDKToCurrentActivePage()
+                    await Services.SiteAdaptor.attachMaskSDKToCurrentActivePage('once')
                     window.close()
                 }}>
                 Connect once
@@ -36,9 +36,7 @@ function MaskSDKLoader() {
             <br />
             <Link
                 onClick={async () => {
-                    const result = await Services.Helper.requestHostPermissionForActiveTab()
-                    if (!result) return
-                    await Services.SiteAdaptor.attachMaskSDKToCurrentActivePage()
+                    await Services.SiteAdaptor.attachMaskSDKToCurrentActivePage('always')
                     window.close()
                 }}>
                 Always connect this site
@@ -46,9 +44,7 @@ function MaskSDKLoader() {
             <br />
             <Link
                 onClick={async () => {
-                    const result = await Services.Helper.requestHostPermission(['<all_urls>'])
-                    if (!result) return
-                    await Services.SiteAdaptor.attachMaskSDKToCurrentActivePage()
+                    await Services.SiteAdaptor.attachMaskSDKToCurrentActivePage('always-all')
                     window.close()
                 }}>
                 Always connect all sites

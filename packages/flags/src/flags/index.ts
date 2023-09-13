@@ -8,7 +8,7 @@ const isInsider = env.channel === 'insider' || isDev
 const isBeta = isInsider || env.channel === 'beta'
 
 export const flags = {
-    mask_SDK_ready: isBeta,
+    maskSDKEnabled: isBeta,
     support_testnet_switch: isBeta,
 
     shadowRootInit: {
@@ -54,5 +54,5 @@ export const flags = {
 
 Object.freeze(flags.shadowRootInit)
 if (process.env.NODE_ENV === 'development') {
-    console.log('[mask] flags:', flags)
+    console.debug('[mask] flags:', flags)
 }

@@ -10,6 +10,7 @@ export async function activateSiteAdaptorUI(): Promise<'notFound' | 'success' | 
     const { activateSiteAdaptorUIInner } = await import('./ui.js')
     try {
         await activateSiteAdaptorUIInner(ui_deferred)
+        if (ui_deferred.shouldLoadMaskSDK) return 'needMaskSDK'
         return 'success'
     } catch (error) {
         console.error('Mask: Failed to initialize Social Network Adaptor', error)

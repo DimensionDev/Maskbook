@@ -15,7 +15,7 @@ export const base: Plugin.Shared.Definition = {
                 [EnhanceableSite.Localhost]: true,
             },
         },
-        target: Flags.mask_SDK_ready ? 'stable' : 'insider',
+        target: Flags.maskSDKEnabled ? 'stable' : 'insider',
     },
     experimentalMark: true,
     i18n: languages,

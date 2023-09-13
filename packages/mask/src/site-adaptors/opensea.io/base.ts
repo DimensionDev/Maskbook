@@ -11,4 +11,5 @@ export const openseaBase: SiteAdaptor.Base = {
         return location.host.endsWith(EnhanceableSite.OpenSea)
     },
     notReadyForProduction: true,
+    shouldLoadMaskSDK: true,
 }
