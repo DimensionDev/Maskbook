@@ -444,7 +444,7 @@
     "data_recovery_invalid_mobile": "无效的电话号码，请检查并重试。",
     "data_recovery_set_name": "设置您的角色名称",
     "data_recovery_name_tip": "设置您的身份名称，最大长度为24个字符",
-    "file_unpacking": "正在打包",
+    "file_unpacking": "正在解压",
     "file_unpacking_completed": "已完成",
     "data_decrypting": "正在解密",
     "data_downloading": "正在下载",
