@@ -5,7 +5,7 @@ declare namespace Mask {
      * @public
      * @remarks Since API=0
      */
-    export const ethereum: undefined | Ethereum.ProviderObject
+    export const ethereum: Ethereum.ProviderObject
 }
 // Defined in EIP-1193
 // https://github.com/typescript-eslint/typescript-eslint/issues/7192
