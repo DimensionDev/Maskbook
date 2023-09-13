@@ -1,6 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@masknet/theme'
 import { EmptyStatus } from '@masknet/shared'
+import format from 'date-fns/format'
 import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()((theme) => ({
@@ -30,7 +31,6 @@ const useStyles = makeStyles()((theme) => ({
         padding: '8px 12px',
         flexDirection: 'column',
         gap: '8px',
-        borderBottom: `1px solid ${theme.palette.maskColor.line}`,
         fontWeight: 700,
         lineHeight: '16px',
         fontSize: '12px',
@@ -58,28 +58,21 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         color: theme.palette.maskColor.main,
     },
-    eventContent: {
-        fontSize: '13px',
-        fontWeight: 400,
-        lineHeight: '18px',
-        color: theme.palette.maskColor.second,
-    },
-    eventType: {
-        fontSize: '12px',
-        fontWeight: 400,
-        color: theme.palette.maskColor.main,
-        borderRadius: '4px',
-        background: theme.palette.maskColor.bg,
-        padding: '2px 4px',
-        textAlign: 'center',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+    poster: {
+        borderRadius: '8px',
+        width: '100%',
+        height: '156px',
+        objectFit: 'cover',
     },
 }))
 
 interface EventListProps {
     list: any[]
+}
+
+export const formatDate = (date: string) => {
+    const dateFormat = 'MMM dd, yyyy HH:mm:ss'
+    return format(new Date(Number(date) * 1000), dateFormat)
 }
 
 export function EventList({ list }: EventListProps) {
@@ -100,10 +93,10 @@ export function EventList({ list }: EventListProps) {
                                     <img src={v.project.logo} className={classes.logo} alt="logo" />
                                     {v.project.name}
                                 </div>
-                                <div className={classes.eventType}>{v.event_type}</div>
                             </div>
                             <div className={classes.eventTitle}>{v.event_title}</div>
-                            <div className={classes.eventContent}>{v.event_description}</div>
+                            <div className={classes.eventTitle}>{formatDate(v.event_date)}</div>
+                            <img className={classes.poster} src={v.poster_url} alt="poster" />
                         </div>
                     )
                 })

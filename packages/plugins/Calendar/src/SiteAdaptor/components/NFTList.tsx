@@ -1,7 +1,9 @@
 import React from 'react'
 import { makeStyles } from '@masknet/theme'
 import { EmptyStatus } from '@masknet/shared'
-import { Trans } from 'react-i18next'
+import { useI18N } from '../../locales/i18n_generated.js'
+import CountdownTimer from './CountDownTimer.js'
+import { formatDate } from './EventList.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -30,7 +32,6 @@ const useStyles = makeStyles()((theme) => ({
         padding: '8px 12px',
         flexDirection: 'column',
         gap: '8px',
-        borderBottom: `1px solid ${theme.palette.maskColor.line}`,
         fontWeight: 700,
         lineHeight: '16px',
         fontSize: '12px',
@@ -58,23 +59,17 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         color: theme.palette.maskColor.main,
     },
-    eventContent: {
-        fontSize: '13px',
+    second: {
+        fontSize: '14px',
         fontWeight: 400,
         lineHeight: '18px',
         color: theme.palette.maskColor.second,
     },
-    eventType: {
-        fontSize: '12px',
-        fontWeight: 400,
-        color: theme.palette.maskColor.main,
-        borderRadius: '4px',
-        background: theme.palette.maskColor.bg,
-        padding: '2px 4px',
-        textAlign: 'center',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+    poster: {
+        borderRadius: '8px',
+        width: '100%',
+        height: '156px',
+        objectFit: 'cover',
     },
 }))
 
@@ -84,6 +79,8 @@ interface NFTListProps {
 
 export function NFTList({ list }: NFTListProps) {
     const { classes } = useStyles()
+    const t = useI18N()
+    console.log(list)
     return (
         <div className={classes.container}>
             {list?.length ? (
@@ -100,17 +97,29 @@ export function NFTList({ list }: NFTListProps) {
                                     <img src={v.project.logo} className={classes.logo} alt="logo" />
                                     {v.project.name}
                                 </div>
-                                <div className={classes.eventType}>{v.event_type}</div>
                             </div>
                             <div className={classes.eventTitle}>{v.event_title}</div>
-                            <div className={classes.eventContent}>{v.event_description}</div>
+                            <div className={classes.eventHeader}>
+                                <CountdownTimer targetDate={new Date(Number(v.event_date) * 1000)} />
+                            </div>
+                            <div className={classes.eventHeader}>
+                                <div className={classes.second}>{t.total()}</div>
+                                <div className={classes.eventTitle}>{v.ext_info.nft_info.total}</div>
+                            </div>
+                            <div className={classes.eventHeader}>
+                                <div className={classes.second}>{t.price()}</div>
+                                <div className={classes.eventTitle}>{v.ext_info.nft_info.token}</div>
+                            </div>
+                            <div className={classes.eventHeader}>
+                                <div className={classes.second}>{t.date()}</div>
+                                <div className={classes.eventTitle}>{formatDate(v.event_date)}</div>
+                            </div>
+                            <img className={classes.poster} src={v.poster_url} alt="poster" />
                         </div>
                     )
                 })
             ) : (
-                <EmptyStatus className={classes.empty}>
-                    <Trans i18nKey="empty_status" />
-                </EmptyStatus>
+                <EmptyStatus className={classes.empty}>{t.empty_status()}</EmptyStatus>
             )}
         </div>
     )

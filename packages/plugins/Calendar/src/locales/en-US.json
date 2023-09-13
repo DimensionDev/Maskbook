@@ -1,5 +1,8 @@
 {
     "title": "Calendar",
     "description": "Highly integrated Web3 news & events on Twitter. Providing Token, NFT, AMA, and regulation events.",
-    "empty_status": "No content for the last two weeks."
+    "empty_status": "No content for the last two weeks.",
+    "total": "Total",
+    "price": "Price",
+    "date": "Date"
 }

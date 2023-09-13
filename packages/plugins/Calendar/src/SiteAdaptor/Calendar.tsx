@@ -57,10 +57,10 @@ export function Calendar() {
                 <TabPanel value={tabs.news} style={{ padding: 0 }}>
                     <NewsList list={newsList[dateString]} />
                 </TabPanel>
-                <TabPanel value={tabs.event}>
+                <TabPanel value={tabs.event} style={{ padding: 0 }}>
                     <EventList list={eventList[dateString]} />
                 </TabPanel>
-                <TabPanel value={tabs.nfts}>
+                <TabPanel value={tabs.nfts} style={{ padding: 0 }}>
                     <NFTList list={nftList[dateString]} />
                 </TabPanel>
             </TabContext>

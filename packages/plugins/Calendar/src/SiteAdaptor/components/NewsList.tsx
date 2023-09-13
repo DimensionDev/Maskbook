@@ -1,7 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@masknet/theme'
 import { EmptyStatus } from '@masknet/shared'
-import { Trans } from 'react-i18next'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -84,7 +84,7 @@ interface NewsListProps {
 
 export function NewsList({ list }: NewsListProps) {
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const t = useI18N()
     return (
         <div className={classes.container}>
             {list?.length ? (
@@ -109,9 +109,7 @@ export function NewsList({ list }: NewsListProps) {
                     )
                 })
             ) : (
-                <EmptyStatus className={classes.empty}>
-                    <Trans i18nKey="empty_status" />
-                </EmptyStatus>
+                <EmptyStatus className={classes.empty}>{t.empty_status()}</EmptyStatus>
             )}
         </div>
     )
