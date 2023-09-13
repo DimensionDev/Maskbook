@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID, DEFAULT_PLUGIN_PUBLISHER, ExtensionSite, EnhanceableSite } from '@masknet/shared-base'
+import { NetworkPluginID, DEFAULT_PLUGIN_PUBLISHER, EnhanceableSite } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { SAVINGS_PLUGIN_ID } from './constants.js'
 import { languages } from './locales/languages.js'
@@ -16,9 +16,6 @@ export const base: Plugin.Shared.Definition = {
             type: 'opt-out',
             sites: {
                 [EnhanceableSite.Localhost]: true,
-                [ExtensionSite.Dashboard]: true,
-                [ExtensionSite.Popup]: true,
-                [ExtensionSite.PopupConnect]: true,
             },
         },
         target: 'stable',

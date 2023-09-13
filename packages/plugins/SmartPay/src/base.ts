@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { PLUGIN_DESCRIPTION, PLUGIN_ID, PLUGIN_NAME } from './constants.js'
 import { languages } from './locales/languages.js'
-import { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
+import { EnhanceableSite } from '@masknet/shared-base'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
@@ -13,9 +13,6 @@ export const base: Plugin.Shared.Definition = {
             type: 'opt-out',
             sites: {
                 [EnhanceableSite.Localhost]: true,
-                [ExtensionSite.Dashboard]: true,
-                [ExtensionSite.Popup]: true,
-                [ExtensionSite.PopupConnect]: true,
             },
         },
         target: 'stable',
