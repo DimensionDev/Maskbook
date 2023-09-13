@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useRef } from 'react'
+import React, { useMemo } from 'react'
 import { makeStyles, useTabs } from '@masknet/theme'
 import startOfWeek from 'date-fns/startOfWeek'
 import endOfWeek from 'date-fns/endOfWeek'
@@ -15,6 +15,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: '12px',
         justifyContent: 'space-between',
         alignItems: 'center',
+        position: 'relative',
     },
     date: {
         display: 'flex',
@@ -43,11 +44,19 @@ const useStyles = makeStyles()((theme) => ({
 interface DatePickerTabProps {
     selectedDate: Date
     setSelectedDate: (date: Date) => void
+    list: Record<string, any[]> | null
 }
 
-export function DatePickerTab({ selectedDate, setSelectedDate }: DatePickerTabProps) {
-    const [open, setOpen] = useState(false)
-    const iconRef = useRef<HTMLDivElement>(null)
+export function DatePickerTab({ selectedDate, setSelectedDate, list }: DatePickerTabProps) {
+    const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        console.log(event)
+        setAnchorEl(event.currentTarget)
+    }
+    const handleClose = () => {
+        setAnchorEl(null)
+    }
+    const open = Boolean(anchorEl)
     const { classes } = useStyles()
     const week = useMemo(() => {
         return eachDayOfInterval({ start: startOfWeek(selectedDate), end: endOfWeek(selectedDate) })
@@ -56,15 +65,17 @@ export function DatePickerTab({ selectedDate, setSelectedDate }: DatePickerTabPr
         ...(week.map((v) => v.getDate().toString()) as unknown as [string, string]),
     )
     const id = open ? 'simple-popover' : undefined
-
     return (
         <div className={classes.container}>
             {week.map((v) => {
                 return (
                     <div
-                        className={`${classes.date} ${selectedDate.getDate() === v.getDate() ? classes.isActive : ''}`}
+                        className={`${classes.date} ${selectedDate.getDate() === v.getDate() ? classes.isActive : ''} ${
+                            list && !list[v.toLocaleDateString()] ? classes.disabled : ''
+                        }`}
                         key={v.toString()}
                         onClick={() => {
+                            if (list && !list[v.toLocaleDateString()]) return
                             setSelectedDate(v)
                         }}>
                         {' '}
@@ -72,15 +83,23 @@ export function DatePickerTab({ selectedDate, setSelectedDate }: DatePickerTabPr
                     </div>
                 )
             })}
-            <IconButton size="small" onClick={() => setOpen(!open)}>
-                <div ref={iconRef}>
-                    <Icons.LinearCalendar />
-                </div>
+            <IconButton size="small" onClick={handleClick} aria-describedby={id}>
+                <Icons.LinearCalendar />
             </IconButton>
-            <Popover id={id} open={open} anchorEl={iconRef.current} onClose={() => setOpen(false)}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DateCalendar />
-                </LocalizationProvider>
+            <Popover
+                id={id}
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}>
+                <div style={{ padding: '16px' }}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DateCalendar />
+                    </LocalizationProvider>
+                </div>
             </Popover>
         </div>
     )

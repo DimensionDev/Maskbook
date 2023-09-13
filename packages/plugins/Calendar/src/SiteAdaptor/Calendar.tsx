@@ -11,6 +11,10 @@ import { EventList } from './components/EventList.js'
 import { NewsList } from './components/NewsList.js'
 import { NFTList } from './components/NFTList.js'
 import { Footer } from './components/Footer.js'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar'
+import { safeUnreachable } from '@masknet/kit'
 
 const useStyles = makeStyles()((theme) => ({
     calendar: {
@@ -44,6 +48,19 @@ export function Calendar() {
     const { data: eventList, isLoading: eventLoading } = useEventList()
     const { data: newsList, isLoading: newsLoading } = useNewsList()
     const { data: nftList, isLoading: nftLoading } = useNFTList()
+    const list = useMemo(() => {
+        switch (currentTab) {
+            case 'news':
+                return newsList
+            case 'event':
+                return eventList
+            case 'nfts':
+                return nftList
+            default:
+                safeUnreachable(currentTab)
+                return null
+        }
+    }, [currentTab, newsList, eventList, nftList])
     const dateString = useMemo(() => selectedDate.toLocaleDateString(), [selectedDate])
     return (
         <div className={disable ? classes.hidden : classes.calendar}>
@@ -55,7 +72,14 @@ export function Calendar() {
                         <Tab className={classes.tab} label="NFTs" value={tabs.nfts} />
                     </MaskTabList>
                 </div>
-                <DatePickerTab selectedDate={selectedDate} setSelectedDate={(date: Date) => setSelectedDate(date)} />
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DateCalendar />
+                </LocalizationProvider>
+                <DatePickerTab
+                    selectedDate={selectedDate}
+                    setSelectedDate={(date: Date) => setSelectedDate(date)}
+                    list={list}
+                />
                 <TabPanel value={tabs.news} style={{ padding: 0 }}>
                     <NewsList list={newsList[dateString]} isLoading={newsLoading} />
                 </TabPanel>
