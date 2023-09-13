@@ -42,6 +42,7 @@ const IGNORE_ERRORS = [
     'ResizeObserver',
     'User rejected the request.',
     'Non-Error promise rejection captured with keys: message',
+    'Object captured as promise rejection with keys: message',
     'An attempt was made to break through the security policy of the user agent.',
 ]
 
