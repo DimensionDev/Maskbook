@@ -21,5 +21,6 @@
     "plugin_pets_name": "小宠物",
     "plugin_pets_description": "探索 #NFT 的无限可能性。",
     "share_twitter": "我刚刚用 @realMaskNetwork 设置了我的非同质化的朋友。请访问我的个人资料以查看它！安装Mask Network 扩展插件并设置你的非同质化的朋友。\n #mask_io #nonfungiblefriends\nhttps://twitter.com/NonFFriend/status/150871087149641731",
+    "pet_setting_tooltip$default": "点击侧边栏中的 Mask 图标并访问 Non-F Friends 应用来配置您的个性化桌面NFT宠物。",
     "pet_setting_tooltip$punk": "我是CryptoPunk #6128！航行者，欢迎来到WEB3的未知水域！"
 }
