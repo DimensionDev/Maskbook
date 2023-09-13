@@ -15,6 +15,7 @@ declare namespace Mask.Ethereum {
     export interface Provider {
         /**
          * The `request` method is intended as a transport- and protocol-agnostic wrapper function for Remote Procedure Calls (RPCs).
+         * @remarks Since API=0
          */
         request<key extends keyof RPC.ImplementedMethods>(args: {
             readonly method: key
@@ -33,15 +34,21 @@ declare namespace Mask.Ethereum {
      * @see https://nodejs.org/api/events.html
      */
     export interface EventEmitter {
+        /**
+         * @remarks Since API=0
+         */
         on(eventName: string | symbol, listener: (...args: any[]) => void): this
+        /**
+         * @remarks Since API=0
+         */
         removeListener(eventName: string | symbol, listener: (...args: any[]) => void): this
     }
     export interface EthereumEventEmitter extends EventEmitter {
-        on(eventName: 'message', listener: (message: ProviderMessage | EthSubscription) => void): this
-        on(eventName: 'connect', listener: (message: ProviderConnectInfo) => void): this
-        on(eventName: 'disconnect', listener: (error: ProviderRpcError) => void): this
-        on(eventName: 'chainChanged', listener: (chainId: string) => void): this
-        on(eventName: 'accountsChanged', listener: (accounts: string[]) => void): this
+        // on(eventName: 'message', listener: (message: ProviderMessage | EthSubscription) => void): this
+        // on(eventName: 'connect', listener: (message: ProviderConnectInfo) => void): this
+        // on(eventName: 'disconnect', listener: (error: ProviderRpcError) => void): this
+        // on(eventName: 'chainChanged', listener: (chainId: string) => void): this
+        // on(eventName: 'accountsChanged', listener: (accounts: string[]) => void): this
     }
     export interface ProviderMessage {
         readonly type: string
@@ -240,13 +247,6 @@ declare namespace Mask.Ethereum {
 
     /** Extra APIs that only can be used with Mask Network is defined here. */
     export interface ExperimentalProvider {}
-    export interface EthereumEventEmitter extends EventEmitter {
-        on(eventName: 'message', listener: (message: ProviderMessage | EthSubscription) => void): this
-        on(eventName: 'connect', listener: (message: ProviderConnectInfo) => void): this
-        on(eventName: 'disconnect', listener: (error: ProviderRpcError) => void): this
-        on(eventName: 'chainChanged', listener: (chainId: string) => void): this
-        on(eventName: 'accountsChanged', listener: (accounts: string[]) => void): this
-    }
     export interface EthereumEventMap {
         message: CustomEvent<ProviderMessage | EthSubscription>
         connect: CustomEvent<ProviderConnectInfo>
@@ -255,15 +255,15 @@ declare namespace Mask.Ethereum {
         accountsChanged: CustomEvent<string[]>
     }
     export interface MaskEthereumEventEmitter extends EthereumEventEmitter, EventTarget {
-        addEventListener<K extends keyof EthereumEventMap>(
-            type: K,
-            callback: EventListenerOrEventListenerObject | null | ((ev: EthereumEventMap[K]) => any),
-            options?: boolean | AddEventListenerOptions,
-        ): void
-        removeEventListener<K extends keyof EthereumEventMap>(
-            type: K,
-            listener: EventListenerOrEventListenerObject | null | ((ev: EthereumEventMap[K]) => any),
-            options?: boolean | EventListenerOptions,
-        ): void
+        // addEventListener<K extends keyof EthereumEventMap>(
+        //     type: K,
+        //     callback: EventListenerOrEventListenerObject | null | ((ev: EthereumEventMap[K]) => any),
+        //     options?: boolean | AddEventListenerOptions,
+        // ): void
+        // removeEventListener<K extends keyof EthereumEventMap>(
+        //     type: K,
+        //     listener: EventListenerOrEventListenerObject | null | ((ev: EthereumEventMap[K]) => any),
+        //     options?: boolean | EventListenerOptions,
+        // ): void
     }
 }
