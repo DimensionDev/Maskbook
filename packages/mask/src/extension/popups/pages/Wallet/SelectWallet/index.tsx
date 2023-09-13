@@ -141,7 +141,7 @@ const SelectWallet = memo(function SelectWallet() {
         if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
     }, [selected, wallets])
 
-    useTitle(external_request ? 'Connecting External Website' : t('popups_select_wallet'))
+    useTitle(external_request ? 'Connecting External Site' : t('popups_select_wallet'))
 
     if (!chainIdValid)
         return (
@@ -154,7 +154,9 @@ const SelectWallet = memo(function SelectWallet() {
         <Box overflow="auto" data-hide-scrollbar>
             {external_request ? (
                 <Box textAlign="center" paddingX={2}>
-                    Connecting {external_request.origin}. Be aware!
+                    Connecting: <i>{external_request.origin}</i>
+                    <br />
+                    Be aware of fraud!
                 </Box>
             ) : null}
             <Box pt={1} pb={9} px={2} display="flex" flexDirection="column" rowGap="6px">

@@ -30,6 +30,11 @@ function sendNotification(result: boolean) {
     if (result) MaskMessages.events.hostPermissionChanged.sendToAll()
     return result
 }
+export async function requestHostPermissionForActiveTab() {
+    const [{ id, url }] = await browser.tabs.query({ active: true })
+    if (!id || !url) return false
+    return requestHostPermission([new URL(url).origin + '/*'])
+}
 export async function requestHostPermission(origins: readonly string[]) {
     const currentOrigins = (await browser.permissions.getAll()).origins || []
     const extra = origins.filter((i) => !currentOrigins?.includes(i))

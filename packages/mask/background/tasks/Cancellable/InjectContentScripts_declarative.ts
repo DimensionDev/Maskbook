@@ -1,7 +1,7 @@
 import { noop } from 'lodash-es'
 import { hmr } from '../../../utils-pure/index.js'
 import type { Scripting } from 'webextension-polyfill'
-import { injectedScriptURL, fetchInjectContentScriptList } from '../../utils/injectScript.js'
+import { injectedScriptURL, fetchInjectContentScriptList, maskSDK_URL } from '../../utils/injectScript.js'
 import { Sniffings } from '@masknet/shared-base'
 
 const { signal } = hmr(import.meta.webpackHot)
@@ -24,7 +24,7 @@ function prepareMainWorldScript(matches: string[]): Scripting.RegisteredContentS
     const result: Scripting.RegisteredContentScript = {
         id: 'injected',
         allFrames: true,
-        js: [injectedScriptURL],
+        js: [maskSDK_URL, injectedScriptURL],
         persistAcrossSessions: false,
         // @ts-expect-error Chrome API
         world: 'MAIN',

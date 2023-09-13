@@ -10,6 +10,7 @@ export async function attachMaskSDKToCurrentActivePage(): Promise<boolean> {
     }
     return true
 }
+
 async function attachMaskSDK2() {
     await browser.tabs.executeScript(undefined, {
         code: await injectUserScriptMV2(maskSDK_URL),

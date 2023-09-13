@@ -15,6 +15,7 @@ export {
     requestExtensionPermission,
     hasHostPermission,
     requestHostPermission,
+    requestHostPermissionForActiveTab,
 } from './request-permission.js'
 export { queryRemoteI18NBundle, type Bundle } from './i18n-cache-query.js'
 export { getTelemetryID, setTelemetryID } from './telemetry-id.js'

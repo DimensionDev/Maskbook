@@ -4,8 +4,8 @@ import { hmr_sdkServer } from './hmr-bridge.js'
 import Services from '#services'
 import { currentSiteContext } from './bridge/site_context.js'
 
-const maskSDK = createMaskSDKServer(hmr_sdkServer)
 export async function startMaskSDK() {
+    const maskSDK = createMaskSDKServer(hmr_sdkServer)
     const data = currentSiteContext ? await Services.ThirdPartyPlugin.getHostedMeta(currentSiteContext) : undefined
     const meta = data ? new Map([data]) : undefined
     // TODO: listen to SNSContext connected status

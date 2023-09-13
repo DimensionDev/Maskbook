@@ -5,6 +5,7 @@ import {
     ignoreInjectError,
     injectUserScriptMV2,
     injectedScriptURL,
+    maskSDK_URL,
 } from '../../utils/injectScript.js'
 import { Sniffings } from '@masknet/shared-base'
 
@@ -24,6 +25,9 @@ async function onCommittedListener(arg: WebNavigation.OnCommittedDetailsType): P
         browser.tabs.executeScript(arg.tabId, { ...detail, file: injectedScriptURL }).catch(err)
     } else {
         injectUserScriptMV2(injectedScriptURL)
+            .then(async (code) => browser.tabs.executeScript(arg.tabId, { ...detail, code }))
+            .catch(err)
+        injectUserScriptMV2(maskSDK_URL)
             .then(async (code) => browser.tabs.executeScript(arg.tabId, { ...detail, code }))
             .catch(err)
     }
