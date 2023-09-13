@@ -35,6 +35,11 @@ export const Celo = /*#__PURE__*/ __createIcon('Celo', [
         u: () => new URL('./brands/Celo.svg', import.meta.url),
     },
 ])
+export const Coincarp = /*#__PURE__*/ __createIcon('Coincarp', [
+    {
+        u: () => new URL('./brands/Coincarp.svg', import.meta.url),
+    },
+])
 export const CoinGecko = /*#__PURE__*/ __createIcon('CoinGecko', [
     {
         u: () => new URL('./brands/CoinGecko.svg', import.meta.url),
@@ -223,6 +228,11 @@ export const Lens = /*#__PURE__*/ __createIcon('Lens', [
         u: () => new URL('./brands/Lens.svg', import.meta.url),
     },
 ])
+export const Link3 = /*#__PURE__*/ __createIcon('Link3', [
+    {
+        u: () => new URL('./brands/Link3.svg', import.meta.url),
+    },
+])
 export const LooksRare = /*#__PURE__*/ __createIcon('LooksRare', [
     {
         u: () => new URL('./brands/LooksRare.svg', import.meta.url),
@@ -345,6 +355,11 @@ export const NextIDMini = /*#__PURE__*/ __createIcon('NextIDMini', [
     {
         c: ['light'],
         u: () => new URL('./brands/NextIDMini.light.svg', import.meta.url),
+    },
+])
+export const Nftgo = /*#__PURE__*/ __createIcon('Nftgo', [
+    {
+        u: () => new URL('./brands/Nftgo.svg', import.meta.url),
     },
 ])
 export const NFTScan = /*#__PURE__*/ __createIcon('NFTScan', [

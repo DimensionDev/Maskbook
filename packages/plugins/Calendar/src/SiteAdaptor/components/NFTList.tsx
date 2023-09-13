@@ -1,9 +1,10 @@
 import React from 'react'
-import { makeStyles } from '@masknet/theme'
 import { EmptyStatus } from '@masknet/shared'
 import { useI18N } from '../../locales/i18n_generated.js'
-import CountdownTimer from './CountDownTimer.js'
+import { CountdownTimer } from './CountDownTimer.js'
 import { formatDate } from './EventList.js'
+import { makeStyles, LoadingBase } from '@masknet/theme'
+import { Typography } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -75,15 +76,20 @@ const useStyles = makeStyles()((theme) => ({
 
 interface NFTListProps {
     list: any[]
+    isLoading: boolean
 }
 
-export function NFTList({ list }: NFTListProps) {
-    const { classes } = useStyles()
+export function NFTList({ list, isLoading }: NFTListProps) {
+    const { classes, cx } = useStyles()
     const t = useI18N()
-    console.log(list)
     return (
         <div className={classes.container}>
-            {list?.length ? (
+            {isLoading && !list?.length ? (
+                <div className={cx(classes.empty, classes.eventTitle)}>
+                    <LoadingBase />
+                    <Typography>{t.loading()}</Typography>
+                </div>
+            ) : list?.length ? (
                 list.map((v) => {
                     return (
                         <div

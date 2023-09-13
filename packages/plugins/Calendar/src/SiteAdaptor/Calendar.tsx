@@ -10,6 +10,7 @@ import { useEventList, useNFTList, useNewsList } from '../hooks/useEventList.js'
 import { EventList } from './components/EventList.js'
 import { NewsList } from './components/NewsList.js'
 import { NFTList } from './components/NFTList.js'
+import { Footer } from './components/Footer.js'
 
 const useStyles = makeStyles()((theme) => ({
     calendar: {
@@ -18,6 +19,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '12px',
         border: `1px solid ${theme.palette.maskColor.line}`,
         marginTop: '60px',
+        position: 'relative',
     },
     hidden: {
         display: 'hidden',
@@ -55,14 +57,15 @@ export function Calendar() {
                 </div>
                 <DatePicker selectedDate={selectedDate} setSelectedDate={(date: Date) => setSelectedDate(date)} />
                 <TabPanel value={tabs.news} style={{ padding: 0 }}>
-                    <NewsList list={newsList[dateString]} />
+                    <NewsList list={newsList[dateString]} isLoading={newsLoading} />
                 </TabPanel>
                 <TabPanel value={tabs.event} style={{ padding: 0 }}>
-                    <EventList list={eventList[dateString]} />
+                    <EventList list={eventList[dateString]} isLoading={eventLoading} />
                 </TabPanel>
                 <TabPanel value={tabs.nfts} style={{ padding: 0 }}>
-                    <NFTList list={nftList[dateString]} />
+                    <NFTList list={nftList[dateString]} isLoading={nftLoading} />
                 </TabPanel>
+                <Footer provider={currentTab} />
             </TabContext>
         </div>
     )

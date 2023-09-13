@@ -1,7 +1,8 @@
 import React from 'react'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, LoadingBase } from '@masknet/theme'
 import { EmptyStatus } from '@masknet/shared'
 import { useI18N } from '../../locales/i18n_generated.js'
+import { Typography } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -80,14 +81,20 @@ const useStyles = makeStyles()((theme) => ({
 
 interface NewsListProps {
     list: any[]
+    isLoading: boolean
 }
 
-export function NewsList({ list }: NewsListProps) {
-    const { classes } = useStyles()
+export function NewsList({ list, isLoading }: NewsListProps) {
+    const { classes, cx } = useStyles()
     const t = useI18N()
     return (
         <div className={classes.container}>
-            {list?.length ? (
+            {isLoading && !list?.length ? (
+                <div className={cx(classes.empty, classes.eventTitle)}>
+                    <LoadingBase />
+                    <Typography>{t.loading()}</Typography>
+                </div>
+            ) : list?.length ? (
                 list.map((v) => {
                     return (
                         <div
@@ -103,8 +110,8 @@ export function NewsList({ list }: NewsListProps) {
                                 </div>
                                 <div className={classes.eventType}>{v.event_type}</div>
                             </div>
-                            <div className={classes.eventTitle}>{v.event_title}</div>
-                            <div className={classes.eventContent}>{v.event_description}</div>
+                            <Typography className={classes.eventTitle}>{v.event_title}</Typography>
+                            <Typography className={classes.eventContent}>{v.event_description}</Typography>
                         </div>
                     )
                 })

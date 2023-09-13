@@ -1,8 +1,9 @@
 import React from 'react'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, LoadingBase } from '@masknet/theme'
 import { EmptyStatus } from '@masknet/shared'
 import format from 'date-fns/format'
-import { Trans } from 'react-i18next'
+import { Typography } from '@mui/material'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -68,6 +69,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface EventListProps {
     list: any[]
+    isLoading: boolean
 }
 
 export const formatDate = (date: string) => {
@@ -75,11 +77,17 @@ export const formatDate = (date: string) => {
     return format(new Date(Number(date) * 1000), dateFormat)
 }
 
-export function EventList({ list }: EventListProps) {
-    const { classes } = useStyles()
+export function EventList({ list, isLoading }: EventListProps) {
+    const { classes, cx } = useStyles()
+    const t = useI18N()
     return (
         <div className={classes.container}>
-            {list?.length ? (
+            {isLoading && !list?.length ? (
+                <div className={cx(classes.empty, classes.eventTitle)}>
+                    <LoadingBase />
+                    <Typography>{t.loading()}</Typography>
+                </div>
+            ) : list?.length ? (
                 list.map((v) => {
                     return (
                         <div
@@ -101,9 +109,7 @@ export function EventList({ list }: EventListProps) {
                     )
                 })
             ) : (
-                <EmptyStatus className={classes.empty}>
-                    <Trans i18nKey="empty_status" />
-                </EmptyStatus>
+                <EmptyStatus className={classes.empty}>{t.empty_status()}</EmptyStatus>
             )}
         </div>
     )

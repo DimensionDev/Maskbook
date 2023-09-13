@@ -4,5 +4,7 @@
     "empty_status": "No content for the last two weeks.",
     "total": "Total",
     "price": "Price",
-    "date": "Date"
+    "date": "Date",
+    "loading": "Loading",
+    "powered_by": "Powered By"
 }
