@@ -1,9 +1,13 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState, useRef } from 'react'
 import { makeStyles, useTabs } from '@masknet/theme'
 import startOfWeek from 'date-fns/startOfWeek'
 import endOfWeek from 'date-fns/endOfWeek'
 import eachDayOfInterval from 'date-fns/eachDayOfInterval'
 import { Icons } from '@masknet/icons'
+import { IconButton, Popover } from '@mui/material'
+import { LocalizationProvider } from '@mui/lab'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -36,12 +40,14 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface DatePickerProps {
+interface DatePickerTabProps {
     selectedDate: Date
     setSelectedDate: (date: Date) => void
 }
 
-export function DatePicker({ selectedDate, setSelectedDate }: DatePickerProps) {
+export function DatePickerTab({ selectedDate, setSelectedDate }: DatePickerTabProps) {
+    const [open, setOpen] = useState(false)
+    const iconRef = useRef<HTMLDivElement>(null)
     const { classes } = useStyles()
     const week = useMemo(() => {
         return eachDayOfInterval({ start: startOfWeek(selectedDate), end: endOfWeek(selectedDate) })
@@ -49,6 +55,8 @@ export function DatePicker({ selectedDate, setSelectedDate }: DatePickerProps) {
     const [currentTab, onChange, tabs] = useTabs(
         ...(week.map((v) => v.getDate().toString()) as unknown as [string, string]),
     )
+    const id = open ? 'simple-popover' : undefined
+
     return (
         <div className={classes.container}>
             {week.map((v) => {
@@ -64,7 +72,16 @@ export function DatePicker({ selectedDate, setSelectedDate }: DatePickerProps) {
                     </div>
                 )
             })}
-            <Icons.LinearCalendar />
+            <IconButton size="small" onClick={() => setOpen(!open)}>
+                <div ref={iconRef}>
+                    <Icons.LinearCalendar />
+                </div>
+            </IconButton>
+            <Popover id={id} open={open} anchorEl={iconRef.current} onClose={() => setOpen(false)}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DateCalendar />
+                </LocalizationProvider>
+            </Popover>
         </div>
     )
 }

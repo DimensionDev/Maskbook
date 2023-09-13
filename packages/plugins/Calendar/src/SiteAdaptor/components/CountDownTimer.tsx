@@ -20,7 +20,7 @@ interface CountDownTimerProps {
     targetDate: Date
 }
 
-function CountdownTimer({ targetDate }: CountDownTimerProps) {
+export function CountdownTimer({ targetDate }: CountDownTimerProps) {
     const calculateRemainingTime = useCallback(
         (targetDate: Date) => {
             const currentDate = new Date()
@@ -54,5 +54,3 @@ function CountdownTimer({ targetDate }: CountDownTimerProps) {
 
     return <div className={classes.timer}>{`${days}d :${hours}h :${minutes}m :${seconds}s`}</div>
 }
-
-export default CountdownTimer

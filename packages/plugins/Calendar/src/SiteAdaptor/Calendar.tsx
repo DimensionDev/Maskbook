@@ -5,7 +5,7 @@ import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { Tab } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
-import { DatePicker } from './components/DatePicker.js'
+import { DatePickerTab } from './components/DatePickerTab.js'
 import { useEventList, useNFTList, useNewsList } from '../hooks/useEventList.js'
 import { EventList } from './components/EventList.js'
 import { NewsList } from './components/NewsList.js'
@@ -55,7 +55,7 @@ export function Calendar() {
                         <Tab className={classes.tab} label="NFTs" value={tabs.nfts} />
                     </MaskTabList>
                 </div>
-                <DatePicker selectedDate={selectedDate} setSelectedDate={(date: Date) => setSelectedDate(date)} />
+                <DatePickerTab selectedDate={selectedDate} setSelectedDate={(date: Date) => setSelectedDate(date)} />
                 <TabPanel value={tabs.news} style={{ padding: 0 }}>
                     <NewsList list={newsList[dateString]} isLoading={newsLoading} />
                 </TabPanel>
