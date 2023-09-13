@@ -23,6 +23,7 @@ import Services from '#services'
 import { useI18N } from '../../../../../utils/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { usePasswordForm } from '../hooks/usePasswordForm.js'
+import { queryClient } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -207,6 +208,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                 const hasPassword = await Services.Wallet.hasPassword()
 
                 if (hasPassword) {
+                    queryClient.invalidateQueries(['@@has-password'])
                     const from = params.get('from')
                     showSnackbar(t('popups_wallet_set_payment_password_successfully'), { variant: 'success' })
                     CrossIsolationMessages.events.passwordStatusUpdated.sendToAll(true)
