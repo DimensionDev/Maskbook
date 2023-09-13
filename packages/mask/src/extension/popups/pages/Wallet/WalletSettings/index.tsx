@@ -25,7 +25,7 @@ import { useStyles } from './useStyles.js'
 
 function getPathIndex(path?: string) {
     const rawIndex = path?.split('/').pop()
-    if (!rawIndex) return Number.POSITIVE_INFINITY
+    if (!rawIndex) return
     return Number.parseInt(rawIndex, 10)
 }
 
@@ -51,6 +51,9 @@ const WalletSettings = memo(function WalletSettings() {
                 if (msA !== msZ) return msA - msZ
                 const pathIndexA = getPathIndex(a.derivationPath)
                 const pathIndexZ = getPathIndex(z.derivationPath)
+                if (pathIndexA === pathIndexZ) return 0
+                if (pathIndexA === undefined) return 1
+                if (pathIndexZ === undefined) return -1
                 return pathIndexA - pathIndexZ
             })
     }, [allWallets, wallet?.mnemonicId])
