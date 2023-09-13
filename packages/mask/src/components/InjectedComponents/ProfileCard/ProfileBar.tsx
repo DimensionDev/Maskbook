@@ -18,9 +18,9 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography } from '@mui/material'
 import type { BoxProps } from '@mui/system'
+import { PluginTraderMessages } from '@masknet/plugin-trader'
 import { useI18N } from '../../../utils/index.js'
 import { AvatarDecoration } from './AvatarDecoration.js'
-import { PluginTraderMessages } from '@masknet/plugin-trader'
 
 const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
     root: {
@@ -138,7 +138,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                 window.removeEventListener('scroll', closeMenu, false)
             }
         }, [])
-        const selectedAddress = socialAccounts.find((x) => isSameAddress(x.address, address))
+        const selectedAccount = socialAccounts.find((x) => isSameAddress(x.address, address))
 
         return (
             <Box className={cx(classes.root, className)} {...rest}>
@@ -169,7 +169,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                     {address ? (
                         <div className={classes.addressRow}>
                             <AddressItem
-                                socialAccount={selectedAddress}
+                                socialAccount={selectedAccount}
                                 disableLinkIcon
                                 TypographyProps={{ className: classes.address }}
                             />

@@ -108,7 +108,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
             : EMPTY_LIST,
     })
     const mergedIndexes = useMemo(() => {
-        if (!isReset) return pathIndexes
+        if (!isReset) return sortBy(uniq(pathIndexes))
         const existedSiblingsIndexes = existedSiblingQueries
             .flatMap((x) => x.data)
             .filter((x) => typeof x === 'number') as number[]
