@@ -12,15 +12,15 @@ import { CrossIsolationMessages, EMPTY_LIST, type SocialAccount, type SocialIden
 import { useAnchor } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { ScopedDomainsContainer, useChainContext, useWeb3Others } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography } from '@mui/material'
 import type { BoxProps } from '@mui/system'
+import { PluginTraderMessages } from '@masknet/plugin-trader'
 import { useI18N } from '../../../utils/index.js'
 import { AvatarDecoration } from './AvatarDecoration.js'
-import { PluginTraderMessages } from '@masknet/plugin-trader'
 
 const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
     root: {
@@ -139,11 +139,6 @@ export const ProfileBar = memo<ProfileBarProps>(
             }
         }, [])
         const selectedAccount = socialAccounts.find((x) => isSameAddress(x.address, address))
-        const { setPair } = ScopedDomainsContainer.useContainer()
-        useEffect(() => {
-            if (!selectedAccount?.address || !selectedAccount.label) return
-            setPair(selectedAccount?.address, selectedAccount?.label)
-        }, [selectedAccount])
 
         return (
             <Box className={cx(classes.root, className)} {...rest}>

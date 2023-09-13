@@ -172,6 +172,16 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
         onChange(undefined, first(tabs)?.id)
     }, [userId])
 
+    const scopedDomainsMap: Record<string, string> = useMemo(() => {
+        return socialAccounts.reduce((map, account) => {
+            if (!account.label) return map
+            return {
+                ...map,
+                [account.address.toLowerCase()]: account.label,
+            }
+        }, {})
+    }, [socialAccounts])
+
     if (!userId || loadingSocialAccounts)
         return (
             <div className={cx(classes.root, classes.loading)}>
@@ -181,7 +191,7 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
 
     return (
         <DefaultWeb3ContextProvider value={{ chainId: ChainId.Mainnet }}>
-            <ScopedDomainsContainer.Provider>
+            <ScopedDomainsContainer.Provider initialState={scopedDomainsMap}>
                 <div className={classes.root}>
                     <div className={classes.header}>
                         <ProfileCardTitle
