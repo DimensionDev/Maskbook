@@ -46,7 +46,7 @@
     "smart_pay_description": "SmartPay is based on ERC-4337 and is currently deployed on Polygon Network. Multiple chains will be supported in the future. ERC-4337 is a new wallet proposal that would open the door for creativity in wallet design and could provide more important features. And we will design more fascinating features based on the new wallet proposal in Mask Network.",
     "setup_smart_pay_title": "You need to know before using SmartPay:",
     "setup_smart_pay_one": "<strong>Your smart contract wallet is only deployed on Polygon Network for now. Please do not receive funds on other chains with the same address. </strong> We will support more chains in the future.",
-    "setup_smart_pay_two": "Free gas experience in Mask Network’s dApps like Lucky Drop, ITO and Tips.",
+    "setup_smart_pay_two": "Free gas experience in Mask Network’s dApps like Lucky Drop and Tips.",
     "setup_smart_pay_three": "Your private key and Json file can only be used in SmartPay.",
     "scan_address_to_payment": "Scan address to receive payment",
     "remain_mask_tips": "MASK token can be used to pay gas fee.",

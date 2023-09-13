@@ -1,16 +1,16 @@
 import { memo, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { type ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
-import { resolveTradeProviderName } from '../../pipes.js'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { multipliedBy, formatBalance, ZERO, formatCurrency, formatPercentage } from '@masknet/web3-shared-base'
-import { PluginTraderRPC } from '../../messages.js'
-import { TradeProvider } from '@masknet/public-api'
-import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting.js'
-import { useChainContext, useNativeTokenPrice, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
-import { DefaultTraderPlaceholderUI, TraderInfoUI } from './components/TraderInfoUI.js'
-import type { TraderAPI } from '@masknet/web3-providers/types'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
+import { type ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
+import { TradeProvider } from '@masknet/public-api'
+import { NetworkPluginID } from '@masknet/shared-base'
+import type { TraderAPI } from '@masknet/web3-providers/types'
+import { multipliedBy, formatBalance, ZERO, formatCurrency, formatPercentage } from '@masknet/web3-shared-base'
+import { useChainContext, useNativeTokenPrice, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
+import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting.js'
+import { DefaultTraderPlaceholderUI, TraderInfoUI } from './components/TraderInfoUI.js'
+import { Balancer } from '../../providers/index.js'
+import { resolveTradeProviderName } from '../../helpers/index.js'
 
 export interface TraderInfoProps {
     trade: AsyncStateRetry<TraderAPI.TradeInfo>
@@ -29,7 +29,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
         if (pluginID !== NetworkPluginID.PLUGIN_EVM)
             if (trade.value?.provider === TradeProvider.BALANCER)
                 // force update balancer's pools each time user enters into the swap tab
-                await PluginTraderRPC.updatePools(true, chainId as ChainId)
+                await Balancer.updatePools(true, chainId as ChainId)
     }, [trade.value?.provider, chainId, pluginID])
     // #endregion
 

@@ -7,10 +7,14 @@ import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import { Web3 } from '@masknet/web3-providers'
-import { PluginTraderRPC } from '../../messages.js'
-import type { SwapBancorRequest, TradeComputed } from '../../types/index.js'
+import type { TraderAPI } from '@masknet/web3-providers/types'
+import { Bancor } from '../../providers/index.js'
+import type { SwapBancorRequest } from '../../types/index.js'
 
-export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest> | null, gasConfig?: GasConfig) {
+export function useTradeCallback(
+    tradeComputed: TraderAPI.TradeComputed<SwapBancorRequest> | null,
+    gasConfig?: GasConfig,
+) {
     const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
@@ -20,19 +24,14 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest>
     }, [account, tradeComputed])
 
     return useAsyncFn(async () => {
-        if (!account || !trade || pluginID !== NetworkPluginID.PLUGIN_EVM) {
-            return
-        }
-
-        const [data, err] = await PluginTraderRPC.swapTransactionBancor(trade)
-        if (err) {
-            throw new Error(err.error.messages?.[0] || 'Unknown Error')
-        }
-
-        // Note that if approval is required, the API will also return the necessary approval transaction.
-        const tradeTransaction = data.length === 1 ? data[0] : data[1]
+        if (!account || !trade || pluginID !== NetworkPluginID.PLUGIN_EVM) return
 
         try {
+            const data = await Bancor.swapTransactionBancor(trade)
+
+            // Note that if approval is required, the API will also return the necessary approval transaction.
+            const tradeTransaction = data.length === 1 ? data[0] : data[1]
+
             const config = pick(tradeTransaction.transaction, ['to', 'data', 'from', 'value'])
             const gas = await Web3.estimateTransaction?.(config, undefined, {
                 chainId,

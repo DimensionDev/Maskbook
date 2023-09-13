@@ -959,7 +959,7 @@ export interface NameServiceState extends Startable {
     /** get address of domain name */
     lookup?: (domain: string) => Promise<string | undefined>
     /** get domain name of address */
-    reverse?: (address: string) => Promise<string | undefined>
+    reverse?: (address: string, domainOnly?: boolean) => Promise<string | undefined>
     /** safely get domain name of address */
     safeReverse?: (address: string) => Promise<string | undefined>
 }

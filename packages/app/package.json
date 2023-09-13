@@ -46,7 +46,6 @@
         "@masknet/plugin-go-plus-security": "workspace:^",
         "@masknet/plugin-handle": "workspace:^",
         "@masknet/plugin-infra": "workspace:^",
-        "@masknet/plugin-ito": "workspace:^",
         "@masknet/plugin-maskbox": "workspace:^",
         "@masknet/plugin-nextid": "workspace:^",
         "@masknet/plugin-pets": "workspace:^",

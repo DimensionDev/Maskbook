@@ -70,7 +70,7 @@ export const WalletGroupModal = memo<ActionModalBaseProps>(function WalletGroupM
     return (
         <ActionModal header={t('wallet_account')} {...rest}>
             <Box className={classes.root}>
-                {Object.entries(walletGroup?.groups).map(([key, value], index) => {
+                {Object.entries(walletGroup.groups).map(([key, value], index) => {
                     return (
                         <Box key={key}>
                             <Typography className={classes.title}>

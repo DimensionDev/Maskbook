@@ -8,6 +8,7 @@ export function formatBalance(
     isPrecise = false,
     isFixed = false,
     fixedDecimals = 4,
+    hasSeparators = true,
 ) {
     let balance = new BigNumber(rawValue)
     if (!balance.isInteger()) {
@@ -25,7 +26,8 @@ export function formatBalance(
         const minimum = scale10(1, -fixedDecimals)
         if (value.eq(0)) return '0'
         if (isLessThan(value, minimum)) return '<' + minimum.toFixed()
-        return addThousandSeparators(trimZero(value.toFixed(fixedDecimals)))
+        const result = trimZero(value.toFixed(fixedDecimals))
+        return hasSeparators ? addThousandSeparators(result) : result
     }
 
     const base = pow10(decimals) // 10n ** decimals
@@ -52,5 +54,5 @@ export function formatBalance(
 
     const raw = negative ? `-${value}` : value
     const result = raw.includes('.') ? raw.replace(/0+$/, '').replace(/\.$/, '') : raw
-    return addThousandSeparators(result)
+    return hasSeparators ? addThousandSeparators(result) : result
 }

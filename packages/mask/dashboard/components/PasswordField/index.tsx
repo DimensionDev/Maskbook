@@ -32,4 +32,6 @@ const PasswordField = forwardRef(({ show = true, ...props }: PasswordFieldProps,
     )
 })
 
+PasswordField.displayName = 'PasswordField'
+
 export default PasswordField

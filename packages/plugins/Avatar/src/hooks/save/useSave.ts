@@ -22,7 +22,7 @@ export function useSave(pluginID: NetworkPluginID) {
             token: AllChainsNonFungibleToken,
             data: AvatarInfo,
             persona: ECKeyIdentifier,
-            proof: BindingProof,
+            proof?: BindingProof,
         ) => {
             if (!token.contract?.address) return
             const info: NextIDAvatarMeta = {
@@ -47,6 +47,7 @@ export function useSave(pluginID: NetworkPluginID) {
                         return await saveToStringStorage(data.userId, account, info)
                     }
                     default:
+                        if (!proof) return
                         return await saveToKV(info, account, persona, proof)
                 }
             } catch {

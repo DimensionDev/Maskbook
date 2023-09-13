@@ -1,5 +1,5 @@
-import { SiteAdaptor, type Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID } from '@masknet/shared-base'
+import type { Plugin } from '@masknet/plugin-infra'
+import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { GamePluginID } from './constants.js'
 import { languages } from './locales/languages.js'
@@ -13,13 +13,9 @@ export const base: Plugin.Shared.Definition = {
     publisher: { name: { fallback: '' }, link: 'https://github.com/HelloWeb3Team' },
     enableRequirement: {
         supports: {
-            type: 'opt-in',
+            type: 'opt-out',
             sites: {
-                [SiteAdaptor.Twitter]: true,
-                [SiteAdaptor.Facebook]: true,
-                [SiteAdaptor.Instagram]: true,
-                [SiteAdaptor.Minds]: true,
-                [SiteAdaptor.MaskIO]: true,
+                [EnhanceableSite.Localhost]: true,
             },
         },
         web3: {

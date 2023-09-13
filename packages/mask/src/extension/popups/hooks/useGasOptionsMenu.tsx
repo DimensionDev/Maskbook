@@ -3,7 +3,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext, useChainIdSupport, useGasOptions } from '@masknet/web3-hooks-base'
 import { GasOptionType } from '@masknet/web3-shared-base'
-import { formatWeiToGwei, type GasConfig, type GasOption } from '@masknet/web3-shared-evm'
+import { formatWeiToGwei, type EIP1559GasConfig, type GasConfig, type GasOption } from '@masknet/web3-shared-evm'
 import { MenuItem, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui.js'
@@ -67,7 +67,16 @@ export function useGasOptionsMenu(
         })
         if (!result) return
 
-        setCustomGasConfig(result)
+        setCustomGasConfig({
+            ...result,
+            gasPrice: result.gasPrice ? formatWeiToGwei(result.gasPrice).toFixed(2) : undefined,
+            maxFeePerGas: (result as EIP1559GasConfig).maxFeePerGas
+                ? formatWeiToGwei((result as EIP1559GasConfig).maxFeePerGas).toFixed(2)
+                : '',
+            maxPriorityFeePerGas: (result as EIP1559GasConfig).maxPriorityFeePerGas
+                ? formatWeiToGwei((result as EIP1559GasConfig).maxPriorityFeePerGas).toFixed(2)
+                : '',
+        })
         callback(result)
     }, [chainId, minimumGas, callback, customGasConfig, paymentToken])
 

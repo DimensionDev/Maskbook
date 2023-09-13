@@ -4,13 +4,14 @@ import { useChainContext, useCustomBlockBeatRetry, useNetworkContext } from '@ma
 import { isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { PluginTraderRPC } from '../../messages.js'
+import type { TraderAPI } from '@masknet/web3-providers/types'
 import { OPENOCEAN_SUPPORTED_CHAINS } from './constants.js'
-import type { SwapOOData, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
+import type { SwapOOData } from '../../types/index.js'
+import { OpenOcean } from '../../providers/index.js'
 
 export function useTrade(
-    strategy: TradeStrategy,
+    strategy: TraderAPI.TradeStrategy,
     inputAmount: string,
     outputAmount: string,
     inputToken?: Web3Helper.FungibleTokenAll,
@@ -36,7 +37,7 @@ export function useTrade(
             const buyToken = isNativeTokenAddress(outputToken.address)
                 ? { ...outputToken, address: OPENOCEAN_ETH_ADDRESS ?? '' }
                 : outputToken
-            return PluginTraderRPC.swapOO({
+            return OpenOcean.swapOO({
                 isNativeSellToken: isNativeTokenAddress(inputToken.address),
                 fromToken: sellToken,
                 toToken: buyToken,

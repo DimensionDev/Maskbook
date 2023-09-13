@@ -75,8 +75,8 @@ export function createManager<
         const { signal = new AbortController().signal, addI18NResource, minimalMode } = _host
         const removeListener1 = minimalMode.events.on('enabled', (id) => updateCompositedMinimalMode(id))
         const removeListener2 = minimalMode.events.on('disabled', (id) => updateCompositedMinimalMode(id))
-        const removeListener3 = onNewPluginRegistered((id, def) => {
-            def.i18n && addI18NResource(id, def.i18n)
+        const removeListener3 = onNewPluginRegistered((id, define) => {
+            define.i18n && addI18NResource(id, define.i18n)
             checkRequirementAndStartOrStop()
         })
 
@@ -106,6 +106,7 @@ export function createManager<
         async function meetRequirement(id: PluginID) {
             const define = getPluginDefine(id)
             if (!define) return false
+
             if (extraCheck && !extraCheck(id)) return false
             return true
         }

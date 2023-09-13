@@ -141,38 +141,32 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
         )
     }
 
-    if (isMatched) return <>{props.children}</>
-
     if (!chainIdValid && !expectedChainAllowed && forceShowingWrongNetworkButton)
         return renderBox(
-            <>
-                {!props.hiddenConnectButton ? (
-                    <ActionButton
-                        fullWidth
-                        startIcon={<Icons.Wallet size={18} />}
-                        onClick={() => SelectProviderModal.open()}
-                        {...props.ActionButtonPromiseProps}>
-                        {t.plugin_wallet_wrong_network()}
-                    </ActionButton>
-                ) : null}
-            </>,
+            !props.hiddenConnectButton ? (
+                <ActionButton
+                    fullWidth
+                    startIcon={<Icons.Wallet size={18} />}
+                    onClick={() => SelectProviderModal.open()}
+                    {...props.ActionButtonPromiseProps}>
+                    {t.plugin_wallet_wrong_network()}
+                </ActionButton>
+            ) : null,
         )
 
     // No wallet connected
     if (!account && !disableConnectWallet)
         return renderBox(
-            <>
-                {!props.hiddenConnectButton ? (
-                    <ActionButton
-                        className={classes.connectWallet}
-                        fullWidth
-                        startIcon={<Icons.Wallet size={18} />}
-                        onClick={() => SelectProviderModal.open()}
-                        {...props.ActionButtonPromiseProps}>
-                        {t.plugin_wallet_connect_a_wallet()}
-                    </ActionButton>
-                ) : null}
-            </>,
+            !props.hiddenConnectButton ? (
+                <ActionButton
+                    className={classes.connectWallet}
+                    fullWidth
+                    startIcon={<Icons.Wallet size={18} />}
+                    onClick={() => SelectProviderModal.open()}
+                    {...props.ActionButtonPromiseProps}>
+                    {t.plugin_wallet_connect_a_wallet()}
+                </ActionButton>
+            ) : null,
         )
 
     // Network mismatch
@@ -182,12 +176,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                 fullWidth
                 className={classes.switchButton}
                 disabled={actualProviderType === ProviderType.WalletConnect}
-                startIcon={
-                    <WalletIcon
-                        mainIcon={expectedNetworkDescriptor?.icon} // switch the icon to meet design
-                        size={18}
-                    />
-                }
+                startIcon={<WalletIcon mainIcon={expectedNetworkDescriptor?.icon} size={18} />}
                 sx={props.ActionButtonPromiseProps?.sx}
                 onClick={() => SelectProviderModal.open()}
                 {...props.ActionButtonPromiseProps}>
@@ -203,12 +192,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
     if (actualProviderType === ProviderType.WalletConnect && !isMatched) {
         return renderBox(
             <ActionButton
-                startIcon={
-                    <WalletIcon
-                        mainIcon={expectedNetworkDescriptor?.icon} // switch the icon to meet design
-                        size={18}
-                    />
-                }
+                startIcon={<WalletIcon mainIcon={expectedNetworkDescriptor?.icon} size={18} />}
                 onClick={onSwitchChain}
                 loading={loading}
                 className={classes.switchButton}
@@ -220,7 +204,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
         )
     }
 
-    return <>{props.children}</>
+    return props.children
 }
 
 export const ChainBoundary = memo(function <T extends NetworkPluginID>(props: ChainBoundaryProps<T>) {

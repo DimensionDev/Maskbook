@@ -36,7 +36,7 @@ export const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
         justifyContent: 'space-between',
         background: theme.palette.maskColor.bottom,
-        borderRadius: 16,
+        borderRadius: 8,
         boxShadow: `0px 0px 20px 0px ${alpha(theme.palette.maskColor.main, 0.05)}`,
     },
     itemText: {
@@ -85,5 +85,8 @@ export const useStyles = makeStyles()((theme) => ({
     confirmMessage: {
         fontSize: 14,
         lineHeight: '18px',
+        wordBreak: 'break-word',
+        maxHeight: '60vh',
+        overflow: 'auto',
     },
 }))

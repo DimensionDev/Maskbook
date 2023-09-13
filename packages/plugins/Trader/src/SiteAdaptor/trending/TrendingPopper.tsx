@@ -1,11 +1,11 @@
+import { memo, useEffect, useState } from 'react'
+import { useLocation } from 'react-use'
+import { ClickAwayListener, Fade } from '@mui/material'
 import type { SocialIdentity } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
-import { ClickAwayListener, Fade } from '@mui/material'
-import { memo, useEffect, useState } from 'react'
-import { useLocation } from 'react-use'
-import { PluginTraderMessages } from '../../messages.js'
 import { AnchorProvider } from '@masknet/shared-base-ui'
+import { PluginTraderMessages } from '../../messages.js'
 
 export interface TrendingPopperProps {
     children?: (

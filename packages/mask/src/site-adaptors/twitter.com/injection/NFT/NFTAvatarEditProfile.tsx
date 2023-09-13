@@ -64,9 +64,18 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
     useEffect(() => {
-        return CrossIsolationMessages.events.personaBindFinished.on((ev) => {
-            if (ev.pluginID === PluginID.Avatar) clickHandler()
-        })
+        const clearTasks = [
+            CrossIsolationMessages.events.personaBindFinished.on((ev) => {
+                if (ev.pluginID === PluginID.Avatar) clickHandler()
+            }),
+            CrossIsolationMessages.events.applicationDialogEvent.on((ev) => {
+                if (ev.pluginID === PluginID.Avatar) clickHandler()
+            }),
+        ]
+
+        return () => {
+            clearTasks.forEach((task) => task())
+        }
     }, [clickHandler])
 
     return (

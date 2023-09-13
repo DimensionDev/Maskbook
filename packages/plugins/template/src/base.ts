@@ -1,4 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import { EnhanceableSite } from '@masknet/shared-base'
 import { PLUGIN_DESCRIPTION, PLUGIN_ID, PLUGIN_NAME } from './constants.js'
 import { languages } from './locales/languages.js'
 
@@ -8,7 +9,12 @@ export const base: Plugin.Shared.Definition = {
     description: { fallback: PLUGIN_DESCRIPTION },
     publisher: { name: { fallback: '' }, link: '' },
     enableRequirement: {
-        supports: { type: 'opt-out', sites: {} },
+        supports: {
+            type: 'opt-out',
+            sites: {
+                [EnhanceableSite.Localhost]: true,
+            },
+        },
         target: 'beta',
     },
     experimentalMark: true,

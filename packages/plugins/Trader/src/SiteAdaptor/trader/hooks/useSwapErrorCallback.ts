@@ -1,5 +1,5 @@
-import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
 import { useRef, useCallback } from 'react'
+import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
 import { useI18N } from '../../../locales/i18n_generated.js'
 
 export function useSwapErrorCallback() {

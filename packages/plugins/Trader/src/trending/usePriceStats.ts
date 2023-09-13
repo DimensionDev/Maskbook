@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { isUndefined } from 'lodash-es'
-import { Days } from '@masknet/shared-base'
+import { Days, EMPTY_LIST } from '@masknet/shared-base'
 import type { SourceType } from '@masknet/web3-shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -24,7 +24,8 @@ export function usePriceStats({
         chainId: expectedChainId,
     })
     return useAsyncRetry(async () => {
-        if (isUndefined(days) || isUndefined(coinId) || isUndefined(sourceType) || isUndefined(currency)) return []
+        if (isUndefined(days) || isUndefined(coinId) || isUndefined(sourceType) || isUndefined(currency))
+            return EMPTY_LIST
         return PluginTraderRPC.getPriceStats(chainId, coinId, currency, days, sourceType)
     }, [coinId, sourceType, currency?.id, days])
 }

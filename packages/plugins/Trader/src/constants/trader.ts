@@ -1,6 +1,6 @@
+import { BigNumber } from 'bignumber.js'
 import { ONE } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { BigNumber } from 'bignumber.js'
 
 export const MIN_GAS_LIMIT = '150000'
 export const MIN_SLIPPAGE = 50 // 0.5%

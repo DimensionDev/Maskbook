@@ -49,8 +49,6 @@ export const PersistentStorages = {
         current: {
             [PluginID.RedPacket]: false,
             [PluginID.FileService]: false,
-            [PluginID.ITO]: false,
-            [`${PluginID.ITO}_claim`]: false,
             [PluginID.CrossChainBridge]: false,
             [PluginID.MaskBox]: false,
             [PluginID.Savings]: false,

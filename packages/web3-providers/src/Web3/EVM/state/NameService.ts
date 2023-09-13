@@ -21,7 +21,8 @@ export class NameService extends NameServiceState {
         })
     }
 
-    override createResolvers() {
+    override createResolvers(domainOnly?: boolean) {
+        if (domainOnly) return [this.ENS, this.SpaceID] as NameServiceAPI.Provider[]
         return [this.ENS, this.SpaceID, this.Lens] as NameServiceAPI.Provider[]
     }
 }

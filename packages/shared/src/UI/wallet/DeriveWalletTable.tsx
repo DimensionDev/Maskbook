@@ -88,7 +88,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface DeriveWalletTableProps {
     loading: boolean
-    dataSource?: Array<{
+    dataSource: Array<{
         address: string
         added: boolean
         selected: boolean
@@ -126,8 +126,9 @@ export const DeriveWalletTable = memo<DeriveWalletTableProps>(function DeriveWal
                 </TableHead>
             )}
             <TableBody>
-                {dataSource?.length && !loading
-                    ? dataSource.map((item, index) => (
+                {loading
+                    ? range(10).map((index) => <DeriveWalletTableRowSkeleton key={index} />)
+                    : dataSource.map((item) => (
                           <DeriveWalletTableRow
                               address={item.address}
                               pathIndex={item.pathIndex}
@@ -137,8 +138,7 @@ export const DeriveWalletTable = memo<DeriveWalletTableProps>(function DeriveWal
                               onCheck={(checked) => onCheck(checked, item.pathIndex)}
                               symbol={symbol}
                           />
-                      ))
-                    : range(10).map((index) => <DeriveWalletTableRowSkeleton key={index} />)}
+                      ))}
             </TableBody>
         </Table>
     )
@@ -204,7 +204,7 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(function Der
             <TableCell align="right" variant="body" className={classes.cell}>
                 <Checkbox
                     disabled={added}
-                    defaultChecked={selected || added}
+                    checked={selected || added}
                     icon={<Icons.CheckboxNo size={16} color={theme.palette.maskColor.secondaryLine} />}
                     checkedIcon={<Icons.Checkbox size={16} />}
                     sx={{

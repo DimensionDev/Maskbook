@@ -3,9 +3,9 @@ import type { Currency } from '@uniswap/sdk-core'
 import { type Route } from '@uniswap/v3-sdk'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { uniswap } from '@masknet/web3-providers/helpers'
 import { useV3SwapPools } from './useV3SwapPools.js'
 import { useSingleHopOnly } from './useSingleHopOnly.js'
+import { computeAllRoutes } from '../../helpers/index.js'
 
 /**
  * Returns all the routes from an input currency to an output currency
@@ -35,7 +35,7 @@ export function useAllV3Routes(
         )
             return { loading: true, routes: [] }
 
-        const routes = uniswap.computeAllRoutes(
+        const routes = computeAllRoutes(
             currencyIn,
             currencyOut,
             pools,

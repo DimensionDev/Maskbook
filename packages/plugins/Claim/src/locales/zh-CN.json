@@ -1,7 +1,6 @@
 {
     "__plugin_name": "领取",
     "airdrop": "空投",
-    "ito": "ITO",
     "claim": "领取",
     "claimable": "可领取",
     "tips": "小费",
@@ -9,7 +8,6 @@
     "share_text": "我刚刚在 Mask Network 插件上领取了{{amount}} {{symbol}} 的空投。 关注 @realMaskNetwork 以确认您是否有资格认领。 \n 安装 https://mask.io 来探索更多的空投活动。",
     "airdrop_alert": "要参与空投，您的钱包必须有足够的原生代币来支付交易成本。",
     "connect_wallet_airdrop_tips": "请连接钱包",
-    "connect_wallet_tips": "请连接钱包以查看ITO活动。",
     "congratulations": "恭喜！",
     "claim_successfully_tips": "成功领取了{{amount}} ${{symbol}}。",
     "eligible_to_claim": "有资格领取",

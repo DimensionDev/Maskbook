@@ -11,11 +11,7 @@ import { PersonaItem } from './PersonaItem.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
 import { Alert, PersonaAction, usePersonasFromNextID } from '@masknet/shared'
 import { isValidAddress } from '@masknet/web3-shared-evm'
-import {
-    useAllPersonas,
-    useLastRecognizedSocialIdentity,
-    useSiteAdaptorContext,
-} from '@masknet/plugin-infra/content-script'
+import { useAllPersonas, useLastRecognizedIdentity, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { RoutePaths } from './Routes.js'
 import { useAvatarManagement } from '../contexts/index.js'
 
@@ -24,8 +20,10 @@ export function PersonaPage() {
     const [visible, setVisible] = useState(true)
     const dismissAlert = useCallback(() => setVisible(false), [])
     const navigate = useNavigate()
-    const { setProofs, setTokenInfo, setProof } = useAvatarManagement()
-    const { isLoading, data: socialIdentity } = useLastRecognizedSocialIdentity()
+    const { setProofs, setTokenInfo, setProof, isLoading, binding } = useAvatarManagement()
+
+    const socialIdentity = useLastRecognizedIdentity()
+
     const network = socialIdentity?.identifier?.network.replace('.com', '')
     const userId = socialIdentity?.identifier?.userId
 
@@ -52,7 +50,7 @@ export function PersonaPage() {
     )
     const handleSelect = useCallback(
         (proof: BindingProof, tokenInfo?: AllChainsNonFungibleToken) => {
-            const proofs = socialIdentity?.binding?.proofs.filter(
+            const proofs = binding?.proofs.filter(
                 (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
             )
             setProofs(proofs ?? EMPTY_LIST)
@@ -80,7 +78,7 @@ export function PersonaPage() {
                             .filter((x) => x.identity.toLowerCase() === userId?.toLowerCase())
                             .map((x, i) => (
                                 <PersonaItem
-                                    persona={socialIdentity!.binding?.persona}
+                                    persona={binding?.persona}
                                     key={`avatar${i}`}
                                     avatar={socialIdentity!.avatar ?? ''}
                                     owner
@@ -94,7 +92,7 @@ export function PersonaPage() {
                         {myPersonas[0].linkedProfiles
                             .filter((x) => x.identifier.network === network)
                             .map((x, i) =>
-                                socialIdentity?.binding?.proofs.some(
+                                binding?.proofs.some(
                                     (y) => y.identity.toLowerCase() === x.identifier.userId.toLowerCase(),
                                 ) ? null : (
                                     <PersonaItem avatar="" key={`persona${i}`} userId={x.identifier.userId} />
@@ -105,7 +103,7 @@ export function PersonaPage() {
                             .map((x, i) => (
                                 <PersonaItem
                                     key={i}
-                                    persona={socialIdentity!.binding?.persona}
+                                    persona={binding?.persona}
                                     avatar=""
                                     userId={x.identity}
                                     proof={x}

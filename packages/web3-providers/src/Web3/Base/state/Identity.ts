@@ -51,24 +51,27 @@ export class IdentityServiceState<ChainId> implements Web3SocialIdentityState<Ch
     }
 
     __mergeSocialAddressesAll__(socialAddresses: Array<SocialAddress<ChainId>>) {
-        const accountsGrouped = groupBy(socialAddresses, (x) => `${x.pluginID}_${x.address.toLowerCase()}`)
-        return Object.entries(accountsGrouped).map<SocialAccount<ChainId>>(([, group]) => {
+        const accountGroups = groupBy(socialAddresses, (x) => `${x.pluginID}_${x.address.toLowerCase()}`)
+        const domainAddressTypes = [
+            SocialAddressType.ENS,
+            SocialAddressType.SPACE_ID,
+            SocialAddressType.ARBID,
+            SocialAddressType.Lens,
+            SocialAddressType.RSS3,
+            SocialAddressType.SOL,
+        ]
+        return Object.entries(accountGroups).map<SocialAccount<ChainId>>(([, accounts]) => {
+            const domainLabels = compact(domainAddressTypes.map((x) => accounts.find((y) => y.type === x)?.label))
+            const theFirstAccount = accounts[0]
             return {
-                pluginID: group[0].pluginID,
-                address: group[0].address,
-                label:
-                    first(
-                        compact(
-                            [SocialAddressType.ENS, SocialAddressType.RSS3, SocialAddressType.SOL].map(
-                                (x) => group.find((y) => y.type === x)?.label,
-                            ),
-                        ),
-                    ) ?? group[0].label,
+                pluginID: theFirstAccount.pluginID,
+                address: theFirstAccount.address,
+                label: first(domainLabels) || theFirstAccount.label,
                 // The supportedChainIds support all chains by default. If not set value, should keep it.
-                supportedChainIds: group.find((x) => !x.chainId)
+                supportedChainIds: accounts.find((x) => !x.chainId)
                     ? undefined
-                    : uniq(compact(group.map((x) => x.chainId))),
-                supportedAddressTypes: uniq(group.map((x) => x.type)),
+                    : uniq(compact(accounts.map((x) => x.chainId))),
+                supportedAddressTypes: uniq(accounts.map((x) => x.type)),
             }
         })
     }

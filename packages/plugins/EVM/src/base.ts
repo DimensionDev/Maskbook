@@ -2,10 +2,10 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { DEFAULT_PLUGIN_PUBLISHER } from '@masknet/shared-base'
 import {
     CHAIN_DESCRIPTORS,
-    type ChainId,
     NETWORK_DESCRIPTORS,
-    type NetworkType,
     PROVIDER_DESCRIPTORS,
+    type ChainId,
+    type NetworkType,
     type ProviderType,
     type SchemaType,
 } from '@masknet/web3-shared-evm'

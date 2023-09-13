@@ -1,17 +1,17 @@
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
+import type { TraderAPI } from '@masknet/web3-providers/types'
 import { multipliedBy, pow10 } from '@masknet/web3-shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { TradeProvider } from '@masknet/public-api'
 import { useTrade as useNativeTokenTrade } from './native/useTrade.js'
 import { useUniswapV2Like } from './useUniswapV2Like.js'
-import { TradeProvider } from '@masknet/public-api'
 import { useAvailableTraderProviders } from '../trending/useAvailableTraderProviders.js'
 import { useUniswapV3Like } from './useUniSwapV3Like.js'
-import { useZrx } from './useZrx.js'
+import { useZeroX } from './useZeroX.js'
 import { useBalancer } from './useBalancer.js'
 import { useOpenOcean } from './useOpenOcean.js'
 import { useBancor } from './useBancor.js'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
-import type { TraderAPI } from '@masknet/web3-providers/types'
 
 export function useAllTradeComputed(
     inputAmount: string,
@@ -84,7 +84,7 @@ export function useAllTradeComputed(
     )
 
     // zrx
-    const zrx = useZrx(inputAmount_, scale, inputToken, outputToken, temporarySlippage, isNativeTokenWrapper)
+    const zrx = useZeroX(inputAmount_, scale, inputToken, outputToken, temporarySlippage, isNativeTokenWrapper)
 
     // balancer
     const balancer = useBalancer(inputAmount_, scale, inputToken, outputToken, temporarySlippage, isNativeTokenWrapper)

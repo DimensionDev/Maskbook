@@ -1,28 +1,28 @@
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { first, noop } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import { Tune as TuneIcon } from '@mui/icons-material'
+import { alpha, Box, chipClasses, Collapse, IconButton, lighten, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { SelectGasSettingsModal, SelectTokenChip, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { alpha, Box, chipClasses, Collapse, IconButton, lighten, Typography } from '@mui/material'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { type ChainId, type GasConfig, GasEditor, type Transaction } from '@masknet/web3-shared-evm'
 import { rightShift, multipliedBy, isZero, ZERO, formatBalance } from '@masknet/web3-shared-base'
 import { PluginID, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
-import type { Web3Helper } from '@masknet/web3-helpers'
+import type { TraderAPI } from '@masknet/web3-providers/types'
 import { InputTokenPanel } from './InputTokenPanel.js'
-import { TokenPanelType } from '../../types/index.js'
+import { TokenPanel } from '../../types/index.js'
 import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { currentSlippageSettings } from '../../settings.js'
 import { PluginTraderMessages } from '../../messages.js'
-import type { TraderAPI } from '@masknet/web3-providers/types'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { useI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -178,7 +178,7 @@ export interface AllTradeFormProps extends withClasses<'root'> {
     outputToken?: Web3Helper.FungibleTokenAll
     inputTokenBalance?: string
     onInputAmountChange: (amount: string) => void
-    onTokenChipClick?: (token: TokenPanelType) => void
+    onTokenChipClick?: (token: TokenPanel) => void
     onRefreshClick?: () => void
     trades: Array<AsyncStateRetry<TraderAPI.TradeInfo>>
     focusedTrade?: AsyncStateRetry<TraderAPI.TradeInfo>
@@ -367,8 +367,8 @@ export const TradeForm = memo<AllTradeFormProps>(
                         maxAmount={maxAmount}
                         SelectTokenChip={{
                             ChipProps: {
-                                onClick: () => onTokenChipClick(TokenPanelType.Input),
-                                onDelete: () => onTokenChipClick(TokenPanelType.Input),
+                                onClick: () => onTokenChipClick(TokenPanel.Input),
+                                onDelete: () => onTokenChipClick(TokenPanel.Input),
                                 deleteIcon: (
                                     <Icons.Drop
                                         className={cx(classes.dropIcon, !inputToken ? classes.whiteDrop : null)}
@@ -394,8 +394,8 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 }}
                                 token={outputToken}
                                 ChipProps={{
-                                    onClick: () => onTokenChipClick(TokenPanelType.Output),
-                                    onDelete: () => onTokenChipClick(TokenPanelType.Output),
+                                    onClick: () => onTokenChipClick(TokenPanel.Output),
+                                    onDelete: () => onTokenChipClick(TokenPanel.Output),
                                     deleteIcon: (
                                         <Icons.Drop
                                             className={cx(classes.dropIcon, !outputToken ? classes.whiteDrop : null)}

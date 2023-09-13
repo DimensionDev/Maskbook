@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { ZERO } from '@masknet/web3-shared-base'
-import { type TradeComputed, TradeStrategy } from '../../types/index.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3Others } from '@masknet/web3-hooks-base'
+import { TraderAPI } from '@masknet/web3-providers/types'
 
 export interface NativeTokenWrapper {
     /**
@@ -19,18 +19,20 @@ export interface NativeTokenWrapper {
 
 export function useTradeComputed(
     isNativeTokenWrapper: boolean,
-    strategy: TradeStrategy,
+    strategy: TraderAPI.TradeStrategy,
     inputAmount: string,
     outputAmount: string,
     inputToken?: Web3Helper.FungibleTokenAll,
     outputToken?: Web3Helper.FungibleTokenAll,
 ) {
     const Others = useWeb3Others()
-    return useMemo((): TradeComputed<NativeTokenWrapper> | null => {
+    return useMemo((): TraderAPI.TradeComputed<NativeTokenWrapper> | null => {
         if (!isNativeTokenWrapper) return null
 
         // the trade amount follows trade strategy
-        const tradeAmount = new BigNumber(strategy === TradeStrategy.ExactIn ? inputAmount || '0' : outputAmount || '0')
+        const tradeAmount = new BigNumber(
+            strategy === TraderAPI.TradeStrategy.ExactIn ? inputAmount || '0' : outputAmount || '0',
+        )
 
         // skip to render 0s
         if (tradeAmount.isZero()) return null
@@ -48,8 +50,10 @@ export function useTradeComputed(
             fee: ZERO,
             trade_: {
                 isWrap:
-                    (strategy === TradeStrategy.ExactIn && !!Others.isNativeTokenSchemaType(inputToken?.schema)) ||
-                    (strategy === TradeStrategy.ExactOut && !!Others.isNativeTokenSchemaType(outputToken?.schema)),
+                    (strategy === TraderAPI.TradeStrategy.ExactIn &&
+                        !!Others.isNativeTokenSchemaType(inputToken?.schema)) ||
+                    (strategy === TraderAPI.TradeStrategy.ExactOut &&
+                        !!Others.isNativeTokenSchemaType(outputToken?.schema)),
                 isNativeTokenWrapper,
             },
         }

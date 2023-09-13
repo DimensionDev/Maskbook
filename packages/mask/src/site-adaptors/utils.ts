@@ -1,17 +1,5 @@
-import { SiteAdaptor } from '@masknet/plugin-infra'
-import type { SiteAdaptor as SiteAdaptorType } from '@masknet/types'
-import { EnhanceableSite, type PersonaIdentifier, type ProfileIdentifier } from '@masknet/shared-base'
+import { type PersonaIdentifier, type ProfileIdentifier } from '@masknet/shared-base'
 import { activatedSiteAdaptorUI, activatedSiteAdaptor_state } from '../site-adaptor-infra/index.js'
-
-export function getCurrentSite(current: SiteAdaptorType.Base['networkIdentifier']): SiteAdaptor {
-    const table: Partial<Record<EnhanceableSite, SiteAdaptor>> = {
-        [EnhanceableSite.Twitter]: SiteAdaptor.Twitter,
-        [EnhanceableSite.Facebook]: SiteAdaptor.Facebook,
-        [EnhanceableSite.Instagram]: SiteAdaptor.Instagram,
-        [EnhanceableSite.Minds]: SiteAdaptor.Minds,
-    }
-    return table[current] ?? SiteAdaptor.Unknown
-}
 
 export function getCurrentIdentifier():
     | {

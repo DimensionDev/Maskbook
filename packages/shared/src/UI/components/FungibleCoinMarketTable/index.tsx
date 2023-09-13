@@ -32,7 +32,7 @@ const useStyles = makeStyles()({
         fontSize: 14,
         border: 'none',
     },
-    cell: {
+    value: {
         whiteSpace: 'nowrap',
         border: 'none',
         fontSize: 14,
@@ -70,9 +70,9 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                                     {t.market_cap()}
                                 </Typography>
                             </TableCell>
-                            <TableCell className={classes.cell}>
+                            <TableCell className={classes.value}>
                                 {market?.market_cap ? (
-                                    <ProgressiveText loading={isLoading} skeletonWidth={60}>
+                                    <ProgressiveText className={classes.value} loading={isLoading} skeletonWidth={60}>
                                         <FormattedCurrency
                                             value={market.market_cap}
                                             formatter={formatCurrency}
@@ -91,7 +91,7 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                                     {t.circulating_supply()}
                                 </Typography>
                             </TableCell>
-                            <TableCell className={classes.cell}>
+                            <TableCell className={classes.value}>
                                 {formatSupply(market?.circulating_supply, '--')}
                             </TableCell>
                         </TableRow>
@@ -102,9 +102,9 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                                     {t.volume_24()}
                                 </Typography>
                             </TableCell>
-                            <TableCell className={classes.cell}>
+                            <TableCell className={classes.value}>
                                 {market?.total_volume ? (
-                                    <ProgressiveText loading={isLoading} skeletonWidth={60}>
+                                    <ProgressiveText className={classes.value} loading={isLoading} skeletonWidth={60}>
                                         <FormattedCurrency
                                             value={market.total_volume}
                                             formatter={formatCurrency}
@@ -122,7 +122,7 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                                     {t.total_supply()}
                                 </Typography>
                             </TableCell>
-                            <TableCell className={classes.cell}>{formatSupply(market?.total_supply, '--')}</TableCell>
+                            <TableCell className={classes.value}>{formatSupply(market?.total_supply, '--')}</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -151,7 +151,7 @@ export const FungibleCoinMarketTableSkeleton = memo(function FungibleCoinMarketT
                                     {t.market_cap()}
                                 </Typography>
                             </TableCell>
-                            <TableCell className={classes.cell}>
+                            <TableCell className={classes.value}>
                                 <Skeleton />
                             </TableCell>
                         </TableRow>
@@ -162,7 +162,7 @@ export const FungibleCoinMarketTableSkeleton = memo(function FungibleCoinMarketT
                                     {t.circulating_supply()}
                                 </Typography>
                             </TableCell>
-                            <TableCell className={classes.cell}>
+                            <TableCell className={classes.value}>
                                 <Skeleton />
                             </TableCell>
                         </TableRow>
@@ -173,7 +173,7 @@ export const FungibleCoinMarketTableSkeleton = memo(function FungibleCoinMarketT
                                     {t.volume_24()}
                                 </Typography>
                             </TableCell>
-                            <TableCell className={classes.cell}>
+                            <TableCell className={classes.value}>
                                 <Skeleton />
                             </TableCell>
                         </TableRow>
@@ -183,7 +183,7 @@ export const FungibleCoinMarketTableSkeleton = memo(function FungibleCoinMarketT
                                     {t.total_supply()}
                                 </Typography>
                             </TableCell>
-                            <TableCell className={classes.cell}>
+                            <TableCell className={classes.value}>
                                 <Skeleton />
                             </TableCell>
                         </TableRow>

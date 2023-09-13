@@ -4,16 +4,17 @@ import { TabContext, TabPanel } from '@mui/lab'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { InjectedDialog, LeavePageConfirmModal, useSharedI18N, type PersonaPerSiteConnectStatus } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch.js'
-import { ApplicationSettingPluginList } from './ApplicationSettingPluginList.js'
+import type { IdentityResolved } from '@masknet/plugin-infra'
 import {
     CrossIsolationMessages,
+    type EnhanceableSite,
     type DashboardRoutes,
     type PersonaInformation,
     type PluginID,
 } from '@masknet/shared-base'
 import { ApplicationBoardContent } from './ApplicationBoard.js'
-import type { SiteAdaptor, IdentityResolved } from '@masknet/plugin-infra'
+import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch.js'
+import { ApplicationSettingPluginList } from './ApplicationSettingPluginList.js'
 
 const useStyles = makeStyles<{
     openSettings: boolean
@@ -41,7 +42,7 @@ interface ApplicationBoardProps {
 
     openDashboard?: (route?: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
-    currentSite?: SiteAdaptor
+    currentSite?: EnhanceableSite
     allPersonas: PersonaInformation[]
     lastRecognized?: IdentityResolved
     applicationCurrentStatus?: PersonaPerSiteConnectStatus

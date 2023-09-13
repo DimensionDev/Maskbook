@@ -21,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
         whiteSpace: 'nowrap',
         flex: 1,
         paddingTop: theme.spacing(3),
-        paddingLeft: theme.spacing(4),
+        paddingLeft: 0,
         textOverflow: 'ellipsis',
         overflow: 'hidden',
     },

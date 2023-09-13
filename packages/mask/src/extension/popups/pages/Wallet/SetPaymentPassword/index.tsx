@@ -1,11 +1,5 @@
-import { memo, useEffect, useState } from 'react'
-import { useAsyncFn } from 'react-use'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { Trans } from 'react-i18next'
-import { Controller } from 'react-hook-form'
-import type { z as zod } from 'zod'
-import { Box, Link, Typography, useTheme } from '@mui/material'
-import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { Icons } from '@masknet/icons'
+import { FormattedBalance, ProgressiveText } from '@masknet/shared'
 import {
     CrossIsolationMessages,
     NetworkPluginID,
@@ -13,16 +7,23 @@ import {
     getDefaultWalletPassword,
     type Wallet,
 } from '@masknet/shared-base'
+import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useBalance, useReverseAddress, useWallets } from '@masknet/web3-hooks-base'
-import { Icons } from '@masknet/icons'
-import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { FormattedBalance, ProgressiveText } from '@masknet/shared'
 import { ExplorerResolver } from '@masknet/web3-providers'
 import { formatBalance } from '@masknet/web3-shared-base'
-import { useI18N } from '../../../../../utils/index.js'
-import { usePasswordForm } from '../hooks/usePasswordForm.js'
+import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { Box, Link, Typography, useTheme } from '@mui/material'
+import { memo, useEffect, useState } from 'react'
+import { Controller } from 'react-hook-form'
+import { Trans } from 'react-i18next'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useAsyncFn } from 'react-use'
+import type { z as zod } from 'zod'
 import Services from '#services'
+import { useI18N } from '../../../../../utils/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
+import { usePasswordForm } from '../hooks/usePasswordForm.js'
+import { queryClient } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -207,6 +208,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                 const hasPassword = await Services.Wallet.hasPassword()
 
                 if (hasPassword) {
+                    queryClient.invalidateQueries(['@@has-password'])
                     const from = params.get('from')
                     showSnackbar(t('popups_wallet_set_payment_password_successfully'), { variant: 'success' })
                     CrossIsolationMessages.events.passwordStatusUpdated.sendToAll(true)
@@ -249,6 +251,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                                     render={({ field }) => (
                                         <PasswordField
                                             {...field}
+                                            autoFocus
                                             type="password"
                                             variant="filled"
                                             placeholder={t('popups_wallet_payment_password')}

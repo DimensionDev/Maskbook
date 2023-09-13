@@ -3,14 +3,14 @@ import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
-import type { SwapResponse, TradeComputed } from '../../types/index.js'
-import { TradeStrategy } from '../../types/index.js'
 import { type ChainId, ContractTransaction, useTraderConstants } from '@masknet/web3-shared-evm'
+import { TraderAPI } from '@masknet/web3-providers/types'
 import { useExchangeProxyContract } from '../../contracts/balancer/useExchangeProxyContract.js'
 import { useTradeAmount } from './useTradeAmount.js'
 import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
+import type { SwapResponse } from '../../types/index.js'
 
-export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): AsyncState<string> {
+export function useTradeGasLimit(trade: TraderAPI.TradeComputed<SwapResponse> | null): AsyncState<string> {
     const { account, chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
     const Others = useWeb3Others()
@@ -60,13 +60,19 @@ export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): Asy
 
         // trade with the native token
         let transactionValue = '0'
-        if (trade.strategy === TradeStrategy.ExactIn && Others.isNativeTokenSchemaType(trade.inputToken?.schema))
+        if (
+            trade.strategy === TraderAPI.TradeStrategy.ExactIn &&
+            Others.isNativeTokenSchemaType(trade.inputToken?.schema)
+        )
             transactionValue = trade.inputAmount.toFixed()
-        else if (trade.strategy === TradeStrategy.ExactOut && Others.isNativeTokenSchemaType(trade.outputToken?.schema))
+        else if (
+            trade.strategy === TraderAPI.TradeStrategy.ExactOut &&
+            Others.isNativeTokenSchemaType(trade.outputToken?.schema)
+        )
             transactionValue = trade.outputAmount.toFixed()
 
         const tx = await new ContractTransaction(exchangeProxyContract).fillAll(
-            trade.strategy === TradeStrategy.ExactIn
+            trade.strategy === TraderAPI.TradeStrategy.ExactIn
                 ? exchangeProxyContract.methods.multihopBatchSwapExactIn(
                       swap_,
                       inputTokenAddress,

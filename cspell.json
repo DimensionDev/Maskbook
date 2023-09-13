@@ -466,10 +466,6 @@
             "ignoreWords": ["görli"]
         },
         {
-            "filename": "packages/mask/src/plugins/ITO/assets/regions.json",
-            "enabled": false
-        },
-        {
             "filename": "**/qya-AA.json",
             "enabled": false
         },

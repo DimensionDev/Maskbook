@@ -1,12 +1,12 @@
 import { NetworkPluginID, PopupModalRoutes, PopupRoutes } from '@masknet/shared-base'
 import { useChainContext, useNetwork, useWallet } from '@masknet/web3-hooks-base'
 import { useQuery } from '@tanstack/react-query'
-import { memo, useCallback, useEffect } from 'react'
+import { memo, useCallback } from 'react'
 import { matchPath, useLocation, useMatch } from 'react-router-dom'
+import Services from '#services'
 import { NormalHeader, useModalNavigate } from '../../../../components/index.js'
 import { WalletHeaderUI } from './UI.js'
 import { WalletSetupHeaderUI } from './WalletSetupHeaderUI.js'
-import Services from '#services'
 
 const CUSTOM_HEADER_PATTERNS = [
     `${PopupRoutes.AddToken}/:chainId/:assetType`,
@@ -19,15 +19,12 @@ export const WalletHeader = memo(function WalletHeader() {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const location = useLocation()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const { data: hasPassword, refetch } = useQuery(['has-password'], Services.Wallet.hasPassword)
-    useEffect(() => {
-        refetch()
-    }, [location.pathname])
+    const { data: hasPassword } = useQuery(['@@has-password'], Services.Wallet.hasPassword)
 
     const currentNetwork = useNetwork(NetworkPluginID.PLUGIN_EVM, chainId)
     const matchUnlock = useMatch(PopupRoutes.Unlock)
     const matchResetWallet = useMatch(PopupRoutes.ResetWallet)
-    const matchWallet = useMatch(PopupRoutes.Wallet)
+    const matchWallet = PopupRoutes.Wallet === location.pathname
     const customHeader = CUSTOM_HEADER_PATTERNS.some((pattern) => matchPath(pattern, location.pathname))
     const matchContractInteraction = useMatch(PopupRoutes.ContractInteraction)
 

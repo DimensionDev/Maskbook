@@ -1,10 +1,10 @@
 import { useRef } from 'react'
 import { Stack, Typography } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import type { Coin, Currency, Stat } from '../../types/index.js'
 import { openWindow } from '@masknet/shared-base-ui'
-import { useI18N } from '../../locales/index.js'
 import { useDimension, usePriceLineChart, type Dimension } from '@masknet/shared'
+import { useI18N } from '../../locales/index.js'
+import type { Coin, Currency, Stat } from '../../types/index.js'
 
 const DEFAULT_DIMENSION: Dimension = {
     top: 32,

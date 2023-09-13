@@ -1,8 +1,8 @@
 import { makeStyles } from '@masknet/theme'
+import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { useChainContext, useFungibleToken, useNetworkContext } from '@masknet/web3-hooks-base'
 import { Trader, type TraderProps } from './Trader.js'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
-import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {

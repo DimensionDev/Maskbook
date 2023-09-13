@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { isGreaterThan, isLessThan, multipliedBy, leftShift } from '@masknet/web3-shared-base'
 import {
     useFungibleToken,
@@ -7,11 +8,10 @@ import {
     useNetworkContext,
     useWeb3Others,
 } from '@masknet/web3-hooks-base'
-import { MINIMUM_AMOUNT } from '../../../constants/index.js'
-import { AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { TraderAPI } from '@masknet/web3-providers/types'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
+import { MINIMUM_AMOUNT } from '../../../constants/index.js'
+import { AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext.js'
 
 export function useSortedTrades(
     traders: Array<AsyncStateRetry<TraderAPI.TradeInfo>>,

@@ -5,7 +5,6 @@ import type { TransactionMethodABI } from './types.js'
 
 // built-in abis
 import BulkCheckout from '@masknet/web3-contracts/abis/BulkCheckout.json'
-import ITO2 from '@masknet/web3-contracts/abis/ITO2.json'
 import NftRedPacket from '@masknet/web3-contracts/abis/NftRedPacket.json'
 import HappyRedPacketV4 from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import ERC20 from '@masknet/web3-contracts/abis/ERC20.json'
@@ -33,7 +32,6 @@ class ABI {
 
     constructor() {
         this.construct(BulkCheckout as AbiItem[]) // donate gitcoin grants
-        this.construct(ITO2 as AbiItem[])
         this.construct(NftRedPacket as AbiItem[])
         this.construct(HappyRedPacketV4 as AbiItem[])
         this.construct(MaskBox as AbiItem[])

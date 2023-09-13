@@ -180,6 +180,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
                         onChange={(e) => setPassword(e.target.value)}
                         error={!!error}
                         helperText={error}
+                        autoFocus
                     />
                 </Box>
             ) : restoreStatus === RestoreStatus.Verified && summary ? (

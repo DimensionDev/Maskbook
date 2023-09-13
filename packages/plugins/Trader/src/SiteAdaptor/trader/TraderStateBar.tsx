@@ -19,12 +19,11 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useEnvironmentContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { isLessThan, leftShift, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, formatWeiToEther, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { MINIMUM_AMOUNT, MIN_GAS_LIMIT } from '../../constants/trader.js'
-import { isNativeTokenWrapper } from '../../helpers/trader.js'
-import { resolveTradeProviderName } from '../../pipes.js'
+import type { TraderAPI } from '@masknet/web3-providers/types'
+import { MINIMUM_AMOUNT, MIN_GAS_LIMIT } from '../../constants/index.js'
+import { isNativeTokenWrapper, resolveTradeProviderName } from '../../helpers/index.js'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed.js'
-import type { TradeComputed, TraderAPI } from '@masknet/web3-providers/types'
 import type { NativeTokenWrapper } from '../../trader/native/useTradeComputed.js'
 import { useI18N } from '../../locales/index.js'
 
@@ -167,7 +166,7 @@ export function TraderStateBar({
     const nativeWrapMessage = useMemo(() => {
         if (focusedTrade?.value) {
             if (isNativeTokenWrapper(focusedTrade.value.value)) {
-                const trade_ = focusedTrade.value.value as TradeComputed<NativeTokenWrapper> | null
+                const trade_ = focusedTrade.value.value as TraderAPI.TradeComputed<NativeTokenWrapper> | null
                 return trade_?.trade_?.isWrap ? t.plugin_trader_wrap() : t.plugin_trader_unwrap()
             }
             return t.plugin_trader_swap_amount_symbol()

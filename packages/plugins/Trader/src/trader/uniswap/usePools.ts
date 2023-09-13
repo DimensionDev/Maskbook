@@ -2,15 +2,15 @@ import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { computePoolAddress, Pool, type FeeAmount } from '@uniswap/v3-sdk'
 import type { Token, Currency } from '@uniswap/sdk-core'
-import { usePoolContracts } from '../../contracts/uniswap/usePoolContract.js'
 import type { TradeProvider } from '@masknet/public-api'
-import { useGetTradeContext } from '../useGetTradeContext.js'
 import { MulticallStateType, useMultipleContractSingleData } from '@masknet/web3-hooks-evm'
-import { useTargetBlockNumber } from '../useTargetBlockNumber.js'
 import { isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { useGetTradeContext } from '../useGetTradeContext.js'
+import { useTargetBlockNumber } from '../useTargetBlockNumber.js'
+import { usePoolContracts } from '../../contracts/uniswap/usePoolContract.js'
 
 export enum PoolState {
     LOADING = 0,

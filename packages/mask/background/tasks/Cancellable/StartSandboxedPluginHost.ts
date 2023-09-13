@@ -1,9 +1,9 @@
 import { None, Result, Some } from 'ts-results-es'
+import { Flags } from '@masknet/flags'
 import type { PluginID } from '@masknet/shared-base'
 import { type Plugin, registerPlugin } from '@masknet/plugin-infra'
 import { type BackgroundInstance, BackgroundPluginHost } from '@masknet/sandboxed-plugin-runtime/background'
 import { hmr } from '../../../utils-pure/index.js'
-import { Flags } from '@masknet/flags'
 import { createPluginDatabase } from '../../database/plugin-db/index.js'
 import { createHostAPIs } from '../../../shared/sandboxed-plugin/host-api.js'
 

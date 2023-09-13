@@ -151,10 +151,11 @@ const AccountDetail = memo(() => {
                 result.createdAt,
                 { signature },
             )
-            // Broadcast updates
-            MaskMessages.events.ownProofChanged.sendToAll()
 
             await Service.Identity.detachProfile(selectedAccount.identifier)
+
+            // Broadcast updates
+            MaskMessages.events.ownProofChanged.sendToAll()
             MaskMessages.events.ownPersonaChanged.sendToAll()
 
             showSnackbar(t('popups_disconnect_success'), {

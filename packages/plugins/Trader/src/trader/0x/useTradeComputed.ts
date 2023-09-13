@@ -1,12 +1,13 @@
 import { useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { ZERO } from '@masknet/web3-shared-base'
-import type { SwapQuoteResponse, TradeComputed, TradeStrategy } from '../../types/index.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { TraderAPI } from '@masknet/web3-providers/types'
+import type { SwapQuoteResponse } from '../../types/index.js'
 
 export function useTradeComputed(
     trade: SwapQuoteResponse | null,
-    strategy: TradeStrategy,
+    strategy: TraderAPI.TradeStrategy,
     inputToken?: Web3Helper.FungibleTokenAll,
     outputToken?: Web3Helper.FungibleTokenAll,
 ) {
@@ -30,6 +31,6 @@ export function useTradeComputed(
             priceImpact: ZERO,
 
             trade_: { ...trade, buyAmount: outputAmount.toFixed() },
-        } as TradeComputed<SwapQuoteResponse>
+        } as TraderAPI.TradeComputed<SwapQuoteResponse>
     }, [trade, strategy, inputToken, outputToken])
 }

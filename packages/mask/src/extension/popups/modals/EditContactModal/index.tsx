@@ -130,6 +130,7 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
             <Box className={classes.inputWrapper}>
                 <MaskTextField
                     variant="standard"
+                    autoFocus
                     inputProps={{ style: { textAlign: 'center' } }}
                     classes={{ root: classes.inputRoot }}
                     spellCheck={false}

@@ -1,7 +1,13 @@
 import { forwardRef, useState } from 'react'
-import type { DashboardRoutes, PersonaInformation, PluginID, SingletonModalRefCreator } from '@masknet/shared-base'
+import type {
+    DashboardRoutes,
+    EnhanceableSite,
+    PersonaInformation,
+    PluginID,
+    SingletonModalRefCreator,
+} from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
-import type { SiteAdaptor, IdentityResolved } from '@masknet/plugin-infra'
+import type { IdentityResolved } from '@masknet/plugin-infra'
 import { ApplicationBoard, ApplicationSettingTabs } from './ApplicationBoardDialog.js'
 import type { PersonaPerSiteConnectStatus } from '../../../types.js'
 import { ApplicationBoardSettingsDialog } from './ApplicationSettingsDialog.js'
@@ -9,7 +15,7 @@ import { ApplicationBoardSettingsDialog } from './ApplicationSettingsDialog.js'
 export interface ApplicationBoardModalOpenProps {
     openDashboard: (route?: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
-    currentSite: SiteAdaptor
+    currentSite: EnhanceableSite
     allPersonas: PersonaInformation[]
     lastRecognized: IdentityResolved
     applicationCurrentStatus?: PersonaPerSiteConnectStatus
@@ -32,7 +38,7 @@ export const ApplicationBoardModal = forwardRef<
     const [openDashboard, setOpenDashboard] = useState<(route?: DashboardRoutes, search?: string) => void>()
     const [queryOwnedPersonaInformation, setQueryOwnedPersonaInformation] =
         useState<(initializedOnly: boolean) => Promise<PersonaInformation[]>>()
-    const [currentSite, setCurrentSite] = useState<SiteAdaptor>()
+    const [currentSite, setCurrentSite] = useState<EnhanceableSite>()
     const [allPersonas, setAllPersonas] = useState<PersonaInformation[]>()
     const [lastRecognized, setLastRecognized] = useState<IdentityResolved>()
     const [applicationCurrentStatus, setApplicationCurrentStatus] = useState<PersonaPerSiteConnectStatus>()

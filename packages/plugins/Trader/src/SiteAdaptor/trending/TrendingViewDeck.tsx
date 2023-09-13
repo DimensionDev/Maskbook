@@ -41,10 +41,10 @@ import { SourceType, TokenType, formatCurrency } from '@masknet/web3-shared-base
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
-import { ContentTabs, type Currency, type Stat } from '../../types/index.js'
+import { ContentTab, type Currency, type Stat } from '../../types/index.js'
 import { TrendingCard, type TrendingCardProps } from './TrendingCard.js'
 import { TrendingViewDescriptor } from './TrendingViewDescriptor.js'
-import { CoinIcon } from './components/index.js'
+import { CoinIcon } from './CoinIcon.js'
 import { TrendingViewContext } from './context.js'
 import { useI18N } from '../../locales/index.js'
 
@@ -153,7 +153,7 @@ const useStyles = makeStyles<{
 export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | 'footer' | 'content' | 'cardHeader'> {
     stats: Stat[]
     currency: Currency
-    currentTab: ContentTabs
+    currentTab: ContentTab
     trending: TrendingAPI.Trending
     identity?: SocialIdentity
     setActive?: (x: boolean) => void
@@ -403,11 +403,11 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
             <CardContent className={classes.content}>
                 <Paper className={classes.body} elevation={0}>
                     {children}
-                    {(isCollectionProjectPopper || isTokenTagPopper) && currentTab === ContentTabs.Market ? (
+                    {(isCollectionProjectPopper || isTokenTagPopper) && currentTab === ContentTab.Market ? (
                         <Stack style={{ height: 48, width: '100%', background: theme.palette.maskColor.bottom }} />
                     ) : null}
                 </Paper>
-                {(isCollectionProjectPopper || isTokenTagPopper) && currentTab !== ContentTabs.Swap ? (
+                {(isCollectionProjectPopper || isTokenTagPopper) && currentTab !== ContentTab.Swap ? (
                     <section className={classes.pluginDescriptorWrapper}>
                         <TrendingViewDescriptor result={result} resultList={resultList} setResult={setResult} />
                     </section>

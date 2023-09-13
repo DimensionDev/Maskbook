@@ -16,15 +16,16 @@ import { NormalHeader } from '../../../components/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { WalletAssetTabs } from '../type.js'
 
-const useStyles = makeStyles<{ currentTab: TabType; searchError: boolean }>()((theme, { currentTab, searchError }) => ({
+const useStyles = makeStyles<{ searchError: boolean }>()((theme, { searchError }) => ({
     content: {
         flex: 1,
-        padding: '16px 16px 0 16px',
+        padding: '0 0 0 16px',
         display: 'flex',
         overflow: 'hidden',
     },
     channel: {
         flex: 1,
+        paddingTop: theme.spacing(2),
         '& > div': {
             flex: 1,
             display: 'flex',
@@ -33,13 +34,13 @@ const useStyles = makeStyles<{ currentTab: TabType; searchError: boolean }>()((t
     },
     listBox: {
         flex: 1,
-        marginTop: searchError ? 54 : 36,
+        marginTop: searchError ? 18 : 0,
         '&::-webkit-scrollbar': {
             display: 'none',
         },
     },
     wrapper: {
-        paddingTop: theme.spacing(2),
+        padding: theme.spacing(0, 2, 0, 1.5),
     },
     input: {
         fontSize: 12,
@@ -52,7 +53,7 @@ const useStyles = makeStyles<{ currentTab: TabType; searchError: boolean }>()((t
         paddingRight: 16,
     },
     panel: {
-        padding: theme.spacing(0),
+        padding: 0,
         background: theme.palette.maskColor.bottom,
         flex: 1,
         overflow: 'auto',
@@ -67,21 +68,19 @@ const useStyles = makeStyles<{ currentTab: TabType; searchError: boolean }>()((t
         },
     },
     searchInput: {
-        position: 'absolute',
-        transform: 'translateX(-36px)',
-        width: 368,
-        zIndex: 50,
+        marginRight: theme.spacing(2),
+        marginLeft: theme.spacing(1.5),
+        paddingBottom: theme.spacing(2),
     },
     sidebar: {
-        marginTop: currentTab === TabType.Tokens ? (searchError ? 70 : 52) : 0,
-        marginRight: theme.spacing(1.5),
         height: 432,
+        paddingTop: theme.spacing(2),
     },
     grid: {
         gridTemplateColumns: 'repeat(auto-fill, minmax(40%, 1fr))',
     },
     form: {
-        padding: 0,
+        padding: theme.spacing(2, 2, 0, 1.5),
         height: 490,
     },
     nftContent: {
@@ -111,7 +110,7 @@ const AddToken = memo(function AddToken() {
         TabType.Collectibles,
     )
     const [searchError, setSearchError] = useState(false)
-    const { classes } = useStyles({ currentTab, searchError })
+    const { classes } = useStyles({ searchError })
     const allNetworks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
 
     const supportedChains = allNetworks.map((x) => x.chainId)
@@ -182,7 +181,7 @@ const AddToken = memo(function AddToken() {
                             }}
                             onSearchError={setSearchError}
                             blacklist={blackList.map((x) => x.address)}
-                            FixedSizeListProps={{ height: 474, itemSize: rowSize + 16, className: classes.wrapper }}
+                            FixedSizeListProps={{ height: 444, itemSize: rowSize + 16, className: classes.wrapper }}
                             SearchTextFieldProps={{ className: classes.input }}
                         />
                     </TabPanel>

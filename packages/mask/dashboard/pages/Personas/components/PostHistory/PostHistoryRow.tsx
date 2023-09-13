@@ -65,16 +65,6 @@ const SUPPORT_PLUGIN: Record<
         icon: <Icons.NFTRedPacket />,
         messageParse: (body: { message: string }) => body.message,
     },
-    'com.maskbook.ito:1': {
-        pluginID: PluginID.ITO,
-        icon: <Icons.ITO />,
-        messageParse: (body: any) => body.message.split(MSG_DELIMITER)[1],
-    },
-    'com.maskbook.ito:2': {
-        pluginID: PluginID.ITO,
-        icon: <Icons.ITO />,
-        messageParse: (body: any) => body.message.split(MSG_DELIMITER)[1],
-    },
 }
 
 interface PostHistoryRowProps {

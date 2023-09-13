@@ -123,8 +123,15 @@ const SelectWallet = memo(function SelectWallet() {
 
     useTitle(t('popups_select_wallet'))
 
-    return chainIdValid ? (
-        <Box>
+    if (!chainIdValid)
+        return (
+            <Box className={classes.placeholder}>
+                <Typography>{t('popups_wallet_unsupported_network')}</Typography>
+            </Box>
+        )
+
+    return (
+        <Box overflow="auto" data-hide-scrollbar>
             <Box pt={1} pb={9} px={2} display="flex" flexDirection="column" rowGap="6px">
                 {wallets
                     .filter((x) => {
@@ -164,10 +171,6 @@ const SelectWallet = memo(function SelectWallet() {
                     {t('confirm')}
                 </ActionButton>
             </BottomController>
-        </Box>
-    ) : (
-        <Box className={classes.placeholder}>
-            <Typography>{t('popups_wallet_unsupported_network')}</Typography>
         </Box>
     )
 })

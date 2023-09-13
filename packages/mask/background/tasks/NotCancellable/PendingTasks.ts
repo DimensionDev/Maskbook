@@ -8,7 +8,7 @@ function checkMessages(messages: Array<ReasonableMessage<Request, Response>>) {
     const length = Math.min(pendingTasks.length, 99)
     const action = browser.action || browser.browserAction
     action.setBadgeBackgroundColor({
-        color: '#d32f2f',
+        color: '#D92F0E',
     })
     action.setBadgeText({
         text: length ? length.toString() : '',

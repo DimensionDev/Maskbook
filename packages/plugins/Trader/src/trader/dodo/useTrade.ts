@@ -1,15 +1,16 @@
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
-import { ChainId, ProviderURL, isNativeTokenAddress, useTraderConstants } from '@masknet/web3-shared-evm'
-import { useChainContext, useCustomBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
 import { isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import type { TraderAPI } from '@masknet/web3-providers/types'
+import { ChainId, ProviderURL, isNativeTokenAddress, useTraderConstants } from '@masknet/web3-shared-evm'
+import { useChainContext, useCustomBlockBeatRetry, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { PluginTraderRPC } from '../../messages.js'
-import type { SwapRouteData, TradeStrategy } from '../../types/index.js'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
+import { Dodo } from '../../providers/index.js'
+import type { SwapRouteData } from '../../types/index.js'
 
 export function useTrade(
-    strategy: TradeStrategy,
+    strategy: TraderAPI.TradeStrategy,
     inputAmount: string,
     outputAmount: string,
     inputToken?: Web3Helper.FungibleTokenAll,
@@ -33,7 +34,7 @@ export function useTrade(
             const buyToken = isNativeTokenAddress(outputToken.address)
                 ? { ...outputToken, address: DODO_ETH_ADDRESS ?? '' }
                 : outputToken
-            return PluginTraderRPC.swapRoute({
+            return Dodo.swapRoute({
                 isNativeSellToken: isNativeTokenAddress(inputToken.address),
                 fromToken: sellToken,
                 toToken: buyToken,

@@ -2,7 +2,6 @@ import { filter, flatten, pick, uniq, values } from 'lodash-es'
 import Aave from '@masknet/web3-constants/evm/aave.json'
 import ArtBlocks from '@masknet/web3-constants/evm/artblocks.json'
 import Gitcoin from '@masknet/web3-constants/evm/gitcoin.json'
-import ITO from '@masknet/web3-constants/evm/ito.json'
 import Lido from '@masknet/web3-constants/evm/lido.json'
 import MaskBox from '@masknet/web3-constants/evm/mask-box.json'
 import NftRedPacket from '@masknet/web3-constants/evm/nft-red-packet.json'
@@ -57,7 +56,6 @@ const domainAddressMap: Record<string, string[]> = {
     ]),
     'lido.fi': collect(Lido, ['LIDO_stETH_ADDRESS', 'LIDO_REFERRAL_ADDRESS']),
     'mask.io': [
-        ...collect(ITO, ['ITO_CONTRACT_ADDRESS']),
         ...collect(RedPacket, [
             'HAPPY_RED_PACKET_ADDRESS_V1',
             'HAPPY_RED_PACKET_ADDRESS_V2',

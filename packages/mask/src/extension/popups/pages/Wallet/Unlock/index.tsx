@@ -63,7 +63,7 @@ const Unlock = memo(() => {
         const verified = await Services.Wallet.unlockWallet(password)
 
         if (verified) {
-            if (toBeClose) {
+            if (toBeClose && !from) {
                 await Services.Helper.removePopupWindow()
             } else {
                 const path = from

@@ -41,7 +41,7 @@ export * from './types/Snapshot.js'
 export * from './types/PluginContext.js'
 export * from './types/Trader.js'
 
-// Implementations
+// Provider Implementations
 export * from './DeBank/types.js'
 export * from './Zerion/types.js'
 export * from './RSS3/types.js'

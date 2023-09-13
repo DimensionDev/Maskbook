@@ -60,9 +60,13 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 13,
         lineHeight: '16px',
         borderRadius: 6,
+        border: '1px solid transparent',
         [`&.${formHelperTextClasses.error}`]: {
             boxShadow: `0 0 0 ${theme.spacing(0.5)} ${MaskColorVar.redMain.alpha(0.2)}`,
-            border: `1px solid ${MaskColorVar.redMain.alpha(0.8)}`,
+            borderColor: MaskColorVar.redMain.alpha(0.8),
+        },
+        [`&.${formHelperTextClasses.focused}`]: {
+            borderColor: Sniffings.is_dashboard_page ? alpha(theme.palette.maskColor.primary, 0.5) : 'transparent',
         },
     },
     inputDisabled: {
@@ -76,7 +80,7 @@ const useStyles = makeStyles()((theme) => ({
         ...(Sniffings.is_dashboard_page
             ? {
                   outline: `2px solid ${alpha(theme.palette.maskColor.primary, 0.2)}`,
-                  border: `1px solid ${alpha(theme.palette.maskColor.primary, 0.5)}`,
+                  borderColor: alpha(theme.palette.maskColor.primary, 0.5),
               }
             : { boxShadow: `0 0 0 2px ${theme.palette.mode === 'dark' ? '#4F5378' : 'rgba(28, 104, 243, 0.2)'}` }),
     },
