@@ -42,5 +42,6 @@ export async function eth_request(request: unknown) {
     const { params } = request as any
     if (params !== undefined && !Array.isArray(params)) throw new E(C.InvalidRequest, M.ParamsIsNotArray)
 
-    return (methods[method as keyof typeof methods] as any)(...((params as unknown[]) || []))
+    const f = Reflect.get(methods, method)
+    return f(...params)
 }
