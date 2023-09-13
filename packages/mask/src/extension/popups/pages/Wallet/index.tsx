@@ -53,7 +53,6 @@ export default function Wallet() {
                         <Route path={r(PopupRoutes.SelectWallet)} element={<SelectWallet />} />
                         <Route path={r(PopupRoutes.Unlock)} element={<Unlock />} />
                         <Route path={r(PopupRoutes.ResetWallet)} element={<ResetWallet />} />
-                        <Route path={r(PopupRoutes.SetPaymentPassword)} element={<SetPaymentPassword />} />
                         <Route path={r(PopupRoutes.ChangeOwner)} element={<ChangeOwner />} />
                         <Route path={r(PopupRoutes.NetworkManagement)} element={<NetworkManagement />} />
                         <Route path={r(PopupRoutes.AddNetwork)} element={<EditNetwork />} />
@@ -61,12 +60,13 @@ export default function Wallet() {
                         <Route path={r(PopupRoutes.Receive)} element={<Receive />} />
                         <Route path={r(PopupRoutes.ExportWalletPrivateKey)} element={<ExportPrivateKey />} />
                         <Route path={r(PopupRoutes.ConnectedSites)} element={<ConnectedSites />} />
-                        <Route path="*" element={<Navigate to={PopupRoutes.Wallet} />} />
                     </Route>
                     <Route path="*" element={<NoWalletGuard />}>
+                        <Route path={r(PopupRoutes.SetPaymentPassword)} element={<SetPaymentPassword />} />
                         <Route path={r(PopupRoutes.TokenDetail)} element={<TokenDetail />} />
                         <Route path={r(PopupRoutes.TransactionDetail)} element={<TransactionDetail />} />
                         <Route path={r(PopupRoutes.CollectibleDetail)} element={<CollectibleDetail />} />
+                        <Route path="*" element={<Navigate to={PopupRoutes.Wallet} />} />
                     </Route>
                 </Routes>
             </RestorableScrollContext.Provider>

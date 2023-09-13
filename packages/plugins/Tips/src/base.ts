@@ -1,5 +1,5 @@
-import { SiteAdaptor, type Plugin } from '@masknet/plugin-infra'
-import { PluginID, NetworkPluginID, DEFAULT_PLUGIN_PUBLISHER } from '@masknet/shared-base'
+import type { Plugin } from '@masknet/plugin-infra'
+import { PluginID, NetworkPluginID, DEFAULT_PLUGIN_PUBLISHER, EnhanceableSite } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { languages } from './locales/languages.js'
 
@@ -12,10 +12,10 @@ export const base: Plugin.Shared.Definition = {
     publisher: DEFAULT_PLUGIN_PUBLISHER,
     enableRequirement: {
         supports: {
-            type: 'opt-out',
+            type: 'opt-in',
             sites: {
-                [SiteAdaptor.Facebook]: false,
-                [SiteAdaptor.Minds]: false,
+                [EnhanceableSite.Twitter]: true,
+                [EnhanceableSite.Mirror]: true,
             },
         },
         target: 'stable',

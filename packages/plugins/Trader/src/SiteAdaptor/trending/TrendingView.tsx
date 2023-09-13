@@ -39,14 +39,14 @@ import { TickersTable } from './TickersTable.js'
 import { TrendingViewDeck } from './TrendingViewDeck.js'
 import { NonFungibleTickersTable } from './NonFungibleTickersTable.js'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
-import { ContentTabs } from '../../types/index.js'
+import { ContentTab } from '../../types/index.js'
 import { FailedTrendingView } from './FailedTrendingView.js'
 import { useI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
     isCollectionProjectPopper: boolean
-    currentTab: ContentTabs
+    currentTab: ContentTab
 }>()((theme, props) => {
     return {
         root:
@@ -72,9 +72,9 @@ const useStyles = makeStyles<{
             ? {
                   minHeight: 374,
                   maxHeight: props.isCollectionProjectPopper
-                      ? props.currentTab === ContentTabs.Price
+                      ? props.currentTab === ContentTab.Price
                           ? 450
-                          : props.currentTab === ContentTabs.Swap
+                          : props.currentTab === ContentTab.Swap
                           ? 'unset'
                           : 374
                       : 'unset',
@@ -85,7 +85,7 @@ const useStyles = makeStyles<{
               }
             : {
                   background: 'transparent',
-                  maxHeight: props.currentTab === ContentTabs.Market ? 374 : 'unset',
+                  maxHeight: props.currentTab === ContentTab.Market ? 374 : 'unset',
               },
         footerSkeleton: props.isTokenTagPopper
             ? {}
@@ -234,12 +234,12 @@ export function TrendingView(props: TrendingViewProps) {
 
     // #region tabs
     const tabs = useMemo(() => {
-        const list = [ContentTabs.Market, ContentTabs.Price, ContentTabs.Exchange]
-        if (isSwappable) list.push(ContentTabs.Swap)
-        if (isNFT) list.push(ContentTabs.NFTItems)
+        const list = [ContentTab.Market, ContentTab.Price, ContentTab.Exchange]
+        if (isSwappable) list.push(ContentTab.Swap)
+        if (isNFT) list.push(ContentTab.NFTItems)
         return list
     }, [isSwappable, isNFT])
-    const [currentTab, , , setTab] = useTabs<ContentTabs>(tabs[0], ...tabs)
+    const [currentTab, , , setTab] = useTabs<ContentTab>(tabs[0], ...tabs)
     useLayoutEffect(() => {
         setTab(tabs[0])
     }, [result, tabs[0]])
@@ -247,26 +247,26 @@ export function TrendingView(props: TrendingViewProps) {
     const tabComponents = useMemo(() => {
         const configs = [
             {
-                key: ContentTabs.Market,
+                key: ContentTab.Market,
                 label: t.plugin_trader_tab_market(),
             },
             {
-                key: ContentTabs.Price,
+                key: ContentTab.Price,
                 label: t.plugin_trader_trending(),
             },
             {
-                key: ContentTabs.Exchange,
+                key: ContentTab.Exchange,
                 label: isNFT ? t.plugin_trader_tab_activities() : t.plugin_trader_tab_exchange(),
             },
             isSwappable
                 ? {
-                      key: ContentTabs.Swap,
+                      key: ContentTab.Swap,
                       label: t.plugin_trader_tab_swap(),
                   }
                 : undefined,
             isNFT
                 ? {
-                      key: ContentTabs.NFTItems,
+                      key: ContentTab.NFTItems,
                       label: t.plugin_trader_nft_items(),
                   }
                 : undefined,
@@ -344,23 +344,23 @@ export function TrendingView(props: TrendingViewProps) {
                     <MaskTabList
                         variant="base"
                         classes={{ root: classes.tabListRoot }}
-                        onChange={(_, v: ContentTabs) => {
+                        onChange={(_, v: ContentTab) => {
                             setTab(v)
 
                             if (!isProfilePage) return
 
                             if (isNFT) {
-                                if (v === ContentTabs.Price) {
+                                if (v === ContentTab.Price) {
                                     Telemetry.captureEvent(EventType.Access, EventID.EntryProfileNFT_TrendSwitchTo)
-                                } else if (v === ContentTabs.NFTItems) {
+                                } else if (v === ContentTab.NFTItems) {
                                     Telemetry.captureEvent(EventType.Access, EventID.EntryProfileNFT_ItemsSwitchTo)
-                                } else if (v === ContentTabs.Exchange) {
+                                } else if (v === ContentTab.Exchange) {
                                     Telemetry.captureEvent(EventType.Access, EventID.EntryProfileNFT_ActivitiesSwitchTo)
                                 }
                             } else {
-                                if (v === ContentTabs.Price) {
+                                if (v === ContentTab.Price) {
                                     Telemetry.captureEvent(EventType.Access, EventID.EntryProfileTokenSwitchTrend)
-                                } else if (v === ContentTabs.Exchange) {
+                                } else if (v === ContentTab.Exchange) {
                                     Telemetry.captureEvent(EventType.Access, EventID.EntryProfileTokenSwitchMarket)
                                 }
                             }
@@ -380,10 +380,10 @@ export function TrendingView(props: TrendingViewProps) {
                         display: 'none',
                     },
                 }}>
-                {currentTab === ContentTabs.Market && trending.dataProvider ? (
+                {currentTab === ContentTab.Market && trending.dataProvider ? (
                     <CoinMarketPanel trending={trending} result={result} />
                 ) : null}
-                {currentTab === ContentTabs.Price ? (
+                {currentTab === ContentTab.Price ? (
                     <Box className={classes.priceChartWrapper}>
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
@@ -403,7 +403,7 @@ export function TrendingView(props: TrendingViewProps) {
                         </PriceChart>
                     </Box>
                 ) : null}
-                {currentTab === ContentTabs.Exchange && trending.dataProvider ? (
+                {currentTab === ContentTab.Exchange && trending.dataProvider ? (
                     <Box p={2}>
                         {isNFT ? (
                             <NonFungibleTickersTable
@@ -419,7 +419,7 @@ export function TrendingView(props: TrendingViewProps) {
                         )}
                     </Box>
                 ) : null}
-                {currentTab === ContentTabs.Swap && isSwappable ? (
+                {currentTab === ContentTab.Swap && isSwappable ? (
                     <Web3ContextProvider
                         value={{
                             pluginID: context.pluginID,
@@ -454,7 +454,7 @@ export function TrendingView(props: TrendingViewProps) {
                 ) : null}
 
                 {isNFT ? (
-                    <Box className={cx(classes.nftItems, currentTab === ContentTabs.NFTItems ? '' : classes.hidden)}>
+                    <Box className={cx(classes.nftItems, currentTab === ContentTab.NFTItems ? '' : classes.hidden)}>
                         <NFTList
                             pluginID={result.pluginID}
                             className={classes.nftList}

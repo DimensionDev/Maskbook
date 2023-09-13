@@ -3,11 +3,11 @@ import { type TradeProvider } from '@masknet/public-api'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useCustomBlockBeatRetry, useNetwork } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { UniSwapV2Like } from '@masknet/web3-providers'
 import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import type { TraderAPI } from '@masknet/web3-providers/types'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
-import { getEVMAvailableTraderProviders } from '../helpers/getEVMAvailableTraderProviders.js'
+import { getEVMAvailableTraderProviders } from '../helpers/index.js'
+import { UniSwapV2LikeAPI } from '../providers/index.js'
 
 export function useUniswapV2Like(
     traderProvider: TradeProvider,
@@ -30,7 +30,7 @@ export function useUniswapV2Like(
         if (!network) return
         const providers = getEVMAvailableTraderProviders(network.type as NetworkType)
         if (!providers.includes(traderProvider)) return
-        return new UniSwapV2Like(traderProvider)
+        return new UniSwapV2LikeAPI(traderProvider)
     }, [traderProvider, network])
     return useCustomBlockBeatRetry<NetworkPluginID.PLUGIN_EVM, TraderAPI.TradeInfo | undefined | null>(
         NetworkPluginID.PLUGIN_EVM,

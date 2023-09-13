@@ -3,20 +3,20 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { TradeProvider } from '@masknet/public-api'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { uniswap } from '@masknet/web3-providers/helpers'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { TraderAPI } from '@masknet/web3-providers/types'
 import { useV2BestTradeExactIn, useV2BestTradeExactOut } from './useV2BestTrade.js'
 import { useV3BestTradeExactIn, useV3BestTradeExactOut } from './useV3BestTrade.js'
-import { TradeStrategy } from '../../types/index.js'
+import { toUniswapCurrency, toUniswapCurrencyAmount } from '../../helpers/index.js'
 
 function useTrade(
-    strategy: TradeStrategy = TradeStrategy.ExactIn,
+    strategy: TraderAPI.TradeStrategy = TraderAPI.TradeStrategy.ExactIn,
     inputAmount: string,
     outputAmount: string,
     inputToken?: Web3Helper.FungibleTokenAll,
     outputToken?: Web3Helper.FungibleTokenAll,
 ) {
-    const isExactIn = strategy === TradeStrategy.ExactIn
+    const isExactIn = strategy === TraderAPI.TradeStrategy.ExactIn
     const isTradable = !isZero(inputAmount) || !isZero(outputAmount)
     const isNotAvailable =
         !isTradable ||
@@ -26,15 +26,15 @@ function useTrade(
         (isZero(outputAmount) && !isExactIn)
     const { chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
-    const inputCurrency = uniswap.toUniswapCurrency(
+    const inputCurrency = toUniswapCurrency(
         pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         inputToken,
     )
-    const outputCurrency = uniswap.toUniswapCurrency(
+    const outputCurrency = toUniswapCurrency(
         pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         outputToken,
     )
-    const tradeAmount = uniswap.toUniswapCurrencyAmount(
+    const tradeAmount = toUniswapCurrencyAmount(
         pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         isExactIn ? inputToken : outputToken,
         isExactIn ? inputAmount : outputAmount,
@@ -50,7 +50,7 @@ function useTrade(
 
 export function useV2Trade(
     tradeProvider: TradeProvider,
-    strategy: TradeStrategy = TradeStrategy.ExactIn,
+    strategy: TraderAPI.TradeStrategy = TraderAPI.TradeStrategy.ExactIn,
     inputAmount: string,
     outputAmount: string,
     inputToken?: Web3Helper.FungibleTokenAll,
@@ -90,7 +90,7 @@ export function useV2Trade(
 }
 
 export function useV3Trade(
-    strategy: TradeStrategy = TradeStrategy.ExactIn,
+    strategy: TraderAPI.TradeStrategy = TraderAPI.TradeStrategy.ExactIn,
     inputAmount: string,
     outputAmount: string,
     inputToken?: Web3Helper.FungibleTokenAll,

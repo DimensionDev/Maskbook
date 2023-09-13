@@ -1,11 +1,7 @@
 import { createContext, useContext, useMemo, useState, type PropsWithChildren } from 'react'
 import { useTimeout } from 'react-use'
 import { Typography } from '@mui/material'
-import {
-    SiteAdaptor,
-    useActivatedPluginsSiteAdaptor,
-    type IdentityResolved,
-} from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginsSiteAdaptor, type IdentityResolved } from '@masknet/plugin-infra/content-script'
 import {
     useCurrentPersonaConnectStatus,
     SelectProviderModal,
@@ -16,6 +12,8 @@ import {
 import { Boundary, getMaskColor, makeStyles } from '@masknet/theme'
 import {
     currentPersonaIdentifier,
+    EnhanceableSite,
+    EMPTY_LIST,
     type DashboardRoutes,
     type NetworkPluginID,
     type PersonaInformation,
@@ -84,7 +82,7 @@ const useStyles = makeStyles<{
 interface ApplicationBoardContentProps extends withClasses<'applicationWrapper' | 'recommendFeatureAppListWrapper'> {
     openDashboard?: (route?: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
-    currentSite?: SiteAdaptor
+    currentSite?: EnhanceableSite
     lastRecognized?: IdentityResolved
     allPersonas: PersonaInformation[]
     applicationCurrentStatus?: PersonaPerSiteConnectStatus
@@ -123,11 +121,11 @@ export function ApplicationBoardContent({
 
 interface ApplicationBoardPluginsListProps
     extends withClasses<'applicationWrapper' | 'recommendFeatureAppListWrapper'> {
-    currentSite?: SiteAdaptor
+    currentSite?: EnhanceableSite
 }
 
 function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
-    const { currentSite = SiteAdaptor.Twitter } = props
+    const { currentSite = EnhanceableSite.Twitter } = props
     const t = useSharedI18N()
     const plugins = useActivatedPluginsSiteAdaptor('any')
     const { pluginID: currentWeb3Network } = useNetworkContext()
@@ -136,7 +134,7 @@ function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
         () =>
             plugins
                 .flatMap(({ ID, ApplicationEntries, enableRequirement }) => {
-                    if (!ApplicationEntries) return []
+                    if (!ApplicationEntries) return EMPTY_LIST
                     const currentWeb3NetworkSupportedChainIds = enableRequirement.web3?.[currentWeb3Network]
                     const isWalletConnectedRequired = currentWeb3NetworkSupportedChainIds !== undefined
                     const currentSiteIsSupportedNetwork = enableRequirement.supports.sites[currentSite]

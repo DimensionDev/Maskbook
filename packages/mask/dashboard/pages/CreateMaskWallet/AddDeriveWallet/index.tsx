@@ -157,15 +157,13 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         )
 
         await Promise.all(
-            mergedIndexes
-                .slice(1)
-                .map(async (pathIndex, index) =>
-                    Services.Wallet.recoverWalletFromMnemonicWords(
-                        generateNewWalletName(existedWallets, index + 1),
-                        mnemonic,
-                        `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${pathIndex}`,
-                    ),
-                ),
+            mergedIndexes.slice(1).map(async (pathIndex, index) => {
+                await Services.Wallet.recoverWalletFromMnemonicWords(
+                    generateNewWalletName(existedWallets, index + 1),
+                    mnemonic,
+                    `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${pathIndex}`,
+                )
+            }),
         )
 
         await Web3.connect({

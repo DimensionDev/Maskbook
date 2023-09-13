@@ -3,10 +3,10 @@ import { useChainContext, useNetwork, useWallet } from '@masknet/web3-hooks-base
 import { useQuery } from '@tanstack/react-query'
 import { memo, useCallback } from 'react'
 import { matchPath, useLocation, useMatch, useSearchParams } from 'react-router-dom'
+import Services from '#services'
 import { NormalHeader, useModalNavigate } from '../../../../components/index.js'
 import { WalletHeaderUI } from './UI.js'
 import { WalletSetupHeaderUI } from './WalletSetupHeaderUI.js'
-import Services from '#services'
 
 const CUSTOM_HEADER_PATTERNS = [
     `${PopupRoutes.AddToken}/:chainId/:assetType`,

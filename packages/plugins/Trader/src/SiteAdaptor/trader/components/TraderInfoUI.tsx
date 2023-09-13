@@ -1,10 +1,10 @@
 import { memo } from 'react'
+import { Box, TextField, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Sniffings } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { formatBalance, isZero } from '@masknet/web3-shared-base'
-import { Box, TextField, Typography } from '@mui/material'
 import { FormattedBalance, DotLoading } from '@masknet/shared'
 import { useI18N } from '../../../locales/index.js'
 
