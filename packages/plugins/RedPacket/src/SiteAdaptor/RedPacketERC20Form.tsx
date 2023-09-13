@@ -329,8 +329,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                             autoCorrect: 'off',
                             inputMode: 'decimal',
                             placeholder: t.enter_quantity(),
-                            pattern: '^[0-9]$',
                             spellCheck: false,
+                            pattern: '^[0-9]+$',
                         },
                     }}
                 />
