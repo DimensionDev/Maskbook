@@ -1,5 +1,6 @@
-import { SiteAdaptor, type Plugin } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
 import { PLUGIN_DESCRIPTION, PLUGIN_ID, PLUGIN_NAME } from './constants.js'
+import { EnhanceableSite } from '@masknet/shared-base'
 import { languages } from './locales/languages.js'
 
 export const base: Plugin.Shared.Definition = {
@@ -11,10 +12,8 @@ export const base: Plugin.Shared.Definition = {
         supports: {
             type: 'opt-in',
             sites: {
-                [SiteAdaptor.Twitter]: true,
-                [SiteAdaptor.Facebook]: false,
-                [SiteAdaptor.Instagram]: false,
-                [SiteAdaptor.MaskIO]: true,
+                [EnhanceableSite.App]: true,
+                [EnhanceableSite.Twitter]: true,
             },
         },
         target: 'stable',

@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { DEFAULT_PLUGIN_PUBLISHER, NetworkPluginID } from '@masknet/shared-base'
+import { DEFAULT_PLUGIN_PUBLISHER, EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { RedPacketMetaKey, RedPacketNftMetaKey, RedPacketPluginID } from './constants.js'
 import { languages } from './locales/languages.js'
@@ -15,7 +15,9 @@ export const base: Plugin.Shared.Definition = {
     enableRequirement: {
         supports: {
             type: 'opt-out',
-            sites: {},
+            sites: {
+                [EnhanceableSite.Localhost]: true,
+            },
         },
         target: 'stable',
         web3: {

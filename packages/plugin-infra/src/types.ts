@@ -4,6 +4,7 @@ import type React from 'react'
 import type { Option, Result } from 'ts-results-es'
 import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import type { Emitter } from '@servie/events'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 /* eslint @masknet/unicode-specific-set: ["error", { "only": "code" }] */
 import type {
@@ -42,7 +43,6 @@ import type {
 } from '@masknet/web3-shared-base'
 import type { LinkedProfileDetails } from '@masknet/public-api'
 import type { TransactionOptions } from '@masknet/web3-shared-evm'
-import type { Emitter } from '@servie/events'
 import type { CompositionType } from './entry-content-script.js'
 
 export declare namespace Plugin {
@@ -337,7 +337,7 @@ export namespace Plugin.Shared {
          * out-out means the listed site is not supported.
          */
         type: 'opt-in' | 'opt-out'
-        sites: Partial<Record<SiteAdaptor, boolean>>
+        sites: Partial<Record<EnhanceableSite, boolean>>
     }
 
     export type I18NLanguage = string
@@ -1199,19 +1199,6 @@ export interface I18NStringField {
 }
 
 export type I18NFieldOrReactNode = I18NStringField | React.ReactNode
-
-/**
- * All supported site adaptors.
- */
-export enum SiteAdaptor {
-    Unknown = 0,
-    Facebook = 1,
-    Twitter = 2,
-    Instagram = 3,
-    Minds = 4,
-
-    MaskIO = 99,
-}
 
 export interface IdentityResolved {
     nickname?: string

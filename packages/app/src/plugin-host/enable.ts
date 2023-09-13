@@ -1,13 +1,13 @@
 import './register.js'
 
 import { Emitter } from '@servie/events'
-import { SiteAdaptor, startPluginSiteAdaptor } from '@masknet/plugin-infra/content-script'
-import { BooleanPreference, createI18NBundle, i18NextInstance } from '@masknet/shared-base'
+import { startPluginSiteAdaptor } from '@masknet/plugin-infra/content-script'
+import { BooleanPreference, EnhanceableSite, createI18NBundle, i18NextInstance } from '@masknet/shared-base'
 import { setupReactShadowRootEnvironment } from '@masknet/theme'
 import { inMemoryStorage, indexedDBStorage } from '../setup/storage.js'
 import { createSharedContext } from '../helpers/createSharedContext.js'
 
-startPluginSiteAdaptor(SiteAdaptor.MaskIO, {
+startPluginSiteAdaptor(EnhanceableSite.App, {
     minimalMode: {
         events: new Emitter(),
         isEnabled: () => BooleanPreference.False,

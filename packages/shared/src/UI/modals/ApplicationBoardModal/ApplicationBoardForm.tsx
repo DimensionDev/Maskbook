@@ -1,16 +1,16 @@
-import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { useState } from 'react'
-import { ApplicationSettingTabs } from './ApplicationBoardDialog.js'
+import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { IconButton, Stack, Tab } from '@mui/material'
-import type { DashboardRoutes, PersonaInformation, PluginID } from '@masknet/shared-base'
-import type { SiteAdaptor, IdentityResolved } from '@masknet/plugin-infra'
+import { ArrowBackRounded as ArrowBackRoundedIcon } from '@mui/icons-material'
+import type { DashboardRoutes, EnhanceableSite, PersonaInformation, PluginID } from '@masknet/shared-base'
+import type { IdentityResolved } from '@masknet/plugin-infra'
 import { Icons } from '@masknet/icons'
+import { ApplicationSettingTabs } from './ApplicationBoardDialog.js'
 import { ApplicationSettingPluginList } from './ApplicationSettingPluginList.js'
 import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch.js'
 import { ApplicationBoardContent } from './ApplicationBoard.js'
 import { useSharedI18N, type PersonaPerSiteConnectStatus } from '../../../index.js'
-import { ArrowBackRounded as ArrowBackRoundedIcon } from '@mui/icons-material'
 
 const useStyles = makeStyles()((theme) => ({
     applicationWrapper: {
@@ -40,10 +40,11 @@ const useStyles = makeStyles()((theme) => ({
     },
     recommendFeatureAppListWrapper: {},
 }))
-interface ApplicationBoardFormProps {
+
+export interface ApplicationBoardFormProps {
     openDashboard?: (route?: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
-    currentSite?: SiteAdaptor
+    currentSite?: EnhanceableSite
     allPersonas: PersonaInformation[]
     lastRecognized?: IdentityResolved
     applicationCurrentStatus?: PersonaPerSiteConnectStatus
@@ -56,6 +57,7 @@ interface ApplicationBoardFormProps {
     tab?: ApplicationSettingTabs
     quickMode?: boolean
 }
+
 export function ApplicationBoardForm(props: ApplicationBoardFormProps) {
     const t = useSharedI18N()
     const [openSettings, setOpenSettings] = useState(false)
