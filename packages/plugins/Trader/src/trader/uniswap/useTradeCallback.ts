@@ -7,10 +7,11 @@ import type { GasConfig } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
-import { uniswap } from '@masknet/web3-providers/helpers'
-import { useSwapParameters as useTradeParameters } from './useTradeParameters.js'
-import type { SwapCall, Trade, TradeComputed } from '../../types/index.js'
+import type { TraderAPI } from '@masknet/web3-providers/types'
 import { useSwapErrorCallback } from '../../SiteAdaptor/trader/hooks/useSwapErrorCallback.js'
+import { useSwapParameters as useTradeParameters } from './useTradeParameters.js'
+import type { SwapCall, Trade } from '../../types/index.js'
+import { swapErrorToUserReadableMessage } from '../../helpers/index.js'
 
 interface FailedCall {
     parameters: SwapParameters
@@ -32,7 +33,7 @@ interface FailedCall extends SwapCallEstimate {
 }
 
 export function useTradeCallback(
-    trade: TradeComputed<Trade> | null,
+    trade: TraderAPI.TradeComputed<Trade> | null,
     tradeProvider?: TradeProvider,
     gasConfig?: GasConfig,
     allowedSlippage?: number,
@@ -76,7 +77,7 @@ export function useTradeCallback(
                         .catch((error) => {
                             return {
                                 call: x,
-                                error: new Error(uniswap.swapErrorToUserReadableMessage(error)),
+                                error: new Error(swapErrorToUserReadableMessage(error)),
                             }
                         })
                 }

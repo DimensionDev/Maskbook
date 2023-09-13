@@ -4,10 +4,11 @@ import { useAsync } from 'react-use'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
-import type { TradeComputed, SwapQuoteResponse } from '../../types/index.js'
+import type { TraderAPI } from '@masknet/web3-providers/types'
 import { SUPPORTED_CHAIN_ID_LIST } from './constants.js'
+import type { SwapQuoteResponse } from '../../types/index.js'
 
-export function useTradeGasLimit(tradeComputed: TradeComputed<SwapQuoteResponse> | null) {
+export function useTradeGasLimit(tradeComputed: TraderAPI.TradeComputed<SwapQuoteResponse> | null) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { pluginID } = useNetworkContext()
     const config = useMemo(() => {

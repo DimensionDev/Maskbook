@@ -5,12 +5,13 @@ import type { BigNumber } from 'bignumber.js'
 import type { TradeProvider } from '@masknet/public-api'
 import type { SwapParameters } from '@uniswap/v2-sdk'
 import { NetworkPluginID } from '@masknet/shared-base'
-import type { Trade, TradeComputed, SwapCall } from '../../types/index.js'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { toFixed } from '@masknet/web3-shared-base'
 import { Web3 } from '@masknet/web3-providers'
-import { uniswap } from '@masknet/web3-providers/helpers'
+import type { TraderAPI } from '@masknet/web3-providers/types'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters.js'
+import type { SwapCall, Trade } from '../../types/index.js'
+import { swapErrorToUserReadableMessage } from '../../helpers/index.js'
 
 interface FailedCall {
     parameters: SwapParameters
@@ -31,7 +32,10 @@ interface FailedCall extends SwapCallEstimate {
     error: Error
 }
 
-export function useTradeGasLimit(trade: TradeComputed<Trade> | null, tradeProvider: TradeProvider): AsyncState<string> {
+export function useTradeGasLimit(
+    trade: TraderAPI.TradeComputed<Trade> | null,
+    tradeProvider: TradeProvider,
+): AsyncState<string> {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { pluginID } = useNetworkContext()
     const tradeParameters = useTradeParameters(trade, tradeProvider)
@@ -67,7 +71,7 @@ export function useTradeGasLimit(trade: TradeComputed<Trade> | null, tradeProvid
                         .catch((error) => {
                             return {
                                 call: x,
-                                error: new Error(uniswap.swapErrorToUserReadableMessage(error)),
+                                error: new Error(swapErrorToUserReadableMessage(error)),
                             }
                         })
                 }

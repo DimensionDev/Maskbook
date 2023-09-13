@@ -1,7 +1,6 @@
 import Services from '#services'
 import { PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { Web3 } from '@masknet/web3-providers'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
 import { Trans } from 'react-i18next'
@@ -80,7 +79,7 @@ const ResetWallet = memo(function ResetWallet() {
     const onBack = useCallback(() => navigate(PopupRoutes.Unlock), [])
 
     const onConfirm = useCallback(async () => {
-        await Web3.resetAllWallets?.()
+        // We don't reset existed wallets until recovery
         await browser.tabs.create({
             active: true,
             url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet/form?reset=true'),

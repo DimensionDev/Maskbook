@@ -6,10 +6,10 @@ import { isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainResolver } from '@masknet/web3-providers'
-import { ZRX_AFFILIATE_ADDRESS } from '../../constants/index.js'
-import { PluginTraderRPC } from '../../messages.js'
-import { type SwapQuoteResponse, TradeStrategy } from '../../types/index.js'
+import { TraderAPI } from '@masknet/web3-providers/types'
 import { useSlippageTolerance } from '../0x/useSlippageTolerance.js'
+import { ZeroX } from '../../providers/index.js'
+import type { SwapQuoteResponse } from '../../types/index.js'
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 
@@ -42,7 +42,7 @@ export function getNativeTokenLabel(networkType: NetworkType) {
 }
 
 export function useTrade(
-    strategy: TradeStrategy,
+    strategy: TraderAPI.TradeStrategy,
     inputAmount: string,
     outputAmount: string,
     inputToken?: Web3Helper.FungibleTokenAll,
@@ -59,7 +59,7 @@ export function useTrade(
         NetworkPluginID.PLUGIN_EVM,
         async () => {
             if (!inputToken || !outputToken || pluginID !== NetworkPluginID.PLUGIN_EVM) return null
-            const isExactIn = strategy === TradeStrategy.ExactIn
+            const isExactIn = strategy === TraderAPI.TradeStrategy.ExactIn
             if (isZero(inputAmount) && isExactIn) return null
             if (isZero(outputAmount) && !isExactIn) return null
 
@@ -69,7 +69,7 @@ export function useTrade(
             const buyToken = isNativeTokenAddress(outputToken.address)
                 ? getNativeTokenLabel(ChainResolver.networkType(chainId as ChainId) ?? (networkType as NetworkType))
                 : outputToken.address
-            return PluginTraderRPC.swapQuote(
+            return ZeroX.swapQuote(
                 {
                     sellToken,
                     buyToken,
@@ -78,9 +78,8 @@ export function useTrade(
                     buyAmount: isExactIn ? void 0 : outputAmount,
                     skipValidation: true,
                     slippagePercentage: slippage,
-                    affiliateAddress: ZRX_AFFILIATE_ADDRESS,
                 },
-                ChainResolver.networkType(chainId as ChainId) ?? (networkType as NetworkType),
+                chainId as ChainId,
             )
         },
         [

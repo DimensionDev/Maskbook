@@ -1,7 +1,7 @@
+import { flatten } from 'lodash-es'
 import { useEffect, useRef, useState } from 'react'
 import { useAsync, useAsyncFn, useAsyncRetry } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
-import { flatten } from 'lodash-es'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
@@ -31,7 +31,7 @@ export function useNonFungibleTokenActivities(
     const [nonFungibleTokenActivities, setNonFungibleTokenActivities] = useState<
         Record<string, Array<NonFungibleTokenActivity<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
     >({})
-    const [{ loading: loadingNonFungibleTokenActivities }, getNonFungibleTokenActivities] = useAsyncFn(async () => {
+    const [{ loading: loadingActivities }, fetchActivities] = useAsyncFn(async () => {
         if (!id || !expectedChainId || !pluginID) return
 
         const result = await PluginTraderRPC.getNonFungibleTokenActivities(
@@ -50,13 +50,13 @@ export function useNonFungibleTokenActivities(
     }, [id, expectedChainId, pluginID])
 
     useEffect(() => {
-        getNonFungibleTokenActivities()
-    }, [getNonFungibleTokenActivities])
+        fetchActivities()
+    }, [fetchActivities])
 
     return {
         activities: flatten(Object.values(nonFungibleTokenActivities)),
-        fetchMore: getNonFungibleTokenActivities,
-        loadingNonFungibleTokenActivities,
+        fetchActivities,
+        loadingActivities,
     }
 }
 

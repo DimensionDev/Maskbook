@@ -1,17 +1,14 @@
 import { noop } from 'lodash-es'
+import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn.js'
 import type { Trade as V2Trade } from '@uniswap/v2-sdk'
 import type { Trade as V3Trade } from '@uniswap/v3-sdk'
 import type { Currency, TradeType } from '@uniswap/sdk-core'
 import { unreachable } from '@masknet/kit'
 import { TradeProvider } from '@masknet/public-api'
-import type {
-    SwapQuoteResponse,
-    SwapResponse,
-    SwapBancorRequest,
-    SwapRouteSuccessResponse,
-    TradeComputed,
-    SwapOOSuccessResponse,
-} from '../types/index.js'
+import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import type { TraderAPI } from '@masknet/web3-providers/types'
 import { useTradeCallback as useNativeTokenWrapperCallback } from './native/useTradeCallback.js'
 import { useTradeCallback as useZrxCallback } from './0x/useTradeCallback.js'
 import { useTradeCallback as useUniswapCallback } from './uniswap/useTradeCallback.js'
@@ -21,16 +18,19 @@ import { useTradeCallback as useBancorCallback } from './bancor/useTradeCallback
 import { useTradeCallback as useOpenOceanCallback } from './openocean/useTradeCallback.js'
 import { useExchangeProxyContract } from '../contracts/balancer/useExchangeProxyContract.js'
 import type { NativeTokenWrapper } from './native/useTradeComputed.js'
-import { isNativeTokenWrapper } from '../helpers/index.js'
 import { useGetTradeContext } from './useGetTradeContext.js'
-import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
-import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn.js'
-import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { isNativeTokenWrapper } from '../helpers/index.js'
+import type {
+    SwapQuoteResponse,
+    SwapResponse,
+    SwapBancorRequest,
+    SwapRouteSuccessResponse,
+    SwapOOSuccessResponse,
+} from '../types/index.js'
 
 export function useTradeCallback(
     provider?: TradeProvider,
-    tradeComputed?: TradeComputed | null,
+    tradeComputed?: TraderAPI.TradeComputed | null,
     gasConfig?: GasConfig,
     allowedSlippage?: number,
 ): AsyncFnReturn<() => Promise<string | undefined>> {
@@ -42,20 +42,26 @@ export function useTradeCallback(
     const isNativeTokenWrapper_ = isNativeTokenWrapper(tradeComputed ?? null)
     const tradeComputedForUniswapV2Like =
         context?.IS_UNISWAP_V2_LIKE && !isNativeTokenWrapper_
-            ? (tradeComputed as TradeComputed<V2Trade<Currency, Currency, TradeType>>)
+            ? (tradeComputed as TraderAPI.TradeComputed<V2Trade<Currency, Currency, TradeType>>)
             : null
     const tradeComputedForUniswapV3Like =
         context?.IS_UNISWAP_V3_LIKE && !isNativeTokenWrapper_
-            ? (tradeComputed as TradeComputed<V3Trade<Currency, Currency, TradeType>>)
+            ? (tradeComputed as TraderAPI.TradeComputed<V3Trade<Currency, Currency, TradeType>>)
             : null
-    const tradeComputedForZRX = !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<SwapQuoteResponse>) : null
-    const tradeComputedForBalancer = !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<SwapResponse>) : null
-    const tradeComputedForDODO = !isNativeTokenWrapper_
-        ? (tradeComputed as TradeComputed<SwapRouteSuccessResponse>)
+    const tradeComputedForZRX = !isNativeTokenWrapper_
+        ? (tradeComputed as TraderAPI.TradeComputed<SwapQuoteResponse>)
         : null
-    const tradeComputedForBancor = !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<SwapBancorRequest>) : null
+    const tradeComputedForBalancer = !isNativeTokenWrapper_
+        ? (tradeComputed as TraderAPI.TradeComputed<SwapResponse>)
+        : null
+    const tradeComputedForDODO = !isNativeTokenWrapper_
+        ? (tradeComputed as TraderAPI.TradeComputed<SwapRouteSuccessResponse>)
+        : null
+    const tradeComputedForBancor = !isNativeTokenWrapper_
+        ? (tradeComputed as TraderAPI.TradeComputed<SwapBancorRequest>)
+        : null
     const tradeComputedForOpenOcean = !isNativeTokenWrapper_
-        ? (tradeComputed as TradeComputed<SwapOOSuccessResponse>)
+        ? (tradeComputed as TraderAPI.TradeComputed<SwapOOSuccessResponse>)
         : null
     // uniswap like providers
     const uniswapV2Like = useUniswapCallback(tradeComputedForUniswapV2Like, provider, gasConfig, allowedSlippage)
@@ -83,7 +89,7 @@ export function useTradeCallback(
 
     // the trade is an ETH-WETH pair
     const nativeTokenWrapper = useNativeTokenWrapperCallback(
-        tradeComputed as TradeComputed<NativeTokenWrapper>,
+        tradeComputed as TraderAPI.TradeComputed<NativeTokenWrapper>,
         gasConfig,
         pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
     )

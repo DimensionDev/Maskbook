@@ -1,13 +1,13 @@
 import { useMemo } from 'react'
-import { uniswap } from '@masknet/web3-providers/helpers'
 import type { Trade } from '../../types/index.js'
+import { computeRealizedLPFeePercent, computeRealizedLPFeeAmount } from '../../helpers/index.js'
 
 export function useTradeBreakdown(trade: Trade | null) {
     return useMemo(() => {
         try {
             if (!trade) return null
-            const realizedLPFeePercent = uniswap.computeRealizedLPFeePercent(trade)
-            const realizedLPFeeAmount = uniswap.computeRealizedLPFeeAmount(trade)
+            const realizedLPFeePercent = computeRealizedLPFeePercent(trade)
+            const realizedLPFeeAmount = computeRealizedLPFeeAmount(trade)
             return {
                 realizedLPFeePercent,
                 realizedLPFeeAmount,

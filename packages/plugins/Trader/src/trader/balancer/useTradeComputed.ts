@@ -1,14 +1,15 @@
 import { useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { ZERO } from '@masknet/web3-shared-base'
-import { type SwapResponse, type TradeComputed, TradeStrategy } from '../../types/index.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { TraderAPI } from '@masknet/web3-providers/types'
+import type { SwapResponse } from '../../types/index.js'
 
 const MIN_VALUE = new BigNumber('1e-5')
 
 export function useTradeComputed(
     trade: SwapResponse | null,
-    strategy: TradeStrategy,
+    strategy: TraderAPI.TradeStrategy,
     inputAmount: string,
     outputAmount: string,
     inputToken?: Web3Helper.FungibleTokenAll,
@@ -20,7 +21,7 @@ export function useTradeComputed(
 
         const { swaps: swaps_, routes } = trade
         const [swaps, tradeAmount, spotPrice] = swaps_
-        const isExactIn = strategy === TradeStrategy.ExactIn
+        const isExactIn = strategy === TraderAPI.TradeStrategy.ExactIn
         let priceImpact = isExactIn
             ? new BigNumber(inputAmount).div(tradeAmount)
             : new BigNumber(tradeAmount).div(outputAmount)
@@ -39,6 +40,6 @@ export function useTradeComputed(
             path: [],
             fee: ZERO,
             trade_: trade,
-        } as TradeComputed<SwapResponse>
+        } as TraderAPI.TradeComputed<SwapResponse>
     }, [trade, strategy, inputToken, outputToken])
 }

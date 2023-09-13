@@ -1,6 +1,6 @@
 import { type ChangeEvent, memo, useCallback, useMemo } from 'react'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { alpha, Box, Chip, chipClasses, lighten, Typography, InputBase } from '@mui/material'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { formatBalance, formatCurrency, isZero } from '@masknet/web3-shared-base'

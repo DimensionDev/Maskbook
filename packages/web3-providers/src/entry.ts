@@ -102,18 +102,6 @@ import {
     SolanaNetworkResolverAPI,
 } from './Web3/Solana/apis/ResolverAPI.js'
 
-export { UniSwapV2Like } from './Trader/UniSwapV2.js'
-export { UniSwapV3Like } from './Trader/UniSwapV3.js'
-export { Balancer } from './Trader/Balancer.js'
-export { Zrx } from './Trader/Zrx.js'
-export { Bancor } from './Trader/Bancor.js'
-export { OpenOcean } from './Trader/OpenOcean.js'
-
-export { DepositPaymaster } from './SmartPay/libs/DepositPaymaster.js'
-export { ContractWallet } from './SmartPay/libs/ContractWallet.js'
-export { Create2Factory } from './SmartPay/libs/Create2Factory.js'
-export { UserTransaction } from './SmartPay/libs/UserTransaction.js'
-
 export const OpenSea = new OpenSeaAPI()
 export const Lido = new LidoAPI()
 export const LooksRare = new LooksRareAPI()
@@ -200,6 +188,12 @@ export const SolanaWeb3State = new SolanaWeb3StateAPI()
 export const SolanaWeb3 = Web3All.use(NetworkPluginID.PLUGIN_SOLANA)!
 export const SolanaHub = HubAll.use(NetworkPluginID.PLUGIN_SOLANA)!
 export const SolanaOthers = OthersAll.use(NetworkPluginID.PLUGIN_SOLANA)!
+
+// Smart Pay
+export { DepositPaymaster } from './SmartPay/libs/DepositPaymaster.js'
+export { ContractWallet } from './SmartPay/libs/ContractWallet.js'
+export { Create2Factory } from './SmartPay/libs/Create2Factory.js'
+export { UserTransaction } from './SmartPay/libs/UserTransaction.js'
 
 // Etherscan
 export const EtherscanExplorer = new EtherscanExplorerAPI()

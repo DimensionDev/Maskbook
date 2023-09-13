@@ -1,15 +1,15 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import type { BigNumber } from 'bignumber.js'
-import { Icons } from '@masknet/icons'
 import { ArrowDownward } from '@mui/icons-material'
 import { Alert, alpha, Box, Button, DialogActions, DialogContent, dialogTitleClasses, Typography } from '@mui/material'
+import { Icons } from '@masknet/icons'
+import { makeStyles, MaskColorVar, parseColor } from '@masknet/theme'
 import { Sniffings } from '@masknet/shared-base'
 import { FormattedBalance, InjectedDialog, TokenIcon, PluginWalletStatusBar, DotLoading } from '@masknet/shared'
-import { makeStyles, MaskColorVar, parseColor } from '@masknet/theme'
 import { formatBalance, formatCurrency, formatPercentage, isZero } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { TradeComputed } from '../../../types/index.js'
+import type { TraderAPI } from '@masknet/web3-providers/types'
 import { ONE_BIPS, MIN_SLIPPAGE, MAX_SLIPPAGE } from '../../../constants/index.js'
 import { useI18N } from '../../../locales/index.js'
 
@@ -177,7 +177,7 @@ export interface ConfirmDialogUIProps {
     gasFee: string
     gasFeeUSD: string
     isGreatThanSlippageSetting: boolean
-    trade: TradeComputed
+    trade: TraderAPI.TradeComputed
     nativeToken?: Web3Helper.FungibleTokenAll
     inputToken: Web3Helper.FungibleTokenAll
     outputToken: Web3Helper.FungibleTokenAll
@@ -208,7 +208,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
         const t = useI18N()
         const { classes, cx } = useStyles()
 
-        const [cacheTrade, setCacheTrade] = useState<TradeComputed>()
+        const [cacheTrade, setCacheTrade] = useState<TraderAPI.TradeComputed>()
         const [priceUpdated, setPriceUpdated] = useState(false)
         const [priceReversed, setPriceReversed] = useState(false)
 

@@ -103,6 +103,7 @@ export const RestoreWalletFromLocal = memo(function RestorePersonaFromLocal({
                                 }}
                                 error={!!error}
                                 helperText={error}
+                                autoFocus
                             />
                         </Box>
                     ) : null}

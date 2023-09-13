@@ -4,14 +4,14 @@ import { numberToHex } from 'web3-utils'
 import { Pair } from '@uniswap/v2-sdk'
 import { CurrencyAmount, type Token } from '@uniswap/sdk-core'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { getPairAddress } from '../../helpers/index.js'
-import { usePairContracts } from '../../contracts/uniswap/usePairContract.js'
 import type { TradeProvider } from '@masknet/public-api'
-import { useGetTradeContext } from '../useGetTradeContext.js'
 import { useMultipleContractSingleData } from '@masknet/web3-hooks-evm'
-import { useTargetBlockNumber } from '../useTargetBlockNumber.js'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { usePairContracts } from '../../contracts/uniswap/usePairContract.js'
+import { getPairAddress } from '../../helpers/index.js'
+import { useGetTradeContext } from '../useGetTradeContext.js'
+import { useTargetBlockNumber } from '../useTargetBlockNumber.js'
 
 export enum PairState {
     NOT_EXISTS = 0,
