@@ -1,3 +1,4 @@
+/* cspell: disable */
 import React, { type ReactNode } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
