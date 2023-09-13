@@ -142,7 +142,8 @@
       "@masknet/plugin-savings": ["./packages/plugins/Savings/src"],
       "@masknet/plugin-snapshot": ["./packages/plugins/Snapshot/src"],
       // @masknet/scripts: insert-here 3
-      "@masknet/plugin-switch-logo": ["./packages/plugins/SwitchLogo/src"]
+      "@masknet/plugin-switch-logo": ["./packages/plugins/SwitchLogo/src"],
+      "@masknet/plugin-calendar": ["./packages/plugins/Calendar/src"]
     }
   },
   "files": [],

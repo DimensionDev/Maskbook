@@ -66,6 +66,7 @@
     "@masknet/plugin-transak": "workspace:^",
     "@masknet/plugin-vcent": "workspace:^",
     "@masknet/plugin-web3-profile": "workspace:^",
+    "@masknet/plugin-calendar": "workspace:^",
     "@masknet/public-api": "workspace:^",
     "@masknet/sandboxed-plugin-runtime": "workspace:^",
     "@masknet/sdk": "workspace:^",

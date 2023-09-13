@@ -66,6 +66,7 @@ import { FiatCurrencyRateAPI } from './FiatCurrencyRate/index.js'
 import { SID_DomainAPI } from './SID/index.js'
 import { SiteAdaptorContextAPI, SharedContextAPI } from './PluginContext/index.js'
 import { ApprovalAPI } from './Approval/index.js'
+import { CalendarAPI } from './Calendar/index.js'
 import { ContractAPI } from './Web3/EVM/apis/ContractAPI.js'
 import { ContractReadonlyAPI } from './Web3/EVM/apis/ContractReadonlyAPI.js'
 import { ConnectionReadonlyAPI } from './Web3/EVM/apis/ConnectionReadonlyAPI.js'
@@ -283,3 +284,6 @@ export const Firefly = new FireflyAPI()
 
 // FiatCurrencyRate
 export const FiatCurrencyRate = new FiatCurrencyRateAPI()
+
+// Calendar
+export const Calendar = new CalendarAPI()

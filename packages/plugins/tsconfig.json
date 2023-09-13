@@ -37,6 +37,7 @@
     { "path": "./Transak/" },
     { "path": "./VCent/" },
     { "path": "./Web3Profile/" },
-    { "path": "./template/" }
+    { "path": "./template/" },
+    { "path": "./Calendar" }
   ]
 }

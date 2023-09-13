@@ -111,6 +111,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
 
     ui.injection.switchLogo?.(signal)
     ui.injection.PluginSettingsDialog?.(signal)
+    ui.injection.calendar?.(signal)
 
     // Update user avatar
     ui.collecting.currentVisitingIdentityProvider?.recognized.addListener((ref) => {

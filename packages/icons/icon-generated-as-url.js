@@ -209,6 +209,7 @@ export function japan_url() { return new URL("./general/Japan.svg", import.meta.
 export function jpy_url() { return new URL("./general/JPY.svg", import.meta.url) }
 export function key_square_url() { return new URL("./general/KeySquare.svg", import.meta.url) }
 export function left_arrow_url() { return new URL("./general/LeftArrow.svg", import.meta.url) }
+export function linear_calendar_url() { return new URL("./general/LinearCalendar.svg", import.meta.url) }
 export function link_url() { return new URL("./general/Link.svg", import.meta.url) }
 export function link_out_url() { return new URL("./general/LinkOut.svg", import.meta.url) }
 export function loader_url() { return new URL("./general/Loader.svg", import.meta.url) }
@@ -313,6 +314,7 @@ export function approval_url() { return new URL("./plugins/Approval.svg", import
 export function art_blocks_url() { return new URL("./plugins/ArtBlocks.png", import.meta.url) }
 export function avatar_url() { return new URL("./plugins/Avatar.svg", import.meta.url) }
 export function bit_url() { return new URL("./plugins/Bit.svg", import.meta.url) }
+export function calendar_url() { return new URL("./plugins/Calendar.svg", import.meta.url) }
 export function collectibles_url() { return new URL("./plugins/Collectibles.svg", import.meta.url) }
 export function cross_bridge_url() { return new URL("./plugins/CrossBridge.png", import.meta.url) }
 export function cyber_connect_dark_url() { return new URL("./plugins/CyberConnect.dark.svg", import.meta.url) }

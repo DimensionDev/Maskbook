@@ -1997,6 +1997,11 @@ export const LeftArrow = /*#__PURE__*/ __createIcon('LeftArrow', [
         s: true,
     },
 ])
+export const LinearCalendar = /*#__PURE__*/ __createIcon('LinearCalendar', [
+    {
+        u: () => new URL('./general/LinearCalendar.svg', import.meta.url),
+    },
+])
 export const Link = /*#__PURE__*/ __createIcon('Link', [
     {
         u: () => new URL('./general/Link.svg', import.meta.url),
@@ -3185,6 +3190,11 @@ export const Avatar = /*#__PURE__*/ __createIcon('Avatar', [
 export const Bit = /*#__PURE__*/ __createIcon('Bit', [
     {
         u: () => new URL('./plugins/Bit.svg', import.meta.url),
+    },
+])
+export const Calendar = /*#__PURE__*/ __createIcon('Calendar', [
+    {
+        u: () => new URL('./plugins/Calendar.svg', import.meta.url),
     },
 ])
 export const Collectibles = /*#__PURE__*/ __createIcon('Collectibles', [
