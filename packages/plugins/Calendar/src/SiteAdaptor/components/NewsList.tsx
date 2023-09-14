@@ -82,11 +82,13 @@ const useStyles = makeStyles()((theme) => ({
 interface NewsListProps {
     list: any[]
     isLoading: boolean
+    empty: boolean
 }
 
-export function NewsList({ list, isLoading }: NewsListProps) {
+export function NewsList({ list, isLoading, empty }: NewsListProps) {
     const { classes, cx } = useStyles()
     const t = useI18N()
+    console.log(empty, 'aaaaa')
     return (
         <div className={classes.container}>
             {isLoading && !list?.length ? (
@@ -94,8 +96,8 @@ export function NewsList({ list, isLoading }: NewsListProps) {
                     <LoadingBase />
                     <Typography>{t.loading()}</Typography>
                 </div>
-            ) : list?.length ? (
-                list.map((v) => {
+            ) : !empty ? (
+                list?.map((v) => {
                     return (
                         <div
                             className={classes.eventCard}

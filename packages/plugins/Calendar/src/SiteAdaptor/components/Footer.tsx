@@ -12,7 +12,6 @@ const useStyles = makeStyles()((theme) => ({
         background: 'rgba(255, 255, 255, 0.80)',
         backdropFilter: 'blur(10px)',
         borderRadius: '0 0 12px 12px',
-
         position: 'absolute',
         bottom: 0,
         left: 0,
@@ -22,12 +21,12 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: '16px',
+        padding: '12px',
         width: '100%',
     },
     poweredByWrap: {
         display: 'flex',
-        gap: '8px',
+        gap: '4px',
         alignItems: 'center',
     },
     poweredBy: {
@@ -46,6 +45,13 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '20px',
         alignItems: 'center',
     },
+    providerName: {
+        color: theme.palette.maskColor.main,
+        fontSize: '16px',
+        fontWeight: 700,
+        lineHeight: '20px',
+        alignItems: 'center',
+    },
 }))
 
 interface FooterProps {
@@ -58,19 +64,19 @@ export function Footer({ provider }: FooterProps) {
     const providerMap: Record<string, ReactNode> = {
         news: (
             <>
-                <Typography className={classes.calender}>CoinCarp</Typography>
+                <Typography className={classes.providerName}>CoinCarp</Typography>
                 <Icons.Coincarp size={24} />
             </>
         ),
         event: (
             <>
-                <Typography className={classes.calender}>LINK3</Typography>
+                <Typography className={classes.providerName}>LINK3</Typography>
                 <Icons.Link3 size={24} />
             </>
         ),
         nfts: (
             <>
-                <Typography className={classes.calender}>NFTGO</Typography>
+                <Typography className={classes.providerName}>NFTGO</Typography>
                 <Icons.Nftgo size={24} />
             </>
         ),
@@ -86,8 +92,8 @@ export function Footer({ provider }: FooterProps) {
                 <div className={classes.poweredByWrap}>
                     <Typography className={classes.poweredBy}>{t.powered_by()}</Typography>
                     {providerMap[provider]}
-                    <IconButton size="small" onClick={() => openApplicationBoardDialog()}>
-                        <Icons.Gear size={24} />
+                    <IconButton sx={{ width: '16px', height: '16px' }} onClick={() => openApplicationBoardDialog()}>
+                        <Icons.Gear size={16} />
                     </IconButton>
                 </div>
             </div>

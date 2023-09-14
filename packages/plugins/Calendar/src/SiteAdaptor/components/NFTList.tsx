@@ -77,9 +77,10 @@ const useStyles = makeStyles()((theme) => ({
 interface NFTListProps {
     list: any[]
     isLoading: boolean
+    empty: boolean
 }
 
-export function NFTList({ list, isLoading }: NFTListProps) {
+export function NFTList({ list, isLoading, empty }: NFTListProps) {
     const { classes, cx } = useStyles()
     const t = useI18N()
     return (
@@ -89,8 +90,8 @@ export function NFTList({ list, isLoading }: NFTListProps) {
                     <LoadingBase />
                     <Typography>{t.loading()}</Typography>
                 </div>
-            ) : list?.length ? (
-                list.map((v) => {
+            ) : !empty ? (
+                list?.map((v) => {
                     return (
                         <div
                             className={classes.eventCard}
@@ -101,24 +102,24 @@ export function NFTList({ list, isLoading }: NFTListProps) {
                             <div className={classes.eventHeader}>
                                 <div className={classes.projectWrap}>
                                     <img src={v.project.logo} className={classes.logo} alt="logo" />
-                                    {v.project.name}
+                                    <Typography> {v.project.name}</Typography>
                                 </div>
                             </div>
-                            <div className={classes.eventTitle}>{v.event_title}</div>
+                            <Typography className={classes.eventTitle}>{v.event_title}</Typography>
                             <div className={classes.eventHeader}>
                                 <CountdownTimer targetDate={new Date(Number(v.event_date) * 1000)} />
                             </div>
                             <div className={classes.eventHeader}>
-                                <div className={classes.second}>{t.total()}</div>
-                                <div className={classes.eventTitle}>{v.ext_info.nft_info.total}</div>
+                                <Typography className={classes.second}>{t.total()}</Typography>
+                                <Typography className={classes.eventTitle}>{v.ext_info.nft_info.total}</Typography>
                             </div>
                             <div className={classes.eventHeader}>
-                                <div className={classes.second}>{t.price()}</div>
-                                <div className={classes.eventTitle}>{v.ext_info.nft_info.token}</div>
+                                <Typography className={classes.second}>{t.price()}</Typography>
+                                <Typography className={classes.eventTitle}>{v.ext_info.nft_info.token}</Typography>
                             </div>
                             <div className={classes.eventHeader}>
-                                <div className={classes.second}>{t.date()}</div>
-                                <div className={classes.eventTitle}>{formatDate(v.event_date)}</div>
+                                <Typography className={classes.second}>{t.date()}</Typography>
+                                <Typography className={classes.eventTitle}>{formatDate(v.event_date)}</Typography>
                             </div>
                             <img className={classes.poster} src={v.poster_url} alt="poster" />
                         </div>

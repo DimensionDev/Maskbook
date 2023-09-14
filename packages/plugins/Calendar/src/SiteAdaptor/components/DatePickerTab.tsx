@@ -3,7 +3,7 @@ import { makeStyles, useTabs } from '@masknet/theme'
 import startOfWeek from 'date-fns/startOfWeek'
 import endOfWeek from 'date-fns/endOfWeek'
 import eachDayOfInterval from 'date-fns/eachDayOfInterval'
-import { IconButton } from '@mui/material'
+import { IconButton, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
@@ -35,6 +35,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     disabled: {
         color: theme.palette.maskColor.second,
+        cursor: 'default',
     },
 }))
 
@@ -67,8 +68,7 @@ export function DatePickerTab({ selectedDate, setSelectedDate, list, open, setOp
                             if (list && !list[v.toLocaleDateString()]) return
                             setSelectedDate(v)
                         }}>
-                        {' '}
-                        {v.getDate()}{' '}
+                        <Typography>{v.getDate()}</Typography>
                     </div>
                 )
             })}

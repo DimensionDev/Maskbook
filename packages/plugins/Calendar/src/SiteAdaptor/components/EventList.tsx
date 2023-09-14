@@ -70,6 +70,7 @@ const useStyles = makeStyles()((theme) => ({
 interface EventListProps {
     list: any[]
     isLoading: boolean
+    empty: boolean
 }
 
 export const formatDate = (date: string) => {
@@ -77,7 +78,7 @@ export const formatDate = (date: string) => {
     return format(new Date(Number(date) * 1000), dateFormat)
 }
 
-export function EventList({ list, isLoading }: EventListProps) {
+export function EventList({ list, isLoading, empty }: EventListProps) {
     const { classes, cx } = useStyles()
     const t = useI18N()
     return (
@@ -87,8 +88,8 @@ export function EventList({ list, isLoading }: EventListProps) {
                     <LoadingBase />
                     <Typography>{t.loading()}</Typography>
                 </div>
-            ) : list?.length ? (
-                list.map((v) => {
+            ) : !empty ? (
+                list?.map((v) => {
                     return (
                         <div
                             className={classes.eventCard}
@@ -102,8 +103,8 @@ export function EventList({ list, isLoading }: EventListProps) {
                                     {v.project.name}
                                 </div>
                             </div>
-                            <div className={classes.eventTitle}>{v.event_title}</div>
-                            <div className={classes.eventTitle}>{formatDate(v.event_date)}</div>
+                            <Typography className={classes.eventTitle}>{v.event_title}</Typography>
+                            <Typography className={classes.eventTitle}>{formatDate(v.event_date)}</Typography>
                             <img className={classes.poster} src={v.poster_url} alt="poster" />
                         </div>
                     )

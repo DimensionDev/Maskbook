@@ -3,7 +3,7 @@ import React, { useState, useMemo } from 'react'
 import { PluginID } from '@masknet/shared-base'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { Tab, StyledEngineProvider } from '@mui/material'
+import { Tab } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { DatePickerTab } from './components/DatePickerTab.js'
 import { useEventList, useNFTList, useNewsList } from '../hooks/useEventList.js'
@@ -64,42 +64,48 @@ export function CalendarContent() {
     }, [currentTab, newsList, eventList, nftList])
     const dateString = useMemo(() => selectedDate.toLocaleDateString(), [selectedDate])
     return (
-        <StyledEngineProvider>
-            <div className={disable ? classes.hidden : classes.calendar}>
-                <TabContext value={currentTab}>
-                    <div className={classes.tabList}>
-                        <MaskTabList variant="base" onChange={onChange} aria-label="">
-                            <Tab className={classes.tab} label={t.news()} value={tabs.news} />
-                            <Tab className={classes.tab} label={t.event()} value={tabs.event} />
-                            <Tab className={classes.tab} label={t.nfts()} value={tabs.nfts} />
-                        </MaskTabList>
-                    </div>
-                    <DatePickerTab
-                        open={open}
-                        setOpen={(open) => setOpen(open)}
-                        selectedDate={selectedDate}
-                        setSelectedDate={(date: Date) => setSelectedDate(date)}
-                        list={list}
+        <div className={disable ? classes.hidden : classes.calendar}>
+            <TabContext value={currentTab}>
+                <div className={classes.tabList}>
+                    <MaskTabList variant="base" onChange={onChange} aria-label="">
+                        <Tab className={classes.tab} label={t.news()} value={tabs.news} />
+                        <Tab className={classes.tab} label={t.event()} value={tabs.event} />
+                        <Tab className={classes.tab} label={t.nfts()} value={tabs.nfts} />
+                    </MaskTabList>
+                </div>
+                <DatePickerTab
+                    open={open}
+                    setOpen={(open) => setOpen(open)}
+                    selectedDate={selectedDate}
+                    setSelectedDate={(date: Date) => setSelectedDate(date)}
+                    list={list}
+                />
+                <DatePicker
+                    open={open}
+                    setOpen={(open) => setOpen(open)}
+                    list={list}
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                />
+                <TabPanel value={tabs.news} style={{ padding: 0 }}>
+                    <NewsList
+                        list={newsList[dateString]}
+                        isLoading={newsLoading}
+                        empty={!Object.keys(newsList).length}
                     />
-                    <DatePicker
-                        open={open}
-                        setOpen={(open) => setOpen(open)}
-                        list={list}
-                        selectedDate={selectedDate}
-                        setSelectedDate={setSelectedDate}
+                </TabPanel>
+                <TabPanel value={tabs.event} style={{ padding: 0 }}>
+                    <EventList
+                        list={eventList[dateString]}
+                        isLoading={eventLoading}
+                        empty={!Object.keys(eventList).length}
                     />
-                    <TabPanel value={tabs.news} style={{ padding: 0 }}>
-                        <NewsList list={newsList[dateString]} isLoading={newsLoading} />
-                    </TabPanel>
-                    <TabPanel value={tabs.event} style={{ padding: 0 }}>
-                        <EventList list={eventList[dateString]} isLoading={eventLoading} />
-                    </TabPanel>
-                    <TabPanel value={tabs.nfts} style={{ padding: 0 }}>
-                        <NFTList list={nftList[dateString]} isLoading={nftLoading} />
-                    </TabPanel>
-                    <Footer provider={currentTab} />
-                </TabContext>
-            </div>
-        </StyledEngineProvider>
+                </TabPanel>
+                <TabPanel value={tabs.nfts} style={{ padding: 0 }}>
+                    <NFTList list={nftList[dateString]} isLoading={nftLoading} empty={!Object.keys(newsList).length} />
+                </TabPanel>
+                <Footer provider={currentTab} />
+            </TabContext>
+        </div>
     )
 }
