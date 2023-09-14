@@ -23,6 +23,11 @@ import { ShowPrivateKey } from './ShowPrivateKey.js'
 import { useStyles } from './useStyles.js'
 import { ConnectedOrigins } from './ConnectedOrigins.js'
 
+function getPathIndex(path?: string) {
+    const rawIndex = path?.split('/').pop()
+    if (!rawIndex) return
+    return Number.parseInt(rawIndex, 10)
+}
 const WalletSettings = memo(() => {
     const { t } = useI18N()
     const { classes, cx, theme } = useStyles()
