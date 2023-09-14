@@ -31,7 +31,7 @@ export function CountdownTimer({ targetDate }: CountDownTimerProps) {
         [targetDate],
     )
 
-    const [remainingTime, setRemainingTime] = useState(calculateRemainingTime(targetDate))
+    const [remainingTime, setRemainingTime] = useState(() => calculateRemainingTime(targetDate))
 
     const { classes } = useStyles()
 
