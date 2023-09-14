@@ -61,7 +61,7 @@ export function useActivatedPluginSiteAdaptor(pluginID: string, minimalModeEqual
 
 export function startPluginSiteAdaptor(
     currentNetwork: EnhanceableSite,
-    host: Plugin.__Host.Host<Plugin.SiteAdaptor.SiteAdaptorContext>,
+    host: Plugin.__Host.Host<Plugin.SiteAdaptor.Definition, Plugin.SiteAdaptor.SiteAdaptorContext>,
 ) {
     startDaemon(host, (id) => {
         const def = getPluginDefine(id)

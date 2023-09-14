@@ -15,7 +15,6 @@ import { InjectSmartPayDescriptionDialog } from './components/SmartPayDescriptio
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
-    init(signal, context) {},
     GlobalInjection: function SmartPayGlobalInjection() {
         const wallets = useWallets()
         const contractAccounts = wallets.filter((x) => x.owner)

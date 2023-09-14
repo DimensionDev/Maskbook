@@ -11,7 +11,6 @@ import { PLUGIN_DESCRIPTION, PLUGIN_NAME } from '../constants.js'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
-    init(signal, context) {},
     ApplicationEntries: [
         (() => {
             const icon = <Icons.Danger size={36} />

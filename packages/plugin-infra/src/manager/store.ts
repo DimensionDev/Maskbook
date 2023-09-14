@@ -32,27 +32,7 @@ export function getPluginDefine(id: PluginID | NetworkPluginID) {
     return __registered.get(id as unknown as PluginID)
 }
 
-export function registerPlugin<
-    ChainId = unknown,
-    SchemaType = unknown,
-    ProviderType = unknown,
-    NetworkType = unknown,
-    MessageRequest = unknown,
-    MessageResponse = unknown,
-    Transaction = unknown,
-    TransactionParameter = unknown,
->(
-    def: Plugin.DeferredDefinition<
-        ChainId,
-        SchemaType,
-        ProviderType,
-        NetworkType,
-        MessageRequest,
-        MessageResponse,
-        Transaction,
-        TransactionParameter
-    >,
-) {
+export function registerPlugin(def: Plugin.DeferredDefinition) {
     if (__registered.has(def.ID)) return
     if (!__meetRegisterRequirement(def, env.channel)) return
     __registered.set(def.ID, def as any)

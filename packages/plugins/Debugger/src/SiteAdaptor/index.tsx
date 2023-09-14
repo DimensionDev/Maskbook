@@ -17,7 +17,6 @@ import { SearchResultInspector } from './components/SearchResultInspector.js'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
-    init(signal, context) {},
     ApplicationEntries: [
         {
             ApplicationEntryID: `${PLUGIN_ID}_Debugger`,

@@ -14,7 +14,6 @@ const isMaskBox = (x: string) => x.startsWith('https://box-beta.mask.io') || x.s
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
-    init(signal, context) {},
     DecryptedInspector(props) {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)

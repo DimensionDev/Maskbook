@@ -4,7 +4,7 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from './constants/index.js'
 import { languages } from './locales/languages.js'
 
-export const base: Plugin.Shared.Definition<ChainId> = {
+export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
     name: { fallback: 'Trader' },
     description: { fallback: 'View trending of cryptocurrencies, swap ERC20 tokens in various DEX markets.' },
