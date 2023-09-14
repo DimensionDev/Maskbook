@@ -13,6 +13,7 @@ import { NFTList } from './components/NFTList.js'
 import { Footer } from './components/Footer.js'
 import { safeUnreachable } from '@masknet/kit'
 import { DatePicker } from './components/DatePicker.js'
+import { useI18N } from '../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     calendar: {
@@ -39,11 +40,12 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function CalendarContent() {
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
     const disable = useIsMinimalMode(PluginID.Calendar)
     const [currentTab, onChange, tabs] = useTabs('news', 'event', 'nfts')
     const [selectedDate, setSelectedDate] = useState(new Date())
     const [open, setOpen] = useState(false)
+    const t = useI18N()
     const { data: eventList, isLoading: eventLoading } = useEventList()
     const { data: newsList, isLoading: newsLoading } = useNewsList()
     const { data: nftList, isLoading: nftLoading } = useNFTList()
@@ -67,9 +69,9 @@ export function CalendarContent() {
                 <TabContext value={currentTab}>
                     <div className={classes.tabList}>
                         <MaskTabList variant="base" onChange={onChange} aria-label="">
-                            <Tab className={classes.tab} label="News" value={tabs.news} />
-                            <Tab className={classes.tab} label="Event" value={tabs.event} />
-                            <Tab className={classes.tab} label="NFTs" value={tabs.nfts} />
+                            <Tab className={classes.tab} label={t.news()} value={tabs.news} />
+                            <Tab className={classes.tab} label={t.event()} value={tabs.event} />
+                            <Tab className={classes.tab} label={t.nfts()} value={tabs.nfts} />
                         </MaskTabList>
                     </div>
                     <DatePickerTab

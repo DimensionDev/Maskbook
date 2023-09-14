@@ -6,5 +6,8 @@
     "price": "Price",
     "date": "Date",
     "loading": "Loading",
-    "powered_by": "Powered By"
+    "powered_by": "Powered By",
+    "news": "News",
+    "event": "Event",
+    "nfts": "NFTs"
 }

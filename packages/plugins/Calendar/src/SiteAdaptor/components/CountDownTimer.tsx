@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
+import { Typography } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
     timer: {
@@ -52,5 +53,5 @@ export function CountdownTimer({ targetDate }: CountDownTimerProps) {
     const minutes = Math.floor((remainingTime % (60 * 60)) / 60)
     const seconds = remainingTime % 60
 
-    return <div className={classes.timer}>{`${days}d :${hours}h :${minutes}m :${seconds}s`}</div>
+    return <Typography className={classes.timer}>{`${days}d :${hours}h :${minutes}m :${seconds}s`}</Typography>
 }
