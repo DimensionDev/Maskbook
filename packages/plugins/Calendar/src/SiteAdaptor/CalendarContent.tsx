@@ -38,7 +38,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function Calendar() {
+export function CalendarContent() {
     const { classes, cx } = useStyles()
     const disable = useIsMinimalMode(PluginID.Calendar)
     const [currentTab, onChange, tabs] = useTabs('news', 'event', 'nfts')

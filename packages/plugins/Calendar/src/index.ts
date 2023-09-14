@@ -1,1 +1,1 @@
-export * from './SiteAdaptor/Calendar.js'
+export * from './SiteAdaptor/CalendarContent.js'
