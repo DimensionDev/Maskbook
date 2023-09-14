@@ -7,7 +7,7 @@ import { ErrorBoundary } from '@masknet/shared-base-ui'
 
 const f = cache(Services.SiteAdaptor.shouldSuggestConnectInPopup)
 export default function MaskSDK() {
-    if (!Flags.maskSDKEnabled) return null
+    if (!Flags.mask_sdk_enabled) return null
     return (
         <ErrorBoundary>
             <Suspense>

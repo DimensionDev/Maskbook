@@ -8,7 +8,7 @@ const isInsider = env.channel === 'insider' || isDev
 const isBeta = isInsider || env.channel === 'beta'
 
 export const flags = {
-    maskSDKEnabled: isBeta,
+    mask_sdk_enabled: isBeta,
     support_testnet_switch: isBeta,
 
     shadowRootInit: {
