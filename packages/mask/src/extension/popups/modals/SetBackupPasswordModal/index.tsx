@@ -28,10 +28,10 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
 
     const validPassword = useCallback(() => {
         if (newPassword.length < 8 || newPassword.length > 20) {
-            setPasswordValidError(t('popups_backup_password_invalid'))
+            setPasswordValidError(t('popups_settings_backup_password_invalid'))
             return
         } else if (!MATCH_PASSWORD_RE.test(newPassword)) {
-            setPasswordValidError(t('popups_backup_password_rules'))
+            setPasswordValidError(t('popups_settings_backup_password_invalid'))
             return
         }
         setPasswordValidError('')

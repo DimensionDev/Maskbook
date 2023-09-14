@@ -41,48 +41,42 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
             z
                 .object({
                     oldPassword: z
-                        .string(t('popups_backup_password_incorrect'))
-                        .min(8, t('popups_backup_password_incorrect'))
-                        .max(20, t('popups_backup_password_incorrect'))
+                        .string(t('popups_settings_backup_password_invalid'))
+                        .min(8, t('popups_settings_backup_password_invalid'))
+                        .max(20, t('popups_settings_backup_password_invalid'))
                         .refine(
                             (oldPassword) => oldPassword === user.backupPassword,
                             t('popups_backup_password_incorrect'),
                         )
                         .refine(
                             (oldPassword) => MATCH_PASSWORD_RE.test(oldPassword),
-                            t('popups_backup_password_rules'),
+                            t('popups_settings_backup_password_invalid'),
                         ),
                     newPassword: z
-                        .string()
-                        .min(8, t('popups_backup_password_incorrect'))
-                        .max(20, t('popups_backup_password_incorrect'))
+                        .string(t('popups_settings_backup_password_invalid'))
+                        .min(8, t('popups_settings_backup_password_invalid'))
+                        .max(20, t('popups_settings_backup_password_invalid'))
                         .refine(
                             (newPassword) => MATCH_PASSWORD_RE.test(newPassword),
-                            t('popups_backup_password_rules'),
+                            t('popups_settings_backup_password_invalid'),
                         ),
                     repeatPassword: z
-                        .string()
-                        .min(8, t('popups_backup_password_incorrect'))
-                        .max(20, t('popups_backup_password_incorrect'))
+                        .string(t('popups_settings_backup_password_invalid'))
+                        .min(8, t('popups_settings_backup_password_invalid'))
+                        .max(20, t('popups_settings_backup_password_invalid'))
                         .refine(
                             (repeatPassword) => MATCH_PASSWORD_RE.test(repeatPassword),
-                            t('popups_backup_password_rules'),
+                            t('popups_settings_backup_password_invalid'),
                         ),
                 })
                 .refine((data) => data.oldPassword === user.backupPassword, {
                     message: t('popups_backup_password_incorrect'),
                     path: ['oldPassword'],
                 })
-                .refine(
-                    (data) => {
-                        console.log(data)
-                        return data.newPassword !== data.oldPassword
-                    },
-                    {
-                        message: t('popups_settings_new_backup_password_error_tips'),
-                        path: ['newPassword'],
-                    },
-                )
+                .refine((data) => data.newPassword !== data.oldPassword, {
+                    message: t('popups_settings_new_backup_password_error_tips'),
+                    path: ['newPassword'],
+                })
                 .refine((data) => data.newPassword === data.repeatPassword, {
                     message: t('popups_backup_password_inconsistency'),
                     path: ['repeatPassword'],

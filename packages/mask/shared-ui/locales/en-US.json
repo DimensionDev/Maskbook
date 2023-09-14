@@ -1022,6 +1022,7 @@
     "popups_settings_set_backup_password": "Change Backup Password",
     "popups_settings_new_backup_password": "New password",
     "popups_settings_new_backup_password_error_tips": "New password cannot be the same as your current password.",
+    "popups_settings_backup_password_invalid": "Lack of number, letter or special character.",
     "nft_wallet_label": "Wallet",
     "plugin_profile_no_wallets": "Connect your wallet here.<br/>This section will be shown to your encrypted friends.<br/>The display content includes digital art, donations, badges<br/>and other public information on chain.",
     "nft_input_address_label": "Please input contract address",
