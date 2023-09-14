@@ -1,5 +1,5 @@
 import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout.js'
-import { useLanguage } from '../Personas/api.js'
+import { useLanguage } from '../../../shared-ui/index.js'
 import { styled } from '@mui/material/styles'
 
 const IFrame = styled('iframe')`

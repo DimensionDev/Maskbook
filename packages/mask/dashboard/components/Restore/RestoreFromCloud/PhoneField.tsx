@@ -11,7 +11,7 @@ import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useState } from
 import { useAsyncFn } from 'react-use'
 import { usePersonaRecovery } from '../../../contexts/index.js'
 import { useDashboardI18N } from '../../../locales/index.js'
-import { useLanguage } from '../../../pages/Personas/api.js'
+import { useLanguage } from '../../../../shared-ui/index.js'
 import { sendCode, type RestoreQueryError } from '../../../pages/Settings/api.js'
 import { phoneRegexp } from '../../../pages/Settings/regexp.js'
 import { AccountType, Locale, Scenario } from '../../../pages/Settings/type.js'

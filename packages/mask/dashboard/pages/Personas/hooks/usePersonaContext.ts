@@ -3,11 +3,11 @@ import { createContainer } from 'unstated-next'
 import { useConnectSite, useDisconnectSite, useOpenProfilePage } from './useConnectSite.js'
 import Services from '#services'
 import {
-    useOwnedPersonas,
-    useSupportedSocialNetworkSites,
-    type SiteAdaptor,
     useCurrentPersonaIdentifier,
-} from '../api.js'
+    useSupportedSocialNetworkSites,
+    useOwnedPersonas,
+    type SiteAdaptor,
+} from '../../../../shared-ui/index.js'
 import { useCreatePersona } from './useCreatePersona.js'
 import { useDeleteBound } from './useOperateBindingProof.js'
 

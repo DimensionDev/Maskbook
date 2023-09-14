@@ -7,7 +7,7 @@ import { LanguageOptions } from '@masknet/public-api'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import Services from '#services'
-import { useLanguage } from '../../../../../dashboard/pages/Personas/api.js'
+import { useLanguage } from '../../../../../shared-ui/index.js'
 
 const LANGUAGE_OPTIONS_ICON_MAP = {
     [LanguageOptions.__auto__]: null,

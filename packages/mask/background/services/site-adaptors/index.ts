@@ -4,7 +4,7 @@ export {
     getSupportedOrigins,
     getOriginsWithoutPermission,
     getSitesWithoutPermission,
-    getOriginsWithPermission,
+    getAllOrigins,
     requestPermissionBySite,
     hasSetup,
     setupSite,
