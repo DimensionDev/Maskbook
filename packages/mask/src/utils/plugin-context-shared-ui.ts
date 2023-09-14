@@ -30,6 +30,7 @@ export const RestPartOfPluginUIContextShared: Omit<
     | 'currentPersonaIdentifier'
     | 'allPersonas'
     | 'getSearchedKeyword'
+    | 'setWeb3State'
 > = {
     currentPersona: createSubscriptionFromAsync(
         Services.Settings.getCurrentPersonaIdentifier,

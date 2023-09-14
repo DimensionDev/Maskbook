@@ -15,11 +15,14 @@ startPluginSiteAdaptor(EnhanceableSite.App, {
     addI18NResource(plugin, resource) {
         createI18NBundle(plugin, resource)(i18NextInstance)
     },
-    createContext(id, signal) {
+    createContext(id, def, signal) {
         return {
             createKVStorage(type, defaultValues) {
                 if (type === 'memory') return inMemoryStorage(id, defaultValues, signal)
                 else return indexedDBStorage(id, defaultValues, signal)
+            },
+            setWeb3State(state) {
+                def.Web3State = state
             },
             ...createSharedContext(),
         }

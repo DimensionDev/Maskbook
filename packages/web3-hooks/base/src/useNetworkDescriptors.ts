@@ -13,7 +13,7 @@ export function useNetworkDescriptors<S extends 'all' | void = void, T extends N
     expectedPluginID?: T,
 ) {
     const { pluginID } = useNetworkContext(expectedPluginID)
-    return (getPluginDefine(pluginID)?.declareWeb3Networks ?? EMPTY_LIST) as Array<
+    return (getPluginDefine(pluginID)?.contribution?.web3?.networks ?? EMPTY_LIST) as Array<
         Web3Helper.NetworkDescriptorScope<S, T>
     >
 }

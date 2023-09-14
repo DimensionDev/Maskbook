@@ -5,9 +5,18 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { type BooleanPreference, MaskMessages, createI18NBundle, i18NextInstance } from '@masknet/shared-base'
 import { InMemoryStorages, PersistentStorages } from '../../shared/index.js'
 
-export type PartialSharedUIContext = Pick<Plugin.Shared.SharedUIContext, 'createKVStorage'>
-export const createPartialSharedUIContext = (id: string, signal: AbortSignal): PartialSharedUIContext => {
-    return { ...createSharedContext(id, signal) }
+export type PartialSharedUIContext = Pick<Plugin.Shared.SharedUIContext, 'createKVStorage' | 'setWeb3State'>
+export function createPartialSharedUIContext<Definition extends Plugin.GeneralUI.Definition>(
+    id: string,
+    definition: Definition,
+    signal: AbortSignal,
+): PartialSharedUIContext {
+    return {
+        ...createSharedContext(id, signal),
+        setWeb3State(state) {
+            definition.Web3State = state
+        },
+    }
 }
 
 export function createSharedContext(pluginID: string, signal: AbortSignal): Plugin.Shared.SharedContext {
@@ -19,12 +28,12 @@ export function createSharedContext(pluginID: string, signal: AbortSignal): Plug
     }
 }
 
-export function createPluginHost<Context>(
+export function createPluginHost<Definition, Context>(
     signal: AbortSignal | undefined,
-    createContext: (plugin: string, signal: AbortSignal) => Context,
+    createContext: (plugin: string, definition: Definition, signal: AbortSignal) => Context,
     getPluginMinimalModeEnabled: (id: string) => Promise<BooleanPreference>,
     hasPermission: (host_permission: string[]) => Promise<boolean>,
-): Plugin.__Host.Host<Context> {
+): Plugin.__Host.Host<Definition, Context> {
     const minimalMode: Plugin.__Host.EnabledStatusReporter = {
         isEnabled: getPluginMinimalModeEnabled,
         events: new Emitter(),

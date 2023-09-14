@@ -11,7 +11,7 @@ async function reject(): Promise<never> {
 
 const emptyValueRef = new ValueRefWithReady<any>()
 
-export function createSharedContext(): Omit<Plugin.SiteAdaptor.SiteAdaptorContext, 'createKVStorage'> {
+export function createSharedContext(): Omit<Plugin.SiteAdaptor.SiteAdaptorContext, 'createKVStorage' | 'setWeb3State'> {
     return {
         currentPersona: UNDEFINED,
         wallets: EMPTY_ARRAY,

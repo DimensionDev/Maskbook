@@ -8,7 +8,11 @@ import { hasHostPermission } from '../../services/helper/request-permission.js'
 const { signal } = hmr(import.meta.webpackHot)
 startPluginWorker(createPluginHost(signal, createWorkerContext, getPluginMinimalModeEnabled, hasHostPermission))
 
-function createWorkerContext(pluginID: string, signal: AbortSignal): Plugin.Worker.WorkerContext {
+function createWorkerContext(
+    pluginID: string,
+    def: Plugin.Worker.Definition,
+    signal: AbortSignal,
+): Plugin.Worker.WorkerContext {
     let storage: Plugin.Worker.DatabaseStorage<any> = undefined!
 
     return {

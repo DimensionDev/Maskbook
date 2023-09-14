@@ -4,5 +4,5 @@ export {
     startPluginDashboard,
     useActivatedPluginDashboard,
     useActivatedPluginsDashboard,
-    useIsMinimalModeDashBoard,
+    useIsMinimalModeDashboard,
 } from './manager/dashboard.js'

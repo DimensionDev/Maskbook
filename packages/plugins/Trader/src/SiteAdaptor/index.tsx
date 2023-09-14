@@ -5,7 +5,6 @@ import { DefaultWeb3ContextProvider, Web3ContextProvider } from '@masknet/web3-h
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Others } from '@masknet/web3-providers'
@@ -22,7 +21,7 @@ function openDialog() {
         open: true,
     })
 }
-const site: Plugin.SiteAdaptor.Definition<ChainId> = {
+const site: Plugin.SiteAdaptor.Definition = {
     ...base,
     init() {},
     SearchResultInspector: {
