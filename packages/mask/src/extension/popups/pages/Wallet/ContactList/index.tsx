@@ -317,7 +317,7 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
             onClick={() => !isOpenMenu && onSelectContact?.(address, name)}
             {...rest}>
             <div className={classes.contactsListItemInfo}>
-                <EmojiAvatar address={address} className={classes.emojiAvatar} sx={{ width: 24, height: 24 }} />
+                <EmojiAvatar value={address} className={classes.emojiAvatar} sx={{ width: 24, height: 24 }} />
                 <div>
                     <Typography className={classes.nickname}>{name}</Typography>
                     <Typography className={classes.identifier}>

@@ -2,7 +2,7 @@ import { NextIDPlatform } from './NextID/types.js'
 import { EnhanceableSite } from './Site/types.js'
 
 export const SOCIAL_MEDIA_NAME: Record<EnhanceableSite | string, string> = {
-    [EnhanceableSite.Twitter]: 'Twitter',
+    [EnhanceableSite.Twitter]: 'X',
     [EnhanceableSite.Facebook]: 'Facebook',
     [EnhanceableSite.Minds]: 'Minds',
     [EnhanceableSite.Instagram]: 'Instagram',

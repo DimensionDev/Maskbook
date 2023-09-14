@@ -1,7 +1,7 @@
 import { Box, IconButton, Paper, Typography } from '@mui/material'
-import { Close as CloseIcon } from '@mui/icons-material'
 import { makeStyles } from '@masknet/theme'
 import { SetupGuideStep } from '@masknet/shared-base'
+import { Icons } from '@masknet/icons'
 
 interface ContentUIProps {
     dialogType: SetupGuideStep
@@ -76,6 +76,7 @@ export const useWizardDialogStyles = makeStyles()((theme) => ({
         position: 'absolute',
         right: 10,
         top: 10,
+        cursor: 'pointer',
     },
     header: {
         height: 40,
@@ -110,7 +111,7 @@ export function WizardDialog(props: WizardDialogProps) {
             <ContentUI dialogType={dialogType} content={content} tip={tip} footer={footer} dismiss={dismiss} />
             {onClose ? (
                 <IconButton className={classes.close} size="medium" onClick={onClose}>
-                    <CloseIcon cursor="pointer" />
+                    <Icons.Close />
                 </IconButton>
             ) : null}
         </Paper>

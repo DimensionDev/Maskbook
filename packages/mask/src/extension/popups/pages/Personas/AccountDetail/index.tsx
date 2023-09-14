@@ -27,7 +27,6 @@ import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { AccountDetailUI } from './UI.js'
 import Service from '#services'
 import { PageTitleContext } from '../../../context.js'
-import { isEqualWith, uniq, sortBy, isEqual } from 'lodash-es'
 import { ConfirmDialog } from '../../../modals/modals.js'
 import { DisconnectEventMap } from '../common.js'
 
@@ -55,20 +54,6 @@ const AccountDetail = memo(() => {
                     ? [selectedAccount.identity]
                     : EMPTY_LIST,
         })
-
-    const isClean = useMemo(() => {
-        if (!selectedAccount?.is_valid) return true
-
-        return isEqualWith(unlistedAddressConfig, pendingUnlistedConfig, (config1, config2) => {
-            // Some identities might only in pendingUnlistedConfig but not in migratedUnlistedAddressConfig,
-            // so we merged all the identities
-            const keys = uniq([...Object.keys(config1), ...Object.keys(config2)])
-            for (const key of keys) {
-                if (!isEqual(sortBy(config1[key] || []), sortBy(config2[key] || []))) return false
-            }
-            return true
-        })
-    }, [unlistedAddressConfig, pendingUnlistedConfig, selectedAccount])
 
     const listingAddresses = useMemo(() => {
         if (!selectedAccount?.identity) return EMPTY_LIST
@@ -233,7 +218,6 @@ const AccountDetail = memo(() => {
                 onVerify={onVerify}
                 isSupportNextDotID={isSupportNextDotID}
                 walletProofs={walletProofs}
-                isClean={isClean}
                 toggleUnlisted={toggleUnlisted}
                 listingAddresses={listingAddresses}
                 loading={isInitialLoading}

@@ -499,7 +499,12 @@ export const TwitterX = /*#__PURE__*/ __createIcon('TwitterX', [
 ])
 export const TwitterXRound = /*#__PURE__*/ __createIcon('TwitterXRound', [
     {
-        u: () => new URL('./brands/TwitterXRound.svg', import.meta.url),
+        c: ['dark'],
+        u: () => new URL('./brands/TwitterXRound.dark.svg', import.meta.url),
+    },
+    {
+        c: ['light'],
+        u: () => new URL('./brands/TwitterXRound.light.svg', import.meta.url),
     },
 ])
 export const Uniswap = /*#__PURE__*/ __createIcon('Uniswap', [
@@ -3760,6 +3765,22 @@ export const UnknownOut = /*#__PURE__*/ __createIcon('UnknownOut', [
 export const CN = /*#__PURE__*/ __createIcon('CN', [
     {
         u: () => new URL('./settings/CN.svg', import.meta.url),
+    },
+])
+export const Email = /*#__PURE__*/ __createIcon('Email', [
+    {
+        u: () => new URL('./settings/Email.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 24 24',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fill: 'currentColor',
+                    d: 'M16.192 14.725c1.238.944 2.07 1.14 2.597.905.346-.156.595-.521.74-.925a8.002 8.002 0 0 0-3.53-9.633A8 8 0 1 0 12.015 20l.006 2A9.957 9.957 0 0 1 7 20.66C2.22 17.897.58 11.781 3.341 7a10 10 0 0 1 18.07 8.383 4.033 4.033 0 0 1-.471.925c-.337.494-.775.895-1.332 1.145-1.327.595-2.945.19-4.83-1.297a5 5 0 1 1 1.414-1.432ZM12.001 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z',
+                }),
+            }),
+        s: true,
     },
 ])
 export const JP = /*#__PURE__*/ __createIcon('JP', [
