@@ -46,13 +46,13 @@ function getRegisteredPlugin(ID: NetworkPluginID) {
     return [...__registered.values()].find((x) => x.ID === pluginID)
 }
 const getRegisteredWeb3Chains_memo = memoize((ID: NetworkPluginID) => {
-    return getRegisteredPlugin(ID)?.declareWeb3Chains ?? []
+    return getRegisteredPlugin(ID)?.contribution?.web3?.chains ?? []
 })
 const getRegisteredWeb3Networks_memo = memoize((ID: NetworkPluginID) => {
-    return getRegisteredPlugin(ID)?.declareWeb3Networks ?? []
+    return getRegisteredPlugin(ID)?.contribution?.web3?.networks ?? []
 })
 const getRegisteredWeb3Providers_memo = memoize((ID: NetworkPluginID) => {
-    return getRegisteredPlugin(ID)?.declareWeb3Providers ?? []
+    return getRegisteredPlugin(ID)?.contribution?.web3?.providers ?? []
 })
 
 export function getRegisteredWeb3Chains<T extends NetworkPluginID>(ID: T) {

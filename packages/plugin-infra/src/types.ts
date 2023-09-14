@@ -229,15 +229,6 @@ export namespace Plugin.Shared {
         inMinimalModeByDefault?: boolean
         /** i18n resources of this plugin */
         i18n?: I18NResource
-        // TODO: move to .contribution.web3Chains
-        /** Introduce sub-network information. */
-        declareWeb3Chains?: Array<ChainDescriptor<unknown, unknown, unknown>>
-        // TODO: move to .contribution.web3Networks
-        /** Introduce networks information. */
-        declareWeb3Networks?: Array<NetworkDescriptor<unknown, unknown>>
-        // TODO: move to .contribution.web3Providers
-        /** Introduce wallet providers information. */
-        declareWeb3Providers?: Array<ProviderDescriptor<unknown, unknown>>
         /**
          * Declare what this plugin provides.
          *
@@ -320,6 +311,15 @@ export namespace Plugin.Shared {
         metadataKeys?: ReadonlySet<string>
         /** This plugin can recognize and enhance the post that matches the following matchers. */
         postContent?: ReadonlySet<RegExp | string>
+        web3?: Web3Contribution
+    }
+    export interface Web3Contribution {
+        /** Introduced sub-network information. */
+        chains?: Array<ChainDescriptor<unknown, unknown, unknown>>
+        /** Introduced networks information. */
+        networks?: Array<NetworkDescriptor<unknown, unknown>>
+        /** Introduced wallet providers information. */
+        providers?: Array<ProviderDescriptor<unknown, unknown>>
     }
 
     export interface Ability {}
