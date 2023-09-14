@@ -3,11 +3,8 @@ import { makeStyles, useTabs } from '@masknet/theme'
 import startOfWeek from 'date-fns/startOfWeek'
 import endOfWeek from 'date-fns/endOfWeek'
 import eachDayOfInterval from 'date-fns/eachDayOfInterval'
+import { IconButton } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { IconButton, Popover } from '@mui/material'
-import { LocalizationProvider } from '@mui/lab'
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { DateCalendar } from '@mui/x-date-pickers/DateCalendar'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -42,21 +39,14 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface DatePickerTabProps {
+    open: boolean
+    setOpen: (x: boolean) => void
     selectedDate: Date
     setSelectedDate: (date: Date) => void
     list: Record<string, any[]> | null
 }
 
-export function DatePickerTab({ selectedDate, setSelectedDate, list }: DatePickerTabProps) {
-    const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        console.log(event)
-        setAnchorEl(event.currentTarget)
-    }
-    const handleClose = () => {
-        setAnchorEl(null)
-    }
-    const open = Boolean(anchorEl)
+export function DatePickerTab({ selectedDate, setSelectedDate, list, open, setOpen }: DatePickerTabProps) {
     const { classes } = useStyles()
     const week = useMemo(() => {
         return eachDayOfInterval({ start: startOfWeek(selectedDate), end: endOfWeek(selectedDate) })
@@ -64,7 +54,6 @@ export function DatePickerTab({ selectedDate, setSelectedDate, list }: DatePicke
     const [currentTab, onChange, tabs] = useTabs(
         ...(week.map((v) => v.getDate().toString()) as unknown as [string, string]),
     )
-    const id = open ? 'simple-popover' : undefined
     return (
         <div className={classes.container}>
             {week.map((v) => {
@@ -83,24 +72,13 @@ export function DatePickerTab({ selectedDate, setSelectedDate, list }: DatePicke
                     </div>
                 )
             })}
-            <IconButton size="small" onClick={handleClick} aria-describedby={id}>
-                <Icons.LinearCalendar />
-            </IconButton>
-            <Popover
-                id={id}
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
+            <IconButton
+                size="small"
+                onClick={() => {
+                    setOpen(!open)
                 }}>
-                <div style={{ padding: '16px' }}>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DateCalendar />
-                    </LocalizationProvider>
-                </div>
-            </Popover>
+                <Icons.LinearCalendar size={24} />
+            </IconButton>
         </div>
     )
 }
