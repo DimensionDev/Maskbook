@@ -8,8 +8,8 @@ export function useNewsList() {
         async () => await Calendar.getNewsList(date),
     )
     const eventsWithDate: Record<string, any[]> =
-        data?.data?.events.reduce((acc: Record<string, any[]>, v: any) => {
-            const date = new Date(Number(v.event_date) * 1000).toLocaleDateString()
+        data?.reduce((acc: Record<string, any[]>, v: any) => {
+            const date = new Date(Number(v.event_date)).toLocaleDateString()
             acc[date] = acc[date] || []
             acc[date].push(v)
             return acc
@@ -24,8 +24,8 @@ export function useEventList() {
         async () => await Calendar.getEventList(date),
     )
     const eventsWithDate: Record<string, any[]> =
-        data?.data?.events.reduce((acc: Record<string, any[]>, v: any) => {
-            const date = new Date(Number(v.event_date) * 1000).toLocaleDateString()
+        data?.reduce((acc: Record<string, any[]>, v: any) => {
+            const date = new Date(Number(v.event_date)).toLocaleDateString()
             acc[date] = acc[date] || []
             acc[date].push(v)
             return acc
@@ -40,8 +40,8 @@ export function useNFTList() {
         async () => await Calendar.getNFTList(date),
     )
     const eventsWithDate: Record<string, any[]> =
-        data?.data?.events.reduce((acc: Record<string, any[]>, v: any) => {
-            const date = new Date(Number(v.event_date) * 1000).toLocaleDateString()
+        data?.reduce((acc: Record<string, any[]>, v: any) => {
+            const date = new Date(v.event_date).toLocaleDateString()
             acc[date] = acc[date] || []
             acc[date].push(v)
             return acc

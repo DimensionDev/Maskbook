@@ -88,7 +88,6 @@ interface NewsListProps {
 export function NewsList({ list, isLoading, empty }: NewsListProps) {
     const { classes, cx } = useStyles()
     const t = useI18N()
-    console.log(empty, 'aaaaa')
     return (
         <div className={classes.container}>
             {isLoading && !list?.length ? (

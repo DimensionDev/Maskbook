@@ -75,7 +75,7 @@ interface EventListProps {
 
 export const formatDate = (date: string) => {
     const dateFormat = 'MMM dd, yyyy HH:mm:ss'
-    return format(new Date(Number(date) * 1000), dateFormat)
+    return format(new Date(date), dateFormat)
 }
 
 export function EventList({ list, isLoading, empty }: EventListProps) {

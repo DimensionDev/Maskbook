@@ -107,7 +107,7 @@ export function NFTList({ list, isLoading, empty }: NFTListProps) {
                             </div>
                             <Typography className={classes.eventTitle}>{v.event_title}</Typography>
                             <div className={classes.eventHeader}>
-                                <CountdownTimer targetDate={new Date(Number(v.event_date) * 1000)} />
+                                <CountdownTimer targetDate={new Date(v.event_date)} />
                             </div>
                             <div className={classes.eventHeader}>
                                 <Typography className={classes.second}>{t.total()}</Typography>
