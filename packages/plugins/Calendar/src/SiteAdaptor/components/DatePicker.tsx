@@ -119,17 +119,17 @@ export function DatePicker({ list, selectedDate, setSelectedDate, open, setOpen 
                             {Array.from({ length: 7 }).map((_, dayIndex) => {
                                 const currentDatePointer = addDays(monthStart, weekIndex * 7 + dayIndex)
                                 return (
-                                    <td key={dayIndex} onClick={() => handleDateClick(currentDatePointer)}>
+                                    <td key={dayIndex}>
                                         <button
                                             className={classes.button}
                                             type="submit"
-                                            disabled={!list[currentDatePointer.toLocaleDateString()]}
-                                            onClick={handleDateClick}>
+                                            disabled={!list?.[currentDatePointer.toLocaleDateString()]}
+                                            onClick={() => handleDateClick(currentDatePointer)}>
                                             <Typography
                                                 className={`${classes.dateItem} ${
                                                     selectedDate.toDateString() === currentDatePointer.toDateString()
                                                         ? classes.active
-                                                        : list[currentDatePointer.toLocaleDateString()]
+                                                        : list?.[currentDatePointer.toLocaleDateString()]
                                                         ? classes.canClick
                                                         : ''
                                                 }`}>
