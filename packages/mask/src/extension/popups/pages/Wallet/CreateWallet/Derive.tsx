@@ -1,14 +1,14 @@
 import Services from '#services'
 import { Icons } from '@masknet/icons'
 import { defer, timeout } from '@masknet/kit'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID, type Wallet } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { Providers, Web3 } from '@masknet/web3-providers'
 import { generateNewWalletName, isSameAddress } from '@masknet/web3-shared-base'
 import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, List, ListItem, Tooltip, Typography } from '@mui/material'
-import { memo } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { useI18N } from '../../../../../utils/index.js'
@@ -19,7 +19,7 @@ import { WalletRenameModal } from '../../../modals/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
-        padding: '16px',
+        padding: theme.spacing(0, 2, 2),
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
@@ -88,12 +88,16 @@ const DeriveWallet = memo(function DeriveWallet() {
     const currentWallet = useWallet()
 
     const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const allWalletsRef = useRef<Wallet[]>([])
+    useEffect(() => {
+        allWalletsRef.current = allWallets
+    })
 
     const [{ loading }, create] = useAsyncFn(async () => {
         try {
             const nextWallet = await Services.Wallet.generateNextDerivationAddress()
             const ens = await NameService?.safeReverse?.(nextWallet)
-            const name = ens || generateNewWalletName(allWallets)
+            const name = ens || generateNewWalletName(allWalletsRef.current)
             const address = await Services.Wallet.deriveWallet(name, mnemonicId)
             await pollResult(address)
             await Web3.connect({
@@ -101,13 +105,13 @@ const DeriveWallet = memo(function DeriveWallet() {
                 account: address,
             })
         } catch {}
-    }, [allWallets, mnemonicId])
+    }, [mnemonicId])
 
     useTitle(t('popups_add_wallet'))
 
     return (
         <div className={classes.content}>
-            <List dense className={classes.list}>
+            <List dense className={classes.list} data-hide-scrollbar>
                 {wallets.map((wallet) => (
                     <ListItem key={wallet.address} className={classes.wallet}>
                         {isSameAddress(wallet.address, currentWallet?.address) ? (
