@@ -13,7 +13,7 @@ export async function requestExtensionPermission(permission: Permissions.Permiss
     }
     const popup = await browser.windows.create({
         height: 600,
-        width: 350,
+        width: 400,
         type: 'popup',
         url: getPermissionRequestURL(permission),
     })

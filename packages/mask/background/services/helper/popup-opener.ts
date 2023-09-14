@@ -37,7 +37,7 @@ async function openWindow(url: string): Promise<void> {
         const { id } = await browser.windows.create({
             url: browser.runtime.getURL(url),
             width: 400,
-            height: 628,
+            height: 600,
             type: 'popup',
             state: 'normal',
             left,

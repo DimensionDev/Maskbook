@@ -32,7 +32,7 @@ export async function openPluginPopup(
     if (meta) hostedMeta.set(meta[0], [meta[1], meta[2]])
     const { id: windowID } = await browser.windows.create({
         type: 'popup',
-        width: 350,
+        width: 400,
         height: 600,
         url,
     })
