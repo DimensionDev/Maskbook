@@ -1,6 +1,6 @@
 import React from 'react'
-import { makeStyles, LoadingBase } from '@masknet/theme'
-import { EmptyStatus } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
+import { EmptyStatus, LoadingStatus } from '@masknet/shared'
 import format from 'date-fns/format'
 import { Typography } from '@mui/material'
 import { useI18N } from '../../locales/i18n_generated.js'
@@ -85,8 +85,7 @@ export function EventList({ list, isLoading, empty }: EventListProps) {
         <div className={classes.container}>
             {isLoading && !list?.length ? (
                 <div className={cx(classes.empty, classes.eventTitle)}>
-                    <LoadingBase />
-                    <Typography>{t.loading()}</Typography>
+                    <LoadingStatus />
                 </div>
             ) : !empty ? (
                 list?.map((v) => {
