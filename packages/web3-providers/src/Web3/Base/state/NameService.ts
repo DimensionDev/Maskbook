@@ -96,9 +96,9 @@ export class NameServiceState<
         return attemptUntil(callbacks, undefined, (result) => !result)
     }
 
-    async safeReverse(address: string) {
+    async safeReverse(address: string, domainOnly?: boolean) {
         try {
-            return await this.reverse(address)
+            return await this.reverse(address, domainOnly)
         } catch {}
         return
     }

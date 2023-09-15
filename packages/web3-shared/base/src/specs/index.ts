@@ -961,7 +961,7 @@ export interface NameServiceState extends Startable {
     /** get domain name of address */
     reverse?: (address: string, domainOnly?: boolean) => Promise<string | undefined>
     /** safely get domain name of address */
-    safeReverse?: (address: string) => Promise<string | undefined>
+    safeReverse?: (address: string, domainOnly?: boolean) => Promise<string | undefined>
 }
 
 export interface TokenState<ChainId, SchemaType> extends Startable {
