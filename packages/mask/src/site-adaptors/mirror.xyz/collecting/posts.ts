@@ -29,7 +29,7 @@ export function queryInjectPoint(node: HTMLElement) {
             ':scope > div:nth-child(4) div:has(div > div > div+a)~div~a',
 
             // collection page card footer
-            ':scope > div:nth-child(1) footer span > div > div',
+            ':scope > div:nth-child(1) footer > div + div',
             // if have header image is 4, either 3 entries: time + entry link
             ':scope > div:nth-child(3) div+a',
             ':scope > div:nth-child(4) div+a',
