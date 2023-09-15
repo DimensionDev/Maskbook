@@ -66,7 +66,7 @@ export async function getOriginsWithoutPermission(options: SitesQueryOptions = {
     return compact(await Promise.all(promises))
 }
 
-export async function getAllOrigins() {
+export async function getOriginsWithNoPermission() {
     const groups = await getSupportedOrigins()
     const promises = groups.map(async ({ origins, networkIdentifier }) => {
         const unGrantedOrigins = compact(

@@ -58,11 +58,7 @@ export const SupportedSitesModal = memo<ActionModalBaseProps>(function Supported
                 if (!result) return
             }
 
-            const prev = await Services.Settings.getInjectSwitchSettings()
-            await Services.Settings.setInjectSwitchSettings({
-                ...prev,
-                [networkIdentifier]: !allowInject,
-            })
+            await Services.Settings.setInjectSwitchSetting(networkIdentifier, !allowInject)
             await refetch()
         },
         [InjectSwitchSettings, refetch],

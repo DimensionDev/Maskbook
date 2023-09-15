@@ -115,7 +115,7 @@ const Settings = memo(function Settings() {
             [LanguageOptions.jaJP]: '日本語',
             [LanguageOptions.koKR]: '한국인',
         }),
-        [],
+        [t],
     )
 
     const APPEARANCE_OPTIONS_MAP = useMemo(
@@ -124,7 +124,7 @@ const Settings = memo(function Settings() {
             [Appearance.light]: t('popups_settings_appearance_light'),
             [Appearance.dark]: t('popups_settings_appearance_dark'),
         }),
-        [],
+        [t],
     )
 
     const itemClasses = useMemo(
@@ -211,19 +211,11 @@ const Settings = memo(function Settings() {
                     </Box>
                     <List className={classes.list}>
                         <ListItem className={classes.listItem}>
-                            <ListItemText
-                                classes={itemClasses}
-                                primary={t('popups_settings_cloud_backup')}
-                                secondary="Not backed up"
-                            />
+                            <ListItemText classes={itemClasses} primary={t('popups_settings_cloud_backup')} />
                             <Icons.ArrowRight size={24} />
                         </ListItem>
                         <ListItem className={classes.listItem}>
-                            <ListItemText
-                                classes={itemClasses}
-                                primary={t('popups_settings_local_backup')}
-                                secondary="Backup on 2022.12.20 12:23.20"
-                            />
+                            <ListItemText classes={itemClasses} primary={t('popups_settings_local_backup')} />
                             <Icons.ArrowRight size={24} />
                         </ListItem>
                         <ListItem className={classes.listItem}>

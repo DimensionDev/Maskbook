@@ -41,7 +41,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
 
     console.log('Activating provider', ui_deferred.networkIdentifier)
 
-    const injectSwitchSettings = await Services.Settings.getInjectSwitchSettings()
+    const injectSwitchSettings = await Services.Settings.getAllInjectSwitchSettings()
     if (!injectSwitchSettings[ui_deferred.networkIdentifier]) return
 
     configureSelectorMissReporter((name) => {
