@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { Button, Drawer, type DrawerProps } from '@mui/material'
+import { Button, Drawer, backdropClasses, type DrawerProps } from '@mui/material'
 import { memo, type ReactNode, useEffect } from 'react'
 import { ActionModalContainer, useActionModal } from './ActionModalContext.js'
 
@@ -42,6 +42,15 @@ const useStyles = makeStyles()((theme) => ({
             marginBottom: theme.spacing(2),
         },
     },
+    root: {
+        [`& .${backdropClasses.root}`]: {
+            background:
+                theme.palette.mode === 'dark'
+                    ? 'rgba(255, 255, 255, 0.10)'
+                    : 'linear-gradient(0deg, rgba(0, 0, 0, 0.40) 0%, rgba(0, 0, 0, 0.40) 100%), rgba(28, 104, 243, 0.20)',
+            backdropFilter: 'blur(5px)',
+        },
+    },
 }))
 
 export interface ActionModalBaseProps extends Omit<DrawerProps, 'onClose'> {}
@@ -59,7 +68,7 @@ export const ActionModal = memo(function ActionModal({
     onClose,
     ...rest
 }: ActionModalProps) {
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
 
     const { open, openModal, closeModal } = useActionModal()
     useEffect(openModal, [])
@@ -67,8 +76,8 @@ export const ActionModal = memo(function ActionModal({
     return (
         <Drawer
             anchor="bottom"
-            className={cx(className)}
-            classes={{ paper: classes.modal }}
+            className={className}
+            classes={{ paper: classes.modal, root: classes.root }}
             role="dialog"
             open={open}
             onClose={closeModal}

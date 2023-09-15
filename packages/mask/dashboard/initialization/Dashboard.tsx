@@ -19,7 +19,7 @@ import { NetworkPluginID, i18NextInstance, queryRemoteI18NBundle } from '@maskne
 import '../utils/kv-storage.js'
 
 import { Pages } from '../pages/routes.js'
-import { useAppearance } from '../pages/Personas/api.js'
+import { useAppearance } from '../../shared-ui/index.js'
 import Services from '#services'
 import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext.js'
 

@@ -17,6 +17,7 @@ import {
     selectClasses,
     filledInputClasses,
     formHelperTextClasses,
+    inputAdornmentClasses,
 } from '@mui/material'
 import type { MaskColor } from './colors.js'
 
@@ -816,6 +817,9 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                             border: `1px solid ${alpha(colors.maskColor.danger, 0.5)}`,
                             boxShadow: 'unset',
                         },
+                        [`& .${inputAdornmentClasses.positionEnd}`]: {
+                            color: colors.maskColor.danger,
+                        },
                     },
                 },
                 {
@@ -829,6 +833,9 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                             outline: `2px solid ${alpha(colors.maskColor.danger, 0.2)}`,
                             border: `1px solid ${alpha(colors.maskColor.danger, 0.5)}`,
                             boxShadow: 'unset',
+                        },
+                        [`& .${inputAdornmentClasses.positionEnd}`]: {
+                            color: colors.maskColor.danger,
                         },
                     },
                 },
@@ -858,6 +865,9 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                         outline: `2px solid ${alpha(colors.maskColor.primary, 0.2)}`,
                         borderColor: alpha(colors.maskColor.primary, 0.5),
                         backgroundColor: colors.maskColor.bottom,
+                    },
+                    [`&.${inputBaseClasses.focused} .${inputAdornmentClasses.positionEnd}`]: {
+                        color: colors.maskColor.second,
                     },
                     // For Select Menu
                     [`& .${popoverClasses.paper}`]: {

@@ -13,6 +13,9 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
     const { t } = useI18N()
     const theme = useTheme()
     const [params] = useSearchParams()
+
+    const to = params.get('to')
+
     const { updateUser } = UserContext.useContainer()
     const [newPassword, setNewPassword] = useState('')
     const [repeatPassword, setRepeatPassword] = useState('')
@@ -25,10 +28,10 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
 
     const validPassword = useCallback(() => {
         if (newPassword.length < 8 || newPassword.length > 20) {
-            setPasswordValidError(t('popups_backup_password_invalid'))
+            setPasswordValidError(t('popups_settings_backup_password_invalid'))
             return
         } else if (!MATCH_PASSWORD_RE.test(newPassword)) {
-            setPasswordValidError(t('popups_backup_password_rules'))
+            setPasswordValidError(t('popups_settings_backup_password_invalid'))
             return
         }
         setPasswordValidError('')
@@ -47,13 +50,12 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
 
         showSnackbar(t('popups_backup_password_set_successfully'))
 
-        const to = params.get('to')
         if (to) {
             navigate(to, { replace: true })
             return
         }
         navigate(-1)
-    }, [newPassword, passwordMatched, passwordValidError, updateUser, params])
+    }, [newPassword, passwordMatched, passwordValidError, updateUser, params, to])
 
     return (
         <ActionModal
@@ -92,9 +94,11 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
                     <Typography fontSize={12} color={theme.palette.maskColor.second}>
                         {t('popups_backup_password_rules_tips')}
                     </Typography>
-                    <Typography mt={2} fontSize={12} color={theme.palette.maskColor.second}>
-                        {t('popups_backup_password_tips')}
-                    </Typography>
+                    {to ? (
+                        <Typography mt={2} fontSize={12} color={theme.palette.maskColor.second}>
+                            {t('popups_backup_password_tips')}
+                        </Typography>
+                    ) : null}
                 </Box>
             </Box>
         </ActionModal>

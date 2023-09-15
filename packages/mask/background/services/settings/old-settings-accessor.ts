@@ -1,4 +1,4 @@
-import { head } from 'lodash-es'
+import { forIn, head } from 'lodash-es'
 import { telemetrySettings } from '@masknet/web3-telemetry'
 import {
     currentPersonaIdentifier,
@@ -12,6 +12,8 @@ import {
     decentralizedSearchSettings,
     appearanceSettings,
     BooleanPreference,
+    InjectSwitchSettings,
+    EnhanceableSite,
 } from '@masknet/shared-base'
 import { queryPersonasDB } from '../../database/persona/web.js'
 
@@ -53,6 +55,18 @@ export async function setPluginMinimalModeEnabled(id: string, enabled: boolean) 
     setCurrentPluginMinimalMode(id, enabled ? BooleanPreference.True : BooleanPreference.False)
 
     MaskMessages.events.pluginMinimalModeChanged.sendToAll([id, enabled])
+}
+
+export async function getAllInjectSwitchSettings() {
+    const result = {} as Record<EnhanceableSite, boolean>
+    forIn(EnhanceableSite, (value) => {
+        result[value] = InjectSwitchSettings[value].value
+    })
+    return result
+}
+
+export async function setInjectSwitchSetting(network: string, value: boolean) {
+    InjectSwitchSettings[network].value = value
 }
 
 export const [getDecentralizedSearchSettings, setDecentralizedSearchSettings] = create(decentralizedSearchSettings)

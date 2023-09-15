@@ -15,7 +15,7 @@ import {
     verifyCode,
     type VerifyCodeRequest,
 } from '../../api.js'
-import { useLanguage } from '../../../Personas/api.js'
+import { useLanguage } from '../../../../../shared-ui/index.js'
 import { decryptBackup, encryptBackup } from '@masknet/backup-format'
 import { encode } from '@msgpack/msgpack'
 

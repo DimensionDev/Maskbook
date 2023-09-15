@@ -10,7 +10,7 @@ import {
     formatPersonaFingerprint,
 } from '@masknet/shared-base'
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
-import type { SiteAdaptor } from '../../api.js'
+import type { SiteAdaptor } from '../../../../../shared-ui/index.js'
 import { usePersonaProofs } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({

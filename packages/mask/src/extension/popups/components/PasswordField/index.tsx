@@ -20,8 +20,8 @@ export const PasswordField = memo(
                     endAdornment:
                         rest.error && onClear ? (
                             <InputAdornment position="end" sx={{ paddingRight: 1.5 }}>
-                                <IconButton onClick={onClear} edge="end" size="small">
-                                    <Icons.Close size={24} color={theme.palette.maskColor.danger} />
+                                <IconButton onClick={onClear} edge="end" size="small" sx={{ color: 'inherit' }}>
+                                    <Icons.Close size={24} />
                                 </IconButton>
                             </InputAdornment>
                         ) : (

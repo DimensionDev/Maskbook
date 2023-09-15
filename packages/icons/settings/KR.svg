@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
+    <path fill="#F5F8FB" d="M0 0h16v12H0z"/>
+    <circle cx="8" cy="6" r="3" fill="#DC251C"/>
+    <mask id="KR_svg__mask_flags_kr" width="6" height="5" x="5" y="5" maskUnits="userSpaceOnUse" style="mask-type:alpha">
+        <path fill="#C4C4C4" d="M11 9.5v-3c-1.001-1.752-3.003-.31-3.003-.31S5.999 7.498 5 5.5v4h6Z"/>
+    </mask>
+    <g mask="url('#KR_svg__mask_flags_kr')">
+        <circle cx="8" cy="6" r="3" fill="#41479B"/>
+    </g>
+    <path stroke="#000" stroke-width=".5" d="m2.164 3.69 1.5-2.599m-.832 2.983 1.5-2.598M3.501 4.46l1.5-2.597"/>
+    <path stroke="#000" stroke-dasharray="8 1" stroke-width=".5" d="m13.836 3.69-1.5-2.599"/>
+    <path stroke="#000" stroke-width=".5" d="m13.168 4.074-1.5-2.598"/>
+    <path stroke="#000" stroke-dasharray="8 1" stroke-width=".5" d="m12.499 4.46-1.5-2.597"/>
+    <path stroke="#000" stroke-width=".5" d="m2.164 8.31 1.5 2.599"/>
+    <path stroke="#000" stroke-dasharray="8 1" stroke-width=".5" d="m2.832 7.926 1.5 2.598"/>
+    <path stroke="#000" stroke-width=".5" d="m3.501 7.54 1.5 2.597"/>
+    <path stroke="#000" stroke-dasharray="8 1" stroke-width=".5" d="m13.836 8.31-1.5 2.599m.832-2.983-1.5 2.598m.831-2.984-1.5 2.597"/>
+</svg>

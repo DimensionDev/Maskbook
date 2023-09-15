@@ -28,6 +28,8 @@ export const pluginIDsSettings = createGlobalSettings<Record<EnhanceableSite | E
     isEqual,
 )
 
+export const InjectSwitchSettings = createBulkSettings<boolean>('InjectSwitchBySite', true)
+
 export const currentMaskWalletLockStatusSettings = createGlobalSettings<LockStatus>(
     `${PluginID.Wallet}+maskWalletLockStatus`,
     LockStatus.INIT,
