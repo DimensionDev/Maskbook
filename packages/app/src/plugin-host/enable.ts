@@ -2,7 +2,14 @@ import './register.js'
 
 import { Emitter } from '@servie/events'
 import { startPluginSiteAdaptor } from '@masknet/plugin-infra/content-script'
-import { BooleanPreference, EnhanceableSite, UNDEFINED, createI18NBundle, i18NextInstance } from '@masknet/shared-base'
+import {
+    BooleanPreference,
+    EMPTY_ARRAY,
+    EnhanceableSite,
+    UNDEFINED,
+    createI18NBundle,
+    i18NextInstance,
+} from '@masknet/shared-base'
 import { setupReactShadowRootEnvironment } from '@masknet/theme'
 import { inMemoryStorage, indexedDBStorage } from '../setup/storage.js'
 import { createSharedContext } from '../helpers/createSharedContext.js'
@@ -11,6 +18,7 @@ import { __setSiteAdaptorContext__ } from '@masknet/plugin-infra/content-script/
 __setSiteAdaptorContext__({
     lastRecognizedProfile: UNDEFINED,
     currentVisitingProfile: UNDEFINED,
+    allPersonas: EMPTY_ARRAY,
 })
 
 startPluginSiteAdaptor(EnhanceableSite.App, {

@@ -1,31 +1,23 @@
 import { IntegratedDashboard } from '../../../dashboard/entry.js'
 import { startPluginDashboard } from '@masknet/plugin-infra/dashboard'
-import { DashboardRoutes, MaskMessages, createSubscriptionFromAsync } from '@masknet/shared-base'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { createPartialSharedUIContext, createPluginHost } from '../../../shared/plugin-infra/host.js'
 import { createNormalReactRoot } from '../../utils/createNormalReactRoot.js'
-import { RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui.js'
+import { NextSharedUIContext, RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui.js'
 import Services from '#services'
 import { Modals } from '@masknet/shared'
+import { __setUIContext__ } from '@masknet/plugin-infra/dom/context'
 
+__setUIContext__({
+    allPersonas: NextSharedUIContext.allPersonas,
+})
 startPluginDashboard(
     createPluginHost(
         undefined,
         (id, def, signal) => ({
             ...createPartialSharedUIContext(id, def, signal),
             ...RestPartOfPluginUIContextShared,
-            allPersonas: createSubscriptionFromAsync(
-                () => Services.Identity.queryOwnedPersonaInformation(true),
-                [],
-                (x) => {
-                    const clearCurrentPersonaIdentifier = MaskMessages.events.currentPersonaIdentifier.on(x)
-                    const clearPersonasChanged = MaskMessages.events.personasChanged.on(x)
-
-                    return () => {
-                        clearCurrentPersonaIdentifier()
-                        clearPersonasChanged()
-                    }
-                },
-            ),
+            allPersonas: NextSharedUIContext.allPersonas,
         }),
         Services.Settings.getPluginMinimalModeEnabled,
         Services.Helper.hasHostPermission,

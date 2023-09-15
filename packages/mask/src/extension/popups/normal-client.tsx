@@ -4,7 +4,7 @@ import { createNormalReactRoot, hydrateNormalReactRoot } from '../../utils/index
 import { createPluginHost, createPartialSharedUIContext } from '../../../shared/plugin-infra/host.js'
 import Services from '#services'
 import Popups from './UI.js'
-import { RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui.js'
+import { NextSharedUIContext, RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui.js'
 import {
     MaskMessages,
     createSubscriptionFromAsync,
@@ -12,7 +12,11 @@ import {
     pluginIDsSettings,
 } from '@masknet/shared-base'
 import { initialPersonaInformation } from '@masknet/shared'
+import { __setUIContext__ } from '@masknet/plugin-infra/dom/context'
 
+__setUIContext__({
+    allPersonas: NextSharedUIContext.allPersonas,
+})
 if (
     location.hash === '#/personas' ||
     (location.hash.includes('#/personas') && location.hash.includes('tab=Connected+Wallets'))

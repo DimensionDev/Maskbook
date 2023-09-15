@@ -114,7 +114,6 @@ export namespace Plugin.Shared {
 
     export interface SharedUIContext extends SharedContext {
         setWeb3State(state: Web3State<any, any, any, any, any, any, any, any>): void
-        allPersonas?: Subscription<PersonaInformation[]>
         /** The selected persona */
         currentPersona: Subscription<PersonaIdentifier | undefined>
         /** Get all wallets */

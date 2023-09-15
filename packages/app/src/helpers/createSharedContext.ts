@@ -54,6 +54,5 @@ export function createSharedContext(): Omit<Plugin.SiteAdaptor.SiteAdaptorContex
         updateWallet: reject,
         send: reject,
         themeSettings: UNDEFINED,
-        allPersonas: EMPTY_ARRAY,
     }
 }

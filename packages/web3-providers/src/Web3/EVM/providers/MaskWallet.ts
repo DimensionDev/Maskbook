@@ -21,6 +21,7 @@ import {
     type RequestArguments,
 } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
+import { allPersonas as allPersonasSub } from '@masknet/plugin-infra/dom/context'
 import { ChainResolverAPI } from '../apis/ResolverAPI.js'
 import { BaseContractWalletProvider } from './BaseContractWallet.js'
 import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
@@ -54,7 +55,7 @@ export class MaskWalletProvider
         // Fetching info of SmartPay wallets is slow, update provider wallets eagerly here.
         await this.updateImmediately()
 
-        const allPersonas = this.context?.allPersonas?.getCurrentValue() ?? []
+        const allPersonas = allPersonasSub.getCurrentValue()
         const wallets = this.context?.wallets.getCurrentValue() ?? EMPTY_LIST
 
         const chainId = await this.Bundler.getSupportedChainId()
@@ -124,7 +125,7 @@ export class MaskWalletProvider
         const debounceUpdate = debounce(this.update.bind(this), 1000)
 
         this.context?.wallets.subscribe(debounceUpdate)
-        this.context?.allPersonas?.subscribe(debounceUpdate)
+        allPersonasSub.subscribe(debounceUpdate)
         CrossIsolationMessages.events.renameWallet.on(debounceUpdate)
     }
 

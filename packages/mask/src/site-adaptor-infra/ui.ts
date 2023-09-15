@@ -6,14 +6,12 @@ import type { SiteAdaptorUI } from '@masknet/types'
 import { type Plugin, startPluginSiteAdaptor, SiteAdaptorContextRef } from '@masknet/plugin-infra/content-script'
 import { Modals, sharedUIComponentOverwrite, sharedUINetworkIdentifier, type ModalProps } from '@masknet/shared'
 import {
-    createSubscriptionFromAsync,
     createSubscriptionFromValueRef,
     currentPersonaIdentifier,
     currentSetupGuideStatus,
     DashboardRoutes,
     ECKeyIdentifier,
     i18NextInstance,
-    MaskMessages,
     queryRemoteI18NBundle,
     type SetupGuideContext,
     SetupGuideStep,
@@ -28,7 +26,7 @@ import { getCurrentIdentifier } from '../site-adaptors/utils.js'
 import { attachReactTreeWithoutContainer, setupReactShadowRootEnvironment } from '../utils/index.js'
 import '../utils/debug/general.js'
 import { configureSelectorMissReporter } from '../utils/startWatch.js'
-import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
+import { NextSharedUIContext, RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
 import { definedSiteAdaptorsUI } from './define.js'
 import { __setSiteAdaptorContext__ } from '@masknet/plugin-infra/content-script/context'
 
@@ -129,21 +127,6 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
 
     signal.addEventListener('abort', queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle))
 
-    const allPersonaSub = createSubscriptionFromAsync(
-        () => Services.Identity.queryOwnedPersonaInformation(true),
-        [],
-        (x) => {
-            const clearCurrentPersonaIdentifier = MaskMessages.events.currentPersonaIdentifier.on(x)
-            const clearOwnPersonaChanged = MaskMessages.events.ownPersonaChanged.on(x)
-
-            return () => {
-                clearCurrentPersonaIdentifier()
-                clearOwnPersonaChanged()
-            }
-        },
-        signal,
-    )
-
     const lastRecognizedSub = createSubscriptionFromValueRef(ui.collecting.identityProvider.recognized, signal)
     const currentVisitingSub = createSubscriptionFromValueRef(
         ui.collecting.currentVisitingIdentityProvider.recognized,
@@ -162,11 +145,11 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
     __setSiteAdaptorContext__({
         lastRecognizedProfile: lastRecognizedSub,
         currentVisitingProfile: currentVisitingSub,
+        allPersonas: NextSharedUIContext.allPersonas,
     })
     SiteAdaptorContextRef.value = {
         ...RestPartOfPluginUIContextShared,
         currentPersonaIdentifier,
-        allPersonas: allPersonaSub,
         themeSettings: themeSettingsSub,
         getThemeSettings: () => ui.configuration.themeSettings,
         getNextIDPlatform: () => ui.configuration.nextIDConfig?.platform,

@@ -14,6 +14,11 @@
       "mask-src": "./src/entry-dom.ts",
       "default": "./dist/entry-dom.js"
     },
+    "./dom/context": {
+      "types": "./dist/dom/context.d.ts",
+      "mask-src": "./src/dom/context.ts",
+      "default": "./dist/dom/context.js"
+    },
     "./background-worker": {
       "types": "./dist/entry-background-worker.d.ts",
       "mask-src": "./src/entry-background-worker.ts",

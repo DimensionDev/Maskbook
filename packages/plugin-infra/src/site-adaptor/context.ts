@@ -3,14 +3,16 @@
 
 import type { Subscription } from 'use-subscription'
 import type { IdentityResolved } from '../types.js'
+import { __setUIContext__, type __UIContext__ } from '../dom/context.js'
 
-export interface __SiteAdaptorContext__ {
+export interface __SiteAdaptorContext__ extends __UIContext__ {
     lastRecognizedProfile: Subscription<IdentityResolved | undefined>
     currentVisitingProfile: Subscription<IdentityResolved | undefined>
 }
 export let lastRecognizedProfile: __SiteAdaptorContext__['lastRecognizedProfile']
 export let currentVisitingProfile: __SiteAdaptorContext__['currentVisitingProfile']
 export function __setSiteAdaptorContext__(value: __SiteAdaptorContext__) {
+    __setUIContext__(value)
     lastRecognizedProfile = value.lastRecognizedProfile
     currentVisitingProfile = value.currentVisitingProfile
 }

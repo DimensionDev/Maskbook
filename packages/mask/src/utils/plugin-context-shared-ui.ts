@@ -13,6 +13,21 @@ import { WalletConnectQRCodeModal } from '@masknet/shared'
 import Services from '#services'
 import type { PartialSharedUIContext } from '../../shared/plugin-infra/host.js'
 
+export const NextSharedUIContext = {
+    allPersonas: createSubscriptionFromAsync(
+        () => Services.Identity.queryOwnedPersonaInformation(true),
+        [],
+        (x) => {
+            const clearCurrentPersonaIdentifier = MaskMessages.events.currentPersonaIdentifier.on(x)
+            const clearPersonasChanged = MaskMessages.events.personasChanged.on(x)
+
+            return () => {
+                clearCurrentPersonaIdentifier()
+                clearPersonasChanged()
+            }
+        },
+    ),
+}
 export const RestPartOfPluginUIContextShared: Omit<
     Plugin.SiteAdaptor.SiteAdaptorContext,
     | keyof PartialSharedUIContext
@@ -28,7 +43,6 @@ export const RestPartOfPluginUIContextShared: Omit<
     | 'connectPersona'
     | 'createPersona'
     | 'currentPersonaIdentifier'
-    | 'allPersonas'
     | 'getSearchedKeyword'
     | 'setWeb3State'
 > = {
