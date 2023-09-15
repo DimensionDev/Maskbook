@@ -57,7 +57,7 @@ export const SelectLanguageModal = memo<ActionModalBaseProps>(function SelectLan
             [LanguageOptions.jaJP]: '日本語',
             [LanguageOptions.koKR]: '한국인',
         }),
-        [],
+        [t],
     )
 
     return (

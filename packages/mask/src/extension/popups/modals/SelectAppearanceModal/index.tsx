@@ -47,7 +47,7 @@ export const SelectAppearanceModal = memo<ActionModalBaseProps>(function SelectA
             [Appearance.light]: t('popups_settings_appearance_light'),
             [Appearance.dark]: t('popups_settings_appearance_dark'),
         }),
-        [],
+        [t],
     )
 
     const handleAppearanceChange = useCallback(async (target: Appearance) => {

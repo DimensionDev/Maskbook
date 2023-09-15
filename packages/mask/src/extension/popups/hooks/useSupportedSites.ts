@@ -6,7 +6,7 @@ export const useSupportedSites = () => {
     return useQuery({
         queryKey: ['supported-sites'],
         queryFn: async () => {
-            const sites = await Services.SiteAdaptor.getOriginsWithNoPermission()
+            const sites = await Services.SiteAdaptor.getAllOrigins()
             const settings = await Services.Settings.getAllInjectSwitchSettings()
             return Promise.all(
                 sites.map(async (x) => ({
