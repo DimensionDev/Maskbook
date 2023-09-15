@@ -16,6 +16,7 @@ import { WalletBalance } from '../../../components/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { useWalletGroup } from '../../../hooks/useWalletGroup.js'
 import { WalletRenameModal } from '../../../modals/index.js'
+import { DeriveStateContext } from './context.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -89,14 +90,20 @@ const DeriveWallet = memo(function DeriveWallet() {
 
     const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const allWalletsRef = useRef<Wallet[]>([])
+
+    const [isDeriving, setIsDeriving] = DeriveStateContext.useContainer()
+    const isDerivingRef = useRef(isDeriving)
+
     useEffect(() => {
         allWalletsRef.current = allWallets
+        isDerivingRef.current = isDeriving
     })
-
-    const [{ loading }, create] = useAsyncFn(async () => {
+    const [{ loading: creating }, create] = useAsyncFn(async () => {
+        if (isDerivingRef.current) return
+        setIsDeriving(true)
         try {
             const nextWallet = await Services.Wallet.generateNextDerivationAddress()
-            const ens = await NameService?.safeReverse?.(nextWallet)
+            const ens = await NameService?.safeReverse?.(nextWallet, true)
             const name = ens || generateNewWalletName(allWalletsRef.current)
             const address = await Services.Wallet.deriveWallet(name, mnemonicId)
             await pollResult(address)
@@ -105,9 +112,12 @@ const DeriveWallet = memo(function DeriveWallet() {
                 account: address,
             })
         } catch {}
+        setIsDeriving(false)
     }, [mnemonicId])
 
     useTitle(t('popups_add_wallet'))
+
+    const loading = creating || isDeriving
 
     return (
         <div className={classes.content}>
