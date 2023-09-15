@@ -161,10 +161,10 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
 
     __setSiteAdaptorContext__({
         lastRecognizedProfile: lastRecognizedSub,
+        currentVisitingProfile: currentVisitingSub,
     })
     SiteAdaptorContextRef.value = {
         ...RestPartOfPluginUIContextShared,
-        currentVisitingProfile: currentVisitingSub,
         currentPersonaIdentifier,
         allPersonas: allPersonaSub,
         themeSettings: themeSettingsSub,

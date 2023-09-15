@@ -23,7 +23,6 @@ export function createSharedContext(): Omit<Plugin.SiteAdaptor.SiteAdaptorContex
         connectPersona: reject,
         createPersona: reject,
         currentPersonaIdentifier: emptyValueRef,
-        currentVisitingProfile: UNDEFINED,
         getPostURL,
         getPostPayload,
         getNextIDPlatform: () => undefined,

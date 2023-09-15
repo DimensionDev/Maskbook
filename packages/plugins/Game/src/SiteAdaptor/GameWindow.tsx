@@ -6,8 +6,8 @@ import { IconClose, IconFull, IconShare } from '../constants.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { GameInfo, GameNFT } from '../types.js'
 import { type NetworkPluginID, EnhanceableSite } from '@masknet/shared-base'
-import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useSubscription } from 'use-subscription'
+import { currentVisitingProfile } from '@masknet/plugin-infra/content-script/context'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -110,7 +110,6 @@ function GameWindow(props: Props) {
         }
     }, [gameInfo?.width, gameInfo?.height])
 
-    const { currentVisitingProfile } = useSiteAdaptorContext()
     const profile = useSubscription(currentVisitingProfile)
     const gameUrl = useMemo(() => {
         return urlcat(gameInfo?.url ?? '', {

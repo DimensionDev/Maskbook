@@ -336,7 +336,6 @@ export namespace Plugin.Shared {
 /** This part runs in the Site Adaptor */
 export namespace Plugin.SiteAdaptor {
     export interface SiteAdaptorContext extends Shared.SharedUIContext {
-        currentVisitingProfile: Subscription<IdentityResolved | undefined>
         themeSettings: Subscription<ThemeSettings | undefined>
         /** The default theme settings. */
         getThemeSettings: () => ThemeSettings | undefined

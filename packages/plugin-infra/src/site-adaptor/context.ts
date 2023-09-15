@@ -6,8 +6,11 @@ import type { IdentityResolved } from '../types.js'
 
 export interface __SiteAdaptorContext__ {
     lastRecognizedProfile: Subscription<IdentityResolved | undefined>
+    currentVisitingProfile: Subscription<IdentityResolved | undefined>
 }
 export let lastRecognizedProfile: __SiteAdaptorContext__['lastRecognizedProfile']
+export let currentVisitingProfile: __SiteAdaptorContext__['currentVisitingProfile']
 export function __setSiteAdaptorContext__(value: __SiteAdaptorContext__) {
     lastRecognizedProfile = value.lastRecognizedProfile
+    currentVisitingProfile = value.currentVisitingProfile
 }
