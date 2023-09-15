@@ -14,7 +14,6 @@ import { ClaimSuccessDialog } from './components/ClaimSuccessDialog/index.js'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
-    init(signal, context) {},
     GlobalInjection: function ClaimGlobalInjection() {
         const { open: claimOpen, closeDialog: closeClaimDialog } = useRemoteControlledDialog(
             PluginClaimMessage.claimDialogEvent,

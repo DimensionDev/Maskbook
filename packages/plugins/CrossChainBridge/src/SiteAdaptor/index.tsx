@@ -10,7 +10,6 @@ import { CrossChainBridgeDialog } from './CrossChainBridgeDialog.js'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
-    init(signal, context) {},
     ApplicationEntries: [
         (() => {
             const icon = <Icons.CrossBridge size={36} />

@@ -13,7 +13,6 @@ const recommendFeature = {
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
-    init(signal, context) {},
     ApplicationEntries: [
         {
             ApplicationEntryID: PLUGIN_ID,

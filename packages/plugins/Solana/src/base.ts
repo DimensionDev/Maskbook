@@ -22,7 +22,11 @@ export const base: Plugin.Shared.Definition<ChainId, SchemaType, ProviderType, N
         target: 'stable',
     },
     i18n: languages,
-    declareWeb3Chains: CHAIN_DESCRIPTORS,
-    declareWeb3Networks: NETWORK_DESCRIPTORS,
-    declareWeb3Providers: PROVIDER_DESCRIPTORS,
+    contribution: {
+        web3: {
+            chains: CHAIN_DESCRIPTORS,
+            networks: NETWORK_DESCRIPTORS,
+            providers: PROVIDER_DESCRIPTORS,
+        },
+    },
 }

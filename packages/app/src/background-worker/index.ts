@@ -20,7 +20,7 @@ startPluginWorker({
     addI18NResource(pluginID, resources) {
         createI18NBundle(pluginID, resources)(i18NextInstance)
     },
-    createContext(pluginID, signal) {
+    createContext(pluginID, def, signal) {
         let storage: Plugin.Worker.DatabaseStorage<any> = undefined!
         const context: Plugin.Worker.WorkerContext = {
             createKVStorage(type, defaultValues) {

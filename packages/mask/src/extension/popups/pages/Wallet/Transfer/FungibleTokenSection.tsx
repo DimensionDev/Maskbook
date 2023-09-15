@@ -195,7 +195,9 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                 providerURL: network?.rpcUrl,
             })
         } catch (err) {
-            showSnackbar(t('failed_to_transfer_token', { message: (err as Error).message }), { variant: 'error' })
+            let message = (err as Error).message
+            message = message.includes('"blockNumber":') ? '' : message
+            showSnackbar(t('failed_to_transfer_token', { message }), { variant: 'error' })
         }
     }, [
         address,
