@@ -13,6 +13,7 @@ import { TransactionDetail } from './TransactionDetail/index.js'
 import { CollectibleDetail } from './CollectibleDetail/index.js'
 import { WalletGuard } from './WalletGuard/index.js'
 import { NoWalletGuard } from './NoWalletGuard/index.js'
+import { DeriveStateContext } from './CreateWallet/context.js'
 
 const WalletSettings = lazy(() => import('./WalletSettings/index.js'))
 const CreateWallet = lazy(() => import('./CreateWallet/index.js'))
@@ -36,39 +37,47 @@ export default function Wallet() {
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
             <RestorableScrollContext.Provider>
-                <Routes>
-                    <Route path="/" element={<WalletGuard />}>
-                        <Route index element={<WalletAssets />} />
-                        <Route path={r(PopupRoutes.WalletSettings)} element={<WalletSettings />} />
-                        <Route path={r(PopupRoutes.CreateWallet)} element={<CreateWallet />} />
-                        <Route path={r(PopupRoutes.DeriveWallet)} element={<DeriveWallet />} />
-                        <Route path={r(`${PopupRoutes.Contacts}/:address?` as PopupRoutes)} element={<ContactList />} />
-                        <Route
-                            path={r(`${PopupRoutes.AddToken}/:chainId/:assetType` as PopupRoutes)}
-                            element={<AddToken />}
-                        />
-                        <Route path={r(PopupRoutes.GasSetting)} element={<GasSetting />} />
-                        <Route path={r(PopupRoutes.Transfer)} element={<Transfer />} />
-                        <Route path={r(PopupRoutes.ContractInteraction)} element={<ContractInteraction />} />
-                        <Route path={r(PopupRoutes.SelectWallet)} element={<SelectWallet />} />
-                        <Route path={r(PopupRoutes.Unlock)} element={<Unlock />} />
-                        <Route path={r(PopupRoutes.ResetWallet)} element={<ResetWallet />} />
-                        <Route path={r(PopupRoutes.ChangeOwner)} element={<ChangeOwner />} />
-                        <Route path={r(PopupRoutes.NetworkManagement)} element={<NetworkManagement />} />
-                        <Route path={r(PopupRoutes.AddNetwork)} element={<EditNetwork />} />
-                        <Route path={r(`${PopupRoutes.EditNetwork}/:id?` as PopupRoutes)} element={<EditNetwork />} />
-                        <Route path={r(PopupRoutes.Receive)} element={<Receive />} />
-                        <Route path={r(PopupRoutes.ExportWalletPrivateKey)} element={<ExportPrivateKey />} />
-                        <Route path={r(PopupRoutes.ConnectedSites)} element={<ConnectedSites />} />
-                    </Route>
-                    <Route path="*" element={<NoWalletGuard />}>
-                        <Route path={r(PopupRoutes.SetPaymentPassword)} element={<SetPaymentPassword />} />
-                        <Route path={r(PopupRoutes.TokenDetail)} element={<TokenDetail />} />
-                        <Route path={r(PopupRoutes.TransactionDetail)} element={<TransactionDetail />} />
-                        <Route path={r(PopupRoutes.CollectibleDetail)} element={<CollectibleDetail />} />
-                        <Route path="*" element={<Navigate to={PopupRoutes.Wallet} />} />
-                    </Route>
-                </Routes>
+                <DeriveStateContext.Provider>
+                    <Routes>
+                        <Route path="/" element={<WalletGuard />}>
+                            <Route index element={<WalletAssets />} />
+                            <Route path={r(PopupRoutes.WalletSettings)} element={<WalletSettings />} />
+                            <Route path={r(PopupRoutes.CreateWallet)} element={<CreateWallet />} />
+                            <Route path={r(PopupRoutes.DeriveWallet)} element={<DeriveWallet />} />
+                            <Route
+                                path={r(`${PopupRoutes.Contacts}/:address?` as PopupRoutes)}
+                                element={<ContactList />}
+                            />
+                            <Route
+                                path={r(`${PopupRoutes.AddToken}/:chainId/:assetType` as PopupRoutes)}
+                                element={<AddToken />}
+                            />
+                            <Route path={r(PopupRoutes.GasSetting)} element={<GasSetting />} />
+                            <Route path={r(PopupRoutes.Transfer)} element={<Transfer />} />
+                            <Route path={r(PopupRoutes.ContractInteraction)} element={<ContractInteraction />} />
+                            <Route path={r(PopupRoutes.SelectWallet)} element={<SelectWallet />} />
+                            <Route path={r(PopupRoutes.Unlock)} element={<Unlock />} />
+                            <Route path={r(PopupRoutes.ResetWallet)} element={<ResetWallet />} />
+                            <Route path={r(PopupRoutes.ChangeOwner)} element={<ChangeOwner />} />
+                            <Route path={r(PopupRoutes.NetworkManagement)} element={<NetworkManagement />} />
+                            <Route path={r(PopupRoutes.AddNetwork)} element={<EditNetwork />} />
+                            <Route
+                                path={r(`${PopupRoutes.EditNetwork}/:id?` as PopupRoutes)}
+                                element={<EditNetwork />}
+                            />
+                            <Route path={r(PopupRoutes.Receive)} element={<Receive />} />
+                            <Route path={r(PopupRoutes.ExportWalletPrivateKey)} element={<ExportPrivateKey />} />
+                            <Route path={r(PopupRoutes.ConnectedSites)} element={<ConnectedSites />} />
+                        </Route>
+                        <Route path="*" element={<NoWalletGuard />}>
+                            <Route path={r(PopupRoutes.SetPaymentPassword)} element={<SetPaymentPassword />} />
+                            <Route path={r(PopupRoutes.TokenDetail)} element={<TokenDetail />} />
+                            <Route path={r(PopupRoutes.TransactionDetail)} element={<TransactionDetail />} />
+                            <Route path={r(PopupRoutes.CollectibleDetail)} element={<CollectibleDetail />} />
+                            <Route path="*" element={<Navigate to={PopupRoutes.Wallet} />} />
+                        </Route>
+                    </Routes>
+                </DeriveStateContext.Provider>
             </RestorableScrollContext.Provider>
         </Suspense>
     )
