@@ -109,7 +109,9 @@ export function DatePicker({ list, selectedDate, setSelectedDate, open, setOpen 
                 <thead>
                     <tr className={classes.daysOfWeek}>
                         {daysOfWeek.map((day) => (
-                            <th key={day}>{day}</th>
+                            <th key={day}>
+                                <Typography>{day}</Typography>
+                            </th>
                         ))}
                     </tr>
                 </thead>
