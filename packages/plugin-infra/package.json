@@ -28,6 +28,11 @@
       "types": "./dist/entry-content-script.d.ts",
       "mask-src": "./src/entry-content-script.ts",
       "default": "./dist/entry-content-script.js"
+    },
+    "./content-script/context": {
+      "types": "./dist/site-adaptor/context.d.ts",
+      "mask-src": "./src/site-adaptor/context.ts",
+      "default": "./dist/site-adaptor/context.js"
     }
   },
   "types": "./dist/entry.d.ts",

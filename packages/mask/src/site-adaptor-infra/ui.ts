@@ -30,6 +30,7 @@ import '../utils/debug/general.js'
 import { configureSelectorMissReporter } from '../utils/startWatch.js'
 import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
 import { definedSiteAdaptorsUI } from './define.js'
+import { __setSiteAdaptorContext__ } from '@masknet/plugin-infra/content-script/context'
 
 const definedSiteAdaptorsResolved = new Map<string, SiteAdaptorUI.Definition>()
 
@@ -158,9 +159,11 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         })
     }
 
+    __setSiteAdaptorContext__({
+        lastRecognizedProfile: lastRecognizedSub,
+    })
     SiteAdaptorContextRef.value = {
         ...RestPartOfPluginUIContextShared,
-        lastRecognizedProfile: lastRecognizedSub,
         currentVisitingProfile: currentVisitingSub,
         currentPersonaIdentifier,
         allPersonas: allPersonaSub,

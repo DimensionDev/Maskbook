@@ -32,7 +32,6 @@ export function createSharedContext(): Omit<Plugin.SiteAdaptor.SiteAdaptorContex
         getThemeSettings: () => ({ color: '', mode: ThemeMode.Light, size: FontSize.Normal, isDim: false }),
         getWallets: reject,
         hasPaymentPassword: reject,
-        lastRecognizedProfile: UNDEFINED,
         openDashboard: reject,
         openPopupWindow: reject,
         fetchJSON: reject,

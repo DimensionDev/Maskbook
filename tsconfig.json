@@ -74,6 +74,11 @@
       "@masknet/injected-script": ["./packages/injected-script/sdk"],
       // @masknet/mask is not listed. it does not have a exports/main field in the package.json.
       "@masknet/mask-sdk": ["./packages/mask-sdk/server"],
+      "@masknet/plugin-infra/dom": ["./packages/plugin-infra/src/entry-dom.ts"],
+      "@masknet/plugin-infra/background-worker": ["./packages/plugin-infra/src/entry-background-worker.ts"],
+      "@masknet/plugin-infra/dashboard": ["./packages/plugin-infra/src/entry-dashboard.ts"],
+      "@masknet/plugin-infra/content-script/context": ["./packages/plugin-infra/src/site-adaptor/context.ts"],
+      "@masknet/plugin-infra/content-script": ["./packages/plugin-infra/src/entry-content-script.ts"],
       "@masknet/plugin-infra": ["./packages/plugin-infra/src"],
       "@masknet/global-types/*": ["./packages/polyfills/types/*"],
       "@masknet/public-api": ["./packages/public-api/src"],
