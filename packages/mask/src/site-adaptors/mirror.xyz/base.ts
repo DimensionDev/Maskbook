@@ -10,4 +10,5 @@ export const mirrorBase: SiteAdaptor.Base = {
     shouldActivate(location) {
         return location.host.endsWith(EnhanceableSite.Mirror)
     },
+    shouldLoadMaskSDK: true,
 }

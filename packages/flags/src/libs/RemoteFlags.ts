@@ -99,7 +99,6 @@ export class RemoteFlags<T extends Record<string, unknown>> extends Flags<T> {
                 localStorage.setItem(this.KEY, JSON.stringify(lastFetchResult))
             } catch {}
         } else if (lastStorageResult?.timestamp) {
-            console.log('[RemoteFlags] sync from storage')
             this.lastFetchResult = lastStorageResult
         }
     }

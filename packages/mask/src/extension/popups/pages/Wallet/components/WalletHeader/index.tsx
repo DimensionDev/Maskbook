@@ -2,7 +2,7 @@ import { NetworkPluginID, PopupModalRoutes, PopupRoutes } from '@masknet/shared-
 import { useChainContext, useNetwork, useWallet } from '@masknet/web3-hooks-base'
 import { useQuery } from '@tanstack/react-query'
 import { memo, useCallback } from 'react'
-import { matchPath, useLocation, useMatch } from 'react-router-dom'
+import { matchPath, useLocation, useMatch, useSearchParams } from 'react-router-dom'
 import Services from '#services'
 import { NormalHeader, useModalNavigate } from '../../../../components/index.js'
 import { WalletHeaderUI } from './UI.js'
@@ -20,6 +20,8 @@ export const WalletHeader = memo(function WalletHeader() {
     const location = useLocation()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { data: hasPassword } = useQuery(['@@has-password'], Services.Wallet.hasPassword)
+    const [params] = useSearchParams()
+    const origin = params.get('source')
 
     const currentNetwork = useNetwork(NetworkPluginID.PLUGIN_EVM, chainId)
     const matchUnlock = useMatch(PopupRoutes.Unlock)
@@ -42,6 +44,7 @@ export const WalletHeader = memo(function WalletHeader() {
         if (!wallet) return null
         return (
             <WalletHeaderUI
+                origin={origin}
                 chainId={chainId}
                 currentNetwork={currentNetwork}
                 disabled
@@ -58,6 +61,7 @@ export const WalletHeader = memo(function WalletHeader() {
 
     return matchWallet ? (
         <WalletHeaderUI
+            origin={origin}
             chainId={chainId}
             currentNetwork={currentNetwork}
             onActionClick={handleActionClick}

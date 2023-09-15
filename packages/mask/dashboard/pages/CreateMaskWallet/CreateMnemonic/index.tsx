@@ -1,14 +1,13 @@
 import { toBlob } from 'html-to-image'
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { Alert, alpha, Box, Button, Stack, Typography, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { CopyButton } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { generateNewWalletName } from '@masknet/web3-shared-base'
-import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
@@ -20,6 +19,8 @@ import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useWallets } from '@masknet/web3-hooks-base'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
+import Services from '#services'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -170,6 +171,8 @@ const CreateMnemonic = memo(function CreateMnemonic() {
     const { handlePasswordAndWallets } = ResetWalletContext.useContainer()
     const [verified, setVerified] = useState(false)
     const { classes, cx } = useStyles()
+    const [params] = useSearchParams()
+    const external_request = params.get('external_request')
     const { words, refreshCallback, puzzleWordList, answerCallback, puzzleAnswer, verifyAnswerCallback, isMatched } =
         useMnemonicWordsPuzzle()
 
@@ -178,37 +181,33 @@ const CreateMnemonic = memo(function CreateMnemonic() {
     }, [])
 
     const handleRecovery = useCallback(() => {
-        navigate(DashboardRoutes.RecoveryMaskWallet, {
+        navigate(urlcat(DashboardRoutes.RecoveryMaskWallet, { external_request }), {
             state: {
                 password: location.state?.password,
                 isReset: location.state?.isReset,
             },
         })
-    }, [location.state?.password, location.state?.isReset])
+    }, [location.state?.password, location.state?.isReset, external_request])
 
-    const { value: hasPassword, loading: loadingHasPassword } = useAsync(WalletServiceRef.value.hasPassword, [])
+    const { value: hasPassword, loading: loadingHasPassword } = useAsync(Services.Wallet.hasPassword, [])
 
     const { value: address } = useAsync(async () => {
         if (!words.length) return
 
-        if (!hasPassword) await WalletServiceRef.value.setDefaultPassword()
+        if (!hasPassword) await Services.Wallet.setDefaultPassword()
 
-        const address = await WalletServiceRef.value.generateAddressFromMnemonicWords(walletName, words.join(' '))
+        const address = await Services.Wallet.generateAddressFromMnemonicWords(walletName, words.join(' '))
         return address
     }, [words.join(' '), walletName, hasPassword])
 
     const [{ loading }, onSubmit] = useAsyncFn(async () => {
         const result = await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
         if (!result) return
-        const address = await WalletServiceRef.value.createWalletFromMnemonicWords(walletName, words.join(' '))
-        await WalletServiceRef.value.resolveMaskAccount([
-            {
-                address,
-            },
-        ])
+        const address = await Services.Wallet.createWalletFromMnemonicWords(walletName, words.join(' '))
+        await Services.Wallet.resolveMaskAccount([{ address }])
         Telemetry.captureEvent(EventType.Access, EventID.EntryPopupWalletCreate)
-        navigate(DashboardRoutes.SignUpMaskWalletOnboarding, { replace: true })
-    }, [walletName, words, location.state?.isReset, location.state?.password])
+        navigate(urlcat(DashboardRoutes.SignUpMaskWalletOnboarding, { external_request }), { replace: true })
+    }, [walletName, words, location.state?.isReset, location.state?.password, external_request])
 
     const step = useMemo(() => String((verified ? 3 : 2) - (hasPassword ? 1 : 0)), [verified, hasPassword])
     const totalSteps = hasPassword ? '2' : '3'

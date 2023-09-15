@@ -1,13 +1,13 @@
 /// <reference types="react/canary" />
 import { Flags } from '@masknet/flags'
 import Services from '#services'
-import { Button, SnackbarContent, Box } from '@mui/material'
+import { Box, Link } from '@mui/material'
 import { Suspense, cache, use, useState } from 'react'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 
 const f = cache(Services.SiteAdaptor.shouldSuggestConnectInPopup)
 export default function MaskSDK() {
-    if (!Flags.mask_SDK_ready) return null
+    if (!Flags.mask_sdk_enabled) return null
     return (
         <ErrorBoundary>
             <Suspense>
@@ -19,24 +19,38 @@ export default function MaskSDK() {
 
 function MaskSDKLoader() {
     const shouldShow = use(f())
-    const [clicked, setClicked] = useState(false)
+    const [dismissed, setDismissed] = useState(false)
     if (!shouldShow) return null
-    if (clicked) return null
+    if (dismissed) return null
     return (
         <Box>
-            <SnackbarContent
-                message="(Dev only) Enable Mask on this site"
-                action={
-                    <Button
-                        onClick={async () => {
-                            await Services.SiteAdaptor.attachMaskSDKToCurrentActivePage()
-                            setClicked(true)
-                            window.close()
-                        }}>
-                        Connect
-                    </Button>
-                }
-            />
+            (Dev mode only, UI to be done) Connect Mask on this site.
+            <br />
+            <Link
+                onClick={async () => {
+                    await Services.SiteAdaptor.attachMaskSDKToCurrentActivePage('once')
+                    window.close()
+                }}>
+                Connect once
+            </Link>
+            <br />
+            <Link
+                onClick={async () => {
+                    await Services.SiteAdaptor.attachMaskSDKToCurrentActivePage('always')
+                    window.close()
+                }}>
+                Always connect this site
+            </Link>
+            <br />
+            <Link
+                onClick={async () => {
+                    await Services.SiteAdaptor.attachMaskSDKToCurrentActivePage('always-all')
+                    window.close()
+                }}>
+                Always connect all sites
+            </Link>
+            <br />
+            <Link onClick={() => setDismissed(true)}>Close</Link>
         </Box>
     )
 }

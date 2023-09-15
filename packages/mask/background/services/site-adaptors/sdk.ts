@@ -1,6 +1,12 @@
 import { maskSDK_URL, injectUserScriptMV2, evaluateContentScript } from '../../utils/injectScript.js'
+import { requestHostPermission, requestHostPermissionForActiveTab } from '../helper/request-permission.js'
 
-export async function attachMaskSDKToCurrentActivePage(): Promise<boolean> {
+export async function attachMaskSDKToCurrentActivePage(choose: 'once' | 'always' | 'always-all'): Promise<boolean> {
+    if (choose === 'always') {
+        requestHostPermissionForActiveTab()
+    } else if (choose === 'always-all') {
+        requestHostPermission(['<all_urls>'])
+    }
     if (browser.scripting) {
         const [{ id }] = await browser.tabs.query({ active: true })
         if (!id) return false
@@ -10,6 +16,7 @@ export async function attachMaskSDKToCurrentActivePage(): Promise<boolean> {
     }
     return true
 }
+
 async function attachMaskSDK2() {
     await browser.tabs.executeScript(undefined, {
         code: await injectUserScriptMV2(maskSDK_URL),
@@ -36,11 +43,13 @@ export async function developmentMaskSDKReload(): Promise<void> {
     }
 }
 
-export async function shouldSuggestConnectInPopup(): Promise<boolean> {
-    const tabs = await browser.tabs.query({ active: true })
-    if (!tabs.length) return false
-    const [{ url }] = tabs
-    if (!url) return false
+export async function shouldSuggestConnectInPopup(url?: string): Promise<boolean> {
+    if (!url) {
+        const tabs = await browser.tabs.query({ active: true })
+        if (!tabs.length) return false
+        ;[{ url }] = tabs
+        if (!url) return false
+    }
     return canInject(url) && !(await browser.permissions.contains({ origins: [new URL(url).origin + '/*'] }))
 }
 
