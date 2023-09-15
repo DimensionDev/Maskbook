@@ -211,7 +211,7 @@ const Interaction = memo(function Interaction() {
                 )
             }
 
-            await Message?.approveRequest(currentRequest.ID, {
+            const response = await Message?.approveRequest(currentRequest.ID, {
                 ...currentRequest.request,
                 arguments: {
                     ...currentRequest.request.arguments,
@@ -222,6 +222,9 @@ const Interaction = memo(function Interaction() {
                     paymentToken,
                 },
             })
+            if (response?.error) {
+                throw new Error(response.error.message)
+            }
             if (source) await Services.Helper.removePopupWindow()
             navigate(urlcat(PopupRoutes.Wallet, { tab: WalletAssetTabs.Activity }), { replace: true })
         } catch (error) {
