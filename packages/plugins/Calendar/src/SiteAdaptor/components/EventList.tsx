@@ -99,7 +99,7 @@ export function EventList({ list, isLoading, empty }: EventListProps) {
                             <div className={classes.eventHeader}>
                                 <div className={classes.projectWrap}>
                                     <img src={v.project.logo} className={classes.logo} alt="logo" />
-                                    {v.project.name}
+                                    <Typography> {v.project.name}</Typography>
                                 </div>
                             </div>
                             <Typography className={classes.eventTitle}>{v.event_title}</Typography>

@@ -106,9 +106,9 @@ export function NewsList({ list, isLoading, empty }: NewsListProps) {
                             <div className={classes.eventHeader}>
                                 <div className={classes.projectWrap}>
                                     <img src={v.project.logo} className={classes.logo} alt="logo" />
-                                    {v.project.name}
+                                    <Typography>{v.project.name}</Typography>
                                 </div>
-                                <div className={classes.eventType}>{v.event_type}</div>
+                                <Typography className={classes.eventType}>{v.event_type}</Typography>
                             </div>
                             <Typography className={classes.eventTitle}>{v.event_title}</Typography>
                             <Typography className={classes.eventContent}>{v.event_description}</Typography>
