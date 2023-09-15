@@ -12,7 +12,7 @@ const render: Plugin.GeneralUI.MetadataRender.StaticRenderComponent<unknown> = f
     return <>Metadata render for key "io.mask.example/v1" {JSON.stringify(props.metadata)}</>
 })
 
-const contextFree: Plugin.GeneralUI.DefinitionDeferred = {
+const contextFree: Plugin.GeneralUI.Definition = {
     metadataRender: new Map([[metadataReader, render]]),
 }
 export default contextFree

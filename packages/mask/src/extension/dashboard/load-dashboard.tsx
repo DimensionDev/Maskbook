@@ -10,8 +10,8 @@ import { Modals } from '@masknet/shared'
 startPluginDashboard(
     createPluginHost(
         undefined,
-        (id, signal) => ({
-            ...createPartialSharedUIContext(id, signal),
+        (id, def, signal) => ({
+            ...createPartialSharedUIContext(id, def, signal),
             ...RestPartOfPluginUIContextShared,
             allPersonas: createSubscriptionFromAsync(
                 () => Services.Identity.queryOwnedPersonaInformation(true),

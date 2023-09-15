@@ -32,27 +32,7 @@ export function getPluginDefine(id: PluginID | NetworkPluginID) {
     return __registered.get(id as unknown as PluginID)
 }
 
-export function registerPlugin<
-    ChainId = unknown,
-    SchemaType = unknown,
-    ProviderType = unknown,
-    NetworkType = unknown,
-    MessageRequest = unknown,
-    MessageResponse = unknown,
-    Transaction = unknown,
-    TransactionParameter = unknown,
->(
-    def: Plugin.DeferredDefinition<
-        ChainId,
-        SchemaType,
-        ProviderType,
-        NetworkType,
-        MessageRequest,
-        MessageResponse,
-        Transaction,
-        TransactionParameter
-    >,
-) {
+export function registerPlugin(def: Plugin.DeferredDefinition) {
     if (__registered.has(def.ID)) return
     if (!__meetRegisterRequirement(def, env.channel)) return
     __registered.set(def.ID, def as any)
@@ -66,13 +46,13 @@ function getRegisteredPlugin(ID: NetworkPluginID) {
     return [...__registered.values()].find((x) => x.ID === pluginID)
 }
 const getRegisteredWeb3Chains_memo = memoize((ID: NetworkPluginID) => {
-    return getRegisteredPlugin(ID)?.declareWeb3Chains ?? []
+    return getRegisteredPlugin(ID)?.contribution?.web3?.chains ?? []
 })
 const getRegisteredWeb3Networks_memo = memoize((ID: NetworkPluginID) => {
-    return getRegisteredPlugin(ID)?.declareWeb3Networks ?? []
+    return getRegisteredPlugin(ID)?.contribution?.web3?.networks ?? []
 })
 const getRegisteredWeb3Providers_memo = memoize((ID: NetworkPluginID) => {
-    return getRegisteredPlugin(ID)?.declareWeb3Providers ?? []
+    return getRegisteredPlugin(ID)?.contribution?.web3?.providers ?? []
 })
 
 export function getRegisteredWeb3Chains<T extends NetworkPluginID>(ID: T) {

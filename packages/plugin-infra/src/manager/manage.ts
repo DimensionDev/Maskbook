@@ -29,14 +29,14 @@ export function createManager<
         }
         return value
     })()
-    let _host: Plugin.__Host.Host<Context> = undefined!
+    let _host: Plugin.__Host.Host<T, Context> = undefined!
     const events = new Emitter<{
         activateChanged: [id: string, enabled: boolean]
         minimalModeChanged: [id: string, enabled: boolean]
     }>()
 
     return {
-        configureHostHooks: (host: Plugin.__Host.Host<Context>) => (_host = host),
+        configureHostHooks: (host: Plugin.__Host.Host<T, Context>) => (_host = host),
         activatePlugin,
         stopPlugin,
         isMinimalMode,
@@ -70,7 +70,7 @@ export function createManager<
         result ? minimalModePluginIDs.add(id) : minimalModePluginIDs.delete(id)
     }
 
-    function startDaemon(host: Plugin.__Host.Host<Context>, extraCheck?: (id: PluginID) => boolean) {
+    function startDaemon(host: Plugin.__Host.Host<T, Context>, extraCheck?: (id: PluginID) => boolean) {
         _host = host
         const { signal = new AbortController().signal, addI18NResource, minimalMode } = _host
         const removeListener1 = minimalMode.events.on('enabled', (id) => updateCompositedMinimalMode(id))
@@ -137,14 +137,16 @@ export function createManager<
         const activatedPlugin: ActivatedPluginInstance = {
             instance: definition,
             controller: abort,
-            context: _host.createContext(id, abort.signal),
+            context: _host.createContext(id, definition, abort.signal),
         }
         activated.set(id, activatedPlugin)
-        await timeout(
-            Promise.resolve(definition.init(activatedPlugin.controller.signal, activatedPlugin.context)),
-            1000,
-            `Plugin ${id} init() timed out.`,
-        ).catch(console.error)
+        if (definition.init) {
+            await timeout(
+                Promise.resolve(definition.init(activatedPlugin.controller.signal, activatedPlugin.context)),
+                1000,
+                `Plugin ${id} init() timed out.`,
+            ).catch(console.error)
+        }
         events.emit('activateChanged', id, true)
     }
 

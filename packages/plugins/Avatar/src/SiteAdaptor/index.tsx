@@ -17,7 +17,6 @@ function clickHandler() {
 }
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
-    init(signal, context) {},
     GlobalInjection() {
         const { pluginID } = useNetworkContext()
         const { chainId } = useChainContext()

@@ -10,5 +10,7 @@ export function useChainDescriptor<T extends NetworkPluginID>(
     const { pluginID } = useNetworkContext(expectedPluginID)
     const { chainId } = useChainContext()
 
-    return getPluginDefine(pluginID)?.declareWeb3Chains?.find((x) => x.chainId === (expectedChainId ?? chainId))
+    return getPluginDefine(pluginID)?.contribution?.web3?.chains?.find(
+        (x) => x.chainId === (expectedChainId ?? chainId),
+    )
 }

@@ -77,8 +77,8 @@ function startPluginHost() {
     startPluginDashboard(
         createPluginHost(
             undefined,
-            (id, signal) => ({
-                ...createPartialSharedUIContext(id, signal),
+            (id, def, signal) => ({
+                ...createPartialSharedUIContext(id, def, signal),
                 ...RestPartOfPluginUIContextShared,
                 allPersonas: allPersonaSub,
             }),

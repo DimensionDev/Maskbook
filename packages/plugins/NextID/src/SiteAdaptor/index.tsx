@@ -5,7 +5,6 @@ import { NextIdPage } from '../components/NextIdPage.js'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
-    init(signal, context) {},
     ProfileTabs: [
         {
             ID: `${PLUGIN_ID}_tabContent`,

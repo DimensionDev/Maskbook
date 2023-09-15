@@ -13,7 +13,7 @@ events.on(ALL_EVENTS, () => (activatedSub.value = [...activated.plugins]))
 const minimalModeSub = new ValueRefWithReady<string[]>([], isEqual)
 events.on('minimalModeChanged', () => (minimalModeSub.value = [...minimalMode]))
 
-export function useIsMinimalModeDashBoard(pluginID: string) {
+export function useIsMinimalModeDashboard(pluginID: string) {
     return useValueRef(minimalModeSub).includes(pluginID)
 }
 
@@ -26,6 +26,8 @@ export function useActivatedPluginDashboard(pluginID: string) {
     return plugins.find((x) => x.ID === pluginID)
 }
 
-export function startPluginDashboard(host: Plugin.__Host.Host<Plugin.Dashboard.DashboardContext>) {
+export function startPluginDashboard(
+    host: Plugin.__Host.Host<Plugin.Dashboard.Definition, Plugin.Dashboard.DashboardContext>,
+) {
     startDaemon(host)
 }

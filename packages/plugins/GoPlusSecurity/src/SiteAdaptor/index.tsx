@@ -11,7 +11,6 @@ import { GoPlusGlobalInjection } from './GoPlusGlobalInjection.js'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
-    init(signal, context) {},
     GlobalInjection: GoPlusGlobalInjection,
     ApplicationEntries: [
         (() => {

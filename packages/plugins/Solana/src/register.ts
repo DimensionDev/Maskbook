@@ -1,26 +1,7 @@
 import { registerPlugin } from '@masknet/plugin-infra'
-import type {
-    MessageRequest,
-    MessageResponse,
-    ChainId,
-    NetworkType,
-    ProviderType,
-    SchemaType,
-    Transaction,
-    TransactionParameter,
-} from '@masknet/web3-shared-solana'
 import { base } from './base.js'
 
-registerPlugin<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter
->({
+registerPlugin({
     ...base,
     SiteAdaptor: {
         load: () => import('./UI/SiteAdaptor/index.js'),

@@ -78,7 +78,6 @@ const TabConfig: Plugin.SiteAdaptor.ProfileTab = {
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
-    init(signal, context) {},
     GlobalInjection() {
         return <DialogInspector />
     },

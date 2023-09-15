@@ -16,7 +16,7 @@ export function useNetworkDescriptor<S extends 'all' | void = void, T extends Ne
     const { pluginID } = useNetworkContext(expectedPluginID)
     const { networkType } = useChainContext()
 
-    return getPluginDefine(pluginID)?.declareWeb3Networks?.find((x) =>
+    return getPluginDefine(pluginID)?.contribution?.web3?.networks?.find((x) =>
         [x.chainId, x.type, x.ID].includes(expectedChainIdOrNetworkTypeOrID ?? networkType ?? ''),
     ) as Web3Helper.NetworkDescriptorScope<S, T> | undefined
 }

@@ -92,42 +92,11 @@ export declare namespace Plugin {
      * DeferredDefinition should not contain any functionality of the plugin expects the loader.
      * If the plugin is not providing some of the functionality, please can omit that field.
      */
-    export interface DeferredDefinition<
-        ChainId = unknown,
-        SchemaType = unknown,
-        ProviderType = unknown,
-        NetworkType = unknown,
-        MessageRequest = unknown,
-        MessageResponse = unknown,
-        Transaction = unknown,
-        TransactionParameter = unknown,
-    > extends Shared.Definition<ChainId, SchemaType, ProviderType, NetworkType> {
+    export interface DeferredDefinition extends Shared.Definition {
         /** Load the Site Adaptor part of the plugin. */
-        SiteAdaptor?: Loader<
-            SiteAdaptor.Definition<
-                ChainId,
-                SchemaType,
-                ProviderType,
-                NetworkType,
-                MessageRequest,
-                MessageResponse,
-                Transaction,
-                TransactionParameter
-            >
-        >
+        SiteAdaptor?: Loader<SiteAdaptor.Definition>
         /** Load the Dashboard part of the plugin. */
-        Dashboard?: Loader<
-            Dashboard.Definition<
-                ChainId,
-                SchemaType,
-                ProviderType,
-                NetworkType,
-                MessageRequest,
-                MessageResponse,
-                Transaction,
-                TransactionParameter
-            >
-        >
+        Dashboard?: Loader<Dashboard.Definition>
         /** Load the Worker part of the plugin. */
         Worker?: Loader<Worker.Definition>
     }
@@ -144,6 +113,7 @@ export namespace Plugin.Shared {
     }
 
     export interface SharedUIContext extends SharedContext {
+        setWeb3State(state: Web3State<any, any, any, any, any, any, any, any>): void
         allPersonas?: Subscription<PersonaInformation[]>
         /** The selected persona */
         currentPersona: Subscription<PersonaIdentifier | undefined>
@@ -259,15 +229,6 @@ export namespace Plugin.Shared {
         inMinimalModeByDefault?: boolean
         /** i18n resources of this plugin */
         i18n?: I18NResource
-        // TODO: move to .contribution.web3Chains
-        /** Introduce sub-network information. */
-        declareWeb3Chains?: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>
-        // TODO: move to .contribution.web3Networks
-        /** Introduce networks information. */
-        declareWeb3Networks?: Array<NetworkDescriptor<ChainId, NetworkType>>
-        // TODO: move to .contribution.web3Providers
-        /** Introduce wallet providers information. */
-        declareWeb3Providers?: Array<ProviderDescriptor<ChainId, ProviderType>>
         /**
          * Declare what this plugin provides.
          *
@@ -289,7 +250,7 @@ export namespace Plugin.Shared {
          * The plugin must clean up all side effects it creates when the `AbortSignal` provided aborts
          * to make sure the plugin can be reloaded safely.
          */
-        init(signal: AbortSignal, context: Context): void | Promise<void>
+        init?(signal: AbortSignal, context: Context): void | Promise<void>
     }
 
     export interface Utilities {}
@@ -350,6 +311,15 @@ export namespace Plugin.Shared {
         metadataKeys?: ReadonlySet<string>
         /** This plugin can recognize and enhance the post that matches the following matchers. */
         postContent?: ReadonlySet<RegExp | string>
+        web3?: Web3Contribution
+    }
+    export interface Web3Contribution {
+        /** Introduced sub-network information. */
+        chains?: Array<ChainDescriptor<unknown, unknown, unknown>>
+        /** Introduced networks information. */
+        networks?: Array<NetworkDescriptor<unknown, unknown>>
+        /** Introduced wallet providers information. */
+        providers?: Array<ProviderDescriptor<unknown, unknown>>
     }
 
     export interface Ability {}
@@ -403,16 +373,7 @@ export namespace Plugin.SiteAdaptor {
         setDecentralizedSearchSettings?: (checked: boolean) => Promise<void>
     }
 
-    export interface Definition<
-        ChainId = unknown,
-        SchemaType = unknown,
-        ProviderType = unknown,
-        NetworkType = unknown,
-        MessageRequest = unknown,
-        MessageResponse = unknown,
-        Transaction = unknown,
-        TransactionParameter = unknown,
-    > extends Shared.DefinitionDeferred<SiteAdaptorContext> {
+    export interface Definition extends GeneralUI.Definition, Shared.DefinitionDeferred<SiteAdaptorContext> {
         /** This UI will be rendered for each post found. */
         PostInspector?: InjectUI<{}>
         /** This UI will be rendered for action of each post found. */
@@ -427,19 +388,6 @@ export namespace Plugin.SiteAdaptor {
         SearchResultInspector?: SearchResultInspector
         /** This UI will be rendered under the Search result of the site. */
         SearchResultTabs?: SearchResultTab[]
-        /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
-        Web3UI?: Web3UI<ChainId, ProviderType, NetworkType>
-        /** This is the context of the currently chosen network. */
-        Web3State?: Web3State<
-            ChainId,
-            SchemaType,
-            ProviderType,
-            NetworkType,
-            MessageRequest,
-            MessageResponse,
-            Transaction,
-            TransactionParameter
-        >
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         readonly CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
@@ -472,12 +420,7 @@ export namespace Plugin.SiteAdaptor {
          */
         enhanceTag?: {
             onClick?: (kind: 'cash' | 'hash', content: string, event: React.MouseEvent<HTMLAnchorElement>) => void
-            onHover?: (
-                kind: 'cash' | 'hash',
-                content: string,
-                event: React.MouseEvent<HTMLAnchorElement>,
-                chainId: ChainId,
-            ) => () => void
+            onHover?: (kind: 'cash' | 'hash', content: string, event: React.MouseEvent<HTMLAnchorElement>) => () => void
         }
     }
 
@@ -900,33 +843,9 @@ export namespace Plugin.Dashboard {
     export interface DashboardContext extends Shared.SharedUIContext {}
 
     // As you can see we currently don't have so much use case for an API here.
-    export interface Definition<
-        ChainId = unknown,
-        SchemaType = unknown,
-        ProviderType = unknown,
-        NetworkType = unknown,
-        MessageRequest = unknown,
-        MessageResponse = unknown,
-        Transaction = unknown,
-        TransactionParameter = unknown,
-    > extends Shared.DefinitionDeferred<DashboardContext> {
-        /** This UI will be injected into the global scope of the Dashboard. */
-        GlobalInjection?: InjectUI<{}>
-        /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
-        Web3UI?: Web3UI<ChainId, ProviderType, NetworkType>
-        /** This is the context of the currently chosen network. */
-        Web3State?: Web3State<
-            ChainId,
-            SchemaType,
-            ProviderType,
-            NetworkType,
-            MessageRequest,
-            MessageResponse,
-            Transaction,
-            TransactionParameter
-        >
+    export interface Definition extends GeneralUI.Definition, Shared.DefinitionDeferred<DashboardContext> {
         /** Plugin DO NOT need to define this. This will be auto set by the plugin host. */
-        __general_ui__?: GeneralUI.DefinitionDeferred
+        __general_ui__?: GeneralUI.Definition
     }
 }
 
@@ -1063,7 +982,13 @@ export namespace Plugin.Worker {
 
 /** This part defines the plugin part that does not context aware. */
 export namespace Plugin.GeneralUI {
-    export interface DefinitionDeferred {
+    export interface Definition {
+        /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
+        Web3UI?: Web3UI<unknown, unknown, unknown>
+        /** This UI will be injected into the global scope of the target page. */
+        GlobalInjection?: InjectUI<{}>
+        /** This is the context of the currently chosen network. */
+        Web3State?: Web3State<unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown>
         /**
          * Render metadata in many different environments.
          *
@@ -1094,7 +1019,7 @@ export namespace Plugin.GeneralUI {
          * The render component MUST BE a ForwardRefExotic React Component
          * that support operations defined in `Plugin.ContextFree.MetadataRender.RenderActions`
          */
-        metadataRender: MetadataRender.StaticRender | MetadataRender.DynamicRender
+        metadataRender?: MetadataRender.StaticRender | MetadataRender.DynamicRender
     }
 
     export namespace MetadataRender {
@@ -1214,7 +1139,7 @@ export interface IdentityResolved {
  */
 // ---------------------------------------------------
 export namespace Plugin.__Host {
-    export interface Host<Context = undefined> {
+    export interface Host<Definition, Context> {
         /**
          * Control if the plugin is in the minimal mode.
          *
@@ -1224,7 +1149,7 @@ export namespace Plugin.__Host {
 
         addI18NResource(pluginID: string, resources: Shared.I18NResource): void
 
-        createContext(id: string, signal: AbortSignal): Context
+        createContext(id: string, definition: Definition, signal: AbortSignal): Context
 
         signal?: AbortSignal
         permission: PermissionReporter

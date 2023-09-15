@@ -191,9 +191,9 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         ui.networkIdentifier,
         createPluginHost(
             signal,
-            (id, signal): Plugin.SiteAdaptor.SiteAdaptorContext => {
+            (id, def, signal): Plugin.SiteAdaptor.SiteAdaptorContext => {
                 return {
-                    ...createPartialSharedUIContext(id, signal),
+                    ...createPartialSharedUIContext(id, def, signal),
                     ...SiteAdaptorContextRef.value,
                 }
             },
