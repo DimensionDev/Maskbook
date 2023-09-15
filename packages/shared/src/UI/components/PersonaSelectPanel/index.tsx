@@ -22,6 +22,8 @@ import { useLastRecognizedIdentity, useSiteAdaptorContext } from '@masknet/plugi
 import { useConnectedPersonas } from '../../../hooks/useConnectedPersonas.js'
 import { useCurrentPersona } from '../../../hooks/useCurrentPersona.js'
 import { useNextIDVerify } from '../../../hooks/useNextIDVerify.js'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -130,6 +132,8 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
         const handleClick = async () => {
             if (!isConnected) {
                 await connect?.(currentProfileIdentify.identifier, selectedPersona.persona.identifier)
+                if (!finishTarget) Telemetry.captureEvent(EventType.Access, EventID.EntryProfileConnectTwitter)
+                else Telemetry.captureEvent(EventType.Access, EventID.EntryMaskComposeConnectTwitter)
             }
             if (!isVerified && enableVerify) {
                 onClose?.()
@@ -141,6 +145,8 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
                     })
                 }
                 await handleVerifyNextID(selectedPersona.persona, currentProfileIdentify.identifier?.userId)
+                if (!finishTarget) Telemetry.captureEvent(EventType.Access, EventID.EntryProfileConnectVerify)
+                else Telemetry.captureEvent(EventType.Access, EventID.EntryMaskComposeVerifyTwitter)
             }
 
             if (isVerified) CrossIsolationMessages.events.personaBindFinished.sendToAll({ pluginID: finishTarget })
