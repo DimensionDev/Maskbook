@@ -1,22 +1,14 @@
-import { getSiteType } from '@masknet/shared-base'
 import { useQuery } from '@tanstack/react-query'
 import Services from '#services'
-import { useSearchParams } from 'react-router-dom'
 
-export function useConnected() {
-    const [params] = useSearchParams()
-    const source = params.get('source') ?? ''
-    return useQuery(['connected-status', source], async () => {
-        const result = await Services.Helper.queryCurrentActiveTab()
-        if (!result) return
-        const url = result.url || source
-        const siteType = getSiteType(url)
-
-        if (!siteType) return { connected: false, url }
-        const connected = await Services.Wallet.getConnectedStatus(siteType)
-        return {
-            connected,
-            url,
+export function useConnectedWallets(origin: string | null) {
+    return useQuery(['origin-connected-wallets', origin], async () => {
+        if (origin === null) {
+            const result = await Services.Helper.queryCurrentActiveTab()
+            if (!result.url || !URL.canParse(result.url)) return null
+            origin = new URL(result.url).origin
         }
+        const connected = await Services.Wallet.getAllConnectedWallets(origin)
+        return connected
     })
 }

@@ -39,6 +39,11 @@ const SelectWallet = memo(function SelectWallet() {
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const [params] = useSearchParams()
+    const external_request_id = params.get('external_request')
+    const { value: external_request } = useAsync(async () => {
+        if (!external_request_id) return null
+        return Services.Wallet.getEIP2255PermissionDetail(external_request_id)
+    }, [external_request_id])
     const chainIdSearched = params.get('chainId')
     const isVerifyWalletFlow = params.get('verifyWallet')
     const isSettingNFTAvatarFlow = params.get('setNFTAvatar')
@@ -76,6 +81,10 @@ const SelectWallet = memo(function SelectWallet() {
     }, [isVerifyWalletFlow])
 
     const handleConfirm = useCallback(async () => {
+        if (external_request_id && external_request) {
+            await Services.Wallet.grantEIP2255Permission(external_request_id, [selected])
+            return Services.Helper.removePopupWindow()
+        }
         if (isVerifyWalletFlow || isSettingNFTAvatarFlow) {
             await Web3.connect({
                 account: selected,
@@ -115,13 +124,24 @@ const SelectWallet = memo(function SelectWallet() {
             if (network) await Network?.switchNetwork(network.ID)
         }
         return Services.Helper.removePopupWindow()
-    }, [isVerifyWalletFlow, selected, chainId, wallets, smartPayChainId, isSettingNFTAvatarFlow, networks, Network])
+    }, [
+        external_request,
+        external_request_id,
+        isVerifyWalletFlow,
+        selected,
+        chainId,
+        wallets,
+        smartPayChainId,
+        isSettingNFTAvatarFlow,
+        networks,
+        Network,
+    ])
 
     useEffect(() => {
         if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
     }, [selected, wallets])
 
-    useTitle(t('popups_select_wallet'))
+    useTitle(external_request ? 'Connecting External Site' : t('popups_select_wallet'))
 
     if (!chainIdValid)
         return (
@@ -132,6 +152,13 @@ const SelectWallet = memo(function SelectWallet() {
 
     return (
         <Box overflow="auto" data-hide-scrollbar>
+            {external_request ? (
+                <Box textAlign="center" paddingX={2}>
+                    Connecting: <i>{external_request.origin}</i>
+                    <br />
+                    Be aware of fraud!
+                </Box>
+            ) : null}
             <Box pt={1} pb={9} px={2} display="flex" flexDirection="column" rowGap="6px">
                 {wallets
                     .filter((x) => {

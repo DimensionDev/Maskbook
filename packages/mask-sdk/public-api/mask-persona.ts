@@ -6,11 +6,5 @@ declare namespace Mask {
      * @public
      */
     export const persona: undefined | Persona
-    export interface Persona {
-        /**
-         * API might change any time.
-         * @remarks Since API=0
-         */
-        __experimental__sign__(message: string, style: 'web3'): Promise<string>
-    }
+    export interface Persona {}
 }

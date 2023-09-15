@@ -8,7 +8,7 @@ import { formatEthereumAddress, type ChainId, type NetworkType, type SchemaType 
 import { Box, Link, Typography } from '@mui/material'
 import { memo, type MouseEvent } from 'react'
 import { useI18N } from '../../../../../../utils/index.js'
-import { useConnected } from '../../hooks/useConnected.js'
+import { useConnectedWallets } from '../../hooks/useConnected.js'
 import { ActionGroup } from '../ActionGroup/index.js'
 import { WalletAssetsValue } from './WalletAssetsValue.js'
 
@@ -115,6 +115,7 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => (
     },
 }))
 interface WalletHeaderUIProps {
+    origin: string | null
     currentNetwork?: ReasonableNetwork<ChainId, SchemaType, NetworkType>
     chainId: ChainId
     onOpenNetworkSelector: (event: MouseEvent<HTMLDivElement>) => void
@@ -132,11 +133,12 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
     wallet,
     disabled = false,
     disableCopy = false,
+    origin,
 }) {
     const { t } = useI18N()
     const { classes, cx } = useStyles({ disabled })
-    const { data, isLoading } = useConnected()
-    const connected = data?.connected
+    const { data: connectedWallets, isLoading } = useConnectedWallets(origin)
+    const connected = connectedWallets?.has(wallet.address)
     const addressLink = ExplorerResolver.addressLink(chainId, wallet.address)
 
     const networkName = currentNetwork?.name || currentNetwork?.fullName

@@ -17,19 +17,18 @@ import { ChangeCurrency } from './ChangeCurrency.js'
 import { ChangeNetwork } from './ChangeNetwork.js'
 import { ChangeOwner } from './ChangeOwner.js'
 import { ChangePaymentPassword } from './ChangePaymentPassword.js'
-import { ConnectedSites } from './ConnectedSites.js'
 import { Contacts } from './Contacts.js'
 import { Rename } from './Rename.js'
 import { ShowPrivateKey } from './ShowPrivateKey.js'
 import { useStyles } from './useStyles.js'
+import { ConnectedOrigins } from './ConnectedOrigins.js'
 
 function getPathIndex(path?: string) {
     const rawIndex = path?.split('/').pop()
     if (!rawIndex) return
     return Number.parseInt(rawIndex, 10)
 }
-
-const WalletSettings = memo(function WalletSettings() {
+const WalletSettings = memo(() => {
     const { t } = useI18N()
     const { classes, cx, theme } = useStyles()
     const modalNavigate = useModalNavigate()
@@ -88,7 +87,7 @@ const WalletSettings = memo(function WalletSettings() {
                 {wallet.owner ? <ChangeOwner /> : null}
                 <Rename />
                 <Contacts />
-                <ConnectedSites />
+                <ConnectedOrigins />
                 <AutoLock />
                 <ChangeCurrency />
                 <ChangePaymentPassword />

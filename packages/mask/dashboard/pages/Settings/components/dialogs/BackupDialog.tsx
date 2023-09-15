@@ -6,7 +6,6 @@ import { encryptBackup } from '@masknet/backup-format'
 import { CrossIsolationMessages, MimeType, PopupRoutes } from '@masknet/shared-base'
 import { MaskDialog, useCustomSnackbar } from '@masknet/theme'
 import { encode } from '@msgpack/msgpack'
-import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import Services from '#services'
 import { LoadingButton } from '../../../../components/LoadingButton/index.js'
 import { MaskAlert } from '../../../../components/MaskAlert/index.js'
@@ -41,7 +40,7 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
 
     const { value: previewInfo, loading: searching } = useAsync(() => Services.Backup.generateBackupPreviewInfo())
 
-    const { value: hasPassword, retry } = useAsyncRetry(WalletServiceRef.value.hasPassword, [])
+    const { value: hasPassword, retry } = useAsyncRetry(Services.Wallet.hasPassword, [])
 
     const [{ loading }, handleBackup] = useAsyncFn(async () => {
         if (backupPassword !== user.backupPassword) {
@@ -51,7 +50,7 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
 
         try {
             if (showPassword.wallet) {
-                const verified = await WalletServiceRef.value.verifyPassword(paymentPassword)
+                const verified = await Services.Wallet.verifyPassword(paymentPassword)
                 if (!verified) {
                     setIncorrectPaymentPassword(true)
                     return

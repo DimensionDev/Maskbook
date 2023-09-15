@@ -5,7 +5,7 @@ const DEFAULT_LOCK_DURATION = 1000 * 60 * 60 * 24 // One day
 
 const ID = 'locker'
 
-export type LockerRecord = {
+export interface LockerRecord {
     type: 'locker'
     id: string
     duration: number // ms

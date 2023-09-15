@@ -49,7 +49,7 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
             if (Sniffings.is_popup_page && !location.hash.includes('/swap')) {
                 PopupsHistory.push(urlcat(route, fromState))
             } else {
-                // open the popups window and wait for approvement from the user.
+                // open the popups window and wait for approval from the user.
                 await SiteAdaptorContextRef.value.openPopupWindow(route, {
                     source: location.origin,
                     ...fromState,

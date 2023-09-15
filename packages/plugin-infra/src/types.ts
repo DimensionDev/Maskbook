@@ -10,8 +10,6 @@ import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
     BindingProof,
     ECKeyIdentifier,
-    EnhanceableSite,
-    ExtensionSite,
     NetworkPluginID,
     NextIDPlatform,
     PostIdentifier,
@@ -29,6 +27,8 @@ import type {
     SocialIdentity,
     BooleanPreference,
     ImportSource,
+    PopupRoutesParamsMap,
+    EnhanceableSite,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -42,7 +42,7 @@ import type {
     Web3UI,
 } from '@masknet/web3-shared-base'
 import type { LinkedProfileDetails } from '@masknet/public-api'
-import type { TransactionOptions } from '@masknet/web3-shared-evm'
+import type { ChainId, TransactionOptions } from '@masknet/web3-shared-evm'
 import type { CompositionType } from './entry-content-script.js'
 
 export declare namespace Plugin {
@@ -121,13 +121,19 @@ export namespace Plugin.Shared {
         wallets: Subscription<Wallet[]>
 
         /** Select a Mask Wallet account */
-        selectAccount(): Promise<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
+        selectMaskWalletAccount(
+            chainId: ChainId,
+        ): Promise<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
 
         /** Open Dashboard with a new window */
         openDashboard(route?: DashboardRoutes, search?: string): Promise<void>
 
         /** Open popup window */
-        openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
+        openPopupWindow<T extends PopupRoutes>(
+            route: T,
+            params: T extends keyof PopupRoutesParamsMap ? PopupRoutesParamsMap[T] : undefined,
+            evenWhenWalletLocked?: boolean,
+        ): Promise<void>
 
         /** Close popup window */
         closePopupWindow(): Promise<void>
@@ -141,8 +147,10 @@ export namespace Plugin.Shared {
         /** Close walletconnect dialog */
         closeWalletConnectDialog(): void
 
-        /** Record which sites are connected to the Mask wallet  */
-        recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean): Promise<void>
+        /** Connect origin to Mask wallet  */
+        grantEIP2255Permission(id: string, grantedWalletAddress: Set<string> | string[]): Promise<void>
+        /** Disconnect origin from Mask wallet  */
+        disconnectAllWalletsFromOrigin(origin: string): Promise<void>
 
         /** Sign a message with persona (w or w/o popups) */
         signWithPersona<T>(type: SignType, message: T, identifier?: ECKeyIdentifier, silent?: boolean): Promise<string>
@@ -797,7 +805,6 @@ export namespace Plugin.SiteAdaptor {
 
     export interface SettingsTabUIProps {
         onClose: () => void
-        onOpenPopup: (route?: PopupRoutes, params?: Record<string, any>) => void
         bindingWallets?: BindingProof[]
         currentPersona?: ECKeyIdentifier
         pluginID: PluginID

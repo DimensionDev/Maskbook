@@ -27,7 +27,7 @@ class EthereumEventEmitter extends EventTarget implements Mask.Ethereum.MaskEthe
     }
 }
 class MaskProvider extends EthereumEventEmitter implements Mask.Ethereum.ProviderObject {
-    async request(param: unknown) {
+    async request(param: any): Promise<any> {
         return contentScript.eth_request(param)
     }
 }

@@ -1,6 +1,5 @@
 /// <reference path="../dist/public-api.d.ts" />
 export interface BridgeAPI {
-    persona_signMessage(message: string): Promise<string>
     site_appendComposition(message: string, metadata?: ReadonlyMap<string, unknown>): Promise<void>
     eth_request(request: unknown): Promise<unknown>
     reload(): Promise<void>
@@ -18,3 +17,4 @@ export interface InitInformation {
 }
 export { serializer } from './serializer.js'
 export { createMaskSDKChannel } from './channel.js'
+export * from './types.js'

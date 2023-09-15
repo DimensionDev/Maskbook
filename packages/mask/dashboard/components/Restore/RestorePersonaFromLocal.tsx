@@ -7,7 +7,6 @@ import { delay } from '@masknet/kit'
 import { FileFrame, UploadDropArea } from '@masknet/shared'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { decode, encode } from '@msgpack/msgpack'
-import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import Services from '#services'
 import { usePersonaRecovery } from '../../contexts/RecoveryContext.js'
 import { useDashboardI18N } from '../../locales/index.js'
@@ -119,8 +118,8 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
             setProcessing(true)
             // If json has wallets, restore in popup.
             if (summary?.countOfWallets) {
-                const hasPassword = await WalletServiceRef.value.hasPassword()
-                if (!hasPassword) await WalletServiceRef.value.setDefaultPassword()
+                const hasPassword = await Services.Wallet.hasPassword()
+                if (!hasPassword) await Services.Wallet.setDefaultPassword()
             }
             await Services.Backup.restoreBackup(backupValue)
 

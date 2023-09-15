@@ -33,5 +33,6 @@ export declare namespace SiteAdaptor {
         shouldActivate(location: Location | URL): boolean
         /** This provider is not ready for production, Mask will not use it in production */
         notReadyForProduction?: boolean
+        shouldLoadMaskSDK?: boolean
     }
 }

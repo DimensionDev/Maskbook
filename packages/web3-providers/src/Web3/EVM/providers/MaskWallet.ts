@@ -6,10 +6,9 @@ import {
     type ECKeyIdentifier,
     EMPTY_LIST,
     ExtensionSite,
-    getSiteType,
-    PopupRoutes,
     ValueRef,
     ImportSource,
+    getExtensionSiteType,
 } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
@@ -27,7 +26,6 @@ import { BaseContractWalletProvider } from './BaseContractWallet.js'
 import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
 import { SmartPayOwnerAPI } from '../../../SmartPay/apis/OwnerAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
-import { env } from '@masknet/flags'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
 
 export class MaskWalletProvider
@@ -37,15 +35,6 @@ export class MaskWalletProvider
     private Request = new RequestReadonlyAPI()
 
     private ref = new ValueRef<Wallet[]>(EMPTY_LIST)
-
-    private openPopupWindow: (route?: PopupRoutes, params?: Record<string, any>) => Promise<void> = async (...args) => {
-        await this.context?.openPopupWindow(...args)
-    }
-
-    private openSelectWalletWindow =
-        env.channel === 'stable' && process.env.NODE_ENV === 'production'
-            ? this.openPopupWindow
-            : debounce(this.openPopupWindow, 1000)
 
     constructor() {
         super(ProviderType.MaskWallet)
@@ -179,14 +168,16 @@ export class MaskWalletProvider
             identifier?: ECKeyIdentifier
         },
         silent?: boolean,
+        externalRequestID?: string | null,
     ) {
-        const siteType = getSiteType()
-        if (siteType === ExtensionSite.Popup || silent) {
+        if (getExtensionSiteType() === ExtensionSite.Popup || silent) {
             if (isValidAddress(address)) {
                 await this.switchAccount(address, owner)
                 await this.switchChain(chainId)
 
-                if (siteType) await this.context?.recordConnectedSites(siteType, true)
+                if (externalRequestID) {
+                    await this.context?.grantEIP2255Permission(externalRequestID, [address])
+                }
 
                 return {
                     account: address,
@@ -200,11 +191,12 @@ export class MaskWalletProvider
             }
         }
 
-        await this.openSelectWalletWindow?.(this.wallets.length ? PopupRoutes.SelectWallet : PopupRoutes.Wallet, {
-            chainId,
-        })
+        if (externalRequestID)
+            throw new TypeError(
+                'externalRequestID is not expected in MaskWalletProvider.connect() when the page is not popup page.',
+            )
 
-        const account = first(await this.context?.selectAccount())
+        const account = first(await this.context?.selectMaskWalletAccount(chainId))
         if (!account) throw new Error(`Failed to connect to ${new ChainResolverAPI().chainFullName(chainId)}`)
 
         // switch account
@@ -222,8 +214,6 @@ export class MaskWalletProvider
 
         // switch chain
         if (chainId !== this.hostedChainId) await this.switchChain(chainId)
-        if (siteType) await this.context?.recordConnectedSites(siteType, true)
-
         return {
             chainId,
             account: account.address,
@@ -231,8 +221,7 @@ export class MaskWalletProvider
     }
 
     override async disconnect() {
-        const siteType = getSiteType()
-        if (siteType) await this.context?.recordConnectedSites(siteType, false)
+        await this.context?.disconnectAllWalletsFromOrigin(location.origin)
     }
 
     override async request<T>(

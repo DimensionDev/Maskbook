@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom'
 import { Box } from '@mui/material'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { useCustomSnackbar } from '@masknet/theme'
-import { WalletServiceRef } from '@masknet/plugin-infra/dom'
 import Services from '#services'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { PersonaContext } from '../../../pages/Personas/hooks/usePersonaContext.js'
@@ -73,8 +72,8 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
         dispatch({ type: 'SET_LOADING', loading: true })
         try {
             if (backupSummary?.countOfWallets) {
-                const hasPassword = await WalletServiceRef.value.hasPassword()
-                if (!hasPassword) await WalletServiceRef.value.setDefaultPassword()
+                const hasPassword = await Services.Wallet.hasPassword()
+                if (!hasPassword) await Services.Wallet.setDefaultPassword()
             }
 
             await Services.Backup.restoreBackup(backupDecrypted)

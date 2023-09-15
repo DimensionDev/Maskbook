@@ -10,6 +10,7 @@ import { useDashboardI18N } from '../../../locales/index.js'
 import PasswordField from '../../../components/PasswordField/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -75,6 +76,7 @@ const CreateWalletForm = memo(function CreateWalletForm() {
     const params = new URLSearchParams(location.search)
     const isReset = params.get('reset')
     const isRecover = params.get('recover')
+    const external_request = params.get('external_request')
 
     const schema = useMemo(() => {
         const passwordRule = zod
@@ -108,7 +110,9 @@ const CreateWalletForm = memo(function CreateWalletForm() {
 
     const onSubmit = handleSubmit((data) => {
         navigate(
-            isRecover ? DashboardRoutes.RecoveryMaskWallet : DashboardRoutes.CreateMaskWalletMnemonic,
+            urlcat(isRecover ? DashboardRoutes.RecoveryMaskWallet : DashboardRoutes.CreateMaskWalletMnemonic, {
+                external_request,
+            }),
             data.password
                 ? {
                       state: { password: data.password, isReset },
