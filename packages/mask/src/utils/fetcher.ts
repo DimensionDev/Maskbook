@@ -42,6 +42,7 @@ function canAccessAsContent(url: string) {
     )
         return true
 
+    if (target.origin.includes('maskbook-backup')) return true
     if (isHostName(location, 'mirror.xyz') && isHostName(target, 'mirror-api.com')) return true
     if (extensionOrigin === target.origin) return true
     return target.origin === location.origin

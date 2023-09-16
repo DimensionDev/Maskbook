@@ -125,7 +125,8 @@ export function arrow_right_url() { return new URL("./general/ArrowRight.svg", i
 export function arrow_up_url() { return new URL("./general/ArrowUp.svg", import.meta.url) }
 export function arrow_up_round_url() { return new URL("./general/ArrowUpRound.svg", import.meta.url) }
 export function back_up_url() { return new URL("./general/BackUp.svg", import.meta.url) }
-export function base_close_url() { return new URL("./general/BaseClose.svg", import.meta.url) }
+export function base_close_dark_url() { return new URL("./general/BaseClose.dark.svg", import.meta.url) }
+export function base_close_light_url() { return new URL("./general/BaseClose.light.svg", import.meta.url) }
 export function base_contacts_url() { return new URL("./general/BaseContacts.svg", import.meta.url) }
 export function base_upload_url() { return new URL("./general/BaseUpload.svg", import.meta.url) }
 export function base_user_url() { return new URL("./general/BaseUser.svg", import.meta.url) }
@@ -151,7 +152,9 @@ export function circle_warning_url() { return new URL("./general/CircleWarning.s
 export function clear_dark_url() { return new URL("./general/Clear.dark.svg", import.meta.url) }
 export function clear_light_url() { return new URL("./general/Clear.light.svg", import.meta.url) }
 export function close_url() { return new URL("./general/Close.svg", import.meta.url) }
+export function cloud_url() { return new URL("./general/Cloud.svg", import.meta.url) }
 export function cloud_backup_url() { return new URL("./general/CloudBackup.png", import.meta.url) }
+export function cloud_backup_2_url() { return new URL("./general/CloudBackup2.svg", import.meta.url) }
 export function cloud_link_url() { return new URL("./general/CloudLink.png", import.meta.url) }
 export function cny_url() { return new URL("./general/CNY.svg", import.meta.url) }
 export function collectible_url() { return new URL("./general/Collectible.svg", import.meta.url) }

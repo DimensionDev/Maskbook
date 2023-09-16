@@ -1,7 +1,7 @@
 import type { BackupSummary } from '@masknet/backup-format'
 import type { PhoneNumberFieldValue } from '@masknet/theme'
 import { produce } from 'immer'
-import { AccountType, type BackupFileInfo } from '../../../pages/Settings/type.js'
+import { AccountType, type BackupFileInfo } from '../../../type.js'
 
 export enum RestoreStep {
     InputEmail = 'InputEmail',

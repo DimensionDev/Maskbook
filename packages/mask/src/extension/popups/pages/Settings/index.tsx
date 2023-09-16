@@ -1,18 +1,18 @@
 import { Box, List, ListItem, ListItemText, Typography, useTheme } from '@mui/material'
-import { memo, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { useTitle } from '../../hooks/useTitle.js'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { NormalHeader, useModalNavigate } from '../../components/index.js'
 import { env } from '@masknet/flags'
-import { useAppearance, useLanguage } from '../../../../../shared-ui/index.js'
+import { UserContext, useAppearance, useLanguage } from '../../../../../shared-ui/index.js'
 import { Appearance, LanguageOptions } from '@masknet/public-api'
 import { openWindow } from '@masknet/shared-base-ui'
-import { PopupModalRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, PopupModalRoutes } from '@masknet/shared-base'
 import { useSupportedSites } from '../../hooks/useSupportedSites.js'
 import { Trans } from 'react-i18next'
-import { UserContext } from '../../hooks/useUserContext.js'
+import Services from '#services'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -104,8 +104,6 @@ const Settings = memo(function Settings() {
 
     const { user } = UserContext.useContainer()
 
-    useTitle(t('settings'))
-
     const LANGUAGE_OPTIONS_MAP = useMemo(
         () => ({
             [LanguageOptions.__auto__]: t('popups_settings_language_auto'),
@@ -136,7 +134,38 @@ const Settings = memo(function Settings() {
         [classes],
     )
 
+    const localBackupTip = useMemo(() => {
+        if (!user.backupPassword) return t('popups_settings_set_backup_password_tips')
+        const backupMethod = localStorage.getItem('backupMethod')
+        // old data
+        if (backupMethod === 'local' && !user.localBackupAt) return t('popups_settings_local_backup_exsist')
+        if (!user.localBackupAt) return t('popups_settings_no_backup')
+        return t('popups_settings_backup_on', { time: user.localBackupAt })
+    }, [user])
+
+    const cloudBackupTip = useMemo(() => {
+        if (!user.backupPassword) return t('popups_settings_set_backup_password_tips')
+        const backupMethod = localStorage.getItem('backupMethod')
+        // old data
+        if (backupMethod === 'cloud' && !user.cloudBackupAt) return t('popups_settings_cloud_backup_exsist')
+        if (!user.cloudBackupAt) return t('popups_settings_no_backup')
+        return t('popups_settings_backup_on', { time: user.cloudBackupAt })
+    }, [user])
+
     const { data } = useSupportedSites()
+
+    const handleOpenDashboard = useCallback(async (route: DashboardRoutes) => {
+        await browser.tabs.create({
+            active: true,
+            url: browser.runtime.getURL(`/dashboard.html#${route}`),
+        })
+        if (navigator.userAgent.includes('Firefox')) {
+            window.close()
+        }
+        await Services.Helper.removePopupWindow()
+    }, [])
+
+    useTitle(t('settings'))
 
     return (
         <>
@@ -211,11 +240,34 @@ const Settings = memo(function Settings() {
                     </Box>
                     <List className={classes.list}>
                         <ListItem className={classes.listItem}>
-                            <ListItemText classes={itemClasses} primary={t('popups_settings_cloud_backup')} />
+                            <ListItemText
+                                classes={itemClasses}
+                                primary={t('popups_settings_cloud_backup')}
+                                secondary={cloudBackupTip}
+                                onClick={() => {
+                                    if (!user.backupPassword) {
+                                        modalNavigate(PopupModalRoutes.SetBackupPassword)
+                                    } else {
+                                        handleOpenDashboard(DashboardRoutes.CloudBackup)
+                                    }
+                                }}
+                            />
                             <Icons.ArrowRight size={24} />
                         </ListItem>
-                        <ListItem className={classes.listItem}>
-                            <ListItemText classes={itemClasses} primary={t('popups_settings_local_backup')} />
+                        <ListItem
+                            className={classes.listItem}
+                            onClick={() => {
+                                if (!user.backupPassword) {
+                                    modalNavigate(PopupModalRoutes.SetBackupPassword)
+                                } else {
+                                    handleOpenDashboard(DashboardRoutes.LocalBackup)
+                                }
+                            }}>
+                            <ListItemText
+                                classes={itemClasses}
+                                primary={t('popups_settings_local_backup')}
+                                secondary={localBackupTip}
+                            />
                             <Icons.ArrowRight size={24} />
                         </ListItem>
                         <ListItem className={classes.listItem}>
@@ -240,8 +292,8 @@ const Settings = memo(function Settings() {
                                 primary={t('popups_settings_backup_password')}
                                 secondary={
                                     user.backupPassword
-                                        ? t('popups_settings_set_backup_password')
-                                        : t('popups_settings_backup_password')
+                                        ? t('popups_settings_change_backup_password')
+                                        : t('popups_settings_not_set')
                                 }
                             />
                             <Icons.ArrowRight size={24} />

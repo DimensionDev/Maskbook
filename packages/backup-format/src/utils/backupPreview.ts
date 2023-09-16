@@ -42,7 +42,7 @@ export function getBackupSummary(json: NormalizedBackup.Data): BackupSummary {
         relations: json.relations.length,
         files,
         wallets: json.wallets.map((wallet) => wallet.address),
-        createdAt: Number(json.meta.createdAt),
+        createdAt: Number(json.meta.createdAt.unwrapOr(undefined)),
         countOfWallets: 0,
     }
 }

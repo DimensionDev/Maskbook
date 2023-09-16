@@ -1,15 +1,12 @@
 import urlcat from 'urlcat'
-import { memo, useCallback, useContext, useLayoutEffect, useState } from 'react'
+import { memo, useCallback, useLayoutEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box } from '@mui/material'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { useCustomSnackbar } from '@masknet/theme'
 import Services from '#services'
 import { useDashboardI18N } from '../../../locales/index.js'
-import { PersonaContext } from '../../../pages/Personas/hooks/usePersonaContext.js'
-import { BackupPreview } from '../../../pages/Settings/components/BackupPreview.js'
-import { UserContext } from '../../../pages/Settings/hooks/UserContext.js'
-import { AccountType } from '../../../pages/Settings/type.js'
+
 import { ConfirmSynchronizePasswordDialog } from '../ConfirmSynchronizePasswordDialog.js'
 import { usePersonaRecovery } from '../../../contexts/index.js'
 import { PrimaryButton } from '../../PrimaryButton/index.js'
@@ -17,6 +14,10 @@ import { RestoreContext } from './RestoreProvider.js'
 import { RestoreStep } from './restoreReducer.js'
 import { InputForm } from './InputForm.js'
 import { ConfirmBackupInfo } from './ConfirmBackupInfo.js'
+import { PersonaContext } from '../../../hooks/usePersonaContext.js'
+import { UserContext } from '../../../../shared-ui/index.js'
+import { AccountType } from '../../../type.js'
+import { BackupPreview } from '../../BackupPreview/index.js'
 
 interface RestoreProps {
     onRestore: () => Promise<void>
@@ -44,7 +45,7 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
     const t = useDashboardI18N()
     const navigate = useNavigate()
     const { showSnackbar } = useCustomSnackbar()
-    const { user, updateUser } = useContext(UserContext)
+    const { user, updateUser } = UserContext.useContainer()
     const { currentPersona, changeCurrentPersona } = PersonaContext.useContainer()
     const { state, dispatch } = RestoreContext.useContainer()
     const { account, accountType, backupSummary, password, backupDecrypted } = state

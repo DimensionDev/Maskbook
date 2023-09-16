@@ -5,12 +5,12 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {
     CustomSnackbarProvider,
     applyMaskColorVars,
-    DashboardDarkTheme,
-    DashboardLightTheme,
+    MaskLightTheme,
+    MaskDarkTheme,
     useSystemPreferencePalette,
     DialogStackingProvider,
 } from '@masknet/theme'
-import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
+import { I18NextProviderHMR, PersonaContext, SharedContextProvider } from '@masknet/shared'
 import { ErrorBoundary, queryClient } from '@masknet/shared-base-ui'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
@@ -19,9 +19,8 @@ import { NetworkPluginID, i18NextInstance, queryRemoteI18NBundle } from '@maskne
 import '../utils/kv-storage.js'
 
 import { Pages } from '../pages/routes.js'
-import { useAppearance } from '../../shared-ui/index.js'
+import { UserContext, useAppearance } from '../../shared-ui/index.js'
 import Services from '#services'
-import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext.js'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
@@ -32,9 +31,9 @@ export default function DashboardRoot(props: React.PropsWithChildren<{}>) {
     const appearance = useAppearance()
     const mode = useSystemPreferencePalette()
     const theme = {
-        dark: DashboardDarkTheme,
-        light: DashboardLightTheme,
-        default: mode === 'dark' ? DashboardDarkTheme : DashboardLightTheme,
+        dark: MaskDarkTheme,
+        light: MaskLightTheme,
+        default: mode === 'dark' ? MaskDarkTheme : MaskLightTheme,
     }[appearance]
 
     applyMaskColorVars(document.body, appearance === 'default' ? mode : appearance)
@@ -50,18 +49,20 @@ export default function DashboardRoot(props: React.PropsWithChildren<{}>) {
                     <StyledEngineProvider injectFirst>
                         <ThemeProvider theme={theme}>
                             <DialogStackingProvider>
-                                <PersonaContext.Provider>
-                                    <ErrorBoundary>
-                                        <CssBaseline />
-                                        <CustomSnackbarProvider>
-                                            <SharedContextProvider>
-                                                <Pages />
-                                                <PluginRender />
-                                                {props.children}
-                                            </SharedContextProvider>
-                                        </CustomSnackbarProvider>
-                                    </ErrorBoundary>
-                                </PersonaContext.Provider>
+                                <UserContext.Provider>
+                                    <PersonaContext.Provider>
+                                        <ErrorBoundary>
+                                            <CssBaseline />
+                                            <CustomSnackbarProvider>
+                                                <SharedContextProvider>
+                                                    <Pages />
+                                                    <PluginRender />
+                                                    {props.children}
+                                                </SharedContextProvider>
+                                            </CustomSnackbarProvider>
+                                        </ErrorBoundary>
+                                    </PersonaContext.Provider>
+                                </UserContext.Provider>
                             </DialogStackingProvider>
                         </ThemeProvider>
                     </StyledEngineProvider>
