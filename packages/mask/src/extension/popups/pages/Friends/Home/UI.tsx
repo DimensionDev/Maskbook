@@ -12,7 +12,7 @@ import { SearchList } from '../SearchList/index.js'
 const useStyles = makeStyles()((theme) => ({
     container: {
         flex: 1,
-        backgroundColor: theme.palette.maskColor.white,
+        backgroundColor: theme.palette.mode === 'dark' ? theme.palette.maskColor.bottom : theme.palette.maskColor.white,
         display: 'flex',
         flexDirection: 'column',
         maxHeight: '100vh',
