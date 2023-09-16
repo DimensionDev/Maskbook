@@ -102,8 +102,6 @@ export const RestPartOfPluginUIContextShared: Omit<
     getWallets: Services.Wallet.getWallets,
     addWallet: Services.Wallet.addWallet,
     updateWallet: Services.Wallet.updateWallet,
-    removeWallet: Services.Wallet.removeWallet,
-    resetAllWallets: Services.Wallet.resetAllWallets,
 
     hasPaymentPassword: Services.Wallet.hasPassword,
 }

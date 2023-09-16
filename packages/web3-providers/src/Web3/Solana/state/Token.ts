@@ -1,5 +1,5 @@
 import type { Subscription } from 'use-subscription'
-import type { Plugin } from '@masknet/plugin-infra'
+import type { WalletAPI } from '../../../entry-types.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress, type FungibleToken, type NonFungibleToken } from '@masknet/web3-shared-base'
 import {
@@ -16,7 +16,7 @@ export class Token extends TokenState<ChainId, SchemaType> {
     private Hub = new SolanaHubAPI().create()
 
     constructor(
-        protected override context: Plugin.Shared.SharedUIContext,
+        protected override context: WalletAPI.IOContext,
         protected override subscriptions: {
             account?: Subscription<string>
         },

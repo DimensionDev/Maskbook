@@ -1,7 +1,8 @@
 import { v4 as uuid } from 'uuid'
 import { omit } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import { getRegisteredWeb3Chains, getRegisteredWeb3Networks, type Plugin } from '@masknet/plugin-infra'
+import { getRegisteredWeb3Chains, getRegisteredWeb3Networks } from '@masknet/plugin-infra'
+import type { WalletAPI } from '../../../entry-types.js'
 import {
     mapSubscription,
     PersistentStorages,
@@ -30,7 +31,7 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
     public networks: Subscription<Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>>
 
     constructor(
-        protected context: Plugin.Shared.SharedUIContext,
+        protected context: WalletAPI.IOContext,
         protected options: {
             pluginID: NetworkPluginID
         },

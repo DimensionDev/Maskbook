@@ -45,8 +45,6 @@ export function createSharedContext(): Omit<Plugin.SiteAdaptor.SiteAdaptorContex
         queryPersonaByProfile: reject,
         grantEIP2255Permission: reject,
         disconnectAllWalletsFromOrigin: reject,
-        removeWallet: reject,
-        resetAllWallets: reject,
         selectMaskWalletAccount: reject,
         setMinimalMode: reject,
         signWithPersona: reject,

@@ -10,7 +10,7 @@ import type { WalletAPI } from '../../../entry-types.js'
 /**
  * EIP-4337 compatible smart contract based wallet.
  */
-export class BaseContractWalletProvider
+export abstract class BaseContractWalletProvider
     extends BaseHostedProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {

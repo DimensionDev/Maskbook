@@ -1,4 +1,4 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import type { WalletAPI } from '../../../entry-types.js'
 import type {
     ChainId,
     SchemaType,
@@ -36,7 +36,7 @@ export class FlowWeb3StateAPI extends Web3StateAPI_Base<
         super(FlowWeb3StateRef)
     }
 
-    override async create(context: Plugin.Shared.SharedUIContext): Promise<Web3State> {
+    override async create(context: WalletAPI.IOContext): Promise<Web3State> {
         const Provider_ = new Provider(context)
         await Provider_.setup()
 

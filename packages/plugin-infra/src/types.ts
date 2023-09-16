@@ -181,12 +181,6 @@ export namespace Plugin.Shared {
             },
         ): Promise<void>
 
-        /** Remove a old wallet */
-        removeWallet(id: string, password?: string): Promise<void>
-
-        /** Reset all wallets */
-        resetAllWallets(): Promise<void>
-
         /** Send request to native API, for a risky request will be added into the waiting queue. */
         send(payload: JsonRpcPayload, options?: TransactionOptions): Promise<JsonRpcResponse>
         hasPaymentPassword(): Promise<boolean>

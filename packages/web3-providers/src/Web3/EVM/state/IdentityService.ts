@@ -1,5 +1,5 @@
 import { compact, first, uniqBy } from 'lodash-es'
-import type { Plugin } from '@masknet/plugin-infra'
+import type { WalletAPI } from '../../../entry-types.js'
 import {
     EMPTY_LIST,
     EnhanceableSite,
@@ -122,7 +122,7 @@ const resolveMaskXAddressType = createLookupTableResolver<MaskX_BaseAPI.SourceTy
 export class IdentityService extends IdentityServiceState<ChainId> {
     private Web3 = new ConnectionReadonlyAPI()
 
-    constructor(protected context: Plugin.Shared.SharedUIContext) {
+    constructor(protected context: WalletAPI.IOContext) {
         super()
     }
 

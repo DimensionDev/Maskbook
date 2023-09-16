@@ -9,6 +9,7 @@ import {
     ValueRef,
     ImportSource,
     getExtensionSiteType,
+    type PersonaInformation,
 } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
@@ -21,14 +22,21 @@ import {
     type RequestArguments,
 } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
-import { allPersonas as allPersonasSub } from '@masknet/plugin-infra/dom/context'
 import { ChainResolverAPI } from '../apis/ResolverAPI.js'
 import { BaseContractWalletProvider } from './BaseContractWallet.js'
 import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
 import { SmartPayOwnerAPI } from '../../../SmartPay/apis/OwnerAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
+import type { Subscription } from 'use-subscription'
 
+export interface MaskWalletIOContext {
+    allPersonas: Subscription<readonly PersonaInformation[]>
+    resetAllWallets(): Promise<void>
+    /** Remove a old wallet */
+    removeWallet(id: string, password?: string): Promise<void>
+    renameWallet(address: string, name: string): Promise<void>
+}
 export class MaskWalletProvider
     extends BaseContractWalletProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
@@ -36,7 +44,14 @@ export class MaskWalletProvider
     private Request = new RequestReadonlyAPI()
 
     private ref = new ValueRef<Wallet[]>(EMPTY_LIST)
-
+    #io: MaskWalletIOContext | undefined
+    protected override async io_renameWallet(address: string, name: string): Promise<void> {
+        await this.#io?.renameWallet(address, name)
+    }
+    setIOContext(io: MaskWalletIOContext) {
+        if (this.#io) return
+        this.#io = io
+    }
     constructor() {
         super(ProviderType.MaskWallet)
     }
@@ -55,13 +70,13 @@ export class MaskWalletProvider
         // Fetching info of SmartPay wallets is slow, update provider wallets eagerly here.
         await this.updateImmediately()
 
-        const allPersonas = allPersonasSub.getCurrentValue()
+        const allPersonas = this.#io?.allPersonas.getCurrentValue()
         const wallets = this.context?.wallets.getCurrentValue() ?? EMPTY_LIST
 
         const chainId = await this.Bundler.getSupportedChainId()
         const accounts = await new SmartPayOwnerAPI().getAccountsByOwners(chainId, [
             ...wallets.map((x) => x.address),
-            ...compact(allPersonas.map((x) => x.address)),
+            ...compact(allPersonas?.map((x) => x.address)),
         ])
 
         const now = new Date()
@@ -79,7 +94,9 @@ export class MaskWalletProvider
                 updatedAt: now,
                 owner: x.owner,
                 deployed: x.deployed,
-                identifier: allPersonas.find((persona) => isSameAddress(x.owner, persona.address))?.identifier.toText(),
+                identifier: allPersonas
+                    ?.find((persona) => isSameAddress(x.owner, persona.address))
+                    ?.identifier.toText(),
             }))
 
         const result = uniqWith([...smartPayWallets, ...super.wallets, ...wallets], (a, b) =>
@@ -125,7 +142,7 @@ export class MaskWalletProvider
         const debounceUpdate = debounce(this.update.bind(this), 1000)
 
         this.context?.wallets.subscribe(debounceUpdate)
-        allPersonasSub.subscribe(debounceUpdate)
+        this.#io?.allPersonas.subscribe(debounceUpdate)
         CrossIsolationMessages.events.renameWallet.on(debounceUpdate)
     }
 
@@ -139,21 +156,21 @@ export class MaskWalletProvider
         if (scWallets.length) await super.removeWallets(scWallets)
         if (isSameAddress(this.hostedAccount, address)) await this.walletStorage?.account.setValue('')
         await super.removeWallet(address, password)
-        await this.context?.removeWallet(address, password)
+        await this.#io?.removeWallet(address, password)
     }
 
     override async removeWallets(wallets: Wallet[]): Promise<void> {
         await super.removeWallets(wallets)
         for (const wallet of wallets) {
             if (isSameAddress(this.hostedAccount, wallet.address)) await this.walletStorage?.account.setValue('')
-            if (!wallet.owner) await this.context?.removeWallet(wallet.address)
+            if (!wallet.owner) await this.#io?.removeWallet(wallet.address)
         }
     }
 
     override async resetAllWallets(): Promise<void> {
         await super.removeWallets(this.wallets)
         await this.walletStorage?.account.setValue('')
-        await this.context?.resetAllWallets()
+        await this.#io?.resetAllWallets()
     }
 
     override async renameWallet(address: string, name: string) {

@@ -1,6 +1,6 @@
 import { ValueRefWithReady, type NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { Plugin } from '@masknet/plugin-infra'
+import type { WalletAPI } from '../../../entry-types.js'
 import type {
     ChainId,
     SchemaType,
@@ -44,7 +44,7 @@ export class Web3StateAPI extends Web3StateAPI_Base<
         super(Web3StateRef)
     }
 
-    override async create(context: Plugin.Shared.SharedUIContext): Promise<Web3State> {
+    override async create(context: WalletAPI.IOContext): Promise<Web3State> {
         const Provider_ = new Provider(context)
         await Provider_.setup()
 
