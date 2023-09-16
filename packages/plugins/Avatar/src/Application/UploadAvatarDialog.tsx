@@ -9,12 +9,12 @@ import { Twitter } from '@masknet/web3-providers'
 import { usePersonaConnectStatus } from '@masknet/shared'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
+import { currentVisitingProfile } from '@masknet/plugin-infra/content-script/context'
 import { useI18N } from '../locales/i18n_generated.js'
 import { type AvatarInfo, useSave } from '../hooks/save/useSave.js'
 import { useAvatarManagement } from '../contexts/index.js'
 import { RoutePaths } from './Routes.js'
 import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
-import { currentVisitingProfile } from '@masknet/plugin-infra/content-script/context'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {

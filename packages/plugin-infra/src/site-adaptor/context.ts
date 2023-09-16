@@ -5,6 +5,7 @@ import type { Subscription } from 'use-subscription'
 import type { IdentityResolved } from '../types.js'
 import { __setUIContext__, type __UIContext__ } from '../dom/context.js'
 
+export * from '../dom/context.js'
 export interface __SiteAdaptorContext__ extends __UIContext__ {
     lastRecognizedProfile: Subscription<IdentityResolved | undefined>
     currentVisitingProfile: Subscription<IdentityResolved | undefined>
