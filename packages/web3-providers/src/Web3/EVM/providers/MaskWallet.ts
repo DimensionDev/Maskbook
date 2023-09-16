@@ -70,13 +70,13 @@ export class MaskWalletProvider
         // Fetching info of SmartPay wallets is slow, update provider wallets eagerly here.
         await this.updateImmediately()
 
-        const allPersonas = this.#io?.allPersonas.getCurrentValue()
+        const allPersonas = this.#io?.allPersonas.getCurrentValue() ?? EMPTY_LIST
         const wallets = this.context?.wallets.getCurrentValue() ?? EMPTY_LIST
 
         const chainId = await this.Bundler.getSupportedChainId()
         const accounts = await new SmartPayOwnerAPI().getAccountsByOwners(chainId, [
             ...wallets.map((x) => x.address),
-            ...compact(allPersonas?.map((x) => x.address)),
+            ...compact(allPersonas.map((x) => x.address)),
         ])
 
         const now = new Date()
@@ -94,9 +94,7 @@ export class MaskWalletProvider
                 updatedAt: now,
                 owner: x.owner,
                 deployed: x.deployed,
-                identifier: allPersonas
-                    ?.find((persona) => isSameAddress(x.owner, persona.address))
-                    ?.identifier.toText(),
+                identifier: allPersonas.find((persona) => isSameAddress(x.owner, persona.address))?.identifier.toText(),
             }))
 
         const result = uniqWith([...smartPayWallets, ...super.wallets, ...wallets], (a, b) =>
