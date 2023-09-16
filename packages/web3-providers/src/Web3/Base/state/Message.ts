@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid'
 import type { Subscription } from 'use-subscription'
-import type { Plugin } from '@masknet/plugin-infra'
+import type { WalletAPI } from '../../../entry-types.js'
 import {
     MessageStateType,
     type ReasonableMessage,
@@ -17,7 +17,7 @@ export class MessageState<Request, Response> implements Web3MessageState<Request
     public messages?: Subscription<Array<ReasonableMessage<Request, Response>>>
 
     constructor(
-        protected context: Plugin.Shared.SharedUIContext,
+        protected context: WalletAPI.IOContext,
         protected options: {
             pluginID: NetworkPluginID
         },

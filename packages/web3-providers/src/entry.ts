@@ -64,7 +64,7 @@ import { AirdropAPI } from './Airdrop/index.js'
 import { FireflyAPI } from './Firefly/index.js'
 import { FiatCurrencyRateAPI } from './FiatCurrencyRate/index.js'
 import { SID_DomainAPI } from './SID/index.js'
-import { SiteAdaptorContextAPI, SharedContextAPI } from './PluginContext/index.js'
+import { SharedContextAPI } from './PluginContext/index.js'
 import { ApprovalAPI } from './Approval/index.js'
 import { CalendarAPI } from './Calendar/index.js'
 import { ContractAPI } from './Web3/EVM/apis/ContractAPI.js'
@@ -140,7 +140,6 @@ export const Approval = new ApprovalAPI()
 
 // Plugin Context
 export const SharedPluginContext = new SharedContextAPI()
-export const SiteAdaptorPluginContext = new SiteAdaptorContextAPI()
 
 export { Providers } from './Web3/EVM/providers/index.js'
 export { FlowProviders } from './Web3/Flow/providers/index.js'

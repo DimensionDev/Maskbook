@@ -1,5 +1,5 @@
 import type { Subscription } from 'use-subscription'
-import type { Plugin } from '@masknet/plugin-infra'
+import type { WalletAPI } from '../../../entry-types.js'
 import {
     mapSubscription,
     mergeSubscription,
@@ -32,7 +32,7 @@ export class TransactionState<ChainId extends PropertyKey, Transaction>
     public transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
 
     constructor(
-        protected context: Plugin.Shared.SharedUIContext,
+        protected context: WalletAPI.IOContext,
         protected chainIds: ChainId[],
         protected subscriptions: {
             account?: Subscription<string>

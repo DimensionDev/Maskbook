@@ -24,7 +24,7 @@ const DEFAULT_PERSONA_CONNECT_STATUS: PersonaConnectStatus = {
 }
 
 export function useCurrentPersonaConnectStatus(
-    personas: PersonaInformation[],
+    personas: readonly PersonaInformation[],
     currentPersonaIdentifier?: string,
     openDashboard?: (route?: DashboardRoutes, search?: string) => void,
     identity?: IdentityResolved,

@@ -1,4 +1,4 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import type { WalletAPI } from '../../../entry-types.js'
 import {
     ChainIdList,
     formatAddress,
@@ -12,7 +12,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 
 export class Transaction extends TransactionState<ChainId, FlowTransaction> {
     constructor(
-        protected override context: Plugin.Shared.SharedUIContext,
+        protected override context: WalletAPI.IOContext,
         protected override subscriptions: {
             account?: Subscription<string>
             chainId?: Subscription<ChainId>

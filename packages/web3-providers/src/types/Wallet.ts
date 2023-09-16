@@ -1,7 +1,8 @@
 import type { Subscription } from 'use-subscription'
 import type { Emitter } from '@servie/events'
-import type { ECKeyIdentifier, Account, Wallet, Startable } from '@masknet/shared-base'
-import type { Plugin } from '@masknet/plugin-infra/content-script'
+import type { ECKeyIdentifier, Account, Wallet, Startable, SignType } from '@masknet/shared-base'
+import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import type { TransactionOptions } from '@masknet/web3-shared-evm'
 
 export namespace WalletAPI {
     export interface ProviderEvents<ChainId, ProviderType> {
@@ -19,7 +20,18 @@ export namespace WalletAPI {
         chainId: ChainId
         account?: string
     }
-
+    export interface IOContext {
+        /** Send request to native API, for a risky request will be added into the waiting queue. */
+        send(payload: JsonRpcPayload, options?: TransactionOptions): Promise<JsonRpcResponse>
+        hasPaymentPassword(): Promise<boolean>
+        /** Sign a message with persona (w or w/o popups) */
+        signWithPersona(
+            type: SignType,
+            message: unknown,
+            identifier?: ECKeyIdentifier,
+            silent?: boolean,
+        ): Promise<string>
+    }
     export interface Provider<ChainId, ProviderType, Web3Provider, Web3> extends Startable {
         readonly emitter: Emitter<ProviderEvents<ChainId, ProviderType>>
 
@@ -32,7 +44,7 @@ export namespace WalletAPI {
         /** connection status */
         readonly connected: boolean
         /** async setup tasks */
-        setup(context?: Plugin.Shared.SharedUIContext): Promise<void>
+        setup(context?: IOContext): Promise<void>
         /** Add a new wallet. */
         addWallet(wallet: Wallet): Promise<void>
         /** Update a wallet. */

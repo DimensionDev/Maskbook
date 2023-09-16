@@ -1,4 +1,4 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import type { WalletAPI } from '../../../entry-types.js'
 import type {
     TransactionContext,
     TransactionDescriptor,
@@ -8,7 +8,7 @@ import type {
 export class TransactionFormatterState<ChainId, TransactionParameter, Transaction>
     implements Web3TransactionFormatterState<ChainId, TransactionParameter, Transaction>
 {
-    constructor(context: Plugin.Shared.SharedUIContext) {}
+    constructor(context: WalletAPI.IOContext) {}
 
     async formatTransaction(chainId: ChainId, transaction: Transaction, txHash?: string) {
         const context = await this.createContext(chainId, transaction, txHash)

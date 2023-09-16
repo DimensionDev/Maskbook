@@ -1,7 +1,6 @@
 import { clone, first } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import { delay } from '@masknet/kit'
-import type { Plugin } from '@masknet/plugin-infra'
 import {
     type Account,
     type ECKeyIdentifier,
@@ -37,7 +36,7 @@ export class ProviderState<
     public providerType?: Subscription<ProviderType>
 
     constructor(
-        protected context: Plugin.Shared.SharedUIContext,
+        protected context: WalletAPI.IOContext,
         protected providers: Record<ProviderType, WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>>,
         protected options: {
             pluginID: NetworkPluginID

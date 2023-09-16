@@ -114,7 +114,6 @@ export namespace Plugin.Shared {
 
     export interface SharedUIContext extends SharedContext {
         setWeb3State(state: Web3State<any, any, any, any, any, any, any, any>): void
-        allPersonas?: Subscription<PersonaInformation[]>
         /** The selected persona */
         currentPersona: Subscription<PersonaIdentifier | undefined>
         /** Get all wallets */
@@ -181,12 +180,6 @@ export namespace Plugin.Shared {
                 storedKeyInfo?: api.IStoredKeyInfo
             },
         ): Promise<void>
-
-        /** Remove a old wallet */
-        removeWallet(id: string, password?: string): Promise<void>
-
-        /** Reset all wallets */
-        resetAllWallets(): Promise<void>
 
         /** Send request to native API, for a risky request will be added into the waiting queue. */
         send(payload: JsonRpcPayload, options?: TransactionOptions): Promise<JsonRpcResponse>
@@ -336,8 +329,6 @@ export namespace Plugin.Shared {
 /** This part runs in the Site Adaptor */
 export namespace Plugin.SiteAdaptor {
     export interface SiteAdaptorContext extends Shared.SharedUIContext {
-        lastRecognizedProfile: Subscription<IdentityResolved | undefined>
-        currentVisitingProfile: Subscription<IdentityResolved | undefined>
         themeSettings: Subscription<ThemeSettings | undefined>
         /** The default theme settings. */
         getThemeSettings: () => ThemeSettings | undefined

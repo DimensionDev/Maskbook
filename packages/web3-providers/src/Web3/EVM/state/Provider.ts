@@ -1,4 +1,4 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import type { WalletAPI } from '../../../entry-types.js'
 import {
     type ECKeyIdentifier,
     mapSubscription,
@@ -25,7 +25,7 @@ import { Providers } from '../providers/index.js'
 import { ProviderState } from '../../Base/state/Provider.js'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
-    constructor(context: Plugin.Shared.SharedUIContext) {
+    constructor(context: WalletAPI.IOContext) {
         super(context, Providers, {
             pluginID: NetworkPluginID.PLUGIN_EVM,
             isSameAddress,

@@ -11,7 +11,7 @@ import {
     SourceType,
     type SettingsState as Web3SettingsState,
 } from '@masknet/web3-shared-base'
-import type { Plugin } from '@masknet/plugin-infra'
+import type { WalletAPI } from '../../../entry-types.js'
 
 export interface SettingsStorage {
     currencyType: CurrencyType
@@ -29,7 +29,7 @@ export class SettingsState implements Web3SettingsState {
     public nonFungibleAssetSourceType?: Subscription<SourceType>
 
     constructor(
-        context: Plugin.Shared.SharedUIContext,
+        context: WalletAPI.IOContext,
         protected options: {
             pluginID: NetworkPluginID
         },

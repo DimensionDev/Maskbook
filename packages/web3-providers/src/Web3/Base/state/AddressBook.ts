@@ -1,5 +1,5 @@
 import type { Subscription } from 'use-subscription'
-import type { Plugin } from '@masknet/plugin-infra'
+import type { WalletAPI } from '../../../entry-types.js'
 import { EMPTY_LIST, type NetworkPluginID, PersistentStorages, type StorageItem } from '@masknet/shared-base'
 import type { Contact, AddressBookState as Web3AddressBookState } from '@masknet/web3-shared-base'
 
@@ -8,7 +8,7 @@ export class AddressBookState implements Web3AddressBookState {
     public contacts?: Subscription<Contact[]>
 
     constructor(
-        protected context: Plugin.Shared.SharedUIContext,
+        protected context: WalletAPI.IOContext,
         protected options: {
             pluginID: NetworkPluginID
             isValidAddress(a: string): boolean

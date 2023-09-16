@@ -10,7 +10,7 @@ import {
     Sniffings,
     currentMaskWalletLockStatusSettings,
 } from '@masknet/shared-base'
-import type { Plugin } from '@masknet/plugin-infra'
+import type { WalletAPI } from '../../../entry-types.js'
 import { SiteAdaptorContextRef } from '@masknet/plugin-infra/dom'
 import {
     createJsonRpcPayload,
@@ -20,10 +20,9 @@ import {
 } from '@masknet/web3-shared-evm'
 import { MessageStateType, type ReasonableMessage } from '@masknet/web3-shared-base'
 import { MessageState } from '../../Base/state/Message.js'
-import { SharedContextRef } from '../../../PluginContext/index.js'
 
 export class Message extends MessageState<MessageRequest, MessageResponse> {
-    constructor(context: Plugin.Shared.SharedUIContext) {
+    constructor(context: WalletAPI.IOContext) {
         super(context, { pluginID: NetworkPluginID.PLUGIN_EVM })
     }
 
@@ -36,7 +35,7 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
             await this.approveRequest(id)
         } else {
             // TODO: make this for Mask Wallet only
-            const hasPassword = await SiteAdaptorContextRef.value.hasPaymentPassword()
+            const hasPassword = await this.context.hasPaymentPassword()
             const route = !hasPassword
                 ? PopupRoutes.SetPaymentPassword
                 : currentMaskWalletLockStatusSettings.value === LockStatus.LOCKED
@@ -63,7 +62,7 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
     override async approveRequest(id: string, updates?: MessageRequest): Promise<void> {
         const { request } = this.assertMessage(id)
 
-        const response = await SharedContextRef.value.send(
+        const response = await this.context.send(
             createJsonRpcPayload(
                 0,
                 updates?.arguments

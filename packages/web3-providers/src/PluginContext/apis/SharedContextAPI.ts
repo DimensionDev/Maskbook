@@ -1,8 +1,8 @@
-import type { Plugin } from '@masknet/plugin-infra'
 import { ValueRefWithReady } from '@masknet/shared-base'
 import { BaseContextAPI } from './BaseAPI.js'
+import type { WalletAPI } from '../../entry-types.js'
 
-type Context = Pick<Plugin.Shared.SharedUIContext, 'signWithPersona' | 'send'>
+type Context = Pick<WalletAPI.IOContext, 'signWithPersona' | 'send'>
 
 export const SharedContextRef = new ValueRefWithReady<Context>()
 

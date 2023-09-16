@@ -1,4 +1,4 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import type { WalletAPI } from '../../../entry-types.js'
 import type { ValueRefWithReady } from '@masknet/shared-base'
 import type { Web3State } from '@masknet/web3-shared-base'
 
@@ -57,7 +57,7 @@ export class Web3StateAPI_Base<
     /**
      * Create web3 state if a context was set.
      */
-    create(context: Plugin.Shared.SharedUIContext): Promise<State> {
+    create(context: WalletAPI.IOContext): Promise<State> {
         throw new Error('Method not implemented.')
     }
 }

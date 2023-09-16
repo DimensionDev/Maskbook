@@ -1,5 +1,5 @@
 import type { Subscription } from 'use-subscription'
-import type { Plugin } from '@masknet/plugin-infra'
+import type { WalletAPI } from '../../../entry-types.js'
 import {
     type ChainId,
     type Transaction as SolanaTransaction,
@@ -12,7 +12,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 
 export class Transaction extends TransactionState<ChainId, SolanaTransaction> {
     constructor(
-        context: Plugin.Shared.SharedUIContext,
+        context: WalletAPI.IOContext,
         subscriptions: {
             account?: Subscription<string>
             chainId?: Subscription<ChainId>
