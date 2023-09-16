@@ -116,12 +116,12 @@ const CloudBackupInner = memo(function CloudBackupInner() {
                 </Typography>
                 <Typography className={classes.description}>
                     {user.email ? (
-                        <DashboardTrans.cloud_backup_exsist_tips
+                        <DashboardTrans.cloud_backup_exist_tips
                             components={{ strong: <strong /> }}
                             values={{ account: user.email }}
                         />
                     ) : (
-                        t.cloud_backup_no_exsist_tips()
+                        t.cloud_backup_no_exist_tips()
                     )}
                 </Typography>
                 <Box className={classes.tabContainer}>

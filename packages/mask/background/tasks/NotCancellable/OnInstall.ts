@@ -18,11 +18,11 @@ browser.runtime.onInstalled.addListener(async (detail) => {
         if (groups.length) openWelcome()
         if ((globalThis as any).localStorage) {
             const localStorage = (globalThis as any).localStorage
-            const backupPasswrod = localStorage.getItem('backupPassword')
-            if (backupPasswrod) {
+            const backupPassword = localStorage.getItem('backupPassword')
+            if (backupPassword) {
                 const backupMethod = localStorage.getItem('backupMethod')
                 PersistentStorages.Settings.storage.backupConfig.setValue({
-                    backupPassword: atob(backupPasswrod),
+                    backupPassword: atob(backupPassword),
                     email: localStorage.getItem('email'),
                     phone: localStorage.getItem('phone'),
                     cloudBackupAt: backupMethod && backupMethod === 'cloud' ? localStorage.getItem('backupAt') : null,

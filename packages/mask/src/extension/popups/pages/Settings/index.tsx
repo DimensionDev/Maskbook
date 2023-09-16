@@ -138,7 +138,7 @@ const Settings = memo(function Settings() {
         if (!user.backupPassword) return t('popups_settings_set_backup_password_tips')
         const backupMethod = localStorage.getItem('backupMethod')
         // old data
-        if (backupMethod === 'local' && !user.localBackupAt) return t('popups_settings_local_backup_exsist')
+        if (backupMethod === 'local' && !user.localBackupAt) return t('popups_settings_local_backup_exist')
         if (!user.localBackupAt) return t('popups_settings_no_backup')
         return t('popups_settings_backup_on', { time: user.localBackupAt })
     }, [user])
@@ -147,7 +147,7 @@ const Settings = memo(function Settings() {
         if (!user.backupPassword) return t('popups_settings_set_backup_password_tips')
         const backupMethod = localStorage.getItem('backupMethod')
         // old data
-        if (backupMethod === 'cloud' && !user.cloudBackupAt) return t('popups_settings_cloud_backup_exsist')
+        if (backupMethod === 'cloud' && !user.cloudBackupAt) return t('popups_settings_cloud_backup_exist')
         if (!user.cloudBackupAt) return t('popups_settings_no_backup')
         return t('popups_settings_backup_on', { time: user.cloudBackupAt })
     }, [user])

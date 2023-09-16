@@ -89,7 +89,7 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
         onClose()
     }, [onClose])
 
-    const { value: encrytped } = useAsync(async () => {
+    const { value: encrypted } = useAsync(async () => {
         if (!downloadLink) return
 
         const response = await fetch(downloadLink, { method: 'GET' })
@@ -133,8 +133,8 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
 
     const [{ loading }, handleClickMerge] = useAsyncFn(async () => {
         try {
-            if (!encrytped) return
-            const decrypted = await decryptBackup(encode(account + backupPassword), encrytped)
+            if (!encrypted) return
+            const decrypted = await decryptBackup(encode(account + backupPassword), encrypted)
             const backupText = JSON.stringify(decode(decrypted))
             const summary = await Services.Backup.generateBackupSummary(backupText)
             if (summary.isErr()) {
@@ -156,7 +156,7 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
         } catch {
             showSnackbar(t.cloud_backup_merge_to_local_failed())
         }
-    }, [encrytped, backupPassword, account])
+    }, [encrypted, backupPassword, account])
 
     const handleClickBackup = useCallback(async () => {
         if (!type) return
@@ -249,7 +249,7 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
                             helperText={
                                 backupPasswordError
                                     ? backupPasswordError
-                                    : t.cloud_backup_enter_backup_password_to_decryp_file()
+                                    : t.cloud_backup_enter_backup_password_to_decrypt_file()
                             }
                         />
                     </DialogContent>
@@ -258,7 +258,7 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
                             fullWidth
                             onClick={handleClickMerge}
                             loading={loading}
-                            disabled={!!backupPasswordError || !backupPassword || !encrytped}>
+                            disabled={!!backupPasswordError || !backupPassword || !encrypted}>
                             {t.cloud_backup_merge_to_local()}
                         </ActionButton>
                     </DialogActions>
