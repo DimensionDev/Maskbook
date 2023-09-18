@@ -152,8 +152,6 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
     SiteAdaptorContextRef.value = {
         ...RestPartOfPluginUIContextShared,
         currentPersonaIdentifier,
-        themeSettings: themeSettingsSub,
-        getThemeSettings: () => ui.configuration.themeSettings,
         getNextIDPlatform: () => ui.configuration.nextIDConfig?.platform,
         getPostIdFromNewPostToast: ui.configuration.nextIDConfig?.getPostIdFromNewPostToast,
         getPostURL: ui.utils.getPostURL,

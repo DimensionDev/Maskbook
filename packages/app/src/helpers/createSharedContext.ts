@@ -1,6 +1,5 @@
 import { WalletConnectQRCodeModal } from '@masknet/shared'
 import { EMPTY_ARRAY, UNDEFINED, ValueRefWithReady } from '@masknet/shared-base'
-import { ThemeMode, FontSize } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 import { getPostURL } from '../helpers/getPostURL.js'
 import { getPostPayload } from '../helpers/getPostPayload.js'
@@ -30,7 +29,6 @@ export function createSharedContext(): Omit<
         getPostPayload,
         getNextIDPlatform: () => undefined,
         getSocialIdentity: reject,
-        getThemeSettings: () => ({ color: '', mode: ThemeMode.Light, size: FontSize.Normal, isDim: false }),
         getWallets: reject,
         hasPaymentPassword: reject,
         openDashboard: reject,
@@ -52,6 +50,5 @@ export function createSharedContext(): Omit<
         signWithWallet: reject,
         updateWallet: reject,
         send: reject,
-        themeSettings: UNDEFINED,
     }
 }

@@ -37,7 +37,6 @@ import type {
     NetworkDescriptor,
     ProviderDescriptor,
     SearchResult,
-    ThemeSettings,
     Web3State,
     Web3UI,
 } from '@masknet/web3-shared-base'
@@ -330,9 +329,6 @@ export namespace Plugin.Shared {
 /** This part runs in the Site Adaptor */
 export namespace Plugin.SiteAdaptor {
     export interface SiteAdaptorContext extends Shared.SharedUIContext {
-        themeSettings: Subscription<ThemeSettings | undefined>
-        /** The default theme settings. */
-        getThemeSettings: () => ThemeSettings | undefined
         getNextIDPlatform: () => NextIDPlatform | undefined
         getSocialIdentity: (
             platform: NextIDPlatform,
