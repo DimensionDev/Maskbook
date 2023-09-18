@@ -16,6 +16,8 @@ import { PersonasBackupPreview, WalletsBackupPreview } from '../../components/Ba
 import PasswordField from '../../components/PasswordField/index.js'
 import { useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
+import formatDateTime from 'date-fns/format'
+import { UserContext } from '../../../shared-ui/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -75,6 +77,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
     const { classes, theme } = useStyles()
     const navigate = useNavigate()
     const t = useDashboardI18N()
+    const { updateUser } = UserContext.useContainer()
     const {
         hasPassword,
         previewInfo,
@@ -119,7 +122,9 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 const response = await uploadBackupValue(uploadUrl, encrypted, controller.signal)
 
                 if (response.ok) {
+                    const now = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
                     showSnackbar(t.settings_alert_backup_success(), { variant: 'success' })
+                    updateUser({ cloudBackupAt: now })
                 }
                 return true
             } catch (error) {
