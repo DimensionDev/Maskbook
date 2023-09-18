@@ -19,6 +19,12 @@ __setSiteAdaptorContext__({
     lastRecognizedProfile: UNDEFINED,
     currentVisitingProfile: UNDEFINED,
     allPersonas: EMPTY_ARRAY,
+    queryPersonaAvatar: async (identifiers): Promise<any> => {
+        if (Array.isArray(identifiers)) return new Map()
+        return undefined
+    },
+    currentNextIDPlatform: undefined,
+    currentPersonaIdentifier: UNDEFINED,
 })
 
 startPluginSiteAdaptor(EnhanceableSite.App, {
@@ -37,6 +43,9 @@ startPluginSiteAdaptor(EnhanceableSite.App, {
             },
             setWeb3State(state) {
                 def.Web3State = state
+            },
+            setMinimalMode(enabled) {
+                console.warn('setMinimalMode is ignored.')
             },
             ...createSharedContext(),
         }

@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
-import { openWindow, useValueRef } from '@masknet/shared-base-ui'
+import { openWindow } from '@masknet/shared-base-ui'
+import { useSubscription } from 'use-subscription'
 import { Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
@@ -20,6 +21,7 @@ import {
     useLastRecognizedIdentity,
     useSiteAdaptorContext,
 } from '@masknet/plugin-infra/content-script'
+import { currentPersonaIdentifier } from '@masknet/plugin-infra/content-script/context'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
     (theme, props) => ({
@@ -88,8 +90,8 @@ export function CardDialogContent(props: CardDialogContentProps) {
     } = Context.useContainer()
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const lastRecognized = useLastRecognizedIdentity()
-    const { currentPersonaIdentifier, openDashboard } = useSiteAdaptorContext()
-    const currentIdentifier = useValueRef(currentPersonaIdentifier)
+    const { openDashboard } = useSiteAdaptorContext()
+    const currentIdentifier = useSubscription(currentPersonaIdentifier)
     const personas = useAllPersonas()
     const onBeforeAction = useCallback(() => {
         props.setOpen(false)

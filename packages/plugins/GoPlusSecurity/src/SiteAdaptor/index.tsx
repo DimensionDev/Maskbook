@@ -8,9 +8,13 @@ import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { base } from '../base.js'
 import { GoPlusGlobalInjection } from './GoPlusGlobalInjection.js'
+import { onConfirm } from './components/CheckSecurityConfirmDialog.js'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
+    init(signal, context) {
+        onConfirm.f = () => context.setMinimalMode(true)
+    },
     GlobalInjection: GoPlusGlobalInjection,
     ApplicationEntries: [
         (() => {

@@ -2,7 +2,7 @@ import { memo, type ReactNode, useCallback, useMemo } from 'react'
 import { Button, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { DashboardRoutes, type PersonaInformation, type PluginID } from '@masknet/shared-base'
+import { DashboardRoutes, type PersonaIdentifier, type PersonaInformation, type PluginID } from '@masknet/shared-base'
 import { type PersonaConnectStatus, useCurrentPersonaConnectStatus, useSharedI18N } from '../../../index.js'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 
@@ -43,7 +43,7 @@ interface ConnectPersonaBoundaryProps {
     personas: readonly PersonaInformation[]
     beforeAction?: (status: PersonaConnectStatus) => Promise<void> | void
     afterAction?: (status: PersonaConnectStatus) => Promise<void> | void
-    currentPersonaIdentifier: string
+    currentPersonaIdentifier: PersonaIdentifier | undefined
     openDashboard?: (route?: DashboardRoutes, search?: string) => void
     identity?: IdentityResolved
 }
