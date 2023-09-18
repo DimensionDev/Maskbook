@@ -27,7 +27,7 @@ const site: Plugin.SiteAdaptor.Definition = {
     SearchResultInspector: {
         ID: PluginID.Trader,
         UI: {
-            Content({ currentResult, resultList, isProfilePage, identity }) {
+            Content: function TraderSearchResultContent({ currentResult, resultList, isProfilePage, identity }) {
                 if (!resultList.length || !currentResult) return null
                 const { chainId, keyword, pluginID } = currentResult
                 return (
