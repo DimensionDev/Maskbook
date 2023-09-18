@@ -23,6 +23,7 @@ __setSiteAdaptorContext__({
         if (Array.isArray(identifiers)) return new Map()
         return undefined
     },
+    currentNextIDPlatform: undefined,
 })
 
 startPluginSiteAdaptor(EnhanceableSite.App, {

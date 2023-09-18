@@ -133,8 +133,6 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         ui.collecting.currentVisitingIdentityProvider.recognized,
         signal,
     )
-    const themeSettingsSub = createSubscriptionFromValueRef(ui.collecting.themeSettingsProvider.recognized, signal)
-
     const connectPersona = async () => {
         const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
         currentSetupGuideStatus[activatedSiteAdaptorUI!.networkIdentifier].value = stringify({
@@ -148,11 +146,11 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         currentVisitingProfile: currentVisitingSub,
         allPersonas: NextSharedUIContext.allPersonas,
         queryPersonaAvatar: Services.Identity.getPersonaAvatar,
+        currentNextIDPlatform: ui.configuration.nextIDConfig?.platform,
     })
     SiteAdaptorContextRef.value = {
         ...RestPartOfPluginUIContextShared,
         currentPersonaIdentifier,
-        getNextIDPlatform: () => ui.configuration.nextIDConfig?.platform,
         getPostIdFromNewPostToast: ui.configuration.nextIDConfig?.getPostIdFromNewPostToast,
         getPostURL: ui.utils.getPostURL,
         share: ui.utils.share,

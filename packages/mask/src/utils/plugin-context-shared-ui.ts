@@ -35,7 +35,6 @@ export const RestPartOfPluginUIContextShared: Omit<
     | 'currentVisitingProfile'
     | 'themeSettings'
     | 'getThemeSettings'
-    | 'getNextIDPlatform'
     | 'getSocialIdentity'
     | 'getPersonaAvatar'
     | 'setMinimalMode'

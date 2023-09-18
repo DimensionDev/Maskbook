@@ -329,7 +329,6 @@ export namespace Plugin.Shared {
 /** This part runs in the Site Adaptor */
 export namespace Plugin.SiteAdaptor {
     export interface SiteAdaptorContext extends Shared.SharedUIContext {
-        getNextIDPlatform: () => NextIDPlatform | undefined
         getSocialIdentity: (
             platform: NextIDPlatform,
             identity: IdentityResolved | undefined,

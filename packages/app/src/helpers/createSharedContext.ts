@@ -27,7 +27,6 @@ export function createSharedContext(): Omit<
         currentPersonaIdentifier: emptyValueRef,
         getPostURL,
         getPostPayload,
-        getNextIDPlatform: () => undefined,
         getSocialIdentity: reject,
         getWallets: reject,
         hasPaymentPassword: reject,
