@@ -63,7 +63,7 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
                 <BottomNavigationAction
                     tabIndex={-1}
                     showLabel={false}
-                    icon={<Icons.Me size={28} />}
+                    icon={<Icons.MaskMe size={28} />}
                     className={classes.action}
                 />
             </BottomNavLink>

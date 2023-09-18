@@ -66,9 +66,7 @@ const CloudBackupInner = memo(function CloudBackupInner() {
 
     const { currentTab, onChange, tabs, formState } = CloudBackupFormContext.useContainer()
 
-    const disabled = useMemo(() => {
-        return !formState.formState.isDirty || !formState.formState.isValid
-    }, [currentTab, tabs])
+    console.log(formState)
 
     const [{ loading }, handleSubmit] = useAsyncFn(
         async (data: CloudBackupFormInputs) => {
@@ -165,7 +163,7 @@ const CloudBackupInner = memo(function CloudBackupInner() {
                     size="large"
                     color="primary"
                     loading={loading}
-                    disabled={disabled}
+                    disabled={!formState.formState.isDirty || !formState.formState.isValid}
                     onClick={formState.handleSubmit(handleSubmit)}>
                     {t.continue()}
                 </PrimaryButton>

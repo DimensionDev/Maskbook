@@ -487,8 +487,8 @@ export function lock_url() { return new URL("./general/Lock.svg", import.meta.ur
 export function mask_avatar_dark_url() { return new URL("./general/MaskAvatar.dark.svg", import.meta.url) }
 export function mask_avatar_light_url() { return new URL("./general/MaskAvatar.light.svg", import.meta.url) }
 export function mask_in_minds_url() { return new URL("./general/MaskInMinds.svg", import.meta.url) }
+export function mask_me_url() { return new URL("./general/MaskMe.svg", import.meta.url) }
 export function masks_url() { return new URL("./general/Masks.svg", import.meta.url) }
-export function me_url() { return new URL("./general/Me.svg", import.meta.url) }
 export function message_url() { return new URL("./general/Message.svg", import.meta.url) }
 export function mnemonic_url() { return new URL("./general/Mnemonic.svg", import.meta.url) }
 export function more_url() { return new URL("./general/More.svg", import.meta.url) }

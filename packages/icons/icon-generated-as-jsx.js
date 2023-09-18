@@ -3515,6 +3515,24 @@ export const MaskInMinds = /*#__PURE__*/ __createIcon('MaskInMinds', [
         u: () => new URL('./general/MaskInMinds.svg', import.meta.url),
     },
 ])
+export const MaskMe = /*#__PURE__*/ __createIcon('MaskMe', [
+    {
+        u: () => new URL('./general/MaskMe.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 25 25',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fill: 'currentColor',
+                    fillRule: 'evenodd',
+                    d: 'M17.794 7.397a5.274 5.274 0 0 1-5.294 5.292 5.275 5.275 0 0 1-5.294-5.292A5.274 5.274 0 0 1 12.5 2.105a5.273 5.273 0 0 1 5.294 5.292ZM12.5 22.105c-4.338 0-8-.705-8-3.425 0-2.72 3.685-3.4 8-3.4 4.339 0 8 .704 8 3.424 0 2.721-3.685 3.401-8 3.401Z',
+                    clipRule: 'evenodd',
+                }),
+            }),
+        s: true,
+    },
+])
 export const Masks = /*#__PURE__*/ __createIcon('Masks', [
     {
         u: () => new URL('./general/Masks.svg', import.meta.url),

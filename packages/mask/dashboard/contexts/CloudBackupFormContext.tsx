@@ -49,7 +49,7 @@ function useCloudBackupFormContext() {
                 })
                 .refine(
                     (data) => {
-                        if (currentTab !== tabs.mobile) return
+                        if (currentTab !== tabs.mobile) return true
                         if (!data.countryCode || !data.phone) return false
                         return phoneRegexp.test(data.countryCode + data.phone)
                     },

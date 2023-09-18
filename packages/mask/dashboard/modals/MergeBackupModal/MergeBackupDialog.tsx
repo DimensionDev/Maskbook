@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1.5),
         display: 'flex',
         alignItems: 'center',
-        marginTop: theme.spacing(1.5),
+        margin: theme.spacing(1.5, 0),
         columnGap: 8,
     },
     fileName: {
@@ -169,101 +169,98 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
         })
         onClose()
     }, [code, abstract, type, account])
+
+    if (showCongratulation)
+        return (
+            <InjectedDialog title={t.cloud_backup_merge_to_local_database()} open={open} onClose={onClose}>
+                <DialogContent>
+                    <Box className={classes.container}>
+                        <Typography fontSize={36}>🎉</Typography>
+                        <Typography fontSize={24} fontWeight={700} lineHeight="120%" sx={{ my: 1.5 }}>
+                            {t.congratulations()}
+                        </Typography>
+                        <Typography
+                            fontSize={14}
+                            fontWeight={700}
+                            lineHeight="18px"
+                            color={theme.palette.maskColor.second}
+                            textAlign="center">
+                            {t.cloud_backup_merge_to_local_congratulation_tips()}
+                        </Typography>
+                    </Box>
+                </DialogContent>
+                <DialogActions>
+                    <ActionButton fullWidth onClick={handleClickBackup}>
+                        {t.cloud_backup_backup_to_mask_cloud_service()}
+                    </ActionButton>
+                </DialogActions>
+            </InjectedDialog>
+        )
+
     return (
         <InjectedDialog title={t.cloud_backup_merge_to_local_database()} open={open} onClose={onClose}>
-            {showCongratulation ? (
-                <>
-                    <DialogContent>
-                        <Box className={classes.container}>
-                            <Typography fontSize={36}>🎉</Typography>
-                            <Typography fontSize={24} fontWeight={700} lineHeight="120%" sx={{ my: 1.5 }}>
-                                {t.congratulations()}
-                            </Typography>
-                            <Typography
-                                fontSize={14}
-                                fontWeight={700}
-                                lineHeight="18px"
-                                color={theme.palette.maskColor.second}
-                                textAlign="center">
-                                {t.cloud_backup_merge_to_local_congratulation_tips()}
-                            </Typography>
-                        </Box>
-                    </DialogContent>
-                    <DialogActions>
-                        <ActionButton fullWidth onClick={handleClickBackup}>
-                            {t.cloud_backup_backup_to_mask_cloud_service()}
-                        </ActionButton>
-                    </DialogActions>
-                </>
-            ) : (
-                <>
-                    <DialogContent>
-                        <Typography className={classes.account}>{account}</Typography>
-                        <Box className={classes.box}>
-                            <Icons.Message size={24} />
-                            <Box flex={1}>
-                                <Typography className={classes.fileName}>{fileName}</Typography>
-                                <LinearProgress variant="determinate" value={process} sx={{ my: 0.5 }} />
-                                <Typography
-                                    color={theme.palette.maskColor.third}
-                                    fontSize={12}
-                                    fontWeight={700}
-                                    lineHeight="16px">
-                                    {process !== 100 ? (
-                                        t.data_downloading()
-                                    ) : (
-                                        <>
-                                            <Typography
-                                                component="span"
-                                                fontSize={12}
-                                                fontWeight={700}
-                                                lineHeight="16px">
-                                                {formatFileSize(Number(size), false)}
-                                            </Typography>
-                                            <Typography
-                                                component="span"
-                                                fontSize={12}
-                                                lineHeight="16px"
-                                                color={theme.palette.maskColor.third}>
-                                                {formatDateTime(fromUnixTime(Number(uploadedAt)), 'yyyy-MM-dd HH:mm')}
-                                            </Typography>
-                                        </>
-                                    )}
-                                </Typography>
-                            </Box>
-                            <Icons.BaseClose size={24} />
-                        </Box>
-                        <PasswordField
-                            value={backupPassword}
-                            placeholder={t.settings_label_backup_password()}
-                            onChange={(e) => {
-                                setPassword(e.target.value)
-                                setBackupPasswordError('')
-                            }}
-                            onBlur={(e) => {
-                                if (!passwordRegexp.test(e.target.value)) {
-                                    setBackupPasswordError(t.cloud_backup_incorrect_backup_password())
-                                }
-                            }}
-                            error={!!backupPasswordError}
-                            helperText={
-                                backupPasswordError
-                                    ? backupPasswordError
-                                    : t.cloud_backup_enter_backup_password_to_decrypt_file()
-                            }
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <ActionButton
-                            fullWidth
-                            onClick={handleClickMerge}
-                            loading={loading}
-                            disabled={!!backupPasswordError || !backupPassword || !encrypted}>
-                            {t.cloud_backup_merge_to_local()}
-                        </ActionButton>
-                    </DialogActions>
-                </>
-            )}
+            <DialogContent>
+                <Typography className={classes.account}>{account}</Typography>
+                <Box className={classes.box}>
+                    <Icons.Message size={24} />
+                    <Box flex={1}>
+                        <Typography className={classes.fileName}>{fileName}</Typography>
+                        <LinearProgress variant="determinate" value={process} sx={{ my: 0.5 }} />
+                        <Typography
+                            color={theme.palette.maskColor.third}
+                            fontSize={12}
+                            fontWeight={700}
+                            lineHeight="16px">
+                            {process !== 100 ? (
+                                t.data_downloading()
+                            ) : (
+                                <>
+                                    <Typography component="span" fontSize={12} fontWeight={700} lineHeight="16px">
+                                        {formatFileSize(Number(size), false)}
+                                    </Typography>
+                                    <Typography
+                                        component="span"
+                                        fontSize={12}
+                                        lineHeight="16px"
+                                        color={theme.palette.maskColor.third}>
+                                        {formatDateTime(fromUnixTime(Number(uploadedAt)), 'yyyy-MM-dd HH:mm')}
+                                    </Typography>
+                                </>
+                            )}
+                        </Typography>
+                    </Box>
+                    <Icons.BaseClose size={24} />
+                </Box>
+                <PasswordField
+                    fullWidth
+                    value={backupPassword}
+                    placeholder={t.settings_label_backup_password()}
+                    onChange={(e) => {
+                        setPassword(e.target.value)
+                        setBackupPasswordError('')
+                    }}
+                    onBlur={(e) => {
+                        if (!passwordRegexp.test(e.target.value)) {
+                            setBackupPasswordError(t.cloud_backup_incorrect_backup_password())
+                        }
+                    }}
+                    error={!!backupPasswordError}
+                    helperText={
+                        backupPasswordError
+                            ? backupPasswordError
+                            : t.cloud_backup_enter_backup_password_to_decrypt_file()
+                    }
+                />
+            </DialogContent>
+            <DialogActions>
+                <ActionButton
+                    fullWidth
+                    onClick={handleClickMerge}
+                    loading={loading}
+                    disabled={!!backupPasswordError || !backupPassword || !encrypted}>
+                    {t.cloud_backup_merge_to_local()}
+                </ActionButton>
+            </DialogActions>
         </InjectedDialog>
     )
 })
