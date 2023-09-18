@@ -7,6 +7,7 @@ import { NetworkPluginID, PluginID } from '../types/PluginID.js'
 import { LockStatus } from '../types/Wallet.js'
 import { EnhanceableSite, ExtensionSite } from '../Site/types.js'
 import { SwitchLogoDialogStatus, SwitchLogoType } from '../types/SwitchLogo.js'
+import { ValueRefWithReady, type PersonaIdentifier, ECKeyIdentifier } from '../index.js'
 
 export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__)
 languageSettings.addListener(updateLanguage)
@@ -63,7 +64,20 @@ export function setCurrentPluginMinimalMode(id: string, value: BooleanPreference
     else if (value === BooleanPreference.True) pluginMinimalModeReversed['plugin:' + id].value = false
     else if (value === BooleanPreference.False) pluginMinimalModeReversed['plugin:' + id].value = 'enabled'
 }
-export const currentPersonaIdentifier = createGlobalSettings('currentPersonaIdentifier', '')
+export const currentPersonaIdentifier = new ValueRefWithReady<PersonaIdentifier | undefined>(undefined)
+{
+    const currentPersonaIdentifier_raw = createGlobalSettings('currentPersonaIdentifier', '')
+    currentPersonaIdentifier.addListener((newVal) => {
+        currentPersonaIdentifier_raw.value = newVal?.toText() ?? ''
+    })
+    currentPersonaIdentifier_raw.addListener((newVal) => {
+        currentPersonaIdentifier.value = newVal ? ECKeyIdentifier.from(newVal).unwrap() : undefined
+    })
+    currentPersonaIdentifier_raw.readyPromise.then(() => {
+        const value = currentPersonaIdentifier_raw.value
+        currentPersonaIdentifier.value = value ? ECKeyIdentifier.from(value).unwrap() : undefined
+    })
+}
 
 try {
     // Migrate language settings

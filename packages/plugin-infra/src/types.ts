@@ -21,7 +21,6 @@ import type {
     ProfileIdentifier,
     ScopedStorage,
     SignType,
-    ValueRefWithReady,
     Wallet,
     SocialAccount,
     SocialIdentity,
@@ -333,7 +332,6 @@ export namespace Plugin.SiteAdaptor {
             platform: NextIDPlatform,
             identity: IdentityResolved | undefined,
         ) => Promise<SocialIdentity | undefined>
-        currentPersonaIdentifier: ValueRefWithReady<string>
 
         share?: (text: string) => void
         getPostURL?: (identifier: PostIdentifier) => URL | null

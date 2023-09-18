@@ -33,6 +33,8 @@
     "immer": "^10.0.2",
     "react-use": "^17.4.0",
     "ts-results-es": "^4.0.0",
+    "use-subscription": "^1.8.0",
+    "@types/use-subscription": "^1.0.0",
     "unstated-next": "^1.1.0",
     "urlcat": "^3.1.0"
   }

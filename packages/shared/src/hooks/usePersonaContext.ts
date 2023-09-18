@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { head, unionWith, uniqBy } from 'lodash-es'
+import { unionWith, uniqBy } from 'lodash-es'
 import { createContainer } from 'unstated-next'
 import {
-    ECKeyIdentifier,
+    type ECKeyIdentifier,
     EMPTY_LIST,
     isSameProfile,
     type PersonaInformation,
@@ -57,9 +57,7 @@ function usePersonaContext(initialState?: {
 
     const { personas } = useSSRPersonaInformation(initialState?.queryOwnedPersonaInformation)
 
-    const currentPersona = personas?.find(
-        (x) => x.identifier === ECKeyIdentifier.from(currentIdentifier).unwrapOr(head(personas)?.identifier),
-    )
+    const currentPersona = personas?.find((x) => x.identifier === (currentIdentifier || personas[0]?.identifier))
 
     const { value: avatar } = useAsync(async () => {
         if (!currentPersona) return

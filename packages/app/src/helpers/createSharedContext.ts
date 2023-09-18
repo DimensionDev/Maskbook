@@ -24,7 +24,6 @@ export function createSharedContext(): Omit<
         closePopupWindow: reject,
         connectPersona: reject,
         createPersona: reject,
-        currentPersonaIdentifier: emptyValueRef,
         getPostURL,
         getPostPayload,
         getSocialIdentity: reject,
