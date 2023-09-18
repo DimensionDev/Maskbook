@@ -34,6 +34,7 @@ const useStyles = makeStyles()((theme) => {
             borderRadius: 8,
             border: 'none',
             boxShadow: `0px 4px 6px 0px ${isDark ? 'rgba(0, 0, 0, 0.10)' : 'rgba(102, 108, 135, 0.10)'}`,
+            backdropFilter: 'blur(5px)',
             cursor: 'pointer',
             transition: 'transform 0.1s ease',
             '&:hover': {

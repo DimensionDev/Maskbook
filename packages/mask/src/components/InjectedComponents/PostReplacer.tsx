@@ -54,7 +54,7 @@ export function PostReplacer(props: PostReplacerProps) {
         return {
             authorHint: author || undefined,
             currentProfile,
-            postURL: url?.toString(),
+            postURL: url?.href,
         }
     }, [author, currentProfile, url])
 

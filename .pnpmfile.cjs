@@ -13,8 +13,10 @@ approvedList.set('ethereumjs-abi', [
     'git+https://github.com/ethereumjs/ethereumjs-abi.git',
 ])
 
-approvedList.set('webpack', 'Jack-Works/webpack#lazy-import')
-approvedList.set('webpack', 'Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770')
+approvedList.set('webpack', [
+    'Jack-Works/webpack#lazy-import',
+    'Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770',
+])
 approvedList.set('string-width-cjs', 'npm:string-width@^4.2.0')
 approvedList.set('strip-ansi-cjs', 'npm:strip-ansi@^6.0.1')
 approvedList.set('wrap-ansi-cjs', ['npm:wrap-ansi@^6.0.1', 'npm:wrap-ansi@^7.0.0'])

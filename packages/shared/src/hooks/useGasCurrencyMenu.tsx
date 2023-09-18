@@ -1,6 +1,6 @@
 import { compact, noop, pick } from 'lodash-es'
 import { useCallback, useState } from 'react'
-import { Button, MenuItem, Typography } from '@mui/material'
+import { Button, MenuItem, Typography, alpha } from '@mui/material'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, RadioIndicator } from '@masknet/theme'
 import { formatBalance, isLessThan, isSameAddress } from '@masknet/web3-shared-base'
@@ -33,6 +33,9 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 16,
         fontWeight: 700,
         lineHeight: '20px',
+    },
+    radio: {
+        color: theme.palette.mode === 'dark' ? alpha(theme.palette.maskColor.line, 0.43) : theme.palette.maskColor.line,
     },
 }))
 
@@ -72,7 +75,11 @@ export function useGasCurrencyMenu(
                         <TokenIcon {...pick(nativeToken, 'chainId', 'address', 'symbol')} size={30} />
                         {nativeToken.symbol}
                     </Typography>
-                    <RadioIndicator size={20} checked={isSameAddress(selected, nativeToken.address)} />
+                    <RadioIndicator
+                        size={20}
+                        checked={isSameAddress(selected, nativeToken.address)}
+                        className={classes.radio}
+                    />
                 </MenuItem>
             ) : null,
             maskToken ? (
@@ -89,7 +96,11 @@ export function useGasCurrencyMenu(
                             {sharedI18N.unlock()}
                         </Button>
                     ) : (
-                        <RadioIndicator size={20} checked={isSameAddress(selected, maskAddress)} />
+                        <RadioIndicator
+                            size={20}
+                            className={classes.radio}
+                            checked={isSameAddress(selected, maskAddress)}
+                        />
                     )}
                 </MenuItem>
             ) : null,

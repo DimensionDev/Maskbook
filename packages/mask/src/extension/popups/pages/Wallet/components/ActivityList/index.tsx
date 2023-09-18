@@ -15,7 +15,7 @@ import { useI18N } from '../../../../../../utils/i18n-next-ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
-        backgroundColor: '#ffffff',
+        backgroundColor: theme.palette.maskColor.bottom,
         padding: theme.spacing(2),
     },
     item: {
