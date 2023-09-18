@@ -1,4 +1,4 @@
-import { type Plugin } from '@masknet/plugin-infra'
+import type { WalletAPI } from '../../../entry-types.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
 import type { ReasonableNetwork, TransferableNetwork } from '@masknet/web3-shared-base'
@@ -7,7 +7,7 @@ import { createSchema } from '../schemas/ChainDescriptor.js'
 import { fetchChainId } from '../../../helpers/fetchChainId.js'
 
 export class Network extends NetworkState<ChainId, SchemaType, NetworkType> {
-    constructor(context: Plugin.Shared.SharedUIContext) {
+    constructor(context: WalletAPI.IOContext) {
         super(context, {
             pluginID: NetworkPluginID.PLUGIN_EVM,
         })

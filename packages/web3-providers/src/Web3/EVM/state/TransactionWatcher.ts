@@ -1,5 +1,5 @@
 import type { Subscription } from 'use-subscription'
-import type { Plugin } from '@masknet/plugin-infra'
+import type { WalletAPI } from '../../../entry-types.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, type Transaction } from '@masknet/web3-shared-evm'
 import { type RecentTransaction, TransactionStatusType } from '@masknet/web3-shared-base'
@@ -9,7 +9,7 @@ import { TransactionWatcherState } from '../../Base/state/TransactionWatcher.js'
 
 export class TransactionWatcher extends TransactionWatcherState<ChainId, Transaction> {
     constructor(
-        context: Plugin.Shared.SharedUIContext,
+        context: WalletAPI.IOContext,
         subscriptions: {
             chainId: Subscription<ChainId>
             transactions: Subscription<Array<RecentTransaction<ChainId, Transaction>>>

@@ -1,4 +1,4 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import type { WalletAPI } from '../../../entry-types.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { isSameAddress, type FungibleToken, type NonFungibleToken } from '@masknet/web3-shared-base'
@@ -18,7 +18,7 @@ export class Token extends TokenState<ChainId, SchemaType> {
     private Hub = new HubAPI().create()
 
     constructor(
-        context: Plugin.Shared.SharedUIContext,
+        context: WalletAPI.IOContext,
         subscriptions: {
             account?: Subscription<string>
             chainId?: Subscription<ChainId>

@@ -10,6 +10,7 @@ import {
     PayloadEditor,
     formatEthereumAddress,
     ChainId,
+    ErrorEditor,
 } from '@masknet/web3-shared-evm'
 import { toHex, toUtf8 } from 'web3-utils'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -211,7 +212,7 @@ const Interaction = memo(function Interaction() {
                 )
             }
 
-            await Message?.approveRequest(currentRequest.ID, {
+            const response = await Message?.approveRequest(currentRequest.ID, {
                 ...currentRequest.request,
                 arguments: {
                     ...currentRequest.request.arguments,
@@ -222,6 +223,10 @@ const Interaction = memo(function Interaction() {
                     paymentToken,
                 },
             })
+            const editor = response ? ErrorEditor.from(null, response) : undefined
+            if (editor?.presence) {
+                throw editor.error
+            }
             if (source) await Services.Helper.removePopupWindow()
             navigate(urlcat(PopupRoutes.Wallet, { tab: WalletAssetTabs.Activity }), { replace: true })
         } catch (error) {

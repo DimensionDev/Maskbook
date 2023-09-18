@@ -35,6 +35,11 @@ export const Celo = /*#__PURE__*/ __createIcon('Celo', [
         u: () => new URL('./brands/Celo.svg', import.meta.url),
     },
 ])
+export const Coincarp = /*#__PURE__*/ __createIcon('Coincarp', [
+    {
+        u: () => new URL('./brands/Coincarp.svg', import.meta.url),
+    },
+])
 export const CoinGecko = /*#__PURE__*/ __createIcon('CoinGecko', [
     {
         u: () => new URL('./brands/CoinGecko.svg', import.meta.url),
@@ -223,6 +228,11 @@ export const Lens = /*#__PURE__*/ __createIcon('Lens', [
         u: () => new URL('./brands/Lens.svg', import.meta.url),
     },
 ])
+export const Link3 = /*#__PURE__*/ __createIcon('Link3', [
+    {
+        u: () => new URL('./brands/Link3.svg', import.meta.url),
+    },
+])
 export const LooksRare = /*#__PURE__*/ __createIcon('LooksRare', [
     {
         u: () => new URL('./brands/LooksRare.svg', import.meta.url),
@@ -345,6 +355,11 @@ export const NextIDMini = /*#__PURE__*/ __createIcon('NextIDMini', [
     {
         c: ['light'],
         u: () => new URL('./brands/NextIDMini.light.svg', import.meta.url),
+    },
+])
+export const Nftgo = /*#__PURE__*/ __createIcon('Nftgo', [
+    {
+        u: () => new URL('./brands/Nftgo.svg', import.meta.url),
     },
 ])
 export const NFTScan = /*#__PURE__*/ __createIcon('NFTScan', [
@@ -2065,6 +2080,11 @@ export const LeftArrow = /*#__PURE__*/ __createIcon('LeftArrow', [
         s: true,
     },
 ])
+export const LinearCalendar = /*#__PURE__*/ __createIcon('LinearCalendar', [
+    {
+        u: () => new URL('./general/LinearCalendar.svg', import.meta.url),
+    },
+])
 export const Link = /*#__PURE__*/ __createIcon('Link', [
     {
         u: () => new URL('./general/Link.svg', import.meta.url),
@@ -3269,6 +3289,11 @@ export const Avatar = /*#__PURE__*/ __createIcon('Avatar', [
 export const Bit = /*#__PURE__*/ __createIcon('Bit', [
     {
         u: () => new URL('./plugins/Bit.svg', import.meta.url),
+    },
+])
+export const Calendar = /*#__PURE__*/ __createIcon('Calendar', [
+    {
+        u: () => new URL('./plugins/Calendar.svg', import.meta.url),
     },
 ])
 export const Collectibles = /*#__PURE__*/ __createIcon('Collectibles', [

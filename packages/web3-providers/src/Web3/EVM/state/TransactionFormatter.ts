@@ -1,5 +1,5 @@
 import * as ABICoder from 'web3-eth-abi'
-import type { Plugin } from '@masknet/plugin-infra'
+import type { WalletAPI } from '../../../entry-types.js'
 import {
     type TransactionContext,
     type TransactionDescriptor as TransactionDescriptorBase,
@@ -58,7 +58,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
         [TransactionDescriptorType.CANCEL]: [new CancelDescriptor()],
     }
 
-    constructor(context: Plugin.Shared.SharedUIContext) {
+    constructor(context: WalletAPI.IOContext) {
         super(context)
     }
 

@@ -40,7 +40,7 @@ interface ConnectPersonaBoundaryProps {
     children: SupportChildren
     createConfirm?: boolean
     enableVerify?: boolean
-    personas: PersonaInformation[]
+    personas: readonly PersonaInformation[]
     beforeAction?: (status: PersonaConnectStatus) => Promise<void> | void
     afterAction?: (status: PersonaConnectStatus) => Promise<void> | void
     currentPersonaIdentifier: string

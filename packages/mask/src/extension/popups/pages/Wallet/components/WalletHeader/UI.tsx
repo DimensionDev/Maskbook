@@ -12,108 +12,114 @@ import { useConnectedWallets } from '../../hooks/useConnected.js'
 import { ActionGroup } from '../ActionGroup/index.js'
 import { WalletAssetsValue } from './WalletAssetsValue.js'
 
-const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => ({
-    container: {
-        padding: '16px',
-        lineHeight: 0,
-        // padding bottom space for assets tabs
-        paddingBottom: !disabled ? 34 : 16,
-        background:
-            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
-    },
-    topbar: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        height: 38,
-        gap: theme.spacing(1),
-    },
-    action: {
-        background: 'rgba(255, 255, 255, 0.8)',
-        borderRadius: 99,
-        padding: '5px 8px 5px 4px',
-        display: 'flex',
-        alignItems: 'center',
-        cursor: 'pointer',
-        maxWidth: '50%',
-    },
-    nickname: {
-        color: '#07101B',
-        lineHeight: '18px',
-        fontWeight: 700,
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
-    },
-    identifier: {
-        fontSize: 10,
-        color: '#767F8D',
-        lineHeight: 1,
-        display: 'flex',
-        alignItems: 'center',
-    },
-    icon: {
-        height: 12,
-        width: 12,
-        color: '#767F8D',
-        cursor: 'pointer',
-        marginLeft: 4,
-    },
-    arrow: {
-        fontSize: 20,
-        transition: 'all 300ms',
-        flexShrink: 0,
-        color: theme.palette.maskColor.secondaryDark,
-    },
-    networkSelector: {
-        display: 'flex',
-        flexGrow: 1,
-        alignItems: 'center',
-        cursor: 'pointer',
-        overflow: 'auto',
-    },
-    chainName: {
-        flexGrow: 1,
-        lineHeight: '18px',
-        color: theme.palette.maskColor.main,
-        fontWeight: 700,
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
-        maxWidth: 154,
-    },
-    connected: {
-        display: 'flex',
-        alignItems: 'center',
-        lineHeight: '18px',
-        fontSize: 12,
-        color: theme.palette.maskColor.second,
-        columnGap: 4,
-    },
-    dot: {
-        display: 'inline-block',
-        width: 7,
-        height: 7,
-        borderRadius: 99,
-    },
-    connectedDot: {
-        backgroundColor: theme.palette.maskColor.success,
-    },
-    unconnectedDot: {
-        backgroundColor: theme.palette.maskColor.third,
-    },
-    balance: {
-        fontSize: 36,
-        fontWeight: 700,
-        color: theme.palette.maskColor.main,
-        height: 54,
-        paddingTop: theme.spacing(1.5),
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: theme.spacing(2),
-    },
-}))
+const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => {
+    const isDark = theme.palette.mode === 'dark'
+    return {
+        container: {
+            padding: '16px',
+            lineHeight: 0,
+            // padding bottom space for assets tabs
+            paddingBottom: !disabled ? 34 : 16,
+            background: isDark
+                ? theme.palette.maskColor.modalTitleBg
+                : 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
+        },
+        topbar: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            height: 38,
+            gap: theme.spacing(1),
+        },
+        action: {
+            background: theme.palette.maskColor.bg,
+            borderRadius: 99,
+            padding: '5px 8px 5px 4px',
+            display: 'flex',
+            alignItems: 'center',
+            cursor: 'pointer',
+            maxWidth: '50%',
+            boxShadow: `0px 4px 6px 0px ${isDark ? 'rgba(0, 0, 0, 0.10)' : 'rgba(102, 108, 135, 0.10)'}`,
+            backdropFilter: 'blur(5px)',
+        },
+        nickname: {
+            color: theme.palette.maskColor.main,
+            lineHeight: '18px',
+            fontWeight: 700,
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+        },
+        identifier: {
+            fontSize: 10,
+            color: theme.palette.maskColor.second,
+            lineHeight: 1,
+            display: 'flex',
+            alignItems: 'center',
+        },
+        icon: {
+            height: 12,
+            width: 12,
+            color: theme.palette.maskColor.second,
+            cursor: 'pointer',
+            marginLeft: 4,
+        },
+        arrow: {
+            fontSize: 20,
+            transition: 'all 300ms',
+            flexShrink: 0,
+            color: theme.palette.maskColor.secondaryDark,
+        },
+        networkSelector: {
+            display: 'flex',
+            flexGrow: 1,
+            alignItems: 'center',
+            cursor: 'pointer',
+            overflow: 'auto',
+        },
+        chainName: {
+            flexGrow: 1,
+            lineHeight: '18px',
+            color: theme.palette.maskColor.main,
+            fontWeight: 700,
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            maxWidth: 154,
+        },
+        connected: {
+            display: 'flex',
+            alignItems: 'center',
+            lineHeight: '18px',
+            fontSize: 12,
+            color: theme.palette.maskColor.second,
+            columnGap: 4,
+        },
+        dot: {
+            display: 'inline-block',
+            width: 7,
+            height: 7,
+            borderRadius: 99,
+        },
+        connectedDot: {
+            backgroundColor: theme.palette.maskColor.success,
+        },
+        unconnectedDot: {
+            backgroundColor: theme.palette.maskColor.third,
+        },
+        balance: {
+            fontSize: 36,
+            fontWeight: 700,
+            color: theme.palette.maskColor.main,
+            height: 54,
+            paddingTop: theme.spacing(1.5),
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: theme.spacing(2),
+        },
+    }
+})
 interface WalletHeaderUIProps {
     origin: string | null
     currentNetwork?: ReasonableNetwork<ChainId, SchemaType, NetworkType>

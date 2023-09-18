@@ -1,4 +1,4 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import type { WalletAPI } from '../../../entry-types.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
@@ -19,7 +19,7 @@ import { SolanaChainResolverAPI } from '../apis/ResolverAPI.js'
 import { ProviderState } from '../../Base/state/Provider.js'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
-    constructor(override context: Plugin.Shared.SharedUIContext) {
+    constructor(override context: WalletAPI.IOContext) {
         super(context, SolanaProviders, {
             pluginID: NetworkPluginID.PLUGIN_SOLANA,
             isSameAddress,

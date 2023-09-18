@@ -21,7 +21,7 @@ export function PostActions() {
     const Others = useWeb3Others()
 
     const identifier = usePostInfoDetails.author()
-    const nickname = usePostInfoDetails.nickname()
+    const nickname = usePostInfoDetails.nickname() as string | null
     const coAuthors = usePostInfoDetails.coAuthors()
 
     if (!identifier) return null
@@ -61,13 +61,6 @@ function createPostActionsInjector() {
                 signal,
             })
 
-            const parentNode = postInfo.actionsElement?.realCurrent?.parentNode as HTMLDivElement
-            if (parentNode?.lastElementChild) {
-                const htmlDivElement = parentNode.lastElementChild as HTMLDivElement
-
-                htmlDivElement.style.flex = '1'
-                parentNode.style.flex = '1 1 auto'
-            }
             root.render(jsx)
             return root.destroy
         }

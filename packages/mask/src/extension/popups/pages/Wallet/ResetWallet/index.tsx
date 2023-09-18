@@ -66,6 +66,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     button: {
         flex: '1 0 0',
+        '&:disabled': {
+            color: theme.palette.maskColor.white,
+        },
     },
 }))
 

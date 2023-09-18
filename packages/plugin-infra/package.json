@@ -14,6 +14,11 @@
       "mask-src": "./src/entry-dom.ts",
       "default": "./dist/entry-dom.js"
     },
+    "./dom/context": {
+      "types": "./dist/dom/context.d.ts",
+      "mask-src": "./src/dom/context.ts",
+      "default": "./dist/dom/context.js"
+    },
     "./background-worker": {
       "types": "./dist/entry-background-worker.d.ts",
       "mask-src": "./src/entry-background-worker.ts",
@@ -28,6 +33,11 @@
       "types": "./dist/entry-content-script.d.ts",
       "mask-src": "./src/entry-content-script.ts",
       "default": "./dist/entry-content-script.js"
+    },
+    "./content-script/context": {
+      "types": "./dist/site-adaptor/context.d.ts",
+      "mask-src": "./src/site-adaptor/context.ts",
+      "default": "./dist/site-adaptor/context.js"
     }
   },
   "types": "./dist/entry.d.ts",

@@ -48,4 +48,5 @@ export enum PluginID {
     Claim = 'com.mask.claim',
     WalletService = 'com.mask.WalletService',
     SwitchLogo = 'io.mask.switch-logo',
+    Calendar = 'io.mask.calendar',
 }

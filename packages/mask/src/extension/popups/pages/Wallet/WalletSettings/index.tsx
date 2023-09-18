@@ -57,11 +57,6 @@ const WalletSettings = memo(() => {
             })
     }, [allWallets, wallet?.mnemonicId])
 
-    const ownedWallets = useMemo(() => {
-        if (!wallet?.address) return EMPTY_LIST
-        return allWallets.filter((x) => isSameAddress(x.owner, wallet.address))
-    }, [allWallets, wallet?.address])
-
     if (!wallet) return null
 
     // The wallet has derivationPath is also the one with minimum derivation path
@@ -104,6 +99,9 @@ const WalletSettings = memo(() => {
                         fullWidth
                         disabled={isTheFirstWallet}
                         onClick={async () => {
+                            const ownedWallets = !wallet?.address
+                                ? []
+                                : allWallets.filter((x) => isSameAddress(x.owner, wallet.address))
                             if (ownedWallets.length) {
                                 const currentWallet = formatEthereumAddress(wallet.address, 4)
                                 const other_wallets = ownedWallets

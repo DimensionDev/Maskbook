@@ -23,7 +23,6 @@ export function createSharedContext(): Omit<Plugin.SiteAdaptor.SiteAdaptorContex
         connectPersona: reject,
         createPersona: reject,
         currentPersonaIdentifier: emptyValueRef,
-        currentVisitingProfile: UNDEFINED,
         getPostURL,
         getPostPayload,
         getNextIDPlatform: () => undefined,
@@ -32,7 +31,6 @@ export function createSharedContext(): Omit<Plugin.SiteAdaptor.SiteAdaptorContex
         getThemeSettings: () => ({ color: '', mode: ThemeMode.Light, size: FontSize.Normal, isDim: false }),
         getWallets: reject,
         hasPaymentPassword: reject,
-        lastRecognizedProfile: UNDEFINED,
         openDashboard: reject,
         openPopupWindow: reject,
         fetchJSON: reject,
@@ -47,8 +45,6 @@ export function createSharedContext(): Omit<Plugin.SiteAdaptor.SiteAdaptorContex
         queryPersonaByProfile: reject,
         grantEIP2255Permission: reject,
         disconnectAllWalletsFromOrigin: reject,
-        removeWallet: reject,
-        resetAllWallets: reject,
         selectMaskWalletAccount: reject,
         setMinimalMode: reject,
         signWithPersona: reject,
@@ -56,6 +52,5 @@ export function createSharedContext(): Omit<Plugin.SiteAdaptor.SiteAdaptorContex
         updateWallet: reject,
         send: reject,
         themeSettings: UNDEFINED,
-        allPersonas: EMPTY_ARRAY,
     }
 }

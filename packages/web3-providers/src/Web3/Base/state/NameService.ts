@@ -1,9 +1,8 @@
 import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@masknet/kit'
-import type { Plugin } from '@masknet/plugin-infra'
 import { type StorageItem, NameServiceID, InMemoryStorages, type NetworkPluginID } from '@masknet/shared-base'
 import { attemptUntil, type NameServiceState as Web3NameServiceState } from '@masknet/web3-shared-base'
-import type { NameServiceAPI } from '../../../entry-types.js'
+import type { NameServiceAPI, WalletAPI } from '../../../entry-types.js'
 
 export class NameServiceState<
     DomainBook extends Record<string, string> = Record<string, string>,
@@ -14,7 +13,7 @@ export class NameServiceState<
     public domainBook?: Subscription<DomainBook>
 
     constructor(
-        protected context: Plugin.Shared.SharedUIContext,
+        protected context: WalletAPI.IOContext,
         protected options: {
             pluginID: NetworkPluginID
             isValidName(a: string): boolean

@@ -14,17 +14,14 @@ export const querySelectorAll = <T extends E>(selector: string) => {
 export const entryInfoSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('div+button').map((x) => x.parentElement?.firstElementChild?.lastElementChild as HTMLElement)
 
-export const menuAuthorSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>(['div[style="height: 56px;"] a', '.GlobalNavigation a[href="/"]'].join(','))
-// export const entryDetailSelector: () => LiveSelector<E, true> = () => querySelector<E>('a[href="/"]')
-
 export const postsContentSelector = () =>
     querySelectorAll(
         [
             // In Entries
             '[id="__next"] > div:nth-child(2) > div > div:not([class]) > div:not(footer)',
             // In collection
-            '[id="__next"] > div:nth-child(2) > div > div > div > a:has(footer)',
+            '[id="__next"] > div:nth-child(2) a:has(footer)',
+            '[id="__next"] > div:nth-child(2) a:has(img[alt="Card Header"][loading="lazy"])',
             // In Entry detail
             '[id="__next"] > div:nth-child(2) > div:has([class]):not(footer):has(p)',
         ].join(','),
