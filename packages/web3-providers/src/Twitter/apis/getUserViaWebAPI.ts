@@ -36,7 +36,6 @@ async function createRequest(screenName: string) {
     return new Request(url, {
         headers: await getHeaders({
             'content-type': 'application/json',
-            'x-twitter-client-language': navigator.language ? navigator.language : 'en',
             referer: `https://twitter.com/${screenName}`,
         }),
         credentials: 'include',

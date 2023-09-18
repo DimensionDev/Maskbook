@@ -7,19 +7,12 @@ function getCSRFToken() {
     return value
 }
 
-export async function getTokens() {
-    return {
-        csrfToken: getCSRFToken(),
-    }
-}
-
 export async function getHeaders(overrides?: Record<string, string>) {
-    const { csrfToken } = await getTokens()
-
     return {
         authorization: `Bearer ${Flags.twitter_token}`,
-        'x-csrf-token': csrfToken,
+        'x-csrf-token': getCSRFToken(),
         'x-twitter-auth-type': 'OAuth2Session',
+        'x-twitter-client-language': typeof navigator !== undefined && navigator.language ? navigator.language : 'en',
         ...overrides,
     }
 }
