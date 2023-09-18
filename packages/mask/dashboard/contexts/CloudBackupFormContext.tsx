@@ -10,6 +10,7 @@ export interface CloudBackupFormInputs {
     email: string
     phone: string
     code: string
+    countryCode: string
 }
 
 function useCloudBackupFormContext() {
@@ -27,22 +28,36 @@ function useCloudBackupFormContext() {
             email: '',
             phone: '',
             code: '',
+            countryCode: '+93',
         },
         resolver: zodResolver(
-            z.object({
-                email:
-                    currentTab === tabs.email
-                        ? z.string().email(t.cloud_backup_incorrect_email_address())
-                        : z.string().optional(),
-                phone:
-                    currentTab === tabs.mobile
-                        ? z.string().refine((mobile) => phoneRegexp.test(mobile))
-                        : z.string().optional(),
-                code: z
-                    .string()
-                    .min(1, t.cloud_backup_incorrect_verified_code())
-                    .max(6, t.cloud_backup_incorrect_verified_code()),
-            }),
+            z
+                .object({
+                    email:
+                        currentTab === tabs.email
+                            ? z.string().email(t.cloud_backup_incorrect_email_address())
+                            : z.string().optional(),
+                    countryCode: currentTab === tabs.mobile ? z.string() : z.string().optional(),
+                    phone:
+                        currentTab === tabs.mobile
+                            ? z.string().refine((mobile) => phoneRegexp.test(mobile))
+                            : z.string().optional(),
+                    code: z
+                        .string()
+                        .min(1, t.cloud_backup_incorrect_verified_code())
+                        .max(6, t.cloud_backup_incorrect_verified_code()),
+                })
+                .refine(
+                    (data) => {
+                        if (currentTab !== tabs.mobile) return
+                        if (!data.countryCode || !data.phone) return false
+                        return phoneRegexp.test(data.countryCode + data.phone)
+                    },
+                    {
+                        message: t.settings_dialogs_incorrect_phone(),
+                        path: ['phone'],
+                    },
+                ),
         ),
     })
 

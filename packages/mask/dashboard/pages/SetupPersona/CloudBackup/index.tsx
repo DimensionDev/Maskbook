@@ -14,6 +14,7 @@ import { AccountType } from '../../../type.js'
 import { useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
 import urlcat from 'urlcat'
+import { PhoneForm } from './PhoneForm.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -59,26 +60,20 @@ const useStyles = makeStyles()((theme) => ({
 const CloudBackupInner = memo(function CloudBackupInner() {
     const t = useDashboardI18N()
     const { classes } = useStyles()
-    const { user } = UserContext.useContainer()
+    const { user, updateUser } = UserContext.useContainer()
     const navigate = useNavigate()
     const tabPanelClasses = useMemo(() => ({ root: classes.panels }), [classes.panels])
 
     const { currentTab, onChange, tabs, formState } = CloudBackupFormContext.useContainer()
 
     const disabled = useMemo(() => {
-        if (currentTab === tabs.email) {
-            return !formState.formState.isDirty || !formState.formState.isValid
-        }
-        // TODO: phone
-        return false
+        return !formState.formState.isDirty || !formState.formState.isValid
     }, [currentTab, tabs])
 
     const [{ loading }, handleSubmit] = useAsyncFn(
         async (data: CloudBackupFormInputs) => {
-            // TODO: phone
-            if (!(currentTab === tabs.email && data.email && data.code)) return
             const response = await fetchDownloadLink({
-                account: data.email,
+                account: currentTab === tabs.email ? data.email : data.countryCode + data.phone,
                 type: AccountType.Email,
                 code: data.code,
             }).catch((error) => {
@@ -92,12 +87,18 @@ const CloudBackupInner = memo(function CloudBackupInner() {
                     navigate(DashboardRoutes.CloudBackupPreview)
                 }
             })
+
             if (!response) return
+
+            updateUser({
+                email: data.email || user.email,
+                phone: data.phone ? `${data.countryCode} ${data.phone}` : user.phone,
+            })
             navigate(
                 urlcat(DashboardRoutes.CloudBackupPreview, {
                     ...response,
-                    type: AccountType.Email,
-                    account: data.email,
+                    type: currentTab === tabs.email ? AccountType.Email : AccountType.Phone,
+                    account: currentTab === tabs.email ? data.email : data.countryCode + data.phone,
                 }),
                 {
                     state: {
@@ -106,28 +107,44 @@ const CloudBackupInner = memo(function CloudBackupInner() {
                 },
             )
         },
-        [currentTab, tabs, formState, navigate],
+        [currentTab, tabs, formState, navigate, updateUser, user],
     )
+
+    const description = useMemo(() => {
+        if (currentTab === tabs.email && user.email)
+            return (
+                <DashboardTrans.cloud_backup_email_exists
+                    components={{ strong: <strong /> }}
+                    values={{ account: user.email }}
+                />
+            )
+        else if (currentTab === tabs.mobile && user.phone)
+            return (
+                <DashboardTrans.cloud_backup_mobile_exists
+                    components={{ strong: <strong /> }}
+                    values={{ account: user.phone }}
+                />
+            )
+
+        return t.cloud_backup_no_exist_tips()
+    }, [t, currentTab, tabs, user])
     return (
         <>
             <Box>
                 <Typography variant="h1" className={classes.title}>
                     {t.cloud_backup_title()}
                 </Typography>
-                <Typography className={classes.description}>
-                    {user.email ? (
-                        <DashboardTrans.cloud_backup_exist_tips
-                            components={{ strong: <strong /> }}
-                            values={{ account: user.email }}
-                        />
-                    ) : (
-                        t.cloud_backup_no_exist_tips()
-                    )}
-                </Typography>
+                <Typography className={classes.description}>{description}</Typography>
                 <Box className={classes.tabContainer}>
                     <TabContext value={currentTab}>
                         <div className={classes.tabList}>
-                            <MaskTabList variant="base" onChange={onChange} aria-label="Cloud Backup Methods">
+                            <MaskTabList
+                                variant="base"
+                                onChange={(_, value) => {
+                                    onChange(_, value)
+                                    formState.reset()
+                                }}
+                                aria-label="Cloud Backup Methods">
                                 <Tab className={classes.tab} label={t.cloud_backup_email_title()} value={tabs.email} />
                                 <Tab className={classes.tab} label={t.cloud_backup_phone_title()} value={tabs.mobile} />
                             </MaskTabList>
@@ -135,6 +152,9 @@ const CloudBackupInner = memo(function CloudBackupInner() {
                         <div className={classes.panelContainer}>
                             <TabPanel value={tabs.email} classes={tabPanelClasses}>
                                 <EmailForm />
+                            </TabPanel>
+                            <TabPanel value={tabs.mobile} classes={tabPanelClasses}>
+                                <PhoneForm />
                             </TabPanel>
                         </div>
                     </TabContext>

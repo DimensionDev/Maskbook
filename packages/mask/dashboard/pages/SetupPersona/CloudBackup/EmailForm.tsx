@@ -55,7 +55,7 @@ export const EmailForm = memo(function EmailForm() {
                 render={({ field }) => (
                     <TextField
                         {...field}
-                        onFocus={() => clearErrors()}
+                        onFocus={() => clearErrors('email')}
                         fullWidth
                         placeholder={t.email()}
                         type="email"
@@ -70,7 +70,7 @@ export const EmailForm = memo(function EmailForm() {
                 render={({ field }) => (
                     <TextField
                         {...field}
-                        onFocus={() => clearErrors()}
+                        onFocus={() => clearErrors('code')}
                         fullWidth
                         placeholder={t.cloud_backup_email_verification_code()}
                         error={!!errors.code?.message}
