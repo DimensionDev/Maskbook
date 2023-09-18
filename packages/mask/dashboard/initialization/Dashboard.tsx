@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { CssBaseline, ThemeProvider, StyledEngineProvider } from '@mui/material'
-import { QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {
     CustomSnackbarProvider,
@@ -10,11 +9,12 @@ import {
     useSystemPreferencePalette,
     DialogStackingProvider,
 } from '@masknet/theme'
-import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
+import { I18NextProviderHMR, SharedContextProvider, persistOptions } from '@masknet/shared'
 import { ErrorBoundary, queryClient } from '@masknet/shared-base-ui'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, i18NextInstance, queryRemoteI18NBundle } from '@masknet/shared-base'
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 
 import '../utils/kv-storage.js'
 
@@ -41,7 +41,7 @@ export default function DashboardRoot(props: React.PropsWithChildren<{}>) {
     // #endregion
 
     return (
-        <QueryClientProvider client={queryClient}>
+        <PersistQueryClientProvider client={queryClient} persistOptions={persistOptions}>
             <RootWeb3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
                 {process.env.NODE_ENV === 'development' ? (
                     <ReactQueryDevtools position="bottom-right" toggleButtonProps={{ style: { width: 24 } }} />
@@ -67,6 +67,6 @@ export default function DashboardRoot(props: React.PropsWithChildren<{}>) {
                     </StyledEngineProvider>
                 </I18NextProviderHMR>
             </RootWeb3ContextProvider>
-        </QueryClientProvider>
+        </PersistQueryClientProvider>
     )
 }

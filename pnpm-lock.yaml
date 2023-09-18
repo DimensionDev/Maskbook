@@ -909,9 +909,15 @@ importers:
       '@splinetool/react-spline':
         specifier: 2.2.6
         version: 2.2.6(@splinetool/runtime@0.9.342)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
+      '@tanstack/query-sync-storage-persister':
+        specifier: ^4.35.0
+        version: 4.35.0
       '@tanstack/react-query-devtools':
         specifier: ^4.29.25
         version: 4.29.25(@tanstack/react-query@4.29.25)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
+      '@tanstack/react-query-persist-client':
+        specifier: ^4.35.0
+        version: 4.35.0(@tanstack/react-query@4.29.25)
       '@types/bn.js':
         specifier: ^4.11.6
         version: 4.11.6

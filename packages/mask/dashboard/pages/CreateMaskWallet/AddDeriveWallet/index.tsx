@@ -1,7 +1,8 @@
+import { delay } from '@masknet/kit'
 import { DeriveWalletTable } from '@masknet/shared'
 import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useWallets } from '@masknet/web3-hooks-base'
+import { useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
 import {
     HD_PATH_WITHOUT_INDEX_ETHEREUM,
@@ -90,6 +91,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
     const [pathIndexes, setPathIndexes] = useState<number[]>([])
     const { handlePasswordAndWallets } = ResetWalletContext.useContainer()
 
+    useWallet() // Warming up persist caching
     const wallets = useWallets()
     const existedSiblingQueries = useQueries({
         queries: isReset
@@ -173,6 +175,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         })
         await Services.Wallet.resolveMaskAccount([{ address: firstWallet }])
         Telemetry.captureEvent(EventType.Access, EventID.EntryPopupWalletImport)
+        await delay(300) // Wait for warming up above. 300ms is the closed duration after testing.
         navigate(urlcat(DashboardRoutes.SignUpMaskWalletOnboarding, { external_request }), { replace: true })
     }, [mnemonic, wallets.length, isReset, password, mergedIndexes, external_request])
 
