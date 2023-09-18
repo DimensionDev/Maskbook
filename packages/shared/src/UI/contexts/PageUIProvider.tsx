@@ -5,8 +5,8 @@ import { CSSVariableInjector, DialogStackingProvider, MaskThemeProvider } from '
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { compose, i18NextInstance } from '@masknet/shared-base'
 import { ErrorBoundary, queryClient } from '@masknet/shared-base-ui'
-import { PersistQueryClientProvider, type PersistQueryClientOptions } from '@tanstack/react-query-persist-client'
-import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
+import { persistOptions } from './localStoragePersist.js'
 
 export function PageUIProvider(useTheme: () => Theme, children: React.ReactNode, fallback?: React.ReactNode) {
     return compose(
@@ -24,20 +24,6 @@ export function PageUIProvider(useTheme: () => Theme, children: React.ReactNode,
 interface MaskUIRootProps extends React.PropsWithChildren<{}> {
     useTheme(): Theme
     fallback?: React.ReactNode
-}
-
-const persister = createSyncStoragePersister({
-    storage: window.localStorage,
-})
-// We don't persist all queries but only those have the first key starts with '@@'
-const persistOptions: Omit<PersistQueryClientOptions, 'queryClient'> = {
-    persister,
-    dehydrateOptions: {
-        shouldDehydrateQuery: ({ queryKey }) => {
-            if (typeof queryKey[0] !== 'string') return false
-            return queryKey[0].startsWith('@@')
-        },
-    },
 }
 
 function MaskUIRoot({ children, useTheme, fallback }: MaskUIRootProps) {

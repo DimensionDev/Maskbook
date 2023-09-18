@@ -76,7 +76,7 @@ export function TipsRealmContent({
 
     if (!identity || identity.userId === myIdentity?.identifier?.userId) return null
 
-    const buttonClassMap: Record<Plugin.SiteAdaptor.TipsSlot, string> = {
+    const buttonClassMap: Partial<Record<Plugin.SiteAdaptor.TipsSlot, string>> = {
         [TipsSlot.FollowButton]: cx(classes.followTipsButton, classes.roundButton),
         [TipsSlot.Post]: classes.postTipsButton,
         [TipsSlot.Profile]: cx(classes.profileTipsButton, classes.roundButton),

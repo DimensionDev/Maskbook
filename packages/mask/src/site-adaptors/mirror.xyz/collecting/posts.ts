@@ -13,30 +13,14 @@ import { PostIdentifier } from '@masknet/shared-base'
 const MIRROR_LINK_PREFIX = /https(.*)mirror.xyz(.*)\//i
 
 export function queryInjectPoint(node: HTMLElement) {
+    // Could be ENS or address
+    const authorWallet = location.pathname.split('/')[1].toLowerCase()
     const allANode = node.querySelectorAll(
         [
-            // workaround for case: only have one contributor in entry detail page
-            // Not find better selector
-            /* cspell:disable-next-line */
-            ':scope > div:nth-child(3) > div > div > div:has(div._1sjywpl0._1sjywpl1.bc5nci3lg.bc5nci3rz):not(svg)',
-            /* cspell:disable-next-line */
-            ':scope > div:nth-child(4) > div > div > div:has(div._1sjywpl0._1sjywpl1.bc5nci3lg.bc5nci3rz):not(svg)',
-
-            // if have header image is 4, either 3
-            ':scope > div:nth-child(3) div:has(div > div > div+a)~div',
-            ':scope > div:nth-child(4) div:has(div > div > div+a)~div',
-            ':scope > div:nth-child(3) div:has(div > div > div+a)~div~a',
-            ':scope > div:nth-child(4) div:has(div > div > div+a)~div~a',
-
+            // post detail header
+            `:scope div[href$="/${authorWallet}" i]:has(img[alt^="0x" i][decoding="async"]) > div:last-child`, // img alt is always address
             // collection page card footer
-            ':scope > div:nth-child(1) footer span > div > div',
-            // if have header image is 4, either 3 entries: time + entry link
-            ':scope > div:nth-child(3) div+a',
-            ':scope > div:nth-child(4) div+a',
-
-            // if have header image is 4, either 3 entry: address link + time
-            ':scope > div:nth-child(3) > div > div > a~div',
-            ':scope > div:nth-child(4) > div > div > a~div',
+            ':scope header div:has(> span img[alt="Publisher"])',
         ].join(','),
     )
     return allANode.item(allANode.length - 1) as HTMLElement
