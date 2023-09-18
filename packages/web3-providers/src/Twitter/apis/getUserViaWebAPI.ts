@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 import { isNull } from 'lodash-es'
 import { attemptTimes } from '@masknet/web3-shared-base'
-import { getTokens, getHeaders } from './getTokens.js'
+import { getHeaders } from './getTokens.js'
 import { fetchGlobal } from '../../helpers/fetchGlobal.js'
 import { Expiration } from '../../helpers/fetchSquashed.js'
 import { Duration, staleCached } from '../../helpers/fetchCached.js'
@@ -24,10 +24,7 @@ const features = {
 }
 
 async function createRequest(screenName: string) {
-    const { queryId } = await getTokens('UserByScreenName')
-    if (!queryId) return
-    const url = urlcat('https://twitter.com/i/api/graphql/:queryId/UserByScreenName', {
-        queryId,
+    const url = urlcat('https://twitter.com/i/api/graphql/sLVLhk0bGj3MVFEKTdax1w/UserByScreenName', {
         variables: JSON.stringify({
             screen_name: screenName,
             withSafetyModeUserFields: true,
@@ -38,8 +35,11 @@ async function createRequest(screenName: string) {
 
     return new Request(url, {
         headers: await getHeaders({
+            'content-type': 'application/json',
+            'x-twitter-client-language': navigator.language ? navigator.language : 'en',
             referer: `https://twitter.com/${screenName}`,
         }),
+        credentials: 'include',
     })
 }
 
@@ -80,6 +80,7 @@ export const getUserViaWebTimesAPI = (screenName: string) => {
 export async function staleUserViaWebAPI(screenName: string): Promise<TwitterBaseAPI.User | null> {
     const request = await createRequest(screenName)
     if (!request) return null
+
     const response = await staleCached(request)
     if (!response?.ok) return null
 
