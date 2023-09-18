@@ -18,6 +18,9 @@ startPluginDashboard(
             ...createPartialSharedUIContext(id, def, signal),
             ...RestPartOfPluginUIContextShared,
             allPersonas: NextSharedUIContext.allPersonas,
+            setMinimalMode(enabled) {
+                Services.Settings.setPluginMinimalModeEnabled(id, enabled)
+            },
         }),
         Services.Settings.getPluginMinimalModeEnabled,
         Services.Helper.hasHostPermission,

@@ -85,6 +85,9 @@ function startPluginHost() {
                 ...createPartialSharedUIContext(id, def, signal),
                 ...RestPartOfPluginUIContextShared,
                 allPersonas: allPersonaSub,
+                setMinimalMode(enabled) {
+                    Services.Settings.setPluginMinimalModeEnabled(id, enabled)
+                },
             }),
             Services.Settings.getPluginMinimalModeEnabled,
             Services.Helper.hasHostPermission,

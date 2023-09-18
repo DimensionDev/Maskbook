@@ -167,7 +167,6 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         attachProfile: Services.Identity.attachProfile,
         getPersonaAvatars: Services.Identity.getPersonaAvatars,
         postMessage: ui.automation?.nativeCompositionDialog?.appendText,
-        setMinimalMode: Services.Settings.setPluginMinimalModeEnabled,
         setCurrentPersonaIdentifier: Services.Settings.setCurrentPersonaIdentifier,
         setPluginMinimalModeEnabled: Services.Settings.setPluginMinimalModeEnabled,
         setDecentralizedSearchSettings: Services.Settings.setDecentralizedSearchSettings,
@@ -183,6 +182,9 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
             signal,
             (id, def, signal): Plugin.SiteAdaptor.SiteAdaptorContext => {
                 return {
+                    setMinimalMode(enabled) {
+                        Services.Settings.setPluginMinimalModeEnabled(id, enabled)
+                    },
                     ...createPartialSharedUIContext(id, def, signal),
                     ...SiteAdaptorContextRef.value,
                 }

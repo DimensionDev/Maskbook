@@ -38,6 +38,9 @@ startPluginSiteAdaptor(EnhanceableSite.App, {
             setWeb3State(state) {
                 def.Web3State = state
             },
+            setMinimalMode(enabled) {
+                console.warn('setMinimalMode is ignored.')
+            },
             ...createSharedContext(),
         }
     },

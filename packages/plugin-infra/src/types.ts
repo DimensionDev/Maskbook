@@ -113,6 +113,7 @@ export namespace Plugin.Shared {
     }
 
     export interface SharedUIContext extends SharedContext {
+        setMinimalMode(enabled: boolean): void
         setWeb3State(state: Web3State<any, any, any, any, any, any, any, any>): void
         /** The selected persona */
         currentPersona: Subscription<PersonaIdentifier | undefined>
@@ -338,7 +339,6 @@ export namespace Plugin.SiteAdaptor {
             platform: NextIDPlatform,
             identity: IdentityResolved | undefined,
         ) => Promise<SocialIdentity | undefined>
-        setMinimalMode: (id: string, enabled: boolean) => Promise<void>
         currentPersonaIdentifier: ValueRefWithReady<string>
 
         share?: (text: string) => void

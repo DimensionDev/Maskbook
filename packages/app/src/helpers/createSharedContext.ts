@@ -11,7 +11,10 @@ async function reject(): Promise<never> {
 
 const emptyValueRef = new ValueRefWithReady<any>()
 
-export function createSharedContext(): Omit<Plugin.SiteAdaptor.SiteAdaptorContext, 'createKVStorage' | 'setWeb3State'> {
+export function createSharedContext(): Omit<
+    Plugin.SiteAdaptor.SiteAdaptorContext,
+    'createKVStorage' | 'setWeb3State' | 'setMinimalMode'
+> {
     return {
         currentPersona: UNDEFINED,
         wallets: EMPTY_ARRAY,
@@ -46,7 +49,6 @@ export function createSharedContext(): Omit<Plugin.SiteAdaptor.SiteAdaptorContex
         grantEIP2255Permission: reject,
         disconnectAllWalletsFromOrigin: reject,
         selectMaskWalletAccount: reject,
-        setMinimalMode: reject,
         signWithPersona: reject,
         signWithWallet: reject,
         updateWallet: reject,
