@@ -334,7 +334,6 @@ export namespace Plugin.SiteAdaptor {
         /** The default theme settings. */
         getThemeSettings: () => ThemeSettings | undefined
         getNextIDPlatform: () => NextIDPlatform | undefined
-        getPersonaAvatar: (identifier: ECKeyIdentifier | null | undefined) => Promise<string | null | undefined>
         getSocialIdentity: (
             platform: NextIDPlatform,
             identity: IdentityResolved | undefined,
@@ -358,10 +357,6 @@ export namespace Plugin.SiteAdaptor {
             target: ProfileIdentifier | PersonaIdentifier,
             data: LinkedProfileDetails,
         ) => Promise<void>
-
-        getPersonaAvatars?: (
-            identifiers?: PersonaIdentifier[],
-        ) => Promise<Map<ProfileIdentifier | PersonaIdentifier, string>>
         getPostIdFromNewPostToast?: () => string
         postMessage?: (text: string, options?: any) => Promise<void>
         setPluginMinimalModeEnabled?: (id: string, enabled: boolean) => Promise<void>

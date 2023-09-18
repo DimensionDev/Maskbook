@@ -16,6 +16,7 @@ import { __setUIContext__ } from '@masknet/plugin-infra/dom/context'
 
 __setUIContext__({
     allPersonas: NextSharedUIContext.allPersonas,
+    queryPersonaAvatar: Services.Identity.getPersonaAvatar,
 })
 if (
     location.hash === '#/personas' ||

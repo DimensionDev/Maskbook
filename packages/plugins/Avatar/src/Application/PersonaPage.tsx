@@ -12,6 +12,7 @@ import type { AllChainsNonFungibleToken } from '../types.js'
 import { Alert, PersonaAction, usePersonasFromNextID } from '@masknet/shared'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { useAllPersonas, useLastRecognizedIdentity, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { queryPersonaAvatar } from '@masknet/plugin-infra/content-script/context'
 import { RoutePaths } from './Routes.js'
 import { useAvatarManagement } from '../contexts/index.js'
 
@@ -27,7 +28,7 @@ export function PersonaPage() {
     const network = socialIdentity?.identifier?.network.replace('.com', '')
     const userId = socialIdentity?.identifier?.userId
 
-    const { getPersonaAvatar, currentPersona: currentPersona_ } = useSiteAdaptorContext()
+    const { currentPersona: currentPersona_ } = useSiteAdaptorContext()
     const myPersonas = useAllPersonas()
     const _persona = useSubscription(currentPersona_)
     const currentPersona = myPersonas?.find(
@@ -60,7 +61,10 @@ export function PersonaPage() {
         },
         [navigate],
     )
-    const { value: avatar } = useAsyncRetry(async () => getPersonaAvatar(currentPersona?.identifier), [])
+    const { value: avatar } = useAsyncRetry(
+        async () => queryPersonaAvatar(currentPersona?.identifier),
+        [currentPersona?.identifier],
+    )
 
     return (
         <>

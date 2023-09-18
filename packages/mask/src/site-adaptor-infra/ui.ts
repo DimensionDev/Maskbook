@@ -147,6 +147,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         lastRecognizedProfile: lastRecognizedSub,
         currentVisitingProfile: currentVisitingSub,
         allPersonas: NextSharedUIContext.allPersonas,
+        queryPersonaAvatar: Services.Identity.getPersonaAvatar,
     })
     SiteAdaptorContextRef.value = {
         ...RestPartOfPluginUIContextShared,
@@ -161,11 +162,9 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         createPersona: () => Services.Helper.openDashboard(DashboardRoutes.SignUpPersona),
         connectPersona,
         fetchManifest: Services.ThirdPartyPlugin.fetchManifest,
-        getPersonaAvatar: Services.Identity.getPersonaAvatar,
         getSocialIdentity: Services.Identity.querySocialIdentity,
         queryPersonaByProfile: Services.Identity.queryPersonaByProfile,
         attachProfile: Services.Identity.attachProfile,
-        getPersonaAvatars: Services.Identity.getPersonaAvatars,
         postMessage: ui.automation?.nativeCompositionDialog?.appendText,
         setCurrentPersonaIdentifier: Services.Settings.setCurrentPersonaIdentifier,
         setPluginMinimalModeEnabled: Services.Settings.setPluginMinimalModeEnabled,

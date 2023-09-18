@@ -29,7 +29,6 @@ export function createSharedContext(): Omit<
         getPostURL,
         getPostPayload,
         getNextIDPlatform: () => undefined,
-        getPersonaAvatar: reject,
         getSocialIdentity: reject,
         getThemeSettings: () => ({ color: '', mode: ThemeMode.Light, size: FontSize.Normal, isDim: false }),
         getWallets: reject,

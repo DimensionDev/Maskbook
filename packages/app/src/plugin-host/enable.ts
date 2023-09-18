@@ -19,6 +19,10 @@ __setSiteAdaptorContext__({
     lastRecognizedProfile: UNDEFINED,
     currentVisitingProfile: UNDEFINED,
     allPersonas: EMPTY_ARRAY,
+    queryPersonaAvatar: async (identifiers): Promise<any> => {
+        if (Array.isArray(identifiers)) return new Map()
+        return undefined
+    },
 })
 
 startPluginSiteAdaptor(EnhanceableSite.App, {
