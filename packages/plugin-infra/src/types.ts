@@ -654,6 +654,8 @@ export namespace Plugin.SiteAdaptor {
         Profile = 'profile',
         MirrorMenu = 'mirror-menu',
         MirrorEntry = 'mirror-entry',
+        MirrorProfile = 'mirror-profile',
+        MirrorVerification = 'mirror-verification',
     }
 
     export interface TipsRealmOptions {
