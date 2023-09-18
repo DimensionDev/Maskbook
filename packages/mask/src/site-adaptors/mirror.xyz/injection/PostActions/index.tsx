@@ -21,7 +21,7 @@ export function PostActions() {
     const Others = useWeb3Others()
 
     const identifier = usePostInfoDetails.author()
-    const nickname = usePostInfoDetails.nickname()
+    const nickname = usePostInfoDetails.nickname() as string | null
     const coAuthors = usePostInfoDetails.coAuthors()
 
     if (!identifier) return null
