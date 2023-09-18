@@ -48,6 +48,9 @@ const useStyles = makeStyles()((theme) => {
             zIndex: 100,
             marginTop: 'auto',
         },
+        confirmButton: {
+            color: `${theme.palette.maskColor.bottom} !important`,
+        },
     }
 })
 
@@ -162,7 +165,12 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
                 )}
             </div>
             <div className={classes.actionGroup}>
-                <ActionButton fullWidth onClick={transfer} disabled={disabled} loading={state.loading}>
+                <ActionButton
+                    className={classes.confirmButton}
+                    fullWidth
+                    onClick={transfer}
+                    disabled={disabled}
+                    loading={state.loading}>
                     {t('confirm')}
                 </ActionButton>
             </div>

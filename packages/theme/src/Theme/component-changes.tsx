@@ -78,6 +78,7 @@ export const Button = (mode: PaletteMode, colors: MaskColor) => ({
                         [`&.${buttonClasses.disabled}`]: {
                             background: colors.maskColor.primaryMain,
                             opacity: 0.6,
+                            color: colors.maskColor.bottom,
                         },
                     },
                 },
