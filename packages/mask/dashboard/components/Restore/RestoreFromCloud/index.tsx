@@ -67,7 +67,7 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
             }
         }
         toggleSynchronizePasswordDialog(true)
-    }, [currentPersona, account, accountType, user, toggleSynchronizePasswordDialog])
+    }, [currentPersona, account, accountType, user, toggleSynchronizePasswordDialog, updateUser])
 
     const handleRestore = useCallback(async () => {
         dispatch({ type: 'SET_LOADING', loading: true })
@@ -97,7 +97,7 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
         if (!account || !password) return
         updateUser({ backupPassword: password })
         onCloseSynchronizePassword()
-    }, [account, password])
+    }, [account, password, updateUser])
 
     return (
         <Box width="100%">

@@ -76,7 +76,6 @@ export const LocalBackup = memo(function LocalBackup() {
             a.click()
 
             await updateUser({
-                ...user,
                 localBackupAt: now,
             })
 

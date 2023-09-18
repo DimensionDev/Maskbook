@@ -1,4 +1,4 @@
-import { createElement, memo, useCallback, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { UserContext, useLanguage } from '../../../../shared-ui/index.js'
 import { CloudBackupFormContext } from '../../../contexts/CloudBackupFormContext.js'
@@ -10,6 +10,7 @@ import REGIONS from '../../../assets/region.json'
 import { CountdownButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { AccountType, Scenario, Locale } from '../../../type.js'
 import { sendCode } from '../../../utils/api.js'
+import { COUNTRY_ICON_URL } from '../../../constants.js'
 
 const useStyles = makeStyles()((theme) => ({
     send: {
@@ -41,12 +42,10 @@ export const PhoneForm = memo(function PhoneForm() {
     const [countryCode, phone] = watch(['countryCode', 'phone'])
 
     const countryIcon = useMemo(() => {
-        if (!countryCode) return null
+        if (!countryCode) return
         const target = REGIONS.find((x) => x.dial_code === countryCode)
-        if (!target) return null
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        return Icons[target.code.charAt(0).toUpperCase() + target.code.slice(1).toLowerCase()]
+        if (!target) return
+        return `${COUNTRY_ICON_URL}${target.code.toLowerCase()}.svg`
     }, [countryCode])
 
     const handleSendVerificationCode = useCallback(async () => {
@@ -90,9 +89,7 @@ export const PhoneForm = memo(function PhoneForm() {
                                         setAnchorEl(event.currentTarget)
                                         setOpen(true)
                                     }}>
-                                    {countryIcon
-                                        ? createElement(countryIcon, { style: { width: 16, height: 12 } })
-                                        : null}
+                                    <img src={countryIcon} style={{ width: 16, height: 12 }} />
                                     <Box
                                         component="span"
                                         sx={{ minWidth: 32, textAlign: 'right', whiteSpace: 'nowrap' }}>

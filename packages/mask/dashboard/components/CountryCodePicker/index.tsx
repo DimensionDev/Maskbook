@@ -1,10 +1,12 @@
 import { List, ListItemButton, ListItemIcon, ListItemText, Popover, TextField, Typography } from '@mui/material'
-import { createElement, memo, useDeferredValue, useMemo, useState } from 'react'
+import { memo, useDeferredValue, useMemo, useState } from 'react'
 import { useDashboardI18N } from '../../locales/i18n_generated.js'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import Fuse from 'fuse.js'
+
 import REGIONS from '../../assets/region.json'
+import { COUNTRY_ICON_URL } from '../../constants.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -105,11 +107,7 @@ export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl,
             <List className={classes.list} data-hide-scrollbar>
                 {regions.map((data) => {
                     const selected = data.dial_code === code
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    const icon = Icons[data.code.charAt(0).toUpperCase() + data.code.slice(1).toLowerCase()]
-
-                    if (!icon) return
+                    const icon = `${COUNTRY_ICON_URL}${code.toLowerCase()}.svg`
                     return (
                         <ListItemButton
                             onClick={() => {
@@ -120,7 +118,8 @@ export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl,
                             autoFocus={selected}
                             selected={selected}>
                             <ListItemIcon className={classes.listItemIcon}>
-                                {createElement(icon, { className: classes.icon })}
+                                <img src={icon} className={classes.icon} />
+                                {/* {createElement(icon, { className: classes.icon })} */}
                             </ListItemIcon>
                             <ListItemText
                                 primary={data.name}
