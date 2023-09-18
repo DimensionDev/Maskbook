@@ -9,7 +9,7 @@ const useStyles = makeStyles()((theme) => ({
     connectedAccounts: {
         borderBottomLeftRadius: '6px',
         borderBottomRightRadius: '6px',
-        background: theme.palette.maskColor.white,
+        background: theme.palette.mode === 'dark' ? theme.palette.maskColor.bottom : theme.palette.maskColor.white,
         padding: '8px',
         position: 'relative',
     },
