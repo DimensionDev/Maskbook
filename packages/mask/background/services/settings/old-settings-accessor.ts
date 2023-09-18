@@ -1,8 +1,7 @@
-import { forIn, head } from 'lodash-es'
+import { forIn } from 'lodash-es'
 import { telemetrySettings } from '@masknet/web3-telemetry'
 import {
     currentPersonaIdentifier,
-    ECKeyIdentifier,
     getCurrentPluginMinimalMode,
     languageSettings,
     MaskMessages,
@@ -37,15 +36,15 @@ export async function getCurrentPersonaIdentifier(): Promise<PersonaIdentifier |
     const personas = (await queryPersonasDB({ hasPrivateKey: true }))
         .sort((a, b) => (a.createdAt > b.createdAt ? 1 : 0))
         .map((x) => x.identifier)
-    const newVal = ECKeyIdentifier.from(currentPersonaIdentifier.value).unwrapOr(head(personas))
+    const newVal = currentPersonaIdentifier.value || personas[0]
     if (!newVal) return
     if (personas.find((x) => x === newVal)) return newVal
-    if (personas[0]) currentPersonaIdentifier.value = personas[0].toText()
+    if (personas[0]) currentPersonaIdentifier.value = personas[0]
     return personas[0]
 }
 export async function setCurrentPersonaIdentifier(x?: PersonaIdentifier) {
     await currentPersonaIdentifier.readyPromise
-    currentPersonaIdentifier.value = x?.toText() ?? ''
+    currentPersonaIdentifier.value = x
     MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
 }
 export async function getPluginMinimalModeEnabled(id: string): Promise<BooleanPreference> {
