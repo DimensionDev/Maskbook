@@ -15,7 +15,9 @@ const useStyles = makeStyles()((theme) => ({
         flexShrink: 0,
         alignSelf: 'stretch',
         background:
-            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
+            theme.palette.mode === 'light'
+                ? 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)'
+                : theme.palette.maskColor.bottom,
         lineHeight: 0,
     },
     backIcon: {

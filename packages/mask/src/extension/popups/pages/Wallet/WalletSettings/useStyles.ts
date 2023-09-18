@@ -81,6 +81,7 @@ export const useStyles = makeStyles()((theme) => ({
     bold: {
         fontSize: 14,
         fontWeight: 700,
+        color: theme.palette.maskColor.main,
     },
     confirmMessage: {
         fontSize: 14,
