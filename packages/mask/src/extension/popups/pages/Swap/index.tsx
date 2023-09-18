@@ -4,9 +4,8 @@ import { Appearance } from '@masknet/public-api'
 import { SharedContextProvider } from '@masknet/shared'
 import { applyMaskColorVars, makeStyles } from '@masknet/theme'
 import { ChainContextProvider, DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
-import { ThemeProvider, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import { useI18N } from '../../../../utils/index.js'
-import { useSwapPageTheme } from '../../../../utils/theme/useSwapPageTheme.js'
 import { NetworkSelector } from '../../components/NetworkSelector/index.js'
 import { useTokenParams } from '../../hooks/index.js'
 import { SwapBox } from './SwapBox/index.js'
@@ -22,7 +21,7 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: '#F7F9FA',
+            backgroundColor: theme.palette.maskColor.bg,
         },
         container: {
             width: 800,
@@ -49,7 +48,7 @@ const useStyles = makeStyles()((theme) => {
         title: {
             fontSize: 32,
             fontWeight: 'bold',
-            color: theme.palette.grey['900'],
+            color: theme.palette.maskColor.second,
         },
         main: {
             width: 598,
@@ -64,7 +63,6 @@ const useStyles = makeStyles()((theme) => {
 export default function SwapPage() {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const theme = useSwapPageTheme()
     const { chainId } = useTokenParams()
     applyMaskColorVars(document.body, Appearance.light)
     const chainContextValue = useMemo(() => ({ chainId }), [chainId])
@@ -98,28 +96,26 @@ export default function SwapPage() {
     }, [])
 
     return (
-        <ThemeProvider theme={theme}>
-            <SharedContextProvider>
-                <ChainContextProvider value={chainContextValue}>
-                    <div className={classes.page}>
-                        <div className={classes.container}>
-                            <header className={classes.header}>
-                                <Typography variant="h1" className={classes.title}>
-                                    {t('plugin_trader_swap')}
-                                </Typography>
-                                <NetworkSelector />
-                            </header>
-                            <main className={classes.main}>
-                                <DefaultWeb3ContextProvider>
-                                    <AllProviderTradeContext.Provider>
-                                        <SwapBox />
-                                    </AllProviderTradeContext.Provider>
-                                </DefaultWeb3ContextProvider>
-                            </main>
-                        </div>
+        <SharedContextProvider>
+            <ChainContextProvider value={chainContextValue}>
+                <div className={classes.page}>
+                    <div className={classes.container}>
+                        <header className={classes.header}>
+                            <Typography variant="h1" className={classes.title}>
+                                {t('plugin_trader_swap')}
+                            </Typography>
+                            <NetworkSelector />
+                        </header>
+                        <main className={classes.main}>
+                            <DefaultWeb3ContextProvider>
+                                <AllProviderTradeContext.Provider>
+                                    <SwapBox />
+                                </AllProviderTradeContext.Provider>
+                            </DefaultWeb3ContextProvider>
+                        </main>
                     </div>
-                </ChainContextProvider>
-            </SharedContextProvider>
-        </ThemeProvider>
+                </div>
+            </ChainContextProvider>
+        </SharedContextProvider>
     )
 }

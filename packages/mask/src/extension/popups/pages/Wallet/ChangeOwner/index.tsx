@@ -65,7 +65,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         fontSize: 12,
         fontWeight: 400,
-        color: theme.palette.maskColor.secondaryMain,
+        color: theme.palette.mode === 'light' ? theme.palette.maskColor.second : theme.palette.maskColor.main,
         WebkitTextSizeAdjust: '100%',
     },
     walletAddress: {
@@ -122,16 +122,8 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         fontWeight: 600,
         padding: '9px 0',
-        borderRadius: 20,
         fontSize: 14,
         lineHeight: '20px',
-    },
-    secondaryButton: {
-        backgroundColor: '#F7F9FA',
-        color: '#1C68F3',
-        '&:hover': {
-            backgroundColor: 'rgba(28, 104, 243, 0.04)',
-        },
     },
     controller: {
         display: 'grid',
@@ -139,9 +131,10 @@ const useStyles = makeStyles()((theme) => ({
         gap: 20,
         padding: 16,
         position: 'fixed',
+        left: 0,
+        right: 0,
         bottom: 0,
-        width: '100%',
-        backgroundColor: '#ffffff',
+        backgroundColor: theme.palette.maskColor.bg,
     },
     disabledItem: {
         opacity: 0.5,
@@ -221,8 +214,8 @@ export default function ChangeOwner() {
         const contract = Contract.getWeb3Contract<Wallet>(wallet?.address, WalletABI as AbiItem[])
         if (!manageAccount?.address || !wallet?.address) return
         const tx = {
-            from: wallet?.address,
-            to: wallet?.address,
+            from: wallet.address,
+            to: wallet.address,
             data: contract?.methods.changeOwner(manageAccount.address).encodeABI(),
         }
         const gas = await Web3.estimateTransaction?.(tx, FALLBACK_GAS)
@@ -237,7 +230,7 @@ export default function ChangeOwner() {
             account: wallet?.address,
             providerType: ProviderType.MaskWallet,
             owner: wallet?.owner,
-            identifier: ECKeyIdentifier.from(wallet?.identifier).unwrapOr(undefined),
+            identifier: ECKeyIdentifier.from(wallet.identifier).unwrapOr(undefined),
             gasOptionType: gasConfig?.gasOptionType,
             overrides: gasConfig,
         })
@@ -259,6 +252,7 @@ export default function ChangeOwner() {
             { providerType: ProviderType.MaskWallet },
         )
     }, [manageAccount, smartPayChainId, wallet, gasConfig])
+    const disabled = !manageAccount?.address || !wallet || loadingHandleConfirm
 
     useTitle(t('popups_wallet_change_owner'))
 
@@ -448,8 +442,10 @@ export default function ChangeOwner() {
             </div>
             <div className={classes.controller}>
                 <ActionButton
-                    variant="contained"
-                    className={cx(classes.button, classes.secondaryButton)}
+                    className={classes.button}
+                    variant="outlined"
+                    color="secondary"
+                    disabled={disabled}
                     onClick={async () => {
                         navigate(-1)
                         await Services.Helper.removePopupWindow()
@@ -461,7 +457,7 @@ export default function ChangeOwner() {
                     className={classes.button}
                     onClick={handleConfirm}
                     loading={loadingHandleConfirm}
-                    disabled={loadingHandleConfirm}>
+                    disabled={disabled}>
                     {t('wallet_status_button_change')}
                 </ActionButton>
             </div>
