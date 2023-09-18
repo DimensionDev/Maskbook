@@ -8,6 +8,7 @@ import {
     type MessageState as Web3MessageState,
 } from '@masknet/web3-shared-base'
 import { type NetworkPluginID, PersistentStorages, type StorageObject, mapSubscription } from '@masknet/shared-base'
+import type { JsonRpcResponse } from 'web3-core-helpers'
 
 export class MessageState<Request, Response> implements Web3MessageState<Request, Response> {
     public storage: StorageObject<{
@@ -124,7 +125,7 @@ export class MessageState<Request, Response> implements Web3MessageState<Request
         })
     }
 
-    async approveRequest(id: string, updates?: Request): Promise<void> {
+    async approveRequest(id: string, updates?: Request): Promise<JsonRpcResponse | void> {
         const message = this.assertMessage(id)
 
         await this.updateMessage(id, {
