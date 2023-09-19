@@ -1,8 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import { Calendar } from '@masknet/web3-providers'
+import startOfMonth from 'date-fns/startOfMonth'
 
 export function useNewsList() {
-    const date = Math.floor(Date.now() / 1000)
+    const start = startOfMonth(new Date())
+    const date = start.getTime() / 1000
     const { data, isLoading } = useQuery<any>(
         ['newsList', Math.floor(date / 1000)],
         async () => await Calendar.getNewsList(date),
@@ -18,7 +20,8 @@ export function useNewsList() {
 }
 
 export function useEventList() {
-    const date = Math.floor(Date.now() / 1000)
+    const start = startOfMonth(new Date())
+    const date = start.getTime() / 1000
     const { data, isLoading } = useQuery<any>(
         ['eventList', Math.floor(date / 1000)],
         async () => await Calendar.getEventList(date),
@@ -34,7 +37,8 @@ export function useEventList() {
 }
 
 export function useNFTList() {
-    const date = Math.floor(Date.now() / 1000)
+    const start = startOfMonth(new Date())
+    const date = start.getTime() / 1000
     const { data, isLoading } = useQuery<any>(
         ['nftList', Math.floor(date / 1000)],
         async () => await Calendar.getNFTList(date),
