@@ -7,8 +7,6 @@ import Fuse from 'fuse.js'
 import { useSharedI18N } from '../../../index.js'
 import { COUNTRIES } from '@masknet/shared-base-ui'
 import { getCountryFlag } from '../../../utils/getCountryFlag.js'
-// import REGIONS from '../../assets/region.json'
-// import { COUNTRY_ICON_URL } from '../../constants.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
