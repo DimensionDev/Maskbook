@@ -12,9 +12,12 @@ import { createRequire } from 'module'
 import { emitJSONFile } from '@nice-labs/emit-file-webpack-plugin'
 import Terser from 'terser-webpack-plugin'
 import { getGitInfo } from './.webpack/git-info.js'
+import CopyPlugin from 'copy-webpack-plugin'
 
 const require = createRequire(import.meta.url)
 const __dirname = fileURLToPath(dirname(import.meta.url))
+const outputPath = fileURLToPath(new URL('./dist', import.meta.url))
+const polyfillsFolderPath = join(outputPath, './js/polyfills')
 
 /**
  * @param {*} env
@@ -29,7 +32,7 @@ function Configuration(env, argv) {
         entry: './src/index.tsx',
         output: {
             filename: '[name].[contenthash].js',
-            path: fileURLToPath(new URL('./dist', import.meta.url)),
+            path: outputPath,
             publicPath: 'auto',
             clean: true,
         },
@@ -117,6 +120,15 @@ function Configuration(env, argv) {
                 'process.env.NODE_DEBUG': 'undefined',
                 'process.version': JSON.stringify('v20.0.0'),
                 'process.browser': 'true',
+            }),
+            new CopyPlugin({
+                patterns: [
+                    {
+                        context: join(__dirname, '../polyfills/dist/'),
+                        from: '*.js',
+                        to: polyfillsFolderPath,
+                    },
+                ],
             }),
             (() => {
                 const { BRANCH_NAME, BUILD_DATE, COMMIT_DATE, COMMIT_HASH, DIRTY } = getGitInfo()
