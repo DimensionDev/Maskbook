@@ -133,8 +133,6 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         ui.collecting.currentVisitingIdentityProvider.recognized,
         signal,
     )
-    const themeSettingsSub = createSubscriptionFromValueRef(ui.collecting.themeSettingsProvider.recognized, signal)
-
     const connectPersona = async () => {
         const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
         currentSetupGuideStatus[activatedSiteAdaptorUI!.networkIdentifier].value = stringify({
@@ -147,13 +145,12 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         lastRecognizedProfile: lastRecognizedSub,
         currentVisitingProfile: currentVisitingSub,
         allPersonas: NextSharedUIContext.allPersonas,
+        queryPersonaAvatar: Services.Identity.getPersonaAvatar,
+        currentNextIDPlatform: ui.configuration.nextIDConfig?.platform,
+        currentPersonaIdentifier: createSubscriptionFromValueRef(currentPersonaIdentifier, signal),
     })
     SiteAdaptorContextRef.value = {
         ...RestPartOfPluginUIContextShared,
-        currentPersonaIdentifier,
-        themeSettings: themeSettingsSub,
-        getThemeSettings: () => ui.configuration.themeSettings,
-        getNextIDPlatform: () => ui.configuration.nextIDConfig?.platform,
         getPostIdFromNewPostToast: ui.configuration.nextIDConfig?.getPostIdFromNewPostToast,
         getPostURL: ui.utils.getPostURL,
         share: ui.utils.share,
@@ -161,13 +158,10 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         createPersona: () => Services.Helper.openDashboard(DashboardRoutes.SignUpPersona),
         connectPersona,
         fetchManifest: Services.ThirdPartyPlugin.fetchManifest,
-        getPersonaAvatar: Services.Identity.getPersonaAvatar,
         getSocialIdentity: Services.Identity.querySocialIdentity,
         queryPersonaByProfile: Services.Identity.queryPersonaByProfile,
         attachProfile: Services.Identity.attachProfile,
-        getPersonaAvatars: Services.Identity.getPersonaAvatars,
         postMessage: ui.automation?.nativeCompositionDialog?.appendText,
-        setMinimalMode: Services.Settings.setPluginMinimalModeEnabled,
         setCurrentPersonaIdentifier: Services.Settings.setCurrentPersonaIdentifier,
         setPluginMinimalModeEnabled: Services.Settings.setPluginMinimalModeEnabled,
         setDecentralizedSearchSettings: Services.Settings.setDecentralizedSearchSettings,
@@ -183,6 +177,9 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
             signal,
             (id, def, signal): Plugin.SiteAdaptor.SiteAdaptorContext => {
                 return {
+                    setMinimalMode(enabled) {
+                        Services.Settings.setPluginMinimalModeEnabled(id, enabled)
+                    },
                     ...createPartialSharedUIContext(id, def, signal),
                     ...SiteAdaptorContextRef.value,
                 }

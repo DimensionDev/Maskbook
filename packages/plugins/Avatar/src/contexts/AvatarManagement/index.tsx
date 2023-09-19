@@ -22,6 +22,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { PFP_TYPE, type SelectTokenInfo } from '../../types.js'
 import { useLastRecognizedIdentity, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { currentNextIDPlatform } from '@masknet/plugin-infra/content-script/context'
 import { useQuery } from '@tanstack/react-query'
 import { NextIDProof } from '@masknet/web3-providers'
 import { isValidAddress } from '@masknet/web3-shared-evm'
@@ -62,7 +63,7 @@ export const AvatarManagementContext = createContext<AvatarManagementContextOpti
 interface Props extends PropsWithChildren<{ socialIdentity?: SocialIdentity }> {}
 
 export const AvatarManagementProvider = memo(({ children }: Props) => {
-    const { getNextIDPlatform, queryPersonaByProfile } = useSiteAdaptorContext()
+    const { queryPersonaByProfile } = useSiteAdaptorContext()
     const identity = useLastRecognizedIdentity()
 
     const [proof, setProof] = useState<BindingProof>()
@@ -76,10 +77,9 @@ export const AvatarManagementProvider = memo(({ children }: Props) => {
         queryKey: ['nft-avatar-state', identity],
         enabled: !!identity,
         queryFn: async () => {
-            const platform = getNextIDPlatform()
-            if (!identity?.identifier || !platform) return
+            if (!identity?.identifier || !currentNextIDPlatform) return
             const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(
-                platform,
+                currentNextIDPlatform,
                 identity.identifier.userId.toLowerCase(),
             )
             const linkedPersona = await queryPersonaByProfile(identity.identifier)

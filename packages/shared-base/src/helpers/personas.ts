@@ -1,5 +1,10 @@
-import { ECKeyIdentifier, ProfileIdentifier } from '../index.js'
-import type { PersonaIdentifier, PersonaInformation, ProfileInformation, Identifier } from '../index.js'
+import {
+    type ProfileIdentifier,
+    type PersonaIdentifier,
+    type PersonaInformation,
+    type ProfileInformation,
+    Identifier,
+} from '../index.js'
 
 export function formatPersonaFingerprint(fingerprint: string, size?: number) {
     if (!size) {
@@ -22,45 +27,23 @@ export const formatPersonaName = (nickname?: string) => {
     return `${nickname.slice(0, 12)}...`
 }
 
-function isSameIdentity<T extends Identifier>(
-    formatString: (i: string) => T,
-    ...identities: Array<T | { identifier: T } | string | undefined>
-) {
-    return identities.reduce((previousValue, currentIdentity, key) => {
+function isSameIdentity<T extends Identifier>(identities: Array<T | { identifier: T } | undefined>) {
+    return identities.reduce((previousValue, T2, key) => {
         if (key === 0) return true
-        const preIdentity = identities[key - 1]
-        if (!currentIdentity || !preIdentity) return false
+        const T1 = identities[key - 1]
+        if (!T2 || !T1) return false
 
-        const i1IdentifierText =
-            typeof preIdentity === 'string'
-                ? formatString(preIdentity).toText()
-                : 'toText' in preIdentity
-                ? preIdentity.toText()
-                : preIdentity.identifier.toText()
-        const i2IdentifierText =
-            typeof currentIdentity === 'string'
-                ? formatString(currentIdentity).toText()
-                : 'toText' in currentIdentity
-                ? currentIdentity.toText()
-                : currentIdentity.identifier.toText()
+        const i1IdentifierText = (T1 instanceof Identifier ? T1 : T1.identifier).toText()
+        const i2IdentifierText = (T2 instanceof Identifier ? T2 : T2.identifier).toText()
 
         return previousValue && i1IdentifierText.toLowerCase() === i2IdentifierText.toLowerCase()
     }, false)
 }
 
-export function isSamePersona(...personas: Array<PersonaIdentifier | PersonaInformation | string | undefined>) {
-    return isSameIdentity(
-        (i) => {
-            if (i.startsWith('ec_key:')) return ECKeyIdentifier.from(i).expect(`${i} should be a valid ECKeyIdentifier`)
-            return new ECKeyIdentifier('secp256k1', i)
-        },
-        ...personas,
-    )
+export function isSamePersona(...personas: Array<PersonaIdentifier | PersonaInformation | undefined>) {
+    return isSameIdentity(personas)
 }
 
-export function isSameProfile(...profiles: Array<ProfileIdentifier | ProfileInformation | string | undefined>) {
-    return isSameIdentity(
-        (i) => ProfileIdentifier.from(i).expect(`${i} should be a valid ProfileIdentifier`),
-        ...profiles,
-    )
+export function isSameProfile(...profiles: Array<ProfileIdentifier | ProfileInformation | undefined>) {
+    return isSameIdentity(profiles)
 }

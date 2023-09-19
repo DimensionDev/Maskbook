@@ -29,7 +29,7 @@ export const useCurrentPersonaIdentifier = createHook(
 )
 
 export const usePersonaAvatar = createHook(
-    () => Services.Settings.getCurrentPersonaIdentifier().then(Services.Identity.getPersonaAvatar),
+    () => Services.Settings.getCurrentPersonaIdentifier().then((x) => Services.Identity.getPersonaAvatar(x)),
     (x) => {
         MaskMessages.events.currentPersonaIdentifier.on(x)
         MaskMessages.events.ownPersonaChanged.on(x)

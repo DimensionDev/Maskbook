@@ -21,7 +21,6 @@ import type {
     ProfileIdentifier,
     ScopedStorage,
     SignType,
-    ValueRefWithReady,
     Wallet,
     SocialAccount,
     SocialIdentity,
@@ -37,7 +36,6 @@ import type {
     NetworkDescriptor,
     ProviderDescriptor,
     SearchResult,
-    ThemeSettings,
     Web3State,
     Web3UI,
 } from '@masknet/web3-shared-base'
@@ -113,6 +111,7 @@ export namespace Plugin.Shared {
     }
 
     export interface SharedUIContext extends SharedContext {
+        setMinimalMode(enabled: boolean): void
         setWeb3State(state: Web3State<any, any, any, any, any, any, any, any>): void
         /** The selected persona */
         currentPersona: Subscription<PersonaIdentifier | undefined>
@@ -329,17 +328,10 @@ export namespace Plugin.Shared {
 /** This part runs in the Site Adaptor */
 export namespace Plugin.SiteAdaptor {
     export interface SiteAdaptorContext extends Shared.SharedUIContext {
-        themeSettings: Subscription<ThemeSettings | undefined>
-        /** The default theme settings. */
-        getThemeSettings: () => ThemeSettings | undefined
-        getNextIDPlatform: () => NextIDPlatform | undefined
-        getPersonaAvatar: (identifier: ECKeyIdentifier | null | undefined) => Promise<string | null | undefined>
         getSocialIdentity: (
             platform: NextIDPlatform,
             identity: IdentityResolved | undefined,
         ) => Promise<SocialIdentity | undefined>
-        setMinimalMode: (id: string, enabled: boolean) => Promise<void>
-        currentPersonaIdentifier: ValueRefWithReady<string>
 
         share?: (text: string) => void
         getPostURL?: (identifier: PostIdentifier) => URL | null
@@ -358,10 +350,6 @@ export namespace Plugin.SiteAdaptor {
             target: ProfileIdentifier | PersonaIdentifier,
             data: LinkedProfileDetails,
         ) => Promise<void>
-
-        getPersonaAvatars?: (
-            identifiers?: PersonaIdentifier[],
-        ) => Promise<Map<ProfileIdentifier | PersonaIdentifier, string>>
         getPostIdFromNewPostToast?: () => string
         postMessage?: (text: string, options?: any) => Promise<void>
         setPluginMinimalModeEnabled?: (id: string, enabled: boolean) => Promise<void>

@@ -33,11 +33,7 @@ export {
     useLastRecognizedSocialIdentity,
     usePostLink,
     useSocialIdentity,
-    useThemeColor,
     useSiteThemeMode,
-    useThemeMode,
-    useThemeSettings,
-    useThemeSize,
     useSocialIdentityByUserId,
 } from './site-adaptor/index.js'
 

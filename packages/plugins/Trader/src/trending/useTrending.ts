@@ -10,6 +10,7 @@ import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { TokenType, type NonFungibleTokenActivity } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../messages.js'
+import { useQuery } from '@tanstack/react-query'
 
 export function useNFT_TrendingOverview(
     pluginID: NetworkPluginID,
@@ -71,19 +72,22 @@ export function useTrendingById(
     const currency = trending.getCurrency(result.chainId, result.source)
 
     const {
-        value: coinTrending,
-        loading,
+        isLoading,
+        data: coinTrending,
         error,
-    } = useAsync(async () => {
-        if (!currency || !result.source) return null
-        return PluginTraderRPC.getCoinTrending(result, currency)
-    }, [chainId, JSON.stringify(result), currency?.id])
+    } = useQuery({
+        queryKey: ['get-coin-trending', result, currency?.id],
+        queryFn: async () => {
+            if (!currency || !result.source) return null
+            return PluginTraderRPC.getCoinTrending(result, currency)
+        },
+    })
 
     const { data: detailedToken } = useFungibleToken(result.pluginID, coinTrending?.coin.contract_address, undefined, {
         chainId: coinTrending?.coin.chainId as ChainId,
     })
 
-    if (loading) {
+    if (isLoading) {
         return {
             loading: true,
         }
@@ -92,7 +96,7 @@ export function useTrendingById(
     if (error) {
         return {
             loading: false,
-            error,
+            error: error as Error,
         }
     }
 
@@ -116,8 +120,7 @@ export function useTrendingById(
                   }
                 : null,
         },
-        loading,
-        error,
+        loading: isLoading,
     }
 }
 
