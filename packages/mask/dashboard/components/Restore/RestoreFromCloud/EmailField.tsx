@@ -1,5 +1,5 @@
-import { MaskTextField, SendingCodeField, useCustomSnackbar } from '@masknet/theme'
-import { Box } from '@mui/material'
+import { SendingCodeField, useCustomSnackbar } from '@masknet/theme'
+import { Box, TextField } from '@mui/material'
 import { memo, useCallback, useLayoutEffect, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { usePersonaRecovery } from '../../../contexts/RecoveryContext.js'
@@ -79,7 +79,7 @@ export const EmailField = memo(function EmailField() {
 
     return (
         <>
-            <MaskTextField
+            <TextField
                 fullWidth
                 value={account}
                 autoFocus
@@ -99,6 +99,7 @@ export const EmailField = memo(function EmailField() {
             />
             <Box mt={1.5}>
                 <SendingCodeField
+                    fullWidth
                     value={code}
                     onChange={setCode}
                     errorMessage={sendCodeError?.message || codeError}

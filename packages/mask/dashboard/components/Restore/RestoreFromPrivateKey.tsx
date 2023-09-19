@@ -1,8 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import type { UseFormSetError, SubmitHandler } from 'react-hook-form'
-import { MaskTextField, makeStyles } from '@masknet/theme'
-import { Box } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
+import { Box, TextField } from '@mui/material'
 import { memo, useCallback, useLayoutEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
@@ -73,11 +73,12 @@ export const RestoreFromPrivateKey = memo(function RestoreFromPrivateKey({
             <Controller
                 control={control}
                 render={({ field }) => (
-                    <MaskTextField
+                    <TextField
                         {...field}
                         autoFocus
                         InputProps={{
                             className: classes.input,
+                            disableUnderline: true,
                         }}
                         multiline={multiline}
                         rows={multiline ? 6 : undefined}

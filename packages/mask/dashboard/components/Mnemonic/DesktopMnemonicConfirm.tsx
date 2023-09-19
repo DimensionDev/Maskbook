@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
 import { useDrop } from 'react-use'
-import { MaskTextField, makeStyles } from '@masknet/theme'
-import { Grid, Typography } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
+import { Grid, TextField, Typography } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
     input: {
@@ -50,7 +50,7 @@ export const DesktopMnemonicConfirm = memo(function DesktopMnemonicConfirm(props
                 const no = i + 1
                 return (
                     <Grid item xs={3} key={i}>
-                        <MaskTextField
+                        <TextField
                             sx={{ width: '100%', userSelect: 'none' }}
                             value={word}
                             autoFocus={i === 0}
@@ -58,6 +58,7 @@ export const DesktopMnemonicConfirm = memo(function DesktopMnemonicConfirm(props
                                 disableUnderline: true,
                                 className: classes.input,
                                 startAdornment: <Typography className={classes.no}>{no}.</Typography>,
+                                size: 'small',
                                 inputProps: {
                                     style: {
                                         textAlign: 'center',

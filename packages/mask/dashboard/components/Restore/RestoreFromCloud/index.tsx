@@ -14,10 +14,10 @@ import { RestoreContext } from './RestoreProvider.js'
 import { RestoreStep } from './restoreReducer.js'
 import { InputForm } from './InputForm.js'
 import { ConfirmBackupInfo } from './ConfirmBackupInfo.js'
-import { PersonaContext } from '../../../hooks/usePersonaContext.js'
 import { UserContext } from '../../../../shared-ui/index.js'
 import { AccountType } from '../../../type.js'
 import { BackupPreview } from '../../BackupPreview/index.js'
+import { PersonaContext } from '@masknet/shared'
 
 interface RestoreProps {
     onRestore: () => Promise<void>
@@ -46,11 +46,13 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
     const navigate = useNavigate()
     const { showSnackbar } = useCustomSnackbar()
     const { user, updateUser } = UserContext.useContainer()
-    const { currentPersona, changeCurrentPersona } = PersonaContext.useContainer()
+    const { currentPersona } = PersonaContext.useContainer()
     const { state, dispatch } = RestoreContext.useContainer()
     const { account, accountType, backupSummary, password, backupDecrypted } = state
 
     const [openSynchronizePasswordDialog, toggleSynchronizePasswordDialog] = useState(false)
+
+    const changeCurrentPersona = useCallback(Services.Settings.setCurrentPersonaIdentifier, [])
 
     const restoreCallback = useCallback(async () => {
         if (!currentPersona) {
@@ -67,7 +69,7 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
             }
         }
         toggleSynchronizePasswordDialog(true)
-    }, [currentPersona, account, accountType, user, toggleSynchronizePasswordDialog, updateUser])
+    }, [currentPersona, account, accountType, user, toggleSynchronizePasswordDialog, updateUser, changeCurrentPersona])
 
     const handleRestore = useCallback(async () => {
         dispatch({ type: 'SET_LOADING', loading: true })
