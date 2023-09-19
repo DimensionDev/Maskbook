@@ -9,7 +9,7 @@ import { useOpenApplicationSettings } from '@masknet/shared'
 const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
-        background: 'rgba(255, 255, 255, 0.80)',
+        background: theme.palette.mode === 'dark' ? 'rgba(0, 0, 0, 0.80)' : 'rgba(255, 255, 255, 0.80)',
         backdropFilter: 'blur(10px)',
         borderRadius: '0 0 12px 12px',
         position: 'absolute',
@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     poweredBy: {
         color: theme.palette.maskColor.second,
-        fontSize: 14,
+        fontSize: '14px',
         fontWeight: 700,
         lineHeight: '18px',
         alignItems: 'center',
@@ -40,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         gap: '8px',
         color: theme.palette.maskColor.main,
-        fontSize: '16px',
+        fontSize: '14px',
         fontWeight: 700,
         lineHeight: '20px',
         alignItems: 'center',
