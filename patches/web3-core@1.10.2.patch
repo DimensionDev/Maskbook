@@ -1,0 +1,13 @@
+diff --git a/types/index.d.ts b/types/index.d.ts
+index 2853d4e2c57b6225ba38077d13325e53ded87c70..40318f892b4542dbc47ae49806ef46924607c4d2 100644
+--- a/types/index.d.ts
++++ b/types/index.d.ts
+@@ -222,7 +222,7 @@ export interface TransactionReceipt {
+     logs: Log[];
+     logsBloom: string;
+     events?: {
+-        [eventName: string]: EventLog;
++        [eventName: string]: EventLog | undefined;
+     };
+ }
+ 

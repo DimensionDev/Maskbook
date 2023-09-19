@@ -95,6 +95,12 @@ patchedDependencies:
   urlcat@3.1.0:
     hash: 5r5xyq4zgcnqugwsrx4lxq2i4e
     path: patches/urlcat@3.1.0.patch
+  web3-core@1.10.2:
+    hash: 7c6knffilb7dxuf3r2r5ttgbem
+    path: patches/web3-core@1.10.2.patch
+  web3@1.10.2:
+    hash: 6qos2fdq7vlcgtcov7f4zw4ome
+    path: patches/web3@1.10.2.patch
 
 importers:
 
@@ -1115,10 +1121,10 @@ importers:
         version: 1.0.1
       web3:
         specifier: 1.10.2
-        version: 1.10.2
+        version: 1.10.2(patch_hash=6qos2fdq7vlcgtcov7f4zw4ome)
       web3-core:
         specifier: 1.10.2
-        version: 1.10.2
+        version: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
       web3-core-helpers:
         specifier: 1.10.2
         version: 1.10.2
@@ -1294,10 +1300,10 @@ importers:
         version: 1.0.1
       web3:
         specifier: 1.10.2
-        version: 1.10.2
+        version: 1.10.2(patch_hash=6qos2fdq7vlcgtcov7f4zw4ome)
       web3-core:
         specifier: 1.10.2
-        version: 1.10.2
+        version: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
       web3-core-helpers:
         specifier: 1.10.2
         version: 1.10.2
@@ -1870,10 +1876,10 @@ importers:
         version: 1.0.1
       web3:
         specifier: 1.10.2
-        version: 1.10.2
+        version: 1.10.2(patch_hash=6qos2fdq7vlcgtcov7f4zw4ome)
       web3-core:
         specifier: 1.10.2
-        version: 1.10.2
+        version: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
       web3-core-helpers:
         specifier: 1.10.2
         version: 1.10.2
@@ -2597,7 +2603,7 @@ importers:
         version: 4.0.0
       web3-core:
         specifier: 1.10.2
-        version: 1.10.2
+        version: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
       web3-utils:
         specifier: 1.10.2
         version: 1.10.2
@@ -2651,7 +2657,7 @@ importers:
         version: 4.0.0
       web3:
         specifier: 1.10.2
-        version: 1.10.2
+        version: 1.10.2(patch_hash=6qos2fdq7vlcgtcov7f4zw4ome)
       web3-utils:
         specifier: 1.10.2
         version: 1.10.2
@@ -3866,7 +3872,7 @@ importers:
         version: 8.3.1(typescript@5.3.0-dev.20230830)
       web3-core:
         specifier: 1.10.2
-        version: 1.10.2
+        version: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
       web3-eth-contract:
         specifier: 1.10.2
         version: 1.10.2
@@ -3954,7 +3960,7 @@ importers:
         version: 1.8.0(react@0.0.0-experimental-0a360642d-20230711)
       web3:
         specifier: 1.10.2
-        version: 1.10.2
+        version: 1.10.2(patch_hash=6qos2fdq7vlcgtcov7f4zw4ome)
 
   packages/web3-hooks/evm:
     dependencies:
@@ -3999,10 +4005,10 @@ importers:
         version: 1.0.1
       web3:
         specifier: 1.10.2
-        version: 1.10.2
+        version: 1.10.2(patch_hash=6qos2fdq7vlcgtcov7f4zw4ome)
       web3-core:
         specifier: 1.10.2
-        version: 1.10.2
+        version: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
       web3-utils:
         specifier: 1.10.2
         version: 1.10.2
@@ -4191,10 +4197,10 @@ importers:
         version: 1.0.1
       web3:
         specifier: 1.10.2
-        version: 1.10.2
+        version: 1.10.2(patch_hash=6qos2fdq7vlcgtcov7f4zw4ome)
       web3-core:
         specifier: 1.10.2
-        version: 1.10.2
+        version: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
       web3-core-helpers:
         specifier: 1.10.2
         version: 1.10.2
@@ -4334,10 +4340,10 @@ importers:
         version: 1.0.1
       web3:
         specifier: 1.10.2
-        version: 1.10.2
+        version: 1.10.2(patch_hash=6qos2fdq7vlcgtcov7f4zw4ome)
       web3-core:
         specifier: 1.10.2
-        version: 1.10.2
+        version: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
       web3-core-helpers:
         specifier: 1.10.2
         version: 1.10.2
@@ -14639,8 +14645,8 @@ packages:
       lodash: 4.17.21
       ts-essentials: 7.0.2(typescript@5.3.0-dev.20230830)
       typechain: 8.3.1(typescript@5.3.0-dev.20230830)
-      web3: 1.10.2
-      web3-core: 1.10.2
+      web3: 1.10.2(patch_hash=6qos2fdq7vlcgtcov7f4zw4ome)
+      web3-core: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
       web3-eth-contract: 1.10.2
     transitivePeerDependencies:
       - typescript
@@ -35519,7 +35525,7 @@ packages:
       web3-core-helpers: 1.10.2
     dev: false
 
-  /web3-core@1.10.2:
+  /web3-core@1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem):
     resolution: {integrity: sha512-qTn2UmtE8tvwMRsC5pXVdHxrQ4uZ6jiLgF5DRUVtdi7dPUmX18Dp9uxKfIfhGcA011EAn8P6+X7r3pvi2YRxBw==}
     engines: {node: '>=8.0.0'}
     dependencies:
@@ -35534,6 +35540,7 @@ packages:
       - encoding
       - supports-color
     dev: false
+    patched: true
 
   /web3-eth-abi@1.10.2:
     resolution: {integrity: sha512-pY4fQUio7W7ZRSLf+vsYkaxJqaT/jHcALZjIxy+uBQaYAJ3t6zpQqMZkJB3Dw7HUODRJ1yI0NPEFGTnkYf/17A==}
@@ -35553,7 +35560,7 @@ packages:
       eth-lib: 0.2.8
       scrypt-js: 3.0.1
       uuid: 9.0.0
-      web3-core: 1.10.2
+      web3-core: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
       web3-core-helpers: 1.10.2
       web3-core-method: 1.10.2
       web3-utils: 1.10.2
@@ -35567,7 +35574,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       '@types/bn.js': 5.1.1
-      web3-core: 1.10.2
+      web3-core: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
       web3-core-helpers: 1.10.2
       web3-core-method: 1.10.2
       web3-core-promievent: 1.10.2
@@ -35585,7 +35592,7 @@ packages:
     dependencies:
       content-hash: 2.5.2
       eth-ens-namehash: 2.0.8
-      web3-core: 1.10.2
+      web3-core: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
       web3-core-helpers: 1.10.2
       web3-core-promievent: 1.10.2
       web3-eth-abi: 1.10.2
@@ -35609,7 +35616,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       '@types/node': 20.5.7
-      web3-core: 1.10.2
+      web3-core: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
       web3-core-helpers: 1.10.2
       web3-core-method: 1.10.2
       web3-net: 1.10.2
@@ -35623,7 +35630,7 @@ packages:
     resolution: {integrity: sha512-s38rhrntyhGShmXC4R/aQtfkpcmev9c7iZwgb9CDIBFo7K8nrEJvqIOyajeZTxnDIiGzTJmrHxiKSadii5qTRg==}
     engines: {node: '>=8.0.0'}
     dependencies:
-      web3-core: 1.10.2
+      web3-core: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
       web3-core-helpers: 1.10.2
       web3-core-method: 1.10.2
       web3-core-subscriptions: 1.10.2
@@ -35644,7 +35651,7 @@ packages:
     resolution: {integrity: sha512-w9i1t2z7dItagfskhaCKwpp6W3ylUR88gs68u820y5f8yfK5EbPmHc6c2lD8X9ZrTnmDoeOpIRCN/RFPtZCp+g==}
     engines: {node: '>=8.0.0'}
     dependencies:
-      web3-core: 1.10.2
+      web3-core: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
       web3-core-method: 1.10.2
       web3-utils: 1.10.2
     transitivePeerDependencies:
@@ -35687,7 +35694,7 @@ packages:
     resolution: {integrity: sha512-UP0Kc3pHv9uULFu0+LOVfPwKBSJ6B+sJ5KflF7NyBk6TvNRxlpF3hUhuaVDCjjB/dDUR6T0EQeg25FA2uzJbag==}
     engines: {node: '>=8.0.0'}
     dependencies:
-      web3-core: 1.10.2
+      web3-core: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
       web3-core-method: 1.10.2
       web3-core-subscriptions: 1.10.2
       web3-net: 1.10.2
@@ -35710,12 +35717,12 @@ packages:
       utf8: 3.0.0
     dev: false
 
-  /web3@1.10.2:
+  /web3@1.10.2(patch_hash=6qos2fdq7vlcgtcov7f4zw4ome):
     resolution: {integrity: sha512-DAtZ3a3ruPziE80uZ3Ob0YDZxt6Vk2un/F5BcBrxO70owJ9Z1Y2+loZmbh1MoAmoLGjA/SUSHeUtid3fYmBaog==}
     engines: {node: '>=8.0.0'}
     dependencies:
       web3-bzz: 1.10.2
-      web3-core: 1.10.2
+      web3-core: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
       web3-eth: 1.10.2
       web3-eth-personal: 1.10.2
       web3-net: 1.10.2
@@ -35727,6 +35734,7 @@ packages:
       - supports-color
       - utf-8-validate
     dev: false
+    patched: true
 
   /webcrypto-core@1.4.0:
     resolution: {integrity: sha512-HY3Zo0GcRIQUUDnlZ/shGjN+4f7LVMkdJZoGPog+oHhJsJdMz6iM8Za5xZ0t6qg7Fx/JXXz+oBv2J2p982hGTQ==}

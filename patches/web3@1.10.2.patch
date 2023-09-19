@@ -1,0 +1,21 @@
+diff --git a/package.json b/package.json
+index 79973a924fae0f40df7e69bf3f7bcf74e4bc8c3b..fd301e07ff978dff7f2b8756f248b30ad52118ab 100644
+--- a/package.json
++++ b/package.json
+@@ -8,7 +8,6 @@
+         "node": ">=8.0.0"
+     },
+     "main": "lib/index.js",
+-    "browser": "dist/web3.min.js",
+     "bugs": {
+         "url": "https://github.com/ethereum/web3.js/issues"
+     },
+@@ -18,7 +17,7 @@
+         "API"
+     ],
+     "author": "ethereum.org",
+-    "types": "types/index.d.ts",
++    "types": "types/index.d.mts",
+     "scripts": {
+         "compile": "tsc -b tsconfig.json",
+         "dtslint": "dtslint --localTs ../../node_modules/typescript/lib types",
