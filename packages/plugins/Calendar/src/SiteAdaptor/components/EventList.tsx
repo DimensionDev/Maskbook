@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { EmptyStatus, LoadingStatus } from '@masknet/shared'
 import format from 'date-fns/format'
@@ -67,12 +67,20 @@ const useStyles = makeStyles()((theme) => ({
         height: '156px',
         objectFit: 'cover',
     },
+    dateDiv: {
+        fontSize: '14px',
+        fontWeight: 700,
+        lineHeight: '18px',
+        color: theme.palette.maskColor.main,
+        padding: '10px 12px',
+    },
 }))
 
 interface EventListProps {
-    list: any[]
+    list: Record<string, any[]>
     isLoading: boolean
     empty: boolean
+    dateString: string
 }
 
 export const formatDate = (date: string) => {
@@ -80,9 +88,18 @@ export const formatDate = (date: string) => {
     return format(new Date(date), dateFormat)
 }
 
-export function EventList({ list, isLoading, empty }: EventListProps) {
+export function EventList({ list, isLoading, empty, dateString }: EventListProps) {
     const { classes, cx } = useStyles()
     const t = useI18N()
+    const listAfterDate = useMemo(() => {
+        const listAfterDate: string[] = []
+        for (const key in list) {
+            if (new Date(key) >= new Date(dateString)) {
+                listAfterDate.push(key)
+            }
+        }
+        return listAfterDate
+    }, [list, dateString])
     return (
         <div className={classes.container}>
             {isLoading && !list?.length ? (
@@ -90,23 +107,28 @@ export function EventList({ list, isLoading, empty }: EventListProps) {
                     <LoadingStatus />
                 </div>
             ) : !empty ? (
-                list?.map((v) => {
+                listAfterDate.map((key) => {
                     return (
-                        <div
-                            className={classes.eventCard}
-                            key={v.eventTitle}
-                            onClick={() => {
-                                window.open(v.event_url)
-                            }}>
-                            <div className={classes.eventHeader}>
-                                <div className={classes.projectWrap}>
-                                    <img src={v.project.logo} className={classes.logo} alt="logo" />
-                                    <Typography className={classes.projectName}> {v.project.name}</Typography>
+                        <div key={key}>
+                            <Typography className={classes.dateDiv}>{format(new Date(key), 'MMM dd,yyy')}</Typography>
+                            {list[key].map((v) => (
+                                <div
+                                    className={classes.eventCard}
+                                    key={v.eventTitle}
+                                    onClick={() => {
+                                        window.open(v.event_url)
+                                    }}>
+                                    <div className={classes.eventHeader}>
+                                        <div className={classes.projectWrap}>
+                                            <img src={v.project.logo} className={classes.logo} alt="logo" />
+                                            <Typography className={classes.projectName}> {v.project.name}</Typography>
+                                        </div>
+                                    </div>
+                                    <Typography className={classes.eventTitle}>{v.event_title}</Typography>
+                                    <Typography className={classes.eventTitle}>{formatDate(v.event_date)}</Typography>
+                                    <img className={classes.poster} src={v.poster_url} alt="poster" />
                                 </div>
-                            </div>
-                            <Typography className={classes.eventTitle}>{v.event_title}</Typography>
-                            <Typography className={classes.eventTitle}>{formatDate(v.event_date)}</Typography>
-                            <img className={classes.poster} src={v.poster_url} alt="poster" />
+                            ))}
                         </div>
                     )
                 })

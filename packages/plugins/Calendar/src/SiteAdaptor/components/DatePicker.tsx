@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import format from 'date-fns/format'
 import startOfMonth from 'date-fns/startOfMonth'
 import endOfMonth from 'date-fns/endOfMonth'
@@ -86,19 +86,17 @@ interface DatePickerProps {
 
 export function DatePicker({ list, selectedDate, setSelectedDate, open, setOpen }: DatePickerProps) {
     const { classes } = useStyles({ open })
-    const [currentDate, setCurrentDate] = useState(selectedDate || new Date())
 
-    const monthStart = useMemo(() => startOfMonth(currentDate), [currentDate])
-    const monthEnd = useMemo(() => endOfMonth(currentDate), [currentDate])
+    const monthStart = useMemo(() => startOfMonth(selectedDate), [selectedDate])
+    const monthEnd = useMemo(() => endOfMonth(selectedDate), [selectedDate])
 
     const handleDateClick = (date: Date) => {
         setSelectedDate(date)
-        setCurrentDate(date)
         setOpen(false)
     }
 
     const changeMonth = (amount: number) => {
-        setCurrentDate(addMonths(currentDate, amount))
+        setSelectedDate(addMonths(selectedDate, amount))
     }
 
     const renderDatePicker = () => {
@@ -150,7 +148,7 @@ export function DatePicker({ list, selectedDate, setSelectedDate, open, setOpen 
         return (
             <div className={classes.container}>
                 <div className={classes.header}>
-                    <Typography className={classes.headerText}>{format(currentDate, 'MMMM yyyy')}</Typography>
+                    <Typography className={classes.headerText}>{format(selectedDate, 'MMMM yyyy')}</Typography>
                     <Box className={classes.headerIcon}>
                         <IconButton size="small" onClick={() => changeMonth(-1)}>
                             <Icons.LeftArrow size={24} />

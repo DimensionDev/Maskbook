@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { EmptyStatus, LoadingStatus } from '@masknet/shared'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { Typography } from '@mui/material'
+import format from 'date-fns/format'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -82,41 +83,63 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    dateDiv: {
+        fontSize: '14px',
+        fontWeight: 700,
+        lineHeight: '18px',
+        color: theme.palette.maskColor.main,
+        padding: '10px 12px',
+    },
 }))
 
 interface NewsListProps {
-    list: any[]
+    list: Record<string, any[]>
     isLoading: boolean
     empty: boolean
+    dateString: string
 }
 
-export function NewsList({ list, isLoading, empty }: NewsListProps) {
+export function NewsList({ list, isLoading, empty, dateString }: NewsListProps) {
     const { classes, cx } = useStyles()
     const t = useI18N()
+    const listAfterDate = useMemo(() => {
+        const listAfterDate: string[] = []
+        for (const key in list) {
+            if (new Date(key) >= new Date(dateString)) {
+                listAfterDate.push(key)
+            }
+        }
+        return listAfterDate
+    }, [list, dateString])
     return (
         <div className={classes.container}>
             {isLoading && !list?.length ? (
                 <div className={cx(classes.empty, classes.eventTitle)}>
                     <LoadingStatus />
                 </div>
-            ) : !empty ? (
-                list?.map((v) => {
+            ) : !empty && listAfterDate.length ? (
+                listAfterDate.map((key) => {
                     return (
-                        <div
-                            className={classes.eventCard}
-                            key={v.eventTitle}
-                            onClick={() => {
-                                window.open(v.event_url)
-                            }}>
-                            <div className={classes.eventHeader}>
-                                <div className={classes.projectWrap}>
-                                    <img src={v.project.logo} className={classes.logo} alt="logo" />
-                                    <Typography className={classes.projectName}>{v.project.name}</Typography>
+                        <div key={key}>
+                            <Typography className={classes.dateDiv}>{format(new Date(key), 'MMM dd,yyy')}</Typography>
+                            {list[key].map((v) => (
+                                <div
+                                    className={classes.eventCard}
+                                    key={v.eventTitle}
+                                    onClick={() => {
+                                        window.open(v.event_url)
+                                    }}>
+                                    <div className={classes.eventHeader}>
+                                        <div className={classes.projectWrap}>
+                                            <img src={v.project.logo} className={classes.logo} alt="logo" />
+                                            <Typography className={classes.projectName}>{v.project.name}</Typography>
+                                        </div>
+                                        <Typography className={classes.eventType}>{v.event_type}</Typography>
+                                    </div>
+                                    <Typography className={classes.eventTitle}>{v.event_title}</Typography>
+                                    <Typography className={classes.eventContent}>{v.event_description}</Typography>
                                 </div>
-                                <Typography className={classes.eventType}>{v.event_type}</Typography>
-                            </div>
-                            <Typography className={classes.eventTitle}>{v.event_title}</Typography>
-                            <Typography className={classes.eventContent}>{v.event_description}</Typography>
+                            ))}
                         </div>
                     )
                 })
