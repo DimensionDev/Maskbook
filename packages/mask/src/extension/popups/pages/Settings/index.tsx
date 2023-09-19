@@ -1,5 +1,6 @@
-import { Box, List, ListItem, ListItemText, Typography, useTheme } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
+import { Trans } from 'react-i18next'
+import { Box, List, ListItem, ListItemText, Typography, useTheme } from '@mui/material'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { useTitle } from '../../hooks/useTitle.js'
 import { makeStyles } from '@masknet/theme'
@@ -9,9 +10,8 @@ import { env } from '@masknet/flags'
 import { UserContext, useAppearance, useLanguage } from '../../../../../shared-ui/index.js'
 import { Appearance, LanguageOptions } from '@masknet/public-api'
 import { openWindow } from '@masknet/shared-base-ui'
-import { DashboardRoutes, PopupModalRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, PopupModalRoutes, Sniffings } from '@masknet/shared-base'
 import { useSupportedSites } from '../../hooks/useSupportedSites.js'
-import { Trans } from 'react-i18next'
 import Services from '#services'
 
 const useStyles = makeStyles()((theme) => ({
@@ -159,7 +159,7 @@ const Settings = memo(function Settings() {
             active: true,
             url: browser.runtime.getURL(`/dashboard.html#${route}`),
         })
-        if (navigator.userAgent.includes('Firefox')) {
+        if (Sniffings.is_firefox) {
             window.close()
         }
         await Services.Helper.removePopupWindow()

@@ -119,7 +119,6 @@ export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl,
                             selected={selected}>
                             <ListItemIcon className={classes.listItemIcon}>
                                 <img src={icon} className={classes.icon} />
-                                {/* {createElement(icon, { className: classes.icon })} */}
                             </ListItemIcon>
                             <ListItemText
                                 primary={data.name}
