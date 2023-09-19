@@ -6,7 +6,8 @@ import { Icons } from '@masknet/icons'
 import { Alert, EmptyStatus, InjectedDialog, PersonaAction, PopupHomeTabType, usePersonaProofs } from '@masknet/shared'
 import { EMPTY_LIST, NextIDPlatform, PopupRoutes, PluginID, EMPTY_OBJECT } from '@masknet/shared-base'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { useChainContext, useUnlistedAddressConfig } from '@masknet/web3-hooks-base'
+import { useUnlistedAddressConfig } from '@masknet/web3-hooks-base'
+import { queryPersonaAvatar } from '@masknet/plugin-infra/dom/context'
 import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../../locales/index.js'
 import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks/index.js'
@@ -44,10 +45,9 @@ interface Props {
 export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose }: Props) {
     const t = useI18N()
     const { classes } = useStyles()
-    const { chainId } = useChainContext()
     const myProfile = useLastRecognizedProfile()
     const allPersona = useAllPersonas()
-    const { getPersonaAvatar, openPopupWindow } = useSiteAdaptorContext()
+    const { openPopupWindow } = useSiteAdaptorContext()
 
     const [tipsVisible, setTipsVisible] = useState(true)
     const dismissTips = useCallback(() => setTipsVisible(false), [])
@@ -129,7 +129,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
         refetch()
     }, [pendingUnlistedConfig, t, updateConfig])
 
-    const { value: avatar } = useAsyncRetry(async () => getPersonaAvatar(currentPersona?.identifier), [])
+    const { value: avatar } = useAsyncRetry(async () => queryPersonaAvatar(currentPersona?.identifier), [])
 
     const openPopupsWindow = useCallback(() => {
         openPopupWindow(PopupRoutes.Personas, {

@@ -4,11 +4,8 @@ import { useAsync, useBoolean, useUpdateEffect } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { Box, Typography, alpha } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import {
-    useCurrentPersonaInformation,
-    useLastRecognizedIdentity,
-    useSiteAdaptorContext,
-} from '@masknet/plugin-infra/content-script'
+import { useCurrentPersonaInformation, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { queryPersonaAvatar } from '@masknet/plugin-infra/dom/context'
 import { CopyButton, ImageIcon, PersonaAction, WalletDescription } from '@masknet/shared'
 import { NetworkPluginID, formatPersonaFingerprint } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -132,7 +129,6 @@ export function Deploy({ open }: { open: boolean }) {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const [manager, setManager] = useState<ManagerAccount>()
 
-    const { getPersonaAvatar } = useSiteAdaptorContext()
     const { personaManagers, walletManagers } = useManagers()
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -145,10 +141,10 @@ export function Deploy({ open }: { open: boolean }) {
     const currentVisitingProfile = useLastRecognizedIdentity()
 
     const { value: avatar } = useAsync(async () => {
-        if (signPersona) return getPersonaAvatar(signPersona.identifier)
+        if (signPersona) return queryPersonaAvatar(signPersona.identifier)
 
         return null
-    }, [signPersona, getPersonaAvatar])
+    }, [signPersona])
 
     // #region get contract account
     const { value, loading: queryContractLoading } = useAsync(async () => {

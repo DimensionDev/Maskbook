@@ -1,12 +1,12 @@
 import { memo, type PropsWithChildren, useLayoutEffect, useEffect } from 'react'
-import { type PersonaInformation } from '@masknet/shared-base'
+import { type PersonaIdentifier, type PersonaInformation } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { useCurrentPersonaConnectStatus } from '../../../hooks/useCurrentPersonaConnectStatus.js'
 import { PersonaSelectPanelModal } from '../../modals/index.js'
 
 interface Props {
     personas: PersonaInformation[]
-    currentPersonaIdentifier?: string
+    currentPersonaIdentifier?: PersonaIdentifier
     identity?: IdentityResolved
     onDiscard?: () => void
     /** The target that will be opened after connected */

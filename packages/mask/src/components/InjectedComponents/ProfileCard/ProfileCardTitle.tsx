@@ -62,7 +62,7 @@ function Web3ProfileSettingButton() {
     const identity = useLastRecognizedIdentity()
     const { value: status, loading } = useCurrentPersonaConnectStatus(
         personas,
-        persona?.identifier.toText(),
+        persona?.identifier,
         undefined,
         identity,
     )

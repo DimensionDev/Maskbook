@@ -1,6 +1,6 @@
 import type { Appearance, LanguageOptions } from '@masknet/public-api'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
-import type { ProfileIdentifier, PersonaIdentifier } from '@masknet/base'
+import type { ProfileIdentifier, PersonaIdentifier, ECKeyIdentifier } from '@masknet/base'
 import type { NetworkPluginID, PluginID } from '../types/PluginID.js'
 import type { PersonaInformation, RelationFavor } from '../types/Persona.js'
 import type { EnhanceableSite, ExtensionSite } from '../Site/types.js'
@@ -10,7 +10,7 @@ export interface MaskSettingsEvents {
     telemetrySettings: boolean
     pluginIDSettings: Record<EnhanceableSite | ExtensionSite, NetworkPluginID>
     languageSettings: LanguageOptions
-    currentPersonaIdentifier: string
+    currentPersonaIdentifier: ECKeyIdentifier | undefined
 }
 export interface MaskContentScriptEvents {
     // TODO: Maybe in-page UI related messages should use Context instead of messages?
