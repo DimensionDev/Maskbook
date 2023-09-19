@@ -338,6 +338,18 @@ export namespace TwitterBaseAPI {
         }
     }
 
+    export interface Tweet {
+        text: string
+        mediaIds: string[]
+        card_uri: string
+        sensitive?: boolean
+        in_reply_to_tweet_id: string
+        exclude_reply_user_ids: string[] | string
+        attachment_url: string
+        circle?: string
+        conversation_control: 'follows' | 'mentions'
+    }
+
     export type UserByScreenNameResponse = Response<{ user: { result: User } }>
 
     export interface Provider {
