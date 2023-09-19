@@ -1,5 +1,6 @@
 {
     "send": "Send",
+    "search_area": "Search Area",
     "approve": "Approve",
     "operation": "Operation",
     "approve_mask": "Approve MASK?",
@@ -32,6 +33,7 @@
     "select_collectibles": "Select Collectibles",
     "no_collectible_found": "No collectible found.",
     "manage_token_list": "Manage Token List",
+    "mobile_number": "Mobile Number",
     "token_list_loading": "Loading",
     "erc20_token_list_placeholder": "Name or Contract address e.g. USDC or 0x234...",
     "erc20_token_list_loading": "Loading token lists...",

@@ -1,12 +1,14 @@
 import { List, ListItemButton, ListItemIcon, ListItemText, Popover, TextField, Typography } from '@mui/material'
 import { memo, useDeferredValue, useMemo, useState } from 'react'
-import { useDashboardI18N } from '../../locales/i18n_generated.js'
+
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import Fuse from 'fuse.js'
-
-import REGIONS from '../../assets/region.json'
-import { COUNTRY_ICON_URL } from '../../constants.js'
+import { useSharedI18N } from '../../../index.js'
+import { COUNTRIES } from '@masknet/shared-base-ui'
+import { getCountryFlag } from '../../../utils/getCountryFlag.js'
+// import REGIONS from '../../assets/region.json'
+// import { COUNTRY_ICON_URL } from '../../constants.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -62,20 +64,20 @@ export interface CountryCodePickerProps {
 }
 
 export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl, onClose, code }) => {
-    const t = useDashboardI18N()
+    const t = useSharedI18N()
     const { classes } = useStyles()
     const [query, setQuery] = useState('')
     const deferredQuery = useDeferredValue(query)
 
     const regions = useMemo(() => {
-        if (!deferredQuery) return REGIONS
-        const fuse = new Fuse(REGIONS, {
+        if (!deferredQuery) return COUNTRIES
+        const fuse = new Fuse(COUNTRIES, {
             shouldSort: false,
             isCaseSensitive: false,
             threshold: 0.45,
             minMatchCharLength: 1,
             findAllMatches: true,
-            keys: ['name'],
+            keys: ['country_region', 'iso_code', 'dialing_code'],
         })
 
         const filtered = fuse.search(deferredQuery)
@@ -106,14 +108,15 @@ export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl,
             />
             <List className={classes.list} data-hide-scrollbar>
                 {regions.map((data) => {
-                    const selected = data.dial_code === code
-                    const icon = `${COUNTRY_ICON_URL}${code.toLowerCase()}.svg`
+                    const selected = data.dialing_code === code
+                    const icon = getCountryFlag(data.iso_code)
+
                     return (
                         <ListItemButton
                             onClick={() => {
-                                onClose(data.dial_code)
+                                onClose(data.dialing_code)
                             }}
-                            key={data.code}
+                            key={data.iso_code}
                             className={classes.listItem}
                             autoFocus={selected}
                             selected={selected}>
@@ -121,11 +124,11 @@ export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl,
                                 <img src={icon} className={classes.icon} />
                             </ListItemIcon>
                             <ListItemText
-                                primary={data.name}
+                                primary={data.country_region}
                                 className={classes.text}
                                 classes={{ primary: classes.primaryText }}
                             />
-                            <Typography className={classes.primaryText}>{data.dial_code}</Typography>
+                            <Typography className={classes.primaryText}>+{data.dialing_code}</Typography>
                         </ListItemButton>
                     )
                 })}
