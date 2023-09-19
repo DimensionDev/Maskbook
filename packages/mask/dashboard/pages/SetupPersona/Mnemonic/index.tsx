@@ -13,7 +13,6 @@ import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
 import { useMnemonicWordsPuzzle } from '../../../hooks/useMnemonicWordsPuzzle.js'
 import { useDashboardI18N } from '../../../locales/index.js'
-import { PersonaContext } from '../../../hooks/usePersonaContext.js'
 import { ComponentToPrint } from './ComponentToPrint.js'
 import { Words } from './Words.js'
 import urlcat from 'urlcat'
@@ -92,7 +91,7 @@ export const SignUpMnemonic = memo(function SignUpMnemonic() {
     const navigate = useNavigate()
     const t = useDashboardI18N()
     const createPersona = useCreatePersonaV2()
-    const { changeCurrentPersona } = PersonaContext.useContainer()
+
     const { classes } = useStyles()
     const { state } = useLocation() as {
         state: {
@@ -117,6 +116,8 @@ export const SignUpMnemonic = memo(function SignUpMnemonic() {
         link.click()
     }, [])
 
+    const changeCurrentPersona = useCallback(Services.Settings.setCurrentPersonaIdentifier, [])
+
     const [{ loading }, handleCreate] = useAsyncFn(async () => {
         try {
             const identifier = await createPersona(words.join(' '), state.personaName)
@@ -125,7 +126,7 @@ export const SignUpMnemonic = memo(function SignUpMnemonic() {
         } catch (error) {
             showSnackbar((error as Error).message, { variant: 'error' })
         }
-    }, [words])
+    }, [words, changeCurrentPersona])
 
     const handleRecovery = useCallback(() => {
         navigate(DashboardRoutes.RecoveryPersona)

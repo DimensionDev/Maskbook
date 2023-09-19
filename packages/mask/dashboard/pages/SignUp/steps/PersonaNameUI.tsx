@@ -1,5 +1,5 @@
-import { MaskTextField, makeStyles } from '@masknet/theme'
-import { Box, Typography } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
+import { Box, TextField, Typography } from '@mui/material'
 import { useState } from 'react'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
@@ -52,7 +52,7 @@ export function PersonaNameUI({ onNext, error, loading }: PersonaNameUIProps) {
             <Typography className={classes.second} mt={3} mb={2}>
                 {t.persona_name()}
             </Typography>
-            <MaskTextField
+            <TextField
                 onChange={(e) => {
                     setPersonaName(e.target.value)
                 }}

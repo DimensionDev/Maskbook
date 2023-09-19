@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { upperFirst } from 'lodash-es'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { Button, Stack } from '@mui/material'
-import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
+import { PersonaContext, SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import {
     Body,
     ColumnContentLayout,
@@ -12,13 +12,18 @@ import {
 } from '../../../components/RegisterFrame/ColumnContentLayout.js'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader.js'
 import { useDashboardI18N } from '../../../locales/index.js'
-import { PersonaContext } from '../../../hooks/usePersonaContext.js'
 import { ActionCard } from '../../../components/ActionCard/index.js'
+import { useConnectSite } from '../../../hooks/useConnectSite.js'
+import { type SiteAdaptor, useSupportedSocialNetworkSites } from '../../../../shared-ui/index.js'
 
 export function ConnectSocialMedia() {
     const navigate = useNavigate()
     const t = useDashboardI18N()
-    const { currentPersona, connectPersona, definedSocialNetworkAdaptors } = PersonaContext.useContainer()
+    const { currentPersona } = PersonaContext.useContainer()
+
+    const definedSocialNetworkAdaptors: SiteAdaptor[] = useSupportedSocialNetworkSites()
+
+    const [, connectPersona] = useConnectSite()
 
     const handleConnect = async (networkIdentifier: string) => {
         if (currentPersona) {

@@ -92,6 +92,7 @@ export const PhoneField = memo(function PhoneField() {
             />
             <Box mt={1.5}>
                 <SendingCodeField
+                    fullWidth
                     value={code}
                     onChange={(code) => {
                         setCodeError('')

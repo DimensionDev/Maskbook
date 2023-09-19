@@ -1,7 +1,8 @@
 import { useRef, useEffect, useState } from 'react'
-import { MaskTextField, type MaskTextFieldProps } from '../TextField/index.js'
+import { type MaskTextFieldProps } from '../TextField/index.js'
 import { CountdownButton } from '../CountdownButton/index.js'
 import { makeStyles } from '../../UIHelper/index.js'
+import { TextField } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
     countdown: {
@@ -42,7 +43,7 @@ export function SendingCodeField({
     }, [autoSend])
 
     return (
-        <MaskTextField
+        <TextField
             size="small"
             value={code}
             onChange={(event) => {
@@ -54,6 +55,7 @@ export function SendingCodeField({
             onBlur={() => onBlur?.(code)}
             disabled={disabled}
             InputProps={{
+                disableUnderline: true,
                 endAdornment: (
                     <CountdownButton
                         ref={sendButton}
