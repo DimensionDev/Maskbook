@@ -5,6 +5,8 @@ import { ValueRef, MaskMessages } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import Services from '#services'
 
+export { UserContext } from './useUserContext.js'
+
 export interface SiteAdaptor {
     networkIdentifier: string
 }

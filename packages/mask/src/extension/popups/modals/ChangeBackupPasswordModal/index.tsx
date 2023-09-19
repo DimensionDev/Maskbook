@@ -3,13 +3,13 @@ import { ActionModal, type ActionModalBaseProps } from '../../components/index.j
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { Box, Typography, useTheme } from '@mui/material'
 import { PasswordField } from '../../components/PasswordField/index.js'
-import { UserContext } from '../../hooks/useUserContext.js'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MATCH_PASSWORD_RE } from '../../constants.js'
 import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
 import { useNavigate } from 'react-router-dom'
+import { UserContext } from '../../../../../shared-ui/index.js'
 type FormInputs = {
     oldPassword: string
     newPassword: string
@@ -36,6 +36,9 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
             oldPassword: '',
             newPassword: '',
             repeatPassword: '',
+        },
+        context: {
+            user,
         },
         resolver: zodResolver(
             z
@@ -99,7 +102,7 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
 
     return (
         <ActionModal
-            header={t('popups_settings_set_backup_password')}
+            header={t('popups_settings_change_backup_password')}
             action={
                 <ActionButton
                     onClick={handleSubmit(handleFormSubmit)}

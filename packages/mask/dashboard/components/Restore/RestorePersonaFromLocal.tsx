@@ -10,10 +10,10 @@ import { decode, encode } from '@msgpack/msgpack'
 import Services from '#services'
 import { usePersonaRecovery } from '../../contexts/RecoveryContext.js'
 import { useDashboardI18N } from '../../locales/index.js'
-import { BackupPreview } from '../../pages/Settings/components/BackupPreview.js'
 import PasswordField from '../PasswordField/index.js'
 import { PrimaryButton } from '../PrimaryButton/index.js'
 import { AccountStatusBar } from './AccountStatusBar.js'
+import { BackupPreview } from '../BackupPreview/index.js'
 
 enum RestoreStatus {
     WaitingInput = 0,

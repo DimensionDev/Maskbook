@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Typography } from '@mui/material'
 import formatDateTime from 'date-fns/format'
-import type { BackupFileInfo } from '../../pages/Settings/type.js'
+import type { BackupFileInfo } from '../../type.js'
 import { formatFileSize } from '@masknet/kit'
 import { FileFrame } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'

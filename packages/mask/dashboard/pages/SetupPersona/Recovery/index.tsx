@@ -14,9 +14,9 @@ import { RestoreFromCloud } from '../../../components/Restore/RestoreFromCloud/i
 import { RecoveryProvider, RecoveryContext } from '../../../contexts/index.js'
 import { RestoreFromMnemonic } from '../../../components/Restore/RestoreFromMnemonic.js'
 import Services from '#services'
-import { PersonaContext } from '../../../pages/Personas/hooks/usePersonaContext.js'
+import { PersonaContext } from '../../../hooks/usePersonaContext.js'
 import { delay } from '@masknet/kit'
-import { UserProvider } from '../../Settings/hooks/UserContext.js'
+
 import urlcat from 'urlcat'
 import { SignUpRoutePath } from '../../SignUp/routePath.js'
 
@@ -188,9 +188,7 @@ export const Recovery = memo(function Recovery() {
                                 <RestorePersonaFromLocal onRestore={onRestore} />
                             </TabPanel>
                             <TabPanel value={tabs.cloud} classes={tabPanelClasses}>
-                                <UserProvider>
-                                    <RestoreFromCloud />
-                                </UserProvider>
+                                <RestoreFromCloud />
                             </TabPanel>
                         </div>
                     </TabContext>

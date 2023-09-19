@@ -6,6 +6,9 @@ import { SignUp } from './SignUp/index.js'
 import { SignUpMnemonic } from './Mnemonic/index.js'
 import { Onboarding } from './Onboarding/index.js'
 import { Recovery } from './Recovery/index.js'
+import { LocalBackup } from './LocalBackup/index.js'
+import { CloudBackup } from './CloudBackup/index.js'
+import { CloudBackupPreview } from './CloudBackupPreview/index.js'
 
 const r = relativeRouteOf(DashboardRoutes.Setup)
 export default function SetupPersona() {
@@ -17,6 +20,9 @@ export default function SetupPersona() {
                 <Route path={r(DashboardRoutes.RecoveryPersona)} element={<Recovery />} />
                 <Route path={r(DashboardRoutes.SignUpPersonaMnemonic)} element={<SignUpMnemonic />} />
                 <Route path={r(DashboardRoutes.SignUpPersonaOnboarding)} element={<Onboarding />} />
+                <Route path={r(DashboardRoutes.LocalBackup)} element={<LocalBackup />} />
+                <Route path={r(DashboardRoutes.CloudBackup)} element={<CloudBackup />} />
+                <Route path={r(DashboardRoutes.CloudBackupPreview)} element={<CloudBackupPreview />} />
             </Routes>
         </SetupFrame>
     )
