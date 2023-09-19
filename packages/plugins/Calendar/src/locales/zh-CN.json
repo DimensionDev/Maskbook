@@ -1,1 +1,13 @@
-{}
+{
+    "title": "日历",
+    "description": "与Twitter 高度关联的 Web3 新闻和事件。提供 Token 、NFT、AMA 和管理活动。",
+    "empty_status": "最近两周没有内容。",
+    "total": "总额",
+    "price": "价格",
+    "date": "日期",
+    "loading": "加载中",
+    "powered_by": "技术支持",
+    "news": "新闻",
+    "event": "事件",
+    "nfts": "NFTs"
+}
