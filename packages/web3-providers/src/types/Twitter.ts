@@ -77,6 +77,7 @@ export namespace TwitterBaseAPI {
         url: string
         indices: [number, number]
     }
+
     export interface User {
         id: string
         rest_id: string
@@ -148,7 +149,8 @@ export namespace TwitterBaseAPI {
     export type Response<T> = {
         data: T
     }
-    type ResponseError = {
+
+    export interface ResponseError {
         code: number
         extensions: ResponseError
         kind: 'Validation' | string
@@ -160,7 +162,7 @@ export namespace TwitterBaseAPI {
             trace_id: string
         }
     }
-    export type IdentifyResponse = {
+    export interface IdentifyResponse {
         id: number
         id_str: string
         name: string
@@ -260,7 +262,11 @@ export namespace TwitterBaseAPI {
         withheld_in_countries: []
         require_some_consent: boolean
     }
-    export type FailedResponse = { errors: ResponseError[] }
+
+    export interface FailedResponse {
+        errors: ResponseError[]
+    }
+
     export interface AvatarInfo {
         nickname: string
         userId: string
@@ -326,7 +332,7 @@ export namespace TwitterBaseAPI {
         }
     }
 
-    export type Event<T> = {
+    export interface Event<T> {
         target: {
             result?: T
         }

@@ -1,9 +1,7 @@
-import urlcat from 'urlcat'
 import { timeout } from '@masknet/kit'
 import { attemptUntil } from '@masknet/web3-shared-base'
 import {
     getSettings,
-    getHeaders,
     getUserViaWebTimesAPI,
     getDefaultUserSettings,
     getUserSettings,
@@ -14,16 +12,14 @@ import {
     staleUserViaIdentity,
     getComputedUserSettings,
 } from './apis/index.js'
+import { uploadMedia } from './apis/uploadMedia.js'
+import { updateProfileImage } from './apis/updateProfileImage.js'
 import type { TwitterBaseAPI } from '../entry-types.js'
-import { fetchJSON } from '../helpers/fetchJSON.js'
-
-const UPLOAD_AVATAR_URL = 'https://upload.twitter.com/i/media/upload.json'
-const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/
 
 export class TwitterAPI implements TwitterBaseAPI.Provider {
     getAvatarId(avatarURL?: string) {
         if (!avatarURL) return ''
-        const match = new URL(avatarURL).pathname.match(TWITTER_AVATAR_ID_MATCH)
+        const match = new URL(avatarURL).pathname.match(/^\/profile_images\/(\d+)/)
         return match ? match[1] : ''
     }
 
@@ -79,65 +75,11 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
     }
 
     async uploadUserAvatar(screenName: string, image: File | Blob): Promise<TwitterBaseAPI.TwitterResult> {
-        const headers = await getHeaders()
-
-        // INIT
-        const initURL = `${UPLOAD_AVATAR_URL}?command=INIT&total_bytes=${image.size}&media_type=${encodeURIComponent(
-            image.type,
-        )}`
-        const initRes = await fetchJSON<{
-            media_id_string: string
-        }>(initURL, {
-            method: 'POST',
-            headers,
-            credentials: 'include',
-        })
-
-        // APPEND
-        const mediaId = initRes.media_id_string
-        const appendURL = `${UPLOAD_AVATAR_URL}?command=APPEND&media_id=${mediaId}&segment_index=0`
-        const formData = new FormData()
-        formData.append('media', image)
-        await fetch(appendURL, {
-            method: 'POST',
-            headers,
-            body: formData,
-            credentials: 'include',
-        })
-
-        // FINALIZE
-        const finalizeURL = `${UPLOAD_AVATAR_URL}?command=FINALIZE&media_id=${mediaId}`
-        return fetchJSON<TwitterBaseAPI.TwitterResult>(finalizeURL, {
-            method: 'POST',
-            headers,
-            credentials: 'include',
-        })
+        return uploadMedia(image)
     }
 
     async updateProfileImage(screenName: string, media_id_str: string): Promise<TwitterBaseAPI.AvatarInfo | undefined> {
-        const response = await fetch(
-            urlcat('https://twitter.com/i/api/1.1/account/update_profile_image.json', {
-                media_id: media_id_str,
-                skip_status: 1,
-                return_user: true,
-            }),
-            {
-                method: 'POST',
-                headers: await getHeaders({
-                    referer: `https://twitter.com/${screenName}`,
-                }),
-                credentials: 'include',
-            },
-        )
-
-        const updateInfo = await response.json()
-
-        return {
-            imageUrl: updateInfo.profile_image_url_https,
-            mediaId: updateInfo.id_str,
-            nickname: updateInfo.name,
-            userId: updateInfo.screen_name,
-        }
+        return updateProfileImage(screenName, media_id_str)
     }
 
     async getUserByScreenName(screenName: string, checkNFTAvatar?: boolean): Promise<TwitterBaseAPI.User | null> {
