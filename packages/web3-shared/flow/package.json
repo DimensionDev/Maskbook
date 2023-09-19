@@ -15,7 +15,7 @@
     "@masknet/shared-base": "workspace:^",
     "@masknet/web3-constants": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
-    "bignumber.js": "9.1.1",
+    "bignumber.js": "9.1.2",
     "react-use": "^17.4.0",
     "urlcat": "^3.1.0"
   }

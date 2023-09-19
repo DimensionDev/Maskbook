@@ -40,7 +40,7 @@
     "@uniswap/sdk-core": "^3.0.1",
     "@uniswap/v2-sdk": "3.0.0-alpha.2",
     "@uniswap/v3-sdk": "3.9.0",
-    "bignumber.js": "9.1.1",
+    "bignumber.js": "9.1.2",
     "d3": "^5.16.0",
     "date-fns": "^2.30.0",
     "json-stable-stringify": "^1.0.2",
@@ -49,6 +49,6 @@
     "ts-results-es": "^4.0.0",
     "unstated-next": "^1.1.0",
     "urlcat": "^3.1.0",
-    "web3-utils": "1.8.0"
+    "web3-utils": "1.10.2"
   }
 }
