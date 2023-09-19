@@ -4,7 +4,7 @@ import { Sniffings } from '@masknet/shared-base'
 const DB_NAME = 'localforage'
 const DB_VERSION = 2
 
-export async function getDatabase() {
+async function getDatabase() {
     if (!Sniffings.is_firefox) {
         const databases = await indexedDB.databases()
         if (!databases.some((x) => x.name === DB_NAME && x.version === DB_VERSION)) return
@@ -22,7 +22,7 @@ export async function getDatabase() {
     })
 }
 
-export async function getStore(name: string) {
+export async function getObjectStore(name: string) {
     const database = await getDatabase()
     if (!database) throw new Error('Failed to read database.')
 

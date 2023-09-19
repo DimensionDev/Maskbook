@@ -52,7 +52,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
     }
 
     async getUserNftContainer(screenName: string) {
-        const result = await attemptUntil<TwitterBaseAPI.NFT | undefined>(
+        return await attemptUntil<TwitterBaseAPI.NFT | undefined>(
             [
                 async () => {
                     const response = await getUserNFTContainer(screenName)
@@ -76,8 +76,6 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             ],
             undefined,
         )
-
-        return result
     }
 
     async uploadUserAvatar(screenName: string, image: File | Blob): Promise<TwitterBaseAPI.TwitterResult> {
@@ -91,8 +89,8 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             media_id_string: string
         }>(initURL, {
             method: 'POST',
-            credentials: 'include',
             headers,
+            credentials: 'include',
         })
 
         // APPEND
@@ -102,17 +100,17 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         formData.append('media', image)
         await fetch(appendURL, {
             method: 'POST',
-            credentials: 'include',
-            body: formData,
             headers,
+            body: formData,
+            credentials: 'include',
         })
 
         // FINALIZE
         const finalizeURL = `${UPLOAD_AVATAR_URL}?command=FINALIZE&media_id=${mediaId}`
         return fetchJSON<TwitterBaseAPI.TwitterResult>(finalizeURL, {
             method: 'POST',
-            credentials: 'include',
             headers,
+            credentials: 'include',
         })
     }
 
@@ -125,10 +123,10 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             }),
             {
                 method: 'POST',
-                credentials: 'include',
                 headers: await getHeaders({
                     referer: `https://twitter.com/${screenName}`,
                 }),
+                credentials: 'include',
             },
         )
 

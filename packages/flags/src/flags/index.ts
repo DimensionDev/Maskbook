@@ -26,6 +26,10 @@ export const flags = {
     post_actions_enabled: true,
     sandboxedPluginRuntime: false,
 
+    // twitter
+    twitter_token:
+        'AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA',
+
     // sentry
     sentry_earliest_version: env.VERSION,
     sentry_sample_rate: 0.05,
