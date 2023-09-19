@@ -3510,6 +3510,9 @@ importers:
       date-fns:
         specifier: ^2.30.0
         version: 2.30.0
+      fuse.js:
+        specifier: 6.6.2
+        version: 6.6.2(patch_hash=b2o4qvyfvxmpo7347sqko6h22a)
       iframe-resizer-react:
         specifier: ^1.1.0
         version: 1.1.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
