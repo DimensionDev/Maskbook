@@ -12,7 +12,7 @@ export async function getHeaders(overrides?: Record<string, string>) {
         authorization: `Bearer ${Flags.twitter_token}`,
         'x-csrf-token': getCSRFToken(),
         'x-twitter-auth-type': 'OAuth2Session',
-        'x-twitter-client-language': typeof navigator !== undefined && navigator.language ? navigator.language : 'en',
+        'x-twitter-client-language': navigator.language ? navigator.language : 'en',
         ...overrides,
     }
 }
