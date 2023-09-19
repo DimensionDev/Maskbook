@@ -7,7 +7,7 @@ function getCSRFToken() {
     return value
 }
 
-export async function getHeaders(overrides?: Record<string, string>) {
+export function getHeaders(overrides?: Record<string, string>) {
     return {
         authorization: `Bearer ${Flags.twitter_token}`,
         'x-csrf-token': getCSRFToken(),

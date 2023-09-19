@@ -338,16 +338,136 @@ export namespace TwitterBaseAPI {
         }
     }
 
+    export interface Card {
+        'twitter:card': `poll${number}choice_text_only`
+        'twitter:api:api:endpoint': '1'
+        'twitter:long:duration_minutes': number
+        'twitter:string:choice1_label': string
+        'twitter:string:choice2_label': string
+    }
+
     export interface Tweet {
-        text: string
-        mediaIds: string[]
-        card_uri: string
-        sensitive?: boolean
-        in_reply_to_tweet_id: string
-        exclude_reply_user_ids: string[] | string
-        attachment_url: string
-        circle?: string
-        conversation_control: 'follows' | 'mentions'
+        tweet_text: string
+        media: {
+            media_entities: Array<{
+                media_id: string
+                togged_users: []
+            }>
+            possibly_sensitive: boolean
+        }
+        replay: {
+            exclude_reply_user_ids: string[]
+            in_reply_to_tweet_id: string
+        }
+    }
+
+    export interface CreateTweetResult {
+        data: {
+            [key in 'create_tweet' | 'notetweet_create']: {
+                tweet_results: {
+                    result: {
+                        rest_id: string
+                        core: {
+                            user_results: {
+                                result: {
+                                    __typename: 'User'
+                                    id: string
+                                    rest_id: string
+                                    affiliates_highlighted_label: {}
+                                    has_graduated_access: boolean
+                                    is_blue_verified: boolean
+                                    profile_image_shape: 'Circle'
+                                    legacy: {
+                                        can_dm: boolean
+                                        can_media_tag: boolean
+                                        // e.g., Thu Aug 04 06:28:33 +0000 2011
+                                        created_at: string
+                                        default_profile: boolean
+                                        default_profile_image: boolean
+                                        description: string
+                                        entities: {
+                                            description: {
+                                                urls: []
+                                            }
+                                            url: {
+                                                urls: {
+                                                    display_url: string
+                                                    expanded_url: string
+                                                    url: string
+                                                    indices: number[]
+                                                }
+                                            }
+                                        }
+                                        fast_followers_count: number
+                                        favourites_count: number
+                                        followers_count: number
+                                        friends_count: number
+                                        has_custom_timelines: boolean
+                                        is_translator: boolean
+                                        listed_count: number
+                                        location: string
+                                        media_count: number
+                                        name: string
+                                        needs_phone_verification: boolean
+
+                                        normal_followers_count: number
+                                        pinned_tweet_ids_str: string[]
+                                        possibly_sensitive: boolean
+
+                                        profile_banner_url: string
+                                        profile_image_url_https: string
+                                        profile_interstitial_type: string
+                                        screen_name: string
+                                        statuses_count: number
+                                        translator_type: string
+                                        url: string
+                                        verified: boolean
+                                        want_retweets: boolean
+                                        withheld_in_countries: string[]
+                                    }
+                                }
+                            }
+                        }
+                        edit_control: {
+                            edit_tweet_ids: string[]
+                            editable_until_msecs: string
+                            is_edit_eligible: boolean
+                            edits_remaining: string
+                        }
+                        is_translatable: boolean
+                        views: {
+                            state: 'Enabled' | 'Disabled'
+                        }
+                        source: string
+                        legacy: {
+                            bookmark_count: number
+                            bookmarked: boolean
+                            // e.g., 'Tue Sep 19 08:19:39 +0000 2023'
+                            created_at: string
+                            conversation_id_str: string
+                            display_text_range: number[]
+                            entities: {
+                                user_mentions: string[]
+                                urls: string[]
+                                hashtags: string[]
+                                symbols: string[]
+                            }
+                            favorite_count: number
+                            favorited: boolean
+                            full_text: string
+                            is_quote_status: boolean
+                            lang: string
+                            quote_count: number
+                            reply_count: number
+                            retweet_count: number
+                            retweeted: boolean
+                            user_id_str: string
+                            id_str: string
+                        }
+                    }
+                }
+            }
+        }
     }
 
     export type UserByScreenNameResponse = Response<{ user: { result: User } }>
