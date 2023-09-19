@@ -39,8 +39,10 @@ const useStyles = makeStyles()((theme) => ({
     calender: {
         display: 'flex',
         gap: '8px',
+    },
+    calendarText: {
         color: theme.palette.maskColor.main,
-        fontSize: '14px',
+        fontSize: '16px',
         fontWeight: 700,
         lineHeight: '20px',
         alignItems: 'center',
@@ -87,7 +89,7 @@ export function Footer({ provider }: FooterProps) {
             <div className={classes.lineWrap}>
                 <div className={classes.calender}>
                     <Icons.Calendar size={24} />
-                    <Typography>{t.title()}</Typography>
+                    <Typography className={classes.calendarText}>{t.title()}</Typography>
                 </div>
                 <div className={classes.poweredByWrap}>
                     <Typography className={classes.poweredBy}>{t.powered_by()}</Typography>

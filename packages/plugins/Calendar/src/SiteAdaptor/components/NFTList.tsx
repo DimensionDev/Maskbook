@@ -2,9 +2,9 @@ import React from 'react'
 import { EmptyStatus, LoadingStatus } from '@masknet/shared'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { CountdownTimer } from './CountDownTimer.js'
-import { formatDate } from './EventList.js'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
+import { formatDate } from './EventList.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -12,7 +12,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         height: '506px',
         width: '100%',
-        overflowY: 'auto',
+        overflow: 'overlay',
         position: 'relative',
         gap: '10px',
     },
@@ -48,6 +48,12 @@ const useStyles = makeStyles()((theme) => ({
         gap: 8,
         alignItems: 'center',
         color: theme.palette.maskColor.main,
+    },
+    projectName: {
+        color: theme.palette.maskColor.main,
+        fontSize: '12px',
+        fontWeight: 700,
+        lineHeight: '16px',
     },
     logo: {
         width: '24px',
@@ -101,7 +107,7 @@ export function NFTList({ list, isLoading, empty }: NFTListProps) {
                             <div className={classes.eventHeader}>
                                 <div className={classes.projectWrap}>
                                     <img src={v.project.logo} className={classes.logo} alt="logo" />
-                                    <Typography> {v.project.name}</Typography>
+                                    <Typography className={classes.projectName}> {v.project.name}</Typography>
                                 </div>
                             </div>
                             <Typography className={classes.eventTitle}>{v.event_title}</Typography>

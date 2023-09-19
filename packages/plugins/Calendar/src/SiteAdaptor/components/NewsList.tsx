@@ -10,7 +10,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         height: '506px',
         width: '100%',
-        overflowY: 'auto',
+        overflow: 'overlay',
         position: 'relative',
         gap: '10px',
     },
@@ -46,7 +46,12 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         gap: 8,
         alignItems: 'center',
+    },
+    projectName: {
         color: theme.palette.maskColor.main,
+        fontSize: '12px',
+        fontWeight: 700,
+        lineHeight: '16px',
     },
     logo: {
         width: '24px',
@@ -106,7 +111,7 @@ export function NewsList({ list, isLoading, empty }: NewsListProps) {
                             <div className={classes.eventHeader}>
                                 <div className={classes.projectWrap}>
                                     <img src={v.project.logo} className={classes.logo} alt="logo" />
-                                    <Typography>{v.project.name}</Typography>
+                                    <Typography className={classes.projectName}>{v.project.name}</Typography>
                                 </div>
                                 <Typography className={classes.eventType}>{v.event_type}</Typography>
                             </div>
