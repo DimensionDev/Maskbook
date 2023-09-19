@@ -14,6 +14,7 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'overlay',
         position: 'relative',
         gap: '10px',
+        paddingBottom: '50px',
     },
     empty: {
         position: 'absolute',
@@ -106,8 +107,8 @@ export function EventList({ list, isLoading, empty, dateString }: EventListProps
                 <div className={cx(classes.empty, classes.eventTitle)}>
                     <LoadingStatus />
                 </div>
-            ) : !empty ? (
-                listAfterDate.map((key) => {
+            ) : !empty && listAfterDate.length ? (
+                listAfterDate.map((key, index) => {
                     return (
                         <div key={key}>
                             <Typography className={classes.dateDiv}>{format(new Date(key), 'MMM dd,yyy')}</Typography>

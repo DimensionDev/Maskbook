@@ -16,6 +16,7 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'overlay',
         position: 'relative',
         gap: '10px',
+        paddingBottom: '50px',
     },
     empty: {
         position: 'absolute',
