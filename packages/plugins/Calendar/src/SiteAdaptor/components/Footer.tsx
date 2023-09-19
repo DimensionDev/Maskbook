@@ -30,6 +30,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     poweredBy: {
+        display: 'flex',
         color: theme.palette.maskColor.second,
         fontSize: '14px',
         fontWeight: 700,
@@ -39,6 +40,7 @@ const useStyles = makeStyles()((theme) => ({
     calender: {
         display: 'flex',
         gap: '8px',
+        alignItems: 'center',
     },
     calendarText: {
         color: theme.palette.maskColor.main,
@@ -49,9 +51,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     providerName: {
         color: theme.palette.maskColor.main,
-        fontSize: '16px',
+        fontSize: '14px',
         fontWeight: 700,
-        lineHeight: '20px',
+        lineHeight: '18px',
         alignItems: 'center',
     },
 }))
