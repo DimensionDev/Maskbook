@@ -8,6 +8,7 @@ import {
     isSameProfile,
     resolveNextIDIdentityToProfile,
     MaskMessages,
+    type ECKeyIdentifier,
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { LeavePageConfirmModal, PersonaSelectPanelModal } from '../UI/modals/index.js'
@@ -25,7 +26,7 @@ const DEFAULT_PERSONA_CONNECT_STATUS: PersonaConnectStatus = {
 
 export function useCurrentPersonaConnectStatus(
     personas: readonly PersonaInformation[],
-    currentPersonaIdentifier?: string,
+    currentPersonaIdentifier?: ECKeyIdentifier,
     openDashboard?: (route?: DashboardRoutes, search?: string) => void,
     identity?: IdentityResolved,
 ) {

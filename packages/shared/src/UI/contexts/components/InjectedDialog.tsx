@@ -31,7 +31,9 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         whiteSpace: 'nowrap',
         display: 'flex',
         gridTemplateColumns: '50px auto 50px',
+        background: Sniffings.is_dashboard_page ? theme.palette.maskColor.modalTitleBg : undefined,
     },
+
     dialogTitleEndingContent: {
         display: 'flex',
         justifyContent: 'center',
@@ -51,9 +53,14 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         `,
     },
     dialogContent: {
+        background: Sniffings.is_dashboard_page ? theme.palette.maskColor.bottom : undefined,
         overscrollBehavior: 'contain',
     },
-
+    dialogActions: {
+        background: Sniffings.is_dashboard_page ? theme.palette.maskColor.secondaryBottom : undefined,
+        boxShadow: Sniffings.is_dashboard_page ? theme.palette.maskColor.bottomBg : undefined,
+        backdropFilter: Sniffings.is_dashboard_page ? 'blur(8px)' : undefined,
+    },
     dialogGap: {
         gridArea: 'gap',
     },
@@ -215,12 +222,8 @@ export function InjectedDialog(props: InjectedDialogProps) {
                 <ErrorBoundary>
                     {title ? (
                         <DialogTitle
-                            className={cx('dashboard-dialog-title-hook', titleTabs ? dialogTitleWithTabs : '')}
-                            classes={{ root: dialogTitle }}
-                            style={{
-                                border: Sniffings.is_dashboard_page || disableTitleBorder ? 'none' : undefined,
-                                fontSize: Sniffings.is_dashboard_page ? 24 : undefined,
-                            }}>
+                            className={cx(titleTabs ? dialogTitleWithTabs : '')}
+                            classes={{ root: dialogTitle }}>
                             <IconButton
                                 size="large"
                                 disableTouchRipple

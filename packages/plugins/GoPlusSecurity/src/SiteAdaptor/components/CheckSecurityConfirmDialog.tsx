@@ -1,8 +1,6 @@
 import { Button, DialogContent, Stack, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
-import { PluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { SiteAdaptorContextRef } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -28,8 +26,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-function onConfirm() {
-    return SiteAdaptorContextRef.value.setMinimalMode(PluginID.GoPlusSecurity, true)
+export const onConfirm = {
+    f: () => {},
 }
 interface Props {
     open: boolean
@@ -55,7 +53,7 @@ function CheckSecurityConfirmDialog({ open, onClose }: Props) {
                     <Button
                         className={classes.confirmButton}
                         onClick={() => {
-                            onConfirm()
+                            onConfirm.f()
                             onClose()
                         }}>
                         {t.confirm()}

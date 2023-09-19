@@ -8,8 +8,8 @@ import { PersonaAvatar } from '../../components/PersonaAvatar/index.js'
 import { Icons } from '@masknet/icons'
 import { PersonaPublicKey } from '../../components/PersonaPublicKey/index.js'
 import { PopupModalRoutes, PopupRoutes } from '@masknet/shared-base'
-import { UserContext } from '../../hooks/index.js'
 import { useNavigate } from 'react-router-dom'
+import { UserContext } from '../../../../../shared-ui/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     avatarItem: {

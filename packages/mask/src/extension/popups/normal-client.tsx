@@ -16,6 +16,7 @@ import { __setUIContext__ } from '@masknet/plugin-infra/dom/context'
 
 __setUIContext__({
     allPersonas: NextSharedUIContext.allPersonas,
+    queryPersonaAvatar: Services.Identity.getPersonaAvatar,
 })
 if (
     location.hash === '#/personas' ||
@@ -85,6 +86,9 @@ function startPluginHost() {
                 ...createPartialSharedUIContext(id, def, signal),
                 ...RestPartOfPluginUIContextShared,
                 allPersonas: allPersonaSub,
+                setMinimalMode(enabled) {
+                    Services.Settings.setPluginMinimalModeEnabled(id, enabled)
+                },
             }),
             Services.Settings.getPluginMinimalModeEnabled,
             Services.Helper.hasHostPermission,

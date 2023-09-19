@@ -11,21 +11,21 @@ import {
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { currentNextIDPlatform } from '@masknet/plugin-infra/content-script/context'
 
 export function useNextIDVerify() {
     const verifyPostCollectTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-    const { getPostIdFromNewPostToast, postMessage, getNextIDPlatform, signWithPersona } = useSiteAdaptorContext()
-    const platform = getNextIDPlatform()
+    const { getPostIdFromNewPostToast, postMessage, signWithPersona } = useSiteAdaptorContext()
 
     return useAsyncFn(
         async (persona?: PersonaInformation, username?: string, verifiedCallback?: () => void | Promise<void>) => {
-            if (!platform || !persona || !username) return
+            if (!currentNextIDPlatform || !persona || !username) return
 
             const payload = await NextIDProof.createPersonaPayload(
                 persona.identifier.publicKeyAsHex,
                 NextIDAction.Create,
                 username,
-                platform,
+                currentNextIDPlatform,
                 languageSettings.value ?? 'default',
             )
             if (!payload) throw new Error('Failed to create persona payload.')
@@ -44,7 +44,7 @@ export function useNextIDVerify() {
                             payload.uuid,
                             persona.identifier.publicKeyAsHex,
                             NextIDAction.Create,
-                            platform,
+                            currentNextIDPlatform!,
                             username,
                             payload.createdAt,
                             {
@@ -62,12 +62,16 @@ export function useNextIDVerify() {
                 }, 1000 * 20)
             })
 
-            const isBound = await NextIDProof.queryIsBound(persona.identifier.publicKeyAsHex, platform, username)
+            const isBound = await NextIDProof.queryIsBound(
+                persona.identifier.publicKeyAsHex,
+                currentNextIDPlatform,
+                username,
+            )
             if (!isBound) throw new Error('Failed to verify.')
 
             MaskMessages.events.ownProofChanged.sendToAll(undefined)
             await verifiedCallback?.()
         },
-        [postMessage, platform, signWithPersona],
+        [postMessage, signWithPersona],
     )
 }

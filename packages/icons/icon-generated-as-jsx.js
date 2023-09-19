@@ -827,32 +827,12 @@ export const BackUp = /*#__PURE__*/ __createIcon('BackUp', [
 ])
 export const BaseClose = /*#__PURE__*/ __createIcon('BaseClose', [
     {
-        u: () => new URL('./general/BaseClose.svg', import.meta.url),
-        j: () =>
-            /*#__PURE__*/ _jsxs('svg', {
-                xmlns: 'http://www.w3.org/2000/svg',
-                fill: 'none',
-                viewBox: '0 0 24 24',
-                children: [
-                    /*#__PURE__*/ _jsx('path', {
-                        fill: 'currentColor',
-                        d: 'M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10Z',
-                    }),
-                    /*#__PURE__*/ _jsx('path', {
-                        fill: '#fff',
-                        fillRule: 'evenodd',
-                        d: 'M7.757 7.757c.352-.351.985-.287 1.416.143l6.927 6.927c.43.43.494 1.064.142 1.416-.351.351-.985.287-1.415-.143L7.9 9.173c-.43-.43-.494-1.064-.143-1.416Z',
-                        clipRule: 'evenodd',
-                    }),
-                    /*#__PURE__*/ _jsx('path', {
-                        fill: '#fff',
-                        fillRule: 'evenodd',
-                        d: 'M16.242 7.757c.352.352.288.985-.142 1.416L9.173 16.1c-.43.43-1.064.494-1.416.142-.351-.351-.287-.985.143-1.415L14.827 7.9c.43-.43 1.064-.494 1.415-.143Z',
-                        clipRule: 'evenodd',
-                    }),
-                ],
-            }),
-        s: true,
+        c: ['dark'],
+        u: () => new URL('./general/BaseClose.dark.svg', import.meta.url),
+    },
+    {
+        c: ['light'],
+        u: () => new URL('./general/BaseClose.light.svg', import.meta.url),
     },
 ])
 export const BaseContacts = /*#__PURE__*/ __createIcon('BaseContacts', [
@@ -1224,9 +1204,92 @@ export const Close = /*#__PURE__*/ __createIcon('Close', [
         s: true,
     },
 ])
+export const Cloud = /*#__PURE__*/ __createIcon('Cloud', [
+    {
+        u: () => new URL('./general/Cloud.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsxs('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 18 18',
+                children: [
+                    /*#__PURE__*/ _jsxs('g', {
+                        fill: 'currentColor',
+                        fillRule: 'evenodd',
+                        clipPath: "url('#Cloud_svg__cloud_a')",
+                        clipRule: 'evenodd',
+                        children: [
+                            /*#__PURE__*/ _jsx('path', {
+                                d: 'M4.924 7.633a.6.6 0 0 1-.536.658 2.576 2.576 0 1 0 .726 5.097.6.6 0 0 1 .217 1.18 3.776 3.776 0 1 1-1.065-7.471.6.6 0 0 1 .658.536Z',
+                            }),
+                            /*#__PURE__*/ _jsx('path', {
+                                d: 'M13.515 7.313a.6.6 0 0 1-.737-.422 4.253 4.253 0 1 0-8.107 2.55.6.6 0 0 1-1.129.406 5.453 5.453 0 1 1 10.395-3.27.6.6 0 0 1-.422.736Z',
+                            }),
+                            /*#__PURE__*/ _jsx('path', {
+                                d: 'M12.574 13.412a2.889 2.889 0 1 0-1.734-4.951.6.6 0 0 1-.835-.862 4.088 4.088 0 1 1 2.455 7.008.6.6 0 0 1 .114-1.195Zm-3.948-2.038a.6.6 0 0 1 .6.6v4.01l1.282-1.28a.6.6 0 1 1 .848.848L9.05 17.858a.6.6 0 0 1-.848 0l-2.306-2.306a.6.6 0 1 1 .848-.849l1.282 1.282v-4.011a.6.6 0 0 1 .6-.6Z',
+                            }),
+                        ],
+                    }),
+                    /*#__PURE__*/ _jsx('defs', {
+                        children: /*#__PURE__*/ _jsx('clipPath', {
+                            id: 'Cloud_svg__cloud_a',
+                            children: /*#__PURE__*/ _jsx('path', {
+                                fill: 'currentColor',
+                                d: 'M.043.933h18v18h-18z',
+                            }),
+                        }),
+                    }),
+                ],
+            }),
+        s: true,
+    },
+])
 export const CloudBackup = /*#__PURE__*/ __createIcon('CloudBackup', [
     {
         u: () => new URL('./general/CloudBackup.png', import.meta.url),
+    },
+])
+export const CloudBackup2 = /*#__PURE__*/ __createIcon('CloudBackup2', [
+    {
+        u: () => new URL('./general/CloudBackup2.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsxs('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 19 19',
+                children: [
+                    /*#__PURE__*/ _jsxs('g', {
+                        fill: 'currentColor',
+                        fillRule: 'evenodd',
+                        clipPath: "url('#CloudBackup2_svg__cloud_backup_a')",
+                        clipRule: 'evenodd',
+                        children: [
+                            /*#__PURE__*/ _jsx('path', {
+                                d: 'M4.924 7.633a.6.6 0 0 1-.536.658 2.576 2.576 0 1 0 .726 5.097.6.6 0 0 1 .217 1.18 3.776 3.776 0 1 1-1.065-7.471.6.6 0 0 1 .658.536Z',
+                            }),
+                            /*#__PURE__*/ _jsx('path', {
+                                d: 'M13.515 7.313a.6.6 0 0 1-.737-.422 4.253 4.253 0 1 0-8.107 2.55.6.6 0 0 1-1.129.406 5.453 5.453 0 1 1 10.395-3.27.6.6 0 0 1-.422.736Z',
+                            }),
+                            /*#__PURE__*/ _jsx('path', {
+                                d: 'M12.574 13.412a2.889 2.889 0 1 0-1.734-4.951.6.6 0 0 1-.835-.862 4.088 4.088 0 1 1 2.455 7.008.6.6 0 0 1 .114-1.195Z',
+                            }),
+                            /*#__PURE__*/ _jsx('path', {
+                                d: 'M8.626 16.535a.6.6 0 0 1-.6-.6v-4.011l-1.282 1.282a.6.6 0 0 1-.849-.849l2.306-2.306a.6.6 0 0 1 .849 0l2.306 2.306a.6.6 0 0 1-.848.849l-1.282-1.282v4.01a.6.6 0 0 1-.6.6Z',
+                            }),
+                        ],
+                    }),
+                    /*#__PURE__*/ _jsx('defs', {
+                        children: /*#__PURE__*/ _jsx('clipPath', {
+                            id: 'CloudBackup2_svg__cloud_backup_a',
+                            children: /*#__PURE__*/ _jsx('path', {
+                                fill: 'currentColor',
+                                d: 'M.043.933h18v18h-18z',
+                            }),
+                        }),
+                    }),
+                ],
+            }),
+        s: true,
     },
 ])
 export const CloudLink = /*#__PURE__*/ __createIcon('CloudLink', [
@@ -2147,14 +2210,9 @@ export const MaskInMinds = /*#__PURE__*/ __createIcon('MaskInMinds', [
         u: () => new URL('./general/MaskInMinds.svg', import.meta.url),
     },
 ])
-export const Masks = /*#__PURE__*/ __createIcon('Masks', [
+export const MaskMe = /*#__PURE__*/ __createIcon('MaskMe', [
     {
-        u: () => new URL('./general/Masks.svg', import.meta.url),
-    },
-])
-export const Me = /*#__PURE__*/ __createIcon('Me', [
-    {
-        u: () => new URL('./general/Me.svg', import.meta.url),
+        u: () => new URL('./general/MaskMe.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2168,6 +2226,11 @@ export const Me = /*#__PURE__*/ __createIcon('Me', [
                 }),
             }),
         s: true,
+    },
+])
+export const Masks = /*#__PURE__*/ __createIcon('Masks', [
+    {
+        u: () => new URL('./general/Masks.svg', import.meta.url),
     },
 ])
 export const Message = /*#__PURE__*/ __createIcon('Message', [
@@ -2692,6 +2755,24 @@ export const Selected = /*#__PURE__*/ __createIcon('Selected', [
                             clipRule: 'evenodd',
                         }),
                     ],
+                }),
+            }),
+        s: true,
+    },
+])
+export const Self = /*#__PURE__*/ __createIcon('Self', [
+    {
+        u: () => new URL('./general/Self.svg', import.meta.url),
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 25 25',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fill: 'currentColor',
+                    fillRule: 'evenodd',
+                    d: 'M17.794 7.397a5.274 5.274 0 0 1-5.294 5.292 5.275 5.275 0 0 1-5.294-5.292A5.274 5.274 0 0 1 12.5 2.105a5.273 5.273 0 0 1 5.294 5.292ZM12.5 22.105c-4.338 0-8-.705-8-3.425 0-2.72 3.685-3.4 8-3.4 4.339 0 8 .704 8 3.424 0 2.721-3.685 3.401-8 3.401Z',
+                    clipRule: 'evenodd',
                 }),
             }),
         s: true,

@@ -5,6 +5,8 @@ import { ValueRef, MaskMessages } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import Services from '#services'
 
+export { UserContext } from './useUserContext.js'
+
 export interface SiteAdaptor {
     networkIdentifier: string
 }
@@ -27,7 +29,7 @@ export const useCurrentPersonaIdentifier = createHook(
 )
 
 export const usePersonaAvatar = createHook(
-    () => Services.Settings.getCurrentPersonaIdentifier().then(Services.Identity.getPersonaAvatar),
+    () => Services.Settings.getCurrentPersonaIdentifier().then((x) => Services.Identity.getPersonaAvatar(x)),
     (x) => {
         MaskMessages.events.currentPersonaIdentifier.on(x)
         MaskMessages.events.ownPersonaChanged.on(x)

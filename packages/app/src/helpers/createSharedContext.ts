@@ -1,6 +1,5 @@
 import { WalletConnectQRCodeModal } from '@masknet/shared'
 import { EMPTY_ARRAY, UNDEFINED, ValueRefWithReady } from '@masknet/shared-base'
-import { ThemeMode, FontSize } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 import { getPostURL } from '../helpers/getPostURL.js'
 import { getPostPayload } from '../helpers/getPostPayload.js'
@@ -11,7 +10,10 @@ async function reject(): Promise<never> {
 
 const emptyValueRef = new ValueRefWithReady<any>()
 
-export function createSharedContext(): Omit<Plugin.SiteAdaptor.SiteAdaptorContext, 'createKVStorage' | 'setWeb3State'> {
+export function createSharedContext(): Omit<
+    Plugin.SiteAdaptor.SiteAdaptorContext,
+    'createKVStorage' | 'setWeb3State' | 'setMinimalMode'
+> {
     return {
         currentPersona: UNDEFINED,
         wallets: EMPTY_ARRAY,
@@ -22,13 +24,9 @@ export function createSharedContext(): Omit<Plugin.SiteAdaptor.SiteAdaptorContex
         closePopupWindow: reject,
         connectPersona: reject,
         createPersona: reject,
-        currentPersonaIdentifier: emptyValueRef,
         getPostURL,
         getPostPayload,
-        getNextIDPlatform: () => undefined,
-        getPersonaAvatar: reject,
         getSocialIdentity: reject,
-        getThemeSettings: () => ({ color: '', mode: ThemeMode.Light, size: FontSize.Normal, isDim: false }),
         getWallets: reject,
         hasPaymentPassword: reject,
         openDashboard: reject,
@@ -46,11 +44,9 @@ export function createSharedContext(): Omit<Plugin.SiteAdaptor.SiteAdaptorContex
         grantEIP2255Permission: reject,
         disconnectAllWalletsFromOrigin: reject,
         selectMaskWalletAccount: reject,
-        setMinimalMode: reject,
         signWithPersona: reject,
         signWithWallet: reject,
         updateWallet: reject,
         send: reject,
-        themeSettings: UNDEFINED,
     }
 }

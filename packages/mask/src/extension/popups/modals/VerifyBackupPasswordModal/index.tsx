@@ -4,10 +4,10 @@ import { Box } from '@mui/material'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { PasswordField } from '../../components/PasswordField/index.js'
-import { UserContext } from '../../hooks/index.js'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { MATCH_PASSWORD_RE } from '../../constants.js'
+import { UserContext } from '../../../../../shared-ui/index.js'
 
 export const VerifyBackupPasswordModal = memo<ActionModalBaseProps>(function VerifyBackupPasswordModal() {
     const { t } = useI18N()
