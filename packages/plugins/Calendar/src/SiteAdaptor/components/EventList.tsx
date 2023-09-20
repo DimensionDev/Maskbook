@@ -83,7 +83,7 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         lineHeight: '18px',
         color: theme.palette.maskColor.main,
-        padding: '10px 12px',
+        padding: '10px 0',
     },
 }))
 
