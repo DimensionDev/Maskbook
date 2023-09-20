@@ -1,5 +1,5 @@
 import { List, ListItemButton, ListItemIcon, ListItemText, Popover, TextField, Typography } from '@mui/material'
-import { memo, useDeferredValue, useMemo, useState } from 'react'
+import { memo, useDeferredValue, useEffect, useMemo, useState } from 'react'
 
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
@@ -64,23 +64,28 @@ export interface CountryCodePickerProps {
 export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl, onClose, code }) => {
     const t = useSharedI18N()
     const { classes } = useStyles()
-    const [query, setQuery] = useState('')
+    const [query, setQuery] = useState<string>()
     const deferredQuery = useDeferredValue(query)
 
     const regions = useMemo(() => {
         if (!deferredQuery) return COUNTRIES
         const fuse = new Fuse(COUNTRIES, {
-            shouldSort: false,
             isCaseSensitive: false,
-            threshold: 0.45,
-            minMatchCharLength: 1,
+            includeMatches: true,
+            threshold: 0.8,
+            minMatchCharLength: 2,
             findAllMatches: true,
-            keys: ['country_region', 'iso_code', 'dialing_code'],
+            keys: ['country_region', 'dialing_code'],
         })
 
         const filtered = fuse.search(deferredQuery)
+
         return filtered.map((x) => x.item)
     }, [deferredQuery])
+
+    useEffect(() => {
+        setQuery(undefined)
+    }, [open])
 
     return (
         <Popover
@@ -99,6 +104,7 @@ export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl,
             <TextField
                 fullWidth
                 value={query}
+                autoFocus
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder={t.search_area()}
                 InputProps={{ disableUnderline: true, startAdornment: <Icons.Search size={16} />, size: 'small' }}
@@ -114,10 +120,10 @@ export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl,
                             onClick={() => {
                                 onClose(data.dialing_code)
                             }}
-                            key={data.iso_code}
+                            key={`${data.iso_code}+${data.dialing_code}`}
                             className={classes.listItem}
-                            autoFocus={selected}
-                            selected={selected}>
+                            selected={query === undefined ? selected : undefined}
+                            autoFocus={query === undefined ? selected : undefined}>
                             <ListItemIcon className={classes.listItemIcon}>
                                 <img src={icon} className={classes.icon} />
                             </ListItemIcon>

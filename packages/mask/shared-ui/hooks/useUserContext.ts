@@ -11,7 +11,7 @@ function useUserContext() {
             await PersistentStorages.Settings.storage.backupConfig.setValue({
                 ...user,
                 ...obj,
-                backupPassword: btoa(obj.backupPassword ?? ''),
+                backupPassword: obj.backupPassword ? btoa(obj.backupPassword) : user.backupPassword,
             })
         },
         [user],

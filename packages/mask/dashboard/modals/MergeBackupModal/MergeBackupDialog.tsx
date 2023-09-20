@@ -12,7 +12,6 @@ import { formatFileSize } from '@masknet/kit'
 import formatDateTime from 'date-fns/format'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import PasswordField from '../../components/PasswordField/index.js'
-import { setPassword } from '../../../background/services/wallet/services/index.js'
 import { passwordRegexp } from '../../utils/regexp.js'
 import { decryptBackup } from '@masknet/backup-format'
 import { decode, encode } from '@msgpack/msgpack'
@@ -89,7 +88,7 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
         onClose()
     }, [onClose])
 
-    const { value: encrypted } = useAsync(async () => {
+    const { value: encrypted, error } = useAsync(async () => {
         if (!downloadLink) return
 
         const response = await fetch(downloadLink, { method: 'GET' })
@@ -104,7 +103,7 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
 
         if (!contentLength || !reader) return
         let received = 0
-
+        const chunks: number[] = []
         // eslint-disable-next-line no-constant-condition
         while (true) {
             const { done, value } = await reader.read()
@@ -113,12 +112,12 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
                 setProcess(100)
                 break
             }
-
+            chunks.push(...value)
             received += value.length
+
             setProcess((received / Number(contentLength)) * 100)
         }
-
-        return response.arrayBuffer()
+        return Uint8Array.from(chunks).buffer
     }, [downloadLink, handleClose])
 
     const fileName = useMemo(() => {
@@ -236,7 +235,7 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
                     value={backupPassword}
                     placeholder={t.settings_label_backup_password()}
                     onChange={(e) => {
-                        setPassword(e.target.value)
+                        setBackupPassword(e.target.value)
                         setBackupPasswordError('')
                     }}
                     onBlur={(e) => {

@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import { Button, TextField, type FilledTextFieldProps, Typography, ClickAwayListener } from '@mui/material'
+import { forwardRef, useMemo, useState } from 'react'
+import { Button, TextField, type FilledTextFieldProps, Typography } from '@mui/material'
 import { COUNTRIES } from '@masknet/shared-base-ui'
 import { getCountryFlag, useSharedI18N } from '../../../index.js'
 import { Icons } from '@masknet/icons'
@@ -10,7 +10,10 @@ export interface PhoneNumberFieldProps extends Omit<FilledTextFieldProps, 'varia
     onCodeChange: (code: string) => void
 }
 
-export function PhoneNumberField({ code, onCodeChange, ...rest }: PhoneNumberFieldProps) {
+export const PhoneNumberField = forwardRef<HTMLDivElement, PhoneNumberFieldProps>(function PhoneNumberField(
+    { code, onCodeChange, ...rest },
+    ref,
+) {
     const t = useSharedI18N()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
@@ -24,6 +27,7 @@ export function PhoneNumberField({ code, onCodeChange, ...rest }: PhoneNumberFie
     return (
         <>
             <TextField
+                ref={ref}
                 placeholder={t.mobile_number()}
                 type="tel"
                 {...rest}
@@ -33,23 +37,24 @@ export function PhoneNumberField({ code, onCodeChange, ...rest }: PhoneNumberFie
                     startAdornment: (
                         <Button variant="text" onClick={(event) => setAnchorEl(event.currentTarget)}>
                             <img src={countryIcon} style={{ width: 16, height: 12 }} />
-                            <Typography component="span">+{code}</Typography>
+                            <Typography component="span" sx={{ minWidth: 32, mx: 0.5, textAlign: 'right' }}>
+                                +{code}
+                            </Typography>
                             <Icons.ArrowDrop size={16} />
                         </Button>
                     ),
                 }}
             />
-            <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
-                <CountryCodePicker
-                    open={!!anchorEl}
-                    anchorEl={anchorEl}
-                    code={code}
-                    onClose={(code) => {
-                        if (code) onCodeChange(code)
-                        setAnchorEl(null)
-                    }}
-                />
-            </ClickAwayListener>
+
+            <CountryCodePicker
+                open={!!anchorEl}
+                anchorEl={anchorEl}
+                code={code}
+                onClose={(code) => {
+                    if (code) onCodeChange(code)
+                    setAnchorEl(null)
+                }}
+            />
         </>
     )
-}
+})

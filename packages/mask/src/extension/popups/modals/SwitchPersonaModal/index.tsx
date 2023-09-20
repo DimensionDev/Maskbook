@@ -65,7 +65,7 @@ export const SwitchPersonaModal = memo<ActionModalBaseProps>(function SwitchPers
                 size="small"
                 variant="outlined"
                 startIcon={<Icons.History size={18} />}
-                onClick={() => handleOpenDashboard(DashboardRoutes.Settings)}>
+                onClick={() => handleOpenDashboard(DashboardRoutes.LocalBackup)}>
                 {t('backup')}
             </ActionButton>
             <ActionButton
