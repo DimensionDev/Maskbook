@@ -77,7 +77,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
     const { classes, theme } = useStyles()
     const navigate = useNavigate()
     const t = useDashboardI18N()
-    const { updateUser } = UserContext.useContainer()
+    const { updateUser, user } = UserContext.useContainer()
     const {
         hasPassword,
         previewInfo,
