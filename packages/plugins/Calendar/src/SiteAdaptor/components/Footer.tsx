@@ -4,7 +4,8 @@ import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Typography, IconButton } from '@mui/material'
 import { useI18N } from '../../locales/i18n_generated.js'
-import { useOpenApplicationSettings } from '@masknet/shared'
+import { useOpenApplicationSettings, ApplicationSettingTabs } from '@masknet/shared'
+import { PluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -96,7 +97,11 @@ export function Footer({ provider }: FooterProps) {
                 <div className={classes.poweredByWrap}>
                     <Typography className={classes.poweredBy}>{t.powered_by()}</Typography>
                     {providerMap[provider]}
-                    <IconButton sx={{ width: '16px', height: '16px' }} onClick={() => openApplicationBoardDialog()}>
+                    <IconButton
+                        sx={{ width: '16px', height: '16px' }}
+                        onClick={() =>
+                            openApplicationBoardDialog(ApplicationSettingTabs.pluginSwitch, PluginID.Calendar)
+                        }>
                         <Icons.Gear size={16} />
                     </IconButton>
                 </div>

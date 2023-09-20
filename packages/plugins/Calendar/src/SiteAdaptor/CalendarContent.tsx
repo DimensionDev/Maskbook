@@ -79,7 +79,6 @@ export function CalendarContent() {
                     setSelectedDate={(date: Date) => setSelectedDate(date)}
                     list={list}
                 />
-
                 <TabPanel value={tabs.news} style={{ padding: 0 }}>
                     <NewsList
                         list={newsList}
