@@ -10,6 +10,7 @@ import { __setUIContext__ } from '@masknet/plugin-infra/dom/context'
 
 __setUIContext__({
     allPersonas: NextSharedUIContext.allPersonas,
+    queryPersonaAvatar: Services.Identity.getPersonaAvatar,
 })
 startPluginDashboard(
     createPluginHost(
@@ -18,6 +19,9 @@ startPluginDashboard(
             ...createPartialSharedUIContext(id, def, signal),
             ...RestPartOfPluginUIContextShared,
             allPersonas: NextSharedUIContext.allPersonas,
+            setMinimalMode(enabled) {
+                Services.Settings.setPluginMinimalModeEnabled(id, enabled)
+            },
         }),
         Services.Settings.getPluginMinimalModeEnabled,
         Services.Helper.hasHostPermission,

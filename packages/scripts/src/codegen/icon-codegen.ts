@@ -112,7 +112,7 @@ async function generateIcons() {
 
             // cross platform, use URL to calculate relative path
             const importPath = './' + new URL(path, ROOT_PATH).toString().slice(relativePrefix)
-            const identifier = snakeCase(name)
+            const identifier = importPath.includes('countries') ? `countries_${snakeCase(name)}` : snakeCase(name)
 
             const url = `new URL(${JSON.stringify(importPath)}, import.meta.url)`
             asURL.js.push(`export function ${identifier}_url() { return ${url} }`)

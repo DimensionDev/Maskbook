@@ -15,11 +15,12 @@ import { ExplorerResolver, Providers, Web3 } from '@masknet/web3-providers'
 import { type ChainId, ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../utils/index.js'
 import Services from '#services'
-import { useTitle, PopupContext, useHasPassword, UserContext } from '../../../hooks/index.js'
+import { useTitle, PopupContext, useHasPassword } from '../../../hooks/index.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { useModalNavigate } from '../../../components/index.js'
+import { UserContext } from '../../../../../../shared-ui/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     infoBox: {

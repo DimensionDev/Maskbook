@@ -7,23 +7,22 @@ import {
     type PersonaInformation,
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { useAllPersonas, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useAllPersonas } from '@masknet/plugin-infra/content-script'
+import { queryPersonaAvatar } from '@masknet/plugin-infra/dom/context'
 import { useQuery } from '@tanstack/react-query'
 
 export function useConnectedPersonas() {
     const personasInDB = useAllPersonas()
-    const { getPersonaAvatars } = useSiteAdaptorContext()
-
     const result = useQuery<
         Array<{ persona: PersonaInformation; proof: BindingProof[]; avatar: string | undefined }>,
         Error
     >({
-        queryKey: ['connected-persona', personasInDB, getPersonaAvatars],
+        queryKey: ['connected-persona', personasInDB],
         queryFn: async () => {
             const allPersonaPublicKeys = personasInDB.map((x) => x.identifier.publicKeyAsHex)
             const allPersonaIdentifiers = personasInDB.map((x) => x.identifier)
 
-            const avatars = await getPersonaAvatars?.(allPersonaIdentifiers)
+            const avatars = await queryPersonaAvatar?.(allPersonaIdentifiers)
             const allNextIDBindings = await NextIDProof.queryAllExistedBindingsByPlatform(
                 NextIDPlatform.NextID,
                 allPersonaPublicKeys.join(','),

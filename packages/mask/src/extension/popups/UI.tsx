@@ -21,7 +21,7 @@ import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import { PopupLayout } from './components/PopupLayout/index.js'
 import { wrapModal } from './components/index.js'
 import { PageTitleContext } from './context.js'
-import { PopupContext, UserContext } from './hooks/index.js'
+import { PopupContext } from './hooks/index.js'
 import { ConnectProviderModal } from './modals/ConnectProvider/index.js'
 import { SelectProviderModal } from './modals/SelectProviderModal/index.js'
 import {
@@ -42,6 +42,7 @@ import {
 } from './modals/index.js'
 import SwitchWallet from './pages/Wallet/SwitchWallet/index.js'
 import { noop } from 'lodash-es'
+import { UserContext } from '../../../shared-ui/index.js'
 
 const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet/index.js'))
 const Personas = lazy(() => import(/* webpackPreload: true */ './pages/Personas/index.js'))

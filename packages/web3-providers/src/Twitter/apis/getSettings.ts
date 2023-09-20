@@ -1,23 +1,12 @@
-import urlcat from 'urlcat'
 import { getHeaders } from './getTokens.js'
-import type { TwitterBaseAPI } from '../../entry-types.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
+import type { TwitterBaseAPI } from '../../entry-types.js'
 
 export async function getSettings() {
-    return fetchJSON<TwitterBaseAPI.Settings>(
-        urlcat('https://twitter.com/i/api/1.1/account/settings.json', {
-            include_mention_filter: false,
-            include_nsfw_user_flag: false,
-            include_nsfw_admin_flag: false,
-            include_ranked_timeline: false,
-            include_alt_text_compose: false,
-            include_country_code: false,
-            include_ext_dm_nsfw_media_filter: false,
+    return fetchJSON<TwitterBaseAPI.Settings>('https://api.twitter.com/1.1/account/settings.json', {
+        headers: await getHeaders({
+            referer: 'https://twitter.com/home',
         }),
-        {
-            headers: await getHeaders({
-                referer: 'https://twitter.com/home',
-            }),
-        },
-    )
+        credentials: 'include',
+    })
 }

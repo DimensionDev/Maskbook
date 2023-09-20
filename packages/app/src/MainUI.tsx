@@ -1,5 +1,6 @@
 import { Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { Modals } from '@masknet/shared'
 import { SiteAdaptorContextRef } from '@masknet/plugin-infra/content-script'
 import { DashboardForDesktop } from './components/DashboardDesktop.js'
 import { DashboardForMobile } from './components/DashboardMobile.js'
@@ -47,6 +48,7 @@ export function MainUI() {
                         </Routes>
                     </Suspense>
                 </div>
+                <Modals createWallet={() => {}} />
             </BrowserRouter>
             <PageInspectorRender />
         </DashboardContext.Provider>

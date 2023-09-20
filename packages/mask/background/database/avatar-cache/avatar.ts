@@ -13,7 +13,7 @@ import type { PersonaIdentifier } from '@masknet/shared-base'
 
 const impl = memoizePromise(
     memoize,
-    async function (identifiers: IdentifierWithAvatar[]): Promise<Map<IdentifierWithAvatar, string>> {
+    async function (identifiers: readonly IdentifierWithAvatar[]): Promise<Map<IdentifierWithAvatar, string>> {
         const promises: Array<Promise<unknown>> = []
 
         const map = new Map<IdentifierWithAvatar, string>()
@@ -43,8 +43,9 @@ const queryAvatarLastUpdateTimeImpl = memoizePromise(
     (x) => x,
 )
 
-export const queryAvatarsDataURL: (identifiers: IdentifierWithAvatar[]) => Promise<Map<IdentifierWithAvatar, string>> =
-    impl
+export const queryAvatarsDataURL: (
+    identifiers: readonly IdentifierWithAvatar[],
+) => Promise<Map<IdentifierWithAvatar, string>> = impl
 
 export const queryAvatarLastUpdateTime: (identifier: PersonaIdentifier) => Promise<Date | undefined> =
     queryAvatarLastUpdateTimeImpl

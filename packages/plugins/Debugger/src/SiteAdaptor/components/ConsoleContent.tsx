@@ -14,7 +14,6 @@ import {
     useLastRecognizedIdentity,
     useCurrentVisitingIdentity,
     useCurrentVisitingSocialIdentity,
-    useThemeSettings,
 } from '@masknet/plugin-infra/content-script'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -43,7 +42,6 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const currentVisitingSocialIdentity = useCurrentVisitingSocialIdentity()
-    const themeSettings = useThemeSettings()
 
     useRemoteControlledDialog(CrossIsolationMessages.events.followLensDialogEvent)
 
@@ -51,22 +49,6 @@ export function ConsoleContent(props: ConsoleContentProps) {
         {
             name: 'A/B Testing',
             content: <Typography variant="body2">{joinsABTest() ? 'A' : 'B'}</Typography>,
-        },
-        {
-            name: 'Color',
-            content: (
-                <Typography variant="body2">
-                    {themeSettings.color} <span style={{ color: themeSettings.color }}>&#11044;</span>
-                </Typography>
-            ),
-        },
-        {
-            name: 'Size',
-            content: <Typography variant="body2">{themeSettings.size}</Typography>,
-        },
-        {
-            name: 'Palette Mode',
-            content: <Typography variant="body2">{themeSettings.mode}</Typography>,
         },
         {
             name: 'Account',

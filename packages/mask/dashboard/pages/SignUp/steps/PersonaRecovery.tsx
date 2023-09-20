@@ -6,11 +6,11 @@ import { useDashboardI18N } from '../../../locales/index.js'
 import Services from '#services'
 import { PersonaNameUI } from './PersonaNameUI.js'
 import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
-import { PersonaContext } from '../../Personas/hooks/usePersonaContext.js'
 import { delay } from '@masknet/kit'
 import { useAsync, useAsyncFn } from 'react-use'
 import { SmartPayBundler, SmartPayOwner } from '@masknet/web3-providers'
 import urlcat from 'urlcat'
+import { PersonaContext } from '../../../hooks/usePersonaContext.js'
 
 export function PersonaRecovery() {
     const t = useDashboardI18N()

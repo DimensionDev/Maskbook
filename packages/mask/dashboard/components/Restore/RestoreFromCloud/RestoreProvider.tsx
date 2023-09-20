@@ -1,7 +1,7 @@
 import { useCallback, useReducer } from 'react'
 import { createContainer } from 'unstated-next'
-import { fetchDownloadLink } from '../../../pages/Settings/api.js'
-import { type AccountType } from '../../../pages/Settings/type.js'
+import { fetchDownloadLink } from '../../../utils/api.js'
+import { type AccountType } from '../../../type.js'
 import { initialState, restoreReducer } from './restoreReducer.js'
 
 function useRestoreState() {

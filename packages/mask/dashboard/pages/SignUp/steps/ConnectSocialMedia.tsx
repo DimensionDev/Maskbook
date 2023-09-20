@@ -12,7 +12,7 @@ import {
 } from '../../../components/RegisterFrame/ColumnContentLayout.js'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader.js'
 import { useDashboardI18N } from '../../../locales/index.js'
-import { PersonaContext } from '../../Personas/hooks/usePersonaContext.js'
+import { PersonaContext } from '../../../hooks/usePersonaContext.js'
 import { ActionCard } from '../../../components/ActionCard/index.js'
 
 export function ConnectSocialMedia() {
