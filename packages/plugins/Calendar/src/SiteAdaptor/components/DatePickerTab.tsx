@@ -3,8 +3,9 @@ import { makeStyles, useTabs } from '@masknet/theme'
 import startOfWeek from 'date-fns/startOfWeek'
 import endOfWeek from 'date-fns/endOfWeek'
 import eachDayOfInterval from 'date-fns/eachDayOfInterval'
-import { IconButton, Typography } from '@mui/material'
+import { ClickAwayListener, IconButton, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
+import { DatePicker } from './DatePicker.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -72,13 +73,24 @@ export function DatePickerTab({ selectedDate, setSelectedDate, list, open, setOp
                     </div>
                 )
             })}
-            <IconButton
-                size="small"
-                onClick={() => {
-                    setOpen(!open)
-                }}>
-                <Icons.LinearCalendar size={24} />
-            </IconButton>
+            <ClickAwayListener onClickAway={() => setOpen(false)}>
+                <div>
+                    <IconButton
+                        size="small"
+                        onClick={() => {
+                            setOpen(!open)
+                        }}>
+                        <Icons.LinearCalendar size={24} />
+                    </IconButton>
+                    <DatePicker
+                        open={open}
+                        setOpen={(open) => setOpen(open)}
+                        list={list}
+                        selectedDate={selectedDate}
+                        setSelectedDate={setSelectedDate}
+                    />
+                </div>
+            </ClickAwayListener>
         </div>
     )
 }
