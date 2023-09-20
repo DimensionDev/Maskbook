@@ -12,7 +12,6 @@ import { EventList } from './components/EventList.js'
 import { NFTList } from './components/NFTList.js'
 import { Footer } from './components/Footer.js'
 import { safeUnreachable } from '@masknet/kit'
-import { DatePicker } from './components/DatePicker.js'
 import { useI18N } from '../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -79,13 +78,6 @@ export function CalendarContent() {
                     selectedDate={selectedDate}
                     setSelectedDate={(date: Date) => setSelectedDate(date)}
                     list={list}
-                />
-                <DatePicker
-                    open={open}
-                    setOpen={(open) => setOpen(open)}
-                    list={list}
-                    selectedDate={selectedDate}
-                    setSelectedDate={setSelectedDate}
                 />
                 <TabPanel value={tabs.news} style={{ padding: 0 }}>
                     <NewsList
