@@ -1,11 +1,10 @@
-import * as ABICoder from 'web3-eth-abi'
-import type { WalletAPI } from '../../../entry-types.js'
 import {
     type TransactionContext,
     type TransactionDescriptor as TransactionDescriptorBase,
     TransactionDescriptorType,
 } from '@masknet/web3-shared-base'
 import {
+    abiCoder,
     AccountTransaction,
     type ChainId,
     isEmptyHex,
@@ -15,6 +14,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { readABIs } from './TransactionFormatter/abi.js'
 import type { TransactionDescriptor } from './TransactionFormatter/types.js'
+import type { WalletAPI } from '../../../entry-types.js'
 
 // built-in descriptors
 import { TransferTokenDescriptor } from './TransactionFormatter/descriptors/TransferToken.js'
@@ -37,7 +37,6 @@ import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
 export class TransactionFormatter extends TransactionFormatterState<ChainId, TransactionParameter, Transaction> {
     private Web3 = new ConnectionReadonlyAPI()
 
-    private coder = ABICoder as unknown as ABICoder.AbiCoder
     private descriptors: Record<TransactionDescriptorType, TransactionDescriptor[]> = {
         [TransactionDescriptorType.TRANSFER]: [new TransferTokenDescriptor()],
         [TransactionDescriptorType.INTERACTION]: [
@@ -88,7 +87,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
                         type: TransactionDescriptorType.INTERACTION,
                         methods: abis.map((x) => ({
                             name: x.name,
-                            parameters: this.coder.decodeParameters(x.parameters, functionParameters ?? ''),
+                            parameters: abiCoder.decodeParameters(x.parameters, functionParameters ?? ''),
                         })),
                     }
                 } catch {

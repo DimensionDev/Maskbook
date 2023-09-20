@@ -1,15 +1,13 @@
-import Web3 from 'web3'
+import { Web3 } from 'web3'
 import type { AbiItem } from 'web3-utils'
-import * as ABICoder from 'web3-eth-abi'
-import { createContract, type ChainId, ZERO_ADDRESS, getSmartPayConstants } from '@masknet/web3-shared-evm'
+import { createContract, type ChainId, ZERO_ADDRESS, getSmartPayConstants, abiCoder } from '@masknet/web3-shared-evm'
 import type { WalletProxy } from '@masknet/web3-contracts/types/WalletProxy.js'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import WalletProxyABI from '@masknet/web3-contracts/abis/WalletProxy.json'
 import { WalletProxyByteCode } from '@masknet/web3-contracts/bytes/WalletProxy.mjs'
 
 export class ContractWallet {
-    private web3 = new Web3.default()
-    private coder = ABICoder as unknown as ABICoder.AbiCoder
+    private web3 = new Web3()
 
     /**
      * ContractWallet
@@ -53,7 +51,7 @@ export class ContractWallet {
         const abi = WalletABI.find((x) => x.name === 'initialize' && x.type === 'function')
         if (!abi) throw new Error('Failed to load ABI.')
 
-        return this.coder.encodeFunctionCall(abi as AbiItem, [
+        return abiCoder.encodeFunctionCall(abi as AbiItem, [
             this.entryPoint,
             this.owner,
             PAYMENT_TOKEN_ADDRESS,

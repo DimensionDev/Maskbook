@@ -1,3 +1,3 @@
-import * as ABICoder from 'web3-eth-abi'
+import { AbiCoder } from 'web3-eth-abi'
 
-export const abiCoder = ABICoder as unknown as ABICoder.AbiCoder
+export const abiCoder = new AbiCoder()

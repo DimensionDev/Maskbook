@@ -1,11 +1,11 @@
-import type Web3 from 'web3'
+import type { Web3 } from 'web3'
 import type { AbiItem } from 'web3-utils'
 import type { ContractOptions } from 'web3-eth-contract'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
 import { isValidAddress } from './address.js'
 
 export function createContract<T extends BaseContract>(
-    web3: Web3.default | null,
+    web3: Web3 | null,
     address: string | undefined,
     ABI: AbiItem[],
     options?: ContractOptions,

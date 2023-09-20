@@ -1,0 +1,13 @@
+diff --git a/types/index.d.ts b/types/index.d.ts
+index 555e7762aa4582fd8d8a2bc00caed01fe44aaebd..0aefe994ac72ce873d6d8456f53f884f7eae19c6 100644
+--- a/types/index.d.ts
++++ b/types/index.d.ts
+@@ -26,7 +26,7 @@ import { Network } from 'web3-net';
+ import { Shh } from 'web3-shh';
+ import { Utils } from 'web3-utils';
+ 
+-export default class Web3 {
++export class Web3 {
+     constructor();
+     constructor(provider: provider);
+     constructor(provider: provider, net: net.Socket);

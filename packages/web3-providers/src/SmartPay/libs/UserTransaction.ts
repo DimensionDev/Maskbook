@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js'
 import { isUndefined, omitBy } from 'lodash-es'
-import type Web3 from 'web3'
+import type { Web3 } from 'web3'
 import { type AbiItem, hexToBytes, keccak256, padLeft, toHex, toNumber } from 'web3-utils'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
 import { isGreaterThan, multipliedBy, toFixed } from '@masknet/web3-shared-base'
@@ -157,19 +157,19 @@ export class UserTransaction {
         return this.userOperation
     }
 
-    createWalletContract(web3: Web3.default, sender: string) {
+    createWalletContract(web3: Web3, sender: string) {
         const contract = createContract<Wallet>(web3, sender, WalletABI as AbiItem[])
         if (!contract) throw new Error('Failed to create wallet contract.')
         return contract
     }
 
-    createEntryPointContract(web3: Web3.default) {
+    createEntryPointContract(web3: Web3) {
         const contract = createContract<EntryPoint>(web3, this.entryPoint, EntryPointABI as AbiItem[])
         if (!contract) throw new Error('Failed to create entry point contract.')
         return contract
     }
 
-    async fillUserOperation(web3: Web3.default, overrides?: Required<Pick<UserOperation, 'initCode' | 'nonce'>>) {
+    async fillUserOperation(web3: Web3, overrides?: Required<Pick<UserOperation, 'initCode' | 'nonce'>>) {
         // from overrides
         if (overrides) {
             this.userOperation.nonce = overrides.nonce
@@ -273,7 +273,7 @@ export class UserTransaction {
         return toHex(callGas)
     }
 
-    async signTransaction(web3: Web3.default, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string> {
+    async signTransaction(web3: Web3, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string> {
         const transaction = UserTransaction.toTransaction(this.chainId, this.userOperation)
         if (!transaction.from || !transaction.to) throw new Error('Invalid transaction.')
 

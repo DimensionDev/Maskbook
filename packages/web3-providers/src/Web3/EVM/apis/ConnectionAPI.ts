@@ -1,4 +1,4 @@
-import type Web3 from 'web3'
+import type { Web3 } from 'web3'
 import { toHex } from 'web3-utils'
 import { delay } from '@masknet/kit'
 import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet } from '@masknet/shared-base'
@@ -46,7 +46,7 @@ export class ConnectionAPI
             TransactionDetailed,
             TransactionSignature,
             Block,
-            Web3.default,
+            Web3,
             Web3Provider
         >
 {

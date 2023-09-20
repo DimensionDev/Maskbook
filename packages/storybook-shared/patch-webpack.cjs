@@ -1,4 +1,5 @@
-const { ProvidePlugin, EnvironmentPlugin } = require('webpack')
+const { ProvidePlugin } = require('webpack')
+
 module.exports = async function (config) {
     const transpile = config.module.rules.find((x) => x.test.toString().includes('tsx')).use
     transpile.push({
@@ -33,6 +34,7 @@ module.exports = async function (config) {
         os: false,
         http: false,
         https: false,
+        zlib: false,
     }
     config.resolve.conditionNames = ['mask-src', '...']
 

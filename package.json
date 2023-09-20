@@ -153,7 +153,8 @@
       "@splinetool/runtime@0.9.342": "patches/@splinetool__runtime@0.9.342.patch",
       "guess-calling-code@1.1.7": "patches/guess-calling-code@1.1.7.patch",
       "@walletconnect/socket-transport@1.7.8": "patches/@walletconnect__socket-transport@1.7.8.patch",
-      "web3-core@1.10.2": "patches/web3-core@1.10.2.patch"
+      "web3-core@1.10.2": "patches/web3-core@1.10.2.patch",
+      "web3@1.10.2": "patches/web3@1.10.2.patch"
     }
   }
 }

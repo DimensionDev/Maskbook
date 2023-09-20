@@ -1,5 +1,5 @@
 import { useAsyncFn } from 'react-use'
-import Web3Utils from 'web3-utils'
+import { sha3 } from 'web3-utils'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { HappyRedPacketV1 } from '@masknet/web3-contracts/types/HappyRedPacketV1.js'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
@@ -33,7 +33,7 @@ export function useClaimCallback(
                       config,
                   )
                 : await contractTransaction.fillAll(
-                      (redPacketContract as HappyRedPacketV1).methods.claim(id, password, from, Web3Utils.sha3(from)!),
+                      (redPacketContract as HappyRedPacketV1).methods.claim(id, password, from, sha3(from)!),
                       config,
                   )
 

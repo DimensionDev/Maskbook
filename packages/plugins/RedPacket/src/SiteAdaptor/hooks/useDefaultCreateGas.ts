@@ -1,13 +1,13 @@
+import { useAsync } from 'react-use'
+import { sha3 } from 'web3-utils'
+import { omit } from 'lodash-es'
 import type { NetworkPluginID } from '@masknet/shared-base'
+import { ZERO, toFixed } from '@masknet/web3-shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
+import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
 import { checkParams, type RedPacketSettings, type ParamsObjType, type MethodParameters } from './useCreateCallback.js'
 import { useRedPacketContract } from './useRedPacketContract.js'
-import { useAsync } from 'react-use'
-import { ZERO, toFixed } from '@masknet/web3-shared-base'
-import Web3Utils from 'web3-utils'
-import { omit } from 'lodash-es'
-import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 
 export function useDefaultCreateGas(
     redPacketSettings: RedPacketSettings | undefined,
@@ -34,7 +34,7 @@ export function useDefaultCreateGas(
             shares,
             isRandom,
             duration,
-            seed: Web3Utils.sha3(seed)!,
+            seed: sha3(seed)!,
             message,
             name,
             tokenType,
