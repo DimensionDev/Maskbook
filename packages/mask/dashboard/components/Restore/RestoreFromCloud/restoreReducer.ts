@@ -1,5 +1,4 @@
 import type { BackupSummary } from '@masknet/backup-format'
-import type { PhoneNumberFieldValue } from '@masknet/theme'
 import { produce } from 'immer'
 import { AccountType, type BackupFileInfo } from '../../../type.js'
 
@@ -23,7 +22,9 @@ export interface RestoreState {
     phoneForm: {
         account: string
         code: string
-    } & PhoneNumberFieldValue
+        dialingCode: string
+        phone: string
+    }
     backupFileInfo: BackupFileInfo | null
     backupSummary: BackupSummary | null
     backupDecrypted: string
