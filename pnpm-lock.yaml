@@ -1116,9 +1116,6 @@ importers:
       wallet.ts:
         specifier: ^1.0.1
         version: 1.0.1
-      web3:
-        specifier: 1.10.2
-        version: 1.10.2
       web3-core:
         specifier: 1.10.2
         version: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
@@ -1301,9 +1298,6 @@ importers:
       wallet.ts:
         specifier: ^1.0.1
         version: 1.0.1
-      web3:
-        specifier: 1.10.2
-        version: 1.10.2
       web3-core:
         specifier: 1.10.2
         version: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
@@ -1877,9 +1871,6 @@ importers:
       wallet.ts:
         specifier: ^1.0.1
         version: 1.0.1
-      web3:
-        specifier: 1.10.2
-        version: 1.10.2
       web3-core:
         specifier: 1.10.2
         version: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
@@ -2658,9 +2649,6 @@ importers:
       ts-results-es:
         specifier: ^4.0.0
         version: 4.0.0
-      web3:
-        specifier: 1.10.2
-        version: 1.10.2
       web3-utils:
         specifier: 1.10.2
         version: 1.10.2
@@ -3964,9 +3952,6 @@ importers:
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-0a360642d-20230711)
-      web3:
-        specifier: 1.10.2
-        version: 1.10.2
 
   packages/web3-hooks/evm:
     dependencies:
@@ -4009,9 +3994,6 @@ importers:
       wallet.ts:
         specifier: ^1.0.1
         version: 1.0.1
-      web3:
-        specifier: 1.10.2
-        version: 1.10.2
       web3-core:
         specifier: 1.10.2
         version: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
@@ -4201,9 +4183,6 @@ importers:
       wallet.ts:
         specifier: ^1.0.1
         version: 1.0.1
-      web3:
-        specifier: 1.10.2
-        version: 1.10.2
       web3-core:
         specifier: 1.10.2
         version: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
@@ -4344,13 +4323,13 @@ importers:
       wallet.ts:
         specifier: ^1.0.1
         version: 1.0.1
-      web3:
-        specifier: 1.10.2
-        version: 1.10.2
       web3-core:
         specifier: 1.10.2
         version: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
       web3-core-helpers:
+        specifier: 1.10.2
+        version: 1.10.2
+      web3-eth:
         specifier: 1.10.2
         version: 1.10.2
       web3-eth-abi:
@@ -37084,7 +37063,6 @@ time:
   /web3-eth-contract@1.10.2: '2023-08-28T12:56:25.461Z'
   /web3-eth@1.10.2: '2023-08-28T12:56:29.986Z'
   /web3-utils@1.10.2: '2023-08-28T12:56:10.815Z'
-  /web3@1.10.2: '2023-08-28T12:56:38.752Z'
   /webextension-polyfill@0.10.0: '2022-08-12T19:42:49.271Z'
   /webpack-cli@5.1.4: '2023-06-07T18:23:17.058Z'
   /webpack-dev-server@4.15.1: '2023-06-09T14:38:58.996Z'

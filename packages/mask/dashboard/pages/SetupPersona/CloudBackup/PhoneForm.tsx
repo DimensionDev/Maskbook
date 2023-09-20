@@ -1,14 +1,13 @@
 import { memo, useCallback } from 'react'
+import { Controller } from 'react-hook-form'
+import { Box, TextField } from '@mui/material'
+import { PhoneNumberField } from '@masknet/shared'
+import { CountdownButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { UserContext, useLanguage } from '../../../../shared-ui/index.js'
 import { CloudBackupFormContext } from '../../../contexts/CloudBackupFormContext.js'
-import { Box, TextField } from '@mui/material'
-import { Controller } from 'react-hook-form'
-
-import { CountdownButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { AccountType, Scenario, Locale } from '../../../type.js'
 import { sendCode } from '../../../utils/api.js'
-import { PhoneNumberField } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     send: {

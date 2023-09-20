@@ -1,8 +1,8 @@
-import type EVM_Web3 from 'web3'
 import type { Transaction as Web3Transaction, TransactionReceipt as Web3TransactionReceipt } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types.js'
 import type { Web3UI as Web3UIShared, Web3State as Web3StateShared, GasOptionType } from '@masknet/web3-shared-base'
+import type { Web3 } from '../libs/Web3.js'
 
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
 
@@ -290,8 +290,6 @@ export enum ProviderType {
     Clover = 'Clover',
     CustomNetwork = 'CustomNetwork',
 }
-
-export type Web3 = EVM_Web3
 
 /**
  * EIP-1193 compatible provider

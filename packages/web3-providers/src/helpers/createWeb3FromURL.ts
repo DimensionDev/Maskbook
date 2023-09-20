@@ -1,5 +1,5 @@
-import type Web3 from 'web3'
 import { memoize } from 'lodash-es'
+import type { Web3 } from '@masknet/web3-shared-evm'
 import { createWeb3FromProvider } from './createWeb3FromProvider.js'
 import { createWeb3ProviderFromURL } from './createWeb3ProviderFromURL.js'
 

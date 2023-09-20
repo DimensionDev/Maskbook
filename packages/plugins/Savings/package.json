@@ -28,7 +28,6 @@
     "bignumber.js": "9.1.2",
     "react-use": "^17.4.0",
     "ts-results-es": "^4.0.0",
-    "web3": "1.10.2",
     "web3-utils": "1.10.2"
   }
 }

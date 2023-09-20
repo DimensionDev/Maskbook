@@ -1,6 +1,12 @@
-import Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
-import { createContract, type ChainId, ZERO_ADDRESS, getSmartPayConstants, abiCoder } from '@masknet/web3-shared-evm'
+import {
+    type ChainId,
+    createContract,
+    ZERO_ADDRESS,
+    getSmartPayConstants,
+    abiCoder,
+    Web3,
+} from '@masknet/web3-shared-evm'
 import type { WalletProxy } from '@masknet/web3-contracts/types/WalletProxy.js'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import WalletProxyABI from '@masknet/web3-contracts/abis/WalletProxy.json'
