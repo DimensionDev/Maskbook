@@ -11,6 +11,7 @@ import {
     type InputBaseProps,
     type PopoverProps,
     type Popper,
+    TextField,
 } from '@mui/material'
 import Fuse from 'fuse.js'
 import guessCallingCode from 'guess-calling-code'
@@ -154,7 +155,7 @@ export function PhoneNumberField({ value, error, placeholder, onBlur, onChange }
 
     return (
         <>
-            <MaskTextField
+            <TextField
                 fullWidth
                 autoFocus
                 value={value.phone}
@@ -163,12 +164,17 @@ export function PhoneNumberField({ value, error, placeholder, onBlur, onChange }
                 type="text"
                 error={!!error}
                 helperText={error}
-                ref={buttonRef}
                 size="small"
                 placeholder={placeholder}
                 InputProps={{
+                    disableUnderline: true,
                     startAdornment: (
-                        <Button onClick={handleOpenList} className={classes.openButton} variant="text" size="small">
+                        <Button
+                            ref={buttonRef}
+                            onClick={handleOpenList}
+                            className={classes.openButton}
+                            variant="text"
+                            size="small">
                             {countryConfig ? (
                                 <>
                                     <img className={classes.flag} src={getFlag(countryConfig?.iso_code)} />
