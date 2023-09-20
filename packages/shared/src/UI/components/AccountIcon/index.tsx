@@ -85,9 +85,14 @@ export function AccountIcon({ socialAccount, classes: externalClasses }: Account
               }
             : undefined
 
-    const fromTwitter = [SocialAddressType.Address, SocialAddressType.ENS, SocialAddressType.TwitterBlue].find((x) =>
-        supportedAddressTypes.includes(x),
-    )
+    const fromTwitter = [
+        SocialAddressType.ENS,
+        SocialAddressType.SPACE_ID,
+        SocialAddressType.ARBID,
+        SocialAddressType.Lens,
+        SocialAddressType.TwitterBlue,
+        SocialAddressType.Address,
+    ].find((x) => supportedAddressTypes.includes(x))
 
     return (
         <>
