@@ -14,6 +14,7 @@ export class CalendarAPI implements CalendarBaseAPI.Provider {
                 cursor: 0,
             }),
         )
+        console.log(list)
         return list?.data?.events?.map((x: any) => ({ ...x, event_date: x.event_date * 1000 }))
     }
     async getEventList(startDate: number, endDate?: number) {
