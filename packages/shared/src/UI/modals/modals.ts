@@ -50,3 +50,5 @@ export const SelectFungibleTokenModal = new SingletonModal<
 export const PersonaSelectPanelModal = new SingletonModal<PersonaSelectPanelModalOpenProps>()
 
 export const ShareSelectNetworkModal = new SingletonModal<ShareSelectNetworkModalOpenProps>()
+
+export { ApplicationSettingTabs } from './ApplicationBoardModal/ApplicationBoardDialog.js'
