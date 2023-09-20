@@ -46,7 +46,7 @@ export class ConnectionAPI
             TransactionDetailed,
             TransactionSignature,
             Block,
-            Web3,
+            Web3.default,
             Web3Provider
         >
 {

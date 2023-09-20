@@ -7,4 +7,4 @@ function __create__(url: string) {
     return createWeb3FromProvider(createWeb3ProviderFromURL(url))
 }
 
-export const createWeb3FromURL: (url: string) => Web3 = memoize(__create__, (url) => url.toLowerCase())
+export const createWeb3FromURL: (url: string) => Web3.default = memoize(__create__, (url) => url.toLowerCase())

@@ -157,19 +157,19 @@ export class UserTransaction {
         return this.userOperation
     }
 
-    createWalletContract(web3: Web3, sender: string) {
+    createWalletContract(web3: Web3.default, sender: string) {
         const contract = createContract<Wallet>(web3, sender, WalletABI as AbiItem[])
         if (!contract) throw new Error('Failed to create wallet contract.')
         return contract
     }
 
-    createEntryPointContract(web3: Web3) {
+    createEntryPointContract(web3: Web3.default) {
         const contract = createContract<EntryPoint>(web3, this.entryPoint, EntryPointABI as AbiItem[])
         if (!contract) throw new Error('Failed to create entry point contract.')
         return contract
     }
 
-    async fillUserOperation(web3: Web3, overrides?: Required<Pick<UserOperation, 'initCode' | 'nonce'>>) {
+    async fillUserOperation(web3: Web3.default, overrides?: Required<Pick<UserOperation, 'initCode' | 'nonce'>>) {
         // from overrides
         if (overrides) {
             this.userOperation.nonce = overrides.nonce
@@ -190,7 +190,7 @@ export class UserTransaction {
         if (isValidAddress(this.userOperation.sender) && typeof overrides === 'undefined' && nonce === 0) {
             try {
                 const nonce_ = await this.createWalletContract(web3, sender).methods.nonce().call()
-                this.userOperation.nonce = toNumber(nonce_)
+                this.userOperation.nonce = toNumber(nonce_) as number
             } catch (error) {
                 this.userOperation.nonce = 0
             }
@@ -273,7 +273,7 @@ export class UserTransaction {
         return toHex(callGas)
     }
 
-    async signTransaction(web3: Web3, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string> {
+    async signTransaction(web3: Web3.default, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string> {
         const transaction = UserTransaction.toTransaction(this.chainId, this.userOperation)
         if (!transaction.from || !transaction.to) throw new Error('Invalid transaction.')
 
@@ -354,7 +354,7 @@ export class UserTransaction {
 
         return UserTransaction.fillUserOperation(chainId, {
             sender: formatEthereumAddress(from),
-            nonce: toNumber(nonce),
+            nonce: toNumber(nonce) as number,
             callGas: transaction.gas ?? DEFAULT_USER_OPERATION.callGas,
             callData: abiCoder.encodeFunctionCall(CALL_WALLET_TYPE, [to, value, data]),
             maxFeePerGas: transaction.maxFeePerGas ?? transaction.gasPrice ?? DEFAULT_USER_OPERATION.maxFeePerGas,
@@ -381,7 +381,7 @@ export class UserTransaction {
             gas: userOperation.callGas,
             maxFeePerGas: userOperation.maxFeePerGas,
             maxPriorityFeePerGas: userOperation.maxPriorityFeePerGas,
-            nonce: toNumber(userOperation.nonce ?? '0'),
+            nonce: toNumber(userOperation.nonce ?? '0') as number,
             data: parameters?.func ?? '0x',
         }
     }

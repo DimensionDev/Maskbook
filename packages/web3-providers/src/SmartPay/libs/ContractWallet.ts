@@ -8,7 +8,7 @@ import WalletProxyABI from '@masknet/web3-contracts/abis/WalletProxy.json'
 import { WalletProxyByteCode } from '@masknet/web3-contracts/bytes/WalletProxy.mjs'
 
 export class ContractWallet {
-    private web3 = new Web3()
+    private web3 = new Web3.default()
     private coder = ABICoder as unknown as ABICoder.AbiCoder
 
     /**

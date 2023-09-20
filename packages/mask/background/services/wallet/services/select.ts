@@ -1,8 +1,8 @@
 import { defer, type DeferTuple } from '@masknet/kit'
 import { PopupRoutes, type ECKeyIdentifier } from '@masknet/shared-base'
 import { ProviderType, type ChainId } from '@masknet/web3-shared-evm'
-import { openPopupWindow } from '../../helper/popup-opener.js'
 import { Providers } from '@masknet/web3-providers'
+import { openPopupWindow } from '../../helper/popup-opener.js'
 
 let deferred: DeferTuple<MaskAccount[], Error> | undefined
 
