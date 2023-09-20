@@ -9,7 +9,7 @@ import { useOpenApplicationSettings } from '@masknet/shared'
 const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
-        background: 'rgba(255, 255, 255, 0.80)',
+        background: theme.palette.mode === 'dark' ? 'rgba(0, 0, 0, 0.80)' : 'rgba(255, 255, 255, 0.80)',
         backdropFilter: 'blur(10px)',
         borderRadius: '0 0 12px 12px',
         position: 'absolute',
@@ -30,8 +30,9 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     poweredBy: {
+        display: 'flex',
         color: theme.palette.maskColor.second,
-        fontSize: 14,
+        fontSize: '14px',
         fontWeight: 700,
         lineHeight: '18px',
         alignItems: 'center',
@@ -39,6 +40,9 @@ const useStyles = makeStyles()((theme) => ({
     calender: {
         display: 'flex',
         gap: '8px',
+        alignItems: 'center',
+    },
+    calendarText: {
         color: theme.palette.maskColor.main,
         fontSize: '16px',
         fontWeight: 700,
@@ -47,9 +51,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     providerName: {
         color: theme.palette.maskColor.main,
-        fontSize: '16px',
+        fontSize: '14px',
         fontWeight: 700,
-        lineHeight: '20px',
+        lineHeight: '18px',
         alignItems: 'center',
     },
 }))
@@ -87,7 +91,7 @@ export function Footer({ provider }: FooterProps) {
             <div className={classes.lineWrap}>
                 <div className={classes.calender}>
                     <Icons.Calendar size={24} />
-                    <Typography>{t.title()}</Typography>
+                    <Typography className={classes.calendarText}>{t.title()}</Typography>
                 </div>
                 <div className={classes.poweredByWrap}>
                     <Typography className={classes.poweredBy}>{t.powered_by()}</Typography>

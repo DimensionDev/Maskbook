@@ -1,6 +1,3 @@
-import { Web3 } from 'web3'
-import * as AbiCoder from 'web3-eth-abi'
+import * as ABICoder from 'web3-eth-abi'
 
-console.log(Web3)
-
-export const abiCoder = AbiCoder.default
+export const abiCoder = ABICoder as unknown as ABICoder.AbiCoder

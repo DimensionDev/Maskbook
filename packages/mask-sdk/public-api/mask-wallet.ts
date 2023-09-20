@@ -11,8 +11,8 @@ declare namespace Mask {
 // https://github.com/typescript-eslint/typescript-eslint/issues/7192
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
 declare namespace Mask.Ethereum {
-    export interface ProviderObject extends Ethereum.Provider, Ethereum.EthereumEventEmitter {}
-    export interface Provider {
+    export interface ProviderObject extends Ethereum.EIP1193Provider, Ethereum.EthereumEventEmitter {}
+    export interface EIP1193Provider {
         /**
          * The `request` method is intended as a transport- and protocol-agnostic wrapper function for Remote Procedure Calls (RPCs).
          * @remarks Since API=0
@@ -63,6 +63,22 @@ declare namespace Mask.Ethereum {
     }
     export interface ProviderConnectInfo {
         readonly chainId: string
+    }
+}
+
+// Defined in EIP-6963
+// https://github.com/typescript-eslint/typescript-eslint/issues/7192
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
+declare namespace Mask.Ethereum {
+    export interface EIP6963ProviderInfo {
+        uuid: string
+        name: string
+        icon: string
+        rdns: string
+    }
+    export interface EIP6963ProviderDetail {
+        info: EIP6963ProviderInfo
+        provider: EIP1193Provider
     }
 }
 
@@ -241,7 +257,7 @@ declare namespace Mask.Ethereum.RPC {
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
 declare namespace Mask.Ethereum {
     export interface ProviderObject
-        extends Ethereum.Provider,
+        extends Ethereum.EIP1193Provider,
             Ethereum.ExperimentalProvider,
             Ethereum.EthereumEventEmitter {}
 

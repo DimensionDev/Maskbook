@@ -1,9 +1,4 @@
-import {
-    PhoneNumberField,
-    SendingCodeField,
-    useCustomSnackbar,
-    type PhoneNumberFieldValue as PhoneConfig,
-} from '@masknet/theme'
+import { SendingCodeField, useCustomSnackbar } from '@masknet/theme'
 import { Box } from '@mui/material'
 import guessCallingCode from 'guess-calling-code'
 import { pick } from 'lodash-es'
@@ -17,6 +12,7 @@ import { phoneRegexp } from '../../../utils/regexp.js'
 import { AccountType, Locale, Scenario } from '../../../type.js'
 import { PrimaryButton } from '../../PrimaryButton/index.js'
 import { RestoreContext } from './RestoreProvider.js'
+import { PhoneNumberField } from '@masknet/shared'
 
 export const PhoneField = memo(function PhoneField() {
     const language = useLanguage()
@@ -28,8 +24,20 @@ export const PhoneField = memo(function PhoneField() {
     const { state, dispatch, downloadBackupInfo } = RestoreContext.useContainer()
     const { loading, phoneForm } = state
     const { account, code, dialingCode } = phoneForm
-    const phoneConfig: PhoneConfig = useMemo(() => pick(phoneForm, 'dialingCode', 'phone', 'country'), [phoneForm])
-    const setPhoneConfig = useCallback((newConfig: PhoneConfig) => dispatch({ type: 'SET_PHONE', form: newConfig }), [])
+    const phoneConfig = useMemo(() => pick(phoneForm, 'dialingCode', 'phone'), [phoneForm])
+    const onPhoneNumberChange = useCallback(
+        (phoneNumber: string) => {
+            dispatch({ type: 'SET_PHONE', form: { ...phoneConfig, phone: phoneNumber } })
+        },
+        [phoneConfig],
+    )
+    const onCountryCodeChange = useCallback(
+        (code: string) => {
+            dispatch({ type: 'SET_PHONE', form: { ...phoneConfig, dialingCode: code } })
+        },
+        [phoneConfig],
+    )
+
     useEffect(() => {
         if (dialingCode) return
         dispatch({ type: 'SET_PHONE', form: { dialingCode: guessCallingCode() } })
@@ -81,17 +89,22 @@ export const PhoneField = memo(function PhoneField() {
         )
     }, [account, code, disabled, loading])
 
+    console.log(phoneForm)
     return (
         <>
             <PhoneNumberField
+                fullWidth
+                code={phoneConfig.dialingCode}
+                onCodeChange={onCountryCodeChange}
                 onBlur={validCheck}
-                onChange={setPhoneConfig}
-                error={invalidPhone ? t.data_recovery_invalid_mobile() : error || ''}
-                value={phoneConfig}
-                placeholder={t.mobile_number()}
+                onChange={(event) => onPhoneNumberChange(event.target.value)}
+                error={invalidPhone}
+                helperText={invalidPhone ? t.data_recovery_invalid_mobile() : error || ''}
+                value={phoneForm.phone}
             />
             <Box mt={1.5}>
                 <SendingCodeField
+                    fullWidth
                     value={code}
                     onChange={(code) => {
                         setCodeError('')

@@ -174,6 +174,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
             {restoreStatus === RestoreStatus.Decrypting ? (
                 <Box mt={4}>
                     <PasswordField
+                        fullWidth
                         placeholder={t.sign_in_account_cloud_backup_password()}
                         type="password"
                         onChange={(e) => setPassword(e.target.value)}

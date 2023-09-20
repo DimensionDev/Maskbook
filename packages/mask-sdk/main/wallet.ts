@@ -1,4 +1,7 @@
 import { contentScript } from './bridge.js'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import image from '../../icons/brands/MaskBlue.svg'
 
 class EthereumEventEmitter extends EventTarget implements Mask.Ethereum.MaskEthereumEventEmitter {
     #mapping = new WeakMap()
@@ -32,3 +35,21 @@ class MaskProvider extends EthereumEventEmitter implements Mask.Ethereum.Provide
     }
 }
 export const ethereum = new MaskProvider()
+
+{
+    const detail: Mask.Ethereum.EIP6963ProviderDetail = {
+        info: {
+            uuid: 'f113ee3f-49e3-4576-8f77-c3991d82af41',
+            name: 'Mask Wallet',
+            rdns: 'io.mask',
+            icon: String(image),
+        },
+        provider: ethereum,
+    }
+    Object.freeze(detail)
+    Object.freeze(detail.info)
+    const event = new CustomEvent('eip6963:announceProvider', { detail })
+
+    window.dispatchEvent(event)
+    window.addEventListener('eip6963:requestProvider', () => window.dispatchEvent(event))
+}

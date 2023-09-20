@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import Services from '#services'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { delay } from '@masknet/kit'
-import { MaskTextField, makeStyles } from '@masknet/theme'
-import { Typography, Button } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
+import { Typography, Button, TextField } from '@mui/material'
 import { Box } from '@mui/system'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
@@ -97,7 +97,7 @@ export const SignUp = memo(function SignUp() {
             <Typography className={classes.second} mt={3} mb={2}>
                 {t.persona_name()}
             </Typography>
-            <MaskTextField
+            <TextField
                 onChange={(e) => {
                     if (error) setError('')
                     setPersonaName(e.target.value)
@@ -105,7 +105,7 @@ export const SignUp = memo(function SignUp() {
                 autoFocus
                 placeholder={t.persona_setup_persona_example()}
                 required
-                InputProps={{ disableUnderline: true }}
+                InputProps={{ disableUnderline: true, size: 'large' }}
                 inputProps={{ maxLength: 24 }}
                 error={!!error}
                 helperText={error}

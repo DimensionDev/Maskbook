@@ -1,11 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
 import { Calendar } from '@masknet/web3-providers'
+import startOfMonth from 'date-fns/startOfMonth'
+import endOfMonth from 'date-fns/endOfMonth'
 
-export function useNewsList() {
-    const date = Math.floor(Date.now() / 1000)
+export function useNewsList(date: Date) {
+    const startTime = startOfMonth(date).getTime() / 1000
+    const endTime = Math.floor(endOfMonth(date).getTime() / 1000)
     const { data, isLoading } = useQuery<any>(
-        ['newsList', Math.floor(date / 1000)],
-        async () => await Calendar.getNewsList(date),
+        ['newsList', startTime, endTime],
+        async () => await Calendar.getNewsList(startTime, endTime),
     )
     const eventsWithDate: Record<string, any[]> =
         data?.reduce((acc: Record<string, any[]>, v: any) => {
@@ -17,11 +20,12 @@ export function useNewsList() {
     return { data: eventsWithDate, isLoading }
 }
 
-export function useEventList() {
-    const date = Math.floor(Date.now() / 1000)
+export function useEventList(date: Date) {
+    const startTime = startOfMonth(date).getTime() / 1000
+    const endTime = Math.floor(endOfMonth(date).getTime() / 1000)
     const { data, isLoading } = useQuery<any>(
-        ['eventList', Math.floor(date / 1000)],
-        async () => await Calendar.getEventList(date),
+        ['eventList', startTime, endTime],
+        async () => await Calendar.getEventList(startTime, endTime),
     )
     const eventsWithDate: Record<string, any[]> =
         data?.reduce((acc: Record<string, any[]>, v: any) => {
@@ -33,11 +37,12 @@ export function useEventList() {
     return { data: eventsWithDate, isLoading }
 }
 
-export function useNFTList() {
-    const date = Math.floor(Date.now() / 1000)
+export function useNFTList(date: Date) {
+    const startTime = startOfMonth(date).getTime() / 1000
+    const endTime = Math.floor(endOfMonth(date).getTime() / 1000)
     const { data, isLoading } = useQuery<any>(
-        ['nftList', Math.floor(date / 1000)],
-        async () => await Calendar.getNFTList(date),
+        ['nftList', startTime, endTime],
+        async () => await Calendar.getNFTList(startTime, endTime),
     )
     const eventsWithDate: Record<string, any[]> =
         data?.reduce((acc: Record<string, any[]>, v: any) => {

@@ -9,6 +9,7 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 400,
         lineHeight: '16px',
         background: theme.palette.maskColor.bg,
+        color: theme.palette.maskColor.main,
         borderRadius: '4px',
         display: 'flex',
         alignItems: 'center',
