@@ -15,18 +15,15 @@ const gridProps = {
     columns: 'repeat(auto-fill, minmax(20%, 1fr))',
     gap: '8px',
 }
-const useStyles = makeStyles()((theme) => {
-    const isDark = theme.palette.mode === 'dark'
-    return {
-        importNft: {
-            cursor: 'pointer',
-            color: isDark ? theme.palette.maskColor.main : theme.palette.maskColor.highlight,
-            fontSize: 14,
-            fontWeight: 400,
-            textAlign: 'center',
-        },
-    }
-})
+const useStyles = makeStyles()((theme) => ({
+    importNft: {
+        cursor: 'pointer',
+        color: theme.palette.maskColor.main,
+        fontSize: 14,
+        fontWeight: 700,
+        textAlign: 'center',
+    },
+}))
 
 interface Props {
     onAddToken: (assetTab: WalletAssetTabs) => void
