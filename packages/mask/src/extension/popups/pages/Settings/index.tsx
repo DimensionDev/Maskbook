@@ -23,6 +23,20 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         rowGap: theme.spacing(2),
+        '::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            width: 20,
+        },
+        '::-webkit-scrollbar-thumb': {
+            borderRadius: '20px',
+            width: 5,
+            borderBottom: '64px solid rgba(0, 0, 0, 0)',
+            borderTop: '64px solid rgba(0,0,0,0)',
+            borderLeft: '7px solid rgba(0,0,0,0)',
+            borderRight: '7px solid rgba(0,0,0,0)',
+            backgroundColor: theme.palette.maskColor.secondaryLine,
+            backgroundClip: 'padding-box',
+        },
     },
     header: {
         display: 'flex',
@@ -86,6 +100,9 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         lineHeight: '16px',
         fontWeight: 700,
+    },
+    arrow: {
+        color: theme.palette.maskColor.second,
     },
 }))
 
@@ -192,7 +209,7 @@ const Settings = memo(function Settings() {
                                 primary={t('popups_settings_language')}
                                 secondary={LANGUAGE_OPTIONS_MAP[lang]}
                             />
-                            <Icons.ArrowRight size={24} />
+                            <Icons.ArrowRight size={24} className={classes.arrow} />
                         </ListItem>
                         <ListItem
                             className={classes.listItem}
@@ -202,7 +219,7 @@ const Settings = memo(function Settings() {
                                 primary={t('popups_settings_appearance')}
                                 secondary={APPEARANCE_OPTIONS_MAP[mode]}
                             />
-                            <Icons.ArrowRight size={24} />
+                            <Icons.ArrowRight size={24} className={classes.arrow} />
                         </ListItem>
                         <ListItem
                             className={classes.listItem}
@@ -220,7 +237,7 @@ const Settings = memo(function Settings() {
                                     />
                                 }
                             />
-                            <Icons.ArrowRight size={24} />
+                            <Icons.ArrowRight size={24} className={classes.arrow} />
                         </ListItem>
                     </List>
                 </Box>
@@ -252,7 +269,7 @@ const Settings = memo(function Settings() {
                                     }
                                 }}
                             />
-                            <Icons.ArrowRight size={24} />
+                            <Icons.ArrowRight size={24} className={classes.arrow} />
                         </ListItem>
                         <ListItem
                             className={classes.listItem}
@@ -268,7 +285,7 @@ const Settings = memo(function Settings() {
                                 primary={t('popups_settings_local_backup')}
                                 secondary={localBackupTip}
                             />
-                            <Icons.ArrowRight size={24} />
+                            <Icons.ArrowRight size={24} className={classes.arrow} />
                         </ListItem>
                         <ListItem className={classes.listItem}>
                             <ListItemText
@@ -276,7 +293,7 @@ const Settings = memo(function Settings() {
                                 primary={t('popups_settings_restore_database')}
                                 secondary={t('popups_settings_restore_database_description')}
                             />
-                            <Icons.ArrowRight size={24} />
+                            <Icons.ArrowRight size={24} className={classes.arrow} />
                         </ListItem>
                         <ListItem
                             className={classes.listItem}
@@ -296,7 +313,7 @@ const Settings = memo(function Settings() {
                                         : t('popups_settings_not_set')
                                 }
                             />
-                            <Icons.ArrowRight size={24} />
+                            <Icons.ArrowRight size={24} className={classes.arrow} />
                         </ListItem>
                     </List>
                 </Box>
@@ -319,7 +336,7 @@ const Settings = memo(function Settings() {
                                 primary={t('popups_settings_feedback')}
                                 secondary={FEEDBACK_MAIL}
                             />
-                            <Icons.ArrowRight size={24} />
+                            <Icons.ArrowRight size={24} className={classes.arrow} />
                         </ListItem>
                         <ListItem
                             className={classes.listItem}
@@ -329,7 +346,7 @@ const Settings = memo(function Settings() {
                                 primary={t('popups_settings_faq')}
                                 secondary={FAQ_LINK}
                             />
-                            <Icons.ArrowRight size={24} />
+                            <Icons.ArrowRight size={24} className={classes.arrow} />
                         </ListItem>
                         <ListItem
                             className={classes.listItem}
@@ -339,7 +356,7 @@ const Settings = memo(function Settings() {
                                 primary={t('popups_settings_website')}
                                 secondary={HOME_LINK}
                             />
-                            <Icons.ArrowRight size={24} />
+                            <Icons.ArrowRight size={24} className={classes.arrow} />
                         </ListItem>
                     </List>
                 </Box>
@@ -359,7 +376,7 @@ const Settings = memo(function Settings() {
                                 primary={t('popups_settings_version')}
                                 secondary={env.VERSION}
                             />
-                            <Icons.ArrowRight size={24} />
+                            <Icons.ArrowRight size={24} className={classes.arrow} />
                         </ListItem>
                         <ListItem
                             className={classes.listItem}
@@ -371,7 +388,7 @@ const Settings = memo(function Settings() {
                                 )
                             }>
                             <ListItemText classes={itemClasses} secondary={t('popups_settings_service_agreement')} />
-                            <Icons.ArrowRight size={24} />
+                            <Icons.ArrowRight size={24} className={classes.arrow} />
                         </ListItem>
                         <ListItem
                             className={classes.listItem}
@@ -381,7 +398,7 @@ const Settings = memo(function Settings() {
                                 })
                             }>
                             <ListItemText classes={itemClasses} secondary={t('popups_settings_primary_policy')} />
-                            <Icons.ArrowRight size={24} />
+                            <Icons.ArrowRight size={24} className={classes.arrow} />
                         </ListItem>
                     </List>
                 </Box>

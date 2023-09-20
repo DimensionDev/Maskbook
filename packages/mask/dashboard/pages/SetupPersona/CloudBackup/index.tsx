@@ -66,8 +66,6 @@ const CloudBackupInner = memo(function CloudBackupInner() {
 
     const { currentTab, onChange, tabs, formState } = CloudBackupFormContext.useContainer()
 
-    console.log(formState)
-
     const [{ loading }, handleSubmit] = useAsyncFn(
         async (data: CloudBackupFormInputs) => {
             const response = await fetchDownloadLink({
