@@ -1,4 +1,4 @@
-import { Web3 } from 'web3'
+import Web3 from 'web3'
 import type { provider as Provider } from 'web3-core'
 
 export function createWeb3FromProvider(provider: Provider) {

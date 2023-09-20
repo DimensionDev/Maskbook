@@ -1,4 +1,4 @@
-import type { Web3 } from 'web3'
+import Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
 import type { ContractOptions } from 'web3-eth-contract'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'

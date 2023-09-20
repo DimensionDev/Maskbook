@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js'
 import { isUndefined, omitBy } from 'lodash-es'
-import type { Web3 } from 'web3'
+import type Web3 from 'web3'
 import { type AbiItem, hexToBytes, keccak256, padLeft, toHex, toNumber } from 'web3-utils'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
 import { isGreaterThan, multipliedBy, toFixed } from '@masknet/web3-shared-base'
