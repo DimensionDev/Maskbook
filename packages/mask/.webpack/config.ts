@@ -85,7 +85,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 stream: require.resolve('stream-browserify'),
                 crypto: require.resolve('crypto-browserify'),
                 buffer: require.resolve('buffer'),
-                zlib: require.resolve('zlib'),
+                zlib: require.resolve('zlib-browserify'),
                 'text-encoding': require.resolve('@sinonjs/text-encoding'),
             },
             conditionNames: ['mask-src', '...'],

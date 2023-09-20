@@ -1140,6 +1140,9 @@ importers:
       webextension-polyfill:
         specifier: ^0.10.0
         version: 0.10.0
+      zlib-browserify:
+        specifier: ^0.0.3
+        version: 0.0.3
       zod:
         specifier: ^3.22.2
         version: 3.22.2
@@ -20451,6 +20454,10 @@ packages:
       type-detect: 4.0.8
     dev: true
 
+  /deep-equal@0.0.0:
+    resolution: {integrity: sha512-p1bI/kkDPT6auUI0U+WLuIIrzmDIDo80I406J8tT4y6I4ZGtBuMeTudrKDtBdMJFAcxqrQdx27gosqPVyY3IvQ==}
+    dev: false
+
   /deep-extend@0.6.0:
     resolution: {integrity: sha512-LOHxIOaPYdHlJRtCQfDIVZtfw/ufM8+rVj649RIHzcm/vGwQRXFt6OPqIFWsm2XEMrNIEtWR64sY1LEKD2vAOA==}
     engines: {node: '>=4.0.0'}
@@ -20558,6 +20565,10 @@ packages:
       is-descriptor: 1.0.2
       isobject: 3.0.1
     dev: true
+
+  /defined@0.0.0:
+    resolution: {integrity: sha512-zpqiCT8bODLu3QSmLLic8xJnYWBFjOSu/fBCm189oAiTtPq/PSanNACKZDS7kgSyCJY7P+IcODzlIogBK/9RBg==}
+    dev: false
 
   /delay@5.0.0:
     resolution: {integrity: sha512-ReEBKkIfe4ya47wlPYf/gu5ib6yUG0/Aez0JQZQz94kiWtRQvZIQbTiehsnwHvLSWJnQdhVeqYue7Id1dKr0qw==}
@@ -33547,6 +33558,14 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
+  /tape@0.2.2:
+    resolution: {integrity: sha512-bfyf/0yv2FZVsf80b7oo50Lyi35sfjE7VM6206du7LtpbdQP8rbLhZy/stuS/Dcq4w6jE1Pz2zFrHtfeOKbaUA==}
+    dependencies:
+      deep-equal: 0.0.0
+      defined: 0.0.0
+      jsonify: 0.0.1
+    dev: false
+
   /tar@4.4.19:
     resolution: {integrity: sha512-a20gEsvHnWe0ygBY8JbxoM4w3SJdhc7ZAuxkLqh+nvNQN2IOt0B5lLgM490X5Hl8FF0dl0tOf2ewFYAlIFgzVA==}
     engines: {node: '>=4.5'}
@@ -36715,6 +36734,12 @@ packages:
       jszip: 3.10.1
     dev: true
 
+  /zlib-browserify@0.0.3:
+    resolution: {integrity: sha512-KW42YGoQKq7+oU46deeWMUsrPyBruEWV1DoObBTMfEC2LnTqQIrwKVKrPoz2mn5DXESW4Ca/lIP2MqGHrt/WFA==}
+    dependencies:
+      tape: 0.2.2
+    dev: false
+
   /zod@3.22.2:
     resolution: {integrity: sha512-wvWkphh5WQsJbVk1tbx1l1Ly4yg+XecD+Mq280uBGt9wa5BKSWf4Mhp6GmrkPixhMxmabYY7RbzlwVP32pbGCg==}
     dev: false
@@ -37050,4 +37075,5 @@ time:
   /webpack-target-webextension@1.1.0: '2023-06-20T12:22:16.811Z'
   /yargs@17.7.2: '2023-04-27T19:59:02.861Z'
   /z-schema@6.0.1: '2023-04-13T12:31:24.670Z'
+  /zlib-browserify@0.0.3: '2013-10-01T15:26:02.577Z'
   /zod@3.22.2: '2023-08-19T00:15:29.521Z'

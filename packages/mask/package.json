@@ -130,6 +130,7 @@
     "guess-calling-code": "^1.1.7",
     "html-to-image": "^1.11.11",
     "https-browserify": "^1.0.0",
+    "zlib-browserify": "^0.0.3",
     "idb": "^7.1.1",
     "iframe-resizer-react": "^1.1.0",
     "immer": "^10.0.2",

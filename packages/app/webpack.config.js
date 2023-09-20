@@ -70,6 +70,7 @@ function Configuration(env, argv) {
                 crypto: require.resolve('crypto-browserify'),
                 stream: require.resolve('stream-browserify'),
                 buffer: require.resolve('buffer'),
+                zlib: require.resolve('zlib-browserify'),
                 'text-encoding': require.resolve('@sinonjs/text-encoding'),
             },
         },
