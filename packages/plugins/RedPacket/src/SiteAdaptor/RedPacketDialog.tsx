@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { compact } from 'lodash-es'
-import Web3Utils from 'web3-utils'
+import { sha3 } from 'web3-utils'
 import { DialogContent, Tab } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
@@ -110,7 +110,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     payload.password = prompt('Please enter the password of the lucky drop:', '') ?? ''
                 } else if (payload.contract_version > 1 && payload.contract_version < 4) {
                     // just sign out the password if it is lost.
-                    payload.password = await Web3.signMessage('message', Web3Utils.sha3(payload.sender.message) ?? '', {
+                    payload.password = await Web3.signMessage('message', sha3(payload.sender.message) ?? '', {
                         account,
                     })
                     payload.password = payload.password.slice(2)

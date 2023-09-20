@@ -1,3 +1,7 @@
+import { mapKeys } from 'lodash-es'
+import type { BigNumber } from 'bignumber.js'
+import { toHex } from 'web3-utils'
+import { Interface } from '@ethersproject/abi'
 import { Web3 } from '@masknet/web3-providers'
 import ERC20_ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import { toFixed, type RecentTransaction } from '@masknet/web3-shared-base'
@@ -7,12 +11,8 @@ import {
     type ChainId,
     type Transaction as EvmTransaction,
 } from '@masknet/web3-shared-evm'
-import { mapKeys } from 'lodash-es'
-import { toHex } from 'web3-utils'
 import { GasSettingModal } from '../../modals/modals.js'
 import { ReplaceType } from './type.js'
-import { Interface } from '@ethersproject/abi'
-import type { BigNumber } from 'bignumber.js'
 
 const erc20InterFace = new Interface(ERC20_ABI)
 

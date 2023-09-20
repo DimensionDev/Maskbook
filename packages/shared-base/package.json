@@ -24,7 +24,7 @@
     "@types/react": "18.2.21",
     "anchorme": "^2.1.2",
     "async-call-rpc": "^6.3.1",
-    "bignumber.js": "9.1.1",
+    "bignumber.js": "9.1.2",
     "dompurify": "^3.0.5",
     "history": "^5.3.0",
     "i18next-browser-languagedetector": "^7.1.0",
@@ -34,7 +34,7 @@
     "tiny-secp256k1": "^2.2.3",
     "typeson": "^9.0.3",
     "typeson-registry": "^8.0.0",
-    "web3-utils": "1.8.0"
+    "web3-utils": "1.10.2"
   },
   "devDependencies": {
     "@types/use-subscription": "^1.0.0"

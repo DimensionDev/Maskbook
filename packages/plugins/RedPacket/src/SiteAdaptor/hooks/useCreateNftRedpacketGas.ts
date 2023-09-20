@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useAsync } from 'react-use'
-import Web3Utils from 'web3-utils'
+import { sha3 } from 'web3-utils'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -26,7 +26,7 @@ export function useCreateNFTRedpacketGas(
         const params: FillMethodParameters = [
             publicKey,
             60 * 60 * 24,
-            Web3Utils.sha3(Math.random().toString())!,
+            sha3(Math.random().toString())!,
             message,
             name,
             contractAddress,

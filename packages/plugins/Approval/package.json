@@ -27,7 +27,7 @@
     "@masknet/web3-telemetry": "workspace:^",
     "react-use": "^17.4.0",
     "urlcat": "^3.1.0",
-    "bignumber.js": "9.1.1",
+    "bignumber.js": "9.1.2",
     "unstated-next": "^1.1.0"
   }
 }

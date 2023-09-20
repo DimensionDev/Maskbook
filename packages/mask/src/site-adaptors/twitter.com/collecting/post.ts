@@ -1,7 +1,8 @@
+import { memoize, noop } from 'lodash-es'
+import { keccak256 } from 'web3-utils'
 import { DOMProxy, IntervalWatcher, type DOMProxyEvents } from '@dimensiondev/holoflows-kit'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
-import { parseId } from '../utils/url.js'
 import {
     FlattenTypedMessage,
     extractTextFromTypedMessage,
@@ -13,11 +14,10 @@ import {
 } from '@masknet/typed-message'
 import type { SiteAdaptorUI } from '@masknet/types'
 import type { EventListener } from '@servie/events'
-import { memoize, noop } from 'lodash-es'
-import utils from 'web3-utils'
 import Services from '#services'
 import { creator, activatedSiteAdaptor_state } from '../../../site-adaptor-infra/index.js'
 import { createRefsForCreatePostContext } from '../../../site-adaptor-infra/utils/create-post-context.js'
+import { parseId } from '../utils/url.js'
 import { untilElementAvailable } from '../../../utils/dom.js'
 import { getCurrentIdentifier } from '../../utils.js'
 import { twitterBase } from '../base.js'
@@ -142,7 +142,7 @@ function registerPostCollectorInner(
             const tweetNode = getTweetNode(node)
             const parentTweetNode = isQuotedTweet(tweetNode) ? getParentTweetNode(tweetNode!) : null
             if (!tweetNode || shouldSkipDecrypt(node, tweetNode)) {
-                return `keccak256:${utils.keccak256(node.innerText)}`
+                return `keccak256:${keccak256(node.innerText)}`
             }
             const parentTweetId = parentTweetNode ? getPostId(parentTweetNode) : ''
             const tweetId = getPostId(tweetNode)

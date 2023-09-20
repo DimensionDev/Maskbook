@@ -28,11 +28,11 @@
     "@masknet/web3-shared-evm": "workspace:^",
     "@masknet/web3-telemetry": "workspace:^",
     "@react-hookz/web": "^23.1.0",
-    "bignumber.js": "9.1.1",
+    "bignumber.js": "9.1.2",
     "date-fns": "^2.30.0",
     "react-use": "^17.4.0",
     "ts-results-es": "^4.0.0",
-    "web3-core": "1.8.0",
-    "web3-utils": "1.8.0"
+    "web3-core": "1.10.2",
+    "web3-utils": "1.10.2"
   }
 }

@@ -1,3 +1,5 @@
+import type { AbiItem } from 'web3-utils'
+import { BigNumber } from 'bignumber.js'
 import AaveLendingPoolABI from '@masknet/web3-contracts/abis/AaveLendingPool.json'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
@@ -7,15 +9,13 @@ import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
 import { fetchJSON } from '@masknet/web3-providers/helpers'
 import { ZERO, pow10, type FungibleToken } from '@masknet/web3-shared-base'
 import {
-    TransactionEventType,
-    createContract,
+    type Web3,
     type ChainId,
     type SchemaType,
+    TransactionEventType,
+    createContract,
     getAaveConstant,
 } from '@masknet/web3-shared-evm'
-import { BigNumber } from 'bignumber.js'
-import type Web3 from 'web3'
-import type { AbiItem } from 'web3-utils'
 import { ProtocolType, type SavingsProtocol } from '../types.js'
 
 export class AAVEProtocol implements SavingsProtocol {
