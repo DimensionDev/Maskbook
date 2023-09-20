@@ -2145,7 +2145,12 @@ export const LeftArrow = /*#__PURE__*/ __createIcon('LeftArrow', [
 ])
 export const LinearCalendar = /*#__PURE__*/ __createIcon('LinearCalendar', [
     {
-        u: () => new URL('./general/LinearCalendar.svg', import.meta.url),
+        c: ['dark'],
+        u: () => new URL('./general/LinearCalendar.dark.svg', import.meta.url),
+    },
+    {
+        c: ['light'],
+        u: () => new URL('./general/LinearCalendar.light.svg', import.meta.url),
     },
 ])
 export const Link = /*#__PURE__*/ __createIcon('Link', [
