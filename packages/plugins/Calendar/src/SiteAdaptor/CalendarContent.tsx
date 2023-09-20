@@ -7,8 +7,8 @@ import { Tab } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { DatePickerTab } from './components/DatePickerTab.js'
 import { useEventList, useNFTList, useNewsList } from '../hooks/useEventList.js'
-import { EventList } from './components/EventList.js'
 import { NewsList } from './components/NewsList.js'
+import { EventList } from './components/EventList.js'
 import { NFTList } from './components/NFTList.js'
 import { Footer } from './components/Footer.js'
 import { safeUnreachable } from '@masknet/kit'
@@ -46,9 +46,9 @@ export function CalendarContent() {
     const [selectedDate, setSelectedDate] = useState(new Date())
     const [open, setOpen] = useState(false)
     const t = useI18N()
-    const { data: eventList, isLoading: eventLoading } = useEventList()
-    const { data: newsList, isLoading: newsLoading } = useNewsList()
-    const { data: nftList, isLoading: nftLoading } = useNFTList()
+    const { data: eventList, isLoading: eventLoading } = useEventList(selectedDate)
+    const { data: newsList, isLoading: newsLoading } = useNewsList(selectedDate)
+    const { data: nftList, isLoading: nftLoading } = useNFTList(selectedDate)
     const list = useMemo(() => {
         switch (currentTab) {
             case 'news':
@@ -89,20 +89,27 @@ export function CalendarContent() {
                 />
                 <TabPanel value={tabs.news} style={{ padding: 0 }}>
                     <NewsList
-                        list={newsList[dateString]}
+                        list={newsList}
                         isLoading={newsLoading}
                         empty={!Object.keys(newsList).length}
+                        dateString={dateString}
                     />
                 </TabPanel>
                 <TabPanel value={tabs.event} style={{ padding: 0 }}>
                     <EventList
-                        list={eventList[dateString]}
+                        list={eventList}
                         isLoading={eventLoading}
                         empty={!Object.keys(eventList).length}
+                        dateString={dateString}
                     />
                 </TabPanel>
                 <TabPanel value={tabs.nfts} style={{ padding: 0 }}>
-                    <NFTList list={nftList[dateString]} isLoading={nftLoading} empty={!Object.keys(newsList).length} />
+                    <NFTList
+                        list={nftList}
+                        isLoading={nftLoading}
+                        empty={!Object.keys(newsList).length}
+                        dateString={dateString}
+                    />
                 </TabPanel>
                 <Footer provider={currentTab} />
             </TabContext>

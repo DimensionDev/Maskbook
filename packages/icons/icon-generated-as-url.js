@@ -215,7 +215,8 @@ export function japan_url() { return new URL("./general/Japan.svg", import.meta.
 export function jpy_url() { return new URL("./general/JPY.svg", import.meta.url) }
 export function key_square_url() { return new URL("./general/KeySquare.svg", import.meta.url) }
 export function left_arrow_url() { return new URL("./general/LeftArrow.svg", import.meta.url) }
-export function linear_calendar_url() { return new URL("./general/LinearCalendar.svg", import.meta.url) }
+export function linear_calendar_dark_url() { return new URL("./general/LinearCalendar.dark.svg", import.meta.url) }
+export function linear_calendar_light_url() { return new URL("./general/LinearCalendar.light.svg", import.meta.url) }
 export function link_url() { return new URL("./general/Link.svg", import.meta.url) }
 export function link_out_url() { return new URL("./general/LinkOut.svg", import.meta.url) }
 export function loader_url() { return new URL("./general/Loader.svg", import.meta.url) }
