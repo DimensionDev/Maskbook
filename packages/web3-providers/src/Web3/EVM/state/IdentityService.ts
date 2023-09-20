@@ -212,12 +212,13 @@ export class IdentityService extends IdentityServiceState<ChainId> {
             names.map(async (name) => {
                 const address = await ENS.lookup(name)
                 if (!address) return
-                return this.createSocialAddress(SocialAddressType.ENS, address, name)
+                return [
+                    this.createSocialAddress(SocialAddressType.ENS, address, name),
+                    this.createSocialAddress(SocialAddressType.Address, address, name),
+                ]
             }),
         )
-        return uniqBy(compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined))), (x) =>
-            x.address.toLowerCase(),
-        )
+        return compact(allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : undefined)))
     }
 
     private async getSocialAddressFromARBID({ identifier, nickname = '', bio = '' }: SocialIdentity) {
@@ -228,12 +229,13 @@ export class IdentityService extends IdentityServiceState<ChainId> {
             names.map(async (name) => {
                 const address = await ARBID.lookup(name)
                 if (!address) return
-                return this.createSocialAddress(SocialAddressType.SPACE_ID, address, name, ChainId.Arbitrum)
+                return [
+                    this.createSocialAddress(SocialAddressType.ARBID, address, name, ChainId.Arbitrum),
+                    this.createSocialAddress(SocialAddressType.Address, address, name, ChainId.Arbitrum),
+                ]
             }),
         )
-        return uniqBy(compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined))), (x) =>
-            x.address.toLowerCase(),
-        )
+        return compact(allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : undefined)))
     }
 
     private async getSocialAddressFromSpaceID({ identifier, nickname = '', bio = '' }: SocialIdentity) {
@@ -244,12 +246,13 @@ export class IdentityService extends IdentityServiceState<ChainId> {
             names.map(async (name) => {
                 const address = await SpaceID.lookup(name)
                 if (!address) return
-                return this.createSocialAddress(SocialAddressType.SPACE_ID, address, name, ChainId.BSC)
+                return [
+                    this.createSocialAddress(SocialAddressType.SPACE_ID, address, name, ChainId.BSC),
+                    this.createSocialAddress(SocialAddressType.Address, address, name, ChainId.BSC),
+                ]
             }),
         )
-        return uniqBy(compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined))), (x) =>
-            x.address.toLowerCase(),
-        )
+        return compact(allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : undefined)))
     }
 
     private async getSocialAddressFromLens({ nickname = '', bio = '', homepage = '' }: SocialIdentity) {
@@ -260,10 +263,13 @@ export class IdentityService extends IdentityServiceState<ChainId> {
             names.map(async (name) => {
                 const profile = await Lens.getProfileByHandle(name)
                 if (!profile) return
-                return this.createSocialAddress(SocialAddressType.Lens, profile.ownedBy, name)
+                return [
+                    this.createSocialAddress(SocialAddressType.Lens, profile.ownedBy, name),
+                    this.createSocialAddress(SocialAddressType.Address, profile.ownedBy, name),
+                ]
             }),
         )
-        return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)))
+        return compact(allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : undefined)))
     }
 
     /** Read a social address from Twitter Blue. */
