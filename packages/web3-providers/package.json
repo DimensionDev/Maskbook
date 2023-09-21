@@ -87,6 +87,7 @@
     "react-use": "^17.4.0",
     "rss3-next": "^0.6.17",
     "socket.io-client": "2.4.0",
+    "twitter-text": "^3.1.0",
     "urlcat": "^3.1.0",
     "use-subscription": "^1.8.0",
     "uuid": "^9.0.0",
@@ -102,6 +103,7 @@
     "@types/bn.js": "^4.11.6",
     "@types/bs58": "^4.0.1",
     "@types/json-stable-stringify": "^1.0.34",
+    "@types/twitter-text": "^3.1.6",
     "@types/use-subscription": "^1.0.0"
   }
 }
