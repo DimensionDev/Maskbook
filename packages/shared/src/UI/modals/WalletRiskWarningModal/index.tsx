@@ -13,7 +13,7 @@ export interface WalletRiskWarningModalProps {}
 export const WalletRiskWarningModal = forwardRef<
     SingletonModalRefCreator<WalletRiskWarningModalOpenProps>,
     WalletRiskWarningModalProps
->((props, ref) => {
+>(function WalletRiskWarningModal(props, ref) {
     const [account, setAccount] = useState('')
     const [pluginID, setPluginID] = useState(NetworkPluginID.PLUGIN_EVM)
 

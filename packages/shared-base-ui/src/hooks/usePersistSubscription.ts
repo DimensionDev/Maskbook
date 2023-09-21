@@ -20,6 +20,7 @@ export function usePersistSubscription<T>(
         },
     })
     useEffect(() => {
+        refetch() // Actively fetch, make persist data act as placeholder data
         return subscription.subscribe(refetch)
     }, [subscription, refetch])
 
