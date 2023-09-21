@@ -41,10 +41,6 @@ export const VerifyBackupPasswordModal = memo<ActionModalBaseProps>(function Ver
                         setPassword(e.target.value)
                         setPasswordValid(MATCH_PASSWORD_RE.test(e.target.value))
                     }}
-                    onClear={() => {
-                        setPasswordMatched(true)
-                        setPassword('')
-                    }}
                     value={password}
                     error={!passwordMatched}
                     helperText={

@@ -88,7 +88,7 @@ export const PhoneForm = memo(function PhoneForm() {
                                     className={classes.send}
                                     disableFocusRipple
                                     disableRipple
-                                    disabled={!phone && !!errors.phone?.message}
+                                    disabled={!phone || !!errors.phone?.message}
                                     variant="text"
                                     sx={{ width: 120 }}
                                     onClick={handleSendVerificationCode}

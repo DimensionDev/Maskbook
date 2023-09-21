@@ -27,6 +27,7 @@ browser.runtime.onInstalled.addListener(async (detail) => {
                     phone: localStorage.getItem('phone'),
                     cloudBackupAt: backupMethod && backupMethod === 'cloud' ? localStorage.getItem('backupAt') : null,
                     localBackupAt: backupMethod && backupMethod === 'local' ? localStorage.getItem('backupAt') : null,
+                    cloudBackupMethod: null,
                 })
             }
         }

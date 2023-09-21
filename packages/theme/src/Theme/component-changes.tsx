@@ -921,9 +921,20 @@ export const TextField = (mode: PaletteMode, colors: MaskColor) => ({
                     borderRadius: 8,
                     [`& .${filledInputClasses.root}`]: {
                         borderRadius: 8,
+                        background: colors.maskColor.input,
+                        '&.Mui-disabled': {
+                            background: colors.maskColor.input,
+                            opacity: 0.5,
+                        },
                     },
                     [`& .${formHelperTextClasses.root}`]: {
                         marginLeft: 0,
+                    },
+
+                    [`& .${inputBaseClasses.input}.Mui-disabled`]: {
+                        opacity: 0.5,
+                        background: colors.maskColor.input,
+                        color: colors.maskColor.third,
                     },
                 },
             },

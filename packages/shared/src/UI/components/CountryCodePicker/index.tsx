@@ -4,7 +4,7 @@ import { memo, useDeferredValue, useEffect, useMemo, useState } from 'react'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import Fuse from 'fuse.js'
-import { useSharedI18N } from '../../../index.js'
+import { EmptyStatus, useSharedI18N } from '../../../index.js'
 import { COUNTRIES } from '@masknet/shared-base-ui'
 import { getCountryFlag } from '../../../utils/getCountryFlag.js'
 
@@ -110,33 +110,37 @@ export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl,
                 InputProps={{ disableUnderline: true, startAdornment: <Icons.Search size={16} />, size: 'small' }}
                 sx={{ marginBottom: 0.5 }}
             />
-            <List className={classes.list} data-hide-scrollbar>
-                {regions.map((data) => {
-                    const selected = data.dialing_code === code
-                    const icon = getCountryFlag(data.iso_code)
+            {regions.length ? (
+                <List className={classes.list} data-hide-scrollbar>
+                    {regions.map((data) => {
+                        const selected = data.dialing_code === code
+                        const icon = getCountryFlag(data.iso_code)
 
-                    return (
-                        <ListItemButton
-                            onClick={() => {
-                                onClose(data.dialing_code)
-                            }}
-                            key={`${data.iso_code}+${data.dialing_code}`}
-                            className={classes.listItem}
-                            selected={query === undefined ? selected : undefined}
-                            autoFocus={query === undefined ? selected : undefined}>
-                            <ListItemIcon className={classes.listItemIcon}>
-                                <img src={icon} className={classes.icon} />
-                            </ListItemIcon>
-                            <ListItemText
-                                primary={data.country_region}
-                                className={classes.text}
-                                classes={{ primary: classes.primaryText }}
-                            />
-                            <Typography className={classes.primaryText}>+{data.dialing_code}</Typography>
-                        </ListItemButton>
-                    )
-                })}
-            </List>
+                        return (
+                            <ListItemButton
+                                onClick={() => {
+                                    onClose(data.dialing_code)
+                                }}
+                                key={`${data.iso_code}+${data.dialing_code}`}
+                                className={classes.listItem}
+                                selected={query === undefined ? selected : undefined}
+                                autoFocus={query === undefined ? selected : undefined}>
+                                <ListItemIcon className={classes.listItemIcon}>
+                                    <img src={icon} className={classes.icon} />
+                                </ListItemIcon>
+                                <ListItemText
+                                    primary={data.country_region}
+                                    className={classes.text}
+                                    classes={{ primary: classes.primaryText }}
+                                />
+                                <Typography className={classes.primaryText}>+{data.dialing_code}</Typography>
+                            </ListItemButton>
+                        )
+                    })}
+                </List>
+            ) : (
+                <EmptyStatus style={{ height: '100%' }}>{t.no_results()}</EmptyStatus>
+            )}
         </Popover>
     )
 })

@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
     },
     cardContent: {
-        padding: theme.spacing(1, 2),
+        padding: theme.spacing(1, 0),
         '&:last-child': {
             paddingBottom: theme.spacing(1),
         },
@@ -225,7 +225,7 @@ export const WalletsBackupPreview = memo<WalletsBackupPreviewProps>(function Wal
                 }
             />
             <CardContent className={classes.cardContent}>
-                <List className={cx(classes.wallets, classes.list)}>
+                <List className={cx(classes.wallets, classes.list)} sx={{ px: 0 }}>
                     {wallets.map((wallet) => (
                         <ListItem key={wallet} className={classes.wallet}>
                             <ListItemIcon className={classes.walletIcon}>
