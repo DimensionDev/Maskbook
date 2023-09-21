@@ -47,7 +47,7 @@ export function FileServiceDialog({ onClose, selectMode, selectedFileIds, compos
         const OpenEntry = selectMode
             ? {
                   pathname: RoutePaths.FileSelector,
-                  search: '?' + urlcat('', { selectedFileIds }),
+                  search: '?' + urlcat('', { selectedFileIds: selectedFileIds?.join(',') }),
               }
             : RoutePaths.Browser
         return [RoutePaths.Exit, OpenEntry, RoutePaths.Terms]
