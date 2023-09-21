@@ -36,6 +36,9 @@ const useStyles = makeStyles()((theme) => ({
         padding: '8px 16px 0 16px',
         borderRadius: '12px 12px 0 0',
     },
+    tabPanel: {
+        padding: '0 4px 0 12px',
+    },
 }))
 
 export function CalendarContent() {
@@ -79,7 +82,7 @@ export function CalendarContent() {
                     setSelectedDate={(date: Date) => setSelectedDate(date)}
                     list={list}
                 />
-                <TabPanel value={tabs.news} style={{ padding: 0 }}>
+                <TabPanel value={tabs.news} className={classes.tabPanel}>
                     <NewsList
                         list={newsList}
                         isLoading={newsLoading}
@@ -87,7 +90,7 @@ export function CalendarContent() {
                         dateString={dateString}
                     />
                 </TabPanel>
-                <TabPanel value={tabs.event} style={{ padding: 0 }}>
+                <TabPanel value={tabs.event} className={classes.tabPanel}>
                     <EventList
                         list={eventList}
                         isLoading={eventLoading}
@@ -95,7 +98,7 @@ export function CalendarContent() {
                         dateString={dateString}
                     />
                 </TabPanel>
-                <TabPanel value={tabs.nfts} style={{ padding: 0 }}>
+                <TabPanel value={tabs.nfts} className={classes.tabPanel}>
                     <NFTList
                         list={nftList}
                         isLoading={nftLoading}

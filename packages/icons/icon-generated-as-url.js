@@ -16,6 +16,8 @@ export function danger_url() { return new URL("./brands/Danger.svg", import.meta
 export function debank_url() { return new URL("./brands/Debank.svg", import.meta.url) }
 export function discord_url() { return new URL("./brands/Discord.svg", import.meta.url) }
 export function discord_round_url() { return new URL("./brands/DiscordRound.svg", import.meta.url) }
+export function discord_round_black_dark_url() { return new URL("./brands/DiscordRoundBlack.dark.svg", import.meta.url) }
+export function discord_round_black_light_url() { return new URL("./brands/DiscordRoundBlack.light.svg", import.meta.url) }
 export function discord_round_gray_url() { return new URL("./brands/DiscordRoundGray.svg", import.meta.url) }
 export function eip_1577_url() { return new URL("./brands/EIP1577.svg", import.meta.url) }
 export function eth_url() { return new URL("./brands/ETH.svg", import.meta.url) }
@@ -313,6 +315,8 @@ export function wallet_setting_url() { return new URL("./general/WalletSetting.s
 export function warning_url() { return new URL("./general/Warning.svg", import.meta.url) }
 export function warning_triangle_url() { return new URL("./general/WarningTriangle.svg", import.meta.url) }
 export function web_url() { return new URL("./general/Web.svg", import.meta.url) }
+export function web_black_dark_url() { return new URL("./general/WebBlack.dark.svg", import.meta.url) }
+export function web_black_light_url() { return new URL("./general/WebBlack.light.svg", import.meta.url) }
 export function menu_personas_url() { return new URL("./menus/MenuPersonas.png", import.meta.url) }
 export function menu_personas_active_url() { return new URL("./menus/MenuPersonasActive.png", import.meta.url) }
 export function menu_settings_url() { return new URL("./menus/MenuSettings.png", import.meta.url) }

@@ -1,11 +1,12 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, type ReactNode } from 'react'
 import { EmptyStatus, LoadingStatus } from '@masknet/shared'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { CountdownTimer } from './CountDownTimer.js'
 import { makeStyles } from '@masknet/theme'
-import { Typography } from '@mui/material'
+import { IconButton, Typography } from '@mui/material'
 import { formatDate } from './EventList.js'
 import format from 'date-fns/format'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -13,10 +14,20 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         height: '506px',
         width: '100%',
-        overflow: 'overlay',
+        overflowY: 'scroll',
         position: 'relative',
         gap: '10px',
-        paddingBottom: '50px',
+        '&::-webkit-scrollbar': {
+            width: '4px',
+        },
+        '&::-webkit-scrollbar-thumb': {
+            backgroundColor: theme.palette.maskColor.secondaryLine,
+            borderRadius: '99px',
+        },
+        marginBottom: '50px',
+    },
+    paddingWrap: {
+        paddingRight: '12px',
     },
     empty: {
         position: 'absolute',
@@ -32,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     eventCard: {
         display: 'flex',
-        padding: '8px 12px',
+        padding: '8px 0',
         flexDirection: 'column',
         gap: '8px',
         fontWeight: 700,
@@ -67,6 +78,9 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 400,
         lineHeight: '18px',
         color: theme.palette.maskColor.main,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
     },
     second: {
         fontSize: '14px',
@@ -85,7 +99,12 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         lineHeight: '18px',
         color: theme.palette.maskColor.main,
-        padding: '10px 12px',
+        padding: '10px 0',
+    },
+    socialLinks: {
+        display: 'flex',
+        gap: '8px',
+        alignItems: 'center',
     },
 }))
 
@@ -94,6 +113,17 @@ interface NFTListProps {
     isLoading: boolean
     empty: boolean
     dateString: string
+}
+
+const socialIcons: Record<string, ReactNode> = {
+    twitter: <Icons.TwitterX size={18} />,
+    discord: <Icons.DiscordRoundBlack size={20} color="#000" />,
+    website: <Icons.WebBlack size={20} />,
+}
+
+const sortPlat = (_: any, b: { type: string }) => {
+    if (b.type === 'website') return -1
+    else return 0
 }
 
 export function NFTList({ list, isLoading, empty, dateString }: NFTListProps) {
@@ -110,59 +140,81 @@ export function NFTList({ list, isLoading, empty, dateString }: NFTListProps) {
     }, [list, dateString])
     return (
         <div className={classes.container}>
-            {isLoading && !list?.length ? (
-                <div className={cx(classes.empty, classes.eventTitle)}>
-                    <LoadingStatus />
-                </div>
-            ) : !empty && listAfterDate.length ? (
-                listAfterDate.map((key) => {
-                    return (
-                        <div key={key}>
-                            <Typography className={classes.dateDiv}>{format(new Date(key), 'MMM dd,yyy')}</Typography>
-                            {list[key].map((v) => (
-                                <div
-                                    className={classes.eventCard}
-                                    key={v.eventTitle}
-                                    onClick={() => {
-                                        window.open(v.event_url)
-                                    }}>
-                                    <div className={classes.eventHeader}>
-                                        <div className={classes.projectWrap}>
-                                            <img src={v.project.logo} className={classes.logo} alt="logo" />
-                                            <Typography className={classes.projectName}> {v.project.name}</Typography>
+            <div className={classes.paddingWrap}>
+                {isLoading && !list?.length ? (
+                    <div className={cx(classes.empty, classes.eventTitle)}>
+                        <LoadingStatus />
+                    </div>
+                ) : !empty && listAfterDate.length ? (
+                    listAfterDate.map((key) => {
+                        return (
+                            <div key={key}>
+                                <Typography className={classes.dateDiv}>
+                                    {format(new Date(key), 'MMM dd,yyy')}
+                                </Typography>
+                                {list[key].map((v) => (
+                                    <div
+                                        className={classes.eventCard}
+                                        key={v.eventTitle}
+                                        onClick={() => {
+                                            window.open(v.event_url)
+                                        }}>
+                                        <div className={classes.eventHeader}>
+                                            <div className={classes.projectWrap}>
+                                                <img src={v.project.logo} className={classes.logo} alt="logo" />
+                                                <Typography className={classes.projectName}>
+                                                    {v.project.name}
+                                                </Typography>
+                                            </div>
                                         </div>
+                                        <Typography className={classes.eventTitle}>{v.project.description}</Typography>
+                                        <div className={classes.eventHeader}>
+                                            <CountdownTimer targetDate={new Date(v.event_date)} />
+                                            <div className={classes.socialLinks}>
+                                                {v.project.links
+                                                    .sort(sortPlat)
+                                                    .map((platform: { type: string; url: string }) => {
+                                                        return (
+                                                            <IconButton
+                                                                style={{ width: '20px', height: '20px' }}
+                                                                key={platform.type}
+                                                                onClick={() => {
+                                                                    window.open(platform.url)
+                                                                }}>
+                                                                {socialIcons[platform.type]}
+                                                            </IconButton>
+                                                        )
+                                                    })}
+                                            </div>
+                                        </div>
+                                        <div className={classes.eventHeader}>
+                                            <Typography className={classes.second}>{t.total()}</Typography>
+                                            <Typography className={classes.eventTitle}>
+                                                {Number(v.ext_info.nft_info.total).toLocaleString('en-US')}
+                                            </Typography>
+                                        </div>
+                                        <div className={classes.eventHeader}>
+                                            <Typography className={classes.second}>{t.price()}</Typography>
+                                            <Typography className={classes.eventTitle}>
+                                                {v.ext_info.nft_info.token}
+                                            </Typography>
+                                        </div>
+                                        <div className={classes.eventHeader}>
+                                            <Typography className={classes.second}>{t.date()}</Typography>
+                                            <Typography className={classes.eventTitle}>
+                                                {formatDate(v.event_date)}
+                                            </Typography>
+                                        </div>
+                                        <img className={classes.poster} src={v.poster_url} alt="poster" />
                                     </div>
-                                    <Typography className={classes.eventTitle}>{v.event_title}</Typography>
-                                    <div className={classes.eventHeader}>
-                                        <CountdownTimer targetDate={new Date(v.event_date)} />
-                                    </div>
-                                    <div className={classes.eventHeader}>
-                                        <Typography className={classes.second}>{t.total()}</Typography>
-                                        <Typography className={classes.eventTitle}>
-                                            {v.ext_info.nft_info.total}
-                                        </Typography>
-                                    </div>
-                                    <div className={classes.eventHeader}>
-                                        <Typography className={classes.second}>{t.price()}</Typography>
-                                        <Typography className={classes.eventTitle}>
-                                            {v.ext_info.nft_info.token}
-                                        </Typography>
-                                    </div>
-                                    <div className={classes.eventHeader}>
-                                        <Typography className={classes.second}>{t.date()}</Typography>
-                                        <Typography className={classes.eventTitle}>
-                                            {formatDate(v.event_date)}
-                                        </Typography>
-                                    </div>
-                                    <img className={classes.poster} src={v.poster_url} alt="poster" />
-                                </div>
-                            ))}
-                        </div>
-                    )
-                })
-            ) : (
-                <EmptyStatus className={classes.empty}>{t.empty_status()}</EmptyStatus>
-            )}
+                                ))}
+                            </div>
+                        )
+                    })
+                ) : (
+                    <EmptyStatus className={classes.empty}>{t.empty_status()}</EmptyStatus>
+                )}
+            </div>
         </div>
     )
 }
