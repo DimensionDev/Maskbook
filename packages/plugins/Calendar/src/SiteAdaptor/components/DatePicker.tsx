@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react'
 import format from 'date-fns/format'
 import startOfMonth from 'date-fns/startOfMonth'
-import endOfMonth from 'date-fns/endOfMonth'
 import addDays from 'date-fns/addDays'
 import addMonths from 'date-fns/addMonths'
+import isAfter from 'date-fns/isAfter'
+import endOfMonth from 'date-fns/endOfMonth'
 import { IconButton, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
@@ -88,7 +89,12 @@ export function DatePicker({ list, selectedDate, setSelectedDate, open, setOpen 
     const { classes } = useStyles({ open })
 
     const monthStart = useMemo(() => startOfMonth(selectedDate), [selectedDate])
-    const monthEnd = useMemo(() => endOfMonth(selectedDate), [selectedDate])
+    const isPrevMonthDisabled = useMemo(() => {
+        return !isAfter(selectedDate, endOfMonth(new Date()))
+    }, [selectedDate])
+    const isNextMonthDisabled = useMemo(() => {
+        return isAfter(addMonths(selectedDate, 1), addMonths(endOfMonth(new Date()), 2))
+    }, [selectedDate])
 
     const handleDateClick = (date: Date) => {
         setSelectedDate(date)
@@ -150,10 +156,10 @@ export function DatePicker({ list, selectedDate, setSelectedDate, open, setOpen 
                 <div className={classes.header}>
                     <Typography className={classes.headerText}>{format(selectedDate, 'MMMM yyyy')}</Typography>
                     <Box className={classes.headerIcon}>
-                        <IconButton size="small" onClick={() => changeMonth(-1)}>
+                        <IconButton size="small" onClick={() => changeMonth(-1)} disabled={isPrevMonthDisabled}>
                             <Icons.LeftArrow size={24} />
                         </IconButton>
-                        <IconButton size="small" onClick={() => changeMonth(1)}>
+                        <IconButton size="small" onClick={() => changeMonth(1)} disabled={isNextMonthDisabled}>
                             <Icons.RightArrow size={24} />
                         </IconButton>
                     </Box>
