@@ -34,7 +34,7 @@ async function createRequest(screenName: string) {
     })
 
     return new Request(url, {
-        headers: await getHeaders({
+        headers: getHeaders({
             'content-type': 'application/json',
             referer: `https://twitter.com/${screenName}`,
         }),
