@@ -11,6 +11,7 @@ import {
     getUserNFTContainer,
     staleUserViaIdentity,
     getComputedUserSettings,
+    createTweet,
 } from './apis/index.js'
 import { uploadMedia } from './apis/uploadMedia.js'
 import { updateProfileImage } from './apis/updateProfileImage.js'
@@ -93,5 +94,10 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
     async staleUserByScreenName(screenName: string): Promise<void> {
         await staleUserViaWebAPI(screenName)
         await staleUserViaIdentity(screenName)
+    }
+
+    async createTweet(tweet: TwitterBaseAPI.Tweet) {
+        const response = await createTweet(tweet)
+        return response.rest_id
     }
 }
