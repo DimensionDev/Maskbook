@@ -1,4 +1,4 @@
-import { compact, first, uniqBy } from 'lodash-es'
+import { compact, uniqBy } from 'lodash-es'
 import type { WalletAPI } from '../../../entry-types.js'
 import {
     EMPTY_LIST,
@@ -35,7 +35,6 @@ const ADDRESS_FULL = /0x\w{40,}/i
 const CROSSBELL_HANDLE_RE = /[\w.]+\.csb/gi
 const LENS_RE = /[^\s()[\]]{1,256}\.lens\b/i
 const LENS_URL_RE = /https?:\/\/.+\/(\w+\.lens)/
-const LENS_DOMAIN_RE = /[a-z][\d_a-z]{4,25}\.lens/
 
 const ARBID = new ARBID_API()
 const ENS = new ENS_API()
@@ -53,9 +52,9 @@ function getENSNames(userId: string, nickname: string, bio: string) {
 }
 
 function getLensNames(nickname: string, bio: string, homepage: string) {
-    const homepageNames = homepage.match(LENS_URL_RE)
+    const homepageNames = homepage.match(LENS_URL_RE)?.[1]
     const names = [nickname.match(LENS_RE), bio.match(LENS_RE)].map((result) => result?.[0] ?? '')
-    return [...names, homepageNames?.[1]].map((x) => first(x?.match(LENS_DOMAIN_RE)) ?? '').filter(Boolean)
+    return [...names, homepageNames].filter(Boolean) as string[]
 }
 
 function getARBIDNames(userId: string, nickname: string, bio: string) {
@@ -340,7 +339,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
 
         const handle = identity.identifier?.userId
         const verifiedResult = await Promise.allSettled(
-            identities.map(async (x) => {
+            uniqBy(identities, (x) => x.address.toLowerCase()).map(async (x) => {
                 const address = x.address.toLowerCase()
                 const isReliable = await Firefly.verifyTwitterHandlerByAddress(address, handle)
                 return isReliable ? address : null
