@@ -1,4 +1,5 @@
 /* cspell:disable */
+import { parseTweet } from 'twitter-text'
 import { getHeaders } from './getTokens.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'
@@ -37,7 +38,8 @@ export async function createTweet(tweet: TwitterBaseAPI.Tweet) {
         withSuperFollowsUserFields: true,
         semantic_annotation_ids: [],
     }
-    const overLength = variables.tweet_text.length > 280
+    const parsedTweet = parseTweet(variables.tweet_text)
+    const overLength = parsedTweet.weightedLength > 280
     const scheduled = typeof variables.execute_at !== 'undefined'
     const queryId = scheduled
         ? 'LCVzRQGxOaGnOnYH01NQXg'
