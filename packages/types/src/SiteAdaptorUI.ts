@@ -130,6 +130,7 @@ export namespace SiteAdaptorUI {
             maskCompositionDialog?: MaskCompositionDialog
             nativeCommentBox?: NativeCommentBox
             redirect?: Redirect
+            endpoint?: Endpoint
         }
         export interface NativeCompositionDialog {
             open?(): void
@@ -147,11 +148,14 @@ export namespace SiteAdaptorUI {
             recover?: boolean
             reason?: 'timeline' | 'popup' | 'reply' | 'verify'
         }
-        export interface MaskCompositionDialog {
-            open?(content: SerializableTypedMessages, options?: MaskCompositionDialogOpenOptions): void
+        export interface PublishPostOptions {
+            reason?: 'timeline' | 'popup' | 'reply' | 'verify'
         }
         export interface MaskCompositionDialogOpenOptions {
             target?: EncryptionTargetType
+        }
+        export interface MaskCompositionDialog {
+            open?(content: SerializableTypedMessages, options?: MaskCompositionDialogOpenOptions): void
         }
         export interface NativeCommentBox {
             attachText?(text: string, post: PostInfo, dom: HTMLElement | null, cover?: boolean): void
@@ -159,6 +163,9 @@ export namespace SiteAdaptorUI {
         export interface Redirect {
             profilePage?(profile: ProfileIdentifier): void
             newsFeed?(): void
+        }
+        export interface Endpoint {
+            publishPost?(mediaObject: Array<string | Blob>, options?: PublishPostOptions): Promise<void>
         }
     }
     export namespace CollectingCapabilities {

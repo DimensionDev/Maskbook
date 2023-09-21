@@ -42,21 +42,46 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
             // Since we cannot directly send binary in the composition box, we need to encode it into a string.
             const encrypted = encodeByNetwork(activatedSiteAdaptorUI!.encryptPayloadNetwork, rawEncrypted)
 
-            if (encode === 'image') {
-                const decoratedText = decorateEncryptedText('', t, content.meta)
-                const defaultText = t('additional_post_box__encrypted_post_pre', {
-                    encrypted: 'https://mask.io/',
-                })
-                await pasteImage(
-                    decoratedText || defaultText,
-                    // We can send raw binary through the image, but for the text we still use the old way.
-                    // For text, it must send the text _after_ encodeByNetwork, otherwise it will break backward compatibility.
-                    typeof rawEncrypted === 'string' ? encrypted : rawEncrypted,
-                    reason,
+            const decoratedText =
+                encode === 'image'
+                    ? decorateEncryptedText('', t, content.meta)
+                    : decorateEncryptedText(encrypted, t, content.meta)
+            const defaultText: string =
+                encode === 'image'
+                    ? t('additional_post_box__encrypted_post_pre', {
+                          encrypted: 'https://mask.io/',
+                      })
+                    : t('additional_post_box__encrypted_post_pre', { encrypted })
+
+            const mediaObject =
+                encode === 'image'
+                    ? // We can send raw binary through the image, but for the text we still use the old way.
+                      // For text, it must send the text _after_ encodeByNetwork, otherwise it will break backward compatibility.
+                      await SteganographyPayload(typeof rawEncrypted === 'string' ? encrypted : rawEncrypted)
+                    : undefined
+
+            if (activatedSiteAdaptorUI?.automation.endpoint?.publishPost) {
+                await activatedSiteAdaptorUI.automation.endpoint.publishPost(
+                    mediaObject ? [decoratedText || defaultText, mediaObject] : [decoratedText || defaultText],
+                    {
+                        reason,
+                    },
                 )
+            }
+
+            if (encode === 'image') {
+                if (!mediaObject) throw new Error('Failed to create image payload.')
+                // Don't await this, otherwise the dialog won't disappear
+                activatedSiteAdaptorUI?.automation.nativeCompositionDialog?.attachImage?.(mediaObject, {
+                    recover: true,
+                    relatedTextPayload: decoratedText || defaultText,
+                    reason,
+                })
             } else {
-                const decoratedText = decorateEncryptedText(encrypted, t, content.meta)
-                pasteTextEncode(decoratedText ?? t('additional_post_box__encrypted_post_pre', { encrypted }), reason)
+                activatedSiteAdaptorUI?.automation.nativeCompositionDialog?.attachText?.(decoratedText || defaultText, {
+                    recover: true,
+                    reason,
+                })
             }
 
             if (content.meta?.has(`${PluginID.RedPacket}:1`) || content.meta?.has(`${PluginID.RedPacket}_nft:1`))
@@ -67,26 +92,6 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
         },
         [t, lastRecognizedIdentity, onClose, reason],
     )
-}
-
-function pasteTextEncode(text: string, reason: 'timeline' | 'popup' | 'reply') {
-    activatedSiteAdaptorUI!.automation.nativeCompositionDialog?.attachText?.(text, {
-        recover: true,
-        reason,
-    })
-}
-async function pasteImage(
-    relatedTextPayload: string,
-    encrypted: string | Uint8Array,
-    reason: 'timeline' | 'popup' | 'reply',
-) {
-    const img = await SteganographyPayload(encrypted)
-    // Don't await this, otherwise the dialog won't disappear
-    activatedSiteAdaptorUI!.automation.nativeCompositionDialog!.attachImage!(img, {
-        recover: true,
-        relatedTextPayload,
-        reason,
-    })
 }
 
 // TODO: Provide API to plugin to post-process post content,
