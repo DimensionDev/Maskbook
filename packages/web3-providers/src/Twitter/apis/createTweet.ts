@@ -38,8 +38,13 @@ export async function createTweet(tweet: TwitterBaseAPI.Tweet) {
         semantic_annotation_ids: [],
     }
     const overLength = variables.tweet_text.length > 280
-    const queryId = overLength ? 'pokID4auGUSzBxijrqpIlw' : 'tTsjMKyhajZvK4q76mpIBg'
-    const queryName = overLength ? 'CreateNoteTweet' : 'CreateTweet'
+    const scheduled = typeof variables.execute_at !== 'undefined'
+    const queryId = scheduled
+        ? 'LCVzRQGxOaGnOnYH01NQXg'
+        : overLength
+        ? 'pokID4auGUSzBxijrqpIlw'
+        : 'tTsjMKyhajZvK4q76mpIBg'
+    const queryName = scheduled ? 'CreateScheduledTweet' : overLength ? 'CreateNoteTweet' : 'CreateTweet'
     const response = await fetchJSON<TwitterBaseAPI.CreateTweetResult>(
         `https://twitter.com/i/api/graphql/${queryId}/${queryName}`,
         {
@@ -57,5 +62,6 @@ export async function createTweet(tweet: TwitterBaseAPI.Tweet) {
         },
     )
 
-    return response.data[overLength ? 'notetweet_create' : 'create_tweet'].tweet_results.result
+    return response.data[scheduled ? 'posttweet_created' : overLength ? 'notetweet_create' : 'create_tweet']
+        .tweet_results.result
 }

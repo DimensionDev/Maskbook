@@ -356,15 +356,22 @@ export namespace TwitterBaseAPI {
             }>
             possibly_sensitive: boolean
         }
-        replay: {
-            exclude_reply_user_ids: string[]
+        reply: {
             in_reply_to_tweet_id: string
+            exclude_reply_user_ids: string[]
+        }
+        execute_at?: string
+        card_uri?: string
+        attachment_url?: string
+        trusted_friends_list_id?: string
+        conversation_control?: {
+            mode: 'Community' | 'ByInvitation'
         }
     }
 
     export interface CreateTweetResult {
         data: {
-            [key in 'create_tweet' | 'notetweet_create']: {
+            [key in 'create_tweet' | 'notetweet_create' | 'posttweet_created']: {
                 tweet_results: {
                     result: {
                         rest_id: string
