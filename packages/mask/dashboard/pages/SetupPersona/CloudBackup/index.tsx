@@ -70,7 +70,7 @@ const CloudBackupInner = memo(function CloudBackupInner() {
         async (data: CloudBackupFormInputs) => {
             const response = await fetchDownloadLink({
                 account: currentTab === tabs.email ? data.email : data.countryCode + data.phone,
-                type: AccountType.Email,
+                type: currentTab === tabs.email ? AccountType.Email : AccountType.Phone,
                 code: data.code,
             }).catch((error) => {
                 if (error.status === 400) {
