@@ -11,10 +11,20 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         height: '506px',
         width: '100%',
-        overflow: 'overlay',
+        overflowY: 'scroll',
         position: 'relative',
         gap: '10px',
-        paddingBottom: '50px',
+        '&::-webkit-scrollbar': {
+            width: '4px',
+        },
+        '&::-webkit-scrollbar-thumb': {
+            backgroundColor: theme.palette.maskColor.secondaryLine,
+            borderRadius: '99px',
+        },
+        marginBottom: '50px',
+    },
+    paddingWrap: {
+        paddingRight: '12px',
     },
     empty: {
         position: 'absolute',
@@ -30,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     eventCard: {
         display: 'flex',
-        padding: '8px 12px',
+        padding: '8px 0',
         flexDirection: 'column',
         gap: '8px',
         borderBottom: `1px solid ${theme.palette.maskColor.line}`,
@@ -89,7 +99,7 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         lineHeight: '18px',
         color: theme.palette.maskColor.main,
-        padding: '10px 12px',
+        padding: '10px 0',
     },
 }))
 
@@ -114,39 +124,45 @@ export function NewsList({ list, isLoading, empty, dateString }: NewsListProps) 
     }, [list, dateString])
     return (
         <div className={classes.container}>
-            {isLoading && !list?.length ? (
-                <div className={cx(classes.empty, classes.eventTitle)}>
-                    <LoadingStatus />
-                </div>
-            ) : !empty && listAfterDate.length ? (
-                listAfterDate.map((key) => {
-                    return (
-                        <div key={key}>
-                            <Typography className={classes.dateDiv}>{format(new Date(key), 'MMM dd,yyy')}</Typography>
-                            {list[key].map((v) => (
-                                <div
-                                    className={classes.eventCard}
-                                    key={v.eventTitle}
-                                    onClick={() => {
-                                        window.open(v.event_url)
-                                    }}>
-                                    <div className={classes.eventHeader}>
-                                        <div className={classes.projectWrap}>
-                                            <img src={v.project.logo} className={classes.logo} alt="logo" />
-                                            <Typography className={classes.projectName}>{v.project.name}</Typography>
+            <div className={classes.paddingWrap}>
+                {isLoading && !list?.length ? (
+                    <div className={cx(classes.empty, classes.eventTitle)}>
+                        <LoadingStatus />
+                    </div>
+                ) : !empty && listAfterDate.length ? (
+                    listAfterDate.map((key) => {
+                        return (
+                            <div key={key}>
+                                <Typography className={classes.dateDiv}>
+                                    {format(new Date(key), 'MMM dd,yyy')}
+                                </Typography>
+                                {list[key].map((v) => (
+                                    <div
+                                        className={classes.eventCard}
+                                        key={v.eventTitle}
+                                        onClick={() => {
+                                            window.open(v.event_url)
+                                        }}>
+                                        <div className={classes.eventHeader}>
+                                            <div className={classes.projectWrap}>
+                                                <img src={v.project.logo} className={classes.logo} alt="logo" />
+                                                <Typography className={classes.projectName}>
+                                                    {v.project.name}
+                                                </Typography>
+                                            </div>
+                                            <Typography className={classes.eventType}>{v.event_type}</Typography>
                                         </div>
-                                        <Typography className={classes.eventType}>{v.event_type}</Typography>
+                                        <Typography className={classes.eventTitle}>{v.event_title}</Typography>
+                                        <Typography className={classes.eventContent}>{v.event_description}</Typography>
                                     </div>
-                                    <Typography className={classes.eventTitle}>{v.event_title}</Typography>
-                                    <Typography className={classes.eventContent}>{v.event_description}</Typography>
-                                </div>
-                            ))}
-                        </div>
-                    )
-                })
-            ) : (
-                <EmptyStatus className={classes.empty}>{t.empty_status()}</EmptyStatus>
-            )}
+                                ))}
+                            </div>
+                        )
+                    })
+                ) : (
+                    <EmptyStatus className={classes.empty}>{t.empty_status()}</EmptyStatus>
+                )}
+            </div>
         </div>
     )
 }

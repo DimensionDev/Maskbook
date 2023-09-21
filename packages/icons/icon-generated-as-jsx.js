@@ -98,6 +98,16 @@ export const DiscordRound = /*#__PURE__*/ __createIcon('DiscordRound', [
         u: () => new URL('./brands/DiscordRound.svg', import.meta.url),
     },
 ])
+export const DiscordRoundBlack = /*#__PURE__*/ __createIcon('DiscordRoundBlack', [
+    {
+        c: ['dark'],
+        u: () => new URL('./brands/DiscordRoundBlack.dark.svg', import.meta.url),
+    },
+    {
+        c: ['light'],
+        u: () => new URL('./brands/DiscordRoundBlack.light.svg', import.meta.url),
+    },
+])
 export const DiscordRoundGray = /*#__PURE__*/ __createIcon('DiscordRoundGray', [
     {
         u: () => new URL('./brands/DiscordRoundGray.svg', import.meta.url),
@@ -3314,6 +3324,16 @@ export const WarningTriangle = /*#__PURE__*/ __createIcon('WarningTriangle', [
 export const Web = /*#__PURE__*/ __createIcon('Web', [
     {
         u: () => new URL('./general/Web.svg', import.meta.url),
+    },
+])
+export const WebBlack = /*#__PURE__*/ __createIcon('WebBlack', [
+    {
+        c: ['dark'],
+        u: () => new URL('./general/WebBlack.dark.svg', import.meta.url),
+    },
+    {
+        c: ['light'],
+        u: () => new URL('./general/WebBlack.light.svg', import.meta.url),
     },
 ])
 export const MenuPersonas = /*#__PURE__*/ __createIcon('MenuPersonas', [
