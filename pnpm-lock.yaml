@@ -4214,9 +4214,6 @@ importers:
       '@types/json-stable-stringify':
         specifier: ^1.0.34
         version: 1.0.34
-      '@types/twitter-text':
-        specifier: ^3.1.6
-        version: 3.1.6
       '@types/use-subscription':
         specifier: ^1.0.0
         version: 1.0.0
@@ -15443,10 +15440,6 @@ packages:
   /@types/trusted-types@2.0.2:
     resolution: {integrity: sha512-F5DIZ36YVLE+PN+Zwws4kJogq47hNgX3Nx6WyDJ3kcplxyke3XIzB8uK5n/Lpm1HBsbGzd6nmGehL8cPekP+Tg==}
     dev: false
-
-  /@types/twitter-text@3.1.6:
-    resolution: {integrity: sha512-mNW64lF5qkJEMEMoQ5GsO1CoK9oRo17RMjFbpY3tUyklr5XXXxGxApm05WCT70Qb/yuQmprPz1EPUGKKX2KUEw==}
-    dev: true
 
   /@types/uglify-js@3.17.1:
     resolution: {integrity: sha512-GkewRA4i5oXacU/n4MA9+bLgt5/L3F1mKrYvFGm7r2ouLXhRKjuWwo9XHNnbx6WF3vlGW21S3fCvgqxvxXXc5g==}
@@ -36927,7 +36920,6 @@ time:
   /@types/socket.io-client@1.4.36: '2021-03-12T14:48:11.667Z'
   /@types/terser-webpack-plugin@5.2.0: '2021-09-01T22:01:33.915Z'
   /@types/tinycolor2@1.4.3: '2021-07-02T19:42:46.758Z'
-  /@types/twitter-text@3.1.6: '2023-09-12T12:58:48.905Z'
   /@types/use-subscription@1.0.0: '2019-09-24T21:49:42.206Z'
   /@types/uuid@9.0.3: '2023-08-30T20:17:13.185Z'
   /@types/web@0.0.109: '2023-07-19T04:14:38.093Z'
