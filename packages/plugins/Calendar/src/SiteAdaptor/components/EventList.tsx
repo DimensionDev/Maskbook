@@ -70,7 +70,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: '14px',
         fontWeight: 400,
         lineHeight: '18px',
-        color: theme.palette.mode === 'dark' ? theme.palette.maskColor.main : theme.palette.maskColor.second,
+        color: theme.palette.mode === 'dark' ? theme.palette.maskColor.second : theme.palette.maskColor.main,
     },
     poster: {
         borderRadius: '8px',

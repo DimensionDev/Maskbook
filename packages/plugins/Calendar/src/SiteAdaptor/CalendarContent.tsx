@@ -64,6 +64,7 @@ export function CalendarContent() {
                 return null
         }
     }, [currentTab, newsList, eventList, nftList])
+    console.log(list)
     const dateString = useMemo(() => selectedDate.toLocaleDateString(), [selectedDate])
     return (
         <div className={disable ? classes.hidden : classes.calendar}>
