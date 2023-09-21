@@ -20,7 +20,7 @@ export async function updateProfileImage(
         }),
         {
             method: 'POST',
-            headers: await getHeaders({
+            headers: getHeaders({
                 referer: `https://twitter.com/${screenName}`,
             }),
             credentials: 'include',

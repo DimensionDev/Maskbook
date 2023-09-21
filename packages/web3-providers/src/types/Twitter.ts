@@ -1,3 +1,4 @@
+/* cspell:disable */
 export namespace TwitterBaseAPI {
     export interface NFT {
         address: string

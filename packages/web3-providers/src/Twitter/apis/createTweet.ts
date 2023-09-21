@@ -1,3 +1,4 @@
+/* cspell:disable */
 import { getHeaders } from './getTokens.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'

@@ -4,7 +4,7 @@ import { fetchJSON } from '../../helpers/fetchJSON.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'
 
 export async function getUserNFTContainer(screenName: string) {
-    return fetchJSON<{
+    return await fetchJSON<{
         data: {
             user: {
                 result: TwitterBaseAPI.NFTContainer
@@ -17,7 +17,7 @@ export async function getUserNFTContainer(screenName: string) {
             }),
         }),
         {
-            headers: await getHeaders({
+            headers: getHeaders({
                 referer: `https://twitter.com/${screenName}/nft`,
             }),
             credentials: 'include',
