@@ -13,6 +13,7 @@ import { pasteTextToCompositionTwitter } from './automation/pasteTextToCompositi
 import { pasteImageToCompositionTwitter } from './automation/pasteImageToComposition.js'
 import { gotoNewsFeedPageTwitter } from './automation/gotoNewsFeedPage.js'
 import { gotoProfilePageTwitter } from './automation/gotoProfilePage.js'
+import { publishPostTwitter } from './automation/publishPost.js'
 import { IdentityProviderTwitter, CurrentVisitingIdentityProviderTwitter } from './collecting/identity.js'
 import { ThemeSettingsProviderTwitter } from './collecting/theme.js'
 import { collectVerificationPost, PostProviderTwitter, getPostIdFromNewPostToast } from './collecting/post.js'
@@ -146,6 +147,9 @@ const twitterUI: SiteAdaptorUI.Definition = {
         redirect: {
             newsFeed: gotoNewsFeedPageTwitter,
             profilePage: gotoProfilePageTwitter,
+        },
+        endpoint: {
+            publishPost: publishPostTwitter,
         },
     },
     collecting: {

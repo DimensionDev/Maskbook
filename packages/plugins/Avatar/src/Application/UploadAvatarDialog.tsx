@@ -45,7 +45,7 @@ const useStyles = makeStyles()((theme) => ({
 
 async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | undefined> {
     try {
-        const media = await Twitter.uploadUserAvatar(userId, blob)
+        const media = await Twitter.uploadMedia(blob)
         const data = await Twitter.updateProfileImage(userId, media.media_id_string)
         if (!data) {
             return
