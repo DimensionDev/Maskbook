@@ -12,7 +12,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAsync } from 'react-use'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { SelectProviderModal, WalletRiskWarningModal } from '../../../index.js'
+import { SelectProviderModal, WalletRiskWarningModal } from '../../modals/modals.js'
 
 const useStyles = makeStyles()({
     button: {
