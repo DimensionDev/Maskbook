@@ -1,17 +1,17 @@
-import { useEffect, useMemo } from 'react'
+import { SiteAdaptorContextRef } from '@masknet/plugin-infra/dom'
 import { AllProviderTradeContext } from '@masknet/plugin-trader'
 import { Appearance } from '@masknet/public-api'
-import { SharedContextProvider } from '@masknet/shared'
+import { SharedContextProvider, SwapPageModals } from '@masknet/shared'
+import { openWindow } from '@masknet/shared-base-ui'
 import { applyMaskColorVars, makeStyles } from '@masknet/theme'
 import { ChainContextProvider, DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { Typography } from '@mui/material'
+import { useEffect, useMemo } from 'react'
+import { TwitterAdaptor } from '../../../../../shared/site-adaptors/implementations/twitter.com.js'
 import { useI18N } from '../../../../utils/index.js'
 import { NetworkSelector } from '../../components/NetworkSelector/index.js'
 import { useTokenParams } from '../../hooks/index.js'
 import { SwapBox } from './SwapBox/index.js'
-import { SiteAdaptorContextRef } from '@masknet/plugin-infra/dom'
-import { TwitterAdaptor } from '../../../../../shared/site-adaptors/implementations/twitter.com.js'
-import { openWindow } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -116,6 +116,7 @@ export default function SwapPage() {
                     </div>
                 </div>
             </ChainContextProvider>
+            <SwapPageModals />
         </SharedContextProvider>
     )
 }
