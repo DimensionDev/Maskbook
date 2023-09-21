@@ -11,7 +11,7 @@ import { MaskMessages } from '@masknet/shared-base'
  * Wait for up to 5000 ms
  * If not complete, let user do it.
  */
-export const pasteTextToCompositionMinds: SiteAdaptorUI.AutomationCapabilities.NativeCompositionDialog['appendText'] = (
+export const pasteTextToCompositionMinds: SiteAdaptorUI.AutomationCapabilities.NativeCompositionDialog['attachText'] = (
     text,
     opt,
 ) => {

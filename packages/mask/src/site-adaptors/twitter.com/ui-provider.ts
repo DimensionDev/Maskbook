@@ -13,6 +13,7 @@ import { pasteTextToCompositionTwitter } from './automation/pasteTextToCompositi
 import { pasteImageToCompositionTwitter } from './automation/pasteImageToComposition.js'
 import { gotoNewsFeedPageTwitter } from './automation/gotoNewsFeedPage.js'
 import { gotoProfilePageTwitter } from './automation/gotoProfilePage.js'
+import { publishPostTwitter } from './automation/publishPost.js'
 import { IdentityProviderTwitter, CurrentVisitingIdentityProviderTwitter } from './collecting/identity.js'
 import { ThemeSettingsProviderTwitter } from './collecting/theme.js'
 import { collectVerificationPost, PostProviderTwitter, getPostIdFromNewPostToast } from './collecting/post.js'
@@ -139,13 +140,16 @@ const twitterUI: SiteAdaptorUI.Definition = {
         },
         nativeCommentBox: undefined,
         nativeCompositionDialog: {
-            appendText: pasteTextToCompositionTwitter,
+            attachText: pasteTextToCompositionTwitter,
             // TODO: make a better way to detect
             attachImage: pasteImageToCompositionTwitter,
         },
         redirect: {
             newsFeed: gotoNewsFeedPageTwitter,
             profilePage: gotoProfilePageTwitter,
+        },
+        endpoint: {
+            publishPost: publishPostTwitter,
         },
     },
     collecting: {

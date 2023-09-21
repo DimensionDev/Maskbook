@@ -161,7 +161,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         getSocialIdentity: Services.Identity.querySocialIdentity,
         queryPersonaByProfile: Services.Identity.queryPersonaByProfile,
         attachProfile: Services.Identity.attachProfile,
-        postMessage: ui.automation?.nativeCompositionDialog?.appendText,
+        postMessage: ui.automation?.nativeCompositionDialog?.attachText,
         setCurrentPersonaIdentifier: Services.Settings.setCurrentPersonaIdentifier,
         setPluginMinimalModeEnabled: Services.Settings.setPluginMinimalModeEnabled,
         setDecentralizedSearchSettings: Services.Settings.setDecentralizedSearchSettings,

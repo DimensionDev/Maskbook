@@ -130,12 +130,14 @@ export namespace SiteAdaptorUI {
             maskCompositionDialog?: MaskCompositionDialog
             nativeCommentBox?: NativeCommentBox
             redirect?: Redirect
+            endpoint?: Endpoint
         }
         export interface NativeCompositionDialog {
-            /** Upload the designated image on to the social network composition dialog */
-            attachImage?(url: Blob, options?: NativeCompositionAttachImageOptions): void
-            appendText?(text: string, options?: NativeCompositionAttachTextOptions): Promise<void>
             open?(): void
+            /** Upload the designated image on to the social network composition dialog */
+            attachImage?(img: Blob, options?: NativeCompositionAttachImageOptions): Promise<void>
+            /** Append text on to the social network composition dialog */
+            attachText?(text: string, options?: NativeCompositionAttachTextOptions): Promise<void>
         }
         export interface NativeCompositionAttachImageOptions {
             recover?: boolean
@@ -146,18 +148,24 @@ export namespace SiteAdaptorUI {
             recover?: boolean
             reason?: 'timeline' | 'popup' | 'reply' | 'verify'
         }
-        export interface MaskCompositionDialog {
-            open?(content: SerializableTypedMessages, options?: MaskCompositionDialogOpenOptions): void
+        export interface PublishPostOptions {
+            reason?: 'timeline' | 'popup' | 'reply' | 'verify'
         }
         export interface MaskCompositionDialogOpenOptions {
             target?: EncryptionTargetType
         }
+        export interface MaskCompositionDialog {
+            open?(content: SerializableTypedMessages, options?: MaskCompositionDialogOpenOptions): void
+        }
         export interface NativeCommentBox {
-            appendText?(text: string, post: PostInfo, dom: HTMLElement | null, cover?: boolean): void
+            attachText?(text: string, post: PostInfo, dom: HTMLElement | null, cover?: boolean): void
         }
         export interface Redirect {
             profilePage?(profile: ProfileIdentifier): void
             newsFeed?(): void
+        }
+        export interface Endpoint {
+            publishPost?(mediaObjects: Array<string | Blob>, options?: PublishPostOptions): Promise<void>
         }
     }
     export namespace CollectingCapabilities {

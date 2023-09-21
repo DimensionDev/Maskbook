@@ -322,7 +322,7 @@ export namespace TwitterBaseAPI {
         themeColor?: ThemeColor
     }
 
-    export interface TwitterResult {
+    export interface MediaResult {
         media_id: number
         media_id_string: string
         size: number
@@ -349,16 +349,16 @@ export namespace TwitterBaseAPI {
 
     export interface Tweet {
         tweet_text: string
-        media: {
+        media?: {
             media_entities: Array<{
                 media_id: string
-                togged_users: []
+                togged_users?: []
             }>
-            possibly_sensitive: boolean
+            possibly_sensitive?: boolean
         }
-        reply: {
+        reply?: {
             in_reply_to_tweet_id: string
-            exclude_reply_user_ids: string[]
+            exclude_reply_user_ids?: string[]
         }
         execute_at?: string
         card_uri?: string
@@ -490,8 +490,9 @@ export namespace TwitterBaseAPI {
          */
         getUserByScreenName: (screenName: string, checkNFTAvatar?: boolean) => Promise<User | null>
         getUserNftContainer: (screenName: string) => Promise<NFT | undefined>
-        uploadUserAvatar: (screenName: string, image: Blob | File) => Promise<TwitterResult>
+        uploadMedia: (image: Blob | File) => Promise<MediaResult>
         updateProfileImage: (screenName: string, media_id_str: string) => Promise<AvatarInfo | undefined>
         staleUserByScreenName: (screenName: string) => Promise<void>
+        createTweet: (tweet: Tweet) => Promise<string>
     }
 }
