@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Box, Typography, useTheme } from '@mui/material'
@@ -28,7 +28,6 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
 
     const validPassword = useCallback(() => {
         if (newPassword.length < 8 || newPassword.length > 20) {
-            setPasswordValidError(t('popups_settings_backup_password_invalid'))
             return
         } else if (!MATCH_PASSWORD_RE.test(newPassword)) {
             setPasswordValidError(t('popups_settings_backup_password_invalid'))
@@ -57,16 +56,22 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
         navigate(-1)
     }, [newPassword, passwordMatched, passwordValidError, updateUser, params, to])
 
+    const disabled = useMemo(() => {
+        if (!newPassword.length || !repeatPassword.length) return true
+        if (newPassword.length < 8 || newPassword.length > 20) return true
+
+        if (repeatPassword.length < 8 || repeatPassword.length > 20) return true
+
+        if (!!passwordValidError || !passwordMatched) return true
+
+        return false
+    }, [newPassword, repeatPassword, passwordMatched, passwordValidError])
+
     return (
         <ActionModal
             header={t('popups_backup_password')}
             action={
-                <ActionButton
-                    onClick={handleClick}
-                    loading={loading}
-                    disabled={
-                        !passwordMatched || !!passwordValidError || !newPassword.length || !repeatPassword.length
-                    }>
+                <ActionButton onClick={handleClick} loading={loading} disabled={disabled}>
                     {t('confirm')}
                 </ActionButton>
             }>
@@ -79,7 +84,6 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
                     value={newPassword}
                     error={!!passwordValidError}
                     helperText={passwordValidError}
-                    onClear={() => setNewPassword('')}
                 />
                 <PasswordField
                     placeholder={t('reenter')}
@@ -88,7 +92,6 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
                     onBlur={validRepeatPassword}
                     error={!passwordMatched}
                     helperText={!passwordMatched ? t('popups_backup_password_inconsistency') : ''}
-                    onClear={() => setRepeatPassword('')}
                 />
                 <Box>
                     <Typography fontSize={12} color={theme.palette.maskColor.second}>

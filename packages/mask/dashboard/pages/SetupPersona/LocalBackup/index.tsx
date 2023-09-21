@@ -28,6 +28,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.second,
         fontSize: 14,
         marginTop: theme.spacing(1.5),
+        marginBottom: theme.spacing(3),
     },
 }))
 

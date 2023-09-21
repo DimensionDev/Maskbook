@@ -26,6 +26,7 @@ export const EmailForm = memo(function EmailForm() {
             clearErrors,
             control,
             watch,
+            trigger,
             formState: { errors },
         },
     } = CloudBackupFormContext.useContainer()
@@ -56,6 +57,7 @@ export const EmailForm = memo(function EmailForm() {
                     <TextField
                         {...field}
                         onFocus={() => clearErrors('email')}
+                        onBlur={() => trigger('email')}
                         fullWidth
                         placeholder={t.email()}
                         type="email"
@@ -84,7 +86,7 @@ export const EmailForm = memo(function EmailForm() {
                                     className={classes.send}
                                     disableFocusRipple
                                     disableRipple
-                                    disabled={!email && !!errors.email?.message}
+                                    disabled={!email || !!errors.email?.message}
                                     variant="text"
                                     sx={{ width: 120 }}
                                     onClick={handleSendVerificationCode}

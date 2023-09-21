@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useTabs } from '@masknet/theme'
-import { phoneRegexp } from '../utils/regexp.js'
+import { emailRegexp, phoneRegexp } from '../utils/regexp.js'
 import guessCallingCode from 'guess-calling-code'
 
 export interface CloudBackupFormInputs {
@@ -36,7 +36,10 @@ function useCloudBackupFormContext() {
                 .object({
                     email:
                         currentTab === tabs.email
-                            ? z.string().email(t.cloud_backup_incorrect_email_address())
+                            ? z
+                                  .string()
+                                  .email(t.cloud_backup_incorrect_email_address())
+                                  .refine((email) => emailRegexp.test(email), t.cloud_backup_incorrect_email_address())
                             : z.string().optional(),
                     countryCode: currentTab === tabs.mobile ? z.string() : z.string().optional(),
                     phone:
