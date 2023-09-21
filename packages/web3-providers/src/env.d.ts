@@ -1,9 +1,11 @@
 /// <reference types="@masknet/global-types/webpack" />
 
 declare module 'twitter-text' {
-    export default {
+    const parser: {
         parseTweet(tweet: string): {
             weightedLength: number
         }
     }
+
+    export default parser
 }
