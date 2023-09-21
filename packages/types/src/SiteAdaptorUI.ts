@@ -132,10 +132,11 @@ export namespace SiteAdaptorUI {
             redirect?: Redirect
         }
         export interface NativeCompositionDialog {
-            /** Upload the designated image on to the social network composition dialog */
-            attachImage?(url: Blob, options?: NativeCompositionAttachImageOptions): void
-            appendText?(text: string, options?: NativeCompositionAttachTextOptions): Promise<void>
             open?(): void
+            /** Upload the designated image on to the social network composition dialog */
+            attachImage?(img: Blob, options?: NativeCompositionAttachImageOptions): Promise<void>
+            /** Append text on to the social network composition dialog */
+            attachText?(text: string, options?: NativeCompositionAttachTextOptions): Promise<void>
         }
         export interface NativeCompositionAttachImageOptions {
             recover?: boolean
@@ -153,7 +154,7 @@ export namespace SiteAdaptorUI {
             target?: EncryptionTargetType
         }
         export interface NativeCommentBox {
-            appendText?(text: string, post: PostInfo, dom: HTMLElement | null, cover?: boolean): void
+            attachText?(text: string, post: PostInfo, dom: HTMLElement | null, cover?: boolean): void
         }
         export interface Redirect {
             profilePage?(profile: ProfileIdentifier): void

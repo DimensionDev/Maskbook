@@ -47,6 +47,7 @@ export interface PostDialogProps {
     requireClipboardPermission?: boolean
 }
 let openOnInitAnswered = false
+
 export function Composition({ type = 'timeline', requireClipboardPermission }: PostDialogProps) {
     const { t } = useI18N()
     const { classes, cx } = useStyles()

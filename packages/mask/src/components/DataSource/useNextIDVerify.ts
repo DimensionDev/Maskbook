@@ -16,7 +16,7 @@ import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 export function useNextIDVerify() {
     const verifyPostCollectTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
     const getPostIdFromNewPostToast = activatedSiteAdaptorUI!.configuration.nextIDConfig?.getPostIdFromNewPostToast
-    const postMessage = activatedSiteAdaptorUI!.automation?.nativeCompositionDialog?.appendText
+    const postMessage = activatedSiteAdaptorUI!.automation?.nativeCompositionDialog?.attachText
     const platform = activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform
 
     return useAsyncFn(

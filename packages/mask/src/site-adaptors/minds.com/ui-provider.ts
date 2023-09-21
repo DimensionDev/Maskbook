@@ -122,7 +122,7 @@ const mindsUI: SiteAdaptorUI.Definition = {
         },
         nativeCommentBox: undefined,
         nativeCompositionDialog: {
-            appendText: pasteTextToCompositionMinds,
+            attachText: pasteTextToCompositionMinds,
             // TODO: make a better way to detect
             attachImage: pasteImageToCompositionMinds(),
         },

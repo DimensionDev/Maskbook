@@ -134,12 +134,12 @@ const facebookUI: SiteAdaptorUI.Definition = {
         },
         maskCompositionDialog: { open: taskOpenComposeBoxFacebook },
         nativeCompositionDialog: {
-            appendText: pasteTextToCompositionFacebook,
+            attachText: pasteTextToCompositionFacebook,
             // TODO: make a better way to detect
             attachImage: pasteImageToCompositionDefault(() => false),
         },
         nativeCommentBox: {
-            appendText: pasteToCommentBoxFacebook,
+            attachText: pasteToCommentBoxFacebook,
         },
     },
     collecting: {

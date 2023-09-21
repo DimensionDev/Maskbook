@@ -139,7 +139,7 @@ const twitterUI: SiteAdaptorUI.Definition = {
         },
         nativeCommentBox: undefined,
         nativeCompositionDialog: {
-            appendText: pasteTextToCompositionTwitter,
+            attachText: pasteTextToCompositionTwitter,
             // TODO: make a better way to detect
             attachImage: pasteImageToCompositionTwitter,
         },
