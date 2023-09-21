@@ -13,8 +13,10 @@ const PasswordField = forwardRef(({ show = true, ...props }: PasswordFieldProps,
             {...props}
             ref={ref}
             type={showPassword ? 'text' : 'password'}
+            size="small"
             InputProps={{
                 ...props.InputProps,
+                size: 'small',
                 disableUnderline: true,
                 endAdornment: show ? (
                     <InputAdornment position="end">

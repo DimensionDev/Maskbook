@@ -95,7 +95,15 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     dialogTitleEndingContentWithTabs: {
         marginRight: 16,
     },
-    paper: clean ? { width: 'auto', backgroundImage: 'none' } : {},
+    paper: clean
+        ? {
+              width: 'auto',
+              backgroundImage: 'none',
+              maxHeight: 620,
+          }
+        : {
+              maxHeight: 620,
+          },
     tabs: {
         display: 'flex',
         gridColumn: '3 span',

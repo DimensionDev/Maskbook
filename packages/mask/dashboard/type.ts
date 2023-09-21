@@ -1,14 +1,10 @@
+export { BackupAccountType as AccountType } from '@masknet/shared-base'
 export interface BackupFileInfo {
     downloadURL: string
     size: number
     /** Timestamp in milliseconds */
     uploadedAt: number
     abstract: string
-}
-
-export enum AccountType {
-    Email = 'email',
-    Phone = 'phone',
 }
 
 export enum Scenario {

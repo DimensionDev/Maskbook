@@ -77,7 +77,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
     const { classes, theme } = useStyles()
     const navigate = useNavigate()
     const t = useDashboardI18N()
-    const { updateUser, user } = UserContext.useContainer()
+    const { updateUser } = UserContext.useContainer()
     const {
         hasPassword,
         previewInfo,
@@ -124,7 +124,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 if (response.ok) {
                     const now = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
                     showSnackbar(t.settings_alert_backup_success(), { variant: 'success' })
-                    updateUser({ cloudBackupAt: now })
+                    updateUser({ cloudBackupAt: now, cloudBackupMethod: type })
                 }
                 return true
             } catch (error) {
@@ -285,7 +285,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
 
     return (
         <InjectedDialog title={t.cloud_backup_upload_backup()} open={open} onClose={handleClose}>
-            <DialogContent>{content}</DialogContent>
+            <DialogContent data-hide-scrollbar>{content}</DialogContent>
             <DialogActions>{action}</DialogActions>
         </InjectedDialog>
     )

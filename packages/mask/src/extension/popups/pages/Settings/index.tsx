@@ -23,20 +23,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         rowGap: theme.spacing(2),
-        '::-webkit-scrollbar': {
-            backgroundColor: 'transparent',
-            width: 20,
-        },
-        '::-webkit-scrollbar-thumb': {
-            borderRadius: '20px',
-            width: 5,
-            borderBottom: '64px solid rgba(0, 0, 0, 0)',
-            borderTop: '64px solid rgba(0,0,0,0)',
-            borderLeft: '7px solid rgba(0,0,0,0)',
-            borderRight: '7px solid rgba(0,0,0,0)',
-            backgroundColor: theme.palette.maskColor.secondaryLine,
-            backgroundClip: 'padding-box',
-        },
     },
     header: {
         display: 'flex',
@@ -107,7 +93,8 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const FEEDBACK_MAIL = 'Support@mask.io'
-const FAQ_LINK = 'realmasknetwork.notion.site'
+const FAQ_LINK =
+    'realmasknetwork.notion.site/realmasknetwork/Mask-Network-2-0-Setting-Up-Features-The-Broader-Ecosystem-e4b3e24182e045a58bdb5549c0daea82'
 const HOME_LINK = 'Mask.io'
 
 const Settings = memo(function Settings() {
@@ -187,7 +174,7 @@ const Settings = memo(function Settings() {
     return (
         <>
             <NormalHeader />
-            <Box className={classes.container}>
+            <Box className={classes.container} data-hide-scrollbar>
                 <Box>
                     <Box className={classes.header}>
                         <Box className={classes.headerIcon}>
@@ -256,18 +243,19 @@ const Settings = memo(function Settings() {
                         </Box>
                     </Box>
                     <List className={classes.list}>
-                        <ListItem className={classes.listItem}>
+                        <ListItem
+                            className={classes.listItem}
+                            onClick={() => {
+                                if (!user.backupPassword) {
+                                    modalNavigate(PopupModalRoutes.SetBackupPassword)
+                                } else {
+                                    handleOpenDashboard(DashboardRoutes.CloudBackup)
+                                }
+                            }}>
                             <ListItemText
                                 classes={itemClasses}
                                 primary={t('popups_settings_cloud_backup')}
                                 secondary={cloudBackupTip}
-                                onClick={() => {
-                                    if (!user.backupPassword) {
-                                        modalNavigate(PopupModalRoutes.SetBackupPassword)
-                                    } else {
-                                        handleOpenDashboard(DashboardRoutes.CloudBackup)
-                                    }
-                                }}
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
                         </ListItem>
@@ -287,7 +275,9 @@ const Settings = memo(function Settings() {
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
                         </ListItem>
-                        <ListItem className={classes.listItem}>
+                        <ListItem
+                            className={classes.listItem}
+                            onClick={() => handleOpenDashboard(DashboardRoutes.RecoveryPersona)}>
                             <ListItemText
                                 classes={itemClasses}
                                 primary={t('popups_settings_restore_database')}
