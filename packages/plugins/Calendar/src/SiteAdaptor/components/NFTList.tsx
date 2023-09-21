@@ -78,6 +78,9 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 400,
         lineHeight: '18px',
         color: theme.palette.maskColor.main,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
     },
     second: {
         fontSize: '14px',
@@ -164,7 +167,7 @@ export function NFTList({ list, isLoading, empty, dateString }: NFTListProps) {
                                                 </Typography>
                                             </div>
                                         </div>
-                                        <Typography className={classes.eventTitle}>{v.event_title}</Typography>
+                                        <Typography className={classes.eventTitle}>{v.project.description}</Typography>
                                         <div className={classes.eventHeader}>
                                             <CountdownTimer targetDate={new Date(v.event_date)} />
                                             <div className={classes.socialLinks}>
