@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useTabs } from '@masknet/theme'
 import { phoneRegexp } from '../utils/regexp.js'
+import guessCallingCode from 'guess-calling-code'
 
 export interface CloudBackupFormInputs {
     email: string
@@ -28,7 +29,7 @@ function useCloudBackupFormContext() {
             email: '',
             phone: '',
             code: '',
-            countryCode: '+93',
+            countryCode: guessCallingCode(),
         },
         resolver: zodResolver(
             z

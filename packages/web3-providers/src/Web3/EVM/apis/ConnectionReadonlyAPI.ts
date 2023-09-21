@@ -1,6 +1,5 @@
 import { first, omit } from 'lodash-es'
-import type Web3 from 'web3'
-import { numberToHex, toHex, toNumber } from 'web3-utils'
+import { numberToHex, toHex } from 'web3-utils'
 import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet } from '@masknet/shared-base'
 import {
     AddressType,
@@ -18,6 +17,7 @@ import {
     type ProviderType,
     type Signature,
     type UserOperation,
+    type Web3,
     isValidAddress,
     isEmptyHex,
     getTransactionStatusType,
@@ -329,7 +329,7 @@ export class ConnectionReadonlyAPI
         if (actualSchema === SchemaType.ERC1155) {
             const contract = this.Contract.getERC1155Contract(address, options)
             // the owner has at least 1 token
-            return toNumber((await contract?.methods.balanceOf(owner, tokenId).call()) ?? 0) > 0
+            return isGreaterThan((await contract?.methods.balanceOf(owner, tokenId).call()) ?? 0, 0)
         }
 
         // ERC721

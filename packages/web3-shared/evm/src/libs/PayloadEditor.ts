@@ -257,5 +257,5 @@ function parseHexNumberString(hex: string | number | undefined) {
 }
 
 function parseHexNumber(hex: string | number | undefined) {
-    return typeof hex !== 'undefined' ? hexToNumber(hex) : undefined
+    return typeof hex !== 'undefined' ? (hexToNumber(hex) as number) : undefined
 }

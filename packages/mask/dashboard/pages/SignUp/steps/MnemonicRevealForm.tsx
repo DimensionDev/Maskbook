@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, Stack, Box, IconButton, FormControlLabel, Checkbox } from '@mui/material'
 import { Refresh as RefreshIcon, Print as PrintIcon } from '@mui/icons-material'
@@ -17,7 +17,6 @@ import { SignUpRoutePath } from '../routePath.js'
 import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer.js'
 import { useMnemonicWordsPuzzle } from '../../../hooks/useMnemonicWordsPuzzle.js'
 import { useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
-import { PersonaContext } from '../../../hooks/usePersonaContext.js'
 import Services from '#services'
 import { PreviewDialog } from './PreviewDialog.js'
 import { Icons } from '@masknet/icons'
@@ -25,7 +24,7 @@ import { useAsync } from 'react-use'
 
 export const MnemonicRevealForm = memo(() => {
     const createPersona = useCreatePersonaV2()
-    const { changeCurrentPersona } = PersonaContext.useContainer()
+
     const t = useDashboardI18N()
     const navigate = useNavigate()
     const { state } = useLocation() as {
@@ -45,6 +44,8 @@ export const MnemonicRevealForm = memo(() => {
     const [id, setId] = useState<ECKeyIdentifier | null>(null)
     const [privateKey, setPrivateKey] = useState('')
     const [checked, setChecked] = useState(false)
+
+    const changeCurrentPersona = useCallback(Services.Settings.setCurrentPersonaIdentifier, [])
 
     const create = async () => {
         try {

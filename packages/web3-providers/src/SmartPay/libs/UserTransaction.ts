@@ -1,6 +1,5 @@
 import { BigNumber } from 'bignumber.js'
 import { isUndefined, omitBy } from 'lodash-es'
-import type Web3 from 'web3'
 import { type AbiItem, hexToBytes, keccak256, padLeft, toHex, toNumber } from 'web3-utils'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
 import { isGreaterThan, multipliedBy, toFixed } from '@masknet/web3-shared-base'
@@ -22,6 +21,7 @@ import {
     type Signer,
     type Transaction,
     type UserOperation,
+    type Web3,
     abiCoder,
 } from '@masknet/web3-shared-evm'
 
@@ -190,7 +190,7 @@ export class UserTransaction {
         if (isValidAddress(this.userOperation.sender) && typeof overrides === 'undefined' && nonce === 0) {
             try {
                 const nonce_ = await this.createWalletContract(web3, sender).methods.nonce().call()
-                this.userOperation.nonce = toNumber(nonce_)
+                this.userOperation.nonce = toNumber(nonce_) as number
             } catch (error) {
                 this.userOperation.nonce = 0
             }
@@ -354,7 +354,7 @@ export class UserTransaction {
 
         return UserTransaction.fillUserOperation(chainId, {
             sender: formatEthereumAddress(from),
-            nonce: toNumber(nonce),
+            nonce: toNumber(nonce) as number,
             callGas: transaction.gas ?? DEFAULT_USER_OPERATION.callGas,
             callData: abiCoder.encodeFunctionCall(CALL_WALLET_TYPE, [to, value, data]),
             maxFeePerGas: transaction.maxFeePerGas ?? transaction.gasPrice ?? DEFAULT_USER_OPERATION.maxFeePerGas,
@@ -381,7 +381,7 @@ export class UserTransaction {
             gas: userOperation.callGas,
             maxFeePerGas: userOperation.maxFeePerGas,
             maxPriorityFeePerGas: userOperation.maxPriorityFeePerGas,
-            nonce: toNumber(userOperation.nonce ?? '0'),
+            nonce: toNumber(userOperation.nonce ?? '0') as number,
             data: parameters?.func ?? '0x',
         }
     }

@@ -1,8 +1,8 @@
-import type Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
 import {
     type ChainId,
+    type Web3,
     createContract,
     TransactionEventType,
     ZERO_ADDRESS,

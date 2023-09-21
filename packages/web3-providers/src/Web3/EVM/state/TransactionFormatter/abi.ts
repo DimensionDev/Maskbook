@@ -1,6 +1,6 @@
-import type { AbiItem } from 'web3-utils'
-import * as ABICoder from 'web3-eth-abi'
 import { uniqBy } from 'lodash-es'
+import type { AbiItem } from 'web3-utils'
+import { abiCoder } from '@masknet/web3-shared-evm'
 import type { TransactionMethodABI } from './types.js'
 
 // built-in abis
@@ -27,7 +27,6 @@ import LensFollowNFT from '@masknet/web3-contracts/abis/LensFollowNFT.json'
 import Airdrop from '@masknet/web3-contracts/abis/AirdropV2.json'
 
 class ABI {
-    private coder = ABICoder as unknown as ABICoder.AbiCoder
     private abis: Map<string, TransactionMethodABI[]> = new Map()
 
     constructor() {
@@ -65,7 +64,7 @@ class ABI {
             const { name, inputs = [] } = x
             if (!name) return
             try {
-                const signature = this.coder.encodeFunctionSignature(x)
+                const signature = abiCoder.encodeFunctionSignature(x)
 
                 const all = uniqBy(
                     [

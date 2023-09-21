@@ -1,5 +1,6 @@
 {
     "send": "发送",
+    "search_area": "探索范围",
     "approve": "授权",
     "operation": "操作",
     "approve_mask": "授权MASK?",
@@ -32,6 +33,7 @@
     "select_collectibles": "选择收藏品",
     "no_collectible_found": "未找到任何 NFT。",
     "manage_token_list": "编辑代币列表",
+    "mobile_number": "手机号码",
     "token_list_loading": "加载中",
     "erc20_token_list_placeholder": "代币代号名称或合约地址",
     "erc20_token_list_loading": "正在加载代币列表...",

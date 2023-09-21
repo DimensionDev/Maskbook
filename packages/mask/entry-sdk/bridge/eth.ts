@@ -1,7 +1,11 @@
 import { readonlyMethodType, type EthereumMethodType } from '@masknet/web3-shared-evm'
 import Services from '#services'
-import type { EIP2255PermissionRequest } from '@masknet/sdk'
-import { MaskEthereumProviderRpcError as E, ErrorCode as C, ErrorMessages as M } from '@masknet/sdk'
+import {
+    type EIP2255PermissionRequest,
+    MaskEthereumProviderRpcError as E,
+    ErrorCode as C,
+    ErrorMessages as M,
+} from '@masknet/sdk'
 
 const readonlyMethods: Record<EthereumMethodType, (params: unknown[] | undefined) => Promise<unknown>> = {} as any
 for (const method of readonlyMethodType) {

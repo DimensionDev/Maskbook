@@ -14,11 +14,11 @@ import { RestoreFromCloud } from '../../../components/Restore/RestoreFromCloud/i
 import { RecoveryProvider, RecoveryContext } from '../../../contexts/index.js'
 import { RestoreFromMnemonic } from '../../../components/Restore/RestoreFromMnemonic.js'
 import Services from '#services'
-import { PersonaContext } from '../../../hooks/usePersonaContext.js'
 import { delay } from '@masknet/kit'
 
 import urlcat from 'urlcat'
 import { SignUpRoutePath } from '../../SignUp/routePath.js'
+import { PersonaContext } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -78,12 +78,14 @@ const useStyles = makeStyles()((theme) => ({
 export const Recovery = memo(function Recovery() {
     const t = useDashboardI18N()
     const { classes } = useStyles()
-    const { currentPersona, changeCurrentPersona } = PersonaContext.useContainer()
+    const { currentPersona } = PersonaContext.useContainer()
     const tabPanelClasses = useMemo(() => ({ root: classes.panels }), [classes.panels])
     const navigate = useNavigate()
     const [error, setError] = useState('')
 
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'privateKey', 'local', 'cloud')
+
+    const changeCurrentPersona = useCallback(Services.Settings.setCurrentPersonaIdentifier, [])
 
     const handleRestoreFromMnemonic = useCallback(
         async (values: string[]) => {
@@ -104,7 +106,7 @@ export const Recovery = memo(function Recovery() {
                 setError(t.incorrect_identity_mnemonic())
             }
         },
-        [t, navigate],
+        [t, navigate, changeCurrentPersona],
     )
 
     const handleRestoreFromPrivateKey = useCallback(

@@ -1,6 +1,5 @@
-import type Web3 from 'web3'
 import type { BigNumber } from 'bignumber.js'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType, Web3 } from '@masknet/web3-shared-evm'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 
 export type TokenPair = [FungibleToken<ChainId, SchemaType>, FungibleToken<ChainId, SchemaType>]

@@ -1,4 +1,3 @@
-import type Web3 from 'web3'
 import { toHex } from 'web3-utils'
 import { delay } from '@masknet/kit'
 import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet } from '@masknet/shared-base'
@@ -15,6 +14,7 @@ import {
     type ProviderType,
     type Signature,
     type UserOperation,
+    type Web3,
     EthereumMethodType,
     AccountTransaction,
     getAverageBlockDelay,

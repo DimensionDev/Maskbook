@@ -1,6 +1,6 @@
+import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { TransactionDescriptor, TransactionContext, GasOptionType } from '@masknet/web3-shared-base'
 import type { ChainId, TransactionParameter, Transaction } from '@masknet/web3-shared-evm'
-import type { JsonRpcPayload } from 'web3-core-helpers'
 
 export enum ReplaceType {
     CANCEL = 'CANCEL',

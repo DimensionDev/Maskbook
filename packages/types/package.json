@@ -21,7 +21,7 @@
     "@masknet/web3-hooks-base": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "@types/use-subscription": "^1.0.0",
-    "bignumber.js": "9.1.1",
+    "bignumber.js": "9.1.2",
     "date-fns": "^2.30.0",
     "react-use": "^17.4.0",
     "urlcat": "^3.1.0",
