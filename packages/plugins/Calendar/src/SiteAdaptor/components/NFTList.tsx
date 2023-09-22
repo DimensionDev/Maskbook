@@ -178,7 +178,8 @@ export function NFTList({ list, isLoading, empty, dateString }: NFTListProps) {
                                                             <IconButton
                                                                 style={{ width: '20px', height: '20px' }}
                                                                 key={platform.type}
-                                                                onClick={() => {
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation()
                                                                     window.open(platform.url)
                                                                 }}>
                                                                 {socialIcons[platform.type]}

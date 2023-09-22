@@ -43,6 +43,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: '8px 0',
         flexDirection: 'column',
         gap: '8px',
+        cursor: 'pointer',
     },
     eventHeader: {
         display: 'flex',
@@ -71,6 +72,12 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 400,
         lineHeight: '18px',
         color: theme.palette.mode === 'dark' ? theme.palette.maskColor.second : theme.palette.maskColor.main,
+    },
+    time: {
+        fontSize: '14px',
+        fontWeight: 400,
+        lineHeight: '18px',
+        color: theme.palette.maskColor.second,
     },
     poster: {
         borderRadius: '8px',
@@ -136,15 +143,12 @@ export function EventList({ list, isLoading, empty, dateString }: EventListProps
                                             <div className={classes.projectWrap}>
                                                 <img src={v.project.logo} className={classes.logo} alt="logo" />
                                                 <Typography className={classes.projectName}>
-                                                    {' '}
                                                     {v.project.name}
                                                 </Typography>
                                             </div>
                                         </div>
                                         <Typography className={classes.eventTitle}>{v.event_title}</Typography>
-                                        <Typography className={classes.eventTitle}>
-                                            {formatDate(v.event_date)}
-                                        </Typography>
+                                        <Typography className={classes.time}>{formatDate(v.event_date)}</Typography>
                                         <img className={classes.poster} src={v.poster_url} alt="poster" />
                                     </div>
                                 ))}
