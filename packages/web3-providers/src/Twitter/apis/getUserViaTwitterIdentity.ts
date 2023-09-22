@@ -1,6 +1,7 @@
 import urlcat from 'urlcat'
 import { fetchCachedJSON } from '../../helpers/fetchJSON.js'
 import { staleCached } from '../../helpers/fetchCached.js'
+import { Duration, Expiration } from '../../entry-helpers.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'
 
 const TWITTER_IDENTITY_URL = 'https://mr8asf7i4h.execute-api.us-east-1.amazonaws.com/prod/twitter-identity'
@@ -23,6 +24,11 @@ export async function getUserViaTwitterIdentity(screenName: string): Promise<Twi
         urlcat(TWITTER_IDENTITY_URL, {
             screenName,
         }),
+        undefined,
+        {
+            cacheDuration: Duration.ONE_DAY,
+            squashExpiration: Expiration.ONE_SECOND,
+        },
     )
     return createUser(identity)
 }

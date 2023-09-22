@@ -60,7 +60,7 @@ export async function getUserByScreenName(screenName: string): Promise<TwitterBa
     if (!request) return null
 
     const response = await fetchGlobal(request, undefined, {
-        cacheDuration: Duration.ONE_MINUTE,
+        cacheDuration: Duration.ONE_DAY,
         squashExpiration: Expiration.ONE_SECOND,
     })
     if (response.ok) {
