@@ -19,5 +19,5 @@ export let currentNextIDPlatform: NextIDPlatform | undefined
 export let currentPersonaIdentifier: __SiteAdaptorContext__['currentPersonaIdentifier']
 export function __setSiteAdaptorContext__(value: __SiteAdaptorContext__) {
     __setUIContext__(value)
-    ;({ lastRecognizedProfile, currentVisitingProfile, currentNextIDPlatform } = value)
+    ;({ lastRecognizedProfile, currentVisitingProfile, currentNextIDPlatform, currentPersonaIdentifier } = value)
 }
