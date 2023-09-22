@@ -42,7 +42,7 @@ export function RedpacketMessagePanel(props: RedpacketMessagePanelProps) {
                 <InputBase
                     className={classes.input}
                     onChange={(e) => onChange(e.target.value)}
-                    inputProps={{ placeholder: t.best_wishes() }}
+                    inputProps={{ maxLength: 100, placeholder: t.best_wishes() }}
                     value={message}
                 />
             </div>
