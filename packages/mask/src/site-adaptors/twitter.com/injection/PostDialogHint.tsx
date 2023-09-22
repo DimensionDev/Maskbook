@@ -29,6 +29,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function injectPostDialogHintAtTwitter(signal: AbortSignal) {
     const emptyNode = document.createElement('div')
+
     renderPostDialogHintTo('timeline', searchReplyToolbarSelector(), {
         signal,
         missingReportRule: { name: 'PostDialog hint timeline', rule: 'https://twitter.com/home' },
