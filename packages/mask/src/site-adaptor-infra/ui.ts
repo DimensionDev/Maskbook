@@ -4,6 +4,7 @@ import { assertNotEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { delay, waitDocumentReadyState } from '@masknet/kit'
 import type { SiteAdaptorUI } from '@masknet/types'
 import { type Plugin, startPluginSiteAdaptor, SiteAdaptorContextRef } from '@masknet/plugin-infra/content-script'
+import { __setSiteAdaptorContext__ } from '@masknet/plugin-infra/content-script/context'
 import { Modals, sharedUIComponentOverwrite, sharedUINetworkIdentifier, type ModalProps } from '@masknet/shared'
 import {
     createSubscriptionFromValueRef,
@@ -28,7 +29,6 @@ import '../utils/debug/general.js'
 import { configureSelectorMissReporter } from '../utils/startWatch.js'
 import { NextSharedUIContext, RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
 import { definedSiteAdaptorsUI } from './define.js'
-import { __setSiteAdaptorContext__ } from '@masknet/plugin-infra/content-script/context'
 
 const definedSiteAdaptorsResolved = new Map<string, SiteAdaptorUI.Definition>()
 

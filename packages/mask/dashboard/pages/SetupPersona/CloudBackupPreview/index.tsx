@@ -1,7 +1,7 @@
-import { Box, Tooltip, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { memo, useCallback, useEffect, useMemo } from 'react'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
-import { ActionButton, makeStyles } from '@masknet/theme'
+import { ActionButton, TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
@@ -13,18 +13,6 @@ import { BackupPreviewModal, ConfirmDialog, MergeBackupModal } from '../../../mo
 import type { AccountType } from '../../../type.js'
 import { EmptyStatus } from '@masknet/shared'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
-
-function economizeAbstract(input: string) {
-    if (!input.length) return <div>error</div>
-    if (input.length < 30) return <div>{input}</div>
-    return (
-        <Tooltip title={input} placement="top" arrow>
-            <div>
-                {input.slice(0, 30)}...({input.split(',').length})
-            </div>
-        </Tooltip>
-    )
-}
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -162,9 +150,10 @@ export const CloudBackupPreview = memo(function CloudBackupPreview() {
                         <Box className={classes.content}>
                             <Icons.Message size={48} />
                             <Box flex={1}>
-                                <Typography className={classes.text}>
-                                    {economizeAbstract(previewInfo.abstract ?? '')}
-                                </Typography>
+                                <TextOverflowTooltip title={previewInfo.abstract} arrow placement="top">
+                                    <Typography className={classes.text}>{previewInfo.abstract}</Typography>
+                                </TextOverflowTooltip>
+
                                 <Typography display="flex" columnGap="4px">
                                     <Typography component="span" fontSize={12} fontWeight={700} lineHeight="16px">
                                         {formatFileSize(Number(previewInfo.size), false)}

@@ -334,7 +334,7 @@ const Settings = memo(function Settings() {
                             <ListItemText
                                 classes={itemClasses}
                                 primary={t('popups_settings_faq')}
-                                secondary={FAQ_LINK}
+                                secondary={'realmasknetwork.notion.site'}
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
                         </ListItem>

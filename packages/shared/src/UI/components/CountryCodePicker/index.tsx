@@ -139,7 +139,7 @@ export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl,
                     })}
                 </List>
             ) : (
-                <EmptyStatus style={{ height: '100%' }}>{t.no_results()}</EmptyStatus>
+                <EmptyStatus style={{ height: 246 }}>{t.no_results()}</EmptyStatus>
             )}
         </Popover>
     )
