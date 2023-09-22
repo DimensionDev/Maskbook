@@ -1,5 +1,5 @@
-import { fetchCachedJSON } from '../entry-helpers.js'
 import urlcat from 'urlcat'
+import { fetchCachedJSON } from '../entry-helpers.js'
 import { type CalendarBaseAPI } from '../types/Calendar.js'
 
 const BASE_URL = 'https://mask-network-dev.firefly.land/v1/calendar/crypto_event_list'

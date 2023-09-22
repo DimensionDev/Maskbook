@@ -8,13 +8,6 @@ import { ConnectPersonaBoundary, LoadingStatus, PluginWalletStatusBar, ReloadSta
 import { PluginID, NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { SourceType, resolveSourceTypeName } from '@masknet/web3-shared-base'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { AboutTab } from './tabs/AboutTab.js'
-import { OffersTab } from './tabs/OffersTab.js'
-import { ActivitiesTab } from './tabs/ActivitiesTab.js'
-import { TabType } from '../../types.js'
-import { FigureCard } from '../Shared/FigureCard.js'
-import { Context } from '../Context/index.js'
-import { useI18N } from '../../locales/i18n_generated.js'
 import {
     useAllPersonas,
     useCurrentVisitingIdentity,
@@ -22,6 +15,13 @@ import {
     useSiteAdaptorContext,
 } from '@masknet/plugin-infra/content-script'
 import { currentPersonaIdentifier } from '@masknet/plugin-infra/content-script/context'
+import { AboutTab } from './tabs/AboutTab.js'
+import { OffersTab } from './tabs/OffersTab.js'
+import { ActivitiesTab } from './tabs/ActivitiesTab.js'
+import { TabType } from '../../types.js'
+import { FigureCard } from '../Shared/FigureCard.js'
+import { Context } from '../Context/index.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
     (theme, props) => ({
