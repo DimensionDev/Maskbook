@@ -132,8 +132,8 @@ function resolveCurrentVisitingIdentityInner(
         const ownerHandle = ownerRef.value.identifier?.userId
         const isOwner = !!(ownerHandle && handle.toLowerCase() === ownerHandle.toLowerCase())
         const avatar = user.avatarURL
-        const bio = user.bio ?? ''
-        const homepage = user.homepage ?? ''
+        const bio = user.bio
+        const homepage = user.homepage
 
         ref.value = {
             identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),

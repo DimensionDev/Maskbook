@@ -61,10 +61,8 @@ function ProfileCardHolder() {
         })
         if (!user) return null
 
-        const handle = user.screenName
-
         return {
-            identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
+            identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, user.screenName).unwrapOr(undefined),
             nickname: user.nickname,
             avatar: user.avatarURL,
             bio: user.bio,

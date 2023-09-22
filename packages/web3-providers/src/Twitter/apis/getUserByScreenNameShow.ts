@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 import { getHeaders } from './getTokens.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
-import { type TwitterBaseAPI } from '../../entry-types.js'
+import type { TwitterBaseAPI } from '../../entry-types.js'
 
 function createUser(response: TwitterBaseAPI.ShowResult): TwitterBaseAPI.User {
     return {
