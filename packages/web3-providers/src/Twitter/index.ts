@@ -4,18 +4,19 @@ import { attemptUntil } from '@masknet/web3-shared-base'
 import {
     getSettings,
     getHeaders,
-    getUserViaWebTimesAPI,
     getDefaultUserSettings,
     getUserSettings,
     getUserViaTwitterIdentity,
-    staleUserViaWebAPI,
+    staleUserByScreenName,
     getUserNFTAvatar,
     getUserNFTContainer,
     staleUserViaIdentity,
     getComputedUserSettings,
+    getUserByScreenName,
+    getUserByScreenNameShow,
 } from './apis/index.js'
-import type { TwitterBaseAPI } from '../entry-types.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
+import type { TwitterBaseAPI } from '../entry-types.js'
 
 const UPLOAD_AVATAR_URL = 'https://upload.twitter.com/i/media/upload.json'
 const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/
@@ -141,15 +142,19 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
     }
 
     async getUserByScreenName(screenName: string, checkNFTAvatar?: boolean): Promise<TwitterBaseAPI.User | null> {
-        if (checkNFTAvatar) return getUserViaWebTimesAPI(screenName)
+        if (checkNFTAvatar) return getUserByScreenName(screenName)
         return attemptUntil<TwitterBaseAPI.User | null>(
-            [() => getUserViaTwitterIdentity(screenName), () => getUserViaWebTimesAPI(screenName)],
+            [
+                () => getUserByScreenName(screenName),
+                () => getUserByScreenNameShow(screenName),
+                () => getUserViaTwitterIdentity(screenName),
+            ],
             null,
         )
     }
 
     async staleUserByScreenName(screenName: string): Promise<void> {
-        await staleUserViaWebAPI(screenName)
+        await staleUserByScreenName(screenName)
         await staleUserViaIdentity(screenName)
     }
 }

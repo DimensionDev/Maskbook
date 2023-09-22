@@ -9,6 +9,7 @@ function createUser(response: TwitterBaseAPI.IdentifyResponse): TwitterBaseAPI.U
     return {
         has_nft_avatar: false,
         verified: response.verified,
+        userId: '',
         nickname: response.name,
         screenName: response.screen_name,
         avatarURL: response.profile_image_url_https,

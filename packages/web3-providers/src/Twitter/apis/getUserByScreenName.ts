@@ -1,6 +1,4 @@
 import urlcat from 'urlcat'
-import { isNull } from 'lodash-es'
-import { attemptTimes } from '@masknet/web3-shared-base'
 import { getHeaders } from './getTokens.js'
 import { fetchGlobal } from '../../helpers/fetchGlobal.js'
 import { Expiration } from '../../helpers/fetchSquashed.js'
@@ -47,6 +45,7 @@ function createUser(response: TwitterBaseAPI.UserByScreenNameResponse) {
     return {
         verified: result.legacy?.verified ?? false,
         has_nft_avatar: result.has_nft_avatar ?? false,
+        userId: result.rest_id,
         nickname: result.legacy?.name ?? '',
         screenName: result.legacy?.screen_name ?? '', // handle
         avatarURL: result.legacy?.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1'),
@@ -56,7 +55,7 @@ function createUser(response: TwitterBaseAPI.UserByScreenNameResponse) {
     }
 }
 
-export async function getUserViaWebAPI(screenName: string): Promise<TwitterBaseAPI.User | null> {
+export async function getUserByScreenName(screenName: string): Promise<TwitterBaseAPI.User | null> {
     const request = await createRequest(screenName)
     if (!request) return null
 
@@ -86,11 +85,7 @@ export async function getUserViaWebAPI(screenName: string): Promise<TwitterBaseA
     return null
 }
 
-export const getUserViaWebTimesAPI = (screenName: string) => {
-    return attemptTimes(() => getUserViaWebAPI(screenName), null, isNull)
-}
-
-export async function staleUserViaWebAPI(screenName: string): Promise<TwitterBaseAPI.User | null> {
+export async function staleUserByScreenName(screenName: string): Promise<TwitterBaseAPI.User | null> {
     const request = await createRequest(screenName)
     if (!request) return null
 

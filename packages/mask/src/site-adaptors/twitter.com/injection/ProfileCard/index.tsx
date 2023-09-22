@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
+import { Fade } from '@mui/material'
 import { CrossIsolationMessages, ProfileIdentifier, type SocialIdentity } from '@masknet/shared-base'
 import { LoadingBase, ShadowRootPopper, makeStyles } from '@masknet/theme'
+import { AnchorProvider, queryClient } from '@masknet/shared-base-ui'
 import { Twitter } from '@masknet/web3-providers'
 import { useSocialIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { ProfileCard } from '../../../../components/InjectedComponents/ProfileCard/index.js'
@@ -9,8 +11,6 @@ import { attachReactTreeWithoutContainer } from '../../../../utils/index.js'
 import { twitterBase } from '../../base.js'
 import { CARD_HEIGHT, CARD_WIDTH } from './constants.js'
 import { useControlProfileCard } from './useControlProfileCard.js'
-import { Fade } from '@mui/material'
-import { AnchorProvider, queryClient } from '@masknet/shared-base-ui'
 
 export function injectProfileCardHolder(signal: AbortSignal) {
     attachReactTreeWithoutContainer('profile-card', <ProfileCardHolder />, signal)
