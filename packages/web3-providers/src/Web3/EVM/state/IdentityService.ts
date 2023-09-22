@@ -341,12 +341,14 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         const verifiedResult = await Promise.allSettled(
             uniqBy(identities, (x) => x.address.toLowerCase()).map(async (x) => {
                 const address = x.address.toLowerCase()
-                const isReliable = await Firefly.verifyTwitterHandlerByAddress(address, handle)
+                const isReliable = await Firefly.verifyTwitterHandleByAddress(address, handle)
                 return isReliable ? address : null
             }),
         )
         const trustedAddresses = compact(verifiedResult.map((x) => (x.status === 'fulfilled' ? x.value : null)))
 
-        return identities.filter((x) => trustedAddresses.includes(x.address.toLowerCase())).concat(identitiesFromNextID)
+        return identities
+            .filter((x) => trustedAddresses.includes(x.address.toLowerCase()) || x.type === SocialAddressType.Address)
+            .concat(identitiesFromNextID)
     }
 }
