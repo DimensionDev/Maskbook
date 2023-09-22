@@ -95,6 +95,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
         },
     } = useBackupFormState()
     const { showSnackbar } = useCustomSnackbar()
+
     const [{ loading: uploadLoading, value }, handleUploadBackup] = useAsyncFn(
         async (data: BackupFormInputs) => {
             try {
@@ -106,15 +107,17 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                     }
                 }
 
-                const { file, personaNickNames } = await Services.Backup.createBackupFile({
-                    excludeBase: backupPersonas,
-                    excludeWallet: backupWallets,
+                const { file } = await Services.Backup.createBackupFile({
+                    excludeBase: !backupPersonas,
+                    excludeWallet: !backupWallets,
                 })
+
+                const name = `mask-network-keystore-backup-${formatDateTime(new Date(), 'yyyy-MM-dd')}`
                 const uploadUrl = await fetchUploadLink({
                     code,
                     account,
                     type,
-                    abstract: abstract ?? personaNickNames.join(','),
+                    abstract: name,
                 })
                 const encrypted = await encryptBackup(encode(account + data.backupPassword), encode(file))
                 const controller = new AbortController()
@@ -203,7 +206,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                     onChange={setBackupWallets}
                 />
 
-                {backupWallets ? (
+                {backupWallets && hasPassword ? (
                     <Controller
                         control={control}
                         render={({ field }) => (

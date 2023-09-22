@@ -166,12 +166,12 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
             type,
             account,
         })
-        onClose()
-    }, [code, abstract, type, account])
+        handleClose()
+    }, [code, abstract, type, account, handleClose])
 
     if (showCongratulation)
         return (
-            <InjectedDialog title={t.cloud_backup_merge_to_local_database()} open={open} onClose={onClose}>
+            <InjectedDialog title={t.cloud_backup_merge_to_local_database()} open={open} onClose={handleClose}>
                 <DialogContent>
                     <Box className={classes.container}>
                         <Typography fontSize={36}>🎉</Typography>

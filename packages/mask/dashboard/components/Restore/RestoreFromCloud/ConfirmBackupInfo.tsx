@@ -64,6 +64,7 @@ export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
             </PrimaryButton>,
         )
     }, [handleNext, t, loading])
+    console.log(backupFileInfo)
 
     if (!backupFileInfo) return null
 
@@ -75,7 +76,8 @@ export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
             </Box>
             <Box mt={4}>
                 <PasswordField
-                    label={t.sign_in_account_cloud_backup_password()}
+                    fullWidth
+                    placeholder={t.sign_in_account_cloud_backup_password()}
                     onChange={(e) => {
                         setErrorMessage('')
                         setPassword(e.currentTarget.value)
