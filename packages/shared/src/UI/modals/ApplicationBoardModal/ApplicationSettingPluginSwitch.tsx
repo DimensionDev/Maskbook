@@ -5,7 +5,6 @@ import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Avatar, Box, List, ListItem, ListItemAvatar, Stack, Switch, Typography } from '@mui/material'
-import { useAsyncRetry } from 'react-use'
 import { useSharedI18N } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -79,15 +78,11 @@ const DSearch_KEY = 'decentralized_search'
 interface Props {
     focusPluginID?: PluginID | typeof DSearch_KEY
     setPluginMinimalModeEnabled?: (id: string, checked: boolean) => Promise<void>
-    getDecentralizedSearchSettings?: () => Promise<boolean>
-    setDecentralizedSearchSettings?: (checked: boolean) => Promise<void>
 }
 
 export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPluginSwitch({
     focusPluginID,
     setPluginMinimalModeEnabled,
-    getDecentralizedSearchSettings,
-    setDecentralizedSearchSettings,
 }: Props) {
     const { classes } = useStyles()
     const plugins = useActivatedPluginsSiteAdaptor('any')
@@ -118,9 +113,9 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
 
     return (
         <List>
-            <DSearchSetting
-                setDecentralizedSearchSettings={setDecentralizedSearchSettings}
-                getDecentralizedSearchSettings={getDecentralizedSearchSettings}
+            <DSearchSettings
+                checked={!pluginsInMinimalMode.map((x) => x.ID).includes(PluginID.Handle)}
+                onSwitch={(event) => onSwitch(PluginID.Handle, event?.target.checked)}
                 setRef={(element: HTMLLIElement | null) => {
                     if (DSearch_KEY === focusPluginID) {
                         targetPluginRef.current = element
@@ -193,31 +188,16 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
     )
 })
 
-interface DSearchSettingProps {
+interface DSearchSettingsProps {
+    checked: boolean
+    onSwitch: (event: React.ChangeEvent<HTMLInputElement>) => void
     focusPluginID?: string
     setRef(element: HTMLLIElement | null): void
-    getDecentralizedSearchSettings?: () => Promise<boolean>
-    setDecentralizedSearchSettings?: (checked: boolean) => Promise<void>
 }
 
-function DSearchSetting({
-    setRef,
-    focusPluginID,
-    getDecentralizedSearchSettings,
-    setDecentralizedSearchSettings,
-}: DSearchSettingProps) {
+function DSearchSettings({ checked, onSwitch, setRef, focusPluginID }: DSearchSettingsProps) {
     const t = useSharedI18N()
     const { classes } = useStyles()
-
-    const { value: settings = true, retry } = useAsyncRetry(async () => {
-        const settings = await getDecentralizedSearchSettings?.()
-        return settings
-    })
-
-    const handleSwitch = async (checked: boolean) => {
-        await setDecentralizedSearchSettings?.(checked)
-        retry()
-    }
 
     return (
         <ListItem key={DSearch_KEY} ref={(ele) => setRef(ele)} className={classes.listItem}>
@@ -237,7 +217,7 @@ function DSearchSetting({
                         </Stack>
                     </section>
                     <Stack justifyContent="center">
-                        <Switch checked={settings} onChange={(event) => handleSwitch(event.target.checked)} />
+                        <Switch checked={checked} onChange={onSwitch} />
                     </Stack>
                 </Stack>
                 <Stack direction="row" mt={1.25}>

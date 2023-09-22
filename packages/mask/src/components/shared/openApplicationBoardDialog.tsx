@@ -22,8 +22,6 @@ export function useOpenApplicationBoardDialog(quickMode?: boolean, focusPluginID
                 currentSite: activatedSiteAdaptorUI!.networkIdentifier,
                 queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
                 setPluginMinimalModeEnabled: Services.Settings.setPluginMinimalModeEnabled,
-                getDecentralizedSearchSettings: Services.Settings.getDecentralizedSearchSettings,
-                setDecentralizedSearchSettings: Services.Settings.setDecentralizedSearchSettings,
                 personaPerSiteConnectStatusLoading,
                 applicationCurrentStatus,
                 quickMode,

@@ -164,8 +164,6 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         postMessage: ui.automation?.nativeCompositionDialog?.appendText,
         setCurrentPersonaIdentifier: Services.Settings.setCurrentPersonaIdentifier,
         setPluginMinimalModeEnabled: Services.Settings.setPluginMinimalModeEnabled,
-        setDecentralizedSearchSettings: Services.Settings.setDecentralizedSearchSettings,
-        getDecentralizedSearchSettings: Services.Settings.getDecentralizedSearchSettings,
         getSearchedKeyword: ui.collecting.getSearchedKeyword,
         hasHostPermission: Services.Helper.hasHostPermission,
         requestHostPermission: Services.Helper.requestHostPermission,

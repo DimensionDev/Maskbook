@@ -356,8 +356,6 @@ export namespace Plugin.SiteAdaptor {
         getSearchedKeyword?: () => string
         hasHostPermission?: (origins: readonly string[]) => Promise<boolean>
         requestHostPermission?: (origins: readonly string[]) => Promise<boolean>
-        getDecentralizedSearchSettings?: () => Promise<boolean>
-        setDecentralizedSearchSettings?: (checked: boolean) => Promise<void>
     }
 
     export interface Definition extends GeneralUI.Definition, Shared.DefinitionDeferred<SiteAdaptorContext> {

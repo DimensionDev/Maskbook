@@ -1,11 +1,11 @@
+import { memo } from 'react'
+import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography, alpha } from '@mui/material'
 import { useToggle } from '@react-hookz/web'
-import { memo } from 'react'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
-import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
