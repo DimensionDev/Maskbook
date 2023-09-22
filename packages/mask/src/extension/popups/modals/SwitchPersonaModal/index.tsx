@@ -5,7 +5,7 @@ import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { PersonaContext } from '@masknet/shared'
 import { PersonaItem } from './PersonaItem.js'
-import { DashboardRoutes, type PersonaInformation } from '@masknet/shared-base'
+import { DashboardRoutes, PopupRoutes, type PersonaInformation } from '@masknet/shared-base'
 import Services from '#services'
 import { useNavigate } from 'react-router-dom'
 import { Icons } from '@masknet/icons'
@@ -65,7 +65,7 @@ export const SwitchPersonaModal = memo<ActionModalBaseProps>(function SwitchPers
                 size="small"
                 variant="outlined"
                 startIcon={<Icons.History size={18} />}
-                onClick={() => handleOpenDashboard(DashboardRoutes.LocalBackup)}>
+                onClick={() => navigate(PopupRoutes.Settings)}>
                 {t('backup')}
             </ActionButton>
             <ActionButton

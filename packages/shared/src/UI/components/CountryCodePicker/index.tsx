@@ -73,7 +73,7 @@ export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl,
             isCaseSensitive: false,
             includeMatches: true,
             threshold: 0.8,
-            minMatchCharLength: 2,
+            minMatchCharLength: 1,
             findAllMatches: true,
             keys: ['country_region', 'dialing_code'],
         })

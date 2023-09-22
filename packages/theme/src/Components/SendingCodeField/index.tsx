@@ -62,6 +62,7 @@ export function SendingCodeField({
                         className={classes.countdown}
                         size="small"
                         variant="text"
+                        sx={{ width: 120 }}
                         onClick={onSend}
                         disabled={resendDisabled || disabled}>
                         {sendButtonText}

@@ -21,6 +21,7 @@ const LANGUAGE_OPTIONS_ICON_MAP = {
 const useStyles = makeStyles()((theme) => ({
     item: {
         padding: theme.spacing(1.5),
+        borderRadius: 8,
     },
     icon: {
         minWidth: 24,

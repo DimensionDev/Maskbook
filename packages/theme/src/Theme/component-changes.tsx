@@ -812,6 +812,7 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                     style: {
                         outline: `2px solid ${alpha(colors.maskColor.danger, 0.2)}`,
                         border: `1px solid ${alpha(colors.maskColor.danger, 0.5)}`,
+                        paddingRight: 12,
                         [`&.${inputBaseClasses.focused}`]: {
                             outline: `2px solid ${alpha(colors.maskColor.danger, 0.2)}`,
                             border: `1px solid ${alpha(colors.maskColor.danger, 0.5)}`,
@@ -829,6 +830,7 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                     style: {
                         outline: `2px solid ${alpha(colors.maskColor.danger, 0.2)}`,
                         border: `1px solid ${alpha(colors.maskColor.danger, 0.5)}`,
+                        background: '#fffff',
                         [`&.${inputBaseClasses.focused}`]: {
                             outline: `2px solid ${alpha(colors.maskColor.danger, 0.2)}`,
                             border: `1px solid ${alpha(colors.maskColor.danger, 0.5)}`,

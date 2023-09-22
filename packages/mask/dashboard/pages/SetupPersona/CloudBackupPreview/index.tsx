@@ -205,7 +205,7 @@ export const CloudBackupPreview = memo(function CloudBackupPreview() {
             </Box>
             {!previewInfo.downloadLink ? (
                 <SetupFrameController>
-                    <ActionButton startIcon={<Icons.CloudBackup2 size={20} onClick={handleBackupClick} />}>
+                    <ActionButton onClick={handleBackupClick} startIcon={<Icons.CloudBackup2 size={20} />}>
                         {t.backup()}
                     </ActionButton>
                 </SetupFrameController>

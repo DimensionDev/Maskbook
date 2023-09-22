@@ -11,6 +11,7 @@ import { useAppearance } from '../../../../../shared-ui/index.js'
 const useStyles = makeStyles()((theme) => ({
     item: {
         padding: theme.spacing(1.5),
+        borderRadius: 8,
     },
     icon: {
         minWidth: 24,
