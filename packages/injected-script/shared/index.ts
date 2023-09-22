@@ -64,24 +64,31 @@ export type EventItemBeforeSerialization = keyof InternalEvents extends infer U
 const { parse, stringify } = JSON
 const { isArray } = Array
 const { setPrototypeOf } = Object
-// @ts-expect-error firefox api
-const isFirefox = typeof XPCNativeWrapper === 'function'
-export const encodeEvent: <T extends keyof InternalEvents>(key: T, args: InternalEvents[T]) => unknown = isFirefox
-    ? (key, args) => [key, args]
-    : (key, args) => stringify(setPrototypeOf([key, args], null))
+const { String } = globalThis
+export function encodeEvent(key: string, args: unknown[]) {
+    return stringify(setPrototypeOf([key, args], null), function formatter(key: string, value: unknown) {
+        if (value instanceof Uint8Array) return { $type: 'u8[]', value: [...value] }
+        return value
+    })
+}
 
-export const decodeEvent: (data: unknown) => EventItemBeforeSerialization = isFirefox
-    ? (data) => {
-          if (!isEventItemBeforeSerialization(data)) throw null
-          return data
-      }
-    : (data) => {
-          const result = parse(data as any)
-          // Do not throw new Error cause it requires a global lookup.
-
-          if (!isEventItemBeforeSerialization(result)) throw null
-          return result
-      }
+export function decodeEvent(data: unknown) {
+    const result = parse(String(data), function reviver(key: string, value: unknown) {
+        if (
+            typeof value === 'object' &&
+            value &&
+            '$type' in value &&
+            'value' in value &&
+            isArray(value.value) &&
+            value.$type === 'u8[]'
+        )
+            return new Uint8Array(value.value)
+        return value
+    })
+    // Do not throw new Error cause it requires a global lookup.
+    if (!isEventItemBeforeSerialization(result)) throw null
+    return result
+}
 
 function isEventItemBeforeSerialization(data: unknown): data is EventItemBeforeSerialization {
     if (!isArray(data)) return false
