@@ -48,8 +48,6 @@ interface ApplicationBoardProps {
     applicationCurrentStatus?: PersonaPerSiteConnectStatus
     personaPerSiteConnectStatusLoading: boolean
     setPluginMinimalModeEnabled?: (id: string, checked: boolean) => Promise<void>
-    getDecentralizedSearchSettings?: () => Promise<boolean>
-    setDecentralizedSearchSettings?: (checked: boolean) => Promise<void>
 
     focusPluginID?: PluginID
     tab?: ApplicationSettingTabs
@@ -67,8 +65,6 @@ export function ApplicationBoard({
     applicationCurrentStatus,
     personaPerSiteConnectStatusLoading,
     setPluginMinimalModeEnabled,
-    getDecentralizedSearchSettings,
-    setDecentralizedSearchSettings,
     quickMode = false,
     tab = ApplicationSettingTabs.pluginSwitch,
     focusPluginID,
@@ -136,8 +132,6 @@ export function ApplicationBoard({
                                 <ApplicationSettingPluginSwitch
                                     focusPluginID={focusPluginID}
                                     setPluginMinimalModeEnabled={setPluginMinimalModeEnabled}
-                                    getDecentralizedSearchSettings={getDecentralizedSearchSettings}
-                                    setDecentralizedSearchSettings={setDecentralizedSearchSettings}
                                 />
                             </TabPanel>
                         </>

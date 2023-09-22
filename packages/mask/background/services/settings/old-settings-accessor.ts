@@ -8,7 +8,6 @@ import {
     setCurrentPluginMinimalMode,
     type PersonaIdentifier,
     type ValueRefWithReady,
-    decentralizedSearchSettings,
     appearanceSettings,
     BooleanPreference,
     InjectSwitchSettings,
@@ -67,7 +66,5 @@ export async function getAllInjectSwitchSettings() {
 export async function setInjectSwitchSetting(network: string, value: boolean) {
     InjectSwitchSettings[network].value = value
 }
-
-export const [getDecentralizedSearchSettings, setDecentralizedSearchSettings] = create(decentralizedSearchSettings)
 
 export { __deprecated__getStorage as getLegacySettingsInitialValue } from '../../utils/deprecated-storage.js'

@@ -31,7 +31,7 @@ import {
 } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { useCurrentVisitingIdentity } from '@masknet/plugin-infra/content-script'
-import { useChainContext, useWallet, useNativeTokenPrice, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useWallet, useNativeTokenPrice, useEnvironmentContext } from '@masknet/web3-hooks-base'
 import { ChainResolver, SmartPayBundler, Web3 } from '@masknet/web3-providers'
 import { useI18N } from '../locales/index.js'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants.js'
@@ -113,7 +113,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const { onChange, onNext, origin, gasOption, onGasOptionChange, expectedChainId } = props
     // context
     const wallet = useWallet()
-    const { pluginID } = useNetworkContext()
+    const { pluginID } = useEnvironmentContext()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
     const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
@@ -359,6 +359,9 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder={t.blessing_words()}
                     value={message}
+                    inputProps={{
+                        maxLength: 100,
+                    }}
                 />
             </Box>
 
