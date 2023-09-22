@@ -42,6 +42,20 @@ async function createRequest(screenName: string) {
     })
 }
 
+function createUser(response: TwitterBaseAPI.UserByScreenNameResponse) {
+    const result = response.data.user.result
+    return {
+        verified: result.legacy?.verified ?? false,
+        has_nft_avatar: result.has_nft_avatar ?? false,
+        nickname: result.legacy?.name ?? '',
+        screenName: result.legacy?.screen_name ?? '', // handle
+        avatarURL: result.legacy?.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1'),
+        bio: result.legacy?.description,
+        location: result.legacy?.location,
+        homepage: result.legacy?.entities.url?.urls[0]?.expanded_url,
+    }
+}
+
 export async function getUserViaWebAPI(screenName: string): Promise<TwitterBaseAPI.User | null> {
     const request = await createRequest(screenName)
     if (!request) return null
@@ -52,7 +66,7 @@ export async function getUserViaWebAPI(screenName: string): Promise<TwitterBaseA
     })
     if (response.ok) {
         const json: TwitterBaseAPI.UserByScreenNameResponse = await response.json()
-        return json.data.user.result
+        return createUser(json)
     }
 
     const patchingFeatures: string[] = []
@@ -84,5 +98,5 @@ export async function staleUserViaWebAPI(screenName: string): Promise<TwitterBas
     if (!response?.ok) return null
 
     const json: TwitterBaseAPI.UserByScreenNameResponse = await response.json()
-    return json.data.user.result
+    return createUser(json)
 }

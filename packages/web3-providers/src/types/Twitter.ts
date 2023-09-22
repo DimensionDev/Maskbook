@@ -77,7 +77,7 @@ export namespace TwitterBaseAPI {
         url: string
         indices: [number, number]
     }
-    export interface User {
+    export interface UserResult {
         id: string
         rest_id: string
         affiliates_highlighted_label: {}
@@ -148,6 +148,7 @@ export namespace TwitterBaseAPI {
     export type Response<T> = {
         data: T
     }
+
     type ResponseError = {
         code: number
         extensions: ResponseError
@@ -260,7 +261,9 @@ export namespace TwitterBaseAPI {
         withheld_in_countries: []
         require_some_consent: boolean
     }
+
     export type FailedResponse = { errors: ResponseError[] }
+
     export interface AvatarInfo {
         nickname: string
         userId: string
@@ -332,7 +335,18 @@ export namespace TwitterBaseAPI {
         }
     }
 
-    export type UserByScreenNameResponse = Response<{ user: { result: User } }>
+    export type UserByScreenNameResponse = Response<{ user: { result: UserResult } }>
+
+    export interface User {
+        verified: boolean
+        has_nft_avatar: boolean
+        nickname: string
+        screenName: string // handle
+        avatarURL?: string
+        location?: string
+        bio?: string
+        homepage?: string
+    }
 
     export interface Provider {
         getSettings: () => Promise<Settings | undefined>

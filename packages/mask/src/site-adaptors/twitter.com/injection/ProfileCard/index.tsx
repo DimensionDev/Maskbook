@@ -59,16 +59,16 @@ function ProfileCardHolder() {
             queryKey: ['twitter', 'profile', twitterId],
             queryFn: () => Twitter.getUserByScreenName(twitterId),
         })
-        if (!user?.legacy) return null
+        if (!user) return null
 
-        const handle = user.legacy.screen_name
+        const handle = user.screenName
 
         return {
             identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
-            nickname: user.legacy.name,
-            avatar: user.legacy.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1'),
-            bio: user.legacy.description,
-            homepage: user.legacy.entities.url?.urls[0]?.expanded_url ?? '',
+            nickname: user.nickname,
+            avatar: user.avatarURL,
+            bio: user.bio,
+            homepage: user.homepage,
         }
     }, [twitterId])
 
