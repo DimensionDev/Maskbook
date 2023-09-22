@@ -136,11 +136,6 @@ export function postContentMessageParser(node: HTMLElement): TypedMessage {
         ? FlattenTypedMessage.NoContext(makeTypedMessageTuple(Array.from(lang.childNodes).flatMap(make)))
         : makeTypedMessageEmpty()
 
-    console.log('DEBUG: content')
-    console.log({
-        content,
-    })
-
     return content
 }
 
