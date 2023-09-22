@@ -2,6 +2,7 @@ import urlcat from 'urlcat'
 import { getHeaders } from './getTokens.js'
 import { fetchCachedJSON } from '../../helpers/fetchJSON.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'
+import { Duration } from '../../entry-helpers.js'
 
 export async function getUserNFTContainer(screenName: string) {
     return fetchCachedJSON<{
@@ -21,6 +22,9 @@ export async function getUserNFTContainer(screenName: string) {
                 referer: `https://twitter.com/${screenName}/nft`,
             }),
             credentials: 'include',
+        },
+        {
+            cacheDuration: Duration.ONE_DAY,
         },
     )
 }

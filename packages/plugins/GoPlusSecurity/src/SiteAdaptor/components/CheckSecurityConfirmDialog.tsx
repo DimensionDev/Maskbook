@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.grey[700],
     },
     confirmButton: {
-        backgroundColor: theme.palette.maskColor.warn,
+        backgroundColor: `${theme.palette.maskColor.warn} !important`,
         color: theme.palette.maskColor.white,
         borderRadius: '99px',
     },
