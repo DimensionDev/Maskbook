@@ -124,6 +124,8 @@ export function postContentMessageParser(node: HTMLElement): TypedMessage {
             if (!alt) return makeTypedMessageEmpty()
 
             return makeTypedMessageText(alt)
+        } else if (node instanceof HTMLSpanElement) {
+            return makeTypedMessageText(node.textContent ?? '')
         } else if (node.childNodes.length) {
             const messages = makeTypedMessageTuple(flattenDeep(Array.from(node.childNodes).map(make)))
             return FlattenTypedMessage.NoContext(messages)
