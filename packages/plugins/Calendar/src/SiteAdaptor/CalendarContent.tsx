@@ -23,9 +23,6 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: '60px',
         position: 'relative',
     },
-    hidden: {
-        display: 'hidden',
-    },
     tab: {
         fontSize: 16,
         fontWeight: 700,
@@ -65,8 +62,8 @@ export function CalendarContent() {
         }
     }, [currentTab, newsList, eventList, nftList])
     const dateString = useMemo(() => selectedDate.toLocaleDateString(), [selectedDate])
-    return (
-        <div className={disable ? classes.hidden : classes.calendar}>
+    return !disable ? (
+        <div className={classes.calendar}>
             <TabContext value={currentTab}>
                 <div className={classes.tabList}>
                     <MaskTabList variant="base" onChange={onChange} aria-label="">
@@ -109,5 +106,5 @@ export function CalendarContent() {
                 <Footer provider={currentTab} />
             </TabContext>
         </div>
-    )
+    ) : null
 }
