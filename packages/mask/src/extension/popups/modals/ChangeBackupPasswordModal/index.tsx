@@ -45,8 +45,6 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                 .object({
                     oldPassword: z
                         .string(t('popups_settings_backup_password_invalid'))
-                        .min(8, t('popups_settings_backup_password_invalid'))
-                        .max(20, t('popups_settings_backup_password_invalid'))
                         .refine(
                             (oldPassword) => oldPassword === user.backupPassword,
                             t('popups_backup_password_incorrect'),
@@ -57,25 +55,18 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                         ),
                     newPassword: z
                         .string(t('popups_settings_backup_password_invalid'))
-                        .min(8, t('popups_settings_backup_password_invalid'))
-                        .max(20, t('popups_settings_backup_password_invalid'))
                         .refine(
                             (newPassword) => MATCH_PASSWORD_RE.test(newPassword),
                             t('popups_settings_backup_password_invalid'),
                         ),
                     repeatPassword: z
                         .string(t('popups_settings_backup_password_invalid'))
-                        .min(8, t('popups_settings_backup_password_invalid'))
-                        .max(20, t('popups_settings_backup_password_invalid'))
                         .refine(
                             (repeatPassword) => MATCH_PASSWORD_RE.test(repeatPassword),
                             t('popups_settings_backup_password_invalid'),
                         ),
                 })
-                .refine((data) => data.oldPassword === user.backupPassword, {
-                    message: t('popups_backup_password_incorrect'),
-                    path: ['oldPassword'],
-                })
+
                 .refine((data) => data.newPassword !== data.oldPassword, {
                     message: t('popups_settings_new_backup_password_error_tips'),
                     path: ['newPassword'],
@@ -129,7 +120,6 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                                 {...field}
                                 placeholder={t('password')}
                                 autoFocus
-                                onClear={() => resetField('oldPassword', { defaultValue: '' })}
                                 error={!!errors.oldPassword?.message}
                                 helperText={errors.oldPassword?.message}
                             />
@@ -144,7 +134,6 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                         <PasswordField
                             {...field}
                             placeholder={t('popups_settings_new_backup_password')}
-                            onClear={() => resetField('newPassword', { defaultValue: '' })}
                             error={!!errors.newPassword?.message}
                             helperText={errors.newPassword?.message}
                         />
@@ -157,7 +146,6 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                         <PasswordField
                             {...field}
                             placeholder={t('reenter')}
-                            onClear={() => resetField('repeatPassword', { defaultValue: '' })}
                             error={!!errors.repeatPassword?.message}
                             helperText={errors.repeatPassword?.message}
                         />

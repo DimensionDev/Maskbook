@@ -1,10 +1,10 @@
 import { List, ListItemButton, ListItemIcon, ListItemText, Popover, TextField, Typography } from '@mui/material'
-import { memo, useDeferredValue, useMemo, useState } from 'react'
+import { memo, useDeferredValue, useEffect, useMemo, useState } from 'react'
 
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import Fuse from 'fuse.js'
-import { useSharedI18N } from '../../../index.js'
+import { EmptyStatus, useSharedI18N } from '../../../index.js'
 import { COUNTRIES } from '@masknet/shared-base-ui'
 import { getCountryFlag } from '../../../utils/getCountryFlag.js'
 
@@ -64,23 +64,28 @@ export interface CountryCodePickerProps {
 export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl, onClose, code }) => {
     const t = useSharedI18N()
     const { classes } = useStyles()
-    const [query, setQuery] = useState('')
+    const [query, setQuery] = useState<string>()
     const deferredQuery = useDeferredValue(query)
 
     const regions = useMemo(() => {
         if (!deferredQuery) return COUNTRIES
         const fuse = new Fuse(COUNTRIES, {
-            shouldSort: false,
             isCaseSensitive: false,
-            threshold: 0.45,
-            minMatchCharLength: 1,
+            includeMatches: true,
+            threshold: 0.8,
+            minMatchCharLength: 2,
             findAllMatches: true,
-            keys: ['country_region', 'iso_code', 'dialing_code'],
+            keys: ['country_region', 'dialing_code'],
         })
 
         const filtered = fuse.search(deferredQuery)
+
         return filtered.map((x) => x.item)
     }, [deferredQuery])
+
+    useEffect(() => {
+        setQuery(undefined)
+    }, [open])
 
     return (
         <Popover
@@ -99,38 +104,43 @@ export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl,
             <TextField
                 fullWidth
                 value={query}
+                autoFocus
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder={t.search_area()}
                 InputProps={{ disableUnderline: true, startAdornment: <Icons.Search size={16} />, size: 'small' }}
                 sx={{ marginBottom: 0.5 }}
             />
-            <List className={classes.list} data-hide-scrollbar>
-                {regions.map((data) => {
-                    const selected = data.dialing_code === code
-                    const icon = getCountryFlag(data.iso_code)
+            {regions.length ? (
+                <List className={classes.list} data-hide-scrollbar>
+                    {regions.map((data) => {
+                        const selected = data.dialing_code === code
+                        const icon = getCountryFlag(data.iso_code)
 
-                    return (
-                        <ListItemButton
-                            onClick={() => {
-                                onClose(data.dialing_code)
-                            }}
-                            key={data.iso_code}
-                            className={classes.listItem}
-                            autoFocus={selected}
-                            selected={selected}>
-                            <ListItemIcon className={classes.listItemIcon}>
-                                <img src={icon} className={classes.icon} />
-                            </ListItemIcon>
-                            <ListItemText
-                                primary={data.country_region}
-                                className={classes.text}
-                                classes={{ primary: classes.primaryText }}
-                            />
-                            <Typography className={classes.primaryText}>+{data.dialing_code}</Typography>
-                        </ListItemButton>
-                    )
-                })}
-            </List>
+                        return (
+                            <ListItemButton
+                                onClick={() => {
+                                    onClose(data.dialing_code)
+                                }}
+                                key={`${data.iso_code}+${data.dialing_code}`}
+                                className={classes.listItem}
+                                selected={query === undefined ? selected : undefined}
+                                autoFocus={query === undefined ? selected : undefined}>
+                                <ListItemIcon className={classes.listItemIcon}>
+                                    <img src={icon} className={classes.icon} />
+                                </ListItemIcon>
+                                <ListItemText
+                                    primary={data.country_region}
+                                    className={classes.text}
+                                    classes={{ primary: classes.primaryText }}
+                                />
+                                <Typography className={classes.primaryText}>+{data.dialing_code}</Typography>
+                            </ListItemButton>
+                        )
+                    })}
+                </List>
+            ) : (
+                <EmptyStatus style={{ height: '100%' }}>{t.no_results()}</EmptyStatus>
+            )}
         </Popover>
     )
 })

@@ -38,7 +38,7 @@ export const PhoneForm = memo(function PhoneForm() {
 
     const handleSendVerificationCode = useCallback(async () => {
         const response = await sendCode({
-            account: phone,
+            account: countryCode + phone,
             type: AccountType.Phone,
             scenario: user.phone ? Scenario.change : Scenario.create,
             locale: lang.includes('zh') ? Locale.zh : Locale.en,
@@ -49,7 +49,7 @@ export const PhoneForm = memo(function PhoneForm() {
         if (response) {
             showSnackbar(t.settings_alert_validation_code_sent(), { variant: 'success' })
         }
-    }, [phone, user, lang])
+    }, [phone, user, lang, countryCode])
 
     return (
         <Box component="form" width="100%" display="flex" flexDirection="column" rowGap={2}>
@@ -89,7 +89,7 @@ export const PhoneForm = memo(function PhoneForm() {
                                     className={classes.send}
                                     disableFocusRipple
                                     disableRipple
-                                    disabled={!phone && !!errors.phone?.message}
+                                    disabled={!phone || !!errors.phone?.message}
                                     variant="text"
                                     sx={{ width: 120 }}
                                     onClick={handleSendVerificationCode}

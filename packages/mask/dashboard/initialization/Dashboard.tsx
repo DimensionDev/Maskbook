@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { CssBaseline, ThemeProvider, StyledEngineProvider } from '@mui/material'
+import { CssBaseline, ThemeProvider, StyledEngineProvider, GlobalStyles } from '@mui/material'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {
     CustomSnackbarProvider,
@@ -21,6 +21,18 @@ import '../utils/kv-storage.js'
 import { Pages } from '../pages/routes.js'
 import { UserContext, useAppearance } from '../../shared-ui/index.js'
 import Services from '#services'
+
+const GlobalCss = (
+    <GlobalStyles
+        styles={{
+            '[data-hide-scrollbar]': {
+                '&::-webkit-scrollbar': {
+                    display: 'none',
+                },
+            },
+        }}
+    />
+)
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
@@ -55,6 +67,7 @@ export default function DashboardRoot(props: React.PropsWithChildren<{}>) {
                                             <CssBaseline />
                                             <CustomSnackbarProvider>
                                                 <SharedContextProvider>
+                                                    {GlobalCss}
                                                     <Pages />
                                                     <PluginRender />
                                                     {props.children}

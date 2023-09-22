@@ -124,7 +124,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 if (response.ok) {
                     const now = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
                     showSnackbar(t.settings_alert_backup_success(), { variant: 'success' })
-                    updateUser({ cloudBackupAt: now })
+                    updateUser({ cloudBackupAt: now, cloudBackupMethod: type })
                 }
                 return true
             } catch (error) {
@@ -285,7 +285,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
 
     return (
         <InjectedDialog title={t.cloud_backup_upload_backup()} open={open} onClose={handleClose}>
-            <DialogContent>{content}</DialogContent>
+            <DialogContent data-hide-scrollbar>{content}</DialogContent>
             <DialogActions>{action}</DialogActions>
         </InjectedDialog>
     )

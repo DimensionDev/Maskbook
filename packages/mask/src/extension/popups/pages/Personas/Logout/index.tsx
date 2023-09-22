@@ -199,10 +199,6 @@ export const LogoutUI = memo<LogoutUIProps>(
                                 if (paymentPasswordError) setPaymentPasswordError('')
                                 setPaymentPassword(e.target.value)
                             }}
-                            onClear={() => {
-                                setPaymentPassword('')
-                                setPaymentPasswordError('')
-                            }}
                         />
                     )
                 } else if (backupPassword) {
@@ -215,10 +211,6 @@ export const LogoutUI = memo<LogoutUIProps>(
                                 setPassword(e.target.value)
                             }}
                             error={error}
-                            onClear={() => {
-                                setPassword('')
-                                setError(false)
-                            }}
                             helperText={error ? t('popups_password_do_not_match') : ''}
                         />
                     )
@@ -237,10 +229,6 @@ export const LogoutUI = memo<LogoutUIProps>(
                             setPassword(e.target.value)
                         }}
                         error={error}
-                        onClear={() => {
-                            setPassword('')
-                            setError(false)
-                        }}
                         helperText={error ? t('popups_password_do_not_match') : ''}
                     />
                 )

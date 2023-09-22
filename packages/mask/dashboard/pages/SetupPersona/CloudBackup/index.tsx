@@ -66,13 +66,11 @@ const CloudBackupInner = memo(function CloudBackupInner() {
 
     const { currentTab, onChange, tabs, formState } = CloudBackupFormContext.useContainer()
 
-    console.log(formState)
-
     const [{ loading }, handleSubmit] = useAsyncFn(
         async (data: CloudBackupFormInputs) => {
             const response = await fetchDownloadLink({
                 account: currentTab === tabs.email ? data.email : data.countryCode + data.phone,
-                type: AccountType.Email,
+                type: currentTab === tabs.email ? AccountType.Email : AccountType.Phone,
                 code: data.code,
             }).catch((error) => {
                 if (error.status === 400) {
@@ -82,7 +80,17 @@ const CloudBackupInner = memo(function CloudBackupInner() {
                     })
                 } else if (error.status === 404) {
                     // No cloud backup file
-                    navigate(DashboardRoutes.CloudBackupPreview)
+                    navigate(
+                        urlcat(DashboardRoutes.CloudBackupPreview, {
+                            type: currentTab === tabs.email ? AccountType.Email : AccountType.Phone,
+                            account: currentTab === tabs.email ? data.email : data.countryCode + data.phone,
+                        }),
+                        {
+                            state: {
+                                code: data.code,
+                            },
+                        },
+                    )
                 }
             })
 
@@ -109,14 +117,14 @@ const CloudBackupInner = memo(function CloudBackupInner() {
     )
 
     const description = useMemo(() => {
-        if (currentTab === tabs.email && user.email)
+        if (user.cloudBackupMethod === AccountType.Email && user.email)
             return (
                 <DashboardTrans.cloud_backup_email_exists
                     components={{ strong: <strong /> }}
                     values={{ account: user.email }}
                 />
             )
-        else if (currentTab === tabs.mobile && user.phone)
+        if (user.cloudBackupMethod === AccountType.Phone && user.phone)
             return (
                 <DashboardTrans.cloud_backup_mobile_exists
                     components={{ strong: <strong /> }}
@@ -125,7 +133,7 @@ const CloudBackupInner = memo(function CloudBackupInner() {
             )
 
         return t.cloud_backup_no_exist_tips()
-    }, [t, currentTab, tabs, user])
+    }, [user, DashboardTrans])
     return (
         <>
             <Box>

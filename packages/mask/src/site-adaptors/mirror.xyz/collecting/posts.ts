@@ -18,7 +18,7 @@ export function queryInjectPoint(node: HTMLElement) {
     const allANode = node.querySelectorAll(
         [
             // post detail header
-            `:scope div[href$="/${authorWallet}" i]:has(img[alt^="0x" i][decoding="async"]) > div:last-child`, // img alt is always address
+            `:scope [href$="/${authorWallet}" i]:has(img[alt^="0x" i][decoding="async"]) > div:last-of-type`, // img alt is always address
             // collection page card footer
             ':scope header div:has(> span img[alt="Publisher"])',
         ].join(','),

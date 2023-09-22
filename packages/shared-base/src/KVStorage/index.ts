@@ -32,12 +32,17 @@ export const InMemoryStorages = {
 const ApplicationEntryUnlistedListKey = 'application_entry_unlisted_list'
 const APPLICATION_ENTRY_UNLISTED = 'APPLICATION_ENTRY_UNLISTED'
 
+export enum BackupAccountType {
+    Email = 'email',
+    Phone = 'phone',
+}
 export interface BackupConfig {
     backupPassword: string | null
     email: string | null
     phone: string | null
     localBackupAt: string | null
     cloudBackupAt: string | null
+    cloudBackupMethod: BackupAccountType | null
 }
 
 export const PersistentStorages = {
@@ -54,6 +59,7 @@ export const PersistentStorages = {
             phone: '',
             localBackupAt: '',
             cloudBackupAt: '',
+            cloudBackupMethod: null,
         },
     }),
     /**

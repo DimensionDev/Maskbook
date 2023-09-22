@@ -85,7 +85,7 @@ export function TokenOperationCard({ feed, ...rest }: TokenFeedCardProps) {
     const t = useI18N()
     const { classes, cx } = useStyles()
 
-    const action = feed.actions[0]
+    const action = feed.actions.find((x) => x.address_from && x.address_to) || feed.actions[0]
     const metadata = action.metadata
 
     const owner = useFeedOwner()
@@ -94,8 +94,8 @@ export function TokenOperationCard({ feed, ...rest }: TokenFeedCardProps) {
     const cardType = cardTypeMap[feed.type] || (isFromOwner ? CardType.TokenOut : CardType.TokenIn)
     const context = contextMap[feed.type] || (isFromOwner ? 'send' : 'claim')
 
-    const from = useAddressLabel(action.address_from!)
-    const to = useAddressLabel(action.address_to!)
+    const from = useAddressLabel(action.address_from ?? '')
+    const to = useAddressLabel(action.address_to ?? '')
 
     return (
         <CardFrame type={cardType} feed={feed} {...rest}>

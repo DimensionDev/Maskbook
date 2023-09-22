@@ -86,7 +86,7 @@ const CreateWallet = memo(function CreateWallet() {
                     </Typography>
                     <List className={classes.groups}>
                         {groups.map(([key, wallets], index) => {
-                            const theFirstWallet = first(sortBy(wallets, (w) => w.createdAt.getMilliseconds()))
+                            const theFirstWallet = first(sortBy(wallets, (w) => w.createdAt.getTime()))
                             return (
                                 <ListItem
                                     classes={{ secondaryAction: classes.secondaryAction }}
