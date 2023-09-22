@@ -8,17 +8,11 @@ import {
     getSearchResultContentForProfileTab,
     getSearchResultTabContent,
     getSearchResultTabs,
+    useActivatedPlugin,
     useActivatedPluginsSiteAdaptor,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
-import {
-    EMPTY_LIST,
-    PluginID,
-    type SocialIdentity,
-    ProfileTabs,
-    decentralizedSearchSettings,
-} from '@masknet/shared-base'
-import { useValueRef } from '@masknet/shared-base-ui'
+import { EMPTY_LIST, PluginID, type SocialIdentity, type ProfileTabs } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
@@ -60,7 +54,8 @@ export interface SearchResultInspectorProps {
 export function SearchResultInspector(props: SearchResultInspectorProps) {
     const translate = usePluginI18NField()
 
-    const dSearchEnabled = useValueRef(decentralizedSearchSettings)
+    const dSearchEnabled = useActivatedPlugin(PluginID.Handle, false)
+
     const { profileTabType, empty = null } = props
     const keyword_ = useSearchedKeyword()
     const keyword = props.keyword || keyword_
@@ -111,7 +106,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         return <Component result={currentResult} />
     }, [currentTab, resultList.value])
 
-    if (!dSearchEnabled && profileTabType === ProfileTabs.WEB3) return empty
+    if (!dSearchEnabled) return empty
     if (!keyword && !currentResult) return empty
     if (!contentComponent) return empty
 
