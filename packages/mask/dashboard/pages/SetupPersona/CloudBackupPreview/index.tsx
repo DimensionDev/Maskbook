@@ -14,7 +14,6 @@ import type { AccountType } from '../../../type.js'
 import { EmptyStatus } from '@masknet/shared'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 
-
 const useStyles = makeStyles()((theme) => ({
     title: {
         fontSize: 36,
