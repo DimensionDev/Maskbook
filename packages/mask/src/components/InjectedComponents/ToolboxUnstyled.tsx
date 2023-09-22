@@ -117,21 +117,20 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
         mini,
     } = props
     const { classes } = useStyles()
-    const { openWallet, walletTitle, chainColor, shouldDisplayChainIndicator, account } = useToolbox()
+    const { openWallet, walletTitle, chainColor, shouldDisplayChainIndicator, account, provider } = useToolbox()
 
     const theme = useTheme()
-    const providerDescriptor = useProviderDescriptor()
 
     return (
         <GuideStep step={2} total={4} tip={t('user_guide_tip_2')}>
             <Container>
                 <ListItemButton onClick={openWallet}>
                     <ListItemIcon>
-                        {!!account && providerDescriptor && providerDescriptor.type !== ProviderType.MaskWallet ? (
+                        {account && provider && provider.type !== ProviderType.MaskWallet ? (
                             <WalletIcon
                                 size={iconSize}
                                 badgeSize={badgeSize}
-                                mainIcon={providerDescriptor.icon}
+                                mainIcon={provider.icon}
                                 badgeIconBorderColor={theme.palette.background.paper}
                             />
                         ) : (
@@ -172,16 +171,13 @@ function useToolbox() {
     const chainColor = useChainColor()
     const chainIdValid = useChainIdValid()
     const chainIdMainnet = useChainIdMainnet()
+    const provider = useProviderDescriptor()
     const Others = useWeb3Others()
-
-    // #region recent pending transactions
     const pendingTransactions = useRecentTransactions(undefined, TransactionStatusType.NOT_DEPEND)
-    // #endregion
-
     const { data: domain } = useReverseAddress(undefined, account, true)
 
     function renderButtonText() {
-        if (!account) return t('plugin_wallet_connect_wallet')
+        if (!account || !provider) return t('plugin_wallet_connect_wallet')
         if (pendingTransactions.length <= 0)
             return Others.formatDomainName?.(domain) || Others.formatAddress(account, 4) || account
         return (
@@ -197,17 +193,15 @@ function useToolbox() {
     }
 
     const openWallet = useCallback(() => {
-        return account ? WalletStatusModal.open() : SelectProviderModal.open()
-    }, [account])
+        return account && provider ? WalletStatusModal.open() : SelectProviderModal.open()
+    }, [account, provider])
 
-    const walletTitle = renderButtonText()
-
-    const shouldDisplayChainIndicator = account && chainIdValid && !chainIdMainnet
     return {
         openWallet,
-        walletTitle,
-        shouldDisplayChainIndicator,
+        walletTitle: renderButtonText(),
+        shouldDisplayChainIndicator: account && chainIdValid && !chainIdMainnet,
         chainColor,
         account,
+        provider,
     }
 }
