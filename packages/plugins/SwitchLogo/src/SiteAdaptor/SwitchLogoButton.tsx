@@ -1,11 +1,11 @@
 /* cspell: disable */
 import { useCallback, useLayoutEffect } from 'react'
-import { CrossIsolationMessages, PluginID, SwitchLogoType, switchLogoSettings } from '@masknet/shared-base'
-import { useValueRef } from '@masknet/shared-base-ui'
-import { useIsMinimalMode, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
-import { makeStyles } from '@masknet/theme'
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { Icons } from '@masknet/icons'
+import { makeStyles } from '@masknet/theme'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { CrossIsolationMessages, PluginID, SwitchLogoType, switchLogoSettings } from '@masknet/shared-base'
+import { useIsMinimalMode, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 
 const BlueBirdHTML = `
      <svg
@@ -45,7 +45,6 @@ const useStyles = makeStyles()(() => ({
         position: 'relative',
         flex: 1,
     },
-
     icon: {
         position: 'absolute',
         right: 5,
@@ -53,7 +52,6 @@ const useStyles = makeStyles()(() => ({
         width: 20,
         height: 20,
     },
-
     hover: {
         opacity: 0,
         '&:hover': {
@@ -74,7 +72,9 @@ export function SwitchLogoButton() {
     useLayoutEffect(() => {
         const node = LogoSelector.evaluate()
         if (!node) return
+
         node?.parentElement?.style.setProperty('position', 'relative')
+
         if (logoType === SwitchLogoType.Classics && !disable) {
             // eslint-disable-next-line @masknet/browser-no-set-html
             node.innerHTML = BlueBirdHTML

@@ -68,7 +68,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
 
     const [reason, setReason] = useState<'timeline' | 'popup' | 'reply'>('timeline')
     const [initialMetas, setInitialMetas] = useState<Record<string, unknown>>(EMPTY_OBJECT)
-    // #region Open
+
     const [open, setOpen] = useState(false)
     const [isOpenFromApplicationBoard, setIsOpenFromApplicationBoard] = useState(false)
 
@@ -109,6 +109,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             if (options?.startupPlugin) UI.current?.startPlugin(options.startupPlugin, options.startupPluginProps)
         })
     }, [type])
+
     useEffect(() => {
         if (!open) return
 
@@ -116,16 +117,12 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
         Telemetry.captureEvent(EventType.Interact, EventID.EntryMaskComposeVisibleAll)
 
         return MaskMessages.events.replaceComposition.on((message) => {
-            const ui = UI.current
-            if (!ui) return
+            if (!UI.current) return
             UI.current.setMessage(message)
         })
     }, [open])
-    // #endregion
 
-    // #region submit
     const onSubmit_ = useSubmit(onClose, reason)
-    // #endregion
 
     const UI = useRef<CompositionRef>(null)
     const networkSupport = activatedSiteAdaptorUI!.injection.newPostComposition?.supportedOutputTypes
