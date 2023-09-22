@@ -12,6 +12,13 @@ import { LoadingButton } from '@mui/lab'
 import { Button, DialogActions, Typography, alpha } from '@mui/material'
 import type { EncryptTargetPublic } from '@masknet/encryption'
 import { Icons } from '@masknet/icons'
+import {
+    TypedMessageEditor,
+    type TypedMessageEditorRef,
+    CharLimitIndicator,
+    PluginEntryRender,
+    type PluginEntryRenderRef,
+} from '@masknet/shared'
 import { CompositionContext, type CompositionType } from '@masknet/plugin-infra/content-script'
 import { EncryptionTargetType, type ProfileInformation } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
@@ -22,13 +29,6 @@ import { useI18N } from '../../utils/index.js'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients.js'
 import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMethodSelector.js'
 import { EncryptionTargetSelector } from './EncryptionTargetSelector.js'
-import {
-    TypedMessageEditor,
-    type TypedMessageEditorRef,
-    CharLimitIndicator,
-    PluginEntryRender,
-    type PluginEntryRenderRef,
-} from '@masknet/shared'
 import type { EncryptTargetE2EFromProfileIdentifier } from '../../../background/services/crypto/encryption.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -186,7 +186,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 attachMetadata: (meta, data) => Editor.current?.attachMetadata(meta, data),
                 dropMetadata: (meta) => Editor.current?.dropMetadata(meta),
             }),
-            [props.type],
+            [props.type, Editor.current],
         )
 
         const submitAvailable = currentPostSize > 0 && currentPostSize < (props.maxLength ?? Number.POSITIVE_INFINITY)
