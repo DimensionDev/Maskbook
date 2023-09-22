@@ -443,7 +443,7 @@
     "persona_create_tips": "Create your persona to get started",
     "persona_setup_persona_example": "Example: Alice",
     "data_recovery_title": "Recover your data",
-    "data_recovery_description": "12-word recovery phrase is used to recover your persona data.",
+    "data_recovery_description": "Please select the appropriate method to restore your personal data.",
     "data_recovery_email": "Email",
     "data_recovery_email_code": "Email verification code",
     "data_recovery_mobile": "Mobile",

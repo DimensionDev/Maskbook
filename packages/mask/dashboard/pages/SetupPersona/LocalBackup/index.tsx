@@ -63,8 +63,8 @@ export const LocalBackup = memo(function LocalBackup() {
                 }
             }
             const { file } = await Services.Backup.createBackupFile({
-                excludeBase: backupPersonas,
-                excludeWallet: backupWallets,
+                excludeBase: !backupPersonas,
+                excludeWallet: !backupWallets,
             })
 
             const encrypted = await encryptBackup(encode(data.backupPassword), encode(file))
