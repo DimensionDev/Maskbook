@@ -359,6 +359,9 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder={t.blessing_words()}
                     value={message}
+                    inputProps={{
+                        maxLength: 100,
+                    }}
                 />
             </Box>
 
