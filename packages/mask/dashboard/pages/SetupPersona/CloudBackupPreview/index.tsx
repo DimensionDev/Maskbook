@@ -14,15 +14,6 @@ import type { AccountType } from '../../../type.js'
 import { EmptyStatus } from '@masknet/shared'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 
-// function economizeAbstract(input: string) {
-//     if (!input.length) return <div>error</div>
-//     if (input.length < 30) return <div>{input}</div>
-//     return (
-//         <Tooltip title={input} placement="top" arrow>
-//             <div>{input}</div>
-//         </Tooltip>
-//     )
-// }
 
 const useStyles = makeStyles()((theme) => ({
     title: {
