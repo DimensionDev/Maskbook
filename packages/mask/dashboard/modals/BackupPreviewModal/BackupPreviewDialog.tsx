@@ -238,7 +238,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
         backupPersonas,
         setBackupPersonas,
         t,
-        errors,
+        JSON.stringify(errors),
         backupWallets,
         setBackupWallets,
         isOverwrite,
