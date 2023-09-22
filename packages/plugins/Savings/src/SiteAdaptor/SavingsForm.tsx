@@ -147,7 +147,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
             )
         } catch {
             // do nothing
-            console.log('Failed to estimate gas')
+            console.error('Failed to estimate gas')
         }
     }, [chainId, isDeposit, protocol, tokenAmount])
     // #endregion
