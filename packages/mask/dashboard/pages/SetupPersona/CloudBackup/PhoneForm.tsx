@@ -77,7 +77,7 @@ export const PhoneForm = memo(function PhoneForm() {
                         {...field}
                         onFocus={() => clearErrors('code')}
                         fullWidth
-                        placeholder={t.cloud_backup_email_verification_code()}
+                        placeholder={t.cloud_backup_phone_verification_code()}
                         error={!!errors.code?.message}
                         helperText={errors.code?.message}
                         InputProps={{

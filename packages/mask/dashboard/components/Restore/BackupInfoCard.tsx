@@ -5,6 +5,7 @@ import type { BackupFileInfo } from '../../type.js'
 import { formatFileSize } from '@masknet/kit'
 import { FileFrame } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
+import fromUnixTime from 'date-fns/fromUnixTime'
 
 const useStyles = makeStyles()((theme) => ({
     file: {
@@ -35,7 +36,7 @@ export const BackupInfoCard = memo(function BackupInfoCard({ info }: BackupInfoP
             operations={<Typography className={classes.desc}>{formatFileSize(info.size, true)}</Typography>}>
             {Number.isNaN(info.uploadedAt) ? null : (
                 <Typography fontSize={12} color="second">
-                    {formatDateTime(info.uploadedAt, 'yyyy-MM-dd hh:mm')}
+                    {formatDateTime(fromUnixTime(info.uploadedAt), 'yyyy-MM-dd hh:mm')}
                 </Typography>
             )}
         </FileFrame>
