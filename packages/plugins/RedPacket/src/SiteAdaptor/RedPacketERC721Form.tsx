@@ -32,6 +32,7 @@ import {
     useNativeTokenPrice,
     useWallet,
     useNonFungibleAssetsByCollectionAndOwner,
+    useEnvironmentContext,
 } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import { SourceType } from '@masknet/web3-shared-base'
@@ -245,6 +246,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const { classes, cx } = useStyles()
     const [selectOption, setSelectOption] = useState<NFTSelectOption | undefined>(undefined)
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { pluginID } = useEnvironmentContext()
     const [collection, setCollection] = useState<NonFungibleCollection<ChainId, SchemaType>>()
     const [manualSelectedTokenDetailedList, setExistTokenDetailedList] = useState<OrderedERC721Token[]>(EMPTY_LIST)
     const [onceAllSelectedTokenDetailedList, setAllTokenDetailedList] = useState<OrderedERC721Token[]>(EMPTY_LIST)
@@ -497,7 +499,10 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
             </Box>
 
             <Box style={{ position: 'absolute', bottom: 0, width: '100%' }}>
-                <PluginWalletStatusBar>
+                <PluginWalletStatusBar
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={chainId}
+                    actualPluginID={pluginID}>
                     <ChainBoundary
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                         expectedChainId={chainId}
