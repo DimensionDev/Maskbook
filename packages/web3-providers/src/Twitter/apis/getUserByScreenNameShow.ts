@@ -1,8 +1,9 @@
 import urlcat from 'urlcat'
 import { getHeaders } from './getTokens.js'
+import { Duration, staleCached } from '../../helpers/fetchCached.js'
+import { Expiration } from '../../helpers/fetchSquashed.js'
 import { fetchCachedJSON } from '../../helpers/fetchJSON.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'
-import { Duration, Expiration } from '../../entry-helpers.js'
 
 function createUser(response: TwitterBaseAPI.ShowResult): TwitterBaseAPI.User {
     return {
@@ -18,19 +19,32 @@ function createUser(response: TwitterBaseAPI.ShowResult): TwitterBaseAPI.User {
     }
 }
 
+async function createRequest(screenName: string) {
+    const url = urlcat('https://api.twitter.com/1.1/users/show.json', {
+        screen_name: screenName,
+    })
+    return new Request(url, {
+        headers: await getHeaders(),
+        credentials: 'include',
+    })
+}
+
 export async function getUserByScreenNameShow(screenName: string): Promise<TwitterBaseAPI.User | null> {
-    const response = await fetchCachedJSON<TwitterBaseAPI.ShowResult>(
-        urlcat('https://api.twitter.com/1.1/users/show.json', {
-            screen_name: screenName,
-        }),
-        {
-            headers: await getHeaders(),
-            credentials: 'include',
-        },
-        {
-            cacheDuration: Duration.ONE_DAY,
-            squashExpiration: Expiration.ONE_SECOND,
-        },
-    )
+    const request = await createRequest(screenName)
+    const response = await fetchCachedJSON<TwitterBaseAPI.ShowResult>(request, undefined, {
+        cacheDuration: Duration.ONE_DAY,
+        squashExpiration: Expiration.ONE_SECOND,
+    })
     return createUser(response)
+}
+
+export async function staleUserByScreenNameShow(screenName: string): Promise<TwitterBaseAPI.User | null> {
+    const request = await createRequest(screenName)
+    if (!request) return null
+
+    const response = await staleCached(request)
+    if (!response?.ok) return null
+
+    const json: TwitterBaseAPI.ShowResult = await response.json()
+    return createUser(json)
 }

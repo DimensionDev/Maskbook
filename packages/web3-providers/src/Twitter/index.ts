@@ -7,13 +7,14 @@ import {
     getDefaultUserSettings,
     getUserSettings,
     getUserViaTwitterIdentity,
-    staleUserByScreenName,
     getUserNFTAvatar,
     getUserNFTContainer,
-    staleUserViaIdentity,
     getComputedUserSettings,
     getUserByScreenName,
     getUserByScreenNameShow,
+    staleUserByScreenName,
+    staleUserByScreenNameShow,
+    staleUserViaIdentity,
 } from './apis/index.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 import type { TwitterBaseAPI } from '../entry-types.js'
@@ -155,6 +156,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
 
     async staleUserByScreenName(screenName: string): Promise<void> {
         await staleUserByScreenName(screenName)
+        await staleUserByScreenNameShow(screenName)
         await staleUserViaIdentity(screenName)
     }
 }

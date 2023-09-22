@@ -1,8 +1,9 @@
 import urlcat from 'urlcat'
 import { getHeaders } from './getTokens.js'
 import { fetchCachedJSON } from '../../helpers/fetchJSON.js'
+import { Duration } from '../../helpers/fetchCached.js'
+import { Expiration } from '../../helpers/fetchSquashed.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'
-import { Duration, Expiration } from '../../entry-helpers.js'
 
 export async function getUserNFTContainer(screenName: string) {
     return fetchCachedJSON<{
