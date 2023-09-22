@@ -78,15 +78,11 @@ const DSearch_KEY = 'decentralized_search'
 interface Props {
     focusPluginID?: PluginID | typeof DSearch_KEY
     setPluginMinimalModeEnabled?: (id: string, checked: boolean) => Promise<void>
-    getDecentralizedSearchSettings?: () => Promise<boolean>
-    setDecentralizedSearchSettings?: (checked: boolean) => Promise<void>
 }
 
 export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPluginSwitch({
     focusPluginID,
     setPluginMinimalModeEnabled,
-    getDecentralizedSearchSettings,
-    setDecentralizedSearchSettings,
 }: Props) {
     const { classes } = useStyles()
     const plugins = useActivatedPluginsSiteAdaptor('any')
