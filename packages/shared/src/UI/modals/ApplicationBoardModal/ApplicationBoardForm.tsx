@@ -50,8 +50,6 @@ export interface ApplicationBoardFormProps {
     applicationCurrentStatus?: PersonaPerSiteConnectStatus
     personaPerSiteConnectStatusLoading: boolean
     setPluginMinimalModeEnabled?: (id: string, checked: boolean) => Promise<void>
-    getDecentralizedSearchSettings?: () => Promise<boolean>
-    setDecentralizedSearchSettings?: (checked: boolean) => Promise<void>
 
     focusPluginID?: PluginID
     tab?: ApplicationSettingTabs
@@ -93,8 +91,6 @@ export function ApplicationBoardForm(props: ApplicationBoardFormProps) {
                         <ApplicationSettingPluginSwitch
                             focusPluginID={props.focusPluginID}
                             setPluginMinimalModeEnabled={props.setPluginMinimalModeEnabled}
-                            getDecentralizedSearchSettings={props.getDecentralizedSearchSettings}
-                            setDecentralizedSearchSettings={props.setDecentralizedSearchSettings}
                         />
                     </TabPanel>
                 </TabContext>
