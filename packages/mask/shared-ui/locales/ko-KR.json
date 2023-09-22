@@ -969,5 +969,12 @@
     "persona_boundary_create_persona": "페르소나 만들기",
     "persona_boundary_connect_persona": "페로소나 연결하기",
     "persona_boundary_verify_persona": "트위터 ID 인증",
+    "wallet_status_pending_clear_all": "모두 지우기",
+    "wallet_risk_warning_no_select_wallet": "월렛 아직 선택하지 않습니다.",
+    "wallet_risk_warning_dialog_title": "리스크 경고",
+    "wallet_risk_warning_content": "사용자 여러분께, <br/><br/>Mask Network에서 월렛 관련 플러그인을 사용할 경우, 다음과 같은 사용 위험을 확인해 주시기 바랍니다:<br/><br/>Mask Network는 비상업적인 무료 서비스를 제공합니다. 플러그인은 커뮤니티 회원 및 기타 제3자 디앱 팀에서 제공합니다. 탈중앙화된 네트워크의 자유 및 기타 불확실한 위험 요소로 인해 사용자는 월렛 니모닉 단어, 개인 키 등 민감한 정보를 적절하게 보호해야 합니다. 블록체인 컨트랙트 상호 작용 시 주의하시기 바랍니다. 제3자 디앱(플러그인) 으로 인한 위험은 제3자 디앱 자체에서 부담합니다.",
+    "wallet_risk_warning_confirm_tips": "확인 버튼을 클릭하면 위와 같이 발생할 수 있는 위험을 부담하는 것에 동의한다는 의미합니다.",
+    "wallet_risk_confirm_confirming": "확인 중",
+    "wallet_risk_confirm_failed": "확인 실패",
     "plugin_disabled_tip": "특정 콘텐츠를 보려면 DAPP을 열어야 합니다."
 }
