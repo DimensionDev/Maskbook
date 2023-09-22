@@ -8,7 +8,6 @@ import {
     Web3ContextProvider,
     useFungibleTokens,
     RevokeChainContextProvider,
-    useNetworkContext,
     ChainContextProvider,
     useChainContext,
 } from '@masknet/web3-hooks-base'
@@ -65,7 +64,6 @@ const chains = [ChainId.Mainnet]
 export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const t = useI18N()
     const { classes } = useStyles()
-    const { pluginID } = useNetworkContext()
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: ChainId.Mainnet })
     const [selectedProtocol, setSelectedProtocol] = useState<SavingsProtocol | null>(null)
