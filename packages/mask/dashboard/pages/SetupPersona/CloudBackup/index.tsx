@@ -119,14 +119,14 @@ const CloudBackupInner = memo(function CloudBackupInner() {
     const description = useMemo(() => {
         if (user.cloudBackupMethod === AccountType.Email && user.email)
             return (
-                <DashboardTrans.cloud_backup_email_exists
+                <DashboardTrans.cloud_backup_backup_exists
                     components={{ strong: <strong /> }}
                     values={{ account: user.email }}
                 />
             )
         if (user.cloudBackupMethod === AccountType.Phone && user.phone)
             return (
-                <DashboardTrans.cloud_backup_mobile_exists
+                <DashboardTrans.cloud_backup_backup_exists
                     components={{ strong: <strong /> }}
                     values={{ account: user.phone }}
                 />
