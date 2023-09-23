@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useEffect, useRef } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { EmptyStatus, LoadingStatus } from '@masknet/shared'
 import format from 'date-fns/format'
@@ -109,6 +109,7 @@ export const formatDate = (date: string) => {
 export function EventList({ list, isLoading, empty, dateString }: EventListProps) {
     const { classes, cx } = useStyles()
     const t = useI18N()
+    const listRef = useRef<HTMLDivElement>(null)
     const listAfterDate = useMemo(() => {
         const listAfterDate: string[] = []
         for (const key in list) {
@@ -118,8 +119,14 @@ export function EventList({ list, isLoading, empty, dateString }: EventListProps
         }
         return listAfterDate
     }, [list, dateString])
+    useEffect(() => {
+        if (listRef.current)
+            listRef.current.scrollTo({
+                top: 0,
+            })
+    }, [listRef, list])
     return (
-        <div className={classes.container}>
+        <div className={classes.container} ref={listRef}>
             <div className={classes.paddingWrap}>
                 {isLoading && !list?.length ? (
                     <div className={cx(classes.empty, classes.eventTitle)}>

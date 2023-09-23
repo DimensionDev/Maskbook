@@ -1,4 +1,4 @@
-import React, { useMemo, type ReactNode } from 'react'
+import React, { useMemo, type ReactNode, useRef, useEffect } from 'react'
 import { EmptyStatus, LoadingStatus } from '@masknet/shared'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { CountdownTimer } from './CountDownTimer.js'
@@ -129,6 +129,7 @@ const sortPlat = (_: any, b: { type: string }) => {
 export function NFTList({ list, isLoading, empty, dateString }: NFTListProps) {
     const { classes, cx } = useStyles()
     const t = useI18N()
+    const listRef = useRef<HTMLDivElement>(null)
     const listAfterDate = useMemo(() => {
         const listAfterDate: string[] = []
         for (const key in list) {
@@ -138,8 +139,14 @@ export function NFTList({ list, isLoading, empty, dateString }: NFTListProps) {
         }
         return listAfterDate
     }, [list, dateString])
+    useEffect(() => {
+        if (listRef.current)
+            listRef.current.scrollTo({
+                top: 0,
+            })
+    }, [listRef, list])
     return (
-        <div className={classes.container}>
+        <div className={classes.container} ref={listRef}>
             <div className={classes.paddingWrap}>
                 {isLoading && !list?.length ? (
                     <div className={cx(classes.empty, classes.eventTitle)}>
