@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo } from 'react'
-import { makeStyles, ActionButton, LoadingBase, parseColor, ShadowRootTooltip, useDetectOverflow } from '@masknet/theme'
+import { makeStyles, ActionButton, parseColor, ShadowRootTooltip, useDetectOverflow } from '@masknet/theme'
 import { signMessage, type ChainId } from '@masknet/web3-shared-evm'
 import { type RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { Card, Typography, Button, Box } from '@mui/material'
@@ -9,6 +9,8 @@ import {
     AssetPreviewer,
     NFTFallbackImage,
     TransactionConfirmModal,
+    LoadingStatus,
+    ReloadStatus,
 } from '@masknet/shared'
 import {
     useChainContext,
@@ -79,7 +81,7 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
     claimedTokenWrapper: {
         position: 'absolute',
         top: 80,
-        right: 50,
+        right: 'clamp(10px, 5.6%, 30px)',
         borderRadius: 9,
         cursor: 'pointer',
     },
@@ -181,7 +183,7 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
             bottom: 8,
         },
     },
-    NFTFallbackImageWrapper: {
+    fallbackImageWrapper: {
         width: '100%',
         height: 126,
         background: theme.palette.common.white,
@@ -256,7 +258,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         })
     }, [pluginID, payload.chainId, availability?.claimed_id, availability?.token_address])
 
-    const { data: NFTDetailed, isLoading: loadingNFTDetailed } = useNonFungibleAsset<'all'>(
+    const { data: asset, isLoading: loadingAsset } = useNonFungibleAsset<'all'>(
         NetworkPluginID.PLUGIN_EVM,
         payload.contractAddress,
         availability?.claimed_id,
@@ -316,31 +318,9 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         }
     }, [claimCallback, retryAvailability])
 
-    if (availabilityError)
-        return (
-            <Box display="flex" flexDirection="column" alignItems="center" sx={{ padding: 1.5 }}>
-                <Typography color="textPrimary">{t.go_wrong()}</Typography>
-                <Button variant="roundedDark" onClick={retryAvailability}>
-                    {t.retry()}
-                </Button>
-            </Box>
-        )
+    if (availabilityError) return <ReloadStatus message={t.go_wrong()} onRetry={retryAvailability} />
 
-    if (!availability || loading)
-        return (
-            <Box
-                flex={1}
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-                gap={1}
-                padding={1}
-                minHeight={148}>
-                <LoadingBase />
-                <Typography>{t.loading()}</Typography>
-            </Box>
-        )
+    if (!availability || loading) return <LoadingStatus minHeight={148} iconSize={24} />
 
     return (
         <div className={classes.root}>
@@ -352,9 +332,11 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 <Stack />
 
                 <div className={classes.messageBox}>
-                    <Typography className={classes.words} variant="h6">
-                        {payload.message}
-                    </Typography>
+                    <ShadowRootTooltip title={payload.message}>
+                        <Typography className={classes.words} variant="h6">
+                            {payload.message}
+                        </Typography>
+                    </ShadowRootTooltip>
                 </div>
                 <ShadowRootTooltip
                     title={showTooltip ? `${payload.contractName} #${availability.claimed_id}` : undefined}
@@ -366,15 +348,15 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                     }}>
                     <Box className={cx(classes.claimedTokenWrapper, !availability.isClaimed ? classes.hidden : '')}>
                         <Box className={classes.tokenImageWrapper} onClick={openNFTDialog}>
-                            {loadingNFTDetailed ? null : (
+                            {loadingAsset ? null : (
                                 <AssetPreviewer
-                                    url={NFTDetailed?.metadata?.imageURL || NFTDetailed?.metadata?.mediaURL}
+                                    url={asset?.metadata?.imageURL || asset?.metadata?.mediaURL}
                                     classes={{
                                         root: classes.imgWrapper,
                                         fallbackImage: classes.fallbackImage,
                                     }}
                                     fallbackImage={
-                                        <div className={classes.NFTFallbackImageWrapper}>{NFTFallbackImage}</div>
+                                        <div className={classes.fallbackImageWrapper}>{NFTFallbackImage}</div>
                                     }
                                 />
                             )}
