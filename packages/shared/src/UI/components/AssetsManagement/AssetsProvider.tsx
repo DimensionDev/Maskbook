@@ -108,7 +108,8 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
     const { collections } = CollectionsContext.useContainer()
     const isEmpty = useMemo(() => {
         // Collections assets are lazy loading, can't judge if not all collections been load
-        if (Object.keys(assetsMap).length < collections.length) return false
+        if (Object.keys(assetsMap).length < collections.length || Object.values(assetsMap).some((x) => x.loading))
+            return false
         // Spam score of some collections might be OK, but NFTs of them might be treated as spam #MF-5091
         return getAssetsTotal(assetsMap) === 0
     }, [assetsMap, collections.length])

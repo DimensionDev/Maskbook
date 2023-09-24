@@ -25,7 +25,7 @@ export const NetworkIcon = memo(function NetworkIcon(props: NetworkIconProps) {
     if (iconUrl && !network?.isCustomized) return <ImageIcon size={20} {...rest} icon={iconUrl} />
     return (
         <ChainIcon
-            size={rest?.size || 20}
+            size={rest.size || 20}
             name={network?.name}
             color={rest.color || network?.color}
             className={rest.className}
