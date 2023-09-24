@@ -172,19 +172,21 @@ export namespace TwitterBaseAPI {
         require_some_consent: boolean
     }
 
+    export interface ResponseError {
+        code: number
+        extensions: ResponseError
+        kind: 'Validation' | string
+        message: string
+        /** Error constructor */
+        name: string
+        source: 'Client' | string
+        tracking: {
+            trace_id: string
+        }
+    }
+
     export interface FailedResponse {
-        errors: Array<{
-            code: number
-            extensions: ResponseError
-            kind: 'Validation' | string
-            message: string
-            /** Error constructor */
-            name: string
-            source: 'Client' | string
-            tracking: {
-                trace_id: string
-            }
-        }>
+        errors: ResponseError[]
     }
 
     export interface AvatarInfo {
@@ -242,73 +244,75 @@ export namespace TwitterBaseAPI {
     }
 
     export interface UserResponse {
-        user: {
-            result: {
-                id: string
-                rest_id: string
-                affiliates_highlighted_label: {}
-                /** Only web API provides */
-                has_nft_avatar?: boolean
-                legacy?: {
-                    blocked_by?: boolean
-                    blocking?: boolean
-                    can_dm?: boolean
-                    can_media_tag?: boolean
-                    /** ISODateTime */
-                    created_at: string
-                    default_profile: boolean
-                    default_profile_image: boolean
-                    description: string
-                    entities: {
-                        description: {
-                            urls: any[]
+        data: {
+            user: {
+                result: {
+                    id: string
+                    rest_id: string
+                    affiliates_highlighted_label: {}
+                    /** Only web API provides */
+                    has_nft_avatar?: boolean
+                    legacy?: {
+                        blocked_by?: boolean
+                        blocking?: boolean
+                        can_dm?: boolean
+                        can_media_tag?: boolean
+                        /** ISODateTime */
+                        created_at: string
+                        default_profile: boolean
+                        default_profile_image: boolean
+                        description: string
+                        entities: {
+                            description: {
+                                urls: any[]
+                            }
+                            url: {
+                                urls: UserUrl[]
+                            }
                         }
-                        url: {
-                            urls: UserUrl[]
-                        }
+                        fast_followers_count?: number
+                        favourites_count: number
+                        follow_request_sent: boolean | null
+                        followed_by?: boolean
+                        followers_count: number
+                        following: boolean | null
+                        friends_count: number
+                        has_custom_timelines: boolean
+                        is_translator: boolean
+                        listed_count: number
+                        location: string
+                        media_count: number
+                        muting?: boolean
+                        name: string
+                        normal_followers_count?: number
+                        notifications: boolean | null
+                        pinned_tweet_ids_str?: []
+                        possibly_sensitive?: boolean
+                        /** unused data, declare details when you need */
+                        profile_banner_extensions?: any
+                        profile_banner_url: string
+                        /** unused data, declare details when you need */
+                        profile_image_extensions?: any
+                        profile_image_url_https: string
+                        profile_interstitial_type?: string
+                        protected: boolean
+                        screen_name: string
+                        statuses_count: number
+                        translator_type: string
+                        /** t.co url */
+                        url: string
+                        verified: boolean
+                        want_retweets?: boolean
+                        withheld_in_countries: []
                     }
-                    fast_followers_count?: number
-                    favourites_count: number
-                    follow_request_sent: boolean | null
-                    followed_by?: boolean
-                    followers_count: number
-                    following: boolean | null
-                    friends_count: number
-                    has_custom_timelines: boolean
-                    is_translator: boolean
-                    listed_count: number
-                    location: string
-                    media_count: number
-                    muting?: boolean
-                    name: string
-                    normal_followers_count?: number
-                    notifications: boolean | null
-                    pinned_tweet_ids_str?: []
-                    possibly_sensitive?: boolean
-                    /** unused data, declare details when you need */
-                    profile_banner_extensions?: any
-                    profile_banner_url: string
-                    /** unused data, declare details when you need */
-                    profile_image_extensions?: any
-                    profile_image_url_https: string
-                    profile_interstitial_type?: string
-                    protected: boolean
-                    screen_name: string
-                    statuses_count: number
-                    translator_type: string
-                    /** t.co url */
-                    url: string
-                    verified: boolean
-                    want_retweets?: boolean
-                    withheld_in_countries: []
+                    smart_blocked_by?: boolean
+                    smart_blocking?: boolean
+                    super_follow_eligible?: boolean
+                    super_followed_by?: boolean
+                    super_following?: boolean
+                    legacy_extended_profile?: {}
+                    is_profile_translatable?: boolean
                 }
-                smart_blocked_by?: boolean
-                smart_blocking?: boolean
-                super_follow_eligible?: boolean
-                super_followed_by?: boolean
-                super_following?: boolean
-                legacy_extended_profile?: {}
-                is_profile_translatable?: boolean
             }
         }
     }

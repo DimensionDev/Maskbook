@@ -24,7 +24,7 @@ async function createRequest(screenName: string) {
         screen_name: screenName,
     })
     return new Request(url, {
-        headers: await getHeaders(),
+        headers: getHeaders(),
         credentials: 'include',
     })
 }

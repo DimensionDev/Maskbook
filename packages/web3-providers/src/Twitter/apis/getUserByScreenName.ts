@@ -40,7 +40,7 @@ async function createRequest(screenName: string) {
     })
 }
 
-function createUser(response: TwitterBaseAPI.UserResult) {
+function createUser(response: TwitterBaseAPI.UserResponse) {
     const result = response.data.user.result
     return {
         verified: result.legacy?.verified ?? false,
@@ -64,7 +64,7 @@ export async function getUserByScreenName(screenName: string): Promise<TwitterBa
         squashExpiration: Expiration.ONE_SECOND,
     })
     if (response.ok) {
-        const json: TwitterBaseAPI.UserResult = await response.json()
+        const json: TwitterBaseAPI.UserResponse = await response.json()
         return createUser(json)
     }
 
@@ -92,6 +92,6 @@ export async function staleUserByScreenName(screenName: string): Promise<Twitter
     const response = await staleCached(request)
     if (!response?.ok) return null
 
-    const json: TwitterBaseAPI.UserResult = await response.json()
+    const json: TwitterBaseAPI.UserResponse = await response.json()
     return createUser(json)
 }

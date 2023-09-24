@@ -77,7 +77,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         )
     }
 
-    async uploadMedia(image: File | Blob): Promise<TwitterBaseAPI.MediaResult> {
+    async uploadMedia(image: File | Blob): Promise<TwitterBaseAPI.MediaResponse> {
         return uploadMedia(image)
     }
 

@@ -5,7 +5,7 @@ import type { TwitterBaseAPI } from '../../entry-types.js'
 
 const UPLOAD_AVATAR_URL = 'https://upload.twitter.com/i/media/upload.json'
 
-export async function uploadMedia(image: File | Blob): Promise<TwitterBaseAPI.MediaResult> {
+export async function uploadMedia(image: File | Blob): Promise<TwitterBaseAPI.MediaResponse> {
     const headers = getHeaders()
 
     // INIT
@@ -43,7 +43,7 @@ export async function uploadMedia(image: File | Blob): Promise<TwitterBaseAPI.Me
         command: 'FINALIZE',
         media_id: mediaId,
     })
-    return fetchJSON<TwitterBaseAPI.MediaResult>(finalizeURL, {
+    return fetchJSON<TwitterBaseAPI.MediaResponse>(finalizeURL, {
         method: 'POST',
         headers,
         credentials: 'include',
