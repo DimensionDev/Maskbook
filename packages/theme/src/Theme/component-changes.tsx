@@ -1143,3 +1143,17 @@ export const Modal: ThemeOverride = (mode, colors) => {
         },
     }
 }
+
+export const ButtonGroup: ThemeOverride = (_, colors) => {
+    return {
+        components: {
+            MuiButtonGroup: {
+                styleOverrides: {
+                    grouped: {
+                        color: colors.maskColor.second,
+                    },
+                },
+            },
+        },
+    }
+}
