@@ -146,8 +146,8 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         if (checkNFTAvatar) return getUserByScreenName(screenName)
         return attemptUntil<TwitterBaseAPI.User | null>(
             [
-                () => getUserByScreenName(screenName),
                 () => getUserByScreenNameShow(screenName),
+                () => getUserByScreenName(screenName),
                 () => getUserViaTwitterIdentity(screenName),
             ],
             null,
