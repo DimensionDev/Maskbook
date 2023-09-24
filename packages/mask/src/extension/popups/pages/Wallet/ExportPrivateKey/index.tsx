@@ -110,12 +110,12 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
                         <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
                             <Tab label={t('popups_wallet_name_mnemonic')} value={TabType.Mnemonic} />
                             <Tab label={t('popups_wallet_name_private_key')} value={TabType.PrivateKey} />
-                            <Tab label={t('popups_wallet_name_json_file')} value={TabType.JsonFile} />
+                            <Tab label={t('popups_wallet_name_keystore')} value={TabType.JsonFile} />
                         </MaskTabList>
                     ) : (
                         <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
                             <Tab label={t('popups_wallet_name_private_key')} value={TabType.PrivateKey} />
-                            <Tab label={t('popups_wallet_name_json_file')} value={TabType.JsonFile} />
+                            <Tab label={t('popups_wallet_name_keystore')} value={TabType.JsonFile} />
                         </MaskTabList>
                     )
                 }
@@ -145,7 +145,9 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
                         maxHeight="450px"
                         overflow="auto"
                         data-hide-scrollbar>
-                        {wallet?.mnemonicId ? (
+                        {wallet?.mnemonicId &&
+                        walletGroup?.groups[wallet.mnemonicId] &&
+                        walletGroup?.groups[wallet.mnemonicId].length > 1 ? (
                             walletGroup?.groups[wallet.mnemonicId].map((x, index) => (
                                 <PrivateKeyDisplay wallet={x} key={index} />
                             ))
@@ -158,7 +160,7 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
                     <Box className={classes.iconWrapper}>
                         <Icons.EncryptedFiles size={36} />
                     </Box>
-                    <Typography color={theme.palette.maskColor.danger}>{t('popups_export_json_file_tips')}</Typography>
+                    <Typography color={theme.palette.maskColor.danger}>{t('popups_export_keystore_tips')}</Typography>
                 </TabPanel>
             </Box>
 

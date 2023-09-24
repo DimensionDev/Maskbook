@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useEverSeen } from '@masknet/shared-base-ui'
 import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query'
 import { Icons } from '@masknet/icons'
-import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { Box, Typography, Link, useTheme, ButtonBase as Button, Avatar } from '@mui/material'
 import {
     formatPersonaFingerprint,
@@ -53,18 +53,6 @@ const useStyles = makeStyles()((theme) => ({
         height: 12,
         fontSize: 12,
         color: theme.palette.maskColor.second,
-    },
-    addButton: {
-        display: 'flex',
-        padding: '8px 12px',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: '99px',
-        background: theme.palette.maskColor.main,
-        color: theme.palette.maskColor.white,
-        fontSize: '12px',
-        lineHeight: '16px',
-        fontWeight: 700,
     },
 }))
 
@@ -223,9 +211,13 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                         <Icons.ArrowRight />
                     </Button>
                 ) : (
-                    <Button className={classes.addButton} onClick={() => onAdd(friendInfo)} disabled={isLoading}>
+                    <ActionButton
+                        variant="roundedContained"
+                        onClick={() => onAdd(friendInfo)}
+                        loading={isLoading}
+                        disabled={isLoading}>
                         {t('popups_encrypted_friends_add_friends')}
-                    </Button>
+                    </ActionButton>
                 )}
             </Box>
             <ConnectedAccounts
