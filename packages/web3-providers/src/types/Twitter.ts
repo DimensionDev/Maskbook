@@ -77,7 +77,7 @@ export namespace TwitterBaseAPI {
         url: string
         indices: [number, number]
     }
-    export interface User {
+    export interface UserResult {
         id: string
         rest_id: string
         affiliates_highlighted_label: {}
@@ -148,6 +148,7 @@ export namespace TwitterBaseAPI {
     export type Response<T> = {
         data: T
     }
+
     type ResponseError = {
         code: number
         extensions: ResponseError
@@ -260,7 +261,9 @@ export namespace TwitterBaseAPI {
         withheld_in_countries: []
         require_some_consent: boolean
     }
+
     export type FailedResponse = { errors: ResponseError[] }
+
     export interface AvatarInfo {
         nickname: string
         userId: string
@@ -332,7 +335,90 @@ export namespace TwitterBaseAPI {
         }
     }
 
-    export type UserByScreenNameResponse = Response<{ user: { result: User } }>
+    export type UserByScreenNameResponse = Response<{ user: { result: UserResult } }>
+
+    export interface ShowResult {
+        id: number
+        id_str: string
+        name: string
+        screen_name: string
+        location: string
+        profile_location: string
+        description: string
+        url: string
+        entities: {
+            url: {
+                urls: Array<{
+                    url: string
+                    expanded_url: string
+                    display_url: string
+                    indices: number[]
+                }>
+            }
+            description: {
+                urls: string[]
+            }
+        }
+        protected: boolean
+        followers_count: number
+        fast_followers_count: number
+        normal_followers_count: number
+        friends_count: number
+        listed_count: number
+        created_at: string
+        favourites_count: number
+        utc_offset: string
+        time_zone: string
+        geo_enabled: boolean
+        verified: boolean
+        statuses_count: number
+        media_count: number
+        lang: string
+        contributors_enabled: boolean
+        is_translator: boolean
+        is_translation_enabled: boolean
+        profile_background_color: string
+        profile_background_image_url: string
+        profile_background_image_url_https: string
+        profile_background_tile: boolean
+        profile_image_url: string
+        profile_image_url_https: string
+        profile_banner_url: string
+        profile_link_color: string
+        profile_sidebar_border_color: string
+        profile_sidebar_fill_color: string
+        profile_text_color: string
+        profile_use_background_image: boolean
+        has_extended_profile: boolean
+        default_profile: boolean
+        default_profile_image: boolean
+        pinned_tweet_ids: string[]
+        pinned_tweet_ids_str: string[]
+        has_custom_timelines: boolean
+        can_media_tag: boolean
+        followed_by: boolean
+        following: boolean
+        follow_request_sent: boolean
+        notifications: boolean
+        advertiser_account_type: string
+        advertiser_account_service_levels: string[]
+        business_profile_state: string
+        translator_type: string
+        withheld_in_countries: string[]
+        require_some_consent: false
+    }
+
+    export interface User {
+        verified: boolean
+        has_nft_avatar: boolean
+        userId: string
+        nickname: string
+        screenName: string // handle
+        avatarURL?: string
+        location?: string
+        bio?: string
+        homepage?: string
+    }
 
     export interface Provider {
         getSettings: () => Promise<Settings | undefined>

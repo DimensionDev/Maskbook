@@ -124,21 +124,20 @@ function resolveCurrentVisitingIdentityInner(
     const update = async (twitterId: string) => {
         const user = await Twitter.getUserByScreenName(twitterId)
         if (process.env.NODE_ENV === 'development') {
-            console.assert(user?.legacy, `Can't get get user by screen name ${twitterId}`)
+            console.assert(user, `Can't get get user by screen name ${twitterId}`)
         }
-        if (!user?.legacy) return
+        if (!user) return
 
-        const nickname = user.legacy.name
-        const handle = user.legacy.screen_name
+        const handle = user.screenName
         const ownerHandle = ownerRef.value.identifier?.userId
         const isOwner = !!(ownerHandle && handle.toLowerCase() === ownerHandle.toLowerCase())
-        const avatar = user.legacy.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1')
-        const bio = user.legacy.description
-        const homepage = user.legacy.entities.url?.urls[0]?.expanded_url ?? ''
+        const avatar = user.avatarURL
+        const bio = user.bio
+        const homepage = user.homepage
 
         ref.value = {
             identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
-            nickname,
+            nickname: user.nickname,
             avatar,
             bio,
             homepage,

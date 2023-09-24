@@ -1,5 +1,5 @@
-import { Twitter } from '@masknet/web3-providers'
 import { useAsync } from 'react-use'
+import { Twitter } from '@masknet/web3-providers'
 import { RSS3_KEY_SITE, NFTAvatarMiniClip, NFTBadgeTimeline } from '@masknet/plugin-avatar'
 
 interface Props {
@@ -16,15 +16,13 @@ export function AvatarDecoration({ clipPathId, userId, className, size }: Props)
 
     if (!userId || !user) return null
 
-    const avatarId = Twitter.getAvatarId(user.legacy?.profile_image_url_https)
-
     return user.has_nft_avatar ? (
         <NFTAvatarMiniClip className={className} id={clipPathId} size={size} screenName={userId} />
     ) : (
         <NFTBadgeTimeline
             classes={{ root: className }}
             userId={userId}
-            avatarId={avatarId}
+            avatarId={Twitter.getAvatarId(user.avatarURL)}
             height={size}
             width={size}
             siteKey={RSS3_KEY_SITE.TWITTER}

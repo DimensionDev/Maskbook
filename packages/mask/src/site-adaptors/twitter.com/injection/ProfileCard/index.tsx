@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
+import { Fade } from '@mui/material'
 import { CrossIsolationMessages, ProfileIdentifier, type SocialIdentity } from '@masknet/shared-base'
 import { LoadingBase, ShadowRootPopper, makeStyles } from '@masknet/theme'
+import { AnchorProvider, queryClient } from '@masknet/shared-base-ui'
 import { Twitter } from '@masknet/web3-providers'
 import { useSocialIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { ProfileCard } from '../../../../components/InjectedComponents/ProfileCard/index.js'
@@ -9,8 +11,6 @@ import { attachReactTreeWithoutContainer } from '../../../../utils/index.js'
 import { twitterBase } from '../../base.js'
 import { CARD_HEIGHT, CARD_WIDTH } from './constants.js'
 import { useControlProfileCard } from './useControlProfileCard.js'
-import { Fade } from '@mui/material'
-import { AnchorProvider, queryClient } from '@masknet/shared-base-ui'
 
 export function injectProfileCardHolder(signal: AbortSignal) {
     attachReactTreeWithoutContainer('profile-card', <ProfileCardHolder />, signal)
@@ -59,16 +59,14 @@ function ProfileCardHolder() {
             queryKey: ['twitter', 'profile', twitterId],
             queryFn: () => Twitter.getUserByScreenName(twitterId),
         })
-        if (!user?.legacy) return null
-
-        const handle = user.legacy.screen_name
+        if (!user) return null
 
         return {
-            identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
-            nickname: user.legacy.name,
-            avatar: user.legacy.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1'),
-            bio: user.legacy.description,
-            homepage: user.legacy.entities.url?.urls[0]?.expanded_url ?? '',
+            identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, user.screenName).unwrapOr(undefined),
+            nickname: user.nickname,
+            avatar: user.avatarURL,
+            bio: user.bio,
+            homepage: user.homepage,
         }
     }, [twitterId])
 
