@@ -96,12 +96,6 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.maskColor.main,
             textAlign: 'center',
         },
-        chooseNetwork: {
-            fontSize: 14,
-            fontWeight: 700,
-            color: theme.palette.maskColor.main,
-            paddingLeft: 32,
-        },
         dialogCloseButton: {
             color: theme.palette.text.primary,
             padding: 0,
@@ -123,6 +117,7 @@ const useStyles = makeStyles()((theme) => {
             alignItems: 'center',
             justifyContent: 'center',
             rowGap: 12,
+            borderRadius: 12,
         },
         listItemText: {
             fontSize: 12,
@@ -311,10 +306,9 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                             onClick={() => setSelectChainDialogOpen(false)}>
                             <DialogDismissIconUI />
                         </IconButton>
-                        <Typography className={classes.dialogTitle}>{t.plugin_wallet_connect_fortmatic()}</Typography>
+                        <Typography className={classes.dialogTitle}>{t.plugin_wallet_choose_network()}</Typography>
                     </DialogTitle>
                     <DialogContent sx={{ minWidth: 352 }}>
-                        <Typography className={classes.chooseNetwork}>{t.plugin_wallet_choose_network()}</Typography>
                         <List className={classes.list}>
                             {EVM_NETWORK_DESCRIPTORS.filter((x) =>
                                 [ChainId.Mainnet, ChainId.BSC].includes(x.chainId),

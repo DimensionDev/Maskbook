@@ -2,7 +2,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { first } from 'lodash-es'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { ECKeyIdentifier, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { ECKeyIdentifier, EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { useChainContext, useChainIdValid, useNetworks, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { ProviderType, ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, Typography } from '@mui/material'
@@ -61,7 +61,7 @@ const SelectWallet = memo(function SelectWallet() {
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
     const { smartPayChainId } = PopupContext.useContainer()
 
-    const { value: localWallets = [] } = useAsync(async () => Services.Wallet.getWallets(), [])
+    const { value: localWallets = EMPTY_LIST } = useAsync(async () => Services.Wallet.getWallets(), [])
 
     const allWallets = useWallets()
 
@@ -75,7 +75,13 @@ const SelectWallet = memo(function SelectWallet() {
         if (isVerifyWalletFlow) {
             navigate(-1)
         } else {
-            await Services.Wallet.resolveMaskAccount([])
+            // TODO Open the popup via a RPC request, and reject the request
+            const rejected = await Promise.allSettled([
+                Promise.reject({
+                    message: 'User rejected the request.',
+                }),
+            ])
+            await Services.Wallet.resolveMaskAccount(rejected[0])
             await Services.Helper.removePopupWindow()
         }
     }, [isVerifyWalletFlow])
