@@ -2,19 +2,21 @@ import { timeout } from '@masknet/kit'
 import { attemptUntil } from '@masknet/web3-shared-base'
 import {
     getSettings,
-    getUserViaWebTimesAPI,
     getDefaultUserSettings,
     getUserSettings,
     getUserViaTwitterIdentity,
-    staleUserViaWebAPI,
     getUserNFTAvatar,
     getUserNFTContainer,
-    staleUserViaIdentity,
     getComputedUserSettings,
+    getUserByScreenName,
+    getUserByScreenNameShow,
+    staleUserByScreenName,
+    staleUserByScreenNameShow,
+    staleUserViaIdentity,
     createTweet,
+    uploadMedia,
+    updateProfileImage,
 } from './apis/index.js'
-import { uploadMedia } from './apis/uploadMedia.js'
-import { updateProfileImage } from './apis/updateProfileImage.js'
 import type { TwitterBaseAPI } from '../entry-types.js'
 
 export class TwitterAPI implements TwitterBaseAPI.Provider {
@@ -84,15 +86,20 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
     }
 
     async getUserByScreenName(screenName: string, checkNFTAvatar?: boolean): Promise<TwitterBaseAPI.User | null> {
-        if (checkNFTAvatar) return getUserViaWebTimesAPI(screenName)
+        if (checkNFTAvatar) return getUserByScreenName(screenName)
         return attemptUntil<TwitterBaseAPI.User | null>(
-            [() => getUserViaTwitterIdentity(screenName), () => getUserViaWebTimesAPI(screenName)],
+            [
+                () => getUserByScreenNameShow(screenName),
+                () => getUserByScreenName(screenName),
+                () => getUserViaTwitterIdentity(screenName),
+            ],
             null,
         )
     }
 
     async staleUserByScreenName(screenName: string): Promise<void> {
-        await staleUserViaWebAPI(screenName)
+        await staleUserByScreenName(screenName)
+        await staleUserByScreenNameShow(screenName)
         await staleUserViaIdentity(screenName)
     }
 

@@ -1,6 +1,7 @@
+import { memo, useState, useCallback, useMemo, useRef } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { Icons } from '@masknet/icons'
 import { PlatformAvatar, WalletSettingCard } from '@masknet/shared'
-import { useI18N } from '../../locales/index.js'
 import { type BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
@@ -15,9 +16,8 @@ import {
     Button,
     alpha,
 } from '@mui/material'
-import { useQuery } from '@tanstack/react-query'
-import { memo, useState, useCallback, useMemo, useRef } from 'react'
 import { resolveNextIDPlatformWalletName } from '@masknet/web3-shared-base'
+import { useI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -131,10 +131,10 @@ export const ProfileCard = memo(function ProfileCard({
         queryKey: ['twitter', 'profile', profile.identity],
         queryFn: () => Twitter.getUserByScreenName(profile.identity),
     })
-    const nickname = user?.legacy?.name || profile.name || profile.identity
+    const nickname = user?.nickname || profile.name || profile.identity
     // Identities of Twitter proof get lowered case. Prefer handle from Twitter API.
-    const handle = user?.legacy?.screen_name || profile.identity
-    const avatarUrl = user?.legacy?.profile_image_url_https || avatar
+    const handle = user?.screenName || profile.identity
+    const avatarUrl = user?.avatarURL || avatar
     const handleSwitch = useCallback(
         (address: string) => {
             onToggle?.(profile.identity, address)

@@ -15,8 +15,8 @@ import { usePersonasFromDB } from '../../../../components/DataSource/usePersonas
 import Services from '#services'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { ButtonStyle } from '../../constant.js'
-import { searchProfileAvatarSelector, searchProfileSaveSelector } from '../../utils/selector.js'
 import { startWatch } from '../../../../utils/startWatch.js'
+import { searchProfileAvatarSelector, searchProfileSaveSelector } from '../../utils/selector.js'
 
 export function injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())

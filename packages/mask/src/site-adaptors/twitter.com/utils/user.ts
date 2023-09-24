@@ -34,15 +34,13 @@ export const getNickname = () => {
 
 export const getTwitterId = () => {
     const ele = searchAvatarSelector().evaluate()?.closest('a') || searchNFTAvatarSelector().evaluate()?.closest('a')
-    if (ele) {
-        const link = ele.getAttribute('href')
-        if (link) {
-            const [, userId] = link.match(/^\/(\w+)\/(photo|nft)$/) ?? []
-            return userId
-        }
-    }
+    if (!ele) return ''
 
-    return ''
+    const link = ele.getAttribute('href')
+    if (!link) return ''
+
+    const [, userId] = link.match(/^\/(\w+)\/(photo|nft)$/) ?? []
+    return userId
 }
 
 export const getBio = () => {
@@ -67,20 +65,14 @@ export const getAvatar = () => {
 
 export async function getUserIdentity(twitterId: string): Promise<SocialIdentity | undefined> {
     const user = await Twitter.getUserByScreenName(twitterId)
-    if (!user?.legacy) return
-
-    const nickname = user.legacy.name
-    const handle = user.legacy.screen_name
-    const avatar = user.legacy.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1')
-    const bio = user.legacy.description
-    const homepage = user.legacy.entities.url?.urls[0]?.expanded_url ?? ''
+    if (!user) return
 
     return {
-        identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
-        nickname,
-        avatar,
-        bio,
-        homepage,
+        identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, user.screenName).unwrapOr(undefined),
+        nickname: user.nickname,
+        avatar: user.avatarURL,
+        bio: user.bio,
+        homepage: user.homepage,
     }
 }
 
