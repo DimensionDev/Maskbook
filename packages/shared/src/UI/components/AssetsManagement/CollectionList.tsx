@@ -58,6 +58,7 @@ const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap 
         emptyMain: {
             display: 'flex',
             flexDirection: 'column',
+            alignSelf: 'center',
         },
         grid: {
             width: '100%',

@@ -36,6 +36,7 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
             url: 'https://explorer.solana.com/',
         },
         rpcUrl: '',
+        iconUrl: new URL('../assets/solana.png', import.meta.url).href,
         isCustomized: false,
     },
     {
@@ -66,6 +67,7 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
             },
         },
         rpcUrl: '',
+        iconUrl: new URL('../assets/solana.png', import.meta.url).href,
         isCustomized: false,
     },
     {
@@ -96,6 +98,7 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
             },
         },
         rpcUrl: '',
+        iconUrl: new URL('../assets/solana.png', import.meta.url).href,
         isCustomized: false,
     },
 ]
