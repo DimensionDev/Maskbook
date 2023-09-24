@@ -296,10 +296,12 @@ export const Button = (mode: PaletteMode, colors: MaskColor) => ({
                         ['&:hover']: {
                             background: colors.maskColor.danger,
                             boxShadow: `0 8px 25px ${alpha(colors.maskColor.danger, 0.3)}`,
+                            color: colors.maskColor.white,
                         },
                         [`&.${buttonClasses.disabled}`]: {
                             background: alpha(colors.maskColor.danger, 0.5),
-                            opacity: 0.6,
+                            opacity: 0.5,
+                            color: colors.maskColor.white,
                         },
                     },
                 },
