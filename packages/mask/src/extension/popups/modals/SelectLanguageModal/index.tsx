@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo } from 'react'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
 import { List, ListItemButton, ListItemIcon, ListItemText, Radio } from '@mui/material'
 import { getEnumAsArray } from '@masknet/kit'
 import { LanguageOptions } from '@masknet/public-api'
@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const SelectLanguageModal = memo<ActionModalBaseProps>(function SelectLanguageModal({ ...rest }) {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes } = useStyles()
     const lang = useLanguage()
 

@@ -11,7 +11,7 @@ import { SnapshotCard } from './SnapshotCard.js'
 import { Parser } from '@json2csv/plainjs'
 import { LoadingFailCard } from './LoadingFailCard.js'
 import { formatCount } from '@masknet/web3-shared-base'
-import { useSnapshotI18N } from '../locales/index.js'
+import { useSnapshotTrans } from '../locales/index.js'
 import { LoadingCard } from './LoadingCard.js'
 
 const choiceMaxWidth = 240
@@ -90,7 +90,7 @@ function Content() {
     const votes = useVotes(identifier)
     const { results } = useResults(identifier, proposal)
     const { classes, cx } = useStyles()
-    const t = useSnapshotI18N()
+    const t = useSnapshotTrans()
 
     const dataForCsv = useMemo(
         () =>
@@ -190,7 +190,7 @@ function Content() {
 }
 
 function Loading(props: React.PropsWithChildren<{}>) {
-    const t = useSnapshotI18N()
+    const t = useSnapshotTrans()
     const identifier = useContext(SnapshotContext)
     const proposal = useProposal(identifier.id)
     return (
@@ -202,7 +202,7 @@ function Loading(props: React.PropsWithChildren<{}>) {
 }
 
 function Fail(props: React.PropsWithChildren<{}>) {
-    const t = useSnapshotI18N()
+    const t = useSnapshotTrans()
     const identifier = useContext(SnapshotContext)
     const retry = unstable_useCacheRefresh()
     const proposal = useProposal(identifier.id)

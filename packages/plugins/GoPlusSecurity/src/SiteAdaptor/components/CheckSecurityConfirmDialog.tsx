@@ -1,7 +1,7 @@
 import { Button, DialogContent, Stack, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { useGoPlusLabsI18N } from '../../locales/index.js'
+import { useGoPlusLabsTrans } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -34,7 +34,7 @@ interface Props {
     onClose(): void
 }
 function CheckSecurityConfirmDialog({ open, onClose }: Props) {
-    const t = useGoPlusLabsI18N()
+    const t = useGoPlusLabsTrans()
     const { classes } = useStyles()
 
     return (

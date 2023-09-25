@@ -1,6 +1,6 @@
 import { Box, Paper, Typography } from '@mui/material'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
-import { PluginI18NFieldRender, useActivatedPluginsSiteAdaptor, Widget } from '@masknet/plugin-infra/content-script'
+import { PluginTransFieldRender, useActivatedPluginsSiteAdaptor, Widget } from '@masknet/plugin-infra/content-script'
 
 export interface WidgetContentProps {
     onClose?: () => void
@@ -17,7 +17,7 @@ export function WidgetContent(props: WidgetContentProps) {
             {displayPlugins.map((x) => (
                 <Box key={x.ID}>
                     <Typography variant="h6" sx={{ mb: 1 }}>
-                        <PluginI18NFieldRender field={x.name} pluginID={x.ID} />
+                        <PluginTransFieldRender field={x.name} pluginID={x.ID} />
                     </Typography>
                     <Paper variant="outlined" sx={{ padding: 1 }}>
                         {x.Widgets?.map((y) => <Widget key={y.ID} pluginID={x.ID} name={y.name} />)}

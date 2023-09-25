@@ -13,7 +13,7 @@ import { toFixed } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Web3 } from '@masknet/web3-providers'
 import { PluginClaimMessage } from '../message.js'
-import { useClaimI18N } from '../locales/i18n_generated.js'
+import { useClaimTrans } from '../locales/i18n_generated.js'
 
 export function useClaimAirdrop(
     chainId: ChainId,
@@ -24,7 +24,7 @@ export function useClaimAirdrop(
     tokenAddress?: string,
 ) {
     const theme = useTheme()
-    const t = useClaimI18N()
+    const t = useClaimTrans()
     const { account, providerType, chainId: globalChainId } = useChainContext()
     const { CONTRACT_ADDRESS } = useAirdropClaimersConstants(chainId)
     const airdropContract = useContract<AirdropV2>(chainId, CONTRACT_ADDRESS, AirDropV2ABI as AbiItem[])

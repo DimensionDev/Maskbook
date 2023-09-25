@@ -3,7 +3,7 @@ import formatDistanceStrict from 'date-fns/formatDistanceStrict'
 import addSeconds from 'date-fns/addSeconds'
 import { makeStyles } from '@masknet/theme'
 import { type GasOptionType, getLocale, formatCurrency } from '@masknet/web3-shared-base'
-import { useSharedI18N } from '@masknet/shared'
+import { useSharedTrans } from '@masknet/shared'
 import { Typography, useTheme } from '@mui/material'
 import { CheckCircle, RadioButtonUnchecked } from '@mui/icons-material'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -53,7 +53,7 @@ export function GasOption(props: GasOptionProps) {
     const { type, option, lang, checked = false, onClick } = props
     const { classes } = useStyles()
     const theme = useTheme()
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { GAS_OPTION_NAMES } = SettingsContext.useContainer()
 
     const now = useMemo(() => {

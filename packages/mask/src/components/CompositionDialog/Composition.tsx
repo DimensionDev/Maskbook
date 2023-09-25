@@ -18,7 +18,7 @@ import { useSubmit } from './useSubmit.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 import { useCurrentPersona } from '../DataSource/useCurrentPersona.js'
 import { EncryptionMethodType } from './EncryptionMethodSelector.js'
-import { useMaskSharedI18N } from '../../utils/index.js'
+import { useMaskSharedTrans } from '../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     dialogRoot: {
@@ -49,7 +49,7 @@ export interface PostDialogProps {
 let openOnInitAnswered = false
 
 export function Composition({ type = 'timeline', requireClipboardPermission }: PostDialogProps) {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     const currentIdentity = useCurrentIdentity()?.identifier
     const allPersonas = usePersonasFromDB()

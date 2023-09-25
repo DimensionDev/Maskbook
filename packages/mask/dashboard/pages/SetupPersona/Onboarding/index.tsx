@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useMemo } from 'react'
-import { useDashboardI18N } from '../../../locales/i18n_generated.js'
+import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { Box, Typography, useTheme } from '@mui/material'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
@@ -74,7 +74,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Onboarding = memo(function Onboarding() {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const { classes } = useStyles()
 
     const [params] = useSearchParams()

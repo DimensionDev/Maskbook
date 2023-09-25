@@ -18,7 +18,7 @@ import { ProviderType } from '@masknet/web3-shared-evm'
 import { type ShowSnackbarOptions, type SnackbarKey, type SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
 import { Web3 } from '@masknet/web3-providers'
 import type { ManagerAccount } from '../type.js'
-import { useSmartPayI18N } from '../locales/index.js'
+import { useSmartPayTrans } from '../locales/index.js'
 import { PluginSmartPayMessages } from '../message.js'
 
 export function useDeploy(
@@ -30,7 +30,7 @@ export function useDeploy(
     onSuccess?: () => void,
 ) {
     const snackbarKeyRef = useRef<SnackbarKey>()
-    const t = useSmartPayI18N()
+    const t = useSmartPayTrans()
 
     const { TransactionWatcher, Transaction } = useWeb3State()
     const { signWithPersona, hasPaymentPassword, openPopupWindow } = useSiteAdaptorContext()

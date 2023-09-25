@@ -20,7 +20,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import type { z as zod } from 'zod'
 import Services from '#services'
-import { useMaskSharedI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { usePasswordForm } from '../hooks/usePasswordForm.js'
 import { queryClient } from '@masknet/shared-base-ui'
@@ -174,7 +174,7 @@ const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
 })
 
 const SetPaymentPassword = memo(function SetPaymentPassword() {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes } = useStyles()
     const navigate = useNavigate()
     const wallets = useWallets()

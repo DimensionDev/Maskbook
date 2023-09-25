@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
 import { Box, TextField, Typography, useTheme } from '@mui/material'
 import { useAsyncFn } from 'react-use'
 import { PersonaContext } from '@masknet/shared'
@@ -11,7 +11,7 @@ import { ActionButton } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 
 export const PersonaRenameModal = memo<ActionModalBaseProps>(function PersonaRenameModal() {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const theme = useTheme()
     const [name, setName] = useState('')
     const [error, setError] = useState('')

@@ -4,7 +4,7 @@ import { useAsync, useCopyToClipboard } from 'react-use'
 import { memo, useCallback, useState } from 'react'
 import Services from '#services'
 import { Icons } from '@masknet/icons'
-import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
 import { Box, Typography, alpha } from '@mui/material'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { WalletBalance } from '../index.js'
@@ -102,7 +102,7 @@ export interface PrimaryKeyDisplayProps {
 }
 
 export const PrivateKeyDisplay = memo<PrimaryKeyDisplayProps>(function PrivateKeyDisplay({ wallet, hiddenArrow }) {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const [display, toggle] = useToggle(false)
     const [expand, setExpand] = useState(!!hiddenArrow)
     const { classes, cx } = useStyles()

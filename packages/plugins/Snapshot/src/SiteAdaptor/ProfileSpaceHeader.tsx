@@ -8,7 +8,7 @@ import { SpaceMenu } from './SpaceMenu.js'
 import { resolveSnapshotSpacePageUrl } from './helpers.js'
 import { useCurrentAccountFollowSpaceList } from './hooks/useCurrentAccountFollowSpaceList.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { useSnapshotI18N } from '../locales/index.js'
+import { useSnapshotTrans } from '../locales/index.js'
 
 interface ProfileSpaceHeaderProps {
     spaceList: Array<DAOResult<ChainId.Mainnet>>
@@ -65,7 +65,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
     const { spaceList, currentSpace, setSpaceIndex, theme } = props
-    const t = useSnapshotI18N()
+    const t = useSnapshotTrans()
     const { classes } = useStyles()
     const [spaceMenuOpen, setSpaceMenuOpen] = useState(false)
     const spaceRef = useRef<HTMLDivElement>(null)

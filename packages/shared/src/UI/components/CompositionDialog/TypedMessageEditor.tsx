@@ -10,7 +10,7 @@ import { makeStyles } from '@masknet/theme'
 import { InputBase, Alert, Button, inputBaseClasses, alpha } from '@mui/material'
 import { useCallback, useImperativeHandle, useState, useRef, forwardRef, memo, useMemo, useEffect } from 'react'
 import { BadgeRenderer } from './BadgeRenderer.js'
-import { useSharedI18N } from '../../../index.js'
+import { useSharedTrans } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -83,7 +83,7 @@ export const TypedMessageEditor = memo(
     forwardRef<TypedMessageEditorRef, TypedMessageEditorProps>(function TypedMessageEditor(props, ref) {
         const { onChange, readonly } = props
         const { classes, cx } = useStyles()
-        const t = useSharedI18N()
+        const t = useSharedTrans()
 
         const [value, setValue] = useState(props.defaultValue ?? emptyMessage)
         const currentValue = useRef(value)

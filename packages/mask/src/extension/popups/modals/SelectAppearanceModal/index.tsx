@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { memo, useCallback, useMemo } from 'react'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
 import { Appearance } from '@masknet/public-api'
 import { List, ListItemButton, ListItemIcon, ListItemText, Radio } from '@mui/material'
 import { getEnumAsArray } from '@masknet/kit'
@@ -39,7 +39,7 @@ const APPEARANCE_ICON_MAP = {
 }
 
 export const SelectAppearanceModal = memo<ActionModalBaseProps>(function SelectAppearanceModal(...rest) {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes } = useStyles()
     const mode = useAppearance()
     const APPEARANCE_OPTIONS_MAP = useMemo(

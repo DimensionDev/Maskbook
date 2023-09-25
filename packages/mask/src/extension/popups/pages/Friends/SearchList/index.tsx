@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
 import { ContactCard } from '../ContactCard/index.js'
 import { Box } from '@mui/material'
-import { useMaskSharedI18N } from '../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
 import { EmptyStatus, RestorableScroll, ElementAnchor } from '@masknet/shared'
 import type { NextIDPersonaBindingsWithIdentifier } from '../../../hooks/index.js'
 
@@ -40,7 +40,7 @@ export interface SearchListProps {
 
 export const SearchList = memo<SearchListProps>(function SearchList({ searchResult, fetchNextPage, refetch }) {
     const { classes } = useStyles()
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     return searchResult.length === 0 ? (
         <EmptyStatus className={classes.empty}>{t('popups_encrypted_friends_search_no_result')}</EmptyStatus>
     ) : (

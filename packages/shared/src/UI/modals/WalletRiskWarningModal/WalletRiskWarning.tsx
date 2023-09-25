@@ -3,7 +3,7 @@ import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { getMaskColor, makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
-import { InjectedDialog, ActionButtonPromise, WalletStatusBox, useSharedI18N } from '@masknet/shared'
+import { InjectedDialog, ActionButtonPromise, WalletStatusBox, useSharedTrans } from '@masknet/shared'
 import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { useMatchXS } from '@masknet/shared-base-ui'
 import { useWeb3State } from '@masknet/web3-hooks-base'
@@ -65,7 +65,7 @@ interface WalletRiskWarningProps {
 }
 
 export function WalletRiskWarning({ account, open, pluginID, onClose }: WalletRiskWarningProps) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes, cx } = useStyles()
     const { showSnackbar } = useCustomSnackbar()
     const isMobile = useMatchXS()

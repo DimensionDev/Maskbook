@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Icons } from '@masknet/icons'
 import { getMaskColor, MaskDialog } from '@masknet/theme'
 import { Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
-import { useDashboardI18N } from '../../locales/index.js'
+import { useDashboardTrans } from '../../locales/index.js'
 
 export interface ConfirmSynchronizePasswordDialogProps {
     open: boolean
@@ -12,7 +12,7 @@ export interface ConfirmSynchronizePasswordDialogProps {
 
 export const ConfirmSynchronizePasswordDialog = memo<ConfirmSynchronizePasswordDialogProps>(
     function ConfirmSynchronizePasswordDialog({ open, onClose, onConform }) {
-        const t = useDashboardI18N()
+        const t = useDashboardTrans()
 
         return (
             <MaskDialog open={open} title={t.cloud_backup()} onClose={onClose} maxWidth="xs">

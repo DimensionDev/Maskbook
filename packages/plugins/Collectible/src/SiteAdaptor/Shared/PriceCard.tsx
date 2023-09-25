@@ -2,7 +2,7 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Skeleton, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useCollectibleI18N } from '../../locales/i18n_generated.js'
+import { useCollectibleTrans } from '../../locales/i18n_generated.js'
 import { type NonFungibleTokenOrder, formatBalance, formatCurrency, isZero } from '@masknet/web3-shared-base'
 import { SourceProviderSwitcher } from '@masknet/shared'
 import { Context } from '../Context/index.js'
@@ -58,7 +58,7 @@ export interface PriceCardProps {
 export function PriceCard(props: PriceCardProps) {
     const { topListing } = props
     const { setSourceType, sourceType = topListing?.source, orders } = Context.useContainer()
-    const t = useCollectibleI18N()
+    const t = useCollectibleTrans()
     const { classes } = useStyles()
     if (((!topListing && orders.error) || orders.isLoading) && !sourceType) return null
 

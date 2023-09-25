@@ -7,7 +7,7 @@ import {
     Telegram as TelegramIcon,
     Twitter as TwitterIcon,
 } from '@mui/icons-material'
-import { useDashboardI18N } from '../../locales/index.js'
+import { useDashboardTrans } from '../../locales/index.js'
 import { Version } from './Version.js'
 import links from './links.json'
 import { ABOUT_DIALOG_BACKGROUND } from '../../assets/index.js'
@@ -89,7 +89,7 @@ function MaskTitleIcon() {
 
 export function About() {
     const { classes } = useStyles()
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     return (
         <>
             <section className={classes.wrapper}>

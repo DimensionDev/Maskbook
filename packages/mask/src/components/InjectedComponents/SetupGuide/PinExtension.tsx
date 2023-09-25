@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { Extension as ExtensionIcon } from '@mui/icons-material'
 import { Box, Button, Typography } from '@mui/material'
-import { useMaskSharedI18N } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../utils/index.js'
 import { useFindUsernameStyles } from './FindUsername.js'
 import { WizardDialog } from './WizardDialog.js'
 import { SetupGuideStep } from '@masknet/shared-base'
@@ -14,7 +14,7 @@ interface PinExtensionProps {
 export function PinExtension({ onDone, onClose }: PinExtensionProps) {
     const pinImg = new URL('../../../resources/extensionPinned.png', import.meta.url).toString()
     const { classes } = useFindUsernameStyles()
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
 
     return (
         <WizardDialog

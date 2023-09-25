@@ -3,7 +3,7 @@ import { useInterval } from 'react-use'
 import isAfter from 'date-fns/isAfter'
 import format from 'date-fns/format'
 import isBefore from 'date-fns/isBefore'
-import { ClaimTrans, useClaimI18N } from '../../../locales/i18n_generated.js'
+import { ClaimTrans, useClaimTrans } from '../../../locales/i18n_generated.js'
 import { ActionButton, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { Box, Typography, alpha } from '@mui/material'
 import { useChainContext, useFungibleToken, useNetworkDescriptor } from '@masknet/web3-hooks-base'
@@ -108,7 +108,7 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
         eventIndex,
         onClaimSuccess,
     }) => {
-        const t = useClaimI18N()
+        const t = useClaimTrans()
         const { classes } = useStyles()
         const { account, providerType } = useChainContext()
         const [now, setNow] = useState(new Date())

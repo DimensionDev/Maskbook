@@ -10,7 +10,7 @@ import { ActionButton, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { useWallet } from '@masknet/web3-hooks-base'
 import { encodeText } from '@masknet/kit'
 import { useTitle } from '../../../hooks/index.js'
-import { useMaskSharedI18N } from '../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import Services from '#services'
 import { NormalHeader } from '../../../components/index.js'
@@ -55,7 +55,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const ExportPrivateKey = memo(function ExportPrivateKey() {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const theme = useTheme()
     const { classes } = useStyles()
     const wallet = useWallet()

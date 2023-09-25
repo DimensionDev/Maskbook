@@ -13,7 +13,7 @@ import {
 import { Web3 } from '@masknet/web3-providers'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { useWeb3ProfileI18N } from '../../locales/i18n_generated.js'
+import { useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -54,7 +54,7 @@ export interface HandlerDescriptionProps extends withClasses<'container'> {
 }
 
 export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
-    const t = useWeb3ProfileI18N()
+    const t = useWeb3ProfileTrans()
     const { classes } = useStyles(undefined, { props })
     const { pluginID } = useNetworkContext()
     const wallet = useWallet()

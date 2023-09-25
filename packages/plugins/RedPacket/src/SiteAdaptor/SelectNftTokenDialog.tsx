@@ -12,7 +12,7 @@ import { Icons } from '@masknet/icons'
 import { Web3 } from '@masknet/web3-providers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { RED_PACKET_MAX_SHARES } from '../constants.js'
-import { RedPacketTrans, useRedPacketI18N } from '../locales/index.js'
+import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
 
 interface StyleProps {
     isSelectSharesExceed: boolean
@@ -239,7 +239,7 @@ export interface SelectNftTokenDialogProps {
 export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const { contract, existTokenDetailedList, tokenDetailedOwnerList, setExistTokenDetailedList, onClose } = props
     const theme = useTheme()
-    const t = useRedPacketI18N()
+    const t = useRedPacketTrans()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [searchedTokenDetailedList, setSearchedTokenDetailedList] = useState<OrderedERC721Token[]>()
     const [searched, setSearched] = useState(false)

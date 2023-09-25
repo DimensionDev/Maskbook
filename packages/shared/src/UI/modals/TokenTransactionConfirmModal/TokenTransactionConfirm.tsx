@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { TokenTransactionConfirmModal, useSharedI18N, type TokenTransactionConfirmModalProps } from '../../../index.js'
+import { TokenTransactionConfirmModal, useSharedTrans, type TokenTransactionConfirmModalProps } from '../../../index.js'
 
 export interface TransactionConfirmProps extends TokenTransactionConfirmModalProps {
     shareText: string
@@ -12,7 +12,7 @@ export interface TransactionConfirmProps extends TokenTransactionConfirmModalPro
     onClose: () => void
 }
 export function TransactionConfirm({ onSubmit, shareText, share, ...rest }: TransactionConfirmProps) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const handleConfirm = useCallback(() => {
         share?.(shareText)
         onSubmit?.()

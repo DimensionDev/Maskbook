@@ -5,7 +5,7 @@ import type { PluginID } from '@masknet/shared-base'
 import { useIsMinimalMode, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -23,7 +23,7 @@ interface PluginEnableBoundaryProps extends withClasses<'root'> {
 }
 
 export const PluginEnableBoundary = memo<PluginEnableBoundaryProps>((props) => {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { children, pluginID } = props
     const { classes } = useStyles(undefined, { props })
     const { setPluginMinimalModeEnabled } = useSiteAdaptorContext()

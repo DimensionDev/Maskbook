@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next'
 import type { I18NFieldOrReactNode, I18NStringField } from '../types.js'
 
-export interface PluginI18NFieldRenderProps {
+export interface PluginTransFieldRenderProps {
     field: I18NFieldOrReactNode
     pluginID: string
 }
-export function PluginI18NFieldRender({ pluginID, field }: PluginI18NFieldRenderProps) {
+export function PluginTransFieldRender({ pluginID, field }: PluginTransFieldRenderProps) {
     const [t] = useTranslation()
     if (!field) return null
     if (typeof field === 'object' && 'fallback' in field) {
@@ -17,7 +17,7 @@ export function PluginI18NFieldRender({ pluginID, field }: PluginI18NFieldRender
     }
     return <>{field}</>
 }
-export function usePluginI18NField() {
+export function usePluginTransField() {
     const [t] = useTranslation()
     return function (pluginID: string, field: I18NStringField) {
         if (!field.i18nKey) return field.fallback

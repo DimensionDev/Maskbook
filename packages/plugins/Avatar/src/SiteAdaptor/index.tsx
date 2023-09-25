@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
-import { type Plugin, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { type Plugin, PluginTransFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, Web3ContextProvider } from '@masknet/web3-hooks-base'
@@ -48,7 +48,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 RenderEntryComponent(EntryComponentProps) {
                     return (
                         <ApplicationEntry
-                            title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
+                            title={<PluginTransFieldRender field={name} pluginID={base.ID} />}
                             icon={icon}
                             recommendFeature={recommendFeature}
                             {...EntryComponentProps}

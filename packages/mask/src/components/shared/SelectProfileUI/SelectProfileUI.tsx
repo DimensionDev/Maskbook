@@ -7,7 +7,7 @@ import { Fuse } from '@masknet/web3-providers'
 import { Box, Checkbox, InputAdornment, InputBase, Stack, Typography } from '@mui/material'
 import { compact, uniqBy } from 'lodash-es'
 import { startTransition, useCallback, useDeferredValue, useMemo, useState } from 'react'
-import { useMaskSharedI18N } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../utils/index.js'
 import { ProfileInList } from '../SelectRecipients/ProfileInList.js'
 import { useContacts } from '../SelectRecipients/useContacts.js'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
@@ -69,7 +69,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function SelectProfileUI(props: SelectProfileUIProps) {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes, cx } = useStyles(undefined, { props })
     const { frozenSelected, onSetSelected, disabled, items, selected } = props
     const [search, setSearch] = useState('')

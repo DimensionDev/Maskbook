@@ -11,7 +11,7 @@ import { PopoverListItem } from './PopoverListItem.js'
 import { E2EUnavailableReason } from './CompositionUI.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
-import { useMaskSharedI18N } from '../../utils/index.js'
+import { useMaskSharedTrans } from '../../utils/index.js'
 import Services from '#services'
 
 const useStyles = makeStyles()((theme) => ({
@@ -57,7 +57,7 @@ export interface EncryptionTargetSelectorProps {
     selectedRecipientLength: number
 }
 export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes } = useStyles()
 
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)

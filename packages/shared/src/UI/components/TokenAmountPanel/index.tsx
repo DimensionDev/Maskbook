@@ -6,7 +6,7 @@ import { NUMERIC_INPUT_REGEXP_PATTERN } from '@masknet/shared-base'
 import { type FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { SelectTokenChip, type SelectTokenChipProps } from '../SelectTokenChip/index.js'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 import { FormattedBalance } from '../../wallet/index.js'
 
 const MIN_AMOUNT_LENGTH = 1
@@ -80,7 +80,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
         disableBalance = false,
         MaxChipProps,
     } = props
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes, cx } = useStyles(undefined, { props })
 
     // #region update amount by self

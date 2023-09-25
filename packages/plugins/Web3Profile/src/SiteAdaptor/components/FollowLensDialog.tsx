@@ -16,7 +16,7 @@ import { FollowModuleType } from '@masknet/web3-providers/types'
 import { formatBalance, isLessThan, isSameAddress, resolveIPFS_URL, ZERO } from '@masknet/web3-shared-base'
 import { ChainId, createERC20Token, formatAmount, ProviderType } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Button, buttonClasses, CircularProgress, DialogContent, Typography } from '@mui/material'
-import { Web3ProfileTrans, useWeb3ProfileI18N } from '../../locales/i18n_generated.js'
+import { Web3ProfileTrans, useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
 import { getLensterLink } from '../../utils.js'
 import { useFollow } from '../hooks/Lens/useFollow.js'
 import { useUnfollow } from '../hooks/Lens/useUnfollow.js'
@@ -108,7 +108,7 @@ interface Props {
 let task: Promise<void> | undefined
 
 export function FollowLensDialog({ handle, onClose }: Props) {
-    const t = useWeb3ProfileI18N()
+    const t = useWeb3ProfileTrans()
 
     const wallet = useWallet()
     const [isFollowing, setIsFollowing] = useState(false)

@@ -7,7 +7,7 @@ import { ChainResolver } from '@masknet/web3-providers'
 import type { SecurityAPI } from '@masknet/web3-providers/types'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { WalletIcon, useMenuConfig } from '@masknet/shared'
-import { useGoPlusLabsI18N } from '../../locales/index.js'
+import { useGoPlusLabsTrans } from '../../locales/index.js'
 import { useSupportedChains } from '../hooks/useSupportedChains.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -54,7 +54,7 @@ function getChainName(chain?: SecurityAPI.SupportedChain<ChainId>) {
 }
 
 export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
-    const t = useGoPlusLabsI18N()
+    const t = useGoPlusLabsTrans()
     const { classes } = useStyles()
     const [selectedChain, setSelectedChain] = useState<
         SecurityAPI.SupportedChain<ChainId> & {

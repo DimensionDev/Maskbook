@@ -19,7 +19,7 @@ import { NFTAvatarPicker } from '../../../components/NFTAvatarPicker/index.js'
 import { useVerifiedWallets, useTitle } from '../../../hooks/index.js'
 import Services from '#services'
 import { MAX_FILE_SIZE } from '../../../constants.js'
-import { useMaskSharedI18N } from '../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     tabs: {
@@ -67,7 +67,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const PersonaAvatarSetting = memo(function PersonaAvatar() {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const editor = useRef<AvatarEditor | null>(null)
     const navigate = useNavigate()
     const modalNavigate = useModalNavigate()

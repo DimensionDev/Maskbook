@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
-import { useRSS3I18N } from '../../../locales/index.js'
+import { useRSS3Trans } from '../../../locales/index.js'
 import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useFeedOwner } from '../../contexts/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
@@ -82,7 +82,7 @@ const contextMap: Partial<
  */
 export function TokenOperationCard({ feed, ...rest }: TokenFeedCardProps) {
     const { verbose } = rest
-    const t = useRSS3I18N()
+    const t = useRSS3Trans()
     const { classes, cx } = useStyles()
 
     const action = feed.actions.find((x) => x.address_from && x.address_to) || feed.actions[0]

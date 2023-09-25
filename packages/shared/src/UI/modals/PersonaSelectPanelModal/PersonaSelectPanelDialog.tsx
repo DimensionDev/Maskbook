@@ -1,7 +1,7 @@
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { PersonaSelectPanel, type PositionOption } from '../../components/PersonaSelectPanel/index.js'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 import { InjectedDialog } from '../../contexts/components/InjectedDialog.js'
 
 type PositionStyle = {
@@ -59,7 +59,7 @@ export function PersonaSelectPanelDialog({
     finishTarget,
     onClose,
 }: PersonaSelectPanelDialogProps) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
 
     const { classes } = useStyles({ positionStyle: positionStyleMap[position] })
 

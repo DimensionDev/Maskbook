@@ -5,13 +5,13 @@ import { Box, ListItem, Typography } from '@mui/material'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { useMaskSharedI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { useStyles } from './useStyles.js'
 import { useQuery } from '@tanstack/react-query'
 import Services from '#services'
 
 export function ChangeOwner() {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes, cx, theme } = useStyles()
     const navigate = useNavigate()
     const wallet = useWallet()

@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { useSharedI18N } from '@masknet/shared'
+import { useSharedTrans } from '@masknet/shared'
 import { Typography } from '@mui/material'
 import { formatBalance, multipliedBy } from '@masknet/web3-shared-base'
 import { Section } from './Section.js'
@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => {
 export interface SlippageToleranceSectionProps {}
 
 export function SlippageToleranceSection(props: SlippageToleranceSectionProps) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes } = useStyles()
     const { DEFAULT_SLIPPAGE_TOLERANCES, slippageTolerance, setSlippageTolerance } = SettingsContext.useContainer()
 

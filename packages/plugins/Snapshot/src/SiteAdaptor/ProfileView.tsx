@@ -23,7 +23,7 @@ import { ContentTabs } from '../types.js'
 import { useProposalList } from './hooks/useProposalList.js'
 import { ProfileProposalList } from './ProfileProposalList.js'
 import { useSpace } from './hooks/useSpace.js'
-import { useSnapshotI18N } from '../locales/index.js'
+import { useSnapshotTrans } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -72,7 +72,7 @@ export interface ProfileViewProps extends withClasses<'content' | 'footer'> {
 export function ProfileView(props: ProfileViewProps) {
     const { ProfileCardProps, spaceList } = props
     const { classes } = useStyles(undefined, { props })
-    const t = useSnapshotI18N()
+    const t = useSnapshotTrans()
     const theme = useTheme()
     const [currentTab, , , setTab] = useTabs<ContentTabs>(
         ContentTabs.All,

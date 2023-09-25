@@ -6,7 +6,7 @@ import { PluginWalletStatusBar, InjectedDialog, WalletConnectedBoundary } from '
 import { formatCount } from '@masknet/web3-shared-base'
 import { ExplorerResolver } from '@masknet/web3-providers'
 import { InfoField } from './InformationCard.js'
-import { useSnapshotI18N } from '../locales/index.js'
+import { useSnapshotTrans } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -45,7 +45,7 @@ interface VoteConfirmDialogProps {
 
 export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
     const { open, onClose, onVoteConfirm, choiceText, snapshot, powerSymbol, power = 0, loading, chainId } = props
-    const t = useSnapshotI18N()
+    const t = useSnapshotTrans()
 
     const { classes } = useStyles()
     return (

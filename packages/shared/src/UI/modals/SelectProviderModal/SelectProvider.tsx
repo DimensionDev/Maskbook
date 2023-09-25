@@ -1,6 +1,6 @@
 import { delay, getEnumAsArray } from '@masknet/kit'
 import { getRegisteredWeb3Providers } from '@masknet/plugin-infra'
-import { ConnectWalletModal, InjectedDialog, useSharedI18N } from '@masknet/shared'
+import { ConnectWalletModal, InjectedDialog, useSharedTrans } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
@@ -32,7 +32,7 @@ export interface SelectProviderProps {
 }
 export const SelectProvider = memo(function SelectProvider(props: SelectProviderProps) {
     const { open, requiredSupportPluginID, requiredSupportChainIds, onConnect, onClose, createWallet } = props
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes } = useStyles()
 
     const onProviderIconClicked = useCallback(

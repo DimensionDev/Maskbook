@@ -3,7 +3,7 @@ import { Stack, Typography } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useDimension, usePriceLineChart, type Dimension } from '@masknet/shared'
-import { useTraderI18N } from '../../locales/index.js'
+import { useTraderTrans } from '../../locales/index.js'
 import type { Coin, Currency, Stat } from '../../types/index.js'
 
 const DEFAULT_DIMENSION: Dimension = {
@@ -50,7 +50,7 @@ export interface PriceChartProps extends withClasses<'root'> {
 }
 
 export function PriceChart(props: PriceChartProps) {
-    const t = useTraderI18N()
+    const t = useTraderTrans()
     const { classes } = useStyles(props, { props })
     const rootRef = useRef<HTMLDivElement>(null)
     const svgRef = useRef<SVGSVGElement>(null)

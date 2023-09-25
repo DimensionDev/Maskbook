@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from 'react'
 import { Route, Routes, Navigate, HashRouter } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { useDashboardI18N } from '../locales/index.js'
+import { useDashboardTrans } from '../locales/index.js'
 import { TermsGuard } from './TermsGuard.js'
 import { DashboardFrame } from '../components/DashboardFrame/index.js'
 import { Modals } from '../modals/index.js'
@@ -13,7 +13,7 @@ const PrivacyPolicy = lazy(() => import('./PrivacyPolicy/index.js'))
 const CreateWallet = lazy(() => import('./CreateMaskWallet/index.js'))
 
 export function Pages() {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
 
     return (
         <Suspense fallback={null}>

@@ -12,7 +12,7 @@ import {
     SelectableFile,
     UploadingFile,
 } from './Files/index.js'
-import { FileServiceTrans, useFileServiceI18N } from '../../locales/index.js'
+import { FileServiceTrans, useFileServiceTrans } from '../../locales/index.js'
 import { useFileManagement } from '../contexts/index.js'
 import { PluginFileServiceRPC } from '../../Worker/rpc.js'
 import { ConfirmModal, RenameModal } from '../modals/index.js'
@@ -56,7 +56,7 @@ interface FileListProps extends FileListBaseProps, Pick<ManageableFileProps, 'on
 }
 
 export function FileList({ files, onLoadMore, className, onDownload, onSend, ...rest }: FileListProps) {
-    const t = useFileServiceI18N()
+    const t = useFileServiceTrans()
     const { classes, cx } = useStyles()
     const { uploadStateMap, refetchFiles } = useFileManagement()
 

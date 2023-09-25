@@ -1,9 +1,9 @@
 import { MaskColorVar } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
-import { useGoPlusLabsI18N } from '../../locales/index.js'
+import { useGoPlusLabsTrans } from '../../locales/index.js'
 
 export function NotFound() {
-    const t = useGoPlusLabsI18N()
+    const t = useGoPlusLabsTrans()
     return (
         <Stack justifyContent="flex-start" alignItems="flex-start">
             <Typography fontSize={12} color={MaskColorVar.orangeMain}>

@@ -2,7 +2,7 @@ import { memo, useState } from 'react'
 import { Box, DialogContent, Button } from '@mui/material'
 import { makeStyles, MaskDialog } from '@masknet/theme'
 import { Others } from '@masknet/web3-providers'
-import { useNextID_I18N } from '../locales/index.js'
+import { useNextID_Trans } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -45,7 +45,7 @@ export enum DialogTabs {
 }
 
 export const UnbindConfirm = memo<UnbindConfirmProps>(({ onClose, unbindAddress, onConfirm }) => {
-    const t = useNextID_I18N()
+    const t = useNextID_Trans()
     const { classes } = useStyles()
 
     const [isVisible, setVisible] = useState(true)

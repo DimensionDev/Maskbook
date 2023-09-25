@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogActions, DialogContent, dialogClasses } from '@mui/material'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 import { InjectedDialog, type InjectedDialogProps } from '../../contexts/index.js'
 
 const useStyles = makeStyles<number | undefined>()((theme, maxWidth) => ({
@@ -33,7 +33,7 @@ export interface ConfirmProps extends Omit<InjectedDialogProps, 'title' | 'onSub
 }
 
 export function Confirm({ title, confirmLabel, content, onSubmit, maxWidthOfContent, ...rest }: ConfirmProps) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes } = useStyles(maxWidthOfContent)
 
     return (

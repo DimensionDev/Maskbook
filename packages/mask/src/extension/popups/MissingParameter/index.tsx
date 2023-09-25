@@ -1,8 +1,8 @@
 import { Card, CardContent, Typography } from '@mui/material'
-import { useMaskSharedI18N } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../utils/index.js'
 
 export function MissingParameter(props: { message: string }) {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     return (
         <Card>
             <CardContent>

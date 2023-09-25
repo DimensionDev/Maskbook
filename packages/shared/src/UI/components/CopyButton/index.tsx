@@ -3,7 +3,7 @@ import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { Link, type LinkProps } from '@mui/material'
 import { memo, useCallback, useRef, useState, type MouseEvent } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { useSharedI18N } from '../../../index.js'
+import { useSharedTrans } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     copy: {
@@ -34,7 +34,7 @@ export const CopyButton = memo<CopyButtonProps>(function CopyButton({
     className,
     ...props
 }) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes, cx, theme } = useStyles(undefined, { props })
 
     const [, copyToClipboard] = useCopyToClipboard()

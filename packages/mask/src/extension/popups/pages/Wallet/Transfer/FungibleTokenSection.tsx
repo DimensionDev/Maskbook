@@ -25,7 +25,7 @@ import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
-import { formatTokenBalance, useMaskSharedI18N } from '../../../../../utils/index.js'
+import { formatTokenBalance, useMaskSharedTrans } from '../../../../../utils/index.js'
 import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
 import { TokenPicker } from '../../../components/index.js'
 import { useTokenParams, PopupContext } from '../../../hooks/index.js'
@@ -89,7 +89,7 @@ const ERC20_GAS_LIMIT = '50000'
 // Change chain in SelectNetworkSidebar is pending status, but it should affect ContactsContext
 const PENDING_CHAIN_ID = 'pendingChainId'
 export const FungibleTokenSection = memo(function FungibleTokenSection() {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes } = useStyles()
     const { chainId, address, params, setParams } = useTokenParams()
     const { smartPayChainId } = PopupContext.useContainer()

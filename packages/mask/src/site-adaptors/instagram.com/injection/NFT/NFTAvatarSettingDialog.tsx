@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useMount } from 'react-use'
-import { useMaskSharedI18N } from '../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../utils/index.js'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import {
     toPNG,
@@ -30,7 +30,7 @@ const useStyles = makeStyles()(() => ({
 }))
 
 export function NFTAvatarSettingDialog() {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const [open, setOpen] = useState(false)
     const { classes } = useStyles()
     const { account } = useChainContext()

@@ -10,7 +10,7 @@ import { ApplicationSettingTabs } from './ApplicationBoardDialog.js'
 import { ApplicationSettingPluginList } from './ApplicationSettingPluginList.js'
 import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch.js'
 import { ApplicationBoardContent } from './ApplicationBoard.js'
-import { useSharedI18N, type PersonaPerSiteConnectStatus } from '../../../index.js'
+import { useSharedTrans, type PersonaPerSiteConnectStatus } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     applicationWrapper: {
@@ -57,7 +57,7 @@ export interface ApplicationBoardFormProps {
 }
 
 export function ApplicationBoardForm(props: ApplicationBoardFormProps) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const [openSettings, setOpenSettings] = useState(false)
     const [currentTab, onChange, tabs, setTab] = useTabs(
         ApplicationSettingTabs.pluginList,

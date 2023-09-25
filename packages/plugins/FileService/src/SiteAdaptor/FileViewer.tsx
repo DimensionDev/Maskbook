@@ -6,7 +6,7 @@ import { DisplayingFileList } from './components/FileList.js'
 import { useCallback } from 'react'
 import { PluginFileServiceRPC } from '../Worker/rpc.js'
 import { downloadFile } from '../helpers.js'
-import { useFileServiceI18N } from '../locales/i18n_generated.js'
+import { useFileServiceTrans } from '../locales/i18n_generated.js'
 
 const useStyles = makeStyles()({
     file: {
@@ -25,7 +25,7 @@ const useStyles = makeStyles()({
 export function FileViewer({ files }: { files: FileInfo[] }) {
     usePluginWrapper(true)
     const { classes } = useStyles()
-    const t = useFileServiceI18N()
+    const t = useFileServiceTrans()
 
     const { showSnackbar } = useCustomSnackbar()
     const handleSave = useCallback(

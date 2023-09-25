@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { useMaskSharedI18N } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../utils/index.js'
 import { AdditionalContent } from '../AdditionalPostContent.js'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import { useAuthorDifferentMessage } from './authorDifferentMessage.js'
@@ -13,7 +13,7 @@ export interface DecryptPostFailedProps {
 }
 export const DecryptPostFailed = memo(function DecryptPostFailed(props: DecryptPostFailedProps) {
     const { author, postedBy, error } = props
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
 
     return (
         <AdditionalContent

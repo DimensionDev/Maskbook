@@ -4,7 +4,7 @@ import { CardContent, Stack, Typography } from '@mui/material'
 import { TrendingViewContext } from './context.js'
 import { PluginDescriptor } from './PluginDescriptor.js'
 import { TrendingCard, type TrendingCardProps } from './TrendingCard.js'
-import { useTraderI18N } from '../../locales/index.js'
+import { useTraderTrans } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -28,7 +28,7 @@ export function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
     const { TrendingCardProps, children } = props
     const { isCollectionProjectPopper, isProfilePage, isTokenTagPopper } = useContext(TrendingViewContext)
     const { classes } = useStyles(undefined, { props })
-    const t = useTraderI18N()
+    const t = useTraderTrans()
 
     return (
         <TrendingCard {...TrendingCardProps}>

@@ -4,7 +4,7 @@ import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { resolveResourceURL } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import { RSS3Trans } from '../../../locales/i18n_generated.js'
-import { useRSS3I18N } from '../../../locales/index.js'
+import { useRSS3Trans } from '../../../locales/index.js'
 import { useFeedOwner } from '../../contexts/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
@@ -59,7 +59,7 @@ interface StakingFeedCardProps extends Omit<FeedCardProps, 'feed'> {
  */
 export function StakingCard({ feed, ...rest }: StakingFeedCardProps) {
     const { verbose } = rest
-    const t = useRSS3I18N()
+    const t = useRSS3Trans()
     const { classes, cx } = useStyles()
 
     const action = feed.actions.find((x) => x.type === Type.Staking)

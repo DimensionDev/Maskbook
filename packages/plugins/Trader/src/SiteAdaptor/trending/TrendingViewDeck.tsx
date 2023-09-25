@@ -46,7 +46,7 @@ import { TrendingCard, type TrendingCardProps } from './TrendingCard.js'
 import { TrendingViewDescriptor } from './TrendingViewDescriptor.js'
 import { CoinIcon } from './CoinIcon.js'
 import { TrendingViewContext } from './context.js'
-import { useTraderI18N } from '../../locales/index.js'
+import { useTraderTrans } from '../../locales/index.js'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -186,7 +186,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const { anchorEl, anchorBounding } = useAnchor()
     const [timer, setTimer] = useState<ReturnType<typeof setTimeout>>()
 
-    const t = useTraderI18N()
+    const t = useTraderTrans()
     const theme = useTheme()
     const { classes } = useStyles({ isTokenTagPopper, isCollectionProjectPopper }, { props })
     const isNFT = coin.type === TokenType.NonFungible

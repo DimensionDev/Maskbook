@@ -5,7 +5,7 @@ import { useWeb3Others } from '@masknet/web3-hooks-base'
 import { SourceType } from '@masknet/web3-shared-base'
 import { Box, type BoxProps } from '@mui/material'
 import { memo, useCallback, useMemo, useRef } from 'react'
-import { useSharedI18N } from '../../../index.js'
+import { useSharedTrans } from '../../../index.js'
 import { ReloadStatus } from '../index.js'
 import { CollectibleItem, type ChangeEventOptions, type SelectableProps } from './CollectibleItem.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
@@ -82,7 +82,7 @@ export const CollectibleList = memo(function CollectibleList(props: CollectibleL
         className,
         ...rest
     } = props
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes, cx } = useStyles({ columns, gap })
     const Others = useWeb3Others()
 

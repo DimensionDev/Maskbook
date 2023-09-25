@@ -1,6 +1,6 @@
 import { Box, InputBase, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useRedPacketI18N } from '../locales/index.js'
+import { useRedPacketTrans } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -31,7 +31,7 @@ export interface RedpacketMessagePanelProps {
 export function RedpacketMessagePanel(props: RedpacketMessagePanelProps) {
     const { onChange, message } = props
     const { classes, cx } = useStyles()
-    const t = useRedPacketI18N()
+    const t = useRedPacketTrans()
 
     return (
         <Box className={classes.root}>

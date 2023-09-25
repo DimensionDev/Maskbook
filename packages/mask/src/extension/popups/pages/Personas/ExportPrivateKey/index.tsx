@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react'
 import { useTitle } from '../../../hooks/index.js'
-import { useMaskSharedI18N } from '../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
 import { Box, Button, Link, Typography, useTheme } from '@mui/material'
 
 import { PersonaContext } from '@masknet/shared'
@@ -13,7 +13,7 @@ import { DashboardRoutes, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
 
 const ExportPrivateKey = memo(function ExportPrivateKey() {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const theme = useTheme()
     const navigate = useNavigate()
     const { currentPersona } = PersonaContext.useContainer()

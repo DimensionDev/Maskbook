@@ -12,7 +12,7 @@ import {
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { LeavePageConfirmModal, PersonaSelectPanelModal } from '../UI/modals/index.js'
-import { useSharedI18N } from '../locales/index.js'
+import { useSharedTrans } from '../locales/index.js'
 import type { PersonaConnectStatus } from '../types.js'
 
 const DEFAULT_PERSONA_CONNECT_STATUS: PersonaConnectStatus = {
@@ -30,7 +30,7 @@ export function useCurrentPersonaConnectStatus(
     openDashboard?: (route?: DashboardRoutes, search?: string) => void,
     identity?: IdentityResolved,
 ) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
 
     const create = useCallback((target?: string, position?: 'center' | 'top-right', _?: boolean, direct = false) => {
         if (direct) {

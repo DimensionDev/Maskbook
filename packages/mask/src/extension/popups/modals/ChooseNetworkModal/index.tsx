@@ -10,7 +10,7 @@ import { formatBalance, type ReasonableNetwork } from '@masknet/web3-shared-base
 import { ProviderType, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { ActionModal, useActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     networkList: {
@@ -128,7 +128,7 @@ const NetworkItem = memo(function NetworkItem({ network, currentNetworkId }: Net
 })
 
 export const ChooseNetworkModal = memo(function ChooseNetworkModal({ ...rest }: ActionModalBaseProps) {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes } = useStyles()
     const navigate = useNavigate()
     const network = useNetwork(NetworkPluginID.PLUGIN_EVM)

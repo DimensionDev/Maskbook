@@ -17,7 +17,7 @@ import {
     FormattedAddress,
     WalletIcon,
     SelectProviderModal,
-    useSharedI18N,
+    useSharedTrans,
     WalletStatusModal,
     CopyButton,
 } from '@masknet/shared'
@@ -110,7 +110,7 @@ export interface WalletStatusBox {
     closeDialog?: () => void
 }
 export function WalletStatusBox(props: WalletStatusBox) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const providerDescriptor = useProviderDescriptor<'all'>()
     const theme = useTheme()
     const { classes, cx } = useStyles({

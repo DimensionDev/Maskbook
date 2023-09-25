@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from 'react'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { makeStyles, MaskTextField, MaskAlert } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { useSharedI18N } from '@masknet/shared'
+import { useSharedTrans } from '@masknet/shared'
 import { Box, Paper } from '@mui/material'
 import { isZero } from '@masknet/web3-shared-base'
 import { NUMERIC_INPUT_REGEXP_PATTERN } from '@masknet/shared-base'
@@ -37,7 +37,7 @@ export interface SlippageToleranceFormProps {
 
 export function SlippageToleranceForm(props: SlippageToleranceFormProps) {
     const { slippageTolerance, slippageTolerances, onChange } = props
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes } = useStyles()
 
     const schema = useSlippageToleranceSchema()

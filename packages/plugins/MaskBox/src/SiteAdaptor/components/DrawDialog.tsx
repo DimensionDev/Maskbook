@@ -20,7 +20,7 @@ import { formatBalance, formatCurrency, multipliedBy } from '@masknet/web3-share
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { BoxInfo } from '../../type.js'
 import { Context } from '../../hooks/useContext.js'
-import { useMaskBoxI18N } from '../../locales/index.js'
+import { useMaskBoxTrans } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -96,7 +96,7 @@ export function DrawDialog(props: DrawDialogProps) {
     const { boxInfo, open, drawing, onClose, onSubmit } = props
     const { classes } = useStyles()
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
-    const t = useMaskBoxI18N()
+    const t = useMaskBoxTrans()
 
     const {
         paymentCount,

@@ -9,7 +9,7 @@ import { formatPersonaFingerprint, type BindingProof } from '@masknet/shared-bas
 import { useTheme } from '@mui/system'
 import { CopyButton, EmptyStatus } from '@masknet/shared'
 import { ConnectedAccounts } from './ConnectAccounts/index.js'
-import { useMaskSharedI18N } from '../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -95,7 +95,7 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
     const { classes } = useStyles()
     const navigate = useNavigate()
     const handleBack = useCallback(() => navigate(-1), [])
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const theme = useTheme()
     return (
         <Box display="flex" flexDirection="column" alignItems="center" width="100%" className={classes.container}>

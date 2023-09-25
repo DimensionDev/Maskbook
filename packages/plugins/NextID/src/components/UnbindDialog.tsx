@@ -18,7 +18,7 @@ import { useWalletSign } from '../hooks/useWalletSign.js'
 import { useBindPayload } from '../hooks/useBindPayload.js'
 import { UnbindPanelUI } from './UnbindPanelUI.js'
 import { UnbindConfirm } from './UnbindConfirm.js'
-import { useNextID_I18N } from '../locales/index.js'
+import { useNextID_Trans } from '../locales/index.js'
 
 interface VerifyWalletDialogProps {
     unbindAddress: string
@@ -29,7 +29,7 @@ interface VerifyWalletDialogProps {
 }
 
 export const UnbindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onClose, persona, onUnBound, bounds }) => {
-    const t = useNextID_I18N()
+    const t = useNextID_Trans()
 
     const { showSnackbar } = useCustomSnackbar()
     const [openSecondDialog, setSecondDialog] = useState(false)

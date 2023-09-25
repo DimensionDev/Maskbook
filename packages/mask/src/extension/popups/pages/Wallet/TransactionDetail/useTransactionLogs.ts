@@ -1,7 +1,7 @@
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { useMemo } from 'react'
 import format from 'date-fns/format'
-import { useMaskSharedI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import type { TransactionState } from './types.js'
 import { useQuery } from '@tanstack/react-query'
 import { useAccount, useWeb3State } from '@masknet/web3-hooks-base'
@@ -14,7 +14,7 @@ import type { ChainId, Transaction as EvmTransaction } from '@masknet/web3-share
  * Would try to get activity from local record transaction for online transaction
  */
 export function useTransactionLogs(transactionState: TransactionState) {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { Transaction } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { data: txes } = useQuery({

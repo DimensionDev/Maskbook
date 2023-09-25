@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Button, type ButtonProps, Stack, Typography } from '@mui/material'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 
 interface RetryHintProps {
     hint?: boolean
@@ -9,7 +9,7 @@ interface RetryHintProps {
 }
 
 export const RetryHint = memo<RetryHintProps>(({ retry, hint = true, ButtonProps }) => {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     return (
         <Stack justifyContent="center" direction="row" alignItems="center" height={hint ? '100%' : '100px'}>
             <Stack gap={2.75}>

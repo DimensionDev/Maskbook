@@ -24,7 +24,7 @@ import { usePostLink, useSiteAdaptorContext } from '@masknet/plugin-infra/conten
 import { NetworkPluginID, CrossIsolationMessages, Sniffings } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { Stack } from '@mui/system'
-import { useRedPacketI18N } from '../locales/index.js'
+import { useRedPacketTrans } from '../locales/index.js'
 import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
 import { useNftRedPacketContract } from './hooks/useNftRedPacketContract.js'
@@ -194,7 +194,7 @@ export interface RedPacketNftProps {
 }
 
 export function RedPacketNft({ payload }: RedPacketNftProps) {
-    const t = useRedPacketI18N()
+    const t = useRedPacketTrans()
 
     const { pluginID } = useNetworkContext()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>(
@@ -422,7 +422,7 @@ interface OperationFooterProps {
 
 function OperationFooter({ claimed, onShare, chainId, claim, isClaiming }: OperationFooterProps) {
     const { classes } = useStyles({ claimed, outdated: false })
-    const t = useRedPacketI18N()
+    const t = useRedPacketTrans()
 
     return (
         <Box className={classes.buttonWrapper}>

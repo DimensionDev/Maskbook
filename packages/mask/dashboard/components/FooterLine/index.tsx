@@ -3,7 +3,7 @@ import { styled, Breadcrumbs, Dialog, IconButton, Link, Typography } from '@mui/
 import { Close } from '@mui/icons-material'
 import { openWindow, useBuildInfo } from '@masknet/shared-base-ui'
 import { makeStyles, getMaskColor } from '@masknet/theme'
-import { useDashboardI18N } from '../../locales/index.js'
+import { useDashboardTrans } from '../../locales/index.js'
 import { About } from './About.js'
 import { Version } from './Version.js'
 import links from './links.json'
@@ -65,7 +65,7 @@ function FooterLinkItem(props: FooterLinkAnchorProps) {
 }
 
 export const FooterLine = memo((props: HTMLProps<HTMLDivElement>) => {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const { classes } = useStyles()
     const [isOpen, setOpen] = useState(false)
     const env = useBuildInfo()

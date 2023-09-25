@@ -1,5 +1,5 @@
 import { makeStyles, ActionButton, type ActionButtonProps } from '@masknet/theme'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 import { isZero } from '@masknet/web3-shared-base'
 import {
     useChainContext,
@@ -32,7 +32,7 @@ export interface WalletConnectedBoundaryProps extends withClasses<'connectWallet
 export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
     const { children = null, offChain = false, hideRiskWarningConfirmed = false, expectedChainId } = props
 
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes, cx } = useStyles(undefined, { props })
 
     const { pluginID } = useNetworkContext()

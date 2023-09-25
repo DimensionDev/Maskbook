@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { Box, ListItem, Typography } from '@mui/material'
-import { useMaskSharedI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { useStyles } from './useStyles.js'
 import { useCallback } from 'react'
 import { PopupModalRoutes } from '@masknet/shared-base'
@@ -9,7 +9,7 @@ import { useCurrencyType } from '@masknet/web3-hooks-base'
 import { resolveCurrencyName } from '@masknet/web3-shared-base'
 
 export function ChangeCurrency() {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes, theme } = useStyles()
 
     const modalNavigate = useModalNavigate()

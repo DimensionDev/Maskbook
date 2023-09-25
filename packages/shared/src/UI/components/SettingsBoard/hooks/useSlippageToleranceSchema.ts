@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
-import { useSharedI18N } from '@masknet/shared'
+import { useSharedTrans } from '@masknet/shared'
 import { isGreaterThan, isLessThanOrEqualTo } from '@masknet/web3-shared-base'
 import { z as zod } from 'zod'
 
 export function useSlippageToleranceSchema() {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
 
     return useMemo(() => {
         return zod.object({

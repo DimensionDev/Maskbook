@@ -4,7 +4,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NonFungibleTokenOrder } from '@masknet/web3-shared-base'
 import { Box, Button, Stack } from '@mui/material'
 import { useMemo } from 'react'
-import { useCollectibleI18N } from '../../locales/i18n_generated.js'
+import { useCollectibleTrans } from '../../locales/i18n_generated.js'
 import { Context } from '../Context/index.js'
 import { OfferCard } from './OfferCard.js'
 
@@ -42,7 +42,7 @@ export function OffersList(props: OffersListProps) {
     const orderedOffers = useMemo(() => offers.sort((a, b) => (a.createdAt! > b.createdAt! ? -1 : 0)), [offers])
 
     const { classes } = useStyles()
-    const t = useCollectibleI18N()
+    const t = useCollectibleTrans()
 
     if (loading && !orderedOffers.length)
         return (

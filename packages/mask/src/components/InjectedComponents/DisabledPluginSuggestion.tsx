@@ -1,7 +1,11 @@
+import { type ReactNode, useCallback } from 'react'
+import { useAsync } from 'react-use'
+import type { Option } from 'ts-results-es'
+import { useSubscription } from 'use-subscription'
 import { Icons } from '@masknet/icons'
 import {
     type Plugin,
-    PluginI18NFieldRender,
+    PluginTransFieldRender,
     registeredPlugins,
     useActivatedPluginsSiteAdaptor,
     usePostInfoDetails,
@@ -11,12 +15,8 @@ import { BooleanPreference, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme } from '@masknet/theme'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Box, type BoxProps, Button, Skeleton, Typography, useTheme } from '@mui/material'
-import { type ReactNode, useCallback } from 'react'
-import { useAsync } from 'react-use'
-import type { Option } from 'ts-results-es'
-import { useSubscription } from 'use-subscription'
 import Services from '#services'
-import { useMaskSharedI18N } from '../../utils/index.js'
+import { useMaskSharedTrans } from '../../utils/index.js'
 
 function useDisabledPlugins() {
     const activated = new Set(useActivatedPluginsSiteAdaptor('any').map((x) => x.ID))
@@ -82,7 +82,7 @@ export function PossiblePluginSuggestionUISingle(props: {
     content?: ReactNode
 }) {
     const { define, lackHostPermission, wrapperProps, content } = props
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const theme = useTheme()
     const onClick = useCallback(() => {
         if (lackHostPermission && define.enableRequirement.host_permissions) {
@@ -105,10 +105,10 @@ export function PossiblePluginSuggestionUISingle(props: {
         <MaskPostExtraInfoWrapper
             ID={props.define.ID}
             open
-            title={<PluginI18NFieldRender field={define.name} pluginID={define.ID} />}
+            title={<PluginTransFieldRender field={define.name} pluginID={define.ID} />}
             publisher={
                 define.publisher ? (
-                    <PluginI18NFieldRender pluginID={define.ID} field={define.publisher.name} />
+                    <PluginTransFieldRender pluginID={define.ID} field={define.publisher.name} />
                 ) : undefined
             }
             publisherLink={define.publisher?.link}
@@ -158,7 +158,7 @@ export interface FallbackContentProps extends BoxProps {
 }
 
 export function FallbackContent({ disabled, ...rest }: FallbackContentProps) {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     if (disabled)
         return (

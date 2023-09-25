@@ -1,6 +1,6 @@
 import { InjectedDialog, LoadingStatus } from '@masknet/shared'
 import { memo, useCallback, useMemo, useRef } from 'react'
-import { useDashboardI18N } from '../../locales/i18n_generated.js'
+import { useDashboardTrans } from '../../locales/i18n_generated.js'
 import { Box, DialogActions, DialogContent, Typography } from '@mui/material'
 import { useBackupFormState, type BackupFormInputs } from '../../hooks/useBackupFormState.js'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
@@ -76,7 +76,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
     const controllerRef = useRef<AbortController | null>(null)
     const { classes, theme } = useStyles()
     const navigate = useNavigate()
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const { updateUser } = UserContext.useContainer()
     const {
         hasPassword,

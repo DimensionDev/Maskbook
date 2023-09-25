@@ -1,6 +1,16 @@
 import { useCallback, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 import {
+    Card,
+    CardActions,
+    CardContent,
+    Checkbox,
+    DialogContent,
+    FormControlLabel,
+    Link,
+    Typography,
+} from '@mui/material'
+import {
     InjectedDialog,
     FungibleTokenInput,
     useOpenShareTxDialog,
@@ -12,21 +22,11 @@ import { makeStyles, ActionButton } from '@masknet/theme'
 import { type FungibleToken, leftShift } from '@masknet/web3-shared-base'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { SchemaType, useArtBlocksConstants, type ChainId } from '@masknet/web3-shared-evm'
-import {
-    Card,
-    CardActions,
-    CardContent,
-    Checkbox,
-    DialogContent,
-    FormControlLabel,
-    Link,
-    Typography,
-} from '@mui/material'
 import { useFungibleTokenWatched } from '@masknet/web3-hooks-base'
+import { usePostLink, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback.js'
 import type { Project } from '../types.js'
-import { usePostLink, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { useArtBlocksI18N } from '../locales/index.js'
+import { useArtBlocksTrans } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -48,7 +48,7 @@ export interface ActionBarProps {
 }
 
 export function PurchaseDialog(props: ActionBarProps) {
-    const t = useArtBlocksI18N()
+    const t = useArtBlocksTrans()
     const { classes } = useStyles()
     const { project, open, onClose, chainId } = props
     const { share } = useSiteAdaptorContext()

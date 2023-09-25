@@ -1,7 +1,7 @@
 import { LoadingBase, MaskLightTheme, makeStyles } from '@masknet/theme'
 import { Box } from '@mui/material'
 import { ElementAnchor, LoadingStatus, ReloadStatus } from '@masknet/shared'
-import { useCyberConnectI18N } from '../locales/index.js'
+import { useCyberConnectTrans } from '../locales/index.js'
 import { useFollowers } from '../hooks/useFollowers.js'
 import type { ProfileTab } from '../constants.js'
 import type { IFollowIdentity } from '../Worker/apis/index.js'
@@ -21,7 +21,7 @@ interface FollowersPageProps {
 }
 
 export function FollowersPage(props: FollowersPageProps) {
-    const t = useCyberConnectI18N()
+    const t = useCyberConnectTrans()
     const { classes } = useStyles()
     const iterator = useFollowers(props.tab, props.address)
     const { value, next, done, error, retry, loading } = useIterator<IFollowIdentity>(iterator)

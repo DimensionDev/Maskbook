@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Box, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
-import { useDashboardI18N } from '../../locales/index.js'
+import { useDashboardTrans } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export const LoadingPlaceholder = memo(() => {
     const { classes } = useStyles()
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     return (
         <Box className={classes.container}>
             <LoadingBase size={30} color={MaskColorVar.primary} />

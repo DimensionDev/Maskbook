@@ -3,13 +3,13 @@ import { Icons } from '@masknet/icons'
 import { Box, ListItem, Typography } from '@mui/material'
 import millisecondsToMinutes from 'date-fns/millisecondsToMinutes'
 import millisecondsToHours from 'date-fns/millisecondsToHours'
-import { useMaskSharedI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { useStyles } from './useStyles.js'
 import { WalletAutoLockSettingModal } from '../../../modals/modals.js'
 import { useWalletAutoLockTime } from '../hooks/useWalletAutoLockTime.js'
 
 export function AutoLock() {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes, theme } = useStyles()
 
     const { value } = useWalletAutoLockTime()

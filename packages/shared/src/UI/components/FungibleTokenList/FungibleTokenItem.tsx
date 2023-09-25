@@ -7,7 +7,7 @@ import { Icons } from '@masknet/icons'
 import { useFungibleTokenBalance, useNetwork, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, LoadingBase, ActionButton } from '@masknet/theme'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 import { TokenListMode } from './type.js'
 import { SettingSwitch } from '../SettingSwitch/index.js'
 import { useTokenBlocked, useTokenTrusted } from './useTokenBlocked.js'
@@ -112,7 +112,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
     isCustomToken?: boolean,
 ) => {
     return memo(({ data, index, style }: any) => {
-        const t = useSharedI18N()
+        const t = useSharedTrans()
         const { classes } = useStyles()
         const Others = useWeb3Others()
 

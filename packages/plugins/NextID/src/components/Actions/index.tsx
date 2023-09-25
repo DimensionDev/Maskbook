@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Button, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useNextID_I18N } from '../../locales/index.js'
+import { useNextID_Trans } from '../../locales/index.js'
 import { PersonaSelectPanel } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
@@ -26,7 +26,7 @@ interface CreatePersonaActionProps {
 }
 
 export const CreatePersonaAction = memo<CreatePersonaActionProps>(({ disabled, onCreate }) => {
-    const t = useNextID_I18N()
+    const t = useNextID_Trans()
     const { classes } = useStyles()
 
     return (
@@ -63,7 +63,7 @@ interface AddWalletPersonaActionProps {
 }
 
 export const AddWalletPersonaAction = memo<AddWalletPersonaActionProps>(({ onAddWallet }) => {
-    const t = useNextID_I18N()
+    const t = useNextID_Trans()
     const { classes } = useStyles()
     return (
         <>
@@ -83,7 +83,7 @@ export const AddWalletPersonaAction = memo<AddWalletPersonaActionProps>(({ onAdd
 })
 
 export const OtherLackWalletAction = memo(() => {
-    const t = useNextID_I18N()
+    const t = useNextID_Trans()
     return (
         <Stack justifyContent="center" alignItems="center" flex={1}>
             <Typography fontWeight={400} fontSize={14}>

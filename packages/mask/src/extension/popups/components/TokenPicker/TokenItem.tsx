@@ -15,7 +15,7 @@ import {
     useForkRef,
 } from '@mui/material'
 import { memo, useEffect, useMemo, useRef } from 'react'
-import { formatTokenBalance, useMaskSharedI18N } from '../../../../utils/index.js'
+import { formatTokenBalance, useMaskSharedTrans } from '../../../../utils/index.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useEverSeen } from '@masknet/shared-base-ui'
 import type { ChainId } from '@masknet/web3-shared-evm'
@@ -89,7 +89,7 @@ export const TokenItem = memo(function TokenItem({
     ...rest
 }: TokenItemProps) {
     const { classes, cx } = useStyles()
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
 
     const Others = useWeb3Others()
     const explorerLink = useMemo(() => {

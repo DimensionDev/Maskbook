@@ -3,7 +3,7 @@ import { useAsyncRetry, useUpdateEffect } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { Box, Button, Popover, Typography } from '@mui/material'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { Icon, LeavePageConfirmModal, PersonaSelectPanelModal, useSharedI18N } from '@masknet/shared'
+import { Icon, LeavePageConfirmModal, PersonaSelectPanelModal, useSharedTrans } from '@masknet/shared'
 import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { SmartPayFunder } from '@masknet/web3-providers'
@@ -12,7 +12,7 @@ import { RoutePaths } from '../../constants.js'
 import { useQueryQualifications } from '../../hooks/useQueryQualifications.js'
 import { SmartPayContext } from '../../hooks/useSmartPayContext.js'
 import { PluginSmartPayMessages } from '../../message.js'
-import { useSmartPayI18N } from '../../locales/i18n_generated.js'
+import { useSmartPayTrans } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -58,8 +58,8 @@ export interface AddSmartPayPopoverProps {
 }
 
 export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorEl, onClose }) => {
-    const t = useSmartPayI18N()
-    const sharedI18N = useSharedI18N()
+    const t = useSmartPayTrans()
+    const sharedI18N = useSharedTrans()
     const navigate = useNavigate()
     const { classes } = useStyles()
     const { setSigner } = SmartPayContext.useContainer()

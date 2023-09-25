@@ -1,8 +1,8 @@
-import { useMaskSharedI18N } from '../../utils/index.js'
+import { useMaskSharedTrans } from '../../utils/index.js'
 import { useBuildInfoMarkdown, openWindow, useBuildInfo } from '@masknet/shared-base-ui'
 
 export function DebugInfo() {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const info = useBuildInfo()
     const markdown = useBuildInfoMarkdown()
 

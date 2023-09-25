@@ -9,7 +9,7 @@ import { Box, List, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Services from '#services'
-import { useMaskSharedI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { PopupContext } from '../../../hooks/index.js'
 import { ActionModal, useActionModal } from '../../../components/index.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const SwitchWallet = memo(function SwitchWallet() {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes, theme } = useStyles()
     const navigate = useNavigate()
     const { closeModal } = useActionModal()

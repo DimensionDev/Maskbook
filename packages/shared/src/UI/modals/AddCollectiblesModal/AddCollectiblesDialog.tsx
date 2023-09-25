@@ -4,7 +4,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { type NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { DialogContent } from '@mui/material'
 import { memo } from 'react'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 import { InjectedDialog } from '../../contexts/components/index.js'
 import { AddCollectibles } from '../../components/index.js'
 
@@ -44,7 +44,7 @@ export const AddCollectiblesDialog = memo(function AddCollectiblesDialog({
     account,
     onClose,
 }: AddCollectiblesDialogProps) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes } = useStyles()
 
     return (

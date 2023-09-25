@@ -6,7 +6,7 @@ import { Box, TextField } from '@mui/material'
 import { memo, useCallback, useLayoutEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
-import { useDashboardI18N } from '../../locales/index.js'
+import { useDashboardTrans } from '../../locales/index.js'
 import { PrimaryButton } from '../PrimaryButton/index.js'
 import { usePersonaRecovery } from '../../contexts/index.js'
 
@@ -33,7 +33,7 @@ export const RestoreFromPrivateKey = memo(function RestoreFromPrivateKey({
 }: RestoreFromPrivateKeyProps) {
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const { fillSubmitOutlet } = usePersonaRecovery()
 
     const {

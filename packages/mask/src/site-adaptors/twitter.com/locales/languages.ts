@@ -17,7 +17,7 @@ export const languages = {
     zh: zh_TW,
 }
 import { createI18NBundle } from '@masknet/shared-base'
-export const addDO_NOT_useMaskSharedI18N = createI18NBundle('DO_NOT_USE', languages)
+export const addDO_NOT_useMaskSharedTrans = createI18NBundle('DO_NOT_USE', languages)
 // @ts-ignore
 if (import.meta.webpackHot) {
     // @ts-ignore

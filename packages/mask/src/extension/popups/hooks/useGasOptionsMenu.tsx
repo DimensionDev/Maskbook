@@ -6,7 +6,7 @@ import { GasOptionType } from '@masknet/web3-shared-base'
 import { formatWeiToGwei, type EIP1559GasConfig, type GasConfig, type GasOption } from '@masknet/web3-shared-evm'
 import { MenuItem, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
-import { useMaskSharedI18N } from '../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../utils/i18n-next-ui.js'
 import { GasSettingModal } from '../modals/modals.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -51,7 +51,7 @@ export function useGasOptionsMenu(
     callback: (config: GasConfig, type?: GasOptionType) => void,
     paymentToken?: string,
 ) {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes } = useStyles()
     const { data: gasOptions } = useGasOptions()
 

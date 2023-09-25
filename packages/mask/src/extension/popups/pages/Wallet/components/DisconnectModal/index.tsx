@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import { useMaskSharedI18N } from '../../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../../utils/i18n-next-ui.js'
 import { Box, Typography } from '@mui/material'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import Services from '#services'
@@ -98,7 +98,7 @@ interface DisconnectModalProps {
 }
 
 const DisconnectModal = memo(function DisconnectModal({ origin, setOpen }: DisconnectModalProps) {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes } = useStyles()
     const { showSnackbar } = usePopupCustomSnackbar()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)

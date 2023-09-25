@@ -8,7 +8,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useMaskSharedI18N",
+                "hooks": "useMaskSharedTrans",
                 "namespace": "mask",
                 "trans": "MaskSharedTrans",
                 "emitTS": true,
@@ -34,7 +34,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useSharedI18N",
+                "hooks": "useSharedTrans",
                 "namespace": "shared",
                 "trans": "SharedTrans",
                 "emitTS": true,
@@ -47,7 +47,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useSharedBaseI18N",
+                "hooks": "useSharedBaseTrans",
                 "namespace": "shareBase",
                 "trans": "SharedBaseTrans",
                 "emitTS": true,
@@ -60,7 +60,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useDashboardI18N",
+                "hooks": "useDashboardTrans",
                 "namespace": "dashboard",
                 "trans": "DashboardTrans",
                 "emitTS": true,
@@ -73,7 +73,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useDebuggerI18N",
+                "hooks": "useDebuggerTrans",
                 "namespace": "io.mask.debugger",
                 "trans": "DebuggerTrans",
                 "emitTS": true,
@@ -86,7 +86,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useFlowI18N",
+                "hooks": "useFlowTrans",
                 "namespace": "com.mask.flow",
                 "trans": "FlowTrans",
                 "emitTS": true,
@@ -99,7 +99,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useFileServiceI18N",
+                "hooks": "useFileServiceTrans",
                 "namespace": "com.maskbook.fileservice",
                 "trans": "FileServiceTrans",
                 "emitTS": true,
@@ -112,7 +112,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useScamSnifferI18N",
+                "hooks": "useScamSnifferTrans",
                 "namespace": "io.scamsniffer.mask-plugin",
                 "trans": "ScamSnifferTrans",
                 "emitTS": true,
@@ -125,7 +125,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useCyberConnectI18N",
+                "hooks": "useCyberConnectTrans",
                 "namespace": "me.cyberconnect.app",
                 "trans": "CyberConnectTrans",
                 "emitTS": true,
@@ -138,7 +138,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useRSS3I18N",
+                "hooks": "useRSS3Trans",
                 "namespace": "bio.rss3",
                 "trans": "RSS3Trans",
                 "emitTS": true,
@@ -151,7 +151,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useEVM_I18N",
+                "hooks": "useEVM_Trans",
                 "namespace": "com.mask.evm",
                 "trans": "EVM_Trans",
                 "emitTS": true,
@@ -164,7 +164,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useSolanaI18N",
+                "hooks": "useSolanaTrans",
                 "namespace": "com.maskbook.solana",
                 "trans": "SolanaTrans",
                 "emitTS": true,
@@ -177,7 +177,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useNextID_I18N",
+                "hooks": "useNextID_Trans",
                 "namespace": "com.mask.next_id",
                 "trans": "NextID_Trans",
                 "emitTS": true,
@@ -190,7 +190,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useTemplateI18N",
+                "hooks": "useTemplateTrans",
                 "namespace": "__template__",
                 "trans": "TemplateTrans",
                 "emitTS": true,
@@ -203,7 +203,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useGoPlusLabsI18N",
+                "hooks": "useGoPlusLabsTrans",
                 "namespace": "io.gopluslabs.security",
                 "trans": "GoPlusLabsTrans",
                 "emitTS": true,
@@ -216,7 +216,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useCrossChainBridgeI18N",
+                "hooks": "useCrossChainBridgeTrans",
                 "namespace": "io.mask.cross-chain-bridge",
                 "trans": "CrossChainBridgeTrans",
                 "emitTS": true,
@@ -229,7 +229,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useRedPacketI18N",
+                "hooks": "useRedPacketTrans",
                 "namespace": "com.maskbook.red_packet",
                 "trans": "RedPacketTrans",
                 "emitTS": true,
@@ -242,7 +242,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useTipsI18N",
+                "hooks": "useTipsTrans",
                 "namespace": "com.maskbook.tip",
                 "trans": "TipsTrans",
                 "emitTS": true,
@@ -255,7 +255,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useAvatarI18N",
+                "hooks": "useAvatarTrans",
                 "namespace": "com.maskbook.avatar",
                 "trans": "AvatarTrans",
                 "emitTS": true,
@@ -268,7 +268,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useTraderI18N",
+                "hooks": "useTraderTrans",
                 "namespace": "com.maskbook.trader",
                 "trans": "TraderTrans",
                 "emitTS": true,
@@ -281,7 +281,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useGitcoinI18N",
+                "hooks": "useGitcoinTrans",
                 "namespace": "co.gitcoin",
                 "trans": "GitcoinTrans",
                 "emitTS": true,
@@ -294,7 +294,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useMaskBoxI18N",
+                "hooks": "useMaskBoxTrans",
                 "namespace": "com.maskbook.box",
                 "trans": "MaskBoxTrans",
                 "emitTS": true,
@@ -307,7 +307,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useGameI18N",
+                "hooks": "useGameTrans",
                 "namespace": "com.maskbook.game",
                 "trans": "GameTrans",
                 "emitTS": true,
@@ -320,7 +320,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "usePetsI18N",
+                "hooks": "usePetsTrans",
                 "namespace": "com.maskbook.pets",
                 "trans": "PetsTrans",
                 "emitTS": true,
@@ -333,7 +333,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useWeb3ProfileI18N",
+                "hooks": "useWeb3ProfileTrans",
                 "namespace": "io.mask.web3-profile",
                 "trans": "Web3ProfileTrans",
                 "emitTS": true,
@@ -346,7 +346,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useHandleI18N",
+                "hooks": "useHandleTrans",
                 "namespace": "com.maskbook.handle",
                 "trans": "HandleTrans",
                 "emitTS": true,
@@ -359,7 +359,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useApprovalI18N",
+                "hooks": "useApprovalTrans",
                 "namespace": "com.maskbook.approval",
                 "trans": "ApprovalTrans",
                 "emitTS": true,
@@ -372,7 +372,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useScamWarningI18N",
+                "hooks": "useScamWarningTrans",
                 "namespace": "com.mask.scam-warning",
                 "trans": "ScamWarningTrans",
                 "emitTS": true,
@@ -385,7 +385,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useSmartPayI18N",
+                "hooks": "useSmartPayTrans",
                 "namespace": "com.mask.smart-pay",
                 "trans": "SmartPayTrans",
                 "emitTS": true,
@@ -398,7 +398,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useVCentI18N",
+                "hooks": "useVCentTrans",
                 "namespace": "com.maskbook.tweet",
                 "trans": "VCentTrans",
                 "emitTS": true,
@@ -411,7 +411,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useTransakI18N",
+                "hooks": "useTransakTrans",
                 "namespace": "com.maskbook.transak",
                 "trans": "TransakTrans",
                 "emitTS": true,
@@ -424,7 +424,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useCollectibleI18N",
+                "hooks": "useCollectibleTrans",
                 "namespace": "com.maskbook.collectibles",
                 "trans": "Collectible",
                 "emitTS": true,
@@ -437,7 +437,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useClaimI18N",
+                "hooks": "useClaimTrans",
                 "namespace": "com.mask.claim",
                 "trans": "ClaimTrans",
                 "emitTS": true
@@ -449,7 +449,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useArtBlocksI18N",
+                "hooks": "useArtBlocksTrans",
                 "namespace": "io.artblocks",
                 "trans": "ArtBlocksTrans",
                 "emitTS": true
@@ -461,7 +461,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useExternalI18N",
+                "hooks": "useExternalTrans",
                 "namespace": "io.mask.external",
                 "trans": "ExternalTrans",
                 "emitTS": true
@@ -473,7 +473,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useSavingsI18N",
+                "hooks": "useSavingsTrans",
                 "namespace": "com.savings",
                 "trans": "SavingsTrans",
                 "emitTS": true
@@ -485,7 +485,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useSnapshotI18N",
+                "hooks": "useSnapshotTrans",
                 "namespace": "org.snapshot",
                 "trans": "SnapshotTrans",
                 "emitTS": true
@@ -497,7 +497,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useProfileCardI18N",
+                "hooks": "useProfileCardTrans",
                 "namespace": "io.mask.web3-profile-card",
                 "trans": "ProfileCardTrans",
                 "emitTS": true
@@ -509,7 +509,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useSwitchLogoI18N",
+                "hooks": "useSwitchLogoTrans",
                 "namespace": "io.mask.switch-logo",
                 "trans": "SwitchLogoTrans",
                 "emitTS": true
@@ -521,7 +521,7 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useCalendarI18N",
+                "hooks": "useCalendarTrans",
                 "namespace": "io.mask.calendar",
                 "trans": "CalendarTrans",
                 "emitTS": true

@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo } from 'react'
 import { Trans } from 'react-i18next'
 import { Box, List, ListItem, ListItemText, Typography, useTheme } from '@mui/material'
-import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
 import { useTitle } from '../../hooks/useTitle.js'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
@@ -99,7 +99,7 @@ const HOME_LINK = 'Mask.io'
 
 const Settings = memo(function Settings() {
     const theme = useTheme()
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes } = useStyles()
     const modalNavigate = useModalNavigate()
 

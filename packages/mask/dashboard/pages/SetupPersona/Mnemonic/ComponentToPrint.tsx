@@ -1,5 +1,5 @@
 import { forwardRef, type ForwardedRef, useMemo } from 'react'
-import { useDashboardI18N } from '../../../locales/i18n_generated.js'
+import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { QRCode } from 'react-qrcode-logo'
@@ -78,7 +78,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export const ComponentToPrint = forwardRef((props: ComponentToPrintProps, ref: ForwardedRef<any>) => {
     const { words, privateKey, personaName, publicKey } = props
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const { classes } = useStyles()
 
     const qrValue = useMemo(() => {

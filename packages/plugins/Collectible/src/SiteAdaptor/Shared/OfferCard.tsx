@@ -6,7 +6,7 @@ import { FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
-import { useCollectibleI18N } from '../../locales/i18n_generated.js'
+import { useCollectibleTrans } from '../../locales/i18n_generated.js'
 import { memo, type HTMLProps } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
@@ -55,7 +55,7 @@ export interface OfferCardProps extends HTMLProps<HTMLDivElement> {
 export const OfferCard = memo(function OfferCard({ offer, ...rest }: OfferCardProps) {
     const { classes, cx } = useStyles()
     const Others = useWeb3Others()
-    const t = useCollectibleI18N()
+    const t = useCollectibleTrans()
 
     const renderTokenIcon = () => {
         if (offer.priceInToken?.token.logoURL)

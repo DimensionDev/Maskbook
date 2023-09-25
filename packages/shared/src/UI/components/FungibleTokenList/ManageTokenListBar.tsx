@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
 import { memo } from 'react'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -23,7 +23,7 @@ interface ManageTokenListBarProps {
 }
 
 export const ManageTokenListBar = memo<ManageTokenListBarProps>(({ onClick }) => {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes } = useStyles()
     return (
         <Stack className={classes.root} direction="row" justifyContent="center">

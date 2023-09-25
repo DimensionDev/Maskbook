@@ -12,7 +12,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { resolveSnapshotProposalUrl } from './helpers.js'
 import { useCurrentAccountVote } from './hooks/useCurrentAccountVote.js'
-import { useSnapshotI18N } from '../locales/index.js'
+import { useSnapshotTrans } from '../locales/index.js'
 
 const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
     return {
@@ -213,7 +213,7 @@ function ProfileProposalListItemHeader(props: ProfileProposalProps) {
 function ProfileProposalListItemBody(props: ProfileProposalProps) {
     const { proposal } = props
     const { classes } = useStyles({ state: proposal.state })
-    const t = useSnapshotI18N()
+    const t = useSnapshotTrans()
 
     const date = useMemo(() => {
         const now = Date.now()
@@ -239,7 +239,7 @@ function ProfileProposalListItemVote(props: ProfileProposalProps) {
     const { proposal } = props
     const { classes, cx } = useStyles({ state: proposal.state })
     const theme = useTheme()
-    const t = useSnapshotI18N()
+    const t = useSnapshotTrans()
     const { value: currentAccountVote } = useCurrentAccountVote(proposal.id, proposal.votes)
 
     return (

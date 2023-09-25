@@ -2,7 +2,7 @@ import { DashboardRoutes, EnhanceableSite } from '@masknet/shared-base'
 import { useState, useCallback, memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Services from '#services'
-import { useDashboardI18N } from '../../../locales/i18n_generated.js'
+import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { delay } from '@masknet/kit'
 import { makeStyles } from '@masknet/theme'
 import { Typography, Button, TextField } from '@mui/material'
@@ -40,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const SignUp = memo(function SignUp() {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const navigate = useNavigate()
 
     const { classes } = useStyles()

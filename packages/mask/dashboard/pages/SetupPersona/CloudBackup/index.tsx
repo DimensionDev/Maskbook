@@ -2,7 +2,7 @@ import { memo, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
-import { DashboardTrans, useDashboardI18N } from '../../../locales/i18n_generated.js'
+import { DashboardTrans, useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { Typography, Box, Tab } from '@mui/material'
 import { MaskTabList, makeStyles } from '@masknet/theme'
 import { UserContext } from '../../../../shared-ui/index.js'
@@ -58,7 +58,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const CloudBackupInner = memo(function CloudBackupInner() {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const { classes } = useStyles()
     const { user, updateUser } = UserContext.useContainer()
     const navigate = useNavigate()

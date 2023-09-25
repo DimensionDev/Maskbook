@@ -4,7 +4,7 @@ import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme
 import { Box, Typography, useTheme, type InputProps } from '@mui/material'
 import { forwardRef, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import Services from '#services'
@@ -44,7 +44,7 @@ function ChangePaymentPasswordDrawer({
     setOriginalPasswordWrong,
     ...rest
 }: ChangePaymentPasswordDrawer) {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const theme = useTheme()
     const { classes } = useStyles()
 

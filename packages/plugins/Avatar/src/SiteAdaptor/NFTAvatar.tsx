@@ -20,7 +20,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, List, ListItem, Skeleton, Typography } from '@mui/material'
-import { useAvatarI18N } from '../locales/i18n_generated.js'
+import { useAvatarTrans } from '../locales/i18n_generated.js'
 import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types.js'
 import { NFTImage } from './NFTImage.js'
 
@@ -96,7 +96,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const { account, chainId } = useChainContext()
     const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken>()
     const [customCollectibles, setCustomCollectibles] = useState<AllChainsNonFungibleToken[]>([])
-    const t = useAvatarI18N()
+    const t = useAvatarTrans()
     const {
         value: collectibles = EMPTY_LIST,
         done: loadFinish,

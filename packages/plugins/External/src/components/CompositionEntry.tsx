@@ -1,14 +1,14 @@
+import { useEffect } from 'react'
 import type { Plugin } from '@masknet/plugin-infra'
 import { usePortalShadowRoot } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
-import { useEffect } from 'react'
 import { PluginLoader } from './PluginLoader.js'
 import { InjectedDialog } from '@masknet/shared'
 import { MaskMessages } from '@masknet/shared-base'
-import { useExternalI18N } from '../locales/index.js'
+import { useExternalTrans } from '../locales/index.js'
 
 export function ThirdPartyPluginCompositionEntry(props: Plugin.SiteAdaptor.CompositionDialogEntry_DialogProps) {
-    const t = useExternalI18N()
+    const t = useExternalTrans()
     useEffect(
         () =>
             MaskMessages.events.replaceComposition.on(() => {

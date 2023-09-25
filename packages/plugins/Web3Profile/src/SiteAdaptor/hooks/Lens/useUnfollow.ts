@@ -11,7 +11,7 @@ import type { LensFollowNFT } from '@masknet/web3-contracts/types/LensFollowNFT.
 import { useQueryAuthenticate } from './useQueryAuthenticate.js'
 import { BroadcastType } from '@masknet/web3-providers/types'
 import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { useWeb3ProfileI18N } from '../../../locales/i18n_generated.js'
+import { useWeb3ProfileTrans } from '../../../locales/i18n_generated.js'
 
 export function useUnfollow(
     profileId?: string,
@@ -19,7 +19,7 @@ export function useUnfollow(
     onFailed?: () => void,
 ) {
     const [loading, setLoading] = useState(false)
-    const t = useWeb3ProfileI18N()
+    const t = useWeb3ProfileTrans()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const handleQueryAuthenticate = useQueryAuthenticate(account)
     const { fetchJSON } = useSiteAdaptorContext()

@@ -5,7 +5,7 @@ import { ImageType } from '../types.js'
 import type { User, ShowMeta, EssayRSSNode } from '../types.js'
 import { MASK_TWITTER, PunkIcon, Punk3D } from '../constants.js'
 import { useUser } from './useUser.js'
-import { usePetsI18N } from '../locales/i18n_generated.js'
+import { usePetsTrans } from '../locales/i18n_generated.js'
 
 export function useEssay(user: User, refresh?: number) {
     const { value } = useAsync(async () => {
@@ -24,7 +24,7 @@ export function useEssay(user: User, refresh?: number) {
 
 export function useDefaultEssay(user: User) {
     const profileUser = useUser()
-    const t = usePetsI18N()
+    const t = usePetsTrans()
     const essayMeta = useMemo<ShowMeta | undefined>(() => {
         if (user?.userId || user?.userId !== '$unknown') {
             const isProfile = user.userId === profileUser?.userId

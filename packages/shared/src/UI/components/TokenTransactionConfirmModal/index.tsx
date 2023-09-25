@@ -6,7 +6,7 @@ import { useNonFungibleAsset } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import type { PropsWithChildren } from 'react'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     confirmDialog: {
@@ -95,7 +95,7 @@ export function TokenTransactionConfirmModal({
     ...rest
 }: TokenTransactionConfirmModalProps) {
     const { classes } = useStyles()
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     confirmText = confirmText || 'Confirm'
     const isToken = tokenType === TokenType.Fungible
     const { data: nonFungibleToken } = useNonFungibleAsset(undefined, nonFungibleTokenAddress, nonFungibleTokenId ?? '')

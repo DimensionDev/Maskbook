@@ -3,7 +3,7 @@ import { useAsyncFn } from 'react-use'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Sniffings } from '@masknet/shared-base'
-import { useMaskSharedI18N } from '../../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../utils/index.js'
 import Services from '#services'
 import { ImportCreateWallet } from '../ImportCreateWallet/index.js'
 
@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const WalletStartUp = memo(function WalletStartUp() {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes } = useStyles()
 
     const [, onEnterCreateWallet] = useAsyncFn(async () => {

@@ -1,14 +1,14 @@
+import { memo, useMemo } from 'react'
+import { useSubscription } from 'use-subscription'
 import {
-    PluginI18NFieldRender,
+    PluginTransFieldRender,
     useActivatedPluginsSiteAdaptor,
     type Plugin,
 } from '@masknet/plugin-infra/content-script'
 import { PersistentStorages, type PluginID } from '@masknet/shared-base'
 import { Boundary, ShadowRootTooltip, getMaskColor, makeStyles, useBoundedPopperProps } from '@masknet/theme'
 import { List, ListItemButton, Typography } from '@mui/material'
-import { memo, useMemo } from 'react'
-import { useSubscription } from 'use-subscription'
-import { useSharedI18N } from '../../../index.js'
+import { useSharedTrans } from '../../../index.js'
 
 export interface Application {
     entry: Plugin.SiteAdaptor.ApplicationEntry
@@ -86,7 +86,7 @@ const useStyles = makeStyles<{
 
 export function ApplicationSettingPluginList() {
     const { classes } = useStyles({ iconFilterColor: undefined })
-    const t = useSharedI18N()
+    const t = useSharedTrans()
 
     const plugins = useActivatedPluginsSiteAdaptor('any')
     const applicationList = useMemo(() => {
@@ -127,7 +127,7 @@ interface AppListProps {
 
 function AppList({ appList, isListing }: AppListProps) {
     const { classes } = useStyles({ iconFilterColor: undefined })
-    const t = useSharedI18N()
+    const t = useSharedTrans()
 
     return appList.length > 0 ? (
         <Boundary>
@@ -169,7 +169,7 @@ const AppListItem = memo(function AppListItem({ pluginID, entry, isListing }: Ap
             disableInteractive
             title={
                 <Typography>
-                    <PluginI18NFieldRender field={entry.name} pluginID={pluginID} />
+                    <PluginTransFieldRender field={entry.name} pluginID={pluginID} />
                 </Typography>
             }
             placement="bottom"

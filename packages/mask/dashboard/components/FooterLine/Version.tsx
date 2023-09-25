@@ -1,9 +1,9 @@
 import { Typography } from '@mui/material'
-import { useDashboardI18N } from '../../locales/index.js'
+import { useDashboardTrans } from '../../locales/index.js'
 import { useBuildInfo } from '@masknet/shared-base-ui'
 
 export function Version({ className }: { className?: string }) {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const env = useBuildInfo()
     const version = env.VERSION || 'unknown'
 

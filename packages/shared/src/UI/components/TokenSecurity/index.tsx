@@ -3,7 +3,7 @@ import { Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import type { SecurityAPI } from '@masknet/web3-providers/types'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 import { DefineMapping, SecurityMessageLevel } from './Common.js'
 
 interface TokenCardProps {
@@ -11,7 +11,7 @@ interface TokenCardProps {
 }
 
 export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
 
     const { warn_item_quantity: attentionFactors = 0, risk_item_quantity: riskyFactors = 0 } = tokenSecurity
 

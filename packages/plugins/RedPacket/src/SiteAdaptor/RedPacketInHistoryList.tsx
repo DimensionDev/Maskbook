@@ -10,7 +10,7 @@ import {
     type RedPacketJSONPayloadFromChain,
     RedPacketStatus,
 } from '@masknet/web3-providers/types'
-import { RedPacketTrans, useRedPacketI18N } from '../locales/index.js'
+import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
 import { useCreateRedPacketReceipt } from './hooks/useCreateRedPacketReceipt.js'
 import { useRefundCallback } from './hooks/useRefundCallback.js'
@@ -201,7 +201,7 @@ export interface RedPacketInHistoryListProps {
 }
 export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const { history, onSelect } = props
-    const t = useRedPacketI18N()
+    const t = useRedPacketTrans()
     const [isViewed, setIsViewed] = useState(false)
 
     const ref = useRef<HTMLLIElement | null>(null)

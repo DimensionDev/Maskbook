@@ -11,7 +11,7 @@ import { Box, List, ListItem, Tooltip, Typography } from '@mui/material'
 import { memo, useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
-import { useMaskSharedI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { WalletBalance } from '../../../components/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { useWalletGroup } from '../../../hooks/useWalletGroup.js'
@@ -78,7 +78,7 @@ async function pollResult(address: string) {
 }
 
 const DeriveWallet = memo(function DeriveWallet() {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes } = useStyles()
     const mnemonicId = useLocation().state?.mnemonicId as string
 

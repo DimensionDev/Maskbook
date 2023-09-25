@@ -2,7 +2,7 @@ import type { HTMLProps } from 'react'
 import { Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { useFileServiceI18N } from '../../locales/i18n_generated.js'
+import { useFileServiceTrans } from '../../locales/i18n_generated.js'
 import { type CompositionType, useCompositionContext } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
@@ -21,7 +21,7 @@ interface SingleFileChipProps extends Omit<HTMLProps<HTMLDivElement>, 'ref' | 's
 
 export function SingleFileChip({ name, size, onClick, ...rest }: SingleFileChipProps) {
     const { classes } = useStyles()
-    const t = useFileServiceI18N()
+    const t = useFileServiceTrans()
     const { type } = useCompositionContext()
     return (
         <Typography
@@ -43,7 +43,7 @@ interface MultipleFileChipProps
 }
 export function MultipleFileChip({ count, onClick, ...rest }: MultipleFileChipProps) {
     const { classes, cx } = useStyles()
-    const t = useFileServiceI18N()
+    const t = useFileServiceTrans()
     const { type } = useCompositionContext()
     return (
         <Typography

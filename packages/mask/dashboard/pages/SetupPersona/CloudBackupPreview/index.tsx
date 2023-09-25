@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material'
 import { memo, useCallback, useEffect, useMemo } from 'react'
-import { useDashboardI18N } from '../../../locales/i18n_generated.js'
+import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { ActionButton, TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
@@ -52,7 +52,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const CloudBackupPreview = memo(function CloudBackupPreview() {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const { classes, theme, cx } = useStyles()
     const [params] = useSearchParams()
     const location = useLocation()

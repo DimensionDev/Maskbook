@@ -17,7 +17,7 @@ import { InjectedDialog } from '@masknet/shared'
 import { isDataMatchJSONSchema, getKnownMetadataKeys, getMetadataSchema } from '@masknet/typed-message-react'
 import { ShadowRootPopper } from '@masknet/theme'
 import { useState } from 'react'
-import { useMaskSharedI18N } from '../../utils/index.js'
+import { useMaskSharedTrans } from '../../utils/index.js'
 
 export interface DebugMetadataInspectorProps {
     meta: ReadonlyMap<string, any>
@@ -30,7 +30,7 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
     const { meta, onExit, onDeleteMeta, onNewMeta } = props
     const [field, setField] = useState('')
     const [content, setContent] = useState('{}')
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
 
     const knownMetadata = getKnownMetadataKeys()
     const result = isValid(content)

@@ -25,7 +25,7 @@ import { Box } from '@mui/system'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
-import { useDashboardI18N } from '../../../locales/i18n_generated.js'
+import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { ResetWalletContext } from '../context.js'
 import Services from '#services'
 
@@ -74,7 +74,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const AddDeriveWallet = memo(function AddDeriveWallet() {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const { cx, classes } = useStyles()
     const navigate = useNavigate()
     const state = useLocation().state as {

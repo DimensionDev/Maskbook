@@ -5,7 +5,7 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { ScopedDomainsContainer, useReverseAddress, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Box, Skeleton } from '@mui/material'
-import { useRSS3I18N } from '../locales/index.js'
+import { useRSS3Trans } from '../locales/index.js'
 import { FeedCard } from './components/index.js'
 import { FeedOwnerContext, type FeedOwnerOptions } from './contexts/index.js'
 import { useFeeds } from './hooks/useFeeds.js'
@@ -25,7 +25,7 @@ export interface FeedPageProps {
 }
 
 export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps) {
-    const t = useRSS3I18N()
+    const t = useRSS3Trans()
     const { classes } = useStyles()
     const Others = useWeb3Others()
 

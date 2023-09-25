@@ -9,7 +9,7 @@ import { Controller } from 'react-hook-form'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import type { z as zod } from 'zod'
-import { useMaskSharedI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm.js'
@@ -38,7 +38,7 @@ const useStyles = makeStyles()({
  * @deprecated unused
  */
 const WalletRename = memo(() => {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const navigate = useNavigate()
     const { classes } = useStyles()
     const currentWallet = useWallet()

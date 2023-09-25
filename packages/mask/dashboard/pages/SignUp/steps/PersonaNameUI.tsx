@@ -3,7 +3,7 @@ import { Box, TextField, Typography } from '@mui/material'
 import { useState } from 'react'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
-import { useDashboardI18N } from '../../../locales/index.js'
+import { useDashboardTrans } from '../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -34,7 +34,7 @@ export interface PersonaNameUIProps {
 
 export function PersonaNameUI({ onNext, error, loading }: PersonaNameUIProps) {
     const { classes } = useStyles()
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
 
     const [personaName, setPersonaName] = useState('')
 

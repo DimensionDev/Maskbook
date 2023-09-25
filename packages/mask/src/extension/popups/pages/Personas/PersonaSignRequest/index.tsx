@@ -1,19 +1,19 @@
 import { memo, useEffect, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { Box } from '@mui/material'
 import { ActionButton } from '@masknet/theme'
 import { PersonaContext } from '@masknet/shared'
 import { type PersonaInformation, PopupRoutes, SignType, MaskMessages } from '@masknet/shared-base'
 import { usePersonasFromDB } from '../../../../../components/DataSource/usePersonasFromDB.js'
 import { MethodAfterPersonaSign } from '../../Wallet/type.js'
 import Services from '#services'
-import { useMaskSharedI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { SignRequestInfo } from '../../../components/SignRequestInfo/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
-import { Box } from '@mui/material'
 
 const PersonaSignRequest = memo(() => {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const navigate = useNavigate()
     const [params] = useSearchParams()
     const [requestID, setRequestID] = useState<string>()

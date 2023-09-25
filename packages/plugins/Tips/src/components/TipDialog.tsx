@@ -21,7 +21,7 @@ import { useCallback, useMemo } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { TargetRuntimeContext } from '../contexts/TargetRuntimeContext.js'
 import { useTip } from '../contexts/index.js'
-import { useTipsI18N } from '../locales/index.js'
+import { useTipsTrans } from '../locales/index.js'
 import { NFTSection } from './NFTSection/index.js'
 import { NetworkSection } from './NetworkSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
@@ -66,7 +66,7 @@ export interface TipDialogProps {
 
 const site = getSiteType()
 export function TipDialog({ open = false, onClose }: TipDialogProps) {
-    const t = useTipsI18N()
+    const t = useTipsTrans()
     const { classes } = useStyles()
 
     const {

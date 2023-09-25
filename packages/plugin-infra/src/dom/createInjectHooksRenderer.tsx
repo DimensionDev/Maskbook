@@ -6,7 +6,7 @@ import {
     type PluginWrapperComponent,
     type PluginWrapperMethods,
 } from './usePluginWrapper.js'
-import { usePluginI18NField } from './useI18N.js'
+import { usePluginTransField } from './useTrans.js'
 import type { Plugin } from '../types.js'
 import { getAvailablePlugins } from '../utils/getAvailablePlugins.js'
 
@@ -39,7 +39,7 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
         return element
     }
     function SinglePluginWithinErrorBoundary({ plugin, props }: { plugin: PluginDefinition; props: unknown }) {
-        const t = usePluginI18NField()
+        const t = usePluginTransField()
         const ui = pickInjectorHook(plugin)
         return usePluginWrapperProvider(
             ui ? (

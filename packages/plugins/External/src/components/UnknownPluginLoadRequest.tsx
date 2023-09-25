@@ -13,7 +13,7 @@ import {
 } from '@mui/material'
 import { useMap } from 'react-use'
 import type { ExternalPluginLoadDetails } from '../types.js'
-import { useExternalI18N } from '../locales/index.js'
+import { useExternalTrans } from '../locales/index.js'
 
 export function UnknownPluginLoadRequestUI({ plugins, onConfirm }: UnknownPluginLoadRequestProps) {
     const [_selected, { get, set }] = useMap({} as Record<string, boolean>)
@@ -22,7 +22,7 @@ export function UnknownPluginLoadRequestUI({ plugins, onConfirm }: UnknownPlugin
     const selected = plugins.filter((x) => _selected[x.url])
     const confirmSelected = () => onConfirm(selected)
 
-    const t = useExternalI18N()
+    const t = useExternalTrans()
 
     if (plugins.length === 0) return null
     if (plugins.length === 1)

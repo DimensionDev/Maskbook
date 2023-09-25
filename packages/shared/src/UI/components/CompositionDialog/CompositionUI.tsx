@@ -8,7 +8,7 @@ import { DialogActions, Typography, alpha } from '@mui/material'
 import { CharLimitIndicator } from './CharLimitIndicator.js'
 import { PluginEntryRender, type PluginEntryRenderRef } from './PluginEntryRender.js'
 import { TypedMessageEditor, type TypedMessageEditorRef } from './TypedMessageEditor.js'
-import { useSharedI18N } from '../../../index.js'
+import { useSharedTrans } from '../../../index.js'
 import { CrossIsolationMessages, EMPTY_OBJECT } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -73,7 +73,7 @@ export interface CompositionRef {
 }
 export function CompositionDialogUI(props: CompositionProps) {
     const { classes } = useStyles()
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const [initialMetas, setInitialMetas] = useState<Record<string, unknown>>(EMPTY_OBJECT)
     const [currentPostSize, __updatePostSize] = useState(0)
 

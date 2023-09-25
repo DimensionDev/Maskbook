@@ -8,7 +8,7 @@ import { Box, List, Typography } from '@mui/material'
 import { first } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import { Trans } from 'react-i18next'
-import { useMaskSharedI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { useModalNavigate } from '../../../components/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { ConfirmDialog, WalletRemoveModal } from '../../../modals/modals.js'
@@ -29,7 +29,7 @@ function getPathIndex(path?: string) {
     return Number.parseInt(rawIndex, 10)
 }
 const WalletSettings = memo(() => {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes, cx, theme } = useStyles()
     const modalNavigate = useModalNavigate()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)

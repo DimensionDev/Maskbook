@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { PluginTransFieldRender } from '@masknet/plugin-infra/content-script'
 import { base } from '../base.js'
 import { useState } from 'react'
 import { PluginID } from '@masknet/shared-base'
@@ -23,7 +23,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                     return (
                         <>
                             <ApplicationEntry
-                                title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
+                                title={<PluginTransFieldRender field={name} pluginID={base.ID} />}
                                 {...EntryComponentProps}
                                 iconFilterColor={iconFilterColor}
                                 icon={icon}

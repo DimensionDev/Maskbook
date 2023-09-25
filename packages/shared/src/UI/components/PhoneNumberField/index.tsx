@@ -1,7 +1,7 @@
 import { forwardRef, useMemo, useState } from 'react'
 import { Button, TextField, type FilledTextFieldProps, Typography } from '@mui/material'
 import { COUNTRIES } from '@masknet/shared-base-ui'
-import { getCountryFlag, useSharedI18N } from '../../../index.js'
+import { getCountryFlag, useSharedTrans } from '../../../index.js'
 import { Icons } from '@masknet/icons'
 import { CountryCodePicker } from '../CountryCodePicker/index.js'
 
@@ -14,7 +14,7 @@ export const PhoneNumberField = forwardRef<HTMLDivElement, PhoneNumberFieldProps
     { code, onCodeChange, ...rest },
     ref,
 ) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
     const countryIcon = useMemo(() => {

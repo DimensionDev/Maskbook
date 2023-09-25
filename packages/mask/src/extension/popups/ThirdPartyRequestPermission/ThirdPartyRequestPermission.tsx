@@ -1,5 +1,5 @@
 import { Trans } from 'react-i18next'
-import { useMaskSharedI18N } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../utils/index.js'
 import { ThirdPartyPluginPermission } from '../../../../shared/definitions/routes.js'
 
 export interface ThirdPartyRequestPermissionProps {
@@ -9,7 +9,7 @@ export interface ThirdPartyRequestPermissionProps {
     onGrant(permissions: ThirdPartyPluginPermission[]): void
 }
 export function ThirdPartyRequestPermission(props: ThirdPartyRequestPermissionProps) {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     return (
         <main>
             <Trans

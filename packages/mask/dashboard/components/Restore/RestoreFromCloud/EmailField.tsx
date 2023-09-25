@@ -3,7 +3,7 @@ import { Box, TextField } from '@mui/material'
 import { memo, useCallback, useLayoutEffect, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { usePersonaRecovery } from '../../../contexts/RecoveryContext.js'
-import { useDashboardI18N } from '../../../locales/index.js'
+import { useDashboardTrans } from '../../../locales/index.js'
 import { sendCode, type RestoreQueryError } from '../../../utils/api.js'
 import { emailRegexp } from '../../../utils/regexp.js'
 import { AccountType, Locale, Scenario } from '../../../type.js'
@@ -13,7 +13,7 @@ import { RestoreContext } from './RestoreProvider.js'
 
 export const EmailField = memo(function EmailField() {
     const language = useLanguage()
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const [invalidEmail, setInvalidEmail] = useState(false)
     const { showSnackbar } = useCustomSnackbar()
     const [error, setError] = useState('')

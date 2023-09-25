@@ -30,7 +30,7 @@ import {
 import { Alert, Box, Button, TextField, Typography, useTheme } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
 import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
 import { useGasRatio } from '../../hooks/useGasRatio.js'
 
@@ -80,7 +80,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     nonce,
     config,
 }) {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const theme = useTheme()
     const { classes } = useStyles()
     const gasRatio = useGasRatio(config.paymentToken)

@@ -19,7 +19,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { WalletIcon } from '../WalletIcon/index.js'
 import { type ActionButtonPromiseProps } from '../ActionButton/index.js'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 import { SelectProviderModal } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -72,7 +72,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
             actualPluginID === expectedPluginID && actualChainId === expectedChainId,
     } = props
 
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes } = useStyles(undefined, { props })
 
     const { pluginID: actualPluginID } = useNetworkContext(actualNetworkPluginID)

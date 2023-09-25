@@ -7,7 +7,7 @@ import { NetworkType } from '@masknet/web3-shared-evm'
 import { NetworkResolver } from '@masknet/web3-providers'
 import { PrintBackground } from '../../../assets/index.js'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
-import { useDashboardI18N } from '../../../locales/i18n_generated.js'
+import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 
 interface ComponentToPrintProps {
     words: string[]
@@ -88,7 +88,7 @@ export const ComponentToPrint = forwardRef(function ComponentToPrint(
     ref: ForwardedRef<any>,
 ) {
     const { words, address } = props
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const { classes } = useStyles()
 
     const qrValue = useMemo(() => {

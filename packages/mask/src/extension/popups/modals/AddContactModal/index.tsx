@@ -10,7 +10,7 @@ import { isValidAddress } from '@masknet/web3-shared-evm'
 import { IconButton, InputAdornment, Typography, useTheme } from '@mui/material'
 import { Web3State } from '@masknet/web3-providers'
 import { useContacts, useWallets } from '@masknet/web3-hooks-base'
-import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
@@ -62,7 +62,7 @@ interface AddContactModalProps extends BottomDrawerProps {
 
 function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...rest }: AddContactModalProps) {
     const { classes, cx } = useStyles()
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const theme = useTheme()
 
     const contacts = useContacts()

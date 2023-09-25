@@ -3,7 +3,7 @@ import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { formatFileSize } from '@masknet/kit'
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
-import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { PluginTransFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { MaskLightTheme } from '@masknet/theme'
 import { ThemeProvider } from '@mui/material'
@@ -76,7 +76,7 @@ const definition: Plugin.SiteAdaptor.Definition = {
                 RenderEntryComponent(EntryComponentProps) {
                     return (
                         <ApplicationEntry
-                            title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
+                            title={<PluginTransFieldRender field={name} pluginID={base.ID} />}
                             {...EntryComponentProps}
                             icon={icon}
                             iconFilterColor={iconFilterColor}

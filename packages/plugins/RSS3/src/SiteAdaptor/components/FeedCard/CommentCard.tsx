@@ -4,7 +4,7 @@ import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { resolveResourceURL } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import Linkify from 'linkify-react'
-import { RSS3Trans, useRSS3I18N } from '../../../locales/i18n_generated.js'
+import { RSS3Trans, useRSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
@@ -98,7 +98,7 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
     const { classes, cx } = useStyles()
     const { classes: mdClasses } = useMarkdownStyles()
 
-    const t = useRSS3I18N()
+    const t = useRSS3Trans()
 
     const action = feed.actions[0]
     const metadata = action.metadata

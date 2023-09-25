@@ -14,7 +14,7 @@ import {
     userGuideFinished,
     userGuideStatus,
 } from '@masknet/shared-base'
-import { useMaskSharedI18N } from '../../utils/index.js'
+import { useMaskSharedTrans } from '../../utils/index.js'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import Services from '#services'
 import { FindUsername } from './SetupGuide/FindUsername.js'
@@ -33,7 +33,7 @@ interface SetupGuideUIProps {
 }
 
 function SetupGuideUI(props: SetupGuideUIProps) {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { persona } = props
     const { showSnackbar } = useCustomSnackbar()
     const [, handleVerifyNextID] = useNextIDVerify()

@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { QRCode, useSharedI18N } from '@masknet/shared'
+import { QRCode, useSharedTrans } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -19,7 +19,7 @@ interface QRCodeModalProps {
 }
 
 export function QRCodeModal({ uri }: QRCodeModalProps) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes } = useStyles()
 
     const style: React.CSSProperties = {

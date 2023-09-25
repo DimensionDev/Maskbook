@@ -3,7 +3,7 @@ import { Button, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { DashboardRoutes, type PersonaIdentifier, type PersonaInformation, type PluginID } from '@masknet/shared-base'
-import { type PersonaConnectStatus, useCurrentPersonaConnectStatus, useSharedI18N } from '../../../index.js'
+import { type PersonaConnectStatus, useCurrentPersonaConnectStatus, useSharedTrans } from '../../../index.js'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
@@ -63,7 +63,7 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
         identity,
         openDashboard,
     }) => {
-        const t = useSharedI18N()
+        const t = useSharedTrans()
         const { classes } = useStyles()
 
         const { value: status, loading: statusLoading } = useCurrentPersonaConnectStatus(

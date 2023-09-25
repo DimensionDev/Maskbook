@@ -1,6 +1,6 @@
 import React, { useMemo, type ReactNode } from 'react'
 import { EmptyStatus, LoadingStatus } from '@masknet/shared'
-import { useCalendarI18N } from '../../locales/i18n_generated.js'
+import { useCalendarTrans } from '../../locales/i18n_generated.js'
 import { CountdownTimer } from './CountDownTimer.js'
 import { makeStyles } from '@masknet/theme'
 import { IconButton, Typography } from '@mui/material'
@@ -128,7 +128,7 @@ const sortPlat = (_: any, b: { type: string }) => {
 
 export function NFTList({ list, isLoading, empty, dateString }: NFTListProps) {
     const { classes, cx } = useStyles()
-    const t = useCalendarI18N()
+    const t = useCalendarTrans()
     const listAfterDate = useMemo(() => {
         const listAfterDate: string[] = []
         for (const key in list) {

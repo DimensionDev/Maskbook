@@ -4,7 +4,7 @@ import { makeStyles, type ActionButtonProps, ActionButton } from '@masknet/theme
 import { useWeb3Others } from '@masknet/web3-hooks-base'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { useERC721ContractIsApproveForAll, useERC721ContractSetApproveForAllCallback } from '@masknet/web3-hooks-evm'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 
 const useStyles = makeStyles()(() => ({}))
 
@@ -20,7 +20,7 @@ export interface EthereumERC712TokenApprovedBoundaryProps extends withClasses<'a
 
 export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenApprovedBoundaryProps) {
     const { owner, collection, operator, children, validationMessage: _validationMessage, chainId } = props
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const Others = useWeb3Others()
     const { classes } = useStyles(undefined, { props })
     const {

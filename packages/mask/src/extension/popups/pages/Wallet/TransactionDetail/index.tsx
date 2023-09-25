@@ -25,7 +25,7 @@ import { BigNumber } from 'bignumber.js'
 import { capitalize } from 'lodash-es'
 import { memo, useCallback } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
-import { useMaskSharedI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { ReplaceType, WalletAssetTabs } from '../type.js'
 import { modifyTransaction, parseReceiverFromERC20TransferInput } from '../utils.js'
@@ -143,7 +143,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const TransactionDetail = memo(function TransactionDetail() {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes, cx, theme } = useStyles()
     const location = useLocation()
     const transactionState = location.state.transaction as TransactionState | undefined

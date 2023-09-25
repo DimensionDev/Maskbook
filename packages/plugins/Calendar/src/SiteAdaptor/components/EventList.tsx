@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { EmptyStatus, LoadingStatus } from '@masknet/shared'
 import format from 'date-fns/format'
 import { Typography } from '@mui/material'
-import { useCalendarI18N } from '../../locales/i18n_generated.js'
+import { useCalendarTrans } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -101,7 +101,7 @@ export const formatDate = (date: string) => {
 
 export function EventList({ list, isLoading, empty, dateString }: EventListProps) {
     const { classes, cx } = useStyles()
-    const t = useCalendarI18N()
+    const t = useCalendarTrans()
     const listAfterDate = useMemo(() => {
         const listAfterDate: string[] = []
         for (const key in list) {

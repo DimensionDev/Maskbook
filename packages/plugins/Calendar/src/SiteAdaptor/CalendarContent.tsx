@@ -12,7 +12,7 @@ import { EventList } from './components/EventList.js'
 import { NFTList } from './components/NFTList.js'
 import { Footer } from './components/Footer.js'
 import { safeUnreachable } from '@masknet/kit'
-import { useCalendarI18N } from '../locales/i18n_generated.js'
+import { useCalendarTrans } from '../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     calendar: {
@@ -47,7 +47,7 @@ export function CalendarContent() {
     const [currentTab, onChange, tabs] = useTabs('news', 'event', 'nfts')
     const [selectedDate, setSelectedDate] = useState(new Date())
     const [open, setOpen] = useState(false)
-    const t = useCalendarI18N()
+    const t = useCalendarTrans()
     const { data: eventList, isLoading: eventLoading } = useEventList(selectedDate)
     const { data: newsList, isLoading: newsLoading } = useNewsList(selectedDate)
     const { data: nftList, isLoading: nftLoading } = useNFTList(selectedDate)

@@ -3,7 +3,7 @@ import { Button, Link, Typography } from '@mui/material'
 import { useLayoutEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
-import { FileServiceTrans, useFileServiceI18N } from '../../locales/index.js'
+import { FileServiceTrans, useFileServiceTrans } from '../../locales/index.js'
 import { useTermsConfirmed } from '../storage.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -79,7 +79,7 @@ const TERMS_URL = 'https://legal.mask.io/arweave/file-service/plugin-terms.html'
 const POLICY_URL = 'https://legal.mask.io/arweave/file-service/privacy-policy-uploader.html'
 
 export function Terms() {
-    const t = useFileServiceI18N()
+    const t = useFileServiceTrans()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const [confirmed, setConfirmed] = useTermsConfirmed()

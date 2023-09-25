@@ -1,13 +1,13 @@
 import { Icons } from '@masknet/icons'
 import { Box, ListItem, Typography, useTheme } from '@mui/material'
-import { useMaskSharedI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { useStyles } from './useStyles.js'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useConnectedOrigins } from '../../../hooks/useConnectedOrigins.js'
 
 export function ConnectedOrigins() {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const theme = useTheme()
     const { classes } = useStyles()
     const navigate = useNavigate()

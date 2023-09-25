@@ -6,7 +6,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { Skeleton, Typography, useForkRef } from '@mui/material'
 import { range } from 'lodash-es'
 import { memo, useLayoutEffect, type HTMLProps, useMemo, forwardRef } from 'react'
-import { useSharedI18N } from '../../../index.js'
+import { useSharedTrans } from '../../../index.js'
 import { isSameNFT } from '../../../utils/index.js'
 import { CollectibleCard } from './CollectibleCard.js'
 import { CollectibleItem, CollectibleItemSkeleton, type CollectibleItemProps } from './CollectibleItem.js'
@@ -113,7 +113,7 @@ export const Collection = memo(
         selectedAsset,
         ...rest
     }: CollectionProps) => {
-        const t = useSharedI18N()
+        const t = useSharedTrans()
         const { compact, containerRef } = useCompactDetection()
         const popperProps = useBoundedPopperProps()
         const { classes, cx } = useStyles({ compact })

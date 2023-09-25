@@ -6,7 +6,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { useDashboardI18N } from '../../../locales/index.js'
+import { useDashboardTrans } from '../../../locales/index.js'
 import PasswordField from '../../../components/PasswordField/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
@@ -69,7 +69,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const CreateWalletForm = memo(function CreateWalletForm() {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const location = useLocation()

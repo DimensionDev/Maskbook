@@ -10,7 +10,7 @@ import { Box, Link, Typography, useTheme } from '@mui/material'
 import { useQueries } from '@tanstack/react-query'
 import { memo, useCallback } from 'react'
 import { Trans } from 'react-i18next'
-import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
 import Services from '#services'
 import { ConfirmDialog } from '../../modals/modals.js'
 import type { ConnectedWalletInfo } from '../../pages/Personas/type.js'
@@ -75,7 +75,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const ConnectedWallet = memo(function ConnectedWallet() {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const theme = useTheme()
     const { classes } = useStyles()
 

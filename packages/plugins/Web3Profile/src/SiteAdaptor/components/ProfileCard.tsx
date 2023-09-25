@@ -17,7 +17,7 @@ import {
     alpha,
 } from '@mui/material'
 import { resolveNextIDPlatformWalletName } from '@masknet/web3-shared-base'
-import { useWeb3ProfileI18N } from '../../locales/index.js'
+import { useWeb3ProfileTrans } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -125,7 +125,7 @@ export const ProfileCard = memo(function ProfileCard({
     ...rest
 }: Props) {
     const { classes, cx } = useStyles()
-    const t = useWeb3ProfileI18N()
+    const t = useWeb3ProfileTrans()
     const [expanded, setExpanded] = useState(initialExpanded)
     const { data: user } = useQuery({
         queryKey: ['twitter', 'profile', profile.identity],

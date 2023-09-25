@@ -1,7 +1,7 @@
 import { memo, useState } from 'react'
 import { InputAdornment, InputBase } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useMaskSharedI18N } from '../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
 import { Icons } from '@masknet/icons'
 import { useCurrentLinkedPersona } from '@masknet/shared'
 
@@ -31,7 +31,7 @@ interface SearchProps {
 
 export const Search = memo<SearchProps>(function Search({ setSearchValue }) {
     const { classes } = useStyles()
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const [value, setValue] = useState<string>('')
     const [timer, setTimer] = useState<ReturnType<typeof setTimeout> | null>(null)
     const currentPersona = useCurrentLinkedPersona()

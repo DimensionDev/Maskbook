@@ -2,9 +2,9 @@ import { PluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Stack, Typography, useTheme, Link } from '@mui/material'
-import { useSharedI18N } from '@masknet/shared'
+import { useSharedTrans } from '@masknet/shared'
 import { Box } from '@mui/system'
-import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { PluginTransFieldRender } from '@masknet/plugin-infra/content-script'
 import { base } from '../base.js'
 
 const useStyles = makeStyles()((theme, props) => {
@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme, props) => {
 export function PluginHeader() {
     const theme = useTheme()
     const { classes } = useStyles()
-    const t = useSharedI18N()
+    const t = useSharedTrans()
 
     return (
         <Stack flexDirection="row" justifyContent="space-between" alignItems="center" className={classes.wrapper}>
@@ -52,7 +52,7 @@ export function PluginHeader() {
                     component="div"
                     color={MaskColorVar.textPluginColor}>
                     {base.publisher ? (
-                        <PluginI18NFieldRender pluginID={PluginID.Handle} field={base.publisher.name} />
+                        <PluginTransFieldRender pluginID={PluginID.Handle} field={base.publisher.name} />
                     ) : undefined}
                 </Typography>
                 {base.publisher?.link ? (

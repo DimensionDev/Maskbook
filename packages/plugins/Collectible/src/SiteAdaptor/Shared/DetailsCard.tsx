@@ -5,7 +5,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { SourceType } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
-import { useCollectibleI18N } from '../../locales/i18n_generated.js'
+import { useCollectibleTrans } from '../../locales/i18n_generated.js'
 
 const PLATFORM_COSTS: {
     [k in SourceType]?: number
@@ -70,7 +70,7 @@ export interface DetailsCardProps {
 
 export function DetailsCard(props: DetailsCardProps) {
     const { asset, sourceType } = props
-    const t = useCollectibleI18N()
+    const t = useCollectibleTrans()
     const { classes } = useStyles()
     const Others = useWeb3Others()
     const { pluginID } = useNetworkContext()

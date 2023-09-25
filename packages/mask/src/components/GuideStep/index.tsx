@@ -12,7 +12,7 @@ import {
 } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
-import { useMaskSharedI18N } from '../../utils/index.js'
+import { useMaskSharedTrans } from '../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -111,7 +111,7 @@ export interface GuideStepProps {
 }
 
 export default function GuideStep({ total, step, tip, children, arrow = true, onComplete }: GuideStepProps) {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     const childrenRef = useRef<HTMLElement>()
     const [clientRect, setClientRect] = useState<Pick<DOMRect, 'width' | 'height' | 'top' | 'left'>>()

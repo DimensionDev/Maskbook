@@ -22,7 +22,7 @@ import { useActivatedPlugin, useSiteAdaptorContext } from '@masknet/plugin-infra
 import { NetworkPluginID, PluginID, Sniffings } from '@masknet/shared-base'
 import { type TraderAPI } from '@masknet/web3-providers/types'
 import { DepositPaymaster, SmartPayBundler, Web3 } from '@masknet/web3-providers'
-import { useTraderI18N } from '../../locales/index.js'
+import { useTraderTrans } from '../../locales/index.js'
 import { isNativeTokenWrapper } from '../../helpers/index.js'
 import { PluginTraderMessages } from '../../messages.js'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
@@ -51,7 +51,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const theme = useTheme()
     const wallet = useWallet()
     const { defaultOutputCoin, chainId: targetChainId, defaultInputCoin, settings = false } = props
-    const t = useTraderI18N()
+    const t = useTraderTrans()
     const [focusedTrade, setFocusTrade] = useState<AsyncStateRetry<TraderAPI.TradeInfo>>()
     const { chainId, account, setChainId } = useChainContext({
         chainId: targetChainId,

@@ -10,7 +10,7 @@ import { EmojiAvatar } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Web3State } from '@masknet/web3-providers'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
-import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -68,7 +68,7 @@ interface DeleteContactModalProps extends BottomDrawerProps {
 
 function DeleteContactDrawer({ onConfirm, address, name, ...rest }: DeleteContactModalProps) {
     const { classes, cx } = useStyles()
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
 
     const { showSnackbar } = usePopupCustomSnackbar()
 

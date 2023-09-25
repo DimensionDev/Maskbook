@@ -6,7 +6,7 @@ import { z } from 'zod'
 import { UserContext } from '../../shared-ui/index.js'
 import Services from '#services'
 import { passwordRegexp } from '../utils/regexp.js'
-import { useDashboardI18N } from '../locales/i18n_generated.js'
+import { useDashboardTrans } from '../locales/i18n_generated.js'
 
 export type BackupFormInputs = {
     backupPassword: string
@@ -14,7 +14,7 @@ export type BackupFormInputs = {
 }
 
 export function useBackupFormState() {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const { value: hasPassword } = useAsync(Services.Wallet.hasPassword, [])
     const { value: previewInfo, loading } = useAsync(Services.Backup.generateBackupPreviewInfo, [])
     const { user } = UserContext.useContainer()

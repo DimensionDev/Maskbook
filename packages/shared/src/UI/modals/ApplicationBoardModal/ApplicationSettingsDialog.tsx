@@ -6,7 +6,7 @@ import type { PluginID } from '@masknet/shared-base'
 import { ApplicationSettingPluginList } from './ApplicationSettingPluginList.js'
 import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch.js'
 import { ApplicationSettingTabs } from './ApplicationBoardDialog.js'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 import { InjectedDialog } from '../../../index.js'
 
 interface ApplicationBoardSettingsProps {
@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => {
 
 export const ApplicationBoardSettingsDialog = memo<ApplicationBoardSettingsProps>(
     ({ focusPluginID, setPluginMinimalModeEnabled, open, onClose, tab = ApplicationSettingTabs.pluginSwitch }) => {
-        const t = useSharedI18N()
+        const t = useSharedTrans()
         const { classes } = useStyles()
         const [currentTab, onChange, tabs, setTab] = useTabs(
             ApplicationSettingTabs.pluginList,

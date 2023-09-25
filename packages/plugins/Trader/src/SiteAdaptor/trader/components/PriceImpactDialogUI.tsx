@@ -14,7 +14,7 @@ import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
 import { Sniffings } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { formatPercentage } from '@masknet/web3-shared-base'
-import { useTraderI18N, TraderTrans } from '../../../locales/index.js'
+import { useTraderTrans, TraderTrans } from '../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -86,7 +86,7 @@ export interface PriceImpactDialogProps extends InjectedDialogProps {
 
 export const PriceImpactDialogUI = memo<PriceImpactDialogProps>(
     ({ open, onClose, lostToken, lostValue, priceImpact, symbol, onConfirm }) => {
-        const t = useTraderI18N()
+        const t = useTraderTrans()
         const { classes } = useStyles()
 
         return (

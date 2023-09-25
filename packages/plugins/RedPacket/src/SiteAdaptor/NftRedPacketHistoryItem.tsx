@@ -8,7 +8,7 @@ import { useChainContext, useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { type NftRedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { Box, ListItem, Typography } from '@mui/material'
-import { RedPacketTrans, useRedPacketI18N } from '../locales/index.js'
+import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
 import { useNftAvailabilityComputed } from './hooks/useNftAvailabilityComputed.js'
 import { useCreateNftRedPacketReceipt } from './hooks/useCreateNftRedPacketReceipt.js'
@@ -172,7 +172,7 @@ export const NftRedPacketHistoryItem = memo(
         const [isViewed, setIsViewed] = useState(false)
         const ref = useRef<HTMLLIElement | null>(null)
         const entry = useIntersectionObserver(ref, {})
-        const t = useRedPacketI18N()
+        const t = useRedPacketTrans()
 
         const { value: receipt } = useCreateNftRedPacketReceipt(isViewed ? history.txid : '', history.chainId)
         const rpid = receipt?.rpid ?? ''

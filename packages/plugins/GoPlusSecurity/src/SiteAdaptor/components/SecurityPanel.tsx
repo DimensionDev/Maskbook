@@ -13,7 +13,7 @@ import { DefineMapping, SecurityMessageLevel } from '../constants.js'
 import { TokenPanel } from './TokenPanel.js'
 import { RiskCard, RiskCardUI } from './RiskCard.js'
 import { resolveGoLabLink } from '../../utils/helper.js'
-import { useGoPlusLabsI18N } from '../../locales/index.js'
+import { useGoPlusLabsTrans } from '../../locales/index.js'
 
 interface TokenCardProps {
     tokenSecurity: SecurityAPI.TokenSecurityType
@@ -60,7 +60,7 @@ const LIST_HEIGHT = {
 
 export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, tokenPrice, tokenMarketCap }) => {
     const { classes } = useStyles()
-    const t = useGoPlusLabsI18N()
+    const t = useGoPlusLabsTrans()
     const theme = useTheme()
 
     const [isCollapse, setCollapse] = useState(false)

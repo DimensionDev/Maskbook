@@ -2,10 +2,10 @@ import type { ExternalPluginLoadDetails } from '../types.js'
 import { Card, CardHeader, Typography, Link, Button } from '@mui/material'
 // import { PermissionAwareRedirectOf } from '../../../extension/popups'
 import { useExternalPluginManifest, useExternalPluginTemplate } from '../loader/index.js'
-import { useExternalI18N } from '../locales/index.js'
+import { useExternalTrans } from '../locales/index.js'
 
 export function ExternalPluginRenderer(props: ExternalPluginLoadDetails) {
-    const t = useExternalI18N()
+    const t = useExternalTrans()
     const manifest = useExternalPluginManifest(props.url)
     const template = useExternalPluginTemplate(props.url, manifest.value, props.metaKey)
     const retry = (

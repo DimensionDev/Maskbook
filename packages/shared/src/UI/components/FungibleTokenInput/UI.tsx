@@ -14,7 +14,7 @@ import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
-import { FormattedBalance, TokenIcon, useSharedI18N } from '../../../index.js'
+import { FormattedBalance, TokenIcon, useSharedTrans } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -144,7 +144,7 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
         ...props
     }) => {
         const { classes, cx } = useStyles()
-        const t = useSharedI18N()
+        const t = useSharedTrans()
         return (
             <InputBase
                 fullWidth

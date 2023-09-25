@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { memo } from 'react'
-import { useSharedI18N } from '../../../locales/i18n_generated.js'
+import { useSharedTrans } from '../../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     description: {
@@ -21,7 +21,7 @@ export interface GrantPermissionsProps extends withClasses<'description' | 'acti
 }
 export const GrantPermissions = memo<GrantPermissionsProps>(({ permissions, onGrant, ...props }) => {
     const { classes } = useStyles(undefined, { props })
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     return (
         <>
             <Typography className={classes.description}>

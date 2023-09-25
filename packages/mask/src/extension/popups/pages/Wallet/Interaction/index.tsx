@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { useMaskSharedI18N } from '../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
 import { Box, Typography } from '@mui/material'
 import { useChainContext, useMessages, useWeb3State } from '@masknet/web3-hooks-base'
 import {
@@ -101,7 +101,7 @@ const approveParametersType = [
 ]
 
 const Interaction = memo(function Interaction() {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const [params] = useSearchParams()

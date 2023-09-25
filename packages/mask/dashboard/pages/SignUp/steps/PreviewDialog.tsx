@@ -7,7 +7,7 @@ import { type ForwardedRef, forwardRef, useMemo, useRef, useState } from 'react'
 import { useReactToPrint } from 'react-to-print'
 import { toJpeg } from 'html-to-image'
 import { WatermarkURL } from '../../../assets/index.js'
-import { useDashboardI18N } from '../../../locales/index.js'
+import { useDashboardTrans } from '../../../locales/index.js'
 import { CopyButton } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
@@ -56,7 +56,7 @@ interface PreviewDialogProps {
 
 export function PreviewDialog(props: PreviewDialogProps) {
     const { personaName, open, type, onClose } = props
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const ref = useRef(null)
     const [height, setHeight] = useState('')
 
@@ -111,7 +111,7 @@ export function PreviewDialog(props: PreviewDialogProps) {
 const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRef<any>) => {
     const { personaName, id, privateKey, words, height } = props
     const { classes } = useStyles()
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
 
     const qrValue = useMemo(() => {
         const main = words?.length ? `mnemonic/${btoa(words.join(' '))}` : `privatekey/${privateKey}`

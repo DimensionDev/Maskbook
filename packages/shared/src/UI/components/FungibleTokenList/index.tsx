@@ -29,7 +29,7 @@ import {
     type FungibleToken,
 } from '@masknet/web3-shared-base'
 import { Box, Stack } from '@mui/material'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 import { getFungibleTokenItem } from './FungibleTokenItem.js'
 import { ManageTokenListBar } from './ManageTokenListBar.js'
 import { TokenListMode } from './type.js'
@@ -84,7 +84,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         mode = TokenListMode.List,
     } = props
 
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes } = useStyles({ enableMange: mode === TokenListMode.List && enableManage }, { props })
 
     const { pluginID } = useNetworkContext<T>(props.pluginID)

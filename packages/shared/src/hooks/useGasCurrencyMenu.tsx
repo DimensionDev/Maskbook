@@ -7,7 +7,7 @@ import { formatBalance, isLessThan, isSameAddress } from '@masknet/web3-shared-b
 import { useChainContext, useFungibleToken, useMaskTokenAddress, useNativeToken } from '@masknet/web3-hooks-base'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { useSmartPayConstants } from '@masknet/web3-shared-evm'
-import { TokenIcon, useSharedI18N } from '../index.js'
+import { TokenIcon, useSharedTrans } from '../index.js'
 import { useMenuConfig } from './useMenu.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -45,7 +45,7 @@ export function useGasCurrencyMenu(
     selectedAddress?: string,
     handleUnlock?: () => void,
 ) {
-    const sharedI18N = useSharedI18N()
+    const sharedI18N = useSharedTrans()
     const { classes } = useStyles()
     const { chainId } = useChainContext()
     const [current, setCurrent] = useState('')

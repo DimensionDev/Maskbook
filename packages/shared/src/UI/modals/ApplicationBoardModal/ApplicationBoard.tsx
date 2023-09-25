@@ -5,7 +5,7 @@ import { useActivatedPluginsSiteAdaptor, type IdentityResolved } from '@masknet/
 import {
     useCurrentPersonaConnectStatus,
     SelectProviderModal,
-    useSharedI18N,
+    useSharedTrans,
     PersonaContext,
     type PersonaPerSiteConnectStatus,
 } from '@masknet/shared'
@@ -126,7 +126,7 @@ interface ApplicationBoardPluginsListProps
 
 function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
     const { currentSite = EnhanceableSite.Twitter } = props
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const plugins = useActivatedPluginsSiteAdaptor('any')
     const { pluginID: currentWeb3Network } = useNetworkContext()
     const { account, chainId } = useChainContext()
@@ -223,7 +223,7 @@ function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
 
 function RenderEntryComponent({ application }: { application: Application }) {
     const Entry = application.entry.RenderEntryComponent!
-    const t = useSharedI18N()
+    const t = useSharedTrans()
 
     const ApplicationEntryStatus = useContext(ApplicationEntryStatusContext)
 

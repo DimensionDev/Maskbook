@@ -13,7 +13,7 @@ import {
     switchLogoSettings,
 } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { useMaskSharedI18N } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../utils/index.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
 
@@ -64,7 +64,7 @@ const useStyles = makeStyles()((theme) => ({
 interface SwitchLogoDialogProps {}
 
 export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     const identity = useLastRecognizedIdentity()
     const defaultLogoType = useValueRef(switchLogoSettings[identity?.identifier?.userId || ''])

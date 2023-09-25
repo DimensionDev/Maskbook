@@ -4,7 +4,7 @@ import { Typography } from '@mui/material'
 import { ChainResolver } from '@masknet/web3-providers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { useMaskSharedI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { GasSetting1559 } from './GasSetting1559.js'
 import { Prior1559GasSetting } from './Prior1559GasSetting.js'
@@ -29,7 +29,7 @@ const useStyles = makeStyles()(() => ({
 }))
 
 const GasSetting = memo(() => {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     useTitle(t('popups_gas_fee_settings'))

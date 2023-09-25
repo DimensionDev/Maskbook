@@ -1,12 +1,12 @@
 import { memo } from 'react'
 import { Box, Typography, useTheme } from '@mui/material'
 import { type ActionModalBaseProps, ActionModal } from '../../components/index.js'
-import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
 import { SelectProvider } from '../../components/SelectProvider/index.js'
 import { useSearchParams } from 'react-router-dom'
 
 export const SelectProviderModal = memo<ActionModalBaseProps>(function SelectProviderModal({ ...rest }) {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const theme = useTheme()
     const [params] = useSearchParams()
     const onlyMask = params.get('onlyMask')

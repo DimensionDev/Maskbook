@@ -6,8 +6,8 @@ import { Web3 } from '@masknet/web3-providers'
 import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
 import { PluginCyberConnectRPC } from '../messages.js'
-import { useCyberConnectI18N } from '../locales/i18n_generated.js'
-import { useSharedI18N, WalletConnectedBoundary } from '@masknet/shared'
+import { useCyberConnectTrans } from '../locales/i18n_generated.js'
+import { useSharedTrans, WalletConnectedBoundary } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -45,8 +45,8 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export default function ConnectButton({ address }: { address: string }) {
-    const t = useCyberConnectI18N()
-    const sharedI18N = useSharedI18N()
+    const t = useCyberConnectTrans()
+    const sharedI18N = useSharedTrans()
     const { classes, cx } = useStyles()
     const { account, chainId } = useChainContext()
     const wallet = useWallet()

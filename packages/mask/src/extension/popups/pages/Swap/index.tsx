@@ -8,7 +8,7 @@ import { ChainContextProvider, DefaultWeb3ContextProvider } from '@masknet/web3-
 import { Typography } from '@mui/material'
 import { useEffect, useMemo } from 'react'
 import { TwitterAdaptor } from '../../../../../shared/site-adaptors/implementations/twitter.com.js'
-import { useMaskSharedI18N } from '../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../utils/index.js'
 import { NetworkSelector } from '../../components/NetworkSelector/index.js'
 import { useTokenParams } from '../../hooks/index.js'
 import { SwapBox } from './SwapBox/index.js'
@@ -61,7 +61,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export default function SwapPage() {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes } = useStyles()
     const { chainId } = useTokenParams()
     applyMaskColorVars(document.body, Appearance.light)

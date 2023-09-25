@@ -6,7 +6,7 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Box, useForkRef } from '@mui/material'
 import type { BoxProps } from '@mui/system'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
 import { Collection, CollectionSkeleton, LazyCollection, type CollectionProps } from './Collection.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
@@ -120,7 +120,7 @@ export const CollectionList = memo(function CollectionList({
     from,
     ...rest
 }: CollectionListProps) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes, cx } = useStyles(gridProps)
 
     const { pluginID, account, chainId, setChainId, networks } = useChainRuntime()
@@ -327,7 +327,7 @@ const ExpandedCollection = memo(function ExpandedCollection({
     emptyText,
     ...collectionProps
 }: ExpandedCollectionProps) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { loadAssets, getAssets } = useUserAssets()
     const { classes, theme } = useStyles(gridProps)
     const { collection, assets } = collectionProps

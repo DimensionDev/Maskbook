@@ -11,7 +11,7 @@ import { TokenType, type NonFungibleTokenContract } from '@masknet/web3-shared-b
 import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab } from '@mui/material'
-import { useMaskSharedI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { NormalHeader } from '../../../components/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { WalletAssetTabs } from '../type.js'
@@ -97,7 +97,7 @@ enum TabType {
 }
 
 const AddToken = memo(function AddToken() {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
 
     const blackList = useBlockedFungibleTokens()
     const rowSize = useRowSize()

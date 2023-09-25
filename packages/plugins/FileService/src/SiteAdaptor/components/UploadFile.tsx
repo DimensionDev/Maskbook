@@ -5,7 +5,7 @@ import { Checkbox, FormControlLabel, Radio, Typography } from '@mui/material'
 import { useCallback, useMemo, useState } from 'react'
 import { MAX_FILE_SIZE } from '../../constants.js'
 import { downloadFile } from '../../helpers.js'
-import { useFileServiceI18N } from '../../locales/i18n_generated.js'
+import { useFileServiceTrans } from '../../locales/i18n_generated.js'
 import type { ProviderConfig } from '../../types.js'
 import { Provider } from '../../types.js'
 import { useFileManagement } from '../contexts/index.js'
@@ -71,7 +71,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function UploadFile() {
-    const t = useFileServiceI18N()
+    const t = useFileServiceTrans()
     const { classes, theme } = useStyles()
     const [encrypted, setEncrypted] = useState(true)
     const [useCDN, setUseCDN] = useState(false)

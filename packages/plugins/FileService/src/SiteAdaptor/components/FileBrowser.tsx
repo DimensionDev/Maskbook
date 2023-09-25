@@ -8,7 +8,7 @@ import { useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
 import { downloadFile } from '../../helpers.js'
-import { useFileServiceI18N } from '../../locales/index.js'
+import { useFileServiceTrans } from '../../locales/index.js'
 import { Provider } from '../../types.js'
 import { useFileManagement } from '../contexts/index.js'
 import { FileList, SelectableFileList } from './FileList.js'
@@ -142,7 +142,7 @@ interface Props {
 }
 
 export function FileBrowser({ selectMode, selectedFileIds = EMPTY_LIST }: Props) {
-    const t = useFileServiceI18N()
+    const t = useFileServiceTrans()
     const { classes } = useStyles()
     const [tab, setTab] = useState(ProviderTabs.All)
     const navigate = useNavigate()

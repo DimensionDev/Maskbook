@@ -7,7 +7,7 @@ import { Box } from '@mui/system'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
-import { useDashboardI18N } from '../../../locales/i18n_generated.js'
+import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { RestoreFromPrivateKey, type FormInputs } from '../../../components/Restore/RestoreFromPrivateKey.js'
 import { RestorePersonaFromLocal } from '../../../components/Restore/RestorePersonaFromLocal.js'
 import { RestoreFromCloud } from '../../../components/Restore/RestoreFromCloud/index.js'
@@ -76,7 +76,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Recovery = memo(function Recovery() {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const { classes } = useStyles()
     const { currentPersona } = PersonaContext.useContainer()
     const tabPanelClasses = useMemo(() => ({ root: classes.panels }), [classes.panels])

@@ -1,7 +1,7 @@
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
-import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { PluginTransFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import { Telemetry } from '@masknet/web3-telemetry'
@@ -25,7 +25,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 RenderEntryComponent({ disabled }) {
                     return (
                         <ApplicationEntry
-                            title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
+                            title={<PluginTransFieldRender field={name} pluginID={base.ID} />}
                             disabled={disabled}
                             icon={icon}
                             onClick={() => {

@@ -3,7 +3,7 @@ import { styled, ListItemButton, Typography, ListItemIcon, Box, useMediaQuery } 
 import { ToolboxHintUnstyled } from '../../../components/InjectedComponents/ToolboxUnstyled.js'
 import { useSideBarNativeItemStyleVariants } from './ToolboxHint.js'
 import GuideStep from '../../../components/GuideStep/index.js'
-import { useMaskSharedI18N } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../utils/index.js'
 import { useThemeSettings } from '../../../components/DataSource/useActivatedUI.js'
 import { searchHomeLinkName } from '../utils/selector.js'
 import { ButtonStyle } from '../constant.js'
@@ -98,7 +98,7 @@ export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application'
 }
 
 export function ProfileLinkAtTwitter() {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
 
     return (
         <>

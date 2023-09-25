@@ -1,7 +1,7 @@
 import { Trans } from 'react-i18next'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { Icons } from '@masknet/icons'
-import { WalletIcon, useSharedI18N } from '@masknet/shared'
+import { WalletIcon, useSharedTrans } from '@masknet/shared'
 import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Card, Typography, Paper, Link } from '@mui/material'
@@ -75,7 +75,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
     const { pluginID, providerType, networkType, connection } = props
     const { value: connected, loading, error, retry } = connection
 
-    const t = useSharedI18N()
+    const t = useSharedTrans()
 
     const Others = useWeb3Others(pluginID)
     const providerDescriptor = useProviderDescriptor(pluginID, providerType)

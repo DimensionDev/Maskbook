@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import { useDashboardI18N } from '../../../locales/i18n_generated.js'
+import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { CountdownButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Controller } from 'react-hook-form'
 import { Box, TextField } from '@mui/material'
@@ -16,7 +16,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const EmailForm = memo(function EmailForm() {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const language = useLanguage()
     const { classes } = useStyles()
     const { user } = UserContext.useContainer()

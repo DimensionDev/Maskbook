@@ -3,7 +3,7 @@ import { useCustomSnackbar, makeStyles } from '@masknet/theme'
 import { alpha, Button, Typography } from '@mui/material'
 import { type HTMLProps, memo, useCallback, useRef } from 'react'
 import { useDropArea } from 'react-use'
-import { useSharedI18N } from '../../../index.js'
+import { useSharedTrans } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     dropArea: {
@@ -73,7 +73,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
 
 export const UploadDropArea = memo(
     ({ maxFileSize = Number.POSITIVE_INFINITY, omitSizeLimit, onSelectFile, className, accept, ...rest }: Props) => {
-        const t = useSharedI18N()
+        const t = useSharedTrans()
         const { classes, cx } = useStyles()
         const { showSnackbar } = useCustomSnackbar()
         const handleFiles = (files: File[] | FileList | null) => {

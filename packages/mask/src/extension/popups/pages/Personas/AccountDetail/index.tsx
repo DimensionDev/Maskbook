@@ -23,7 +23,7 @@ import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType } from '@masknet/web3-telemetry/types'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useTitle } from '../../../hooks/index.js'
-import { useMaskSharedI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { AccountDetailUI } from './UI.js'
 import Service from '#services'
 import { PageTitleContext } from '../../../context.js'
@@ -32,7 +32,7 @@ import { ConfirmDialog } from '../../../modals/modals.js'
 import { DisconnectEventMap } from '../common.js'
 
 const AccountDetail = memo(() => {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const navigate = useNavigate()
     const theme = useTheme()
     const { selectedAccount, currentPersona, walletProofs } = PersonaContext.useContainer()

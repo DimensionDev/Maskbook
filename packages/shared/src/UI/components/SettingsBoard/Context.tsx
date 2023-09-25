@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { createContainer } from 'unstated-next'
-import { useSharedI18N } from '@masknet/shared'
+import { useSharedTrans } from '@masknet/shared'
 import {
     useGasOptions,
     useNetworkContext,
@@ -35,7 +35,7 @@ export function useSettingsContext(initial?: {
     disableGasLimit?: boolean
     disableSlippageTolerance?: boolean
 }) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { pluginID } = useNetworkContext(initial?.pluginID)
     const { chainId } = useChainContext({
         chainId: initial?.chainId,

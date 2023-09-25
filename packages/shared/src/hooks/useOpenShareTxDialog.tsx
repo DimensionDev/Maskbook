@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { ExplorerResolver } from '@masknet/web3-providers'
-import { useSharedI18N } from '../locales/index.js'
+import { useSharedTrans } from '../locales/index.js'
 import { ConfirmModal } from '../UI/modals/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -45,7 +45,7 @@ type ShareTransactionProps = Omit<ShareTransactionOptions, 'title' | 'onShare'>
 
 const ShareTransaction = memo(({ message, content, hash }: ShareTransactionProps) => {
     const { classes } = useStyles()
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const link = ExplorerResolver.transactionLink(chainId, hash)
     return (
@@ -73,7 +73,7 @@ const ShareTransaction = memo(({ message, content, hash }: ShareTransactionProps
 })
 
 export function useOpenShareTxDialog() {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
 
     return useCallback(
         async ({ title, message, content, hash, buttonLabel, onShare }: ShareTransactionOptions) => {

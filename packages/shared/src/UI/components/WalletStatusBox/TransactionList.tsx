@@ -14,7 +14,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { getContractOwnerDomain } from '@masknet/web3-shared-evm'
 import { Grid, type GridProps, Link, List, ListItem, type ListProps, Stack, Typography } from '@mui/material'
-import { useSharedI18N } from '../../../index.js'
+import { useSharedTrans } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -82,7 +82,7 @@ interface TransactionProps extends GridProps {
     onClear?(tx: RecentTransactionComputed<Web3Helper.ChainIdAll, Web3Helper.TransactionAll>): void
 }
 function Transaction({ chainId, transaction: tx, onClear = noop, ...rest }: TransactionProps) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes, theme } = useStyles()
 
     const statusTextMap: Record<TransactionStatusType, string> = {

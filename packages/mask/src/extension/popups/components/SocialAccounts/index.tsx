@@ -2,7 +2,7 @@ import { PopupModalRoutes, type EnhanceableSite, type ProfileAccount } from '@ma
 import { memo } from 'react'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
 import { AccountAvatar } from '../../pages/Personas/components/AccountAvatar/index.js'
 import { Icons } from '@masknet/icons'
 import { ConnectSocialAccounts } from '../ConnectSocialAccounts/index.js'
@@ -73,7 +73,7 @@ export const SocialAccounts = memo<SocialAccountsProps>(function SocialAccounts(
     onConnect,
     onAccountClick,
 }) {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes } = useStyles()
     const modalNavigate = useModalNavigate()
 

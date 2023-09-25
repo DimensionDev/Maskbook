@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { PluginWalletStatusBar, useSharedI18N } from '@masknet/shared'
+import { PluginWalletStatusBar, useSharedTrans } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { ActionButton, LoadingBase, ShadowRootPopper, makeStyles, useCustomSnackbar } from '@masknet/theme'
@@ -23,7 +23,7 @@ import { useMemo, useState, type ReactNode } from 'react'
 import { useTimeout } from 'react-use'
 import { GLB3DIcon, PetsPluginID, initMeta } from '../constants.js'
 import { useNFTs, useUser } from '../hooks/index.js'
-import { usePetsI18N } from '../locales/index.js'
+import { usePetsTrans } from '../locales/index.js'
 import { PluginPetMessages } from '../messages.js'
 import { petShowSettings } from '../settings.js'
 import { ImageType, type FilterContract, type OwnerERC721TokenInfo, type PetMetaDB } from '../types.js'
@@ -115,8 +115,8 @@ interface PetSetDialogProps {
 }
 
 export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
-    const t = usePetsI18N()
-    const sharedI18N = useSharedI18N()
+    const t = usePetsTrans()
+    const sharedI18N = useSharedTrans()
     const { classes } = useStyles()
     const theme = useTheme()
     const { showSnackbar } = useCustomSnackbar()

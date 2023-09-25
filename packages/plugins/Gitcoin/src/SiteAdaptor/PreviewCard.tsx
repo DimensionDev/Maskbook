@@ -9,7 +9,7 @@ import { NetworkPluginID, purify } from '@masknet/shared-base'
 import { makeStyles, ShadowRootIsolation } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { alpha, Box, Button, Card, Link, Stack, Typography } from '@mui/material'
-import { GitcoinTrans, useGitcoinI18N } from '../locales/i18n_generated.js'
+import { GitcoinTrans, useGitcoinTrans } from '../locales/i18n_generated.js'
 import { SUPPORTED_TENANTS, TenantToChainIconMap } from '../constants.js'
 import { grantDetailStyle } from './gitcoin-grant-detail-style.js'
 import { useGrant } from './hooks/useGrant.js'
@@ -127,7 +127,7 @@ export interface PreviewCardProps {
 }
 
 export function PreviewCard(props: PreviewCardProps) {
-    const t = useGitcoinI18N()
+    const t = useGitcoinTrans()
     const { classes, theme } = useStyles()
     const { value: grant, error, loading, retry } = useGrant(props.grantId)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

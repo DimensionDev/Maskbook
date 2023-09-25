@@ -18,7 +18,7 @@ import {
     leftShift,
 } from '@masknet/web3-shared-base'
 import { ChainBoundary, TokenIcon } from '@masknet/shared'
-import { useApprovalI18N } from '../locales/index.js'
+import { useApprovalTrans } from '../locales/index.js'
 import { ApprovalLoadingContent } from './ApprovalLoadingContent.js'
 import { ApprovalEmptyContent } from './ApprovalEmptyContent.js'
 
@@ -190,7 +190,7 @@ interface ApprovalTokenItemProps {
 function ApprovalTokenItem(props: ApprovalTokenItemProps) {
     const { networkDescriptor, spender, chainId, retry } = props
 
-    const t = useApprovalI18N()
+    const t = useApprovalTrans()
     const { classes, cx } = useStyles({
         listItemBackground: networkDescriptor?.backgroundGradient,
         listItemBackgroundIcon: `url("${networkDescriptor?.icon}")`,

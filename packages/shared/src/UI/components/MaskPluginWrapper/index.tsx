@@ -1,16 +1,16 @@
+import { Suspense, type ReactNode, useMemo, forwardRef, useImperativeHandle, useState } from 'react'
 import { Typography, SnackbarContent, Link } from '@mui/material'
 import { makeStyles, MaskColorVar, MaskLightTheme } from '@masknet/theme'
-import { Suspense, type ReactNode, useMemo, forwardRef, useImperativeHandle, useState } from 'react'
-import { useSharedI18N } from '@masknet/shared'
 import { Box } from '@mui/system'
 import {
-    usePluginI18NField,
-    PluginI18NFieldRender,
+    usePluginTransField,
+    PluginTransFieldRender,
     type PluginWrapperComponent,
     type Plugin,
     type PluginWrapperMethods,
 } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
+import { useSharedTrans } from '../../../index.js'
 
 interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     open?: boolean
@@ -90,7 +90,7 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
         borderRadius: wrapperProps?.borderRadius,
         margin: wrapperProps?.margin,
     })
-    const t = useSharedI18N()
+    const t = useSharedTrans()
 
     const publisherInfo = useMemo(() => {
         if (!publisher) return
@@ -161,7 +161,7 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
 export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SiteAdaptor.Definition> = forwardRef(
     (props, ref) => {
         const { ID, name, publisher, wrapperProps } = props.definition
-        const t = usePluginI18NField()
+        const t = usePluginTransField()
         const [width, setWidth] = useState<undefined | number>(undefined)
         const [open, setOpen] = useState<boolean>(false)
         const [title, setTitle] = useState<string | undefined>(undefined)
@@ -183,7 +183,7 @@ export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SiteAdapt
                 open={open}
                 title={title || t(ID, name)}
                 width={width}
-                publisher={publisher ? <PluginI18NFieldRender pluginID={ID} field={publisher.name} /> : undefined}
+                publisher={publisher ? <PluginTransFieldRender pluginID={ID} field={publisher.name} /> : undefined}
                 publisherLink={publisher?.link}
                 children={props.children}
                 lackHostPermission={props.lackHostPermission}

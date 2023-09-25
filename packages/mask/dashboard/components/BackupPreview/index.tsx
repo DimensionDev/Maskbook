@@ -19,7 +19,7 @@ import {
 } from '@mui/material'
 import { Box, type BoxProps } from '@mui/system'
 import { memo } from 'react'
-import { useDashboardI18N } from '../../locales/i18n_generated.js'
+import { useDashboardTrans } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -131,7 +131,7 @@ export const PersonasBackupPreview = memo<PersonasBackupPreviewProps>(function P
     selected,
     onChange,
 }) {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const { classes, cx } = useStyles()
 
     const personas = info.personas.join(', ')
@@ -204,7 +204,7 @@ export const WalletsBackupPreview = memo<WalletsBackupPreviewProps>(function Wal
     selected,
     onChange,
 }) {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const { classes, theme, cx } = useStyles()
 
     if (!wallets.length) return null

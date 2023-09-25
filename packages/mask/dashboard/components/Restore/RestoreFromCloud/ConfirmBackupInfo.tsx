@@ -4,7 +4,7 @@ import { Box } from '@mui/material'
 import { memo, useCallback, useLayoutEffect, useState } from 'react'
 import Services from '#services'
 import { usePersonaRecovery } from '../../../contexts/index.js'
-import { useDashboardI18N } from '../../../locales/index.js'
+import { useDashboardTrans } from '../../../locales/index.js'
 import { fetchBackupValue } from '../../../utils/api.js'
 import PasswordField from '../../PasswordField/index.js'
 import { PrimaryButton } from '../../PrimaryButton/index.js'
@@ -14,7 +14,7 @@ import { RestoreContext } from './RestoreProvider.js'
 import { RestoreStep } from './restoreReducer.js'
 
 export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
     const { state, dispatch } = RestoreContext.useContainer()

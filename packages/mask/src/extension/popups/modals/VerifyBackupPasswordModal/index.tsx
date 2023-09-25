@@ -2,7 +2,7 @@ import { memo, useCallback, useState } from 'react'
 import { ActionButton } from '@masknet/theme'
 import { Box } from '@mui/material'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
@@ -10,7 +10,7 @@ import { MATCH_PASSWORD_RE } from '../../constants.js'
 import { UserContext } from '../../../../../shared-ui/index.js'
 
 export const VerifyBackupPasswordModal = memo<ActionModalBaseProps>(function VerifyBackupPasswordModal() {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const navigate = useNavigate()
     const [password, setPassword] = useState('')
     const [passwordMatched, setPasswordMatched] = useState(true)

@@ -1,8 +1,8 @@
 import { Icons } from '@masknet/icons'
 import { Stack, Typography, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useSharedI18N } from '@masknet/shared'
-import { useSnapshotI18N } from '../locales/index.js'
+import { useSharedTrans } from '@masknet/shared'
+import { useSnapshotTrans } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     item1: {
@@ -22,8 +22,8 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function PluginDescriptor() {
-    const t = useSnapshotI18N()
-    const tr = useSharedI18N()
+    const t = useSnapshotTrans()
+    const tr = useSharedTrans()
     const { classes } = useStyles()
 
     return (

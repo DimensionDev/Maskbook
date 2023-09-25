@@ -25,7 +25,7 @@ import { SavingsFormDialog } from './SavingsForm.js'
 import { LidoProtocol } from '../protocols/LDOProtocol.js'
 import { AAVEProtocol } from '../protocols/AAVEProtocol.js'
 import { LDO_PAIRS } from '../constants.js'
-import { useSavingsI18N } from '../locales/index.js'
+import { useSavingsTrans } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -62,7 +62,7 @@ export interface SavingsDialogProps {
 const chains = [ChainId.Mainnet]
 
 export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
-    const t = useSavingsI18N()
+    const t = useSavingsTrans()
     const { classes } = useStyles()
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: ChainId.Mainnet })

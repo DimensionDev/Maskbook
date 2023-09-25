@@ -3,7 +3,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { isGreaterThan, isLessThanOrEqualTo, rightShift, TokenType } from '@masknet/web3-shared-base'
-import { useTipsI18N } from '../../locales/index.js'
+import { useTipsTrans } from '../../locales/index.js'
 import type { ValidationTuple } from '../../types/index.js'
 import type { TipContextOptions } from './TipContext.js'
 
@@ -27,7 +27,7 @@ export function useTipValidate(
     const { account } = useChainContext()
 
     const { data: balance = '0' } = useFungibleTokenBalance(pluginID, token?.address, { chainId, account })
-    const t = useTipsI18N()
+    const t = useTipsTrans()
 
     const result: ValidationTuple = useMemo(() => {
         if (tipType === TokenType.Fungible) {

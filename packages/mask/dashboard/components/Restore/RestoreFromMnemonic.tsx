@@ -4,7 +4,7 @@ import { some } from 'lodash-es'
 import { useCallback, useLayoutEffect } from 'react'
 import { useList } from 'react-use'
 import { usePersonaRecovery } from '../../contexts/index.js'
-import { useDashboardI18N } from '../../locales/index.js'
+import { useDashboardTrans } from '../../locales/index.js'
 import { DesktopMnemonicConfirm } from '../Mnemonic/index.js'
 import { PrimaryButton } from '../PrimaryButton/index.js'
 
@@ -23,7 +23,7 @@ interface RestoreFromMnemonicProp {
 
 export function RestoreFromMnemonic({ handleRestoreFromMnemonic, error, setError }: RestoreFromMnemonicProp) {
     const { classes } = useStyles()
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const [values, { updateAt, set: setMnemonic }] = useList(Array.from({ length: 12 }, () => ''))
     const { fillSubmitOutlet } = usePersonaRecovery()
     const handleWordChange = useCallback((word: string, index: number) => {

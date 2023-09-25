@@ -6,7 +6,7 @@ import { List, ListItem, ListItemIcon, ListItemText, Tooltip, Typography } from 
 import { first, sortBy } from 'lodash-es'
 import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useMaskSharedI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { useWalletGroup } from '../../../hooks/useWalletGroup.js'
 import { ImportCreateWallet } from '../components/ImportCreateWallet/index.js'
@@ -68,7 +68,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const CreateWallet = memo(function CreateWallet() {
-    const { t } = useMaskSharedI18N()
+    const { t } = useMaskSharedTrans()
     const { classes, theme } = useStyles()
     const navigate = useNavigate()
 
