@@ -2,8 +2,6 @@ import { Flags } from '@masknet/flags'
 
 function isIgnoredRequest(request: Request) {
     return [
-        // Twitter NFT Avatar API
-        'yb0w3z63oa',
         // Twitter Identity API
         'mr8asf7i4h',
         // NextID

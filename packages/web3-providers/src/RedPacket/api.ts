@@ -1,12 +1,12 @@
 import secondsToMilliseconds from 'date-fns/secondsToMilliseconds'
 import { abiCoder, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
 import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import type { RedPacketJSONPayloadFromChain } from './types.js'
 import { CREATE_LUCKY_DROP_TOPIC } from './constants.js'
 import type { RedPacketBaseAPI } from '../entry-types.js'
-import { isSameAddress } from '@masknet/web3-shared-base'
 
 const creationSuccessTopicInputs = REDPACKET_ABI.find((x) => x.name === 'CreationSuccess')?.inputs!
 
