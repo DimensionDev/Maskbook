@@ -133,6 +133,12 @@ const useStyles = makeStyles()((theme) => ({
         paddingLeft: 16,
         paddingRight: 16,
     },
+    groupedButton: {
+        // Increasing priority instead of using !important.
+        '&&': {
+            color: theme.palette.maskColor.second,
+        },
+    },
     panel: {
         padding: theme.spacing(2),
         background: theme.palette.maskColor.bottom,
@@ -262,7 +268,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                             <MaskTabList
                                 onChange={onChangeTab}
                                 aria-label="persona-tabs"
-                                classes={{ root: classes.tabs }}>
+                                classes={{ root: classes.tabs, grouped: classes.groupedButton }}>
                                 <Tab label={t('popups_social_account')} value={PopupHomeTabType.SocialAccounts} />
                                 <Tab label={t('popups_connected_wallets')} value={PopupHomeTabType.ConnectedWallets} />
                             </MaskTabList>
