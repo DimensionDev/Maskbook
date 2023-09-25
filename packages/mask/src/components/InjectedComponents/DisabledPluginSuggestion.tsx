@@ -1,3 +1,7 @@
+import { type ReactNode, useCallback } from 'react'
+import { useAsync } from 'react-use'
+import type { Option } from 'ts-results-es'
+import { useSubscription } from 'use-subscription'
 import { Icons } from '@masknet/icons'
 import {
     type Plugin,
@@ -11,10 +15,6 @@ import { BooleanPreference, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme } from '@masknet/theme'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Box, type BoxProps, Button, Skeleton, Typography, useTheme } from '@mui/material'
-import { type ReactNode, useCallback } from 'react'
-import { useAsync } from 'react-use'
-import type { Option } from 'ts-results-es'
-import { useSubscription } from 'use-subscription'
 import Services from '#services'
 import { useI18N } from '../../utils/index.js'
 
@@ -42,12 +42,12 @@ export function useDisabledPluginSuggestionFromPost(postContent: Option<string>,
 
 export function useDisabledPluginSuggestionFromMeta(meta: undefined | ReadonlyMap<string, unknown>) {
     const disabled = useDisabledPlugins().filter((x) => x.contribution?.metadataKeys)
+
     if (!meta) return EMPTY_LIST
-    const keys = [...meta.keys()]
 
     const matches = disabled.filter((x) => {
         const contributes = x.contribution!.metadataKeys!
-        return keys.some((key) => contributes.has(key))
+        return [...meta.keys()].some((key) => contributes.has(key))
     })
     return matches
 }
@@ -58,6 +58,7 @@ export function PossiblePluginSuggestionPostInspector() {
     const matches = useDisabledPluginSuggestionFromPost(message, metaLinks)
     return <PossiblePluginSuggestionUI plugins={matches} />
 }
+
 export function PossiblePluginSuggestionUI(props: { plugins: Plugin.Shared.Definition[] }) {
     const { plugins } = props
     const _plugins = useActivatedPluginsSiteAdaptor('any')

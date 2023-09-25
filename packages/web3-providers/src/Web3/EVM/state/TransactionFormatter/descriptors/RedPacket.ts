@@ -20,7 +20,6 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
             claimed_value: string
             token_address: string
         }
-
         if (!token_address) return
 
         const token = await this.Hub.getFungibleToken(token_address ?? '', { chainId })
@@ -51,7 +50,6 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
         const { token_address } = (events?.ClaimSuccess?.returnValues ?? {}) as {
             token_address: string
         }
-
         if (!token_address) return
 
         return this.getNonFungibleContractSymbol(chainId, token_address)

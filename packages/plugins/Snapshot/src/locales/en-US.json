@@ -35,7 +35,5 @@
     "plugin_snapshot_vote_confirm_dialog_warning": "This action cannot be undone.",
     "plugin_snapshot_current_result_title": "Current results",
     "plugin_snapshot_download_report": "Download report",
-    "enable_plugin_boundary": "Enable plugin",
-    "loading": "Loading",
-    "enable_plugin_boundary_description": "This function has been turned off in the App settings. Enable plug-ins to fully access."
+    "loading": "Loading"
 }

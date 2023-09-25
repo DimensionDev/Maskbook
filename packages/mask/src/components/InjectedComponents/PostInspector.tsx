@@ -1,14 +1,14 @@
-import { DecryptPost } from './DecryptedPost/DecryptedPost.js'
-import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
+import { useSubscription } from 'use-subscription'
 import {
     usePostInfoDetails,
     createInjectHooksRenderer,
     useActivatedPluginsSiteAdaptor,
 } from '@masknet/plugin-infra/content-script'
+import { DecryptPost } from './DecryptedPost/DecryptedPost.js'
+import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
 import { PossiblePluginSuggestionPostInspector } from './DisabledPluginSuggestion.js'
-import { useSubscription } from 'use-subscription'
-import { PersistentStorages } from '../../../shared/index.js'
 import { MaskPostExtraPluginWrapperWithPermission } from './PermissionBoundary.js'
+import { PersistentStorages } from '../../../shared/index.js'
 
 const PluginHooksRenderer = createInjectHooksRenderer(
     useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
