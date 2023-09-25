@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { makeStyles, useTabs } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import startOfWeek from 'date-fns/startOfWeek'
 import endOfWeek from 'date-fns/endOfWeek'
 import eachDayOfInterval from 'date-fns/eachDayOfInterval'
@@ -46,16 +46,14 @@ interface DatePickerTabProps {
     selectedDate: Date
     setSelectedDate: (date: Date) => void
     list: Record<string, any[]> | null
+    currentTab: 'news' | 'event' | 'nfts'
 }
 
-export function DatePickerTab({ selectedDate, setSelectedDate, list, open, setOpen }: DatePickerTabProps) {
+export function DatePickerTab({ selectedDate, setSelectedDate, list, open, setOpen, currentTab }: DatePickerTabProps) {
     const { classes } = useStyles()
     const week = useMemo(() => {
         return eachDayOfInterval({ start: startOfWeek(selectedDate), end: endOfWeek(selectedDate) })
     }, [selectedDate])
-    const [currentTab, onChange, tabs] = useTabs(
-        ...(week.map((v) => v.getDate().toString()) as unknown as [string, string]),
-    )
     return (
         <div className={classes.container}>
             {week.map((v) => {
@@ -85,9 +83,9 @@ export function DatePickerTab({ selectedDate, setSelectedDate, list, open, setOp
                     <DatePicker
                         open={open}
                         setOpen={(open) => setOpen(open)}
-                        list={list}
                         selectedDate={selectedDate}
                         setSelectedDate={setSelectedDate}
+                        currentTab={currentTab}
                     />
                 </div>
             </ClickAwayListener>

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useEffect, useRef } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { EmptyStatus, LoadingStatus } from '@masknet/shared'
 import { useI18N } from '../../locales/i18n_generated.js'
@@ -113,6 +113,7 @@ interface NewsListProps {
 export function NewsList({ list, isLoading, empty, dateString }: NewsListProps) {
     const { classes, cx } = useStyles()
     const t = useI18N()
+    const listRef = useRef<HTMLDivElement>(null)
     const listAfterDate = useMemo(() => {
         const listAfterDate: string[] = []
         for (const key in list) {
@@ -122,8 +123,14 @@ export function NewsList({ list, isLoading, empty, dateString }: NewsListProps) 
         }
         return listAfterDate
     }, [list, dateString])
+    useEffect(() => {
+        if (listRef.current)
+            listRef.current.scrollTo({
+                top: 0,
+            })
+    }, [listRef, list])
     return (
-        <div className={classes.container}>
+        <div className={classes.container} ref={listRef}>
             <div className={classes.paddingWrap}>
                 {isLoading && !list?.length ? (
                     <div className={cx(classes.empty, classes.eventTitle)}>
