@@ -56,6 +56,5 @@
     "mask_network": "Mask Network",
     "create_persona_intro": "Web3 프로필로 페르소나를 맏드세요.",
     "add_wallet_intro": "Web3 탭에서는 Mask 확장 기능을 설치한 친구에게 NFT 컬렉션, 기부 기록 및 기타 온체인 피드에 대한 지갑 주소를 표시할 수 있습니다.",
-    "others_lack_wallet": "해당 사용자가 이것을 설치하지 않습니다.",
-    "enable_plugin": "특정 콘텐츠를 보려면 DAPP을 열어야 합니다"
+    "others_lack_wallet": "해당 사용자가 이것을 설치하지 않습니다."
 }
