@@ -1,6 +1,4 @@
-import urlcat from 'urlcat'
-import { compact, first, unionBy } from 'lodash-es'
-import { padLeft, toHex } from 'web3-utils'
+import { compact, first } from 'lodash-es'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -11,7 +9,7 @@ import { SmartPayBundlerAPI } from './BundlerAPI.js'
 import { SmartPayFunderAPI } from './FunderAPI.js'
 import { ContractWallet } from '../libs/ContractWallet.js'
 import { Create2Factory } from '../libs/Create2Factory.js'
-import { LOG_ROOT, MAX_ACCOUNT_LENGTH, THE_GRAPH_PROD } from '../constants.js'
+import { MAX_ACCOUNT_LENGTH, THE_GRAPH_PROD } from '../constants.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 import type { OwnerAPI } from '../../entry-types.js'
 
@@ -135,37 +133,6 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
 
         return response.data.ownerShips.map((x) =>
             this.createContractAccount(chainId, x.address, x.owner, '', true, true),
-        )
-    }
-
-    /**
-     * Query the on-chain changeOwner event from chainbase.
-     * @param chainId
-     * @param owner
-     * @returns
-     */
-    private async getAccountsFromChainbase(chainId: ChainId, owner: string) {
-        const { records: logs } = await fetchJSON<{ records: OwnerAPI.Log[]; count: number }>(
-            urlcat(LOG_ROOT, '/records', {
-                newOwnerAddress: padLeft(owner, 64),
-                size: MAX_ACCOUNT_LENGTH,
-                offset: 0,
-            }),
-        )
-
-        if (!logs) {
-            return []
-        }
-
-        return compact(
-            unionBy(logs, (x) => x.address.toLowerCase()).map((topic) => {
-                if (!isValidAddress(topic.address)) return
-
-                const previousOwner = toHex(topic.topic1.slice(-40))
-                if (!isValidAddress(previousOwner)) return
-
-                return this.createContractAccount(chainId, topic.address, owner, previousOwner, true)
-            }),
         )
     }
 
