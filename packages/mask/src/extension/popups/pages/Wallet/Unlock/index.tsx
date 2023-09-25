@@ -49,7 +49,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const Unlock = memo(() => {
+const Unlock = memo(function Unlock() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [password, setPassword] = useState('')
@@ -65,12 +65,10 @@ const Unlock = memo(() => {
         if (verified) {
             if (close_after_unlock && !from) {
                 await Services.Helper.removePopupWindow()
-            } else {
-                const path = from
-                    ? urlcat(from, {
-                          tab: from === PopupRoutes.Personas ? PopupHomeTabType.ConnectedWallets : undefined,
-                      })
-                    : PopupRoutes.Wallet
+            } else if (from) {
+                const path = urlcat(from, {
+                    tab: from === PopupRoutes.Personas ? PopupHomeTabType.ConnectedWallets : undefined,
+                })
                 navigate(path, { replace: true })
             }
         }

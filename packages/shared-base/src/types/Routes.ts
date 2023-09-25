@@ -65,7 +65,6 @@ export enum PopupRoutes {
     CollectibleDetail = '/wallet/collectible-detail',
     ContractInteraction = '/wallet/contract-interaction',
     ConfirmTransaction = '/wallet/confirm-transaction',
-    Unlock = '/wallet/unlock',
     ResetWallet = '/wallet/reset-wallet',
     Transfer = '/wallet/transfer',
     Contacts = '/wallet/contacts',
@@ -114,10 +113,6 @@ export interface PopupRoutesParamsMap {
         tab: string
         from?: PopupModalRoutes
     }
-    [PopupRoutes.Unlock]: {
-        close_after_unlock?: boolean
-        from?: string | null
-    }
     [PopupRoutes.SetPaymentPassword]: {
         isCreating?: boolean
         source?: string
@@ -128,6 +123,9 @@ export interface PopupRoutesParamsMap {
     [PopupRoutes.Wallet]: {
         isCreating?: boolean
         external_request?: string
+        // Unlock
+        close_after_unlock?: boolean
+        from?: string | null
     }
     [PopupRoutes.ChangeOwner]: { contractAccount: string | undefined }
     [PopupRoutes.Contacts]: { selectedToken: string | undefined }

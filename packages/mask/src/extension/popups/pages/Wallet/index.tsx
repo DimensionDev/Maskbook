@@ -23,7 +23,6 @@ const GasSetting = lazy(() => import('./GasSetting/index.js'))
 const Transfer = lazy(() => import('./Transfer/index.js'))
 const ContactList = lazy(() => import('./ContactList/index.js'))
 const ContractInteraction = lazy(() => import('./Interaction/index.js'))
-const Unlock = lazy(() => import('./Unlock/index.js'))
 const ResetWallet = lazy(() => import('./ResetWallet/index.js'))
 const SetPaymentPassword = lazy(() => import('./SetPaymentPassword/index.js'))
 const ChangeOwner = lazy(() => import('./ChangeOwner/index.js'))
@@ -56,8 +55,6 @@ export default function Wallet() {
                             <Route path={r(PopupRoutes.Transfer)} element={<Transfer />} />
                             <Route path={r(PopupRoutes.ContractInteraction)} element={<ContractInteraction />} />
                             <Route path={r(PopupRoutes.SelectWallet)} element={<SelectWallet />} />
-                            <Route path={r(PopupRoutes.Unlock)} element={<Unlock />} />
-                            <Route path={r(PopupRoutes.ResetWallet)} element={<ResetWallet />} />
                             <Route path={r(PopupRoutes.ChangeOwner)} element={<ChangeOwner />} />
                             <Route path={r(PopupRoutes.NetworkManagement)} element={<NetworkManagement />} />
                             <Route path={r(PopupRoutes.AddNetwork)} element={<EditNetwork />} />
@@ -74,6 +71,7 @@ export default function Wallet() {
                             <Route path={r(PopupRoutes.TokenDetail)} element={<TokenDetail />} />
                             <Route path={r(PopupRoutes.TransactionDetail)} element={<TransactionDetail />} />
                             <Route path={r(PopupRoutes.CollectibleDetail)} element={<CollectibleDetail />} />
+                            <Route path={r(PopupRoutes.ResetWallet)} element={<ResetWallet />} />
                             <Route path="*" element={<Navigate to={PopupRoutes.Wallet} />} />
                         </Route>
                     </Routes>
