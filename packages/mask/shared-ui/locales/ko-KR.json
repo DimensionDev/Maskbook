@@ -779,7 +779,6 @@
     "plugin_default_title": "디폴트",
     "plugin_provider_by": "제공자",
     "plugin_enable": "플러그인 활성화",
-    "show_wallet_setting_intro": "설정 저장 후 이 기능을 활성화하는 데 사용할 월렛을 선택하세요.",
     "show_wallet_setting_button": "설정으로 가기",
     "web3_profile_no_social_address_list": "인증된 사용자 주소 데이터 소스를 찾을 수 없습니다.",
     "plugin_avatar_feature_general_user_name": "일반 사용자",
