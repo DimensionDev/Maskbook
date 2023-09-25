@@ -1,7 +1,3 @@
-import type { PluginWrapperComponent, Plugin, PluginWrapperMethods } from '@masknet/plugin-infra/content-script'
-import { MaskPostExtraPluginWrapper, useSharedTrans } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { Typography, useTheme } from '@mui/material'
 import {
     forwardRef,
     memo,
@@ -13,8 +9,13 @@ import {
     useState,
 } from 'react'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
+import type { PluginWrapperComponent, Plugin, PluginWrapperMethods } from '@masknet/plugin-infra/content-script'
+import { MaskPostExtraPluginWrapper, useSharedTrans } from '@masknet/shared'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { Typography, useTheme } from '@mui/material'
 import { useCheckPermissions, useGrantPermissions } from '../DataSource/usePluginHostPermission.js'
 import { PossiblePluginSuggestionUISingle } from './DisabledPluginSuggestion.js'
+
 interface PermissionBoundaryProps extends PropsWithChildren<{}> {
     permissions: string[]
     fallback?:
@@ -52,6 +53,7 @@ export const MaskPostExtraPluginWrapperWithPermission: PluginWrapperComponent<Pl
         }, [])
 
         useImperativeHandle(ref, () => refItem, [refItem])
+
         return (
             <PermissionBoundary
                 permissions={props.definition.enableRequirement.host_permissions ?? EMPTY_LIST}

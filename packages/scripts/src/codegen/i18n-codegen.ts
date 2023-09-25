@@ -1,5 +1,5 @@
-import { ROOT_PATH, watchTask } from '../utils/index.js'
 import { fileURLToPath } from 'url'
+import { ROOT_PATH, watchTask } from '../utils/index.js'
 
 const config = fileURLToPath(new URL('.i18n-codegen.json', ROOT_PATH))
 export async function i18nCodegen() {

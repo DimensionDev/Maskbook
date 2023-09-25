@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { DEFAULT_PLUGIN_PUBLISHER, EnhanceableSite, PluginID } from '@masknet/shared-base'
 import { languages } from './locales/languages.js'
-import { META_KEY_1, META_KEY_2 } from './constants.js'
+import { META_KEY_1, META_KEY_2, META_KEY_3 } from './constants.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: PluginID.FileService,
@@ -21,6 +21,6 @@ export const base: Plugin.Shared.Definition = {
     },
     i18n: languages,
     contribution: {
-        metadataKeys: new Set([META_KEY_1, META_KEY_2]),
+        metadataKeys: new Set([META_KEY_1, META_KEY_2, META_KEY_3]),
     },
 }
