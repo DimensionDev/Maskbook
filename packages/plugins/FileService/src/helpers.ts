@@ -18,7 +18,7 @@ const reader_v1 = createTypedMessageMetadataReader<FileInfoV1>(META_KEY_1, schem
 const reader_v2 = createTypedMessageMetadataReader<FileInfo>(META_KEY_2, schemaV2)
 const reader_v3 = createTypedMessageMetadataReader<FileInfo[]>(META_KEY_3, schemaV3)
 
-export function FileInfoMetadataReader(meta: TypedMessage['meta']): Result<FileInfo[], void> {
+export function getFileInfoMetadata(meta: TypedMessage['meta']): Result<FileInfo[], void> {
     const v3 = reader_v3(meta)
     if (v3.isOk()) return v3
     const v2 = reader_v2(meta).map((info) => [info])

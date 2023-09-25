@@ -42,12 +42,12 @@ export function useDisabledPluginSuggestionFromPost(postContent: Option<string>,
 
 export function useDisabledPluginSuggestionFromMeta(meta: undefined | ReadonlyMap<string, unknown>) {
     const disabled = useDisabledPlugins().filter((x) => x.contribution?.metadataKeys)
+
     if (!meta) return EMPTY_LIST
-    const keys = [...meta.keys()]
 
     const matches = disabled.filter((x) => {
         const contributes = x.contribution!.metadataKeys!
-        return keys.some((key) => contributes.has(key))
+        return [...meta.keys()].some((key) => contributes.has(key))
     })
     return matches
 }
@@ -58,6 +58,7 @@ export function PossiblePluginSuggestionPostInspector() {
     const matches = useDisabledPluginSuggestionFromPost(message, metaLinks)
     return <PossiblePluginSuggestionUI plugins={matches} />
 }
+
 export function PossiblePluginSuggestionUI(props: { plugins: Plugin.Shared.Definition[] }) {
     const { plugins } = props
     const _plugins = useActivatedPluginsSiteAdaptor('any')

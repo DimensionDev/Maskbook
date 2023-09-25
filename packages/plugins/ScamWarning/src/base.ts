@@ -18,5 +18,8 @@ export const base: Plugin.Shared.Definition = {
         target: 'stable',
     },
     experimentalMark: true,
+    contribution: {
+        postContent: new Set([/https?:\/\/.*/]),
+    },
     i18n: languages,
 }

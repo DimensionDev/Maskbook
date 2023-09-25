@@ -10,7 +10,7 @@ import { ThemeProvider } from '@mui/material'
 import { Trans } from 'react-i18next'
 import { base } from '../base.js'
 import { META_KEY_1, META_KEY_2, META_KEY_3 } from '../constants.js'
-import { FileInfoMetadataReader } from '../helpers.js'
+import { getFileInfoMetadata } from '../helpers.js'
 import type { FileInfo } from '../types.js'
 import { MultipleFileChip, SingleFileChip } from './components/index.js'
 import { FileViewer } from './FileViewer.js'
@@ -32,7 +32,8 @@ const definition: Plugin.SiteAdaptor.Definition = {
         setupStorage(context.createKVStorage<StorageOptions>('persistent', { termsConfirmed: undefined }))
     },
     DecryptedInspector(props) {
-        const metadata = FileInfoMetadataReader(props.message.meta)
+        const metadata = getFileInfoMetadata(props.message.meta)
+
         if (!metadata.isOk()) return null
         return (
             <ThemeProvider theme={MaskLightTheme}>

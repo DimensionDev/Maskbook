@@ -1,5 +1,4 @@
 import { useMemo, useState, useTransition } from 'react'
-import { useAsyncFn } from 'react-use'
 import { LoadingBase, MaskDarkTheme, MaskLightTheme, MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { CardContent, Stack, Tab, ThemeProvider, Typography, useTheme } from '@mui/material'
 import { PluginEnableBoundary } from '@masknet/shared'
@@ -8,7 +7,7 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { Icons } from '@masknet/icons'
 import { PluginID } from '@masknet/shared-base'
-import { useIsMinimalMode, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { PluginDescriptor } from './PluginDescriptor.js'
 import { ProfileSpaceHeader } from './ProfileSpaceHeader.js'
 import { ContentTabs } from '../types.js'
@@ -66,10 +65,6 @@ export function ProfileView(props: ProfileViewProps) {
         currentSpace.spaceId,
         currentSpace.strategyName ?? space?.symbol,
     )
-    const { setPluginMinimalModeEnabled } = useSiteAdaptorContext()
-    const [{ loading: loadingModeEnabled }, onEnablePlugin] = useAsyncFn(async () => {
-        await setPluginMinimalModeEnabled?.(PluginID.Snapshot, false)
-    }, [setPluginMinimalModeEnabled])
 
     const [isPending, startTransition] = useTransition()
     const filteredProposalList = useMemo(() => {
