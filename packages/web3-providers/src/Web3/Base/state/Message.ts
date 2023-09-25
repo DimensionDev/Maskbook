@@ -105,11 +105,13 @@ export class MessageState<Request, Response> implements Web3MessageState<Request
         return message_
     }
 
-    async applyAndWaitResponse(message: TransferableMessage<Request, Response>): Promise<Response> {
+    async applyAndWaitResponse(
+        message: TransferableMessage<Request, Response>,
+    ): Promise<ReasonableMessage<Request, Response>> {
         const { ID } = await this.applyRequest(message)
-        const { response } = await this.waitForApprovingRequest(ID)
-        if (!response) throw new Error('Invalid response')
-        return response
+        const reasonableMessage = await this.waitForApprovingRequest(ID)
+        if (!reasonableMessage.response) throw new Error('Invalid response')
+        return reasonableMessage
     }
 
     async updateMessage(id: string, updates: Partial<TransferableMessage<Request, Response>>): Promise<void> {

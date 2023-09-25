@@ -297,6 +297,7 @@ export async function exportKeyStoreJSON(address: string, unverifiedPassword?: s
     const masterPassword = await password.INTERNAL_getMasterPasswordRequired()
     const wallet = await database.getWalletRequired(address)
     if (!wallet.storedKeyInfo) throw new Error(`Cannot export private key of ${address}.`)
+
     const exported =
         wallet.derivationPath && !wallet.configurable
             ? await Mask.exportKeyStoreJSONOfPath({

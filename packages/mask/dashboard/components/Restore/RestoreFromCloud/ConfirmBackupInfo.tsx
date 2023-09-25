@@ -64,7 +64,6 @@ export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
             </PrimaryButton>,
         )
     }, [handleNext, t, loading])
-    console.log(backupFileInfo)
 
     if (!backupFileInfo) return null
 

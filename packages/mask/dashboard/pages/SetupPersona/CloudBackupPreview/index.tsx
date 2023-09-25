@@ -53,7 +53,9 @@ const useStyles = makeStyles()((theme) => ({
 
 export const CloudBackupPreview = memo(function CloudBackupPreview() {
     const t = useDashboardI18N()
+
     const { classes, theme, cx } = useStyles()
+
     const [params] = useSearchParams()
     const location = useLocation()
 
@@ -149,9 +151,15 @@ export const CloudBackupPreview = memo(function CloudBackupPreview() {
                         </Box>
                         <Box className={classes.content}>
                             <Icons.Message size={48} />
-                            <Box flex={1}>
+                            <Box width="clamp(188px, 27%, 35%)" flex={1}>
                                 <TextOverflowTooltip title={previewInfo.abstract} arrow placement="top">
-                                    <Typography className={classes.text}>{previewInfo.abstract}</Typography>
+                                    <Typography
+                                        className={classes.text}
+                                        whiteSpace="nowrap"
+                                        textOverflow="ellipsis"
+                                        overflow="hidden">
+                                        {previewInfo.abstract}
+                                    </Typography>
                                 </TextOverflowTooltip>
 
                                 <Typography display="flex" columnGap="4px">
@@ -170,22 +178,25 @@ export const CloudBackupPreview = memo(function CloudBackupPreview() {
                                     </Typography>
                                 </Typography>
                             </Box>
-                            <ActionButton
-                                startIcon={<Icons.Cloud size={18} />}
-                                color="primary"
-                                className={classes.button}
-                                loading={mergeLoading}
-                                onClick={handleMergeClick}>
-                                {t.cloud_backup_merge_local_data()}
-                            </ActionButton>
-                            <ActionButton
-                                loading={overwriteLoading}
-                                onClick={handleOverwriteClick}
-                                startIcon={<Icons.CloudBackup2 size={18} />}
-                                color="error"
-                                className={cx(classes.button)}>
-                                {t.cloud_backup_overwrite_backup()}
-                            </ActionButton>
+
+                            <Box display="flex" justifyContent="flex-end" flex={1} columnGap={1} minWidth={436}>
+                                <ActionButton
+                                    startIcon={<Icons.Cloud size={18} />}
+                                    color="primary"
+                                    className={classes.button}
+                                    loading={mergeLoading}
+                                    onClick={handleMergeClick}>
+                                    {t.cloud_backup_merge_local_data()}
+                                </ActionButton>
+                                <ActionButton
+                                    loading={overwriteLoading}
+                                    onClick={handleOverwriteClick}
+                                    startIcon={<Icons.CloudBackup2 size={18} />}
+                                    color="error"
+                                    className={cx(classes.button)}>
+                                    {t.cloud_backup_overwrite_backup()}
+                                </ActionButton>
+                            </Box>
                         </Box>
                     </>
                 ) : (

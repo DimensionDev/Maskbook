@@ -67,12 +67,18 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
         if (!wallet?.address) return
         const now = formatDateTime(Date.now(), 'yyyy-MM-dd')
         const jsonFile = await Services.Wallet.exportKeyStoreJSON(wallet.address, state?.password)
+        // TODO: The address parameter should be returned by the sdk and not displayed as such. We need to wait for the sdk to be upgraded.
         await saveFileFromBuffer({
-            fileContent: encodeText(JSON.stringify(jsonFile)),
+            fileContent: encodeText(
+                JSON.stringify({
+                    ...JSON.parse(jsonFile),
+                    address: wallet.address.slice(2),
+                }),
+            ),
             fileName: `mask-network-keystore-backup-${now}.json`,
             mimeType: MimeType.JSON,
         })
-    }, [wallet?.address])
+    }, [wallet?.address, state?.password])
 
     const { loading: getMnemonicLoading, value: mnemonic } = useAsync(async () => {
         if (!wallet) return
