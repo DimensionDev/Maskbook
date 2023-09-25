@@ -1,9 +1,9 @@
 import { resolve } from 'path'
+import { fileURLToPath } from 'url'
 import { camelCase, identity, kebabCase, upperFirst } from 'lodash-es'
 import { task } from '../utils/task.js'
 import { ROOT_PATH } from '../utils/paths.js'
 import { awaitChildProcess, changeFile, shell } from '../utils/index.js'
-import { fileURLToPath } from 'url'
 
 type PackageOptions = {
     type: 'plugin' | 'package'
