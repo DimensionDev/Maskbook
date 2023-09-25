@@ -95,6 +95,7 @@ export const RestoreWalletFromLocal = memo(function RestorePersonaFromLocal({
                     {!readingFile ? (
                         <Box mt={4}>
                             <PasswordField
+                                fullWidth
                                 placeholder={t.create_wallet_key_store_password()}
                                 type="password"
                                 onChange={(e) => {

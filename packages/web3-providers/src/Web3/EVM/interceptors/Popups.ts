@@ -165,10 +165,16 @@ export class Popups implements Middleware<ConnectionContext> {
             }
 
             if (!Web3StateRef.value.Message) throw new Error('Failed to approve request.')
-            const response = await Web3StateRef.value.Message.applyAndWaitResponse(request)
+            const { request: updates, response } = await Web3StateRef.value.Message.applyAndWaitResponse(request)
+
+            context.config = {
+                ...context.config,
+                ...updates.arguments.params[0],
+            }
+
             const editor = ErrorEditor.from(null, response)
 
-            if (editor.presence) {
+            if (editor.presence || !response) {
                 context.abort(editor.error)
             } else {
                 context.write(response.result)

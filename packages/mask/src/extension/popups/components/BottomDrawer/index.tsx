@@ -1,12 +1,22 @@
 import { memo, useRef, type ReactNode, useEffect } from 'react'
 import { Icons } from '@masknet/icons'
 import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
-import { Box, Drawer, Typography } from '@mui/material'
+import { Box, Drawer, Typography, backdropClasses } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
+    paper: {
         padding: theme.spacing(2.25),
         borderRadius: '24px 24px 0 0',
+        background: theme.palette.maskColor.bottom,
+    },
+    root: {
+        [`& .${backdropClasses.root}`]: {
+            background:
+                theme.palette.mode === 'dark'
+                    ? 'rgba(255, 255, 255, 0.10)'
+                    : 'linear-gradient(0deg, rgba(0, 0, 0, 0.40) 0%, rgba(0, 0, 0, 0.40) 100%), rgba(28, 104, 243, 0.20)',
+            backdropFilter: 'blur(5px)',
+        },
     },
     header: {
         display: 'flex',
@@ -47,7 +57,11 @@ export const BottomDrawer = memo<BottomDrawerProps>(function BottomDrawer({ open
         if (open) everOpenRef.current = true
     }, [open])
     return (
-        <Drawer anchor="bottom" onClose={handleClose} open={open} classes={{ paper: classes.root }}>
+        <Drawer
+            anchor="bottom"
+            onClose={handleClose}
+            open={open}
+            classes={{ paper: classes.paper, root: classes.root }}>
             <Box className={classes.header}>
                 <TextOverflowTooltip title={title}>
                     <Typography className={classes.title}>{title}</Typography>
