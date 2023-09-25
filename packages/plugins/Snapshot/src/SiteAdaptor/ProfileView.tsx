@@ -1,16 +1,8 @@
 import { useMemo, useState, useTransition } from 'react'
 import { useAsyncFn } from 'react-use'
-import {
-    ActionButton,
-    LoadingBase,
-    MaskDarkTheme,
-    MaskLightTheme,
-    MaskTabList,
-    makeStyles,
-    useTabs,
-} from '@masknet/theme'
+import { LoadingBase, MaskDarkTheme, MaskLightTheme, MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { CardContent, Stack, Tab, ThemeProvider, Typography, useTheme } from '@mui/material'
-import { ProfileCard, type ProfileCardProps } from './ProfileCard.js'
+import { PluginEnableBoundary } from '@masknet/shared'
 import type { DAOResult } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
@@ -21,8 +13,9 @@ import { PluginDescriptor } from './PluginDescriptor.js'
 import { ProfileSpaceHeader } from './ProfileSpaceHeader.js'
 import { ContentTabs } from '../types.js'
 import { useProposalList } from './hooks/useProposalList.js'
-import { ProfileProposalList } from './ProfileProposalList.js'
 import { useSpace } from './hooks/useSpace.js'
+import { ProfileCard, type ProfileCardProps } from './ProfileCard.js'
+import { ProfileProposalList } from './ProfileProposalList.js'
 import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -38,29 +31,9 @@ const useStyles = makeStyles()((theme) => ({
         paddingBottom: 0,
         borderBottom: `1px solid ${theme.palette.maskColor.line}`,
     },
-    minimalContent: {
-        height: 148,
-        paddingTop: 0,
-        paddingBottom: 0,
-        '&:last-child': {
-            paddingBottom: 16,
-        },
-    },
-    minimalText: {
-        color: theme.palette.maskColor.dark,
-        whiteSpace: 'nowrap',
-    },
     tabListRoot: {
         marginTop: '10px !important',
         flexGrow: 0,
-    },
-
-    enableButton: {
-        display: 'inline-flex',
-        justifyContent: 'center',
-        borderRadius: 20,
-        width: 254,
-        height: 40,
     },
 }))
 
@@ -111,25 +84,9 @@ export function ProfileView(props: ProfileViewProps) {
             <ProfileCard {...ProfileCardProps}>
                 <Stack className={classes.root}>
                     <ThemeProvider theme={MaskLightTheme}>
-                        <PluginDescriptor />
-                        <CardContent className={classes.minimalContent}>
-                            <Stack height="100%" alignItems="center" justifyContent="end">
-                                <Stack justifyContent="center" alignItems="center" width="100%" boxSizing="border-box">
-                                    <Typography fontWeight={400} fontSize={14} className={classes.minimalText}>
-                                        {t.enable_plugin_boundary_description()}
-                                    </Typography>
-                                </Stack>
-                                <ActionButton
-                                    loading={loadingModeEnabled}
-                                    startIcon={<Icons.Plugin size={18} />}
-                                    className={classes.enableButton}
-                                    color="primary"
-                                    onClick={onEnablePlugin}
-                                    sx={{ mt: 6 }}>
-                                    {t.enable_plugin_boundary()}
-                                </ActionButton>
-                            </Stack>
-                        </CardContent>
+                        <PluginEnableBoundary pluginID={PluginID.Snapshot}>
+                            <PluginDescriptor />
+                        </PluginEnableBoundary>
                     </ThemeProvider>
                 </Stack>
             </ProfileCard>
