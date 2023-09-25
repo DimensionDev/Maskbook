@@ -1151,7 +1151,6 @@
     "failed_to_save_network": "无法保存网络",
     "incorrect_chain_id": "不正确的链号",
     "invalid_number": "数字无效",
-    "adding_network_exists": "已存在相同网络",
     "saved_network_successfully": "保存网络成功",
     "adding_network_successfully": "添加网络成功",
     "deleted_network_successfully": "网络删除成功",
