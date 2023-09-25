@@ -188,7 +188,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                         render={({ field }) => (
                             <PasswordField
                                 {...field}
-                                onFocus={() => clearErrors()}
+                                onFocus={() => clearErrors('backupPassword')}
                                 sx={{ mb: 2 }}
                                 placeholder={t.settings_label_backup_password()}
                                 error={!!errors.backupPassword?.message}
@@ -212,7 +212,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                         render={({ field }) => (
                             <PasswordField
                                 {...field}
-                                onFocus={() => clearErrors()}
+                                onFocus={() => clearErrors('paymentPassword')}
                                 sx={{ mb: 2 }}
                                 placeholder={t.sign_in_account_local_backup_payment_password()}
                                 error={!!errors.paymentPassword?.message}

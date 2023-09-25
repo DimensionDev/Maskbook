@@ -9,6 +9,7 @@ const useStyles = makeStyles()((theme) => ({
         background: theme.palette.maskColor.secondaryBottom,
         padding: theme.spacing(2),
         boxShadow: theme.palette.maskColor.bottomBg,
+        backdropFilter: 'blur(8px)',
         left: 0,
         right: 0,
         display: 'flex',

@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react'
-import { Box, formHelperTextClasses, Typography } from '@mui/material'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { Box, Typography } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 import { z as zod } from 'zod'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -34,16 +34,6 @@ const useStyles = makeStyles()((theme) => ({
     input: {
         width: '100%',
         marginTop: 10,
-    },
-    textField: {
-        padding: theme.spacing(1),
-        fontSize: 12,
-        lineHeight: '16px',
-        borderRadius: 6,
-        [`&.${formHelperTextClasses.error}`]: {
-            boxShadow: `0 0 0 ${theme.spacing(0.5)} ${MaskColorVar.redMain.alpha(0.2)}`,
-            border: `1px solid ${MaskColorVar.redMain.alpha(0.8)}`,
-        },
     },
     tips: {
         fontSize: 14,
@@ -140,7 +130,6 @@ const CreateWalletForm = memo(function CreateWalletForm() {
                                 placeholder={t.create_wallet_payment_password_place_holder()}
                                 error={!isValid && !!errors.password?.message}
                                 helperText={!isValid ? errors.password?.message : ''}
-                                InputProps={{ className: classes.textField }}
                             />
                         )}
                         name="password"
@@ -153,7 +142,6 @@ const CreateWalletForm = memo(function CreateWalletForm() {
                                 error={!isValid && !!errors.confirm?.message}
                                 helperText={!isValid ? errors.confirm?.message : ''}
                                 placeholder={t.create_wallet_re_enter_payment_password()}
-                                InputProps={{ className: classes.textField }}
                             />
                         )}
                         name="confirm"

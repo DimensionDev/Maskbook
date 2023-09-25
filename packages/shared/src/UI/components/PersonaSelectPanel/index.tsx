@@ -138,12 +138,6 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
             if (!isVerified && enableVerify) {
                 onClose?.()
                 ApplicationBoardModal.close()
-                if (finishTarget) {
-                    CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
-                        open: false,
-                        pluginID: finishTarget,
-                    })
-                }
                 await handleVerifyNextID(selectedPersona.persona, currentProfileIdentify.identifier?.userId)
                 if (!finishTarget) Telemetry.captureEvent(EventType.Access, EventID.EntryProfileConnectVerify)
                 else Telemetry.captureEvent(EventType.Access, EventID.EntryMaskComposeVerifyTwitter)

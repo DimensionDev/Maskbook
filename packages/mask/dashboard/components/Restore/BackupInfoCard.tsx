@@ -36,7 +36,7 @@ export const BackupInfoCard = memo(function BackupInfoCard({ info }: BackupInfoP
             operations={<Typography className={classes.desc}>{formatFileSize(info.size, true)}</Typography>}>
             {Number.isNaN(info.uploadedAt) ? null : (
                 <Typography fontSize={12} color="second">
-                    {formatDateTime(fromUnixTime(info.uploadedAt), 'yyyy-MM-dd hh:mm')}
+                    {formatDateTime(fromUnixTime(info.uploadedAt), 'yyyy-MM-dd HH:mm')}
                 </Typography>
             )}
         </FileFrame>

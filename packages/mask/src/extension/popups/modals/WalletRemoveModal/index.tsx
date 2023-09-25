@@ -46,9 +46,10 @@ function WalletRemoveDrawer({ wallet, error, password, setPassword, setError, ..
             if (!remainWallets.includes(nextWallet)) nextWallet = remainWallets[0]
 
             await Web3.removeWallet?.(wallet.address, password, { providerType: ProviderType.MaskWallet })
+
             await Web3.connect({
                 providerType: ProviderType.MaskWallet,
-                account: nextWallet.address,
+                account: nextWallet?.address ?? '',
             })
             rest.onClose?.()
 

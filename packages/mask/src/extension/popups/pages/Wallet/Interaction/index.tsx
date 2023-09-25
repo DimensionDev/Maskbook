@@ -11,6 +11,7 @@ import {
     formatEthereumAddress,
     ChainId,
     ErrorEditor,
+    addGasMargin,
 } from '@masknet/web3-shared-evm'
 import { toHex, toUtf8 } from 'web3-utils'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -204,7 +205,7 @@ const Interaction = memo(function Interaction() {
                                       return toHex(value)
                                   })
                                 : {}),
-
+                            gas: toHex(addGasMargin(gasConfig?.gas ?? x.gas).toString()),
                             chainId: toHex(x.chainId),
                             nonce: toHex(x.nonce),
                         }

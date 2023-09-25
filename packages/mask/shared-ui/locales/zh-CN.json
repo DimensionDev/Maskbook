@@ -1,6 +1,6 @@
 {
     "promote": ":performancing_arts::performancing_arts::performancing_arts: 是否早已厌倦了纯文字信息？您可以尝试发送加密信息给朋友。安装Mask.io来发送您第一个加密推文吧。",
-    "promote_red_packet": "🧧🧧🧧 尝试给你的好友发送代币或 NFTs 红包，分享此时的喜悦吧！ 安装 Mask.io 发送你的第一个红包。",
+    "promote_red_packet": "我刚刚用 Mask Network 插件在 Twitter 上创建一个 {{token}} 红包。欢迎抽取和转发。",
     "promote_file_service": "📃📃📃 尝试在推特上使用永久的、去中心化的文件存储功能。安装 Mask.io 上传并分享你的第一份永久的去中心化存储文件，由主流去中心化存储方案提供技术支持。",
     "promote_savings": "Hi朋友们，我刚刚在 {{chain}} 上质押了 {{amount}} {{symbol}} 。关注@{{account}} 来查找更多的质押项目。",
     "promote_withdraw": "Hi朋友们，我刚刚在 {{chain}} 上质押了 {{- amount}} {{symbol}} 。关注@{{account}} 来查找更多的质押项目。",
@@ -92,7 +92,7 @@
     "application_settings_tab_plug_app-unlisted-placeholder": "点击应用图标将会在应用列表中显示。",
     "persona_load_failed": "加载失败",
     "additional_post_box__encrypted_post_pre": "安装 #mask_io 解密此贴文 ！ {{encrypted}}",
-    "additional_post_box__encrypted_post_pre_red_packet_sns_official_account": "使用 #mask_io 来领取这个红包！@{{account}} \n\n$t(promote_red_packet)\n {{encrypted}}",
+    "additional_post_box__encrypted_post_pre_red_packet_sns_official_account": "$t(promote_red_packet) 关注@{{account}}，获取更多 Web3 应用的最新资讯和洞见。 \n\n🧧🧧🧧 尝试用 Mask.io 给你的好友发送红包。\n\n {{encrypted}}",
     "additional_post_box__encrypted_post_pre_red_packet": "使用 #mask_io 来认领这个红包！@{{encrypted}}",
     "additional_post_box__encrypted_post_pre_file_service_sns_official_account": "$t(promote_file_service)\n {{encrypted}}",
     "additional_post_box__encrypted_post_pre_file_service": "$t(promote_file_service) {{encrypted}}",

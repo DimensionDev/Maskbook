@@ -95,7 +95,6 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
         [handleSubmit, updateUser, showSnackbar],
     )
 
-    console.log(errors.oldPassword?.type)
     return (
         <ActionModal
             header={t('popups_settings_change_backup_password')}

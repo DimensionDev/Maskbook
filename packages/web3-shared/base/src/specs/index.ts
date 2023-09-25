@@ -1028,7 +1028,9 @@ export interface MessageState<Request, Response> extends Startable {
     /** Applies a request. */
     applyRequest(message: TransferableMessage<Request, Response>): Promise<ReasonableMessage<Request, Response>>
     /** Applies a request and waits for confirmation from the user. */
-    applyAndWaitResponse<T>(message: TransferableMessage<Request, Response>): Promise<Response>
+    applyAndWaitResponse<T>(
+        message: TransferableMessage<Request, Response>,
+    ): Promise<ReasonableMessage<Request, Response>>
     /** Approves a request. */
     approveRequest(id: string, updates?: Request): Promise<JsonRpcResponse | void>
     /** Rejects a request. */

@@ -26,6 +26,8 @@
     "coming_soon": "Coming soon",
     "max": "Max",
     "data": "Data",
+    "redpacket_a_token": "a token",
+    "redpacket_an_nft": "an NFT",
     "available_balance": "Available Balance",
     "available_amount": "{{- amount}} available",
     "failed_to_transfer_token": "Failed to transfer token: {{- message}}",
