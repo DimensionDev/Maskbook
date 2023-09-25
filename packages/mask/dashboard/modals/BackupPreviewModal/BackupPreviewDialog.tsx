@@ -5,7 +5,7 @@ import { Box, DialogActions, DialogContent, Typography } from '@mui/material'
 import { useBackupFormState, type BackupFormInputs } from '../../hooks/useBackupFormState.js'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { useAsyncFn } from 'react-use'
+import { useAsyncFn, useUpdateEffect } from 'react-use'
 import Services from '#services'
 import type { AccountType } from '../../type.js'
 import { fetchUploadLink, uploadBackupValue } from '../../utils/api.js'
@@ -91,6 +91,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
             setError,
             control,
             handleSubmit,
+            reset,
             formState: { errors, isDirty, isValid },
         },
     } = useBackupFormState()
@@ -145,6 +146,14 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
         if (uploadLoading && controllerRef.current) controllerRef.current.abort()
         onClose()
     }, [uploadLoading, onClose])
+
+    useUpdateEffect(() => {
+        reset(undefined, {
+            keepDirty: true,
+            keepDirtyValues: true,
+            keepTouched: true,
+        })
+    }, [backupPersonas, backupWallets, reset])
 
     const content = useMemo(() => {
         if (value)
@@ -267,11 +276,13 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 onClick={handleSubmit(handleUploadBackup)}
                 startIcon={isOverwrite ? <Icons.CloudBackup2 size={18} /> : <Icons.Cloud />}
                 color={isOverwrite ? 'error' : 'primary'}
-                disabled={!isDirty || !isValid}>
+                disabled={!isDirty || !isValid || (!backupPersonas && !backupWallets)}>
                 {isOverwrite ? t.cloud_backup_overwrite_backup() : t.cloud_backup_upload_to_cloud()}
             </ActionButton>
         )
     }, [
+        backupPersonas,
+        backupWallets,
         isOverwrite,
         isDirty,
         isValid,
