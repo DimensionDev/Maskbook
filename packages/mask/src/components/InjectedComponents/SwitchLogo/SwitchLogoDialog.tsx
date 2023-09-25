@@ -5,13 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
-import {
-    CrossIsolationMessages,
-    SwitchLogoDialogStatus,
-    SwitchLogoType,
-    switchLogoOpenedState,
-    switchLogoSettings,
-} from '@masknet/shared-base'
+import { CrossIsolationMessages, SwitchLogoType, switchLogoSettings } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../utils/index.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
@@ -75,7 +69,6 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
     useEffect(() => {
         return CrossIsolationMessages.events.switchLogoDialogUpdated.on(async (data) => {
             setOpen(data.open)
-            switchLogoOpenedState.value = SwitchLogoDialogStatus.PreviouslyOpened
         })
     }, [])
 

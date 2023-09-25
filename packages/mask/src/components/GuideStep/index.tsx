@@ -1,7 +1,7 @@
 import { cloneElement, useRef, useState, type ReactElement, useLayoutEffect } from 'react'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Modal, styled, Typography } from '@mui/material'
-import { sayHelloShowed, switchLogoOpenedState, userGuideFinished, userGuideStatus } from '@masknet/shared-base'
+import { sayHelloShowed, userGuideFinished, userGuideStatus } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { useI18N } from '../../utils/index.js'
@@ -112,7 +112,6 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     const currentStep = useValueRef(userGuideStatus[networkIdentifier])
     const finished = useValueRef(userGuideFinished[networkIdentifier])
     const isCurrentStep = +currentStep === step
-    const state = useValueRef(switchLogoOpenedState)
 
     const box1Ref = useRef<HTMLDivElement>(null)
     const box2Ref = useRef<HTMLDivElement>(null)
