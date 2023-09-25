@@ -5,7 +5,7 @@ import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderI
 import { CalendarContent } from '@masknet/plugin-calendar'
 
 const sidebarSearchSelector: () => LiveSelector<HTMLElement, true> = () => {
-    return querySelector<HTMLElement>('[data-testid="sidebarColumn"] [role="search"]').closest(4)
+    return querySelector<HTMLElement>('[data-testid="sidebarColumn"] [tabindex="0"] div > :nth-child(2)')
 }
 
 export function injectCalendar(signal: AbortSignal) {

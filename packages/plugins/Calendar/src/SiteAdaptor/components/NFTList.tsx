@@ -1,12 +1,12 @@
-import React, { useMemo, type ReactNode } from 'react'
+import React, { useMemo, type ReactNode, useRef, useEffect } from 'react'
+import format from 'date-fns/format'
 import { EmptyStatus, LoadingStatus } from '@masknet/shared'
-import { useCalendarTrans } from '../../locales/i18n_generated.js'
-import { CountdownTimer } from './CountDownTimer.js'
 import { makeStyles } from '@masknet/theme'
 import { IconButton, Typography } from '@mui/material'
-import { formatDate } from './EventList.js'
-import format from 'date-fns/format'
 import { Icons } from '@masknet/icons'
+import { formatDate } from './EventList.js'
+import { CountdownTimer } from './CountDownTimer.js'
+import { useCalendarTrans } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -129,6 +129,7 @@ const sortPlat = (_: any, b: { type: string }) => {
 export function NFTList({ list, isLoading, empty, dateString }: NFTListProps) {
     const { classes, cx } = useStyles()
     const t = useCalendarTrans()
+    const listRef = useRef<HTMLDivElement>(null)
     const listAfterDate = useMemo(() => {
         const listAfterDate: string[] = []
         for (const key in list) {
@@ -138,8 +139,14 @@ export function NFTList({ list, isLoading, empty, dateString }: NFTListProps) {
         }
         return listAfterDate
     }, [list, dateString])
+    useEffect(() => {
+        if (listRef.current)
+            listRef.current.scrollTo({
+                top: 0,
+            })
+    }, [listRef, list])
     return (
-        <div className={classes.container}>
+        <div className={classes.container} ref={listRef}>
             <div className={classes.paddingWrap}>
                 {isLoading && !list?.length ? (
                     <div className={cx(classes.empty, classes.eventTitle)}>
@@ -178,7 +185,8 @@ export function NFTList({ list, isLoading, empty, dateString }: NFTListProps) {
                                                             <IconButton
                                                                 style={{ width: '20px', height: '20px' }}
                                                                 key={platform.type}
-                                                                onClick={() => {
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation()
                                                                     window.open(platform.url)
                                                                 }}>
                                                                 {socialIcons[platform.type]}

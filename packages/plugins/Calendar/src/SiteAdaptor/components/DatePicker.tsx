@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import format from 'date-fns/format'
 import startOfMonth from 'date-fns/startOfMonth'
 import addDays from 'date-fns/addDays'
@@ -8,6 +8,8 @@ import endOfMonth from 'date-fns/endOfMonth'
 import { IconButton, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
+import { useEventList, useNFTList, useNewsList } from '../../hooks/useEventList.js'
+import { safeUnreachable } from '@masknet/kit'
 import { Box } from '@mui/system'
 
 const useStyles = makeStyles<{ open: boolean }>()((theme, { open }) => ({
@@ -82,19 +84,36 @@ interface DatePickerProps {
     setOpen: (x: boolean) => void
     selectedDate: Date
     setSelectedDate: (date: Date) => void
-    list: Record<string, any[]> | null
+    currentTab: 'news' | 'event' | 'nfts'
 }
 
-export function DatePicker({ list, selectedDate, setSelectedDate, open, setOpen }: DatePickerProps) {
+export function DatePicker({ selectedDate, setSelectedDate, open, setOpen, currentTab }: DatePickerProps) {
     const { classes } = useStyles({ open })
+    const [currentDate, setCurrentDate] = useState(selectedDate)
+    const monthStart = useMemo(() => startOfMonth(currentDate), [currentDate])
+    const { data: eventList } = useEventList(monthStart)
+    const { data: newsList } = useNewsList(monthStart)
+    const { data: nftList } = useNFTList(monthStart)
+    const list = useMemo(() => {
+        switch (currentTab) {
+            case 'news':
+                return newsList
+            case 'event':
+                return eventList
+            case 'nfts':
+                return nftList
+            default:
+                safeUnreachable(currentTab)
+                return null
+        }
+    }, [currentTab, newsList, eventList, nftList])
 
-    const monthStart = useMemo(() => startOfMonth(selectedDate), [selectedDate])
     const isPrevMonthDisabled = useMemo(() => {
-        return !isAfter(selectedDate, endOfMonth(new Date()))
-    }, [selectedDate])
+        return !isAfter(currentDate, endOfMonth(new Date()))
+    }, [currentDate])
     const isNextMonthDisabled = useMemo(() => {
-        return isAfter(addMonths(selectedDate, 1), addMonths(endOfMonth(new Date()), 2))
-    }, [selectedDate])
+        return isAfter(addMonths(currentDate, 1), addMonths(endOfMonth(new Date()), 2))
+    }, [currentDate])
 
     const handleDateClick = (date: Date) => {
         setSelectedDate(date)
@@ -102,7 +121,7 @@ export function DatePicker({ list, selectedDate, setSelectedDate, open, setOpen 
     }
 
     const changeMonth = (amount: number) => {
-        setSelectedDate(addMonths(selectedDate, amount))
+        setCurrentDate(addMonths(currentDate, amount))
     }
 
     const renderDatePicker = () => {
@@ -154,7 +173,7 @@ export function DatePicker({ list, selectedDate, setSelectedDate, open, setOpen 
         return (
             <div className={classes.container}>
                 <div className={classes.header}>
-                    <Typography className={classes.headerText}>{format(selectedDate, 'MMMM yyyy')}</Typography>
+                    <Typography className={classes.headerText}>{format(currentDate, 'MMMM yyyy')}</Typography>
                     <Box className={classes.headerIcon}>
                         <IconButton size="small" onClick={() => changeMonth(-1)} disabled={isPrevMonthDisabled}>
                             <Icons.LeftArrow size={24} />

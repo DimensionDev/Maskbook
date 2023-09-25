@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useEffect, useRef } from 'react'
+import format from 'date-fns/format'
 import { makeStyles } from '@masknet/theme'
 import { EmptyStatus, LoadingStatus } from '@masknet/shared'
-import format from 'date-fns/format'
 import { Typography } from '@mui/material'
 import { useCalendarTrans } from '../../locales/i18n_generated.js'
 
@@ -43,6 +43,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: '8px 0',
         flexDirection: 'column',
         gap: '8px',
+        cursor: 'pointer',
     },
     eventHeader: {
         display: 'flex',
@@ -71,6 +72,12 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 400,
         lineHeight: '18px',
         color: theme.palette.mode === 'dark' ? theme.palette.maskColor.second : theme.palette.maskColor.main,
+    },
+    time: {
+        fontSize: '14px',
+        fontWeight: 400,
+        lineHeight: '18px',
+        color: theme.palette.maskColor.second,
     },
     poster: {
         borderRadius: '8px',
@@ -102,6 +109,7 @@ export const formatDate = (date: string) => {
 export function EventList({ list, isLoading, empty, dateString }: EventListProps) {
     const { classes, cx } = useStyles()
     const t = useCalendarTrans()
+    const listRef = useRef<HTMLDivElement>(null)
     const listAfterDate = useMemo(() => {
         const listAfterDate: string[] = []
         for (const key in list) {
@@ -111,8 +119,14 @@ export function EventList({ list, isLoading, empty, dateString }: EventListProps
         }
         return listAfterDate
     }, [list, dateString])
+    useEffect(() => {
+        if (listRef.current)
+            listRef.current.scrollTo({
+                top: 0,
+            })
+    }, [listRef, list])
     return (
-        <div className={classes.container}>
+        <div className={classes.container} ref={listRef}>
             <div className={classes.paddingWrap}>
                 {isLoading && !list?.length ? (
                     <div className={cx(classes.empty, classes.eventTitle)}>
@@ -136,15 +150,12 @@ export function EventList({ list, isLoading, empty, dateString }: EventListProps
                                             <div className={classes.projectWrap}>
                                                 <img src={v.project.logo} className={classes.logo} alt="logo" />
                                                 <Typography className={classes.projectName}>
-                                                    {' '}
                                                     {v.project.name}
                                                 </Typography>
                                             </div>
                                         </div>
                                         <Typography className={classes.eventTitle}>{v.event_title}</Typography>
-                                        <Typography className={classes.eventTitle}>
-                                            {formatDate(v.event_date)}
-                                        </Typography>
+                                        <Typography className={classes.time}>{formatDate(v.event_date)}</Typography>
                                         <img className={classes.poster} src={v.poster_url} alt="poster" />
                                     </div>
                                 ))}
