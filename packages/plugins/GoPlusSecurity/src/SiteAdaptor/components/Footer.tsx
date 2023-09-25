@@ -1,10 +1,10 @@
 import { Box, Link, Stack, Typography } from '@mui/material'
-import { useI18N } from '../../locales/index.js'
+import { useGoPlusLabsTrans } from '../../locales/index.js'
 import { GoPlusLabLogo } from '../icons/Logo.js'
 import { PLUGIN_OFFICIAL_WEBSITE } from '../../constants.js'
 
 export function Footer() {
-    const t = useI18N()
+    const t = useGoPlusLabsTrans()
     return (
         <Stack justifyContent="flex-end" direction="row">
             <Box display="flex" justifyContent="center">

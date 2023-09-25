@@ -1,5 +1,5 @@
 import { createContainer } from 'unstated-next'
-import { useDashboardI18N } from '../locales/i18n_generated.js'
+import { useDashboardTrans } from '../locales/i18n_generated.js'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -15,7 +15,7 @@ export interface CloudBackupFormInputs {
 }
 
 function useCloudBackupFormContext() {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
 
     const [currentTab, onChange, tabs] = useTabs('email', 'mobile')
 

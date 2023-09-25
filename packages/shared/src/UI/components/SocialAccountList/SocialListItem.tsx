@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { CopyButton, Image, useSharedI18N } from '@masknet/shared'
+import { CopyButton, Image, useSharedTrans } from '@masknet/shared'
 import { CrossIsolationMessages, NextIDPlatform, type BindingProof } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
@@ -148,7 +148,7 @@ export function SocialAccountListItem({
     relatedList,
     profileUrl,
 }: SocialAccountListItemProps) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { account } = useChainContext()
     const { classes, cx } = useStyles()
     const Others = useWeb3Others()

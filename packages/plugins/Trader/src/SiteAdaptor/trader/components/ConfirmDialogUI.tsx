@@ -11,7 +11,7 @@ import { formatBalance, formatCurrency, formatPercentage, isZero } from '@maskne
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { TraderAPI } from '@masknet/web3-providers/types'
 import { ONE_BIPS, MIN_SLIPPAGE, MAX_SLIPPAGE } from '../../../constants/index.js'
-import { useI18N } from '../../../locales/index.js'
+import { useTraderTrans } from '../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     section: {
@@ -205,7 +205,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
         onConfirm,
         loading,
     }) => {
-        const t = useI18N()
+        const t = useTraderTrans()
         const { classes, cx } = useStyles()
 
         const [cacheTrade, setCacheTrade] = useState<TraderAPI.TradeComputed>()

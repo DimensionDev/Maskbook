@@ -2,7 +2,7 @@ import { memo, useCallback } from 'react'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { AccountAvatar } from '../components/AccountAvatar/index.js'
-import { useI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { useNavigate } from 'react-router-dom'
 import { Trans } from 'react-i18next'
 import type { BindingProof, ProfileAccount } from '@masknet/shared-base'
@@ -59,7 +59,7 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(
         onSubmit,
         submitting,
     }) => {
-        const { t } = useI18N()
+        const { t } = useMaskSharedTrans()
         const { classes } = useStyles()
         const navigate = useNavigate()
         const handleBack = useCallback(() => navigate(-1), [])

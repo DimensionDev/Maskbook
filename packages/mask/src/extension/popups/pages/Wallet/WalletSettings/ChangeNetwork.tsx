@@ -1,13 +1,13 @@
 import { Icons } from '@masknet/icons'
 import { Box, ListItem, Typography } from '@mui/material'
-import { useI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { useStyles } from './useStyles.js'
 import { useCallback } from 'react'
 import { PopupModalRoutes } from '@masknet/shared-base'
 import { useModalNavigate } from '../../../components/index.js'
 
 export function ChangeNetwork() {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const { classes, theme } = useStyles()
     const modalNavigate = useModalNavigate()
 

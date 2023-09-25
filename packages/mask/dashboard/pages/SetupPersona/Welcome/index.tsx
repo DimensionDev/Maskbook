@@ -5,7 +5,7 @@ import { memo, useCallback, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import Services from '#services'
 import { TermsAgreedContext } from '../../../hooks/useTermsAgreed.js'
-import { DashboardTrans, useDashboardI18N } from '../../../locales/index.js'
+import { DashboardTrans, useDashboardTrans } from '../../../locales/index.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 
@@ -72,7 +72,7 @@ export const Welcome = memo(function Welcome() {
         navigate(DashboardRoutes.SignUpPersona, { replace: true })
     }, [params, allowedToCollect])
 
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const { classes } = useStyles()
 
     return (

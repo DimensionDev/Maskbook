@@ -21,7 +21,7 @@ import { MaskColorVar } from '@masknet/theme'
 import { DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { DashboardContext } from './context.js'
-import { useDashboardI18N } from '../../locales/index.js'
+import { useDashboardTrans } from '../../locales/index.js'
 
 function ListItemLinkUnStyled({
     to,
@@ -109,7 +109,7 @@ export function Navigation({ onClose }: NavigationProps) {
     const isWalletHistoryPath = useMatch(DashboardRoutes.WalletsHistory)
 
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const mode = useTheme().palette.mode
     const { pluginID } = useNetworkContext()
 

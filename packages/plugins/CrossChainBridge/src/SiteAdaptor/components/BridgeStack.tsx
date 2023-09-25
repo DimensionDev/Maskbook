@@ -2,7 +2,7 @@ import { Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { openWindow } from '@masknet/shared-base-ui'
 import { getCrossChainBridge } from '../../constants.js'
-import { useI18N } from '../../locales/index.js'
+import { useCrossChainBridgeTrans } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     bridgeItem: {
@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface BridgeStackProps {}
 
 export function BridgeStack(props: BridgeStackProps) {
-    const t = useI18N()
+    const t = useCrossChainBridgeTrans()
     const { classes } = useStyles()
 
     return (

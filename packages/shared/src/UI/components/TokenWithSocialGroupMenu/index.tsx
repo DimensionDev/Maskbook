@@ -7,7 +7,7 @@ import { isSameAddress, type SearchResultType } from '@masknet/web3-shared-base'
 import { Divider, Menu, MenuItem, Typography, type MenuProps } from '@mui/material'
 import { groupBy, toPairs } from 'lodash-es'
 import { memo, useCallback, type PropsWithChildren } from 'react'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 
 const MENU_ITEM_HEIGHT = 40
 const MENU_LIST_PADDING = 8
@@ -98,7 +98,7 @@ export const TokenWithSocialGroupMenu = memo(function TokenWithSocialGroupMenu({
     ...rest
 }: TokenWithSocialGroupProps) {
     const { classes } = useStyles()
-    const t = useSharedI18N()
+    const t = useSharedTrans()
 
     const onSelect = useCallback(
         (value: Web3Helper.TokenResultAll, index: number) => {

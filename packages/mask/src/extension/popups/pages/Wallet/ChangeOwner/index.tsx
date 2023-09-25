@@ -15,7 +15,7 @@ import { ActionButton, makeStyles } from '@masknet/theme'
 import { ChainContextProvider, useChainContext, useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, ProviderType, type GasConfig } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { StyledRadio } from '../../../components/StyledRadio/index.js'
 import { PopupContext, useTitle } from '../../../hooks/index.js'
@@ -179,7 +179,7 @@ interface ManagerAccount {
 const FALLBACK_GAS = 50000
 
 export default function ChangeOwner() {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)

@@ -5,7 +5,7 @@ import { createInjectHooksRenderer, useActivatedPluginsSiteAdaptor } from '@mask
 import { MaskMessages } from '@masknet/shared-base'
 import { useMatchXS } from '@masknet/shared-base-ui'
 import { useAutoPasteFailedDialog } from './AutoPasteFailedDialog.js'
-import { useI18N } from '../../utils/index.js'
+import { useMaskSharedTrans } from '../../utils/index.js'
 
 const GlobalInjection = createInjectHooksRenderer(
     useActivatedPluginsSiteAdaptor.visibility.useAnyMode,
@@ -15,7 +15,7 @@ const GlobalInjection = createInjectHooksRenderer(
 export interface PageInspectorProps {}
 
 export function PageInspector(props: PageInspectorProps) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
     const [autoPasteFailed, JSX] = useAutoPasteFailedDialog()
     const xsMatched = useMatchXS()

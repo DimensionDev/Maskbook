@@ -7,7 +7,7 @@ import { Tab, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import {
     useActivatedPluginsSiteAdaptor,
-    usePluginI18NField,
+    usePluginTransField,
     getProfileCardTabContent,
 } from '@masknet/plugin-infra/content-script'
 import { addressSorter, useSocialAccountsBySettings } from '@masknet/shared'
@@ -18,10 +18,10 @@ import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { DefaultWeb3ContextProvider, ScopedDomainsContainer } from '@masknet/web3-hooks-base'
-import { ProfileCardTitle } from './ProfileCardTitle.js'
-import { useI18N } from '../../../utils/index.js'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
+import { ProfileCardTitle } from './ProfileCardTitle.js'
+import { useMaskSharedTrans } from '../../../utils/index.js'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
     identity: SocialIdentity
@@ -106,8 +106,8 @@ const useStyles = makeStyles()((theme) => {
 export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) => {
     const { classes, cx } = useStyles(undefined, { props: { classes: rest.classes } })
 
-    const { t } = useI18N()
-    const translate = usePluginI18NField()
+    const { t } = useMaskSharedTrans()
+    const translate = usePluginTransField()
     const {
         data: allSocialAccounts = EMPTY_LIST,
         isLoading: loadingSocialAccounts,

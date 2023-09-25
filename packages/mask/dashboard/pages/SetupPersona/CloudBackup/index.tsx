@@ -1,5 +1,8 @@
 import { memo, useMemo } from 'react'
-import { DashboardTrans, useDashboardI18N } from '../../../locales/i18n_generated.js'
+import { useAsyncFn } from 'react-use'
+import { useNavigate } from 'react-router-dom'
+import urlcat from 'urlcat'
+import { DashboardTrans, useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { Typography, Box, Tab } from '@mui/material'
 import { MaskTabList, makeStyles } from '@masknet/theme'
 import { UserContext } from '../../../../shared-ui/index.js'
@@ -8,12 +11,9 @@ import { EmailForm } from './EmailForm.js'
 import { CloudBackupFormContext, type CloudBackupFormInputs } from '../../../contexts/CloudBackupFormContext.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
-import { useAsyncFn } from 'react-use'
 import { fetchDownloadLink } from '../../../utils/api.js'
 import { AccountType } from '../../../type.js'
-import { useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
-import urlcat from 'urlcat'
 import { PhoneForm } from './PhoneForm.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -58,7 +58,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const CloudBackupInner = memo(function CloudBackupInner() {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const { classes } = useStyles()
     const { user, updateUser } = UserContext.useContainer()
     const navigate = useNavigate()

@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
 import { Box, Typography, useTheme } from '@mui/material'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { Controller, useForm } from 'react-hook-form'
@@ -16,7 +16,7 @@ type FormInputs = {
     repeatPassword: string
 }
 export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function ChangeBackupPasswordModal({ ...rest }) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const theme = useTheme()
 
     const navigate = useNavigate()

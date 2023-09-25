@@ -4,7 +4,7 @@ import { memo, useDeferredValue, useEffect, useMemo, useState } from 'react'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import Fuse from 'fuse.js'
-import { EmptyStatus, useSharedI18N } from '../../../index.js'
+import { EmptyStatus, useSharedTrans } from '../../../index.js'
 import { COUNTRIES } from '@masknet/shared-base-ui'
 import { getCountryFlag } from '../../../utils/getCountryFlag.js'
 
@@ -62,7 +62,7 @@ export interface CountryCodePickerProps {
 }
 
 export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl, onClose, code }) => {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes } = useStyles()
     const [query, setQuery] = useState<string>()
     const deferredQuery = useDeferredValue(query)

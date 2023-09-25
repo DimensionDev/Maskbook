@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { makeStyles, MaskTabList } from '@masknet/theme'
-import { useSharedI18N } from '@masknet/shared'
+import { useSharedTrans } from '@masknet/shared'
 import { TabContext } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -48,7 +48,7 @@ export interface GasSectionProps {
 export function GasSection(props: GasSectionProps) {
     const { activeTab, setActiveTab, disableGasLimit } = props
 
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes } = useStyles()
     const {
         pluginID,

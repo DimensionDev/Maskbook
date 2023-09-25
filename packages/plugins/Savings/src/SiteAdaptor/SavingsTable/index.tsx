@@ -7,7 +7,7 @@ import { useCallback } from 'react'
 import { LDO_PAIRS } from '../../constants.js'
 import { TabType, type SavingsProtocol } from '../../types.js'
 import { SavingsRow } from './SavingsRow.js'
-import { useI18N } from '../../locales/index.js'
+import { useSavingsTrans } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
@@ -63,7 +63,7 @@ export interface SavingsTableProps {
 }
 
 export function SavingsTable({ tab, protocols, setSelectedProtocol, loadingProtocols }: SavingsTableProps) {
-    const t = useI18N()
+    const t = useSavingsTrans()
     const { classes } = useStyles()
     const theme = useTheme()
 

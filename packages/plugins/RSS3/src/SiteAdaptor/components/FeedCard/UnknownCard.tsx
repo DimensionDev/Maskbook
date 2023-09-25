@@ -5,7 +5,7 @@ import { Typography } from '@mui/material'
 import { useFeedOwner } from '../../contexts/index.js'
 import { CardType } from '../share.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
-import { Translate } from '../../../locales/index.js'
+import { RSS3Trans } from '../../../locales/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { Label } from './common.js'
 
@@ -34,7 +34,7 @@ export function UnknownCard({ feed, ...rest }: TokenFeedCardProps) {
     return (
         <CardFrame type={cardType} feed={feed} {...rest}>
             <Typography className={classes.summary}>
-                <Translate.carry_out_activity
+                <RSS3Trans.carry_out_activity
                     values={{
                         user,
                         target: targetUser,

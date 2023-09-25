@@ -4,7 +4,7 @@ import { FileFrame } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Checkbox, Typography } from '@mui/material'
 import { memo } from 'react'
-import { Translate } from '../../../locales/index.js'
+import { FileServiceTrans } from '../../../locales/index.js'
 import type { FileBaseProps, FileInfo } from '../../../types.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -51,7 +51,7 @@ export const SelectableFile = memo(({ file, selected, onChange, disabled, ...res
             <Typography className={classes.desc}>{formatFileSize(file.size, true)}</Typography>
             {file.key ? (
                 <Typography className={classes.meta}>
-                    <Translate.file_key
+                    <FileServiceTrans.file_key
                         components={{
                             key: <Typography className={classes.metaValue} component="span" />,
                         }}

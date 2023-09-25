@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography, Box } from '@mui/material'
-import { useI18N } from '../locales/index.js'
+import { useGameTrans } from '../locales/index.js'
 import type { GameInfo } from '../types.js'
 import { Share_Twitter } from '../constants.js'
 import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
@@ -30,7 +30,7 @@ interface PetSetDialogProps {
 }
 
 export default function GameShareDialog({ onClose, gameInfo }: PetSetDialogProps) {
-    const t = useI18N()
+    const t = useGameTrans()
     const { classes } = useStyles()
     const { share } = useSiteAdaptorContext()
 

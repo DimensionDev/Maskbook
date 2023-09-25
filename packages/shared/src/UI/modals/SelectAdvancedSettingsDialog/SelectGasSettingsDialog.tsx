@@ -7,7 +7,7 @@ import { DialogContent } from '@mui/material'
 import { SettingsBoard } from '../../components/SettingsBoard/index.js'
 import { SettingsContext } from '../../components/SettingsBoard/Context.js'
 import { InjectedDialog } from '../../contexts/index.js'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 
 interface StyleProps {
     compact: boolean
@@ -54,7 +54,7 @@ export function SelectGasSettingsDialog({
     onClose,
     title,
 }: SelectGasSettingsDialogProps) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes } = useStyles({ compact: disableSlippageTolerance ?? true })
     const { pluginID: pluginID_ } = useNetworkContext(pluginID)
     const { chainId: chainId_ } = useChainContext({ chainId })

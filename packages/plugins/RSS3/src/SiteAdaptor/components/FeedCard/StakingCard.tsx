@@ -3,8 +3,8 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { resolveResourceURL } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
-import { Translate } from '../../../locales/i18n_generated.js'
-import { useI18N } from '../../../locales/index.js'
+import { RSS3Trans } from '../../../locales/i18n_generated.js'
+import { useRSS3Trans } from '../../../locales/index.js'
 import { useFeedOwner } from '../../contexts/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
@@ -59,7 +59,7 @@ interface StakingFeedCardProps extends Omit<FeedCardProps, 'feed'> {
  */
 export function StakingCard({ feed, ...rest }: StakingFeedCardProps) {
     const { verbose } = rest
-    const t = useI18N()
+    const t = useRSS3Trans()
     const { classes, cx } = useStyles()
 
     const action = feed.actions.find((x) => x.type === Type.Staking)
@@ -73,7 +73,7 @@ export function StakingCard({ feed, ...rest }: StakingFeedCardProps) {
     return (
         <CardFrame type={cardType} feed={feed} {...rest}>
             <Typography className={classes.summary}>
-                <Translate.token_staking
+                <RSS3Trans.token_staking
                     values={{
                         user,
                         symbol: metadata?.token?.symbol!,

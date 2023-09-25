@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { useDashboardI18N } from '../../../locales/index.js'
+import { useDashboardTrans } from '../../../locales/index.js'
 import { SignUpRoutePath } from '../routePath.js'
 import Services from '#services'
 import { PersonaNameUI } from './PersonaNameUI.js'
 
 export function PersonaCreate() {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const navigate = useNavigate()
 
     const [error, setError] = useState('')

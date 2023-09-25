@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { z as zod } from 'zod'
-import { useSharedI18N } from '@masknet/shared'
+import { useSharedTrans } from '@masknet/shared'
 import { type ChainId, formatGweiToWei, type GasOption, type Transaction } from '@masknet/web3-shared-evm'
 import {
     type GasOptionType,
@@ -18,7 +18,7 @@ export function useGasSchema(
     transaction: Transaction | undefined,
     gasOptions: Record<GasOptionType, GasOption> | undefined,
 ) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
 
     return useMemo(() => {
         return zod

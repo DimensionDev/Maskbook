@@ -6,7 +6,7 @@ import { Sniffings } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { formatBalance, isZero } from '@masknet/web3-shared-base'
 import { FormattedBalance, DotLoading } from '@masknet/shared'
-import { useI18N } from '../../../locales/index.js'
+import { useTraderTrans } from '../../../locales/index.js'
 
 // TODO: remove isDashboard after remove Dashboard page
 const useStyles = makeStyles()((theme) => ({
@@ -103,7 +103,7 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
         isGreatThanSlippageSetting,
         priceImpact,
     }) => {
-        const t = useI18N()
+        const t = useTraderTrans()
         const { classes, cx } = useStyles()
 
         return (
@@ -179,7 +179,7 @@ export interface DefaultTraderPlaceholderUIProps {
 }
 
 export const DefaultTraderPlaceholderUI = memo<DefaultTraderPlaceholderUIProps>(({ nativeToken }) => {
-    const t = useI18N()
+    const t = useTraderTrans()
     const { classes, cx } = useStyles()
 
     return (

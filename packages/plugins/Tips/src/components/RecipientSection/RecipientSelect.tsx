@@ -8,7 +8,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID, type SocialAccount } from '@masknet/shared-base'
 import { useTip } from '../../contexts/index.js'
-import { useI18N } from '../../locales/index.js'
+import { useTipsTrans } from '../../locales/index.js'
 
 const useStyles = makeStyles<void, 'icon' | 'pluginIcon' | 'text'>()((theme, _, refs) => {
     return {
@@ -113,7 +113,7 @@ const PluginIcon = ({ pluginID }: { pluginID: NetworkPluginID }) => {
 }
 
 function ExternalLink({ account }: { account: SocialAccount<Web3Helper.ChainIdAll> }) {
-    const t = useI18N()
+    const t = useTipsTrans()
     const { classes, cx } = useStyles()
     const Others = useWeb3Others(account.pluginID)
     const chainId = useDefaultChainId(account.pluginID)

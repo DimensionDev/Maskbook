@@ -4,7 +4,7 @@ import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import type { PropsWithChildren } from 'react'
-import { useI18N } from '../../../locales/index.js'
+import { useGitcoinTrans } from '../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     resultDialog: {
@@ -57,7 +57,7 @@ export function ResultDialog({
     ...rest
 }: ResultDialogProps) {
     const { classes } = useStyles()
-    const t = useI18N()
+    const t = useGitcoinTrans()
     return (
         <InjectedDialog
             title={t.donate()}

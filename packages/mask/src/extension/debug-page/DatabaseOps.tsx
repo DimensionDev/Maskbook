@@ -2,7 +2,7 @@ import { openDB, wrap } from 'idb/with-async-ittr'
 import { timeout } from '@masknet/kit'
 import { __DEBUG__ONLY__enableCryptoKeySerialization, serializer } from '@masknet/shared-base'
 import type { BackupFormat, Instance, ObjectStore } from './types.js'
-import { useI18N } from '../../utils/index.js'
+import { useMaskSharedTrans } from '../../utils/index.js'
 import { env } from '@masknet/flags'
 
 __DEBUG__ONLY__enableCryptoKeySerialization()
@@ -47,7 +47,7 @@ async function onClear() {
     )
 }
 export function DatabaseOps() {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     return (
         <section>
             <p>

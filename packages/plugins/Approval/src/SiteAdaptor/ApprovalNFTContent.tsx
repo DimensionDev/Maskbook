@@ -21,7 +21,7 @@ import {
     type NonFungibleContractSpender,
     type NonFungibleCollection,
 } from '@masknet/web3-shared-base'
-import { useI18N } from '../locales/index.js'
+import { useApprovalTrans } from '../locales/index.js'
 import { ApprovalLoadingContent } from './ApprovalLoadingContent.js'
 import { ApprovalEmptyContent } from './ApprovalEmptyContent.js'
 
@@ -195,7 +195,7 @@ interface ApprovalNFTItemProps {
 
 function ApprovalNFTItem(props: ApprovalNFTItemProps) {
     const { networkDescriptor, spender, chainId, collection } = props
-    const t = useI18N()
+    const t = useApprovalTrans()
     const [cancelled, setCancelled] = useState(false)
     const { classes, cx } = useStyles({
         listItemBackground: networkDescriptor?.backgroundGradient,

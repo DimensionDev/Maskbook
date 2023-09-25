@@ -9,7 +9,7 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import { ChainResolver, ExplorerResolver } from '@masknet/web3-providers'
 import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes/index.js'
 import type { Project } from '../types.js'
-import { useI18N } from '../locales/index.js'
+import { useArtBlocksTrans } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -47,7 +47,7 @@ interface DetailsViewProps {
 
 export function DetailsView({ project }: DetailsViewProps) {
     const { classes } = useStyles()
-    const t = useI18N()
+    const t = useArtBlocksTrans()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const invocations = `${project.invocations} of ${project.maxInvocations}`

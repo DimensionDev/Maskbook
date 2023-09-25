@@ -2,7 +2,7 @@ import { ShadowRootTooltip, TextOverflowTooltip, makeStyles } from '@masknet/the
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatTrait } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { useCollectibleTrans } from '../../locales/i18n_generated.js'
 import { Rank } from './Rank.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -76,7 +76,7 @@ export interface PropertiesCardProps {
 export function PropertiesCard(props: PropertiesCardProps) {
     const { asset, rank, timeline } = props
     const { classes, cx } = useStyles()
-    const t = useI18N()
+    const t = useCollectibleTrans()
 
     if (!asset.traits?.length) return null
 

@@ -4,7 +4,7 @@ import { FileFrame } from '@masknet/shared'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { MenuItem, Typography } from '@mui/material'
 import { memo, useRef, useState } from 'react'
-import { Translate, useI18N } from '../../../locales/index.js'
+import { FileServiceTrans, useFileServiceTrans } from '../../../locales/index.js'
 import type { FileBaseProps, FileInfo } from '../../../types.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -53,7 +53,7 @@ export const ManageableFile = memo(({ file, onDownload, onRename, onDelete, onSe
     const { classes, cx } = useStyles()
     const menuRef = useRef<HTMLDivElement>(null)
     const [menuOpen, setMenuOpen] = useState(false)
-    const t = useI18N()
+    const t = useFileServiceTrans()
 
     return (
         <FileFrame
@@ -118,7 +118,7 @@ export const ManageableFile = memo(({ file, onDownload, onRename, onDelete, onSe
             <Typography className={classes.desc}>{formatFileSize(file.size, true)}</Typography>
             {file.key ? (
                 <Typography className={classes.meta}>
-                    <Translate.file_key
+                    <FileServiceTrans.file_key
                         components={{
                             key: <Typography className={classes.metaValue} component="span" />,
                         }}

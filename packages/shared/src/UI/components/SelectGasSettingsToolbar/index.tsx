@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js'
 import {
     useMenuConfig,
     FormattedBalance,
-    useSharedI18N,
+    useSharedTrans,
     ApproveMaskDialog,
     SelectGasSettingsModal,
 } from '@masknet/shared'
@@ -157,7 +157,7 @@ export function SelectGasSettingsToolbarUI({
     onOpenCustomSetting,
     MenuProps = {},
 }: SelectGasSettingsToolbarProps) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes, cx, theme } = useStyles(undefined, { props: { classes: externalClasses } })
     const { gasOptions, GAS_OPTION_NAMES } = SettingsContext.useContainer()
 

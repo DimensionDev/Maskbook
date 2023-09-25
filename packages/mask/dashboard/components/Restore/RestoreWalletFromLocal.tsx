@@ -5,7 +5,7 @@ import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, useCallback, useLayoutEffect, useState } from 'react'
 import { usePersonaRecovery } from '../../contexts/RecoveryContext.js'
-import { useDashboardI18N } from '../../locales/index.js'
+import { useDashboardTrans } from '../../locales/index.js'
 import PasswordField from '../PasswordField/index.js'
 import { PrimaryButton } from '../PrimaryButton/index.js'
 
@@ -32,7 +32,7 @@ export const RestoreWalletFromLocal = memo(function RestorePersonaFromLocal({
     error,
 }: RestoreFromLocalProps) {
     const { classes, theme } = useStyles()
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const { fillSubmitOutlet } = usePersonaRecovery()
 
     const [keyStoreContent, setKeyStoreContent] = useState('')

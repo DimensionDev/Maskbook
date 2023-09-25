@@ -4,7 +4,7 @@ import { Button, Skeleton, Typography } from '@mui/material'
 import { forwardRef, memo, useCallback, useMemo, type HTMLProps } from 'react'
 import { CollectibleCard, type CollectibleCardProps } from './CollectibleCard.js'
 import { Icons } from '@masknet/icons'
-import { useSharedI18N } from '../../../index.js'
+import { useSharedTrans } from '../../../index.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles<void, 'action' | 'collectibleCard' | 'info'>()((theme, _, refs) => ({
@@ -126,7 +126,7 @@ export const CollectibleItem = memo(
             showUnCheckedIndicator,
             ...rest
         } = props
-        const t = useSharedI18N()
+        const t = useSharedTrans()
         const { classes, cx } = useStyles()
         const name = asset.collection?.name ?? ''
         const popperProps = useBoundedPopperProps()

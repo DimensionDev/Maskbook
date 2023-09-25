@@ -1,6 +1,6 @@
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../locales/index.js'
+import { useCrossChainBridgeTrans } from '../locales/index.js'
 import { InjectedDialog } from '@masknet/shared'
 import { BridgeStack } from './components/BridgeStack.js'
 
@@ -17,7 +17,7 @@ export interface CrossChainBridgeDialogProps extends withClasses<'root'> {
 }
 
 export function CrossChainBridgeDialog(props: CrossChainBridgeDialogProps) {
-    const t = useI18N()
+    const t = useCrossChainBridgeTrans()
     const { classes } = useStyles(undefined, { props })
     const { open, onClose } = props
 

@@ -2,7 +2,7 @@ import { memo } from 'react'
 import type { DialogProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material'
-import { useI18N } from '../../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../utils/index.js'
 import { Close } from '@mui/icons-material'
 import { SOCIAL_MEDIA_ROUND_ICON_MAPPING } from '@masknet/shared'
 import { type EnhanceableSite, SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
@@ -65,7 +65,7 @@ interface ConnectDialogProps extends DialogProps {
 
 export const ConnectDialog = memo<ConnectDialogProps>(({ open, onClose, networks, onConnect }) => {
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
 
     return (
         <Dialog open={open} onClose={onClose} classes={{ paper: classes.dialog }}>

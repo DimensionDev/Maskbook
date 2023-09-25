@@ -1,11 +1,12 @@
 import { memo, useMemo, useState } from 'react'
-import { Translate, useI18N } from '../../../locales/i18n_generated.js'
-import { ActionButton, ShadowRootTooltip, makeStyles } from '@masknet/theme'
-import { Box, Typography, alpha } from '@mui/material'
-import { useChainContext, useFungibleToken, useNetworkDescriptor } from '@masknet/web3-hooks-base'
+import { useInterval } from 'react-use'
 import isAfter from 'date-fns/isAfter'
 import format from 'date-fns/format'
 import isBefore from 'date-fns/isBefore'
+import { ClaimTrans, useClaimTrans } from '../../../locales/i18n_generated.js'
+import { ActionButton, ShadowRootTooltip, makeStyles } from '@masknet/theme'
+import { Box, Typography, alpha } from '@mui/material'
+import { useChainContext, useFungibleToken, useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import intervalToDuration from 'date-fns/intervalToDuration'
 import differenceInDays from 'date-fns/differenceInDays'
 import { ActivityStatus } from '../../../types.js'
@@ -14,7 +15,6 @@ import { ProviderType, type ChainId } from '@masknet/web3-shared-evm'
 import { ImageIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { useClaimAirdrop } from '../../../hooks/useClaimAirdrop.js'
-import { useInterval } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     badge: {
@@ -108,7 +108,7 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
         eventIndex,
         onClaimSuccess,
     }) => {
-        const t = useI18N()
+        const t = useClaimTrans()
         const { classes } = useStyles()
         const { account, providerType } = useChainContext()
         const [now, setNow] = useState(new Date())
@@ -124,7 +124,7 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
             switch (activityStatus) {
                 case ActivityStatus.NOT_START:
                     return (
-                        <Translate.start_time_tips
+                        <ClaimTrans.start_time_tips
                             values={{ time: format(startTime, 'MM-dd-yyyy HH:mm') }}
                             components={{ strong: <strong className={classes.strong} /> }}
                         />
@@ -138,7 +138,7 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
                     const days = differenceInDays(endTime, now)
 
                     return (
-                        <Translate.airdrop_in_progress_time_tips
+                        <ClaimTrans.airdrop_in_progress_time_tips
                             values={{
                                 days: String(days ?? ''),
                                 hours: String(duration.hours ?? ''),
@@ -149,7 +149,7 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
                     )
                 case ActivityStatus.ENDED:
                     return (
-                        <Translate.end_time_tips
+                        <ClaimTrans.end_time_tips
                             values={{ time: format(endTime, 'MM-dd-yyyy HH:mm') }}
                             components={{ strong: <strong className={classes.strong} /> }}
                         />

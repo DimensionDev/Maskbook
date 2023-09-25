@@ -7,7 +7,7 @@ import { useRowSize } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { TokenListMode } from '../../components/FungibleTokenList/type.js'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 import { InjectedDialog, useBaseUIRuntime } from '../../contexts/index.js'
 import { FungibleTokenList } from '../../components/index.js'
 
@@ -71,7 +71,7 @@ export function SelectFungibleTokenDialog({
     enableManage = true,
     onClose,
 }: SelectFungibleTokenDialogProps) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { networkIdentifier } = useBaseUIRuntime()
     const compact = networkIdentifier === EnhanceableSite.Minds
     const { pluginID: currentPluginID } = useNetworkContext(pluginID)

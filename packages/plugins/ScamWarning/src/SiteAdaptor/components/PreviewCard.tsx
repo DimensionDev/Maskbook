@@ -3,7 +3,7 @@ import { uniq } from 'lodash-es'
 import { Stack, ThemeProvider, Typography } from '@mui/material'
 import { CryptoScamDB } from '@masknet/web3-providers'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
-import { useI18N } from '../../locales/index.js'
+import { useScamWarningTrans } from '../../locales/index.js'
 import { makeStyles, MaskDarkTheme } from '@masknet/theme'
 
 interface PreviewCardProps {
@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function PreviewCard({ links }: PreviewCardProps) {
-    const t = useI18N()
+    const t = useScamWarningTrans()
     const { classes } = useStyles()
 
     const { value, loading } = useAsync(() => {

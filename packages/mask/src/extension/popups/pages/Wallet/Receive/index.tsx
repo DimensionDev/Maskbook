@@ -6,7 +6,7 @@ import { type ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Skeleton, Typography, type AvatarProps } from '@mui/material'
 import { memo } from 'react'
 import { QRCode } from 'react-qrcode-logo'
-import { useI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { useTitle, useTokenParams } from '../../../hooks/index.js'
 import { useAsset } from '../hooks/useAsset.js'
 
@@ -112,7 +112,7 @@ const avatarProps: AvatarProps = {
 }
 export default memo(function Receive() {
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { chainId, address, rawAddress } = useTokenParams()
     // No specific token but only for chain

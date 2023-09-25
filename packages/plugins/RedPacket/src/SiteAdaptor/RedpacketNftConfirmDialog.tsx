@@ -21,7 +21,7 @@ import type { NonFungibleToken, NonFungibleCollection } from '@masknet/web3-shar
 import { Grid, Link, Typography, List, DialogContent, ListItem, Box } from '@mui/material'
 import { ExplorerResolver, Web3 } from '@masknet/web3-providers'
 import { Launch as LaunchIcon } from '@mui/icons-material'
-import { useI18N } from '../locales/index.js'
+import { useRedPacketTrans } from '../locales/index.js'
 import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback.js'
 import { RedPacketNftMetaKey } from '../constants.js'
 import { RedPacketRPC } from '../messages.js'
@@ -156,7 +156,7 @@ export interface RedpacketNftConfirmDialogProps {
     gasOption?: GasConfig
 }
 export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps) {
-    const t = useI18N()
+    const t = useRedPacketTrans()
     const { classes, cx } = useStyles()
     const { onClose, message, contract, tokenList, senderName, gasOption } = props
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)

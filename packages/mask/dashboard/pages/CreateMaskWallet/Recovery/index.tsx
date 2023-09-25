@@ -16,7 +16,7 @@ import { RestoreFromPrivateKey, type FormInputs } from '../../../components/Rest
 import { RestoreWalletFromLocal } from '../../../components/Restore/RestoreWalletFromLocal.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { RecoveryContext, RecoveryProvider } from '../../../contexts/index.js'
-import { useDashboardI18N } from '../../../locales/i18n_generated.js'
+import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { ResetWalletContext } from '../context.js'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
@@ -83,7 +83,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const Recovery = memo(function Recovery() {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const location = useLocation()
     const { cx, classes } = useStyles()
     const tabPanelClasses = useMemo(() => ({ root: classes.panels }), [classes.panels])

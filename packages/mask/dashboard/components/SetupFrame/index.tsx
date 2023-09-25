@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import Spline from '@splinetool/react-spline'
 import { Welcome } from '../../assets/index.js'
-import { useDashboardI18N } from '../../locales/i18n_generated.js'
+import { useDashboardTrans } from '../../locales/i18n_generated.js'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 
 interface SetupFrameProps extends PropsWithChildren {
@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, hiddenSpline }) {
     const { classes, theme } = useStyles()
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const [loading, setLoading] = useState(true)
 
     return (

@@ -6,7 +6,7 @@ import { Link, Button, Stack, Tab, ThemeProvider, Typography } from '@mui/materi
 import { Icons } from '@masknet/icons'
 import {
     useActivatedPluginsSiteAdaptor,
-    usePluginI18NField,
+    usePluginTransField,
     getProfileTabContent,
     useAllPersonas,
     useSiteAdaptorContext,
@@ -42,7 +42,7 @@ import {
     useCurrentPersonaConnectStatus,
     useGrantPermissions,
     usePluginHostPermissionCheck,
-    useSharedI18N,
+    useSharedTrans,
 } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -129,8 +129,8 @@ function openWeb3ProfileSettingDialog() {
 function Content(props: ProfileTabContentProps) {
     const { classes } = useStyles(undefined, { props })
 
-    const t = useSharedI18N()
-    const translate = usePluginI18NField()
+    const t = useSharedTrans()
+    const translate = usePluginTransField()
 
     const [profileTabType, setProfileTabType] = useState(ProfileTabs.WEB3)
     const [menuOpen, setMenuOpen] = useState(false)

@@ -25,7 +25,7 @@ import { isNativeTokenWrapper, resolveTradeProviderName } from '../../helpers/in
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed.js'
 import type { NativeTokenWrapper } from '../../trader/native/useTradeComputed.js'
-import { useI18N } from '../../locales/index.js'
+import { useTraderTrans } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -73,7 +73,7 @@ export function TraderStateBar({
     onSwap,
     refresh,
 }: TradeStateBarProps) {
-    const t = useI18N()
+    const t = useTraderTrans()
     const { classes } = useStyles()
 
     const { chainId } = useChainContext()

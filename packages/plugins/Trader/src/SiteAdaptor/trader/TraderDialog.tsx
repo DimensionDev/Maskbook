@@ -20,7 +20,7 @@ import { PluginTraderMessages } from '../../messages.js'
 import { Trader, type TraderRef } from './Trader.js'
 import { currentSlippageSettings } from '../../settings.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
-import { useI18N } from '../../locales/index.js'
+import { useTraderTrans } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -76,7 +76,7 @@ export function TraderDialog() {
     const { chainId, setChainId } = useChainContext()
     const Others = useWeb3Others()
     const chainIdList = traderDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
-    const t = useI18N()
+    const t = useTraderTrans()
     const { classes } = useStyles()
 
     const chainIdValid = useChainIdValid(pluginID, chainId)

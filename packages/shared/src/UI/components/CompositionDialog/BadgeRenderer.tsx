@@ -1,8 +1,8 @@
-import { useActivatedPluginsSiteAdaptor, type Plugin, usePluginI18NField } from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginsSiteAdaptor, type Plugin, usePluginTransField } from '@masknet/plugin-infra/content-script'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import type { TypedMessage } from '@masknet/typed-message'
 import { Box, Chip } from '@mui/material'
-import { useSharedI18N } from '../../../index.js'
+import { useSharedTrans } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     chip: {
@@ -20,8 +20,8 @@ export interface BadgeRendererProps {
 
 export function BadgeRenderer({ meta, onDeleteMeta, readonly }: BadgeRendererProps) {
     const plugins = useActivatedPluginsSiteAdaptor('any')
-    const i18n = usePluginI18NField()
-    const t = useSharedI18N()
+    const i18n = usePluginTransField()
+    const t = useSharedTrans()
     if (!meta) return null
 
     const result = [...meta.entries()].flatMap(([metaKey, metaValue]) => {

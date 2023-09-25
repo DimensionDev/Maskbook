@@ -20,7 +20,7 @@ import {
     useChainId,
     useWeb3Others,
 } from '@masknet/web3-hooks-base'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 import { Action } from './Action.js'
 import type { WalletDescriptionProps } from './WalletDescription.js'
 import { useWalletName } from './hooks/useWalletName.js'
@@ -73,7 +73,7 @@ interface PluginVerifiedWalletStatusBarProps extends PropsWithChildren<{}> {
 
 export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarProps>(
     ({ className, children, verifiedWallets, onChange, expectedAddress, openPopupWindow, onChangeWallet }) => {
-        const t = useSharedI18N()
+        const t = useSharedTrans()
         const { classes, cx } = useStyles()
 
         const account = useAccount()

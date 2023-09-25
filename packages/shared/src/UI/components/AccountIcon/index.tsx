@@ -5,7 +5,7 @@ import { type SocialAccount, SocialAddressType } from '@masknet/shared-base'
 import { resolveSocialAddressLink } from '@masknet/web3-shared-base'
 import { type TooltipProps, Typography } from '@mui/material'
 import { Linking } from '../../../index.js'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 
 const useStyles = makeStyles<void, 'icon' | 'tooltip'>()((theme) => {
     return {
@@ -44,7 +44,7 @@ interface AccountTooltipsProps extends Omit<TooltipProps, 'title'> {
 
 function AccountTooltips({ platform, type, children }: AccountTooltipsProps) {
     const { classes } = useStyles()
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     return (
         <ShadowRootTooltip
             classes={{ tooltip: classes.tooltip }}

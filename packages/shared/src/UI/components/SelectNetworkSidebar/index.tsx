@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { useSharedI18N } from '@masknet/shared'
+import { useSharedTrans } from '@masknet/shared'
 import { type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -65,7 +65,7 @@ export const SelectNetworkSidebar = memo(function SelectNetworkSidebar({
     className,
     ...rest
 }: SelectNetworkSidebarProps) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
 
     const { classes, cx } = useStyles()
 

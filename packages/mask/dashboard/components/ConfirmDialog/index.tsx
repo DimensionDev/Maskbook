@@ -1,7 +1,7 @@
 import type { PropsWithChildren, ReactNode } from 'react'
 import { MaskDialog } from '@masknet/theme'
 import { DialogContent, DialogActions, Button, styled, buttonClasses } from '@mui/material'
-import { useDashboardI18N } from '../../locales/index.js'
+import { useDashboardTrans } from '../../locales/index.js'
 
 const StyledButton: typeof Button = styled(Button)(() => ({
     [`&.${buttonClasses.root}`]: {
@@ -21,7 +21,7 @@ export interface ConfirmDialogProps extends PropsWithChildren<{}> {
 }
 
 export default function ConfirmDialog(props: ConfirmDialogProps) {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const {
         title,
         open,

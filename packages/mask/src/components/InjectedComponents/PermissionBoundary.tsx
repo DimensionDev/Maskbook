@@ -1,5 +1,5 @@
 import type { PluginWrapperComponent, Plugin, PluginWrapperMethods } from '@masknet/plugin-infra/content-script'
-import { MaskPostExtraPluginWrapper, useSharedI18N } from '@masknet/shared'
+import { MaskPostExtraPluginWrapper, useSharedTrans } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { Typography, useTheme } from '@mui/material'
 import {
@@ -37,7 +37,7 @@ export const MaskPostExtraPluginWrapperWithPermission: PluginWrapperComponent<Pl
     forwardRef((props, ref) => {
         const wrapperMethodsRef = useRef<PluginWrapperMethods | null>(null)
         const theme = useTheme()
-        const t = useSharedI18N()
+        const t = useSharedTrans()
         const [open, setOpen] = useState<boolean>(false)
 
         const refItem = useMemo((): PluginWrapperMethods => {

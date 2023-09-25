@@ -5,7 +5,7 @@ import { useFungibleToken } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
-import { useI18N } from '../../../locales/i18n_generated.js'
+import { useClaimTrans } from '../../../locales/i18n_generated.js'
 import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
@@ -70,7 +70,7 @@ interface Props {
     tokenAddress?: string
 }
 export function ClaimSuccessDialog({ open, onClose, amount, tokenAddress }: Props) {
-    const t = useI18N()
+    const t = useClaimTrans()
     const { classes } = useStyles()
 
     const { share } = useSiteAdaptorContext()

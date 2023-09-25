@@ -10,7 +10,7 @@ import { memo } from 'react'
 import { useAsync } from 'react-use'
 import urlcat from 'urlcat'
 import { VALUABLES_VCENT_URL } from '../constants.js'
-import { useI18N } from '../locales/i18n_generated.js'
+import { useVCentTrans } from '../locales/i18n_generated.js'
 import { PluginVCentRPC } from '../messages.js'
 
 const useStyle = makeStyles()((theme) => ({
@@ -57,7 +57,7 @@ const useStyle = makeStyles()((theme) => ({
 
 export const VCentDialog = memo(function VCentDialog({ tweetAddress }: { tweetAddress: string }) {
     const { classes } = useStyle()
-    const t = useI18N()
+    const t = useVCentTrans()
     const { value: tweets } = useAsync(() => PluginVCentRPC.getTweetData(tweetAddress), [tweetAddress])
     const tweet = first(tweets)
     usePluginWrapper(tweet?.type === 'Offer')

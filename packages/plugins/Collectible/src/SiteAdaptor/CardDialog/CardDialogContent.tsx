@@ -21,7 +21,7 @@ import { ActivitiesTab } from './tabs/ActivitiesTab.js'
 import { TabType } from '../../types.js'
 import { FigureCard } from '../Shared/FigureCard.js'
 import { Context } from '../Context/index.js'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { useCollectibleTrans } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
     (theme, props) => ({
@@ -78,7 +78,7 @@ export interface CardDialogContentProps {
 export function CardDialogContent(props: CardDialogContentProps) {
     const { currentTab } = props
     const { classes } = useStyles()
-    const t = useI18N()
+    const t = useCollectibleTrans()
     const {
         asset,
         orders,

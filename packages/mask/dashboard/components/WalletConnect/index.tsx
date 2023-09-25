@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { styled, Typography } from '@mui/material'
 import { WalletQRCodeContainer } from '../WalletQRCodeContainer/index.js'
 import { MaskColorVar } from '@masknet/theme'
-import { useDashboardI18N } from '../../locales/index.js'
+import { useDashboardTrans } from '../../locales/index.js'
 
 const Container = styled('div')`
     display: flex;
@@ -18,7 +18,7 @@ const Tip = styled(Typography)(({ theme }) => ({
 }))
 
 export const WalletConnect = memo(() => {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     return (
         <Container>
             <Tip color="textSecondary">{t.wallets_wallet_connect_title()}</Tip>

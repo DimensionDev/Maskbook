@@ -16,7 +16,7 @@ import GameList from './GameList.js'
 import GameWindow from './GameWindow.js'
 import GameShareDialog from './GameShareDialog.js'
 import type { GameInfo, GameNFT } from '../types.js'
-import { useI18N } from '../locales/index.js'
+import { useGameTrans } from '../locales/index.js'
 
 export const ConnectContext = createContainer(() => {
     const [isGameShow, setGameShow] = useState(false)
@@ -47,7 +47,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 function WalletConnectDialog() {
-    const t = useI18N()
+    const t = useGameTrans()
     const { classes } = useStyles()
     const { showSnackbar } = useCustomSnackbar()
     const { pluginID } = useNetworkContext()

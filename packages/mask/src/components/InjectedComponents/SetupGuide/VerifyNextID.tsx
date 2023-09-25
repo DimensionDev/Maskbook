@@ -1,4 +1,4 @@
-import { useI18N } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../utils/index.js'
 import { Box, Checkbox, FormControlLabel, Typography } from '@mui/material'
 import { ActionButtonPromise } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
@@ -99,7 +99,7 @@ export function VerifyNextID({
     network,
     disableVerify,
 }: VerifyNextIDProps) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
 
     const { classes, cx } = useStyles()
     const [checked, setChecked] = useState(false)

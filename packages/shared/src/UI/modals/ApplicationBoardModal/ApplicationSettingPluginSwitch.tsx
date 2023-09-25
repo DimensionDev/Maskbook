@@ -1,11 +1,11 @@
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { Icons } from '@masknet/icons'
-import { PluginI18NFieldRender, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
+import { PluginTransFieldRender, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Avatar, Box, List, ListItem, ListItemAvatar, Stack, Switch, Typography } from '@mui/material'
-import { useSharedI18N } from '../../../index.js'
+import { useSharedTrans } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     listItem: {
@@ -141,7 +141,7 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
                                 <Stack className={classes.info} flex={1}>
                                     <div className={classes.headerWrapper}>
                                         <Typography className={classes.name}>
-                                            <PluginI18NFieldRender field={x.entry.name} pluginID={x.pluginID} />
+                                            <PluginTransFieldRender field={x.entry.name} pluginID={x.pluginID} />
                                         </Typography>
                                         {x.entry.tutorialLink ? (
                                             <Box className={classes.settings}>
@@ -153,7 +153,7 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
                                         ) : null}
                                     </div>
                                     <Typography className={classes.desc}>
-                                        <PluginI18NFieldRender field={x.entry.description} pluginID={x.pluginID} />
+                                        <PluginTransFieldRender field={x.entry.description} pluginID={x.pluginID} />
                                     </Typography>
                                 </Stack>
                             </section>
@@ -171,10 +171,10 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
                                     {x.entry.features?.map((f, i) => (
                                         <Stack key={i}>
                                             <Typography className={classes.name} fontSize={14}>
-                                                <PluginI18NFieldRender field={f.name} pluginID={x.pluginID} />
+                                                <PluginTransFieldRender field={f.name} pluginID={x.pluginID} />
                                             </Typography>
                                             <Typography className={classes.desc}>
-                                                <PluginI18NFieldRender field={f.description} pluginID={x.pluginID} />
+                                                <PluginTransFieldRender field={f.description} pluginID={x.pluginID} />
                                             </Typography>
                                         </Stack>
                                     ))}
@@ -196,7 +196,7 @@ interface DSearchSettingsProps {
 }
 
 function DSearchSettings({ checked, onSwitch, setRef, focusPluginID }: DSearchSettingsProps) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes } = useStyles()
 
     return (

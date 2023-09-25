@@ -4,8 +4,8 @@ import { Result } from 'ts-results-es'
 import {
     useActivatedPluginsSiteAdaptor,
     type Plugin,
-    PluginI18NFieldRender,
-    usePluginI18NField,
+    PluginTransFieldRender,
+    usePluginTransField,
     useCompositionContext,
 } from '@masknet/plugin-infra/content-script'
 import { DialogContent, alpha } from '@mui/material'
@@ -16,7 +16,7 @@ import {
     InjectedDialog,
     useGrantPermissions,
     usePluginHostPermissionCheck,
-    useSharedI18N,
+    useSharedTrans,
 } from '@masknet/shared'
 import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
@@ -44,7 +44,7 @@ export const PluginEntryRender = memo(
         }
     >((props, ref) => {
         const [trackPluginRef] = useSetPluginEntryRenderRef(ref)
-        const pluginField = usePluginI18NField()
+        const pluginField = usePluginTransField()
         const plugins = [...useActivatedPluginsSiteAdaptor('any')].sort((plugin) => {
             // TODO: support priority order
             if (plugin.ID === PluginID.RedPacket) return -1
@@ -111,7 +111,7 @@ const cache = new Map<
 function getPluginEntryDisabledDialog(define: Plugin.Shared.Definition) {
     if (!cache.has(define)) {
         cache.set(define, (props: Plugin.SiteAdaptor.CompositionDialogEntry_DialogProps) => {
-            const t = useSharedI18N()
+            const t = useSharedTrans()
             const { classes } = usePermissionDialogStyles()
             const [, onGrant] = useGrantPermissions(define.enableRequirement.host_permissions)
             return (
@@ -184,7 +184,7 @@ const CustomEntry = memo(
                 }}
                 label={
                     <>
-                        <PluginI18NFieldRender field={label} pluginID={id} />
+                        <PluginTransFieldRender field={label} pluginID={id} />
                         {unstable ? (
                             <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />
                         ) : null}
@@ -222,7 +222,7 @@ const DialogEntry = memo(
                 }}
                 label={
                     <>
-                        <PluginI18NFieldRender field={label} pluginID={id} />
+                        <PluginTransFieldRender field={label} pluginID={id} />
                         {unstable ? (
                             <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />
                         ) : null}

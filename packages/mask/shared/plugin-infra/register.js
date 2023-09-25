@@ -1,5 +1,4 @@
 // This file is a JavaScript file because it's reference to the plugins should not be counted as a project reference.
-import '@masknet/plugin-example/register'
 import '@masknet/plugin-debugger/register'
 
 import '@masknet/plugin-evm/register'

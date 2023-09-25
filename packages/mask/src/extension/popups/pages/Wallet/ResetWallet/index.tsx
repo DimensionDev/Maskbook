@@ -5,7 +5,7 @@ import { Box, Button, Typography } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { useI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -73,7 +73,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const ResetWallet = memo(function ResetWallet() {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const { classes } = useStyles()
     const navigate = useNavigate()
     const [answer, setAnswer] = useState('')

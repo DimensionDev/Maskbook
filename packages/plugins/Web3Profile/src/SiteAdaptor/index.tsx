@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { Plugin } from '@masknet/plugin-infra'
-import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { PluginTransFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { useFireflyLensAccounts } from '@masknet/web3-hooks-base'
@@ -39,7 +39,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                         <>
                             <ApplicationEntry
                                 {...EntryComponentProps}
-                                title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
+                                title={<PluginTransFieldRender field={name} pluginID={base.ID} />}
                                 icon={icon}
                                 onClick={() =>
                                     EntryComponentProps?.onClick

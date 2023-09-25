@@ -18,7 +18,7 @@ import { RoutePaths } from '../../constants.js'
 import { useDeploy } from '../../hooks/useDeploy.js'
 import { useManagers } from '../../hooks/useManagers.js'
 import { SmartPayContext } from '../../hooks/useSmartPayContext.js'
-import { useI18N } from '../../locales/index.js'
+import { useSmartPayTrans } from '../../locales/index.js'
 import { PluginSmartPayMessages } from '../../message.js'
 import { ManagerAccountType, type ManagerAccount } from '../../type.js'
 import { CreateSuccessDialog } from './CreateSuccessDialog.js'
@@ -120,7 +120,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function Deploy({ open }: { open: boolean }) {
-    const t = useI18N()
+    const t = useSmartPayTrans()
     const navigate = useNavigate()
     const { classes } = useStyles()
     const wallets = useWallets()

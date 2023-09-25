@@ -17,7 +17,7 @@ import { compact, uniq } from 'lodash-es'
 import { memo, useCallback, useMemo, useState, type FormEvent } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { CollectibleItem, CollectibleItemSkeleton } from '../../components/AssetsManagement/CollectibleItem.js'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 import { EmptyStatus, LoadingStatus, ReloadStatus } from '../../components/index.js'
 import { AddressType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { type NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
@@ -124,7 +124,7 @@ function isValidTokenIds(rawIds: string) {
 export const AddCollectibles = memo(function AddCollectibles(props: AddCollectiblesProps) {
     const { pluginID, chainId: chainId_, account: defaultAccount, onClose } = props
     const { chainId } = useChainContext({ chainId: chainId_ })
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const theme = useTheme()
     const walletAccount = useAccount()
     const account = defaultAccount || walletAccount

@@ -4,7 +4,7 @@ import { first } from 'lodash-es'
 import { InjectedDialog, PopupHomeTabType, usePersonaProofs } from '@masknet/shared'
 import {
     useActivatedPluginsSiteAdaptor,
-    usePluginI18NField,
+    usePluginTransField,
     getSettingsTabContent,
 } from '@masknet/plugin-infra/content-script'
 import {
@@ -20,7 +20,7 @@ import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useI18N } from '../../utils/index.js'
+import { useMaskSharedTrans } from '../../utils/index.js'
 import Services from '#services'
 
 const useStyles = makeStyles()((theme) => ({
@@ -40,9 +40,9 @@ const useStyles = makeStyles()((theme) => ({
  * @deprecated unused
  */
 export function PluginSettingsDialog() {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const { classes } = useStyles()
-    const translate = usePluginI18NField()
+    const translate = usePluginTransField()
 
     const [open, setOpen] = useState(false)
     const activatedPlugins = useActivatedPluginsSiteAdaptor('any')

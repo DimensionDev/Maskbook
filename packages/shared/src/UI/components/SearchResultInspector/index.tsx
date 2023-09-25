@@ -10,7 +10,7 @@ import {
     getSearchResultTabs,
     useActivatedPlugin,
     useActivatedPluginsSiteAdaptor,
-    usePluginI18NField,
+    usePluginTransField,
 } from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST, PluginID, type SocialIdentity, type ProfileTabs } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
@@ -52,7 +52,7 @@ export interface SearchResultInspectorProps {
 }
 
 export function SearchResultInspector(props: SearchResultInspectorProps) {
-    const translate = usePluginI18NField()
+    const translate = usePluginTransField()
 
     const dSearchEnabled = useActivatedPlugin(PluginID.Handle, false)
 

@@ -6,7 +6,7 @@ import { ActionButton, makeStyles } from '@masknet/theme'
 import { Box, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { ChainBoundary, WalletConnectedBoundary, SelectProviderModal } from '@masknet/shared'
-import { useI18N } from '../../locales/index.js'
+import { useRedPacketTrans } from '../../locales/index.js'
 
 export const useStyles = makeStyles()((theme) => {
     return {
@@ -45,7 +45,7 @@ export function OperationFooter({
     onClaimOrRefund,
 }: OperationFooterProps) {
     const { classes } = useStyles()
-    const t = useI18N()
+    const t = useRedPacketTrans()
     const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId })
     const theme = useTheme()
 

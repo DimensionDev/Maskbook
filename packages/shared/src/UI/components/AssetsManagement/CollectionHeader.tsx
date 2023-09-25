@@ -3,7 +3,7 @@ import { Image } from '@masknet/shared'
 import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, type HTMLProps } from 'react'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 import { useUserAssets } from './AssetsProvider.js'
 import { CollectionsContext } from './CollectionsProvider.js'
 
@@ -43,7 +43,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
 }
 
 export const CollectionHeader = memo(function CollectionHeader({ className, onResetCollection, ...rest }: Props) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes, cx } = useStyles()
     const { getVerifiedBy } = useUserAssets()
     const { currentCollectionId, currentCollection } = CollectionsContext.useContainer()

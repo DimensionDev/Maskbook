@@ -8,7 +8,7 @@ import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
 import { useRecipientsList } from '../CompositionDialog/useRecipientsList.js'
 import { useTwitterIdByWalletSearch } from '../shared/SelectRecipients/useTwitterIdByWalletSearch.js'
 import { SelectProfileUI } from '../shared/SelectProfileUI/index.js'
-import { useI18N } from '../../utils/index.js'
+import { useMaskSharedTrans } from '../../utils/index.js'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
 
@@ -67,7 +67,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose, onSelect }: SelectProfileDialogProps) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const { classes } = useStyles()
     const [people, select] = useState<Profile[]>([])
     const [committed, setCommitted] = useState(false)

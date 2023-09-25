@@ -33,7 +33,7 @@ import { Icons } from '@masknet/icons'
 import { useCurrentVisitingIdentity } from '@masknet/plugin-infra/content-script'
 import { useChainContext, useWallet, useNativeTokenPrice, useEnvironmentContext } from '@masknet/web3-hooks-base'
 import { ChainResolver, SmartPayBundler, Web3 } from '@masknet/web3-providers'
-import { useI18N } from '../locales/index.js'
+import { useRedPacketTrans } from '../locales/index.js'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants.js'
 import { type RedPacketSettings, useCreateParams } from './hooks/useCreateCallback.js'
 import { useDefaultCreateGas } from './hooks/useDefaultCreateGas.js'
@@ -107,7 +107,7 @@ export interface RedPacketFormProps {
 }
 
 export function RedPacketERC20Form(props: RedPacketFormProps) {
-    const t = useI18N()
+    const t = useRedPacketTrans()
     const { classes, cx } = useStyles()
     const theme = useTheme()
     const { onChange, onNext, origin, gasOption, onGasOptionChange, expectedChainId } = props

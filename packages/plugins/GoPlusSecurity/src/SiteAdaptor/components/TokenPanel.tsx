@@ -7,7 +7,7 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { formatMarketCap, formatSupply } from '@masknet/web3-shared-base'
 import { ExplorerResolver } from '@masknet/web3-providers'
 import type { SecurityAPI } from '@masknet/web3-providers/types'
-import { useI18N } from '../../locales/index.js'
+import { useGoPlusLabsTrans } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -38,7 +38,7 @@ interface TokenPanelProps {
 }
 
 export const TokenPanel = forwardRef(({ tokenSecurity, tokenMarketCap }: TokenPanelProps, ref) => {
-    const t = useI18N()
+    const t = useGoPlusLabsTrans()
     const { classes } = useStyles()
     const theme = useTheme()
 

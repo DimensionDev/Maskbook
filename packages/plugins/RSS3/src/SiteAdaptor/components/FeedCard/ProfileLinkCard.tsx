@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { formatDomainName } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import { Translate } from '../../../locales/i18n_generated.js'
+import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
@@ -102,7 +102,7 @@ export function ProfileLinkCard({ feed, className, ...rest }: ProfileLinkCardPro
             className={cx(className, rest.verbose ? classes.verbose : null)}
             {...rest}>
             <Typography className={classes.summary}>
-                <Translate.profile_link
+                <RSS3Trans.profile_link
                     values={{
                         user: formattedUser,
                         other: formattedOther,

@@ -8,7 +8,7 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Button, Popover, Radio, Typography } from '@mui/material'
 import { memo } from 'react'
 import { useManagers } from '../../hooks/useManagers.js'
-import { useI18N } from '../../locales/index.js'
+import { useSmartPayTrans } from '../../locales/index.js'
 import { type ManagerAccount, ManagerAccountType } from '../../type.js'
 
 export interface ManagePopoverProps {
@@ -79,7 +79,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose, onSelect, selectedAddress }) => {
-    const t = useI18N()
+    const t = useSmartPayTrans()
     const { classes } = useStyles()
     const { personaManagers, walletManagers } = useManagers()
 

@@ -13,7 +13,7 @@ import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { ResetWalletContext } from '../context.js'
 import { useMnemonicWordsPuzzle, type PuzzleWord } from '../../../hooks/useMnemonicWordsPuzzle.js'
-import { useDashboardI18N } from '../../../locales/index.js'
+import { useDashboardTrans } from '../../../locales/index.js'
 import { ComponentToPrint } from './ComponentToPrint.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useWallets } from '@masknet/web3-hooks-base'
@@ -167,7 +167,7 @@ const CreateMnemonic = memo(function CreateMnemonic() {
     const navigate = useNavigate()
     const wallets = useWallets()
     const walletName = generateNewWalletName(wallets)
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const { handlePasswordAndWallets } = ResetWalletContext.useContainer()
     const [verified, setVerified] = useState(false)
     const { classes, cx } = useStyles()
@@ -292,7 +292,7 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
     verifyAnswerCallback,
     isMatched,
 }) {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const { classes, cx } = useStyles()
 
     const handleOnBack = useCallback(() => {
@@ -377,7 +377,7 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
     onVerifyClick,
     address,
 }) {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const ref = useRef(null)
     const { classes, cx } = useStyles()
     const theme = useTheme()

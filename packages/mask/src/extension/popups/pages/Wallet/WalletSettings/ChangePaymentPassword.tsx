@@ -1,11 +1,11 @@
 import { Icons } from '@masknet/icons'
 import { Box, ListItem, Typography } from '@mui/material'
-import { useI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { useStyles } from './useStyles.js'
 import { ChangePaymentPasswordModal } from '../../../modals/modals.js'
 
 export function ChangePaymentPassword() {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const { classes, theme } = useStyles()
 
     return (

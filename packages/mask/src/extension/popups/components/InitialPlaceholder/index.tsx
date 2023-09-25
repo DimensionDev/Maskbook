@@ -3,7 +3,7 @@ import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useEnterDashboard } from '../../hooks/index.js'
 import { Icons } from '@masknet/icons'
-import { useI18N } from '../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../utils/index.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -53,7 +53,7 @@ const useStyles = makeStyles()({
 })
 
 export const InitialPlaceholder = memo(() => {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const { classes } = useStyles()
     const onEnter = useEnterDashboard()
 

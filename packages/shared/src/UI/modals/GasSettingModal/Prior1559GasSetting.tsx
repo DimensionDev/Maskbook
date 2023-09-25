@@ -20,7 +20,7 @@ import { useChainContext, useGasOptions, useNativeTokenPrice } from '@masknet/we
 import { ActionButton, makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import type { GasSettingProps } from './types.js'
-import { useSharedI18N } from '../../../index.js'
+import { useSharedTrans } from '../../../index.js'
 
 const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
     [ChainId.BSC]: pow10(9).multipliedBy(5),
@@ -87,7 +87,7 @@ const useStyles = makeStyles()((theme) => ({
 export const Prior1559GasSetting = memo(
     ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }: GasSettingProps) => {
         const { classes } = useStyles()
-        const t = useSharedI18N()
+        const t = useSharedTrans()
         const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
         const [selectedGasOption, setGasOptionType] = useState<GasOptionType>(gasOptionType)
 

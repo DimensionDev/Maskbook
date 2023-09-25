@@ -3,7 +3,7 @@ import { TabContext, TabPanel } from '@mui/lab'
 import { Box, Tab } from '@mui/material'
 import { memo, useEffect, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { useI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
 import { NormalHeader } from '../../../components/index.js'
 import {
@@ -50,7 +50,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const Transfer = memo(function Transfer() {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const { classes } = useStyles()
 
     useTitle(t('popups_send'))

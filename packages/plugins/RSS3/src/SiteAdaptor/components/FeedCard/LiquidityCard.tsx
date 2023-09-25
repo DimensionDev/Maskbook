@@ -3,8 +3,8 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { resolveResourceURL } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
-import { Translate } from '../../../locales/i18n_generated.js'
-import { useI18N } from '../../../locales/index.js'
+import { RSS3Trans } from '../../../locales/i18n_generated.js'
+import { useRSS3Trans } from '../../../locales/index.js'
 import { useFeedOwner } from '../../contexts/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
@@ -78,7 +78,7 @@ interface TokenFeedCardProps extends Omit<FeedCardProps, 'feed'> {
  */
 export function LiquidityCard({ feed, className, ...rest }: TokenFeedCardProps) {
     const { verbose } = rest
-    const t = useI18N()
+    const t = useRSS3Trans()
     const { classes, cx } = useStyles()
 
     const owner = useFeedOwner()
@@ -101,7 +101,7 @@ export function LiquidityCard({ feed, className, ...rest }: TokenFeedCardProps) 
                         className={cx(className, verbose ? classes.verbose : null)}
                         {...rest}>
                         <Typography className={classes.summary}>
-                            <Translate.liquidity
+                            <RSS3Trans.liquidity
                                 values={{
                                     user,
                                     platform: feed.platform!,

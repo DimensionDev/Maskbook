@@ -3,7 +3,7 @@ import { Trans } from 'react-i18next'
 import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { PluginTransFieldRender } from '@masknet/plugin-infra/content-script'
 import { Web3ContextProvider, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { Telemetry } from '@masknet/web3-telemetry'
@@ -29,7 +29,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                         <>
                             <ApplicationEntry
                                 {...EntryComponentProps}
-                                title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
+                                title={<PluginTransFieldRender field={name} pluginID={base.ID} />}
                                 iconFilterColor={iconFilterColor}
                                 icon={icon}
                                 onClick={() => {

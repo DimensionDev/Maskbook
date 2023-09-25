@@ -23,7 +23,7 @@ import { formatBalance, type FungibleToken, rightShift, ZERO } from '@masknet/we
 import { type ChainId, isNativeTokenAddress, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
 import { Box, DialogActions, DialogContent, Typography } from '@mui/material'
 import { useDonateCallback } from '../../hooks/useDonateCallback.js'
-import { useI18N } from '../../../locales/i18n_generated.js'
+import { useGitcoinTrans } from '../../../locales/i18n_generated.js'
 import type { GitcoinGrant } from '../../../apis/index.js'
 import { GiveBackSelect } from './GiveBackSelect.js'
 import { getSupportedChainIds } from '../../../utils.js'
@@ -74,7 +74,7 @@ export interface DonateDialogProps extends InjectedDialogProps {
 }
 
 export const DonateDialog = memo(({ grant, ...rest }: DonateDialogProps) => {
-    const t = useI18N()
+    const t = useGitcoinTrans()
     const { classes, theme } = useStyles()
     const { title, admin_address: address, tenants } = grant
     const { share } = useSiteAdaptorContext()

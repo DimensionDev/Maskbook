@@ -17,7 +17,7 @@ import {
     Typography,
 } from '@mui/material'
 import { memo, useEffect } from 'react'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 import { ContractItem } from './ContractItem.js'
 import { ContractSection } from './ContractSection.js'
 
@@ -91,7 +91,7 @@ const brands: Record<TrendingAPI.CommunityType, React.ReactNode> = {
 }
 
 export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: CoinMetadataTableProps) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes } = useStyles()
 
     const metadataLinks = [[t.website(), trending?.coin.home_urls]] as Array<[string, string[] | undefined]>
@@ -240,7 +240,7 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
 })
 
 export const CoinMetadataTableSkeleton = memo(function CoinMetadataTableSkeleton() {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes } = useStyles()
 
     return (

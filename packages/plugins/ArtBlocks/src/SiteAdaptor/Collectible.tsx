@@ -11,7 +11,7 @@ import { ActionBar } from './ActionBar.js'
 import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes/index.js'
 import { ArtBlocksLogoUrl } from '../constants.js'
 import { ChainBoundary } from '@masknet/shared'
-import { useI18N } from '../locales/index.js'
+import { useArtBlocksTrans } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -45,7 +45,7 @@ interface CollectibleProps {
 }
 
 export function Collectible({ projectId, chainId: projectChainId }: CollectibleProps) {
-    const t = useI18N()
+    const t = useArtBlocksTrans()
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: projectChainId })
     const [tabIndex, setTabIndex] = useState(0)

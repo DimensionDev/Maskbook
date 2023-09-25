@@ -11,7 +11,7 @@ import {
     PersonaLogoBox,
     SignUpAccountLogo,
 } from '../../../components/RegisterFrame/ColumnContentLayout.js'
-import { useDashboardI18N } from '../../../locales/index.js'
+import { useDashboardTrans } from '../../../locales/index.js'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { SignUpRoutePath } from '../routePath.js'
 import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer.js'
@@ -25,7 +25,7 @@ import { useAsync } from 'react-use'
 export const MnemonicRevealForm = memo(() => {
     const createPersona = useCreatePersonaV2()
 
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const navigate = useNavigate()
     const { state } = useLocation() as {
         state: {

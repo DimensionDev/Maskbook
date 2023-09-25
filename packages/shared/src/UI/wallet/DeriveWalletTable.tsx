@@ -22,7 +22,7 @@ import { formatBalance } from '@masknet/web3-shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useBalance } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useSharedI18N } from '../../locales/index.js'
+import { useSharedTrans } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -107,7 +107,7 @@ export const DeriveWalletTable = memo<DeriveWalletTableProps>(function DeriveWal
     hiddenHeader,
 }) {
     const { classes } = useStyles()
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     return (
         <Table size="small" padding="none" stickyHeader>
             {hiddenHeader ? null : (

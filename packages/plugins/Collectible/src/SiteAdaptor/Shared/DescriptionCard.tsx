@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { Markdown } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { useCollectibleTrans } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -50,7 +50,7 @@ export interface DescriptionCardProps {
 export function DescriptionCard(props: DescriptionCardProps) {
     const { asset } = props
     const { classes } = useStyles()
-    const t = useI18N()
+    const t = useCollectibleTrans()
     return (
         <div className={classes.root}>
             <Typography className={classes.title}>{t.plugin_collectible_description_title()}</Typography>

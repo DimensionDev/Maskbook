@@ -1,4 +1,4 @@
-import { useSharedI18N } from '@masknet/shared'
+import { useSharedTrans } from '@masknet/shared'
 import { type NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { resolveNextIDPlatformName } from '@masknet/web3-shared-base'
@@ -22,7 +22,7 @@ export function SocialTooltip({ children, platform }: SocialTooltipProps) {
     const { classes } = useStyles()
     const [inView, setInView] = useState(false)
 
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const ref = useRef<HTMLElement>(null)
     const title = platform ? (
         <Typography className={classes.title} fontSize={14}>

@@ -6,7 +6,7 @@ import { makeStyles } from '@masknet/theme'
 import { Stack } from '@mui/material'
 import { useTipsUserGuide } from '../../../storage/index.js'
 import { TipButton } from '../../../components/index.js'
-import { useI18N } from '../../../locales/index.js'
+import { useTipsTrans } from '../../../locales/index.js'
 
 const useStyles = makeStyles<{ buttonSize: number }, 'postTipsButton'>()((theme, { buttonSize }, refs) => ({
     postButtonWrapper: {
@@ -69,7 +69,7 @@ export function TipsRealmContent({
     buttonSize = 34,
     onStatusUpdate,
 }: Plugin.SiteAdaptor.TipsRealmOptions) {
-    const t = useI18N()
+    const t = useTipsTrans()
     const { classes, cx } = useStyles({ buttonSize })
     const myIdentity = useLastRecognizedIdentity()
     const userGuide = useTipsUserGuide(myIdentity?.identifier?.network as EnhanceableSite)

@@ -22,7 +22,7 @@ import { useExternalPluginManifest } from '../loader/index.js'
 import { Link as LinkIcon, Person as PublisherIcon, Description as DescriptionIcon } from '@mui/icons-material'
 import { Trans } from 'react-i18next'
 import { LoadingBase } from '@masknet/theme'
-import { useI18N } from '../locales/index.js'
+import { useExternalTrans } from '../locales/index.js'
 
 export function PluginLoader() {
     const [input, setInput] = useState(
@@ -32,7 +32,7 @@ export function PluginLoader() {
     )
     const [url, setURL] = useState<null | string>(null)
     const invalidURL = !URL.canParse(input)
-    const t = useI18N()
+    const t = useExternalTrans()
 
     return (
         <Stack sx={{ minHeight: 400 }} spacing={2}>
@@ -82,7 +82,7 @@ export function PluginLoader() {
 }
 
 function Loader(props: { url: string }) {
-    const t = useI18N()
+    const t = useExternalTrans()
     const { loading, retry, error, value } = useExternalPluginManifest(props.url)
     if (error) return <SnackbarContent message={'Failed to load the plugin from ' + props.url} />
     const skeleton = <Skeleton variant="text" sx={{ display: 'inline-block' }} width={150} />

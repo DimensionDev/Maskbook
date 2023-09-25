@@ -1,9 +1,9 @@
 import { Typography, Card, CardContent, Button, CardActions } from '@mui/material'
-import { useI18N } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../utils/index.js'
 import { Trans } from 'react-i18next'
 
 export function PermissionAwareRedirectUI(props: PermissionAwareRedirectProps) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     if (props.granted) {
         return (
             <>

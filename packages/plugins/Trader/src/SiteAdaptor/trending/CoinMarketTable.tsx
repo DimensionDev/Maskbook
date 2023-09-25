@@ -7,7 +7,7 @@ import { TokenIcon, WalletIcon, FungibleCoinMarketTable } from '@masknet/shared'
 import { CurrencyType, formatInteger, formatSupply, TokenType } from '@masknet/web3-shared-base'
 import type { Trending } from '../../types/index.js'
 import { useHighestFloorPrice, useNFT_TrendingOverview, useOneDaySaleAmounts } from '../../trending/useTrending.js'
-import { useI18N } from '../../locales/index.js'
+import { useTraderTrans } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     gridContainer: {
@@ -50,7 +50,7 @@ export interface CoinMarketTableProps {
 }
 
 export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
-    const t = useI18N()
+    const t = useTraderTrans()
     const { trending, result } = props
     const chainId = result.chainId ?? trending.coin.chainId
     const { value: overview } = useNFT_TrendingOverview(result.pluginID, trending.coin.id, chainId)

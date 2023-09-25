@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useSharedI18N } from '@masknet/shared'
+import { useSharedTrans } from '@masknet/shared'
 import { Box } from '@mui/system'
 
 const useStyles = makeStyles()((theme) => {
@@ -25,7 +25,7 @@ export function PluginDescriptor({
     isTokenTagPopper,
 }: PluginHeaderProps) {
     const { classes } = useStyles()
-    const t = useSharedI18N()
+    const t = useSharedTrans()
 
     return (
         <Stack flexDirection="row" justifyContent="space-between" alignItems="center" width="100%">

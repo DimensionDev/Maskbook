@@ -6,7 +6,7 @@ import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { formatBalance, formatCurrency, isZero } from '@masknet/web3-shared-base'
 import { Sniffings, NUMERIC_INPUT_REGEXP_PATTERN } from '@masknet/shared-base'
 import { FormattedBalance, SelectTokenChip, type SelectTokenChipProps } from '@masknet/shared'
-import { useI18N } from '../../../locales/index.js'
+import { useTraderTrans } from '../../../locales/index.js'
 
 // TODO: remove isDashboard after remove Dashboard page
 const useStyles = makeStyles()((theme) => ({
@@ -158,7 +158,7 @@ export const InputTokenPanelUI = memo<InputTokenPanelUIProps>(
         tokenValueUSD,
         isAvailableBalance,
     }) => {
-        const t = useI18N()
+        const t = useTraderTrans()
         const { classes } = useStyles()
 
         // #region update amount by self

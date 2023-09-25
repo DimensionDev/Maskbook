@@ -9,7 +9,7 @@ import { PopupModalRoutes, type NetworkPluginID, PopupRoutes } from '@masknet/sh
 import { Web3 } from '@masknet/web3-providers'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { ActionModal, type ActionModalBaseProps, useModalNavigate } from '../../components/index.js'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
 
 interface StyleProps {
     loading: boolean
@@ -65,7 +65,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { loading, timeout }) => ({
 }))
 
 export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectProviderModal({ ...rest }) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const navigate = useNavigate()
     const modalNavigate = useModalNavigate()
     const location = useLocation()

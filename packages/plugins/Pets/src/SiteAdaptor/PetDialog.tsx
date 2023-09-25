@@ -7,7 +7,7 @@ import { Web3Storage } from '@masknet/web3-providers'
 import { usePetConstants } from '@masknet/web3-shared-evm'
 import { PetShareDialog } from './PetShareDialog.js'
 import { PetSetDialog } from './PetSetDialog.js'
-import { useI18N } from '../locales/index.js'
+import { usePetsTrans } from '../locales/index.js'
 import type { ConfigRSSNode } from '../types.js'
 
 enum PetFriendNFTStep {
@@ -20,7 +20,7 @@ interface Props {
     onClose(): void
 }
 export const PetDialog = memo(function PetDialog({ open, onClose }: Props) {
-    const t = useI18N()
+    const t = usePetsTrans()
     const [step, setStep] = useState(PetFriendNFTStep.SetFriendNFT)
     const [configNFTs, setConfigNFTs] = useState<Record<string, Constant> | undefined>(undefined)
     const [isReady, cancel] = useTimeout(500)

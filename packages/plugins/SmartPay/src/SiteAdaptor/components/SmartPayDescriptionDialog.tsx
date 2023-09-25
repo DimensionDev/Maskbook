@@ -3,7 +3,7 @@ import { Box, DialogContent, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { Translate, useI18N } from '../../locales/i18n_generated.js'
+import { SmartPayTrans, useSmartPayTrans } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -36,7 +36,7 @@ interface Props {
     onClose(): void
 }
 export const SmartPayDescriptionDialog = memo(function SmartPayDescriptionDialog({ open, onClose }: Props) {
-    const t = useI18N()
+    const t = useSmartPayTrans()
     const { classes } = useStyles()
     return (
         <InjectedDialog open={open} onClose={onClose} title={t.what_is_smart_pay()}>
@@ -48,7 +48,9 @@ export const SmartPayDescriptionDialog = memo(function SmartPayDescriptionDialog
                 <Typography className={classes.title}>{t.setup_smart_pay_title()}</Typography>
                 <Box component="ul">
                     <Typography component="li" className={classes.content}>
-                        <Translate.setup_smart_pay_one components={{ strong: <strong className={classes.strong} /> }} />
+                        <SmartPayTrans.setup_smart_pay_one
+                            components={{ strong: <strong className={classes.strong} /> }}
+                        />
                     </Typography>
                     <Typography component="li" className={classes.content}>
                         {t.setup_smart_pay_two()}

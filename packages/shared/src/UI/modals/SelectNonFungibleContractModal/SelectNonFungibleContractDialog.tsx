@@ -12,7 +12,7 @@ import { FuseNonFungibleCollection } from '@masknet/web3-providers'
 import { type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { SchemaType, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
 import { ContractItem } from './ContractItem.js'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 import { InjectedDialog } from '../../contexts/components/InjectedDialog.js'
 import { ReloadStatus } from '../../components/ReloadStatus/index.js'
 import { EmptyStatus, LoadingStatus } from '../../components/index.js'
@@ -73,7 +73,7 @@ export interface SelectNonFungibleContractDialogProps<T extends NetworkPluginID 
 
 export const SelectNonFungibleContractDialog = memo(
     ({ open, pluginID, chainId, onClose, onSubmit, schemaType }: SelectNonFungibleContractDialogProps) => {
-        const t = useSharedI18N()
+        const t = useSharedTrans()
         const { classes } = useStyles()
         const [keyword, setKeyword] = useState('')
 

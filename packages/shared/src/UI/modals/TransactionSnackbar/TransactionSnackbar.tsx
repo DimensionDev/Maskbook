@@ -15,7 +15,7 @@ import { type NetworkPluginID, createLookupTableResolver, Sniffings } from '@mas
 import { TransactionStatusType, type RecognizableError } from '@masknet/web3-shared-base'
 import { useWeb3State, useChainContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useSharedI18N } from '../../../index.js'
+import { useSharedTrans } from '../../../index.js'
 
 const useStyles = makeStyles()({
     link: {
@@ -30,7 +30,7 @@ export interface TransactionSnackbarProps<T extends NetworkPluginID> {
 
 export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: TransactionSnackbarProps<T>) {
     const { classes } = useStyles()
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
     const { showSnackbar: showPopupSnackbar, closeSnackbar: closePopupSnackbar } = usePopupCustomSnackbar()
     const snackbarKeyRef = useRef<SnackbarKey>()

@@ -2,10 +2,10 @@ import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
 import { useLayoutEffect } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { useFileServiceTrans } from '../../locales/i18n_generated.js'
 
 export function RouterDialog(props: InjectedDialogProps) {
-    const t = useI18N()
+    const t = useFileServiceTrans()
     const { pathname } = useLocation()
     const navigate = useNavigate()
 

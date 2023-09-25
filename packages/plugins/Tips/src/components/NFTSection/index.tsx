@@ -15,7 +15,7 @@ import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { isLensProfileAddress, isLensFollower, isLensCollect, SchemaType, type ChainId } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../locales/index.js'
+import { useTipsTrans } from '../../locales/index.js'
 import { useTip } from '../../contexts/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -88,7 +88,7 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
         setNonFungibleTokenAddress,
     } = useTip()
     const { classes, cx } = useStyles()
-    const t = useI18N()
+    const t = useTipsTrans()
     const selectedKey = tokenAddress || tokenId ? `${tokenAddress}_${tokenId}` : undefined
     const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext()

@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { DialogContent, dialogClasses } from '@mui/material'
-import { InjectedDialog, useSharedI18N } from '@masknet/shared'
+import { InjectedDialog, useSharedTrans } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { useWeb3Connection, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -30,7 +30,7 @@ interface ConnectWalletProps {
 
 export function ConnectWallet({ pluginID, networkType, providerType, open, onConnect, onClose }: ConnectWalletProps) {
     const { classes } = useStyles()
-    const t = useSharedI18N()
+    const t = useSharedTrans()
 
     const Web3 = useWeb3Connection(pluginID, { providerType })
     const Others = useWeb3Others(pluginID)

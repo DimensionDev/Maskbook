@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { Link, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useMemo } from 'react'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 import { LoadingStatus } from '../index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -45,7 +45,7 @@ export interface PluginCardFrameMiniProps {
 }
 
 export function PluginCardFrameMini({ name, provider, providerLink, children }: PluginCardFrameMiniProps) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes } = useStyles()
 
     const defaultPluginName = useMemo(() => {

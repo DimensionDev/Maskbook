@@ -5,7 +5,7 @@ import { pick } from 'lodash-es'
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { usePersonaRecovery } from '../../../contexts/index.js'
-import { useDashboardI18N } from '../../../locales/index.js'
+import { useDashboardTrans } from '../../../locales/index.js'
 import { useLanguage } from '../../../../shared-ui/index.js'
 import { sendCode, type RestoreQueryError } from '../../../utils/api.js'
 import { phoneRegexp } from '../../../utils/regexp.js'
@@ -16,7 +16,7 @@ import { PhoneNumberField } from '@masknet/shared'
 
 export const PhoneField = memo(function PhoneField() {
     const language = useLanguage()
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const [invalidPhone, setInvalidPhone] = useState(false)
     const { showSnackbar } = useCustomSnackbar()
     const [error, setError] = useState('')

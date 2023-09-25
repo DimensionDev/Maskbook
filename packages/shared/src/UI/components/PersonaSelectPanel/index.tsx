@@ -14,7 +14,7 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Button, Stack, Typography } from '@mui/material'
 import { memo, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { ApplicationBoardModal, LeavePageConfirmModal, useSharedI18N } from '../../../index.js'
+import { ApplicationBoardModal, LeavePageConfirmModal, useSharedTrans } from '../../../index.js'
 import { ErrorPanel } from './ErrorPanel.js'
 import type { PersonaNextIDMixture } from './PersonaItemUI.js'
 import { PersonaItemUI } from './PersonaItemUI.js'
@@ -55,7 +55,7 @@ interface PersonaSelectPanelProps extends withClasses<'checked' | 'unchecked' | 
 export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     const { finishTarget, enableVerify = true, onClose } = props
 
-    const t = useSharedI18N()
+    const t = useSharedTrans()
 
     const currentPersonaIdentifier = useCurrentPersona()
 

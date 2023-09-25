@@ -23,7 +23,7 @@ import { MIN_GAS_LIMIT } from '../../constants/index.js'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { currentSlippageSettings } from '../../settings.js'
 import { PluginTraderMessages } from '../../messages.js'
-import { useI18N } from '../../locales/index.js'
+import { useTraderTrans } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -210,7 +210,7 @@ export const TradeForm = memo<AllTradeFormProps>(
     }) => {
         const maxAmountTrade = useRef<AsyncStateRetry<TraderAPI.TradeInfo> | null>(null)
         const userSelected = useRef(false)
-        const t = useI18N()
+        const t = useTraderTrans()
         const { classes, cx } = useStyles(undefined, { props })
         const { chainId } = useChainContext()
         const { pluginID } = useNetworkContext()

@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material'
 import { type NonFungibleCollection, SourceType } from '@masknet/web3-shared-base'
 import { useWeb3Others } from '@masknet/web3-hooks-base'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { SelectNonFungibleContractModal } from '../../modals/index.js'
 
@@ -68,7 +68,7 @@ export interface ERC721TokenSelectPanelProps {
 }
 export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const { onContractChange, collection, label, chainId = ChainId.Mainnet, balance } = props
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes, cx } = useStyles({ hasIcon: !!collection?.iconURL })
     const Others = useWeb3Others()
 

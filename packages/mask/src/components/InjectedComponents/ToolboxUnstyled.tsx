@@ -28,7 +28,7 @@ import {
 import { WalletIcon, SelectProviderModal, WalletStatusModal } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../utils/index.js'
+import { useMaskSharedTrans } from '../../utils/index.js'
 import GuideStep from '../GuideStep/index.js'
 import { useOpenApplicationBoardDialog } from '../shared/openApplicationBoardDialog.js'
 import { SwitchLogoDialog } from './SwitchLogo/SwitchLogoDialog.js'
@@ -70,7 +70,7 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
         ListItemText = MuiListItemText,
     } = props
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
 
     const openApplicationBoardDialog = useOpenApplicationBoardDialog()
 
@@ -105,7 +105,7 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
 }
 
 function ToolboxHintForWallet(props: ToolboxHintProps) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const {
         ListItemButton = MuiListItemButton,
         ListItemText = MuiListItemText,
@@ -166,7 +166,7 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
 }
 
 function useToolbox() {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const { account } = useChainContext()
     const chainColor = useChainColor()
     const chainIdValid = useChainIdValid()

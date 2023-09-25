@@ -8,7 +8,7 @@ import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import { useState } from 'react'
 import { TransactionList } from './TransactionList.js'
-import { useSharedI18N } from '../../../index.js'
+import { useSharedTrans } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     summaryWrapper: {
@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function usePendingTransactions() {
     const { classes, cx } = useStyles()
-    const t = useSharedI18N()
+    const t = useSharedTrans()
 
     // #region recent pending transactions
     const pendingTransactions = useRecentTransactions(undefined, TransactionStatusType.NOT_DEPEND)

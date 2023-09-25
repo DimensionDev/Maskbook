@@ -5,7 +5,7 @@ import { Box } from '@mui/material'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { useCustomSnackbar } from '@masknet/theme'
 import Services from '#services'
-import { useDashboardI18N } from '../../../locales/index.js'
+import { useDashboardTrans } from '../../../locales/index.js'
 
 import { ConfirmSynchronizePasswordDialog } from '../ConfirmSynchronizePasswordDialog.js'
 import { usePersonaRecovery } from '../../../contexts/index.js'
@@ -24,7 +24,7 @@ interface RestoreProps {
 }
 
 const Restore = memo(function Restore({ onRestore }: RestoreProps) {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const { fillSubmitOutlet } = usePersonaRecovery()
     const { state } = RestoreContext.useContainer()
 
@@ -42,7 +42,7 @@ const Restore = memo(function Restore({ onRestore }: RestoreProps) {
 })
 
 const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const navigate = useNavigate()
     const { showSnackbar } = useCustomSnackbar()
     const { user, updateUser } = UserContext.useContainer()

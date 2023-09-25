@@ -20,7 +20,7 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { CurrencyType, formatCurrency, formatElapsed } from '@masknet/web3-shared-base'
 import type { Ticker } from '../../types/index.js'
 import { TrendingViewContext } from './context.js'
-import { useI18N } from '../../locales/index.js'
+import { useTraderTrans } from '../../locales/index.js'
 
 const useStyles = makeStyles<{ themeMode?: 'dim' | 'dark' | 'light'; isPopper?: boolean }>()(
     (theme, { themeMode, isPopper }) => ({
@@ -71,7 +71,7 @@ export interface TickersTableProps {
 type Cells = 'exchange' | 'pair' | 'price' | 'volume' | 'updated'
 
 export function TickersTable({ tickers }: TickersTableProps) {
-    const t = useI18N()
+    const t = useTraderTrans()
     const theme = useTheme()
     const themeMode = useSiteThemeMode(theme)
     const { isCollectionProjectPopper, isTokenTagPopper } = useContext(TrendingViewContext)

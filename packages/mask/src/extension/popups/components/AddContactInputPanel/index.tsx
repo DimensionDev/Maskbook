@@ -7,7 +7,7 @@ import { ExplorerResolver } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Box, Typography, useTheme, type BoxProps, type InputProps } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
-import { useI18N } from '../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../utils/index.js'
 import { ContactsContext } from '../../hooks/index.js'
 import { AddContactModal } from '../../modals/modals.js'
 
@@ -73,7 +73,7 @@ interface Props extends BoxProps {
 }
 
 const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, autoFocus, ...props }: Props) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const {

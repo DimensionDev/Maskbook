@@ -2,7 +2,7 @@ import urlcat from 'urlcat'
 import { memo, useMemo, useState } from 'react'
 import { EncryptPayloadNetwork, encryptPayloadNetworkToDomain, encodeByNetwork } from '@masknet/encryption'
 import { Icons } from '@masknet/icons'
-import { CopyButton, InjectedDialog, useSharedI18N } from '@masknet/shared'
+import { CopyButton, InjectedDialog, useSharedTrans } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogContent, FormControlLabel, Radio, RadioGroup, Typography, useTheme } from '@mui/material'
@@ -68,7 +68,7 @@ const SharedUrl: Record<EncryptPayloadNetwork, ((message: string) => URL) | unde
 export const ShareSelectNetwork = memo<ShareSelectNetworkProps>(({ open, onClose, message }) => {
     const { classes } = useStyles()
     const theme = useTheme()
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const [network, setNetwork] = useState<EncryptPayloadNetwork>(EncryptPayloadNetwork.Twitter)
     const encodedText = useMemo(() => {
         if (!message) return

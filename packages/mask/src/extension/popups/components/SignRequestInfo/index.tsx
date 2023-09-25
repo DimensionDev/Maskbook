@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
 import { Box, Typography } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
@@ -52,7 +52,7 @@ interface SignRequestInfoProps {
 }
 
 export const SignRequestInfo = memo<SignRequestInfoProps>(function SignRequestInfo({ message, source }) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const { classes } = useStyles()
 
     return (

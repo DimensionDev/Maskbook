@@ -18,7 +18,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 import { WalletDescription } from './WalletDescription.js'
 import { Action } from './Action.js'
 import { SelectProviderModal, WalletStatusModal } from '../../../index.js'
@@ -69,7 +69,7 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
         requiredSupportChainIds,
         requiredSupportPluginID,
     }) => {
-        const t = useSharedI18N()
+        const t = useSharedTrans()
         const { classes, cx } = useStyles()
 
         const { pluginID } = useNetworkContext()

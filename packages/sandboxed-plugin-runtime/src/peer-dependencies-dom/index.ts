@@ -1,11 +1,11 @@
-import type { PluginRuntime } from '../runtime/runtime.js'
 import * as react from 'react'
 import * as react_jsx_runtime from 'react/jsx-runtime'
 import * as react_dom from 'react-dom'
+import { Trans, useTranslation } from 'react-i18next'
 import * as mui_material from '@mui/material'
 import { makeStyles, MaskDialog } from '@masknet/theme'
 import * as masknet_icons from '@masknet/icons/jsx'
-import { Trans, useTranslation } from 'react-i18next'
+import type { PluginRuntime } from '../runtime/runtime.js'
 
 export function addPeerDependenciesDOM(runtime: PluginRuntime) {
     runtime.addNamespaceModule('react', esModuleInterop(react))

@@ -7,7 +7,7 @@ import { Twitter as TwitterIcon, Link as LinkIcon, Description as DescriptionIco
 import { openWindow } from '@masknet/shared-base-ui'
 import type { ScamResult } from '@scamsniffer/detector'
 import { PluginScamRPC } from '../messages.js'
-import { useI18N } from '../locales/i18n_generated.js'
+import { useScamSnifferTrans } from '../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -62,7 +62,7 @@ const useStyles = makeStyles()((theme) => ({
 function ScamAlert({ result }: { result: ScamResult }) {
     const { classes } = useStyles()
     const [autoReport, setAutoReport] = useState(false)
-    const t = useI18N()
+    const t = useScamSnifferTrans()
 
     useEffect(() => {
         if (autoReport) {

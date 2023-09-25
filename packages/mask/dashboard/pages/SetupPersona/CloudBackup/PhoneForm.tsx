@@ -3,7 +3,7 @@ import { Controller } from 'react-hook-form'
 import { Box, TextField } from '@mui/material'
 import { PhoneNumberField } from '@masknet/shared'
 import { CountdownButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { useDashboardI18N } from '../../../locales/i18n_generated.js'
+import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { UserContext, useLanguage } from '../../../../shared-ui/index.js'
 import { CloudBackupFormContext } from '../../../contexts/CloudBackupFormContext.js'
 import { AccountType, Scenario, Locale } from '../../../type.js'
@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const PhoneForm = memo(function PhoneForm() {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const { classes } = useStyles()
     const { user } = UserContext.useContainer()
     const lang = useLanguage()

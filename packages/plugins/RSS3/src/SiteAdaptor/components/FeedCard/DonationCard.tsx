@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
 import { type HTMLProps, memo, useState } from 'react'
-import { Translate } from '../../../locales/i18n_generated.js'
+import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardType } from '../share.js'
 import { Slider } from '../Slider.js'
@@ -142,7 +142,7 @@ export function DonationCard({ feed, actionIndex, className, ...rest }: Donation
                 badge={badge}
                 {...rest}>
                 <Typography className={classes.summary}>
-                    <Translate.donation_donate_verbose
+                    <RSS3Trans.donation_donate_verbose
                         values={{
                             user,
                             cost_value: formatValue(metadata?.token),
@@ -171,7 +171,7 @@ export function DonationCard({ feed, actionIndex, className, ...rest }: Donation
             className={className}
             {...rest}>
             <Typography className={classes.summary}>
-                <Translate.donation_donate
+                <RSS3Trans.donation_donate
                     values={{
                         user,
                         cost_value: formatValue(metadata?.token),

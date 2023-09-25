@@ -6,7 +6,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { CardDialogContent } from './CardDialogContent.js'
 import { TabType } from '../../types.js'
 import { Context } from '../Context/index.js'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { useCollectibleTrans } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     dialogRoot: {
@@ -29,7 +29,7 @@ export interface CardDialogProps {
 }
 
 export function CardDialog(props: CardDialogProps) {
-    const t = useI18N()
+    const t = useCollectibleTrans()
     const { classes } = useStyles()
     const { chainId, pluginID, tokenId, tokenAddress } = Context.useContainer()
 

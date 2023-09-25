@@ -4,7 +4,7 @@ import { forwardRef, useState } from 'react'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import type { SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     message: {
@@ -28,7 +28,7 @@ interface ConfirmModalProps extends BottomDrawerProps {
 
 function ConfirmDrawer({ message, buttonLabel, onConfirm, ...rest }: ConfirmModalProps) {
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     return (
         <BottomDrawer {...rest}>
             <Typography className={classes.message}>{message}</Typography>

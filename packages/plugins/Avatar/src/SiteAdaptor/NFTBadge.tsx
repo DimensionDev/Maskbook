@@ -4,7 +4,7 @@ import { Link } from '@mui/material'
 import type { NFTInfo } from '../types.js'
 import { formatPrice, formatText } from '../utils/index.js'
 import { NFTAvatarRing } from './NFTAvatarRing.js'
-import { useI18N } from '../locales/i18n_generated.js'
+import { useAvatarTrans } from '../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -25,7 +25,7 @@ interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
 export function NFTBadge(props: NFTBadgeProps) {
     const { nftInfo, size = 140, hasRainbow, borderSize } = props
     const { classes } = useStyles(undefined, { props })
-    const t = useI18N()
+    const t = useAvatarTrans()
 
     if (!nftInfo)
         return (

@@ -18,7 +18,7 @@ import {
     useMediaQuery,
     useTheme,
 } from '@mui/material'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '../base/index.js'
 import { DialogDismissIcon } from './DialogDismissIcon.js'
 
@@ -169,7 +169,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
         ...dialogClasses
     } = classes
 
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))
     const {
         children,

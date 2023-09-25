@@ -1,6 +1,6 @@
 import { InjectedDialog } from '@masknet/shared'
 import { memo, useCallback, useMemo, useState } from 'react'
-import { useDashboardI18N } from '../../locales/i18n_generated.js'
+import { useDashboardTrans } from '../../locales/i18n_generated.js'
 import { Box, DialogActions, DialogContent, LinearProgress, Typography } from '@mui/material'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useAsync, useAsyncFn } from 'react-use'
@@ -72,7 +72,7 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
     code,
     abstract,
 }) {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const { classes, theme } = useStyles()
     const [process, setProcess] = useState(0)
     const [backupPassword, setBackupPassword] = useState('')

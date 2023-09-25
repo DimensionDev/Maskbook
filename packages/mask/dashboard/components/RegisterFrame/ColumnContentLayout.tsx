@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Icons } from '@masknet/icons'
 import { Box, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import { useDashboardI18N } from '../../locales/index.js'
+import { useDashboardTrans } from '../../locales/index.js'
 
 export const ColumnContentLayout = styled('div')`
     display: flex;
@@ -48,7 +48,7 @@ export const SignUpAccountLogo = styled(Icons.SignUpAccount)(({ theme }) => ({
 interface PersonaLogoBoxProps {}
 
 export const PersonaLogoBox = memo<React.PropsWithChildren<PersonaLogoBoxProps>>(({ children }) => {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     return (
         <LogoBoxStyled>
             {children}

@@ -4,13 +4,13 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Box, Typography, useTheme } from '@mui/material'
 import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { MATCH_PASSWORD_RE } from '../../constants.js'
 import { UserContext } from '../../../../../shared-ui/index.js'
 
 export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBackupPasswordModal() {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const theme = useTheme()
     const [params] = useSearchParams()
 

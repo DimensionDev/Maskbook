@@ -6,7 +6,7 @@ import { AddressType, type ChainId, isValidAddress, isValidDomain } from '@maskn
 import { useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { createContainer } from 'unstated-next'
-import { useI18N } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../utils/index.js'
 
 interface ContextOptions {
     defaultName: string
@@ -17,7 +17,7 @@ interface ContextOptions {
 function useContactsContext(
     { defaultName, defaultChainId, defaultAddress }: ContextOptions = { defaultName: '', defaultAddress: '' },
 ) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: defaultChainId })
     const contacts = useContacts()
     const wallets = useWallets()

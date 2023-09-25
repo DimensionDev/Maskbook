@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Button, List, Typography } from '@mui/material'
 import { ArrowDropDown as ArrowDropDownIcon } from '@mui/icons-material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../locales/index.js'
+import { useGameTrans } from '../locales/index.js'
 import { useGameList } from '../hook/index.js'
 import type { GameInfo } from '../types.js'
 
@@ -91,7 +91,7 @@ interface Props {
 }
 
 function GameList(props: Props) {
-    const t = useI18N()
+    const t = useGameTrans()
     const { classes, cx } = useStyles()
     const gameList = useGameList()
     const [descTypes, setDescTypes] = useState<boolean[]>([])

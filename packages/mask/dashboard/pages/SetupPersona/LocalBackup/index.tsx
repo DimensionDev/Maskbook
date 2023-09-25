@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { memo } from 'react'
-import { useDashboardI18N } from '../../../locales/i18n_generated.js'
+import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { useAsyncFn } from 'react-use'
 import Services from '#services'
 import { LoadingStatus } from '@masknet/shared'
@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const LocalBackup = memo(function LocalBackup() {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const { classes } = useStyles()
     const { user, updateUser } = UserContext.useContainer()
     const {

@@ -1,7 +1,7 @@
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Box, Typography, type BoxProps } from '@mui/material'
 import { memo } from 'react'
-import { useSharedI18N } from '../../../index.js'
+import { useSharedTrans } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     statusBox: {
@@ -31,7 +31,7 @@ export const LoadingStatus = memo(function LoadingStatus({
     ...rest
 }: Props) {
     const { classes, cx } = useStyles()
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     return (
         <Box className={cx(classes.statusBox, className)} p={2} {...rest}>
             <LoadingBase size={iconSize} />

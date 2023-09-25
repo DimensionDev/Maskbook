@@ -6,7 +6,7 @@ import { isSameAddress, type FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { HelpOutline } from '@mui/icons-material'
 import React, { useCallback } from 'react'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 import { useChainContext, useFungibleTokenSpenders } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 
@@ -55,7 +55,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
         callback,
     } = props
 
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes } = useStyles(undefined, { props })
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: token?.chainId })
 

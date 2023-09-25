@@ -3,8 +3,8 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
-import { useI18N } from '../../../locales/index.js'
-import { Translate } from '../../../locales/i18n_generated.js'
+import { useRSS3Trans } from '../../../locales/index.js'
+import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useFeedOwner } from '../../contexts/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardType } from '../share.js'
@@ -82,7 +82,7 @@ const contextMap: Partial<
  */
 export function TokenOperationCard({ feed, ...rest }: TokenFeedCardProps) {
     const { verbose } = rest
-    const t = useI18N()
+    const t = useRSS3Trans()
     const { classes, cx } = useStyles()
 
     const action = feed.actions.find((x) => x.address_from && x.address_to) || feed.actions[0]
@@ -101,7 +101,7 @@ export function TokenOperationCard({ feed, ...rest }: TokenFeedCardProps) {
         <CardFrame type={cardType} feed={feed} {...rest}>
             <Typography className={classes.summary}>
                 {verbose ? (
-                    <Translate.token_operation_verbose
+                    <RSS3Trans.token_operation_verbose
                         values={{
                             from,
                             to,
@@ -119,7 +119,7 @@ export function TokenOperationCard({ feed, ...rest }: TokenFeedCardProps) {
                         }}
                     />
                 ) : (
-                    <Translate.token_operation
+                    <RSS3Trans.token_operation
                         values={{
                             from,
                             to,

@@ -6,13 +6,13 @@ import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import Services from '#services'
 import { activatedSiteAdaptorUI, activatedSiteAdaptor_state } from '../../site-adaptor-infra/index.js'
-import { type I18NFunction, useI18N } from '../../utils/index.js'
+import { type I18NFunction, useMaskSharedTrans } from '../../utils/index.js'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import type { SubmitComposition } from './CompositionUI.js'
 import { SteganographyPayload } from './SteganographyPayload.js'
 
 export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'reply') {
-    const { t: originalTran } = useI18N()
+    const { t: originalTran } = useMaskSharedTrans()
     const t: typeof originalTran = useCallback(
         ((key: string, options = {}) => {
             if (typeof options === 'string') return t(key, options)

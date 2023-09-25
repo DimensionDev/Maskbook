@@ -5,7 +5,7 @@ import { ActionButtonPromise } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { WizardDialog, type WizardDialogProps } from './WizardDialog.js'
-import { useI18N } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../utils/index.js'
 import { SetupGuideStep } from '@masknet/shared-base'
 
 export const useFindUsernameStyles = makeStyles()((theme) => ({
@@ -93,7 +93,7 @@ export function FindUsername({
     enableNextID,
     stepUpdating,
 }: FindUsernameProps) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const { classes, cx } = useFindUsernameStyles()
     const [connected, setConnected] = useState(false)
 

@@ -34,7 +34,7 @@ import { Box, ListItem, ListItemText, Skeleton, Typography, alpha, type ListItem
 import { useQuery } from '@tanstack/react-query'
 import { memo, useMemo } from 'react'
 import { Trans } from 'react-i18next'
-import { formatTokenBalance, useI18N } from '../../../../../../utils/index.js'
+import { formatTokenBalance, useMaskSharedTrans } from '../../../../../../utils/index.js'
 import { parseAmountFromERC20ApproveInput, parseReceiverFromERC20TransferInput } from '../../utils.js'
 
 const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' }, __) => {
@@ -189,7 +189,7 @@ export interface ActivityItemProps extends ListItemProps {
 }
 
 export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ transaction, className, onView, ...rest }) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const { classes, cx } = useStyles({})
     const descriptors = useNetworkDescriptors(NetworkPluginID.PLUGIN_EVM)
     const networkDescriptor = descriptors.find((x) => x.chainId === transaction.chainId)
@@ -325,7 +325,7 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
     onView,
     ...rest
 }) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const { classes, cx } = useStyles({})
     // candidate is current transaction
     const candidate = transaction.candidates[transaction.indexId]

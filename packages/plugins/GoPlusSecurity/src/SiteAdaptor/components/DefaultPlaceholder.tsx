@@ -1,9 +1,9 @@
 import { Box, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useI18N } from '../../locales/index.js'
+import { useGoPlusLabsTrans } from '../../locales/index.js'
 
 export function DefaultPlaceholder() {
-    const t = useI18N()
+    const t = useGoPlusLabsTrans()
     return (
         <Stack alignItems="center" spacing={2.5}>
             <Box>

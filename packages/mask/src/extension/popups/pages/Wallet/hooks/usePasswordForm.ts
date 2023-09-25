@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { z as zod } from 'zod'
-import { useI18N, type I18NFunction } from '../../../../../utils/index.js'
+import { useMaskSharedTrans, type I18NFunction } from '../../../../../utils/index.js'
 import { useForm, type UseFormReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -27,7 +27,7 @@ export function usePasswordForm(refine = true): UseFormReturn<
 > & {
     schema: ReturnType<typeof defineSchema>
 } {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
 
     const schema = useMemo(() => {
         return defineSchema(refine, t)

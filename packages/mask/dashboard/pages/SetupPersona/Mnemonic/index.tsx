@@ -12,7 +12,7 @@ import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
 import { useMnemonicWordsPuzzle } from '../../../hooks/useMnemonicWordsPuzzle.js'
-import { useDashboardI18N } from '../../../locales/index.js'
+import { useDashboardTrans } from '../../../locales/index.js'
 import { ComponentToPrint } from './ComponentToPrint.js'
 import { Words } from './Words.js'
 import urlcat from 'urlcat'
@@ -89,7 +89,7 @@ export const SignUpMnemonic = memo(function SignUpMnemonic() {
     const ref = useRef(null)
 
     const navigate = useNavigate()
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const createPersona = useCreatePersonaV2()
 
     const { classes } = useStyles()

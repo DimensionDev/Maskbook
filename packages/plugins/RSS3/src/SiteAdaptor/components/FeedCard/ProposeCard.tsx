@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
-import { Translate } from '../../../locales/i18n_generated.js'
+import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardType } from '../share.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
@@ -56,7 +56,7 @@ export function ProposeCard({ feed, ...rest }: ProposeCardProps) {
     return (
         <CardFrame type={CardType.GovernancePropose} feed={feed} {...rest}>
             <Typography className={classes.summary}>
-                <Translate.propose
+                <RSS3Trans.propose
                     values={{
                         user,
                     }}

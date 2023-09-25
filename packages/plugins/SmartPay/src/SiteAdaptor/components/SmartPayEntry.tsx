@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect } from 'react'
 import { Trans } from 'react-i18next'
-import { ApplicationEntry, LeavePageConfirmModal, PersonaSelectPanelModal, useSharedI18N } from '@masknet/shared'
+import { ApplicationEntry, LeavePageConfirmModal, PersonaSelectPanelModal, useSharedTrans } from '@masknet/shared'
 import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Icons } from '@masknet/icons'
@@ -16,7 +16,7 @@ export interface SmartPayEntryProps {
 }
 
 export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
 
     const wallets = useWallets()
     const personas = useAllPersonas()

@@ -22,7 +22,7 @@ import { Twitter, Hub } from '@masknet/web3-providers'
 import { useInjectedCSS } from './useInjectedCSS.js'
 import { useUpdatedAvatar } from './useUpdatedAvatar.js'
 import { getAvatarType } from '../../utils/AvatarType.js'
-import { useI18N } from '../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../utils/index.js'
 import { activatedSiteAdaptorUI } from '../../../../site-adaptor-infra/ui.js'
 import { searchAvatarMetaSelector, searchAvatarSelector, searchTwitterAvatarSelector } from '../../utils/selector.js'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
@@ -124,7 +124,7 @@ export function NFTAvatarInTwitter() {
 }
 
 function useNFTCircleAvatar(size: number) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
 
     const identity = useCurrentVisitingIdentity()
     const { value: nftAvatar } = usePersonaNFTAvatar(

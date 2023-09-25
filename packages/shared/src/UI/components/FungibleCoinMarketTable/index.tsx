@@ -14,7 +14,7 @@ import {
     Typography,
 } from '@mui/material'
 import { memo } from 'react'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 import { FormattedCurrency } from '../../wallet/FormattedCurrency.js'
 import { ProgressiveText } from '../ProgressiveText/index.js'
 
@@ -48,7 +48,7 @@ interface CoinMarketTableProps {
     sign?: CurrencyType
 }
 export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ trending, sign }: CoinMarketTableProps) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes } = useStyles()
     const { isLoading } = useFiatCurrencyRate()
 
@@ -133,7 +133,7 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
 
 export const FungibleCoinMarketTableSkeleton = memo(function FungibleCoinMarketTableSkeleton() {
     const { classes } = useStyles()
-    const t = useSharedI18N()
+    const t = useSharedTrans()
 
     return (
         <Stack>

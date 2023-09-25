@@ -9,7 +9,7 @@ import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useUnlistedAddressConfig } from '@masknet/web3-hooks-base'
 import { queryPersonaAvatar } from '@masknet/plugin-infra/dom/context'
 import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
-import { useI18N } from '../../locales/index.js'
+import { useWeb3ProfileTrans } from '../../locales/index.js'
 import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks/index.js'
 import { ProfileCard, ProfileCardSkeleton } from './ProfileCard.js'
 
@@ -43,7 +43,7 @@ interface Props {
     onClose(): void
 }
 export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose }: Props) {
-    const t = useI18N()
+    const t = useWeb3ProfileTrans()
     const { classes } = useStyles()
     const myProfile = useLastRecognizedProfile()
     const allPersona = useAllPersonas()

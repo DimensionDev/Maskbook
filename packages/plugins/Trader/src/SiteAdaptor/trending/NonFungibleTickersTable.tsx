@@ -24,7 +24,7 @@ import { formatCurrency } from '@masknet/web3-shared-base'
 import { resolveActivityTypeBackgroundColor } from '@masknet/web3-providers/helpers'
 import { useNonFungibleTokenActivities } from '../../trending/useTrending.js'
 import { TrendingViewContext } from './context.js'
-import { useI18N } from '../../locales/index.js'
+import { useTraderTrans } from '../../locales/index.js'
 
 const useStyles = makeStyles<{ isPopper: boolean; themeMode?: 'dim' | 'dark' | 'light' }>()(
     (theme, { isPopper, themeMode }) => ({
@@ -122,7 +122,7 @@ export interface NonFungibleTickersTableProps {
 type Cells = 'nft' | 'method' | 'value' | 'from' | 'to' | 'time'
 
 export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTickersTableProps) {
-    const t = useI18N()
+    const t = useTraderTrans()
     const theme = useTheme()
     const containerRef = useRef(null)
     const themeMode = useSiteThemeMode(theme)

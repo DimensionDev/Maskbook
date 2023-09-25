@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { ActionButton, makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Dialog, DialogActions, DialogContent, Typography } from '@mui/material'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { useSmartPayTrans } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -40,7 +40,7 @@ interface CreateSuccessDialogProps {
 }
 
 export function CreateSuccessDialog({ open, onClose, address, owner }: CreateSuccessDialogProps) {
-    const t = useI18N()
+    const t = useSmartPayTrans()
     const { classes } = useStyles()
 
     return usePortalShadowRoot((container) => (

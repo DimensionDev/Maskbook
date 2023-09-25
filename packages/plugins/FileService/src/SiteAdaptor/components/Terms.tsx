@@ -3,7 +3,7 @@ import { Button, Link, Typography } from '@mui/material'
 import { useLayoutEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
-import { Translate, useI18N } from '../../locales/index.js'
+import { FileServiceTrans, useFileServiceTrans } from '../../locales/index.js'
 import { useTermsConfirmed } from '../storage.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -79,7 +79,7 @@ const TERMS_URL = 'https://legal.mask.io/arweave/file-service/plugin-terms.html'
 const POLICY_URL = 'https://legal.mask.io/arweave/file-service/privacy-policy-uploader.html'
 
 export function Terms() {
-    const t = useI18N()
+    const t = useFileServiceTrans()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const [confirmed, setConfirmed] = useTermsConfirmed()
@@ -95,10 +95,10 @@ export function Terms() {
                     {t.what_is_web3_file_service()}
                 </Typography>
                 <Typography variant="body2" className={classes.introduction}>
-                    <Translate.introduction multiple components={{ br: <br /> }} />
+                    <FileServiceTrans.introduction multiple components={{ br: <br /> }} />
                 </Typography>
                 <Typography variant="body2" className={classes.footNote}>
-                    <Translate.foot_note
+                    <FileServiceTrans.foot_note
                         components={{
                             terms: <Link target="_blank" className={classes.link} href={TERMS_URL} />,
                             policy: <Link target="_blank" className={classes.link} href={POLICY_URL} />,

@@ -11,7 +11,7 @@ import { NFTInfo } from './NFTInfo.js'
 import { RSS3_KEY_SITE } from '../constants.js'
 import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
-import { useI18N } from '../locales/index.js'
+import { useAvatarTrans } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -44,7 +44,7 @@ interface PersonaItemProps {
 
 export const PersonaItem = memo(function PersonaItem(props: PersonaItemProps) {
     const { userId, onSelect, owner = false, proof, avatar, nickname = '', persona = '' } = props
-    const t = useI18N()
+    const t = useAvatarTrans()
     const { classes } = useStyles()
 
     const { value: nftAvatar, loading } = usePersonaNFTAvatar(

@@ -1,7 +1,7 @@
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { GasOptionType } from '@masknet/web3-shared-base'
-import { GasSettingModal, InjectedDialog, useSharedI18N } from '@masknet/shared'
+import { GasSettingModal, InjectedDialog, useSharedTrans } from '@masknet/shared'
 import { GasSettingSupported } from './GasSettingSupported.js'
 import type { BigNumber } from 'bignumber.js'
 
@@ -25,7 +25,7 @@ interface GasSettingProps {
 }
 
 export function GasSetting(props: GasSettingProps) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes } = useStyles()
     const {
         open,

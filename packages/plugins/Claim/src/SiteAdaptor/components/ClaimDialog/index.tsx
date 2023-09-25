@@ -1,7 +1,7 @@
 import { InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
-import { useI18N } from '../../../locales/i18n_generated.js'
+import { useClaimTrans } from '../../../locales/i18n_generated.js'
 import { DialogActions, DialogContent } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -18,7 +18,7 @@ interface Props {
     onClose(): void
 }
 export const ClaimDialog = memo(({ open, onClose }: Props) => {
-    const t = useI18N()
+    const t = useClaimTrans()
     const { classes } = useStyles()
 
     return (

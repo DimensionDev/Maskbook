@@ -7,7 +7,7 @@ import { Icons } from '@masknet/icons'
 import {
     useActivatedPluginsSiteAdaptor,
     useIsMinimalMode,
-    usePluginI18NField,
+    usePluginTransField,
     getProfileTabContent,
 } from '@masknet/plugin-infra/content-script'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
@@ -39,7 +39,7 @@ import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme
 import { NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ScopedDomainsContainer, useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
-import { useI18N } from '../../utils/index.js'
+import { useMaskSharedTrans } from '../../utils/index.js'
 import {
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
@@ -138,8 +138,8 @@ function openWeb3ProfileSettingDialog() {
 function Content(props: ProfileTabContentProps) {
     const { classes } = useStyles(undefined, { props })
 
-    const { t } = useI18N()
-    const translate = usePluginI18NField()
+    const { t } = useMaskSharedTrans()
+    const translate = usePluginTransField()
 
     const [hidden, setHidden] = useState(true)
     const [profileTabType, setProfileTabType] = useState(ProfileTabs.WEB3)

@@ -1,6 +1,6 @@
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { InjectedDialog, useSharedI18N } from '@masknet/shared'
+import { InjectedDialog, useSharedTrans } from '@masknet/shared'
 import { QRCodeModal } from './QRCodeModal.js'
 
 const useStyles = makeStyles()({
@@ -18,7 +18,7 @@ interface QRCodeDialogProps {
 }
 
 export function QRCodeDialog({ uri, open, onClose }: QRCodeDialogProps) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes } = useStyles()
     return (
         <InjectedDialog open={open} onClose={onClose} title={t.wallet_connect_qr_code_dialog_title()}>

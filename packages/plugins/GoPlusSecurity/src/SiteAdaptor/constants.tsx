@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import type { ReactNode } from 'react'
-import type { useI18N } from '../locales/index.js'
+import type { useGoPlusLabsTrans } from '../locales/index.js'
 
 export enum SecurityMessageLevel {
     High = 'High',
@@ -10,7 +10,7 @@ export enum SecurityMessageLevel {
 
 type DefineMapping = {
     [key in SecurityMessageLevel]: {
-        i18nKey: keyof ReturnType<typeof useI18N>
+        i18nKey: keyof ReturnType<typeof useGoPlusLabsTrans>
         bgColor: string
         titleColor: string
         icon(size?: number): ReactNode

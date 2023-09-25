@@ -7,7 +7,7 @@ import { Grid, Typography } from '@mui/material'
 import { makeStyles, MaskAlert, MaskTextField } from '@masknet/theme'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icons } from '@masknet/icons'
-import { useSharedI18N } from '@masknet/shared'
+import { useSharedTrans } from '@masknet/shared'
 import { NUMERIC_INPUT_REGEXP_PATTERN } from '@masknet/shared-base'
 import {
     type ChainId,
@@ -82,7 +82,7 @@ export function GasForm(props: GasFormProps) {
         maxPriorityFeePerGasByUser,
         setMaxPriorityFeePerGasByUser,
     } = props
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes } = useStyles()
 
     const isEIP1559 = Others.chainResolver.isFeatureSupported(chainId, 'EIP1559')

@@ -10,7 +10,7 @@ import {
     type SelectChangeEvent,
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useDashboardI18N } from '../../locales/index.js'
+import { useDashboardTrans } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -42,7 +42,7 @@ export function CreateWalletForm(props: CreateWalletFormProps) {
     const { classes } = useStyles()
     const [selected, setSelected] = useState<any>()
 
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
 
     return (
         <Container>

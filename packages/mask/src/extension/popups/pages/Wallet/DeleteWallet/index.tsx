@@ -12,7 +12,7 @@ import { ManageWallet } from '@masknet/shared'
 import { useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Web3 } from '@masknet/web3-providers'
-import { useI18N } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { useTitle, PopupContext } from '../../../hooks/index.js'
 
@@ -78,7 +78,7 @@ const useStyles = makeStyles()({
  * @deprecated unused
  */
 const DeleteWallet = memo(() => {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const navigate = useNavigate()
     const currentWallet = useWallet()
     const wallets = useWallets()

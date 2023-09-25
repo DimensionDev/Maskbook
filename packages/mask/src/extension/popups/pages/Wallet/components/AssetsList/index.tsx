@@ -10,7 +10,7 @@ import { range } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
-import { formatTokenBalance, useI18N } from '../../../../../../utils/index.js'
+import { formatTokenBalance, useMaskSharedTrans } from '../../../../../../utils/index.js'
 import { useAssetExpand, useWalletAssets } from '../../hooks/index.js'
 import { MoreBar } from './MoreBar.js'
 
@@ -87,7 +87,7 @@ interface AssetItemProps extends ListItemProps {
 
 const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: AssetItemProps) {
     const { classes, cx } = useStyles()
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
     const network = networks.find((x) => x.chainId === asset.chainId)
     const providerURL = network?.isCustomized ? network.rpcUrl : undefined

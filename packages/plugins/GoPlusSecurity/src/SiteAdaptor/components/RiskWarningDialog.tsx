@@ -6,7 +6,7 @@ import { CopyButton, InjectedDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { ExplorerResolver } from '@masknet/web3-providers'
 import { ChainId, formatEthereumAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../locales/index.js'
+import { useGoPlusLabsTrans } from '../../locales/index.js'
 import { type TokenRiskWarningDialogEvent } from '../../messages.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -71,7 +71,7 @@ interface Props {
     onSetDialog(event: TokenRiskWarningDialogEvent): void
 }
 export function RiskWarningDialog({ open, token, onSetDialog }: Props) {
-    const t = useI18N()
+    const t = useGoPlusLabsTrans()
     const { classes } = useStyles()
 
     const onClose = useCallback(async () => {

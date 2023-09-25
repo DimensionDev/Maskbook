@@ -1,7 +1,7 @@
 import { styled, Typography, useTheme } from '@mui/material'
 import { openWindow } from '@masknet/shared-base-ui'
 import { Icons } from '@masknet/icons'
-import { useDashboardI18N } from '../../locales/index.js'
+import { useDashboardTrans } from '../../locales/index.js'
 
 const FollowUsContainer = styled('div')(() => ({
     background: 'linear-gradient(90deg, #ACCBEE 0%, #E7F0FD 100%)',
@@ -30,7 +30,7 @@ function openMaskNetwork() {
     return openWindow('https://twitter.com/realMaskNetwork')
 }
 export function FollowUs() {
-    const t = useDashboardI18N()
+    const t = useDashboardTrans()
     const theme = useTheme()
 
     return (

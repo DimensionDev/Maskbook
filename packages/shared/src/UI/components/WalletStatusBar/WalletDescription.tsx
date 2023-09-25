@@ -3,7 +3,7 @@ import { memo } from 'react'
 import { alpha, Box, Link, Typography } from '@mui/material'
 import { CopyButton, WalletIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { useSharedI18N } from '../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -79,7 +79,7 @@ export const WalletDescription = memo<WalletDescriptionProps>(
         verified,
     }) => {
         const { classes } = useStyles()
-        const t = useSharedI18N()
+        const t = useSharedTrans()
 
         return (
             <Box onClick={onClick} className={classes.root}>

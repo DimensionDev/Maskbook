@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
-import { useI18N } from '../locales/i18n_generated.js'
+import { useAvatarTrans } from '../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -36,7 +36,7 @@ export interface NFTAvatarButtonProps extends withClasses<'root' | 'text'> {
 
 export function NFTAvatarButton(props: NFTAvatarButtonProps) {
     const { onClick } = props
-    const t = useI18N()
+    const t = useAvatarTrans()
     const { classes } = useStyles(undefined, { props })
 
     return (

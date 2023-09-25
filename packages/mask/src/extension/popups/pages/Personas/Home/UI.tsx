@@ -14,7 +14,7 @@ import { MaskTabList, makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Box, Tab, Typography, useTheme } from '@mui/material'
 import { memo, useCallback } from 'react'
-import { useI18N } from '../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
 import { SocialAccounts } from '../../../components/SocialAccounts/index.js'
 import { ConnectedWallet } from '../../../components/ConnectedWallet/index.js'
 import type { ConnectedWalletInfo } from '../type.js'
@@ -199,7 +199,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
         hasPaymentPassword,
     }) => {
         const theme = useTheme()
-        const { t } = useI18N()
+        const { t } = useMaskSharedTrans()
         const navigate = useNavigate()
         const modalNavigate = useModalNavigate()
         const { classes, cx } = useStyles()

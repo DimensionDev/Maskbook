@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Stack, Typography, Button } from '@mui/material'
-import { useSharedI18N } from '../../../index.js'
+import { useSharedTrans } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -20,7 +20,7 @@ interface ErrorPanelProps {
 }
 
 export function ErrorPanel({ onRetry }: ErrorPanelProps) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { classes } = useStyles()
 
     return (

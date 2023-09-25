@@ -2,7 +2,12 @@ import { useState, useCallback, useEffect } from 'react'
 import { DialogContent, IconButton, Tab } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { InjectedDialog, LeavePageConfirmModal, useSharedI18N, type PersonaPerSiteConnectStatus } from '@masknet/shared'
+import {
+    InjectedDialog,
+    LeavePageConfirmModal,
+    useSharedTrans,
+    type PersonaPerSiteConnectStatus,
+} from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import {
@@ -71,7 +76,7 @@ export function ApplicationBoard({
 }: ApplicationBoardProps) {
     const [openSettings, setOpenSettings] = useState(false)
     const { classes } = useStyles({ openSettings })
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const [currentTab, onChange, tabs, setTab] = useTabs(
         ApplicationSettingTabs.pluginList,
         ApplicationSettingTabs.pluginSwitch,

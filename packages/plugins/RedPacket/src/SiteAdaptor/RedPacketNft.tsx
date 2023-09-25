@@ -24,7 +24,7 @@ import { usePostLink, useSiteAdaptorContext } from '@masknet/plugin-infra/conten
 import { NetworkPluginID, CrossIsolationMessages, Sniffings } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { Stack } from '@mui/system'
-import { useI18N } from '../locales/index.js'
+import { useRedPacketTrans } from '../locales/index.js'
 import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
 import { useNftRedPacketContract } from './hooks/useNftRedPacketContract.js'
@@ -92,7 +92,7 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         height: 126,
         width: 126,
         borderRadius: 8,
-        transform: 'translateY(6px)',
+        transform: 'RedPacketTransY(6px)',
         '& > div': {
             display: 'flex',
             justifyContent: 'center',
@@ -136,7 +136,7 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         width: 126,
-        transform: 'translateY(3px)',
+        transform: 'RedPacketTransY(3px)',
         fontSize: 13,
         color: theme.palette.common.white,
         lineHeight: '36px',
@@ -194,7 +194,7 @@ export interface RedPacketNftProps {
 }
 
 export function RedPacketNft({ payload }: RedPacketNftProps) {
-    const t = useI18N()
+    const t = useRedPacketTrans()
 
     const { pluginID } = useNetworkContext()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>(
@@ -422,7 +422,7 @@ interface OperationFooterProps {
 
 function OperationFooter({ claimed, onShare, chainId, claim, isClaiming }: OperationFooterProps) {
     const { classes } = useStyles({ claimed, outdated: false })
-    const t = useI18N()
+    const t = useRedPacketTrans()
 
     return (
         <Box className={classes.buttonWrapper}>

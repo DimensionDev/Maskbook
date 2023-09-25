@@ -6,7 +6,7 @@ import { Checkbox, ListItem, ListItemAvatar, ListItemText } from '@mui/material'
 import { truncate } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import Highlighter from 'react-highlight-words'
-import { useI18N } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../utils/index.js'
 import { Avatar } from '../../../utils/components/Avatar.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -85,7 +85,7 @@ export interface ProfileInListProps {
 }
 
 export const ProfileInList = memo(function ProfileInList(props: ProfileInListProps) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     const { profile, selected, disabled, highlightText, onChange } = props
     const searchWords = useMemo(() => (highlightText ? [highlightText] : EMPTY_LIST), [highlightText])

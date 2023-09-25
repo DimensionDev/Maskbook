@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useCustomSnackbar, usePopupCustomSnackbar } from '@masknet/theme'
-import { useSharedI18N } from '../locales/index.js'
+import { useSharedTrans } from '../locales/index.js'
 
 export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>(options: SnackbarCallback<P, T>): P
 /** Prefer the first overload. */
@@ -22,7 +22,7 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
     successText?: string | React.ReactNode,
     errorText?: string | React.ReactNode,
 ) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { showSnackbar } = useCustomSnackbar()
     const executor = typeof opts === 'function' ? opts : opts.executor
     if (typeof opts === 'object') {
@@ -72,7 +72,7 @@ export function usePopupSnackbarCallback<P extends (...args: any[]) => Promise<T
     key?: string,
     successText?: string,
 ) {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
     const { showSnackbar } = usePopupCustomSnackbar()
     const executor = typeof opts === 'function' ? opts : opts.executor
     if (typeof opts === 'object') {

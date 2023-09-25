@@ -5,7 +5,7 @@ import { ActionButton, makeStyles } from '@masknet/theme'
 import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
 import { List, ListItem, Typography, type ListProps } from '@mui/material'
 import { memo } from 'react'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
 import { useAsync } from 'react-use'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Lens } from '@masknet/web3-providers'
@@ -78,7 +78,7 @@ interface Props extends ListProps {
 
 export const LensList = memo(({ className, accounts, ...rest }: Props) => {
     const { classes, cx } = useStyles()
-    const t = useI18N()
+    const t = useWeb3ProfileTrans()
     return (
         <List className={cx(classes.list, className)} {...rest}>
             {accounts.map((account, key) => {
@@ -97,7 +97,7 @@ interface LensListItemProps {
 const LensListItem = memo<LensListItemProps>(({ account }) => {
     const { classes } = useStyles()
     const { account: wallet } = useChainContext()
-    const t = useI18N()
+    const t = useWeb3ProfileTrans()
     const profileUri = account.profileUri.filter(Boolean)
     const lensIcon = <Icons.Lens size={20} />
 

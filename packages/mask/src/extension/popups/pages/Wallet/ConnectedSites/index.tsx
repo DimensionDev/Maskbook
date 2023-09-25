@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { useTitle } from '../../../hooks/index.js'
-import { useI18N } from '../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import OriginCard from '../components/OriginCard/index.js'
@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const ConnectedSites = memo(function ConnectedSites() {
-    const { t } = useI18N()
+    const { t } = useMaskSharedTrans()
     const { classes } = useStyles()
     useTitle(t('popups_wallet_connected_sites'))
     const _ = useConnectedOrigins()
