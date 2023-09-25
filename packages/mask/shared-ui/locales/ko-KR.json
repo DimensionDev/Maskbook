@@ -63,8 +63,6 @@
     "application_display_tab_plug_app-unlisted-placeholder": "설정 아이콘을 클릭하여 앱 보드에 나열합니다.",
     "application_settings_tab_plug_app-unlisted-placeholder": "애프리케이션 아이콘을 클릭하여 앱 보드에 나열합니다.",
     "persona_load_failed": "로딩 실패",
-    "enable_plugin_boundary": "플러그인 활성화",
-    "enable_plugin_boundary_description": "특정 콘텐츠를 보려면 dApp을 열어야 합니다.",
     "additional_post_box__encrypted_post_pre": "#mask_io로 이 게시물을 해독하기. {{encrypted}}",
     "additional_post_box__encrypted_post_pre_red_packet_sns_official_account": "#mask_io로 행운 드랍을 수령해 보세요. @{{account}} \n\n$t(promote_red_packet)\n {{encrypted}}",
     "additional_post_box__encrypted_post_pre_red_packet": "#mask_io {{encrypted}} 덧붙이고 레드 패킷을 수령하세요.",

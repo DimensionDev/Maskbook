@@ -91,8 +91,6 @@
     "application_display_tab_plug_app-unlisted-placeholder": "Click the setting icon to list it on the App board.",
     "application_settings_tab_plug_app-unlisted-placeholder": "Click the application icon to list it on the App board.",
     "persona_load_failed": "Load failed",
-    "enable_plugin_boundary": "Enable plugin",
-    "enable_plugin_boundary_description": "This function has been turned off in the App settings. Enable plug-ins to fully access.",
     "additional_post_box__encrypted_post_pre": "Decrypt this post with #mask_io! $t(promote) {{encrypted}}",
     "additional_post_box__encrypted_post_pre_red_packet_sns_official_account": "$t(promote_red_packet) Follow @{{account}} for Web3 updates and insights. \n\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \n\n{{encrypted}}",
     "additional_post_box__encrypted_post_pre_red_packet": "$t(promote_red_packet) \n\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \n\n{{encrypted}}",
