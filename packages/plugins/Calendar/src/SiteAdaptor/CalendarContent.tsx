@@ -20,8 +20,8 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         borderRadius: '12px',
         border: `1px solid ${theme.palette.maskColor.line}`,
-        marginTop: '60px',
         position: 'relative',
+        marginBottom: '20px',
     },
     tab: {
         fontSize: 16,

@@ -5,12 +5,23 @@ import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderI
 import { CalendarContent } from '@masknet/plugin-calendar'
 
 const sidebarSearchSelector: () => LiveSelector<HTMLElement, true> = () => {
-    return querySelector<HTMLElement>('[data-testid="sidebarColumn"] [role="search"]').closest(4)
+    return querySelector<HTMLElement>('[data-testid="sidebarColumn"] > div > div div div > div > div:nth-child(2)')
+}
+
+export function isExplorePage() {
+    if (location.pathname === 'explore') return true
+    return false
 }
 
 export function injectCalendar(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(sidebarSearchSelector())
-    startWatch(watcher, signal)
+    startWatch(watcher, {
+        signal,
+        missingReportRule: {
+            name: 'profile page cover',
+            rule: () => !isExplorePage(),
+        },
+    })
     attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
         <CalendarContent />,
     )
