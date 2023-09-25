@@ -1,9 +1,9 @@
-import { type Plugin } from '@masknet/plugin-infra'
-import { base } from '../base.js'
-import { Trans } from 'react-i18next'
-import { PLUGIN_ID } from '../constants.js'
 import React from 'react'
+import { Trans } from 'react-i18next'
+import { type Plugin } from '@masknet/plugin-infra'
 import { Icons } from '@masknet/icons'
+import { base } from '../base.js'
+import { PLUGIN_ID } from '../constants.js'
 
 const recommendFeature = {
     description: <Trans i18nKey="description" ns={PLUGIN_ID} />,

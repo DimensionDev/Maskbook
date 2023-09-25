@@ -1,15 +1,7 @@
 import { cloneElement, useRef, useState, type ReactElement, useLayoutEffect } from 'react'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Modal, styled, Typography } from '@mui/material'
-import {
-    CrossIsolationMessages,
-    EnhanceableSite,
-    SwitchLogoDialogStatus,
-    sayHelloShowed,
-    switchLogoOpenedState,
-    userGuideFinished,
-    userGuideStatus,
-} from '@masknet/shared-base'
+import { sayHelloShowed, userGuideFinished, userGuideStatus } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { useI18N } from '../../utils/index.js'
@@ -120,7 +112,6 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     const currentStep = useValueRef(userGuideStatus[networkIdentifier])
     const finished = useValueRef(userGuideFinished[networkIdentifier])
     const isCurrentStep = +currentStep === step
-    const state = useValueRef(switchLogoOpenedState)
 
     const box1Ref = useRef<HTMLDivElement>(null)
     const box2Ref = useRef<HTMLDivElement>(null)
@@ -131,7 +122,6 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     const onSkip = () => {
         sayHelloShowed[networkIdentifier].value = true
         userGuideFinished[networkIdentifier].value = true
-        CrossIsolationMessages.events.switchLogoDialogUpdated.sendToLocal({ open: true })
     }
 
     const onNext = () => {
@@ -146,18 +136,7 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     const onTry = () => {
         userGuideFinished[networkIdentifier].value = true
         onComplete?.()
-        CrossIsolationMessages.events.switchLogoDialogUpdated.sendToLocal({ open: true })
     }
-
-    useLayoutEffect(() => {
-        if (
-            !finished ||
-            state === SwitchLogoDialogStatus.PreviouslyOpened ||
-            networkIdentifier !== EnhanceableSite.Twitter
-        )
-            return
-        CrossIsolationMessages.events.switchLogoDialogUpdated.sendToLocal({ open: true })
-    }, [finished, state, networkIdentifier])
 
     useLayoutEffect(() => {
         let stopped = false
