@@ -5,6 +5,7 @@ import { PluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
+import { SwitchLogoDialog } from './SwitchLogoDialog.js'
 
 const recommendFeature = {
     description: <Trans i18nKey="description" ns={PluginID.SwitchLogo} />,
@@ -24,6 +25,9 @@ const site: Plugin.SiteAdaptor.Definition = {
             description: recommendFeature.description,
         },
     ],
+    GlobalInjection() {
+        return <SwitchLogoDialog />
+    },
 }
 
 export default site

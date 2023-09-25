@@ -6,10 +6,9 @@ import { Icons } from '@masknet/icons'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { CrossIsolationMessages, SwitchLogoType, switchLogoSettings } from '@masknet/shared-base'
+import { useLastRecognizedIdentity, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { useI18N } from '../../../utils/index.js'
-import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
-import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
+import { useI18N } from '../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -58,13 +57,14 @@ const useStyles = makeStyles()((theme) => ({
 interface SwitchLogoDialogProps {}
 
 export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes, cx } = useStyles()
     const identity = useLastRecognizedIdentity()
     const defaultLogoType = useValueRef(switchLogoSettings[identity?.identifier?.userId || ''])
     const [logoType, setLogoType] = useState<SwitchLogoType>(SwitchLogoType.Classics)
     const [needShare, setNeedShare] = useState(true)
     const [open, setOpen] = useState(false)
+    const { share } = useSiteAdaptorContext()
 
     useEffect(() => {
         return CrossIsolationMessages.events.switchLogoDialogUpdated.on(async (data) => {
@@ -78,15 +78,13 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
         Telemetry.captureEvent(EventType.Access, EventID.EntrySwitchLogoSave)
         setOpen(false)
         if (needShare && logoType === SwitchLogoType.Classics) {
-            activatedSiteAdaptorUI!.utils.share?.(
-                [
-                    t('switch_logo_share_text'),
-                    '#TwitterLogo #TwitterX #SaveTheBird\n',
-                    t('switch_logo_share_mask'),
-                ].join('\n'),
+            share?.(
+                [t.switch_logo_share_text(), '#TwitterLogo #TwitterX #SaveTheBird\n', t.switch_logo_share_mask()].join(
+                    '\n',
+                ),
             )
         }
-    }, [logoType, identity?.identifier?.userId, defaultLogoType, activatedSiteAdaptorUI!.utils.share, needShare])
+    }, [logoType, identity?.identifier?.userId, defaultLogoType, share, needShare])
 
     const onChange = useCallback((logoType: SwitchLogoType) => {
         setLogoType(logoType)
@@ -103,7 +101,7 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
         <InjectedDialog
             open={open}
             onClose={() => setOpen(false)}
-            title={t('switch_logo_title')}
+            title={t.switch_logo_title()}
             classes={{ paper: classes.dialog }}>
             <DialogContent className={classes.content}>
                 <Stack className={classes.icons}>
@@ -115,7 +113,7 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
                         onClick={() => onChange(SwitchLogoType.Classics)}>
                         <Icons.TwitterColored />
                         <Typography fontSize={14} fontWeight={700}>
-                            {t('switch_logo_classics_logo')}
+                            {t.switch_logo_classics_logo()}
                         </Typography>
                     </Stack>
                     <Stack
@@ -126,7 +124,7 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
                         onClick={() => onChange(SwitchLogoType.New)}>
                         <Icons.TwitterX />
                         <Typography fontSize={14} fontWeight={700}>
-                            {t('switch_logo_new_logo')}
+                            {t.switch_logo_new_logo()}
                         </Typography>
                     </Stack>
                 </Stack>
@@ -146,7 +144,7 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
                                     fontWeight={400}
                                     lineHeight="18px"
                                     color={(theme) => theme.palette.maskColor.secondaryDark}>
-                                    {t('switch_logo_save_tip')}
+                                    {t.switch_logo_save_tip()}
                                 </Typography>
                             }
                         />
@@ -156,7 +154,7 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
                 </Stack>
                 <Stack className={classes.buttons}>
                     <Button variant="roundedContained" fullWidth onClick={onSave} disabled={disabled}>
-                        {t('save')}
+                        {t.save()}
                     </Button>
                 </Stack>
                 <Stack className={classes.powered_by}>
@@ -165,10 +163,10 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
                         fontWeight={700}
                         marginRight="5px"
                         color={(theme) => theme.palette.maskColor.secondaryDark}>
-                        {t('powered_by')}
+                        {t.powered_by()}
                     </Typography>
                     <Typography fontSize="14px" fontWeight={700} marginRight="4px">
-                        {t('mask_network')}
+                        {t.mask_network()}
                     </Typography>
                     <IconButton size="small" sx={{ margin: '-5px' }} onClick={() => openApplicationBoardDialog()}>
                         <Icons.Gear size={24} />
