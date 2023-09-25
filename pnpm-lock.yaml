@@ -2892,6 +2892,9 @@ importers:
       '@masknet/theme':
         specifier: workspace:^
         version: link:../../theme
+      '@masknet/web3-telemetry':
+        specifier: workspace:^
+        version: link:../../web3-telemetry
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)

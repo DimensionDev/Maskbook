@@ -1,15 +1,15 @@
+import { memo } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { first, sortBy } from 'lodash-es'
+import { List, ListItem, ListItemIcon, ListItemText, Tooltip, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { List, ListItem, ListItemIcon, ListItemText, Tooltip, Typography } from '@mui/material'
-import { first, sortBy } from 'lodash-es'
-import { memo } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { useWalletGroup } from '../../../hooks/useWalletGroup.js'
 import { ImportCreateWallet } from '../components/ImportCreateWallet/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
