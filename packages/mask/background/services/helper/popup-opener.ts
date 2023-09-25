@@ -67,7 +67,7 @@ async function openOrUpdatePopupWindow(route: PopupRoutes, params: ParamMap) {
     )
 }
 
-const noWalletUnlockNeeded: PopupRoutes[] = [PopupRoutes.PersonaSignRequest, PopupRoutes.Unlock, PopupRoutes.Personas]
+const noWalletUnlockNeeded: PopupRoutes[] = [PopupRoutes.PersonaSignRequest, PopupRoutes.Personas]
 
 export async function openPopupWindow<T extends PopupRoutes>(
     route: T,
@@ -80,10 +80,10 @@ export async function openPopupWindow<T extends PopupRoutes>(
             ...params,
         })
     } else {
-        return openOrUpdatePopupWindow(PopupRoutes.Unlock, {
+        return openOrUpdatePopupWindow(PopupRoutes.Wallet, {
             close_after_unlock: true,
             from: urlcat(route, params as ParamMap),
-        } satisfies PopupRoutesParamsMap[PopupRoutes.Unlock])
+        } satisfies PopupRoutesParamsMap[PopupRoutes.Wallet])
     }
 }
 

@@ -1,17 +1,13 @@
 /// <reference types="react/canary" />
 // ! This file is used during SSR. DO NOT import new files that does not work in SSR
-import urlcat from 'urlcat'
-import { createContext, memo, use, useContext, useMemo, useRef } from 'react'
+import { memo, useContext } from 'react'
 import { NavLink, type LinkProps } from 'react-router-dom'
 import { BottomNavigationAction, Box, type BoxProps } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { PopupRoutes } from '@masknet/shared-base'
-import { useMessages, useWallet } from '@masknet/web3-hooks-base'
-import { useHasPassword } from '../../hooks/index.js'
-import { useWalletLockStatus } from '../../pages/Wallet/hooks/useWalletLockStatus.js'
+import { useMessages } from '@masknet/web3-hooks-base'
 import { HydrateFinished } from '../../../../utils/createNormalReactRoot.js'
-import { useCurrentPersona } from '../../../../components/DataSource/useCurrentPersona.js'
 
 const useStyle = makeStyles()((theme) => ({
     container: {
@@ -42,7 +38,7 @@ const BottomNavLink = memo<LinkProps>(function BottomNavLink({ children, to }) {
     const { classes } = useStyle()
 
     return (
-        <NavLink to={to} className={({ isActive }) => (isActive && to !== '#' ? classes.selected : undefined)}>
+        <NavLink to={to} className={({ isActive }) => (isActive ? classes.selected : undefined)}>
             {children}
         </NavLink>
     )
@@ -50,9 +46,6 @@ const BottomNavLink = memo<LinkProps>(function BottomNavLink({ children, to }) {
 
 export const Navigator = memo(function Navigator({ className, ...rest }: BoxProps) {
     const { classes, cx } = useStyle()
-    const walletLink = useRef(use(WalletLinkContext)).current()
-
-    const currentPersona = useCurrentPersona()
 
     useContext(HydrateFinished)()
     const messages = useMessages()
@@ -67,7 +60,7 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
                     className={classes.action}
                 />
             </BottomNavLink>
-            <BottomNavLink to={walletLink}>
+            <BottomNavLink to={PopupRoutes.Wallet}>
                 <BottomNavigationAction
                     tabIndex={-1}
                     showLabel={false}
@@ -93,22 +86,4 @@ export const Navigator = memo(function Navigator({ className, ...rest }: BoxProp
             </BottomNavLink>
         </Box>
     )
-})
-
-export const WalletLinkContext = createContext(function useWalletLink() {
-    const wallet = useWallet()
-    const messages = useMessages()
-    const { isLocked, loading: lockStatusLoading } = useWalletLockStatus()
-    const { hasPassword, loading: hasPasswordLoading } = useHasPassword()
-    const walletPageLoading = lockStatusLoading || hasPasswordLoading
-    const walletLink = useMemo(() => {
-        if (walletPageLoading) return '#'
-        if (!wallet) return PopupRoutes.Wallet
-        if (!hasPassword) return PopupRoutes.SetPaymentPassword
-        if (isLocked)
-            return urlcat(PopupRoutes.Unlock, { from: messages.length ? PopupRoutes.ContractInteraction : undefined })
-        if (messages.length) return PopupRoutes.ContractInteraction
-        return PopupRoutes.Wallet
-    }, [wallet, walletPageLoading, isLocked, hasPassword, messages])
-    return walletLink
 })

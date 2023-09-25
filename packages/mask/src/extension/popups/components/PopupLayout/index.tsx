@@ -55,7 +55,6 @@ const useStyles = makeStyles()((theme) => ({
 const PATTERNS = [
     PopupRoutes.Personas,
     PopupRoutes.Wallet,
-    PopupRoutes.Unlock,
     PopupRoutes.SetPaymentPassword,
     PopupRoutes.Friends,
     PopupRoutes.Settings,

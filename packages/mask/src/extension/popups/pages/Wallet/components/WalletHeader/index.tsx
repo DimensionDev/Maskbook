@@ -24,7 +24,6 @@ export const WalletHeader = memo(function WalletHeader() {
     const origin = params.get('source')
 
     const currentNetwork = useNetwork(NetworkPluginID.PLUGIN_EVM, chainId)
-    const matchUnlock = useMatch(PopupRoutes.Unlock)
     const matchResetWallet = useMatch(PopupRoutes.ResetWallet)
     const matchWallet = PopupRoutes.Wallet === location.pathname
     const customHeader = CUSTOM_HEADER_PATTERNS.some((pattern) => matchPath(pattern, location.pathname))
@@ -56,8 +55,7 @@ export const WalletHeader = memo(function WalletHeader() {
         )
     }
 
-    if (!wallet || !hasPassword || matchUnlock || matchResetWallet)
-        return <WalletSetupHeaderUI showBack={!!matchResetWallet} />
+    if (!wallet || !hasPassword || matchResetWallet) return <WalletSetupHeaderUI showBack={!!matchResetWallet} />
 
     return matchWallet ? (
         <WalletHeaderUI

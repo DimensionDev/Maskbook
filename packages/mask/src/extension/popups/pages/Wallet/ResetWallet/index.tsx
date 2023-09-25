@@ -1,5 +1,4 @@
 import Services from '#services'
-import { PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
@@ -79,7 +78,7 @@ const ResetWallet = memo(function ResetWallet() {
     const [answer, setAnswer] = useState('')
     const disabled = answer !== 'RESET'
 
-    const onBack = useCallback(() => navigate(PopupRoutes.Unlock), [])
+    const onBack = useCallback(() => navigate(-1), [])
 
     const onConfirm = useCallback(async () => {
         // We don't reset existed wallets until recovery

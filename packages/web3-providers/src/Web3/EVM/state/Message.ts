@@ -1,13 +1,5 @@
 import { SiteAdaptorContextRef } from '@masknet/plugin-infra/dom'
-import {
-    EMPTY_OBJECT,
-    LockStatus,
-    NetworkPluginID,
-    PopupRoutes,
-    PopupsHistory,
-    Sniffings,
-    currentMaskWalletLockStatusSettings,
-} from '@masknet/shared-base'
+import { EMPTY_OBJECT, NetworkPluginID, PopupRoutes, PopupsHistory, Sniffings } from '@masknet/shared-base'
 import { MessageStateType, type ReasonableMessage } from '@masknet/web3-shared-base'
 import {
     createJsonRpcPayload,
@@ -37,17 +29,13 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
         } else {
             // TODO: make this for Mask Wallet only
             const hasPassword = await this.context.hasPaymentPassword()
-            const route = !hasPassword
-                ? PopupRoutes.SetPaymentPassword
-                : currentMaskWalletLockStatusSettings.value === LockStatus.LOCKED
-                ? PopupRoutes.Unlock
-                : PopupRoutes.ContractInteraction
+            const route = !hasPassword ? PopupRoutes.SetPaymentPassword : PopupRoutes.ContractInteraction
 
             const fromState =
                 route !== PopupRoutes.ContractInteraction ? { from: PopupRoutes.ContractInteraction } : EMPTY_OBJECT
 
             if (Sniffings.is_popup_page && !location.hash.includes('/swap')) {
-                PopupsHistory.push(urlcat(route, fromState))
+                PopupsHistory.push(urlcat(PopupRoutes.Wallet, fromState))
             } else {
                 // open the popups window and wait for approval from the user.
                 await SiteAdaptorContextRef.value.openPopupWindow(route, {
