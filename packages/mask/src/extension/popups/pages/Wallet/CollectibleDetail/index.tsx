@@ -11,7 +11,7 @@ import formatDateTime from 'date-fns/format'
 import { memo, useContext, useEffect, useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
-import { useI18N } from '../../../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../../../utils/index.js'
 import { PageTitleContext } from '../../../context.js'
 import { useTitle, useTokenParams } from '../../../hooks/index.js'
 import { ConfirmModal } from '../../../modals/modals.js'
@@ -143,7 +143,7 @@ const formatTimestamp = (timestamp: string) => {
 
 export const CollectibleDetail = memo(function CollectibleDetail() {
     const { classes, cx } = useStyles()
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const navigate = useNavigate()
     const location = useLocation()
     const { chainId, address, params } = useTokenParams()

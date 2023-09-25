@@ -5,7 +5,7 @@ import { useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Box, Skeleton, type BoxProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
 
 export interface CollectionListProps extends BoxProps {
     loading: boolean
@@ -40,7 +40,7 @@ export const CollectionList = memo<CollectionListProps>(function CollectionList(
     onItemClick,
     ...rest
 }) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { pluginID } = useNetworkContext()
     const { classes, cx } = useStyles()
     const wallet = useWallet()

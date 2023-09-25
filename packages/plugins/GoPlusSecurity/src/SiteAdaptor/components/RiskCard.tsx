@@ -2,7 +2,7 @@ import { memo, type ReactNode } from 'react'
 import { Box, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { SecurityMessage, SecurityAPI } from '@masknet/web3-providers/types'
-import { useI18N } from '../../locales/index.js'
+import { useGoPlusLabsI18N } from '../../locales/index.js'
 import { DefineMapping } from '../constants.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -39,7 +39,7 @@ interface RiskCardProps {
 }
 
 export const RiskCard = memo<RiskCardProps>(({ info, tokenSecurity }) => {
-    const t = useI18N()
+    const t = useGoPlusLabsI18N()
     return (
         <RiskCardUI
             icon={DefineMapping[info.level].icon(14)}

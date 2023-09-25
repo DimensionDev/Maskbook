@@ -25,7 +25,7 @@ import { makeStyles } from '@masknet/theme'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
-import { useI18N } from '../../utils/index.js'
+import { useMaskSharedI18N } from '../../utils/index.js'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients.js'
 import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMethodSelector.js'
 import { EncryptionTargetSelector } from './EncryptionTargetSelector.js'
@@ -126,7 +126,7 @@ export interface CompositionRef {
 export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     function CompositionDialogUI(props, ref) {
         const { classes, cx } = useStyles()
-        const { t } = useI18N()
+        const { t } = useMaskSharedI18N()
 
         const [currentPostSize, __updatePostSize] = useState(0)
 

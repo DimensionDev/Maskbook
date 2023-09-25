@@ -11,7 +11,7 @@ import { memo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { saveFileFromBuffer } from '../../../../../../shared/index.js'
-import { useI18N } from '../../../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../../../utils/index.js'
 import Services from '#services'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { useTitle } from '../../../hooks/index.js'
@@ -107,7 +107,7 @@ enum BackupTabs {
  * @deprecated unused
  */
 const BackupWallet = memo(() => {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes } = useStyles()
     const currentWallet = useWallet()
     const wallets = useWallets()

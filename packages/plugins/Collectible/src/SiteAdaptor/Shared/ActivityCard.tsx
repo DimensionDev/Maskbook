@@ -12,7 +12,7 @@ import {
     isValidTimestamp,
     ActivityType,
 } from '@masknet/web3-shared-base'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { useCollectibleI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -95,7 +95,7 @@ export interface ActivityCardProps {
 export function ActivityCard(props: ActivityCardProps) {
     const { activity } = props
     const { type } = activity
-    const t = useI18N()
+    const t = useCollectibleI18N()
     const { classes, cx } = useStyles()
     const Others = useWeb3Others()
 

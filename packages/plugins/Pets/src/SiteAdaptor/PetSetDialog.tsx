@@ -23,7 +23,7 @@ import { useMemo, useState, type ReactNode } from 'react'
 import { useTimeout } from 'react-use'
 import { GLB3DIcon, PetsPluginID, initMeta } from '../constants.js'
 import { useNFTs, useUser } from '../hooks/index.js'
-import { useI18N } from '../locales/index.js'
+import { usePetsI18N } from '../locales/index.js'
 import { PluginPetMessages } from '../messages.js'
 import { petShowSettings } from '../settings.js'
 import { ImageType, type FilterContract, type OwnerERC721TokenInfo, type PetMetaDB } from '../types.js'
@@ -115,7 +115,7 @@ interface PetSetDialogProps {
 }
 
 export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
-    const t = useI18N()
+    const t = usePetsI18N()
     const sharedI18N = useSharedI18N()
     const { classes } = useStyles()
     const theme = useTheme()

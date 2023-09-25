@@ -25,7 +25,7 @@ import {
 } from '@mui/material'
 import { useMemo, useCallback, memo } from 'react'
 import { Trans } from 'react-i18next'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
 import { LoadingBase } from '@masknet/theme'
 import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
@@ -119,7 +119,7 @@ export const WalletList = memo<WalletListProps>(function WalletList({
     isValid,
     identity,
 }) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const theme = useTheme()
     const navigate = useNavigate()
     if (!isValid) return null

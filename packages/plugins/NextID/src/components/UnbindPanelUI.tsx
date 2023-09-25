@@ -3,7 +3,7 @@ import { Box, DialogContent, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { LoadingButton } from '@mui/lab'
 import { Done as DoneIcon } from '@mui/icons-material'
-import { useI18N } from '../locales/index.js'
+import { useNextID_I18N } from '../locales/index.js'
 import { getMaskColor, makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
 import { InjectedDialog, WalletStatusBox, type AbstractTabProps, AbstractTab } from '@masknet/shared'
 import { formatPersonaFingerprint, NetworkPluginID, type PersonaInformation } from '@masknet/shared-base'
@@ -90,7 +90,7 @@ export enum DialogTabs {
 
 export const UnbindPanelUI = memo<BindPanelUIProps>(
     ({ onPersonaSign, onWalletSign, currentPersona, signature, isBound, title, onClose, open, isCurrentAccount }) => {
-        const t = useI18N()
+        const t = useNextID_I18N()
         const { classes } = useStyles()
         const { pluginID } = useNetworkContext()
         const isSupported = SUPPORTED_PLUGINS.includes(pluginID)

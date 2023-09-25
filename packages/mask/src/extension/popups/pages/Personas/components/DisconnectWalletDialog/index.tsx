@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import { useI18N } from '../../../../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../../../../utils/index.js'
 import type { DialogProps } from '@mui/material'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
@@ -66,7 +66,7 @@ export interface DisconnectWalletDialogProps extends DialogProps {
 export const DisconnectWalletDialog = memo<DisconnectWalletDialogProps>(
     ({ open, confirmLoading, onConfirmDisconnect, onClose, address, personaName }) => {
         const { classes, cx } = useStyles()
-        const { t } = useI18N()
+        const { t } = useMaskSharedI18N()
 
         const handleConfirm = useCallback(async () => {
             await onConfirmDisconnect()

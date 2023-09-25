@@ -44,7 +44,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { useLastRecognizedIdentity, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { Others, SmartPayFunder, Web3 } from '@masknet/web3-providers'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { useSmartPayI18N } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { AddSmartPayPopover } from './AddSmartPayPopover.js'
@@ -175,7 +175,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const SmartPayContent = memo(() => {
-    const t = useI18N()
+    const t = useSmartPayI18N()
     const { classes } = useStyles()
 
     const [approveDialogOpen, setApproveDialogOpen] = useState(false)

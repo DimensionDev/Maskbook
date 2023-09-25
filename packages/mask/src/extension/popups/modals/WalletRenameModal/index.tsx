@@ -1,6 +1,6 @@
 import { forwardRef, useState } from 'react'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
 import { Box, TextField, Typography, useTheme } from '@mui/material'
 import { useAsyncFn } from 'react-use'
 import { Icons } from '@masknet/icons'
@@ -16,7 +16,7 @@ interface WalletRenameDrawerProps extends BottomDrawerProps {
 }
 
 function WalletRenameDrawer({ wallet, ...rest }: WalletRenameDrawerProps) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const theme = useTheme()
     const [name, setName] = useState('')
     const [error, setError] = useState('')

@@ -1,13 +1,13 @@
 import { Icons } from '@masknet/icons'
 import { Box, ListItem, Typography } from '@mui/material'
-import { useI18N } from '../../../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../../../utils/index.js'
 import { useStyles } from './useStyles.js'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useContacts, useWallet, useWallets } from '@masknet/web3-hooks-base'
 
 export function Contacts() {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const wallet = useWallet()
     const wallets = useWallets()
     const contacts = useContacts()

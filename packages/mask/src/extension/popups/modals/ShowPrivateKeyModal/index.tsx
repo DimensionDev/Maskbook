@@ -1,6 +1,6 @@
 import { forwardRef, useState } from 'react'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
 import { Box, Typography, useTheme } from '@mui/material'
 import { useAsyncFn } from 'react-use'
 import { PopupRoutes, type SingletonModalRefCreator } from '@masknet/shared-base'
@@ -20,7 +20,7 @@ interface ShowPrivateKeyDrawerProps extends BottomDrawerProps {
 }
 
 function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest }: ShowPrivateKeyDrawerProps) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const theme = useTheme()
     const wallet = useWallet()
     const navigate = useNavigate()

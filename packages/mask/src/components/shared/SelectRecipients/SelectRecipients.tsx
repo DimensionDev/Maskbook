@@ -7,7 +7,7 @@ import { SelectRecipientsDialogUI } from './SelectRecipientsDialog.js'
 import { useTwitterIdByWalletSearch } from './useTwitterIdByWalletSearch.js'
 import { resolveNextIDPlatform, resolveValueToSearch, usePersonasFromNextID } from '@masknet/shared'
 import { useContacts } from './useContacts.js'
-import { useI18N } from '../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../utils/index.js'
 
 export interface SelectRecipientsUIProps {
     items: LazyRecipients
@@ -22,7 +22,7 @@ export interface SelectRecipientsUIProps {
 
 export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     const { items, selected, onSetSelected, open, onClose } = props
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const [valueToSearch, setValueToSearch] = useState('')
     const currentIdentity = useCurrentIdentity()
     const type = resolveNextIDPlatform(valueToSearch)

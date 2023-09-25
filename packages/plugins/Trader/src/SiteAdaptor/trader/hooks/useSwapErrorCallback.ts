@@ -1,9 +1,9 @@
 import { useRef, useCallback } from 'react'
 import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
-import { useI18N } from '../../../locales/i18n_generated.js'
+import { useTraderI18N } from '../../../locales/i18n_generated.js'
 
 export function useSwapErrorCallback() {
-    const t = useI18N()
+    const t = useTraderI18N()
     const snackbarKeyRef = useRef<SnackbarKey>()
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
 

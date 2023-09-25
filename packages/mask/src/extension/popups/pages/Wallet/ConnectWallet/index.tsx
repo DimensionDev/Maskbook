@@ -11,7 +11,7 @@ import { getRegisteredWeb3Networks, getRegisteredWeb3Providers } from '@masknet/
 import { Web3 } from '@masknet/web3-providers'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useTitle, PopupContext } from '../../../hooks/index.js'
-import { useI18N } from '../../../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../../../utils/index.js'
 import { useWalletLockStatus } from '../hooks/useWalletLockStatus.js'
 import Services from '#services'
 
@@ -54,7 +54,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const ConnectWalletPage = memo(() => {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
     const { setSigned } = PopupContext.useContainer()

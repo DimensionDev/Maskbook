@@ -28,7 +28,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 
 import { useTitle } from '../../../hooks/index.js'
-import { useI18N } from '../../../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../../../utils/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { LoadingMask } from '../../../components/LoadingMask/index.js'
 import Services from '#services'
@@ -93,7 +93,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const ConnectWalletPage = memo(function ConnectWalletPage() {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
 
     const { classes } = useStyles()
     const navigate = useNavigate()

@@ -31,7 +31,7 @@ import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { supportPluginIds } from '../constants.js'
 import { useAvatarManagement } from '../contexts/index.js'
-import { useI18N } from '../locales/index.js'
+import { useAvatarI18N } from '../locales/index.js'
 import { type AllChainsNonFungibleToken, PFP_TYPE } from '../types.js'
 import { toPNG } from '../utils/index.js'
 import { RoutePaths } from './Routes.js'
@@ -80,7 +80,7 @@ const gridProps = {
     columns: 'repeat(auto-fill, minmax(20%, 1fr))',
 }
 export function NFTListDialog() {
-    const t = useI18N()
+    const t = useAvatarI18N()
     const sharedI18N = useSharedI18N()
     const { classes } = useStyles()
     const { pfpType, proofs, tokenInfo, targetAccount, setTargetAccount, setSelectedTokenInfo, proof } =

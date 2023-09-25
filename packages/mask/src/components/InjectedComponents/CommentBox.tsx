@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { Box, InputBase } from '@mui/material'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
-import { useI18N } from '../../utils/index.js'
+import { useMaskSharedI18N } from '../../utils/index.js'
 import { EnhanceableSite } from '@masknet/shared-base'
 
 interface StyleProps {
@@ -38,7 +38,7 @@ export interface CommentBoxProps {
 }
 export function CommentBox(props: CommentBoxProps) {
     const { classes } = useStyles({ site: activatedSiteAdaptorUI!.networkIdentifier })
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     return (
         <Box sx={{ display: 'flex', width: '100%' }}>
             <InputBase

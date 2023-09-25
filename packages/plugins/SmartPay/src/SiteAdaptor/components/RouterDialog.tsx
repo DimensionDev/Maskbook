@@ -14,7 +14,7 @@ import { Box } from '@mui/system'
 import { matchPath, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
 import { SmartPayContext } from '../../hooks/useSmartPayContext.js'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { useSmartPayI18N } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
 import { Deploy } from './Deploy.js'
 import { InEligibilityTips } from './InEligibilityTips.js'
@@ -39,7 +39,7 @@ const useStyles = makeStyles<{ isDeployPage: boolean }>()((theme, { isDeployPage
 }))
 
 export function RouterDialog() {
-    const t = useI18N()
+    const t = useSmartPayI18N()
     const { pathname, state } = useLocation()
     const { classes } = useStyles({ isDeployPage: Boolean(matchPath(RoutePaths.Deploy, pathname)) })
     const navigate = useNavigate()

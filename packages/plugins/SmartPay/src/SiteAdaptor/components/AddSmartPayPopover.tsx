@@ -12,7 +12,7 @@ import { RoutePaths } from '../../constants.js'
 import { useQueryQualifications } from '../../hooks/useQueryQualifications.js'
 import { SmartPayContext } from '../../hooks/useSmartPayContext.js'
 import { PluginSmartPayMessages } from '../../message.js'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { useSmartPayI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -58,7 +58,7 @@ export interface AddSmartPayPopoverProps {
 }
 
 export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorEl, onClose }) => {
-    const t = useI18N()
+    const t = useSmartPayI18N()
     const sharedI18N = useSharedI18N()
     const navigate = useNavigate()
     const { classes } = useStyles()

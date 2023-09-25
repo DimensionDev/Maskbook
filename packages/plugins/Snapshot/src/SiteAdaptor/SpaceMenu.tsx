@@ -5,7 +5,7 @@ import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { Avatar, MenuItem, Stack, Typography, Divider } from '@mui/material'
 import type { DAOResult } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { useI18N } from '../locales/index.js'
+import { useSnapshotI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     menu: {
@@ -93,7 +93,7 @@ export function SpaceMenu({
     disableScrollLock,
 }: SpaceMenuProps) {
     const { classes } = useStyles()
-    const t = useI18N()
+    const t = useSnapshotI18N()
     return (
         <ShadowRootMenu
             anchorEl={containerRef.current}

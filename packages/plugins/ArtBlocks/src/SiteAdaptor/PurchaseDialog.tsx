@@ -26,7 +26,7 @@ import { useFungibleTokenWatched } from '@masknet/web3-hooks-base'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback.js'
 import type { Project } from '../types.js'
 import { usePostLink, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { useI18N } from '../locales/index.js'
+import { useArtBlocksI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -48,7 +48,7 @@ export interface ActionBarProps {
 }
 
 export function PurchaseDialog(props: ActionBarProps) {
-    const t = useI18N()
+    const t = useArtBlocksI18N()
     const { classes } = useStyles()
     const { project, open, onClose, chainId } = props
     const { share } = useSiteAdaptorContext()

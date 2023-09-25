@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { useI18N } from '../locales/index.js'
+import { usePetsI18N } from '../locales/index.js'
 import type { OwnerERC721TokenInfo } from '../types.js'
 import { ImageLoader } from './ImageLoader.js'
 import ModelView from './ModelView.js'
@@ -121,7 +121,7 @@ interface Props {
 
 export function PreviewBox(props: Props) {
     const { classes, cx } = useStyles()
-    const t = useI18N()
+    const t = usePetsI18N()
 
     const renderPreview = (mediaUrl: string, imageUrl: string) => {
         if (/\.(mp4|webm|ogg)/.test(mediaUrl ?? '')) {

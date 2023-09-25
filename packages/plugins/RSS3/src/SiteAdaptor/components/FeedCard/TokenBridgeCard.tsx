@@ -4,7 +4,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
-import { Translate } from '../../../locales/index.js'
+import { RSS3Trans } from '../../../locales/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType, getPlatformIcon } from '../share.js'
@@ -75,7 +75,7 @@ export function TokenBridgeCard({ feed, ...rest }: TokenBridgeCardProps) {
     return (
         <CardFrame type={CardType.TokenBridge} feed={feed} {...rest}>
             <Typography className={classes.summary}>
-                <Translate.token_bridge
+                <RSS3Trans.token_bridge
                     values={{
                         user,
                         amount: formatValue(metadata?.token),

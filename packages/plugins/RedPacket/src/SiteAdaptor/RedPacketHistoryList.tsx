@@ -4,7 +4,7 @@ import { useSharedI18N } from '@masknet/shared'
 import { type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { RedPacketInHistoryList } from './RedPacketInHistoryList.js'
 import { useRedPacketHistory } from './hooks/useRedPacketHistory.js'
-import { useI18N } from '../locales/index.js'
+import { useRedPacketI18N } from '../locales/index.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { type NetworkPluginID } from '@masknet/shared-base'
@@ -55,7 +55,7 @@ interface RedPacketHistoryListProps {
 
 export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
     const { onSelect } = props
-    const t = useI18N()
+    const t = useRedPacketI18N()
     const sharedI18N = useSharedI18N()
     const { classes } = useStyles()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

@@ -4,14 +4,14 @@ import { useAddressType, useChainContext } from '@masknet/web3-hooks-base'
 import { GoPlusLabs } from '@masknet/web3-providers'
 import { AddressType } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useI18N } from '../../locales/index.js'
+import { useTipsI18N } from '../../locales/index.js'
 import type { ValidationTuple } from '../../types/index.js'
 
 export function useRecipientValidate(recipientAddress: string): {
     loading: boolean
     validation: ValidationTuple
 } {
-    const t = useI18N()
+    const t = useTipsI18N()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value: addressType, loading } = useAddressType(NetworkPluginID.PLUGIN_EVM, recipientAddress, {
         chainId,

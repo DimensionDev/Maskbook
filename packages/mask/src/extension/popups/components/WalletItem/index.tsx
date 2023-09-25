@@ -14,7 +14,7 @@ import {
     listItemSecondaryActionClasses,
 } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
 import { WalletBalance } from '../index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -98,7 +98,7 @@ export const WalletItem = memo<WalletItemProps>(function WalletItem({
     hiddenTag,
     ...rest
 }) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes, cx } = useStyles()
     const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.address)
 

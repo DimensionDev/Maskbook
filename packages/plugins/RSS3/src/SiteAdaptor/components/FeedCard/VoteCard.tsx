@@ -4,7 +4,7 @@ import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
 import Linkify from 'linkify-react'
 import { useMemo } from 'react'
-import { Translate } from '../../../locales/i18n_generated.js'
+import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
@@ -87,7 +87,7 @@ export function VoteCard({ feed, className, ...rest }: VoteCardProps) {
             className={cx(className, verbose ? classes.verbose : null)}
             {...rest}>
             <Typography className={classes.summary}>
-                <Translate.vote
+                <RSS3Trans.vote
                     values={{
                         user,
                         option,

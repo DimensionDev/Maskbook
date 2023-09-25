@@ -13,7 +13,7 @@ import { PopupRoutes, type PersonaInformation, type Wallet, PopupModalRoutes } f
 import { useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { ExplorerResolver, Providers, Web3 } from '@masknet/web3-providers'
 import { type ChainId, ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../../../utils/index.js'
 import Services from '#services'
 import { useTitle, PopupContext, useHasPassword } from '../../../hooks/index.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
@@ -47,7 +47,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const Logout = memo(() => {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { currentPersona } = PersonaContext.useContainer()
     const navigate = useNavigate()
     const wallet = useWallet()
@@ -134,7 +134,7 @@ export const LogoutUI = memo<LogoutUIProps>(
         verifyPaymentPassword,
         chainId,
     }) => {
-        const { t } = useI18N()
+        const { t } = useMaskSharedI18N()
         const theme = useTheme()
         const modalNavigate = useModalNavigate()
         const { classes } = useStyles()

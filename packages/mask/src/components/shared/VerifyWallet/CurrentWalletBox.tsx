@@ -11,7 +11,7 @@ import { makeStyles } from '@masknet/theme'
 import { type Account, NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
-import { useI18N } from '../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -87,7 +87,7 @@ interface CurrentWalletBox {
     notInPop?: boolean
 }
 export function CurrentWalletBox(props: CurrentWalletBox) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes } = useStyles()
     const { wallet, walletName, notInPop, changeWallet } = props
     const { providerType } = wallet

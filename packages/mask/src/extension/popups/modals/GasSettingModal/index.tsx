@@ -5,7 +5,7 @@ import type { SingletonModalRefCreator } from '@masknet/shared-base'
 import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
 import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
 import { BottomDrawer } from '../../components/index.js'
-import { useI18N } from '../../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../../utils/index.js'
 
 export type GasSettingModalOpenProps = {
     chainId: ChainId
@@ -23,7 +23,7 @@ const initGasSetting = {
 export const GasSettingModal = forwardRef<
     SingletonModalRefCreator<GasSettingModalOpenProps, GasSettingModalCloseProps>
 >(function GasSettingModal(_, ref) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const [chainId, setChainId] = useState<ChainId | undefined>()
     const [replaceType, setReplaceType] = useState<ReplaceType>()
     const [gasConfig = initGasSetting, setGasConfig] = useState<GasSetting>()

@@ -5,7 +5,7 @@ import { Web3State } from '@masknet/web3-providers'
 import { CurrencyType, resolveCurrencyFullName } from '@masknet/web3-shared-base'
 import { Box, Typography, useTheme } from '@mui/material'
 import { memo, useCallback } from 'react'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
 import { ActionModal, useActionModal, type ActionModalBaseProps } from '../../components/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -69,7 +69,7 @@ const CurrencyItem = memo(function CurrencyItem({ fiatCurrencyType }: CurrencyIt
 })
 
 export const ChooseCurrencyModal = memo(function ChooseCurrencyModal({ ...rest }: ActionModalBaseProps) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes } = useStyles()
 
     const currencies = [CurrencyType.USD, CurrencyType.CNY, CurrencyType.HKD, CurrencyType.JPY, CurrencyType.EUR]

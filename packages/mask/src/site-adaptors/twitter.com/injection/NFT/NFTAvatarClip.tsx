@@ -12,7 +12,7 @@ import {
     useNFT,
     useNFTContainerAtTwitter,
 } from '@masknet/plugin-avatar'
-import { useI18N } from '../../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../../utils/index.js'
 import { searchTwitterAvatarNFTLinkSelector, searchTwitterAvatarNFTSelector } from '../../utils/selector.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -87,7 +87,7 @@ interface NFTAvatarClipOrSquareProps {
     avatarType: AvatarType
 }
 export function NFTAvatarClipOrSquareInTwitter({ screenName, size, avatarType }: NFTAvatarClipOrSquareProps) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes } = useStyles()
     const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName)
     const { account } = useChainContext()

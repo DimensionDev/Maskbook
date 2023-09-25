@@ -7,7 +7,7 @@ import { uniqBy } from 'lodash-es'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { CollectionList } from './CollectionList.js'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
 import { EMPTY_LIST, type NetworkPluginID, PopupModalRoutes, type BindingProof } from '@masknet/shared-base'
 import { useModalNavigate } from '../index.js'
 import { Flags } from '@masknet/flags'
@@ -47,7 +47,7 @@ export interface NFTAvatarPickerProps {
 }
 
 export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPicker({ onChange, bindingWallets }) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes } = useStyles()
     const { pluginID } = useNetworkContext()
     const modalNavigate = useModalNavigate()

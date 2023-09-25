@@ -6,7 +6,6 @@ export default {
     'shared/src/locales/%locale%.json': 'shared',
     'shared-base-ui/src/locales/%locale%.json': 'shareBase',
     'mask/dashboard/locales/%locale%.json': 'dashboard',
-    'plugins/Example/src/locales/%locale%.json': 'io.mask.example',
     'plugins/Debugger/src/locales/%locale%.json': 'io.mask.debugger',
     'plugins/Flow/src/locales/%locale%.json': 'com.mask.flow',
     'plugins/FileService/src/locales/%locale%.json': 'com.maskbook.fileservice',

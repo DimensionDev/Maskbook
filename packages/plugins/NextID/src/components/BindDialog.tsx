@@ -17,7 +17,7 @@ import { BindPanelUI } from './BindPanelUI.js'
 import { useBindPayload } from '../hooks/useBindPayload.js'
 import { usePersonaSign } from '../hooks/usePersonaSign.js'
 import { useWalletSign } from '../hooks/useWalletSign.js'
-import { useI18N } from '../locales/index.js'
+import { useNextID_I18N } from '../locales/index.js'
 
 interface BindDialogProps {
     open: boolean
@@ -29,7 +29,7 @@ interface BindDialogProps {
 
 export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBound, bounds }) => {
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const t = useI18N()
+    const t = useNextID_I18N()
     const { showSnackbar } = useCustomSnackbar()
     const currentIdentifier = persona.identifier
     const isBound = !!bounds.find((x) => isSameAddress(x.identity, account))

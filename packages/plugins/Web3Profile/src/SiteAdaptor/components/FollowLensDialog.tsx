@@ -16,7 +16,7 @@ import { FollowModuleType } from '@masknet/web3-providers/types'
 import { formatBalance, isLessThan, isSameAddress, resolveIPFS_URL, ZERO } from '@masknet/web3-shared-base'
 import { ChainId, createERC20Token, formatAmount, ProviderType } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Button, buttonClasses, CircularProgress, DialogContent, Typography } from '@mui/material'
-import { Translate, useI18N } from '../../locales/i18n_generated.js'
+import { Web3ProfileTrans, useWeb3ProfileI18N } from '../../locales/i18n_generated.js'
 import { getLensterLink } from '../../utils.js'
 import { useFollow } from '../hooks/Lens/useFollow.js'
 import { useUnfollow } from '../hooks/Lens/useUnfollow.js'
@@ -108,7 +108,7 @@ interface Props {
 let task: Promise<void> | undefined
 
 export function FollowLensDialog({ handle, onClose }: Props) {
-    const t = useI18N()
+    const t = useWeb3ProfileI18N()
 
     const wallet = useWallet()
     const [isFollowing, setIsFollowing] = useState(false)
@@ -307,11 +307,11 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                         <Typography className={classes.name}>{profile?.name}</Typography>
                         <Typography className={classes.handle}>@{profile?.handle}</Typography>
                         <Typography className={classes.followers}>
-                            <Translate.followers
+                            <Web3ProfileTrans.followers
                                 components={{ strong: <strong /> }}
                                 values={{ followers: String(profile?.stats?.totalFollowers ?? '0') }}
                             />
-                            <Translate.following
+                            <Web3ProfileTrans.following
                                 components={{ strong: <strong /> }}
                                 values={{ following: String(profile?.stats?.totalFollowing ?? '0') }}
                             />

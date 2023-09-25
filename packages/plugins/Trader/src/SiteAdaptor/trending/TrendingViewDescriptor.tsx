@@ -7,7 +7,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { Stack, Typography } from '@mui/material'
 import { TrendingViewContext } from './context.js'
 import { PluginDescriptor } from './PluginDescriptor.js'
-import { useI18N } from '../../locales/index.js'
+import { useTraderI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -56,7 +56,7 @@ export function TrendingViewDescriptor(props: TrendingViewDescriptorProps) {
         isCollectionProjectPopper = false,
         isTokenTagPopper = true,
     } = useContext(TrendingViewContext)
-    const t = useI18N()
+    const t = useTraderI18N()
 
     const { classes } = useStyles({ isTokenTagPopper, isCollectionProjectPopper })
 

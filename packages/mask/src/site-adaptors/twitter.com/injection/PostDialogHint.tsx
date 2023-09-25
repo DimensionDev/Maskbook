@@ -9,7 +9,7 @@ import { startWatch, type WatchOptions } from '../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint.js'
 import { twitterBase } from '../base.js'
-import { useI18N } from '../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../utils/index.js'
 import { hasEditor, isCompose } from '../utils/postBox.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -59,7 +59,7 @@ function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelecto
 
 function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
 
     const onHintButtonClicked = useCallback(() => {
         const content = sayHelloShowed[twitterBase.networkIdentifier].value

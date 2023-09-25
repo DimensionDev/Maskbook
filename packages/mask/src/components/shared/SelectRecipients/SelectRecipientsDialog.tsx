@@ -17,7 +17,7 @@ import {
     Typography,
     alpha,
 } from '@mui/material'
-import { attachNextIDToProfile, useI18N } from '../../../utils/index.js'
+import { attachNextIDToProfile, useMaskSharedI18N } from '../../../utils/index.js'
 import { ProfileInList } from './ProfileInList.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -134,7 +134,7 @@ export interface SelectRecipientsDialogUIProps {
     onSetSelected(selected: Profile[]): void
 }
 export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes, cx } = useStyles()
     const { items, onSearch } = props
     const [searchInput, setSearchInput] = useState('')

@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
 import { ListItem, listItemSecondaryActionClasses, type ListItemProps, Radio, Typography, Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { type PersonaInformation } from '@masknet/shared-base'
@@ -42,7 +42,7 @@ export interface PersonaItemProps extends Omit<ListItemProps, 'onSelect'> {
 }
 
 export const PersonaItem = memo<PersonaItemProps>(function PersonaItem({ isSelected, onSelect, persona, ...rest }) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes } = useStyles()
     const handleClick = useCallback(() => {
         onSelect(persona)

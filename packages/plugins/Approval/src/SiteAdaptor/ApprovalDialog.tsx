@@ -7,7 +7,7 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import { type ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { useI18N } from '../locales/index.js'
+import { useApprovalI18N } from '../locales/index.js'
 import { ApprovalTokenContent } from './ApprovalTokenContent.js'
 import { ApprovalNFTContent } from './ApprovalNFTContent.js'
 
@@ -76,7 +76,7 @@ enum Tabs {
 }
 
 export function ApprovalDialog({ open, onClose }: ApprovalDialogProps) {
-    const t = useI18N()
+    const t = useApprovalI18N()
     const { classes } = useStyles()
 
     const [currentTab, onChange] = useTabs<Tabs>(Tabs.tokens, Tabs.collectibles)

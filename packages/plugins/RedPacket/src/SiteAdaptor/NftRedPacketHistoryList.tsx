@@ -10,7 +10,7 @@ import { type NftRedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { List, Popper, Typography, Box } from '@mui/material'
 import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory.js'
 import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem.js'
-import { useI18N } from '../locales/index.js'
+import { useRedPacketI18N } from '../locales/index.js'
 
 const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -67,11 +67,11 @@ const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
             borderLeft: '6px solid transparent',
             borderRight: '6px solid transparent',
             borderTop: `6px solid ${theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 1)' : '#fff'}`,
-            transform: 'translate(-50%, 6px)',
+            transform: 'RedPacketTrans(-50%, 6px)',
             [`&.${refs.atBottom}`]: {
                 bottom: 'auto',
                 top: 0,
-                transform: 'translate(-50%, -6px) rotate(180deg)',
+                transform: 'RedPacketTrans(-50%, -6px) rotate(180deg)',
             },
         },
         atBottom: {},
@@ -93,7 +93,7 @@ interface Props {
 
 export function NftRedPacketHistoryList({ onSend }: Props) {
     const { classes, cx } = useStyles()
-    const t = useI18N()
+    const t = useRedPacketI18N()
     const sharedI18N = useSharedI18N()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value: histories, loading } = useNftRedPacketHistory(account, chainId)

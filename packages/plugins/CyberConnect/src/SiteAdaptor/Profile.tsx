@@ -9,7 +9,7 @@ import { Icons } from '@masknet/icons'
 import { ExplorerResolver } from '@masknet/web3-providers'
 import ConnectButton from './ConnectButton.js'
 import { FollowersPage } from './FollowersPage.js'
-import { useI18N } from '../locales/index.js'
+import { useCyberConnectI18N } from '../locales/index.js'
 import { ProfileTab } from '../constants.js'
 import { PluginCyberConnectRPC } from '../messages.js'
 
@@ -98,7 +98,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 function Profile({ url }: { url: string }) {
-    const t = useI18N()
+    const t = useCyberConnectI18N()
     const { classes } = useStyles()
     const [, , , , queryAddress] = url.split('/')
     const {

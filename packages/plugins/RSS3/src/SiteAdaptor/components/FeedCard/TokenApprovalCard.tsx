@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { isGreaterThan } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
-import { Translate } from '../../../locales/i18n_generated.js'
+import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useFeedOwner } from '../../contexts/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardType } from '../share.js'
@@ -73,7 +73,7 @@ export function TokenApprovalCard({ feed, ...rest }: TokenApprovalFeedCardProps)
         <CardFrame type={CardType.TokenApproval} feed={feed} {...rest}>
             <Typography className={classes.summary}>
                 {verbose ? (
-                    <Translate.token_approval_verbose
+                    <RSS3Trans.token_approval_verbose
                         values={{
                             user,
                             amount,
@@ -85,7 +85,7 @@ export function TokenApprovalCard({ feed, ...rest }: TokenApprovalFeedCardProps)
                         }}
                     />
                 ) : (
-                    <Translate.token_approval
+                    <RSS3Trans.token_approval
                         values={{
                             user,
                             amount: isGreaterThan(metadata!.value, '1e+10') ? 'infinite' : metadata?.value_display!,

@@ -21,7 +21,7 @@ import { Launch as LaunchIcon } from '@mui/icons-material'
 import { ChainResolver, ExplorerResolver, SmartPayBundler, Web3 } from '@masknet/web3-providers'
 import { formatBalance, isSameAddress, isZero } from '@masknet/web3-shared-base'
 import { type RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback.js'
-import { useI18N } from '../locales/index.js'
+import { useRedPacketI18N } from '../locales/index.js'
 import { RedPacketRPC } from '../messages.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -75,7 +75,7 @@ export interface ConfirmRedPacketFormProps {
 }
 
 export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
-    const t = useI18N()
+    const t = useRedPacketI18N()
     const { settings, onCreated, onClose, gasOption, onGasOptionChange, expectedChainId } = props
     const { classes, cx } = useStyles()
     const { isLoading: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM)

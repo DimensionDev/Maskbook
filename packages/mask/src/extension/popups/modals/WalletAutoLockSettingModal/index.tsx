@@ -9,7 +9,7 @@ import { ActionButton, makeStyles } from '@masknet/theme'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import Services from '#services'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
 import { useWalletAutoLockTime } from '../../pages/Wallet/hooks/useWalletAutoLockTime.js'
 import { isPositive, isZero } from '@masknet/web3-shared-base'
 import { isEmpty, isUndefined } from 'lodash-es'
@@ -60,7 +60,7 @@ const DEFAULT_MIN_AUTO_LOCKER_TIME = 1000 * 60 * 15 // 15 minutes
 const ONE_DAY_IN_MILLISECONDS = hoursToMilliseconds(24)
 
 function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const theme = useTheme()
     const { classes, cx } = useStyles()
     const { value: autoLockerTime = DEFAULT_MIN_AUTO_LOCKER_TIME } = useWalletAutoLockTime()

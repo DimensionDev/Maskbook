@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { useCallback } from 'react'
-import { useI18N } from '../locales/index.js'
+import { usePetsI18N } from '../locales/index.js'
 import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
@@ -36,7 +36,7 @@ interface PetSetDialogProps {
 }
 
 export function PetShareDialog({ onClose }: PetSetDialogProps) {
-    const t = useI18N()
+    const t = usePetsI18N()
     const { classes } = useStyles()
     const { share } = useSiteAdaptorContext()
 

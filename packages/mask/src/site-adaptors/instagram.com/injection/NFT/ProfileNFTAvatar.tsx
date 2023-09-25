@@ -6,7 +6,7 @@ import { MaskMessages } from '@masknet/shared-base'
 import { useLocationChange } from '@masknet/shared-base-ui'
 import { startWatch } from '../../../../utils/startWatch.js'
 import { searchInstagramAvatarEditPageSettingDialog, searchInstagramAvatarListSelector } from '../../utils/selector.js'
-import { attachReactTreeWithContainer, useI18N } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer, useMaskSharedI18N } from '../../../../utils/index.js'
 import { NFTAvatarSettingDialog } from './NFTAvatarSettingDialog.js'
 
 export async function injectProfileNFTAvatarInInstagram(signal: AbortSignal) {
@@ -43,7 +43,7 @@ interface StyleProps {
 }
 
 export function NFTAvatarButtonInDialog() {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const [style, setStyle] = useState<StyleProps>({
         fontSize: 12,
         minHeight: 48,

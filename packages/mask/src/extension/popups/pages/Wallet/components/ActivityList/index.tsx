@@ -11,7 +11,7 @@ import { ReplaceType } from '../../type.js'
 import { ActivityItem, ActivityItemSkeleton, RecentActivityItem } from './ActivityItem.js'
 import { useTransactions } from './useTransactions.js'
 import { modifyTransaction } from '../../utils.js'
-import { useI18N } from '../../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../../../utils/i18n-next-ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -28,7 +28,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface ActivityListProps {}
 
 export const ActivityList = memo<ActivityListProps>(function ActivityList() {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
     const { data: transactions, localeTxes, isLoading, isFetching, fetchNextPage } = useTransactions()

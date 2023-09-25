@@ -10,7 +10,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { PersonaContext } from '@masknet/shared'
 import { Web3 } from '@masknet/web3-providers'
-import { useI18N } from '../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../../utils/i18n-next-ui.js'
 import { useTitle, PopupContext, useVerifiedWallets } from '../../../hooks/index.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const SelectWallet = memo(function SelectWallet() {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const [params] = useSearchParams()

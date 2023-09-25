@@ -8,7 +8,7 @@ import { useChainContext, useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { type NftRedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { Box, ListItem, Typography } from '@mui/material'
-import { Translate, useI18N } from '../locales/index.js'
+import { RedPacketTrans, useRedPacketI18N } from '../locales/index.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
 import { useNftAvailabilityComputed } from './hooks/useNftAvailabilityComputed.js'
 import { useCreateNftRedPacketReceipt } from './hooks/useCreateNftRedPacketReceipt.js'
@@ -69,7 +69,7 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             width: '100%',
         },
         content: {
-            transform: 'translateY(-4px)',
+            transform: 'RedPacketTransY(-4px)',
             width: '100%',
             paddingLeft: theme.spacing(1),
         },
@@ -172,7 +172,7 @@ export const NftRedPacketHistoryItem = memo(
         const [isViewed, setIsViewed] = useState(false)
         const ref = useRef<HTMLLIElement | null>(null)
         const entry = useIntersectionObserver(ref, {})
-        const t = useI18N()
+        const t = useRedPacketI18N()
 
         const { value: receipt } = useCreateNftRedPacketReceipt(isViewed ? history.txid : '', history.chainId)
         const rpid = receipt?.rpid ?? ''
@@ -266,7 +266,7 @@ export const NftRedPacketHistoryItem = memo(
 
                             <section className={classes.footer}>
                                 <Typography variant="body1" className={classes.footerInfo}>
-                                    <Translate.history_nft_claimed
+                                    <RedPacketTrans.history_nft_claimed
                                         components={{
                                             span: <span />,
                                         }}

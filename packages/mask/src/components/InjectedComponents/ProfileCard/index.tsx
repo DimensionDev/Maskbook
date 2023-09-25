@@ -19,7 +19,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { DefaultWeb3ContextProvider, ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
-import { useI18N } from '../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../utils/index.js'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
 
@@ -106,7 +106,7 @@ const useStyles = makeStyles()((theme) => {
 export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) => {
     const { classes, cx } = useStyles(undefined, { props: { classes: rest.classes } })
 
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const translate = usePluginI18NField()
     const {
         data: allSocialAccounts = EMPTY_LIST,

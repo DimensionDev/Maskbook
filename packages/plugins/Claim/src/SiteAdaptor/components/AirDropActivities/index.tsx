@@ -2,7 +2,7 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Alert, AlertTitle, Box } from '@mui/material'
 import { memo } from 'react'
-import { useI18N } from '../../../locales/i18n_generated.js'
+import { useClaimI18N } from '../../../locales/i18n_generated.js'
 import { AirDropActivityItem } from './AirDropActivityItem.js'
 import { useAirDropActivity } from '../../../hooks/useAirDropActivity.js'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -47,7 +47,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const AirDropActivities = memo(() => {
-    const t = useI18N()
+    const t = useClaimI18N()
     const [open, toggle] = useToggle(true)
     const { classes } = useStyles()
     const { account } = useChainContext()

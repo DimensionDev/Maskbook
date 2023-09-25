@@ -16,7 +16,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import { GasOptionType, ZERO, formatBalance, formatCurrency, scale10, toFixed } from '@masknet/web3-shared-base'
 import { type EIP1559GasConfig, type GasConfig, type ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
 import { useGasOptionsMenu } from '../../hooks/index.js'
 import { useGasRatio } from '../../hooks/useGasRatio.js'
 
@@ -44,7 +44,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
     onChange,
     onPaymentTokenChange,
 }) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const theme = useTheme()
     const gasRatio = useGasRatio(paymentToken)
     const [gasConfig = initConfig, setGasConfig] = useState<GasConfig | undefined>()

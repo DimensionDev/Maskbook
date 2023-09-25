@@ -19,7 +19,7 @@ import { BroadcastType, ProxyActionType, type FollowModuleTypedData } from '@mas
 import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
 import { useQueryAuthenticate } from './useQueryAuthenticate.js'
-import { useI18N } from '../../../locales/i18n_generated.js'
+import { useWeb3ProfileI18N } from '../../../locales/i18n_generated.js'
 
 export function useFollow(
     profileId?: string,
@@ -29,7 +29,7 @@ export function useFollow(
     onFailed?: () => void,
 ) {
     const [loading, setLoading] = useState(false)
-    const t = useI18N()
+    const t = useWeb3ProfileI18N()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const handleQueryAuthenticate = useQueryAuthenticate(account)
     const { LENS_HUB_PROXY_CONTRACT_ADDRESS } = useLensConstants(chainId)

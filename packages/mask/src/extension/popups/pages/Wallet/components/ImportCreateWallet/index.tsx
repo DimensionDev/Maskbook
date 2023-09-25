@@ -3,7 +3,7 @@ import { DashboardRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { memo } from 'react'
-import { useI18N } from '../../../../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../../../../utils/index.js'
 import { useAsyncFn } from 'react-use'
 import Services from '#services'
 import urlcat from 'urlcat'
@@ -56,7 +56,7 @@ interface Props {
 }
 
 export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onChoose }) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes, cx, theme } = useStyles()
     const [params] = useSearchParams()
     const external_request = params.get('external_request')

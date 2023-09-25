@@ -1,12 +1,12 @@
-import { useMaskI18N } from '../../../../shared-ui/index.js'
 import type { ProfileIdentifier } from '@masknet/shared-base'
+import { useMaskSharedI18N } from '../../../../shared-ui/index.js'
 
 export function useAuthorDifferentMessage(
     author: ProfileIdentifier | null,
     postBy: ProfileIdentifier | null,
     jsx: React.ReactNode,
 ) {
-    const t = useMaskI18N()
+    const t = useMaskSharedI18N()
     if (!author || !postBy) return jsx
     if (author === postBy) return jsx
     return (

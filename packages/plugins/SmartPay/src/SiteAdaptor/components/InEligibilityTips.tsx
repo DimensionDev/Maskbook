@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { DialogContent, Link, Typography } from '@mui/material'
-import { Translate, useI18N } from '../../locales/index.js'
+import { SmartPayTrans, useSmartPayI18N } from '../../locales/index.js'
 import { memo } from 'react'
 import { SmartPayBanner } from './SmartPayBanner.js'
 
@@ -34,14 +34,14 @@ const useStyles = makeStyles()((theme) => ({
 
 export const InEligibilityTips = memo(() => {
     const { classes } = useStyles()
-    const t = useI18N()
+    const t = useSmartPayI18N()
     return (
         <DialogContent className={classes.dialogContent}>
             <SmartPayBanner>
                 <Typography>{t.ineligibility_tips()}</Typography>
             </SmartPayBanner>
             <Typography className={classes.description}>
-                <Translate.eligibility_description
+                <SmartPayTrans.eligibility_description
                     components={{
                         Link: (
                             <Link
@@ -57,7 +57,7 @@ export const InEligibilityTips = memo(() => {
                 />
             </Typography>
             <Typography className={classes.description}>
-                <Translate.eligibility_query
+                <SmartPayTrans.eligibility_query
                     components={{
                         Link: (
                             <Link

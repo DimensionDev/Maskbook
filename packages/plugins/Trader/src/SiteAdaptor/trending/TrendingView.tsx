@@ -41,7 +41,7 @@ import { NonFungibleTickersTable } from './NonFungibleTickersTable.js'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
 import { ContentTab } from '../../types/index.js'
 import { FailedTrendingView } from './FailedTrendingView.js'
-import { useI18N } from '../../locales/index.js'
+import { useTraderI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -144,7 +144,7 @@ export function TrendingView(props: TrendingViewProps) {
     const { resultList, identity, setActive, currentResult } = props
     const [result, setResult] = useState(currentResult ?? resultList[0])
     const { isTokenTagPopper, isCollectionProjectPopper, isProfilePage } = useContext(TrendingViewContext)
-    const t = useI18N()
+    const t = useTraderI18N()
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
     const isWeb3ProfileMinimalMode = useIsMinimalMode(PluginID.Web3Profile)

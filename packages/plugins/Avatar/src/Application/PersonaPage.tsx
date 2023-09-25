@@ -6,7 +6,7 @@ import { useSubscription } from 'use-subscription'
 import { type BindingProof, EMPTY_LIST, NextIDPlatform, type PersonaInformation } from '@masknet/shared-base'
 import { LoadingBase } from '@masknet/theme'
 import { DialogActions, DialogContent, Stack } from '@mui/material'
-import { useI18N } from '../locales/index.js'
+import { useAvatarI18N } from '../locales/index.js'
 import { PersonaItem } from './PersonaItem.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
 import { Alert, PersonaAction, usePersonasFromNextID } from '@masknet/shared'
@@ -17,7 +17,7 @@ import { RoutePaths } from './Routes.js'
 import { useAvatarManagement } from '../contexts/index.js'
 
 export function PersonaPage() {
-    const t = useI18N()
+    const t = useAvatarI18N()
     const [visible, setVisible] = useState(true)
     const dismissAlert = useCallback(() => setVisible(false), [])
     const navigate = useNavigate()

@@ -3,7 +3,7 @@ import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useDropArea } from 'react-use'
 import { Icons } from '@masknet/icons'
-import { useI18N } from '../../../../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -41,7 +41,7 @@ export interface JsonFileBox {
 }
 
 export const JsonFileBox = memo<JsonFileBox>(({ onChange }) => {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes } = useStyles()
     const inputRef = useRef<HTMLInputElement>(null)
     const [file, setFile] = useState<File | null>()

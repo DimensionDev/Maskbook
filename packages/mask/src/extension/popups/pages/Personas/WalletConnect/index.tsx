@@ -1,5 +1,5 @@
 import { memo, useEffect } from 'react'
-import { useI18N } from '../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../../utils/i18n-next-ui.js'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Box, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
@@ -81,7 +81,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export default memo(function WalletConnect() {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const navigate = useNavigate()
     const { classes } = useStyles()
     const location = useLocation()

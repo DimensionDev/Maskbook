@@ -16,7 +16,7 @@ import { useAsync } from 'react-use'
 import type { Option } from 'ts-results-es'
 import { useSubscription } from 'use-subscription'
 import Services from '#services'
-import { useI18N } from '../../utils/index.js'
+import { useMaskSharedI18N } from '../../utils/index.js'
 
 function useDisabledPlugins() {
     const activated = new Set(useActivatedPluginsSiteAdaptor('any').map((x) => x.ID))
@@ -82,7 +82,7 @@ export function PossiblePluginSuggestionUISingle(props: {
     content?: ReactNode
 }) {
     const { define, lackHostPermission, wrapperProps, content } = props
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const theme = useTheme()
     const onClick = useCallback(() => {
         if (lackHostPermission && define.enableRequirement.host_permissions) {
@@ -158,7 +158,7 @@ export interface FallbackContentProps extends BoxProps {
 }
 
 export function FallbackContent({ disabled, ...rest }: FallbackContentProps) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes, cx } = useStyles()
     if (disabled)
         return (

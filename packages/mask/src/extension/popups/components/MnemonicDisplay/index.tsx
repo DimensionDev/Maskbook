@@ -5,7 +5,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography, alpha } from '@mui/material'
 import { useToggle } from '@react-hookz/web'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -79,7 +79,7 @@ export interface MnemonicDisplayProps {
 }
 
 export const MnemonicDisplay = memo<MnemonicDisplayProps>(function MnemonicDisplay({ mnemonic = EMPTY_LIST }) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes } = useStyles()
     const [display, toggle] = useToggle(false)
 

@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useMemo } from 'react'
 import { Box, Typography, List, ListItem, Skeleton } from '@mui/material'
 import { makeStyles, ActionButton, ShadowRootTooltip } from '@masknet/theme'
 import { Check as CheckIcon, Close as CloseIcon, AddCircleOutline as AddCircleOutlineIcon } from '@mui/icons-material'
-import { useI18N } from '../locales/index.js'
+import { useRedPacketI18N } from '../locales/index.js'
 import {
     WalletConnectedBoundary,
     AssetPreviewer,
@@ -232,7 +232,7 @@ interface RedPacketERC721FormProps {
     onGasOptionChange?: (config: GasConfig) => void
 }
 export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
-    const t = useI18N()
+    const t = useRedPacketI18N()
     const {
         onClose,
         setIsNFTRedPacketLoaded,

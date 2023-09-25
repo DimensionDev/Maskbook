@@ -12,7 +12,7 @@ import {
     SelectableFile,
     UploadingFile,
 } from './Files/index.js'
-import { Translate, useI18N } from '../../locales/index.js'
+import { FileServiceTrans, useFileServiceI18N } from '../../locales/index.js'
 import { useFileManagement } from '../contexts/index.js'
 import { PluginFileServiceRPC } from '../../Worker/rpc.js'
 import { ConfirmModal, RenameModal } from '../modals/index.js'
@@ -56,7 +56,7 @@ interface FileListProps extends FileListBaseProps, Pick<ManageableFileProps, 'on
 }
 
 export function FileList({ files, onLoadMore, className, onDownload, onSend, ...rest }: FileListProps) {
-    const t = useI18N()
+    const t = useFileServiceI18N()
     const { classes, cx } = useStyles()
     const { uploadStateMap, refetchFiles } = useFileManagement()
 
@@ -86,7 +86,7 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
             const confirmed = await ConfirmModal.openAndWaitForClose({
                 title: t.delete_file(),
                 message: (
-                    <Translate.delete_message
+                    <FileServiceTrans.delete_message
                         values={{
                             name: file.name,
                         }}

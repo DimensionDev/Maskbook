@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { useI18N } from '../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../utils/index.js'
 import { AdditionalContent } from '../AdditionalPostContent.js'
 import type { DecryptionProgress } from './types.js'
 import type { ProfileIdentifier } from '@masknet/shared-base'
@@ -13,7 +13,7 @@ export interface DecryptPostAwaitingProps {
 }
 export const DecryptPostAwaiting = memo(function DecryptPostAwaiting(props: DecryptPostAwaitingProps) {
     const { author, postedBy, type } = props
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const key = {
         finding_post_key: t('decrypted_postbox_decrypting_finding_post_key'),
         finding_person_public_key: t('decrypted_postbox_decrypting_finding_person_key'),

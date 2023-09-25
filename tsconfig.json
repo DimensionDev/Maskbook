@@ -113,7 +113,6 @@
 
       // Plugins
       "@masknet/plugin-debugger": ["./packages/plugins/Debugger/src"],
-      "@masknet/plugin-example": ["./packages/plugins/Example/src"],
       "@masknet/plugin-file-service": ["./packages/plugins/FileService/src"],
       "@masknet/plugin-evm": ["./packages/plugins/EVM/src"],
       "@masknet/plugin-flow": ["./packages/plugins/Flow/src"],

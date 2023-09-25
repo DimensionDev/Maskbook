@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { useI18N } from '../../utils/index.js'
+import { useMaskSharedI18N } from '../../utils/index.js'
 import formatDateTime from 'date-fns/format'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import {
@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
     const { onClose, data } = props
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes } = useStyles()
     const url = data.image ? URL.createObjectURL(data.image) : undefined
     const { showSnackbar } = useCustomSnackbar()

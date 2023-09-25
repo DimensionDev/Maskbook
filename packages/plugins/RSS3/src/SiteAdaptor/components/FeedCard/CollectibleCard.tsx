@@ -5,7 +5,7 @@ import { isSameAddress, resolveResourceURL } from '@masknet/web3-shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { useMemo } from 'react'
-import { Translate } from '../../../locales/i18n_generated.js'
+import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType, getCost, getLastAction } from '../share.js'
@@ -155,7 +155,7 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
                     cardType: CardType.CollectibleMint,
                     metadata,
                     summary: (
-                        <Translate.collectible_mint
+                        <RSS3Trans.collectible_mint
                             values={{
                                 user,
                                 collectible: verbose ? metadata!.name : 'an NFT',
@@ -179,7 +179,7 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
                     cardType: CardType.CollectibleOut,
                     metadata,
                     summary: (
-                        <Translate.collectible_trade
+                        <RSS3Trans.collectible_trade
                             values={{
                                 user,
                                 collectible: verbose ? metadata!.name : 'an NFT',
@@ -203,7 +203,7 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
                         cardType: CardType.CollectibleIn,
                         metadata: feed.actions[1].metadata,
                         summary: (
-                            <Translate.collectible_register_ens
+                            <RSS3Trans.collectible_register_ens
                                 values={{
                                     user,
                                     ens: verbose ? feed.actions[1].metadata!.name : 'an ENS',
@@ -234,7 +234,7 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
                     cardType: isSending ? CardType.CollectibleOut : CardType.CollectibleIn,
                     metadata,
                     summary: (
-                        <Translate.collectible_operation
+                        <RSS3Trans.collectible_operation
                             values={{
                                 user,
                                 collectible: verbose ? metadata!.name : 'an NFT',
@@ -258,7 +258,7 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
                     cardType: CardType.CollectibleBurn,
                     metadata,
                     summary: (
-                        <Translate.collectible_burn
+                        <RSS3Trans.collectible_burn
                             values={{
                                 user,
                                 collectible: verbose ? metadata!.name : 'an NFT',

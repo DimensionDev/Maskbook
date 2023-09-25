@@ -8,7 +8,7 @@ import { isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/we
 import { uniqWith } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
-import { useI18N } from '../../../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../../../utils/index.js'
 import { useNonFungibleTokenParams } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -55,7 +55,7 @@ const getCollectibleKey = (token: Web3Helper.NonFungibleAssetAll) => {
     return `${token.chainId}.${token.address}.${token.tokenId}`
 }
 export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes } = useStyles()
     const { chainId, address, tokenId, params, setParams } = useNonFungibleTokenParams()
 

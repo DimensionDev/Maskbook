@@ -7,7 +7,7 @@ import { resolveIPFS_URL, resolveResourceURL } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
 import Linkify from 'linkify-react'
 import { useCallback } from 'react'
-import { Translate } from '../../../locales/i18n_generated.js'
+import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel, usePublicationId } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
@@ -207,7 +207,7 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
             className={cx(rest.verbose ? classes.verbose : null, className)}
             {...rest}>
             <Typography className={classes.summary}>
-                <Translate.note
+                <RSS3Trans.note
                     values={{
                         user,
                         platform: action.platform!,

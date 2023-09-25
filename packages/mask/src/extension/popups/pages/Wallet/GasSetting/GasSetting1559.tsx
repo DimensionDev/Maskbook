@@ -27,7 +27,7 @@ import {
 import { Web3 } from '@masknet/web3-providers'
 import { useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
-import { useI18N } from '../../../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../../../utils/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import Services from '#services'
 import { FormattedCurrency } from '@masknet/shared'
@@ -106,7 +106,7 @@ const useStyles = makeStyles()((theme) => ({
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 
 export const GasSetting1559 = memo(() => {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
     const [selected, setOption] = useState<number | null>(null)

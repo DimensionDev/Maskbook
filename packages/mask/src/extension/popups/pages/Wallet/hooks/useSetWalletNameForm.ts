@@ -4,10 +4,10 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useContacts, useWallets } from '@masknet/web3-hooks-base'
 import { generateNewWalletName } from '@masknet/web3-shared-base'
-import { useI18N } from '../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../../utils/i18n-next-ui.js'
 
 export function useSetWalletNameForm(defaultName?: string) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const wallets = useWallets()
     const contacts = useContacts()
 

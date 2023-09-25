@@ -15,7 +15,7 @@ import {
     step2DisableIcon,
     step2ActiveIcon,
 } from './constants.js'
-import { useI18N } from '../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../utils/index.js'
 import { CurrentWalletBox } from './CurrentWalletBox.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -109,7 +109,7 @@ interface StepsProps {
 }
 
 export function Steps(props: StepsProps) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes } = useStyles()
     const {
         changeWallet,

@@ -19,7 +19,7 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography } from '@mui/material'
 import type { BoxProps } from '@mui/system'
 import { PluginTraderMessages } from '@masknet/plugin-trader'
-import { useI18N } from '../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../utils/index.js'
 import { AvatarDecoration } from './AvatarDecoration.js'
 
 const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
@@ -120,7 +120,7 @@ export interface ProfileBarProps extends BoxProps {
 export const ProfileBar = memo<ProfileBarProps>(
     ({ socialAccounts, address, identity, onAddressChange, className, children, ...rest }) => {
         const { classes, theme, cx } = useStyles()
-        const { t } = useI18N()
+        const { t } = useMaskSharedI18N()
         const { current: avatarClipPathId } = useRef<string>(uuid())
         const { anchorEl, anchorBounding } = useAnchor()
 

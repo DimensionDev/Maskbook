@@ -15,7 +15,7 @@ import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { Web3 } from '@masknet/web3-providers'
-import { useI18N } from '../locales/index.js'
+import { useRedPacketI18N } from '../locales/index.js'
 import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
 import { RedPacketMetaKey } from '../constants.js'
 import { DialogTabs } from '../types.js'
@@ -57,7 +57,7 @@ interface RedPacketDialogProps {
 }
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
-    const t = useI18N()
+    const t = useRedPacketI18N()
     const [showHistory, setShowHistory] = useState(false)
     const [gasOption, setGasOption] = useState<GasConfig>()
 

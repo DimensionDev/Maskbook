@@ -11,7 +11,7 @@ import { ChainId, signMessage } from '@masknet/web3-shared-evm'
 import { Box, Card, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
 import { useCallback, useMemo } from 'react'
-import { useI18N } from '../../locales/index.js'
+import { useRedPacketI18N } from '../../locales/index.js'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
 import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
@@ -132,7 +132,7 @@ export interface RedPacketProps {
 export function RedPacket(props: RedPacketProps) {
     const { payload } = props
 
-    const t = useI18N()
+    const t = useRedPacketI18N()
     const { share } = useSiteAdaptorContext()
     const token = payload.token
     const { pluginID } = useNetworkContext()

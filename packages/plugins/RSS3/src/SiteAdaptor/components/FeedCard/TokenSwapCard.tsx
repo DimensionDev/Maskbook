@@ -2,8 +2,8 @@ import { Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
-import { useI18N } from '../../../locales/index.js'
-import { Translate } from '../../../locales/i18n_generated.js'
+import { useRSS3I18N } from '../../../locales/index.js'
+import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardType } from '../share.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
@@ -62,7 +62,7 @@ interface TokenSwapCardProps extends Omit<FeedCardProps, 'feed'> {
  */
 export function TokenSwapCard({ feed, ...rest }: TokenSwapCardProps) {
     const { verbose } = rest
-    const t = useI18N()
+    const t = useRSS3I18N()
     const { classes, cx } = useStyles()
 
     // You might see some `transfer` type actions as well
@@ -74,7 +74,7 @@ export function TokenSwapCard({ feed, ...rest }: TokenSwapCardProps) {
     return (
         <CardFrame type={CardType.TokenSwap} feed={feed} {...rest}>
             <Typography className={classes.summary}>
-                <Translate.token_swap
+                <RSS3Trans.token_swap
                     values={{
                         user,
                         from_value: formatValue(metadata?.from),

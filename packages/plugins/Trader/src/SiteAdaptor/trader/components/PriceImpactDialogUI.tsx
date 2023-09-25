@@ -14,7 +14,7 @@ import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
 import { Sniffings } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { formatPercentage } from '@masknet/web3-shared-base'
-import { useI18N, Translate } from '../../../locales/index.js'
+import { useTraderI18N, TraderTrans } from '../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -86,7 +86,7 @@ export interface PriceImpactDialogProps extends InjectedDialogProps {
 
 export const PriceImpactDialogUI = memo<PriceImpactDialogProps>(
     ({ open, onClose, lostToken, lostValue, priceImpact, symbol, onConfirm }) => {
-        const t = useI18N()
+        const t = useTraderI18N()
         const { classes } = useStyles()
 
         return (
@@ -95,7 +95,7 @@ export const PriceImpactDialogUI = memo<PriceImpactDialogProps>(
                     <Icons.CircleWarning className={classes.icon} />
                     <Typography className={classes.title}>{t.risk_warning()}</Typography>
                     <Typography className={classes.description}>
-                        <Translate.risk_warning_description
+                        <TraderTrans.risk_warning_description
                             components={{ span: <span /> }}
                             values={{
                                 impact: formatPercentage(priceImpact ?? 0),

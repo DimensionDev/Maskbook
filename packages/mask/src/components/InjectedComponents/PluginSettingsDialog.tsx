@@ -20,7 +20,7 @@ import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useI18N } from '../../utils/index.js'
+import { useMaskSharedI18N } from '../../utils/index.js'
 import Services from '#services'
 
 const useStyles = makeStyles()((theme) => ({
@@ -40,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
  * @deprecated unused
  */
 export function PluginSettingsDialog() {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes } = useStyles()
     const translate = usePluginI18NField()
 

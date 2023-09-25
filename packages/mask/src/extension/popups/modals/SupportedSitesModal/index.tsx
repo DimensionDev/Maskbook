@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Switch, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useSupportedSites } from '../../hooks/useSupportedSites.js'
@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const SupportedSitesModal = memo<ActionModalBaseProps>(function SupportedSitesModal({ ...rest }) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes } = useStyles()
     const { data = EMPTY_LIST, isLoading, refetch } = useSupportedSites()
 

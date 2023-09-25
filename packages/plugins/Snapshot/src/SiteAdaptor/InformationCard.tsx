@@ -12,7 +12,7 @@ import { SnapshotContext } from '../context.js'
 import { useProposal } from './hooks/useProposal.js'
 import { SnapshotCard } from './SnapshotCard.js'
 import { SNAPSHOT_IPFS } from '../constants.js'
-import { useI18N } from '../locales/index.js'
+import { useSnapshotI18N } from '../locales/index.js'
 
 export interface InformationCardProps {}
 
@@ -72,7 +72,7 @@ export function InfoField(props: InfoFieldProps) {
 
 export function InformationCard(props: InformationCardProps) {
     const { classes } = useStyles()
-    const t = useI18N()
+    const t = useSnapshotI18N()
     const identifier = useContext(SnapshotContext)
     const proposal = useProposal(identifier.id)
     const { start, end, snapshot, strategies, chainId } = proposal

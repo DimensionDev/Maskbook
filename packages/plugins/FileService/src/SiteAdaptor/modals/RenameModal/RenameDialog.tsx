@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogContent, InputBase, Typography } from '@mui/material'
-import { useI18N } from '../../../locales/i18n_generated.js'
+import { useFileServiceI18N } from '../../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -70,7 +70,7 @@ export interface RenameDialogProps extends Omit<InjectedDialogProps, 'title' | '
 export const RenameDialog = memo(
     ({ title, message, description, currentName, onSubmit, onClose, ...rest }: RenameDialogProps) => {
         const { classes } = useStyles()
-        const t = useI18N()
+        const t = useFileServiceI18N()
         const [name, setName] = useState(currentName)
         const isDirty = name !== currentName
         const isValid = isDirty && name.length >= 3 && name.length <= 20

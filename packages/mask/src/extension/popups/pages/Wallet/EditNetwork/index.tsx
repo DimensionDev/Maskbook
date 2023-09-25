@@ -12,7 +12,7 @@ import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'rea
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { type z, type ZodCustomIssue } from 'zod'
-import { useI18N, type AvailableLocaleKeys } from '../../../../../utils/index.js'
+import { useMaskSharedI18N, type AvailableLocaleKeys } from '../../../../../utils/index.js'
 import { createSchema } from './network-schema.js'
 import { PageTitleContext } from '../../../context.js'
 import { useTitle } from '../../../hooks/index.js'
@@ -64,7 +64,7 @@ const useStyles = makeStyles()((theme) => ({
 
 const QUERY_KEY = ['system', 'wallet', 'networks']
 export const EditNetwork = memo(function EditNetwork() {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
     const id = useParams<{ id: string }>().id

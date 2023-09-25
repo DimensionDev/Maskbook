@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { EmptyStatus, LoadingStatus } from '@masknet/shared'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { useCalendarI18N } from '../../locales/i18n_generated.js'
 import { Typography } from '@mui/material'
 import format from 'date-fns/format'
 
@@ -112,7 +112,7 @@ interface NewsListProps {
 
 export function NewsList({ list, isLoading, empty, dateString }: NewsListProps) {
     const { classes, cx } = useStyles()
-    const t = useI18N()
+    const t = useCalendarI18N()
     const listAfterDate = useMemo(() => {
         const listAfterDate: string[] = []
         for (const key in list) {

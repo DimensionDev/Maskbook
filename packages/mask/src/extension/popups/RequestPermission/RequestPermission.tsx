@@ -8,7 +8,7 @@ import {
     DialogActions,
     DialogContent,
 } from '@mui/material'
-import { useI18N } from '../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../utils/index.js'
 import type { Permissions } from 'webextension-polyfill'
 
 export interface RequestPermissionProps extends Permissions.AnyPermissions {
@@ -16,7 +16,7 @@ export interface RequestPermissionProps extends Permissions.AnyPermissions {
     onCancel(): void
 }
 export function RequestPermission(props: RequestPermissionProps) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { origins, permissions } = props
     return (
         <>

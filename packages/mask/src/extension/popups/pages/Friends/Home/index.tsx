@@ -2,13 +2,13 @@ import { memo, useState, useMemo } from 'react'
 import { FriendsHomeUI } from './UI.js'
 import { useFriendsPaged, useTitle, useSearchValue, useFriendsFromSearch } from '../../../hooks/index.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { useI18N } from '../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../../utils/i18n-next-ui.js'
 import { resolveNextIDPlatform } from '@masknet/shared'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { NextIDProof } from '@masknet/web3-providers'
 
 const FriendsHome = memo(function FriendsHome() {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     useTitle(t('popups_encrypted_friends'))
 
     const { data, fetchNextPage, isLoading, refetch } = useFriendsPaged()

@@ -8,7 +8,7 @@ import formatDateTime from 'date-fns/format'
 import isAfter from 'date-fns/isAfter'
 import isValidDate from 'date-fns/isValid'
 import { useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { useCollectibleI18N } from '../../locales/i18n_generated.js'
 import { Context } from '../Context/index.js'
 import { LinkingAvatar } from '../Shared/LinkingAvatar.js'
 import { CollectiblePaper } from './CollectiblePaper.js'
@@ -113,7 +113,7 @@ const useStyles = makeStyles<{ currentTab: string }>()((theme, { currentTab }) =
 })
 
 export function Collectible() {
-    const t = useI18N()
+    const t = useCollectibleI18N()
     const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activities')
     const { classes } = useStyles({ currentTab })
     const { asset, orders } = Context.useContainer()

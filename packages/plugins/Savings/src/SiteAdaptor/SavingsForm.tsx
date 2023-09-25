@@ -40,7 +40,7 @@ import { SchemaType, getAaveConstant, isNativeTokenAddress } from '@masknet/web3
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { ProtocolType, TabType, type SavingsProtocol } from '../types.js'
 import { useApr, useBalance } from './hooks/index.js'
-import { useI18N } from '../locales/index.js'
+import { useSavingsI18N } from '../locales/index.js'
 
 export const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
@@ -100,7 +100,7 @@ export const resolveProtocolName = createLookupTableResolver<ProtocolType, strin
 )
 
 export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFormDialogProps) {
-    const t = useI18N()
+    const t = useSavingsI18N()
     const { classes } = useStyles()
     const isDeposit = tab === TabType.Deposit
     const { share } = useSiteAdaptorContext()

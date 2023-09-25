@@ -15,7 +15,7 @@ import { CopyButton, TokenIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { GasSettingMenu } from '../GasSettingMenu/index.js'
 import type { TransactionDetail } from '../../pages/Wallet/type.js'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
 import { TokenType, isSameAddress } from '@masknet/web3-shared-base'
@@ -114,7 +114,7 @@ export const UnlockERC721Token = memo<UnlockERC721TokenProps>(function UnlockERC
     paymentToken,
 }) {
     const { pluginID } = useNetworkContext()
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes } = useStyles()
     const theme = useTheme()
 

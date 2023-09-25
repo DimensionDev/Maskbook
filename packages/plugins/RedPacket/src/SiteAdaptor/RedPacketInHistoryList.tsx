@@ -1,4 +1,6 @@
 import { type MouseEvent, useCallback, useState, useMemo, useRef, useEffect } from 'react'
+import nextDay from 'date-fns/nextDay'
+import intervalToDuration from 'date-fns/intervalToDuration'
 import { useIntersectionObserver } from '@react-hookz/web'
 import { Box, Typography, Popper, useMediaQuery, type Theme, ListItem } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
@@ -8,9 +10,7 @@ import {
     type RedPacketJSONPayloadFromChain,
     RedPacketStatus,
 } from '@masknet/web3-providers/types'
-import intervalToDuration from 'date-fns/intervalToDuration'
-import nextDay from 'date-fns/nextDay'
-import { Translate, useI18N } from '../locales/index.js'
+import { RedPacketTrans, useRedPacketI18N } from '../locales/index.js'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
 import { useCreateRedPacketReceipt } from './hooks/useCreateRedPacketReceipt.js'
 import { useRefundCallback } from './hooks/useRefundCallback.js'
@@ -74,7 +74,7 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             width: '100%',
         },
         content: {
-            transform: 'translateY(-4px)',
+            transform: 'RedPacketTransY(-4px)',
             width: '100%',
             [smallQuery]: {
                 paddingLeft: theme.spacing(1.5),
@@ -153,7 +153,7 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
         popper: {
             overflow: 'visible',
             backgroundColor: theme.palette.maskColor.dark,
-            transform: 'translate(196px, 47px)',
+            transform: 'RedPacketTrans(196px, 47px)',
             borderRadius: 8,
             width: 328,
             padding: 10,
@@ -167,7 +167,7 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             borderLeft: '6px solid transparent',
             borderRight: '6px solid transparent',
             borderBottom: `6px solid ${theme.palette.maskColor.dark}`,
-            transform: 'translateY(6px)',
+            transform: 'RedPacketTransY(6px)',
         },
         popperText: {
             cursor: 'default',
@@ -201,7 +201,7 @@ export interface RedPacketInHistoryListProps {
 }
 export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const { history, onSelect } = props
-    const t = useI18N()
+    const t = useRedPacketI18N()
     const [isViewed, setIsViewed] = useState(false)
 
     const ref = useRef<HTMLLIElement | null>(null)
@@ -345,7 +345,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
 
                         <section className={classes.footer}>
                             <Typography variant="body1" className={classes.footerInfo}>
-                                <Translate.history_claimed
+                                <RedPacketTrans.history_claimed
                                     components={{
                                         span: <span />,
                                     }}

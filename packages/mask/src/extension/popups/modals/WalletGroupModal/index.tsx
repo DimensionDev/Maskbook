@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react'
 import { ActionModal, useActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
 import { useWalletGroup } from '../../hooks/useWalletGroup.js'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 export const WalletGroupModal = memo<ActionModalBaseProps>(function WalletGroupModal({ ...rest }) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes } = useStyles()
     const walletGroup = useWalletGroup()
     const currentWallet = useWallet()

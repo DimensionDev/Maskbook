@@ -16,7 +16,7 @@ import { CopyButton, PersonaContext } from '@masknet/shared'
 import { NextIDPlatform } from '@masknet/shared-base'
 import { attachNextIDToProfile } from '../../../../../utils/utils.js'
 import { ConnectedAccounts } from './ConnectedAccounts/index.js'
-import { useI18N } from '../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../../utils/i18n-next-ui.js'
 import Services from '#services'
 import { type Friend, useFriendProfiles } from '../../../hooks/index.js'
 
@@ -82,7 +82,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
     const [local, setLocal] = useState(false)
     const [seen, ref] = useEverSeen<HTMLLIElement>()
     const { currentPersona } = PersonaContext.useContainer()
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const profiles = useFriendProfiles(seen, nextId, profile?.userId)
     const rawPublicKey = currentPersona?.identifier.rawPublicKey
     const queryClient = useQueryClient()

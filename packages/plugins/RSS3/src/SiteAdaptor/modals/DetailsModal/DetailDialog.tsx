@@ -6,7 +6,7 @@ import { ScopedDomainsContainer, useReverseAddress } from '@masknet/web3-hooks-b
 import { Others } from '@masknet/web3-providers'
 import { DialogContent, Typography } from '@mui/material'
 import { useMemo, type PropsWithChildren } from 'react'
-import { useI18N } from '../../../locales/index.js'
+import { useRSS3I18N } from '../../../locales/index.js'
 import type { FeedCardProps } from '../../components/base.js'
 import { FeedCard } from '../../components/index.js'
 import { hostIconMap, hostNameMap, type CardType } from '../../components/share.js'
@@ -67,7 +67,7 @@ export interface FeedDetailsDialogProps
 }
 
 export function FeedDetailsDialog({ type, feed, onClose, actionIndex, ...rest }: FeedDetailsDialogProps) {
-    const t = useI18N()
+    const t = useRSS3I18N()
     const { classes } = useStyles()
     const links = feed.actions[0].related_urls
 

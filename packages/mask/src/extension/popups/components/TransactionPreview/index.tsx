@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { memo, useMemo } from 'react'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
 import {
     TransactionDescriptorType,
     formatBalance,
@@ -82,7 +82,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
     paymentToken,
     onPaymentTokenChange,
 }) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const contacts = useContacts()

@@ -3,7 +3,7 @@ import { EMPTY_LIST, type EnhanceableSite } from '@masknet/shared-base'
 import { PersonaContext } from '@masknet/shared'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType } from '@masknet/web3-telemetry/types'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
 import { ConnectSocialAccounts } from '../../components/ConnectSocialAccounts/index.js'
 import { useSupportSocialNetworks } from '../../hooks/index.js'
@@ -11,7 +11,7 @@ import Services from '#services'
 import { EventMap } from '../../pages/Personas/common.js'
 
 export const ConnectSocialAccountModal = memo<ActionModalBaseProps>(function ConnectSocialAccountModal({ ...rest }) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { value: definedSocialNetworks = EMPTY_LIST } = useSupportSocialNetworks()
 
     const { currentPersona } = PersonaContext.useContainer()

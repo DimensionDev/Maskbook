@@ -16,7 +16,7 @@ import { ArticlesTab } from './ArticlesTab.js'
 import { DetailsTab } from './DetailsTab.js'
 import { DrawDialog } from './DrawDialog.js'
 import { DrawResultDialog } from './DrawResultDialog.js'
-import { useI18N } from '../../locales/index.js'
+import { useMaskBoxI18N } from '../../locales/index.js'
 
 const useTabsStyles = makeStyles()((theme) => ({
     button: {
@@ -134,7 +134,7 @@ export function PreviewCard(props: PreviewCardProps) {
     const { chainId } = useChainContext()
     const networkDescriptor = useNetworkDescriptor()
     const theme = useTheme()
-    const t = useI18N()
+    const t = useMaskBoxI18N()
     const {
         boxState,
         boxStateMessage,

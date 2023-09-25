@@ -3,7 +3,7 @@ import { ThemeProvider } from '@mui/material'
 import { TrendingCard, type TrendingCardProps } from './TrendingCard.js'
 import { EmptyStatus } from '@masknet/shared'
 import { TrendingViewDescriptor, type TrendingViewDescriptorProps } from './TrendingViewDescriptor.js'
-import { useI18N } from '../../locales/index.js'
+import { useTraderI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
 interface Props extends TrendingCardProps, TrendingViewDescriptorProps {}
 
 export function FailedTrendingView({ result, resultList, setResult, ...rest }: Props) {
-    const t = useI18N()
+    const t = useTraderI18N()
     const { classes } = useStyles()
     return (
         <ThemeProvider theme={MaskLightTheme}>

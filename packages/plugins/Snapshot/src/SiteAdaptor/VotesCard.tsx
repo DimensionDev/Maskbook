@@ -14,7 +14,7 @@ import { useProposal } from './hooks/useProposal.js'
 import { LoadingCard } from './LoadingCard.js'
 import { LoadingFailCard } from './LoadingFailCard.js'
 import { SnapshotCard } from './SnapshotCard.js'
-import { useI18N } from '../locales/index.js'
+import { useSnapshotI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -90,7 +90,7 @@ function Content() {
     const proposal = useProposal(identifier.id)
     const votes = useVotes(identifier, account)
     const { classes, cx, theme } = useStyles()
-    const t = useI18N()
+    const t = useSnapshotI18N()
     return (
         <SnapshotCard
             lazy
@@ -178,12 +178,12 @@ function Content() {
 }
 
 function Loading(props: React.PropsWithChildren<{}>) {
-    const t = useI18N()
+    const t = useSnapshotI18N()
     return <LoadingCard title={t.plugin_snapshot_votes_title()}>{props.children}</LoadingCard>
 }
 
 function Fail(props: React.PropsWithChildren<{}>) {
-    const t = useI18N()
+    const t = useSnapshotI18N()
     const retry = unstable_useCacheRefresh()
     return (
         <LoadingFailCard title={t.plugin_snapshot_votes_title()} retry={retry}>

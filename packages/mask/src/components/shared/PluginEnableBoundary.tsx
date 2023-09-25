@@ -6,7 +6,7 @@ import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
 import Services from '#services'
-import { useI18N } from '../../utils/index.js'
+import { useMaskSharedI18N } from '../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -24,7 +24,7 @@ interface PluginEnableBoundaryProps extends withClasses<'root'> {
 }
 
 export const PluginEnableBoundary = memo<PluginEnableBoundaryProps>((props) => {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { children, pluginID } = props
     const { classes } = useStyles(undefined, { props })
 

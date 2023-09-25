@@ -39,7 +39,7 @@ import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme
 import { NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ScopedDomainsContainer, useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
-import { useI18N } from '../../utils/index.js'
+import { useMaskSharedI18N } from '../../utils/index.js'
 import {
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
@@ -138,7 +138,7 @@ function openWeb3ProfileSettingDialog() {
 function Content(props: ProfileTabContentProps) {
     const { classes } = useStyles(undefined, { props })
 
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const translate = usePluginI18NField()
 
     const [hidden, setHidden] = useState(true)

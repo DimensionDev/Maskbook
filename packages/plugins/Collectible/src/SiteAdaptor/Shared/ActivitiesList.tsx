@@ -4,7 +4,7 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useNonFungibleEvents } from '@masknet/web3-hooks-base'
 import { Stack } from '@mui/material'
 import { useMemo } from 'react'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { useCollectibleI18N } from '../../locales/i18n_generated.js'
 import { Context } from '../Context/index.js'
 import { ActivityCard } from './ActivityCard.js'
 
@@ -24,7 +24,7 @@ const useStyles = makeStyles()({
 export function ActivitiesList() {
     const { pluginID, tokenAddress, tokenId, chainId, ownerAddress } = Context.useContainer()
 
-    const t = useI18N()
+    const t = useCollectibleI18N()
     const { classes } = useStyles()
 
     const { data, isLoading, error, hasNextPage, fetchNextPage, refetch } = useNonFungibleEvents(

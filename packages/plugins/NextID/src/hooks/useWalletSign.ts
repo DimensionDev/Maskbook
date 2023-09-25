@@ -1,10 +1,10 @@
 import { useAsyncFn, useUpdateEffect } from 'react-use'
 import { useCustomSnackbar } from '@masknet/theme'
 import { Web3 } from '@masknet/web3-providers'
-import { useI18N } from '../locales/index.js'
+import { useNextID_I18N } from '../locales/index.js'
 
 export const useWalletSign = (message?: string, address?: string) => {
-    const t = useI18N()
+    const t = useNextID_I18N()
     const { showSnackbar } = useCustomSnackbar()
 
     const [state, fn] = useAsyncFn(

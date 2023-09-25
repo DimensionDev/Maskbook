@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { ActionModal, useModalNavigate, type ActionModalBaseProps } from '../../components/index.js'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { PersonaContext } from '@masknet/shared'
@@ -49,7 +49,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const PersonaSettingModal = memo<ActionModalBaseProps>(function PersonaSettingModal({ ...rest }) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes } = useStyles()
     const { user } = UserContext.useContainer()
     const { currentPersona, avatar, proofs } = PersonaContext.useContainer()

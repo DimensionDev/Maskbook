@@ -10,7 +10,7 @@ import type { SecurityAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, DialogActions, DialogContent, Stack } from '@mui/material'
-import { useI18N } from '../locales/index.js'
+import { useGoPlusLabsI18N } from '../locales/index.js'
 import { DefaultPlaceholder } from './components/DefaultPlaceholder.js'
 import { Footer } from './components/Footer.js'
 import { NotFound } from './components/NotFound.js'
@@ -41,7 +41,7 @@ interface Props {
     tokenAddress: string
 }
 export function CheckSecurityDialog({ open, onClose, searchHidden, chainId, tokenAddress }: Props) {
-    const t = useI18N()
+    const t = useGoPlusLabsI18N()
     const { classes } = useStyles()
 
     useEffect(() => {

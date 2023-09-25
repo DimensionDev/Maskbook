@@ -4,7 +4,7 @@ import { Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ElementAnchor, EmptyStatus } from '@masknet/shared'
 import { ContactCard } from '../ContactCard/index.js'
-import { useI18N } from '../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../../utils/i18n-next-ui.js'
 import { type Friend } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -40,7 +40,7 @@ export interface ContactsProps {
 
 export const Contacts = memo<ContactsProps>(function Contacts({ friendsArray, fetchNextPage }) {
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     return !first(friendsArray) || first(friendsArray)?.friends.length === 0 ? (
         <EmptyStatus className={classes.empty}>{t('popups_encrypted_friends_no_friends')}</EmptyStatus>
     ) : (

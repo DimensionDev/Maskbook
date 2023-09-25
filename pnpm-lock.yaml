@@ -744,9 +744,6 @@ importers:
       '@masknet/plugin-evm':
         specifier: workspace:^
         version: link:../plugins/EVM
-      '@masknet/plugin-example':
-        specifier: workspace:^
-        version: link:../plugins/Example
       '@masknet/plugin-external':
         specifier: workspace:^
         version: link:../plugins/External
@@ -1887,18 +1884,6 @@ importers:
       '@types/use-subscription':
         specifier: ^1.0.0
         version: 1.0.0
-
-  packages/plugins/Example:
-    dependencies:
-      '@masknet/plugin-infra':
-        specifier: workspace:^
-        version: link:../../plugin-infra
-      '@masknet/shared-base':
-        specifier: workspace:^
-        version: link:../../shared-base
-      ts-results-es:
-        specifier: ^4.0.0
-        version: 4.0.0
 
   packages/plugins/External:
     dependencies:

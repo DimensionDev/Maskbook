@@ -3,7 +3,7 @@ import { useChainContext, useWeb3Connection, useWeb3State } from '@masknet/web3-
 import type { ConnectionOptions } from '@masknet/web3-providers/types'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { TipTuple } from './type.js'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { useTipsI18N } from '../../locales/i18n_generated.js'
 
 export function useNftTip<T extends NetworkPluginID>(
     pluginID: T,
@@ -12,7 +12,7 @@ export function useNftTip<T extends NetworkPluginID>(
     tokenId?: string | null,
     options?: ConnectionOptions<T>,
 ): TipTuple {
-    const t = useI18N()
+    const t = useTipsI18N()
     const { Token } = useWeb3State<'all'>(pluginID)
     const { account, chainId } = useChainContext()
     const Web3 = useWeb3Connection(pluginID, {

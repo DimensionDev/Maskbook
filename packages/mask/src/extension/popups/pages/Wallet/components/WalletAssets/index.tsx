@@ -7,7 +7,7 @@ import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab, styled, tabClasses, tabsClasses } from '@mui/material'
 import { memo, useCallback, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useI18N } from '../../../../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../../../../utils/index.js'
 import { useParamTab } from '../../../../hooks/index.js'
 import { WalletAssetTabs } from '../../type.js'
 import { ActivityList } from '../ActivityList/index.js'
@@ -110,7 +110,7 @@ interface WalletAssetsUIProps {
 }
 
 export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI({ onAddToken }) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const [params] = useSearchParams()
 
     const { classes } = useStyles()

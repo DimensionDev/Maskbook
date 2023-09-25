@@ -1,4 +1,4 @@
-import { useI18N } from '../../utils/index.js'
+import { useMaskSharedI18N } from '../../utils/index.js'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { PopoverListTrigger } from './PopoverListTrigger.js'
@@ -32,7 +32,7 @@ export enum EncryptionMethodType {
     Image = 'image',
 }
 export function EncryptionMethodSelector(props: EncryptionMethodSelectorProps) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes } = useStyles()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 

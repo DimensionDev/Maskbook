@@ -7,7 +7,7 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import { Others } from '@masknet/web3-providers'
 import { Close } from '@mui/icons-material'
 import { alpha, Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { useSmartPayI18N } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -67,7 +67,7 @@ interface Props {
     onClose(): void
 }
 export const ReceiveDialog = memo(function ReceiveDialog({ address, name, open, onClose }: Props) {
-    const t = useI18N()
+    const t = useSmartPayI18N()
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 

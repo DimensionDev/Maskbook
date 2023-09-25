@@ -14,7 +14,7 @@ import { SnapshotContext } from '../context.js'
 import { SNAPSHOT_VOTE_DOMAIN } from '../constants.js'
 import { getSnapshotVoteType } from '../utils.js'
 import { PluginSnapshotRPC } from '../messages.js'
-import { useI18N } from '../locales/index.js'
+import { useSnapshotI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -49,7 +49,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export function VotingCard() {
-    const t = useI18N()
+    const t = useSnapshotI18N()
     const { classes, cx } = useStyles()
     const identifier = useContext(SnapshotContext)
     const proposal = useProposal(identifier.id)

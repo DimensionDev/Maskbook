@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
 import { Box, List } from '@mui/material'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedI18N } from '../../../../utils/i18n-next-ui.js'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { PersonaContext } from '@masknet/shared'
 import { PersonaItem } from './PersonaItem.js'
@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const SwitchPersonaModal = memo<ActionModalBaseProps>(function SwitchPersonaModal({ ...rest }) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const navigate = useNavigate()
     const { classes } = useStyles()
     const { personas, currentPersona } = PersonaContext.useContainer()

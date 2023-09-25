@@ -7,13 +7,13 @@ import { type PersonaInformation, PopupRoutes, SignType, MaskMessages } from '@m
 import { usePersonasFromDB } from '../../../../../components/DataSource/usePersonasFromDB.js'
 import { MethodAfterPersonaSign } from '../../Wallet/type.js'
 import Services from '#services'
-import { useI18N } from '../../../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../../../utils/index.js'
 import { SignRequestInfo } from '../../../components/SignRequestInfo/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { Box } from '@mui/material'
 
 const PersonaSignRequest = memo(() => {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const navigate = useNavigate()
     const [params] = useSearchParams()
     const [requestID, setRequestID] = useState<string>()

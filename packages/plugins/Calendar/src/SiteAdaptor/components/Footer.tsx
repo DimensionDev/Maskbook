@@ -3,7 +3,7 @@ import React, { type ReactNode } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Typography, IconButton } from '@mui/material'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { useCalendarI18N } from '../../locales/i18n_generated.js'
 import { useOpenApplicationSettings, ApplicationSettingTabs } from '@masknet/shared'
 import { PluginID } from '@masknet/shared-base'
 
@@ -65,7 +65,7 @@ interface FooterProps {
 
 export function Footer({ provider }: FooterProps) {
     const { classes } = useStyles()
-    const t = useI18N()
+    const t = useCalendarI18N()
     const providerMap: Record<string, ReactNode> = {
         news: (
             <>

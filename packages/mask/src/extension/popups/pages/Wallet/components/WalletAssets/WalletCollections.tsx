@@ -7,7 +7,7 @@ import { Typography } from '@mui/material'
 import { forwardRef, memo, useCallback, useMemo } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import urlcat from 'urlcat'
-import { useI18N } from '../../../../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../../../../utils/index.js'
 import { WalletAssetTabs } from '../../type.js'
 import { useParamTab } from '../../../../hooks/index.js'
 
@@ -32,7 +32,7 @@ interface Props {
 
 export const WalletCollections = memo<Props>(
     forwardRef<HTMLDivElement, Props>(function WalletCollections({ onAddToken, scrollTargetRef }, ref) {
-        const { t } = useI18N()
+        const { t } = useMaskSharedI18N()
         const { classes } = useStyles()
         const [currentTab] = useParamTab<WalletAssetTabs>(WalletAssetTabs.Tokens)
         const [, setParams] = useSearchParams()

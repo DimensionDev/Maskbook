@@ -1,4 +1,4 @@
-import { useI18N } from '../locales/index.js'
+import { useApprovalI18N } from '../locales/index.js'
 import { Icons } from '@masknet/icons'
 import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -34,7 +34,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
 export function ApprovalEmptyContent() {
     const { classes, cx } = useStyles()
 
-    const t = useI18N()
+    const t = useApprovalI18N()
     return (
         <div className={classes.approvalEmptyOrLoadingWrapper}>
             <div className={cx(classes.approvalEmptyOrLoadingContent, classes.emptyText)}>

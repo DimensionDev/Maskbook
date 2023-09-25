@@ -9,7 +9,7 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import { EmojiAvatar, FormattedAddress, useMenuConfig } from '@masknet/shared'
 import { ExplorerResolver } from '@masknet/web3-providers'
-import { useI18N } from '../../../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../../../utils/index.js'
 import { useTitle, ContactsContext } from '../../../hooks/index.js'
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
 import { DeleteContactModal, EditContactModal, AddContactModal } from '../../../modals/modals.js'
@@ -136,7 +136,7 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean }>()
 )
 
 const ContactListUI = memo(function ContactListUI() {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const theme = useTheme()
     const { setExtension } = useContext(PageTitleContext)
     const state = useLocation().state as
@@ -255,7 +255,7 @@ interface ContactListItemProps extends ListItemProps {
 }
 
 function ContactListItem({ address, name, contactType, onSelectContact, ...rest }: ContactListItemProps) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes } = useStyles({ showDivideLine: contactType === ContactType.Recipient })
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const theme = useTheme()

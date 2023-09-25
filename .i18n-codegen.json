@@ -10,7 +10,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useMaskSharedI18N",
                 "namespace": "mask",
-                "trans": "MaskSharedTranslate",
+                "trans": "MaskSharedTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -36,7 +36,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useSharedI18N",
                 "namespace": "shared",
-                "trans": "SharedTranslate",
+                "trans": "SharedTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -49,7 +49,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useSharedBaseI18N",
                 "namespace": "shareBase",
-                "trans": "SharedBaseTranslate",
+                "trans": "SharedBaseTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -62,7 +62,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useDashboardI18N",
                 "namespace": "dashboard",
-                "trans": "DashboardTranslate",
+                "trans": "DashboardTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -75,7 +75,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useDebuggerI18N",
                 "namespace": "io.mask.debugger",
-                "trans": "DebuggerTranslate",
+                "trans": "DebuggerTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -88,7 +88,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useFlowI18N",
                 "namespace": "com.mask.flow",
-                "trans": "FlowTranslate",
+                "trans": "FlowTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -101,7 +101,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useFileServiceI18N",
                 "namespace": "com.maskbook.fileservice",
-                "trans": "FileServiceTranslate",
+                "trans": "FileServiceTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -114,7 +114,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useScamSnifferI18N",
                 "namespace": "io.scamsniffer.mask-plugin",
-                "trans": "ScamSnifferTranslate",
+                "trans": "ScamSnifferTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -127,7 +127,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useCyberConnectI18N",
                 "namespace": "me.cyberconnect.app",
-                "trans": "CyberConnectTranslate",
+                "trans": "CyberConnectTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -140,7 +140,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useRSS3I18N",
                 "namespace": "bio.rss3",
-                "trans": "RSS3Translate",
+                "trans": "RSS3Trans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -153,7 +153,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useEVM_I18N",
                 "namespace": "com.mask.evm",
-                "trans": "EVM_Translate",
+                "trans": "EVM_Trans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -166,7 +166,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useSolanaI18N",
                 "namespace": "com.maskbook.solana",
-                "trans": "SolanaTranslate",
+                "trans": "SolanaTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -179,7 +179,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useNextID_I18N",
                 "namespace": "com.mask.next_id",
-                "trans": "NextID_Translate",
+                "trans": "NextID_Trans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -192,7 +192,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useTemplateI18N",
                 "namespace": "__template__",
-                "trans": "TemplateTranslate",
+                "trans": "TemplateTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -205,7 +205,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useGoPlusLabsI18N",
                 "namespace": "io.gopluslabs.security",
-                "trans": "GoPlusLabsTranslate",
+                "trans": "GoPlusLabsTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -218,7 +218,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useCrossChainBridgeI18N",
                 "namespace": "io.mask.cross-chain-bridge",
-                "trans": "CrossChainBridgeTranslate",
+                "trans": "CrossChainBridgeTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -231,7 +231,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useRedPacketI18N",
                 "namespace": "com.maskbook.red_packet",
-                "trans": "RedPacketTranslate",
+                "trans": "RedPacketTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -244,7 +244,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useTipsI18N",
                 "namespace": "com.maskbook.tip",
-                "trans": "TipsTranslate",
+                "trans": "TipsTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -257,7 +257,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useAvatarI18N",
                 "namespace": "com.maskbook.avatar",
-                "trans": "AvatarTranslate",
+                "trans": "AvatarTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -270,7 +270,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useTraderI18N",
                 "namespace": "com.maskbook.trader",
-                "trans": "TraderTranslate",
+                "trans": "TraderTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -283,7 +283,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useGitcoinI18N",
                 "namespace": "co.gitcoin",
-                "trans": "GitcoinTranslate",
+                "trans": "GitcoinTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -296,7 +296,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useMaskBoxI18N",
                 "namespace": "com.maskbook.box",
-                "trans": "MaskBoxTranslate",
+                "trans": "MaskBoxTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -309,7 +309,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useGameI18N",
                 "namespace": "com.maskbook.game",
-                "trans": "GameTranslate",
+                "trans": "GameTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -322,7 +322,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "usePetsI18N",
                 "namespace": "com.maskbook.pets",
-                "trans": "PetsTranslate",
+                "trans": "PetsTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -335,7 +335,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useWeb3ProfileI18N",
                 "namespace": "io.mask.web3-profile",
-                "trans": "Web3ProfileTranslate",
+                "trans": "Web3ProfileTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -348,7 +348,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useHandleI18N",
                 "namespace": "com.maskbook.handle",
-                "trans": "HandleTranslate",
+                "trans": "HandleTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -361,7 +361,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useApprovalI18N",
                 "namespace": "com.maskbook.approval",
-                "trans": "ApprovalTranslate",
+                "trans": "ApprovalTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -374,7 +374,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useScamWarningI18N",
                 "namespace": "com.mask.scam-warning",
-                "trans": "ScamWarningTranslate",
+                "trans": "ScamWarningTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -387,7 +387,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useSmartPayI18N",
                 "namespace": "com.mask.smart-pay",
-                "trans": "SmartPayTranslate",
+                "trans": "SmartPayTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -400,7 +400,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useVCentI18N",
                 "namespace": "com.maskbook.tweet",
-                "trans": "VCentTranslate",
+                "trans": "VCentTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -413,7 +413,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useTransakI18N",
                 "namespace": "com.maskbook.transak",
-                "trans": "TransakTranslate",
+                "trans": "TransakTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }
@@ -439,7 +439,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useClaimI18N",
                 "namespace": "com.mask.claim",
-                "trans": "ClaimTranslate",
+                "trans": "ClaimTrans",
                 "emitTS": true
             }
         },
@@ -451,7 +451,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useArtBlocksI18N",
                 "namespace": "io.artblocks",
-                "trans": "ArtBlocksTranslate",
+                "trans": "ArtBlocksTrans",
                 "emitTS": true
             }
         },
@@ -463,7 +463,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useExternalI18N",
                 "namespace": "io.mask.external",
-                "trans": "ExternalTranslate",
+                "trans": "ExternalTrans",
                 "emitTS": true
             }
         },
@@ -475,7 +475,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useSavingsI18N",
                 "namespace": "com.savings",
-                "trans": "SavingsTranslate",
+                "trans": "SavingsTrans",
                 "emitTS": true
             }
         },
@@ -487,7 +487,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useSnapshotI18N",
                 "namespace": "org.snapshot",
-                "trans": "SnapshotTranslate",
+                "trans": "SnapshotTrans",
                 "emitTS": true
             }
         },
@@ -499,7 +499,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useProfileCardI18N",
                 "namespace": "io.mask.web3-profile-card",
-                "trans": "ProfileCardTranslate",
+                "trans": "ProfileCardTrans",
                 "emitTS": true
             }
         },
@@ -511,7 +511,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useSwitchLogoI18N",
                 "namespace": "io.mask.switch-logo",
-                "trans": "SwitchLogoTranslate",
+                "trans": "SwitchLogoTrans",
                 "emitTS": true
             }
         },
@@ -523,7 +523,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useCalendarI18N",
                 "namespace": "io.mask.calendar",
-                "trans": "CalendarTranslate",
+                "trans": "CalendarTrans",
                 "emitTS": true
             }
         }

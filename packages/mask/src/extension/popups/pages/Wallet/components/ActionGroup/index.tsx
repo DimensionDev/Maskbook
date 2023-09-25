@@ -8,7 +8,7 @@ import { Box, Typography, type BoxProps } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
-import { useI18N } from '../../../../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../../../../utils/index.js'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => {
@@ -65,7 +65,7 @@ interface Props extends BoxProps {
 
 export const ActionGroup = memo(function ActionGroup({ className, chainId, address, asset, ...rest }: Props) {
     const { classes, cx, theme } = useStyles()
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const navigate = useNavigate()
     const location = useLocation()
     const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')

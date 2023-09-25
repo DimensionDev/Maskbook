@@ -7,7 +7,7 @@ import type { ReasonableNetwork } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography } from '@mui/material'
 import { memo, type MouseEvent } from 'react'
-import { useI18N } from '../../../../../../utils/index.js'
+import { useMaskSharedI18N } from '../../../../../../utils/index.js'
 import { useConnectedWallets } from '../../hooks/useConnected.js'
 import { ActionGroup } from '../ActionGroup/index.js'
 import { WalletAssetsValue } from './WalletAssetsValue.js'
@@ -141,7 +141,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
     disableCopy = false,
     origin,
 }) {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { classes, cx } = useStyles({ disabled })
     const { data: connectedWallets, isLoading } = useConnectedWallets(origin)
     const connected = connectedWallets?.has(wallet.address)

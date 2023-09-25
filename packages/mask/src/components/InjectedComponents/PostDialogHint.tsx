@@ -3,7 +3,7 @@ import { MaskColors, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { IconButton, Typography } from '@mui/material'
 import { memo } from 'react'
 import { isMobileFacebook } from '../../site-adaptors/facebook.com/utils/isMobile.js'
-import { useI18N } from '../../utils/index.js'
+import { useMaskSharedI18N } from '../../utils/index.js'
 import GuideStep from '../GuideStep/index.js'
 
 interface TooltipConfigProps {
@@ -43,7 +43,7 @@ const ICON_MAP: Record<string, JSX.Element> = {
 }
 
 const EntryIconButton = memo((props: PostDialogHintUIProps) => {
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const { tooltip, disableGuideTip } = props
     const { classes, cx } = useStyles(undefined, { props })
 
@@ -77,7 +77,7 @@ const EntryIconButton = memo((props: PostDialogHintUIProps) => {
 export const PostDialogHint = memo(function PostDialogHintUI(props: PostDialogHintUIProps) {
     const { onHintButtonClicked, size, ...others } = props
     const { classes } = useStyles(undefined, { props })
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
 
     return isMobileFacebook ? (
         <div className={classes.wrapper} onClick={onHintButtonClicked}>

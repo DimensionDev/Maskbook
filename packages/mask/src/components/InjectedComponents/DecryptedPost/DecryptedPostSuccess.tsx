@@ -1,5 +1,5 @@
 import { memo, useContext, useEffect, useState } from 'react'
-import { attachNextIDToProfile, useI18N } from '../../../utils/index.js'
+import { attachNextIDToProfile, useMaskSharedI18N } from '../../../utils/index.js'
 import { AdditionalContent } from '../AdditionalPostContent.js'
 import { SelectProfileDialog } from '../SelectPeopleDialog.js'
 import { makeStyles } from '@masknet/theme'
@@ -51,7 +51,7 @@ const DecryptPostSuccessBase = memo(function DecryptPostSuccessNoShare(
     props: React.PropsWithChildren<DecryptPostSuccessProps>,
 ) {
     const { message, author, postedBy } = props
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const iv = usePostInfoDetails.postIVIdentifier()
 
     useEffect(() => {
@@ -97,7 +97,7 @@ const useStyles = makeStyles<{ canAppendShareTarget: boolean }>()((theme, { canA
 export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: DecryptPostSuccessProps) {
     const canAppendShareTarget = useCanAppendShareTarget(props.whoAmI)
     const { classes } = useStyles({ canAppendShareTarget })
-    const { t } = useI18N()
+    const { t } = useMaskSharedI18N()
     const [showDialog, setShowDialog] = useState(false)
     const theme = useTheme()
     const recipients = useRecipientsList()

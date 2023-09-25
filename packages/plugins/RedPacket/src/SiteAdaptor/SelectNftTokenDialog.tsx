@@ -12,7 +12,7 @@ import { Icons } from '@masknet/icons'
 import { Web3 } from '@masknet/web3-providers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { RED_PACKET_MAX_SHARES } from '../constants.js'
-import { Translate, useI18N } from '../locales/index.js'
+import { RedPacketTrans, useRedPacketI18N } from '../locales/index.js'
 
 interface StyleProps {
     isSelectSharesExceed: boolean
@@ -164,7 +164,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         width: 12,
         border: `1px solid ${theme.palette.mode === 'light' ? '#0F1419' : '#D9D9D9'}`,
         borderRadius: 999,
-        transform: 'translateY(-1px)',
+        transform: 'RedPacketTransY(-1px)',
         height: 12,
         marginLeft: 5,
         cursor: 'pointer',
@@ -206,10 +206,10 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
     arrow: {
         color: theme.palette.mode === 'dark' ? '#fff' : '#111418',
-        transform: 'translateX(260px) !important',
+        transform: 'RedPacketTransX(260px) !important',
     },
     tooltip: {
-        transform: 'translateX(20px) !important',
+        transform: 'RedPacketTransX(20px) !important',
         padding: '10px 20px',
         width: 256,
         backgroundColor: theme.palette.mode === 'dark' ? '#fff' : '#111418',
@@ -239,7 +239,7 @@ export interface SelectNftTokenDialogProps {
 export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const { contract, existTokenDetailedList, tokenDetailedOwnerList, setExistTokenDetailedList, onClose } = props
     const theme = useTheme()
-    const t = useI18N()
+    const t = useRedPacketI18N()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [searchedTokenDetailedList, setSearchedTokenDetailedList] = useState<OrderedERC721Token[]>()
     const [searched, setSearched] = useState(false)
@@ -414,7 +414,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                         <QuestionMarkIcon className={classes.questionMarkIcon} />
                     </ShadowRootTooltip>
                     <Typography>
-                        <Translate.nft_select_amount
+                        <RedPacketTrans.nft_select_amount
                             components={{ span: <span className={classes.selectedTokenAmount} /> }}
                             values={{ count: tokenDetailedSelectedList.length }}
                         />
@@ -470,7 +470,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                     </Typography>
                                 </div>
                                 <Typography>
-                                    <Translate.nft_shift_select_tip
+                                    <RedPacketTrans.nft_shift_select_tip
                                         components={{
                                             text: <span style={{ color: theme.palette.maskColor.primary }} />,
                                         }}
