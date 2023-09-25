@@ -15,7 +15,6 @@ import type { PopupSSR_Props } from '../../../background/tasks/Cancellable/Popup
 import { PersonaHomeUI } from './pages/Personas/Home/UI.js'
 import { usePopupTheme } from '../../utils/theme/usePopupTheme.js'
 import { PopupLayout } from './components/PopupLayout/index.js'
-import { WalletLinkContext } from './components/Navigator/index.js'
 
 const init = once(() =>
     i18NextInstance.init().then(() => {
@@ -44,7 +43,6 @@ export async function render(props: PopupSSR_Props) {
     return { html, css }
 }
 
-const walletLink = () => '#'
 function PopupSSR(props: PopupSSR_Props) {
     return (
         // MaskUIRoot
@@ -54,23 +52,21 @@ function PopupSSR(props: PopupSSR_Props) {
                     useTheme={usePopupTheme}
                     CustomSnackbarOffsetY={0}
                     useMaskIconPalette={() => 'light'}>
-                    <WalletLinkContext.Provider value={walletLink}>
-                        <PopupLayout>
-                            <PersonaHomeUI
-                                accounts={props.accounts ?? EMPTY_LIST}
-                                networks={props.networks}
-                                onRestore={noop}
-                                onCreatePersona={noop}
-                                onConnect={noop}
-                                onAccountClick={noop}
-                                avatar={props.avatar}
-                                publicKey={props.currentPublicKeyHex}
-                                fingerprint={props.currentFingerPrint}
-                                isEmpty={!props.hasPersona}
-                                nickname={props.nickname}
-                            />
-                        </PopupLayout>
-                    </WalletLinkContext.Provider>
+                    <PopupLayout>
+                        <PersonaHomeUI
+                            accounts={props.accounts ?? EMPTY_LIST}
+                            networks={props.networks}
+                            onRestore={noop}
+                            onCreatePersona={noop}
+                            onConnect={noop}
+                            onAccountClick={noop}
+                            avatar={props.avatar}
+                            publicKey={props.currentPublicKeyHex}
+                            fingerprint={props.currentFingerPrint}
+                            isEmpty={!props.hasPersona}
+                            nickname={props.nickname}
+                        />
+                    </PopupLayout>
                 </MaskThemeProvider>
             </StaticRouter>
         </DisableShadowRootContext.Provider>

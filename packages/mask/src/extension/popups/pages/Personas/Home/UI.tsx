@@ -219,7 +219,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                     value === PopupHomeTabType.ConnectedWallets &&
                     hasPaymentPassword
                 ) {
-                    navigate(urlcat(PopupRoutes.Unlock, { from: PopupRoutes.Personas, goBack: true, popup: true }))
+                    navigate(urlcat(PopupRoutes.Wallet, { from: PopupRoutes.Personas, goBack: true, popup: true }))
                     return
                 }
                 onChange(event, value)

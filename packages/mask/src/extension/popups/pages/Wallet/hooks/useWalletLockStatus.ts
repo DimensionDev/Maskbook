@@ -1,21 +1,14 @@
-import { useAsyncRetry } from 'react-use'
 import { useEffect } from 'react'
 import Services from '#services'
 import { CrossIsolationMessages } from '@masknet/shared-base'
+import { useQuery } from '@tanstack/react-query'
 
 export function useWalletLockStatus() {
-    const {
-        value: isLocked,
-        loading,
-        error,
-        retry,
-    } = useAsyncRetry(async () => {
-        return Services.Wallet.isLocked()
-    }, [])
+    const { data: isLocked, isLoading: loading, error, refetch } = useQuery(['@@is-locked'], Services.Wallet.isLocked)
 
     useEffect(() => {
-        return CrossIsolationMessages.events.walletLockStatusUpdated.on(retry)
-    }, [retry])
+        return CrossIsolationMessages.events.walletLockStatusUpdated.on(() => refetch())
+    }, [])
 
     return {
         error,

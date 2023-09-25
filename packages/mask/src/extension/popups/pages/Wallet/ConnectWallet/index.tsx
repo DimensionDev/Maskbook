@@ -10,10 +10,10 @@ import { useWeb3UI, useWallets } from '@masknet/web3-hooks-base'
 import { getRegisteredWeb3Networks, getRegisteredWeb3Providers } from '@masknet/plugin-infra'
 import { Web3 } from '@masknet/web3-providers'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import Services from '#services'
 import { useTitle, PopupContext } from '../../../hooks/index.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { useWalletLockStatus } from '../hooks/useWalletLockStatus.js'
-import Services from '#services'
 
 const useStyles = makeStyles()((theme) => ({
     box: {
@@ -76,7 +76,7 @@ const ConnectWalletPage = memo(() => {
                 })
 
                 if (isLocked && !lockStatusLoading) {
-                    navigate(urlcat(PopupRoutes.Unlock, { from: PopupRoutes.SelectWallet, goBack: true, popup: true }))
+                    navigate(urlcat(PopupRoutes.Wallet, { from: PopupRoutes.SelectWallet, goBack: true, popup: true }))
                     return
                 }
 

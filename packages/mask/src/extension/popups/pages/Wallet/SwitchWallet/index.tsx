@@ -103,7 +103,7 @@ const SwitchWallet = memo(function SwitchWallet() {
 
     const handleLock = useCallback(async () => {
         await Services.Wallet.lockWallet()
-        navigate(PopupRoutes.Unlock)
+        navigate(PopupRoutes.Wallet)
     }, [])
 
     const action = (
