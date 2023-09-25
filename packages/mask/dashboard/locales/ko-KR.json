@@ -455,8 +455,6 @@
     "data_backup_title": "백업 내용을 선택하세요.",
     "data_backup_description": "개인 데이터를 복원할 수 있는 적절한 방법을 선택하세요.",
     "cloud_backup_title": "Mask 클라우드 로그인",
-    "cloud_backup_email_exists": "지난 백업 이메일 주소: <strong>{{account}}</strong>.",
-    "cloud_backup_mobile_exists": "지난 백업 전화번호: <strong>{{account}}</strong>.",
     "cloud_backup_no_exist_tips": "자주 이용하는 이메일이나 전화번호로 백업하시길 바랍니다.",
     "cloud_backup_email_title": "이메일",
     "cloud_backup_phone_title": "모바일",
