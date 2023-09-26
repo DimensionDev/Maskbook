@@ -149,6 +149,8 @@ export class Popups implements Middleware<ConnectionContext> {
                 await Web3StateRef.value.Network?.switchNetwork(network?.ID)
             }
 
+            if (!Web3StateRef.value.Message) throw new Error('Failed to approve request.')
+
             const request: TransferableMessage<MessageRequest, MessageResponse> = {
                 state: MessageStateType.NOT_DEPEND,
                 request: {
@@ -163,8 +165,6 @@ export class Popups implements Middleware<ConnectionContext> {
                     },
                 },
             }
-
-            if (!Web3StateRef.value.Message) throw new Error('Failed to approve request.')
             const { request: updates, response } = await Web3StateRef.value.Message.applyAndWaitResponse(request)
 
             context.config = {

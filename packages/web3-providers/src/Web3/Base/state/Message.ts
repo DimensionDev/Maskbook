@@ -1,6 +1,5 @@
 import { v4 as uuid } from 'uuid'
 import type { Subscription } from 'use-subscription'
-import type { WalletAPI } from '../../../entry-types.js'
 import {
     MessageStateType,
     type ReasonableMessage,
@@ -8,7 +7,7 @@ import {
     type MessageState as Web3MessageState,
 } from '@masknet/web3-shared-base'
 import { type NetworkPluginID, PersistentStorages, type StorageObject, mapSubscription } from '@masknet/shared-base'
-import type { JsonRpcResponse } from 'web3-core-helpers'
+import type { WalletAPI } from '../../../entry-types.js'
 
 export class MessageState<Request, Response> implements Web3MessageState<Request, Response> {
     public storage: StorageObject<{
@@ -127,7 +126,7 @@ export class MessageState<Request, Response> implements Web3MessageState<Request
         })
     }
 
-    async approveRequest(id: string, updates?: Request): Promise<JsonRpcResponse | void> {
+    async approveRequest(id: string, updates?: Request): Promise<Response | void> {
         const message = this.assertMessage(id)
 
         await this.updateMessage(id, {
@@ -152,7 +151,7 @@ export class MessageState<Request, Response> implements Web3MessageState<Request
                     id,
                     {
                         ...message,
-                        state: MessageStateType.DENIED,
+                        state: message.state === MessageStateType.NOT_DEPEND ? MessageStateType.DENIED : message.state,
                     },
                 ]),
             ),

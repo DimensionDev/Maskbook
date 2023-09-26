@@ -1,22 +1,69 @@
+import { omitBy } from 'lodash-es'
+import urlcat from 'urlcat'
+import type { JsonRpcResponse } from 'web3-core-helpers'
 import { SiteAdaptorContextRef } from '@masknet/plugin-infra/dom'
 import { EMPTY_OBJECT, NetworkPluginID, PopupRoutes, PopupsHistory, Sniffings } from '@masknet/shared-base'
 import { MessageStateType, type ReasonableMessage } from '@masknet/web3-shared-base'
 import {
     createJsonRpcPayload,
+    PayloadEditor,
     type MessageRequest,
     type MessageResponse,
     type TransactionOptions,
+    EthereumMethodType,
 } from '@masknet/web3-shared-evm'
 import { isUndefined } from '@walletconnect/utils'
-import { omitBy } from 'lodash-es'
-import urlcat from 'urlcat'
-import type { JsonRpcResponse } from 'web3-core-helpers'
-import type { WalletAPI } from '../../../entry-types.js'
 import { MessageState } from '../../Base/state/Message.js'
+import { ConnectionReadonlyAPI } from '../../../Web3/EVM/apis/ConnectionReadonlyAPI.js'
+import type { WalletAPI } from '../../../entry-types.js'
 
 export class Message extends MessageState<MessageRequest, MessageResponse> {
+    private Web3 = new ConnectionReadonlyAPI()
+
     constructor(context: WalletAPI.IOContext) {
         super(context, { pluginID: NetworkPluginID.PLUGIN_EVM })
+    }
+
+    protected resolveRequest(request: MessageRequest, updates?: MessageRequest): MessageRequest {
+        return {
+            arguments: updates?.arguments
+                ? {
+                      ...request.arguments,
+                      ...updates.arguments,
+                  }
+                : request.arguments,
+            options: updates?.options
+                ? {
+                      ...request.options,
+                      ...updates.options,
+                  }
+                : request.options,
+        }
+    }
+
+    protected async updateRequest(request_: MessageRequest, updates?: MessageRequest): Promise<MessageRequest> {
+        const request = this.resolveRequest(request_, updates)
+
+        const { method, chainId, config } = PayloadEditor.fromMethod(request.arguments.method, request.arguments.params)
+        if (method !== EthereumMethodType.ETH_SEND_TRANSACTION) return request
+
+        // recheck the nonce and update it if needed before sending with the transaction
+        if (config.from && typeof config.nonce !== 'undefined') {
+            const nonce = await this.Web3.getTransactionNonce(config.from, {
+                chainId,
+            })
+
+            if (nonce + 1 !== config.nonce) {
+                request.arguments.params = [
+                    {
+                        ...config,
+                        nonce,
+                    },
+                ]
+            }
+        }
+
+        return request
     }
 
     protected override async waitForApprovingRequest(
@@ -48,30 +95,24 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
         return super.waitForApprovingRequest(id)
     }
 
-    override async approveRequest(id: string, updates?: MessageRequest): Promise<JsonRpcResponse> {
-        const { request } = this.assertMessage(id)
+    override async approveRequest(id: string, updates?: MessageRequest): Promise<JsonRpcResponse | void> {
+        const { request: request_ } = this.assertMessage(id)
 
+        const request = await this.updateRequest(request_, updates)
         const response = await this.context.send(
-            createJsonRpcPayload(
-                0,
-                updates?.arguments
-                    ? {
-                          ...request.arguments,
-                          ...updates.arguments,
-                      }
-                    : request.arguments,
-            ),
+            createJsonRpcPayload(0, request.arguments),
             omitBy<TransactionOptions>(request.options, isUndefined),
         )
 
         await this.updateMessage(id, {
-            request: {
-                ...request,
-                ...updates,
-            },
-            state: MessageStateType.APPROVED,
+            request,
             response,
+            state: MessageStateType.APPROVED,
         })
+
+        // deny all requests after approving one
+        await this.denyAllRequests()
+
         return response
     }
 }

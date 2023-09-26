@@ -1,6 +1,6 @@
 import type { ComponentType, ReactNode } from 'react'
 import type { Subscription } from 'use-subscription'
-import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Emitter } from '@servie/events'
 import type {
     ECKeyIdentifier,
@@ -1032,7 +1032,7 @@ export interface MessageState<Request, Response> extends Startable {
         message: TransferableMessage<Request, Response>,
     ): Promise<ReasonableMessage<Request, Response>>
     /** Approves a request. */
-    approveRequest(id: string, updates?: Request): Promise<JsonRpcResponse | void>
+    approveRequest(id: string, updates?: Request): Promise<Response | void>
     /** Rejects a request. */
     denyRequest(id: string): Promise<void>
     /** Rejects all requests. */
