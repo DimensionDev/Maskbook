@@ -203,7 +203,7 @@
     "wallets_address": "钱包地址",
     "wallets_receive_tips": "扫描二维码并发送{{chainName}} 资产到此钱包",
     "wallets_add_collectible": "添加 NFT",
-    "wallets_incorrect_address": "钱包地址不正确",
+    "wallets_incorrect_address": "合约地址不正确",
     "wallets_collectible_been_added": "此 NFT 已被添加。",
     "wallets_collectible_error_not_exist": "此收 NFT 不存在或不属于您。",
     "wallets_collectible_contract_is_empty": "请选择合约",
