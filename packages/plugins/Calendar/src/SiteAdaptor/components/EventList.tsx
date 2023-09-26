@@ -133,7 +133,7 @@ export function EventList({ list, isLoading, empty, dateString }: EventListProps
                         <LoadingStatus />
                     </div>
                 ) : !empty && listAfterDate.length ? (
-                    listAfterDate.map((key, index) => {
+                    listAfterDate.map((key) => {
                         return (
                             <div key={key}>
                                 <Typography className={classes.dateDiv}>
