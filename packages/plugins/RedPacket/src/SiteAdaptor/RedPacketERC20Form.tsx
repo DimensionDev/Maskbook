@@ -1,9 +1,8 @@
 import { type ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
-import { Check as CheckIcon } from '@mui/icons-material'
 import { useAsync } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { omit } from 'lodash-es'
-import { makeStyles, ActionButton, MaskTextField } from '@masknet/theme'
+import { makeStyles, ActionButton, MaskTextField, RadioIndicator } from '@masknet/theme'
 import { Box, InputBase, Typography, useTheme } from '@mui/material'
 import {
     type FungibleToken,
@@ -68,27 +67,16 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         width: '50%',
         alignItems: 'center',
-    },
-    checkIcon: {
-        width: 15,
-        height: 15,
-        color: theme.palette.maskColor.bottom,
+        color: theme.palette.maskColor.line,
     },
     checkIconWrapper: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         cursor: 'pointer',
-        width: 17,
-        height: 17,
-        borderRadius: 999,
+        borderRadius: '50%',
         marginRight: 5,
-        border: `2px solid ${theme.palette.maskColor.secondaryLine}`,
         backgroundColor: 'transparent',
-    },
-    checked: {
-        borderColor: `${theme.palette.maskColor.primary} !important`,
-        backgroundColor: `${theme.palette.maskColor.primary} !important`,
     },
     tokenValue: {
         flexGrow: 1,
@@ -108,7 +96,7 @@ export interface RedPacketFormProps {
 
 export function RedPacketERC20Form(props: RedPacketFormProps) {
     const t = useI18N()
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
     const theme = useTheme()
     const { onChange, onNext, origin, gasOption, onGasOptionChange, expectedChainId } = props
     // context
@@ -283,10 +271,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         <>
             <div className={classes.field}>
                 <div className={classes.option}>
-                    <div
-                        className={cx(classes.checkIconWrapper, isRandom ? classes.checked : '')}
-                        onClick={() => setRandom(1)}>
-                        <CheckIcon className={classes.checkIcon} />
+                    <div className={classes.checkIconWrapper}>
+                        <RadioIndicator onClick={() => setRandom(1)} checked={!!isRandom} size={20} />
                     </div>
                     <Typography
                         color={isRandom ? theme.palette.maskColor.main : theme.palette.maskColor.second}
@@ -296,10 +282,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     </Typography>
                 </div>
                 <div className={classes.option}>
-                    <div
-                        className={cx(classes.checkIconWrapper, !isRandom ? classes.checked : '')}
-                        onClick={() => setRandom(0)}>
-                        <CheckIcon className={classes.checkIcon} />
+                    <div className={classes.checkIconWrapper}>
+                        <RadioIndicator onClick={() => setRandom(0)} checked={!isRandom} size={20} />
                     </div>
                     <Typography
                         color={!isRandom ? theme.palette.maskColor.main : theme.palette.maskColor.second}
