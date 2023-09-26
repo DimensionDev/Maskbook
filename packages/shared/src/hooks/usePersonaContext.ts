@@ -1,4 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useAsync } from 'react-use'
+import compareDesc from 'date-fns/compareDesc'
+import isBefore from 'date-fns/isBefore'
 import { unionWith, uniqBy } from 'lodash-es'
 import { createContainer } from 'unstated-next'
 import {
@@ -16,9 +19,6 @@ import {
 } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { usePersonaProofs } from './usePersonaProofs.js'
-import compareDesc from 'date-fns/compareDesc'
-import isBefore from 'date-fns/isBefore'
-import { useAsync } from 'react-use'
 import { Web3Storage } from '@masknet/web3-providers'
 import { PERSONA_AVATAR_DB_NAMESPACE } from '../constants.js'
 import type { PersonaAvatarData } from '../types.js'
@@ -66,11 +66,9 @@ function usePersonaContext(initialState?: {
         const lastUpdateTime = await initialState.queryPersonaAvatarLastUpdateTime(currentPersona.identifier)
         const storage = Web3Storage.createKVStorage(PERSONA_AVATAR_DB_NAMESPACE)
         try {
-            const remote: PersonaAvatarData = await storage.get<PersonaAvatarData>(
-                currentPersona.identifier.rawPublicKey,
-            )
+            const remote = await storage.get<PersonaAvatarData>(currentPersona.identifier.rawPublicKey)
 
-            if (lastUpdateTime && isBefore(lastUpdateTime, remote.updateAt)) {
+            if (remote && lastUpdateTime && isBefore(lastUpdateTime, remote.updateAt)) {
                 return remote.imageUrl
             }
             return currentPersona.avatar
