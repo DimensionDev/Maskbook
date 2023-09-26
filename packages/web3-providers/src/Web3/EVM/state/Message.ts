@@ -1,3 +1,6 @@
+import { omitBy } from 'lodash-es'
+import urlcat from 'urlcat'
+import type { JsonRpcResponse } from 'web3-core-helpers'
 import { SiteAdaptorContextRef } from '@masknet/plugin-infra/dom'
 import { EMPTY_OBJECT, NetworkPluginID, PopupRoutes, PopupsHistory, Sniffings } from '@masknet/shared-base'
 import { MessageStateType, type ReasonableMessage } from '@masknet/web3-shared-base'
@@ -8,9 +11,6 @@ import {
     type TransactionOptions,
 } from '@masknet/web3-shared-evm'
 import { isUndefined } from '@walletconnect/utils'
-import { omitBy } from 'lodash-es'
-import urlcat from 'urlcat'
-import type { JsonRpcResponse } from 'web3-core-helpers'
 import type { WalletAPI } from '../../../entry-types.js'
 import { MessageState } from '../../Base/state/Message.js'
 
@@ -48,7 +48,7 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
         return super.waitForApprovingRequest(id)
     }
 
-    override async approveRequest(id: string, updates?: MessageRequest): Promise<JsonRpcResponse> {
+    override async approveRequest(id: string, updates?: MessageRequest): Promise<JsonRpcResponse | void> {
         const { request } = this.assertMessage(id)
 
         const response = await this.context.send(

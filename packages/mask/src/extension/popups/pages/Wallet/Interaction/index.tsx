@@ -1,5 +1,10 @@
+import urlcat from 'urlcat'
+import { compact, mapValues, omit } from 'lodash-es'
+import { toHex, toUtf8 } from 'web3-utils'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { useI18N } from '../../../../../utils/i18n-next-ui.js'
+import { useAsync, useAsyncFn } from 'react-use'
+import { useUpdateEffect } from '@react-hookz/web'
+import { Icons } from '@masknet/icons'
 import { Box, Typography } from '@mui/material'
 import { useChainContext, useMessages, useWeb3State } from '@masknet/web3-hooks-base'
 import {
@@ -13,22 +18,17 @@ import {
     ErrorEditor,
     addGasMargin,
 } from '@masknet/web3-shared-evm'
-import { toHex, toUtf8 } from 'web3-utils'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { SignRequestInfo } from '../../../components/SignRequestInfo/index.js'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
-import { useAsync, useAsyncFn } from 'react-use'
 import Services from '#services'
+import { WalletAssetTabs } from '../type.js'
+import { useI18N } from '../../../../../utils/i18n-next-ui.js'
+import { SignRequestInfo } from '../../../components/SignRequestInfo/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { TransactionPreview } from '../../../components/TransactionPreview/index.js'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
-import { Icons } from '@masknet/icons'
-import { useUpdateEffect } from '@react-hookz/web'
 import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
-import { compact, mapValues, omit } from 'lodash-es'
-import urlcat from 'urlcat'
-import { WalletAssetTabs } from '../type.js'
 import { UnlockERC721Token } from '../../../components/UnlockERC721Token/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -225,9 +225,7 @@ const Interaction = memo(function Interaction() {
                 },
             })
             const editor = response ? ErrorEditor.from(null, response) : undefined
-            if (editor?.presence) {
-                throw editor.error
-            }
+            if (editor?.presence) throw editor.error
             if (source) await Services.Helper.removePopupWindow()
             navigate(urlcat(PopupRoutes.Wallet, { tab: WalletAssetTabs.Activity }), { replace: true })
         } catch (error) {
