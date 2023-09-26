@@ -38,7 +38,7 @@ function canAccessAsContent(url: string) {
     const target = new URL(url, location.href)
     if (
         location.origin.endsWith('twitter.com') &&
-        ['https://abs.twimg.com', 'https://upload.twitter.com', 'https://api.twitter.com'].includes(target.origin)
+        (target.origin.endsWith('twitter.com') || target.origin.endsWith('twimg.com'))
     )
         return true
 
