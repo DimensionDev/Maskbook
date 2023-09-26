@@ -6,13 +6,16 @@ import { EMPTY_OBJECT, NetworkPluginID, PopupRoutes, PopupsHistory, Sniffings } 
 import { MessageStateType, type ReasonableMessage } from '@masknet/web3-shared-base'
 import {
     createJsonRpcPayload,
+    PayloadEditor,
     type MessageRequest,
     type MessageResponse,
     type TransactionOptions,
+    EthereumMethodType,
 } from '@masknet/web3-shared-evm'
 import { isUndefined } from '@walletconnect/utils'
 import type { WalletAPI } from '../../../entry-types.js'
 import { MessageState } from '../../Base/state/Message.js'
+import { Web3Readonly } from '../../../entry.js'
 
 export class Message extends MessageState<MessageRequest, MessageResponse> {
     constructor(context: WalletAPI.IOContext) {
@@ -34,6 +37,30 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
                   }
                 : request.options,
         }
+    }
+
+    protected async updateRequest(request_: MessageRequest, updates?: MessageRequest): Promise<MessageRequest> {
+        const request = this.resolveRequest(request_, updates)
+
+        const { method, chainId, config } = PayloadEditor.fromMethod(request.arguments.method, request.arguments.params)
+        if (method !== EthereumMethodType.ETH_SEND_TRANSACTION) return request
+
+        if (config.from && typeof config.nonce !== 'undefined') {
+            const nonce = await Web3Readonly.getTransactionNonce(config.from, {
+                chainId,
+            })
+
+            if (nonce + 1 !== config.nonce) {
+                request.arguments.params = [
+                    {
+                        ...config,
+                        nonce,
+                    },
+                ]
+            }
+        }
+
+        return request
     }
 
     protected override async waitForApprovingRequest(
@@ -68,7 +95,7 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
     override async approveRequest(id: string, updates?: MessageRequest): Promise<JsonRpcResponse | void> {
         const { request: request_ } = this.assertMessage(id)
 
-        const request = this.resolveRequest(request_, updates)
+        const request = await this.updateRequest(request_, updates)
         const response = await this.context.send(
             createJsonRpcPayload(0, request.arguments),
             omitBy<TransactionOptions>(request.options, isUndefined),

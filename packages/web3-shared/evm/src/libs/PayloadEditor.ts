@@ -32,6 +32,14 @@ export class PayloadEditor {
         return typeof id === 'string' ? Number.parseInt(id, 10) : id
     }
 
+    get method() {
+        return this.payload.method
+    }
+
+    get params() {
+        return this.payload.params ?? []
+    }
+
     get from(): string | undefined {
         const { method, params } = this.payload
         switch (method) {
