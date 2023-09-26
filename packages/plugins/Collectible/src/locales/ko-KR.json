@@ -110,5 +110,6 @@
     "token_standard": "토큰 표준",
     "price": "가격",
     "no_NFTs_found": "NFT가 없습니다.",
-    "load_more": "추가 로드"
+    "load_more": "추가 로드",
+    "nft_minted": "NFT가 민팅되지 않습니다."
 }
