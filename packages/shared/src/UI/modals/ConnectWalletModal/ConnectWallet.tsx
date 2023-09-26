@@ -43,10 +43,14 @@ export function ConnectWallet({ pluginID, networkType, providerType, open, onCon
         const chainId = Others.networkResolver.networkChainId(networkType)
         if (!chainId) throw new Error('Failed to connect to provider.')
 
-        const account = await Web3.connect({
-            chainId,
-        })
-        if (!account) throw new Error('Failed to build connection.')
+        try {
+            const account = await Web3.connect({
+                chainId,
+            })
+            if (!account) throw new Error('Failed to build connection.')
+        } catch (err) {
+            throw new Error('Failed to connect to provider.')
+        }
 
         const site = getSiteType()
 
