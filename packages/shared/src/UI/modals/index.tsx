@@ -54,6 +54,7 @@ export const Modals = memo(function Modals(props: ModalProps) {
 export const SwapPageModals = memo(function SwapPageModals() {
     return (
         <>
+            <ConnectWalletModal ref={modals.ConnectWalletModal.register} />
             <SelectProviderModal createWallet={noop} ref={modals.SelectProviderModal.register} />
             <WalletRiskWarningModal ref={modals.WalletRiskWarningModal.register} />
             <SelectFungibleTokenModal ref={modals.SelectFungibleTokenModal.register} />
