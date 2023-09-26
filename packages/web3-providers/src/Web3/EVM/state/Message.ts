@@ -13,11 +13,13 @@ import {
     EthereumMethodType,
 } from '@masknet/web3-shared-evm'
 import { isUndefined } from '@walletconnect/utils'
-import type { WalletAPI } from '../../../entry-types.js'
 import { MessageState } from '../../Base/state/Message.js'
-import { Web3Readonly } from '../../../entry.js'
+import { ConnectionReadonlyAPI } from '../../../Web3/EVM/apis/ConnectionReadonlyAPI.js'
+import type { WalletAPI } from '../../../entry-types.js'
 
 export class Message extends MessageState<MessageRequest, MessageResponse> {
+    private Web3 = new ConnectionReadonlyAPI()
+
     constructor(context: WalletAPI.IOContext) {
         super(context, { pluginID: NetworkPluginID.PLUGIN_EVM })
     }
@@ -46,7 +48,7 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
         if (method !== EthereumMethodType.ETH_SEND_TRANSACTION) return request
 
         if (config.from && typeof config.nonce !== 'undefined') {
-            const nonce = await Web3Readonly.getTransactionNonce(config.from, {
+            const nonce = await this.Web3.getTransactionNonce(config.from, {
                 chainId,
             })
 
