@@ -1,19 +1,23 @@
 import { useCallback, useMemo, useState } from 'react'
 import { compact } from 'lodash-es'
 import { sha3 } from 'web3-utils'
-import { DialogContent, Tab } from '@mui/material'
+import { DialogContent, Tab, useTheme } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useChainContext, useGasPrice } from '@masknet/web3-hooks-base'
 import { ApplicationBoardModal, InjectedDialog, NetworkTab, useCurrentLinkedPersona } from '@masknet/shared'
 import { ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
 import { type RedPacketJSONPayload } from '@masknet/web3-providers/types'
-import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { makeStyles, MaskTabList } from '@masknet/theme'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { Icons } from '@masknet/icons'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
-import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import {
+    useCurrentVisitingIdentity,
+    useLastRecognizedIdentity,
+    useSiteThemeMode,
+} from '@masknet/plugin-infra/content-script'
 import { Web3 } from '@masknet/web3-providers'
 import { useRedPacketTrans } from '../locales/index.js'
 import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
@@ -26,8 +30,13 @@ import { RedPacketERC20Form } from './RedPacketERC20Form.js'
 import { RedPacketERC721Form } from './RedPacketERC721Form.js'
 import { openComposition } from './openComposition.js'
 
-const useStyles = makeStyles<{ currentTab: 'tokens' | 'collectibles'; showHistory: boolean }>()(
-    (theme, { currentTab, showHistory }) => ({
+const useStyles = makeStyles<{ currentTab: 'tokens' | 'collectibles'; showHistory: boolean; isDim: boolean }>()((
+    theme,
+    { currentTab, showHistory, isDim },
+) => {
+    // it's hard to set dynamic color, since the background color of the button is blended transparent
+    const darkBackgroundColor = isDim ? '#38414b' : '#292929'
+    return {
         dialogContent: {
             padding: 0,
             '::-webkit-scrollbar': {
@@ -41,8 +50,11 @@ const useStyles = makeStyles<{ currentTab: 'tokens' | 'collectibles'; showHistor
             width: '100%',
             paddingBottom: theme.spacing(2),
         },
-    }),
-)
+        arrowButton: {
+            backgroundColor: theme.palette.mode === 'dark' ? darkBackgroundColor : undefined,
+        },
+    }
+})
 
 enum CreateRedPacketPageStep {
     NewRedPacketPage = 'new',
@@ -67,8 +79,10 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
     const { account, chainId: _chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const approvalDefinition = useActivatedPlugin(PluginID.RedPacket, 'any')
-    const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
-    const { classes } = useStyles({ currentTab, showHistory })
+    const theme = useTheme()
+
+    const mode = useSiteThemeMode(theme)
+    const { classes } = useStyles({ currentTab, showHistory, isDim: mode === 'dim' })
     const chainIdList = useMemo(() => {
         return compact<ChainId>(
             currentTab === tabs.tokens
@@ -217,6 +231,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                 chains={chainIdList}
                                 hideArrowButton={currentTab === tabs.collectibles}
                                 pluginID={NetworkPluginID.PLUGIN_EVM}
+                                classes={{ arrowButton: classes.arrowButton }}
                             />
                         </div>
                     ) : null
