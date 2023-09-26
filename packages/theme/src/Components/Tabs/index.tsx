@@ -1,4 +1,13 @@
-import { Box, Button, ButtonGroup, type ButtonGroupProps, styled, Tab, alpha } from '@mui/material'
+import {
+    Box,
+    Button,
+    ButtonGroup,
+    type ButtonGroupProps,
+    styled,
+    Tab,
+    alpha,
+    type ButtonGroupClasses,
+} from '@mui/material'
 import { useTabContext, getPanelId, getTabId } from '@mui/lab'
 import {
     forwardRef,
@@ -20,9 +29,11 @@ import { RoundTab } from './RoundTab.js'
 type MaskTabVariant = 'base' | 'flexible' | 'round'
 const defaultTabSize = 38
 
-export interface MaskTabListProps extends Omit<ButtonGroupProps, 'variant' | 'onChange'> {
+export interface MaskTabListProps
+    extends Omit<ButtonGroupProps, 'variant' | 'onChange' | 'classes'>,
+        withClasses<keyof ButtonGroupClasses | 'arrowButton'> {
     onChange(event: object, value: string): void
-    'aria-label': string
+    'aria-label'?: string
     variant?: MaskTabVariant
     hideArrowButton?: boolean
 }
@@ -154,6 +165,7 @@ const tabMapping: {
  */
 export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, ref) => {
     const context = useTabContext()
+    const classes = props.classes
 
     const [open, handleToggle] = useState(false)
     const [isTabsOverflow, setIsTabsOverflow] = useState(false)
@@ -259,6 +271,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
                         {flexibleTabs}
                         {isTabsOverflow && !hideArrowButton ? (
                             <ArrowButtonWrap
+                                className={classes?.arrowButton}
                                 variant="text"
                                 size="small"
                                 aria-controls={open ? 'split-button-menu' : undefined}

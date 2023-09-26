@@ -51,7 +51,7 @@ const useStyles = makeStyles()((theme) => ({
             color: !Sniffings.is_dashboard_page ? theme.palette.maskColor.second : theme.palette.maskColor.third,
         },
         [`&.${inputBaseClasses.focused}`]: {
-            background: theme.palette.maskColor.bottom,
+            background: 'transparent',
         },
     },
     input: {
@@ -74,9 +74,7 @@ const useStyles = makeStyles()((theme) => ({
         color: 'rgba(255, 255, 255, 0.4)',
     },
     inputFocused: {
-        background: `${
-            !Sniffings.is_dashboard_page ? theme.palette.maskColor.input : theme.palette.maskColor.bottom
-        } !important`,
+        background: 'transparent',
         ...(Sniffings.is_dashboard_page
             ? {
                   outline: `2px solid ${alpha(theme.palette.maskColor.primary, 0.2)}`,
