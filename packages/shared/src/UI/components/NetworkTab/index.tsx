@@ -8,7 +8,7 @@ import {
     useWeb3Others,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { MaskTabList, useTabs } from '@masknet/theme'
+import { MaskTabList, useTabs, type MaskTabListProps } from '@masknet/theme'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { TabContext } from '@mui/lab'
 import { Stack, Tab, Typography } from '@mui/material'
@@ -16,9 +16,8 @@ import { WalletIcon } from '../WalletIcon/index.js'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { ChainId } from '@masknet/web3-shared-evm'
 
-interface NetworkTabProps {
+interface NetworkTabProps extends Omit<MaskTabListProps, 'onChange'> {
     chains: Web3Helper.ChainIdAll[]
-    hideArrowButton?: boolean
     pluginID: NetworkPluginID
     onChange?(chainId: Web3Helper.ChainIdAll): void
     requireChains?: boolean
@@ -27,9 +26,9 @@ interface NetworkTabProps {
 export const NetworkTab = memo(function NetworkTab({
     chains,
     pluginID,
-    hideArrowButton,
     onChange,
     requireChains,
+    ...rest
 }: NetworkTabProps) {
     const { pluginID: networkPluginID } = useNetworkContext(pluginID)
     const { chainId, setChainId, setNetworkType } = useChainContext()
@@ -64,6 +63,7 @@ export const NetworkTab = memo(function NetworkTab({
     return (
         <TabContext value={tab}>
             <MaskTabList
+                {...rest}
                 variant="flexible"
                 onChange={(_, v) => {
                     const chainId = Number.parseInt(v, 10)
@@ -73,7 +73,6 @@ export const NetworkTab = memo(function NetworkTab({
                     onChange?.(chainId)
                     setTab(v)
                 }}
-                hideArrowButton={hideArrowButton}
                 aria-label="Network Tabs">
                 {usedNetworks.map((x) => {
                     return (
