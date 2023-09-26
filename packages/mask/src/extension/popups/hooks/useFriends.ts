@@ -19,20 +19,28 @@ export type Friend = {
 
 export function useFriendsPaged() {
     const currentPersona = useCurrentPersona()
+
     const {
         data: records = EMPTY_LIST,
         isLoading: recordsLoading,
         refetch: refetchRecords,
-    } = useQuery(['relation-records', currentPersona?.identifier.rawPublicKey], async () => {
-        return Services.Identity.queryRelationPaged(
-            currentPersona?.identifier,
-            {
-                network: 'all',
-                pageOffset: 0,
-            },
-            3000,
-        )
-    })
+        status: fetchRelationStatus,
+    } = useQuery(
+        ['relation-records', currentPersona?.identifier.rawPublicKey],
+        async () => {
+            return Services.Identity.queryRelationPaged(
+                currentPersona?.identifier,
+                {
+                    network: 'all',
+                    pageOffset: 0,
+                },
+                3000,
+            )
+        },
+        {
+            enabled: !!currentPersona,
+        },
+    )
     const {
         data,
         hasNextPage,
@@ -40,6 +48,7 @@ export function useFriendsPaged() {
         isLoading,
         isFetchingNextPage,
         refetch: refetchFriends,
+        status,
     } = useInfiniteQuery({
         queryKey: ['friends', currentPersona?.identifier.rawPublicKey],
         enabled: !recordsLoading,
@@ -74,6 +83,7 @@ export function useFriendsPaged() {
         refetchFriends()
         refetchRecords()
     }, [refetchFriends, refetchRecords])
+
     return {
         data,
         isLoading: isLoading || recordsLoading,
@@ -81,5 +91,7 @@ export function useFriendsPaged() {
         fetchNextPage,
         isFetchingNextPage,
         refetch,
+        status,
+        fetchRelationStatus,
     }
 }

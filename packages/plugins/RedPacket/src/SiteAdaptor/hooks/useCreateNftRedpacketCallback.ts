@@ -74,7 +74,10 @@ export function useCreateNftRedpacketCallback(
                 },
             )
 
-            const hash = await Web3.sendTransaction(tx, { paymentToken: gasOption?.gasCurrency })
+            const hash = await Web3.sendTransaction(tx, {
+                paymentToken: gasOption?.gasCurrency,
+                gasOptionType: gasOption?.gasOptionType,
+            })
             const receipt = await Web3.getTransactionReceipt(hash)
             if (receipt) {
                 const events = decodeEvents(nftRedPacketContract.options.jsonInterface, receipt)
