@@ -104,9 +104,11 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
 
     const onSwitch = useCallback(
         async (id: string, checked: boolean) => {
-            if (id === PluginID.GoPlusSecurity && checked === false)
-                return CrossIsolationMessages.events.checkSecurityConfirmationDialogEvent.sendToAll({ open: true })
-            await setPluginMinimalModeEnabled?.(id, !checked)
+            if (id === PluginID.GoPlusSecurity && checked === false) {
+                CrossIsolationMessages.events.checkSecurityConfirmationDialogEvent.sendToAll({ open: true })
+            } else {
+                await setPluginMinimalModeEnabled?.(id, !checked)
+            }
         },
         [setPluginMinimalModeEnabled],
     )
@@ -121,7 +123,6 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
                         targetPluginRef.current = element
                     }
                 }}
-                focusPluginID={focusPluginID}
             />
             {availablePlugins.map((x) => (
                 <ListItem
@@ -191,11 +192,10 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
 interface DSearchSettingsProps {
     checked: boolean
     onSwitch: (event: React.ChangeEvent<HTMLInputElement>) => void
-    focusPluginID?: string
     setRef(element: HTMLLIElement | null): void
 }
 
-function DSearchSettings({ checked, onSwitch, setRef, focusPluginID }: DSearchSettingsProps) {
+function DSearchSettings({ checked, onSwitch, setRef }: DSearchSettingsProps) {
     const t = useSharedI18N()
     const { classes } = useStyles()
 

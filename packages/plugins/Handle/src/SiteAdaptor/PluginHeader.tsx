@@ -1,9 +1,9 @@
-import { PluginID } from '@masknet/shared-base'
-import { Icons } from '@masknet/icons'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { Stack, Typography, useTheme, Link } from '@mui/material'
-import { useSharedI18N } from '@masknet/shared'
 import { Box } from '@mui/system'
+import { Stack, Typography, useTheme, Link } from '@mui/material'
+import { Icons } from '@masknet/icons'
+import { PluginID } from '@masknet/shared-base'
+import { useSharedI18N } from '@masknet/shared'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { base } from '../base.js'
 
@@ -29,9 +29,9 @@ const useStyles = makeStyles()((theme, props) => {
 })
 
 export function PluginHeader() {
+    const t = useSharedI18N()
     const theme = useTheme()
     const { classes } = useStyles()
-    const t = useSharedI18N()
 
     return (
         <Stack flexDirection="row" justifyContent="space-between" alignItems="center" className={classes.wrapper}>
@@ -45,16 +45,16 @@ export function PluginHeader() {
                 <Typography variant="body1" fontSize={14} fontWeight="400" className={classes.providerBy}>
                     {t.plugin_provider_by()}
                 </Typography>
-                <Typography
-                    variant="body1"
-                    fontSize={14}
-                    fontWeight="500"
-                    component="div"
-                    color={MaskColorVar.textPluginColor}>
-                    {base.publisher ? (
+                {base.publisher ? (
+                    <Typography
+                        variant="body1"
+                        fontSize={14}
+                        fontWeight="500"
+                        component="div"
+                        color={MaskColorVar.textPluginColor}>
                         <PluginI18NFieldRender pluginID={PluginID.Handle} field={base.publisher.name} />
-                    ) : undefined}
-                </Typography>
+                    </Typography>
+                ) : null}
                 {base.publisher?.link ? (
                     <Link href={base.publisher?.link} underline="none" target="_blank" rel="noopener">
                         <Icons.Provider size={18} style={{ marginLeft: 4 }} />

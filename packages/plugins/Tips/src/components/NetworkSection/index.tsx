@@ -19,8 +19,8 @@ export function NetworkSection() {
     const { setTargetChainId } = TargetRuntimeContext.useContainer()
 
     const { pluginID } = useNetworkContext()
-    const definition = useActivatedPlugin(PluginID.Tips, 'any')
-    const chainIdList = definition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
+    const tipsDefinition = useActivatedPlugin(PluginID.Tips, 'any')
+    const chainIdList = tipsDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
 
     if (!chainIdList.length) return null
 

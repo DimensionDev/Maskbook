@@ -201,7 +201,7 @@ function Content(props: ProfileTabContentProps) {
 
     const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
-    const isWeb3ProfileDisable = useIsMinimalMode(PluginID.Web3Profile)
+    const isWeb3ProfileDisabled = useIsMinimalMode(PluginID.Web3Profile)
 
     const isOnTwitter = Sniffings.is_twitter_page
     const doesOwnerHaveNoAddress =
@@ -212,7 +212,7 @@ function Content(props: ProfileTabContentProps) {
     const showNextID =
         isOnTwitter &&
         // enabled the plugin
-        (isWeb3ProfileDisable ||
+        (isWeb3ProfileDisabled ||
             myPersonaNotVerifiedYet ||
             // the owner persona and site verified on next ID but not verify the wallet
             doesOwnerHaveNoAddress ||
@@ -358,7 +358,6 @@ function Content(props: ProfileTabContentProps) {
     if (((isOwnerIdentity && loadPersonaStatusError) || loadSocialAccounts) && socialAccounts.length === 0) {
         const handleClick = () => {
             if (loadPersonaStatusError) retryLoadPersonaStatus()
-
             if (loadSocialAccounts) retrySocialAccounts()
         }
         return (

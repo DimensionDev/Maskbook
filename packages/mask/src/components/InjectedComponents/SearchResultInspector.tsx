@@ -8,8 +8,8 @@ import {
     getSearchResultContentForProfileTab,
     getSearchResultTabContent,
     getSearchResultTabs,
-    useActivatedPlugin,
     useActivatedPluginsSiteAdaptor,
+    useIsMinimalMode,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST, PluginID, type SocialIdentity, type ProfileTabs } from '@masknet/shared-base'
@@ -54,9 +54,9 @@ export interface SearchResultInspectorProps {
 export function SearchResultInspector(props: SearchResultInspectorProps) {
     const translate = usePluginI18NField()
 
-    const dSearchEnabled = useActivatedPlugin(PluginID.Handle, false)
+    const dSearchEnabled = useIsMinimalMode(PluginID.Handle)
 
-    const { profileTabType } = props
+    const { identity, profileTabType, isProfilePage } = props
     const keyword_ = useSearchedKeyword()
     const keyword = props.keyword || keyword_
     const activatedPlugins = useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode()
@@ -83,7 +83,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
 
     const currentResult = props.currentSearchResult ?? resultList.value?.[0]
 
-    const { classes } = useStyles({ isProfilePage: props.isProfilePage, searchType: currentResult?.type })
+    const { classes } = useStyles({ isProfilePage, searchType: currentResult?.type })
     const contentComponent = useMemo(() => {
         if (!currentResult || !resultList.value?.length) return null
 
@@ -95,11 +95,11 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
             <Component
                 resultList={resultList.value}
                 currentResult={currentResult}
-                isProfilePage={props.isProfilePage}
-                identity={props.identity}
+                isProfilePage={isProfilePage}
+                identity={identity}
             />
         )
-    }, [currentResult, resultList.value, props.isProfilePage, props.identity, profileTabType])
+    }, [currentResult, resultList.value, isProfilePage, identity, profileTabType])
 
     const tabs = useMemo(() => {
         if (!currentResult) return EMPTY_LIST
@@ -118,7 +118,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         return <Component result={currentResult} />
     }, [currentTab, resultList.value])
 
-    if (!dSearchEnabled) return null
+    if (!dSearchEnabled && !isProfilePage) return null
     if (!keyword && !currentResult) return null
     if (!contentComponent) return null
 
