@@ -19,6 +19,23 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
         super(context, { pluginID: NetworkPluginID.PLUGIN_EVM })
     }
 
+    protected resolveRequest(request: MessageRequest, updates?: MessageRequest): MessageRequest {
+        return {
+            arguments: updates?.arguments
+                ? {
+                      ...request.arguments,
+                      ...updates.arguments,
+                  }
+                : request.arguments,
+            options: updates?.options
+                ? {
+                      ...request.options,
+                      ...updates.options,
+                  }
+                : request.options,
+        }
+    }
+
     protected override async waitForApprovingRequest(
         id: string,
     ): Promise<ReasonableMessage<MessageRequest, MessageResponse>> {
@@ -49,28 +66,18 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
     }
 
     override async approveRequest(id: string, updates?: MessageRequest): Promise<JsonRpcResponse | void> {
-        const { request } = this.assertMessage(id)
+        const { request: request_ } = this.assertMessage(id)
 
+        const request = this.resolveRequest(request_, updates)
         const response = await this.context.send(
-            createJsonRpcPayload(
-                0,
-                updates?.arguments
-                    ? {
-                          ...request.arguments,
-                          ...updates.arguments,
-                      }
-                    : request.arguments,
-            ),
+            createJsonRpcPayload(0, request.arguments),
             omitBy<TransactionOptions>(request.options, isUndefined),
         )
 
         await this.updateMessage(id, {
-            request: {
-                ...request,
-                ...updates,
-            },
-            state: MessageStateType.APPROVED,
+            request,
             response,
+            state: MessageStateType.APPROVED,
         })
         return response
     }

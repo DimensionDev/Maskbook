@@ -151,7 +151,7 @@ export class MessageState<Request, Response> implements Web3MessageState<Request
                     id,
                     {
                         ...message,
-                        state: MessageStateType.DENIED,
+                        state: message.state === MessageStateType.NOT_DEPEND ? MessageStateType.DENIED : message.state,
                     },
                 ]),
             ),
