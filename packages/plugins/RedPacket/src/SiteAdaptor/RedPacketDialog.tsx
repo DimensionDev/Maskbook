@@ -8,7 +8,7 @@ import { useChainContext, useGasPrice } from '@masknet/web3-hooks-base'
 import { ApplicationBoardModal, InjectedDialog, NetworkTab, useCurrentLinkedPersona } from '@masknet/shared'
 import { ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
 import { type RedPacketJSONPayload } from '@masknet/web3-providers/types'
-import { makeStyles, MaskTabList } from '@masknet/theme'
+import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { Icons } from '@masknet/icons'
 import { Telemetry } from '@masknet/web3-telemetry'
@@ -79,8 +79,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
     const { account, chainId: _chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const approvalDefinition = useActivatedPlugin(PluginID.RedPacket, 'any')
+    const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
     const theme = useTheme()
-
     const mode = useSiteThemeMode(theme)
     const { classes } = useStyles({ currentTab, showHistory, isDim: mode === 'dim' })
     const chainIdList = useMemo(() => {
