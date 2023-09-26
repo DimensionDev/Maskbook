@@ -10,5 +10,6 @@
     "news": "News",
     "event": "Events",
     "nfts": "NFTs",
-    "content_end": "The content is fully loaded"
+    "content_end": "The content is fully loaded",
+    "expired": "Expired"
 }

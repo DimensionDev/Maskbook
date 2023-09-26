@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import differenceInSeconds from 'date-fns/differenceInSeconds'
 import { Typography } from '@mui/material'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     timer: {
@@ -35,6 +36,7 @@ export function CountdownTimer({ targetDate }: CountDownTimerProps) {
     const [remainingTime, setRemainingTime] = useState(() => calculateRemainingTime(targetDate))
 
     const { classes } = useStyles()
+    const t = useI18N()
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -54,5 +56,9 @@ export function CountdownTimer({ targetDate }: CountDownTimerProps) {
     const minutes = Math.floor((remainingTime % (60 * 60)) / 60)
     const seconds = remainingTime % 60
 
-    return <Typography className={classes.timer}>{`${days}d :${hours}h :${minutes}m :${seconds}s`}</Typography>
+    return (
+        <Typography className={classes.timer}>
+            {remainingTime === 0 ? t.expired() : `${days}d :${hours}h :${minutes}m :${seconds}s`}
+        </Typography>
+    )
 }
