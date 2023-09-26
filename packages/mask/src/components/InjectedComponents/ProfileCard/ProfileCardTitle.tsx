@@ -1,6 +1,6 @@
-import type { HTMLProps } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import { Icons } from '@masknet/icons'
+import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
+import { TipButton } from '@masknet/plugin-tips'
 import { PersonaSelectPanelModal, SocialAccountList, useCurrentPersonaConnectStatus } from '@masknet/shared'
 import {
     CrossIsolationMessages,
@@ -12,11 +12,12 @@ import {
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NextIDProof } from '@masknet/web3-providers'
+import { useQuery } from '@tanstack/react-query'
+import type { HTMLProps } from 'react'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { useCurrentPersona } from '../../DataSource/useCurrentPersona.js'
-import { ProfileBar } from './ProfileBar.js'
 import { usePersonasFromDB } from '../../DataSource/usePersonasFromDB.js'
-import { TipButton } from '@masknet/plugin-tips'
+import { ProfileBar } from './ProfileBar.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -113,6 +114,7 @@ export function ProfileCardTitle({
             return NextIDProof.queryProfilesByTwitterId(userId)
         },
     })
+    const tipsDisabled = useIsMinimalMode(PluginID.Tips)
 
     return (
         <div className={cx(classes.title, className)} {...rest}>
@@ -137,9 +139,9 @@ export function ProfileCardTitle({
                     ) : null}
                     {itsMe ? (
                         <Web3ProfileSettingButton />
-                    ) : (
+                    ) : !tipsDisabled ? (
                         <TipButton className={classes.tipButton} receiver={identity.identifier} />
-                    )}
+                    ) : null}
                 </div>
             </ProfileBar>
         </div>
