@@ -212,7 +212,7 @@
     "no_NFTs_found": "没有找到任何NFT。",
     "add_collectibles": "添加 NFT",
     "collectible_contract_require": "NFT 地址为必填项",
-    "collectible_contract_invalid": "钱包地址不正确",
+    "collectible_contract_invalid": "合约地址不正确",
     "collectible_token_id_require": "NFT id 为必填项",
     "collectible_token_id_invalid": "不正确的 NFT id",
     "collection_not_belong_to_you": "合约地址不正确或此 NFT 不属于您。",
