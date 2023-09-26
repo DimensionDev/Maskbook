@@ -4,7 +4,6 @@ import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
 import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { PluginID } from '@masknet/shared-base'
 import { VCentDialog } from './TweetDialog.js'
 import { base } from '../base.js'
 
@@ -16,11 +15,11 @@ const site: Plugin.SiteAdaptor.Definition = {
         {
             ApplicationEntryID: base.ID,
             category: 'dapp',
-            description: <Trans i18nKey="plugin_valuables_description" ns={PluginID.Valuables} />,
-            name: <Trans i18nKey="plugin_valuables_name" ns={PluginID.Valuables} />,
+            description: <Trans i18nKey="description" ns={base.ID} />,
+            name: <Trans i18nKey="name" ns={base.ID} />,
             marketListSortingPriority: 10,
             tutorialLink: 'https://realmasknetwork.notion.site/27424923ee454a4a9b0ed16fc5cb93d0',
-            icon: <Icons.Valuables size={36} variant="dark" />,
+            icon: <Icons.Valuables size={36} />,
         },
     ],
     wrapperProps: {
@@ -28,10 +27,10 @@ const site: Plugin.SiteAdaptor.Definition = {
             <Icons.Valuables
                 size={24}
                 style={{ filter: 'drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.2))' }}
-                variant="dark"
+                variant="light"
             />
         ),
-        title: <Trans i18nKey="plugin_valuables_name" />,
+        title: <Trans i18nKey="name" ns={base.ID} />,
     },
 }
 
