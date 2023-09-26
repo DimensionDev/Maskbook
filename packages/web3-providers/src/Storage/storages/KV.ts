@@ -34,8 +34,8 @@ export class KVStorage implements StorageAPI.Storage {
     async get<T>(key: string) {
         const cacheKey = `${this.namespace}_${key}`
         const cache = this.cache?.get(cacheKey)
-        const stroage = cache ?? this.getKV<T>().get(key)
-        return stroage as T | undefined
+        const storage = cache ?? this.getKV<T>().get(key)
+        return storage as T | undefined
     }
 
     async set<T>(key: string, value: T) {
