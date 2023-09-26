@@ -26,6 +26,8 @@
     "coming_soon": "crwdns22149:0crwdne22149:0",
     "max": "crwdns21905:0crwdne21905:0",
     "data": "crwdns21987:0crwdne21987:0",
+    "redpacket_a_token": "crwdns22457:0crwdne22457:0",
+    "redpacket_an_nft": "crwdns22459:0crwdne22459:0",
     "available_balance": "crwdns19861:0crwdne19861:0",
     "available_amount": "crwdns21907:0{{- amount}}crwdne21907:0",
     "failed_to_transfer_token": "crwdns22155:0{{- message}}crwdne22155:0",
@@ -1195,13 +1197,6 @@
     "about_collection": "crwdns21777:0{{- name}}crwdne21777:0",
     "hide_collectible": "crwdns21779:0{{-name}}crwdne21779:0",
     "hide_collectible_description": "crwdns21781:0{{- name}}crwdne21781:0",
-    "switch_logo_title": "crwdns21915:0crwdne21915:0",
-    "switch_logo_save_tip": "crwdns21917:0crwdne21917:0",
-    "switch_logo_classics_logo": "crwdns21919:0crwdne21919:0",
-    "switch_logo_new_logo": "crwdns21921:0crwdne21921:0",
-    "switch_logo_share_text": "crwdns21923:0crwdne21923:0",
-    "switch_logo_share_mask": "crwdns21925:0crwdne21925:0",
-    "switch_logo_description": "crwdns21927:0crwdne21927:0",
     "add_new_address_to_an_existing_group": "crwdns22255:0crwdne22255:0",
     "or_create_a_new_wallet_group": "crwdns22257:0crwdne22257:0"
 }
