@@ -106,6 +106,10 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
             response,
             state: MessageStateType.APPROVED,
         })
+
+        // deny all requests after approving one
+        await this.denyAllRequests()
+
         return response
     }
 }
