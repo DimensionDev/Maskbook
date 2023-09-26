@@ -12,6 +12,7 @@ import { usePersonaRecovery } from '../../contexts/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     input: {
+        paddingTop: 12,
         backgroundColor: theme.palette.maskColor.input,
         color: theme.palette.maskColor.main,
     },

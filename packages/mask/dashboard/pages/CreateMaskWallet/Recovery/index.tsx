@@ -235,7 +235,7 @@ const Recovery = memo(function Recovery() {
                             <MaskTabList variant="base" onChange={onTabChange} aria-label="Recovery Methods">
                                 <Tab className={classes.tab} label="Mnemonic" value={tabs.mnemonic} />
                                 <Tab className={classes.tab} label="Private Key" value={tabs.privateKey} />
-                                <Tab className={classes.tab} label="KeyStore" value={tabs.local} />
+                                <Tab className={classes.tab} label="Keystore" value={tabs.local} />
                             </MaskTabList>
                         </div>
                         <div className={classes.panelContainer}>
