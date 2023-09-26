@@ -6,6 +6,7 @@ import { useWeb3Connection, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { getSiteType, type NetworkPluginID, pluginIDsSettings } from '@masknet/shared-base'
 import { ConnectionProgress } from './ConnectionProgress.js'
+import { ErrorEditor } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -43,10 +44,16 @@ export function ConnectWallet({ pluginID, networkType, providerType, open, onCon
         const chainId = Others.networkResolver.networkChainId(networkType)
         if (!chainId) throw new Error('Failed to connect to provider.')
 
-        const account = await Web3.connect({
-            chainId,
-        })
-        if (!account) throw new Error('Failed to build connection.')
+        try {
+            const account = await Web3.connect({
+                chainId,
+            })
+            if (!account) throw new Error('Failed to build connection.')
+        } catch (err) {
+            const editor = ErrorEditor.fromError(err)
+            if (!editor.presence) throw err
+            throw new Error('Failed to connect to provider.')
+        }
 
         const site = getSiteType()
 
