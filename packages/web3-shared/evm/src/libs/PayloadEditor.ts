@@ -221,7 +221,7 @@ export class PayloadEditor {
                 gasPrice: parseHexNumberString(this.config.gasPrice),
                 maxFeePerGas: parseHexNumberString(this.config.maxFeePerGas),
                 maxPriorityFeePerGas: parseHexNumberString(this.config.maxPriorityFeePerGas),
-                // TODO: revert to parseHexNumberString after update MaskCore
+                // TODO: revert to parseHexNumberString after updating MaskCore
                 chainId: parseHexNumber(this.config.chainId),
                 nonce: parseHexNumberString(this.config.nonce),
             },

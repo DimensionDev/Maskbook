@@ -47,6 +47,7 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
         const { method, chainId, config } = PayloadEditor.fromMethod(request.arguments.method, request.arguments.params)
         if (method !== EthereumMethodType.ETH_SEND_TRANSACTION) return request
 
+        // recheck the nonce and update it if needed before sending with the transaction
         if (config.from && typeof config.nonce !== 'undefined') {
             const nonce = await this.Web3.getTransactionNonce(config.from, {
                 chainId,
