@@ -65,19 +65,21 @@ export class ConnectionOptionsAPI_Base<
         ConnectionOptions_Base<ChainId, ProviderType, Transaction>,
         'account' | 'chainId' | 'providerType'
     > {
+        const others = this.Web3Others
         return {
             account: '',
-            chainId: this.Web3Others.getDefaultChainId(),
-            providerType: this.Web3Others.getDefaultProviderType(),
+            chainId: others.getDefaultChainId(),
+            providerType: others.getDefaultProviderType(),
         }
     }
 
     protected get refs(): ConnectionOptions_Base<ChainId, ProviderType, Transaction> {
-        if (!this.Web3StateRef.value) return {}
+        const provider = this.Web3StateRef.value?.Provider
+        if (!provider) return {}
         return {
-            account: this.Web3StateRef.value.Provider?.account?.getCurrentValue(),
-            chainId: this.Web3StateRef.value.Provider?.chainId?.getCurrentValue(),
-            providerType: this.Web3StateRef.value.Provider?.providerType?.getCurrentValue(),
+            account: provider.account?.getCurrentValue(),
+            chainId: provider.chainId?.getCurrentValue(),
+            providerType: provider.providerType?.getCurrentValue(),
         }
     }
 

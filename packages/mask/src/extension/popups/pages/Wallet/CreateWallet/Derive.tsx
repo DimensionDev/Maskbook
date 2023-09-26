@@ -1,9 +1,10 @@
 import Services from '#services'
 import { Icons } from '@masknet/icons'
 import { defer, timeout } from '@masknet/kit'
-import { EMPTY_LIST, NetworkPluginID, type Wallet } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { queryClient } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
+import { useWallet, useWeb3State } from '@masknet/web3-hooks-base'
 import { Providers, Web3 } from '@masknet/web3-providers'
 import { generateNewWalletName, isSameAddress } from '@masknet/web3-shared-base'
 import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -84,18 +85,15 @@ const DeriveWallet = memo(function DeriveWallet() {
 
     const walletGroup = useWalletGroup()
     const wallets = walletGroup?.groups[mnemonicId] ?? EMPTY_LIST
-    const allWallets = useWallets()
 
     const currentWallet = useWallet()
 
     const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const allWalletsRef = useRef<Wallet[]>([])
 
     const [isDeriving, setIsDeriving] = DeriveStateContext.useContainer()
     const isDerivingRef = useRef(isDeriving)
 
     useEffect(() => {
-        allWalletsRef.current = allWallets
         isDerivingRef.current = isDeriving
     })
     const [{ loading: creating }, create] = useAsyncFn(async () => {
@@ -104,7 +102,9 @@ const DeriveWallet = memo(function DeriveWallet() {
         try {
             const nextWallet = await Services.Wallet.generateNextDerivationAddress()
             const ens = await NameService?.safeReverse?.(nextWallet, true)
-            const name = ens || generateNewWalletName(allWalletsRef.current)
+            const allWallets = Providers[ProviderType.MaskWallet].subscription.wallets.getCurrentValue()
+            queryClient.invalidateQueries(['@@mask-wallets'])
+            const name = ens || generateNewWalletName(allWallets)
             const address = await Services.Wallet.deriveWallet(name, mnemonicId)
             await pollResult(address)
             await Web3.connect({
