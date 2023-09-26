@@ -13,6 +13,7 @@ export function usePersistSubscription<T>(
     const [initialValue] = useState(() => subscription.getCurrentValue())
     const { data = initialValue, refetch } = useQuery({
         queryKey: [persistKey],
+        networkMode: 'always',
         queryFn: () => {
             const value = subscription.getCurrentValue()
             if (predicate && !predicate(value)) return undefined
