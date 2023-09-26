@@ -3,8 +3,8 @@ import { useAsyncFn } from 'react-use'
 import { Icons } from '@masknet/icons'
 import type { PluginID } from '@masknet/shared-base'
 import { useIsMinimalMode, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { makeStyles, ActionButton } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import { useSharedTrans } from '../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({

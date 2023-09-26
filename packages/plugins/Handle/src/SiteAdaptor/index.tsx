@@ -1,11 +1,11 @@
+import { Trans } from 'react-i18next'
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginID } from '@masknet/shared-base'
-import { Trans } from 'react-i18next'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
-import { base } from '../base.js'
-import { SearchResultInspector } from './SearchResultInspector.js'
 import { type EOAResult, SearchResultType } from '@masknet/web3-shared-base'
+import { SearchResultInspector } from './SearchResultInspector.js'
+import { base } from '../base.js'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,

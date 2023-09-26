@@ -6,8 +6,8 @@ import { MaskLightTheme, MaskThemeProvider, makeStyles } from '@masknet/theme'
 import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Others } from '@masknet/web3-providers'
-import { SuffixToChainIconMap, SuffixToChainIdMap } from '../constants.js'
 import { PluginHeader } from './PluginHeader.js'
+import { SuffixToChainIconMap, SuffixToChainIdMap } from '../constants.js'
 import { ENSContext, ENSProvider, type SearchResultInspectorProps } from './context.js'
 
 const useStyles = makeStyles()((theme) => {

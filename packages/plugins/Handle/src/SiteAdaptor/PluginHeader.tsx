@@ -29,9 +29,9 @@ const useStyles = makeStyles()((theme, props) => {
 })
 
 export function PluginHeader() {
+    const t = useSharedTrans()
     const theme = useTheme()
     const { classes } = useStyles()
-    const t = useSharedTrans()
 
     return (
         <Stack flexDirection="row" justifyContent="space-between" alignItems="center" className={classes.wrapper}>
@@ -45,16 +45,16 @@ export function PluginHeader() {
                 <Typography variant="body1" fontSize={14} fontWeight="400" className={classes.providerBy}>
                     {t.plugin_provider_by()}
                 </Typography>
-                <Typography
-                    variant="body1"
-                    fontSize={14}
-                    fontWeight="500"
-                    component="div"
-                    color={MaskColorVar.textPluginColor}>
-                    {base.publisher ? (
+                {base.publisher ? (
+                    <Typography
+                        variant="body1"
+                        fontSize={14}
+                        fontWeight="500"
+                        component="div"
+                        color={MaskColorVar.textPluginColor}>
                         <PluginTransFieldRender pluginID={PluginID.Handle} field={base.publisher.name} />
-                    ) : undefined}
-                </Typography>
+                    </Typography>
+                ) : null}
                 {base.publisher?.link ? (
                     <Link href={base.publisher?.link} underline="none" target="_blank" rel="noopener">
                         <Icons.Provider size={18} style={{ marginLeft: 4 }} />
