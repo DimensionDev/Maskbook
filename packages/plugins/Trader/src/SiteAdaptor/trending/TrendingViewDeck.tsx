@@ -231,7 +231,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const openRss3Profile = useCallback(
         (address: string) => {
             if (!isCollectionProjectPopper) {
-                return CrossIsolationMessages.events.hideSearchResultInspectorEvent.sendToLocal({ hide: true })
+                CrossIsolationMessages.events.hideSearchResultInspectorEvent.sendToLocal({ hide: true })
+                return
             }
 
             if (!identity?.identifier?.userId || !anchorBounding) return
@@ -244,7 +245,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 address,
                 external: true,
             })
-
             setActive?.(false)
         },
         [JSON.stringify(identity), isCollectionProjectPopper, anchorBounding, anchorEl],

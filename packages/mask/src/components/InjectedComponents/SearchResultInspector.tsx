@@ -8,8 +8,8 @@ import {
     getSearchResultContentForProfileTab,
     getSearchResultTabContent,
     getSearchResultTabs,
-    useActivatedPlugin,
     useActivatedPluginsSiteAdaptor,
+    useIsMinimalMode,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST, PluginID, type SocialIdentity, type ProfileTabs } from '@masknet/shared-base'
@@ -54,7 +54,7 @@ export interface SearchResultInspectorProps {
 export function SearchResultInspector(props: SearchResultInspectorProps) {
     const translate = usePluginI18NField()
 
-    const dSearchEnabled = useActivatedPlugin(PluginID.Handle, false)
+    const dSearchEnabled = useIsMinimalMode(PluginID.Handle)
 
     const { profileTabType } = props
     const keyword_ = useSearchedKeyword()

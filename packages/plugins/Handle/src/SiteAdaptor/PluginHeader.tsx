@@ -29,9 +29,9 @@ const useStyles = makeStyles()((theme, props) => {
 })
 
 export function PluginHeader() {
+    const t = useSharedI18N()
     const theme = useTheme()
     const { classes } = useStyles()
-    const t = useSharedI18N()
 
     return (
         <Stack flexDirection="row" justifyContent="space-between" alignItems="center" className={classes.wrapper}>
