@@ -220,6 +220,7 @@ const CreateMnemonic = memo(function CreateMnemonic() {
         const address = await Services.Wallet.createWalletFromMnemonicWords(walletName, words.join(' '))
         await pollResult(address)
         await Web3.connect({
+            silent: true,
             providerType: ProviderType.MaskWallet,
             account: address,
         })
