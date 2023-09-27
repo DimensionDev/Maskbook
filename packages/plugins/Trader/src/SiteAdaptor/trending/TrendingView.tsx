@@ -193,11 +193,7 @@ export function TrendingView(props: TrendingViewProps) {
     }, [trending?.market])
 
     const isNFT = trending?.coin.type === TokenType.NonFungible
-    const {
-        value: stats = EMPTY_LIST,
-        loading: loadingStats,
-        retry: retryStats,
-    } = usePriceStats({
+    const { data: stats = EMPTY_LIST, isLoading: loadingStats } = usePriceStats({
         chainId: result.chainId,
         coinId: trending?.coin.id,
         sourceType: isNFT ? SourceType.NFTScan : trending?.dataProvider,
@@ -395,7 +391,6 @@ export function TrendingView(props: TrendingViewProps) {
                             }
                             currency={trending.currency}
                             stats={stats}
-                            retry={retryStats}
                             loading={loadingStats}>
                             <PriceChartDaysControl
                                 rangeOptions={DEFAULT_RANGE_OPTIONS}
