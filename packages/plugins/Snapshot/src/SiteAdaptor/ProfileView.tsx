@@ -1,7 +1,7 @@
 import { useMemo, useState, useTransition } from 'react'
 import { LoadingBase, MaskDarkTheme, MaskLightTheme, MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { CardContent, Stack, Tab, ThemeProvider, Typography, useTheme } from '@mui/material'
-import { PluginEnableBoundary } from '@masknet/shared'
+import { PluginCardFrameMini, PluginEnableBoundary } from '@masknet/shared'
 import type { DAOResult } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
@@ -33,6 +33,10 @@ const useStyles = makeStyles()((theme) => ({
     tabListRoot: {
         marginTop: '10px !important',
         flexGrow: 0,
+    },
+    iconSnapshot: {
+        marginRight: 6,
+        marginTop: 2,
     },
 }))
 
@@ -76,15 +80,15 @@ export function ProfileView(props: ProfileViewProps) {
 
     if (isMinimalMode) {
         return (
-            <ProfileCard {...ProfileCardProps}>
-                <Stack className={classes.root}>
-                    <ThemeProvider theme={MaskLightTheme}>
-                        <PluginEnableBoundary pluginID={PluginID.Snapshot}>
-                            <PluginDescriptor />
-                        </PluginEnableBoundary>
-                    </ThemeProvider>
-                </Stack>
-            </ProfileCard>
+            <PluginCardFrameMini
+                title={t.plugin_snapshot_info_snapshot()}
+                icon={<Icons.Snapshot className={classes.iconSnapshot} />}>
+                <ThemeProvider theme={MaskLightTheme}>
+                    <PluginEnableBoundary pluginID={PluginID.Snapshot}>
+                        <PluginDescriptor />
+                    </PluginEnableBoundary>
+                </ThemeProvider>
+            </PluginCardFrameMini>
         )
     }
 
