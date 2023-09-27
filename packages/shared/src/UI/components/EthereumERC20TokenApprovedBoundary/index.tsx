@@ -85,7 +85,11 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
             token?.chainId,
         )
 
-    const loading = spendersLoading || approveStateType === ApproveStateType.UPDATING || transactionState.loadingApprove
+    const loading =
+        spendersLoading ||
+        approveStateType === ApproveStateType.UPDATING ||
+        transactionState.loadingApprove ||
+        transactionState.loading
 
     const onApprove = useCallback(async () => {
         if (approved || loading) return
