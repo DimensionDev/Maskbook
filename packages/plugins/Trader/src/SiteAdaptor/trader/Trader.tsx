@@ -239,7 +239,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             title: t.swap(),
             content: (
                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-                    <ImageIcon icon={inputToken?.logoURL} size={90} />
+                    <ImageIcon icon={inputToken?.logoURL} size={90} style={{ borderRadius: 99 }} />
                     <Typography
                         fontSize={20}
                         lineHeight="24px"
