@@ -1,7 +1,6 @@
 import { mapKeys } from 'lodash-es'
 import type { BigNumber } from 'bignumber.js'
-import { toHex } from 'web3-utils'
-import { Interface } from '@ethersproject/abi'
+import { toHex, type AbiItem } from 'web3-utils'
 import { Web3 } from '@masknet/web3-providers'
 import ERC20_ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import { toFixed, type RecentTransaction } from '@masknet/web3-shared-base'
@@ -10,11 +9,10 @@ import {
     formatWeiToGwei,
     type ChainId,
     type Transaction as EvmTransaction,
+    decodeInputString,
 } from '@masknet/web3-shared-evm'
 import { GasSettingModal } from '../../modals/modals.js'
 import { ReplaceType } from './type.js'
-
-const erc20InterFace = new Interface(ERC20_ABI)
 
 const MaxUint256 = toFixed('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
 
@@ -60,7 +58,7 @@ export async function modifyTransaction(
 export function parseReceiverFromERC20TransferInput(input?: string) {
     if (!input) return ''
     try {
-        const decodedInputParam = erc20InterFace.decodeFunctionData('transfer', input ?? '')
+        const decodedInputParam = decodeInputString(ERC20_ABI as AbiItem[], input ?? '', 'transfer')
         return decodedInputParam[0] as string
     } catch {
         return ''
@@ -72,7 +70,7 @@ export function parseReceiverFromERC20TransferInput(input?: string) {
 export function parseAmountFromERC20ApproveInput(input?: string) {
     if (!input) return
     try {
-        const decodedInputParam = erc20InterFace.decodeFunctionData('approve', input ?? '')
+        const decodedInputParam = decodeInputString(ERC20_ABI as AbiItem[], input ?? '', 'approve')
         const result = (decodedInputParam[1] as BigNumber).toString()
         return MaxUint256 === result ? 'Infinite' : result
     } catch {

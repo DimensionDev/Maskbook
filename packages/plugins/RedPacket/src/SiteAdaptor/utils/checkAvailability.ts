@@ -1,14 +1,12 @@
-import { Interface } from '@ethersproject/abi'
-import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
-import type { ChainId } from '@masknet/web3-shared-evm'
-import type { RedpacketAvailability } from '@masknet/web3-providers/types'
+import type { AbiItem } from 'web3-utils'
 import { Web3 } from '@masknet/web3-providers'
-
-const interFace = new Interface(REDPACKET_ABI)
+import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
+import { type ChainId, encodeInputString, decodeOutputString } from '@masknet/web3-shared-evm'
+import type { RedpacketAvailability } from '@masknet/web3-providers/types'
 
 // red-packet contract readonly method, read it no matter on whatever chains you are.
 export async function checkAvailability(pid: string, from: string, to: string, chainId: ChainId) {
-    const callData = interFace.encodeFunctionData('check_availability', [pid])
+    const callData = encodeInputString(REDPACKET_ABI as AbiItem[], [pid], 'check_availability')
     const data = await Web3.callTransaction(
         {
             to,
@@ -21,15 +19,16 @@ export async function checkAvailability(pid: string, from: string, to: string, c
 }
 
 function decodeResult(data: string): RedpacketAvailability {
-    const results = interFace.decodeFunctionResult('check_availability', data)
+    const results = decodeOutputString(REDPACKET_ABI as AbiItem[], data, 'check_availability')
+    if (!results) throw new Error('Failed to decode result.')
 
     return {
-        token_address: results[0],
-        balance: parseHexToInt(results[1]),
-        total: +parseHexToInt(results[2]),
-        claimed: +parseHexToInt(results[3]),
-        expired: !!results[4],
-        claimed_amount: parseHexToInt(results[5]),
+        token_address: results.token_address,
+        balance: parseHexToInt(results.balance),
+        total: +parseHexToInt(results.total),
+        claimed: +parseHexToInt(results.claimed),
+        expired: !!results.expired,
+        claimed_amount: parseHexToInt(results.claimed_amount),
     }
 }
 
