@@ -1065,8 +1065,6 @@
     "plugin_mask_box_description": "NFT 미스터리박스를 론칭하는 멀티체인 탈중앙화 플랫폼",
     "plugin_transak_name": "Fiat On-Ramp",
     "plugin_transak_description": "Fit On-Ramp 애그리게이터. Transak 지원을 통해 60개 이상의 국가에서 암호화폐를 구매할 수 있습니다.",
-    "plugin_valuables_name": "귀중품",
-    "plugin_valuables_description": "크리에이터가 서명한 트윗을 구입 및 판매하기",
     "popups_wallet_unsupported_network": "지원되지 않는 네트워크",
     "plugin_default_title": "디폴트",
     "plugin_provider_by": "제공자",

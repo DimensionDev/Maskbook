@@ -1067,8 +1067,6 @@
     "plugin_mask_box_description": "支持多链的去中心化NFT盲盒发布平台。",
     "plugin_transak_name": "法币入金",
     "plugin_transak_description": "法币入金可支持在60多个国家内购买代币。",
-    "plugin_valuables_name": "Valuables",
-    "plugin_valuables_description": "购买和销售由其原创作者发布的推文。",
     "popups_wallet_unsupported_network": "不支持的网络类型",
     "plugin_default_title": "默认",
     "plugin_provider_by": "提供方：",
