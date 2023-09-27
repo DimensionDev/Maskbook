@@ -1,9 +1,10 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography, useTheme, ButtonBase } from '@mui/material'
-import { type BindingProof, PopupRoutes } from '@masknet/shared-base'
+import { PopupRoutes } from '@masknet/shared-base'
 import { useNavigate } from 'react-router-dom'
 import { AccountRender } from '../../AccountRender/index.js'
+import type { Profile } from '../../common.js'
 
 const useStyles = makeStyles()((theme) => ({
     connectedAccounts: {
@@ -28,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface ConnectedAccountsProps {
     avatar?: string
-    profiles?: BindingProof[]
+    profiles?: Profile[]
     nextId?: string
     publicKey?: string
     isLocal?: boolean

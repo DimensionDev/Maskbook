@@ -16,16 +16,18 @@ export class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId
     private FungibleToken = new EVM_FungibleTokenAPI()
 
     async getAssets(address: string, options?: HubOptions_Base<ChainId>) {
-        const result = await fetchCachedJSON<WalletTokenRecord[] | undefined>(
-            urlcat(DEBANK_OPEN_API, '/v1/user/all_token_list', {
-                id: address,
-                is_all: false,
-            }),
-            undefined,
-            {
-                cacheDuration: Duration.TEN_SECONDS,
-            },
-        )
+        const result = (
+            await fetchCachedJSON<WalletTokenRecord[] | undefined>(
+                urlcat(DEBANK_OPEN_API, '/v1/user/all_token_list', {
+                    id: address,
+                    is_all: true,
+                }),
+                undefined,
+                {
+                    cacheDuration: Duration.TEN_SECONDS,
+                },
+            )
+        )?.filter((x) => x.is_verified)
 
         return createPageable(
             unionWith(
