@@ -6,15 +6,35 @@ import { CalendarContent } from '@masknet/plugin-calendar'
 
 const sidebarSearchSelector: () => LiveSelector<HTMLElement, true> = () => {
     return querySelector<HTMLElement>(
-        '[data-testid="sidebarColumn"] [tabindex="0"] div > :nth-child(2):not(div[tabindex="0"])',
+        '[data-testid="sidebarColumn"] > div > div > div > div[tabindex="0"] > div > div:not(div[tabindex="0"]):empty',
     )
 }
 
+const sidebarExplorePageSelector: () => LiveSelector<HTMLElement, true> = () => {
+    return querySelector<HTMLElement>('[data-testid="settingsAppBar"]')
+        .closest(12)
+        .querySelector('[data-testid="sidebarColumn"] [tabindex="0"] > div')
+}
+
+const sidebarSearchPageSelector: () => LiveSelector<HTMLElement, true> = () => {
+    return querySelector<HTMLElement>('[data-testid="searchBoxOverflowButton"]')
+        .closest(11)
+        .querySelector('[data-testid="sidebarColumn"] [tabindex="0"] > div > div')
+}
 export function injectCalendar(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(sidebarSearchSelector())
+    const exploreWatcher = new MutationObserverWatcher(sidebarExplorePageSelector())
+    const searchWatcher = new MutationObserverWatcher(sidebarSearchPageSelector())
     startWatch(watcher, signal)
-
+    startWatch(exploreWatcher, signal)
+    startWatch(searchWatcher, signal)
     attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
+        <CalendarContent />,
+    )
+    attachReactTreeWithContainer(exploreWatcher.firstDOMProxy.beforeShadow, { untilVisible: true, signal }).render(
+        <CalendarContent />,
+    )
+    attachReactTreeWithContainer(searchWatcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
         <CalendarContent />,
     )
 }
