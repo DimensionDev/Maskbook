@@ -66,7 +66,7 @@ export function CalendarContent() {
     if (isMinimalMode) return null
 
     return (
-        <div className={classes.calendar}>
+        <div className={classes.calendar} style={{ marginTop: location.pathname.includes('explore') ? 24 : 0 }}>
             <TabContext value={currentTab}>
                 <div className={classes.tabList}>
                     <MaskTabList variant="base" onChange={onChange} aria-label="">
