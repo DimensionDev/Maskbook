@@ -244,7 +244,7 @@ export function TrendingView(props: TrendingViewProps) {
         setTab(tabs[0])
     }, [result, tabs[0]])
 
-    const tabComponents = useMemo(() => {
+    const TabComponents = useMemo(() => {
         const configs = [
             {
                 key: ContentTab.Market,
@@ -322,7 +322,8 @@ export function TrendingView(props: TrendingViewProps) {
     // #endregion
 
     const { coin, tickers } = trending
-    const component = (
+
+    const Component = (
         <TrendingViewDeck
             classes={{
                 body: classes.body,
@@ -366,7 +367,7 @@ export function TrendingView(props: TrendingViewProps) {
                             }
                         }}
                         aria-label="Network Tabs">
-                        {tabComponents}
+                        {TabComponents}
                     </MaskTabList>
                 </Stack>
             </TabContext>
@@ -474,11 +475,11 @@ export function TrendingView(props: TrendingViewProps) {
         return (
             <PluginCardFrameMini>
                 <ThemeProvider theme={MaskLightTheme}>
-                    <PluginEnableBoundary pluginID={PluginID.Web3Profile}>{component}</PluginEnableBoundary>
+                    <PluginEnableBoundary pluginID={PluginID.Web3Profile}>{Component}</PluginEnableBoundary>
                 </ThemeProvider>
             </PluginCardFrameMini>
         )
     }
 
-    return component
+    return Component
 }
