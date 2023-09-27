@@ -9,7 +9,7 @@ export const base: Plugin.Shared.Definition = {
     publisher: { name: { fallback: '' }, link: '' },
     enableRequirement: {
         supports: { type: 'opt-out', sites: {} },
-        target: 'beta',
+        target: 'stable',
     },
     experimentalMark: true,
     i18n: languages,
