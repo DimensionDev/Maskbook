@@ -203,7 +203,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     )
     // #endregion
 
-    console.log(gasOption?.gasOptionType)
     return (
         <TabContext value={currentTab}>
             <InjectedDialog
