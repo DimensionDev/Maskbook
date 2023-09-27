@@ -52,11 +52,11 @@ export interface SearchResultInspectorProps {
 }
 
 export function SearchResultInspector(props: SearchResultInspectorProps) {
-    const translate = usePluginTransField()
-
-    const dSearchEnabled = useIsMinimalMode(PluginID.Handle)
-
     const { identity, profileTabType, isProfilePage } = props
+
+    const translate = usePluginTransField()
+    const isMinimalMode = useIsMinimalMode(PluginID.Handle)
+
     const keyword_ = useSearchedKeyword()
     const keyword = props.keyword || keyword_
     const activatedPlugins = useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode()
@@ -118,7 +118,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         return <Component result={currentResult} />
     }, [currentTab, resultList.value])
 
-    if (!dSearchEnabled && !isProfilePage) return null
+    if (isMinimalMode && !isProfilePage) return null
     if (!keyword && !currentResult) return null
     if (!contentComponent) return null
 

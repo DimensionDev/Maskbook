@@ -4,6 +4,9 @@ import { first } from 'lodash-es'
 import { TabContext } from '@mui/lab'
 import { Link, Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
+import { useQuery } from '@tanstack/react-query'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import {
     useActivatedPluginsSiteAdaptor,
     useIsMinimalMode,
@@ -50,9 +53,6 @@ import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource
 import { SearchResultInspector } from './SearchResultInspector.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 import Services from '#services'
-import { useQuery } from '@tanstack/react-query'
-import { Telemetry } from '@masknet/web3-telemetry'
-import { EventType, EventID } from '@masknet/web3-telemetry/types'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
