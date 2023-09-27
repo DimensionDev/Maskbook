@@ -14,9 +14,10 @@ export interface MaskAccount {
 /**
  * @param chainId Chain ID
  */
-export async function selectMaskAccount(chainId: ChainId): Promise<MaskAccount[]> {
+export async function selectMaskAccount(chainId: ChainId, defaultAddress: string): Promise<MaskAccount[]> {
     await openPopupWindow(Providers[ProviderType.MaskWallet].wallets ? PopupRoutes.SelectWallet : PopupRoutes.Wallet, {
         chainId,
+        address: defaultAddress,
     })
     deferred = defer()
     return deferred![0]

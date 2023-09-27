@@ -1,26 +1,29 @@
-import { toBlob } from 'html-to-image'
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
-import { useAsync, useAsyncFn } from 'react-use'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import { Alert, alpha, Box, Button, Stack, Typography, useTheme } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { useAsync, useAsyncFn } from 'react-use'
+import urlcat from 'urlcat'
+import { toBlob } from 'html-to-image'
 import { Icons } from '@masknet/icons'
+import { defer, timeout } from '@masknet/kit'
 import { CopyButton } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { generateNewWalletName } from '@masknet/web3-shared-base'
+import { makeStyles } from '@masknet/theme'
+import { useWallets } from '@masknet/web3-hooks-base'
+import { Providers, Web3 } from '@masknet/web3-providers'
+import { generateNewWalletName, isSameAddress } from '@masknet/web3-shared-base'
+import { ProviderType } from '@masknet/web3-shared-evm'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
+import { Alert, Box, Button, Stack, Typography, alpha, useTheme } from '@mui/material'
+import Services from '#services'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
-import { ResetWalletContext } from '../context.js'
+import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useMnemonicWordsPuzzle, type PuzzleWord } from '../../../hooks/useMnemonicWordsPuzzle.js'
 import { useDashboardTrans } from '../../../locales/index.js'
+import { ResetWalletContext } from '../context.js'
 import { ComponentToPrint } from './ComponentToPrint.js'
-import { SetupFrameController } from '../../../components/SetupFrame/index.js'
-import { useWallets } from '@masknet/web3-hooks-base'
-import { Telemetry } from '@masknet/web3-telemetry'
-import { EventType, EventID } from '@masknet/web3-telemetry/types'
-import Services from '#services'
-import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -131,6 +134,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: '9px 8px',
         alignItems: 'center',
         marginRight: 24,
+        cursor: 'pointer',
     },
     puzzleWordText: {
         fontSize: 14,
@@ -161,6 +165,16 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 400,
     },
 }))
+
+async function pollResult(address: string) {
+    const subscription = Providers[ProviderType.MaskWallet].subscription.wallets
+    if (subscription.getCurrentValue().find((x) => isSameAddress(x.address, address))) return
+    const [promise, resolve] = defer()
+    const unsubscribe = subscription.subscribe(() => {
+        if (subscription.getCurrentValue().find((x) => isSameAddress(x.address, address))) resolve(true)
+    })
+    return timeout(promise, 10_000, 'It takes too long to create a wallet. You might try again.').finally(unsubscribe)
+}
 
 const CreateMnemonic = memo(function CreateMnemonic() {
     const location = useLocation()
@@ -204,6 +218,11 @@ const CreateMnemonic = memo(function CreateMnemonic() {
         const result = await handlePasswordAndWallets(location.state?.password, location.state?.isReset)
         if (!result) return
         const address = await Services.Wallet.createWalletFromMnemonicWords(walletName, words.join(' '))
+        await pollResult(address)
+        await Web3.connect({
+            providerType: ProviderType.MaskWallet,
+            account: address,
+        })
         await Services.Wallet.resolveMaskAccount([{ address }])
         Telemetry.captureEvent(EventType.Access, EventID.EntryPopupWalletCreate)
         navigate(urlcat(DashboardRoutes.SignUpMaskWalletOnboarding, { external_request }), { replace: true })
