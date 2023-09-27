@@ -30,7 +30,7 @@ export const ReversedAddress = memo<ReverseAddressProps>(({ address, pluginID, s
     return hasEllipsis ? (
         <ShadowRootTooltip
             title={showDomain ? domain : address}
-            PopperProps={{ ...popperProps, style: { whiteSpace: 'break-spaces', zIndex: 10 } }}>
+            PopperProps={{ ...popperProps, style: { whiteSpace: 'break-spaces' } }}>
             {node}
         </ShadowRootTooltip>
     ) : (
