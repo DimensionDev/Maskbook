@@ -40,9 +40,7 @@ export const LocalBackup = memo(function LocalBackup() {
         hasPassword,
         previewInfo,
         loading,
-        backupPersonas,
         backupWallets,
-        setBackupPersonas,
         setBackupWallets,
         formState: {
             setError,
@@ -63,7 +61,7 @@ export const LocalBackup = memo(function LocalBackup() {
                 }
             }
             const { file } = await Services.Backup.createBackupFile({
-                excludeBase: !backupPersonas,
+                excludeBase: false,
                 excludeWallet: !backupWallets,
             })
 
@@ -82,7 +80,7 @@ export const LocalBackup = memo(function LocalBackup() {
 
             window.close()
         },
-        [backupPersonas, backupWallets, hasPassword, setError, updateUser, user],
+        [backupWallets, hasPassword, setError, updateUser, user],
     )
 
     return (
@@ -94,29 +92,22 @@ export const LocalBackup = memo(function LocalBackup() {
                 <Typography className={classes.description}>{t.data_backup_description()}</Typography>
                 {!loading && previewInfo ? (
                     <Box display="flex" flexDirection="column">
-                        <PersonasBackupPreview
-                            info={previewInfo}
-                            selectable
-                            selected={backupPersonas}
-                            onChange={setBackupPersonas}
-                        />
+                        <PersonasBackupPreview info={previewInfo} />
 
-                        {backupPersonas ? (
-                            <Controller
-                                control={control}
-                                render={({ field }) => (
-                                    <PasswordField
-                                        {...field}
-                                        onFocus={() => clearErrors()}
-                                        sx={{ mb: 2 }}
-                                        placeholder={t.settings_label_backup_password()}
-                                        error={!!errors.backupPassword?.message}
-                                        helperText={errors.backupPassword?.message}
-                                    />
-                                )}
-                                name="backupPassword"
-                            />
-                        ) : null}
+                        <Controller
+                            control={control}
+                            render={({ field }) => (
+                                <PasswordField
+                                    {...field}
+                                    onFocus={() => clearErrors()}
+                                    sx={{ mb: 2 }}
+                                    placeholder={t.settings_label_backup_password()}
+                                    error={!!errors.backupPassword?.message}
+                                    helperText={errors.backupPassword?.message}
+                                />
+                            )}
+                            name="backupPassword"
+                        />
 
                         <WalletsBackupPreview
                             wallets={previewInfo.wallets}

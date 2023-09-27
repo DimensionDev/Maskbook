@@ -18,14 +18,13 @@ export function useBackupFormState() {
     const { value: hasPassword } = useAsync(Services.Wallet.hasPassword, [])
     const { value: previewInfo, loading } = useAsync(Services.Backup.generateBackupPreviewInfo, [])
     const { user } = UserContext.useContainer()
-    const [backupPersonas, setBackupPersonas] = useState(true)
     const [backupWallets, setBackupWallets] = useState(false)
 
     const formState = useForm<BackupFormInputs>({
         mode: 'onBlur',
         context: {
             user,
-            backupPersonas,
+
             backupWallets,
             hasPassword,
         },
@@ -35,14 +34,12 @@ export function useBackupFormState() {
         },
         resolver: zodResolver(
             z.object({
-                backupPassword: backupPersonas
-                    ? z
-                          .string()
-                          .min(8, t.incorrect_password())
-                          .max(20, t.incorrect_password())
-                          .refine((password) => password === user.backupPassword, t.incorrect_password())
-                          .refine((password) => passwordRegexp.test(password), t.incorrect_password())
-                    : z.string().optional(),
+                backupPassword: z
+                    .string()
+                    .min(8, t.incorrect_password())
+                    .max(20, t.incorrect_password())
+                    .refine((password) => password === user.backupPassword, t.incorrect_password())
+                    .refine((password) => passwordRegexp.test(password), t.incorrect_password()),
                 paymentPassword:
                     backupWallets && hasPassword
                         ? z
@@ -60,9 +57,7 @@ export function useBackupFormState() {
         hasPassword,
         previewInfo,
         loading,
-        backupPersonas,
         backupWallets,
-        setBackupPersonas,
         setBackupWallets,
         formState,
     }
