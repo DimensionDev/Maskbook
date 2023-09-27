@@ -86,6 +86,8 @@ const useStyles = makeStyles<{
             : {
                   background: 'transparent',
                   maxHeight: props.currentTab === ContentTab.Market ? 374 : 'unset',
+                  display: 'flex',
+                  flexDirection: 'column',
               },
         footerSkeleton: props.isTokenTagPopper
             ? {}
@@ -183,12 +185,12 @@ export function TrendingView(props: TrendingViewProps) {
             }
             setCurrentPriceChange(map[days as Days])
         },
-        [JSON.stringify(trending?.market)],
+        [trending?.market],
     )
 
     useEffect(() => {
         onPriceDaysControlChange(Days.ONE_DAY)
-    }, [JSON.stringify(trending?.market)])
+    }, [trending?.market])
 
     const isNFT = trending?.coin.type === TokenType.NonFungible
     const {
