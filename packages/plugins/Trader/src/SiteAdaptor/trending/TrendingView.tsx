@@ -86,6 +86,8 @@ const useStyles = makeStyles<{
             : {
                   background: 'transparent',
                   maxHeight: props.currentTab === ContentTab.Market ? 374 : 'unset',
+                  display: 'flex',
+                  flexDirection: 'column',
               },
         footerSkeleton: props.isTokenTagPopper
             ? {}
@@ -183,19 +185,15 @@ export function TrendingView(props: TrendingViewProps) {
             }
             setCurrentPriceChange(map[days as Days])
         },
-        [JSON.stringify(trending?.market)],
+        [trending?.market],
     )
 
     useEffect(() => {
         onPriceDaysControlChange(Days.ONE_DAY)
-    }, [JSON.stringify(trending?.market)])
+    }, [trending?.market])
 
     const isNFT = trending?.coin.type === TokenType.NonFungible
-    const {
-        value: stats = EMPTY_LIST,
-        loading: loadingStats,
-        retry: retryStats,
-    } = usePriceStats({
+    const { data: stats = EMPTY_LIST, isLoading: loadingStats } = usePriceStats({
         chainId: result.chainId,
         coinId: trending?.coin.id,
         sourceType: isNFT ? SourceType.NFTScan : trending?.dataProvider,
@@ -394,7 +392,6 @@ export function TrendingView(props: TrendingViewProps) {
                             }
                             currency={trending.currency}
                             stats={stats}
-                            retry={retryStats}
                             loading={loadingStats}>
                             <PriceChartDaysControl
                                 rangeOptions={DEFAULT_RANGE_OPTIONS}
