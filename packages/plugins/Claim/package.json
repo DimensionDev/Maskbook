@@ -32,7 +32,6 @@
         "@ethersproject/abi": "^5.4.0",
         "react-use": "^17.4.0",
         "use-subscription": "^1.8.0",
-        "ethers": "^5.6.8",
         "merkletreejs": "^0.3.10"
     }
 }

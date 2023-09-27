@@ -1568,9 +1568,6 @@ importers:
       date-fns:
         specifier: ^2.30.0
         version: 2.30.0
-      ethers:
-        specifier: ^5.6.8
-        version: 5.7.2
       merkletreejs:
         specifier: ^0.3.10
         version: 0.3.10
@@ -4248,15 +4245,6 @@ importers:
 
   packages/web3-shared/evm:
     dependencies:
-      '@ethersproject/bytes':
-        specifier: 5.7.0
-        version: 5.7.0
-      '@ethersproject/keccak256':
-        specifier: 5.7.0
-        version: 5.7.0
-      '@ethersproject/strings':
-        specifier: 5.7.0
-        version: 5.7.0
       '@masknet/flags':
         specifier: workspace:^
         version: link:../../flags
@@ -4284,9 +4272,6 @@ importers:
       ethereum-blockies:
         specifier: ^0.1.1
         version: 0.1.1
-      ethers:
-        specifier: ^5.7.2
-        version: 5.7.2
       fortmatic:
         specifier: ^2.2.1
         version: 2.2.1(patch_hash=tb3oevqnvhntsyfyhi2z6spuea)
@@ -36822,11 +36807,8 @@ time:
   /@ethersproject/abi@5.4.0: '2021-06-26T17:05:27.127Z'
   /@ethersproject/abi@5.7.0: '2022-08-19T21:19:34.932Z'
   /@ethersproject/address@5.4.0: '2021-06-26T17:04:46.615Z'
-  /@ethersproject/bytes@5.7.0: '2022-08-19T21:19:11.133Z'
-  /@ethersproject/keccak256@5.7.0: '2022-08-19T21:19:15.555Z'
   /@ethersproject/providers@5.7.2: '2022-10-19T22:59:19.925Z'
   /@ethersproject/solidity@5.4.0: '2021-06-26T17:05:05.396Z'
-  /@ethersproject/strings@5.7.0: '2022-08-19T21:19:26.755Z'
   /@headlessui/react@1.7.15: '2023-06-01T10:41:43.429Z'
   /@heroicons/react@2.0.18: '2023-05-09T19:41:26.731Z'
   /@hookform/resolvers@3.1.1: '2023-06-12T17:05:20.706Z'
@@ -36961,7 +36943,6 @@ time:
   /eslint-plugin-unused-imports@3.0.0: '2023-07-11T19:42:07.022Z'
   /eslint@8.48.0: '2023-08-25T20:02:06.946Z'
   /ethereum-blockies@0.1.1: '2017-06-12T21:12:31.823Z'
-  /ethers@5.7.2: '2022-10-19T22:59:23.032Z'
   /event-iterator@2.0.0: '2020-06-12T12:26:39.825Z'
   /fs-extra@11.1.1: '2023-03-20T14:56:50.321Z'
   /glob@10.3.4: '2023-08-30T22:45:21.320Z'
