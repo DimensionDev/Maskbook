@@ -1,6 +1,6 @@
 import { flatten } from 'lodash-es'
-import { useEffect, useRef, useState } from 'react'
-import { useAsync, useAsyncFn, useAsyncRetry } from 'react-use'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useAsyncFn } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -17,10 +17,10 @@ export function useNFT_TrendingOverview(
     id: string, // For nftscan it's address, for simplehash it's collection id.
     expectedChainId?: Web3Helper.ChainIdAll,
 ) {
-    return useAsync(async () => {
+    return useQuery(['nft-trending-overview', pluginID, expectedChainId, id], async () => {
         if (!id || !expectedChainId || !pluginID) return null
         return PluginTraderRPC.getNFT_TrendingOverview(pluginID, expectedChainId, id)
-    }, [id, expectedChainId, pluginID])
+    })
 }
 
 export function useNonFungibleTokenActivities(
@@ -87,6 +87,23 @@ export function useTrendingById(
         chainId: coinTrending?.coin.chainId as ChainId,
     })
 
+    const trendingData = useMemo(() => {
+        if (isLoading || error || !coinTrending) return
+        return {
+            ...coinTrending,
+            coin: {
+                ...coinTrending.coin,
+                id: coinTrending.coin.id ?? '',
+                name: coinTrending.coin.name ?? '',
+                symbol: coinTrending.coin.symbol ?? '',
+                type: coinTrending.coin.type ?? TokenType.Fungible,
+                decimals: coinTrending.coin.decimals || detailedToken?.decimals || 0,
+                contract_address: coinTrending.coin.contract_address ?? coinTrending.contracts?.[0]?.address ?? address,
+                chainId: coinTrending.coin.chainId ?? coinTrending.contracts?.[0]?.chainId ?? chainId,
+            },
+        }
+    }, [isLoading, error, coinTrending, detailedToken?.decimals])
+
     if (isLoading) {
         return {
             loading: true,
@@ -103,44 +120,29 @@ export function useTrendingById(
     return {
         value: {
             currency,
-            trending: coinTrending
-                ? {
-                      ...coinTrending,
-                      coin: {
-                          ...coinTrending.coin,
-                          id: coinTrending.coin.id ?? '',
-                          name: coinTrending.coin.name ?? '',
-                          symbol: coinTrending.coin.symbol ?? '',
-                          type: coinTrending.coin.type ?? TokenType.Fungible,
-                          decimals: coinTrending.coin.decimals || detailedToken?.decimals || 0,
-                          contract_address:
-                              coinTrending.coin.contract_address ?? coinTrending.contracts?.[0]?.address ?? address,
-                          chainId: coinTrending.coin.chainId ?? coinTrending.contracts?.[0]?.chainId ?? chainId,
-                      },
-                  }
-                : null,
+            trending: trendingData,
         },
         loading: isLoading,
     }
 }
 
 export function useCoinInfoByAddress(address: string) {
-    return useAsyncRetry(async () => {
-        if (!address) return
+    return useQuery(['coin-info-by-address', address], async () => {
+        if (!address) return null
         return PluginTraderRPC.getCoinInfoByAddress(address)
-    }, [address])
+    })
 }
 
 export function useHighestFloorPrice(id: string) {
-    return useAsyncRetry(async () => {
-        if (!id) return
+    return useQuery(['highest-floor-price', id], async () => {
+        if (!id) return null
         return PluginTraderRPC.getHighestFloorPrice(id)
-    }, [id])
+    })
 }
 
 export function useOneDaySaleAmounts(id: string) {
-    return useAsyncRetry(async () => {
-        if (!id) return
+    return useQuery(['one-day-sale-amount', id], async () => {
+        if (!id) return null
         return PluginTraderRPC.getOneDaySaleAmounts(id)
-    }, [id])
+    })
 }

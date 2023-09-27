@@ -45,7 +45,6 @@ export interface PriceChartProps extends withClasses<'root'> {
     width?: number
     height?: number
     amount: number
-    retry(): void
     children?: React.ReactNode
 }
 

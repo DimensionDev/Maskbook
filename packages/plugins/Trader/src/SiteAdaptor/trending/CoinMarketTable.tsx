@@ -53,11 +53,11 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
     const t = useTraderTrans()
     const { trending, result } = props
     const chainId = result.chainId ?? trending.coin.chainId
-    const { value: overview } = useNFT_TrendingOverview(result.pluginID, trending.coin.id, chainId)
-    const { value: highestPrice_ } = useHighestFloorPrice(
+    const { data: overview } = useNFT_TrendingOverview(result.pluginID, trending.coin.id, chainId)
+    const { data: highestPrice_ } = useHighestFloorPrice(
         overview?.highest_price ?? trending.market?.highest_price ? '' : trending.coin.id,
     )
-    const { value: salesOneDay_ } = useOneDaySaleAmounts(
+    const { data: salesOneDay_ } = useOneDaySaleAmounts(
         overview?.sales_24h ?? overview?.sales ?? trending.market?.total_24h ? '' : trending.coin.id,
     )
     const salesOneDay = salesOneDay_ ?? overview?.sales_24h ?? overview?.sales ?? trending.market?.total_24h
