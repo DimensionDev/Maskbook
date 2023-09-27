@@ -186,8 +186,8 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
         if (!innerRef?.current) return
 
         const current = innerRef.current
-        setIsTabsOverflow(current?.scrollWidth >= current?.clientWidth + defaultTabSize)
-    }, [innerRef?.current?.scrollWidth, innerRef?.current?.clientWidth, width])
+        setIsTabsOverflow(current.scrollWidth >= current.clientWidth + defaultTabSize)
+    }, [innerRef?.current, width])
     // #endregion
 
     const children = Children.map(props.children, (child) => {
@@ -269,7 +269,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
                         ref={innerRef}
                         role="tablist">
                         {flexibleTabs}
-                        {isTabsOverflow && !hideArrowButton ? (
+                        {(isTabsOverflow || open) && !hideArrowButton ? (
                             <ArrowButtonWrap
                                 className={classes?.arrowButton}
                                 variant="text"
