@@ -1,5 +1,9 @@
 import { Icons, type GeneratedIcon } from '@masknet/icons'
-import { NextIDPlatform } from '@masknet/shared-base'
+import { NextIDPlatform, type BindingProof, type EnhanceableSite } from '@masknet/shared-base'
+
+export type Profile = Omit<BindingProof, 'platform'> & {
+    platform: NextIDPlatform | EnhanceableSite.Twitter | EnhanceableSite.Facebook | EnhanceableSite.Instagram
+}
 
 export type SupportedPlatforms =
     | NextIDPlatform.Ethereum

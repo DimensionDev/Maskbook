@@ -14,10 +14,9 @@ import {
 } from '@masknet/shared-base'
 import { CopyButton, PersonaContext } from '@masknet/shared'
 import { NextIDPlatform } from '@masknet/shared-base'
-import { attachNextIDToProfile } from '../../../../../utils/utils.js'
-import { ConnectedAccounts } from './ConnectedAccounts/index.js'
-import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
 import Services from '#services'
+import { ConnectedAccounts } from './ConnectedAccounts/index.js'
+import { attachNextIDToProfile } from '../../../../../utils/utils.js'
 import { type Friend, useFriendProfiles } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -56,7 +55,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface ContactCardProps {
+export interface ContactCardProps {
     avatar?: string
     proofProfiles?: BindingProof[]
     nextId?: string
@@ -82,8 +81,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
     const [local, setLocal] = useState(false)
     const [seen, ref] = useEverSeen<HTMLLIElement>()
     const { currentPersona } = PersonaContext.useContainer()
-    const { t } = useMaskSharedTrans()
-    const profiles = useFriendProfiles(seen, nextId, profile?.userId)
+    const profiles = useFriendProfiles(seen, nextId, profile)
     const rawPublicKey = currentPersona?.identifier.rawPublicKey
     const queryClient = useQueryClient()
 
