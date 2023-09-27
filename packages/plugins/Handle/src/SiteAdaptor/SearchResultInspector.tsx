@@ -106,6 +106,7 @@ export const SearchResultInspectorContent = memo(function SearchResultInspectorC
 
 const useTheme = () => MaskLightTheme
 const useMaskIconPalette = (theme: Theme) => theme.palette.mode
+
 export const SearchResultInspector = memo(function SearchResultInspector(props: SearchResultInspectorProps) {
     return (
         <ENSProvider {...props}>

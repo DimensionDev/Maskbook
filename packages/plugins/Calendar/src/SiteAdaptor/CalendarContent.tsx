@@ -1,5 +1,6 @@
 /* cspell: disable */
 import React, { useState, useMemo } from 'react'
+import { safeUnreachable } from '@masknet/kit'
 import { PluginID } from '@masknet/shared-base'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
@@ -11,7 +12,6 @@ import { NewsList } from './components/NewsList.js'
 import { EventList } from './components/EventList.js'
 import { NFTList } from './components/NFTList.js'
 import { Footer } from './components/Footer.js'
-import { safeUnreachable } from '@masknet/kit'
 import { useI18N } from '../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -39,12 +39,12 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function CalendarContent() {
+    const t = useI18N()
     const { classes } = useStyles()
-    const disable = useIsMinimalMode(PluginID.Calendar)
+    const isMinimalMode = useIsMinimalMode(PluginID.Calendar)
     const [currentTab, onChange, tabs] = useTabs('news', 'event', 'nfts')
     const [selectedDate, setSelectedDate] = useState(new Date())
     const [open, setOpen] = useState(false)
-    const t = useI18N()
     const { data: eventList, isLoading: eventLoading } = useEventList(selectedDate)
     const { data: newsList, isLoading: newsLoading } = useNewsList(selectedDate)
     const { data: nftList, isLoading: nftLoading } = useNFTList(selectedDate)
@@ -62,7 +62,10 @@ export function CalendarContent() {
         }
     }, [currentTab, newsList, eventList, nftList])
     const dateString = useMemo(() => selectedDate.toLocaleDateString(), [selectedDate])
-    return !disable ? (
+
+    if (isMinimalMode) return null
+
+    return (
         <div className={classes.calendar}>
             <TabContext value={currentTab}>
                 <div className={classes.tabList}>
@@ -107,5 +110,5 @@ export function CalendarContent() {
                 <Footer provider={currentTab} />
             </TabContext>
         </div>
-    ) : null
+    )
 }
