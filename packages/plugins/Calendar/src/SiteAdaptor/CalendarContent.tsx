@@ -13,6 +13,7 @@ import { EventList } from './components/EventList.js'
 import { NFTList } from './components/NFTList.js'
 import { Footer } from './components/Footer.js'
 import { useI18N } from '../locales/i18n_generated.js'
+import { useLocationChange } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     calendar: {
@@ -38,9 +39,10 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function CalendarContent() {
+export function CalendarContent({ target }: { target?: string }) {
     const t = useI18N()
     const { classes } = useStyles()
+    const [pathname, setPathname] = useState(location.pathname)
     const isMinimalMode = useIsMinimalMode(PluginID.Calendar)
     const [currentTab, onChange, tabs] = useTabs('news', 'event', 'nfts')
     const [selectedDate, setSelectedDate] = useState(new Date())
@@ -63,10 +65,13 @@ export function CalendarContent() {
     }, [currentTab, newsList, eventList, nftList])
     const dateString = useMemo(() => selectedDate.toLocaleDateString(), [selectedDate])
 
-    if (isMinimalMode) return null
+    useLocationChange(() => {
+        setPathname(location.pathname)
+    })
+    if (isMinimalMode || (target && !pathname?.includes(target))) return null
 
     return (
-        <div className={classes.calendar} style={{ marginTop: location.pathname.includes('explore') ? 24 : 0 }}>
+        <div className={classes.calendar} style={{ marginTop: pathname?.includes('explore') ? 24 : 0 }}>
             <TabContext value={currentTab}>
                 <div className={classes.tabList}>
                     <MaskTabList variant="base" onChange={onChange} aria-label="">
