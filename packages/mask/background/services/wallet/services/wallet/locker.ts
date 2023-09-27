@@ -18,6 +18,7 @@ export async function unlockWallet(unverifiedPassword: string) {
         await password.verifyPasswordRequired(unverifiedPassword)
         currentMaskWalletLockStatusSettings.value = LockStatus.UNLOCK
         CrossIsolationMessages.events.walletLockStatusUpdated.sendToAll(false)
+        await setAutoLockTimer()
         return true
     } catch {
         CrossIsolationMessages.events.walletLockStatusUpdated.sendToAll(true)
@@ -38,3 +39,6 @@ export async function setAutoLockTimer() {
         await lockWallet()
     }, autoLockDuration)
 }
+
+// Reset timer
+CrossIsolationMessages.events.walletLockStatusUpdated.on(setAutoLockTimer)
