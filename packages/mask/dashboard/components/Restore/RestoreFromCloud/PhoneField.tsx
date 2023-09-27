@@ -89,7 +89,6 @@ export const PhoneField = memo(function PhoneField() {
         )
     }, [account, code, disabled, loading])
 
-    console.log(phoneForm)
     return (
         <>
             <PhoneNumberField
