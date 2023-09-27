@@ -715,13 +715,14 @@ export class ConnectionReadonlyAPI
     }
 
     async getTransactionNonce(address: string, initial?: ConnectionOptions) {
-        return this.Request.request<number>(
+        const nonce = await this.Request.request<number | string>(
             {
                 method: EthereumMethodType.ETH_GET_TRANSACTION_COUNT,
                 params: [address, 'latest'],
             },
             initial,
         )
+        return toNumber(nonce)
     }
 
     signMessage(
