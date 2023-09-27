@@ -37,7 +37,7 @@ export const PhoneForm = memo(function PhoneForm() {
 
     const handleSendVerificationCode = useCallback(async () => {
         const response = await sendCode({
-            account: countryCode + phone,
+            account: `+${countryCode}${phone}`,
             type: AccountType.Phone,
             scenario: user.phone ? Scenario.change : Scenario.create,
             locale: lang.includes('zh') ? Locale.zh : Locale.en,

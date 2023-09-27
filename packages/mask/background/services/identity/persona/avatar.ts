@@ -11,7 +11,10 @@ export async function getPersonaAvatar(
     if (!identifiers) return undefined
     // Array.isArray cannot guard for readonly array.
     // eslint-disable-next-line @masknet/type-no-instanceof-wrapper
-    return queryAvatarsDataURL(identifiers instanceof Array ? identifiers : [identifiers])
+    const map = await queryAvatarsDataURL(identifiers instanceof Array ? identifiers : [identifiers])
+    // eslint-disable-next-line @masknet/type-no-instanceof-wrapper
+    if (identifiers instanceof Array) return map
+    return map.get(identifiers)
 }
 
 export async function getPersonaAvatarLastUpdateTime(identifier?: PersonaIdentifier | null) {

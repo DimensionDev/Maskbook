@@ -69,7 +69,7 @@ const CloudBackupInner = memo(function CloudBackupInner() {
     const [{ loading }, handleSubmit] = useAsyncFn(
         async (data: CloudBackupFormInputs) => {
             const response = await fetchDownloadLink({
-                account: currentTab === tabs.email ? data.email : data.countryCode + data.phone,
+                account: currentTab === tabs.email ? data.email : `+${data.countryCode} ${data.phone}`,
                 type: currentTab === tabs.email ? AccountType.Email : AccountType.Phone,
                 code: data.code,
             }).catch((error) => {
@@ -83,7 +83,7 @@ const CloudBackupInner = memo(function CloudBackupInner() {
                     navigate(
                         urlcat(DashboardRoutes.CloudBackupPreview, {
                             type: currentTab === tabs.email ? AccountType.Email : AccountType.Phone,
-                            account: currentTab === tabs.email ? data.email : data.countryCode + data.phone,
+                            account: currentTab === tabs.email ? data.email : `+${data.countryCode} ${data.phone}`,
                             code: data.code,
                         }),
                     )
@@ -100,7 +100,7 @@ const CloudBackupInner = memo(function CloudBackupInner() {
                 urlcat(DashboardRoutes.CloudBackupPreview, {
                     ...response,
                     type: currentTab === tabs.email ? AccountType.Email : AccountType.Phone,
-                    account: currentTab === tabs.email ? data.email : data.countryCode + data.phone,
+                    account: currentTab === tabs.email ? data.email : `+${data.countryCode} ${data.phone}`,
                     code: data.code,
                 }),
             )

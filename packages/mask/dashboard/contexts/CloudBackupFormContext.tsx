@@ -55,7 +55,7 @@ function useCloudBackupFormContext() {
                     (data) => {
                         if (currentTab !== tabs.mobile) return true
                         if (!data.countryCode || !data.phone) return false
-                        return phoneRegexp.test(data.countryCode + data.phone)
+                        return phoneRegexp.test(`+${data.countryCode} ${data.phone}`)
                     },
                     {
                         message: t.settings_dialogs_incorrect_phone(),
