@@ -20,6 +20,8 @@ export function useContacts(network: string): AsyncStateRetry<ProfileInformation
         if (values.length === 0) return EMPTY_LIST
 
         const identifiers = values.map((x) => x.profile).filter(isProfileIdentifier)
-        return (await Services.Identity.queryProfilesInformation(identifiers)).filter((x) => x.linkedPersona)
+        return (await Services.Identity.queryProfilesInformation(identifiers)).filter(
+            (x) => x.linkedPersona && x.linkedPersona !== currentPersona?.identifier,
+        )
     }, [network, currentPersona])
 }
