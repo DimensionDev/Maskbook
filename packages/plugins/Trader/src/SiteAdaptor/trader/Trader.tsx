@@ -4,7 +4,7 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { BigNumber } from 'bignumber.js'
 import { delay } from '@masknet/kit'
 import { Box, Typography, useTheme } from '@mui/material'
-import { ImageIcon, ConfirmModal, SelectProviderModal, SelectFungibleTokenModal } from '@masknet/shared'
+import { ConfirmModal, SelectProviderModal, SelectFungibleTokenModal } from '@masknet/shared'
 import { formatBalance, isSameAddress, isZero, minus, toFixed } from '@masknet/web3-shared-base'
 import { addGasMargin, ChainId, type EIP1559GasConfig, type GasConfig } from '@masknet/web3-shared-evm'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
@@ -33,6 +33,7 @@ import { useUpdateBalance } from './hooks/useUpdateBalance.js'
 import { TradeForm } from './TradeForm.js'
 import { TraderStateBar } from './TraderStateBar.js'
 import { ConfirmDialog } from './ConfirmDialog.js'
+import { Icons } from '@masknet/icons'
 
 export interface TraderProps extends withClasses<'root'> {
     defaultInputCoin?: Web3Helper.FungibleTokenAll
@@ -239,7 +240,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             title: t.swap(),
             content: (
                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-                    <ImageIcon icon={inputToken?.logoURL} size={90} style={{ borderRadius: 99 }} />
+                    <Icons.FillSuccess size={90} style={{ borderRadius: 99 }} />
                     <Typography
                         fontSize={20}
                         lineHeight="24px"

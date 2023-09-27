@@ -89,9 +89,10 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
     }, [onClose])
 
     const { value: encrypted, error } = useAsync(async () => {
-        if (!downloadLink) return
+        if (!downloadLink || !open) return
 
-        const response = await fetch(downloadLink, { method: 'GET' })
+        const response = await fetch(downloadLink, { method: 'GET', cache: 'no-store' })
+
         if (!response.ok || response.status !== 200) {
             showSnackbar(t.cloud_backup_download_link_expired(), { variant: 'error' })
             handleClose()
@@ -118,7 +119,7 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
             setProcess((received / Number(contentLength)) * 100)
         }
         return Uint8Array.from(chunks).buffer
-    }, [downloadLink, handleClose])
+    }, [downloadLink, handleClose, open])
 
     const fileName = useMemo(() => {
         try {

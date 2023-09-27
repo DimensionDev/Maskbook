@@ -92,6 +92,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
             control,
             handleSubmit,
             reset,
+            resetField,
             formState: { errors, isDirty, isValid },
         },
     } = useBackupFormState()
@@ -155,12 +156,8 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
     }, [uploadLoading, onClose])
 
     useUpdateEffect(() => {
-        reset(undefined, {
-            keepDirty: true,
-            keepDirtyValues: true,
-            keepTouched: true,
-        })
-    }, [backupWallets, reset])
+        resetField('paymentPassword')
+    }, [backupWallets, resetField])
 
     const content = useMemo(() => {
         if (value)
