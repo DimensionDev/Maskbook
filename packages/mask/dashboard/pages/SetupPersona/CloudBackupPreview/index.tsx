@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material'
-import { memo, useCallback, useEffect, useMemo } from 'react'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useDashboardI18N } from '../../../locales/i18n_generated.js'
 import { ActionButton, TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
@@ -55,11 +55,9 @@ export const CloudBackupPreview = memo(function CloudBackupPreview() {
     const t = useDashboardI18N()
 
     const { classes, theme, cx } = useStyles()
-
+    const [code, setCode] = useState('')
     const [params] = useSearchParams()
     const location = useLocation()
-
-    const code = location.state?.code as string
 
     const navigate = useNavigate()
 
@@ -72,7 +70,7 @@ export const CloudBackupPreview = memo(function CloudBackupPreview() {
             size: params.get('size'),
             type: params.get('type'),
         }
-    }, [])
+    }, [params])
 
     const [{ loading: mergeLoading }, handleMergeClick] = useAsyncFn(async () => {
         if (
@@ -129,9 +127,10 @@ export const CloudBackupPreview = memo(function CloudBackupPreview() {
         })
     }, [t, previewInfo])
 
+    // cache the code to state
     useEffect(() => {
-        if (!code) navigate(DashboardRoutes.CloudBackup, { replace: true })
-    }, [code, navigate])
+        if (location.state?.code) setCode(location.state.code)
+    }, [location.state?.code])
 
     return (
         <>

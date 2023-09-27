@@ -63,7 +63,7 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
             <Box padding="16px">
                 <Search setSearchValue={setSearchValue} />
             </Box>
-            {loading && !(searchValue ? searchResult.length : friends.length) ? (
+            {loading ? (
                 <div className={cx(classes.empty, classes.mainText)}>
                     <LoadingBase />
                     <Typography>{t('loading')}</Typography>

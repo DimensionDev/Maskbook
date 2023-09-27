@@ -11,13 +11,14 @@ const FriendsHome = memo(function FriendsHome() {
     const { t } = useI18N()
     useTitle(t('popups_encrypted_friends'))
 
-    const { data, fetchNextPage, isLoading, refetch } = useFriendsPaged()
+    const { data, fetchNextPage, isLoading, refetch, status, fetchRelationStatus } = useFriendsPaged()
     const friends = useMemo(() => data?.pages.flatMap((x) => x.friends) ?? EMPTY_LIST, [data])
     const [searchValue, setSearchValue] = useState('')
     const type = resolveNextIDPlatform(searchValue)
     const { loading: resolveLoading, value: keyword = '' } = useSearchValue(searchValue, type)
     const {
         isLoading: searchLoading,
+        isInitialLoading,
         data: searchResultArray,
         fetchNextPage: fetchNextSearchPage,
     } = useInfiniteQuery(
@@ -40,7 +41,13 @@ const FriendsHome = memo(function FriendsHome() {
     return (
         <FriendsHomeUI
             friends={data?.pages ?? EMPTY_LIST}
-            loading={isLoading || resolveLoading || searchLoading}
+            loading={
+                isLoading ||
+                resolveLoading ||
+                (!!keyword && !!type ? searchLoading : isInitialLoading) ||
+                status === 'loading' ||
+                fetchRelationStatus === 'loading'
+            }
             setSearchValue={setSearchValue}
             searchValue={searchValue}
             searchResult={searchedList}

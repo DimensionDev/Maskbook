@@ -14,7 +14,7 @@ import { encode } from '@msgpack/msgpack'
 import { Controller } from 'react-hook-form'
 import { PersonasBackupPreview, WalletsBackupPreview } from '../../components/BackupPreview/index.js'
 import PasswordField from '../../components/PasswordField/index.js'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
 import formatDateTime from 'date-fns/format'
 import { UserContext } from '../../../shared-ui/index.js'
@@ -75,6 +75,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
 }) {
     const controllerRef = useRef<AbortController | null>(null)
     const { classes, theme } = useStyles()
+    const [params, setParams] = useSearchParams()
     const navigate = useNavigate()
     const t = useDashboardI18N()
     const { updateUser } = UserContext.useContainer()
@@ -129,6 +130,13 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                     const now = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
                     showSnackbar(t.settings_alert_backup_success(), { variant: 'success' })
                     updateUser({ cloudBackupAt: now, cloudBackupMethod: type })
+                    if (!params.get('downloadURL')) navigate(DashboardRoutes.CloudBackup, { replace: true })
+                    setParams((params) => {
+                        params.set('size', encrypted.byteLength.toString())
+                        params.set('abstract', name)
+                        params.set('uploadedAt', Date.now().toString())
+                        return params.toString()
+                    })
                 }
                 return true
             } catch (error) {

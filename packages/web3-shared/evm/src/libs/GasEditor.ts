@@ -55,6 +55,7 @@ export class GasEditor {
                     this.EIP1559GasOptionConfig.gas && !isZero(this.EIP1559GasOptionConfig.gas)
                         ? toHex(this.EIP1559GasOptionConfig.gas)
                         : undefined,
+                gasOptionType: this.config.gasOptionType ?? config?.gasOptionType,
             }
         }
 
@@ -64,6 +65,7 @@ export class GasEditor {
             gasPrice: toHex(this.priorEIP1559GasOptionConfig.gasPrice) || toHex(priorConfig?.gasPrice || '0'),
             maxFeePerGas: undefined,
             maxPriorityFeePerGas: undefined,
+            gasOptionType: this.config.gasOptionType ?? priorConfig?.gasOptionType,
         }
     }
 
