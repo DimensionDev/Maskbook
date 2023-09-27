@@ -67,7 +67,7 @@ export function SwitchLogoButton() {
     const { classes, cx } = useStyles()
     const current = useLastRecognizedIdentity()
     const logoType = useValueRef(switchLogoSettings[current?.identifier?.userId || ''])
-    const disable = useIsMinimalMode(PluginID.SwitchLogo)
+    const isMinimalMode = useIsMinimalMode(PluginID.SwitchLogo)
 
     useLayoutEffect(() => {
         const node = LogoSelector.evaluate()
@@ -75,23 +75,23 @@ export function SwitchLogoButton() {
 
         node?.parentElement?.style.setProperty('position', 'relative')
 
-        if (logoType === SwitchLogoType.Classics && !disable) {
+        if (logoType === SwitchLogoType.Classics && !isMinimalMode) {
             // eslint-disable-next-line @masknet/browser-no-set-html
             node.innerHTML = BlueBirdHTML
         } else {
             // eslint-disable-next-line @masknet/browser-no-set-html
             node.innerHTML = LetterHTML || defaultXIcon
         }
-    }, [logoType, disable])
+    }, [logoType, isMinimalMode])
 
     const onClick = useCallback(() => {
-        if (disable) return
+        if (isMinimalMode) return
         CrossIsolationMessages.events.switchLogoDialogUpdated.sendToLocal({ open: true })
-    }, [disable])
+    }, [isMinimalMode])
 
     return (
         <div className={classes.switchIcon}>
-            <div className={cx(classes.iconBox, disable ? classes.hidden : classes.hover)}>
+            <div className={cx(classes.iconBox, isMinimalMode ? classes.hidden : classes.hover)}>
                 <Icons.SwitchLogo className={classes.icon} onClickCapture={onClick} />
             </div>
         </div>

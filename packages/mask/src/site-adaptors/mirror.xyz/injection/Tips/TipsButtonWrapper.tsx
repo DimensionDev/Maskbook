@@ -1,14 +1,14 @@
+import { memo, useMemo } from 'react'
+import { EMPTY_LIST, PluginID, type SocialAccount } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import {
     createInjectHooksRenderer,
     Plugin,
     useActivatedPluginsSiteAdaptor,
     useIsMinimalMode,
 } from '@masknet/plugin-infra/content-script'
-import { EMPTY_LIST, PluginID, type SocialAccount } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
-import { memo, useMemo } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 
 export const useStyles = makeStyles()((theme) => ({
@@ -36,7 +36,7 @@ export const TipsButtonWrapper = memo(function TipsButtonWrapper({ slot }: Props
     const { classes } = useStyles()
 
     const visitingIdentity = useCurrentVisitingIdentity()
-    const isMinimal = useIsMinimalMode(PluginID.Tips)
+    const isMinimalMode = useIsMinimalMode(PluginID.Tips)
     const { pluginID } = useNetworkContext()
     const Others = useWeb3Others()
 
@@ -61,8 +61,8 @@ export const TipsButtonWrapper = memo(function TipsButtonWrapper({ slot }: Props
 
         return <Component identity={visitingIdentity.identifier} slot={slot} accounts={accounts} />
     }, [visitingIdentity.identifier, accounts, slot])
-    const isDashboard = location.href === '/'
-    if (!component || !visitingIdentity.identifier || isMinimal || isDashboard) return null
+
+    if (!component || !visitingIdentity.identifier || isMinimalMode || location.href === '/') return null
 
     return (
         <span className={slot === Plugin.SiteAdaptor.TipsSlot.MirrorMenu ? classes.root : undefined}>{component}</span>
