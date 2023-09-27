@@ -9,11 +9,15 @@ import {
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
-import { useCallback, useEffect, useMemo, type HTMLProps, type MouseEventHandler } from 'react'
+import { useCallback, useEffect, useMemo, type HTMLProps, type MouseEventHandler, useContext } from 'react'
 import { useProfilePublicKey } from '../../hooks/useProfilePublicKey.js'
 import { PluginTipsMessages } from '../../messages.js'
 import { useTipsAccounts } from './useTipsAccounts.js'
-import { useCurrentVisitingIdentity, useSocialIdentityByUserId } from '@masknet/plugin-infra/content-script'
+import {
+    PostInfoContext,
+    useCurrentVisitingIdentity,
+    useSocialIdentityByUserId,
+} from '@masknet/plugin-infra/content-script'
 
 interface Props extends HTMLProps<HTMLDivElement> {
     // This is workaround solution, link issue mf-2536 and pr #7576.
@@ -52,6 +56,7 @@ export function TipButton(props: Props) {
         ...rest
     } = props
     const { classes, cx } = useStyles({ iconSize })
+    const info = useContext(PostInfoContext)
 
     const { data: personaPubkey, isLoading: loadingPersona } = useProfilePublicKey(receiver?.userId)
     const receiverUserId = receiver?.userId
@@ -115,6 +120,11 @@ export function TipButton(props: Props) {
             accounts,
         })
     }, [recipient, receiverUserId, accounts])
+
+    useEffect(() => {
+        if (disabled || !info?.actionsElement?.realCurrent) return
+        info.actionsElement.realCurrent.style.flex = '1'
+    }, [disabled, info])
 
     if (disabled) return null
 
