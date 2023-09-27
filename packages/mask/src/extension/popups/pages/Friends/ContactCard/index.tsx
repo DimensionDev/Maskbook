@@ -83,7 +83,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
     const [seen, ref] = useEverSeen<HTMLLIElement>()
     const { currentPersona } = PersonaContext.useContainer()
     const { t } = useI18N()
-    const profiles = useFriendProfiles(seen, nextId, profile?.userId)
+    const profiles = useFriendProfiles(seen, nextId, profile)
     const rawPublicKey = currentPersona?.identifier.rawPublicKey
     const queryClient = useQueryClient()
 

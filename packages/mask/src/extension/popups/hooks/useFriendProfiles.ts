@@ -1,4 +1,10 @@
-import { EMPTY_LIST, NextIDPlatform, type BindingProof } from '@masknet/shared-base'
+import {
+    EMPTY_LIST,
+    NextIDPlatform,
+    type BindingProof,
+    type ProfileIdentifier,
+    EnhanceableSite,
+} from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useQuery } from '@tanstack/react-query'
 import { useCurrentPersona } from '../../../components/DataSource/useCurrentPersona.js'
@@ -8,7 +14,7 @@ export const profilesFilter = (x: BindingProof) => {
     return (x.platform === NextIDPlatform.ENS && x.name.endsWith('.eth')) || !UnsupportedPlatforms.includes(x.platform)
 }
 
-export function useFriendProfiles(seen: boolean, nextId?: string, twitterId?: string) {
+export function useFriendProfiles(seen: boolean, nextId?: string, profile?: ProfileIdentifier) {
     const currentPersona = useCurrentPersona()
 
     const { data: profiles } = useQuery(
@@ -27,14 +33,14 @@ export function useFriendProfiles(seen: boolean, nextId?: string, twitterId?: st
     )
     if (!profiles) return EMPTY_LIST
     if (profiles.length === 0) {
-        if (twitterId) {
+        if (profile?.userId && profile?.network === EnhanceableSite.Twitter) {
             return [
                 {
                     platform: NextIDPlatform.Twitter,
-                    identity: twitterId,
+                    identity: profile.userId,
                     is_valid: true,
                     last_checked_at: '',
-                    name: twitterId,
+                    name: profile.userId,
                     created_at: '',
                 },
             ]
