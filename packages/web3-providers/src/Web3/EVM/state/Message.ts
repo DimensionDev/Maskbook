@@ -53,7 +53,7 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
                 chainId,
             })
 
-            if (nonce + 1 !== config.nonce) {
+            if (nonce !== config.nonce) {
                 request.arguments.params = [
                     {
                         ...config,
