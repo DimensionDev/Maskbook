@@ -212,7 +212,8 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                     const from = params.get('from')
                     showSnackbar(t('popups_wallet_set_payment_password_successfully'), { variant: 'success' })
                     CrossIsolationMessages.events.passwordStatusUpdated.sendToAll(true)
-                    navigate({ pathname: from || PopupRoutes.Wallet }, { replace: true })
+                    params.delete('from')
+                    navigate({ pathname: from || PopupRoutes.Wallet, search: params.toString() }, { replace: true })
                 }
             } catch (error) {
                 if (error instanceof Error) {

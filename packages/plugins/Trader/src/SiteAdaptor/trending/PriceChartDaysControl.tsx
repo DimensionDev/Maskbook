@@ -11,7 +11,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     active: {
         boxShadow: '0px 2px 5px 1px rgba(0, 0, 0, 0.05)',
-        background: theme.palette.background.paper,
+        background: theme.palette.maskColor.bottom,
         fontWeight: 700,
     },
     link: {

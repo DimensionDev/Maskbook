@@ -1,10 +1,10 @@
-import { memo, useCallback, useEffect, useMemo } from 'react'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import { Box, Typography } from '@mui/material'
 import formatDateTime from 'date-fns/format'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import { ActionButton, TextOverflowTooltip, makeStyles } from '@masknet/theme'
+import { Box, Typography } from '@mui/material'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { formatFileSize } from '@masknet/kit'
@@ -55,11 +55,9 @@ export const CloudBackupPreview = memo(function CloudBackupPreview() {
     const t = useDashboardTrans()
 
     const { classes, theme, cx } = useStyles()
-
+    const [code, setCode] = useState('')
     const [params] = useSearchParams()
     const location = useLocation()
-
-    const code = location.state?.code as string
 
     const navigate = useNavigate()
 
@@ -72,7 +70,7 @@ export const CloudBackupPreview = memo(function CloudBackupPreview() {
             size: params.get('size'),
             type: params.get('type'),
         }
-    }, [])
+    }, [params])
 
     const [{ loading: mergeLoading }, handleMergeClick] = useAsyncFn(async () => {
         if (
@@ -129,9 +127,10 @@ export const CloudBackupPreview = memo(function CloudBackupPreview() {
         })
     }, [t, previewInfo])
 
+    // cache the code to state
     useEffect(() => {
-        if (!code) navigate(DashboardRoutes.CloudBackup, { replace: true })
-    }, [code, navigate])
+        if (location.state?.code) setCode(location.state.code)
+    }, [location.state?.code])
 
     return (
         <>

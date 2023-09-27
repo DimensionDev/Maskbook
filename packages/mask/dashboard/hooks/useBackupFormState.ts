@@ -35,12 +35,14 @@ export function useBackupFormState() {
         },
         resolver: zodResolver(
             z.object({
-                backupPassword: z
-                    .string()
-                    .min(8, t.incorrect_password())
-                    .max(20, t.incorrect_password())
-                    .refine((password) => password === user.backupPassword, t.incorrect_password())
-                    .refine((password) => passwordRegexp.test(password), t.incorrect_password()),
+                backupPassword: backupPersonas
+                    ? z
+                          .string()
+                          .min(8, t.incorrect_password())
+                          .max(20, t.incorrect_password())
+                          .refine((password) => password === user.backupPassword, t.incorrect_password())
+                          .refine((password) => passwordRegexp.test(password), t.incorrect_password())
+                    : z.string().optional(),
                 paymentPassword:
                     backupWallets && hasPassword
                         ? z

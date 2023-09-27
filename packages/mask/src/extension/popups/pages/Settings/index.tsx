@@ -64,12 +64,15 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
         padding: theme.spacing(1.5, 0),
         borderBottom: `1px solid ${theme.palette.maskColor.line}`,
-        '&:first-child': {
+        '&:first-of-type': {
             paddingTop: 0,
         },
-        '&:last-child': {
+        '&:last-of-type': {
             paddingBottom: 0,
             borderBottom: 'none',
+        },
+        '&:hover > span': {
+            color: theme.palette.maskColor.main,
         },
     },
     listItemText: {
@@ -360,7 +363,11 @@ const Settings = memo(function Settings() {
                         </Box>
                     </Box>
                     <List className={classes.list}>
-                        <ListItem className={classes.listItem}>
+                        <ListItem
+                            className={classes.listItem}
+                            onClick={() =>
+                                openWindow('https://github.com/DimensionDev/Maskbook', '_blank', { referrer: false })
+                            }>
                             <ListItemText
                                 classes={itemClasses}
                                 primary={t('popups_settings_version')}

@@ -133,7 +133,7 @@ const CloudBackupInner = memo(function CloudBackupInner() {
             )
 
         return t.cloud_backup_no_exist_tips()
-    }, [user, DashboardTrans])
+    }, [user, DashboardTrans, t])
     return (
         <>
             <Box>

@@ -163,7 +163,11 @@ export function SelectGasSettingsToolbarUI({
 
     const [approveDialogOpen, setApproveDialogOpen] = useState(false)
     const [isCustomGas, setIsCustomGas] = useState(false)
-    const [currentGasOptionType, setCurrentGasOptionType] = useState<GasOptionType>(GasOptionType.NORMAL)
+    const [currentGasOptionType, setCurrentGasOptionType] = useState<GasOptionType>(
+        gasOption?.gasOptionType && gasOption.gasOptionType !== GasOptionType.CUSTOM
+            ? gasOption.gasOptionType
+            : GasOptionType.NORMAL,
+    )
     const [currentGasCurrency, setCurrentGasCurrency] = useState(gasOption?.gasCurrency)
     const { chainId } = useChainContext()
     const Others = useWeb3Others()
@@ -178,14 +182,16 @@ export function SelectGasSettingsToolbarUI({
                           maxPriorityFeePerGas,
                           gasCurrency: currentGasCurrency,
                           gas: new BigNumber(gasLimit).toString(),
+                          gasOptionType: isCustomGas ? GasOptionType.CUSTOM : currentGasOptionType,
                       }
                     : {
                           gasPrice: new BigNumber(maxFeePerGas).gt(0) ? maxFeePerGas : gasPrice,
                           gasCurrency: currentGasCurrency,
                           gas: new BigNumber(gasLimit).toString(),
+                          gasOptionType: isCustomGas ? GasOptionType.CUSTOM : currentGasOptionType,
                       },
             ),
-        [isSupportEIP1559, chainId, onChange, currentGasCurrency, gasLimit],
+        [isSupportEIP1559, chainId, onChange, currentGasCurrency, gasLimit, currentGasOptionType, isCustomGas],
     )
 
     const openCustomGasSettingsDialog = useCallback(async () => {

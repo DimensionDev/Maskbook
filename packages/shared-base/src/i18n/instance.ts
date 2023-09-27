@@ -27,6 +27,12 @@ if (!i18NextInstance.isInitialized) {
         detection: {
             order: ['navigator'],
         },
+        react: {
+            bindI18n: 'languageChanged loaded',
+            // We'll be getting bundles in different languages from the remote, and we'll need to trigger re-rendering.
+            // https://react.i18next.com/latest/i18next-instance
+            bindI18nStore: 'added removed',
+        },
     })
 }
 export function updateLanguage(next: LanguageOptions) {
