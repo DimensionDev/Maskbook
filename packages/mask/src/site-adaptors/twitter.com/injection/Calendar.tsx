@@ -32,9 +32,9 @@ export function injectCalendar(signal: AbortSignal) {
         <CalendarContent />,
     )
     attachReactTreeWithContainer(exploreWatcher.firstDOMProxy.beforeShadow, { untilVisible: true, signal }).render(
-        <CalendarContent />,
+        <CalendarContent target="/explore" />,
     )
     attachReactTreeWithContainer(searchWatcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
-        <CalendarContent />,
+        <CalendarContent target="/search" />,
     )
 }
