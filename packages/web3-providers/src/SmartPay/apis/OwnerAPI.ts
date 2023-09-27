@@ -59,13 +59,13 @@ export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGI
     }
 
     private filterAccounts(accounts: Array<OwnerAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM>>) {
-        return compact(
-            accounts.map((x, index, array) => {
-                const allElement = array.filter((y) => isSameAddress(y.address, x.address))
-                if (allElement.length === 1) return x
-                return x.creator ? x : null
-            }),
-        )
+        const countMap = new Map<string, number>()
+        accounts.forEach((x) => {
+            const address = x.address.toLowerCase()
+            const count = countMap.get(address) || 0
+            countMap.set(address, count + 1)
+        })
+        return accounts.filter((x) => countMap.get(x.address.toLowerCase()) === 1 || x.creator)
     }
 
     private createContractAccount(
