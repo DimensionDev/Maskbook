@@ -3,7 +3,7 @@ import {
     NextIDPlatform,
     type BindingProof,
     type ProfileIdentifier,
-    EnhanceableSite,
+    type EnhanceableSite,
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useQuery } from '@tanstack/react-query'
@@ -33,10 +33,13 @@ export function useFriendProfiles(seen: boolean, nextId?: string, profile?: Prof
     )
     if (!profiles) return EMPTY_LIST
     if (profiles.length === 0) {
-        if (profile?.userId && profile?.network === EnhanceableSite.Twitter) {
+        if (profile?.userId) {
             return [
                 {
-                    platform: NextIDPlatform.Twitter,
+                    platform: profile?.network as
+                        | EnhanceableSite.Twitter
+                        | EnhanceableSite.Facebook
+                        | EnhanceableSite.Instagram,
                     identity: profile.userId,
                     is_valid: true,
                     last_checked_at: '',

@@ -1,19 +1,21 @@
 import { safeUnreachable } from '@masknet/kit'
-import { EnhanceableSite, NextIDPlatform, type BindingProof } from '@masknet/shared-base'
+import { EnhanceableSite, NextIDPlatform } from '@masknet/shared-base'
 import { memo } from 'react'
 import { Account } from '../ContactCard/Account/index.js'
 import { SocialAccount } from '../ContactCard/SocialAccount/index.js'
 import { Account as DetailAccount } from '../Detail/Account/index.js'
 import { SocialAccount as DetailSocialAccount } from '../Detail/SocialAccount/index.js'
+import type { Profile } from '../common.js'
 
 interface AccountRenderProps {
-    profile: BindingProof
+    profile: Profile
     detail?: boolean
 }
 
 export const AccountRender = memo<AccountRenderProps>(function AccountRender({ profile, detail }) {
     switch (profile.platform) {
         case NextIDPlatform.Twitter:
+        case EnhanceableSite.Twitter:
             return detail ? (
                 <DetailSocialAccount
                     avatar=""
@@ -52,6 +54,34 @@ export const AccountRender = memo<AccountRenderProps>(function AccountRender({ p
         case NextIDPlatform.RSS3:
         case NextIDPlatform.NextID:
             return null
+        case EnhanceableSite.Facebook:
+            return detail ? (
+                <DetailSocialAccount
+                    avatar=""
+                    userId={profile.name ? profile.name : profile.identity}
+                    site={EnhanceableSite.Facebook}
+                />
+            ) : (
+                <SocialAccount
+                    avatar=""
+                    userId={profile.name ? profile.name : profile.identity}
+                    site={EnhanceableSite.Facebook}
+                />
+            )
+        case EnhanceableSite.Instagram:
+            return detail ? (
+                <DetailSocialAccount
+                    avatar=""
+                    userId={profile.name ? profile.name : profile.identity}
+                    site={EnhanceableSite.Instagram}
+                />
+            ) : (
+                <SocialAccount
+                    avatar=""
+                    userId={profile.name ? profile.name : profile.identity}
+                    site={EnhanceableSite.Instagram}
+                />
+            )
         default:
             safeUnreachable(profile.platform)
             return null
