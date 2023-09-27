@@ -1,6 +1,6 @@
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import formatDateTime from 'date-fns/format'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import { ActionButton, TextOverflowTooltip, makeStyles } from '@masknet/theme'
@@ -55,9 +55,7 @@ export const CloudBackupPreview = memo(function CloudBackupPreview() {
     const t = useDashboardTrans()
 
     const { classes, theme, cx } = useStyles()
-    const [code, setCode] = useState('')
     const [params] = useSearchParams()
-    const location = useLocation()
 
     const navigate = useNavigate()
 
@@ -69,6 +67,7 @@ export const CloudBackupPreview = memo(function CloudBackupPreview() {
             uploadedAt: params.get('uploadedAt'),
             size: params.get('size'),
             type: params.get('type'),
+            code: params.get('code'),
         }
     }, [params])
 
@@ -78,7 +77,8 @@ export const CloudBackupPreview = memo(function CloudBackupPreview() {
             !previewInfo.account ||
             !previewInfo.size ||
             !previewInfo.uploadedAt ||
-            !previewInfo.type
+            !previewInfo.type ||
+            !previewInfo.code
         )
             return
         await MergeBackupModal.openAndWaitForClose({
@@ -86,17 +86,17 @@ export const CloudBackupPreview = memo(function CloudBackupPreview() {
             account: previewInfo.account,
             size: previewInfo.size,
             uploadedAt: previewInfo.uploadedAt,
-            code,
+            code: previewInfo.code,
             abstract: previewInfo.abstract ? previewInfo.abstract : undefined,
             type: previewInfo.type as AccountType,
         })
-    }, [t, previewInfo, code])
+    }, [t, previewInfo])
 
     const handleBackupClick = useCallback(() => {
-        if (!previewInfo.type || !previewInfo.account) return
+        if (!previewInfo.type || !previewInfo.account || !previewInfo.code) return
         BackupPreviewModal.open({
             isOverwrite: false,
-            code,
+            code: previewInfo.code,
             abstract: previewInfo.abstract ? previewInfo.abstract : undefined,
             type: previewInfo.type as AccountType,
             account: previewInfo.account,
@@ -114,11 +114,11 @@ export const CloudBackupPreview = memo(function CloudBackupPreview() {
             },
             onConfirm: () => {
                 ConfirmDialog.close(false)
-                if (!previewInfo.type || !previewInfo.account) return
+                if (!previewInfo.type || !previewInfo.account || !previewInfo.code) return
 
                 BackupPreviewModal.open({
                     isOverwrite: true,
-                    code,
+                    code: previewInfo.code,
                     abstract: previewInfo.abstract ? previewInfo.abstract : undefined,
                     type: previewInfo.type as AccountType,
                     account: previewInfo.account,
@@ -126,11 +126,6 @@ export const CloudBackupPreview = memo(function CloudBackupPreview() {
             },
         })
     }, [t, previewInfo])
-
-    // cache the code to state
-    useEffect(() => {
-        if (location.state?.code) setCode(location.state.code)
-    }, [location.state?.code])
 
     return (
         <>

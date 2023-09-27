@@ -84,12 +84,8 @@ const CloudBackupInner = memo(function CloudBackupInner() {
                         urlcat(DashboardRoutes.CloudBackupPreview, {
                             type: currentTab === tabs.email ? AccountType.Email : AccountType.Phone,
                             account: currentTab === tabs.email ? data.email : data.countryCode + data.phone,
+                            code: data.code,
                         }),
-                        {
-                            state: {
-                                code: data.code,
-                            },
-                        },
                     )
                 }
             })
@@ -105,12 +101,8 @@ const CloudBackupInner = memo(function CloudBackupInner() {
                     ...response,
                     type: currentTab === tabs.email ? AccountType.Email : AccountType.Phone,
                     account: currentTab === tabs.email ? data.email : data.countryCode + data.phone,
+                    code: data.code,
                 }),
-                {
-                    state: {
-                        code: data.code,
-                    },
-                },
             )
         },
         [currentTab, tabs, formState, navigate, updateUser, user],

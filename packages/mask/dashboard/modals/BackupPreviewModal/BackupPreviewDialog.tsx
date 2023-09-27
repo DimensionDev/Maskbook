@@ -18,6 +18,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
 import formatDateTime from 'date-fns/format'
 import { UserContext } from '../../../shared-ui/index.js'
+import millisecondsToSeconds from 'date-fns/millisecondsToSeconds'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -83,9 +84,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
         hasPassword,
         previewInfo,
         loading,
-        backupPersonas,
         backupWallets,
-        setBackupPersonas,
         setBackupWallets,
         formState: {
             clearErrors,
@@ -110,7 +109,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 }
 
                 const { file } = await Services.Backup.createBackupFile({
-                    excludeBase: !backupPersonas,
+                    excludeBase: false,
                     excludeWallet: !backupWallets,
                 })
 
@@ -134,7 +133,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                     setParams((params) => {
                         params.set('size', encrypted.byteLength.toString())
                         params.set('abstract', name)
-                        params.set('uploadedAt', Date.now().toString())
+                        params.set('uploadedAt', millisecondsToSeconds(Date.now()).toString())
                         return params.toString()
                     })
                 }
@@ -146,7 +145,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 return false
             }
         },
-        [code, hasPassword, backupWallets, abstract, backupPersonas, code, account, type, t, navigate, updateUser],
+        [code, hasPassword, backupWallets, abstract, code, account, type, t, navigate, updateUser, params],
     )
 
     const handleClose = useCallback(() => {
@@ -161,7 +160,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
             keepDirtyValues: true,
             keepTouched: true,
         })
-    }, [backupPersonas, backupWallets, reset])
+    }, [backupWallets, reset])
 
     const content = useMemo(() => {
         if (value)
@@ -192,29 +191,22 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
             )
         return !loading && previewInfo ? (
             <Box display="flex" flexDirection="column">
-                <PersonasBackupPreview
-                    info={previewInfo}
-                    selectable
-                    selected={backupPersonas}
-                    onChange={setBackupPersonas}
-                />
+                <PersonasBackupPreview info={previewInfo} />
 
-                {backupPersonas ? (
-                    <Controller
-                        control={control}
-                        render={({ field }) => (
-                            <PasswordField
-                                {...field}
-                                onFocus={() => clearErrors('backupPassword')}
-                                sx={{ mb: 2 }}
-                                placeholder={t.settings_label_backup_password()}
-                                error={!!errors.backupPassword?.message}
-                                helperText={errors.backupPassword?.message}
-                            />
-                        )}
-                        name="backupPassword"
-                    />
-                ) : null}
+                <Controller
+                    control={control}
+                    render={({ field }) => (
+                        <PasswordField
+                            {...field}
+                            onFocus={() => clearErrors('backupPassword')}
+                            sx={{ mb: 2 }}
+                            placeholder={t.settings_label_backup_password()}
+                            error={!!errors.backupPassword?.message}
+                            helperText={errors.backupPassword?.message}
+                        />
+                    )}
+                    name="backupPassword"
+                />
 
                 <WalletsBackupPreview
                     wallets={previewInfo.wallets}
@@ -252,8 +244,6 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
         loading,
         previewInfo,
         control,
-        backupPersonas,
-        setBackupPersonas,
         t,
         JSON.stringify(errors),
         backupWallets,
@@ -284,12 +274,11 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 onClick={handleSubmit(handleUploadBackup)}
                 startIcon={isOverwrite ? <Icons.CloudBackup2 size={18} /> : <Icons.Cloud />}
                 color={isOverwrite ? 'error' : 'primary'}
-                disabled={!isDirty || !isValid || (!backupPersonas && !backupWallets)}>
+                disabled={!isDirty || !isValid}>
                 {isOverwrite ? t.cloud_backup_overwrite_backup() : t.cloud_backup_upload_to_cloud()}
             </ActionButton>
         )
     }, [
-        backupPersonas,
         backupWallets,
         isOverwrite,
         isDirty,
