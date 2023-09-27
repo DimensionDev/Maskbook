@@ -106,6 +106,7 @@ export interface PopupRoutesParamsMap {
     }
     [PopupRoutes.SelectWallet]: {
         chainId?: number
+        address?: string
         external_request?: string
     }
     [PopupRoutes.Personas]: {

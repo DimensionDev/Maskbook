@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { first } from 'lodash-es'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -69,7 +69,8 @@ const SelectWallet = memo(function SelectWallet() {
         if (!allWallets.length && localWallets.length) return localWallets
         return allWallets
     }, [localWallets, allWallets])
-    const [selected, setSelected] = useState(account)
+    const defaultWallet = params.get('address') || account || (first(wallets)?.address ?? '')
+    const [selected = defaultWallet, setSelected] = useState<string>()
 
     const handleCancel = useCallback(async () => {
         if (isVerifyWalletFlow) {
@@ -142,10 +143,6 @@ const SelectWallet = memo(function SelectWallet() {
         networks,
         Network,
     ])
-
-    useEffect(() => {
-        if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
-    }, [selected, wallets])
 
     useTitle(external_request ? 'Connecting External Site' : t('popups_select_wallet'))
 
