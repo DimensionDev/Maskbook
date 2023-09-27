@@ -57,7 +57,7 @@ export const NextIdPage = memo(function NextIdPage() {
         })
     }, [openPopupWindow])
 
-    const getActionComponent = useMemo(() => {
+    const ActionComponent = useMemo(() => {
         if (!isOwn) return <OtherLackWalletAction />
 
         if (!personaConnectStatus.hasPersona || !personaConnectStatus.connected || !personaConnectStatus.verified) {
@@ -84,7 +84,7 @@ export const NextIdPage = memo(function NextIdPage() {
         <>
             <PluginCardFrameMini>
                 <ThemeProvider theme={MaskLightTheme}>
-                    <PluginEnableBoundary pluginID={PluginID.Web3Profile}>{getActionComponent}</PluginEnableBoundary>
+                    <PluginEnableBoundary pluginID={PluginID.Web3Profile}>{ActionComponent}</PluginEnableBoundary>
                 </ThemeProvider>
             </PluginCardFrameMini>
             {openBindDialog && currentPersona && isOwn ? (

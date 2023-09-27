@@ -1,7 +1,7 @@
+import { useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Link, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useMemo } from 'react'
 import { useSharedTrans } from '../../../locales/index.js'
 import { LoadingStatus } from '../index.js'
 
@@ -38,31 +38,32 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface PluginCardFrameMiniProps {
-    name?: React.ReactNode
+    icon?: React.ReactNode
+    title?: React.ReactNode
     provider?: React.ReactNode
     providerLink?: string
     children?: React.ReactNode
 }
 
-export function PluginCardFrameMini({ name, provider, providerLink, children }: PluginCardFrameMiniProps) {
+export function PluginCardFrameMini({ icon, title, provider, providerLink, children }: PluginCardFrameMiniProps) {
     const t = useSharedTrans()
     const { classes } = useStyles()
 
-    const defaultPluginName = useMemo(() => {
+    const PluginName = useMemo(() => {
         return (
             <Stack className={classes.title} direction="row">
-                <Icons.Web3Profile className={classes.web3Icon} />
+                {icon ?? <Icons.Web3Profile className={classes.web3Icon} />}
                 <Typography fontSize={16} fontWeight={700}>
-                    {t.plugin_card_frame_default_title()}
+                    {title ?? t.plugin_card_frame_default_title()}
                 </Typography>
             </Stack>
         )
-    }, [])
+    }, [icon, title])
 
     return (
         <Stack className={classes.container}>
             <Stack direction="row" justifyContent="space-between" p={1.5}>
-                {name ?? defaultPluginName}
+                {PluginName}
                 <Stack direction="row" gap={0.5}>
                     <Typography className={classes.item1}>{t.plugin_card_frame_default_provided_by()}</Typography>
                     <Typography className={classes.item2}>
