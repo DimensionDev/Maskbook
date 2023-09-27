@@ -121,6 +121,7 @@ export namespace Plugin.Shared {
         /** Select a Mask Wallet account */
         selectMaskWalletAccount(
             chainId: ChainId,
+            defaultAccount?: string,
         ): Promise<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
 
         /** Open Dashboard with a new window */
