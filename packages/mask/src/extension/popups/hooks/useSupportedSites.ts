@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 export const useSupportedSites = () => {
     return useQuery({
         queryKey: ['supported-sites'],
+        networkMode: 'always',
         queryFn: async () => {
             const sites = await Services.SiteAdaptor.getAllOrigins()
             const settings = await Services.Settings.getAllInjectSwitchSettings()

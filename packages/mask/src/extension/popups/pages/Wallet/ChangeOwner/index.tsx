@@ -186,9 +186,11 @@ export default function ChangeOwner() {
     const [manageAccount, setManageAccount] = useState<ManagerAccount>()
 
     const { smartPayChainId } = useContainer(PopupContext)
-    const { data: personaManagers } = useQuery(['persona-managers'], async () => {
-        return Services.Identity.queryOwnedPersonaInformation(true)
-    })
+    const { data: personaManagers } = useQuery(
+        ['persona-managers'],
+        () => Services.Identity.queryOwnedPersonaInformation(true),
+        { networkMode: 'always' },
+    )
     const chainContextValue = useMemo(() => ({ chainId: smartPayChainId }), [smartPayChainId])
     const [paymentToken, setPaymentToken] = useState('')
     const [gasConfig, setGasConfig] = useState<GasConfig>()
