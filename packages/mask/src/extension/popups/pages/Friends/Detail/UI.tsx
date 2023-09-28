@@ -5,11 +5,12 @@ import { memo, useCallback } from 'react'
 import { Box, Avatar, Typography, Link } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
-import { formatPersonaFingerprint, type BindingProof } from '@masknet/shared-base'
+import { formatPersonaFingerprint } from '@masknet/shared-base'
 import { useTheme } from '@mui/system'
 import { CopyButton, EmptyStatus } from '@masknet/shared'
 import { ConnectedAccounts } from './ConnectAccounts/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
+import type { Profile } from '../common.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -75,7 +76,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface FriendsDetailUIProps {
     avatar?: string
-    profiles: BindingProof[]
+    profiles: Profile[]
     nextId: string
     publicKey?: string
     isLocal?: boolean
