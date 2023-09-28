@@ -7,18 +7,18 @@ import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme
 import { Box, Typography, Link, useTheme, ButtonBase as Button, Avatar } from '@mui/material'
 import {
     formatPersonaFingerprint,
-    type BindingProof,
     PopupRoutes,
     ProfileIdentifier,
     ECKeyIdentifier,
+    NextIDPlatform,
 } from '@masknet/shared-base'
 import { CopyButton, PersonaContext } from '@masknet/shared'
-import { NextIDPlatform } from '@masknet/shared-base'
 import { attachNextIDToProfile } from '../../../../../utils/utils.js'
 import { ConnectedAccounts } from './ConnectedAccounts/index.js'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
 import Services from '#services'
 import { type Friend, useFriendProfiles } from '../../../hooks/index.js'
+import { type Profile } from '../common.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -58,7 +58,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface ContactCardProps {
     avatar?: string
-    proofProfiles?: BindingProof[]
+    proofProfiles?: Profile[]
     nextId?: string
     publicKey?: string
     isLocal?: boolean

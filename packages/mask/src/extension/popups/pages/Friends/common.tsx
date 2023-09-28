@@ -5,6 +5,8 @@ export type Profile = Omit<BindingProof, 'platform'> & {
     platform: NextIDPlatform | EnhanceableSite.Twitter | EnhanceableSite.Facebook | EnhanceableSite.Instagram
 }
 
+export type FriendNetwork = EnhanceableSite.Twitter | EnhanceableSite.Facebook | EnhanceableSite.Instagram
+
 export type SupportedPlatforms =
     | NextIDPlatform.Ethereum
     | NextIDPlatform.GitHub
