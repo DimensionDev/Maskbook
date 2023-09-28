@@ -23,17 +23,17 @@ export function useFriendsFromSearch(
         if (!searchResult?.length && !localSearchedResult?.length) return EMPTY_LIST
         const localProfiles: NextIDPersonaBindingsWithIdentifier[] =
             localSearchedResult
-                ?.filter((x) => x.persona.publicKeyAsHex !== currentIdentifier?.identifier.publicKeyAsHex)
+                ?.filter((x) => x.persona.publicKeyAsHex !== currentIdentifier?.identifier.publicKeyAsHex && x.profile)
                 .map((item) => {
                     const profile = item.profile as ProfileIdentifier
                     return {
                         proofs: [
                             {
-                                platform: profile?.network as FriendNetwork,
-                                identity: profile?.userId,
+                                platform: profile.network as FriendNetwork,
+                                identity: profile.userId,
                                 is_valid: true,
                                 last_checked_at: '',
-                                name: profile?.userId,
+                                name: profile.userId,
                                 created_at: '',
                             },
                         ],
