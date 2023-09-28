@@ -103,6 +103,7 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
             createJsonRpcPayload(0, request.arguments),
             omitBy<TransactionOptions>(request.options, isUndefined),
         )
+        if (response.error) return
 
         await this.updateMessage(id, {
             request,
