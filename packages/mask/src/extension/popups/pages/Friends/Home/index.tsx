@@ -1,4 +1,8 @@
 import { memo, useState, useMemo } from 'react'
+import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { resolveNextIDPlatform } from '@masknet/shared'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { NextIDProof, Fuse } from '@masknet/web3-providers'
 import { FriendsHomeUI } from './UI.js'
 import {
     useFriendsPaged,
@@ -7,11 +11,7 @@ import {
     useFriendsFromSearch,
     useFriendFromList,
 } from '../../../hooks/index.js'
-import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils/i18n-next-ui.js'
-import { resolveNextIDPlatform } from '@masknet/shared'
-import { useInfiniteQuery } from '@tanstack/react-query'
-import { NextIDProof, Fuse } from '@masknet/web3-providers'
 
 const FriendsHome = memo(function FriendsHome() {
     const { t } = useI18N()
@@ -22,16 +22,18 @@ const FriendsHome = memo(function FriendsHome() {
     const [searchValue, setSearchValue] = useState('')
     const type = resolveNextIDPlatform(searchValue)
     const { loading: resolveLoading, value: keyword = '' } = useSearchValue(searchValue, type)
-    const searchedRecords = useMemo(() => {
-        if (!keyword || type !== NextIDPlatform.Twitter) return EMPTY_LIST
-        const fuse = Fuse.create(records, {
+    const fuse = useMemo(() => {
+        return Fuse.create(records, {
             keys: ['profile.userId'],
             isCaseSensitive: false,
             ignoreLocation: true,
             threshold: 0,
         })
+    }, [records])
+    const searchedRecords = useMemo(() => {
+        if (!keyword || type !== NextIDPlatform.Twitter) return EMPTY_LIST
         return fuse.search(keyword).map((item) => item.item)
-    }, [keyword, records, type])
+    }, [fuse, keyword, type])
     const { isLoading: isSearchRecordLoading, data: localSearchedList = EMPTY_LIST } =
         useFriendFromList(searchedRecords)
     const {

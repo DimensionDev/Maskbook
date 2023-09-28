@@ -1,8 +1,8 @@
-import { ECKeyIdentifier, EMPTY_LIST, type NextIDPersonaBindings, type ProfileIdentifier } from '@masknet/shared-base'
-import { uniqBy } from 'lodash-es'
 import { useMemo } from 'react'
-import type { Friend } from './useFriends.js'
+import { uniqBy } from 'lodash-es'
+import { ECKeyIdentifier, EMPTY_LIST, type NextIDPersonaBindings } from '@masknet/shared-base'
 import { useCurrentLinkedPersona } from '@masknet/shared'
+import type { Friend } from './useFriends.js'
 import { profilesFilter } from './useFriendProfiles.js'
 import { PlatformSort, type FriendNetwork, type Profile } from '../pages/Friends/common.js'
 
@@ -25,7 +25,7 @@ export function useFriendsFromSearch(
             localSearchedResult
                 ?.filter((x) => x.persona.publicKeyAsHex !== currentIdentifier?.identifier.publicKeyAsHex && x.profile)
                 .map((item) => {
-                    const profile = item.profile as ProfileIdentifier
+                    const profile = item.profile!
                     return {
                         proofs: [
                             {
