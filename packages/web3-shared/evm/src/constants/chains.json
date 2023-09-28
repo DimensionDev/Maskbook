@@ -515,7 +515,7 @@
         "nativeCurrency": {
             "chainId": 1313161554,
             "name": "Ether",
-            "symbol": "AETH",
+            "symbol": "ETH",
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/aurora/info/logo.png/quality=85"
         },
