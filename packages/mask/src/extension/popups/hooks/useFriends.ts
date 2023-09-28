@@ -5,6 +5,7 @@ import { first } from 'lodash-es'
 import { useCallback } from 'react'
 import { useCurrentPersona } from '../../../components/DataSource/useCurrentPersona.js'
 import Services from '#services'
+import { type RelationRecord } from '../../../../background/database/persona/type.js'
 
 export type FriendsInformation = Friend & {
     profiles: BindingProof[]
@@ -15,6 +16,10 @@ export type Friend = {
     persona: ECKeyIdentifier
     profile?: ProfileIdentifier
     avatar?: string
+}
+
+function isFriend(obj: any): obj is Friend {
+    return typeof obj === 'object' && 'persona' in obj
 }
 
 export function useFriendsPaged() {
@@ -93,5 +98,32 @@ export function useFriendsPaged() {
         refetch,
         status,
         fetchRelationStatus,
+        records,
     }
+}
+
+export function useFriendFromList(searchedRecords: RelationRecord[]) {
+    const currentPersona = useCurrentPersona()
+    return useQuery(['searched-local', searchedRecords], async () => {
+        const friends: Friend[] = (
+            await Promise.all(
+                searchedRecords.map(async (x) => {
+                    if (isProfileIdentifier(x.profile)) {
+                        const res = first(await Services.Identity.queryProfilesInformation([x.profile]))
+                        if (res?.linkedPersona !== undefined && res?.linkedPersona !== currentPersona?.identifier)
+                            return {
+                                persona: res.linkedPersona,
+                                profile: x.profile,
+                                avatar: res.avatar,
+                            }
+                        return {}
+                    } else {
+                        if (x.profile !== currentPersona?.identifier) return { persona: x.profile }
+                        return {}
+                    }
+                }),
+            )
+        ).filter(isFriend) as Friend[]
+        return friends
+    })
 }

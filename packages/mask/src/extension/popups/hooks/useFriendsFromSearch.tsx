@@ -1,16 +1,25 @@
-import { ECKeyIdentifier, EMPTY_LIST, type NextIDPersonaBindings } from '@masknet/shared-base'
+import {
+    ECKeyIdentifier,
+    EMPTY_LIST,
+    type NextIDPersonaBindings,
+    type EnhanceableSite,
+    type ProfileIdentifier,
+} from '@masknet/shared-base'
 import { uniqBy } from 'lodash-es'
 import { useMemo } from 'react'
 import type { Friend } from './useFriends.js'
 import { useCurrentLinkedPersona } from '@masknet/shared'
 import { profilesFilter } from './useFriendProfiles.js'
-import { PlatformSort } from '../pages/Friends/common.js'
+import { PlatformSort, type Profile } from '../pages/Friends/common.js'
 
-export type NextIDPersonaBindingsWithIdentifier = NextIDPersonaBindings & { linkedPersona: ECKeyIdentifier } & {
+export type NextIDPersonaBindingsWithIdentifier = Omit<NextIDPersonaBindings, 'proofs'> & { proofs: Profile[] } & {
+    linkedPersona: ECKeyIdentifier
+} & {
     isLocal?: boolean
 }
 
 export function useFriendsFromSearch(
+    localSearchedResult?: Friend[],
     searchResult?: NextIDPersonaBindings[],
     localList?: Friend[],
     searchValue?: string,
@@ -18,6 +27,31 @@ export function useFriendsFromSearch(
     const currentIdentifier = useCurrentLinkedPersona()
     return useMemo(() => {
         if (!searchResult?.length) return EMPTY_LIST
+        const localProfiles: NextIDPersonaBindingsWithIdentifier[] =
+            localSearchedResult
+                ?.filter((x) => x.persona.publicKeyAsHex !== currentIdentifier?.identifier.publicKeyAsHex)
+                .map((item) => {
+                    const profile = item.profile as ProfileIdentifier
+                    return {
+                        proofs: [
+                            {
+                                platform: profile?.network as
+                                    | EnhanceableSite.Twitter
+                                    | EnhanceableSite.Facebook
+                                    | EnhanceableSite.Instagram,
+                                identity: profile?.userId,
+                                is_valid: true,
+                                last_checked_at: '',
+                                name: profile?.userId,
+                                created_at: '',
+                            },
+                        ],
+                        linkedPersona: item.persona,
+                        activated_at: '',
+                        persona: item.persona.publicKeyAsHex,
+                        isLocal: true,
+                    }
+                }) ?? EMPTY_LIST
         const profiles: NextIDPersonaBindingsWithIdentifier[] = searchResult
             .filter((x) => x.persona !== currentIdentifier?.identifier.publicKeyAsHex)
             .map((item) => {
@@ -38,6 +72,6 @@ export function useFriendsFromSearch(
                         : false,
                 }
             })
-        return uniqBy(profiles, ({ linkedPersona }) => linkedPersona.publicKeyAsHex)
+        return uniqBy(localProfiles?.concat(profiles), ({ linkedPersona }) => linkedPersona.publicKeyAsHex)
     }, [searchResult, localList, currentIdentifier])
 }
