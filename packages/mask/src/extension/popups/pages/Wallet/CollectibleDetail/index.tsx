@@ -7,7 +7,6 @@ import { useAccount, useNonFungibleAsset, useWeb3State } from '@masknet/web3-hoo
 import { TokenType, formatBalance } from '@masknet/web3-shared-base'
 import { SchemaType, formatTrait, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
 import { Button, Skeleton, Typography } from '@mui/material'
-import formatDateTime from 'date-fns/format'
 import { memo, useContext, useEffect, useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
@@ -132,14 +131,6 @@ const useStyles = makeStyles()((theme) => ({
         width: 'auto',
     },
 }))
-
-/**
- * timestamp in seconds or milliseconds
- */
-const formatTimestamp = (timestamp: string) => {
-    const value = Number.parseInt(timestamp, 10) * (timestamp.length === 10 ? 1000 : 1)
-    return formatDateTime(new Date(value), 'yyyy-MM-dd HH:mm')
-}
 
 export const CollectibleDetail = memo(function CollectibleDetail() {
     const { classes, cx } = useStyles()

@@ -10,6 +10,7 @@ import {
     type MessageResponse,
     type TransactionOptions,
     EthereumMethodType,
+    ErrorEditor,
 } from '@masknet/web3-shared-evm'
 import { isUndefined } from '@walletconnect/utils'
 import { MessageState } from '../../Base/state/Message.js'
@@ -102,6 +103,8 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
             createJsonRpcPayload(0, request.arguments),
             omitBy<TransactionOptions>(request.options, isUndefined),
         )
+        const error = ErrorEditor.from(null, response)
+        if (error.presence) return
 
         await this.updateMessage(id, {
             request,
