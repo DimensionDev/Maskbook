@@ -32,15 +32,17 @@ export class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId
         return createPageable(
             unionWith(
                 formatAssets(
-                    (result ?? []).map((x) => ({
-                        ...x,
-                        // prefix ARETH
-                        symbol: x.chain === 'arb' && x.symbol === 'ETH' ? 'ARETH' : x.symbol,
-                        logo_url:
-                            x.chain === 'arb' && x.symbol === 'ETH'
-                                ? 'https://assets.debank.com/static/media/arbitrum.8e326f58.svg'
+                    (result ?? []).map((x) => {
+                        const isEther = ['arb', 'aurora'].includes(x.chain) && ['ETH', 'AETH'].includes(x.name)
+                        return {
+                            ...x,
+                            name: isEther ? 'ETH' : x.name,
+                            symbol: isEther ? 'ETH' : x.symbol,
+                            logo_url: isEther
+                                ? 'https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85'
                                 : x.logo_url,
-                    })),
+                        }
+                    }),
                 ),
                 getNativeAssets(),
                 (a, z) => isSameAddress(a.address, z.address) && a.chainId === z.chainId,
