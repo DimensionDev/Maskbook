@@ -1,16 +1,10 @@
-import {
-    ECKeyIdentifier,
-    EMPTY_LIST,
-    type NextIDPersonaBindings,
-    type EnhanceableSite,
-    type ProfileIdentifier,
-} from '@masknet/shared-base'
+import { ECKeyIdentifier, EMPTY_LIST, type NextIDPersonaBindings, type ProfileIdentifier } from '@masknet/shared-base'
 import { uniqBy } from 'lodash-es'
 import { useMemo } from 'react'
 import type { Friend } from './useFriends.js'
 import { useCurrentLinkedPersona } from '@masknet/shared'
 import { profilesFilter } from './useFriendProfiles.js'
-import { PlatformSort, type Profile } from '../pages/Friends/common.js'
+import { PlatformSort, type FriendNetwork, type Profile } from '../pages/Friends/common.js'
 
 export type NextIDPersonaBindingsWithIdentifier = Omit<NextIDPersonaBindings, 'proofs'> & { proofs: Profile[] } & {
     linkedPersona: ECKeyIdentifier
@@ -19,7 +13,7 @@ export type NextIDPersonaBindingsWithIdentifier = Omit<NextIDPersonaBindings, 'p
 }
 
 export function useFriendsFromSearch(
-    localSearchedResult?: Friend[],
+    localSearchedResult: Friend[],
     searchResult?: NextIDPersonaBindings[],
     localList?: Friend[],
     searchValue?: string,
@@ -35,10 +29,7 @@ export function useFriendsFromSearch(
                     return {
                         proofs: [
                             {
-                                platform: profile?.network as
-                                    | EnhanceableSite.Twitter
-                                    | EnhanceableSite.Facebook
-                                    | EnhanceableSite.Instagram,
+                                platform: profile?.network as FriendNetwork,
                                 identity: profile?.userId,
                                 is_valid: true,
                                 last_checked_at: '',
@@ -75,7 +66,7 @@ export function useFriendsFromSearch(
                   })
             : EMPTY_LIST
         return uniqBy(
-            localProfiles ? localProfiles?.concat(profiles) : profiles,
+            localProfiles ? localProfiles.concat(profiles) : profiles,
             ({ linkedPersona }) => linkedPersona.publicKeyAsHex,
         )
     }, [searchResult, localList, currentIdentifier, localSearchedResult])

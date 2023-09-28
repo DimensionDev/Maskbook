@@ -1,7 +1,6 @@
 import { isProfileIdentifier } from '@masknet/shared'
 import { EMPTY_LIST, type BindingProof, type ECKeyIdentifier, type ProfileIdentifier } from '@masknet/shared-base'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
-import { first } from 'lodash-es'
 import { useCallback } from 'react'
 import { useCurrentPersona } from '../../../components/DataSource/useCurrentPersona.js'
 import Services from '#services'
@@ -66,12 +65,11 @@ export function useFriendsPaged() {
                 if (friends.length === 10) break
                 const x = records[i]
                 if (isProfileIdentifier(x.profile)) {
-                    const res = first(await Services.Identity.queryProfilesInformation([x.profile]))
+                    const res = await Services.Identity.queryProfileInformation(x.profile)
                     if (res?.linkedPersona !== undefined && res?.linkedPersona !== currentPersona?.identifier)
                         friends.push({
                             persona: res.linkedPersona,
                             profile: x.profile,
-                            avatar: res.avatar,
                         })
                 } else {
                     if (x.profile !== currentPersona?.identifier) friends.push({ persona: x.profile })
@@ -109,16 +107,17 @@ export function useFriendFromList(searchedRecords: RelationRecord[]) {
             await Promise.all(
                 searchedRecords.map(async (x) => {
                     if (isProfileIdentifier(x.profile)) {
-                        const res = first(await Services.Identity.queryProfilesInformation([x.profile]))
-                        if (res?.linkedPersona !== undefined && res?.linkedPersona !== currentPersona?.identifier)
+                        const res = await Services.Identity.queryProfileInformation(x.profile)
+                        if (
+                            res?.linkedPersona !== undefined &&
+                            res?.linkedPersona.publicKeyAsHex !== currentPersona?.identifier.publicKeyAsHex
+                        )
                             return {
                                 persona: res.linkedPersona,
                                 profile: x.profile,
-                                avatar: res.avatar,
                             }
                         return {}
                     } else {
-                        if (x.profile !== currentPersona?.identifier) return { persona: x.profile }
                         return {}
                     }
                 }),

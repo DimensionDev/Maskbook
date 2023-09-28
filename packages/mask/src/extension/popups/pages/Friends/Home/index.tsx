@@ -24,15 +24,13 @@ const FriendsHome = memo(function FriendsHome() {
     const { loading: resolveLoading, value: keyword = '' } = useSearchValue(searchValue, type)
     const searchedRecords = useMemo(() => {
         if (!keyword || type !== NextIDPlatform.Twitter) return EMPTY_LIST
-
-        return Fuse.create(records, {
+        const fuse = Fuse.create(records, {
             keys: ['profile.userId'],
             isCaseSensitive: false,
             ignoreLocation: true,
             threshold: 0,
         })
-            .search(keyword)
-            .map((item) => item.item)
+        return fuse.search(keyword).map((item) => item.item)
     }, [keyword, records, type])
     const { isLoading: isSearchRecordLoading, data: localSearchedList = EMPTY_LIST } =
         useFriendFromList(searchedRecords)
