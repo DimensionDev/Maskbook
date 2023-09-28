@@ -34,7 +34,7 @@ const FriendsHome = memo(function FriendsHome() {
             .search(keyword)
             .map((item) => item.item)
     }, [keyword, records, type])
-    const { isInitialLoading: isSearchRecordLoading, data: localSearchedList = EMPTY_LIST } =
+    const { isLoading: isSearchRecordLoading, data: localSearchedList = EMPTY_LIST } =
         useFriendFromList(searchedRecords)
     const {
         isLoading: searchLoading,
@@ -57,14 +57,13 @@ const FriendsHome = memo(function FriendsHome() {
     )
     const searchResult = useMemo(() => searchResultArray?.pages.flat() ?? EMPTY_LIST, [searchResultArray])
     const searchedList = useFriendsFromSearch(localSearchedList, searchResult, friends, keyword)
-
     return (
         <FriendsHomeUI
             friends={data?.pages ?? EMPTY_LIST}
             loading={
                 isLoading ||
                 resolveLoading ||
-                (!!keyword && !!type ? searchLoading : isInitialLoading) ||
+                (!!keyword && !!type ? searchLoading || isSearchRecordLoading : isInitialLoading) ||
                 status === 'loading' ||
                 fetchRelationStatus === 'loading'
             }

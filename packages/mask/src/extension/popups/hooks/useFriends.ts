@@ -104,7 +104,7 @@ export function useFriendsPaged() {
 
 export function useFriendFromList(searchedRecords: RelationRecord[]) {
     const currentPersona = useCurrentPersona()
-    return useQuery(['searched-local', searchedRecords], async () => {
+    return useQuery(['search-local', searchedRecords], async () => {
         const friends: Friend[] = (
             await Promise.all(
                 searchedRecords.map(async (x) => {
