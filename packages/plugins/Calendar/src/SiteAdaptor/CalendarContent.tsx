@@ -1,11 +1,12 @@
 /* cspell: disable */
 import React, { useState, useMemo } from 'react'
+import { Tab } from '@mui/material'
+import { TabContext, TabPanel } from '@mui/lab'
 import { safeUnreachable } from '@masknet/kit'
 import { PluginID } from '@masknet/shared-base'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { Tab } from '@mui/material'
-import { TabContext, TabPanel } from '@mui/lab'
+import { useLocationChange } from '@masknet/shared-base-ui'
 import { DatePickerTab } from './components/DatePickerTab.js'
 import { useEventList, useNFTList, useNewsList } from '../hooks/useEventList.js'
 import { NewsList } from './components/NewsList.js'
@@ -13,7 +14,6 @@ import { EventList } from './components/EventList.js'
 import { NFTList } from './components/NFTList.js'
 import { Footer } from './components/Footer.js'
 import { useI18N } from '../locales/i18n_generated.js'
-import { useLocationChange } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     calendar: {

@@ -1,24 +1,15 @@
-import { isProfileIdentifier } from '@masknet/shared'
-import { EMPTY_LIST, type BindingProof, type ECKeyIdentifier, type ProfileIdentifier } from '@masknet/shared-base'
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { useCallback } from 'react'
-import { useCurrentPersona } from '../../../components/DataSource/useCurrentPersona.js'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { isProfileIdentifier } from '@masknet/shared'
+import { EMPTY_LIST, type ECKeyIdentifier, type ProfileIdentifier } from '@masknet/shared-base'
 import Services from '#services'
+import { useCurrentPersona } from '../../../components/DataSource/useCurrentPersona.js'
 import { type RelationRecord } from '../../../../background/database/persona/type.js'
 
-export type FriendsInformation = Friend & {
-    profiles: BindingProof[]
-    id: string
-}
-
-export type Friend = {
+export interface Friend {
     persona: ECKeyIdentifier
     profile?: ProfileIdentifier
     avatar?: string
-}
-
-function isFriend(obj: any): obj is Friend {
-    return typeof obj === 'object' && 'persona' in obj
 }
 
 export function useFriendsPaged() {
@@ -65,10 +56,10 @@ export function useFriendsPaged() {
                 if (friends.length === 10) break
                 const x = records[i]
                 if (isProfileIdentifier(x.profile)) {
-                    const res = await Services.Identity.queryProfileInformation(x.profile)
-                    if (res?.linkedPersona !== undefined && res?.linkedPersona !== currentPersona?.identifier)
+                    const profile = await Services.Identity.queryProfileInformation(x.profile)
+                    if (profile?.linkedPersona && profile.linkedPersona !== currentPersona?.identifier)
                         friends.push({
-                            persona: res.linkedPersona,
+                            persona: profile.linkedPersona,
                             profile: x.profile,
                         })
                 } else {
@@ -103,26 +94,22 @@ export function useFriendsPaged() {
 export function useFriendFromList(searchedRecords: RelationRecord[]) {
     const currentPersona = useCurrentPersona()
     return useQuery(['search-local', searchedRecords], async () => {
-        const friends: Friend[] = (
+        return (
             await Promise.all(
-                searchedRecords.map(async (x) => {
-                    if (isProfileIdentifier(x.profile)) {
-                        const res = await Services.Identity.queryProfileInformation(x.profile)
-                        if (
-                            res?.linkedPersona !== undefined &&
-                            res?.linkedPersona.publicKeyAsHex !== currentPersona?.identifier.publicKeyAsHex
-                        )
-                            return {
-                                persona: res.linkedPersona,
-                                profile: x.profile,
-                            }
-                        return {}
-                    } else {
-                        return {}
-                    }
+                searchedRecords.map<Promise<Friend | undefined>>(async (x) => {
+                    if (!isProfileIdentifier(x.profile)) return
+                    const profile = await Services.Identity.queryProfileInformation(x.profile)
+                    if (
+                        profile?.linkedPersona !== undefined &&
+                        profile?.linkedPersona.publicKeyAsHex !== currentPersona?.identifier.publicKeyAsHex
+                    )
+                        return {
+                            persona: profile.linkedPersona,
+                            profile: x.profile,
+                        }
+                    return
                 }),
             )
-        ).filter(isFriend) as Friend[]
-        return friends
+        ).filter((x): x is Friend => typeof x !== 'undefined' && Object.hasOwn(x, 'persona'))
     })
 }
