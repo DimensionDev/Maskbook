@@ -11,8 +11,9 @@ export function useHasPassword() {
     } = useQuery(['@@has-password'], Services.Wallet.hasPassword, { networkMode: 'always' })
 
     useEffect(() => {
+        refetch()
         return CrossIsolationMessages.events.passwordStatusUpdated.on(() => refetch())
-    }, [refetch])
+    }, [])
 
-    return { hasPassword, loading: isLoading }
+    return { hasPassword, isLoading }
 }
