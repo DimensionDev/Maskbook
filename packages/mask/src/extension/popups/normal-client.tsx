@@ -20,6 +20,7 @@ __setUIContext__({
     queryPersonaAvatar: Services.Identity.getPersonaAvatar,
     querySocialIdentity: Services.Identity.querySocialIdentity,
     fetchJSON: Services.Helper.fetchJSON,
+    queryPersonaByProfile: Services.Identity.queryPersonaByProfile,
 })
 if (
     location.hash === '#/personas' ||

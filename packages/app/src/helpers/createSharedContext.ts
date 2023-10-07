@@ -33,7 +33,6 @@ export function createSharedContext(): Omit<
         closeWalletConnectDialog: () => {
             WalletConnectQRCodeModal.close()
         },
-        queryPersonaByProfile: reject,
         grantEIP2255Permission: reject,
         disconnectAllWalletsFromOrigin: reject,
         selectMaskWalletAccount: reject,

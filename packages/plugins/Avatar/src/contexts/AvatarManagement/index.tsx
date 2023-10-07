@@ -21,8 +21,8 @@ import {
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { PFP_TYPE, type SelectTokenInfo } from '../../types.js'
-import { useLastRecognizedIdentity, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { currentNextIDPlatform } from '@masknet/plugin-infra/content-script/context'
+import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { currentNextIDPlatform, queryPersonaByProfile } from '@masknet/plugin-infra/content-script/context'
 import { useQuery } from '@tanstack/react-query'
 import { NextIDProof } from '@masknet/web3-providers'
 import { isValidAddress } from '@masknet/web3-shared-evm'
@@ -63,7 +63,6 @@ export const AvatarManagementContext = createContext<AvatarManagementContextOpti
 interface Props extends PropsWithChildren<{ socialIdentity?: SocialIdentity }> {}
 
 export const AvatarManagementProvider = memo(({ children }: Props) => {
-    const { queryPersonaByProfile } = useSiteAdaptorContext()
     const identity = useLastRecognizedIdentity()
 
     const [proof, setProof] = useState<BindingProof>()

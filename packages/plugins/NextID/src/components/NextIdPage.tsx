@@ -24,13 +24,14 @@ import {
     OtherLackWalletAction,
     SelectConnectPersonaAction,
 } from './Actions/index.js'
+import { queryPersonaByProfile } from '@masknet/plugin-infra/dom/context'
 
 export const NextIdPage = memo(function NextIdPage() {
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const allPersonas = useAllPersonas()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
-    const { openDashboard, queryPersonaByProfile, openPopupWindow } = useSiteAdaptorContext()
+    const { openDashboard, openPopupWindow } = useSiteAdaptorContext()
 
     const { value: personaConnectStatus, loading: statusLoading } = useCurrentPersonaConnectStatus(
         allPersonas,
@@ -47,7 +48,7 @@ export const NextIdPage = memo(function NextIdPage() {
     const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(async () => {
         if (!visitingPersonaIdentifier?.identifier) return
         return queryPersonaByProfile?.(visitingPersonaIdentifier.identifier)
-    }, [visitingPersonaIdentifier?.identifier, personaConnectStatus.hasPersona, queryPersonaByProfile])
+    }, [visitingPersonaIdentifier?.identifier, personaConnectStatus.hasPersona])
     const publicKeyAsHex = currentPersona?.identifier.publicKeyAsHex
     const proofs = usePersonaProofs(publicKeyAsHex)
 

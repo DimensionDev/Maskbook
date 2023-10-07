@@ -152,6 +152,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         getPostURL: ui.utils.getPostURL || (() => null),
         querySocialIdentity: Services.Identity.querySocialIdentity,
         fetchJSON: Services.Helper.fetchJSON,
+        queryPersonaByProfile: Services.Identity.queryPersonaByProfile,
     })
     SiteAdaptorContextRef.value = {
         ...RestPartOfPluginUIContextShared,
@@ -161,7 +162,6 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         createPersona: () => Services.Helper.openDashboard(DashboardRoutes.SignUpPersona),
         connectPersona,
         fetchManifest: Services.ThirdPartyPlugin.fetchManifest,
-        queryPersonaByProfile: Services.Identity.queryPersonaByProfile,
         attachProfile: Services.Identity.attachProfile,
         postMessage: ui.automation?.nativeCompositionDialog?.attachText,
         setCurrentPersonaIdentifier: Services.Settings.setCurrentPersonaIdentifier,

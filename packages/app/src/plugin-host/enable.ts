@@ -23,6 +23,7 @@ __setSiteAdaptorContext__({
     currentVisitingProfile: UNDEFINED,
     currentPersona: UNDEFINED,
     allPersonas: EMPTY_ARRAY,
+    queryPersonaByProfile: reject,
     queryPersonaAvatar: async (identifiers): Promise<any> => {
         if (Array.isArray(identifiers)) return new Map()
         return undefined

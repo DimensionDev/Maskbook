@@ -12,7 +12,6 @@ import type {
     ECKeyIdentifier,
     NetworkPluginID,
     PersonaIdentifier,
-    PersonaInformation,
     PluginID,
     PopupRoutes,
     DashboardRoutes,
@@ -323,8 +322,6 @@ export namespace Plugin.SiteAdaptor {
     export interface SiteAdaptorContext extends Shared.SharedUIContext {
         share?: (text: string) => void
         getPostPayload?: () => [string, '1' | '2'] | undefined
-
-        queryPersonaByProfile: (id: ProfileIdentifier) => Promise<PersonaInformation | undefined>
         connectPersona: () => Promise<void>
         createPersona: () => void
         getUserIdentity?: (useId: string) => Promise<IdentityResolved | undefined>
