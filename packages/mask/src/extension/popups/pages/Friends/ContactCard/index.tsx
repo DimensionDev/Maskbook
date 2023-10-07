@@ -18,6 +18,7 @@ import Services from '#services'
 import { ConnectedAccounts } from './ConnectedAccounts/index.js'
 import { attachNextIDToProfile } from '../../../../../utils/utils.js'
 import { type Friend, useFriendProfiles } from '../../../hooks/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -84,6 +85,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
     const profiles = useFriendProfiles(seen, nextId, profile)
     const rawPublicKey = currentPersona?.identifier.rawPublicKey
     const queryClient = useQueryClient()
+    const { t } = useMaskSharedTrans()
 
     const friendInfo = useMemo(() => {
         if (!rawPublicKey) return
