@@ -7,7 +7,7 @@ export declare namespace SiteAdaptor {
     export interface Utils {
         /** @returns post URL from PostIdentifier */
         getPostURL?(post: PostIdentifier): URL | null
-        getUserIdentity?(useId: string): Promise<IdentityResolved | undefined>
+        getUserIdentity?(userId: string): Promise<IdentityResolved | undefined>
         /** Is this username valid in this network */
         isValidUsername?(username: string): boolean
         /** Handle share */

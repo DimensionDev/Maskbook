@@ -323,10 +323,7 @@ export namespace Plugin.SiteAdaptor {
         getPostPayload?: () => [string, '1' | '2'] | undefined
         connectPersona: () => Promise<void>
         createPersona: () => void
-        getUserIdentity?: (useId: string) => Promise<IdentityResolved | undefined>
-
         fetchManifest?: (addr: string) => Promise<any>
-
         setCurrentPersonaIdentifier?: (x?: PersonaIdentifier) => Promise<void>
         attachProfile?: (
             source: ProfileIdentifier,
