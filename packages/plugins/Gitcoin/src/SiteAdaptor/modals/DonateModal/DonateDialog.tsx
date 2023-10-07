@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useLayoutEffect, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { Icons } from '@masknet/icons'
-import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { share } from '@masknet/plugin-infra/content-script/context'
 import {
     ChainBoundary,
     EthereumERC20TokenApprovedBoundary,
@@ -77,7 +77,6 @@ export const DonateDialog = memo(({ grant, ...rest }: DonateDialogProps) => {
     const t = useGitcoinTrans()
     const { classes, theme } = useStyles()
     const { title, admin_address: address, tenants } = grant
-    const { share } = useSiteAdaptorContext()
 
     const availableChains = useMemo(() => getSupportedChainIds(tenants), [tenants])
     const { account, chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

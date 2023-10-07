@@ -9,7 +9,8 @@ import { Context } from '../../hooks/useContext.js'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
-import { usePostLink, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { usePostLink } from '@masknet/plugin-infra/content-script'
+import { share } from '@masknet/plugin-infra/content-script/context'
 
 const useStyles = makeStyles()((theme) => ({
     main: { padding: 8 },
@@ -36,7 +37,6 @@ export interface DrawResultDialogProps {
 export function DrawResultDialog(props: DrawResultDialogProps) {
     const { open, onClose, boxInfo, contractDetailed } = props
     const { classes } = useStyles()
-    const { share } = useSiteAdaptorContext()
     const { lastPurchasedTokenIds } = useContainer(Context)
 
     const postLink = usePostLink()

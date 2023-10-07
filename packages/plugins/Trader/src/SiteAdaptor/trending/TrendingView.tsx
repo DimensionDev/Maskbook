@@ -42,6 +42,7 @@ import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
 import { ContentTab } from '../../types/index.js'
 import { FailedTrendingView } from './FailedTrendingView.js'
 import { useTraderTrans } from '../../locales/index.js'
+import { share } from '@masknet/plugin-infra/content-script/context'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -426,6 +427,7 @@ export function TrendingView(props: TrendingViewProps) {
                         <TradeView
                             classes={{ root: classes.tradeViewRoot }}
                             TraderProps={{
+                                share,
                                 defaultInputCoin: createFungibleToken(
                                     result.chainId,
                                     SchemaType.Native,

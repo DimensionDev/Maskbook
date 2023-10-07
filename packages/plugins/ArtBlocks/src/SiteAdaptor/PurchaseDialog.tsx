@@ -23,7 +23,8 @@ import { type FungibleToken, leftShift } from '@masknet/web3-shared-base'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { SchemaType, useArtBlocksConstants, type ChainId } from '@masknet/web3-shared-evm'
 import { useFungibleTokenWatched } from '@masknet/web3-hooks-base'
-import { usePostLink, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { usePostLink } from '@masknet/plugin-infra/content-script'
+import { share } from '@masknet/plugin-infra/content-script/context'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback.js'
 import type { Project } from '../types.js'
 import { useArtBlocksTrans } from '../locales/index.js'
@@ -51,7 +52,6 @@ export function PurchaseDialog(props: ActionBarProps) {
     const t = useArtBlocksTrans()
     const { classes } = useStyles()
     const { project, open, onClose, chainId } = props
-    const { share } = useSiteAdaptorContext()
 
     const {
         token: { data: token },

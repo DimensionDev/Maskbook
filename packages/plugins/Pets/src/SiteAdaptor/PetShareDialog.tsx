@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { useCallback } from 'react'
 import { usePetsTrans } from '../locales/index.js'
-import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { share } from '@masknet/plugin-infra/content-script/context'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -38,12 +38,11 @@ interface PetSetDialogProps {
 export function PetShareDialog({ onClose }: PetSetDialogProps) {
     const t = usePetsTrans()
     const { classes } = useStyles()
-    const { share } = useSiteAdaptorContext()
 
     const onShareClick = useCallback(() => {
         share?.(t.share_twitter())
         onClose()
-    }, [onClose, share])
+    }, [onClose])
 
     return (
         <Box className={classes.root}>

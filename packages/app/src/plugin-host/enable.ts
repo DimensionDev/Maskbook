@@ -33,6 +33,7 @@ __setSiteAdaptorContext__({
     currentPersonaIdentifier: UNDEFINED,
     getPostURL: () => null,
     fetchJSON: reject,
+    share: undefined,
 })
 
 startPluginSiteAdaptor(EnhanceableSite.App, {

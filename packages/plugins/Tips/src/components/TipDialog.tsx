@@ -1,4 +1,4 @@
-import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
+import { share } from '@masknet/plugin-infra/content-script/context'
 import { ChainBoundary, InjectedDialog, PluginWalletStatusBar, TransactionConfirmModal } from '@masknet/shared'
 import { NetworkPluginID, getSiteType, pluginIDsSettings } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
@@ -119,8 +119,6 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
 
     const { data: nonFungibleToken } = useNonFungibleAsset(undefined, nonFungibleTokenAddress, nonFungibleTokenId ?? '')
-    const { share } = useSiteAdaptorContext()
-
     const send = useCallback(async () => {
         const hash = await sendTip()
         if (typeof hash !== 'string') return
@@ -145,17 +143,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
             share,
         })
         onClose?.()
-    }, [
-        sendTip,
-        nonFungibleToken,
-        shareText,
-        amount,
-        tipType,
-        token,
-        nonFungibleTokenAddress,
-        nonFungibleTokenId,
-        share,
-    ])
+    }, [sendTip, nonFungibleToken, shareText, amount, tipType, token, nonFungibleTokenAddress, nonFungibleTokenId])
 
     const expectedPluginID = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginID)
         ? pluginID

@@ -4,7 +4,7 @@ import { Button, Typography, Box } from '@mui/material'
 import { useGameTrans } from '../locales/index.js'
 import type { GameInfo } from '../types.js'
 import { Share_Twitter } from '../constants.js'
-import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
+import { share } from '@masknet/plugin-infra/content-script/context'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -32,8 +32,6 @@ interface PetSetDialogProps {
 export default function GameShareDialog({ onClose, gameInfo }: PetSetDialogProps) {
     const t = useGameTrans()
     const { classes } = useStyles()
-    const { share } = useSiteAdaptorContext()
-
     const onShareClick = useCallback(() => {
         share?.(
             t.game_share_text({
@@ -43,7 +41,7 @@ export default function GameShareDialog({ onClose, gameInfo }: PetSetDialogProps
             }),
         )
         onClose()
-    }, [gameInfo?.name, gameInfo?.snsId, onClose, share])
+    }, [gameInfo?.name, gameInfo?.snsId, onClose])
 
     return (
         <Box className={classes.root}>

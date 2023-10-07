@@ -153,11 +153,11 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         querySocialIdentity: Services.Identity.querySocialIdentity,
         fetchJSON: Services.Helper.fetchJSON,
         queryPersonaByProfile: Services.Identity.queryPersonaByProfile,
+        share: ui.utils.share,
     })
     SiteAdaptorContextRef.value = {
         ...RestPartOfPluginUIContextShared,
         getPostIdFromNewPostToast: ui.configuration.nextIDConfig?.getPostIdFromNewPostToast,
-        share: ui.utils.share,
         getUserIdentity: ui.utils.getUserIdentity,
         createPersona: () => Services.Helper.openDashboard(DashboardRoutes.SignUpPersona),
         connectPersona,

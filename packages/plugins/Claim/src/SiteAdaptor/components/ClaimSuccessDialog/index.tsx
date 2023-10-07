@@ -6,7 +6,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
 import { useClaimTrans } from '../../../locales/i18n_generated.js'
-import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { share } from '@masknet/plugin-infra/content-script/context'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -73,15 +73,13 @@ export function ClaimSuccessDialog({ open, onClose, amount, tokenAddress }: Prop
     const t = useClaimTrans()
     const { classes } = useStyles()
 
-    const { share } = useSiteAdaptorContext()
-
     const { data: tokenDetail } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress)
 
     const onShare = useCallback(() => {
         if (!amount || !tokenDetail) return
 
         share?.(t.share_text({ amount, symbol: tokenDetail.symbol }))
-    }, [share, amount, tokenDetail?.symbol])
+    }, [amount, tokenDetail?.symbol])
 
     return usePortalShadowRoot((container) => (
         <Dialog container={container} open={open} onClose={onClose} classes={{ paper: classes.paper }}>

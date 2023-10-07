@@ -1,10 +1,10 @@
-import { memo } from 'react'
+import { memo, type ComponentType } from 'react'
 import { Icons } from '@masknet/icons'
 import { Box, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { useDashboardTrans } from '../../locales/index.js'
 
-export const ColumnContentLayout = styled('div')`
+export const ColumnContentLayout: ComponentType<JSX.IntrinsicElements['div']> = styled('div')`
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -14,7 +14,7 @@ export const ColumnContentLayout = styled('div')`
     justify-content: center;
 `
 
-export const Body = styled('main')(({ theme }) => ({
+export const Body: ComponentType<JSX.IntrinsicElements['main']> = styled('main')(({ theme }) => ({
     flex: '1 5',
     width: '78%',
     [theme.breakpoints.down('md')]: {
@@ -22,7 +22,7 @@ export const Body = styled('main')(({ theme }) => ({
     },
 }))
 
-export const Footer = styled('footer')(({ theme }) => ({
+export const Footer: ComponentType<JSX.IntrinsicElements['footer']> = styled('footer')(({ theme }) => ({
     flex: 1,
     width: '78%',
     [theme.breakpoints.down('md')]: {
@@ -38,7 +38,7 @@ export const LogoBoxStyled = styled(Box)(({ theme }) => ({
     [theme.breakpoints.down('md')]: {
         marginBottom: theme.spacing(2),
     },
-}))
+})) as any as typeof Box
 
 export const SignUpAccountLogo = styled(Icons.SignUpAccount)(({ theme }) => ({
     width: '100%',

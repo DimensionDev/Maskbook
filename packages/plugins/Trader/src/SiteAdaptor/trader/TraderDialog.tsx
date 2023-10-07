@@ -69,7 +69,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function TraderDialog() {
+export function TraderDialog(props: { share: ((text: string) => void) | undefined }) {
     const tradeRef = useRef<TraderRef>(null)
     const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')
     const { pluginID } = useNetworkContext()
@@ -198,6 +198,7 @@ export function TraderDialog() {
                 </div>
                 <AllProviderTradeContext.Provider>
                     <Trader
+                        share={props.share}
                         defaultInputCoin={defaultInputCoin ? inputToken : undefined}
                         defaultOutputCoin={defaultOutputCoin ? outputToken : undefined}
                         chainId={chainId}

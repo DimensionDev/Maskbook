@@ -13,9 +13,6 @@ export function createSharedContext(): Omit<
 > {
     return {
         wallets: EMPTY_ARRAY,
-        share(text) {
-            throw new Error('To be implemented.')
-        },
         addWallet: reject,
         closePopupWindow: reject,
         connectPersona: reject,

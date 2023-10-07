@@ -6,7 +6,7 @@ import { ThemeMode, FontSize, ThemeColor, type ThemeSettings } from '@masknet/we
 export const stateCreator: {
     readonly [key in keyof SiteAdaptorUI.AutonomousState]-?: () => SiteAdaptorUI.AutonomousState[key]
 } = {
-    profiles: () => new ValueRef<ProfileInformation[]>([], isEqual),
+    profiles: () => new ValueRef<readonly ProfileInformation[]>([], isEqual),
 }
 export const creator = {
     EmptyIdentityResolveProviderState: (): SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider['recognized'] =>

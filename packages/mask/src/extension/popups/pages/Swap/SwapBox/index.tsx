@@ -4,6 +4,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
 import { createERC20Token } from '@masknet/web3-shared-evm'
 import { Trader } from '@masknet/plugin-trader'
+import { shareToTwitterAsPopup } from '@masknet/shared-base-ui'
 
 export function SwapBox() {
     const location = useLocation()
@@ -25,5 +26,5 @@ export function SwapBox() {
     }, [chainId, address, name, symbol, decimals])
     const { data: coin } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, address ?? '', fallbackToken, { chainId })
 
-    return <Trader defaultInputCoin={coin} chainId={chainId} />
+    return <Trader share={shareToTwitterAsPopup} defaultInputCoin={coin} chainId={chainId} />
 }

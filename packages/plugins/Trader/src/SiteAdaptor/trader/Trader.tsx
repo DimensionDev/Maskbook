@@ -18,7 +18,7 @@ import {
     useWeb3Others,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useActivatedPlugin, useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
+import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { NetworkPluginID, PluginID, Sniffings } from '@masknet/shared-base'
 import { type TraderAPI } from '@masknet/web3-providers/types'
 import { DepositPaymaster, SmartPayBundler, Web3 } from '@masknet/web3-providers'
@@ -40,6 +40,7 @@ export interface TraderProps extends withClasses<'root'> {
     defaultOutputCoin?: Web3Helper.FungibleTokenAll
     chainId?: Web3Helper.ChainIdAll
     settings?: boolean
+    share: ((text: string) => void) | undefined
 }
 
 export interface TraderRef {
@@ -51,14 +52,12 @@ export interface TraderRef {
 export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, ref) => {
     const theme = useTheme()
     const wallet = useWallet()
-    const { defaultOutputCoin, chainId: targetChainId, defaultInputCoin, settings = false } = props
+    const { defaultOutputCoin, chainId: targetChainId, defaultInputCoin, settings = false, share } = props
     const t = useTraderTrans()
     const [focusedTrade, setFocusTrade] = useState<AsyncStateRetry<TraderAPI.TradeInfo>>()
     const { chainId, account, setChainId } = useChainContext({
         chainId: targetChainId,
     })
-    const { share } = useSiteAdaptorContext()
-
     const { pluginID } = useNetworkContext()
     const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')
     const chainIdList = traderDefinition?.enableRequirement?.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
@@ -271,7 +270,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
             amount: '',
         })
-    }, [tradeCallback, shareText, focusedTrade, share])
+    }, [tradeCallback, shareText, focusedTrade])
 
     const onConfirmDialogClose = useCallback(() => {
         setOpenConfirmDialog(false)

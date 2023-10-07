@@ -89,8 +89,8 @@ export function createSiteAdaptorSpecializedPostContext(create: PostContextActio
             suggestedInjectionPoint: opt.suggestedInjectionPoint,
 
             comment: opt.comments,
-            encryptComment: new ValueRef(null),
-            decryptComment: new ValueRef(null),
+            encryptComment: new ValueRef<any>(null),
+            decryptComment: new ValueRef<any>(null),
 
             identifier: postIdentifier,
             url: mapSubscription(postIdentifier, (id) => {
