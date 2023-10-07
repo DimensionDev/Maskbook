@@ -150,6 +150,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         currentNextIDPlatform: ui.configuration.nextIDConfig?.platform,
         currentPersonaIdentifier: createSubscriptionFromValueRef(currentPersonaIdentifier, signal),
         getPostURL: ui.utils.getPostURL || (() => null),
+        querySocialIdentity: Services.Identity.querySocialIdentity,
     })
     SiteAdaptorContextRef.value = {
         ...RestPartOfPluginUIContextShared,
@@ -159,7 +160,6 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         createPersona: () => Services.Helper.openDashboard(DashboardRoutes.SignUpPersona),
         connectPersona,
         fetchManifest: Services.ThirdPartyPlugin.fetchManifest,
-        getSocialIdentity: Services.Identity.querySocialIdentity,
         queryPersonaByProfile: Services.Identity.queryPersonaByProfile,
         attachProfile: Services.Identity.attachProfile,
         postMessage: ui.automation?.nativeCompositionDialog?.attachText,

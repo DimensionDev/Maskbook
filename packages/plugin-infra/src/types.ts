@@ -11,7 +11,6 @@ import type {
     BindingProof,
     ECKeyIdentifier,
     NetworkPluginID,
-    NextIDPlatform,
     PersonaIdentifier,
     PersonaInformation,
     PluginID,
@@ -326,11 +325,6 @@ export namespace Plugin.Shared {
 /** This part runs in the Site Adaptor */
 export namespace Plugin.SiteAdaptor {
     export interface SiteAdaptorContext extends Shared.SharedUIContext {
-        getSocialIdentity: (
-            platform: NextIDPlatform,
-            identity: IdentityResolved | undefined,
-        ) => Promise<SocialIdentity | undefined>
-
         share?: (text: string) => void
         getPostPayload?: () => [string, '1' | '2'] | undefined
 

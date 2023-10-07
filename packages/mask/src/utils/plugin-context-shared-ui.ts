@@ -40,7 +40,6 @@ export const RestPartOfPluginUIContextShared: Omit<
     | 'currentVisitingProfile'
     | 'themeSettings'
     | 'getThemeSettings'
-    | 'getSocialIdentity'
     | 'getPersonaAvatar'
     | 'setMinimalMode'
     | 'queryPersonaByProfile'

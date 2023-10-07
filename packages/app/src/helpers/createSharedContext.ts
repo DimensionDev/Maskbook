@@ -21,7 +21,6 @@ export function createSharedContext(): Omit<
         connectPersona: reject,
         createPersona: reject,
         getPostPayload,
-        getSocialIdentity: reject,
         getWallets: reject,
         hasPaymentPassword: reject,
         openDashboard: reject,
