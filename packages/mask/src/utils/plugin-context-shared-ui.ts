@@ -56,7 +56,6 @@ export const RestPartOfPluginUIContextShared: Omit<
     },
     openPopupWindow: Services.Helper.openPopupWindow,
     closePopupWindow: Services.Helper.removePopupWindow,
-    fetchJSON: Services.Helper.fetchJSON,
 
     openWalletConnectDialog: async (uri: string) => {
         if (Sniffings.is_popup_page) {

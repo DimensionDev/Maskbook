@@ -13,6 +13,7 @@ __setUIContext__({
     currentPersona: NextSharedUIContext.currentPersonaIdentifier,
     queryPersonaAvatar: Services.Identity.getPersonaAvatar,
     querySocialIdentity: Services.Identity.querySocialIdentity,
+    fetchJSON: Services.Helper.fetchJSON,
 })
 startPluginDashboard(
     createPluginHost(

@@ -170,7 +170,7 @@ export class LensAPI implements LensBaseAPI.Provider {
                     stats {
                       totalFollowers
                       totalFollowing
-                     
+
                     }
                     followModule {
                       ... on FeeFollowModuleSettings {
@@ -215,7 +215,7 @@ export class LensAPI implements LensBaseAPI.Provider {
                     doesFollow(request: {
                       followInfos: [
                         {
-                          followerAddress: "${address}", 
+                          followerAddress: "${address}",
                           profileId: "${profileId}"
                         }
                       ]
@@ -363,7 +363,7 @@ export class LensAPI implements LensBaseAPI.Provider {
                           }
                         }
                       }
-                    }  
+                    }
                   `,
                 }),
             },
@@ -409,7 +409,7 @@ export class LensAPI implements LensBaseAPI.Provider {
                           }
                         }
                       }
-                    }  
+                    }
                 `,
                 }),
             },
@@ -479,11 +479,11 @@ export class LensAPI implements LensBaseAPI.Provider {
         signature: string,
         options?: {
             token: string
-            fetcher: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<T>
+            fetcher: (input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<unknown>
         },
     ) {
         if (!id || !options?.token || !signature) return
-        const { data } = await options.fetcher<{ data: { broadcast: LensBaseAPI.Broadcast } }>(LENS_ROOT_API, {
+        const { data } = (await options.fetcher(LENS_ROOT_API, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -510,7 +510,7 @@ export class LensAPI implements LensBaseAPI.Provider {
                     }
                     `,
             }),
-        })
+        })) as { data: { broadcast: LensBaseAPI.Broadcast } }
 
         return data.broadcast
     }

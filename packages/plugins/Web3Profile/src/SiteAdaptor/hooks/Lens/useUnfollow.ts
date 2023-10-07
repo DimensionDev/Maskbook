@@ -10,7 +10,7 @@ import LensFollowNftABI from '@masknet/web3-contracts/abis/LensFollowNFT.json'
 import type { LensFollowNFT } from '@masknet/web3-contracts/types/LensFollowNFT.js'
 import { useQueryAuthenticate } from './useQueryAuthenticate.js'
 import { BroadcastType } from '@masknet/web3-providers/types'
-import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { fetchJSON } from '@masknet/plugin-infra/dom/context'
 import { useWeb3ProfileTrans } from '../../../locales/i18n_generated.js'
 
 export function useUnfollow(
@@ -22,7 +22,6 @@ export function useUnfollow(
     const t = useWeb3ProfileTrans()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const handleQueryAuthenticate = useQueryAuthenticate(account)
-    const { fetchJSON } = useSiteAdaptorContext()
 
     const snackbarKeyRef = useRef<SnackbarKey>()
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()

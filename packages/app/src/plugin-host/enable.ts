@@ -31,6 +31,7 @@ __setSiteAdaptorContext__({
     currentNextIDPlatform: undefined,
     currentPersonaIdentifier: UNDEFINED,
     getPostURL: () => null,
+    fetchJSON: reject,
 })
 
 startPluginSiteAdaptor(EnhanceableSite.App, {

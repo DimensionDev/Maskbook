@@ -132,10 +132,6 @@ export namespace Plugin.Shared {
 
         /** Close popup window */
         closePopupWindow(): Promise<void>
-
-        /** Fetch json from background */
-        fetchJSON<T>(input: RequestInfo | URL, init?: RequestInit): Promise<T>
-
         /** Open walletconnect dialog */
         openWalletConnectDialog(uri: string): Promise<void>
 

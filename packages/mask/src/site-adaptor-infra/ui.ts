@@ -151,6 +151,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         currentPersonaIdentifier: createSubscriptionFromValueRef(currentPersonaIdentifier, signal),
         getPostURL: ui.utils.getPostURL || (() => null),
         querySocialIdentity: Services.Identity.querySocialIdentity,
+        fetchJSON: Services.Helper.fetchJSON,
     })
     SiteAdaptorContextRef.value = {
         ...RestPartOfPluginUIContextShared,

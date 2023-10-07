@@ -22,11 +22,16 @@ export interface __UIContext__ {
         platform: NextIDPlatform,
         identity: IdentityResolved | undefined,
     ) => Promise<SocialIdentity | undefined>
+    // DO NOT add <T> to this function, you do not test if it is T right?
+    // (e.g. receive a function to check it validate: (x: unknown) => x is T)
+    // fetchJSON<T>(validate: (x: unknown) => x is T, input: RequestInfo | URL, init?: RequestInit): Promise<T>
+    fetchJSON(input: RequestInfo | URL, init?: RequestInit): Promise<unknown>
 }
 export let allPersonas: __UIContext__['allPersonas']
 export let currentPersona: __UIContext__['currentPersona']
 export let queryPersonaAvatar: __UIContext__['queryPersonaAvatar']
 export let querySocialIdentity: __UIContext__['querySocialIdentity']
+export let fetchJSON: __UIContext__['fetchJSON']
 export function __setUIContext__(value: __UIContext__) {
-    ;({ allPersonas, currentPersona, queryPersonaAvatar, querySocialIdentity } = value)
+    ;({ allPersonas, currentPersona, queryPersonaAvatar, querySocialIdentity, fetchJSON } = value)
 }

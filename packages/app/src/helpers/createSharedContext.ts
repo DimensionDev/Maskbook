@@ -25,7 +25,6 @@ export function createSharedContext(): Omit<
         hasPaymentPassword: reject,
         openDashboard: reject,
         openPopupWindow: reject,
-        fetchJSON: reject,
         openWalletConnectDialog: async (uri: string) => {
             await WalletConnectQRCodeModal.openAndWaitForClose({
                 uri,
