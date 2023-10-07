@@ -1,5 +1,5 @@
 import { WalletConnectQRCodeModal } from '@masknet/shared'
-import { EMPTY_ARRAY, UNDEFINED, ValueRefWithReady } from '@masknet/shared-base'
+import { EMPTY_ARRAY } from '@masknet/shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 import { getPostPayload } from '../helpers/getPostPayload.js'
 
@@ -7,14 +7,11 @@ async function reject(): Promise<never> {
     throw new Error('Not implemented')
 }
 
-const emptyValueRef = new ValueRefWithReady<any>()
-
 export function createSharedContext(): Omit<
     Plugin.SiteAdaptor.SiteAdaptorContext,
     'createKVStorage' | 'setWeb3State' | 'setMinimalMode'
 > {
     return {
-        currentPersona: UNDEFINED,
         wallets: EMPTY_ARRAY,
         share(text) {
             throw new Error('To be implemented.')

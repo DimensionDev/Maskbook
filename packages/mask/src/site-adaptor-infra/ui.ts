@@ -145,6 +145,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         lastRecognizedProfile: lastRecognizedSub,
         currentVisitingProfile: currentVisitingSub,
         allPersonas: NextSharedUIContext.allPersonas,
+        currentPersona: NextSharedUIContext.currentPersonaIdentifier,
         queryPersonaAvatar: Services.Identity.getPersonaAvatar,
         currentNextIDPlatform: ui.configuration.nextIDConfig?.platform,
         currentPersonaIdentifier: createSubscriptionFromValueRef(currentPersonaIdentifier, signal),

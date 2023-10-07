@@ -27,6 +27,11 @@ export const NextSharedUIContext = {
             }
         },
     ),
+    currentPersonaIdentifier: createSubscriptionFromAsync(
+        Services.Settings.getCurrentPersonaIdentifier,
+        undefined,
+        MaskMessages.events.currentPersonaIdentifier.on,
+    ),
 }
 export const RestPartOfPluginUIContextShared: Omit<
     Plugin.SiteAdaptor.SiteAdaptorContext,
@@ -45,11 +50,6 @@ export const RestPartOfPluginUIContextShared: Omit<
     | 'getSearchedKeyword'
     | 'setWeb3State'
 > = {
-    currentPersona: createSubscriptionFromAsync(
-        Services.Settings.getCurrentPersonaIdentifier,
-        undefined,
-        MaskMessages.events.currentPersonaIdentifier.on,
-    ),
     send: Services.Wallet.send,
 
     openDashboard: async (...args) => {

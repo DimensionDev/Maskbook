@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { useSubscription } from 'use-subscription'
-import { type BindingProof, EMPTY_LIST, NextIDPlatform, type PersonaInformation } from '@masknet/shared-base'
+import { type BindingProof, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { LoadingBase } from '@masknet/theme'
 import { DialogActions, DialogContent, Stack } from '@mui/material'
 import { useAvatarTrans } from '../locales/index.js'
@@ -11,8 +11,8 @@ import { PersonaItem } from './PersonaItem.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
 import { Alert, PersonaAction, usePersonasFromNextID } from '@masknet/shared'
 import { isValidAddress } from '@masknet/web3-shared-evm'
-import { useAllPersonas, useLastRecognizedIdentity, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { queryPersonaAvatar } from '@masknet/plugin-infra/content-script/context'
+import { useAllPersonas, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { currentPersona, queryPersonaAvatar } from '@masknet/plugin-infra/content-script/context'
 import { RoutePaths } from './Routes.js'
 import { useAvatarManagement } from '../contexts/index.js'
 
@@ -28,15 +28,14 @@ export function PersonaPage() {
     const network = socialIdentity?.identifier?.network.replace('.com', '')
     const userId = socialIdentity?.identifier?.userId
 
-    const { currentPersona: currentPersona_ } = useSiteAdaptorContext()
     const myPersonas = useAllPersonas()
-    const _persona = useSubscription(currentPersona_)
-    const currentPersona = myPersonas?.find(
-        (x: PersonaInformation) => x.identifier.rawPublicKey.toLowerCase() === _persona?.rawPublicKey.toLowerCase(),
+    const currentPersonaIdentifier = useSubscription(currentPersona)
+    const currentPersonaInfo = myPersonas?.find(
+        (x) => x.identifier.rawPublicKey.toLowerCase() === currentPersonaIdentifier?.rawPublicKey.toLowerCase(),
     )
 
     const { data: bindingPersonas = EMPTY_LIST } = usePersonasFromNextID(
-        _persona?.publicKeyAsHex ?? '',
+        currentPersonaIdentifier?.publicKeyAsHex ?? '',
         NextIDPlatform.NextID,
         false,
     )
@@ -62,8 +61,8 @@ export function PersonaPage() {
         [navigate],
     )
     const { value: avatar } = useAsyncRetry(
-        async () => queryPersonaAvatar(currentPersona?.identifier),
-        [currentPersona?.identifier],
+        async () => queryPersonaAvatar(currentPersonaIdentifier),
+        [currentPersonaIdentifier],
     )
 
     return (
@@ -119,7 +118,7 @@ export function PersonaPage() {
             <DialogActions style={{ padding: 0, margin: 0 }}>
                 <PersonaAction
                     avatar={avatar === null ? undefined : avatar}
-                    currentPersona={currentPersona}
+                    currentPersona={currentPersonaInfo}
                     currentVisitingProfile={socialIdentity}
                 />
             </DialogActions>

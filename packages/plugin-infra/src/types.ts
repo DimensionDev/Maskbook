@@ -112,8 +112,6 @@ export namespace Plugin.Shared {
     export interface SharedUIContext extends SharedContext {
         setMinimalMode(enabled: boolean): void
         setWeb3State(state: Web3State<any, any, any, any, any, any, any, any>): void
-        /** The selected persona */
-        currentPersona: Subscription<PersonaIdentifier | undefined>
         /** Get all wallets */
         wallets: Subscription<Wallet[]>
 

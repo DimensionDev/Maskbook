@@ -1,7 +1,6 @@
-import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { currentPersona } from '@masknet/plugin-infra/content-script/context'
 import { useSubscription } from 'use-subscription'
 
 export function useCurrentPersona() {
-    const context = useSiteAdaptorContext()
-    return useSubscription(context.currentPersona)
+    return useSubscription(currentPersona)
 }

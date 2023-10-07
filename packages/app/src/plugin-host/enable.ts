@@ -18,6 +18,7 @@ import { __setSiteAdaptorContext__ } from '@masknet/plugin-infra/content-script/
 __setSiteAdaptorContext__({
     lastRecognizedProfile: UNDEFINED,
     currentVisitingProfile: UNDEFINED,
+    currentPersona: UNDEFINED,
     allPersonas: EMPTY_ARRAY,
     queryPersonaAvatar: async (identifiers): Promise<any> => {
         if (Array.isArray(identifiers)) return new Map()

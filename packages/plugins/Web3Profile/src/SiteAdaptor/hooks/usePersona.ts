@@ -1,14 +1,13 @@
-import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
 import {
     allPersonas,
+    currentPersona,
     lastRecognizedProfile,
     currentVisitingProfile,
 } from '@masknet/plugin-infra/content-script/context'
 import { useSubscription } from 'use-subscription'
 
 export function useCurrentPersona() {
-    const context = useSiteAdaptorContext()
-    return useSubscription(context.currentPersona)
+    return useSubscription(currentPersona)
 }
 
 export function useCurrentVisitingProfile() {
