@@ -6,6 +6,7 @@ import { DefaultWeb3ContextProvider, useChainContext, useFungibleToken } from '@
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { createERC20Token, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { PageContainer } from '../components/PageContainer.js'
+import { shareToTwitterAsPopup } from '@masknet/shared-base-ui'
 
 export interface SwapPageProps {}
 
@@ -34,6 +35,7 @@ export default function SwapPage(props: SwapPageProps) {
             <DefaultWeb3ContextProvider>
                 <AllProviderTradeContext.Provider>
                     <Trader
+                        share={shareToTwitterAsPopup}
                         defaultInputCoin={coin as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>}
                         chainId={chainId}
                     />
