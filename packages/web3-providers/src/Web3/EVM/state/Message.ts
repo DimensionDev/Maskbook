@@ -1,7 +1,6 @@
 import { omitBy } from 'lodash-es'
 import urlcat from 'urlcat'
 import type { JsonRpcResponse } from 'web3-core-helpers'
-import { SiteAdaptorContextRef } from '@masknet/plugin-infra/dom'
 import { EMPTY_OBJECT, NetworkPluginID, PopupRoutes, PopupsHistory, Sniffings } from '@masknet/shared-base'
 import { MessageStateType, type ReasonableMessage } from '@masknet/web3-shared-base'
 import {
@@ -85,7 +84,7 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
                 PopupsHistory.push(urlcat(PopupRoutes.Wallet, fromState))
             } else {
                 // open the popups window and wait for approval from the user.
-                await SiteAdaptorContextRef.value.openPopupWindow(route, {
+                await this.context.openPopupWindow(route, {
                     source: location.origin,
                     ...fromState,
                 })

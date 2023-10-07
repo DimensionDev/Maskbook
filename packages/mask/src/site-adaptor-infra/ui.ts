@@ -155,6 +155,8 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         queryPersonaByProfile: Services.Identity.queryPersonaByProfile,
         share: ui.utils.share,
         getUserIdentity: ui.utils.getUserIdentity,
+        openDashboard: Services.Helper.openDashboard,
+        openPopupWindow: Services.Helper.openPopupWindow,
     })
     SiteAdaptorContextRef.value = {
         ...RestPartOfPluginUIContextShared,

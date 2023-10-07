@@ -12,9 +12,8 @@ import {
     useAllPersonas,
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
-    useSiteAdaptorContext,
 } from '@masknet/plugin-infra/content-script'
-import { currentPersonaIdentifier } from '@masknet/plugin-infra/content-script/context'
+import { currentPersonaIdentifier, openDashboard } from '@masknet/plugin-infra/content-script/context'
 import { AboutTab } from './tabs/AboutTab.js'
 import { OffersTab } from './tabs/OffersTab.js'
 import { ActivitiesTab } from './tabs/ActivitiesTab.js'
@@ -90,7 +89,6 @@ export function CardDialogContent(props: CardDialogContentProps) {
     } = Context.useContainer()
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const lastRecognized = useLastRecognizedIdentity()
-    const { openDashboard } = useSiteAdaptorContext()
     const currentIdentifier = useSubscription(currentPersonaIdentifier)
     const personas = useAllPersonas()
     const onBeforeAction = useCallback(() => {

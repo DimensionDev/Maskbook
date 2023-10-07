@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { Icons } from '@masknet/icons'
-import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { openPopupWindow } from '@masknet/plugin-infra/dom/context'
 import {
     AddCollectiblesModal,
     ChainBoundary,
@@ -98,7 +98,6 @@ export function NFTListDialog() {
     const [disabled, setDisabled] = useState(false)
     const [pendingTokenCount, setPendingTokenCount] = useState(0)
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
-    const { openPopupWindow } = useSiteAdaptorContext()
     const targetWallet = wallets.find((x) => isSameAddress(targetAccount, x.address))
 
     useEffect(() => setSelectedToken(undefined), [chainId])

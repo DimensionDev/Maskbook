@@ -34,6 +34,8 @@ __setSiteAdaptorContext__({
     getPostURL: () => null,
     fetchJSON: reject,
     share: undefined,
+    openDashboard: reject,
+    openPopupWindow: reject,
 })
 
 startPluginSiteAdaptor(EnhanceableSite.App, {

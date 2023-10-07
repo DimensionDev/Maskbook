@@ -7,12 +7,13 @@ import { Icon, LeavePageConfirmModal, PersonaSelectPanelModal, useSharedTrans } 
 import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { SmartPayFunder } from '@masknet/web3-providers'
-import { useAllPersonas, useLastRecognizedIdentity, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useAllPersonas, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { RoutePaths } from '../../constants.js'
 import { useQueryQualifications } from '../../hooks/useQueryQualifications.js'
 import { SmartPayContext } from '../../hooks/useSmartPayContext.js'
 import { PluginSmartPayMessages } from '../../message.js'
 import { useSmartPayTrans } from '../../locales/i18n_generated.js'
+import { openDashboard } from '@masknet/plugin-infra/dom/context'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -69,7 +70,6 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
         if (!currentProfile?.identifier?.userId) return 0
         return SmartPayFunder.getRemainFrequency(currentProfile.identifier.userId)
     }, [currentProfile])
-    const { openDashboard } = useSiteAdaptorContext()
 
     const { value: qualifications, loading } = useQueryQualifications()
 

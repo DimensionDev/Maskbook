@@ -51,9 +51,7 @@ export const RestPartOfPluginUIContextShared: Omit<
 > = {
     send: Services.Wallet.send,
 
-    openDashboard: async (...args) => {
-        await Services.Helper.openDashboard(...args)
-    },
+    openDashboard: Services.Helper.openDashboard,
     openPopupWindow: Services.Helper.openPopupWindow,
     closePopupWindow: Services.Helper.removePopupWindow,
 

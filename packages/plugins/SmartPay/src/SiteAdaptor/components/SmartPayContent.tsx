@@ -42,7 +42,8 @@ import {
     isSameAddress,
     toFixed,
 } from '@masknet/web3-shared-base'
-import { useLastRecognizedIdentity, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { openPopupWindow } from '@masknet/plugin-infra/dom/context'
 import { Others, SmartPayFunder, Web3 } from '@masknet/web3-providers'
 import { useSmartPayTrans } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
@@ -194,8 +195,6 @@ export const SmartPayContent = memo(() => {
     // #endregion
 
     // #region web3 state
-
-    const { openPopupWindow } = useSiteAdaptorContext()
     const { account, chainId, setAccount } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const wallet = useMemo(() => {
@@ -317,7 +316,7 @@ export const SmartPayContent = memo(() => {
     const [{ loading: openSendLoading }, handleSendClick] = useAsyncFn(async () => {
         await connectToCurrent()
         await openPopupWindow(PopupRoutes.Contacts, { selectedToken: maskToken?.address })
-    }, [connectToCurrent, openPopupWindow, maskToken])
+    }, [connectToCurrent, maskToken])
 
     const handleReceiveClick = useCallback(() => {
         setReceiveDialog({

@@ -15,6 +15,8 @@ __setUIContext__({
     querySocialIdentity: Services.Identity.querySocialIdentity,
     fetchJSON: Services.Helper.fetchJSON,
     queryPersonaByProfile: Services.Identity.queryPersonaByProfile,
+    openDashboard: Services.Helper.openDashboard,
+    openPopupWindow: Services.Helper.openPopupWindow,
 })
 startPluginDashboard(
     createPluginHost(

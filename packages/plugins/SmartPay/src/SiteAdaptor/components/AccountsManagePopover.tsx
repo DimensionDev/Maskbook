@@ -4,7 +4,7 @@ import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { formatPersonaFingerprint, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { openPopupWindow } from '@masknet/plugin-infra/dom/context'
 import { useManagers } from '../../hooks/useManagers.js'
 import { useSmartPayTrans } from '../../locales/i18n_generated.js'
 import { useAccount, useChainContext, useNetwork, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
@@ -63,7 +63,6 @@ export const AccountsManagerPopover = memo<AccountsManagePopoverProps>(
         const t = useSmartPayTrans()
         const { classes } = useStyles()
         const { personaManagers, walletManagers } = useManagers()
-        const { openPopupWindow } = useSiteAdaptorContext()
 
         const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
         const account = useAccount()

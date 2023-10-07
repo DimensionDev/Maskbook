@@ -6,7 +6,6 @@ import {
     useAllPersonas,
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
-    useSiteAdaptorContext,
 } from '@masknet/plugin-infra/content-script'
 import {
     PluginCardFrameMini,
@@ -24,14 +23,13 @@ import {
     OtherLackWalletAction,
     SelectConnectPersonaAction,
 } from './Actions/index.js'
-import { queryPersonaByProfile } from '@masknet/plugin-infra/dom/context'
+import { openDashboard, openPopupWindow, queryPersonaByProfile } from '@masknet/plugin-infra/dom/context'
 
 export const NextIdPage = memo(function NextIdPage() {
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const allPersonas = useAllPersonas()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
-    const { openDashboard, openPopupWindow } = useSiteAdaptorContext()
 
     const { value: personaConnectStatus, loading: statusLoading } = useCurrentPersonaConnectStatus(
         allPersonas,
@@ -56,7 +54,7 @@ export const NextIdPage = memo(function NextIdPage() {
         openPopupWindow?.(PopupRoutes.Personas, {
             tab: PopupHomeTabType.ConnectedWallets,
         })
-    }, [openPopupWindow])
+    }, [])
 
     const ActionComponent = useMemo(() => {
         if (!isOwn) return <OtherLackWalletAction />
