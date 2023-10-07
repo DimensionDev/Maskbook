@@ -25,6 +25,7 @@ __setSiteAdaptorContext__({
     },
     currentNextIDPlatform: undefined,
     currentPersonaIdentifier: UNDEFINED,
+    getPostURL: () => null,
 })
 
 startPluginSiteAdaptor(EnhanceableSite.App, {

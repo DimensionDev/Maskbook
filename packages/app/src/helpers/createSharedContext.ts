@@ -1,7 +1,6 @@
 import { WalletConnectQRCodeModal } from '@masknet/shared'
 import { EMPTY_ARRAY, UNDEFINED, ValueRefWithReady } from '@masknet/shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
-import { getPostURL } from '../helpers/getPostURL.js'
 import { getPostPayload } from '../helpers/getPostPayload.js'
 
 async function reject(): Promise<never> {
@@ -24,7 +23,6 @@ export function createSharedContext(): Omit<
         closePopupWindow: reject,
         connectPersona: reject,
         createPersona: reject,
-        getPostURL,
         getPostPayload,
         getSocialIdentity: reject,
         getWallets: reject,

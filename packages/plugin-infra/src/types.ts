@@ -12,7 +12,6 @@ import type {
     ECKeyIdentifier,
     NetworkPluginID,
     NextIDPlatform,
-    PostIdentifier,
     PersonaIdentifier,
     PersonaInformation,
     PluginID,
@@ -335,7 +334,6 @@ export namespace Plugin.SiteAdaptor {
         ) => Promise<SocialIdentity | undefined>
 
         share?: (text: string) => void
-        getPostURL?: (identifier: PostIdentifier) => URL | null
         getPostPayload?: () => [string, '1' | '2'] | undefined
 
         queryPersonaByProfile: (id: ProfileIdentifier) => Promise<PersonaInformation | undefined>
