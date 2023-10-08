@@ -34,13 +34,13 @@ function collectPostsMindsInner(
         new MutationObserverWatcher(postContentSelector()).useForeach((node, key, metadata) => {
             const activitySelector = new LiveSelector()
                 .replace(() => [metadata.realCurrent])
-                .closest('m-activityv2, m-activity__modal')
+                .closest('m-activity, m-activity__modal')
             const activityNode = activitySelector.evaluate()[0]! as HTMLElement
 
             // ? inject after comments
             const commentsSelector = activitySelector
                 .clone()
-                .querySelectorAll<HTMLElement>('m-activityv2__content .m-comment__message')
+                .querySelectorAll<HTMLElement>('m-activity__content .m-comment__message')
 
             // ? inject comment text field
             const commentBoxSelector = activitySelector

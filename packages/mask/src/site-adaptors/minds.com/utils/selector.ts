@@ -68,8 +68,8 @@ export const searchResultHeadingSelector = () => querySelector('m-discovery__sea
 export const postContentSelector = () =>
     new LiveSelector().querySelectorAll<HTMLDivElement>(
         [
-            'm-activityv2 m-activityv2__content .m-activityTop__mainColumn',
-            'm-activityv2 m-activityv2__content .m-activityContentText__body > m-readmore > span:first-child',
+            'm-activity m-activity__content .m-activityTop__mainColumn',
+            'm-activity m-activity__content .m-activityContentText__body > m-readmore > span:first-child',
             'm-activity:not(.m-activity--minimalMode) m-activity__content .m-activityContent__messageWrapper > span:first-child',
             'm-activity:not(.m-activity--minimalMode) m-activity__content .m-activityContent__mediaDescriptionText',
         ].join(','),
