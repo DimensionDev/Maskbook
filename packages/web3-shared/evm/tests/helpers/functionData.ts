@@ -32,7 +32,7 @@ const ERC20 = [
 const DATA =
     '0x095ea7b30000000000000000000000008ba1f109551bd432803012645ac136ddd64dba720000000000000000000000000000000000000000000000000000000000000000'
 
-describe('encodeFunctionData', () => {
+describe('encode & decode function data', () => {
     test('should encode function data', () => {
         const result = encodeFunctionData(ERC20, ['0x8ba1f109551bD432803012645Ac136ddd64DBA72', '0x0'], 'approve')
         expect(result).toBe(DATA)
