@@ -40,7 +40,10 @@ export const EmailForm = memo(function EmailForm() {
             scenario: user.email ? Scenario.change : Scenario.create,
             locale: language.includes('zh') ? Locale.zh : Locale.en,
         }).catch((error) => {
-            showSnackbar(error.message, { variant: 'error' })
+            showSnackbar(
+                error.message.includes('SendTemplatedEmail') ? t.cloud_backup_incorrect_email_address() : error.message,
+                { variant: 'error' },
+            )
         })
 
         if (response) {
