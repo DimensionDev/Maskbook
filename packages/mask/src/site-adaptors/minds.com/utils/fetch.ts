@@ -26,7 +26,12 @@ export const postIdParser = (node: HTMLElement) => {
 export const postNameParser = (node: HTMLElement) => {
     return parseNameArea(
         assertNonNull(
-            node.querySelector<HTMLAnchorElement>('m-activity__ownerblock .m-activityOwnerBlock__primaryName'),
+            node.querySelector<HTMLAnchorElement>(
+                [
+                    'm-activity__ownerblock .m-activityOwnerBlock__primaryName',
+                    'm-activity__ownerblock .m-activityOwnerBlock__secondaryName', // It's `secondaryName` in detail page
+                ].join(','),
+            ),
         ),
     )
 }
