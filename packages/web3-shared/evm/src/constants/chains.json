@@ -87,7 +87,8 @@
             "chainId": 5,
             "name": "Görli Ether",
             "symbol": "ETH",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
         "infoURL": "https://goerli.net/#about",
         "explorers": [
@@ -111,7 +112,8 @@
             "chainId": 42,
             "name": "Kovan Ether",
             "symbol": "ETH",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
         "infoURL": "https://kovan-testnet.github.io/website",
         "explorers": [
@@ -285,7 +287,7 @@
             "name": "Ether",
             "symbol": "ETH",
             "decimals": 18,
-            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/arbitrum/info/logo.png/quality=85"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
         "infoURL": "https://arbitrum.io",
         "explorers": [
@@ -310,7 +312,7 @@
             "name": "Arbitrum Rinkeby Ether",
             "symbol": "ETH",
             "decimals": 18,
-            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/arbitrum/info/logo.png/quality=85"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
         "infoURL": "https://arbitrum.io",
         "explorers": [
@@ -332,7 +334,7 @@
             "name": "Ether",
             "symbol": "ETH",
             "decimals": 18,
-            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/optimism/info/logo.png/quality=85"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
         "infoURL": "https://optimistic.etherscan.io/",
         "fullName": "Optimism",
@@ -358,7 +360,7 @@
             "name": "Ether",
             "symbol": "ETH",
             "decimals": 18,
-            "logoURL": "https://static.debank.com/image/chain/logo_url/op/01ae734fe781c9c2ae6a4cc7e9244056.png"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
         "infoURL": "https://optimism.io",
         "shortName": "kor",
@@ -381,7 +383,8 @@
             "chainId": 420,
             "name": "Ether",
             "symbol": "ETH",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
         "infoURL": "https://optimism.io",
         "shortName": "gor"
@@ -517,7 +520,7 @@
             "name": "Ether",
             "symbol": "ETH",
             "decimals": 18,
-            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/aurora/info/logo.png/quality=85"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
         "infoURL": "https://aurora.dev",
         "explorers": [
@@ -541,7 +544,8 @@
             "chainId": 1313161555,
             "name": "Ether",
             "symbol": "ETH",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
         "infoURL": "https://aurora.dev",
         "explorers": [
@@ -564,7 +568,8 @@
             "chainId": 1313161556,
             "name": "Ether",
             "symbol": "ETH",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
         "infoURL": "https://aurora.dev",
         "explorers": [
@@ -910,7 +915,7 @@
             "name": "Ether",
             "symbol": "ETH",
             "decimals": 18,
-            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/boba/info/logo.png/quality=85"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
         "infoURL": "https://boba.network",
         "shortName": "Boba",
@@ -1109,7 +1114,7 @@
             "name": "Ether",
             "symbol": "ETH",
             "decimals": 18,
-            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/arb-nova/info/logo.png/quality=85"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
         "infoURL": "https://arbitrum.io",
         "explorers": [

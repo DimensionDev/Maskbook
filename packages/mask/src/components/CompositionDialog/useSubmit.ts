@@ -95,13 +95,14 @@ function decorateEncryptedText(encrypted: string, t: I18NFunction, meta?: Meta):
 
     // Note: since this is in the composition stage, we can assume plugins don't insert old version of meta.
     if (meta?.has(`${PluginID.RedPacket}:1`) || meta?.has(`${PluginID.RedPacket}_nft:1`)) {
+        const token = meta?.has(`${PluginID.RedPacket}:1`) ? t('redpacket_a_token') : t('redpacket_an_nft')
         return hasOfficialAccount
             ? t('additional_post_box__encrypted_post_pre_red_packet_sns_official_account', {
                   encrypted,
                   account: officialAccount,
-                  token: meta?.has(`${PluginID.RedPacket}:1`) ? t('redpacket_a_token') : t('redpacket_an_nft'),
+                  token,
               })
-            : t('additional_post_box__encrypted_post_pre_red_packet', { encrypted })
+            : t('additional_post_box__encrypted_post_pre_red_packet', { encrypted, token })
     } else if (meta?.has(`${PluginID.FileService}:3`)) {
         return hasOfficialAccount
             ? t('additional_post_box__encrypted_post_pre_file_service_sns_official_account', {

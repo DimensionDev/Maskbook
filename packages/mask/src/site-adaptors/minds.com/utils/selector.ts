@@ -30,10 +30,11 @@ export const postEditorDraftContentSelector = () => {
     return querySelector<HTMLElement>('m-composer__modal m-composer__textarea textarea.m-composerTextarea__message')
 }
 
-export const handleSelector = () => querySelector('.m-sidebarNavigation__item--user > a > div > span')
+export const handleSelector = () =>
+    querySelector<HTMLAnchorElement>('.m-sidebarNavigation__item--user [data-ref="sidenav-channel"]')
 
 export const selfInfoSelectors = () => ({
-    handle: handleSelector().evaluate()?.innerText.trim(),
+    handle: handleSelector().evaluate()?.getAttribute('href')?.slice(1),
     avatar: querySelector<HTMLImageElement>('.m-sidebarNavigation__item--user > a > div > img').evaluate()?.src,
 })
 
@@ -68,8 +69,8 @@ export const searchResultHeadingSelector = () => querySelector('m-discovery__sea
 export const postContentSelector = () =>
     new LiveSelector().querySelectorAll<HTMLDivElement>(
         [
-            'm-activityv2 m-activityv2__content .m-activityTop__mainColumn',
-            'm-activityv2 m-activityv2__content .m-activityContentText__body > m-readmore > span:first-child',
+            'm-activity m-activity__content .m-activityTop__mainColumn',
+            'm-activity m-activity__content .m-activityContentText__body > m-readmore > span:first-child',
             'm-activity:not(.m-activity--minimalMode) m-activity__content .m-activityContent__messageWrapper > span:first-child',
             'm-activity:not(.m-activity--minimalMode) m-activity__content .m-activityContent__mediaDescriptionText',
         ].join(','),
