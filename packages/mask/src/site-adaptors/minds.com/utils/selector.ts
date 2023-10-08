@@ -30,10 +30,11 @@ export const postEditorDraftContentSelector = () => {
     return querySelector<HTMLElement>('m-composer__modal m-composer__textarea textarea.m-composerTextarea__message')
 }
 
-export const handleSelector = () => querySelector('.m-sidebarNavigation__item--user > a > div > span')
+export const handleSelector = () =>
+    querySelector<HTMLAnchorElement>('.m-sidebarNavigation__item--user [data-ref="sidenav-channel"]')
 
 export const selfInfoSelectors = () => ({
-    handle: handleSelector().evaluate()?.innerText.trim(),
+    handle: handleSelector().evaluate()?.getAttribute('href')?.slice(1),
     avatar: querySelector<HTMLImageElement>('.m-sidebarNavigation__item--user > a > div > img').evaluate()?.src,
 })
 
