@@ -1,9 +1,9 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box } from '@mui/material'
-import { type BindingProof } from '@masknet/shared-base'
 import { AccountRender } from '../../AccountRender/index.js'
 import { RestorableScroll } from '@masknet/shared'
+import type { Profile } from '../../common.js'
 
 const useStyles = makeStyles()((theme) => ({
     accounts: {
@@ -21,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface ConnectedAccountsProps {
-    profiles: BindingProof[]
+    profiles: Profile[]
 }
 
 export const ConnectedAccounts = memo<ConnectedAccountsProps>(function ConnectedAccounts({ profiles }) {

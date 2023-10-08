@@ -201,7 +201,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                                     avatar,
                                     publicKey,
                                     nextId,
-                                    profiles,
+                                    profiles: proofProfiles ? proofProfiles : profiles,
                                     isLocal,
                                 },
                             })
