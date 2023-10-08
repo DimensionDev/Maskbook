@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest'
 import type { AbiItem } from 'web3-utils'
-import { encodeFunctionCall } from '../../src/helpers/encodeFunctionCall.js'
+import { encodeFunctionData } from '../../src/helpers/encodeFunctionData.js'
 
 const ERC20 = [
     {
@@ -28,9 +28,9 @@ const ERC20 = [
     },
 ] satisfies AbiItem[]
 
-describe('encodeFunctionCall', () => {
+describe('encodeFunctionData', () => {
     test('should encode function call', () => {
-        const result = encodeFunctionCall(ERC20, ['0x8ba1f109551bd432803012645ac136ddd64dba72', '0x0'], 'approve')
+        const result = encodeFunctionData(ERC20, ['0x8ba1f109551bd432803012645ac136ddd64dba72', '0x0'], 'approve')
         expect(result).toBe(
             '0x095ea7b30000000000000000000000008ba1f109551bd432803012645ac136ddd64dba720000000000000000000000000000000000000000000000000000000000000000',
         )
