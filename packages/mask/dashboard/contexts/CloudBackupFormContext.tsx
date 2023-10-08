@@ -38,7 +38,6 @@ function useCloudBackupFormContext() {
                         currentTab === tabs.email
                             ? z
                                   .string()
-                                  .email(t.cloud_backup_incorrect_email_address())
                                   .refine((email) => emailRegexp.test(email), t.cloud_backup_incorrect_email_address())
                             : z.string().optional(),
                     countryCode: currentTab === tabs.mobile ? z.string() : z.string().optional(),

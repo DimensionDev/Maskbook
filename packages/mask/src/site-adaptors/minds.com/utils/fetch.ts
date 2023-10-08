@@ -19,14 +19,19 @@ const parseNameArea = (nameArea: HTMLAnchorElement) => {
 }
 
 export const postIdParser = (node: HTMLElement) => {
-    const idNode = node.querySelector<HTMLAnchorElement>('m-activityv2__permalink .m-activityPermalink__wrapper--link')
+    const idNode = node.querySelector<HTMLAnchorElement>('m-activity__permalink .m-activityPermalink__wrapper--link')
     return idNode ? idNode.getAttribute('href')?.split('/')[2] ?? undefined : undefined
 }
 
 export const postNameParser = (node: HTMLElement) => {
     return parseNameArea(
         assertNonNull(
-            node.querySelector<HTMLAnchorElement>('m-activityv2__ownerblock .m-activityOwnerBlock__displayName'),
+            node.querySelector<HTMLAnchorElement>(
+                [
+                    'm-activity__ownerblock .m-activityOwnerBlock__primaryName',
+                    'm-activity__ownerblock .m-activityOwnerBlock__secondaryName', // It's `secondaryName` in detail page
+                ].join(','),
+            ),
         ),
     )
 }
@@ -69,7 +74,7 @@ export const postContentMessageParser = (node: HTMLElement) => {
         } else return makeTypedMessageEmpty()
     }
 
-    const content = node.querySelector<HTMLDivElement>('m-activityv2__content')
+    const content = node.querySelector<HTMLDivElement>('m-activity__content')
     return content ? Array.from(content.childNodes).flatMap(make) : []
 }
 

@@ -10,8 +10,8 @@ import { type PropsWithChildren, useCallback, useState, useMemo } from 'react'
 import { createContainer } from 'unstated-next'
 
 function useTargetRuntime(initPluginID?: NetworkPluginID) {
-    const { pluginID } = useNetworkContext(initPluginID)
-    const [targetPluginID, setTargetPluginID] = useState<NetworkPluginID>(pluginID)
+    const { pluginID } = useNetworkContext()
+    const [targetPluginID, setTargetPluginID] = useState<NetworkPluginID>(initPluginID ?? pluginID)
 
     const [chainIdMap, setChainIdMap] = useState<Partial<Record<NetworkPluginID, number>>>({})
 
@@ -35,6 +35,7 @@ function useTargetRuntime(initPluginID?: NetworkPluginID) {
 }
 
 export const TargetRuntimeContext = createContainer(useTargetRuntime)
+TargetRuntimeContext.Provider.displayName = 'TargetRuntimeContextProvider'
 
 /**
  * A Tips scoped chain runtime, which controls Web3ContextProvider value
