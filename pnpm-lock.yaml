@@ -678,9 +678,6 @@ importers:
       '@ethersproject/abi':
         specifier: ^5.4.0
         version: 5.4.0
-      '@ethersproject/address':
-        specifier: ^5.4.0
-        version: 5.4.0
       '@ethersproject/providers':
         specifier: 5.7.2
         version: 5.7.2
@@ -2964,9 +2961,6 @@ importers:
       '@balancer-labs/sor':
         specifier: ^1.0.0
         version: 1.0.0
-      '@ethersproject/address':
-        specifier: ^5.4.0
-        version: 5.4.0
       '@ethersproject/providers':
         specifier: 5.7.2
         version: 5.7.2
@@ -4007,9 +4001,6 @@ importers:
         specifier: ^3.0.6-20221105074301-8806fca
         version: 3.0.6-20221105074301-8806fca
       '@ethersproject/abi':
-        specifier: ^5.4.0
-        version: 5.4.0
-      '@ethersproject/address':
         specifier: ^5.4.0
         version: 5.4.0
       '@ethersproject/providers':
@@ -18168,10 +18159,10 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001524
-      electron-to-chromium: 1.4.506
+      caniuse-lite: 1.0.30001543
+      electron-to-chromium: 1.4.539
       node-releases: 2.0.13
-      update-browserslist-db: 1.0.11(browserslist@4.21.5)
+      update-browserslist-db: 1.0.13(browserslist@4.21.5)
     dev: false
 
   /browserslist@4.22.1:
@@ -18535,10 +18526,6 @@ packages:
 
   /caniuse-lite@1.0.30001480:
     resolution: {integrity: sha512-q7cpoPPvZYgtyC4VaBSN0Bt+PJ4c4EYRf0DrduInOz2SkFpHD5p3LnvEpqBp7UnJn+8x1Ogl1s38saUxe+ihQQ==}
-    dev: false
-
-  /caniuse-lite@1.0.30001524:
-    resolution: {integrity: sha512-Jj917pJtYg9HSJBF95HVX3Cdr89JUyLT4IZ8SvM5aDRni95swKgYi3TgYLH5hnGfPE/U1dg6IfZ50UsIlLkwSA==}
     dev: false
 
   /caniuse-lite@1.0.30001543:
@@ -21061,10 +21048,6 @@ packages:
     engines: {node: '>=6'}
     dependencies:
       encoding: 0.1.13
-    dev: false
-
-  /electron-to-chromium@1.4.506:
-    resolution: {integrity: sha512-xxGct4GPAKSRlrLBtJxJFYy74W11zX6PO9GyHgl/U+2s3Dp0ZEwAklDfNHXOWcvH7zWMpsmgbR0ggEuaYAVvHA==}
     dev: false
 
   /electron-to-chromium@1.4.539:
@@ -34924,8 +34907,8 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /update-browserslist-db@1.0.11(browserslist@4.21.5):
-    resolution: {integrity: sha512-dCwEFf0/oT85M1fHBg4F0jtLwJrutGoHSQXCh7u4o2t1drG+c0a9Flnqww6XUKSfQMPpJBRjU8d4RXB09qtvaA==}
+  /update-browserslist-db@1.0.13(browserslist@4.21.5):
+    resolution: {integrity: sha512-xebP81SNcPuNpPP3uzeW1NYXxI3rxyJzF3pD6sH4jE7o/IX+WtSpwnVU+qIsDPyk0d3hmFQ7mjqc6AtV604hbg==}
     hasBin: true
     peerDependencies:
       browserslist: '>= 4.21.0'
@@ -36972,7 +36955,6 @@ time:
   /@ethereumjs/util@8.0.5: '2023-02-27T14:07:47.825Z'
   /@ethersproject/abi@5.4.0: '2021-06-26T17:05:27.127Z'
   /@ethersproject/abi@5.7.0: '2022-08-19T21:19:34.932Z'
-  /@ethersproject/address@5.4.0: '2021-06-26T17:04:46.615Z'
   /@ethersproject/bytes@5.7.0: '2022-08-19T21:19:11.133Z'
   /@ethersproject/keccak256@5.7.0: '2022-08-19T21:19:15.555Z'
   /@ethersproject/providers@5.7.2: '2022-10-19T22:59:19.925Z'
