@@ -1,5 +1,4 @@
 import { useState, useCallback, useMemo } from 'react'
-import type { AbiOutput } from 'web3-utils'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { Web3 } from '@masknet/web3-providers'
 import {
@@ -157,16 +156,11 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
                                 overrides,
                             )
                             const hex = await Web3.callTransaction(tx, { chainId })
-
-                            const outputType = multicallContract.options.jsonInterface.find(
-                                ({ name }) => name === 'multicall',
-                            )?.outputs
-
-                            if (!outputType) return
-
-                            const decodeResult = decodeOutputString(outputType, hex) as
-                                | UnboxTransactionObject<ReturnType<Multicall['methods']['multicall']>>
-                                | undefined
+                            const decodeResult = decodeOutputString(
+                                multicallContract.options.jsonInterface,
+                                hex,
+                                'multicall',
+                            ) as UnboxTransactionObject<ReturnType<Multicall['methods']['multicall']>> | undefined
 
                             if (!decodeResult) return
 
@@ -218,12 +212,12 @@ export function useMulticallStateDecoded<
     return useMemo(() => {
         if (state.type !== MulticallStateType.SUCCEED || contracts.length !== state.results.length) return []
         return state.results.map(([succeed, gasUsed, result], index): Result => {
-            const outputs: AbiOutput[] =
-                contracts[index].options.jsonInterface.find(
-                    ({ type, name }) => type === 'function' && name === names[index],
-                )?.outputs ?? []
             try {
-                const value = decodeOutputString(outputs, result) as R
+                const value = decodeOutputString(
+                    contracts[index].options.jsonInterface,
+                    result,
+                    names[index] as string,
+                ) as R
                 return { succeed, gasUsed, value, error: null }
             } catch (error) {
                 return { succeed: false, gasUsed, value: null, error }
