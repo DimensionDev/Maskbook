@@ -17,7 +17,7 @@ export const profilesFilter = (x: BindingProof) => {
 export function useFriendProfiles(seen: boolean, nextId?: string, profile?: ProfileIdentifier) {
     const currentPersona = useCurrentPersona()
 
-    const { data: profiles = EMPTY_LIST, isLoading } = useQuery(
+    const { data: profiles = EMPTY_LIST } = useQuery(
         ['profiles', currentPersona?.identifier.publicKeyAsHex, nextId],
         async () => {
             if (!nextId) return EMPTY_LIST
