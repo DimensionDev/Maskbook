@@ -90,7 +90,7 @@ export const PhoneForm = memo(function PhoneForm() {
                                     disableRipple
                                     disabled={!phone || !!errors.phone?.message}
                                     variant="text"
-                                    sx={{ width: 120 }}
+                                    sx={{ px: 0 }}
                                     onClick={handleSendVerificationCode}
                                     repeatContent={t.resend()}>
                                     {t.send()}
