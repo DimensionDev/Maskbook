@@ -8,7 +8,7 @@ import { abiCoder } from './abiCoder.js'
  * @param methodName
  * @returns
  */
-export function encodeFunctionCall(abis: AbiItem[], args: string[], methodName: string) {
+export function encodeFunctionData(abis: AbiItem[], args: string[], methodName: string) {
     const item = abis.find((x) => x.type === 'function' && x.name === methodName)
     if (!item) throw new Error(`Failed to locate abi with name: ${methodName}.`)
     return abiCoder.encodeFunctionCall(item, args)

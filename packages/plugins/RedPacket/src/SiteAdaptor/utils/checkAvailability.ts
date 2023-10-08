@@ -1,12 +1,12 @@
 import type { AbiItem } from 'web3-utils'
 import { Web3 } from '@masknet/web3-providers'
 import type { RedpacketAvailability } from '@masknet/web3-providers/types'
-import { encodeFunctionCall, type ChainId, decodeOutputString } from '@masknet/web3-shared-evm'
+import { encodeFunctionData, type ChainId, decodeOutputString } from '@masknet/web3-shared-evm'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 
 // red-packet contract readonly method, read it no matter on whatever chains you are.
 export async function checkAvailability(pid: string, from: string, to: string, chainId: ChainId) {
-    const callData = encodeFunctionCall(REDPACKET_ABI as AbiItem[], [pid], 'check_availability')
+    const callData = encodeFunctionData(REDPACKET_ABI as AbiItem[], [pid], 'check_availability')
     const data = await Web3.callTransaction(
         {
             to,
