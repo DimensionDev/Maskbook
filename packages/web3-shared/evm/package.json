@@ -11,6 +11,7 @@
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
+    "@ethersproject/address": "^5.4.0",
     "@ethersproject/bytes": "5.7.0",
     "@ethersproject/keccak256": "5.7.0",
     "@ethersproject/strings": "5.7.0",
