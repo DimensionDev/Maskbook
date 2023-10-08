@@ -1,4 +1,4 @@
-import { Eth } from 'web3-eth'
+import Web3Eth, { type Eth } from 'web3-eth'
 import type { provider as Provider } from 'web3-core'
 
 /**
@@ -8,7 +8,8 @@ export class Web3 {
     public eth: Eth = null!
 
     constructor(provider?: Provider) {
-        this.eth = provider ? new Eth(provider) : new Eth()
+        const Eth_ = Web3Eth as unknown as typeof Eth
+        this.eth = provider ? new Eth_(provider) : new Eth_()
     }
 
     public setProvider(provider: Provider) {
