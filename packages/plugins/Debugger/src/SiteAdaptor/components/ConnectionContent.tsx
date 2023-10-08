@@ -230,8 +230,10 @@ export function ConnectionContent(props: ConnectionContentProps) {
                         return ''
                 }
             }
+            const signed = await sign()
+
             // eslint-disable-next-line no-alert
-            alert(`Signed: ${await sign()}`)
+            alert(`Signed: ${signed}`)
         },
         [chainId],
     )
