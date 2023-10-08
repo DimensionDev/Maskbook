@@ -1,6 +1,6 @@
 import type { Token } from '@uniswap/sdk-core'
-import { getCreate2Address } from '@ethersproject/address'
 import { pack, keccak256 } from '@ethersproject/solidity'
+import { getCreate2Address } from '@masknet/web3-shared-evm'
 
 /** cache[token0Address][token1Address] = value  */
 type PairCache = Record<string, Record<string, string>>

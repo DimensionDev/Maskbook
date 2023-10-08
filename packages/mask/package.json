@@ -17,7 +17,6 @@
     "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
     "@ethereumjs/util": "^8.0.5",
     "@ethersproject/abi": "^5.4.0",
-    "@ethersproject/address": "^5.4.0",
     "@ethersproject/providers": "^5.7.2",
     "@ethersproject/solidity": "^5.4.0",
     "@hookform/resolvers": "^3.1.1",
