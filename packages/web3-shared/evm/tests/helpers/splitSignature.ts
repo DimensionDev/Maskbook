@@ -6,10 +6,10 @@ const signed =
 
 describe('splitSignature', () => {
     test('should split signature', () => {
-        const splited = splitSignature(signed)
+        const result = splitSignature(signed)
 
-        expect(splited.r).toBe('0x670f45faac741b2c2d742007482790ed1bb87ca9b7e7680a8314c1cf96eabbb5')
-        expect(splited.s).toBe('0x5f98114c10ade72b2fcdd6fdaa10811a337919e77862976355ea63d34cd2699f')
-        expect(splited.v).toBe(28)
+        expect(result.r).toBe('0x670f45faac741b2c2d742007482790ed1bb87ca9b7e7680a8314c1cf96eabbb5')
+        expect(result.s).toBe('0x5f98114c10ade72b2fcdd6fdaa10811a337919e77862976355ea63d34cd2699f')
+        expect(result.v).toBe(28)
     })
 })
