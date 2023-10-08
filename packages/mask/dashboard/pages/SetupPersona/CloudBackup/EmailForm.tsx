@@ -88,7 +88,7 @@ export const EmailForm = memo(function EmailForm() {
                                     disableRipple
                                     disabled={!email || !!errors.email?.message}
                                     variant="text"
-                                    sx={{ width: 120 }}
+                                    sx={{ px: 0 }}
                                     onClick={handleSendVerificationCode}
                                     repeatContent={t.resend()}>
                                     {t.send()}
