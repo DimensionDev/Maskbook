@@ -5,7 +5,7 @@ import secondsToMilliseconds from 'date-fns/secondsToMilliseconds'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Airdrop } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { type ChainId, formatEtherToWei, abiCoder } from '@masknet/web3-shared-evm'
+import { type ChainId, formatEtherToWei, pack } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
 
 export function useAirDropActivity(chainId: ChainId) {
@@ -21,12 +21,12 @@ export function useAirDropActivity(chainId: ChainId) {
             const claimerList = Object.entries(claimers)
             const claimer = claimerList.find(([address]) => isSameAddress(address, account))
             const airdropList = claimerList.map(([address, amount]) => {
-                return keccak256(abiCoder.encodeParameters(['address', 'uint256'], [address, formatEtherToWei(amount)]))
+                return keccak256(pack(['address', 'uint256'], [address, formatEtherToWei(amount)]))
             })
             const merkleTree = new MerkleTree(airdropList, keccak256, { sortPairs: true })
             const amount = claimer ? last(claimer) : undefined
             const leaf = amount
-                ? keccak256(abiCoder.encodeParameters(['address', 'uint256'], [account, formatEtherToWei(amount)]))
+                ? keccak256(pack(['address', 'uint256'], [account, formatEtherToWei(amount)]))
                 : undefined
 
             const merkleProof = leaf ? merkleTree.getHexProof(leaf) : undefined

@@ -1,6 +1,6 @@
 import { keccak256 } from 'web3-utils'
 import type { Token } from '@uniswap/sdk-core'
-import { abiCoder, getCreate2Address } from '@masknet/web3-shared-evm'
+import { getCreate2Address, pack } from '@masknet/web3-shared-evm'
 
 /** cache[token0Address][token1Address] = value  */
 type PairCache = Record<string, Record<string, string>>
@@ -22,7 +22,7 @@ export function getPairAddress(factoryAddress: string, initCodeHash: string, tok
                 ...cache?.[token0Addr],
                 [token1Addr]: getCreate2Address(
                     factoryAddress,
-                    keccak256(abiCoder.encodeParameters(['address', 'address'], [token0Addr, token1Addr])),
+                    keccak256(pack(['address', 'address'], [token0Addr, token1Addr])),
                     initCodeHash,
                 ),
             },
