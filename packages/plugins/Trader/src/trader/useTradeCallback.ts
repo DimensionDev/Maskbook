@@ -12,17 +12,14 @@ import type { TraderAPI } from '@masknet/web3-providers/types'
 import { useTradeCallback as useNativeTokenWrapperCallback } from './native/useTradeCallback.js'
 import { useTradeCallback as useZrxCallback } from './0x/useTradeCallback.js'
 import { useTradeCallback as useUniswapCallback } from './uniswap/useTradeCallback.js'
-import { useTradeCallback as useBalancerCallback } from './balancer/useTradeCallback.js'
 import { useTradeCallback as useDODOCallback } from './dodo/useTradeCallback.js'
 import { useTradeCallback as useBancorCallback } from './bancor/useTradeCallback.js'
 import { useTradeCallback as useOpenOceanCallback } from './openocean/useTradeCallback.js'
-import { useExchangeProxyContract } from '../contracts/balancer/useExchangeProxyContract.js'
 import type { NativeTokenWrapper } from './native/useTradeComputed.js'
 import { useGetTradeContext } from './useGetTradeContext.js'
 import { isNativeTokenWrapper } from '../helpers/index.js'
 import type {
     SwapQuoteResponse,
-    SwapResponse,
     SwapBancorRequest,
     SwapRouteSuccessResponse,
     SwapOOSuccessResponse,
@@ -51,9 +48,6 @@ export function useTradeCallback(
     const tradeComputedForZRX = !isNativeTokenWrapper_
         ? (tradeComputed as TraderAPI.TradeComputed<SwapQuoteResponse>)
         : null
-    const tradeComputedForBalancer = !isNativeTokenWrapper_
-        ? (tradeComputed as TraderAPI.TradeComputed<SwapResponse>)
-        : null
     const tradeComputedForDODO = !isNativeTokenWrapper_
         ? (tradeComputed as TraderAPI.TradeComputed<SwapRouteSuccessResponse>)
         : null
@@ -66,17 +60,6 @@ export function useTradeCallback(
     // uniswap like providers
     const uniswapV2Like = useUniswapCallback(tradeComputedForUniswapV2Like, provider, gasConfig, allowedSlippage)
     const uniswapV3Like = useUniswapCallback(tradeComputedForUniswapV3Like, provider, gasConfig, allowedSlippage)
-
-    // balancer
-    const exchangeProxyContract = useExchangeProxyContract(
-        pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
-    )
-    const balancer = useBalancerCallback(
-        provider === TradeProvider.BALANCER ? tradeComputedForBalancer : null,
-        exchangeProxyContract,
-        allowedSlippage,
-        gasConfig,
-    )
 
     // other providers
     const zrx = useZrxCallback(provider === TradeProvider.ZRX ? tradeComputedForZRX : null, gasConfig)
@@ -123,8 +106,6 @@ export function useTradeCallback(
             return uniswapV2Like
         case TradeProvider.ZRX:
             return zrx
-        case TradeProvider.BALANCER:
-            return balancer
         case TradeProvider.DODO:
             return dodo
         case TradeProvider.BANCOR:

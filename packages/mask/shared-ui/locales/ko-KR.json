@@ -455,7 +455,6 @@
     "plugin_gitcoin_insufficient_balance": "{{symbol}} 잔액 부족",
     "plugin_trader_fail_to_load": "시세 정보 로드 실패  ",
     "plugin_trader_switch_provider": "{{provider}} 로 전환",
-    "plugin_trader_lbp_pool_in_balancer": "LBP Pool in Balancer",
     "plugin_trader_swap_description": "팝업 트레이딩 기능으로 인기 크립토의 가격을 바로 확인하고 거래할 수 있습니다. 또한 최저의 성과를 내는 매니저에게 투자할 수 있습니다.",
     "plugin_trader_tutorial": "튜토리얼",
     "plugin_trader_what_is_lbp": "LBP가 무엇입니까?",

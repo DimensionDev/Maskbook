@@ -457,7 +457,6 @@
     "plugin_gitcoin_insufficient_balance": "{{symbol}} の残高が足りません",
     "plugin_trader_fail_to_load": "トレンド情報の読み込みに失敗しました  ",
     "plugin_trader_switch_provider": "{{provider}} に切り替え",
-    "plugin_trader_lbp_pool_in_balancer": "バランサーのLBPプール",
     "plugin_trader_swap_description": "ポップアップ取引ウィジェットを使用すると、最もホットなCrypto/Stockの価格を即座に表示することができ、最高のパフォーマンスを発揮するマネージャーに投資することもできます。",
     "plugin_trader_tutorial": "チュートリアル",
     "plugin_trader_what_is_lbp": "LBPとは？",

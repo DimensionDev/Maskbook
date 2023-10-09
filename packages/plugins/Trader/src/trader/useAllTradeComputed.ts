@@ -9,7 +9,6 @@ import { useUniswapV2Like } from './useUniswapV2Like.js'
 import { useAvailableTraderProviders } from '../trending/useAvailableTraderProviders.js'
 import { useUniswapV3Like } from './useUniSwapV3Like.js'
 import { useZeroX } from './useZeroX.js'
-import { useBalancer } from './useBalancer.js'
 import { useOpenOcean } from './useOpenOcean.js'
 import { useBancor } from './useBancor.js'
 
@@ -85,9 +84,6 @@ export function useAllTradeComputed(
 
     // zrx
     const zrx = useZeroX(inputAmount_, scale, inputToken, outputToken, temporarySlippage, isNativeTokenWrapper)
-
-    // balancer
-    const balancer = useBalancer(inputAmount_, scale, inputToken, outputToken, temporarySlippage, isNativeTokenWrapper)
 
     // bancor
     const bancor = useBancor(inputAmount_, scale, inputToken, outputToken, temporarySlippage, isNativeTokenWrapper)
@@ -203,7 +199,6 @@ export function useAllTradeComputed(
         pancakeSwap,
         uniswapV3,
         zrx,
-        balancer,
         traderJoe,
         bancor,
         pangolindex,

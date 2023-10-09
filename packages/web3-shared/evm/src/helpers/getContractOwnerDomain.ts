@@ -34,7 +34,6 @@ const domainAddressMap: Record<string, string[]> = {
     'www.sushi.com': collect(Trader, ['SUSHISWAP_ROUTER_ADDRESS', 'SUSHISWAP_FACTORY_ADDRESS']),
     'quickswap.exchange': collect(Trader, ['QUICKSWAP_ROUTER_ADDRESS', 'QUICKSWAP_FACTORY_ADDRESS']),
     'pancakeswap.finance': collect(Trader, ['PANCAKESWAP_ROUTER_ADDRESS', 'PANCAKESWAP_FACTORY_ADDRESS']),
-    'balancer.fi': collect(Trader, ['BALANCER_EXCHANGE_PROXY_ADDRESS']),
     'dodoex.io': collect(Trader, ['DODO_EXCHANGE_PROXY_ADDRESS']),
     'www.bancor.network': collect(Trader, ['BANCOR_EXCHANGE_PROXY_ADDRESS']),
     'traderjoexyz.com': collect(Trader, ['TRADERJOE_ROUTER_ADDRESS', 'TRADERJOE_FACTORY_ADDRESS']),

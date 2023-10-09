@@ -457,7 +457,6 @@
     "plugin_gitcoin_insufficient_balance": "crwdns4799:0{{symbol}}crwdne4799:0",
     "plugin_trader_fail_to_load": "crwdns10207:0crwdne10207:0",
     "plugin_trader_switch_provider": "crwdns18614:0{{provider}}crwdne18614:0",
-    "plugin_trader_lbp_pool_in_balancer": "crwdns10209:0crwdne10209:0",
     "plugin_trader_swap_description": "crwdns16242:0crwdne16242:0",
     "plugin_trader_tutorial": "crwdns10211:0crwdne10211:0",
     "plugin_trader_what_is_lbp": "crwdns10213:0crwdne10213:0",
