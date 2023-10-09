@@ -10,6 +10,7 @@ export function useConnectedOrigins() {
         async () => await Services.Wallet.getAllConnectedOrigins(wallet!.address),
         {
             enabled: !!wallet?.address,
+            networkMode: 'always',
         },
     )
 }

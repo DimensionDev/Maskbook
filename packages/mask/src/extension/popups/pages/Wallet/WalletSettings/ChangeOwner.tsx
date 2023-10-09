@@ -17,9 +17,13 @@ export function ChangeOwner() {
     const wallet = useWallet()
     const wallets = useWallets()
 
-    const { data: personaManagers } = useQuery(['persona-managers'], async () => {
-        return Services.Identity.queryOwnedPersonaInformation(true)
-    })
+    const { data: personaManagers } = useQuery(
+        ['persona-managers'],
+        async () => {
+            return Services.Identity.queryOwnedPersonaInformation(true)
+        },
+        { networkMode: 'always' },
+    )
 
     const walletManager = useMemo(
         () => wallets.find((x) => !x.owner && isSameAddress(wallet?.owner, x.address)),

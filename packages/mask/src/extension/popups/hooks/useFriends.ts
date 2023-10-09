@@ -34,6 +34,7 @@ export function useFriendsPaged() {
         },
         {
             enabled: !!currentPersona,
+            networkMode: 'always',
         },
     )
     const {

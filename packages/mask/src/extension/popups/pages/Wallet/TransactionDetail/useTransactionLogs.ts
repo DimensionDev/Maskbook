@@ -21,6 +21,7 @@ export function useTransactionLogs(transactionState: TransactionState) {
         enabled: transactionState && !('candidates' in transactionState),
         // Could already be cached through ActivityList page.
         queryKey: ['transactions', transactionState?.chainId, account],
+        networkMode: 'always',
         queryFn: async () => {
             if (!transactionState?.chainId) return
             return Transaction?.getTransactions?.(transactionState?.chainId, account) ?? EMPTY_LIST

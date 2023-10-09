@@ -124,6 +124,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
 
     const { data: walletChunks = EMPTY_LIST, isLoading } = useQuery({
         queryKey: ['derived-wallets', mnemonicHash, page],
+        networkMode: 'always',
         queryFn: async () => {
             if (!mnemonic) return EMPTY_LIST
             return await Services.Wallet.getDerivableAccounts(mnemonic, page)
