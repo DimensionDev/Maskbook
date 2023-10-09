@@ -224,11 +224,6 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                 return {
                     TYPE: tradeProvider,
                 }
-            case TradeProvider.BALANCER:
-                return {
-                    TYPE: tradeProvider,
-                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.BALANCER_EXCHANGE_PROXY_ADDRESS,
-                }
             case TradeProvider.DODO:
                 return {
                     TYPE: tradeProvider,

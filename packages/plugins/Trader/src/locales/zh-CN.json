@@ -24,7 +24,6 @@
     "share": "分享",
     "plugin_trader_fail_to_load": "无法加载趋势信息  ",
     "plugin_trader_switch_provider": "切换到 {{provider}}",
-    "plugin_trader_lbp_pool_in_balancer": "Balancer 的 LBP 池",
     "plugin_trader_swap_description": "弹窗式交易小部件允许您即时查看最热门的加密货币并交易，并寻找最佳投资标的。",
     "plugin_trader_tutorial": "教程",
     "plugin_trader_what_is_lbp": "什么是LBP？",

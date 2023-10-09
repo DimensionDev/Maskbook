@@ -12,7 +12,6 @@ export function getEVMAvailableTraderProviders(networkType?: NetworkType) {
                 TradeProvider.UNISWAP_V3,
                 TradeProvider.SUSHISWAP,
                 TradeProvider.ZRX,
-                TradeProvider.BALANCER,
                 TradeProvider.DODO,
                 TradeProvider.BANCOR,
                 TradeProvider.OPENOCEAN,

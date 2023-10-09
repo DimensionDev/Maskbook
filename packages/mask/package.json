@@ -13,7 +13,6 @@
     ".": null
   },
   "dependencies": {
-    "@balancer-labs/sor": "^1.0.0",
     "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
     "@ethereumjs/util": "^8.0.5",
     "@hookform/resolvers": "^3.1.1",
