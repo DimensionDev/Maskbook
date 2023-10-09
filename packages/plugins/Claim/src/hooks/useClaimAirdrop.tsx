@@ -1,13 +1,18 @@
 import { useRef, useCallback } from 'react'
 import { useAsyncFn } from 'react-use'
 import type { AbiItem } from 'web3-utils'
-import { utils } from 'ethers'
 import { useTheme } from '@mui/material'
 import type { AirdropV2 } from '@masknet/web3-contracts/types/AirdropV2.js'
+import AirDropV2ABI from '@masknet/web3-contracts/abis/AirdropV2.json'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { useContract } from '@masknet/web3-hooks-evm'
-import { useAirdropClaimersConstants, type ChainId, ProviderType, ContractTransaction } from '@masknet/web3-shared-evm'
-import AirDropV2ABI from '@masknet/web3-contracts/abis/AirdropV2.json'
+import {
+    useAirdropClaimersConstants,
+    type ChainId,
+    ProviderType,
+    ContractTransaction,
+    formatEtherToWei,
+} from '@masknet/web3-shared-evm'
 import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
 import { toFixed } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -55,12 +60,12 @@ export function useClaimAirdrop(
                 })
             }
             const tx = await new ContractTransaction(airdropContract).fillAll(
-                airdropContract.methods.claim(eventIndex, merkleProof, account, utils.parseEther(amount)),
+                airdropContract.methods.claim(eventIndex, merkleProof, account, formatEtherToWei(amount)),
                 {
                     from: account,
                     gas: toFixed(
                         await airdropContract.methods
-                            .claim(eventIndex, merkleProof, account, utils.parseEther(amount))
+                            .claim(eventIndex, merkleProof, account, formatEtherToWei(amount))
                             .estimateGas({ from: account }),
                     ),
                     chainId,

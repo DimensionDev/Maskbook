@@ -15,7 +15,6 @@
   "dependencies": {
     "@balancer-labs/sor": "^1.0.0",
     "@ethersproject/providers": "^5.7.2",
-    "@ethersproject/solidity": "^5.4.0",
     "@masknet/icons": "workspace:^",
     "@masknet/plugin-go-plus-security": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",

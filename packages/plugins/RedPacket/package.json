@@ -13,7 +13,6 @@
     }
   },
   "dependencies": {
-    "@ethersproject/abi": "^5.4.0",
     "@masknet/icons": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",
     "@masknet/shared": "workspace:^",
