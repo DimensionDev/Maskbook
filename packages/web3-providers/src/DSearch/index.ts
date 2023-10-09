@@ -45,7 +45,6 @@ import { PlatformToChainIdMap } from '../RSS3/constants.js'
 import { getHandlers } from './rules.js'
 import { DSEARCH_BASE_URL } from './constants.js'
 import { fetchFromDSearch } from './helpers.js'
-import type { DSearchBaseAPI } from '../entry-types.js'
 
 const isValidAddress = (address?: string): boolean => {
     return isValidAddressEVM(address) || isValidAddressFlow(address) || isValidAddressSolana(address)

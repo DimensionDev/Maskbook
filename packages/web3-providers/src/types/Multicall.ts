@@ -1,5 +1,5 @@
-import type { ChainId, UnboxTransactionObject } from '@masknet/web3-shared-evm'
-import type { BaseContract, NonPayableTx } from '@masknet/web3-contracts/types/types.js'
+import type { UnboxTransactionObject } from '@masknet/web3-shared-evm'
+import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
 
 export namespace MulticallBaseAPI {
     // [target, gasLimit, callData]
