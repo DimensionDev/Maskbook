@@ -93,7 +93,6 @@ export interface Options {
  */
 export class UserTransaction {
     /**
-     * @deprecated Don't new UserTransaction()
      * Use UserTransaction.fromTransaction() or UserTransaction.fromUserOperation() stead.
      * They ensure to create of a valid user operation.
      *
@@ -101,7 +100,7 @@ export class UserTransaction {
      * @param entryPoint
      * @param userOperation
      */
-    constructor(
+    private constructor(
         private chainId: ChainId,
         private entryPoint: string,
         private userOperation: UserOperation,

@@ -13,7 +13,7 @@ import type { FT, FT_Price } from '../types.js'
 import { fetchFromChainbase } from '../helpers.js'
 import type { FungibleTokenAPI, HubOptions_Base } from '../../entry-types.js'
 
-export class ChainbaseFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, SchemaType> {
+class ChainbaseFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, SchemaType> {
     createFungibleAssetFromFT(chainId: ChainId, token: FT) {
         return {
             chainId,
@@ -74,3 +74,4 @@ export class ChainbaseFungibleTokenAPI implements FungibleTokenAPI.Provider<Chai
         return data?.price
     }
 }
+export const ChainbaseFungibleToken = new ChainbaseFungibleTokenAPI()

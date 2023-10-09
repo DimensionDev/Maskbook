@@ -25,24 +25,4 @@ export namespace MulticallBaseAPI {
               value: R
           }
     )
-
-    export interface Provider {
-        /**
-         * Create a multicall callback
-         * @param chainId
-         * @param blockNumber
-         */
-        call<
-            T extends BaseContract,
-            K extends keyof T['methods'],
-            R extends UnboxTransactionObject<ReturnType<T['methods'][K]>>,
-        >(
-            chainId: ChainId,
-            contracts: T[],
-            names: K[],
-            calls: Call[],
-            overrides?: NonPayableTx,
-            blockNumber?: number,
-        ): Promise<Array<DecodeResult<T, K, R>>>
-    }
 }

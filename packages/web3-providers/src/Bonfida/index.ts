@@ -41,11 +41,9 @@ export async function reverse(owner: string) {
     return `${domain}.sol`
 }
 
-export class BonfidaAPI implements NameServiceAPI.Provider {
-    get id() {
-        return NameServiceID.Bonfida
-    }
-
+class BonfidaAPI implements NameServiceAPI.Provider {
+    readonly id = NameServiceID.Bonfida
     lookup = lookup
     reverse = reverse
 }
+export const Bonfida = new BonfidaAPI()

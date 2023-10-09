@@ -18,7 +18,7 @@ import {
     isSameAddress,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
-import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
+import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
 import {
     DebankTransactionDirection,
     type HistoryResponse,
@@ -28,7 +28,7 @@ import {
 import { DEBANK_CHAIN_TO_CHAIN_ID_MAP } from './constants.js'
 
 export function formatAssets(data: WalletTokenRecord[]): Array<FungibleAsset<ChainId, SchemaType>> {
-    const resolver = new ChainResolverAPI()
+    const resolver = ChainResolver
 
     const resolveNativeAddress = memoize((chainId: ChainId) => {
         try {

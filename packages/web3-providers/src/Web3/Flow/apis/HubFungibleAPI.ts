@@ -9,7 +9,7 @@ import type {
     Transaction,
     TransactionParameter,
 } from '@masknet/web3-shared-flow'
-import { FlowFungibleAPI } from './FungibleTokenAPI.js'
+import { FlowFungible } from './FungibleTokenAPI.js'
 import { FlowConnectionAPI } from './ConnectionAPI.js'
 import { FlowHubOptionsAPI } from './HubOptionsAPI.js'
 import { HubFungibleAPI_Base } from '../../Base/apis/HubFungibleAPI.js'
@@ -27,16 +27,15 @@ export class FlowHubFungibleAPI extends HubFungibleAPI_Base<
     TransactionParameter
 > {
     private FlowWeb3 = new FlowConnectionAPI()
-    private FlowFungible = new FlowFungibleAPI()
 
     protected override HubOptions = new FlowHubOptionsAPI(this.options)
 
     protected override getProviders(initial?: HubOptions_Base<ChainId>) {
         return this.getPredicateProviders<FungibleTokenAPI.Provider<ChainId, SchemaType>>(
             {
-                [SourceType.Flow]: this.FlowFungible,
+                [SourceType.Flow]: FlowFungible,
             },
-            [this.FlowFungible],
+            [FlowFungible],
             initial,
         )
     }

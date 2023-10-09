@@ -12,13 +12,13 @@ import { ExplorerResolverAPI_Base } from '../../Base/apis/ExplorerResolverAPI.js
 import { ProviderResolverAPI_Base } from '../../Base/apis/ProviderResolverAPI.js'
 import { NetworkResolverAPI_Base } from '../../Base/apis/NetworkExplorerAPI.js'
 
-export class FlowChainResolverAPI extends ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
+class FlowChainResolverAPI extends ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
     constructor() {
         super(() => CHAIN_DESCRIPTORS)
     }
 }
 
-export class FlowExplorerResolverAPI extends ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
+class FlowExplorerResolverAPI extends ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
     constructor() {
         super(() => CHAIN_DESCRIPTORS, {
             addressPathname: '/account/:address',
@@ -29,14 +29,19 @@ export class FlowExplorerResolverAPI extends ExplorerResolverAPI_Base<ChainId, S
     }
 }
 
-export class FlowProviderResolverAPI extends ProviderResolverAPI_Base<ChainId, ProviderType> {
+class FlowProviderResolverAPI extends ProviderResolverAPI_Base<ChainId, ProviderType> {
     constructor() {
         super(() => PROVIDER_DESCRIPTORS)
     }
 }
 
-export class FlowNetworkResolverAPI extends NetworkResolverAPI_Base<ChainId, NetworkType> {
+class FlowNetworkResolverAPI extends NetworkResolverAPI_Base<ChainId, NetworkType> {
     constructor() {
         super(() => NETWORK_DESCRIPTORS)
     }
 }
+
+export const FlowChainResolver = new FlowChainResolverAPI()
+export const FlowExplorerResolver = new FlowExplorerResolverAPI()
+export const FlowProviderResolver = new FlowProviderResolverAPI()
+export const FlowNetworkResolver = new FlowNetworkResolverAPI()

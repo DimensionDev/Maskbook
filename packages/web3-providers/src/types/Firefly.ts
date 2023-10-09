@@ -18,8 +18,4 @@ export namespace FireflyBaseAPI {
     export type LensResult = Result<LensAccount[]>
 
     export type VerifyTwitterResult = { error: string } | { data: string[] }
-
-    export interface Provider {
-        getLensByTwitterId(twitterHandle: string): Promise<LensAccount[]>
-    }
 }

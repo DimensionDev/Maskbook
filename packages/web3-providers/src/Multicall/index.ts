@@ -13,7 +13,7 @@ import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js
 import { CONSERVATIVE_BLOCK_GAS_LIMIT, DEFAULT_GAS_LIMIT, DEFAULT_GAS_REQUIRED } from './constants.js'
 import type { MulticallBaseAPI } from '../entry-types.js'
 
-export class MulticallAPI implements MulticallBaseAPI.Provider {
+export class MulticallAPI {
     private Contract = new ContractReadonlyAPI()
     private Web3 = new ConnectionReadonlyAPI()
 

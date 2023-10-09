@@ -6,7 +6,7 @@ import { fetchFromDSearch } from '../../DSearch/helpers.js'
 import type { SnapshotBaseAPI } from '../../entry-types.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
-export class SnapshotSearchAPI implements SnapshotBaseAPI.DataSourceProvider {
+class SnapshotSearchAPI implements SnapshotBaseAPI.DataSourceProvider {
     async get(): Promise<Array<DAOResult<ChainId.Mainnet>>> {
         const results = await fetchFromDSearch<Array<DAOResult<ChainId.Mainnet>>>(
             urlcat(DSEARCH_BASE_URL, 'dao/spaces.json'),
@@ -37,3 +37,4 @@ export class SnapshotSearchAPI implements SnapshotBaseAPI.DataSourceProvider {
         }))
     }
 }
+export const SnapshotSearch = new SnapshotSearchAPI()
