@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import { InputAdornment, InputBase } from '@mui/material'
+import { InputBase } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
 import { Icons } from '@masknet/icons'
@@ -12,16 +12,24 @@ const useStyles = makeStyles()((theme) => ({
         background: theme.palette.maskColor.input,
         fontSize: 14,
     },
+    input: {
+        '&::placeholder': {
+            color: theme.palette.maskColor.third,
+        },
+        padding: '11px 4px !important',
+    },
     inputFocused: {
         background: theme.palette.maskColor.bottom,
         borderColor: theme.palette.text.third,
     },
-
     button: {
         background: 'transparent',
         border: 'none',
         outline: 'none',
         cursor: 'pointer',
+    },
+    adornedStart: {
+        padding: '0',
     },
 }))
 
@@ -45,7 +53,10 @@ export const Search = memo<SearchProps>(function Search({ setSearchValue }) {
             className={classes.inputRoot}
             classes={{
                 focused: classes.inputFocused,
+                adornedStart: classes.adornedStart,
+                input: classes.input,
             }}
+            inputProps={{ className: classes.input }}
             disabled={!currentPersona}
             value={value}
             onKeyUp={(e) => handleKeyPress(e)}
@@ -60,11 +71,7 @@ export const Search = memo<SearchProps>(function Search({ setSearchValue }) {
             onChange={(e) => {
                 setValue(e.target.value)
             }}
-            startAdornment={
-                <InputAdornment position="start">
-                    <Icons.Search />
-                </InputAdornment>
-            }
+            startAdornment={<Icons.Search />}
             endAdornment={
                 value ? (
                     <button
