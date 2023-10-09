@@ -27,6 +27,11 @@ export const NextSharedUIContext = {
             }
         },
     ),
+    currentPersonaIdentifier: createSubscriptionFromAsync(
+        Services.Settings.getCurrentPersonaIdentifier,
+        undefined,
+        MaskMessages.events.currentPersonaIdentifier.on,
+    ),
 }
 export const RestPartOfPluginUIContextShared: Omit<
     Plugin.SiteAdaptor.SiteAdaptorContext,
@@ -35,7 +40,6 @@ export const RestPartOfPluginUIContextShared: Omit<
     | 'currentVisitingProfile'
     | 'themeSettings'
     | 'getThemeSettings'
-    | 'getSocialIdentity'
     | 'getPersonaAvatar'
     | 'setMinimalMode'
     | 'queryPersonaByProfile'
@@ -45,19 +49,11 @@ export const RestPartOfPluginUIContextShared: Omit<
     | 'getSearchedKeyword'
     | 'setWeb3State'
 > = {
-    currentPersona: createSubscriptionFromAsync(
-        Services.Settings.getCurrentPersonaIdentifier,
-        undefined,
-        MaskMessages.events.currentPersonaIdentifier.on,
-    ),
     send: Services.Wallet.send,
 
-    openDashboard: async (...args) => {
-        await Services.Helper.openDashboard(...args)
-    },
+    openDashboard: Services.Helper.openDashboard,
     openPopupWindow: Services.Helper.openPopupWindow,
     closePopupWindow: Services.Helper.removePopupWindow,
-    fetchJSON: Services.Helper.fetchJSON,
 
     openWalletConnectDialog: async (uri: string) => {
         if (Sniffings.is_popup_page) {

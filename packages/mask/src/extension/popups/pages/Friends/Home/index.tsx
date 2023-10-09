@@ -1,21 +1,41 @@
 import { memo, useState, useMemo } from 'react'
-import { FriendsHomeUI } from './UI.js'
-import { useFriendsPaged, useTitle, useSearchValue, useFriendsFromSearch } from '../../../hooks/index.js'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
+import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { resolveNextIDPlatform } from '@masknet/shared'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { NextIDProof } from '@masknet/web3-providers'
+import { NextIDProof, Fuse } from '@masknet/web3-providers'
+import { FriendsHomeUI } from './UI.js'
+import {
+    useFriendsPaged,
+    useTitle,
+    useSearchValue,
+    useFriendsFromSearch,
+    useFriendFromList,
+} from '../../../hooks/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
 
 const FriendsHome = memo(function FriendsHome() {
     const { t } = useMaskSharedTrans()
     useTitle(t('popups_encrypted_friends'))
 
-    const { data, fetchNextPage, isLoading, refetch, status, fetchRelationStatus } = useFriendsPaged()
+    const { data, fetchNextPage, isLoading, refetch, status, fetchRelationStatus, records } = useFriendsPaged()
     const friends = useMemo(() => data?.pages.flatMap((x) => x.friends) ?? EMPTY_LIST, [data])
     const [searchValue, setSearchValue] = useState('')
     const type = resolveNextIDPlatform(searchValue)
     const { loading: resolveLoading, value: keyword = '' } = useSearchValue(searchValue, type)
+    const fuse = useMemo(() => {
+        return Fuse.create(records, {
+            keys: ['profile.userId'],
+            isCaseSensitive: false,
+            ignoreLocation: true,
+            threshold: 0,
+        })
+    }, [records])
+    const searchedRecords = useMemo(() => {
+        if (!keyword || type !== NextIDPlatform.Twitter) return EMPTY_LIST
+        return fuse.search(keyword).map((item) => item.item)
+    }, [fuse, keyword, type])
+    const { isLoading: isSearchRecordLoading, data: localSearchedList = EMPTY_LIST } =
+        useFriendFromList(searchedRecords)
     const {
         isLoading: searchLoading,
         isInitialLoading,
@@ -36,15 +56,14 @@ const FriendsHome = memo(function FriendsHome() {
         },
     )
     const searchResult = useMemo(() => searchResultArray?.pages.flat() ?? EMPTY_LIST, [searchResultArray])
-    const searchedList = useFriendsFromSearch(searchResult, friends, keyword)
-
+    const searchedList = useFriendsFromSearch(localSearchedList, searchResult, friends, keyword)
     return (
         <FriendsHomeUI
             friends={data?.pages ?? EMPTY_LIST}
             loading={
                 isLoading ||
                 resolveLoading ||
-                (!!keyword && !!type ? searchLoading : isInitialLoading) ||
+                (!!keyword && !!type ? searchLoading || isSearchRecordLoading : isInitialLoading) ||
                 status === 'loading' ||
                 fetchRelationStatus === 'loading'
             }

@@ -11,10 +11,7 @@ import type {
     BindingProof,
     ECKeyIdentifier,
     NetworkPluginID,
-    NextIDPlatform,
-    PostIdentifier,
     PersonaIdentifier,
-    PersonaInformation,
     PluginID,
     PopupRoutes,
     DashboardRoutes,
@@ -113,8 +110,6 @@ export namespace Plugin.Shared {
     export interface SharedUIContext extends SharedContext {
         setMinimalMode(enabled: boolean): void
         setWeb3State(state: Web3State<any, any, any, any, any, any, any, any>): void
-        /** The selected persona */
-        currentPersona: Subscription<PersonaIdentifier | undefined>
         /** Get all wallets */
         wallets: Subscription<Wallet[]>
 
@@ -136,10 +131,6 @@ export namespace Plugin.Shared {
 
         /** Close popup window */
         closePopupWindow(): Promise<void>
-
-        /** Fetch json from background */
-        fetchJSON<T>(input: RequestInfo | URL, init?: RequestInit): Promise<T>
-
         /** Open walletconnect dialog */
         openWalletConnectDialog(uri: string): Promise<void>
 
@@ -329,22 +320,10 @@ export namespace Plugin.Shared {
 /** This part runs in the Site Adaptor */
 export namespace Plugin.SiteAdaptor {
     export interface SiteAdaptorContext extends Shared.SharedUIContext {
-        getSocialIdentity: (
-            platform: NextIDPlatform,
-            identity: IdentityResolved | undefined,
-        ) => Promise<SocialIdentity | undefined>
-
-        share?: (text: string) => void
-        getPostURL?: (identifier: PostIdentifier) => URL | null
         getPostPayload?: () => [string, '1' | '2'] | undefined
-
-        queryPersonaByProfile: (id: ProfileIdentifier) => Promise<PersonaInformation | undefined>
         connectPersona: () => Promise<void>
         createPersona: () => void
-        getUserIdentity?: (useId: string) => Promise<IdentityResolved | undefined>
-
         fetchManifest?: (addr: string) => Promise<any>
-
         setCurrentPersonaIdentifier?: (x?: PersonaIdentifier) => Promise<void>
         attachProfile?: (
             source: ProfileIdentifier,

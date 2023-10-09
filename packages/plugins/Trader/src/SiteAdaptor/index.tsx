@@ -15,6 +15,7 @@ import { TrendingViewProvider } from './trending/context.js'
 import { TraderDialog } from './trader/TraderDialog.js'
 import { TagInspector } from './trending/TagInspector.js'
 import { enhanceTag } from './cashTag.js'
+import { share } from '@masknet/plugin-infra/content-script/context'
 
 function openDialog() {
     return CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
@@ -68,7 +69,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             <>
                 <TagInspector />
                 <DefaultWeb3ContextProvider>
-                    <TraderDialog />
+                    <TraderDialog share={share} />
                 </DefaultWeb3ContextProvider>
             </>
         )

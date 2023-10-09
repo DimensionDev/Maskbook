@@ -7,8 +7,7 @@ import { Alert, EmptyStatus, InjectedDialog, PersonaAction, PopupHomeTabType, us
 import { EMPTY_LIST, NextIDPlatform, PopupRoutes, PluginID, EMPTY_OBJECT } from '@masknet/shared-base'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useUnlistedAddressConfig } from '@masknet/web3-hooks-base'
-import { queryPersonaAvatar } from '@masknet/plugin-infra/dom/context'
-import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
+import { openPopupWindow, queryPersonaAvatar } from '@masknet/plugin-infra/dom/context'
 import { useWeb3ProfileTrans } from '../../locales/index.js'
 import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks/index.js'
 import { ProfileCard, ProfileCardSkeleton } from './ProfileCard.js'
@@ -47,7 +46,6 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
     const { classes } = useStyles()
     const myProfile = useLastRecognizedProfile()
     const allPersona = useAllPersonas()
-    const { openPopupWindow } = useSiteAdaptorContext()
 
     const [tipsVisible, setTipsVisible] = useState(true)
     const dismissTips = useCallback(() => setTipsVisible(false), [])

@@ -1,11 +1,12 @@
 /* cspell: disable */
 import React, { useState, useMemo } from 'react'
+import { Tab } from '@mui/material'
+import { TabContext, TabPanel } from '@mui/lab'
 import { safeUnreachable } from '@masknet/kit'
 import { PluginID } from '@masknet/shared-base'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { Tab } from '@mui/material'
-import { TabContext, TabPanel } from '@mui/lab'
+import { useLocationChange } from '@masknet/shared-base-ui'
 import { DatePickerTab } from './components/DatePickerTab.js'
 import { useEventList, useNFTList, useNewsList } from '../hooks/useEventList.js'
 import { NewsList } from './components/NewsList.js'
@@ -38,9 +39,10 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function CalendarContent() {
+export function CalendarContent({ target }: { target?: string }) {
     const t = useCalendarTrans()
     const { classes } = useStyles()
+    const [pathname, setPathname] = useState(location.pathname)
     const isMinimalMode = useIsMinimalMode(PluginID.Calendar)
     const [currentTab, onChange, tabs] = useTabs('news', 'event', 'nfts')
     const [selectedDate, setSelectedDate] = useState(new Date())
@@ -63,10 +65,13 @@ export function CalendarContent() {
     }, [currentTab, newsList, eventList, nftList])
     const dateString = useMemo(() => selectedDate.toLocaleDateString(), [selectedDate])
 
-    if (isMinimalMode) return null
+    useLocationChange(() => {
+        setPathname(location.pathname)
+    })
+    if (isMinimalMode || (target && !pathname?.includes(target))) return null
 
     return (
-        <div className={classes.calendar}>
+        <div className={classes.calendar} style={{ marginTop: pathname?.includes('explore') ? 24 : 0 }}>
             <TabContext value={currentTab}>
                 <div className={classes.tabList}>
                     <MaskTabList variant="base" onChange={onChange} aria-label="">

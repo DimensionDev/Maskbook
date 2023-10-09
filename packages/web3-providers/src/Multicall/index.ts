@@ -1,4 +1,3 @@
-import type { AbiOutput } from 'web3-utils'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { Multicall } from '@masknet/web3-contracts/types/Multicall.js'
 import type { BaseContract, NonPayableTx } from '@masknet/web3-contracts/types/types.js'
@@ -122,16 +121,13 @@ export class MulticallAPI implements MulticallBaseAPI.Provider {
                     const tx = new ContractTransaction(contract).fill(contract.methods.multicall(chunk), overrides)
                     const hex = await this.Web3.callTransaction(tx, { chainId })
 
-                    const outputType = contract.options.jsonInterface.find(({ name }) => name === 'multicall')?.outputs
-                    if (!outputType) return
-
-                    const decodeResult = decodeOutputString(outputType, hex) as
+                    const result = decodeOutputString(contract.options.jsonInterface, hex, 'multicall') as
                         | UnboxTransactionObject<ReturnType<Multicall['methods']['multicall']>>
                         | undefined
 
-                    if (!decodeResult) return
+                    if (!result) return
 
-                    decodeResult.returnData.forEach((result, index) =>
+                    result.returnData.forEach((result, index) =>
                         this.setCallResult(chunk[index], result, chainId, blockNumber_),
                     )
                 }),
@@ -144,12 +140,12 @@ export class MulticallAPI implements MulticallBaseAPI.Provider {
         )
 
         return results.map<MulticallBaseAPI.DecodeResult<T, K, R>>(([succeed, gasUsed, result], index) => {
-            const outputs: AbiOutput[] =
-                contracts[index].options.jsonInterface.find(
-                    ({ type, name }) => type === 'function' && name === names[index],
-                )?.outputs ?? []
             try {
-                const value = decodeOutputString(outputs, result) as R
+                const value = decodeOutputString(
+                    contracts[index].options.jsonInterface,
+                    result,
+                    names[index] as string,
+                ) as R
                 return { succeed, gasUsed, value, error: null }
             } catch (error) {
                 return { succeed: false, gasUsed, value: null, error }

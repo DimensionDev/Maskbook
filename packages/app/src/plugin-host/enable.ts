@@ -15,16 +15,27 @@ import { inMemoryStorage, indexedDBStorage } from '../setup/storage.js'
 import { createSharedContext } from '../helpers/createSharedContext.js'
 import { __setSiteAdaptorContext__ } from '@masknet/plugin-infra/content-script/context'
 
+async function reject(): Promise<never> {
+    throw new Error('Not implemented')
+}
 __setSiteAdaptorContext__({
     lastRecognizedProfile: UNDEFINED,
     currentVisitingProfile: UNDEFINED,
+    currentPersona: UNDEFINED,
     allPersonas: EMPTY_ARRAY,
+    queryPersonaByProfile: reject,
     queryPersonaAvatar: async (identifiers): Promise<any> => {
         if (Array.isArray(identifiers)) return new Map()
         return undefined
     },
+    querySocialIdentity: reject,
     currentNextIDPlatform: undefined,
     currentPersonaIdentifier: UNDEFINED,
+    getPostURL: () => null,
+    fetchJSON: reject,
+    share: undefined,
+    openDashboard: reject,
+    openPopupWindow: reject,
 })
 
 startPluginSiteAdaptor(EnhanceableSite.App, {

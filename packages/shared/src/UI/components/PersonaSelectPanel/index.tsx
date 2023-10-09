@@ -24,6 +24,7 @@ import { useCurrentPersona } from '../../../hooks/useCurrentPersona.js'
 import { useNextIDVerify } from '../../../hooks/useNextIDVerify.js'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
+import { openDashboard } from '@masknet/plugin-infra/dom/context'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -66,7 +67,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     const [, handleVerifyNextID] = useNextIDVerify()
     const currentProfileIdentify = useLastRecognizedIdentity()
     const { data: personas = EMPTY_LIST, isLoading, error, refetch } = useConnectedPersonas()
-    const { openDashboard, attachProfile, setCurrentPersonaIdentifier } = useSiteAdaptorContext()
+    const { attachProfile, setCurrentPersonaIdentifier } = useSiteAdaptorContext()
 
     useEffect(() => {
         if (!currentPersonaIdentifier) {

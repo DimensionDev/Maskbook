@@ -9,10 +9,10 @@ import {
     usePluginTransField,
     getProfileTabContent,
     useAllPersonas,
-    useSiteAdaptorContext,
     useLastRecognizedIdentity,
     useSocialIdentityByUserId,
 } from '@masknet/plugin-infra/content-script'
+import { openDashboard } from '@masknet/plugin-infra/dom/context'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
 import {
     CrossIsolationMessages,
@@ -138,8 +138,6 @@ function Content(props: ProfileTabContentProps) {
     const allPersonas = useAllPersonas()
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
-
-    const { openDashboard } = useSiteAdaptorContext()
 
     const {
         value: personaStatus,

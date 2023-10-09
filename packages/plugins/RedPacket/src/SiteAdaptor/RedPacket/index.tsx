@@ -1,4 +1,5 @@
-import { usePostLink, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { usePostLink } from '@masknet/plugin-infra/content-script'
+import { share } from '@masknet/plugin-infra/content-script/context'
 import { TransactionConfirmModal } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, parseColor } from '@masknet/theme'
@@ -133,7 +134,6 @@ export function RedPacket(props: RedPacketProps) {
     const { payload } = props
 
     const t = useRedPacketTrans()
-    const { share } = useSiteAdaptorContext()
     const token = payload.token
     const { pluginID } = useNetworkContext()
     const payloadChainId = token?.chainId ?? ChainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
@@ -216,7 +216,7 @@ export function RedPacket(props: RedPacketProps) {
             title: t.lucky_drop(),
             share,
         })
-    }, [JSON.stringify(token), redPacketContract, payload.rpid, account, share])
+    }, [JSON.stringify(token), redPacketContract, payload.rpid, account])
 
     const onClaimOrRefund = useCallback(async () => {
         let hash: string | undefined
@@ -266,9 +266,8 @@ export function RedPacket(props: RedPacketProps) {
     }, [availability, canRefund, token, t, payload, listOfStatus])
 
     const handleShare = useCallback(() => {
-        if (!shareText || !share) return
-        share(shareText)
-    }, [shareText, share])
+        if (shareText) share?.(shareText)
+    }, [shareText])
 
     const outdated =
         listOfStatus.includes(RedPacketStatus.empty) || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))

@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { ECKeyIdentifier, MAX_WALLET_LIMIT, NetworkPluginID, PopupRoutes, type Wallet } from '@masknet/shared-base'
+import { ECKeyIdentifier, NetworkPluginID, PopupRoutes, type Wallet } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworks, useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { Web3 } from '@masknet/web3-providers'
@@ -113,7 +113,6 @@ const SwitchWallet = memo(function SwitchWallet() {
                 fullWidth
                 size="small"
                 variant="outlined"
-                disabled={wallets.length >= MAX_WALLET_LIMIT}
                 onClick={handleClickCreate}>
                 <Icons.Wallet size={20} color={theme.palette.maskColor.second} />
                 <Typography className={classes.actionLabel} component="span">

@@ -6,7 +6,6 @@ import {
     useAllPersonas,
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
-    useSiteAdaptorContext,
 } from '@masknet/plugin-infra/content-script'
 import {
     PluginCardFrameMini,
@@ -24,13 +23,13 @@ import {
     OtherLackWalletAction,
     SelectConnectPersonaAction,
 } from './Actions/index.js'
+import { openDashboard, openPopupWindow, queryPersonaByProfile } from '@masknet/plugin-infra/dom/context'
 
 export const NextIdPage = memo(function NextIdPage() {
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const allPersonas = useAllPersonas()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
-    const { openDashboard, queryPersonaByProfile, openPopupWindow } = useSiteAdaptorContext()
 
     const { value: personaConnectStatus, loading: statusLoading } = useCurrentPersonaConnectStatus(
         allPersonas,
@@ -47,7 +46,7 @@ export const NextIdPage = memo(function NextIdPage() {
     const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(async () => {
         if (!visitingPersonaIdentifier?.identifier) return
         return queryPersonaByProfile?.(visitingPersonaIdentifier.identifier)
-    }, [visitingPersonaIdentifier?.identifier, personaConnectStatus.hasPersona, queryPersonaByProfile])
+    }, [visitingPersonaIdentifier?.identifier, personaConnectStatus.hasPersona])
     const publicKeyAsHex = currentPersona?.identifier.publicKeyAsHex
     const proofs = usePersonaProofs(publicKeyAsHex)
 
@@ -55,7 +54,7 @@ export const NextIdPage = memo(function NextIdPage() {
         openPopupWindow?.(PopupRoutes.Personas, {
             tab: PopupHomeTabType.ConnectedWallets,
         })
-    }, [openPopupWindow])
+    }, [])
 
     const ActionComponent = useMemo(() => {
         if (!isOwn) return <OtherLackWalletAction />

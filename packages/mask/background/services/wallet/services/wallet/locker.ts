@@ -1,6 +1,7 @@
 import { CrossIsolationMessages, LockStatus, currentMaskWalletLockStatusSettings } from '@masknet/shared-base'
 import { getAutoLockerDuration } from './database/locker.js'
 import * as password from './password.js'
+import { hmr } from '../../../../../utils-pure/hmr.js'
 
 export async function isLocked() {
     return (await password.hasPassword()) && !(await password.hasVerifiedPassword())
@@ -40,5 +41,6 @@ export async function setAutoLockTimer() {
     }, autoLockDuration)
 }
 
+const { signal } = hmr(import.meta.webpackHot)
 // Reset timer
-CrossIsolationMessages.events.walletLockStatusUpdated.on(setAutoLockTimer)
+CrossIsolationMessages.events.walletLockStatusUpdated.on(setAutoLockTimer, { signal })

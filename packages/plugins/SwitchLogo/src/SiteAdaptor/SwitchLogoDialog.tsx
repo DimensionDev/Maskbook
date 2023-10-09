@@ -6,7 +6,8 @@ import { Icons } from '@masknet/icons'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { CrossIsolationMessages, SwitchLogoType, switchLogoSettings } from '@masknet/shared-base'
-import { useLastRecognizedIdentity, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { share } from '@masknet/plugin-infra/content-script/context'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { useSwitchLogoTrans } from '../locales/i18n_generated.js'
 
@@ -64,7 +65,6 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
     const [logoType, setLogoType] = useState<SwitchLogoType>(SwitchLogoType.Classics)
     const [needShare, setNeedShare] = useState(true)
     const [open, setOpen] = useState(false)
-    const { share } = useSiteAdaptorContext()
 
     useEffect(() => {
         return CrossIsolationMessages.events.switchLogoDialogUpdated.on(async (data) => {
@@ -84,7 +84,7 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
                 ),
             )
         }
-    }, [logoType, identity?.identifier?.userId, defaultLogoType, share, needShare])
+    }, [logoType, identity?.identifier?.userId, defaultLogoType, needShare])
 
     const onChange = useCallback((logoType: SwitchLogoType) => {
         setLogoType(logoType)

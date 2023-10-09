@@ -1,5 +1,5 @@
 {
-  "extends": "@masknet/config/tsconfig.json",
+  "extends": "./node_modules/@masknet/config/tsconfig.json",
   "references": [
     // Only list top-level projects here
     { "path": "./packages/polyfills/" },

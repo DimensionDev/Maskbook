@@ -1,8 +1,18 @@
 import type { Subscription } from 'use-subscription'
 import type { Emitter } from '@servie/events'
-import type { ECKeyIdentifier, Account, Wallet, Startable, SignType } from '@masknet/shared-base'
+import type {
+    ECKeyIdentifier,
+    Account,
+    Wallet,
+    Startable,
+    SignType,
+    PopupRoutes,
+    PopupRoutesParamsMap,
+    ImportSource,
+} from '@masknet/shared-base'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import type { TransactionOptions } from '@masknet/web3-shared-evm'
+import type { ChainId, TransactionOptions } from '@masknet/web3-shared-evm'
+import type { api } from '@dimensiondev/mask-wallet-core/proto'
 
 export namespace WalletAPI {
     export interface ProviderEvents<ChainId, ProviderType> {
@@ -31,6 +41,39 @@ export namespace WalletAPI {
             identifier?: ECKeyIdentifier,
             silent?: boolean,
         ): Promise<string>
+        /** Open popup window */
+        openPopupWindow<T extends PopupRoutes>(
+            route: T,
+            params: T extends keyof PopupRoutesParamsMap ? PopupRoutesParamsMap[T] : undefined,
+            evenWhenWalletLocked?: boolean,
+        ): Promise<void>
+        /** Open walletconnect dialog */
+        openWalletConnectDialog(uri: string): Promise<void>
+        /** Close walletconnect dialog */
+        closeWalletConnectDialog(): void
+        /** Get all wallets */
+        wallets: Subscription<Wallet[]>
+        /** Add a new wallet */
+        addWallet(
+            source: ImportSource,
+            id: string,
+            updates?: {
+                name?: string
+                derivationPath?: string
+                storedKeyInfo?: api.IStoredKeyInfo
+            },
+        ): Promise<string>
+        /** Connect origin to Mask wallet  */
+        grantEIP2255Permission(id: string, grantedWalletAddress: Set<string> | string[]): Promise<void>
+
+        /** Select a Mask Wallet account */
+        selectMaskWalletAccount(
+            chainId: ChainId,
+            defaultAccount?: string,
+        ): Promise<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
+
+        /** Disconnect origin from Mask wallet  */
+        disconnectAllWalletsFromOrigin(origin: string): Promise<void>
     }
     export interface Provider<ChainId, ProviderType, Web3Provider, Web3> extends Startable {
         readonly emitter: Emitter<ProviderEvents<ChainId, ProviderType>>

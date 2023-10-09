@@ -103,7 +103,7 @@ export async function removePopupWindow(): Promise<void> {
 }
 
 export async function openDashboard(route?: DashboardRoutes, search?: string) {
-    return browser.tabs.create({
+    await browser.tabs.create({
         active: true,
         url: browser.runtime.getURL(`/dashboard.html#${route}${search ? `?${search}` : ''}`),
     })

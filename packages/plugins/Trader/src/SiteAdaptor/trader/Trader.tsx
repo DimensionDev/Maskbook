@@ -4,7 +4,7 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { BigNumber } from 'bignumber.js'
 import { delay } from '@masknet/kit'
 import { Box, Typography, useTheme } from '@mui/material'
-import { ImageIcon, ConfirmModal, SelectProviderModal, SelectFungibleTokenModal } from '@masknet/shared'
+import { ConfirmModal, SelectProviderModal, SelectFungibleTokenModal } from '@masknet/shared'
 import { formatBalance, isSameAddress, isZero, minus, toFixed } from '@masknet/web3-shared-base'
 import { addGasMargin, ChainId, type EIP1559GasConfig, type GasConfig } from '@masknet/web3-shared-evm'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
@@ -18,7 +18,7 @@ import {
     useWeb3Others,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useActivatedPlugin, useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
+import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { NetworkPluginID, PluginID, Sniffings } from '@masknet/shared-base'
 import { type TraderAPI } from '@masknet/web3-providers/types'
 import { DepositPaymaster, SmartPayBundler, Web3 } from '@masknet/web3-providers'
@@ -33,12 +33,14 @@ import { useUpdateBalance } from './hooks/useUpdateBalance.js'
 import { TradeForm } from './TradeForm.js'
 import { TraderStateBar } from './TraderStateBar.js'
 import { ConfirmDialog } from './ConfirmDialog.js'
+import { Icons } from '@masknet/icons'
 
 export interface TraderProps extends withClasses<'root'> {
     defaultInputCoin?: Web3Helper.FungibleTokenAll
     defaultOutputCoin?: Web3Helper.FungibleTokenAll
     chainId?: Web3Helper.ChainIdAll
     settings?: boolean
+    share: ((text: string) => void) | undefined
 }
 
 export interface TraderRef {
@@ -50,14 +52,12 @@ export interface TraderRef {
 export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, ref) => {
     const theme = useTheme()
     const wallet = useWallet()
-    const { defaultOutputCoin, chainId: targetChainId, defaultInputCoin, settings = false } = props
+    const { defaultOutputCoin, chainId: targetChainId, defaultInputCoin, settings = false, share } = props
     const t = useTraderTrans()
     const [focusedTrade, setFocusTrade] = useState<AsyncStateRetry<TraderAPI.TradeInfo>>()
     const { chainId, account, setChainId } = useChainContext({
         chainId: targetChainId,
     })
-    const { share } = useSiteAdaptorContext()
-
     const { pluginID } = useNetworkContext()
     const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')
     const chainIdList = traderDefinition?.enableRequirement?.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
@@ -239,7 +239,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             title: t.swap(),
             content: (
                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-                    <ImageIcon icon={inputToken?.logoURL} size={90} style={{ borderRadius: 99 }} />
+                    <Icons.FillSuccess size={90} style={{ borderRadius: 99 }} />
                     <Typography
                         fontSize={20}
                         lineHeight="24px"
@@ -270,7 +270,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
             amount: '',
         })
-    }, [tradeCallback, shareText, focusedTrade, share])
+    }, [tradeCallback, shareText, focusedTrade])
 
     const onConfirmDialogClose = useCallback(() => {
         setOpenConfirmDialog(false)

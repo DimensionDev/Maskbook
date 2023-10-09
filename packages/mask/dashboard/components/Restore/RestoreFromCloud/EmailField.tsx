@@ -74,8 +74,11 @@ export const EmailField = memo(function EmailField() {
         )
     }, [account, code, loading, disabled])
 
-    const hasError = invalidEmail || !!error
-    const errorMessage = invalidEmail ? t.sign_in_account_cloud_backup_email_format_error() : error || ''
+    const hasError = sendCodeError?.message.includes('SendTemplatedEmail') || invalidEmail || !!error
+    const errorMessage =
+        sendCodeError?.message.includes('SendTemplatedEmail') || invalidEmail
+            ? t.sign_in_account_cloud_backup_email_format_error()
+            : error || ''
 
     return (
         <>
@@ -102,7 +105,11 @@ export const EmailField = memo(function EmailField() {
                     fullWidth
                     value={code}
                     onChange={setCode}
-                    errorMessage={sendCodeError?.message || codeError}
+                    errorMessage={
+                        !sendCodeError?.message.includes('SendTemplatedEmail')
+                            ? sendCodeError?.message || codeError
+                            : ''
+                    }
                     onSend={handleSendCodeFn}
                     placeholder={t.data_recovery_email_code()}
                     disabled={emailNotReady}

@@ -1,13 +1,10 @@
-import { SiteAdaptorContextRef } from '@masknet/plugin-infra/dom'
 import { AllProviderTradeContext } from '@masknet/plugin-trader'
 import { Appearance } from '@masknet/public-api'
 import { SharedContextProvider, SwapPageModals } from '@masknet/shared'
-import { openWindow } from '@masknet/shared-base-ui'
 import { applyMaskColorVars, makeStyles } from '@masknet/theme'
 import { ChainContextProvider, DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { Typography } from '@mui/material'
-import { useEffect, useMemo } from 'react'
-import { TwitterAdaptor } from '../../../../../shared/site-adaptors/implementations/twitter.com.js'
+import { useMemo } from 'react'
 import { useMaskSharedTrans } from '../../../../utils/index.js'
 import { NetworkSelector } from '../../components/NetworkSelector/index.js'
 import { useTokenParams } from '../../hooks/index.js'
@@ -66,34 +63,6 @@ export default function SwapPage() {
     const { chainId } = useTokenParams()
     applyMaskColorVars(document.body, Appearance.light)
     const chainContextValue = useMemo(() => ({ chainId }), [chainId])
-
-    useEffect(() => {
-        SiteAdaptorContextRef.value = {
-            ...SiteAdaptorContextRef.value,
-            share(text) {
-                const url = TwitterAdaptor.getShareLinkURL!(text)
-                const width = 700
-                const height = 520
-                const openedWindow = openWindow(url, 'share', {
-                    width,
-                    height,
-                    screenX: window.screenX + (window.innerWidth - width) / 2,
-                    screenY: window.screenY + (window.innerHeight - height) / 2,
-                    opener: true,
-                    referrer: true,
-                    behaviors: {
-                        toolbar: true,
-                        status: true,
-                        resizable: true,
-                        scrollbars: true,
-                    },
-                })
-                if (openedWindow === null) {
-                    location.assign(url)
-                }
-            },
-        }
-    }, [])
 
     return (
         <SharedContextProvider>

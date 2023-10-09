@@ -20,7 +20,8 @@ import {
     useWeb3Hub,
 } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
-import { usePostLink, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { usePostLink } from '@masknet/plugin-infra/content-script'
+import { share } from '@masknet/plugin-infra/content-script/context'
 import { NetworkPluginID, CrossIsolationMessages, Sniffings } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { Stack } from '@mui/system'
@@ -200,7 +201,6 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>(
         pluginID === NetworkPluginID.PLUGIN_EVM ? {} : { account: '' },
     )
-    const { share } = useSiteAdaptorContext()
     const {
         value: availability,
         loading,
@@ -244,7 +244,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
 
     const onShare = useCallback(() => {
         if (shareText) share?.(shareText)
-    }, [shareText, share])
+    }, [shareText])
     // #endregion
 
     const openNFTDialog = useCallback(() => {
@@ -308,7 +308,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             title: t.lucky_drop(),
             share,
         })
-    }, [nftRedPacketContract, payload.id, account, share, Hub])
+    }, [nftRedPacketContract, payload.id, account, Hub])
 
     const claim = useCallback(async () => {
         const hash = await claimCallback()

@@ -31,7 +31,7 @@ const define: SiteAdaptorUI.Definition = {
     utils: { createPostContext: null! },
     async init(signal) {
         const state: Readonly<SiteAdaptorUI.AutonomousState> = {
-            profiles: new ValueRef<ProfileInformation[]>([]),
+            profiles: new ValueRef<readonly ProfileInformation[]>([]),
         }
         const activeTab = ((await browser.tabs.query({ active: true, currentWindow: true })) || [])[0]
         if (activeTab === undefined) return state

@@ -4,6 +4,7 @@ import {
     type ProfileRecord,
     queryPersonasDB,
     queryProfilesDB,
+    queryProfileDB,
 } from '../../../database/persona/db.js'
 import { hasLocalKeyOf } from '../../../database/persona/helper.js'
 import { toProfileInformation } from '../../__utils__/convert.js'
@@ -15,6 +16,10 @@ export interface MobileQueryProfilesOptions {
 export async function queryProfilesInformation(identifiers: ProfileIdentifier[]): Promise<ProfileInformation[]> {
     const profiles = await queryProfilesDB({ identifiers })
     return toProfileInformation(profiles).mustNotAwaitThisWithInATransaction
+}
+
+export async function queryProfileInformation(identifier: ProfileIdentifier): Promise<ProfileRecord | null> {
+    return await queryProfileDB(identifier)
 }
 
 /** @deprecated */

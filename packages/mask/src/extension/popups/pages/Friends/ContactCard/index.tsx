@@ -7,18 +7,18 @@ import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme
 import { Box, Typography, Link, useTheme, ButtonBase as Button, Avatar } from '@mui/material'
 import {
     formatPersonaFingerprint,
-    type BindingProof,
     PopupRoutes,
     ProfileIdentifier,
     ECKeyIdentifier,
+    NextIDPlatform,
 } from '@masknet/shared-base'
 import { CopyButton, PersonaContext } from '@masknet/shared'
-import { NextIDPlatform } from '@masknet/shared-base'
-import { attachNextIDToProfile } from '../../../../../utils/utils.js'
-import { ConnectedAccounts } from './ConnectedAccounts/index.js'
-import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
 import Services from '#services'
+import { ConnectedAccounts } from './ConnectedAccounts/index.js'
+import { attachNextIDToProfile } from '../../../../../utils/utils.js'
 import { type Friend, useFriendProfiles } from '../../../hooks/index.js'
+import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
+import { type Profile } from '../common.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -56,9 +56,9 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface ContactCardProps {
+export interface ContactCardProps {
     avatar?: string
-    proofProfiles?: BindingProof[]
+    proofProfiles?: Profile[]
     nextId?: string
     publicKey?: string
     isLocal?: boolean
@@ -82,10 +82,10 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
     const [local, setLocal] = useState(false)
     const [seen, ref] = useEverSeen<HTMLLIElement>()
     const { currentPersona } = PersonaContext.useContainer()
-    const { t } = useMaskSharedTrans()
-    const profiles = useFriendProfiles(seen, nextId, profile?.userId)
+    const profiles = useFriendProfiles(seen, nextId, profile)
     const rawPublicKey = currentPersona?.identifier.rawPublicKey
     const queryClient = useQueryClient()
+    const { t } = useMaskSharedTrans()
 
     const friendInfo = useMemo(() => {
         if (!rawPublicKey) return
@@ -201,7 +201,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                                     avatar,
                                     publicKey,
                                     nextId,
-                                    profiles,
+                                    profiles: proofProfiles ? proofProfiles : profiles,
                                     isLocal,
                                 },
                             })

@@ -33,6 +33,9 @@ const useStyles = makeStyles()((theme) => ({
             paddingBottom: 4,
             border: 'unset',
         },
+        '&.Mui-focusVisible': {
+            backgroundColor: 'transparent',
+        },
     },
     optionName: {
         fontSize: 14,

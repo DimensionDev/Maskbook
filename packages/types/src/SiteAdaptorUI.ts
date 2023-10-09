@@ -45,7 +45,7 @@ export namespace SiteAdaptorUI {
     /** The init() should setup watcher for those states */
     export interface AutonomousState {
         /** My profiles at current network */
-        readonly profiles: ValueRef<ProfileInformation[]>
+        readonly profiles: ValueRef<readonly ProfileInformation[]>
     }
     export interface DeclarativePermission {
         origins: readonly string[]

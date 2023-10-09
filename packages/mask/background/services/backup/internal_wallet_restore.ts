@@ -11,7 +11,7 @@ import {
     recoverWalletFromMnemonicWords,
     recoverWalletFromPrivateKey,
 } from '../wallet/services/index.js'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 
 export async function internal_wallet_restore(backup: NormalizedBackup.WalletBackup[]) {
     const mnemonicWalletMap = new Map<
@@ -30,7 +30,7 @@ export async function internal_wallet_restore(backup: NormalizedBackup.WalletBac
                 if (!mnemonicId) continue
 
                 accounts.forEach((x) => {
-                    mnemonicWalletMap.set(x.address, {
+                    mnemonicWalletMap.set(formatEthereumAddress(x.address), {
                         mnemonicId,
                         derivationPath: x.derivationPath,
                     })

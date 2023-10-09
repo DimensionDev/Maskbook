@@ -9,7 +9,7 @@ import {
     formatWeiToGwei,
     type ChainId,
     type Transaction as EvmTransaction,
-    decodeInputString,
+    decodeFunctionData,
 } from '@masknet/web3-shared-evm'
 import { GasSettingModal } from '../../modals/modals.js'
 import { ReplaceType } from './type.js'
@@ -58,7 +58,7 @@ export async function modifyTransaction(
 export function parseReceiverFromERC20TransferInput(input?: string) {
     if (!input) return ''
     try {
-        const decodedInputParam = decodeInputString(ERC20_ABI as AbiItem[], input ?? '', 'transfer')
+        const decodedInputParam = decodeFunctionData(ERC20_ABI as AbiItem[], input ?? '', 'transfer')
         return decodedInputParam[0] as string
     } catch {
         return ''
@@ -70,7 +70,7 @@ export function parseReceiverFromERC20TransferInput(input?: string) {
 export function parseAmountFromERC20ApproveInput(input?: string) {
     if (!input) return
     try {
-        const decodedInputParam = decodeInputString(ERC20_ABI as AbiItem[], input ?? '', 'approve')
+        const decodedInputParam = decodeFunctionData(ERC20_ABI as AbiItem[], input ?? '', 'approve')
         const result = (decodedInputParam[1] as BigNumber).toString()
         return MaxUint256 === result ? 'Infinite' : result
     } catch {

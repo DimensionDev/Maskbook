@@ -1,7 +1,6 @@
 import { omitBy } from 'lodash-es'
 import urlcat from 'urlcat'
 import type { JsonRpcResponse } from 'web3-core-helpers'
-import { SiteAdaptorContextRef } from '@masknet/plugin-infra/dom'
 import { EMPTY_OBJECT, NetworkPluginID, PopupRoutes, PopupsHistory, Sniffings } from '@masknet/shared-base'
 import { MessageStateType, type ReasonableMessage } from '@masknet/web3-shared-base'
 import {
@@ -11,6 +10,7 @@ import {
     type MessageResponse,
     type TransactionOptions,
     EthereumMethodType,
+    ErrorEditor,
 } from '@masknet/web3-shared-evm'
 import { isUndefined } from '@walletconnect/utils'
 import { MessageState } from '../../Base/state/Message.js'
@@ -53,7 +53,7 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
                 chainId,
             })
 
-            if (nonce + 1 !== config.nonce) {
+            if (nonce > config.nonce) {
                 request.arguments.params = [
                     {
                         ...config,
@@ -85,7 +85,7 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
                 PopupsHistory.push(urlcat(PopupRoutes.Wallet, fromState))
             } else {
                 // open the popups window and wait for approval from the user.
-                await SiteAdaptorContextRef.value.openPopupWindow(route, {
+                await this.context.openPopupWindow(route, {
                     source: location.origin,
                     ...fromState,
                 })
@@ -103,6 +103,8 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
             createJsonRpcPayload(0, request.arguments),
             omitBy<TransactionOptions>(request.options, isUndefined),
         )
+        const error = ErrorEditor.from(null, response)
+        if (error.presence) return
 
         await this.updateMessage(id, {
             request,
