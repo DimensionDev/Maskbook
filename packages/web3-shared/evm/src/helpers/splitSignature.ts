@@ -10,5 +10,5 @@ export function splitSignature(signature: string) {
     const s = '0x' + signature.slice(66, 130)
     const v = toDecimal('0x' + signature.slice(130, 132))
 
-    return { r, s, v: v + 27 }
+    return { r, s, v }
 }
