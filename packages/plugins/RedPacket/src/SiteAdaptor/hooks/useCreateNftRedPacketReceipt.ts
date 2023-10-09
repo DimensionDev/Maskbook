@@ -27,8 +27,8 @@ export function useCreateNftRedPacketReceipt(txid: string, expectedChainId: Chai
         }
 
         return {
-            rpid: eventParams['CreationSuccess'].id ?? '',
-            creation_time: eventParams['CreationSuccess'].creation_time.toNumber() * 1000,
+            rpid: eventParams.CreationSuccess.id ?? '',
+            creation_time: eventParams.CreationSuccess.creation_time.toNumber() * 1000,
         }
     }, [txid, chainId, RED_PACKET_NFT_ADDRESS])
 }

@@ -29,8 +29,8 @@ export function useCreateRedPacketReceipt(txid: string) {
         }
 
         return {
-            rpid: eventParams['CreationSuccess'].id ?? '',
-            creation_time: eventParams['CreationSuccess'].creation_time.toNumber() * 1000,
+            rpid: eventParams.CreationSuccess.id ?? '',
+            creation_time: eventParams.CreationSuccess.creation_time.toNumber() * 1000,
         }
     }, [txid, HAPPY_RED_PACKET_ADDRESS_V4, chainId])
 }
