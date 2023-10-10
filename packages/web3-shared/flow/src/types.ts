@@ -2,7 +2,7 @@
 /// <reference types="@masknet/global-types/webpack" />
 
 import type { MutateOptions, BlockObject, TransactionObject, QueryOptions, BlockHeaderObject } from '@blocto/fcl'
-import type { Web3State as Web3StateShared, Web3UI as Web3UIShared } from '@masknet/web3-shared-base'
+import type { Web3State as Web3StateShared } from '@masknet/web3-shared-base'
 
 export enum ChainId {
     // For any chains not supported yet.
@@ -65,8 +65,6 @@ export type TransactionDetailed = TransactionObject
 export type TransactionSignature = never
 export type TransactionParameter = string
 
-export type Web3UI = Web3UIShared<ChainId, ProviderType, NetworkType>
-
 export type Web3State = Web3StateShared<
     ChainId,
     SchemaType,
@@ -97,7 +95,6 @@ export type Web3Definition = {
     TransactionParameter: TransactionParameter
     UserOperation: Operation
     Web3: Web3
-    Web3UI: Web3UI
     Web3Provider: Web3Provider
     Web3State: Web3State
 }

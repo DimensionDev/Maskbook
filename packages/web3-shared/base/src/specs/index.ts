@@ -1,4 +1,4 @@
-import type { ComponentType, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Emitter } from '@servie/events'
@@ -1168,36 +1168,4 @@ export interface Web3State<
     TransactionFormatter?: TransactionFormatterState<ChainId, TransactionParameter, Transaction>
     TransactionWatcher?: TransactionWatcherState<ChainId, Transaction>
     Provider?: ProviderState<ChainId, ProviderType, NetworkType>
-}
-
-export interface NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType> {
-    network: NetworkDescriptor<ChainId, NetworkType>
-    provider?: ProviderDescriptor<ChainId, ProviderType>
-    children?: ReactNode
-    onClick?: (
-        network: NetworkDescriptor<ChainId, NetworkType>,
-        provider?: ProviderDescriptor<ChainId, ProviderType>,
-    ) => void
-}
-
-export interface ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType> {
-    provider: ProviderDescriptor<ChainId, ProviderType>
-    children?: ReactNode
-    onClick?: (
-        network: NetworkDescriptor<ChainId, NetworkType>,
-        provider: ProviderDescriptor<ChainId, ProviderType>,
-    ) => void
-}
-
-export interface Web3UI<ChainId, ProviderType, NetworkType> {
-    SelectNetworkMenu?: {
-        /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
-        NetworkIconClickBait?: ComponentType<NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType>>
-    }
-    SelectProviderDialog?: {
-        /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
-        NetworkIconClickBait?: ComponentType<NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType>>
-        /** This UI will receive provider icon as children component, and the plugin may hook click handle on it. */
-        ProviderIconClickBait?: ComponentType<ProviderIconClickBaitProps<ChainId, ProviderType, NetworkType>>
-    }
 }

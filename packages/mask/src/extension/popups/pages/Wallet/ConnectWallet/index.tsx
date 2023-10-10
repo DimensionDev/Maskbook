@@ -6,7 +6,7 @@ import { Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { ExtensionSite, PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
-import { useWeb3UI, useWallets } from '@masknet/web3-hooks-base'
+import { useWallets } from '@masknet/web3-hooks-base'
 import { getRegisteredWeb3Networks, getRegisteredWeb3Providers } from '@masknet/plugin-infra'
 import { Web3 } from '@masknet/web3-providers'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -60,7 +60,6 @@ const ConnectWalletPage = memo(() => {
     const { setSigned } = PopupContext.useContainer()
     const wallets = useWallets()
     const { isLocked, isLoading: lockStatusLoading } = useWalletLockStatus()
-    const { ProviderIconClickBait } = useWeb3UI(NetworkPluginID.PLUGIN_EVM).SelectProviderDialog ?? {}
 
     const mainnet = getRegisteredWeb3Networks(NetworkPluginID.PLUGIN_EVM).find((x) => x.chainId === ChainId.Mainnet)
     const providers = getRegisteredWeb3Providers(NetworkPluginID.PLUGIN_EVM)
@@ -131,11 +130,7 @@ const ConnectWalletPage = memo(() => {
                 {providers
                     .filter((x) => (x.enableRequirements?.supportedExtensionSites ?? []).includes(ExtensionSite.Popup))
                     .map((provider) => {
-                        return ProviderIconClickBait ? (
-                            <ProviderIconClickBait key={provider.ID} provider={provider} onClick={onClick}>
-                                {createProvider(provider)}
-                            </ProviderIconClickBait>
-                        ) : (
+                        return (
                             <React.Fragment key={provider.ID}>
                                 {createProvider(provider, {
                                     onClick: () => onClick(mainnet, provider),

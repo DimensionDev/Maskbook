@@ -1,5 +1,5 @@
 import type { PublicKey, BlockResponse, Transaction as SolanaTransaction, TransactionResponse } from '@solana/web3.js'
-import type { Web3UI as Web3UIShared, Web3State as Web3StateShared } from '@masknet/web3-shared-base'
+import type { Web3State as Web3StateShared } from '@masknet/web3-shared-base'
 
 export enum ChainId {
     Mainnet = 101,
@@ -77,8 +77,6 @@ export type TransactionDetailed = TransactionResponse
 export type TransactionSignature = SolanaTransaction
 export type TransactionParameter = string
 
-export type Web3UI = Web3UIShared<ChainId, ProviderType, NetworkType>
-
 export type Web3State = Web3StateShared<
     ChainId,
     SchemaType,
@@ -109,7 +107,6 @@ export type Web3Definition = {
     TransactionParameter: TransactionParameter
     UserOperation: Operation
     Web3: Web3
-    Web3UI: Web3UI
     Web3Provider: Web3Provider
     Web3State: Web3State
 }

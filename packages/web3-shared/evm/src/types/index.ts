@@ -1,7 +1,7 @@
 import type { Transaction as Web3Transaction, TransactionReceipt as Web3TransactionReceipt } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types.js'
-import type { Web3UI as Web3UIShared, Web3State as Web3StateShared, GasOptionType } from '@masknet/web3-shared-base'
+import type { Web3State as Web3StateShared, GasOptionType } from '@masknet/web3-shared-base'
 import type { Web3 } from '../libs/Web3.js'
 
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
@@ -398,8 +398,6 @@ export interface TransactionOptions {
     silent?: boolean
 }
 
-export type Web3UI = Web3UIShared<ChainId, ProviderType, NetworkType>
-
 export type Web3State = Web3StateShared<
     ChainId,
     SchemaType,
@@ -430,7 +428,6 @@ export type Web3Definition = {
     TransactionParameter: TransactionParameter
     UserOperation: UserOperation
     Web3: Web3
-    Web3UI: Web3UI
     Web3Provider: Web3Provider
     Web3State: Web3State
 }

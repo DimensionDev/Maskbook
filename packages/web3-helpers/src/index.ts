@@ -17,7 +17,6 @@ import type {
     NonFungibleTokenResult,
     NonFungibleCollection,
     Web3State as Web3StateShared,
-    Web3UI as Web3UIShared,
 } from '@masknet/web3-shared-base'
 import type * as EVM from '@masknet/web3-shared-evm'
 import type * as Flow from '@masknet/web3-shared-flow'
@@ -43,11 +42,6 @@ export declare namespace Web3Helper {
     export type Web3Provider<T extends NetworkPluginID = never> = T extends never
         ? never
         : Definition[T]['Web3Provider']
-
-    export type Web3UI<T extends NetworkPluginID = never> = T extends never
-        ? never
-        : Web3UIShared<Definition[T]['ChainId'], Definition[T]['ProviderType'], Definition[T]['NetworkType']>
-
     export type Web3State<T extends NetworkPluginID = never> = T extends never
         ? never
         : Web3StateShared<
@@ -167,13 +161,6 @@ export declare namespace Web3Helper {
         Definition[NetworkPluginID]['Transaction'],
         Definition[NetworkPluginID]['TransactionParameter']
     >
-
-    export type Web3UIAll = Web3UIShared<
-        Definition[NetworkPluginID]['ChainId'],
-        Definition[NetworkPluginID]['ProviderType'],
-        Definition[NetworkPluginID]['NetworkType']
-    >
-
     export type ChainIdScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
@@ -285,14 +272,6 @@ export declare namespace Web3Helper {
               Definition[T]['Transaction'],
               Definition[T]['TransactionParameter']
           >
-
-    export type Web3UIScope<
-        S extends 'all' | void = void,
-        T extends NetworkPluginID = NetworkPluginID,
-    > = S extends 'all'
-        ? Web3UIAll
-        : Web3UIShared<Definition[T]['ChainId'], Definition[T]['ProviderType'], Definition[T]['NetworkType']>
-
     export type Scope<S extends 'all' | void = void, T = unknown, F = unknown> = S extends 'all' ? T : F
 
     export type Web3Scope<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID> = S extends 'all'
