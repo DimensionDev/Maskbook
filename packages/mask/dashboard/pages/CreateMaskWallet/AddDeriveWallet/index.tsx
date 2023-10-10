@@ -51,9 +51,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     pagination: {
         display: 'flex',
-        padding: 10,
+        padding: '8px',
         alignItems: 'flex-start',
         alignSelf: 'stretch',
+        marginTop: '12px',
         gap: 12,
     },
     paginationButton: {
