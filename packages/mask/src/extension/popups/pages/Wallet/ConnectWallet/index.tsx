@@ -59,7 +59,7 @@ const ConnectWalletPage = memo(() => {
     const navigate = useNavigate()
     const { setSigned } = PopupContext.useContainer()
     const wallets = useWallets()
-    const { isLocked, loading: lockStatusLoading } = useWalletLockStatus()
+    const { isLocked, isLoading: lockStatusLoading } = useWalletLockStatus()
     const { ProviderIconClickBait } = useWeb3UI(NetworkPluginID.PLUGIN_EVM).SelectProviderDialog ?? {}
 
     const mainnet = getRegisteredWeb3Networks(NetworkPluginID.PLUGIN_EVM).find((x) => x.chainId === ChainId.Mainnet)

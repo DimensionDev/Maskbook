@@ -44,7 +44,6 @@ export enum TradeProvider {
     UNISWAP_V2 = 0,
     ZRX = 1,
     SUSHISWAP = 2,
-    BALANCER = 4,
     QUICKSWAP = 5,
     PANCAKESWAP = 6,
     DODO = 7,

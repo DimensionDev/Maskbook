@@ -62,10 +62,14 @@ export function useCurrentVisitingIdentity() {
 
 export function useCurrentLinkedPersona() {
     const currentIdentity = useCurrentIdentity()
-    return useQuery(['current-linked-persona', currentIdentity?.linkedPersona], async () => {
-        if (!currentIdentity?.linkedPersona) return
-        return Services.Identity.queryPersona(currentIdentity.linkedPersona)
-    })
+    return useQuery(
+        ['current-linked-persona', currentIdentity?.linkedPersona],
+        async () => {
+            if (!currentIdentity?.linkedPersona) return
+            return Services.Identity.queryPersona(currentIdentity.linkedPersona)
+        },
+        { networkMode: 'always' },
+    )
 }
 
 /**
@@ -100,10 +104,14 @@ export function useSocialIdentity(identity: IdentityResolved | null | undefined)
 }
 
 export function useSocialIdentityByUserId(userId?: string) {
-    const { data: identity } = useQuery(['social-identity', 'by-id', userId], async () => {
-        if (!userId) return
-        return activatedSiteAdaptorUI!.utils.getUserIdentity?.(userId)
-    })
+    const { data: identity } = useQuery(
+        ['social-identity', 'by-id', userId],
+        async () => {
+            if (!userId) return
+            return activatedSiteAdaptorUI!.utils.getUserIdentity?.(userId)
+        },
+        { networkMode: 'always' },
+    )
     return useSocialIdentity(identity)
 }
 

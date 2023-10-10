@@ -170,7 +170,7 @@ export function useCreateCallback(
         })
         const receipt = await Web3.getTransactionReceipt(hash, { chainId })
         if (receipt) {
-            const events = decodeEvents(redPacketContract.options.jsonInterface, receipt)
+            const events = decodeEvents(redPacketContract.options.jsonInterface, receipt.logs)
 
             return {
                 hash,

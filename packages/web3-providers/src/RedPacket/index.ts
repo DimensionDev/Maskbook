@@ -1,27 +1,23 @@
 import urlcat from 'urlcat'
 import { mapKeys } from 'lodash-es'
+import type { AbiItem } from 'web3-utils'
 import { createIndicator, createPageable, type PageIndicator, type Pageable, EMPTY_LIST } from '@masknet/shared-base'
 import { type Transaction, attemptUntil, type NonFungibleCollection } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import {
-    type RedPacketJSONPayloadFromChain,
-    type CreateRedpacketParam,
-    type NftRedPacketJSONPayload,
-    type CreateNFTRedpacketParam,
-} from './types.js'
-import { Interface } from '@ethersproject/abi'
+import { decodeFunctionData, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import NFT_REDPACKET_ABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
 import { DSEARCH_BASE_URL } from '../DSearch/constants.js'
 import { fetchFromDSearch } from '../DSearch/helpers.js'
 import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
-import { ContractRedPacketAPI } from './api.js'
 import { ChainbaseRedPacketAPI } from '../Chainbase/index.js'
 import { EtherscanRedPacketAPI } from '../Etherscan/index.js'
+import { ContractRedPacketAPI } from './api.js'
+import {
+    type RedPacketJSONPayloadFromChain,
+    type NftRedPacketJSONPayload,
+    type CreateNFTRedpacketParam,
+} from './types.js'
 import type { HubOptions_Base, RedPacketBaseAPI } from '../entry-types.js'
-
-const redPacketInterFace = new Interface(REDPACKET_ABI)
-const nftRedPacketInterFace = new Interface(NFT_REDPACKET_ABI)
 
 export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
     private ChainbaseRedPacket = new ChainbaseRedPacketAPI()
@@ -131,10 +127,11 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
 
         return transactions.flatMap((tx) => {
             try {
-                const decodedInputParam = nftRedPacketInterFace.decodeFunctionData(
-                    'create_red_packet',
+                const decodedInputParam = decodeFunctionData(
+                    NFT_REDPACKET_ABI as AbiItem[],
                     tx.input ?? '',
-                ) as unknown as CreateNFTRedpacketParam
+                    'create_red_packet',
+                ) as CreateNFTRedpacketParam
 
                 const redpacketPayload: NftRedPacketJSONPayload = {
                     contract_address: tx.to,
@@ -175,10 +172,11 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
 
         return transactions.flatMap((tx) => {
             try {
-                const decodedInputParam = redPacketInterFace.decodeFunctionData(
-                    'create_red_packet',
+                const decodedInputParam = decodeFunctionData(
+                    REDPACKET_ABI as AbiItem[],
                     tx.input ?? '',
-                ) as unknown as CreateRedpacketParam
+                    'create_red_packet',
+                )
 
                 const redpacketPayload: RedPacketJSONPayloadFromChain = {
                     contract_address: tx.to,

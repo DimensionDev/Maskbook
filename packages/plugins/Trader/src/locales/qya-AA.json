@@ -25,7 +25,6 @@
     "share": "crwdns20817:0crwdne20817:0",
     "plugin_trader_fail_to_load": "crwdns20819:0crwdne20819:0",
     "plugin_trader_switch_provider": "crwdns20821:0{{provider}}crwdne20821:0",
-    "plugin_trader_lbp_pool_in_balancer": "crwdns20823:0crwdne20823:0",
     "plugin_trader_swap_description": "crwdns20825:0crwdne20825:0",
     "plugin_trader_tutorial": "crwdns20827:0crwdne20827:0",
     "plugin_trader_what_is_lbp": "crwdns20829:0crwdne20829:0",

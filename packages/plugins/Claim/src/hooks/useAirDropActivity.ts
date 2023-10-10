@@ -1,11 +1,11 @@
 import { last } from 'lodash-es'
-import { utils } from 'ethers'
+import { keccak256 } from 'web3-utils'
 import { MerkleTree } from 'merkletreejs'
 import secondsToMilliseconds from 'date-fns/secondsToMilliseconds'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Airdrop } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { type ChainId, formatEtherToWei, pack } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
 
 export function useAirDropActivity(chainId: ChainId) {
@@ -21,12 +21,12 @@ export function useAirDropActivity(chainId: ChainId) {
             const claimerList = Object.entries(claimers)
             const claimer = claimerList.find(([address]) => isSameAddress(address, account))
             const airdropList = claimerList.map(([address, amount]) => {
-                return utils.keccak256(utils.solidityPack(['address', 'uint256'], [address, utils.parseEther(amount)]))
+                return keccak256(pack(['address', 'uint256'], [address, formatEtherToWei(amount)]))
             })
-            const merkleTree = new MerkleTree(airdropList, utils.keccak256, { sortPairs: true })
+            const merkleTree = new MerkleTree(airdropList, keccak256, { sortPairs: true })
             const amount = claimer ? last(claimer) : undefined
             const leaf = amount
-                ? utils.keccak256(utils.solidityPack(['address', 'uint256'], [account, utils.parseEther(amount)]))
+                ? keccak256(pack(['address', 'uint256'], [account, formatEtherToWei(amount)]))
                 : undefined
 
             const merkleProof = leaf ? merkleTree.getHexProof(leaf) : undefined
