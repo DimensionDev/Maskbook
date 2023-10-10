@@ -84,6 +84,9 @@ const useStyles = makeStyles()((theme) => ({
             background: theme.palette.maskColor.bg,
         },
     },
+    colorPrimary: {
+        color: theme.palette.maskColor.main,
+    },
 }))
 
 interface DeriveWalletTableProps {
@@ -160,7 +163,7 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(function Der
     symbol,
 }) {
     const { classes, cx } = useStyles()
-    const { data: balance, isFetching } = useBalance(NetworkPluginID.PLUGIN_EVM, {
+    const { data: balance, isLoading } = useBalance(NetworkPluginID.PLUGIN_EVM, {
         account: address,
         chainId: ChainId.Mainnet,
     })
@@ -186,8 +189,8 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(function Der
                 </div>
             </TableCell>
             <TableCell align="left" variant="body" className={cx(classes.cell, classes.center)}>
-                {isFetching ? (
-                    <CircularProgress color="primary" size={12} />
+                {isLoading ? (
+                    <CircularProgress color="primary" size={12} classes={{ colorPrimary: classes.colorPrimary }} />
                 ) : (
                     <Typography className={classes.title}>
                         <FormattedBalance
