@@ -69,7 +69,7 @@ async function fetchERC20TokensFromTokenList(urls: string[], chainId = ChainId.M
  * @param urls
  * @param chainId
  */
-export class R2D2TokenListAPI implements TokenListAPI.Provider<ChainId, SchemaType> {
+class R2D2TokenListAPI implements TokenListAPI.Provider<ChainId, SchemaType> {
     async getFungibleTokenList(chainId: ChainId, urls?: string[]) {
         const { FUNGIBLE_TOKEN_LISTS = EMPTY_LIST } = getTokenListConstants(chainId)
         const result = memoizePromise(
@@ -98,3 +98,5 @@ export class R2D2TokenListAPI implements TokenListAPI.Provider<ChainId, SchemaTy
         return EMPTY_LIST
     }
 }
+
+export const R2D2TokenList = new R2D2TokenListAPI()

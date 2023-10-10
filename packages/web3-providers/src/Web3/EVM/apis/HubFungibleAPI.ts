@@ -21,7 +21,7 @@ import { Cloudflare } from '../../../Cloudflare/index.js'
 import { CoinGeckoPriceEVM } from '../../../CoinGecko/index.js'
 import { DeBankFungibleToken } from '../../../DeBank/index.js'
 import { GoPlusAuthorization } from '../../../GoPlusLabs/index.js'
-import { R2D2TokenListAPI } from '../../../R2D2/index.js'
+import { R2D2TokenList } from '../../../R2D2/index.js'
 import { Rabby } from '../../../Rabby/index.js'
 import { Zerion } from '../../../Zerion/index.js'
 
@@ -36,8 +36,6 @@ export class HubFungibleAPI extends HubFungibleAPI_Base<
     TransactionParameter
 > {
     private Approval = new ApprovalAPI()
-    private R2D2TokenList = new R2D2TokenListAPI()
-
     protected override HubOptions = new HubOptionsAPI(this.options)
 
     private Web3 = new ConnectionReadonlyAPI()
@@ -62,7 +60,7 @@ export class HubFungibleAPI extends HubFungibleAPI_Base<
                 [SourceType.GoPlus]: GoPlusAuthorization,
                 [SourceType.Rabby]: Rabby,
                 [SourceType.Approval]: this.Approval,
-                [SourceType.R2D2]: this.R2D2TokenList,
+                [SourceType.R2D2]: R2D2TokenList,
                 [SourceType.CF]: Cloudflare,
                 [SourceType.CoinGecko]: CoinGeckoPriceEVM,
             },
@@ -73,7 +71,7 @@ export class HubFungibleAPI extends HubFungibleAPI_Base<
                 ChainbaseFungibleToken,
                 Rabby,
                 GoPlusAuthorization,
-                this.R2D2TokenList,
+                R2D2TokenList,
                 Cloudflare,
                 CoinGeckoPriceEVM,
             ],

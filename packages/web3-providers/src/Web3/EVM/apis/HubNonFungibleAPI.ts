@@ -20,7 +20,7 @@ import { Gem } from '../../../Gem/index.js'
 import { GoPlusAuthorization } from '../../../GoPlusLabs/index.js'
 import { NFTScanNonFungibleTokenEVM } from '../../../NFTScan/index.js'
 import { OpenSea } from '../../../OpenSea/index.js'
-import { R2D2TokenListAPI } from '../../../R2D2/index.js'
+import { R2D2TokenList } from '../../../R2D2/index.js'
 import { Rabby } from '../../../Rabby/index.js'
 import { SimpleHashEVM } from '../../../SimpleHash/index.js'
 import { X2Y2 } from '../../../X2Y2/index.js'
@@ -38,8 +38,6 @@ export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<
     TransactionParameter
 > {
     private Approval_ = new ApprovalAPI()
-    private R2D2TokenList_ = new R2D2TokenListAPI()
-
     protected override HubOptions = new HubOptionsAPI(this.options)
 
     protected override getProviders(initial?: HubOptions) {
@@ -61,7 +59,7 @@ export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<
                 [SourceType.Gem]: Gem,
                 [SourceType.GoPlus]: GoPlusAuthorization,
                 [SourceType.Rabby]: Rabby,
-                [SourceType.R2D2]: this.R2D2TokenList_,
+                [SourceType.R2D2]: R2D2TokenList,
                 [SourceType.SimpleHash]: SimpleHashEVM,
             },
             options.chainId === ChainId.Mainnet
@@ -77,7 +75,7 @@ export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<
                       this.Approval_,
                       GoPlusAuthorization,
                       Rabby,
-                      this.R2D2TokenList_,
+                      R2D2TokenList,
                   ]
                 : [
                       SimpleHashEVM,
@@ -90,7 +88,7 @@ export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<
                       Gem,
                       GoPlusAuthorization,
                       Rabby,
-                      this.R2D2TokenList_,
+                      R2D2TokenList,
                   ],
             initial,
         )

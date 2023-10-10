@@ -28,12 +28,10 @@ import {
 import { DEBANK_CHAIN_TO_CHAIN_ID_MAP } from './constants.js'
 
 export function formatAssets(data: WalletTokenRecord[]): Array<FungibleAsset<ChainId, SchemaType>> {
-    const resolver = ChainResolver
-
     const resolveNativeAddress = memoize((chainId: ChainId) => {
         try {
             // chainId is beyond builtin chainIds
-            return resolver.nativeCurrency(chainId)?.address || ZERO_ADDRESS
+            return ChainResolver.nativeCurrency(chainId)?.address || ZERO_ADDRESS
         } catch {
             return ZERO_ADDRESS
         }

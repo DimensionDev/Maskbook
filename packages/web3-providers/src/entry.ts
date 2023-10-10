@@ -1,5 +1,4 @@
 import { NetworkPluginID } from '@masknet/shared-base'
-import { R2D2TokenListAPI } from './R2D2/index.js'
 import { SmartPayAccountAPI, SmartPayFunderAPI } from './SmartPay/index.js'
 import { DSearchAPI } from './DSearch/index.js'
 import { MulticallAPI } from './Multicall/index.js'
@@ -90,7 +89,7 @@ export { GoPlusLabs } from './GoPlusLabs/index.js'
 export { CoinGeckoTrending } from './CoinGecko/index.js'
 
 // R2D2
-export const R2D2TokenList = new R2D2TokenListAPI()
+export { R2D2TokenList } from './R2D2/index.js'
 
 // Name Service
 export { ENS } from './ENS/index.js'
