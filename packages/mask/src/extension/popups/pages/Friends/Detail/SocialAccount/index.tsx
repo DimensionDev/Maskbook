@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { type EnhanceableSite } from '@masknet/shared-base'
 
 interface SocialAccountProps {
-    avatar: string
+    avatar?: string
     userId: string
     site: EnhanceableSite
 }

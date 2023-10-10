@@ -5,7 +5,7 @@ import { memo, useCallback } from 'react'
 import { Box, Avatar, Typography, Link } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
-import { formatPersonaFingerprint } from '@masknet/shared-base'
+import { type ProfileIdentifier, formatPersonaFingerprint } from '@masknet/shared-base'
 import { useTheme } from '@mui/system'
 import { CopyButton, EmptyStatus } from '@masknet/shared'
 import { ConnectedAccounts } from './ConnectAccounts/index.js'
@@ -82,6 +82,7 @@ export interface FriendsDetailUIProps {
     isLocal?: boolean
     onDelete: () => void
     deleting?: boolean
+    localProfile?: ProfileIdentifier
 }
 
 export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetailUI({
@@ -92,6 +93,7 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
     isLocal,
     onDelete,
     deleting,
+    localProfile,
 }) {
     const { classes } = useStyles()
     const navigate = useNavigate()
@@ -144,7 +146,7 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
                 </Box>
             </Box>
             {profiles.length ? (
-                <ConnectedAccounts profiles={profiles} />
+                <ConnectedAccounts profiles={profiles} localProfile={localProfile} avatar={avatar} />
             ) : (
                 <div className={classes.emptyContainer}>
                     <EmptyStatus className={classes.empty}>

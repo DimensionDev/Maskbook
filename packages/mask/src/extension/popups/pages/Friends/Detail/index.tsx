@@ -13,7 +13,7 @@ export const FriendsDetail = memo(function FriendsDetail() {
     const location = useLocation()
     const { t } = useMaskSharedTrans()
     const { showSnackbar } = usePopupCustomSnackbar()
-    const { avatar, profiles, nextId, publicKey, isLocal } = location.state
+    const { avatar, profiles, nextId, publicKey, isLocal, localProfile } = location.state
     const navigate = useNavigate()
     const [deleted, setDeleted] = useState(false)
     const currentPersona = useCurrentPersona()
@@ -75,6 +75,7 @@ export const FriendsDetail = memo(function FriendsDetail() {
             isLocal={isLocal ? !deleted : false}
             onDelete={onDelete}
             deleting={isLoading}
+            localProfile={localProfile}
         />
     )
 })

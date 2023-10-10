@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography, useTheme, ButtonBase } from '@mui/material'
-import { PopupRoutes } from '@masknet/shared-base'
+import { PopupRoutes, type ProfileIdentifier } from '@masknet/shared-base'
 import { useNavigate } from 'react-router-dom'
 import { AccountRender } from '../../AccountRender/index.js'
 import type { Profile } from '../../common.js'
@@ -33,6 +33,7 @@ interface ConnectedAccountsProps {
     nextId?: string
     publicKey?: string
     isLocal?: boolean
+    localProfile?: ProfileIdentifier
 }
 
 export const ConnectedAccounts = memo<ConnectedAccountsProps>(function ({
@@ -41,6 +42,7 @@ export const ConnectedAccounts = memo<ConnectedAccountsProps>(function ({
     profiles,
     publicKey,
     isLocal,
+    localProfile,
 }) {
     const theme = useTheme()
     const { classes } = useStyles()
@@ -55,7 +57,13 @@ export const ConnectedAccounts = memo<ConnectedAccountsProps>(function ({
             className={classes.connectedAccounts}
             width="100%">
             {profiles?.slice(0, 2).map((profile, index) => {
-                return <AccountRender key={index} profile={profile} />
+                return (
+                    <AccountRender
+                        key={index}
+                        profile={profile}
+                        avatar={localProfile?.userId === (profile.name ?? profile.identity) ? avatar : ''}
+                    />
+                )
             })}
             {profiles && profiles.length > 2 ? (
                 <ButtonBase
@@ -68,6 +76,7 @@ export const ConnectedAccounts = memo<ConnectedAccountsProps>(function ({
                                 nextId,
                                 profiles,
                                 isLocal,
+                                localProfile,
                             },
                         })
                     }}>
