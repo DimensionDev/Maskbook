@@ -25,7 +25,7 @@ import type { PersonaAvatarData } from '../types.js'
 function usePersonaInformation(
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>,
 ) {
-    const { value: personas, retry } = useAsyncRetry(
+    const { value: personas = EMPTY_LIST, retry } = useAsyncRetry(
         async () => queryOwnedPersonaInformation?.(false),
         [queryOwnedPersonaInformation],
     )
