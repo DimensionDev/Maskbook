@@ -13,25 +13,18 @@ import { ProviderResolverAPI_Base } from '../../Base/apis/ProviderResolverAPI.js
 import { NetworkResolverAPI_Base } from '../../Base/apis/NetworkExplorerAPI.js'
 
 export class SolanaChainResolverAPI extends ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
-    constructor() {
-        super(() => CHAIN_DESCRIPTORS)
-    }
+    protected readonly descriptors = CHAIN_DESCRIPTORS
 }
 
 export class SolanaExplorerResolverAPI extends ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
-    constructor() {
-        super(() => CHAIN_DESCRIPTORS)
-    }
+    protected readonly descriptors = CHAIN_DESCRIPTORS
+    protected readonly initial = undefined
 }
 
 export class SolanaProviderResolverAPI extends ProviderResolverAPI_Base<ChainId, ProviderType> {
-    constructor() {
-        super(() => PROVIDER_DESCRIPTORS)
-    }
+    protected readonly descriptors = PROVIDER_DESCRIPTORS
 }
 
 export class SolanaNetworkResolverAPI extends NetworkResolverAPI_Base<ChainId, NetworkType> {
-    constructor() {
-        super(() => NETWORK_DESCRIPTORS)
-    }
+    protected readonly descriptors = NETWORK_DESCRIPTORS
 }

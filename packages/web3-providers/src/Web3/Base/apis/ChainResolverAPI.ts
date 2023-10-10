@@ -1,10 +1,9 @@
 import type { ChainDescriptor } from '@masknet/web3-shared-base'
 
-export class ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
-    constructor(private getDescriptors: () => Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>) {}
-
+export abstract class ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
+    protected abstract readonly descriptors: ReadonlyArray<ChainDescriptor<ChainId, SchemaType, NetworkType>>
     private getDescriptor(chainId: ChainId) {
-        return this.getDescriptors().find((x) => x.chainId === chainId)
+        return this.descriptors.find((x) => x.chainId === chainId)
     }
 
     private getDescriptorRequired(chainId: ChainId) {
@@ -17,7 +16,7 @@ export class ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
      * Guess chain id by name, it's not perfectly accurate
      */
     chainId = (name: string) =>
-        this.getDescriptors().find((x) =>
+        this.descriptors.find((x) =>
             [x.name, x.type as string, x.fullName, x.shortName]
                 .map((x) => x?.toLowerCase())
                 .filter(Boolean)

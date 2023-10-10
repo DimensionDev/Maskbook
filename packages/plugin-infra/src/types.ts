@@ -28,13 +28,7 @@ import type {
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type {
-    ChainDescriptor,
-    NetworkDescriptor,
-    ProviderDescriptor,
-    SearchResult,
-    Web3State,
-} from '@masknet/web3-shared-base'
+import type { SearchResult, Web3State } from '@masknet/web3-shared-base'
 import type { LinkedProfileDetails } from '@masknet/public-api'
 import type { ChainId, TransactionOptions } from '@masknet/web3-shared-evm'
 import type { CompositionType } from './entry-content-script.js'
@@ -302,17 +296,7 @@ export namespace Plugin.Shared {
         metadataKeys?: ReadonlySet<string>
         /** This plugin can recognize and enhance the post that matches the following matchers. */
         postContent?: ReadonlySet<RegExp | string>
-        web3?: Web3Contribution
     }
-    export interface Web3Contribution {
-        /** Introduced sub-network information. */
-        chains?: Array<ChainDescriptor<unknown, unknown, unknown>>
-        /** Introduced networks information. */
-        networks?: Array<NetworkDescriptor<unknown, unknown>>
-        /** Introduced wallet providers information. */
-        providers?: Array<ProviderDescriptor<unknown, unknown>>
-    }
-
     export interface Ability {}
 }
 

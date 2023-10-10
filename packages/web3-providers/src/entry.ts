@@ -103,6 +103,7 @@ import {
     SolanaNetworkResolverAPI,
 } from './Web3/Solana/apis/ResolverAPI.js'
 
+export { getRegisteredWeb3Chains, getRegisteredWeb3Networks, getRegisteredWeb3Providers } from './Manager/index.js'
 export const OpenSea = new OpenSeaAPI()
 export const Lido = new LidoAPI()
 export const LooksRare = new LooksRareAPI()

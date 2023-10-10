@@ -1,7 +1,7 @@
 import { ElementAnchor, NetworkTab, PluginVerifiedWalletStatusBar, RetryHint } from '@masknet/shared'
 import { Box, Button, Stack } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
-import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
+import { getRegisteredWeb3Networks } from '@masknet/web3-providers'
 import { useChainContext, useNetworkContext, useNonFungibleAssets, useWallet } from '@masknet/web3-hooks-base'
 import { uniqBy } from 'lodash-es'
 import { LoadingBase, makeStyles } from '@masknet/theme'
