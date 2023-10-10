@@ -1169,13 +1169,3 @@ export interface Web3State<
     TransactionWatcher?: TransactionWatcherState<ChainId, Transaction>
     Provider?: ProviderState<ChainId, ProviderType, NetworkType>
 }
-
-export interface NetworkIconClickBaitProps<ChainId, ProviderType, NetworkType> {
-    network: NetworkDescriptor<ChainId, NetworkType>
-    provider?: ProviderDescriptor<ChainId, ProviderType>
-    children?: ReactNode
-    onClick?: (
-        network: NetworkDescriptor<ChainId, NetworkType>,
-        provider?: ProviderDescriptor<ChainId, ProviderType>,
-    ) => void
-}
