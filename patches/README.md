@@ -25,7 +25,6 @@
 
 ## Other problems
 
-- emotion-js: SSR rendering does not work on browser. <https://github.com/emotion-js/emotion/issues/2691>
 - react-devtools-inline: <https://github.com/facebook/react/pull/25510> and <https://github.com/facebook/react/pull/25518>
 - web3: <https://github.com/web3/web3.js/pull/5274> introduce a bug that crashes
 - @chainsafe/as-sha256: currently we cannot load WebAssembly modules in the content script. compiled into JS by <https://github.com/WebAssembly/binaryen/tree/main>.

@@ -12,19 +12,12 @@ export enum DashboardRoutes {
     SignIn = '/sign-in',
     PrivacyPolicy = '/privacy-policy',
     Personas = '/personas',
-    Wallets = '/wallets',
-    WalletsTransfer = '/wallets/transfer',
-    WalletsSwap = '/wallets/swap',
-    WalletsRedPacket = '/wallets/red-packet',
-    WalletsSell = '/wallets/sell',
-    WalletsHistory = '/wallets/history',
     CreateMaskWallet = '/create-mask-wallet',
     CreateMaskWalletForm = '/create-mask-wallet/form',
     RecoveryMaskWallet = '/create-mask-wallet/recovery',
     CreateMaskWalletMnemonic = '/create-mask-wallet/mnemonic',
     AddDeriveWallet = '/create-mask-wallet/add-derive-wallet',
     SignUpMaskWalletOnboarding = '/create-mask-wallet/onboarding',
-    Settings = '/settings',
 }
 
 export enum PopupModalRoutes {

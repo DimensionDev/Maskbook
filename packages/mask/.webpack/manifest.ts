@@ -92,7 +92,7 @@ function editManifest(manifest: ManifestV2 | ManifestV3, flags: ModifyAcceptFlag
 
     if (manifest.manifest_version === 2) {
         if (String(computedFlags.sourceMapKind).includes('eval')) {
-            manifest.content_security_policy = `script-src 'self' 'unsafe-eval'; object-src 'self'; require-trusted-types-for 'script'; trusted-types default dompurify webpack mask ssr`
+            manifest.content_security_policy = `script-src 'self' 'unsafe-eval'; object-src 'self'; require-trusted-types-for 'script'; trusted-types default dompurify webpack mask`
         }
 
         if (flags.hmr) {

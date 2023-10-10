@@ -1,5 +1,3 @@
-// ! This file is used during SSR. DO NOT import new files that does not work in SSR
-
 import { createContext } from 'react'
 
 export interface PageTitleState {

@@ -36,6 +36,10 @@ const GlobalCss = (
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
+const PersonaContextIO = {
+    queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
+    queryPersonaAvatarLastUpdateTime: Services.Identity.getPersonaAvatarLastUpdateTime,
+}
 export default function DashboardRoot(props: React.PropsWithChildren<{}>) {
     useEffect(() => queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
 
@@ -62,7 +66,7 @@ export default function DashboardRoot(props: React.PropsWithChildren<{}>) {
                         <ThemeProvider theme={theme}>
                             <DialogStackingProvider>
                                 <UserContext.Provider>
-                                    <PersonaContext.Provider>
+                                    <PersonaContext.Provider initialState={PersonaContextIO}>
                                         <ErrorBoundary>
                                             <CssBaseline />
                                             <CustomSnackbarProvider>
