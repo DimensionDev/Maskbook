@@ -330,16 +330,19 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
             'linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },
     {
-        ID: `${PLUGIN_ID}_injected`,
+        ID: `${PLUGIN_ID}_browser`,
         providerAdaptorPluginID: PLUGIN_ID,
-        type: ProviderType.Injected,
+        type: ProviderType.Browser,
         name: 'Browser Wallet',
         icon: new URL('../assets/metamask.png', import.meta.url).href,
-        enableRequirements: {
-            supportedChainIds: ChainIdList,
-            supportedEnhanceableSites: EnhanceableSiteList,
-            supportedExtensionSites: ExtensionSiteList,
-        },
+        enableRequirements:
+            process.env.NODE_ENV === 'development'
+                ? {
+                      supportedChainIds: ChainIdList,
+                      supportedEnhanceableSites: EnhanceableSiteList,
+                      supportedExtensionSites: ExtensionSiteList,
+                  }
+                : undefined,
         homeLink: '',
         shortenLink: '',
         downloadLink: '',

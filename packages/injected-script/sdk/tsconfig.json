@@ -8,7 +8,7 @@
   "files": [
     "index.ts",
     "Base.ts",
-    "Injected.ts",
+    "Browser.ts",
     "Phantom.ts",
     "Solflare.ts",
     "Coin98.ts",
