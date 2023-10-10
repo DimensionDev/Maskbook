@@ -168,11 +168,6 @@ export const Flow = /*#__PURE__*/ __createIcon('Flow', [
         u: () => new URL('./brands/Flow.svg', import.meta.url),
     },
 ])
-export const Game = /*#__PURE__*/ __createIcon('Game', [
-    {
-        u: () => new URL('./brands/Game.svg', import.meta.url),
-    },
-])
 export const Gem = /*#__PURE__*/ __createIcon('Gem', [
     {
         u: () => new URL('./brands/Gem.svg', import.meta.url),

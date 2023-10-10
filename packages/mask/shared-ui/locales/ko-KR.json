@@ -655,8 +655,6 @@
     "plugin_snapshot_download_report": "다운로드 리포트",
     "plugin_pets_name": "Non-F 친구",
     "plugin_pets_description": "#NFT 무한한 가능성을 탐색합니다.",
-    "plugin_game_name": "GAME",
-    "plugin_game_description": "NFT로 게임합니다.",
     "wallet_verify_persona_sign": "페르소나 사인",
     "wallet_verify_has_bound": "이 월렛은 이미 {{currentPersona}} 연동되어 있습니다. 다른 월렛으로 변경하세요.",
     "wallet_verify_persona_name": "{{personaName}} 사인",

@@ -637,8 +637,6 @@
     "plugin_snapshot_download_report": "レポートをダウンロードする",
     "plugin_pets_name": "非F 友達",
     "plugin_pets_description": "#NFTの無限の可能性を発見してください。",
-    "plugin_game_name": "ゲーム",
-    "plugin_game_description": "NFTでゲームをプレイしましょう。",
     "wallet_verify_persona_sign": "ペルソナサイン",
     "wallet_verify_has_bound": "ウォレットは既に {{currentPersona}}にバインドされています。別のウォレットに切り替えてください。",
     "wallet_verify_persona_name": "{{- personaName}} のサイン",

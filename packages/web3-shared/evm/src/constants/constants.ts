@@ -16,7 +16,6 @@ import TokenAssetBaseURL from '@masknet/web3-constants/evm/token-asset-base-url.
 import ArtBlocks from '@masknet/web3-constants/evm/artblocks.json'
 import Aave from '@masknet/web3-constants/evm/aave.json'
 import Lido from '@masknet/web3-constants/evm/lido.json'
-import Game from '@masknet/web3-constants/evm/game.json'
 import Pet from '@masknet/web3-constants/evm/pet.json'
 import SmartPay from '@masknet/web3-constants/evm/smart-pay.json'
 import ENS from '@masknet/web3-constants/evm/ens.json'
@@ -141,11 +140,6 @@ export const getLidoConstant = transform(ChainId, Lido)
 export const getLidoConstants = transformAll(ChainId, Lido)
 export const useLidoConstant = transformHook(getLidoConstants)
 export const useLidoConstants = transformAllHook(getLidoConstants)
-
-export const getGameConstant = transform(ChainId, Game)
-export const getGameConstants = transformAll(ChainId, Game)
-export const useGameConstant = transformHook(getGameConstants)
-export const useGameConstants = transformAllHook(getGameConstants)
 
 export const getPetConstant = transform(ChainId, Pet)
 export const getPetConstants = transformAll(ChainId, Pet)

@@ -657,8 +657,6 @@
     "plugin_snapshot_download_report": "下载报告",
     "plugin_pets_name": "小宠物",
     "plugin_pets_description": "发现 #NFT 的无限可能性。",
-    "plugin_game_name": "游戏",
-    "plugin_game_description": "用 NFT 玩游戏。",
     "wallet_verify_persona_sign": "身份签名",
     "wallet_verify_has_bound": "此钱包已绑定。请切换钱包。",
     "wallet_verify_persona_name": "{{personaName}} 签名",

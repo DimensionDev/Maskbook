@@ -657,8 +657,6 @@
     "plugin_snapshot_download_report": "Download report",
     "plugin_pets_name": "Non-F Friends",
     "plugin_pets_description": "Discover the infinite possibilities of #NFTs.",
-    "plugin_game_name": "GAME",
-    "plugin_game_description": "Play game with your NFT.",
     "wallet_verify_persona_sign": "Persona Sign",
     "wallet_verify_has_bound": "The wallet has already been bound to {{currentPersona}}. Please switch to another wallet.",
     "wallet_verify_persona_name": "{{- personaName}} Sign",

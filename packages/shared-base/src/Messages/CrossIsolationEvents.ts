@@ -19,7 +19,6 @@ import type {
     FollowLensDialogEvent,
     RequestsUpdatedEvent,
     WalletLockStatusUpdatedEvent,
-    GameDialogEvent,
     PopupWalletConnectEvent,
     SwitchLogoDialogEvent,
     PasswordStatusUpdatedEvent,
@@ -67,7 +66,6 @@ export interface CrossIsolationEvents {
     walletLockStatusUpdated: WalletLockStatusUpdatedEvent
     passwordStatusUpdated: PasswordStatusUpdatedEvent
     walletLockTimeUpdated: void
-    gameDialogUpdated: GameDialogEvent
     switchLogoDialogUpdated: SwitchLogoDialogEvent
 }
 
