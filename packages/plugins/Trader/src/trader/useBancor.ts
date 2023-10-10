@@ -18,7 +18,7 @@ export function useBancor(
     isNativeTokenWrapper?: boolean,
 ) {
     const { chainId, account } = useChainContext()
-    const network = useNetwork()
+    const network = useNetwork(undefined, chainId)
     const slippageSetting = useSlippageTolerance()
 
     const slippage = useMemo(() => {

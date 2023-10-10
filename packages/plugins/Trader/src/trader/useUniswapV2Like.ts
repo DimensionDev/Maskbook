@@ -19,7 +19,7 @@ export function useUniswapV2Like(
     isNativeTokenWrapper?: boolean,
 ) {
     const { chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const network = useNetwork()
+    const network = useNetwork(undefined, chainId)
     const slippageSetting = useSlippageTolerance()
 
     const slippage = useMemo(() => {
