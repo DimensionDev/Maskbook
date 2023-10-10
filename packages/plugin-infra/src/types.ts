@@ -34,7 +34,6 @@ import type {
     ProviderDescriptor,
     SearchResult,
     Web3State,
-    Web3UI,
 } from '@masknet/web3-shared-base'
 import type { LinkedProfileDetails } from '@masknet/public-api'
 import type { ChainId, TransactionOptions } from '@masknet/web3-shared-evm'
@@ -949,8 +948,6 @@ export namespace Plugin.Worker {
 /** This part defines the plugin part that does not context aware. */
 export namespace Plugin.GeneralUI {
     export interface Definition {
-        /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
-        Web3UI?: Web3UI<unknown, unknown, unknown>
         /** This UI will be injected into the global scope of the target page. */
         GlobalInjection?: InjectUI<{}>
         /** This is the context of the currently chosen network. */

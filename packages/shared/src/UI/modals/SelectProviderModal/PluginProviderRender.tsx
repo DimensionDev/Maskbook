@@ -16,7 +16,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
 import { Web3All, OthersAll } from '@masknet/web3-providers'
 import { makeStyles, ShadowRootTooltip, usePortalShadowRoot } from '@masknet/theme'
-import { type NetworkDescriptor, type ProviderIconClickBaitProps } from '@masknet/web3-shared-base'
+import { type NetworkDescriptor } from '@masknet/web3-shared-base'
 import { ChainId, NETWORK_DESCRIPTORS as EVM_NETWORK_DESCRIPTORS, ProviderType } from '@masknet/web3-shared-evm'
 import {
     NETWORK_DESCRIPTORS as SOL_NETWORK_DESCRIPTORS,
@@ -144,16 +144,12 @@ export interface PluginProviderRenderProps {
         isReady?: boolean,
         downloadLink?: string,
     ) => void
-    ProviderIconClickBait?: React.ComponentType<
-        ProviderIconClickBaitProps<Web3Helper.ChainIdAll, Web3Helper.ProviderTypeAll, Web3Helper.NetworkTypeAll>
-    >
     requiredSupportPluginID?: NetworkPluginID
     requiredSupportChainIds?: Web3Helper.ChainIdAll[]
 }
 
 export const PluginProviderRender = memo(function PluginProviderRender({
     providers,
-    ProviderIconClickBait,
     onProviderIconClicked,
     requiredSupportChainIds,
     requiredSupportPluginID,
@@ -265,23 +261,12 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                                         onClick={() => {
                                             handleClick(provider)
                                         }}>
-                                        {ProviderIconClickBait ? (
-                                            <ProviderIconClickBait key={provider.ID} provider={provider}>
-                                                <ProviderIcon
-                                                    className={classes.providerIcon}
-                                                    icon={provider.icon}
-                                                    name={provider.name}
-                                                    iconFilterColor={provider.iconFilterColor}
-                                                />
-                                            </ProviderIconClickBait>
-                                        ) : (
-                                            <ProviderIcon
-                                                className={classes.providerIcon}
-                                                icon={provider.icon}
-                                                name={provider.name}
-                                                iconFilterColor={provider.iconFilterColor}
-                                            />
-                                        )}
+                                        <ProviderIcon
+                                            className={classes.providerIcon}
+                                            icon={provider.icon}
+                                            name={provider.name}
+                                            iconFilterColor={provider.iconFilterColor}
+                                        />
                                     </ListItem>
                                 </ShadowRootTooltip>
                             ))}
