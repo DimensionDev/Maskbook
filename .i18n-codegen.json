@@ -302,19 +302,6 @@
             }
         },
         {
-            "input": "./packages/plugins/Game/src/locales/en-US.json",
-            "output": "./packages/plugins/Game/src/locales/i18n_generated",
-            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
-            "generator": {
-                "type": "i18next/react-hooks",
-                "hooks": "useGameTrans",
-                "namespace": "com.maskbook.game",
-                "trans": "GameTrans",
-                "emitTS": true,
-                "shouldUnescape": true
-            }
-        },
-        {
             "input": "./packages/plugins/Pets/src/locales/en-US.json",
             "output": "./packages/plugins/Pets/src/locales/i18n_generated",
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },

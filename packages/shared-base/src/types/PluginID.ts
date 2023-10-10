@@ -32,7 +32,6 @@ export enum PluginID {
     RSS3 = 'bio.rss3',
     RedPacket = 'com.maskbook.red_packet',
     Pets = 'com.maskbook.pets',
-    Game = 'com.maskbook.game',
     Snapshot = 'org.snapshot',
     Savings = 'com.savings',
     Wallet = 'com.maskbook.wallet',

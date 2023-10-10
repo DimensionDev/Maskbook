@@ -6,7 +6,6 @@ import { PluginPetMessages } from '../messages.js'
 import { usePetsTrans } from '../locales/index.js'
 import { NFF_TWITTER } from '../constants.js'
 import { type ShowMeta, MenuType } from '../types.js'
-import { CrossIsolationMessages } from '@masknet/shared-base'
 
 type Props = {
     isShow: boolean
@@ -71,7 +70,6 @@ function RightMenu(props: Props) {
     const [isTop, setIsTop] = useState(false)
 
     const { openDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated)
-    const { setDialog: openGameDialog } = useRemoteControlledDialog(CrossIsolationMessages.events.gameDialogUpdated)
 
     useEffect(() => {
         if (props.isShow) {
@@ -91,16 +89,6 @@ function RightMenu(props: Props) {
         switch (type) {
             case MenuType.Setting:
                 openDialog()
-                break
-            case MenuType.Game:
-                openGameDialog({
-                    open: true,
-                    tokenProps: {
-                        tokenId: props.showMeta?.tokenId,
-                        contract: props.showMeta?.contract,
-                        chainId: props.showMeta?.chainId,
-                    },
-                })
                 break
             case MenuType.About:
                 window.open(NFF_TWITTER)

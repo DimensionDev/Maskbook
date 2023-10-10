@@ -14,7 +14,6 @@
     { "path": "./External/" },
     { "path": "./FileService/" },
     { "path": "./Flow/" },
-    { "path": "./Game/" },
     { "path": "./Gitcoin/" },
     { "path": "./GoPlusSecurity/" },
     { "path": "./Handle/" },

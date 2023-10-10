@@ -657,8 +657,6 @@
     "plugin_snapshot_download_report": "crwdns5391:0crwdne5391:0",
     "plugin_pets_name": "crwdns16260:0crwdne16260:0",
     "plugin_pets_description": "crwdns16262:0crwdne16262:0",
-    "plugin_game_name": "crwdns17990:0crwdne17990:0",
-    "plugin_game_description": "crwdns17992:0crwdne17992:0",
     "wallet_verify_persona_sign": "crwdns16310:0crwdne16310:0",
     "wallet_verify_has_bound": "crwdns16312:0{{currentPersona}}crwdne16312:0",
     "wallet_verify_persona_name": "crwdns16314:0{{- personaName}}crwdne16314:0",

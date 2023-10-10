@@ -30,7 +30,6 @@ export function farcaster_url() { return new URL("./brands/Farcaster.svg", impor
 export function firefly_dark_url() { return new URL("./brands/Firefly.dark.svg", import.meta.url) }
 export function firefly_light_url() { return new URL("./brands/Firefly.light.svg", import.meta.url) }
 export function flow_url() { return new URL("./brands/Flow.svg", import.meta.url) }
-export function game_url() { return new URL("./brands/Game.svg", import.meta.url) }
 export function gem_url() { return new URL("./brands/Gem.svg", import.meta.url) }
 export function git_hub_url() { return new URL("./brands/GitHub.svg", import.meta.url) }
 export function git_hub_gray_url() { return new URL("./brands/GitHubGray.svg", import.meta.url) }
