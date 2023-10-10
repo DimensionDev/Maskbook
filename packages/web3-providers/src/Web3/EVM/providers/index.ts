@@ -1,5 +1,6 @@
 import { type ChainId, ProviderType, type Web3, type Web3Provider } from '@masknet/web3-shared-evm'
 import { NoneProvider } from './None.js'
+import { InjectedProvider } from './Injected.js'
 import { MetaMaskProvider } from './MetaMask.js'
 import WalletConnectProvider from './WalletConnect.js'
 import WalletConnectV2Provider from './WalletConnectV2.js'
@@ -18,6 +19,7 @@ export interface EVM_Provider extends WalletAPI.Provider<ChainId, ProviderType, 
 export const Providers = {
     [ProviderType.None]: new NoneProvider(),
     [ProviderType.MaskWallet]: new MaskWalletProvider(),
+    [ProviderType.Injected]: new InjectedProvider(),
     [ProviderType.MetaMask]: new MetaMaskProvider(),
     [ProviderType.WalletConnect]: new WalletConnectProvider(),
     [ProviderType.WalletConnectV2]: new WalletConnectV2Provider(),

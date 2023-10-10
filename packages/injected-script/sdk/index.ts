@@ -8,6 +8,7 @@ import { MetaMaskProvider } from './MetaMask.js'
 import { sendEvent, rejectPromise, resolvePromise } from './utils.js'
 import { OperaProvider } from './Opera.js'
 import { CloverProvider } from './Clover.js'
+import { BrowserProvider } from './Injected.js'
 
 export type { EthereumProvider, InternalEvents } from '../shared/index.js'
 export { InjectedProvider } from './Base.js'
@@ -17,6 +18,7 @@ export const injectedCoin98SolanaProvider = new Coin98Provider(Coin98ProviderTyp
 export const injectedPhantomProvider = new PhantomProvider()
 export const injectedSolflareProvider = new SolflareProvider()
 export const injectedMetaMaskProvider = new MetaMaskProvider()
+export const injectedBrowserProvider = new BrowserProvider()
 export const injectedCoinbaseProvider = new CoinbaseProvider()
 export const injectedOKXProvider = new OKXProvider()
 export const injectedOperaProvider = new OperaProvider()
@@ -28,6 +30,7 @@ const Providers = [
     injectedOKXProvider,
     injectedOperaProvider,
     injectedCloverProvider,
+    injectedBrowserProvider,
     injectedMetaMaskProvider,
     injectedCoin98EVMProvider,
     injectedCoin98SolanaProvider,
