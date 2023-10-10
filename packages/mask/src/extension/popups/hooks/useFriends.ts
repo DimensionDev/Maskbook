@@ -5,6 +5,7 @@ import { EMPTY_LIST, type ECKeyIdentifier, type ProfileIdentifier } from '@maskn
 import Services from '#services'
 import { useCurrentPersona } from '../../../components/DataSource/useCurrentPersona.js'
 import { type RelationRecord } from '../../../../background/database/persona/type.js'
+import { first } from 'lodash-es'
 
 export interface Friend {
     persona: ECKeyIdentifier
@@ -56,11 +57,12 @@ export function useFriendsPaged() {
                 if (friends.length === 10) break
                 const x = records[i]
                 if (isProfileIdentifier(x.profile)) {
-                    const profile = await Services.Identity.queryProfileInformation(x.profile)
+                    const profile = first(await Services.Identity.queryProfileInformation(x.profile))
                     if (profile?.linkedPersona && profile.linkedPersona !== currentPersona?.identifier)
                         friends.push({
                             persona: profile.linkedPersona,
                             profile: x.profile,
+                            avatar: profile.avatar,
                         })
                 } else {
                     if (x.profile !== currentPersona?.identifier) friends.push({ persona: x.profile })
@@ -98,7 +100,7 @@ export function useFriendFromList(searchedRecords: RelationRecord[]) {
             await Promise.all(
                 searchedRecords.map<Promise<Friend | undefined>>(async (x) => {
                     if (!isProfileIdentifier(x.profile)) return
-                    const profile = await Services.Identity.queryProfileInformation(x.profile)
+                    const profile = first(await Services.Identity.queryProfileInformation(x.profile))
                     if (
                         profile?.linkedPersona !== undefined &&
                         profile?.linkedPersona.publicKeyAsHex !== currentPersona?.identifier.publicKeyAsHex
@@ -106,6 +108,7 @@ export function useFriendFromList(searchedRecords: RelationRecord[]) {
                         return {
                             persona: profile.linkedPersona,
                             profile: x.profile,
+                            avatar: profile.avatar,
                         }
                     return
                 }),

@@ -18,8 +18,9 @@ export async function queryProfilesInformation(identifiers: ProfileIdentifier[])
     return toProfileInformation(profiles).mustNotAwaitThisWithInATransaction
 }
 
-export async function queryProfileInformation(identifier: ProfileIdentifier): Promise<ProfileRecord | null> {
-    return await queryProfileDB(identifier)
+export async function queryProfileInformation(identifier: ProfileIdentifier): Promise<ProfileInformation[] | null> {
+    const profile = await queryProfileDB(identifier)
+    return toProfileInformation(profile ? [profile] : []).mustNotAwaitThisWithInATransaction
 }
 
 /** @deprecated */

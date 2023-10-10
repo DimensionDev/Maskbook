@@ -10,22 +10,23 @@ import type { Profile } from '../common.js'
 interface AccountRenderProps {
     profile: Profile
     detail?: boolean
+    avatar?: string
 }
 
-export const AccountRender = memo<AccountRenderProps>(function AccountRender({ profile, detail }) {
+export const AccountRender = memo<AccountRenderProps>(function AccountRender({ profile, detail, avatar }) {
     switch (profile.platform) {
         case NextIDPlatform.Twitter:
         case EnhanceableSite.Twitter:
             return detail ? (
                 <DetailSocialAccount
-                    avatar=""
-                    userId={profile.name ? profile.name : profile.identity}
+                    avatar={avatar}
+                    userId={profile.name ?? profile.identity}
                     site={EnhanceableSite.Twitter}
                 />
             ) : (
                 <SocialAccount
-                    avatar=""
-                    userId={profile.name ? profile.name : profile.identity}
+                    avatar={avatar}
+                    userId={profile.name ?? profile.identity}
                     site={EnhanceableSite.Twitter}
                 />
             )
@@ -57,28 +58,28 @@ export const AccountRender = memo<AccountRenderProps>(function AccountRender({ p
         case EnhanceableSite.Facebook:
             return detail ? (
                 <DetailSocialAccount
-                    avatar=""
-                    userId={profile.name ? profile.name : profile.identity}
+                    avatar={avatar}
+                    userId={profile.name ?? profile.identity}
                     site={EnhanceableSite.Facebook}
                 />
             ) : (
                 <SocialAccount
-                    avatar=""
-                    userId={profile.name ? profile.name : profile.identity}
+                    avatar={avatar}
+                    userId={profile.name ?? profile.identity}
                     site={EnhanceableSite.Facebook}
                 />
             )
         case EnhanceableSite.Instagram:
             return detail ? (
                 <DetailSocialAccount
-                    avatar=""
-                    userId={profile.name ? profile.name : profile.identity}
+                    avatar={avatar}
+                    userId={profile.name ?? profile.identity}
                     site={EnhanceableSite.Instagram}
                 />
             ) : (
                 <SocialAccount
-                    avatar=""
-                    userId={profile.name ? profile.name : profile.identity}
+                    avatar={avatar}
+                    userId={profile.name ?? profile.identity}
                     site={EnhanceableSite.Instagram}
                 />
             )

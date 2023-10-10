@@ -55,6 +55,7 @@ export const SearchList = memo<SearchListProps>(function SearchList({ searchResu
                             publicKey={friend.linkedPersona?.rawPublicKey}
                             isLocal={friend.isLocal}
                             refetch={refetch}
+                            avatar={friend.avatar}
                         />
                     )
                 })}

@@ -127,7 +127,6 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
             if (!friend) return
             await queryClient.cancelQueries(['relation-records', rawPublicKey])
             await queryClient.cancelQueries(['friends', rawPublicKey])
-            const old = queryClient.getQueryData(['friends', rawPublicKey])
             queryClient.setQueryData(
                 ['friends', rawPublicKey],
                 (
@@ -201,8 +200,9 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                                     avatar,
                                     publicKey,
                                     nextId,
-                                    profiles: proofProfiles ? proofProfiles : profiles,
+                                    profiles: proofProfiles ?? profiles,
                                     isLocal,
+                                    localProfile: profile,
                                 },
                             })
                         }
@@ -225,7 +225,8 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                 nextId={nextId}
                 publicKey={publicKey}
                 isLocal={isLocal}
-                profiles={proofProfiles ? proofProfiles : profiles}
+                profiles={proofProfiles ?? profiles}
+                localProfile={profile}
             />
         </Box>
     )

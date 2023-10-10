@@ -28,9 +28,6 @@ const useStyles = makeStyles()((theme) => ({
         outline: 'none',
         cursor: 'pointer',
     },
-    adornedStart: {
-        padding: '0',
-    },
 }))
 
 interface SearchProps {
@@ -53,7 +50,6 @@ export const Search = memo<SearchProps>(function Search({ setSearchValue }) {
             className={classes.inputRoot}
             classes={{
                 focused: classes.inputFocused,
-                adornedStart: classes.adornedStart,
                 input: classes.input,
             }}
             inputProps={{ className: classes.input }}

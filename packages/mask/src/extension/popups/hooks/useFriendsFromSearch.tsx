@@ -6,10 +6,11 @@ import type { Friend } from './useFriends.js'
 import { profilesFilter } from './useFriendProfiles.js'
 import { PlatformSort, type FriendNetwork, type Profile } from '../pages/Friends/common.js'
 
-export type NextIDPersonaBindingsWithIdentifier = Omit<NextIDPersonaBindings, 'proofs'> & { proofs: Profile[] } & {
+export type NextIDPersonaBindingsWithIdentifier = Omit<NextIDPersonaBindings, 'proofs'> & {
+    proofs: Profile[]
     linkedPersona: ECKeyIdentifier
-} & {
     isLocal?: boolean
+    avatar?: string
 }
 
 export function useFriendsFromSearch(
@@ -41,6 +42,7 @@ export function useFriendsFromSearch(
                         activated_at: '',
                         persona: item.persona.publicKeyAsHex,
                         isLocal: true,
+                        avatar: item.avatar,
                     }
                 }) ?? EMPTY_LIST
         const profiles: NextIDPersonaBindingsWithIdentifier[] = searchResult
