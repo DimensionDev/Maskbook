@@ -6,7 +6,6 @@ import { PluginPetMessages } from '../messages.js'
 import { usePetsTrans } from '../locales/index.js'
 import { NFF_TWITTER } from '../constants.js'
 import { type ShowMeta, MenuType } from '../types.js'
-import { CrossIsolationMessages } from '@masknet/shared-base'
 
 type Props = {
     isShow: boolean
