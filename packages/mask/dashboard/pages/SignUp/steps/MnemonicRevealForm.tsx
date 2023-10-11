@@ -1,16 +1,14 @@
 import { memo, useCallback, useEffect, useState } from 'react'
+import { useAsync } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, Stack, Box, IconButton, FormControlLabel, Checkbox } from '@mui/material'
+import { styled } from '@mui/material/styles'
 import { Refresh as RefreshIcon, Print as PrintIcon } from '@mui/icons-material'
+import { Icons } from '@masknet/icons'
 import { MaskColorVar, useCustomSnackbar } from '@masknet/theme'
 import { DashboardRoutes, type ECKeyIdentifier } from '@masknet/shared-base'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader.js'
-import {
-    Body,
-    ColumnContentLayout,
-    PersonaLogoBox,
-    SignUpAccountLogo,
-} from '../../../components/RegisterFrame/ColumnContentLayout.js'
+import { PersonaLogoBox, SignUpAccountLogo } from '../../../components/RegisterFrame/ColumnContentLayout.js'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { SignUpRoutePath } from '../routePath.js'
@@ -19,8 +17,24 @@ import { useMnemonicWordsPuzzle } from '../../../hooks/useMnemonicWordsPuzzle.js
 import { useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
 import Services from '#services'
 import { PreviewDialog } from './PreviewDialog.js'
-import { Icons } from '@masknet/icons'
-import { useAsync } from 'react-use'
+
+const ColumnContentLayout = styled('div')`
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+`
+
+const Body = styled('main')(({ theme }) => ({
+    flex: '1 5',
+    width: '78%',
+    [theme.breakpoints.down('md')]: {
+        width: '95%',
+    },
+}))
 
 export const MnemonicRevealForm = memo(() => {
     const createPersona = useCreatePersonaV2()

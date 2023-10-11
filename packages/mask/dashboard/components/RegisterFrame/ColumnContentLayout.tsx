@@ -4,37 +4,11 @@ import { Box, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { useDashboardI18N } from '../../locales/index.js'
 
-export const ColumnContentLayout = styled('div')`
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    width: 100%;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-`
-
-export const Body = styled('main')(({ theme }) => ({
-    flex: '1 5',
-    width: '78%',
-    [theme.breakpoints.down('md')]: {
-        width: '95%',
-    },
-}))
-
-export const Footer = styled('footer')(({ theme }) => ({
-    flex: 1,
-    width: '78%',
-    [theme.breakpoints.down('md')]: {
-        width: '95%',
-    },
-}))
-
-export const LogoBoxStyled = styled(Box)(({ theme }) => ({
+const LogoBoxStyled = styled(Box)(({ theme }) => ({
     marginBottom: theme.spacing(10),
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'qcenter',
     [theme.breakpoints.down('md')]: {
         marginBottom: theme.spacing(2),
     },

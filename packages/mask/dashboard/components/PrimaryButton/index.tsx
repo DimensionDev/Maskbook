@@ -1,6 +1,6 @@
+import { memo } from 'react'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { buttonClasses, type ButtonProps } from '@mui/material/Button'
-import { memo } from 'react'
 
 export interface ActionButtonProps extends ButtonProps {
     width?: number | string
