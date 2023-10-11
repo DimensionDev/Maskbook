@@ -1,1 +1,9 @@
-{}
+{
+    "plugin_external_unknown_plugin": "알 수 없는 새 마스크 플러그인을 찾았습니다. 로드하시겠습니까?",
+    "plugin_external_loader_search_holder": "외부 플러그인 검색",
+    "plugin_external_loader_search_button": "플러그인 검색",
+    "plugin_external_loader_search_sub_title": "모든 외부 플러그인은 URL에 호스팅되어야 합니다.",
+    "plugin_external_loader_alert": "이것은 변화할 수 있습니다. 오피셜 제품을 여기에서 개발하지 마세요.",
+    "plugin_external_loader_example_github": "오피셜 플러그인은 <terms>GitHub</terms>에서 찾을 수 있습니다.",
+    "plugin_external_loader_intro": "Mask 외부 플러그인은 누구나 외부 Mask 플러그인을 개발할 수 있는 Mask Network의 초기 단계 기능입니다"
+}
