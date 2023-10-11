@@ -3,11 +3,10 @@ import { uniqBy } from 'lodash-es'
 import { type DAOResult, SearchResultType } from '@masknet/web3-shared-base'
 import { DSEARCH_BASE_URL } from '../../DSearch/constants.js'
 import { fetchFromDSearch } from '../../DSearch/helpers.js'
-import type { SnapshotBaseAPI } from '../../entry-types.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
-class SnapshotSearchAPI implements SnapshotBaseAPI.DataSourceProvider {
-    async get(): Promise<Array<DAOResult<ChainId.Mainnet>>> {
+export class SnapshotSearch {
+    static async get(): Promise<Array<DAOResult<ChainId.Mainnet>>> {
         const results = await fetchFromDSearch<Array<DAOResult<ChainId.Mainnet>>>(
             urlcat(DSEARCH_BASE_URL, 'dao/spaces.json'),
             {
@@ -37,4 +36,3 @@ class SnapshotSearchAPI implements SnapshotBaseAPI.DataSourceProvider {
         }))
     }
 }
-export const SnapshotSearch = new SnapshotSearchAPI()

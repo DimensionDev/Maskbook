@@ -38,8 +38,8 @@ type NFTRedpacketRecord = {
     id: string
 }
 
-class TheGraphRedPacketAPI {
-    async getHistories(chainId: ChainId, senderAddress: string, contractAddress: string) {
+export class TheGraphRedPacket {
+    static async getHistories(chainId: ChainId, senderAddress: string, contractAddress: string) {
         if (!senderAddress || !contractAddress) return
 
         const response = await fetchJSON<{
@@ -101,7 +101,7 @@ class TheGraphRedPacketAPI {
         )
     }
 
-    async getNFTHistories(chainId: ChainId, senderAddress: string, contractAddress: string) {
+    static async getNFTHistories(chainId: ChainId, senderAddress: string, contractAddress: string) {
         if (!senderAddress || !contractAddress) return
 
         const response = await fetchJSON<{
@@ -163,4 +163,3 @@ class TheGraphRedPacketAPI {
         )
     }
 }
-export const TheGraphRedPacket = new TheGraphRedPacketAPI()

@@ -24,13 +24,13 @@ function formatPatchData(pluginID: string, data: unknown) {
     }
 }
 
-class NextIDStorageAPI {
+export class NextIDStorageProvider {
     /**
      * Get current KV of a persona
      * @param personaPublicKey
      *
      */
-    async getByIdentity<T>(
+    static async getByIdentity<T>(
         personaPublicKey: string,
         platform: NextIDPlatform,
         identity: string,
@@ -57,7 +57,7 @@ class NextIDStorageAPI {
         return Ok(proofs[0].content[pluginID])
     }
 
-    async getAllByIdentity<T>(
+    static async getAllByIdentity<T>(
         platform: NextIDPlatform,
         identity: string,
         pluginID: string,
@@ -76,7 +76,7 @@ class NextIDStorageAPI {
         const result = compact(response.values.map((x) => x.content[pluginID]))
         return Ok(result)
     }
-    async get<T>(personaPublicKey: string): Promise<T> {
+    static async get<T>(personaPublicKey: string): Promise<T> {
         return fetchCachedJSON<T>(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
     }
     /**
@@ -89,7 +89,7 @@ class NextIDStorageAPI {
      *
      * We choose [RFC 7396](https://www.rfc-editor.org/rfc/rfc7396) standard for KV modifying.
      */
-    async getPayload(
+    static async getPayload(
         personaPublicKey: string,
         platform: NextIDPlatform,
         identity: string,
@@ -130,7 +130,7 @@ class NextIDStorageAPI {
      *
      * We choose [RFC 7396](https://www.rfc-editor.org/rfc/rfc7396) standard for KV modifying.
      */
-    async set<T>(
+    static async set<T>(
         uuid: string,
         personaPublicKey: string,
         signature: string,
@@ -162,4 +162,3 @@ class NextIDStorageAPI {
         return result ? Ok(result) : Err(null)
     }
 }
-export const NextIDStorageProvider = new NextIDStorageAPI()

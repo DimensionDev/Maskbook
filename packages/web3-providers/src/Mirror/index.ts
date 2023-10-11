@@ -59,8 +59,8 @@ async function fetchFromMirror<T>(body: requestBody) {
     return data
 }
 
-class MirrorAPI {
-    async getPostPublisher(digest: string): Promise<Publisher | null> {
+export class Mirror {
+    static async getPostPublisher(digest: string): Promise<Publisher | null> {
         const script = document.getElementById('__NEXT_DATA__')?.innerHTML
         const INIT_DATA = JSON.parse(script ?? '{}')
 
@@ -102,7 +102,7 @@ class MirrorAPI {
             }
         }
     }
-    async getWriter(id: string) {
+    static async getWriter(id: string) {
         if (!id) return null
 
         const writer = await fetchFromMirror<{
@@ -125,7 +125,7 @@ class MirrorAPI {
         return writer?.projectFeed || null
     }
 
-    async getPost(digest: string) {
+    static async getPost(digest: string) {
         if (!digest) return null
 
         const response = await fetchFromMirror<{
@@ -224,7 +224,7 @@ class MirrorAPI {
 
     // TODO: this user get from local, should as fallback when get from mirror api failed.
     // Should refactor it when use this method in the business case.
-    async getUser(): Promise<Writer | null> {
+    static async getUser(): Promise<Writer | null> {
         const script = document.getElementById('__NEXT_DATA__')?.innerHTML
         if (!script) return null
         const INIT_DATA = JSON.parse(script)
@@ -233,4 +233,3 @@ class MirrorAPI {
         return INIT_DATA.props?.pageProps?.project as Writer
     }
 }
-export const Mirror = new MirrorAPI()

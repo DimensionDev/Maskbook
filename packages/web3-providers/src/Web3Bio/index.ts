@@ -4,12 +4,12 @@ import { fetchCachedJSON } from '../helpers/fetchJSON.js'
 import { WEB3_BIO_ROOT_URL } from './constants.js'
 import type { Web3BioProfile } from './types.js'
 
-class Web3BioAPI {
-    fetchFromWeb3Bio<T>(request: Request | RequestInfo, init?: RequestInit) {
+export class Web3Bio {
+    static fetchFromWeb3Bio<T>(request: Request | RequestInfo, init?: RequestInit) {
         return fetchCachedJSON<T>(request, init)
     }
 
-    async queryProfilesByAddress(address: string) {
+    static async queryProfilesByAddress(address: string) {
         const { links = EMPTY_LIST } = await this.fetchFromWeb3Bio<Web3BioProfile>(
             urlcat(WEB3_BIO_ROOT_URL, '/ens/:address', { address }),
         )
@@ -26,4 +26,3 @@ class Web3BioAPI {
         return BindingProofs
     }
 }
-export const Web3Bio = new Web3BioAPI()

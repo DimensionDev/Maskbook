@@ -144,8 +144,8 @@ class GoPlusAuthorizationAPI implements AuthorizationAPI.Provider<ChainId> {
     }
 }
 
-class GoPlusLabsAPI {
-    async getTokenSecurity(chainId: ChainId, addresses: string[]) {
+export class GoPlusLabs {
+    static async getTokenSecurity(chainId: ChainId, addresses: string[]) {
         const response = await fetchJSON<{
             code: 0 | 1
             message: 'OK' | string
@@ -164,7 +164,10 @@ class GoPlusLabsAPI {
         return createTokenSecurity(chainId, response.result)
     }
 
-    async getAddressSecurity(chainId: ChainId, address: string): Promise<SecurityAPI.AddressSecurity | undefined> {
+    static async getAddressSecurity(
+        chainId: ChainId,
+        address: string,
+    ): Promise<SecurityAPI.AddressSecurity | undefined> {
         if (!isValidChainId(chainId)) return
         const response = await fetchJSON<{
             code: 0 | 1
@@ -181,7 +184,7 @@ class GoPlusLabsAPI {
         return response.result
     }
 
-    async getSupportedChain(): Promise<Array<SecurityAPI.SupportedChain<ChainId>>> {
+    static async getSupportedChain(): Promise<Array<SecurityAPI.SupportedChain<ChainId>>> {
         const { code, result } = await fetchJSON<{
             code: 0 | 1
             message: 'OK' | string
@@ -192,7 +195,6 @@ class GoPlusLabsAPI {
         return result.map((x) => ({ chainId: parseInt(x.id) ?? ChainId.Mainnet, name: x.name }))
     }
 }
-export const GoPlusLabs = new GoPlusLabsAPI()
 export const GoPlusAuthorization = new GoPlusAuthorizationAPI()
 
 export function createTokenSecurity(

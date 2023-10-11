@@ -3,8 +3,8 @@ import { signTransaction, type Transaction } from '@masknet/web3-shared-evm'
 import { SignType, toHex } from '@masknet/shared-base'
 import { unreachable } from '@masknet/kit'
 
-class SignerAPI {
-    async sign<T>(type: SignType, key: Buffer, message: T): Promise<string> {
+export class Signer {
+    static async sign(type: SignType, key: Buffer, message: unknown): Promise<string> {
         switch (type) {
             case SignType.Message:
                 return _metamask_eth_sig_util.personalSign({
@@ -32,4 +32,3 @@ class SignerAPI {
         }
     }
 }
-export const Signer = new SignerAPI()

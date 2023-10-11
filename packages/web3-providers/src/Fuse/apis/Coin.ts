@@ -1,8 +1,8 @@
 import Fuse from 'fuse.js'
 import type { TrendingAPI } from '../../entry-types.js'
 
-export const FuseCoin = {
-    create<T = TrendingAPI.Coin>(items: T[]) {
+export class FuseCoin {
+    static create<T = TrendingAPI.Coin>(items: T[]) {
         return new Fuse(items, {
             keys: [
                 { name: 'name', weight: 0.8 },
@@ -14,5 +14,5 @@ export const FuseCoin = {
             threshold: 0,
             minMatchCharLength: 3,
         })
-    },
+    }
 }

@@ -25,8 +25,8 @@ const fetchFromRSS3 = <T>(url: string) => {
     })
 }
 
-class RSS3API {
-    createRSS3(
+export class RSS3 {
+    static createRSS3(
         address: string,
         sign: (message: string) => Promise<string> = () => {
             throw new Error('Not supported.')
@@ -38,13 +38,13 @@ class RSS3API {
             sign,
         })
     }
-    async getFileData<T>(rss3: RSS3Next.default, address: string, key: string) {
+    static async getFileData<T>(rss3: RSS3Next.default, address: string, key: string) {
         const file = await rss3.files.get(address)
         if (!file) throw new Error('The account was not found.')
         const descriptor = Object.getOwnPropertyDescriptor(file, key)
         return descriptor?.value as T | undefined
     }
-    async setFileData<T>(rss3: RSS3Next.default, address: string, key: string, data: T): Promise<T> {
+    static async setFileData<T>(rss3: RSS3Next.default, address: string, key: string, data: T): Promise<T> {
         const file = await rss3.files.get(address)
         if (!file) throw new Error('The account was not found.')
         const descriptor = Object.getOwnPropertyDescriptor(file, key)
@@ -56,7 +56,7 @@ class RSS3API {
         await rss3.files.sync()
         return value
     }
-    async getDonations(address: string, { indicator, size = 100 }: HubOptions_Base<ChainId> = {}) {
+    static async getDonations(address: string, { indicator, size = 100 }: HubOptions_Base<ChainId> = {}) {
         if (!address) return createPageable([], createIndicator(indicator))
         const collectionURL = urlcat(RSS3_FEED_ENDPOINT, address, {
             tag: TAG.donation,
@@ -75,7 +75,7 @@ class RSS3API {
         })
         return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, cursor))
     }
-    async getFootprints(address: string, { indicator, size = 100 }: HubOptions_Base<ChainId> = {}) {
+    static async getFootprints(address: string, { indicator, size = 100 }: HubOptions_Base<ChainId> = {}) {
         if (!address) return createPageable([], createIndicator(indicator))
         const collectionURL = urlcat(RSS3_FEED_ENDPOINT, address, {
             tag: TAG.collectible,
@@ -88,7 +88,7 @@ class RSS3API {
         return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, cursor))
     }
     /** get .csb handle info */
-    async getNameInfo(handle: string) {
+    static async getNameInfo(handle: string) {
         if (!handle) return
         const url = urlcat('https://pregod.rss3.dev/v1/ns/:id', { id: handle })
         return fetchFromRSS3<RSS3BaseAPI.NameInfo>(url)
@@ -98,7 +98,7 @@ class RSS3API {
      * @deprecated
      * Get feeds in tags of donation, collectible and transaction
      */
-    async getWeb3Feeds(address: string, { indicator, size = 100 }: HubOptions_Base<ChainId> = {}) {
+    static async getWeb3Feeds(address: string, { indicator, size = 100 }: HubOptions_Base<ChainId> = {}) {
         if (!address) return createPageable([], createIndicator(indicator))
         const tags = [RSS3BaseAPI.Tag.Donation, RSS3BaseAPI.Tag.Collectible, RSS3BaseAPI.Tag.Transaction]
         const queryString = `tag=${tags.join('&tag=')}&${query({
@@ -116,7 +116,7 @@ class RSS3API {
         result.forEach(normalizedFeed)
         return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, cursor))
     }
-    async getAllNotes(
+    static async getAllNotes(
         address: string,
         options: Partial<Record<string, string>> = {},
         { indicator, size = 100 }: HubOptions_Base<ChainId> = {},
@@ -149,7 +149,7 @@ class RSS3API {
         )
     }
 
-    async getProfiles(handle: string) {
+    static async getProfiles(handle: string) {
         const url = urlcat(RSS3_ENDPOINT, '/profiles/:handle', {
             handle,
         })
@@ -159,7 +159,7 @@ class RSS3API {
         return response.result
     }
 
-    async getNameService(handle: string) {
+    static async getNameService(handle: string) {
         const url = urlcat(RSS3_ENDPOINT, '/ns/:handle', {
             handle,
         })
@@ -174,4 +174,3 @@ class RSS3API {
         }
     }
 }
-export const RSS3 = new RSS3API()

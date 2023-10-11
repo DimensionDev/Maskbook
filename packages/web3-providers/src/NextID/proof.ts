@@ -222,8 +222,8 @@ const getExistedBindingQueryURL = (platform: string, identity: string, personaPu
         public_key: personaPublicKey,
     })
 
-class NextIDProofAPI {
-    fetchFromProofService<T>(request: Request | RequestInfo, init?: RequestInit, disableCache?: boolean) {
+export class NextIDProof {
+    static fetchFromProofService<T>(request: Request | RequestInfo, init?: RequestInit, disableCache?: boolean) {
         return disableCache
             ? fetchJSON<T>(request, init)
             : fetchCachedJSON<T>(request, init, {
@@ -232,13 +232,13 @@ class NextIDProofAPI {
               })
     }
 
-    async clearPersonaQueryCache(personaPublicKey: string) {
+    static async clearPersonaQueryCache(personaPublicKey: string) {
         const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
         await staleNextIDCached(url)
         await stableSquashedCached(url)
     }
 
-    async bindProof(
+    static async bindProof(
         uuid: string,
         personaPublicKey: string,
         action: NextIDAction,
@@ -286,7 +286,7 @@ class NextIDProofAPI {
         await stableSquashedCached(cacheKeyOfExistedBinding)
     }
 
-    async queryExistedBindingByPersona(personaPublicKey: string) {
+    static async queryExistedBindingByPersona(personaPublicKey: string) {
         const { ids } = await this.fetchFromProofService<NextIDBindings>(
             getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey),
         )
@@ -294,7 +294,7 @@ class NextIDProofAPI {
         return first(ids)
     }
 
-    async queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page = 1, exact = true) {
+    static async queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page = 1, exact = true) {
         if (!platform && !identity) return []
 
         const response = await this.fetchFromProofService<NextIDBindings>(
@@ -310,7 +310,7 @@ class NextIDProofAPI {
         return sortBy(response.ids, (x) => -x.activated_at)
     }
 
-    async queryLatestBindingByPlatform(
+    static async queryLatestBindingByPlatform(
         platform: NextIDPlatform,
         identity: string,
         publicKey?: string,
@@ -322,7 +322,7 @@ class NextIDProofAPI {
         return first(result) ?? null
     }
 
-    async queryAllExistedBindingsByPlatform(
+    static async queryAllExistedBindingsByPlatform(
         platform: NextIDPlatform,
         identity: string,
         exact?: boolean,
@@ -356,7 +356,12 @@ class NextIDProofAPI {
         return []
     }
 
-    async queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string, disableCache = false) {
+    static async queryIsBound(
+        personaPublicKey: string,
+        platform: NextIDPlatform,
+        identity: string,
+        disableCache = false,
+    ) {
         try {
             if (!platform && !identity) return false
 
@@ -371,7 +376,7 @@ class NextIDProofAPI {
         }
     }
 
-    async queryProfilesByDomain(domain?: string, depth?: number) {
+    static async queryProfilesByDomain(domain?: string, depth?: number) {
         const domainSystem = getDomainSystem(domain)
         if (domainSystem === 'unknown') return EMPTY_LIST
         const { data } = await fetchSquashedJSON<{
@@ -402,7 +407,7 @@ class NextIDProofAPI {
         return bindings.filter((x) => ![NextIDPlatform.NextID].includes(x.platform) && x.identity)
     }
 
-    async queryProfilesByAddress(address: string, depth?: number) {
+    static async queryProfilesByAddress(address: string, depth?: number) {
         const { data } = await fetchSquashedJSON<{
             data: {
                 identity: {
@@ -430,7 +435,7 @@ class NextIDProofAPI {
         )
     }
 
-    async queryProfilesByPublicKey(publicKey: string, depth?: number) {
+    static async queryProfilesByPublicKey(publicKey: string, depth?: number) {
         const { data } = await fetchJSON<{
             data: {
                 identity: {
@@ -455,7 +460,7 @@ class NextIDProofAPI {
         return bindings
     }
 
-    async queryProfilesByTwitterId(twitterId: string, depth?: number) {
+    static async queryProfilesByTwitterId(twitterId: string, depth?: number) {
         const { data } = await fetchSquashedJSON<{
             data: {
                 identity: {
@@ -480,7 +485,7 @@ class NextIDProofAPI {
         return bindings.filter((x) => ![NextIDPlatform.NextID].includes(x.platform) && x.identity)
     }
 
-    async queryAllLens(twitterId: string, depth?: number): Promise<NextIDBaseAPI.LensAccount[]> {
+    static async queryAllLens(twitterId: string, depth?: number): Promise<NextIDBaseAPI.LensAccount[]> {
         const lowerCaseId = twitterId.toLowerCase()
         const { data } = await fetchSquashedJSON<{
             data: {
@@ -533,7 +538,7 @@ class NextIDProofAPI {
         )
     }
 
-    async createPersonaPayload(
+    static async createPersonaPayload(
         personaPublicKey: string,
         action: NextIDAction,
         identity: string,
@@ -565,7 +570,6 @@ class NextIDProofAPI {
             : null
     }
 }
-export const NextIDProof = new NextIDProofAPI()
 
 function createBindingProofNodeFromNeighbor(nextIDIdentity: NextIDIdentity, source: NextIDPlatform) {
     const nft = nextIDIdentity.nft.map((x) =>

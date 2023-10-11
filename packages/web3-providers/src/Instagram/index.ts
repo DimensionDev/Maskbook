@@ -9,8 +9,8 @@ function getCSRFToken() {
     return value
 }
 
-class InstagramAPI {
-    async uploadUserAvatar(image: File | Blob, userId: string) {
+export class Instagram {
+    static async uploadUserAvatar(image: File | Blob, userId: string) {
         const formData = new FormData()
         const csrfToken = getCSRFToken()
         formData.append('profile_pic', image)
@@ -29,4 +29,3 @@ class InstagramAPI {
         })
     }
 }
-export const Instagram = new InstagramAPI()
