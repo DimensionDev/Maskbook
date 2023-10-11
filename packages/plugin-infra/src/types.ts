@@ -28,7 +28,7 @@ import type {
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { SearchResult, Web3State } from '@masknet/web3-shared-base'
+import type { SearchResult } from '@masknet/web3-shared-base'
 import type { LinkedProfileDetails } from '@masknet/public-api'
 import type { ChainId, TransactionOptions } from '@masknet/web3-shared-evm'
 import type { CompositionType } from './entry-content-script.js'
