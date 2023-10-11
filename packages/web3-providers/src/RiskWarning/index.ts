@@ -1,5 +1,3 @@
-import type { RiskWarningBaseAPI } from '../entry-types.js'
-
 const BASE_URL_MAP: Record<typeof process.env.NODE_ENV, string> = {
     production: 'https://backup.mask.io/api',
     development: 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com/api',
@@ -8,7 +6,7 @@ const BASE_URL_MAP: Record<typeof process.env.NODE_ENV, string> = {
 
 const BASE_URL = BASE_URL_MAP[process.env.NODE_ENV]
 
-export class RiskWarningAPI implements RiskWarningBaseAPI.Provider {
+class RiskWarningAPI {
     async approve(address: string, pluginID = '') {
         await fetch(`${BASE_URL}/v1/risk_warning/confirm`, {
             method: 'POST',
@@ -19,3 +17,4 @@ export class RiskWarningAPI implements RiskWarningBaseAPI.Provider {
         })
     }
 }
+export const RiskWarning = new RiskWarningAPI()

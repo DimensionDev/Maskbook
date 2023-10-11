@@ -132,7 +132,7 @@ function createNonFungibleAsset(
     }
 }
 
-export class AlchemyEVM_API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType, string> {
+class AlchemyEVM_API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType, string> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
         const chainInfo = Alchemy_EVM_NetworkMap.chains.find((chain) => chain.chainId === chainId)
         if (!chainInfo) return
@@ -189,3 +189,4 @@ export class AlchemyEVM_API implements NonFungibleTokenAPI.Provider<ChainId, Sch
         )
     }
 }
+export const AlchemyEVM = new AlchemyEVM_API()

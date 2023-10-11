@@ -13,7 +13,7 @@ import type { Tx } from '../types.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 import type { RedPacketBaseAPI } from '../../entry-types.js'
 
-export class ChainbaseRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
+class ChainbaseRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
     async getHistoryTransactions(
         chainId: ChainId,
         senderAddress: string,
@@ -62,3 +62,4 @@ export class ChainbaseRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId,
         }
     }
 }
+export const ChainbaseRedPacket = new ChainbaseRedPacketAPI()

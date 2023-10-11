@@ -11,24 +11,19 @@ import {
 import {
     CurrencyType,
     type NonFungibleAsset,
-    type NonFungibleCollection,
     type NonFungibleTokenEvent,
-    type NonFungibleTokenOrder,
-    OrderSide,
     SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
-import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
+import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
 import {
-    type Collection,
     type Event,
     EventType,
     type MintEventProperty,
     type SaleEventProperty,
     type Token,
     type TransferEventProperty,
-    type V3AskEventProperty,
 } from './types.js'
 import { GetEventsQuery, GetTokenQuery } from './queries.js'
 import { ZORA_MAINNET_GRAPHQL_URL } from './constants.js'
@@ -36,10 +31,10 @@ import { getAssetFullName } from '../helpers/getAssetFullName.js'
 import { resolveActivityType } from '../helpers/resolveActivityType.js'
 import type { HubOptions_Base, NonFungibleTokenAPI } from '../entry-types.js'
 
-export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     private client = new GraphQLClient(ZORA_MAINNET_GRAPHQL_URL)
 
-    private createZoraLink(chainId: ChainId, address: string, tokenId: string) {
+    private createZoraLink(address: string, tokenId: string) {
         return urlcat('https://zora.co/collections/:address/:tokenId', {
             address,
             tokenId,
@@ -65,7 +60,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             chainId,
             type: TokenType.NonFungible,
             schema: SchemaType.ERC721,
-            link: this.createZoraLink(chainId, token.collectionAddress, token.tokenId),
+            link: this.createZoraLink(token.collectionAddress, token.tokenId),
             address: token.collectionAddress,
             tokenId: token.tokenId,
             contract: {
@@ -96,7 +91,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             priceInToken: token.mintInfo?.price.nativePrice.raw
                 ? {
                       amount: token.mintInfo?.price.nativePrice.raw,
-                      token: new ChainResolverAPI().nativeCurrency(chainId),
+                      token: ChainResolver.nativeCurrency(chainId),
                   }
                 : undefined,
             owner: token.owner
@@ -105,22 +100,6 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
                   }
                 : undefined,
             ownerId: token.owner,
-            source: SourceType.Zora,
-        }
-    }
-
-    private createNonFungibleCollectionFromCollection(
-        chainId: ChainId,
-        collection: Collection,
-    ): NonFungibleCollection<ChainId, SchemaType> {
-        return {
-            chainId,
-            address: collection.collectionAddress,
-            name: collection.name ?? 'Unknown Token',
-            symbol: collection.entity.symbol ?? 'UNKNOWN',
-            slug: collection.entity.symbol ?? 'UNKNOWN',
-            description: collection.entity.description ?? collection.description,
-            schema: SchemaType.ERC721,
             source: SourceType.Zora,
         }
     }
@@ -168,7 +147,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
                     priceInToken: price.nativePrice.raw
                         ? {
                               amount: price.nativePrice.raw,
-                              token: new ChainResolverAPI().nativeCurrency(chainId),
+                              token: ChainResolver.nativeCurrency(chainId),
                           }
                         : undefined,
                 }
@@ -190,51 +169,6 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             hash: event.transactionInfo.transactionHash,
             ...price,
             source: SourceType.Zora,
-        }
-    }
-
-    private createNonFungibleOrderFromEvent(
-        chainId: ChainId,
-        event: Event<SaleEventProperty | V3AskEventProperty>,
-    ): NonFungibleTokenOrder<ChainId, SchemaType> {
-        const shared = {
-            id: event.transactionInfo.transactionHash ?? `${event.transactionInfo.blockNumber}_${event.tokenId}`,
-            chainId,
-            assetPermalink:
-                event.collectionAddress && event.tokenId
-                    ? this.createZoraLink(chainId, event.collectionAddress, event.tokenId)
-                    : '',
-            quantity: '1',
-            hash: event.transactionInfo.transactionHash,
-            source: SourceType.Zora,
-        }
-
-        switch (event.eventType) {
-            case EventType.SALE_EVENT:
-                const saleProperty = event.properties as SaleEventProperty | undefined
-                return {
-                    ...shared,
-                    side: OrderSide.Sell,
-                    maker: saleProperty
-                        ? {
-                              address: saleProperty.sellerAddress,
-                          }
-                        : undefined,
-                    taker: saleProperty
-                        ? {
-                              address: saleProperty.buyerAddress,
-                          }
-                        : undefined,
-                }
-            case EventType.V3_ASK_EVENT:
-                return {
-                    ...shared,
-                    side: OrderSide.Buy,
-                }
-            default:
-                return {
-                    ...shared,
-                }
         }
     }
 
@@ -298,3 +232,4 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         return this.createPageable(events_, indicator)
     }
 }
+export const Zora = new ZoraAPI()

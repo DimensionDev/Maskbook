@@ -5,7 +5,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { getSmartPayConstants, isValidAddress, type ChainId } from '@masknet/web3-shared-evm'
 import { MulticallAPI } from '../../Multicall/index.js'
 import { ContractReadonlyAPI } from '../../Web3/EVM/apis/ContractReadonlyAPI.js'
-import { SmartPayBundlerAPI } from './BundlerAPI.js'
+import { SmartPayBundler } from './BundlerAPI.js'
 import { SmartPayFunderAPI } from './FunderAPI.js'
 import { ContractWallet } from '../libs/ContractWallet.js'
 import { Create2Factory } from '../libs/Create2Factory.js'
@@ -20,14 +20,13 @@ interface OwnerShip {
     creator: string
 }
 
-export class SmartPayOwnerAPI implements OwnerAPI.Provider<NetworkPluginID.PLUGIN_EVM> {
+export class SmartPayOwnerAPI {
     private Contract = new ContractReadonlyAPI()
     private Multicall = new MulticallAPI()
-    private Bundler = new SmartPayBundlerAPI()
     private Funder = new SmartPayFunderAPI()
 
     private async getEntryPoint(chainId: ChainId) {
-        const entryPoints = await this.Bundler.getSupportedEntryPoints(chainId)
+        const entryPoints = await SmartPayBundler.getSupportedEntryPoints(chainId)
         const entryPoint = first(entryPoints)
         if (!entryPoint || !isValidAddress(entryPoint)) throw new Error(`Not supported ${chainId}`)
         return entryPoint

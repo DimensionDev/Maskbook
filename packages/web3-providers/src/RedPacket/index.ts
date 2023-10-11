@@ -8,9 +8,8 @@ import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import NFT_REDPACKET_ABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
 import { DSEARCH_BASE_URL } from '../DSearch/constants.js'
 import { fetchFromDSearch } from '../DSearch/helpers.js'
-import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
-import { ChainbaseRedPacketAPI } from '../Chainbase/index.js'
-import { EtherscanRedPacketAPI } from '../Etherscan/index.js'
+import { ChainbaseRedPacket } from '../Chainbase/index.js'
+import { EtherscanRedPacket } from '../Etherscan/index.js'
 import { ContractRedPacketAPI } from './api.js'
 import {
     type RedPacketJSONPayloadFromChain,
@@ -18,10 +17,9 @@ import {
     type CreateNFTRedpacketParam,
 } from './types.js'
 import type { HubOptions_Base, RedPacketBaseAPI } from '../entry-types.js'
+import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
 
 export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
-    private ChainbaseRedPacket = new ChainbaseRedPacketAPI()
-    private EtherscanRedPacket = new EtherscanRedPacketAPI()
     private ContractRedPacket = new ContractRedPacketAPI()
 
     getHistories(
@@ -85,7 +83,7 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
         return attemptUntil(
             [
                 async () =>
-                    await this.EtherscanRedPacket.getHistoryTransactions(
+                    await EtherscanRedPacket.getHistoryTransactions(
                         chainId,
                         senderAddress,
                         contractAddress,
@@ -95,12 +93,7 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
                     ),
 
                 async () =>
-                    await this.ChainbaseRedPacket.getHistoryTransactions(
-                        chainId,
-                        senderAddress,
-                        contractAddress,
-                        methodId,
-                    ),
+                    await ChainbaseRedPacket.getHistoryTransactions(chainId, senderAddress, contractAddress, methodId),
             ],
             [],
         )
@@ -138,7 +131,7 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
                     txid: tx.hash ?? '',
                     contract_version: 1,
                     shares: decodedInputParam._erc721_token_ids.length,
-                    network: new ChainResolverAPI().networkType(tx.chainId),
+                    network: ChainResolver.networkType(tx.chainId),
                     token_address: decodedInputParam._token_addr,
                     chainId: tx.chainId,
                     sender: {
@@ -188,7 +181,7 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
                     duration: decodedInputParam._duration.toNumber() * 1000,
                     block_number: Number(tx.blockNumber),
                     contract_version: 4,
-                    network: new ChainResolverAPI().networkType(tx.chainId),
+                    network: ChainResolver.networkType(tx.chainId),
                     token_address: decodedInputParam._token_addr,
                     sender: {
                         address: senderAddress,

@@ -4,7 +4,7 @@ import { MASK_X_DEFAULT_PAGINATION, MASK_X_ROOT_URL } from './constants.js'
 import { MaskX_BaseAPI } from '../entry-types.js'
 import { fetchCachedJSON } from '../helpers/fetchJSON.js'
 
-export class MaskX_API implements MaskX_BaseAPI.Provider {
+class MaskX_API {
     private async fetchFromMaskX(pathname: string) {
         return fetchCachedJSON<MaskX_BaseAPI.Response>(urlcat(MASK_X_ROOT_URL, pathname))
     }
@@ -79,3 +79,4 @@ export class MaskX_API implements MaskX_BaseAPI.Provider {
         return this.getResponse(response)
     }
 }
+export const MaskX = new MaskX_API()

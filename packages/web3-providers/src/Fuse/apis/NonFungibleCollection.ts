@@ -1,9 +1,8 @@
 import Fuse from 'fuse.js'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import type { FuseBaseAPI } from '../../entry-types.js'
 
-export class FuseNonFungibleCollectionAPI implements FuseBaseAPI.Provider {
+export const FuseNonFungibleCollection = {
     create<T = NonFungibleCollection<ChainId, SchemaType>>(items: T[]) {
         return new Fuse(items, {
             keys: [
@@ -15,5 +14,5 @@ export class FuseNonFungibleCollectionAPI implements FuseBaseAPI.Provider {
             threshold: 0.45,
             minMatchCharLength: 3,
         })
-    }
+    },
 }

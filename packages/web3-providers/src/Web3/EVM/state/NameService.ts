@@ -1,16 +1,12 @@
 import { NetworkPluginID } from '@masknet/shared-base'
 import { formatEthereumAddress, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { NameServiceState } from '../../Base/state/NameService.js'
-import { ENS_API } from '../../../ENS/index.js'
-import { SpaceID_API } from '../../../SpaceID/index.js'
+import { ENS } from '../../../ENS/index.js'
+import { SpaceID } from '../../../SpaceID/index.js'
 import type { WalletAPI, NameServiceAPI } from '../../../entry-types.js'
-import { LensAPI } from '../../../Lens/index.js'
+import { Lens } from '../../../Lens/index.js'
 
 export class NameService extends NameServiceState {
-    private ENS = new ENS_API()
-    private SpaceID = new SpaceID_API()
-    private Lens = new LensAPI()
-
     constructor(context: WalletAPI.IOContext) {
         super(context, {
             pluginID: NetworkPluginID.PLUGIN_EVM,
@@ -21,7 +17,7 @@ export class NameService extends NameServiceState {
     }
 
     override createResolvers(domainOnly?: boolean) {
-        if (domainOnly) return [this.ENS, this.SpaceID] as NameServiceAPI.Provider[]
-        return [this.ENS, this.SpaceID, this.Lens] as NameServiceAPI.Provider[]
+        if (domainOnly) return [ENS, SpaceID] as NameServiceAPI.Provider[]
+        return [ENS, SpaceID, Lens] as NameServiceAPI.Provider[]
     }
 }

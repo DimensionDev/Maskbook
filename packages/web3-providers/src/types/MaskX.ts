@@ -46,13 +46,4 @@ export namespace MaskX_BaseAPI {
         }
         records: Identity[]
     }
-
-    export interface Provider {
-        /** Get identities by precisely matching the identity id. */
-        getIdentitiesExact(handle: string, platform: PlatformType, options?: Options): Promise<Response>
-        /** Get identities by fuzzy searching the identity id. */
-        getIdentitiesFuzzy(handle: string, platform: PlatformType, options?: Options): Promise<Response>
-        /** Get all included identities. */
-        getAllIdentities(options?: Options): Promise<Response>
-    }
 }

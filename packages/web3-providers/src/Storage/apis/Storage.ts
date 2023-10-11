@@ -3,10 +3,9 @@ import { KVStorage } from '../storages/KV.js'
 import { NextIDStorage } from '../storages/NextID.js'
 import { RSS3Storage } from '../storages/RSS3.js'
 import { FireflyStorage } from '../storages/Firefly.js'
-import type { StorageAPI } from '../../entry-types.js'
 import { SharedContextRef } from '../../PluginContext/index.js'
 
-export class Web3StorageAPI implements StorageAPI.Provider {
+class Web3StorageAPI {
     createKVStorage(namespace: string) {
         return new KVStorage(namespace)
     }
@@ -24,3 +23,4 @@ export class Web3StorageAPI implements StorageAPI.Provider {
         return new NextIDStorage(proofIdentity, platform, signerOrPublicKey, SharedContextRef.value.signWithPersona)
     }
 }
+export const Web3Storage = new Web3StorageAPI()

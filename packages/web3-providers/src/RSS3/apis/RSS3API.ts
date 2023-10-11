@@ -1,4 +1,4 @@
-import RSS3 from 'rss3-next'
+import * as RSS3Next from /* webpackDefer: true */ 'rss3-next'
 import urlcat, { query } from 'urlcat'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
@@ -25,26 +25,26 @@ const fetchFromRSS3 = <T>(url: string) => {
     })
 }
 
-export class RSS3API implements RSS3BaseAPI.Provider {
+class RSS3API {
     createRSS3(
         address: string,
         sign: (message: string) => Promise<string> = () => {
             throw new Error('Not supported.')
         },
-    ): RSS3 {
-        return new RSS3({
+    ): RSS3Next.default {
+        return new RSS3Next.default({
             endpoint: RSS3_LEGACY_ENDPOINT,
             address,
             sign,
         })
     }
-    async getFileData<T>(rss3: RSS3, address: string, key: string) {
+    async getFileData<T>(rss3: RSS3Next.default, address: string, key: string) {
         const file = await rss3.files.get(address)
         if (!file) throw new Error('The account was not found.')
         const descriptor = Object.getOwnPropertyDescriptor(file, key)
         return descriptor?.value as T | undefined
     }
-    async setFileData<T>(rss3: RSS3, address: string, key: string, data: T): Promise<T> {
+    async setFileData<T>(rss3: RSS3Next.default, address: string, key: string, data: T): Promise<T> {
         const file = await rss3.files.get(address)
         if (!file) throw new Error('The account was not found.')
         const descriptor = Object.getOwnPropertyDescriptor(file, key)
@@ -174,3 +174,4 @@ export class RSS3API implements RSS3BaseAPI.Provider {
         }
     }
 }
+export const RSS3 = new RSS3API()

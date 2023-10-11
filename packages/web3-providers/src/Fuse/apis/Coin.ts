@@ -1,7 +1,7 @@
 import Fuse from 'fuse.js'
-import type { FuseBaseAPI, TrendingAPI } from '../../entry-types.js'
+import type { TrendingAPI } from '../../entry-types.js'
 
-export class FuseCoinAPI implements FuseBaseAPI.Provider {
+export const FuseCoin = {
     create<T = TrendingAPI.Coin>(items: T[]) {
         return new Fuse(items, {
             keys: [
@@ -14,5 +14,5 @@ export class FuseCoinAPI implements FuseBaseAPI.Provider {
             threshold: 0,
             minMatchCharLength: 3,
         })
-    }
+    },
 }

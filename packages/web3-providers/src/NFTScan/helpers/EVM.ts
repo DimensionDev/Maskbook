@@ -21,7 +21,7 @@ import {
     isValidDomain,
     resolveImageURL,
 } from '@masknet/web3-shared-evm'
-import { ChainResolverAPI } from '../../Web3/EVM/apis/ResolverAPI.js'
+import { ChainResolver } from '../../Web3/EVM/apis/ResolverAPI.js'
 import { ContractReadonlyAPI } from '../../Web3/EVM/apis/ContractReadonlyAPI.js'
 import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants.js'
 import type { EVM } from '../types/EVM.js'
@@ -132,7 +132,7 @@ export function createNonFungibleAsset(
                   // FIXME: cannot get payment token
                   token:
                       asset.latest_trade_symbol === 'ETH'
-                          ? new ChainResolverAPI().nativeCurrency(chainId) ?? WNATIVE[chainId]
+                          ? ChainResolver.nativeCurrency(chainId) ?? WNATIVE[chainId]
                           : WNATIVE[chainId],
               }
             : undefined,

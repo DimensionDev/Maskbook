@@ -16,7 +16,7 @@ import {
 import type { PageableResponse, Response, Solana } from '../types/index.js'
 import type { HubOptions_Base, NonFungibleTokenAPI } from '../../entry-types.js'
 
-export class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, _?: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
         if (!isValidChainId(chainId)) return
         const path = urlcat('/api/sol/assets/:address', {
@@ -115,3 +115,4 @@ export class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Pr
         )
     }
 }
+export const NFTScanNonFungibleTokenSolana = new NFTScanNonFungibleTokenAPI_Solana()
