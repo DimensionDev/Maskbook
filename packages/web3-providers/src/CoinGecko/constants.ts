@@ -5,6 +5,7 @@ export const COINGECKO_URL_BASE = 'https://coingecko-agent.r2d2.to/api/v3'
 export const COINGECKO_CHAIN_ID_LIST = [
     ChainId.Mainnet,
     ChainId.BSC,
+    ChainId.Base,
     ChainId.Matic,
     ChainId.Arbitrum,
     ChainId.xDai,
@@ -15,6 +16,14 @@ export const COINGECKO_CHAIN_ID_LIST = [
     ChainId.Aurora,
     ChainId.Conflux,
     ChainId.Astar,
+    ChainId.Pulse,
+    ChainId.Moonbeam,
+    ChainId.Klaytn,
+    ChainId.Moonriver,
+    ChainId.Harmony,
+    ChainId.Cronos,
+    ChainId.BitTorrent,
+    ChainId.Boba,
 ]
 
 if (process.env.NODE_ENV === 'development') {
