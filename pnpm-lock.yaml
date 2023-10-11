@@ -506,49 +506,49 @@ importers:
     devDependencies:
       '@nice-labs/emit-file-webpack-plugin':
         specifier: ^1.1.4
-        version: 1.1.4(webpack@5.88.0)
+        version: 1.1.4(webpack@5.88.2)
       '@pmmmwh/react-refresh-webpack-plugin':
         specifier: ^0.5.11
-        version: 0.5.11(react-refresh@0.14.0)(webpack-dev-server@4.15.1)(webpack@5.88.0)
+        version: 0.5.11(react-refresh@0.14.0)(webpack-dev-server@4.15.1)(webpack@5.88.2)
       '@sinonjs/text-encoding':
         specifier: ^0.7.2
         version: 0.7.2
       '@types/terser-webpack-plugin':
         specifier: ^5.2.0
-        version: 5.2.0(@swc/core@1.3.81)(webpack@5.88.0)
+        version: 5.2.0(@swc/core@1.3.81)(webpack@5.88.2)
       copy-webpack-plugin:
         specifier: ^11.0.0
-        version: 11.0.0(webpack@5.88.0)
+        version: 11.0.0(webpack@5.88.2)
       css-loader:
         specifier: ^6.8.1
-        version: 6.8.1(webpack@5.88.0)
+        version: 6.8.1(webpack@5.88.2)
       html-webpack-plugin:
         specifier: ^5.5.3
-        version: 5.5.3(webpack@5.88.0)
+        version: 5.5.3(webpack@5.88.2)
       react-refresh:
         specifier: ^0.14.0
         version: 0.14.0
       source-map-loader:
         specifier: ^4.0.1
-        version: 4.0.1(webpack@5.88.0)
+        version: 4.0.1(webpack@5.88.2)
       style-loader:
         specifier: ^3.3.3
-        version: 3.3.3(webpack@5.88.0)
+        version: 3.3.3(webpack@5.88.2)
       swc-loader:
         specifier: ^0.2.3
-        version: 0.2.3(@swc/core@1.3.81)(webpack@5.88.0)
+        version: 0.2.3(@swc/core@1.3.81)(webpack@5.88.2)
       terser-webpack-plugin:
         specifier: ^5.3.9
-        version: 5.3.9(@swc/core@1.3.81)(webpack@5.88.0)
+        version: 5.3.9(@swc/core@1.3.81)(webpack@5.88.2)
       webpack:
         specifier: Jack-Works/webpack#lazy-import
-        version: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
+        version: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
       webpack-cli:
         specifier: ^5.1.4
-        version: 5.1.4(webpack-dev-server@4.15.1)(webpack@5.88.0)
+        version: 5.1.4(webpack-dev-server@4.15.1)(webpack@5.88.2)
       webpack-dev-server:
         specifier: ^4.15.1
-        version: 4.15.1(webpack-cli@5.1.4)(webpack@5.88.0)
+        version: 4.15.1(webpack-cli@5.1.4)(webpack@5.88.2)
 
   packages/backup-format:
     dependencies:
@@ -1127,10 +1127,10 @@ importers:
     devDependencies:
       '@nice-labs/emit-file-webpack-plugin':
         specifier: ^1.1.4
-        version: 1.1.4(webpack@5.88.0)
+        version: 1.1.4(webpack@5.88.2)
       '@pmmmwh/react-refresh-webpack-plugin':
         specifier: ^0.5.11
-        version: 0.5.11(react-refresh@0.14.0)(webpack-dev-server@4.15.1)(webpack@5.88.0)
+        version: 0.5.11(react-refresh@0.14.0)(webpack-dev-server@4.15.1)(webpack@5.88.2)
       '@types/color':
         specifier: ^3.0.3
         version: 3.0.3
@@ -1139,13 +1139,13 @@ importers:
         version: 4.24.3
       copy-webpack-plugin:
         specifier: ^11.0.0
-        version: 11.0.0(webpack@5.88.0)
+        version: 11.0.0(webpack@5.88.2)
       devtools-ignore-webpack-plugin:
         specifier: ^0.1.1
-        version: 0.1.1(webpack@5.88.0)
+        version: 0.1.1(webpack@5.88.2)
       html-webpack-plugin:
         specifier: ^5.5.3
-        version: 5.5.3(webpack@5.88.0)
+        version: 5.5.3(webpack@5.88.2)
       react-devtools-inline:
         specifier: 4.28.0
         version: 4.28.0
@@ -1157,25 +1157,25 @@ importers:
         version: 5.0.1
       source-map-loader:
         specifier: ^4.0.1
-        version: 4.0.1(webpack@5.88.0)
+        version: 4.0.1(webpack@5.88.2)
       svgo-loader:
         specifier: ^4.0.0
         version: 4.0.0
       swc-loader:
         specifier: ^0.2.3
-        version: 0.2.3(@swc/core@1.3.81)(webpack@5.88.0)
+        version: 0.2.3(@swc/core@1.3.81)(webpack@5.88.2)
       webpack:
         specifier: Jack-Works/webpack#lazy-import
-        version: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
+        version: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
       webpack-cli:
         specifier: ^5.1.4
-        version: 5.1.4(webpack-dev-server@4.15.1)(webpack@5.88.0)
+        version: 5.1.4(webpack-dev-server@4.15.1)(webpack@5.88.2)
       webpack-dev-server:
         specifier: ^4.15.1
-        version: 4.15.1(webpack-cli@5.1.4)(webpack@5.88.0)
+        version: 4.15.1(webpack-cli@5.1.4)(webpack@5.88.2)
       webpack-target-webextension:
         specifier: ^1.1.0
-        version: 1.1.0(webpack@5.88.0)
+        version: 1.1.0(webpack@5.88.2)
 
   packages/mask-sdk:
     dependencies:
@@ -3678,10 +3678,10 @@ importers:
         version: 3.0.0
       swc-loader:
         specifier: ^0.2.3
-        version: 0.2.3(@swc/core@1.3.81)(webpack@5.88.0)
+        version: 0.2.3(@swc/core@1.3.81)(webpack@5.88.2)
       webpack:
         specifier: Jack-Works/webpack#lazy-import
-        version: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
+        version: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
 
   packages/test-serializer:
     dependencies:
@@ -3745,7 +3745,7 @@ importers:
         version: 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
       '@storybook/addon-essentials':
         specifier: ^6.5.13
-        version: 6.5.13(@babel/core@7.22.11)(@storybook/builder-webpack5@6.5.13)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)(webpack@5.88.0)
+        version: 6.5.13(@babel/core@7.22.11)(@storybook/builder-webpack5@6.5.13)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)(webpack@5.88.2)
       '@storybook/addon-links':
         specifier: ^6.5.13
         version: 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
@@ -3763,7 +3763,7 @@ importers:
         version: 1.8.5
       babel-loader:
         specifier: ^9.1.3
-        version: 9.1.3(@babel/core@7.22.11)(webpack@5.88.0)
+        version: 9.1.3(@babel/core@7.22.11)(webpack@5.88.2)
 
   packages/typed-message/base:
     dependencies:
@@ -7817,16 +7817,6 @@ packages:
       '@babel/helper-validator-identifier': 7.22.5
       to-fast-properties: 2.0.0
 
-<<<<<<< HEAD
-  /@babel/types@7.22.5:
-    resolution: {integrity: sha512-zo3MIHGOkPOfoRXitsgHLjEXmlDaD/5KU1Uzuc9GNiZPhSqVxVRtxuPaSBZDsYZ9qV88AjtMtWW7ww98loJ9KA==}
-    engines: {node: '>=6.9.0'}
-    dependencies:
-      '@babel/helper-string-parser': 7.22.5
-      '@babel/helper-validator-identifier': 7.22.5
-      to-fast-properties: 2.0.0
-    dev: true
-
   /@balancer-labs/sor@1.0.0:
     resolution: {integrity: sha512-EF4RvwCHGIa3gqRKMBlrq19FS4X+4g3NAJkJf9k21oIUp1XAhdV3/aMlAoJ25OigafCjPFEHn7wOHrtZNKHc3A==}
     dependencies:
@@ -7843,8 +7833,6 @@ packages:
       - utf-8-validate
     dev: false
 
-=======
->>>>>>> f2a740063a (refactor: remove ssr (#10931))
   /@base2/pretty-print-object@1.0.1:
     resolution: {integrity: sha512-4iri8i1AqYHJE2DstZYkyEprg6Pq6sKx3xn5FpySk9sNhH7qN2LLlHJCfDTZRILNwQNPD7mATWM0TBui7uC1pA==}
     dev: true
@@ -11623,13 +11611,13 @@ packages:
       '@napi-rs/magic-string-win32-x64-msvc': 0.3.4
     dev: true
 
-  /@nice-labs/emit-file-webpack-plugin@1.1.4(webpack@5.88.0):
+  /@nice-labs/emit-file-webpack-plugin@1.1.4(webpack@5.88.2):
     resolution: {integrity: sha512-yNYzYN6N2wrcoOcxfNgBP7GLVoewfV7vsg4muVLAJdIBQWnXx+t7d/MEp0n3BYhcxH4MEjm6IZ6jDVzFa3zkJw==}
     engines: {node: '>= 12'}
     peerDependencies:
       webpack: '>= 5'
     dependencies:
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
     dev: true
 
   /@nice-labs/git-rev@3.5.1:
@@ -12091,7 +12079,7 @@ packages:
     engines: {node: '>=14'}
     optional: true
 
-  /@pmmmwh/react-refresh-webpack-plugin@0.5.10(react-refresh@0.11.0)(webpack@5.88.0):
+  /@pmmmwh/react-refresh-webpack-plugin@0.5.10(react-refresh@0.11.0)(webpack@5.88.2):
     resolution: {integrity: sha512-j0Ya0hCFZPd4x40qLzbhGsh9TMtdb+CJQiso+WxLOPNasohq9cc5SNUcwsZaRH6++Xh91Xkm/xHCkuIiIu0LUA==}
     engines: {node: '>= 10.13'}
     peerDependencies:
@@ -12127,10 +12115,10 @@ packages:
       react-refresh: 0.11.0
       schema-utils: 3.3.0
       source-map: 0.7.4
-      webpack: 5.88.0(@swc/core@1.3.81)
+      webpack: 5.88.2(@swc/core@1.3.81)
     dev: true
 
-  /@pmmmwh/react-refresh-webpack-plugin@0.5.11(react-refresh@0.14.0)(webpack-dev-server@4.15.1)(webpack@5.88.0):
+  /@pmmmwh/react-refresh-webpack-plugin@0.5.11(react-refresh@0.14.0)(webpack-dev-server@4.15.1)(webpack@5.88.2):
     resolution: {integrity: sha512-7j/6vdTym0+qZ6u4XbSAxrWBGYSdCfTzySkj7WAFgDLmSyWlOrWvpyzxlFh5jtw9dn0oL/jtW+06XfFiisN3JQ==}
     engines: {node: '>= 10.13'}
     peerDependencies:
@@ -12166,8 +12154,8 @@ packages:
       react-refresh: 0.14.0
       schema-utils: 3.3.0
       source-map: 0.7.4
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
-      webpack-dev-server: 4.15.1(webpack-cli@5.1.4)(webpack@5.88.0)
+      webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack-dev-server: 4.15.1(webpack-cli@5.1.4)(webpack@5.88.2)
     dev: true
 
   /@pnpm/network.ca-file@1.0.2:
@@ -12713,7 +12701,7 @@ packages:
   /@solana/web3.js@1.78.4:
     resolution: {integrity: sha512-up5VG1dK+GPhykmuMIozJZBbVqpm77vbOG6/r5dS7NBGZonwHfTLdBbsYc3rjmaQ4DpCXUa3tUc4RZHRORvZrw==}
     dependencies:
-      '@babel/runtime': 7.22.6
+      '@babel/runtime': 7.22.15
       '@noble/curves': 1.2.0
       '@noble/hashes': 1.3.2
       '@solana/buffer-layout': 4.0.1
@@ -12991,7 +12979,7 @@ packages:
       - webpack-command
     dev: true
 
-  /@storybook/addon-docs@6.5.13(@babel/core@7.22.11)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)(webpack@5.88.0):
+  /@storybook/addon-docs@6.5.13(@babel/core@7.22.11)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)(webpack@5.88.2):
     resolution: {integrity: sha512-RG/NjsheD9FixZ789RJlNyNccaR2Cuy7CtAwph4oUNi3aDFjtOI8Oe9L+FOT7qtVnZLw/YMjF+pZxoDqJNKLPw==}
     peerDependencies:
       '@storybook/mdx2-csf': ^0.0.3
@@ -13023,7 +13011,7 @@ packages:
       '@storybook/source-loader': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
       '@storybook/store': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
       '@storybook/theming': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
-      babel-loader: 8.3.0(@babel/core@7.22.11)(webpack@5.88.0)
+      babel-loader: 8.3.0(@babel/core@7.22.11)(webpack@5.88.2)
       core-js: 3.29.0
       fast-deep-equal: 3.1.3
       global: 4.4.0
@@ -13046,7 +13034,7 @@ packages:
       - webpack-command
     dev: true
 
-  /@storybook/addon-essentials@6.5.13(@babel/core@7.22.11)(@storybook/builder-webpack5@6.5.13)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)(webpack@5.88.0):
+  /@storybook/addon-essentials@6.5.13(@babel/core@7.22.11)(@storybook/builder-webpack5@6.5.13)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)(webpack@5.88.2):
     resolution: {integrity: sha512-G9FVAWV7ixjVLWeLgIX+VT90tcAk6yQxfZQegfg5ucRilGysJCDaNnoab4xuuvm1R40TfFhba3iAGZtQYsddmw==}
     peerDependencies:
       '@babel/core': ^7.9.6
@@ -13109,7 +13097,7 @@ packages:
       '@storybook/addon-actions': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
       '@storybook/addon-backgrounds': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
       '@storybook/addon-controls': 6.5.13(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)
-      '@storybook/addon-docs': 6.5.13(@babel/core@7.22.11)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)(webpack@5.88.0)
+      '@storybook/addon-docs': 6.5.13(@babel/core@7.22.11)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)(webpack@5.88.2)
       '@storybook/addon-measure': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
       '@storybook/addon-outline': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
       '@storybook/addon-toolbars': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
@@ -13124,7 +13112,7 @@ packages:
       react-dom: 0.0.0-experimental-0a360642d-20230711(react@0.0.0-experimental-0a360642d-20230711)
       regenerator-runtime: 0.13.11
       ts-dedent: 2.2.0
-      webpack: 5.88.0(@swc/core@1.3.81)
+      webpack: 5.88.2(@swc/core@1.3.81)
     transitivePeerDependencies:
       - '@storybook/mdx2-csf'
       - eslint
@@ -13440,7 +13428,7 @@ packages:
       ts-dedent: 2.2.0
       typescript: 5.3.0-dev.20230830
       util-deprecate: 1.0.2
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)
       webpack-dev-middleware: 4.3.0(webpack@5.88.0)
       webpack-hot-middleware: 2.25.3
       webpack-virtual-modules: 0.4.6
@@ -13629,7 +13617,48 @@ packages:
       typescript: 5.3.0-dev.20230830
       unfetch: 4.2.0
       util-deprecate: 1.0.2
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)
+    dev: true
+
+  /@storybook/core-client@6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)(webpack@5.88.2):
+    resolution: {integrity: sha512-YuELbRokTBdqjbx/R4/7O4rou9kvbBIOJjlUkor9hdLLuJ3P0yGianERGNkZFfvcfMBAxU0p52o7QvDldSR3kA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-0a360642d-20230711
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-0a360642d-20230711
+      typescript: '*'
+      webpack: '*'
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
+      typescript:
+        optional: true
+    dependencies:
+      '@storybook/addons': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
+      '@storybook/channel-postmessage': 6.5.13
+      '@storybook/channel-websocket': 6.5.13
+      '@storybook/client-api': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
+      '@storybook/client-logger': 6.5.13
+      '@storybook/core-events': 6.5.13
+      '@storybook/csf': 0.0.2--canary.4566f4d.1
+      '@storybook/preview-web': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
+      '@storybook/store': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
+      '@storybook/ui': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
+      airbnb-js-shims: 2.2.1
+      ansi-to-html: 0.6.15
+      core-js: 3.29.0
+      global: 4.4.0
+      lodash: 4.17.21
+      qs: 6.11.2
+      react: 0.0.0-experimental-0a360642d-20230711
+      react-dom: 0.0.0-experimental-0a360642d-20230711(react@0.0.0-experimental-0a360642d-20230711)
+      regenerator-runtime: 0.13.11
+      ts-dedent: 2.2.0
+      typescript: 5.3.0-dev.20230830
+      unfetch: 4.2.0
+      util-deprecate: 1.0.2
+      webpack: 5.88.2(@swc/core@1.3.81)
     dev: true
 
   /@storybook/core-common@6.5.13(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830):
@@ -13796,7 +13825,7 @@ packages:
       - webpack-command
     dev: true
 
-  /@storybook/core@6.5.13(@storybook/builder-webpack5@6.5.13)(@storybook/manager-webpack5@6.5.13)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)(webpack@5.88.0):
+  /@storybook/core@6.5.13(@storybook/builder-webpack5@6.5.13)(@storybook/manager-webpack5@6.5.13)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)(webpack@5.88.2):
     resolution: {integrity: sha512-kw1lCgbsxzUimGww6t5rmuWJmFPe9kGGyzIqvj4RC4BBcEsP40LEu9XhSfvnb8vTOLIULFZeZpdRFfJs4TYbUw==}
     peerDependencies:
       '@storybook/builder-webpack5': '*'
@@ -13818,13 +13847,13 @@ packages:
         optional: true
     dependencies:
       '@storybook/builder-webpack5': 6.5.13(@swc/core@1.3.81)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)
-      '@storybook/core-client': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)(webpack@5.88.0)
+      '@storybook/core-client': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)(webpack@5.88.2)
       '@storybook/core-server': 6.5.13(@storybook/builder-webpack5@6.5.13)(@storybook/manager-webpack5@6.5.13)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)
       '@storybook/manager-webpack5': 6.5.13(@swc/core@1.3.81)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)
       react: 0.0.0-experimental-0a360642d-20230711
       react-dom: 0.0.0-experimental-0a360642d-20230711(react@0.0.0-experimental-0a360642d-20230711)
       typescript: 5.3.0-dev.20230830
-      webpack: 5.88.0(@swc/core@1.3.81)
+      webpack: 5.88.2(@swc/core@1.3.81)
     transitivePeerDependencies:
       - '@storybook/mdx2-csf'
       - bluebird
@@ -13994,7 +14023,7 @@ packages:
       ts-dedent: 2.2.0
       typescript: 5.3.0-dev.20230830
       util-deprecate: 1.0.2
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)
       webpack-dev-middleware: 4.3.0(webpack@5.88.0)
       webpack-virtual-modules: 0.4.6
     transitivePeerDependencies:
@@ -14110,17 +14139,17 @@ packages:
       '@babel/core': 7.22.11
       '@babel/preset-flow': 7.18.6(@babel/core@7.22.11)
       '@babel/preset-react': 7.18.6(@babel/core@7.22.11)
-      '@pmmmwh/react-refresh-webpack-plugin': 0.5.10(react-refresh@0.11.0)(webpack@5.88.0)
+      '@pmmmwh/react-refresh-webpack-plugin': 0.5.10(react-refresh@0.11.0)(webpack@5.88.2)
       '@storybook/addons': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
       '@storybook/builder-webpack5': 6.5.13(@swc/core@1.3.81)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)
       '@storybook/client-logger': 6.5.13
-      '@storybook/core': 6.5.13(@storybook/builder-webpack5@6.5.13)(@storybook/manager-webpack5@6.5.13)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)(webpack@5.88.0)
+      '@storybook/core': 6.5.13(@storybook/builder-webpack5@6.5.13)(@storybook/manager-webpack5@6.5.13)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)(webpack@5.88.2)
       '@storybook/core-common': 6.5.13(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)
       '@storybook/csf': 0.0.2--canary.4566f4d.1
       '@storybook/docs-tools': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
       '@storybook/manager-webpack5': 6.5.13(@swc/core@1.3.81)(eslint@8.48.0)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)(typescript@5.3.0-dev.20230830)
       '@storybook/node-logger': 6.5.13
-      '@storybook/react-docgen-typescript-plugin': /react-docgen-typescript-plugin@1.0.2(typescript@5.3.0-dev.20230830)(webpack@5.88.0)
+      '@storybook/react-docgen-typescript-plugin': /react-docgen-typescript-plugin@1.0.2(typescript@5.3.0-dev.20230830)(webpack@5.88.2)
       '@storybook/semver': 7.3.2
       '@storybook/store': 6.5.13(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
       '@types/estree': 0.0.51
@@ -14148,7 +14177,7 @@ packages:
       ts-dedent: 2.2.0
       typescript: 5.3.0-dev.20230830
       util-deprecate: 1.0.2
-      webpack: 5.88.0(@swc/core@1.3.81)
+      webpack: 5.88.2(@swc/core@1.3.81)
     transitivePeerDependencies:
       - '@storybook/mdx2-csf'
       - '@swc/core'
@@ -15366,11 +15395,11 @@ packages:
     resolution: {integrity: sha512-ipixuVrh2OdNmauvtT51o3d8z12p6LtFW9in7U79der/kwejjdNchQC5UMn5u/KxNoM7VHHOs/l8KS8uHxhODQ==}
     dev: true
 
-  /@types/terser-webpack-plugin@5.2.0(@swc/core@1.3.81)(webpack@5.88.0):
+  /@types/terser-webpack-plugin@5.2.0(@swc/core@1.3.81)(webpack@5.88.2):
     resolution: {integrity: sha512-iHDR2pRfFjGyDqCALX2tgUgFtGoQf2AJhKpC2XD1IMBQVJF2bny6WChGRDKj9eaZJl4F2RmvBhxJNtVPj7aTRw==}
     deprecated: This is a stub types definition. terser-webpack-plugin provides its own type definitions, so you do not need this installed.
     dependencies:
-      terser-webpack-plugin: 5.3.9(@swc/core@1.3.81)(webpack@5.88.0)
+      terser-webpack-plugin: 5.3.9(@swc/core@1.3.81)(webpack@5.88.2)
     transitivePeerDependencies:
       - '@swc/core'
       - esbuild
@@ -16317,29 +16346,29 @@ packages:
       '@xtuc/long': 4.2.2
     dev: true
 
-  /@webpack-cli/configtest@2.1.1(webpack-cli@5.1.4)(webpack@5.88.0):
+  /@webpack-cli/configtest@2.1.1(webpack-cli@5.1.4)(webpack@5.88.2):
     resolution: {integrity: sha512-wy0mglZpDSiSS0XHrVR+BAdId2+yxPSoJW8fsna3ZpYSlufjvxnP4YbKTCBZnNIcGN4r6ZPXV55X4mYExOfLmw==}
     engines: {node: '>=14.15.0'}
     peerDependencies:
       webpack: 5.x.x
       webpack-cli: 5.x.x
     dependencies:
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
-      webpack-cli: 5.1.4(webpack-dev-server@4.15.1)(webpack@5.88.0)
+      webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack-cli: 5.1.4(webpack-dev-server@4.15.1)(webpack@5.88.2)
     dev: true
 
-  /@webpack-cli/info@2.0.2(webpack-cli@5.1.4)(webpack@5.88.0):
+  /@webpack-cli/info@2.0.2(webpack-cli@5.1.4)(webpack@5.88.2):
     resolution: {integrity: sha512-zLHQdI/Qs1UyT5UBdWNqsARasIA+AaF8t+4u2aS2nEpBQh2mWIVb8qAklq0eUENnC5mOItrIB4LiS9xMtph18A==}
     engines: {node: '>=14.15.0'}
     peerDependencies:
       webpack: 5.x.x
       webpack-cli: 5.x.x
     dependencies:
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
-      webpack-cli: 5.1.4(webpack-dev-server@4.15.1)(webpack@5.88.0)
+      webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack-cli: 5.1.4(webpack-dev-server@4.15.1)(webpack@5.88.2)
     dev: true
 
-  /@webpack-cli/serve@2.0.5(webpack-cli@5.1.4)(webpack-dev-server@4.15.1)(webpack@5.88.0):
+  /@webpack-cli/serve@2.0.5(webpack-cli@5.1.4)(webpack-dev-server@4.15.1)(webpack@5.88.2):
     resolution: {integrity: sha512-lqaoKnRYBdo1UgDX8uF24AfGMifWK19TxPmM5FHc2vAGxrJ/qtyUyFBWoY1tISZdelsQ5fBcOusifo5o5wSJxQ==}
     engines: {node: '>=14.15.0'}
     peerDependencies:
@@ -16350,9 +16379,9 @@ packages:
       webpack-dev-server:
         optional: true
     dependencies:
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
-      webpack-cli: 5.1.4(webpack-dev-server@4.15.1)(webpack@5.88.0)
-      webpack-dev-server: 4.15.1(webpack-cli@5.1.4)(webpack@5.88.0)
+      webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack-cli: 5.1.4(webpack-dev-server@4.15.1)(webpack@5.88.2)
+      webpack-dev-server: 4.15.1(webpack-cli@5.1.4)(webpack@5.88.2)
     dev: true
 
   /@xmldom/xmldom@0.8.6:
@@ -17343,7 +17372,25 @@ packages:
       loader-utils: 2.0.4
       make-dir: 3.1.0
       schema-utils: 2.7.1
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)
+    dev: true
+
+  /babel-loader@8.3.0(@babel/core@7.22.11)(webpack@5.88.2):
+    resolution: {integrity: sha512-H8SvsMF+m9t15HNLMipppzkC+Y2Yq+v3SonZyU70RBL/h1gxPkH08Ot8pEE9Z4Kd+czyWJClmFS8qzIP9OZ04Q==}
+    engines: {node: '>= 8.9'}
+    peerDependencies:
+      '@babel/core': ^7.0.0
+      webpack: '>=2'
+    peerDependenciesMeta:
+      '@babel/core':
+        optional: true
+    dependencies:
+      '@babel/core': 7.22.11
+      find-cache-dir: 3.3.2
+      loader-utils: 2.0.4
+      make-dir: 3.1.0
+      schema-utils: 2.7.1
+      webpack: 5.88.2(@swc/core@1.3.81)
     dev: true
 
   /babel-loader@8.3.0(@babel/core@7.22.9)(webpack@4.46.0):
@@ -17364,7 +17411,7 @@ packages:
       webpack: 4.46.0
     dev: true
 
-  /babel-loader@9.1.3(@babel/core@7.22.11)(webpack@5.88.0):
+  /babel-loader@9.1.3(@babel/core@7.22.11)(webpack@5.88.2):
     resolution: {integrity: sha512-xG3ST4DglodGf8qSwv0MdeWLhrDsw/32QMdTO5T1ZIp9gQur0HkCyFs7Awskr10JKXFXwpAhiCuYX5oGXnRGbw==}
     engines: {node: '>= 14.15.0'}
     peerDependencies:
@@ -17377,7 +17424,7 @@ packages:
       '@babel/core': 7.22.11
       find-cache-dir: 4.0.0
       schema-utils: 4.0.0
-      webpack: 5.88.0(@swc/core@1.3.81)
+      webpack: 5.88.2(@swc/core@1.3.81)
     dev: true
 
   /babel-plugin-add-react-displayname@0.0.5:
@@ -19285,7 +19332,7 @@ packages:
       toggle-selection: 1.0.6
     dev: false
 
-  /copy-webpack-plugin@11.0.0(webpack@5.88.0):
+  /copy-webpack-plugin@11.0.0(webpack@5.88.2):
     resolution: {integrity: sha512-fX2MWpamkW0hZxMEg0+mYnA40LTosOSa5TqZ9GYIBzyJa9C3QUaMPSE2xAi/buNr8u89SfD9wHSQVBzrRa/SOQ==}
     engines: {node: '>= 14.15.0'}
     peerDependencies:
@@ -19297,7 +19344,7 @@ packages:
       normalize-path: 3.0.0
       schema-utils: 4.0.0
       serialize-javascript: 6.0.0
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
     dev: true
 
   /core-js-builder@3.32.1:
@@ -19814,10 +19861,10 @@ packages:
       postcss-value-parser: 4.2.0
       schema-utils: 3.3.0
       semver: 7.5.4
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)
     dev: true
 
-  /css-loader@6.8.1(webpack@5.88.0):
+  /css-loader@6.8.1(webpack@5.88.2):
     resolution: {integrity: sha512-xDAXtEVGlD0gJ07iclwWVkLoZOpEvAWaSyf6W18S2pOC//K8+qUDIx8IIT3D+HjnmkJPQeesOPv5aiUaJsCM2g==}
     engines: {node: '>= 12.13.0'}
     peerDependencies:
@@ -19831,7 +19878,7 @@ packages:
       postcss-modules-values: 4.0.0(postcss@8.4.29)
       postcss-value-parser: 4.2.0
       semver: 7.5.4
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
     dev: true
 
   /css-select@4.3.0:
@@ -20595,13 +20642,13 @@ packages:
       - supports-color
     dev: true
 
-  /devtools-ignore-webpack-plugin@0.1.1(webpack@5.88.0):
+  /devtools-ignore-webpack-plugin@0.1.1(webpack@5.88.2):
     resolution: {integrity: sha512-pJ/NGZTQxK1VDoyy8fLm0UV3ugOanostztLKUmzqYnUIKqyUm2ZkIpon6No0gWlpOSMoSpBWTnzrx1cdsbpuyw==}
     engines: {node: '>=16.14.2', npm: '>=8.5.0'}
     peerDependencies:
       webpack: ^5.20.0
     dependencies:
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
     dev: true
 
   /did-jwt@5.12.3:
@@ -20860,15 +20907,6 @@ packages:
     dev: true
     optional: true
 
-<<<<<<< HEAD
-  /duplexer2@0.1.4:
-    resolution: {integrity: sha512-asLFVfWWtJ90ZyOUHMqk7/S2w2guQKxUI2itj3d92ADHhxUSbCMGi1f1cBcJ7xM1To+pE/Khbwo1yuNbMEPKeA==}
-    dependencies:
-      readable-stream: 2.3.7
-    dev: false
-
-=======
->>>>>>> f2a740063a (refactor: remove ssr (#10931))
   /duplexer@0.1.2:
     resolution: {integrity: sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==}
     dev: false
@@ -22822,7 +22860,7 @@ packages:
       semver: 7.5.4
       tapable: 1.1.3
       typescript: 5.3.0-dev.20230830
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)
     dev: true
 
   /form-data-encoder@1.7.1:
@@ -24187,7 +24225,21 @@ packages:
       lodash: 4.17.21
       pretty-error: 4.0.0
       tapable: 2.2.1
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)
+    dev: true
+
+  /html-webpack-plugin@5.5.3(webpack@5.88.2):
+    resolution: {integrity: sha512-6YrDKTuqaP/TquFH7h4srYWsZx+x6k6+FbsTm0ziCwGHDP78Unr1r9F/H4+sGmMbX08GQcJ+K64x55b+7VM/jg==}
+    engines: {node: '>=10.13.0'}
+    peerDependencies:
+      webpack: ^5.20.0
+    dependencies:
+      '@types/html-minifier-terser': 6.0.0
+      html-minifier-terser: 6.0.2
+      lodash: 4.17.21
+      pretty-error: 4.0.0
+      tapable: 2.2.1
+      webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
     dev: true
 
   /htmlparser2@6.1.0:
@@ -30648,7 +30700,7 @@ packages:
       sourcemap-codec: 1.4.8
     dev: true
 
-  /react-docgen-typescript-plugin@1.0.2(typescript@5.3.0-dev.20230830)(webpack@5.88.0):
+  /react-docgen-typescript-plugin@1.0.2(typescript@5.3.0-dev.20230830)(webpack@5.88.2):
     resolution: {integrity: sha512-/8OKrPRDTAGDnOkumGvDWixfrNPrRWhEMGLZnJr1NiJtRwdvNRGqGA2J/SeSvWerawqSPxNyXK+EfERCir6mMw==}
     peerDependencies:
       typescript: '>= 4.x || 5'
@@ -30665,7 +30717,7 @@ packages:
       react-docgen-typescript: 2.2.2(typescript@5.3.0-dev.20230830)
       tslib: 2.6.2
       typescript: 5.3.0-dev.20230830
-      webpack: 5.88.0(@swc/core@1.3.81)
+      webpack: 5.88.2(@swc/core@1.3.81)
       webpack-sources: 2.3.1
     transitivePeerDependencies:
       - supports-color
@@ -31868,7 +31920,7 @@ packages:
   /rpc-websockets@7.6.0:
     resolution: {integrity: sha512-Jgcs8q6t8Go98dEulww1x7RysgTkzpCMelVxZW4hvuyFtOGpeUz9prpr2KjUa/usqxgFCd9Tu3+yhHEP9GVmiQ==}
     dependencies:
-      '@babel/runtime': 7.22.6
+      '@babel/runtime': 7.22.15
       eventemitter3: 4.0.7
       uuid: 8.3.2
       ws: 8.13.0(bufferutil@4.0.7)(utf-8-validate@5.0.10)
@@ -32561,7 +32613,7 @@ packages:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
     engines: {node: '>=0.10.0'}
 
-  /source-map-loader@4.0.1(webpack@5.88.0):
+  /source-map-loader@4.0.1(webpack@5.88.2):
     resolution: {integrity: sha512-oqXpzDIByKONVY8g1NUPOTQhe0UTU5bWUl32GSkqK2LjJj0HmwTMVKxcUip0RgAYhY1mqgOxjbQM48a0mmeNfA==}
     engines: {node: '>= 14.15.0'}
     peerDependencies:
@@ -32570,7 +32622,7 @@ packages:
       abab: 2.0.6
       iconv-lite: 0.6.3
       source-map-js: 1.0.2
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
     dev: true
 
   /source-map-resolve@0.5.3:
@@ -33209,16 +33261,16 @@ packages:
     dependencies:
       loader-utils: 2.0.4
       schema-utils: 3.3.0
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)
     dev: true
 
-  /style-loader@3.3.3(webpack@5.88.0):
+  /style-loader@3.3.3(webpack@5.88.2):
     resolution: {integrity: sha512-53BiGLXAcll9maCYtZi2RCQZKa8NQQai5C4horqKyRmHj9H7QmcUyucrH+4KW/gBQbXM2AsB0axoEcFZPlfPcw==}
     engines: {node: '>= 12.13.0'}
     peerDependencies:
       webpack: ^5.0.0
     dependencies:
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
     dev: true
 
   /style-to-object@0.3.0:
@@ -33351,14 +33403,14 @@ packages:
       - utf-8-validate
     dev: false
 
-  /swc-loader@0.2.3(@swc/core@1.3.81)(webpack@5.88.0):
+  /swc-loader@0.2.3(@swc/core@1.3.81)(webpack@5.88.2):
     resolution: {integrity: sha512-D1p6XXURfSPleZZA/Lipb3A8pZ17fP4NObZvFCDjK/OKljroqDpPmsBdTraWhVBqUNpcWBQY1imWdoPScRlQ7A==}
     peerDependencies:
       '@swc/core': ^1.2.147
       webpack: '>=2'
     dependencies:
       '@swc/core': 1.3.81
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
     dev: true
 
   /symbol-tree@3.2.4:
@@ -33541,7 +33593,32 @@ packages:
       schema-utils: 3.3.0
       serialize-javascript: 6.0.1
       terser: 5.19.3
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)
+    dev: true
+
+  /terser-webpack-plugin@5.3.9(@swc/core@1.3.81)(webpack@5.88.2):
+    resolution: {integrity: sha512-ZuXsqE07EcggTWQjXUj+Aot/OMcD0bMKGgF63f7UxYcu5/AJF53aIpK1YoP5xR9l6s/Hy2b+t1AM0bLNPRuhwA==}
+    engines: {node: '>= 10.13.0'}
+    peerDependencies:
+      '@swc/core': '*'
+      esbuild: '*'
+      uglify-js: '*'
+      webpack: ^5.1.0
+    peerDependenciesMeta:
+      '@swc/core':
+        optional: true
+      esbuild:
+        optional: true
+      uglify-js:
+        optional: true
+    dependencies:
+      '@jridgewell/trace-mapping': 0.3.19
+      '@swc/core': 1.3.81
+      jest-worker: 27.5.1
+      schema-utils: 3.3.0
+      serialize-javascript: 6.0.1
+      terser: 5.19.3
+      webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
     dev: true
 
   /terser@4.8.1:
@@ -35644,7 +35721,7 @@ packages:
     engines: {node: '>=12'}
     dev: false
 
-  /webpack-cli@5.1.4(webpack-dev-server@4.15.1)(webpack@5.88.0):
+  /webpack-cli@5.1.4(webpack-dev-server@4.15.1)(webpack@5.88.2):
     resolution: {integrity: sha512-pIDJHIEI9LR0yxHXQ+Qh95k2EvXpWzZ5l+d+jIo+RdSm9MiHfzazIxwwni/p7+x4eJZuvG1AJwgC4TNQ7NRgsg==}
     engines: {node: '>=14.15.0'}
     hasBin: true
@@ -35662,9 +35739,9 @@ packages:
         optional: true
     dependencies:
       '@discoveryjs/json-ext': 0.5.7
-      '@webpack-cli/configtest': 2.1.1(webpack-cli@5.1.4)(webpack@5.88.0)
-      '@webpack-cli/info': 2.0.2(webpack-cli@5.1.4)(webpack@5.88.0)
-      '@webpack-cli/serve': 2.0.5(webpack-cli@5.1.4)(webpack-dev-server@4.15.1)(webpack@5.88.0)
+      '@webpack-cli/configtest': 2.1.1(webpack-cli@5.1.4)(webpack@5.88.2)
+      '@webpack-cli/info': 2.0.2(webpack-cli@5.1.4)(webpack@5.88.2)
+      '@webpack-cli/serve': 2.0.5(webpack-cli@5.1.4)(webpack-dev-server@4.15.1)(webpack@5.88.2)
       colorette: 2.0.19
       commander: 10.0.1
       cross-spawn: 7.0.3
@@ -35673,8 +35750,8 @@ packages:
       import-local: 3.1.0
       interpret: 3.1.1
       rechoir: 0.8.0
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
-      webpack-dev-server: 4.15.1(webpack-cli@5.1.4)(webpack@5.88.0)
+      webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack-dev-server: 4.15.1(webpack-cli@5.1.4)(webpack@5.88.2)
       webpack-merge: 5.8.0
     dev: true
 
@@ -35704,10 +35781,10 @@ packages:
       mime-types: 2.1.35
       range-parser: 1.2.1
       schema-utils: 3.3.0
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)
     dev: true
 
-  /webpack-dev-middleware@5.3.3(webpack@5.88.0):
+  /webpack-dev-middleware@5.3.3(webpack@5.88.2):
     resolution: {integrity: sha512-hj5CYrY0bZLB+eTO+x/j67Pkrquiy7kWepMHmUMoPsmcUaeEnQJqFzHJOyxgWlq746/wUuA64p9ta34Kyb01pA==}
     engines: {node: '>= 12.13.0'}
     peerDependencies:
@@ -35718,10 +35795,10 @@ packages:
       mime-types: 2.1.35
       range-parser: 1.2.1
       schema-utils: 4.0.0
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
     dev: true
 
-  /webpack-dev-server@4.15.1(webpack-cli@5.1.4)(webpack@5.88.0):
+  /webpack-dev-server@4.15.1(webpack-cli@5.1.4)(webpack@5.88.2):
     resolution: {integrity: sha512-5hbAst3h3C3L8w6W4P96L5vaV0PxSmJhxZvWKYIdgxOQm8pNZ5dEOmmSLBVpP85ReeyRt6AS1QJNyo/oFFPeVA==}
     engines: {node: '>= 12.13.0'}
     hasBin: true
@@ -35762,9 +35839,9 @@ packages:
       serve-index: 1.9.1
       sockjs: 0.3.24
       spdy: 4.0.2
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
-      webpack-cli: 5.1.4(webpack-dev-server@4.15.1)(webpack@5.88.0)
-      webpack-dev-middleware: 5.3.3(webpack@5.88.0)
+      webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack-cli: 5.1.4(webpack-dev-server@4.15.1)(webpack@5.88.2)
+      webpack-dev-middleware: 5.3.3(webpack@5.88.2)
       ws: 8.13.0(bufferutil@4.0.7)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - bufferutil
@@ -35826,13 +35903,13 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: true
 
-  /webpack-target-webextension@1.1.0(webpack@5.88.0):
+  /webpack-target-webextension@1.1.0(webpack@5.88.2):
     resolution: {integrity: sha512-ip7ljKtjRmXKjuLZLo8jzcQjV3nuVPI1U+AUcx6PGJXC/+7apt20wbSVfOKnXDhHhijzP44qe/1qSgR8C+HgZg==}
     engines: {node: '>=14.17.6'}
     peerDependencies:
       webpack: ^5.0.0
     dependencies:
-      webpack: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4)
+      webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
     dev: true
 
   /webpack-virtual-modules@0.2.2:
@@ -35887,8 +35964,8 @@ packages:
       - supports-color
     dev: true
 
-  /webpack@5.88.0(@swc/core@1.3.81):
-    resolution: {integrity: sha512-O3jDhG5e44qIBSi/P6KpcCcH7HD+nYIHVBhdWFxcLOcIGN8zGo5nqF3BjyNCxIh4p1vFdNnreZv2h2KkoAw3lw==}
+  /webpack@5.88.2(@swc/core@1.3.81):
+    resolution: {integrity: sha512-JmcgNZ1iKj+aiR0OvTYtWQqJwq37Pf683dY9bVORwVbUrDhLhdn/PlO2sHsFHPkj7sHNQF3JwaAkp49V+Sq1tQ==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     peerDependencies:
@@ -35918,7 +35995,7 @@ packages:
       neo-async: 2.6.2
       schema-utils: 3.3.0
       tapable: 2.2.1
-      terser-webpack-plugin: 5.3.9(@swc/core@1.3.81)(webpack@5.88.0)
+      terser-webpack-plugin: 5.3.9(@swc/core@1.3.81)(webpack@5.88.2)
       watchpack: 2.4.0
       webpack-sources: 3.2.3
     transitivePeerDependencies:
@@ -36585,7 +36662,7 @@ packages:
     resolution: {integrity: sha512-JZxotl7SxAJH0j7dN4pxsTV6ZLXoLdGME+PsjkL/DaBrVryK9kTGq06GfKrwcSOqypP+fdXGoCHE36b99fWVoA==}
     dev: false
 
-  github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81)(webpack-cli@5.1.4):
+  github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770(@swc/core@1.3.81):
     resolution: {tarball: https://codeload.github.com/Jack-Works/webpack/tar.gz/528c91e564d5756e21c9c462b607d913452af770}
     id: github.com/Jack-Works/webpack/528c91e564d5756e21c9c462b607d913452af770
     name: webpack
@@ -36621,7 +36698,50 @@ packages:
       tapable: 2.2.1
       terser-webpack-plugin: 5.3.9(@swc/core@1.3.81)(webpack@5.88.0)
       watchpack: 2.4.0
-      webpack-cli: 5.1.4(webpack-dev-server@4.15.1)(webpack@5.88.0)
+      webpack-sources: 3.2.3
+    transitivePeerDependencies:
+      - '@swc/core'
+      - esbuild
+      - uglify-js
+    dev: true
+
+  github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4):
+    resolution: {tarball: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e}
+    id: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e
+    name: webpack
+    version: 5.88.2
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+    peerDependencies:
+      webpack-cli: '*'
+    peerDependenciesMeta:
+      webpack-cli:
+        optional: true
+    dependencies:
+      '@types/eslint-scope': 3.7.4
+      '@types/estree': 1.0.1
+      '@webassemblyjs/ast': 1.11.6
+      '@webassemblyjs/wasm-edit': 1.11.6
+      '@webassemblyjs/wasm-parser': 1.11.6
+      acorn: 8.10.0
+      acorn-import-assertions: 1.9.0(acorn@8.10.0)
+      browserslist: 4.21.10
+      chrome-trace-event: 1.0.3
+      enhanced-resolve: 5.15.0
+      es-module-lexer: 1.3.0
+      eslint-scope: 5.1.1
+      events: 3.3.0
+      glob-to-regexp: 0.4.1
+      graceful-fs: 4.2.11
+      json-parse-even-better-errors: 2.3.1
+      loader-runner: 4.3.0
+      mime-types: 2.1.35
+      neo-async: 2.6.2
+      schema-utils: 3.3.0
+      tapable: 2.2.1
+      terser-webpack-plugin: 5.3.9(@swc/core@1.3.81)(webpack@5.88.2)
+      watchpack: 2.4.0
+      webpack-cli: 5.1.4(webpack-dev-server@4.15.1)(webpack@5.88.2)
       webpack-sources: 3.2.3
     transitivePeerDependencies:
       - '@swc/core'
@@ -36638,281 +36758,4 @@ packages:
     dev: true
 
 time:
-<<<<<<< HEAD
-  /@babel/core@7.22.11: '2023-08-24T13:08:56.485Z'
-  /@balancer-labs/sor@1.0.0: '2020-12-17T16:40:01.207Z'
-  /@blocto/fcl@1.4.0: '2023-06-07T11:29:36.137Z'
-  /@bonfida/spl-name-service@0.1.50: '2022-08-29T01:47:36.489Z'
-  /@changesets/cli@2.26.2: '2023-06-27T08:30:52.503Z'
-  /@commitlint/cli@17.7.1: '2023-08-10T05:35:08.844Z'
-  /@commitlint/config-conventional@17.7.0: '2023-08-09T08:25:19.990Z'
-  /@dimensiondev/common-protocols@1.6.0-20210723072221-8f46a92: '2021-07-23T07:22:56Z'
-  /@dimensiondev/holoflows-kit@0.9.0-20230307045856-46252fb: '2023-03-07T04:58:40Z'
-  /@dimensiondev/mask-wallet-core@0.1.0-20211013082857-eb62e5f: '2021-10-13T08:39:07Z'
-  /@dimensiondev/metamask-extension-provider@3.0.6-20221105074301-8806fca: '2022-11-05T07:43:23Z'
-  /@emotion/serialize@1.1.0: '2022-07-31T09:06:36.799Z'
-  /@emotion/server@11.10.0: '2022-07-31T09:06:36.914Z'
-  /@emotion/styled@11.10.4: '2022-08-30T09:02:33.440Z'
-  /@emotion/utils@1.2.0: '2022-07-31T09:06:37.417Z'
-  /@ethereumjs/util@8.0.5: '2023-02-27T14:07:47.825Z'
-  /@ethersproject/abi@5.4.0: '2021-06-26T17:05:27.127Z'
-  /@ethersproject/abi@5.7.0: '2022-08-19T21:19:34.932Z'
-  /@ethersproject/address@5.4.0: '2021-06-26T17:04:46.615Z'
-  /@ethersproject/bytes@5.7.0: '2022-08-19T21:19:11.133Z'
-  /@ethersproject/keccak256@5.7.0: '2022-08-19T21:19:15.555Z'
-  /@ethersproject/providers@5.7.2: '2022-10-19T22:59:19.925Z'
-  /@ethersproject/solidity@5.4.0: '2021-06-26T17:05:05.396Z'
-  /@ethersproject/strings@5.7.0: '2022-08-19T21:19:26.755Z'
-  /@headlessui/react@1.7.15: '2023-06-01T10:41:43.429Z'
-  /@heroicons/react@2.0.18: '2023-05-09T19:41:26.731Z'
-  /@hookform/resolvers@3.1.1: '2023-06-12T17:05:20.706Z'
-  /@json2csv/plainjs@7.0.1: '2023-05-31T09:42:24.217Z'
-  /@magic-works/i18n-codegen@0.5.0: '2023-02-17T06:35:05.095Z'
-  /@masknet/compartment@0.4.2: '2022-10-31T05:24:41.592Z'
-  /@masknet/kit@0.1.2: '2023-04-26T09:27:49.423Z'
-  /@masknet/membrane@0.1.5: '2022-10-31T04:33:00.047Z'
-  /@masknet/secp256k1-webcrypto@1.0.0: '2022-11-01T07:12:50.321Z'
-  /@masknet/static-module-record-swc@0.4.1: '2022-10-31T06:11:09.670Z'
-  /@masknet/stego-js@0.14.2: '2022-11-01T07:34:52.614Z'
-  /@masknet/web-endowments@0.1.1: '2022-08-31T04:58:03.487Z'
-  /@metamask/eth-sig-util@4.0.0: '2021-09-22T12:27:28.380Z'
-  /@metamask/eth-sig-util@5.0.2: '2022-11-10T21:56:15.449Z'
-  /@metaplex-foundation/mpl-token-metadata@1.1.0: '2022-01-11T05:47:46.383Z'
-  /@metaplex/js@4.11.7: '2022-01-19T22:01:58.682Z'
-  /@msgpack/msgpack@3.0.0-beta2: '2023-03-19T01:55:14.738Z'
-  /@mui/icons-material@5.10.6: '2022-09-19T14:32:36.483Z'
-  /@mui/lab@5.0.0-alpha.102: '2022-10-03T16:22:19.340Z'
-  /@mui/material@5.10.8: '2022-10-03T16:22:57.228Z'
-  /@mui/system@5.10.8: '2022-10-03T16:21:59.688Z'
-  /@nice-labs/emit-file-webpack-plugin@1.1.4: '2023-06-08T14:34:13.568Z'
-  /@nice-labs/git-rev@3.5.1: '2022-09-17T04:11:47.528Z'
-  /@pmmmwh/react-refresh-webpack-plugin@0.5.11: '2023-08-15T02:38:25.368Z'
-  /@react-hookz/web@23.1.0: '2023-06-30T06:39:12.288Z'
-  /@rollup/plugin-commonjs@25.0.4: '2023-08-11T17:13:52.902Z'
-  /@rollup/plugin-json@6.0.0: '2022-12-17T15:14:08.547Z'
-  /@rollup/plugin-node-resolve@15.2.1: '2023-08-22T04:58:47.775Z'
-  /@rollup/plugin-replace@5.0.2: '2022-12-17T15:03:40.788Z'
-  /@scamsniffer/detector@0.0.21: '2022-08-15T06:05:49.379Z'
-  /@sentry/browser@7.66.0: '2023-08-30T11:30:31.797Z'
-  /@sentry/tracing@7.66.0: '2023-08-30T11:31:35.105Z'
-  /@sentry/types@7.66.0: '2023-08-30T11:30:16.619Z'
-  /@servie/events@3.0.0: '2021-04-13T22:43:08.067Z'
-  /@sinonjs/text-encoding@0.7.2: '2022-07-27T11:54:25.384Z'
-  /@solana/buffer-layout@4.0.1: '2022-12-09T16:49:55.927Z'
-  /@solana/spl-token@0.1.8: '2021-08-16T19:07:32.336Z'
-  /@solana/web3.js@1.75.0: '2023-04-04T06:26:46.874Z'
-  /@splinetool/react-spline@2.2.6: '2023-02-24T14:10:59.598Z'
-  /@storybook/addon-actions@6.5.13: '2022-10-24T04:02:38.942Z'
-  /@storybook/addon-essentials@6.5.13: '2022-10-24T04:04:16.548Z'
-  /@storybook/addon-links@6.5.13: '2022-10-24T04:02:53.198Z'
-  /@storybook/addons@6.5.13: '2022-10-24T04:02:22.818Z'
-  /@storybook/builder-webpack5@6.5.13: '2022-10-24T04:04:10.534Z'
-  /@storybook/manager-webpack5@6.5.13: '2022-10-24T04:04:24.767Z'
-  /@storybook/react@6.5.13: '2022-10-24T04:05:15.187Z'
-  /@swc/core@1.3.81: '2023-08-30T13:36:47.226Z'
-  /@tailwindcss/aspect-ratio@0.4.2: '2022-09-02T11:31:31.571Z'
-  /@tailwindcss/container-queries@0.1.1: '2023-03-31T14:50:50.368Z'
-  /@tailwindcss/forms@0.5.4: '2023-07-13T16:33:31.697Z'
-  /@tailwindcss/line-clamp@0.4.4: '2023-03-30T19:46:03.962Z'
-  /@tailwindcss/typography@0.5.9: '2023-01-10T16:14:23.354Z'
-  /@tanstack/query-sync-storage-persister@4.35.0: '2023-09-07T08:05:59.582Z'
-  /@tanstack/react-query-devtools@4.29.25: '2023-07-16T04:57:00.088Z'
-  /@tanstack/react-query-persist-client@4.35.0: '2023-09-07T08:06:11.130Z'
-  /@tanstack/react-query@4.29.25: '2023-07-16T04:56:56.995Z'
-  /@typechain/web3-v1@6.0.2: '2022-11-01T22:04:27.996Z'
-  /@types/bn.js@4.11.6: '2020-01-03T23:18:47.360Z'
-  /@types/bs58@4.0.1: '2019-11-15T20:48:33.391Z'
-  /@types/color@3.0.3: '2022-02-01T01:31:41.288Z'
-  /@types/d3@5.16.4: '2020-11-04T01:11:28.922Z'
-  /@types/dompurify@3.0.2: '2023-04-19T20:32:44.559Z'
-  /@types/elliptic@6.4.14: '2021-11-03T19:31:48.087Z'
-  /@types/ethereum-blockies@0.1.0: '2021-12-07T20:01:28.367Z'
-  /@types/fs-extra@11.0.1: '2023-01-10T19:32:56.188Z'
-  /@types/gulp@4.0.13: '2023-06-28T19:02:46.170Z'
-  /@types/json-stable-stringify@1.0.34: '2022-03-02T17:32:27.548Z'
-  /@types/lodash-es@4.17.9: '2023-08-30T19:54:17.616Z'
-  /@types/node@20.5.7: '2023-08-28T00:33:06.057Z'
-  /@types/proper-lockfile@4.1.2: '2021-07-07T17:17:09.492Z'
-  /@types/punycode@2.1.0: '2018-12-07T19:12:11.241Z'
-  /@types/qrcode@1.5.2: '2023-08-30T20:01:39.243Z'
-  /@types/react-devtools-inline@4.24.3: '2022-12-16T07:03:08.830Z'
-  /@types/react-dom@18.2.7: '2023-07-12T19:02:48.652Z'
-  /@types/react-window@1.8.5: '2021-07-27T04:01:45.463Z'
-  /@types/react@18.2.21: '2023-08-22T18:26:08.023Z'
-  /@types/remarkable@2.0.3: '2021-07-08T23:36:05.386Z'
-  /@types/socket.io-client@1.4.36: '2021-03-12T14:48:11.667Z'
-  /@types/terser-webpack-plugin@5.2.0: '2021-09-01T22:01:33.915Z'
-  /@types/tinycolor2@1.4.3: '2021-07-02T19:42:46.758Z'
-  /@types/use-subscription@1.0.0: '2019-09-24T21:49:42.206Z'
-  /@types/uuid@9.0.3: '2023-08-30T20:17:13.185Z'
   /@types/web@0.0.109: '2023-07-19T04:14:38.093Z'
-  /@types/webextension-polyfill@0.10.2: '2023-08-22T18:36:25.711Z'
-  /@types/yargs@17.0.24: '2023-03-27T18:38:00.815Z'
-  /@typescript-eslint/eslint-plugin@6.5.0: '2023-08-28T17:14:53.432Z'
-  /@typescript-eslint/parser@6.5.0: '2023-08-28T17:14:25.431Z'
-  /@uniswap/sdk-core@3.0.1: '2021-07-29T23:10:56.521Z'
-  /@uniswap/v2-sdk@3.0.0-alpha.2: '2021-05-21T14:24:53.975Z'
-  /@vitest/ui@0.34.3: '2023-08-25T07:30:41.528Z'
-  /@walletconnect/sign-client@2.7.3: '2023-05-08T06:42:19.413Z'
-  /@walletconnect/types@2.7.3: '2023-05-08T06:42:07.362Z'
-  /@walletconnect/utils@2.7.3: '2023-05-08T06:42:09.851Z'
-  /anchorme@2.1.2: '2020-05-08T13:17:56.752Z'
-  /arweave@1.13.6: '2023-04-17T13:00:31.872Z'
-  /assert@2.0.0: '2019-05-12T11:00:27.859Z'
-  /async-call-rpc@6.3.1: '2023-05-31T14:38:02.038Z'
-  /autoprefixer@10.4.14: '2023-03-09T21:42:07.697Z'
-  /babel-loader@9.1.3: '2023-07-07T14:47:26.287Z'
-  /bignumber.js@9.1.1: '2022-12-04T12:43:57.430Z'
-  /bip39@3.1.0: '2023-02-25T05:36:52.236Z'
-  /bn.js@4.12.0: '2021-02-24T07:16:47.735Z'
-  /boring-avatars@1.6.3: '2022-02-20T17:50:27.695Z'
-  /bs58@5.0.0: '2022-02-17T13:19:37.346Z'
-  /buffer@6.0.3: '2020-11-23T02:51:27.107Z'
-  /chalk@5.3.0: '2023-06-29T10:58:11.887Z'
-  /clipboard-polyfill@3.0.3: '2021-04-03T22:29:46.525Z'
-  /color@4.2.3: '2022-04-05T09:15:16.379Z'
-  /copy-webpack-plugin@11.0.0: '2022-05-17T16:15:50.971Z'
-  /core-js-builder@3.32.1: '2023-08-18T17:05:35.575Z'
-  /core-js@3.32.1: '2023-08-18T17:05:33.550Z'
-  /cross-env@7.0.3: '2020-12-01T20:25:26.541Z'
-  /cross-fetch@4.0.0: '2023-07-03T15:54:26.105Z'
-  /crypto-browserify@3.12.0: '2017-11-03T12:22:40.198Z'
-  /cspell@7.2.0: '2023-08-29T10:12:17.818Z'
-  /css-loader@6.8.1: '2023-05-28T01:41:50.349Z'
-  /cssnano@6.0.1: '2023-04-30T09:32:01.132Z'
-  /d3@5.16.0: '2020-04-20T17:59:07.964Z'
-  /date-fns@2.30.0: '2023-04-30T02:49:47.228Z'
-  /devtools-ignore-webpack-plugin@0.1.1: '2023-03-30T15:55:35.664Z'
-  /dompurify@3.0.5: '2023-07-11T08:02:01.823Z'
-  /dotenv@16.3.1: '2023-06-17T16:47:53.971Z'
-  /ef.js@0.17.4: '2023-07-11T15:21:23.449Z'
-  /elliptic@6.5.4: '2021-02-02T18:22:21.969Z'
-  /enquirer@2.4.1: '2023-07-28T12:26:30.586Z'
-  /eslint-plugin-import@2.28.1: '2023-08-18T20:41:10.468Z'
-  /eslint-plugin-react-hooks@4.6.0: '2022-06-14T19:46:28.829Z'
-  /eslint-plugin-react@7.33.2: '2023-08-16T04:22:35.076Z'
-  /eslint-plugin-tss-unused-classes@1.0.1: '2023-08-18T03:08:33.065Z'
-  /eslint-plugin-unicorn@48.0.1: '2023-07-25T16:06:04.550Z'
-  /eslint-plugin-unused-imports@3.0.0: '2023-07-11T19:42:07.022Z'
-  /eslint@8.48.0: '2023-08-25T20:02:06.946Z'
-  /ethereum-blockies@0.1.1: '2017-06-12T21:12:31.823Z'
-  /ethers@5.7.2: '2022-10-19T22:59:23.032Z'
-  /event-iterator@2.0.0: '2020-06-12T12:26:39.825Z'
-  /fs-extra@11.1.1: '2023-03-20T14:56:50.321Z'
-  /glob@10.3.4: '2023-08-30T22:45:21.320Z'
-  /graphql-request@6.0.0: '2023-04-13T03:54:19.579Z'
-  /graphql@16.6.0: '2022-08-16T19:26:38.481Z'
-  /gulp-cli@2.3.0: '2020-06-04T00:14:30.257Z'
-  /gun@0.2020.1234: '2021-08-26T04:44:56.538Z'
-  /history@5.3.0: '2022-02-22T17:18:05.834Z'
-  /html-to-image@1.11.11: '2023-02-01T07:02:51.019Z'
-  /html-webpack-plugin@5.5.3: '2023-06-10T19:57:00.200Z'
-  /https-browserify@1.0.0: '2017-04-04T23:35:16.037Z'
-  /husky@8.0.3: '2023-01-03T08:01:18.807Z'
-  /i18next-browser-languagedetector@7.1.0: '2023-06-27T07:30:12.318Z'
-  /i18next@23.2.11: '2023-07-12T19:10:10.167Z'
-  /idb@7.1.1: '2022-11-04T10:28:55.720Z'
-  /iframe-resizer-react@1.1.0: '2021-01-05T22:32:47.844Z'
-  /immer@10.0.2: '2023-05-09T18:24:24.940Z'
-  /ipfs-http-client@60.0.1: '2023-05-25T14:59:42.047Z'
-  /json-stable-stringify@1.0.2: '2022-11-08T17:21:21.117Z'
-  /linkify-react@4.1.1: '2023-03-25T15:06:24.522Z'
-  /linkifyjs@4.1.1: '2023-03-25T15:05:16.391Z'
-  /lint-staged@14.0.1: '2023-08-21T09:48:06.355Z'
-  /lodash-es@4.17.21: '2021-02-20T15:43:35.756Z'
-  /lru-cache@10.0.0: '2023-06-15T17:45:24.798Z'
-  /merkletreejs@0.3.10: '2023-04-24T07:24:06.338Z'
-  /millify@6.1.0: '2023-03-12T05:25:33.920Z'
-  /mock-socket@9.2.1: '2023-02-14T12:46:15.982Z'
-  /msw@1.2.1: '2023-03-24T14:26:16.989Z'
-  /next-tick@1.1.0: '2020-02-11T04:03:15.049Z'
-  /notistack@2.0.8: '2022-10-16T13:58:55.665Z'
-  /postcss-cli@10.1.0: '2022-11-29T20:55:37.193Z'
-  /postcss@8.4.29: '2023-08-29T17:47:30.490Z'
-  /prettier@3.0.3: '2023-08-29T12:30:11.880Z'
-  /promievent@0.1.5: '2020-12-21T22:00:08.601Z'
-  /proper-lockfile@4.1.2: '2021-01-25T18:55:18.544Z'
-  /punycode@2.3.0: '2023-01-19T17:57:59.553Z'
-  /pure-react-carousel@1.30.1: '2022-10-13T02:02:21.395Z'
-  /purgecss@5.0.0: '2022-09-13T20:19:53.516Z'
-  /pvtsutils@1.3.5: '2023-08-18T09:36:38.878Z'
-  /qrcode@1.5.3: '2023-04-22T05:26:26.362Z'
-  /quill-delta-to-html@0.12.1: '2022-04-07T06:29:53.616Z'
-  /react-avatar-editor@13.0.0: '2022-05-03T17:49:29.967Z'
-  /react-devtools-inline@4.28.0: '2023-07-10T09:13:49.376Z'
-  /react-dom@0.0.0-experimental-0a360642d-20230711: '2023-07-12T16:15:25.367Z'
-  /react-draggable@4.4.5: '2022-04-26T18:04:09.131Z'
-  /react-feather@2.0.10: '2022-05-30T14:20:50.600Z'
-  /react-highlight-words@0.20.0: '2023-01-22T22:11:15.972Z'
-  /react-hook-form@7.45.2: '2023-07-17T13:42:21.419Z'
-  /react-i18next@13.0.2: '2023-07-10T18:14:53.905Z'
-  /react-markdown@8.0.7: '2023-04-12T10:09:37.701Z'
-  /react-qrcode-logo@2.9.0: '2023-02-25T14:35:39.109Z'
-  /react-refresh@0.14.0: '2022-06-14T19:47:06.215Z'
-  /react-router-dom@6.14.2: '2023-07-17T20:54:19.824Z'
-  /react-to-print@2.14.13: '2023-06-07T08:18:39.357Z'
-  /react-transition-group@4.4.5: '2022-08-01T08:36:58.958Z'
-  /react-use@17.4.0: '2022-05-20T12:10:53.726Z'
-  /react-window@1.8.9: '2023-04-17T19:30:25.509Z'
-  /react@0.0.0-experimental-0a360642d-20230711: '2023-07-12T16:15:14.202Z'
-  /regenerator-runtime@0.14.0: '2023-08-04T17:35:20.982Z'
-  /rehype-raw@6.1.1: '2021-12-30T12:01:42.673Z'
-  /remark-gfm@3.0.1: '2021-11-03T18:15:59.082Z'
-  /remarkable@2.0.1: '2020-05-25T11:32:44.241Z'
-  /rimraf@5.0.1: '2023-05-17T22:03:25.693Z'
-  /rollup-plugin-swc3@0.10.1: '2023-08-27T09:49:29.595Z'
-  /rollup-plugin-terser@7.0.2: '2020-09-04T18:39:17.900Z'
-  /rollup@3.28.1: '2023-08-22T05:46:12.354Z'
-  /scrypt-js@3.0.1: '2020-05-19T07:06:27.834Z'
-  /ses@0.18.7: '2023-08-07T21:38:49.283Z'
-  /socket.io-client@2.4.0: '2021-01-04T22:41:40.900Z'
-  /source-map-loader@4.0.1: '2022-10-07T16:54:15.119Z'
-  /source-map@0.7.4: '2022-06-04T22:57:10.068Z'
-  /stream-browserify@3.0.0: '2020-04-16T12:50:54.368Z'
-  /stream-http@2.8.3: '2018-06-02T01:17:56.106Z'
-  /style-loader@3.3.3: '2023-05-19T02:36:10.622Z'
-  /svgo-loader@4.0.0: '2023-01-21T06:39:04.523Z'
-  /svgo@3.0.2: '2022-11-18T16:47:44.481Z'
-  /swc-loader@0.2.3: '2022-06-09T15:26:53.432Z'
-  /tailwindcss@3.3.3: '2023-07-13T16:18:50.075Z'
-  /terser-webpack-plugin@5.3.9: '2023-05-17T23:20:28.819Z'
-  /tiny-secp256k1@2.2.3: '2023-06-29T08:38:53.395Z'
-  /tinycolor2@1.6.0: '2023-02-03T23:33:07.774Z'
-  /ts-node@10.9.1: '2022-07-14T02:33:44.792Z'
-  /ts-results-es@4.0.0: '2023-08-08T10:13:15.427Z'
-  /tslib@2.6.2: '2023-08-18T17:41:58.755Z'
-  /tss-react@4.9.0: '2023-08-18T06:18:25.345Z'
-  /typechain@8.3.1: '2023-07-24T07:52:39.458Z'
-  /typescript@5.3.0-dev.20230830: '2023-08-30T07:12:49.423Z'
-  /typeson-registry@8.0.0: '2023-08-13T19:05:18.535Z'
-  /typeson@9.0.3: '2023-06-09T16:06:00.595Z'
-  /unstated-next@1.1.0: '2019-05-13T23:34:47.580Z'
-  /urlcat@3.1.0: '2023-01-17T18:49:25.457Z'
-  /use-subscription@1.6.0: '2022-03-29T16:02:10.348Z'
-  /use-subscription@1.8.0: '2022-06-14T19:47:14.602Z'
-  /uuid@9.0.0: '2022-09-05T20:03:54.869Z'
-  /vite@4.4.9: '2023-08-07T09:16:13.971Z'
-  /vitest@0.34.3: '2023-08-25T07:30:46.281Z'
-  /wallet.ts@1.0.1: '2020-08-18T00:18:54.467Z'
-  /web-ext@7.6.2: '2023-04-25T09:11:52.549Z'
-  /web3-core-helpers@1.8.0: '2022-09-14T10:59:29.411Z'
-  /web3-core@1.8.0: '2022-09-14T10:59:33.813Z'
-  /web3-eth-abi@1.8.0: '2022-09-14T10:59:27.837Z'
-  /web3-eth-accounts@1.8.0: '2022-09-14T10:59:35.229Z'
-  /web3-eth-contract@1.8.0: '2022-09-14T10:59:39.169Z'
-  /web3-eth@1.8.0: '2022-09-14T10:59:42.175Z'
-  /web3-utils@1.8.0: '2022-09-14T10:59:26.419Z'
-  /webextension-polyfill@0.10.0: '2022-08-12T19:42:49.271Z'
-  /webpack-cli@5.1.4: '2023-06-07T18:23:17.058Z'
-  /webpack-dev-server@4.15.1: '2023-06-09T14:38:58.996Z'
-  /webpack-target-webextension@1.1.0: '2023-06-20T12:22:16.811Z'
-  /yargs@17.7.2: '2023-04-27T19:59:02.861Z'
-  /z-schema@6.0.1: '2023-04-13T12:31:24.670Z'
-  /zod@3.22.2: '2023-08-19T00:15:29.521Z'
-=======
-  /@emotion/cache@11.11.0: '2023-05-06T08:49:11.977Z'
-  /@emotion/react@11.11.1: '2023-06-07T11:01:08.326Z'
-  /@emotion/serialize@1.1.2: '2023-05-06T08:49:15.377Z'
-  /@emotion/styled@11.11.0: '2023-05-06T08:49:15.982Z'
-  /@types/web@0.0.115: '2023-09-20T04:07:22.191Z'
->>>>>>> f2a740063a (refactor: remove ssr (#10931))
