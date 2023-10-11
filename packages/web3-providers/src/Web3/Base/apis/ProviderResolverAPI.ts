@@ -1,10 +1,9 @@
 import type { ProviderDescriptor } from '@masknet/web3-shared-base'
 
-export class ProviderResolverAPI_Base<ChainId, ProviderType> {
-    constructor(private getDescriptors: () => Array<ProviderDescriptor<ChainId, ProviderType>>) {}
-
+export abstract class ProviderResolverAPI_Base<ChainId, ProviderType> {
+    protected abstract readonly descriptors: ReadonlyArray<ProviderDescriptor<ChainId, ProviderType>>
     private getDescriptor(providerType: ProviderType) {
-        return this.getDescriptors().find((x) => x.type === providerType)
+        return this.descriptors.find((x) => x.type === providerType)
     }
 
     providerName = (providerType: ProviderType) => this.getDescriptor(providerType)?.name

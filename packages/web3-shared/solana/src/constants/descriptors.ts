@@ -10,7 +10,7 @@ import { ChainIdList, getTokenConstant } from './constants.js'
 
 const PLUGIN_ID = NetworkPluginID.PLUGIN_SOLANA
 
-export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>> = [
+export const CHAIN_DESCRIPTORS: ReadonlyArray<ChainDescriptor<ChainId, SchemaType, NetworkType>> = [
     {
         ID: `${ChainId.Mainnet}_Solana`,
         type: NetworkType.Solana,
@@ -103,7 +103,7 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
     },
 ]
 
-export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>> = [
+export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, NetworkType>> = [
     {
         ID: `${PLUGIN_ID}_solana`,
         networkSupporterPluginID: PLUGIN_ID,
@@ -127,7 +127,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         isMainnet: false,
     },
 ]
-export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderType>> = [
+export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, ProviderType>> = [
     {
         ID: `${PLUGIN_ID}_phantom`,
         providerAdaptorPluginID: PLUGIN_ID,

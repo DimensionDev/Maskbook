@@ -10,12 +10,9 @@ export interface ExplorerOptions {
     nonFungibleTokenPathname?: string
 }
 
-export class ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
-    constructor(
-        private getDescriptors: () => Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>,
-        private initial?: ExplorerOptions,
-    ) {}
-
+export abstract class ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
+    protected abstract readonly descriptors: ReadonlyArray<ChainDescriptor<ChainId, SchemaType, NetworkType>>
+    protected abstract initial?: ExplorerOptions
     private get options() {
         const defaults = {
             addressPathname: '/address/:address',
@@ -32,7 +29,7 @@ export class ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
     }
 
     private getExplorerURL(chainId: ChainId) {
-        const chainDescriptor = this.getDescriptors().find((x) => x.chainId === chainId)
+        const chainDescriptor = this.descriptors.find((x) => x.chainId === chainId)
         return chainDescriptor?.explorerUrl ?? { url: '' }
     }
 

@@ -18,6 +18,7 @@ import { AllHubAPI } from './Web3/Router/apis/AllHubAPI.js'
 import { AllConnectionAPI } from './Web3/Router/apis/AllConnectionAPI.js'
 import { AllOthersAPI } from './Web3/Router/apis/AllOthersAPI.js'
 
+export { getRegisteredWeb3Chains, getRegisteredWeb3Networks, getRegisteredWeb3Providers } from './Manager/index.js'
 export { Lido } from './Lido/index.js'
 export { Twitter } from './Twitter/index.js'
 export { Minds } from './Minds/index.js'

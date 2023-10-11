@@ -33,7 +33,7 @@ import { openWindow } from '@masknet/shared-base-ui'
 
 const descriptors: Record<
     NetworkPluginID,
-    Array<NetworkDescriptor<Web3Helper.ChainIdAll, Web3Helper.NetworkTypeAll>>
+    ReadonlyArray<NetworkDescriptor<Web3Helper.ChainIdAll, Web3Helper.NetworkTypeAll>>
 > = {
     [NetworkPluginID.PLUGIN_EVM]: EVM_NETWORK_DESCRIPTORS,
     [NetworkPluginID.PLUGIN_FLOW]: FLOW_NETWORK_DESCRIPTORS,
@@ -137,7 +137,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface PluginProviderRenderProps {
-    providers: Web3Helper.ProviderDescriptorAll[]
+    providers: readonly Web3Helper.ProviderDescriptorAll[]
     onProviderIconClicked: (
         network: Web3Helper.NetworkDescriptorAll,
         provider: Web3Helper.ProviderDescriptorAll,

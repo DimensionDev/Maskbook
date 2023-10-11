@@ -15,9 +15,9 @@ import { openPopupWindow } from '../../helper/popup-opener.js'
 /**
  * Generate a signature w or w/o confirmation from user
  */
-export async function signWithPersona<T>(
+export async function signWithPersona(
     type: SignType,
-    message: T,
+    message: unknown,
     identifier?: ECKeyIdentifier,
     source?: string,
     silent = false,

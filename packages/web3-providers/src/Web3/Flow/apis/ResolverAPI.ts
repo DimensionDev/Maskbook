@@ -13,32 +13,25 @@ import { ProviderResolverAPI_Base } from '../../Base/apis/ProviderResolverAPI.js
 import { NetworkResolverAPI_Base } from '../../Base/apis/NetworkExplorerAPI.js'
 
 class FlowChainResolverAPI extends ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
-    constructor() {
-        super(() => CHAIN_DESCRIPTORS)
-    }
+    protected readonly descriptors = CHAIN_DESCRIPTORS
 }
 
 class FlowExplorerResolverAPI extends ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
-    constructor() {
-        super(() => CHAIN_DESCRIPTORS, {
-            addressPathname: '/account/:address',
-            transactionPathname: '/transaction/:id',
-            fungibleTokenPathname: '/contract/:address',
-            nonFungibleTokenPathname: '/contract/:address',
-        })
+    protected readonly descriptors = CHAIN_DESCRIPTORS
+    protected readonly initial = {
+        addressPathname: '/account/:address',
+        transactionPathname: '/transaction/:id',
+        fungibleTokenPathname: '/contract/:address',
+        nonFungibleTokenPathname: '/contract/:address',
     }
 }
 
 class FlowProviderResolverAPI extends ProviderResolverAPI_Base<ChainId, ProviderType> {
-    constructor() {
-        super(() => PROVIDER_DESCRIPTORS)
-    }
+    protected readonly descriptors = PROVIDER_DESCRIPTORS
 }
 
 class FlowNetworkResolverAPI extends NetworkResolverAPI_Base<ChainId, NetworkType> {
-    constructor() {
-        super(() => NETWORK_DESCRIPTORS)
-    }
+    protected readonly descriptors = NETWORK_DESCRIPTORS
 }
 
 export const FlowChainResolver = new FlowChainResolverAPI()

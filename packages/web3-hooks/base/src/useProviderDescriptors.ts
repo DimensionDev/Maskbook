@@ -1,14 +1,11 @@
-import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
-import { getPluginDefine } from '@masknet/plugin-infra'
-import type { Web3Helper } from '@masknet/web3-helpers'
+import { type NetworkPluginID } from '@masknet/shared-base'
 import { useNetworkContext } from './useContext.js'
+import { getRegisteredWeb3Providers } from '@masknet/web3-providers'
 
 export function useProviderDescriptors<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     expectedPluginID?: T,
 ) {
     const { pluginID } = useNetworkContext(expectedPluginID)
 
-    return (getPluginDefine(pluginID)?.contribution?.web3?.providers ?? EMPTY_LIST) as Array<
-        Web3Helper.ProviderDescriptorScope<S, T>
-    >
+    return getRegisteredWeb3Providers(pluginID)
 }

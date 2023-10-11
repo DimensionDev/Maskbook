@@ -14,33 +14,26 @@ import { ProviderResolverAPI_Base } from '../../Base/apis/ProviderResolverAPI.js
 import { NetworkResolverAPI_Base } from '../../Base/apis/NetworkExplorerAPI.js'
 
 class ChainResolverAPI extends ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
-    constructor() {
-        super(() => {
-            if (!State.Web3StateRef.value?.Network?.networks) return CHAIN_DESCRIPTORS
-            return [...CHAIN_DESCRIPTORS, ...(State.Web3StateRef.value.Network.networks.getCurrentValue() ?? [])]
-        })
+    protected get descriptors() {
+        if (!State.Web3StateRef.value?.Network?.networks) return CHAIN_DESCRIPTORS
+        return CHAIN_DESCRIPTORS.concat(State.Web3StateRef.value.Network.networks.getCurrentValue())
     }
 }
 
 class ExplorerResolverAPI extends ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
-    constructor() {
-        super(() => {
-            if (!State.Web3StateRef.value?.Network?.networks) return CHAIN_DESCRIPTORS
-            return [...CHAIN_DESCRIPTORS, ...(State.Web3StateRef.value.Network.networks.getCurrentValue() ?? [])]
-        })
+    protected get descriptors() {
+        if (!State.Web3StateRef.value?.Network?.networks) return CHAIN_DESCRIPTORS
+        return CHAIN_DESCRIPTORS.concat(State.Web3StateRef.value.Network.networks.getCurrentValue())
     }
+    protected readonly initial = undefined
 }
 
 class ProviderResolverAPI extends ProviderResolverAPI_Base<ChainId, ProviderType> {
-    constructor() {
-        super(() => PROVIDER_DESCRIPTORS)
-    }
+    protected readonly descriptors = PROVIDER_DESCRIPTORS
 }
 
 class NetworkResolverAPI extends NetworkResolverAPI_Base<ChainId, NetworkType> {
-    constructor() {
-        super(() => NETWORK_DESCRIPTORS)
-    }
+    protected readonly descriptors = NETWORK_DESCRIPTORS
 }
 
 export const ChainResolver = new ChainResolverAPI()
