@@ -7,7 +7,7 @@ import {
     type NetworkType,
     type ProviderType,
 } from '@masknet/web3-shared-evm'
-import { Web3StateRef } from './Web3StateAPI.js'
+import * as State from /* webpackDefer: true */ './Web3StateAPI.js'
 import { ChainResolverAPI_Base } from '../../Base/apis/ChainResolverAPI.js'
 import { ExplorerResolverAPI_Base } from '../../Base/apis/ExplorerResolverAPI.js'
 import { ProviderResolverAPI_Base } from '../../Base/apis/ProviderResolverAPI.js'
@@ -16,8 +16,8 @@ import { NetworkResolverAPI_Base } from '../../Base/apis/NetworkExplorerAPI.js'
 export class ChainResolverAPI extends ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
     constructor() {
         super(() => {
-            if (!Web3StateRef.value?.Network?.networks) return CHAIN_DESCRIPTORS
-            return [...CHAIN_DESCRIPTORS, ...(Web3StateRef.value.Network.networks.getCurrentValue() ?? [])]
+            if (!State.Web3StateRef.value?.Network?.networks) return CHAIN_DESCRIPTORS
+            return [...CHAIN_DESCRIPTORS, ...(State.Web3StateRef.value.Network.networks.getCurrentValue() ?? [])]
         })
     }
 }
@@ -25,8 +25,8 @@ export class ChainResolverAPI extends ChainResolverAPI_Base<ChainId, SchemaType,
 export class ExplorerResolverAPI extends ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
     constructor() {
         super(() => {
-            if (!Web3StateRef.value?.Network?.networks) return CHAIN_DESCRIPTORS
-            return [...CHAIN_DESCRIPTORS, ...(Web3StateRef.value.Network.networks.getCurrentValue() ?? [])]
+            if (!State.Web3StateRef.value?.Network?.networks) return CHAIN_DESCRIPTORS
+            return [...CHAIN_DESCRIPTORS, ...(State.Web3StateRef.value.Network.networks.getCurrentValue() ?? [])]
         })
     }
 }
