@@ -9,7 +9,6 @@ import {
     type Web3,
     type RequestArguments,
 } from '@masknet/web3-shared-evm'
-import type { Plugin } from '@masknet/plugin-infra/content-script'
 import { BaseProvider } from './Base.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
@@ -33,7 +32,7 @@ export class BaseInjectedProvider
         return Promise.reject(new Error('Not available on extension site.'))
     }
 
-    override async setup(context?: Plugin.SiteAdaptor.SiteAdaptorContext | undefined) {
+    override async setup(context?: WalletAPI.IOContext | undefined) {
         this.bridge.on('accountsChanged', this.onAccountsChanged.bind(this))
         this.bridge.on('chainChanged', this.onChainChanged.bind(this))
         this.bridge.on('disconnect', this.onDisconnect.bind(this))

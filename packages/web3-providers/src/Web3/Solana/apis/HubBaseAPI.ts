@@ -23,5 +23,7 @@ export class SolanaHubBaseAPI extends HubBaseAPI_Base<
     TransactionParameter,
     GasOption
 > {
+    override getGasOptions = undefined
+    override getTransactions = undefined
     protected override HubOptions = new SolanaHubOptionsAPI(this.options)
 }

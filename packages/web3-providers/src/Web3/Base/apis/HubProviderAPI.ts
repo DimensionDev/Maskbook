@@ -1,7 +1,7 @@
 import { type SourceType, createPredicate } from '@masknet/web3-shared-base'
-import { HubOptionsAPI_Base, type HubOptions_Base } from './HubOptionsAPI.js'
+import { type HubOptionsAPI_Base, type HubOptions_Base } from './HubOptionsAPI.js'
 
-export class HubProviderAPI_Base<
+export abstract class HubProviderAPI_Base<
     ChainId,
     SchemaType,
     ProviderType,
@@ -11,19 +11,17 @@ export class HubProviderAPI_Base<
     Transaction,
     TransactionParameter,
 > {
-    constructor(protected options?: HubOptions_Base<ChainId>) {
-        this.HubOptions = new HubOptionsAPI_Base<
-            ChainId,
-            SchemaType,
-            ProviderType,
-            NetworkType,
-            MessageRequest,
-            MessageResponse,
-            Transaction,
-            TransactionParameter
-        >(options)
-    }
-    protected HubOptions
+    constructor(protected options?: HubOptions_Base<ChainId>) {}
+    protected abstract HubOptions: HubOptionsAPI_Base<
+        ChainId,
+        SchemaType,
+        ProviderType,
+        NetworkType,
+        MessageRequest,
+        MessageResponse,
+        Transaction,
+        TransactionParameter
+    >
 
     protected getPredicateProviders<P>(
         providers: Partial<Record<SourceType, P>>,

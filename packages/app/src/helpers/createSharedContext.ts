@@ -9,7 +9,7 @@ async function reject(): Promise<never> {
 
 export function createSharedContext(): Omit<
     Plugin.SiteAdaptor.SiteAdaptorContext,
-    'createKVStorage' | 'setWeb3State' | 'setMinimalMode'
+    'createKVStorage' | 'setMinimalMode'
 > {
     return {
         wallets: EMPTY_ARRAY,

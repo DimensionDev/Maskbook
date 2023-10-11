@@ -3,7 +3,7 @@ import type { GasOptionType, Transaction as Web3Transaction } from '@masknet/web
 import type { HubOptions_Base } from './HubOptionsAPI.js'
 import { HubProviderAPI_Base } from './HubProviderAPI.js'
 
-export class HubBaseAPI_Base<
+export abstract class HubBaseAPI_Base<
     ChainId,
     SchemaType,
     ProviderType,
@@ -23,18 +23,13 @@ export class HubBaseAPI_Base<
     Transaction,
     TransactionParameter
 > {
-    getGasOptions(
+    abstract getGasOptions?(
         chainId: ChainId,
         initial?: HubOptions_Base<ChainId>,
-    ): Promise<Record<GasOptionType, GasOption> | undefined> {
-        throw new Error('Method not implemented.')
-    }
-
-    getTransactions(
+    ): Promise<Record<GasOptionType, GasOption> | undefined>
+    abstract getTransactions?(
         chainId: ChainId,
         account: string,
         initial?: HubOptions_Base<ChainId>,
-    ): Promise<Pageable<Web3Transaction<ChainId, SchemaType>>> {
-        throw new Error('Method not implemented.')
-    }
+    ): Promise<Pageable<Web3Transaction<ChainId, SchemaType>>>
 }

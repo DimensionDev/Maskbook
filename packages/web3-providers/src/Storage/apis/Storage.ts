@@ -3,7 +3,7 @@ import { KVStorage } from '../storages/KV.js'
 import { NextIDStorage } from '../storages/NextID.js'
 import { RSS3Storage } from '../storages/RSS3.js'
 import { FireflyStorage } from '../storages/Firefly.js'
-import { SharedContextRef } from '../../PluginContext/index.js'
+import { io } from '../../Manager/io.js'
 
 export class Web3Storage {
     static createKVStorage(namespace: string) {
@@ -24,6 +24,6 @@ export class Web3Storage {
         signerOrPublicKey: string | ECKeyIdentifier,
     ) {
         if (!platform || !signerOrPublicKey) throw new Error('Instantiation parameter error.')
-        return new NextIDStorage(proofIdentity, platform, signerOrPublicKey, SharedContextRef.value.signWithPersona)
+        return new NextIDStorage(proofIdentity, platform, signerOrPublicKey, io.signWithPersona)
     }
 }

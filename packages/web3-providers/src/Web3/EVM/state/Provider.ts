@@ -25,18 +25,20 @@ import { Providers } from '../providers/index.js'
 import { ProviderState } from '../../Base/state/Provider.js'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
-    constructor(context: WalletAPI.IOContext) {
-        super(context, Providers, {
-            pluginID: NetworkPluginID.PLUGIN_EVM,
-            isSameAddress,
-            isValidAddress,
-            isValidChainId,
-            getDefaultChainId,
-            getInvalidChainId,
-            getDefaultNetworkType,
-            getDefaultProviderType,
-            getNetworkTypeFromChainId: (chainId: ChainId) => ChainResolver.networkType(chainId) ?? NetworkType.Ethereum,
-        })
+    protected providers = Providers
+    protected override isValidAddress = isValidAddress
+    protected override isValidChainId = isValidChainId
+    protected override isSameAddress = isSameAddress
+    protected override getInvalidChainId = getInvalidChainId
+    protected override getDefaultNetworkType = getDefaultNetworkType
+    protected override getDefaultProviderType = getDefaultProviderType
+    protected override getDefaultChainId = getDefaultChainId
+    protected override getNetworkTypeFromChainId(chainId: ChainId) {
+        return ChainResolver.networkType(chainId) ?? NetworkType.Ethereum
+    }
+
+    constructor(io: WalletAPI.IOContext) {
+        super(io, NetworkPluginID.PLUGIN_EVM, getDefaultChainId(), getDefaultProviderType())
     }
 
     protected override async setupSubscriptions() {
@@ -49,7 +51,7 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             ([account]) => account.account,
         )
         this.networkType = mapSubscription(mergeSubscription(this.storage.account.subscription), ([account]) => {
-            return this.options.getNetworkTypeFromChainId(account.chainId)
+            return this.getNetworkTypeFromChainId(account.chainId)
         })
         this.providerType = mapSubscription(this.storage.providerType.subscription, (provider) => provider)
     }

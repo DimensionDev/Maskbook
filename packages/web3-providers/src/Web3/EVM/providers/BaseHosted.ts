@@ -1,7 +1,6 @@
 import { uniqWith } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import { delay } from '@masknet/kit'
-import type { Plugin } from '@masknet/plugin-infra'
 import {
     EMPTY_LIST,
     PersistentStorages,
@@ -50,7 +49,7 @@ export abstract class BaseHostedProvider
         super(providerType)
     }
 
-    override async setup(context?: Plugin.SiteAdaptor.SiteAdaptorContext) {
+    override async setup(context?: WalletAPI.IOContext) {
         await super.setup(context)
 
         this.walletStorage = PersistentStorages.Web3.createSubScope(

@@ -15,7 +15,7 @@ import { ContractReadonlyAPI } from '../apis/ContractReadonlyAPI.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { Providers } from '../providers/index.js'
 import type { BaseContractWalletProvider } from '../providers/BaseContractWallet.js'
-import { SharedContextRef } from '../../../PluginContext/index.js'
+import { io } from '../../../Manager/io.js'
 import type { BundlerAPI, AbstractAccountAPI, FunderAPI } from '../../../entry-types.js'
 
 export class ContractWallet implements Middleware<ConnectionContext> {
@@ -40,7 +40,7 @@ export class ContractWallet implements Middleware<ConnectionContext> {
             return new Signer(
                 context.identifier,
                 async <T>(type: SignType, message: T, identifier?: ECKeyIdentifier) => {
-                    return SharedContextRef.value.signWithPersona(type, message, identifier, true)
+                    return io.signWithPersona(type, message, identifier, true)
                 },
             )
         if (context.owner)

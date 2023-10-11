@@ -19,18 +19,18 @@ import { SolanaChainResolver } from '../apis/ResolverAPI.js'
 import { ProviderState } from '../../Base/state/Provider.js'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
-    constructor(override context: WalletAPI.IOContext) {
-        super(context, SolanaProviders, {
-            pluginID: NetworkPluginID.PLUGIN_SOLANA,
-            isSameAddress,
-            isValidChainId,
-            getInvalidChainId,
-            isValidAddress,
-            getDefaultChainId,
-            getDefaultNetworkType,
-            getDefaultProviderType,
-            getNetworkTypeFromChainId: (chainId: ChainId) =>
-                SolanaChainResolver.networkType(chainId) ?? NetworkType.Solana,
-        })
+    protected override providers = SolanaProviders
+    protected override isValidAddress = isValidAddress
+    protected override isValidChainId = isValidChainId
+    protected override isSameAddress = isSameAddress
+    protected override getInvalidChainId = getInvalidChainId
+    protected override getDefaultNetworkType = getDefaultNetworkType
+    protected override getDefaultProviderType = getDefaultProviderType
+    protected override getDefaultChainId = getDefaultChainId
+    protected override getNetworkTypeFromChainId(chainId: ChainId): NetworkType {
+        return SolanaChainResolver.networkType(chainId) ?? NetworkType.Solana
+    }
+    constructor(io: WalletAPI.IOContext) {
+        super(io, NetworkPluginID.PLUGIN_SOLANA, getDefaultChainId(), getDefaultProviderType())
     }
 }

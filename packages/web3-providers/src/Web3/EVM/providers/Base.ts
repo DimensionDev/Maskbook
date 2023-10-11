@@ -2,7 +2,6 @@ import { first } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import { Emitter } from '@servie/events'
 import { delay } from '@masknet/kit'
-import type { Plugin } from '@masknet/plugin-infra/content-script'
 import {
     ChainId,
     ProviderURL,
@@ -20,7 +19,7 @@ import { createWeb3ProviderFromRequest } from '../../../helpers/createWeb3Provid
 import type { WalletAPI } from '../../../entry-types.js'
 
 export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3> {
-    protected context: Plugin.SiteAdaptor.SiteAdaptorContext | undefined
+    protected context: WalletAPI.IOContext | undefined
 
     constructor(protected providerType: ProviderType) {}
 
@@ -56,7 +55,7 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
         return Promise.resolve()
     }
 
-    async setup(context?: Plugin.SiteAdaptor.SiteAdaptorContext): Promise<void> {
+    async setup(context?: WalletAPI.IOContext): Promise<void> {
         if (context) {
             this.context = context
             return

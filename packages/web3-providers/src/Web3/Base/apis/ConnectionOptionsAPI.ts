@@ -1,6 +1,6 @@
 import { identity, pickBy } from 'lodash-es'
 import type { GasOptionType, Web3State } from '@masknet/web3-shared-base'
-import type { ECKeyIdentifier, PartialRequired, ValueRefWithReady } from '@masknet/shared-base'
+import type { ECKeyIdentifier, PartialRequired } from '@masknet/shared-base'
 import type { OthersAPI_Base } from './OthersAPI.js'
 
 export interface ConnectionOptions_Base<ChainId, ProviderType, Transaction> {
@@ -30,7 +30,7 @@ export interface ConnectionOptions_Base<ChainId, ProviderType, Transaction> {
     gasOptionType?: GasOptionType
 }
 
-export class ConnectionOptionsAPI_Base<
+export abstract class ConnectionOptionsAPI_Base<
     ChainId,
     SchemaType,
     ProviderType,
@@ -41,9 +41,8 @@ export class ConnectionOptionsAPI_Base<
     TransactionParameter,
 > {
     constructor(private options?: ConnectionOptions_Base<ChainId, ProviderType, Transaction>) {}
-
-    get Web3StateRef(): ValueRefWithReady<
-        Web3State<
+    abstract readonly Web3StateRef: {
+        readonly value: Web3State<
             ChainId,
             SchemaType,
             ProviderType,
@@ -53,13 +52,9 @@ export class ConnectionOptionsAPI_Base<
             Transaction,
             TransactionParameter
         >
-    > {
-        throw new Error('To be implemented.')
     }
 
-    get Web3Others(): OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
-        throw new Error('To be implemented.')
-    }
+    abstract readonly Web3Others: OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
 
     protected get defaults(): PartialRequired<
         ConnectionOptions_Base<ChainId, ProviderType, Transaction>,

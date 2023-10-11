@@ -1,7 +1,7 @@
 import { activateSiteAdaptorUI } from '../../setup.ui.js'
 import { startPluginDashboard } from '@masknet/plugin-infra/dashboard'
 import { createNormalReactRoot } from '../../utils/index.js'
-import { createPluginHost, createPartialSharedUIContext } from '../../../shared/plugin-infra/host.js'
+import { createPluginHost, createSharedContext } from '../../../shared/plugin-infra/host.js'
 import Services from '#services'
 import Popups from './UI.js'
 import { NextSharedUIContext, RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui.js'
@@ -18,6 +18,7 @@ __setUIContext__({
     queryPersonaByProfile: Services.Identity.queryPersonaByProfile,
     openDashboard: Services.Helper.openDashboard,
     openPopupWindow: Services.Helper.openPopupWindow,
+    signWithPersona: (a, b, c, d) => Services.Identity.signWithPersona(a, b, c, location.origin, d),
 })
 
 /**
@@ -64,7 +65,7 @@ function startPluginHost() {
         createPluginHost(
             undefined,
             (id, def, signal) => ({
-                ...createPartialSharedUIContext(id, def, signal),
+                ...createSharedContext(id, signal),
                 ...RestPartOfPluginUIContextShared,
                 allPersonas: allPersonaSub,
                 setMinimalMode(enabled) {

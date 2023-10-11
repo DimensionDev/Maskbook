@@ -102,7 +102,6 @@ export namespace Plugin.Shared {
 
     export interface SharedUIContext extends SharedContext {
         setMinimalMode(enabled: boolean): void
-        setWeb3State(state: Web3State<any, any, any, any, any, any, any, any>): void
         /** Get all wallets */
         wallets: Subscription<Wallet[]>
 
@@ -934,8 +933,6 @@ export namespace Plugin.GeneralUI {
     export interface Definition {
         /** This UI will be injected into the global scope of the target page. */
         GlobalInjection?: InjectUI<{}>
-        /** This is the context of the currently chosen network. */
-        Web3State?: Web3State<unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown>
         /**
          * Render metadata in many different environments.
          *

@@ -19,7 +19,7 @@ export interface ProviderStorage<Account, ProviderType extends string> {
     providerType: ProviderType
 }
 
-export class ProviderState<
+export abstract class ProviderState<
     ChainId extends number,
     ProviderType extends string,
     NetworkType extends string,
@@ -35,31 +35,28 @@ export class ProviderState<
     public networkType?: Subscription<NetworkType>
     public providerType?: Subscription<ProviderType>
 
+    protected abstract providers: Record<ProviderType, WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>>
+    protected abstract isValidAddress(address: string | undefined): boolean
+    protected abstract isValidChainId(chainID: number | undefined): boolean
+    protected abstract isSameAddress(a: string | undefined, b: string | undefined): boolean
+    protected abstract getInvalidChainId(): ChainId
+    protected abstract getDefaultNetworkType(): NetworkType
+    protected abstract getDefaultChainId(): ChainId
+    protected abstract getDefaultProviderType(): ProviderType
+    protected abstract getNetworkTypeFromChainId(chainId: ChainId): NetworkType
     constructor(
         protected context: WalletAPI.IOContext,
-        protected providers: Record<ProviderType, WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>>,
-        protected options: {
-            pluginID: NetworkPluginID
-            isValidAddress(a?: string): boolean
-            isValidChainId(a?: number): boolean
-            isSameAddress(a?: string, b?: string): boolean
-            getDefaultChainId(): ChainId
-            getInvalidChainId(): ChainId
-            getDefaultNetworkType(): NetworkType
-            getDefaultProviderType(): ProviderType
-            getNetworkTypeFromChainId(chainId: ChainId): NetworkType
-        },
+        pluginID: NetworkPluginID,
+        defaultChainId: ChainId,
+        defaultProviderType: ProviderType,
     ) {
-        const { storage } = InMemoryStorages.Web3.createSubScope(
-            `${this.options.pluginID}_${this.site ?? 'Provider'}`,
-            {
-                account: {
-                    account: '',
-                    chainId: options.getDefaultChainId(),
-                },
-                providerType: options.getDefaultProviderType(),
+        const { storage } = InMemoryStorages.Web3.createSubScope(`${pluginID}_${this.site ?? 'Provider'}`, {
+            account: {
+                account: '',
+                chainId: defaultChainId,
             },
-        )
+            providerType: defaultProviderType,
+        })
         this.storage = storage
     }
 
@@ -92,7 +89,7 @@ export class ProviderState<
             ([account]) => account.account,
         )
         this.networkType = mapSubscription(mergeSubscription(this.storage.account.subscription), ([account]) =>
-            this.options.getNetworkTypeFromChainId(account.chainId),
+            this.getNetworkTypeFromChainId(account.chainId),
         )
         this.providerType = mapSubscription(this.storage.providerType.subscription, (provider) => provider)
     }
@@ -116,7 +113,7 @@ export class ProviderState<
                 })
             })
             provider.emitter.on('connect', async ({ account }) => {
-                if (!this.options.isValidAddress(account)) return
+                if (!this.isValidAddress(account)) return
                 // provider should update before account, otherwise account failed to update
                 await this.setProvider(providerType)
                 await this.setAccount(providerType, {
@@ -126,7 +123,7 @@ export class ProviderState<
             provider.emitter.on('accounts', async (accounts) => {
                 const account = first(accounts)
 
-                if (account && this.options.isValidAddress(account))
+                if (account && this.isValidAddress(account))
                     await this.setAccount(providerType, {
                         account,
                     })
@@ -134,11 +131,11 @@ export class ProviderState<
             provider.emitter.on('disconnect', async () => {
                 await this.setAccount(providerType, {
                     account: '',
-                    chainId: this.options.getDefaultChainId(),
+                    chainId: this.getDefaultChainId(),
                 })
 
                 if (!this.site) return
-                await this.storage.providerType.setValue(this.options.getDefaultProviderType())
+                await this.storage.providerType.setValue(this.getDefaultProviderType())
             })
 
             try {
@@ -156,14 +153,13 @@ export class ProviderState<
         const account_ = this.storage.account.value
         const accountCopied = clone(account)
 
-        if (accountCopied.account !== '' && !this.options.isValidAddress(accountCopied.account))
-            delete accountCopied.account
-        if (accountCopied.chainId && !this.options.isValidChainId(accountCopied.chainId)) {
-            accountCopied.chainId = this.options.getInvalidChainId()
+        if (accountCopied.account !== '' && !this.isValidAddress(accountCopied.account)) delete accountCopied.account
+        if (accountCopied.chainId && !this.isValidChainId(accountCopied.chainId)) {
+            accountCopied.chainId = this.getInvalidChainId()
         }
 
         const needToUpdateAccount =
-            accountCopied.account === '' || !this.options.isSameAddress(account_.account, account.account)
+            accountCopied.account === '' || !this.isSameAddress(account_.account, account.account)
         const needToUpdateChainId = accountCopied.chainId && account_.chainId !== accountCopied.chainId
 
         if (needToUpdateAccount || needToUpdateChainId) {

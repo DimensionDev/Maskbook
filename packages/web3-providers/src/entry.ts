@@ -5,20 +5,25 @@ import { MulticallAPI } from './Multicall/index.js'
 import { RedPacketAPI } from './RedPacket/index.js'
 import { SmartPayOwnerAPI } from './SmartPay/apis/OwnerAPI.js'
 import { AirdropAPI } from './Airdrop/index.js'
-import { SharedContextAPI } from './PluginContext/index.js'
 import { ContractAPI } from './Web3/EVM/apis/ContractAPI.js'
 import { ContractReadonlyAPI } from './Web3/EVM/apis/ContractReadonlyAPI.js'
 import { ConnectionReadonlyAPI } from './Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { RequestAPI } from './Web3/EVM/apis/RequestAPI.js'
 import { RequestReadonlyAPI } from './Web3/EVM/apis/RequestReadonlyAPI.js'
-import { Web3StateAPI } from './Web3/EVM/apis/Web3StateAPI.js'
-import { FlowWeb3StateAPI } from './Web3/Flow/apis/Web3StateAPI.js'
-import { SolanaWeb3StateAPI } from './Web3/Solana/apis/Web3StateAPI.js'
 import { AllHubAPI } from './Web3/Router/apis/AllHubAPI.js'
 import { AllConnectionAPI } from './Web3/Router/apis/AllConnectionAPI.js'
 import { AllOthersAPI } from './Web3/Router/apis/AllOthersAPI.js'
 
-export { getRegisteredWeb3Chains, getRegisteredWeb3Networks, getRegisteredWeb3Providers } from './Manager/index.js'
+export {
+    getRegisteredWeb3Chains,
+    getRegisteredWeb3Networks,
+    getRegisteredWeb3Providers,
+    initWallet,
+    getActivatedPluginWeb3State,
+    getAllPluginsWeb3State,
+} from './Manager/index.js'
+export { evm as Web3State } from './Manager/registry.js'
+
 export { Lido } from './Lido/index.js'
 export { Twitter } from './Twitter/index.js'
 export { Minds } from './Minds/index.js'
@@ -35,9 +40,6 @@ export { SimpleHashEVM } from './SimpleHash/index.js'
 export { SnapshotSearch } from './Snapshot/index.js'
 export { Snapshot } from './Snapshot/index.js'
 
-// Plugin Context
-export const SharedPluginContext = new SharedContextAPI()
-
 export { Providers } from './Web3/EVM/providers/index.js'
 export { FlowProviders } from './Web3/Flow/providers/index.js'
 export { SolanaProviders } from './Web3/Solana/providers/index.js'
@@ -52,7 +54,6 @@ export { ChainResolver, ExplorerResolver, ProviderResolver, NetworkResolver } fr
 export const Contract = new ContractAPI()
 export const ContractReadonly = new ContractReadonlyAPI()
 export { Signer } from './Web3/EVM/apis/SignerAPI.js'
-export const Web3State = new Web3StateAPI()
 export { Web3Storage } from './Storage/apis/Storage.js'
 export const Web3 = Web3All.use(NetworkPluginID.PLUGIN_EVM)!
 export const Web3Readonly = new ConnectionReadonlyAPI()
@@ -61,12 +62,10 @@ export const RequestReadonly = new RequestReadonlyAPI()
 export const Hub = HubAll.use(NetworkPluginID.PLUGIN_EVM)!
 export const Others = OthersAll.use(NetworkPluginID.PLUGIN_EVM)!
 
-export const FlowWeb3State = new FlowWeb3StateAPI()
 export const FlowWeb3 = Web3All.use(NetworkPluginID.PLUGIN_FLOW)!
 export const FlowHub = HubAll.use(NetworkPluginID.PLUGIN_FLOW)!
 export const FlowOthers = OthersAll.use(NetworkPluginID.PLUGIN_FLOW)!
 
-export const SolanaWeb3State = new SolanaWeb3StateAPI()
 export const SolanaWeb3 = Web3All.use(NetworkPluginID.PLUGIN_SOLANA)!
 export const SolanaHub = HubAll.use(NetworkPluginID.PLUGIN_SOLANA)!
 export const SolanaOthers = OthersAll.use(NetworkPluginID.PLUGIN_SOLANA)!
