@@ -40,7 +40,6 @@ const SelectWallet = memo(function SelectWallet() {
     const navigate = useNavigate()
     const [params] = useSearchParams()
     const external_request_id = params.get('external_request')
-    const source = params.get('source')
     const { value: external_request } = useAsync(async () => {
         if (!external_request_id) return null
         return Services.Wallet.getEIP2255PermissionDetail(external_request_id)
@@ -111,8 +110,6 @@ const SelectWallet = memo(function SelectWallet() {
 
         const wallet = wallets.find((x) => isSameAddress(x.address, selected))
 
-        if (wallet && source && !external_request_id)
-            await Services.Wallet.connectWalletFromOrigin(wallet?.address, source)
         await Services.Wallet.resolveMaskAccount([
             wallet?.owner
                 ? {
@@ -135,7 +132,6 @@ const SelectWallet = memo(function SelectWallet() {
         }
         return Services.Helper.removePopupWindow()
     }, [
-        source,
         external_request,
         external_request_id,
         isVerifyWalletFlow,
