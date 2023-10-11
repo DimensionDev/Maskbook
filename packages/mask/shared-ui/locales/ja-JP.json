@@ -760,5 +760,8 @@
     "popups_wallet_backup_input_password": "バックアップパスワードを入力してください。",
     "popups_wallet_logout_input_payment_password": "支払いパスワードを入力してください。",
     "popups_wallet_backup_json_file_drag_tip": "ファイルをここにドラッグしてください",
-    "popups_wallet_backup_json_file_click_tip": "ここにファイルをクリックまたはドラッグしてください"
+    "popups_wallet_backup_json_file_click_tip": "ここにファイルをクリックまたはドラッグしてください",
+    "popups_wallet_backup_mnemonic_title": "ニーモニックワードを書き留めてください",
+    "popups_wallet_backup_mnemonic_tips": "以下の単語を正しい順序で書き留めてください。安全に保管し、誰とも共有しないでください！",
+    "popups_wallet_backup_mnemonic_view_tips": "タップしてニーモニックワードを表示します。誰もあなたの画面を見ていないことを確認してください"
 }
