@@ -27,9 +27,5 @@
         "./icon-generated-as-url.d.ts"
       ]
     }
-  },
-  "scripts": {},
-  "dependencies": {
-    "@emotion/server": "^11.10.0"
   }
 }

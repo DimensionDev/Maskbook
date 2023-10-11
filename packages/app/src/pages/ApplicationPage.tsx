@@ -6,7 +6,11 @@ export interface ApplicationsPageProps {}
 export default function ApplicationsPage(props: ApplicationsPageProps) {
     return (
         <PageContainer title="Applications">
-            <ApplicationBoardForm allPersonas={[]} personaPerSiteConnectStatusLoading={false} />
+            <ApplicationBoardForm
+                queryOwnedPersonaInformation={async () => []}
+                allPersonas={[]}
+                personaPerSiteConnectStatusLoading={false}
+            />
         </PageContainer>
     )
 }

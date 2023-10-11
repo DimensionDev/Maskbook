@@ -4,7 +4,7 @@ import { Err, None, Ok, Some } from 'ts-results-es'
 import * as BN from 'bignumber.js'
 import { EncryptError, DecryptError } from '@masknet/encryption'
 
-import { blob, builtin, cryptokey, file, filelist, imagebitmap, specialNumbers } from 'typeson-registry'
+import { blob, builtin, file, filelist, imagebitmap, specialNumbers } from 'typeson-registry'
 import { Identifier } from '@masknet/base'
 import { responseRegedit } from './response.js'
 import { requestRegedit } from './request.js'
@@ -78,12 +78,6 @@ export const serializer: Serialization = {
         if (!typeson) setup()
         return typeson!.revive(to)
     },
-}
-
-/** THIS MUST NOT BE USED OUTSIDE OF A DEBUGGER CONTEXT */
-export function __DEBUG__ONLY__enableCryptoKeySerialization() {
-    if (!typeson) setup()
-    typeson!.register(cryptokey)
 }
 export function registerSerializableClass(name: string, constructor: NewableFunction): void
 export function registerSerializableClass<T, Q>(
