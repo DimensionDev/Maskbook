@@ -1,5 +1,5 @@
 /// <reference types="@masknet/global-types/web-extension" />
 
 import '../../setup.ui.js'
-import '../../site-adaptors/browser-action/index.js'
-import './render.js'
+await import(/* webpackMode:'eager' */ '../../site-adaptors/browser-action/index.js')
+await import(/* webpackMode: 'eager' */ './render.js')

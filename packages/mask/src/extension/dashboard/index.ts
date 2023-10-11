@@ -1,2 +1,2 @@
 import '../../setup.ui.js'
-import './load-dashboard.js'
+await import(/* webpackMode: 'eager' */ './load-dashboard.js')
