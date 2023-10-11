@@ -335,7 +335,14 @@ const Interaction = memo(function Interaction() {
 
     return (
         <Box flex={1} display="flex" flexDirection="column">
-            <Box p={2} display="flex" flexDirection="column" flex={1} maxHeight="458px" overflow="auto">
+            <Box
+                p={2}
+                display="flex"
+                flexDirection="column"
+                flex={1}
+                maxHeight="458px"
+                overflow="auto"
+                data-hide-scrollbar>
                 {content}
                 {currentRequest && !signRequest.includes(currentRequest?.request.arguments.method) ? (
                     <Box

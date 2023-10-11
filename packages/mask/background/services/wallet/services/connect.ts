@@ -89,7 +89,28 @@ export async function grantEIP2255Permission(id: string, grantedWalletAddress: I
     }
     promise[1](EIP2255PermissionsOfWallets(origin, grantedWalletAddress))
 }
-
+export async function connectWalletFromOrigin(wallet: string, origin: string) {
+    assertOrigin(origin)
+    const data = await walletDatabase.get('granted_permission', wallet)
+    const newData = produce<WalletGrantedPermission>(
+        data || {
+            type: 'granted_permission',
+            id: wallet,
+            origins: new Map(),
+        },
+        (draft) => {
+            if (!draft.origins.has(origin)) draft.origins.set(origin, new Set())
+            const permissions = draft.origins.get(origin)!
+            if (Array.from(permissions).some((data) => hasEthAccountsPermission(origin, data))) return
+            permissions.add({
+                invoker: origin,
+                parentCapability: 'eth_accounts',
+                caveats: [],
+            })
+        },
+    )
+    if (data !== newData) await walletDatabase.add(newData)
+}
 export async function disconnectWalletFromOrigin(wallet: string, origin: string) {
     assertOrigin(origin)
     const origins = new Map((await walletDatabase.get('granted_permission', wallet))?.origins)
