@@ -8,6 +8,7 @@ import type { NextIDPlatform, NextIDStoragePayload } from '@masknet/shared-base'
 import { env } from '@masknet/flags'
 import { KV_BASE_URL_DEV, KV_BASE_URL_PROD } from './constants.js'
 import { staleNextIDCached } from './helpers.js'
+import type { NextIDBaseAPI } from '../entry-types.js'
 import { fetchCachedJSON, fetchJSON, fetchSquashedJSON } from '../helpers/fetchJSON.js'
 
 interface CreatePayloadResponse {
@@ -24,7 +25,7 @@ function formatPatchData(pluginID: string, data: unknown) {
     }
 }
 
-class NextIDStorageAPI {
+export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
     /**
      * Get current KV of a persona
      * @param personaPublicKey
@@ -162,4 +163,3 @@ class NextIDStorageAPI {
         return result ? Ok(result) : Err(null)
     }
 }
-export const NextIDStorageProvider = new NextIDStorageAPI()

@@ -1,11 +1,12 @@
 import { LRUCache } from 'lru-cache'
-import { RSS3 } from '../../RSS3/index.js'
+import { RSS3API } from '../../RSS3/index.js'
 import { ConnectionAPI } from '../../Web3/EVM/apis/ConnectionAPI.js'
 import type { StorageAPI } from '../../entry-types.js'
 
 const caches = new Map<string, LRUCache<string, any>>()
 
 export class RSS3Storage implements StorageAPI.Storage {
+    private RSS3 = new RSS3API()
     private Web3 = new ConnectionAPI()
 
     private cache: LRUCache<string, any> | undefined
@@ -26,8 +27,8 @@ export class RSS3Storage implements StorageAPI.Storage {
         }
     }
 
-    private async getRSS3() {
-        return RSS3.createRSS3(this.address, (message: string) =>
+    private async getRSS3<T>() {
+        return this.RSS3.createRSS3(this.address, (message: string) =>
             this.Web3.signMessage('message', message, { account: this.address }),
         )
     }
@@ -38,14 +39,14 @@ export class RSS3Storage implements StorageAPI.Storage {
 
     async get<T>(key: string): Promise<T | undefined> {
         const cacheKey = `${this.address}_${key}`
-        const rss3 = await this.getRSS3()
+        const rss3 = await this.getRSS3<T>()
         const cache = this.cache?.get(cacheKey)
-        return cache ?? RSS3.getFileData(rss3, this.address, key)
+        return cache ?? this.RSS3.getFileData(rss3, this.address, key)
     }
 
     async set<T>(key: string, value: T) {
-        const rss3 = await this.getRSS3()
-        await RSS3.setFileData<T>(rss3, this.address, key, value)
+        const rss3 = await this.getRSS3<T>()
+        await this.RSS3.setFileData<T>(rss3, this.address, key, value)
 
         this.delete(key)
         return

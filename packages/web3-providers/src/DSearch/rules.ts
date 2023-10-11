@@ -1,7 +1,9 @@
 import { compact } from 'lodash-es'
 import { isSameAddress, type SearchResult, SearchResultType } from '@masknet/web3-shared-base'
 import type { Handler } from './types.js'
-import { Fuse } from '../Fuse/index.js'
+import { FuseAPI } from '../Fuse/index.js'
+
+const Fuse = new FuseAPI()
 
 export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, SchemaType>> => [
     {

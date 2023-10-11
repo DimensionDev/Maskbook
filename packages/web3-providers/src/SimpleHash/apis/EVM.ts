@@ -48,16 +48,19 @@ import {
     type Activity,
     ActivityType,
 } from '../type.js'
-import { LooksRare } from '../../LooksRare/index.js'
-import { OpenSea } from '../../OpenSea/index.js'
+import { LooksRareAPI } from '../../LooksRare/index.js'
+import { OpenSeaAPI } from '../../OpenSea/index.js'
 import { getContractSymbol } from '../../helpers/getContractSymbol.js'
 import { NonFungibleMarketplace } from '../../NFTScan/helpers/utils.js'
-import { ChainResolver, ExplorerResolver } from '../../Web3/EVM/apis/ResolverAPI.js'
+import { ChainResolverAPI, ExplorerResolverAPI } from '../../Web3/EVM/apis/ResolverAPI.js'
 import type { HubOptions_Base, NonFungibleTokenAPI, TrendingAPI } from '../../entry-types.js'
 import { historicalPriceState } from '../historicalPriceState.js'
 import { SIMPLE_HASH_HISTORICAL_PRICE_START_TIME, SPAM_SCORE } from '../constants.js'
 
-class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+export class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+    private Looksrare = new LooksRareAPI()
+    private Opensea = new OpenSeaAPI()
+
     private async getCollectionByContractAddress(
         address: string,
         { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
@@ -416,7 +419,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 const trade_token =
                     !x.sale_details?.payment_token ||
                     checkBlurToken(NetworkPluginID.PLUGIN_EVM, chainId, x.sale_details.payment_token?.address || '')
-                        ? ChainResolver.nativeCurrency(chainId)
+                        ? new ChainResolverAPI().nativeCurrency(chainId)
                         : {
                               ...x.sale_details?.payment_token,
                               type: TokenType.Fungible,
@@ -434,7 +437,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     hash: x.transaction,
                     from: x.from_address,
                     token_id: x.token_id,
-                    transaction_link: ExplorerResolver.transactionLink(chainId, x.transaction),
+                    transaction_link: new ExplorerResolverAPI().transactionLink(chainId, x.transaction),
                     event_type: resolveEventType(x.event_type),
                     send: x.from_address,
                     receive: x.event_type === ActivityType.Burn ? ZERO_ADDRESS : x.to_address,
@@ -453,7 +456,11 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         }
     }
 
-    async getCoinTrending(chainId: ChainId, address: string): Promise<TrendingAPI.Trending | undefined> {
+    async getCoinTrending(
+        chainId: ChainId,
+        address: string,
+        currency: TrendingAPI.Currency,
+    ): Promise<TrendingAPI.Trending | undefined> {
         const collection = await this.getCollectionByContractAddress(address, { chainId })
         if (!collection) {
             throw new Error(`SimpleHash: Can not find collection by address ${address}, chainId ${chainId}`)
@@ -461,8 +468,8 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
 
         const [symbol, openseaStats, looksrareStats] = await Promise.all([
             getContractSymbol(chainId, address),
-            OpenSea.getStats(address).catch(() => null),
-            LooksRare.getStats(address).catch(() => null),
+            this.Opensea.getStats(address).catch(() => null),
+            this.Looksrare.getStats(address).catch(() => null),
         ])
 
         const paymentToken = collection.floor_prices[0]?.payment_token
@@ -571,4 +578,3 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         }
     }
 }
-export const SimpleHashEVM = new SimpleHashAPI_EVM()

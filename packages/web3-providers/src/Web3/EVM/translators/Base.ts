@@ -4,7 +4,7 @@ import { GasOptionType, isLessThan, toFixed } from '@masknet/web3-shared-base'
 import { ChainId, formatWeiToGwei, PayloadEditor, ProviderType, type Translator } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { HubAPI } from '../apis/HubAPI.js'
-import { ChainResolver } from '../apis/ResolverAPI.js'
+import { ChainResolverAPI } from '../apis/ResolverAPI.js'
 
 export class Base implements Translator<ConnectionContext> {
     private Hub = new HubAPI().create()
@@ -35,7 +35,7 @@ export class Base implements Translator<ConnectionContext> {
             })
             const { [GasOptionType.SLOW]: slowOption, [GasOptionType.NORMAL]: normalOption } = options ?? {}
 
-            if (ChainResolver.isFeatureSupported(context.chainId, 'EIP1559')) {
+            if (new ChainResolverAPI().isFeatureSupported(context.chainId, 'EIP1559')) {
                 delete config.gasPrice
 
                 if (

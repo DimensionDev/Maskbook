@@ -5,8 +5,8 @@ import type { ScamWarningAPI } from '../entry-types.js'
 
 const BASE_URL = 'https://scam.mask.r2d2.to/cryptoscam-db'
 
-class CryptoScamDB_API {
-    private bloomFilter?: ScalableBloomFilter
+export class CryptoScamDB_API implements ScamWarningAPI.Provider {
+    bloomFilter?: ScalableBloomFilter
 
     async getBloomFilter() {
         if (this.bloomFilter) return this.bloomFilter
@@ -14,7 +14,7 @@ class CryptoScamDB_API {
 
         const { ScalableBloomFilter } = await import('bloom-filters')
         this.bloomFilter = ScalableBloomFilter.fromJSON(filter)
-        return this.bloomFilter
+        return this.bloomFilter as ScalableBloomFilter
     }
 
     async getScamWarning(link: string): Promise<ScamWarningAPI.Info | undefined> {
@@ -59,4 +59,3 @@ class CryptoScamDB_API {
             .filter((x): x is ScamWarningAPI.Info => !!x)
     }
 }
-export const CryptoScamDB = new CryptoScamDB_API()

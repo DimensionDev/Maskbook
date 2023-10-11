@@ -7,7 +7,7 @@ import type { BundlerAPI } from '../../entry-types.js'
 import { Duration } from '../../helpers/fetchCached.js'
 import { fetchCachedJSON, fetchJSON } from '../../helpers/fetchJSON.js'
 
-class SmartPayBundlerAPI implements BundlerAPI.Provider {
+export class SmartPayBundlerAPI implements BundlerAPI.Provider {
     private healthz() {
         return fetchCachedJSON<BundlerAPI.Healthz>(
             urlcat(BUNDLER_PROD, '/healthz'),
@@ -79,7 +79,10 @@ class SmartPayBundlerAPI implements BundlerAPI.Provider {
         const healthz = await this.healthz()
         return [healthz.entrypoint_contract_address]
     }
-    simulateUserOperation(): Promise<{ preOpGas: string; prefund: string }> {
+    simulateUserOperation(
+        chainId: ChainId,
+        userOperation: UserOperation,
+    ): Promise<{ preOpGas: string; prefund: string }> {
         throw new Error('Method not implemented.')
     }
     async sendUserOperation(chainId: ChainId, userOperation: UserOperation): Promise<string> {
@@ -87,4 +90,3 @@ class SmartPayBundlerAPI implements BundlerAPI.Provider {
         return this.handle(userOperation)
     }
 }
-export const SmartPayBundler = new SmartPayBundlerAPI()

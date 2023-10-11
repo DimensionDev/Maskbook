@@ -6,7 +6,7 @@ import type { Tx } from '../types.js'
 import { fetchFromChainbase, toTransaction } from '../helpers.js'
 import type { HistoryAPI, HubOptions_Base } from '../../entry-types.js'
 
-class ChainbaseHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaType> {
+export class ChainbaseHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaType> {
     async getTransactions(
         address: string,
         { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {},
@@ -54,4 +54,3 @@ class ChainbaseHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaType> {
         return fetchFromChainbase<Event>(url)
     }
 }
-export const ChainbaseHistory = new ChainbaseHistoryAPI()

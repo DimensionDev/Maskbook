@@ -4,7 +4,7 @@ import { SourceType, type NonFungibleTokenRarity } from '@masknet/web3-shared-ba
 import { createLookupTableResolver } from '@masknet/shared-base'
 import { GEM_API_URL, RARITY_SOURCE_TYPE } from './constants.js'
 import { fetchCachedJSON } from '../helpers/fetchJSON.js'
-import type { NonFungibleTokenAPI } from '../entry-types.js'
+import type { HubOptions_Base, NonFungibleTokenAPI } from '../entry-types.js'
 
 const resolveRarityId = createLookupTableResolver<
     SourceType.Gem | SourceType.RaritySniper | SourceType.TraitSniper,
@@ -25,8 +25,8 @@ async function fetchFromGem<T>(pathname: string, init?: RequestInit) {
     return data
 }
 
-class GemAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    async getRarity(address: string, tokenId: string) {
+export class GemAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+    async getRarity(address: string, tokenId: string, options?: HubOptions_Base<ChainId>) {
         const response = await fetchFromGem<Record<string, NonFungibleTokenRarity<ChainId>>>(
             urlcat('/rarity/:address/:tokenId', {
                 address: address.toLowerCase(),
@@ -43,4 +43,3 @@ class GemAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
         return
     }
 }
-export const Gem = new GemAPI()

@@ -86,7 +86,7 @@ function createNFTCollection(collection: Collection): NonFungibleTokenContract<C
     }
 }
 
-class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getToken(address: string, tokenMint: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
         if (!isValidChainId(chainId)) return
         const token = await fetchFromMagicEden<MagicEdenToken>(
@@ -310,4 +310,3 @@ class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
         )
     }
 }
-export const MagicEden = new MagicEdenAPI()

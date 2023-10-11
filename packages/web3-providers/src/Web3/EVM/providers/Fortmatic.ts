@@ -12,7 +12,7 @@ import {
     type Web3,
 } from '@masknet/web3-shared-evm'
 import { createLookupTableResolver } from '@masknet/shared-base'
-import { ChainResolver } from '../apis/ResolverAPI.js'
+import { ChainResolverAPI } from '../apis/ResolverAPI.js'
 import { BaseProvider } from './Base.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
@@ -123,7 +123,8 @@ export default class FortmaticProvider
         try {
             this.chainId = chainId
             const accounts = await this.login()
-            if (!accounts.length) throw new Error(`Failed to connect to ${ChainResolver.chainFullName(this.chainId)}.`)
+            if (!accounts.length)
+                throw new Error(`Failed to connect to ${new ChainResolverAPI().chainFullName(this.chainId)}.`)
 
             const connected = {
                 account: first(accounts)!,

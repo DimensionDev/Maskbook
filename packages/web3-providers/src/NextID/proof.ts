@@ -222,7 +222,7 @@ const getExistedBindingQueryURL = (platform: string, identity: string, personaPu
         public_key: personaPublicKey,
     })
 
-class NextIDProofAPI {
+export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     fetchFromProofService<T>(request: Request | RequestInfo, init?: RequestInit, disableCache?: boolean) {
         return disableCache
             ? fetchJSON<T>(request, init)
@@ -565,7 +565,6 @@ class NextIDProofAPI {
             : null
     }
 }
-export const NextIDProof = new NextIDProofAPI()
 
 function createBindingProofNodeFromNeighbor(nextIDIdentity: NextIDIdentity, source: NextIDPlatform) {
     const nft = nextIDIdentity.nft.map((x) =>

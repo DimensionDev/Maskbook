@@ -1,6 +1,6 @@
 import { type ChainId } from '@masknet/web3-shared-evm'
 import { REDPACKET_API_URL, NFT_REDPACKET_API_URL } from '../constants.js'
-import { ChainResolver } from '../../Web3/EVM/apis/ResolverAPI.js'
+import { ChainResolverAPI } from '../../Web3/EVM/apis/ResolverAPI.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 import type { NftRedPacketJSONPayload, RedPacketJSONPayloadFromChain } from '../../entry-types.js'
 
@@ -38,7 +38,7 @@ type NFTRedpacketRecord = {
     id: string
 }
 
-class TheGraphRedPacketAPI {
+export class TheGraphRedPacketAPI {
     async getHistories(chainId: ChainId, senderAddress: string, contractAddress: string) {
         if (!senderAddress || !contractAddress) return
 
@@ -85,7 +85,7 @@ class TheGraphRedPacketAPI {
                     duration: Number(x.duration) * 1000,
                     block_number: Number(x.block_number),
                     contract_version: 4,
-                    network: ChainResolver.networkType(chainId),
+                    network: new ChainResolverAPI().networkType(chainId),
                     token_address: x.token.address,
                     sender: {
                         address: senderAddress,
@@ -143,7 +143,7 @@ class TheGraphRedPacketAPI {
                     txid: x.txid,
                     contract_version: 1,
                     shares: x.shares,
-                    network: ChainResolver.networkType(chainId),
+                    network: new ChainResolverAPI().networkType(chainId),
                     token_address: x.token_contract.address,
                     sender: {
                         address: x.creator.address,
@@ -163,4 +163,3 @@ class TheGraphRedPacketAPI {
         )
     }
 }
-export const TheGraphRedPacket = new TheGraphRedPacketAPI()

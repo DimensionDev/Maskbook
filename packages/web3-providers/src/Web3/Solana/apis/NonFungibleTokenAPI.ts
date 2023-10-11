@@ -90,11 +90,10 @@ async function getNonFungibleAssets(
     return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value ?? [] : []))
 }
 
-class SolanaNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+export class SolanaNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAssets(address: string, options?: HubOptions): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
         const tokens = await getNonFungibleAssets(options?.chainId ?? ChainId.Mainnet, address)
 
         return createPageable(tokens, createIndicator(options?.indicator))
     }
 }
-export const SolanaNonFungible = new SolanaNonFungibleTokenAPI()

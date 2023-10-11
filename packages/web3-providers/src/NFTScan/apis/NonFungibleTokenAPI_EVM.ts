@@ -24,7 +24,7 @@ import {
 } from '../helpers/EVM.js'
 import type { HubOptions_Base, NonFungibleTokenAPI } from '../../entry-types.js'
 
-class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
         if (!isValidChainId(chainId)) return
         const path = urlcat('/api/v2/assets/:address/:token_id', {
@@ -144,4 +144,3 @@ class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provider<Cha
         )
     }
 }
-export const NFTScanNonFungibleTokenEVM = new NFTScanNonFungibleTokenAPI_EVM()

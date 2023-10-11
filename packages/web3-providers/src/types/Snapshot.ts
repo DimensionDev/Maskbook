@@ -33,4 +33,15 @@ export namespace SnapshotBaseAPI {
     export interface DataSourceProvider {
         get(): Promise<Array<DAOResult<ChainId.Mainnet>>>
     }
+
+    export interface Provider {
+        getProposalListBySpace(spaceId: string, strategyName?: string): Promise<SnapshotProposal[]>
+        getSpace(spaceId: string): Promise<SnapshotSpace>
+        getCurrentAccountVote(
+            proposalId: string,
+            totalVotes: number,
+            account: string,
+        ): Promise<{ choice: number } | undefined>
+        getFollowingSpaceIdList(account: string): Promise<string[] | undefined>
+    }
 }

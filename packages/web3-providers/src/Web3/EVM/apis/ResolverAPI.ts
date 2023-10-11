@@ -13,7 +13,7 @@ import { ExplorerResolverAPI_Base } from '../../Base/apis/ExplorerResolverAPI.js
 import { ProviderResolverAPI_Base } from '../../Base/apis/ProviderResolverAPI.js'
 import { NetworkResolverAPI_Base } from '../../Base/apis/NetworkExplorerAPI.js'
 
-class ChainResolverAPI extends ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
+export class ChainResolverAPI extends ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
     constructor() {
         super(() => {
             if (!Web3StateRef.value?.Network?.networks) return CHAIN_DESCRIPTORS
@@ -22,7 +22,7 @@ class ChainResolverAPI extends ChainResolverAPI_Base<ChainId, SchemaType, Networ
     }
 }
 
-class ExplorerResolverAPI extends ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
+export class ExplorerResolverAPI extends ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
     constructor() {
         super(() => {
             if (!Web3StateRef.value?.Network?.networks) return CHAIN_DESCRIPTORS
@@ -31,19 +31,14 @@ class ExplorerResolverAPI extends ExplorerResolverAPI_Base<ChainId, SchemaType, 
     }
 }
 
-class ProviderResolverAPI extends ProviderResolverAPI_Base<ChainId, ProviderType> {
+export class ProviderResolverAPI extends ProviderResolverAPI_Base<ChainId, ProviderType> {
     constructor() {
         super(() => PROVIDER_DESCRIPTORS)
     }
 }
 
-class NetworkResolverAPI extends NetworkResolverAPI_Base<ChainId, NetworkType> {
+export class NetworkResolverAPI extends NetworkResolverAPI_Base<ChainId, NetworkType> {
     constructor() {
         super(() => NETWORK_DESCRIPTORS)
     }
 }
-
-export const ChainResolver = new ChainResolverAPI()
-export const ExplorerResolver = new ExplorerResolverAPI()
-export const ProviderResolver = new ProviderResolverAPI()
-export const NetworkResolver = new NetworkResolverAPI()

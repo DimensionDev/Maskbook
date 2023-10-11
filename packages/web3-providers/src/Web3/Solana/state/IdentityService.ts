@@ -3,7 +3,7 @@ import type { WalletAPI } from '../../../entry-types.js'
 import { NetworkPluginID, type SocialIdentity, type SocialAddress, SocialAddressType } from '@masknet/shared-base'
 import { type ChainId, isValidAddress } from '@masknet/web3-shared-solana'
 import { IdentityServiceState } from '../../Base/state/Identity.js'
-import { SolanaDomain } from '../apis/DomainAPI.js'
+import { SolanaDomainAPI } from '../apis/DomainAPI.js'
 
 const SOL_RE = /\S{1,256}\.sol\b/i
 
@@ -21,7 +21,7 @@ function getSolanaDomain(nickname: string, bio: string) {
 
 function getSolanaDomainAddress(domain: string) {
     if (!domain) return
-    return SolanaDomain.lookup(domain)
+    return new SolanaDomainAPI().lookup(domain)
 }
 
 export class IdentityService extends IdentityServiceState<ChainId> {

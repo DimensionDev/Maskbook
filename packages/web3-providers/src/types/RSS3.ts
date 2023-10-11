@@ -1,4 +1,7 @@
-import type { MimeType } from '@masknet/shared-base'
+import type RSS3 from 'rss3-next'
+import type { Pageable, MimeType } from '@masknet/shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import type { HubOptions_Base } from '../entry-types.js'
 
 /**
  * Conform to the RFC3339 Datetime format.
@@ -563,5 +566,15 @@ export namespace RSS3BaseAPI {
         total: number
         cursor?: string
         list: Web3Feed[]
+    }
+
+    export interface Provider {
+        createRSS3(address: string): RSS3
+        getFileData<T>(rss3: RSS3, address: string, key: string): Promise<T | undefined>
+        setFileData<T>(rss3: RSS3, address: string, key: string, data: T): Promise<T>
+        getDonations(address: string): Promise<Pageable<Donation>>
+        getFootprints(address: string): Promise<Pageable<Footprint>>
+        getNameInfo(id: string): Promise<NameInfo | undefined>
+        getWeb3Feeds(address: string, HubOptions?: HubOptions_Base<ChainId>): Promise<Pageable<Activity>>
     }
 }

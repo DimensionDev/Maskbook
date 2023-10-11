@@ -6,7 +6,7 @@ import { DEBANK_OPEN_API } from '../constants.js'
 import { fetchSquashedJSON } from '../../helpers/fetchJSON.js'
 import type { GasOptionAPI_Base } from '../../entry-types.js'
 
-class DeBankGasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
+export class DeBankGasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
     async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
         const { CHAIN_ID } = getDeBankConstants(chainId)
         if (!CHAIN_ID) throw new Error('Failed to get gas price.')
@@ -43,4 +43,3 @@ class DeBankGasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOptio
         }
     }
 }
-export const DeBankGasOption = new DeBankGasOptionAPI()

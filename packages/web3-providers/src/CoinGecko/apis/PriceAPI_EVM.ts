@@ -2,7 +2,7 @@ import { type ChainId, getCoinGeckoConstants, isNativeTokenAddress, isValidAddre
 import { getTokenPrice, getTokenPriceByCoinId } from './base.js'
 import type { HubOptions_Base, PriceAPI } from '../../entry-types.js'
 
-class CoinGeckoPriceAPI_EVM implements PriceAPI.Provider<ChainId> {
+export class CoinGeckoPriceAPI_EVM implements PriceAPI.Provider<ChainId> {
     async getFungibleTokenPrice(chainId: ChainId, address: string, options?: HubOptions_Base<ChainId>) {
         const { PLATFORM_ID = '', COIN_ID = '' } = getCoinGeckoConstants(options?.chainId ?? chainId)
 
@@ -12,4 +12,3 @@ class CoinGeckoPriceAPI_EVM implements PriceAPI.Provider<ChainId> {
         return getTokenPrice(PLATFORM_ID, address, options?.currencyType)
     }
 }
-export const CoinGeckoPriceEVM = new CoinGeckoPriceAPI_EVM()

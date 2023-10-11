@@ -45,6 +45,7 @@ import {
     isGreaterThan,
 } from '@masknet/web3-shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
+import { ChainResolverAPI } from './ResolverAPI.js'
 import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import { ContractReadonlyAPI } from './ContractReadonlyAPI.js'
 import { ConnectionOptionsReadonlyAPI } from './ConnectionOptionsReadonlyAPI.js'
@@ -52,7 +53,6 @@ import type { ConnectionAPI_Base } from '../../Base/apis/ConnectionAPI.js'
 import { fetchJSON } from '../../../helpers/fetchJSON.js'
 import type { ConnectionOptions } from '../types/index.js'
 import type { ConnectionOptions_Base } from '../../../entry-types.js'
-import { ChainResolver } from './ResolverAPI.js'
 
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)
@@ -558,7 +558,7 @@ export class ConnectionReadonlyAPI
 
     getNativeToken(initial?: ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
-        const token = ChainResolver.nativeCurrency(options.chainId)
+        const token = new ChainResolverAPI().nativeCurrency(options.chainId)
         if (!token) throw new Error('Failed to create native token.')
         return Promise.resolve(token)
     }

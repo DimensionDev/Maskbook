@@ -28,17 +28,17 @@ import {
 import { createFungibleToken, createNonFungibleToken } from '@masknet/web3-shared-base'
 import { OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
 import {
-    SolanaChainResolver,
-    SolanaExplorerResolver,
-    SolanaProviderResolver,
-    SolanaNetworkResolver,
+    SolanaChainResolverAPI,
+    SolanaExplorerResolverAPI,
+    SolanaProviderResolverAPI,
+    SolanaNetworkResolverAPI,
 } from './ResolverAPI.js'
 
 export class SolanaOthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
-    override chainResolver: typeof SolanaChainResolver = SolanaChainResolver
-    override explorerResolver: typeof SolanaExplorerResolver = SolanaExplorerResolver
-    override providerResolver: typeof SolanaProviderResolver = SolanaProviderResolver
-    override networkResolver: typeof SolanaNetworkResolver = SolanaNetworkResolver
+    override chainResolver = new SolanaChainResolverAPI()
+    override explorerResolver = new SolanaExplorerResolverAPI()
+    override providerResolver = new SolanaProviderResolverAPI()
+    override networkResolver = new SolanaNetworkResolverAPI()
 
     override isValidDomain = isValidDomain
     override isValidChainId = isValidChainId

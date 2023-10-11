@@ -108,4 +108,9 @@ export namespace SecurityAPI {
             contract: string
             chainId: ChainId
         }
+
+    export interface Provider<ChainId> {
+        getTokenSecurity(chainId: ChainId, listOfAddress: string[]): Promise<TokenSecurityType | void>
+        getSupportedChain(): Promise<Array<SupportedChain<ChainId>>>
+    }
 }

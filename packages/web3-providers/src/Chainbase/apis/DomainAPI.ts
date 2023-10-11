@@ -12,7 +12,7 @@ const suffixMap: Partial<Record<ChainId, string>> = {
     [ChainId.Arbitrum]: 'arb',
 }
 
-class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
+export class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
     private async getAddress(chainId: ChainId, name: string) {
         if (!isValidChainId(chainId)) return
 
@@ -51,4 +51,3 @@ class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
         return
     }
 }
-export const ChainbaseDomain = new ChainbaseDomainAPI()

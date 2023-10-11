@@ -11,7 +11,7 @@ import {
     SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { SolanaChainResolver } from '../../Web3/Solana/apis/ResolverAPI.js'
+import { SolanaChainResolverAPI } from '../../Web3/Solana/apis/ResolverAPI.js'
 import { NFTSCAN_BASE_SOLANA, NFTSCAN_URL } from '../constants.js'
 import type { Solana } from '../types/Solana.js'
 import { fetchSquashedJSON } from '../../helpers/fetchJSON.js'
@@ -50,7 +50,7 @@ export function createNonFungibleAsset(chainId: ChainId, asset: Solana.Asset): N
     const owner = asset.owner
     const schema = SchemaType.NonFungible
     const symbol = payload?.symbol
-    const nativeToken = SolanaChainResolver.nativeCurrency(chainId)
+    const nativeToken = new SolanaChainResolverAPI().nativeCurrency(chainId)
 
     return {
         id: asset.token_address,
@@ -151,7 +151,7 @@ export function createNonFungibleTokenEvent(
     chainId: ChainId,
     transaction: Solana.Transaction,
 ): NonFungibleTokenEvent<ChainId, SchemaType> {
-    const paymentToken = SolanaChainResolver.nativeCurrency(chainId)
+    const paymentToken = new SolanaChainResolverAPI().nativeCurrency(chainId)
     return {
         chainId,
         id: transaction.hash,

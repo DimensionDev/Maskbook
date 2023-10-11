@@ -5,7 +5,7 @@ import { type ChainId, isValidChainId } from '@masknet/web3-shared-evm'
 import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_BASE_URL, THIRD_PARTY_V1_BASE_URL } from '../constants.js'
 import { fetchFromCoinMarketCap, resolveCoinMarketCapChainId, resolveCoinMarketCapAddress } from '../helpers.js'
 import type { Coin, Pair, ResultData, Status, QuotesInfo, CoinInfo } from '../types.js'
-import { FuseCoin } from '../../Fuse/index.js'
+import { FuseCoinAPI } from '../../Fuse/index.js'
 import { getCommunityLink, isMirroredKeyword } from '../../Trending/helpers.js'
 import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../../Trending/constants.js'
 import type { TrendingAPI } from '../../entry-types.js'
@@ -85,7 +85,9 @@ export async function getLatestMarketPairs(id: string, currency: string) {
 
 // #endregion
 
-class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
+export class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
+    private Fuse = new FuseCoinAPI()
+
     private async getHistorical(
         id: string,
         currency: string,
@@ -128,7 +130,7 @@ class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
     }
 
     async getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
-        return FuseCoin.create(await this.getAllCoins())
+        return this.Fuse.create(await this.getAllCoins())
             .search(keyword)
             .map((x) => x.item)
             .filter((y) => y.market_cap_rank && y.market_cap_rank < VALID_TOP_RANK)
@@ -276,4 +278,3 @@ class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
         throw new Error('Method not implemented.')
     }
 }
-export const CoinMarketCap = new CoinMarketCapTrendingAPI()

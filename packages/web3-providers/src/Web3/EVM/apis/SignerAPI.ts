@@ -1,9 +1,9 @@
 import * as _metamask_eth_sig_util from /* webpackDefer: true */ '@metamask/eth-sig-util'
 import { signTransaction, type Transaction } from '@masknet/web3-shared-evm'
 import { SignType, toHex } from '@masknet/shared-base'
-import { unreachable } from '@masknet/kit'
+import type { SignerAPI_Base } from '../../../entry-types.js'
 
-class SignerAPI {
+export class SignerAPI implements SignerAPI_Base.Provider {
     async sign<T>(type: SignType, key: Buffer, message: T): Promise<string> {
         switch (type) {
             case SignType.Message:
@@ -28,8 +28,7 @@ class SignerAPI {
                 return rawTransaction
 
             default:
-                unreachable(type)
+                throw new Error(`Unknown sign type: ${type}.`)
         }
     }
 }
-export const Signer = new SignerAPI()

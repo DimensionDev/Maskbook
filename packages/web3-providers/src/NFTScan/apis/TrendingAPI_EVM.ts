@@ -14,12 +14,15 @@ import type { EVM, Response } from '../types/index.js'
 import { fetchFromNFTScanV2, createNonFungibleAsset } from '../helpers/EVM.js'
 import { getContractSymbol } from '../../helpers/getContractSymbol.js'
 import { resolveNFTScanHostName, resolveNFTScanRange, NonFungibleMarketplace } from '../helpers/utils.js'
-import { LooksRare } from '../../LooksRare/index.js'
-import { OpenSea } from '../../OpenSea/index.js'
+import { LooksRareAPI } from '../../LooksRare/index.js'
+import { OpenSeaAPI } from '../../OpenSea/index.js'
 import { getPaymentToken } from '../../helpers/getPaymentToken.js'
 import type { TrendingAPI, NonFungibleTokenAPI } from '../../entry-types.js'
 
-class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
+export class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
+    private Looksrare = new LooksRareAPI()
+    private Opensea = new OpenSeaAPI()
+
     private async getCollection(chainId: ChainId, id: string): Promise<NonFungibleTokenAPI.Collection | undefined> {
         const path = urlcat('/api/v2/collections/:address', {
             address: id,
@@ -166,8 +169,8 @@ class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
         const address = collection.contract_address
         const [symbol, openseaStats, looksrareStats] = await Promise.all([
             getContractSymbol(chainId, id),
-            OpenSea.getStats(address).catch(() => null),
-            LooksRare.getStats(address).catch(() => null),
+            this.Opensea.getStats(address).catch(() => null),
+            this.Looksrare.getStats(address).catch(() => null),
         ])
         const tickers: TrendingAPI.Ticker[] = compact([
             openseaStats
@@ -284,4 +287,3 @@ class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
         throw new Error('Method not implemented.')
     }
 }
-export const NFTScanTrending_EVM = new NFTScanTrendingAPI_EVM()

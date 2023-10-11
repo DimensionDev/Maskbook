@@ -1,7 +1,8 @@
-import FuseLib from 'fuse.js'
+import Fuse from 'fuse.js'
+import type { FuseBaseAPI } from '../../entry-types.js'
 
-export const Fuse = {
-    create<T>(items: T[], options?: FuseLib.IFuseOptions<T>, index?: FuseLib.FuseIndex<T>) {
-        return new FuseLib(items, options, index)
-    },
+export class FuseAPI implements FuseBaseAPI.Provider {
+    create<T>(items: T[], options?: Fuse.IFuseOptions<T>, index?: Fuse.FuseIndex<T>) {
+        return new Fuse(items, options, index)
+    }
 }

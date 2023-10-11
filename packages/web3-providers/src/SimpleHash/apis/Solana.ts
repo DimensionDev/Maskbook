@@ -20,7 +20,7 @@ import {
 } from '../solana-helpers.js'
 import { SPAM_SCORE } from '../constants.js'
 
-class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+export class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_SOLANA, chainId)
         if (!chain || !address || !tokenId || !isValidChainId(chainId)) return
@@ -147,4 +147,3 @@ class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, Sche
         return marketplaces.map((x) => x.marketplace_name)
     }
 }
-export const SimpleHashSolana = new SimpleHashAPI_Solana()

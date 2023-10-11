@@ -2,7 +2,7 @@ import urlcat from 'urlcat'
 import type { MindBaseAPI } from '../entry-types.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 
-class MindsAPI {
+export class MindsAPI implements MindBaseAPI.Provider {
     async getUserByScreenName(screenName?: string) {
         if (!screenName) return null
         const { channel } = await fetchJSON<{ channel: MindBaseAPI.User }>(
@@ -11,4 +11,3 @@ class MindsAPI {
         return channel
     }
 }
-export const Minds = new MindsAPI()

@@ -564,4 +564,20 @@ export namespace TwitterBaseAPI {
         bio?: string
         homepage?: string
     }
+
+    export interface Provider {
+        getSettings: () => Promise<Settings | undefined>
+        getUserSettings: () => Promise<UserSettings>
+        /**
+         * @param screenName
+         * @param checkNFTAvatar With `checkNFTAvatar` true, will get user via web API directly,
+         * because only web API provides has_nft_avatar property
+         */
+        getUserByScreenName: (screenName: string, checkNFTAvatar?: boolean) => Promise<User | null>
+        getUserNftContainer: (screenName: string) => Promise<NFT | undefined>
+        uploadMedia: (image: Blob | File) => Promise<MediaResponse>
+        updateProfileImage: (screenName: string, media_id_str: string) => Promise<AvatarInfo | undefined>
+        staleUserByScreenName: (screenName: string) => Promise<void>
+        createTweet: (tweet: Tweet) => Promise<string>
+    }
 }

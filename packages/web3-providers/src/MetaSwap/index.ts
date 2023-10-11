@@ -11,7 +11,7 @@ function formatAmountAsWei(amount = '0') {
     return formatGweiToWei(amount).toFixed()
 }
 
-class MetaSwapAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
+export class MetaSwapAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
     async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption> | undefined> {
         if (!isValidChainId(chainId)) return
         const result = await fetchJSON<EstimateSuggestResponse>(
@@ -48,4 +48,3 @@ class MetaSwapAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
         }
     }
 }
-export const MetaSwap = new MetaSwapAPI()

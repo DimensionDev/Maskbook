@@ -8,10 +8,11 @@ import { Fortmatic } from '../interceptors/Fortmatic.js'
 import { ContractWallet } from '../interceptors/ContractWallet.js'
 import { Popups } from '../interceptors/Popups.js'
 import { CustomNetwork } from '../interceptors/CustomNetwork.js'
-import { SmartPayAccountAPI, SmartPayBundler, SmartPayFunderAPI } from '../../../SmartPay/index.js'
+import { SmartPayAccountAPI, SmartPayBundlerAPI, SmartPayFunderAPI } from '../../../SmartPay/index.js'
 
 export class Interceptor implements Middleware<ConnectionContext> {
     private Account = new SmartPayAccountAPI()
+    private Bundler = new SmartPayBundlerAPI()
     private Funder = new SmartPayFunderAPI()
 
     private composers: Partial<Record<ProviderType, Composer<ConnectionContext>>> = {
@@ -19,7 +20,7 @@ export class Interceptor implements Middleware<ConnectionContext> {
         [ProviderType.MaskWallet]: Composer.from(
             new Popups(),
             new CustomNetwork(),
-            new ContractWallet(ProviderType.MaskWallet, this.Account, SmartPayBundler, this.Funder),
+            new ContractWallet(ProviderType.MaskWallet, this.Account, this.Bundler, this.Funder),
             new MaskWallet(),
         ),
         [ProviderType.MetaMask]: Composer.from(new MetaMaskLike(ProviderType.MetaMask)),

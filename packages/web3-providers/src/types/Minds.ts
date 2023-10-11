@@ -10,4 +10,8 @@ export namespace MindBaseAPI {
             tiny: string
         }
     }
+
+    export interface Provider {
+        getUserByScreenName: (screenName: string) => Promise<User | null>
+    }
 }

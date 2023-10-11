@@ -12,7 +12,7 @@ import { fetchCachedJSON } from '../../helpers/fetchJSON.js'
 import { getNativeAssets } from '../../helpers/getNativeAssets.js'
 import type { FungibleTokenAPI, HubOptions_Base } from '../../entry-types.js'
 
-class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, SchemaType> {
+export class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, SchemaType> {
     private FungibleToken = new EVM_FungibleTokenAPI()
 
     async getAssets(address: string, options?: HubOptions_Base<ChainId>) {
@@ -67,4 +67,3 @@ class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, Schem
         )
     }
 }
-export const DeBankFungibleToken = new DeBankFungibleTokenAPI()

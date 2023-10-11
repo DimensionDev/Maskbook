@@ -11,12 +11,12 @@ import {
 } from '@masknet/web3-shared-base'
 import { createIndicator, createNextIndicator, createPageable, EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, isValidChainId, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { ChainResolver, ExplorerResolver } from '../../Web3/EVM/apis/ResolverAPI.js'
+import { ChainResolverAPI, ExplorerResolverAPI } from '../../Web3/EVM/apis/ResolverAPI.js'
 import type { NFT, NFT_FloorPrice, NFT_Metadata, NFT_TransferEvent } from '../types.js'
 import { fetchFromChainbase } from '../helpers.js'
 import type { HubOptions_Base, NonFungibleTokenAPI } from '../../entry-types.js'
 
-class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     createNonFungibleTokenPermalink(chainId: ChainId, address: string, tokenId: string) {
         if (chainId === ChainId.Mainnet || chainId === ChainId.Matic) {
             return urlcat('https://opensea.com/:protocol/:contract/:tokenId', {
@@ -25,7 +25,7 @@ class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<Chain
                 protocol: chainId === ChainId.Mainnet ? 'ethereum' : 'matic',
             })
         }
-        return ExplorerResolver.addressLink(chainId, address)
+        return new ExplorerResolverAPI().addressLink(chainId, address)
     }
 
     createNonFungibleTokenAssetFromNFT(chainId: ChainId, nft: NFT): NonFungibleAsset<ChainId, SchemaType> {
@@ -138,7 +138,7 @@ class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<Chain
             }),
         )
         if (!floorPrice) return
-        const nativeToken = ChainResolver.nativeCurrency(chainId)
+        const nativeToken = new ChainResolverAPI().nativeCurrency(chainId)
         return {
             amount: scale10(floorPrice.floor_price, nativeToken.decimals).toFixed(0),
             token: nativeToken,
@@ -230,4 +230,3 @@ class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<Chain
         )
     }
 }
-export const ChainbaseNonFungibleToken = new ChainbaseNonFungibleTokenAPI()

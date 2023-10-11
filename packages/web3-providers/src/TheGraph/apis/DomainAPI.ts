@@ -4,7 +4,7 @@ import { API_URL } from '../constants.js'
 import type { DomainAPI } from '../../entry-types.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 
-class TheGraphDomainAPI implements DomainAPI.Provider<ChainId> {
+export class TheGraphDomainAPI implements DomainAPI.Provider<ChainId> {
     async lookup(chainId: ChainId, name: string): Promise<string | undefined> {
         const response = await fetchJSON<{
             data: {
@@ -56,4 +56,3 @@ class TheGraphDomainAPI implements DomainAPI.Provider<ChainId> {
         return first(response.data.domains)?.name
     }
 }
-export const TheGraphDomain = new TheGraphDomainAPI()

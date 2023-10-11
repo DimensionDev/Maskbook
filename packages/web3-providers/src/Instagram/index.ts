@@ -1,4 +1,5 @@
 import { fetchJSON } from '../helpers/fetchJSON.js'
+import type { InstagramBaseAPI } from '../entry-types.js'
 
 const UPLOAD_AVATAR_URL = 'https://www.instagram.com/accounts/web_change_profile_picture/'
 
@@ -9,7 +10,7 @@ function getCSRFToken() {
     return value
 }
 
-class InstagramAPI {
+export class InstagramAPI implements InstagramBaseAPI.Provider {
     async uploadUserAvatar(image: File | Blob, userId: string) {
         const formData = new FormData()
         const csrfToken = getCSRFToken()
@@ -29,4 +30,3 @@ class InstagramAPI {
         })
     }
 }
-export const Instagram = new InstagramAPI()

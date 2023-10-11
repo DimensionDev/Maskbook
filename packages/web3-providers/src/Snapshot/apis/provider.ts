@@ -11,7 +11,7 @@ async function fetchFromGraphql<T>(query: string) {
     return data
 }
 
-class SnapshotAPI {
+export class SnapshotAPI implements SnapshotBaseAPI.Provider {
     async getProposalListBySpace(spaceId: string, strategyName?: string): Promise<SnapshotBaseAPI.SnapshotProposal[]> {
         const queryProposal = `
             query {
@@ -146,4 +146,3 @@ class SnapshotAPI {
         return follows.map((x) => x.space.id)
     }
 }
-export const Snapshot = new SnapshotAPI()

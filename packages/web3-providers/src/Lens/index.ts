@@ -6,8 +6,10 @@ import type { FollowModuleTypedData, LensBaseAPI } from '../entry-types.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 import { LENS_ROOT_API } from './constants.js'
 
-class LensAPI implements LensBaseAPI.Provider {
-    readonly id = NameServiceID.Lens
+export class LensAPI implements LensBaseAPI.Provider {
+    get id() {
+        return NameServiceID.Lens
+    }
     async getProfileByHandle(handle: string): Promise<LensBaseAPI.Profile> {
         const { data } = await fetchJSON<{ data: { profile: LensBaseAPI.Profile } }>(LENS_ROOT_API, {
             method: 'POST',
@@ -573,4 +575,3 @@ class LensAPI implements LensBaseAPI.Provider {
         return result?.data?.dataAvailabilityTransaction?.publicationId
     }
 }
-export const Lens = new LensAPI()

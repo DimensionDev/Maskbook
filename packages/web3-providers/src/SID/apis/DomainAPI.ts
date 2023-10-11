@@ -6,7 +6,7 @@ import { resolveCrossOriginURL } from '@masknet/web3-shared-base'
 
 const ROOT_HOST = 'https://api.prd.space.id'
 
-class SID_DomainAPI implements DomainAPI.Provider<ChainId> {
+export class SID_DomainAPI implements DomainAPI.Provider<ChainId> {
     private resolveTLD(chainId: ChainId) {
         switch (chainId) {
             case ChainId.BSC:
@@ -50,5 +50,3 @@ class SID_DomainAPI implements DomainAPI.Provider<ChainId> {
         return
     }
 }
-
-export const SID_Domain = new SID_DomainAPI()

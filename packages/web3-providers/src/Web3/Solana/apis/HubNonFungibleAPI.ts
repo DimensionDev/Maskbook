@@ -12,10 +12,10 @@ import { SourceType } from '@masknet/web3-shared-base'
 import { HubNonFungibleAPI_Base } from '../../Base/apis/HubNonFungibleAPI.js'
 import type { HubOptions_Base } from '../../Base/apis/HubOptionsAPI.js'
 import { SolanaHubOptionsAPI } from './HubOptionsAPI.js'
-import { MagicEden } from '../../../MagicEden/index.js'
-import { SolanaNonFungible } from './NonFungibleTokenAPI.js'
-import { NFTScanNonFungibleTokenSolana } from '../../../NFTScan/index.js'
-import { SimpleHashSolana } from '../../../SimpleHash/index.js'
+import { MagicEdenAPI } from '../../../MagicEden/index.js'
+import { SolanaNonFungibleTokenAPI } from './NonFungibleTokenAPI.js'
+import { NFTScanNonFungibleTokenAPI_Solana } from '../../../NFTScan/index.js'
+import { SimpleHashAPI_Solana } from '../../../SimpleHash/index.js'
 import type { NonFungibleTokenAPI } from '../../../entry-types.js'
 
 export class SolanaHubNonFungibleAPI extends HubNonFungibleAPI_Base<
@@ -28,17 +28,22 @@ export class SolanaHubNonFungibleAPI extends HubNonFungibleAPI_Base<
     Transaction,
     TransactionParameter
 > {
+    private MagicEden = new MagicEdenAPI()
+    private SolanaNonFungible = new SolanaNonFungibleTokenAPI()
+    private NFTScanNonFungibleTokenSolana = new NFTScanNonFungibleTokenAPI_Solana()
+    private SimpleHashSolana = new SimpleHashAPI_Solana()
+
     protected override HubOptions = new SolanaHubOptionsAPI(this.options)
 
     protected override getProviders(initial?: HubOptions_Base<ChainId>) {
         return this.getPredicateProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
             {
-                [SourceType.MagicEden]: MagicEden,
-                [SourceType.Solana]: SolanaNonFungible,
-                [SourceType.NFTScan]: NFTScanNonFungibleTokenSolana,
-                [SourceType.SimpleHash]: SimpleHashSolana,
+                [SourceType.MagicEden]: this.MagicEden,
+                [SourceType.Solana]: this.SolanaNonFungible,
+                [SourceType.NFTScan]: this.NFTScanNonFungibleTokenSolana,
+                [SourceType.SimpleHash]: this.SimpleHashSolana,
             },
-            [SimpleHashSolana, NFTScanNonFungibleTokenSolana, MagicEden, SolanaNonFungible],
+            [this.SimpleHashSolana, this.NFTScanNonFungibleTokenSolana, this.MagicEden, this.SolanaNonFungible],
             initial,
         )
     }

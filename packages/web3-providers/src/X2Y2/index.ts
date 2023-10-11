@@ -9,7 +9,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { createPageable, createIndicator, createNextIndicator, EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, createERC20Token, isZeroAddress, SchemaType } from '@masknet/web3-shared-evm'
-import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
+import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
 import { X2Y2_API_URL, X2Y2_PAGE_SIZE } from './constants.js'
 import type { Contract, Event, Order } from './types.js'
 import { resolveActivityType } from '../helpers/resolveActivityType.js'
@@ -29,7 +29,7 @@ async function fetchFromX2Y2<T>(pathname: string) {
     return response?.success ? ([response.data ?? undefined, response.next] as const) : EMPTY_LIST
 }
 
-class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     createPermalink(address: string, tokenId: string) {
         return urlcat('https://x2y2.io/eth/:contract/:tokenId', {
             contract: address,
@@ -59,7 +59,7 @@ class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
             priceInToken: {
                 amount: order.price,
                 token: isZeroAddress(order.currency)
-                    ? ChainResolver.nativeCurrency(ChainId.Mainnet)
+                    ? new ChainResolverAPI().nativeCurrency(ChainId.Mainnet)
                     : createERC20Token(ChainId.Mainnet, order.currency),
             },
             source: SourceType.X2Y2,
@@ -82,7 +82,7 @@ class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
             },
             timestamp: Number.parseInt(event.created_at, 10) * 1000,
             paymentToken: isZeroAddress(event.order.currency)
-                ? ChainResolver.nativeCurrency(ChainId.Mainnet)
+                ? new ChainResolverAPI().nativeCurrency(ChainId.Mainnet)
                 : createERC20Token(ChainId.Mainnet, event.order.currency),
             source: SourceType.X2Y2,
         }
@@ -142,7 +142,7 @@ class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
             offers.length && next ? createNextIndicator(options?.indicator, next) : undefined,
         )
     }
-    getListings(address: string, tokenId: string) {
+    getListings(address: string, tokenId: string, options?: HubOptions_Base<ChainId>) {
         return this.getOrders(address, tokenId, OrderSide.Sell)
     }
     async getEvents(address: string, tokenId: string, options?: HubOptions_Base<ChainId>) {
@@ -187,7 +187,7 @@ class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
             events.length && next ? createNextIndicator(options?.indicator, next) : undefined,
         )
     }
-    async getContract(address: string) {
+    async getContract(address: string, options?: HubOptions_Base<ChainId>) {
         const [contract] = await fetchFromX2Y2<Contract>(
             urlcat('/v1/contracts/:contract', {
                 contract: address,
@@ -197,4 +197,3 @@ class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
         return this.createContract(address, contract)
     }
 }
-export const X2Y2 = new X2Y2API()

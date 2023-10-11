@@ -21,7 +21,7 @@ import {
     isSameURL,
 } from '@masknet/web3-shared-base'
 import { DepositPaymaster } from '../../../SmartPay/libs/DepositPaymaster.js'
-import { SmartPayAccountAPI, SmartPayBundler } from '../../../SmartPay/index.js'
+import { SmartPayAccountAPI, SmartPayBundlerAPI } from '../../../SmartPay/index.js'
 import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
 import { ContractReadonlyAPI } from '../apis/ContractReadonlyAPI.js'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
@@ -31,6 +31,7 @@ import { Providers } from '../providers/index.js'
 export class Popups implements Middleware<ConnectionContext> {
     private Web3 = new ConnectionReadonlyAPI()
     private Contract = new ContractReadonlyAPI()
+    private Bundler = new SmartPayBundlerAPI()
     private AbstractAccount = new SmartPayAccountAPI()
 
     private get networks() {
@@ -47,7 +48,7 @@ export class Popups implements Middleware<ConnectionContext> {
             paymentToken: nativeTokenAddress,
         }
         try {
-            const smartPayChainId = await SmartPayBundler.getSupportedChainId()
+            const smartPayChainId = await this.Bundler.getSupportedChainId()
             if (context.chainId !== smartPayChainId || !context.owner)
                 return {
                     allowMaskAsGas: false,

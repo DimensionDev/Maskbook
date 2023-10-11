@@ -9,7 +9,7 @@ import { resolveNFTScanHostName } from '../helpers/utils.js'
 import { fetchFromNFTScanV2 } from '../helpers/Solana.js'
 import type { NonFungibleTokenAPI, TrendingAPI } from '../../entry-types.js'
 
-class NFTScanTrendingAPI_Solana implements TrendingAPI.Provider<ChainId> {
+export class NFTScanTrendingAPI_Solana implements TrendingAPI.Provider<ChainId> {
     private async getCollection(chainId: ChainId, id: string): Promise<NonFungibleTokenAPI.Collection | undefined> {
         const path = urlcat('/api/sol/collections/:collection', {
             collection: id,
@@ -179,4 +179,3 @@ class NFTScanTrendingAPI_Solana implements TrendingAPI.Provider<ChainId> {
         throw new Error('Method not implemented.')
     }
 }
-export const NFTScanTrending_Solana = new NFTScanTrendingAPI_Solana()

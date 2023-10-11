@@ -4,8 +4,8 @@ import { ECKeyIdentifier, InMemoryStorages, NetworkPluginID, type StorageItem } 
 import { type ProviderType, isValidAddress, type ChainId, type Web3Provider, type Web3 } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
 import { BaseHostedProvider } from './BaseHosted.js'
-import { SmartPayBundler } from '../../../SmartPay/index.js'
-import type { BundlerAPI, WalletAPI } from '../../../entry-types.js'
+import { SmartPayBundlerAPI } from '../../../SmartPay/index.js'
+import type { WalletAPI } from '../../../entry-types.js'
 
 /**
  * EIP-4337 compatible smart contract based wallet.
@@ -14,7 +14,7 @@ export abstract class BaseContractWalletProvider
     extends BaseHostedProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
-    protected Bundler: BundlerAPI.Provider = SmartPayBundler
+    protected Bundler = new SmartPayBundlerAPI()
 
     private ownerStorage:
         | StorageItem<{

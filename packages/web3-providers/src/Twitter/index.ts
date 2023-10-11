@@ -19,7 +19,7 @@ import {
 } from './apis/index.js'
 import type { TwitterBaseAPI } from '../entry-types.js'
 
-class TwitterAPI {
+export class TwitterAPI implements TwitterBaseAPI.Provider {
     getAvatarId(avatarURL?: string) {
         if (!avatarURL) return ''
         const match = new URL(avatarURL).pathname.match(/^\/profile_images\/(\d+)/)
@@ -108,4 +108,3 @@ class TwitterAPI {
         return response.rest_id
     }
 }
-export const Twitter = new TwitterAPI()

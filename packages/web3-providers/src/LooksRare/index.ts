@@ -151,7 +151,7 @@ function createNonFungibleTokenOrderFromOrder(
     }
 }
 
-class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
         if (!isSupportedChainId(chainId)) return
         const response = await fetchFromLooksRare<{
@@ -281,4 +281,3 @@ class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
         return this.getOrders(address, tokenId, OrderSide.Sell, options)
     }
 }
-export const LooksRare = new LooksRareAPI()
