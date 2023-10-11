@@ -8,6 +8,7 @@ const useStyles = makeStyles()((theme) => ({
     bridgeItem: {
         display: 'flex',
         padding: '12px',
+        borderRadius: '8px',
         ':hover': {
             backgroundColor: theme.palette.maskColor.bg,
             cursor: 'pointer',
