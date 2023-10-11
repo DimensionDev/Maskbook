@@ -1,10 +1,9 @@
 import urlcat from 'urlcat'
 import { fetchCachedJSON } from '../entry-helpers.js'
-import { type CalendarBaseAPI } from '../types/Calendar.js'
 
 const BASE_URL = 'https://mask-network-dev.firefly.land/v1/calendar/crypto_event_list'
 
-export class CalendarAPI implements CalendarBaseAPI.Provider {
+class CalendarAPI {
     async getNewsList(startDate: number, endDate?: number) {
         const list = await fetchCachedJSON<any>(
             urlcat(BASE_URL, {
@@ -39,3 +38,4 @@ export class CalendarAPI implements CalendarBaseAPI.Provider {
         return list?.data?.events?.map((x: any) => ({ ...x, event_date: x.event_date * 1000 }))
     }
 }
+export const Calendar = new CalendarAPI()

@@ -11,7 +11,7 @@ import { NameServiceID } from '@masknet/shared-base'
 import { ChainId, createClient } from '@masknet/web3-shared-solana'
 import type { NameServiceAPI } from '../../../entry-types.js'
 
-export class SolanaDomainAPI implements NameServiceAPI.Provider {
+class SolanaDomainAPI implements NameServiceAPI.Provider {
     private client = createClient(ChainId.Mainnet)
 
     private SOL_TLD_AUTHORITY = new PublicKey('58PwtjSDuFHuUkYjH9BYnnQKHfwo9reZhC2zMJv9JPkx')
@@ -45,3 +45,4 @@ export class SolanaDomainAPI implements NameServiceAPI.Provider {
         return `${domain}.sol`
     }
 }
+export const SolanaDomain = new SolanaDomainAPI()

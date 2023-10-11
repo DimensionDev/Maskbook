@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useAsync } from 'react-use'
+import { useEffect, useMemo, useState } from 'react'
+import { useAsync, useAsyncRetry } from 'react-use'
 import compareDesc from 'date-fns/compareDesc'
 import isBefore from 'date-fns/isBefore'
 import { unionWith, uniqBy } from 'lodash-es'
@@ -13,7 +13,6 @@ import {
     NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP,
     MaskMessages,
     currentPersonaIdentifier,
-    ValueRef,
     NextIDPlatform,
     type ProfileAccount,
 } from '@masknet/shared-base'
@@ -23,28 +22,16 @@ import { Web3Storage } from '@masknet/web3-providers'
 import { PERSONA_AVATAR_DB_NAMESPACE } from '../constants.js'
 import type { PersonaAvatarData } from '../types.js'
 
-export const initialPersonaInformation = new ValueRef<PersonaInformation[]>([])
-
-function useSSRPersonaInformation(
+function usePersonaInformation(
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>,
 ) {
-    const [personas, setPersonas] = useState(useValueRef(initialPersonaInformation))
-    const revalidate = useCallback(() => {
-        queryOwnedPersonaInformation?.(false)
-            ?.then(setPersonas)
-            .then(() => set(false))
-    }, [queryOwnedPersonaInformation])
-    const [useServerSnapshot, set] = useState(true)
-    useEffect(() => {
-        if (!initialPersonaInformation.value.length) {
-            revalidate()
-        }
-    }, [])
-    useEffect(() => MaskMessages.events.ownPersonaChanged.on(revalidate), [])
+    const { value: personas = EMPTY_LIST, retry } = useAsyncRetry(
+        async () => queryOwnedPersonaInformation?.(false),
+        [queryOwnedPersonaInformation],
+    )
+    useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [])
 
-    return {
-        personas: useServerSnapshot && !personas.length ? initialPersonaInformation.getServerSnapshot() : personas,
-    }
+    return { personas }
 }
 
 function usePersonaContext(initialState?: {
@@ -55,7 +42,7 @@ function usePersonaContext(initialState?: {
     const [selectedPersona, setSelectedPersona] = useState<PersonaInformation>()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
-    const { personas } = useSSRPersonaInformation(initialState?.queryOwnedPersonaInformation)
+    const { personas } = usePersonaInformation(initialState?.queryOwnedPersonaInformation)
 
     const currentPersona = personas?.find((x) => x.identifier === (currentIdentifier || personas[0]?.identifier))
 

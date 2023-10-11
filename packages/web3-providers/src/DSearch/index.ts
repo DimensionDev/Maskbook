@@ -33,19 +33,18 @@ import {
     isZeroAddress as isZeroAddressSolana,
 } from '@masknet/web3-shared-solana'
 import { CoinGeckoSearchAPI } from '../CoinGecko/apis/DSearchAPI.js'
-import { CoinGeckoTrendingAPI } from '../CoinGecko/apis/TrendingAPI.js'
+import { CoinGeckoTrending } from '../CoinGecko/apis/TrendingAPI.js'
 import { CoinMarketCapSearchAPI } from '../CoinMarketCap/apis/DSearchAPI.js'
 import { NFTScanCollectionSearchAPI, NFTScanSearchAPI } from '../NFTScan/apis/DSearchAPI.js'
-import { RSS3API } from '../RSS3/index.js'
-import { ENS_API } from '../ENS/index.js'
-import { SpaceID_API } from '../SpaceID/index.js'
-import { ARBID_API } from '../ARBID/index.js'
-import { NextIDProofAPI } from '../NextID/proof.js'
+import { RSS3 } from '../RSS3/index.js'
+import { ENS } from '../ENS/index.js'
+import { SpaceID } from '../SpaceID/index.js'
+import { ARBID } from '../ARBID/index.js'
+import { NextIDProof } from '../NextID/proof.js'
 import { PlatformToChainIdMap } from '../RSS3/constants.js'
 import { getHandlers } from './rules.js'
 import { DSEARCH_BASE_URL } from './constants.js'
 import { fetchFromDSearch } from './helpers.js'
-import type { DSearchBaseAPI } from '../entry-types.js'
 
 const isValidAddress = (address?: string): boolean => {
     return isValidAddressEVM(address) || isValidAddressFlow(address) || isValidAddressSolana(address)
@@ -85,19 +84,11 @@ const isValidHandle = (handle: string): boolean => {
     return handleRe.test(handle)
 }
 
-export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.SchemaTypeAll>
-    implements DSearchBaseAPI.Provider<ChainId, SchemaType>
-{
+export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.SchemaTypeAll> {
     private NFTScanClient = new NFTScanSearchAPI<ChainId, SchemaType>()
     private NFTScanCollectionClient = new NFTScanCollectionSearchAPI<ChainId, SchemaType>()
     private CoinGeckoClient = new CoinGeckoSearchAPI<ChainId, SchemaType>()
     private CoinMarketCapClient = new CoinMarketCapSearchAPI<ChainId, SchemaType>()
-    private RSS3 = new RSS3API()
-    private CoinGeckoTrending = new CoinGeckoTrendingAPI()
-    private ENS = new ENS_API()
-    private SpaceID = new SpaceID_API()
-    private ARBID = new ARBID_API()
-    private NextIDProof = new NextIDProofAPI()
 
     private parseKeyword(keyword: string): { word: string; field?: string } {
         const words = keyword.split(':')
@@ -119,17 +110,17 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         const [address, chainId] = await attemptUntil(
             [
                 () =>
-                    this.ENS.lookup(domain).then((x = '') => {
+                    ENS.lookup(domain).then((x = '') => {
                         if (!x || isZeroAddressEVM(address)) throw new Error(`No result for ${domain}`)
                         return [x, ChainIdEVM.Mainnet]
                     }),
                 () =>
-                    this.SpaceID.lookup(domain).then((x = '') => {
+                    SpaceID.lookup(domain).then((x = '') => {
                         if (!x || isZeroAddressEVM(address)) throw new Error(`No result for ${domain}`)
                         return [x, ChainIdEVM.BSC]
                     }),
                 () =>
-                    this.ARBID.lookup(domain).then((x = '') => {
+                    ARBID.lookup(domain).then((x = '') => {
                         if (!x || isZeroAddressEVM(address)) throw new Error(`No result for ${domain}`)
                         return [x, ChainIdEVM.Arbitrum]
                     }),
@@ -151,7 +142,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
     }
 
     private async searchRSS3Handle(handle: string): Promise<Array<DomainResult<ChainId>>> {
-        const profiles = await this.RSS3.getProfiles(handle)
+        const profiles = await RSS3.getProfiles(handle)
         return profiles
             .filter((x) => x.handle === handle)
             .map((profile) => {
@@ -170,7 +161,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
     }
 
     private async searchRSS3NameService(handle: string): Promise<Array<DomainResult<ChainId>>> {
-        const result = await this.RSS3.getNameService(handle)
+        const result = await RSS3.getNameService(handle)
         if (!result) return []
         return [
             {
@@ -190,9 +181,9 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
         const [domain, chainId] = await attemptUntil(
             [
-                () => this.ENS.reverse(address).then((x) => [x, ChainIdEVM.Mainnet]),
-                () => this.SpaceID.reverse(address).then((x) => [x, ChainIdEVM.BSC]),
-                () => this.ARBID.reverse(address).then((x) => [x, ChainIdEVM.Arbitrum]),
+                () => ENS.reverse(address).then((x) => [x, ChainIdEVM.Mainnet]),
+                () => SpaceID.reverse(address).then((x) => [x, ChainIdEVM.BSC]),
+                () => ARBID.reverse(address).then((x) => [x, ChainIdEVM.Arbitrum]),
             ],
             ['', ChainIdEVM.Mainnet],
         )
@@ -210,7 +201,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
             ]
         }
 
-        const bindingProofs = await this.NextIDProof.queryProfilesByAddress(address)
+        const bindingProofs = await NextIDProof.queryProfilesByAddress(address)
 
         if (bindingProofs?.length > 0) {
             return [
@@ -301,7 +292,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
 
         if (normalTokensFiltered.length > 0) return [normalTokensFiltered[0]]
 
-        const coinInfo = await this.CoinGeckoTrending.getCoinInfoByAddress(address)
+        const coinInfo = await CoinGeckoTrending.getCoinInfoByAddress(address)
 
         if (coinInfo?.id) {
             return [

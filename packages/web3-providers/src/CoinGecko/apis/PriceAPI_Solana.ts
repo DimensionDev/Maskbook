@@ -2,7 +2,7 @@ import { type ChainId, getCoinGeckoConstants, isNativeTokenAddress } from '@mask
 import { getTokenPriceByCoinId, getTokenPrice } from './base.js'
 import type { HubOptions_Base, PriceAPI } from '../../entry-types.js'
 
-export class CoinGeckoPriceAPI_Solana implements PriceAPI.Provider<ChainId> {
+class CoinGeckoPriceAPI_Solana implements PriceAPI.Provider<ChainId> {
     getFungibleTokenPrice(chainId: ChainId, address: string, options?: HubOptions_Base<ChainId>) {
         const { PLATFORM_ID = '', COIN_ID = '' } = getCoinGeckoConstants(options?.chainId ?? chainId)
 
@@ -12,3 +12,4 @@ export class CoinGeckoPriceAPI_Solana implements PriceAPI.Provider<ChainId> {
         return getTokenPrice(PLATFORM_ID, address, options?.currencyType)
     }
 }
+export const CoinGeckoPriceSolana = new CoinGeckoPriceAPI_Solana()

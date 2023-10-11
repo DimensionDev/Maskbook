@@ -5,7 +5,7 @@ import { toTransaction } from '../helpers.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 import type { ExplorerAPI } from '../../entry-types.js'
 
-export class EtherscanExplorerAPI implements ExplorerAPI.Provider {
+class EtherscanExplorerAPI {
     async getLatestTransactions(
         chainId: ChainId,
         account: string,
@@ -31,3 +31,4 @@ export class EtherscanExplorerAPI implements ExplorerAPI.Provider {
         return transactions.map(toTransaction)
     }
 }
+export const EtherscanExplorer = new EtherscanExplorerAPI()

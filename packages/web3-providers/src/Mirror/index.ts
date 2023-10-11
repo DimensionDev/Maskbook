@@ -1,7 +1,7 @@
 import formatDateTime from 'date-fns/format'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import type { MirrorBaseAPI, Publisher, Writer } from '../entry-types.js'
+import type { Publisher, Writer } from '../entry-types.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 
 const MIRROR_API_URL = 'https://mirror-api.com/graphql'
@@ -59,7 +59,7 @@ async function fetchFromMirror<T>(body: requestBody) {
     return data
 }
 
-export class MirrorAPI implements MirrorBaseAPI.Provider {
+class MirrorAPI {
     async getPostPublisher(digest: string): Promise<Publisher | null> {
         const script = document.getElementById('__NEXT_DATA__')?.innerHTML
         const INIT_DATA = JSON.parse(script ?? '{}')
@@ -233,3 +233,4 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
         return INIT_DATA.props?.pageProps?.project as Writer
     }
 }
+export const Mirror = new MirrorAPI()

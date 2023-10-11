@@ -12,19 +12,23 @@ import { ExplorerResolverAPI_Base } from '../../Base/apis/ExplorerResolverAPI.js
 import { ProviderResolverAPI_Base } from '../../Base/apis/ProviderResolverAPI.js'
 import { NetworkResolverAPI_Base } from '../../Base/apis/NetworkExplorerAPI.js'
 
-export class SolanaChainResolverAPI extends ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
+class SolanaChainResolverAPI extends ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
     protected readonly descriptors = CHAIN_DESCRIPTORS
 }
 
-export class SolanaExplorerResolverAPI extends ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
+class SolanaExplorerResolverAPI extends ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
     protected readonly descriptors = CHAIN_DESCRIPTORS
     protected readonly initial = undefined
 }
 
-export class SolanaProviderResolverAPI extends ProviderResolverAPI_Base<ChainId, ProviderType> {
+class SolanaProviderResolverAPI extends ProviderResolverAPI_Base<ChainId, ProviderType> {
     protected readonly descriptors = PROVIDER_DESCRIPTORS
 }
 
-export class SolanaNetworkResolverAPI extends NetworkResolverAPI_Base<ChainId, NetworkType> {
+class SolanaNetworkResolverAPI extends NetworkResolverAPI_Base<ChainId, NetworkType> {
     protected readonly descriptors = NETWORK_DESCRIPTORS
 }
+export const SolanaChainResolver = new SolanaChainResolverAPI()
+export const SolanaExplorerResolver = new SolanaExplorerResolverAPI()
+export const SolanaProviderResolver = new SolanaProviderResolverAPI()
+export const SolanaNetworkResolver = new SolanaNetworkResolverAPI()
