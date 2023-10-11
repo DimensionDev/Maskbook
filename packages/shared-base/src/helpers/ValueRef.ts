@@ -12,6 +12,7 @@ const defaultComparer: ValueComparer<any> = (a, b) => a === b
 export class ValueRef<T> {
     constructor(value: T, isEqual: ValueComparer<T> = defaultComparer) {
         this._value = value
+        this._ssrValue = value
         this.isEqual = isEqual
     }
     get value() {
@@ -33,9 +34,22 @@ export class ValueRef<T> {
         this.watcher.add(fn)
         return () => void this.watcher.delete(fn)
     }
+    setServerSnapshot(value: T): void {
+        if (this.hasSSRValue) {
+            if (this.isEqual(this._ssrValue, value)) return
+            throw new Error('Cannot change the server side snapshot')
+        }
+        this.hasSSRValue = true
+        this._ssrValue = value
+    }
+    getServerSnapshot(): T {
+        return this._ssrValue
+    }
     private watcher = new Set<(newVal: any, oldVal: any) => void>()
     private isEqual: ValueComparer<T>
     private _value: T
+    private hasSSRValue = false
+    private _ssrValue: T
 }
 
 export class ValueRefWithReady<T> extends ValueRef<T> {

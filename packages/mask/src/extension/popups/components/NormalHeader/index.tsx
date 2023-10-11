@@ -1,3 +1,5 @@
+// ! This file is used during SSR. DO NOT import new files that does not work in SSR
+
 import { memo, useCallback, useContext, type ReactNode } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import { Box, Typography } from '@mui/material'

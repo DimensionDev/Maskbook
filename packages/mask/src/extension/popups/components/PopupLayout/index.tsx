@@ -1,3 +1,5 @@
+// ! This file is used during SSR. DO NOT import new files that does not work in SSR
+
 import { memo, useMemo, type PropsWithChildren, lazy, Suspense } from 'react'
 import { matchPath, Outlet, useLocation } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'

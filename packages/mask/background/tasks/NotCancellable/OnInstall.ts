@@ -1,5 +1,6 @@
 // ALL IMPORTS MUST BE DEFERRED
 import { PersistentStorages, type DashboardRoutes } from '@masknet/shared-base'
+import * as connect /* webpackDefer: true */ from '../../services/site-adaptors/connect.js'
 
 type DashboardRoutes_Welcome = DashboardRoutes.Welcome extends `${infer T}` ? T : never
 function openWelcome() {
@@ -13,7 +14,6 @@ browser.runtime.onInstalled.addListener(async (detail) => {
     if (detail.reason === 'install') {
         openWelcome()
     } else if (detail.reason === 'update') {
-        const connect = await import('../../services/site-adaptors/connect.js')
         const groups = await connect.getOriginsWithoutPermission()
         if (groups.length) openWelcome()
         if ((globalThis as any).localStorage) {

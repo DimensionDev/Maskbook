@@ -1,3 +1,5 @@
+// ! This file is used during SSR. DO NOT import new files that does not work in SSR
+
 import { LanguageOptions, SupportedLanguages } from '@masknet/public-api'
 import { jaJP, koKR, zhTW, zhCN, enUS, type Localization } from '@mui/material/locale/index.js'
 import { updateLanguage } from '@masknet/shared-base'

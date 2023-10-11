@@ -1,11 +1,13 @@
 /// <reference types="react/canary" />
-import { memo } from 'react'
+// ! This file is used during SSR. DO NOT import new files that does not work in SSR
+import { memo, useContext } from 'react'
 import { NavLink, type LinkProps } from 'react-router-dom'
 import { BottomNavigationAction, Box, type BoxProps } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useMessages } from '@masknet/web3-hooks-base'
+import { HydrateFinished } from '../../../../utils/createNormalReactRoot.js'
 
 const useStyle = makeStyles()((theme) => ({
     container: {
@@ -45,6 +47,7 @@ const BottomNavLink = memo<LinkProps>(function BottomNavLink({ children, to }) {
 export const Navigator = memo(function Navigator({ className, ...rest }: BoxProps) {
     const { classes, cx } = useStyle()
 
+    useContext(HydrateFinished)()
     const messages = useMessages()
 
     return (

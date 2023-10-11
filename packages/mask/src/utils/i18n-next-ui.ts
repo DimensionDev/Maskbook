@@ -1,3 +1,5 @@
+// ! This file is used during SSR. DO NOT import new files that does not work in SSR
+
 import { useTranslation, type UseTranslationOptions } from 'react-i18next'
 import type en from '../../shared-ui/locales/en-US.json'
 import type { i18NextInstance } from '@masknet/shared-base'

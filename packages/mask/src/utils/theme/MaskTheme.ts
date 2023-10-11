@@ -1,3 +1,5 @@
+// ! This file is used during SSR. DO NOT import new files that does not work in SSR
+
 import { unstable_createMuiStrictModeTheme, type ThemeOptions } from '@mui/material'
 import { grey, orange } from '@mui/material/colors'
 import { cloneDeep, merge } from 'lodash-es'

@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface ApplicationBoardFormProps {
     openDashboard?: (route?: DashboardRoutes, search?: string) => void
-    queryOwnedPersonaInformation: (initializedOnly: boolean) => Promise<PersonaInformation[]>
+    queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
     currentSite?: EnhanceableSite
     allPersonas: PersonaInformation[]
     lastRecognized?: IdentityResolved

@@ -303,8 +303,9 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
 
     const entries: Record<string, EntryDescription> = (baseConfig.entry = {
         dashboard: withReactDevTools(join(__dirname, '../src/extension/dashboard/index.ts')),
-        popups: withReactDevTools(join(__dirname, '../src/extension/popups/entry.ts')),
+        popups: withReactDevTools(join(__dirname, '../src/extension/popups/SSR-client.ts')),
         contentScript: withReactDevTools(join(__dirname, '../src/content-script.ts')),
+        debug: withReactDevTools(join(__dirname, '../src/extension/debug-page/index.tsx')),
         background: normalizeEntryDescription(join(__dirname, '../background/mv2-entry.ts')),
         backgroundWorker: normalizeEntryDescription(join(__dirname, '../background/mv3-entry.ts')),
     })
@@ -312,6 +313,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         await addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html' }),
         await addHTMLEntry({ chunks: ['popups'], filename: 'popups.html' }),
         await addHTMLEntry({ chunks: ['contentScript'], filename: 'generated__content__script.html' }),
+        await addHTMLEntry({ chunks: ['debug'], filename: 'debug.html' }),
         await addHTMLEntry({ chunks: ['background'], filename: 'background.html', gun: true }),
     )
     if (flags.devtools) {

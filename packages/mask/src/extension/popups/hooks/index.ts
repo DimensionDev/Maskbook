@@ -1,4 +1,5 @@
 export * from './useContactsContext.js'
+export * from './useEnterDashboard.js'
 export * from './useFriendProfiles.js'
 export * from './useFriends.js'
 export * from './useFriendsFromSearch.js'
