@@ -1,17 +1,41 @@
 import { useRef } from 'react'
 import { useAsyncFn } from 'react-use'
 import {
-    fromHex,
     NextIDAction,
     type PersonaInformation,
     SignType,
-    toBase64,
     languageSettings,
     MaskMessages,
+    toBase64,
+    fromHex,
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import Services from '#services'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
+
+async function createAndSignMessage(persona: PersonaInformation, username: string) {
+    const platform = activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform
+    if (!platform) return null
+
+    const payload = await NextIDProof.createPersonaPayload(
+        persona.identifier.publicKeyAsHex,
+        NextIDAction.Create,
+        username,
+        platform,
+        languageSettings.value ?? 'default',
+    )
+    if (!payload) throw new Error('Failed to create persona payload.')
+
+    const signature = await Services.Identity.signWithPersona(
+        SignType.Message,
+        payload.signPayload,
+        persona.identifier,
+        location.origin,
+        true,
+    )
+    if (!signature) throw new Error('Failed to sign by persona.')
+    return { payload, signature }
+}
 
 export function useNextIDVerify() {
     const verifyPostCollectTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -23,23 +47,9 @@ export function useNextIDVerify() {
         async (persona?: PersonaInformation, username?: string, verifiedCallback?: () => void | Promise<void>) => {
             if (!platform || !persona || !username) return
 
-            const payload = await NextIDProof.createPersonaPayload(
-                persona.identifier.publicKeyAsHex,
-                NextIDAction.Create,
-                username,
-                platform,
-                languageSettings.value ?? 'default',
-            )
-            if (!payload) throw new Error('Failed to create persona payload.')
-
-            const signature = await Services.Identity.signWithPersona(
-                SignType.Message,
-                payload.signPayload,
-                persona.identifier,
-                location.origin,
-                true,
-            )
-            if (!signature) throw new Error('Failed to sign by persona.')
+            const message = await createAndSignMessage(persona, username)
+            if (!message) return
+            const { signature, payload } = message
 
             const postContent = payload.postContent.replace('%SIG_BASE64%', toBase64(fromHex(signature)))
             postMessage?.(postContent, { recover: false, reason: 'verify' })

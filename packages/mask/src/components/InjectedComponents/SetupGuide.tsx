@@ -61,13 +61,11 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     }, [type, hasOperation, notify])
     // #endregion
 
-    const disableVerify = useMemo(
-        () =>
-            !currentIdentityResolved?.identifier || !userId
-                ? false
-                : currentIdentityResolved?.identifier.userId !== userId,
-        [currentIdentityResolved, userId],
-    )
+    const disableVerify = useMemo(() => {
+        return !currentIdentityResolved?.identifier || !userId
+            ? false
+            : currentIdentityResolved?.identifier.userId !== userId
+    }, [currentIdentityResolved, userId])
 
     const onConnect = useCallback(async () => {
         const id = ProfileIdentifier.of(activatedSiteAdaptorUI!.networkIdentifier, userId)
@@ -179,7 +177,8 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                 <VerifyNextID
                     personaIdentifier={destinedPersonaInfo?.identifier}
                     personaName={destinedPersonaInfo?.nickname}
-                    username={userId}
+                    username={currentIdentityResolved.nickname}
+                    userId={userId}
                     network={activatedSiteAdaptorUI!.networkIdentifier}
                     avatar={currentIdentityResolved?.avatar}
                     onVerify={onVerify}

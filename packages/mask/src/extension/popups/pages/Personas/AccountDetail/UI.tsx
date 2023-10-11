@@ -39,7 +39,6 @@ interface AccountDetailUIProps {
     isSupportNextDotID: boolean
     walletProofs?: BindingProof[]
     listingAddresses: string[]
-    isClean: boolean
     toggleUnlisted: (identity: string, address: string) => void
     loading: boolean
     onSubmit: () => void
@@ -52,7 +51,6 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(
         onVerify,
         isSupportNextDotID,
         walletProofs,
-        isClean,
         toggleUnlisted,
         listingAddresses,
         loading,
@@ -101,11 +99,7 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(
                         <Button variant="outlined" fullWidth onClick={handleBack}>
                             {t('back')}
                         </Button>
-                        <ActionButton
-                            loading={submitting}
-                            fullWidth
-                            onClick={account.is_valid ? onSubmit : onVerify}
-                            disabled={account.is_valid ? isClean || loading : submitting}>
+                        <ActionButton loading={submitting} fullWidth onClick={account.is_valid ? onSubmit : onVerify}>
                             {t(account.is_valid ? 'save' : 'popups_verify_account')}
                         </ActionButton>
                     </BottomController>

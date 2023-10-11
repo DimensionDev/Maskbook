@@ -1,30 +1,40 @@
-import { useMaskSharedTrans } from '../../../utils/index.js'
-import { Box, Checkbox, FormControlLabel, Typography } from '@mui/material'
-import { ActionButtonPromise } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { type WizardDialogProps, WizardDialog } from './WizardDialog.js'
+import { ActionButtonPromise, EmojiAvatar } from '@masknet/shared'
+import { formatPersonaFingerprint, type PersonaIdentifier } from '@masknet/shared-base'
+import { MaskColorVar, MaskTextField, makeStyles } from '@masknet/theme'
+import { Box, Link, Typography } from '@mui/material'
 import { useState } from 'react'
-import { SetupGuideStep, type PersonaIdentifier, dismissVerifyNextID } from '@masknet/shared-base'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { useMaskSharedTrans } from '../../../utils/index.js'
+import { BindingDialog } from './BindingDialog.js'
+import { AccountConnectStatus } from './AccountConnectStatus.js'
+import { type WizardDialogProps } from './WizardDialog.js'
+import { useCurrentUserId, usePersonaConnected, usePostContent } from './hooks.js'
+import { Trans } from 'react-i18next'
 
 export const useStyles = makeStyles()((theme) => ({
+    dialog: {
+        color: theme.palette.maskColor.main,
+    },
+    body: {
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        overflow: 'auto',
+    },
+    main: {
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
+    },
     avatar: {
         display: 'block',
-        width: 48,
-        height: 48,
+        width: 36,
+        height: 36,
         borderRadius: '50%',
         border: `solid 1px ${MaskColorVar.border}`,
         '&.connected': {
             borderColor: MaskColorVar.success,
         },
-    },
-    verified: {
-        position: 'absolute',
-        bottom: 0,
-        right: 0,
-        height: 16,
-        width: 16,
-        color: MaskColorVar.success,
     },
     button: {
         minWidth: 150,
@@ -43,42 +53,80 @@ export const useStyles = makeStyles()((theme) => ({
         },
     },
     tip: {
-        fontSize: 16,
+        fontSize: 12,
         fontWeight: 500,
-        lineHeight: '22px',
-        paddingTop: 16,
+        lineHeight: '16px',
+        color: theme.palette.maskColor.second,
+        marginTop: theme.spacing(2),
     },
     connection: {
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-around',
+        justifyContent: 'center',
+        padding: theme.spacing(1.5),
+        gap: theme.spacing(1.5),
+        color: theme.palette.maskColor.main,
     },
     connectItem: {
         flex: 1,
-        height: 75,
+        width: 148,
+        flexShrink: 0,
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        gap: theme.spacing(0.5),
     },
-    line: {
-        width: 100,
-        height: 1,
-        borderTop: `dashed 1px  ${MaskColorVar.borderSecondary}`,
+    input: {
+        width: 136,
+    },
+    postContentTitle: {
+        fontSize: 12,
+        color: theme.palette.maskColor.main,
+    },
+    postContent: {
+        color: theme.palette.maskColor.main,
+        fontSize: 12,
+        wordBreak: 'break-all',
+        backgroundColor: theme.palette.maskColor.bg,
+        borderRadius: 12,
+        padding: theme.spacing(1),
+        marginTop: theme.spacing(1.5),
+    },
+    text: {
+        fontSize: 12,
+        fontWeight: 400,
+        color: theme.palette.maskColor.second,
     },
     name: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: 500,
     },
-    label: {
-        fontSize: 16,
-        fontWeight: 400,
-        lineHeight: '22px',
+    second: {
+        color: theme.palette.maskColor.second,
+        fontSize: 12,
+        display: 'flex',
+        alignItems: 'center',
+        marginTop: theme.spacing(0.5),
+    },
+    linkIcon: {
+        fontSize: 0,
+        color: theme.palette.maskColor.second,
+        marginLeft: 2,
+    },
+    send: {
+        marginRight: theme.spacing(1),
+    },
+    footer: {
+        borderRadius: 12,
+        backdropFilter: 'blur(8px)',
+        boxShadow: theme.palette.maskColor.bottomBg,
+        padding: theme.spacing(2),
+        marginTop: 'auto',
     },
 }))
 
 interface VerifyNextIDProps extends Partial<WizardDialogProps> {
-    username: string
+    username?: string
+    userId: string
     personaName?: string
     personaIdentifier?: PersonaIdentifier
     network: string
@@ -92,99 +140,131 @@ export function VerifyNextID({
     personaName,
     personaIdentifier,
     username,
+    userId,
     avatar,
     onVerify,
     onDone,
     onClose,
-    network,
     disableVerify,
 }: VerifyNextIDProps) {
     const { t } = useMaskSharedTrans()
-
     const { classes, cx } = useStyles()
-    const [checked, setChecked] = useState(false)
+
+    const [customUserId, setCustomUserId] = useState('')
+    const postContent = usePostContent(personaIdentifier, userId || customUserId)
+    const [loadingCurrentUserId, currentUserId] = useCurrentUserId()
+    const connected = usePersonaConnected(personaIdentifier?.publicKeyAsHex, userId)
+    const [completed, setCompleted] = useState(false)
+
+    if (currentUserId !== userId || loadingCurrentUserId || connected) {
+        return (
+            <AccountConnectStatus
+                className={classes.dialog}
+                expectAccount={userId}
+                currentUserId={currentUserId}
+                loading={loadingCurrentUserId}
+                connected={connected}
+                onClose={onClose}
+            />
+        )
+    }
 
     if (!personaIdentifier) return null
 
+    const buttonLabel = (
+        <>
+            <Icons.Send size={18} className={classes.send} />
+            {t('send')}
+        </>
+    )
+    const disabled = !(userId || customUserId) || !personaName || disableVerify
+
     return (
-        <WizardDialog
-            dialogType={SetupGuideStep.VerifyOnNextID}
-            small={!username}
-            content={
-                <Box className={classes.connection}>
-                    <Box className={classes.connectItem}>
-                        <Icons.MaskBlue size={48} />
-                        <Typography variant="body2" className={classes.name}>
-                            {personaName}
-                        </Typography>
-                    </Box>
-                    {username ? (
-                        <>
-                            <Box className={classes.line} />
+        <BindingDialog onClose={onClose} className={classes.dialog}>
+            <div className={classes.body}>
+                <Box p={2} overflow="auto" className={classes.main}>
+                    <Box className={classes.connection}>
+                        {userId ? (
                             <Box className={classes.connectItem}>
-                                <Box position="relative" width={48}>
+                                <Box width={36}>
                                     <img src={avatar} className={cx(classes.avatar, 'connected')} />
-                                    <Icons.Verification className={classes.verified} />
                                 </Box>
-                                <Typography variant="body2" className={classes.name}>
-                                    {username}
+                                <Box ml={1}>
+                                    <Typography className={classes.name}>{username}</Typography>
+                                    <Typography className={classes.second}>@{userId}</Typography>
+                                </Box>
+                            </Box>
+                        ) : (
+                            <Box className={classes.connectItem}>
+                                <Icons.Email size={24} />
+                                <Box ml={0.5}>
+                                    <MaskTextField
+                                        placeholder="handle"
+                                        className={classes.input}
+                                        value={customUserId}
+                                        onChange={(e) => {
+                                            setCustomUserId(e.target.value.trim())
+                                        }}
+                                    />
+                                </Box>
+                            </Box>
+                        )}
+                        <Icons.Connect size={24} />
+                        <Box className={classes.connectItem}>
+                            <EmojiAvatar value={personaIdentifier.publicKeyAsHex} />
+                            <Box ml={1}>
+                                <Typography className={classes.name}>{personaName}</Typography>
+                                <Typography className={classes.second} component="div">
+                                    {formatPersonaFingerprint(personaIdentifier.rawPublicKey, 4)}
+                                    <Link
+                                        className={classes.linkIcon}
+                                        href={`https://web3.bio/${personaIdentifier.publicKeyAsHex}`}
+                                        target="_blank">
+                                        <Icons.LinkOut size={12} />
+                                    </Link>
                                 </Typography>
                             </Box>
+                        </Box>
+                    </Box>
+                    {completed ? (
+                        <Typography className={classes.text}>
+                            <Trans i18nKey="send_post_successfully" components={{ br: <br /> }} />
+                        </Typography>
+                    ) : postContent ? (
+                        <>
+                            <Typography className={classes.postContentTitle}>
+                                {t('setup_guide_post_content')}
+                            </Typography>
+                            <Typography className={classes.postContent}>{postContent}</Typography>
+                            <Typography className={classes.tip} component="div">
+                                {t('setup_guide_verify_tip')}
+                            </Typography>
                         </>
                     ) : null}
                 </Box>
-            }
-            tip={
-                <Typography className={classes.tip} variant="body2">
-                    {!username ? (
-                        t('setup_guide_login')
-                    ) : (
-                        <>
-                            <p>{t('user_guide_tip_connected')}</p>
-                            <p>{t('user_guide_tip_need_verify_on_next_id')}</p>
-                        </>
-                    )}
-                </Typography>
-            }
-            footer={
-                username ? (
+
+                <Box className={classes.footer}>
                     <ActionButtonPromise
                         className={classes.button}
+                        fullWidth
                         variant="contained"
-                        init={disableVerify ? t('setup_guide_verify_should_change_profile') : t('setup_guide_verify')}
-                        waiting={t('setup_guide_verifying')}
+                        init={buttonLabel}
+                        waiting={buttonLabel}
                         complete={t('ok')}
-                        failed={t('setup_guide_verifying_failed')}
+                        failed={buttonLabel}
                         executor={onVerify}
                         completeOnClick={onDone}
-                        disabled={!username || !personaName || disableVerify}
+                        disabled={disabled}
                         completeIcon={null}
                         failIcon={null}
                         failedOnClick="use executor"
-                        data-testid="confirm_button">
-                        {t('setup_guide_verify')}
-                    </ActionButtonPromise>
-                ) : null
-            }
-            dismiss={
-                <FormControlLabel
-                    classes={{ label: classes.label }}
-                    control={
-                        <Checkbox
-                            checked={checked}
-                            onChange={(e) => {
-                                setChecked(e.target.checked)
-                                dismissVerifyNextID[network].value = {
-                                    ...dismissVerifyNextID[network].value,
-                                    [`${username}_${personaIdentifier.toText()}`]: e.target.checked,
-                                }
-                            }}
-                        />
-                    }
-                    label={t('setup_guide_verify_dismiss')}
-                />
-            }
-            onClose={onClose}
-        />
+                        data-testid="confirm_button"
+                        onComplete={() => {
+                            setCompleted(true)
+                        }}
+                    />
+                </Box>
+            </div>
+        </BindingDialog>
     )
 }

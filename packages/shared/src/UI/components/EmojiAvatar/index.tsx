@@ -1,36 +1,33 @@
 import { generateContactAvatarColor } from '@masknet/shared-base'
-import { useTheme, Avatar as MuiAvatar, type AvatarProps, alpha } from '@mui/material'
-import { EMOJI_LIST } from './constants.js'
+import { isZeroAddress } from '@masknet/web3-shared-evm'
+import { Avatar as MuiAvatar, alpha, useTheme, type AvatarProps } from '@mui/material'
 import { useMemo } from 'react'
-import { isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
+import { EMOJI_LIST } from './constants.js'
 
 interface Props extends AvatarProps {
-    address: string
+    value: string
 }
 
-export function EmojiAvatar({ address, ...props }: Props) {
+export function EmojiAvatar({ value, ...props }: Props) {
     const theme = useTheme()
 
-    const defaultEmojiSetting = useMemo(() => {
-        if (!isValidAddress(address) || isZeroAddress(address)) {
-            // hard code color.
-            return { emoji: '\u{1F43C}', backgroundColor: alpha('#627EEA', 0.2) }
+    const config = useMemo(() => {
+        if (isZeroAddress(value)) {
+            return { emoji: '🐼', backgroundColor: alpha('#627EEA', 0.2) }
         }
-        return undefined
-    }, [address])
-
-    const randomEmoji = useMemo(() => {
-        return EMOJI_LIST[Number.parseInt(address.slice(0, 6), 16) % EMOJI_LIST.length]
-    }, [address])
+        return {
+            emoji: EMOJI_LIST[Number.parseInt(value.slice(0, 6), 16) % EMOJI_LIST.length],
+            backgroundColor: generateContactAvatarColor(value, theme.palette.mode),
+        }
+    }, [value, theme.palette.mode])
 
     return (
         <MuiAvatar
             style={{
-                backgroundColor:
-                    defaultEmojiSetting?.backgroundColor ?? generateContactAvatarColor(address, theme.palette.mode),
+                backgroundColor: config.backgroundColor,
             }}
             {...props}>
-            {defaultEmojiSetting?.emoji ?? randomEmoji}
+            {config.emoji}
         </MuiAvatar>
     )
 }

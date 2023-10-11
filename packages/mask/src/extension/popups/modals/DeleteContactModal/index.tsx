@@ -80,7 +80,7 @@ function DeleteContactDrawer({ onConfirm, address, name, ...rest }: DeleteContac
 
     return (
         <BottomDrawer {...rest}>
-            <EmojiAvatar address={address} className={classes.emojiAvatar} sx={{ width: 60, height: 60 }} />
+            <EmojiAvatar value={address} className={classes.emojiAvatar} sx={{ width: 60, height: 60 }} />
             <Typography className={classes.name}>{name}</Typography>
             <Typography className={classes.address}>{formatEthereumAddress(address, 4)}</Typography>
 

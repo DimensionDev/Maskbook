@@ -33,7 +33,7 @@ export const isValidAddress: (address?: string) => address is string = memoize(f
     return isAddress(address)
 })
 
-export function isZeroAddress(address?: string): address is string {
+export function isZeroAddress(address?: string): address is '0x0000000000000000000000000000000000000000' {
     return isSameAddress(address, ZERO_ADDRESS)
 }
 
