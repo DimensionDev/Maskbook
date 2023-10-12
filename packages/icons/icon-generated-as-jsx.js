@@ -245,7 +245,12 @@ export const LooksRare = /*#__PURE__*/ __createIcon('LooksRare', [
 ])
 export const Mask = /*#__PURE__*/ __createIcon('Mask', [
     {
-        u: () => new URL('./brands/Mask.svg', import.meta.url),
+        c: ['dark'],
+        u: () => new URL('./brands/Mask.dark.svg', import.meta.url),
+    },
+    {
+        c: ['light'],
+        u: () => new URL('./brands/Mask.light.svg', import.meta.url),
     },
 ])
 export const MaskBanner = /*#__PURE__*/ __createIcon('MaskBanner', [
