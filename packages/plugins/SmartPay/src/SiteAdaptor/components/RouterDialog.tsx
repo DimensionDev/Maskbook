@@ -6,10 +6,10 @@ import { useAllPersonas, useLastRecognizedIdentity } from '@masknet/plugin-infra
 import { InjectedDialog } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useWallets } from '@masknet/web3-hooks-base'
 import { SmartPayBundler, SmartPayFunder, SmartPayOwner } from '@masknet/web3-providers'
-import { DialogContent, CircularProgress } from '@mui/material'
+import { DialogContent, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { matchPath, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
@@ -106,8 +106,15 @@ export function RouterDialog() {
             titleTail={<Icons.Questions onClick={() => setDialog({ open: true })} />}>
             <DialogContent className={classes.dialogContent}>
                 {queryVerifyLoading ? (
-                    <Box display="flex" justifyContent="center" alignItems="center" minHeight={564}>
-                        <CircularProgress />
+                    <Box
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        flexDirection="column"
+                        rowGap={1.5}
+                        minHeight={564}>
+                        <LoadingBase size={36} />
+                        <Typography>{t.loading()}</Typography>
                     </Box>
                 ) : (
                     <Routes>
