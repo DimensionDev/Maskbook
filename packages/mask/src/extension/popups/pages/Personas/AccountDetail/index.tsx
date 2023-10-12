@@ -25,11 +25,10 @@ import { NextIDProof } from '@masknet/web3-providers'
 import { useTitle } from '../../../hooks/index.js'
 import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { AccountDetailUI } from './UI.js'
-import Service from '#services'
+import Service, { Services } from '#services'
 import { PageTitleContext } from '../../../context.js'
 import { ConfirmDialog } from '../../../modals/modals.js'
 import { DisconnectEventMap } from '../common.js'
-import { signWithPersona } from '@masknet/plugin-infra/dom/context'
 
 const AccountDetail = memo(() => {
     const { t } = useMaskSharedTrans()
@@ -56,7 +55,7 @@ const AccountDetail = memo(() => {
                         ? [selectedAccount.identity]
                         : EMPTY_LIST,
             },
-            signWithPersona,
+            (a, b, c, d) => Services.Identity.signWithPersona(a, b, c, location.origin, d),
         )
 
     const listingAddresses = useMemo(() => {

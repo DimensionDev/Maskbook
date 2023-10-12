@@ -53,7 +53,6 @@ import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource
 import { SearchResultInspector } from './SearchResultInspector.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 import Services from '#services'
-import { signWithPersona } from '@masknet/plugin-infra/dom/context'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -167,7 +166,9 @@ function Content(props: ProfileTabContentProps) {
         isLoading: loadingSocialAccounts,
         error: loadSocialAccounts,
         refetch: retrySocialAccounts,
-    } = useSocialAccountsBySettings(currentSocialIdentity, undefined, addressSorter, signWithPersona)
+    } = useSocialAccountsBySettings(currentSocialIdentity, undefined, addressSorter, (a, b, c, d) =>
+        Services.Identity.signWithPersona(a, b, c, location.origin, d),
+    )
     const [selectedAddress = first(socialAccounts)?.address, setSelectedAddress] = useState<string>()
     const selectedSocialAccount = socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))
     const { setPair } = ScopedDomainsContainer.useContainer()
