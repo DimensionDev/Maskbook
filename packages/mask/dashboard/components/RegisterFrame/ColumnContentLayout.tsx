@@ -8,7 +8,7 @@ const LogoBoxStyled = styled(Box)(({ theme }) => ({
     marginBottom: theme.spacing(10),
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'qcenter',
+    alignItems: 'center',
     [theme.breakpoints.down('md')]: {
         marginBottom: theme.spacing(2),
     },
