@@ -901,6 +901,7 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                 input: {
                     '&::placeholder': {
                         color: colors.maskColor.third,
+                        opacity: '1',
                     },
                     '&:focus': {
                         borderRadius: 8,
