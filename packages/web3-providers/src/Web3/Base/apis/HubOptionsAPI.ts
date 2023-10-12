@@ -1,5 +1,5 @@
 import { identity, pickBy } from 'lodash-es'
-import type { NetworkPluginID, PageIndicator, PartialRequired, ValueRefWithReady } from '@masknet/shared-base'
+import type { NetworkPluginID, PageIndicator, PartialRequired } from '@masknet/shared-base'
 import { CurrencyType, type SourceType, type Web3State } from '@masknet/web3-shared-base'
 import { type SchemaType } from '@masknet/web3-shared-evm'
 import type { OthersAPI_Base } from './OthersAPI.js'
@@ -24,7 +24,7 @@ export interface HubOptions_Base<ChainId, Indicator = PageIndicator> {
     allChains?: boolean
 }
 
-export class HubOptionsAPI_Base<
+export abstract class HubOptionsAPI_Base<
     ChainId,
     SchemaType,
     ProviderType,
@@ -36,8 +36,8 @@ export class HubOptionsAPI_Base<
 > {
     constructor(private options?: HubOptions_Base<ChainId>) {}
 
-    get Web3StateRef(): ValueRefWithReady<
-        Web3State<
+    abstract readonly Web3StateRef: {
+        readonly value: Web3State<
             ChainId,
             SchemaType,
             ProviderType,
@@ -47,13 +47,9 @@ export class HubOptionsAPI_Base<
             Transaction,
             TransactionParameter
         >
-    > {
-        throw new Error('To be implemented.')
     }
 
-    get Web3Others(): OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
-        throw new Error('To be implemented.')
-    }
+    abstract readonly Web3Others: OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
 
     protected get defaults(): PartialRequired<HubOptions_Base<ChainId>, 'account' | 'chainId'> {
         return {

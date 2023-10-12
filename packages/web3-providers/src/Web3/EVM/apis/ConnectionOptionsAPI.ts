@@ -22,11 +22,6 @@ export class ConnectionOptionsAPI extends ConnectionOptionsAPI_Base<
     Transaction,
     TransactionParameter
 > {
-    override get Web3StateRef() {
-        return Web3StateRef
-    }
-
-    override get Web3Others() {
-        return new OthersAPI()
-    }
+    readonly Web3StateRef = Web3StateRef
+    readonly Web3Others = new OthersAPI()
 }

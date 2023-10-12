@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
-import { Web3All, OthersAll } from '@masknet/web3-providers'
+import { Web3All, OthersAll, getAllPluginsWeb3State } from '@masknet/web3-providers'
 import { makeStyles, ShadowRootTooltip, usePortalShadowRoot } from '@masknet/theme'
 import { type NetworkDescriptor } from '@masknet/web3-shared-base'
 import { ChainId, NETWORK_DESCRIPTORS as EVM_NETWORK_DESCRIPTORS, ProviderType } from '@masknet/web3-shared-evm'
@@ -168,12 +168,9 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                 setSelectChainDialogOpen(true)
                 return
             }
-            const target = [...plugins, ...dashboardPlugins].find(
-                (x) => x.ID === (provider.providerAdaptorPluginID as string),
-            )
-            if (!target) return
-
-            const isReady = target.Web3State?.Provider?.isReady(provider.type)
+            const target = getAllPluginsWeb3State()[provider.providerAdaptorPluginID]
+            // note: unsafe cast, we cannot ensure provider.type is the isReady implementation we intended to call
+            const isReady = target?.Provider?.isReady(provider.type as any as never)
             const downloadLink = OthersAll.use(provider.providerAdaptorPluginID)?.providerResolver.providerDownloadLink(
                 provider.type,
             )

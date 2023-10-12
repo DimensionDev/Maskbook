@@ -8,6 +8,7 @@ import type {
     SignType,
     PopupRoutes,
     PopupRoutesParamsMap,
+    PersonaInformation,
     ImportSource,
 } from '@masknet/shared-base'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
@@ -30,7 +31,16 @@ export namespace WalletAPI {
         chainId: ChainId
         account?: string
     }
+
+    export interface MaskWalletIOContext {
+        allPersonas: Subscription<readonly PersonaInformation[]>
+        resetAllWallets(): Promise<void>
+        /** Remove a old wallet */
+        removeWallet(id: string, password?: string): Promise<void>
+        renameWallet(address: string, name: string): Promise<void>
+    }
     export interface IOContext {
+        MaskWalletContext?: MaskWalletIOContext
         /** Send request to native API, for a risky request will be added into the waiting queue. */
         send(payload: JsonRpcPayload, options?: TransactionOptions): Promise<JsonRpcResponse>
         hasPaymentPassword(): Promise<boolean>

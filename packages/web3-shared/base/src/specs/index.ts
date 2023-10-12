@@ -14,6 +14,7 @@ import type {
     SocialIdentity,
     SocialAccount,
     Startable,
+    SignType,
 } from '@masknet/shared-base'
 
 export enum CurrencyType {
@@ -1114,8 +1115,6 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> extends Start
     /** The provider type of the currently visiting site. */
     providerType?: Subscription<ProviderType>
 
-    setup(): Promise<void>
-
     /** Detect if a provider is ready */
     isReady: (providerType: ProviderType) => boolean
     /** Wait until a provider ready */
@@ -1134,6 +1133,9 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> extends Start
     ) => Promise<Account<ChainId>>
     /** Disconnect with the provider. */
     disconnect: (providerType: ProviderType) => Promise<void>
+    /** Sign a message with persona (w or w/o popups) */
+    // TODO: this is not the best place to put this signature, but to avoid IOContext leaked as a global variable, we'll put it here for now.
+    signWithPersona(type: SignType, message: unknown, identifier?: ECKeyIdentifier, silent?: boolean): Promise<string>
 }
 
 export interface BalanceNotifierState<ChainId> {

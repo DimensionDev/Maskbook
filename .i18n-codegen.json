@@ -81,19 +81,6 @@
             }
         },
         {
-            "input": "./packages/plugins/Flow/src/locales/en-US.json",
-            "output": "./packages/plugins/Flow/src/locales/i18n_generated",
-            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
-            "generator": {
-                "type": "i18next/react-hooks",
-                "hooks": "useFlowTrans",
-                "namespace": "com.mask.flow",
-                "trans": "FlowTrans",
-                "emitTS": true,
-                "shouldUnescape": true
-            }
-        },
-        {
             "input": "./packages/plugins/FileService/src/locales/en-US.json",
             "output": "./packages/plugins/FileService/src/locales/i18n_generated",
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
@@ -141,32 +128,6 @@
                 "hooks": "useRSS3Trans",
                 "namespace": "bio.rss3",
                 "trans": "RSS3Trans",
-                "emitTS": true,
-                "shouldUnescape": true
-            }
-        },
-        {
-            "input": "./packages/plugins/EVM/src/locales/en-US.json",
-            "output": "./packages/plugins/EVM/src/locales/i18n_generated",
-            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
-            "generator": {
-                "type": "i18next/react-hooks",
-                "hooks": "useEVM_Trans",
-                "namespace": "com.mask.evm",
-                "trans": "EVM_Trans",
-                "emitTS": true,
-                "shouldUnescape": true
-            }
-        },
-        {
-            "input": "./packages/plugins/Solana/src/locales/en-US.json",
-            "output": "./packages/plugins/Solana/src/locales/i18n_generated",
-            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
-            "generator": {
-                "type": "i18next/react-hooks",
-                "hooks": "useSolanaTrans",
-                "namespace": "com.maskbook.solana",
-                "trans": "SolanaTrans",
                 "emitTS": true,
                 "shouldUnescape": true
             }

@@ -1,6 +1,5 @@
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, type Pageable, createPageable, createIndicator } from '@masknet/shared-base'
 import { attemptUntil, type Transaction as Web3Transaction } from '@masknet/web3-shared-base'
-import { type Pageable, createPageable, createIndicator } from '@masknet/shared-base'
 import {
     ChainId,
     type GasOption,
@@ -36,7 +35,7 @@ export class HubBaseAPI extends HubBaseAPI_Base<
     private GasOptions = new GasOptionAPI()
     protected override HubOptions = new HubOptionsAPI(this.options)
 
-    override async getGasOptions(chainId: ChainId, initial?: HubOptions) {
+    async getGasOptions(chainId: ChainId, initial?: HubOptions) {
         const options = this.HubOptions.fill({
             ...initial,
             chainId,
@@ -52,7 +51,7 @@ export class HubBaseAPI extends HubBaseAPI_Base<
         }
     }
 
-    override async getTransactions(
+    async getTransactions(
         chainId: ChainId,
         account: string,
         initial?: HubOptions,

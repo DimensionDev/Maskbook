@@ -11,7 +11,6 @@ import {
 } from '@masknet/shared-base'
 import { WalletConnectQRCodeModal } from '@masknet/shared'
 import Services from '#services'
-import type { PartialSharedUIContext } from '../../shared/plugin-infra/host.js'
 
 export const NextSharedUIContext = {
     allPersonas: createSubscriptionFromAsync(
@@ -35,7 +34,7 @@ export const NextSharedUIContext = {
 }
 export const RestPartOfPluginUIContextShared: Omit<
     Plugin.SiteAdaptor.SiteAdaptorContext,
-    | keyof PartialSharedUIContext
+    | 'createKVStorage'
     | 'lastRecognizedProfile'
     | 'currentVisitingProfile'
     | 'themeSettings'
@@ -47,7 +46,6 @@ export const RestPartOfPluginUIContextShared: Omit<
     | 'createPersona'
     | 'currentPersonaIdentifier'
     | 'getSearchedKeyword'
-    | 'setWeb3State'
 > = {
     send: Services.Wallet.send,
 
@@ -84,7 +82,7 @@ export const RestPartOfPluginUIContextShared: Omit<
     grantEIP2255Permission: Services.Wallet.grantEIP2255Permission,
     disconnectAllWalletsFromOrigin: Services.Wallet.disconnectAllWalletsFromOrigin,
 
-    signWithPersona: <T>(type: SignType, message: T, identifier?: ECKeyIdentifier, silent?: boolean) =>
+    signWithPersona: (type: SignType, message: unknown, identifier?: ECKeyIdentifier, silent?: boolean) =>
         Services.Identity.signWithPersona(type, message, identifier, location.origin, silent),
     signWithWallet: Services.Wallet.signWithWallet,
 

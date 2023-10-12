@@ -7,7 +7,7 @@ import { Alert, EmptyStatus, InjectedDialog, PersonaAction, PopupHomeTabType, us
 import { EMPTY_LIST, NextIDPlatform, PopupRoutes, PluginID, EMPTY_OBJECT } from '@masknet/shared-base'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useUnlistedAddressConfig } from '@masknet/web3-hooks-base'
-import { openPopupWindow, queryPersonaAvatar } from '@masknet/plugin-infra/dom/context'
+import { openPopupWindow, queryPersonaAvatar, signWithPersona } from '@masknet/plugin-infra/dom/context'
 import { useWeb3ProfileTrans } from '../../locales/index.js'
 import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks/index.js'
 import { ProfileCard, ProfileCardSkeleton } from './ProfileCard.js'
@@ -76,11 +76,14 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
 
     const socialIds = useMemo(() => twitterProofs.map((x) => x.identity), [twitterProofs])
     const [{ data: unlistedAddressConfig = EMPTY_OBJECT, isInitialLoading, refetch }, updateConfig] =
-        useUnlistedAddressConfig({
-            identifier: currentPersona?.identifier,
-            pluginID: PluginID.Web3Profile,
-            socialIds,
-        })
+        useUnlistedAddressConfig(
+            {
+                identifier: currentPersona?.identifier,
+                pluginID: PluginID.Web3Profile,
+                socialIds,
+            },
+            signWithPersona,
+        )
 
     const [pendingUnlistedConfig, setPendingUnlistedConfig] = useState<Record<string, string[]>>({})
     useEffect(() => {

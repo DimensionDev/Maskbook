@@ -27,6 +27,10 @@ import {
     getEthereumConstant,
     getTokenConstant,
     createAccount,
+    type NetworkType,
+    type MessageRequest,
+    type MessageResponse,
+    type TransactionParameter,
 } from '@masknet/web3-shared-evm'
 import {
     type FungibleToken,
@@ -53,6 +57,7 @@ import { fetchJSON } from '../../../helpers/fetchJSON.js'
 import type { ConnectionOptions } from '../types/index.js'
 import type { ConnectionOptions_Base } from '../../../entry-types.js'
 import { ChainResolver } from './ResolverAPI.js'
+import type { ConnectionOptionsAPI_Base } from '../../Base/apis/ConnectionOptionsAPI.js'
 
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)
@@ -95,7 +100,16 @@ export class ConnectionReadonlyAPI
     }
     protected Request
     protected Contract
-    protected ConnectionOptions
+    protected ConnectionOptions: ConnectionOptionsAPI_Base<
+        ChainId,
+        SchemaType,
+        ProviderType,
+        NetworkType,
+        MessageRequest,
+        MessageResponse,
+        Transaction,
+        TransactionParameter
+    >
 
     getWeb3(initial?: ConnectionOptions) {
         return this.Request.getWeb3(initial)

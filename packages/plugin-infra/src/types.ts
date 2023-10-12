@@ -28,7 +28,7 @@ import type {
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { SearchResult, Web3State } from '@masknet/web3-shared-base'
+import type { SearchResult } from '@masknet/web3-shared-base'
 import type { LinkedProfileDetails } from '@masknet/public-api'
 import type { ChainId, TransactionOptions } from '@masknet/web3-shared-evm'
 import type { CompositionType } from './entry-content-script.js'
@@ -102,7 +102,6 @@ export namespace Plugin.Shared {
 
     export interface SharedUIContext extends SharedContext {
         setMinimalMode(enabled: boolean): void
-        setWeb3State(state: Web3State<any, any, any, any, any, any, any, any>): void
         /** Get all wallets */
         wallets: Subscription<Wallet[]>
 
@@ -935,8 +934,6 @@ export namespace Plugin.GeneralUI {
     export interface Definition {
         /** This UI will be injected into the global scope of the target page. */
         GlobalInjection?: InjectUI<{}>
-        /** This is the context of the currently chosen network. */
-        Web3State?: Web3State<unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown>
         /**
          * Render metadata in many different environments.
          *

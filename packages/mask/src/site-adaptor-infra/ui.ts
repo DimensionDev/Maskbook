@@ -25,7 +25,7 @@ import {
 import { Flags } from '@masknet/flags'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
-import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host.js'
+import { createSharedContext, createPluginHost } from '../../shared/plugin-infra/host.js'
 import Services from '#services'
 import { getCurrentIdentifier } from '../site-adaptors/utils.js'
 import { attachReactTreeWithoutContainer, setupReactShadowRootEnvironment } from '../utils/index.js'
@@ -161,6 +161,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         getUserIdentity: ui.utils.getUserIdentity,
         openDashboard: Services.Helper.openDashboard,
         openPopupWindow: Services.Helper.openPopupWindow,
+        signWithPersona: (a, b, c, d) => Services.Identity.signWithPersona(a, b, c, location.origin, d),
     })
     SiteAdaptorContextRef.value = {
         ...RestPartOfPluginUIContextShared,
@@ -186,7 +187,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
                     setMinimalMode(enabled) {
                         Services.Settings.setPluginMinimalModeEnabled(id, enabled)
                     },
-                    ...createPartialSharedUIContext(id, def, signal),
+                    ...createSharedContext(id, signal),
                     ...SiteAdaptorContextRef.value,
                 }
             },

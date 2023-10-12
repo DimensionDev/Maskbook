@@ -14,7 +14,6 @@
     { "path": "../web3-shared/flow" },
     { "path": "../web3-shared/solana" },
     { "path": "../web3-telemetry" },
-    { "path": "../plugin-infra" },
     { "path": "../shared-base-ui/" }
   ]
 }

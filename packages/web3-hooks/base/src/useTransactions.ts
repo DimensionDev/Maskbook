@@ -14,7 +14,7 @@ export function useTransactions<T extends NetworkPluginID = NetworkPluginID>(
     return useMemo(() => {
         return pageableToIterator(
             async (indicator) => {
-                return Hub.getTransactions(options?.chainId ?? chainId, options?.account ?? account, {
+                return Hub.getTransactions!(options?.chainId ?? chainId, options?.account ?? account, {
                     indicator,
                 })
             },

@@ -2,6 +2,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { evm, flow, solana } from './registry.js'
 
+export { initWallet } from './io.js'
 const all = {
     [NetworkPluginID.PLUGIN_EVM]: evm,
     [NetworkPluginID.PLUGIN_FLOW]: flow,
@@ -37,4 +38,18 @@ export function getRegisteredWeb3Chains<T extends NetworkPluginID>(
     ID: T,
 ): ReadonlyArray<Web3Helper.ChainDescriptorScope<void, T>> {
     return all[ID].chain
+}
+export function getAllPluginsWeb3State(): {
+    [key in NetworkPluginID]: Web3Helper.Web3State<key>
+} {
+    return {
+        [NetworkPluginID.PLUGIN_EVM]: evm.state,
+        [NetworkPluginID.PLUGIN_FLOW]: flow.state,
+        [NetworkPluginID.PLUGIN_SOLANA]: solana.state,
+    }
+}
+
+export function getActivatedPluginWeb3State<T extends NetworkPluginID>(pluginID: T): Web3Helper.Web3State<T>
+export function getActivatedPluginWeb3State(pluginID: NetworkPluginID): Web3Helper.Web3State<NetworkPluginID> {
+    return all[pluginID].state
 }

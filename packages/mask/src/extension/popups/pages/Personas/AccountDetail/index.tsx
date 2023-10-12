@@ -46,14 +46,17 @@ const AccountDetail = memo(() => {
         : false
 
     const [{ data: unlistedAddressConfig = EMPTY_OBJECT, isInitialLoading, refetch }, updateConfig] =
-        useUnlistedAddressConfig({
-            identifier: currentPersona?.identifier,
-            pluginID: PluginID.Web3Profile,
-            socialIds:
-                isSupportNextDotID && selectedAccount?.is_valid && selectedAccount.identity
-                    ? [selectedAccount.identity]
-                    : EMPTY_LIST,
-        })
+        useUnlistedAddressConfig(
+            {
+                identifier: currentPersona?.identifier,
+                pluginID: PluginID.Web3Profile,
+                socialIds:
+                    isSupportNextDotID && selectedAccount?.is_valid && selectedAccount.identity
+                        ? [selectedAccount.identity]
+                        : EMPTY_LIST,
+            },
+            (a, b, c, d) => Service.Identity.signWithPersona(a, b, c, location.origin, d),
+        )
 
     const listingAddresses = useMemo(() => {
         if (!selectedAccount?.identity) return EMPTY_LIST

@@ -36,6 +36,7 @@ __setSiteAdaptorContext__({
     share: undefined,
     openDashboard: reject,
     openPopupWindow: reject,
+    signWithPersona: reject,
 })
 
 startPluginSiteAdaptor(EnhanceableSite.App, {
@@ -51,9 +52,6 @@ startPluginSiteAdaptor(EnhanceableSite.App, {
             createKVStorage(type, defaultValues) {
                 if (type === 'memory') return inMemoryStorage(id, defaultValues, signal)
                 else return indexedDBStorage(id, defaultValues, signal)
-            },
-            setWeb3State(state) {
-                def.Web3State = state
             },
             setMinimalMode(enabled) {
                 console.warn('setMinimalMode is ignored.')

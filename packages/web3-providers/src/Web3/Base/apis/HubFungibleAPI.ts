@@ -4,7 +4,6 @@ import {
     attemptUntil,
     type FungibleAsset,
     type FungibleToken,
-    type FungibleTokenSecurity,
     type FungibleTokenSpender,
 } from '@masknet/web3-shared-base'
 import { isEmpty } from 'lodash-es'
@@ -12,7 +11,7 @@ import type { AuthorizationAPI, FungibleTokenAPI, PriceAPI, TokenIconAPI, TokenL
 import type { HubOptions_Base } from './HubOptionsAPI.js'
 import { HubProviderAPI_Base } from './HubProviderAPI.js'
 
-export class HubFungibleAPI_Base<
+export abstract class HubFungibleAPI_Base<
     ChainId,
     SchemaType,
     ProviderType,
@@ -31,7 +30,7 @@ export class HubFungibleAPI_Base<
     Transaction,
     TransactionParameter
 > {
-    protected getProviders(
+    protected abstract getProviders(
         initial?: HubOptions_Base<ChainId>,
     ): Array<
         AuthorizationAPI.Provider<ChainId> &
@@ -39,21 +38,7 @@ export class HubFungibleAPI_Base<
             TokenListAPI.Provider<ChainId, SchemaType> &
             TokenIconAPI.Provider<ChainId> &
             PriceAPI.Provider<ChainId>
-    > {
-        throw new Error('Method not implemented.')
-    }
-
-    async getFungibleTokenBalance(address: string, initial?: HubOptions_Base<ChainId>): Promise<number> {
-        throw new Error('Method not implemented.')
-    }
-
-    async getFungibleTokenSecurity(
-        chainId: ChainId,
-        address: string,
-        initial?: HubOptions_Base<ChainId>,
-    ): Promise<FungibleTokenSecurity> {
-        throw new Error('Method not implemented.')
-    }
+    >
 
     async getFungibleTokensFromTokenList(
         chainId: ChainId,
@@ -146,17 +131,8 @@ export class HubFungibleAPI_Base<
         )
     }
 
-    async getFungibleToken(
+    abstract getFungibleToken(
         address: string,
         initial?: HubOptions_Base<ChainId>,
-    ): Promise<FungibleToken<ChainId, SchemaType> | undefined> {
-        throw new Error('Method not implemented.')
-    }
-
-    async getFungibleTokens(
-        account: string,
-        initial?: HubOptions_Base<ChainId>,
-    ): Promise<Pageable<Error | FungibleToken<ChainId, SchemaType>>> {
-        throw new Error('Method not implemented.')
-    }
+    ): Promise<FungibleToken<ChainId, SchemaType> | undefined>
 }
