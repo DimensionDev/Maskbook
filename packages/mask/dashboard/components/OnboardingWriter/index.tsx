@@ -1,7 +1,7 @@
 import { isArray, sum } from 'lodash-es'
 import { useState, useMemo, useEffect, cloneElement } from 'react'
-import { useDashboardI18N } from '../../locales/i18n_generated.js'
 import { makeStyles } from '@masknet/theme'
+import { useDashboardI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     typed: {

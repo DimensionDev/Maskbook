@@ -34,10 +34,6 @@ if (typeof trustedTypes === 'object' && location.protocol.includes('extension'))
             return html
         },
     })
-
-    if (location.pathname !== '/popups.html') {
-        trustedTypes.createPolicy('ssr', {})
-    }
 }
 
 undefined
