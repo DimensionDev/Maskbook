@@ -55,7 +55,7 @@ const AccountDetail = memo(() => {
                         ? [selectedAccount.identity]
                         : EMPTY_LIST,
             },
-            (a, b, c, d) => Services.Identity.signWithPersona(a, b, c, location.origin, d),
+            (a, b, c, d) => Service.Identity.signWithPersona(a, b, c, location.origin, d),
         )
 
     const listingAddresses = useMemo(() => {
