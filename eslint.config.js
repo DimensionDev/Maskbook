@@ -507,7 +507,6 @@ export default [
             'import/resolver': {
                 typescript: {},
             },
-            // 'import/extensions': ['.ts', '.tsx'],
         },
     },
     {
