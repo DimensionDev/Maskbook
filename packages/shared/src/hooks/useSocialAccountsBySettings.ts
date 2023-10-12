@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import { PluginID, EMPTY_LIST, SocialAddressType, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
+import { PluginID, SocialAddressType, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
 import { useHiddenAddressConfigOf, useSocialAccountsAll } from '@masknet/web3-hooks-base'
 import { currySameAddress } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -12,7 +12,7 @@ export function useSocialAccountsBySettings(
     signWithPersona: WalletAPI.IOContext['signWithPersona'],
 ) {
     const {
-        data: socialAccounts = EMPTY_LIST,
+        data: socialAccounts,
         isLoading: loadingSocialAccounts,
         error: loadSocialAccountsError,
         refetch: refetchSocialAccounts,
@@ -27,7 +27,7 @@ export function useSocialAccountsBySettings(
     } = useHiddenAddressConfigOf(identity?.publicKey, PluginID.Web3Profile, userId, signWithPersona)
 
     const addresses = useMemo(() => {
-        if (!hiddenAddress?.length) return socialAccounts
+        if (!hiddenAddress || !socialAccounts) return
 
         return socialAccounts.filter((x) => {
             if (!x.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID)) return true

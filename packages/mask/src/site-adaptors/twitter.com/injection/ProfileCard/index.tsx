@@ -1,6 +1,6 @@
 import { CrossIsolationMessages, ProfileIdentifier, type SocialIdentity } from '@masknet/shared-base'
 import { AnchorProvider } from '@masknet/shared-base-ui'
-import { LoadingBase, ShadowRootPopper, makeStyles } from '@masknet/theme'
+import { ShadowRootPopper, makeStyles } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
 import { Fade } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
@@ -24,13 +24,6 @@ const useStyles = makeStyles()({
         height: CARD_HEIGHT,
         maxHeight: CARD_HEIGHT,
     },
-    loading: {
-        height: '100%',
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
 })
 
 function ProfileCardHolder() {
@@ -52,7 +45,7 @@ function ProfileCardHolder() {
         })
     }, [])
 
-    const { data: identity, isLoading } = useQuery({
+    const { data: identity } = useQuery({
         queryKey: ['twitter', 'profile', twitterId],
         queryFn: () => Twitter.getUserByScreenName(twitterId),
         select: (user) => {
@@ -67,7 +60,7 @@ function ProfileCardHolder() {
         },
     })
 
-    const { data: resolvedIdentity, isLoading: resolving } = useSocialIdentity(identity)
+    const { data: resolvedIdentity } = useSocialIdentity(identity)
 
     return (
         <Fade in={active} easing="linear" timeout={250}>
@@ -79,15 +72,9 @@ function ProfileCardHolder() {
                 className={classes.root}
                 ref={holderRef}
                 onClick={stopPropagation}>
-                {isLoading || resolving ? (
-                    <div className={classes.loading}>
-                        <LoadingBase size={36} />
-                    </div>
-                ) : resolvedIdentity ? (
-                    <AnchorProvider anchorEl={anchorEl} anchorBounding={badgeBounding}>
-                        <ProfileCard identity={resolvedIdentity} currentAddress={address} />
-                    </AnchorProvider>
-                ) : null}
+                <AnchorProvider anchorEl={anchorEl} anchorBounding={badgeBounding}>
+                    <ProfileCard key={twitterId} identity={resolvedIdentity || undefined} currentAddress={address} />
+                </AnchorProvider>
             </ShadowRootPopper>
         </Fade>
     )
