@@ -116,6 +116,43 @@ export async function disconnectAllOriginsConnectedFromWallet(wallet: string) {
     await walletDatabase.remove('granted_permission', wallet)
 }
 
+export async function internalWalletConnect(wallet: string, origin: string) {
+    assertOrigin(origin)
+    const origins = (await walletDatabase.get('internal_connected', wallet))?.origins
+
+    if (!origins) {
+        walletDatabase.add({
+            type: 'internal_connected',
+            id: wallet,
+            origins: new Set([origin]),
+        })
+    } else if (!origins.has(origin)) {
+        for await (const cursor of walletDatabase.iterate_mutate('internal_connected')) {
+            if (cursor.value.id !== wallet) continue
+            await cursor.update(
+                produce(cursor.value, (draft) => {
+                    draft.origins.add(origin)
+                }),
+            )
+        }
+    }
+}
+
+export async function internalWalletDisconnect(wallet: string, origin: string) {
+    assertOrigin(origin)
+    for await (const cursor of walletDatabase.iterate_mutate('internal_connected')) {
+        if (cursor.value.id !== wallet || !cursor.value.origins.has(origin)) continue
+        if (cursor.value.origins.size === 1) await cursor.delete()
+        else {
+            await cursor.update(
+                produce(cursor.value, (draft) => {
+                    draft.origins.delete(origin)
+                }),
+            )
+        }
+    }
+}
+
 function hasEthAccountsPermission(origin: string, permission: EIP2255Permission) {
     return permission.parentCapability === 'eth_accounts' && permission.invoker === origin
 }
@@ -154,6 +191,11 @@ export async function getAllConnectedWallets(origin: string): Promise<ReadonlySe
                 continue out
             }
         }
+    }
+
+    for await (const cursor of walletDatabase.iterate('internal_connected')) {
+        if (!cursor.value.origins.has(origin)) continue
+        wallets.add(cursor.value.id)
     }
     return wallets
 }
