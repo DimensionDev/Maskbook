@@ -3,8 +3,12 @@ import stringify from 'json-stable-stringify'
 import { assertNotEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { delay, waitDocumentReadyState } from '@masknet/kit'
 import type { SiteAdaptorUI } from '@masknet/types'
-import { type Plugin, startPluginSiteAdaptor, SiteAdaptorContextRef } from '@masknet/plugin-infra/content-script'
-import { __setSiteAdaptorContext__ } from '@masknet/plugin-infra/content-script/context'
+import {
+    type Plugin,
+    startPluginSiteAdaptor,
+    SiteAdaptorContextRef,
+    __setSiteAdaptorContext__,
+} from '@masknet/plugin-infra/content-script'
 import { Modals, sharedUIComponentOverwrite, sharedUINetworkIdentifier, type ModalProps } from '@masknet/shared'
 import {
     createSubscriptionFromValueRef,

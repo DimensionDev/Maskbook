@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { useMaskSharedTrans } from '../../utils/index.js'
-import formatDateTime from 'date-fns/format'
+import { format as formatDateTime } from 'date-fns'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import {
     DialogActions,

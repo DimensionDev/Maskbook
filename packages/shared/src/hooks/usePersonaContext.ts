@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useAsync, useAsyncRetry } from 'react-use'
-import compareDesc from 'date-fns/compareDesc'
-import isBefore from 'date-fns/isBefore'
+import { compareDesc, isBefore } from 'date-fns'
 import { unionWith, uniqBy } from 'lodash-es'
 import { createContainer } from 'unstated-next'
 import {

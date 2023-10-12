@@ -1,6 +1,5 @@
 import { useRef, useContext } from 'react'
-import formatDateTime from 'date-fns/format'
-import fromUnixTime from 'date-fns/fromUnixTime'
+import { format as formatDateTime, fromUnixTime } from 'date-fns'
 import {
     Table,
     TableBody,

@@ -1,4 +1,4 @@
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import { formatDistanceToNow } from 'date-fns'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { type NonFungibleTokenOrder, formatBalance, formatCurrency, isValidTimestamp } from '@masknet/web3-shared-base'

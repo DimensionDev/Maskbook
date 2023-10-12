@@ -2,7 +2,7 @@ import * as d3 from 'd3'
 import { useEffect, type RefObject } from 'react'
 import stringify from 'json-stable-stringify'
 import type { Dimension } from '../useDimension.js'
-import format from 'date-fns/format'
+import { format } from 'date-fns'
 import { alpha, useTheme } from '@mui/material'
 import { fixOverPosition } from './utils.js'
 

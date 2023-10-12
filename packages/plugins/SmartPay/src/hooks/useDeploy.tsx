@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react'
 import { useAsyncFn } from 'react-use'
-import getUnixTime from 'date-fns/getUnixTime'
+import { getUnixTime } from 'date-fns'
 import { Typography } from '@mui/material'
 import { useLastRecognizedIdentity, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import {

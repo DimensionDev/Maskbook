@@ -25,12 +25,11 @@
 
 ## Other problems
 
-- react-devtools-inline: <https://github.com/facebook/react/pull/25510> and <https://github.com/facebook/react/pull/25518>
 - web3: <https://github.com/web3/web3.js/pull/5274> introduce a bug that crashes
 - @chainsafe/as-sha256: currently we cannot load WebAssembly modules in the content script. compiled into JS by <https://github.com/WebAssembly/binaryen/tree/main>.
 - @mui/base: <https://github.com/mui/material-ui/issues/25077>
 - react-spline: <https://github.com/splinetool/react-spline/issues/133>
-- guess-calling-code: <https://github.com/AstraSurge/guess-calling-code/pull/3>
+- eslint-plugin-i: <https://github.com/import-js/eslint-plugin-import/pull/1900/>
 
 ## CSP
 

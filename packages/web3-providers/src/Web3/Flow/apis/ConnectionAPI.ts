@@ -1,5 +1,5 @@
 import { first } from 'lodash-es'
-import getUnixTime from 'date-fns/getUnixTime'
+import { getUnixTime } from 'date-fns'
 import { unreachable } from '@masknet/kit'
 import {
     AddressType,

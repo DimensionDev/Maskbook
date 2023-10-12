@@ -21,10 +21,7 @@ import {
     type NonFungibleCollectionOverview,
 } from '@masknet/web3-shared-base'
 import { formatBalance } from '@masknet/web3-shared-base'
-import subSeconds from 'date-fns/subSeconds'
-import isAfter from 'date-fns/isAfter'
-import secondsToMilliseconds from 'date-fns/secondsToMilliseconds'
-import millisecondsToSeconds from 'date-fns/millisecondsToSeconds'
+import { subSeconds, isAfter, secondsToMilliseconds, millisecondsToSeconds } from 'date-fns'
 import { ChainId, SchemaType, isValidChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import {
     fetchFromSimpleHash,
