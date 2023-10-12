@@ -29,6 +29,7 @@ import Service from '#services'
 import { PageTitleContext } from '../../../context.js'
 import { ConfirmDialog } from '../../../modals/modals.js'
 import { DisconnectEventMap } from '../common.js'
+import { signWithPersona } from '@masknet/plugin-infra/dom/context'
 
 const AccountDetail = memo(() => {
     const { t } = useMaskSharedTrans()
@@ -46,14 +47,17 @@ const AccountDetail = memo(() => {
         : false
 
     const [{ data: unlistedAddressConfig = EMPTY_OBJECT, isInitialLoading, refetch }, updateConfig] =
-        useUnlistedAddressConfig({
-            identifier: currentPersona?.identifier,
-            pluginID: PluginID.Web3Profile,
-            socialIds:
-                isSupportNextDotID && selectedAccount?.is_valid && selectedAccount.identity
-                    ? [selectedAccount.identity]
-                    : EMPTY_LIST,
-        })
+        useUnlistedAddressConfig(
+            {
+                identifier: currentPersona?.identifier,
+                pluginID: PluginID.Web3Profile,
+                socialIds:
+                    isSupportNextDotID && selectedAccount?.is_valid && selectedAccount.identity
+                        ? [selectedAccount.identity]
+                        : EMPTY_LIST,
+            },
+            signWithPersona,
+        )
 
     const listingAddresses = useMemo(() => {
         if (!selectedAccount?.identity) return EMPTY_LIST

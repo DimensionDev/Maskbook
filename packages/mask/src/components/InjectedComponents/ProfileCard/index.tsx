@@ -22,6 +22,7 @@ import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
 import { useMaskSharedTrans } from '../../../utils/index.js'
+import { signWithPersona } from '@masknet/plugin-infra/dom/context'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
     identity: SocialIdentity
@@ -112,7 +113,7 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
         data: allSocialAccounts = EMPTY_LIST,
         isLoading: loadingSocialAccounts,
         refetch: retrySocialAddress,
-    } = useSocialAccountsBySettings(identity, undefined, addressSorter)
+    } = useSocialAccountsBySettings(identity, undefined, addressSorter, signWithPersona)
     const socialAccounts = useMemo(
         () => allSocialAccounts.filter((x) => x.pluginID === NetworkPluginID.PLUGIN_EVM),
         [allSocialAccounts],
