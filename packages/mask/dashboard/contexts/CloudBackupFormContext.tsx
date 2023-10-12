@@ -29,7 +29,7 @@ function useCloudBackupFormContext() {
             email: '',
             phone: '',
             code: '',
-            countryCode: guessCallingCode(),
+            countryCode: (guessCallingCode.default || guessCallingCode)(),
         },
         resolver: zodResolver(
             z

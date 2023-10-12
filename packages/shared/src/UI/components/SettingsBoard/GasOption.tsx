@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
-import formatDistanceStrict from 'date-fns/formatDistanceStrict'
-import addSeconds from 'date-fns/addSeconds'
+import { formatDistanceStrict, addSeconds } from 'date-fns'
 import { makeStyles } from '@masknet/theme'
 import { type GasOptionType, getLocale, formatCurrency } from '@masknet/web3-shared-base'
 import { useSharedTrans } from '@masknet/shared'

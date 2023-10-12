@@ -120,7 +120,7 @@
     "fuse.js": "6.6.2",
     "graphql": "^16.6.0",
     "graphql-request": "^6.0.0",
-    "guess-calling-code": "^1.1.7",
+    "guess-calling-code": "^1.1.8",
     "html-to-image": "^1.11.11",
     "https-browserify": "^1.0.0",
     "zlib-browserify": "^0.0.3",

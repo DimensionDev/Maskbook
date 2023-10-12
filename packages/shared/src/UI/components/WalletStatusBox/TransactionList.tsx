@@ -1,7 +1,7 @@
 import { forwardRef, useCallback, useMemo, useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
 import { noop } from 'lodash-es'
-import format from 'date-fns/format'
+import { format } from 'date-fns'
 import { Icons } from '@masknet/icons'
 import { useChainContext, useWeb3Others, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'

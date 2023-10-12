@@ -14,7 +14,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { isUndefined } from '@walletconnect/utils'
 import { MessageState } from '../../Base/state/Message.js'
-import { ConnectionReadonlyAPI } from '../../../Web3/EVM/apis/ConnectionReadonlyAPI.js'
+import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 export class Message extends MessageState<MessageRequest, MessageResponse> {

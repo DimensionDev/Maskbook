@@ -1,4 +1,4 @@
-import getUnixTime from 'date-fns/getUnixTime'
+import { getUnixTime } from 'date-fns'
 import { Days, NetworkPluginID } from '@masknet/shared-base'
 import { TokenType, SourceType } from '@masknet/web3-shared-base'
 import { type ChainId, isValidChainId } from '@masknet/web3-shared-evm'

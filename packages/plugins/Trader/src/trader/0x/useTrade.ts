@@ -7,7 +7,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainResolver } from '@masknet/web3-providers'
 import { TraderAPI } from '@masknet/web3-providers/types'
-import { useSlippageTolerance } from '../0x/useSlippageTolerance.js'
+import { useSlippageTolerance } from './useSlippageTolerance.js'
 import { ZeroX } from '../../providers/index.js'
 import type { SwapQuoteResponse } from '../../types/index.js'
 

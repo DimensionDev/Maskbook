@@ -6,7 +6,7 @@ import Services from '#services'
 import Popups from './UI.js'
 import { NextSharedUIContext, RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui.js'
 import { MaskMessages, createSubscriptionFromAsync } from '@masknet/shared-base'
-import { __setUIContext__ } from '@masknet/plugin-infra/dom/context'
+import { __setUIContext__ } from '@masknet/plugin-infra/dom'
 
 if (location.hash === '') location.assign('#/personas')
 __setUIContext__({

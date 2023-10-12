@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { first } from 'lodash-es'
-import compareDesc from 'date-fns/compareDesc'
+import { compareDesc } from 'date-fns'
 import {
     createPageable,
     createIndicator,

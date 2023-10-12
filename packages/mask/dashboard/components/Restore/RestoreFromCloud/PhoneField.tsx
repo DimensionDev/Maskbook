@@ -40,7 +40,7 @@ export const PhoneField = memo(function PhoneField() {
 
     useEffect(() => {
         if (dialingCode) return
-        dispatch({ type: 'SET_PHONE', form: { dialingCode: guessCallingCode() } })
+        dispatch({ type: 'SET_PHONE', form: { dialingCode: (guessCallingCode.default || guessCallingCode)() } })
     }, [!dialingCode])
 
     const validCheck = () => {

@@ -16,9 +16,8 @@ import { PersonasBackupPreview, WalletsBackupPreview } from '../../components/Ba
 import PasswordField from '../../components/PasswordField/index.js'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
-import formatDateTime from 'date-fns/format'
+import { format as formatDateTime, millisecondsToSeconds } from 'date-fns'
 import { UserContext } from '../../../shared-ui/index.js'
-import millisecondsToSeconds from 'date-fns/millisecondsToSeconds'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

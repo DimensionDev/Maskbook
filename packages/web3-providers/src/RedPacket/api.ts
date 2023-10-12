@@ -1,4 +1,4 @@
-import secondsToMilliseconds from 'date-fns/secondsToMilliseconds'
+import { secondsToMilliseconds } from 'date-fns'
 import { abiCoder, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'

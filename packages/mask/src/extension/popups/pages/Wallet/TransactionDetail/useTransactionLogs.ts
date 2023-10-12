@@ -1,6 +1,6 @@
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { useMemo } from 'react'
-import format from 'date-fns/format'
+import { format } from 'date-fns'
 import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import type { TransactionState } from './types.js'
 import { useQuery } from '@tanstack/react-query'

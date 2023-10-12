@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import compareDesc from 'date-fns/compareDesc'
+import { compareDesc } from 'date-fns'
 import { migrateFileInfoV1 } from '../helpers.js'
 import type { FileInfo, FileInfoV1 } from '../types.js'
 

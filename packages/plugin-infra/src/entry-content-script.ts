@@ -35,6 +35,8 @@ export {
     useSocialIdentity,
     useSiteThemeMode,
     useSocialIdentityByUserId,
+    __setSiteAdaptorContext__,
+    __setUIContext__,
 } from './site-adaptor/index.js'
 
 export { getBackgroundColor, isDark, toRGB, fromRGB, shade } from './utils/theme/color-tools.js'

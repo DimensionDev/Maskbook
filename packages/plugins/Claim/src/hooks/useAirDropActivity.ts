@@ -1,7 +1,7 @@
 import { last } from 'lodash-es'
 import { keccak256 } from 'web3-utils'
 import { MerkleTree } from 'merkletreejs'
-import secondsToMilliseconds from 'date-fns/secondsToMilliseconds'
+import { secondsToMilliseconds } from 'date-fns'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Airdrop } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
