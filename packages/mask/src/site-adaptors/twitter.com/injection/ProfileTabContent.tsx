@@ -1,15 +1,16 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { MaskMessages } from '@masknet/shared-base'
 import { getMaskColor, makeStyles } from '@masknet/theme'
+import { memo } from 'react'
 import { ProfileTabContent } from '../../../components/InjectedComponents/ProfileTabContent.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { startWatch } from '../../../utils/startWatch.js'
 import {
     searchNewTweetButtonSelector,
     searchProfileEmptySelector,
-    searchProfileTabPageSelector,
     searchProfileTabLoseConnectionPageSelector,
+    searchProfileTabPageSelector,
 } from '../utils/selector.js'
-import { startWatch } from '../../../utils/startWatch.js'
 
 function injectProfileTabContentForEmptyState(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileEmptySelector())
@@ -94,7 +95,7 @@ const useStyles = makeStyles()((theme) => {
 interface Props {
     floating?: boolean
 }
-export function ProfileTabContentAtTwitter({ floating }: Props) {
+export const ProfileTabContentAtTwitter = memo(function ProfileTabContentAtTwitter({ floating }: Props) {
     const { classes } = useStyles()
     const content = (
         <ProfileTabContent
@@ -108,4 +109,4 @@ export function ProfileTabContentAtTwitter({ floating }: Props) {
     // If it's floating, for example being attached to emptyState timeline, we
     // can fix the position by putting it in a stacking context.
     return floating ? <div className={classes.holder}>{content}</div> : content
-}
+})

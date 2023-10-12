@@ -45,7 +45,8 @@ export function leaderboard_url() { return new URL("./brands/Leaderboard.png", i
 export function lens_url() { return new URL("./brands/Lens.svg", import.meta.url) }
 export function link_3_url() { return new URL("./brands/Link3.svg", import.meta.url) }
 export function looks_rare_url() { return new URL("./brands/LooksRare.svg", import.meta.url) }
-export function mask_url() { return new URL("./brands/Mask.svg", import.meta.url) }
+export function mask_dark_url() { return new URL("./brands/Mask.dark.svg", import.meta.url) }
+export function mask_light_url() { return new URL("./brands/Mask.light.svg", import.meta.url) }
 export function mask_banner_url() { return new URL("./brands/MaskBanner.svg", import.meta.url) }
 export function mask_blue_url() { return new URL("./brands/MaskBlue.svg", import.meta.url) }
 export function mask_grey_dark_url() { return new URL("./brands/MaskGrey.dark.svg", import.meta.url) }

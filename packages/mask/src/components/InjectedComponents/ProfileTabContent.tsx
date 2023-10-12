@@ -450,7 +450,7 @@ function Content(props: ProfileTabContentProps) {
                                 collectionList={collectionList}
                                 socialAccounts={socialAccounts}
                                 currentCollection={trendingResult}
-                                onTokenChange={(currentResult, i) => {
+                                onTokenChange={(_, i) => {
                                     setCurrentTrendingIndex(i)
                                     hideInspector(false)
                                     setMenuOpen(false)
