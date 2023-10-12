@@ -1134,6 +1134,7 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> extends Start
     /** Disconnect with the provider. */
     disconnect: (providerType: ProviderType) => Promise<void>
     /** Sign a message with persona (w or w/o popups) */
+    // TODO: this is not the best place to put this signature, but to avoid IOContext leaked as a global variable, we'll put it here for now.
     signWithPersona(type: SignType, message: unknown, identifier?: ECKeyIdentifier, silent?: boolean): Promise<string>
 }
 
