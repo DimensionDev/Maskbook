@@ -29,7 +29,7 @@ export abstract class ProviderState<
 {
     protected site = getSiteType()
 
-    public storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>> = null!
+    abstract storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>>
     public account?: Subscription<string>
     public chainId?: Subscription<ChainId>
     public networkType?: Subscription<NetworkType>
@@ -44,20 +44,20 @@ export abstract class ProviderState<
     protected abstract getDefaultChainId(): ChainId
     protected abstract getDefaultProviderType(): ProviderType
     protected abstract getNetworkTypeFromChainId(chainId: ChainId): NetworkType
-    constructor(
-        protected context: WalletAPI.IOContext,
+    protected constructor(protected context: WalletAPI.IOContext) {}
+    protected static createStorage<ChainId extends number, ProviderType extends string>(
         pluginID: NetworkPluginID,
         defaultChainId: ChainId,
         defaultProviderType: ProviderType,
     ) {
-        const { storage } = InMemoryStorages.Web3.createSubScope(`${pluginID}_${this.site ?? 'Provider'}`, {
+        const { storage } = InMemoryStorages.Web3.createSubScope(`${pluginID}_${getSiteType() ?? 'Provider'}`, {
             account: {
                 account: '',
                 chainId: defaultChainId,
             },
             providerType: defaultProviderType,
         })
-        this.storage = storage
+        return storage
     }
 
     get ready() {
@@ -73,11 +73,11 @@ export abstract class ProviderState<
 
     async setup() {
         await this.readyPromise
-        await this.setupSubscriptions()
-        await this.setupProviders()
+        this.setupSubscriptions()
+        this.setupProviders()
     }
 
-    protected async setupSubscriptions() {
+    protected setupSubscriptions() {
         if (!this.site) return
 
         this.chainId = mapSubscription(
@@ -94,7 +94,7 @@ export abstract class ProviderState<
         this.providerType = mapSubscription(this.storage.providerType.subscription, (provider) => provider)
     }
 
-    private async setupProviders() {
+    private setupProviders() {
         const providers = Object.entries(this.providers) as Array<
             [ProviderType, WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>]
         >

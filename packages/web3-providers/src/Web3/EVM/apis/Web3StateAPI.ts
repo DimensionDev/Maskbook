@@ -22,10 +22,7 @@ export const Web3StateRef = {
     },
 }
 export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3State> {
-    const Provider_ = new Provider(context)
-    await Provider_.setup()
-
-    const Settings_ = new Settings(context)
+    const Provider_ = await Provider.new(context)
 
     const Transaction_ = new Transaction(context, {
         chainId: Provider_.chainId,
@@ -33,7 +30,7 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
     })
 
     return {
-        Settings: Settings_,
+        Settings: new Settings(context),
         Provider: Provider_,
         BalanceNotifier: new BalanceNotifier(),
         BlockNumberNotifier: new BlockNumberNotifier(),

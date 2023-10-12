@@ -37,8 +37,15 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
         return ChainResolver.networkType(chainId) ?? NetworkType.Ethereum
     }
 
-    constructor(io: WalletAPI.IOContext) {
-        super(io, NetworkPluginID.PLUGIN_EVM, getDefaultChainId(), getDefaultProviderType())
+    private constructor(io: WalletAPI.IOContext) {
+        super(io)
+    }
+    storage = ProviderState.createStorage(NetworkPluginID.PLUGIN_EVM, getDefaultChainId(), getDefaultProviderType())
+
+    static async new(io: WalletAPI.IOContext) {
+        const provider = new this(io)
+        await provider.setup()
+        return provider
     }
 
     protected override async setupSubscriptions() {

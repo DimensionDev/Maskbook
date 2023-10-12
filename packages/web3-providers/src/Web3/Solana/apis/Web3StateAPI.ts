@@ -14,8 +14,7 @@ export const SolanaWeb3StateRef = {
     },
 }
 export async function createSolanaState(context: WalletAPI.IOContext): Promise<Web3State> {
-    const Provider_ = new Provider(context)
-    await Provider_.setup()
+    const Provider_ = await Provider.new(context)
 
     return {
         AddressBook: new AddressBook(context),

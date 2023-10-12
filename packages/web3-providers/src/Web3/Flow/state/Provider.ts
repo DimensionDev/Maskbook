@@ -30,7 +30,14 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
     protected override getNetworkTypeFromChainId(chainId: ChainId): NetworkType {
         return FlowChainResolver.networkType(chainId) ?? NetworkType.Flow
     }
-    constructor(io: WalletAPI.IOContext) {
-        super(io, NetworkPluginID.PLUGIN_FLOW, getDefaultChainId(), getDefaultProviderType())
+    private constructor(io: WalletAPI.IOContext) {
+        super(io)
+    }
+    storage = ProviderState.createStorage(NetworkPluginID.PLUGIN_FLOW, getDefaultChainId(), getDefaultProviderType())
+
+    static async new(io: WalletAPI.IOContext) {
+        const provider = new this(io)
+        await provider.setup()
+        return provider
     }
 }
