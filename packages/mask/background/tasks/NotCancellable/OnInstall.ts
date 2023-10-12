@@ -31,10 +31,10 @@ browser.runtime.onInstalled.addListener(async (detail) => {
                 })
             }
             // remove old data after migrate
-            localStorage.delete('backupPassword')
-            localStorage.delete('backupMethod')
-            localStorage.delete('email')
-            localStorage.delete('backupAt')
+            localStorage.removeItem('backupPassword')
+            localStorage.removeItem('backupMethod')
+            localStorage.removeItem('email')
+            localStorage.removeItem('backupAt')
         }
     }
 })
