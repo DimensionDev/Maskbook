@@ -22,7 +22,7 @@ browser.runtime.onInstalled.addListener(async (detail) => {
             if (backupPassword) {
                 const backupMethod = localStorage.getItem('backupMethod')
                 PersistentStorages.Settings.storage.backupConfig.setValue({
-                    backupPassword: backupPassword,
+                    backupPassword,
                     email: localStorage.getItem('email'),
                     phone: localStorage.getItem('phone'),
                     cloudBackupAt: backupMethod && backupMethod === 'cloud' ? localStorage.getItem('backupAt') : null,

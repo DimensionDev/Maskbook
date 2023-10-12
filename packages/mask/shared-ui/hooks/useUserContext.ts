@@ -1,5 +1,4 @@
 import { PersistentStorages, type BackupConfig } from '@masknet/shared-base'
-import { omit } from 'lodash-es'
 import { useCallback, useMemo } from 'react'
 import { createContainer } from 'unstated-next'
 import { useSubscription } from 'use-subscription'
@@ -27,7 +26,7 @@ function useUserContext() {
             }
         } catch {
             // Maybe `backupPassword` is not base64-encoded.
-            return omit(user, 'backupPassword')
+            return user
         }
     }, [user, updateUser])
 
