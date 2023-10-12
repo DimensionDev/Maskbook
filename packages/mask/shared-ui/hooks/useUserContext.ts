@@ -31,7 +31,10 @@ function useUserContext() {
         }
     }, [user, updateUser])
 
-    return result
+    return {
+        user: result,
+        updateUser,
+    }
 }
 
 export const UserContext = createContainer(useUserContext)
