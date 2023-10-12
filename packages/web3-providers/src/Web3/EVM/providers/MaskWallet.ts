@@ -197,7 +197,7 @@ export class MaskWalletProvider
                 'externalRequestID is not expected in MaskWalletProvider.connect() when the page is not popup page.',
             )
 
-        const account = first(await this.context?.selectMaskWalletAccount(chainId, address))
+        const account = first(await this.context?.selectMaskWalletAccount(chainId, address, location.origin))
         if (!account) throw new Error(`Failed to connect to ${ChainResolver.chainFullName(chainId)}`)
 
         // switch account

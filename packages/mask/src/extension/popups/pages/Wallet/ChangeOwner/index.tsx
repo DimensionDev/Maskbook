@@ -23,6 +23,7 @@ import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
 import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
 import { useQuery } from '@tanstack/react-query'
 import Services from '#services'
+import { BottomController } from '../../../components/BottomController/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -65,7 +66,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         fontSize: 12,
         fontWeight: 400,
-        color: theme.palette.mode === 'light' ? theme.palette.maskColor.second : theme.palette.maskColor.main,
+        color: theme.palette.maskColor.second,
         WebkitTextSizeAdjust: '100%',
     },
     walletAddress: {
@@ -87,23 +88,23 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
         justifyContent: 'space-between',
         background: theme.palette.maskColor.bottom,
-        borderRadius: 16,
-        '&:hover': {
-            background: theme.palette.maskColor.bg,
-        },
+        borderRadius: 8,
     },
     primaryItemBox: {
         display: 'flex',
         alignItems: 'center',
         height: 36,
     },
-
     paper: {
         padding: theme.spacing(1.5),
         borderRadius: 16,
         '::-webkit-scrollbar': {
             display: 'none',
         },
+        boxShadow:
+            theme.palette.mode === 'dark'
+                ? '0px 4px 30px 0px rgba(255, 255, 255, 0.15)'
+                : '0px 4px 30px 0px rgba(0, 0, 0, 0.10)',
     },
     popoverTitle: {
         fontSize: 16,
@@ -124,17 +125,6 @@ const useStyles = makeStyles()((theme) => ({
         padding: '9px 0',
         fontSize: 14,
         lineHeight: '20px',
-    },
-    controller: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
-        gap: 20,
-        padding: 16,
-        position: 'fixed',
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: theme.palette.maskColor.bg,
     },
     disabledItem: {
         opacity: 0.5,
@@ -442,8 +432,9 @@ export default function ChangeOwner() {
                     </Box>
                 </Popover>
             </div>
-            <div className={classes.controller}>
+            <BottomController>
                 <ActionButton
+                    fullWidth
                     className={classes.button}
                     variant="outlined"
                     color="secondary"
@@ -455,6 +446,7 @@ export default function ChangeOwner() {
                     {t('cancel')}
                 </ActionButton>
                 <ActionButton
+                    fullWidth
                     variant="contained"
                     className={classes.button}
                     onClick={handleConfirm}
@@ -462,7 +454,7 @@ export default function ChangeOwner() {
                     disabled={disabled}>
                     {t('wallet_status_button_change')}
                 </ActionButton>
-            </div>
+            </BottomController>
         </>
     )
 }

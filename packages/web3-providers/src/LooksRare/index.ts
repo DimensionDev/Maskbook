@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import fromUnixTime from 'date-fns/fromUnixTime'
+import { fromUnixTime } from 'date-fns'
 import {
     type NonFungibleAsset,
     type NonFungibleTokenContract,

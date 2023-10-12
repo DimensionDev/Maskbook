@@ -6,7 +6,7 @@ import { createNormalReactRoot } from '../../utils/createNormalReactRoot.js'
 import { NextSharedUIContext, RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui.js'
 import Services from '#services'
 import { Modals } from '@masknet/shared'
-import { __setUIContext__ } from '@masknet/plugin-infra/dom/context'
+import { __setUIContext__ } from '@masknet/plugin-infra/dom'
 
 __setUIContext__({
     allPersonas: NextSharedUIContext.allPersonas,

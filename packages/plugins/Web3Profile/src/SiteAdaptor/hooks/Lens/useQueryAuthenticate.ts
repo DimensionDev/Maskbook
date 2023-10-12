@@ -1,6 +1,5 @@
 import { useCallback } from 'react'
-import isBefore from 'date-fns/isBefore'
-import add from 'date-fns/add'
+import { isBefore, add } from 'date-fns'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Lens, Web3 } from '@masknet/web3-providers'
 import { ChainId, isValidAddress } from '@masknet/web3-shared-evm'

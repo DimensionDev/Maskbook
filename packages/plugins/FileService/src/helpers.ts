@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 import { isNil } from 'lodash-es'
 import type { Result } from 'ts-results-es'
-import isAfter from 'date-fns/isAfter'
+import { isAfter } from 'date-fns'
 import { encodeArrayBuffer, encodeText } from '@masknet/kit'
 import { createLookupTableResolver } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'

@@ -21,7 +21,7 @@ export const WalletGuard = memo(function WalletGuard() {
     const hitPaymentPasswordGuard = usePaymentPasswordGuard()
     const hitMessageGuard = useMessageGuard()
 
-    if (hitPaymentPasswordGuard) {
+    if (hitPaymentPasswordGuard && wallets.length) {
         params.set('from', location.pathname)
         return <Navigate to={{ pathname: PopupRoutes.SetPaymentPassword, search: params.toString() }} />
     }

@@ -80,6 +80,7 @@ export namespace WalletAPI {
         selectMaskWalletAccount(
             chainId: ChainId,
             defaultAccount?: string,
+            source?: string,
         ): Promise<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
 
         /** Disconnect origin from Mask wallet  */

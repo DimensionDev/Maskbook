@@ -1,5 +1,5 @@
 import type { ComponentType } from 'react'
-import formatDateTime from 'date-fns/format'
+import { format as formatDateTime } from 'date-fns'
 import { Icons } from '@masknet/icons'
 import type { GeneratedIconNonSquareProps } from '@masknet/icons'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'

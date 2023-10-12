@@ -1,0 +1,12 @@
+diff --git a/lib/rules/no-restricted-paths.js b/lib/rules/no-restricted-paths.js
+index e0c9a5c8948fd627721a51d2ba200d9e9fd88c3c..dd781682e122d0581f6956d591f365a5d87d5dce 100644
+--- a/lib/rules/no-restricted-paths.js
++++ b/lib/rules/no-restricted-paths.js
+@@ -216,6 +216,7 @@ module.exports = {
+       var validators = [];
+ 
+       function checkForRestrictedImportPath(importPath, node) {
++        if (node.parent?.importKind !== "value") return;
+         var absoluteImportPath = (0, _resolve2['default'])(importPath, context);
+ 
+         if (!absoluteImportPath) {

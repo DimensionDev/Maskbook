@@ -1,5 +1,4 @@
-import formatDateTime from 'date-fns/format'
-import fromUnixTime from 'date-fns/fromUnixTime'
+import { format as formatDateTime, fromUnixTime } from 'date-fns'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { Publisher, Writer } from '../entry-types.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'

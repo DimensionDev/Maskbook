@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict'
+import { formatDistanceToNowStrict } from 'date-fns'
 import { Typography, Link } from '@mui/material'
 import { useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'

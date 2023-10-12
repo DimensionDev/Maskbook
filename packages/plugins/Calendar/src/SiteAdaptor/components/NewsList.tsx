@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect, useRef } from 'react'
-import format from 'date-fns/format'
+import { format } from 'date-fns'
 import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { EmptyStatus, LoadingStatus } from '@masknet/shared'

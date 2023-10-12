@@ -1,6 +1,6 @@
 import { type TextFieldProps, InputBase, Typography, inputBaseClasses } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import formatDateTime from 'date-fns/format'
+import { format as formatDateTime } from 'date-fns'
 
 export interface DateTimePanelProps extends Omit<TextFieldProps, 'onChange'> {
     date: Date
