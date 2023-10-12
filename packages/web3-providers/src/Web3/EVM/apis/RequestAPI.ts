@@ -27,7 +27,7 @@ export class RequestAPI extends RequestReadonlyAPI {
                 const context = createContext(requestArguments, options)
 
                 try {
-                    await this.Composer.compose().dispatch(context, async () => {
+                    await this.Composer.compose(this.Provider.signWithPersona).dispatch(context, async () => {
                         if (!context.writeable) return
                         try {
                             switch (context.method) {

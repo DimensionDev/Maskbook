@@ -1,6 +1,6 @@
 import { type ECKeyIdentifier, fromHex, type NextIDPlatform, SignType, toBase64 } from '@masknet/shared-base'
 import { NextIDStorageProvider as Storage } from '../../NextID/kv.js'
-import type { StorageAPI } from '../../entry-types.js'
+import type { StorageAPI, WalletAPI } from '../../entry-types.js'
 
 export class NextIDStorage implements StorageAPI.Storage {
     private publicKeyAsHex = ''
@@ -10,12 +10,7 @@ export class NextIDStorage implements StorageAPI.Storage {
         private proofIdentity: string, // proof identity as key
         private platform: NextIDPlatform, // proof platform
         private signerOrPublicKey: string | ECKeyIdentifier, // publicKey, like SocialIdentity publicKey or PersonaIdentifier publicKeyAsHex
-        private signWithPersona?: <T>(
-            method: SignType,
-            message: T,
-            identifier?: ECKeyIdentifier,
-            silent?: boolean,
-        ) => Promise<string>,
+        private signWithPersona?: WalletAPI.IOContext['signWithPersona'],
     ) {
         if (typeof this.signerOrPublicKey === 'string') {
             this.publicKeyAsHex = this.signerOrPublicKey

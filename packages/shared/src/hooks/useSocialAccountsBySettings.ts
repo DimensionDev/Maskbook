@@ -3,12 +3,14 @@ import { PluginID, EMPTY_LIST, SocialAddressType, type SocialAccount, type Socia
 import { useHiddenAddressConfigOf, useSocialAccountsAll } from '@masknet/web3-hooks-base'
 import { currySameAddress } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { WalletAPI } from '@masknet/web3-providers/types'
 
-export const useSocialAccountsBySettings = (
-    identity?: SocialIdentity,
-    typeWhitelist?: SocialAddressType[],
-    sorter?: (a: SocialAccount<Web3Helper.ChainIdAll>, z: SocialAccount<Web3Helper.ChainIdAll>) => number,
-) => {
+export function useSocialAccountsBySettings(
+    identity: SocialIdentity,
+    typeWhitelist: SocialAddressType[],
+    sorter: (a: SocialAccount<Web3Helper.ChainIdAll>, z: SocialAccount<Web3Helper.ChainIdAll>) => number,
+    signWithPersona: WalletAPI.IOContext['signWithPersona'],
+) {
     const {
         data: socialAccounts = EMPTY_LIST,
         isLoading: loadingSocialAccounts,
@@ -22,7 +24,7 @@ export const useSocialAccountsBySettings = (
         isInitialLoading,
         error: loadingHiddenAddressError,
         refetch: refetchLoadHiddenAddress,
-    } = useHiddenAddressConfigOf(identity?.publicKey, PluginID.Web3Profile, userId)
+    } = useHiddenAddressConfigOf(identity?.publicKey, PluginID.Web3Profile, userId, signWithPersona)
 
     const addresses = useMemo(() => {
         if (!hiddenAddress?.length) return socialAccounts

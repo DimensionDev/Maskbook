@@ -44,7 +44,10 @@ export abstract class ProviderState<
     protected abstract getDefaultChainId(): ChainId
     protected abstract getDefaultProviderType(): ProviderType
     protected abstract getNetworkTypeFromChainId(chainId: ChainId): NetworkType
-    protected constructor(protected context: WalletAPI.IOContext) {}
+    protected constructor(protected context: WalletAPI.IOContext) {
+        this.signWithPersona = context.signWithPersona
+    }
+    signWithPersona
     protected static createStorage<ChainId extends number, ProviderType extends string>(
         pluginID: NetworkPluginID,
         defaultChainId: ChainId,

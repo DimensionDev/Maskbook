@@ -1,10 +1,7 @@
 import type { WalletAPI } from '../entry-types.js'
 import { evm, flow, solana } from './registry.js'
 
-export let io: WalletAPI.IOContext
-export async function initWallet(_io: WalletAPI.IOContext) {
-    io = _io
-
+export async function initWallet(io: WalletAPI.IOContext) {
     await Promise.all([
         import(/* webpackMode: 'eager' */ '../Web3/EVM/apis/Web3StateAPI.js').then((mod) =>
             mod.createEVMState(io).then((state) => (evm.state = state)),

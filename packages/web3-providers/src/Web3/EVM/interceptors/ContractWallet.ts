@@ -15,8 +15,7 @@ import { ContractReadonlyAPI } from '../apis/ContractReadonlyAPI.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { Providers } from '../providers/index.js'
 import type { BaseContractWalletProvider } from '../providers/BaseContractWallet.js'
-import { io } from '../../../Manager/io.js'
-import type { BundlerAPI, AbstractAccountAPI, FunderAPI } from '../../../entry-types.js'
+import type { BundlerAPI, AbstractAccountAPI, FunderAPI, WalletAPI } from '../../../entry-types.js'
 
 export class ContractWallet implements Middleware<ConnectionContext> {
     private Web3 = new ConnectionAPI()
@@ -27,6 +26,7 @@ export class ContractWallet implements Middleware<ConnectionContext> {
         protected account: AbstractAccountAPI.Provider<ChainId, UserOperation, Transaction>,
         protected bundler: BundlerAPI.Provider,
         protected funder: FunderAPI.Provider<ChainId>,
+        private signWithPersona: WalletAPI.IOContext['signWithPersona'],
     ) {}
 
     private async getNonce(context: ConnectionContext) {
@@ -40,7 +40,7 @@ export class ContractWallet implements Middleware<ConnectionContext> {
             return new Signer(
                 context.identifier,
                 async <T>(type: SignType, message: T, identifier?: ECKeyIdentifier) => {
-                    return io.signWithPersona(type, message, identifier, true)
+                    return this.signWithPersona(type, message, identifier, true)
                 },
             )
         if (context.owner)

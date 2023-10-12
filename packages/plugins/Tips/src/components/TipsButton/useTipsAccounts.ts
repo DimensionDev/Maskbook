@@ -3,6 +3,7 @@ import type { IdentityResolved } from '@masknet/plugin-infra'
 import { EMPTY_LIST, PluginID, SocialAddressType } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useHiddenAddressConfigOf, useSocialAccountsAll } from '@masknet/web3-hooks-base'
+import { signWithPersona } from '@masknet/plugin-infra/dom/context'
 
 // In Tips, we don't list address from MaskX.
 const supportSources: SocialAddressType[] = [
@@ -21,7 +22,12 @@ const supportSources: SocialAddressType[] = [
 export function useTipsAccounts(identity: IdentityResolved | undefined, personaPubkey: string | undefined) {
     const { data: socialAccounts = EMPTY_LIST } = useSocialAccountsAll(identity, supportSources)
     const userId = identity?.identifier?.userId
-    const { data: hiddenAddresses } = useHiddenAddressConfigOf(personaPubkey, PluginID.Web3Profile, userId)
+    const { data: hiddenAddresses } = useHiddenAddressConfigOf(
+        personaPubkey,
+        PluginID.Web3Profile,
+        userId,
+        signWithPersona,
+    )
     return useMemo(() => {
         if (!hiddenAddresses?.length) return socialAccounts
         const list = socialAccounts
