@@ -48,7 +48,7 @@ const useStyles = makeStyles()((theme) => ({
             WebkitAppearance: 'none',
         },
         '& input::-webkit-input-placeholder': {
-            color: !Sniffings.is_dashboard_page ? theme.palette.maskColor.second : theme.palette.maskColor.third,
+            color: theme.palette.maskColor.third,
         },
         [`&.${inputBaseClasses.focused}`]: {
             background: 'transparent',
