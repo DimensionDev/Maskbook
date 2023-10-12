@@ -101,6 +101,7 @@ export interface PopupRoutesParamsMap {
         chainId?: number
         address?: string
         external_request?: string
+        source?: string
     }
     [PopupRoutes.Personas]: {
         providerType?: string
