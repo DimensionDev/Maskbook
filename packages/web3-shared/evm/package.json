@@ -18,17 +18,8 @@
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-telemetry": "workspace:^",
     "bignumber.js": "9.1.2",
-    "ethereum-blockies": "^0.1.1",
     "date-fns": "^2.30.0",
-    "fortmatic": "^2.2.1",
-    "fuse.js": "6.6.2",
     "punycode": "^2.3.0",
-    "react-use": "^17.4.0",
-    "unstated-next": "^1.1.0",
-    "urlcat": "^3.1.0",
-    "use-subscription": "^1.8.0",
-    "uuid": "^9.0.0",
-    "wallet.ts": "^1.0.1",
     "web3-core": "1.10.2",
     "web3-core-helpers": "1.10.2",
     "web3-eth": "1.10.2",
@@ -39,9 +30,6 @@
   },
   "devDependencies": {
     "@masknet/injected-script": "*",
-    "@types/ethereum-blockies": "^0.1.0",
-    "@types/punycode": "^2.1.0",
-    "@types/use-subscription": "^1.0.0",
-    "@types/uuid": "^9.0.3"
+    "@types/punycode": "^2.1.0"
   }
 }

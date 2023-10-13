@@ -14,9 +14,6 @@
   },
   "dependencies": {
     "@masknet/plugin-infra": "workspace:^",
-    "@masknet/shared": "workspace:^",
-    "@masknet/shared-base": "workspace:^",
-    "react-use": "^17.4.0",
-    "use-subscription": "^1.8.0"
+    "@masknet/shared-base": "workspace:^"
   }
 }

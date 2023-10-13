@@ -21,21 +21,14 @@
     "@masknet/theme": "workspace:^",
     "@masknet/web3-helpers": "workspace:^",
     "@masknet/web3-hooks-base": "workspace:^",
-    "@masknet/web3-hooks-evm": "workspace:^",
     "@masknet/web3-providers": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
-    "@masknet/web3-telemetry": "workspace:^",
-    "@types/use-subscription": "^1.0.0",
     "@types/uuid": "^9.0.3",
     "bignumber.js": "9.1.2",
     "date-fns": "^2.30.0",
     "linkify-react": "^4.1.1",
     "linkifyjs": "^4.1.1",
-    "react-use": "^17.4.0",
-    "urlcat": "^3.1.0",
-    "use-subscription": "^1.8.0",
-    "uuid": "^9.0.0",
-    "web3-utils": "1.10.2"
+    "uuid": "^9.0.0"
   }
 }
