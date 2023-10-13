@@ -85,14 +85,6 @@ export function useSetupGuideStepInfo(destinedPersona: PersonaIdentifier) {
             ),
         ),
     )
-
-    if (!personaConnectedProfile || (!confirmConnected && lastSettingState.status !== SetupGuideStep.VerifyOnNextID))
-        return composeInfo(SetupGuideStep.FindUsername, 'doing')
-
-    // NextID is available on this site.
-    // Should show pin extension when not set
-    if (!activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform) return composeInfo(SetupGuideStep.Close, 'close')
-
     // Should verified persona
     const verifiedProfile = proofs?.find((x) => {
         return (
@@ -102,7 +94,13 @@ export function useSetupGuideStepInfo(destinedPersona: PersonaIdentifier) {
             ) && x.is_valid
         )
     })
-    if (!verifiedProfile) return composeInfo(SetupGuideStep.VerifyOnNextID, 'doing')
+    if (personaConnectedProfile && !verifiedProfile && lastSettingState.status === SetupGuideStep.VerifyOnNextID)
+        return composeInfo(SetupGuideStep.VerifyOnNextID, 'doing')
+    if (!personaConnectedProfile || !confirmConnected) return composeInfo(SetupGuideStep.FindUsername, 'doing')
+
+    // NextID is available on this site.
+    // Should show pin extension when not set
+    if (!activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform) return composeInfo(SetupGuideStep.Close, 'close')
 
     // Default
     return composeInfo(SetupGuideStep.Close, 'done')

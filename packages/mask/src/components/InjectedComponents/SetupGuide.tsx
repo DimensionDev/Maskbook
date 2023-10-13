@@ -15,7 +15,8 @@ import { NextIDProof } from '@masknet/web3-providers'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { useQuery } from '@tanstack/react-query'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import stringify from 'json-stable-stringify'
+import { useCallback, useMemo } from 'react'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { useMaskSharedTrans } from '../../utils/index.js'
 import { useNextIDVerify } from '../DataSource/useNextIDVerify.js'
@@ -36,11 +37,10 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const { showSnackbar } = useCustomSnackbar()
     const [, handleVerifyNextID] = useNextIDVerify()
 
-    const { type, step, userId, currentIdentityResolved, destinedPersonaInfo } = useSetupGuideStepInfo(persona)
+    const { step, userId, currentIdentityResolved, destinedPersonaInfo, setConfirmConnected } =
+        useSetupGuideStepInfo(persona)
 
-    // #region should not show notification if user have operation
-    const [hasOperation, setOperation] = useState(false)
-
+    // #region should not show notification
     const notify = useCallback(
         () =>
             showSnackbar(t('setup_guide_connected_title'), {
@@ -50,12 +50,6 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         [t, showSnackbar],
     )
 
-    useEffect(() => {
-        if (type !== 'done' || hasOperation) return
-
-        notify()
-        currentSetupGuideStatus[activatedSiteAdaptorUI!.networkIdentifier].value = ''
-    }, [type, hasOperation, notify])
     // #endregion
 
     const disableVerify = useMemo(() => {
@@ -79,10 +73,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         )
         if (isBound) return
 
-        const afterVerify = () => {
-            setOperation(true)
-        }
-        await handleVerifyNextID(destinedPersonaInfo, userId, afterVerify)
+        await handleVerifyNextID(destinedPersonaInfo, userId)
         notify()
         currentSetupGuideStatus[activatedSiteAdaptorUI!.networkIdentifier].value = ''
         Telemetry.captureEvent(EventType.Access, EventID.EntryPopupSocialAccountVerifyTwitter)
@@ -136,10 +127,16 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             return info?.avatar
         },
     })
+    const handleNext = useCallback(() => {
+        setConfirmConnected(true)
+        currentSetupGuideStatus[activatedSiteAdaptorUI!.networkIdentifier].value = stringify({
+            status: SetupGuideStep.VerifyOnNextID,
+        })
+    }, [])
 
     switch (step) {
         case SetupGuideStep.FindUsername:
-            return <FindUsername persona={persona} onClose={onClose} />
+            return <FindUsername persona={persona} onClose={onClose} onDone={handleNext} />
         case SetupGuideStep.VerifyOnNextID:
             return (
                 <VerifyNextID

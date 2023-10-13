@@ -1,19 +1,11 @@
 import { Icons } from '@masknet/icons'
 import { LoadingStatus, SOCIAL_MEDIA_ROUND_ICON_MAPPING } from '@masknet/shared'
-import {
-    ProfileIdentifier,
-    SOCIAL_MEDIA_NAME,
-    SetupGuideStep,
-    currentSetupGuideStatus,
-    type PersonaIdentifier,
-    MaskMessages,
-} from '@masknet/shared-base'
+import { ProfileIdentifier, SOCIAL_MEDIA_NAME, type PersonaIdentifier, MaskMessages } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType } from '@masknet/web3-telemetry/types'
 import { Box, Button, Typography } from '@mui/material'
-import stringify from 'json-stable-stringify'
-import { useCallback, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Trans } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import Services from '#services'
@@ -61,19 +53,13 @@ export interface FindUsernameProps extends BindingDialogProps {
     onDone?: () => void
 }
 
-export function FindUsername({ persona, onClose }: FindUsernameProps) {
+export function FindUsername({ persona, onClose, onDone }: FindUsernameProps) {
     const { t } = useMaskSharedTrans()
     const { classes } = useFindUsernameStyles()
     const site = activatedSiteAdaptorUI!.networkIdentifier
     const siteName = SOCIAL_MEDIA_NAME[site] || ''
     const Icon = SOCIAL_MEDIA_ROUND_ICON_MAPPING[site] || Icons.Globe
-    const {
-        step,
-        userId,
-        currentIdentityResolved,
-        destinedPersonaInfo: personaInfo,
-        setConfirmConnected,
-    } = useSetupGuideStepInfo(persona)
+    const { step, userId, currentIdentityResolved, destinedPersonaInfo: personaInfo } = useSetupGuideStepInfo(persona)
     const connected = personaInfo?.linkedProfiles.some(
         (x) => x.identifier.network === site && x.identifier.userId === userId,
     )
@@ -99,13 +85,6 @@ export function FindUsername({ persona, onClose }: FindUsernameProps) {
 
         Telemetry.captureEvent(EventType.Access, EventMap[activatedSiteAdaptorUI!.networkIdentifier])
     }, [activatedSiteAdaptorUI!.networkIdentifier, personaInfo, step, persona, userId, currentIdentityResolved.avatar])
-
-    const handleNext = useCallback(() => {
-        currentSetupGuideStatus[activatedSiteAdaptorUI!.networkIdentifier].value = stringify({
-            status: SetupGuideStep.VerifyOnNextID,
-        })
-        setConfirmConnected(true)
-    }, [])
 
     // Auto connect
     useEffect(() => {
@@ -139,7 +118,7 @@ export function FindUsername({ persona, onClose }: FindUsernameProps) {
                             {t('switch_for_more_connections')}
                         </Typography>
                         <Box mt="auto" width="100%">
-                            <Button fullWidth onClick={handleNext}>
+                            <Button fullWidth onClick={() => onDone?.()}>
                                 {t('done')}
                             </Button>
                         </Box>
