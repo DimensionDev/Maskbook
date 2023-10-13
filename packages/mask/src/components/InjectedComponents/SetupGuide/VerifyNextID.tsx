@@ -4,17 +4,13 @@ import { formatPersonaFingerprint, type PersonaIdentifier } from '@masknet/share
 import { MaskColorVar, MaskTextField, makeStyles } from '@masknet/theme'
 import { Box, Link, Typography } from '@mui/material'
 import { useState } from 'react'
-import { useMaskSharedTrans } from '../../../utils/index.js'
-import { BindingDialog } from './BindingDialog.js'
-import { AccountConnectStatus } from './AccountConnectStatus.js'
-import { type WizardDialogProps } from './WizardDialog.js'
-import { useCurrentUserId, usePersonaConnected, usePostContent } from './hooks.js'
 import { Trans } from 'react-i18next'
+import { useMaskSharedTrans } from '../../../utils/index.js'
+import { AccountConnectStatus } from './AccountConnectStatus.js'
+import { BindingDialog, type BindingDialogProps } from './BindingDialog.js'
+import { useCurrentUserId, usePersonaConnected, usePostContent } from './hooks.js'
 
 export const useStyles = makeStyles()((theme) => ({
-    dialog: {
-        color: theme.palette.maskColor.main,
-    },
     body: {
         display: 'flex',
         flexDirection: 'column',
@@ -126,7 +122,7 @@ export const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface VerifyNextIDProps extends Partial<WizardDialogProps> {
+interface VerifyNextIDProps extends BindingDialogProps {
     username?: string
     userId: string
     personaName?: string
@@ -163,7 +159,6 @@ export function VerifyNextID({
     if (currentUserId !== userId || loadingCurrentUserId || connected) {
         return (
             <AccountConnectStatus
-                className={classes.dialog}
                 expectAccount={userId}
                 currentUserId={currentUserId}
                 loading={loadingCurrentUserId}
@@ -184,7 +179,7 @@ export function VerifyNextID({
     const disabled = !(userId || customUserId) || !personaName || disableVerify
 
     return (
-        <BindingDialog onClose={onClose} className={classes.dialog}>
+        <BindingDialog onClose={onClose}>
             <div className={classes.body}>
                 <Box p={2} overflow="auto" className={classes.main}>
                     <Box className={classes.connection}>

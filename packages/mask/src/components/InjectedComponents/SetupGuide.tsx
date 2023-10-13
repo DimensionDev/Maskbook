@@ -2,7 +2,6 @@ import Services from '#services'
 import {
     EncryptionTargetType,
     EnhanceableSite,
-    ProfileIdentifier,
     SetupGuideStep,
     currentSetupGuideStatus,
     userGuideFinished,
@@ -16,9 +15,7 @@ import { NextIDProof } from '@masknet/web3-providers'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { useQuery } from '@tanstack/react-query'
-import stringify from 'json-stable-stringify'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { EventMap } from '../../extension/popups/pages/Personas/common.js'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { useMaskSharedTrans } from '../../utils/index.js'
 import { useNextIDVerify } from '../DataSource/useNextIDVerify.js'
@@ -38,7 +35,6 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const { persona } = props
     const { showSnackbar } = useCustomSnackbar()
     const [, handleVerifyNextID] = useNextIDVerify()
-    const [enableNextID] = useState(activatedSiteAdaptorUI!.configuration.nextIDConfig?.enable)
 
     const { type, step, userId, currentIdentityResolved, destinedPersonaInfo } = useSetupGuideStepInfo(persona)
 
@@ -55,7 +51,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     )
 
     useEffect(() => {
-        if (!(type === 'done' && !hasOperation)) return
+        if (type !== 'done' || hasOperation) return
 
         notify()
         currentSetupGuideStatus[activatedSiteAdaptorUI!.networkIdentifier].value = ''
@@ -67,40 +63,6 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             ? false
             : currentIdentityResolved?.identifier.userId !== userId
     }, [currentIdentityResolved, userId])
-
-    const onConnect = useCallback(async () => {
-        const id = ProfileIdentifier.of(activatedSiteAdaptorUI!.networkIdentifier, userId)
-        if (!id.isSome()) return
-        // attach persona with site profile
-        await Services.Identity.attachProfile(id.value, persona, {
-            connectionConfirmState: 'confirmed',
-        })
-
-        if (currentIdentityResolved.avatar) {
-            await Services.Identity.updateProfileInfo(id.value, {
-                avatarURL: currentIdentityResolved.avatar,
-            })
-        }
-        // auto-finish the setup process
-        if (!destinedPersonaInfo) throw new Error('invalid persona')
-        await Services.Identity.setupPersona(destinedPersonaInfo?.identifier)
-
-        Telemetry.captureEvent(EventType.Access, EventMap[activatedSiteAdaptorUI!.networkIdentifier])
-
-        setOperation(true)
-        if (step !== SetupGuideStep.FindUsername) return
-
-        currentSetupGuideStatus[activatedSiteAdaptorUI!.networkIdentifier].value = stringify({
-            status: SetupGuideStep.VerifyOnNextID,
-        })
-    }, [
-        activatedSiteAdaptorUI!.networkIdentifier,
-        destinedPersonaInfo,
-        step,
-        persona,
-        userId,
-        currentIdentityResolved.avatar,
-    ])
 
     const onVerify = useCallback(async () => {
         if (!userId) return
@@ -121,11 +83,13 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             setOperation(true)
         }
         await handleVerifyNextID(destinedPersonaInfo, userId, afterVerify)
+        notify()
+        currentSetupGuideStatus[activatedSiteAdaptorUI!.networkIdentifier].value = ''
         Telemetry.captureEvent(EventType.Access, EventID.EntryPopupSocialAccountVerifyTwitter)
-    }, [userId, destinedPersonaInfo])
+    }, [userId, destinedPersonaInfo, notify])
 
     const onVerifyDone = useCallback(() => {
-        if (!(step === SetupGuideStep.VerifyOnNextID)) return
+        if (step !== SetupGuideStep.VerifyOnNextID) return
         currentSetupGuideStatus[activatedSiteAdaptorUI!.networkIdentifier].value = ''
     }, [step])
 
@@ -175,16 +139,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     switch (step) {
         case SetupGuideStep.FindUsername:
-            return (
-                <FindUsername
-                    personaName={destinedPersonaInfo?.nickname}
-                    username={userId}
-                    avatar={currentIdentityResolved?.avatar}
-                    onConnect={onConnect}
-                    onClose={onClose}
-                    enableNextID={enableNextID}
-                />
-            )
+            return <FindUsername persona={persona} onClose={onClose} />
         case SetupGuideStep.VerifyOnNextID:
             return (
                 <VerifyNextID

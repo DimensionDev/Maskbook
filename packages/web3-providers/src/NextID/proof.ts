@@ -543,7 +543,7 @@ export class NextIDProof {
         action: NextIDAction,
         identity: string,
         platform: NextIDPlatform,
-        language?: string,
+        language: string = 'default',
     ): Promise<NextIDPayload | null> {
         const requestBody: CreatePayloadBody = {
             action,
@@ -552,7 +552,7 @@ export class NextIDProof {
             public_key: personaPublicKey,
         }
 
-        const nextIDLanguageFormat = language?.replace('-', '_') as PostContentLanguages
+        const nextIDLanguageFormat = language.replace('-', '_') as PostContentLanguages
 
         const response = await fetchJSON<CreatePayloadResponse>(urlcat(BASE_URL, '/v1/proof/payload'), {
             body: JSON.stringify(requestBody),
@@ -561,8 +561,7 @@ export class NextIDProof {
 
         return response
             ? {
-                  postContent:
-                      response.post_content[nextIDLanguageFormat ?? 'default'] ?? response.post_content.default,
+                  postContent: response.post_content[nextIDLanguageFormat] ?? response.post_content.default,
                   signPayload: JSON.stringify(JSON.parse(response.sign_payload)),
                   createdAt: response.created_at,
                   uuid: response.uuid,
