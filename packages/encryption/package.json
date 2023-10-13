@@ -24,5 +24,8 @@
     "dist/**/*.js",
     "dist/**/*.d.ts",
     "dist/**/*.map"
-  ]
+  ],
+  "devDependencies": {
+    "tiny-secp256k1": "^2.2.3"
+  }
 }

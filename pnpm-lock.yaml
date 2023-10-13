@@ -551,6 +551,10 @@ importers:
       '@msgpack/msgpack':
         specifier: ^3.0.0-beta2
         version: 3.0.0-beta2
+    devDependencies:
+      tiny-secp256k1:
+        specifier: ^2.2.3
+        version: 2.2.3
 
   packages/external-plugin-previewer:
     dependencies:
@@ -32305,7 +32309,6 @@ packages:
     engines: {node: '>=14.0.0'}
     dependencies:
       uint8array-tools: 0.0.7
-    dev: false
 
   /tiny-warning@1.0.3:
     resolution: {integrity: sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==}
@@ -32990,7 +32993,6 @@ packages:
   /uint8array-tools@0.0.7:
     resolution: {integrity: sha512-vrrNZJiusLWoFWBqz5Y5KMCgP9W9hnjZHzZiZRT8oNAkq3d5Z5Oe76jAvVVSRh4U8GGR90N2X1dWtrhvx6L8UQ==}
     engines: {node: '>=14.0.0'}
-    dev: false
 
   /uint8arraylist@2.4.3:
     resolution: {integrity: sha512-oEVZr4/GrH87K0kjNce6z8pSCzLEPqHNLNR5sj8cJOySrTP8Vb/pMIbZKLJGhQKxm1TiZ31atNrpn820Pyqpow==}
@@ -35268,3 +35270,4 @@ time:
   /eslint-plugin-i@2.28.1: '2023-09-06T08:19:37.937Z'
   /eslint-plugin-import@2.28.1: '2023-08-18T20:41:10.468Z'
   /guess-calling-code@1.1.8: '2023-06-26T16:50:23.300Z'
+  /tiny-secp256k1@2.2.3: '2023-06-29T08:38:53.395Z'
