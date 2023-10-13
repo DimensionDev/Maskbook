@@ -9,7 +9,7 @@ type AddressList = Array<SocialAddress<Web3Helper.ChainIdAll>>
  * Get all social addresses across all networks.
  */
 export function useSocialAddressesAll(
-    identity?: SocialIdentity,
+    identity?: SocialIdentity | null,
     includes?: SocialAddressType[],
     sorter?: (a: SocialAddress<Web3Helper.ChainIdAll>, z: SocialAddress<Web3Helper.ChainIdAll>) => number,
 ) {

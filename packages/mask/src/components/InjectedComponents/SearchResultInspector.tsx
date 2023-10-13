@@ -44,7 +44,7 @@ const useStyles = makeStyles<{ isProfilePage?: boolean; searchType?: SearchResul
 
 export interface SearchResultInspectorProps {
     keyword?: string
-    identity?: SocialIdentity
+    identity?: SocialIdentity | null
     isProfilePage?: boolean
     profileTabType?: ProfileTabs
     searchResults?: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>

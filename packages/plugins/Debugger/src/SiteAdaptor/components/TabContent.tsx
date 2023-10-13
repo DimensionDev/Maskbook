@@ -5,7 +5,7 @@ import { List, ListItem, ListItemText, Table, TableBody, TableCell, TableRow, Ty
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 export interface TabContentProps {
-    identity?: SocialIdentity
+    identity?: SocialIdentity | null
     socialAccount?: SocialAccount<Web3Helper.ChainIdAll>
 }
 

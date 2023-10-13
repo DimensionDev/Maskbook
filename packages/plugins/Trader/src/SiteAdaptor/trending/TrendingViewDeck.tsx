@@ -156,7 +156,7 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     currency: Currency
     currentTab: ContentTab
     trending: TrendingAPI.Trending
-    identity?: SocialIdentity
+    identity?: SocialIdentity | null
     setActive?: (x: boolean) => void
     setResult: (a: Web3Helper.TokenResultAll) => void
     result: Web3Helper.TokenResultAll

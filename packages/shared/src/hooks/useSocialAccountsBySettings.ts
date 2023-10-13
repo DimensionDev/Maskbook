@@ -6,7 +6,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import type { WalletAPI } from '@masknet/web3-providers/types'
 
 export function useSocialAccountsBySettings(
-    identity: SocialIdentity | undefined,
+    identity: SocialIdentity | null | undefined,
     typeWhitelist: SocialAddressType[] | undefined,
     sorter: ((a: SocialAccount<Web3Helper.ChainIdAll>, z: SocialAccount<Web3Helper.ChainIdAll>) => number) | undefined,
     signWithPersona: WalletAPI.IOContext['signWithPersona'],
