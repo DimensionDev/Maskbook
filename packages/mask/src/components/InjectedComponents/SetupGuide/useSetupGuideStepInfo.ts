@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react'
-import { useAsyncRetry } from 'react-use'
+import { useEffect, useState } from 'react'
 import { usePersonaProofs } from '@masknet/shared'
 import {
     EnhanceableSite,
@@ -16,6 +15,7 @@ import Services from '#services'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { useSetupGuideStatus } from '../../GuideStep/useSetupGuideStatus.js'
+import { useQuery } from '@tanstack/react-query'
 
 export function useSetupGuideStepInfo(destinedPersona: PersonaIdentifier) {
     // #region parse setup status
@@ -28,11 +28,11 @@ export function useSetupGuideStepInfo(destinedPersona: PersonaIdentifier) {
     const username = lastSettingState.username || lastRecognized.identifier?.userId || ''
     // #endregion
 
-    const { value: persona, retry } = useAsyncRetry(async () => {
+    const { data: persona, refetch } = useQuery(['query-persona-info', destinedPersona.publicKeyAsHex], async () => {
         return Services.Identity.queryPersona(destinedPersona)
-    }, [destinedPersona])
+    })
 
-    useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [retry])
+    useEffect(() => MaskMessages.events.ownPersonaChanged.on(() => refetch()), [])
 
     useEffect(() => {
         if (username || activatedSiteAdaptorUI!.networkIdentifier !== EnhanceableSite.Twitter) return
@@ -50,70 +50,58 @@ export function useSetupGuideStepInfo(destinedPersona: PersonaIdentifier) {
         }
     }, [username])
 
-    const composeInfo = useCallback(
-        (step: SetupGuideStep, stepType: 'close' | 'done' | 'doing' = 'close') => {
-            return {
-                step,
-                userId: username,
-                currentIdentityResolved: lastRecognized,
-                destinedPersonaInfo: persona,
-                type: stepType,
-            }
-        },
-        [username, lastRecognized, persona],
-    )
+    const [confirmConnected, setConfirmConnected] = useState(false)
+    const composeInfo = (step: SetupGuideStep, stepType: 'close' | 'done' | 'doing' = 'close') => {
+        return {
+            step,
+            userId: username,
+            currentIdentityResolved: lastRecognized,
+            destinedPersonaInfo: persona,
+            type: stepType,
+            setConfirmConnected,
+        }
+    }
 
     const { data: proofs } = usePersonaProofs(destinedPersona.publicKeyAsHex)
 
-    return useMemo(() => {
-        if (!persona || !username) return composeInfo(SetupGuideStep.Close, 'close')
+    if (!persona || !username) return composeInfo(SetupGuideStep.Close, 'close')
 
-        // Not set status
-        if (!lastSettingState.status) {
-            // Should show pin extension when not set
-            if (!lastPinExtensionSetting) {
-                return composeInfo(SetupGuideStep.PinExtension, 'doing')
-            } else {
-                return composeInfo(SetupGuideStep.Close, 'close')
-            }
-        }
-
-        // Should connected persona
-        const personaConnectedProfile = persona?.linkedProfiles.find((x) =>
-            isSameProfile(
-                x.identifier,
-                ProfileIdentifier.of(activatedSiteAdaptorUI!.networkIdentifier, username).expect(
-                    `${username} should be a valid user id`,
-                ),
-            ),
-        )
-
-        if (!personaConnectedProfile) return composeInfo(SetupGuideStep.FindUsername, 'doing')
-
-        // NextID is available on this site.
+    // Not set status
+    if (!lastSettingState.status) {
         // Should show pin extension when not set
-        if (!activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform)
+        if (!lastPinExtensionSetting) {
+            return composeInfo(SetupGuideStep.PinExtension, 'doing')
+        } else {
             return composeInfo(SetupGuideStep.Close, 'close')
+        }
+    }
 
-        // Should verified persona
-        const verifiedProfile = proofs?.find(
-            (x) =>
-                isSameProfile(
-                    resolveNextIDIdentityToProfile(x.identity, x.platform),
-                    personaConnectedProfile?.identifier,
-                ) && x.is_valid,
+    // Should connected persona
+    const personaConnectedProfile = persona?.linkedProfiles.find((x) =>
+        isSameProfile(
+            x.identifier,
+            ProfileIdentifier.of(activatedSiteAdaptorUI!.networkIdentifier, username).expect(
+                `${username} should be a valid user id`,
+            ),
+        ),
+    )
+    // Should verified persona
+    const verifiedProfile = proofs?.find((x) => {
+        return (
+            isSameProfile(
+                resolveNextIDIdentityToProfile(x.identity, x.platform),
+                personaConnectedProfile?.identifier,
+            ) && x.is_valid
         )
-        if (!verifiedProfile) return composeInfo(SetupGuideStep.VerifyOnNextID, 'doing')
+    })
+    if (personaConnectedProfile && !verifiedProfile && lastSettingState.status === SetupGuideStep.VerifyOnNextID)
+        return composeInfo(SetupGuideStep.VerifyOnNextID, 'doing')
+    if (!personaConnectedProfile || !confirmConnected) return composeInfo(SetupGuideStep.FindUsername, 'doing')
 
-        // Default
-        return composeInfo(SetupGuideStep.Close, 'done')
-    }, [
-        lastSettingState.status,
-        persona,
-        username,
-        lastPinExtensionSetting,
-        composeInfo,
-        proofs?.length,
-        lastRecognized.identifier?.userId,
-    ])
+    // NextID is available on this site.
+    // Should show pin extension when not set
+    if (!activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform) return composeInfo(SetupGuideStep.Close, 'close')
+
+    // Default
+    return composeInfo(SetupGuideStep.Close, 'done')
 }

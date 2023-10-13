@@ -29,6 +29,7 @@ import Service from '#services'
 import { PageTitleContext } from '../../../context.js'
 import { ConfirmDialog } from '../../../modals/modals.js'
 import { DisconnectEventMap } from '../common.js'
+import { queryClient } from '@masknet/shared-base-ui'
 
 const AccountDetail = memo(() => {
     const { t } = useMaskSharedTrans()
@@ -79,6 +80,8 @@ const AccountDetail = memo(() => {
         try {
             if (!selectedAccount?.identifier) return
             await Service.Identity.detachProfile(selectedAccount.identifier)
+            MaskMessages.events.ownPersonaChanged.sendToAll()
+            queryClient.invalidateQueries(['next-id', 'bindings-by-persona', pubkey])
             showSnackbar(t('popups_disconnect_success'), {
                 variant: 'success',
             })
@@ -107,13 +110,13 @@ const AccountDetail = memo(() => {
         refetch()
     }, [pendingUnlistedConfig, t, updateConfig])
 
+    const pubkey = currentPersona?.identifier.publicKeyAsHex
     const handleConfirmReleaseBind = useCallback(async () => {
         try {
-            if (!currentPersona?.identifier.publicKeyAsHex || !selectedAccount?.identity || !selectedAccount?.platform)
-                return
+            if (!pubkey || !selectedAccount?.identity || !selectedAccount?.platform) return
 
             const result = await NextIDProof.createPersonaPayload(
-                currentPersona.identifier.publicKeyAsHex,
+                pubkey,
                 NextIDAction.Delete,
                 selectedAccount.identity,
                 selectedAccount.platform,
@@ -133,7 +136,7 @@ const AccountDetail = memo(() => {
 
             await Service.Identity.detachProfileWithNextID(
                 result.uuid,
-                currentPersona.identifier.publicKeyAsHex,
+                pubkey,
                 selectedAccount.platform,
                 selectedAccount.identity,
                 result.createdAt,
@@ -200,7 +203,11 @@ const AccountDetail = memo(() => {
                                 />
                             ),
                         })
-                        if (confirmed) await handleConfirmReleaseBind()
+                        if (confirmed) {
+                            await handleConfirmReleaseBind()
+                            MaskMessages.events.ownPersonaChanged.sendToAll()
+                            queryClient.invalidateQueries(['next-id', 'bindings-by-persona', pubkey])
+                        }
                     }}
                 />
             ),

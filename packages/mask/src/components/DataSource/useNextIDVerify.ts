@@ -1,14 +1,6 @@
 import { useRef } from 'react'
 import { useAsyncFn } from 'react-use'
-import {
-    NextIDAction,
-    type PersonaInformation,
-    SignType,
-    languageSettings,
-    MaskMessages,
-    toBase64,
-    fromHex,
-} from '@masknet/shared-base'
+import { NextIDAction, type PersonaInformation, SignType, MaskMessages, toBase64, fromHex } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import Services from '#services'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
@@ -22,7 +14,6 @@ async function createAndSignMessage(persona: PersonaInformation, username: strin
         NextIDAction.Create,
         username,
         platform,
-        languageSettings.value ?? 'default',
     )
     if (!payload) throw new Error('Failed to create persona payload.')
 
@@ -84,7 +75,7 @@ export function useNextIDVerify() {
             const isBound = await NextIDProof.queryIsBound(persona.identifier.publicKeyAsHex, platform, username)
             if (!isBound) throw new Error('Failed to verify.')
 
-            MaskMessages.events.ownProofChanged.sendToAll(undefined)
+            MaskMessages.events.ownProofChanged.sendToAll()
             await verifiedCallback?.()
         },
         [postMessage, platform],

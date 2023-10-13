@@ -16,18 +16,16 @@ export function usePersonaProofs(publicKey?: string) {
     })
     const { refetch } = result
 
-    useEffect(
-        () =>
-            MaskMessages.events.ownProofChanged.on(async () => {
-                // Clearing the query cache when the proof relation changes
-                if (publicKey) {
-                    await NextIDProof.clearPersonaQueryCache(publicKey)
-                    await delay(2000)
-                }
-                refetch()
-            }),
-        [publicKey],
-    )
+    useEffect(() => {
+        return MaskMessages.events.ownProofChanged.on(async () => {
+            // Clearing the query cache when the proof relation changes
+            if (publicKey) {
+                await NextIDProof.clearPersonaQueryCache(publicKey)
+                await delay(2000)
+            }
+            refetch()
+        })
+    }, [publicKey])
 
     return result
 }

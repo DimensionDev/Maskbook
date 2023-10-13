@@ -16,6 +16,7 @@ const useStyles = makeStyles()((theme) => {
             borderRadius: 12,
             backgroundColor: theme.palette.maskColor.bottom,
             boxShadow: theme.palette.maskColor.bottomBg,
+            color: theme.palette.maskColor.main,
             overflow: 'auto',
             overflowX: 'hidden',
             '&::-webkit-scrollbar': {

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useAsync, useAsyncRetry } from 'react-use'
+import { useAsync } from 'react-use'
 import { compareDesc, isBefore } from 'date-fns'
 import { unionWith, uniqBy } from 'lodash-es'
 import { createContainer } from 'unstated-next'
@@ -20,15 +20,18 @@ import { usePersonaProofs } from './usePersonaProofs.js'
 import { Web3Storage } from '@masknet/web3-providers'
 import { PERSONA_AVATAR_DB_NAMESPACE } from '../constants.js'
 import type { PersonaAvatarData } from '../types.js'
+import { useQuery } from '@tanstack/react-query'
 
 function usePersonaInformation(
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>,
 ) {
-    const { value: personas = EMPTY_LIST, retry } = useAsyncRetry(
-        async () => queryOwnedPersonaInformation?.(false),
-        [queryOwnedPersonaInformation],
-    )
-    useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [])
+    const { data: personas = EMPTY_LIST, refetch } = useQuery({
+        queryKey: ['my-own-persona-info'],
+        queryFn: () => {
+            return queryOwnedPersonaInformation?.(false)
+        },
+    })
+    useEffect(() => MaskMessages.events.ownPersonaChanged.on(() => refetch()), [])
 
     return { personas }
 }
@@ -43,7 +46,7 @@ function usePersonaContext(initialState?: {
 
     const { personas } = usePersonaInformation(initialState?.queryOwnedPersonaInformation)
 
-    const currentPersona = personas?.find((x) => x.identifier === (currentIdentifier || personas[0]?.identifier))
+    const currentPersona = personas.find((x) => x.identifier === (currentIdentifier || personas[0]?.identifier))
 
     const { value: avatar } = useAsync(async () => {
         if (!currentPersona) return

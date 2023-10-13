@@ -1,163 +1,147 @@
-import { useState } from 'react'
-import { Trans } from 'react-i18next'
-import { Box, Typography } from '@mui/material'
-import { ActionButtonPromise } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { WizardDialog, type WizardDialogProps } from './WizardDialog.js'
+import { LoadingStatus, SOCIAL_MEDIA_ROUND_ICON_MAPPING } from '@masknet/shared'
+import { ProfileIdentifier, SOCIAL_MEDIA_NAME, type PersonaIdentifier, MaskMessages } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventType } from '@masknet/web3-telemetry/types'
+import { Box, Button, Typography } from '@mui/material'
+import { useEffect } from 'react'
+import { Trans } from 'react-i18next'
+import { useAsyncFn } from 'react-use'
+import Services from '#services'
+import { EventMap } from '../../../extension/popups/pages/Personas/common.js'
+import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
 import { useMaskSharedTrans } from '../../../utils/index.js'
-import { SetupGuideStep } from '@masknet/shared-base'
+import { BindingDialog, type BindingDialogProps } from './BindingDialog.js'
+import { useSetupGuideStepInfo } from './useSetupGuideStepInfo.js'
+import { queryClient } from '@masknet/shared-base-ui'
 
 export const useFindUsernameStyles = makeStyles()((theme) => ({
-    avatar: {
-        display: 'block',
-        width: 48,
-        height: 48,
-        borderRadius: '50%',
-        border: `solid 1px ${MaskColorVar.border}`,
-        '&.connected': {
-            borderColor: MaskColorVar.success,
-        },
-    },
-    verified: {
-        position: 'absolute',
-        bottom: 0,
-        right: 0,
-        height: 16,
-        width: 16,
-        color: MaskColorVar.success,
-    },
-    button: {
-        minWidth: 150,
-        height: 40,
-        minHeight: 40,
-        marginLeft: 0,
-        marginTop: 0,
-        [theme.breakpoints.down('sm')]: {
-            width: '100%',
-        },
-        fontSize: 14,
-        wordBreak: 'keep-all',
-        '&,&:hover': {
-            color: `${MaskColorVar.twitterButtonText} !important`,
-            background: `${MaskColorVar.twitterButton} !important`,
-        },
-    },
-    tip: {
-        fontSize: 16,
-        fontWeight: 500,
-        lineHeight: '22px',
-        paddingTop: 16,
-    },
-    connection: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-    },
-    connectItem: {
-        flex: 1,
-        height: 75,
+    main: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        padding: theme.spacing(3),
+        height: '100%',
+        boxSizing: 'border-box',
     },
-    line: {
-        width: 100,
-        height: 1,
-        borderTop: `dashed 1px  ${MaskColorVar.borderSecondary}`,
+    icon: {
+        marginTop: theme.spacing(3),
     },
-    name: {
+    title: {
+        fontSize: 18,
+        margin: theme.spacing(1.5),
+        fontWeight: 700,
+    },
+    loadingBox: {
+        width: 320,
+        height: 130,
+        padding: theme.spacing(2),
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    text: {
         fontSize: 16,
-        fontWeight: 500,
+        textAlign: 'center',
+        color: theme.palette.maskColor.second,
     },
 }))
 
-export interface FindUsernameProps extends Partial<WizardDialogProps> {
-    username: string
-    stepUpdating?: boolean
-    personaName?: string
-    avatar?: string
-    onConnect: () => Promise<void>
+export interface FindUsernameProps extends BindingDialogProps {
+    persona: PersonaIdentifier
     onDone?: () => void
-    enableNextID?: boolean
 }
 
-export function FindUsername({
-    personaName,
-    username,
-    avatar,
-    onConnect,
-    onDone,
-    onClose,
-    enableNextID,
-    stepUpdating,
-}: FindUsernameProps) {
+export function FindUsername({ persona, onClose, onDone }: FindUsernameProps) {
     const { t } = useMaskSharedTrans()
-    const { classes, cx } = useFindUsernameStyles()
-    const [connected, setConnected] = useState(false)
+    const { classes } = useFindUsernameStyles()
+    const site = activatedSiteAdaptorUI!.networkIdentifier
+    const siteName = SOCIAL_MEDIA_NAME[site] || ''
+    const Icon = SOCIAL_MEDIA_ROUND_ICON_MAPPING[site] || Icons.Globe
+    const { step, userId, currentIdentityResolved, destinedPersonaInfo: personaInfo } = useSetupGuideStepInfo(persona)
+    const connected = personaInfo?.linkedProfiles.some(
+        (x) => x.identifier.network === site && x.identifier.userId === userId,
+    )
+
+    const [{ loading }, onConnect] = useAsyncFn(async () => {
+        const id = ProfileIdentifier.of(activatedSiteAdaptorUI!.networkIdentifier, userId)
+        if (!id.isSome()) return
+        // attach persona with site profile
+        await Services.Identity.attachProfile(id.value, persona, {
+            connectionConfirmState: 'confirmed',
+        })
+
+        if (currentIdentityResolved.avatar) {
+            await Services.Identity.updateProfileInfo(id.value, {
+                avatarURL: currentIdentityResolved.avatar,
+            })
+        }
+        // auto-finish the setup process
+        if (!personaInfo) throw new Error('invalid persona')
+        await Services.Identity.setupPersona(personaInfo?.identifier)
+        queryClient.invalidateQueries(['query-persona-info', persona.publicKeyAsHex])
+        MaskMessages.events.ownPersonaChanged.sendToAll()
+
+        Telemetry.captureEvent(EventType.Access, EventMap[activatedSiteAdaptorUI!.networkIdentifier])
+    }, [activatedSiteAdaptorUI!.networkIdentifier, personaInfo, step, persona, userId, currentIdentityResolved.avatar])
+
+    // Auto connect
+    useEffect(() => {
+        if (connected) return
+        onConnect()
+    }, [connected, onConnect])
 
     return (
-        <WizardDialog
-            dialogType={SetupGuideStep.FindUsername}
-            small={!username}
-            content={
-                <Box className={classes.connection}>
-                    <Box className={classes.connectItem}>
-                        <Icons.MaskBlue size={48} />
-                        <Typography variant="body2" className={classes.name}>
-                            {personaName}
+        <BindingDialog onClose={onClose}>
+            <div className={classes.main}>
+                <Icon size={48} className={classes.icon} />
+                <Typography className={classes.title}>{t('connect_persona')}</Typography>
+                {loading ? (
+                    <div className={classes.loadingBox}>
+                        <LoadingStatus omitText />
+                    </div>
+                ) : connected ? (
+                    <>
+                        <Typography className={classes.text}>
+                            <Trans
+                                i18nKey="connected_already"
+                                values={{
+                                    account: userId,
+                                }}
+                                components={{
+                                    bold: <b />,
+                                }}
+                            />
                         </Typography>
-                    </Box>
-                    {username ? (
-                        <>
-                            <Box className={classes.line} />
-                            <Box className={classes.connectItem}>
-                                <Box position="relative" width={48}>
-                                    <img src={avatar} className={cx(classes.avatar, connected ? 'connected' : '')} />
-                                    {connected ? <Icons.Verification className={classes.verified} /> : null}
-                                </Box>
-                                <Typography variant="body2" className={classes.name}>
-                                    {username}
-                                </Typography>
-                            </Box>
-                        </>
-                    ) : null}
-                </Box>
-            }
-            tip={
-                <Typography className={classes.tip} variant="body2">
-                    {!username ? (
-                        t('setup_guide_login')
-                    ) : connected ? (
-                        t('user_guide_tip_connected')
-                    ) : (
-                        <Trans i18nKey="setup_guide_find_username_text" components={{ br: <br /> }} />
-                    )}
-                </Typography>
-            }
-            footer={
-                username ? (
-                    <ActionButtonPromise
-                        className={classes.button}
-                        variant="contained"
-                        init={t('setup_guide_connect_auto')}
-                        waiting={t('connecting')}
-                        complete={enableNextID ? t('setup_guide_verify_checking') : t('ok')}
-                        failed={t('setup_guide_connect_failed')}
-                        executor={onConnect}
-                        completeOnClick={enableNextID ? undefined : onDone}
-                        onComplete={enableNextID ? onDone : () => setConnected(true)}
-                        disabled={!username || !personaName || stepUpdating}
-                        completeIcon={null}
-                        failIcon={null}
-                        failedOnClick="use executor"
-                        data-testid="confirm_button">
-                        {t('confirm')}
-                    </ActionButtonPromise>
-                ) : null
-            }
-            onClose={onClose}
-        />
+                        <Typography className={classes.text} mt="1.5em">
+                            {t('switch_for_more_connections')}
+                        </Typography>
+                        <Box mt="auto" width="100%">
+                            <Button fullWidth onClick={() => onDone?.()}>
+                                {t('done')}
+                            </Button>
+                        </Box>
+                    </>
+                ) : userId ? (
+                    <>
+                        <Typography className={classes.text}>{t('not_current_account')}</Typography>
+                        <Typography className={classes.text} mt="1.5em">
+                            <Trans
+                                i18nKey="request_to_switch_account"
+                                values={{
+                                    account: userId,
+                                }}
+                                components={{
+                                    bold: <b />,
+                                }}
+                            />
+                        </Typography>
+                    </>
+                ) : (
+                    <Typography className={classes.text}>{t('request_to_login', { siteName })}</Typography>
+                )}
+            </div>
+        </BindingDialog>
     )
 }
