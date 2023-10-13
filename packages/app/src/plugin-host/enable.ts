@@ -1,7 +1,7 @@
 import './register.js'
 
 import { Emitter } from '@servie/events'
-import { startPluginSiteAdaptor } from '@masknet/plugin-infra/content-script'
+import { startPluginSiteAdaptor, __setSiteAdaptorContext__ } from '@masknet/plugin-infra/content-script'
 import {
     BooleanPreference,
     EMPTY_ARRAY,
@@ -13,7 +13,6 @@ import {
 import { setupReactShadowRootEnvironment } from '@masknet/theme'
 import { inMemoryStorage, indexedDBStorage } from '../setup/storage.js'
 import { createSharedContext } from '../helpers/createSharedContext.js'
-import { __setSiteAdaptorContext__ } from '@masknet/plugin-infra/content-script/context'
 
 async function reject(): Promise<never> {
     throw new Error('Not implemented')

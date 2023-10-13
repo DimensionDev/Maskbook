@@ -441,6 +441,16 @@ const moduleSystemRules = {
                     ],
                     message: 'Use Services.* instead.',
                 },
+                // ideally shared folder should also bans import plugin context
+                // but that requires a lot of context passing. we leave it as a legacy escape path.
+                {
+                    target: './packages/!(plugins|plugin-infra|shared)/**',
+                    from: [
+                        './packages/plugin-infra/src/dom/context.ts',
+                        './packages/plugin-infra/src/site-adaptor/context.ts',
+                    ],
+                    message: 'Only plugins can import plugin context.',
+                },
             ],
         },
     ],
