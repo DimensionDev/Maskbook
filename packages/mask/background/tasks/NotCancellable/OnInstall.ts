@@ -34,6 +34,7 @@ browser.runtime.onInstalled.addListener(async (detail) => {
             localStorage.removeItem('backupPassword')
             localStorage.removeItem('backupMethod')
             localStorage.removeItem('email')
+            localStorage.removeItem('phone')
             localStorage.removeItem('backupAt')
         }
     }
