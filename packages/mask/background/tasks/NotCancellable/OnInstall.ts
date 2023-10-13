@@ -22,7 +22,7 @@ browser.runtime.onInstalled.addListener(async (detail) => {
             if (backupPassword) {
                 const backupMethod = localStorage.getItem('backupMethod')
                 PersistentStorages.Settings.storage.backupConfig.setValue({
-                    backupPassword: atob(backupPassword),
+                    backupPassword,
                     email: localStorage.getItem('email'),
                     phone: localStorage.getItem('phone'),
                     cloudBackupAt: backupMethod && backupMethod === 'cloud' ? localStorage.getItem('backupAt') : null,
@@ -30,6 +30,12 @@ browser.runtime.onInstalled.addListener(async (detail) => {
                     cloudBackupMethod: null,
                 })
             }
+            // remove old data after migrate
+            localStorage.removeItem('backupPassword')
+            localStorage.removeItem('backupMethod')
+            localStorage.removeItem('email')
+            localStorage.removeItem('phone')
+            localStorage.removeItem('backupAt')
         }
     }
 })
