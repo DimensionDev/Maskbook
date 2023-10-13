@@ -511,7 +511,7 @@ export namespace Plugin.SiteAdaptor {
                 resultList: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
                 currentResult: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
                 isProfilePage?: boolean
-                identity?: SocialIdentity
+                identity?: SocialIdentity | null
             }>
         }
         Utils?: {
@@ -571,7 +571,7 @@ export namespace Plugin.SiteAdaptor {
              * The injected avatar decorator component
              */
             Decorator: InjectUI<{
-                identity?: SocialIdentity
+                identity?: SocialIdentity | null
                 userId?: string
                 persona?: string
                 socialAccounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
@@ -590,7 +590,7 @@ export namespace Plugin.SiteAdaptor {
              * If it returns false, this cover will not be displayed.
              */
             shouldDisplay?(
-                identity?: SocialIdentity,
+                identity?: SocialIdentity | null,
                 socialAccounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>,
                 sourceType?: AvatarRealmSourceType,
             ): boolean
@@ -687,7 +687,7 @@ export namespace Plugin.SiteAdaptor {
              * The injected tab content
              */
             TabContent: InjectUI<{
-                identity?: SocialIdentity
+                identity?: SocialIdentity | null
                 socialAccount?: SocialAccount<Web3Helper.ChainIdAll>
             }>
         }
@@ -695,7 +695,10 @@ export namespace Plugin.SiteAdaptor {
             /**
              * If it returns false, this tab will not be displayed.
              */
-            shouldDisplay?(identity?: SocialIdentity, socialAccount?: SocialAccount<Web3Helper.ChainIdAll>): boolean
+            shouldDisplay?(
+                identity?: SocialIdentity | null,
+                socialAccount?: SocialAccount<Web3Helper.ChainIdAll>,
+            ): boolean
             /**
              * Filter social address.
              */

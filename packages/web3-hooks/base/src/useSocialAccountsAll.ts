@@ -7,7 +7,7 @@ import { useSocialAccountsFrom } from './useSocialAccountsFrom.js'
  * Get all social addresses across all networks.
  */
 export function useSocialAccountsAll(
-    identity?: SocialIdentity,
+    identity?: SocialIdentity | null,
     includes?: SocialAddressType[],
     sorter?: (a: SocialAccount<Web3Helper.ChainIdAll>, z: SocialAccount<Web3Helper.ChainIdAll>) => number,
 ) {

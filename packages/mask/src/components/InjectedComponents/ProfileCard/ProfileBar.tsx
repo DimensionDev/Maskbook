@@ -16,7 +16,7 @@ import { useChainContext, useWeb3Others } from '@masknet/web3-hooks-base'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { Box, Link, Typography } from '@mui/material'
+import { Box, Link, Skeleton, Typography } from '@mui/material'
 import type { BoxProps } from '@mui/system'
 import { PluginTraderMessages } from '@masknet/plugin-trader'
 import { useMaskSharedTrans } from '../../../utils/index.js'
@@ -117,121 +117,178 @@ export interface ProfileBarProps extends BoxProps {
  * - Website info
  * - Wallets
  */
-export const ProfileBar = memo<ProfileBarProps>(
-    ({ socialAccounts, address, identity, onAddressChange, className, children, ...rest }) => {
-        const { classes, theme, cx } = useStyles()
-        const { t } = useMaskSharedTrans()
-        const { current: avatarClipPathId } = useRef<string>(uuid())
-        const { anchorEl, anchorBounding } = useAnchor()
+export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
+    socialAccounts,
+    address,
+    identity,
+    onAddressChange,
+    className,
+    children,
+    ...rest
+}) {
+    const { classes, theme, cx } = useStyles()
+    const { t } = useMaskSharedTrans()
+    const { current: avatarClipPathId } = useRef<string>(uuid())
+    const { anchorEl, anchorBounding } = useAnchor()
 
-        const { value: collectionList = EMPTY_LIST } = useCollectionByTwitterHandler(identity.identifier?.userId)
+    const { value: collectionList = EMPTY_LIST } = useCollectionByTwitterHandler(identity.identifier?.userId)
 
-        const Others = useWeb3Others()
-        const { chainId } = useChainContext()
+    const Others = useWeb3Others()
+    const { chainId } = useChainContext()
 
-        const [walletMenuOpen, setWalletMenuOpen] = useState(false)
-        const closeMenu = useCallback(() => setWalletMenuOpen(false), [])
-        useEffect(() => {
-            const closeMenu = () => setWalletMenuOpen(false)
-            window.addEventListener('scroll', closeMenu, false)
-            return () => {
-                window.removeEventListener('scroll', closeMenu, false)
-            }
-        }, [])
-        const selectedAccount = socialAccounts.find((x) => isSameAddress(x.address, address))
+    const [walletMenuOpen, setWalletMenuOpen] = useState(false)
+    const closeMenu = useCallback(() => setWalletMenuOpen(false), [])
+    useEffect(() => {
+        const closeMenu = () => setWalletMenuOpen(false)
+        window.addEventListener('scroll', closeMenu, false)
+        return () => {
+            window.removeEventListener('scroll', closeMenu, false)
+        }
+    }, [])
+    const selectedAccount = socialAccounts.find((x) => isSameAddress(x.address, address))
 
-        return (
-            <Box className={cx(classes.root, className)} {...rest}>
-                <div className={classes.avatar}>
-                    <Image
-                        src={identity.avatar}
-                        height={40}
-                        width={40}
-                        alt={identity.nickname}
-                        containerProps={{
-                            className: classes.avatarImageContainer,
-                            style: {
-                                WebkitClipPath: `url(#${avatarClipPathId}-clip-path)`,
-                            },
-                        }}
-                    />
-                    <AvatarDecoration
-                        className={classes.avatarDecoration}
-                        clipPathId={avatarClipPathId}
-                        userId={identity.identifier?.userId}
-                        size={40}
-                    />
-                </div>
-                <Box className={classes.description}>
-                    <Typography className={classes.nickname} title={identity.nickname}>
-                        {identity.nickname}
-                    </Typography>
-                    {address ? (
-                        <div className={classes.addressRow}>
-                            <AddressItem
-                                socialAccount={selectedAccount}
-                                disableLinkIcon
-                                TypographyProps={{ className: classes.address }}
-                            />
-                            <CopyButton size={14} className={classes.linkIcon} text={address} />
-                            <Link
-                                href={Others.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)}
-                                target="_blank"
-                                title={t('view_on_explorer')}
-                                rel="noopener noreferrer"
-                                onClick={(event) => {
-                                    event.stopPropagation()
-                                }}
-                                sx={{ outline: 0 }}
-                                className={classes.linkIcon}>
-                                <Icons.LinkOut size={14} />
-                            </Link>
-                            <Icons.ArrowDrop
-                                size={14}
-                                color={theme.palette.text.primary}
-                                onClick={() => {
-                                    setWalletMenuOpen((v) => !v)
-                                }}
-                            />
-                        </div>
-                    ) : null}
-                </Box>
-
-                <TokenWithSocialGroupMenu
-                    open={walletMenuOpen}
-                    onClose={closeMenu}
-                    fromSocialCard
-                    onAddressChange={onAddressChange}
-                    currentAddress={address}
-                    socialAccounts={socialAccounts}
-                    collectionList={collectionList}
-                    onTokenChange={(currentResult) => {
-                        setWalletMenuOpen(false)
-                        if (!anchorBounding) return
-                        PluginTraderMessages.trendingAnchorObserved.sendToLocal({
-                            name: identity.identifier?.userId || '',
-                            identity,
-                            address,
-                            anchorBounding,
-                            anchorEl,
-                            type: TrendingAPI.TagType.HASH,
-                            isCollectionProjectPopper: true,
-                            currentResult,
-                        })
-
-                        CrossIsolationMessages.events.profileCardEvent.sendToLocal({ open: false })
+    return (
+        <Box className={cx(classes.root, className)} {...rest}>
+            <div className={classes.avatar}>
+                <Image
+                    src={identity.avatar}
+                    height={40}
+                    width={40}
+                    alt={identity.nickname}
+                    containerProps={{
+                        className: classes.avatarImageContainer,
+                        style: {
+                            WebkitClipPath: `url(#${avatarClipPathId}-clip-path)`,
+                        },
                     }}
-                    anchorPosition={{
-                        top: 60,
-                        left: 60,
-                    }}
-                    anchorReference="anchorPosition"
                 />
-
-                {children}
+                <AvatarDecoration
+                    className={classes.avatarDecoration}
+                    clipPathId={avatarClipPathId}
+                    userId={identity.identifier?.userId}
+                    size={40}
+                />
+            </div>
+            <Box className={classes.description}>
+                <Typography className={classes.nickname} title={identity.nickname}>
+                    {identity.nickname}
+                </Typography>
+                {address ? (
+                    <div className={classes.addressRow}>
+                        <AddressItem
+                            socialAccount={selectedAccount}
+                            disableLinkIcon
+                            TypographyProps={{ className: classes.address }}
+                        />
+                        <CopyButton size={14} className={classes.linkIcon} text={address} />
+                        <Link
+                            href={Others.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)}
+                            target="_blank"
+                            title={t('view_on_explorer')}
+                            rel="noopener noreferrer"
+                            onClick={(event) => {
+                                event.stopPropagation()
+                            }}
+                            sx={{ outline: 0 }}
+                            className={classes.linkIcon}>
+                            <Icons.LinkOut size={14} />
+                        </Link>
+                        <Icons.ArrowDrop
+                            size={14}
+                            color={theme.palette.text.primary}
+                            onClick={() => {
+                                setWalletMenuOpen((v) => !v)
+                            }}
+                        />
+                    </div>
+                ) : null}
             </Box>
-        )
-    },
-)
 
-ProfileBar.displayName = 'ProfileBar'
+            <TokenWithSocialGroupMenu
+                open={walletMenuOpen}
+                onClose={closeMenu}
+                fromSocialCard
+                onAddressChange={onAddressChange}
+                currentAddress={address}
+                socialAccounts={socialAccounts}
+                collectionList={collectionList}
+                onTokenChange={(currentResult) => {
+                    setWalletMenuOpen(false)
+                    if (!anchorBounding) return
+                    PluginTraderMessages.trendingAnchorObserved.sendToLocal({
+                        name: identity.identifier?.userId || '',
+                        identity,
+                        address,
+                        anchorBounding,
+                        anchorEl,
+                        type: TrendingAPI.TagType.HASH,
+                        isCollectionProjectPopper: true,
+                        currentResult,
+                    })
+
+                    CrossIsolationMessages.events.profileCardEvent.sendToLocal({ open: false })
+                }}
+                anchorPosition={{
+                    top: 60,
+                    left: 60,
+                }}
+                anchorReference="anchorPosition"
+            />
+
+            {children}
+        </Box>
+    )
+})
+
+export type ProfileBarSkeletonProps = Omit<ProfileBarProps, 'identity' | 'onAddressChange'>
+
+// This Skeleton is not fully empty, but also has user address
+export const ProfileBarSkeleton = memo<ProfileBarSkeletonProps>(function ProfileBarSkeleton({
+    socialAccounts,
+    address,
+    className,
+    children,
+    ...rest
+}) {
+    const { classes, cx } = useStyles()
+    const { t } = useMaskSharedTrans()
+
+    const Others = useWeb3Others()
+    const { chainId } = useChainContext()
+
+    const selectedAccount = socialAccounts.find((x) => isSameAddress(x.address, address))
+
+    return (
+        <Box className={cx(classes.root, className)} {...rest}>
+            <div className={classes.avatar}>
+                <Skeleton variant="circular" height={40} width={40} />
+            </div>
+            <Box className={classes.description}>
+                <Skeleton variant="text" className={classes.nickname} width={100} />
+                {address ? (
+                    <div className={classes.addressRow}>
+                        <AddressItem
+                            socialAccount={selectedAccount}
+                            disableLinkIcon
+                            TypographyProps={{ className: classes.address }}
+                        />
+                        <CopyButton size={14} className={classes.linkIcon} text={address} />
+                        <Link
+                            href={Others.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)}
+                            target="_blank"
+                            title={t('view_on_explorer')}
+                            rel="noopener noreferrer"
+                            onClick={(event) => {
+                                event.stopPropagation()
+                            }}
+                            sx={{ outline: 0 }}
+                            className={classes.linkIcon}>
+                            <Icons.LinkOut size={14} />
+                        </Link>
+                    </div>
+                ) : null}
+            </Box>
+            {children}
+        </Box>
+    )
+})

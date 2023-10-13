@@ -29,7 +29,7 @@ export function AvatarBadge({ userId, identity, socialAccounts }: Props) {
     return socialAccounts?.filter((x) => x.pluginID === NetworkPluginID.PLUGIN_EVM).length ? (
         <Box display="flex" alignItems="top" justifyContent="center">
             <div style={{ display: 'flex', alignItems: 'top', justifyContent: 'center' }}>
-                <ProfileAvatarBadge userId={userId} />
+                <ProfileAvatarBadge userId={userId} address={socialAccounts[0]?.address} />
             </div>
         </Box>
     ) : null

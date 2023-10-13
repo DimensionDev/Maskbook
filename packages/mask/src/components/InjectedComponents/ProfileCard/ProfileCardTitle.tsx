@@ -17,7 +17,7 @@ import type { HTMLProps } from 'react'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { useCurrentPersona } from '../../DataSource/useCurrentPersona.js'
 import { usePersonasFromDB } from '../../DataSource/usePersonasFromDB.js'
-import { ProfileBar } from './ProfileBar.js'
+import { ProfileBar, ProfileBarSkeleton } from './ProfileBar.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -88,7 +88,7 @@ function Web3ProfileSettingButton() {
 }
 
 export interface ProfileCardTitleProps extends HTMLProps<HTMLDivElement> {
-    identity: SocialIdentity
+    identity?: SocialIdentity
     socialAccounts: Array<SocialAccount<Web3Helper.ChainIdAll>>
     address?: string
     onAddressChange?(address: string): void
@@ -104,8 +104,8 @@ export function ProfileCardTitle({
     const me = useLastRecognizedIdentity()
     const { classes, cx } = useStyles()
 
-    const userId = identity.identifier?.userId
-    const itsMe = identity.identifier?.userId === me?.identifier?.userId
+    const userId = identity?.identifier?.userId
+    const itsMe = !!userId && userId === me?.identifier?.userId
     const { data: nextIdBindings = EMPTY_LIST } = useQuery({
         queryKey: ['next-id', 'profiles-by-twitter-id', userId],
         enabled: !!userId,
@@ -115,6 +115,13 @@ export function ProfileCardTitle({
         },
     })
     const tipsDisabled = useIsMinimalMode(PluginID.Tips)
+
+    if (!identity)
+        return (
+            <div className={cx(classes.title, className)} {...rest}>
+                <ProfileBarSkeleton className={classes.profileBar} socialAccounts={socialAccounts} address={address} />
+            </div>
+        )
 
     return (
         <div className={cx(classes.title, className)} {...rest}>

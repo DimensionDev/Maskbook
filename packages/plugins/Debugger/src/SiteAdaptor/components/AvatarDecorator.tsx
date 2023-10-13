@@ -3,7 +3,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import type { SocialAccount, SocialIdentity } from '@masknet/shared-base'
 
 interface AvatarDecoratorProps {
-    identity?: SocialIdentity
+    identity?: SocialIdentity | null
     persona?: string
     socialAccounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
 }

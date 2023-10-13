@@ -8,7 +8,8 @@ export const twitterBase: SiteAdaptor.Base = {
     encryptPayloadNetwork: EncryptPayloadNetwork.Twitter,
     declarativePermissions: { origins },
     shouldActivate(location) {
-        return location.hostname.endsWith('twitter.com')
+        const { hostname, pathname } = location
+        return hostname.endsWith('twitter.com') && !pathname.startsWith('/i/cards-frame/')
     },
 }
 

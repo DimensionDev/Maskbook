@@ -80,7 +80,7 @@ export function useSocialIdentity(identity: IdentityResolved | null | undefined)
         enabled: !!identity,
         queryKey: ['social-identity', identity],
         queryFn: async () => {
-            if (!identity) return
+            if (!identity) return null
             try {
                 const bindings = await queryPersonasFromNextID(identity)
                 const persona = await queryPersonaFromDB(identity)
