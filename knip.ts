@@ -1,3 +1,4 @@
+// cspell:ignore knip
 import type { KnipConfig } from 'knip'
 
 // https://github.com/webpro/knip
