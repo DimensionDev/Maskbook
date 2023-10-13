@@ -1,5 +1,5 @@
 import { PersistentStorages, type BackupConfig } from '@masknet/shared-base'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { createContainer } from 'unstated-next'
 import { useSubscription } from 'use-subscription'
 
@@ -17,11 +17,21 @@ function useUserContext() {
         [user],
     )
 
+    const result = useMemo(() => {
+        try {
+            const backupPassword = user.backupPassword && atob(user.backupPassword)
+            return {
+                ...user,
+                backupPassword,
+            }
+        } catch {
+            // Maybe `backupPassword` is not base64-encoded.
+            return user
+        }
+    }, [user, updateUser])
+
     return {
-        user: {
-            ...user,
-            backupPassword: user.backupPassword && atob(user.backupPassword),
-        },
+        user: result,
         updateUser,
     }
 }
