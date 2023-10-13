@@ -81,15 +81,17 @@ export const useStyles = makeStyles()((theme) => ({
     postContentTitle: {
         fontSize: 12,
         color: theme.palette.maskColor.main,
+        fontWeight: 700,
     },
     postContent: {
         color: theme.palette.maskColor.main,
         fontSize: 12,
-        wordBreak: 'break-all',
         backgroundColor: theme.palette.maskColor.bg,
         borderRadius: 12,
         padding: theme.spacing(1),
         marginTop: theme.spacing(1.5),
+        whiteSpace: 'pre-line',
+        wordBreak: 'break-all',
     },
     text: {
         fontSize: 12,
@@ -131,6 +133,7 @@ interface VerifyNextIDProps extends Partial<WizardDialogProps> {
     personaIdentifier?: PersonaIdentifier
     network: string
     avatar?: string
+    personaAvatar?: string
     disableVerify: boolean
     onVerify: () => Promise<void>
     onDone?: () => void
@@ -142,6 +145,7 @@ export function VerifyNextID({
     username,
     userId,
     avatar,
+    personaAvatar,
     onVerify,
     onDone,
     onClose,
@@ -211,7 +215,11 @@ export function VerifyNextID({
                         )}
                         <Icons.Connect size={24} />
                         <Box className={classes.connectItem}>
-                            <EmojiAvatar value={personaIdentifier.publicKeyAsHex} />
+                            {personaAvatar ? (
+                                <img src={personaAvatar} className={cx(classes.avatar, 'connected')} />
+                            ) : (
+                                <EmojiAvatar value={personaIdentifier.publicKeyAsHex} />
+                            )}
                             <Box ml={1}>
                                 <Typography className={classes.name}>{personaName}</Typography>
                                 <Typography className={classes.second} component="div">

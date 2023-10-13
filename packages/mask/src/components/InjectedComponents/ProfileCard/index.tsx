@@ -28,9 +28,9 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { DefaultWeb3ContextProvider, ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
+import Services from '#services'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
 import { useMaskSharedTrans } from '../../../utils/index.js'
-import Services from '../../../../shared-ui/service.js'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
     identity?: SocialIdentity
