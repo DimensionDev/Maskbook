@@ -88,7 +88,6 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
         justifyContent: 'space-between',
         background: theme.palette.maskColor.bottom,
-        borderRadius: 8,
     },
     primaryItemBox: {
         display: 'flex',
@@ -101,6 +100,7 @@ const useStyles = makeStyles()((theme) => ({
         '::-webkit-scrollbar': {
             display: 'none',
         },
+        background: theme.palette.maskColor.bottom,
         boxShadow:
             theme.palette.mode === 'dark'
                 ? '0px 4px 30px 0px rgba(255, 255, 255, 0.15)'
