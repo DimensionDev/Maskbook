@@ -75,7 +75,7 @@ export function useNextIDVerify() {
             const isBound = await NextIDProof.queryIsBound(persona.identifier.publicKeyAsHex, platform, username)
             if (!isBound) throw new Error('Failed to verify.')
 
-            MaskMessages.events.ownProofChanged.sendToAll(undefined)
+            MaskMessages.events.ownProofChanged.sendToAll()
             await verifiedCallback?.()
         },
         [postMessage, platform],

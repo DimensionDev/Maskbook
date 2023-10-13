@@ -6,6 +6,7 @@ import {
     SetupGuideStep,
     currentSetupGuideStatus,
     type PersonaIdentifier,
+    MaskMessages,
 } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Telemetry } from '@masknet/web3-telemetry'
@@ -94,6 +95,7 @@ export function FindUsername({ persona, onClose }: FindUsernameProps) {
         if (!personaInfo) throw new Error('invalid persona')
         await Services.Identity.setupPersona(personaInfo?.identifier)
         queryClient.invalidateQueries(['query-persona-info', persona.publicKeyAsHex])
+        MaskMessages.events.ownPersonaChanged.sendToAll()
 
         Telemetry.captureEvent(EventType.Access, EventMap[activatedSiteAdaptorUI!.networkIdentifier])
     }, [activatedSiteAdaptorUI!.networkIdentifier, personaInfo, step, persona, userId, currentIdentityResolved.avatar])
