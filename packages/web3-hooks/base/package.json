@@ -24,7 +24,6 @@
     "@types/use-subscription": "^1.0.0",
     "bignumber.js": "9.1.2",
     "ethereum-blockies": "^0.1.1",
-    "lru-cache": "^10.0.0",
     "react-use": "^17.4.0",
     "unstated-next": "^1.1.0",
     "use-subscription": "^1.8.0"

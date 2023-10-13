@@ -17,15 +17,10 @@
     "@masknet/plugin-infra": "workspace:^",
     "@masknet/shared": "workspace:^",
     "@masknet/shared-base": "workspace:^",
-    "@masknet/shared-base-ui": "workspace:^",
     "@masknet/web3-hooks-base": "workspace:^",
-    "@masknet/web3-hooks-evm": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
     "@masknet/web3-providers": "workspace:^",
-    "@masknet/theme": "workspace:^",
-    "react-use": "^17.4.0",
-    "bignumber.js": "9.1.2",
-    "unstated-next": "^1.1.0"
+    "@masknet/theme": "workspace:^"
   }
 }

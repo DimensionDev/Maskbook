@@ -27,10 +27,8 @@
         "@masknet/web3-providers": "workspace:^",
         "web3-utils": "1.10.2",
         "bignumber.js": "9.1.2",
-        "urlcat": "^3.1.0",
         "date-fns": "^2.30.0",
         "react-use": "^17.4.0",
-        "use-subscription": "^1.8.0",
         "merkletreejs": "^0.3.10"
     }
 }
