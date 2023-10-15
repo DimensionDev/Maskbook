@@ -161,7 +161,7 @@ export const Onboarding = memo(function Onboarding() {
                     <Icons.BluePin size={14} width={9} />
                 </Box>
             </Box>
-            <img className={classes.trend} src={Trend.toString()} />
+            <img className={classes.trend} src={Trend} />
             <Box>
                 <OnboardingWriter words={words} />
             </Box>
