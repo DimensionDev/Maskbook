@@ -22,7 +22,7 @@ import { currentSlippageSettings } from '../../settings.js'
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
 import { useTraderTrans } from '../../locales/index.js'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ rotate: boolean }>()((theme, { rotate }) => ({
     abstractTabWrapper: {
         width: '100%',
         position: 'sticky',
@@ -67,6 +67,21 @@ const useStyles = makeStyles()((theme) => ({
             },
         },
     },
+    iconRotate: {
+        '@keyframes rotate': {
+            '0%': {
+                transform: 'rotate(0deg)',
+            },
+            '100%': {
+                transform: 'rotate(-360deg)',
+            },
+        },
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        animation: rotate ? 'rotate 1.5s linear' : 'none',
+        transformOrigin: 'center',
+    },
 }))
 
 export function TraderDialog(props: { share: ((text: string) => void) | undefined }) {
@@ -77,7 +92,8 @@ export function TraderDialog(props: { share: ((text: string) => void) | undefine
     const Others = useWeb3Others()
     const chainIdList = traderDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
     const t = useTraderTrans()
-    const { classes } = useStyles()
+    const [rotate, setRotate] = useState(false)
+    const { classes } = useStyles({ rotate })
 
     const chainIdValid = useChainIdValid(pluginID, chainId)
     const [defaultCoins, setDefaultCoins] = useState<
@@ -181,8 +197,18 @@ export function TraderDialog(props: { share: ((text: string) => void) | undefine
             titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
             titleTail={
                 <div className={classes.tail}>
-                    <IconButton onClick={() => tradeRef.current?.refresh()}>
-                        <Icons.Refresh size={24} className={classes.icon} />
+                    <IconButton
+                        onClick={() => {
+                            if (rotate) return
+                            setRotate(true)
+                            setTimeout(() => {
+                                setRotate(false)
+                            }, 1500)
+                            tradeRef.current?.refresh()
+                        }}>
+                        <div className={classes.iconRotate}>
+                            <Icons.Refresh size={24} className={classes.icon} />
+                        </div>
                     </IconButton>
                     {pluginID === NetworkPluginID.PLUGIN_EVM ? (
                         <IconButton onClick={openGasSettingDialog}>
