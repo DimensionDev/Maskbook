@@ -1,12 +1,5 @@
 import { usePersonaProofs } from '@masknet/shared'
-import {
-    NextIDAction,
-    SignType,
-    fromHex,
-    languageSettings,
-    toBase64,
-    type PersonaIdentifier,
-} from '@masknet/shared-base'
+import { NextIDAction, SignType, fromHex, toBase64, type PersonaIdentifier } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useQuery } from '@tanstack/react-query'
 import { useTimeout } from 'react-use'
@@ -16,10 +9,9 @@ import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 
 export function usePostContent(personaIdentifier: PersonaIdentifier | undefined, userId: string) {
     const platform = activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform
-    const language = languageSettings.value ?? 'default'
 
     const { data: postContent } = useQuery({
-        queryKey: ['create-persona-payload', personaIdentifier?.publicKeyAsHex, userId, platform, language],
+        queryKey: ['create-persona-payload', personaIdentifier?.publicKeyAsHex, userId, platform],
         queryFn: async () => {
             if (!personaIdentifier?.publicKeyAsHex || !platform) return null
             const payload = await NextIDProof.createPersonaPayload(
@@ -27,7 +19,6 @@ export function usePostContent(personaIdentifier: PersonaIdentifier | undefined,
                 NextIDAction.Create,
                 userId,
                 platform,
-                language,
             )
             if (!payload) throw new Error('Failed to create persona payload.')
 
