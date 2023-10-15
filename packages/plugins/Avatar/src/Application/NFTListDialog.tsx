@@ -228,7 +228,7 @@ export function NFTListDialog() {
                         padding: '8px 16px',
                         justifyContent: 'space-between',
                     }}>
-                    {selectedPluginId === NetworkPluginID.PLUGIN_EVM && assetChainId ? (
+                    {selectedPluginId === NetworkPluginID.PLUGIN_EVM ? (
                         <Button
                             variant="text"
                             size="small"

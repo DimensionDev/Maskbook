@@ -39,7 +39,8 @@ const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap 
         },
         sidebar: {
             paddingTop: gapIsNumber ? theme.spacing(gap) : gap,
-            paddingRight: theme.spacing(1.5),
+            paddingLeft: theme.spacing(1.5),
+            paddingRight: theme.spacing(0.25),
         },
         main: {
             display: 'flex',
@@ -210,10 +211,10 @@ export const CollectionList = memo(function CollectionList({
         return (
             <Box className={cx(classes.container, className)} {...rest}>
                 <div className={classes.columns}>
+                    {sidebar}
                     <div className={classes.main}>
                         <LoadingSkeleton className={classes.grid} />
                     </div>
-                    {sidebar}
                 </div>
             </Box>
         )
@@ -231,10 +232,10 @@ export const CollectionList = memo(function CollectionList({
         return (
             <Box className={cx(classes.container, className)} {...rest}>
                 <div className={classes.columns}>
+                    {sidebar}
                     <Box className={cx(classes.main, classes.emptyMain)} display="flex">
                         <EmptyStatus flexGrow={1}>{emptyText ?? t.no_NFTs_found()}</EmptyStatus>
                     </Box>
-                    {sidebar}
                 </div>
             </Box>
         )
@@ -243,6 +244,7 @@ export const CollectionList = memo(function CollectionList({
     return (
         <Box className={cx(classes.container, className)} ref={containerRef} {...rest}>
             <div className={classes.columns}>
+                {sidebar}
                 <div className={classes.main} ref={forkedMainColumnRef}>
                     <CollectionHeader className={classes.collectionHeader} onResetCollection={handleCollectionChange} />
                     {currentCollection ? (
@@ -310,7 +312,6 @@ export const CollectionList = memo(function CollectionList({
                     )}
                     {error ? <RetryHint hint={false} retry={retry} /> : null}
                 </div>
-                {sidebar}
             </div>
         </Box>
     )
