@@ -246,8 +246,7 @@ interface CollectionStats {
  * launchpad collections
  * /launchpad/collections
  */
-interface LaunchpadCollection
-    extends Omit<MagicEdenCollection, 'twitter' | 'discord' | 'website' | 'categories'> {
+interface LaunchpadCollection extends Omit<MagicEdenCollection, 'twitter' | 'discord' | 'website' | 'categories'> {
     featured: boolean
     edition: string
     price: number
