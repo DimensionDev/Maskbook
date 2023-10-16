@@ -3,7 +3,6 @@ import { Box, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import Spline from '@splinetool/react-spline'
 import { Welcome } from '../../assets/index.js'
-import { useDashboardTrans } from '../../locales/i18n_generated.js'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 
 interface SetupFrameProps extends PropsWithChildren {
@@ -43,7 +42,6 @@ const useStyles = makeStyles()((theme) => ({
 
 export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, hiddenSpline }) {
     const { classes, theme } = useStyles()
-    const t = useDashboardTrans()
     const [loading, setLoading] = useState(true)
 
     return (
@@ -57,7 +55,7 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, 
             </Box>
             <Box className={classes.sidebar} position="relative">
                 {!hiddenSpline ? (
-                    <div style={{ position: 'absolute', width: '100%', height: '100%' }}>
+                    <div style={{ position: 'absolute', width: '100%', height: '100%', backgroundColor: '#d2deff' }}>
                         <Box position="absolute" marginTop={21.5} width="100%" display="flex" justifyContent="center">
                             <Typography
                                 fontSize={36}
@@ -67,11 +65,12 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, 
                                 display="flex"
                                 width="70%"
                                 justifyContent="center">
-                                {t.persona_setup_identity_tips()}
+                                {/* Don't translate this slogan */}
+                                The Web3 identity for everyone
                             </Typography>
                         </Box>
 
-                        <Spline scene={Welcome.toString()} onLoad={() => setLoading(false)} />
+                        <Spline scene={Welcome} onLoad={() => setLoading(false)} />
                     </div>
                 ) : null}
                 {loading && !hiddenSpline ? (

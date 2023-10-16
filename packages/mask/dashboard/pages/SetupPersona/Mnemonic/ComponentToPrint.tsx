@@ -105,7 +105,7 @@ export const ComponentToPrint = forwardRef((props: ComponentToPrintProps, ref: F
                     ecLevel="L"
                     size={136}
                     quietZone={6}
-                    logoImage={MaskWallet.toString()}
+                    logoImage={MaskWallet}
                     logoWidth={28}
                     logoHeight={28}
                 />
