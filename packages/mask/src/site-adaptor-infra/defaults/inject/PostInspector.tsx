@@ -10,7 +10,7 @@ export function injectPostInspectorDefault(
     props?: Pick<PostInspectorProps, 'slotPosition'>,
 ) {
     const PostInspectorDefault = memo(function PostInspectorDefault(props: { zipPost(): void }) {
-        return <PostInspector {...props} zipPost={props.zipPost} />
+        return <PostInspector {...props} />
     })
 
     const { zipPost, injectionPoint } = config
@@ -19,7 +19,7 @@ export function injectPostInspectorDefault(
     return function injectPostInspector(current: PostInfo, signal: AbortSignal) {
         const jsx = (
             <PostInfoProvider post={current}>
-                <PostInspectorDefault zipPost={() => zipPostF(current.rootElement)} />
+                <PostInspectorDefault {...props} zipPost={() => zipPostF(current.rootElement)} />
             </PostInfoProvider>
         )
         const root = attachReactTreeWithContainer(injectionPoint?.(current) ?? current.rootElement.afterShadow, {
