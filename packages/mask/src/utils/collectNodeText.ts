@@ -7,7 +7,7 @@ export function collectTwitterEmoji(points: readonly number[]) {
     return String.fromCodePoint(points[0], 0xfe0f, ...points.slice(1))
 }
 
-export interface CollectNodeTextOptions {
+interface CollectNodeTextOptions {
     onHTMLAnchorElement?(node: HTMLAnchorElement): Option<string>
 }
 

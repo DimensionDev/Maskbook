@@ -41,7 +41,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface ActionBarProps {
+interface ActionBarProps {
     chainId: ChainId
     project: Project
     open: boolean

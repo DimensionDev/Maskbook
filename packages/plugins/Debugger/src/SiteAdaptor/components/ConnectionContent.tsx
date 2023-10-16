@@ -8,7 +8,7 @@ import { useChainContext, useNetworkContext, useNetworks, useWeb3State } from '@
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID, ExceptionType, ExceptionID } from '@masknet/web3-telemetry/types'
 
-export interface ConnectionContentProps {
+interface ConnectionContentProps {
     onClose?: () => void
 }
 

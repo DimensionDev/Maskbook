@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface TrendingViewSkeletonProps extends withClasses<'content' | 'footer'> {
+interface TrendingViewSkeletonProps extends withClasses<'content' | 'footer'> {
     TrendingCardProps?: Partial<TrendingCardProps>
     children?: ReactNode
 }

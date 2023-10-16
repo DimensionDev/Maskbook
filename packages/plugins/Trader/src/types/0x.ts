@@ -1,6 +1,6 @@
 // ZRX supported source swap list
 // Learn more: https://matcha.xyz/
-export enum ZrxTradePool {
+enum ZrxTradePool {
     ZRX = '0x',
     ACryptoS = 'ACryptoS',
     ApeSwap = 'ApeSwap',
@@ -68,7 +68,7 @@ export enum ZrxTradePool {
     AstarExchange = 'AstarExchange',
 }
 
-export interface SwapOrder {
+interface SwapOrder {
     chainId: string
     exchangeAddress: string
     makerAddress: string
@@ -88,7 +88,7 @@ export interface SwapOrder {
     signature: string
 }
 
-export interface SwapProportion {
+interface SwapProportion {
     name: ZrxTradePool
     proportion: string
 }

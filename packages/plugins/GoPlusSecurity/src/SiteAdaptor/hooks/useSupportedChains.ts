@@ -4,7 +4,7 @@ import { GoPlusLabs } from '@masknet/web3-providers'
 import { useNetworkDescriptors } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 
-export const SupportedChainList = [
+const SupportedChainList = [
     'Ethereum',
     'BNB Chain',
     'Base',

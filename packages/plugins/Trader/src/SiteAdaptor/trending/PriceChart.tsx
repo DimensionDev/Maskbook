@@ -37,7 +37,7 @@ const useStyles = makeStyles<PriceChartProps>()((theme, { stats, coin }) => {
     }
 })
 
-export interface PriceChartProps extends withClasses<'root'> {
+interface PriceChartProps extends withClasses<'root'> {
     coin?: Coin
     currency: Currency
     stats: Stat[]

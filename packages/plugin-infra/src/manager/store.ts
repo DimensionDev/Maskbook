@@ -7,7 +7,7 @@ import type { Plugin } from '../types.js'
 const __registered = new Map<PluginID, Plugin.DeferredDefinition>()
 const listeners = new Set<onNewPluginRegisteredListener>()
 
-export type onNewPluginRegisteredListener = (id: string, def: Plugin.DeferredDefinition) => void
+type onNewPluginRegisteredListener = (id: string, def: Plugin.DeferredDefinition) => void
 export function onNewPluginRegistered(f: onNewPluginRegisteredListener) {
     listeners.add(f)
     return () => listeners.delete(f)

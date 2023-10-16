@@ -7,7 +7,6 @@ export {
     removePopupWindow,
     openDashboard,
     queryCurrentActiveTab,
-    openWalletStartUpWindow,
     queryCurrentPopupWindowId,
 } from './popup-opener.js'
 export {

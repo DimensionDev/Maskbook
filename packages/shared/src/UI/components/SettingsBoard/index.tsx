@@ -11,7 +11,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface SettingsBoardProps {
+interface SettingsBoardProps {
     disableGasPrice?: boolean
     disableGasLimit?: boolean
     disableSlippageTolerance?: boolean

@@ -59,7 +59,7 @@ export function NormalNFT(props: NormalNFTProps) {
     const { classes, cx } = useStyles()
     const { classes: boxClasses } = useBoxStyles()
 
-    const [position, setPosition] = useState({ x: 50, y: 150 })
+    const [, setPosition] = useState({ x: 50, y: 150 })
     const moveHandle = (x: number, y: number) => {
         setPosition({ x, y })
     }

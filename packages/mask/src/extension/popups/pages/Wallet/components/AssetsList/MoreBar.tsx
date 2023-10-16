@@ -3,7 +3,7 @@ import { ActionButton, type ActionButtonProps } from '@masknet/theme'
 import { memo } from 'react'
 import { useMaskSharedTrans } from '../../../../../../utils/index.js'
 
-export interface MoreBarProps extends ActionButtonProps {
+interface MoreBarProps extends ActionButtonProps {
     isExpand: boolean
 }
 

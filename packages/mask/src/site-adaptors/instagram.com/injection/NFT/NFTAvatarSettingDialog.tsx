@@ -14,7 +14,7 @@ import { InjectedDialog, SelectProviderModal } from '@masknet/shared'
 import { Button, DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Instagram } from '@masknet/web3-providers'
-import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 
 import { MaskMessages, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -35,7 +35,6 @@ export function NFTAvatarSettingDialog() {
     const { classes } = useStyles()
     const { account } = useChainContext()
     const identity = useCurrentVisitingIdentity()
-    const { pluginID } = useNetworkContext()
     const saveNFTAvatar = useSaveStringStorage(NetworkPluginID.PLUGIN_EVM)
 
     const onChange = useCallback(

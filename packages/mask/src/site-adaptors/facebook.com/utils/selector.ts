@@ -24,9 +24,6 @@ export const searchNickNameSelector: () => LiveSelector<HTMLHeadingElement, true
 
 export const searchNickNameSelectorOnMobile: () => LiveSelector<E, true> = () => querySelector<E>('#cover-name-root h3')
 
-export const bioDescriptionSelector = () =>
-    querySelector('span[dir="auto"] div h1').closest(7).querySelector<HTMLSpanElement>('span[dir="auto"] > span')
-
 export const bioDescriptionSelectorOnMobile: () => LiveSelector<HTMLDivElement, true> = () => querySelector('#bio div')
 
 export const searchUserIdSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
@@ -60,11 +57,6 @@ export const searchFacebookAvatarOpenFilesSelector = () => querySelector('[role=
 
 export const searchFacebookAvatarOpenFilesOnMobileSelector = () =>
     querySelector<HTMLInputElement>('#nuxChoosePhotoButton ~ input')
-
-export const searchFacebookSaveAvatarButtonOnMobileSelector = () => querySelector('#nuxUploadPhotoButton')
-
-export const searchFacebookAvatarContainerSelector = () =>
-    querySelector('div[data-pagelet="ProfileActions"] > div > div')
 
 export const searchFacebookProfileSettingButtonSelector = () =>
     querySelector('[role="main"] > div > div > div > div > div input[accept*="image"] + div[role="button"]').closest<E>(

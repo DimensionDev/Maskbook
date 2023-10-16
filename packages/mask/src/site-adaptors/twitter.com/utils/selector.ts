@@ -43,12 +43,10 @@ export const searchNewTweetButtonSelector: () => LiveSelector<E, true> = () => {
     return querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
 }
 
-export const searchNickNameSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] [data-testid="UserName"] div[dir="auto"] > span > span')
+querySelector<E>('[data-testid="primaryColumn"] [data-testid="UserName"] div[dir="auto"] > span > span')
 export const searchAvatarSelector = () =>
     querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/photo"] img[src*="profile_images"]')
-export const searchNFTAvatarSelector = () =>
-    querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/nft"] img[src*="profile_images"]')
+querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/nft"] img[src*="profile_images"]')
 export const searchAvatarMetaSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('head meta[property="og:image"]')
 
@@ -116,10 +114,6 @@ export const searchResultHeadingSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="main"] [data-testid="primaryColumn"] > div > :nth-child(2)')
 
 export const newPostButtonSelector = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
-
-export const profileBioSelector = () => querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
-
-export const personalHomepageSelector = () => querySelector<HTMLDivElement>('[data-testid="UserUrl"]')
 
 export const bioPageUserNickNameSelector = () =>
     querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
@@ -246,9 +240,6 @@ export const searchProfileAvatarSelector = () => {
 
 export const searchProfileSaveSelector = () => querySelector<E>('[data-testid="Profile_Save_Button"]')
 
-export const searchProfessionalButtonSelector = () => querySelector<E>('[data-testid*="ProfessionalButton"]')
-// #endregion
-
 // #region avatar selector
 export const searchTwitterAvatarLinkSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="UserProfileHeader_Items"]').closest<E>(2).querySelector('div  a')
@@ -257,9 +248,6 @@ export const searchTwitterAvatarSelector = () =>
     querySelector<E>('a[href$="/photo"]').querySelector('img').closest<E>(1)
 
 export const searchTwitterAvatarNormalSelector = () => querySelector<E>('a[href$="/photo"]')
-
-export const searchTwitterCircleAvatarSelector = () =>
-    querySelector<E>('a[href$="/nft"]').querySelector('img').closest<E>(1)
 
 // #endregion
 

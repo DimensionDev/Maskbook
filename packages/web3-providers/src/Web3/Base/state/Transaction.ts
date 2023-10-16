@@ -13,7 +13,7 @@ import {
     type TransactionState as Web3TransactionState,
 } from '@masknet/web3-shared-base'
 
-export type TransactionStorage<ChainId extends PropertyKey, Transaction> = Record<
+type TransactionStorage<ChainId extends PropertyKey, Transaction> = Record<
     ChainId,
     | Record<
           // address

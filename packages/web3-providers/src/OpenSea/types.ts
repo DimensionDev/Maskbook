@@ -8,7 +8,7 @@ export enum EventType {
     Approve = 'approve',
 }
 
-export interface OpenSeaFees {
+interface OpenSeaFees {
     /**
      * @deprecated
      * use fee instead
@@ -19,7 +19,7 @@ export interface OpenSeaFees {
     dev_buyer_fee_basis_points: number
 }
 
-export interface Asset {
+interface Asset {
     token_id: string
     token_address: string
     schema_name?: string
@@ -28,36 +28,7 @@ export interface Asset {
     decimals?: number
 }
 
-export interface AssetToken {
-    image_url?: string
-    eth_price?: string
-    usd_price?: string
-    name: string
-    symbol: string
-    decimals: number
-    address: string
-}
-
-export interface AssetOrder {
-    created_time?: string
-    current_price?: string
-    current_bounty?: string
-    maker_account?: OrderAccount
-    taker_account?: OrderAccount
-    payment_token?: string
-    payment_token_contract?: AssetToken
-    fee_recipient_account?: AssetToken
-    cancelled_or_finalized?: boolean
-    marked_invalid?: boolean
-    approved_on_chain: boolean
-    listing_time: number
-    side: number
-    quantity: string
-    expiration_time: number
-    order_hash: string
-}
-
-export interface AssetEvent {
+interface AssetEvent {
     event_type: string
     event_timestamp: number
     auction_type: string
@@ -237,71 +208,6 @@ export interface OpenSeaAssetEvent {
         id: string
     }
     created_date: string
-}
-
-export interface OrderAccount {
-    user: number
-    address: string
-    profile_img_url?: string
-    config: string
-}
-
-export interface OrderFee {
-    account: OrderAccount
-    basis_points: string
-}
-
-export interface OrderConsideration {
-    itemType: number
-    token: string
-    identifierOrCriteria: string
-    startAmount: string
-    endAmount: string
-    recipient: string
-}
-
-export interface OrderProtocol {
-    parameters: {
-        offerer: string
-        offer: OrderConsideration[]
-        consideration: OrderConsideration[]
-        startTime: string
-        endTime: string
-        orderType: number
-        zone: string
-        zoneHash: string
-        salt: string
-        conduitKey: string
-        totalOriginalConsiderationItems: number
-        counter: number
-    }
-}
-
-export interface OrderAssetBundle {}
-
-export interface OpenSeaAssetOrder {
-    created_date?: string
-    closing_data?: string
-    listing_time?: number
-    expiration_time?: number
-    order_hash: string
-    protocol_data: OrderProtocol
-    protocol_address: string
-    maker?: OrderAccount
-    maker_asset_bundle?: OrderAssetBundle
-    taker?: OrderAccount
-    taker_asset_bundle?: OrderAssetBundle
-    current_price?: string
-    maker_fees: OrderFee[]
-    taker_fees: OrderFee[]
-    side: 'bid' | 'sell'
-    order_type: 'criteria'
-    cancelled?: boolean
-    finalized?: boolean
-    marked_invalid?: boolean
-    client_signature: string
-    relay_id: string
-    criteria_proof?: string
 }
 
 export interface OpenSeaCollectionStats {

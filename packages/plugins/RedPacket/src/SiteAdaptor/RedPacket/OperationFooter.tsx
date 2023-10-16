@@ -8,7 +8,7 @@ import { Icons } from '@masknet/icons'
 import { ChainBoundary, WalletConnectedBoundary, SelectProviderModal } from '@masknet/shared'
 import { useRedPacketTrans } from '../../locales/index.js'
 
-export const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles()((theme) => {
     return {
         footer: {
             width: '100%',

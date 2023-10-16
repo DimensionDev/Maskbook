@@ -198,11 +198,6 @@ export async function consistentPersonaDBWriteAccess(
     }
 }
 
-/** @internal */
-export async function createReadonlyPersonaTransaction() {
-    return createTransaction(await db(), 'readonly')
-}
-
 // #region Plain methods
 /** @internal */
 export async function createPersonaDB(record: PersonaRecord, t: PersonasTransaction<'readwrite'>): Promise<void> {
@@ -438,8 +433,7 @@ export async function queryProfilesDB(
     return result
 }
 
-/** @internal */
-export async function updateProfileDB(
+async function updateProfileDB(
     updating: Partial<ProfileRecord> & Pick<ProfileRecord, 'identifier'>,
     t: FullPersonaDBTransaction<'readwrite'>,
 ): Promise<void> {

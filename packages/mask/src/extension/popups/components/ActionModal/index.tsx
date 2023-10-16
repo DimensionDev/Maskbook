@@ -54,7 +54,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ActionModalBaseProps extends Omit<DrawerProps, 'onClose'> {}
-export interface ActionModalProps extends ActionModalBaseProps {
+interface ActionModalProps extends ActionModalBaseProps {
     header: string
     action?: ReactNode
     onClose?(): void

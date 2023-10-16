@@ -16,8 +16,6 @@ import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, i18NextInstance, queryRemoteI18NBundle } from '@masknet/shared-base'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 
-import '../utils/kv-storage.js'
-
 import { Pages } from '../pages/routes.js'
 import { UserContext, useAppearance } from '../../shared-ui/index.js'
 import Services from '#services'

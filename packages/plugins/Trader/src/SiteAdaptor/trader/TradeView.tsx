@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface TradeViewProps extends withClasses<'root'> {
+interface TradeViewProps extends withClasses<'root'> {
     TraderProps: TraderProps
 }
 

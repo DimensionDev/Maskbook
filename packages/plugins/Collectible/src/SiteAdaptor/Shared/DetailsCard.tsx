@@ -63,7 +63,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface DetailsCardProps {
+interface DetailsCardProps {
     asset: Web3Helper.NonFungibleAssetAll
     sourceType?: SourceType
 }

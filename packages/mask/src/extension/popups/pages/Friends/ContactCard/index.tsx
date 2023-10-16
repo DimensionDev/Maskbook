@@ -56,7 +56,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ContactCardProps {
+interface ContactCardProps {
     avatar?: string
     proofProfiles?: Profile[]
     nextId?: string

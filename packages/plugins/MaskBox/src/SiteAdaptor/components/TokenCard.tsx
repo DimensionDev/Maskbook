@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface TokenCardProps {
+interface TokenCardProps {
     tokenId: string
     contractDetailed: NonFungibleTokenContract<ChainId, SchemaType>
 }

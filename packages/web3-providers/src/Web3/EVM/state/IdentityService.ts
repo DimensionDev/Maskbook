@@ -50,7 +50,7 @@ function getARBIDNames(userId: string, nickname: string, bio: string) {
     return [userId.match(ARBID_RE), nickname.match(ARBID_RE), bio.match(ARBID_RE)].flatMap((result) => result ?? [])
 }
 
-export function getSIDNames(userId: string, nickname: string, bio: string) {
+function getSIDNames(userId: string, nickname: string, bio: string) {
     return [userId.match(SID_RE), nickname.match(SID_RE), bio.match(SID_RE)]
         .flatMap((result) => result || [])
         .map((x) => x.toLowerCase())

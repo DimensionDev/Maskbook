@@ -4,7 +4,7 @@ import type { TypedMessageAnchor } from '@masknet/typed-message'
 import { parseLink } from '@masknet/typed-message/internal'
 
 /** @internal */
-export interface RenderTextProps {
+interface RenderTextProps {
     text: string
     style?: React.CSSProperties
 }

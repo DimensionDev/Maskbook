@@ -183,7 +183,7 @@ const TransactionIcon = memo(function TransactionIcon({ cateType }: TransactionI
     return <div className={classes.txIcon}>{IconMap[mapType] || IconMap.default}</div>
 })
 
-export interface ActivityItemProps extends ListItemProps {
+interface ActivityItemProps extends ListItemProps {
     transaction: Transaction<ChainId, SchemaType>
     onView: (tx: Transaction<ChainId, SchemaType>) => void
 }

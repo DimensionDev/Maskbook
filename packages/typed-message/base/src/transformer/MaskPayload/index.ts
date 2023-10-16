@@ -10,7 +10,7 @@ import { isTypedMessageAnchor, isTypedMessageMaskPayload } from '../../extension
 import { visitEachTypedMessageChild } from '../../visitor/index.js'
 import type { TransformationContext } from '../context.js'
 
-export interface MaskPayloadTransformOptions {
+interface MaskPayloadTransformOptions {
     /**
      * Text that always before the Mask Payload. This transform will remove them.
      *

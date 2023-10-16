@@ -11,7 +11,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface SectionProps {
+interface SectionProps {
     title: string
     additions?: React.ReactNode
     children: React.ReactNode

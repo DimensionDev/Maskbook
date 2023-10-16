@@ -16,11 +16,8 @@ export interface SelectNonFungibleContractModalOpenProps<T extends NetworkPlugin
     ): void
 }
 
-export interface SelectNonFungibleContractModalProps {}
-
 export const SelectNonFungibleContractModal = forwardRef<
-    SingletonModalRefCreator<SelectNonFungibleContractModalOpenProps>,
-    SelectNonFungibleContractModalProps
+    SingletonModalRefCreator<SelectNonFungibleContractModalOpenProps>
 >((props, ref) => {
     const [pluginID, setPluginID] = useState(NetworkPluginID.PLUGIN_EVM)
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()

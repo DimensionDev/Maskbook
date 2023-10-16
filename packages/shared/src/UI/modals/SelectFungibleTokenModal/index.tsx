@@ -21,11 +21,8 @@ export interface SelectFungibleTokenModalOpenProps {
 
 export type SelectFungibleTokenModalCloseProps = Web3Helper.FungibleTokenAll | null
 
-export interface SelectFungibleTokenModalProps {}
-
 export const SelectFungibleTokenModal = forwardRef<
-    SingletonModalRefCreator<SelectFungibleTokenModalOpenProps, SelectFungibleTokenModalCloseProps>,
-    SelectFungibleTokenModalProps
+    SingletonModalRefCreator<SelectFungibleTokenModalOpenProps, SelectFungibleTokenModalCloseProps>
 >((props, ref) => {
     const [enableManage, setEnableManage] = useState<boolean>()
     const [pluginID, setPluginID] = useState<NetworkPluginID>()

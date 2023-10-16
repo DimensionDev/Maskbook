@@ -37,7 +37,7 @@ interface AssetsContextOptions {
     isEmpty: boolean
 }
 
-export const AssetsContext = createContext<AssetsContextOptions>({
+const AssetsContext = createContext<AssetsContextOptions>({
     assetsMapRef: { current: {} },
     getAssets: () => ({ loading: false, finished: false, assets: [] }),
     getBLockedTokenIds: () => EMPTY_LIST,

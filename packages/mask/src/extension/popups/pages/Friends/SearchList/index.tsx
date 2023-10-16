@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface SearchListProps {
+interface SearchListProps {
     searchResult: NextIDPersonaBindingsWithIdentifier[]
     fetchNextPage: () => void
     refetch: () => void

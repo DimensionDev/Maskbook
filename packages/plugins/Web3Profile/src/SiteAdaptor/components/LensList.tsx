@@ -78,7 +78,6 @@ interface Props extends ListProps {
 
 export const LensList = memo(({ className, accounts, ...rest }: Props) => {
     const { classes, cx } = useStyles()
-    const t = useWeb3ProfileTrans()
     return (
         <List className={cx(classes.list, className)} {...rest}>
             {accounts.map((account, key) => {

@@ -71,7 +71,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface SpaceMenuProps {
+interface SpaceMenuProps {
     options: Array<DAOResult<ChainId.Mainnet>>
     currentOption?: DAOResult<ChainId.Mainnet>
     onSelect(index: number): void

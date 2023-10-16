@@ -18,12 +18,12 @@ const parseNameArea = (nameArea: HTMLAnchorElement) => {
     }
 }
 
-export const postIdParser = (node: HTMLElement) => {
+const postIdParser = (node: HTMLElement) => {
     const idNode = node.querySelector<HTMLAnchorElement>('m-activity__permalink .m-activityPermalink__wrapper--link')
     return idNode ? idNode.getAttribute('href')?.split('/')[2] ?? undefined : undefined
 }
 
-export const postNameParser = (node: HTMLElement) => {
+const postNameParser = (node: HTMLElement) => {
     return parseNameArea(
         assertNonNull(
             node.querySelector<HTMLAnchorElement>(
@@ -36,7 +36,7 @@ export const postNameParser = (node: HTMLElement) => {
     )
 }
 
-export const postAvatarParser = (node: HTMLElement) => {
+const postAvatarParser = (node: HTMLElement) => {
     const avatarElement = node.querySelector<HTMLImageElement>('m-hovercard img')
     return avatarElement ? avatarElement.src : undefined
 }
@@ -47,7 +47,7 @@ function resolveType(content: string) {
     if (content.startsWith('$')) return 'cash'
     return 'normal'
 }
-export const postContentMessageParser = (node: HTMLElement) => {
+const postContentMessageParser = (node: HTMLElement) => {
     function make(node: Node): TypedMessage | TypedMessage[] {
         if (node.nodeType === Node.TEXT_NODE) {
             if (!node.nodeValue) return makeTypedMessageEmpty()

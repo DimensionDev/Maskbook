@@ -10,11 +10,7 @@ import { createPersonaByJsonWebKey } from '../../../database/persona/helper.js'
 import { decode, encode } from '@msgpack/msgpack'
 import { omit } from 'lodash-es'
 import { queryPersonasDB } from '../../../database/persona/db.js'
-import {
-    deriveLocalKeyFromECDHKey,
-    generate_ECDH_256k1_KeyPair_ByMnemonicWord,
-    recover_ECDH_256k1_KeyPair_ByMnemonicWord,
-} from './utils.js'
+import { deriveLocalKeyFromECDHKey, recover_ECDH_256k1_KeyPair_ByMnemonicWord } from './utils.js'
 
 export async function createPersonaByPrivateKey(
     privateKeyString: string,
@@ -24,23 +20,6 @@ export async function createPersonaByPrivateKey(
     if (!isEC_Private_JsonWebKey(privateKey)) throw new TypeError('Invalid private key')
 
     return createPersonaByJsonWebKey({ privateKey, publicKey: omit(privateKey, 'd') as EC_Public_JsonWebKey, nickname })
-}
-
-export async function createPersonaByMnemonic(
-    nickname: string | undefined,
-    password: string,
-): Promise<PersonaIdentifier> {
-    const { key, mnemonicRecord: mnemonic } = await generate_ECDH_256k1_KeyPair_ByMnemonicWord(password)
-    const { privateKey, publicKey } = key
-    const localKey = await deriveLocalKeyFromECDHKey(publicKey, mnemonic.words)
-    return createPersonaByJsonWebKey({
-        privateKey,
-        publicKey,
-        localKey,
-        mnemonic,
-        nickname,
-        uninitialized: false,
-    })
 }
 
 export async function createPersonaByMnemonicV2(

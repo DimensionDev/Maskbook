@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 
-export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
+const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
     (theme, props) => ({
         approvalEmptyOrLoadingWrapper: {
             flexGrow: 1,

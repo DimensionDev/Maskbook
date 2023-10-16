@@ -6,7 +6,7 @@ import { PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginClaimMessage } from '../../../message.js'
 
-export interface ClaimEntryProps {
+interface ClaimEntryProps {
     disabled: boolean
     tooltipHint?: string
     onClick?: (walletConnectedCallback?: () => void) => void

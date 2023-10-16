@@ -1,7 +1,7 @@
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { buttonClasses, type ButtonProps } from '@mui/material/Button'
 
-export interface ActionButtonProps extends ButtonProps {
+interface ActionButtonProps extends ButtonProps {
     width?: number | string
     loading?: boolean
 }

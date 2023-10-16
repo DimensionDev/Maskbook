@@ -3,7 +3,7 @@ import { type MaskTextFieldProps } from '@masknet/theme'
 import { IconButton, InputAdornment, TextField } from '@mui/material'
 import { Icons } from '@masknet/icons'
 
-export type PasswordFieldProps = Exclude<MaskTextFieldProps, 'type'> & { show?: boolean }
+type PasswordFieldProps = Exclude<MaskTextFieldProps, 'type'> & { show?: boolean }
 
 const PasswordField = forwardRef(({ show = true, ...props }: PasswordFieldProps, ref: ForwardedRef<any>) => {
     const [showPassword, setShowPassword] = useState(false)

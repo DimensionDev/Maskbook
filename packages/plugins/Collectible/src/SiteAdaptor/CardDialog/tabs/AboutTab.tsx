@@ -34,7 +34,7 @@ const resolveTopListing = (orders?: Array<NonFungibleTokenOrder<Web3Helper.Chain
     )
 }
 
-export interface AboutTabProps {
+interface AboutTabProps {
     asset: Web3Helper.NonFungibleAssetScope
     orders?: Array<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
 }

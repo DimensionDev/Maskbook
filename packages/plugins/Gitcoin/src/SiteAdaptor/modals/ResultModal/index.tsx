@@ -13,27 +13,23 @@ export interface ResultModalOpenProps extends Omit<PropsWithChildren<InjectedDia
     onShare?(): void
 }
 
-export interface ResultModalProps {}
+export const ResultModal = forwardRef<SingletonModalRefCreator<ResultModalOpenProps>>((props, ref) => {
+    const [props_, setProps_] = useState<ResultModalOpenProps>()
 
-export const ResultModal = forwardRef<SingletonModalRefCreator<ResultModalOpenProps>, ResultModalProps>(
-    (props, ref) => {
-        const [props_, setProps_] = useState<ResultModalOpenProps>()
+    const [open, dispatch] = useSingletonModal(ref, {
+        onOpen(props) {
+            setProps_(props)
+        },
+    })
 
-        const [open, dispatch] = useSingletonModal(ref, {
-            onOpen(props) {
-                setProps_(props)
-            },
-        })
-
-        if (!open) return null
-        return (
-            <ResultDialog
-                open
-                onClose={() => dispatch?.close()}
-                {...props_}
-                token={props_?.token}
-                uiAmount={props_?.uiAmount || ''}
-            />
-        )
-    },
-)
+    if (!open) return null
+    return (
+        <ResultDialog
+            open
+            onClose={() => dispatch?.close()}
+            {...props_}
+            token={props_?.token}
+            uiAmount={props_?.uiAmount || ''}
+        />
+    )
+})

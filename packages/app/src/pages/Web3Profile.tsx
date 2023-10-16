@@ -3,9 +3,7 @@ import { ProfileTabContent, ProfileTabContext } from '@masknet/shared'
 import { currentSocialIdentity, currentVisitingSocialIdentity, socialAccounts } from '../mock.js'
 import { PageContainer } from '../components/PageContainer.js'
 
-export interface Web3ProfilePageProps {}
-
-export default function Web3ProfilePage(props: Web3ProfilePageProps) {
+export default function Web3ProfilePage() {
     return (
         <PageContainer title="Web3 Profile">
             <DefaultWeb3ContextProvider>

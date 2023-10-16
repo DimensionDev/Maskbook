@@ -11,7 +11,7 @@ import {
     __workaround__replaceImplementationOfMaskMessage__,
     serializer,
 } from '@masknet/shared-base'
-export type MessageHandler = (message: any) => void
+type MessageHandler = (message: any) => void
 export let postMessage: (type: string, data: unknown) => void
 const messageHandlers = new Map<string, Set<MessageHandler>>()
 

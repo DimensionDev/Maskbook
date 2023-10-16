@@ -19,7 +19,7 @@ export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog(signal)
 }
 
-export function injectOpenNFTAvatarEditProfileButtonAtProfilePage(signal: AbortSignal) {
+function injectOpenNFTAvatarEditProfileButtonAtProfilePage(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchEditProfileSelector())
     startWatch(watcher, signal)
     attachReactTreeWithContainer(watcher.firstDOMProxy.beforeShadow, { untilVisible: true, signal }).render(

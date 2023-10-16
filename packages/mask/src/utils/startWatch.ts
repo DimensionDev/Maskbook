@@ -48,10 +48,10 @@ export function startWatch<T extends MutationObserverWatcher<any, any, any, any>
 /**
  * string will be startsWith match, RegExp will be partial match
  */
-export type MissingReportRuleBasic = string | RegExp
-export type MissingReportRule = MissingReportRuleBasic | MissingReportRuleBasic[] | (() => boolean | Promise<boolean>)
+type MissingReportRuleBasic = string | RegExp
+type MissingReportRule = MissingReportRuleBasic | MissingReportRuleBasic[] | (() => boolean | Promise<boolean>)
 
-export interface MissingReportRuleOptions {
+interface MissingReportRuleOptions {
     name: string
     rule: MissingReportRule
 }

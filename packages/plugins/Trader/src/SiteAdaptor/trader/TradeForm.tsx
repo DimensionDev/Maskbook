@@ -172,7 +172,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface AllTradeFormProps extends withClasses<'root'> {
+interface AllTradeFormProps extends withClasses<'root'> {
     inputAmount: string
     inputToken?: Web3Helper.FungibleTokenAll
     outputToken?: Web3Helper.FungibleTokenAll

@@ -99,7 +99,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface UnlockERC20TokenProps {
+interface UnlockERC20TokenProps {
     transaction: TransactionDetail
     handleChange: (amount: string) => void
     paymentToken?: string
@@ -214,7 +214,6 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                                 variant="text"
                                 className={classes.max}
                                 onClick={() => {
-                                    const result = leftShift(balance, token?.decimals).toString()
                                     setValue(leftShift(balance, token?.decimals).toString())
                                     handleChange(balance)
                                 }}>

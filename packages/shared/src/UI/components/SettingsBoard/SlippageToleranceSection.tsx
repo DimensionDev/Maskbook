@@ -16,9 +16,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface SlippageToleranceSectionProps {}
-
-export function SlippageToleranceSection(props: SlippageToleranceSectionProps) {
+export function SlippageToleranceSection() {
     const t = useSharedTrans()
     const { classes } = useStyles()
     const { DEFAULT_SLIPPAGE_TOLERANCES, slippageTolerance, setSlippageTolerance } = SettingsContext.useContainer()

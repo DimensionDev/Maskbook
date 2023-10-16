@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface SnapshotTabProps {
+interface SnapshotTabProps {
     children: React.ReactNode
 }
 

@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface GasSectionProps {
+interface GasSectionProps {
     activeTab: GasSettingsType
     setActiveTab: (type: GasSettingsType) => void
     disableGasLimit?: boolean

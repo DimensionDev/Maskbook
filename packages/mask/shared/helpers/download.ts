@@ -4,7 +4,7 @@ import type { MimeType } from '@masknet/shared-base'
 export async function saveFileFromUrl(url: string, fileName: string) {
     await browser.downloads.download({ url, filename: fileName, saveAs: true })
 }
-export interface SaveFileOptions {
+interface SaveFileOptions {
     fileContent: BufferSource
     fileName: string
     mimeType: string | MimeType

@@ -5,7 +5,7 @@ import { LoadingFailCard } from './LoadingFailCard.js'
 // @ts-expect-error undocumented api
 import { unstable_Cache as Cache, unstable_useCacheRefresh } from 'react'
 
-export interface PostInspectorProps {
+interface PostInspectorProps {
     url: string
 }
 

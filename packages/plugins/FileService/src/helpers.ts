@@ -41,7 +41,7 @@ export async function makeFileKeySigned(fileKey: string | undefined | null) {
     return [signed, exportedKey].map(encodeArrayBuffer)
 }
 
-export const resolveGatewayAPI = createLookupTableResolver<Provider, string>(
+const resolveGatewayAPI = createLookupTableResolver<Provider, string>(
     {
         [Provider.Arweave]: 'https://arweave.net',
         [Provider.IPFS]: 'https://mask.infura-ipfs.io/ipfs',

@@ -42,9 +42,6 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
     updateWallet(address: string, wallet: Wallet): Promise<void> {
         throw new Error('Method not implemented.')
     }
-    updateOrAddWallet(wallet: Wallet): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
     renameWallet(address: string, name: string): Promise<void> {
         throw new Error('Method not implemented.')
     }

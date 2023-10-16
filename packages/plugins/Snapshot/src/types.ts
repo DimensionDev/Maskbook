@@ -10,7 +10,7 @@ export interface ProposalIdentifier {
     /** the identifier of proposal */
     id: string
 }
-export interface RawVote {
+interface RawVote {
     /**
      * There're two sorts of vote,
      * for multiple choice vote, each choice can be assigned to a different weight.
@@ -77,28 +77,6 @@ export interface Strategy {
     __typename: string
 }
 
-export interface ProposalPayload {
-    body: string
-    choices: string[]
-    start: number
-    end: number
-    snapshot: string
-    name: string
-    metadata: {
-        strategies: Strategy[]
-        network: string
-    }
-}
-
-export interface ProposalMessage {
-    payload: ProposalPayload
-    timestamp: string
-    token: string
-    type: 'proposal'
-    version: string
-    space: string
-}
-
 /**
  * Payload of a vote
  */
@@ -122,10 +100,6 @@ export interface VoteItem {
     choiceIndex: number | undefined
     choiceIndexes: number[] | undefined
     timestamp: number
-}
-
-export type VoteItemList = {
-    [key in string]: VoteItem
 }
 
 export interface ProposalResult {

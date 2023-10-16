@@ -6,7 +6,7 @@ import { RedPacketNft } from './RedPacketNft.js'
 import { ThemeProvider } from '@mui/material'
 import { MaskLightTheme } from '@masknet/theme'
 
-export interface RedPacketNftInPostProps {
+interface RedPacketNftInPostProps {
     payload: RedPacketNftJSONPayload
 }
 

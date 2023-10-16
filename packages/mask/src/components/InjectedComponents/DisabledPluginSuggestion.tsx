@@ -154,11 +154,11 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-export interface FallbackContentProps extends BoxProps {
+interface FallbackContentProps extends BoxProps {
     disabled?: boolean
 }
 
-export function FallbackContent({ disabled, ...rest }: FallbackContentProps) {
+function FallbackContent({ disabled, ...rest }: FallbackContentProps) {
     const { t } = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     if (disabled)

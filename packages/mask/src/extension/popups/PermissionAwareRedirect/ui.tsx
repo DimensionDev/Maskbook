@@ -32,7 +32,7 @@ export function PermissionAwareRedirectUI(props: PermissionAwareRedirectProps) {
         </Card>
     )
 }
-export interface PermissionAwareRedirectProps {
+interface PermissionAwareRedirectProps {
     url: string
     onRequest(): void
     onCancel(): void

@@ -26,7 +26,7 @@ export const createWalletDBAccess = createDBAccess(() => {
     })
 })
 
-export interface WalletDB extends DBSchema {
+interface WalletDB extends DBSchema {
     Wallet: {
         value: LegacyWalletRecordInDatabase
         key: string

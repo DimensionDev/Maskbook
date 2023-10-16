@@ -6,7 +6,7 @@ import type { SiteAdaptorUI } from '@masknet/types'
 import { creator } from '../../../site-adaptor-infra/utils.js'
 import { formatWriter, getMirrorUserId } from './utils.js'
 
-export const getCurrentUserInfo = async () => {
+const getCurrentUserInfo = async () => {
     if (location.host !== EnhanceableSite.Mirror) return
     const userAddress = localStorage.getItem('mirror.userAddress')
 

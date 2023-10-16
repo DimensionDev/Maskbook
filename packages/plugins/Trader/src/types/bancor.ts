@@ -35,10 +35,6 @@ export type ExpectedTargetAmountResponse = {
     amount: string
 }
 
-export type ExpectedSourceAmountResponse = {
-    amount: string
-}
-
 export type BancorApiErrorResponse = {
     error: {
         status: number

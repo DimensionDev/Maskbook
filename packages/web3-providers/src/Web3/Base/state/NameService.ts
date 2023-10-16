@@ -1,4 +1,3 @@
-import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@masknet/kit'
 import { type StorageItem, NameServiceID, InMemoryStorages, type NetworkPluginID } from '@masknet/shared-base'
 import { attemptUntil, type NameServiceState as Web3NameServiceState } from '@masknet/web3-shared-base'
@@ -10,7 +9,6 @@ export class NameServiceState<
 > implements Web3NameServiceState
 {
     public storage: StorageItem<DomainBooks> = null!
-    public domainBook?: Subscription<DomainBook>
 
     constructor(
         protected context: WalletAPI.IOContext,

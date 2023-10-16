@@ -12,7 +12,6 @@ import {
     type ZerionCoinResponseBody,
     type ZerionTransactionResponseBody,
     type ZerionNonFungibleTokenResponseBody,
-    type ZerionNonFungibleCollectionBody,
     type ZerionNonFungibleTokenInfoBody,
     type ZerionGasResponseBody,
 } from './types.js'
@@ -173,21 +172,6 @@ export async function getNonFungibleAssets(address: string, page?: number, size 
         ) as Promise<ZerionNonFungibleTokenResponseBody>,
         delay(5_000),
     ])
-}
-
-export async function getNonFungibleCollection(slug: string) {
-    return (await subscribeFromZerion(
-        {
-            namespace: SocketRequestNameSpace.Assets,
-            socket: createSocket(SocketRequestNameSpace.Assets),
-        },
-        {
-            scope: ['nft-collection-info'],
-            payload: {
-                collection_slug: slug,
-            },
-        },
-    )) as ZerionNonFungibleCollectionBody
 }
 
 export async function getNonFungibleInfo(address: string, tokenId: string) {

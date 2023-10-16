@@ -11,19 +11,11 @@ export interface SwapOORequest {
     chainId: number
 }
 
-export type SwapOOResponse = SwapOOSuccessResponse | SwapOOErrorResponse
-
 export interface SwapOOSuccessResponse {
     code: number
     status: 200
     data: SwapOOData
     value: string
-}
-
-export interface SwapOOErrorResponse {
-    code: number
-    status: number
-    data: string | undefined
 }
 
 export interface SwapOOData {

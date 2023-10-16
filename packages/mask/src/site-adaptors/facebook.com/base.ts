@@ -12,10 +12,3 @@ export const facebookBase: SiteAdaptor.Base = {
         return location.hostname.endsWith('facebook.com')
     },
 }
-
-/**
- * @deprecated Use `Sniffings.is_facebook_page` instead
- */
-export function isFacebook(ui: SiteAdaptor.Base) {
-    return ui.networkIdentifier === EnhanceableSite.Facebook
-}

@@ -110,7 +110,7 @@ const Logout = memo(() => {
     )
 })
 
-export interface LogoutUIProps {
+interface LogoutUIProps {
     chainId?: ChainId
     manageWallets: Wallet[]
     currentPersona?: PersonaInformation
@@ -122,7 +122,7 @@ export interface LogoutUIProps {
     onLogout: () => void
 }
 
-export const LogoutUI = memo<LogoutUIProps>(
+const LogoutUI = memo<LogoutUIProps>(
     ({
         backupPassword,
         loading,

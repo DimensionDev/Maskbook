@@ -27,7 +27,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export const DEFAULT_RANGE_OPTIONS = [Days.ONE_DAY, Days.ONE_WEEK, Days.ONE_MONTH, Days.ONE_YEAR, Days.MAX]
 
-export interface PriceChartDaysControlProps {
+interface PriceChartDaysControlProps {
     days: number
     rangeOptions?: Days[]
     onDaysChange?: (days: number) => void

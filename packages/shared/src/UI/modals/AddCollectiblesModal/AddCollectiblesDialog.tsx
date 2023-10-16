@@ -17,7 +17,7 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-export interface AddCollectiblesDialogProps<T extends NetworkPluginID = NetworkPluginID> {
+interface AddCollectiblesDialogProps<T extends NetworkPluginID = NetworkPluginID> {
     open: boolean
     pluginID?: T
     chainId?: Web3Helper.Definition[T]['ChainId']

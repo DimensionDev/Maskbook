@@ -59,7 +59,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface GasFormProps {
+interface GasFormProps {
     defaultGasLimit: string
     chainId: ChainId
     transaction: Transaction

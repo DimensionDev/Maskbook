@@ -23,26 +23,13 @@ export const searchProfileActiveTabSelector = () =>
 
 export const bioDescriptionSelector = () => querySelector<E>('section main header section > div:last-child h1')
 
-export const personalHomepageSelector = () => querySelector<E>(' section main header section > div:last-child  a')
-
 export const searchNickNameSelector = () =>
     querySelector<E>('section main header section > div:last-child > div > span')
 
-export const searchUserIdSelector = () => querySelector<HTMLHeadingElement>('section main header section h2')
-
-export const searchUserIdInEditPageSelector = () =>
-    querySelector('#react-root').querySelector('button > img').closest(4).querySelector('h1')
-
 export const searchProfileTabArticlePageSelector = () => querySelector<E>('section main div[role="tablist"]')
-
-export const searchProfileTabOtherArticlePageSelector = () =>
-    querySelector<E>('section main > div > div:last-child > div')
 
 export const searchInstagramAvatarListSelector = () =>
     querySelector('[role="dialog"] .piCib > div > form').closest(1).querySelector('button')
-
-export const searchInstagramSaveAvatarButtonSelector = () =>
-    querySelector<HTMLButtonElement>('section > div > header > div > div:last-child > button')
 
 export const searchInstagramAvatarSelector = () => querySelector<E>('header img, img[data-testid="user-avatar"]')
 
@@ -52,9 +39,6 @@ export const searchInstagramProfileAvatarButtonSelector = () =>
 export const searchInstagramAvatarSettingDialog = () => querySelector('#ssrb_root_start').closest<E>(1)
 
 export const searchInstagramAvatarEditPageSettingDialog = () => querySelector('#react-root')
-
-export const searchInstagramProfileSettingButtonSelector = () =>
-    querySelector('header button').closest(4).querySelector('section > div > div')
 
 export const searchInstagramProfileEditButton = () => querySelector('a[href="/accounts/edit/"]')
 

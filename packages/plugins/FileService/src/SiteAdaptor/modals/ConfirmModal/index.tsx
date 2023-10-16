@@ -13,28 +13,25 @@ export interface ConfirmModalOpenProps extends Omit<InjectedDialogProps, 'title'
 
 export type ConfirmModalCloseProps = boolean
 
-export interface ConfirmModalProps {}
+export const ConfirmModal = forwardRef<SingletonModalRefCreator<ConfirmModalOpenProps, ConfirmModalCloseProps>>(
+    (props, ref) => {
+        const [props_, setProps_] = useState<ConfirmModalOpenProps>()
+        const [open, dispatch] = useSingletonModal(ref, {
+            onOpen(props) {
+                setProps_(props)
+            },
+        })
 
-export const ConfirmModal = forwardRef<
-    SingletonModalRefCreator<ConfirmModalOpenProps, ConfirmModalCloseProps>,
-    ConfirmModalProps
->((props, ref) => {
-    const [props_, setProps_] = useState<ConfirmModalOpenProps>()
-    const [open, dispatch] = useSingletonModal(ref, {
-        onOpen(props) {
-            setProps_(props)
-        },
-    })
+        if (!open) return null
 
-    if (!open) return null
-
-    return (
-        <ConfirmDialog
-            open
-            onSubmit={() => dispatch?.close(true)}
-            onClose={() => dispatch?.close(false)}
-            {...props_}
-            message={props_?.message}
-        />
-    )
-})
+        return (
+            <ConfirmDialog
+                open
+                onSubmit={() => dispatch?.close(true)}
+                onClose={() => dispatch?.close(false)}
+                {...props_}
+                message={props_?.message}
+            />
+        )
+    },
+)

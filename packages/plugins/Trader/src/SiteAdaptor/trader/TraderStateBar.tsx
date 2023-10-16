@@ -52,7 +52,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface TradeStateBarProps {
+interface TradeStateBarProps {
     inputAmount: string
     focusedTrade?: AsyncStateRetry<TraderAPI.TradeInfo>
     inputToken?: Web3Helper.FungibleTokenAll

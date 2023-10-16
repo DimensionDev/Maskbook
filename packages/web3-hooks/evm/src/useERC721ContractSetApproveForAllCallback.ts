@@ -16,7 +16,7 @@ export function useERC721ContractSetApproveForAllCallback(
     callback?: () => void,
     _chainId?: ChainId,
 ) {
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         chainId: _chainId,
     })
 

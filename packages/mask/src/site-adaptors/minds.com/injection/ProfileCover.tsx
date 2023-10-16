@@ -10,6 +10,6 @@ export function injectMindsProfileCover(signal: AbortSignal) {
     attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileCoverAtMinds />)
 }
 
-export function ProfileCoverAtMinds() {
+function ProfileCoverAtMinds() {
     return <ProfileCover />
 }

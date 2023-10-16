@@ -15,15 +15,3 @@ export interface CollectiblePayload {
     address: string
     provider?: SourceType
 }
-
-export enum CollectibleTab {
-    ABOUT = 0,
-    DETAILS = 1,
-    OFFERS = 2,
-    ACTIVITY = 3,
-}
-
-export interface CollectibleGridProps {
-    columns?: number
-    gap?: string | number
-}

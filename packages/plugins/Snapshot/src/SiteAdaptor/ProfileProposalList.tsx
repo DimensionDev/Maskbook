@@ -141,7 +141,7 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
     }
 })
 
-export interface ProfileProposalListProps {
+interface ProfileProposalListProps {
     proposalList: SnapshotBaseAPI.SnapshotProposal[]
 }
 

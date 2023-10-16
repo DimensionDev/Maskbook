@@ -80,14 +80,14 @@ export const PopupSnackbarProvider = memo<SnackbarProviderProps>(function PopupS
     )
 })
 
-export interface PopupSnackbarContentProps {
+interface PopupSnackbarContentProps {
     id: SnackbarKey
     title: SnackbarMessage
     message?: string | React.ReactNode
     variant?: VariantType
 }
 
-export const PopupSnackbarContent = forwardRef<HTMLDivElement, PopupSnackbarContentProps>(
+const PopupSnackbarContent = forwardRef<HTMLDivElement, PopupSnackbarContentProps>(
     ({ id, title, message, variant }, ref) => {
         const { classes, cx } = useStyles()
 

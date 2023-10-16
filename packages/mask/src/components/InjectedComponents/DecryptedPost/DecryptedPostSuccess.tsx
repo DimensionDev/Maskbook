@@ -24,7 +24,7 @@ import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
 import { RecipientsToolTip } from './RecipientsToolTip.js'
 import { Icons } from '@masknet/icons'
 
-export interface DecryptPostSuccessProps {
+interface DecryptPostSuccessProps {
     message: TypedMessage
     /** The author in the payload */
     author: ProfileIdentifier | null

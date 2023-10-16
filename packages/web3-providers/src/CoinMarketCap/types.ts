@@ -7,14 +7,6 @@ export interface Status {
     timestamp: string
 }
 
-export interface Currency {
-    id: number
-    name: string
-    symbol: string
-    token: string
-    space: string
-}
-
 export interface ResultData<T> {
     data: T
     status: Status
@@ -67,7 +59,7 @@ export interface QuotesInfo {
     total_supply: number
 }
 
-export interface PlatformInfo {
+interface PlatformInfo {
     coin: {
         id: string
         name: string
@@ -77,7 +69,7 @@ export interface PlatformInfo {
     name: string
 }
 
-export interface ContractInfo {
+interface ContractInfo {
     contract_address: string
     platform: PlatformInfo
 }

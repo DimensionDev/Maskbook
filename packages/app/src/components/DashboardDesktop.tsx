@@ -3,9 +3,7 @@ import { WalletItem } from './Wallet.js'
 import { Navigation } from './Navigation.js'
 import { InstallExtension } from './Install.js'
 
-export interface SidebarForDesktopProps {}
-
-export function DashboardForDesktop(props: SidebarForDesktopProps) {
+export function DashboardForDesktop() {
     return (
         <div className="hidden xl:fixed xl:inset-y-0 xl:z-50 xl:flex xl:w-72 xl:flex-col bg-[#f5f5f7] dark:bg-[#1d1d21]">
             <div className="flex grow flex-col gap-y-2 overflow-y-auto bg-white/10 dark:bg-[#16161a]/10 px-6 border-r dark:border-neutral-800">

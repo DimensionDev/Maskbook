@@ -47,7 +47,6 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
         amount,
         spender,
         token,
-        fallback,
         infiniteUnlockContent,
         contractName,
         showHelperToken = true,

@@ -1,5 +1,5 @@
 import type { PageIndicator, Pageable } from '@masknet/shared-base'
-import type { FungibleAsset, FungibleTokenStats, FungibleToken } from '@masknet/web3-shared-base'
+import type { FungibleAsset, FungibleToken } from '@masknet/web3-shared-base'
 import type { HubOptions_Base } from '../Web3/Base/apis/HubOptionsAPI.js'
 
 export namespace FungibleTokenAPI {
@@ -23,9 +23,6 @@ export namespace FungibleTokenAPI {
             options?: HubOptions_Base<ChainId, Indicator>,
         ) => Promise<Pageable<FungibleAsset<ChainId, SchemaType>, Indicator>>
         /** Get fungible token stats. */
-        getStats?: (
-            address: string,
-            options?: HubOptions_Base<ChainId, Indicator>,
-        ) => Promise<FungibleTokenStats | undefined>
+        getStats?: (address: string, options?: HubOptions_Base<ChainId, Indicator>) => Promise<{} | undefined>
     }
 }

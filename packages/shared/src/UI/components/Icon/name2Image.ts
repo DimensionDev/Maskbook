@@ -1,4 +1,4 @@
-export const DEFAULT_IMAGES = [
+const DEFAULT_IMAGES = [
     new URL('./Aura1.svg', import.meta.url).toString(),
     new URL('./Aura2.svg', import.meta.url).toString(),
     new URL('./Aura3.svg', import.meta.url).toString(),

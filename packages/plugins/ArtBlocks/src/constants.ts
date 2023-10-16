@@ -2,8 +2,8 @@ import { PluginID } from '@masknet/shared-base'
 
 export const ARTBLOCKS_PLUGIN_ID = PluginID.ArtBlocks
 export const PLUGIN_NAME = 'ArtBlocks'
-export const TESTNET_HOSTNAME = 'artist-staging.artblocks.io'
-export const MAINNET_HOSTNAME = 'www.artblocks.io'
+const TESTNET_HOSTNAME = 'artist-staging.artblocks.io'
+const MAINNET_HOSTNAME = 'www.artblocks.io'
 export const artBlocksHostnames = [TESTNET_HOSTNAME, MAINNET_HOSTNAME]
 export const artBlocksPathnameRegex = /^\/project\/(\d+)|^\/collections\/.*?\/projects\/0x.{40}\/(\d+)/
 export const ArtBlocksLogoUrl = 'https://www.artblocks.io/_next/image?url=%2Fsquig.png&w=48&q=75'
@@ -17,6 +17,3 @@ export const ArtBlocksMainnetUrl = 'https://artblocks.io'
 export const URL_PATTERN = /https:\/\/(www.artblocks.io|artist-staging.artblocks.io)\/project\/(\d+)/
 export const ArtBlocksMainnetHostImageUrl = 'https://artblocks-mainnet.s3.amazonaws.com'
 export const ArtBlocksRopstenHostImageUrl = 'https://artblocks-artists-staging.s3.amazonaws.com'
-
-export const ArtBlocksMainnetLiveUrl = 'https://generator.artblocks.io'
-export const ArtBlocksRopstenLiveUrl = 'https://generator-staging.artblocks.io'

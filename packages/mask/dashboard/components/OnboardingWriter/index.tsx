@@ -1,6 +1,5 @@
 import { isArray, sum } from 'lodash-es'
 import { useState, useMemo, useEffect, cloneElement } from 'react'
-import { useDashboardTrans } from '../../locales/i18n_generated.js'
 import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
@@ -22,7 +21,6 @@ interface OnboardingWriterProps {
 }
 
 export function OnboardingWriter({ words }: OnboardingWriterProps) {
-    const t = useDashboardTrans()
     const { classes, cx } = useStyles()
 
     const [index, setIndex] = useState(0)

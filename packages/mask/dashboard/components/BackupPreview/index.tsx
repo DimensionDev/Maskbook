@@ -253,7 +253,7 @@ export const WalletsBackupPreview = memo<WalletsBackupPreviewProps>(function Wal
         </Card>
     )
 })
-export interface BackupPreviewProps extends BoxProps {
+interface BackupPreviewProps extends BoxProps {
     info: BackupSummary
 }
 

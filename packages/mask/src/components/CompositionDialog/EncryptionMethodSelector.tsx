@@ -21,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface EncryptionMethodSelectorProps extends PropsWithChildren<{}> {
+interface EncryptionMethodSelectorProps extends PropsWithChildren<{}> {
     onChange(v: EncryptionMethodType): void
     method: EncryptionMethodType
     textDisabled: boolean

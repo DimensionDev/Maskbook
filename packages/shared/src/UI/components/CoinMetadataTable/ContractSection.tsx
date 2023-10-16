@@ -6,7 +6,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { Box, Stack, Typography } from '@mui/material'
 
-export interface ContractSectionProps {
+interface ContractSectionProps {
     pluginID?: NetworkPluginID
     chainId?: Web3Helper.ChainIdAll
     address: string

@@ -134,7 +134,7 @@ const useStyles = makeStyles<{
     }
 })
 
-export interface TrendingViewProps {
+interface TrendingViewProps {
     resultList: Web3Helper.TokenResultAll[]
     currentResult?: Web3Helper.TokenResultAll
     identity?: SocialIdentity | null

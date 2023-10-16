@@ -4,7 +4,7 @@ import { AdditionalContent } from '../AdditionalPostContent.js'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import { useAuthorDifferentMessage } from './authorDifferentMessage.js'
 
-export interface DecryptPostFailedProps {
+interface DecryptPostFailedProps {
     error: Error
     /** The author in the payload */
     author: ProfileIdentifier | null

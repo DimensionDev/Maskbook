@@ -23,7 +23,7 @@ const RoundTabWrap = styled(Button, {
     },
 }))
 
-export interface ButtonTabProps extends React.PropsWithChildren<Omit<ButtonProps, 'onChange' | 'value' | 'selected'>> {
+interface ButtonTabProps extends React.PropsWithChildren<Omit<ButtonProps, 'onChange' | 'value' | 'selected'>> {
     value: string
     selected?: boolean
     onChange?(event: object, value: string): void

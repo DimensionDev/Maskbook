@@ -3,7 +3,7 @@ import { range } from 'lodash-es'
 import { CollectibleItemSkeleton } from './CollectibleItem.js'
 import { CollectionSkeleton } from './Collection.js'
 
-export interface LoadingSkeletonProps extends Pick<HTMLProps<HTMLDivElement>, 'className'> {}
+interface LoadingSkeletonProps extends Pick<HTMLProps<HTMLDivElement>, 'className'> {}
 
 export function LoadingSkeleton({ className }: LoadingSkeletonProps) {
     return (

@@ -126,13 +126,6 @@ export function useTrendingById(
     }
 }
 
-export function useCoinInfoByAddress(address: string) {
-    return useQuery(['coin-info-by-address', address], async () => {
-        if (!address) return null
-        return PluginTraderRPC.getCoinInfoByAddress(address)
-    })
-}
-
 export function useHighestFloorPrice(id: string) {
     return useQuery(['highest-floor-price', id], async () => {
         if (!id) return null

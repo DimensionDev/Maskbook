@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface FriendsHomeUIProps {
+interface FriendsHomeUIProps {
     searchValue: string
     searchResult: NextIDPersonaBindingsWithIdentifier[]
     loading: boolean

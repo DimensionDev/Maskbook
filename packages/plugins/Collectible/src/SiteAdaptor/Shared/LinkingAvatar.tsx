@@ -1,7 +1,7 @@
 import { Icon, Image } from '@masknet/shared'
 import { Link } from '@mui/material'
 
-export interface LinkingAvatarProps {
+interface LinkingAvatarProps {
     href: string
     title: string
     name: string

@@ -1,7 +1,7 @@
 import { TOKEN_PROGRAM_ID, AccountLayout } from '@solana/spl-token'
 import type { Connection, PublicKey, Commitment } from '@solana/web3.js'
 
-export enum AccountState {
+enum AccountState {
     Uninitialized = 0,
     Initialized = 1,
     Frozen = 2,

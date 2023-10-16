@@ -1,4 +1,4 @@
-export interface DashboardHeaderProps {
+interface DashboardHeaderProps {
     title: string
 }
 

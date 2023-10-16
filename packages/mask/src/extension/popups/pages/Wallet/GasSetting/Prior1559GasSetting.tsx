@@ -177,7 +177,6 @@ export const Prior1559GasSetting = memo(() => {
     const {
         control,
         handleSubmit,
-        setError,
         setValue,
         formState: { errors },
     } = useForm<zod.infer<typeof schema>>({

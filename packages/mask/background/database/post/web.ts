@@ -2,7 +2,6 @@ import {
     type AESCryptoKey,
     type AESJsonWebKey,
     ECKeyIdentifier,
-    type PersonaIdentifier,
     PostIdentifier,
     PostIVIdentifier,
     ProfileIdentifier,
@@ -159,8 +158,7 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
     'maskbook-post-v2',
 )
 
-/** @internal */
-export const PostDBAccess = db
+const PostDBAccess = db
 
 /** @internal */
 export async function withPostDBTransaction(task: (t: PostReadWriteTransaction) => Promise<void>) {
@@ -237,51 +235,6 @@ export async function queryPostsDB(
         }
     }
     return selected
-}
-
-/**
- * Query posts by paged
- * @internal
- */
-export async function queryPostPagedDB(
-    linked: PersonaIdentifier,
-    options: {
-        network: string
-        userIds: string[]
-        after?: PostIVIdentifier
-        page?: number
-    },
-    count: number,
-): Promise<PostRecord[]> {
-    const t = createTransaction(await db(), 'readonly')('post')
-
-    const data: PostRecord[] = []
-    let firstRecord = true
-
-    for await (const cursor of t.objectStore('post').iterate()) {
-        if (cursor.value.encryptBy !== linked.toText()) continue
-        if (!cursor.value.postBy) continue
-        if (!options.userIds.includes(cursor.value.postBy.userId)) continue
-
-        const postIdentifier = PostIVIdentifier.from(cursor.value.identifier).expect(
-            `data stored in the post database should be a valid PostIVIdentifier, but found ${cursor.value.identifier}`,
-        )
-        if (postIdentifier.network !== options.network) continue
-
-        if (firstRecord && options.after) {
-            cursor.continue(options.after.toText())
-            firstRecord = false
-            continue
-        }
-
-        if (postIdentifier === options.after) continue
-
-        if (count <= 0) break
-        const outData = postOutDB(cursor.value)
-        count -= 1
-        data.push(outData)
-    }
-    return data
 }
 
 function postOutDB(db: LatestPostDBRecord): PostRecord {

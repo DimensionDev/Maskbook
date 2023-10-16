@@ -19,7 +19,7 @@ import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { joinsABTest } from '@masknet/web3-telemetry/helpers'
 
-export interface ConsoleContentProps {
+interface ConsoleContentProps {
     onClose?: () => void
 }
 

@@ -5,9 +5,7 @@ import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ConsoleContent } from './ConsoleContent.js'
 import { PluginDebuggerMessages } from '../../messages.js'
 
-export interface ConsoleDialogProps {}
-
-export function ConsoleDialog(props: ConsoleDialogProps) {
+export function ConsoleDialog() {
     const { open, closeDialog } = useRemoteControlledDialog(PluginDebuggerMessages.consoleDialogUpdated)
     return (
         <InjectedDialog title="Debugger" fullWidth open={open} onClose={closeDialog}>

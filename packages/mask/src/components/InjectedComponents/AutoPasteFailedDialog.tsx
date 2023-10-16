@@ -23,7 +23,7 @@ import { DraggableDiv } from '../shared/DraggableDiv.js'
 import { Close as CloseIcon, Download, OpenInBrowser } from '@mui/icons-material'
 import { saveFileFromUrl } from '../../../shared/index.js'
 
-export interface AutoPasteFailedDialogProps {
+interface AutoPasteFailedDialogProps {
     onClose: () => void
     data: AutoPasteFailedEvent
 }
@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
     button: { marginRight: theme.spacing(1) },
 }))
 
-export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
+function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
     const { onClose, data } = props
     const { t } = useMaskSharedTrans()
     const { classes } = useStyles()

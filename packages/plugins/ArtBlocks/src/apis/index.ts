@@ -38,27 +38,3 @@ export async function fetchProject(chainId: number, projectId: string) {
     })
     return data
 }
-
-export async function fetchToken(chainId: number, tokenId: number) {
-    const body = {
-        query: `query Token {
-            tokens(where: { tokenId: "${tokenId}"}) {
-                tokenId
-                contract {
-                    id
-                }
-                project {
-                    maxInvocations
-                    projectId
-                }
-            }
-        }`,
-    }
-
-    const { data } = await fetchJSON<{ data: any }>(resolveSubgraphLinkOnArtBlocks(chainId), {
-        body: JSON.stringify(body),
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-    })
-    return data
-}

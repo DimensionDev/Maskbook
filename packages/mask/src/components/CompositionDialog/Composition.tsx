@@ -42,11 +42,10 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface PostDialogProps {
+interface PostDialogProps {
     type?: CompositionType
     requireClipboardPermission?: boolean
 }
-let openOnInitAnswered = false
 
 export function Composition({ type = 'timeline', requireClipboardPermission }: PostDialogProps) {
     const { t } = useMaskSharedTrans()
@@ -78,16 +77,6 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
         setInitialMetas(EMPTY_OBJECT)
 
         UI.current?.reset()
-    }, [])
-
-    useEffect(() => {
-        if (openOnInitAnswered) return
-        openOnInitAnswered = true
-        Services.SiteAdaptor.getDesignatedAutoStartPluginID().then((plugin) => {
-            if (!plugin) return
-            setOpen(true)
-            UI.current?.startPlugin(plugin)
-        })
     }, [])
 
     const { onQueryClipboardPermission, hasClipboardPermission, onRequestClipboardPermission } =

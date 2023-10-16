@@ -11,7 +11,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface CrossChainBridgeDialogProps extends withClasses<'root'> {
+interface CrossChainBridgeDialogProps extends withClasses<'root'> {
     open: boolean
     onClose(): void
 }

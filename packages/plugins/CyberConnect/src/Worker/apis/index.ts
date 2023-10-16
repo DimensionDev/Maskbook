@@ -7,7 +7,7 @@ import {
 } from '@masknet/shared-base'
 import { PageSize, ProfileTab } from '../../constants.js'
 
-export interface IQuery {
+interface IQuery {
     query: string
     variables: Record<string, string | number>
 }
@@ -17,14 +17,8 @@ export interface IFollowIdentity {
     ens: string
     namespace: string
 }
-export interface IFollowPageInfo {
-    endCursor: number
-    hasNextPage: boolean
-    hasPreviousPage: boolean
-    startCursor: number
-}
 
-export interface IIdentity {
+interface IIdentity {
     address: string
     avatar: string
     domain: string
@@ -38,7 +32,7 @@ export interface IIdentity {
         list: IFollowIdentity[]
     }
 }
-export interface IFollowStatus {
+interface IFollowStatus {
     isFollowing: boolean
     isFollowed: boolean
 }

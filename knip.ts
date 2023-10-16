@@ -8,7 +8,7 @@ const config: KnipConfig = {
     workspaces: {
         '.': {
             entry: ['*.js', '*.cjs'],
-            ignoreDependencies: ['@typescript/lib-dom', 'ses'],
+            ignoreDependencies: ['@typescript/lib-dom', 'ses', 'eslint-import-resolver-typescript', 'vite'],
         },
         'packages/mask': {
             ignore: ['public'],
@@ -23,6 +23,7 @@ const config: KnipConfig = {
                 'devtools/content-script/index.ts',
                 'devtools/panels/index.tsx',
             ],
+            ignoreDependencies: ['webpack-cli'],
         },
         'packages/web3-constants': {
             entry: ['constants.ts'],
@@ -36,7 +37,7 @@ const config: KnipConfig = {
         },
         'packages/app': {
             entry: ['webpack.config.js', 'postcss.config.cjs', 'src/background-worker/init.ts', 'src/index.tsx'],
-            ignoreDependencies: ['autoprefixer'],
+            ignoreDependencies: ['autoprefixer', 'webpack-cli', 'webpack-dev-server'],
         },
         'packages/mask-sdk': {
             ignore: ['public-api'],
@@ -44,6 +45,9 @@ const config: KnipConfig = {
         },
         'packages/sentry': {
             ignoreDependencies: ['@sentry/browser'],
+        },
+        'packages/scripts': {
+            ignoreDependencies: ['ts-node'],
         },
     },
     ignoreWorkspaces: ['packages/polyfills', 'packages/sandboxed-plugins', 'packages/xcode'],

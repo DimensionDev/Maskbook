@@ -19,11 +19,8 @@ export type AddCollectiblesModalCloseProps =
     | [contract: NonFungibleTokenContract<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>, tokenIds: string[]]
     | undefined
 
-export interface AddCollectiblesModalProps {}
-
 export const AddCollectiblesModal = forwardRef<
-    SingletonModalRefCreator<AddCollectiblesModalOpenProps, AddCollectiblesModalCloseProps>,
-    AddCollectiblesModalProps
+    SingletonModalRefCreator<AddCollectiblesModalOpenProps, AddCollectiblesModalCloseProps>
 >((props, ref) => {
     const [pluginID, setPluginID] = useState<NetworkPluginID>(NetworkPluginID.PLUGIN_EVM)
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()

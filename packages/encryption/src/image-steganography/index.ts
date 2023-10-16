@@ -3,7 +3,7 @@ import { getDimension } from './utils.js'
 import { getPreset, findPreset } from './presets.js'
 import { decodeArrayBuffer, encodeArrayBuffer } from '@masknet/kit'
 
-export { GrayscaleAlgorithm, AlgorithmVersion } from '@masknet/stego-js'
+export { GrayscaleAlgorithm } from '@masknet/stego-js'
 
 export interface SteganographyIO {
     downloadImage: (url: string) => Promise<ArrayBuffer>

@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface WalletStatusDialogProps {
+interface WalletStatusDialogProps {
     open: boolean
     onClose: () => void
     isHidden: boolean

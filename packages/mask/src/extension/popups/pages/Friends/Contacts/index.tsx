@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ContactsProps {
+interface ContactsProps {
     friendsArray: Array<{ friends: Friend[]; nextPageOffset: number }>
     fetchNextPage: () => void
 }

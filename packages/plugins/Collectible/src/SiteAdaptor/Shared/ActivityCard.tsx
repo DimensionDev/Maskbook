@@ -88,7 +88,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ActivityCardProps {
+interface ActivityCardProps {
     activity: NonFungibleTokenEvent<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
 }
 

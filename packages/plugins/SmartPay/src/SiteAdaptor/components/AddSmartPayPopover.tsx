@@ -52,7 +52,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface AddSmartPayPopoverProps {
+interface AddSmartPayPopoverProps {
     open: boolean
     anchorEl: HTMLElement | null
     onClose: () => void

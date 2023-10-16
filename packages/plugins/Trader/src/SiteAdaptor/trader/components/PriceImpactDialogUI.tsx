@@ -76,7 +76,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface PriceImpactDialogProps extends InjectedDialogProps {
+interface PriceImpactDialogProps extends InjectedDialogProps {
     priceImpact?: BigNumber.Value
     symbol?: string
     onConfirm: () => void

@@ -41,7 +41,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface NFTAvatarPickerProps {
+interface NFTAvatarPickerProps {
     onChange: (image: string) => void
     bindingWallets?: BindingProof[]
 }

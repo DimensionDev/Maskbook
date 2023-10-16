@@ -9,13 +9,11 @@ import { createPostInfoContext } from '../helpers/createPostInfoContext.js'
 import { DecryptMessage } from '../main/DecryptMessage.js'
 import { usePostPayload } from '../hooks/usePostPayload.js'
 
-export interface ComposePageProps {}
-
 async function throws(): Promise<never> {
     throw new Error('Unreachable')
 }
 
-export default function ComposePage(props: ComposePageProps) {
+export default function ComposePage() {
     const context = useMemo(() => createPostInfoContext(), [])
     const payload = usePostPayload()
 

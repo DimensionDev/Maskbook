@@ -12,12 +12,7 @@ export interface BackupPreviewModalOpenProps {
     abstract?: string
 }
 
-export interface BackupPreviewModalProps {}
-
-export const BackupPreviewModal = forwardRef<
-    SingletonModalRefCreator<BackupPreviewModalOpenProps>,
-    BackupPreviewModalProps
->((props, ref) => {
+export const BackupPreviewModal = forwardRef<SingletonModalRefCreator<BackupPreviewModalOpenProps>>((props, ref) => {
     const [isOverwrite, setIsOverwrite] = useState(false)
     const [code, setCode] = useState('')
     const [type, setType] = useState<AccountType>()

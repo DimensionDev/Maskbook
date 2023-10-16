@@ -1,7 +1,7 @@
 import type { PersonaIdentifier } from '@masknet/shared-base'
 import { queryRelationsPagedDB, type RelationRecord } from '../../../database/persona/db.js'
 
-export interface QueryRelationPagedOptions {
+interface QueryRelationPagedOptions {
     network: string
     after?: RelationRecord
     pageOffset?: number

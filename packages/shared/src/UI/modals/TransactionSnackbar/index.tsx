@@ -3,9 +3,7 @@ import { type NetworkPluginID, type SingletonModalRefCreator } from '@masknet/sh
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { TransactionSnackbar } from './TransactionSnackbar.js'
 
-export type TransactionSnackbarOpenProps = void
-
-export interface TransactionSnackbarProps {
+interface TransactionSnackbarProps {
     pluginID: NetworkPluginID
 }
 

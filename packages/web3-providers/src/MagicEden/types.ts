@@ -64,27 +64,10 @@ export interface MagicEdenToken {
 }
 
 /**
- * /tokens/:token_mint/listings
- */
-export interface TokenInListings {
-    /** address */
-    pdaAddress: string
-    auctionHouse: string
-    /** address */
-    tokenAddress: string
-    /** address */
-    tokenMint: string
-    /** address */
-    seller: string
-    tokenSize: number
-    price: number
-}
-
-/**
  * tokens/:token_mint/offer_received
  *
  */
-export interface TokenOffer {
+interface TokenOffer {
     /** address */
     pdaAddress: string
     /** address */
@@ -120,26 +103,6 @@ export interface TokenActivity {
 }
 
 /**
- * /wallets/:wallet_address/tokens
- * Token owned by a wallet.
- */
-export interface WalletToken extends Omit<MagicEdenToken, 'animationUrl'> {
-    /** Either "listed", "unlisted" or "both". Default "both". */
-    listStatus: 'listed' | 'unlisted' | 'both'
-}
-
-/**
- * Activity of a wallet.
- * /wallets/:wallet_address/activities
- */
-export interface WalletActivity extends Omit<TokenActivity, 'collectionSymbol'> {
-    type: LiteralUnion<'buyNow'>
-    collection: string
-    /** address */
-    buyer: string
-}
-
-/**
  * - Offer made by a wallet.
  * - offer received by a wallet.
  *
@@ -149,26 +112,6 @@ export interface WalletActivity extends Omit<TokenActivity, 'collectionSymbol'> 
 export interface WalletOffer extends Omit<TokenOffer, 'buyerReferral'> {
     /** address */
     buyer: string
-}
-
-/**
- * Escrow balance for a wallet.
- * /wallets/:wallet_address/escrow_balance
- */
-export interface WalletEscrowBalance {
-    /** address */
-    buyerEscrow: string
-    balance: 0.03
-}
-
-/**
- * Escrow balance for a wallet.
- * /wallets/:wallet_address
- */
-export interface WalletAddress {
-    displayName: string
-    /** mint address of NFT */
-    avatar: string
 }
 
 /**
@@ -217,76 +160,15 @@ export interface MagicEdenNFT {
 }
 
 /**
- * Collection in listings
- * /collections/:symbol/listings
- */
-export interface CollectionInListings extends TokenInListings {}
-
-/**
- * Activity of a collection
- * /collections/:symbol/activities
- */
-export interface CollectionActivity extends TokenActivity {
-    type: 'cancelBid'
-}
-
-/**
  * Stats of a collection
  * /collections/:symbol/stats
  */
-export interface CollectionStats {
+interface CollectionStats {
     symbol: string
     floorPrice: number
     listedCount: number
     avgPrice24hr: number
     volumeAll: number
-}
-
-/**
- * launchpad collections
- * /launchpad/collections
- */
-export interface LaunchpadCollection
-    extends Omit<MagicEdenCollection, 'twitter' | 'discord' | 'website' | 'categories'> {
-    featured: boolean
-    edition: string
-    price: number
-    size: number
-    /** ISODatetime */
-    launchDatetime: string
-}
-
-/**
- * - Instruction to buy(bid) on a NFT
- *   /instructions/buy
- * - Instruction to buy on a NFT now for the listed price
- *   /instructions/buy_now
- * - Instruction to cancel a buy(bid)
- *   /instructions/buy_cancel
- * - Instruction to change a buy (bid) price
- *   /instructions/buy_change_price
- * - Instruction to sell (list)
- *   /instructions/sell
- * - Instruction to sell now (accept offer)
- *   /instructions/sell_now
- * - Instruction to cancel a sell (list)
- *   /instructions/sell_cancel
- * - Instruction to change a sell (list) price
- *   /instructions/sell_change_price
- * - Instruction to deposit to escrow
- *   /instructions/deposit
- * - Instruction to withdraw from escrow
- *   /instructions/withdraw
- */
-export interface Instruction {
-    tx: {
-        type: 'Buffer'
-        data: number[]
-    }
-    txSigned: {
-        type: 'Buffer'
-        data: number[]
-    }
 }
 
 interface AuctionBid {

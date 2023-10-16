@@ -11,7 +11,7 @@ interface TooltipConfigProps {
     disabled?: boolean
 }
 
-export interface PostDialogHintUIProps extends withClasses<'buttonTransform' | 'iconButton' | 'tooltip'> {
+interface PostDialogHintUIProps extends withClasses<'buttonTransform' | 'iconButton' | 'tooltip'> {
     disableGuideTip?: boolean
     size?: number
     tooltip?: TooltipConfigProps

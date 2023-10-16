@@ -60,7 +60,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface FeedDetailsDialogProps
+interface FeedDetailsDialogProps
     extends PropsWithChildren<InjectedDialogProps>,
         Pick<FeedCardProps, 'feed' | 'actionIndex'> {
     type: CardType

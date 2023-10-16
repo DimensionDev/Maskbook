@@ -6,7 +6,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatEtherToWei } from '@masknet/web3-shared-evm'
 import { InputTokenPanelUI } from './components/InputTokenPanelUI.js'
 
-export interface InputTokenPanelProps extends withClasses<'root'> {
+interface InputTokenPanelProps extends withClasses<'root'> {
     balance: string
     amount: string
     chainId: Web3Helper.ChainIdAll

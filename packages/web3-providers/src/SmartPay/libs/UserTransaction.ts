@@ -83,7 +83,7 @@ const CALL_WALLET_TYPE: AbiItem = {
     ],
 }
 
-export interface Options {
+interface Options {
     paymentToken?: string
 }
 

@@ -178,17 +178,4 @@ export class MulticallAPI {
             contract.methods[names[i]](...callData).encodeABI() as string,
         ])
     }
-
-    createMultipleContractMultipleData<T extends BaseContract, K extends keyof T['methods']>(
-        contracts: T[],
-        names: K[],
-        callDatas: Array<Parameters<T['methods'][K]>>,
-        gasLimit = DEFAULT_GAS_LIMIT,
-    ) {
-        return contracts.map<MulticallBaseAPI.Call>((contract, i) => [
-            contract.options.address,
-            gasLimit,
-            contract.methods[names[i]](callDatas[i]).encodeABI() as string,
-        ])
-    }
 }

@@ -118,7 +118,7 @@ export const wrapXRayVision: <const T extends object>(val: T) => T =
     typeof XPCNativeWrapper !== 'undefined' ? XPCNativeWrapper : Object
 export const isFirefox = typeof XPCNativeWrapper !== 'undefined'
 // #endregion
-export interface TypedPropertyDescriptor<T, V> {
+interface TypedPropertyDescriptor<T, V> {
     enumerable?: boolean
     configurable?: boolean
     writable?: boolean

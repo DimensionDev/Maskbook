@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface RadioChipProps extends CheckboxProps {
+interface RadioChipProps extends CheckboxProps {
     label: string
 }
 

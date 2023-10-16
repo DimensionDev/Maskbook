@@ -1,5 +1,4 @@
 import { useCallback, useLayoutEffect, useState } from 'react'
-import { useLocation } from 'react-use'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { MaskMessages } from '@masknet/shared-base'
@@ -42,7 +41,7 @@ interface StyleProps {
     borderTop?: string
 }
 
-export function NFTAvatarButtonInDialog() {
+function NFTAvatarButtonInDialog() {
     const { t } = useMaskSharedTrans()
     const [style, setStyle] = useState<StyleProps>({
         fontSize: 12,
@@ -50,7 +49,6 @@ export function NFTAvatarButtonInDialog() {
         // Instagram css var
         borderTop: '1px solid rgba(var(--b6a,219,219,219),1)',
     })
-    const location = useLocation()
     const { classes } = useStyles(style)
 
     const setStyleWithSelector = useCallback(() => {

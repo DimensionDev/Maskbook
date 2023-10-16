@@ -4,7 +4,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { Stack } from '@mui/material'
 import { CoinMarketTable } from './CoinMarketTable.js'
 
-export interface CoinMarketPanelProps {
+interface CoinMarketPanelProps {
     trending: TrendingAPI.Trending
     result: Web3Helper.TokenResultAll
 }

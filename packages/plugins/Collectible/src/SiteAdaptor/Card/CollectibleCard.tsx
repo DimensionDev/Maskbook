@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface CollectibleCardProps extends withClasses<'root' | 'content'> {
+interface CollectibleCardProps extends withClasses<'root' | 'content'> {
     children: React.ReactNode
     CardProps?: Partial<CardProps>
 }

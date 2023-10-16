@@ -9,7 +9,7 @@ import { type CardType, cardTypeIconMap, formatTimestamp, getPlatformIcon } from
 import { FeedDetailsModal } from '../modals/modals.js'
 import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 
-export interface FeedCardBaseProps {
+interface FeedCardBaseProps {
     feed: RSS3BaseAPI.Web3Feed
     /**
      * to specify action from the feed
@@ -64,7 +64,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface CardFrameProps extends Omit<HTMLProps<HTMLDivElement>, 'type' | 'action'>, FeedCardBaseProps {
+interface CardFrameProps extends Omit<HTMLProps<HTMLDivElement>, 'type' | 'action'>, FeedCardBaseProps {
     type: CardType
     badge?: ReactNode
 }

@@ -109,7 +109,7 @@ interface WalletAssetsUIProps {
     onAddToken: (assetTab: WalletAssetTabs) => void
 }
 
-export const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI({ onAddToken }) {
+const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI({ onAddToken }) {
     const { t } = useMaskSharedTrans()
     const [params] = useSearchParams()
 

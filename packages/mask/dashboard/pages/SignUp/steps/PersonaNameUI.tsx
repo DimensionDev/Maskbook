@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface PersonaNameUIProps {
+interface PersonaNameUIProps {
     error?: string
     onNext(personaName: string): void
     loading?: boolean

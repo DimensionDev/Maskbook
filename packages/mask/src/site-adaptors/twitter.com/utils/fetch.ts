@@ -44,7 +44,7 @@ export const getPostId = (node: HTMLElement) => {
     return isRetweet ? `retweet:${pid}` : pid
 }
 
-export const postNameParser = (node: HTMLElement) => {
+const postNameParser = (node: HTMLElement) => {
     const tweetElement = node.querySelector<HTMLElement>('[data-testid="tweet"]') ?? node
     const name = collectNodeText(tweetElement.querySelector<HTMLElement>('[data-testid^="User-Name"] a div div > span'))
     // Note: quoted tweet has no [data-testid^="User-Name"]
@@ -81,7 +81,7 @@ export const postNameParser = (node: HTMLElement) => {
     }
 }
 
-export const postAvatarParser = (node: HTMLElement) => {
+const postAvatarParser = (node: HTMLElement) => {
     const tweetElement = node.querySelector('[data-testid="tweet"]') ?? node
     const avatarElement = tweetElement.children[0].querySelector<HTMLImageElement>('img[src*="twimg.com"]')
     return avatarElement ? avatarElement.src : undefined

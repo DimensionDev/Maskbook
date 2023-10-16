@@ -228,7 +228,7 @@ export type OrderedERC721Token = NonFungibleToken<ChainId, SchemaType.ERC721> & 
     index: number
 }
 
-export interface SelectNftTokenDialogProps {
+interface SelectNftTokenDialogProps {
     onClose: () => void
     contract: NonFungibleCollection<ChainId, SchemaType> | null | undefined
     existTokenDetailedList: OrderedERC721Token[]

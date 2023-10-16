@@ -97,7 +97,7 @@ function styleTab(textColor: string, borderColor: string) {
     if (!iconEle) return
     iconEle.style.fill = textColor
 }
-export function ProfileTabAtFacebook() {
+function ProfileTabAtFacebook() {
     const { classes } = useStyles()
     const [action, setAction] = useState('reset')
 

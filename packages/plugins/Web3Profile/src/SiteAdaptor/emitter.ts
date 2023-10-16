@@ -15,7 +15,3 @@ export const emitter = new Emitter<{
 export function openPopup(options: OpenPopupOptions) {
     emitter.emit('open', options)
 }
-
-export function closePopup() {
-    emitter.emit('close')
-}

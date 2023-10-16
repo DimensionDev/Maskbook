@@ -159,7 +159,7 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
     }
 })
 
-export interface NftRedPacketHistoryItemProps {
+interface NftRedPacketHistoryItemProps {
     history: NftRedPacketJSONPayload
     collections: Array<NonFungibleCollection<ChainId, SchemaType>>
     onSend: (history: NftRedPacketJSONPayload, contract: NonFungibleCollection<ChainId, SchemaType>) => void

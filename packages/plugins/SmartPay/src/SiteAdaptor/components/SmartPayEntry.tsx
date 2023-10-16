@@ -10,7 +10,7 @@ import { PluginSmartPayMessages } from '../../message.js'
 import { useQueryQualifications } from '../../hooks/useQueryQualifications.js'
 import { openDashboard } from '@masknet/plugin-infra/dom/context'
 
-export interface SmartPayEntryProps {
+interface SmartPayEntryProps {
     disabled: boolean
     tooltipHint?: string
     onClick?: (walletConnectedCallback?: () => void) => void

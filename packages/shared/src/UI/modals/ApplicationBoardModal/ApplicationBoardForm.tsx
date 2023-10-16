@@ -59,10 +59,7 @@ export interface ApplicationBoardFormProps {
 export function ApplicationBoardForm(props: ApplicationBoardFormProps) {
     const t = useSharedTrans()
     const [openSettings, setOpenSettings] = useState(false)
-    const [currentTab, onChange, tabs, setTab] = useTabs(
-        ApplicationSettingTabs.pluginList,
-        ApplicationSettingTabs.pluginSwitch,
-    )
+    const [currentTab, onChange, tabs] = useTabs(ApplicationSettingTabs.pluginList, ApplicationSettingTabs.pluginSwitch)
     const { classes } = useStyles()
 
     return (

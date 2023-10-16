@@ -12,8 +12,7 @@ export type PluginWrapperComponent<T extends Plugin.Shared.Definition = Plugin.S
         >
     >
 
-/** @internal */
-export const emptyPluginWrapperMethods = {
+const emptyPluginWrapperMethods = {
     setWrap: noop,
     setWrapperName: noop,
     setWidth: noop,

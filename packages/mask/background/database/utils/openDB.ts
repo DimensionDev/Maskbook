@@ -49,13 +49,7 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
     dbName: string,
 ) {
     let db: IDBPDatabase<DBSchema> | undefined = undefined
-    function clean() {
-        if (db) {
-            db.close()
-            db.addEventListener('close', () => (pendingOpen = db = undefined), { once: true })
-        }
-        pendingOpen = db = undefined
-    }
+
     let pendingOpen: Promise<IDBPDatabase<DBSchema>> | undefined
     async function open(): Promise<IDBPDatabase<DBSchema>> {
         assertEnvironment(Environment.ManifestBackground)
@@ -99,7 +93,7 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
         return promise
     }
 }
-export interface IDBPSafeObjectStore<
+interface IDBPSafeObjectStore<
     DBTypes extends DBSchema,
     TxStores extends Array<StoreNames<DBTypes>> = Array<StoreNames<DBTypes>>,
     StoreName extends StoreNames<DBTypes> = StoreNames<DBTypes>,

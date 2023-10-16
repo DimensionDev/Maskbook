@@ -1,8 +1,8 @@
 import { pluginWorkerReadyPromise } from './ready.js'
 
 const ports = new Set<MessagePort>()
-export const messageHandlers = new Map<string, Set<TargetAwareHandler>>()
-export type TargetAwareHandler = (
+const messageHandlers = new Map<string, Set<TargetAwareHandler>>()
+type TargetAwareHandler = (
     message: unknown,
     sender: MessagePort | null,
     response: (type: string, value: unknown) => void,

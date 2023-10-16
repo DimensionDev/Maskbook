@@ -1,4 +1,4 @@
-export interface SpinnerProps {
+interface SpinnerProps {
     size?: number
 }
 

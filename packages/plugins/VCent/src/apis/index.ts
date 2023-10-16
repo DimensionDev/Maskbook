@@ -2,7 +2,7 @@ import urlcat from 'urlcat'
 import { fetchCachedJSON } from '@masknet/web3-providers/helpers'
 import { TWEET_BASE_URL } from '../constants.js'
 
-export interface TweetData {
+interface TweetData {
     id: string
     tweet_id: string
     type: string
@@ -17,7 +17,7 @@ export interface TweetData {
     amount_usd: number
 }
 
-export interface TweetDataResponse {
+interface TweetDataResponse {
     results: TweetData[]
 }
 

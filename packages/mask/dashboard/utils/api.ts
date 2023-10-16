@@ -12,7 +12,7 @@ interface SendCodeRequest extends BackupBaseRequest {
     locale: Locale
 }
 
-export interface VerifyCodeRequest extends BackupBaseRequest {
+interface VerifyCodeRequest extends BackupBaseRequest {
     code: string
 }
 
@@ -90,17 +90,6 @@ export const fetchDownloadLink = async ({ account, code, type }: VerifyCodeReque
             uploadedAt: uploaded_at,
             abstract,
         }
-    })
-}
-
-export const verifyCode = ({ account, type, code }: VerifyCodeRequest) => {
-    return fetchBackupInstance('v1/backup/validate_code', {
-        method: 'POST',
-        body: JSON.stringify({
-            account: account.replace(' ', ''),
-            account_type: type,
-            code,
-        }),
     })
 }
 

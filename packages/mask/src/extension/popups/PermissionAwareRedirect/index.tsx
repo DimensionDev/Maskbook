@@ -6,7 +6,6 @@ import { MissingParameter } from '../MissingParameter/index.js'
 import { PermissionAwareRedirectUI } from './ui.js'
 import { getHostPermissionFieldFromURL, isValidURL } from './utils.js'
 
-export { PermissionAwareRedirectUI } from './ui.js'
 export default function PermissionAwareRedirect() {
     const url = new URLSearchParams(useLocation().search).get('url')
     const context = new URLSearchParams(useLocation().search).get('context')

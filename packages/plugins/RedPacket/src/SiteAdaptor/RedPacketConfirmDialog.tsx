@@ -64,7 +64,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ConfirmRedPacketFormProps {
+interface ConfirmRedPacketFormProps {
     onCreated: (payload: RedPacketJSONPayload) => void
     onBack: () => void
     onClose: () => void

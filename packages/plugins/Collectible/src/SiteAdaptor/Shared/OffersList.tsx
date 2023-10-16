@@ -36,7 +36,7 @@ export interface OffersListProps {
     onNext?(): void
 }
 
-export function OffersList(props: OffersListProps) {
+function OffersList(props: OffersListProps) {
     const { offers, loading, finished, error, onRetry, onNext } = props
 
     const orderedOffers = useMemo(() => offers.sort((a, b) => (a.createdAt! > b.createdAt! ? -1 : 0)), [offers])

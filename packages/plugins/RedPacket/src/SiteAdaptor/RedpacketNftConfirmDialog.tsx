@@ -146,7 +146,7 @@ const NFTCard = memo(function NFTCard(props: NFTCardProps) {
         </ListItem>
     )
 })
-export interface RedpacketNftConfirmDialogProps {
+interface RedpacketNftConfirmDialogProps {
     onBack: () => void
     onClose: () => void
     contract: NonFungibleCollection<ChainId, SchemaType>

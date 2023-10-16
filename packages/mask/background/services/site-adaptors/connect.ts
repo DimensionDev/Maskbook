@@ -5,7 +5,6 @@ import {
     userGuideStatus,
     type PersonaIdentifier,
     type ProfileIdentifier,
-    userGuideFinished,
     currentSetupGuideStatus,
     SetupGuideStep,
 } from '@masknet/shared-base'
@@ -92,10 +91,6 @@ export async function getSitesWithoutPermission(): Promise<SiteAdaptor.Definitio
         return x
     })
     return compact(await Promise.all(promises))
-}
-
-export async function hasSetup(network: string) {
-    return !!userGuideStatus[network].value || userGuideFinished[network].value
 }
 
 export async function setupSite(network: string, newTab: boolean) {

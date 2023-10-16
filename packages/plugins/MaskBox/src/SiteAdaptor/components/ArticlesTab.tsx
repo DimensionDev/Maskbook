@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ArticlesTabProps {
+interface ArticlesTabProps {
     boxMetadata?: BoxMetadata
 }
 

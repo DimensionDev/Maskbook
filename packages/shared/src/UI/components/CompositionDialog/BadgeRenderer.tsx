@@ -12,7 +12,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface BadgeRendererProps {
+interface BadgeRendererProps {
     meta: TypedMessage['meta']
     onDeleteMeta(metaID: string): void
     readonly: boolean

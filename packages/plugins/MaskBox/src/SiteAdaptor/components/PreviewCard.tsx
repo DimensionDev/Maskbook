@@ -11,7 +11,7 @@ import { useTransactionCallback } from '@masknet/web3-hooks-evm'
 import { formatCurrency } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Context } from '../../hooks/useContext.js'
-import { BoxState, CardTab } from '../../type.js'
+import { BoxState } from '../../type.js'
 import { ArticlesTab } from './ArticlesTab.js'
 import { DetailsTab } from './DetailsTab.js'
 import { DrawDialog } from './DrawDialog.js'
@@ -124,11 +124,8 @@ const useTabsStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface PreviewCardProps {}
-
-export function PreviewCard(props: PreviewCardProps) {
+export function PreviewCard() {
     const { classes } = useTabsStyles()
-    const state = useState(CardTab.Articles)
     const [openDrawDialog, setOpenDrawDialog] = useState(false)
     const [openDrawResultDialog, setOpenDrawResultDialog] = useState(false)
     const { chainId } = useChainContext()
@@ -176,7 +173,6 @@ export function PreviewCard(props: PreviewCardProps) {
     // #region open box
     const [{ loading: isOpening }, openBoxCallback] = useTransactionCallback(txConfig, openBoxTransaction?.method)
     const onRefresh = useCallback(() => {
-        state[1](CardTab.Articles)
         setPaymentCount(1)
         setPaymentTokenAddress('')
         retryMaskBoxInfo()
@@ -348,7 +344,7 @@ export function PreviewCard(props: PreviewCardProps) {
                         {boxInfo ? <ArticlesTab boxMetadata={boxMetadata} /> : null}
                     </TabPanel>
                     <TabPanel value={tabs.Details} key={tabs.Details} sx={{ padding: 0 }}>
-                        {boxInfo ? <DetailsTab boxInfo={boxInfo} boxMetadata={boxMetadata} /> : null}
+                        {boxInfo ? <DetailsTab boxMetadata={boxMetadata} /> : null}
                     </TabPanel>
                 </Paper>
 

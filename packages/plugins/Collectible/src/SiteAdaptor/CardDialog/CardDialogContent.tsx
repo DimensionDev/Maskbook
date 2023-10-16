@@ -68,7 +68,7 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
     }),
 )
 
-export interface CardDialogContentProps {
+interface CardDialogContentProps {
     currentTab: TabType
     open: boolean
     setOpen: (opened: boolean) => void

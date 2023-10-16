@@ -12,10 +12,3 @@ export const twitterBase: SiteAdaptor.Base = {
         return hostname.endsWith('twitter.com') && !pathname.startsWith('/i/cards-frame/')
     },
 }
-
-/**
- * @deprecated Use `Sniffings.is_twitter_page` instead
- */
-export function isTwitter(ui: SiteAdaptor.Base) {
-    return ui.networkIdentifier === EnhanceableSite.Twitter
-}

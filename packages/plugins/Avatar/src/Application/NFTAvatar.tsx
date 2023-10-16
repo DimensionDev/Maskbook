@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, Stack } from '@mui/material'
 import { RainbowBox } from '../SiteAdaptor/RainbowBox.js'
 
-export const SOCIAL_MEDIA_ICON_MAPPING: Record<string, React.ReactNode> = {
+const SOCIAL_MEDIA_ICON_MAPPING: Record<string, React.ReactNode> = {
     [EnhanceableSite.Twitter]: <Icons.TwitterXRound size={14} />,
     [EnhanceableSite.Localhost]: null,
 }

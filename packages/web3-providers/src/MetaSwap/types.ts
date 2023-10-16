@@ -1,4 +1,4 @@
-export interface EstimateSuggestOption {
+interface EstimateSuggestOption {
     maxWaitTimeEstimate: number
     minWaitTimeEstimate: number
     suggestedMaxFeePerGas: string

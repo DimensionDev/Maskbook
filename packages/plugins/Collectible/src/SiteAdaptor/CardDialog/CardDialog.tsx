@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface CardDialogProps {
+interface CardDialogProps {
     open: boolean
     setOpen: (opened: boolean) => void
 }

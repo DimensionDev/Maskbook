@@ -14,11 +14,8 @@ export type GasSettingModalOpenOrCloseProps = {
     priorityFee?: BigNumber.Value
 } | void
 
-export interface GasSettingModalProps {}
-
 export const GasSettingModal = forwardRef<
-    SingletonModalRefCreator<GasSettingModalOpenOrCloseProps, GasSettingModalOpenOrCloseProps>,
-    GasSettingModalProps
+    SingletonModalRefCreator<GasSettingModalOpenOrCloseProps, GasSettingModalOpenOrCloseProps>
 >((props, ref) => {
     const [gasOptionType, setGasOptionType] = useState(GasOptionType.NORMAL)
     const [gasLimit, setGasLimit] = useState(0)

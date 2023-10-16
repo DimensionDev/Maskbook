@@ -14,7 +14,7 @@ import {
     WalletConnectedBoundary,
     useOpenShareTxDialog,
 } from '@masknet/shared'
-import { NetworkPluginID, Sniffings, createLookupTableResolver } from '@masknet/shared-base'
+import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider.js'
@@ -42,7 +42,7 @@ import { ProtocolType, TabType, type SavingsProtocol } from '../types.js'
 import { useApr, useBalance } from './hooks/index.js'
 import { useSavingsTrans } from '../locales/index.js'
 
-export const useStyles = makeStyles()((theme, props) => ({
+const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
         padding: 0,
         fontFamily: theme.typography.fontFamily,
@@ -84,20 +84,12 @@ export const useStyles = makeStyles()((theme, props) => ({
     },
 }))
 
-export interface SavingsFormDialogProps {
+interface SavingsFormDialogProps {
     chainId: number
     protocol: SavingsProtocol
     tab: TabType
     onClose?: () => void
 }
-
-export const resolveProtocolName = createLookupTableResolver<ProtocolType, string>(
-    {
-        [ProtocolType.Lido]: 'Lido',
-        [ProtocolType.AAVE]: 'AAVE',
-    },
-    'unknown',
-)
 
 export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFormDialogProps) {
     const t = useSavingsTrans()

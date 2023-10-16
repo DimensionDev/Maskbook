@@ -57,7 +57,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface CollectionProps {
+interface CollectionProps {
     key: string
     project: Project
 }

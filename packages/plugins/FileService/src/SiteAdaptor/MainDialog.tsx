@@ -10,7 +10,7 @@ import { FileManagementProvider } from './contexts/index.js'
 import { FileRoutes } from './Routes.js'
 import { useTermsConfirmed } from './storage.js'
 
-export interface FileServiceDialogProps {
+interface FileServiceDialogProps {
     onClose: () => void
     open: boolean
     selectMode?: boolean

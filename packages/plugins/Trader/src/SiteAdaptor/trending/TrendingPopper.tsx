@@ -7,7 +7,7 @@ import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { AnchorProvider } from '@masknet/shared-base-ui'
 import { PluginTraderMessages } from '../../messages.js'
 
-export interface TrendingPopperProps {
+interface TrendingPopperProps {
     children?: (
         name?: string,
         type?: TrendingAPI.TagType,

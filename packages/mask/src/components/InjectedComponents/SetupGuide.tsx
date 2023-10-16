@@ -171,7 +171,7 @@ const useSetupGuideStyles = makeStyles()({
         right: '2em',
     },
 })
-export interface SetupGuideProps extends SetupGuideUIProps {}
+interface SetupGuideProps extends SetupGuideUIProps {}
 
 export function SetupGuide(props: SetupGuideProps) {
     const { classes } = useSetupGuideStyles()

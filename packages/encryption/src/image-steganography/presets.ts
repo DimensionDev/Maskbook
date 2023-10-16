@@ -8,8 +8,7 @@ export interface Dimension {
     height: number
 }
 
-/** @internal */
-export interface Preset extends Dimension {
+interface Preset extends Dimension {
     mask: string | null
     type: 'string' | 'raw'
     description: string

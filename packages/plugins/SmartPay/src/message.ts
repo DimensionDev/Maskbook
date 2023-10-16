@@ -11,7 +11,7 @@ type SmartPayDialogEvent = {
 }
 type ReceiveDialogEvent = { open: boolean; address?: string; name?: string }
 
-export interface PluginSmartPayMessage {
+interface PluginSmartPayMessage {
     smartPayDescriptionDialogEvent: SmartPayDescriptionDialogEvent
     smartPayDialogEvent: SmartPayDialogEvent
     receiveDialogEvent: ReceiveDialogEvent

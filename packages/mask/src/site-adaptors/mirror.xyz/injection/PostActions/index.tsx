@@ -17,7 +17,7 @@ const ActionsRenderer = createInjectHooksRenderer(
     (plugin) => plugin.TipsRealm?.UI?.Content,
 )
 
-export function PostActions() {
+function PostActions() {
     const Others = useWeb3Others()
 
     const identifier = usePostInfoDetails.author()

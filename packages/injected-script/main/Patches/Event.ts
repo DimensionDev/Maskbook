@@ -20,7 +20,7 @@ function ReTarget(A: EventTarget | null, B: unknown): EventTarget | null {
     // }
 }
 
-export type ActivationBehavior = Map<EventTarget, (event: __Event) => void>
+type ActivationBehavior = Map<EventTarget, (event: __Event) => void>
 
 export class __Event extends $unsafe.NewObject implements Event {
     // https://dom.spec.whatwg.org/#dom-eventtarget-dispatchevent

@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 
-export interface SearchBoxProps {
+interface SearchBoxProps {
     onChange: (keyword: string) => void
 }
 

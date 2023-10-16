@@ -22,7 +22,7 @@ function checkInWhitelist(chainId = ChainId.Mainnet, address: string) {
     return WHITE_LISTS?.some((x) => isSameAddress(x, address))
 }
 
-export interface SupportedChainResponse {
+interface SupportedChainResponse {
     id: string
     name: string
 }
@@ -197,7 +197,7 @@ export class GoPlusLabs {
 }
 export const GoPlusAuthorization = new GoPlusAuthorizationAPI()
 
-export function createTokenSecurity(
+function createTokenSecurity(
     chainId: ChainId,
     response: Record<
         string,
@@ -222,7 +222,7 @@ export function createTokenSecurity(
     }
 }
 
-export const isHighRisk = (tokenSecurity?: SecurityAPI.TokenSecurityType) => {
+const isHighRisk = (tokenSecurity?: SecurityAPI.TokenSecurityType) => {
     if (!tokenSecurity) return false
     return tokenSecurity.trust_list === '1'
         ? false
@@ -239,7 +239,7 @@ export const isHighRisk = (tokenSecurity?: SecurityAPI.TokenSecurityType) => {
           }).length > 0
 }
 
-export const getMessageList = (tokenSecurity: SecurityAPI.TokenSecurityType) =>
+const getMessageList = (tokenSecurity: SecurityAPI.TokenSecurityType) =>
     tokenSecurity.trust_list === '1'
         ? []
         : SecurityMessages.filter(

@@ -74,7 +74,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface TraderInfoUIProps {
+interface TraderInfoUIProps {
     isBest?: boolean
     isFocus?: boolean
     gasPrice?: string
@@ -174,7 +174,7 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
     },
 )
 
-export interface DefaultTraderPlaceholderUIProps {
+interface DefaultTraderPlaceholderUIProps {
     nativeToken?: Web3Helper.FungibleTokenAll
 }
 

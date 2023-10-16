@@ -14,7 +14,7 @@ import {
 import type { ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
 import type { WalletAPI } from '../../../entry-types.js'
 
-export interface ProviderStorage<Account, ProviderType extends string> {
+interface ProviderStorage<Account, ProviderType extends string> {
     account: Account
     providerType: ProviderType
 }

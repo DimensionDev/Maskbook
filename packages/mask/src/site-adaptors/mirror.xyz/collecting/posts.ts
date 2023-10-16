@@ -12,7 +12,7 @@ import { PostIdentifier } from '@masknet/shared-base'
 
 const MIRROR_LINK_PREFIX = /https(.*)mirror.xyz(.*)\//i
 
-export function queryInjectPoint(node: HTMLElement) {
+function queryInjectPoint(node: HTMLElement) {
     // Could be ENS or address
     const authorWallet = location.pathname.split('/')[1].toLowerCase()
     const allANode = node.querySelectorAll(

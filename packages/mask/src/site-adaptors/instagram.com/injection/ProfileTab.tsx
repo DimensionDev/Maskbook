@@ -120,7 +120,7 @@ const handler = () => {
     }
 }
 
-export function ProfileTabAtInstagram() {
+function ProfileTabAtInstagram() {
     const isMobile = useMatchXS()
     const location = useLocation()
     const [styles, setStyles] = useState<StyleProps>({

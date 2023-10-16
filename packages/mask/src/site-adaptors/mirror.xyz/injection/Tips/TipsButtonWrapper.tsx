@@ -11,7 +11,7 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 
-export const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         position: 'relative',
         marginLeft: theme.spacing(1),

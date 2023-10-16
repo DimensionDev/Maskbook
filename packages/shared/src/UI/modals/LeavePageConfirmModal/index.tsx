@@ -8,22 +8,19 @@ export interface LeavePageConfirmModalOpenProps {
     info?: OpenPageConfirm
 }
 
-export interface LeavePageConfirmModalProps {}
+export const LeavePageConfirmModal = forwardRef<SingletonModalRefCreator<LeavePageConfirmModalOpenProps>>(
+    (props, ref) => {
+        const [openDashboard, setOpenDashboard] = useState<(route?: DashboardRoutes, search?: string) => void>()
+        const [info, setInfo] = useState<OpenPageConfirm>()
 
-export const LeavePageConfirmModal = forwardRef<
-    SingletonModalRefCreator<LeavePageConfirmModalOpenProps>,
-    LeavePageConfirmModalProps
->((props, ref) => {
-    const [openDashboard, setOpenDashboard] = useState<(route?: DashboardRoutes, search?: string) => void>()
-    const [info, setInfo] = useState<OpenPageConfirm>()
+        const [open, dispatch] = useSingletonModal(ref, {
+            onOpen(props) {
+                setOpenDashboard(() => props.openDashboard)
+                setInfo(props.info)
+            },
+        })
 
-    const [open, dispatch] = useSingletonModal(ref, {
-        onOpen(props) {
-            setOpenDashboard(() => props.openDashboard)
-            setInfo(props.info)
-        },
-    })
-
-    if (!open) return null
-    return <LeavePageConfirm info={info} openDashboard={openDashboard} open onClose={() => dispatch?.close()} />
-})
+        if (!open) return null
+        return <LeavePageConfirm info={info} openDashboard={openDashboard} open onClose={() => dispatch?.close()} />
+    },
+)

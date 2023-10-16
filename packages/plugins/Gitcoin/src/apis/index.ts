@@ -2,9 +2,7 @@ import urlcat from 'urlcat'
 import { fetchCachedJSON } from '@masknet/web3-providers/helpers'
 import { GITCOIN_API_GRANTS_V1, type TenantTypes } from '../constants.js'
 
-export interface Metadata {}
-
-export interface AdminProfile {
+interface AdminProfile {
     id: number
     url: string
     handle: string
@@ -13,7 +11,7 @@ export interface AdminProfile {
     avatar_url: string
     github_url?: string
     total_earned?: number
-    organizations?: Metadata
+    organizations?: unknown
 }
 
 export interface GitcoinGrant {
@@ -33,7 +31,7 @@ export interface GitcoinGrant {
     token_address: string
     token_symbol: string
     contract_address: string
-    metadata: Metadata
+    metadata: unknown
     network: string
     required_gas_price: string
     admin_profile: AdminProfile

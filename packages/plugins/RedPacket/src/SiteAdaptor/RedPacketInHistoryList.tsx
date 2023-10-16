@@ -194,7 +194,7 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
     }
 })
 
-export interface RedPacketInHistoryListProps {
+interface RedPacketInHistoryListProps {
     history: RedPacketJSONPayload | RedPacketJSONPayloadFromChain
     onSelect: (payload: RedPacketJSONPayload) => void
 }

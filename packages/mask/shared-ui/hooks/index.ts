@@ -16,25 +16,8 @@ export const useSupportedSocialNetworkSites = createHook(
     noop,
 )
 
-export const useOwnedPersonas = createHook(
-    () => Services.Identity.queryOwnedPersonaInformation(false),
-    (x) => MaskMessages.events.ownPersonaChanged.on(x),
-)
-
 export const useAppearance = createHook(Services.Settings.getTheme, MaskMessages.events.appearanceSettings.on)
 
-export const useCurrentPersonaIdentifier = createHook(
-    Services.Settings.getCurrentPersonaIdentifier,
-    MaskMessages.events.currentPersonaIdentifier.on,
-)
-
-export const usePersonaAvatar = createHook(
-    () => Services.Settings.getCurrentPersonaIdentifier().then((x) => Services.Identity.getPersonaAvatar(x)),
-    (x) => {
-        MaskMessages.events.currentPersonaIdentifier.on(x)
-        MaskMessages.events.ownPersonaChanged.on(x)
-    },
-)
 export const useLanguage = createHook(Services.Settings.getLanguage, MaskMessages.events.languageSettings.on)
 
 // Do not move or export this function.

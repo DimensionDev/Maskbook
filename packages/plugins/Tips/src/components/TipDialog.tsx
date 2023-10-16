@@ -59,7 +59,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface TipDialogProps {
+interface TipDialogProps {
     open: boolean
     onClose?: () => void
 }

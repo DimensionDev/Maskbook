@@ -96,7 +96,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface PrimaryKeyDisplayProps {
+interface PrimaryKeyDisplayProps {
     wallet: Wallet
     hiddenArrow?: boolean
 }

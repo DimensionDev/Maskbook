@@ -64,7 +64,7 @@ const useStyles = makeStyles<{
     },
 }))
 
-export interface ConnectionProgressProps {
+interface ConnectionProgressProps {
     pluginID: NetworkPluginID
     providerType: Web3Helper.ProviderTypeAll
     networkType: Web3Helper.NetworkTypeAll

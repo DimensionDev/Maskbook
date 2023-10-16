@@ -11,7 +11,7 @@ export type SelectProviderModalOpenProps = {
 
 export type SelectProviderModalCloseProps = boolean
 
-export interface SelectProviderModalProps {
+interface SelectProviderModalProps {
     createWallet(): void
 }
 

@@ -98,7 +98,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface UnlockERC721TokenProps {
+interface UnlockERC721TokenProps {
     transaction: TransactionDetail
 
     paymentToken?: string

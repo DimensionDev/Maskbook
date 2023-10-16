@@ -12,7 +12,7 @@ import {
     unstable_STYLE_META,
 } from '@masknet/typed-message'
 
-export enum Order {
+enum Order {
     Flatten = 1000,
     ParseLink = 900,
     // MaskPayload = 800,

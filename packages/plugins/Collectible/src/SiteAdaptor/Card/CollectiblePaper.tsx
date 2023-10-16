@@ -1,6 +1,6 @@
 import { Card } from '@mui/material'
 
-export interface CollectiblePaperProps extends withClasses<'root'> {
+interface CollectiblePaperProps extends withClasses<'root'> {
     children?: React.ReactNode
 }
 

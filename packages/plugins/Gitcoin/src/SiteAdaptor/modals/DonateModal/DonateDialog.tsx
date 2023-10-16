@@ -69,7 +69,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface DonateDialogProps extends InjectedDialogProps {
+interface DonateDialogProps extends InjectedDialogProps {
     grant: GitcoinGrant
 }
 

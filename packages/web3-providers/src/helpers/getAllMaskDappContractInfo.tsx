@@ -3,10 +3,8 @@ import {
     getMaskBoxConstant,
     getRedPacketConstant,
     getNftRedPacketConstant,
-    NetworkType,
 } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
-import { createLookupTableResolver } from '@masknet/shared-base'
 
 export function getAllMaskDappContractInfo(chainId: ChainId, type: 'token' | 'nft') {
     const HAPPY_RED_PACKET_ADDRESS_V1 = getRedPacketConstant(chainId, 'HAPPY_RED_PACKET_ADDRESS_V1')
@@ -51,27 +49,3 @@ export function getAllMaskDappContractInfo(chainId: ChainId, type: 'token' | 'nf
               },
           ]
 }
-
-export const resolveNetworkOnRabby = createLookupTableResolver<NetworkType, string>(
-    {
-        [NetworkType.Ethereum]: 'eth',
-        [NetworkType.Binance]: 'bsc',
-        [NetworkType.Base]: 'base',
-        [NetworkType.Polygon]: 'matic',
-        [NetworkType.Arbitrum]: 'arb',
-        [NetworkType.xDai]: 'xdai',
-        [NetworkType.Avalanche]: 'avax',
-        [NetworkType.Fantom]: 'ftm',
-        [NetworkType.Aurora]: 'aurora',
-        [NetworkType.Fuse]: '',
-        [NetworkType.Metis]: '',
-        [NetworkType.Boba]: '',
-        [NetworkType.Optimism]: '',
-        [NetworkType.Celo]: '',
-        [NetworkType.Conflux]: '',
-        [NetworkType.Astar]: '',
-        [NetworkType.Moonbeam]: '',
-        [NetworkType.CustomNetwork]: '',
-    },
-    'eth',
-)

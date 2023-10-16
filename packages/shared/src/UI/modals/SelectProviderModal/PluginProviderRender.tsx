@@ -136,7 +136,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface PluginProviderRenderProps {
+interface PluginProviderRenderProps {
     providers: readonly Web3Helper.ProviderDescriptorAll[]
     onProviderIconClicked: (
         network: Web3Helper.NetworkDescriptorAll,

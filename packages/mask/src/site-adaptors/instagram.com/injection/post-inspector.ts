@@ -14,6 +14,6 @@ export function injectPostInspectorInstagram(signal: AbortSignal, current: PostI
         {
             injectionPoint: (post) => getShadowRoot(post.suggestedInjectionPoint),
         },
-        () => ({ slotPosition: 'after' }),
+        { slotPosition: 'after' },
     )(current, signal)
 }

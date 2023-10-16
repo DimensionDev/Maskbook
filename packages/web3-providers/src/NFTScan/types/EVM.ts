@@ -87,70 +87,11 @@ export namespace EVM {
         trade_value: string
     }
 
-    /**
-     * Unstable API.
-     */
-    export interface NFTPlatformInfo {
-        description: string
-        royalty: string
-        trendingVolumeAverage_24h?: number
-        twitter: string
-        total: number
-        trendingVolume_all?: number
-        email: string
-        trendingVolume_24h?: number
-        floorPrice: number
-        /** url */
-        image: string
-        highestPrice: number
-        /** url */
-        website: string
-        /** url */
-        github: string
-        address: string
-        /** url */
-        banner: string
-        authFlag: false
-        /** url */
-        discord?: string
-        instagram?: string
-        medium?: string
-        facebook?: string
-        reddit?: string
-        telegram?: string
-        youtube?: string
-        trendingTotal_24h?: number
-        name: string
-        contractCreator: string
-        ownersCount?: number
-        pageView?: number
-    }
-
-    export interface SearchNFTPlatformNameResult {
-        /** url */
-        image: string
-        address: string
-        platform: string
-    }
-
     export type CollectionTrendingRange = '1h' | '4h' | '12h' | '1d' | '3d' | '7d' | '30d' | '90d' | '1y' | 'all'
     export interface CollectionTrendingRecord {
         begin_timestamp: number
         end_timestamp: number
         average_price: number
-        volume: number
-    }
-    export interface VolumeAndFloorRecord {
-        /** timestamp */
-        time: number
-        price: number
-        volume: number
-        sales: number
-    }
-    export interface VolumeAndFloor {
-        code: number
-        result: VolumeAndFloorRecord[]
-        sales: number
         volume: number
     }
 }
