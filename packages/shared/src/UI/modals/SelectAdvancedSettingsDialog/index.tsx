@@ -18,11 +18,8 @@ export interface SelectGasSettingsModalCloseProps {
     settings?: SelectGasSettings | null
 }
 
-interface SelectGasSettingsModalProps {}
-
 export const SelectGasSettingsModal = forwardRef<
-    SingletonModalRefCreator<SelectGasSettingsModalOpenProps, SelectGasSettingsModalCloseProps>,
-    SelectGasSettingsModalProps
+    SingletonModalRefCreator<SelectGasSettingsModalOpenProps, SelectGasSettingsModalCloseProps>
 >((props, ref) => {
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()

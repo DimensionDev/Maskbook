@@ -3,9 +3,7 @@ import type { SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { WalletStatusDialog } from './WalletStatusDialog.js'
 
-interface WalletStatusModalProps {}
-
-export const WalletStatusModal = forwardRef<SingletonModalRefCreator, WalletStatusModalProps>((props, ref) => {
+export const WalletStatusModal = forwardRef<SingletonModalRefCreator>((props, ref) => {
     const [isHidden, setHidden] = useState(false)
 
     const [open, dispatch] = useSingletonModal(ref, {

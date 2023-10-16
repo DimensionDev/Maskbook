@@ -310,8 +310,6 @@ export interface FungibleToken<ChainId, SchemaType> extends Token<ChainId, Schem
     rank?: number
 }
 
-export interface FungibleTokenStats {}
-
 export interface NonFungibleTokenStats {
     volume24h: number
     count24h: number
@@ -634,16 +632,6 @@ export interface NonFungibleContractSpender<ChainId, SchemaType> {
     name: string | undefined
     logo: ReactNode | undefined
 }
-
-/**
- * The security diagnosis about a fungible token.
- */
-export interface FungibleTokenSecurity {}
-
-/**
- * The security diagnosis about a non-fungible token.
- */
-export interface NonFungibleTokenSecurity {}
 
 export interface Result<ChainId> {
     pluginID: NetworkPluginID

@@ -45,9 +45,7 @@ export const SignUpAccountLogo = styled(Icons.SignUpAccount)(({ theme }) => ({
     height: '96px',
 })) as any as typeof Icons.SignUpAccount
 
-interface PersonaLogoBoxProps {}
-
-export const PersonaLogoBox = memo<React.PropsWithChildren<PersonaLogoBoxProps>>(({ children }) => {
+export const PersonaLogoBox = memo<React.PropsWithChildren<{}>>(({ children }) => {
     const t = useDashboardTrans()
     return (
         <LogoBoxStyled>

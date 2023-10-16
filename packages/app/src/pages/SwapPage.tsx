@@ -8,9 +8,7 @@ import { createERC20Token, type ChainId, type SchemaType } from '@masknet/web3-s
 import { PageContainer } from '../components/PageContainer.js'
 import { shareToTwitterAsPopup } from '@masknet/shared-base-ui'
 
-interface SwapPageProps {}
-
-export default function SwapPage(props: SwapPageProps) {
+export default function SwapPage() {
     const location = useLocation()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const params = new URLSearchParams(location.search)

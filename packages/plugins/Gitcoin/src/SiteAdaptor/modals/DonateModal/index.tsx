@@ -9,19 +9,15 @@ export interface DonateModalOpenProps extends Omit<InjectedDialogProps, 'open'> 
     grant: GitcoinGrant
 }
 
-interface DonateModalProps {}
+export const DonateModal = forwardRef<SingletonModalRefCreator<DonateModalOpenProps>>((props, ref) => {
+    const [props_, setProps_] = useState<DonateModalOpenProps>()
 
-export const DonateModal = forwardRef<SingletonModalRefCreator<DonateModalOpenProps>, DonateModalProps>(
-    (props, ref) => {
-        const [props_, setProps_] = useState<DonateModalOpenProps>()
+    const [open, dispatch] = useSingletonModal(ref, {
+        onOpen(props) {
+            setProps_(props)
+        },
+    })
 
-        const [open, dispatch] = useSingletonModal(ref, {
-            onOpen(props) {
-                setProps_(props)
-            },
-        })
-
-        if (!open || !props_?.grant) return null
-        return <DonateDialog open onClose={() => dispatch?.close()} {...props_} grant={props_?.grant} />
-    },
-)
+    if (!open || !props_?.grant) return null
+    return <DonateDialog open onClose={() => dispatch?.close()} {...props_} grant={props_?.grant} />
+})

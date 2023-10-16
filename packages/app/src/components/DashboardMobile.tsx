@@ -7,9 +7,7 @@ import { WalletItem } from './Wallet.js'
 import { Navigation } from './Navigation.js'
 import { InstallExtension } from './Install.js'
 
-interface DashboardForMobileProps {}
-
-export function DashboardForMobile(props: DashboardForMobileProps) {
+export function DashboardForMobile() {
     const { sidebarOpen, setSidebarOpen } = DashboardContext.useContainer()
 
     return (

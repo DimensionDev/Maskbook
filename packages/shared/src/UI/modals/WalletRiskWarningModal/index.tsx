@@ -8,23 +8,20 @@ export interface WalletRiskWarningModalOpenProps {
     account: string
 }
 
-interface WalletRiskWarningModalProps {}
+export const WalletRiskWarningModal = forwardRef<SingletonModalRefCreator<WalletRiskWarningModalOpenProps>>(
+    function WalletRiskWarningModal(props, ref) {
+        const [account, setAccount] = useState('')
+        const [pluginID, setPluginID] = useState(NetworkPluginID.PLUGIN_EVM)
 
-export const WalletRiskWarningModal = forwardRef<
-    SingletonModalRefCreator<WalletRiskWarningModalOpenProps>,
-    WalletRiskWarningModalProps
->(function WalletRiskWarningModal(props, ref) {
-    const [account, setAccount] = useState('')
-    const [pluginID, setPluginID] = useState(NetworkPluginID.PLUGIN_EVM)
+        const [open, dispatch] = useSingletonModal(ref, {
+            onOpen(props) {
+                setAccount(props.account)
+                setPluginID(props.pluginID)
+            },
+        })
 
-    const [open, dispatch] = useSingletonModal(ref, {
-        onOpen(props) {
-            setAccount(props.account)
-            setPluginID(props.pluginID)
-        },
-    })
+        if (!open) return null
 
-    if (!open) return null
-
-    return <WalletRiskWarning account={account} pluginID={pluginID} open onClose={() => dispatch?.close()} />
-})
+        return <WalletRiskWarning account={account} pluginID={pluginID} open onClose={() => dispatch?.close()} />
+    },
+)

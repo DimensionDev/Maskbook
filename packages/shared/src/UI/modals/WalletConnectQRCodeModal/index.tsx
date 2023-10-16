@@ -7,19 +7,16 @@ export interface WalletConnectQRCodeOpenProps {
     uri: string
 }
 
-interface WalletConnectQRCodeDialogProps {}
+export const WalletConnectQRCodeModal = forwardRef<SingletonModalRefCreator<WalletConnectQRCodeOpenProps>>(
+    (props, ref) => {
+        const [uri, setURI] = useState('')
+        const [open, dispatch] = useSingletonModal(ref, {
+            onOpen(props) {
+                setURI(props.uri)
+            },
+        })
 
-export const WalletConnectQRCodeModal = forwardRef<
-    SingletonModalRefCreator<WalletConnectQRCodeOpenProps>,
-    WalletConnectQRCodeDialogProps
->((props, ref) => {
-    const [uri, setURI] = useState('')
-    const [open, dispatch] = useSingletonModal(ref, {
-        onOpen(props) {
-            setURI(props.uri)
-        },
-    })
-
-    if (!open) return null
-    return <QRCodeDialog uri={uri} open onClose={() => dispatch?.close()} />
-})
+        if (!open) return null
+        return <QRCodeDialog uri={uri} open onClose={() => dispatch?.close()} />
+    },
+)

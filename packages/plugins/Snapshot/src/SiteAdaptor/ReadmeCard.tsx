@@ -31,9 +31,8 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
 }))
-interface ReadMeCardProps {}
 
-export function ReadMeCard(props: ReadMeCardProps) {
+export function ReadMeCard() {
     const { classes } = useStyles()
     const identifier = useContext(SnapshotContext)
     const proposal = useProposal(identifier.id)

@@ -12,11 +12,8 @@ export interface ConnectWalletModalOpenProps {
 
 export type ConnectWalletModalCloseProps = boolean
 
-interface ConnectWalletModalProps {}
-
 export const ConnectWalletModal = forwardRef<
-    SingletonModalRefCreator<ConnectWalletModalOpenProps, ConnectWalletModalCloseProps>,
-    ConnectWalletModalProps
+    SingletonModalRefCreator<ConnectWalletModalOpenProps, ConnectWalletModalCloseProps>
 >((props, ref) => {
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
     const [providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()

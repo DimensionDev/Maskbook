@@ -124,9 +124,7 @@ const useTabsStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface PreviewCardProps {}
-
-export function PreviewCard(props: PreviewCardProps) {
+export function PreviewCard() {
     const { classes } = useTabsStyles()
     const [openDrawDialog, setOpenDrawDialog] = useState(false)
     const [openDrawResultDialog, setOpenDrawResultDialog] = useState(false)

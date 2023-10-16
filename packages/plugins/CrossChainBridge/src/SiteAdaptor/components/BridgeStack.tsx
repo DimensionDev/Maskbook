@@ -40,9 +40,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface BridgeStackProps {}
-
-export function BridgeStack(props: BridgeStackProps) {
+export function BridgeStack() {
     const t = useCrossChainBridgeTrans()
     const { classes } = useStyles()
 

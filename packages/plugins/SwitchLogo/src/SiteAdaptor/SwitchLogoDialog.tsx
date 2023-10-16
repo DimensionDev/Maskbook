@@ -55,9 +55,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface SwitchLogoDialogProps {}
-
-export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
+export const SwitchLogoDialog = memo(() => {
     const t = useSwitchLogoTrans()
     const { classes, cx } = useStyles()
     const identity = useLastRecognizedIdentity()

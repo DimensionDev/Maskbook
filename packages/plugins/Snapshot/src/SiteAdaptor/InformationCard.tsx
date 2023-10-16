@@ -14,8 +14,6 @@ import { SnapshotCard } from './SnapshotCard.js'
 import { SNAPSHOT_IPFS } from '../constants.js'
 import { useSnapshotTrans } from '../locales/index.js'
 
-interface InformationCardProps {}
-
 interface InfoFieldProps extends withClasses<'field'> {
     title: string
     children: React.ReactNode
@@ -70,7 +68,7 @@ export function InfoField(props: InfoFieldProps) {
     )
 }
 
-export function InformationCard(props: InformationCardProps) {
+export function InformationCard() {
     const { classes } = useStyles()
     const t = useSnapshotTrans()
     const identifier = useContext(SnapshotContext)

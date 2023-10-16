@@ -10,9 +10,7 @@ import { DashboardHeader } from '../components/DashboardHeader.js'
 import { useSetThemeMode } from '../hooks/useSetThemeMode.js'
 import { useThemeMode } from '../hooks/useThemeMode.js'
 
-interface SettingsPageProps {}
-
-export default function SettingsPage(props: SettingsPageProps) {
+export default function SettingsPage() {
     return (
         <DashboardContainer>
             <main>

@@ -38,25 +38,6 @@ interface AssetToken {
     address: string
 }
 
-interface AssetOrder {
-    created_time?: string
-    current_price?: string
-    current_bounty?: string
-    maker_account?: OrderAccount
-    taker_account?: OrderAccount
-    payment_token?: string
-    payment_token_contract?: AssetToken
-    fee_recipient_account?: AssetToken
-    cancelled_or_finalized?: boolean
-    marked_invalid?: boolean
-    approved_on_chain: boolean
-    listing_time: number
-    side: number
-    quantity: string
-    expiration_time: number
-    order_hash: string
-}
-
 interface AssetEvent {
     event_type: string
     event_timestamp: number
@@ -258,50 +239,6 @@ interface OrderConsideration {
     startAmount: string
     endAmount: string
     recipient: string
-}
-
-interface OrderProtocol {
-    parameters: {
-        offerer: string
-        offer: OrderConsideration[]
-        consideration: OrderConsideration[]
-        startTime: string
-        endTime: string
-        orderType: number
-        zone: string
-        zoneHash: string
-        salt: string
-        conduitKey: string
-        totalOriginalConsiderationItems: number
-        counter: number
-    }
-}
-
-interface OrderAssetBundle {}
-
-interface OpenSeaAssetOrder {
-    created_date?: string
-    closing_data?: string
-    listing_time?: number
-    expiration_time?: number
-    order_hash: string
-    protocol_data: OrderProtocol
-    protocol_address: string
-    maker?: OrderAccount
-    maker_asset_bundle?: OrderAssetBundle
-    taker?: OrderAccount
-    taker_asset_bundle?: OrderAssetBundle
-    current_price?: string
-    maker_fees: OrderFee[]
-    taker_fees: OrderFee[]
-    side: 'bid' | 'sell'
-    order_type: 'criteria'
-    cancelled?: boolean
-    finalized?: boolean
-    marked_invalid?: boolean
-    client_signature: string
-    relay_id: string
-    criteria_proof?: string
 }
 
 export interface OpenSeaCollectionStats {

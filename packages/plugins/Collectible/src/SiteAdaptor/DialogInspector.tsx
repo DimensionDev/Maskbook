@@ -5,9 +5,7 @@ import { Web3ContextProvider, useChainIdValid, useNetworkContext } from '@maskne
 import { CardDialog } from './CardDialog/CardDialog.js'
 import { Context } from './Context/index.js'
 
-interface DialogInspectorProps {}
-
-export function DialogInspector(props: DialogInspectorProps) {
+export function DialogInspector() {
     const { pluginID: parentPluginID } = useNetworkContext()
     const [open, setOpen] = useState(false)
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
