@@ -8,10 +8,6 @@ export interface UserScriptAPI {
     request_init(init: InitInformation): Promise<void>
 }
 export interface InitInformation {
-    context: {
-        meta: Mask.SocialNetwork['metadata']
-        connected: boolean
-    }
     debuggerMode: boolean
 }
 export { serializer } from './serializer.js'

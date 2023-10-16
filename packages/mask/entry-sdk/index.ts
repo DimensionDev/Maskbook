@@ -6,7 +6,6 @@ export async function startMaskSDK() {
     const maskSDK = createMaskSDKServer(hmr_sdkServer)
     // TODO: listen to SNSContext connected status
     return maskSDK.request_init({
-        context: { connected: false, meta: undefined },
         debuggerMode: process.env.NODE_ENV === 'development',
     })
 }
