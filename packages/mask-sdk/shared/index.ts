@@ -1,6 +1,5 @@
 /// <reference path="../dist/public-api.d.ts" />
 export interface BridgeAPI {
-    site_appendComposition(message: string, metadata?: ReadonlyMap<string, unknown>): Promise<void>
     eth_request(request: unknown): Promise<unknown>
     reload(): Promise<void>
 }

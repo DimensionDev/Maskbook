@@ -32,7 +32,6 @@ export default {
     'plugins/Collectible/src/locales/%locale%.json': 'com.maskbook.collectibles',
     'plugins/Claim/src/locales/%locale%.json': 'com.mask.claim',
     'plugins/ArtBlocks/src/locales/%locale%.json': 'io.artblocks',
-    'plugins/External/src/locales/%locale%.json': 'io.mask.external',
     'plugins/Savings/src/locales/%locale%.json': 'com.savings',
     'plugins/Snapshot/src/locales/%locale%.json': 'org.snapshot',
     'plugins/ProfileCard/src/locales/%locale%.json': 'io.mask.web3-profile-card',

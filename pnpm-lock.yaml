@@ -306,9 +306,6 @@ importers:
       '@masknet/plugin-cyberconnect':
         specifier: workspace:^
         version: link:../plugins/CyberConnect
-      '@masknet/plugin-external':
-        specifier: workspace:^
-        version: link:../plugins/External
       '@masknet/plugin-file-service':
         specifier: workspace:^
         version: link:../plugins/FileService
@@ -555,15 +552,6 @@ importers:
         specifier: ^2.2.3
         version: 2.2.3
 
-  packages/external-plugin-previewer:
-    dependencies:
-      '@masknet/theme':
-        specifier: workspace:^
-        version: link:../theme
-      ef.js:
-        specifier: ^0.17.4
-        version: 0.17.4
-
   packages/flags:
     dependencies:
       '@dimensiondev/holoflows-kit':
@@ -649,9 +637,6 @@ importers:
       '@masknet/plugin-debugger':
         specifier: workspace:^
         version: link:../plugins/Debugger
-      '@masknet/plugin-external':
-        specifier: workspace:^
-        version: link:../plugins/External
       '@masknet/plugin-file-service':
         specifier: workspace:^
         version: link:../plugins/FileService
@@ -1464,33 +1449,6 @@ importers:
       '@masknet/web3-telemetry':
         specifier: workspace:^
         version: link:../../web3-telemetry
-
-  packages/plugins/External:
-    dependencies:
-      '@masknet/flags':
-        specifier: workspace:^
-        version: link:../../flags
-      '@masknet/plugin-infra':
-        specifier: workspace:^
-        version: link:../../plugin-infra
-      '@masknet/shared':
-        specifier: workspace:^
-        version: link:../../shared
-      '@masknet/shared-base':
-        specifier: workspace:^
-        version: link:../../shared-base
-      '@masknet/theme':
-        specifier: workspace:^
-        version: link:../../theme
-      '@masknet/typed-message':
-        specifier: workspace:^
-        version: link:../../typed-message/base
-      '@masknet/web3-providers':
-        specifier: workspace:^
-        version: link:../../web3-providers
-      react-use:
-        specifier: ^17.4.0
-        version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
 
   packages/plugins/FileService:
     dependencies:
@@ -14693,21 +14651,6 @@ packages:
 
   /ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
-
-  /ef-core@0.17.5:
-    resolution: {integrity: sha512-7rfi9tqobCSel9nG29GP5AAMHuUTEmS49iiBewZi7/TqHqR0BgeGCh4O3m8F+qqojhw+GEOSZqoXkbT7PfoBvA==}
-    dev: false
-
-  /ef.js@0.17.4:
-    resolution: {integrity: sha512-fGU+kcDLo+ezKC+Tw68fwTLsPgOszg2hbzU3rIEjQlnHwsnfSokSR2Fi4djHi09BNs7wN+Oe/JBKxXBsRjP3IQ==}
-    dependencies:
-      ef-core: 0.17.5
-      eft-parser: 0.16.5
-    dev: false
-
-  /eft-parser@0.16.5:
-    resolution: {integrity: sha512-7fdg95/IOXs4nN8btfDorkkrY6N9vnC9y4V91bhnsNVHQSpeqQVA06EK12LrdpV5dYFTmCQMY0Gzzu9qSWsWXg==}
-    dev: false
 
   /electron-fetch@1.7.4:
     resolution: {integrity: sha512-+fBLXEy4CJWQ5bz8dyaeSG1hD6JJ15kBZyj3eh24pIVrd3hLM47H/umffrdQfS6GZ0falF0g9JT9f3Rs6AVUhw==}

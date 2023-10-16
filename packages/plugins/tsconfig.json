@@ -10,7 +10,6 @@
     { "path": "./CrossChainBridge/" },
     { "path": "./CyberConnect/" },
     { "path": "./Debugger/" },
-    { "path": "./External/" },
     { "path": "./FileService/" },
     { "path": "./Gitcoin/" },
     { "path": "./GoPlusSecurity/" },
