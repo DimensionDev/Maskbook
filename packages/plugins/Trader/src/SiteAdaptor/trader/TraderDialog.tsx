@@ -94,6 +94,7 @@ export function TraderDialog(props: { share: ((text: string) => void) | undefine
     const t = useTraderTrans()
     const [rotate, setRotate] = useState(false)
     const { classes } = useStyles({ rotate })
+    const [timer, setTimer] = useState<ReturnType<typeof setTimeout> | null>(null)
 
     const chainIdValid = useChainIdValid(pluginID, chainId)
     const [defaultCoins, setDefaultCoins] = useState<
@@ -200,10 +201,13 @@ export function TraderDialog(props: { share: ((text: string) => void) | undefine
                     <IconButton
                         onClick={() => {
                             if (rotate) return
+                            if (timer) clearTimeout(timer)
                             setRotate(true)
-                            setTimeout(() => {
-                                setRotate(false)
-                            }, 1500)
+                            setTimer(
+                                setTimeout(() => {
+                                    setRotate(false)
+                                }, 1500),
+                            )
                             tradeRef.current?.refresh()
                         }}>
                         <div className={classes.iconRotate}>
