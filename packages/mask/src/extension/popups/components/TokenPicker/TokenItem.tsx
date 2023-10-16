@@ -145,6 +145,7 @@ export const TokenItem = memo(function TokenItem({
                 <Box position="relative">
                     <TokenIcon
                         className={classes.tokenIcon}
+                        pluginID={NetworkPluginID.PLUGIN_EVM}
                         chainId={asset.chainId}
                         address={asset.address}
                         name={asset.name}

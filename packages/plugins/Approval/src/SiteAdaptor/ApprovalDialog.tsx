@@ -5,65 +5,64 @@ import { TabContext } from '@mui/lab'
 import { PluginWalletStatusBar, InjectedDialog, NetworkTab } from '@masknet/shared'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { type ChainId } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, PluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../locales/index.js'
 import { ApprovalTokenContent } from './ApprovalTokenContent.js'
 import { ApprovalNFTContent } from './ApprovalNFTContent.js'
+import { useMemo } from 'react'
 
-const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
-    (theme, props) => ({
-        dialogRoot: {
-            width: 600,
-            height: 620,
-            overflowX: 'hidden',
+const useStyles = makeStyles()((theme, props) => ({
+    dialogRoot: {
+        width: 600,
+        height: 620,
+        overflowX: 'hidden',
+    },
+    dialogContent: {
+        width: 600,
+        background: theme.palette.maskColor.bottom,
+        padding: 0,
+        margin: 'auto',
+        overflowX: 'hidden',
+    },
+    contentWrapper: {
+        width: 602,
+        padding: 0,
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        height: '100%',
+        '::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            width: 18,
         },
-        dialogContent: {
-            width: 600,
-            background: theme.palette.maskColor.bottom,
-            padding: 0,
-            margin: 'auto',
-            overflowX: 'hidden',
+        '::-webkit-scrollbar-thumb': {
+            borderRadius: '20px',
+            width: 5,
+            border: '7px solid rgba(0, 0, 0, 0)',
+            backgroundColor: theme.palette.maskColor.secondaryLine,
+            backgroundClip: 'padding-box',
         },
-        contentWrapper: {
-            width: 602,
-            padding: 0,
-            overflowY: 'auto',
-            overflowX: 'hidden',
-            height: '100%',
-            '::-webkit-scrollbar': {
-                backgroundColor: 'transparent',
-                width: 18,
-            },
-            '::-webkit-scrollbar-thumb': {
-                borderRadius: '20px',
-                width: 5,
-                border: '7px solid rgba(0, 0, 0, 0)',
-                backgroundColor: theme.palette.maskColor.secondaryLine,
-                backgroundClip: 'padding-box',
-            },
+    },
+    dialogTitle: {
+        '& > p': {
+            overflow: 'visible',
         },
-        dialogTitle: {
-            '& > p': {
-                overflow: 'visible',
-            },
-        },
-        abstractTabWrapper: {
-            width: '100%',
-            paddingBottom: theme.spacing(2),
-        },
-        approvalWrapper: {
-            display: 'flex',
-            flexDirection: 'column',
-            width: '100%',
-            height: '100%',
-        },
-        footer: {
-            position: 'sticky',
-            bottom: 0,
-        },
-    }),
-)
+    },
+    abstractTabWrapper: {
+        width: '100%',
+        paddingBottom: theme.spacing(2),
+    },
+    approvalWrapper: {
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        height: '100%',
+    },
+    footer: {
+        position: 'sticky',
+        bottom: 0,
+    },
+}))
 
 export interface ApprovalDialogProps {
     open: boolean
@@ -111,9 +110,11 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const approvalDefinition = useActivatedPlugin(PluginID.Approval, 'any')
-    const chainIdList = compact<ChainId>(
-        approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? [],
-    )
+    const chainIdList = useMemo(() => {
+        return compact<ChainId>(
+            approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? EMPTY_LIST,
+        )
+    }, [approvalDefinition])
     const { classes } = useStyles()
 
     return (

@@ -32,6 +32,7 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Avalanche,
                     ChainId.Aurora,
                     ChainId.Optimism,
+                    ChainId.Scroll,
                 ],
             },
             [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },

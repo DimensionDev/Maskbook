@@ -33,6 +33,7 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Fantom,
                     ChainId.Conflux,
                     ChainId.Astar,
+                    ChainId.Scroll,
                     ChainId.Optimism,
                 ],
             },

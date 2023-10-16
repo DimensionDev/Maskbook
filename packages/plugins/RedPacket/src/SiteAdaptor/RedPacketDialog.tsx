@@ -1,5 +1,4 @@
 import { useCallback, useMemo, useState } from 'react'
-import { compact } from 'lodash-es'
 import Web3Utils from 'web3-utils'
 import { DialogContent, Tab, useTheme } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
@@ -83,12 +82,10 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const theme = useTheme()
     const mode = useSiteThemeMode(theme)
     const { classes } = useStyles({ currentTab, showHistory, isDim: mode === 'dim' })
-    const chainIdList = useMemo(() => {
-        return compact<ChainId>(
-            currentTab === tabs.tokens
-                ? approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
-                : [ChainId.Mainnet, ChainId.BSC, ChainId.Matic],
-        )
+    const chainIdList: ChainId[] = useMemo(() => {
+        return currentTab === tabs.tokens
+            ? approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
+            : [ChainId.Mainnet, ChainId.BSC, ChainId.Matic]
     }, [currentTab === tabs.tokens, approvalDefinition?.enableRequirement.web3])
     const chainId = chainIdList.includes(_chainId) ? _chainId : ChainId.Mainnet
 

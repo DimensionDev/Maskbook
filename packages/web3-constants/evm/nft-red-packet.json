@@ -12,7 +12,8 @@
         "Aurora": "0x05ee315E407C21a594f807D61d6CC11306D1F149",
         "Aurora_Testnet": "0x97369fEE7db34E0BfE47861f2ec44b4378d13eB4",
         "Conflux": "0x5b966f3a32db9c180843bcb40267a66b73e4f022",
-        "Astar": "0xc3e62b2CC70439C32a381Bfc056aCEd1d7162cef"
+        "Astar": "0xc3e62b2CC70439C32a381Bfc056aCEd1d7162cef",
+        "Scroll": "0x727F8030964CCEC6B0E344399c8d8E2B4C837351"
     },
     "NFT_RED_PACKET_ADDRESS_BLOCK_HEIGHT": {
         "Mainnet": 13229711,
@@ -39,6 +40,7 @@
         "Aurora": 0,
         "Aurora_Testnet": 0,
         "Conflux": 0,
-        "Astar": 0
+        "Astar": 0,
+        "Scroll": 96705
     }
 }
