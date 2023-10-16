@@ -1,11 +1,10 @@
 import urlcat from 'urlcat'
 import { fetchCachedJSON } from '../entry-helpers.js'
-import { type CalendarBaseAPI } from '../types/Calendar.js'
 
 const BASE_URL = 'https://mask-network-dev.firefly.land/v1/calendar/crypto_event_list'
 
-export class CalendarAPI implements CalendarBaseAPI.Provider {
-    async getNewsList(startDate: number, endDate?: number) {
+export class Calendar {
+    static async getNewsList(startDate: number, endDate?: number) {
         const list = await fetchCachedJSON<any>(
             urlcat(BASE_URL, {
                 provider_type: 'coincarp',
@@ -16,7 +15,7 @@ export class CalendarAPI implements CalendarBaseAPI.Provider {
         )
         return list?.data?.events?.map((x: any) => ({ ...x, event_date: x.event_date * 1000 }))
     }
-    async getEventList(startDate: number, endDate?: number) {
+    static async getEventList(startDate: number, endDate?: number) {
         const list = await fetchCachedJSON<any>(
             urlcat(BASE_URL, {
                 provider_type: 'link3',
@@ -27,7 +26,7 @@ export class CalendarAPI implements CalendarBaseAPI.Provider {
         )
         return list?.data?.events?.map((x: any) => ({ ...x, event_date: x.event_date * 1000 }))
     }
-    async getNFTList(startDate: number, endDate?: number) {
+    static async getNFTList(startDate: number, endDate?: number) {
         const list = await fetchCachedJSON<any>(
             urlcat(BASE_URL, {
                 provider_type: 'nftgo',

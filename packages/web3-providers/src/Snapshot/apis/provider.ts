@@ -11,8 +11,11 @@ async function fetchFromGraphql<T>(query: string) {
     return data
 }
 
-export class SnapshotAPI implements SnapshotBaseAPI.Provider {
-    async getProposalListBySpace(spaceId: string, strategyName?: string): Promise<SnapshotBaseAPI.SnapshotProposal[]> {
+export class Snapshot {
+    static async getProposalListBySpace(
+        spaceId: string,
+        strategyName?: string,
+    ): Promise<SnapshotBaseAPI.SnapshotProposal[]> {
         const queryProposal = `
             query {
                 proposals (
@@ -74,7 +77,7 @@ export class SnapshotAPI implements SnapshotBaseAPI.Provider {
         })
     }
 
-    async getSpace(spaceId: string) {
+    static async getSpace(spaceId: string) {
         const querySpace = `
             query {
                 space(id: "${spaceId}") {
@@ -90,7 +93,7 @@ export class SnapshotAPI implements SnapshotBaseAPI.Provider {
         return space
     }
 
-    async getCurrentAccountVote(proposalId: string, totalVotes: number, account: string) {
+    static async getCurrentAccountVote(proposalId: string, totalVotes: number, account: string) {
         const allSettled = await Promise.allSettled(
             Array.from(Array(Math.ceil(totalVotes / 1000))).map(async (x, i) => {
                 const queryCurrentAccountVote = `
@@ -123,7 +126,7 @@ export class SnapshotAPI implements SnapshotBaseAPI.Provider {
         return result.length ? result[0] : undefined
     }
 
-    async getFollowingSpaceIdList(account: string) {
+    static async getFollowingSpaceIdList(account: string) {
         if (!account) return []
 
         const query = `

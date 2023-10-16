@@ -11,7 +11,7 @@ import type { HistoryAPI, HubOptions_Base } from '../../entry-types.js'
 import { Web3StateRef } from '../../Web3/EVM/apis/Web3StateAPI.js'
 
 const PRESET_CHAIN_IDS = 'eth,aurora,bsc,matic,pls,ftm,op,klay,nova,celo,astar,boba'.split(',')
-export class DeBankHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaType> {
+class DeBankHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaType> {
     // Collect from https://docs.cloud.debank.com/en/readme/api-pro-reference/chain#returns-1
     private getChainIds() {
         const networks = Web3StateRef.value.Network?.networks?.getCurrentValue()
@@ -65,3 +65,4 @@ export class DeBankHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaType
         )
     }
 }
+export const DeBankHistory = new DeBankHistoryAPI()

@@ -2,7 +2,6 @@ import { first } from 'lodash-es'
 import { toHex } from 'web3-utils'
 import { Emitter } from '@servie/events'
 import { delay } from '@masknet/kit'
-import type { Plugin } from '@masknet/plugin-infra/content-script'
 import {
     ChainId,
     ProviderURL,
@@ -14,13 +13,13 @@ import {
     isValidChainId,
 } from '@masknet/web3-shared-evm'
 import { type Account, type Wallet, EMPTY_LIST, createConstantSubscription } from '@masknet/shared-base'
-import { ChainResolverAPI } from '../apis/ResolverAPI.js'
+import { ChainResolver } from '../apis/ResolverAPI.js'
 import { createWeb3FromProvider } from '../../../helpers/createWeb3FromProvider.js'
 import { createWeb3ProviderFromRequest } from '../../../helpers/createWeb3ProviderFromRequest.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3> {
-    protected context: Plugin.SiteAdaptor.SiteAdaptorContext | undefined
+    protected context: WalletAPI.IOContext | undefined
 
     constructor(protected providerType: ProviderType) {}
 
@@ -56,7 +55,7 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
         return Promise.resolve()
     }
 
-    async setup(context?: Plugin.SiteAdaptor.SiteAdaptorContext): Promise<void> {
+    async setup(context?: WalletAPI.IOContext): Promise<void> {
         if (context) {
             this.context = context
             return
@@ -93,8 +92,6 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
     // Switch chain with RPC calls by default
     async switchChain(chainId: ChainId): Promise<void> {
         if (!isValidChainId(chainId)) throw new Error('Invalid chain id.')
-
-        const ChainResolver = new ChainResolverAPI()
 
         try {
             await this.request({

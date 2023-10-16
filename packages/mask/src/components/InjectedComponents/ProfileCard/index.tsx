@@ -13,18 +13,27 @@ import {
 import { addressSorter, useSocialAccountsBySettings } from '@masknet/shared'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
 import { useLocationChange } from '@masknet/shared-base-ui'
-import { EMPTY_LIST, PluginID, NetworkPluginID, type SocialIdentity, MaskMessages } from '@masknet/shared-base'
-import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import {
+    EMPTY_LIST,
+    PluginID,
+    NetworkPluginID,
+    type SocialIdentity,
+    MaskMessages,
+    type SocialAddress,
+    SocialAddressType,
+} from '@masknet/shared-base'
+import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { DefaultWeb3ContextProvider, ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
+import Services from '#services'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
 import { useMaskSharedTrans } from '../../../utils/index.js'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
-    identity: SocialIdentity
+    identity?: SocialIdentity
     currentAddress?: string
 }
 
@@ -40,11 +49,6 @@ const useStyles = makeStyles()((theme) => {
             borderRadius: theme.spacing(1.5),
             boxShadow: theme.palette.shadow.popup,
             backgroundColor: theme.palette.maskColor.bottom,
-        },
-        loading: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
         },
         header: {
             background: theme.palette.maskColor.modalTitleBg,
@@ -104,19 +108,30 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) => {
-    const { classes, cx } = useStyles(undefined, { props: { classes: rest.classes } })
+    const { classes } = useStyles(undefined, { props: { classes: rest.classes } })
 
     const { t } = useMaskSharedTrans()
     const translate = usePluginTransField()
-    const {
-        data: allSocialAccounts = EMPTY_LIST,
-        isLoading: loadingSocialAccounts,
-        refetch: retrySocialAddress,
-    } = useSocialAccountsBySettings(identity, undefined, addressSorter)
-    const socialAccounts = useMemo(
-        () => allSocialAccounts.filter((x) => x.pluginID === NetworkPluginID.PLUGIN_EVM),
-        [allSocialAccounts],
+    const fallbackAccounts = useMemo(() => {
+        return [
+            {
+                address: currentAddress,
+                type: SocialAddressType.Address,
+                pluginID: NetworkPluginID.PLUGIN_EVM,
+                chainId: ChainId.Mainnet,
+                label: '',
+            },
+        ] as Array<SocialAddress<ChainId>>
+    }, [currentAddress])
+    const { data: allSocialAccounts = fallbackAccounts, refetch: retrySocialAddress } = useSocialAccountsBySettings(
+        identity,
+        undefined,
+        addressSorter,
+        (a, b, c, d) => Services.Identity.signWithPersona(a, b, c, location.origin, d),
     )
+    const socialAccounts = useMemo(() => {
+        return allSocialAccounts.filter((x) => x.pluginID === NetworkPluginID.PLUGIN_EVM)
+    }, [allSocialAccounts])
 
     const [selectedAddress, setSelectedAddress] = useState<string | undefined>(currentAddress)
     const firstAddress = first(socialAccounts)?.address
@@ -127,7 +142,7 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
         [activeAddress, socialAccounts],
     )
 
-    const userId = identity.identifier?.userId
+    const userId = identity?.identifier?.userId
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
@@ -181,13 +196,6 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
             }
         }, {})
     }, [socialAccounts])
-
-    if (!userId || loadingSocialAccounts)
-        return (
-            <div className={cx(classes.root, classes.loading)}>
-                <LoadingBase />
-            </div>
-        )
 
     return (
         <DefaultWeb3ContextProvider value={{ chainId: ChainId.Mainnet }}>

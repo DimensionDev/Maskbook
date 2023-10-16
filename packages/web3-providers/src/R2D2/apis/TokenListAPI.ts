@@ -4,7 +4,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { env } from '@masknet/flags'
 import { type FungibleToken, type NonFungibleToken, TokenType } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, formatEthereumAddress, getTokenListConstants } from '@masknet/web3-shared-evm'
-import { ChainResolverAPI } from '../../Web3/EVM/apis/ResolverAPI.js'
+import { ChainResolver } from '../../Web3/EVM/apis/ResolverAPI.js'
 import { Duration } from '../../helpers/fetchCached.js'
 import { fetchCachedJSON } from '../../helpers/fetchJSON.js'
 import type { TokenListAPI } from '../../entry-types.js'
@@ -37,7 +37,7 @@ async function fetchCommonERC20TokensFromTokenList(
             (x) =>
                 x.chainId === chainId &&
                 (process.env.NODE_ENV === 'production' && env.channel === 'stable'
-                    ? new ChainResolverAPI().isMainnet(chainId)
+                    ? ChainResolver.isMainnet(chainId)
                     : true),
         )
         .map((x) => ({
@@ -69,7 +69,7 @@ async function fetchERC20TokensFromTokenList(urls: string[], chainId = ChainId.M
  * @param urls
  * @param chainId
  */
-export class R2D2TokenListAPI implements TokenListAPI.Provider<ChainId, SchemaType> {
+class R2D2TokenListAPI implements TokenListAPI.Provider<ChainId, SchemaType> {
     async getFungibleTokenList(chainId: ChainId, urls?: string[]) {
         const { FUNGIBLE_TOKEN_LISTS = EMPTY_LIST } = getTokenListConstants(chainId)
         const result = memoizePromise(
@@ -98,3 +98,5 @@ export class R2D2TokenListAPI implements TokenListAPI.Provider<ChainId, SchemaTy
         return EMPTY_LIST
     }
 }
+
+export const R2D2TokenList = new R2D2TokenListAPI()

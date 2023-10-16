@@ -1,5 +1,6 @@
 {
     "__plugin_name": "SmartPay",
+    "loading": "加载中",
     "add_smart_pay_wallet": "添加 SmartPay 钱包",
     "approve_mask": "授权MASK?",
     "approve_mask_description": "MATIC 代币用于支付与 Polygon Network 交互时支付的网络费用。 SmartPay 钱包允许用户在与 Polygon Network 网络交互时使用 MASK 代币。",

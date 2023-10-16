@@ -97,7 +97,7 @@ function createNonFungibleAsset(
     }
 }
 
-export class AlchemyFlowAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+class AlchemyFlowAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(
         address: string,
         tokenId: string,
@@ -132,3 +132,5 @@ export class AlchemyFlowAPI implements NonFungibleTokenAPI.Provider<ChainId, Sch
         return createPageable(assets, createIndicator(indicator))
     }
 }
+
+export const AlchemyFlow = new AlchemyFlowAPI()

@@ -1,7 +1,7 @@
 import { WalletConnectQRCodeModal } from '@masknet/shared'
 import { EMPTY_ARRAY } from '@masknet/shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
-import { getPostPayload } from '../helpers/getPostPayload.js'
+import { getPostPayload } from './getPostPayload.js'
 
 async function reject(): Promise<never> {
     throw new Error('Not implemented')
@@ -9,7 +9,7 @@ async function reject(): Promise<never> {
 
 export function createSharedContext(): Omit<
     Plugin.SiteAdaptor.SiteAdaptorContext,
-    'createKVStorage' | 'setWeb3State' | 'setMinimalMode'
+    'createKVStorage' | 'setMinimalMode'
 > {
     return {
         wallets: EMPTY_ARRAY,

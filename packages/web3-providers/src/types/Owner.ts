@@ -35,11 +35,4 @@ export namespace OwnerAPI {
         /** the previous owner address */
         topic1: string
     }
-
-    export interface Provider<T extends NetworkPluginID, ChainId = Web3Helper.Definition[T]['ChainId']> {
-        /** Get all available accounts owned by the owner. */
-        getAccountsByOwner(chainId: ChainId, owner: string): Promise<Array<AbstractAccount<T>>>
-        /** Get all available accounts owned by the owners. */
-        getAccountsByOwners(chainId: ChainId, owners: string[]): Promise<Array<AbstractAccount<T>>>
-    }
 }

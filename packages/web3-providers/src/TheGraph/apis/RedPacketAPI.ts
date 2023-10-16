@@ -1,6 +1,6 @@
 import { type ChainId } from '@masknet/web3-shared-evm'
 import { REDPACKET_API_URL, NFT_REDPACKET_API_URL } from '../constants.js'
-import { ChainResolverAPI } from '../../Web3/EVM/apis/ResolverAPI.js'
+import { ChainResolver } from '../../Web3/EVM/apis/ResolverAPI.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 import type { NftRedPacketJSONPayload, RedPacketJSONPayloadFromChain } from '../../entry-types.js'
 
@@ -38,8 +38,8 @@ type NFTRedpacketRecord = {
     id: string
 }
 
-export class TheGraphRedPacketAPI {
-    async getHistories(chainId: ChainId, senderAddress: string, contractAddress: string) {
+export class TheGraphRedPacket {
+    static async getHistories(chainId: ChainId, senderAddress: string, contractAddress: string) {
         if (!senderAddress || !contractAddress) return
 
         const response = await fetchJSON<{
@@ -85,7 +85,7 @@ export class TheGraphRedPacketAPI {
                     duration: Number(x.duration) * 1000,
                     block_number: Number(x.block_number),
                     contract_version: 4,
-                    network: new ChainResolverAPI().networkType(chainId),
+                    network: ChainResolver.networkType(chainId),
                     token_address: x.token.address,
                     sender: {
                         address: senderAddress,
@@ -101,7 +101,7 @@ export class TheGraphRedPacketAPI {
         )
     }
 
-    async getNFTHistories(chainId: ChainId, senderAddress: string, contractAddress: string) {
+    static async getNFTHistories(chainId: ChainId, senderAddress: string, contractAddress: string) {
         if (!senderAddress || !contractAddress) return
 
         const response = await fetchJSON<{
@@ -143,7 +143,7 @@ export class TheGraphRedPacketAPI {
                     txid: x.txid,
                     contract_version: 1,
                     shares: x.shares,
-                    network: new ChainResolverAPI().networkType(chainId),
+                    network: ChainResolver.networkType(chainId),
                     token_address: x.token_contract.address,
                     sender: {
                         address: x.creator.address,

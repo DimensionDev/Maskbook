@@ -8,7 +8,6 @@ import {
     type NonFungibleTokenOrder,
     type OrderSide,
     type NonFungibleTokenContract,
-    type NonFungibleTokenSecurity,
     type NonFungibleToken,
     type NonFungibleContractSpender,
     type PriceInToken,
@@ -18,7 +17,7 @@ import { HubProviderAPI_Base } from './HubProviderAPI.js'
 import type { HubOptions_Base } from './HubOptionsAPI.js'
 import type { AuthorizationAPI, NonFungibleTokenAPI, TokenListAPI } from '../../../entry-types.js'
 
-export class HubNonFungibleAPI_Base<
+export abstract class HubNonFungibleAPI_Base<
     ChainId,
     SchemaType,
     ProviderType,
@@ -37,19 +36,13 @@ export class HubNonFungibleAPI_Base<
     Transaction,
     TransactionParameter
 > {
-    protected getProviders(
+    protected abstract getProviders(
         initial?: HubOptions_Base<ChainId>,
     ): Array<
         AuthorizationAPI.Provider<ChainId> &
             NonFungibleTokenAPI.Provider<ChainId, SchemaType> &
             TokenListAPI.Provider<ChainId, SchemaType>
-    > {
-        throw new Error('Method not implemented.')
-    }
-
-    async getNonFungibleTokenBalance(address: string, initial?: HubOptions_Base<ChainId>): Promise<number> {
-        throw new Error('Method not implemented.')
-    }
+    >
 
     async getNonFungibleRarity(
         address: string,
@@ -143,15 +136,6 @@ export class HubNonFungibleAPI_Base<
         )
     }
 
-    async getNonFungibleTokenPrice(
-        chainId: ChainId,
-        address: string,
-        tokenId: string,
-        initial?: HubOptions_Base<ChainId>,
-    ): Promise<never> {
-        throw new Error('Method not implemented.')
-    }
-
     async getNonFungibleTokenEvents(
         address: string,
         tokenId: string,
@@ -225,23 +209,6 @@ export class HubNonFungibleAPI_Base<
             providers.map((x) => () => x.getCollectionVerifiedBy?.(id)),
             [],
         )
-    }
-
-    async getNonFungibleTokenSecurity(
-        chainId: ChainId,
-        address: string,
-        initial?: HubOptions_Base<ChainId>,
-    ): Promise<NonFungibleTokenSecurity> {
-        throw new Error('Method not implemented.')
-    }
-
-    async getNonFungibleTokenIconURLs(
-        chainId: ChainId,
-        address: string,
-        tokenId?: string | undefined,
-        initial?: HubOptions_Base<ChainId>,
-    ): Promise<string[]> {
-        throw new Error('Method not implemented.')
     }
 
     async getNonFungibleTokensFromTokenList(

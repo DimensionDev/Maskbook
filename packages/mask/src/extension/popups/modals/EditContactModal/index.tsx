@@ -126,7 +126,7 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
 
     return (
         <BottomDrawer {...rest}>
-            <EmojiAvatar address={address} className={classes.emojiAvatar} sx={{ width: 60, height: 60 }} />
+            <EmojiAvatar value={address} className={classes.emojiAvatar} sx={{ width: 60, height: 60 }} />
             <Box className={classes.inputWrapper}>
                 <MaskTextField
                     variant="standard"

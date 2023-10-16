@@ -5,7 +5,7 @@ import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 import type { RedPacketBaseAPI } from '../../entry-types.js'
 
-export class EtherscanRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
+class EtherscanRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
     async getHistoryTransactions(
         chainId: ChainId,
         senderAddress: string,
@@ -41,3 +41,4 @@ export class EtherscanRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId,
         }
     }
 }
+export const EtherscanRedPacket = new EtherscanRedPacketAPI()

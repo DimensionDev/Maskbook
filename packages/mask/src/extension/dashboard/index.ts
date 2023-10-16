@@ -1,3 +1,2 @@
-import { activateSiteAdaptorUI } from '../../setup.ui.js'
-await activateSiteAdaptorUI()
+import '../../setup.ui.js'
 await import(/* webpackMode: 'eager' */ './load-dashboard.js')

@@ -1,5 +1,4 @@
 import { Icons } from '@masknet/icons'
-import { useSharedTrans } from '@masknet/shared'
 import { type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -65,15 +64,14 @@ export const SelectNetworkSidebar = memo(function SelectNetworkSidebar({
     className,
     ...rest
 }: SelectNetworkSidebarProps) {
-    const t = useSharedTrans()
-
     const { classes, cx } = useStyles()
 
+    // Do not translate the "All" button
     return (
         <div className={cx(classes.sidebar, className)} {...rest}>
             {networks.length > 1 && !hideAllButton ? (
                 <AllButton className={classes.networkButton} onClick={() => onChainChange?.(undefined)}>
-                    {t.all()}
+                    All
                     {!chainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
                 </AllButton>
             ) : null}

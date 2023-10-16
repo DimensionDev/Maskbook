@@ -44,8 +44,7 @@ function getShadowRootEmotionCache(shadow: ShadowRoot) {
     const instanceID = Math.random().toString(36).slice(2).replaceAll(/\d/g, 'x').slice(0, 4)
     const key = 'css-' + instanceID
 
-    // https://github.com/emotion-js/emotion/issues/2933
-    const muiEmotionCache = (createEmotionCache.default || createEmotionCache)({ key })
+    const muiEmotionCache = createEmotionCache({ key })
     const muiStyleSheet = new StyleSheet({ key, container: shadow })
     muiEmotionCache.sheet = muiStyleSheet
 

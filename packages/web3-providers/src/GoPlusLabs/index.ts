@@ -27,7 +27,7 @@ export interface SupportedChainResponse {
     name: string
 }
 
-export class GoPlusAuthorizationAPI implements AuthorizationAPI.Provider<ChainId> {
+class GoPlusAuthorizationAPI implements AuthorizationAPI.Provider<ChainId> {
     async getSupportChainIds() {
         return [ChainId.Mainnet, ChainId.BSC]
     }
@@ -144,8 +144,8 @@ export class GoPlusAuthorizationAPI implements AuthorizationAPI.Provider<ChainId
     }
 }
 
-export class GoPlusLabsAPI implements SecurityAPI.Provider<ChainId> {
-    async getTokenSecurity(chainId: ChainId, addresses: string[]) {
+export class GoPlusLabs {
+    static async getTokenSecurity(chainId: ChainId, addresses: string[]) {
         const response = await fetchJSON<{
             code: 0 | 1
             message: 'OK' | string
@@ -164,7 +164,10 @@ export class GoPlusLabsAPI implements SecurityAPI.Provider<ChainId> {
         return createTokenSecurity(chainId, response.result)
     }
 
-    async getAddressSecurity(chainId: ChainId, address: string): Promise<SecurityAPI.AddressSecurity | undefined> {
+    static async getAddressSecurity(
+        chainId: ChainId,
+        address: string,
+    ): Promise<SecurityAPI.AddressSecurity | undefined> {
         if (!isValidChainId(chainId)) return
         const response = await fetchJSON<{
             code: 0 | 1
@@ -181,7 +184,7 @@ export class GoPlusLabsAPI implements SecurityAPI.Provider<ChainId> {
         return response.result
     }
 
-    async getSupportedChain(): Promise<Array<SecurityAPI.SupportedChain<ChainId>>> {
+    static async getSupportedChain(): Promise<Array<SecurityAPI.SupportedChain<ChainId>>> {
         const { code, result } = await fetchJSON<{
             code: 0 | 1
             message: 'OK' | string
@@ -192,14 +195,15 @@ export class GoPlusLabsAPI implements SecurityAPI.Provider<ChainId> {
         return result.map((x) => ({ chainId: parseInt(x.id) ?? ChainId.Mainnet, name: x.name }))
     }
 }
+export const GoPlusAuthorization = new GoPlusAuthorizationAPI()
 
-export const createTokenSecurity = (
+export function createTokenSecurity(
     chainId: ChainId,
     response: Record<
         string,
         SecurityAPI.ContractSecurity & SecurityAPI.TokenSecurity & SecurityAPI.TradingSecurity
     > = {},
-) => {
+) {
     if (isEmpty(response) || !isValidChainId(chainId)) return
     const entity = first(Object.entries(response))
     if (!entity) return

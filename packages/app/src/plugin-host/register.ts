@@ -1,7 +1,3 @@
-import '@masknet/plugin-evm/register'
-import '@masknet/plugin-flow/register'
-import '@masknet/plugin-solana/register'
-
 import '@masknet/plugin-gitcoin/register'
 import '@masknet/plugin-collectible/register'
 import '@masknet/plugin-artblocks/register'

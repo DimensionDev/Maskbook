@@ -1,6 +1,5 @@
 // ALL IMPORTS MUST BE DEFERRED
 import { PersistentStorages, type DashboardRoutes } from '@masknet/shared-base'
-import * as connect /* webpackDefer: true */ from '../../services/site-adaptors/connect.js'
 
 type DashboardRoutes_Welcome = DashboardRoutes.Welcome extends `${infer T}` ? T : never
 function openWelcome() {
@@ -14,6 +13,7 @@ browser.runtime.onInstalled.addListener(async (detail) => {
     if (detail.reason === 'install') {
         openWelcome()
     } else if (detail.reason === 'update') {
+        const connect = await import('../../services/site-adaptors/connect.js')
         const groups = await connect.getOriginsWithoutPermission()
         if (groups.length) openWelcome()
         if ((globalThis as any).localStorage) {
@@ -22,7 +22,7 @@ browser.runtime.onInstalled.addListener(async (detail) => {
             if (backupPassword) {
                 const backupMethod = localStorage.getItem('backupMethod')
                 PersistentStorages.Settings.storage.backupConfig.setValue({
-                    backupPassword: atob(backupPassword),
+                    backupPassword,
                     email: localStorage.getItem('email'),
                     phone: localStorage.getItem('phone'),
                     cloudBackupAt: backupMethod && backupMethod === 'cloud' ? localStorage.getItem('backupAt') : null,
@@ -30,6 +30,12 @@ browser.runtime.onInstalled.addListener(async (detail) => {
                     cloudBackupMethod: null,
                 })
             }
+            // remove old data after migrate
+            localStorage.removeItem('backupPassword')
+            localStorage.removeItem('backupMethod')
+            localStorage.removeItem('email')
+            localStorage.removeItem('phone')
+            localStorage.removeItem('backupAt')
         }
     }
 })

@@ -19,18 +19,18 @@ import {
 } from './apis/index.js'
 import type { TwitterBaseAPI } from '../entry-types.js'
 
-export class TwitterAPI implements TwitterBaseAPI.Provider {
-    getAvatarId(avatarURL?: string) {
+export class Twitter {
+    static getAvatarId(avatarURL?: string) {
         if (!avatarURL) return ''
         const match = new URL(avatarURL).pathname.match(/^\/profile_images\/(\d+)/)
         return match ? match[1] : ''
     }
 
-    getSettings() {
+    static getSettings() {
         return getSettings()
     }
 
-    async getUserSettings() {
+    static async getUserSettings() {
         const defaults = getDefaultUserSettings()
         const computed = getComputedUserSettings()
 
@@ -50,7 +50,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         }
     }
 
-    async getUserNftContainer(screenName: string) {
+    static async getUserNftContainer(screenName: string) {
         return await attemptUntil<TwitterBaseAPI.NFT | undefined>(
             [
                 async () => {
@@ -77,15 +77,22 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         )
     }
 
-    async uploadMedia(image: File | Blob): Promise<TwitterBaseAPI.MediaResponse> {
+    static async uploadMedia(image: File | Blob): Promise<TwitterBaseAPI.MediaResponse> {
         return uploadMedia(image)
     }
 
-    async updateProfileImage(screenName: string, media_id_str: string): Promise<TwitterBaseAPI.AvatarInfo | undefined> {
+    static async updateProfileImage(
+        screenName: string,
+        media_id_str: string,
+    ): Promise<TwitterBaseAPI.AvatarInfo | undefined> {
         return updateProfileImage(screenName, media_id_str)
     }
 
-    async getUserByScreenName(screenName: string, checkNFTAvatar?: boolean): Promise<TwitterBaseAPI.User | null> {
+    static async getUserByScreenName(
+        screenName: string,
+        checkNFTAvatar?: boolean,
+    ): Promise<TwitterBaseAPI.User | null> {
+        if (!screenName) return null
         if (checkNFTAvatar) return getUserByScreenName(screenName)
         return attemptUntil<TwitterBaseAPI.User | null>(
             [
@@ -97,13 +104,13 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         )
     }
 
-    async staleUserByScreenName(screenName: string): Promise<void> {
+    static async staleUserByScreenName(screenName: string): Promise<void> {
         await staleUserByScreenName(screenName)
         await staleUserByScreenNameShow(screenName)
         await staleUserViaIdentity(screenName)
     }
 
-    async createTweet(tweet: TwitterBaseAPI.Tweet) {
+    static async createTweet(tweet: TwitterBaseAPI.Tweet) {
         const response = await createTweet(tweet)
         return response.rest_id
     }

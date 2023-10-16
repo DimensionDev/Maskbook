@@ -27,9 +27,9 @@ import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { AccountDetailUI } from './UI.js'
 import Service from '#services'
 import { PageTitleContext } from '../../../context.js'
-import { isEqualWith, uniq, sortBy, isEqual } from 'lodash-es'
 import { ConfirmDialog } from '../../../modals/modals.js'
 import { DisconnectEventMap } from '../common.js'
+import { queryClient } from '@masknet/shared-base-ui'
 
 const AccountDetail = memo(() => {
     const { t } = useMaskSharedTrans()
@@ -47,28 +47,17 @@ const AccountDetail = memo(() => {
         : false
 
     const [{ data: unlistedAddressConfig = EMPTY_OBJECT, isInitialLoading, refetch }, updateConfig] =
-        useUnlistedAddressConfig({
-            identifier: currentPersona?.identifier,
-            pluginID: PluginID.Web3Profile,
-            socialIds:
-                isSupportNextDotID && selectedAccount?.is_valid && selectedAccount.identity
-                    ? [selectedAccount.identity]
-                    : EMPTY_LIST,
-        })
-
-    const isClean = useMemo(() => {
-        if (!selectedAccount?.is_valid) return true
-
-        return isEqualWith(unlistedAddressConfig, pendingUnlistedConfig, (config1, config2) => {
-            // Some identities might only in pendingUnlistedConfig but not in migratedUnlistedAddressConfig,
-            // so we merged all the identities
-            const keys = uniq([...Object.keys(config1), ...Object.keys(config2)])
-            for (const key of keys) {
-                if (!isEqual(sortBy(config1[key] || []), sortBy(config2[key] || []))) return false
-            }
-            return true
-        })
-    }, [unlistedAddressConfig, pendingUnlistedConfig, selectedAccount])
+        useUnlistedAddressConfig(
+            {
+                identifier: currentPersona?.identifier,
+                pluginID: PluginID.Web3Profile,
+                socialIds:
+                    isSupportNextDotID && selectedAccount?.is_valid && selectedAccount.identity
+                        ? [selectedAccount.identity]
+                        : EMPTY_LIST,
+            },
+            (a, b, c, d) => Service.Identity.signWithPersona(a, b, c, location.origin, d),
+        )
 
     const listingAddresses = useMemo(() => {
         if (!selectedAccount?.identity) return EMPTY_LIST
@@ -91,6 +80,8 @@ const AccountDetail = memo(() => {
         try {
             if (!selectedAccount?.identifier) return
             await Service.Identity.detachProfile(selectedAccount.identifier)
+            MaskMessages.events.ownPersonaChanged.sendToAll()
+            queryClient.invalidateQueries(['next-id', 'bindings-by-persona', pubkey])
             showSnackbar(t('popups_disconnect_success'), {
                 variant: 'success',
             })
@@ -119,13 +110,13 @@ const AccountDetail = memo(() => {
         refetch()
     }, [pendingUnlistedConfig, t, updateConfig])
 
+    const pubkey = currentPersona?.identifier.publicKeyAsHex
     const handleConfirmReleaseBind = useCallback(async () => {
         try {
-            if (!currentPersona?.identifier.publicKeyAsHex || !selectedAccount?.identity || !selectedAccount?.platform)
-                return
+            if (!pubkey || !selectedAccount?.identity || !selectedAccount?.platform) return
 
             const result = await NextIDProof.createPersonaPayload(
-                currentPersona.identifier.publicKeyAsHex,
+                pubkey,
                 NextIDAction.Delete,
                 selectedAccount.identity,
                 selectedAccount.platform,
@@ -145,7 +136,7 @@ const AccountDetail = memo(() => {
 
             await Service.Identity.detachProfileWithNextID(
                 result.uuid,
-                currentPersona.identifier.publicKeyAsHex,
+                pubkey,
                 selectedAccount.platform,
                 selectedAccount.identity,
                 result.createdAt,
@@ -212,7 +203,11 @@ const AccountDetail = memo(() => {
                                 />
                             ),
                         })
-                        if (confirmed) await handleConfirmReleaseBind()
+                        if (confirmed) {
+                            await handleConfirmReleaseBind()
+                            MaskMessages.events.ownPersonaChanged.sendToAll()
+                            queryClient.invalidateQueries(['next-id', 'bindings-by-persona', pubkey])
+                        }
                     }}
                 />
             ),
@@ -233,7 +228,6 @@ const AccountDetail = memo(() => {
                 onVerify={onVerify}
                 isSupportNextDotID={isSupportNextDotID}
                 walletProofs={walletProofs}
-                isClean={isClean}
                 toggleUnlisted={toggleUnlisted}
                 listingAddresses={listingAddresses}
                 loading={isInitialLoading}

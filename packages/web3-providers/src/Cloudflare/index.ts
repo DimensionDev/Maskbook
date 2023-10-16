@@ -9,7 +9,7 @@ import {
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
 import type { TokenIconAPI } from '../entry-types.js'
 
-export class CloudflareAPI implements TokenIconAPI.Provider<ChainId> {
+class CloudflareAPI implements TokenIconAPI.Provider<ChainId> {
     async getFungibleTokenIconURLs(chainId: ChainId, address: string): Promise<string[]> {
         const { NATIVE_TOKEN_ASSET_BASE_URI = EMPTY_LIST, ERC20_TOKEN_ASSET_BASE_URI = EMPTY_LIST } =
             getTokenAssetBaseURLConstants(chainId)
@@ -26,3 +26,4 @@ export class CloudflareAPI implements TokenIconAPI.Provider<ChainId> {
         return ERC20_TOKEN_ASSET_BASE_URI.map((x) => `${x}/${formattedAddress}/logo.png/quality=85`)
     }
 }
+export const Cloudflare = new CloudflareAPI()

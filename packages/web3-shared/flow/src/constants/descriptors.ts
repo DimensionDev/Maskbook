@@ -10,7 +10,7 @@ import { ChainIdList } from './constants.js'
 
 const PLUGIN_ID = NetworkPluginID.PLUGIN_FLOW
 
-export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>> = [
+export const CHAIN_DESCRIPTORS: ReadonlyArray<ChainDescriptor<ChainId, SchemaType, NetworkType>> = [
     {
         ID: `${ChainId.Mainnet}_Flow`,
         type: NetworkType.Flow,
@@ -67,7 +67,7 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
     },
 ]
 
-export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>> = [
+export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, NetworkType>> = [
     {
         ID: `${PLUGIN_ID}_flow`,
         networkSupporterPluginID: PLUGIN_ID,
@@ -91,7 +91,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         isMainnet: false,
     },
 ]
-export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderType>> = [
+export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, ProviderType>> = [
     {
         ID: `${PLUGIN_ID}_blocto`,
         providerAdaptorPluginID: PLUGIN_ID,

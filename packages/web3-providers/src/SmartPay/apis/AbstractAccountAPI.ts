@@ -11,7 +11,7 @@ import {
     isValidAddress,
 } from '@masknet/web3-shared-evm'
 import { RequestReadonlyAPI } from '../../Web3/EVM/apis/RequestReadonlyAPI.js'
-import { SmartPayBundlerAPI } from './BundlerAPI.js'
+import { SmartPayBundler } from './BundlerAPI.js'
 import { SmartPayOwnerAPI } from './OwnerAPI.js'
 import { ContractWallet } from '../libs/ContractWallet.js'
 import { UserTransaction } from '../libs/UserTransaction.js'
@@ -20,10 +20,9 @@ import type { AbstractAccountAPI } from '../../entry-types.js'
 export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<ChainId, UserOperation, Transaction> {
     private Request = new RequestReadonlyAPI()
     private Owner = new SmartPayOwnerAPI()
-    private Bundler = new SmartPayBundlerAPI()
 
     private async getEntryPoint(chainId: ChainId) {
-        const entryPoints = await this.Bundler.getSupportedEntryPoints(chainId)
+        const entryPoints = await SmartPayBundler.getSupportedEntryPoints(chainId)
         const entryPoint = first(entryPoints)
         if (!entryPoint || !isValidAddress(entryPoint)) throw new Error(`Not supported ${chainId}`)
         return entryPoint
@@ -76,7 +75,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<ChainId, 
         }
 
         await userTransaction.fillUserOperation(this.Request.getWeb3({ chainId }), await getOverrides())
-        return this.Bundler.sendUserOperation(chainId, await userTransaction.signUserOperation(signer))
+        return SmartPayBundler.sendUserOperation(chainId, await userTransaction.signUserOperation(signer))
     }
 
     private async estimateUserTransaction(chainId: ChainId, userTransaction: UserTransaction) {

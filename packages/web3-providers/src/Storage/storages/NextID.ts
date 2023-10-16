@@ -1,10 +1,8 @@
 import { type ECKeyIdentifier, fromHex, type NextIDPlatform, SignType, toBase64 } from '@masknet/shared-base'
-import { NextIDStorageAPI } from '../../NextID/kv.js'
-import type { StorageAPI } from '../../entry-types.js'
+import { NextIDStorageProvider as Storage } from '../../NextID/kv.js'
+import type { StorageAPI, WalletAPI } from '../../entry-types.js'
 
 export class NextIDStorage implements StorageAPI.Storage {
-    private Storage = new NextIDStorageAPI()
-
     private publicKeyAsHex = ''
     private signer: ECKeyIdentifier | null = null
 
@@ -12,12 +10,7 @@ export class NextIDStorage implements StorageAPI.Storage {
         private proofIdentity: string, // proof identity as key
         private platform: NextIDPlatform, // proof platform
         private signerOrPublicKey: string | ECKeyIdentifier, // publicKey, like SocialIdentity publicKey or PersonaIdentifier publicKeyAsHex
-        private signWithPersona?: <T>(
-            method: SignType,
-            message: T,
-            identifier?: ECKeyIdentifier,
-            silent?: boolean,
-        ) => Promise<string>,
+        private signWithPersona?: WalletAPI.IOContext['signWithPersona'],
     ) {
         if (typeof this.signerOrPublicKey === 'string') {
             this.publicKeyAsHex = this.signerOrPublicKey
@@ -32,12 +25,7 @@ export class NextIDStorage implements StorageAPI.Storage {
     }
 
     async get<T>(key: string) {
-        const response = await this.Storage.getByIdentity<T>(
-            this.publicKeyAsHex,
-            this.platform,
-            this.proofIdentity,
-            key,
-        )
+        const response = await Storage.getByIdentity<T>(this.publicKeyAsHex, this.platform, this.proofIdentity, key)
 
         if (!response.isOk()) return
 
@@ -45,7 +33,7 @@ export class NextIDStorage implements StorageAPI.Storage {
     }
 
     async getAll<T>(key: string) {
-        const response = await this.Storage.getAllByIdentity<T>(this.platform, this.proofIdentity, key)
+        const response = await Storage.getAllByIdentity<T>(this.platform, this.proofIdentity, key)
 
         if (!response.isOk()) return
 
@@ -55,7 +43,7 @@ export class NextIDStorage implements StorageAPI.Storage {
     async set<T>(key: string, value: T) {
         if (!this.signer) throw new Error('signer is requirement when set data to NextID Storage')
 
-        const payload = await this.Storage.getPayload(
+        const payload = await Storage.getPayload(
             this.publicKeyAsHex,
             this.platform,
             this.proofIdentity, // identity
@@ -68,7 +56,7 @@ export class NextIDStorage implements StorageAPI.Storage {
         const signature = await this.signWithPersona?.(SignType.Message, payload.value.signPayload, this.signer, true)
         if (!signature) throw new Error('Failed to sign payload.')
 
-        await this.Storage.set(
+        await Storage.set(
             payload.value.uuid,
             this.publicKeyAsHex,
             toBase64(fromHex(signature)),

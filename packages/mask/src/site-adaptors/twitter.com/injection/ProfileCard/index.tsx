@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
-import { useAsync } from 'react-use'
-import { Fade } from '@mui/material'
 import { CrossIsolationMessages, ProfileIdentifier, type SocialIdentity } from '@masknet/shared-base'
-import { LoadingBase, ShadowRootPopper, makeStyles } from '@masknet/theme'
-import { AnchorProvider, queryClient } from '@masknet/shared-base-ui'
+import { AnchorProvider } from '@masknet/shared-base-ui'
+import { ShadowRootPopper, makeStyles } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
+import { Fade } from '@mui/material'
+import { useQuery } from '@tanstack/react-query'
+import { useEffect, useRef, useState } from 'react'
 import { useSocialIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { ProfileCard } from '../../../../components/InjectedComponents/ProfileCard/index.js'
 import { attachReactTreeWithoutContainer } from '../../../../utils/index.js'
@@ -23,13 +23,6 @@ const useStyles = makeStyles()({
         maxWidth: CARD_WIDTH,
         height: CARD_HEIGHT,
         maxHeight: CARD_HEIGHT,
-    },
-    loading: {
-        height: '100%',
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
     },
 })
 
@@ -52,25 +45,22 @@ function ProfileCardHolder() {
         })
     }, [])
 
-    const { value: identity, loading } = useAsync(async (): Promise<SocialIdentity | null> => {
-        if (!twitterId) return null
+    const { data: identity } = useQuery({
+        queryKey: ['twitter', 'profile', twitterId],
+        queryFn: () => Twitter.getUserByScreenName(twitterId),
+        select: (user) => {
+            if (!user) return null
+            return {
+                identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, user.screenName).unwrapOr(undefined),
+                nickname: user.nickname,
+                avatar: user.avatarURL,
+                bio: user.bio,
+                homepage: user.homepage,
+            } as SocialIdentity
+        },
+    })
 
-        const user = await queryClient.fetchQuery({
-            queryKey: ['twitter', 'profile', twitterId],
-            queryFn: () => Twitter.getUserByScreenName(twitterId),
-        })
-        if (!user) return null
-
-        return {
-            identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, user.screenName).unwrapOr(undefined),
-            nickname: user.nickname,
-            avatar: user.avatarURL,
-            bio: user.bio,
-            homepage: user.homepage,
-        }
-    }, [twitterId])
-
-    const { data: resolvedIdentity, isLoading: resolving } = useSocialIdentity(identity)
+    const { data: resolvedIdentity } = useSocialIdentity(identity)
 
     return (
         <Fade in={active} easing="linear" timeout={250}>
@@ -82,15 +72,9 @@ function ProfileCardHolder() {
                 className={classes.root}
                 ref={holderRef}
                 onClick={stopPropagation}>
-                {loading || resolving ? (
-                    <div className={classes.loading}>
-                        <LoadingBase size={36} />
-                    </div>
-                ) : resolvedIdentity ? (
-                    <AnchorProvider anchorEl={anchorEl} anchorBounding={badgeBounding}>
-                        <ProfileCard identity={resolvedIdentity} currentAddress={address} />
-                    </AnchorProvider>
-                ) : null}
+                <AnchorProvider anchorEl={anchorEl} anchorBounding={badgeBounding}>
+                    <ProfileCard key={twitterId} identity={resolvedIdentity || undefined} currentAddress={address} />
+                </AnchorProvider>
             </ShadowRootPopper>
         </Fade>
     )

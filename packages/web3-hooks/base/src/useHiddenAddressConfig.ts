@@ -2,6 +2,7 @@ import { EMPTY_LIST, EMPTY_OBJECT, NextIDPlatform, type PluginID, type PersonaId
 import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { Web3Storage } from '@masknet/web3-providers'
 import { useCallback, useMemo } from 'react'
+import type { WalletAPI } from '@masknet/web3-providers/types'
 
 type AddressData = Record<string, string[]> | string[]
 type StorageValueV1 = string[]
@@ -18,13 +19,22 @@ type StorageValue = StorageValueV1 | StorageValueV2 | StorageValueV3
  * @param pluginID The plugin id as store key
  * @returns
  */
-export function useHiddenAddressConfig(personaPubkey?: string, pluginID?: PluginID) {
+export function useHiddenAddressConfig(
+    personaPubkey: string | undefined,
+    pluginID: PluginID | undefined,
+    signWithPersona: WalletAPI.IOContext['signWithPersona'],
+) {
     return useQuery({
         queryKey: ['next-id', 'hidden-address', pluginID, personaPubkey],
         enabled: !!personaPubkey,
         queryFn: async () => {
             if (!pluginID || !personaPubkey) return EMPTY_OBJECT
-            const storage = Web3Storage.createNextIDStorage(personaPubkey, NextIDPlatform.NextID, personaPubkey)
+            const storage = Web3Storage.createNextIDStorage(
+                personaPubkey,
+                NextIDPlatform.NextID,
+                personaPubkey,
+                signWithPersona,
+            )
 
             const result = await storage.get<StorageValue>(pluginID)
             if (!result) return EMPTY_OBJECT
@@ -40,8 +50,13 @@ export function useHiddenAddressConfig(personaPubkey?: string, pluginID?: Plugin
     })
 }
 
-export function useHiddenAddressConfigOf(personaPubkey?: string, pluginID?: PluginID, socialId?: string) {
-    const result = useHiddenAddressConfig(personaPubkey, pluginID)
+export function useHiddenAddressConfigOf(
+    personaPubkey: string | undefined,
+    pluginID: PluginID | undefined,
+    socialId: string | undefined,
+    signWithPersona: WalletAPI.IOContext['signWithPersona'],
+) {
+    const result = useHiddenAddressConfig(personaPubkey, pluginID, signWithPersona)
     return {
         ...result,
         // Identities of Twitter proof get lowered case.
@@ -61,8 +76,11 @@ type ConfigResult = [UseQueryResult<Record<string, string[]>>, (config: Record<s
 /**
  * Provider address config and data updater
  */
-export function useUnlistedAddressConfig({ identifier, pluginID, socialIds }: Options): ConfigResult {
-    const query = useHiddenAddressConfig(identifier?.publicKeyAsHex, pluginID)
+export function useUnlistedAddressConfig(
+    { identifier, pluginID, socialIds }: Options,
+    signWithPersona: WalletAPI.IOContext['signWithPersona'],
+): ConfigResult {
+    const query = useHiddenAddressConfig(identifier?.publicKeyAsHex, pluginID, signWithPersona)
     const { data: unlistedAddressConfig } = query
 
     const migratedUnlistedAddressConfig = useMemo(() => {
@@ -79,6 +97,7 @@ export function useUnlistedAddressConfig({ identifier, pluginID, socialIds }: Op
                 identifier.publicKeyAsHex,
                 NextIDPlatform.NextID,
                 identifier,
+                signWithPersona,
             )
             await storage.set<CurrentStorageValue>(pluginID, {
                 hiddenAddresses: config,

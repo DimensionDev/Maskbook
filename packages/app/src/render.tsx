@@ -6,7 +6,10 @@ import { PageUIProvider } from '@masknet/shared'
 import { DisableShadowRootContext } from '@masknet/theme'
 import { MainUI } from './MainUI.js'
 import { useTheme } from './hooks/useTheme.js'
+import { initWallet } from '@masknet/web3-providers'
+import { createSharedContext } from './helpers/createSharedContext.js'
 
+initWallet(createSharedContext())
 const root = document.createElement('main')
 document.body.appendChild(root)
 

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { usePostInfoDetails } from './PostContext.js'
-import { getPostURL } from '../site-adaptor/context.js'
+import { getPostURL } from './context.js'
 
 export function usePostLink() {
     const id = usePostInfoDetails.postID()

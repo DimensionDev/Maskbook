@@ -8,28 +8,36 @@ import { Fortmatic } from '../interceptors/Fortmatic.js'
 import { ContractWallet } from '../interceptors/ContractWallet.js'
 import { Popups } from '../interceptors/Popups.js'
 import { CustomNetwork } from '../interceptors/CustomNetwork.js'
-import { SmartPayAccountAPI, SmartPayBundlerAPI, SmartPayFunderAPI } from '../../../SmartPay/index.js'
+import { SmartPayAccountAPI, SmartPayBundler, SmartPayFunderAPI } from '../../../SmartPay/index.js'
+import type { WalletAPI } from '../../../entry-types.js'
 
 export class Interceptor implements Middleware<ConnectionContext> {
     private Account = new SmartPayAccountAPI()
-    private Bundler = new SmartPayBundlerAPI()
     private Funder = new SmartPayFunderAPI()
-
-    private composers: Partial<Record<ProviderType, Composer<ConnectionContext>>> = {
-        [ProviderType.None]: Composer.from(new NoneWallet()),
-        [ProviderType.MaskWallet]: Composer.from(
-            new Popups(),
-            new CustomNetwork(),
-            new ContractWallet(ProviderType.MaskWallet, this.Account, this.Bundler, this.Funder),
-            new MaskWallet(),
-        ),
-        [ProviderType.MetaMask]: Composer.from(new MetaMaskLike(ProviderType.MetaMask)),
-        [ProviderType.WalletConnect]: Composer.from(new WalletConnect()),
-        [ProviderType.Coin98]: Composer.from(new MetaMaskLike(ProviderType.Coin98)),
-        [ProviderType.Fortmatic]: Composer.from(new Fortmatic()),
-        [ProviderType.Opera]: Composer.from(new MetaMaskLike(ProviderType.Opera)),
-        [ProviderType.Clover]: Composer.from(new MetaMaskLike(ProviderType.Clover)),
+    constructor(private signWithPersona: WalletAPI.IOContext['signWithPersona']) {
+        this.composers = {
+            [ProviderType.None]: Composer.from(new NoneWallet()),
+            [ProviderType.MaskWallet]: Composer.from(
+                new Popups(),
+                new CustomNetwork(),
+                new ContractWallet(
+                    ProviderType.MaskWallet,
+                    this.Account,
+                    SmartPayBundler,
+                    this.Funder,
+                    this.signWithPersona,
+                ),
+                new MaskWallet(),
+            ),
+            [ProviderType.MetaMask]: Composer.from(new MetaMaskLike(ProviderType.MetaMask)),
+            [ProviderType.WalletConnect]: Composer.from(new WalletConnect()),
+            [ProviderType.Coin98]: Composer.from(new MetaMaskLike(ProviderType.Coin98)),
+            [ProviderType.Fortmatic]: Composer.from(new Fortmatic()),
+            [ProviderType.Opera]: Composer.from(new MetaMaskLike(ProviderType.Opera)),
+            [ProviderType.Clover]: Composer.from(new MetaMaskLike(ProviderType.Clover)),
+        }
     }
+    private composers: Partial<Record<ProviderType, Composer<ConnectionContext>>>
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {
         const composer = this.composers[context.providerType]

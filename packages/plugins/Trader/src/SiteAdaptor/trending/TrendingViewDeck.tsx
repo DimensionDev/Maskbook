@@ -47,6 +47,7 @@ import { TrendingViewDescriptor } from './TrendingViewDescriptor.js'
 import { CoinIcon } from './CoinIcon.js'
 import { TrendingViewContext } from './context.js'
 import { useTraderTrans } from '../../locales/index.js'
+import { signWithPersona } from '@masknet/plugin-infra/dom/context'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -155,7 +156,7 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     currency: Currency
     currentTab: ContentTab
     trending: TrendingAPI.Trending
-    identity?: SocialIdentity
+    identity?: SocialIdentity | null
     setActive?: (x: boolean) => void
     setResult: (a: Web3Helper.TokenResultAll) => void
     result: Web3Helper.TokenResultAll
@@ -226,7 +227,12 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const collectionList = useTokenMenuCollectionList(resultList, result)
 
     const rss3Key = EnhanceableSite_RSS3_NFT_SITE_KEY_map[identity?.identifier?.network as EnhanceableSite]
-    const { data: socialAccounts = EMPTY_LIST } = useSocialAccountsBySettings(identity)
+    const { data: socialAccounts = EMPTY_LIST } = useSocialAccountsBySettings(
+        identity,
+        undefined,
+        undefined,
+        signWithPersona,
+    )
 
     const openRss3Profile = useCallback(
         (address: string) => {

@@ -222,8 +222,8 @@ const getExistedBindingQueryURL = (platform: string, identity: string, personaPu
         public_key: personaPublicKey,
     })
 
-export class NextIDProofAPI implements NextIDBaseAPI.Proof {
-    fetchFromProofService<T>(request: Request | RequestInfo, init?: RequestInit, disableCache?: boolean) {
+export class NextIDProof {
+    static fetchFromProofService<T>(request: Request | RequestInfo, init?: RequestInit, disableCache?: boolean) {
         return disableCache
             ? fetchJSON<T>(request, init)
             : fetchCachedJSON<T>(request, init, {
@@ -232,13 +232,13 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
               })
     }
 
-    async clearPersonaQueryCache(personaPublicKey: string) {
+    static async clearPersonaQueryCache(personaPublicKey: string) {
         const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
         await staleNextIDCached(url)
         await stableSquashedCached(url)
     }
 
-    async bindProof(
+    static async bindProof(
         uuid: string,
         personaPublicKey: string,
         action: NextIDAction,
@@ -286,7 +286,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         await stableSquashedCached(cacheKeyOfExistedBinding)
     }
 
-    async queryExistedBindingByPersona(personaPublicKey: string) {
+    static async queryExistedBindingByPersona(personaPublicKey: string) {
         const { ids } = await this.fetchFromProofService<NextIDBindings>(
             getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey),
         )
@@ -294,7 +294,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return first(ids)
     }
 
-    async queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page = 1, exact = true) {
+    static async queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page = 1, exact = true) {
         if (!platform && !identity) return []
 
         const response = await this.fetchFromProofService<NextIDBindings>(
@@ -310,7 +310,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return sortBy(response.ids, (x) => -x.activated_at)
     }
 
-    async queryLatestBindingByPlatform(
+    static async queryLatestBindingByPlatform(
         platform: NextIDPlatform,
         identity: string,
         publicKey?: string,
@@ -322,7 +322,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return first(result) ?? null
     }
 
-    async queryAllExistedBindingsByPlatform(
+    static async queryAllExistedBindingsByPlatform(
         platform: NextIDPlatform,
         identity: string,
         exact?: boolean,
@@ -356,7 +356,12 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return []
     }
 
-    async queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string, disableCache = false) {
+    static async queryIsBound(
+        personaPublicKey: string,
+        platform: NextIDPlatform,
+        identity: string,
+        disableCache = false,
+    ) {
         try {
             if (!platform && !identity) return false
 
@@ -371,7 +376,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         }
     }
 
-    async queryProfilesByDomain(domain?: string, depth?: number) {
+    static async queryProfilesByDomain(domain?: string, depth?: number) {
         const domainSystem = getDomainSystem(domain)
         if (domainSystem === 'unknown') return EMPTY_LIST
         const { data } = await fetchSquashedJSON<{
@@ -402,7 +407,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return bindings.filter((x) => ![NextIDPlatform.NextID].includes(x.platform) && x.identity)
     }
 
-    async queryProfilesByAddress(address: string, depth?: number) {
+    static async queryProfilesByAddress(address: string, depth?: number) {
         const { data } = await fetchSquashedJSON<{
             data: {
                 identity: {
@@ -430,7 +435,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         )
     }
 
-    async queryProfilesByPublicKey(publicKey: string, depth?: number) {
+    static async queryProfilesByPublicKey(publicKey: string, depth?: number) {
         const { data } = await fetchJSON<{
             data: {
                 identity: {
@@ -455,7 +460,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return bindings
     }
 
-    async queryProfilesByTwitterId(twitterId: string, depth?: number) {
+    static async queryProfilesByTwitterId(twitterId: string, depth?: number) {
         const { data } = await fetchSquashedJSON<{
             data: {
                 identity: {
@@ -480,7 +485,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return bindings.filter((x) => ![NextIDPlatform.NextID].includes(x.platform) && x.identity)
     }
 
-    async queryAllLens(twitterId: string, depth?: number): Promise<NextIDBaseAPI.LensAccount[]> {
+    static async queryAllLens(twitterId: string, depth?: number): Promise<NextIDBaseAPI.LensAccount[]> {
         const lowerCaseId = twitterId.toLowerCase()
         const { data } = await fetchSquashedJSON<{
             data: {
@@ -533,12 +538,12 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         )
     }
 
-    async createPersonaPayload(
+    static async createPersonaPayload(
         personaPublicKey: string,
         action: NextIDAction,
         identity: string,
         platform: NextIDPlatform,
-        language?: string,
+        language: string = 'default',
     ): Promise<NextIDPayload | null> {
         const requestBody: CreatePayloadBody = {
             action,
@@ -547,7 +552,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
             public_key: personaPublicKey,
         }
 
-        const nextIDLanguageFormat = language?.replace('-', '_') as PostContentLanguages
+        const nextIDLanguageFormat = language.replace('-', '_') as PostContentLanguages
 
         const response = await fetchJSON<CreatePayloadResponse>(urlcat(BASE_URL, '/v1/proof/payload'), {
             body: JSON.stringify(requestBody),
@@ -556,8 +561,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
         return response
             ? {
-                  postContent:
-                      response.post_content[nextIDLanguageFormat ?? 'default'] ?? response.post_content.default,
+                  postContent: response.post_content[nextIDLanguageFormat] ?? response.post_content.default,
                   signPayload: JSON.stringify(JSON.parse(response.sign_payload)),
                   createdAt: response.created_at,
                   uuid: response.uuid,

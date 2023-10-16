@@ -3,24 +3,28 @@ import { KVStorage } from '../storages/KV.js'
 import { NextIDStorage } from '../storages/NextID.js'
 import { RSS3Storage } from '../storages/RSS3.js'
 import { FireflyStorage } from '../storages/Firefly.js'
-import type { StorageAPI } from '../../entry-types.js'
-import { SharedContextRef } from '../../PluginContext/index.js'
+import type { WalletAPI } from '../../entry-types.js'
 
-export class Web3StorageAPI implements StorageAPI.Provider {
-    createKVStorage(namespace: string) {
+export class Web3Storage {
+    static createKVStorage(namespace: string) {
         return new KVStorage(namespace)
     }
 
-    createFireflyStorage(namespace: string, address: string) {
+    static createFireflyStorage(namespace: string, address: string) {
         return new FireflyStorage(namespace, address || '')
     }
 
-    createRSS3Storage(namespace: string) {
+    static createRSS3Storage(namespace: string) {
         return new RSS3Storage(namespace)
     }
 
-    createNextIDStorage(proofIdentity: string, platform: NextIDPlatform, signerOrPublicKey: string | ECKeyIdentifier) {
+    static createNextIDStorage(
+        proofIdentity: string,
+        platform: NextIDPlatform,
+        signerOrPublicKey: string | ECKeyIdentifier,
+        signWithPersona: WalletAPI.IOContext['signWithPersona'],
+    ) {
         if (!platform || !signerOrPublicKey) throw new Error('Instantiation parameter error.')
-        return new NextIDStorage(proofIdentity, platform, signerOrPublicKey, SharedContextRef.value.signWithPersona)
+        return new NextIDStorage(proofIdentity, platform, signerOrPublicKey, signWithPersona)
     }
 }

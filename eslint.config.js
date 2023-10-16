@@ -6,7 +6,7 @@ import UnusedImportsPlugin from 'eslint-plugin-unused-imports'
 import UnusedClassesPlugin from 'eslint-plugin-tss-unused-classes'
 import ReactPlugin from 'eslint-plugin-react'
 import ReactHooksPlugin from 'eslint-plugin-react-hooks'
-import ImportPlugin from 'eslint-plugin-import'
+import ImportPlugin from 'eslint-plugin-i'
 import TypeScriptPlugin from '@typescript-eslint/eslint-plugin'
 import MasknetPlugin from '@masknet/eslint-plugin'
 
@@ -409,8 +409,6 @@ const moduleSystemRules = {
         'error',
         {
             paths: [
-                { name: 'date-fns', message: 'Please use date-fns/{submodule} instead.', allowTypeImports: true },
-                { name: 'date-fns/esm', message: 'Please use date-fns/{submodule} instead.' },
                 { name: 'idb/with-async-ittr-cjs', message: 'Please use idb/with-async-ittr instead.' },
                 { name: 'async-call-rpc', message: 'Please use async-call-rpc/full instead.', allowTypeImports: true },
                 { name: '@masknet/typed-message/base', message: 'Please use @masknet/typed-message instead.' },
@@ -422,6 +420,36 @@ const moduleSystemRules = {
                     name: 'lodash-es',
                     message: 'Avoid using type unsafe methods.',
                     importNames: ['get'],
+                },
+            ],
+        },
+    ],
+    'import/no-restricted-paths': [
+        'error',
+        {
+            zones: [
+                {
+                    target: './packages/mask/!(background)/**',
+                    from: './packages/mask/background/',
+                    message: 'Use Services.* instead.',
+                },
+                {
+                    target: './packages/mask/',
+                    from: [
+                        './packages/plugin-infra/src/dom/context.ts',
+                        './packages/plugin-infra/src/site-adaptor/context.ts',
+                    ],
+                    message: 'Use Services.* instead.',
+                },
+                // ideally shared folder should also bans import plugin context
+                // but that requires a lot of context passing. we leave it as a legacy escape path.
+                {
+                    target: './packages/!(plugins|plugin-infra|shared)/**',
+                    from: [
+                        './packages/plugin-infra/src/dom/context.ts',
+                        './packages/plugin-infra/src/site-adaptor/context.ts',
+                    ],
+                    message: 'Only plugins can import plugin context.',
                 },
             ],
         },
@@ -481,7 +509,15 @@ const plugins = {
 }
 export default [
     {
-        settings: { react: { version: '18.3' } },
+        settings: {
+            react: { version: '18.3' },
+            'import/parsers': {
+                '@typescript-eslint/parser': ['.ts', '.tsx'],
+            },
+            'import/resolver': {
+                typescript: {},
+            },
+        },
     },
     {
         ignores: [

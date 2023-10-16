@@ -1,9 +1,6 @@
 // This file is a JavaScript file because it's reference to the plugins should not be counted as a project reference.
 import '@masknet/plugin-debugger/register'
 
-import '@masknet/plugin-evm/register'
-import '@masknet/plugin-flow/register'
-import '@masknet/plugin-solana/register'
 import '@masknet/plugin-file-service/register'
 import '@masknet/plugin-rss3/register'
 import '@masknet/plugin-go-plus-security/register'

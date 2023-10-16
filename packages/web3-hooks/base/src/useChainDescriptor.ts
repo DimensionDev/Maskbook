@@ -1,5 +1,5 @@
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { getPluginDefine } from '@masknet/plugin-infra'
+import { getRegisteredWeb3Chains } from '@masknet/web3-providers'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useNetworkContext } from './useContext.js'
 
@@ -10,7 +10,5 @@ export function useChainDescriptor<T extends NetworkPluginID>(
     const { pluginID } = useNetworkContext(expectedPluginID)
     const { chainId } = useChainContext()
 
-    return getPluginDefine(pluginID)?.contribution?.web3?.chains?.find(
-        (x) => x.chainId === (expectedChainId ?? chainId),
-    )
+    return getRegisteredWeb3Chains(pluginID).find((x) => x.chainId === (expectedChainId ?? chainId))
 }

@@ -6,8 +6,8 @@ import type { GasOptionAPI_Base } from '../entry-types.js'
 
 const ASTAR_API = 'https://gas.astar.network/api/gasnow?network=astar'
 
-export class AstarAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
-    async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
+class AstarAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
+    async getGasOptions(): Promise<Record<GasOptionType, GasOption>> {
         const { data: result } = await fetchJSON<{ data: EstimateSuggestResponse }>(ASTAR_API)
 
         const { priorityFeePerGas } = result.eip1559
@@ -39,3 +39,4 @@ export class AstarAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> 
         }
     }
 }
+export const AstarGas = new AstarAPI()

@@ -1,6 +1,6 @@
-import { useAsync } from 'react-use'
 import { Twitter } from '@masknet/web3-providers'
 import { RSS3_KEY_SITE, NFTAvatarMiniClip, NFTBadgeTimeline } from '@masknet/plugin-avatar'
+import { useQuery } from '@tanstack/react-query'
 
 interface Props {
     className?: string
@@ -9,10 +9,13 @@ interface Props {
     userId?: string
 }
 export function AvatarDecoration({ clipPathId, userId, className, size }: Props) {
-    const { value: user } = useAsync(async () => {
-        if (!userId) return null
-        return Twitter.getUserByScreenName(userId, true)
-    }, [userId])
+    const { data: user } = useQuery({
+        queryKey: ['twitter', 'profile', 'check-nft-avatar', userId],
+        queryFn: () => {
+            if (!userId) return null
+            return Twitter.getUserByScreenName(userId, true)
+        },
+    })
 
     if (!userId || !user) return null
 

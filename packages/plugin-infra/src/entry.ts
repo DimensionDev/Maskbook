@@ -9,11 +9,4 @@ export {
 } from './utils/message.js'
 export { createPluginRPC, createPluginRPCGenerator, __workaround__replaceIsBackground__ } from './utils/rpc.js'
 export { getAvailablePlugins } from './utils/getAvailablePlugins.js'
-export {
-    getPluginDefine,
-    getRegisteredWeb3Chains,
-    getRegisteredWeb3Networks,
-    getRegisteredWeb3Providers,
-    registerPlugin,
-    registeredPlugins,
-} from './manager/store.js'
+export { getPluginDefine, registerPlugin, registeredPlugins } from './manager/store.js'

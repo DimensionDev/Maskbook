@@ -26,3 +26,9 @@ export interface WalletGrantedPermission {
     id: string
     origins: ReadonlyMap<string, Set<EIP2255Permission>>
 }
+
+export interface InternalWalletConnectRecord {
+    type: 'internal_connected'
+    id: string
+    origins: Set<string>
+}

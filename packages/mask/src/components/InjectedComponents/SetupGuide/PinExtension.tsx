@@ -1,19 +1,66 @@
 import { Icons } from '@masknet/icons'
+import { SetupGuideStep } from '@masknet/shared-base'
+import { MaskColorVar, makeStyles } from '@masknet/theme'
 import { Extension as ExtensionIcon } from '@mui/icons-material'
 import { Box, Button, Typography } from '@mui/material'
 import { useMaskSharedTrans } from '../../../utils/index.js'
-import { useFindUsernameStyles } from './FindUsername.js'
 import { WizardDialog } from './WizardDialog.js'
-import { SetupGuideStep } from '@masknet/shared-base'
 
 interface PinExtensionProps {
     onDone?: () => void
     onClose?: () => void
 }
 
+export const useStyles = makeStyles()((theme) => ({
+    button: {
+        minWidth: 150,
+        height: 40,
+        minHeight: 40,
+        marginLeft: 0,
+        marginTop: 0,
+        [theme.breakpoints.down('sm')]: {
+            width: '100%',
+        },
+        fontSize: 14,
+        wordBreak: 'keep-all',
+        '&,&:hover': {
+            color: `${MaskColorVar.twitterButtonText} !important`,
+            background: `${MaskColorVar.twitterButton} !important`,
+        },
+    },
+    tip: {
+        fontSize: 16,
+        fontWeight: 500,
+        lineHeight: '22px',
+        paddingTop: 16,
+    },
+    connection: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+    },
+    connectItem: {
+        flex: 1,
+        height: 75,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    line: {
+        width: 100,
+        height: 1,
+        borderTop: `dashed 1px  ${MaskColorVar.borderSecondary}`,
+    },
+    name: {
+        fontSize: 16,
+        fontWeight: 500,
+    },
+}))
+
 export function PinExtension({ onDone, onClose }: PinExtensionProps) {
     const pinImg = new URL('../../../resources/extensionPinned.png', import.meta.url).toString()
-    const { classes } = useFindUsernameStyles()
+    const { classes } = useStyles()
     const { t } = useMaskSharedTrans()
 
     return (

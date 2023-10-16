@@ -18,7 +18,6 @@
     "@masknet/shared": "workspace:^",
     "@masknet/shared-base": "workspace:^",
     "@masknet/shared-base-ui": "workspace:^",
-    "@masknet/theme": "workspace:^",
-    "react-use": "^17.4.0"
+    "@masknet/theme": "workspace:^"
   }
 }

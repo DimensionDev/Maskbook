@@ -8,7 +8,7 @@ import { Icons } from '@masknet/icons'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
 import Services from '#services'
 import type { AccountType } from '../../type.js'
-import { fetchUploadLink, uploadBackupValue } from '../../utils/api.js'
+import { fetchDownloadLink, fetchUploadLink, uploadBackupValue } from '../../utils/api.js'
 import { encryptBackup } from '@masknet/backup-format'
 import { encode } from '@msgpack/msgpack'
 import { Controller } from 'react-hook-form'
@@ -16,9 +16,8 @@ import { PersonasBackupPreview, WalletsBackupPreview } from '../../components/Ba
 import PasswordField from '../../components/PasswordField/index.js'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
-import formatDateTime from 'date-fns/format'
+import { format as formatDateTime } from 'date-fns'
 import { UserContext } from '../../../shared-ui/index.js'
-import millisecondsToSeconds from 'date-fns/millisecondsToSeconds'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -128,13 +127,18 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
 
                 if (response.ok) {
                     const now = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
+                    const downloadLinkResponse = await fetchDownloadLink({
+                        account,
+                        type,
+                        code,
+                    })
                     showSnackbar(t.settings_alert_backup_success(), { variant: 'success' })
                     updateUser({ cloudBackupAt: now, cloudBackupMethod: type })
-                    if (!params.get('downloadURL')) navigate(DashboardRoutes.CloudBackup, { replace: true })
                     setParams((params) => {
-                        params.set('size', encrypted.byteLength.toString())
-                        params.set('abstract', name)
-                        params.set('uploadedAt', millisecondsToSeconds(Date.now()).toString())
+                        params.set('size', downloadLinkResponse.size.toString())
+                        params.set('abstract', downloadLinkResponse.abstract)
+                        params.set('uploadedAt', downloadLinkResponse.uploadedAt.toString())
+                        params.set('downloadURL', downloadLinkResponse.downloadURL)
                         return params.toString()
                     })
                 }

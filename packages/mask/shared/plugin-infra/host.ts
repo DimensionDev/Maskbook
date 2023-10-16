@@ -3,21 +3,7 @@ import './register.js'
 import { Emitter } from '@servie/events'
 import type { Plugin } from '@masknet/plugin-infra'
 import { type BooleanPreference, MaskMessages, createI18NBundle, i18NextInstance } from '@masknet/shared-base'
-import { InMemoryStorages, PersistentStorages } from '../../shared/index.js'
-
-export type PartialSharedUIContext = Pick<Plugin.Shared.SharedUIContext, 'createKVStorage' | 'setWeb3State'>
-export function createPartialSharedUIContext<Definition extends Plugin.GeneralUI.Definition>(
-    id: string,
-    definition: Definition,
-    signal: AbortSignal,
-): PartialSharedUIContext {
-    return {
-        ...createSharedContext(id, signal),
-        setWeb3State(state) {
-            definition.Web3State = state
-        },
-    }
-}
+import { InMemoryStorages, PersistentStorages } from '../index.js'
 
 export function createSharedContext(pluginID: string, signal: AbortSignal): Plugin.Shared.SharedContext {
     return {

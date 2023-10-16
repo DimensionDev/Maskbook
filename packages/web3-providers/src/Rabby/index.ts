@@ -2,7 +2,7 @@ import urlcat from 'urlcat'
 import { omit } from 'lodash-es'
 import { type ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import { isSameAddress, type NonFungibleContractSpender, type FungibleTokenSpender } from '@masknet/web3-shared-base'
-import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
+import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
 import { resolveNetworkOnRabby } from './helpers.js'
 import { getAllMaskDappContractInfo } from '../helpers/getAllMaskDappContractInfo.js'
 import { NON_FUNGIBLE_TOKEN_API_URL, FUNGIBLE_TOKEN_API_URL } from './constants.js'
@@ -10,10 +10,10 @@ import type { NFTInfo, RawTokenInfo, TokenSpender } from './types.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 import type { AuthorizationAPI } from '../entry-types.js'
 
-export class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
+class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
     async getNonFungibleTokenSpenders(chainId: ChainId, account: string) {
         const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'nft')
-        const networkType = new ChainResolverAPI().networkType(chainId)
+        const networkType = ChainResolver.networkType(chainId)
 
         if (!networkType || !account || !isValidChainId(chainId)) return []
         const rawData = await fetchJSON<{ contracts: NFTInfo[] }>(
@@ -61,7 +61,7 @@ export class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
 
     async getFungibleTokenSpenders(chainId: ChainId, account: string) {
         const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'token')
-        const networkType = new ChainResolverAPI().networkType(chainId)
+        const networkType = ChainResolver.networkType(chainId)
 
         if (!networkType || !account || !isValidChainId(chainId)) return []
 
@@ -109,3 +109,4 @@ export class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
             }) as Array<FungibleTokenSpender<ChainId, SchemaType>>
     }
 }
+export const Rabby = new RabbyAPI()

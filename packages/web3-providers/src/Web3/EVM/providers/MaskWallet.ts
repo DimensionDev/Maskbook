@@ -9,7 +9,6 @@ import {
     ValueRef,
     ImportSource,
     getExtensionSiteType,
-    type PersonaInformation,
 } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
@@ -21,22 +20,13 @@ import {
     type Web3Provider,
     type RequestArguments,
 } from '@masknet/web3-shared-evm'
-import type { Plugin } from '@masknet/plugin-infra/content-script'
-import { ChainResolverAPI } from '../apis/ResolverAPI.js'
+import { ChainResolver } from '../apis/ResolverAPI.js'
 import { BaseContractWalletProvider } from './BaseContractWallet.js'
 import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
 import { SmartPayOwnerAPI } from '../../../SmartPay/apis/OwnerAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
-import type { Subscription } from 'use-subscription'
 
-export interface MaskWalletIOContext {
-    allPersonas: Subscription<readonly PersonaInformation[]>
-    resetAllWallets(): Promise<void>
-    /** Remove a old wallet */
-    removeWallet(id: string, password?: string): Promise<void>
-    renameWallet(address: string, name: string): Promise<void>
-}
 export class MaskWalletProvider
     extends BaseContractWalletProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
@@ -44,13 +34,8 @@ export class MaskWalletProvider
     private Request = new RequestReadonlyAPI()
 
     private ref = new ValueRef<Wallet[]>(EMPTY_LIST)
-    #io: MaskWalletIOContext | undefined
     protected override async io_renameWallet(address: string, name: string): Promise<void> {
-        await this.#io?.renameWallet(address, name)
-    }
-    setIOContext(io: MaskWalletIOContext) {
-        if (this.#io) return
-        this.#io = io
+        await this.context?.MaskWalletContext?.renameWallet(address, name)
     }
     constructor() {
         super(ProviderType.MaskWallet)
@@ -70,7 +55,7 @@ export class MaskWalletProvider
         // Fetching info of SmartPay wallets is slow, update provider wallets eagerly here.
         await this.updateImmediately()
 
-        const allPersonas = this.#io?.allPersonas.getCurrentValue() ?? EMPTY_LIST
+        const allPersonas = this.context?.MaskWalletContext?.allPersonas.getCurrentValue() ?? EMPTY_LIST
         const wallets = this.context?.wallets.getCurrentValue() ?? EMPTY_LIST
 
         const chainId = await this.Bundler.getSupportedChainId()
@@ -118,7 +103,7 @@ export class MaskWalletProvider
         return this.subscription.wallets.getCurrentValue()
     }
 
-    override async setup(context?: Plugin.SiteAdaptor.SiteAdaptorContext) {
+    override async setup(context?: WalletAPI.IOContext) {
         await super.setup(context)
 
         this.subscription?.wallets?.subscribe(async () => {
@@ -140,7 +125,7 @@ export class MaskWalletProvider
         const debounceUpdate = debounce(this.update.bind(this), 1000)
 
         this.context?.wallets.subscribe(debounceUpdate)
-        this.#io?.allPersonas.subscribe(debounceUpdate)
+        this.context?.MaskWalletContext?.allPersonas.subscribe(debounceUpdate)
         CrossIsolationMessages.events.renameWallet.on(debounceUpdate)
     }
 
@@ -154,21 +139,21 @@ export class MaskWalletProvider
         if (scWallets.length) await super.removeWallets(scWallets)
         if (isSameAddress(this.hostedAccount, address)) await this.walletStorage?.account.setValue('')
         await super.removeWallet(address, password)
-        await this.#io?.removeWallet(address, password)
+        await this.context?.MaskWalletContext?.removeWallet(address, password)
     }
 
     override async removeWallets(wallets: Wallet[]): Promise<void> {
         await super.removeWallets(wallets)
         for (const wallet of wallets) {
             if (isSameAddress(this.hostedAccount, wallet.address)) await this.walletStorage?.account.setValue('')
-            if (!wallet.owner) await this.#io?.removeWallet(wallet.address)
+            if (!wallet.owner) await this.context?.MaskWalletContext?.removeWallet(wallet.address)
         }
     }
 
     override async resetAllWallets(): Promise<void> {
         await super.removeWallets(this.wallets)
         await this.walletStorage?.account.setValue('')
-        await this.#io?.resetAllWallets()
+        await this.context?.MaskWalletContext?.resetAllWallets()
     }
 
     override async renameWallet(address: string, name: string) {
@@ -212,8 +197,8 @@ export class MaskWalletProvider
                 'externalRequestID is not expected in MaskWalletProvider.connect() when the page is not popup page.',
             )
 
-        const account = first(await this.context?.selectMaskWalletAccount(chainId, address))
-        if (!account) throw new Error(`Failed to connect to ${new ChainResolverAPI().chainFullName(chainId)}`)
+        const account = first(await this.context?.selectMaskWalletAccount(chainId, address, location.origin))
+        if (!account) throw new Error(`Failed to connect to ${ChainResolver.chainFullName(chainId)}`)
 
         // switch account
         if (!isSameAddress(this.hostedAccount, account?.address)) {

@@ -1,4 +1,4 @@
-import { type ForwardedRef, forwardRef, useCallback, type ChangeEvent } from 'react'
+import { type ForwardedRef, forwardRef } from 'react'
 import { omit } from 'lodash-es'
 import type { BoxProps } from '@mui/system'
 import {
@@ -89,18 +89,9 @@ export interface MaskTextFieldProps extends Exclude<StandardTextFieldProps, 'var
 }
 
 export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: ForwardedRef<any>) => {
-    const { label, sx, required = false, className, wrapperProps, helperText, onChange, ...rest } = props
+    const { label, sx, required = false, className, wrapperProps, helperText, ...rest } = props
     const InputProps = (props.InputProps as InputProps) ?? {}
     const { classes, cx } = useStyles()
-    const handleChange = useCallback(
-        (ev: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-            if (ev.currentTarget.value && !new RegExp(InputProps.inputProps?.pattern).test(ev.currentTarget.value)) {
-                return
-            }
-            onChange?.(ev)
-        },
-        [InputProps.inputProps?.pattern, onChange],
-    )
     return (
         <Box sx={sx} {...wrapperProps}>
             {label && typeof label === 'string' ? (
@@ -117,7 +108,6 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
             {Sniffings.is_dashboard_page ? (
                 <TextField
                     ref={ref}
-                    onChange={handleChange}
                     {...rest}
                     classes={{ root: classes.field }}
                     variant="standard"
@@ -138,7 +128,6 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
                 <InputBase
                     className={classes.field}
                     {...omit(InputProps, 'disableUnderline')}
-                    onChange={handleChange}
                     {...omit(rest, 'margin', 'onKeyDown', 'onKeyUp', 'InputProps', 'inputProps', 'FormHelperTextProps')}
                 />
             )}

@@ -17,7 +17,7 @@ import {
     resolveImageURL,
     ChainIdList,
 } from '@masknet/web3-shared-evm'
-import { ChainResolverAPI } from '../Web3/EVM/apis/ResolverAPI.js'
+import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
 import type { ZerionNonFungibleTokenItem, ZerionNonFungibleCollection, ZerionCoin } from './types.js'
 import { formatAsset, formatTransactions, isValidAsset } from './helpers.js'
 import {
@@ -44,9 +44,7 @@ import type {
 const ZERION_NFT_DETAIL_URL = 'https://app.zerion.io/nfts/'
 const filterAssetType = ['compound', 'trash', 'uniswap', 'uniswap-v2', 'nft']
 
-export class ZerionAPI
-    implements FungibleTokenAPI.Provider<ChainId, SchemaType>, HistoryAPI.Provider<ChainId, SchemaType>
-{
+class ZerionAPI implements FungibleTokenAPI.Provider<ChainId, SchemaType>, HistoryAPI.Provider<ChainId, SchemaType> {
     async getAssets(address: string, options?: HubOptions_Base<ChainId>) {
         const { meta, payload } = await getAssetsList(address, 'positions')
         if (meta.status !== 'ok') return createPageable(EMPTY_LIST, createIndicator(options?.indicator))
@@ -95,7 +93,7 @@ export class ZerionAPI
     }
 }
 
-export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     createNonFungibleCollectionFromCollectionData(chainId: ChainId, collection: ZerionNonFungibleCollection) {
         return {
             chainId,
@@ -207,7 +205,7 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
         const response = await getNonFungibleInfo(address, tokenId)
         if (!response.payload['nft-info'].asset.floor_price) return
 
-        const nativeToken = new ChainResolverAPI().nativeCurrency(chainId)
+        const nativeToken = ChainResolver.nativeCurrency(chainId)
         return {
             amount: scale10(response.payload['nft-info'].asset.floor_price, nativeToken.decimals).toFixed(0),
             token: nativeToken,
@@ -215,7 +213,7 @@ export class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<C
     }
 }
 
-export class ZerionTrendingAPI implements TrendingAPI.Provider<ChainId> {
+class ZerionTrendingAPI implements TrendingAPI.Provider<ChainId> {
     private createCoinFromData(data: ZerionCoin) {
         return {
             id: data.asset.id,
@@ -234,29 +232,24 @@ export class ZerionTrendingAPI implements TrendingAPI.Provider<ChainId> {
         return response.payload.info.filter((x) => !x.asset.type).map(this.createCoinFromData)
     }
 
-    getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
+    getCoinsByKeyword(): Promise<TrendingAPI.Coin[]> {
         throw new Error('Method not implemented.')
     }
-    getCoinInfoByAddress(address: string): Promise<TrendingAPI.CoinInfo | undefined> {
+    getCoinInfoByAddress(): Promise<TrendingAPI.CoinInfo | undefined> {
         throw new Error('To be implemented.')
     }
-    getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
+    getCoinTrending(): Promise<TrendingAPI.Trending> {
         throw new Error('Method not implemented.')
     }
-    getCoinPriceStats(
-        chainId: ChainId,
-        coinId: string,
-        currency: TrendingAPI.Currency,
-        days: number,
-    ): Promise<TrendingAPI.Stat[]> {
+    getCoinPriceStats(): Promise<TrendingAPI.Stat[]> {
         throw new Error('Method not implemented.')
     }
-    getCoinMarketInfo(symbol: string): Promise<TrendingAPI.MarketInfo> {
+    getCoinMarketInfo(): Promise<TrendingAPI.MarketInfo> {
         throw new Error('Method not implemented.')
     }
 }
 
-export class ZerionGasAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
+class ZerionGasAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
     async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption> | undefined> {
         if (!isValidChainId(chainId)) return
         const result = await getGasOptions(chainId)
@@ -284,3 +277,7 @@ export class ZerionGasAPI implements GasOptionAPI_Base.Provider<ChainId, GasOpti
         }
     }
 }
+export const Zerion = new ZerionAPI()
+export const ZerionNonFungibleToken = new ZerionNonFungibleTokenAPI()
+export const ZerionTrending = new ZerionTrendingAPI()
+export const ZerionGas = new ZerionGasAPI()

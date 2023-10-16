@@ -1,7 +1,6 @@
-import formatDateTime from 'date-fns/format'
-import fromUnixTime from 'date-fns/fromUnixTime'
+import { format as formatDateTime, fromUnixTime } from 'date-fns'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import type { MirrorBaseAPI, Publisher, Writer } from '../entry-types.js'
+import type { Publisher, Writer } from '../entry-types.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 
 const MIRROR_API_URL = 'https://mirror-api.com/graphql'
@@ -59,8 +58,8 @@ async function fetchFromMirror<T>(body: requestBody) {
     return data
 }
 
-export class MirrorAPI implements MirrorBaseAPI.Provider {
-    async getPostPublisher(digest: string): Promise<Publisher | null> {
+export class Mirror {
+    static async getPostPublisher(digest: string): Promise<Publisher | null> {
         const script = document.getElementById('__NEXT_DATA__')?.innerHTML
         const INIT_DATA = JSON.parse(script ?? '{}')
 
@@ -102,7 +101,7 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
             }
         }
     }
-    async getWriter(id: string) {
+    static async getWriter(id: string) {
         if (!id) return null
 
         const writer = await fetchFromMirror<{
@@ -125,7 +124,7 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
         return writer?.projectFeed || null
     }
 
-    async getPost(digest: string) {
+    static async getPost(digest: string) {
         if (!digest) return null
 
         const response = await fetchFromMirror<{
@@ -224,7 +223,7 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
 
     // TODO: this user get from local, should as fallback when get from mirror api failed.
     // Should refactor it when use this method in the business case.
-    async getUser(): Promise<Writer | null> {
+    static async getUser(): Promise<Writer | null> {
         const script = document.getElementById('__NEXT_DATA__')?.innerHTML
         if (!script) return null
         const INIT_DATA = JSON.parse(script)

@@ -1,4 +1,4 @@
-import { getPluginDefine } from '@masknet/plugin-infra'
+import { getRegisteredWeb3Providers } from '@masknet/web3-providers'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useNetworkContext } from './useContext.js'
@@ -16,7 +16,7 @@ export function useProviderDescriptor<S extends 'all' | void = void, T extends N
     const { pluginID } = useNetworkContext(expectedPluginID)
     const { providerType } = useChainContext()
 
-    return getPluginDefine(pluginID)?.contribution?.web3?.providers?.find((x) =>
+    return getRegisteredWeb3Providers(pluginID).find((x) =>
         [x.type, x.ID].includes(expectedProviderTypeOrID ?? providerType ?? ''),
-    ) as Web3Helper.ProviderDescriptorScope<S, T> | undefined
+    )
 }

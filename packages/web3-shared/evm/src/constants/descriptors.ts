@@ -20,7 +20,7 @@ import { ZERO_ADDRESS } from './primitives.js'
 
 const PLUGIN_ID = NetworkPluginID.PLUGIN_EVM
 
-export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>> = [
+export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, NetworkType>> = [
     {
         ID: `${PLUGIN_ID}_ethereum`,
         networkSupporterPluginID: PLUGIN_ID,
@@ -280,7 +280,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
     },
 ]
 
-export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>> = CHAINS.map((x) => {
+export const CHAIN_DESCRIPTORS: ReadonlyArray<ChainDescriptor<ChainId, SchemaType, NetworkType>> = CHAINS.map((x) => {
     const network = NETWORK_DESCRIPTORS.find((y) => y.chainId === x.chainId)
     return {
         ...x,
@@ -307,7 +307,7 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
     }
 })
 
-export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderType>> = [
+export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, ProviderType>> = [
     {
         ID: `${PLUGIN_ID}_maskwallet`,
         providerAdaptorPluginID: PLUGIN_ID,

@@ -13,8 +13,9 @@ const useStyles = makeStyles()((theme) => ({
 
 interface Props extends IconButtonProps {
     userId: string
+    address: string
 }
-export function ProfileAvatarBadge({ userId, className, ...rest }: Props) {
+export function ProfileAvatarBadge({ userId, address, className, ...rest }: Props) {
     const buttonRef = useRef<HTMLButtonElement>(null)
     const { classes, cx } = useStyles()
 
@@ -30,6 +31,7 @@ export function ProfileAvatarBadge({ userId, className, ...rest }: Props) {
             openTimer = setTimeout(() => {
                 CrossIsolationMessages.events.profileCardEvent.sendToLocal({
                     open: true,
+                    address,
                     userId,
                     anchorBounding: button.getBoundingClientRect(),
                     anchorEl: button,
@@ -55,7 +57,7 @@ export function ProfileAvatarBadge({ userId, className, ...rest }: Props) {
             button.removeEventListener('mouseleave', leave)
             unsubscribe()
         }
-    }, [userId])
+    }, [userId, address])
 
     return (
         <IconButton disableRipple className={cx(classes.badge, className)} {...rest} ref={buttonRef}>

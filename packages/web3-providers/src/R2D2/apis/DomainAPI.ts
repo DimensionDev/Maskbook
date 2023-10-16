@@ -4,7 +4,7 @@ import { ENS_ROOT_URL } from '../constants.js'
 import type { DomainAPI } from '../../entry-types.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 
-export class R2D2DomainAPI implements DomainAPI.Provider<ChainId> {
+class R2D2DomainAPI implements DomainAPI.Provider<ChainId> {
     lookup(chainId: ChainId, name: string): Promise<string | undefined> {
         throw new Error('Method not implemented.')
     }
@@ -14,3 +14,4 @@ export class R2D2DomainAPI implements DomainAPI.Provider<ChainId> {
         return response?.reverseRecord
     }
 }
+export const R2D2Domain = new R2D2DomainAPI()

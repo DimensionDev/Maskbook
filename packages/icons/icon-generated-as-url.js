@@ -45,7 +45,8 @@ export function leaderboard_url() { return new URL("./brands/Leaderboard.png", i
 export function lens_url() { return new URL("./brands/Lens.svg", import.meta.url) }
 export function link_3_url() { return new URL("./brands/Link3.svg", import.meta.url) }
 export function looks_rare_url() { return new URL("./brands/LooksRare.svg", import.meta.url) }
-export function mask_url() { return new URL("./brands/Mask.svg", import.meta.url) }
+export function mask_dark_url() { return new URL("./brands/Mask.dark.svg", import.meta.url) }
+export function mask_light_url() { return new URL("./brands/Mask.light.svg", import.meta.url) }
 export function mask_banner_url() { return new URL("./brands/MaskBanner.svg", import.meta.url) }
 export function mask_blue_url() { return new URL("./brands/MaskBlue.svg", import.meta.url) }
 export function mask_grey_dark_url() { return new URL("./brands/MaskGrey.dark.svg", import.meta.url) }
@@ -96,7 +97,8 @@ export function twitter_round_url() { return new URL("./brands/TwitterRound.svg"
 export function twitter_round_gray_url() { return new URL("./brands/TwitterRoundGray.svg", import.meta.url) }
 export function twitter_x_dark_url() { return new URL("./brands/TwitterX.dark.svg", import.meta.url) }
 export function twitter_x_light_url() { return new URL("./brands/TwitterX.light.svg", import.meta.url) }
-export function twitter_x_round_url() { return new URL("./brands/TwitterXRound.svg", import.meta.url) }
+export function twitter_x_round_dark_url() { return new URL("./brands/TwitterXRound.dark.svg", import.meta.url) }
+export function twitter_x_round_light_url() { return new URL("./brands/TwitterXRound.light.svg", import.meta.url) }
 export function uniswap_url() { return new URL("./brands/Uniswap.svg", import.meta.url) }
 export function weth_url() { return new URL("./brands/WETH.svg", import.meta.url) }
 export function x_2_y_2_url() { return new URL("./brands/X2Y2.svg", import.meta.url) }
@@ -399,6 +401,7 @@ export function unknown_cancel_url() { return new URL("./rss3/UnknownCancel.svg"
 export function unknown_in_url() { return new URL("./rss3/UnknownIn.svg", import.meta.url) }
 export function unknown_out_url() { return new URL("./rss3/UnknownOut.svg", import.meta.url) }
 export function cn_url() { return new URL("./settings/CN.svg", import.meta.url) }
+export function email_url() { return new URL("./settings/Email.svg", import.meta.url) }
 export function jp_url() { return new URL("./settings/JP.svg", import.meta.url) }
 export function kr_url() { return new URL("./settings/KR.svg", import.meta.url) }
 export function settings_appearance_dark_url() { return new URL("./settings/SettingsAppearance.dark.svg", import.meta.url) }

@@ -28,13 +28,7 @@ import type {
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type {
-    ChainDescriptor,
-    NetworkDescriptor,
-    ProviderDescriptor,
-    SearchResult,
-    Web3State,
-} from '@masknet/web3-shared-base'
+import type { SearchResult } from '@masknet/web3-shared-base'
 import type { LinkedProfileDetails } from '@masknet/public-api'
 import type { ChainId, TransactionOptions } from '@masknet/web3-shared-evm'
 import type { CompositionType } from './entry-content-script.js'
@@ -108,7 +102,6 @@ export namespace Plugin.Shared {
 
     export interface SharedUIContext extends SharedContext {
         setMinimalMode(enabled: boolean): void
-        setWeb3State(state: Web3State<any, any, any, any, any, any, any, any>): void
         /** Get all wallets */
         wallets: Subscription<Wallet[]>
 
@@ -116,6 +109,7 @@ export namespace Plugin.Shared {
         selectMaskWalletAccount(
             chainId: ChainId,
             defaultAccount?: string,
+            source?: string,
         ): Promise<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
 
         /** Open Dashboard with a new window */
@@ -302,17 +296,7 @@ export namespace Plugin.Shared {
         metadataKeys?: ReadonlySet<string>
         /** This plugin can recognize and enhance the post that matches the following matchers. */
         postContent?: ReadonlySet<RegExp | string>
-        web3?: Web3Contribution
     }
-    export interface Web3Contribution {
-        /** Introduced sub-network information. */
-        chains?: Array<ChainDescriptor<unknown, unknown, unknown>>
-        /** Introduced networks information. */
-        networks?: Array<NetworkDescriptor<unknown, unknown>>
-        /** Introduced wallet providers information. */
-        providers?: Array<ProviderDescriptor<unknown, unknown>>
-    }
-
     export interface Ability {}
 }
 
@@ -527,7 +511,7 @@ export namespace Plugin.SiteAdaptor {
                 resultList: Array<SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
                 currentResult: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
                 isProfilePage?: boolean
-                identity?: SocialIdentity
+                identity?: SocialIdentity | null
             }>
         }
         Utils?: {
@@ -587,7 +571,7 @@ export namespace Plugin.SiteAdaptor {
              * The injected avatar decorator component
              */
             Decorator: InjectUI<{
-                identity?: SocialIdentity
+                identity?: SocialIdentity | null
                 userId?: string
                 persona?: string
                 socialAccounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
@@ -606,7 +590,7 @@ export namespace Plugin.SiteAdaptor {
              * If it returns false, this cover will not be displayed.
              */
             shouldDisplay?(
-                identity?: SocialIdentity,
+                identity?: SocialIdentity | null,
                 socialAccounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>,
                 sourceType?: AvatarRealmSourceType,
             ): boolean
@@ -703,7 +687,7 @@ export namespace Plugin.SiteAdaptor {
              * The injected tab content
              */
             TabContent: InjectUI<{
-                identity?: SocialIdentity
+                identity?: SocialIdentity | null
                 socialAccount?: SocialAccount<Web3Helper.ChainIdAll>
             }>
         }
@@ -711,7 +695,10 @@ export namespace Plugin.SiteAdaptor {
             /**
              * If it returns false, this tab will not be displayed.
              */
-            shouldDisplay?(identity?: SocialIdentity, socialAccount?: SocialAccount<Web3Helper.ChainIdAll>): boolean
+            shouldDisplay?(
+                identity?: SocialIdentity | null,
+                socialAccount?: SocialAccount<Web3Helper.ChainIdAll>,
+            ): boolean
             /**
              * Filter social address.
              */
@@ -950,8 +937,6 @@ export namespace Plugin.GeneralUI {
     export interface Definition {
         /** This UI will be injected into the global scope of the target page. */
         GlobalInjection?: InjectUI<{}>
-        /** This is the context of the currently chosen network. */
-        Web3State?: Web3State<unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown>
         /**
          * Render metadata in many different environments.
          *

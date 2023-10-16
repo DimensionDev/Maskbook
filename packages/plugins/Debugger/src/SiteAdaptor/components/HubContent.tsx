@@ -43,22 +43,16 @@ export function HubContent(props: HubContentProps) {
         ['getFungibleToken', [address]],
         ['getFungibleAsset', [address]],
         ['getFungibleAssets', [account]],
-        ['getFungibleTokenBalance', [address]],
         ['getFungibleTokenPrice', [chainId, address]],
-        ['getFungibleTokenSecurity', [chainId, address]],
 
         ['getFungibleTokenIconURLs', [chainId, address]],
-        ['getNonFungibleTokenIconURLs', [chainId, address, tokenId]],
 
         ['getFungibleTokensFromTokenList', [chainId]],
         ['getFungibleTokenSpenders', [chainId, account]],
 
         // non-fungible tokens
-        ['getNonFungibleTokenPrice', [chainId, address, tokenId]],
         ['getNonFungibleTokensFromTokenList', [chainId]],
         ['getNonFungibleTokenSpenders', [chainId, address]],
-        ['getNonFungibleTokenBalance', [address]],
-        ['getNonFungibleTokenSecurity', [chainId, address]],
         ['getNonFungibleTokenContract', [address]],
         ['getNonFungibleCollectionsByOwner', [account]],
         ['getNonFungibleTokenEvents', [address, tokenId]],

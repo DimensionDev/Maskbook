@@ -70,6 +70,8 @@ const useStyles = makeStyles()((theme) => ({
         padding: '12px 12px 20px !important',
         display: 'flex',
         justifyContent: 'space-between',
+        background: theme.palette.maskColor.secondaryBottom,
+        backdropFilter: 'blur(16px)',
         columnGap: 12,
         '& > *': {
             marginLeft: '0px !important',
@@ -119,11 +121,10 @@ const useStyles = makeStyles()((theme) => ({
     listItem: {
         backgroundColor: theme.palette.maskColor.bottom,
         borderRadius: 8,
-        boxShadow:
-            theme.palette.mode === 'light'
-                ? '0px 0px 20px rgba(0, 0, 0, 0.05)'
-                : '0px 0px 20px rgba(255, 255, 255, 0.12)',
-        padding: theme.spacing(2, 1.5),
+        padding: theme.spacing(1, 1.5),
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.bg,
+        },
     },
     name: {
         display: 'flex',
@@ -397,13 +398,21 @@ export const SmartPayContent = memo(() => {
                         ?.map((token, index) => (
                             <ListItem className={classes.listItem} key={index}>
                                 <Box display="flex" alignItems="center" columnGap="10px">
-                                    <TokenIcon
-                                        size={36}
-                                        address={token.address}
-                                        name={token.name}
-                                        chainId={token.chainId}
-                                        logoURL={token.logoURL}
-                                    />
+                                    <Box position="relative" width={40} height={36}>
+                                        <TokenIcon
+                                            size={36}
+                                            address={token.address}
+                                            name={token.name}
+                                            chainId={token.chainId}
+                                            logoURL={token.logoURL}
+                                        />
+                                        <ImageIcon
+                                            className={classes.badge}
+                                            style={{ right: 0 }}
+                                            size={12}
+                                            icon={polygonDescriptor?.icon}
+                                        />
+                                    </Box>
                                     <Box>
                                         <Typography fontSize={16} lineHeight="20px" fontWeight={700}>
                                             {token.symbol}

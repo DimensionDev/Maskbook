@@ -14,8 +14,8 @@ import { SolanaHubOptionsAPI } from './HubOptionsAPI.js'
 import { SolanaConnectionAPI } from './ConnectionAPI.js'
 import { SolanaWeb3StateRef } from './Web3StateAPI.js'
 import type { HubOptions } from '../types/index.js'
-import { CoinGeckoPriceAPI_Solana } from '../../../CoinGecko/index.js'
-import { SolanaFungibleTokenAPI } from './FungibleTokenAPI.js'
+import { CoinGeckoPriceSolana } from '../../../CoinGecko/index.js'
+import { SolanaFungible } from './FungibleTokenAPI.js'
 import type { FungibleTokenAPI, PriceAPI } from '../../../entry-types.js'
 
 export class SolanaHubFungibleAPI extends HubFungibleAPI_Base<
@@ -28,8 +28,6 @@ export class SolanaHubFungibleAPI extends HubFungibleAPI_Base<
     Transaction,
     TransactionParameter
 > {
-    private CoinGeckoPriceSolana = new CoinGeckoPriceAPI_Solana()
-    private SolanaFungible = new SolanaFungibleTokenAPI()
     private Web3 = new SolanaConnectionAPI()
 
     protected override HubOptions = new SolanaHubOptionsAPI(this.options)
@@ -42,10 +40,10 @@ export class SolanaHubFungibleAPI extends HubFungibleAPI_Base<
 
         return this.getPredicateProviders<FungibleTokenAPI.Provider<ChainId, SchemaType> | PriceAPI.Provider<ChainId>>(
             {
-                [SourceType.Solana]: this.SolanaFungible,
-                [SourceType.CoinGecko]: this.CoinGeckoPriceSolana,
+                [SourceType.Solana]: SolanaFungible,
+                [SourceType.CoinGecko]: CoinGeckoPriceSolana,
             },
-            [this.SolanaFungible, this.CoinGeckoPriceSolana],
+            [SolanaFungible, CoinGeckoPriceSolana],
             initial,
         )
     }

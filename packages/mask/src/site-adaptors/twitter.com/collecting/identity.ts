@@ -1,10 +1,11 @@
-import { first } from 'lodash-es'
-import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { delay } from '@masknet/kit'
+import { MutationObserverWatcher, type LiveSelector } from '@dimensiondev/holoflows-kit'
 import { TWITTER_RESERVED_SLUGS } from '@masknet/injected-script/shared'
+import { delay } from '@masknet/kit'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import { Twitter } from '@masknet/web3-providers'
+import { queryClient } from '@masknet/shared-base-ui'
 import type { SiteAdaptorUI } from '@masknet/types'
+import { Twitter } from '@masknet/web3-providers'
+import { first } from 'lodash-es'
 import { creator } from '../../../site-adaptor-infra/index.js'
 import { twitterBase } from '../base.js'
 import { isMobileTwitter } from '../utils/isMobile.js'
@@ -122,7 +123,10 @@ function resolveCurrentVisitingIdentityInner(
     cancel: AbortSignal,
 ) {
     const update = async (twitterId: string) => {
-        const user = await Twitter.getUserByScreenName(twitterId)
+        const user = await queryClient.fetchQuery({
+            queryKey: ['twitter', 'profile', twitterId],
+            queryFn: () => Twitter.getUserByScreenName(twitterId),
+        })
         if (process.env.NODE_ENV === 'development') {
             console.assert(user, `Can't get get user by screen name ${twitterId}`)
         }

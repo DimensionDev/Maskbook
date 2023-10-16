@@ -4,7 +4,7 @@ import { isProfileIdentifier } from '@masknet/shared'
 import { EMPTY_LIST, type ECKeyIdentifier, type ProfileIdentifier } from '@masknet/shared-base'
 import Services from '#services'
 import { useCurrentPersona } from '../../../components/DataSource/useCurrentPersona.js'
-import { type RelationRecord } from '../../../../background/database/persona/type.js'
+import type { RelationRecord } from '../../../../background/database/persona/type.js'
 import { first } from 'lodash-es'
 
 export interface Friend {

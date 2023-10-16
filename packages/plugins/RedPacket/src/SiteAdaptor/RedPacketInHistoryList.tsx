@@ -1,6 +1,5 @@
 import { type MouseEvent, useCallback, useState, useMemo, useRef, useEffect } from 'react'
-import nextDay from 'date-fns/nextDay'
-import intervalToDuration from 'date-fns/intervalToDuration'
+import { nextDay, intervalToDuration } from 'date-fns'
 import { useIntersectionObserver } from '@react-hookz/web'
 import { Box, Typography, Popper, useMediaQuery, type Theme, ListItem } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'

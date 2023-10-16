@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { useContext } from 'react'
-import formatDateTime from 'date-fns/format'
+import { format as formatDateTime } from 'date-fns'
 import { Avatar, Box, Link, Typography } from '@mui/material'
 import { OpenInNew } from '@mui/icons-material'
 import { makeStyles } from '@masknet/theme'

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import differenceInSeconds from 'date-fns/differenceInSeconds'
+import { differenceInSeconds } from 'date-fns'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useCalendarTrans } from '../../locales/i18n_generated.js'

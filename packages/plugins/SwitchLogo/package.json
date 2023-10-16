@@ -19,8 +19,6 @@
         "@masknet/shared-base": "workspace:^",
         "@masknet/shared-base-ui": "workspace:^",
         "@masknet/theme": "workspace:^",
-        "@masknet/web3-telemetry": "workspace:^",
-        "react-use": "^17.4.0",
-        "use-subscription": "^1.8.0"
+        "@masknet/web3-telemetry": "workspace:^"
     }
 }

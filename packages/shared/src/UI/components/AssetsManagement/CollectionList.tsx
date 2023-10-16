@@ -67,7 +67,7 @@ const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap 
             gridTemplateColumns: typeof columns === 'string' ? columns : `repeat(${columns}, 1fr)`,
             gridGap: gapIsNumber ? theme.spacing(gap) : gap,
             padding: gapIsNumber ? theme.spacing(0, gap, 0) : `0 ${gap} 0`,
-            paddingRight: theme.spacing(1),
+            paddingLeft: theme.spacing(1),
             boxSizing: 'border-box',
         },
         collectionHeader: {

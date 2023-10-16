@@ -3,12 +3,6 @@ import { getRPCConstants } from '../constants/constants.js'
 import type { ChainId } from '../types/index.js'
 
 export class ProviderURL {
-    /**
-     * @deprecated Don't new ProviderEditor()
-     * Use ProviderEditor.from(chainId) stead.
-     */
-    constructor() {}
-
     static from(chainId: ChainId) {
         const { RPC_URLS, RPC_WEIGHTS } = getRPCConstants(chainId)
 
