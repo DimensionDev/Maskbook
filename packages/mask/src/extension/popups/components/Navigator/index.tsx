@@ -12,12 +12,13 @@ import { HydrateFinished } from '../../../../utils/createNormalReactRoot.js'
 const useStyle = makeStyles()((theme) => ({
     container: {
         padding: theme.spacing(2, 1.5),
-        backgroundColor: theme.palette.maskColor.bottom,
+        backgroundColor: theme.palette.mode === 'dark' ? 'rgba(0, 0, 0,0.80)' : 'rgba(255, 255, 255, 0.80)',
         width: '100%',
         backdropFilter: 'blur(8px)',
-        background: theme.palette.maskColor.secondaryBottom,
         boxShadow: theme.palette.maskColor.bottomBg,
         borderRadius: '12px 12px 0 0',
+        position: 'absolute',
+        bottom: 0,
     },
     action: {
         color: theme.palette.maskColor.third,

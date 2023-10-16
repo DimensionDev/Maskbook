@@ -39,6 +39,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         background: theme.palette.maskColor.bottom,
+        position: 'relative',
     },
     body: {
         flexGrow: 1,
