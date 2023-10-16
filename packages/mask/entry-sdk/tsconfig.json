@@ -8,9 +8,5 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"]
   },
   "include": ["./"],
-  "references": [
-    { "path": "../utils-pure" },
-    { "path": "../../mask-sdk/server" },
-    { "path": "../../plugins/External/" }
-  ]
+  "references": [{ "path": "../utils-pure" }, { "path": "../../mask-sdk/server" }]
 }

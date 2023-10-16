@@ -168,7 +168,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         getPostIdFromNewPostToast: ui.configuration.nextIDConfig?.getPostIdFromNewPostToast,
         createPersona: () => Services.Helper.openDashboard(DashboardRoutes.SignUpPersona),
         connectPersona,
-        fetchManifest: Services.ThirdPartyPlugin.fetchManifest,
+        fetchManifest: Services.Helper.fetchSandboxedPluginManifest,
         attachProfile: Services.Identity.attachProfile,
         postMessage: ui.automation?.nativeCompositionDialog?.attachText,
         setCurrentPersonaIdentifier: Services.Settings.setCurrentPersonaIdentifier,

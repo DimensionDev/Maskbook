@@ -404,18 +404,6 @@
             }
         },
         {
-            "input": "./packages/plugins/External/src/locales/en-US.json",
-            "output": "./packages/plugins/External/src/locales/i18n_generated",
-            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
-            "generator": {
-                "type": "i18next/react-hooks",
-                "hooks": "useExternalTrans",
-                "namespace": "io.mask.external",
-                "trans": "ExternalTrans",
-                "emitTS": true
-            }
-        },
-        {
             "input": "./packages/plugins/Savings/src/locales/en-US.json",
             "output": "./packages/plugins/Savings/src/locales/i18n_generated",
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },

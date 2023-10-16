@@ -1,6 +1,5 @@
 /// <reference path="../dist/public-api.d.ts" />
 export interface BridgeAPI {
-    site_appendComposition(message: string, metadata?: ReadonlyMap<string, unknown>): Promise<void>
     eth_request(request: unknown): Promise<unknown>
     reload(): Promise<void>
 }
@@ -9,10 +8,6 @@ export interface UserScriptAPI {
     request_init(init: InitInformation): Promise<void>
 }
 export interface InitInformation {
-    context: {
-        meta: Mask.SocialNetwork['metadata']
-        connected: boolean
-    }
     debuggerMode: boolean
 }
 export { serializer } from './serializer.js'

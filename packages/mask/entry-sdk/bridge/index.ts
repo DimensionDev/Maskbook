@@ -1,6 +1,5 @@
-import { type BridgeAPI } from '@masknet/sdk'
+import type { BridgeAPI } from '@masknet/sdk'
 import Services from '#services'
-import { SiteMethods } from './site_context.js'
 import { eth_request } from './eth.js'
 
 export const maskSDKServer: BridgeAPI = {
@@ -9,5 +8,4 @@ export const maskSDKServer: BridgeAPI = {
         if (process.env.NODE_ENV === 'production') return
         await Services.SiteAdaptor.attachMaskSDKToCurrentActivePage('once')
     },
-    ...SiteMethods,
 }

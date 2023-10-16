@@ -20,7 +20,6 @@ import type {
     IdentityService,
     SettingsService,
     SiteAdaptorService,
-    ThirdPartyPluginService,
     Services as ServicesType,
     WalletService,
 } from '../background/services/types.js'
@@ -41,7 +40,6 @@ export const Services: ServicesType = {
     Helper: add<HelperService>('Helper'),
     SiteAdaptor: add<SiteAdaptorService>('SiteAdaptor'),
     Settings: add<SettingsService>('Settings'),
-    ThirdPartyPlugin: add<ThirdPartyPluginService>('ThirdPartyPlugin'),
     Wallet: add<WalletService>('Wallet'),
 }
 setDebugObject('Services', Services)

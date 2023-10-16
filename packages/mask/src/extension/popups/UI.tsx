@@ -49,7 +49,6 @@ const Personas = lazy(() => import(/* webpackPreload: true */ './pages/Personas/
 const SwapPage = lazy(() => import('./pages/Swap/index.js'))
 const RequestPermissionPage = lazy(() => import('./RequestPermission/index.js'))
 const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect/index.js'))
-const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermission/index.js'))
 const Contacts = lazy(() => import('./pages/Friends/index.js'))
 const Settings = lazy(() => import('./pages/Settings/index.js'))
 
@@ -88,10 +87,6 @@ const PopupRoutes = memo(function PopupRoutes() {
                         <Route path={PopupPaths.Swap} element={<SwapPage />} />
                         <Route path={PopupPaths.RequestPermission} element={<RequestPermissionPage />} />
                         <Route path={PopupPaths.PermissionAwareRedirect} element={<PermissionAwareRedirect />} />
-                        <Route
-                            path={PopupPaths.ThirdPartyRequestPermission}
-                            element={<ThirdPartyRequestPermission />}
-                        />
                         <Route path="*" element={<Navigate replace to={PopupPaths.Personas} />} />
                     </Routes>
                     {mainLocation ? (
