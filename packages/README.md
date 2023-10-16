@@ -26,14 +26,6 @@
 
   This package provides two command to wrap the other commands.
 
-- [netlify](netlify)
-
-  Tools of building netlify previews
-
-- [storybook-shared](storybook-shared)
-
-  Same, but for storybook
-
 ## Resources
 
 - [contracts](contracts)
