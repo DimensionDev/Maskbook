@@ -1,35 +1,17 @@
 import { memo, useCallback, useMemo } from 'react'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
 import { useI18N } from '../../../../utils/i18n-next-ui.js'
-import { List, ListItemButton, ListItemIcon, ListItemText, Radio } from '@mui/material'
+import { List, ListItemButton, ListItemText, Radio } from '@mui/material'
 import { getEnumAsArray } from '@masknet/kit'
 import { LanguageOptions } from '@masknet/public-api'
-import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import Services from '#services'
 import { useLanguage } from '../../../../../shared-ui/index.js'
-
-const LANGUAGE_OPTIONS_ICON_MAP = {
-    [LanguageOptions.__auto__]: null,
-    [LanguageOptions.enUS]: <Icons.UK />,
-    [LanguageOptions.zhCN]: <Icons.CN />,
-    [LanguageOptions.zhTW]: <Icons.CN />,
-    [LanguageOptions.jaJP]: <Icons.JP />,
-    [LanguageOptions.koKR]: <Icons.KR />,
-}
 
 const useStyles = makeStyles()((theme) => ({
     item: {
         padding: theme.spacing(1.5),
         borderRadius: 8,
-    },
-    icon: {
-        minWidth: 24,
-        height: 12,
-        '& > *': {
-            width: '16px !important',
-            height: '12px !important',
-        },
     },
     text: {
         fontWeight: 700,
@@ -65,13 +47,11 @@ export const SelectLanguageModal = memo<ActionModalBaseProps>(function SelectLan
         <ActionModal header={t('popups_settings_select_language')} {...rest}>
             <List>
                 {getEnumAsArray(LanguageOptions).map((x) => {
-                    const icon = LANGUAGE_OPTIONS_ICON_MAP[x.value]
                     return (
                         <ListItemButton
                             className={classes.item}
                             key={x.key}
                             onClick={() => handleLanguageChange(x.value)}>
-                            {icon ? <ListItemIcon className={classes.icon}>{icon}</ListItemIcon> : null}
                             <ListItemText classes={{ primary: classes.text }} primary={LANGUAGE_OPTIONS_MAP[x.value]} />
                             <Radio className={classes.radio} checked={lang === x.value} />
                         </ListItemButton>
